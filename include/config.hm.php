@@ -1,9 +1,9 @@
 <?
 /**
- * file: config.php
- * author: Roman Korostov
- * date: 23/01/07
- **/
+* file: config.php
+* author: Roman Korostov
+* date: 23/01/07        
+**/
 
 // Path settings
 define('SYS_DIR_ROOT',   "/var/www/hm");
@@ -16,10 +16,10 @@ define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
 define('UPLOAD_DIR',    SYS_DIR_ROOT."/home-money.ru/upload/photo_experts/");
 
 // DB settings
-define('SYS_DB_HOST', 'localhost');
-define('SYS_DB_USER',  'root');
-define('SYS_DB_PASS', 'gfh0km');
-define('SYS_DB_BASE', 'homemoney');
+define('SYS_DB_HOST', 	'localhost');
+define('SYS_DB_USER', 	'homemone');
+define('SYS_DB_PASS', 	'lw0Hraec');
+define('SYS_DB_BASE', 	'homemoney');
 
 // Error codes
 define('GENERAL_MESSAGE',  200);
@@ -29,7 +29,7 @@ define('CRITICAL_ERROR',   204);
 
 // Month setting
 $sys_month =
-array(
+array( 
        '01'   => 'Январь',
        '02'   => 'Февраль',
        '03'   => 'Март',
@@ -55,28 +55,29 @@ array(
                 '4' => 5.17);
 
 // Названия валют по кодам
-$sys_currency_name = array(
-    '1' => 'руб.',
-    '2' => '$',
-    '3' => '&euro;',
-    '4' => 'грв.'
-);
+$sys_currency_name =
+    array(
+        '1' => 'руб.',
+        '2' => '$',
+        '3' => '&euro;',
+        '4' => 'грв.'
+    );
 
 // Виды и названия отчетов
 $sys_reports = array(
-    'graph_profit' => 'Доходы',
-    'graph_loss' => 'Расходы',
-    'graph_profit_loss' => 'Сравнение расходов и доходов',
-    'txt_profit' => 'Детальные доходы',
-    'txt_loss' => 'Детальные расходы',
-    'txt_loss_difference' => 'Сравнение расходов за периоды',
-    'txt_profit_difference' => 'Сравнение доходов за периоды',
-    'txt_profit_avg_difference' => 'Сравнение доходов со средним за периоды',
-    'txt_loss_avg_difference' => 'Сравнение расходов со средним за периоды',
+	'graph_profit' => 'Доходы',
+	'graph_loss' => 'Расходы',
+	'graph_profit_loss' => 'Сравнение расходов и доходов',
+	'txt_profit' => 'Детальные доходы',
+	'txt_loss' => 'Детальные расходы',
+	'txt_loss_difference' => 'Сравнение расходов за периоды',
+	'txt_profit_difference' => 'Сравнение доходов за периоды',
+	'txt_profit_avg_difference' => 'Сравнение доходов со средним за периоды',
+	'txt_loss_avg_difference' => 'Сравнение расходов со средним за периоды',
 );
 
 
-        define('SYS_MAX_PERPAGE',   3);
-        define('DEFAULT_MODULE',   'welcam');
+define('SYS_MAX_PERPAGE',   3);               
+define('DEFAULT_MODULE',   'welcam');
 
-        ?>
+?>
