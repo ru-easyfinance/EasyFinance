@@ -4,7 +4,7 @@
  * author: Roman Korostov
  * date: 28/03/07
  **/
-$tpl->assign('name_page', 'welcam');
+$tpl->assign('name_page', 'welcome');
 $count = 800 + $user->getCountUsers();
 $transaction = $user->getAllTransaction();
 
