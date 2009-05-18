@@ -1,0 +1,34 @@
+<table width="100%" bgcolor="#f8f6ea">
+<form action="index.php?modules=admin&action=get_list_cost_for_experts" method="post">
+<tr>
+	<td class="cat_add" colspan="6">
+		<a href="index.php?modules=admin">Вернуться в панель администрирования</a><br><br>
+	</td>
+</tr>
+<tr>
+	<td class="cat_add" width="15%">Название услуги:</td>
+	<td class="cat_add" colspan="2"><input type="text" name="cost_name" value="{$cost.cost_name}"></td>
+</tr>
+<tr>
+	<td class="cat_add">&nbsp;</td>
+	<td class="cat_add" colspan="2">
+		<input type="hidden" value="{$cost.cost_id}" name="cost_id">
+		<input type="submit" value="Сохранить">
+	</td>
+</tr>
+<tr>
+	<td colspan="3">&nbsp;</td>
+</tr>
+</table>
+
+<table width="100%">
+{foreach from=$listCosts item=data}
+<tr onMouseOver=this.style.backgroundColor='#f8f6ea';
+						   		onMouseOut=this.style.backgroundColor='#FFFFFF';>
+	<td class="money" height="22">{$data.cost_name}</td>
+	<td class="money" width="50"><a href="index.php?modules=admin&action=get_list_cost_for_experts&id={$data.cost_id}">Редактировать</a></td>
+	<td class="money" width="50"><a href="index.php?modules=admin&action=get_list_cost_for_experts&d_id={$data.cost_id}">Удалить</a></td>
+</tr>
+{/foreach}
+</form>
+</table>

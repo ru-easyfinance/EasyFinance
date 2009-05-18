@@ -1,0 +1,79 @@
+<form action="index.php?modules=admin&action=subscribe" method="post">
+<table width="100%" border="0">
+<tr>
+	<td class="cat_add" colspan="2">
+		<a href="index.php?modules=admin">Вернуться в панель администрирования</a><br><br>
+	</td>
+</tr>
+
+<tr><td colspan="2" class="cat_add" width="100%"><h1>Почтовая рассылка</h1></td></tr>
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          От:&nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          <input type="text" name="from_mail" style="width:250px;" value="info@home-money.ru">
+      </td>
+</tr>
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          Кому:&nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          <textarea name="to_mail" cols="40" rows="2"></textarea>
+      </td>
+</tr>
+<tr>
+	<td width="10%" class="cat_add" align="right" valign="top">
+          Тема письма:&nbsp;
+      </td>
+      <td align="left" class="cat_add" width="90%">
+          <input type="text" name="title_mail" style="width:250px;">
+      </td>
+</tr>
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          &nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          <input type="checkbox" name="is_send_from_db"> Разослать всем пользователям?
+      </td>
+</tr>
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          Текст:&nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          <textarea name="text_mail" cols="80" rows="20"></textarea>
+      </td>
+</tr>
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          &nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          <input type="submit" value="Отправить">
+      </td>
+</tr>
+{if !empty($errors)}
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          &nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          <ul>{$message}</ul>
+      </td>
+</tr>
+{/if}
+{if !empty($success)}
+<tr>
+	<td class="cat_add" align="right" valign="top">
+          &nbsp;
+      </td>
+      <td align="left" class="cat_add">
+          {$success}
+      </td>
+</tr>
+{/if}
+</table>
+</form>

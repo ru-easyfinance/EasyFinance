@@ -1,0 +1,111 @@
+<table width="100%">
+	<td width="100%">
+		<div class="dtree">
+			{if !empty($categories)}
+			&nbsp;<input type="button" onclick="location.href='index.php?modules=category&action=add'" value="Добавить категорию" class="inputsubmit" /><br /><br />
+			{/if}
+			<!--<p>&nbsp;<a href="index.php?modules=category&action=add">Добавить категорию</a></p>-->
+			{if $page_title == 'category add' || $page_title == 'category edit'}
+			{if $page_title == 'category add'}
+				<form action="index.php?modules=category&action=add" method="post">
+			{else}
+				<form action="index.php?modules=category&action=edit" method="post">
+			{/if}
+				<table width="100%" border="0">
+				{if empty($good_text)}
+				<tr>
+					<td width="10%" align="left" class="cat_add">Категория:</td>
+					<td width="90%"  align="left" class="cat_add">
+						<select name="cat[parent]" style="width:250px;">
+							<option value="0">---</option>
+							{foreach from=$categories item=cats}
+							{if $in_category !=  $cats.cat_id}
+								{if $cats.cat_parent == '0'}
+									<option value="{$cats.cat_id}" {if $cats.cat_id == $category.parent} selected="selected" {/if}>{$cats.cat_name}</option>
+								{/if}
+							{/if}
+							{/foreach}
+						</select>						
+					</td>
+				</tr>				
+				<tr>
+					<td  align="left" class="cat_add">
+						{if !empty($error_text.name)}<font color="#FF0000">Название:</font>{else}Название:{/if}
+					</td>
+					<td  align="left" class="cat_add">
+						<input type="text" name="cat[name]" style="width:250px;" value="{if !empty($category.name)}{$category.name}{/if}" />
+					</td>
+				</tr>
+				<!--
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add">
+						<input type="radio" name="cat[drain]" value="1" checked="checked"/>Расход
+						<input type="radio" name="cat[drain]" {if $category.drain == '0'}checked="checked"{/if} value="0"/>Доход
+					</td>
+				</tr>
+				-->
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add">
+					<table  border="0">
+					<td valign="top">
+						{if $page_title == 'category add'}
+							<br><input class="inputsubmit" type="submit" value="Сохранить">
+						{else}
+							<input type="hidden" name="cat[id]" value="{$category.id}">
+							<br><input class="inputsubmit" type="submit" value="Изменить" style="width:120px;">
+							</form>
+					</td>
+					<td valign="top">
+							<form action="index.php?modules=category&action=del" method="post" name="form_del">
+								<br>
+								<input type="hidden" name="cat[id]" value="{$category.id}">
+								<input class="inputsubmit" name="sub_del" type="button" value="Удалить" style="width:120px;" OnClick="confirmDelete('категорию #{$category.name}');">							
+					</td>
+					<td valign="top">
+						<br /><input class="inputsubmit" type="button" value="Отменить" style="width:120px;" onclick="history.back();">
+						</form>
+					</td>
+                    {/if}
+					</table>
+						
+					</td>
+				</tr>
+				{if !empty($error_text)}
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add">
+						<br /><font size="+1" color="#FF0000">Внимание, ошибка!</font>
+						<ul>
+						{foreach from=$error_text item=err_text}
+							<li>{$err_text}</li>
+						{/foreach}
+						</ul>
+					</td>
+				</tr>
+				{/if}
+				{else}
+					<br /><font size="+1" color="#33CC66">
+					<ul>
+						<li>{$good_text}</li>
+					</ul>
+					</font>
+					<a href="index.php?modules=category">Вернуться к списку</a>
+				{/if}
+				</table>
+			{else}
+            	<div>
+                	<font size="-1" color="#76b900">{$good_text}</font><br /><br />
+                </div>
+				<table width="100%">
+					{if !empty($categories)}
+						{$categories}
+					{else}
+						&nbsp;<input type="button" onclick="location.href='index.php?modules=category&action=get'" value="Загрузить категории из справочника" class="inputsubmit" />
+					{/if}
+				</table>
+			{/if}
+		</div>
+	</td>
+</table>

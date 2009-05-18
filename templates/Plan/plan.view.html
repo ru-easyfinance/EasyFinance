@@ -1,0 +1,180 @@
+<table border='0' cellpadding='5' cellspacing='0' width='100%' bgcolor='#FFFFFF'>
+<tr>
+	<td colspan="6" class="cat_add" bgcolor="#f8f8d8">
+    	<span style="color: rgb(56, 120, 215);">Период плана с {$plan_settings.start_plan} по {$plan_settings.finish_plan}</span>
+	</td>
+</tr>
+
+<tr>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=25%>
+    	<div style="font-size: 14px; font-family: tahoma;">Категория</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=15%>
+    	<div style="font-size: 14px; font-family: tahoma;" align='right'>План</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=10%>
+    	<div style="font-size: 14px; font-family: tahoma;" align='right'>Факт</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=15%>
+    	<div style="font-size: 14px; font-family: tahoma;" align="right">Откл</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=15%>
+    	<div style="font-size: 14px; font-family: tahoma;" align="right">Откл %</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=20%>
+    	<div style="font-size: 14px; font-family: tahoma;" align="right">Среднее за 3 периода</div>
+    </td>
+</tr>
+<tr>
+    <td class='cat_add' width=25% style='padding-left: 25px; border-bottom:1px solid #cccccc; color:#093; font-size: 18px;'><b>Доходы</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-right: 0px; border-bottom:1px solid #cccccc;'><b>{$plan_settings.total_income}</b></td>
+    <td class='cat_add' width=10% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_income.total_sum}</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_income.total_sum_otkl}</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_income.total_sum_otkl_percent}</b></td>
+    <td class='cat_add' width=20% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_income.total_sum_3_period}</b></td>
+</tr>
+{foreach from=$plan_income item=data_parent}
+{if $data_parent.cat_parent == 0}
+<tr style='background-color: rgb(255, 255, 255);' onmouseover=this.style.backgroundColor='#f8f6ea'; onmouseout=this.style.backgroundColor='#FFFFFF';>	
+      <td style='padding-left: 16px; border-bottom:1px solid #f8f6ea;' class='cat_add'>
+          | <a href='#' class='cat_add'>{$data_parent.cat_name}</a>  |       
+      </td>
+      <td class='cat_add' align='right' style='padding-right: 0px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_plan}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_otkl}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_otkl_percent}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_3_period}</b>
+      </td>     
+</tr>
+	{foreach from=$plan_income item=data}        
+        {if $data.cat_parent == $data_parent.category_id}
+        <tr style='background-color: rgb(255, 255, 255);' onmouseover=this.style.backgroundColor='#f8f6ea'; 
+                                                        onmouseout=this.style.backgroundColor='#FFFFFF';>
+          <td style='padding-left: 46px; border-bottom:1px solid #f8f6ea;' class='cat_add'>
+              {$data.cat_name}    
+          </td>
+          <td class='cat_add' align='right' style='padding-right: 0px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_plan}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_otkl}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_otkl_percent}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_3_period}
+          </td>
+         </tr>    
+        {/if}        
+	{/foreach}
+    {/if}
+{/foreach}
+
+<tr><td colspan=6 class='cat_add' bgcolor='#f8f8d8'>&nbsp;</td></tr>
+
+<!--<tr>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=25%>
+    	<div style="font-size: 21px; font-family: tahoma;">Категория</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=15% align='right'>
+    	<div style="font-size: 18px; font-family: tahoma;">План</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=10% align='right'>
+    	<div style="font-size: 18px; font-family: tahoma;">Факт</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=15% align="right">
+    	<div style="font-size: 18px; font-family: tahoma;">Откл</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=15% align="right">
+    	<div style="font-size: 18px; font-family: tahoma;">Откл %</div>
+    </td>
+    <td  class='cat_add' bgcolor='#f8f8d8' width=20% align="right">
+    	<div style="font-size: 18px; font-family: tahoma;">Среднее за 3 периода</div>
+    </td>
+</tr>-->
+<tr>
+    <td class='cat_add' width=25% style='padding-left: 25px; border-bottom:1px solid #cccccc; color:#F46833; font-size: 16px;'><b>Расходы</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-right: 0px; border-bottom:1px solid #cccccc;'><b>{$plan_settings.total_outcome}</b></td>
+    <td class='cat_add' width=10% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_outcome.total_sum}</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_outcome.total_sum_otkl}</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_outcome.total_sum_otkl_percent}</b></td>
+    <td class='cat_add' width=20% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'><b>{$plan_total_sum_outcome.total_sum_3_period}</b></td>
+</tr>
+{foreach from=$plan_outcome item=data_parent}
+{if $data_parent.cat_parent == 0}
+<tr style='background-color: rgb(255, 255, 255);' onmouseover=this.style.backgroundColor='#f8f6ea'; onmouseout=this.style.backgroundColor='#FFFFFF';>	
+      <td style='padding-left: 16px; border-bottom:1px solid #f8f6ea;' class='cat_add'>
+          | <a href='#' class='cat_add'>{$data_parent.cat_name}</a>  |       
+      </td>
+      <td class='cat_add' align='right' style='padding-right: 0px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_plan}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_otkl}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          <b>{$data_parent.total_sum_otkl_percent}</b>
+      </td>
+      <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+      	<b>{$data_parent.total_sum_3_period}</b>          
+      </td>     
+</tr>
+	{foreach from=$plan_outcome item=data}        
+        {if $data.cat_parent == $data_parent.category_id}
+        <tr style='background-color: rgb(255, 255, 255);' onmouseover=this.style.backgroundColor='#f8f6ea'; 
+                                                        onmouseout=this.style.backgroundColor='#FFFFFF';>
+          <td style='padding-left: 46px; border-bottom:1px solid #f8f6ea;' class='cat_add'>
+              {$data.cat_name}    
+          </td>
+          <td class='cat_add' align='right' style='padding-right: 0px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_plan}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_otkl}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+              {$data.total_sum_otkl_percent}
+          </td>
+          <td class='cat_add' align='right' style='padding-left: 25px; border-bottom:1px solid #f8f6ea;'>
+          	{$data.total_sum_3_period}              
+          </td>
+         </tr>    
+        {/if}        
+	{/foreach}
+    {/if}
+{/foreach}
+<tr><td colspan=6 class='cat_add' bgcolor='#f8f8d8'>&nbsp;</td></tr>
+
+
+<tr>
+    <td class='cat_add' width=25% style='padding-left: 25px; border-bottom:1px solid #cccccc; color: rgb(56, 120, 215); font-size: 16px;'><b>Остаток</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-right: 0px; border-bottom:1px solid #cccccc; color: rgb(56, 120, 215);'><b>{$plan_settings.rest_plan_sum}</b></td>
+    <td class='cat_add' width=10% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc; color: rgb(56, 120, 215);'><b>{$plan_settings.rest_fact_sum}</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc; color: rgb(56, 120, 215);'><b>{$plan_settings.rest_otkl}</b></td>
+    <td class='cat_add' width=15% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc; color: rgb(56, 120, 215);'><b>{$plan_settings.rest_otkl_percent}</b></td>
+    <td class='cat_add' width=20% align='right' style='padding-left: 25px; border-bottom:1px solid #cccccc;'>&nbsp;</td>
+</tr>
+
+<tr><td colspan=6 class='cat_add' bgcolor='#f8f8d8'>&nbsp;</td></tr>
+<tr><td colspan=6 class='cat_add' bgcolor='#f8f8d8'><span style="color: rgb(56, 120, 215);">Комментарий: <i>{$plan_settings.comment}</i></span>&nbsp;</td></tr>
+
+</table>

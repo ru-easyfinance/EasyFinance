@@ -1,0 +1,7 @@
+Тип счета: <select>
+{foreach from=$rows item="row"}
+	<option value="{$row.btype_id}">{$row.btype_name}</option>
+{/foreach}
+</select><br>
+<input type="button" class="wznext" value="Дальше">
+<input type="button" class="wzcancel" value="Отмена">

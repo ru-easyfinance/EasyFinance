@@ -1,0 +1,60 @@
+<h1>Импорт транзакций</h1>
+<h2>Шаг 1 из 2</h2>
+
+{if $error_text}<p>{$error_text}</p>{/if}
+
+<div class="cat_add">Импортировать транзакции</div><br>
+
+<table width="50%" border="0" cellpadding="5" cellspacing="0">
+<form enctype="multipart/form-data" action="index.php?modules=import" method="post">
+<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+<tr>
+<td class="cat_add">
+из файла*:
+</td>
+
+<td class="cat_add">
+<input type="file" class="standart" style="width:80px;" name="file2Import">
+</td>
+</tr>
+
+<tr>
+<td class="cat_add">
+на счет*:
+</td>
+
+<td class="cat_add">
+<select name="accountSelected">
+{html_options options=$userAccounts selected=$accountSelected}
+</select>
+</p>
+</td>
+</tr>
+
+<tr>
+<td colspan="2" class="cat_add">
+Формат*: 
+<!--p><input type="radio" name="importFormat" value="qif" checked >QIF (Quicken)</p-->
+<p><input type="radio" name="importFormat" value="csv" checked>CSV</p>
+<ul>
+Разделитель <input type="text" class="standart" name="delimiter" value="{$delimiter|default:";"}" size="2">
+</ul>
+</td>
+</tr>
+
+<tr>
+<td colspan="2" align="center">
+<input type="submit" value="Далее &gt;&gt;">
+</td>
+</tr>
+
+<input type="hidden" name="action" value="displayScreen2">
+</form>
+</table>
+
+<hr>
+
+<form action="index.php?modules=import" method="post">
+<input type="submit" value="Откатить импорт">
+<input type="hidden" name="action" value="rollbackImport">
+</form>

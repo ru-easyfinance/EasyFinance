@@ -1,0 +1,1 @@
+@UPDATE `epos_data` SET paystatus = '' WHERE `operID` = ''@

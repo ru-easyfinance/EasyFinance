@@ -1,0 +1,44 @@
+<form action="index.php?modules=plan&action=create_new_plan&step=6" method="post">
+<table width="100%" style=" background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;">
+<tr>
+	<td colspan="2" width="100%">
+		<table width="100%" border="0">
+		<tr>
+			<td class="cat_add" style="padding-left:15px;padding-right:15px;padding-bottom:15px;" width="90%">				
+				<p align="justify">Выберите счета, которые будут учитываться в плане</p>
+			</td>
+			<td class="cat_add" valign="top" align="right">шаг 5/6&nbsp;</td>
+		</tr>
+		
+		<tr>
+			<td class="cat_add" style="padding-left:15px;padding-right:15px;padding-bottom:15px;" colspan="2">
+				Список счетов:
+				{assign var="cnt_account" value="0"}
+				
+				{foreach from=$listUserAccounts item=data}
+                {assign var="checked" value=''}
+                	{foreach from=$listPlanAccounts item=list}                    	
+                    	{if $data.id == $list.account_id}
+                        	{assign var="checked" value='checked'}
+                        {/if}
+                    {/foreach}
+					<div><input type="checkbox" name="account[{$data.id}]" id="account_{$cnt_account}" {$checked}/> {$data.name}</div>
+					{assign var="cnt_account" value=$cnt_account+1}
+				{/foreach}
+				
+				<div><br>&nbsp;<a href="javascript:checkAllAccounts('{$cnt_account}', 'check');">Выбрать все</a>&nbsp;&nbsp;
+                   		 &nbsp;<a href="javascript:checkAllAccounts('{$cnt_account}', 'uncheck');">Снять все</a></div>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="2" class="cat_add" width="100%" style="padding-left:15px;padding-right:15px;padding-top:15px;">
+				<input type="button" onclick="location.href='index.php?modules=plan&action=create_new_plan&step=4'" value="Назад" class="inputsubmit"/>
+				<input type="submit" value="Далее" class="inputsubmit" />
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</form>

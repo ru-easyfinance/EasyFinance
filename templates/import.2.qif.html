@@ -1,0 +1,19 @@
+<h1>Импорт транзакций</h1>
+<h2>Шаг 2 из 2</h2>
+
+{if $error_text}<p>{$error_text}</p>{/if}
+
+Импорт транзакций на счет: {$userAccounts.$accountSelected}
+<p>
+Формат файла: QIF (Quicken)
+
+
+<form action="index.php?modules=import" method="post">
+
+<input type="submit" value="Начать импорт">
+</p>
+<input type="hidden" name="action" value="startImport">
+<input type="hidden" name="importFormat" value="{$importFormat}">
+<input type="hidden" name="accountSelected" value="{$accountSelected}">
+<input type="hidden" name="file2Import" value="{$file2Import}">
+</form>

@@ -1,0 +1,321 @@
+<table width="100%">
+	<td width="100%">
+		<div class="dtree">
+			&nbsp;<input type="button" onclick="location.href='index.php?modules=account&action=add'" value="Добавить счет" class="inputsubmit" /><br />
+			<!--<p>&nbsp;<a href="index.php?modules=account&action=add">Добавить счет</a></p>-->
+			{if $page_title == 'account add' || $page_title == 'account edit'}
+			{if $page_title == 'account add'}
+				<form action="index.php?modules=account&action=add" method="post">
+			{else}
+				<form action="index.php?modules=account&action=edit" method="post">
+			{/if}
+				<table width="100%" border="0">
+				{if empty($good_text)}
+				<tr>
+					<td width="15%" align="left" class="cat_add">Тип счета:</td>
+					<td width="90%"  align="left" class="cat_add">
+						<select name="acc[type]" style="width:250px;">
+							<option value="0" {if $account.type == 0} selected="selected"{/if}>Наличные</option>
+							<option value="1" {if $account.type == 1} selected="selected"{/if}>Банковская карта</option>
+							<!--<option value="2" {if $account.type == 2} selected="selected"{/if}>Кредитный счет</option> -->
+							<option value="3" {if $account.type == 3} selected="selected"{/if}>Долг</option>
+						</select>
+					</td>
+				</tr>				
+				<tr>
+					<td width="15%" align="left" class="cat_add">Валюта счета:</td>
+					<td width="90%"  align="left" class="cat_add">
+						<select name="acc[currency]" style="width:250px;">							
+							{foreach from=$currency item=cur}
+								<option value="{$cur.cur_id}" {if $cur.cur_id == $account.currency} selected="selected"{/if}>{$cur.cur_name}</option>
+							{/foreach}
+						</select>
+					</td>
+				</tr>	
+				<tr>
+					<td  align="left" class="cat_add">
+						{if !empty($error_text.name)}<font color="#FF0000">Название:</font>{else}Название:{/if}
+					</td>
+					<td  align="left" class="cat_add">
+						<input type="text" name="acc[name]" style="width:250px;" value="{if !empty($account.name)}{$account.name}{/if}" />
+					</td>
+				</tr>
+				<tr>
+					<td  align="left" class="cat_add">{if !empty($error_text.money)}<font color="#FF0000">Начальный капитал:</font>{else}Начальный капитал:{/if}</td>
+					<td  align="left" class="cat_add">
+						<input type="text" id="pos_oc" value="{if !empty($account.money)}{$account.money}{else}0.0{/if}" style="width:80px;" OnKeyUp="onSumChange();">&nbsp;руб.&nbsp;&nbsp;<b>Пример:</b> 125.50<br />
+						<input type="hidden" name="acc[money]" id="pos_mc" size="7">
+					</td>
+				</tr>
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add">
+					<table  border="0">
+					<td valign="top">
+						{if $page_title == 'account add'}
+							<br><input class="inputsubmit" type="submit" value="Сохранить" onclick="onSumChange();">
+						{else}
+							<input type="hidden" name="acc[id]" value="{$account.id}">
+							<br><input class="inputsubmit" type="submit" value="Сохранить" style="width:120px;" onclick="onSumChange();">
+							</form>
+					</td>
+					<form action="index.php?modules=account&action=del" method="post" name="form_del">
+					<td valign="top">							
+								<br>
+								<input type="hidden" name="acc[id]" value="{$account.id}">
+								<input class="inputsubmit" name="sub_del" type="button" value="Удалить" style="width:120px;" OnClick="confirmDelete('счет #{$account.name},\n\n и все операции, связанные с этим счетом');">							
+					</td>
+					<td>
+						<br /><input class="inputsubmit" type="button" value="Отменить" style="width:120px;" onclick="history.back();">
+						</form>
+					</td>				
+						{/if}
+					</table>
+					</td>
+				</tr>
+				{if !empty($error_text)}
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add">
+						<br /><font size="+1" color="#FF0000">Внимание, ошибка!</font>
+						<ul>
+						{foreach from=$error_text item=err_text}
+							<li>{$err_text}</li>
+						{/foreach}
+						</ul>
+					</td>
+				</tr>
+				{/if}
+				{else}
+					<br /><font size="+1" color="#33CC66">
+					<ul>
+						<li>{$good_text}</li>
+					</ul>
+					</font>
+					<a href="index.php?modules=account">Вернуться к списку</a>
+				{/if}
+				</table>
+			{else}
+				<table width="100%" border="0">
+				<br />
+					{if !empty($account)}
+					{if $page_title == 'account transfer' || $page_title == 'edit transfer'}
+					{if empty($good_text)}
+					<form action="index.php?modules=account&action=transfer&id={$account.0.id}" method="post" name="tr">				
+						<tr>
+							<td class="cat_add" width="15%">
+								Перечислить со счета:
+							</td>
+							<td class="cat_add" align="left" colspan="2">
+								&nbsp;{$account.0.name}&nbsp;&nbsp;(валюта&nbsp;<b>{$account.0.cur_name}</b>)
+							</td>
+						</tr>
+						<tr>
+							<td class="cat_add" width="15%" valign="top">
+							<br>{if !empty($error_text.to_account)}<font color="#FF0000">Перечислить на счет:</font>{else}Перечислить на счет:{/if}								
+							</td>
+							<td class="cat_add" align="left" valign="top" colspan="2">
+							<table>
+							{foreach from=$accounts item=acc}
+							{if $acc.id != $account.0.id}
+							<tr>
+								{if $page_title == "edit transfer"}
+								<td class="cat_add" valign="top">
+								<input type="radio" name="transfer[to_account]" id="to_account" value="{$acc.id}" {if $transfer.to_account == $acc.id} checked="checked"{/if} onclick="switch_account({$acc.currency},{$account.0.currency});">&nbsp;{$acc.name}&nbsp;&nbsp;(валюта&nbsp;<b>{$acc.currency_name}</b>)								
+								</td>
+								{else}
+								<td class="cat_add" valign="top">
+								<input type="radio" name="transfer[to_account]" id="to_account" value="{$acc.id}" onclick="switch_account({$acc.currency},{$account.0.currency});">&nbsp;{$acc.name}&nbsp;&nbsp;(валюта&nbsp;<b>{$acc.currency_name}</b>)								
+								</td>
+								{/if}
+							</tr>
+							{/if}
+							{/foreach}
+							</table>
+							</td>
+						</tr>
+						<tr>
+							<td  align="left" class="cat_add">
+								{if !empty($error_text.date)}<font color="#FF0000">Дата:</font>{else}Дата:{/if}
+
+							</td>							
+<script language="javascript">
+{literal}
+function onSumChange2() {
+    var Input1 = null;
+    var Input2 = null;
+	var tmp = null;
+
+    Input1 = getObjectById('pos_oc2');
+    Input2 = getObjectById('pos_mc2');
+
+	if (Input1 && Input2) {
+		tmp = convertCurrency(Input1.value);
+		if (tmp) {
+			Input2.value = round(tmp, 4);
+		}
+		else {
+			Input2.value = '';
+		}
+		return true;
+	}
+	Input2.value = 'Неверно!';
+	return false;
+}
+{/literal}
+</script>					
+							<td  align="left" class="cat_add" colspan="2">
+&nbsp;<input type="text" value="{if !empty($transfer.date)}{$transfer.date}{else}{$date_today}{/if}" class="standart" style="width:80px;" name="transfer[date]" id="sel5" readonly><button type="reset" class="button_calendar" onclick="return showCalendar('sel5', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+							</td>
+						</tr>
+						<tr>
+							<td  align="left" class="cat_add">
+								{if !empty($error_text.money)}<font color="#FF0000">Сумма:</font>{else}Сумма:{/if}
+							</td>						
+							<td  align="left" class="cat_add" colspan="2">								
+								&nbsp;<input type="text" id="pos_oc2" value="{if !empty($transfer.money)}{$transfer.money}{/if}" style="width:80px;" OnKeyUp="onSumChange2();">&nbsp;{$account.cur_name}&nbsp;<b>Пример:</b> 125.50<br />
+								<input type="hidden" name="transfer[money]" id="pos_mc2" size="7">
+							</td>
+						</tr>
+						<tr id='td_kat'>
+							<td class="cat_add" width="15%">
+								{if !empty($error_text.kat)}<font color="#FF0000">Курс валюты:</font>{else}Курс валюты:{/if}								
+							</td>							
+							<td class="cat_add" align="left" colspan="2">
+							{if $page_title == "edit transfer"}
+								&nbsp;<input type="text" id="pos_oc" value="{if !empty($transfer.convert)}{$transfer.convert}{/if}" style="width:80px;" OnKeyUp="onSumChange();" disabled="disabled">&nbsp;&nbsp;<b>Пример:</b> 25.43<br />
+							{else}
+								&nbsp;<input type="text" id="pos_oc" value="{if !empty($transfer.convert)}{$transfer.convert}{/if}" style="width:80px;" OnKeyUp="onSumChange();" disabled="disabled">&nbsp;&nbsp;<b>Пример:</b> 25.43<br />
+							{/if}
+								<input type="hidden" name="transfer[kat]" id="pos_mc" size="7">
+								<input type="hidden" name="transfer[from_account]" value="{$account.0.id}">
+								<input type="hidden" name="transfer[currency]" value="{$account.0.currency}">								
+								<input type="hidden" name="transfer[tr_id]" value="{$transfer.tr_id}">
+							</td>
+						</tr>
+                        <tr>
+                        	<td class="cat_add" width="15%" valign="top">
+                            	Комментарий:
+                            </td>
+                            <td class="cat_add" colspan="2">
+                            	&nbsp;<textarea rows="4" cols="50" name="transfer[comment]">{if !empty($transfer.comment)}{$transfer.comment}{/if}</textarea>
+                            </td>
+                        </tr>
+						<tr>
+							<td class="cat_add">&nbsp;</td>
+							{if $page_title != "edit transfer"}
+								<td class="cat_add" colspan="2"><br>&nbsp;<input class="inputsubmit" type="submit" value="Перечислить" onclick="onSumChange(); onSumChange2();"></td>
+							{else}
+								<td class="cat_add" colspan="2">
+								<table width="100"  border="0">
+								<td valign="top"><br />
+								<input class="inputsubmit" type="submit" value="Сохранить изменения" onclick="onSumChange(); onSumChange2();">
+								</form>
+								</td>
+								<td valign="top"><br />
+								<form action="index.php?modules=account&action=transfer&id={$account.0.id}" method="post" name="form_del">
+								<input class="inputsubmit" name="sub_del" type="button" value="Удалить перевод" style="width:120px;" OnClick="confirmDelete('счет #{$account.0.name}?\n\n Будут удалены все записи из финансов связанные с этим переводом');">
+								<input type="hidden" name="transfer[tr_d]" value="{$transfer.tr_id}">
+								</form>
+								</td>
+								</table>
+								</td>
+															
+							{/if}
+						</tr>
+					
+						{if !empty($error_text)}
+					<tr>
+						<td  align="left" class="cat_add">&nbsp;</td>
+						<td  align="left" class="cat_add" colspan="2">
+							<br /><font size="+1" color="#FF0000">Внимание, ошибка!</font>
+							<ul>
+							{foreach from=$error_text item=err_text}
+								<li>{$err_text}</li>
+							{/foreach}
+							</ul>
+						</td>
+					</tr>
+						{/if}
+					{else}
+						<br /><font size="+1" color="#33CC66">
+						<ul>
+							<li>{$good_text}</li>
+						</ul>
+						</font>
+						<a href="index.php?modules=account">Вернуться к списку</a>
+					{/if}				 
+					{else}
+                    	{if !empty($good_text)}
+                        <div>
+                        	
+                        	<font size="-1" color="#76b900">{$good_text}</font><br /><br />
+                        </div>
+                        {/if}
+						
+						{foreach from=$account item=data}
+							<tr onMouseOver=this.style.backgroundColor='#f8f6ea';
+						   		onMouseOut=this.style.backgroundColor='#FFFFFF';>
+						   		<td class=cat_add width=45%>
+									<img src=img/tree/empty.gif>
+									<a href="index.php?modules=operation&a={$data.id}">{if $data.type != 3}<font color="green">{$data.name}</font>{else}<font color="#bc5f5f">{$data.name}</font>{/if}</a>
+								</td>
+								<td class=cat_add width=10%>
+								{if $data.type == 0}(Наличный счет){/if}
+								{if $data.type == 1}(Банковский счет){/if}
+								{if $data.type == 2}(Кредитный счет){/if}
+								{if $data.type == 3}(Долговой счет){/if}
+								</td>
+								<td class=cat_add width=15% align="right">								
+									{if $data.sum >=0}<font color="green">&nbsp;{$data.total_account_sum}&nbsp;{$data.currency_name}</font>
+									{else}<font color="#bc5f5f">{$data.total_account_sum}&nbsp;{$data.currency_name}</font>{/if}
+								</td>
+
+								<td class=cat_add align="right" width=10%>
+                                  <input type="button" onclick="location.href='index.php?modules=operation&area=add&a={$data.id}'" value="Добавить операцию" class="inputsubmit" style="width:180px;" />
+								</td>
+
+								<!--<td class=cat_add align="right" >								
+									<input type="button" onclick="location.href='index.php?modules=operation&area=transfer&a={$data.id}'" value="Перечислить со счета" class="inputsubmit"  style="width:180px;"/>
+								</td>-->
+								<td class=cat_add align="right" width=10%>
+									<input type="button" onclick="location.href='index.php?modules=account&action=edit&id={$data.id}'" value="Редактировать / Удалить" class="inputsubmit" />
+								</td>								
+							</tr>							
+						{/foreach}
+							<tr>
+								<td class="cat_add" colspan="5"><br />
+									<img src=img/tree/empty.gif>Общий баланс:&nbsp;{$total_all_sum.1|number_format}{$total_all_sum.rub}&nbsp;{$total_all_sum.2|number_format}{$total_all_sum.dol}&nbsp;{$total_all_sum.3|number_format}{$total_all_sum.evro}&nbsp;{$total_all_sum.4|number_format}{$total_all_sum.grvn}
+								</td>
+							</tr>
+					{/if}
+					{else}
+						{if !empty($error_text.account)}
+							<br /><font size="+1" color="#FF0000">Внимание, ошибка!</font>
+							<ul>
+							{foreach from=$error_text item=err_text}
+								<li>{$err_text}</li>
+							{/foreach}
+							</ul>
+						{else}
+						<div style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding: 15px;">
+<p align="justify">
+Данный раздел <b>Счета</b> в сервисе является центральным.<br>
+<b>Счет</b> это, например,  Ваш счет в банке, кошелек, банковская пластиковая карточка, конверт с деньгами и т.п. <br>
+Любое место, где находятся деньги (пусть даже это будет Ваш карман) в сервисе называется <b>Счетом</b>.</p>
+<p align="justify">
+Без <b>Счета</b> невозможно добавить <b>Операцию</b> (расход, доход и перевод по <b>Счету</b>/покупка валюты).
+</p>
+<p align="justify">
+<b>Важно!</b> Перед началом работы добавьте <b>Счета</b>, которые Вам необходимы (Кнопка Добавить). <br>
+В дальнейшем делайте это по мере возникновения потребности в учете новых операций по новым счетам. <br>
+После заведения <b>Счета</b> выберите <b>Добавить Операцию</b> в меню
+</p>
+</div>
+						{/if}
+					{/if}
+				</table>				
+			{/if}
+		</div>
+	</td>
+</table>

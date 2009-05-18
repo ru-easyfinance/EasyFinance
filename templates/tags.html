@@ -1,0 +1,173 @@
+{literal}
+<style>
+@import url(css/jquery/jquery.treeview.css);
+#tagaddform, #tageditform {
+	position:absolute;
+	left: 0;
+	top: 0;
+	display:none;
+	width: 200px;
+	height: 100px;
+	background: #000;
+	color: #fff;
+}
+</style>
+<script src="js/jquery/jquery.treeview.min.js"></script>
+<script>
+$(document).ready(function () {
+	$("#mytree").treeview();
+});
+function addTag(name) {
+	$.ajax({
+		type: "GET",
+		url: "/index.php",
+		data: {
+			modules: "tags",
+			action: "add",
+			name: name.value,
+			ajax: true
+		},
+		success: function(cid) {
+			if (cid > 0) {
+				var branches = $("<li id=\"cli"+cid+"\"><span class='file' style=\"display: inline;\">"+name.value+"</span><img src=\"http://82.146.44.177/manimg/sirius/t-edit.png\" onclick=\"showTagEditForm(this, "+cid+");\"><img src=\"http://82.146.44.177/manimg/sirius/t-delete.png\" onclick=\"deleteTag("+cid+");\">").appendTo("#mytree");
+				$("#mytree").treeview({
+					add: branches
+				});
+				$("#tagaddform").fadeOut("fast");
+			}
+		}
+
+	});
+}
+function editTag(name, id) {
+	$.ajax({
+		type: "GET",
+		url: "/index.php",
+		data: {
+			modules: "tags",
+			action: "edit",
+			name: name.value,
+			id: id.value,
+			ajax: true
+		},
+		success: function(cid) {
+			if (cid > 0) {
+				$("#cli"+cid+" span:first").text(name.value);
+				$("#tageditform").fadeOut("fast");
+			} else {
+				alert(cid);
+			}
+		}
+
+	});
+}
+function deleteTag(id) {
+	$("#tageditform").fadeOut("fast", function () {
+		$("#tagaddform").fadeOut("fast", function () {
+			if (confirm("Вы уверены что хотите удалить категорию "+$("#cli"+id+" span:first").text()+"?")) {
+				$.ajax({
+					type: "GET",
+					url: "/index.php",
+					data: {
+						modules: "tags",
+						action: "delete",
+						id: id,
+						ajax: true
+					},
+					success: function(cid) {
+						if (cid > 0) {
+							$("#cli"+id).hide();
+						}
+					}
+			
+				});
+			}
+		});
+	});
+}
+function showTagEditForm(obj, id) {
+	$("#tagaddform").fadeOut("fast");
+	$("#tageditform").fadeOut("fast", function () {
+		$("#tageditid").attr("value", id);
+		$("#tageditname").attr("value", $("#cli"+id+" span:first").text());
+		pos = getAbsolutePos(obj);
+		$("#tageditform").css("top", pos.y);
+		$("#tageditform").css("left", pos.x);
+		$("#tageditform").fadeIn("slow");
+	});
+}
+function showTagAddForm(obj, id) {
+	$("#tageditform").fadeOut("fast");
+	$("#tagaddform").fadeOut("fast", function () {
+		$("#tagaddparent").attr("value", id);
+		$("#tagaddname").attr("value", "");
+		pos = getAbsolutePos(obj);
+		$("#tagaddform").css("top", pos.y);
+		$("#tagaddform").css("left", pos.x);
+		$("#tagaddform").fadeIn("slow");
+	});
+}
+function CloseForms() {
+	$("#tageditform").fadeOut("fast");
+	$("#tagaddform").fadeOut("fast");
+}
+function getAbsolutePos (el) {
+			var top = el.offsetTop;
+			var left = el.offsetLeft;
+			var parent = el;
+			while (parent=parent.offsetParent) {
+				top += parent.offsetTop;
+				left += parent.offsetLeft;
+			}
+			parent = el;
+			while (parent=parent.parentNode) {
+				if (parent.tagName=="TR") // Из-за Opera
+					continue;
+				top -= parent.scrollTop;
+				left -= parent.scrollLeft;
+				if (parent.tagName=="BODY")
+					break;
+			}
+			return {x:left, y:top};
+		};
+
+</script>
+{/literal}
+<div id="tagaddform">
+	<form onSubmit="return false;">
+	Название:
+	<input type="text" name="tagname" id="tagaddname">
+	<br><button onClick="addTag(this.form.tagname);">Отправить</button>
+	<button onClick="CloseForms();">Отмена</button>
+	</form>
+</div>
+<div id="tageditform">
+	<form onSubmit="return false;">
+	<input type="hidden" name="id" id="tageditid" value="0">
+	Название:
+	<input type="text" name="tagname" id="tageditname">
+	<br><button onClick="editTag(this.form.tagname, this.form.id);">Отправить</button>
+	<button onClick="CloseForms();">Отмена</button>
+	</form>
+</div>
+<table width="100%">
+	<td width="100%">
+		<div class="dtree">
+	       	<div>
+				<font size="-1" color="#76b900">{$good_text}</font><br /><br />
+			</div>
+			<img src="https://82.146.44.177/manimg/sirius/t-new.png" onclick="showTagAddForm(this, 0);">
+			{if !empty($tags)}<ul id="mytree" class="filetree">
+				{foreach from=$tags item="Tag"}<li id="cli{$Tag->Id()}">
+						<span class="file" style="display: inline;">{$Tag->Name()}</span>
+						<img src="https://82.146.44.177/manimg/sirius/t-edit.png" onclick="showTagEditForm(this, {$Tag->Id()})">
+						<img src="http://82.146.44.177/manimg/sirius/t-delete.png" onclick="deleteTag({$Tag->Id()})">
+					</li>
+				{/foreach}
+			</ul>
+			{else}
+					&nbsp;<input type="button" onclick="location.href='index.php?modules=tag&action=get'" value="Загрузить категории из справочника" class="inputsubmit" />
+			{/if}
+		</div>
+	</td>
+</table>

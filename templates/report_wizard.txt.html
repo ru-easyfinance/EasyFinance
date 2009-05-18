@@ -1,0 +1,44 @@
+{if $profit}
+	<div style="color:#76b900; font-size:21px; font-family:tahoma;">Детальные доходы
+{else}
+	<div style="color:#ff6002; font-size:21px; font-family:tahoma;">Детальные расходы
+{/if}</div>
+<p>
+<table width="100%" cellpadding="5" cellspacing="0" border="0" bgcolor="#FFFFFF">
+<tr>
+<td class="cat_add" style="padding-left: 25px;"><b>Дата</b></td>
+<td class="cat_add" style="padding-left: 25px;"><b>Счет</b></td>
+<td class="cat_add" align="right" style="padding-right: 25px;"><b>Сумма</b></td>
+<td style="padding-left: 25px;">&nbsp;</td>
+</tr>
+{assign var=total value="0"}
+{foreach from=$result item=cat key=catName}
+<tr>
+<td colspan="3" class="report_bill_name">
+{assign var=catID value=$cat.categoryID}
+|{foreach from=$parents.$catID item=par} {$par} |{/foreach}
+</td>
+</tr>
+{assign var=subtotal value="0"}
+{foreach from=$cat.dates item=itm}
+<tr style="background-color: rgb(255, 255, 255);" onmouseover="this.style.backgroundColor='#f8f6ea';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class="cat_add" style="padding-left: 25px;">{$itm.day}</td>
+<td class="cat_add" style="padding-left: 25px;">{$itm.account}</td>
+{*<td class="cat_add" align="right" style="padding-right: 25px; white-space: nowrap"><a href="?modules=operation&action=getOperationList&dateFrom={$itm.day}&dateTo={$itm.day}&currentAccount={$itm.accountID}&cat_id={$catID}"><font color="green">{$itm.sum|string_format:"%.2f"|number_format}</font></a></td>*}
+<td class="cat_add" align="right" style="padding-right: 25px; white-space: nowrap"><font color="green">{$itm.sum|string_format:"%.2f"|number_format}</font></td>
+<td style="padding-left: 25px;">&nbsp;</td>
+{assign var=subtotal value=$subtotal+$itm.sum}
+</tr>
+{/foreach}
+<tr>
+<td class="report_month" style="white-space: nowrap"><b>Всего: {$subtotal|default:0|string_format:"%.2f"|number_format} {$currencies.$currency}</b></td><td colspan="2">&nbsp;</td>
+{assign var=total value=$total+$subtotal}
+</tr>
+{foreachelse}
+<tr><td class="cat_add" style="padding-left: 25px;" colspan="3">К сожалению, данных не найдено</td></tr>
+{/foreach}
+<tr>
+<td colspan="4" class="report_month" bgcolor="#f8f8d8" style="white-space: nowrap"><br><b>Общий итог: {$total|default:0|string_format:"%.2f"|number_format} {$currencies.$currency}</b></td>
+</tr>
+</table>
+</p>

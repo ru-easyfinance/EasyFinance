@@ -1,0 +1,184 @@
+
+<table width="100%">
+	<td width="100%">
+		<div class="dtree">
+		{if $page_title == 'periodic add' || $page_title == 'periodic edit'}
+			{if $page_title == 'periodic add'}			
+				<form action="index.php?modules=periodic_transaction&action=add" name="form_add" method="post">
+			{else}
+				<form action="index.php?modules=periodic_transaction&action=edit&id={$periodic.id}" name="form_edit" method="post">
+			{/if}
+			
+			<table width="100%" border="0">
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add" colspan="2"><br />
+						<input type="radio" name="periodic[drain]" value="1" checked="checked"/>Расход
+						<input type="radio" name="periodic[drain]" {if $periodic.drain == '0'}checked="checked"{/if} value="0"/>Доход<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add">{if !empty($error_text.bill_id)}<font color="#FF0000">Счет:</font>{else}Счет:{/if}</td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">						
+						<select name="periodic[bill_id]" style="width:250px;">							
+						{foreach from=$bills_select item=arr_bills}
+							<option value="{$arr_bills.id}" {if $arr_bills.id == $periodic.bill_id}selected{/if}>{$arr_bills.name}</option>
+						{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add">{if !empty($error_text.cat_id)}<font color="#FF0000">Категория:</font>{else}Категория:{/if}</td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">						
+						<select name="periodic[cat_id]" style="width:250px;" id="cat_id_old">							
+							{$categories_select}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td  align="left" class="cat_add" valign="top">
+						<span id="error_money">Сумма:</span>
+					</td>
+					<td  align="left" class="cat_add" colspan="2">
+						
+						<input type="text" id="pos_oc" value="{if !empty($periodic.money)}{$periodic.money}{/if}" style="width:80px;" OnKeyUp="onSumChange();">&nbsp;&nbsp;<b>Пример:</b> 125.50<br />
+						<input type="hidden" name="periodic[money]" id="pos_mc" size="7"><br />
+					</td>
+				</tr>
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add"><span id="next_date">Следующая дата:</span></td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">						
+						<input type="text" value="{if !empty($periodic.date_from)}{$periodic.date_from}{/if}" class="standart" style="width:80px;" name="periodic[date_from]" id="sel5" readonly><button type="reset" class="button_calendar" onclick="return showCalendar('sel5', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add">{if !empty($error_text.cat_id)}<font color="#FF0000">Периодичность:</font>{else}Периодичность:{/if}</td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">						
+						<select name="periodic[period]" style="width:250px;">
+                            <option value="1" {if $periodic.period == '1'}selected{/if}>Ежедневно</option>
+							<option value="7" {if $periodic.period == '7'}selected{/if}>Еженедельно</option>
+		                    <option value="30" {if $periodic.period == '30'}selected{/if}>Ежемесячно</option>
+		                    <option value="90" {if $periodic.period == '90'}selected{/if}>Ежеквартально</option>
+	                    </select>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add"><span id="povtor">Повторения:</span></td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">						
+						<input type="radio" id="povt1" name="periodic[povtor]" value="-1" checked="checked" onclick="{literal}if (document.getElementById('povt1').checked){
+													  document.getElementById('povtor_num').disabled = true;}{/literal}"/>&nbsp;&nbsp;Неограничено &nbsp;	
+		                <input type="radio" id="povt2" name="periodic[povtor]" value="1" {if $periodic.povtor == '1'}checked="checked"{/if}  onclick="{literal}if (document.getElementById('povt2').checked){
+													  document.getElementById('povtor_num').disabled = false;}{/literal}"/>&nbsp;&nbsp;Количество раз &nbsp;
+
+						<input name="periodic[povtor_num]" id="povtor_num" type="text" size="3" maxlength="3" {if $periodic.povtor == '1'}value="{$periodic.povtor_num}"{else}disabled{/if} />
+					</td>
+				</tr>
+				<!--
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add"><span id="err_remind">Вносить:</span></td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">						
+						<input type="radio" name="periodic[insert]" value="0" checked="checked" />&nbsp;&nbsp;Автоматически &nbsp;
+						<input type="radio" name="periodic[insert]" value="1"  />&nbsp;&nbsp;Вручную &nbsp;	
+		                <input type="checkbox" id="remind" name="periodic[remind]" value="1"  onclick="{literal}if (document.getElementById('remind').checked){
+													  document.getElementById('remind_num').disabled = false;}else{ document.getElementById('remind_num').disabled = true; }{/literal}"
+	                                                 />&nbsp;&nbsp;Напомнить за &nbsp;
+
+						<input name="periodic[remind_num]" id="remind_num" type="text" size="3" maxlength="3" disabled="disabled" />	
+						&nbsp; дней
+					</td>
+				</tr>
+				-->
+				<tr>
+					<td width="10%" height=30 align="left" class="cat_add">Комментарий:</td>
+					<td width="90%"  align="left" class="cat_add" colspan="2">
+						<textarea name="periodic[comment]" rows="3" cols="50">{$periodic.comment}</textarea>
+					</td>
+				</tr>				
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add" colspan="2">
+					<table  border="0">
+					<td valign="top">
+						{if $page_title == 'periodic add'}
+							<br><input class="inputsubmit" type="button" value="Сохранить" onclick="onSavePeriodic('form_add');">
+							<input class="inputsubmit" type="button" value="Отменить" style="width:120px;" onclick="location.href='index.php?modules=periodic_transaction'">
+						{else}
+							<input type="hidden" name="periodic[id]" value="{$periodic.id}">							
+							<br><input class="inputsubmit" type="submit" value="Изменить" style="width:120px;" onclick="onSumChange();">
+							</form>
+					</td>
+					<td valign="top">
+							<form action="index.php?modules=periodic_transaction&action=del" method="post" name="form_del">
+								<br>
+								<input type="hidden" name="periodic[id]" value="{$periodic.id}">
+								<input class="inputsubmit" name="sub_del" type="button" value="Удалить" style="width:120px;" OnClick="confirmDelete('эту запись');">							
+					</td>
+					<td valign="top">
+						<br /><input class="inputsubmit" type="button" value="Отменить" style="width:120px;" onclick="history.back();">
+						</form>
+						{/if}
+					</td>
+					</table>						
+					</td>
+				</tr>
+				<tr>
+					<td  align="left" class="cat_add">&nbsp;</td>
+					<td  align="left" class="cat_add" colspan="2">
+						<div id="arrError"></div>
+					</td>
+				</tr>
+			</table>
+		{else}
+			{if !empty($good_text)}
+				<table width="100%">				
+				<tr>
+					<td width="100%" colspan="5" class=cat_add valign="top">                        
+                        	<font size="-1" color="#76b900">{$good_text}</font><br><br>
+					</td>
+				</tr>
+				</table>
+			{/if}
+			<table width="100%">
+				<tr>
+					<td colspan="5" class=cat_add>
+						<input type="button" onclick="location.href='index.php?modules=periodic_transaction&action=add'" value="Добавить регулярную транзакцию" class="inputsubmit" />
+					</td>
+				</tr>
+				{if !empty($periodic)}
+				{assign var="bill" value=""}
+				{foreach from=$periodic item=data}				
+					{if $data.bill_id != $bill}
+					<tr>
+						<td colspan="5" class=cat_add>&nbsp;
+							
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" class=cat_add>
+							Счет: <b>{$data.bill_name}</b><br><br>
+						</td>
+					</tr>					
+					<tr>
+						<td class=cat_add width=20%><img src=img/tree/empty.gif>Категория</td>
+						<td class=cat_add width=10%>Деньги</td>
+						<td class=cat_add width=10%>Дата</td>										
+						<td class=cat_add width=50%>Комментарий</td>
+						<td class=cat_add width=10%>Статус</td>
+					</tr>					
+					{/if}
+					<tr onMouseOver=this.style.backgroundColor='#f8f6ea';
+						   		onMouseOut=this.style.backgroundColor='#FFFFFF';>
+						<td class=money width=20%><img src=img/tree/empty.gif><a href="index.php?modules=periodic_transaction&action=edit&id={$data.id}">{$data.cat_name}</a></td>
+						<td class=money width=10%>{$data.money}</td>
+						<td class=money width=10%>{$data.date_from}</td>										
+						<td class=money width=50%>{$data.comment}&nbsp;</td>
+						<td class=money width=10%>{if $data.povtor == '1' && $data.povtor_num == '0'}<font color="green">Выполнено</font>{else}<font color="#bc5f5f">Активно</font>{/if}</td>
+					</tr>
+				{assign var="bill" value=$data.bill_id}
+				{/foreach}
+				{/if}
+			</table>
+		{/if}
+		</div>
+	</td>
+</table>

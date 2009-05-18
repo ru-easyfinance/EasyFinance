@@ -1,0 +1,38 @@
+{if $result}
+<center>
+{php}
+include_once 'ofc-library/open_flash_chart_object.php';
+
+global $p_reportType,$p_dateFrom,$p_dateTo,$p_account,$p_currency;
+open_flash_chart_object( 800, 450, 'index.php?modules=report_wizard_flash&reportType='.$p_reportType.'&dateFrom='.$p_dateFrom.'&dateTo='.$p_dateTo.'&account='.$p_account.'&currency='.$p_currency, false );
+{/php}
+</center>
+
+{if !$doNotShowResult}
+
+<p>
+<table border="0" cellpadding="5" cellspacing="0" width="100%" bgcolor="#FFFFFF">
+<tr>
+<td class="cat_add" style="padding-left: 25px;"><b>Категория</b></td>
+<td class="cat_add" align="right" style="padding-right: 45px;"><b>Сумма</b></td>
+<td class="cat_add" align="right" style="padding-right: 45px;"><b>Доля</b></td>
+</tr>
+{assign var=subtotal value="0"}
+{foreach from=$result item=v key=k}
+<tr style="background-color: rgb(255, 255, 255);" onmouseover="this.style.backgroundColor='#f8f6ea';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td style="padding-left: 25px;" class="cat_add">
+|{foreach from=$parents.$k item=par} {$par|default:"Название категории не указано"} |{foreachelse} Название категории не указано |{/foreach}</td>
+<td width="20%" class="cat_add" align="right" style="padding-right: 45px; white-space: nowrap">{$v.sum|default:0|string_format:"%.2f"|number_format}</td>
+<td width="20%" class="cat_add" align="right" style="padding-right: 45px; white-space: nowrap">{$v.part|default:0|string_format:"%.1f"} %</td>
+</tr>
+{assign var=subtotal value=$subtotal+$v.sum}
+{/foreach}
+<tr>
+<td colspan="3" class="report_month" bgcolor="#f8f8d8" style="white-space: nowrap"><br><b>Итого: {$subtotal|default:0|string_format:"%.2f"|number_format} {$currencies.$currency}</b></td>
+</tr>
+</table>
+{/if}
+{else}
+Данных нет
+{/if}
+</p>

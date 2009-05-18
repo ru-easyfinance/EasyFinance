@@ -1,0 +1,10 @@
+php_flag register_globals Off
+php_flag display_errors On
+
+#RewriteEngine on
+
+#RewriteCond %{SERVER_NAME} !^www
+#RewriteRule ^(.*) https://www.home-money.ru/$1 [L]
+
+#RewriteCond %{SERVER_PORT} !^443$
+#RewriteRule ^(.*) https://www.home-money.ru/$1 [L]

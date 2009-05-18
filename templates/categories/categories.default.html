@@ -1,0 +1,308 @@
+<script language="javascript">
+{literal}
+	function visible_block_del(id, check)
+	{
+		if (check == 0)
+		{
+			$('#ico_del_' + id).show();
+		}else{
+			$('#ico_del_' + id).hide();
+		}
+	}
+	
+	function categoryAddVisible()
+	{
+		$('#blockCreateCategories').show();	
+	}
+	
+	function categoryAddUnvisible()
+	{
+		$('#blockCreateCategories').hide();
+		document.getElementById('name').value = "";
+		document.getElementById('parent').value = 0;
+		document.getElementById('type').value = 0;
+		document.getElementById('system').value = 0;
+		document.getElementById('category_id').value = '';
+	}
+	
+	function createNewCategory()
+	{
+		var category_id = document.getElementById('category_id').value;
+		var name = document.getElementById('name').value;
+		var parent = document.getElementById('parent').value;
+		var type = document.getElementById('type').value;
+		var system = document.getElementById('system').value;
+
+		$('#loader').html('Подождите, идет сохранение...');
+		$('#information_text').hide();
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "create_new_category",
+				name: name,
+				parent: parent,
+				type: type,
+				system: system,
+				category_id: category_id,
+				ajax: true
+			},			
+			success: function(data) {
+				$('#loader').html(" ");
+				$('#dataCategories').html(data);
+				
+				$('#information_text').show();
+				reloadBlockCreate();
+			}
+		});
+	}
+	
+	function reloadBlockCreate()
+	{
+		//$('#blockCreateCategories').html("Подождите, идет загрузка...");
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "reload_block_create",
+				ajax: true
+			},			
+			success: function(data) {
+				$('#blockCreateCategories').html(data);
+			}
+		});
+	}
+	
+	function deleteCategory(id)
+	{		
+		if (!confirm("Вы действительно хотите удалить эту категорию?")) {           
+        	return false;
+    	}
+		
+		$('#information_text').hide();
+		$('#loader').html('Подождите, идет удаление...');
+		
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "delete_category",
+				id: id,
+				ajax: true
+			},			
+			success: function(data) {
+				$('#loader').html(" ");
+				$('#dataCategories').html(data);
+				
+				$('#information_text').show();
+				reloadBlockCreate();
+			}
+		});
+	}
+	
+	function editCategory(id)
+	{
+		categoryAddVisible();
+		$('#loader').html('Подождите, идет загрузка...');
+		$('#information_text').hide();
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "edit_category",
+				id: id,
+				ajax: true
+			},			
+			success: function(data) {
+				$('#blockCreateCategories').html(data);
+				$('#loader').html(' ');
+				$('#information_text').show();
+			}
+		});
+		scrollTo(0,0);
+	}
+	
+	function acceptFiltrCategories()
+	{
+		var filtr_type = document.getElementById('filtr_type').value;
+		var filtr_visible = document.getElementById('filtr_visible').value;
+		var filtr_period = document.getElementById('filtr_period').value;
+
+		$('#loader').html('Подождите, идет загрузка...');
+		$('#information_text').hide();
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "change_filtr",
+				filtr_type: filtr_type,
+				filtr_visible: filtr_visible,
+				filtr_period: filtr_period,
+				ajax: true
+			},			
+			success: function(data) {
+				$('#dataCategories').html(data);
+				$('#loader').html(' ');
+				$('#information_text').show();
+			}
+		});	
+	}
+	
+	function changePeriodFact()
+	{
+		var period = document.getElementById('period_fact').value;
+		$('#loader').html('Подождите, идет загрузка...');
+		$('#information_text').hide();
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "change_period_fact",
+				period: period,
+				ajax: true
+			},			
+			success: function(data) {
+				$('#dataCategories').html(data);
+				$('#loader').html(' ');
+				$('#information_text').show();
+			}
+		});	
+	}
+	
+	function visibleCategory(id, visible)
+	{
+		$('#loader').html('Подождите, идет загрузка...');
+		$('#information_text').hide();
+		$.ajax({
+			type: "GET",
+			url: "/index.php",
+			data: {
+				modules: "categories",
+				action: "visible_category",
+				id: id,
+				visible: visible,
+				ajax: true
+			},			
+			success: function(data) {
+				$('#dataCategories').html(data);
+				$('#loader').html(' ');
+				$('#information_text').show();
+			}
+		});	
+	}	
+{/literal}
+</script>
+
+<div id="blockCreateCategories" style="display:none;">
+	{include file="categories/categories.block_create.html"}
+</div>
+
+<table width="100%">
+<tr>
+	<td class="cat_add" style="padding-bottom:5px; background-color:#fff;">    
+        <div>
+            Вывести категории: 
+            	<select name="filtr_type" id="filtr_type" style="width:150px;" onchange="acceptFiltrCategories();">
+                    <option label="Все" value="-1"> --- Все ---</option>
+                    <option value="0">Только расходные</option>
+                    <option value="1">Только доходные</option>
+                    <option value="2">Только универсальные</option>
+                </select>
+            &nbsp;&nbsp;
+            Показать: 
+                <select name="filtr_visible" id="filtr_visible" style="width:150px;" onchange="acceptFiltrCategories();">                    
+                    <option value="1">Только видимые</option>
+                    <option value="0">Только скрытые</option>
+                    <option label="Все" value="-1"> --- Все ---</option>
+                </select>
+            &nbsp;&nbsp;
+            Период за: 
+                <select name="filtr_visible" id="filtr_period" style="width:150px;" onchange="acceptFiltrCategories();">                    
+                    <option value="week">Текущую неделю</option>
+                    <option value="month" selected="selected">Текущий месяц</option>
+                    <option value="year">Текущий год</option>
+                    <option value="all">Весь период</option>
+                </select>      
+			&nbsp;&nbsp;
+		</div>
+        <!--<div>
+            <select name="test" style="width:200px;">
+                <optgroup label="часто используемые">
+                    {foreach from=$categories item=oo}
+                        {if $oo.often == '1'}
+                        <option value="{$oo.cat_id}">{$oo.cat_name}</option>
+                        {/if}
+                        {foreach from=$oo.childNodes item=o2}
+                        	{if $o2.often == '1'}
+                            	<option value="{$o2.cat_id}">{$o2.cat_name}</option>
+                            {/if}
+                        {/foreach}
+                    {/foreach}
+                </optgroup>
+                
+                <optgroup label="оставшиеся">
+                	{foreach from=$categories item=dd} 
+                		<option value="{$dd.cat_id}">{$dd.cat_name}</option>
+                        {if (!empty($dd.childNodes))}
+                        	{foreach from=$dd.childNodes item=cc}
+                            	<option value="{$cc.cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;-{$cc.cat_name}</option>
+                            {/foreach}
+                        {/if}
+                	{/foreach}
+                </optgroup>
+			</select>
+        </div>-->
+	</td>
+</tr>
+<tr>
+	<td style="padding: 5px; background-color: rgb(248, 248, 216);" valign="top" width="100%">
+    	<table width="100%" bgcolor="#ffffff" border="0" cellspacing="0">
+        <tr>
+            <td class="cat_add" colspan="5" style="padding:5 0 15 5; background-color:#f8f8d8; border-bottom: 1px solid rgb(204, 204, 204);">
+                <span style="color: rgb(56, 120, 215);" id="loader"></span>
+                <span style="color: rgb(56, 120, 215);" id="information_text">Для редактирования категории выберите ее в списке.</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="cat_add" style="border-bottom: 1px solid #CCC; padding: 5 0 5 25;">        	
+                <b>Категория</b> <span class="tooltip">(?)
+                    <span>
+                        Описание, что такое категория.
+                    </span>
+                </span>
+            </td>
+            <td class="cat_add" style="border-bottom: 1px solid #CCC; border-left: 1px solid #CCC; padding-left: 15px; padding-right:10px;" width="45">
+            	<b>Тип</b> <span class="tooltip">(?)
+                    <span>
+                        Описание, что такое тип.
+                    </span>
+                </span>
+			</td>
+            <td class="cat_add" style="border-bottom: 1px solid #CCC; border-left: 1px solid #CCC; padding-left: 10px;" width="170">
+            	<b>Системная категория</b> <span class="tooltip">(?)
+                    <span>
+                        Описание, что такое системная категория.
+                    </span>
+                </span>
+			</td>
+            <td class="cat_add" style="border-bottom: 1px solid #CCC; border-left: 1px solid #CCC; padding-left: 25px;" width="250">
+            	<b>Сумма за период</b> <span class="tooltip">(?)
+                    <span>
+                        Описание, что такое сумма за период.
+                    </span>
+                </span>
+			</td>
+        </tr>
+        </table>
+		<div class="dtree" id="dataCategories">        
+			{include file="categories/categories.list.html"}        
+        </div>
+	</td>
+</tr>
+</table>

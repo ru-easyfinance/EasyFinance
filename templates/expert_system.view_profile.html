@@ -1,0 +1,72 @@
+<div class="dtree">
+
+		<table width="100%" align="left">
+		<tr>
+			<td class="cat_add_expert">
+			<img src="upload/photo_experts/{$profile.photo}" align="left" width="250" style="padding-right:10px; padding-bottom:10px; padding-top:10px; ">
+			<h3>{$profile.last_name} {$profile.first_name} {$profile.middle_name}</h3>
+			<p>Рейтинг: {$profile.rank} ({$profile.voice_up} / {$profile.voice_down})</p>
+			<p>{$profile.about|nl2br}</p></td>
+		</tr>	
+		<tr><td>
+			<div>
+			<input type="button" onclick="location.href='index.php?modules=experts&action=new_question&exp_id={$profile.id}'" value="Задать вопрос" class="inputsubmit" />
+			</div>&nbsp;</td></tr>
+		<tr>
+			<td class="cat_add_expert">
+				<h4>Список услуг:</h4>
+				<ol>
+				{foreach from=$costs item=data}
+					{if !empty($data.price)}
+					<li style="padding-bottom:15px;"><b>{$data.cost_name}</b> 
+						({$data.price|number_format} руб.)&nbsp;&nbsp;
+						<a href="index.php?modules=experts&action=new_question&exp_id={$profile.id}&cost={$data.cost_id}">Заказать услугу</a><br>
+						{$data.desc|nl2br}</li>
+					{/if}
+				{/foreach}
+				</ol>
+			</td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td class="cat_add_expert">
+				<h4>Список тем:</h4>
+				<ul>
+				{foreach from=$categories item=data}
+					{if !empty($data.expert)}
+					<li>{$data.category_name}&nbsp;&nbsp;
+					<a href="index.php?modules=experts&action=new_question&exp_id={$profile.id}&category={$data.category_id}">Задать вопрос на эту тему</a><br>
+					</li>
+					{/if}
+				{/foreach}
+				</ul>
+			</td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td class="cat_add"><h4>Список статей:</h4></td>
+		</tr>
+		{foreach from=$attach_url item=data}
+			{if !empty($data.article_active)}
+			<tr>
+				<td class="cat_add">{$data.article}</td>
+			</tr>
+			{/if}
+		{/foreach}
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td class="cat_add"><h4>Файлы лицензий:</h4></td>
+		</tr>
+		{foreach from=$attach_file item=data}
+			<tr>
+				<td class="cat_add">
+					<div style="padding:10px; width:100px; margin-bottom:10px;">
+						<a href="upload/file_experts/{$data.file_name}" target="_blank">
+							<img src="upload/file_experts/{$data.file_name}" align="left" width="100" border="0"></a>
+					</div>
+				</td>
+			</tr>
+		{/foreach}
+		</table>
+
+</div>
