@@ -1,0 +1,33 @@
+<div class="dtree">
+<table width="100%" align="center">
+	<tr>
+		<td class="cat_add_expert">
+			<input type="button" onclick="location.href='index.php?modules=experts&action=new_question'" value="Добавить вопрос" class="inputsubmit" />
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?modules=experts&action=get_list_experts">Список экспертов</a><br><br>
+		</td>
+	</tr>
+	{if !empty($success)}
+		<tr>
+			<td class="cat_add_expert">{$success}</td>
+		</tr>
+	{/if}
+	
+	{if !empty($listQuestion)}
+		{foreach from=$listQuestion item=data}
+		<tr>
+			<td class="cat_add_expert">
+				<b><a href="index.php?modules=experts&action=question&id={$data.id}">{$data.title}</a></b>
+				{if empty($data.from_expert_id) && $data.post_is_new == 1}<font color="#FF6633">Новое!</font></font>{/if}
+				<div><i>{$data.description}</i></div>
+				<div align="right">{$data.last_name}&nbsp;{$data.first_name}</div>
+				<div align="right">{$data.date_created}</div>
+			</td>
+		</tr>
+		{/foreach}
+	{else}
+		<tr>
+			<td class="cat_add_expert">Вы не задали ни одного вопроса</td>
+		</tr>
+	{/if}
+</table>
+</div>

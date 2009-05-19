@@ -1,0 +1,97 @@
+<script language="javascript">
+{literal}
+function checkFormCostAndCategory(data)
+{
+	var cost = document.getElementById("costSelect").value;
+	var category = document.getElementById("categorySelect").value;
+	
+	if (data == "cost")
+	{
+		if (cost > 0)
+		{
+			document.getElementById("categorySelect").disabled = true;			
+		}else{
+			document.getElementById("categorySelect").disabled = false;	
+		}
+	}
+	
+	if (data == "category")
+	{
+		if (category > 0)
+		{
+			document.getElementById("costSelect").disabled = true;			
+		}else{
+			document.getElementById("costSelect").disabled = false;
+		}
+	}
+	
+	if (data == "all")
+	{
+		if (cost > 0)
+		{
+			document.getElementById("categorySelect").disabled = true;			
+		}
+		
+		if (category > 0)
+		{
+			document.getElementById("costSelect").disabled = true;			
+		}
+	}
+}
+{/literal}
+</script>
+
+<form action="index.php?modules=experts&action=new_question" method="post">
+
+<table width="100%">
+<tr>
+	<td width="15%" class="cat_add_expert">Название вопроса</td>
+	<td class="cat_add_expert"><input type="text" name="title" style="width:200px;"></td>
+</tr>
+<tr>
+	<td class="cat_add_expert">Эксперт</td>
+	<td class="cat_add_expert">
+		<select name="exp_id">
+		{foreach from=$listExperts item=data}
+			<option value="{$data.id}" {if $select_exp_id == $data.id} selected {/if}>{$data.last_name}&nbsp;{$data.first_name}</option>
+		{/foreach}
+		</select>
+	</td>
+</tr>
+<tr>
+	<td width="15%" class="cat_add_expert">Список услуг</td>
+	<td class="cat_add_expert">
+		<select name="cost_id" id="costSelect" onchange="checkFormCostAndCategory('cost');">
+		<option value="0"></option>
+		{foreach from=$costs item=data}
+			<option value="{$data.cost_id}" {if $cost_id == $data.cost_id} selected {/if}>{$data.cost_name}</option>
+		{/foreach}
+		</select>
+	</td>
+</tr>
+<tr>
+	<td width="15%" class="cat_add_expert">Список тем вопросов</td>
+	<td class="cat_add_expert">
+		<select name="category_id" id="categorySelect" onchange="checkFormCostAndCategory('category');">
+		<option value="0"></option>
+		{foreach from=$categories item=data}
+			<option value="{$data.category_id}" {if $category_id == $data.category_id} selected {/if}>{$data.category_name}</option>
+		{/foreach}
+		</select>
+	</td>
+</tr>
+<tr>
+	<td valign="top" class="cat_add_expert">Текст вопроса</td>
+	<td class="cat_add_expert"><textarea name="question" cols="80" rows="10"></textarea></td>
+</tr>
+<tr>
+	<td class="cat_add_expert">&nbsp;</td>
+	<td class="cat_add_expert"><input type="submit" value="Отправить"></td>
+</tr>
+</table>
+
+</form>
+
+<script language="javascript">
+	checkFormCostAndCategory("all");
+</script>

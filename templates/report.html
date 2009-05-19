@@ -1,0 +1,107 @@
+<table width="100%" cellspacing="5">
+<tr>
+	<td width="100%" class="cat_add">
+		<a href="index.php?modules=report&action=come_for_period&drain=1"><font color="#ff6002"><b>Отчет расходов по категориям за весь период</b></font></a>
+	</td>
+</tr>
+<tr>
+	<td width="100%" class="cat_add">
+		<a href="index.php?modules=report&action=come_for_period&drain=0"><font color="#76b900"><b>Отчет доходов по категориям за весь период</b></font></a>
+	</td>
+</tr>
+</table>
+{if !empty($report_view)}
+	{$report_view}
+    <table><td style="font-size:12px;">
+    	<br /><a href="print.php">Печать отчета</a></td></table>
+
+{/if}
+<table width="100%" cellspacing="5">
+<form action="index.php?modules=report&action=come_for_period" method="post">
+	<tr>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">
+			Дата начала периода:
+		</td>
+		<td class="cat_add" width="8%">
+			
+			<input type="text" value="{if !empty($report.date_from)}{$report.date_from}{else}{$date_today}{/if}" class="standart" style="width:80px;" name="report[date_from]" id="sel5" readonly><button type="reset" class="button_calendar" onclick="return showCalendar('sel5', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>			
+		</td>
+		<td  align="left" class="cat_add">
+			<input type="button" value="Очистить" onclick="document.getElementById('sel5').value = ''" class="inputsubmit">
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">
+			Дата конца периода:
+		</td>
+		<td class="cat_add" width="8%">
+			<input type="text"  value="{if !empty($report.date_to)}{$report.date_to}{else}{$date_to}{/if}" class="standart" style="width:80px;" name="report[date_to]" id="sel1" readonly><button type="reset" class="button_calendar" onclick="return showCalendar('sel1', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+		</td>
+		<td  align="left" class="cat_add">
+			<input type="button" value="Очистить" onclick="document.getElementById('sel1').value = ''" class="inputsubmit">
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">
+			Счет:
+		</td>
+		<td  align="left" class="cat_add" colspan="2">
+			<select name="report[bill_id]" style="width:250px;">
+					<option value="" selected="selected">---</option>						
+				{foreach from=$bills item=bill}
+					<option value="{$bill.id}" {if $bill.id == $report.bill_id} 
+					selected="selected"{/if}>{$bill.name}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">
+			Категория:
+		</td>
+		<td  align="left" class="cat_add" colspan="2">
+			<select name="report[cat_id]" style="width:250px;">
+				<option value="" selected="selected">---</option>
+				{$categories_select}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">&nbsp;
+			
+		</td>
+		<td  align="left" class="cat_add" colspan="2">
+			<input type="radio" name="report[drain]" value="1" checked="checked"/>По расходам
+			<input type="radio" name="report[drain]" {if $report.drain == '0'}checked="checked"{/if} value="0"/>По доходам<br /><br />
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">&nbsp;
+			
+		</td>
+		<td  align="left" class="cat_add" colspan="2">
+			<input type="checkbox" name="report[group_account]" {if $report.group_account == 'on'}checked="checked"{/if}/>
+			Группировать счета&nbsp;&nbsp;
+			<select name="report[currency]" style="width:55px;" id="select_currency">
+				<option value="1" selected="selected">руб.</option>
+				<option value="2" {if $report.currency == '2'} selected="selected" {/if}>$</option>
+				<option value="3" {if $report.currency == '3'} selected="selected" {/if}>€</option>
+			</select>
+			Валюта&nbsp;&nbsp;
+			<input type="checkbox" name="report[with_transfer]" {if $report.with_transfer == 'on'}checked="checked"{/if} />
+			Группировать по месяцам<br /><br />
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" class="cat_add">&nbsp;
+			
+		</td>
+		<td  align="left" class="cat_add" colspan="2">
+			<input class="inputsubmit" type="submit" value="Применить фильтр" style="width:150px;">	
+		</td>
+	</tr>
+</form>
+</table>

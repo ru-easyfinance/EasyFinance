@@ -1,0 +1,39 @@
+<h1>Экспорт транзакций</h1>
+
+{if $error_text}<p>{$error_text}</p>{/if}
+
+<div class="cat_add">Экспортировать транзакции</div><br>
+
+<table width="50%" border="0" cellpadding="5" cellspacing="0">
+<form action="index.php?modules=export" method="post">
+<tr>
+
+<td class="cat_add">с*: 
+<input type="text" value="{$dateFrom}" class="standart" style="width:80px;" name="dateFrom" id="sel5" readonly><button type="reset" class="button_calendar" onclick="return showCalendar('sel5', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+</td>
+
+<td class="cat_add">по*: 
+<input type="text" value="{$dateTo}" class="standart" style="width:80px;" name="dateTo" id="sel6" readonly><button type="reset" class="button_calendar" onclick="return showCalendar('sel6', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+</td>
+</tr>
+
+<tr>
+<td colspan="2" class="cat_add">Счета*:<br>
+<p>
+<select name="accounts[]" multiple size="10">
+{html_options options=$userAccounts selected=$accounts}
+</select>
+</p>
+Формат экспорта: CSV, разделитель* <input type="text" size="2" name="delimiter" value="{$delimiter|default:";"}">
+</td>
+</tr>
+
+<tr>
+<td colspan="2" align="center">
+<input type="submit" value="Начать экспорт">
+</td>
+</tr>
+<input type="hidden" name="action" value="startExport">
+<input type="hidden" name="exportFormat" value="transactions_csv">
+</form>
+</table>

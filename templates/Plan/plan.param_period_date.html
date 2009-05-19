@@ -1,0 +1,84 @@
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+
+{if $planning_horizon == 1}
+		<td width="200" class="cat_add" align="right" valign="top">
+        	Неделя планирования:&nbsp;
+        </td>
+        <td align="left" class="cat_add">
+        	<select id="param_period_date_week" onchange="getPlanDate(1);">
+            	<option value="1">Текущая неделя</option>
+                <option value="2">Следующая неделя</option>
+            </select>
+            <span id="plan_date"></span><br><br>
+		</td>
+{/if}
+
+{if $planning_horizon == 2}
+		<td width="200" class="cat_add" align="right" valign="top">
+        	Месяц планирования:&nbsp;     	        	
+        </td>
+        <td align="left" class="cat_add">
+        	<select id="param_period_date_day" onchange="getPlanDate(2);">
+            	{foreach from=$day item=data}
+                	<option value="{$data.day}">{$data.day}</option>
+                {/foreach}                
+            </select>
+        	<select id="param_period_date_month" onchange="getPlanDate(2);">
+            	<option value="01">Январь</option>
+                <option value="02">Февраль</option> 
+                <option value="03">Март</option> 
+                <option value="04">Апрель</option> 
+                <option value="05">Май</option> 
+                <option value="06">Июнь</option> 
+                <option value="07">Июль</option> 
+                <option value="08">Август</option> 
+                <option value="09">Сентябрь</option> 
+                <option value="10">Октябрь</option> 
+                <option value="11">Ноябрь</option> 
+                <option value="12">Декабрь</option>           
+            </select>
+			<select id="param_period_date_year" onchange="getPlanDate(3);">
+            	<option value="2008">2008</option>
+                <option value="2009">2009</option> 
+                <option value="2010">2010</option>
+            </select>
+            <span id="plan_date"></span><br><br>
+		</td>
+{/if}
+
+{if $planning_horizon == 3}
+	<td width="200" class="cat_add" align="right" valign="top">
+        	Квартал планирования:&nbsp;     	        	
+        </td>
+        <td align="left" class="cat_add">
+			<select id="param_period_date_kvartal" onchange="getPlanDate(3);">
+            	<option value="1">1 квартал</option>
+                <option value="2">2 квартал</option> 
+                <option value="3">3 квартал</option>
+				<option value="3">4 квартал</option>
+            </select>
+        	<select id="param_period_date_year" onchange="getPlanDate(3);">
+            	<option value="2008">2008</option>
+                <option value="2009">2009</option> 
+                <option value="2010">2010</option>
+            </select>
+            <span id="plan_date"></span><br><br>
+		</td>
+{/if}
+
+{if $planning_horizon == 4}
+	<td width="200" class="cat_add" align="right" valign="top">
+        	Год планирования:&nbsp;     	        	
+        </td>
+        <td align="left" class="cat_add">
+        	<select id="param_period_date_year" onchange="getPlanDate(3);">
+            	<option value="2008">2008</option>
+                <option value="2009">2009</option> 
+                <option value="2010">2010</option>
+            </select>
+            <span id="plan_date"></span><br><br>
+		</td>
+{/if}
+<input type="hidden" name="start_date" value="{$start}" />
+<input type="hidden" name="finish_date" value="{$finish}" />
+</table>

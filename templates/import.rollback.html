@@ -1,0 +1,24 @@
+<h1>Откатить импорт</h1>
+
+{if $error_text}<p>{$error_text}</p>{/if}
+
+{if $iList}
+<table border="0" cellpadding="5" cellspacing="0">
+{foreach from=$iList item=itm}
+<tr>
+<td>{$itm.imp_date|default:"Дата импорта неизвестна"}</td>
+
+<form action="index.php?modules=import" method="post">
+<td>
+<input type="submit" value="Откатить">
+</td>
+<input type="hidden" name="action" value="doRollback">
+<input type="hidden" name="impID" value="{$itm.imp_id}">
+</form>
+
+</tr>
+{/foreach}
+</table>
+{else}
+Не было произведено ни одного импорта.
+{/if}

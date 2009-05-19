@@ -1,0 +1,27 @@
+<div class="dtree">
+<table width="100%">
+	<tr>
+		<td class="cat_add"><a href="index.php?modules=experts">Вернутся в список вопросов</a><br><br></td>
+	</tr>
+	{if !empty($listExperts)}
+		{foreach from=$listExperts item=data}
+			<tr>
+				<td class="cat_add">
+					<table width="100%">
+						<td width="100" class="cat_add">
+							<img src="upload/photo_experts/{$data.photo}" align="left" width="100">
+						</td>
+						<td class="cat_add" valign="top">
+							<strong>{$data.last_name}&nbsp;{$data.first_name}&nbsp;{$data.middle_name}</strong><br>
+							ранг:{$data.rank}&nbsp;(за:{$data.voice_up}&nbsp;против:{$data.voice_down})<br><br>
+							<a href="index.php?modules=experts&action=view_profile&exp_id={$data.id}">Полная информация</a><br><br>
+							<a href="index.php?modules=experts&action=review&exp_id={$data.id}">Книга жалоб и предложений</a><br><br>
+							<a href="index.php?modules=experts&action=new_question&exp_id={$data.id}">Задать вопрос</a>
+						</td>
+					</table>
+				</td>
+			</tr>
+		{/foreach}
+	{/if}
+</table>
+</div>

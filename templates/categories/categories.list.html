@@ -1,0 +1,96 @@
+
+<table width="100%" bgcolor="#ffffff" border="0" cellspacing="0">
+    <tbody>        
+    <tr>
+        <td class="cat_add" colspan="4" style="padding-bottom:5px; background-color:#fff;">        	
+        	{if !empty($error)}<span style="color:#F00; font-weight:bold;">{$error}</span>{/if}
+            &nbsp;
+        </td>
+    </tr>
+    
+    {foreach from=$categories item=data}            
+    <tr style="background-color: rgb(255, 255, 255);" 
+                onmouseover="this.style.backgroundColor='#f8f6ea'; visible_block_del({$data.cat_id},0);" 
+                onmouseout="this.style.backgroundColor='#FFFFFF'; visible_block_del({$data.cat_id},1);">
+
+        <td class="cat_add" style="padding-left: 20px;" valign="middle">							
+            <img src="img/tree/folderopen.gif">							
+            <span id="name_id_{$data.cat_id}">
+				<a href="javascript:editCategory({$data.cat_id});">{$data.cat_name}</a>
+			</span>
+            <span id="ico_del_{$data.cat_id}" style="display:none; padding-left:10px;">
+            	<img src="img/edit.gif" title="Редактировать" border="0" alt="Редактировать" style="cursor:pointer;" onClick="editCategory({$data.cat_id});"/>
+				<img src="img/delete.gif" title="Удалить" border="0" alt="Удалить" style="cursor:pointer;" onClick="deleteCategory({$data.cat_id});"/>
+                {if $data.visible == 1}
+                	<a href="javascript:visibleCategory({$data.cat_id}, 0);" title="Скрыть">
+                    	<img src="img/eye.png" border=0 alt="Скрыть"></a>
+                {else}
+                	<a href="javascript:visibleCategory({$data.cat_id}, 1);" title="Показать">
+                    	<img src="img/eye.png" border=0 alt="Показать"></a>
+                {/if}
+			</span>					
+        </td>
+        <td class="cat_add" style="padding-left:25px; border-left:1px solid #CCC;" width="45">
+            <img src="img/cat_type_{$data.type}.jpg" title="{if $data.type == 0}Расходная{elseif $data.type == 1}Доходная{else}Универсальная{/if} категория">
+        </td>
+        <td class="cat_add" align="left" style="padding-left:10px; border-left:1px solid #CCC;" width="170">
+            {$data.system_category_name}&nbsp;
+        </td>
+        <td class="cat_add" align="left" style="padding-left:25px; border-left:1px solid #CCC;" width="250">    	
+            <div style="border:1px solid #CCC; width:100px; height:5px; float:left; margin-top:4px;" title="{$data.percent}%">        
+                <div style="background-color:#{if $data.drain == 0}0C3{else}ff6002{/if}; width:{$data.percent}px;">
+                    <img src="/img/{if $data.drain == 0}green{else}red{/if}.gif">
+                </div>
+            </div>&nbsp; {$data.sum} руб.        
+        </td>
+    </tr>
+    
+    {if (!empty($data.childNodes))}
+        {foreach from=$data.childNodes item=child}
+        <tr style="background-color: rgb(255, 255, 255);" 
+                onmouseover="this.style.backgroundColor='#f8f6ea'; visible_block_del({$child.cat_id},0);" 
+                onmouseout="this.style.backgroundColor='#FFFFFF'; visible_block_del({$child.cat_id},1);">
+
+            <td class="cat_add" style="padding-left: 40px; padding-bottom:2px;padding-top:2px;" valign="middle">							
+                <img src="img/tree/joinbottom.gif"><img src="img/tree/page.gif">
+				<span id="name_id_{$child.cat_id}">
+                	<a href="javascript:editCategory({$child.cat_id});">{$child.cat_name}</a>
+				</span>
+                <span id="ico_del_{$child.cat_id}" style="display:none; padding-left:10px;">
+                	<img src="img/edit.gif" border="0" title="Редактировать" alt="Редактировать" style="cursor:pointer;" onClick="editCategory({$child.cat_id});"/>
+                    <img src="img/delete.gif" title="Удалить" alt="Удалить" border="0" style="cursor:pointer;" onClick="deleteCategory({$child.cat_id});"/>
+                    {if $data.visible == 1}
+                        <a href="javascript:visibleCategory({$child.cat_id}, 0);" title="Скрыть">
+                        	<img src="img/eye.png" border=0 alt="Скрыть"></a>
+                    {else}
+                        <a href="javascript:visibleCategory({$child.cat_id}, 1);" title="Показать">
+                        	<img src="img/eye.png" border=0 alt="Показать"></a>
+                    {/if}
+				</span>
+            </td>
+		<td class="cat_add" style="padding-left:25px; border-left:1px solid #CCC;">
+			<img src="img/cat_type_{$child.type}.jpg" title="{if $child.type == 0}Расходная{elseif $child.type == 1}Доходная{else}Универсальная{/if} категория">
+		</td>
+		<td class="cat_add" style="padding-left:10px; border-left:1px solid #CCC;">
+			{$child.system_category_name}&nbsp;
+		</td>
+        <td class="cat_add" align="left" style="padding-left:25px; border-left:1px solid #CCC;">    	
+            <div style="border:1px solid #CCC; width:100px; height:5px; float:left; margin-top:4px;" title="{$child.percent}%">
+                <div style="background-color:#{if $child.drain == 0}0C3{else}ff6002{/if}; width:{$child.percent}px;">
+                	<img src="/img/{if $child.drain == 0}green{else}red{/if}.gif">
+				</div>
+            </div>&nbsp; {$child.sum} руб.        
+		</td>
+        </tr>
+        {/foreach}
+    {/if}
+    
+    {/foreach}
+    
+    <tr>
+        <td class="cat_add" style="padding-bottom:5px; background-color:#fff;">&nbsp;</td>
+    </tr>
+    
+    </tbody>
+</table>
+

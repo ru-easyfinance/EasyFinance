@@ -1,0 +1,34 @@
+<table width="100%">
+<form action="index.php?modules=experts&action=review" method="post">
+<tr>
+	<td><a href="index.php?modules=experts&action=get_list_experts">Вернуться в список экспертов</a></td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+</tr>
+{if !empty($listReview)}
+	{foreach from=$listReview item=data}
+	<tr bgcolor="{cycle values="#f8f6ea,#ffffff"}">
+		<td class="cat_add">{$data.review}<p align="right"><i>{$data.review_date}</i></p></td>
+	</tr>
+	{/foreach}
+{else}
+<tr>
+	<td class="cat_add_expert">У эксперта нет ни одного отзыва и предложения</td>
+{/if}
+<tr>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td class="cat_add">
+		<textarea name="review" cols="60" rows="15"></textarea>
+	</td>
+</tr>
+<tr>
+	<td class="cat_add">
+		<input type="hidden" name="exp_id" value="{$exp_id}">
+		<input type="submit" value="Оставить отзыв">
+	</td>
+</tr>
+</form>
+</table>

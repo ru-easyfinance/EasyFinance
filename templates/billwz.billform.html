@@ -1,0 +1,6 @@
+{foreach from=$fields item="Field" key="Key"}
+	{$Field->display}: {$Field->formField($data.$Key, $Field->name, $errors.$Key)}<br>
+{/foreach}<br>
+<input type="button" class="wznext" value="Дальше">
+<input type="button" class="wzback" value="Назад">
+<input type="button" class="wzcancel" value="Отмена">

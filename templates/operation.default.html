@@ -1,0 +1,57 @@
+<table width="100%">				
+	<tr>
+		<td width="100%" colspan="4" class=cat_add valign="top">
+			<select name="account" id="selectAccount" onChange="changeOperationList();">
+				{foreach from=$accounts item=acc_data}
+					<option id="{$acc_data.id}" value="{$acc_data.id}" {if $acc_data.id == $currentAccount} selected {/if}>{$acc_data.name}</option>
+				{/foreach}
+			</select>
+			
+			&nbsp;
+			<input type="button" onclick="operationAddVisible();" value="Добавить операцию" class="inputsubmit" />&nbsp;
+			<input type="button" onclick="locationEditAccount();" value="Редактировать счет / Удалить счет" class="inputsubmit" />
+			<br><br>
+			<div id="addOperation" style="display:none;">
+				{include file="operation.add.html"}<br><br>
+			</div>
+			{if $areaAdd}<script language="javascript">{literal}operationAddVisible();{/literal}</script>{/if}
+			{if $areaTransfer}
+				<script language="javascript">
+				{literal}
+					operationAddVisible(); 
+					document.getElementById("type_add").value = 2;
+					changeTypeOperation('add');
+				{/literal}
+				</script>
+			{/if}
+			<div id="editOperation" style="display:none;"><br><br></div>
+			<div>
+		с: <input type="text" value="{$dateFrom}" class="standart" style="width:80px;" name="dateFrom" id="sel5"><button type="reset" class="button_calendar" onclick="return showCalendar('sel5', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>&nbsp;
+		по: <input type="text" value="{$dateTo}" class="standart" style="width:80px;" name="dateTo" id="sel6"><button type="reset" class="button_calendar" onclick="return showCalendar('sel6', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+		&nbsp;&nbsp;
+		категория: 
+			<select name="categories" id="selectCategories">
+				<option label="Все" value=""> --- Все ---
+				{$categories}
+			</select>
+		&nbsp;&nbsp;<input type="button" onclick="changeOperationList();" value="Обновить данные" class="inputsubmit" id="reloadData"/>		
+		</div>
+			
+			<br>
+			{if $begin == "00.00.0000"}
+				Начальный капитал: {if $account.drain == 0}<font color="green">{$account.money}&nbsp;{$account.cur_name}</font>{else}<font color="#bc5f5f">{$account.money}&nbsp;{$account.cur_name}</font>{/if}
+			{/if}
+		<span style="color: #76b900; font-size:14px;" id="goodOperation"></span>
+		<span style="color: #bc5f5f; font-size:14px;" id="badOperation"></span>				
+			
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" width="100%" style=" background-color:#f8f8d8; padding:5px;">
+			<div id="operationDataList"></div>
+			<script language="javascript">
+			{literal}changeOperationList();{/literal}
+			</script>
+		</td>
+	</tr>
+</table>

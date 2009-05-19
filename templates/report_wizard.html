@@ -1,0 +1,140 @@
+<h3>Мастер отчетов</h3>
+
+{literal}
+<script language="JavaScript">
+<!--
+function checkIfDifferenceSelected(sel) {
+	if (sel.selectedIndex == 5 || sel.selectedIndex == 6 || sel.selectedIndex == 7 || sel.selectedIndex == 8) {
+		showInterval2();
+		if (sel.selectedIndex == 7 || sel.selectedIndex == 8) {
+			showAvg();
+		}
+		else {
+			hideAvg();
+		}
+	}
+	else {
+		hideInterval2();
+		hideAvg();
+	}
+}
+
+function hideInterval2() {
+	document.getElementById("interval_1").style.display="none";
+	document.getElementById("interval_2").style.display="none";
+	document.getElementById("div_interval_2").style.display="none";
+}
+
+function showInterval2() {
+	document.getElementById("interval_1").style.display="inline";
+	document.getElementById("interval_2").style.display="inline";
+	document.getElementById("div_interval_2").style.display="inline";	
+	{/literal}
+	{if $reportType eq 'txt_profit_avg_difference' || $reportType eq 'txt_loss_avg_difference'}
+	document.getElementById("avg").style.display="inline";
+	{/if}
+	{literal}
+}
+
+function hideAvg() {
+	document.getElementById("avg").style.display="none";
+}
+
+function showAvg() {
+	document.getElementById("avg").style.display="inline";
+}
+{/literal}
+
+{if $reportType eq 'txt_loss_difference' || $reportType eq 'txt_profit_difference' || $reportType eq 'txt_profit_avg_difference' || $reportType eq 'txt_loss_avg_difference'}
+window.onload=showInterval2;
+{/if}
+{*if $reportType eq 'txt_profit_avg_difference'}
+window.onload="showInterval2(); showAvg();"
+{/if*}
+{literal}
+//-->
+</script>
+{/literal}
+
+{if $error_text}<p>{$error_text}</p>{/if}
+
+<table width="100%" border="0" cellpadding="5" cellspacing="0">
+<form action="index.php?modules=report_wizard" method="post" name="search">
+<tr>
+<script language="javascript1.2">
+{literal}
+	<!--
+	var c = new CodeThatCalendar(caldef4);
+	//-->
+{/literal}
+</script>
+
+<tr>
+<td class="cat_add" valign="top" width="30%">
+<table width="100%" cellpadding="3" cellspacing="0" border="0">
+	<tr>
+		<td class="cat_add" width="20%">
+			Отчёты:
+		</td>
+		<td class="cat_add">
+			<select name="reportType" onchange="javascript:checkIfDifferenceSelected(this);">
+				{html_options options=$reports selected=$reportType}
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="cat_add">
+			<div style="display:none;" id="interval_1"><b>Период 1:</b></div><br><br>
+			<div style='display:none;' id="interval_2"><b>Период 2:</b></div>
+			<div style='display:none;' id="avg"><br><b>(среднее)</b></div>
+		</td>
+		<td class="cat_add">
+		<div>
+		с:<input type="text" value="{$dateFrom}" class="standart" style="width:80px;" name="dateFrom" id="sel5"><button type="reset" class="button_calendar" onclick="return showCalendar('sel5', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>&nbsp;
+		по:<input type="text" value="{$dateTo}" class="standart" style="width:80px;" name="dateTo" id="sel6"><button type="reset" class="button_calendar" onclick="return showCalendar('sel6', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+		</div>
+		<div style='display:none;' id="div_interval_2"><br>
+		с:<input type="text" value="{$dateFrom2}" class="standart" style="width:80px;" name="dateFrom2" id="sel7"><button type="reset" class="button_calendar" onclick="return showCalendar('sel7', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>&nbsp;
+		по:<input type="text" value="{$dateTo2}" class="standart" style="width:80px;" name="dateTo2" id="sel8"><button type="reset" class="button_calendar" onclick="return showCalendar('sel8', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+		</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="cat_add">
+			Счет:
+		</td>
+		<td class="cat_add">
+			<select name="account">
+				<option label="Все" value=""> --- Все ---
+					{html_options options=$userAccounts selected=$account}
+				</select>
+		</td>
+	<tr>
+		<td class="cat_add" height="35">
+			Показывать сумму в:
+		</td>
+		<td class="cat_add">
+			<select name="currency">
+				{html_options options=$currencies selected=$currency}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td class="cat_add">&nbsp;</td>
+		<td class="cat_add"><input type="submit" value="Показать"></td>
+	</tr>
+</table>
+</td>
+</tr><tr>
+<td valign="top" width="100%" style=" background-color:#f8f8d8;">
+{include file="report_wizard.$reportTpl.html"}
+</td>
+
+</tr>
+
+
+<input type="hidden" name="action" value="display_report">
+<input type="hidden" name="exportFormat" value="transactions_csv">
+</form>
+</table>

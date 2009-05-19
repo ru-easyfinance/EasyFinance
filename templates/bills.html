@@ -1,0 +1,250 @@
+{literal}
+<style>
+.wizard {
+	position:absolute;
+	left: 0;
+	top: 0;
+	display:none;
+	width: 400px;
+	height: 400px;
+	background: #000;
+	color: #fff;
+}
+.wizard .error {
+	color: #ff0000;
+}
+</style>
+<script src="js/jquery/jquery.appenddom.js"></script>
+<script>
+	var wz = null;
+	function wizard(id) {
+		
+		if (id == undefined) {
+			wz = new billWizard("add", 0);
+		} else {
+			wz = new billWizard("edit", id);
+		}
+	}
+	
+	billWizard = newClass(null, {
+		constructor: function(mode, id) {
+			this.createWizardWindow();
+			if (mode == "add") {
+				this._initadd();
+			} else if (mode == "edit" && id != 0) {
+				this._initedit(id);
+			}
+		},
+		_curstep: 0,
+		_curtype: 0,
+		_initadd: function () {
+			this._curstep = 1;
+			$.ajax({
+				type: "GET",
+				url: "/index.php",
+				data: {
+					modules: "bills",
+					action: "getbilltypes",
+					ajax: true
+				},
+				
+				success: function(cid) {
+					$('.wizard img:first').remove();
+					$('.wizard:first').html(cid);
+					$('.wznext').click(function() {
+						wz.nextStep();
+					});
+					$('.wzcancel').click(function() {
+						$('.wizard').fadeOut("slow", function () {
+							$('.wizard').html("");
+						});
+					});
+				}
+			});
+		},
+		nextStep: function () {
+			this._curstep += 1;
+			if (this._curstep == 2) {
+				this._getform();
+			} else if (this._curstep == 3) {
+				this._validate();
+			}
+		},
+		backStep: function () {
+			this._curstep -= 1;
+			if (this._curstep == 2) {
+				this._getform();
+			}
+		},
+		_getform: function () {
+			this._curtype = $('.wizard select:first').val();
+			$.ajax({
+				type: "GET",
+				url: "/index.php",
+				data: {
+					modules: "bills",
+					action: "makeform",
+					type_id: $('.wizard select:first').val(),
+					ajax: true
+				},
+				beforeSend: function() {
+					$('.wizard').html("");
+					$('.wizard:first').appendDom([{
+						tagName : 'img',
+						src : '/img/loading.gif',
+					}]);
+				},
+				success: function(cid) {
+					$('.wizard img:first').remove();
+					$('.wizard:first').html(cid);
+					$('.wznext').click(function() {
+						wz.nextStep();
+					});
+					$('.wznext').click(function() {
+						wz.backStep();
+					});
+					$('.wzcancel').click(function() {
+						wz.cancel();
+					});
+				}
+			});
+		},
+		_validate: function () {
+			var sdata = "modules=bills&action=validate&type_id="+this._curtype+"&ajax=true";
+			$(".wizard :input").each(function (i) {
+				if ($(this).attr("name") != undefined) {
+					sdata += "&"+$(this).attr("name")+"="+$(this).val();
+				}
+			});
+			$.ajax({
+				type: "GET",
+				url: "/index.php",
+				data: sdata,
+				beforeSend: function() {
+					$('.wizard').html("");
+					$('.wizard:first').appendDom([{
+						tagName : 'img',
+						src : '/img/loading.gif',
+					}]);
+				},
+				success: function(cid) {
+					
+					$('.wizard img:first').remove();
+					if (cid != "1") {
+						
+						wz._curstep -= 1;
+						$('.wizard:first').html(cid);
+						$('.wznext').click(function() {
+							wz.nextStep();
+						});
+						$('.wznext').click(function() {
+							wz.backStep();
+						});
+						$('.wzcancel').click(function() {
+							wz.cancel();
+						});
+					} else {
+						wz.finish();
+					}	
+				}
+			});
+		},
+		_initedit: function (id) {
+			alert(2+":"+id);
+		},
+		cancel: function () {
+			$('.wizard').fadeOut("slow", function () {
+				this._curstep = 1;
+				$('.wizard').html("");
+				window.location = window.location;
+			});
+		},
+		finish: function () {
+			this.cancel();
+		},
+		createWizardWindow: function() {
+			$('body').appendDom([{
+				tagName : 'div',
+				class : 'wizard'
+			}]);
+			$('.wizard:first').fadeIn("slow", function() {
+				$('.wizard:first').appendDom([{
+					tagName : 'img',
+					src : '/img/loading.gif',
+				}]);
+			});
+		}
+	});
+
+	function newClass(parent, prop) {
+	  // Dynamically create class constructor.
+	  var clazz = function() {
+	    // Stupid JS need exactly one "operator new" calling for parent
+	    // constructor just after class definition.
+	    if (clazz.preparing) return delete(clazz.preparing);
+	    // Call custom constructor.
+	    if (clazz.constr) {
+	      this.constructor = clazz; // we need it!
+	      clazz.constr.apply(this, arguments);
+	    }
+	  }
+	  clazz.prototype = {}; // no prototype by default
+	  if (parent) {
+	    parent.preparing = true;
+	    clazz.prototype = new parent;
+	    clazz.prototype.constructor = parent;
+	    clazz.constr = parent; // BY DEFAULT - parent constructor
+	  }
+	  if (prop) {
+	    var cname = "constructor";
+	    for (var k in prop) {
+	      if (k != cname) clazz.prototype[k] = prop[k];
+	    }
+	    if (prop[cname] && prop[cname] != Object)
+	      clazz.constr = prop[cname];
+	  }
+	  return clazz;
+	}
+	var trans = [];
+	for (var i = 0x410; i <= 0x44F; i++) {
+  		trans[i] = i - 0x350; // А-Яа-я
+  	}
+	trans[0x401] = 0xA8;    // Ё
+	trans[0x451] = 0xB8;    // ё
+
+	// Сохраняем стандартную функцию escape()
+	var escapeOrig = window.escape;
+		
+	// Переопределяем функцию escape()
+	window.escape = function(str) {
+		var ret = [];
+		// Составляем массив кодов символов, попутно переводим кириллицу
+		for (var i = 0; i < str.length; i++) {
+			var n = str.charCodeAt(i);
+			if (typeof trans[n] != 'undefined') {
+				n = trans[n];
+			}
+			if (n <= 0xFF) {
+				ret.push(n);
+			}
+		}
+	
+		return escapeOrig(String.fromCharCode.apply(null, ret));
+	}
+</script>
+{/literal}
+<table width="100%">
+	<td width="100%">
+		<img src="https://82.146.44.177/manimg/sirius/t-new.png" onclick="wizard();">
+		{foreach from=$bills item="Bill"}
+			<table width="100%">
+				<tr>
+					<td>{$Bill->name}<br><small>Тип кошелька: {$Bill->type_name}</small></td>
+					<td>{$Bill->CurrentSum} {$Bill->currency}</td>
+					<td><img src="http://82.146.44.177/manimg/sirius/t-edit.png"></td>
+					<td><img src="http://82.146.44.177/manimg/sirius/t-delete.png"></td>
+				</tr>
+			</table>
+		{/foreach}
+	</td>
+</table>

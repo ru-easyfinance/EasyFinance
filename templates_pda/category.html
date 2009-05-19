@@ -1,0 +1,77 @@
+<div class="cat_add">
+	{if $page_title == 'category add' || $page_title == 'category edit'}
+		{if $page_title == 'category add'}
+			<form action="index.php?modules=category&action=add" method="post">
+		{else}
+			<form action="index.php?modules=category&action=edit" method="post">
+		{/if}
+		
+		{if empty($good_text)}
+		<div class="cat_add">
+			Категория:<br>
+			<select name="cat[parent]" style="width:250px;">
+				<option value="0">---</option>
+				{foreach from=$categories item=cats}
+					{if $in_category !=  $cats.cat_id}
+						{if $cats.cat_parent == '0'}
+							<option value="{$cats.cat_id}" {if $cats.cat_id == $category.parent} selected="selected" {/if}>{$cats.cat_name}</option>
+						{/if}
+					{/if}
+				{/foreach}
+			</select>						
+		</div><br>		
+		
+		<div class="cat_add">
+			{if !empty($error_text.name)}<font color="#FF0000">Название:</font>{else}Название:{/if}<br>
+			<input type="text" name="cat[name]" style="width:250px;" value="{if !empty($category.name)}{$category.name}{/if}" />
+		</div><br>
+		
+		<div class="cat_add">
+		{if $page_title == 'category add'}
+			<input class="inputsubmit" type="submit" value="Сохранить">
+		{else}
+			<input type="hidden" name="cat[id]" value="{$category.id}">
+			<input class="inputsubmit" type="submit" value="Изменить">
+			</form>
+			<div>
+				<form action="index.php?modules=category&action=del" method="post" name="form_del">
+					<input type="hidden" name="cat[id]" value="{$category.id}">
+					<input class="inputsubmit" name="sub_del" type="submit" value="Удалить">
+					<br /><input class="inputsubmit" type="button" value="Отменить" onclick="history.back();">
+				</form>
+			</div>
+		{/if}
+
+		{if !empty($error_text)}
+		<div class="cat_add">
+		<font size="+1" color="#FF0000">Внимание, ошибка!</font>
+			<ul>
+			{foreach from=$error_text item=err_text}
+				<li>{$err_text}</li>
+			{/foreach}
+			</ul>
+		</div>
+		{/if}
+	{else}
+		<div class="cat_add">
+		<font size="+1" color="#33CC66">
+		<ul>
+			<li>{$good_text}</li>
+		</ul>
+		</font>
+		<a href="index.php?modules=category">Вернуться к списку</a>
+	{/if}
+	{else}	
+		<div>
+        	<font size="-1" color="#76b900">{$good_text}</font><br /><br />
+		</div>
+		<table width="100%">
+			{if !empty($categories)}
+			<span><a href='index.php?modules=category&action=add'>Добавить категорию</a></span>
+				{$categories}
+			{else}
+				<a href='index.php?modules=category&action=get'>Загрузить категории из справочника</a>			
+			{/if}
+		</table>
+	{/if}
+</div>

@@ -1,0 +1,106 @@
+<script type="text/javascript">
+{literal}
+$(function() {
+	$('.childrenToggler').click(function() {
+		$('.'+$(this).attr('rel')).toggle();
+	});
+});
+{/literal}
+</script>
+<!--
+
+<table width="100%" style=" background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;">
+	<tr><td colspan="3" width="100%">
+		<table width="100%" border="0">
+        	<tr>
+            	<td class="cat_add" style="padding-left:15px;padding-right:15px;padding-bottom:15px;" width="90%" colspan="2">
+                    <p align="justify">Оставьте все по умолчанию или детализируйте доходы</p>
+                </td>
+                <td class="cat_add" valign="top" align="right">шаг 3/6&nbsp;</td>
+            </tr>
+		</table>
+	</td></tr>
+    <tr><td colspan="3" width="100%" style="padding-left:15px;padding-right:15px;padding-bottom:15px;">
+		<table width="100%">
+
+        <tr><td colspan="3" class=cat_add style='border-bottom:1px solid #CCCCCC;'>Сумма на странице: <span id="current_total">0</span></td></tr>
+		<tr><td class=cat_add style='border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;'>Название категории</td>
+			<td class=cat_add style='border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;' width="160">Сумма планирования</td>
+			<td class=cat_add style='border-bottom:1px solid #CCCCCC;' width="250">Сумма за 3 последних месяца</td>
+		</tr>
+
+        <tr><td colspan="3"><a class="cat_add childrenToggler" rel="parent_1" href="javascript:void(0)"><strong>Зарплата и персональные доходы</strong></a></td></tr>
+		<tr class="cat_add hidden parent_1"><td>Бонусы</td><td><input type="text"></td><td>8333.33 руб.</td></tr>
+		<tr class="cat_add hidden parent_1"><td>Зарплата без налогов</td><td><input type="text"></td><td>66666.67 руб.</td></tr>
+		<tr class="hidden parent_1"><td>Зарплата вкл. налоги</td><td><input type="text"></td><td>0 руб.</td></tr>
+		<tr><td colspan="3"><a class="childrenToggler" rel="parent_2" href="javascript:void(0)"><strong>Бла-бла</strong></a></td></tr>
+
+		<tr class="hidden parent_2"><td>Бонусы</td><td><input type="text"></td><td>8333.33 руб.</td></tr>
+		<tr class="hidden prent_2"><td>Зарплата без налогов</td><td><input type="text"></td><td>66666.67 руб.</td></tr>
+		<tr class="hidden parent_2"><td>Зарплата вкл. налоги</td><td><input type="text"></td><td>0 руб.</td></tr>
+		<tr><td><strong>Банковское обслуживание</strong></td><td><input type="text"></td><td>10000 руб.</td></tr>
+		<tr><td><strong>Без детенышей</strong></td><td width="120"><input type="text"></td><td width="120">10000 руб.</td></tr>
+
+        </table>
+        </td>
+    </tr>
+</table>
+
+-->
+
+<form action="index.php?modules=plan&action=create_new_plan&step=4" method="post">
+<table width="100%" style=" background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;">
+<tr>
+	<td colspan="2" width="100%">
+		<table width="100%" border="0">
+		<tr>
+			<td class="cat_add" style="padding-left:15px;padding-right:15px;padding-bottom:15px;" width="90%">
+				<p align="justify">Оставьте все по умолчанию или детализируйте доходы</p>
+			</td>
+			<td class="cat_add" valign="top" align="right">шаг 3/6&nbsp;</td>
+		</tr>
+
+		<tr>
+			<td class="cat_add" valign="top" colspan="2" style="padding-left:15px;padding-right:15px;padding-bottom:15px;">
+<div class="overFlowDIV">
+				<table width=100%>
+				<tr>
+					<td colspan="3" class=cat_add style='border-bottom:1px solid #CCCCCC;'>
+						Сумма на странице: <span id="current_total">0</span>
+					</td>
+				</tr>
+				<tr>
+					<td width=460 class=cat_add style='border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;'>Название категории</td>
+					<td width=160 class=cat_add style='border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;'>Сумма планирования</td>
+                    <td class=cat_add style='border-bottom:1px solid #CCCCCC;'>Сумма за 3 последних месяца</td>
+				 </tr>
+				 <tr><td colspan="3">
+
+				{$listDetalizeIncomeCategories}
+
+                </td></tr>
+				<tr>
+					<td colspan="3" class=cat_add style='border-bottom:1px solid #CCCCCC;'>
+						Сумма на странице: <span id="current_total_bottom">0</span>
+					</td>
+				</tr>
+				</table>
+</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="cat_add" width="100%" style="padding-left:15px;padding-right:15px;padding-top:15px;">
+				<input type="hidden" id="is_detalize_income" name="is_detalize_income" value="">
+				<input type="button" onclick="location.href='index.php?modules=plan&action=create_new_plan&step=2'" value="Назад" class="inputsubmit"/>
+				<input type="submit" value="Далее" class="inputsubmit" />
+			</td>
+            <td class="cat_add">
+            	<input type="button" onclick="location.href='index.php?modules=plan&action=cancel_plan'" value="Отменить" class="inputsubmit"/>
+            </td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</form>

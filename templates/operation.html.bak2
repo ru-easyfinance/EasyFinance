@@ -1,0 +1,230 @@
+<h3>Операции по счету</h3>
+
+<script language="javascript">
+{literal}
+	function changeOperationList()
+	{
+		var objSel = document.getElementById("selectAccount");
+		var bill_id = objSel.options[objSel.selectedIndex].value;
+		var objSelCat = document.getElementById("selectCategories");
+		var cat_id = objSelCat.options[objSelCat.selectedIndex].value;
+		var dateFrom = document.getElementById("sel5").value;
+		var dateTo = document.getElementById("sel6").value;
+		var modules = "operation";		
+		var action = "getOperationList";	
+		
+		changeAccountForTransfer();
+		
+		$("#operationDataList").hide();
+		
+		$.get(
+			'/index.php',
+			{
+				modules: modules,
+				action : action,
+				a: bill_id,
+				cat_id: cat_id,
+				dateFrom: dateFrom,
+				dateTo: dateTo
+			},
+			onAjaxSuccess
+		); 
+	}
+	function addOperation()
+	{
+		onSumChange();
+		var type = document.getElementById("type_add").value;
+		var objSel = document.getElementById("selectAccount");
+		var bill_id = objSel.options[objSel.selectedIndex].value;
+		var objSelCat = document.getElementById("cat_id_old");
+		var cat_id = objSelCat.options[objSelCat.selectedIndex].value;
+		var sum = document.getElementById("pos_mc").value;
+		var dateTo = document.getElementById("sel3").value;
+		var comment = document.getElementById("comment").value;
+		var toAccount = '';
+		var currency = '';
+		if (document.getElementById("type_add").value == 2)
+		{
+			toAccount = document.getElementById("selectAccountForTransfer").value;
+			currency = document.getElementById("currency_add").value;
+		}
+		var modules = "operation";
+		var action = "addOperation";
+		if (type == '2'){action = "addTransfer";}
+		
+		if (sum == 0 || sum == 'NaN'){alert('Вы ввели неверное значение в поле "сумма"!');return false;}
+
+		if (!ValidateForm()){return false;}
+
+		$.get('/index.php',{modules: modules,action : action,a: bill_id,cat_id: cat_id,dateTo: dateTo,type: type,comment: comment,sum: sum,toAccount: toAccount,currency: currency},operationAfterInsert);
+		visibleMessage('Операция добавляется, подождите несколько секунд...');
+	}
+	function updateOperation()
+	{
+		onSumChangeEdit();
+		var type = document.getElementById("type_edit").value;
+		var objSel = document.getElementById("selectAccount");
+		var bill_id = objSel.options[objSel.selectedIndex].value;
+		var objSelCat = document.getElementById("cat_id_old_edit");
+		var cat_id = objSelCat.options[objSelCat.selectedIndex].value;
+		var sum = document.getElementById("pos_mc_edit").value;
+		var dateTo = document.getElementById("sel1").value;
+		var comment = document.getElementById("comment_edit").value;
+		var toAccount = document.getElementById("selectAccountForTransferEdit").value;
+		if (document.getElementById("currency_edit"))
+		{
+			var currency = document.getElementById("currency_edit").value;
+		}
+		var m_id = document.getElementById("m_id").value;
+		var modules = "operation";
+		var action = "updateOperation";
+		if (type == '2'){action = "updateTransfer";}
+		if (sum == 0 || sum == 'NaN'){alert('Вы ввели неверное значение в поле "сумма"!');return false;}
+		if (!ValidateForm()){return false;}
+		//alert(type+'-'+action+'-'+m_id+'-'+currency+'-'+toAccount);
+		//return false;
+		$.get('/index.php',{modules:modules,action:action,id:m_id,a:bill_id,cat_id:cat_id,dateTo:dateTo,type:type,comment:comment,sum:sum,toAccount:toAccount,currency:currency},changeOperationList);
+		visibleMessage('Операция редактируется, подождите несколько секунд...');
+	}
+	function onAjaxSuccess(data)
+	{		
+		$("#operationDataList").html(data);
+		$("#operationDataList").show();
+		$("#goodOperation").hide();
+	}
+	function locationEditAccount()
+	{
+		location.href="index.php?modules=account&action=edit&id="+document.getElementById('selectAccount').value;
+	}
+	function onSumConvert(type)
+	{		
+		if (document.getElementById("type_"+type).value == 2)
+		{
+			var currency = document.getElementById("currency_"+type).value;
+			if (type == 'edit')
+			{
+				var sum = document.getElementById("pos_mc_edit").value;
+			}else{
+				var sum = document.getElementById("pos_mc").value;
+			}
+			result = round(sum/currency,2);
+			if (result != 'NaN' || result != 'Infinity') 
+			{
+				$("#convertSumCurrency_"+type).html("конвертация: "+result);
+			}
+		}
+	}
+	function visibleMessage(data)
+	{
+		$("#goodOperation").html(data);
+		$("#goodOperation").show();		
+	}
+	function operationAddVisible()
+	{
+		changeTypeOperation('add');
+		$("#addOperation").show();$("#editOperation").hide();
+	}
+	function operationAddInVisible()
+	{
+		$("#addOperation").hide();$("#editOperation").hide();
+	}
+	function operationAfterInsert()
+	{		
+		document.getElementById("comment").value = '';
+		document.getElementById("pos_oc").value = '';
+		changeOperationList();
+	}
+	function deleteOperation(id)
+	{
+		if (!confirm("Вы действительно хотите удалить эту запись?")) {           
+        	return false;
+    	}
+		$("#addOperation").hide();$("#editOperation").hide();
+		var modules = "operation";
+		var action = "deleteOperation";
+		$.get('/index.php',{modules:modules,action : action,id: id,tr_id:0},changeOperationList);
+		visibleMessage('Операция удаляется, подождите несколько секунд...');
+	}
+	function deleteOperationTransfer(id)
+	{
+		if (!confirm("Вы действительно хотите удалить этот перевод?")) {           
+        	return false;
+    	}
+		$("#addOperation").hide();$("#editOperation").hide();
+		var modules = "operation";
+		var action = "deleteOperation";
+		$.get('/index.php',{modules: modules,action : action,id: 0,tr_id:id},changeOperationList);
+		visibleMessage('Перевод удаляется, подождите несколько секунд...');
+	}
+	function editOperation(id)
+	{		
+		var modules = "operation";
+		var action = "editOperation";
+		$.get('/index.php',{modules:modules,action:action,id:id},operationAfterEdit);
+	}
+	function operationAfterEdit(data)
+	{		
+		$("#addOperation").hide();
+		$("#editOperation").html(data);
+		$("#editOperation").show();
+		$("#editOperation").show();
+		changeTypeOperation('edit');
+		scrollTo(0,0);
+		/*location.href = "index.php?modules=operation#panelEditOperation";*/
+	}
+	function changeAccountForTransfer()
+	{
+		var id =document.getElementById("selectAccountForTransfer").value;
+		var currentId = document.getElementById("selectAccount").value;
+
+		$.get('/index.php',{modules:"operation",action:"getCurrency",id:id, currentId:currentId, type:"add"},changeTransferCurrency);
+	}
+	function changeAccountForTransferEdit()
+	{
+		var id =document.getElementById("selectAccountForTransferEdit").value;
+		var currentId = document.getElementById("selectAccount").value;
+
+		$.get('/index.php',{modules:"operation",action:"getCurrency",id:id, currentId:currentId, type:"edit"},changeTransferCurrencyEdit);
+	}
+	function changeTransferCurrency(data)
+	{
+		$("#operationTransferCurrency").html(data);
+	}
+	function changeTransferCurrencyEdit(data)
+	{
+		$("#operationTransferCurrencyEdit").html(data);
+	}
+	function changeTypeOperation(id)
+	{
+
+		switch (document.getElementById("type_"+id).value)
+		{
+			case '0':
+				$("#old_cat").show(); $("#old_cat_edit").show();
+				$("#transferSelect").hide();
+				$("#transferSelectEdit").hide();
+				break;
+			case '1':
+				$("#old_cat").show(); $("#old_cat_edit").show();
+				$("#transferSelect").hide();
+				$("#transferSelectEdit").hide();
+				break;
+			case '2':
+				$("#old_cat").hide(); $("#old_cat_edit").hide();
+				$("#transferSelect").show();
+				$("#transferSelectEdit").show();				
+				if (id == 'add')
+				{
+					changeAccountForTransfer();
+				}else{
+					changeAccountForTransferEdit();
+				}
+				break;
+			case '3':
+				break;
+		}
+		
+	}
+{/literal}
+</script>
+{include file="operation.$operationTpl.html"}

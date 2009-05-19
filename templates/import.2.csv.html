@@ -1,0 +1,94 @@
+<h1>Импорт транзакций</h1>
+<h2>Шаг 2 из 2</h2>
+
+{if $error_text}<p>{$error_text}</p>{/if}
+
+Импортировать транзакции на счет: <b>{$userAccounts.$accountSelected}</b>
+<p>
+Формат файла: CSV (Comma Separated Values)
+<form action="index.php?modules=import" method="post">
+
+<p>
+<input type="checkbox" name="importParams[firstIsHeader]" value="{$importParams.firstIsHeader}"> Первая строка файла является заголовком, не импортировать её
+</p>
+
+Сопоставьте, пожалуйста, поля в системе и импортируемом файле:
+
+<p>
+<table width="50%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="cat_add">
+<b>Поле в системе</b>
+</td>
+
+<td class="cat_add">
+<b>Поле в файле</b>
+</td>
+</tr>
+
+<tr>
+<td class="cat_add">
+Дата транзакции:
+</td>
+
+<td class="cat_add">
+<select name="importParams[tr_date_name]">
+<option value="">Не используется
+{html_options options=$headers selected=$importParams.tr_date_name}
+</select>
+</p>
+</td>
+</tr>
+
+<tr>
+<td class="cat_add">
+Сумма транзакции:
+</td>
+
+<td class="cat_add">
+<select name="importParams[tr_amount_name]">
+<option value="">Не используется
+{html_options options=$headers selected=$importParams.tr_amount_name}
+</select>
+</p>
+</td>
+</tr>
+
+<tr>
+<td class="cat_add">
+Категория:
+</td>
+
+<td class="cat_add">
+<select name="importParams[tr_cat_name]">
+<option value="">Не используется
+{html_options options=$headers selected=$importParams.tr_cat_name}
+</select>
+</p>
+</td>
+</tr>
+
+<tr>
+<td class="cat_add">
+Комментарий:
+</td>
+
+<td class="cat_add">
+<select name="importParams[tr_comment_name]">
+<option value="">Не используется
+{html_options options=$headers selected=$importParams.tr_comment_name}
+</select>
+</p>
+</td>
+</tr>
+
+</table>
+
+<input type="submit" value="Далее &gt;&gt;">
+
+<input type="hidden" name="action" value="startImport">
+<input type="hidden" name="importFormat" value="{$importFormat}">
+<input type="hidden" name="accountSelected" value="{$accountSelected}">
+<input type="hidden" name="file2Import" value="{$file2Import}">
+<input type="hidden" name="delimiter" value="{$delimiter}">
+</form>
