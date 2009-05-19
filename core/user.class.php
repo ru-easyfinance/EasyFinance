@@ -1,17 +1,19 @@
 <?
 /**
- * file: user.class.php
- * author: Roman Korostov
- * date: 23/01/07
- **/
-
+ * Класс для управления пользователями
+ * @author korogen
+ */
 class User
 {
-    var $props = Array();
-    var $user_category = Array();
-    var $user_account = Array();
-    var $user_currency = Array();
+    private $props         = Array();
+    private $user_category = Array();
+    private $user_account  = Array();
+    private $user_currency = Array();
 
+    /**
+     * Ссылка на экземпляр DBSimple
+     * @var DbSimple_Mysql
+     */
     private $db;
 
     /**
@@ -34,11 +36,10 @@ class User
         $sql = "
             SELECT `user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`,
                 DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, `user_active` FROM `users`
-            WHERE `user_login` = ?
+            WHERE `user_login`  = ?
                 AND `user_pass` = ?
-                AND `user_new` = 0";
-        $row = $this->db->selectRow($sql,  str_replace("\\'", "''", $login), $pass);
-        //print_r($this->db);
+                AND `user_new`  = 0";
+        $row = $this->db->selectRow($sql, $login, $pass);
         if ($row['user_active'] == 0) {
             trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
             return false;
@@ -201,8 +202,7 @@ class User
         mysql_select_db('homemoney', $lnk) or die ('Can\'t use foo : ' . mysql_error());
         mysql_query("SET NAMES utf8;");
 
-        if (IS_DEMO)
-        {
+        if (IS_DEMO) {
             $q = "select * from money where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
             $res = mysql_query($q);
             while($row = mysql_fetch_array($res))
@@ -357,75 +357,46 @@ class User
         }
     }
 
+    /**
+     * Возвращает категории
+     * @param $user_id int
+     * @return bool
+     */
     function getCategory($user_id)
     {
-        $lnk = mysql_connect('localhost', 'homemone', 'lw0Hraec') or die ('Not connected : ' . mysql_error());
-        mysql_select_db('homemoney', $lnk) or die ('Can\'t use foo : ' . mysql_error());
-        mysql_query("SET NAMES utf8;");
-
-        /*if (IS_DEMO)
-         {
-         $q = "select * from money where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-         $res = mysql_query($q);
-         while($row = mysql_fetch_array($res))
-         {
-         $m_row[] = $row;
-         }
-         $m_cnt = count($m_row);
-
-         $q = "select * from budget where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-         $res = mysql_query($q);
-         while($row = mysql_fetch_array($res))
-         {
-         $b_row[] = $row;
-         }
-         $b_cnt = count($b_row);
-         }*/
-
-        $sql = "select * from category where user_id='9e08f78840c8fefd7882ffa03813e6d1' and cat_active=1 order by cat_parent, cat_name";
-        $result = mysql_query($sql);
-        $i = 0;
-        while ($row = mysql_fetch_array($result))
-        {
-            $rows[$i]['cat_name']	= $row['cat_name'];
+        //XXX Пересмотреть функцию
+        //FIXME WTF??? // Данные пользователя "ДЕМО"
+        $sql = "SELECT * FROM category WHERE user_id='9e08f78840c8fefd7882ffa03813e6d1' AND cat_active = 1 ORDER BY cat_parent, cat_name;";
+        $result = $this->db->select($sql);
+        foreach ($result as $i => $row) {
+            $rows[$i]['cat_name']   = $row['cat_name'];
             $rows[$i]['cat_parent'] = $row['cat_parent'];
-            $rows[$i]['cat_id'] = $row['cat_id'];
-            $i++;
+            $rows[$i]['cat_id']     = $row['cat_id'];
         }
-        $cnt = count($rows);
 
-        for ($i=0; $i<$cnt; $i++)
-        {
-            if ($rows[$i]['cat_parent'] == 0)
-            {
-                $sql = "INSERT INTO `category` VALUES ('', '0', '".$user_id."', '".$rows[$i]['cat_name']."', '1')";
-                $this->db->sql_query($sql);
+        $cnt = count($rows); //@FIXME WTF??? Перебор по все колонкам?
+        for ($i=0; $i<$cnt; $i++) {
+            if ($rows[$i]['cat_parent'] == 0) {
+                $sql = "INSERT INTO `category` VALUES ('', '0', ?, ?, '1')";
+                $this->db->query($sql, $user_id, $rows[$i]['cat_name']);
                 $next_id = $this->db->sql_nextid();
-                for ($j=0; $j<$cnt; $j++)
-                {
-                    if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id'])
-                    {
-                        $sql = "INSERT INTO `category` VALUES ('', '".$next_id."', '".$user_id."', '".$rows[$j]['cat_name']."', '1')";
-                        $this->db->sql_query($sql);
-                        if (IS_DEMO)
-                        {
+                for ($j=0; $j<$cnt; $j++) {
+                    if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id']) {
+                        $sql = "INSERT INTO `category` VALUES ('', ? , ?, ?, '1')";
+                        $this->db->query($sql, $next_id, $user_id, $rows[$j]['cat_name']);
+                        if (IS_DEMO) {
                             $next_cat_id = $this->db->sql_nextid();
 
-                            for ($k=0; $k<$m_cnt; $k++)
-                            {
-                                //$m_row[$k]['new_cat_id'] = 0;
-                                if ($rows[$j]['cat_id'] == $m_row[$k]['cat_id'])
-                                {
+                            for ($k=0; $k<$m_cnt; $k++) {
+                                if ($rows[$j]['cat_id'] == $m_row[$k]['cat_id']) {
                                     $m_row[$k]['new_cat_id'] = $next_cat_id;
                                 }
 
-                                if ($m_row[$k]['cat_id'] == 0)
-                                {
+                                if ($m_row[$k]['cat_id'] == 0) {
                                     $m_row[$k]['new_cat_id'] = 0;
                                 }
 
-                                if ($m_row[$k]['cat_id'] == "-1")
-                                {
+                                if ($m_row[$k]['cat_id'] == "-1") {
                                     $m_row[$k]['new_cat_id'] = "-1";
                                 }
                             }
@@ -434,93 +405,6 @@ class User
                 }
             }
         }
-
-        /*if (IS_DEMO)
-         {
-         $sql = "select * from bill where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-         $result = mysql_query($sql);
-         $i = 0;
-         while ($row = mysql_fetch_array($result))
-         {
-         $rows[$i]['bill_name'] = $row['bill_name'];
-         $rows[$i]['bill_type'] = $row['bill_type'];
-         $rows[$i]['bill_id'] = $row['bill_id'];
-         $rows[$i]['bill_currency'] = $row['bill_currency'];
-         $i++;
-         }
-
-         $cnt = count($rows);
-
-         for ($i=0; $i<$cnt; $i++)
-         {
-         if (!empty($rows[$i]['bill_name']))
-         {
-         $sql = "INSERT INTO `bill` VALUES ('', '".$rows[$i]['bill_name']."', '".$user_id."', '".$rows[$i]['bill_type']."', '".$rows[$i]['bill_currency']."')";
-         $this->db->sql_query($sql);
-         $next_id = $this->db->sql_nextid();
-
-         for ($k=0; $k<$m_cnt; $k++)
-         {
-         if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'] && $m_row[$k]['cat_id'] == 0)
-         {
-         $sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-         '".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-         '".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-         '".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-         $this->db->sql_query($sql);
-         }
-         }
-         }
-
-         for ($k=0; $k<$m_cnt; $k++)
-         {
-         if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'])
-         {
-         $sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-         '".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-         '".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-         '".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-         $this->db->sql_query($sql);
-         }
-         }
-         }
-
-         }*/
-
-        /*
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Коммунальные услуги', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Личные расходы', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Обучение', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Одежда', '1')"
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Отдых и развлечение', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Продукты', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Подарки', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Работа', '1')"
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Семейные расходы', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Телефон', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Транспорт', '1')";
-         $this->db->sql_query($sql);
-         $sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Хозяйственные расходы', '1')";
-         $this->db->sql_query($sql);
-         */
-        //pre($arr,true);
-
-        /*for($i=0; $i<=count($arr); $i++)
-         {
-         $sql = $arr[$i];
-         //echo $sql;
-         $result = $this->db->sql_query($sql);
-         }*/
 
         $this->initUserCategory($user_id);
         $this->save();
@@ -538,7 +422,7 @@ class User
     }
 
     /**
-     * Возвращает количество всех денех
+     * Возвращает количество всех денег
      * return int
      */
     function getAllTransaction ()
@@ -546,21 +430,25 @@ class User
         return $this->db->selectCell("SELECT count(money) FROM money;");
     }
 
+    /**
+     * Возвращает массив с профилем пользователя, с полями : ид, имя, логин, почта
+     * @param $id int
+     * @return array mixed
+     */
     function getProfile($id)
     {
-        $sql = "
-				SELECT `user_id`, `user_name`, `user_login`, `user_mail` from `users` where `user_id` = '".$id."'
-			   ";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка получния профиля!', '', __LINE__, __FILE__, $sql);
-        }
-
-        $row = $this->db->sql_fetchrow($result);
-        return $row;
+        $sql = "SELECT `user_id`, `user_name`, `user_login`, `user_mail` FROM `users` WHERE `user_id` = ? ;";
+        return $this->db->selectRow($sql, $id);
     }
 
+    /**
+     *
+     * @param $new_passwd string
+     * @param $user_name string
+     * @param $user_mail
+     * @param $user_login
+     * @return unknown_type
+     */
     function updateProfile($new_passwd, $user_name, $user_mail, $user_login)
     {
         if (!empty($new_passwd))
@@ -572,11 +460,11 @@ class User
         $user_id = $this->getId();
 
         $sql = "UPDATE `users` SET
-					`user_name` = '".$user_name."',
-					`user_mail` = '".$user_mail."'
-					".$user_passwd."
-				WHERE `user_id` = '".$user_id."'
-				";
+                    `user_name` = '".$user_name."',
+                    `user_mail` = '".$user_mail."'
+                    ".$user_passwd."
+                WHERE `user_id` = '".$user_id."'
+                ";
         if ( !($result = $this->db->sql_query($sql)) )
         {
             message_error(GENERAL_ERROR, 'Ошибка в cохранении профиля!', '', __LINE__, __FILE__, $sql);

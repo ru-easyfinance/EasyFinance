@@ -35,7 +35,10 @@ function get_number_format($number)
     }
 }
 
-//message_die(GENERAL_ERROR, 'Failed obtaining forum access control lists', '', __LINE__, __FILE__, $sql);
+/**
+ * message_die(GENERAL_ERROR, 'Failed obtaining forum access control lists', '', __LINE__, __FILE__, $sql);
+ * @deprecated
+ */
 function message_error($msg_code, $msg_text = '', $msg_title = '', $err_line = '', $err_file = '', $sql = '')
 {
     global $db, $debug_text, $tpl;
@@ -117,6 +120,11 @@ function message_error($msg_code, $msg_text = '', $msg_title = '', $err_line = '
 }
 
 
+/**
+ * @deprecated
+ * @param $data
+ * @return unknown_type
+ */
 function checkModules ($data)
 {
     if (file_exists(SYS_DIR_MOD."/".$data.".php"))

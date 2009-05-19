@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>reCAPTCHA - Vanilla Extension</title>
+<style><!--
+dd { margin-bottom: 1em; }
+blockquote { margin: 1em; padding: 1em; border: 1px solid black; }
+--></style>
+</head>
+
+<body>
+
+<h1 id="top">reCAPTCHA</h1>
+<p>reCAPTCHA is a Vanilla extension that adds reCAPTCHA validation to a
+forum's membership application form. A new user applicant must answer the
+reCAPTCHA challenge correctly or the application will not be submitted.</p>
+
+<h2 id="toc">Table of Contents</h2>
+<ul>
+<li><a href="#install">Installing and Enabling reCAPTCHA</a></li>
+<li><a href="#config">Configuration Settings</a></li>
+<li><a href="#theme">Vanilla Themes</a></li>
+<li><a href="#develop">Development</a></li>
+</ul>
+
+<hr />
+<h2 id="install">Installing and Enabling reCAPTCHA</h2>
+<p>In order for Vanilla to recognize an extension, it must be contained within
+its own directory within the extensions directory. So, once you have
+downloaded and unzipped the reCAPTCHA files, you can then place the folder
+containing the default.php file into your installation of Vanilla. The path to
+reCAPTCHA's default.php file should look like this:</p>
+<blockquote><code>/path/to/vanilla/extensions/reCAPTCHA/default.php</code></blockquote>
+<p>Once this is complete, you can enable reCAPTCHA through the "Manage
+Extensions" form on the settings tab in Vanilla.</p>
+
+<hr />
+<h2 id="config">Configuration Settings</h2>
+<p>The easiest way to change reCAPTCHA's settings is to install and enable
+<a href="http://code.google.com/p/vanilla-friends/wiki/SetList">Set List</a>.
+Once you enable Set List, forum administrators will see a link to reCAPTCHA in
+the side panel of the Vanilla settings page.</p>
+<p>If you choose not to install Set List, you can change reCAPTCHA's settings
+in the Vanilla <code>conf/settings.php</code> file.</p>
+<dl>
+<dt><strong>$Configuration['reCAPTCHA.ApplyForm']</strong></dt>
+<dd>If this setting is removed or set to "0", your forum will work normally.
+If it is set to "1", reCAPTCHA validation is enabled and a new user applicant
+must correctly answer a reCAPTCHA challenge or the application will be
+rejected.</dd>
+<dt><strong>$Configuration['reCAPTCHA.PublicKey']</strong></dt>
+<dt><strong>$Configuration['reCAPTCHA.PrivateKey']</strong></dt>
+<dd>You <strong>must</strong> have a public key and a private key to use
+reCAPTCHA. If you do not have these keys, you can sign up at
+<a href="http://recaptcha.net/api/getkey">recaptcha.net</a> and get them.</dd>
+<dt><strong>$Configuration['reCAPTCHA.Theme']</strong></dt>
+<dd>The theme used for the reCAPTCHA interface. This setting is the same for
+all users. Valid settings are: 'white', 'red', 'blackglass' and 'clean'.</dd>
+<dt><strong>$Configuration['reCAPTCHA.Language']</strong></dt>
+<dd>The language used in the reCAPTCHA interface. This setting is the same
+for all users. Valid settigns are: 'en', 'nl', 'fr', 'de', 'pt', 'ru', 'es'
+and 'tr'.</dd>
+</dl>
+
+<hr />
+<h2 id="theme">Vanilla Themes</h2>
+<p>Theme developers take note: The reCAPTCHA box is a bit large (about
+320x140 pixels). If you need to tweak the application form in your theme to
+make everything fit, add a <code>reCAPTCHA.css</code> file in your theme's
+styles directory. This style sheet will be added automatically at the end of
+the style sheet list only when reCAPTCHA validation is being used.</p>
+
+<hr />
+<h2 id="develop">Development</h2>
+<p>reCAPTCHA was written by
+<a href="mailto:squirrel@digitalsquirrel.com">squirrel</a>. Inspired by
+Dinoboff's CAPTCHA extension.  Part of the
+<a href="http://code.google.com/p/vanilla-friends/">Vanilla Friends</a>
+project.</p>
+
+</body>
+</html>
+
