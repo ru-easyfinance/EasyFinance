@@ -1,4 +1,4 @@
-﻿<?
+﻿<?php
 /**
 * file: welcam.php
 * author: Roman Korostov
@@ -82,7 +82,6 @@ if (!empty($_COOKIE['autoLogin']) && !empty($_COOKIE['autoPass']) && empty($_SES
 {
   if ($user->initUser(html($_COOKIE['autoLogin']),html($_COOKIE['autoPass'])))
   {
-	  header("Location: https://www.home-money.ru/index.php?modules=account");
+	  //header("Location: https://www.home-money.ru/index.php?modules=account");
   }
 }
-?>
