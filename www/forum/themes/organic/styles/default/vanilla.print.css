@@ -1,0 +1,174 @@
+body{background:#fff; color:#111; font:400 80% "lucida grande","lucida sans unicode","trebuchet ms","lucida sans",Verdana,sans-serif}
+a{color:#000; text-decoration:underline; cursor:pointer}
+.ErrorContainer{background:#FFEDEF; border-top:1px solid #FFC2CA; border-bottom:1px solid #FFC2CA; margin-bottom:10px !important; padding:10px !important}
+.ErrorTitle{font-weight:700; color:#c00 !important}
+.Success{border-top:1px solid #9C9; border-bottom:1px solid #9C9; background:#E2F9E3; color:#060 !important; display:block; text-align:center; font-size:13px; margin-bottom:10px !important; padding:6px !important}
+#Header #Title{font:100 220% Arial,Helvetica,sans-serif; margin:0; padding:0}
+#Content{margin:0}
+.ContentInfo{text-align:right}
+#DiscussionsPage .ContentInfo.Bottom{margin-top:-6px; margin-bottom:8px}
+.ContentInfo *{font-size:14px; font-weight:700; color:#000; text-decoration:none; margin:0; padding:0}
+#CommentsPage .ContentInfo h1{float:left; width:60%; overflow:hidden; white-space:nowrap; text-align:left}
+#DiscussionsPage .ContentInfo h1{float:none; text-align:left}
+.PageInfo{border-top:1px solid #ccc; border-bottom:1px solid #ccc; height:23px; line-height:23px; font-weight:700; margin:5px 0; padding:0 1px}
+#CommentsPage .ContentInfo.Top .PageInfo{margin:5px 0 0 !important}
+.PageInfo p{display:inline; float:left; margin:0; padding:0}
+#Discussions li ul{background-color:#fefecc; border-bottom:1px solid #fff; color:#333; padding:7px 6px}
+.NoNewComments, #Discussions li.Read ul{background-color:#fffeec !important}
+.NewComments, #Discussions li.Read.NewComments ul{background-color:#fefecc !important}
+.Discussion{background:#FF0; overflow:hidden; width:100%; margin:0; padding:0}
+.DiscussionType{font-size:14px; float:left; margin-right:5px !important; color:#062971; font-weight:700; line-height:20px}
+.DiscussionTopic, .User.Name{font-size:14px; line-height:20px; overflow:hidden}
+.DiscussionTopic a, .User.Name a{color:#3354aa !important; text-decoration:underline !important; font-weight:700}
+#Discussions li.Read.NewComments .DiscussionNew{display:inline}
+#CategoryPage div.ContentInfo h1{float:left; text-align:left; width:100%; padding-bottom:6px}
+#Categories{list-style:none; border-top:1px solid #ccc; float:left; width:100%; margin:0 0 20px; padding:0}
+.BlockedCategory{background:#fff}
+.UnblockedCategory{background:#f5f9ff}
+#Categories li ul{border-bottom:1px solid #ccc; padding:7px 6px}
+.Category{overflow:hidden; width:100%; margin:0; padding:0}
+.CategoryName{font-size:14px; margin-right:5px !important; color:#062971 !important; font-weight:700; line-height:20px}
+.CategoryName a{color:#3354AA !important; text-decoration:underline !important}
+.CategoryDescription{font-size:13px; line-height:20px; overflow:hidden}
+#Comments li{border-bottom:1px solid #ccc; margin:0; padding:10px 0}
+#Comments .CommentHeader{padding-left:8px; padding-right:8px; text-align:right; line-height:32px}
+#Comments .CommentHeader ul{float:left; list-style:none; margin:0; padding:0}
+#Comments .CommentHeader li{display:inline; color:#333; font-size:11px; border-bottom:0; margin:0; padding:0}
+#Comments .CommentHeader li div.CommentIcon{margin-right:6px; background-repeat:no-repeat; display:inline; background:#fff center center no-repeat; padding:8px 0 8px 30px}
+#Comments .CommentHeader em{color:#333; font-style:normal}
+#Comments .CommentHeader a{text-decoration:none; font-weight:700; font-size:13px; color:#3354aa}
+#Comments .CommentHeader span{font-size:10px; font-weight:400; color:#333}
+#Comments .CommentNotice{font-size:13px; text-align:center; border-top:1px solid #D9999A; border-bottom:1px solid #D9999A; background:#FEE1E1; color:#850406 !important; margin:10px 0; padding:6px}
+#Comments .CommentBody{display:block; color:#000; margin:10px}
+#Comments .CommentBody ul li, #Comments .CommentBody ol li{border-bottom:none; padding:0}
+#CommentsPage .ContentInfo.Middle .PageInfo{border-top:0; margin:0}
+#Comments code{border-left:6px solid #FFA; background:#FFE; display:block; white-space:pre; padding:8px 8px 8px 16px}
+
+#Form.Search{width:99% !important; padding:20px 0 0 !important}
+html>body #Form.Search{width:100% !important}
+#Form.Search fieldset legend{margin-bottom:6px; padding:0 !important}
+#SearchSimple label{display:inline !important; width:10px !important}
+#MainSearchInput #txtKeywords{width:60% !important; margin-left:0 !important}
+#MainSearchInput label{display:none !important}
+#Form.Search .Submit input{color:#000 !important; margin:0 !important}
+#SimpleSearchRadios input{width:auto !important; margin:0 2px 0 12px}
+.AdvancedSearchInput{width:60% !important}
+.AdvancedUserInput, #DiscussionAutoCompleteResults, #CommentAutoCompleteResults{width:160px !important}
+#ddRoles, #ddOrder, #ddCommentCategories, #ddDiscussionCategories{width:auto !important}
+#SearchPage .ContentInfo h1{text-align:left !important}
+#SearchPage .Bottom .PageInfo{margin-top:0 !important; border-top:0 !important}
+#CommentResults li ul{color:#333; background-color:#fefecc; border-bottom:1px solid #ccc; padding:6px 6px 7px}
+#CommentResults .CommentResult ul{background-color:#fff !important}
+#CommentResults .CommentText span.Highlight{display:inline; color:#333; background:#ff9}
+#CommentResults .CommentText{margin:6px 0 4px !important}
+#CommentResults .SearchComment{border-top:1px solid #fefecc}
+#UserResults li{border-top:1px solid #fff}
+#UserResults li ul{margin-top:0 !important; border-bottom:1px solid #ccc; color:#333; padding:6px 6px 7px}
+li.User{display:inline; font-size:10px; margin-right:10px !important}
+li.User.Name{display:block; font-size:11px}
+li.User.Name .UserIcon{margin-right:6px !important; background-repeat:no-repeat !important; display:inline !important; background:center center no-repeat; padding:8px 0 8px 30px !important}
+li.User.Name a{font-size:14px}
+#Form fieldset{border:0; clear:none; margin-bottom:20px}
+#Form fieldset legend{font-size:14px; font-weight:700; color:#000; margin:0; padding:4px 0}
+#Form form{border:1px solid #ffedae; border-left:0; border-right:0; background-color:#fef9e9; margin:0; padding:10px 10px 0}
+#Form li{margin-bottom:10px; color:#834300; font-weight:700}
+#Form label a{margin-bottom:-3px; margin-right:15px; float:right; color:#834300; text-decoration:none; font-weight:400; border:1px solid #ffedae; background-color:#fff; padding:3px 6px}
+#WhisperUsername, #WhisperAutoCompleteResults{width:200px}
+#Form textarea{width:100%; height:150px}
+#Form textarea.SmallCommentBox{height:150px}
+#Form textarea.LargeCommentBox{height:400px}
+#Form .Button{cursor:pointer; color:#000 !important; width:auto !important}
+#Form .Button.SubmitButton{margin-right:10px}
+.Account{padding-top:18px; margin:0 !important}
+#Form.Account *{color:#84733d}
+#Form.Account legend{color:#000}
+#Form.Account h2{font-size:14px; margin-bottom:10px}
+#Form.Account label{display:block; width:40%; line-height:18px; margin-bottom:4px}
+#Form.Extensions label{width:100%}
+#Form.Account input, #Form.Account select{width:40%}
+#Form.GlobalsForm input, #Form.GlobalsForm select{width:59%}
+.Description{font-weight:400; color:#a99861 !important; margin:3px 0 !important; padding:3px 0 5px !important}
+#Form.Account p span{display:block; margin-top:5px}
+#Form.Account p span label{float:none; display:inline; margin-left:5px; font-weight:700; line-height:20px; width:90%}
+#Form.Account p span input{width:12px}
+#Form.GlobalsForm select.SmallSelect{width:50px}
+#Form.UpdateCheck p.Description{margin:0 0 10px !important; padding:0 !important}
+#Form.Extensions{margin:0 0 20px !important}
+#Form.Extensions div.ExtensionsEnabled h2, #Form.Extensions div.ExtensionsDisabled h2{padding-top:20px}
+div.Extensions ul{border:1px solid #ddd; border-bottom:0; background-color:#fffeec; margin:20px 0 !important}
+div.Extensions ul li{border-bottom:1px solid #ddd; overflow:hidden; margin:0 !important; padding:10px !important}
+div.Extensions ul li.Enabled{background:#FEFECB}
+div.Extensions ul li.Disabled{background:url(disabled-tile.gif) #F4F4C2}
+div.Extensions h3{font-size:13px; color:#000 !important}
+div.Extensions h3 label{display:inline !important; padding-left:30px !important}
+div.Extensions ul li input{width:auto !important; margin-top:3px !important; left:20px; position:absolute}
+div.Extensions h3 a{color:#1EB136 !important; text-decoration:none}
+div.Extensions ul li span, div.Extensions ul li span *{font-size:12px; font-weight:400; z-index:1}
+div.Extensions ul li span{margin-left:10px !important}
+div.Extensions .Version{font-weight:700; margin-left:5px !important}
+div.Extensions ul li p{padding-left:30px !important; color:#000 !important; font-weight:400}
+div.Extensions ul li p a{color:#335eb7 !important; text-decoration:none}
+.SortList{color:#000; background:#fefecc; margin-top:10px !important; border:1px solid #ddd; border-top:0; padding:0}
+.MovableSortListItem{cursor:move}
+.SortListItem{border-top:1px solid #ddd; margin:0 !important; padding:6px !important}
+.SortEdit{position:absolute; margin-left:364px !important}
+.SortEdit, .SortEdit:link, .SortEdit:active, .SortEdit:visited{font-weight:400; color:#1EB136 !important; text-decoration:none}
+.SortRemove{display:block; position:absolute; margin-left:394px !important; height:20px; width:20px; background:url(btn.remove.gif) no-repeat top right; text-decoration:none}
+#CustomInfo li{width:50%; float:left}
+.Submit{text-align:right; margin:20px 0 !important}
+.Submit input{width:auto !important; float:left; cursor:pointer}
+.Submit a{color:#F60 !important}
+#AccountProfile{float:left; width:300px; margin-top:20px; border-right:1px solid #ccc}
+#AccountProfile li{clear:both; margin-right:20px; line-height:18px}
+#AccountProfile h3{font-size:12px; width:44%; float:left}
+#AccountProfile p{float:left; width:55%}
+#AccountProfile h2{font-size:14px; color:#000; width:60%; float:left}
+#AccountProfile .Tagline{text-align:center; border-top:1px solid #D9999A; border-bottom:1px solid #D9999A; background:#FEE1E1; color:#850406 !important; margin:0 20px 10px 0; padding:6px}
+.ProfileTitleIcon{background-repeat:no-repeat}
+.ProfileTitle h2{width:48% !important}
+.ProfileTitle.WithIcon h2{padding-left:4px !important; width:auto}
+.ProfileTitle.WithIcon .ProfileIcon{background:#fff no-repeat center center; margin-right:6px; display:inline; float:left; width:32px; padding:8px 0 8px 30px}
+#AccountProfile .ProfileTitle p{width:auto; float:right; text-align:right; font-size:11px; color:#333}
+#AccountProfile .ProfileTitle{line-height:20px; margin-bottom:10px}
+#AccountHistory{margin-left:320px; padding-top:20px}
+html>body #AccountHistory{margin-left:300px !important}
+#AccountHistory *{list-style:none; color:#333; margin:0; padding:0}
+#AccountHistory ul, #AccountHistory h2{margin:0 20px}
+#AccountHistory ul{margin-bottom:20px; border-top:1px solid #ccc}
+#AccountHistory h2{font-size:14px; color:#000}
+#AccountHistory li{border-bottom:1px solid #ccc; padding:5px}
+#AccountHistory h3, #AccountHistory h3 a{color:#333; font-size:12px}
+#AccountHistory p.Note{font-style:italic; padding:3px 3px 0}
+#Form.Help legend{padding-top:22px !important}
+#Form.Help form{margin:0; padding:0}
+#SettingsPage #Form.Help p.Description{color:#84733d !important; padding:10px !important}
+#SettingsPage #Content dl *{color:#84733d; font-size:12px; margin:0; padding:0}
+#SettingsPage #Content dl dt{font-weight:700; font-size:14px; margin:10px}
+#SettingsPage #Content dl dd{margin:10px}
+.WhisperFrom{background-color:#fefceb}
+.WhisperTo{background-color:#feebfa}
+.hiLite{background-color:#ff9; font-style:normal}
+.AutoCompleteContainer{border:1px solid #888; border-top:0; margin:0; padding:0}
+.AutoCompleteContainer td{cursor:pointer; padding:3px}
+.AutoCompleteRow td{background:#fff; color:#000}
+.AutoCompleteHoverRow td{background:#335EA8; color:#fff}
+.clearfix:after{content:"."; display:block; height:0; clear:both; visibility:hidden}
+.clearfix{display:block}
+* html .clearfix{height:1%}
+.Error, .NewComments .DiscussionNew a{color:#c00 !important}
+#Session, .PageList, .Timer, #Panel, img, #Welcome, #Footer, .DiscussionType span, .DiscussionType.Normal, .CategoryName span, .CategoryDescription span, .CategoryName.Normal, #Comments .CommentHeader span a, #Comments .CommentHeader li span, #Comments .CommentHeader a.WhisperBack, .DiscussionTopic span, .SearchSwitch, #SearchDiscussionFields, #SearchCommentFields, #SearchUserFields, #CommentResults .CommentText span, li.User.Name span, #Form.StartDiscussion, #Form.AddComments, #AccountProfile .Picture, #AccountProfile .ProfileIcon{display:none}
+html>body .ContentInfo h1, #CustomInfo li input{width:80% !important}
+#Discussions, #CommentResults, #UserResults{margin-top:-5px !important}
+#Discussions, #Discussions *, #Comments, #CommentResults, #CommentResults *, #UserResults, #UserResults *, #Form *, #AccountProfile *{list-style:none; margin:0; padding:0}
+#Discussions li li, #Categories li li, #CommentResults li li, #UserResults li li{height:auto; border:0}
+#Discussions ul span, #Discussions ul span a, #Discussions ul a, #Categories ul span, #Categories ul span a, #Categories ul a, #CommentResults ul span, #CommentResults ul span a, #CommentResults ul a{color:#333; text-decoration:none}
+.DiscussionType *, #Form.GlobalsForm label, .left{float:left}
+.DiscussionCategory, .DiscussionStarted, .DiscussionComments, .DiscussionLastComment, .DiscussionActive, .DiscussionNew, .CategoryDiscussionCount, .CategoryOptions, .CommentAuthor, .CommentAdded{width:auto; display:inline; font-size:10px; margin-right:10px}
+#Categories ul a, #CommentResults ul a, li.User span{color:#333}
+#CommentsPage .ContentInfo.Bottom, #SearchPage, #Form.GlobalsForm #ForumOptions{margin-bottom:20px}
+#SearchSimple, #CommentResults .SearchComment ul{margin:0 !important}
+.SearchInput, .SearchSelect, .SearchSelect option, #CommentResults .CommentText a{color:#000 !important}
+li.User.Name.WithIcon, #AccountProfile .ProfileTitle *{line-height:32px}
+#Form, #Form.GlobalsForm p{margin-bottom:10px}
+#AccountHistory h3 small, #AccountHistory p{font-size:11px}
+#SimpleSearchRadios label, #Form.GlobalsForm #ForumOptions p span label, #Form.RoleEditForm li p span label, #Form.Account .Description span label, #Form.Account label small, #Form.Preferences p span label{font-weight:400}

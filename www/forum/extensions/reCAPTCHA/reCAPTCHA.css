@@ -1,0 +1,16 @@
+.Apply {
+	width: 624px;
+	}
+div.Apply #Form {
+	height: 310px;
+	}
+html>body div.Apply #Form { /* ugly hack, but fixes display error in IE. */
+	min-height: 332px;
+	height: auto;
+	}
+#Form.ApplyForm .Submit {
+	padding-left: 126px;
+	}
+#Form.ApplyForm input {
+	width: 200px;
+	}
