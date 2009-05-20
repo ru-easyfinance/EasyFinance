@@ -2,7 +2,7 @@
 /**
 * file: welcam.php
 * author: Roman Korostov
-* date: 28/03/07	
+* date: 28/03/07
 **/
 $tpl->assign('name_page', 'welcam');
 $count = 1234 + $user->getCountUsers();
@@ -35,7 +35,7 @@ if ($_GET['wish'] == 'ok')
 }
 
 if(!empty($_POST['email']) && !empty($_POST['captcha']))
-{	
+{
   $errors = Array();
   // Проверяем Email на валидность
   if (!preg_match("(^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$)i", $_POST['email'])) {
@@ -52,11 +52,11 @@ if(!empty($_POST['email']) && !empty($_POST['captcha']))
 	  foreach ($errors as $error) {
 		  echo "<li>".$error."</li>\n";
 	  }
-	  
+
   } else {
 	  $charset = "utf8";
 	  $db->sql_query("SET character_set_client = '$charset', character_set_connection = '$charset', character_set_results = '$charset'");
-	  $res = $db->sql_query("INSERT INTO wish (name, text, ip, ts) 
+	  $res = $db->sql_query("INSERT INTO wish (name, text, ip, ts)
 									  VALUES ('".mysql_escape_string($_POST['email'])."', '".mysql_real_escape_string(html($_POST['text']))."', '".$_SERVER['REMOTE_ADDR']."', '".date('Y.m.d H:i:s')."')");
 	  $body = "<html><head><title>From home-money.ru</title></head>
 					 <body>
@@ -64,16 +64,16 @@ if(!empty($_POST['email']) && !empty($_POST['captcha']))
 					 </body>
 					 </html>";
 	  $headers = "Content-type: text/html; charset=utf-8\n";
-	  $headers .= "From: ".html($_POST['email'])."\n";			
-	  
+	  $headers .= "From: ".html($_POST['email'])."\n";
+
 	  mail("support@home-money.ru", "Отзыв на сайте", $body, $headers);
-	  
+
 	  if (mysql_affected_rows()) {
 		  echo "<img src=\"img/success.gif\" align=\"absmiddle\"> Спасибо за Ваш отзыв!\n";
 	  } else {
 		  echo "<img src=\"img/error.gif\" align=\"absmiddle\"> Произошла ошибка на сервере. Приносим свои извинения!\n";
 	  }
-  }	
+  }
   //pre($_POST);
 exit;
 }

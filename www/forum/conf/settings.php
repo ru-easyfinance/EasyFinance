@@ -15,7 +15,7 @@ $Configuration['FORWARD_VALIDATED_USER_URL'] = 'http://hm/forum/';
 $Configuration['SUPPORT_EMAIL'] = 'admin@home-money.ru';
 $Configuration['SUPPORT_NAME'] = 'admin';
 $Configuration['APPLICATION_TITLE'] = 'Home-Money';
-$Configuration['BANNER_TITLE'] = 'Home-Money';
+$Configuration['BANNER_TITLE'] = '<a href="../">Home-Money</a>';
 $Configuration['COOKIE_DOMAIN'] = '';
 $Configuration['COOKIE_PATH'] = '/forum/';
 $Configuration['SETUP_COMPLETE'] = '1';
