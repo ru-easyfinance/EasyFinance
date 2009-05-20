@@ -31,3 +31,5 @@ $Configuration['ALLOW_IMMEDIATE_ACCESS'] = '0';
 $Configuration['UPDATE_REMINDER'] = 'Weekly';
 $Configuration['ADDON_NOTICE'] = '0';
 $Configuration['AUTHENTICATION_MODULE'] = 'People/People.Class.HomeMoneyAuthenticator.php';
+$Configuration['COOKIE_USER_KEY'] = 'f1';
+$Configuration['COOKIE_VERIFICATION_KEY'] = 'f2';

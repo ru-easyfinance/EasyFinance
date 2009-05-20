@@ -2,11 +2,12 @@
 /**
 * file: config.php
 * author: Roman Korostov
-* date: 23/01/07        
+* date: 23/01/07
 **/
 
 // Path settings
-define('SYS_DIR_ROOT',   "/home/rkorostov/data/www");
+//define('SYS_DIR_ROOT',   "/home/rkorostov/data/www");
+define('SYS_DIR_ROOT',   "/var/www/old/");
 define('SYS_DIR_LIBS',   SYS_DIR_ROOT."/core/");
 define('SYS_DIR_INC',    SYS_DIR_ROOT."/include/");
 define('SYS_DIR_MOD',    SYS_DIR_ROOT."/modules/");
@@ -16,10 +17,15 @@ define('URL_ROOT', 		 "http://".$_SERVER['HTTP_HOST']);
 define('UPLOAD_DIR',	SYS_DIR_ROOT."/home-money.ru/upload/photo_experts/");
 
 // DB settings
-define('SYS_DB_HOST', 	'localhost');
-define('SYS_DB_USER', 	'homemone');
-define('SYS_DB_PASS', 	'lw0Hraec');
-define('SYS_DB_BASE', 	'homemoney');
+//define('SYS_DB_HOST', 	'localhost');
+//define('SYS_DB_USER', 	'homemone');
+//define('SYS_DB_PASS', 	'lw0Hraec');
+//define('SYS_DB_BASE', 	'homemoney');
+
+define('SYS_DB_HOST',   'localhost');
+define('SYS_DB_USER',   'root');
+define('SYS_DB_PASS',   'gfh0km');
+define('SYS_DB_BASE',   'homemoney');
 
 // Error codes
 define('GENERAL_MESSAGE',  200);
@@ -29,7 +35,7 @@ define('CRITICAL_ERROR',   204);
 
 // Month setting
 $sys_month =
-array( 
+array(
        '01'   => 'Январь',
        '02'   => 'Февраль',
        '03'   => 'Март',
@@ -76,7 +82,7 @@ $sys_reports = array(
 );
 
 
-define('SYS_MAX_PERPAGE',   3);               
+define('SYS_MAX_PERPAGE',   3);
 define('DEFAULT_MODULE',   'welcam');
 
 ?>
