@@ -25,14 +25,15 @@ class User
 
 	function initUser($login, $pass)
 	{
-/*
+		if (URL_ROOT == "http://easyfinance.ru")
+		{
 	    $sql = "
 				SELECT `user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`, DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, `user_active` FROM `users`
 				WHERE `user_login` = '" . str_replace("\\'", "''", $login) . "'
 					   and `user_pass` = '".$pass."'
 					   and `user_new` = '0'
 			   ";
-*/
+		}else{
         $sql = "SELECT
             `users`.`user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`,
             DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, `user_active`,
@@ -44,6 +45,7 @@ class User
         WHERE
             `user_login` = '" . str_replace("\\'", "''", $login) . "'
                 AND `user_pass` = '".$pass."' and `user_new` = '0';";
+		}
 
 		if ( !($result = $this->db->sql_query($sql)) )
 		{
@@ -62,8 +64,8 @@ class User
 
 			if ( $this->init($row['user_id']) )
 			{
-                setcookie("f1", $row['forum_user_id'], time() + 1209600);
-                setcookie("f2", $row['forum_user_key'], time() + 1209600);
+                @setcookie("f1", $row['forum_user_id'], time() + 1209600);
+                @setcookie("f2", $row['forum_user_key'], time() + 1209600);
 				$this->save();
 				return true;
 			}
