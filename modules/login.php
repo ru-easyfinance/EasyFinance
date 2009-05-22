@@ -59,7 +59,7 @@ if (!empty($_SESSION['user'])) {
 					";
 
                     $headers = "Content-type: text/html; charset=utf-8\n";
-                    $headers .= "From: info@home-money.ru\n";
+                    $headers .= "From: Home-Money.ru <info@home-money.ru>\n";
                     $subject = "Успешная регистрация на сайте домашней бухгалтерии Home-Money.ru";
                     mail($_SESSION['user']['user_mail'], $subject, $message, $headers);
 

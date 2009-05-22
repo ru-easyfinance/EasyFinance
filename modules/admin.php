@@ -45,6 +45,10 @@ switch ($action) {
 		require_once (SYS_DIR_MOD . "admin/admin.manage_daily_currency.php");
 	break;
 	
+	case "manage_articles":
+		require_once (SYS_DIR_MOD . "admin/admin.articles.php");
+	break;
+	
 	case "get_list_experts":
 		// список всех экспертов
 		$tpl->assign('name_page', 'admin/admin.list_experts');		

@@ -422,7 +422,7 @@ ul.articles
 	font-family:Verdana, Geneva, sans-serif;
 	font-size: 11px;
 	color: #666;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 }
 
 .td_data_content_currency_format
