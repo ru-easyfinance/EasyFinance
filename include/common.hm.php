@@ -2,7 +2,7 @@
 /**
 * file: common.php
 * author: Roman Korostov
-* date: 23/01/07	
+* date: 23/01/07
 **/
 
 require_once("config.hm.php");
@@ -40,12 +40,12 @@ $tpl->plugins_dir     =  array(SYS_DIR_INC.'/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 
-
-$db = new sql_db(SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS, SYS_DB_BASE);
+global $sql_db;
+$sql_db = $db = new sql_db(SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS, SYS_DB_BASE);
 
 if(!$db->db_connect_id)
 {
-	message_error(CRITICAL_ERROR, "Could not connect to the database");
+	trigger_error("Could not connect to the database", E_USER_ERROR);
 }
 
 $user = new User($db);

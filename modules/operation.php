@@ -6,7 +6,7 @@
  * @package  home-money
  * @version  2.0
  */
- 
+
 if (empty($_SESSION['user']))
 {
 	header("Location: index.php");
@@ -17,7 +17,7 @@ $tpl->assign('name_page', 'operation');
 $cnt = count($_SESSION['user_account']);
 $currentAccount = (!empty($g_a)) ? html($g_a) : $_SESSION['user_account'][0]['id'];
 $currentType = 0;
-$tpl->assign('operationTpl','default');    
+$tpl->assign('operationTpl','default');
 
 
 	/*for ($i=0; $i<$cnt; $i++)
@@ -45,7 +45,6 @@ $area = html($g_area);
 
 $money = new Money($db, $user);
 
-
 $tpl->assign('accounts', $_SESSION['user_account']);
 $tpl->assign('currentAccount', $currentAccount);
 $tpl->assign('dateFrom', date('01.m.Y'));
@@ -68,7 +67,7 @@ switch( $action )
 {
 	case "updateOperation":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
-		
+
 		$id = html($g_id);
 		$bill_id = html($g_a);
 		$cat_id = html($g_cat_id);
@@ -79,23 +78,23 @@ switch( $action )
 		$sum = html($g_sum);
 		$cat_name = '';
 		$cat_type = 0;
-		
+
 		list($tday,$tmonth,$tyear) = explode(".", $date);
 		$date =$tyear.".".$tmonth.".".$tday;
-		
+
 		if(isset($g_cat_type) && $g_cat_type == 1)
 		{
 			$cat_type = $g_cat_type;
 			$cat_name = html($g_cat_name);
 		}
-		
+
 		switch ($type)
 		{
 			case '0':
 				$drain = 1;
-				$sum = $sum * -1;				
+				$sum = $sum * -1;
 				break;
-			
+
 			case '1':
 				$drain = 0;
 				break;
@@ -104,7 +103,7 @@ switch( $action )
 		break;
 	case "addOperation":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
-		
+
 		$bill_id = html($g_a);
 		$cat_id = html($g_cat_id);
 		$date = html($g_dateTo);
@@ -114,16 +113,16 @@ switch( $action )
 		$sum = html($g_sum);
 		$cat_name = '';
 		$cat_type = 0;
-		
+
 		list($tday,$tmonth,$tyear) = explode(".", $date);
 		$date =$tyear.".".$tmonth.".".$tday;
-		
+
 		if(isset($g_cat_type) && $g_cat_type == 1)
 		{
 			$cat_type = $g_cat_type;
 			$cat_name = html($g_cat_name);
 		}
-		
+
 		switch ($type)
 		{
 			case '0':
@@ -131,7 +130,7 @@ switch( $action )
 				$sum = $sum * -1;
 				$money->saveMoney($cat_type, $cat_name, $cat_id, $sum, $date, $drain, $comment, $bill_id);
 				break;
-			
+
 			case '1':
 				$drain = 0;
 				$money->saveMoney($cat_type, $cat_name, $cat_id, $sum, $date, $drain, $comment, $bill_id);
@@ -145,16 +144,16 @@ switch( $action )
 		$sum = html($g_sum);
 		$to_account = html($g_toAccount);
 		$convert = $sum / $g_currency;
-		
+
 		list($tday,$tmonth,$tyear) = explode(".", $date);
 		$date =$tyear.".".$tmonth.".".$tday;
-		
+
 		$money->addOperationDeposit($bill_id, $date, $sum, $to_account, $convert);
 
 		break;
 	case "addTransfer":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
-		
+
 		$bill_id = html($g_a);
 		$cat_id = -1;
 		$date = html($g_dateTo);
@@ -165,7 +164,7 @@ switch( $action )
 
 		$to_account = html($g_toAccount);
 		$convert = $sum / $g_currency;
-		
+
 		list($tday,$tmonth,$tyear) = explode(".", $date);
 		$date =$tyear.".".$tmonth.".".$tday;
 
@@ -186,7 +185,7 @@ switch( $action )
 		$sum = html($g_sum);
 		$to_account = html($g_toAccount);
 		$convert = $sum / $g_currency;
-		
+
 		list($tday,$tmonth,$tyear) = explode(".", $date);
 		$date =$tyear.".".$tmonth.".".$tday;
 
@@ -200,7 +199,7 @@ switch( $action )
 		$id = html($g_id);
 		$currentId = html($g_currentId);
 		$count = count($_SESSION['user_account']);
-		
+
 		for ($i=0; $i<$count; $i++)
 		{
 			if ($_SESSION['user_account'][$i]['id'] == $id)
@@ -214,7 +213,7 @@ switch( $action )
 				$account['currency_current_name'] = $_SESSION['user_account'][$i]['currency_name'];
 			}
 		}
-		
+
 		if ($g_type == 'edit')
 		{
 			$g_type = 'edit';
@@ -223,7 +222,7 @@ switch( $action )
 			$g_type = 'add';
 			$data = "<input type='hidden' name='currency' id='currency_add' value='1'>";
 		}
-			
+
 		if ($account['currency_current'] != $account['currency'])
 		{
 			$count = count($sys_currency);
@@ -231,20 +230,20 @@ switch( $action )
 			list($c1,$c2) = explode(",", $course);
 			if (!empty($c2)) $c2 = ".".$c2;
 			$course =$c1.$c2;
-			
+
 			$current_course = $sys_currency[$account['currency_current']];
 			list($c3,$c4) = explode(",", $current_course);
 			if (!empty($c4)) $c4 = ".".$c4;
-			$current_course = $c3."".$c4;			
-			
+			$current_course = $c3."".$c4;
+
 			$account['course'] = round($course / $current_course,2);
 			$data = "
-				Курс <b>".$account['currency_current_name']."</b> к <b>".$account['currency_name']."</b> 
+				Курс <b>".$account['currency_current_name']."</b> к <b>".$account['currency_name']."</b>
 				<input type='text' name='currency' id='currency_".$g_type."' value='".$account['course']."' OnKeyUp=onSumConvert('".$g_type."');>
 				&nbsp;&nbsp;<span id='convertSumCurrency_".$g_type."'></span>
-			";			
+			";
 		}
-		
+
 		echo $data;
 		exit;
 		break;
@@ -255,7 +254,7 @@ switch( $action )
 		}
 		$id = html($g_id);
 		$tr_id = html($g_tr_id);
-		
+
 		if ($tr_id == '0')
 		{
 			$money->deleteMoney($id);
@@ -304,7 +303,7 @@ switch( $action )
 					<option value='2' selected>Перевод на счет</option>
 				";
 		}
-		
+
 		$data = "
 			<a name='panelEditOperation'></a>
 			<table width=100% style='background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;'>
@@ -330,8 +329,8 @@ switch( $action )
 			</tr>
 			<tr id='old_cat_edit'>
 				<td align=right class=cat_add>Категория:</td>
-				<td align=left class=cat_add>		
-					<select name=cat_id style='width:250px;' id=cat_id_old_edit>							
+				<td align=left class=cat_add>
+					<select name=cat_id style='width:250px;' id=cat_id_old_edit>
 						$categories_select
 					</select>
 					<span style='padding-left:10px;'><a href='index.php?modules=category' class=cat_add>Нет нужной категории? Добавьте ее в разделе [категории]</a></span>
@@ -339,7 +338,7 @@ switch( $action )
 			</tr>
 			<tr id='transferSelectEdit' style='display:none;'>
 				<td align='right' class='cat_add'>На счет:</td>
-				<td align='left' class='cat_add'>	
+				<td align='left' class='cat_add'>
 					<select name='selectAccountForTransferEdit' id='selectAccountForTransferEdit' onChange=changeAccountForTransferEdit();>
 						$accounts
 					</select>
@@ -350,7 +349,7 @@ switch( $action )
 				<td  align=right class=cat_add>
 					Дата:
 				</td>
-				<td  align=left class=cat_add>					
+				<td  align=left class=cat_add>
 					<input type='text' value='".$arr['date']."' class='standart' style='width:80px;' name='dateFrom' id='sel1'>
 					<button type='reset' class='button_calendar' onclick=\"return showCalendar('sel1', '%d.%m.%Y', false, true);\">
 					<img src='img/calendar/cal.gif'></button>
@@ -377,10 +376,10 @@ switch( $action )
 		break;
 	case "getOperationList":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
-		{			
+		{
 			exit;
-		}	
-		
+		}
+
 		switch ($currentType)
 		{
 			case 0:
@@ -389,12 +388,12 @@ switch( $action )
 			case 4:
 				require_once SYS_DIR_MOD."operationTemplate/depositOperationList.php";
 				break;
-		}		
+		}
 		break;
-		
+
 	default:
 		//if ($_SESSION['user']['user_login'] == 'demo')
-		//{			
+		//{
 			$often = $cat->getOftenCategories($_SESSION['user']['user_id']);
 			$list = $cat->loadUserTree($_SESSION['user']['user_id']);
 			$tpl->assign('often', $often);

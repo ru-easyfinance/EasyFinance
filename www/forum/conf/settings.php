@@ -33,3 +33,5 @@ $Configuration['ADDON_NOTICE'] = '0';
 $Configuration['AUTHENTICATION_MODULE'] = 'People/People.Class.HomeMoneyAuthenticator.php';
 $Configuration['COOKIE_USER_KEY'] = 'f1';
 $Configuration['COOKIE_VERIFICATION_KEY'] = 'f2';
+$Configuration['SIGNIN_URL'] = 'https://www.home-money.ru/index.php?modules=login';
+$Configuration['SIGNOUT_URL'] = '/index.php?modules=logout';

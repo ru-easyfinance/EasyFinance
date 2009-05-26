@@ -32,7 +32,6 @@ if (!empty($g_id))
 			message_error(CRITICAL_ERROR, 'Ошибка в регистрации пользователя!', '', __LINE__, __FILE__, $sql);
 		}
 
-		//FIXME
         $sql = "INSERT INTO forum_User (`RoleID`,`Name`,`Password`,`Email`,`user_id`)
             SELECT '3', `user_login`, `user_pass`, `user_mail`, `user_id` FROM users WHERE user_id='{$user_id}'";
 	    if (!$result = $db->sql_query($sql))

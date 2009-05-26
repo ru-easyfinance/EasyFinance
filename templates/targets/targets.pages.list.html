@@ -1,0 +1,15 @@
+{* SVN: $Id$ *}
+{include file="targets/targets.$view_list.html"}
+{if $total > $index_limit}
+    <div class="pages">Страницы: 
+    {math equation = "ceil((total / index_limit)+1)" total=$total index_limit=$index_limit assign=pages}
+    {section name=pages_cycle loop=$pages start=1}
+        {if $smarty.section.pages_cycle.index == $index}
+            <b><a href="/index.php?modules=targets&action={$view_list}&index={$smarty.section.pages_cycle.index}">{$smarty.section.pages_cycle.index}</a></b>
+        {else}
+            <a href="/index.php?modules=targets&action={$view_list}&index={$smarty.section.pages_cycle.index}">{$smarty.section.pages_cycle.index}</a>
+        {/if}
+    {/section}
+    </div>
+{/if}
+<div><a href="/index.php?modules=targets">Вернуться к списку всех целей</a></div>

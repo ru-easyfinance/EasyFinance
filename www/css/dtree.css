@@ -435,3 +435,15 @@ ul.articles
 	white-space: nowrap;
 	text-align:right;
 }
+/* ukko + Стили для таблиц */
+table.list {
+    width: 100%;
+    cellspacing: 0;
+    cellpadding: 5;
+    border: 0;
+    bgcolor: #ffffff;
+}
+td.list {
+
+}
+/* ukko - Стили для таблиц */

@@ -2,7 +2,7 @@
 /**
 * file: index.php
 * author: Roman Korostov
-* date: 23/01/07	
+* date: 23/01/07
 **/
 
 if ($_GET['et']=='on')
@@ -20,10 +20,11 @@ if (!empty($g_modules))
 {
 	//проверим его
 	$is_module = html($g_modules);
-	
+
 	//если модуль проверен и существует, то загружаем его
 	if (isset($is_module) && $is_module != "")
 	{
+
 		if (checkModules($is_module))
 		{
 			require_once (SYS_DIR_MOD."/".$is_module.".php");

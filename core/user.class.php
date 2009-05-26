@@ -389,8 +389,9 @@ class User
 
 	function getCategory($user_id)
 	{
-			$lnk = mysql_connect('localhost', 'homemone', 'lw0Hraec') or die ('Not connected : ' . mysql_error());
-			mysql_select_db('homemoney', $lnk) or die ('Can\'t use foo : ' . mysql_error());
+
+			$lnk = mysql_connect(SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS) or die ('Not connected : ' . mysql_error());
+			mysql_select_db(SYS_DB_BASE, $lnk) or die ('Can\'t use foo : ' . mysql_error());
 			mysql_query("SET NAMES utf8;");
 
 			/*if (IS_DEMO)
