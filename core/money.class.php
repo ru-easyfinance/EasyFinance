@@ -163,7 +163,9 @@ class Money
                 echo $_SESSION['etwas'];
             }
         }
+
         $result = $this->db->sql_query($sql);
+
         return $this->db->sql_fetchrowset($result);
     }
 

@@ -16,8 +16,7 @@ echo '<div id="AccountProfile">';
 		} else {
 			echo '<li class="ProfileTitle clearfix">';
 		}
-			echo '<h2>'.$this->User->Name.'</h2>
-			<p>'.$this->User->Role.'</p>
+			echo '<p>'.$this->User->Role.'</p>
 		</li>';
 		if ($this->User->RoleDescription != '') echo('<li class="Tagline">'.$this->User->RoleDescription.'</li>');
 		if ($this->User->Picture != "" && $this->User->Permission('PERMISSION_HTML_ALLOWED')) echo "<li class=\"Picture\" style=\"background-image: url('".$this->User->Picture."');\">&nbsp;</li>";

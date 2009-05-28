@@ -19,25 +19,6 @@ $currentAccount = (!empty($g_a)) ? html($g_a) : $_SESSION['user_account'][0]['id
 $currentType = 0;
 $tpl->assign('operationTpl','default');
 
-
-	/*for ($i=0; $i<$cnt; $i++)
-	{
-		if ($_SESSION['user_account'][$i]['id'] == $currentAccount)
-		{
-			switch ($_SESSION['user_account'][$i]['type'])
-			{
-				case 4:
-					$currentType = 4;
-					$tpl->assign('operationTpl','deposit');
-					$tpl->assign('aboutAccount', $acc->getAboutDeposit($currentAccount));
-					break;
-				default:
-					$tpl->assign('operationTpl','default');
-					break;
-			}
-		}
-	}*/
-
 require_once SYS_DIR_LIBS.'/money.class.php';
 
 $action = html($g_action);
@@ -390,7 +371,9 @@ switch( $action )
 				break;
 		}
 		break;
-
+    case "addTargetOperation":
+        addTarget();
+        break;
 	default:
 		//if ($_SESSION['user']['user_login'] == 'demo')
 		//{
@@ -402,6 +385,7 @@ switch( $action )
 		switch ($area)
 		{
 			case "add":
+                getTargets();
 				$tpl->assign('areaAdd', true);
 				break;
 			case "transfer":
@@ -410,5 +394,49 @@ switch( $action )
 		}
 	//pre( $money->getOperationList($currentAccount));
 		break;
+}
+
+//TODO FIXME Переписать этот модуль в классы
+function getTargets() {
+    global $tpl;
+    require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
+    require_once (SYS_DIR_LIBS . "targets.class.php");
+    try {
+        $dbs = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+        $dbs->query("SET character_set_client = 'utf8',
+                    character_set_connection = 'utf8',
+                    character_set_results = 'utf8'");
+    } catch (Exception $e) {
+        trigger_error("mysql connect error: ".mysql_error());
+    }
+
+    $targets = new TargetsClass($dbs);
+    $tpl->assign('targetList', $targets->getLastList(0, 1000));
+
+}
+function addTarget() {
+    global $tpl;
+    require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
+    require_once (SYS_DIR_LIBS . "targets.class.php");
+    try {
+        $dbs = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+        $dbs->query("SET character_set_client = 'utf8',
+                    character_set_connection = 'utf8',
+                    character_set_results = 'utf8'");
+    } catch (Exception $e) {
+        trigger_error("mysql connect error: ".mysql_error());
+    }
+
+    $targets = new TargetsClass($dbs);
+    $targets->addTargetOperation(@$_GET['a'], @$_GET['target_id'], @$_GET['sum'], @$_GET['comment'], @$_GET['dateTo']);
+/*
+a 9702
+action addTargetOperation
+comment sdfasd
+dateTo 26.05.2009
+modules operation
+sum 12312
+target_id 28
+*/
 }
 ?>

@@ -93,13 +93,34 @@
 		}
 		var modules = "operation";
 		var action = "addOperation";
-		if (type == '2'){action = "addTransfer";}
+        target_id = '';
+		if (type == '2'){
+            action = "addTransfer";
+        } else if (type == '4' || type == '5') {
+            //TODO Сделать проверку на валюту
+            //if ($("#selectAccount").val())
+            action = 'addTargetOperation';
+            target_id = $("#target_sel").val();
+        }
 		
 		if (sum == 0 || sum == 'NaN'){alert('Вы ввели неверное значение в поле "сумма"!');return false;}
 
 		if (!ValidateForm()){return false;}
 
-		$.get('/index.php',{modules: modules,action : action,a: bill_id,cat_id: cat_id,dateTo: dateTo,type: type,comment: comment,sum: sum,toAccount: toAccount,currency: currency},operationAfterInsert);
+		$.get('/index.php',
+            {
+                modules: modules,
+                action : action,
+                a: bill_id,
+                cat_id: cat_id,
+                dateTo: dateTo,
+                type: type,
+                comment: comment,
+                sum: sum,
+                toAccount: toAccount,
+                currency: currency,
+                target_id: target_id
+            },operationAfterInsert);
 		visibleMessage('Операция добавляется, подождите несколько секунд...');
 	}
 	function updateOperation()
@@ -243,17 +264,21 @@
 		switch (document.getElementById("type_"+id).value)
 		{
 			case '0':
-				$("#old_cat").show(); $("#old_cat_edit").show();
+				$("#old_cat").show(); 
+                $("#old_cat_edit").show();
+                $("#target_fields").hide();
 				$("#transferSelect").hide();
 				$("#transferSelectEdit").hide();
 				break;
 			case '1':
 				$("#old_cat").show(); $("#old_cat_edit").show();
+                $("#target_fields").hide();
 				$("#transferSelect").hide();
 				$("#transferSelectEdit").hide();
 				break;
 			case '2':
 				$("#old_cat").hide(); $("#old_cat_edit").hide();
+                $("#target_fields").hide();
 				$("#transferSelect").show();
 				$("#transferSelectEdit").show();				
 				if (id == 'add')
@@ -265,6 +290,14 @@
 				break;
 			case '3':
 				break;
+            case '4':
+                $("#target_fields").show();
+                $("#old_cat").hide();
+                break;
+            case '5':
+                $("#target_fields").show();
+                $("#old_cat").hide();
+                break;
 		}
 		
 	}

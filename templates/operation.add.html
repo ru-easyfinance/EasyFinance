@@ -1,94 +1,88 @@
-<table width="100%" style=" background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;">
+<table width="100%"
+	style="background-color: #f8f8d8; padding-top: 15px; padding-bottom: 15px; border: 1px dotted #ff6002;">
 	<tr>
-		<td  align="right" class="cat_add" width="10%">Тип операции:</td>
-		<td  align="left" class="cat_add" width="90%">
-			<select name="type" id="type_add" onChange="changeTypeOperation('add');">
-				<option value="0">Расход</option>
-				<option value="1">Доход</option>
-				<option value="2">Перевод со счета</option>
-				<!--<option value="3">Покупка валюты</option>-->
-			</select>
-		</td>
+		<td align="right" class="cat_add" width="10%">Тип операции:</td>
+		<td align="left" class="cat_add" width="90%"><select name="type" id="type_add"
+			onChange="changeTypeOperation('add');">
+			<option value="0">Расход</option>
+			<option value="1">Доход</option>
+			<option value="2">Перевод со счета</option>
+			<!--<option value="3">Покупка валюты</option>-->
+			<option value="4">Перевод на финансовую цель</option>
+			<option value="5">Закрытие финансовой цели</option>
+		</select></td>
 	</tr>
 	<tr>
-		<td  align="right" class="cat_add" valign="top">
-			Сумма:
-		</td>
-		<td  align="left" class="cat_add">
-			<input type="text" id="pos_oc" value="" style="width:80px;" OnKeyUp="onSumChange(); onSumConvert('add');">&nbsp;<b>Пример:</b> 125.50
-			<input type="hidden" name="money" id="pos_mc" size="7">
-		</td>
+		<td align="right" class="cat_add" valign="top">Сумма:</td>
+		<td align="left" class="cat_add"><input type="text" id="pos_oc" value="" style="width: 80px;"
+			OnKeyUp="onSumChange(); onSumConvert('add');">&nbsp;<b>Пример:</b> 125.50 <input
+			type="hidden" name="money" id="pos_mc" size="7"></td>
 	</tr>
 	<tr id='old_cat'>
 		<td align="right" class="cat_add">Категория:</td>
-		<td align="left" class="cat_add">	
-        	{if !empty($list)}
-            	<select name="cat_id" style="width:250px;" id="cat_id_old">
-                
-                {if !empty($often)}
-                <optgroup id="often" label="&nbsp;Часто используемые">
-                	{foreach from=$often item=data}
-                    	<option value="{$data.cat_id}">{$data.cat_name}</option>
-                    {/foreach}
-                </optgroup>
-                {/if}
-                
-                <optgroup id="all" label="&nbsp;Все категории">
-            	{foreach from=$list item=data}
-                	{if $data.cat_parent == 0}
-                		<option value="{$data.cat_id}">{$data.cat_name}</option>
-                        {foreach from=$list item=child}
-                        	{if $child.cat_parent == $data.cat_id}
-                            	<option value="{$child.cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;- {$child.cat_name}</option>
-                            {/if}
-                        {/foreach}
-                    {/if}
-                {/foreach}
-                </optgroup>
-                
-                </select>
-            {else}
-			<select name="cat_id" style="width:250px;" id="cat_id_old">							
-				{$categories}
-			</select>
-            {/if}
-						{if !empty($restore_cat)}
-							(<a href="index.php?modules=money&action=edit&id={$money.id}&restore={$restore_cat}">
-							Восстановить категорию:&nbsp;{$money.cat_restore}</a>)
-						{/if}
-			<span style="padding-left:10px;"><a href='index.php?modules=category' class="cat_add">Нет нужной категории? Добавьте ее в разделе [категории]</a></span>
-		</td>
-	</tr>
-	<tr id="transferSelect" style="display:none; ">
-		<td align="right" class="cat_add">На счет:</td>
-		<td align="left" class="cat_add">	
-			<select name="selectAccountForTransfer" id="selectAccountForTransfer" onChange="changeAccountForTransfer();">
-				{foreach from=$accounts item=acc_data}
-					<option id="{$acc_data.id}" value="{$acc_data.id}">{$acc_data.name}</option>
+		<td align="left" class="cat_add">{if !empty($list)} <select name="cat_id"
+			style="width: 250px;" id="cat_id_old">
+
+			{if !empty($often)}
+			<optgroup id="often" label="&nbsp;Часто используемые">
+				{foreach from=$often item=data}
+				<option value="{$data.cat_id}">{$data.cat_name}</option>
 				{/foreach}
-			</select>
-			<span id="operationTransferCurrency" style="padding-left:5px;"></span>
-		</td>
+			</optgroup>
+			{/if}
+
+			<optgroup id="all" label="&nbsp;Все категории">
+				{foreach from=$list item=data} {if $data.cat_parent == 0}
+				<option value="{$data.cat_id}">{$data.cat_name}</option>
+				{foreach from=$list item=child} {if $child.cat_parent == $data.cat_id}
+				<option value="{$child.cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;- {$child.cat_name}</option>
+				{/if} {/foreach} {/if} {/foreach}
+			</optgroup>
+
+		</select> {else} <select name="cat_id" style="width: 250px;" id="cat_id_old">
+			{$categories}
+		</select> {/if} {if !empty($restore_cat)} (<a
+			href="index.php?modules=money&action=edit&id={$money.id}&restore={$restore_cat}">
+		Восстановить категорию:&nbsp;{$money.cat_restore}</a>) {/if} <span style="padding-left: 10px;"><a
+			href='index.php?modules=category' class="cat_add">Нет нужной категории? Добавьте ее в разделе
+		[категории]</a></span></td>
+	</tr>
+	<tr id="target_fields">
+		<td align="right" class="cat_add">Финансовая цель:</td>
+		<td align="left" class="cat_add"><select name="target_sel" id="target_sel">
+			{foreach from=$targetList item=target}
+			<option bill="{$target.target_account_id}" value="{$target.id}"
+				{if $target.id==$target_sel}selected{/if}>
+			{$target.title|stripslashes|truncate:50:".."}</option>
+			{/foreach}
+		</select></td>
+	</tr>
+	<tr id="transferSelect" style="display: none;">
+		<td align="right" class="cat_add">На счет:</td>
+		<td align="left" class="cat_add"><select name="selectAccountForTransfer"
+			id="selectAccountForTransfer" onChange="changeAccountForTransfer();">
+			{foreach from=$accounts item=acc_data}
+			<option id="{$acc_data.id}" value="{$acc_data.id}">{$acc_data.name}</option>
+			{/foreach}
+		</select> <span id="operationTransferCurrency" style="padding-left: 5px;"></span></td>
 	</tr>
 	<tr>
-		<td  align="right" class="cat_add">
+		<td align="right" class="cat_add">
 			Дата:
 		</td>
-		<td  align="left" class="cat_add">					
-			<input type="text" value="{$dateTo}" class="standart" style="width:80px;" name="money[date]" id="sel3"><button type="reset" class="button_calendar" onclick="return showCalendar('sel3', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
+		<td align="left" class="cat_add">
+			<input type="text" value="{$dateTo}" class="standart" style="width: 80px;" name="money[date]" id="sel3"><button type="reset" class="button_calendar" onclick="return showCalendar('sel3', '%d.%m.%Y', false, true);"><img src="img/calendar/cal.gif"></button>
 		</td>
 	</tr>
 	<tr>
-		<td  align="right" class="cat_add" valign="top">Комментарий:</td>
-		<td  align="left" class="cat_add">
-			<textarea rows="4" cols="50" name="comment" id="comment"></textarea>
+		<td align="right" class="cat_add" valign="top">Комментарий:</td>
+		<td align="left" class="cat_add"><textarea rows="4" cols="50" name="comment" id="comment"></textarea>
 		</td>
 	</tr>
 	<tr>
-		<td  align="right" class="cat_add" valign="top">&nbsp;</td>
-		<td  align="left" class="cat_add">
-			<input class="inputsubmit" type="button" value="Сохранить" onclick="addOperation();">
-			<input class="inputsubmit" type="button" value="Отменить" onclick="operationAddInVisible();">
-		</td>
+		<td align="right" class="cat_add" valign="top">&nbsp;</td>
+		<td align="left" class="cat_add"><input class="inputsubmit" type="button" value="Сохранить"
+			onclick="addOperation();"> <input class="inputsubmit" type="button" value="Отменить"
+			onclick="operationAddInVisible();"></td>
 	</tr>
 </table>

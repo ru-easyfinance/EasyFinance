@@ -44,16 +44,19 @@ class TargetsClass {
     /**
      * Возвращает массив из ближайших к окончанию целей
      * @param $index int С какой цели начать возвращать
+     * @param $limit int Количество лимитируемых записей возвращаемых из БД
      * @return array mixed
      */
-    public function getLastList($index = 0) {
+    public function getLastList($index = 0, $limit = 0) {
         global $tpl;
 
-        if ($index == 0) {
+        if ($limit == 0) {
             $limit = $this->limitCommon;
+        }
+
+        if ($index == 0) {
             $start = 0;
         } else {
-            $limit = $this->limitFull;
             $start = (($index - 1) * $limit);
         }
         $list = $this->db->selectPage($total, "SELECT *, 'Account' as periodic_account
@@ -269,6 +272,30 @@ class TargetsClass {
     }
 
     /**
+     * Обновляет статистику для указанной финансовой цели, или указанного или текущего пользователя
+     * @param $target_id int
+     * @param $user_id string
+     * @return bool
+     */
+    function staticTargetUpdate ($target_id = 0, $user_id = 0) {
+        if ((int)$target_id == 0) {
+            trigger_error("Для обновления статистики указана не существующая цель", E_USER_WARNING);
+            return false;
+        }
+
+        if ($user_id == 0) {
+            $user_id = $_SESSION['user']['user_id'];
+        }
+        //FIXME Дописать обновление прогноза
+        $this->db->query("UPDATE target SET
+            amount_done   = (SELECT SUM(money) FROM target_bill WHERE target_id = target.id LIMIT 1)
+            , percent_done  = ROUND ( amount_done / (amount / 100), 2)
+            , forecast_done = 0
+            WHERE id=? AND user_id=?;", $target_id, $user_id);
+        return true;
+    }
+
+    /**
      * Пополняет финансовую цель, переводя в резерв субсчёта из основного счёта
      * @param $bill_id int Ид счёта
      * @param $target_id int Ид фин.цели
@@ -277,7 +304,7 @@ class TargetsClass {
      * @param $dt date
      * @return bool
      */
-    public function addTargetOperation($bill_id, $target_id, $money, $comment) {
+    public function addTargetOperation($bill_id, $target_id, $money, $comment, $date) {
         if ((int)$bill_id == 0){
             trigger_error("Указанный счёт '{$bill_id}' не существует. ", E_USER_ERROR);
             return false;
@@ -291,8 +318,12 @@ class TargetsClass {
             return false;
         }
         $comment = strip_tags($comment);
-        return $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt`, `comment`)
-            VALUES(?,?,?,?,NOW(),?);",$bill_id, $target_id, $_SESSION['user']['user_id'], $money, $comment);
+        $date = explode('.', $date);
+        $date = "{$date['2']}-{$date['1']}-{$date['0']}";
+        $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt`, `comment`, `date`)
+            VALUES(?,?,?,?,NOW(),?,?);",$bill_id, $target_id, $_SESSION['user']['user_id'], $money, $comment, $date);
+        $this->staticTargetUpdate($target_id);
+        return true;
     }
 
     /**

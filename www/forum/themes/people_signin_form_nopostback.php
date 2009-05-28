@@ -22,8 +22,7 @@ echo '<ul>
 </form>
 </fieldset>
 <ul class="MembershipOptionLinks">
-	<li class="ForgotPasswordLink"><a href="'.GetUrl($this->Context->Configuration, $this->Context->SelfUrl, '', '', '', '', 'PostBackAction=PasswordRequestForm').'">'.$this->Context->GetDefinition('ForgotYourPassword').'</a></li>
-	<li class="ApplyForMembershipLink"><a href="'.GetUrl($this->Context->Configuration, $this->Context->SelfUrl, '', '', '', '', 'PostBackAction=ApplyForm').'">'.$this->Context->GetDefinition('ApplyForMembership').'</a></li>
+	<li class="ApplyForMembershipLink"><a href="/?modules=reg">'.$this->Context->GetDefinition('ApplyForMembership').'</a></li>
 </ul>
 </div>';
 ?>
