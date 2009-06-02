@@ -5,3 +5,6 @@ if (!defined('IN_VANILLA')) exit();
 include($Configuration['EXTENSIONS_PATH']."DisplayName/default.php");
 include($Configuration['EXTENSIONS_PATH']."CustomSideBarLink/default.php");
 include($Configuration['EXTENSIONS_PATH']."PresetAvatars/default.php");
+include($Configuration['EXTENSIONS_PATH']."Whisperfi/default.php");
+include($Configuration['EXTENSIONS_PATH']."SignOutRedirect/default.php");
+include($Configuration['EXTENSIONS_PATH']."SystemMessage/default.php");

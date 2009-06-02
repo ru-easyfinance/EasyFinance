@@ -1,0 +1,7 @@
+1.0.1:
+  • Fixed the configuration options so they actually work ;)
+1.0 (From Whisper Notification 0.1):
+  • The link works properly now (note: it takes you to the last viewed comment in the discussion, whether that is your whisper or not)
+  • Ability for admin to force the entire forum to see the notifications
+  • The whisper count works
+  • Doesn't show the notice on the page after you have clicked it

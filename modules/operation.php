@@ -82,6 +82,20 @@ switch( $action )
 		}
 		$money->editOperation($id, $cat_type, $cat_name, $cat_id, $sum, $date, $drain, $comment, $bill_id);
 		break;
+
+    case "updateTargetOperation":
+        if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
+        $type = @$_GET['type'];
+        switch ($type) {
+            case '4':
+                editTargetOperation();
+                break;
+
+            case '5':
+                break;
+        }
+
+        break;
 	case "addOperation":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
 
@@ -243,11 +257,16 @@ switch( $action )
 			$money->deleteOperationTransfer($tr_id);
 		}
 		break;
+    case "deleteTargetOperation":
+        if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') { exit; }
+        $id = html($g_id);
+        $tr_id = html($g_tr_id);
+        deleteTarget($id, $tr_id);
+        break;
 	case "editOperation":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
 		$id = html($g_id);
 		$arr = $money->getMoney($id);
-//pre($arr);
 		$accounts = "";
 		$categories_select = get_three_select($_SESSION['user_category'], 0, $arr['cat_id']);
 		$count = count($_SESSION['user_account']);
@@ -355,6 +374,131 @@ switch( $action )
 		echo $data;
 		exit;
 		break;
+    case "editTargetOperation":
+        if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') exit;
+        $id = html($g_id);
+        $arr = getTargetOperation($id);
+        $accounts = "";
+        $categories_select = get_three_select($_SESSION['user_category'], 0, $arr['cat_id']);
+
+        $count = count($_SESSION['user_account']);
+        for($i=0; $i<$count; $i++) {
+            $transfer = "";
+            if ($_SESSION['user_account'][$i]['id'] == $arr['transfer']) $transfer = "selected";
+            $accounts .= "<option value='".$_SESSION['user_account'][$i]['id']."' $transfer>".$_SESSION['user_account'][$i]['name']."</option>";
+        }
+        getTargets();
+        $targets = $tpl->get_template_vars('targetList');
+        $t_opt = "";
+        foreach ($targets as $var) {
+            if ($var['close'] == 1) {$dis = "disabled='disabled'";}
+            if ($var['id'] == $arr['tr_id']) {
+                $sel = "selected='selected'";
+            } else {
+                $sel = "";
+            }
+            foreach ($_SESSION['user_account'] as $var_ac) {
+                if ($var_ac['id'] == $arr["bill_id"]) {
+                    $currency = $var_ac["currency_name"]; break;
+                }
+            }
+            $t_opt .= "<option target_account_id='{$var['target_account_id']}' amount_done='{$var['amount_done']}'
+            percent_done='{$var['percent_done']}' forecast_done='{$var['forecast_done']}' amount='{$var['amount']}'
+            value='{$var['id']}' currency='{$currency}' {$sel} {$dis}>".mb_substr(stripslashes(html($var['title'])),0,30,'UTF-8')."</option>";
+        }
+        if($arr['close']>0) $close = "checked='checked'";
+        $data = "
+            <a name='panelEditOperation'></a>
+            <table width=100% style='background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;'>
+            <tr>
+                <td colspan='2' height='25'><span style='color:#3878d7; font-size:12px;'>Редактирование операции:</style></td>
+            </tr>
+            <tr>
+                <td  align='right' class=cat_add width=10%>Тип операции:</td>
+                <td  align='left' class='cat_add' width='90%'>
+                    <select name='type' id='type_edit' onChange=changeTypeOperation('edit'); disabled=disabled>
+                        <option value='0'>Расход</option>
+                        <option value='1' selected>Доход</option>
+                        <option value='2'>Перевод на счет</option>
+                        <option value='4' selected>Перевод на финансовую цель</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td  align=right class=cat_add valign=top>
+                    Сумма:
+                </td>
+                <td  align=left class=cat_add>
+                    <input type=text id=pos_oc_edit value='".$arr['money']."' style=width:80px; OnKeyUp=onSumChangeEdit();onSumConvert('edit');>&nbsp;<b>Пример:</b> 125.50
+                    <input type=hidden name=money id=pos_mc_edit value='".$arr['money']."'/>
+                </td>
+            </tr>
+            <tr id='old_cat_edit' style='display:none'>
+                <td align=right class=cat_add>Категория:</td>
+                <td align=left class=cat_add>
+                    <select name=cat_id style='width:250px;' id=cat_id_old_edit>
+                        $categories_select
+                    </select>
+                    <span style='padding-left:10px;'><a href='index.php?modules=category' class=cat_add>Нет нужной категории? Добавьте ее в разделе [категории]</a></span>
+                </td>
+            </tr>
+            <tr id='target_fields' style='display: table-row;'>
+                <td class='cat_add' align='right'>Финансовая цель:</td>
+                <td class='cat_add' align='left'>
+                <select id='target_sel_ed' name='target_sel_ed' onChange='changeTargetEdit();'>
+                    {$t_opt}
+                </select>
+                </td>
+            </tr>
+            <tr id='transferSelectEdit' style='display:none;'>
+                <td align='right' class='cat_add'>На счет:</td>
+                <td align='left' class='cat_add'>
+                    <select name='selectAccountForTransferEdit' id='selectAccountForTransferEdit' onChange=changeAccountForTransferEdit();>
+                        $accounts
+                    </select>
+                    <span id='operationTransferCurrencyEdit' style='padding-left:5px;'></span>
+                </td>
+            </tr>
+            <tr>
+                <td  align=right class=cat_add>
+                    Дата:
+                </td>
+                <td  align=left class=cat_add><input type='text' value='".$arr['date']."' class='standart' style='width:80px;' name='dateFrom' id='sel1'><button type='reset' class='button_calendar' onclick=\"return showCalendar('sel1', '%d.%m.%Y', false, true);\"><img src='img/calendar/cal.gif'></button></td>
+            </tr>
+            <tr id='target_fields_info_ed'>
+                <td align='right' class='cat_add'>&nbsp;</td>
+                <td align='left' style='font-size:11px;'>
+                    <div>Стоимость цели: <span id='amount_ed' /><span class='currency' /></div>
+                    <div>Сумма накопленная: <span id='amount_done_ed' /><span class='currency' /></div>
+                    <div>Прогноз: <span id='forecast_done_ed'></span> %</div>
+                    <div>Процент готовности: <span id='percent_done_ed'></span> %</div>
+                </td>
+            </tr>
+            <tr>
+                <td  align=right class=cat_add valign=top>Комментарий:</td>
+                <td  align=left class=cat_add>
+                    <textarea rows=4 cols=50 name=comment id=comment_edit>".$arr['comment']."</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td  align=right class=cat_add valign=top>Состояние:</td>
+                <td  align=left class=cat_add>
+                    <input type='checkbox' id='close_ed' name='close' value='Закрытая финансовая цель' {$close} />
+                    <label for='close_ed'>Закрытая финансовая цель</label>
+                </td>
+            </tr>
+            <tr>
+                <td  align=right class=cat_add valign=top>&nbsp;</td>
+                <td  align=left class=cat_add>
+                    <input type='hidden' value='".$arr['id']."' id='m_id'>
+                    <input class=inputsubmit type=button value=Редактировать onclick=updateOperation();>
+                    <input class=inputsubmit type=button value=Отменить onclick=operationAddInVisible();>
+                </td>
+            </tr>
+        </table><br><br>";
+        die ($data);
+        break;
+
 	case "getOperationList":
 		if($_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 		{
@@ -392,11 +536,9 @@ switch( $action )
 				$tpl->assign('areaTransfer', true);
 				break;
 		}
-	//pre( $money->getOperationList($currentAccount));
 		break;
 }
 
-//TODO FIXME Переписать этот модуль в классы
 function getTargets() {
     global $tpl;
     require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
@@ -412,8 +554,27 @@ function getTargets() {
 
     $targets = new TargetsClass($dbs);
     $tpl->assign('targetList', $targets->getLastList(0, 1000));
-
 }
+
+function editTargetOperation() {
+    global $tpl;
+    require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
+    require_once (SYS_DIR_LIBS . "targets.class.php");
+    try {
+        $dbs = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+        $dbs->query("SET character_set_client = 'utf8',
+                    character_set_connection = 'utf8',
+                    character_set_results = 'utf8'");
+    } catch (Exception $e) {
+        trigger_error("mysql connect error: ".mysql_error());
+    }
+
+    $targets = new TargetsClass($dbs);
+    $targets->editTargetOperation(@$_GET['id'], @$_GET['a'], @$_GET['target_id'], @$_GET['sum'],@$_GET['comment'],@$_GET['dateTo'], @$_GET['close']);
+    $targets->staticTargetUpdate(@$_GET['target_id']);
+    return true;
+}
+
 function addTarget() {
     global $tpl;
     require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
@@ -428,15 +589,43 @@ function addTarget() {
     }
 
     $targets = new TargetsClass($dbs);
-    $targets->addTargetOperation(@$_GET['a'], @$_GET['target_id'], @$_GET['sum'], @$_GET['comment'], @$_GET['dateTo']);
-/*
-a 9702
-action addTargetOperation
-comment sdfasd
-dateTo 26.05.2009
-modules operation
-sum 12312
-target_id 28
-*/
+    $targets->addTargetOperation(@$_GET['a'], @$_GET['target_id'], @$_GET['sum'], @$_GET['comment'], @$_GET['dateTo'], @$_GET['close']);
+    return true;
+}
+
+function deleteTarget($id, $tr_id) {
+    global $tpl;
+    require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
+    require_once (SYS_DIR_LIBS . "targets.class.php");
+    try {
+        $dbs = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+        $dbs->query("SET character_set_client = 'utf8',
+                    character_set_connection = 'utf8',
+                    character_set_results = 'utf8'");
+    } catch (Exception $e) {
+        trigger_error("mysql connect error: " . mysql_error());
+    }
+
+    $targets = new TargetsClass($dbs);
+    if ($targets->delTargetOperation($id, $tr_id)) {
+        $targets->staticTargetUpdate($tr_id);
+    }
+    return true;
+}
+function getTargetOperation($id) {
+   global $tpl;
+    require_once (SYS_DIR_LIBS . "external/DBSimple/Mysql.php");
+    require_once (SYS_DIR_LIBS . "targets.class.php");
+    try {
+        $dbs = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+        $dbs->query("SET character_set_client = 'utf8',
+                    character_set_connection = 'utf8',
+                    character_set_results = 'utf8'");
+    } catch (Exception $e) {
+        trigger_error("mysql connect error: ".mysql_error());
+    }
+
+    $targets = new TargetsClass($dbs);
+    return $targets->getTargetOperation($id);
 }
 ?>

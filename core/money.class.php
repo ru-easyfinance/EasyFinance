@@ -122,9 +122,10 @@ class Money
     function getOperationList($conf)
     {
         $order = "AND (m.`date` BETWEEN '".$conf['dateFrom']."' AND '".$conf['dateTo']."')";
-        if (!empty($conf['currentCategory']))
-        {
+        $order1 = "AND (t.`date` BETWEEN '".$conf['dateFrom']."' AND '".$conf['dateTo']."')";
+        if (!empty($conf['currentCategory'])) {
             $order .= " AND (m.`cat_id` = ".$conf['currentCategory']." OR c.`cat_parent` = ".$conf['currentCategory'].")";
+            $order1 .= " AND (cy.`cat_id` = ".$conf['currentCategory']." OR cy.`cat_parent` = ".$conf['currentCategory'].")";
         }
         $limit = "";
 
@@ -145,6 +146,7 @@ class Money
 							ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
             //echo $sql;
         }else{
+/*
             $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
 						   m.`cat_id`, m.`bill_id`, c.`cat_name`, c.`cat_parent`, b.`bill_name`, m.`drain`, m.`comment`,
 						   b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
@@ -158,14 +160,30 @@ class Money
 								   AND m.`user_id` = '".$this->user_id."'
 								   ".$order."
 							ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
-            if ($_SESSION['user']['user_login']=="Etwas")
-            {
-                echo $_SESSION['etwas'];
-            }
+*/
+            $sql = "SELECT m.id, m.user_id, m.money, DATE_FORMAT(m.date,'%d.%m.%Y') as `date`,
+                    m.cat_id, m.bill_id, c.cat_name, c.cat_parent, b.bill_name, m.drain, m.comment,
+                    b.bill_currency, cu.cur_name, m.transfer, m.tr_id,
+                    bt.bill_name as cat_transfer, 0 AS virt
+                FROM money m
+                    LEFT JOIN category c on c.cat_id = m.cat_id
+                    LEFT JOIN bill b on b.bill_id = m.bill_id
+                    LEFT JOIN bill bt on bt.bill_id = m.transfer
+                    LEFT JOIN currency cu on cu.cur_id = b.bill_currency
+                WHERE m.bill_id = '{$conf['currentAccount']}'
+                    AND m.user_id = '{$this->user_id}'
+                    {$order}
+                UNION
+                    SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), tt.id,
+                    t.bill_id, (IF(LENGTH(tt.title)>30,CONCAT(LEFT(tt.title, 30),'..'),tt.title)), cy.cat_parent, bl.bill_name , 0, t.comment, bl.bill_currency, '', '', '', '', 1 AS virt
+                    FROM target_bill t
+                        LEFT JOIN target tt ON t.target_id=tt.id
+                        LEFT JOIN bill bl ON t.bill_id=bl.bill_id
+                        LEFT JOIN category cy ON cy.cat_id = tt.category_id
+                    WHERE t.user_id='{$this->user_id}' {$order1}
+                ORDER BY `date` DESC, `id` DESC";
         }
-
         $result = $this->db->sql_query($sql);
-
         return $this->db->sql_fetchrowset($result);
     }
 
@@ -223,11 +241,12 @@ class Money
      */
     function getMoney($id)
     {
-        $sql = "SELECT m.`id`, m.`user_id`, m.`money`, m.`tr_id`,m.`transfer`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
-						   m.`cat_id`, m.`bill_id`, m.`drain`, m.`comment`, c.`cat_name` as `cat_restore`
-						FROM `money` m
-						LEFT JOIN `category` c on m.cat_id = c.`cat_id`
-						WHERE m.`id` = '".$id."' AND m.`user_id` = '".$this->user_id."'
+        $sql = "SELECT m.`id`, m.`user_id`, m.`money`, m.`tr_id`,m.`transfer`,
+            DATE_FORMAT(m.date,'%d.%m.%Y') as date, m.`cat_id`, m.`bill_id`, m.`drain`, m.`comment`,
+            c.`cat_name` as `cat_restore`
+			FROM `money` m
+			LEFT JOIN `category` c on m.cat_id = c.`cat_id`
+			WHERE m.`id` = '".$id."' AND m.`user_id` = '".$this->user_id."'
 				";
         if ( !($result = $this->db->sql_query($sql)) )
         {

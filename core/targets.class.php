@@ -283,15 +283,14 @@ class TargetsClass {
             return false;
         }
 
-        if ($user_id == 0) {
+        if ((int)$user_id == 0) {
             $user_id = $_SESSION['user']['user_id'];
         }
-        //FIXME Дописать обновление прогноза
         $this->db->query("UPDATE target SET
             amount_done   = (SELECT SUM(money) FROM target_bill WHERE target_id = target.id LIMIT 1)
             , percent_done  = ROUND ( amount_done / (amount / 100), 2)
-            , forecast_done = 0
-            WHERE id=? AND user_id=?;", $target_id, $user_id);
+            , forecast_done = ROUND((DATEDIFF(ADDDATE(date_begin,(amount / (amount_done / DATEDIFF(CURRENT_DATE(), date_begin)))), date_begin) / DATEDIFF(date_end, date_begin)) * 100, 2)
+            WHERE id=? AND user_id=?", $target_id, $user_id);
         return true;
     }
 
@@ -304,7 +303,7 @@ class TargetsClass {
      * @param $dt date
      * @return bool
      */
-    public function addTargetOperation($bill_id, $target_id, $money, $comment, $date) {
+    public function addTargetOperation($bill_id, $target_id, $money, $comment, $date, $close) {
         if ((int)$bill_id == 0){
             trigger_error("Указанный счёт '{$bill_id}' не существует. ", E_USER_ERROR);
             return false;
@@ -322,6 +321,9 @@ class TargetsClass {
         $date = "{$date['2']}-{$date['1']}-{$date['0']}";
         $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt`, `comment`, `date`)
             VALUES(?,?,?,?,NOW(),?,?);",$bill_id, $target_id, $_SESSION['user']['user_id'], $money, $comment, $date);
+        if (!empty($close)) {
+            $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", $_SESSION['user']['user_id'], $target_id);
+        }
         $this->staticTargetUpdate($target_id);
         return true;
     }
@@ -335,7 +337,7 @@ class TargetsClass {
      * @param $comment string Комментарий
      * @return bool
      */
-    public function editTargetOperation($target_bill_id, $bill_id, $target_id, $money, $comment) {
+    public function editTargetOperation($target_bill_id, $bill_id, $target_id, $money, $comment, $date, $close) {
         if ((int)$target_bill_id == 0) {
             trigger_error("Не верно указан ид операции финансовой цели. ". $target_bill_id, E_USER_ERROR);
             return false;
@@ -354,16 +356,51 @@ class TargetsClass {
             return false;
         }
         $comment = strip_tags($comment);
+        $date = explode('.', $date);
+        $date = "{$date['2']}-{$date['1']}-{$date['0']}";
+        $this->db->query("UPDATE target_bill SET bill_id=?, money=?, date=?, comment=?,
+            WHERE id=? AND user_id=? LIMIT 1;", $bill_id, $money, $date, $comment, $target_bill_id, $_SESSION['user']['user_id']);
+        if (!empty($close)) {
+            $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", $_SESSION['user']['user_id'], $target_id);
+        }
+        return true;
     }
 
     /**
-     * Удаляет цель пользователя
+     * Удаляет цель пользователя и все привязанные к ней операции
      * @param $target_id int
      * @return bool
      */
     public function delTarget($target_id = 0) {
-        $this->db->query("DELETE FROM target WHERE user_id=? AND id=?", $_SESSION['user']['user_id'], $target_id);
-        $this->db->query("DELETE FROM target_bill WHERE AND target_id=?;", $target_id);
+        $this->db->query("DELETE FROM target WHERE user_id=? AND id=?",
+            $_SESSION['user']['user_id'], $target_id);
+        $this->db->query("DELETE FROM target_bill WHERE user_id=? AND target_id=?;",
+            $_SESSION['user']['user_id'], $target_id);
         return true;
+    }
+
+    /**
+     * Удаляет операцию финансовой цели
+     * @param $tar_oper_id int Ид операции
+     * @param $tr_id int Ид финансовой цели
+     * @return bool
+     */
+    public function delTargetOperation($tar_oper_id = 0, $tr_id = 0) {
+        $this->db->query("DELETE FROM target_bill WHERE user_id=? AND id=?;", $_SESSION['user']['user_id'], $tar_oper_id);
+        return $this->staticTargetUpdate($tr_id);
+    }
+
+    /**
+     * Возвращает операцию по финансовой цели из базы данных
+     * @param $target_id int
+     * @return array mixed
+     */
+    public function getTargetOperation($target_id) {
+        return $this->db->selectRow("SELECT tb.id, tb.user_id, tb.money, t.category_id as cat_id, '' as transfer,
+            DATE_FORMAT(tb.date,'%d.%m.%Y') as date, t.id as tr_id, tb.bill_id, '' as drain, tb.comment as comment,
+            t.title as title, t.close
+        FROM `target_bill` tb
+        LEFT JOIN target t on tb.target_id = t.id
+        WHERE tb.id = ? AND tb.`user_id` = ?", $target_id, $_SESSION['user']['user_id']);
     }
 }

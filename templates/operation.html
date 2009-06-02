@@ -53,9 +53,9 @@
 		var cat_id = objSelCat.options[objSelCat.selectedIndex].value;
 		var dateFrom = document.getElementById("sel5").value;
 		var dateTo = document.getElementById("sel6").value;
-		var modules = "operation";		
-		var action = "getOperationList";	
-		
+		var modules = "operation";
+		var action = "getOperationList";
+
 		changeAccountForTransfer();
 		
 		$("#operationDataList").hide();
@@ -101,6 +101,8 @@
             //if ($("#selectAccount").val())
             action = 'addTargetOperation';
             target_id = $("#target_sel").val();
+            close = $("#close_ed").attr('checked')?1:0;
+            if (!checkTarget('add')){return false;}
         }
 		
 		if (sum == 0 || sum == 'NaN'){alert('Вы ввели неверное значение в поле "сумма"!');return false;}
@@ -119,7 +121,8 @@
                 sum: sum,
                 toAccount: toAccount,
                 currency: currency,
-                target_id: target_id
+                target_id: target_id,
+                close: close
             },operationAfterInsert);
 		visibleMessage('Операция добавляется, подождите несколько секунд...');
 	}
@@ -142,12 +145,32 @@
 		var m_id = document.getElementById("m_id").value;
 		var modules = "operation";
 		var action = "updateOperation";
-		if (type == '2'){action = "updateTransfer";}
-		if (sum == 0 || sum == 'NaN'){alert('Вы ввели неверное значение в поле "сумма"!');return false;}
-		if (!ValidateForm()){return false;}
-		//alert(type+'-'+action+'-'+m_id+'-'+currency+'-'+toAccount);
-		//return false;
-		$.get('/index.php',{modules:modules,action:action,id:m_id,a:bill_id,cat_id:cat_id,dateTo:dateTo,type:type,comment:comment,sum:sum,toAccount:toAccount,currency:currency},changeOperationList);
+		if (type == '2'){
+            action = "updateTransfer";
+        }else if (type == '4' || type == '5') {
+            action = "updateTargetOperation";
+            if (!checkTarget('edit')){return false;}
+        }
+        target_sel = $("#target_sel_ed option:selected").val();
+        if (sum == 0 || sum == 'NaN'){alert('Вы ввели неверное значение в поле "сумма"!');return false;}
+        if (!ValidateForm()){return false;}
+        close = $("#close_ed").attr('checked')?1:0;
+        $.get('/index.php',
+            {
+                modules : modules,
+                action : action,
+                id : m_id,
+                a : bill_id,
+                cat_id : cat_id,
+                dateTo : dateTo,
+                type : type,
+                comment : comment,
+                sum : sum,
+                toAccount : toAccount,
+                currency : currency,
+                target_id: target_sel,
+                close: close
+            }, changeOperationList);
 		visibleMessage('Операция редактируется, подождите несколько секунд...');
 	}
 	function onAjaxSuccess(data)
@@ -209,6 +232,17 @@
 		$.get('/index.php',{modules:modules,action : action,id: id,tr_id:0},changeOperationList);
 		visibleMessage('Операция удаляется, подождите несколько секунд...');
 	}
+    function deleteTargetOperation(id, tr_id)
+    {
+        if (!confirm("Вы действительно хотите удалить эту запись?")) {           
+            return false;
+        }
+        $("#addOperation").hide();$("#editOperation").hide();
+        var modules = "operation";
+        var action = "deleteTargetOperation";
+        $.get('/index.php',{modules:modules,action : action,id: id,tr_id:0},changeOperationList);
+        visibleMessage('Операция удаляется, подождите несколько секунд...');
+    }
 	function deleteOperationTransfer(id)
 	{
 		if (!confirm("Вы действительно хотите удалить этот перевод?")) {           
@@ -226,6 +260,12 @@
 		var action = "editOperation";
 		$.get('/index.php',{modules:modules,action:action,id:id},operationAfterEdit);
 	}
+    function editTargetOperation(id)
+    {       
+        var modules = "operation";
+        var action = "editTargetOperation";
+        $.get('/index.php',{modules:modules,action:action,id:id},operationAfterEdit);
+    }
 	function operationAfterEdit(data)
 	{		
 		$("#addOperation").hide();
@@ -263,22 +303,25 @@
 
 		switch (document.getElementById("type_"+id).value)
 		{
-			case '0':
+			case '0': //Расход
 				$("#old_cat").show(); 
                 $("#old_cat_edit").show();
                 $("#target_fields").hide();
+                $("#target_fields_info").hide();
 				$("#transferSelect").hide();
 				$("#transferSelectEdit").hide();
 				break;
-			case '1':
+			case '1': //Доход
 				$("#old_cat").show(); $("#old_cat_edit").show();
                 $("#target_fields").hide();
+                $("#target_fields_info").hide();
 				$("#transferSelect").hide();
 				$("#transferSelectEdit").hide();
 				break;
-			case '2':
+			case '2': //Перевод со счёта
 				$("#old_cat").hide(); $("#old_cat_edit").hide();
                 $("#target_fields").hide();
+                $("#target_fields_info").hide();
 				$("#transferSelect").show();
 				$("#transferSelectEdit").show();				
 				if (id == 'add')
@@ -288,19 +331,76 @@
 					changeAccountForTransferEdit();
 				}
 				break;
-			case '3':
+			case '3': 
 				break;
-            case '4':
+            case '4': //Перевод на финансовую цель
                 $("#target_fields").show();
+                changeTarget(); 
+                changeTargetEdit();
+                $("#target_fields_info").show();
                 $("#old_cat").hide();
-                break;
-            case '5':
-                $("#target_fields").show();
-                $("#old_cat").hide();
+                $("#transferSelect").hide();
                 break;
 		}
 		
 	}
+    function changeTarget() {
+        $("span.currency").each(function(){$(this).text(" "+$("#target_sel_ed option:selected").attr("currency"));});
+        $("#amount_done").text(formatCurrency($("#target_sel option:selected").attr("amount_done")));
+        $("#amount").text(formatCurrency($("#target_sel option:selected").attr("amount")));
+        $("#percent_done").text(parseInt($("#target_sel option:selected").attr("percent_done")));
+        $("#forecast_done").text(parseInt($("#target_sel option:selected").attr("forecast_done")));
+    }
+    function changeTargetEdit() {
+        $("span.currency").each(function(){$(this).text(" "+$("#target_sel_ed option:selected").attr("currency"));});
+        $("#amount_done_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("amount_done")));
+        $("#amount_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("amount")));
+        $("#percent_done_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("percent_done")));
+        $("#forecast_done_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("forecast_done")));
+    }
+    
+    function checkTarget(type) {
+        $error = '';
+        if (type == 'add') {
+            amount_now = parseFloat($("#pos_oc").val());
+            amount = parseFloat($("#target_sel option:selected").attr("amount")); $("#amount").text(amount);
+            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done")); $("#amount_done").text(amount_done);
+            if ((amount_done + amount_now) >= amount) {
+                if (confirm('Закрыть финансовую цель?')) {
+                    $("#close").attr("checked","checked");
+                }
+            }
+        } else if (type == 'edit') {            
+            amount_now = parseFloat($("#pos_oc_edit").val());
+            amount_db = parseFloat($("#pos_mc_edit").val());
+            amount = parseFloat($("#target_sel_ed option:selected").attr("amount")); $("#amount_ed").text(amount);
+            amount_done = parseFloat($("#target_sel_ed option:selected").attr("amount_done")); $("#amount_done_ed").text(amount_done);
+            if (((amount_done - amount_db) + amount_now) >= amount) {
+                if (confirm('Закрыть финансовую цель?')) {
+                    $("#close_ed").attr("checked","checked");
+                }
+            } 
+        } else {
+            return false;
+        }
+        return true;
+    }
+    
+    function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+        cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+        num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
+    }
 {/literal}
 </script>
 {include file="operation.$operationTpl.html"}
