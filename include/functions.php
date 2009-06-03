@@ -1,21 +1,73 @@
 <?
 /**
- * file: functions.php
- * author: Roman Korostov
- * date: 23/01/07
- **/
+ * Сборник полезных функций
+ * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
+ * @author korogen
+ * @copyright http://home-money.ru/
+ * SVN $Id$
+ */
 
-function html ($string)
-{
-    if (is_array($string)) {
-        foreach ($string as $key=>$val) {
-            $string[$key] = html($val);
-        }
+/**
+ * Реализация функции __autoload для всех классов
+ * @param string $class_name Строка с названием класса
+ * @access protected Уровень доступа
+ * @return void
+ */
+function __autoload($class_name) {
+    $array = explode("_",$class_name);
+    // Загружаем модули /modules
+    if ( ($array[1] == 'Controller' || empty($array[1]))  && file_exists(SYS_DIR_MOD . strtolower($array[0]) . '.php' ) ) {
+        require_once SYS_DIR_MOD . strtolower($array[0]). '.php';
+    // Загружаем классы /core
+    } elseif ( $array[1] == 'Model' && file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php') ) {
+        require_once SYS_DIR_LIBS . strtolower($array[0]) . '.class.php';
     } else {
-        $string = htmlspecialchars($string);
+        trigger_error("Не удалось найти файл с классом {$class_name}", E_USER_ERROR);
     }
-    return $string;
 }
+
+// Код обработчика ошибок SQL.
+function databaseErrorHandler($message, $info)
+{
+    // Если использовалась @, ничего не делать.
+    if (!error_reporting()) return;
+    // Выводим подробную информацию об ошибке.
+    echo "SQL Error: $message<br><pre>";
+    print_r($info);
+    echo "</pre>";
+    exit();
+}
+
+
+/**
+ * Функция - обработчик ПОЛЬЗОВАТЕЛЬСКИХ ошибок.
+ * @param $errno integer
+ * @param $errstr string
+ * @param $errfile string
+ * @param $errline integer
+ * @return bool
+ */
+function UserErrorHandler($errno, $errstr, $errfile, $errline){
+    //TODO Нотисы и варнинги - показывать, ерроры - не показывать, только записывать в лог
+    switch ($errno) {
+        case E_USER_ERROR:
+            trigger_error("*USER ERROR* [$errno] $errstr<br />\n".
+            "  User error on line $errline in file $errfile<br />\n");
+            exit(1);
+            break;
+        case E_USER_WARNING:
+            trigger_error("*USER WARNING* [$errno] $errstr<br />\n".
+            "  User warning on line $errline in file $errfile<br />\n");
+            break;
+        case E_USER_NOTICE:
+            trigger_error("*USER NOTICE* [$errno] $errstr<br />\n".
+            "  User notice on line $errline in file $errfile<br />\n");
+            break;
+    }
+    return true;
+}
+
+
 
 function get_number_format($number)
 {
@@ -32,90 +84,6 @@ function get_number_format($number)
             return '<span style="color: red;">'.$result.'</span>';
         }
         return $number;
-    }
-}
-
-/**
- * message_die(GENERAL_ERROR, 'Failed obtaining forum access control lists', '', __LINE__, __FILE__, $sql);
- * @deprecated
- */
-function message_error($msg_code, $msg_text = '', $msg_title = '', $err_line = '', $err_file = '', $sql = '')
-{
-    global $db, $debug_text, $tpl;
-
-    $sql_store = $sql;
-
-    if ( $msg_code == GENERAL_ERROR || $msg_code == CRITICAL_ERROR )
-    {
-        die(var_dump($db));
-        $sql_error = $db->sql_error();
-        $debug_text = '';
-
-        if ( $sql_error['message'] != '' ) {
-            $debug_text .= '<br /><br />SQL Error : ' . $sql_error['code'] . ' ' . $sql_error['message'];
-        }
-
-        if ( $sql_store != '' ) {
-            $debug_text .= "<br /><br />".$sql_store;
-        }
-
-        if ( $err_line != '' && $err_file != '' ) {
-            $debug_text .= '<br /><br />Line : ' . $err_line . '<br />File : ' . basename($err_file);
-        }
-    }
-
-    switch($msg_code) {
-        case GENERAL_MESSAGE:
-            if ( $msg_title == '' ) {
-                $msg_title = 'Information';
-            }
-            $msg_text = "<font color=red>$msg_text</font>";
-            break;
-
-        case CRITICAL_MESSAGE:
-            if ( $msg_title == '' )
-            {
-                $msg_title = 'Critical_Information';
-            }
-            break;
-
-        case GENERAL_ERROR:
-            if ( $msg_text == '' )
-            {
-                $msg_text = 'An_error_occured';
-            }
-
-            if ( $msg_title == '' )
-            {
-                $msg_title = 'General_Error';
-            }
-            break;
-
-        case CRITICAL_ERROR:
-
-            if ( $msg_text == '' )
-            {
-                $msg_text = 'A_critical_error';
-            }
-
-            if ( $msg_title == '' )
-            {
-                $msg_title = 'Error : <font color=red><b>' . 'Critical_Error' . '</b></font>';
-            }
-            break;
-    } //end switch
-
-    if ( $debug_text != '' )
-    {
-        //$msg_text = $msg_text . '<br /><br /><b><u>DEBUG MODE</u></b>' . $debug_text;
-    }
-
-    if ( $msg_code == GENERAL_ERROR || $msg_code == CRITICAL_ERROR )
-    {
-        //echo "<html>\n<meta http-equiv='Content-Type' content='text/html; charset=windows-1251' />\n<body>\n" . $msg_title . "\n<br /><br />\n" . $msg_text . "</body>\n</html>";
-        exit();
-    }else{
-        $tpl->assign('error_text', $msg_text);
     }
 }
 

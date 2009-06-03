@@ -1,14 +1,17 @@
-<?
+<? if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс для управления пользователями
  * @author korogen
+ * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
+ * @copyright http://home-money.ru/
+ * SVN $Id$
  */
 class User
 {
     /**
-     * Хранит свойства пользователя
+     * Массив, хранит свойства пользователя
      * @var array mixed
-     *      user_id string
+     *      user_id string ??? //FIXME перейти на INT
      *      user_name string
      *      user_login string
      *      user_pass string //WTF???
@@ -19,11 +22,21 @@ class User
     private $props         = Array();
 
     /**
-     *
-     * @var unknown_type
+     * Массив, хранит категории пользователя
+     * @var array mixed
      */
     private $user_category = Array();
+
+    /**
+     * Массив, хранит счета пользователя
+     * @var array mixed
+     */
     private $user_account  = Array();
+
+    /**
+     * Массив, хранит валюты пользователя
+     * @var array mixed
+     */
     private $user_currency = Array();
 
     /**
@@ -68,11 +81,11 @@ class User
                     DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
                     user_currency_default, user_currency_list
                 FROM users
-                WHERE `user_login`  = ?
-                    AND `user_pass` = ?
-                    AND `user_new`  = 0";
+                WHERE user_login  = ?
+                    AND user_pass = ?
+                    AND user_new  = 0";
         $this->props = $this->db->selectRow($sql, $login, $pass);
-        if ($row['user_active'] == 0) {
+        if ($this->props['user_active'] == 0) {
             trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
             return false;
         }
@@ -130,12 +143,11 @@ class User
      * @param string $id хэш-MD5 ид пользователя
      * @return array mixed
      */
-    public function initUserCategory ($id)
+    public function initUserCategory ()
     {
-        $id = (int)$id;
-        $sql = "SELECT `cat_id`, `cat_name`, `cat_parent`, `cat_active` FROM `category`
-                    WHERE `user_id` = ? AND `cat_active` = '1' ORDER BY `cat_name`;";
-        $this->user_category = $this->db->selectRow($sql, $id);
+        $sql = "SELECT cat_id, cat_name, cat_parent, cat_active FROM category
+            WHERE user_id = ? AND cat_active = '1' ORDER BY cat_name;";
+        $this->user_category = $this->db->selectRow($sql, $this->getId());
         return true;
     }
 
@@ -192,25 +204,6 @@ class User
                 GROUP BY b.`bill_id`, b.`bill_type` ORDER BY b.`bill_name`";
         }
         return $this->user_account = $this->db->selectRow($sql, $id);
-    }
-
-
-   /**
-     * Возвращает количество активных пользователей
-     * return int
-     */
-    function getCountusers ()
-    {
-        return $this->db->selectCell("SELECT count(user_id) FROM users WHERE user_active='1';");
-    }
-
-    /**
-     * Возвращает количество всех денег
-     * return int
-     */
-    function getAllTransaction ()
-    {
-        return $this->db->selectCell("SELECT count(money) FROM money;");
     }
 
     /**
@@ -512,5 +505,4 @@ class User
 
         return $login;
     }
-} //end class
-?>
+}
