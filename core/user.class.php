@@ -5,7 +5,23 @@
  */
 class User
 {
+    /**
+     * Хранит свойства пользователя
+     * @var array mixed
+     *      user_id string
+     *      user_name string
+     *      user_login string
+     *      user_pass string //WTF???
+     *      user_mail string
+     *      user_created date (%d.%m.%Y)
+     *      user_active int 0 - аккаунт неактивен
+     */
     private $props         = Array();
+
+    /**
+     *
+     * @var unknown_type
+     */
     private $user_category = Array();
     private $user_account  = Array();
     private $user_currency = Array();
@@ -21,56 +37,77 @@ class User
      * @param DbSimple_Mysql $db
      * @return void
      */
-    function __construct(DbSimple_Mysql $db)
+    public function __construct(DbSimple_Mysql $db)
     {
         $this->db = $db;
-        $this->load();
+        $this->load(); //FIXME Откуда мы знаем, что у нас в сессии есть данные?
     }
 
     /**
-     *
-     *
+     * Возвращает Id пользователя
+     * @return string || false
      */
-    function initUser($login, $pass)
+    public function getId()
     {
-        $sql = "
-            SELECT `user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`,
-                DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, `user_active` FROM `users`
-            WHERE `user_login`  = ?
-                AND `user_pass` = ?
-                AND `user_new`  = 0";
-        $row = $this->db->selectRow($sql, $login, $pass);
+        if (isset($this->props['user_id']) && !empty($this->props['user_id'])) {
+            return $this->props['user_id'];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Иниализирует пользователя, достаёт из базы некоторые его свойства
+     * @param $login string
+     * @param $pass string MD5 пароля
+     * @return bool
+     */
+    public function initUser($login, $pass)
+    {
+        $sql = "SELECT user_id, user_name, user_login, user_pass, user_mail,
+                    DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
+                    user_currency_default, user_currency_list
+                FROM users
+                WHERE `user_login`  = ?
+                    AND `user_pass` = ?
+                    AND `user_new`  = 0";
+        $this->props = $this->db->selectRow($sql, $login, $pass);
         if ($row['user_active'] == 0) {
             trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
             return false;
         }
 
-        $this->props = $row;
-
-        if ( $this->init($row['user_id']) ) {
-            $this->save();
-            return true;
+        if ( $this->init($this->getId())) {
+            return $this->save();
+        } else {
+            trigger_error("Не верно введён логин или пароль", E_USER_WARNING);
+            return false;
         }
-        trigger_error("Не верно введён логин или пароль", E_USER_WARNING);
     }
 
-    function save () {
-        $_SESSION['user'] = $this->props;
-        $_SESSION['user_category'] = $this->user_category;
-        $_SESSION['user_account'] = $this->user_account;
-        $_SESSION['user_currency'] = $this->user_currency;
+    /**
+     * Сериализуем данные в сессии
+     * @return bool
+     */
+    public function save ()
+    {
+        $_SESSION['user']          = serialize($this->props);
+        $_SESSION['user_category'] = serialize($this->user_category);
+        $_SESSION['user_account']  = serialize($this->user_account);
+        $_SESSION['user_currency'] = serialize($this->user_currency);
+        return true;
     }
 
-    function init($id) {
-
-        if ($this->initUserCategory($id) &&
-        $this->initUserAccount($id) &&
-        $this->initUserCurrency($id))
-        {
+    /**
+     * Вызывает инициализацию пользовательских категорий, счетов, денег
+     * @param $id string user_id
+     * @return bool Если без сбоев, то true, иначе - false
+     */
+    public function init($id)
+    {
+        if ($this->initUserCategory() && $this->initUserAccount() && $this->initUserCurrency()) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -79,12 +116,13 @@ class User
      * Загружает ранее объявленные параметры пользователя из сессии
      * @return void
      */
-    function load()
+    public function load()
     {
-        $this->props = $_SESSION['user'];
-        $this->user_category = $_SESSION['user_category'];
-        $this->user_account = $_SESSION['user_account'];
-        $this->user_currency = $_SESSION['user_currency'];
+        $this->props         = unserialize($_SESSION['user']);
+        $this->user_category = unserialize($_SESSION['user_category']);
+        $this->user_account  = unserialize($_SESSION['user_account']);
+        $this->user_currency = unserialize($_SESSION['user_currency']);
+        return true;
     }
 
     /**
@@ -92,7 +130,7 @@ class User
      * @param string $id хэш-MD5 ид пользователя
      * @return array mixed
      */
-    function initUserCategory ($id)
+    public function initUserCategory ($id)
     {
         $id = (int)$id;
         $sql = "SELECT `cat_id`, `cat_name`, `cat_parent`, `cat_active` FROM `category`
@@ -105,21 +143,26 @@ class User
      * Получает список валют
      * @return array mixed
      */
-    function initUserCurrency ()
+    public function initUserCurrency ()
     {
-        $sql = "SELECT `cur_id`, `cur_name` from `currency` ORDER BY `cur_id` ";
-        $this->user_currency = $this->db->select($sql, $id);
-        return true;
+        if (isset($this->props['user_currency_list'])) {
+            $currency = unserialize($this->props['user_currency_list']);
+            if (!is_array($currency)) {
+                trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
+                $currency = array();
+            }
+            return $currency;
+        }
+        return array();
     }
 
     /**
-     *
-     *
+     * Возвращает счета пользователя
+     * return array mixed
      */
-    function initUserAccount ($id)
+    public function initUserAccount ()
     {
-        $id = (int)$id;
-        if (IS_DEMO == 'demo') {
+        if (IS_DEMO) {
             $sql = "SELECT ROUND(SUM(m.`money`),2) AS `sum`,
                 b.`bill_id` AS `id`,
                 b.`bill_name` AS `name`,
@@ -148,55 +191,94 @@ class User
                 WHERE b.`user_id` = ?
                 GROUP BY b.`bill_id`, b.`bill_type` ORDER BY b.`bill_name`";
         }
-        $this->user_account = $this->db->selectRow($sql, $id);
+        return $this->user_account = $this->db->selectRow($sql, $id);
+    }
+
+
+   /**
+     * Возвращает количество активных пользователей
+     * return int
+     */
+    function getCountusers ()
+    {
+        return $this->db->selectCell("SELECT count(user_id) FROM users WHERE user_active='1';");
+    }
+
+    /**
+     * Возвращает количество всех денег
+     * return int
+     */
+    function getAllTransaction ()
+    {
+        return $this->db->selectCell("SELECT count(money) FROM money;");
+    }
+
+    /**
+     * Возвращает массив с профилем пользователя, с полями : ид, имя, логин, почта
+     * @param $id int
+     * @return array mixed
+     */
+    function getProfile($id)
+    {
+        $sql = "SELECT `user_id`, `user_name`, `user_login`, `user_mail` FROM `users` WHERE `user_id` = ? ;";
+        return $this->db->selectRow($sql, $id);
+    }
+
+    /**
+     * Обновляет профиль пользователя
+     * @param $user_pass string Текущий пароль пользователя
+     * @param $new_passwd string
+     * @param $user_name string
+     * @param $user_mail string
+     * @param $user_login string
+     * @return bool
+     */
+    function updateProfile($user_pass, $new_passwd, $user_name, $user_mail, $user_login)
+    {
+        //XXX Сделать шифрование пароля в SHA1
+        if (!empty($new_passwd)) {
+            $sql = "UPDATE users SET user_name = ?, user_mail = ?,user_pass = ?
+                        WHERE user_id = ? AND user_pass = ? LIMIT 1;";
+            $this->db->query($sql, $user_name, $user_mail, MD5($new_passwd), $this->getId(), MD5($user_pass));
+            return $this->initUser($user_login, $new_passwd);
+        }else{
+            $sql = "UPDATE users SET user_name = ?, user_mail = ?
+                        WHERE user_id = ? AND user_pass = ? LIMIT 1;";
+            $this->db->query($sql, $user_name, $user_mail, $this->getId(), MD5($user_pass));
+            return $this->initUser($user_login, $user_pass);
+        }
+    }
+
+/**
+ * @deprecated Всякий хлам будет снизу
+ */
+
+    /**
+     * @deprecated ????
+     * @param $id
+     * @return bool
+     */
+    public function restoreCategory($id)
+    {
+        $sql = "SELECT cat_id, cat_parent from category WHERE user_id = ? AND cat_id = ?";
+        $row = $this->db->selectRow($sql, $this->getId(), $id);
+        if ($row['cat_parent'] > 0) {
+            $id = $row['cat_parent'];
+        }
+
+        $sql = "UPDATE category SET cat_active = '1' WHERE user_id = ? AND (cat_id = ? OR cat_parent = ?)";
+        $this->db->query($sql, $this->getId(), $id, $id);
+        $this->initUserCategory($this->getId());
+        $this->save();
         return true;
     }
 
-    function getId()
-    {
-        if (isset($this->props['user_id'])) {
-            return $this->props['user_id'];
-        }
-        return false;
-    }
-
-    function restoreCategory($id)
-    {
-        $sql = "SELECT `cat_id`, `cat_parent` from `category`
-				WHERE `user_id` = '".$this->getId()."' AND `cat_id` = ".$id."";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в получении категории!', '', __LINE__, __FILE__, $sql);
-        }else{
-            $row = $this->db->sql_fetchrow($result);
-
-            if ($row['cat_parent'] > 0)
-            {
-                $id = $row['cat_parent'];
-            }
-        }
-
-
-        $sql = "UPDATE `category` SET
-					`cat_active` = '1'
-				WHERE `user_id` = '".$this->getId()."' and (`cat_id` = '".$id."' or `cat_parent` = '".$id."')
-				";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении категории!', '', __LINE__, __FILE__, $sql);
-        }
-        else
-        {
-            $this->initUserCategory($this->getId());
-            $this->save();
-
-            return true;
-        }
-    }
-
-    function getDemoOperations($user_id)
+    /**
+     * @deprecated ???
+     * @param $user_id
+     * @return unknown_type
+     */
+    public function getDemoOperations($user_id)
     {
         $lnk = mysql_connect('localhost', 'homemone', 'lw0Hraec') or die ('Not connected : ' . mysql_error());
         mysql_select_db('homemoney', $lnk) or die ('Can\'t use foo : ' . mysql_error());
@@ -359,6 +441,7 @@ class User
 
     /**
      * Возвращает категории
+     * @deprecated ???
      * @param $user_id int
      * @return bool
      */
@@ -379,7 +462,7 @@ class User
             if ($rows[$i]['cat_parent'] == 0) {
                 $sql = "INSERT INTO `category` VALUES ('', '0', ?, ?, '1')";
                 $this->db->query($sql, $user_id, $rows[$i]['cat_name']);
-                $next_id = $this->db->sql_nextid();
+                //$next_id = $this->db->sql_nextid();
                 for ($j=0; $j<$cnt; $j++) {
                     if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id']) {
                         $sql = "INSERT INTO `category` VALUES ('', ? , ?, ?, '1')";
@@ -412,83 +495,11 @@ class User
         return true;
     }
 
-    /**
-     * Возвращает количество активных пользователей
-     * return int
-     */
-    function getCountusers ()
-    {
-        return $this->db->selectCell("SELECT count(user_id) FROM users WHERE user_active='1';");
-    }
 
     /**
-     * Возвращает количество всех денег
-     * return int
-     */
-    function getAllTransaction ()
-    {
-        return $this->db->selectCell("SELECT count(money) FROM money;");
-    }
-
-    /**
-     * Возвращает массив с профилем пользователя, с полями : ид, имя, логин, почта
-     * @param $id int
-     * @return array mixed
-     */
-    function getProfile($id)
-    {
-        $sql = "SELECT `user_id`, `user_name`, `user_login`, `user_mail` FROM `users` WHERE `user_id` = ? ;";
-        return $this->db->selectRow($sql, $id);
-    }
-
-    /**
-     *
-     * @param $new_passwd string
-     * @param $user_name string
-     * @param $user_mail
-     * @param $user_login
+     * @deprecated ???
      * @return unknown_type
      */
-    function updateProfile($new_passwd, $user_name, $user_mail, $user_login)
-    {
-        if (!empty($new_passwd))
-        {
-            $user_passwd = ", `user_pass` = '".$new_passwd."'";
-        }else{
-            $user_passwd = "";
-        }
-        $user_id = $this->getId();
-
-        $sql = "UPDATE `users` SET
-                    `user_name` = '".$user_name."',
-                    `user_mail` = '".$user_mail."'
-                    ".$user_passwd."
-                WHERE `user_id` = '".$user_id."'
-                ";
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении профиля!', '', __LINE__, __FILE__, $sql);
-        }
-        else
-        {
-            $sql2 = "
-					SELECT `user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`, `user_created`,
-							`user_active` FROM `users`
-					WHERE `user_id` = '".$user_id."' and `user_login` = '".$user_login."'
-				   ";
-            if ( $result2 = $this->db->sql_query($sql2) )
-            {
-                if( $row2 = $this->db->sql_fetchrow($result2) )
-                {
-                    $this->props = $row2;
-                    $this->save();
-                }
-            }
-
-            return true;
-        }
-    }
-
     function demoNewUser()
     {
         $login = substr(md5(microtime().uniqid()), 0, 5);
