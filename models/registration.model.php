@@ -37,7 +37,7 @@ class Registration_Model extends Template_Model {
         // Проверяем валидность заполненных данных
         $error_text = array();
         $register['name'] = htmlspecialchars(@$_POST['register']['name']);
-        if (!empty(@$_POST['register']['pass']) && !empty(@$_POST['register']['pass_r'])) {
+        if (!empty($_POST['register']['pass']) && !empty($_POST['register']['pass_r'])) {
             if (@$_POST['register']['pass'] == @$_POST['register']['pass_r']) {
                 $pass = md5(@$_POST['register']['pass']);
             } else {

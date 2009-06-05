@@ -15,15 +15,19 @@
  */
 function __autoload($class_name) {
     $array = explode("_",$class_name);
+    // Грузим контроллеры
+    if ( $array[1] == 'Controller' &&
+        file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.controller.php' ) ) {
+            require_once SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]). '.controller.php';
     // Загружаем модули /modules
-    if ( ($array[1] == 'Controller' || empty($array[1]))  &&
-        file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.php' ) ) {
-            require_once SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]). '.php';
-    // Загружаем классы /core
-    } elseif ( $array[1] == 'Model' && file_exists(SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.class.php') ) {
-        require_once SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.class.php';
+    } elseif ( $array[1] == 'Model' &&
+        file_exists(SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.model.php') ) {
+            require_once SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.model.php';
+    // Загружаем дополнительные классы /core
+    } elseif (file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php')) {
+        require_once SYS_DIR_LIBS . strtolower($array[0]) . '.class.php';
     } else {
-        trigger_error("Не удалось найти файл с классом {$class_name}", E_USER_ERROR);
+        trigger_error("Не удалось найти файл с классом {$class_name} ".var_dump($array), E_USER_ERROR);
     }
 }
 
@@ -48,7 +52,8 @@ function databaseErrorHandler($message, $info)
  * @param $errline integer
  * @return bool
  */
-function UserErrorHandler($errno, $errstr, $errfile, $errline){
+function UserErrorHandler($errno, $errstr, $errfile, $errline)
+{
     //TODO Нотисы и варнинги - показывать, ерроры - не показывать, только записывать в лог
     switch ($errno) {
         case E_USER_ERROR:
@@ -68,6 +73,16 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline){
 }
 
 
+
+/**
+ * Выводит красивую 404 ошибку
+ * @param $path string Строка, которую нужно показать
+ */
+function error_404 ($path='')
+{
+    header("HTTP/1.0 404 Not Found");
+    die(file_get_contents('/404.html'));
+}
 
 function get_number_format($number)
 {

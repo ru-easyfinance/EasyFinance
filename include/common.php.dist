@@ -5,14 +5,14 @@
 * date: 23/01/07	
 **/
 
-require_once("config.php");
+require_once("config.hm.php");
 require_once SYS_DIR_LIBS.'/db.class.php';
 require_once SYS_DIR_LIBS.'/user.class.php';
 require_once SYS_DIR_LIBS.'/category.class.php';
 require_once SYS_DIR_LIBS.'/account.class.php';
 require_once SYS_DIR_LIBS.'/budget.class.php';
 require_once SYS_DIR_LIBS.'/periodic_transaction.class.php';
-require_once SYS_DIR_LIBS.'/news.class.php';
+//require_once SYS_DIR_LIBS.'/news.class.php';
 require_once SYS_DIR_INC.'/functions.php';
 require_once SYS_DIR_INC.'/smarty/Smarty.class.php';
 require_once SYS_DIR_INC.'/smarty/Smarty_Compiler.class.php';
@@ -40,14 +40,13 @@ $tpl->plugins_dir     =  array(SYS_DIR_INC.'/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 
-
 $db = new sql_db(SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS, SYS_DB_BASE);
 
 if(!$db->db_connect_id)
 {
 	message_error(CRITICAL_ERROR, "Could not connect to the database");
 }
-
+die('sad');
 $user = new User($db);
 
 $cat = new Category($db, $user);
@@ -58,9 +57,22 @@ $bdg = new Budget($db, $user);
 
 $prt = new Periodic($db, $user);
 
-$news = new News($db, $user);
 
-$news_date = date("Y.m.d");
-$tpl->assign('last_news', $news->getTitleNews(10, $news_date));
-//pre($_SESSION);
+
+// вытаскиваем курсы валют из базы и обновляем системный массив валют
+$sql = "select * from daily_currency where currency_date = '".date("Y-m-d")."'";
+$db->sql_query($sql);
+$row_d = $db->sql_fetchrowset($result);
+
+foreach ($sys_currency as $key=>$value)
+{
+	for($i=0; $i<count($row_d);$i++)
+	{
+		if ($row_d[$i]['currency_id'] == $key)
+		{
+			$sys_currency[$key] = $row_d[$i]['currency_sum'];
+		}
+	}
+}
+
 ?>

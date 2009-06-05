@@ -1,6 +1,0 @@
-<Limit GET POST>
-	require valid-user
-</Limit>
-AuthType Basic
-AuthName "webstat"
-AuthUserFile /home/rkorostov/data/etc/demo.home-money.ru.stat.passwd
