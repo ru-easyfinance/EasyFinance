@@ -16,11 +16,12 @@
 function __autoload($class_name) {
     $array = explode("_",$class_name);
     // Загружаем модули /modules
-    if ( ($array[1] == 'Controller' || empty($array[1]))  && file_exists(SYS_DIR_MOD . strtolower($array[0]) . '.php' ) ) {
-        require_once SYS_DIR_MOD . strtolower($array[0]). '.php';
+    if ( ($array[1] == 'Controller' || empty($array[1]))  &&
+        file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.php' ) ) {
+            require_once SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]). '.php';
     // Загружаем классы /core
-    } elseif ( $array[1] == 'Model' && file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php') ) {
-        require_once SYS_DIR_LIBS . strtolower($array[0]) . '.class.php';
+    } elseif ( $array[1] == 'Model' && file_exists(SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.class.php') ) {
+        require_once SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.class.php';
     } else {
         trigger_error("Не удалось найти файл с классом {$class_name}", E_USER_ERROR);
     }
@@ -54,7 +55,6 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline){
             trigger_error("*USER ERROR* [$errno] $errstr<br />\n".
             "  User error on line $errline in file $errfile<br />\n");
             exit(1);
-            break;
         case E_USER_WARNING:
             trigger_error("*USER WARNING* [$errno] $errstr<br />\n".
             "  User warning on line $errline in file $errfile<br />\n");
@@ -122,24 +122,6 @@ function validate_email($email)
     }
 }
 
-function validate_login($login)
-{
-    if ($login != '')
-    {
-        if(preg_match("/^[a-zA-Z0-9_]+$/", $login))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
 
 function get_three ($data, $parent = 0)
 {

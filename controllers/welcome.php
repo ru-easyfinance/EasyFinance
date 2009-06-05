@@ -6,6 +6,15 @@
  */
 class Welcome_Controller extends Template_Controller {
 
+    /**
+     *
+     */
+    public $welcome;
+
+    /**
+     * Страница по умолчанию без параметров
+     * @return void
+     */
     function index() {
         $tpl = $this->tpl;
 
@@ -76,4 +85,5 @@ class Welcome_Controller extends Template_Controller {
 //        }
 
     }
+
 }

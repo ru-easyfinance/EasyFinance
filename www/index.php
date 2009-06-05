@@ -18,6 +18,7 @@ require_once dirname(dirname(__FILE__)). "/include/common.hm.php";
 // Парсим URL
 $args   = explode('/',$_SERVER['REQUEST_URI']);
 $module = array_shift($args);
+if (empty($module)) { $module = array_shift($args); }
 $action = array_shift($args);
 if(!$module) $module = DEFAULT_MODULE;
 $module .= '_Controller';

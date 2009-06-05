@@ -19,6 +19,8 @@ class Template_Controller {
      */
     public $tpl;
 
+    public $template = 'template';
+
     /**
      * Конструктор
      * @param DbSimple_Mysql $db
@@ -28,5 +30,17 @@ class Template_Controller {
     {
         $this->db = $db;
         $this->tpl = $tpl;
+    }
+
+    /**
+     * Если нам были переданы ошибочные данные, генерируем 404 страницу
+     * @param $method
+     * @param $args
+     * @return void
+     */
+    public function __call($method, $args)
+    {
+        header("HTTP/1.0 404 Not Found");
+        file_get_contents('/404.html');
     }
 }
