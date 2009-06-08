@@ -11,16 +11,26 @@ class Core
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
      */
-    public static $db;
+    public static $db = null;
 
     /**
      * Ссылка на экземпляр Smarty
      * @var Smarty
      */
-    public static $tpl;
+    public static $tpl = null;
+
+    /**
+     * Ссылка на экземпляр класса User
+     * @var User
+     */
+    public static $user = null;
 
     /**
      * Возвращает ссылку на себя
+     * @example Core::getInstance()->parse_url();
+     *
+     * @example $core = Core::getInstance();
+     * @example $core->parse_url();
      * @return Core
      */
     public static function getInstance ( )
@@ -30,6 +40,15 @@ class Core
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Конструктор копирования нам не нужен
+     * @return void
+     */
+    private function __clone ( )
+    {
+
     }
 
     /**
@@ -69,13 +88,17 @@ class Core
     }
 
     /**
-     * Конструктор копирования нам не нужен
-     * @return void
+     * Проверяем авторизацию пользователя
+     * @return bool
      */
-    private function __clone ( )
-    {
-
+    public function authUser() {
+        if (!self::$user) {
+            self::$user = new User();
+        }
+        //self::$user->
     }
+
+
 
 
 }

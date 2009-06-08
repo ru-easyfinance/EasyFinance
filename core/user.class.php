@@ -50,9 +50,9 @@ class User
      * @param DbSimple_Mysql $db
      * @return void
      */
-    public function __construct(DbSimple_Mysql $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = Core::getInstance()->db;
         $this->load(); //FIXME Откуда мы знаем, что у нас в сессии есть данные?
     }
 

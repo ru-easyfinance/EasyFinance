@@ -73,16 +73,18 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
 }
 
 
-
 /**
  * Выводит красивую 404 ошибку
  * @param $path string Строка, которую нужно показать
  */
 function error_404 ($path='')
 {
+    //TODO
     header("HTTP/1.0 404 Not Found");
-    die(file_get_contents('/404.html'));
+    die('404');
+    //die(file_get_contents('/404.html'));
 }
+
 
 function get_number_format($number)
 {
@@ -104,6 +106,24 @@ function get_number_format($number)
 
 
 /**
+ * Проверяет корректность почтового ящика
+ * @param $email string
+ * @return bool
+ */
+function validate_email($email)
+{
+    if (!empty($email)) {
+        if (preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+/**
  * @deprecated
  * @param $data
  * @return unknown_type
@@ -117,26 +137,6 @@ function checkModules ($data)
         return false;
     }
 }
-
-function validate_email($email)
-{
-    if ($email != '')
-    {
-        if (preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
-
 
 function get_three ($data, $parent = 0)
 {

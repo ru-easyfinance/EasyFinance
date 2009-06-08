@@ -4,7 +4,8 @@
  * @copyright http://home-money.ru/
  * SVN $Id$
  */
-class Registration_Model extends Template_Model {
+class Registration_Model
+{
 
     /**
      * Активирует пользователя на портале
@@ -12,16 +13,17 @@ class Registration_Model extends Template_Model {
      * @return bool
      */
     function activate ($reg_id) {
+        $db = Core::getInstance()->db;
         $sql = "SELECT user_id, reg_id FROM registration WHERE reg_id = ?;";
-        $row = $this->db->selectRow($sql, $reg_id);
+        $row = $db->selectRow($sql, $reg_id);
         if (!empty($row)) {
             $user_id = $row['user_id'];
-            $this->db->query("DELETE FROM registration WHERE reg_id = ?", $reg_id);
+            $db->query("DELETE FROM registration WHERE reg_id = ?", $reg_id);
 
             $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE user_id = ?";
-            $this->db->query($sql, $user_id);
+            $db->query($sql, $user_id);
 
-            $tpl->assign('good_activation', 'Вы успешно активированы на сайте!');
+            Core::getInstance()->tpl->assign('good_activation', 'Вы успешно активированы на сайте!');
             return true;
         } else {
             trigger_error('Ключ не верен, или он устарел!', E_USER_WARNING);
@@ -34,6 +36,9 @@ class Registration_Model extends Template_Model {
      * @return unknown_type
      */
     function new_user () {
+        $db = Core::getInstance()->db;
+        $tpl = Core::getInstance()->tpl;
+
         // Проверяем валидность заполненных данных
         $error_text = array();
         $register['name'] = htmlspecialchars(@$_POST['register']['name']);
@@ -60,23 +65,22 @@ class Registration_Model extends Template_Model {
             $error_text['mail'] = "Неверно введен e-mail!";
             $register['mail'] = html(@$_POST['register']['mail']);
         }
-        if (!@$this->db->query("SELECT user_id FROM users WHERE user_login=?", $register['login'])) {
+        if (!@$db->query("SELECT user_id FROM users WHERE user_login=?", $register['login'])) {
             $error_text['login'] = "Пользователь с таким логином уже существует!";
         }
 
         // Если нет ошибок, создаём пользователя
         if (empty($error_text)) {
-            $tpl = $this->tpl;
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = md5($_SERVER['REMOTE_ADDR'].";".date("Y-m-d h-i-s").";");
-            $reg_id = md5($register['mail'].";".date("Y-m-d h-i-s").";");
-            $sql = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, CURDATE(), ?);";
-            $this->db->query($sql, $user_id, $reg_id);
+            $reg_id  = md5($register['mail'].";".date("Y-m-d h-i-s").";");
+            $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, CURDATE(), ?);";
+            $db->query($sql, $user_id, $reg_id);
 
             //Добавляем в таблицу пользователей
             $sql = "INSERT INTO users (user_id, user_name, user_login, user_pass, user_mail,
                 user_created, user_active, user_new) VALUES (?,?,?,?,?,CURDATE(),?,?)";
-            $this->db->query($sql, $user_id, $register['name'], $register['login'], $pass, $register['mail'], 0, 1);
+            $db->query($sql, $user_id, $register['name'], $register['login'], $pass, $register['mail'], 0, 1);
             $tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
             $reg_href = URL_ROOT."/registration/activation/".$reg_id;
@@ -117,7 +121,6 @@ class Registration_Model extends Template_Model {
      */
     function validate_login($login = '')
     {
-        //TODO Добавить проверку длины пароля
         if ($login != '') {
             if(preg_match("/^[a-zA-Z0-9_]+$/", $login)) {
                 return true;

@@ -14,8 +14,9 @@
 define('INDEX',true);
 
 require_once dirname(dirname(__FILE__)). "/include/common.php";
+Core::getInstance()->authUser();
 Core::getInstance()->parseUrl();
-// Всякое другое
+
 session_start();
 
 //XXX Разобраться с $_SESSION['user']

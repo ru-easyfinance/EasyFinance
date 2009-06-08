@@ -1,18 +1,18 @@
 <?php
 /**
- * Класс для страницы welcome
+ * Класс-модель для страницы welcome
  * @copyright http://home-money.ru/
  * SVN $Id$
  */
-class Welcome_Model extends Template_Model {
-
+class Welcome_Model
+{
    /**
      * Возвращает количество активных пользователей
      * return int
      */
     function getCountusers ()
     {
-        return $this->db->selectCell("SELECT count(user_id) FROM users WHERE user_active='1';");
+        return Core::getInstance()->db->selectCell("SELECT count(user_id) FROM users WHERE user_active='1';");
     }
 
     /**
@@ -21,16 +21,58 @@ class Welcome_Model extends Template_Model {
      */
     function getAllTransaction ()
     {
-        return $this->db->selectCell("SELECT count(money) FROM money;");
+        return Core::getInstance()->db->selectCell("SELECT count(money) FROM money;");
     }
 
     /**
      * Возвращает список статей
+     * @deprecated ???
      * @return array mixed
      */
     function getAtricles ()
     {
-        $row = $this->db->query("SELECT title, id FROM articles ORDER BY `date` DESC LIMIT 0,5");
+        return Core::getInstance()->db->query("SELECT title, id FROM articles ORDER BY `date` DESC LIMIT 0,5");
     }
 
+    /**
+     *
+     */
+    function sendFeedBack() {
+        $errors = Array();
+        // Проверяем Email на валидность
+        if (!validate_email(@$_POST['email'])) {
+            $errors[] = "Неверный Email";
+        }
+
+        // И защитный код
+        if (@$_SESSION['captcha'] != @$_POST['captcha']) {
+            $errors[] = "Неверный код проверки";
+        }
+
+        // Если есть ошибки - выводим их.
+        if (count($errors)) {
+            //FIXME Убрать разметку
+            echo '<img src="/img/error.gif" align="absmiddle"> Ошибка!';
+            foreach ($errors as $error) {
+                echo "<li>{$error}</li>";
+            }
+        } else {
+            //Отправляем почту
+            Core::getInstance()->db->query("INSERT INTO wish (name, text, ip, ts) VALUES (?,?,?,?);",
+                @$_POST['email'], htmlspecialchars(@$_POST['text']), $_SERVER['REMOTE_ADDR'], date('Y.m.d H:i:s'));
+            $body = "<html><head><title>From home-money.ru</title></head>
+                         <body><p>".htmlspecialchars($_POST['text'])."</p></body></html>";
+            $headers = "Content-type: text/html; charset=utf-8\n";
+            $headers .= "From: ".html($_POST['email'])."\n";
+
+            mail("support@home-money.ru", "Отзыв на сайте", $body, $headers);
+            //FIXME Убрать разметку
+            if (mysql_affected_rows()) {
+                echo "<img src=\"img/success.gif\" align=\"absmiddle\"> Спасибо за Ваш отзыв!\n";
+            } else {
+                echo "<img src=\"img/error.gif\" align=\"absmiddle\"> Произошла ошибка на сервере. Приносим свои извинения!\n";
+            }
+        }
+        return true;
+    }
 }
