@@ -1,4 +1,4 @@
-<? if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс для управления пользователями
  * @author korogen
@@ -84,8 +84,12 @@ class User
                 WHERE user_login  = ?
                     AND user_pass = ?
                     AND user_new  = 0";
+
         $this->props = $this->db->selectRow($sql, $login, $pass);
-        if ($this->props['user_active'] == 0) {
+        if (count($this->props) == 0) {
+            trigger_error('Не верный логин или пароль!', E_USER_WARNING);
+            return false;
+        } elseif ($this->props['user_active'] == 0) {
             trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
             return false;
         }
@@ -104,10 +108,10 @@ class User
      */
     public function save ()
     {
-        $_SESSION['user']          = serialize($this->props);
-        $_SESSION['user_category'] = serialize($this->user_category);
-        $_SESSION['user_account']  = serialize($this->user_account);
-        $_SESSION['user_currency'] = serialize($this->user_currency);
+        $_SESSION['user']          = $this->props;
+        $_SESSION['user_category'] = $this->user_category;
+        $_SESSION['user_account']  = $this->user_account;
+        $_SESSION['user_currency'] = $this->user_currency;
         return true;
     }
 
@@ -131,10 +135,10 @@ class User
      */
     public function load()
     {
-        $this->props         = unserialize($_SESSION['user']);
-        $this->user_category = unserialize($_SESSION['user_category']);
-        $this->user_account  = unserialize($_SESSION['user_account']);
-        $this->user_currency = unserialize($_SESSION['user_currency']);
+        $this->props         = $_SESSION['user'];
+        $this->user_category = $_SESSION['user_category'];
+        $this->user_account  = $_SESSION['user_account'];
+        $this->user_currency = $_SESSION['user_currency'];
         return true;
     }
 
@@ -158,14 +162,14 @@ class User
     public function initUserCurrency ()
     {
         if (isset($this->props['user_currency_list'])) {
-            $currency = unserialize($this->props['user_currency_list']);
+            $currency = $this->props['user_currency_list'];
             if (!is_array($currency)) {
                 trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
                 $currency = array();
             }
-            return $currency;
+            return true;
         }
-        return array();
+        return true;
     }
 
     /**
@@ -189,21 +193,21 @@ class User
                 WHERE b.`user_id` = ?
                 GROUP BY b.`bill_id`, b.`bill_type`";
         }else{
-            $sql = "SELECT ROUND(SUM(m.`money`),2) AS `sum`,
-                    b.`bill_id` AS `id`,
-                    b.`bill_name` AS `name`,
-                    b.`bill_type` AS `type`,
-                    b.`bill_currency` AS `currency`,
-                    c.`cur_name` AS `currency_name`
-                FROM `bill` b
-                    LEFT JOIN `money` m
-                        ON m.`bill_id` = b.`bill_id`
-                    LEFT JOIN `currency` c
-                        ON c.`cur_id` = b.`bill_currency`
-                WHERE b.`user_id` = ?
-                GROUP BY b.`bill_id`, b.`bill_type` ORDER BY b.`bill_name`";
+            $sql = "SELECT ROUND(SUM(m.money),2) AS sum,
+                    b.bill_id AS id,
+                    b.bill_name AS name,
+                    b.bill_type AS type,
+                    b.bill_currency AS currency,
+                    c.cur_name AS currency_name
+                FROM bill b
+                    LEFT JOIN money m
+                        ON m.bill_id = b.bill_id
+                    LEFT JOIN currency c
+                        ON c.cur_id = b.bill_currency
+                WHERE b.user_id = ?
+                GROUP BY b.bill_id, b.bill_type ORDER BY b.bill_name;";
         }
-        return $this->user_account = $this->db->selectRow($sql, $id);
+        return $this->user_account = $this->db->selectRow($sql, $this->getId(), $this->getId());
     }
 
     /**
@@ -242,6 +246,33 @@ class User
         }
     }
 
+    /**
+     * Возвращает пользовательские категории
+     * @return array mixed
+     */
+    function getUserCategory()
+    {
+        return $this->user_category;
+    }
+
+    /**
+     * Получить свойство пользователя
+     * @param $prop string
+     *      user_id string ??? //FIXME перейти на INT
+     *      user_name string
+     *      user_login string
+     *      user_pass string //WTF???
+     *      user_mail string
+     *      user_created date (%d.%m.%Y)
+     *      user_active int 0 - аккаунт неактивен
+     * @return mixed
+     */
+    function getUserProps($prop)
+    {
+        if (isset($this->props['$prop'])) {
+            return $this->props['$prop'];
+        }
+    }
 /**
  * @deprecated Всякий хлам будет снизу
  */
@@ -440,15 +471,14 @@ class User
      */
     function getCategory($user_id)
     {
-        //XXX Пересмотреть функцию
-        //FIXME WTF??? // Данные пользователя "ДЕМО"
-        $sql = "SELECT * FROM category WHERE user_id='9e08f78840c8fefd7882ffa03813e6d1' AND cat_active = 1 ORDER BY cat_parent, cat_name;";
-        $result = $this->db->select($sql);
-        foreach ($result as $i => $row) {
-            $rows[$i]['cat_name']   = $row['cat_name'];
-            $rows[$i]['cat_parent'] = $row['cat_parent'];
-            $rows[$i]['cat_id']     = $row['cat_id'];
-        }
+//        //FIXME WTF??? // Данные пользователя "ДЕМО"
+//        $sql = "SELECT * FROM category WHERE user_id='9e08f78840c8fefd7882ffa03813e6d1' AND cat_active = 1 ORDER BY cat_parent, cat_name;";
+//        $result = $this->db->select($sql);
+//        foreach ($result as $i => $row) {
+//            $rows[$i]['cat_name']   = $row['cat_name'];
+//            $rows[$i]['cat_parent'] = $row['cat_parent'];
+//            $rows[$i]['cat_id']     = $row['cat_id'];
+//        }
 
         $cnt = count($rows); //@FIXME WTF??? Перебор по все колонкам?
         for ($i=0; $i<$cnt; $i++) {

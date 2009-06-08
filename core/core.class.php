@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 class Core
 {
     /**
@@ -57,7 +57,6 @@ class Core
      */
     private function __construct( )
     {
-        //TODO: Код конструктора здесь
     }
 
     /**

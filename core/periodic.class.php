@@ -1,22 +1,35 @@
-<?
-
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+/**
+ * Класс для управления периодическими транзакциями
+ * @author korogen
+ * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
+ * @copyright http://home-money.ru/
+ * SVN $Id$
+ */
 class Periodic
 {
+    /**
+     * Хранит ссылка на базу данных
+     * @var DbSimple_Mysql
+     */
     private $db = null;
+
+    /**
+     * Хранит ссылку на класс User
+     * @var User
+     */
     private $user = null;
-    private $user_id;
 
     /**
      * Конструктор
-     * @param DbSimple_Mysql $db
+     * @param  $db
      * @param User $user
      * @return bool
      */
-    function __construct(DbSimple_Mysql $db, User $user)
+    function __construct()
     {
-        $this->db      = $db;
-        $this->user    = $user;
-        $this->user_id = $user->getId();
+        $this->db      = Core::getInstance()->db;
+        $this->user    = Core::getInstance()->user;
         return true;
     }
 
@@ -40,57 +53,50 @@ class Periodic
         }
     }
 
-    function getInsertPeriodic($id)
+    /**
+     *
+     * @return unknown_type
+     */
+    function getInsertPeriodic()
     {
-        $this->user_id = $id;
         $date = date("Y-m-d");
         $user_oper = $this->getPeriodic();
 
-        if ($user_oper)
-        {
+        if ($user_oper) {
+
             $j = 0;
             $k = 0;
             $c = 0;
             $m = 0;
-            	
-            for ($i=0; $i<count($user_oper); $i++)
-            {
-                if ($user_oper[$i]['povtor'] == '1')
-                {
+
+            for ($i=0; $i<count($user_oper); $i++) {
+                if ($user_oper[$i]['povtor'] == '1') {
                     $k = $user_oper[$i]['povtor_num'];
                     $any = false;
-                }else{
+                } else {
                     $user_oper[$i]['povtor_num'] = $this->foundPovtor($user_oper[$i]['date_from'],$date, $user_oper[$i]['period'], 0);
                     $any = true;
                 }
-                 
+
                 $tmp_date = $user_oper[$i]['date_from'];
-                 
-                for ($j=0; $j<$user_oper[$i]['povtor_num']; $j++)
-                {
-                    if ($user_oper[$i]['period'] == '1')
-                    {
+
+                for ($j=0; $j<$user_oper[$i]['povtor_num']; $j++) {
+                    if ($user_oper[$i]['period'] == '1') {
                         $tmp_date = $this->next_1day($tmp_date);
                     }
-                    if ($user_oper[$i]['period'] == '7')
-                    {
+                    if ($user_oper[$i]['period'] == '7') {
                         $tmp_date = $this->next_7day($tmp_date);
                     }
-                    if ($user_oper[$i]['period'] == '30')
-                    {
+                    if ($user_oper[$i]['period'] == '30') {
                         $tmp_date = $this->next_1month($tmp_date);
                     }
-                    if ($user_oper[$i]['period'] == '90')
-                    {
+                    if ($user_oper[$i]['period'] == '90') {
                         $tmp_date = $this->next_3month($tmp_date);
                     }
-                    if ($j == 0 && $any == false)
-                    {
+                    if ($j == 0 && $any == false) {
                         $tmp_date = $user_oper[$i]['date_from'];
                     }
-                    //echo $tmp_date."<=".$date."___".$periodic[$c]['cat_id']."<br>";
-                    if ($tmp_date <= $date)
-                    {
+                    if ($tmp_date <= $date) {
                         $c++;
                         $periodic[$c]['bill_id'] = $user_oper[$i]['bill_id'];
                         $periodic[$c]['cat_id'] = $user_oper[$i]['cat_id'];
@@ -120,32 +126,22 @@ class Periodic
                 }
             }
         }
-        //pre($periodic);
-        //pre($updatePeriodic,true);
-        if (!empty($periodic))
-        {
-            for ($i=1; $i<=count($periodic); $i++)
-            {
-                $sql = "INSERT INTO `money`
-						(`id`, `user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment`)
-					VALUES
-						('', '".$this->user_id."', '".$periodic[$i]['money']."', '".$periodic[$i]['date']."', '".$periodic[$i]['cat_id']."', '".$periodic[$i]['bill_id']."', '".$periodic[$i]['drain']."', '')
-					";
 
-                $result = $this->db->sql_query($sql);
+        if (!empty($periodic)) {
+            for ($i=1; $i<=count($periodic); $i++) {
+                //TODO Оптимизировать запрос!!!!
+                $sql = "INSERT INTO money (user_id, `date`, cat_id, bill_id, drain) VALUES (?, ?, ?, ?, ?);";
+                $this->db->query($sql, $this->user->getId(), $periodic[$i]['money'], $periodic[$i]['date'],
+                    $periodic[$i]['cat_id'], $periodic[$i]['bill_id'], $periodic[$i]['drain']);
             }
         }
 
-        if (!empty($updatePeriodic))
-        {
-            for ($i=1; $i<=count($updatePeriodic); $i++)
-            {
-                $sql = "UPDATE `periodic` SET
-					`date_from` = '".$updatePeriodic[$i]['date']."', `povtor_num` = '".$updatePeriodic[$i]['povtor_num']."'
-				WHERE `id` = '".$updatePeriodic[$i]['id']."' AND `user_id` = '".$this->user_id."'
-				";
-
-                $result = $this->db->sql_query($sql);
+        if (!empty($updatePeriodic)) {
+            for ($i=1; $i<=count($updatePeriodic); $i++) {
+                $sql = "UPDATE periodic SET date_from = ?, povtor_num = ?  WHERE id = ? AND user_id = ?;";
+                $this->db->query($sql, $updatePeriodic[$i]['date'], $updatePeriodic[$i]['povtor_num'],
+                    $updatePeriodic[$i]['id'], $this->user_id);
+                return true;
             }
         }
     }
@@ -164,7 +160,7 @@ class Periodic
 
         $result  = mktime(0, 0, 0, $month, $day+7, $year);
         //date("m",mktime(0, 0, 0, $month-1, date("d"), $year));
-         
+
         return date("Y-m-d", $result);
     }
 
@@ -217,16 +213,14 @@ class Periodic
         return mktime(0, 0, 0, $date[3].$date[4], $date[0].$date[1], $date[6].$date[7].$date[8].$date[9]);
     }
 
+    /**
+     * Возвращает периодические транзакции
+     * @return array mixed
+     */
     function getPeriodic()
     {
-        $sql = "select * from periodic where `user_id` = '".$this->user_id."' and `date_from` <= '".date("Y-m-d")."'";
-        //echo $sql;
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в получении транзакций!', '', __LINE__, __FILE__, $sql);
-        }
-
-        return $this->db->sql_fetchrowset($result);
+        $rows = $this->db->select("SELECT * FROM periodic WHERE user_id = ? AND date_from <= CURRENT_DATE();", $this->user->getId());
+        return $rows;
     }
 
     function getAllPeriodic()
@@ -234,7 +228,7 @@ class Periodic
         $sql = "select p.*, DATE_FORMAT( p.`date_from`,'%d.%m.%Y') as date_from, c.cat_name, acc.bill_name from periodic p
 				left join category c on c.cat_id = p.cat_id
 				left join bill acc on acc.bill_id = p.bill_id and acc.user_id='".$this->user_id."'
-				where p.`user_id` = '".$this->user_id."' order by acc.bill_name, p.`date_from`";		
+				where p.`user_id` = '".$this->user_id."' order by acc.bill_name, p.`date_from`";
 
         if ( !($result = $this->db->sql_query($sql)) )
         {
@@ -246,8 +240,8 @@ class Periodic
     function getSelectPeriodic($id)
     {
         $sql = "select p.*, DATE_FORMAT( p.`date_from`,'%d.%m.%Y') as date_from from periodic p
-							where p.`id` = '".$id."' and user_id = '".$this->user_id."'";	
-        	
+							where p.`id` = '".$id."' and user_id = '".$this->user_id."'";
+
         if ( !($result = $this->db->sql_query($sql)) )
         {
             message_error(GENERAL_ERROR, 'Ошибка в cохранении транзакции!', '', __LINE__, __FILE__, $sql);
@@ -258,8 +252,8 @@ class Periodic
     function updatePeriodic($data)
     {
         $sql = "UPDATE `periodic` SET
-					`bill_id` = '".$data['bill_id']."', 
-					`cat_id` = '".$data['cat_id']."', 
+					`bill_id` = '".$data['bill_id']."',
+					`cat_id` = '".$data['cat_id']."',
 					`money` = '".$data['money']."',
 					`drain` = '".$data['drain']."',
 					`date_from` = '".$data['date_from']."',
@@ -279,7 +273,7 @@ class Periodic
 
     function deletePeriodic($id)
     {
-        $user_id = $this->user_id;
+        $user_id = $this->user->getId();
 
         $sql = "DELETE FROM `periodic` WHERE `id` = '".$id."' and `user_id` = '".$user_id."'";
 
@@ -293,5 +287,3 @@ class Periodic
         }
     }
 }
-
-?>

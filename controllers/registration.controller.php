@@ -1,4 +1,4 @@
-<?
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля welcome
  * @copyright http://home-money.ru/
@@ -47,5 +47,6 @@ class Registration_Controller extends Template_Controller {
      */
     function new_user ($args) {
         $registration = new Registration_Model($this->db, $this->tpl);
+        $registration->new_user();
     }
 }

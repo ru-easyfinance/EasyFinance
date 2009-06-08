@@ -14,24 +14,24 @@
 	</tr>
 	<tr>
 		<td height="100%" class="reg">{if !empty($error_text.login)}<font color="#FF0000">Логин:</font>{else}Логин:{/if}</td>
-		<td height="100%" class="reg"><input type="text" name="registery[login]"
-			style="width: 200px;" value={if !empty($registery.login)}{$registery.login}{/if}></td>
+		<td height="100%" class="reg"><input type="text" name="register[login]"
+			style="width: 200px;" value={if !empty($register.login)}{$register.login}{/if}></td>
 	</tr>
 	<tr>
 		<td height="100%" class="reg">{if !empty($error_text.pass)}<font color="#FF0000">Пароль:</font>{else}Пароль:{/if}</td>
-		<td height="100%" class="reg"><input type="password" name="registery[pass]"
+		<td height="100%" class="reg"><input type="password" name="register[pass]"
 			style="width: 200px;" value=''></td>
 	</tr>
 	<tr>
 		<td height="100%" class="reg">{if !empty($error_text.pass)}<font color="#FF0000">Повтор
 		пароля:</font>{else}Повтор пароля:{/if}</td>
-		<td height="100%" class="reg"><input type="password" name="registery[pass_r]"
+		<td height="100%" class="reg"><input type="password" name="register[pass_r]"
 			style="width: 200px;" value=''></td>
 	</tr>
 	<tr>
 		<td height="100%" class="reg">{if !empty($error_text.mail)}<font color="#FF0000">e-mail:</font>{else}e-mail:{/if}</td>
-		<td height="100%" class="reg"><input type="text" name="registery[mail]" style="width: 200px;"
-			value={if !empty($registery.mail)}{$registery.mail}{/if}></td>
+		<td height="100%" class="reg"><input type="text" name="register[mail]" style="width: 200px;"
+			value={if !empty($register.mail)}{$register.mail}{/if}></td>
 	</tr>
 	<tr>
 		<td height="100%" class="reg">&nbsp;</td>

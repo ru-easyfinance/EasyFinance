@@ -1,4 +1,4 @@
-<?
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля welcome
  * @copyright http://home-money.ru/

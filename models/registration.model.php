@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс модели для регистрации пользователей
  * @copyright http://home-money.ru/
@@ -63,14 +63,16 @@ class Registration_Model
             $register['mail'] = @$_POST['register']['mail'];
         }else{
             $error_text['mail'] = "Неверно введен e-mail!";
-            $register['mail'] = html(@$_POST['register']['mail']);
+            $register['mail'] = htmlspecialchars(@$_POST['register']['mail']);
         }
-        if (!@$db->query("SELECT user_id FROM users WHERE user_login=?", $register['login'])) {
+        $cell = $db->selectCell("SELECT user_id FROM users WHERE user_login=?", $register['login']);
+        if (!empty($cell)) {
             $error_text['login'] = "Пользователь с таким логином уже существует!";
         }
 
         // Если нет ошибок, создаём пользователя
         if (empty($error_text)) {
+
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = md5($_SERVER['REMOTE_ADDR'].";".date("Y-m-d h-i-s").";");
             $reg_id  = md5($register['mail'].";".date("Y-m-d h-i-s").";");
@@ -110,6 +112,8 @@ class Registration_Model
             $headers .= "From: info@home-money.ru\n";
             //TODO
             mail($register['mail'], $subject, $body, $headers);
+        } else {
+            $tpl->assign('error_text', $error_text);
         }
         $tpl->assign('register', $register);
     }

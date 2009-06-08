@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс-родитель для классов контроллеров
  * @author Max Kamashev "ukko" <max.kamashev@gmail.com>

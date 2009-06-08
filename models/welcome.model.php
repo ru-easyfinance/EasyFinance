@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс-модель для страницы welcome
  * @copyright http://home-money.ru/
@@ -63,7 +63,7 @@ class Welcome_Model
             $body = "<html><head><title>From home-money.ru</title></head>
                          <body><p>".htmlspecialchars($_POST['text'])."</p></body></html>";
             $headers = "Content-type: text/html; charset=utf-8\n";
-            $headers .= "From: ".html($_POST['email'])."\n";
+            $headers .= "From: ".htmlspecialchars($_POST['email'])."\n";
 
             mail("support@home-money.ru", "Отзыв на сайте", $body, $headers);
             //FIXME Убрать разметку

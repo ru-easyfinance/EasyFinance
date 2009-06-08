@@ -1,5 +1,5 @@
 <table width="100%" align="center">
-<form action="index.php?modules=login" method="post">
+<form action="/login/" method="post">
 <tr>
 	<td width="10%" valign="middle" align="left" class="reg">		
 		Логин
@@ -26,16 +26,6 @@
 		<input type="checkbox" name="autoLogin" checked />&nbsp;запомнить меня
 	</td>
 </tr>
-<!--
-<tr>
-	<td width="10%" valign="middle" align="left" class="reg">		
-		&nbsp;
-	</td>
-	<td width="90%" align="left" class="reg">		
-		<a href="index.php?modules=login&action=remember">Забыли пароль?</a>
-	</td>
-</tr>
--->
 {if !empty($error_text)}
 <tr>
 	<td width="10%" valign="middle" align="left" class="reg">&nbsp;		

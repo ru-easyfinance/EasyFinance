@@ -1,4 +1,4 @@
-<?
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Сборник полезных функций
  * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
