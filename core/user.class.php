@@ -53,7 +53,7 @@ class User
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        $this->load(); //FIXME Откуда мы знаем, что у нас в сессии есть данные?
+        $this->load(); //Пробуем загрузить из сессии данные
     }
 
     /**
@@ -77,6 +77,7 @@ class User
      */
     public function initUser($login, $pass)
     {
+        //FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
         $sql = "SELECT user_id, user_name, user_login, user_pass, user_mail,
                     DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
                     user_currency_default, user_currency_list
