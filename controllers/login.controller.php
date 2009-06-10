@@ -41,18 +41,16 @@ class Login_Controller extends Template_Controller
 
                 if ($user->initUser($login,$pass)) {
 
-                    } else {
+                } else {
 //                        $prt->getInsertPeriodic($user->getId());
-                        $user->init($user->getId());
-                        $user->save($user->getId());
-                        if ($_SESSION['template_new'] == 'on') {
-                            header("Location: /accounts/"); exit;
-                        }else{
-                            header("Location: /account/"); exit;
-                        }
+                    $user->init($user->getId());
+                    $user->save($user->getId());
+                    if ($_SESSION['template_new'] == 'on') {
+                        header("Location: /accounts/"); exit;
+                    }else{
+                        header("Location: /account/"); exit;
                     }
                 }
-
             }
         }
     }

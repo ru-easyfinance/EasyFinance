@@ -135,10 +135,27 @@ class User
      */
     public function load()
     {
-        $this->props         = $_SESSION['user'];
-        $this->user_category = $_SESSION['user_category'];
-        $this->user_account  = $_SESSION['user_account'];
-        $this->user_currency = $_SESSION['user_currency'];
+        if (isset($_SESSION['user']) && is_array($_SESSION['user'])) {
+            $this->props = $_SESSION['user'];
+        } else {
+            $this->props = array();
+        }
+        if (isset($_SESSION['user_category']) && is_array($_SESSION['user_category'])) {
+            $this->user_category = $_SESSION['user_category'];
+        } else {
+            $this->user_category = array();
+        }
+        if (isset($_SESSION['user_account']) && is_array($_SESSION['user_account'])) {
+            $this->user_account = $_SESSION['user_account'];
+        } else {
+            $this->user_account = array();
+        }
+        if (isset($_SESSION['user_currency']) && is_array($_SESSION['user_currency'])) {
+            $this->user_currency = $_SESSION['user_currency'];
+        } else {
+            $this->user_currency = array();
+        }
+
         return true;
     }
 
