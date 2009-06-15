@@ -287,7 +287,7 @@ class User
      */
     function getUserAccounts()
     {
-        return $this->getUserAccounts();
+        return $this->user_account;
     }
 
     /**

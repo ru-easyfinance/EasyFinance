@@ -32,17 +32,61 @@ class Accounts_Controller extends Template_Controller
      */
     function index($args)
     {
-
-        if ($this->user->getId() == 0) {
+        //TODO Переписать условие, когда сменим инкрементные поля
+        if (!$this->user->getId()) {
             header("Location: /");
             exit;
         }
 
-        if ($_SESSION['account'] == "reload")
-        {
+        if ($_SESSION['account'] == "reload") {
             $this->user->initUserAccount($this->user->getId());
             $this->user->save();
             $_SESSION['account'] = false; //XXX??
+        }
+
+
+
+        $this->tpl->assign("page_title", "account all");
+
+        $this->tpl->assign('account', $this->user->getUserAccounts());
+
+        foreach ($this->user->getUserAccounts() as $val) {
+            switch ($val['currency']) {
+                case '1':
+                    $total['1'] = $total['1'] + $val['sum'];
+                    break;
+                case '2':
+                    $total['2'] = $total['2'] + $val['sum'];
+                    break;
+                case '3':
+                    $total['3'] = $total['3'] + $val['sum'];
+                    break;
+                case '4':
+                    $total['4'] = $total['4'] + $val['sum'];
+                    break;
+            }
+        }
+
+        //FIXME Что за странное присваивание?
+        if (!empty($total['1'])) {
+            $total['rub'] = "&nbsp;руб.";
+        }
+        if (!empty($total['2'])) {
+            $total['dol'] = "&nbsp;$&nbsp;";
+        }
+        if (!empty($total['3'])) {
+            $total['evro'] = "&nbsp;€&nbsp;";
+        }
+        if (!empty($total['4'])) {
+            $total['grvn'] = "&nbsp;грн.&nbsp;";
+        }
+
+        $this->tpl->assign('total_all_sum', $total);
+
+        //FIXME
+        if ($_SESSION['good_text']) {
+            $this->tpl->assign('good_text', $_SESSION['good_text']);
+            $_SESSION['good_text'] = false;
         }
 
     }
@@ -610,54 +654,7 @@ switch( $action )
 
 		break;
 	default:
-		$tpl->assign("page_title","account all");
-		$tpl->assign('account', $_SESSION['user_account']);
-		for($i=0; $i<count($_SESSION['user_account']); $i++)
-		{
-			if ($_SESSION['user_account'][$i]['currency'] == '1')
-			{
-				$total['1'] = $total['1'] + $_SESSION['user_account'][$i]['sum'];
-			}
-			if ($_SESSION['user_account'][$i]['currency'] == '2')
-			{
-				$total['2'] = $total['2'] + $_SESSION['user_account'][$i]['sum'];
-			}
-			if ($_SESSION['user_account'][$i]['currency'] == '3')
-			{
-				$total['3'] = $total['3'] + $_SESSION['user_account'][$i]['sum'];
-			}
-			if ($_SESSION['user_account'][$i]['currency'] == '4')
-			{
-				$total['4'] = $total['4'] + $_SESSION['user_account'][$i]['sum'];
-			}
-		}
-		if (!empty($total['1']))
-		{
-			$total['1'] = $total['1'];
-			$total['rub'] = "&nbsp;?oa.";
-		}
-		if (!empty($total['2']))
-		{
-			$total['2'] = $total['2'];
-			$total['dol'] = "&nbsp;$&nbsp;";
-		}
-		if (!empty($total['3']))
-		{
-			$total['3'] = $total['3'];
-			$total['evro'] = "&nbsp;?&nbsp;";
-		}
-		if (!empty($total['4']))
-		{
-			$total['4'] = $total['4'];
-			$total['grvn'] = "&nbsp;a?ai.&nbsp;";
-		}
-		$tpl->assign('total_all_sum', $total);
 
-		if ($_SESSION['good_text'])
-		{
-			$tpl->assign('good_text', $_SESSION['good_text']);
-			$_SESSION['good_text'] = false;
-		}
 
 		//pre($total);
 

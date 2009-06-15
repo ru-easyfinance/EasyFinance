@@ -13,16 +13,18 @@
 
 define('INDEX',true);
 
+session_start();
+
+//print '<pre>';
+//print_r($_SESSION);
+//print '</pre>';
+
 require_once dirname(dirname(__FILE__)). "/include/common.php";
+
 Core::getInstance()->authUser();
 Core::getInstance()->parseUrl();
 
-session_start();
-
-//XXX Разобраться с $_SESSION['user']
-//if (!empty($_SESSION['user'])) {
-//    $tpl->assign("user", $_SESSION['user']);
-//    $tpl->display("index.hm.html");
-//} else{
-    $tpl->display("index.html");
-//}
+if (!empty($_SESSION['user'])) {
+    $tpl->assign("user", $_SESSION['user']);
+}
+$tpl->display("index.html");
