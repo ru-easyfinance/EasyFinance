@@ -54,6 +54,7 @@ function databaseErrorHandler($message, $info)
  */
 function UserErrorHandler($errno, $errstr, $errfile, $errline)
 {
+    $tpl = Core::getInstance()->tpl;
     //TODO Нотисы и варнинги - показывать, ерроры - не показывать, только записывать в лог
     switch ($errno) {
         case E_USER_ERROR:
@@ -65,13 +66,12 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
             "  User warning on line $errline in file $errfile<br />\n");
             break;
         case E_USER_NOTICE:
-            trigger_error("*USER NOTICE* [$errno] $errstr<br />\n".
+            $tpl->append("notice", "*USER NOTICE* [$errno] $errstr<br />\n".
             "  User notice on line $errline in file $errfile<br />\n");
             break;
     }
     return true;
 }
-
 
 /**
  * Выводит красивую 404 ошибку

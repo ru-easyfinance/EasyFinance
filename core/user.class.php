@@ -169,7 +169,7 @@ class User
     {
         $sql = "SELECT cat_id, cat_name, cat_parent, cat_active FROM category
             WHERE user_id = ? AND cat_active = '1' ORDER BY cat_name;";
-        $this->user_category = $this->db->selectRow($sql, $this->getId());
+        $this->user_category = $this->db->select($sql, $this->getId());
         return true;
     }
 
@@ -271,6 +271,23 @@ class User
     function getUserCategory()
     {
         return $this->user_category;
+    }
+    /**
+     * Возвращает пользовательские валюты
+     * @return array mixed
+     */
+    function getUserCurrency()
+    {
+        return $this->user_currency;
+    }
+
+    /**
+     * Возвращает пользовательские счета
+     * @return array mixed
+     */
+    function getUserAccounts()
+    {
+        return $this->getUserAccounts();
     }
 
     /**

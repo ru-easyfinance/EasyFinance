@@ -73,7 +73,7 @@ class Core
         }
         if(!$module) {
             $module = DEFAULT_MODULE;
-        } elseif ($module == '?XDEBUG') { //Грязный хак, потом можно убрать
+        } elseif (substr($module,0, 7) == '?XDEBUG') { //Грязный хак, потом можно убрать
             $module = DEFAULT_MODULE;
         }
         $module .= '_Controller';

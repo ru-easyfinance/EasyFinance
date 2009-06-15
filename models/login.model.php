@@ -41,17 +41,21 @@ class Login_Model
                 поддержки support@home-money.ru.</li>
                 </ul>
                 <p>C уважением,<br/>Администрация системы Home-money.ru</p>
-                <p>Email: <a href='mailto:info@home-money.ru'>info@home-money.ru</a><br>
+                <p>Email: <a href='mailto:info@home-money.ru'>info@home-money.ru</a><br/>
                 <a href='http://www.home-money.ru'>www.home-money.ru</a>";
 
                 $headers = "Content-type: text/html; charset=utf-8\n";
                 $headers .= "From: info@home-money.ru\n";
                 $subject = "Успешная регистрация на сайте домашней бухгалтерии Home-Money.ru";
                 mail($_SESSION['user']['user_mail'], $subject, $message, $headers);
-                header("Location: /first_start/"); exit;
+                header("Location: /first_start/");
+                exit;
+
             } else {
                 trigger_error("Справочник не загружен!", E_USER_WARNING);
             }
+        } else {
+
         }
     }
 }

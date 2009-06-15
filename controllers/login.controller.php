@@ -23,12 +23,15 @@ class Login_Controller extends Template_Controller
      */
     function index($args)
     {
-    // FIXME
         $user = Core::getInstance()->user;
+
         if ($user->getId()) {
-        //if (!empty($_SESSION['user'])) {
-            header("Location: /account/"); exit;
+            //FIXME Если ничего другого в адресной строке не задано, то перенаправлять на кошельки,
+            //иначе - на туда, куда просился пользователь
+            header("Location: /account/");
+            exit;
         } else {
+            // Пользователь авторизируется через диалог ввода логина и пароля
             if (!empty($_POST['login']) && !empty($_POST['pass'])) {
 
                 $login = htmlspecialchars($_POST['login']);
@@ -40,15 +43,17 @@ class Login_Controller extends Template_Controller
                 }
 
                 if ($user->initUser($login,$pass)) {
+                    if (count($user->getUserCategory()) == 0) {
+                        $model = new Login_Model();
+                        $model->activate_user();
 
-                } else {
-//                        $prt->getInsertPeriodic($user->getId());
-                    $user->init($user->getId());
-                    $user->save($user->getId());
-                    if ($_SESSION['template_new'] == 'on') {
-                        header("Location: /accounts/"); exit;
-                    }else{
-                        header("Location: /account/"); exit;
+                    } else {
+                        $periodic = new Periodic();
+                        $periodic->getInsertPeriodic();
+                        $user->init($user->getId());
+                        $user->save($user->getId());
+                        header("Location: /accounts/");
+                        exit;
                     }
                 }
             }
