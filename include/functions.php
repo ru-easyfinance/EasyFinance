@@ -7,6 +7,11 @@
  * SVN $Id$
  */
 
+// Устанавливаем константу последней ревизии
+$Rev = "$LastChangedRevision$"; //DO NOT EDIT!
+$Rev = explode(" ", $Rev);
+define('REVISION', $Rev[1]);
+
 /**
  * Реализация функции __autoload для всех классов
  * @param string $class_name Строка с названием класса

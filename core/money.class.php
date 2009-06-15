@@ -10,7 +10,6 @@ class Money
 {
     private $db             = null;
     private $user           = null;
-    private $user_id        = 0; /** @deprecated */
     private $cat_id         = 0;
     private $current_date   = 0;
     private $account_money  = 0;
@@ -25,7 +24,6 @@ class Money
     {
         $this->db = Core::getInstance()->db;
         $this->user = Core::getInstance()->user;
-        $this->user_id = $this->user->getId();
         $this->current_date = date('d.m.Y');
 
         $this->load();
@@ -111,26 +109,26 @@ class Money
         $order = "AND (m.`date` BETWEEN '".$conf['dateFrom']."' AND '".$conf['dateTo']."')";
         $order1 = "AND (t.`date` BETWEEN '".$conf['dateFrom']."' AND '".$conf['dateTo']."')";
         if (!empty($conf['currentCategory'])) {
-            $order .= " AND (m.`cat_id` = ".$conf['currentCategory']." OR c.`cat_parent` = ".$conf['currentCategory'].")";
-            $order1 .= " AND (cy.`cat_id` = ".$conf['currentCategory']." OR cy.`cat_parent` = ".$conf['currentCategory'].")";
+            $order .= " AND (m.cat_id = ".$conf['currentCategory']." OR c.cat_parent = ".$conf['currentCategory'].")";
+            $order1 .= " AND (cy.cat_id = ".$conf['currentCategory']." OR cy.cat_parent = ".$conf['currentCategory'].")";
         }
         $limit = "";
 
         if (IS_DEMO) {
-            $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
-						   m.`cat_id`, m.`bill_id`, c.`cat_name`, c.`cat_parent`, b.`bill_name`, m.`drain`, m.`comment`,
-						   b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
-						   bt.`bill_name` as `cat_transfer`
-						FROM `money` m
-						LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
-						LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id` and b.user_id = '".$this->user_id."'
-						LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer` and bt.user_id = '".$this->user_id."'
-						LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
-							WHERE m.`bill_id` = '".$conf['currentAccount']."'
-								   AND m.`user_id` = '".$this->user_id."'
-								   ".$order."
-							ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
-            //echo $sql;
+            $sql = "SELECT m.id, m.user_id, m.money, DATE_FORMAT(m.date,'%d.%m.%Y') as `date`,
+                       m.cat_id, m.bill_id, c.cat_name, c.cat_parent, b.bill_name, m.drain, m.comment,
+                       b.bill_currency, cu.cur_name, m.transfer, m.tr_id,
+                       bt.bill_name as cat_transfer
+                    FROM money m
+                    LEFT JOIN category c on c.cat_id = m.cat_id
+                    LEFT JOIN bill b on b.bill_id = m.bill_id and b.user_id = ?
+                    LEFT JOIN bill bt on bt.bill_id = m.transfer and bt.user_id = ?
+                    LEFT JOIN currency cu on cu.cur_id = b.bill_currency
+                    WHERE m.bill_id = ?
+                           AND m.user_id = ?
+                           ".$order."
+                    ORDER BY m.`date` DESC, m.id DESC " . $limit;
+            return $this->db->select($sql, $this->user->getId(), $this->user->getId(), $conf['currentAccount'], $this->user->getId());
         }else{
             /*
              $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
@@ -174,56 +172,43 @@ class Money
 
     /**
      * Получение списка транзакций для депозита
-     * id - id счета
      * @deprecated
-     * @param $id
-     * @return unknown_type
+     * @param $bill_id int Ид счета
+     * @return array mixed
      */
-    function getDepositOperationList($id)
+    function getDepositOperationList($bill_id)
     {
-        $sql = "
-			select * from `account_deposit_list` where `account_id` = '".$id."'
-		";
-        $result = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrowset($result);
-
-        return $row;
+        $sql = "SELECT * FROM account_deposit_list WHERE account_id = ?";
+        return $this->db->select($sql, $bill_id);
     }
 
     /**
-     * Возвращает активный счёт
-     * @return unknown_type
+     * Возвращает активный счёт (последний в списке)
+     * @return array mixed
      */
     function getActiveAccount()
     {
         $i = count($this->user_money) - 1;
-        $arr = array(
-            "id"=>$this->user_money[$i]['bill_id'],
-            "name"=>$this->user_money[$i]['bill_name'],
-            "money"=>$this->user_money[$i]['money'],
-            "drain"=>$this->user_money[$i]['drain'],
-            "currency"=>$this->user_money[$i]['bill_currency'],
-            "cur_name"=>$this->user_money[$i]['cur_name']
+        return array(
+            'id'       => $this->user_money[$i]['bill_id'],
+            'name'     => $this->user_money[$i]['bill_name'],
+            'money'    => $this->user_money[$i]['money'],
+            'drain'    => $this->user_money[$i]['drain'],
+            'currency' => $this->user_money[$i]['bill_currency'],
+            'cur_name' => $this->user_money[$i]['cur_name']
         );
-        return $arr;
     }
 
     /**
      * Возвращает все деньги пользователя по определённому счёту
-     * @param $id
-     * @return unknown_type
+     * @param $bill_id string Ид счёта
+     * @return int
      */
-    function getTotalSum($id)
+    function getTotalSum($bill_id)
     {
-        $sql = "
-				select SUM(`money`) as sum from money where `user_id` = '".$this->user_id."' and `bill_id` = '".$id."'
-				";
-        if ($result = $this->db->sql_query($sql))
-        {
-            $row = $this->db->sql_fetchrow($result);
-            $this->total_sum = $row['sum'];
-            return $row['sum'];
-        }
+        $sql = "SELECT SUM(money) as sum FROM money WHERE user_id = ? AND bill_id = ?";
+        $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $bill_id);
+        return $this->total_sum;
     }
 
     /**
@@ -233,26 +218,17 @@ class Money
      */
     function getMoney($id)
     {
-        $sql = "SELECT m.`id`, m.`user_id`, m.`money`, m.`tr_id`,m.`transfer`,
-            DATE_FORMAT(m.date,'%d.%m.%Y') as date, m.`cat_id`, m.`bill_id`, m.`drain`, m.`comment`,
-            c.`cat_name` as `cat_restore`
-			FROM `money` m
-			LEFT JOIN `category` c on m.cat_id = c.`cat_id`
-			WHERE m.`id` = '".$id."' AND m.`user_id` = '".$this->user_id."'";
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в получении финансов!', '', __LINE__, __FILE__, $sql);
+        $sql = "SELECT m.id, m.user_id, m.money, m.tr_id,m.transfer,
+            DATE_FORMAT(m.date,'%d.%m.%Y') as `date`, m.cat_id, m.bill_id, m.drain, m.comment,
+            c.cat_name as cat_restore
+            FROM money m
+            LEFT JOIN category c on m.cat_id = c.cat_id
+            WHERE m.id = ? AND m.user_id = ?";
+        $row = $this->db->selectRow($sql, $id, $this->user->getId());
+        if ($row['drain'] == 1) {
+            $row['money'] = substr($row['money'], 1);
         }
-        else
-        {
-            $row = $this->db->sql_fetchrow($result);
-            if ($row['drain'] == 1)
-            {
-                $row['money'] = substr($row['money'], 1);
-            }
-            return $row;
-        }
-        //$archive = substr($archive, 0, -1);
+        return $row;
     }
 
     /**
@@ -273,22 +249,20 @@ class Money
 
     function saveMoney($cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id,$impID='',$impDate='')
     {
-        $user_id = $this->user_id;
-
         if ($cat_type == 1)
         {
             if ($cat_id) {
                 $sql = "INSERT INTO `category`
 						(`cat_name`, `cat_parent`, `user_id`, `cat_active`)
 					VALUES
-						('".$cat_name."', '".$cat_id."', '".$user_id."', '1')
+						('".$cat_name."', '".$cat_id."', '".$this->user->getId()."', '1')
 					";
             }
             else {
                 $sql = "INSERT INTO `category`
 						(`cat_name`, `user_id`, `cat_active`)
 					VALUES
-						('".$cat_name."', '".$user_id."', '1')
+						('".$cat_name."', '".$this->user->getId()."', '1')
 					";
             }
 
@@ -298,7 +272,7 @@ class Money
             }
             else
             {
-                $this->user->initUserCategory($user_id);
+                $this->user->initUserCategory($this->user->getId());
                 $this->user->save();
                 $cat_id = $this->db->sql_nextid();
             }
@@ -350,7 +324,7 @@ class Money
         $sql = "INSERT INTO `money`
 					(`user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment` $impKey)
 				VALUES
-					('".$user_id."', '".$money."', '".$date."', '".$cat_id."', '".$bill_id."', '".$drain."', '".$comment."' $impVal)
+					('".$this->user->getId()."', '".$money."', '".$date."', '".$cat_id."', '".$bill_id."', '".$drain."', '".$comment."' $impVal)
 				";
 
         if ( !($result = $this->db->sql_query($sql)) )
@@ -361,7 +335,7 @@ class Money
         {
             $_SESSION['user']['POS_ID'] = $this->db->sql_nextid();
             $_SESSION['account'] = "reload";
-            $this->selectMoney($user_id);
+            $this->selectMoney($this->user->getId());
             $this->save();
 
             return true;
@@ -432,12 +406,11 @@ class Money
      */
     function updateOperationTransfer($money, $convert, $date, $from_account, $to_account, $tr_id, $comment)
     {
-        $user_id = $this->user_id;
         $drain_money = "-$money";
 
         $sql = "UPDATE `money` SET
 						`money` = '".$drain_money."', `date` = '".$date."', `transfer` = '".$to_account."', `comment` = '".$comment."'
-					WHERE `bill_id` = '".$from_account."' AND `user_id` = '".$user_id."' AND
+					WHERE `bill_id` = '".$from_account."' AND `user_id` = '".$this->user->getId()."' AND
 						  `drain` = '1' AND `tr_id` = '".$tr_id."'
 					";
 
@@ -449,7 +422,7 @@ class Money
         {
             $sql = "UPDATE `money` SET
 						`money` = '".$convert."', `date` = '".$date."', `bill_id` = '".$to_account."', `comment` = '".$comment."'
-					WHERE `transfer` = '".$from_account."' AND `user_id` = '".$user_id."' AND
+					WHERE `transfer` = '".$from_account."' AND `user_id` = '".$this->user->getId()."' AND
 						  `drain` = '0' AND `tr_id` = '".$tr_id."'
 					";
 
@@ -462,7 +435,7 @@ class Money
             {
                 $_SESSION['user_money'] = "reload";
 
-                $this->user->initUserAccount($user_id);
+                $this->user->initUserAccount($this->user->getId());
                 $this->user->save();
 
                 return true;
@@ -485,14 +458,12 @@ class Money
      */
     function updateMoney($id,$cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id)
     {
-        $user_id = $this->user_id;
-
         if ($cat_type == 1)
         {
             $sql = "INSERT INTO `category`
 						(`cat_id`, `cat_name`, `cat_parent`, `user_id`, `cat_active`)
 					VALUES
-						('', '".$cat_name."', '".$cat_id."', '".$user_id."', '1')
+						('', '".$cat_name."', '".$cat_id."', '".$this->user->getId()."', '1')
 					";
 
             if ( !($result = $this->db->sql_query($sql)) )
@@ -501,14 +472,14 @@ class Money
             }
             else
             {
-                $this->user->initUserCategory($user_id);
+                $this->user->initUserCategory($this->user->getId());
                 $this->user->save();
                 $cat_id = $this->db->sql_nextid();
             }
         }
 
         $sql = "UPDATE `money` SET
-						`user_id` = '".$user_id."',
+						`user_id` = '".$this->user->getId()."',
 						`money` = '".$money."',
 						`date` = '".$date."',
 						`cat_id` = '".$cat_id."',
@@ -539,9 +510,8 @@ class Money
      */
     function deleteOperationTransfer($id)
     {
-        $user_id = $this->user_id;
 
-        $sql = "DELETE FROM `money` WHERE `tr_id` = '".$id."' and `user_id` = '".$user_id."'";
+        $sql = "DELETE FROM `money` WHERE `tr_id` = '".$id."' and `user_id` = '".$this->user->getId()."'";
 
         if ( !($result = $this->db->sql_query($sql)) )
         {
@@ -550,7 +520,7 @@ class Money
         else
         {
             $_SESSION['user_money'] = "reload";
-            $this->user->initUserAccount($user_id);
+            $this->user->initUserAccount($this->user->getId());
             $this->user->save();
 
             return true;
@@ -601,14 +571,13 @@ class Money
      */
     function addOperationTransfer($money, $convert, $date, $from_account, $to_account, $comment)
     {
-        $user_id = $this->user_id;
-        $tr_id = md5($user_id."+".date("d-m-Y H-i-s"));
+        $tr_id = md5($this->user->getId()."+".date("d-m-Y H-i-s"));
         $drain_money = $money * -1; // 0 - доход, 1- расход
 
         $sql = "INSERT INTO `money`
 					(`id`, `user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment`, `transfer`, `tr_id`)
 				VALUES
-					('', '".$user_id."', '".$drain_money."', '".$date."', '-1', '".$from_account."', '1', '".$comment."', '".$to_account."', '".$tr_id."')
+					('', '".$this->user->getId()."', '".$drain_money."', '".$date."', '-1', '".$from_account."', '1', '".$comment."', '".$to_account."', '".$tr_id."')
 				";
 
         if ( !($result = $this->db->sql_query($sql)) )
@@ -620,7 +589,7 @@ class Money
             $sql = "INSERT INTO `money`
 						(`id`, `user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment`, `transfer`, `tr_id`)
 					VALUES
-						('', '".$user_id."', '".$convert."', '".$date."', '-1', '".$to_account."', '0', '".$comment."' , '".$from_account."', '".$tr_id."')
+						('', '".$this->user->getId()."', '".$convert."', '".$date."', '-1', '".$to_account."', '0', '".$comment."' , '".$from_account."', '".$tr_id."')
 					";
             if ( !($result = $this->db->sql_query($sql)) )
             {
@@ -630,7 +599,7 @@ class Money
             {
                 $_SESSION['user_money'] = "reload";
 
-                $this->user->initUserAccount($user_id);
+                $this->user->initUserAccount($this->user->getId());
                 $this->user->save();
 
                 return true;
@@ -645,9 +614,7 @@ class Money
      */
     function deleteMoney($id)
     {
-        $user_id = $this->user_id;
-
-        $sql = "DELETE FROM `money` WHERE `id` = '".$id."' and `user_id` = '".$user_id."'";
+        $sql = "DELETE FROM `money` WHERE `id` = '".$id."' and `user_id` = '".$this->user->getId()."'";
 
         if ( !($result = $this->db->sql_query($sql)) )
         {
