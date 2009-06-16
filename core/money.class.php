@@ -59,49 +59,6 @@ class Money
     }
 
     /**
-     * Возвращает список из последних 30 транзакций или за указанный период (неделя, месяц, день)
-     * @param $bill_id Ид счёта
-     * @return void
-     */
-    function selectMoney($bill_id)
-    {
-        $g_order = trim($_GET['order']);
-        if (!empty($g_order)) {
-            if ($g_order == "today") {
-                $order = "AND (m.`date` = '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
-            }
-            if ($g_order == "month") {
-                $order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
-            }
-            if ($g_order == "week") {
-                $begin_week = (date('d')+1) - date('w');
-                $order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
-            }
-        }else{
-            $limit = "LIMIT 0, 30";
-        }
-
-        $sql = "SELECT m.id, m.user_id, m.money, DATE_FORMAT(m.date,'%d.%m.%Y') as `date`,
-                   m.cat_id, m.bill_id, c.cat_name, b.bill_name, m.drain, m.comment,
-                   b.bill_currency, cu.cur_name, m.transfer, m.tr_id,
-                   bt.bill_name as cat_transfer
-                FROM money m
-                LEFT JOIN category c on c.cat_id = m.cat_id
-                LEFT JOIN bill b on b.bill_id = m.bill_id
-                LEFT JOIN bill bt on bt.bill_id = m.transfer
-                LEFT JOIN currency cu on cu.cur_id = b.bill_currency
-                    WHERE m.bill_id = ? AND m.user_id = ? ".
-                $order.
-                "ORDER BY m.`date` DESC, m.id DESC ".$limit;
-
-        $this->user_money = $this->db->select($sql, $bill_id, $this->user->getId());
-        $this->account_money = $bill_id;
-        $this->getTotalSum($bill_id);
-        $this->save();
-    }
-
-
-    /**
      * Получение списка транзакций
      */
     function getOperationList($conf)
@@ -211,6 +168,52 @@ class Money
         return $this->total_sum;
     }
 
+/**
+ * Операции с операциями
+ */
+
+    /**
+     * Возвращает список из последних 30 транзакций или за указанный период (неделя, месяц, день)
+     * @param $bill_id Ид счёта
+     * @return void
+     */
+    function selectMoney($bill_id)
+    {
+        $g_order = trim($_GET['order']);
+        if (!empty($g_order)) {
+            if ($g_order == "today") {
+                $order = "AND (m.`date` = '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
+            }
+            if ($g_order == "month") {
+                $order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
+            }
+            if ($g_order == "week") {
+                $begin_week = (date('d')+1) - date('w');
+                $order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
+            }
+        }else{
+            $limit = "LIMIT 0, 30";
+        }
+
+        $sql = "SELECT m.id, m.user_id, m.money, DATE_FORMAT(m.date,'%d.%m.%Y') as `date`,
+                   m.cat_id, m.bill_id, c.cat_name, b.bill_name, m.drain, m.comment,
+                   b.bill_currency, cu.cur_name, m.transfer, m.tr_id,
+                   bt.bill_name as cat_transfer
+                FROM money m
+                LEFT JOIN category c on c.cat_id = m.cat_id
+                LEFT JOIN bill b on b.bill_id = m.bill_id
+                LEFT JOIN bill bt on bt.bill_id = m.transfer
+                LEFT JOIN currency cu on cu.cur_id = b.bill_currency
+                    WHERE m.bill_id = ? AND m.user_id = ? ".
+                $order.
+                "ORDER BY m.`date` DESC, m.id DESC ".$limit;
+
+        $this->user_money = $this->db->select($sql, $bill_id, $this->user->getId());
+        $this->account_money = $bill_id;
+        $this->getTotalSum($bill_id);
+        $this->save();
+    }
+
     /**
      * Возвращает операцию со всеми параметрами
      * @param $id
@@ -226,7 +229,7 @@ class Money
             WHERE m.id = ? AND m.user_id = ?";
         $row = $this->db->selectRow($sql, $id, $this->user->getId());
         if ($row['drain'] == 1) {
-            $row['money'] = substr($row['money'], 1);
+            $row['money'] = ABS($row['money']);
         }
         return $row;
     }
@@ -246,73 +249,38 @@ class Money
      * @param string $impDate Дата импорта в формате Y.m.d. Опционально
      * @return boolean true - Регистрация прошла успешно
      */
-
-    function saveMoney($cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id,$impID='',$impDate='')
+    function saveMoney($cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id, $impID='',$impDate='')
     {
-        if ($cat_type == 1)
-        {
+        //Если создаём новую категорию
+        if ($cat_type == 1) {
+            //Если это субкатегория
             if ($cat_id) {
-                $sql = "INSERT INTO `category`
-						(`cat_name`, `cat_parent`, `user_id`, `cat_active`)
-					VALUES
-						('".$cat_name."', '".$cat_id."', '".$this->user->getId()."', '1')
-					";
+                $sql = "INSERT INTO category (cat_name, cat_parent, user_id, cat_active) VALUES (?, ?, ?, '1')";
+                $this->db->query($sql, $cat_name, $cat_id, $this->user->getId());
+            // Если категория первого уровня
+            } else {
+                $sql = "INSERT INTO category (cat_name, user_id, cat_active) VALUES (?, ?, '1')";
+                $this->db->query($sql, $cat_name, $this->user->getId());
             }
-            else {
-                $sql = "INSERT INTO `category`
-						(`cat_name`, `user_id`, `cat_active`)
-					VALUES
-						('".$cat_name."', '".$this->user->getId()."', '1')
-					";
-            }
-
-            if ( !($result = $this->db->sql_query($sql)) )
-            {
-                message_error(GENERAL_ERROR, 'Ошибка в cохранении категории!', '', __LINE__, __FILE__, $sql);
-            }
-            else
-            {
-                $this->user->initUserCategory($this->user->getId());
-                $this->user->save();
-                $cat_id = $this->db->sql_nextid();
-            }
+            $this->user->initUserCategory($this->user->getId());
+            $this->user->save();
+            $cat_id = mysql_insert_id();
         }
-
-        /*$last_cat = 0;
-         for($i=0; $i<=count($_SESSION['user_category']); $i++)
-         {
-         $cat_id = $_SESSION['user_category'][$i]['cat_id'];
-         if ($cat_id > $last_cat)
-         {
-         $last_cat = $cat_id;
-         }
-         }*/
-
-        $impKey = ($impID)?", `imp_id`, `imp_date`":"";
-        $impVal = ($impID)?", '$impID', '$impDate'":"";
-
-        $sql = "select pf.total_sum, pf.plan_id from plan_fact pf
-					left join plan_accounts pa on pa.plan_id = pf.plan_id
-					where pf.drain='".$drain."' and pf.category_id = '".$cat_id."' and pa.account_id = '".$bill_id."'";
-        if ($_SESSION['user']['user_login']=="Etwas")
-        {
-            //$_SESSION['etwas'] = false;
-        }
-        $result = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrow($result);
-
-        if (count($row))
-        {
+//TODO Эта штука будет работать по другому, обновляться планфакт будет разом для всех категорий
+/*
+        $sql = "SELECT pf.total_sum, pf.plan_id FROM plan_fact pf
+            LEFT JOIN plan_accounts pa ON pa.plan_id = pf.plan_id
+            WHERE pf.drain= ? AND pf.category_id = ? AND pa.account_id = ?";
+        $row = $this->db->selectRow($sql, $drain, $cat_id, $bill_id);
+        if (count($row) > 0) {
             $money2 = $money;
 
-            if ($drain == 1)
-            {
+            if ($drain == 1) {
                 $money2 = $money * -1;
             }
 
             $total_sum = $money2 + $row['total_sum'];
-
-            $sql = "UPDATE `plan_fact` SET
+            $sql = "UPDATE plan_fact SET
 							`total_sum` = '".$total_sum."'
 						WHERE `category_id` = '".$cat_id."' AND
 							  `plan_id` = '".$row['plan_id']."' and
@@ -320,127 +288,39 @@ class Money
             $this->db->sql_query($sql);
 
         }
-
-        $sql = "INSERT INTO `money`
-					(`user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment` $impKey)
-				VALUES
-					('".$this->user->getId()."', '".$money."', '".$date."', '".$cat_id."', '".$bill_id."', '".$drain."', '".$comment."' $impVal)
-				";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
+*/
+        if ($impID && $impDate) {
+            $sql = "INSERT INTO money (user_id, money, `date`, cat_id, bill_id, drain, comment,
+                imp_id, imp_date) VALUES (?,?,?,?,?,?,?,?,?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $cat_id, $bill_id, $drain,
+                $comment, $impID, $impDate);
+        } else {
+            $sql = "INSERT INTO money (user_id, money, `date`, cat_id, bill_id, drain, comment) VALUES (?,?,?,?,?,?,?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $cat_id, $bill_id, $drain, $comment);
         }
-        else
-        {
-            $_SESSION['user']['POS_ID'] = $this->db->sql_nextid();
-            $_SESSION['account'] = "reload";
-            $this->selectMoney($this->user->getId());
-            $this->save();
+        //TODO Убрать отсюда использование сессий
+        $_SESSION['user']['POS_ID'] = mysql_insert_id();
+        $_SESSION['account'] = "reload";
+        $this->selectMoney($this->user->getId());
+        $this->save();
 
-            return true;
-        }
+        return true;
     }
 
     /**
-     * Выбирает операцию для редактирования
-     * @param $id
-     * @param $cat_type
-     * @param $cat_name
-     * @param $cat_id
-     * @param $money
-     * @param $date
-     * @param $drain
-     * @param $comment
-     * @param $bill_id
-     * @return unknown_type
+     * Удаляет операцию
+     * @param $id int Ид операции
+     * @return bool
      */
-    function editOperation($id, $cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id)
+    function deleteMoney($id)
     {
-        $sql = "select id, tr_id from money where id = '$id'";
-        $result = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrow($result);
-        if (!empty($row['tr_id']))
-        {
-            $this->deleteOperationTransfer($row['tr_id']);
-            $this->saveMoney($cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id);
-        }else{
-            $this->updateMoney($id,$cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id);
-        }
-    }
+        $this->db->query("DELETE FROM money WHERE id = ? and user_id = ?", $id, $this->user->getId());
 
-    /**
-     * Выбирает трансфер для редактирования
-     * @param $id
-     * @param $convert
-     * @param $sum
-     * @param $date
-     * @param $to_account
-     * @param $bill_id
-     * @param $comment
-     * @return unknown_type
-     */
-    function editOperationTransfer($id, $convert, $sum, $date, $to_account, $bill_id, $comment)
-    {
-        $sql = "select id, tr_id from money where id = '$id'";
-        $result = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrow($result);
-        if (empty($row['tr_id']))
-        {
-            $this->deleteMoney($id);
-            $this->addOperationTransfer($sum, $convert, $date, $bill_id, $to_account, $comment);
-        }else{
-            $this->updateOperationTransfer($sum, $convert, $date, $bill_id, $to_account, $row['tr_id'], $comment);
-        }
-    }
-    /**
-     * Редактирует трансфер
-     * @param $money
-     * @param $convert
-     * @param $date
-     * @param $from_account
-     * @param $to_account
-     * @param $tr_id
-     * @param $comment
-     * @return unknown_type
-     */
-    function updateOperationTransfer($money, $convert, $date, $from_account, $to_account, $tr_id, $comment)
-    {
-        $drain_money = "-$money";
+        $_SESSION['account'] = "reload";
+        $this->selectMoney($this->account_money);
+        $this->save();
 
-        $sql = "UPDATE `money` SET
-						`money` = '".$drain_money."', `date` = '".$date."', `transfer` = '".$to_account."', `comment` = '".$comment."'
-					WHERE `bill_id` = '".$from_account."' AND `user_id` = '".$this->user->getId()."' AND
-						  `drain` = '1' AND `tr_id` = '".$tr_id."'
-					";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
-        }
-        else
-        {
-            $sql = "UPDATE `money` SET
-						`money` = '".$convert."', `date` = '".$date."', `bill_id` = '".$to_account."', `comment` = '".$comment."'
-					WHERE `transfer` = '".$from_account."' AND `user_id` = '".$this->user->getId()."' AND
-						  `drain` = '0' AND `tr_id` = '".$tr_id."'
-					";
-
-
-            if ( !($result = $this->db->sql_query($sql)) )
-            {
-                message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
-            }
-            else
-            {
-                $_SESSION['user_money'] = "reload";
-
-                $this->user->initUserAccount($this->user->getId());
-                $this->user->save();
-
-                return true;
-            }
-        }
+        return true;
     }
 
     /**
@@ -454,110 +334,135 @@ class Money
      * @param $drain
      * @param $comment
      * @param $bill_id
-     * @return unknown_type
+     * @return bool
      */
     function updateMoney($id,$cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id)
     {
-        if ($cat_type == 1)
-        {
-            $sql = "INSERT INTO `category`
-						(`cat_id`, `cat_name`, `cat_parent`, `user_id`, `cat_active`)
-					VALUES
-						('', '".$cat_name."', '".$cat_id."', '".$this->user->getId()."', '1')
-					";
-
-            if ( !($result = $this->db->sql_query($sql)) )
-            {
-                message_error(GENERAL_ERROR, 'Ошибка в cохранении категории!', '', __LINE__, __FILE__, $sql);
-            }
-            else
-            {
-                $this->user->initUserCategory($this->user->getId());
-                $this->user->save();
-                $cat_id = $this->db->sql_nextid();
-            }
+        if ($cat_type == 1) {
+            $sql = "INSERT INTO category (cat_name, cat_parent, user_id, cat_active) VALUES (?,?,?,1)";
+            $this->db->query($sql, $cat_name, $cat_id, $this->user->getId());
+            $this->user->initUserCategory($this->user->getId());
+            $this->user->save();
+            $cat_id = mysql_insert_id();
         }
 
-        $sql = "UPDATE `money` SET
-						`user_id` = '".$this->user->getId()."',
-						`money` = '".$money."',
-						`date` = '".$date."',
-						`cat_id` = '".$cat_id."',
-						`bill_id` = '".$bill_id."',
-						`drain` = '".$drain."',
-						`comment` = '".$comment."'
-					WHERE `id` = '".$id."'
-				";
+        $sql = "UPDATE money SET user_id = ?, money = ?, `date` = ?, cat_id = ?, bill_id = ?,
+                    drain = ?, comment = ? WHERE id = ?";
+        $this->db->query($sql, $this->user->getId(), $money, $date, $cat_id, $bill_id, $drain, $comment, $id);
 
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
-        }
-        else
-        {
-            $_SESSION['account'] = "reload";
-            $this->selectMoney($bill_id);
-            $this->save();
+        $_SESSION['account'] = "reload";
+        $this->selectMoney($bill_id);
+        $this->save();
 
-            return true;
-        }
+        return true;
     }
 
     /**
-     * Удаляет трансфер
+     * Выбирает операцию для редактирования
+     * @param $id int Ид операции
+     * @param $cat_type
+     * @param $cat_name
+     * @param $cat_id
+     * @param $money
+     * @param $date
+     * @param $drain
+     * @param $comment
+     * @param $bill_id
+     * @return bool
+     */
+    function editOperation($id, $cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id)
+    {
+        $sql = "SELECT id, tr_id FROM money WHERE id = ?";
+        $row = $this->db->selectRow($sql, $id);
+        if (!empty($row['tr_id'])) {
+            $this->deleteOperationTransfer($row['tr_id']);
+            $this->saveMoney($cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id);
+        }else{
+            $this->updateMoney($id, $cat_type, $cat_name, $cat_id, $money, $date, $drain, $comment, $bill_id);
+        }
+    }
+
+/**
+ * Трансферты
+ */
+
+    /**
+     * Выбирает трансферт для редактирования
      * @param $id
-     * @return unknown_type
+     * @param $convert
+     * @param $sum
+     * @param $date
+     * @param $to_account
+     * @param $bill_id
+     * @param $comment
+     * @return
+     */
+    function editOperationTransfer($id, $convert, $sum, $date, $to_account, $bill_id, $comment)
+    {
+        $sql = "SELECT id, tr_id FROM money WHERE id = ?";
+        $row = $this->db->selectRow($sql, $id);
+        if (empty($row['tr_id'])) {
+            $this->deleteMoney($id);
+            $this->addOperationTransfer($sum, $convert, $date, $bill_id, $to_account, $comment);
+        }else{
+            $this->updateOperationTransfer($sum, $convert, $date, $bill_id, $to_account, $row['tr_id'], $comment);
+        }
+    }
+    /**
+     * Редактирует трансферт
+     * @param $money
+     * @param $convert
+     * @param $date
+     * @param $from_account
+     * @param $to_account
+     * @param $tr_id
+     * @param $comment
+     * @return bool
+     */
+    function updateOperationTransfer($money, $convert, $date, $from_account, $to_account, $tr_id, $comment)
+    {
+        //$drain_money = "-$money";
+        $drain_money = -1 * $money;
+
+        $sql = "UPDATE money SET money = ?, `date` = ?, transfer = ?, comment = ?
+                    WHERE bill_id = ? AND user_id = ? AND drain = '1' AND tr_id = ?";
+        $this->db->query($sql, $drain_money, $date, $to_account, $comment, $from_account,
+            $this->user->getId(), $tr_id);
+
+        $sql = "UPDATE money SET money = ?, `date` = ?, bill_id = ?, comment = ?
+                    WHERE transfer = ? AND user_id = ? AND drain = '0' AND tr_id = ?";
+        $this->db->query($sql, $convert, $date, $to_account, $comment, $from_account,
+            $this->user->getId(), $tr_id);
+
+        $_SESSION['user_money'] = "reload";
+
+        $this->user->initUserAccount($this->user->getId());
+        $this->user->save();
+
+        return true;
+    }
+
+
+    /**
+     * Удаляет трансферт
+     * @param $id int Ид операции (трансферта)
+     * @return bool
      */
     function deleteOperationTransfer($id)
     {
 
-        $sql = "DELETE FROM `money` WHERE `tr_id` = '".$id."' and `user_id` = '".$this->user->getId()."'";
+        $sql = "DELETE FROM money WHERE tr_id = ? and user_id = ?";
+        $this->db->query($sql, $id, $this->user->getId());
 
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в удалении перечислений!', '', __LINE__, __FILE__, $sql);
-        }
-        else
-        {
-            $_SESSION['user_money'] = "reload";
-            $this->user->initUserAccount($this->user->getId());
-            $this->user->save();
+        $_SESSION['user_money'] = "reload";
+        $this->user->initUserAccount($this->user->getId());
+        $this->user->save();
 
-            return true;
-        }
+        return true;
     }
 
-    /**
-     * Добавляет операцию к депозитному счёту
-     * @deprecated
-     * @param $bill_id
-     * @param $date
-     * @param $sum
-     * @param $to_account
-     * @param $convert
-     * @return unknown_type
-     */
-    function addOperationDeposit($bill_id, $date, $sum, $to_account, $convert)
-    {
-        $sql = "select `balance_for_percent`, `total_sum` from `account_deposit_list` where `account_id` = '".$bill_id."' order by `date_operation`";
-        $result = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrow($result);
 
-        $balance_for_percent = $row['balance_for_percent'] + $sum;
-        $total_sum = $row['total_sum'] + $sum;
 
-        $sql = "INSERT INTO `account_deposit_list`
-					(`account_id`, `date_operation`, `sum_operation`, `balance_for_percent`, `accrued_interest`, `added_interest`, `description`, `total_sum`)
-				VALUES
-					('".$bill_id."', '".$date."', '".$sum."', '".$balance_for_percent."', '0', '0', 'Пополнение депозита', '".$total_sum."')
-				";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
-        }
-        $this->addOperationTransfer($sum, $convert, $date, $to_account, $bill_id, 'Перевод на депозит');
-    }
 
     /**
      * Добавляет трансфер с одного на другой счёт
@@ -606,29 +511,6 @@ class Money
             }
         }
     }
-
-    /**
-     * Удаляет операцию
-     * @param $id
-     * @return unknown_type
-     */
-    function deleteMoney($id)
-    {
-        $sql = "DELETE FROM `money` WHERE `id` = '".$id."' and `user_id` = '".$this->user->getId()."'";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в удалении счета!', '', __LINE__, __FILE__, $sql);
-        }
-        else
-        {
-            $_SESSION['account'] = "reload";
-            $this->selectMoney($account_money);
-            $this->save();
-
-            return true;
-        }
-    } // deleteMOney
 
     /**
      * Возвращает список транзакций пользователя по указанным счетам за указанный период
@@ -1355,7 +1237,40 @@ class Money
         return $res;
     } // _transformInterval
 
+/**
+ * Устаревшие, если на них не будет найдено ссылок - их нужно будет удалить
+ * @deprecated
+ */
 
-} // class
+    /**
+     * Добавляет операцию к депозитному счёту
+     * @deprecated
+     * @param $bill_id
+     * @param $date
+     * @param $sum
+     * @param $to_account
+     * @param $convert
+     * @return unknown_type
+     */
+    private function addOperationDeposit($bill_id, $date, $sum, $to_account, $convert)
+    {
+        $sql = "select `balance_for_percent`, `total_sum` from `account_deposit_list` where `account_id` = '".$bill_id."' order by `date_operation`";
+        $result = $this->db->sql_query($sql);
+        $row = $this->db->sql_fetchrow($result);
 
-?>
+        $balance_for_percent = $row['balance_for_percent'] + $sum;
+        $total_sum = $row['total_sum'] + $sum;
+
+        $sql = "INSERT INTO `account_deposit_list`
+                    (`account_id`, `date_operation`, `sum_operation`, `balance_for_percent`, `accrued_interest`, `added_interest`, `description`, `total_sum`)
+                VALUES
+                    ('".$bill_id."', '".$date."', '".$sum."', '".$balance_for_percent."', '0', '0', 'Пополнение депозита', '".$total_sum."')
+                ";
+
+        if ( !($result = $this->db->sql_query($sql)) )
+        {
+            message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
+        }
+        $this->addOperationTransfer($sum, $convert, $date, $to_account, $bill_id, 'Перевод на депозит');
+    }
+}
