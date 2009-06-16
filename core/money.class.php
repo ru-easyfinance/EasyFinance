@@ -266,29 +266,7 @@ class Money
             $this->user->save();
             $cat_id = mysql_insert_id();
         }
-//TODO Эта штука будет работать по другому, обновляться планфакт будет разом для всех категорий
-/*
-        $sql = "SELECT pf.total_sum, pf.plan_id FROM plan_fact pf
-            LEFT JOIN plan_accounts pa ON pa.plan_id = pf.plan_id
-            WHERE pf.drain= ? AND pf.category_id = ? AND pa.account_id = ?";
-        $row = $this->db->selectRow($sql, $drain, $cat_id, $bill_id);
-        if (count($row) > 0) {
-            $money2 = $money;
 
-            if ($drain == 1) {
-                $money2 = $money * -1;
-            }
-
-            $total_sum = $money2 + $row['total_sum'];
-            $sql = "UPDATE plan_fact SET
-							`total_sum` = '".$total_sum."'
-						WHERE `category_id` = '".$cat_id."' AND
-							  `plan_id` = '".$row['plan_id']."' and
-							  `drain` = '".$drain."'";
-            $this->db->sql_query($sql);
-
-        }
-*/
         if ($impID && $impDate) {
             $sql = "INSERT INTO money (user_id, money, `date`, cat_id, bill_id, drain, comment,
                 imp_id, imp_date) VALUES (?,?,?,?,?,?,?,?,?)";
@@ -461,11 +439,8 @@ class Money
         return true;
     }
 
-
-
-
     /**
-     * Добавляет трансфер с одного на другой счёт
+     * Добавляет трансферт с одного на другой счёт
      * @param $money float Деньги
      * @param $convert Конвертированные в нужную валюту деньги
      * @param $date Дата, когда совершаем трансфер
@@ -479,42 +454,129 @@ class Money
         $tr_id = md5($this->user->getId()."+".date("d-m-Y H-i-s"));
         $drain_money = $money * -1; // 0 - доход, 1- расход
 
-        $sql = "INSERT INTO `money`
-					(`id`, `user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment`, `transfer`, `tr_id`)
-				VALUES
-					('', '".$this->user->getId()."', '".$drain_money."', '".$date."', '-1', '".$from_account."', '1', '".$comment."', '".$to_account."', '".$tr_id."')
-				";
+        $sql = "INSERT INTO money (user_id, money, `date`, cat_id, bill_id, drain, comment,transfer,
+            tr_id) VALUES (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)";
+        $this->db->query($sql,
+            $this->user->getId(), $drain_money, $date, '-1', $from_account, '1',$comment, $to_account, $tr_id,
+            $this->user->getId(), $convert, $date, '-1', $to_account, '0', $comment , $from_account, $tr_id);
+
+        $_SESSION['user_money'] = "reload";
+
+        $this->user->initUserAccount($this->user->getId());
+        $this->user->save();
+
+        return true;
+    }
+
+/**
+ * Устаревшие, если на них не будет найдено ссылок - их нужно будет удалить
+ * @deprecated
+ */
+
+    /**
+     * Подготавливает массив дат от начала интервала до его конца
+     * @deprecated
+     * @param array $dateFrom Массив с датой начала диапазона, день месяц год
+     * @param array $dateTo Массив с датой окончания диапазона, день месяц год
+     *
+     * @return array Массив месяцев с разбивкой по годам
+     *
+     * @throws Exception
+     */
+    private function _prepareInterval($dateFrom,$dateTo) {
+        $res = array();
+        $yearFrom = (int) $dateFrom[2];
+        $yearTo = (int) $dateTo[2];
+        $monthFrom = (int) $dateFrom[1];
+        $monthTo = (int) $dateTo[1];
+
+        // Перебираем годы
+        $y=$yearFrom;
+        while ($y <= $yearTo) {
+            // Внутри года перебираем месяцы
+            // Месяц начала диапазона. Если год начала диапазона, то и месяц начала диапазона
+            $ms = ($y == $yearFrom)?$monthFrom:1;
+            // Месяц окончания диапазона. Если год окончания диапазона, то и месяц окончания диапазона
+            $me = ($y == $yearTo)?$monthTo:12;
+            // Создаем массив месяцев
+            for ($m=$ms;$m<=$me;$m++) $res[$y][$m] = 0;
+            $y++;
+        } // годы
+
+        return $res;
+    } // _prepareInterval
+
+    /**
+     * Преоразует интервал из формата [Год][Месяц_Числовой]=>Значение в формат ["Название месяца,Год"]=>Значение
+     * @deprecated
+     * @param array $interval Интервал для преобразования
+     *
+     * @return array Преобразованный массив
+     *
+     * @throws Exception
+     */
+    private function _transformInterval($interval) {
+        // Русский перевод месяцев
+        $monthNames = array(
+       '1'   => 'Январь',
+       '2'   => 'Февраль',
+       '3'   => 'Март',
+       '4'   => 'Апрель',
+       '5'   => 'Май',
+       '6'   => 'Июнь',
+       '7'   => 'Июль',
+       '8'   => 'Август',
+       '9'   => 'Сентябрь',
+       '10'  => 'Октябрь',
+       '11'  => 'Ноябрь',
+       '12'  => 'Декабрь',
+        );
+
+        $res =array();
+        foreach ($interval as $year=>$months) {
+            foreach ($months as $month=>$value) {
+                $monthName = $monthNames[$month];
+                $res["$monthName,$year"] = $value;
+            } // Месяцы
+        } // годы
+        return $res;
+    } // _transformInterval
+
+    /**
+     * Добавляет операцию к депозитному счёту
+     * @deprecated
+     * @param $bill_id
+     * @param $date
+     * @param $sum
+     * @param $to_account
+     * @param $convert
+     * @return unknown_type
+     */
+    private function addOperationDeposit($bill_id, $date, $sum, $to_account, $convert)
+    {
+        $sql = "select `balance_for_percent`, `total_sum` from `account_deposit_list` where `account_id` = '".$bill_id."' order by `date_operation`";
+        $result = $this->db->sql_query($sql);
+        $row = $this->db->sql_fetchrow($result);
+
+        $balance_for_percent = $row['balance_for_percent'] + $sum;
+        $total_sum = $row['total_sum'] + $sum;
+
+        $sql = "INSERT INTO `account_deposit_list`
+                    (`account_id`, `date_operation`, `sum_operation`, `balance_for_percent`, `accrued_interest`, `added_interest`, `description`, `total_sum`)
+                VALUES
+                    ('".$bill_id."', '".$date."', '".$sum."', '".$balance_for_percent."', '0', '0', 'Пополнение депозита', '".$total_sum."')
+                ";
 
         if ( !($result = $this->db->sql_query($sql)) )
         {
             message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
         }
-        else
-        {
-            $sql = "INSERT INTO `money`
-						(`id`, `user_id`, `money`, `date`, `cat_id`, `bill_id`, `drain`, `comment`, `transfer`, `tr_id`)
-					VALUES
-						('', '".$this->user->getId()."', '".$convert."', '".$date."', '-1', '".$to_account."', '0', '".$comment."' , '".$from_account."', '".$tr_id."')
-					";
-            if ( !($result = $this->db->sql_query($sql)) )
-            {
-                message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
-            }
-            else
-            {
-                $_SESSION['user_money'] = "reload";
-
-                $this->user->initUserAccount($this->user->getId());
-                $this->user->save();
-
-                return true;
-            }
-        }
+        $this->addOperationTransfer($sum, $convert, $date, $to_account, $bill_id, 'Перевод на депозит');
     }
 
     /**
      * Возвращает список транзакций пользователя по указанным счетам за указанный период
-     *
+     * @deprecated
      * @param string $userID Код пользователя
      * @param array $accounts Список кодов счетов
      * @param string $dateFrom Дата начала периода
@@ -526,7 +588,7 @@ class Money
      * @throws Exception
      * @access public
      */
-    public function getTransactions($userID,$accounts=array(),$dateFrom='',$dateTo='',$account,$category) {
+    private function getTransactions($userID,$accounts=array(),$dateFrom='',$dateTo='',$account,$category) {
         if (count($accounts)==0) throw new Exception('Не указаны счета',1);
         if (!is_a($account,'Account')) throw new Exception('Объект Account неверного типа',1);
         if (!is_a($category,'Category')) throw new Exception('Объект Category неверного типа',1);
@@ -567,29 +629,29 @@ class Money
             foreach ($rows as $r) {
                 $cn = ($r['money']>=0)?'перевод со счета':'перевод на счет';
                 $tr[]=array(
-  					'amount'=>$r['money'],
-  					'date'=>$r['d'],
-  					'comment'=>preg_replace('/[\n\r]/','',$r['comment']),
-  					'category'=>($r['cat_id']==-1)?$cn:$userCategories[$r['cat_id']],
-  					'receiver_account'=>$userAccounts[$r['transfer']],
-  					'payer_account'=>$userAccounts[$r['bill_id']],
+                    'amount'=>$r['money'],
+                    'date'=>$r['d'],
+                    'comment'=>preg_replace('/[\n\r]/','',$r['comment']),
+                    'category'=>($r['cat_id']==-1)?$cn:$userCategories[$r['cat_id']],
+                    'receiver_account'=>$userAccounts[$r['transfer']],
+                    'payer_account'=>$userAccounts[$r['bill_id']],
                 );
             } // while
             //pre($myRes);
             return $tr;
-        }  	// if result
+        }   // if result
     } // getTransactions
 
     /**
      * Возвращает список всех проведенных импортов с точностью до минуты
-     *
+     * @deprecated
      * @param string $userID Код пользователя
      *
      * @return array Список импортов. Значение - дата импорта
      * @throws Exception
      * @access public
      */
-    public function getImportsList($userID) {
+    private function getImportsList($userID) {
         $sql = "select distinct imp_id, DATE_FORMAT(imp_date,'%d.%m.%Y %H:%i') as idt from money where imp_id is not null and user_id='$userID'";
 
         if ( !($result = $this->db->sql_query($sql)) )
@@ -605,19 +667,19 @@ class Money
             if (count($rows)>0) {
                 foreach ($rows as $r) {
                     $tr[] = array(
-					'imp_id' => $r['imp_id'],
-					'imp_date' => $r['idt'],
+                    'imp_id' => $r['imp_id'],
+                    'imp_date' => $r['idt'],
                     );
                 } // while
             } // if count > 0
             //pre($myRes);
             return $tr;
-        }  	// if result
+        }   // if result
     } // getImportsList
 
     /**
      * Откатывает указанный импорт
-     *
+     * @deprecated
      * @param string $impID Код импорта
      * @param string $userID Код пользователя
      *
@@ -625,7 +687,7 @@ class Money
      * @throws Exception
      * @access public
      */
-    public function rollbackImport($impID,$userID) {
+    private function rollbackImport($impID,$userID) {
         // Отыскиваем счет, в который был сделан импорт, чтобы потом обновить куки по этому счету
         $sql = "select bill_id from money where imp_id='$impID'";
         if ( !($result = $this->db->sql_query($sql)) )
@@ -637,7 +699,7 @@ class Money
             $r = $this->db->sql_fetchrow($result);
             //pre($rows);
             $accountID = $r['bill_id'];
-        }  	// if result
+        }   // if result
 
         // Удаляем все записи импорта
         $sql = "delete from money where imp_id='$impID' AND user_id='$userID'";
@@ -657,7 +719,7 @@ class Money
 
     /**
      * Выводит данные о доходе пользователя за период с разбивкой по категориям доходов
-     *
+     * @deprecated
      * @param array $rpd Параметры отчета
      * userID - код пользователя
      * dateFrom - дата начала периода в формате дд.мм.ггг
@@ -674,7 +736,7 @@ class Money
      * @throws Exception
      * @access public
      */
-    public function getProfit($rpd,$category) {
+    private function getProfit($rpd,$category) {
         $userID = $rpd['userID'];
         $currencyRates = $rpd['currency_rates'];
         $currencySelected = $rpd['currency'];
@@ -731,9 +793,9 @@ class Money
                     //$profits[$userCategories[$catID]] = $sum;
                     //$profits[$catID] = $sum;
                     $profits[$catID] = array(
-  					'catName' => $userCategories[$catID],
-  					'sum' => $sum,
-  					'cn' => $r['cn'],
+                    'catName' => $userCategories[$catID],
+                    'sum' => $sum,
+                    'cn' => $r['cn'],
                     );
 
                 } // while
@@ -745,7 +807,7 @@ class Money
             } // foreach
 
             return $profits;
-        }  	// if result
+        }   // if result
 
 
         //$profits = array('Зарплата'=>30000, 'Home-money'=>10000);
@@ -754,7 +816,7 @@ class Money
 
     /**
      * Выводит данные о доходах пользователя за период с разбивкой по категориям доходов
-     *
+     * @deprecated
      * @param array $rpd Параметры отчета
      * userID - код пользователя
      * dateFrom - дата начала периода в формате дд.мм.ггг
@@ -766,12 +828,12 @@ class Money
      *
      * @return array Данные о доходе. Хэш.
      * название категории => разбивка дохода по дням и счетам. Хэш
-     * 	дата => список счетов. Хэш
-     * 		счет => величина дохода в рублях?
+     *  дата => список счетов. Хэш
+     *      счет => величина дохода в рублях?
      * @throws Exception
      * @access public
      */
-    public function getDetailedProfit($rpd) {
+    private function getDetailedProfit($rpd) {
         $userID = $rpd['userID'];
         $currencyRates = $rpd['currency_rates'];
         $currencySelected = $rpd['currency'];
@@ -827,21 +889,21 @@ class Money
                     // Формируем результа
                     $profit[$categoryName]['categoryID'] = $r['cid'];
                     $profit[$categoryName]['dates'][] = array (
-  					'day' => $dt,
-  					'account' => $accountName,
-  					'sum' => $sum,
+                    'day' => $dt,
+                    'account' => $accountName,
+                    'sum' => $sum,
                     );
 
                 } // foreach
             } // if count > 0
             return $profit;
-        }  	// if result
+        }   // if result
 
     } // getDetailedProfit
 
     /**
      * Выводит данные о расходах пользователя за период с разбивкой по категориям расходов
-     *
+     * @deprecated
      * @param array $rpd Параметры отчета
      * userID - код пользователя
      * dateFrom - дата начала периода в формате дд.мм.ггг
@@ -853,12 +915,12 @@ class Money
      *
      * @return array Данные о доходе. Хэш.
      * название категории => разбивка дохода по дням и счетам. Хэш
-     * 	дата => список счетов. Хэш
-     * 		счет => величина дохода в рублях?
+     *  дата => список счетов. Хэш
+     *      счет => величина дохода в рублях?
      * @throws Exception
      * @access public
      */
-    public function getDetailedLoss($rpd) {
+    private function getDetailedLoss($rpd) {
         $userID = $rpd['userID'];
         $currencyRates = $rpd['currency_rates'];
         $currencySelected = $rpd['currency'];
@@ -914,22 +976,22 @@ class Money
                     // Формируем результа
                     $loss[$categoryName]['categoryID'] = $r['cid'];
                     $loss[$categoryName]['dates'][] = array (
-  					'day' => $dt,
-  					'account' => $accountName,
-  					'sum' => $sum,
+                    'day' => $dt,
+                    'account' => $accountName,
+                    'sum' => $sum,
                     );
 
                 } // foreach
             } // if count > 0
 
             return $loss;
-        }  	// if result
+        }   // if result
 
     } // getDetailedLoss
 
     /**
      * Выводит данные о расходах пользователя за период с разбивкой по категориям расходов
-     *
+     * @deprecated
      * @param array $rpd Параметры отчета
      * userID - код пользователя
      * dateFrom - дата начала периода в формате дд.мм.ггг
@@ -946,7 +1008,7 @@ class Money
      * @throws Exception
      * @access public
      */
-    public function getLoss($rpd, $category) {
+    private function getLoss($rpd, $category) {
         $userID = $rpd['userID'];
         $currencyRates = $rpd['currency_rates'];
         $currencySelected = $rpd['currency'];
@@ -1005,9 +1067,9 @@ class Money
                     $totalSum += $sum;
 
                     $loss[$catID] = array(
-  					'catName' => $userCategories[$catID],
-  					'sum' => $sum,
-  					'cn' => $r['cn'],
+                    'catName' => $userCategories[$catID],
+                    'sum' => $sum,
+                    'cn' => $r['cn'],
                     );
 
                 } // while
@@ -1024,7 +1086,7 @@ class Money
 
     /**
      * Выводит данные о расходах и доходах пользователя за период с разбивкой по месяцам
-     *
+     * @deprecated
      * @param array $rpd Параметры отчета
      * userID - код пользователя
      * dateFrom - дата начала периода в формате дд.мм.ггг
@@ -1036,15 +1098,15 @@ class Money
      *
      * @return array Данные о расходах и доходах. Хэш
      * profit
-     * 	"название месяца,номер года" => величина дохода
+     *  "название месяца,номер года" => величина дохода
      * loss
-     * 	"название месяца,номер года" => величина расхода
+     *  "название месяца,номер года" => величина расхода
      *
      * Количество ключей "месяц, номер года" у profit & loss должно совпадать
      * @throws Exception
      * @access public
      */
-    public function getProfitAndLoss($rpd) {
+    private  function getProfitAndLoss($rpd) {
         $userID = $rpd['userID'];
         $currencyRates = $rpd['currency_rates'];
         $currencySelected = $rpd['currency'];
@@ -1165,112 +1227,4 @@ class Money
         */
         return $res;
     } // getProfitAndLoss
-
-    /**
-     * Подготавливает массив дат от начала интервала до его конца
-     *
-     * @param array $dateFrom Массив с датой начала диапазона, день месяц год
-     * @param array $dateTo Массив с датой окончания диапазона, день месяц год
-     *
-     * @return array Массив месяцев с разбивкой по годам
-     *
-     * @throws Exception
-     * @access public
-     */
-    private function _prepareInterval($dateFrom,$dateTo) {
-        $res = array();
-        $yearFrom = (int) $dateFrom[2];
-        $yearTo = (int) $dateTo[2];
-        $monthFrom = (int) $dateFrom[1];
-        $monthTo = (int) $dateTo[1];
-
-        // Перебираем годы
-        $y=$yearFrom;
-        while ($y <= $yearTo) {
-            // Внутри года перебираем месяцы
-            // Месяц начала диапазона. Если год начала диапазона, то и месяц начала диапазона
-            $ms = ($y == $yearFrom)?$monthFrom:1;
-            // Месяц окончания диапазона. Если год окончания диапазона, то и месяц окончания диапазона
-            $me = ($y == $yearTo)?$monthTo:12;
-            // Создаем массив месяцев
-            for ($m=$ms;$m<=$me;$m++) $res[$y][$m] = 0;
-            $y++;
-        } // годы
-
-        return $res;
-    } // _prepareInterval
-
-    /**
-     * Преоразует интервал из формата [Год][Месяц_Числовой]=>Значение в формат ["Название месяца,Год"]=>Значение
-     *
-     * @param array $interval Интервал для преобразования
-     *
-     * @return array Преобразованный массив
-     *
-     * @throws Exception
-     * @access public
-     */
-    private function _transformInterval($interval) {
-        // Русский перевод месяцев
-        $monthNames = array(
-       '1'   => 'Январь',
-       '2'   => 'Февраль',
-       '3'   => 'Март',
-       '4'   => 'Апрель',
-       '5'   => 'Май',
-       '6'   => 'Июнь',
-       '7'   => 'Июль',
-       '8'   => 'Август',
-       '9'   => 'Сентябрь',
-       '10'  => 'Октябрь',
-       '11'  => 'Ноябрь',
-       '12'  => 'Декабрь',
-        );
-
-        $res =array();
-        foreach ($interval as $year=>$months) {
-            foreach ($months as $month=>$value) {
-                $monthName = $monthNames[$month];
-                $res["$monthName,$year"] = $value;
-            } // Месяцы
-        } // годы
-        return $res;
-    } // _transformInterval
-
-/**
- * Устаревшие, если на них не будет найдено ссылок - их нужно будет удалить
- * @deprecated
- */
-
-    /**
-     * Добавляет операцию к депозитному счёту
-     * @deprecated
-     * @param $bill_id
-     * @param $date
-     * @param $sum
-     * @param $to_account
-     * @param $convert
-     * @return unknown_type
-     */
-    private function addOperationDeposit($bill_id, $date, $sum, $to_account, $convert)
-    {
-        $sql = "select `balance_for_percent`, `total_sum` from `account_deposit_list` where `account_id` = '".$bill_id."' order by `date_operation`";
-        $result = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrow($result);
-
-        $balance_for_percent = $row['balance_for_percent'] + $sum;
-        $total_sum = $row['total_sum'] + $sum;
-
-        $sql = "INSERT INTO `account_deposit_list`
-                    (`account_id`, `date_operation`, `sum_operation`, `balance_for_percent`, `accrued_interest`, `added_interest`, `description`, `total_sum`)
-                VALUES
-                    ('".$bill_id."', '".$date."', '".$sum."', '".$balance_for_percent."', '0', '0', 'Пополнение депозита', '".$total_sum."')
-                ";
-
-        if ( !($result = $this->db->sql_query($sql)) )
-        {
-            message_error(GENERAL_ERROR, 'Ошибка в cохранении финансов!', '', __LINE__, __FILE__, $sql);
-        }
-        $this->addOperationTransfer($sum, $convert, $date, $to_account, $bill_id, 'Перевод на депозит');
-    }
 }

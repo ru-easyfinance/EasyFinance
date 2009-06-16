@@ -8,6 +8,7 @@
  */
 
 // Устанавливаем константу последней ревизии
+//TODO Переписать на использование утилиты svnversion
 $Rev = "$LastChangedRevision$"; //DO NOT EDIT!
 $Rev = explode(" ", $Rev);
 define('REVISION', $Rev[1]);
