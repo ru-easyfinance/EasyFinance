@@ -17,7 +17,7 @@ class Category_Controller extends Template_Controller
     {
         $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'categories/categories');
-        $this->model = new Category();
+        $this->model = new Category_Model();
     }
 
     /**
@@ -34,9 +34,9 @@ class Category_Controller extends Template_Controller
         $this->model->loadUserTree();
         $this->model->loadSumCategories($sys_currency, $param);
 
-        $tpl->assign("categories", $this->model->tree);
-        $tpl->assign("sys_categories", $this->model->system_categories);
-        $tpl->assign("template", "default");
+        $this->tpl->assign("categories", $this->model->tree);
+        $this->tpl->assign("sys_categories", $this->model->system_categories);
+        $this->tpl->assign("template", "default");
     }
 
     /**
@@ -46,31 +46,27 @@ class Category_Controller extends Template_Controller
      */
     function add($args)
     {
-        $category['user_id'] = $_SESSION['user']['user_id'];
-        $category['cat_name'] = @html($_GET['name']);
-        $category['type'] = @html($_GET['type']);
-        $category['cat_parent'] = @html($_GET['parent']);
-        $category['system_category_id'] = @html($_GET['system']);
-        $category['cat_id'] = @html($_GET['category_id']);
-        $category['visible'] = 1;
-        $category['cat_active'] = 1;
-        $category['often'] = @html($_GET['often']);
+        $category['user_id']            = Core::getInstance()->user->getId();
+        $category['cat_name']           = htmlspecialchars(@$_POST['name']);
+        $category['type']               = htmlspecialchars(@$_POST['type']);
+        $category['cat_parent']         = htmlspecialchars(@$_POST['parent']);
+        $category['system_category_id'] = (int)@$_POST['system'];
+        $category['cat_id']             = (int)@$_POST['category_id'];
+        $category['visible']            = 1;
+        $category['cat_active']         = 1;
+        $category['often']              = htmlspecialchars(@$_POST['often']);
 
-        if (!empty($category['cat_id']))
-        {
-            $cc->updateCategory($category, &$dbs);
-        }else{
-            if (!$cc->createNewCategory($category, &$dbs))
-            {
-                $tpl->assign("error", "Категория не добавлена");
-            }
+        if (!empty($category['cat_id'])) {
+            $this->model->updateCategory($category);
+        } elseif (!$this->model->createNewCategory($category)) {
+            $this->tpl->assign("error", "Категория не добавлена");
         }
-        $cc->loadUserTree();
-        $cc->loadSumCategories($sys_currency);
+        $this->model->loadUserTree();
+        $this->model->loadSumCategories($sys_currency); //FIXME Откуда она взялась? Из конфига?
 
-        $tpl->assign("categories", $cc->tree);
-        $tpl->assign("sys_categories", $cc->system_categories);
-        echo $tpl->fetch("categories/categories.list.html");
+        $this->tpl->assign("categories", $this->model->tree);
+        $this->tpl->assign("sys_categories", $this->model->system_categories);
+        die ($this->tpl->fetch("categories/categories.list.html"));
     }
 
     /**
@@ -80,14 +76,18 @@ class Category_Controller extends Template_Controller
      */
     function edit($args)
     {
-        $id = html($_GET['id']);
+        $id = (int)$_POST['id'];
 
-        $edit = $cc->selectCategoryId($id, &$dbs);
+        $edit = $this->model->selectCategoryId($id);
+        $this->tpl->assign("edit", $edit);
 
-        $tpl->assign("edit", $edit[0]);
-        $tpl->assign("categories", $cc->tree);
-        $tpl->assign("sys_categories", $cc->system_categories);
-        echo $tpl->fetch("categories/categories.block_create.html");
+        if (count($edit) == 0) {
+            die('<div class="error">Похоже что у вас нет прав для редактирования этой категории</div>');
+        } else {
+            $this->tpl->assign("categories", $this->model->tree);
+            $this->tpl->assign("sys_categories", $this->model->system_categories);
+            die ($this->tpl->fetch("categories/categories.block_create.html"));
+        }
     }
 
     function del ($args)
@@ -101,7 +101,7 @@ class Category_Controller extends Template_Controller
         $cc->loadSumCategories($sys_currency);
 
         $tpl->assign("categories", $cc->tree);
-        echo $tpl->fetch("categories/categories.list.html");
+        die ($tpl->fetch("categories/categories.list.html"));
     }
 
     function visible ($args)
@@ -117,14 +117,17 @@ class Category_Controller extends Template_Controller
         $cc->loadSumCategories($sys_currency);
 
         $tpl->assign("categories", $cc->tree);
-        echo $tpl->fetch("categories/categories.list.html");
-        exit;
+        die($tpl->fetch("categories/categories.list.html"));
     }
-//// Если запрос пришел не от аякс
-//if (!isset($_GET['ajax']) || !$_GET['ajax']) {
-//	include(SYS_DIR_MOD."categories/categories.module.php");
-//} else {
-//	//include(SYS_DIR_MOD."categories/ajax/categories.ajax.php");
-//	include(SYS_DIR_MOD."categories/categories.module.php");
-//}
+
+    /**
+     * Возвращает форму для создания новой категории
+     * @return html
+     */
+    function reload_block_create()
+    {
+        $this->tpl->assign("categories", $this->model->tree);
+        $this->tpl->assign("sys_categories", $this->model->system_categories);
+        die($this->tpl->fetch("categories/categories.block_create.html"));
+    }
 }
