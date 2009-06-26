@@ -1,6 +1,6 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс контроллера для модуля logi
+ * Класс контроллера для модуля категорий
  * @copyright http://home-money.ru/
  * SVN $Id$
  */
@@ -90,34 +90,43 @@ class Category_Controller extends Template_Controller
         }
     }
 
+    /**
+     * Удаляет указанную категорию
+     * @param $args array mixed
+     * @return void
+     */
     function del ($args)
     {
-        $id = html($_GET['id']);
-        if (!$cc->deleteCategory($id, &$dbs))
-        {
-            $tpl->assign("error", "Категория не удалена");
+        $id = (int)$_POST['id'];
+        if (!$this->model->deleteCategory($id)) {
+            $this->tpl->assign("error", "Категория не удалена");
         }
-        $cc->loadUserTree();
-        $cc->loadSumCategories($sys_currency);
+        $this->model->loadUserTree();
+        //FIXME не ясно что делать с $sys_currency
+        $this->model->loadSumCategories($sys_currency);
 
-        $tpl->assign("categories", $cc->tree);
-        die ($tpl->fetch("categories/categories.list.html"));
+        $this->tpl->assign("categories", $cc->tree);
+        die ($this->tpl->fetch("categories/categories.list.html"));
     }
 
+    /**
+     * Сдела
+     * @param $args
+     * @return unknown_type
+     */
     function visible ($args)
     {
-        $id = html($_GET['id']);
-        $visible = html($_GET['visible']);
+        $id = (int)$_POST['id'];
+        $visible = (int)$_POST['visible'];
 
-        if (!$cc->visibleCategory($id, $visible, &$dbs))
-        {
-            $tpl->assign("error", "Категория не скрыта");
+        if (!$this->model->visibleCategory($id, $visible)) {
+            $this->tpl->assign("error", "Категория не скрыта");
         }
-        $cc->loadUserTree();
-        $cc->loadSumCategories($sys_currency);
+        $this->model->loadUserTree();
+        $this->model->loadSumCategories($sys_currency);
 
-        $tpl->assign("categories", $cc->tree);
-        die($tpl->fetch("categories/categories.list.html"));
+        $this->tpl->assign("categories", $this->model->tree);
+        die($this->tpl->fetch("categories/categories.list.html"));
     }
 
     /**

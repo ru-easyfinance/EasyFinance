@@ -288,7 +288,7 @@ class Category_Model {
     public function deleteCategory($id)
     {
         $sql = "UPDATE category SET cat_active = '0' WHERE cat_parent = ? AND user_id = ?";
-        if (!$dbs->query($sql, $id, $this->user_id)) {
+        if (!$this->db->query($sql, $id, $this->user_id)) {
             return false;
         }
         return true;

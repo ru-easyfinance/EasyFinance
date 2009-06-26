@@ -180,12 +180,13 @@ class User
     public function initUserCurrency ()
     {
         if (isset($this->props['user_currency_list'])) {
-            $currency = $this->props['user_currency_list'];
-            if (!is_array($currency)) {
+            if (!is_array($this->props['user_currency_list'])) {
                 trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
-                $currency = array();
+                $this->props['user_currency_list'] = array();
             }
             return true;
+        } else {
+            $this->props['user_currency_list'] = array();
         }
         return true;
     }

@@ -26,6 +26,12 @@ class Core
     public static $user = null;
 
     /**
+     * Ссылка на экземпляр класса с валютами
+     * @var Currency
+     */
+    public static $currency = null;
+
+    /**
      * Возвращает ссылку на себя
      * @example Core::getInstance()->parse_url();
      *
@@ -96,10 +102,5 @@ class Core
         if (!self::$user) {
             self::$user = new User();
         }
-        //self::$user->
     }
-
-
-
-
 }
