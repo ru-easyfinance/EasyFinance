@@ -8,7 +8,7 @@ class Calendar_Controller extends Template_Controller
 {
     private $model = null;
     private $tpl = null;
-
+    
     /**
      * Конструктор класса
      * @return void
@@ -28,6 +28,26 @@ class Calendar_Controller extends Template_Controller
     function index($args)
     {
 
+    }
+
+    /**
+     * Добавляет новое событие
+     * @param $args array mixed Какие-нибудь аргументы
+     * @return void
+     */
+    function add($args)
+    {
+        $this->model->add();
+    }
+
+    /**
+     * Редактирует событие
+     * @param $args array mixed Какие-нибудь аргументы
+     * @return void
+     */
+    function edit($args)
+    {
+        die(var_dump($_POST));
     }
 
     /**

@@ -203,8 +203,3 @@
     .full-calendar-month .yellow td { 
         background: yellow; 
     }
-    li {
-		list-style-image:none;
-		list-style-position:outside;
-		list-style-type:none;
-    }
