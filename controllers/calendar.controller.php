@@ -42,39 +42,43 @@ class Calendar_Controller extends Template_Controller
                     id => 1,
                     key => 34345,
                     title => "Длинное событие",
-                    dt => mktime(0,0,0,6,6),
+                    dt => mktime(14,0,0,6,6),
                     start => mktime(14,0,0,6,6),
                     end => mktime(14,0,0,6,11),
                     className => 'yellow',
+                    count => 6,
+                    repeat => 1,
                     comment => "Описание этого длинного события на русском языке",
                     draggable => true
                 ),
                 array(
                     id => 2,
                     title => "Повторяющееся событие",
-                    dt => mktime(0,0,0,6,2),
+                    dt => mktime(14,0,0,6,2),
                     start => mktime(14,0,0,6,2),
+                    count => 3,
+                    repeat => 7,
                     comment => 'Описание',
                     draggable => true
                 ),
                 array(
                     id => 2,
                     title => "Повторяющееся событие",
-                    dt => mktime(0,0,0,6,9),
+                    dt => mktime(14,0,0,6,9),
                     start => mktime(14,0,0,6,9),
                     draggable => true
                 ),
                 array(
                     id => 2,
                     title => "Повторяющееся событие",
-                    dt => mktime(0,0,0,6,16),
+                    dt => mktime(14,0,0,6,16),
                     start => mktime(14,0,0,6,16),
                     draggable => true
                 ),
                 array(
                     id => 3,
                     title => "Общение",
-                    dt => mktime(0,0,0,6,20),
+                    dt => mktime(9,0,0,6,20),
                     start => mktime(9,0,0,6,20),
                     className => 'yellow',
                     draggable => true
