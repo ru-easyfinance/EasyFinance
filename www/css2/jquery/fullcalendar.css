@@ -187,15 +187,18 @@
      }
     .full-calendar-month .green td { 
         background: green;
-        color: white 
+        color: white;
+        cursor:default;
     }
     .full-calendar-month .red td { 
         background: red;
-        color: white 
+        color: white;
+        cursor:default;
     }
     .full-calendar-month .blue td { 
         background: blue;
-        color: white 
+        color: white;
+        cursor:default;
     }
     .full-calendar-month .yellow td { 
         background: yellow; 
