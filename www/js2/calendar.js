@@ -9,10 +9,10 @@ $(document).ready(function() {
     function clearForm() {
         $('form #key,#title,#date_start,#date_end,#date,#time,#count,#comment').val('');
         $('form #repeat option').each(function(){ 
-            $(this).removeAttr('selected')
+            $(this).removeAttr('selected').removeAttr('disabled');
         });
     }
-
+    $('#date,#date_start,#date_end').datepicker({showOn: 'button'});
     $('#datepicker').datepicker({ numberOfMonths: 3 });
     $('#datepicker').datepicker('disable');
     $('#time').timeEntry({show24Hours: true});
@@ -31,14 +31,17 @@ $(document).ready(function() {
             nextMonth: '>',
             nextYear:  '>>'
         },
-        showTime: true,
+        showTime: 'guess',
         timeFormat: "G:i",
         monthDisplay: function(year, month, monthTitle) {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
+            $('div #calendar-buttons').html($('#div #full-calendar-header').html());
+            //$('div #calendar-buttons').html('<b>sdfsd</b>');
         },
         dayClick: function(dayDate) {
             clearForm();
+            $('#date,#date_start,#date_end').val($.datepicker.formatDate('dd.mm.yy',dayDate));
             $('#dialog_event').dialog('open');
         },
         eventDragOpacity: 0.5,
@@ -49,11 +52,11 @@ $(document).ready(function() {
                 clearForm();
                 $('form #key').val(calEvent.key);
                 $('form #title').val(calEvent.title);
-                $('form #date_start').val($.datepicker.formatDate('dd.mm.yy',calEvent.start));
-                $('form #date_end').val($.datepicker.formatDate('dd.mm.yy',calEvent.end));
-                var dt = new Date(calEvent.dt*1000);
-                $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
-                $('form #time').timeEntry('setTime',dt);
+                dt = new Date();
+                //$('form #date_start').val($.datepicker.formatDate('dd.mm.yy',dt));
+                //$('form #date_end').val($.datepicker.formatDate('dd.mm.yy',dt.getDate(calEvent.last_date)));
+                $('form #date').val($.datepicker.formatDate('dd.mm.yy', calEvent.start));
+                $('form #time').timeEntry('setTime',calEvent.date);
                 $('form #repeat option').each(function(){
                     if (calEvent.repeat == $(this).attr('value')) {
                         $(this).attr('selected','selected');
@@ -66,14 +69,15 @@ $(document).ready(function() {
             }
         },
     //eventMouseover, eventMouseout: function(calEvent, jsEvent)
-    eventRender: function(calEvent, element){ element.attr('title', calEvent.comment); }
+    eventRender: function(calEvent, element){ 
+        element.attr('title', calEvent.comment);
+    }
     //eventDragStart, eventDragStop: function(calEvent, jsEvent, ui)
     //eventDrop: function(calEvent, dayDelta, jsEvent, ui),
     //resize: function() { alert ('resize');}
     });
     $('.full-calendar-buttons .today, .prev-month, .prev-year, .next-month, .next-year').addClass('ui-fullcalendar-button ui-button ui-state-default ui-corner-all');
     $('#calendar .full-calendar-month-wrap').addClass('ui-corner-bottom');
-
     $("#dialog_event").dialog({
         bgiframe: true,
         autoOpen: false,
@@ -93,9 +97,14 @@ $(document).ready(function() {
                     repeat: $('form #repeat option:selected').attr('value'),
                     count: $('form #count').attr('value'),
                     comment: $('form #comment').attr('value')
-                }, function(){
-                    $('#calendar').fullCalendar('refresh');
+                }, function(data, textStatus){
+                    // data could be xmlDoc, jsonObj, html, text, etc...
+                    // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
+                    if(textStatus != 'success') {
+                        alert(textStatus);
+                    }
                 }, 'json');
+                $('#calendar').fullCalendar('refresh');
                 $(this).dialog('close');
             },
             'Отмена': function() {
