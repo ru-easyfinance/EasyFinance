@@ -4,12 +4,13 @@
  * @copyright http://home-money.ru/
  * SVN $Id$
  */
+
 class Accounts_Controller extends Template_Controller
 {
     private $money = null;
     private $user = null;
     private $tpl = null;
-    private $model = null;
+    private $model = null;	
 
     /**
      * Конструктор класса
@@ -17,12 +18,13 @@ class Accounts_Controller extends Template_Controller
      */
     function __construct()
     {
+		
         $this->user = Core::getInstance()->user;
         $this->tpl = Core::getInstance()->tpl;
         $this->model = new Accounts_Model();
-        $this->money = new Money();
+        //$this->money = new Money();
 
-        $this->tpl->assign('name_page', 'accounts');
+        $this->tpl->assign('name_page', 'accounts/accounts');
     }
 
     /**
@@ -37,58 +39,34 @@ class Accounts_Controller extends Template_Controller
             header("Location: /");
             exit;
         }
-
+		
         if ($_SESSION['account'] == "reload") {
             $this->user->initUserAccount($this->user->getId());
             $this->user->save();
             $_SESSION['account'] = false; //XXX??
         }
 
-
-
         $this->tpl->assign("page_title", "account all");
-
-        $this->tpl->assign('account', $this->user->getUserAccounts());
-
-        foreach ($this->user->getUserAccounts() as $val) {
-            switch ($val['currency']) {
-                case '1':
-                    $total['1'] = $total['1'] + $val['sum'];
-                    break;
-                case '2':
-                    $total['2'] = $total['2'] + $val['sum'];
-                    break;
-                case '3':
-                    $total['3'] = $total['3'] + $val['sum'];
-                    break;
-                case '4':
-                    $total['4'] = $total['4'] + $val['sum'];
-                    break;
-            }
-        }
-
-        //FIXME Что за странное присваивание?
-        if (!empty($total['1'])) {
-            $total['rub'] = "&nbsp;руб.";
-        }
-        if (!empty($total['2'])) {
-            $total['dol'] = "&nbsp;$&nbsp;";
-        }
-        if (!empty($total['3'])) {
-            $total['evro'] = "&nbsp;€&nbsp;";
-        }
-        if (!empty($total['4'])) {
-            $total['grvn'] = "&nbsp;грн.&nbsp;";
-        }
-
-        $this->tpl->assign('total_all_sum', $total);
-
-        //FIXME
-        if ($_SESSION['good_text']) {
-            $this->tpl->assign('good_text', $_SESSION['good_text']);
-            $_SESSION['good_text'] = false;
-        }
-
+		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
+		$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
+		$this->tpl->assign("template", "default");
+    }
+	
+	/**
+     * Выбирает параметры счета при его создании
+     * @param $args
+     * @return array
+     */
+    function changeType()
+    {
+        $this->tpl->assign("page_title","account add");
+		$id = (int)$_POST['id'];
+//TODO 
+//добавить id из таблицы account_fields для таблицы account_field_values в поле хидден. Это для сохранения надо.
+		$this->model->newEmptyBill($id);
+		$this->tpl->assign("fields", $this->model->formatFields());
+		echo $this->tpl->fetch("accounts/accounts.fields.html");        
+		die();
     }
 
     /**
@@ -100,11 +78,15 @@ class Accounts_Controller extends Template_Controller
     {
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-        $this->model->add();
+		echo "12";
+		pre($_POST);
+		die();
+        //$this->model->add();
     }
 }
 
 /// Переместить
+/*
 switch( $action )
 {
 	case "getStepCreateAccount":
@@ -661,3 +643,4 @@ switch( $action )
 		break;
 }
 ?>
+*/
