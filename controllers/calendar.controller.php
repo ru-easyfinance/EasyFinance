@@ -1,12 +1,22 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля категорий
+ * @category calendar
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @version SVN $Id$
  */
 class Calendar_Controller extends Template_Controller
 {
+    /**
+     * Модель класса календарь
+     * @var <Calendar_Model>
+     */
     private $model = null;
+
+    /**
+     * Ссылка на класс Смарти
+     * @var <Smarty>
+     */
     private $tpl = null;
     
     /**

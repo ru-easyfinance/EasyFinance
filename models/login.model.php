@@ -1,8 +1,9 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс модели для
+ * Класс модели для логина
+ * @category login
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @version SVN $Id$
  */
 class Login_Model
 {

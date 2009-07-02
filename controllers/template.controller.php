@@ -3,7 +3,8 @@
  * Класс-родитель для классов контроллеров
  * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @category template
+ * @version SVN $Id$
  */
 class Template_Controller {
 

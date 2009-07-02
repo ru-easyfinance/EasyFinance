@@ -4,7 +4,9 @@
  * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @package core
+ * @category user
+ * @version SVN $Id$
  */
 class User
 {
@@ -226,27 +228,8 @@ class User
                 WHERE b.user_id = ?
                 GROUP BY b.bill_id, b.bill_type ORDER BY b.bill_name;";
         }
-        return $this->user_account = $this->db->select($sql, $this->getId(), $this->getId());
+        return $this->user_account = $this->db->selectRow($sql, $this->getId(), $this->getId());
     }
-	
-	public function initUserAccounts($user_id)
-	{
-	    $sql = "SELECT a.*, 
-		        act.account_type_name, 
-				afv.string_value
-		    FROM accounts a
-		    LEFT JOIN account_types act 
-			    ON act.account_type_id = a.account_type_id
-			LEFT JOIN account_fields af
-			    ON af.field_descriptionsfield_description_id = 1 
-				AND af.account_typesaccount_type_id = act.account_type_id
-			LEFT JOIN account_field_values afv
-			    ON afv.account_fieldsaccount_field_id = af.account_field_id
-			WHERE a.user_id = ?
-			ORDER BY act.account_type_id";
-		
-		return $this->user_account = $this->db->select($sql, $this->getId(), $this->getId());
-	}
 
     /**
      * Возвращает массив с профилем пользователя, с полями : ид, имя, логин, почта

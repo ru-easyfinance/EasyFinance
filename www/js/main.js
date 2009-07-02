@@ -1,4 +1,111 @@
 // JavaScript Document
+if (screen.width < 400) {
+	window.location.href = "http://home-money.ru/pda/"
+}
+$(document).ready(function() {
+	$("#rcapt").css("cursor", "pointer");
+		$("#rcapt").click(
+			function () {
+				$("#captcha").attr("src", $("#captcha").attr("src")+"?"+Math.random());
+			}
+		);
+	$().ajaxStart( function () {
+		jQuery.blockUI({
+			overlayCSS: { opacity: '0' },
+			message: "<font size:+2>Загрузка...</font>",
+			css: {
+				backgroundColor: '#fff',
+				border:'none',
+				color: '#FF0000',
+				top: '151px', left: '', right: '10px',
+				width: '80'
+				}
+			 });
+	});
+
+	$().ajaxStop( function () { setTimeout(jQuery.unblockUI, 100); });
+});
+
+function AreaChanged (button_name) {
+var action = document.getElementById (button_name);
+
+action.click ();
+
+}
+
+function showCalendar(id, format, showsTime, showsOtherMonths) {
+  var el = document.getElementById(id);
+  if (_dynarch_popupCalendar != null) {
+    // we already have some calendar created
+    _dynarch_popupCalendar.hide();                 // so we hide it first.
+  } else {
+    // first-time call, create the calendar.
+    var cal = new Calendar(1, null, selected, closeHandler);
+    // uncomment the following line to hide the week numbers
+    // cal.weekNumbers = false;
+    if (typeof showsTime == "string") {
+      cal.showsTime = true;
+      cal.time24 = (showsTime == "24");
+    }
+
+   var myDate=new Date();
+   myDate.setDate(myDate.getDate()-1);
+
+	if (el.id == "sel_update_balance")
+	{
+	    cal.setDisabledHandler(function(date, year, month, day) {
+			  // verify date and return true if it has to be disabled
+			  // ``date'' is a JS Date object, but if you only need the
+			  // year, month and/or day you can get them separately as
+			  // next 3 parameters, as you can see in the declaration
+			  if (date  < myDate) {
+			    // disable all dates from 2004
+			    return true;
+			  }
+			  return false;
+			});
+	}
+    if (showsOtherMonths) {
+      cal.showsOtherMonths = true;
+    }
+    _dynarch_popupCalendar = cal;                  // remember it in the global var
+    cal.setRange(1900, 2070);        // min/max year allowed.
+    cal.create();
+  }
+  _dynarch_popupCalendar.setDateFormat(format);    // set the specified date format
+  _dynarch_popupCalendar.parseDate(el.value);      // try to parse the text in field
+  _dynarch_popupCalendar.sel = el;                 // inform it what input field we use
+
+  // the reference element that we pass to showAtElement is the button that
+  // triggers the calendar.  In this example we align the calendar bottom-right
+  // to the button.
+  _dynarch_popupCalendar.showAtElement(el.nextSibling, "Br");        // show the calendar
+
+  return false;
+}
+// This function gets called when the end-user clicks on some date.
+function selected(cal, date) {
+  cal.sel.value = date; // just update the date in the input field.
+  if (cal.dateClicked && (cal.sel.id == "sel1" || cal.sel.id == "sel3" || cal.sel.id == "sel5" || cal.sel.id == "sel_update_balance" || cal.sel.id == "select_epd"))
+  {
+    // if we add this call we close the calendar on single-click.
+    // just to exemplify both cases, we are using this only for the 1st
+    // and the 3rd field, while 2nd and 4th will still require double-click.
+    cal.callCloseHandler();
+    if (cal.sel.id != "select_epd")
+    {
+		// AreaChanged ('select_date');
+	}
+  }
+}
+
+// And this gets called when the end-user clicks on the _selected_ date,
+// or clicks on the "Close" button.  It just hides the calendar without
+// destroying it.
+function closeHandler(cal) {
+  cal.hide();
+  _dynarch_popupCalendar = null;
+}
 function getObjectById (id) {
     var Object;
     if (typeof(document.getElementById) != 'undefined') {

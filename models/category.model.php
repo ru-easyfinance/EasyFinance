@@ -3,8 +3,9 @@
  * Класс-модель для управления категориями пользователя
  * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
+ * @category category
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @version SVN $Id$
  */
 class Category_Model {
     /**

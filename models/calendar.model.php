@@ -1,9 +1,10 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс модели для управления календарём
+ * @category calendar
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @version SVN $Id$
  */
 class Calendar_Model
 {

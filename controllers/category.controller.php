@@ -1,12 +1,22 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля категорий
+ * @category category
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @version SVN $Id$
  */
 class Category_Controller extends Template_Controller
 {
+    /**
+     * Ссылка на класс модели категории
+     * @var <Category_Model>
+     */
     private $model = null;
+
+    /**
+     * Ссылка на Шаблон Смарти
+     * @var <Smarty>
+     */
     private $tpl = null;
 
     /**
@@ -16,6 +26,7 @@ class Category_Controller extends Template_Controller
     function __construct()
     {
         $this->tpl = Core::getInstance()->tpl;
+
         $this->tpl->assign('name_page', 'categories/categories');
         $this->model = new Category_Model();
     }

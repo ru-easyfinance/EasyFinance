@@ -4,7 +4,8 @@
  * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @category money
+ * @version SVN $Id$
  */
 class Money
 {

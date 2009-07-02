@@ -1,33 +1,40 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+ /**
+ * Ядро проекта, класс-одиночка
+ * @category core
+ * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
+ * @copyright http://home-money.ru/
+ * @version SVN $Id$
+ */
 class Core
 {
     /**
      * Ссылка на себя же
-     * @var Core
+     * @var <Core>
      */
     private static $instance = null;
 
     /**
      * Ссылка на экземпляр DBSimple
-     * @var DbSimple_Mysql
+     * @var <DbSimple_Mysql>
      */
     public static $db = null;
 
     /**
      * Ссылка на экземпляр Smarty
-     * @var Smarty
+     * @var <Smarty>
      */
     public static $tpl = null;
 
     /**
      * Ссылка на экземпляр класса User
-     * @var User
+     * @var <User>
      */
     public static $user = null;
 
     /**
      * Ссылка на экземпляр класса с валютами
-     * @var Currency
+     * @var <Currency>
      */
     public static $currency = null;
 

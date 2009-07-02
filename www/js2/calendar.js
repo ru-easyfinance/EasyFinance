@@ -12,6 +12,7 @@ $(document).ready(function() {
             $(this).removeAttr('selected').removeAttr('disabled');
         });
     }
+    $('#tr_date_end,#tr_date_start').hide();
     $('#date,#date_start,#date_end').datepicker({showOn: 'button'});
     $('#datepicker').datepicker({ numberOfMonths: 3 });
     $('#datepicker').datepicker('disable');

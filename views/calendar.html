@@ -1,21 +1,7 @@
 <link rel='stylesheet' type='text/css' href='/css2/jquery/fullcalendar.css' />
-<link rel='stylesheet' type='text/css' href='/css2/jquery/base/ui.datepicker.css' />
-<link rel='stylesheet' type='text/css' href='/css2/jquery/base/ui.dialog.css' />
-<link rel='stylesheet' type='text/css' href='/css2/jquery/base/ui.all.css' />
-<style type='text/css'>
-{literal}
-	body {
-		margin-top: 40px;
-		text-align: center;
-		font-size: 14px;
-		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-	}
-	#calendar {
-		width: 800px;
-		margin: 0 auto;
-	}
-{/literal}
-</style>
+<link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.datepicker.css' />
+<link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.dialog.css' />
+<link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.all.css' />
 <script type='text/javascript' src='/js2/jquery/ui.core.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.dialog.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.draggable.js'></script>
@@ -42,11 +28,11 @@
             <td><label for="date">Дата</label></td>
             <td><input type="text" name="date" id="date" value="" class="text ui-widget-content" /></td>
         </tr>
-        <tr>
+        <tr id="tr_date_start">
             <td><label for="date_start">Дата начала</label></td>
             <td><input type="text" name="date_start" id="date_start" value="" class="text ui-widget-content" /></td>
         </tr>
-        <tr>
+        <tr id="tr_date_end">
             <td><label for="date_end">Дата окончания</label></td>
             <td><input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" /></td>
         </tr>
@@ -75,7 +61,7 @@
         </tr>
         <tr>
             <td><label for="comment">Комментарий</label></td>
-            <td><textarea id="comment" name="comment" class="text ui-widget-content"></textarea></td>
+            <td><textarea id="comment" name="comment" class="text ui-widget-content" cols="18" rows="3"></textarea></td>
         </tr>
     </table>
     </fieldset>

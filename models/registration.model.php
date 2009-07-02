@@ -1,16 +1,18 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс модели для регистрации пользователей
+ * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
+ * @author korogen
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @category registration
+ * @version SVN $Id$
  */
 class Registration_Model
 {
-
     /**
      * Активирует пользователя на портале
-     * @param $reg_id string Временный ключ для регистрации MD5
-     * @return bool
+     * @param <string> $reg_id Временный ключ для регистрации MD5
+     * @return <bool>
      */
     function activate ($reg_id) {
         $db = Core::getInstance()->db;

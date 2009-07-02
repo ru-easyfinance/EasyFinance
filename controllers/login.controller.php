@@ -1,8 +1,9 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс контроллера для модуля logi
+ * Класс контроллера для модуля login
+ * @category login
  * @copyright http://home-money.ru/
- * SVN $Id$
+ * @version SVN $Id$
  */
 class Login_Controller extends Template_Controller
 {
@@ -18,7 +19,7 @@ class Login_Controller extends Template_Controller
 
     /**
      * Индексная страница
-     * @param $args array mixed
+     * @param <array> $args  mixed
      * @return void
      */
     function index($args)
