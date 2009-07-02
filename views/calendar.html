@@ -10,6 +10,7 @@
 <script type='text/javascript' src='/js2/jquery/i18n/ui.datepicker-ru.js'></script>
 <script type='text/javascript' src='/js2/jquery/fullcalendar.min.js'></script>
 <script type='text/javascript' src='/js2/jquery/jquery.timeentry.pack.js'></script>
+<script type="text/javascript" src="/js2/jquery/jquery.jgrow-0.3.js"></script>
 <script type='text/javascript' src='/js2/calendar.js'></script>
 <center>
     <div id='calendar'></div>
@@ -55,16 +56,18 @@
                 <option value="365">Ежегодно</option>
             </select></td>
         </tr>
-        <tr>
+        <tr id="tr_count">
             <td><label for="count">Количество раз</label></td>
             <td><input type="text" name="count" id="count" value="" class="text ui-widget-content" /></td>
         </tr>
         <tr>
             <td><label for="comment">Комментарий</label></td>
-            <td><textarea id="comment" name="comment" class="text ui-widget-content" cols="18" rows="3"></textarea></td>
+                <textarea id="comment" name="comment" class="text ui-widget-content"></textarea>
+            <td></td>
         </tr>
     </table>
     </fieldset>
     </form>
 </div>
+    
 </center>

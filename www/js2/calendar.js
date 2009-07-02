@@ -16,7 +16,8 @@ $(document).ready(function() {
     $('#date,#date_start,#date_end').datepicker({showOn: 'button'});
     $('#datepicker').datepicker({ numberOfMonths: 3 });
     $('#datepicker').datepicker('disable');
-    $('#time').timeEntry({show24Hours: true});
+    $('textarea#comment').jGrow();
+    $('#time').timeEntry({show24Hours: true, spinnerImage: '/img2/spinnerDefault.png'});
     $('#calendar').fullCalendar({
         draggable: false,
         year: y,
@@ -116,5 +117,11 @@ $(document).ready(function() {
         //allFields.val('').removeClass('ui-state-error');
         }
     });
-    
+    $('#repeat').change(function(eventObject){
+        if ($('#repeat option:selected').attr('value') == 0) {
+            $('#tr_count').hide();
+        } else {
+            $('#tr_count').show();
+        }
+    });
 });
