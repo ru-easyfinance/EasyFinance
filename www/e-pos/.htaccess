@@ -1,5 +1,0 @@
-DirectoryIndex index.php index.html
-
-<Files ~ "^_">
-Deny from all
-</Files>

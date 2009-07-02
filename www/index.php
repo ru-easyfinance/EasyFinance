@@ -1,8 +1,8 @@
 <?php
 /**
  * Индексный файл проекта
- * SVN $Id$
  * @copyright http://home-money.ru/
+ * @version SVN $Id$
  */
 
 //XXX WTF???
@@ -13,12 +13,10 @@
 
 define('INDEX',true);
 
+// @FIXME не создавать сессию, если на странице случайный посетитель
 session_start();
 
-//print '<pre>';
-//print_r($_SESSION);
-//print '</pre>';
-
+// Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
 Core::getInstance()->authUser();

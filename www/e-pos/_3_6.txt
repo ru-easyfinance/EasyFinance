@@ -1,1 +1,0 @@
-UPDATE `epos_data` SET paystatus = 'PAID' WHERE `operID` = '1150942224R02'
