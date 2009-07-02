@@ -60,3 +60,8 @@
     width: 200px; /*must have*/
     height: 200px; /*must have*/
 }
+#ui-datepicker-div {
+	z-index: 9999; /*must have*/
+	display: none;
+	background: #ffffff;
+}
