@@ -78,7 +78,7 @@ class Accounts_Controller extends Template_Controller
     {
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-		echo "12";
+		echo "12333";
 		pre($_POST);
 		die();
         //$this->model->add();
