@@ -12,12 +12,13 @@ $(document).ready(function() {
             $(this).removeAttr('selected').removeAttr('disabled');
         });
     }
-    $('#tr_date_end,#tr_date_start').hide();
+    $('#tr_date_end,#tr_date_start,#tr_count').hide();
     $('#date,#date_start,#date_end').datepicker({showOn: 'button'});
     $('#datepicker').datepicker({ numberOfMonths: 3 });
     $('#datepicker').datepicker('disable');
-    $('textarea#comment').jGrow();
-    $('#time').timeEntry({show24Hours: true, spinnerImage: '/img2/spinnerDefault.png'});
+    //$('textarea#comment').jGrow();
+    $('#time').timePicker().mask('99:99');
+    $('#count').mask('99');
     $('#calendar').fullCalendar({
         draggable: false,
         year: y,
@@ -55,10 +56,9 @@ $(document).ready(function() {
                 $('form #key').val(calEvent.key);
                 $('form #title').val(calEvent.title);
                 dt = new Date();
-                //$('form #date_start').val($.datepicker.formatDate('dd.mm.yy',dt));
-                //$('form #date_end').val($.datepicker.formatDate('dd.mm.yy',dt.getDate(calEvent.last_date)));
-                $('form #date').val($.datepicker.formatDate('dd.mm.yy', calEvent.start));
-                $('form #time').timeEntry('setTime',calEvent.date);
+                dt.setTime(calEvent.start);
+                $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
+                $('form #time').val(dt.toLocaleTimeString().substr(0, 5));
                 $('form #repeat option').each(function(){
                     if (calEvent.repeat == $(this).attr('value')) {
                         $(this).attr('selected','selected');
@@ -66,7 +66,6 @@ $(document).ready(function() {
                 });
                 $('form #count').val(calEvent.count);
                 $('form #comment').val(calEvent.comment);
-                
                 $('#dialog_event').dialog('open');
             }
         },
@@ -83,8 +82,7 @@ $(document).ready(function() {
     $("#dialog_event").dialog({
         bgiframe: true,
         autoOpen: false,
-        height: 400,
-        width: 460,
+        width: 450,
         modal: true,
         buttons: {
             'Сохранить': function() {
@@ -119,9 +117,9 @@ $(document).ready(function() {
     });
     $('#repeat').change(function(eventObject){
         if ($('#repeat option:selected').attr('value') == 0) {
-            $('#tr_count').hide();
+            $('#tr_count,#tr_date_end').hide();
         } else {
-            $('#tr_count').show();
+            $('#tr_count,#tr_date_end').show();
         }
     });
 });

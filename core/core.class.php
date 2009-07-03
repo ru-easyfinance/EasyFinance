@@ -70,6 +70,23 @@ class Core
      */
     private function __construct( )
     {
+        //self::$user = self::authUser();
+    }
+
+    /**
+     * Проверяет, разрешён ли доступ пользователю к ресурсу, если это гость
+     * @param <string> $module
+     * @return <bool>
+     */
+    private function isAllowedModule($module)
+    {
+        if (Core::getInstance()->user->getId() == '') {
+            $modules = explode(',', GUEST_MODULES);
+            if (!in_array($module, $modules)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -89,8 +106,12 @@ class Core
         } elseif (substr($module,0, 7) == '?XDEBUG') { //Грязный хак, потом можно убрать
             $module = DEFAULT_MODULE;
         }
-        $module .= '_Controller';
 
+        // Смотрим разрешения на использование модуля
+        if (!$this->isAllowedModule($module)) {
+            $module = DEFAULT_MODULE;
+        }
+        $module .= '_Controller';
         $action = array_shift($args);
 
         if(!$action) {
@@ -105,7 +126,7 @@ class Core
      * Проверяем авторизацию пользователя
      * @return bool
      */
-    public function authUser() {
+    public static function authUser() {
         if (!self::$user) {
             self::$user = new User();
         }

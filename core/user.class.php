@@ -21,7 +21,7 @@ class User
      *      user_created date (%d.%m.%Y)
      *      user_active int 0 - аккаунт неактивен
      */
-    private $props         = Array();
+    private $props = Array();
 
     /**
      * Массив, хранит категории пользователя
@@ -129,6 +129,20 @@ class User
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Удаляет сессию и куки пользователя, очищает авторизацию
+     * @return void
+     */
+    public function destroy()
+    {
+        if (!empty ($_SESSION)) {
+            session_destroy();
+        }
+        if (!empty ($_COOKIE)) {
+            unset($_COOKIE);
         }
     }
 

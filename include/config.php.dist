@@ -22,6 +22,7 @@ define('IS_DEMO',         false);
 //define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
 define('SYS_MAX_PERPAGE', 3);
 define('DEFAULT_MODULE', 'welcome');
+define('GUEST_MODULES', 'welcome,help,articles,login,registration');
 
 define('COOKIE_NAME',  'autoLogin');
 define('COOKIE_VAL',   'autoPass');

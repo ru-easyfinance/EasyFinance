@@ -22,6 +22,7 @@ require_once dirname(dirname(__FILE__)). "/include/common.php";
 Core::getInstance()->authUser();
 Core::getInstance()->parseUrl();
 
+//if (!empty(Core::getInstance()->user->getId())) {
 if (!empty($_SESSION['user'])) {
     $tpl->assign("user", $_SESSION['user']);
 }
