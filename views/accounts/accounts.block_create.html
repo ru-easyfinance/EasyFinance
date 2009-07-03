@@ -1,0 +1,25 @@
+<table style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 15px; padding-bottom: 15px;" width="100%">
+<tr>
+    <td class="cat_add" width="20%" align="right">Тип счета:</td>
+    <td class="cat_add" width="80%" align="left">
+        <select name="type" id="type_account" style="width:200px;">
+        	{foreach from=$type_accounts item=data}
+            <option value="{$data.account_type_id}">{$data.account_type_name}</option>
+            {/foreach}
+        </select>
+    </td>
+</tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr>
+    <td colspan="2"><div id="account_fields"></div></td>
+</tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr>
+    <td class="cat_add">&nbsp;</td>
+    <td class="cat_add">
+        <input type="button" id="btnAddAccount" value="Сохранить" class="inputsubmit" />
+        <input type="button" id="btnCancelAdd" value="Отмена" class="inputsubmit" />
+    </td>
+</tr>
+</table>
+<br>
