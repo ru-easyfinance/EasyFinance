@@ -1,81 +1,83 @@
-<link rel='stylesheet' type='text/css' href='/css2/jquery/fullcalendar.css' />
 <link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.datepicker.css' />
 <link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.dialog.css' />
 <link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.all.css' />
+<link rel='stylesheet' type='text/css' href='/css2/jquery/fullcalendar.css' />
 <script type='text/javascript' src='/js2/jquery/ui.core.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.dialog.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.draggable.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.resizable.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.datepicker.js'></script>
+<script type='text/javascript' src='/js2/jquery/ui.tabs.js'></script>
 <script type='text/javascript' src='/js2/jquery/i18n/ui.datepicker-ru.js'></script>
 <script type='text/javascript' src='/js2/jquery/fullcalendar.min.js'></script>
-<!--
-<script type='text/javascript' src='/js2/jquery/jquery.timeentry.pack.js'></script>
-<script type='text/javascript' src='/js2/jquery/jquery.timepicker.js'></script>
-<script type='text/javascript' src='/js2/jquery/jquery.timepicker-list.js'></script>
--->
-<!--
-<script type='text/javascript' src='/js2/jquery/jquery.meio.mask.min.js'></script>
--->
 <script type='text/javascript' src='/js2/jquery/jquery.maskedinput-1.2.2.min.js'></script>
 <script type='text/javascript' src='/js2/jquery/jquery.timepicker-table.js'></script>
-<script type="text/javascript" src="/js2/jquery/jquery.jgrow-0.3.js"></script>
 <script type='text/javascript' src='/js2/calendar.js'></script>
 <center>
     <div id='calendar'></div>
     <div id='datepicker'></div>
     <div id="calendar-buttons" />
     <div id="dialog_event" title="Событие" style="display: none;">
-    <form action="/calendar/add/" method="post">
-    <input type="hidden" name="key" id="key" />
-    <fieldset>
-    <table>
-        <tr>
-            <td><label for="title">Заголовок</label></td>
-            <td><input type="text" name="title" id="title" class="text ui-widget-content" /></td>
-        </tr>
-        <tr>
-            <td><label for="date">Дата</label></td>
-            <td><input type="text" name="date" id="date" value="" class="text ui-widget-content" /></td>
-        </tr>
-        <tr id="tr_date_start">
-            <td><label for="date_start">Дата начала</label></td>
-            <td><input type="text" name="date_start" id="date_start" value="" class="text ui-widget-content" /></td>
-        </tr>
-        <tr>
-            <td><label for="time">Время</label></td>
-            <td><input type="text" name="time" id="time" value="" class="text ui-widget-content time" /></td>
-        </tr>
-        <tr>
-            <td><label for="repeat">Повторять</label></td>
-            <td><select name="repeat" id="repeat" class="ui-widget-content">
-                <option value="0">Без повторения</option>
-                <option value="1">Ежедневно</option>
-                <option value="3">Каждый Пн., Ср. и Пт.</option>
-                <option value="4">Каждый Вт. и Чт.</option>
-                <option value="5">По будням</option>
-                <option value="6">По выходным</option>
-                <option value="7">Еженедельно</option>
-                <option value="30">Ежемесячно</option>
-                <option value="90">Ежеквартально</option>
-                <option value="365">Ежегодно</option>
-            </select></td>
-        </tr>
-        <tr id="tr_count">
-            <td><label for="count">Количество раз</label></td>
-            <td><input type="text" name="count" id="count" value="" class="text ui-widget-content" /></td>
-        </tr>
-        <tr id="tr_date_end">
-            <td><label for="date_end">Дата окончания</label></td>
-            <td><input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" /></td>
-        </tr>
-        <tr>
-            <td><label for="comment">Комментарий</label></td>
-            <td><textarea id="comment" name="comment" class="text ui-widget-content"></textarea></td>
-        </tr>
-    </table>
-    </fieldset>
-    </form>
-</div>
-    
+    <div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Событие</a></li>
+		<li><a href="#tabs-2">Регулярная транзакция</a></li>
+	</ul>
+        <div id="tabs-1">
+        <form action="/calendar/add/" method="post">
+        <input type="hidden" name="key" id="key" />
+        <fieldset>
+        <table>
+            <tr>
+                <td><label for="title">Заголовок</label></td>
+                <td><input type="text" name="title" id="title" class="text ui-widget-content" /></td>
+            </tr>
+            <tr>
+                <td><label for="date">Дата</label></td>
+                <td><input type="text" name="date" id="date" value="" class="text ui-widget-content" /></td>
+            </tr>
+            <tr id="tr_date_start">
+                <td><label for="date_start">Дата начала</label></td>
+                <td><input type="text" name="date_start" id="date_start" value="" class="text ui-widget-content" /></td>
+            </tr>
+            <tr>
+                <td><label for="time">Время</label></td>
+                <td><input type="text" name="time" id="time" value="" class="text ui-widget-content time" /></td>
+            </tr>
+            <tr>
+                <td><label for="repeat">Повторять</label></td>
+                <td><select name="repeat" id="repeat" class="ui-widget-content">
+                    <option value="0">Без повторения</option>
+                    <option value="1">Ежедневно</option>
+                    <option value="3">Каждый Пн., Ср. и Пт.</option>
+                    <option value="4">Каждый Вт. и Чт.</option>
+                    <option value="5">По будням</option>
+                    <option value="6">По выходным</option>
+                    <option value="7">Еженедельно</option>
+                    <option value="30">Ежемесячно</option>
+                    <option value="90">Ежеквартально</option>
+                    <option value="365">Ежегодно</option>
+                </select></td>
+            </tr>
+            <tr id="tr_count">
+                <td><label for="count">Количество раз</label></td>
+                <td><input type="text" name="count" id="count" value="" class="text ui-widget-content" /></td>
+            </tr>
+            <tr id="tr_date_end">
+                <td><label for="date_end">Дата окончания</label></td>
+                <td><input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" /></td>
+            </tr>
+            <tr>
+                <td><label for="comment">Комментарий</label></td>
+                <td><textarea id="comment" name="comment" class="text ui-widget-content"></textarea></td>
+            </tr>
+        </table>
+        </fieldset>
+        </form>
+    </div>
+    <div id="tabs-2">
+
+    </div>
+    </div>
+    </div>
 </center>

@@ -8,6 +8,7 @@ $(document).ready(function() {
      */
     function clearForm() {
         $('form #key,#title,#date_start,#date_end,#date,#time,#count,#comment').val('');
+        $('form #tr_count,#tr_date_end').hide();
         $('form #repeat option').each(function(){ 
             $(this).removeAttr('selected').removeAttr('disabled');
         });
@@ -17,6 +18,7 @@ $(document).ready(function() {
     $('#datepicker').datepicker({ numberOfMonths: 3 });
     $('#datepicker').datepicker('disable');
     //$('textarea#comment').jGrow();
+    $("#tabs").tabs();
     $('#time').timePicker().mask('99:99');
     $('#count').mask('99');
     $('#calendar').fullCalendar({
@@ -53,8 +55,9 @@ $(document).ready(function() {
         eventClick: function(calEvent, jsEvent) {
             if (calEvent.draggable === true) {
                 clearForm();
-                $('form #key').val(calEvent.key);
+                $('form #key').val(calEvent.id);
                 $('form #title').val(calEvent.title);
+                $('form').attr('action', '/calendar/edit/');
                 dt = new Date();
                 dt.setTime(calEvent.start);
                 $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));

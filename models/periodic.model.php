@@ -1,24 +1,24 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс для управления периодическими транзакциями
+ * Модель для управления периодическими транзакциями
  * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @category periodic
  * @copyright http://home-money.ru/
  * @version SVN $Id$
  */
-class Periodic
+class Periodic_Model
 {
 
     /**
      * Ссылка на экземпляр DBSimple
-     * @var DbSimple_Mysql
+     * @var <DbSimple_Mysql>
      */
     private $db = null;
 
     /**
      * Ссылка на клас Пользователь
-     * @var User
+     * @var <User>
      */
     private $user = null;
 
@@ -32,10 +32,72 @@ class Periodic
         $this->user = Core::getInstance()->user;
     }
 
+    /**
+     * Добавляет новую периодическую транзакцию
+     * @return void
+     */
+    function add()
+    {
+        $periodic = array();
+        $periodic['comment']    = htmlspecialchars($_POST['periodic']['comment']);
+        $periodic['date_from']  = formatRussianDate2MysqlDate($_POST['periodic']['date_from']);
+        $periodic['drain']      = (int)$_POST['periodic']['drain'];
+        $periodic['cat_id']     = (int)$_POST['periodic']['cat_id'];
+        $periodic['bill_id']    = (int)$_POST['periodic']['bill_id'];
+        $periodic['remind']     = (int)$_POST['periodic']['remind'];
+        $periodic['remind_num'] = (int)$_POST['periodic']['remind_num'];
+        $periodic['period']     = (int)$_POST['periodic']['period'];
+        $periodic['povtor']     = (int)$_POST['periodic']['povtor'];
+        $periodic['povtor_num'] = (int)$_POST['periodic']['povtor_num'];
+        $periodic['insert']     = htmlspecialchars($_POST['periodic']['insert']);
+
+        if ($periodic['drain'] === 1) {
+            $periodic['money'] = abs($periodic['money']) * -1;
+        }
+
+        if($this->savePeriodic($periodic)) {
+            //@FIXME Найти способ не использовать сессии для передачи значений
+            $_SESSION['good_text'] = "Регулярная транзакция добавлена!";
+            header("Location: /periodic/");
+        }
+    }
+
+    /**
+     * Редактирует периодическую транзакцию
+     * @return void
+     */
+    function edit($id)
+    {
+        $periodic = array();
+        $periodic['comment']    = htmlspecialchars($_POST['periodic']['comment']);
+        $periodic['date_from']  = formatRussianDate2MysqlDate($_POST['periodic']['date_from']);
+        $periodic['drain']      = (int)$_POST['periodic']['drain'];
+        $periodic['cat_id']     = (int)$_POST['periodic']['cat_id'];
+        $periodic['bill_id']    = (int)$_POST['periodic']['bill_id'];
+        $periodic['remind']     = (int)$_POST['periodic']['remind'];
+        $periodic['remind_num'] = (int)$_POST['periodic']['remind_num'];
+        $periodic['period']     = (int)$_POST['periodic']['period'];
+        $periodic['povtor']     = (int)$_POST['periodic']['povtor'];
+        $periodic['povtor_num'] = (int)$_POST['periodic']['povtor_num'];
+        $periodic['insert']     = htmlspecialchars($_POST['periodic']['insert']);
+
+        if ($periodic['povtor'] === -1) {
+            $periodic['povtor_num'] = '0';
+        }
+
+        if ($periodic['drain'] === 1) {
+            $p_periodic['money'] = abs($periodic['money']) * -1; 
+        }
+
+        if($this->updatePeriodic($periodic)) {
+            $_SESSION['good_text'] = "Регулярная транзакция изменена!";
+            header("Location: /periodic/");
+        }
+    }
 
     /**
      * Сохраняет периодическую транзакцию
-     * @param $data array mixed
+     * @param <array> $data mixed
      * @return bool
      */
     function savePeriodic($data)
@@ -49,7 +111,6 @@ class Periodic
         $this->db->query($sql, $this->user->getId(), $data['bill_id'], $data['cat_id'], $data['money'],
             $data['drain'], $data['date_from'], $data['period'],$data['povtor'], $data['povtor_num'],
             $data['insert'], $data['remind'], $data['remind_num'], $data['comment']);
-
         return true;
     }
 
@@ -249,8 +310,8 @@ class Periodic
 
     /**
      * Возвращает периодическую транзакцию
-     * @param $id int Ид транзакции
-     * @return массив с запрашиваемой транзакцией
+     * @param <int> $id Ид транзакции
+     * @return array
      */
     function getSelectPeriodic($id)
     {

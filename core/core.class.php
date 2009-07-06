@@ -103,7 +103,7 @@ class Core
         }
         if(!$module) {
             $module = DEFAULT_MODULE;
-        } elseif (substr($module,0, 7) == '?XDEBUG') { //Грязный хак, потом можно убрать
+        } elseif (substr($module,0, 7) == '?XDEBUG') { //@XXX Грязный хак, потом можно убрать
             $module = DEFAULT_MODULE;
         }
 
@@ -112,8 +112,8 @@ class Core
             $module = DEFAULT_MODULE;
         }
         $module .= '_Controller';
-        $action = array_shift($args);
 
+        $action = array_shift($args);
         if(!$action) {
             $action = 'index';
         }

@@ -10,7 +10,7 @@ class Calendar_Model
 {
     /**
      * Ссылка на экземпляр DBSimple
-     * @var DbSimple_Mysql
+     * @var <DbSimple_Mysql>
      */
     private $db = NULL;
     
@@ -24,7 +24,7 @@ class Calendar_Model
 
     /**
      * Добавляем новое событие
-     * @return bool
+     * @return <bool>
      */
     function add()
     {
@@ -43,6 +43,35 @@ class Calendar_Model
         $this->db->query($sql, Core::getInstance()->user->getId(), $title, $near_date, $start_date,
             $last_date, $type_repeat, $count_repeat, $comment);
         return mysql_insert_id();
+    }
+    
+    /**
+     * Редактируем событие
+     * @@return <bool>
+     */
+    function edit()
+    {
+        $id           = (int)@$_POST['key'];
+        $title        = htmlspecialchars(@$_POST['title']);
+        $near_date    = formatRussianDate2MysqlDate(@$_POST['date']);
+        $start_date   = formatRussianDate2MysqlDate(@$_POST['date_start']);
+        $last_date    = formatRussianDate2MysqlDate(@$_POST['date_end']);
+        $type_repeat  = (int)@$_POST['repeat'];
+        $count_repeat = (int)@$_POST['count'];
+        $comment      = htmlspecialchars(@$_POST['comment']);
+        //@TODO Добавить проверку переменных
+        $sql = "UPDATE calendar SET
+            title = ?,
+            near_date = ?,
+            start_date = ?,
+            last_date = ?,
+            type_repeat = ?,
+            count_repeat = ?,
+            comment = ?
+            WHERE user_id=? AND id=?";
+        $this->db->query($sql, $title, $near_date, $start_date, $last_date, $type_repeat,
+            $count_repeat, $comment, Core::getInstance()->user->getId(), $id);
+        return $id;
     }
 
     /**

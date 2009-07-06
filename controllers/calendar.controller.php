@@ -57,7 +57,7 @@ class Calendar_Controller extends Template_Controller
      */
     function edit($args)
     {
-        die(var_dump($_POST));
+        die($this->model->edit());
     }
 
     /**
