@@ -125,7 +125,7 @@ class User
      */
     public function init($id)
     {
-        if ($this->initUserCategory() && $this->initUserAccount() && $this->initUserCurrency()) {
+        if ($this->initUserCategory() && $this->initUserAccounts() && $this->initUserCurrency()) {
             return true;
         } else {
             return false;
