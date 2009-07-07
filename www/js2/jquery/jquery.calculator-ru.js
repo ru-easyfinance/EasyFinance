@@ -1,8 +1,5 @@
-﻿/* http://keith-wood.name/calculator.html
-   Spanish initialisation for the jQuery calculator extension
-   Written by David Esperalta (http://www.davidesperalta.com) October 2008. */
+﻿/* http://keith-wood.name/calculator.html */
 (function($) { // hide the namespace
-
 $.calculator.regional['ru'] = {
 	decimalChar: '.', // Character for the decimal point 
 	buttonText: '...', // Display text for trigger button 
@@ -50,7 +47,7 @@ $.calculator.regional['ru'] = {
 	showAnim: 'show', // Name of jQuery animation for popup 
 	showOptions: {}, // Options for enhanced animations 
 	duration: 'fast', // Duration of display/closure 
-	appendText: '$', // Display text following the input box, e.g. showing the format 
+	appendText: '', // Display text following the input box, e.g. showing the format 
 	calculatorClass: '', // Additional CSS class for the calculator for an instance 
 	prompt: '', // Text across the top of the calculator 
 	layout: this.standardLayout, // Layout of keys 

@@ -1,16 +1,16 @@
-<style type="text/css">@import "/js/calculator/jquery.calculator.css";</style>
+<style type="text/css">@import "/css2/jquery/jquery.calculator.css";</style>
 <script type="text/javascript" src="/js2/jquery/jquery.calculator.min.js"></script>
+<script type="text/javascript" src="/js2/jquery/jquery.calculator-ru.js"></script>
 <script type='text/javascript' src='/js2/periodic.js'></script>
 <table width="100%">
     <td width="100%">
         <div class="dtree">
-		{if $page_title == 'periodic add' || $page_title == 'periodic edit'}
-			{if $page_title == 'periodic add'}			
-            <form action="/periodic/add/" name="form_add" method="post">
-			{else}
+        {if $page_title == 'periodic add' || $page_title == 'periodic edit'}
+                {if $page_title == 'periodic add'}
+                <form action="/periodic/add/" name="form_add" method="post">
+                {else}
                 <form action="/periodic/edit/{$periodic.id}/" name="form_edit" method="post">
-			{/if}
-
+                {/if}
                     <table width="100%" border="0">
                         <tr>
                             <td  align="left" class="cat_add">&nbsp;</td>
@@ -23,9 +23,9 @@
                             <td width="10%" height=30 align="left" class="cat_add">{if !empty($error_text.bill_id)}<font color="#FF0000">Счет:</font>{else}Счет:{/if}</td>
                             <td width="90%"  align="left" class="cat_add" colspan="2">
                                 <select name="periodic[bill_id]" style="width:250px;">
-						{foreach from=$bills_select item=arr_bills}
+                                {foreach from=$bills_select item=arr_bills}
                                     <option value="{$arr_bills.id}" {if $arr_bills.id == $periodic.bill_id}selected{/if}>{$arr_bills.name}</option>
-						{/foreach}
+                                {/foreach}
                                 </select>
                             </td>
                         </tr>
@@ -33,7 +33,7 @@
                             <td width="10%" height=30 align="left" class="cat_add">{if !empty($error_text.cat_id)}<font color="#FF0000">Категория:</font>{else}Категория:{/if}</td>
                             <td width="90%"  align="left" class="cat_add" colspan="2">
                                 <select name="periodic[cat_id]" style="width:250px;" id="cat_id_old">
-							{$categories_select}
+                                    {$categories_select}
                                 </select>
                             </td>
                         </tr>

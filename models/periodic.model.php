@@ -203,7 +203,7 @@ class Periodic_Model
                 $sql = "INSERT INTO money (user_id, money, `date`, cat_id, bill_id, drain, comment)
                     VALUES (?,?,?,?,?,?,?);";
                 $this->db->query($sql, $this->user->getId(), $val['money'], $val['date'],
-                    $val['cat_id'],$val['bill_id'], $val['drain']);
+                    $val['cat_id'],$val['bill_id'], $val['drain'], $val['comment']);
             }
         }
 
