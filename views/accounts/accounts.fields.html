@@ -1,5 +1,15 @@
-<form action="/accounts/" method="post" name="formAccount">
+<form action="/accounts/" method="post" id="formAccount">
 <table width="100%">
+<tr>
+    <td class="cat_add" width="20%" align="right">Валюта счета:</td>
+    <td class="cat_add" width="80%" align="left">
+    	<select name="currency_id">
+            <option value="0">Руб.</option>
+            <option value="0">$</option>
+            <option value="0">&euro;</option>
+        </select>
+	</td>
+</tr>
 {foreach from=$fields item=data}
 <tr>
     <td class="cat_add" width="20%" align="right">{$data.display}:</td>
@@ -8,5 +18,8 @@
 	</td>
 </tr>
 {/foreach}
+<tr>
+    <td class="cat_add" colspan="2"><input type="hidden" name="type_id" value="{$type_id}" /></td>
+</tr>
 </table>
 </form>

@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 <script language="javascript">
 {literal}
 $(document).ready(function(){
@@ -45,12 +46,13 @@ $(document).ready(function(){
 	{
 		$('#loader').html('Подождите, идет сохранение...');
 		$('#information_text').hide();
+		var qString = $("#formAccount").formSerialize();
+		alert(qString);
 		$.ajax({
 			type: "POST",
 			url: "/accounts/add/",
 			data: {
-				modules: "accounts",
-				action: "create_new_account",
+				qString: qString,
 				ajax: true
 			},
 			success: function(data) {
@@ -94,7 +96,7 @@ $(document).ready(function(){
 			</tr>
             {foreach from=$accounts item=data}
             <tr style="background-color: rgb(255, 255, 255);" class="cat_tr">
-            	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;">{$data.account_type_name}</td>
+            	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;">{$data.account_name}</td>
                 <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; padding-right: 10px;">0</td>
                 <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 25px;">{$data.account_description}&nbsp;</td>
             </tr>

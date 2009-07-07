@@ -3,9 +3,9 @@
     <td class="cat_add" width="20%" align="right">Тип счета:</td>
     <td class="cat_add" width="80%" align="left">
         <select name="type" id="type_account" style="width:200px;">
-        	{foreach from=$type_accounts item=data}
+          {foreach from=$type_accounts item=data}
             <option value="{$data.account_type_id}">{$data.account_type_name}</option>
-            {/foreach}
+          {/foreach}
         </select>
     </td>
 </tr>
