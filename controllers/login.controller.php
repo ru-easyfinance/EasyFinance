@@ -49,7 +49,7 @@ class Login_Controller extends Template_Controller
                         $model->activate_user();
 
                     } else {
-                        $periodic = new Periodic();
+                        $periodic = new Periodic_Model();
                         $periodic->getInsertPeriodic();
                         $user->init($user->getId());
                         $user->save($user->getId());
