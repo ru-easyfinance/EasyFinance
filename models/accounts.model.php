@@ -166,7 +166,8 @@ class Accounts_Model
 			}			
 		}
 
-		$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`, `account_currency_id`, `user_id`)
+		$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`,
+									  `account_currency_id`, `user_id`)
                     VALUES (?,?,?,?,?,?);";
         if (!$this->db->query($sql, '', $account['name']['value'], $type_id, $account['description']['value'], 
                             $currency_id, $this->user_id))
@@ -192,7 +193,8 @@ class Accounts_Model
 				    $type = "string_value";
 				break;
 			}
-			$sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`, `".$type."`, `accountsaccount_id`)
+			$sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`, 
+													  `".$type."`, `accountsaccount_id`)
                     VALUES (?,?,?,?);";
 			if (!$this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']))
 			{
@@ -200,5 +202,23 @@ class Accounts_Model
 			}
 		}
 		return true;
+    }
+	
+	/**
+     * Удаляет указанный счет
+     * @param $id int Ид счета
+     * @return bool
+     */
+    public function deleteAccount($id)
+    {
+        $sql = "DELETE FROM accounts WHERE `account_id` = ? and `user_id` = ?";
+        if (!$this->db->query($sql, $id, $this->user_id)) {
+            return false;
+        }
+		$sql = "DELETE FROM account_field_values WHERE `accountsaccount_id` = ?";
+        if (!$this->db->query($sql, $id)) {
+            return false;
+        }
+        return true;
     }
 }

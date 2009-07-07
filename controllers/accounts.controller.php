@@ -90,6 +90,20 @@ class Accounts_Controller extends Template_Controller
 		}
 		die();
     }
+	
+	/**
+     * Удаляет указанный счет
+     * @param $args array mixed
+     * @return void
+     */
+    function del ($args)
+    {
+        $id = (int)$_POST['id'];
+        if (!$this->model->deleteAccount($id)) {
+            $this->tpl->assign("error", "Счет не удален");
+        }
+        die ();
+    }
 }
 
 /// Переместить
