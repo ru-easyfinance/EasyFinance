@@ -29,7 +29,7 @@ class Login_Controller extends Template_Controller
         if ($user->getId()) {
             //FIXME Если ничего другого в адресной строке не задано, то перенаправлять на кошельки,
             //иначе - на туда, куда просился пользователь
-            header("Location: /account/");
+            header("Location: /accounts/");
             exit;
         } else {
             // Пользователь авторизируется через диалог ввода логина и пароля

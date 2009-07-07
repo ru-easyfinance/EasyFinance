@@ -55,9 +55,18 @@ class Periodic_Controller extends Template_Controller
     {
         $this->tpl->assign("page_title","periodic add");
         $categories_select = get_three_select($_SESSION['user_category']); //@FIXME Поправить
-        $tpl->assign('categories_select', $categories_select, 0, 0); //@FIXME Поправить
-        $tpl->assign('bills_select', $_SESSION['user_account']); //@FIXME Поправить
-        $this->model->add();
+        $this->tpl->assign('categories_select', $categories_select, 0, 0); //@FIXME Поправить
+
+        $arr = array(
+            array('id'=>1, 'name'=>'Первый фейковый счёт'),
+            array('id'=>6824, 'name'=>'Второй поддельный счёт'),
+        );
+        $this->tpl->assign('bills_select', $arr);
+        //$this->tpl->assign('bills_select', $_SESSION['user_account']); //@FIXME Добавить получение счетов
+        
+        if (!empty($_POST['periodic'])) {
+            $this->model->add();
+        }
     }
 
     /**
