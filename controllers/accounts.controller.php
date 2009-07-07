@@ -61,10 +61,10 @@ class Accounts_Controller extends Template_Controller
     {
         $this->tpl->assign("page_title","account add");
 		$id = (int)$_POST['id'];
-//TODO 
-//добавить id из таблицы account_fields для таблицы account_field_values в поле хидден. Это для сохранения надо.
+
 		$this->model->newEmptyBill($id);
 		$this->tpl->assign("fields", $this->model->formatFields());
+		$this->tpl->assign("type_id", $id);
 		echo $this->tpl->fetch("accounts/accounts.fields.html");        
 		die();
     }
@@ -78,10 +78,11 @@ class Accounts_Controller extends Template_Controller
     {
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-		echo "12333";
-		pre($_POST);
+		$qString = $_POST['qString'];
+		$qString = explode("&", $qString);
+
+        $this->model->add($qString);
 		die();
-        //$this->model->add();
     }
 }
 

@@ -145,7 +145,29 @@ class Accounts_Model
      * Добавляет новый счёт
      * @return bool
      */
-    function add() {
+    function add($data) {
+		$fields = $this->db->select("SELECT af.account_field_id, afd.field_name FROM account_fields af 
+							LEFT JOIN account_field_descriptions afd 
+							    ON afd.field_description_id = af.field_descriptionsfield_description_id");
 
+		foreach($data as $key=>$value)
+		{			
+			list($field_key, $field_value) = explode("=", $value);
+			if ($field_key == 'type_id') $type_id = $field_value;
+			foreach($fields as $values)
+			{
+				if ($values['field_name'] == $field_key)
+				{
+					$sql[$field_key]['value'] = $field_value;
+					$sql[$field_key]['account_field_id'] = $values['account_field_id'];
+				}
+			}			
+		}
+		
+		/*$sql = "INSERT INTO accounts (user_id, money, `date`, cat_id, bill_id, drain, comment)
+                    VALUES (?,?,?,?,?,?,?);";
+                $this->db->query($sql, $this->user->getId(), $val['money'], $val['date'],
+                    $val['cat_id'],$val['bill_id'], $val['drain']);
+		pre($sql);*/
     }
 }
