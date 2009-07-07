@@ -146,28 +146,59 @@ class Accounts_Model
      * @return bool
      */
     function add($data) {
-		$fields = $this->db->select("SELECT af.account_field_id, afd.field_name FROM account_fields af 
+		$fields = $this->db->select("SELECT af.account_field_id, afd.field_name, afd.field_type FROM account_fields af 
 							LEFT JOIN account_field_descriptions afd 
 							    ON afd.field_description_id = af.field_descriptionsfield_description_id");
-
 		foreach($data as $key=>$value)
 		{			
 			list($field_key, $field_value) = explode("=", $value);
 			if ($field_key == 'type_id') $type_id = $field_value;
+			if ($field_key == 'currency_id') $currency_id = $field_value;
+			
 			foreach($fields as $values)
 			{
 				if ($values['field_name'] == $field_key)
 				{
-					$sql[$field_key]['value'] = $field_value;
-					$sql[$field_key]['account_field_id'] = $values['account_field_id'];
+					$account[$field_key]['value'] = $field_value;
+					$account[$field_key]['account_field_id'] = $values['account_field_id'];
+					$account[$field_key]['field_type'] = $values['field_type'];
 				}
 			}			
 		}
+
+		$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`, `account_currency_id`, `user_id`)
+                    VALUES (?,?,?,?,?,?);";
+        if (!$this->db->query($sql, '', $account['name']['value'], $type_id, $account['description']['value'], 
+                            $currency_id, $this->user_id))
+		{
+			return false;
+		}
 		
-		/*$sql = "INSERT INTO accounts (user_id, money, `date`, cat_id, bill_id, drain, comment)
-                    VALUES (?,?,?,?,?,?,?);";
-                $this->db->query($sql, $this->user->getId(), $val['money'], $val['date'],
-                    $val['cat_id'],$val['bill_id'], $val['drain']);
-		pre($sql);*/
+		$next_id = mysql_insert_id();
+		foreach($account as $value)
+		{
+			switch ($value['field_type'])
+			{
+				case "numeric":
+				    $type = "int_value";
+				break;
+				case "percent":
+				    $type = "int_value";
+				break;
+				case "date":
+				    $type = "date_value";
+				break;
+				default:
+				    $type = "string_value";
+				break;
+			}
+			$sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`, `".$type."`, `accountsaccount_id`)
+                    VALUES (?,?,?,?);";
+			if (!$this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']))
+			{
+				return false;
+			}
+		}
+		return true;
     }
 }
