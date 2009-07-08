@@ -90,14 +90,17 @@ class Accounts_Model
 		case "string":
 		case "numeric":
 			if ($field['field_permissions'] != "hidden") {
-				return sprintf("<input type=\"text\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">", $field['field_name'], $field['field_id'], $class, $style, $field['field_default_value']);
+				return sprintf("<input type=\"text\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">", 
+							   $field['field_name'], $field['field_id'], $class, $style, $field['field_default_value']);
 			} else {
-				return sprintf("<input type=\"hidden\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">", $field['field_name'], $field['field_id'], $class, $style, $field['field_default_value']);
+				return sprintf("<input type=\"hidden\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">", 
+							   $field['field_name'], $field['field_id'], $class, $style, $field['field_default_value']);
 			}
 		break;
 		case "text":
 		case "html":
-			return sprintf("<textarea name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">%s</textarea>", $field['field_name'], $field['field_id'], $class, $style, $field['field_default_value']);
+			return sprintf("<textarea name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">%s</textarea>", 
+						   $field['field_name'], $field['field_id'], $class, $style, $field['field_default_value']);
 		break;
 		case "enum":
 			$result = sprintf("<select name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">\n\r", $field['field_name'], $field['field_id'], $class, $style);

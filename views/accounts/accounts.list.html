@@ -1,0 +1,18 @@
+<table width="100%" bgcolor="#ffffff" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+{foreach from=$accounts item=data}
+<tr style="background-color: rgb(255, 255, 255);" class="cat_tr" value="{$data.account_id}">
+    <td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;" width="30%">{$data.account_name} 
+        <span id="ico_del_{$data.account_id}" style="display: none; padding-left: 10px;"> 
+            <img src="/img/edit.gif" class="editAccount" value="{$data.account_id}" /> 
+            <img src="/img/delete.gif" class="delAccount" value="{$data.account_id}" /></span></td>
+    <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); 
+                               border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; 
+                               padding-right: 10px;" width="15%">0</td>
+    <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); 
+                               border-bottom: 1px solid rgb(204, 204, 204); 
+                               padding-left: 25px;" width="55%">{$data.account_description}&nbsp;</td>
+</tr>
+{/foreach}
+</tbody>
+</table>

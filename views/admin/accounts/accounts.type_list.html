@@ -1,0 +1,10 @@
+<table width="100%">
+{foreach from=$list_type item=data}
+<tr onMouseOver=this.style.backgroundColor='#f8f6ea';
+						   		onMouseOut=this.style.backgroundColor='#FFFFFF';>
+	<td class="money" height="22">{$data.account_type_name}</td>
+	<td class="money" width="50" align="center"><img src="/img/edit.gif" class="editTypeAccount" value="{$data.account_type_id}" /></td>
+	<td class="money" width="50" align="center"><img src="/img/delete.gif" class="delTypeAccount" value="{$data.account_type_id}" /></td>
+</tr>
+{/foreach}
+</table>

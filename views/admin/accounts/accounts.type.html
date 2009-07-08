@@ -1,0 +1,101 @@
+{literal}
+<style type="text/css">
+    .editTypeAccount { 
+        /*title : "Редактировать";
+        alt: "Редактировать";
+        border: 0;*/
+        cursor:pointer; 
+    }
+    .delTypeAccount {
+        /*title:"Удалить";
+        border: 0;
+        alt:"Удалить";*/
+        cursor:pointer; 
+    }
+    cat_tr {
+        background-color: rgb(255, 255, 255);
+    }
+ </style>
+{/literal}
+<script language="javascript">
+{literal}
+$(document).ready(function(){
+	$('#btnAddAccount').click(function(){ saveTypeAccount(); });
+	$('.delTypeAccount').click(function(){ deleteTypeAccount($(this).attr('value')); });
+	
+	function saveTypeAccount()
+	{
+		$('#loader').html('Подождите, идет сохранение...');
+		$('#information_text').hide();
+		
+		$.ajax({
+			type: "POST",
+			url: "/admin/accounts/type/",
+			data: {
+				type_name: $('#type_name').val(),
+				type_id: $('#type_id').val(),
+				ajax: true
+			},
+			success: function(data) {
+				$('#loader').html(' ');
+				$('#dataAccounts').html(data);
+				$('#information_text').show();
+			}
+		});
+	}
+})
+{/literal}
+</script>
+
+<form action="/admin/accounts/type/" method="post" id="formAccount">
+<table style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 15px; padding-bottom: 15px;" width="100%">
+<tr>
+	<td class="cat_add" width="20%" align="right">Тип счета:</td>
+	<td class="cat_add" width="80%" align="left"><input type="text" name="type_name" id="type_name" value="{$type.account_type_name}"></td>
+</tr>
+<tr>
+	<td class="cat_add">&nbsp;</td>
+	<td class="cat_add" colspan="2">
+		<input type="hidden" value="{$type.account_type_id}" name="type_id" id="type_id">
+		<input type="button" id="btnAddAccount" value="Сохранить" class="inputsubmit" />
+        <input type="button" id="btnCancelAdd" value="Отмена" class="inputsubmit" />
+	</td>
+</tr>
+<tr>
+	<td colspan="3">&nbsp;</td>
+</tr>
+</table>
+</form>
+
+<table width="100%">
+	<tr>
+		<td valign="top" width="100%" style=" background-color:#f8f8d8; padding:5px;">
+			<table width="100%" bgcolor="#ffffff" border="0" cellspacing="0">
+        	<tbody>
+            <tr>
+            	<td class="cat_add" colspan="3" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 15px 5px; 
+                                                       background-color: rgb(248, 248, 216);">
+                <span style="color: rgb(56, 120, 215);" id="loader"></span>
+                <span style="color: rgb(56, 120, 215);" id="information_text">Для редактирования выберите из списка.</span>
+           		</td>
+        	</tr>
+        	<tr>
+            	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;" colspan="3">        	
+                	<b>Название</b>
+            	</td>
+			</tr>
+            <tr>
+                <td class="cat_add" colspan="3">
+                    <div id="dataAccounts">        
+                        {include file="admin/accounts/accounts.type_list.html"}        
+                    </div>
+                </td>
+            </tr>                        
+			</tbody>
+            </table>
+		</td>
+	</tr>    
+</table>
+			   
+
+

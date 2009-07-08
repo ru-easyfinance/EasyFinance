@@ -79,16 +79,11 @@ class Accounts_Controller extends Template_Controller
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
 		$qString = urldecode($_POST['qString']);
-		pre($qString);
 		$qString = explode("&", $qString);
 
-        if ($this->model->add($qString))
-		{
-			echo "good";
-		}else{
-			echo "bad";
-		}
-		die();
+        $this->model->add($qString);
+		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
+        die ($this->tpl->fetch("accounts/accounts.list.html"));
     }
 	
 	/**
@@ -102,7 +97,8 @@ class Accounts_Controller extends Template_Controller
         if (!$this->model->deleteAccount($id)) {
             $this->tpl->assign("error", "Счет не удален");
         }
-        die ();
+		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
+        die ($this->tpl->fetch("accounts/accounts.list.html"));
     }
 }
 

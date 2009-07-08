@@ -1,15 +1,15 @@
 {literal}
 <style type="text/css">
     .editAccount { 
-        title : "Редактировать";
+        /*title : "Редактировать";
         alt: "Редактировать";
-        border: 0;
+        border: 0;*/
         cursor:pointer; 
     }
     .delAccount {
-        title:"Удалить";
+        /*title:"Удалить";
         border: 0;
-        alt:"Удалить";
+        alt:"Удалить";*/
         cursor:pointer; 
     }
     cat_tr {
@@ -67,7 +67,6 @@ $(document).ready(function(){
 		$('#loader').html('Подождите, идет сохранение...');
 		$('#information_text').hide();
 		var qString = $("#formAccount").formSerialize();
-		alert(qString);
 		$.ajax({
 			type: "POST",
 			url: "/accounts/add/",
@@ -76,11 +75,9 @@ $(document).ready(function(){
 				ajax: true
 			},
 			success: function(data) {
-				$('#loader').html(data);
-				//$('#dataCategories').html(data);
-				
+				$('#loader').html(' ');
+				$('#dataAccounts').html(data);
 				$('#information_text').show();
-				//$('#blockCreateCategories').load('/category/reload_block_create *');
 			}
 		});
 	}
@@ -101,9 +98,8 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				$('#loader').html(" ");
-				//$('#dataCategories').html(data);
+				$('#dataAccounts').html(data);
 				$('#information_text').show();
-                //$('#blockCreateCategories').load('/category/reload_block_create *');
 			}
 		});
 	}
@@ -130,25 +126,22 @@ $(document).ready(function(){
             	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;" width="30%">        	
                 	<b>Название</b>
             	</td>
-            	<td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; padding-right: 10px;"  width="10%">
+            	<td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; padding-right: 10px;"  width="15%">
             		<b>Остаток на счете</b>
 				</td>
-                <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 25px;" width="60%">
+                <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 25px;" width="55%">
                 	<b>Комментарий</b>
                 </td>
 			</tr>
-            {foreach from=$accounts item=data}
-            <tr style="background-color: rgb(255, 255, 255);" class="cat_tr" value="{$data.account_id}">
-            	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;">{$data.account_name} 
-                    <span id="ico_del_{$data.account_id}" style="display: none; padding-left: 10px;"> 
-                    <img src="/img/edit.gif" class="editAccount" value="{$data.account_id}" /> 
-                    <img src="/img/delete.gif" class="delAccount" value="{$data.account_id}" /></td>
-                <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; padding-right: 10px;">0</td>
-                <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 25px;">{$data.account_description}&nbsp;</td>
-            </tr>
-            {/foreach}
+            <tr>
+                <td class="cat_add" colspan="3">
+                    <div id="dataAccounts">        
+                        {include file="accounts/accounts.list.html"}        
+                    </div>
+                </td>
+            </tr>                        
 			</tbody>
             </table>
 		</td>
-	</tr>
+	</tr>    
 </table>
