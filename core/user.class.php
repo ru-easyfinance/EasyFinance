@@ -97,7 +97,7 @@ class User
             return false;
         }
 
-        if ( $this->init($this->getId())) {
+        if ($this->init($this->getId())) {
             return $this->save();
         } else {
             trigger_error("Не верно введён логин или пароль", E_USER_WARNING);
@@ -265,8 +265,8 @@ class User
 			    ON afv.account_fieldsaccount_field_id = af.account_field_id
 			WHERE a.user_id = ?
 			ORDER BY act.account_type_id";
-		
-		return $this->user_account = $this->db->select($sql, $this->getId(), $this->getId());
+		$this->user_account = $this->db->select($sql, $this->getId(), $this->getId());
+		return true;
 	}
 
     /**

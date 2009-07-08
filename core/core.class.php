@@ -109,7 +109,6 @@ class Core
 
         // Смотрим разрешения на использование модуля
         if (!$this->isAllowedModule($module)) {
-            //$module = DEFAULT_MODULE;
 			header("Location: /");
 			exit;
         }

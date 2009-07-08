@@ -2,6 +2,7 @@ $(document).ready(function() {
     var d = new Date();
     var y = d.getFullYear();
     var m = d.getMonth();
+    var listEvents = [];
 
     /**
      * Очищаем форму
@@ -15,12 +16,11 @@ $(document).ready(function() {
     }
     $('#tr_date_end,#tr_date_start,#tr_count').hide();
     $('#date,#date_start,#date_end').datepicker({showOn: 'button'});
-    $('#datepicker').datepicker({ numberOfMonths: 3 });
-    $('#datepicker').datepicker('disable');
+    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
     //$('textarea#comment').jGrow();
-    $("#tabs").tabs();
+    $("#tabs,#views").tabs();
     $('#time').timePicker().mask('99:99');
-    $('#count').mask('99');
+    $('#count').mask('99'); //@FIXME
     $('#calendar').fullCalendar({
         draggable: false,
         year: y,
@@ -42,7 +42,6 @@ $(document).ready(function() {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
             $('div #calendar-buttons').html($('#div #full-calendar-header').html());
-            //$('div #calendar-buttons').html('<b>sdfsd</b>');
         },
         dayClick: function(dayDate) {
             clearForm();
@@ -73,12 +72,23 @@ $(document).ready(function() {
             }
         },
     //eventMouseover, eventMouseout: function(calEvent, jsEvent)
-    eventRender: function(calEvent, element){ 
+    eventRender: function(calEvent, element){
+        d = new Date();
+        ds = new Date(d.getFullYear(),d.getMonth(),1);
+        de = new Date(d.getFullYear(),ds.getMonth()+1,1);
+        if (ds <= calEvent.start && calEvent.start < de) {
+            $('#cal_events').append("<div id='"+calEvent.id+"' style='' title='"+calEvent.comment+"' date='"+calEvent.start+"'>"+calEvent.title+"</div>")
+        }
         element.attr('title', calEvent.comment);
+    },
+//    eventDragStart, eventDragStop: function(calEvent, jsEvent, ui)
+//    eventDrop: function(calEvent, dayDelta, jsEvent, ui),
+//    resize: function() { alert ('resize');}
+    loading: function(isLoading) {
+        if (!isLoading) {
+            $('#cal_events').empty();
+        }
     }
-    //eventDragStart, eventDragStop: function(calEvent, jsEvent, ui)
-    //eventDrop: function(calEvent, dayDelta, jsEvent, ui),
-    //resize: function() { alert ('resize');}
     });
     $('.full-calendar-buttons .today, .prev-month, .prev-year, .next-month, .next-year').addClass('ui-fullcalendar-button ui-button ui-state-default ui-corner-all');
     $('#calendar .full-calendar-month-wrap').addClass('ui-corner-bottom');
