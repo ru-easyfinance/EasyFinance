@@ -179,6 +179,7 @@ class Accounts_Model
 		}
 		
 		$next_id = mysql_insert_id();
+
 		foreach($account as $value)
 		{
 			switch ($value['field_type'])
