@@ -50,7 +50,16 @@ $(document).ready(function() {
         },
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
-        events: '/calendar/events/',
+        events: function(start, end, callback) {
+            $.getJSON('/calendar/events/',
+                {
+                    start: start.getTime(),
+                    end: end.getTime()
+                },   function(result) {
+                    callback(result);
+                }
+            )
+        },
         eventClick: function(calEvent, jsEvent) {
             if (calEvent.draggable === true) {
                 clearForm();
@@ -73,12 +82,6 @@ $(document).ready(function() {
         },
     //eventMouseover, eventMouseout: function(calEvent, jsEvent)
     eventRender: function(calEvent, element){
-        d = new Date();
-        ds = new Date(d.getFullYear(),d.getMonth(),1);
-        de = new Date(d.getFullYear(),ds.getMonth()+1,1);
-        if (ds <= calEvent.start && calEvent.start < de) {
-            $('#cal_events').append("<div id='"+calEvent.id+"' style='' title='"+calEvent.comment+"' date='"+calEvent.start+"'>"+calEvent.title+"</div>")
-        }
         element.attr('title', calEvent.comment);
     },
 //    eventDragStart, eventDragStop: function(calEvent, jsEvent, ui)
