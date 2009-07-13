@@ -49,6 +49,7 @@ class Accounts_Controller extends Template_Controller
         $this->tpl->assign("page_title", "account all");
 		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
 		$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
+		//pre($this->user->initUserAccounts($this->user->getId()));
 		$this->tpl->assign("template", "default");
     }
 	

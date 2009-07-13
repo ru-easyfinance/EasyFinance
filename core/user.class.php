@@ -252,7 +252,7 @@ class User
      */
 	public function initUserAccounts($user_id)
 	{
-	    $sql = "SELECT a.*, 
+	    /*$sql = "SELECT a.*, 
 		        act.account_type_name, 
 				afv.string_value
 		    FROM accounts a
@@ -264,9 +264,12 @@ class User
 			LEFT JOIN account_field_values afv
 			    ON afv.account_fieldsaccount_field_id = af.account_field_id
 			WHERE a.user_id = ?
-			ORDER BY act.account_type_id";
-		$this->user_account = $this->db->select($sql, $this->getId(), $this->getId());
-		return true;
+			ORDER BY act.account_type_id";*/
+			$sql = "SELECT a.*,act.* FROM accounts a 
+			LEFT JOIN account_types act 
+			    ON act.account_type_id = a.account_type_id
+			WHERE user_id= ? ";
+		return $this->user_account = $this->db->select($sql, $this->getId(), $this->getId());		
 	}
 
     /**
