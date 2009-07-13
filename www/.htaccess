@@ -6,11 +6,3 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [PT,L]
-
-# TEST SERVER ONLY
-AuthType Basic
-AuthName "Please, password"
-AuthUserFile /var/www/hm/htpasswd
-<Limit GET POST>
-	Require Valid-User
-</Limit>
