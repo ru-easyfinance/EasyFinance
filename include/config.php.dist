@@ -19,6 +19,7 @@ define('UPLOAD_DIR',      SYS_DIR_ROOT."/home-money.ru/upload/photo_experts/");
 // Other
 define('URL_ROOT',        "http://hm/");
 define('IS_DEMO',         false);
+define('DEBUG',           true);
 //define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
 define('SYS_MAX_PERPAGE', 3);
 define('DEFAULT_MODULE', 'welcome');

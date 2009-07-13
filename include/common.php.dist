@@ -23,6 +23,11 @@ set_error_handler("UserErrorHandler");
 // И обработчик ошибок для бд
 $db->setErrorHandler('databaseErrorHandler');
 
+//Логгируем все запросы. Только во включенном режиме DEBUG
+if (defined(DEBUG)) {
+    $db->setLogger('databaseLogger');
+}
+
 // Настраиваем смарти
 $tpl = new Smarty();
 

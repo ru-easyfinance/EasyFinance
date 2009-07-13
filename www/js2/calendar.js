@@ -46,11 +46,14 @@ $(document).ready(function() {
         dayClick: function(dayDate) {
             clearForm();
             $('#date,#date_start,#date_end').val($.datepicker.formatDate('dd.mm.yy',dayDate));
+            $('form').attr('action','/calendar/add/');
             $('#dialog_event').dialog('open');
         },
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
         events: function(start, end, callback) {
+//            start.setMonth( start.getMonth() - 1 );
+//            end.setMonth( end.getMonth() + 1 );
             $.getJSON('/calendar/events/',
                 {
                     start: start.getTime(),
@@ -103,25 +106,33 @@ $(document).ready(function() {
         buttons: {
             'Сохранить': function() {
                 //@TODO Проверить вводимые значения
-                $.post($('form').attr('action'), {
-                    key: $('form #key').attr('value'),
-                    title: $('form #title').attr('value'),
-                    date_start: $('form #date_start').attr('value'),
-                    date_end: $('form #date_end').attr('value'),
-                    date: $('form #date').attr('value'),
-                    time: $('form #time').attr('value'),
-                    repeat: $('form #repeat option:selected').attr('value'),
-                    count: $('form #count').attr('value'),
-                    comment: $('form #comment').attr('value')
-                }, function(data, textStatus){
-                    // data could be xmlDoc, jsonObj, html, text, etc...
-                    // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
-                    if(textStatus != 'success') {
-                        alert(textStatus);
-                    }
-                }, 'json');
-                $('#calendar').fullCalendar('refresh');
-                $(this).dialog('close');
+                $.post(
+                    $('form').attr('action'),
+                    {
+                        key: $('form #key').attr('value'),
+                        title: $('form #title').attr('value'),
+                        date_start: $('form #date_start').attr('value'),
+                        date_end: $('form #date_end').attr('value'),
+                        date: $('form #date').attr('value'),
+                        time: $('form #time').attr('value'),
+                        repeat: $('form #repeat option:selected').attr('value'),
+                        count: $('form #count').attr('value'),
+                        comment: $('form #comment').attr('value')
+                    }, function(data, textStatus){
+                        // data could be xmlDoc, jsonObj, html, text, etc...
+                        // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
+                        for (var v in data) {
+                            //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                            alert(v);
+                        }
+                        // В случае успешного добавления, закрываем диалог и обновляем календарь
+                        if (data.length == 0) {
+                            $('#dialog_event').dialog('close');
+                            $('#calendar').fullCalendar('refresh');
+                        }
+                    },
+                    'json'
+                );                
             },
             'Отмена': function() {
                 $(this).dialog('close');

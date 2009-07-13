@@ -49,6 +49,14 @@ function databaseErrorHandler($message, $info)
     exit();
 }
 
+function databaseLogger($db, $sql)
+{
+    // Находим контекст вызова этого запроса.
+    $caller = $db->findLibraryCaller();
+    $fh = fopen('/var/www/hm/db_log', 'a');
+    fwrite($fh, "\n".@$caller['object']->_lastQuery[0] . "\n  -- (" . date("Y-m-d H:i:s")  ."  ". @$caller['object']->_statistics['count'].") ".@$caller['object']->_statistics['time']);
+    fclose($fh);
+}
 
 /**
  * Функция - обработчик ПОЛЬЗОВАТЕЛЬСКИХ ошибок.

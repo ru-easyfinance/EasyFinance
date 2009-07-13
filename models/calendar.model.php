@@ -38,55 +38,62 @@ class Calendar_Model
      */
     function checkData($params = array())
     {
-        
+        $this->errorData = array();
         $valid = array();
-        if (isset($params['id']) || count($params) == 0) {
+
+        if (in_array('id', $params) or count($params) == 0) {
             $valid['id'] = (int)@$_POST['key'];
             if ($valid['id'] === 0) {
+                print 'id,';
                 $this->errorData['id'][] = 'Не указан id события';
             }
         }
-        if (isset($params['title']) || count($params) == 0) {
+
+        if (in_array('title', $params) or count($params) == 0) {
             $valid['title'] = trim(htmlspecialchars(@$_POST['title']));
             if (empty ($valid['title'])) {
+                print 'title,';
                 $this->errorData['title'][] = 'Не указан заголовок события';
             }
         }
-        if (isset($params['near_date']) || count($params) == 0) {
+        if (in_array('near_date', $params) or count($params) == 0) {
             $valid['near_date'] = formatRussianDate2MysqlDate(@$_POST['date']);
             //@TODO Проверять валидность mysql даты
             if (!$valid['near_date']) {
+                print 'date,';
                 $this->errorData['near_date'][] = 'Не верно указана дата';
             }
         }
-        if (isset($params['start_date']) || count($params) == 0) {
+        if (in_array('start_date', $params) || count($params) == 0) {
             $valid['start_date'] = formatRussianDate2MysqlDate(@$_POST['start_date']);
             //@TODO Проверять валидность mysql даты
             if (!$valid['start_date']) {
                 $this->errorData['start_date'][] = 'Не верно указана дата начала';
             }
         }
-        if (isset($params['last_date']) || count($params) == 0) {
-            $valid['last_date'] = formatRussianDate2MysqlDate(@$_POST['last_date']);
+        if (in_array('last_date', $params) || count($params) == 0) {
+            $valid['last_date'] = formatRussianDate2MysqlDate(@$_POST['date_end']);
             //@TODO Проверять валидность mysql даты
             if (!$valid['last_date']) {
                 $this->errorData['last_date'][] = 'Не верно указана дата окончания';
             }
         }
-        if (isset($params['start_date']) && isset($params['last_date'])  || count($params) == 0) {
+/*
+        if (in_array('start_date', $params) && in_array('last_date', $params)  || count($params) == 0) {
             if ((!isset($this->errorData['start_date']) && !isset($this->errorData['last_date'])
                     && strtotime($valid['start_date']) < strtotime($valid['last_date']))) {
                 $this->errorData['start_date'][] = 'Дата начала не может быть меньше даты окончания';
                 $this->errorData['last_date'][] = 'Дата начала не может быть меньше даты окончания';
             }
         }
-        if (isset($params['type_repeat']) || count($params) == 0) {
+ */
+        if (in_array('type_repeat', $params) or count($params) == 0) {
             $valid['type_repeat'] = (int)@$_POST['repeat'];
         }
-        if (isset($params['count_repeat']) || count($params) == 0) {
+        if (in_array('count_repeat', $params) or count($params) == 0) {
             $valid['count_repeat'] = (int)@$_POST['count'];
         }
-        if (isset($params['comment']) || count($params) == 0) {
+        if (in_array('comment', $params) or count($params) == 0) {
             $valid['comment'] = trim(htmlspecialchars(@$_POST['comment']));
         }
         if (count($this->errorData) > 0) {
@@ -101,17 +108,56 @@ class Calendar_Model
      */
     function add()
     {
-        $array = array('title','near_date','start_date','last_date','type_repeat','count_repeat','comment');
+        // Проверяем корректность отправленных данных
+        $array = array('title','near_date','last_date','type_repeat','count_repeat','comment');
         $array = $this->checkData($array);
-        if (!$array) {
+        // Если есть ошибки, то возвращаем их пользователю в виде массива
+        if ($array == false) {
             die(json_encode($this->errorData));
         }
         $sql = "INSERT INTO calendar
             (user_id,title,near_date,start_date,last_date,type_repeat,count_repeat,comment,dt_create)
             VALUES (?,?,?,?,?,?,?,?,NOW())";
-        $this->db->query($sql, Core::getInstance()->user->getId(), $array['title'], $array['near_date'],
-            $array['start_date'],$array['last_date'], $array['type_repeat'], $array['count_repeat'], $array['comment']);
-        return mysql_insert_id();
+        // Дата начала и текущая (ближайшая) дата - тут равны
+        $last_id = $this->db->query($sql, Core::getInstance()->user->getId(), $array['title'], $array['near_date'],
+            $array['near_date'],$array['last_date'], $array['type_repeat'], $array['count_repeat'], $array['comment']);
+        // Если у нас есть повторения события, то добавляем и их тоже
+        if($array['count_repeat'] > 0) {
+            switch ($array['type_repeat']) {
+                case 1: // 1 - Ежедневно,
+                    $type = ' DAY '; break;
+                case 3: // 3 - Каждый Пн., Ср. и Пт.,
+                    break;
+                case 4: // 4 - Каждый Вт. и Чт.,
+                    break;
+                case 5: // 5 - По будням,
+                    break;
+                case 6: // 6 - По выходным,
+                    break;
+                case 7: // 7 - Еженедельно,
+                    $type = ' WEEK '; break;
+                case 30: // 30 - Ежемесячно,
+                    $type = ' MONTH '; break;
+                    break;
+                case 90: // 90 - Ежеквартально,
+                    $type = ' QUARTER '; break;
+                    break;
+                case 365: // 365 - Ежегодно
+                    $type = ' YEAR '; break;
+                    break;
+                default: // 0 - Без повторения
+                    return '[]';
+            }
+            // Повторов должно быть на 1 меньше, так как первая дата - оригинал это уже часть повтора
+            for ($i = 1 ; $i < $array['count_repeat'] ; $i++) {
+                $this->db->query("INSERT INTO calendar (`user_id`,`main`,`title`,`start_date`,`last_date`,".
+                    "`type_repeat`,`count_repeat`, `comment`, `dt_create`, `dt_edit`, `near_date`) ".
+                    "SELECT `user_id`,`main`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`,".
+                    "`comment`,`dt_create`,`dt_edit`, DATE_ADD(start_date, INTERVAL ?d WEEK) AS `near_date` FROM calendar ".
+                    "WHERE id=?d AND user_id=?", $i, $last_id, Core::getInstance()->user->getId());
+            }
+        }
+        return '[]';
     }
     
     /**
