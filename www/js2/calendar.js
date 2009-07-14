@@ -42,6 +42,8 @@ $(document).ready(function() {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
             $('div #calendar-buttons').html($('#div #full-calendar-header').html());
+            $('#calendar').fullCalendar('getEvents');
+            <div id="cal_events"></div>
         },
         dayClick: function(dayDate) {
             clearForm();

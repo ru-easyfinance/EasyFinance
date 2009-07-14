@@ -7,11 +7,7 @@
  * SVN $Id$
  */
 
-// Устанавливаем константу последней ревизии
-//TODO Переписать на использование утилиты svnversion
-$Rev = "$LastChangedRevision$"; //DO NOT EDIT!
-$Rev = explode(" ", $Rev);
-define('REVISION', $Rev[1]);
+require_once dirname(__FILE__).'/version.php';
 
 /**
  * Реализация функции __autoload для всех классов
