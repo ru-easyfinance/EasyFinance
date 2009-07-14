@@ -104,7 +104,7 @@ class Calendar_Model
 
     /**
      * Добавляем новое событие
-     * @return <bool>
+     * @return <json> Массив в формате json. Если пустой, значит успешно добавлено, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function add()
     {
@@ -150,11 +150,11 @@ class Calendar_Model
             }
             // Повторов должно быть на 1 меньше, так как первая дата - оригинал это уже часть повтора
             for ($i = 1 ; $i < $array['count_repeat'] ; $i++) {
-                $this->db->query("INSERT INTO calendar (`user_id`,`main`,`title`,`start_date`,`last_date`,".
+                $this->db->query("INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,".
                     "`type_repeat`,`count_repeat`, `comment`, `dt_create`, `dt_edit`, `near_date`) ".
-                    "SELECT `user_id`,`main`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`,".
-                    "`comment`,`dt_create`,`dt_edit`, DATE_ADD(start_date, INTERVAL ?d WEEK) AS `near_date` FROM calendar ".
-                    "WHERE id=?d AND user_id=?", $i, $last_id, Core::getInstance()->user->getId());
+                    "SELECT `user_id`,?d AS `chain`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`,".
+                    "`comment`,`dt_create`,`dt_edit`, DATE_ADD(start_date, INTERVAL ?d {$type}) AS `near_date` FROM calendar ".
+                    "WHERE id=?d AND user_id=?", $last_id, $i, $last_id, Core::getInstance()->user->getId());
             }
         }
         return '[]';
@@ -162,7 +162,7 @@ class Calendar_Model
     
     /**
      * Редактируем событие
-     * @@return <bool>
+     * @return <json> Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function edit()
     {
@@ -185,6 +185,35 @@ class Calendar_Model
     }
 
     /**
+     * Удаляет указанное событие
+     * @return <json> Массив в формате json. Если пустой, значит успешно удалено, если со значениями - значит ошибка. И в них содержится ошибка.
+     */
+    function del()
+    {
+        /**
+         * Ид события, которое требуется удалить
+         * @var <int>
+         */
+        $id = (int)@$_POST['id'];
+
+        /**
+         * Ид цепочки событий. Если указано, то удаляется вся цепочка событий следующая после id, если false - то только указанное в id
+         * @var <bool>
+         */
+        $chain = (int)@$_POST['chain'];
+        // Если сказали удалить всю цепочку, вместе с указанным событием
+        if ($chain) {
+            $this->db->query("DELETE FROM calendar WHERE (id=?d OR (chain=?d AND id > ?d)) AND user_id=?", $id,
+                $chain, $id, Core::getInstance()->user->getId());
+            return '[]';
+        // Если сказали удалить только выбранное событие
+        } else {
+            $this->db->query("DELETE FROM calendar WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
+            return '[]';
+        }
+    }
+
+    /**
      * Возвращает массив событий в формате JSON за указанный период
      * @param <int> $start
      * @param <int> $end
@@ -195,18 +224,13 @@ class Calendar_Model
         //@TODO Сделать проверку и установку свойств по умолчанию
         $array = $this->getEventsArray($start, $end);
         foreach ($array as $key => $val) {
-            $array[$key]['className'] = 'yellow';
+            $array[$key]['className'] = 'yellow'; //'green','red','blue'
             $array[$key]['draggable'] = true;
             $array[$key]['date'] = (int)$val['date'];
             $array[$key]['start_date'] = (int)$val['start_date'];
             $array[$key]['last_date'] = (int)$val['last_date'];
         }
         return json_encode($array);
-//                    showTime => false,
-//                    className => 'green' ,
-//                    className => 'red',
-//                    className => 'blue',
-
     }
 
     /**
@@ -217,14 +241,15 @@ class Calendar_Model
      */
     private function getEventsArray($start, $end)
     {
+        $start = $start / 1000;
+        $end = $end / 1000;
         $sql = "SELECT 
             id, title, UNIX_TIMESTAMP(near_date) AS `date`,
             UNIX_TIMESTAMP(start_date) AS `start_date`, UNIX_TIMESTAMP(last_date) AS `last_date`,
             type_repeat AS `repeat`,
-            count_repeat AS `count`, comment
-            #, dt_create, dt_edit
-        FROM calendar WHERE user_id=?";
-        $array = $this->db->select($sql, Core::getInstance()->user->getId());
+            count_repeat AS `count`, comment, chain
+        FROM calendar WHERE user_id=? AND DATE(near_date) BETWEEN DATE(FROM_UNIXTIME(?)) AND DATE(FROM_UNIXTIME(?));";
+        $array = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
         return $array;
     }
 }

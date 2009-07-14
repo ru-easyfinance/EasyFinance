@@ -51,10 +51,17 @@ function databaseErrorHandler($message, $info)
 
 function databaseLogger($db, $sql)
 {
+    return false;
     // Находим контекст вызова этого запроса.
     $caller = $db->findLibraryCaller();
+    $array = & $caller['object']->_placeholderCache;
+    $array = array_shift($array);
     $fh = fopen('/var/www/hm/db_log', 'a');
-    fwrite($fh, "\n".@$caller['object']->_lastQuery[0] . "\n  -- (" . date("Y-m-d H:i:s")  ."  ". @$caller['object']->_statistics['count'].") ".@$caller['object']->_statistics['time']);
+    //print var_dump(@$caller['object']);
+    //fwrite($fh, "\n".@$caller['object']->_lastQuery[0] . "\n  -- (" . date("Y-m-d H:i:s")  ."  ". @$caller['object']->_statistics['count'].") ".@$caller['object']->_statistics['time']);
+    //fwrite($fh, "\n". $array[0] . "\n  -- (" . date("Y-m-d H:i:s")  ."  ". @$caller['object']->_statistics['count'].") ".@$caller['object']->_statistics['time']);
+    $tip = "\n".$sql;
+    fwrite($fh, $tip);
     fclose($fh);
 }
 

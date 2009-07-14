@@ -43,7 +43,7 @@ class Calendar_Controller extends Template_Controller
     /**
      * Добавляет новое событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return void
+     * @return <void>
      */
     function add($args)
     {
@@ -53,20 +53,30 @@ class Calendar_Controller extends Template_Controller
     /**
      * Редактирует событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return void
+     * @return <void>
      */
     function edit($args)
     {
         die($this->model->edit());
     }
+    
+    /**
+     * Удаляет выбранное событие
+     * @param $args array mixed Какие-нибудь аргументы
+     * @return <void>
+     */
+    function del($args)
+    {
+        die($this->model->del());
+    }
 
     /**
      * Возвращает список событий, в формате JSON
-     * @return void
+     * @return <void>
      */
     function events($args) {
-        $start = (int)$_GET['start'];
-        $end   = (int)$_GET['end'];
+        $start = $_GET['start'];
+        $end   = $_GET['end'];
         die ($this->model->getEvents($start, $end));
     }
 }

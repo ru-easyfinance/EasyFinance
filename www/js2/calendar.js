@@ -67,6 +67,7 @@ $(document).ready(function() {
             if (calEvent.draggable === true) {
                 clearForm();
                 $('form #key').val(calEvent.id);
+                $('form #chain').val(calEvent.chain);
                 $('form #title').val(calEvent.title);
                 $('form').attr('action', '/calendar/edit/');
                 dt = new Date();
@@ -123,7 +124,7 @@ $(document).ready(function() {
                         // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
                         for (var v in data) {
                             //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                            alert(v);
+                            alert('Ошибка в ' + v);
                         }
                         // В случае успешного добавления, закрываем диалог и обновляем календарь
                         if (data.length == 0) {
@@ -136,10 +137,26 @@ $(document).ready(function() {
             },
             'Отмена': function() {
                 $(this).dialog('close');
+            },
+            'Удалить': function () {
+                if (confirm('Удалить событие?')) {
+                    if ($('form #chain').val() > 0 && confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
+                        $.post('/calendar/del/', {id:$('form #key').val(), chain: $('form #chain').val()}, function(){
+                            $('#dialog_event').dialog('close');
+                            $('#calendar').fullCalendar('refresh');
+                        }, 'json');
+                    } else {
+                        $.post('/calendar/del/', {id:$('form #key').val(), chain: false}, function(){
+                            $('#dialog_event').dialog('close');
+                            $('#calendar').fullCalendar('refresh');
+                        }, 'json')
+                    }
+                }
             }
         },
         close: function() {
-        //allFields.val('').removeClass('ui-state-error');
+            //alert('close');
+            //allFields.val('').removeClass('ui-state-error');
         }
     });
     $('#repeat').change(function(eventObject){
