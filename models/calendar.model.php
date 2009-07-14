@@ -248,8 +248,87 @@ class Calendar_Model
             UNIX_TIMESTAMP(start_date) AS `start_date`, UNIX_TIMESTAMP(last_date) AS `last_date`,
             type_repeat AS `repeat`,
             count_repeat AS `count`, comment, chain
-        FROM calendar WHERE user_id=? AND DATE(near_date) BETWEEN DATE(FROM_UNIXTIME(?)) AND DATE(FROM_UNIXTIME(?));";
+        FROM calendar WHERE user_id=? AND DATE(near_date) BETWEEN DATE(FROM_UNIXTIME(?)) AND DATE(FROM_UNIXTIME(?)) ORDER BY near_date;";
         $array = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
         return $array;
+    }
+
+    /**
+     *
+     */
+    function ical()
+    {
+        $header = "BEGIN:VCALENDAR".
+        "\nPRODID:-//Home-Money.ru//http://home-money.ru rev.".REVISION."//EN".
+        "\nVERSION:2.0".
+        "\nCALSCALE:GREGORIAN".
+        "\nMETHOD:PUBLISH". //???
+        "\nX-WR-CALNAME:Список событий".
+        "\nX-WR-TIMEZONE:Europe/Moscow".
+        "\nX-WR-CALDESC:Список событий с сайта home-money.ru".
+        "\nBEGIN:VTIMEZONE".
+        "\nTZID:Europe/Moscow".
+        "\nX-LIC-LOCATION:Europe/Moscow".
+        "\nBEGIN:DAYLIGHT".
+        "\nTZOFFSETFROM:+0300".
+        "\nTZOFFSETTO:+0400".
+        "\nTZNAME:MSD".
+        "\nDTSTART:19700329T020000".
+        "\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU".
+        "\nEND:DAYLIGHT".
+        "\nBEGIN:STANDARD".
+        "\nTZOFFSETFROM:+0400".
+        "\nTZOFFSETTO:+0300".
+        "\nTZNAME:MSK".
+        "\nDTSTART:19701025T030000".
+        "\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU".
+        "\nEND:STANDARD".
+        "\nEND:VTIMEZONE".
+        "\nBEGIN:VEVENT";
+/*
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Открытый календарь
+X-WR-TIMEZONE:Europe/Moscow
+X-WR-CALDESC:Самый\, открытый календарь
+BEGIN:VTIMEZONE
+TZID:Europe/Moscow
+X-LIC-LOCATION:Europe/Moscow
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0300
+TZOFFSETTO:+0400
+TZNAME:MSD
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0400
+TZOFFSETTO:+0300
+TZNAME:MSK
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Moscow:20090624T110000
+DTEND;TZID=Europe/Moscow:20090624T193000
+RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;WKST=MO
+DTSTAMP:20090714T145320Z
+UID:cm9hgv5k2akiv6ssuf539p72vs@google.com
+CLASS:PUBLIC
+CREATED:00001231T000000Z
+DESCRIPTION:Описание этого события
+LAST-MODIFIED:20090626T074742Z
+LOCATION:Москва\, метро Савёловское
+SEQUENCE:2
+STATUS:CONFIRMED
+SUMMARY:Первое открытое событие
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
+*/
     }
 }

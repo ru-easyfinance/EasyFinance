@@ -2,7 +2,6 @@ $(document).ready(function() {
     var d = new Date();
     var y = d.getFullYear();
     var m = d.getMonth();
-    var listEvents = [];
 
     /**
      * Очищаем форму
@@ -42,8 +41,6 @@ $(document).ready(function() {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
             $('div #calendar-buttons').html($('#div #full-calendar-header').html());
-            $('#calendar').fullCalendar('getEvents');
-            <div id="cal_events"></div>
         },
         dayClick: function(dayDate) {
             clearForm();
@@ -54,13 +51,45 @@ $(document).ready(function() {
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
         events: function(start, end, callback) {
-//            start.setMonth( start.getMonth() - 1 );
-//            end.setMonth( end.getMonth() + 1 );
             $.getJSON('/calendar/events/',
                 {
                     start: start.getTime(),
                     end: end.getTime()
                 },   function(result) {
+                    $('div#cal_events').empty();
+                    n = new Date();
+                    for(v in result){
+                        l = result[v];
+                        n.setTime(l.date*1000);
+                        if (start.getTime() <= n.getTime() && n.getTime() <= end.getTime()) {
+                            $('div#cal_events').append(
+                                $('<div>').attr({
+                                    key: l.id,
+                                    title: l.comment
+                                }).html("<span>"+$.datepicker.formatDate('dd.mm',n)+"</span> "+l.title)
+                            );
+                        }
+                    }
+                    $('div#cal_events div').click(function(){
+                        clearForm();
+                        var el = $('#calendar').fullCalendar( 'getEventsById', $(this).attr('key'));
+                        $('form #key').val(el[0].id);
+                        $('form #chain').val(el[0].chain);
+                        $('form #title').val(el[0].title);
+                        $('form').attr('action', '/calendar/edit/');
+                        dt = new Date();
+                        dt.setTime(el[0].start);
+                        $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
+                        $('form #time').val(dt.toLocaleTimeString().substr(0, 5));
+                        $('form #repeat option').each(function(){
+                            if (el[0].repeat == $(this).attr('value')) {
+                                $(this).attr('selected','selected');
+                            }
+                        });
+                        $('form #count').val(el[0].count);
+                        $('form #comment').val(el[0].comment);
+                        $('#dialog_event').dialog('open');
+                    });
                     callback(result);
                 }
             )
@@ -95,7 +124,7 @@ $(document).ready(function() {
 //    resize: function() { alert ('resize');}
     loading: function(isLoading) {
         if (!isLoading) {
-            $('#cal_events').empty();
+            //$('#cal_events').empty();
         }
     }
     });

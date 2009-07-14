@@ -41,6 +41,7 @@ if ($_SESSION['pda'] == 'on') {
 $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
+$tpl->assign('revision',REVISION);
 
 // Добавляем ссылки на БД и Смарти в наше ядро
 Core::getInstance()->db = $db;
