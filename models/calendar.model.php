@@ -230,6 +230,7 @@ class Calendar_Model
             $array[$key]['start_date'] = (int)$val['start_date'];
             $array[$key]['last_date'] = (int)$val['last_date'];
         }
+        
         return json_encode($array);
     }
 
