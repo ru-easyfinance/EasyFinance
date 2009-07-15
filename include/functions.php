@@ -104,17 +104,22 @@ function error_404 ($path='')
 
 /**
  * Форматирует русское представление даты, например: <code>20.02.2009</code> в формат даты mysql <code>2009-02-20</code>
- * @param <string> $date
+ * @param <string> $date Дата, в формате дд.мм.гггг
+ * @param <string> $time Время в формате чч:мм
  * @return <string>
  */
-function formatRussianDate2MysqlDate($date)
+function formatRussianDate2MysqlDate($date, $time)
 {
     if (empty ($date)) {
         return false;
     }
     $date = explode('.', $date);
     if (count($date) == 3) {
-        return (int)$date[2].'-'.(int)$date[1].'-'.(int)$date[0];
+        if (empty ($time)) {
+            return (int)$date[2].'-'.(int)$date[1].'-'.(int)$date[0];
+        } elseif (preg_match("/^([0-9]{2}):([0-9]{2})$/", $time)) {
+            return (int)$date[2].'-'.(int)$date[1].'-'.(int)$date[0].' '.$time.':00';
+        }
     } else {
         return false;
     }

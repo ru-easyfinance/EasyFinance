@@ -38,13 +38,17 @@ class Calendar_Model
      */
     function checkData($params = array())
     {
-        $this->errorData = array();
+        /**
+         * Массив, в котором хранятся проверенные <b>валидные</b> значения из суперглобального массива $_POST
+         * @example $valid['id'] = 109;
+         * @var <array> mixed
+         */
         $valid = array();
+        $this->errorData = array();
 
         if (in_array('id', $params) or count($params) == 0) {
             $valid['id'] = (int)@$_POST['key'];
             if ($valid['id'] === 0) {
-                print 'id,';
                 $this->errorData['id'][] = 'Не указан id события';
             }
         }
@@ -52,15 +56,13 @@ class Calendar_Model
         if (in_array('title', $params) or count($params) == 0) {
             $valid['title'] = trim(htmlspecialchars(@$_POST['title']));
             if (empty ($valid['title'])) {
-                print 'title,';
                 $this->errorData['title'][] = 'Не указан заголовок события';
             }
         }
         if (in_array('near_date', $params) or count($params) == 0) {
-            $valid['near_date'] = formatRussianDate2MysqlDate(@$_POST['date']);
+            $valid['near_date'] = formatRussianDate2MysqlDate(@$_POST['date'], @$_POST['time']);
             //@TODO Проверять валидность mysql даты
             if (!$valid['near_date']) {
-                print 'date,';
                 $this->errorData['near_date'][] = 'Не верно указана дата';
             }
         }
@@ -148,13 +150,20 @@ class Calendar_Model
                 default: // 0 - Без повторения
                     return '[]';
             }
+
+            $sql = "";
             // Повторов должно быть на 1 меньше, так как первая дата - оригинал это уже часть повтора
             for ($i = 1 ; $i < $array['count_repeat'] ; $i++) {
+                    if (!empty ($sql)) {
+                        $sql .= ',';
+                    }
+                    $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
+                    "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                    addslashes($array['comment'])."', NOW(), DATE_ADD('{$array['near_date']}', INTERVAL {$i} {$type}))";
+            }
+            if (!empty($sql)) {
                 $this->db->query("INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,".
-                    "`type_repeat`,`count_repeat`, `comment`, `dt_create`, `dt_edit`, `near_date`) ".
-                    "SELECT `user_id`,?d AS `chain`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`,".
-                    "`comment`,`dt_create`,`dt_edit`, DATE_ADD(start_date, INTERVAL ?d {$type}) AS `near_date` FROM calendar ".
-                    "WHERE id=?d AND user_id=?", $last_id, $i, $last_id, Core::getInstance()->user->getId());
+                    "`type_repeat`,`count_repeat`, `comment`, `dt_create`, `near_date`) VALUES " . $sql);
             }
         }
         return '[]';
@@ -201,10 +210,12 @@ class Calendar_Model
          * @var <bool>
          */
         $chain = (int)@$_POST['chain'];
+
         // Если сказали удалить всю цепочку, вместе с указанным событием
-        if ($chain) {
+        if ($chain > 0) {
             $this->db->query("DELETE FROM calendar WHERE (id=?d OR (chain=?d AND id > ?d)) AND user_id=?", $id,
                 $chain, $id, Core::getInstance()->user->getId());
+            //@TODO Добавить апдейт цепочки событий вверх, до события с указанным Id
             return '[]';
         // Если сказали удалить только выбранное событие
         } else {
@@ -221,7 +232,10 @@ class Calendar_Model
      */
     function getEvents($start, $end)
     {
-        //@TODO Сделать проверку и установку свойств по умолчанию
+        // Делаем проверку чисел, и если это не число, то устанавливаем 0. Внимание, там ОЧЕНЬ большие числа!!!
+        $start = (float)$start;
+        $end   = (float)$end;
+
         $array = $this->getEventsArray($start, $end);
         foreach ($array as $key => $val) {
             $array[$key]['className'] = 'yellow'; //'green','red','blue'
@@ -241,8 +255,11 @@ class Calendar_Model
      */
     private function getEventsArray($start, $end)
     {
+        // Убираем микросекунды, и приводим числа  к формату UNIX_TIMESTAMP
+        //$start = strtotime(date("Y-m-d", strtotime($start / 1000)) . " -1 month"); // Делаем выборку за три месяца
         $start = $start / 1000;
         $end = $end / 1000;
+        
         $sql = "SELECT 
             id, title, UNIX_TIMESTAMP(near_date) AS `date`,
             UNIX_TIMESTAMP(start_date) AS `start_date`, UNIX_TIMESTAMP(last_date) AS `last_date`,
@@ -254,9 +271,9 @@ class Calendar_Model
     }
 
     /**
-     *
+     * Возвращает события в формате iCalendar
      */
-    function ical()
+    function iCalendar()
     {
         $header = "BEGIN:VCALENDAR".
         "\nPRODID:-//Home-Money.ru//http://home-money.ru rev.".REVISION."//EN".

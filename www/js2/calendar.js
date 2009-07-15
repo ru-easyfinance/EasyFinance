@@ -7,7 +7,7 @@ $(document).ready(function() {
      * Очищаем форму
      */
     function clearForm() {
-        $('form #key,#title,#date_start,#date_end,#date,#time,#count,#comment').val('');
+        $('form #key,#title,#date_start,#date_end,#date,#time,#count,#comment,#chain').val('');
         $('form #tr_count,#tr_date_end').hide();
         $('form #repeat option').each(function(){ 
             $(this).removeAttr('selected').removeAttr('disabled');
@@ -66,7 +66,7 @@ $(document).ready(function() {
                                 $('<div>').attr({
                                     key: l.id,
                                     title: l.comment
-                                }).html("<span>"+$.datepicker.formatDate('dd.mm',n)+"</span> "+l.title)
+                                }).html("<span style='background: yellow;'>"+$.datepicker.formatDate('dd.mm',n)+"</span> "+l.title)
                             );
                         }
                     }
