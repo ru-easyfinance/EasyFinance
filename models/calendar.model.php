@@ -120,6 +120,7 @@ class Calendar_Model
         $sql = "INSERT INTO calendar
             (user_id,title,near_date,start_date,last_date,type_repeat,count_repeat,comment,dt_create)
             VALUES (?,?,?,?,?,?,?,?,NOW())";
+
         // Дата начала и текущая (ближайшая) дата - тут равны
         $last_id = $this->db->query($sql, Core::getInstance()->user->getId(), $array['title'], $array['near_date'],
             $array['near_date'],$array['last_date'], $array['type_repeat'], $array['count_repeat'], $array['comment']);
@@ -263,8 +264,7 @@ class Calendar_Model
         $sql = "SELECT 
             id, title, UNIX_TIMESTAMP(near_date) AS `date`,
             UNIX_TIMESTAMP(start_date) AS `start_date`, UNIX_TIMESTAMP(last_date) AS `last_date`,
-            type_repeat AS `repeat`,
-            count_repeat AS `count`, comment, chain
+            type_repeat AS `repeat`, count_repeat AS `count`, comment, chain, infinity
         FROM calendar WHERE user_id=? AND DATE(near_date) BETWEEN DATE(FROM_UNIXTIME(?)) AND DATE(FROM_UNIXTIME(?)) ORDER BY near_date;";
         $array = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
         return $array;

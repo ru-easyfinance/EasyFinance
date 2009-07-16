@@ -9,9 +9,9 @@
 <script type='text/javascript' src='/js2/jquery/ui.datepicker.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.tabs.js'></script>
 <script type='text/javascript' src='/js2/jquery/i18n/ui.datepicker-ru.js'></script>
-<script type='text/javascript' src='/js2/jquery/fullcalendar.js?r={$revision}'></script>
+<script type='text/javascript' src='/js2/jquery/fullcalendar.min.js?r={$revision}'></script>
 <script type='text/javascript' src='/js2/jquery/jquery.maskedinput-1.2.2.min.js'></script>
-<script type='text/javascript' src='/js2/jquery/jquery.timepicker-table.js'></script>
+<script type='text/javascript' src='/js2/jquery/jquery.timepicker-table.min.js'></script>
 <script type='text/javascript' src='/js2/calendar.js?r={$revision}'></script>
 <div id="views">
     <ul>
@@ -62,24 +62,34 @@
                         <td><label for="repeat">Повторять</label></td>
                         <td><select name="repeat" id="repeat" class="ui-widget-content">
                             <option value="0">Без повторения</option>
-                            <option value="1">Ежедневно</option>
+                            <option value="1">Каждый день</option>
                             <option value="3">Каждый Пн., Ср. и Пт.</option>
                             <option value="4">Каждый Вт. и Чт.</option>
                             <option value="5">По будням</option>
                             <option value="6">По выходным</option>
-                            <option value="7">Еженедельно</option>
-                            <option value="30">Ежемесячно</option>
-                            <option value="90">Ежеквартально</option>
-                            <option value="365">Ежегодно</option>
+                            <option value="7">Каждую неделю</option>
+                            <option value="30">Каждый месяц</option>
+                            <option value="90" disabled="disabled">Ежеквартально</option>
+                            <option value="365">Каждый год</option>
                         </select></td>
                     </tr>
                     <tr id="tr_count">
-                        <td><label for="count">Количество раз</label></td>
-                        <td><input type="text" name="count" id="count" value="" class="text ui-widget-content" /></td>
-                    </tr>
-                    <tr id="tr_date_end">
-                        <td><label for="date_end">Дата окончания</label></td>
-                        <td><input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" /></td>
+                        <td><label for="count">Повторить</label></td>
+                        <td>
+                            <div>
+                                <input type="radio" name="rep_type" id="rep_type" value="1">
+                                <select name="count" id="count" class="ui-widget-content"></select>
+                                <label for="count">&nbsp;раз&nbsp;</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="rep_type" id="rep_type" value="2">
+                                <input type="checkbox" name="infinity" id="infinity"><label for="infinity">Бесконечно</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="rep_type" id="rep_type" value="3">
+                                <input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" />
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td><label for="comment">Комментарий</label></td>

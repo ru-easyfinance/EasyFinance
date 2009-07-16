@@ -8,18 +8,86 @@ $(document).ready(function() {
      */
     function clearForm() {
         $('form #key,#title,#date_start,#date_end,#date,#time,#count,#comment,#chain').val('');
-        $('form #tr_count,#tr_date_end').hide();
+        $('form #tr_count').hide();
         $('form #repeat option').each(function(){ 
             $(this).removeAttr('selected').removeAttr('disabled');
         });
+        $('form #count option').each(function(){
+            $(this).removeAttr('selected');
+        });
+        $('form #infinity').removeAttr('checked');
     }
-    $('#tr_date_end,#tr_date_start,#tr_count').hide();
+
+    /**
+     * Перед открытием формы
+     * @param <CalEvent> el Элемент календаря, т.е. объект - событие
+     */
+    function beforeOpenForm(el) {
+        clearForm();
+        $('form #key').val(el.id);
+        $('form #chain').val(el.chain);
+        $('form #title').val(el.title);
+        $('form').attr('action', '/calendar/edit/');
+        dt = new Date(); dt.setTime(el.start);
+        $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
+        $('form #time').val(dt.toLocaleTimeString().substr(0, 5));
+        $('form #repeat option').each(function(){ //@FIXME Оптимизировать
+            if (el.repeat == $(this).attr('value')) {
+                $(this).attr('selected','selected');
+            }
+        });
+        $('form #count option').each(function(){ //@FIXME Оптимизировать
+            if (el.count == $(this).attr('value')) {
+                $(this).attr('selected','selected');
+            }
+        });
+        $('form #comment').val(el.comment);
+        if (el.infinity == 1) {
+            $('form #infinity').attr('checked','checked');
+            $('#repeat').change();
+        }
+    }
+
+    // Init
+    $('#infinity').attr('disabled','disabled');
+    $('#tr_date_start,#tr_count').hide();
     $('#date,#date_start,#date_end').datepicker({showOn: 'button'});
     $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
     //$('textarea#comment').jGrow();
     $("#tabs,#views").tabs();
     $('#time').timePicker().mask('99:99');
-    $('#count').mask('99'); //@FIXME
+    //$('#count').mask('99');
+    for(i = 1; i < 31; i++){
+        $('form #count').append('<option>'+i+'</option>').val(i);
+    }
+
+    // Hooks
+    $('#repeat').change(function(){
+        // Если указано повторять каждый: день, неделю, месяц, год
+        if ($(this).val() == 1 || $(this).val() == 7 || $(this).val() == 30 || $(this).val() == 365) {
+            $('#tr_count').show();
+        // Если повторять не нужно
+        } else if ($(this).val() == 0) {
+            $('#tr_count').hide();
+        } else{
+            $('#tr_count').hide();
+        }
+    });
+    $('#rep_type').click(function(){
+        if ($(this).val() == 1) {
+            $('#count').removeAttr('disabled');
+            $('#infinity').removeAttr('checked');
+            $('#date_end').attr('disabled','disabled');
+        } else if ($(this).val() == 2) {
+            $('#count').attr('disabled','disabled');
+            $('#infinity').attr('checked','checked');
+            $('#date_end').attr('disabled','disabled');
+        } else {
+            $('#count').attr('disabled','disabled');
+            $('#infinity').removeAttr('checked');
+            $('#date_end').removeAttr('disabled');
+        }
+    });
     $('#calendar').fullCalendar({
         draggable: false,
         year: y,
@@ -51,11 +119,13 @@ $(document).ready(function() {
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
         events: function(start, end, callback) {
+            // Получаем события
             $.getJSON('/calendar/events/',
                 {
                     start: start.getTime(),
                     end: end.getTime()
                 },   function(result) {
+                    // Заполняем список событий
                     $('div#cal_events').empty();
                     n = new Date();
                     for(v in result){
@@ -70,24 +140,10 @@ $(document).ready(function() {
                             );
                         }
                     }
+                    // Устанавливаем хук на щелчок
                     $('div#cal_events div').click(function(){
-                        clearForm();
-                        var el = $('#calendar').fullCalendar( 'getEventsById', $(this).attr('key'));
-                        $('form #key').val(el[0].id);
-                        $('form #chain').val(el[0].chain);
-                        $('form #title').val(el[0].title);
-                        $('form').attr('action', '/calendar/edit/');
-                        dt = new Date();
-                        dt.setTime(el[0].start);
-                        $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
-                        $('form #time').val(dt.toLocaleTimeString().substr(0, 5));
-                        $('form #repeat option').each(function(){
-                            if (el[0].repeat == $(this).attr('value')) {
-                                $(this).attr('selected','selected');
-                            }
-                        });
-                        $('form #count').val(el[0].count);
-                        $('form #comment').val(el[0].comment);
+                        el = $('#calendar').fullCalendar( 'getEventsById', $(this).attr('key'));
+                        beforeOpenForm(el[0]);
                         $('#dialog_event').dialog('open');
                     });
                     callback(result);
@@ -96,22 +152,7 @@ $(document).ready(function() {
         },
         eventClick: function(calEvent, jsEvent) {
             if (calEvent.draggable === true) {
-                clearForm();
-                $('form #key').val(calEvent.id);
-                $('form #chain').val(calEvent.chain);
-                $('form #title').val(calEvent.title);
-                $('form').attr('action', '/calendar/edit/');
-                dt = new Date();
-                dt.setTime(calEvent.start);
-                $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
-                $('form #time').val(dt.toLocaleTimeString().substr(0, 5));
-                $('form #repeat option').each(function(){
-                    if (calEvent.repeat == $(this).attr('value')) {
-                        $(this).attr('selected','selected');
-                    }
-                });
-                $('form #count').val(calEvent.count);
-                $('form #comment').val(calEvent.comment);
+                beforeOpenForm(calEvent);
                 $('#dialog_event').dialog('open');
             }
         },
@@ -170,8 +211,10 @@ $(document).ready(function() {
                 $(this).dialog('close');
             },
             'Удалить': function () {
+                el = $('#calendar').fullCalendar( 'getEventsById', $('form #key').val());
                 if (confirm('Удалить событие?')) {
-                    if ($('form #chain').val() > 0 && confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
+                    if (($('form #chain').val() > 0 || el[0].date < el[0].last_date || el[0].infinity == 1) &&
+                     confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
                         $.post('/calendar/del/', {id:$('form #key').val(), chain: $('form #chain').val()}, function(){
                             $('#dialog_event').dialog('close');
                             $('#calendar').fullCalendar('refresh');
@@ -188,13 +231,6 @@ $(document).ready(function() {
         close: function() {
             //alert('close');
             //allFields.val('').removeClass('ui-state-error');
-        }
-    });
-    $('#repeat').change(function(eventObject){
-        if ($('#repeat option:selected').attr('value') == 0) {
-            $('#tr_count,#tr_date_end').hide();
-        } else {
-            $('#tr_count,#tr_date_end').show();
         }
     });
 });
