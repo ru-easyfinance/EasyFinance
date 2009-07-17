@@ -110,16 +110,50 @@ function error_404 ($path='')
  */
 function formatRussianDate2MysqlDate($date, $time)
 {
+    /**
+     * Собирает в себе отформатированную дату
+     * @var <string>
+     */
+    $retval = '';
     if (empty ($date)) {
         return false;
     }
     $date = explode('.', $date);
     if (count($date) == 3) {
-        if (empty ($time)) {
-            return (int)$date[2].'-'.(int)$date[1].'-'.(int)$date[0];
-        } elseif (preg_match("/^([0-9]{2}):([0-9]{2})$/", $time)) {
-            return (int)$date[2].'-'.(int)$date[1].'-'.(int)$date[0].' '.$time.':00';
+        if((int)$date[2] < 10) {
+            $retval = '0'.(int)$date[2] .'-';
+        } else {
+            $retval = (int)$date[2].'-';
         }
+        if ((int)$date[1]<10) {
+             $retval .= '0'.(int)$date[1].'-'.(int)$date[0];
+        } else {
+             $retval .= (int)$date[1].'-'.(int)$date[0];
+        }
+        if (empty ($time)) {
+            return $retval;
+        } elseif (preg_match("/^([0-9]{2}):([0-9]{2})$/", $time)) {
+            return $retval . ' ' . $time . ':00';
+        }
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Форматирует дату в формате mysql <code>1983-05-22</code> или датетайм <code>1983-05-22 12:43:03</code> в unix_timestamp
+ * @param <string> $date
+ * @return <int> Unix Timestamp или false в случае ошибки
+ */
+function formatMysqlDate2UnixTimestamp($date)
+{
+    $date = trim($date);
+    // Таймштамп
+    if (preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$/", $date)) {
+        return strtotime($date);
+    // Дата
+    } elseif (preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date)) {
+        return strtotime($date);
     } else {
         return false;
     }

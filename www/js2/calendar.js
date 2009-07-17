@@ -42,9 +42,14 @@ $(document).ready(function() {
             }
         });
         $('form #comment').val(el.comment);
-        if (el.infinity == 1) {
+        if (el.infinity == 0) {
+            $('.rep_type[value=1]').attr('checked','checked');
+        }else if (el.infinity == 1) {
             $('form #infinity').attr('checked','checked');
+            $('.rep_type[value=2]').attr('checked','checked');
             $('#repeat').change();
+        } else {
+            $('.rep_type[value=3]').attr('checked','checked');
         }
     }
 
@@ -63,6 +68,8 @@ $(document).ready(function() {
 
     // Hooks
     $('#repeat').change(function(){
+        $('#tr_count').show();
+/*
         // Если указано повторять каждый: день, неделю, месяц, год
         if ($(this).val() == 1 || $(this).val() == 7 || $(this).val() == 30 || $(this).val() == 365) {
             $('#tr_count').show();
@@ -72,15 +79,16 @@ $(document).ready(function() {
         } else{
             $('#tr_count').hide();
         }
+*/
     });
-    $('#rep_type').click(function(){
+    $('.rep_type').click(function(){
         if ($(this).val() == 1) {
             $('#count').removeAttr('disabled');
             $('#infinity').removeAttr('checked');
             $('#date_end').attr('disabled','disabled');
         } else if ($(this).val() == 2) {
             $('#count').attr('disabled','disabled');
-            $('#infinity').attr('checked','checked');
+            $('#infinity').attr('checked','on');
             $('#date_end').attr('disabled','disabled');
         } else {
             $('#count').attr('disabled','disabled');
@@ -190,7 +198,9 @@ $(document).ready(function() {
                         time: $('form #time').attr('value'),
                         repeat: $('form #repeat option:selected').attr('value'),
                         count: $('form #count').attr('value'),
-                        comment: $('form #comment').attr('value')
+                        comment: $('form #comment').attr('value'),
+                        infinity: $('form #infinity').attr('value'),
+                        rep_type: $('form .rep_type[checked]').val()
                     }, function(data, textStatus){
                         // data could be xmlDoc, jsonObj, html, text, etc...
                         // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"

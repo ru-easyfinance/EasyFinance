@@ -9,7 +9,7 @@
 <script type='text/javascript' src='/js2/jquery/ui.datepicker.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.tabs.js'></script>
 <script type='text/javascript' src='/js2/jquery/i18n/ui.datepicker-ru.js'></script>
-<script type='text/javascript' src='/js2/jquery/fullcalendar.min.js?r={$revision}'></script>
+<script type='text/javascript' src='/js2/jquery/fullcalendar.js?r={$revision}'></script>
 <script type='text/javascript' src='/js2/jquery/jquery.maskedinput-1.2.2.min.js'></script>
 <script type='text/javascript' src='/js2/jquery/jquery.timepicker-table.min.js'></script>
 <script type='text/javascript' src='/js2/calendar.js?r={$revision}'></script>
@@ -77,16 +77,16 @@
                         <td><label for="count">Повторить</label></td>
                         <td>
                             <div>
-                                <input type="radio" name="rep_type" id="rep_type" value="1">
+                                <input type="radio" name="rep_type" class="rep_type" value="1">
                                 <select name="count" id="count" class="ui-widget-content"></select>
                                 <label for="count">&nbsp;раз&nbsp;</label>
                             </div>
                             <div>
-                                <input type="radio" name="rep_type" id="rep_type" value="2">
-                                <input type="checkbox" name="infinity" id="infinity"><label for="infinity">Бесконечно</label>
+                                <input type="radio" name="rep_type" class="rep_type" value="2">
+                                <input type="checkbox" name="infinity" id="infinity" value="1"><label for="infinity">Бесконечно</label>
                             </div>
                             <div>
-                                <input type="radio" name="rep_type" id="rep_type" value="3">
+                                <input type="radio" name="rep_type" class="rep_type" value="3">
                                 <input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" />
                             </div>
                         </td>
