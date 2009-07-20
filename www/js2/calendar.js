@@ -2,7 +2,11 @@ $(document).ready(function() {
     var d = new Date();
     var y = d.getFullYear();
     var m = d.getMonth();
-
+    
+    $.fullCalendar.monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+    $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+    $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
     /**
      * Очищаем форму
      */
@@ -97,6 +101,7 @@ $(document).ready(function() {
         }
     });
     $('#calendar').fullCalendar({
+        weekStart: 1,
         draggable: false,
         year: y,
         month: m,
@@ -200,7 +205,14 @@ $(document).ready(function() {
                         count: $('form #count').attr('value'),
                         comment: $('form #comment').attr('value'),
                         infinity: $('form #infinity').attr('value'),
-                        rep_type: $('form .rep_type[checked]').val()
+                        rep_type: $('form .rep_type[checked]').val(),
+                        mon: $('form #mon').attr('checked') ? 1 : 0,
+                        tue: $('form #tue').attr('checked') ? 1 : 0,
+                        wed: $('form #wed').attr('checked') ? 1 : 0,
+                        thu: $('form #thu').attr('checked') ? 1 : 0,
+                        fri: $('form #fri').attr('checked') ? 1 : 0,
+                        sat: $('form #sat').attr('checked') ? 1 : 0,
+                        sun: $('form #sun').attr('checked') ? 1 : 0
                     }, function(data, textStatus){
                         // data could be xmlDoc, jsonObj, html, text, etc...
                         // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"

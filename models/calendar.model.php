@@ -126,22 +126,33 @@ class Calendar_Model
         // Дата начала и текущая (ближайшая) дата - тут равны
         $last_id = $this->db->query($sql, Core::getInstance()->user->getId(), $array['title'], $array['near_date'],
             $array['near_date'],$array['last_date'], $array['type_repeat'], $array['count_repeat'], $array['comment']);
-
         // Если у нас есть повторения события, то добавляем и их тоже
         if($array['type_repeat'] > 0) {
             switch ($array['type_repeat']) {
                 case 1: // 1 - Ежедневно,
-                    $type = ' DAY '; break;
+                    $type = ' DAY ';
+                    $sql = $this->_repeatDay($array, $last_id, $type);
+                    break;
                 case 3: // 3 - Каждый Пн., Ср. и Пт.,
-                    $type = ' WEEK '; break;
+                    $type = ' WEEK '; 
+                    $sql = $this->_repeatWeekDay($array, $last_id, $type);
+                    break;
                 case 4: // 4 - Каждый Вт. и Чт.,
-                    $type = ' WEEK '; break;
+                    $type = ' WEEK '; 
+                    $sql = $this->_repeatWeekDay($array, $last_id, $type);
+                    break;
                 case 5: // 5 - По будням,
-                    $type = ' WEEK '; break;
+                    $type = ' WEEK '; 
+                    $sql = $this->_repeatWeekDay($array, $last_id, $type);
+                    break;
                 case 6: // 6 - По выходным,
-                    $type = ' WEEK '; break;
+                    $type = ' WEEK '; 
+                    $sql = $this->_repeatWeekDay($array, $last_id, $type);
+                    break;
                 case 7: // 7 - Еженедельно,
-                    $type = ' WEEK '; break;
+                    $type = ' WEEK '; 
+                    $sql = $this->_repeatWeekDay($array, $last_id, $type);
+                    break;
                 case 30: // 30 - Ежемесячно,
                     $type = ' MONTH '; break;
                     break;
@@ -154,72 +165,200 @@ class Calendar_Model
                 default: // 0 - Без повторения
                     return '[]';
             }
-            $sql = "";
-            $repeat_dates = array();
+/*
             // Создаём повторяющиеся события определённое количество раз
-            if ((int)$_POST['rep_type']== 3) {
-                for ($i = 1 ; $i <= $array['count_repeat'] ; $i++) {
-                    // 3, 4, 5, 6
-                    if ($array['type_repeat'] >= 3 or $array['type_repeat'] <= 6 ) {
-                        $dt = formatMysqlDate2UnixTimestamp($array['near_date']);
-                        $dw = date  ('w', $dt); // День недели, от 0 (вск) до 6 (суб)
-                        for ($j = 0 ; $j < 7 ; $j++) {
-                            switch ($array['type_repeat']) {
-                                case 3: //3 - Каждый Пн., Ср. и Пт.,
-                                    if ($dw == 1 || $dw == 3 || $dw == 5) {
-                                        $repeat_dates[] = $dt+(86400 * $j);
-                                    }
-                                    break;
-                                case 4: //4 - Каждый Вт. и Чт.,
-                                    if ($dw == 2 || $dw == 4) {
-                                        $repeat_dates[] = $dt+(86400 * $j);
-                                    }
-                                    break;
-                                case 5: //5 - По будням,
-                                    if ($dw >= 1 && $dw >= 5) {
-                                        $repeat_dates[]= $dt+(86400 * $j);
-                                    }
-                                    break;
-                                case 6: //6 - По выходным,
-                                    if ($dw == 6 && $dw == 0) {
-                                        $repeat_dates[]= $dt+(86400 * $j);
-                                    }
-                                    break;
-                            }
-                            if ( $dw == 6) {
-                                $dw = 0;
-                            } else {
-                                $dw++;
-                            }
-                        }
-                        // Перебираем все даты и создаём SQL запрос
-                        foreach ($repeat_dates as $v) {
-                            if (!empty ($sql)) {
-                                $sql .= ',';
-                            }
-                            $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
-                            "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
-                            addslashes($array['comment'])."', NOW(), DATE_ADD(FROM_UNIXTIME({$v})), INTERVAL {$i} {$type}))";
-                        }
-                    // 1, 7, 30, 90, 365
-                    } else {
-                        $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
-                        "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
-                        addslashes($array['comment'])."', NOW(), DATE_ADD('{$array['near_date']}', INTERVAL {$i} {$type}))";
-                    }
-                }
+            if ((int)$_POST['rep_type'] == 1) {
+                //$sql = $this->_repeatCount($array, $last_id, $type);
             // Создаём события до определённой даты
-            } else {
+            } elseif ((int)$_POST['rep_type'] == 2) {
+
+            } elseif ((int)$_POST['rep_type'] == 3) {
 
             }
+ */
             if (!empty($sql)) {
                 $this->db->query("INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,".
                     "`type_repeat`,`count_repeat`, `comment`, `dt_create`, `near_date`) VALUES " . $sql);
+//                print "INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`, `comment`, `dt_create`, `near_date`) VALUES " . $sql;
             }
         }
         return '[]';
     }
-    
+
+    /**
+     * Возвращает часть сформированного sql запроса
+     * @param <array> $array mixed
+     * @param <int> $last_id
+     * @param <string> $type
+     * @return <string> $sql
+     */
+    private function _repeatCount($array, $last_id, $type)
+    {
+        $repeat_dates = array();
+        $sql = "";
+
+        if ($array['type_repeat'] >= 3 && $array['type_repeat'] <= 6 ) {
+            $i = 0;
+            $r = $array['count_repeat'];
+        } else {
+            $i = 0;
+            $r = $array['count_repeat'] -1;
+        }
+        for (; $i <= $r ; $i++) {
+            // 3, 4, 5, 6
+            if ($array['type_repeat'] >= 3 && $array['type_repeat'] <= 6 ) {
+                $dt = formatMysqlDate2UnixTimestamp($array['near_date']) + 86400; // Начинаем счёт со следующего дня
+                $dw = date  ('w', $dt); // День недели, от 0 (вск) до 6 (суб)
+                for ($j = 0 ; $j < 7 ; $j++) {
+                    switch ($array['type_repeat']) {
+                        case 3: //3 - Каждый Пн., Ср. и Пт.,
+                            if ($dw == 1 || $dw == 3 || $dw == 5) {
+                                $repeat_dates[] = $dt+(86400 * $j);
+                            }
+                            break;
+                        case 4: //4 - Каждый Вт. и Чт.,
+                            if ($dw == 2 || $dw == 4) {
+                                $repeat_dates[] = $dt+(86400 * $j);
+                            }
+                            break;
+                        case 5: //5 - По будням,
+                            if ($dw >= 1 && $dw >= 5) {
+                                $repeat_dates[]= $dt+(86400 * $j);
+                            }
+                            break;
+                        case 6: //6 - По выходным,
+                            if ($dw == 6 && $dw == 0) {
+                                $repeat_dates[]= $dt+(86400 * $j);
+                            }
+                            break;
+                    }
+                    if ( $dw == 6) {
+                        $dw = 0;
+                    } else {
+                        $dw++;
+                    }
+                }
+                 $repeat_dates = array_unique($repeat_dates);
+                // Перебираем все даты и создаём SQL запрос
+                foreach ($repeat_dates as $v) {
+                    if (!empty ($sql)) {
+                        $sql .= ',';
+                    }
+                    $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
+                    "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                    addslashes($array['comment'])."', NOW(), DATE_ADD('".date('Y-m-d G:i:00',$v)."', INTERVAL ".($i-1)." {$type}))";
+                }
+            // 1, 7, 30, 90, 365
+            } else {
+
+                if (!empty ($sql)) {
+                    $sql .= ',';
+                }
+                $v = date('Y-m-d G:i:00',formatMysqlDate2UnixTimestamp($array['near_date'])+86400);
+                $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
+                "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                addslashes($array['comment'])."', NOW(), DATE_ADD('{$v}', INTERVAL {$i} {$type}))";
+            }
+        }
+        return $sql;
+    }
+
+    /**
+     * Возвращает часть сформированного sql запроса, для повторения по указанным дням недели
+     * @param <array> $array mixed
+     * @param <int> $last_id
+     * @param <string> $type
+     * @return <string> $sql
+     */
+    private function _repeatWeekDay($array, $last_id, $type)
+    {
+        $week = array(); $sql = "";
+        (isset($_POST['mon']) && $_POST['mon'] == '1')? $week[1] = true : $week[1] = false;
+        (isset($_POST['tue']) && $_POST['tue'] == '1')? $week[2] = true : $week[2] = false;
+        (isset($_POST['wed']) && $_POST['wed'] == '1') ? $week[3] = true : $week[3] = false;
+        (isset($_POST['thu']) && $_POST['thu'] == '1') ? $week[4] = true : $week[4] = false;
+        (isset($_POST['fri']) && $_POST['fri'] == '1') ? $week[5] = true : $week[5] = false;
+        (isset($_POST['sat']) && $_POST['sat'] == '1') ? $week[6] = true : $week[6] = false;
+        (isset($_POST['sun']) && $_POST['sun'] == '1') ? $week[0] = true : $week[0] = false;
+        if((int)@$_POST['rep_type'] == 1) {
+            for ($i = 0; $i <= $array['count_repeat'] ; $i++) {
+                $dt = formatMysqlDate2UnixTimestamp($array['near_date']) + 86400; // Начинаем счёт со следующего дня
+                $dw = date  ('w', $dt); // День недели, от 0 (вск) до 6 (суб)
+                for ($j = 0 ; $j < 7 ; $j++) {
+                    if ($week[$j]) {
+                        //$repeat_dates[] = $dt+(86400 * $j);
+                        if (!empty ($sql)) { $sql .= ','; }
+                        $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}',
+                        '{$array['near_date']}','{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                        addslashes($array['comment'])."', NOW(), '".date('Y-m-d G:i:00',($dt+(86400 * $j)))."')";
+                    }
+                    if ( $dw == 6) { $dw = 0; } else { $dw++; }
+                }
+            }
+        } elseif((int)@$_POST['rep_type'] == 2) {
+            for ($i = 1 ; $i <= 90 ; $i++) {
+                $dt = formatMysqlDate2UnixTimestamp($array['near_date']) + 86400; // Начинаем счёт со следующего дня
+                $dw = date  ('w', $dt); // День недели, от 0 (вск) до 6 (суб)
+                for ($j = 0 ; $j < 7 ; $j++) {
+                    if ($week[$j]) {
+                        if (!empty ($sql)) { $sql .= ','; }
+                        $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}',
+                        '{$array['near_date']}',{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                        addslashes($array['comment'])."', NOW(), '".date('Y-m-d G:i:00',($dt+(86400 * $j)))."')";
+                    }
+                    if ( $dw == 6) { $dw = 0; } else { $dw++; }
+                }
+            }
+        } elseif((int)@$_POST['rep_type'] == 3) { // Повторять до даты
+            $c = formatMysqlDate2UnixTimestamp($array['near_date']);
+            for ($i = 1 ; $i <= 90 ; $i++) {
+                $c = $c + 86400;
+                $l = formatMysqlDate2UnixTimestamp($array['last_date']);
+                if ( $c > $l) { return $sql;}
+            }
+        }
+        return $sql;
+    }
+
+    /**
+     * Возвращает часть сформированного sql запроса, для ежедневного повторения
+     * @param <array> $array mixed
+     * @param <int> $last_id
+     * @param <string> $type
+     * @return <string> $sql
+     */
+    private function _repeatDay($array, $last_id, $type)
+    {
+        $sql = "";
+        if ((int)@$_POST['rep_type'] == 1) { // Определённое количество раз
+            for ($i = 1 ; $i <= $array['count_repeat'] ; $i++) {
+                if (!empty ($sql)) { $sql .= ','; }
+                $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
+                "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                addslashes($array['comment'])."', NOW(), DATE_ADD('{$array['near_date']}', INTERVAL {$i} DAY))";
+            }
+        } elseif((int)@$_POST['rep_type'] == 2) { // Бесконечно
+            for ($i = 1 ; $i <= 90 ; $i++) {
+                if (!empty ($sql)) { $sql .= ','; }
+                $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
+                "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                addslashes($array['comment'])."', NOW(), DATE_ADD('{$array['near_date']}', INTERVAL {$i} DAY))";
+            }
+        } elseif((int)@$_POST['rep_type'] == 3) { // Повторять до даты
+            $c = formatMysqlDate2UnixTimestamp($array['near_date']);
+            for ($i = 1 ; $i <= 90 ; $i++) {
+                $c = $c + 86400;
+                $l = formatMysqlDate2UnixTimestamp($array['last_date']);
+                if ( $c > $l) { return $sql;}
+                if (!empty ($sql)) { $sql .= ','; }
+                $sql .= "('".Core::getInstance()->user->getId()."','{$last_id}','{$array['title']}','{$array['near_date']}',".
+                "'{$array['last_date']}','{$array['type_repeat']}','{$array['count_repeat']}','".
+                addslashes($array['comment'])."', NOW(), '".date('Y-m-d G:i:00',$c)."')";
+            }
+        }
+        return $sql;
+    }
+
     /**
      * Редактируем событие
      * @return <json> Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.

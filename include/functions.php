@@ -120,16 +120,21 @@ function formatRussianDate2MysqlDate($date, $time)
     }
     $date = explode('.', $date);
     if (count($date) == 3) {
-        if((int)$date[2] < 10) {
-            $retval = '0'.(int)$date[2] .'-';
+         // Добавляем год
+        $retval = (int)$date[2].'-';
+        // Добавляем месяц
+        if ((int)$date[1] < 10) {
+             $retval .= '0'.(int)$date[1] .'-';
         } else {
-            $retval = (int)$date[2].'-';
+             $retval .= (int)$date[1] .'-';
         }
-        if ((int)$date[1]<10) {
-             $retval .= '0'.(int)$date[1].'-'.(int)$date[0];
+        // Добавляем день
+        if((int)$date[0] < 10) {
+            $retval .= '0'.(int)$date[0];
         } else {
-             $retval .= (int)$date[1].'-'.(int)$date[0];
+            $retval .= (int)$date[0];
         }
+        //  Добавляем время (если есть)
         if (empty ($time)) {
             return $retval;
         } elseif (preg_match("/^([0-9]{2}):([0-9]{2})$/", $time)) {
