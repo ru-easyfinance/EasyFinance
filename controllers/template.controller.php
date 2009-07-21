@@ -16,6 +16,9 @@ class Template_Controller {
      */
     public function __call($method, $args)
     {
-        error_404();
+        //@XXX Делаем хак для XDEBUG
+        if (substr($method, 0, 7) != '?XDEBUG') {
+            error_404();
+        }
     }
 }
