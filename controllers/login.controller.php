@@ -44,17 +44,24 @@ class Login_Controller extends Template_Controller
                 }
 
                 if ($user->initUser($login,$pass)) {
+                    // У пользователя нет категорий, т.е. надо помочь ему их создать
                     if (count($user->getUserCategory()) == 0) {
                         $model = new Login_Model();
                         $model->activate_user();
-
                     } else {
                         $periodic = new Periodic_Model();
                         $periodic->getInsertPeriodic();
                         $user->init($user->getId());
                         $user->save($user->getId());
-                        header("Location: /accounts/");
-                        exit;
+                        // Если у нас есть запись в сессии, куда пользователь хотел попасть, то перенаправляем его туда
+                        if (isset($_SESSION['REQUEST_URI'])) {
+                            header("Location: ".$_SESSION['REQUEST_URI']);
+                            unset($_SESSION['REQUEST_URI']);
+                            exit;
+                        } else {
+                            header("Location: /accounts/");
+                            exit;
+                        }
                     }
                 }
             }

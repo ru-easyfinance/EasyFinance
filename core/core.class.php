@@ -83,6 +83,11 @@ class Core
         if (Core::getInstance()->user->getId() == '') {
             $modules = explode(',', GUEST_MODULES);
             if (!in_array($module, $modules)) {
+                if (isset ($_SESSION)) {
+                    session_start();
+                }
+                // Добавляем запрошенный адрес, если юзер не прошёл валидацию
+                $_SESSION['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
                 return false;
             }
         }
@@ -109,7 +114,7 @@ class Core
 
         // Смотрим разрешения на использование модуля
         if (!$this->isAllowedModule($module)) {
-			header("Location: /");
+			header("Location: /login/");
 			exit;
         }
         $module .= '_Controller';
