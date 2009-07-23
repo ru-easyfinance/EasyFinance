@@ -1,4 +1,5 @@
-<link rel='stylesheet' type='text/css' href='/js2/calculator/jquery.calculator.css' />
+{* $Id$ *}
+<link rel='stylesheet' type='text/css' href='/css2/jquery/jquery.calculator.css' />
 <link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.datepicker.css' />
 <script type='text/javascript' src='/js2/jquery/ui.core.js'></script>
 <script type="text/javascript" src="/js2/jquery/jquery.calculator.min.js"></script>
@@ -12,20 +13,13 @@
             <!-- Переписать, на вывод нормального селекта из массива -->
             <select name="account" id="account">
                 {foreach from=$accounts item=acc_data}
-                <option id="{$acc_data.id}" value="{$acc_data.id}" {if $acc_data.id eq $sess.user.current_curr} selected {/if}>{$acc_data.name}</option>
+                <option value="{$acc_data.account_id}">{$acc_data.account_name}</option>
                 {/foreach}
             </select>
-
-            &nbsp;
-            <input type="button" id="btn_AddOperation" value="Добавить операцию" />
             &nbsp;
             <input type="button" id="btn_EditAccount" value="Редактировать счет / Удалить счет" />
-
             <br><br>
-
-            <div id="addOperation" style="display:none;">
-                <p>{$POS_msg}</p>
-                <div id="POS_SUM" style="display:none"></div>
+            <div id="FormOperation">
                 <table width="100%" border="0" style=" background-color:#f8f8d8; padding-top:15px; padding-bottom:15px; border:1px dotted #ff6002;">
                     <tr>
                         <td  align="right" class="cat_add" width="10%">Тип операции: </td>
@@ -34,63 +28,58 @@
                                 <option value="0">Расход</option>
                                 <option value="1">Доход</option>
                                 <option value="2">Перевод со счета</option>
-                                <!--<option value="3">Покупка валюты</option>-->
+                                {*<!-- <option value="3">Покупка валюты</option> -->*}
                                 <option value="4">Перевод на финансовую цель</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td  align="right" class="cat_add" valign="top">
-			Сумма:
+                            Сумма:
                         </td>
                         <td  align="left" class="cat_add">
-                            <input type="text" id="amount">&nbsp;<b>Пример:</b> 125.50
+                            <input type="text" id="amount">
                         </td>
                     </tr>
                     <tr id='old_cat'>
                         <td align="right" class="cat_add">Категория:</td>
                         <td align="left" class="cat_add">
                         {if !empty($list)}
-                            <select name="cat_id" style="width:250px;" id="cat_id_old">
+                            <select id="cat">
                                 {if !empty($often)}
                                 <optgroup id="often" label="&nbsp;Часто используемые">
-                	{foreach from=$often item=data}
+                                {foreach from=$often item=data}
                                     <option value="{$data.cat_id}">{$data.cat_name}</option>
-                                    {/foreach}
+                                {/foreach}
                                 </optgroup>
                                 {/if}
-
                                 <optgroup id="all" label="&nbsp;Все категории">
-            	{foreach from=$list item=data}
-                	{if $data.cat_parent == 0}
+                                {foreach from=$list item=data}
+                                    {if $data.cat_parent == 0}
                                     <option value="{$data.cat_id}">{$data.cat_name}</option>
                                     {foreach from=$list item=child}
-                        	{if $child.cat_parent == $data.cat_id}
-                                    <option value="{$child.cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;- {$child.cat_name}</option>
-                                    {/if}
+                                        {if $child.cat_parent == $data.cat_id}
+                                        <option value="{$child.cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;- {$child.cat_name}</option>
+                                        {/if}
                                     {/foreach}
                                     {/if}
                                     {/foreach}
                                 </optgroup>
-
                             </select>
                             {else}
-                            <select name="cat_id" style="width:250px;" id="cat_id_old">
+                            <select id="cat">
 				{$categories}
                             </select>
                             {/if}
-						{if !empty($restore_cat)}
-							(<a href="index.php?modules=money&action=edit&id={$money.id}&restore={$restore_cat}">
-							Восстановить категорию:&nbsp;{$money.cat_restore}</a>)
-						{/if}
-                            <span style="padding-left:10px;"><a href='index.php?modules=category' class="cat_add">Нет нужной категории? Добавьте ее в разделе [категории]</a></span>
                         </td>
                     </tr>
-                    <tr id="target_fields">
+                    {* <!-- Финансовая цель --> *}
+                    <tr id="target_fields" style="display:none;">
                         <td align="right" class="cat_add">Финансовая цель:</td>
-                        <td align="left" class="cat_add"><select name="target_sel" id="target_sel" onChange="changeTarget()">
-			{foreach from=$targetList item=target}
-                                <option bill="{$target.target_account_id}" value="{$target.id}"
+                        <td align="left" class="cat_add">
+                            <select id="target">
+                                {foreach from=$targetList item=target}
+                                    <option bill="{$target.target_account_id}" value="{$target.id}"
                                         target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
                                         percent_done='{$target.percent_done}' forecast_done='{$target.forecast_done}' amount={$target.amount}
                                         {if $target.id==$target_sel}selected{/if}>

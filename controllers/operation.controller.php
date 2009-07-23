@@ -36,7 +36,7 @@ class Operation_Controller extends Template_Controller
         $this->model = new Money();
         $this->user = Core::getInstance()->user;
 
-        $this->tpl->assign('accounts', $_SESSION['user_account']); //@FIXME
+        $this->tpl->assign('accounts', $this->user->getUserAccounts());
         $this->tpl->assign('currentAccount', $currentAccount);
         $this->tpl->assign('dateFrom', date('01.m.Y'));
         $this->tpl->assign('dateTo', date('d.m.Y'));

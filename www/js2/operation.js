@@ -1,3 +1,4 @@
+// {* $Id$ *}
 $(function () {
     $('#account').change(function(){
         changeAccountForTransfer();
@@ -17,14 +18,34 @@ $(function () {
     $('#btn_ReloadData').click(function(){ changeOperationList(); });
     $("#dateFrom,#dateTo").datepicker('option', {dateFormat: 'dd.mm.yy'});
     $('#type').change(function(){ changeTypeOperation('add'); });
-    $('#amount').change(function(){
-        onSumChange(); 
-        onSumConvert('add');    
+    $('#target').change(function(){
+        $("span.currency").each(function(){
+            $(this).text(" "+$("#target :selected").attr("currency"));
+        });
+        $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
+        $("#amount").text(formatCurrency($("#target :selected").attr("amount")));
+        $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
+        $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
     });
-
+    $('#amount').calculator({
+         onButton: function(label, value, inst) {
+                if ( label == '+' || label == '-' || label == '*' || label == '/') {
+                    $('#table').text(value+label);
+                }
+                $('#current').text(label+" "+value+" "+inst);
+            },
+            layout: [
+                $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
+                'MR_7_8_9_-' + $.calculator.UNDO,
+                'MS_4_5_6_*' + $.calculator.PERCENT ,
+                'M+_1_2_3_/' + $.calculator.HALF_SPACE,
+                'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
+            showOn: 'opbutton',
+            buttonImageOnly: true,
+            buttonImage: '/img/calculator.png'
+        });
 });
 function addOperation() {
-    onSumChange();
     var type = $('#type_add').val();
     var bill_id = $('#account :selected').val();
     var cat_id = $('#cat_id_old :selected').val();
@@ -284,8 +305,8 @@ function operationAfterEdit(data) {
 }
 
 function changeAccountForTransfer() {
-    var id =document.getElementById("selectAccountForTransfer").value;
-    var currentId = document.getElementById("selectAccount").value;
+    var id =$("#selectAccountForTransfer").val();
+    var currentId = $("#selectAccount").val();
 
     $.get('/index.php',{
         modules:"operation",
@@ -318,8 +339,7 @@ function changeTransferCurrencyEdit(data) {
 }
 
 function changeTypeOperation(id) {
-    switch ($('#type_'+id).val())
-    {
+    switch ($('#type_'+id).val()) {
         case '0': //Расход
             $("#old_cat").show();
             $("#old_cat_edit").show();
@@ -373,13 +393,7 @@ function changeTarget() {
 }
 
 function changeTargetEdit() {
-    $("span.currency").each(function(){
-        $(this).text(" "+$("#target_sel_ed option:selected").attr("currency"));
-    });
-    $("#amount_done_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("amount_done")));
-    $("#amount_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("amount")));
-    $("#percent_done_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("percent_done")));
-    $("#forecast_done_ed").text(formatCurrency($("#target_sel_ed option:selected").attr("forecast_done")));
+
 }
 
 function checkTarget(type) {
