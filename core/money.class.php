@@ -9,12 +9,47 @@
  */
 class Money
 {
+    /**
+     * Ссылка на экземпляр класса базы данных
+     * @var <DbSimple_Mysql>
+     */
     private $db             = null;
+
+    /**
+     * Ссылка на экземпляр класса пользователя
+     * @var <User>
+     */
     private $user           = null;
+
+    /**
+     * Хрень какая-то
+     * @var <type>
+     * @FIXME 
+     */
     private $cat_id         = 0;
+
+    /**
+     *
+     * @var <type>
+     */
     private $current_date   = 0;
+
+    /**
+     *
+     * @var <type>
+     */
     private $account_money  = 0;
+
+    /**
+     *
+     * @var <type>
+     */
     private $user_money     = Array();
+
+    /**
+     *
+     * @var <type>
+     */
     private $total_sum      = 0;
 
     /**

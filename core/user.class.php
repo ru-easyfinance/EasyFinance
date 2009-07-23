@@ -12,7 +12,7 @@ class User
 {
     /**
      * Массив, хранит свойства пользователя
-     * @var array mixed
+     * @var <array> mixed
      *      user_id string ??? //FIXME перейти на INT
      *      user_name string
      *      user_login string
@@ -25,31 +25,30 @@ class User
 
     /**
      * Массив, хранит категории пользователя
-     * @var array mixed
+     * @var <array> mixed
      */
     private $user_category = Array();
 
     /**
      * Массив, хранит счета пользователя
-     * @var array mixed
+     * @var <array> mixed
      */
     private $user_account  = Array();
 
     /**
      * Массив, хранит валюты пользователя
-     * @var array mixed
+     * @var <array> mixed
      */
     private $user_currency = Array();
 
     /**
      * Ссылка на экземпляр DBSimple
-     * @var DbSimple_Mysql
+     * @var <DbSimple_Mysql>
      */
     private $db;
 
     /**
      * Конструктор
-     * @param DbSimple_Mysql $db
      * @return void
      */
     public function __construct()

@@ -195,7 +195,7 @@ return true
 }
 
 function ValidateForm(){
-	var dt=document.getElementById("sel3");
+	var dt=$('#dateTo');
 	if (isDate(dt.value)==false){
 		dt.focus()
 		return false
