@@ -7,6 +7,11 @@
  */
 class Login_Controller extends Template_Controller
 {
+    /**
+     * Ссылка на класс модели пользователя
+     * @var <Login_Model>
+     */
+    private $model = null;
 
     /**
      * Конструктор класса
@@ -14,6 +19,7 @@ class Login_Controller extends Template_Controller
      */
     function __construct()
     {
+        $this->model = new Login_Model();
         Core::getInstance()->tpl->assign('name_page', 'login');
     }
 
@@ -27,44 +33,10 @@ class Login_Controller extends Template_Controller
         $user = Core::getInstance()->user;
 
         if ($user->getId()) {
-            //FIXME Если ничего другого в адресной строке не задано, то перенаправлять на кошельки,
-            //иначе - на туда, куда просился пользователь
             header("Location: /accounts/");
             exit;
         } else {
-            // Пользователь авторизируется через диалог ввода логина и пароля
-            if (!empty($_POST['login']) && !empty($_POST['pass'])) {
-
-                $login = htmlspecialchars($_POST['login']);
-                $pass = md5($_POST['pass']);
-
-                if ($_POST['autoLogin']) {
-                    setcookie("autoLogin", $login, time() + 1209600, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-                    setcookie("autoPass", $pass, time() + 1209600, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-                }
-
-                if ($user->initUser($login,$pass)) {
-                    // У пользователя нет категорий, т.е. надо помочь ему их создать
-                    if (count($user->getUserCategory()) == 0) {
-                        $model = new Login_Model();
-                        $model->activate_user();
-                    } else {
-                        $periodic = new Periodic_Model();
-                        $periodic->getInsertPeriodic();
-                        $user->init($user->getId());
-                        $user->save($user->getId());
-                        // Если у нас есть запись в сессии, куда пользователь хотел попасть, то перенаправляем его туда
-                        if (isset($_SESSION['REQUEST_URI'])) {
-                            header("Location: ".$_SESSION['REQUEST_URI']);
-                            unset($_SESSION['REQUEST_URI']);
-                            exit;
-                        } else {
-                            header("Location: /accounts/");
-                            exit;
-                        }
-                    }
-                }
-            }
+            $this->model->auth_user();
         }
     }
 }

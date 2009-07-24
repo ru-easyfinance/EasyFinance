@@ -21,15 +21,19 @@ define('URL_ROOT',        "http://hm/");
 define('IS_DEMO',         false);
 define('DEBUG',           true);
 //define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
-define('SYS_MAX_PERPAGE', 3);
+define('SYS_MAX_PERPAGE', 3); //WTF???
 define('DEFAULT_MODULE', 'welcome');
 define('GUEST_MODULES', 'welcome,help,articles,login,registration');
 
-define('COOKIE_NAME',  'autoLogin');
-define('COOKIE_VAL',   'autoPass');
+//COOKIE
+define('COOKIE_NAME',  'a');
 define('COOKIE_DOMEN', '.home-money.ru');
 define('COOKIE_PATH',  '/');
 define('COOKIE_HTTPS', true);
+define('COOKIE_EXPIRE', 1209600); // две недели
+
+//CRYPT
+define('CRYPT_KEY','mpnGA3cNNrgwGrU7er4ywLmd'); // 24 битный ключ
 
 // DB settings
 define('SYS_DB_HOST',   'localhost');

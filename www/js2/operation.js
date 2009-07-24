@@ -1,5 +1,24 @@
 // {* $Id$ *}
 $(function () {
+    // Init
+    $("#date,#dateFrom,#dateTo").datepicker('option', {dateFormat: 'dd.mm.yy'});
+    $('#amount').calculator({
+        layout: [
+                $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
+                'MR_7_8_9_-' + $.calculator.UNDO,
+                'MS_4_5_6_*' + $.calculator.PERCENT ,
+                'M+_1_2_3_/' + $.calculator.HALF_SPACE,
+                'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
+        showOn: 'opbutton',
+        buttonImageOnly: true,
+        buttonImage: '/img/calculator.png'
+    });
+    
+    // Bind
+    $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('account').val() });
+    $('#btn_Save').click(function(){ addOperation(); })
+    $('#btn_Cancel').click(function(){ operationAddInVisible(); });
+    $('#btn_ReloadData').click(function(){ changeOperationList(); });
     $('#account').change(function(){
         changeAccountForTransfer();
         $("#operationDataList").hide();
@@ -12,11 +31,6 @@ $(function () {
             },onAjaxSuccess
         );
     });
-    //@TODO Если вызов функции больше нигде не используется, то поместить функцию сюда
-    $('#btn_AddOperation').click(function(){ operationAddVisible(); });
-    $('#btn_EditAccount').click(function(){ locationEditAccount(); });
-    $('#btn_ReloadData').click(function(){ changeOperationList(); });
-    $("#dateFrom,#dateTo").datepicker('option', {dateFormat: 'dd.mm.yy'});
     $('#type').change(function(){ changeTypeOperation('add'); });
     $('#target').change(function(){
         $("span.currency").each(function(){
@@ -27,23 +41,6 @@ $(function () {
         $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
         $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
     });
-    $('#amount').calculator({
-         onButton: function(label, value, inst) {
-                if ( label == '+' || label == '-' || label == '*' || label == '/') {
-                    $('#table').text(value+label);
-                }
-                $('#current').text(label+" "+value+" "+inst);
-            },
-            layout: [
-                $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
-                'MR_7_8_9_-' + $.calculator.UNDO,
-                'MS_4_5_6_*' + $.calculator.PERCENT ,
-                'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-                'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-            showOn: 'opbutton',
-            buttonImageOnly: true,
-            buttonImage: '/img/calculator.png'
-        });
 });
 function addOperation() {
     var type = $('#type_add').val();
@@ -185,9 +182,9 @@ function onAjaxSuccess(data) {
     $("#goodOperation").hide();
 }
 
-function locationEditAccount() {
-    location.href="index.php?modules=account&action=edit&id="+document.getElementById('selectAccount').value;
-}
+
+    
+
 
 function onSumConvert(type) {
     if (document.getElementById("type_"+type).value == 2)

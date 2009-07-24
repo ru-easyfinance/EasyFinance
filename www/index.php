@@ -4,13 +4,7 @@
  * @copyright http://home-money.ru/
  * @version SVN $Id$
  */
-
-//XXX WTF???
-//if (isset($_GET['et']) && $_GET['et'] == 'on') {
-//    //FIXME Редиректить на красивую страничку
-//    trigger_error("На сайте проводятся технические работы. Зайдите позже.", E_USER_ERROR);
-//}
-
+ 
 define('INDEX',true);
 
 // @FIXME не создавать сессию, если на странице случайный посетитель

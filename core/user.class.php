@@ -4,7 +4,6 @@
  * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
- * @package core
  * @category user
  * @version SVN $Id$
  */
@@ -54,6 +53,16 @@ class User
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
+        if (isset($_COOKIE[COOKIE_NAME])) {
+            // Если соединение защищено, то пробуем авторизироваться
+            if (isset($_POST['HTTPS'])) {
+                $array = decrypt($_COOKIE[COOKIE_NAME]);
+                $this->initUser($array[0],$array[1]);
+            // иначе, переходим в защищённое соединение
+            } else {
+                header('Location https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); exit;
+            }
+        }
         $this->load(); //Пробуем загрузить из сессии данные
     }
 
@@ -89,7 +98,7 @@ class User
 
         $this->props = $this->db->selectRow($sql, $login, $pass);
         if (count($this->props) == 0) {
-            trigger_error('Не верный логин или пароль!', E_USER_WARNING);
+            trigger_error('Не верный логин или пароль! ' . $login . ' ' . $pass , E_USER_WARNING);
             return false;
         } elseif ($this->props['user_active'] == 0) {
             trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
@@ -140,9 +149,7 @@ class User
         if (!empty ($_SESSION)) {
             session_destroy();
         }
-        if (!empty ($_COOKIE)) {
-            unset($_COOKIE);
-        }
+        setcookie(COOKIE_NAME, '', COOKIE_EXPIRE - 60, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
     }
 
     /**

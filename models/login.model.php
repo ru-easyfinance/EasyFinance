@@ -49,14 +49,50 @@ class Login_Model
                 $headers .= "From: info@home-money.ru\n";
                 $subject = "Успешная регистрация на сайте домашней бухгалтерии Home-Money.ru";
                 mail($_SESSION['user']['user_mail'], $subject, $message, $headers);
-                header("Location: /first_start/");
-                exit;
-
+                header("Location: /start/"); exit;
             } else {
                 trigger_error("Справочник не загружен!", E_USER_WARNING);
             }
         } else {
 
+        }
+    }
+
+    /**
+     * Пользователь авторизируется через диалог ввода логина и пароля
+     */
+    function auth_user() {
+        $user = Core::getInstance()->user;
+        if (!empty($_POST['login']) && !empty($_POST['pass'])) {
+            $login = htmlspecialchars(@$_POST['login']);
+            $pass = md5(@$_POST['pass']);
+            if (isset($_POST['autoLogin'])) {
+                // Шифруем и сохраняем куки
+                setcookie(COOKIE_NAME, encrypt(array($login,$pass)),
+                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+            }
+            if ($user->initUser($login,$pass)) {
+                // У пользователя нет категорий, т.е. надо помочь ему их создать
+                if (count($user->getUserCategory()) == 0) {
+                    $model = new Login_Model();
+                    $model->activate_user();
+                } else {
+                    //@FIXME Перенести отсюда создание периодических транзакций и повесить их на крон
+                    $periodic = new Periodic_Model();
+                    $periodic->getInsertPeriodic();
+                    $user->init($user->getId());
+                    $user->save($user->getId());
+                    // Если у нас есть запись в сессии, куда пользователь хотел попасть, то перенаправляем его туда
+                    if (isset($_SESSION['REQUEST_URI'])) {
+                        header("Location: ".$_SESSION['REQUEST_URI']);
+                        unset($_SESSION['REQUEST_URI']);
+                        exit;
+                    } else {
+                        header("Location: /accounts/");
+                        exit;
+                    }
+                }
+            }
         }
     }
 }

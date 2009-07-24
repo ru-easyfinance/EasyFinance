@@ -5,20 +5,15 @@
     <meta http-equiv="Content-Language" content="ru">
     <title>Home money - домашняя бухгалтерия он-лайн</title>
     <script type="text/javascript" src="/js/jquery.js"></script>
-<!--
-    <script type="text/javascript" language="javascript" src="/js/codethatcalendarstd.js"></script>
-    <script type="text/javascript" language="javascript" src="/js/local_ex.js"></script>  
-    <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
-    <script type="text/javascript" src="/js/calendar.js"></script>
-    <script type="text/javascript" src="/js/calendar-ru_win_.js"></script>
-    <script type="text/javascript" src="/js/calendar-setup.js"></script>
-    <link rel="stylesheet" href="/css/dtree.css" type="text/css" />
-    <link rel="stylesheet" href="/css/calendar-win2k-1.css" type="text/css" />
--->
     <link rel="stylesheet" href="/css/dtree.css?r={$revision}" type="text/css" />
 </head>
 <body leftmargin="0" topmargin="0" bgcolor="#FFFFFF">
-{$notice}
+<!-- Выводим нотисы, но сразу же их и скрываем -->
+<script>
+    {foreach from=$notice item=curr_id}
+        console.info({$curr_id});
+    {/foreach}
+</script>
 <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td valign="top" width="15%" bgcolor="#76b900">&nbsp;</td>
@@ -137,7 +132,7 @@
 		</tr>
 		<tr>
 			<td valign="top" class="menu" style="padding-left:12px; padding-right:12px; padding-top:3px; padding-bottom:3px;">
-				<a href="/{if !empty($link_login)}{$link_login}{else}login{/if}/">Вход</a>
+				<a href="/login/">Вход</a>
 			</td>
 		</tr>
 		<tr>
