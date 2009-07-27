@@ -53,16 +53,20 @@ class User
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        if (isset($_COOKIE[COOKIE_NAME])) {
-            // Если соединение защищено, то пробуем авторизироваться
-            if (isset($_POST['HTTPS'])) {
+        
+        // Если соединение пользователя защищено, то пробуем авторизироваться
+        if (isset($_SERVER['HTTPS'])) {
+            // Если есть кук с авторизационными данными, то пробуем авторизироваться
+            if (isset($_COOKIE[COOKIE_NAME])) {
                 $array = decrypt($_COOKIE[COOKIE_NAME]);
                 $this->initUser($array[0],$array[1]);
-            // иначе, переходим в защищённое соединение
-            } else {
-                header('Location https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); exit;
             }
+        // иначе, переходим в защищённое соединение, и снова пробуем авторизироваться
+        } else {
+            header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            exit;
         }
+
         $this->load(); //Пробуем загрузить из сессии данные
     }
 
@@ -87,6 +91,11 @@ class User
      */
     public function initUser($login, $pass)
     {
+        if (isset($_SESSION['REMOTE_ADDR']) || isset($_SESSION['HTTP_USER_AGENT'])) {
+             if ($_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT']) {
+                 $this->destroy();
+             }
+        }
         //FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
         $sql = "SELECT user_id, user_name, user_login, user_pass, user_mail,
                     DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
@@ -106,6 +115,8 @@ class User
         }
 
         if ($this->init($this->getId())) {
+            $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
             return $this->save();
         } else {
             trigger_error("Не верно введён логин или пароль", E_USER_WARNING);
