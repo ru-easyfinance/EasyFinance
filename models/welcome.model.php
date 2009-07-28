@@ -13,7 +13,7 @@ class Welcome_Model
      */
     function getCountusers ()
     {
-        return Core::getInstance()->db->selectCell("SELECT count(user_id) FROM users WHERE user_active='1';");
+        return Core::getInstance()->db->selectCell("SELECT count(id) FROM users WHERE user_active='1';");
     }
 
     /**
@@ -22,7 +22,7 @@ class Welcome_Model
      */
     function getAllTransaction ()
     {
-        return Core::getInstance()->db->selectCell("SELECT count(money) FROM money;");
+        return Core::getInstance()->db->selectCell("SELECT count(*) FROM operation;");
     }
 
     /**

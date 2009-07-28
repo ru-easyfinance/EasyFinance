@@ -47,6 +47,12 @@ class User
     private $db;
 
     /**
+     * Массив с недостающими параметрами пользователя
+     * @var <array> 
+     */
+    private $wizard = array();
+
+    /**
      * Конструктор
      * @return void
      */
@@ -76,8 +82,8 @@ class User
      */
     public function getId()
     {
-        if (isset($this->props['user_id']) && !empty($this->props['user_id'])) {
-            return $this->props['user_id'];
+        if (isset($this->props['id']) && !empty($this->props['id'])) {
+            return $this->props['id'];
         } else {
             return false;
         }
@@ -97,7 +103,7 @@ class User
              }
         }
         //FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
-        $sql = "SELECT user_id, user_name, user_login, user_pass, user_mail,
+        $sql = "SELECT id, user_name, user_login, user_pass, user_mail,
                     DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
                     user_currency_default, user_currency_list
                 FROM users
@@ -108,20 +114,20 @@ class User
         $this->props = $this->db->selectRow($sql, $login, $pass);
         if (count($this->props) == 0) {
             trigger_error('Не верный логин или пароль! ' . $login . ' ' . $pass , E_USER_WARNING);
+            $this->destroy();
             return false;
         } elseif ($this->props['user_active'] == 0) {
             trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
+            $this->destroy();
             return false;
         }
 
-        if ($this->init($this->getId())) {
-            $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
-            $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-            return $this->save();
-        } else {
-            trigger_error("Не верно введён логин или пароль", E_USER_WARNING);
-            return false;
+        if (!$this->init($this->getId())) {
+            //@TODO Вызывать мастера настройки счетов, категорий и валют
         }
+        $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+        return $this->save();
     }
 
     /**
@@ -140,15 +146,13 @@ class User
     /**
      * Вызывает инициализацию пользовательских категорий, счетов, денег
      * @param $id string user_id
-     * @return bool Если без сбоев, то true, иначе - false
+     * @return bool 
      */
     public function init($id)
     {
-        if ($this->initUserCategory() && $this->initUserAccounts() && $this->initUserCurrency()) {
-            return true;
-        } else {
-            return false;
-        }
+        $this->initUserCategory();
+        $this->initUserAccounts();
+        $this->initUserCurrency();
     }
 
     /**
@@ -196,19 +200,18 @@ class User
     /**
      * Инициализирует пользовательские категории
      * @param string $id хэш-MD5 ид пользователя
-     * @return array mixed
+     * @return void
      */
     public function initUserCategory ()
     {
         $sql = "SELECT cat_id, cat_name, cat_parent, cat_active FROM category
             WHERE user_id = ? AND cat_active = '1' ORDER BY cat_name;";
         $this->user_category = $this->db->select($sql, $this->getId());
-        return true;
     }
 
     /**
      * Получает список валют
-     * @return array mixed
+     * @return void
      */
     public function initUserCurrency ()
     {
@@ -217,76 +220,22 @@ class User
                 trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
                 $this->props['user_currency_list'] = array();
             }
-            return true;
         } else {
             $this->props['user_currency_list'] = array();
         }
-        return true;
     }
 
-    /**
+  	/**
      * Возвращает счета пользователя
-     * return array mixed
-	 * FIXME убрать этот метод, он для старых счетов нужен был
-     */
-    public function initUserAccount ()
-    {
-        if (IS_DEMO) {
-            $sql = "SELECT ROUND(SUM(m.`money`),2) AS `sum`,
-                b.`bill_id` AS `id`,
-                b.`bill_name` AS `name`,
-                b.`bill_type` AS `type`,
-                b.`bill_currency` AS `currency`,
-                c.`cur_name` AS `currency_name`
-                FROM `bill` b
-                    LEFT JOIN `money` m
-                        ON m.`bill_id` = b.`bill_id` and m.user_id = ?
-                    LEFT JOIN `currency` c
-                        ON c.`cur_id` = b.`bill_currency`
-                WHERE b.`user_id` = ?
-                GROUP BY b.`bill_id`, b.`bill_type`";
-        }else{
-            $sql = "SELECT ROUND(SUM(m.money),2) AS sum,
-                    b.bill_id AS id,
-                    b.bill_name AS name,
-                    b.bill_type AS type,
-                    b.bill_currency AS currency,
-                    c.cur_name AS currency_name
-                FROM bill b
-                    LEFT JOIN money m
-                        ON m.bill_id = b.bill_id
-                    LEFT JOIN currency c
-                        ON c.cur_id = b.bill_currency
-                WHERE b.user_id = ?
-                GROUP BY b.bill_id, b.bill_type ORDER BY b.bill_name;";
-        }
-        return $this->user_account = $this->db->selectRow($sql, $this->getId(), $this->getId());
-    }
-	
-	/**
-     * Возвращает счета пользователя
-     * return array mixed
+     * @return void
      */
 	public function initUserAccounts($user_id)
 	{
-	    /*$sql = "SELECT a.*, 
-		        act.account_type_name, 
-				afv.string_value
-		    FROM accounts a
-		    LEFT JOIN account_types act 
-			    ON act.account_type_id = a.account_type_id
-			LEFT JOIN account_fields af
-			    ON af.field_descriptionsfield_description_id = 1 
-				AND af.account_typesaccount_type_id = act.account_type_id
-			LEFT JOIN account_field_values afv
-			    ON afv.account_fieldsaccount_field_id = af.account_field_id
-			WHERE a.user_id = ?
-			ORDER BY act.account_type_id";*/
-			$sql = "SELECT a.*,act.* FROM accounts a 
-			LEFT JOIN account_types act 
-			    ON act.account_type_id = a.account_type_id
-			WHERE user_id= ? ";
-		return $this->user_account = $this->db->select($sql, $this->getId(), $this->getId());		
+        $sql = "SELECT a.*, act.* FROM accounts a
+            LEFT JOIN account_types act
+                ON act.account_type_id = a.account_type_id
+            WHERE user_id= ? ";
+        $this->user_account = $this->db->select($sql, $this->getId());
 	}
 
     /**
@@ -296,7 +245,7 @@ class User
      */
     function getProfile($id)
     {
-        $sql = "SELECT `user_id`, `user_name`, `user_login`, `user_mail` FROM `users` WHERE `user_id` = ? ;";
+        $sql = "SELECT `id`, `user_name`, `user_login`, `user_mail` FROM `users` WHERE `id` = ? ;";
         return $this->db->selectRow($sql, $id);
     }
 
@@ -314,12 +263,12 @@ class User
         //XXX Сделать шифрование пароля в SHA1
         if (!empty($new_passwd)) {
             $sql = "UPDATE users SET user_name = ?, user_mail = ?,user_pass = ?
-                        WHERE user_id = ? AND user_pass = ? LIMIT 1;";
+                        WHERE id = ? AND user_pass = ? LIMIT 1;";
             $this->db->query($sql, $user_name, $user_mail, MD5($new_passwd), $this->getId(), MD5($user_pass));
             return $this->initUser($user_login, $new_passwd);
         }else{
             $sql = "UPDATE users SET user_name = ?, user_mail = ?
-                        WHERE user_id = ? AND user_pass = ? LIMIT 1;";
+                        WHERE id = ? AND user_pass = ? LIMIT 1;";
             $this->db->query($sql, $user_name, $user_mail, $this->getId(), MD5($user_pass));
             return $this->initUser($user_login, $user_pass);
         }
@@ -354,13 +303,13 @@ class User
     /**
      * Получить свойство пользователя
      * @param $prop string
-     *      user_id string ??? //FIXME перейти на INT
-     *      user_name string
-     *      user_login string
-     *      user_pass string //WTF???
-     *      user_mail string
-     *      user_created date (%d.%m.%Y)
-     *      user_active int 0 - аккаунт неактивен
+     *      <int> user_id
+     *      <string> user_name
+     *      <string> user_login
+     *      <string> user_pass //WTF???
+     *      <string> user_mail
+     *      <date> user_created (%d.%m.%Y)
+     *      <int> user_active  0 - аккаунт неактивен
      * @return mixed
      */
     function getUserProps($prop)
@@ -369,6 +318,7 @@ class User
             return $this->props['$prop'];
         }
     }
+    
 /**
  * @deprecated Всякий хлам будет снизу
  */

@@ -34,7 +34,7 @@ class Registration_Model
     }
 
     /**
-     *
+     * Создаём нового пользователя
      * @return unknown_type
      */
     function new_user () {

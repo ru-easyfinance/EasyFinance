@@ -8,10 +8,17 @@
 class Registration_Controller extends Template_Controller {
 
     /**
+     * Модель регистрации
+     * @var <Registration_Model>
+     */
+    private $model = null;
+
+    /**
      * Конструктор класса
      * @return void
      */
     function __construct() {
+        $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
         $tpl->assign('name_page', 'registration');
         $tpl->assign('register', array());
@@ -33,8 +40,7 @@ class Registration_Controller extends Template_Controller {
     function activate ($args) {
         if (is_array($args)) {
             $reg_id = $args[0];
-            $registration = new Registration_Model();
-            $registration->activate($reg_id);
+            $this->model->activate($reg_id);
         } else {
             return false;
         }
@@ -47,7 +53,6 @@ class Registration_Controller extends Template_Controller {
      * @return void
      */
     function new_user ($args) {
-        $registration = new Registration_Model($this->db, $this->tpl);
-        $registration->new_user();
+        $this->model->new_user();
     }
 }

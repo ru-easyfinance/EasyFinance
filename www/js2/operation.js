@@ -1,7 +1,7 @@
 // {* $Id$ *}
-$(function () {
+$(function() {
     // Init
-    $("#date,#dateFrom,#dateTo").datepicker('option', {dateFormat: 'dd.mm.yy'});
+    
     $('#amount').calculator({
         layout: [
                 $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
@@ -13,23 +13,16 @@ $(function () {
         buttonImageOnly: true,
         buttonImage: '/img/calculator.png'
     });
-
+    $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
+    
     // Bind
-    $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('account').val() });
+    $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('#account :selected').val() });
     $('#btn_Save').click(function(){ addOperation(); })
     $('#btn_Cancel').click(function(){ operationAddInVisible(); });
-    $('#btn_ReloadData').click(function(){ changeOperationList(); });
+    $('#btn_ReloadData').click(function(){ loadOperationList(); });
     $('#account').change(function(){
-        changeAccountForTransfer();
-        $("#operationDataList").hide();
-        $.get('/operation/list/', {
-                a: $('#account :selected').val(),
-                cat_id: $('#categories :selected').val(),
-                dateFrom: $('#dateFrom').val(),
-                dateTo: $('#dateTo').val(),
-                sess_bill : $('#account').val()
-            },onAjaxSuccess
-        );
+        //changeAccountForTransfer();
+        loadOperationList();
     });
     $('#type').change(function(){ changeTypeOperation('add'); });
     $('#target').change(function(){
@@ -42,14 +35,17 @@ $(function () {
         $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
     });
 
-    // Load
-    function load () {
-        $.get('/operation/list/',{
+    // Autoload
+    loadOperationList();
+
+    function loadOperationList() {
+        $.get('/operation/listOperations/',{
             dateFrom: $('#dateFrom').val(),
             dateTo: $('#dateTo').val(),
             category: $('#category :selected').val(),
-            bill: $('#account').val()
+            account: $('#account :selected').val()
         },function(data, textStatus){
+            alert(this);
             // data could be xmlDoc, jsonObj, html, text, etc...
             this; // the options for this ajax request
         },'json');

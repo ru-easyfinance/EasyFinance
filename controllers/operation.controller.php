@@ -31,10 +31,10 @@ class Operation_Controller extends Template_Controller
      */
     function __construct()
     {
+        $this->model = new Operation_Model();
+        $this->user = Core::getInstance()->user;
         $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'operation');
-        $this->model = new Money();
-        $this->user = Core::getInstance()->user;
 
         $this->tpl->assign('accounts', $this->user->getUserAccounts());
         $this->tpl->assign('currentAccount', $currentAccount);
@@ -48,7 +48,6 @@ class Operation_Controller extends Template_Controller
                 $parent_category[$_SESSION['user_category'][$i]['cat_id']]['parent_name'] = $_SESSION['user_category'][$i]['cat_name'];
             }
         }
-
     }
 
     /**
@@ -83,7 +82,7 @@ class Operation_Controller extends Template_Controller
     {
         
     }
-    
+
     /**
      * Удаляет выбранное событие
      * @param $args array mixed Какие-нибудь аргументы
@@ -92,5 +91,21 @@ class Operation_Controller extends Template_Controller
     function del($args)
     {
         
+    }
+
+    /**
+     * Получить список
+     */
+    function listOperations($args)
+    {
+        $dateFrom = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
+        $dateFrom = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+        $category = (int)@$_GET['category'];
+        $account     = (int)@$_GET['account'];
+        $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account);
+        foreach ($list as $val) {
+            $array[] = $val;
+        }
+        die(json_encode($array));
     }
 }

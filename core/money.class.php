@@ -104,11 +104,6 @@ class Money
      */
     function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount)
     {
-        $dateFrom        = formatRussianDate2MysqlDate($dateFrom);
-        $dateTo          = formatRussianDate2MysqlDate($dateTo);
-        $currentAccount  = (int)$currentAccount;
-        $currentCategory = (int)$currentCategory;
-
         //@FIXME Оптимизировать запросы, если возможно
         $order = "AND (m.`date` BETWEEN '{$dateFrom}' AND '{$dateTo}')";
         $order1 = "AND (t.`date` BETWEEN '{$dateFrom}' AND '{$dateTo}')";
@@ -156,7 +151,9 @@ class Money
                         LEFT JOIN category cy ON cy.cat_id = tt.category_id
                     WHERE t.user_id= ? {$order1}
                 ORDER BY `date` DESC, `id` DESC";
-            return $this->db->select($sql, $currentAccount, $this->user->getId(), $this->user->getId());
+            $a = $this->db->select($sql, $currentAccount, $this->user->getId(), $this->user->getId());
+            die(var_dump($a));
+            return $a;
         }
     }
 
