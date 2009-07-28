@@ -13,7 +13,7 @@ $(function () {
         buttonImageOnly: true,
         buttonImage: '/img/calculator.png'
     });
-    
+
     // Bind
     $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('account').val() });
     $('#btn_Save').click(function(){ addOperation(); })
@@ -41,7 +41,22 @@ $(function () {
         $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
         $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
     });
+
+    // Load
+    function load () {
+        $.get('/operation/list/',{
+            dateFrom: $('#dateFrom').val(),
+            dateTo: $('#dateTo').val(),
+            category: $('#category :selected').val(),
+            bill: $('#account').val()
+        },function(data, textStatus){
+            // data could be xmlDoc, jsonObj, html, text, etc...
+            this; // the options for this ajax request
+        },'json');
+        //$('div#list');
+    }
 });
+
 function addOperation() {
     var type = $('#type_add').val();
     var bill_id = $('#account :selected').val();

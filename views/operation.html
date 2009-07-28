@@ -92,6 +92,7 @@
         </select>
         <span id="operationTransferCurrency" style="padding-left:5px;"></span>
     </div>
+    {*<!-- Основные поля -->*}
     <div class="field">
         <label for="target">Дата:</label>
         <input type="text" value="{$date}" id="date">
@@ -105,11 +106,12 @@
         <input type="button" value="Отменить" id="btn_Cancel" >
     </div>
 </div>
+{*<!-- Фильтр -->*}
 <div id="filtr">
     с: <input type="text" value="{$dateFrom}" name="dateFrom" id="dateFrom">&nbsp;
     по: <input type="text" value="{$dateTo}" name="dateTo" id="dateTo">&nbsp;&nbsp;
     категория:
-    <select name="categories" id="categories">
+    <select name="category" id="category">
         <option label="Все" value=""> --- Все ---</option>
         {$categories}
     </select>

@@ -96,15 +96,27 @@ class Money
 
     /**
      * Получение списка транзакций
+     * @param <date> $dateFrom
+     * @param <date> $dateTo
+     * @param <int> $currentCategory
+     * @param <int> $currentAccount
+     * @return <array> mixed
      */
-    function getOperationList($conf)
+    function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount)
     {
-        $order = "AND (m.`date` BETWEEN '".$conf['dateFrom']."' AND '".$conf['dateTo']."')";
-        $order1 = "AND (t.`date` BETWEEN '".$conf['dateFrom']."' AND '".$conf['dateTo']."')";
-        if (!empty($conf['currentCategory'])) {
-            $order .= " AND (m.cat_id = ".$conf['currentCategory']." OR c.cat_parent = ".$conf['currentCategory'].")";
-            $order1 .= " AND (cy.cat_id = ".$conf['currentCategory']." OR cy.cat_parent = ".$conf['currentCategory'].")";
+        $dateFrom        = formatRussianDate2MysqlDate($dateFrom);
+        $dateTo          = formatRussianDate2MysqlDate($dateTo);
+        $currentAccount  = (int)$currentAccount;
+        $currentCategory = (int)$currentCategory;
+
+        //@FIXME Оптимизировать запросы, если возможно
+        $order = "AND (m.`date` BETWEEN '{$dateFrom}' AND '{$dateTo}')";
+        $order1 = "AND (t.`date` BETWEEN '{$dateFrom}' AND '{$dateTo}')";
+        if (!empty($currentCategory)) {
+            $order .= " AND (m.cat_id = {$currentCategory} OR c.cat_parent = {$currentCategory})";
+            $order1 .= " AND (cy.cat_id = {$currentCategory} OR cy.cat_parent = {$currentCategory})";
         }
+
         $limit = "";
 
         if (IS_DEMO) {
@@ -121,23 +133,8 @@ class Money
                            AND m.user_id = ?
                            ".$order."
                     ORDER BY m.`date` DESC, m.id DESC " . $limit;
-            return $this->db->select($sql, $this->user->getId(), $this->user->getId(), $conf['currentAccount'], $this->user->getId());
+            return $this->db->select($sql, $this->user->getId(), $this->user->getId(), $currentAccount, $this->user->getId());
         }else{
-            /*
-             $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
-             m.`cat_id`, m.`bill_id`, c.`cat_name`, c.`cat_parent`, b.`bill_name`, m.`drain`, m.`comment`,
-             b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
-             bt.`bill_name` as `cat_transfer`
-             FROM `money` m
-             LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
-             LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
-             LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer`
-             LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
-             WHERE m.`bill_id` = '".$conf['currentAccount']."'
-             AND m.`user_id` = '".$this->user_id."'
-             ".$order."
-             ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
-             */
             $sql = "SELECT m.id, m.user_id, m.money, DATE_FORMAT(m.date,'%d.%m.%Y') as `date`,
                     m.cat_id, m.bill_id, c.cat_name, c.cat_parent, b.bill_name, m.drain, m.comment,
                     b.bill_currency, cu.cur_name, m.transfer, m.tr_id,
@@ -159,43 +156,14 @@ class Money
                         LEFT JOIN category cy ON cy.cat_id = tt.category_id
                     WHERE t.user_id= ? {$order1}
                 ORDER BY `date` DESC, `id` DESC";
-            return $this->db->select($sql, $conf['currentAccount'], $this->user->getId(), $this->user->getId());
+            return $this->db->select($sql, $currentAccount, $this->user->getId(), $this->user->getId());
         }
     }
 
     /**
-     * Получение списка транзакций для депозита
-     * @deprecated
-     * @param $bill_id int Ид счета
-     * @return array mixed
-     */
-    function getDepositOperationList($bill_id)
-    {
-        $sql = "SELECT * FROM account_deposit_list WHERE account_id = ?";
-        return $this->db->select($sql, $bill_id);
-    }
-
-    /**
-     * Возвращает активный счёт (последний в списке)
-     * @return array mixed
-     */
-    function getActiveAccount()
-    {
-        $i = count($this->user_money) - 1;
-        return array(
-            'id'       => $this->user_money[$i]['bill_id'],
-            'name'     => $this->user_money[$i]['bill_name'],
-            'money'    => $this->user_money[$i]['money'],
-            'drain'    => $this->user_money[$i]['drain'],
-            'currency' => $this->user_money[$i]['bill_currency'],
-            'cur_name' => $this->user_money[$i]['cur_name']
-        );
-    }
-
-    /**
      * Возвращает все деньги пользователя по определённому счёту
-     * @param $bill_id string Ид счёта
-     * @return int
+     * @param <string> $bill_id Ид счёта
+     * @return <int>
      */
     function getTotalSum($bill_id)
     {
