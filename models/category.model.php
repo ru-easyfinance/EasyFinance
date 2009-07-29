@@ -104,17 +104,20 @@ class Category_Model {
      * @param $date
      * @return unknown_type
      */
-    public function loadSumCategories($sys_currency, $date="")
+    public function loadSumCategories($sys_currency, $start, $finish)
     {
-        //FIXME Проверить переменную $date, а лучше переписать этот участок
         //TODO Переписать математические расчёты в функции, на использование BCMATH
-        $sql = "SELECT SUM( m.money ) AS `sum`, m.cat_id, b.bill_currency FROM money m
-            LEFT JOIN bill b ON b.bill_id = m.bill_id AND b.user_id = m.user_id
-            WHERE m.user_id = ? ".$date." GROUP BY m.cat_id, b.bill_currency";
+        if (!empty ($start)) {
+            $param = "and o.date > '{$start}' and o.date < '$finish}'";
+        }
+        $sql = "SELECT SUM( o.money ) AS `sum`, o.cat_id, a.account_currency_id
+            FROM operation o
+            LEFT JOIN accounts a
+            ON a.account_id = o.account_id AND a.user_id = o.user_id
+            WHERE o.user_id = ? {$param} GROUP BY o.cat_id, a.account_currency_id";
         $rows = $this->db->select($sql, $this->user_id);
         $cnt = count($row);
-        for ($i=0; $i<$cnt; $i++)
-        {
+        for ($i=0; $i<$cnt; $i++) {
             $id = $rows[$i]['cat_id'];
             for ($j=0; $j<$cnt; $j++) {
                 if ($id == $rows[$j]['cat_id']) {
@@ -123,7 +126,6 @@ class Category_Model {
                     }
 
                     $forest[$id]['sum'] = $forest[$id]['sum'] + $sum;
-
                     $drain = 0;
 
                     if ($forest[$id]['sum'] < 0) {

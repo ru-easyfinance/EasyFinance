@@ -63,7 +63,7 @@ class Accounts_Model
      * @return array
      */
 	private function setAccountField($data) {
-		if ($data['field_type'] == "enum" || $data['field_type'] == "set") {		
+		if ($data['field_type'] == "enum" || $data['field_type'] == "set") {	
 			return $this->loadEnumList($data['field_regexp']);			
 		}
 		return $data;

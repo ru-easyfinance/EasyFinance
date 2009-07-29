@@ -1,10 +1,11 @@
 {literal}
+<!-- {* Убрать блок ниже в нормальный CSS файл *} -->
 <style type="text/css">
     .editAccount { 
         /*title : "Редактировать";
         alt: "Редактировать";
         border: 0;*/
-        cursor:pointer; 
+        cursor:pointer;
     }
     .delAccount {
         /*title:"Удалить";
@@ -20,134 +21,41 @@
 <script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 <script type='text/javascript' src='/js2/jquery/ui.core.js'></script>
 <script type='text/javascript' src='/js2/jquery/ui.datepicker.js'></script>
-
-<script language="javascript">
-{literal}
-$(document).ready(function(){
-    $('#add_account').click(function(){ accountAddVisible(); }); 
-    $('#btnCancelAdd').click(function(){ accountAddUnvisible(); });
-	$('#type_account').change(function(){ changeTypeAccount($(this).attr('value')); });
-	$('#btnAddAccount').click(function(){ createNewAccount(); });
-	$('.delAccount').click(function(){ deleteAccount($(this).attr('value')); });
-	
-	//$('#statement_date').click(function(){ alert('123'); $("#statement_date").datepicker(); })	
-	$('#statement_date').focus(function(){ alert('123'); });
-    
-    $('.cat_tr').hover(function () {
-        $(this).css('backgroundColor','#F8F6EA');
-        $('#ico_del_' + $(this).attr('value')).show();
-    }, function () {
-        $(this).css('backgroundColor','#FFFFFF');
-        $('#ico_del_' + $(this).attr('value')).hide();
-    });
-    
-    function accountAddUnvisible() {
-        $('#blockCreateAccounts').hide();
-    }
-    
-	function accountAddVisible() {
-		changeTypeAccount(document.getElementById('type_account').value);
-		$('#blockCreateAccounts').show();	
-	}
-	
-	function changeTypeAccount(id) {
-	    $('#loader').html('Подождите, идет загрузка...');
-		$('#information_text').hide();
-		$.ajax({
-			type: "POST",
-			url: "/accounts/changeType/",
-			data: {
-				id: id
-			},			
-			success: function(data) {
-				$('#account_fields').html(data);
-				$('#loader').html(' ');
-				$('#information_text').show();
-			}
-		});
-
-	}
-	
-	function createNewAccount()
-	{
-		$('#loader').html('Подождите, идет сохранение...');
-		$('#information_text').hide();
-		var qString = $("#formAccount").formSerialize();
-		$.ajax({
-			type: "POST",
-			url: "/accounts/add/",
-			data: {
-				qString: qString,
-				ajax: true
-			},
-			success: function(data) {
-				$('#loader').html(' ');
-				$('#dataAccounts').html(data);
-				$('#information_text').show();
-			}
-		});
-	}
-	
-	function deleteAccount(id) {
-		if (!confirm("Вы действительно хотите удалить эту категорию?")) {
-        	return false;
-    	}
-		
-		$('#information_text').hide();
-		$('#loader').html('Подождите, идет удаление...');
-		
-		$.ajax({
-			type: "POST",
-			url: "/accounts/del/",
-			data: {
-				id: id
-			},
-			success: function(data) {
-				$('#loader').html(" ");
-				$('#dataAccounts').html(data);
-				$('#information_text').show();
-			}
-		});
-	}
-});
-{/literal}
-</script>
-
+<script type='text/javascript' src='/js2/accounts.js?r={$revision}'></script>
 <div id="blockCreateAccounts" style="display:none;">
-	{include file="accounts/accounts.block_create.html"}
+    {include file="accounts/accounts.block_create.html"}
 </div>
-
 <table width="100%">
-	<tr>
-		<td valign="top" width="100%" style=" background-color:#f8f8d8; padding:5px;">
-			<table width="100%" bgcolor="#ffffff" border="0" cellspacing="0">
+    <tr>
+        <td valign="top" width="100%" style=" background-color:#f8f8d8; padding:5px;">
+            <table width="100%" bgcolor="#ffffff" border="0" cellspacing="0">
         	<tbody>
-            <tr>
-            	<td class="cat_add" colspan="5" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 15px 5px; background-color: rgb(248, 248, 216);">
-                <span style="color: rgb(56, 120, 215);" id="loader"></span>
-                <span style="color: rgb(56, 120, 215);" id="information_text">Для редактирования счета выберите ее в списке.</span>
-           		</td>
-        	</tr>
-        	<tr>
-            	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;" width="30%">        	
-                	<b>Название</b>
-            	</td>
-            	<td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; padding-right: 10px;"  width="15%">
-            		<b>Тип счета</b>
-				</td>
-                <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 25px;" width="55%">
-                	<b>Комментарий</b>
-                </td>
-			</tr>
-            <tr>
-                <td class="cat_add" colspan="3">
-                    <div id="dataAccounts">        
-                        {include file="accounts/accounts.list.html"}        
-                    </div>
-                </td>
-            </tr>                        
-			</tbody>
+                    <tr>
+                        <td class="cat_add" colspan="5" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 15px 5px; background-color: rgb(248, 248, 216);">
+                            <span style="color: rgb(56, 120, 215);" id="loader"></span>
+                            <span style="color: rgb(56, 120, 215);" id="information_text">Для редактирования счета выберите ее в списке.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;" width="30%">
+                            <b>Название</b>
+                        </td>
+                        <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 15px; padding-right: 10px;"  width="15%">
+                            <b>Тип счета</b>
+                        </td>
+                        <td class="cat_add" style="border-left: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204); padding-left: 25px;" width="55%">
+                            <b>Комментарий</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cat_add" colspan="3">
+                            <div id="dataAccounts">
+                                {include file="accounts/accounts.list.html"}
+                            </div>
+                        </td>
+                    </tr>
+		</tbody>
             </table>
-		</td>
-	</tr>    
+	</td>
+    </tr>
 </table>

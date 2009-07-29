@@ -40,10 +40,9 @@ class Category_Controller extends Template_Controller
     {
         $date['start'] = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
         $date['finish'] = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
-        $param = "and m.date > '".$date['start']."' and m.date < '".$date['finish']."'";
 
         $this->model->loadUserTree();
-        $this->model->loadSumCategories($sys_currency, $param);
+        $this->model->loadSumCategories($sys_currency, $date['start'], $date['finish']);
 
         $this->tpl->assign("categories", $this->model->tree);
         $this->tpl->assign("sys_categories", $this->model->system_categories);

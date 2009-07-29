@@ -35,7 +35,6 @@ class Accounts_Controller extends Template_Controller
 		$this->user  = Core::getInstance()->user;
         $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Accounts_Model();
-        
         $this->tpl->assign('name_page', 'accounts/accounts');
     }
 
@@ -46,16 +45,15 @@ class Accounts_Controller extends Template_Controller
      */
     function index($args)
     {
-        if ($_SESSION['account'] == "reload") {
+        if ($_SESSION['account'] == "reload") { //@FIXME Переписать эту конструкцию
             $this->user->initUserAccount($this->user->getId());
             $this->user->save();
             unset($_SESSION['account']);
         }
 
         $this->tpl->assign("page_title", "account all");
-		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
+		$this->tpl->assign('accounts', Core::$user->getUserAccounts());
 		$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
-		//pre($this->user->initUserAccounts($this->user->getId()));
 		$this->tpl->assign("template", "default");
     }
 	
