@@ -1,7 +1,6 @@
 // {* $Id$ *}
 $(function() {
     // Init
-    
     $('#amount').calculator({
         layout: [
                 $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
@@ -37,44 +36,41 @@ $(function() {
 
     // Autoload
     loadOperationList();
-
     function loadOperationList() {
         $.get('/operation/listOperations/',{
             dateFrom: $('#dateFrom').val(),
             dateTo: $('#dateTo').val(),
-            category: $('#category :selected').val(),
+            category: $('#cat_filtr :selected').val(),
             account: $('#account :selected').val()
         },function(data, textStatus){
-            alert(this);
+            if (data != null) {
+                $('div#list').empty();
+                for(v in data){
+                    $('div#list').append(
+                        "<div value='"+data[v].id+"'><input type='checkbox' />"
+                            + ((data[v].drain == 1) ? '<span>Расход</span>' : '<span>Доход</span>')
+                            + '<span>'+data[v].money+'</span>'
+                            + '<span>'+data[v].date+'</span>'
+                            + '<span>'+data[v].cat_name+'</span>'
+                            + '<span>'+data[v].account_name+'</span>'
+                            + '<span>'+data[v].comment+'</span>'
+                    )
+                }
+            }
             // data could be xmlDoc, jsonObj, html, text, etc...
             this; // the options for this ajax request
         },'json');
-        //$('div#list');
+        
     }
 });
 
 function addOperation() {
-    var type = $('#type_add').val();
-    var bill_id = $('#account :selected').val();
-    var cat_id = $('#cat_id_old :selected').val();
-    var sum = $('#pos_mc').val();
-    $('#POS_SUM').html(sum);
-    var dateTo = $('#dateTo').val();
-    var comment = $('#comment').val();
-
-    var toAccount = '';
-    var currency = '';
-    var modules = "operation";
-    var action = "addOperation";
-    target_id = '';
-
+/*
     if (type == '2') {
         toAccount = document.getElementById("selectAccountForTransfer").value;
         currency = document.getElementById("currency_add").value;
         action = "addTransfer";
     } else if (type == '4' || type == '5') {
-        //TODO Сделать проверку на валюту
-        //if ($("#selectAccount").val())
         action = 'addTargetOperation';
         target_id = $("#target_sel").val();
         close = $("#close_ed").attr('checked')?1:0;
@@ -82,28 +78,25 @@ function addOperation() {
             return false;
         }
     }
-
-    if (sum == 0 || sum == 'NaN'){
-        alert('Вы ввели неверное значение в поле "сумма"!');return false;
-    }
-
+*/
     if (!validateForm()){
         return false;
     }
     $.post('/operation/add/', {
-        modules: modules,
-        action: action,
-        a: bill_id,
-        cat_id: cat_id,
-        dateTo: dateTo,
-        type: type,
-        comment: comment,
-        sum: sum,
-        toAccount: toAccount,
-        currency: currency,
-        target_id: target_id,
-        close: close
+        type: $('#type').val(),
+        account: $('#account').val(),
+        category: $('#category').val(),
+        date: $('#date').val(),
+        comment: $('#comment').val(),
+        amount: $('#amount').val(),
+        toAccount: $('#toAccount').val(),
+        currency: $('#currency').val(),
+        target: $('#target').val(),
+        close: $('#close').val()
     }, function(data, textStatus){
+        if (textStatus == 'success') {
+            alert(data);
+        }
        // data could be xmlDoc, jsonObj, html, text, etc...
        //this; // the options for this ajax request
        // textStatus can be one of:
@@ -119,6 +112,15 @@ function addOperation() {
 
     visibleMessage('Операция добавляется, подождите несколько секунд...');
 }
+
+function validateForm() {
+    if (isNaN(parseFloat($('#amount').val()))){
+        alert('Вы ввели неверное значение в поле "сумма"!');
+        return false;
+    }
+    return true;
+}
+
 function onPosSelect() {
     var el = $('#e_pos-box');
     if(el.attr('checked')) {

@@ -40,7 +40,7 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('currentAccount', $currentAccount);
         $this->tpl->assign('dateFrom', date('01.m.Y'));
         $this->tpl->assign('dateTo', date('d.m.Y'));
-        $this->tpl->assign('categories', get_three_select($_SESSION['user_category'])); //@FIXME
+        $this->tpl->assign('categories', get_tree_select(1)); //@FIXME
        
         $parent_category[0]['cat_name'] = "";
         for($i=0; $i < count($_SESSION['user_category']); $i++) {
@@ -99,7 +99,7 @@ class Operation_Controller extends Template_Controller
     function listOperations($args)
     {
         $dateFrom = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
-        $dateFrom = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+        $dateTo = formatRussianDate2MysqlDate(@$_GET['dateTo']);
         $category = (int)@$_GET['category'];
         $account     = (int)@$_GET['account'];
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account);

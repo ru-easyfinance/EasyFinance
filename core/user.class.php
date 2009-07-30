@@ -204,9 +204,12 @@ class User
      */
     public function initUserCategory ()
     {
-        $sql = "SELECT cat_id, cat_name, cat_parent, cat_active FROM category
-            WHERE user_id = ? AND cat_active = '1' ORDER BY cat_name;";
-        $this->user_category = $this->db->select($sql, $this->getId());
+        $sql = "SELECT * FROM category
+            WHERE user_id = ? AND cat_active = '1' ORDER BY cat_parent, cat_name;";
+        $category = $this->db->select($sql, $this->getId());
+        foreach ($category as $val) {
+            $this->user_category[$val['cat_id']] = $val;
+        }
     }
 
     /**
@@ -215,6 +218,7 @@ class User
      */
     public function initUserCurrency ()
     {
+        //@FIXME переписать выгрузку валют
         if (isset($this->props['user_currency_list'])) {
             if (!is_array($this->props['user_currency_list'])) {
                 trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
@@ -235,7 +239,10 @@ class User
             LEFT JOIN account_types act
                 ON act.account_type_id = a.account_type_id
             WHERE user_id= ? ";
-        $this->user_account = $this->db->select($sql, $this->getId());
+        $accounts = $this->db->select($sql, $this->getId());
+        foreach ($accounts as $val) {
+            $this->user_account[$val['account_id']] = $val;
+        }
 	}
 
     /**

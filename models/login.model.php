@@ -65,13 +65,15 @@ class Login_Model
         $user = Core::getInstance()->user;
         if (!empty($_POST['login']) && !empty($_POST['pass'])) {
             $login = htmlspecialchars(@$_POST['login']);
-            $pass = md5(@$_POST['pass']);
-            if (isset($_POST['autoLogin'])) {
-                // Шифруем и сохраняем куки
-                setcookie(COOKIE_NAME, encrypt(array($login,$pass)),
-                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-            }
+            $pass = sha1(@$_POST['pass']);
             if ($user->initUser($login,$pass)) {
+                // Шифруем и сохраняем куки
+                if (isset($_POST['autoLogin'])) {
+                    setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+                // Шифруем, но куки теперь сохраняются лишь до конца сессии
+                } else {
+                    setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time(), COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+                }
                 // У пользователя нет категорий, т.е. надо помочь ему их создать
                 if (count($user->getUserCategory()) == 0) {
                     $model = new Login_Model();

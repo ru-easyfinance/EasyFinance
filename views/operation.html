@@ -43,16 +43,7 @@
             </optgroup>
             {/if}
             <optgroup id="all" label="&nbsp;Все категории">
-            {foreach from=$list item=data}
-                {if $data.cat_parent == 0}
-                <option value="{$data.cat_id}">{$data.cat_name}</option>
-                {foreach from=$list item=child}
-                    {if $child.cat_parent == $data.cat_id}
-                    <option value="{$child.cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;- {$child.cat_name}</option>
-                    {/if}
-                {/foreach}
-                {/if}
-                {/foreach}
+                {$categories}
             </optgroup>
         </select>
         {else}
@@ -111,11 +102,11 @@
     с: <input type="text" value="{$dateFrom}" name="dateFrom" id="dateFrom">&nbsp;
     по: <input type="text" value="{$dateTo}" name="dateTo" id="dateTo">&nbsp;&nbsp;
     категория:
-    <select name="category" id="category">
+    <select id="cat_filtr">
         <option label="Все" value=""> --- Все ---</option>
         {$categories}
     </select>
     &nbsp;&nbsp;
     <input type="button" value="Обновить данные" id="btn_ReloadData"/>
 </div>
-<div id="list" />
+<div id="list"></div>

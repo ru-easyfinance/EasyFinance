@@ -11,7 +11,7 @@ class Registration_Model
 {
     /**
      * Активирует пользователя на портале
-     * @param <string> $reg_id Временный ключ для регистрации MD5
+     * @param <string> $reg_id Временный ключ для регистрации SHA1
      * @return <bool>
      */
     function activate ($reg_id) {
@@ -19,10 +19,10 @@ class Registration_Model
         $sql = "SELECT user_id, reg_id FROM registration WHERE reg_id = ?;";
         $row = $db->selectRow($sql, $reg_id);
         if (!empty($row)) {
-            $user_id = $row['user_id'];
+            $user_id = $row['user_id']; 
             $db->query("DELETE FROM registration WHERE reg_id = ?", $reg_id);
 
-            $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE user_id = ?";
+            $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE id = ?";
             $db->query($sql, $user_id);
 
             Core::getInstance()->tpl->assign('good_activation', 'Вы успешно активированы на сайте!');
@@ -46,7 +46,7 @@ class Registration_Model
         $register['name'] = htmlspecialchars(@$_POST['register']['name']);
         if (!empty($_POST['register']['pass']) && !empty($_POST['register']['pass_r'])) {
             if (@$_POST['register']['pass'] == @$_POST['register']['pass_r']) {
-                $pass = md5(@$_POST['register']['pass']);
+                $pass = SHA1(@$_POST['register']['pass']);
             } else {
                 $error_text['pass'] = "Введённые пароли не совпадают!";
             }
@@ -67,7 +67,7 @@ class Registration_Model
             $error_text['mail'] = "Неверно введен e-mail!";
             $register['mail'] = htmlspecialchars(@$_POST['register']['mail']);
         }
-        $cell = $db->selectCell("SELECT user_id FROM users WHERE user_login=?", $register['login']);
+        $cell = $db->selectCell("SELECT id FROM users WHERE user_login=?", $register['login']);
         if (!empty($cell)) {
             $error_text['login'] = "Пользователь с таким логином уже существует!";
         }
@@ -75,16 +75,17 @@ class Registration_Model
         // Если нет ошибок, создаём пользователя
         if (empty($error_text)) {
 
+            //Добавляем в таблицу пользователей
+            $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
+                user_created, user_active, user_new) VALUES (?, ?, ?, ?, CURDATE(), 0, 1)";
+            $db->query($sql, $register['name'], $register['login'], $pass, $register['mail']);
+
             //Добавляем его в таблицу не подтверждённых пользователей
-            $user_id = md5($_SERVER['REMOTE_ADDR'].";".date("Y-m-d h-i-s").";");
-            $reg_id  = md5($register['mail'].";".date("Y-m-d h-i-s").";");
-            $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, CURDATE(), ?);";
+            $user_id = mysql_insert_id();
+            $reg_id  = SHA1($register['mail'].";".date("Y-m-d h-i-s").";");
+            $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, NOW(), ?);";
             $db->query($sql, $user_id, $reg_id);
 
-            //Добавляем в таблицу пользователей
-            $sql = "INSERT INTO users (user_id, user_name, user_login, user_pass, user_mail,
-                user_created, user_active, user_new) VALUES (?,?,?,?,?,CURDATE(),?,?)";
-            $db->query($sql, $user_id, $register['name'], $register['login'], $pass, $register['mail'], 0, 1);
             $tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
             $reg_href = URL_ROOT."/registration/activation/".$reg_id;

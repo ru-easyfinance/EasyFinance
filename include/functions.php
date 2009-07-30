@@ -192,20 +192,40 @@ function decrypt($text, $key) {
 */
 function validate_email($email)
 {
-if (!empty($email)) {
-if (preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email)) {
-return true;
-} else {
-return false;
-}
-} else {
-return false;
-}
+    if (!empty($email)) {
+        if (preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
 }
 
 function make_float($var)
 {
     return (float)str_replace(',','.',$var);
+}
+
+function get_tree_select ($selected = 0)
+{
+    $result = '';
+    $cat = Core::getInstance()->user->getUserCategory();
+    foreach ($cat as $val) {
+        if ($selected = $val['cat_id']) {
+            $s = "selected='selected'";
+        } else {
+            $s = '';
+        }
+
+        if ($val['cat_parent'] == 0) {
+            $result .= "<option value='{$val['cat_id']}' {$s}>{$val['cat_name']}</option>";
+        } else {
+            $result .= "<option value='{$val['cat_id']}' {$s}>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+        }
+    }
+    return $result;
 }
 
 /**
