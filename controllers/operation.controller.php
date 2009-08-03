@@ -72,8 +72,15 @@ class Operation_Controller extends Template_Controller
      */
     function add($args)
     {
-        die(var_dump($_POST[]));
-        switch ($type) {
+        $array = $this->model->checkData($array);
+
+        // Если есть ошибки, то возвращаем их пользователю в виде массива
+        if ($array == false) {
+            die(json_encode($this->model->errorData));
+        }
+        
+        // account amount category close comment currency date target toAccount type
+        switch ($array['type']) {
             case '0':
                 $drain = 1;
                 $sum = $sum * -1;

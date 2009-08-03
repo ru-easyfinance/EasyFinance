@@ -25,6 +25,7 @@ $db->query("SET character_set_client = 'utf8', character_set_connection = 'utf8'
 
 // Устанавливаем обработчик ошибок
 set_error_handler("UserErrorHandler");
+
 // И обработчик ошибок для бд
 $db->setErrorHandler('databaseErrorHandler');
 
@@ -48,40 +49,8 @@ $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 $tpl->assign('revision',REVISION);
 
-// Добавляем ссылки на БД и Смарти в наше ядро
+// Добавляем ссылки на БД, Смарти, Пользователя и Валюты - в наше ядро
 Core::getInstance()->db = $db;
 Core::getInstance()->tpl = $tpl;
+Core::getInstance()->currency = new Currency();
 Core::getInstance()->user = new User();
-
-// FIXME Снизу какая-то хрень.. наверное её нужно удалить?
-// Какие-то настройки
-/*
-// Month setting
-$sys_month = array(
-    '01'   => 'Январь',
-    '02'   => 'Февраль',
-    '03'   => 'Март',
-    '04'   => 'Апрель',
-    '05'   => 'Май',
-    '06'   => 'Июнь',
-    '07'   => 'Июль',
-    '08'   => 'Август',
-    '09'   => 'Сентябрь',
-    '10'  => 'Октябрь',
-    '11'  => 'Ноябрь',
-    '12'  => 'Декабрь'
-);
-
-// Виды и названия отчетов
-$sys_reports = array(
-    'graph_profit' => 'Доходы',
-    'graph_loss' => 'Расходы',
-    'graph_profit_loss' => 'Сравнение расходов и доходов',
-    'txt_profit' => 'Детальные доходы',
-    'txt_loss' => 'Детальные расходы',
-    'txt_loss_difference' => 'Сравнение расходов за периоды',
-    'txt_profit_difference' => 'Сравнение доходов за периоды',
-    'txt_profit_avg_difference' => 'Сравнение доходов со средним за периоды',
-    'txt_loss_avg_difference' => 'Сравнение расходов со средним за периоды',
-);
-*/

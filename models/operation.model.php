@@ -38,6 +38,12 @@ class Operation_Model {
     private $total_sum = 0;
 
     /**
+     * Массив со списком ошибок, появляющимися при добавлении, удалении или редактировании (если есть)
+     * @var <array> mixed
+     */
+    public $errorData = array();
+
+    /**
      * Конструктор
      * @return bool
      */
@@ -74,6 +80,33 @@ class Operation_Model {
         $_SESSION['account_money'] = $this->account_money;
         $_SESSION['total_sum']     = $this->total_sum;
     }
+    /**
+     * Проверяет валидность введённых данных
+     * @param <mixed> $params
+     * @return <bool>
+     */
+    function checkData($params = '')
+    {
+        $valid = array();
+        $this->errorData = array();
+
+        // Проверяем ID
+        if (in_array('id', $params) or count($params) == 0) {
+            $valid['id'] = (int)@$_POST['key'];
+            if ($valid['id'] === 0) {
+                $this->errorData['id'][] = 'Не указан id события';
+            }
+        }
+
+        // Проверяем заголовок - title
+        if (in_array('title', $params) or count($params) == 0) {
+            $valid['title'] = trim(htmlspecialchars(@$_POST['title']));
+            if (empty ($valid['title'])) {
+                $this->errorData['title'][] = 'Не указан заголовок события';
+            }
+        }
+    }
+
 
     /**
 	 * Регистрирует новую транзакцию
@@ -85,7 +118,7 @@ class Operation_Model {
      * 
 	 * @return <bool> true - Регистрация прошла успешно
 	 */
-	function add($money, $date, $drain, $comment, $account_id)
+	function add($money=0, $date='', $drain=0, $comment='', $account_id=0)
 	{
         $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $money, $date, $cat_id, $account_id, $drain, $comment);

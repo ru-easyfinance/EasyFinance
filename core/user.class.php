@@ -191,7 +191,7 @@ class User
         if (isset($_SESSION['user_currency']) && is_array($_SESSION['user_currency'])) {
             $this->user_currency = $_SESSION['user_currency'];
         } else {
-            $this->user_currency = array();
+            $this->user_currency = array(1); //Устанавливает валюты пользователя (по умолчанию устанавливается 1 - русский рубль)
         }
 
         return true;
@@ -218,15 +218,20 @@ class User
      */
     public function initUserCurrency ()
     {
-        //@FIXME переписать выгрузку валют
-        if (isset($this->props['user_currency_list'])) {
-            $currency = unserialize($this->props['user_currency_list']);
-            if (!is_array($currency)) {
-                trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
-                $this->props['user_currency_list'] = array();
+        $currency = unserialize($this->props['user_currency_list']);
+        if (!is_array($currency)) {
+            trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
+            $currency = array(1);
+        }
+        foreach (Core::getInstance()->currency as $key => $val) {
+            if (in_array($key, $currency)) {
+                // В начало массива добавляем валюту  по умолчанию
+                if ( $this->props['user_currency_default'] == $key ) {
+                    $this->user_currency = array($key=>$val) + $this->user_currency;
+                } else {
+                    $this->user_currency[$key] = $val;
+                }
             }
-        } else {
-            $this->props['user_currency_list'] = array();
         }
     }
 
