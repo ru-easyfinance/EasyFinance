@@ -15,7 +15,7 @@ $(function() {
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
     
     // Bind
-    $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('#account :selected').val() });
+    $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('#account :selected').val() }); // @FIXME
     $('#btn_Save').click(function(){ addOperation(); })
     $('#btn_Cancel').click(function(){ operationAddInVisible(); });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
@@ -42,9 +42,9 @@ $(function() {
             dateTo: $('#dateTo').val(),
             category: $('#cat_filtr :selected').val(),
             account: $('#account :selected').val()
-        },function(data, textStatus){
+        }, function(data) {
+            $('div#list').empty();
             if (data != null) {
-                $('div#list').empty();
                 for(v in data){
                     $('div#list').append(
                         "<div value='"+data[v].id+"'><input type='checkbox' />"
@@ -60,7 +60,10 @@ $(function() {
             // data could be xmlDoc, jsonObj, html, text, etc...
             this; // the options for this ajax request
         },'json');
-        
+        $('input#tags').tagSuggest({
+            tags: ['javascript', 'js2', 'js', 'jquery', 'java']
+        });
+
     }
 });
 

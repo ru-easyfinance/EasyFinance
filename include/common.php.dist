@@ -8,6 +8,11 @@
 require_once dirname(__FILE__)."/config.php";
 require_once SYS_DIR_INC.'/functions.php';
 
+if (DEBUG) {
+    // В режиме DEBUG выводим отладочные сообщения в консоль firebug < http://getfirebug.com/ > через плагин firephp < http://www.firephp.org/ >
+    require_once SYS_DIR_LIBS . 'external/FirePHPCore/FirePHP.class.php';
+}
+
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . '/external/DBSimple/Mysql.php';
 require_once SYS_DIR_LIBS . 'external/smarty/Smarty.class.php';
@@ -24,7 +29,7 @@ set_error_handler("UserErrorHandler");
 $db->setErrorHandler('databaseErrorHandler');
 
 //Логгируем все запросы. Только во включенном режиме DEBUG
-if (defined(DEBUG)) {
+if (DEBUG) {
     $db->setLogger('databaseLogger');
 }
 

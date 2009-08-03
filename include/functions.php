@@ -45,18 +45,9 @@ function databaseErrorHandler($message, $info)
 
 function databaseLogger($db, $sql)
 {
-    return false;
-    // Находим контекст вызова этого запроса.
     $caller = $db->findLibraryCaller();
-    $array = & $caller['object']->_placeholderCache;
-    $array = array_shift($array);
-    $fh = fopen('/var/www/hm/db_log', 'a');
-    //print var_dump(@$caller['object']);
-    //fwrite($fh, "\n".@$caller['object']->_lastQuery[0] . "\n  -- (" . date("Y-m-d H:i:s")  ."  ". @$caller['object']->_statistics['count'].") ".@$caller['object']->_statistics['time']);
-    //fwrite($fh, "\n". $array[0] . "\n  -- (" . date("Y-m-d H:i:s")  ."  ". @$caller['object']->_statistics['count'].") ".@$caller['object']->_statistics['time']);
-    $tip = "\n".$sql;
-    fwrite($fh, $tip);
-    fclose($fh);
+    trigger_error(end(end(@$caller['object']->_placeholderCache)), E_USER_NOTICE);
+    return false;
 }
 
 /**
@@ -79,7 +70,12 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
             trigger_error("*USER WARNING* [$errno] $errstr  line: $errline in file: $errfile");
             break;
         case E_USER_NOTICE:
-            $tpl->append("notice", "'*USER NOTICE* [$errno] ".htmlspecialchars($errstr)."  line: $errline in file: $errfile'");
+            if (substr($errstr, 0, 4) == '  --'){
+                FirePHP::getInstance(true)->log($errstr);
+            } else {
+                FirePHP::getInstance(true)->info($errstr);
+            }
+//            $tpl->append("notice", '"'.nl2br(htmlspecialchars($errstr)).' line: $errline in file: $errfile"');
             break;
     }
     return true;
@@ -213,10 +209,10 @@ function get_tree_select ($selected = 0)
     $result = '';
     $cat = Core::getInstance()->user->getUserCategory();
     foreach ($cat as $val) {
-        if ($selected = $val['cat_id']) {
+        if ($selected == $val['cat_id']) {
             $s = "selected='selected'";
         } else {
-            $s = '';
+            $s = ' ';
         }
 
         if ($val['cat_parent'] == 0) {

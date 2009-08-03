@@ -1,10 +1,12 @@
 {* $Id$ *}
 <link rel='stylesheet' type='text/css' href='/css2/jquery/jquery.calculator.css' />
+<link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.all.css' />
 <link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.datepicker.css' />
 <script type='text/javascript' src='/js2/jquery/ui.core.js'></script>
 <script type="text/javascript" src="/js2/jquery/ui.datepicker.js"></script>
 <script type="text/javascript" src="/js2/jquery/jquery.calculator.min.js"></script>
 <script type="text/javascript" src="/js2/jquery/jquery.calculator-ru.js"></script>
+<script type="text/javascript" src="/js2/jquery/tag.js"></script>
 <script type="text/javascript" src="/js2/operation.js?r={$revision}"></script>
 <h3>Операции по счету</h3>
 <div id="form">
@@ -43,12 +45,12 @@
             </optgroup>
             {/if}
             <optgroup id="all" label="&nbsp;Все категории">
-                {$categories}
+                {$category}
             </optgroup>
         </select>
         {else}
         <select id="category">
-            {$categories}
+            {$category}
         </select>
         {/if}
     </div>
@@ -85,12 +87,16 @@
     </div>
     {*<!-- Основные поля -->*}
     <div class="field">
-        <label for="target">Дата:</label>
+        <label for="date">Дата:</label>
         <input type="text" value="{$date}" id="date">
     </div>
     <div class="field">
         <label for="target">Комментарий:</label>
         <textarea rows="4" cols="50" name="comment" id="comment"></textarea>
+    </div>
+    <div class="field">
+        <label for="tags">Теги:</label>
+        <input type="text" value="{$tags}" id="tags">
     </div>
     <div class="field">
         <input type="button" value="Сохранить" id="btn_Save">
@@ -104,7 +110,7 @@
     категория:
     <select id="cat_filtr">
         <option label="Все" value=""> --- Все ---</option>
-        {$categories}
+        {$cat_filtr}
     </select>
     &nbsp;&nbsp;
     <input type="button" value="Обновить данные" id="btn_ReloadData"/>

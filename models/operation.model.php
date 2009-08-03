@@ -76,6 +76,68 @@ class Operation_Model {
     }
 
     /**
+	 * Регистрирует новую транзакцию
+	 * @param <float>  $money      Сумма транзакции
+	 * @param <string> $date       Дата транзакции в формате Y.m.d
+	 * @param <int>    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо
+	 * @param <string> $comment    Комментарий транзакции
+	 * @param <int>    $account_id Ид счета
+     * 
+	 * @return <bool> true - Регистрация прошла успешно
+	 */
+	function add($money, $date, $drain, $comment, $account_id)
+	{
+        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $this->db->query($sql, $this->user->getId(), $money, $date, $cat_id, $account_id, $drain, $comment);
+        Core::getInstance()->user->initUserAccounts();
+        //$this->selectMoney($user_id);
+        $this->save();
+        return true;
+	}
+
+    /**
+     * Получает сумму всех счетов пользователя
+     * @param <int> $account_id Ид счёта
+     * @param <string> $period Период
+     * @return unknown_type
+     */
+	function selectMoney($id, $period = '')
+	{
+		if (!empty($period)) {
+			if ($period == "today") {
+				$order = "AND `date` = '".date("Y.m.d")."'";
+			}
+			if (html($_GET['order']) == "month") {
+				$order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
+			}
+			if (html($_GET['order']) == "week") {
+				$begin_week = (date('d')+1) - date('w');
+				$order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
+			}
+		}else{
+			$limit = "LIMIT 0,30";
+		}
+        $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
+                       m.`cat_id`, m.`bill_id`, c.`cat_name`, b.`bill_name`, m.`drain`, m.`comment`,
+                       b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
+                       bt.`bill_name` as `cat_transfer`
+                    FROM `money` m
+                    LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
+                    LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
+                    LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer`
+                    LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
+                        WHERE m.`bill_id` = '".$id."'
+                               AND m.`user_id` = '".$this->user_id."'
+                               ".$order."
+                        ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
+
+        $this->user_money = $row;
+        $this->account_money = $id;
+        $this->getTotalSum($id);
+        $this->save();
+	}
+
+    /**
      * Получение списка транзакций
      * @param <date> $dateFrom
      * @param <date> $dateTo
@@ -98,6 +160,7 @@ class Operation_Model {
         WHERE t.user_id= ? {$order1}
     ORDER BY `date` DESC, `id` DESC";
  */
+
             $category = Core::getInstance()->user->getUserCategory();
             $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
             "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt ".

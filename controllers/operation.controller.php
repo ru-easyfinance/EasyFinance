@@ -40,14 +40,16 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('currentAccount', $currentAccount);
         $this->tpl->assign('dateFrom', date('01.m.Y'));
         $this->tpl->assign('dateTo', date('d.m.Y'));
-        $this->tpl->assign('categories', get_tree_select(1)); //@FIXME
-       
+        $this->tpl->assign('category', get_tree_select());
+        $this->tpl->assign('cat_filtr', get_tree_select(@$_GET['cat_filtr']));
+/*
         $parent_category[0]['cat_name'] = "";
         for($i=0; $i < count($_SESSION['user_category']); $i++) {
             if ($_SESSION['user_category'][$i]['cat_parent']==0) {
                 $parent_category[$_SESSION['user_category'][$i]['cat_id']]['parent_name'] = $_SESSION['user_category'][$i]['cat_name'];
             }
         }
+ */
     }
 
     /**
@@ -70,7 +72,17 @@ class Operation_Controller extends Template_Controller
      */
     function add($args)
     {
-        
+        die(var_dump($_POST[]));
+        switch ($type) {
+            case '0':
+                $drain = 1;
+                $sum = $sum * -1;
+                break;
+            case '1':
+                $drain = 0;
+                break;
+        }
+        die($this->model->add($money, $date, $drain, $comment, $account_id));
     }
 
     /**

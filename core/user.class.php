@@ -12,12 +12,12 @@ class User
     /**
      * Массив, хранит свойства пользователя
      * @var <array> mixed
-     *      user_id string ??? //FIXME перейти на INT
-     *      user_name string
-     *      user_login string
-     *      user_pass string //WTF???
-     *      user_mail string
-     *      user_created date (%d.%m.%Y)
+     *      <int> user_id       Ид пользователя
+     *      <string> user_name  Имя пользователя, отображаемое на форуме
+     *      <string> user_login Логин
+     *      <string> user_pass  Пароль в формате SHA-1
+     *      <string> user_mail  е-мейл
+     *      <date> user_created  Дата создания аккаунта пользователя в формате (%d.%m.%Y)
      *      user_active int 0 - аккаунт неактивен
      */
     private $props = Array();
@@ -78,7 +78,7 @@ class User
 
     /**
      * Возвращает Id пользователя
-     * @return string || false
+     * @return <int> || false
      */
     public function getId()
     {
@@ -91,8 +91,8 @@ class User
 
     /**
      * Иниализирует пользователя, достаёт из базы некоторые его свойства
-     * @param $login string
-     * @param $pass string MD5 пароля
+     * @param <string> $login
+     * @param <string> $pass  MD5 пароля
      * @return bool
      */
     public function initUser($login, $pass)
@@ -102,7 +102,7 @@ class User
                  $this->destroy();
              }
         }
-        //FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
+        //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
         $sql = "SELECT id, user_name, user_login, user_pass, user_mail,
                     DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
                     user_currency_default, user_currency_list
@@ -220,7 +220,8 @@ class User
     {
         //@FIXME переписать выгрузку валют
         if (isset($this->props['user_currency_list'])) {
-            if (!is_array($this->props['user_currency_list'])) {
+            $currency = unserialize($this->props['user_currency_list']);
+            if (!is_array($currency)) {
                 trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
                 $this->props['user_currency_list'] = array();
             }
@@ -233,7 +234,7 @@ class User
      * Возвращает счета пользователя
      * @return void
      */
-	public function initUserAccounts($user_id)
+	public function initUserAccounts()
 	{
         $sql = "SELECT a.*, act.* FROM accounts a
             LEFT JOIN account_types act
