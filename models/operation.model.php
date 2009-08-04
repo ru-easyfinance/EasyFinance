@@ -92,40 +92,116 @@ class Operation_Model {
 
         // Проверяем ID
         if (in_array('id', $params) or count($params) == 0) {
-            $valid['id'] = (int)@$_POST['key'];
+            $valid['id'] = (int)@$_POST['id'];
             if ($valid['id'] === 0) {
                 $this->errorData['id'][] = 'Не указан id события';
             }
         }
 
-        // Проверяем заголовок - title
-        if (in_array('title', $params) or count($params) == 0) {
-            $valid['title'] = trim(htmlspecialchars(@$_POST['title']));
-            if (empty ($valid['title'])) {
-                $this->errorData['title'][] = 'Не указан заголовок события';
+        // Проверяем тип операции
+        if (in_array('type', $params) or count($params) == 0) {
+            $valid['type'] = (int)@$_POST['type'];
+        }
+
+        // Проверяем счёт
+        if (in_array('account', $params) or count($params) == 0) {
+            $valid['account'] = (int)@$_POST['account'];
+            if ($valid['account'] === 0) {
+                $this->errorData['account'][] = 'Не выбран счёт';
             }
         }
-    }
 
+        // Проверяем сумму
+        if (in_array('amount', $params) or count($params) == 0) {
+            $valid['amount'] = (float)@$_POST['amount'];
+            if (empty ($valid['amount'])) {
+                $this->errorData['amount'][] = 'Сумма не должна быть равной нулю.';
+            }
+        }
+
+        // Проверяем категорию
+        if (in_array('category', $params) or count($params) == 0) {
+            $valid['category'] = (int)@$_POST['category'];
+            if (empty ($valid['category'])) {
+                $this->errorData['category'][] = 'Нужно указать категорию';
+            }
+        }
+
+        // Проверяем дату
+        if (in_array('date', $params) or count($params) == 0) {
+            $valid['date'] = trim(formatRussianDate2MysqlDate(@$_POST['date']));
+            if (empty ($valid['date'])) {
+                $this->errorData['date'][] = 'Не верно указана дата';
+            }
+        }
+
+        $valid['comment'] = trim(htmlspecialchars(@$_POST['comment']));
+
+        // Проверяем теги
+        if (!empty ($_POST['tags'])) {
+            $tags = explode(',', trim(@$_POST['tags']));
+            foreach ($tags as $tag) {
+                if (!empty ($tag)) {
+                    if (!in_array(trim($tag), $valid['tags'])) {
+                        $valid['tags'][] = trim($tag);
+                    }
+                }
+            }
+        } else {
+            $valid['tags'] = null;
+        }
+
+
+        // Проверяем тип операции
+        // - Перевод со счёта на счёт
+        if ($valid['type'] == 2) {
+
+        // - Финансовая цель
+        } elseif($valid['type'] == 4) {
+            if (isset ($_POST['close'])) {
+                $valid['close'] = 1;
+            } else {
+                $valid['close'] = 0;
+            }
+            // target
+        }
+
+
+        //currency  toAccount
+        return $valid;
+    }
 
     /**
 	 * Регистрирует новую транзакцию
 	 * @param <float>  $money      Сумма транзакции
 	 * @param <string> $date       Дата транзакции в формате Y.m.d
-	 * @param <int>    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо
+	 * @param <int>    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
 	 * @param <string> $comment    Комментарий транзакции
 	 * @param <int>    $account_id Ид счета
      * 
 	 * @return <bool> true - Регистрация прошла успешно
 	 */
-	function add($money=0, $date='', $drain=0, $comment='', $account_id=0)
+	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
 	{
-        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $this->db->query($sql, $this->user->getId(), $money, $date, $cat_id, $account_id, $drain, $comment);
+        
+        // Если есть теги, то добавляем и их тоже
+        if ($tags) {
+            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment, implode(', ', $tags));
+            $last_id = mysql_insert_id();
+            $sql = "INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES (?, ?, ?)";
+            foreach ($tags as $tag) {
+                $this->db->query($sql, $this->user->getId(), $last_id, $tag);
+            }
+        } else {
+            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment, $tags);
+        }
+        // Обновляем данные о счетах пользователя
         Core::getInstance()->user->initUserAccounts();
         //$this->selectMoney($user_id);
         $this->save();
-        return true;
+        return '[]';
 	}
 
     /**
@@ -196,7 +272,7 @@ class Operation_Model {
 
             $category = Core::getInstance()->user->getUserCategory();
             $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
-            "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt ".
+            "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
             "FROM operation o ".
             "WHERE o.account_id = ? ".
                 "AND o.user_id = ? ".
@@ -206,12 +282,13 @@ class Operation_Model {
                 }
             $accounts = Core::getInstance()->user->getUserAccounts();
             $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom, $dateTo);
+            // Добавляем данные, которых не хватает
             foreach ($operations as $key => $val) {
-                $val['cat_name'] = $category[$val['cat_id']]['cat_name'];
-                $val['cat_parent'] = $category[$val['cat_id']]['cat_parent'];
-                $val['account_name'] = $accounts[$val['account_id']]['account_name'];
+                $val['cat_name']            = $category[$val['cat_id']]['cat_name'];
+                $val['cat_parent']          = $category[$val['cat_id']]['cat_parent'];
+                $val['account_name']        = $accounts[$val['account_id']]['account_name'];
                 $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
-                $val['cat_transfer'] = $accounts[$val['account_id']]['account_currency_id'];
+                $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
                 //$val['cur_name'] = $accounts[$val['cur_id']]['cur_name'];
                 $operations[$key] = $val;
             }

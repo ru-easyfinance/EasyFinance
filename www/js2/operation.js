@@ -36,6 +36,11 @@ $(function() {
 
     // Autoload
     loadOperationList();
+
+    /**
+     * Загружает список всех операций (с фильтром)
+     * @return void
+     */
     function loadOperationList() {
         $.get('/operation/listOperations/',{
             dateFrom: $('#dateFrom').val(),
@@ -46,6 +51,7 @@ $(function() {
             $('div#list').empty();
             if (data != null) {
                 for(v in data){
+                    tags = (data[v].tags!=null) ? data[v].tags : '';
                     $('div#list').append(
                         "<div value='"+data[v].id+"'><input type='checkbox' />"
                             + ((data[v].drain == 1) ? '<span>Расход</span>' : '<span>Доход</span>')
@@ -54,6 +60,7 @@ $(function() {
                             + '<span>'+data[v].cat_name+'</span>'
                             + '<span>'+data[v].account_name+'</span>'
                             + '<span>'+data[v].comment+'</span>'
+                            + '<span>'+tags+'</span>'
                     )
                 }
             }
@@ -61,68 +68,89 @@ $(function() {
             this; // the options for this ajax request
         },'json');
         $('input#tags').tagSuggest({
+            //@TODO Дописать процедуру загрузки тегов
             tags: ['javascript', 'js2', 'js', 'jquery', 'java']
         });
-
     }
-});
-
-function addOperation() {
-/*
-    if (type == '2') {
-        toAccount = document.getElementById("selectAccountForTransfer").value;
-        currency = document.getElementById("currency_add").value;
-        action = "addTransfer";
-    } else if (type == '4' || type == '5') {
-        action = 'addTargetOperation';
-        target_id = $("#target_sel").val();
-        close = $("#close_ed").attr('checked')?1:0;
-        if (!checkTarget('add')){
+    
+    /**
+     * Добавляет новую операцию
+     * @return void
+     */
+    function addOperation() 
+    {
+    /*
+        if (type == '2') {
+            toAccount = document.getElementById("selectAccountForTransfer").value;
+            currency = document.getElementById("currency_add").value;
+            action = "addTransfer";
+        } else if (type == '4' || type == '5') {
+            action = 'addTargetOperation';
+            target_id = $("#target_sel").val();
+            close = $("#close_ed").attr('checked')?1:0;
+            if (!checkTarget('add')){
+                return false;
+            }
+        }
+    */
+        if (!validateForm()){
             return false;
         }
+        $.post('/operation/add/', {
+            type:      $('#type').val(),
+            account:   $('#account').val(),
+            category:  $('#category').val(),
+            date:      $('#date').val(),
+            comment:   $('#comment').val(),
+            amount:    $('#amount').val(),
+            toAccount: $('#toAccount').val(),
+            currency:  $('#currency').val(),
+            target:    $('#target').val(),
+            close:     $('#close').val(),
+            tags:      $('#tags').val()
+        }, function(data, textStatus){
+            for (var v in data) {
+                //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                alert('Ошибка в ' + v);
+            }
+            // В случае успешного добавления, закрываем диалог и обновляем календарь
+            if (data.length == 0) {
+                clearForm();
+                loadOperationList();
+            }
+           // data could be xmlDoc, jsonObj, html, text, etc...
+           //this; // the options for this ajax request
+           // textStatus can be one of:
+           //   "timeout"
+           //   "error"
+           //   "notmodified"
+           //   "success"
+           //   "parsererror"
+        }, 'json');
     }
-*/
-    if (!validateForm()){
-        return false;
-    }
-    $.post('/operation/add/', {
-        type: $('#type').val(),
-        account: $('#account').val(),
-        category: $('#category').val(),
-        date: $('#date').val(),
-        comment: $('#comment').val(),
-        amount: $('#amount').val(),
-        toAccount: $('#toAccount').val(),
-        currency: $('#currency').val(),
-        target: $('#target').val(),
-        close: $('#close').val()
-    }, function(data, textStatus){
-        if (textStatus == 'success') {
-            alert(data);
+
+    /**
+     * Проверяет валидность введённых данных
+     */
+    function validateForm() {
+        if (isNaN(parseFloat($('#amount').val()))){
+            alert('Вы ввели неверное значение в поле "сумма"!');
+            return false;
         }
-       // data could be xmlDoc, jsonObj, html, text, etc...
-       //this; // the options for this ajax request
-       // textStatus can be one of:
-       //   "timeout"
-       //   "error"
-       //   "notmodified"
-       //   "success"
-       //   "parsererror"
-    }, 'json');
-
-//        success : operationAfterInsert,
-//        complete : onPosSelect
-
-    visibleMessage('Операция добавляется, подождите несколько секунд...');
-}
-
-function validateForm() {
-    if (isNaN(parseFloat($('#amount').val()))){
-        alert('Вы ввели неверное значение в поле "сумма"!');
-        return false;
+        return true;
     }
-    return true;
-}
+
+    /**
+     * Очищает форму
+     * @return void
+     */
+    function clearForm() {
+        $('#account,#type,#category,#target').val(0);
+        $('#amount,#AccountForTransfer,#comment,#tags').val('');
+        $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
+        $('#close').removeAttr('checked');
+    }
+});
 
 function onPosSelect() {
     var el = $('#e_pos-box');
@@ -191,16 +219,6 @@ function updateOperation() {
     },changeOperationList);
     visibleMessage('Операция редактируется, подождите несколько секунд...');
 }
-
-function onAjaxSuccess(data) {
-    $("#operationDataList").html(data);
-    $("#operationDataList").show();
-    $("#goodOperation").hide();
-}
-
-
-    
-
 
 function onSumConvert(type) {
     if (document.getElementById("type_"+type).value == 2)
@@ -351,48 +369,24 @@ function changeTransferCurrencyEdit(data) {
     $("#operationTransferCurrencyEdit").html(data);
 }
 
-function changeTypeOperation(id) {
-    switch ($('#type_'+id).val()) {
-        case '0': //Расход
-            $("#old_cat").show();
-            $("#old_cat_edit").show();
-            $("#target_fields").hide();
-            $("#target_fields_info").hide();
-            $("#transferSelect").hide();
-            $("#transferSelectEdit").hide();
-            break;
-        case '1': //Доход
-            $("#old_cat").show(); $("#old_cat_edit").show();
-            $("#target_fields").hide();
-            $("#target_fields_info").hide();
-            $("#transferSelect").hide();
-            $("#transferSelectEdit").hide();
-            break;
-        case '2'://Перевод со счёта
-            $("#old_cat").hide(); $("#old_cat_edit").hide();
-            $("#target_fields").hide();
-            $("#target_fields_info").hide();
-            $("#transferSelect").show();
-            $("#transferSelectEdit").show();
-            if (id == 'add')
-            {
-                changeAccountForTransfer();
-            }else{
-                changeAccountForTransferEdit();
-            }
-            break;
-        case '3':
-            break;
-        case '4': //Перевод на финансовую цель
-            $("#target_fields").show();
-            changeTarget();
-            changeTargetEdit();
-            $("#target_fields_info").show();
-            $("#old_cat").hide();
-            $("#transferSelect").hide();
-            break;
-    }
+function changeTypeOperation() {
+    // Расход или Доход
+    if ($('#type').val() == 0 || $('#type').val() == 1) {
+        $("#category_fields,#tags_fields").show();
+        $("#target_fields,#transfer_fields").hide();
+    //Перевод со счёта
+    } else if ($('#type').val() == 2) {
+        $("#category_fields,#target_fields").hide();
+        $("#tags_fields,#transfer_fields").show();
+        //changeAccountForTransfer();
+    //Перевод на финансовую цель
+    } else if ($('#type').val() == 4) {
+        $("#target_fields").show();
+        $("#tags_fields,#transfer_fields,#category_fields").hide();
+        changeTarget();
+        changeTargetEdit();
 
+    }
 }
 
 function changeTarget() {

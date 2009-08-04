@@ -39,7 +39,7 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('accounts', $this->user->getUserAccounts());
         $this->tpl->assign('currentAccount', $currentAccount);
         $this->tpl->assign('dateFrom', date('01.m.Y'));
-        $this->tpl->assign('dateTo', date('d.m.Y'));
+        $this->tpl->assign('dateTo', date(date('t').'.m.Y'));
         $this->tpl->assign('category', get_tree_select());
         $this->tpl->assign('cat_filtr', get_tree_select(@$_GET['cat_filtr']));
 /*
@@ -72,24 +72,33 @@ class Operation_Controller extends Template_Controller
      */
     function add($args)
     {
+        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type');
         $array = $this->model->checkData($array);
-
-        // Если есть ошибки, то возвращаем их пользователю в виде массива
-        if ($array == false) {
+        if (count($this->model->errorData) > 0) {
+            // Если есть ошибки, то возвращаем их пользователю в виде массива
             die(json_encode($this->model->errorData));
         }
-        
-        // account amount category close comment currency date target toAccount type
+        $array['drain'] = 1;
         switch ($array['type']) {
-            case '0':
-                $drain = 1;
-                $sum = $sum * -1;
+            case 0: //Расход
+                $array['amount'] = abs($array['amount']) * -1;
                 break;
-            case '1':
-                $drain = 0;
+            case 1: // Доход
+                $array['drain'] = 0;
+                break;
+            case 2: // Перевод со счёта
+                break;
+            case 3: //
+                break;
+            case 4: // Перевод на финансовую цель
                 break;
         }
-        die($this->model->add($money, $date, $drain, $comment, $account_id));
+        // The first two headers prevent the browser from caching the response (a problem with IE
+        //and GET requests) and the third sets the correct MIME type for JSON.
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Mon, 22 May 1983 00:00:00 GMT');
+        header('Content-type: application/json');
+        die($this->model->add($array['amount'], $array['date'], $array['category'], $array['drain'], $array['comment'], $array['account'], $array['tags']));
     }
 
     /**
@@ -122,6 +131,7 @@ class Operation_Controller extends Template_Controller
         $category = (int)@$_GET['category'];
         $account     = (int)@$_GET['account'];
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account);
+        //@TODO Похоже, что тут надо что-то дописать в массиве
         foreach ($list as $val) {
             $array[] = $val;
         }

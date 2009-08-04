@@ -10,7 +10,7 @@
 <script type="text/javascript" src="/js2/operation.js?r={$revision}"></script>
 <h3>Операции по счету</h3>
 <div id="form">
-    <div class="field">
+    <div class="field" id="account_fields">
        <label for="account">Счёт:</label>
         <select id="account">
             {foreach from=$accounts item=acc_data}
@@ -19,7 +19,7 @@
         </select>
        <input type="button" id="btn_EditAccount" value="Редактировать счет" />
     </div>
-    <div class="field">
+    <div class="field" id="type_fields">
        <label for="type">Тип операции:</label>
         <select name="type" id="type">
             <option value="0">Расход</option>
@@ -29,11 +29,11 @@
             <option value="4">Перевод на финансовую цель</option>
         </select>
     </div>
-    <div class="field">
+    <div class="field" id="amount_fields">
        <label for="amount">Сумма:</label>
        <input type="text" id="amount">
     </div>
-    <div class="field">
+    <div class="field" id="category_fields">
        <label for="category">Категория:</label>
         {if !empty($list)}
         <select id="category">
@@ -67,7 +67,7 @@
             {/foreach}
         </select>
         <div>
-            <div>Стоимость цели: <span id='amount'/><span class='currency'/></div>
+            <div>Стоимость цели: <span id='amount_target'/><span class='currency'/></div>
             <div>Сумма накопленная: <span id='amount_done' /><span class='currency' /></div>
             <div>Прогноз: <span id='forecast_done'></span> %</div>
             <div>Процент готовности: <span id='percent_done'></span> %</div>
@@ -76,25 +76,25 @@
         <label for="close">Закрытая финансовая цель</label>
     </div>
     {*<!-- Трансфер -->*}
-    <div class="field" id="transfer" style="display:none;">
+    <div class="field" id="transfer_fields" style="display:none;">
         <label for="target">На счет:</label>
         <select id="AccountForTransfer" onChange="changeAccountForTransfer();">
             {foreach from=$accounts item=acc_data}
-            <option id="{$acc_data.id}" value="{$acc_data.id}">{$acc_data.name}</option>
+            <option value="{$acc_data.account_id}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
         <span id="operationTransferCurrency" style="padding-left:5px;"></span>
     </div>
     {*<!-- Основные поля -->*}
-    <div class="field">
+    <div class="field" id="date_fields">
         <label for="date">Дата:</label>
         <input type="text" value="{$date}" id="date">
     </div>
-    <div class="field">
+    <div class="field" id="comment_fields">
         <label for="target">Комментарий:</label>
         <textarea rows="4" cols="50" name="comment" id="comment"></textarea>
     </div>
-    <div class="field">
+    <div class="field" id="tags_fields">
         <label for="tags">Теги:</label>
         <input type="text" value="{$tags}" id="tags">
     </div>
