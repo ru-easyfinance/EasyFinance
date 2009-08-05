@@ -5,7 +5,7 @@
  * @version SVN $Id$
  */
  
-define('INDEX',true);
+ define('INDEX', true);
 
 // @FIXME не создавать сессию, если на странице случайный посетитель
 session_start();

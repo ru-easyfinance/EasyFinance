@@ -44,6 +44,17 @@ class Targets_Controller extends Template_Controller
         $this->tpl->assign('pop_list_targets', $this->model->getPopList());
 
         $this->tpl->assign('template','default');
+        $this->model->_setFormSelectBoxs();
+    }
+
+    /**
+     * Возвращает данные о выбранной финансовой цели в формате JSON
+     * @param <int> $id Ид финцели
+     */
+    function get($id = 0)
+    {
+        $id = abs((int)$id);
+        die(json_encode($this->model->get($id)));
     }
 
     /**

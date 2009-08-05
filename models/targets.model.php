@@ -105,24 +105,29 @@ class Targets_Model {
         $this->tpl->assign('index_limit', $limit);
         return $list;
     }
+    
+    function get ($id) 
+    {
+        return $this->db->selectRow('SELECT * FROM target WHERE id = ?', $id);
+    }
 
     /**
      * Форматирует и устанавливает селектбоксы формы
      * @return void
      */
-    private function _setFormSelectBoxs() {
+    function _setFormSelectBoxs() {
         $this->tpl->assign('type_options', array(
             "r"=>"Расход",
             "d"=>"Доход"));
         $cat_sel = $this->tpl->get_template_vars('data');
-        $tpl->assign('category_options',get_tree_select($cat_sel['category_sel']));
+        $this->tpl->assign('category_options',get_tree_select($cat_sel['category_sel']));
 
         $accounts = array();
-        foreach ($_SESSION['user_account'] as $key => $var) {
-            $accounts[$var['id']]= $var['name'];
+        foreach (Core::getInstance()->user->getUserAccounts() as $key => $var) {
+            $accounts[$var['account_id']] = $var['account_name'];
         }
 
-        $tpl->assign('target_account_id_options', $accounts);
+        $this->tpl->assign('target_account_id_options', $accounts);
     }
 
     /**
@@ -185,6 +190,7 @@ class Targets_Model {
         }else{
             $data['visible'] = 0;
         }
+        
         return $data;
     }
 
@@ -196,7 +202,7 @@ class Targets_Model {
         $data = array();
 
         // Присоединение к чужой цели
-        foreach ($_SESSION['user_category'] as $key => $var) {
+        foreach (Core::getInstance()->user->getUserCategory() as $key => $var) {
             if (trim($var['cat_name']) == trim(@$_GET['category'])) {
                 $data['category_sel'] = $var['cat_id'];
                 break;
@@ -209,9 +215,9 @@ class Targets_Model {
         }
 
         $tpl->assign("data",$data);
-
+        
         $this->_setFormSelectBoxs();
-
+        
         if (isset($_POST['title'])) {
             $data = $this->checkData();
 
