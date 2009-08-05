@@ -1,7 +1,6 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс для управления транзакциями
- * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
  * @category money
