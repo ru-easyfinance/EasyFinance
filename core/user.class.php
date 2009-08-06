@@ -11,14 +11,14 @@ class User
 {
     /**
      * Массив, хранит свойства пользователя
-     * @var <array> mixed
-     *      <int> user_id       Ид пользователя
-     *      <string> user_name  Имя пользователя, отображаемое на форуме
-     *      <string> user_login Логин
-     *      <string> user_pass  Пароль в формате SHA-1
-     *      <string> user_mail  е-мейл
-     *      <date> user_created  Дата создания аккаунта пользователя в формате (%d.%m.%Y)
-     *      user_active int 0 - аккаунт неактивен
+     * @var array mixed
+     *      int user_id       Ид пользователя
+     *      string user_name  Имя пользователя, отображаемое на форуме
+     *      string user_login Логин
+     *      string user_pass  Пароль в формате SHA-1
+     *      string user_mail  е-мейл
+     *      date user_created  Дата создания аккаунта пользователя в формате (%d.%m.%Y)
+     *      int user_active 0 - аккаунт неактивирован, 1 - активирован
      */
     private $props = Array();
 

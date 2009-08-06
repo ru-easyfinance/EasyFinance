@@ -9,13 +9,13 @@ class Targets_Controller extends Template_Controller
 {
     /**
      * Модель класса календарь
-     * @var <Calendar_Model>
+     * @var Targets_Model
      */
     private $model = null;
 
     /**
      * Ссылка на класс Смарти
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
 
@@ -28,6 +28,7 @@ class Targets_Controller extends Template_Controller
         $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'targets/targets');
         $this->model = new Targets_Model();
+        $this->model->_setFormSelectBoxs();
     }
 
     /**
@@ -42,37 +43,27 @@ class Targets_Controller extends Template_Controller
 
         //Список популярных целей у остальных
         $this->tpl->assign('pop_list_targets', $this->model->getPopList());
-
         $this->tpl->assign('template','default');
-        $this->model->_setFormSelectBoxs();
     }
 
     /**
      * Возвращает данные о выбранной финансовой цели в формате JSON
-     * @param <int> $id Ид финцели
+     * @param int $id Ид финцели
      */
     function get($id = 0)
     {
-        $id = abs((int)$id);
-        die(json_encode($this->model->get($id)));
+        $id = (int)@$id[0];
+        die(json_encode($this->model->getTarget($id)));
     }
 
     /**
      * Добавляет новое событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function add($args)
     {
-        // Пробуем записать данные, если всё успешно, то перекидываем на страницу со списком целей
-        if ($this->model->add()) {
-            header("Location: /targets/"); 
-            exit();
-        // Иначе.. открываем форму для добавления новой цели
-        } else {
-            $this->tpl->assign('action','add');
-            $this->tpl->assign('template','form');
-        }
+        die($this->model->add());
     }
 
     /**

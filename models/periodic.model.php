@@ -12,13 +12,13 @@ class Periodic_Model
 
     /**
      * Ссылка на экземпляр DBSimple
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql
      */
     private $db = null;
 
     /**
      * Ссылка на клас Пользователь
-     * @var <User>
+     * @var User
      */
     private $user = null;
 
@@ -97,7 +97,7 @@ class Periodic_Model
 
     /**
      * Сохраняет периодическую транзакцию
-     * @param <array> $data mixed
+     * @param array $data mixed
      * @return bool
      */
     function savePeriodic($data)
@@ -310,7 +310,7 @@ class Periodic_Model
 
     /**
      * Возвращает периодическую транзакцию
-     * @param <int> $id Ид транзакции
+     * @param int $id Ид транзакции
      * @return array
      */
     function getSelectPeriodic($id)

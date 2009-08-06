@@ -31,15 +31,6 @@
     <div id="dialog_event" title="Событие" style="display: none;">
             <form>
                 <fieldset>
-                    {if $errors|count > 0}
-                    <div><span>Ошибки при заполнении полей:</span>
-                            <ul>
-                                    {foreach from=$errors item=item}
-                                        <li>{$item}</li>
-                                    {/foreach}
-                            </ul>
-                        </div>
-                    {/if}
                     <input type="hidden" id="id" />
                     <div id="type_fields">
                         <label for="type">Тип цели:</label>

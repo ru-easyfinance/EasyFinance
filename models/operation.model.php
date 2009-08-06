@@ -9,37 +9,37 @@
 class Operation_Model {
     /**
      * Ссылка на экземпляр класса базы данных
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql
      */
     private $db = null;
 
     /**
      * Ссылка на экземпляр класса пользователя
-     * @var <User>
+     * @var User
      */
     private $user = null;
 
     /**
      *
-     * @var <type>
+     * @var 
      */
     private $account_money = 0;
 
     /**
      *
-     * @var <type>
+     * @var type
      */
     private $user_money = Array();
 
     /**
      * 
-     * @var <type>
+     * @var type
      */
     private $total_sum = 0;
 
     /**
      * Массив со списком ошибок, появляющимися при добавлении, удалении или редактировании (если есть)
-     * @var <array> mixed
+     * @var array mixed
      */
     public $errorData = array();
 
@@ -173,13 +173,13 @@ class Operation_Model {
 
     /**
 	 * Регистрирует новую транзакцию
-	 * @param <float>  $money      Сумма транзакции
-	 * @param <string> $date       Дата транзакции в формате Y.m.d
-	 * @param <int>    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
-	 * @param <string> $comment    Комментарий транзакции
-	 * @param <int>    $account_id Ид счета
+	 * @param float  $money      Сумма транзакции
+	 * @param string $date       Дата транзакции в формате Y.m.d
+	 * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
+	 * @param string $comment    Комментарий транзакции
+	 * @param int    $account_id Ид счета
      * 
-	 * @return <bool> true - Регистрация прошла успешно
+	 * @return bool true - Регистрация прошла успешно
 	 */
 	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
 	{
@@ -206,9 +206,9 @@ class Operation_Model {
 
     /**
      * Получает сумму всех счетов пользователя
-     * @param <int> $account_id Ид счёта
-     * @param <string> $period Период
-     * @return unknown_type
+     * @param int $account_id Ид счёта
+     * @param string $period Период
+     * @return 
      */
 	function selectMoney($id, $period = '')
 	{
@@ -248,11 +248,11 @@ class Operation_Model {
 
     /**
      * Получение списка транзакций
-     * @param <date> $dateFrom
-     * @param <date> $dateTo
-     * @param <int> $currentCategory
-     * @param <int> $currentAccount
-     * @return <array> mixed
+     * @param date $dateFrom
+     * @param date $dateTo
+     * @param int $currentCategory
+     * @param int $currentAccount
+     * @return array mixed
      */
     function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount)
     {
@@ -299,8 +299,8 @@ class Operation_Model {
 
     /**
      * Возвращает все деньги пользователя по определённому счёту
-     * @param <string> $bill_id Ид счёта
-     * @return <int>
+     * @param string $bill_id Ид счёта
+     * @return int
      */
     function getTotalSum($bill_id)
     {

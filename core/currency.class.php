@@ -10,13 +10,13 @@ class Currency implements IteratorAggregate
 {
      /**
      * Ссылка на экземпляр DBSimple
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql
      */
     private $db;
 
     /**
      * Массив с системными валютами
-     * @var <array> mixed
+     * @var array mixed
      */
     protected $sys_list_currency;
 

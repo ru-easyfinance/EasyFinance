@@ -9,14 +9,14 @@
 class Calendar_Model {
 /**
  * Ссылка на экземпляр DBSimple
- * @var <DbSimple_Mysql>
+ * @var DbSimple_Mysql
  */
     private $db = NULL;
 
     /**
      * Массив со ссылками на ошибки. Ключ - имя поля, значение массив текста ошибки
      * @example array('date'=>array('Не указана дата'), 'time'=> array('Не указано время'));
-     * @var <array>
+     * @var array
      */
     private $errorData = array();
 
@@ -30,15 +30,15 @@ class Calendar_Model {
 
     /**
      * Проверяет <b>$_POST</b> на ошибки, при добавлении или редактировании события, все ошибки записывает в переменную <code>$this->errorData</code> в виде массива
-     * @param <array> $params Массив с параметрами, которые нужно проверить. Если массив пустой или параметр не указан, проверяются все значения
+     * @param array $params Массив с параметрами, которые нужно проверить. Если массив пустой или параметр не указан, проверяются все значения
      * @example array('id','title','near_date');
-     * @return <bool> false - если есть ошибки
+     * @return bool false - если есть ошибки
      */
     function checkData($params = array()) {
     /**
      * Массив, в котором хранятся проверенные <b>валидные</b> значения из суперглобального массива $_POST
      * @example $valid['id'] = 109;
-     * @var <array> mixed
+     * @var array mixed
      */
         $valid = array();
         $this->errorData = array();
@@ -135,7 +135,7 @@ class Calendar_Model {
 
     /**
      * Добавляем новое событие
-     * @return <json> Массив в формате json. Если пустой, значит успешно добавлено, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
+     * @return json Массив в формате json. Если пустой, значит успешно добавлено, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function add() {
     // Проверяем корректность отправленных данных
@@ -180,9 +180,9 @@ class Calendar_Model {
 
     /**
      * Возвращает часть сформированного sql запроса, для повторения по указанным дням недели
-     * @param <array> $array mixed
-     * @param <int> $last_id
-     * @return <string> $sql
+     * @param array $array mixed
+     * @param int $last_id
+     * @return string $sql
      */
     private function _repeatWeekDay($array, $last_id) {
         $sql = "";
@@ -242,9 +242,9 @@ class Calendar_Model {
 
     /**
      * Возвращает часть сформированного sql запроса, для ежемесячного повторения
-     * @param <array> $array mixed
-     * @param <int> $last_id
-     * @return <string> $sql
+     * @param array $array mixed
+     * @param int $last_id
+     * @return string $sql
      */
     private function _repeatMonth($array, $last_id) {
         $ds = formatMysqlDate2UnixTimestamp($array['near_date']);
@@ -279,9 +279,9 @@ class Calendar_Model {
 
     /**
      * Возвращает часть сформированного sql запроса, для ежегодного повторения
-     * @param <array> $array mixed
-     * @param <int> $last_id
-     * @return <string> $sql
+     * @param array $array mixed
+     * @param int $last_id
+     * @return string $sql
      */
     private function _repeatYear($array, $last_id) {
         $ds = formatMysqlDate2UnixTimestamp($array['near_date']);
@@ -316,9 +316,9 @@ class Calendar_Model {
 
     /**
      * Возвращает часть сформированного sql запроса, для ежедневного повторения
-     * @param <array> $array mixed
-     * @param <int> $last_id
-     * @return <string> $sql
+     * @param array $array mixed
+     * @param int $last_id
+     * @return string $sql
      */
     private function _repeatDay($array, $last_id) {
         $sql = "";
@@ -353,7 +353,7 @@ class Calendar_Model {
 
     /**
      * Редактируем событие
-     * @return <json> Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
+     * @return json Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function edit() {
         $array = $this->checkData();
@@ -376,18 +376,18 @@ class Calendar_Model {
 
     /**
      * Удаляет указанное событие
-     * @return <json> Массив в формате json. Если пустой, значит успешно удалено, если со значениями - значит ошибка. И в них содержится ошибка.
+     * @return json Массив в формате json. Если пустой, значит успешно удалено, если со значениями - значит ошибка. И в них содержится ошибка.
      */
     function del() {
     /**
      * Ид события, которое требуется удалить
-     * @var <int>
+     * @var int
      */
         $id = (int)@$_POST['id'];
 
         /**
          * Ид цепочки событий. Если указано, то удаляется вся цепочка событий следующая после id, если false - то только указанное в id
-         * @var <bool>
+         * @var bool
          */
         $chain = (int)@$_POST['chain'];
 
@@ -406,8 +406,8 @@ class Calendar_Model {
 
     /**
      * Возвращает массив событий в формате JSON за указанный период
-     * @param <int> $start
-     * @param <int> $end
+     * @param int $start
+     * @param int $end
      * @return JSON
      */
     function getEvents($start, $end) {
@@ -428,8 +428,8 @@ class Calendar_Model {
 
     /**
      * Возвращает массив событий за указанный период
-     * @param <int> $start
-     * @param <int> $end
+     * @param int $start
+     * @param int $end
      * @return array mixed
      */
     private function getEventsArray($start, $end) {

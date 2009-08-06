@@ -11,8 +11,8 @@ class Registration_Model
 {
     /**
      * Активирует пользователя на портале
-     * @param <string> $reg_id Временный ключ для регистрации SHA1
-     * @return <bool>
+     * @param string $reg_id Временный ключ для регистрации SHA1
+     * @return bool
      */
     function activate ($reg_id) {
         $db = Core::getInstance()->db;

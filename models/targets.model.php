@@ -10,32 +10,32 @@ class Targets_Model {
     
     /**
      * Ссылка на экземпляр DBSimple
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql $db
      */
     private $db = NULL;
 
     /**
      * Ссылка на класс Смарти
-     * @var <Smarty>
+     * @var Smarty $tpl
      */
     private $tpl = null;
 
     /**
      * Массив со ссылками на ошибки. Ключ - имя поля, значение массив текста ошибки
      * @example array('date'=>array('Не указана дата'), 'time'=> array('Не указано время'));
-     * @var <array>
+     * @var array
      */
     private $errorData = array();
     
     /**
      * Количество целей, показываемых на отдельной странице
-     * @var <int>
+     * @var int
      */
     private $limitFull = 10;
 
     /**
      * Количество целей, показываемых на совмёщённой странице
-     * @var <int>
+     * @var int
      */
     private $limitCommon = 5;
 
@@ -51,9 +51,9 @@ class Targets_Model {
 
     /**
      * Возвращает массив из ближайших к окончанию целей
-     * @param <int> $index С какой цели начать возвращать
-     * @param <int> $limit Количество лимитируемых записей возвращаемых из БД
-     * @return <array> mixed
+     * @param int $index С какой цели начать возвращать
+     * @param int $limit Количество лимитируемых записей возвращаемых из БД
+     * @return array mixed
      */
     public function getLastList($index = 0, $limit = 0) {
         if ((int)$limit == 0) {
@@ -82,8 +82,8 @@ class Targets_Model {
 
     /**
      * Возвращает массив из пяти популярных целей
-     * @param <int> $index С какой цели возвращать
-     * @return <array> mixed
+     * @param int $index С какой цели возвращать
+     * @return array mixed
      */
     public function getPopList($index = 0) {
         $limit = $start = 0;
@@ -105,10 +105,19 @@ class Targets_Model {
         $this->tpl->assign('index_limit', $limit);
         return $list;
     }
-    
-    function get ($id) 
+
+    /**
+     * Возвращает массив с содержимым финансовой цели
+     * @param int $id
+     * @return array  mixed
+     */
+    function getTarget ($id)
     {
-        return $this->db->selectRow('SELECT * FROM target WHERE id = ?', $id);
+        $sql = "SELECT id, category_id as category, title, type, amount, 
+            DATE_FORMAT(date_begin, '%d.%m.%Y') as start, DATE_FORMAT(date_end, '%d.%m.%Y') as end,
+            visible, photo, url, comment, target_account_id as account
+            FROM target WHERE id = ?";
+        return $this->db->selectRow($sql, $id);
     }
 
     /**
@@ -136,7 +145,7 @@ class Targets_Model {
      */
     public function checkData() {
         $data = array();
-        $data['target'] = ABS((int)@$_POST['target']);
+        $data['id'] = (int)@$_POST['id'];
 
         if (@$_POST['type'] == 'd') {
             $data['type_sel'] = 'd';
@@ -144,7 +153,7 @@ class Targets_Model {
             $data['type_sel'] = 'r';
         }
 
-        $data['category_sel'] = ABS((int)@$_POST['category']);
+        $data['category_sel'] = (int)@$_POST['category'];
         if ($data['category_sel'] == 0) {
             $this->errors['category'] = "Категория цели";
         }
@@ -159,33 +168,23 @@ class Targets_Model {
         } else {
             $data['amount'] = 0;
         }
-        if ($data['amount'] <= 0) {
-            $this->errors['amount'] = "Сумма";
+
+        $data['start'] = formatRussianDate2MysqlDate(@$_POST['start']);
+        if (!$data['start']) {
+            $this->errors['start'] = "Дата начала";
+        }
+        
+        $data['end'] = formatRussianDate2MysqlDate(@$_POST['end']);
+        if (!$data['end']) {
+            $this->errors['end'] = "Дата окончания";
         }
 
-        $date_begin = explode('.', @$_POST['date_begin']);
-        $data['date_begin'] = @$_POST['date_begin'];
-        $data['date_begin_format'] = "{$date_begin['2']}-{$date_begin['1']}-{$date_begin['0']}";
-        //if (strtotime($data['date_begin']) <= 0) {
-        if (count($date_begin) < 3) {
-            $this->errors['date_begin'] = "Дата начала";
-        }
-        $date_end = explode('.',@$_POST['date_end']);
-        $data['date_end'] = @$_POST['date_end'];
-        $data['date_end_format'] = "{$date_end['2']}-{$date_end['1']}-{$date_end['0']}";
-        //if (strtotime($data['date_end']) <= 0) {
-        if (count($date_end) < 3) {
-            $this->errors['date_end'] = "Дата окончания";
-        }
+        $data['photo']   = htmlspecialchars(@$_POST['photo']);
+        $data['url']     = htmlspecialchars(@$_POST['url']);
+        $data['comment'] = htmlspecialchars(@$_POST['comment']);
+        $data['account'] = (int)@$_POST['account'];
 
-        $data['photo']     = html(@$_POST['photo']);
-        $data['url']       = html(@$_POST['url']);
-        $data['comment']   = html(@$_POST['comment']);
-
-        $data['target_account_id_sel'] = ABS((int)@$_POST['target_account_id']);
-        // Не обязательное поле
-
-        if (isset($_POST['visible'])){
+        if ((int)$_POST['visible']){
             $data['visible'] = 1;
         }else{
             $data['visible'] = 0;
@@ -201,31 +200,22 @@ class Targets_Model {
     function add() {
         $data = array();
 
-        // Присоединение к чужой цели
-        foreach (Core::getInstance()->user->getUserCategory() as $key => $var) {
-            if (trim($var['cat_name']) == trim(@$_GET['category'])) {
-                $data['category_sel'] = $var['cat_id'];
-                break;
-            }
-        }
+//        // Присоединение к чужой цели
+//        foreach (Core::getInstance()->user->getUserCategory() as $key => $var) {
+//            if (trim($var['cat_name']) == trim(@$_GET['category'])) {
+//                $data['category_sel'] = $var['cat_id'];
+//                break;
+//            }
+//        }
+//        $tpl->assign("data",$data);
 
-        $title = @$_GET['title'];
-        if (!empty($title)) {
-            $data['title'] = $title;
-        }
-
-        $tpl->assign("data",$data);
-        
-        $this->_setFormSelectBoxs();
-        
         if (isset($_POST['title'])) {
             $data = $this->checkData();
 
             $this->tpl->assign("data",$data);
             // Если есть ошибки, или не все обязательные поля заполнены
             if (count($this->errorData) > 0) {
-                $this->tpl->assign("errors", $this->errors);
-                return false;
+                return $this->errors;
             // Добавляем цель в БД
             } else {
                 $this->db->query("INSERT INTO target(`user_id`, `category_id`, `title`,
@@ -236,15 +226,14 @@ class Targets_Model {
                     $data['amount'], $data['start'] , $data['end'],
                     $data['account'], 0, 0, $data['visible'], $data['photo'],
                     $data['url'], $data['comment']);
-                    //$target = mysql_insert_id();
-                return true;
+                return '[]';
             }
         }
     }
 
     /**
      * Редактируем событие
-     * @return <json> Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
+     * @return json Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function edit() {
         global $tpl, $sql_db;

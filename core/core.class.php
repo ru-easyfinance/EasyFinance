@@ -10,31 +10,31 @@ class Core
 {
     /**
      * Ссылка на себя же
-     * @var <Core>
+     * @var Core
      */
     private static $instance = null;
 
     /**
      * Ссылка на экземпляр DBSimple
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql
      */
     public static $db = null;
 
     /**
      * Ссылка на экземпляр Smarty
-     * @var <Smarty>
+     * @var Smarty
      */
     public static $tpl = null;
 
     /**
      * Ссылка на экземпляр класса User
-     * @var <User>
+     * @var User
      */
     public static $user = null;
 
     /**
      * Ссылка на экземпляр класса с валютами
-     * @var <Currency>
+     * @var Currency
      */
     public static $currency = null;
 
@@ -75,8 +75,8 @@ class Core
 
     /**
      * Проверяет, разрешён ли доступ пользователю к ресурсу, если это гость
-     * @param <string> $module
-     * @return <bool>
+     * @param string $module
+     * @return bool
      */
     private function isAllowedModule($module)
     {
