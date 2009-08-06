@@ -73,14 +73,7 @@ class Targets_Controller extends Template_Controller
      */
     function edit($args)
     {
-        // Если мы успешно отредактировали цель, то перекидываем на список целей
-        if ($this->model->edit()) {
-            header("Location: /targets/");
-            exit();
-        } else {
-            $this->tpl->assign('action','edit');
-            $this->tpl->assign('template','form');
-        }
+        die($this->model->edit());
     }
     
     /**

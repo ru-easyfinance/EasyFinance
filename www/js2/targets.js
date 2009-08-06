@@ -19,6 +19,7 @@ $(document).ready(function(){
 
     $("#button_add_target").click(function(){
         clearForm();
+        $('form#target').attr('action','/targets/add/');
         $('#dialog_event').dialog('open');
     });
 
@@ -34,6 +35,7 @@ $(document).ready(function(){
         clearForm();
         $('#category').val($(event.target).parents("td").prev().prev().text());
         $('#title').val(title = $(event.target).parents("td").prev(":first").text());
+        $('form#target').attr('action','/targets/add/');
         $('#dialog_event').dialog('open');
     });
 
@@ -43,15 +45,13 @@ $(document).ready(function(){
         var id = $(event.target).parents("tr[target_id]").attr("target_id");
         $.getJSON('/targets/get/'+id,'',function(data) {
             fillForm(data);
+            $('form#target').attr('action','/targets/edit/');
             $('#dialog_event').dialog('open');
         });
-        
-        //@TODO Дописать подбор параметров
-
     });
 
     $("[action=del]").click(function(event){
-        var title = $(event.target).parents("tr[target_id]").children().eq(1).text(); //TODO Упростить
+        var title = $(event.target).parents("tr[target_id]").children().eq(1).text(); //@TODO Упростить
         if (confirm("Вы уверены, что хотите удалить финансовую цель '"+title+"'?")) {
             $.post('/targets/del/', {
                 id:$(event.target).parents("tr[target_id]").attr("target_id")
@@ -63,7 +63,7 @@ $(document).ready(function(){
 
     $("#button_save_target").click(function(){
         //TODO Проверяем валидность и сабмитим
-        $.post('/targets/add/', {
+        $.post($('form#target').attr('action'), {
             id      : $('#id').val(),
             type    : $('#type').val(),
             title   : $('#title').val(),
@@ -91,7 +91,8 @@ $(document).ready(function(){
         modal: true,
         buttons: {
             'Сохранить': function() {
-                $.post('/targets/add/',
+                $.post(
+                    $('form#target').attr('action'),
                     {
                         id       : $('form #id').attr('value'),
                         type     : $('form #type').attr('value'),
@@ -151,7 +152,7 @@ $(document).ready(function(){
      * Очищает форму для добавления финансовой цели
      */
     function clearForm() {
-
+        $('#id,#type,#category,#title,#amount,#start,#end,#photo,#url,#comment,#account,#visible').val('');
     }
 
     /**

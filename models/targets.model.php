@@ -96,8 +96,8 @@ class Targets_Model {
             $start = (((int)$index - 1) * $limit);
         }
         $list = $this->db->selectPage($total, "SELECT category_id, title, COUNT(*) AS cnt
-            FROM target WHERE visible=1 GROUP BY title ORDER BY cnt DESC, title ASC LIMIT ?d, ?d;"
-            , $start, $limit);
+            FROM target WHERE visible=1 GROUP BY title ORDER BY cnt DESC, title ASC LIMIT ?d, ?d;",
+            $start, $limit);
         $category = Core::getInstance()->user->getUserCategory();
         $list['cat_name'] = $category[$list['category_id']]['cat_name'];
         $this->tpl->assign('total', $total);
@@ -148,13 +148,13 @@ class Targets_Model {
         $data['id'] = (int)@$_POST['id'];
 
         if (@$_POST['type'] == 'd') {
-            $data['type_sel'] = 'd';
+            $data['type'] = 'd';
         } else {
-            $data['type_sel'] = 'r';
+            $data['type'] = 'r';
         }
 
-        $data['category_sel'] = (int)@$_POST['category'];
-        if ($data['category_sel'] == 0) {
+        $data['category'] = (int)@$_POST['category'];
+        if ($data['category'] == 0) {
             $this->errors['category'] = "Категория цели";
         }
 
@@ -199,33 +199,21 @@ class Targets_Model {
      */
     function add() {
         $data = array();
-
-//        // Присоединение к чужой цели
-//        foreach (Core::getInstance()->user->getUserCategory() as $key => $var) {
-//            if (trim($var['cat_name']) == trim(@$_GET['category'])) {
-//                $data['category_sel'] = $var['cat_id'];
-//                break;
-//            }
-//        }
-//        $tpl->assign("data",$data);
-
         if (isset($_POST['title'])) {
             $data = $this->checkData();
 
-            $this->tpl->assign("data",$data);
+            $this->tpl->assign("data", $data);
             // Если есть ошибки, или не все обязательные поля заполнены
             if (count($this->errorData) > 0) {
-                return $this->errors;
+                return json_encode($this->errors);
             // Добавляем цель в БД
             } else {
-                $this->db->query("INSERT INTO target(`user_id`, `category_id`, `title`,
-                    `type`, `amount`,`date_begin`, `date_end`, `target_account_id`, `percent_done`,
-                    `forecast_done`, `visible`,`photo`,`url`, `comment`)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                $this->db->query("INSERT INTO target(`user_id`, `category_id`, `title`, `type`,
+                    `amount`,`date_begin`, `date_end`, `target_account_id`, `visible`,
+                    `photo`,`url`, `comment`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                     Core::getInstance()->user->getId(), $data['category'], $data['title'], $data['type'],
-                    $data['amount'], $data['start'] , $data['end'],
-                    $data['account'], 0, 0, $data['visible'], $data['photo'],
-                    $data['url'], $data['comment']);
+                    $data['amount'], $data['start'] , $data['end'], $data['account'], $data['visible'],
+                    $data['photo'], $data['url'], $data['comment']);
                 return '[]';
             }
         }
@@ -236,71 +224,29 @@ class Targets_Model {
      * @return json Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function edit() {
-        global $tpl, $sql_db;
-        if ($target_id > 0) { //Значит мы только вызвали форму редактирования. Берём данные из БД
-            $edit = $this->db->select("SELECT `id` as target_id, `user_id`, `category_id` AS category_sel,
-                `title`, `type`, `amount`, DATE_FORMAT(date_begin,'%d.%m.%Y') AS `date_begin`,
-                DATE_FORMAT(date_end, '%d.%m.%Y') AS `date_end`, `target_account_id` AS `target_account_id_sel`,
-                `percent_done`, `forecast_done`, `visible`, `photo`, `url`, `comment`
-                FROM target WHERE user_id=? AND id=?",
-                $_SESSION['user']['user_id'], $target_id);
-            if (count($edit) > 0) {
-                $edit[0]['target_id'] = $target_id;
-                $tpl->assign("data", $edit[0]);
-            } else {
-                header("Location: /");
-                exit();
-            }
-            $this->_setFormSelectBoxs();
+        $data = $this->checkData();
+        // Если у нас есть ошибки при заполнении формы
+        if (count($this->errors) > 0) {
+            return json_encode($this->errors);
         } else {
-            $data = $this->checkPostData();
-            $this->_setFormSelectBoxs();
-            // Если у нас есть ошибки при заполнении формы
-            if (count($this->errors) > 0) {
-                $tpl->assign("errors", $this->errors);
-                $tpl->assign("data", $data);
-            } else {
-                $this->db->query("UPDATE target SET
-                    `category_id`=?, `title`=?, `type`=?, `amount`=?, `date_begin`=?, `date_end`=?,
-                    `visible`=?, `photo`=?, `url`=?, `comment`=? WHERE user_id=? AND id=?;",
-                    $data['category_sel'], $data['title'], $data['type_sel'], $data['amount'],
-                    $data['date_begin_format'], $data['date_end_format'], $data['visible'],
-                    $data['photo'], $data['url'], $data['comment'], $_SESSION['user']['user_id'], $data['target_id']);
-
-                return true;
-            }
+            $this->db->query("UPDATE target SET
+                `category_id`=?, `title`=?, `type`=?, `amount`=?, `date_begin`=?, `date_end`=?,
+                `visible`=?, `photo`=?, `url`=?, `comment`=? WHERE user_id=? AND id=?;",
+                $data['category'], $data['title'], $data['type'], $data['amount'], $data['start'],
+                $data['end'], $data['visible'], $data['photo'], $data['url'], $data['comment'],
+                Core::getInstance()->user->getId(), $data['id']);
+            return '[]';
         }
-        return false;
     }
 
     /**
      * Удаляет указанное событие
-     * @return <json> Массив в формате json. Если пустой, значит успешно удалено, если со значениями - значит ошибка. И в них содержится ошибка.
+     * @return json Массив в формате json. Если пустой, значит успешно удалено, если со значениями - значит ошибка. И в них содержится ошибка.
      */
     function del() {
-    /**
-     * Ид события, которое требуется удалить
-     * @var <int>
-     */
-        $id = (int)@$_POST['id'];
-
-        /**
-         * Ид цепочки событий. Если указано, то удаляется вся цепочка событий следующая после id, если false - то только указанное в id
-         * @var <bool>
-         */
-        $chain = (int)@$_POST['chain'];
-
-        // Если сказали удалить всю цепочку, вместе с указанным событием
-        if ($chain > 0) {
-            $this->db->query("DELETE FROM calendar WHERE (id=?d OR (chain=?d AND id > ?d)) AND user_id=?", $id,
-                $chain, $id, Core::getInstance()->user->getId());
-            //@TODO Добавить апдейт цепочки событий вверх, до события с указанным Id
-            return '[]';
-        // Если сказали удалить только выбранное событие
-        } else {
-            $this->db->query("DELETE FROM calendar WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
-            return '[]';
-        }
+        $id    = (int)@$_POST['id'];
+        $this->db->query("DELETE FROM target WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
+        return '[]';
     }
     /**
      * Обновляет статистику для указанной финансовой цели, или указанного или текущего пользователя
