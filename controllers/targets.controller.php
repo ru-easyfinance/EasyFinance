@@ -42,7 +42,8 @@ class Targets_Controller extends Template_Controller
         $this->tpl->assign('user_list_targets', $this->model->getLastList());
 
         //Список популярных целей у остальных
-        $this->tpl->assign('pop_list_targets', $this->model->getPopList());
+        $pop = $this->model->getPopList();
+        $this->tpl->assign('pop_list_targets', $pop);
         $this->tpl->assign('template','default');
     }
 

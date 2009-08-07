@@ -98,6 +98,7 @@ class Targets_Model {
         $list = $this->db->selectPage($total, "SELECT category_id, title, COUNT(*) AS cnt
             FROM target WHERE visible=1 GROUP BY title ORDER BY cnt DESC, title ASC LIMIT ?d, ?d;",
             $start, $limit);
+        
         $category = Core::getInstance()->user->getUserCategory();
         $list['cat_name'] = $category[$list['category_id']]['cat_name'];
         $this->tpl->assign('total', $total);

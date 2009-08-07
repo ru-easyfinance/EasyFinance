@@ -176,6 +176,4 @@ $(document).ready(function(){
     }
 
 // </editor-fold>
-
-
 });

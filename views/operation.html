@@ -58,6 +58,8 @@
     <div class="field" id="target_fields" style="display:none;">
        <label for="target">Финансовая цель:</label>
         <select id="target">
+            <option bill="" value="" target_account_id='' amount_done='' percent_done=''
+                    forecast_done='' amount=""> -- Все -- </option>
             {foreach from=$targetList item=target}
                 <option bill="{$target.target_account_id}" value="{$target.id}"
                     target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
@@ -78,7 +80,7 @@
     {*<!-- Трансфер -->*}
     <div class="field" id="transfer_fields" style="display:none;">
         <label for="target">На счет:</label>
-        <select id="AccountForTransfer" onChange="changeAccountForTransfer();">
+        <select id="AccountForTransfer">
             {foreach from=$accounts item=acc_data}
             <option value="{$acc_data.account_id}">{$acc_data.account_name}</option>
             {/foreach}

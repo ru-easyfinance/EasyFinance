@@ -36,20 +36,14 @@ class Operation_Controller extends Template_Controller
         $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'operation');
 
-        $this->tpl->assign('accounts', $this->user->getUserAccounts());
+        $targets = new Targets_Model();
+        $this->tpl->assign('targetList',     $targets->getLastList(0, 100));
+        $this->tpl->assign('accounts',       $this->user->getUserAccounts());
         $this->tpl->assign('currentAccount', $currentAccount);
-        $this->tpl->assign('dateFrom', date('01.m.Y'));
-        $this->tpl->assign('dateTo', date(date('t').'.m.Y'));
-        $this->tpl->assign('category', get_tree_select());
-        $this->tpl->assign('cat_filtr', get_tree_select(@$_GET['cat_filtr']));
-/*
-        $parent_category[0]['cat_name'] = "";
-        for($i=0; $i < count($_SESSION['user_category']); $i++) {
-            if ($_SESSION['user_category'][$i]['cat_parent']==0) {
-                $parent_category[$_SESSION['user_category'][$i]['cat_id']]['parent_name'] = $_SESSION['user_category'][$i]['cat_name'];
-            }
-        }
- */
+        $this->tpl->assign('dateFrom',       date('01.m.Y'));
+        $this->tpl->assign('dateTo',         date(date('t').'.m.Y'));
+        $this->tpl->assign('category',       get_tree_select());
+        $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
     }
 
     /**
@@ -136,5 +130,44 @@ class Operation_Controller extends Template_Controller
             $array[] = $val;
         }
         die(json_encode($array));
+    }
+
+    /**
+     * Возвращает валюту пользователя
+     * @param <array> $args
+     * @return <array> 7224297 Дима
+     */
+    function get_currency($args) {
+        $SourceId = (int)$_POST['SourceId']; // Ид счёта на который нужно перевести
+        $TargetId = (int)$_POST['TargetId']; // Ид текущего счёта
+        $aTarget = $aSource = array();
+        foreach (Core::getInstance()->user->getUserAccounts() as $val) {
+            if ($val['id'] == $SourceId) {
+                $aTarget = array($val['currency'] => $val['currency_name']);
+            }
+            if ($val['id'] == $TargetId) {
+                $aSource = array($val['currency'] => $val['currency_name']);
+            }
+        }
+
+        if (key($aSource) != key($aTarget)) {
+            $course = Core::getInstance->currency[key($aTarget)];
+
+            list($c1,$c2) = explode(",", $course);
+            if (!empty($c2)) $c2 = ".".$c2;
+            $course =$c1.$c2;
+
+            $current_course = $sys_currency[$account['currency_current']];
+            list($c3,$c4) = explode(",", $current_course);
+            if (!empty($c4)) $c4 = ".".$c4;
+            $current_course = $c3."".$c4;
+
+            $account['course'] = round($course / $current_course,2);
+            $data = "
+				Курс <b>".$account['currency_current_name']."</b> к <b>".$account['currency_name']."</b>
+				<input type='text' name='currency' id='currency_".$g_type."' value='".$account['course']."' OnKeyUp=onSumConvert('".$g_type."');>
+				&nbsp;&nbsp;<span id='convertSumCurrency_".$g_type."'></span>
+			";
+        }
     }
 }

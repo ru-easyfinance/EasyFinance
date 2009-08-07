@@ -23,6 +23,7 @@ $(function() {
         //changeAccountForTransfer();
         loadOperationList();
     });
+    $('#AccountForTransfer').change(changeAccountForTransfer());
     $('#type').change(function(){ changeTypeOperation('add'); });
     $('#target').change(function(){
         $("span.currency").each(function(){
@@ -336,16 +337,11 @@ function operationAfterEdit(data) {
 }
 
 function changeAccountForTransfer() {
-    var id =$("#selectAccountForTransfer").val();
-    var currentId = $("#selectAccount").val();
-
-    $.get('/index.php',{
-        modules:"operation",
-        action:"getCurrency",
-        id:id,
-        currentId:currentId,
-        type:"add"
-    },changeTransferCurrency);
+    $.post(
+        '/operation/get_currency/', {
+            SourceId : $("#account").val(),
+            TargetId : $("#selectAccountForTransfer").val()
+        }, changeTransferCurrency);
 }
 
 function changeAccountForTransferEdit() {
@@ -358,11 +354,9 @@ function changeAccountForTransferEdit() {
         id:id,
         currentId:currentId,
         type:"edit"
-    },changeTransferCurrencyEdit);
-}
-
-function changeTransferCurrency(data) {
-    $("#operationTransferCurrency").html(data);
+    },function(data){
+        $("#operationTransferCurrency").html(data);
+    });
 }
 
 function changeTransferCurrencyEdit(data) {
