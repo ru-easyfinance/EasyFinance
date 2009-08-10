@@ -42,7 +42,7 @@ class Infopanel_Model
                 $this->xml();
                 break;
             case 2:
-                die(json_encode('server talk...'));
+               // die(json_encode(array(1,'asd',1,1,0)));
                 $targets = new Targets_Model();
                 die(json_encode($targets->getLastList(0, $type)));
                 break;

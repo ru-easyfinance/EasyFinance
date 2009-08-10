@@ -12,6 +12,11 @@ class Infopanel_Controller extends Template_Controller
      * @var Infopanel_Model
      */
     private $model = null;
+    
+    /**
+     * коичество отображаемых фин целей
+     */
+    private $targets_count = '0';
 
     /**
      * Конструктор класса
@@ -19,17 +24,35 @@ class Infopanel_Controller extends Template_Controller
      */
     function __construct()
     {
+        $this->targets_count = (int)$_SESSION['targets_count'];
         $this->model = new Infopanel_Model();
         Core::getInstance()->tpl->assign('name_page', 'info_panel/info_panel');
+        $str='';
+        for ($i=0;$i<$this->targets_count;$i++)
+        {
+        $str.="<div class='element' id='$i'><div class='edit_panel' style='background-color:#FF0000'><div class='delete_o'>del</div></div><div class='conteiner'></div> </div>";
+        }
+        Core::getInstance()->tpl->assign('content', $str);
     }
-
+    function get()
+    {
+        die (strval($this->targets_count));
+    }
+    function targets()
+    {
+        $s = $_POST['cnt'];
+        $this->targets_count=$s;
+        $_SESSION['targets_count']=$s;
+        
+        die (strval($this->targets_count));
+    }
     /**
      * неиспользуется
      * @return void
      */
     function index($args)
     {
-        
+
     }
 
     /**
@@ -70,7 +93,6 @@ class Infopanel_Controller extends Template_Controller
     {
         $type = $_POST['element'];
         $date = formatRussianDate2MysqlDate($_POST['date']);
-        // @TODO Проверить переменные
         header('Content-type: text/xml');
         die($this->model->xml($type, $date));
     }
