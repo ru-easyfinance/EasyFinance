@@ -141,17 +141,18 @@ class Operation_Controller extends Template_Controller
         $SourceId = (int)$_POST['SourceId']; // Ид счёта на который нужно перевести
         $TargetId = (int)$_POST['TargetId']; // Ид текущего счёта
         $aTarget = $aSource = array();
+        $curr = Core::getInstance()->currency;
         foreach (Core::getInstance()->user->getUserAccounts() as $val) {
-            if ($val['id'] == $SourceId) {
-                $aTarget = array($val['currency'] => $val['currency_name']);
+            if ($val['account_id'] == $SourceId) {
+                $aTarget[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
             }
-            if ($val['id'] == $TargetId) {
-                $aSource = array($val['currency'] => $val['currency_name']);
+            if ($val['account_id'] == $TargetId) {
+                $aSource[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
             }
         }
 
         if (key($aSource) != key($aTarget)) {
-            $course = Core::getInstance->currency[key($aTarget)];
+            $course = Core::getInstance()->currency[key($aTarget)];
 
             list($c1,$c2) = explode(",", $course);
             if (!empty($c2)) $c2 = ".".$c2;

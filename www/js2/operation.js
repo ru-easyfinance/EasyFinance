@@ -20,10 +20,10 @@ $(function() {
     $('#btn_Cancel').click(function(){ operationAddInVisible(); });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
     $('#account').change(function(){
-        //changeAccountForTransfer();
+        changeAccountForTransfer();
         loadOperationList();
-    });
-    $('#AccountForTransfer').change(changeAccountForTransfer());
+    }); 
+    $('#AccountForTransfer').change( function(){ changeAccountForTransfer(); });
     $('#type').change(function(){ changeTypeOperation('add'); });
     $('#target').change(function(){
         $("span.currency").each(function(){
@@ -151,6 +151,47 @@ $(function() {
         $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
         $('#close').removeAttr('checked');
     }
+    
+    /**
+     * При переводе со счёта на счёт, проверяем валюты
+     * @return void
+     */
+    function changeAccountForTransfer() {
+        //@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах
+        if ($('#type :selected').val() == 2 && $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
+            $.post(
+                '/operation/get_currency/', {
+                    SourceId : $("#account").val(),
+                    TargetId : $("#AccountForTransfer").val()
+                }, function(data){
+                    //@TODO тут мы что-то делаем с полученными данными
+                }, 'json'
+            );
+        }
+    }
+
+    /**
+     * При изменении типа операции
+     */
+    function changeTypeOperation() {
+        // Расход или Доход
+        if ($('#type').val() == 0 || $('#type').val() == 1) {
+            $("#category_fields,#tags_fields").show();
+            $("#target_fields,#transfer_fields").hide();
+        //Перевод со счёта
+        } else if ($('#type').val() == 2) {
+            $("#category_fields,#target_fields").hide();
+            $("#tags_fields,#transfer_fields").show();
+            changeAccountForTransfer();
+        //Перевод на финансовую цель
+        } else if ($('#type').val() == 4) {
+            $("#target_fields").show();
+            $("#tags_fields,#transfer_fields,#category_fields").hide();
+            changeTarget();
+            changeTargetEdit();
+        }
+    }
+
 });
 
 function onPosSelect() {
@@ -336,52 +377,7 @@ function operationAfterEdit(data) {
     scrollTo(0,0);
 }
 
-function changeAccountForTransfer() {
-    $.post(
-        '/operation/get_currency/', {
-            SourceId : $("#account").val(),
-            TargetId : $("#selectAccountForTransfer").val()
-        }, changeTransferCurrency);
-}
 
-function changeAccountForTransferEdit() {
-    var id =document.getElementById("selectAccountForTransferEdit").value;
-    var currentId = document.getElementById("selectAccount").value;
-
-    $.get('/index.php',{
-        modules:"operation",
-        action:"getCurrency",
-        id:id,
-        currentId:currentId,
-        type:"edit"
-    },function(data){
-        $("#operationTransferCurrency").html(data);
-    });
-}
-
-function changeTransferCurrencyEdit(data) {
-    $("#operationTransferCurrencyEdit").html(data);
-}
-
-function changeTypeOperation() {
-    // Расход или Доход
-    if ($('#type').val() == 0 || $('#type').val() == 1) {
-        $("#category_fields,#tags_fields").show();
-        $("#target_fields,#transfer_fields").hide();
-    //Перевод со счёта
-    } else if ($('#type').val() == 2) {
-        $("#category_fields,#target_fields").hide();
-        $("#tags_fields,#transfer_fields").show();
-        //changeAccountForTransfer();
-    //Перевод на финансовую цель
-    } else if ($('#type').val() == 4) {
-        $("#target_fields").show();
-        $("#tags_fields,#transfer_fields,#category_fields").hide();
-        changeTarget();
-        changeTargetEdit();
-
-    }
-}
 
 function changeTarget() {
     $("span.currency").each(function(){

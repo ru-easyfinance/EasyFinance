@@ -6,7 +6,7 @@
  * @copyright http://home-money.ru/
  * @version SVN $Id$
  */
-class Currency implements IteratorAggregate
+class Currency implements IteratorAggregate,  ArrayAccess
 {
      /**
      * Ссылка на экземпляр DBSimple
@@ -78,5 +78,28 @@ class Currency implements IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->sys_list_currency);
+    }
+
+    /**
+     * ArrayAccess implementation
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->sys_list_currency[$offset]);
+    }
+
+    public function offsetGet($offset )
+    {
+        return $this->sys_list_currency[$offset];
+    }
+
+    public function offsetSet($offset, $value )
+    {
+        $this->sys_list_currency[$offset] = $value;
+    }
+
+    public function offsetUnset($offset )
+    {
+        unset($this->sys_list_currency[$offset]);
     }
 }

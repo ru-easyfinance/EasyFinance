@@ -14,7 +14,7 @@
        <label for="account">Счёт:</label>
         <select id="account">
             {foreach from=$accounts item=acc_data}
-            <option value="{$acc_data.account_id}">{$acc_data.account_name}</option>
+            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
        <input type="button" id="btn_EditAccount" value="Редактировать счет" />
@@ -82,7 +82,7 @@
         <label for="target">На счет:</label>
         <select id="AccountForTransfer">
             {foreach from=$accounts item=acc_data}
-            <option value="{$acc_data.account_id}">{$acc_data.account_name}</option>
+            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
         <span id="operationTransferCurrency" style="padding-left:5px;"></span>
