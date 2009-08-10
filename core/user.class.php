@@ -150,9 +150,9 @@ class User
      */
     public function init($id)
     {
+        $this->initUserCurrency();
         $this->initUserCategory();
         $this->initUserAccounts();
-        $this->initUserCurrency();
     }
 
     /**
@@ -247,6 +247,7 @@ class User
             WHERE user_id= ? ";
         $accounts = $this->db->select($sql, $this->getId());
         foreach ($accounts as $val) {
+            $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
             $this->user_account[$val['account_id']] = $val;
         }
 	}

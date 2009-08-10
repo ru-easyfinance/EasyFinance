@@ -1,0 +1,14 @@
+ALTER TABLE `operation` MODIFY COLUMN `id` BIGINT(255) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Ид операции',
+ MODIFY COLUMN `user_id` INT(100) UNSIGNED NOT NULL COMMENT 'Ид пользователя',
+ MODIFY COLUMN `money` DECIMAL(20,2)  NOT NULL COMMENT 'Деньги',
+ MODIFY COLUMN `date` DATE  NOT NULL DEFAULT '0000-00-00' COMMENT 'Дата операции',
+ MODIFY COLUMN `cat_id` INT(255) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Ид категории',
+ MODIFY COLUMN `account_id` INT(255) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Ид счёта',
+ MODIFY COLUMN `drain` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT 'Расход = 1, Доход = 0',
+ MODIFY COLUMN `comment` TEXT  CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'Комментарий к операции',
+ MODIFY COLUMN `transfer` INT(255) UNSIGNED DEFAULT 0 COMMENT 'Счёт, на который мы переводим денежку',
+ MODIFY COLUMN `tr_id` BIGINT(255) UNSIGNED COMMENT 'Ид трансферта, только вот зачем он нам',
+ MODIFY COLUMN `imp_date` DATETIME ,
+ MODIFY COLUMN `imp_id` VARCHAR(32)  CHARACTER SET utf8 COLLATE utf8_general_ci,
+ MODIFY COLUMN `tags` VARCHAR(255)  CHARACTER SET utf8 COLLATE utf8_general_ci;
+

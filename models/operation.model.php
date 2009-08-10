@@ -155,7 +155,7 @@ class Operation_Model {
         // Проверяем тип операции
         // - Перевод со счёта на счёт
         if ($valid['type'] == 2) {
-
+            $valid['convert'] = round($valid['amount'] /  (float)$_POST['currency'], 2);
         // - Финансовая цель
         } elseif($valid['type'] == 4) {
             if (isset ($_POST['close'])) {
@@ -202,6 +202,33 @@ class Operation_Model {
         //$this->selectMoney($user_id);
         $this->save();
         return '[]';
+	}
+
+    /**
+     * Добавляет трансфер с одного на другой счёт
+     * @param $money float Деньги
+     * @param $convert Конвертированные в нужную валюту деньги
+     * @param $date Дата, когда совершаем трансфер
+     * @param $from_account Из счёта
+     * @param $to_account В счёт
+     * @param $comment Комментарий
+     * @return bool
+     */
+	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment)
+	{
+        $drain_money = $money * -1;
+
+		$sql = "INSERT INTO operation
+                    (user_id, money, date, cat_id, account_id, drain, comment, transfer)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $from_account, 1, $comment, $to_account);
+
+        $sql = "INSERT INTO operation
+                    (user_id, money, date, cat_id, account_id, drain, comment, transfer, tr_id)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment, $from_account, mysql_insert_id());
+        $this->user->initUserAccount();
+        $this->user->save();
 	}
 
     /**
@@ -330,7 +357,7 @@ class Operation_Model {
         if (key($aSource) != key($aTarget)) {
             // Если у нас простое сравнение с рублём
             if (key($aTarget) == 1 || key($aSource) == 1){
-                $course = round($curr[key($aTarget)]['value'] / $curr[key($aSource)]['value'],4);
+                $course = round($curr[key($aSource)]['value'] / $curr[key($aTarget)]['value'],4);
             } else {
                 //@FIXME Придумать алгоритм для конвертации между различными валютами
                 $course = 0;

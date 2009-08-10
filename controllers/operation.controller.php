@@ -64,10 +64,7 @@ class Operation_Controller extends Template_Controller
      */
     function index($args)
     {
-//        $often = $cat->getOftenCategories($_SESSION['user']['user_id']);
-//        $list = $cat->loadUserTree($_SESSION['user']['user_id']);
-//        $tpl->assign('often', $often);
-//        $tpl->assign('list', $list);
+
     }
 
     /**
@@ -77,7 +74,7 @@ class Operation_Controller extends Template_Controller
      */
     function add($args)
     {
-        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type');
+        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert');
         $array = $this->model->checkData($array);
         if (count($this->model->errorData) > 0) {
             // Если есть ошибки, то возвращаем их пользователю в виде массива
@@ -87,23 +84,21 @@ class Operation_Controller extends Template_Controller
         switch ($array['type']) {
             case 0: //Расход
                 $array['amount'] = abs($array['amount']) * -1;
-                break;
+                die($this->model->add($array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags']));
             case 1: // Доход
                 $array['drain'] = 0;
-                break;
+                die($this->model->add($array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags']));
             case 2: // Перевод со счёта
-                break;
+                $array['category'] = -1;
+                die($this->model->addTransfer($array['amount'], $array['convert'], $array['date'], $array['account'],$array['toAccount'],$array['comment'],$array['tags']));
             case 3: //
                 break;
             case 4: // Перевод на финансовую цель
                 break;
         }
-        // The first two headers prevent the browser from caching the response (a problem with IE
-        //and GET requests) and the third sets the correct MIME type for JSON.
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: Mon, 22 May 1983 00:00:00 GMT');
-        header('Content-type: application/json');
-        die($this->model->add($array['amount'], $array['date'], $array['category'], $array['drain'], $array['comment'], $array['account'], $array['tags']));
+
     }
 
     /**

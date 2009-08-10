@@ -19,6 +19,15 @@ $(function() {
     $('#btn_Save').click(function(){ addOperation(); })
     $('#btn_Cancel').click(function(){ operationAddInVisible(); });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
+    $('#amount,#currency').change(function(){
+        if ($('#type').val() == 2) {
+            //@TODO Дописать округление
+            var result = Math.round($('#amount').val() / $('#currency').val());
+            if (!isNaN(result) && result != 'Infinity') {
+                $("#convertSumCurrency").html("конвертация: "+result);
+            }
+        }
+    });
     $('#account').change(function(){
         changeAccountForTransfer();
         loadOperationList();
@@ -78,22 +87,7 @@ $(function() {
      * Добавляет новую операцию
      * @return void
      */
-    function addOperation() 
-    {
-    /*
-        if (type == '2') {
-            toAccount = document.getElementById("selectAccountForTransfer").value;
-            currency = document.getElementById("currency_add").value;
-            action = "addTransfer";
-        } else if (type == '4' || type == '5') {
-            action = 'addTargetOperation';
-            target_id = $("#target_sel").val();
-            close = $("#close_ed").attr('checked')?1:0;
-            if (!checkTarget('add')){
-                return false;
-            }
-        }
-    */
+    function addOperation() {
         if (!validateForm()){
             return false;
         }
@@ -104,10 +98,10 @@ $(function() {
             date:      $('#date').val(),
             comment:   $('#comment').val(),
             amount:    $('#amount').val(),
-            toAccount: $('#toAccount').val(),
+            toAccount: $('#AccountForTransfer').val(),
             currency:  $('#currency').val(),
             target:    $('#target').val(),
-            close:     $('#close').val(),
+            close:     $('#close:checked').length,
             tags:      $('#tags').val()
         }, function(data, textStatus){
             for (var v in data) {
@@ -134,9 +128,21 @@ $(function() {
      * Проверяет валидность введённых данных
      */
     function validateForm() {
+        $error = '';
         if (isNaN(parseFloat($('#amount').val()))){
             alert('Вы ввели неверное значение в поле "сумма"!');
             return false;
+        }
+        
+        if ($('#type') == 4) {
+            //@FIXME Написать обновление финцелей
+            amount = parseFloat($("#target_sel option:selected").attr("amount")); $("#amount").text(amount);
+            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done")); $("#amount_done").text(amount_done);
+            if ((amount_done + parseFloat($("#amount").val())) >= amount) {
+                if (confirm('Закрыть финансовую цель?')) {
+                    $("#close").attr("checked","checked");
+                }
+            }
         }
         return true;
     }
@@ -166,7 +172,8 @@ $(function() {
                         TargetId : $("#AccountForTransfer").val()
                     }, function(data){
                         $('#operationTransferCurrency :first-child').html('Курс <b>'+
-                            $('#account').attr('abbr')+'</b> к <b>'+$('#AccountForTransfer').attr('abbr')+'</b>');
+                            $('#account :selected').attr('abbr')+'</b> к <b>'+$('#AccountForTransfer :selected').attr('abbr')+'</b>');
+                        $('#currency').val(data);
                     }, 'json'
                 );
         } else {

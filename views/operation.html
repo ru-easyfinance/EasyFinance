@@ -5,7 +5,7 @@
        <label for="account">Счёт:</label>
         <select id="account">
             {foreach from=$accounts item=acc_data}
-            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.abbr}">{$acc_data.account_name}</option>
+            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
        <input type="button" id="btn_EditAccount" value="Редактировать счет" />
@@ -49,8 +49,8 @@
     <div class="field" id="target_fields" style="display:none;">
        <label for="target">Финансовая цель:</label>
         <select id="target">
-            <option bill="" value="" target_account_id='' amount_done='' percent_done=''
-                    forecast_done='' amount=""> -- Все -- </option>
+            <option bill="0" value="0" target_account_id='0' amount_done='0' percent_done='0'
+                    forecast_done='0' amount="0"> -- Все -- </option>
             {foreach from=$targetList item=target}
                 <option bill="{$target.target_account_id}" value="{$target.id}"
                     target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
@@ -73,12 +73,12 @@
         <label for="target">На счет:</label>
         <select id="AccountForTransfer">
             {foreach from=$accounts item=acc_data}
-            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.abbr}">{$acc_data.account_name}</option>
+            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
         <span id="operationTransferCurrency" style="display:none;">
             <span></span>
-            <input type='text' name='currency'><span id="convertSumCurrency"></span>
+            <input type='text' id='currency'><span id="convertSumCurrency"></span>
         </span>
     </div>
     {*<!-- Основные поля -->*}
