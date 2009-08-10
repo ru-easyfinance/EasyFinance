@@ -22,8 +22,7 @@ class Budget_Controller extends Template_Controller
 		
         $this->user = Core::getInstance()->user;
         $this->tpl = Core::getInstance()->tpl;
-        //$this->model = new Accounts_Model();
-        //$this->money = new Money();
+        $this->model = new Budget_Model();
 
         $this->tpl->assign('name_page', 'budget/budget');
     }
@@ -35,16 +34,49 @@ class Budget_Controller extends Template_Controller
      */
     function index($args)
     {
-        //TODO Переписать условие, когда сменим инкрементные поля
-        if (!$this->user->getId()) {
-            header("Location: /");
-            exit;
-        }
+        
+    }
 
-        $this->tpl->assign("page_title", "account all");
-		//$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
-		//$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
-		//pre($this->user->initUserAccounts($this->user->getId()));
-		//$this->tpl->assign("template", "default");
+    /**
+     * Загрузка бюджета
+     * @return void
+     */
+    function loadBudget()
+    {
+        list($year,$month,$day) = explode("-", $_GET['current_date']);
+
+        switch ($_GET['month'])
+        {
+            case "current":
+                $current_date = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
+                break;
+
+            case "prev":
+                $current_date = date("Y-m-d", mktime(0, 0, 0, $month-1, "01", $year));
+                break;
+            case "next":
+                $current_date = date("Y-m-d", mktime(0, 0, 0, $month+1, "01", $year));
+                break;
+        }
+        $this->tpl->assign("current_date", $current_date);
+
+        $plan = $this->model->getUserPlan($current_date);
+
+        if (count($plan))
+        {
+            die ($this->tpl->fetch("budget/budget.list.html"));
+        }else{
+            die ($this->tpl->fetch("budget/budget.empty.html"));
+        }
+    }
+
+    /**
+     * Загрузка бюджета
+     * @return void
+     */
+    function create()
+    {
+        $categories_income = $this->model->getCategories(1);
+        die ($this->tpl->fetch("budget/budget.create_form.html"));
     }
 }
