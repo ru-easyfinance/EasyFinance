@@ -3,20 +3,32 @@ $(window).load(function () {
     $('.details_page').hide();
     $('#dialog').hide();
     $('#dialog').hide();
-
-$('document').ready();
 });
 
 $('document').ready(function(){
     /**
-     * рисует элемент второй панели
+     *апдейт второй панельки
      */
-    function panel2_print(i){//@todo
+function panel2_print(){
             $.post(
-                '',
-                {},
+                '/infopanel/update/',
+                {type : o_count,
+                panel : 2},
                 function(data){
-                $('.panel#2').find('.element#'+i).find('.conteiner').html(data);
+                    arr=$.parseJSON(data);
+                    arr = data;
+                    //len = arr.length;
+                    //for (i = 0; i< len;len++)
+                    //{
+                    //    s = "<div class='element' id='"+i+"'>\n\
+                    //            <div class='edit_panel' style='background-color:#FF0000'>\n\
+                    //            <div class='delete_o'>del</div>\n\
+                    //            </div>\n\
+                    //            <div class='conteiner'> "+arr[i]+"</div>\n\
+                    //        </div>";
+                    //    $('.panel#2').find('.content').append(s);
+                    //}
+                    //$('.panel#2').find('.content').append("</div><input type='button' class='element' id='button' value='Добавить цель'/></div>");
                 },
                 'text'
             );
@@ -25,11 +37,12 @@ $('document').ready(function(){
      *апдейт второй панельки
      */
     function panel2_update(){
-        $('.panel#2').find('.element').hide();
+        //$('.panel#2').find('.element').hide();
+        $('.panel#2').find('div.element').empty();
+        panel2_print();
         for ( i = 0;i<o_count;i++)
         {
             $('.panel#2').find('.element#'+i).show();
-            //panel2_print(i);
         }
     }
     /**
@@ -76,8 +89,13 @@ $('document').ready(function(){
             type: i,
             date: i_date},
             function (data){
-                $('.panel#2').find('.element#'+i).html(data);//@todo
+                data=$.parseJSON(data)
+                b0 = (data[0]>0)?'#00ff00':(data[0]<0?'ff0000':'0000ff');
+                b1 = (data[1]>0)?'#00ff00':(data[1]<0?'ff0000':'0000ff');
+                str = "<table><tr><td><b>"+ $('.panel#3').find('.element#'+i).attr('name')+"</b></tr></td><tr><td>итого</tr></td><tr><td class='item' style='background-color:"+b0+";' >"+data[0]+"</tr></td><tr><td>за день</tr></td><tr><td class='item'style='background-color:"+b1+";' > "+data[1]+"</tr></td></table>";
+                $('.panel#3').find('.element#'+i).html(str);//@todo
                     },
+
             'text');
 
     }
@@ -85,7 +103,7 @@ $('document').ready(function(){
      *апдейт второй панельки
      */
     function panel3_update(){
-        var cnt = count(i_list);
+        var cnt = i_list.length;
         for ( i = 0;i<cnt;i++)
         {
             if (i_list[i])
@@ -108,9 +126,9 @@ $('document').ready(function(){
     var o_count;//////////////////////////количество отображаемых фин целей
         o_count = 3;
     var i_list;//////////////////////////блоки инвестиций
-        i_list = [1,1,1,1,1,0];
+        i_list = [1,1,1,1,1];
     var i_date = 0;
-
+panel3_update();
 panel2_update();
 //-----------------------------hronometr--------------------------------------//
 panel1_update();
@@ -182,7 +200,7 @@ panel1_update();
                 }
             }
             $(this).parent().toggle();
-            panel1_update();
+            panel3_update();
         }
     );
 
@@ -201,7 +219,7 @@ panel1_update();
             {
                 if ($(this).attr('id') == 'button')
                 {
-                	//@query servises
+                	document.location = '/targets/' ;
                 }
                 else
                 {
@@ -237,11 +255,15 @@ $('.delete_o').click(
 			},
 			buttons: {
 				'Delete': function() {
-                                        //@query servises
-					$(this).dialog('close');
+                                        $.post('/target/del/',
+                                        {id:$id.attr('id')},
+                                        function(){$(this).dialog('close');
+                                        
                                         $id.empty();
-                                        panel2_update();
-				},
+                                        panel2_update();},
+                                        'json');}
+					
+				,
 				Cancel: function() {
 					$(this).dialog('close');
 				}
@@ -251,6 +273,6 @@ $('.delete_o').click(
 );
 $('.rewright_o').click(
     function(){
-    	//@query servises
+    	//@query servises//dialog
 });
 })

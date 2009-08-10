@@ -39,7 +39,11 @@ class Infopanel_Controller extends Template_Controller
      */
     function update()
     {
-        die($this->model->content((int)$_POST['panel']));
+        $type = $_POST['type'];
+        if ($type=='')
+            die('$type');
+    	$date = formatRussianDate2MysqlDate($_POST['date'],$name,$date);
+        die($this->model->content((int)$_POST['panel'],$type,$date));
     }
 
     /**

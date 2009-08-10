@@ -2,6 +2,7 @@
 /**
  * Класс модели для управления счетами пользователя
  * @copyright http://home-money.ru/
+ * @author rewle Александр Ильичёв
  * SVN $Id: $
  */
 class Infopanel_Model
@@ -34,16 +35,19 @@ class Infopanel_Model
      */
     public function content($i, $type, $date)
     {
-        die('server talk...');
+        
         switch ($i)
         {
             case 1:
                 $this->xml();
                 break;
             case 2:
-                //max
+                die(json_encode('server talk...'));
+                $targets = new Targets_Model();
+                die(json_encode($targets->getLastList(0, $type)));
                 break;
             case 3:
+                die(json_encode(array(rand(-10,10),rand(-10,10))));
                 $sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
                 $row = $this->db->selectRow($sql,$this->user_id, $type, $date);
                 $value = $row['value'];//day
@@ -83,8 +87,8 @@ class Infopanel_Model
         $value = rand(0,100);//$row['value'];
         //$sql = "SELECT name, start, end FROM info_panels WHERE type=?;";
         //$row = $this->db->selectRow($sql, $type);
-
-        $name = $type; //$row['name'];
+        $arr=array('Фин состояние','Деньги','Бюджет','Расходы','Кредиты');
+        $name = $arr[$type]; //$row['name'];
 	$start = 0; //$row['start'] ;
 	$end = 100;//$row['end'];
         $xml = "
