@@ -308,4 +308,34 @@ class Operation_Model {
         $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $bill_id);
         return $this->total_sum;
     }
+
+    /**
+     *
+     */
+    function getCurrency()
+    {
+        $SourceId = (int)$_POST['SourceId']; // Ид счёта на который нужно перевести
+        $TargetId = (int)$_POST['TargetId']; // Ид текущего счёта
+        $aTarget = $aSource = array();
+        $curr = Core::getInstance()->currency;
+        foreach (Core::getInstance()->user->getUserAccounts() as $val) {
+            if ($val['account_id'] == $SourceId) {
+                $aTarget[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
+            }
+            if ($val['account_id'] == $TargetId) {
+                $aSource[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
+            }
+        }
+
+        if (key($aSource) != key($aTarget)) {
+            // Если у нас простое сравнение с рублём
+            if (key($aTarget) == 1 || key($aSource) == 1){
+                $course = round($curr[key($aTarget)]['value'] / $curr[key($aSource)]['value'],4);
+            } else {
+                //@FIXME Придумать алгоритм для конвертации между различными валютами
+                $course = 0;
+            }
+            return $course;
+        }
+    }
 }

@@ -247,7 +247,7 @@ class Targets_Model {
     function del() {
         $id    = (int)@$_POST['id'];
         $this->db->query("DELETE FROM target WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
-        return '[]';
+        return true;
     }
     /**
      * Обновляет статистику для указанной финансовой цели, или указанного или текущего пользователя

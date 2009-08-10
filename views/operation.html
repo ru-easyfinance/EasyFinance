@@ -1,20 +1,11 @@
 {* $Id$ *}
-<link rel='stylesheet' type='text/css' href='/css2/jquery/jquery.calculator.css' />
-<link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.all.css' />
-<link rel='stylesheet' type='text/css' href='/css2/jquery/south-street/ui.datepicker.css' />
-<script type='text/javascript' src='/js2/jquery/ui.core.js'></script>
-<script type="text/javascript" src="/js2/jquery/ui.datepicker.js"></script>
-<script type="text/javascript" src="/js2/jquery/jquery.calculator.min.js"></script>
-<script type="text/javascript" src="/js2/jquery/jquery.calculator-ru.js"></script>
-<script type="text/javascript" src="/js2/jquery/tag.js"></script>
-<script type="text/javascript" src="/js2/operation.js?r={$revision}"></script>
 <h3>Операции по счету</h3>
 <div id="form">
     <div class="field" id="account_fields">
        <label for="account">Счёт:</label>
         <select id="account">
             {foreach from=$accounts item=acc_data}
-            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}">{$acc_data.account_name}</option>
+            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.abbr}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
        <input type="button" id="btn_EditAccount" value="Редактировать счет" />
@@ -82,10 +73,13 @@
         <label for="target">На счет:</label>
         <select id="AccountForTransfer">
             {foreach from=$accounts item=acc_data}
-            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}">{$acc_data.account_name}</option>
+            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.abbr}">{$acc_data.account_name}</option>
             {/foreach}
         </select>
-        <span id="operationTransferCurrency" style="padding-left:5px;"></span>
+        <span id="operationTransferCurrency" style="display:none;">
+            <span></span>
+            <input type='text' name='currency'><span id="convertSumCurrency"></span>
+        </span>
     </div>
     {*<!-- Основные поля -->*}
     <div class="field" id="date_fields">

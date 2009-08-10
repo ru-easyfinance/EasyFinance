@@ -158,15 +158,19 @@ $(function() {
      */
     function changeAccountForTransfer() {
         //@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах
-        if ($('#type :selected').val() == 2 && $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
-            $.post(
-                '/operation/get_currency/', {
-                    SourceId : $("#account").val(),
-                    TargetId : $("#AccountForTransfer").val()
-                }, function(data){
-                    //@TODO тут мы что-то делаем с полученными данными
-                }, 'json'
-            );
+        if ($('#type :selected').val() == 2 && 
+            $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
+                $('#operationTransferCurrency').show();
+                $.post('/operation/get_currency/', {
+                        SourceId : $("#account").val(),
+                        TargetId : $("#AccountForTransfer").val()
+                    }, function(data){
+                        $('#operationTransferCurrency :first-child').html('Курс <b>'+
+                            $('#account').attr('abbr')+'</b> к <b>'+$('#AccountForTransfer').attr('abbr')+'</b>');
+                    }, 'json'
+                );
+        } else {
+            $('#operationTransferCurrency').hide();
         }
     }
 

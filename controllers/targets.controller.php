@@ -84,10 +84,11 @@ class Targets_Controller extends Template_Controller
      */
     function del($args)
     {
-        // @FIXME Переписать логику
-        $this->model->del();
-        header("Location: /targets/");
-        exit();
+        if ($this->model->del()) {
+            die('[]');
+        } else {
+            trigger_error('Не удалось удалить фин.цель', E_USER_NOTICE); exit;
+        }
     }
 
     function user_list()

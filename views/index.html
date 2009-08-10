@@ -4,8 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Language" content="ru">
     <title>Home money - домашняя бухгалтерия он-лайн</title>
-    <script type="text/javascript" src="/js/jquery.js"></script>
-    <link rel="stylesheet" href="/css/dtree.css?r={$revision}" type="text/css" />
+    {foreach from=$css item=i}
+    <link rel="stylesheet" href="/css/{$i}?r={$revision}" type="text/css" />
+    {/foreach}
+    {foreach from=$js item=i}
+    <script type="text/javascript" src="/js2/{$i}?r={$revision}"></script>
+    {/foreach}
 </head>
 <body leftmargin="0" topmargin="0" bgcolor="#FFFFFF">
 <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">

@@ -9,19 +9,19 @@ class Operation_Controller extends Template_Controller
 {
     /**
      * Модель класса журнала операций
-     * @var <Money>
+     * @var Money
      */
     private $model = null;
 
     /**
      * Ссылка на класс Смарти
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
 
     /**
      * Ссылка на экземпляр класса User
-     * @var <User>
+     * @var User
      */
     private $user = null;
     
@@ -44,6 +44,17 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('dateTo',         date(date('t').'.m.Y'));
         $this->tpl->assign('category',       get_tree_select());
         $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
+
+        // Добавляем js и css файлы в начало
+        $this->tpl->append('css','jquery/jquery.calculator.css');
+        $this->tpl->append('css','jquery/south-street/ui.all.css');
+        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.datepicker.js');
+        $this->tpl->append('js','jquery/jquery.calculator.min.js');
+        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
+        $this->tpl->append('js','jquery/tag.js');
+        $this->tpl->append('js','operation.js');
     }
 
     /**
@@ -62,7 +73,7 @@ class Operation_Controller extends Template_Controller
     /**
      * Добавляет новое событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function add($args)
     {
@@ -98,7 +109,7 @@ class Operation_Controller extends Template_Controller
     /**
      * Редактирует событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function edit($args)
     {
@@ -108,7 +119,7 @@ class Operation_Controller extends Template_Controller
     /**
      * Удаляет выбранное событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function del($args)
     {
@@ -134,41 +145,10 @@ class Operation_Controller extends Template_Controller
 
     /**
      * Возвращает валюту пользователя
-     * @param <array> $args
-     * @return <array> 7224297 Дима
+     * @param array $args
+     * @return array
      */
     function get_currency($args) {
-        $SourceId = (int)$_POST['SourceId']; // Ид счёта на который нужно перевести
-        $TargetId = (int)$_POST['TargetId']; // Ид текущего счёта
-        $aTarget = $aSource = array();
-        $curr = Core::getInstance()->currency;
-        foreach (Core::getInstance()->user->getUserAccounts() as $val) {
-            if ($val['account_id'] == $SourceId) {
-                $aTarget[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
-            }
-            if ($val['account_id'] == $TargetId) {
-                $aSource[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
-            }
-        }
-
-        if (key($aSource) != key($aTarget)) {
-            $course = Core::getInstance()->currency[key($aTarget)];
-
-            list($c1,$c2) = explode(",", $course);
-            if (!empty($c2)) $c2 = ".".$c2;
-            $course =$c1.$c2;
-
-            $current_course = $sys_currency[$account['currency_current']];
-            list($c3,$c4) = explode(",", $current_course);
-            if (!empty($c4)) $c4 = ".".$c4;
-            $current_course = $c3."".$c4;
-
-            $account['course'] = round($course / $current_course,2);
-            $data = "
-				Курс <b>".$account['currency_current_name']."</b> к <b>".$account['currency_name']."</b>
-				<input type='text' name='currency' id='currency_".$g_type."' value='".$account['course']."' OnKeyUp=onSumConvert('".$g_type."');>
-				&nbsp;&nbsp;<span id='convertSumCurrency_".$g_type."'></span>
-			";
-        }
+        die(json_encode($this->model->getCurrency()));
     }
 }
