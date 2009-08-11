@@ -47,7 +47,7 @@ class Infopanel_Model
                 die(json_encode($targets->getLastList(0, $type)));
                 break;
             case 3:
-                die(json_encode(array(rand(-10,10),rand(-10,10))));
+                //die(json_encode(array(rand(-10,10),rand(-10,10))));
                 $sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
                 $row = $this->db->selectRow($sql,$this->user_id, $type, $date);
                 $value = $row['value'];//day
@@ -74,7 +74,7 @@ class Infopanel_Model
 	$sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
         $row = $this->db->selectRow($sql,$this->user_id, $type, $date);
         $value = $row['value'];
-        $sql = "SELECT desc FROM info_panels WHERE type=? AND (start<?) AND (end>?);";
+        $sql = "SELECT desc FROM info_panels WHERE type=? AND (start<? OR start='-') AND (end>? OR end='+');";
         $row =$this->db->selectRow($sql, $type, $value, $value);
         $desc = $row['desc'];
         die($desc);
@@ -82,15 +82,15 @@ class Infopanel_Model
     
     public function xml($type, $date)
     {
-        //$sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
-        //$row = $this->db->selectRow($sql,$this->$user_id, $type, $date);
-        $value = rand(0,100);//$row['value'];
-        //$sql = "SELECT name, start, end FROM info_panels WHERE type=?;";
-        //$row = $this->db->selectRow($sql, $type);
+        $sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
+        $row = $this->db->selectRow($sql,$this->$user_id, $type, $date);
+        $value = $row['value'];
+        $sql = "SELECT name, start, end FROM info_panels WHERE type=?;";
+        $row = $this->db->selectRow($sql, $type);
         $arr=array('Фин состояние','Деньги','Бюджет','Расходы','Кредиты');
-        $name = $arr[$type]; //$row['name'];
-	$start = 0; //$row['start'] ;
-	$end = 100;//$row['end'];
+        $name = $row['name'];
+	$start = $row['start'] ;
+	$end = $row['end'];
         $xml = "
 <anychart>
     <gauges>
