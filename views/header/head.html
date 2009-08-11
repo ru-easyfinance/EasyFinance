@@ -1,0 +1,56 @@
+{* $Id: index_old.html -1   $ *}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+<title>Homemoney</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="Keywords" content="" />
+	<meta name="Description" content="" />
+	<link rel="stylesheet" type="text/css" href="/css/main.css" />
+        <!-- Подключениее стилей и скриптов -->
+        {foreach from=$css item=i}
+        <link rel="stylesheet" href="/css/{$i}?r={$revision}" type="text/css" />
+        {/foreach}
+        {foreach from=$js item=i}
+        <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
+        {/foreach}
+        <!-- /Подключениее стилей и скриптов -->
+
+</head>
+<body id="p_index">
+<!-- верхнее меню -->
+<div id="container1">
+	<div id="menumain">
+		<ul class="menu1">
+			{if empty($user)}
+                        <li class="first act"><a href="/">Главная</a></li>
+                        {else}
+                        <li class="first act"><a href="/accounts/">Главная</a></li>
+                        {/if}
+			<li><a href="#">Обзор сервиса</a></li>
+			<li><a href="#">Отзывы</a></li>
+			<li><a href="#">Блог</a></li>
+			<li><a href="/forum/">Форум</a></li>
+		</ul>
+		<ul class="menu2">
+			<li><a href="/help/">Правила использования</a></li>
+			<li><a href="/about/security/">Безопасность</a></li>
+			<li><a href="#">О Компании</a></li>
+		</ul>
+	</div>
+<!-- верхнее меню -->
+<!--шапка-->
+	<div id="header">
+		<div class="logo">Homemoney.ru</div>
+		<div class="slogan">Система управления личными финансам</div>
+	<!-- пользователь или поля для авторизации-->
+		{if empty($user)}
+                    {include file="header/login.html"}
+                    {include file="head_adv.html"}
+                {else}
+                    {include file="header/user.html"}
+                    {include file="head_adv.html"}
+                {/if}
+	<!-- /пользователь или поля для авторизации -->
+	</div>
+<!-- /шапка -->
