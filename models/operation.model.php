@@ -229,6 +229,7 @@ class Operation_Model {
         $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment, $from_account, mysql_insert_id());
         $this->user->initUserAccount();
         $this->user->save();
+        return '[]';
 	}
 
     /**

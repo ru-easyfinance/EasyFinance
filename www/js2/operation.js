@@ -1,5 +1,6 @@
 // {* $Id$ *}
 $(function() {
+
     // Init
     $('#amount').calculator({
         layout: [
@@ -13,6 +14,9 @@ $(function() {
         buttonImage: '/img/calculator.png'
     });
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
+    
+    // Autoload
+    loadOperationList();
     
     // Bind
     $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('#account :selected').val() }); // @FIXME
@@ -35,17 +39,15 @@ $(function() {
     $('#AccountForTransfer').change( function(){ changeAccountForTransfer(); });
     $('#type').change(function(){ changeTypeOperation('add'); });
     $('#target').change(function(){
-        $("span.currency").each(function(){
-            $(this).text(" "+$("#target :selected").attr("currency"));
-        });
-        $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
-        $("#amount").text(formatCurrency($("#target :selected").attr("amount")));
-        $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
-        $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
+        changeTarget();
+//        $("span.currency").each(function(){
+//            $(this).text(" "+$("#target :selected").attr("currency"));
+//        });
+//        $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
+//        $("#amount").text(formatCurrency($("#target :selected").attr("amount")));
+//        $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
+//        $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
     });
-
-    // Autoload
-    loadOperationList();
 
     /**
      * Загружает список всех операций (с фильтром)
@@ -122,6 +124,7 @@ $(function() {
            //   "success"
            //   "parsererror"
         }, 'json');
+        return true;
     }
 
     /**
@@ -199,8 +202,19 @@ $(function() {
             $("#target_fields").show();
             $("#tags_fields,#transfer_fields,#category_fields").hide();
             changeTarget();
-            changeTargetEdit();
         }
+    }
+
+    /**
+     * При изменении финансовой цели
+     */
+    function changeTarget() {
+        $("#amount_done").text(formatCurrency($("#target option:selected").attr("amount_done")));
+        $("span.currency").text(" "+$("#target option:selected").attr("amount"));
+        
+        $("#amount").text(formatCurrency($("#target option:selected").attr("amount")));
+        $("#percent_done").text(parseInt($("#target option:selected").attr("percent_done")));
+        $("#forecast_done").text(parseInt($("#target option:selected").attr("forecast_done")));
     }
 
 });
@@ -386,22 +400,6 @@ function operationAfterEdit(data) {
     $("#editOperation").show();
     changeTypeOperation('edit');
     scrollTo(0,0);
-}
-
-
-
-function changeTarget() {
-    $("span.currency").each(function(){
-        $(this).text(" "+$("#target_sel_ed option:selected").attr("currency"));
-    });
-    $("#amount_done").text(formatCurrency($("#target_sel option:selected").attr("amount_done")));
-    $("#amount").text(formatCurrency($("#target_sel option:selected").attr("amount")));
-    $("#percent_done").text(parseInt($("#target_sel option:selected").attr("percent_done")));
-    $("#forecast_done").text(parseInt($("#target_sel option:selected").attr("forecast_done")));
-}
-
-function changeTargetEdit() {
-
 }
 
 function checkTarget(type) {
