@@ -49,7 +49,7 @@ class Login_Model
                 $headers .= "From: info@home-money.ru\n";
                 $subject = "Успешная регистрация на сайте домашней бухгалтерии Home-Money.ru";
                 mail($_SESSION['user']['user_mail'], $subject, $message, $headers);
-                header("Location: /start/"); exit;
+                header("Location: /accounts/"); exit;
             } else {
                 trigger_error("Справочник не загружен!", E_USER_WARNING);
             }

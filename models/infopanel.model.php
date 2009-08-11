@@ -35,27 +35,31 @@ class Infopanel_Model
      */
     public function content($i, $type, $date)
     {
-        
+        $title_list=array(
+            'fcon'=>'Фин. состояние',
+            'money'=>'Деньги',
+            'budget'=>'Бюджет',
+            'cost'=>'Затраты',
+            'credit'=>'Кредиты',
+            'akc'=>'Акции',
+            'pif'=>'ПИФы',
+            'ofbu'=>'ОФБУ',
+            'oms'=>'ОМС',
+            'estat'=>'Недвижимость');
         switch ($i)
         {
             case 1:
-                $this->xml();
+                $this->xml($type, $date);
                 break;
             case 2:
-               // die(json_encode(array(1,'asd',1,1,0)));
                 $targets = new Targets_Model();
                 die(json_encode($targets->getLastList(0, $type)));
                 break;
             case 3:
-                //die(json_encode(array(rand(-10,10),rand(-10,10))));
-                $sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
-                $row = $this->db->selectRow($sql,$this->user_id, $type, $date);
-                $value = $row['value'];//day
-                $sql = "SELECT name, end FROM info_panels WHERE type=?;";//end == year
-                $row = $this->db->selectRow($sql, $type);
-                $name = $row['name'];
-                $end = $row['end'];
-                die($value+':'+$end+':'+$name);
+                //correct value from date
+                $value = $_SESSION["infopanel_$type"."_value"];
+                $name = $title_list[$type];
+                die($value+':'+$name);
                 break;
             default :
                 die('');
@@ -69,28 +73,33 @@ class Infopanel_Model
      */
     public function page($date, $type)
     {
-        die("server $date $type");
 
-	$sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
-        $row = $this->db->selectRow($sql,$this->user_id, $type, $date);
-        $value = $row['value'];
-        $sql = "SELECT desc FROM info_panels WHERE type=? AND (start<? OR start='-') AND (end>? OR end='+');";
+        //correct value from date
+        $value = $_SESSION["infopanel_$type"."_value"];
+
+        $sql = "SELECT desc FROM info_panels WHERE type=? AND (start<? OR ISNULL(start)) AND (end>? OR ISNULL(end));";
         $row =$this->db->selectRow($sql, $type, $value, $value);
-        $desc = $row['desc'];
-        die($desc);
+        die($row['desc']);
     }
     
     public function xml($type, $date)
     {
-        $sql = "SELECT value FROM info_user WHERE uid=? AND type=? AND date=?;";
-        $row = $this->db->selectRow($sql,$this->$user_id, $type, $date);
-        $value = $row['value'];
-        $sql = "SELECT name, start, end FROM info_panels WHERE type=?;";
-        $row = $this->db->selectRow($sql, $type);
-        $arr=array('Фин состояние','Деньги','Бюджет','Расходы','Кредиты');
-        $name = $row['name'];
-	$start = $row['start'] ;
-	$end = $row['end'];
+    $title_list=array(
+            'fcon'=>'Фин. состояние',
+            'money'=>'Деньги',
+            'budget'=>'Бюджет',
+            'cost'=>'Затраты',
+            'credit'=>'Кредиты');
+    $name = $title_list[$type];
+
+  //correct value from date
+        $value = $_SESSION["infopanel_$type"."_value"];
+ 
+        $sql = "SELECT MAX(start),MAX(end) FROM info_panels WHERE type=?;";
+        $row = $this->db->selectRow($sql, $type);      
+	$start = ($row['start']) ? ($row['start']) : 0;
+	$end = ($row['end']) ? ($row['end']) : 0;
+
         $xml = "
 <anychart>
     <gauges>

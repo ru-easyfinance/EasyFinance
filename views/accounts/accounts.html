@@ -1,14 +1,31 @@
-<table width="100%" border="0">
-<tr>
-	<td width="20%">
-    	<h3>Список счетов</h3>
-	</td>
-	<td align="left" valign="top" style="padding-top:6px;">
-		<input type="button" id="add_account" value="Добавить новый счет" class="inputsubmit" />
-	</td>
-</tr>
-</table>
+<!--середина-->
 
-{include file="accounts/accounts.$template.html"}
+	<!--вкладки-->
+	<!--/вкладки-->
+		<div class="ramka2">
+			<div class="cct"></div>
+		<!--меню4-->
+			{include file="$name_page.submenu.html"}
+		<!--/меню4-->
+			<div class="mid general_cont">
+		<!--левая колонка-->
+                        {include file="$name_page.left.html"}
+		<!--/левая колонка-->
+				<div class="block2">
+		<!--наполнение-->
+				<!--Ввод операции-->
+                                    {include file="$name_page.operation.html"}
+                                <!--/Ввод операции-->
+				<!--Бюджет-->
+                                    {include file="$name_page.content.html"}
+                                <!--/Бюджет-->
+		<!--/наполнение-->
+				</div>
+		<!--правая колонка-->
+                    {include file="$name_page.right.html"}
+                <!--/правая колонка-->
+			</div>
+			<div class="ccb"></div>
+		</div>
 
-
+<!--/середина-->

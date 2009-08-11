@@ -12,7 +12,11 @@ class Infopanel_Controller extends Template_Controller
      * @var Infopanel_Model
      */
     private $model = null;
-    
+
+    /**
+     *
+     */
+    private $tpl = null;
     /**
      * коичество отображаемых фин целей
      */
@@ -24,15 +28,30 @@ class Infopanel_Controller extends Template_Controller
      */
     function __construct()
     {
+        $this->tpl = Core::getInstance()->tpl;
+
+        $this->tpl->append('js','jquery/jquery.js');
+        $this->tpl->append('js','jquery/json.js');
+        $this->tpl->append('js','jquery/jquery.cookie.js');
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.sortable.js');
+        $this->tpl->append('js','jquery/ui.draggable.js');
+        $this->tpl->append('js','jquery/ui.dialog.js');
+        $this->tpl->append('js','anychart/AnyChart.js');
+        $this->tpl->append('js','info_panel.js');
+
+
+
         $this->targets_count = (int)$_SESSION['targets_count'];
         $this->model = new Infopanel_Model();
-        Core::getInstance()->tpl->assign('name_page', 'info_panel/info_panel');
+        $this->tpl->assign('name_page', 'info_panel/info_panel');
         $str='';
         for ($i=0;$i<$this->targets_count;$i++)
         {
         $str.="<div class='element' id='$i'><div class='edit_panel' style='background-color:#FF0000'><div class='delete_o'>del</div></div><div class='conteiner'></div> </div>";
         }
         Core::getInstance()->tpl->assign('content', $str);
+
     }
     function get()
     {

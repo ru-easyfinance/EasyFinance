@@ -20,7 +20,7 @@ class Login_Controller extends Template_Controller
     function __construct()
     {
         $this->model = new Login_Model();
-        Core::getInstance()->tpl->assign('name_page', 'login');
+        Core::getInstance()->tpl->assign('name_page', 'welcome');
     }
 
     /**
@@ -31,7 +31,6 @@ class Login_Controller extends Template_Controller
     function index($args)
     {
         $user = Core::getInstance()->user;
-
         if ($user->getId()) {
             header("Location: /accounts/");
             exit;

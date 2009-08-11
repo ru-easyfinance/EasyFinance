@@ -1,22 +1,31 @@
-<script type='text/javascript' src='/js2/budget.js?r={$revision}'></script>
+<!--середина-->
 
-<table border="0" width="100%">
-<tbody>
-    <tr><td valign="top" width="25%">
-            <h3>Планирование бюджета</h3>
-        </td>
-        <td align="left">
-            <form action="#">
-                <input value="Создать новый план" class="inputsubmit" style="width: 180px;" type="button" id="create_plan">
-            </form>
-        </td>
-    </tr>
-</tbody></table>
+	<!--вкладки-->
+	<!--/вкладки-->
+		<div class="ramka2">
+			<div class="cct"></div>
+		<!--меню4-->
+			{include file="$name_page.submenu.html"}
+		<!--/меню4-->
+			<div class="mid general_cont">
+		<!--левая колонка-->
+                        {include file="$name_page.left.html"}
+		<!--/левая колонка-->
+				<div class="block2">
+		<!--наполнение-->
+				<!--Ввод операции-->
+                                    {include file="$name_page.operation.html"}
+                                <!--/Ввод операции-->
+				<!--Бюджет-->
+                                    {include file="$name_page.content.html"}
+                                <!--/Бюджет-->
+		<!--/наполнение-->
+				</div>
+		<!--правая колонка-->
+                    {include file="$name_page.right.html"}
+                <!--/правая колонка-->
+			</div>
+			<div class="ccb"></div>
+		</div>
 
-<div id="change_history_period">
-    <a href="#" id="prev_month">Предыдущий месяц</a>
-    <a href="#" id="next_month">Следующий месяц</a>
-</div>
-
-<div id="form_create_plan"></div>
-<div id="list"></div>
+<!--/середина-->

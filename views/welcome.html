@@ -1,121 +1,89 @@
 {* $Id$ *}
-<table width="100%" cellspacing="5">
-	<tr>
-		<td width="45%" height="100%" valign="top">
-		<table width="100%">
-			<tr>
-				<td class="whats_hm">Бесплатная домашняя бухгалтерия с Home-Money</td>
-			</tr>
-			<tr>
-				<td class="about_hm">
-				<p>Вы хотите знать, откуда приходят и куда уходят деньги, ведь это нужно для того, чтобы
-				оптимизировать расходы и начать контролировать свои финансы.</p>
-				<p>Понять структуру своих расходов – первое, что нужно сделать для того, чтобы их
-				скорректировать. Проще всего сделать это с помощью <strong>системы домашней бухгалтерии
-				Home-money.ru</strong>.</p>
-				<p>Зарегистрировавшись, вы сможете легко вести учет финансовых средств, как личных, так и
-				всей семьи! Кроме того, система подходит для ведения бухгалтерии в небольших компаниях и она
-				абсолютно бесплатна.</p>
-				<p>Интерфейс системы учета финансов «Home-money» полностью русифицирован и легок в
-				использовании. Однако, несмотря на простоту интерфейса, система является мощным инструментом для
-				учета финансов!</p>
-				</td>
-			</tr>
-			<tr>
-				<td><br />
-				&nbsp;</td>
-			</tr>
-			<tr>
-				<td class="whats_hm">Постоянный контроль семейного бюджета</td>
-			</tr>
-			<tr>
-				<td class="about_hm">
-				<p><strong>Система домашнего бюджетирования Home-Money</strong> доступна круглосуточно из
-				любой точки мира! Теперь Вам не нужно записывать траты в блокнот или собирать чеки, чтобы
-				вечером внести информацию в домашний компьютер. Все можно сделать в режиме реального времени с
-				рабочего места, из кафе, даже с улицы или из машины!</p>
-				<p>Сервис <strong>домашней бухгалтерии Home-money.ru</strong> доступен с мобильных телефонов
-				и коммуникаторов (просто наберите Home-money.ru в браузере Вашего коммуникатора или телефона -
-				PDA режим распознается автоматически)</p>
-				</td>
-			</tr>
-			<tr>
-				<td><br />
-				&nbsp;</td>
-			</tr>
-			<tr>
-				<td class="whats_hm">Не знаете с чего начать?</td>
-			</tr>
-			<tr>
-				<td class="whats_hm"><a
-					href="http://demo.home-money.ru/index.php?modules=demo_registration&action=new_user"><img
-					src="img/demo.jpg" border="0" alt="Home-money - домашняя бухгалтерия он-лайн" /></a>
-                                </td>
-			</tr>
-			<tr>
-				<td>
-                                    <br />&nbsp;
-                                </td>
-			</tr>
-		</table>
-		</td>
-		<td width="2%" class="cat_add" height="100%">&nbsp;</td>
-		<td width="45%" height="100%" valign="top">
-		<table width="100%">
-			<tr>
-				<td><img src="img/photo.gif" /></td>
-			</tr>
-			<tr>
-				<td height="70" class="user_count">Пользователей: {$user_count}<br />
-				Транзакций: {$money_count}</td>
-			</tr>
-			<tr>
-				<td><br />
-				&nbsp;</td>
-			</tr>
-			{if !empty($articles)}
-			<tr>
-				<td class="reg_users">Интересно:</td>
-			</tr>
-			<tr>
-				<td>
-				<ul class="welcam_artile">
-					{foreach from=$articles item=data}
-					<li><a href="index.php?modules=article&id={$data.id}">{$data.title}</a></li>
-					{/foreach}
-				</ul>
-				</td>
-			</tr>
-			{/if}
-			<tr>
-				<td class="reg_users"><br />
-				<br />
-				Курсы валют ЦБ:</td>
-			</tr>
-			<tr>
-				<td height="70" class="user_count">USD ЦБ: <b>{$sys_currency.2}</b><br />
-				EUR ЦБ: <b>{$sys_currency.3}</b></td>
-			</tr>
-			<tr>
-				<td class="reg_users"><br />
-				<br />
-				Контакты:</td>
-			</tr>
-			<tr>
-				<td height="70" class="user_count">
-				<table>
-					<td class="cat_add">Клиентская служба:</td>
-					<td class="cat_add"><b><a href="mailto:info@home-money.ru">info@home-money.ru</a></b></td>
-					<tr>
-						<td class="cat_add">Техническая поддержка:</td>
-						<td class="cat_add"><b> <a href="mailto:support@home-money.ru">support@home-money.ru</a></b>
-						</td>
-					</tr>
-				</table>
-				</td>
-			</tr>
-		</table>
-		</td>
-		<td width="8%" class="cat_add" height="100%">&nbsp;</td>
-	</tr>
-</table>
+	<div id="presentation">
+		<a href="/registration/" title="зарегистрироваться" class="reg">зарегистрироваться</a>
+		<a href="#" title="демо-вход" class="demo">демо-вход</a>
+		<ul class="inf">
+			<li class="u">Пользователей: <b>{$user_count}</b></li>
+			<li class="t">Транзакций: <b>{$money_count}</b></li>
+		</ul>
+		<div id="bgpics" class="bg1"></div> <!--меняем класс, меняется бэк, например для 2-го шага бек будет class="bg2"-->
+		<ul class="steps">
+			<li id="step1" class="act" title="Шаг 1">1</li>
+			<li id="step2" title="Шаг 2">2</li>
+			<li id="step3" title="Шаг 3">3</li>
+			<li id="step4" title="Шаг 4">4</li>
+			<li id="step5" title="Шаг 5">5</li>
+		</ul>
+		<div class="descr">
+			<div class="txt1" style="display: block;">
+				<h2>С чего начать?</h2>
+				Вы хотите знать, откуда приходят и куда уходят деньги, ведь это нужно для того, чтобы оптимизировать расходы и начать контролировать свои финансы.
+			</div>
+			<div class="txt2">
+				<h2>Анализ</h2>
+				шаг 2
+			</div>
+			<div class="txt3">
+				<h2>Учет</h2>
+				шаг 3
+			</div>
+			<div class="txt4">
+				<h2>Рост возможностей</h2>
+				шаг 4
+			</div>
+			<div class="txt5">
+				<h2>Семейный бюджет</h2>
+				шаг 5
+			</div>
+		</div>
+	</div>
+<!--/презентация-->
+	<div id="mainwrap">
+	<!--анонс проекта-->
+		<div id="aboutproject" class="ramka1">
+			<div class="ct"><div></div></div>
+			<div class="inside">
+				<div class="monitors">
+					<h2><a href="#" title="Контролируй">Контролируй</a></h2>
+					Возьмите под контроль свои личные финансы с помощью Home-Money.ru. Вносите информацию о доходах и расходах из любой точки мира, 24 часа в сутки.
+				</div>
+				<div class="control">
+					<h2><a href="#" title="Управляй">Управляй</a></h2>
+					Воспользуйтесь возможностями системы Home-Money.ru, для планирования и анализа. Держите финансы «на кончиках пальцев».
+				</div>
+				<div class="economy">
+					<h2><a href="#" title="Экономь">Экономь</a></h2>
+					Добейтесь эффекта экономии быстро и без труда вместе с Home-Money.ru. Получайте удовольствие и пользу – деньги работают!
+				</div>
+			</div>
+			<div class="cb"><div></div></div>
+		</div>
+	<!--/анонс проекта-->
+	<!--список вопросов-->
+		<div class="info_block general_cont">
+			<a href="#" title="оставить отзыв" class="addmessage">оставить отзыв</a>
+			<dl class="fl_l">
+				<dt class="interest"><span>Интересно</span> <a href="#">архив</a></dt>
+				<dd>
+					<ul>
+						<li><a href="#">Как продать кредитный автомобиль?</a></li>
+						<li><a href="#">На какие товары и услуги из-за кризиса снизились цены</a></li>
+						<li><a href="#">Как выбирать кредитную карту</a></li>
+						<li><a href="#">Как с толком распределить семейный бюджет</a></li>
+						<li><a href="#">Деньги из воздуха</a></li>
+					</ul>
+				</dd>
+			</dl>
+			<dl class="fl_r">
+				<dt class="twitter"><span>Twitter</span> <a href="#">следовать</a></dt>
+				<dd>
+					<ul>
+						<li><a href="#">У нас снова заработал форум! Ждем от вас пожеланий по улучшению сервиса</a></li>
+						<li><a href="#">Заработал калькулятор в полях ввода сумм! </a></li>
+						<li><a href="#">Сегодня на сайте Home-Money.ru открывается доступ к подборке интересных статей.</a></li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
+	<!--/список вопросов-->
+	</div>
