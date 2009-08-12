@@ -26,8 +26,26 @@ class Calendar_Controller extends Template_Controller
     function __construct()
     {
         $this->tpl = Core::getInstance()->tpl;
-        $this->tpl->assign('name_page', 'calendar');
+        $this->tpl->assign('name_page', 'calendar/calendar');
         $this->model = new Calendar_Model();
+
+        $this->tpl->append('css','jquery/fullcalendar.css');
+        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+        $this->tpl->append('css','jquery/south-street/ui.dialog.css');
+        $this->tpl->append('css','jquery/south-street/ui.all.css');
+
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.resizable.js');
+        $this->tpl->append('js','jquery/ui.draggable.js');
+        $this->tpl->append('js','jquery/ui.dialog.js');
+        $this->tpl->append('js','jquery/ui.datepicker.js');
+        $this->tpl->append('js','jquery/i18n/ui.datepicker-ru.js');
+        $this->tpl->append('js','jquery/ui.tabs.js');
+        $this->tpl->append('js','jquery/fullcalendar.js');
+        $this->tpl->append('js','jquery/jquery.maskedinput-1.2.2.min.js');
+        $this->tpl->append('js','jquery/jquery.timepicker-table.min.js');
+
+        $this->tpl->append('js','calendar.js');
     }
 
     /**
