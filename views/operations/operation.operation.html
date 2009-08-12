@@ -18,37 +18,97 @@
 							<form action="">
 								<div class="addoperation" style="display: block;">
 									<div class="line">
-										<div class="f_field">
+										<div class="f_field" id="account_fields">
 											Счет
-											<select>
-												<option>&euro; euro</option>
+											<select id="account">
+                                                {foreach from=$accounts item=acc_data}
+                                                    <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                                                {/foreach}
 											</select>
 										</div>
-										<div class="f_field">
+										<div class="f_field" id="type_fields">
 											Тип операции
-											<select>
-												<option>Расход</option>
+											<select id="type">
+                                                <option value="0">Расход</option>
+                                                <option value="1">Доход</option>
+                                                <option value="2">Перевод со счета</option>
+                                                {*<!-- <option value="3">Покупка валюты</option> -->*}
+                                                <option value="4">Перевод на фин. цель</option>
 											</select>
 										</div>
-										<div class="f_field amount">
+										<div class="f_field amount" id="amount_fields">
 											Сумма
-											<select>
-												<option>15 100 500</option>
-											</select>
+                                            <input type="text" id="amount">
 											<a href="#" title="Пересчитать">Пересчитать</a>
 										</div>
-										<div class="f_field category">
+										<div class="f_field category" id="category_fields">
 											Категория
-											<select>
-												<option>Кредит</option>
-											</select>
+                                            {if !empty($list)}
+                                            <select id="category">
+                                                {if !empty($often)}
+                                                <optgroup id="often" label="&nbsp;Часто используемые">
+                                                {foreach from=$often item=data}
+                                                    <option value="{$data.cat_id}">{$data.cat_name}</option>
+                                                {/foreach}
+                                                </optgroup>
+                                                {/if}
+                                                <optgroup id="all" label="&nbsp;Все категории">
+                                                    {$category}
+                                                </optgroup>
+                                            </select>
+                                            {else}
+                                            <select id="category">
+                                                {$category}
+                                            </select>
+                                            {/if}
 											<a href="#" title="Редактировать">Редактировать</a>
 										</div>
 									</div>
-									<div class="line">
-										<div class="f_field date">
-											<label for="fdate">Дата</label>
-											<input type="text" value="09.05.09" id="fdate" class="inp" />
+                                    {* <!-- Финансовая цель --> *}
+                                    <div class="line" >
+                                        <div class="field" id="target_fields" style="display:none;">
+                                           <label for="target">Финансовая цель:</label>
+                                            <select id="target">
+                                                <option bill="0" value="0" target_account_id='0' amount_done='0' percent_done='0'
+                                                        forecast_done='0' amount="0"> -- Все -- </option>
+                                                {foreach from=$targetList item=target}
+                                                    <option bill="{$target.target_account_id}" value="{$target.id}"
+                                                        target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
+                                                        percent_done='{$target.percent_done}' forecast_done='{$target.forecast_done}' amount={$target.amount}
+                                                        {if $target.id==$target_sel}selected{/if}>
+                                                        {$target.title|stripslashes|truncate:50:".."}</option>
+                                                {/foreach}
+                                            </select>
+                                            <div>
+                                                <div>Стоимость цели: <span id='amount_target'/><span class='currency'/></div>
+                                                <div>Сумма накопленная: <span id='amount_done' /><span class='currency' /></div>
+                                                <div>Прогноз: <span id='forecast_done'></span> %</div>
+                                                <div>Процент готовности: <span id='percent_done'></span> %</div>
+                                            </div>
+                                            <input type="checkbox" id="close" name="close" value="Закрытая финансовая цель" />
+                                            <label for="close">Закрытая финансовая цель</label>
+                                        </div>
+                                    </div>
+                                    {*<!-- Трансфер -->*}
+                                    <div class="line" >
+                                        <div class="field" id="transfer_fields" style="display:none;">
+                                            <label for="target">На счет:</label>
+                                            <select id="AccountForTransfer">
+                                                {foreach from=$accounts item=acc_data}
+                                                <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                                                {/foreach}
+                                            </select>
+                                            <span id="operationTransferCurrency" style="display:none;">
+                                                <span></span>
+                                                <input type='text' id='currency'><span id="convertSumCurrency"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {*<!-- Основные поля -->*}
+									<div class="line" >
+										<div class="f_field date" id="date_fields">
+											<label for="date">Дата</label>
+                                            <input type="text" value="{$date}" id="date" class="inp">
 										</div>
 										<div class="f_field tags">
 											<label for="ftags">Теги</label>

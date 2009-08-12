@@ -8,9 +8,9 @@ $(function() {
                 'MS_4_5_6_*' + $.calculator.PERCENT ,
                 'M+_1_2_3_/' + $.calculator.HALF_SPACE,
                 'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-        showOn: 'opbutton',
-        buttonImageOnly: true,
-        buttonImage: '/img/calculator.png'
+        showOn: 'opbutton'
+        //,buttonImageOnly: true
+        //,buttonImage: '/img/calculator.png'
     });
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
     
