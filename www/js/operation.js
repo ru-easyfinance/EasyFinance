@@ -58,21 +58,41 @@ $(function() {
             category: $('#cat_filtr :selected').val(),
             account: $('#account :selected').val()
         }, function(data) {
-            $('div#list').empty();
+            var tr = '';
             if (data != null) {
                 for(v in data){
-                    tags = (data[v].tags!=null) ? data[v].tags : '';
-                    $('div#list').append(
-                        "<div value='"+data[v].id+"'><input type='checkbox' />"
-                            + ((data[v].drain == 1) ? '<span>Расход</span>' : '<span>Доход</span>')
-                            + '<span>'+data[v].money+'</span>'
-                            + '<span>'+data[v].date+'</span>'
-                            + '<span>'+data[v].cat_name+'</span>'
-                            + '<span>'+data[v].account_name+'</span>'
-                            + '<span>'+data[v].comment+'</span>'
-                            + '<span>'+tags+'</span>'
-                    )
+                    tg = (data[v].tags!=null) ? data[v].tags : '';
+                    tr += "<tr value='"+data[v].id+"'><td><input type='checkbox' /></td>"
+                            + '<td><a href="#">' +((data[v].drain == 1) ? 'Расход' : 'Доход') + '</td>'
+                            + '<td><b>'+data[v].money+'</b></td>'
+                            + '<td>'+data[v].date+'</td>'
+                            + '<td>'+data[v].cat_name+'</td>'
+                            + '<td>'+data[v].account_name+'</td>'
+                            + '<td>'+tg+'</td>'
+                            + '<td class>'
+                                +'<div class="cont">'+data[v].comment+'<ul>'
+                                +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                                +'<li class="del"><a title="Удалить">Удалить</a></li>'
+                                +'<li class="add"><a title="Добавить">Добавить</a></li>'
+                                +'</ul></div></td></tr>';
                 }
+                $('#operations_list tr:not(:first)').each(function(){
+                    $(this).remove();
+                });
+                $('#operations_list').append(tr).find('td')
+                    .unbind('mouseover.namespace').bind('mouseover.namespace', function(){
+                        $(this).parent().find('ul').show();
+                }).unbind('mouseout.panel').bind('mouseout.panel', function(){
+                    $(this).parent().find('ul').hide();
+                });
+                $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
+                    if ($(this).parent().attr('class') == 'edit') {
+                        editOperation($(this).closest('tr').attr('value'));
+                    } else if($(this).parent().attr('class') == 'del') {
+                        deleteOperation($(this).closest('tr').val());
+                    }
+                })
+                //,a.del
             }
             // data could be xmlDoc, jsonObj, html, text, etc...
             this; // the options for this ajax request
@@ -360,8 +380,6 @@ function deleteOperationTransfer(id) {
 }
 
 function editOperation(id) {
-    var modules = "operation";
-    var action = "editOperation";
     $.get('/index.php',{
         modules:modules,
         action:action,
