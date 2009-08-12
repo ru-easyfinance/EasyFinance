@@ -1,5 +1,7 @@
 {* $Id: index_old.html -1   $ *}
+<!--подвал-->
 <div id="footer">
+	<a href="#" title="оставить отзыв" class="addmessage">оставить отзыв</a>
 	<dfn>&copy; 2009&nbsp;&laquo;Home-Money&raquo;</dfn>
 	<ul class="contacts">
 		<li>Телефон:  (495)-777-77-77</li>
@@ -12,12 +14,36 @@
 		<div class="search">
 			<label for="fsearch">Поиск</label>
 			<input type="text" value="" id="fsearch" class="inp" />
-			<input type="image" src="/img/i/pix.gif" value="Найти" class="but" />
+			<input type="image" src="./i/pix.gif" value="Найти" class="but" />
 			<a href="#">карта сайта</a>
 		</div>
 	</form>
 	<div class="creator"><a href="http://notamedia.ru">дизайн и разработка сайта - Нотамедиа</a><br />2009</div>
+<!--popup оставить отзыв-->
+	<div id="popupreport">
+		<div class="bg"></div>
+		<form action="">
+			<div class="inside">
+				<h2>оставить отзыв</h2>
+				<div class="f_field">
+					<label for="ffemail">e-mail</label>
+					<input type="text" value="" id="ffemail" />
+				</div>
+				<div class="f_field">
+					<label for="ffmes">Ваш отзыв</label>
+					<textarea cols="1" rows="1" id="ffmes"></textarea>
+				</div>
+				<div class="f_field">
+					<label for="ffnum">Введите цифры</label>
+					<input type="text" value="" id="ffnum" />
+					<img src="./images/pic13.gif" alt="" />
+				</div>
+				<input type="image" src="./i/pix.gif" value="отправить" class="but" />
+			</div>
+		</form>
+	</div>
+<!--/popup оставить отзыв-->
 </div>
-</div>
+<!--/подвал-->
 </body>
 </html>

@@ -1,10 +1,29 @@
 {* SVN: $Id$ *}
-<div class="ramka2">
-    <div class="cct"></div>
-<ul class="menu4">
-	<li id="m_first"><a href="/budget/">Бюджет</a></li>
-	<li id="m_last" class="act"><span><b>Финансовые цели</b></span></li>
-</ul>
-{include file="targets/targets.$template.html"}
-<div class="ccb"></div>
-</div>
+<!--/вкладки-->
+		<div class="ramka2">
+			<div class="cct"></div>
+		<!--меню4-->
+			{include file="$name_page.submenu.html"}
+		<!--/меню4-->
+			<div class="mid general_cont">
+		<!--левая колонка-->
+            {include file="$name_page.left.html"}
+		<!--/левая колонка-->
+			<div class="block2">
+		<!--наполнение-->
+            <!--Ввод операции-->
+                {include file="$name_page.operation.html"}
+            <!--/Ввод операции-->
+            <!--цели-->
+                {include file="$name_page.content.html"}
+            <!--/цели-->
+		<!--/наполнение-->
+			</div>
+		<!--правая колонка-->
+            {include file="$name_page.right.html"}
+        <!--/правая колонка-->
+			</div>
+           {include file="$name_page.addpop.html"}
+			<div class="ccb"></div>
+		</div>
+<!--{include file="targets/targets.$template.html"}-->
