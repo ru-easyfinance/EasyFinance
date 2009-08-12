@@ -77,13 +77,13 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #menumain ul.menu2 li { display: inline; margin-left: 25px; font-size: 11px; line-height: 12px; color: #f2f172; }
 
 
-#header { position: relative; height: 176px; }
+#header { position: relative; height: 206px; }
 #header .logo { display: block; position: absolute; top: 36px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url('/img/i/logo.png') no-repeat 0 0; }
 #header .slogan { position: absolute; top: 126px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
 
 #header #auth { position: absolute; top: 43px; left: 213px; width: 263px; }
 #header #auth .cb { margin-top: -2px; }
-#header #auth .inside { position: relative; padding: 0 0 0 0; color: #8b8c8b; height: 74px; overflow: hidden; }
+#header #auth .inside { position: relative; padding: 0 0 0 0; color: #8b8c8b; height: 110px; overflow: hidden; }
 #header #auth .inside .f_field { position: relative; margin-bottom: 10px; padding-left: 79px; }
 #header #auth .inside .f_field label { display: block; position: absolute; top: 3px; left: 18px; //-left: -61px; }
 #header #auth .inside .f_field input { width: 128px; //width: 122px; }
@@ -930,7 +930,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 
 
 
-#p_index #header { height: 153px; }
+#p_index #header { height: 178px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
 #p_index #footer dfn { display: block; margin: -1px 0 0 0; padding: 12px 0 0 33px; width: 184px; border-top: 1px solid #f8fcf6; //zoom: 1; }
 
