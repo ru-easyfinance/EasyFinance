@@ -34,7 +34,7 @@ class Operation_Controller extends Template_Controller
         $this->model = new Operation_Model();
         $this->user = Core::getInstance()->user;
         $this->tpl = Core::getInstance()->tpl;
-        $this->tpl->assign('name_page', 'operation');
+        $this->tpl->assign('name_page', 'operations/operation');
 
         $targets = new Targets_Model();
         $this->tpl->assign('targetList',     $targets->getLastList(0, 100));

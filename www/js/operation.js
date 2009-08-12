@@ -1,7 +1,7 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
 $(function() {
     // Init
-    $('#amount').calculator({
+    $('#amount').calculator({//++
         layout: [
                 $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                 'MR_7_8_9_-' + $.calculator.UNDO,
@@ -12,7 +12,7 @@ $(function() {
         buttonImageOnly: true,
         buttonImage: '/img/calculator.png'
     });
-    $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
+    $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
     
     // Bind
     $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('#account :selected').val() }); // @FIXME
