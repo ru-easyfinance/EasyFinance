@@ -15,19 +15,13 @@
 								<div class="sorting">
 									<div class="f_field">
 										Операции с
-										<select>
-											<option>21.07.09</option>
-										</select>
-										<a href="#" title="Выбрать дату">Выбрать дату</a>
+                                                                                <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
 									</div>
 									<div class="f_field">
 										по
-										<select>
-											<option>11.04.09</option>
-										</select>
-										<a href="#" title="Выбрать дату">Выбрать дату</a>
+										<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
 									</div>
-									<input type="submit" value="Показать" />
+									<input type="button" value="Показать" id="btn_ReloadData"/>
 								</div>
 							</form>
 							<ul class="period">
@@ -67,8 +61,11 @@
 										<span class="sort" title="отсортировать">Комментарии</span>
 										<span class="select" title="выбрать">выбрать</span>
 									</th>
-								</tr>
-								<tr class="first">
+                                                                </tr>
+                                                                <div id="list">
+                                                                    
+                                                                </div>
+								<!--<tr class="first">
 									<td><input type="checkbox" value="" /></td>
 									<td><a href="#">Доход</a></td>
 									<td><b>5 000</b></td>
@@ -143,7 +140,7 @@
 											</ul>
 										</div>
 									</td>
-								</tr>
+								</tr>-->
 							</table>
 						</div>
 						<div class="cb"><div></div></div>
