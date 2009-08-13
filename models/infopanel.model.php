@@ -25,6 +25,7 @@ class Infopanel_Model
      */
     public function __construct()
     {
+        
         $this->db = Core::getInstance()->db;
         $this->user_id = Core::getInstance()->user->getId();
     }
@@ -53,13 +54,21 @@ class Infopanel_Model
                 break;
             case 2:
                 $targets = new Targets_Model();
-                die(json_encode($targets->getLastList(0, $type)));
+                die(json_encode($targets->getLastList(0, (int)$_SESSION['targets_count'])));
                 break;
             case 3:
-                //correct value from date
-                $value = $_SESSION["infopanel_$type"."_value"];
+                //correct value from date @todo correct
+                if (!$_SESSION['infopanel'])
+                {
+                    $sql = "SELECT `value` FROM infopanel_value WHERE date=? AND uid=?;";
+                    $_SESSION['infopanel'] =$this->db->selectRow($sql, $date, $this->user_id);
+                }
+                $value = $_SESSION['infopanel'][$type.'_year'];
                 $name = $title_list[$type];
-                die($value+':'+$name);
+                $value = array('day'=>$_SESSION['infopanel'][$type],
+                    'year'=>$_SESSION['infopanel'][$type.'_year'],
+                    'name'=>$name);
+                die(json_encode($value));
                 break;
             default :
                 die('');
@@ -73,11 +82,15 @@ class Infopanel_Model
      */
     public function page($date, $type)
     {
-
-        //correct value from date
-        $value = $_SESSION["infopanel_$type"."_value"];
-
-        $sql = "SELECT desc FROM info_panels WHERE type=? AND (start<? OR ISNULL(start)) AND (end>? OR ISNULL(end));";
+        if (!$_SESSION['infopanel'])
+        {
+            $sql = "SELECT `value` FROM infopanel_value WHERE date=? AND uid=?;";
+            $_SESSION['infopanel'] =$this->db->selectRow($sql, $date, $this->user_id);
+        }
+        $value = $_SESSION['infopanel'][$type];
+        if (!$value)
+            die('Ненайдено значение');
+        $sql = "SELECT `desc` FROM infopanel_desc WHERE type=? AND (ISNULL(start) OR start<?) AND (ISNULL(end) OR end>?);";
         $row =$this->db->selectRow($sql, $type, $value, $value);
         die($row['desc']);
     }
@@ -91,12 +104,18 @@ class Infopanel_Model
             'cost'=>'Затраты',
             'credit'=>'Кредиты');
     $name = $title_list[$type];
-
   //correct value from date
-        $value = $_SESSION["infopanel_$type"."_value"];
- 
-        $sql = "SELECT MAX(start),MAX(end) FROM info_panels WHERE type=?;";
-        $row = $this->db->selectRow($sql, $type);      
+        if (!$_SESSION['infopanel'])
+        {
+            $sql = "SELECT `value` FROM infopanel_value WHERE date=? AND uid=?;";
+            $_SESSION['infopanel'] =$this->db->selectRow($sql, $date, $this->user_id);
+        }
+        $value = $_SESSION['infopanel'][$type];
+        $value = $_SESSION['infopanel'][$date][$type];
+        if (!$value)
+            die('Ненайдено значение');
+        $sql = "SELECT MAX(`start`),MAX(`end`) FROM infopanel_desc WHERE type=?;";
+        //$row = $this->db->selectRow($sql, $type);
 	$start = ($row['start']) ? ($row['start']) : 0;
 	$end = ($row['end']) ? ($row['end']) : 0;
 
@@ -135,7 +154,7 @@ class Infopanel_Model
 		<pointers>
                     <pointer value='$value'><!-- my count-->
                         <label enabled='true' under_pointers='true'>
-                            <position placement_mode='ByPoint' x='50' y='60'/>
+                            <position placement_mode='ByPoint' x='50' y='100'/>
                             <format>{%Value}</format>
                             <background enabled='false'/>
 			</label>

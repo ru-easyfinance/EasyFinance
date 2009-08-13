@@ -20,7 +20,7 @@ class Infopanel_Controller extends Template_Controller
     /**
      * коичество отображаемых фин целей
      */
-    private $targets_count = '0';
+    private $targets_count = 3;
 
     /**
      * Конструктор класса
@@ -41,6 +41,9 @@ class Infopanel_Controller extends Template_Controller
         $this->tpl->append('js','info_panel.js');
 
 
+        if (!$_SESSION['targets_count'])
+            $_SESSION['targets_count']=2;   //default 
+
 
         $this->targets_count = (int)$_SESSION['targets_count'];
         $this->model = new Infopanel_Model();
@@ -48,15 +51,16 @@ class Infopanel_Controller extends Template_Controller
         $str='';
         for ($i=0;$i<$this->targets_count;$i++)
         {
-        $str.="<div class='element' id='$i'><div class='edit_panel' style='background-color:#FF0000'><div class='delete_o'>del</div></div><div class='conteiner'></div> </div>";
+        $str.="<div class='object2' id='$i'><a class='advice'>Получить совет</a><div class='descr'></div><ul><li id='edit'>редактировать</li><li id='del'>удалить</li></ul></div>";
         }
         Core::getInstance()->tpl->assign('content', $str);
-
     }
+
     function get()
     {
         die (strval($this->targets_count));
     }
+    
     function targets()
     {
         $s = $_POST['cnt'];
@@ -83,7 +87,7 @@ class Infopanel_Controller extends Template_Controller
     {
         $type = $_POST['type'];
         if ($type=='')
-            die('$type');
+            die('');
     	$date = formatRussianDate2MysqlDate($_POST['date'],$name,$date);
         die($this->model->content((int)$_POST['panel'],$type,$date));
     }

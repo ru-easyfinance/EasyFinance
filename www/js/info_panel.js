@@ -1,8 +1,8 @@
-$(window).load(function () {
-    $('.edit_panel').hide();
-    $('.details_page').hide();
-    $('#dialog').hide();
-    $('#dialog').hide();
+$(document).ready(function () {
+    //$('.edit_panel').hide();
+    //$('.details_page').hide();
+    //$('#dialog').hide();
+    //$('#dialog').hide();
     /**
      *апдейт второй панельки
      */
@@ -14,9 +14,15 @@ function panel2_print(){
                 panel : 2},
                 function(data){
                     len = data.length;
+
                     for (i = 0; i<len;i++)
                     {
-                        $('.panel#2').find('#'+i+' .conteiner').html(data[i]['title']);
+                        str ='<img src='+data[i]['image']+' alt="" />';
+                        str = str+'<a>'+data[i]['title']+'</a>';
+                        str = str+'<div class="indicator_block"><div class="money">'+data[i]['amount']+'.<br /><span> '+data[i]['amount_done'] +'</span></div>';
+                        str = str+'<div class="indicator"><div style="width:'+data[i]['percent_done']+'%;"><span>'+data[i]['percent_done']+'</span></div></div>';
+                        str = str+'<div class="date"><span>Целевая дата:'+ data[i]['date_end']+'</span> &nbsp;&nbsp;&nbsp; Прогнозная дата: 0</div></div>';
+                        $('.ramka3#2').find('#'+i+' .descr').html(str);
                     }
                 },
                 'json'
@@ -26,21 +32,12 @@ function panel2_print(){
      *апдейт второй панельки
      */
     function panel2_update(){
-
-       // $('.panel#2').find('div.element').empty();
        $.post('/infopanel/targets/',
        {cnt: o_count},
        function(){
        document.location='/infopanel/'},
        'text'
-   )
-        //
-        //$('.panel#2').find('.element').hide();
-        //for ( i = 0;i<o_count;i++)
-        //{
-         //   $('.panel#2').find('.element#'+i).show();
-        //}
-    }
+   )};
     /**
      *рисует хронометр
      */
@@ -52,19 +49,19 @@ function panel2_print(){
             date: c_list[5]},
             function (data){
                     var chartSample_1 = new AnyChart('/swf/anychart/Gauge.swf');
-                    chartSample_1.width = '150px';
-                    chartSample_1.height = '150px';
+                    chartSample_1.width = '109px';
+                    chartSample_1.height = '120px';
                     chartSample_1.setData(data);
                     chartSample_1.wMode="opaque";
-                    chartSample_1.write('condition_' + i);
+                    chartSample_1.write('flash_' + i);
                     chartSample_1 = null;},
             'text');
 
-    }
+    };
     /**
      *апдейт второй панельки
      */
-    function panel1_update(){
+function panel1_update(){
 
         for ( i = 0;i<5;i++)
         {
@@ -79,7 +76,8 @@ function panel2_print(){
             }
         }
     }
-        function print_stat(i){
+
+function print_stat(i){
             arr =['akc','pif','ofbu','oms','estat'];
         $.post(
             '/infopanel/update/',
@@ -87,16 +85,24 @@ function panel2_print(){
             type: arr[i],
             date: i_date},
             function (data){
-                data=$.parseJSON(data)
-                b0 = (data[0]>0)?'#00ff00':(data[0]<0?'ff0000':'0000ff');
-                b1 = (data[1]>0)?'#00ff00':(data[1]<0?'ff0000':'0000ff');
-                str = "<table><tr><td><b>"+ $('.panel#3').find('.element#'+i).attr('name')+"</b></tr></td><tr><td>итого</tr></td><tr><td class='item' style='background-color:"+b0+";' >"+data[0]+"</tr></td><tr><td>за день</tr></td><tr><td class='item'style='background-color:"+b1+";' > "+data[1]+"</tr></td></table>";
-                $('.panel#3').find('.element#'+i).html(str);//@todo
+                b0 = (data['year']>0)?'class="block up"':
+                    (data['year']<0?'class="block down"':
+                    'style="background-color:#0000ee"');
+                b1 = (data['day']>0)?'class="block day up"':
+                    (data['day']<0?'class="block day down"':
+                    'style="background-color:#0000ee"');
+                str = '<a href="#">'+data['name']+'</a>';
+                str = str + '<span '+b0+'">';
+                str = str + '<span class="pct">'+data['year']+'%</span><span class="period">за год</span>';
+                str = str + '</span><span '+b1+'">';
+                str = str + '<span class="pct">'+data['day']+'%</span><span class="period">за день</span>';
+                str = str + '</span></div>';
+                $('.ramka3#3').find('#'+i).html(str);
                     },
 
-            'text');
+            'json');
 
-    }
+    };
     /**
      *апдейт второй панельки
      */
@@ -106,15 +112,15 @@ function panel2_print(){
         {
             if (i_list[i])
             {
-                $('.panel#3').find('.element#'+i).show();
+                $('.ramka3#3').find('.investments_block div#'+i).show();
                 print_stat(i);
             }
             else
             {
-                $('.panel#3').find('.element#'+i).toggle();
+                $('.ramka3#3').find('.investments_block div#'+i).toggle();
             }
         }
-    }
+    };
 //---------------------------------main prop----------------------------------//
 
 
@@ -122,12 +128,13 @@ function panel2_print(){
     var c_list;//////////////////////////показывает видимость блоков
         c_list = [1,1,1,1,1,0];
     var o_count = 0;
-   $.post(
-        '/infopane/get/',
-        {},
-        function(data){ o_count = data;},
-        'text'
-);
+//   $.post( работает криво
+//        '/infopanel/get/',
+//        {},
+//        function(data){ o_count = data;},
+//        'text'
+//);
+
     var i_list;//////////////////////////блоки инвестиций
         i_list = [1,1,1,1,1];
     var i_date = 0;
@@ -137,31 +144,32 @@ panel2_print();
 //-----------------------------hronometr--------------------------------------//
 panel1_update();
 //-----------------------------main buttons-----------------------------------//
-    $('.close').click(//кнопка закрыть на панели
+    $('.over2').click(//кнопка закрыть на панели
         function() {
-            $(this).closest('.panel').hide();
+            $(this).closest('.ramka3').hide();
         }
     )
-    $('.min').click(//кнопка свернуть развернуть на панели
+    $('.over3').click(//кнопка свернуть развернуть на панели
         function() {
-            $(this).closest('.panel').find('.content').toggle();
+            $(this).closest('.ramka3').find('#content').toggle();
         }
     );
-     $('.edit').click(//кнопка настрйки развернуть на панели
+     $('.over1').click(//кнопка настрйки развернуть на панели
 	function(){
-	    var id = $(this).closest('.panel').attr('id');
-        $(".edit_panel").hide();
-        $("#panel"+id+"_edit").toggle();
+	    var id = $(this).closest('.ramka3').attr('id');
+
+        //$(".edit_panel").hide();
+        //$("#panel"+id+"_edit").toggle();
 	}
     );
     $('.back').click(//возврат на инфо-панель
         function(){
-            $('.panel').parent().show();
+            $('.block2').show();
             $('.details_page').hide();
         }
     );
-//-----------------------------edit panel-------------------------------------//
-    $("#panel1_edit").find('input:button').click(//edit panel1
+//-----------------------------edit panel отсутствует-------------------------------------//
+/*    $("#panel1_edit").find('input:button').click(//edit panel1
 	function () {
             k = $(this).parent();
             for ( i = 0;i<5;i++)
@@ -207,77 +215,75 @@ panel1_update();
             panel3_update();
         }
     );
-
+*/
 //----------------------------------movie-------------------------------------//
-    $(".panel").parent().sortable({
-        connectWith: '.panel',
+    $(".ramka3").css('background-color','#ffffff');
+    $(".block2").sortable({
+        connectWith: '.ramka3',
         axis :'y'
     });
-    $(".panel").disableSelection();
+    $(".ramka3").disableSelection();
 //---------------------------------content------------------------------------//
-    $('.panel').find('.element').click(
+    $('.ramka3').find('#content div').click(
         function()
         {
-            $('.edit_panel').hide();
-            if ($(this).closest('.panel').attr('id') == '2')
+            //$('.edit_panel').hide();
+            if ($(this).attr('class') == 'add2') 
             {
-                if ($(this).attr('id') == 'button')
-                {
-                	document.location = '/targets/' ;
-                }
-                else
-                {
-                    $(this).find('.edit_panel').show();
-                }
+              	document.location = '/targets/' ;
             }
-            else
+            else if($(this).closest('.ramka3').attr('id') != 2)
             {
-                $('.panel').parent().hide();
-                $('.details_page').show();
+                //$('.block2').hide();
+                //$('.details_page').show();
+
                 $.post('/infopanel/page/',
                 		{name : $(this).attr('name'),
                 		date : c_list[5]},//@todo
 
-                	function(data){$('.details_page').find('.content').html(data)});
+                	function(data){
+                            //$('.details_page').find('.content').html(data) нету
+                            alert(data+' <br/> js : 246');//временная заглушка
+                        });
+                        return false;
             }
 
         }
     );
 //-----------------------------panel2_cont_butt-------------------------------//
-$('.delete_o').click(
+$('li.del').click(
     function(){
-        var $id=$(this).closest('.element');
-        $("#dialog").dialog('open');
-	$("#dialog").dialog({
-			bgiframe: true,
-			resizable: false,
-			height:140,
-			modal: true,
-			overlay: {
-				backgroundColor: '#000',
-				opacity: 0.5
-			},
-			buttons: {
-				'Delete': function() {
-                                        $.post('/targets/del/',
-                                        {id:$id.attr('id')},
-                                        function(){
-                                            $id.empty();
-                                            $(this).dialog('close')
-                                        },
-                                        'json');
+        var $id=$(this).closest('div');
+        //$("#dialog").dialog('open');
+	//$("#dialog").dialog({
+	//		bgiframe: true,
+//			resizable: false,
+//			height:140,
+//			modal: true,
+//			overlay: {
+//				backgroundColor: '#000',
+//				opacity: 0.5
+//			},
+//			buttons: {
+//				'Delete': function() {
+  //                                      $.post('/targets/del/',
+    //                                    {id:$id.attr('id')},
+      //                                  function(){
+        //                                    $id.empty();
+          //                                  $(this).dialog('close')
+            //                            },
+              //                          'json');
 
-					//document.location='/infopanel/';
-                                    }
-				,
-				Cancel: function() {
-					$(this).dialog('close');
-				}
-			}
-		});
+//                                    }/
+//				,
+//				Cancel: function() {
+//					$(this).dialog('close');
+//				}
+//			}
+		//});
     }
 );
-$('.rewright_o').click(
+$('li#edit').click(
     function(){
     	document.location='/targets/'
 });
