@@ -58,15 +58,31 @@ class Infopanel_Model
                 break;
             case 3:
                 //correct value from date @todo correct
-                if (!$_SESSION['infopanel'])
-                {
-                    $sql = "SELECT `value` FROM infopanel_value WHERE date=? AND uid=?;";
-                    $_SESSION['infopanel'] =$this->db->selectRow($sql, $date, $this->user_id);
-                }
-                $value = $_SESSION['infopanel'][$type.'_year'];
+                  $key = array('fcon'=>0,
+                    'money'=>1,
+                    'budget'=>2,
+                    'cost'=>3,
+                    'credit'=>4,
+                    'akc'=>5,
+                    'pif'=>6,
+                    'ofbu'=>7,
+                    'oms'=>8,
+                    'estat'=>9,
+                    'akc_year'=>10,
+                    'pif_year'=>11,
+                    'ofbu_year'=>12,
+                    'oms_year'=>13,
+                    'estat_year'=>14
+                );
+                    if (!$_SESSION['infopanel'])
+                    {
+                        $sql = "SELECT `value`,`type` FROM infopanel_value WHERE uid=? ;";// date='' AND
+                        $_SESSION['infopanel'] =$this->db->selectcol($sql, /*$date,*/ $this->user_id);
+                    }
+
                 $name = $title_list[$type];
-                $value = array('day'=>$_SESSION['infopanel'][$type],
-                    'year'=>$_SESSION['infopanel'][$type.'_year'],
+                $value = array('day'=>$_SESSION['infopanel'][$key[$type]],
+                    'year'=>$_SESSION['infopanel'][$key[$type.'_year']],
                     'name'=>$name);
                 die(json_encode($value));
                 break;
@@ -87,7 +103,29 @@ class Infopanel_Model
             $sql = "SELECT `value` FROM infopanel_value WHERE date=? AND uid=?;";
             $_SESSION['infopanel'] =$this->db->selectRow($sql, $date, $this->user_id);
         }
-        $value = $_SESSION['infopanel'][$type];
+      $key = array('fcon'=>0,
+	'money'=>1,
+ 	'budget'=>2,
+ 	'cost'=>3,
+ 	'credit'=>4,
+ 	'akc'=>5,
+ 	'pif'=>6,
+ 	'ofbu'=>7,
+ 	'oms'=>8,
+ 	'estat'=>9,
+ 	'akc_year'=>10,
+ 	'pif_year'=>11,
+ 	'ofbu_year'=>12,
+ 	'oms_year'=>13,
+ 	'estat_year'=>14
+    );
+        if (!$_SESSION['infopanel'])
+        {
+            $sql = "SELECT `value`,`type` FROM infopanel_value WHERE uid=? ;";// date='' AND
+            $_SESSION['infopanel'] =$this->db->selectcol($sql, /*$date,*/ $this->user_id);
+        }
+        $i=$key[$type];
+        $value = $_SESSION['infopanel'][$i];
         if (!$value)
             die('Ненайдено значение');
         $sql = "SELECT `desc` FROM infopanel_desc WHERE type=? AND (ISNULL(start) OR start<?) AND (ISNULL(end) OR end>?);";
@@ -103,19 +141,36 @@ class Infopanel_Model
             'budget'=>'Бюджет',
             'cost'=>'Затраты',
             'credit'=>'Кредиты');
+
     $name = $title_list[$type];
   //correct value from date
+      $key = array('fcon'=>0,
+	'money'=>1,
+ 	'budget'=>2,
+ 	'cost'=>3,
+ 	'credit'=>4,
+ 	'akc'=>5,
+ 	'pif'=>6,
+ 	'ofbu'=>7,
+ 	'oms'=>8,
+ 	'estat'=>9,
+ 	'akc_year'=>10,
+ 	'pif_year'=>11,
+ 	'ofbu_year'=>12,
+ 	'oms_year'=>13,
+ 	'estat_year'=>14
+    );
         if (!$_SESSION['infopanel'])
         {
-            $sql = "SELECT `value` FROM infopanel_value WHERE date=? AND uid=?;";
-            $_SESSION['infopanel'] =$this->db->selectRow($sql, $date, $this->user_id);
+            $sql = "SELECT `value`,`type` FROM infopanel_value WHERE uid=? ;";// date='' AND
+            $_SESSION['infopanel'] =$this->db->selectcol($sql, /*$date,*/ $this->user_id);
         }
-        $value = $_SESSION['infopanel'][$type];
-        $value = $_SESSION['infopanel'][$date][$type];
+        $i=$key[$type];
+        $value = $_SESSION['infopanel'][$i];
         if (!$value)
-            die('Ненайдено значение');
+            die(print_r($_SESSION['infopanel']));
         $sql = "SELECT MAX(`start`),MAX(`end`) FROM infopanel_desc WHERE type=?;";
-        //$row = $this->db->selectRow($sql, $type);
+        $row = $this->db->selectRow($sql, $type);
 	$start = ($row['start']) ? ($row['start']) : 0;
 	$end = ($row['end']) ? ($row['end']) : 0;
 
