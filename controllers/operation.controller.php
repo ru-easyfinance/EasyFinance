@@ -133,7 +133,7 @@ class Operation_Controller extends Template_Controller
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account);
         //@TODO Похоже, что тут надо что-то дописать в массиве
         foreach ($list as $val) {
-            $array[] = $val;
+            $array[$val['id']] = $val;
         }
         die(json_encode($array));
     }

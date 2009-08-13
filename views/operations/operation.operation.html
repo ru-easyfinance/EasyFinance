@@ -93,7 +93,7 @@
                                     {*<!-- Трансфер -->*}
                                     <div class="line" >
                                         <div class="field" id="transfer_fields" style="display:none;">
-                                            <label for="target">На счет:</label>
+                                            <label for="AccountForTransfer">На счет:</label>
                                             <select id="AccountForTransfer">
                                                 {foreach from=$accounts item=acc_data}
                                                 <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
@@ -112,14 +112,14 @@
                                             <input type="text" value="{$date}" id="date" class="inp">
 										</div>
 										<div class="f_field tags">
-											<label for="ftags">Теги</label>
-											<input type="text" value="машина" id="ftags" class="inp" />
+											<label for="tags">Теги</label>
+											<input type="text" value="машина" id="tags" class="inp" />
 										</div>
 										<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>
 									</div>
 									<div class="line">
-										<label for="fmes">Комментарии</label>
-										<textarea rows="1" cols="1" id="fmes"></textarea>
+										<label for="comment">Комментарии</label>
+										<textarea rows="1" cols="1" id="comment"></textarea>
 									</div>
 									<div class="but">
 										<input type="submit" value="Сохранить" />

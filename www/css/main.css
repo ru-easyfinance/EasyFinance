@@ -151,7 +151,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #aboutproject { margin-bottom: 33px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
 #aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.png') no-repeat 0 0; }
-#aboutproject .inside h2 { height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
+#aboutproject .inside h2 { margin: 0; height: 30px; background: url('../i/title.png') no-repeat 0 0; }
 #aboutproject .inside h2 a { display: block; height: 23px; text-indent: -999px; overflow: hidden; }
 
 #aboutproject .inside .monitors { left: 13px; background-position: 0 15px;}

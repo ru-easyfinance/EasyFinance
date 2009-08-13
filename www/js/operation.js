@@ -1,5 +1,6 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
 $(function() {
+    var operationList = [];
     // Init
     $('#amount').calculator({//++
         layout: [
@@ -58,6 +59,7 @@ $(function() {
             category: $('#cat_filtr :selected').val(),
             account: $('#account :selected').val()
         }, function(data) {
+            operationList = data;
             var tr = '';
             if (data != null) {
                 for(v in data){
@@ -87,7 +89,9 @@ $(function() {
                 });
                 $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
                     if ($(this).parent().attr('class') == 'edit') {
-                        editOperation($(this).closest('tr').attr('value'));
+                        //editOperation(operationList[$(this).closest('tr').attr('value')]);
+                        fillForm(operationList[$(this).closest('tr').attr('value')]);
+                        $(document).scrollTop(300);
                     } else if($(this).parent().attr('class') == 'del') {
                         deleteOperation($(this).closest('tr').val());
                     }
@@ -142,6 +146,7 @@ $(function() {
            //   "success"
            //   "parsererror"
         }, 'json');
+        return true;
     }
 
     /**
@@ -178,6 +183,37 @@ $(function() {
         $('#close').removeAttr('checked');
     }
     
+    /**
+     * Функция заполняет форму данными c массива
+     * @param data данные для заполнения
+     */
+    function fillForm(data) {
+        clearForm();
+        //"drain":"1",
+        //"comment":"sadf asdfasdf as",
+        //"tags":"",
+        //"cat_name":"\u0414\u044b\u0440\u043a\u0430 3",
+        //"cat_parent":"6",
+        //"account_name":"\u041d\u0430\u043b\u0438\u043a\u0438",
+        //"account_currency_id":"1",
+        //"cat_transfer":"1"},
+        $('#account').val(data.account_id);
+//        if (date.drain) {
+//            $('#type').val(1);
+//        } else {
+//            $('#type').val(0);
+//        }
+        //$('#type').val(data.type);
+        $('#amount').val(data.money);
+        $('#category').val(data.cat_id);
+        //$('#target').val(data.);
+        //$('#close').val(data.);
+        $('#AccountForTransfer').val(data.transfer);
+        $('#date').val(data.date);
+        $('#tags').val(data.tags);
+        $('#comment').val(data.comment);
+    }
+
     /**
      * При переводе со счёта на счёт, проверяем валюты
      * @return void
@@ -223,21 +259,29 @@ $(function() {
         }
     }
 
-});
-
-function onPosSelect() {
-    var el = $('#e_pos-box');
-    if(el.attr('checked')) {
-        if(document.getElementById("pos_oc")) {
-            setTimeout("redirectPOS()", 1800);
-        }
+    /**
+     * Форматирует валюту
+     * @param num float Сумма, число
+     * @return string
+     */
+    function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
     }
-    return true;
-}
 
-function redirectPOS() {
-    window.location.href='http://www.home-money.ru/index.php?modules=e-pos&sum='+$('#POS_SUM').html();
-}
+
+});
 
 function updateOperation() {
     onSumChangeEdit();
@@ -293,44 +337,6 @@ function updateOperation() {
     visibleMessage('Операция редактируется, подождите несколько секунд...');
 }
 
-function onSumConvert(type) {
-    if (document.getElementById("type_"+type).value == 2)
-    {
-        var currency = document.getElementById("currency_"+type).value;
-        if (type == 'edit')
-        {
-            var sum = document.getElementById("pos_mc_edit").value;
-        }else{
-            var sum = document.getElementById("pos_mc").value;
-        }
-        result = round(sum/currency,2);
-        if (result != 'NaN' || result != 'Infinity')
-        {
-            $("#convertSumCurrency_"+type).html("конвертация: "+result);
-        }
-    }
-}
-
-function visibleMessage(data) {
-    $("#goodOperation").html(data);
-    $("#goodOperation").show();
-}
-
-function operationAddVisible() {
-    changeTypeOperation('add');
-    $("#addOperation").show();$("#editOperation").hide();
-}
-
-function operationAddInVisible() {
-    $("#addOperation").hide();$("#editOperation").hide();
-}
-
-function operationAfterInsert() {
-    document.getElementById("comment").value = '';
-    document.getElementById("pos_oc").value = '';
-    changeOperationList();
-}
-
 function deleteOperation(id) {
     if (!confirm("Вы действительно хотите удалить эту запись?")) {
         return false;
@@ -381,10 +387,15 @@ function deleteOperationTransfer(id) {
 
 function editOperation(id) {
     $.get('/index.php',{
-        modules:modules,
-        action:action,
         id:id
-    },operationAfterEdit);
+    }, function() {
+        $("#addOperation").hide();
+        $("#editOperation").html();
+        $("#editOperation").show();
+        $("#editOperation").show();
+        changeTypeOperation('edit');
+        scrollTo(0,0);
+    });
 }
 
 function editTargetOperation(id) {
@@ -395,72 +406,4 @@ function editTargetOperation(id) {
         action:action,
         id:id
     },operationAfterEdit);
-}
-
-function operationAfterEdit(data) {
-    $("#addOperation").hide();
-    $("#editOperation").html(data);
-    $("#editOperation").show();
-    $("#editOperation").show();
-    changeTypeOperation('edit');
-    scrollTo(0,0);
-}
-
-
-
-function changeTarget() {
-    $("span.currency").each(function(){
-        $(this).text(" "+$("#target_sel_ed option:selected").attr("currency"));
-    });
-    $("#amount_done").text(formatCurrency($("#target_sel option:selected").attr("amount_done")));
-    $("#amount").text(formatCurrency($("#target_sel option:selected").attr("amount")));
-    $("#percent_done").text(parseInt($("#target_sel option:selected").attr("percent_done")));
-    $("#forecast_done").text(parseInt($("#target_sel option:selected").attr("forecast_done")));
-}
-
-function changeTargetEdit() {
-
-}
-
-function checkTarget(type) {
-    $error = '';
-    if (type == 'add') {
-        amount_now = parseFloat($("#pos_oc").val());
-        amount = parseFloat($("#target_sel option:selected").attr("amount")); $("#amount").text(amount);
-        amount_done = parseFloat($("#target_sel option:selected").attr("amount_done")); $("#amount_done").text(amount_done);
-        if ((amount_done + amount_now) >= amount) {
-            if (confirm('Закрыть финансовую цель?')) {
-                $("#close").attr("checked","checked");
-            }
-        }
-    } else if (type == 'edit') {
-        amount_now = parseFloat($("#pos_oc_edit").val());
-        amount_db = parseFloat($("#pos_mc_edit").val());
-        amount = parseFloat($("#target_sel_ed option:selected").attr("amount")); $("#amount_ed").text(amount);
-        amount_done = parseFloat($("#target_sel_ed option:selected").attr("amount_done")); $("#amount_done_ed").text(amount_done);
-        if (((amount_done - amount_db) + amount_now) >= amount) {
-            if (confirm('Закрыть финансовую цель?')) {
-                $("#close_ed").attr("checked","checked");
-            }
-        }
-    } else {
-        return false;
-    }
-    return true;
-}
-
-function formatCurrency(num) {
-    if (num=='undefined') num = 0;
-    //num = num.toString().replace(/\$|\,/g,'');
-    if(isNaN(num)) num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num*100+0.50000000001);
-    cents = num%100;
-    num = Math.floor(num/100).toString();
-    if(cents<10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-        num = num.substring(0,num.length-(4*i+3))+' '+
-        num.substring(num.length-(4*i+3));
-    return (((sign)?'':'-') + '' + num + '.' + cents);
 }
