@@ -118,7 +118,8 @@ class Operation_Controller extends Template_Controller
      */
     function del($args)
     {
-        
+        $id = abs((int)$_POST['id']);
+        die($this->model->deleteOperation($id));
     }
 
     /**

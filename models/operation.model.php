@@ -231,6 +231,20 @@ class Operation_Model {
         $this->user->save();
         return '[]';
 	}
+    
+    /**
+     * Удаляет указанную операцию
+     * @param int id
+     * @return bool
+     */
+    function deleteOperation($id = 0)
+    {
+        if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$id, Core::getInstance()->user->getId())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Получает сумму всех счетов пользователя

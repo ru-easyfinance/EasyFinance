@@ -15,7 +15,8 @@
 								<li id="addoperation_but" class="act"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
 								<li id="addtocalendar_but"><a href="#"title="Добавить в календарь">Добавить в календарь</a></li>
 							</ul>
-							<form action="">
+							<form action="/operation/add/">
+                                <input type="hidden" id="id" />
 								<div class="addoperation" style="display: block;">
 									<div class="line">
 										<div class="f_field" id="account_fields">
@@ -122,8 +123,8 @@
 										<textarea rows="1" cols="1" id="comment"></textarea>
 									</div>
 									<div class="but">
-										<input type="submit" value="Сохранить" />
-										<input type="reset" value="Отменить" />
+										<input type="button" id="btn_Save" value="Сохранить" />
+										<input type="button" id="btn_Cancel" value="Отменить" />
 									</div>
 								</div>
 							</form>

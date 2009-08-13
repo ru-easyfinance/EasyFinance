@@ -1,25 +1,24 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
 $(function() {
-    var operationList = [];
+    var operationList = new Array();
     // Init
-    $('#amount').calculator({//++
-        layout: [
-                $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
+    $('#amount').calculator({
+        layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                 'MR_7_8_9_-' + $.calculator.UNDO,
                 'MS_4_5_6_*' + $.calculator.PERCENT ,
                 'M+_1_2_3_/' + $.calculator.HALF_SPACE,
                 'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-        showOn: 'opbutton'
+        showOn: 'focus' //opbutton
         //,buttonImageOnly: true
         //,buttonImage: '/img/calculator.png'
     });
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
-    
+
     // Bind
-    $('#btn_EditAccount').click(function(){ location.href="/accounts/edit/"+$('#account :selected').val() }); // @FIXME
     $('#btn_Save').click(function(){ addOperation(); })
-    $('#btn_Cancel').click(function(){ operationAddInVisible(); });
+    $('#btn_Cancel').click(function(){ clearForm() });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
+
     $('#amount,#currency').change(function(){
         if ($('#type').val() == 2) {
             //@TODO Дописать округление
@@ -32,7 +31,7 @@ $(function() {
     $('#account').change(function(){
         changeAccountForTransfer();
         loadOperationList();
-    }); 
+    });
     $('#AccountForTransfer').change( function(){ changeAccountForTransfer(); });
     $('#type').change(function(){ changeTypeOperation('add'); });
     $('#target').change(function(){
@@ -59,7 +58,7 @@ $(function() {
             category: $('#cat_filtr :selected').val(),
             account: $('#account :selected').val()
         }, function(data) {
-            operationList = data;
+            operationList = operationList.concat(data);
             var tr = '';
             if (data != null) {
                 for(v in data){
@@ -89,11 +88,14 @@ $(function() {
                 });
                 $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
                     if ($(this).parent().attr('class') == 'edit') {
-                        //editOperation(operationList[$(this).closest('tr').attr('value')]);
-                        fillForm(operationList[$(this).closest('tr').attr('value')]);
+                        fillForm(operationList[0][$(this).closest('tr').attr('value')]);
+                        $(this).closest('form').attr('action','/operation/edit/');
                         $(document).scrollTop(300);
                     } else if($(this).parent().attr('class') == 'del') {
-                        deleteOperation($(this).closest('tr').val());
+                        deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
+                    } else if($(this).parent().attr('class') == 'add') {
+                        fillForm(operationList[0][$(this).closest('tr').attr('value')]);
+                        $(document).scrollTop(300);
                     }
                 })
                 //,a.del
@@ -106,7 +108,7 @@ $(function() {
             tags: ['javascript', 'js2', 'js', 'jquery', 'java']
         });
     }
-    
+
     /**
      * Добавляет новую операцию
      * @return void
@@ -115,18 +117,19 @@ $(function() {
         if (!validateForm()){
             return false;
         }
-        $.post('/operation/add/', {
-            type:      $('#type').val(),
-            account:   $('#account').val(),
-            category:  $('#category').val(),
-            date:      $('#date').val(),
-            comment:   $('#comment').val(),
-            amount:    $('#amount').val(),
-            toAccount: $('#AccountForTransfer').val(),
-            currency:  $('#currency').val(),
-            target:    $('#target').val(),
-            close:     $('#close:checked').length,
-            tags:      $('#tags').val()
+        $.post(($('form').attr('action')), {
+            id        : $('#id').val(),
+            type      : $('#type').val(),
+            account   : $('#account').val(),
+            category  : $('#category').val(),
+            date      : $('#date').val(),
+            comment   : $('#comment').val(),
+            amount    : $('#amount').val(),
+            toAccount : $('#AccountForTransfer').val(),
+            currency  : $('#currency').val(),
+            target    : $('#target').val(),
+            close     : $('#close:checked').length,
+            tags      : $('#tags').val()
         }, function(data, textStatus){
             for (var v in data) {
                 //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
@@ -158,7 +161,7 @@ $(function() {
             alert('Вы ввели неверное значение в поле "сумма"!');
             return false;
         }
-        
+
         if ($('#type') == 4) {
             //@FIXME Написать обновление финцелей
             amount = parseFloat($("#target_sel option:selected").attr("amount")); $("#amount").text(amount);
@@ -178,11 +181,12 @@ $(function() {
      */
     function clearForm() {
         $('#account,#type,#category,#target').val(0);
-        $('#amount,#AccountForTransfer,#comment,#tags').val('');
+        $('#amount,#AccountForTransfer,#comment,#tags,#date').val('');
         $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
         $('#close').removeAttr('checked');
+        $('form').attr('action','/operation/add/');
     }
-    
+
     /**
      * Функция заполняет форму данными c массива
      * @param data данные для заполнения
@@ -197,6 +201,7 @@ $(function() {
         //"account_name":"\u041d\u0430\u043b\u0438\u043a\u0438",
         //"account_currency_id":"1",
         //"cat_transfer":"1"},
+        $('#id').val(data.id);
         $('#account').val(data.account_id);
 //        if (date.drain) {
 //            $('#type').val(1);
@@ -220,7 +225,7 @@ $(function() {
      */
     function changeAccountForTransfer() {
         //@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах
-        if ($('#type :selected').val() == 2 && 
+        if ($('#type :selected').val() == 2 &&
             $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
                 $('#operationTransferCurrency').show();
                 $.post('/operation/get_currency/', {
@@ -279,7 +284,23 @@ $(function() {
             num.substring(num.length-(4*i+3));
         return (((sign)?'':'-') + '' + num + '.' + cents);
     }
-
+    
+    /**
+     * Удаляет операцию
+     * @param id int
+     * @return bool
+     */
+    function deleteOperation(id, tr) {
+        if (!confirm("Вы действительно хотите удалить эту запись?")) {
+            return false;
+        }
+        $.post('/operation/del/', {
+                id : id
+            }, function(data) {
+                operationList.splice(operationList.indexOf(id), 0);
+                $(tr).remove();
+            }, 'json');
+    }
 
 });
 
@@ -337,21 +358,7 @@ function updateOperation() {
     visibleMessage('Операция редактируется, подождите несколько секунд...');
 }
 
-function deleteOperation(id) {
-    if (!confirm("Вы действительно хотите удалить эту запись?")) {
-        return false;
-    }
-    $("#addOperation").hide();$("#editOperation").hide();
-    var modules = "operation";
-    var action = "deleteOperation";
-    $.get('/index.php',{
-        modules:modules,
-        action : action,
-        id: id,
-        tr_id:0
-    },changeOperationList);
-    visibleMessage('Операция удаляется, подождите несколько секунд...');
-}
+
 
 function deleteTargetOperation(id, tr_id) {
     if (!confirm("Вы действительно хотите удалить эту запись?")) {
