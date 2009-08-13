@@ -8,8 +8,8 @@
     <property name="DB_USER" value="root" />
     <property name="DB_PASS" value="gfh0km" />
     <property name="SVN_PATH" value="/usr/local/bin/svn" />
-    <property name="SVN_USER" value="ukko" />
-    <property name="SVN_PASS" value="gfh0km" />
+    <property name="SVN_USER" value="root" />
+    <property name="SVN_PASS" value="" />
 
     <target name="backup">
         <exec command="${MYSQL_PATH}mysqldump -u${DB_USER} -p${DB_PASS} ${DB_NAME} > ${DUMP_FILE}" dir="." />
