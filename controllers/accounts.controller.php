@@ -32,7 +32,7 @@ class Accounts_Controller extends Template_Controller
      */
     function __construct()
     {
-		$this->user  = Core::getInstance()->user;
+	$this->user  = Core::getInstance()->user;
         $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Accounts_Model();
         $this->tpl->assign('name_page', 'accounts/accounts');
@@ -50,14 +50,13 @@ class Accounts_Controller extends Template_Controller
             $this->user->save();
             unset($_SESSION['account']);
         }
-
         $this->tpl->assign("page_title", "account all");
-		$this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
-		$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
-		$this->tpl->assign("template", "default");
+	$this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+	$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
+	$this->tpl->assign("template", "default");
     }
 	
-	/**
+    /**
      * Выбирает параметры счета при его создании
      * @param $args
      * @return array
@@ -65,13 +64,11 @@ class Accounts_Controller extends Template_Controller
     function changeType()
     {
         $this->tpl->assign("page_title","account add");
-		$id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
-
-		$this->model->newEmptyBill($id);
-		$this->tpl->assign("fields", $this->model->formatFields());
-		$this->tpl->assign("type_id", $id);
-		echo $this->tpl->fetch("accounts/accounts.fields.html");        
-		die();
+	$id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
+	$this->model->newEmptyBill($id);
+	$this->tpl->assign("fields", $this->model->formatFields());
+	$this->tpl->assign("type_id", $id);     
+	die($this->tpl->fetch("accounts/accounts.fields.html"));
     }
 
     /**
@@ -83,12 +80,11 @@ class Accounts_Controller extends Template_Controller
     {
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-		$qString = urldecode($_POST['qString']);
-		$qString = explode("&", $qString);
-
+	$qString = urldecode($_POST['qString']);
+	$qString = explode("&", $qString);
         $this->model->add($qString);
-		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
-        die ($this->tpl->fetch("accounts/accounts.list.html"));
+	$this->accountslist();
+        die ();
     }
 	
 	/**
@@ -102,7 +98,23 @@ class Accounts_Controller extends Template_Controller
         if (!$this->model->deleteAccount($id)) {
             $this->tpl->assign("error", "Счет не удален");
         }
-		$this->tpl->assign('accounts', $this->user->initUserAccounts($this->user->getId()));
-        die ($this->tpl->fetch("accounts/accounts.list.html"));
+        die ();
     }
+
+    /**
+     * Функция которая отсылает список счетов 
+     */
+    public function accountslist()
+    {
+        $this->model->accounts_list();
+    }
+
+    public function get_fields()
+    {
+        $id = (int)$_POST['id'];
+        $aid = (int)$_POST['aid'];
+        //die('a'.strval($id).'a');
+        $this->model->get_fields($id, $aid);
+    }
+
 }

@@ -38,6 +38,70 @@ $(document).ready(function() {
         $('#blockCreateAccounts').show();
     }
 
+    // upload account
+    $.post('/accounts/accountslist/',
+        {},
+        function(data){
+            len = data.length;
+            str= '';
+            for (i = 0;i < len;i++ )
+            {
+                str = str + '<tr class="item"><td>'+
+                    data[i]['account_name']+'</td><td>'+
+                    data[i]['account_type_name']+'</td><td>'+
+                    data[i]['account_description']+'<div class="cont"><ul>'
+                                +'<li class="edit" id="'+data[i]['account_type_id']+'">Редактировать</li>'
+                                +'<li class="del" id="'+data[i]['account_id']+'">Удалить</li>'
+                                +'</ul></div></td></tr>';
+            }
+            $('table#list').append(str);
+            $('div.cont').hide();
+        },
+        'json'
+    );
+    //acount click
+    $('tr.item').live('click',
+        function(){
+             $('div.cont').hide();
+            $(this).find('div.cont').show();
+    });
+    //del accoun click
+    $('li.del').live('click',
+        function(){
+            $.post('/accounts/del/',
+                {id :$(this).attr('id') },
+                function(data){},
+                'text');
+            $(this).closest('tr').empty();
+        }
+    );
+    //edit account lick
+    $('li.edit').live('click',
+        function(){
+            
+                id =$(this).attr('id');
+               changeTypeAccount(id);
+               $('#blockCreateAccounts').show();
+               
+            $.post('/accounts/get_fields/',
+            {id :id,
+             aid : $(this).closest('div').find('li.del').attr('id')},
+            function(data){
+                for(key in data)//выбирает вообще левые значения
+                {
+                    alert (data[key]);
+                
+               $('#blockCreateAccounts').find('#'+key).val(data[key]) ;
+                }
+            },
+            'json');
+            //$(this).closest('tr').empty();
+        }
+    );
+
+
+
+
     function changeTypeAccount(id) {
         $('#loader').html('Подождите, идет загрузка...');
         $('#information_text').hide();
@@ -55,7 +119,7 @@ $(document).ready(function() {
         });
     }
 
-    function createNewAccount() {
+        function createNewAccount() {
         $('#loader').html('Подождите, идет сохранение...');
         $('#information_text').hide();
         var qString = $("#formAccount").formSerialize();
@@ -68,28 +132,6 @@ $(document).ready(function() {
             },
             success: function(data) {
                 $('#loader').html(' ');
-                $('#dataAccounts').html(data);
-                $('#information_text').show();
-            }
-        });
-    }
-
-    function deleteAccount(id) {
-        if (!confirm("Вы действительно хотите удалить эту категорию?")) {
-            return false;
-        }
-
-        $('#information_text').hide();
-        $('#loader').html('Подождите, идет удаление...');
-
-        $.ajax({
-            type: "POST",
-            url: "/accounts/del/",
-            data: {
-                id: id
-            },
-            success: function(data) {
-                $('#loader').html(" ");
                 $('#dataAccounts').html(data);
                 $('#information_text').show();
             }

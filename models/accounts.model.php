@@ -18,12 +18,6 @@ class Accounts_Model
      */
     private $user_id = NULL;
 	
-	/**
-     * Список полей для счета
-     * @var array
-     */
-	private $fields = Array();
-
     /**
      * Конструктор
      * @return void
@@ -34,181 +28,216 @@ class Accounts_Model
         $this->user_id = Core::getInstance()->user->getId();
     }
 	
-	/**
+    /**
      * Получаем список типов счетов
      * @return array
      */
     public function getTypeAccounts() {
-        return $this->db->select("SELECT * FROM account_types order by account_type_name");
+        return $this->db->selectRow("SELECT * FROM account_types ORDER BY account_type_name");
     }
-	
-	/**
+//@todo accounts_field;
+    /**
      * Получаем поля для счета
      * @return array
      */
-	public function newEmptyBill($type) {
-	    $fields = $this->db->select("SELECT * FROM account_fields af 
-				      LEFT JOIN account_field_descriptions afd 
-					      ON af.field_descriptionsfield_description_id = afd.field_description_id 
-				      WHERE af.account_typesaccount_type_id = ?d", $type);
-        if (count($fields)) {
-			foreach ($fields as $field) {
-				$this->fields[$field["field_name"]] = $this->setAccountField($field);
-			}
-		}	
+    public function newEmptyBill($type)
+    {
+
+        $fields = $this->db->select("SELECT * FROM account_fields af
+                                        LEFT JOIN account_field_descriptions afd
+                                        ON af.field_descriptionsfield_description_id = afd.field_description_id
+                                        WHERE af.account_typesaccount_type_id = ?",
+                                        $type);
+        if (count($fields))
+        {
+            foreach ($fields as $field)
+            {
+                $this->fields[$field["field_name"]] = $this->setAccountField($field);
+            }
 	}
+
+
+    }
+
 	
-	/**
+    /**
      * Проверяем тип поля
      * @return array
      */
-	private function setAccountField($data) {
-		if ($data['field_type'] == "enum" || $data['field_type'] == "set") {	
-			return $this->loadEnumList($data['field_regexp']);			
-		}
-		return $data;
+    private function setAccountField($data)
+    {
+        if ($data['field_type'] == "enum" || $data['field_type'] == "set")
+        {
+            return $this->loadEnumList($data['field_regexp']);
 	}
+            return $data;
+    }
 	
-	/**
+    /**TODO return notvalid
      * Получаем данные для типа поля enum или set
      * @return array
      */
-	private function loadEnumList($table) {
-		$list = $this->db->select("SELECT * FROM ".$table);
-		foreach ($list as $element) {
-			$enum[($element['name']!=""? $element['name'] : $element['id'])] = $element['value'];
-		}
-		return $enum;
-	}
+    private function loadEnumList($table)
+    {
+        $list = $this->db->select("SELECT * FROM ".$table);
+        foreach ($list as $element)
+        {
+            $enum[($element['name']!=""? $element['name'] : $element['id'])] = $element['value'];
+        }
+	return $enum;
+    }
 	
-	/**
+    /**
      * Формируем форму
      * @return string
      */
-	public function formField($field = "", $class="", $style="") {
-		switch ($field['field_type']) {
-		case "string":
-		case "numeric":
-			if ($field['field_permissions'] != "hidden") {
-				return sprintf("<input type=\"text\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">", 
-							   $field['field_name'], $field['field_name'], $class, $style, $field['field_default_value']);
-			} else {
-				return sprintf("<input type=\"hidden\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">", 
-							   $field['field_name'], $field['field_name'], $class, $style, $field['field_default_value']);
-			}
-		break;
-		case "text":
-		case "html":
-			return sprintf("<textarea name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">%s</textarea>", 
-						   $field['field_name'], $field['field_name'], $class, $style, $field['field_default_value']);
-		break;
-		case "enum":
-			$result = sprintf("<select name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">\n\r", $field['field_name'], $field['field_name'], $class, $style);
-			foreach ($field['field_type'] as $index => $option) {
-				$result .= "<option value=\"".$index."\"".($option == $field['field_default_value'] ? " selected" : "").">".$option."</option>\n\r";
-			}
-			$result .= "</select>\n\r";
-			return $result;
-		break;
-		case "set":
-			$result = sprintf("<select name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" multiple>\n\r", $field['field_name'], $field['field_name'], $class, $style);
-			foreach ($field['field_type'] as $index => $option) {
-				$result .= "<option value=\"".$index."\"".($option == $field['field_default_value'] ? " selected" : "").">".$option."</option>\n\r";
-			}
-			$result .= "</select>\n\r";
-			return $result;
-		break;
+    public function formField($field = "", $class="", $style="")
+    {
+        switch ($field['field_type']) {
+            case "string":
+            case "numeric":
+                if ($field['field_permissions'] != "hidden")
+                {
+                    return sprintf("<input type=\"text\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">",
+                        $field['field_name'],
+                        $field['field_name'],
+                        $class,
+                        $style,
+                        $field['field_default_value']);
+		} else {
+                    return sprintf("<input type=\"hidden\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">",
+			$field['field_name'],
+                        $field['field_name'],
+                        $class,
+                        $style,
+                        $field['field_default_value']);
 		}
-	}
+		break;
+            case "text":
+            case "html":
+                return sprintf("<textarea name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">%s</textarea>",
+                    $field['field_name'],
+                    $field['field_name'],
+                    $class,
+                    $style,
+                    $field['field_default_value']);
+		break;
+            case "enum":
+                $result = sprintf("<select name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\">\n\r", $field['field_name'], $field['field_name'], $class, $style);
+		foreach ($field['field_type'] as $index => $option) {
+                    $result .= "<option value=\"".$index."\"".($option == $field['field_default_value'] ? " selected" : "").">".$option."</option>\n\r";
+		}
+		$result .= "</select>\n\r";
+		return $result;
+		break;
+            case "set":
+                $result = sprintf("<select name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" multiple>\n\r", 
+                    $field['field_name'],
+                    $field['field_name'],
+                    $class,
+                    $style);
+		foreach ($field['field_type'] as $index => $option) {
+				$result .= "<option value=\"".$index."\"".($option == $field['field_default_value'] ? " selected" : "").">".$option."</option>\n\r";
+		}
+		$result .= "</select>\n\r";
+		return $result;
+		break;
+        }
+    }
 
 	/**
      * Возвращаем сформированый список полей
      * @return array
      */
-	public function fields() {
-		return $this->fields;
-	}
+    public function fields()
+    {
+        return $this->fields;
+    }
 	
-	/**
+    /**
      * Возвращаем сформированый список полей
      * @return array
      */
-	public function formatFields() {
-		$i=0;
-		foreach($this->fields as $field=>$key)
-		{
-			$data[$i]['display'] = $key['field_visual_name'];
-			$data[$i]['value'] = $this->formField($key, "", "");
-			$i++;
-		}
-		return $data;
+    public function formatFields()
+    {
+    	$i=0;
+        $data = array();
+    	foreach($this->fields as $field => $key)
+	{
+            $data[$i]['display'] = $key['field_visual_name'];
+            $data[$i]['value'] = $this->formField($key, "", "");
+            $i++;
 	}
+	return $data;
+    }
 
     /**
      * Добавляет новый счёт
      * @return bool
      */
     function add($data) {
-		$fields = $this->db->select("SELECT af.account_field_id, afd.field_name, afd.field_type FROM account_fields af 
-							LEFT JOIN account_field_descriptions afd 
-							    ON afd.field_description_id = af.field_descriptionsfield_description_id");
-		foreach($data as $key=>$value)
-		{			
-			list($field_key, $field_value) = explode("=", $value);
-			if ($field_key == 'type_id') $type_id = $field_value;
-			if ($field_key == 'currency_id') $currency_id = $field_value;
-			
-			foreach($fields as $values)
-			{
-				if ($values['field_name'] == $field_key)
-				{
-					$account[$field_key]['value'] = $field_value;
-					$account[$field_key]['account_field_id'] = $values['account_field_id'];
-					$account[$field_key]['field_type'] = $values['field_type'];
-				}
-			}			
-		}
-
-		$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`,
-									  `account_currency_id`, `user_id`)
-                    VALUES (?,?,?,?,?,?);";
-        if (!$this->db->query($sql, '', $account['name']['value'], $type_id, $account['description']['value'], 
-                            $currency_id, $this->user_id))
+	$fields = $this->db->select("SELECT af.account_field_id, afd.field_name, afd.field_type
+                                    FROM account_fields af
+                                    LEFT JOIN account_field_descriptions afd
+                                    ON afd.field_description_id = af.field_descriptionsfield_description_id");
+	foreach($data as $key=>$value)
+	{			
+            list($field_key, $field_value) = explode("=", $value);
+            if ($field_key == 'type_id') $type_id = $field_value;
+            if ($field_key == 'currency_id') $currency_id = $field_value;
+            foreach($fields as $values)
+            {
+                if ($values['field_name'] == $field_key)
 		{
-			return false;
+                    $account[$field_key]['value'] = $field_value;
+                    $account[$field_key]['account_field_id'] = $values['account_field_id'];
+                    $account[$field_key]['field_type'] = $values['field_type'];
 		}
-		
-		$next_id = mysql_insert_id();
+            }
+	}
 
-		foreach($account as $value)
-		{
-			switch ($value['field_type'])
-			{
-				case "numeric":
-				    $type = "int_value";
-				break;
-				case "percent":
-				    $type = "int_value";
-				break;
-				case "date":
-				    $type = "date_value";
-				break;
-				default:
-				    $type = "string_value";
-				break;
-			}
-			$sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`, 
-													  `".$type."`, `accountsaccount_id`)
+	$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`,
+                                        `account_currency_id`, `user_id`)
+                VALUES (?,?,?,?,?,?);";
+        if (!$this->db->query($sql,
+                    '',
+                    $account['name']['value'],
+                    $type_id, $account['description']['value'],
+                    $currency_id,
+                    $this->user_id))
+	{
+            return false;
+	}	
+	$next_id = mysql_insert_id();
+        foreach($account as $value)
+	{
+            switch ($value['field_type'])
+            {
+                case "numeric":
+                    $type = "int_value";
+                    break;
+		case "percent":
+                    $type = "int_value";
+                    break;
+		case "date":
+                    $type = "date_value";
+                    break;
+                default:
+                    $type = "string_value";
+		break;
+            }
+            $sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`,
+                                                        `".$type."`, `accountsaccount_id`)
                     VALUES (?,?,?,?);";
-			if (!$this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']))
-			{
-				return false;
-			}
-		}
-		return true;
+            if (!$this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']))
+            {
+                return false;
+            }
+	}
+	return true;
     }
 	
-	/**
+    /**
      * Удаляет указанный счет
      * @param $id int Ид счета
      * @return bool
@@ -219,10 +248,62 @@ class Accounts_Model
         if (!$this->db->query($sql, $id, $this->user_id)) {
             return false;
         }
-		$sql = "DELETE FROM account_field_values WHERE `accountsaccount_id` = ?";
+	$sql = "DELETE FROM account_field_values WHERE  `accountsaccount_id` = ?";
         if (!$this->db->query($sql, $id)) {
             return false;
         }
         return true;
+    }
+    /**
+     * Функция которая отсылает список счетов
+     */
+    public function accounts_list()
+    {
+        $sql='SELECT
+                   `account_id`, `account_name`,accounts.account_type_id , `account_description`, `account_type_name`
+                FROM
+                    accounts
+                LEFT JOIN
+                    account_types
+                ON
+                    (accounts.account_type_id=account_types.account_type_id)
+                WHERE
+                    user_id=?';
+        $ret = $this->db->select($sql,$this->user_id);
+        die(json_encode($ret));
+    }
+
+    public function get_fields($type,$id)
+    {
+
+        $this->newEmptyBill($type);
+        
+        $sql = "SELECT `int_value`, `date_value`, `string_value` FROM account_field_values WHERE account_fieldsaccount_field_id = ?";
+        $res = $this->db->select($sql,$id);
+        $cnt = count($this->fields());
+        $field=$this->fields();
+        $ret = array();
+        $i=0;
+
+        foreach($field as $key)
+        {
+
+           $f_name = $key['field_name'];
+           if ($res[$i]['int_value'])
+                $ret[$f_name] = $res[strval($i)]['int_value'];
+           else
+           {
+               if ($res[$i]['string_value'])
+                    $ret[$f_name] = $res[strval($i)]['string_value'];
+               else
+                    $ret[$f_name] = $res[strval($i)]['data_value'];
+           }
+           //$ret[$f_name] = $res[$i]['int_value']?$res[$i]['int_value']:($res[$i]['str_value']?$res[$i]['str_value']:$res[$i]['data_value']);
+           //print_r($i);
+           //print_r($res[strval($i)]['str_value']);
+           $i++;  
+        }
+        die(json_encode($ret));
+        //die(print_r($this->formatFields()));
     }
 }
