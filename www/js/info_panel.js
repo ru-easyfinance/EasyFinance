@@ -17,6 +17,8 @@ function panel2_print(){
 
                     for (i = 0; i<len;i++)
                     {
+                        if(!data[i]['image'])
+                            data[i]['image']='/img/images/pic2.gif';
                         str ='<img src='+data[i]['image']+' alt="" />';
                         str = str+'<a>'+data[i]['title']+'</a>';
                         str = str+'<div class="indicator_block"><div class="money">'+data[i]['amount']+'.<br /><span> '+data[i]['amount_done'] +'</span></div>';
@@ -35,7 +37,8 @@ function panel2_print(){
        $.post('/infopanel/targets/',
        {cnt: o_count},
        function(){
-       document.location='/infopanel/index/'},
+       //document.location='/infopanel/index/'
+       },
        'text'
    )};
     /**
