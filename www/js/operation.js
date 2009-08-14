@@ -93,7 +93,7 @@ $(function() {
                 $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
                     if ($(this).parent().attr('class') == 'edit') {
                         fillForm(operationList[0][$(this).closest('tr').attr('value')]);
-                        $(this).closest('form').attr('action','/operation/edit/');
+                        $('form').attr('action','/operation/edit/');
                         $(document).scrollTop(300);
                     } else if($(this).parent().attr('class') == 'del') {
                         deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
@@ -109,7 +109,8 @@ $(function() {
         // Загружаем теги
         $.get('/tags/getTags/', '', function(data) {
             $('input#tags').tagSuggest({
-                tags: data
+                tags: data,
+                separator: ', '
             });
         }, 'json');
     }

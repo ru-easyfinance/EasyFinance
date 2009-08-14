@@ -182,20 +182,24 @@ class Operation_Model {
 	 * @return bool true - Регистрация прошла успешно
 	 */
 	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
-	{
-        
+    {
         // Если есть теги, то добавляем и их тоже
         if ($tags) {
-            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment, implode(', ', $tags));
+            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
+                `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain,
+                $comment, implode(', ', $tags));
             $last_id = mysql_insert_id();
-            $sql = "INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES (?, ?, ?)";
+            $sql = "";
             foreach ($tags as $tag) {
-                $this->db->query($sql, $this->user->getId(), $last_id, $tag);
+                if (!empty($sql)) { $sql .= ','; }
+                $sql .= "(". $this->user->getId() . "," . (int)$last_id . "," . htmlspecialchars(addslashes($tag)) . ")";
             }
+            $sql = "INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql;
         } else {
-            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment, $tags);
+            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
+                `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment);
         }
         // Обновляем данные о счетах пользователя
         Core::getInstance()->user->initUserAccounts();
@@ -221,17 +225,59 @@ class Operation_Model {
 		$sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, drain, comment, transfer)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $from_account, 1, $comment, $to_account);
+        $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $from_account, 1,
+            $comment, $to_account);
 
         $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, drain, comment, transfer, tr_id)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment, $from_account, mysql_insert_id());
+        $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment,
+            $from_account, mysql_insert_id());
         $this->user->initUserAccount();
         $this->user->save();
         return '[]';
 	}
-    
+
+    /**
+	 * Редактирует транзакцию
+     * @param int    $id         Ид транзакции
+	 * @param float  $money      Сумма транзакции
+	 * @param string $date       Дата транзакции в формате Y.m.d
+	 * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
+	 * @param string $comment    Комментарий транзакции
+	 * @param int    $account_id Ид счета
+     *
+	 * @return bool true - Регистрация прошла успешно
+	 */
+	function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
+	{
+        // Если есть теги, то добавляем и их тоже
+        if ($tags) {
+            $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
+            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
+                `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain,
+                $comment, implode(', ', $tags));
+            $last_id = mysql_insert_id();
+
+            $sql = "";
+            foreach ($tags as $tag) {
+                if (!empty($sql)) { $sql .= ','; }
+                $sql .= "(". $this->user->getId() . "," . (int)$last_id . "," . htmlspecialchars(addslashes($tag)) . ")";
+            }
+            $sql = "INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql;
+        } else {
+            $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?
+                WHERE user_id = ? AND id = ?";
+            $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, $this->user->getId(), $id);
+        }
+        // Обновляем данные о счетах пользователя
+        Core::getInstance()->user->initUserAccounts();
+        //$this->selectMoney($user_id);
+        $this->save();
+        return '[]';
+	}
+
     /**
      * Удаляет указанную операцию
      * @param int id

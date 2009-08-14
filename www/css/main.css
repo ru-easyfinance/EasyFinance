@@ -937,12 +937,14 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 
 span.tagMatches {
     margin-left: 10px;
+    z-index: 1000;
 }
 
 span.tagMatches span {
     padding: 2px;
     margin-right: 4px;
-    background-color: #0000AB;
+    background-color: #67d252;
     color: #fff;
     cursor: pointer;
+    z-index: 1000;
 }
