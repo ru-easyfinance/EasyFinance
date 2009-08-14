@@ -150,7 +150,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 #aboutproject { margin-bottom: 33px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
-#aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.png') no-repeat 0 0; }
+#aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.jpg') no-repeat 0 0; }
 #aboutproject .inside h2 { margin: 0; height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
 #aboutproject .inside h2 a { display: block; height: 23px; text-indent: -999px; overflow: hidden; }
 
@@ -706,6 +706,7 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .investments_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .investments_block div { position: relative; float: left; width: 103px; height: 115px; }
 .investments_block div a { display: block; margin: 0 0 8px 18px; color: #2f322a; }
+.investments_block div .null { background: #beeefd; }
 .investments_block div .block { position: relative; display: block; margin-bottom: 2px; width: 73px; height: 45px; overflow: hidden; }
 .investments_block div .block .pct { display: block; position: absolute; top: 8px; left: 22px; font-size: 24px; line-height: 24px; }
 .investments_block div .block .period { display: block; position: absolute; bottom: 0; left: 22px; width: 42px; padding: 0 0 1px 9px; font-size: 10px; color: #ffffff; line-height: 9px; background: #7d8c97; }

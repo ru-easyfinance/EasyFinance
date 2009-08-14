@@ -87,10 +87,10 @@ function print_stat(i){
             function (data){
                 b0 = (data['year']>0)?'class="block up"':
                     (data['year']<0?'class="block down"':
-                    'style="background-color:#0000ee"');
+                    'class="block null"');
                 b1 = (data['day']>0)?'class="block day up"':
                     (data['day']<0?'class="block day down"':
-                    'style="background-color:#0000ee"');
+                    'class="block day null"');
                 str = '<a href="#">'+data['name']+'</a>';
                 str = str + '<span '+b0+'">';
                 str = str + '<span class="pct">'+data['year']+'%</span><span class="period">за год</span>';
@@ -243,7 +243,7 @@ panel1_update();
 
                 	function(data){
                             //$('.details_page').find('.content').html(data) нету
-                            alert(data+' <br/> js : 246');//временная заглушка
+                            //alert(data+' <br/> js : 246');//временная заглушка
                         });
                         return false;
             }
