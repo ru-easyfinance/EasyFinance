@@ -186,7 +186,7 @@ class Operation_Model {
         // Если есть теги, то добавляем и их тоже
         if ($tags) {
             $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                `drain`, `comment`, `tags`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
             $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain,
                 $comment, implode(', ', $tags));
             $last_id = mysql_insert_id();
@@ -195,10 +195,10 @@ class Operation_Model {
                 if (!empty($sql)) { $sql .= ','; }
                 $sql .= "(". $this->user->getId() . "," . (int)$last_id . "," . htmlspecialchars(addslashes($tag)) . ")";
             }
-            $sql = "INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql;
+            $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
             $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                `drain`, `comment`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
             $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment);
         }
         // Обновляем данные о счетах пользователя
@@ -254,6 +254,7 @@ class Operation_Model {
         // Если есть теги, то добавляем и их тоже
         if ($tags) {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
+
             $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
                 `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain,
@@ -265,7 +266,7 @@ class Operation_Model {
                 if (!empty($sql)) { $sql .= ','; }
                 $sql .= "(". $this->user->getId() . "," . (int)$last_id . "," . htmlspecialchars(addslashes($tag)) . ")";
             }
-            $sql = "INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql;
+            $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
             $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?
                 WHERE user_id = ? AND id = ?";

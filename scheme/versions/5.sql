@@ -6,3 +6,7 @@ ALTER TABLE `operation`
 ALTER TABLE tags` DROP COLUMN `id`,
     ADD INDEX `user_name_idx`(`user_id`, `name`),
     ADD INDEX `op_idx`(`oper_id`);
+ALTER TABLE `operation` 
+    ADD COLUMN `dt_create` DATETIME  NOT NULL COMMENT 'Дата и время создания проставляется в скрипте' AFTER `type`,
+     ADD COLUMN `dt_update` TIMESTAMP  NOT NULL DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время модификации' AFTER `dt_create`;
+

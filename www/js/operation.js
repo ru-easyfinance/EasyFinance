@@ -1,6 +1,6 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
 $(function() {
-    var operationList = new Array();
+    var operationList;
     // Init
     $('#amount').calculator({
         layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
@@ -58,7 +58,8 @@ $(function() {
             category: $('#cat_filtr :selected').val(),
             account: $('#account :selected').val()
         }, function(data) {
-            operationList = operationList.concat(data);
+            delete operationList;
+            operationList = $.extend(data);
             var tr = '';
             if (data != null) {
                 // Собираем данные для заполнения в таблицу
@@ -92,13 +93,13 @@ $(function() {
                 // Биндим щелчки на кнопках тулбокса (править, удалить, копировать)
                 $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
                     if ($(this).parent().attr('class') == 'edit') {
-                        fillForm(operationList[0][$(this).closest('tr').attr('value')]);
+                        fillForm(operationList[$(this).closest('tr').attr('value')]);
                         $('form').attr('action','/operation/edit/');
                         $(document).scrollTop(300);
                     } else if($(this).parent().attr('class') == 'del') {
                         deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
                     } else if($(this).parent().attr('class') == 'add') {
-                        fillForm(operationList[0][$(this).closest('tr').attr('value')]);
+                        fillForm(operationList[$(this).closest('tr').attr('value')]);
                         $(this).closest('form').attr('action','/operation/add/');
                         $('#date').datepicker('setDate', new Date() );
                         $(document).scrollTop(300);
@@ -303,7 +304,8 @@ $(function() {
         $.post('/operation/del/', {
                 id : id
             }, function(data) {
-                operationList.splice(operationList.indexOf(id), 0);
+                delete operationList[id];
+                //operationList.splice(operationList.indexOf(id), 0);
                 $(tr).remove();
             }, 'json');
     }
