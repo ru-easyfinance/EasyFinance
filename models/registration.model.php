@@ -88,7 +88,7 @@ class Registration_Model
 
             $tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
-            $reg_href = URL_ROOT."/registration/activation/".$reg_id;
+            $reg_href = URL_ROOT."registration/activate/".$reg_id;
             $body = "<html><head><title>
                 Подтверждение регистрации на сайте домашней бухгалтерии Home-Money.ru
                 </title></head>
