@@ -935,3 +935,14 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
 #p_index #footer dfn { display: block; margin: -1px 0 0 0; padding: 12px 0 0 33px; width: 184px; border-top: 1px solid #f8fcf6; //zoom: 1; }
 
+span.tagMatches {
+    margin-left: 10px;
+}
+
+span.tagMatches span {
+    padding: 2px;
+    margin-right: 4px;
+    background-color: #0000AB;
+    color: #fff;
+    cursor: pointer;
+}

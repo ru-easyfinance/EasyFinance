@@ -15,7 +15,7 @@ $(function() {
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
 
     // Bind
-    $('#btn_Save').click(function(){ addOperation(); })
+    $('#btn_Save').click(function(){ saveOperation(); })
     $('#btn_Cancel').click(function(){ clearForm() });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
 
@@ -61,31 +61,35 @@ $(function() {
             operationList = operationList.concat(data);
             var tr = '';
             if (data != null) {
-                for(v in data){
+                // Собираем данные для заполнения в таблицу
+                for(v in data) {
                     tg = (data[v].tags!=null) ? data[v].tags : '';
                     tr += "<tr value='"+data[v].id+"'><td><input type='checkbox' /></td>"
-                            + '<td><a href="#">' +((data[v].drain == 1) ? 'Расход' : 'Доход') + '</td>'
-                            + '<td><b>'+data[v].money+'</b></td>'
-                            + '<td>'+data[v].date+'</td>'
-                            + '<td>'+data[v].cat_name+'</td>'
-                            + '<td>'+data[v].account_name+'</td>'
-                            + '<td>'+tg+'</td>'
-                            + '<td class>'
-                                +'<div class="cont">'+data[v].comment+'<ul>'
-                                +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
-                                +'<li class="del"><a title="Удалить">Удалить</a></li>'
-                                +'<li class="add"><a title="Добавить">Добавить</a></li>'
-                                +'</ul></div></td></tr>';
+                        + '<td><a href="#">' +((data[v].drain == 1) ? 'Расход' : 'Доход') + '</td>'
+                        + '<td><b>'+data[v].money+'</b></td>'
+                        + '<td>'+data[v].date+'</td>'
+                        + '<td>'+data[v].cat_name+'</td>'
+                        + '<td>'+data[v].account_name+'</td>'
+                        + '<td>'+tg+'</td>'
+                        + '<td class>'
+                            +'<div class="cont">'+data[v].comment+'<ul>'
+                            +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                            +'<li class="del"><a title="Удалить">Удалить</a></li>'
+                            +'<li class="add"><a title="Копировать">Копировать</a></li>'
+                            +'</ul></div></td></tr>';
                 }
+                // Очищаем таблицу
                 $('#operations_list tr:not(:first)').each(function(){
                     $(this).remove();
                 });
+                // Заполняем таблицу и биндим показ и скрытие тулбокса
                 $('#operations_list').append(tr).find('td')
                     .unbind('mouseover.namespace').bind('mouseover.namespace', function(){
                         $(this).parent().find('ul').show();
                 }).unbind('mouseout.panel').bind('mouseout.panel', function(){
                     $(this).parent().find('ul').hide();
                 });
+                // Биндим щелчки на кнопках тулбокса (править, удалить, копировать)
                 $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
                     if ($(this).parent().attr('class') == 'edit') {
                         fillForm(operationList[0][$(this).closest('tr').attr('value')]);
@@ -95,25 +99,26 @@ $(function() {
                         deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
                     } else if($(this).parent().attr('class') == 'add') {
                         fillForm(operationList[0][$(this).closest('tr').attr('value')]);
+                        $(this).closest('form').attr('action','/operation/add/');
+                        $('#date').datepicker('setDate', new Date() );
                         $(document).scrollTop(300);
                     }
                 })
-                //,a.del
             }
-            // data could be xmlDoc, jsonObj, html, text, etc...
-            this; // the options for this ajax request
         },'json');
-        $('input#tags').tagSuggest({
-            //@TODO Дописать процедуру загрузки тегов
-            tags: ['javascript', 'js2', 'js', 'jquery', 'java']
-        });
+        // Загружаем теги
+        $.get('/tags/getTags/', '', function(data) {
+            $('input#tags').tagSuggest({
+                tags: data
+            });
+        }, 'json');
     }
 
     /**
      * Добавляет новую операцию
      * @return void
      */
-    function addOperation() {
+    function saveOperation() {
         if (!validateForm()){
             return false;
         }
