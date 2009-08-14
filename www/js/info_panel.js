@@ -35,7 +35,7 @@ function panel2_print(){
        $.post('/infopanel/targets/',
        {cnt: o_count},
        function(){
-       document.location='/infopanel/'},
+       document.location='/infopanel/index/'},
        'text'
    )};
     /**
