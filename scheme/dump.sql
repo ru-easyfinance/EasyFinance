@@ -493,7 +493,7 @@ CREATE TABLE `target` (
   PRIMARY KEY (`id`),
   KEY `user_index` (`user_id`),
   KEY `date_end_index` (`date_end`),
-  KEY `title_index` (`title`,`visible`) USING BTREE
+  KEY `title_index` (`title`,`visible`)
 ) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COMMENT='Финансовые цели';
 SET character_set_client = @saved_cs_client;
 
@@ -527,7 +527,7 @@ CREATE TABLE `users` (
   `user_new` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Если 1, значит новый',
   `user_currency_default` tinyint(1) unsigned NOT NULL COMMENT 'Валюта пользователя по умолчанию',
   `user_currency_list` varchar(255) NOT NULL COMMENT 'Сериализованный массив валют пользователя',
-  PRIMARY KEY (`id`) USING BTREE,
+  PRIMARY KEY (`id`) ,
   KEY `user_login` (`user_login`,`user_pass`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
