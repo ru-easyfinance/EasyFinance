@@ -1,24 +1,3 @@
--- MySQL dump 10.13  Distrib 5.1.31, for debian-linux-gnu (i486)
---
--- Host: localhost    Database: wwwhomemoneyru
--- ------------------------------------------------------
--- Server version	5.1.31-1ubuntu2
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `account_field_descriptions`
---
-
 DROP TABLE IF EXISTS `account_field_descriptions`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -34,19 +13,10 @@ CREATE TABLE `account_field_descriptions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `account_field_descriptions`
---
 
 LOCK TABLES `account_field_descriptions` WRITE;
-/*!40000 ALTER TABLE `account_field_descriptions` DISABLE KEYS */;
 INSERT INTO `account_field_descriptions` VALUES (1,'Название','name','string','','input',''),(2,'Доступный остаток','demand_balance','numeric','[0-9]+','input',''),(3,'Зарезервировано','reserve','numeric','[0-9]+','input',''),(4,'Годовой процент','annual_percentage','numeric','[0-9]+','input',''),(5,'Примечание','description','html','','input',''),(6,'Начальный баланс','starter_balance','numeric',' 	[0-9]+ ','input',''),(7,'Общий баланс','total_balance','numeric',' 	[0-9]+ ','input',''),(8,'Банк','bank_name','string','','input',''),(9,'Тип карты','card_type','string','','input',''),(10,'Срок действия','card_evaluation_period','string','','input',''),(11,'Кредитный лимит','credit_limit','numeric',' 	[0-9]+ ','input',''),(12,'Грейс период','grace_period','string','','input',''),(13,'Дата выписки','statement_date','string','','input',''),(14,'Использованный кредит','used_credit','string',' 	[0-9]+','input',''),(15,'Доступный остаток','free_limit','string',' 	[0-9]+','input','');
-/*!40000 ALTER TABLE `account_field_descriptions` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `account_field_values`
---
 
 DROP TABLE IF EXISTS `account_field_values`;
 SET @saved_cs_client     = @@character_set_client;
@@ -64,19 +34,9 @@ CREATE TABLE `account_field_values` (
 ) ENGINE=InnoDB AUTO_INCREMENT=564 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `account_field_values`
---
-
 LOCK TABLES `account_field_values` WRITE;
-/*!40000 ALTER TABLE `account_field_values` DISABLE KEYS */;
 INSERT INTO `account_field_values` VALUES (438,48,NULL,'Альфачка',NULL,17),(439,48,39000,NULL,NULL,5),(440,48,0,NULL,NULL,28),(441,48,7,NULL,NULL,19),(442,48,NULL,'',NULL,24),(443,48,0,NULL,NULL,12),(444,48,NULL,'',NULL,18),(445,48,NULL,'',NULL,22),(446,48,NULL,'',NULL,25),(447,48,0,NULL,NULL,16),(448,49,NULL,'Альфачка',NULL,17),(449,49,39000,NULL,NULL,5),(450,49,0,NULL,NULL,28),(451,49,7,NULL,NULL,19),(452,49,NULL,'',NULL,24),(453,49,0,NULL,NULL,12),(454,49,NULL,'',NULL,18),(455,49,NULL,'',NULL,22),(456,49,NULL,'',NULL,25),(457,49,0,NULL,NULL,16),(458,50,NULL,'123',NULL,17),(459,50,123,NULL,NULL,5),(460,50,123,NULL,NULL,28),(461,50,123,NULL,NULL,19),(462,50,NULL,'123',NULL,24),(463,50,123,NULL,NULL,12),(464,50,NULL,'123',NULL,18),(465,50,NULL,'123',NULL,22),(466,50,NULL,'123',NULL,25),(467,50,123,NULL,NULL,16),(468,51,NULL,'ertwe',NULL,17),(469,51,NULL,'34523',NULL,18),(470,51,2345,NULL,NULL,19),(471,51,2345,NULL,NULL,20),(472,51,NULL,'2345',NULL,21),(473,51,NULL,'2345',NULL,22),(474,51,NULL,'2345',NULL,23),(475,51,NULL,'2345',NULL,24),(476,51,NULL,'2345',NULL,25),(477,51,NULL,'2345',NULL,26),(478,51,NULL,'2345',NULL,27),(479,51,234,NULL,NULL,28),(480,52,NULL,'ertwe',NULL,17),(481,52,NULL,'34523',NULL,18),(482,52,2345,NULL,NULL,19),(483,52,2345,NULL,NULL,20),(484,52,NULL,'2345',NULL,21),(485,52,NULL,'2345',NULL,22),(486,52,NULL,'2345',NULL,23),(487,52,NULL,'2345',NULL,24),(488,52,NULL,'2345',NULL,25),(489,52,NULL,'2345',NULL,26),(490,52,NULL,'2345',NULL,27),(491,52,234,NULL,NULL,28),(492,53,NULL,'12312',NULL,17),(493,53,0,NULL,NULL,5),(494,53,0,NULL,NULL,28),(495,53,0,NULL,NULL,19),(496,53,NULL,'',NULL,24),(497,53,0,NULL,NULL,12),(498,53,NULL,'',NULL,18),(499,53,NULL,'',NULL,22),(500,53,NULL,'',NULL,25),(501,53,0,NULL,NULL,16),(502,54,NULL,'12312',NULL,17),(503,54,0,NULL,NULL,5),(504,54,0,NULL,NULL,28),(505,54,0,NULL,NULL,19),(506,54,NULL,'',NULL,24),(507,54,0,NULL,NULL,12),(508,54,NULL,'',NULL,18),(509,54,NULL,'',NULL,22),(510,54,NULL,'',NULL,25),(511,54,0,NULL,NULL,16),(512,55,NULL,'12341234',NULL,17),(513,55,0,NULL,NULL,5),(514,55,0,NULL,NULL,28),(515,55,0,NULL,NULL,19),(516,55,NULL,'',NULL,24),(517,55,0,NULL,NULL,12),(518,55,NULL,'',NULL,18),(519,55,NULL,'',NULL,22),(520,55,NULL,'',NULL,25),(521,55,0,NULL,NULL,16),(522,56,NULL,'12341234',NULL,17),(523,56,0,NULL,NULL,5),(524,56,0,NULL,NULL,28),(525,56,0,NULL,NULL,19),(526,56,NULL,'',NULL,24),(527,56,0,NULL,NULL,12),(528,56,NULL,'',NULL,18),(529,56,NULL,'',NULL,22),(530,56,NULL,'',NULL,25),(531,56,0,NULL,NULL,16),(532,57,NULL,'5678',NULL,17),(533,57,0,NULL,NULL,5),(534,57,0,NULL,NULL,28),(535,57,0,NULL,NULL,19),(536,57,NULL,'',NULL,24),(537,57,0,NULL,NULL,12),(538,57,NULL,'',NULL,18),(539,57,NULL,'',NULL,22),(540,57,NULL,'',NULL,25),(541,57,0,NULL,NULL,16),(542,58,NULL,'',NULL,17),(543,58,0,NULL,NULL,5),(544,58,0,NULL,NULL,28),(545,58,0,NULL,NULL,19),(546,58,NULL,'',NULL,24),(547,58,0,NULL,NULL,12),(548,58,NULL,'',NULL,18),(549,58,NULL,'',NULL,22),(550,58,NULL,'',NULL,25),(551,58,0,NULL,NULL,16),(552,54,NULL,'Налики',NULL,17),(553,54,5000,NULL,NULL,5),(554,54,NULL,'Примечание к кошельку',NULL,24),(555,54,0,NULL,NULL,12),(556,54,0,NULL,NULL,28),(557,54,0,NULL,NULL,16),(558,55,NULL,'Багз',NULL,17),(559,55,500,NULL,NULL,5),(560,55,NULL,'',NULL,24),(561,55,0,NULL,NULL,12),(562,55,0,NULL,NULL,28),(563,55,0,NULL,NULL,16);
-/*!40000 ALTER TABLE `account_field_values` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `account_fields`
---
 
 DROP TABLE IF EXISTS `account_fields`;
 SET @saved_cs_client     = @@character_set_client;
@@ -91,19 +51,9 @@ CREATE TABLE `account_fields` (
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `account_fields`
---
-
 LOCK TABLES `account_fields` WRITE;
-/*!40000 ALTER TABLE `account_fields` DISABLE KEYS */;
 INSERT INTO `account_fields` VALUES (1,1,1),(2,1,2),(3,1,5),(4,2,1),(5,2,2),(6,2,3),(7,2,4),(8,2,5),(9,1,6),(10,1,3),(11,1,7),(12,2,6),(13,2,8),(14,2,9),(15,2,10),(16,2,7),(17,8,1),(18,8,8),(19,8,4),(20,8,11),(21,8,12),(22,8,9),(23,8,13),(24,8,5),(25,8,10),(26,8,14),(27,8,15),(28,8,3);
-/*!40000 ALTER TABLE `account_fields` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `account_types`
---
 
 DROP TABLE IF EXISTS `account_types`;
 SET @saved_cs_client     = @@character_set_client;
@@ -115,19 +65,9 @@ CREATE TABLE `account_types` (
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `account_types`
---
-
 LOCK TABLES `account_types` WRITE;
-/*!40000 ALTER TABLE `account_types` DISABLE KEYS */;
 INSERT INTO `account_types` VALUES (1,'Наличные'),(2,'Дебетовая карта'),(5,'Депозит'),(6,'Займ выданный'),(7,'Займ полученый'),(8,'Кредитная карта'),(9,'Кредит'),(10,'Металлический счет'),(11,'Акции'),(12,'ПИФ'),(13,'ОФБУ'),(14,'Имущество'),(15,'Электронный кошелек');
-/*!40000 ALTER TABLE `account_types` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `accounts`
---
 
 DROP TABLE IF EXISTS `accounts`;
 SET @saved_cs_client     = @@character_set_client;
@@ -144,10 +84,6 @@ CREATE TABLE `accounts` (
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `articles`
---
-
 DROP TABLE IF EXISTS `articles`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -160,11 +96,6 @@ CREATE TABLE `articles` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
-
---
--- Table structure for table `budget`
---
 
 DROP TABLE IF EXISTS `budget`;
 SET @saved_cs_client     = @@character_set_client;
@@ -182,10 +113,6 @@ CREATE TABLE `budget` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2267 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `calendar`
---
 
 DROP TABLE IF EXISTS `calendar`;
 SET @saved_cs_client     = @@character_set_client;
@@ -209,10 +136,6 @@ CREATE TABLE `calendar` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4183 DEFAULT CHARSET=utf8 COMMENT='Календарь';
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `categories_often`
---
-
 DROP TABLE IF EXISTS `categories_often`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -223,10 +146,6 @@ CREATE TABLE `categories_often` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `category`
---
 
 DROP TABLE IF EXISTS `category`;
 SET @saved_cs_client     = @@character_set_client;
@@ -246,10 +165,6 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `currency`
---
-
 DROP TABLE IF EXISTS `currency`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -262,19 +177,9 @@ CREATE TABLE `currency` (
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `currency`
---
-
 LOCK TABLES `currency` WRITE;
-/*!40000 ALTER TABLE `currency` DISABLE KEYS */;
 INSERT INTO `currency` VALUES (1,'руб.','RUB','Российский рубль'),(2,'$','USD','Доллар США'),(3,'&euro;','EUR','Евро'),(4,'грн.','UAH','Украинских гривен');
-/*!40000 ALTER TABLE `currency` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `daily_currency`
---
 
 DROP TABLE IF EXISTS `daily_currency`;
 SET @saved_cs_client     = @@character_set_client;
@@ -287,10 +192,6 @@ CREATE TABLE `daily_currency` (
   KEY `new_index` (`currency_date`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `experts`
---
 
 DROP TABLE IF EXISTS `experts`;
 SET @saved_cs_client     = @@character_set_client;
@@ -314,10 +215,6 @@ CREATE TABLE `experts` (
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `experts_attach_content`
---
-
 DROP TABLE IF EXISTS `experts_attach_content`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -333,10 +230,6 @@ CREATE TABLE `experts_attach_content` (
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `experts_categories`
---
-
 DROP TABLE IF EXISTS `experts_categories`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -345,10 +238,6 @@ CREATE TABLE `experts_categories` (
   `category_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `experts_cost`
---
 
 DROP TABLE IF EXISTS `experts_cost`;
 SET @saved_cs_client     = @@character_set_client;
@@ -360,10 +249,6 @@ CREATE TABLE `experts_cost` (
   `desc` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `experts_post`
---
 
 DROP TABLE IF EXISTS `experts_post`;
 SET @saved_cs_client     = @@character_set_client;
@@ -380,10 +265,6 @@ CREATE TABLE `experts_post` (
 ) ENGINE=MyISAM AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `experts_rank`
---
-
 DROP TABLE IF EXISTS `experts_rank`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -395,10 +276,6 @@ CREATE TABLE `experts_rank` (
   `topic_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `experts_review`
---
 
 DROP TABLE IF EXISTS `experts_review`;
 SET @saved_cs_client     = @@character_set_client;
@@ -412,10 +289,6 @@ CREATE TABLE `experts_review` (
   PRIMARY KEY (`review_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `experts_topic`
---
 
 DROP TABLE IF EXISTS `experts_topic`;
 SET @saved_cs_client     = @@character_set_client;
@@ -433,10 +306,6 @@ CREATE TABLE `experts_topic` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `operation`
---
 
 DROP TABLE IF EXISTS `operation`;
 SET @saved_cs_client     = @@character_set_client;
@@ -461,10 +330,6 @@ CREATE TABLE `operation` (
 ) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `periodic`
---
-
 DROP TABLE IF EXISTS `periodic`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -487,10 +352,6 @@ CREATE TABLE `periodic` (
 ) ENGINE=MyISAM AUTO_INCREMENT=966 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `plan_accounts`
---
-
 DROP TABLE IF EXISTS `plan_accounts`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -500,10 +361,6 @@ CREATE TABLE `plan_accounts` (
   `plan_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `plan_fact`
---
 
 DROP TABLE IF EXISTS `plan_fact`;
 SET @saved_cs_client     = @@character_set_client;
@@ -516,10 +373,6 @@ CREATE TABLE `plan_fact` (
   `total_sum_plan` decimal(11,2) DEFAULT '0.00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `plan_settings`
---
 
 DROP TABLE IF EXISTS `plan_settings`;
 SET @saved_cs_client     = @@character_set_client;
@@ -543,10 +396,6 @@ CREATE TABLE `plan_settings` (
 ) ENGINE=MyISAM AUTO_INCREMENT=139 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `registration`
---
-
 DROP TABLE IF EXISTS `registration`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -556,10 +405,6 @@ CREATE TABLE `registration` (
   `reg_id` varchar(40) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `system_categories`
---
 
 DROP TABLE IF EXISTS `system_categories`;
 SET @saved_cs_client     = @@character_set_client;
@@ -573,19 +418,9 @@ CREATE TABLE `system_categories` (
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `system_categories`
---
-
 LOCK TABLES `system_categories` WRITE;
-/*!40000 ALTER TABLE `system_categories` DISABLE KEYS */;
 INSERT INTO `system_categories` VALUES (1,'Коммунальные услуги',0,0),(2,'Личные расходы',0,0),(3,'Обучение',0,0),(4,'Одежда',0,0),(5,'Налоги',0,0),(6,'Налоги2',1,0),(7,'Налоги4',0,0);
-/*!40000 ALTER TABLE `system_categories` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `system_categories_group`
---
 
 DROP TABLE IF EXISTS `system_categories_group`;
 SET @saved_cs_client     = @@character_set_client;
@@ -597,19 +432,9 @@ CREATE TABLE `system_categories_group` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `system_categories_group`
---
-
 LOCK TABLES `system_categories_group` WRITE;
-/*!40000 ALTER TABLE `system_categories_group` DISABLE KEYS */;
 INSERT INTO `system_categories_group` VALUES (1,'комунальные');
-/*!40000 ALTER TABLE `system_categories_group` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `system_experts_categories`
---
 
 DROP TABLE IF EXISTS `system_experts_categories`;
 SET @saved_cs_client     = @@character_set_client;
@@ -621,19 +446,6 @@ CREATE TABLE `system_experts_categories` (
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;
 
---
--- Dumping data for table `system_experts_categories`
---
-
-LOCK TABLES `system_experts_categories` WRITE;
-/*!40000 ALTER TABLE `system_experts_categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_experts_categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `system_experts_cost`
---
-
 DROP TABLE IF EXISTS `system_experts_cost`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -643,19 +455,6 @@ CREATE TABLE `system_experts_cost` (
   PRIMARY KEY (`cost_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;
-
---
--- Dumping data for table `system_experts_cost`
---
-
-LOCK TABLES `system_experts_cost` WRITE;
-/*!40000 ALTER TABLE `system_experts_cost` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_experts_cost` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tags`
---
 
 DROP TABLE IF EXISTS `tags`;
 SET @saved_cs_client     = @@character_set_client;
@@ -669,14 +468,6 @@ CREATE TABLE `tags` (
   KEY `name_idx` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='Теги';
 SET character_set_client = @saved_cs_client;
-
---
--- Dumping data for table `tags`
---
-
---
--- Table structure for table `target`
---
 
 DROP TABLE IF EXISTS `target`;
 SET @saved_cs_client     = @@character_set_client;
@@ -706,10 +497,6 @@ CREATE TABLE `target` (
 ) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COMMENT='Финансовые цели';
 SET character_set_client = @saved_cs_client;
 
---
--- Table structure for table `target_bill`
---
-
 DROP TABLE IF EXISTS `target_bill`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
@@ -725,10 +512,6 @@ CREATE TABLE `target_bill` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='Виртуальный субсчёт для финансовой цели';
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `users`
---
 
 DROP TABLE IF EXISTS `users`;
 SET @saved_cs_client     = @@character_set_client;
@@ -749,15 +532,3 @@ CREATE TABLE `users` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2009-08-13 14:07:06
