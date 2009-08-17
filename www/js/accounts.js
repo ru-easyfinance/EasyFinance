@@ -1,6 +1,10 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
 $(document).ready(function() {
-    $('#add_account').click(function(){ 
+    var new_acc = 1;
+    var aid;
+    var tid;
+    $('#add_account').click(function(){
+        new_acc = 1;
         accountAddVisible();
     });
     $('#btnCancelAdd').click(function(){ 
@@ -9,8 +13,11 @@ $(document).ready(function() {
     $('#type_account').change(function(){ 
         changeTypeAccount($(this).attr('value'));
     });
-    $('#btnAddAccount').click(function(){ 
-        createNewAccount();
+    $('#btnAddAccount').click(function(){
+        if (new_acc)
+            createNewAccount();
+        else
+            correctaccount();
     });
     $('.delAccount').click(function(){ 
         deleteAccount($(this).attr('value'));
@@ -39,26 +46,31 @@ $(document).ready(function() {
     }
 
     // upload account
-    $.post('/accounts/accountslist/',
-        {},
-        function(data){
-            len = data.length;
-            str= '';
-            for (i = 0;i < len;i++ )
-            {
-                str = str + '<tr class="item"><td>'+
-                    data[i]['account_name']+'</td><td>'+
-                    data[i]['account_type_name']+'</td><td>'+
-                    data[i]['account_description']+'<div class="cont"><ul>'
-                                +'<li class="edit" id="'+data[i]['account_type_id']+'">Редактировать</li>'
-                                +'<li class="del" id="'+data[i]['account_id']+'">Удалить</li>'
-                                +'</ul></div></td></tr>';
-            }
-            $('table#list').append(str);
-            $('div.cont').hide();
-        },
-        'json'
-    );
+    function update_list()
+    {
+        $.post('/accounts/accountslist/',
+            {},
+            function(data){
+                len = data.length;
+                str= '';
+                $('table#list tr.item').empty();
+                for (i = 0;i < len;i++ )
+                {
+                    str = str + '<tr class="item"><td>'+
+                        data[i]['account_name']+'</td><td>'+
+                        data[i]['account_type_name']+'</td><td>'+
+                        data[i]['account_description']+'<div class="cont"><ul>'
+                                    +'<li class="edit" id="'+data[i]['account_type_id']+'">Редактировать</li>'
+                                    +'<li class="del" id="'+data[i]['account_id']+'">Удалить</li>'
+                                    +'</ul></div></td></tr>';
+                }
+                $('table#list').append(str);
+                $('div.cont').hide();
+            },
+            'json'
+        );
+    };
+    update_list();
     //acount click
     $('tr.item').live('click',
         function(){
@@ -80,6 +92,8 @@ $(document).ready(function() {
         function(){
             
                 id =$(this).attr('id');
+                aid = $(this).closest('div').find('li.del').attr('id');
+                tid = id;
                changeTypeAccount(id);
                $('#blockCreateAccounts').show();
                
@@ -87,15 +101,13 @@ $(document).ready(function() {
             {id :id,
              aid : $(this).closest('div').find('li.del').attr('id')},
             function(data){
-                for(key in data)//выбирает вообще левые значения
-                {
-                    alert (data[key]);
-                
-               $('#blockCreateAccounts').find('#'+key).val(data[key]) ;
+                for(key in data)
+                {                
+                    $('#blockCreateAccounts').find('#'+key).val(data[key]) ;
                 }
+                new_acc = 0;
             },
             'json');
-            //$(this).closest('tr').empty();
         }
     );
 
@@ -134,7 +146,29 @@ $(document).ready(function() {
                 $('#loader').html(' ');
                 $('#dataAccounts').html(data);
                 $('#information_text').show();
+                update_list();
             }
         });
+    }
+
+    function correctaccount() {
+        $('#loader').html('Подождите, идет сохранение...');
+        $('#information_text').hide();
+        var qString = $("#formAccount").formSerialize();
+        $.post(
+            "/accounts/correct/",
+            {
+                qString: qString,
+                aid :aid,
+                tid :tid
+            },
+            function(data) {
+                $('#loader').html(' ');
+                $('#dataAccounts').html(data);
+                $('#information_text').show();
+                update_list();
+            },
+            'text'
+        );
     }
 });

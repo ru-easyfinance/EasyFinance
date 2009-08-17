@@ -298,12 +298,70 @@ class Accounts_Model
                else
                     $ret[$f_name] = $res[strval($i)]['data_value'];
            }
-           //$ret[$f_name] = $res[$i]['int_value']?$res[$i]['int_value']:($res[$i]['str_value']?$res[$i]['str_value']:$res[$i]['data_value']);
-           //print_r($i);
-           //print_r($res[strval($i)]['str_value']);
            $i++;  
         }
         die(json_encode($ret));
-        //die(print_r($this->formatFields()));
+    }
+     /**
+     * Редактирует счёт
+     * @return bool
+     */
+    function correct($data,$aid,$tid) {
+	$fields = $this->db->select("SELECT af.account_field_id, afd.field_name, afd.field_type
+                                    FROM account_fields af
+                                    LEFT JOIN account_field_descriptions afd
+                                    ON afd.field_description_id = af.field_descriptionsfield_description_id");
+	foreach($data as $key=>$value)
+	{
+            list($field_key, $field_value) = explode("=", $value);
+            if ($field_key == 'type_id') $type_id = $field_value;
+            if ($field_key == 'currency_id') $currency_id = $field_value;
+            foreach($fields as $values)
+            {
+                if ($values['field_name'] == $field_key)
+		{
+                    $account[$field_key]['value'] = $field_value;
+                    $account[$field_key]['account_field_id'] = $values['account_field_id'];
+                    $account[$field_key]['field_type'] = $values['field_type'];
+		}
+            }
+	}
+
+	$sql = "UPDATE accounts SET `account_name`=?, `account_type_id`=?, `account_description`=?,
+                                        `account_currency_id`=?, `user_id`=? WHERE `account_id`=?;";
+        $this->db->query($sql,
+                    $account['name']['value'],
+                    $type_id,
+                    $account['description']['value'],
+                    $currency_id,
+                    $this->user_id,
+                    $aid);
+        $sql = "SELECT `field_value_id` FROM account_field_values WHERE account_fieldsaccount_field_id = ?";
+        $arr = $this->db->selectCol($sql,$aid);
+        $i=0;
+        foreach($account as $value)
+	{
+            switch ($value['field_type'])
+            {
+                case "numeric":
+                    $type = "int_value";
+                    break;
+		case "percent":
+                    $type = "int_value";
+                    break;
+		case "date":
+                    $type = "date_value";
+                    break;
+                default:
+                    $type = "string_value";
+		break;
+            }
+            $sql = "UPDATE account_field_values SET  
+                                                        `$type`=?, `accountsaccount_id`=? WHERE `field_value_id`=?;";
+            $this->db->query($sql , $value['value'],$value['account_field_id'], $arr[$i]);
+
+            $i++;
+	}
+	return true;
     }
 }

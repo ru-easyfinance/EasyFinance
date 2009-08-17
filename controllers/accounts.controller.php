@@ -116,5 +116,16 @@ class Accounts_Controller extends Template_Controller
         //die('a'.strval($id).'a');
         $this->model->get_fields($id, $aid);
     }
+    
+    function correct()
+    {
+        $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
+	$qString = urldecode($_POST['qString']);
+        $aid=$_POST['aid'];
+        $tid=$_POST['tid'];
+	$qString = explode("&", $qString);
+        $this->model->correct($qString,$aid,$tid);
+        die ();
+    }
 
 }
