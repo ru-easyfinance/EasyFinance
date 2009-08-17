@@ -39,8 +39,8 @@ $(document).ready(function() {
             {},
             function(data){
                 len = data.length;
-                str= '';
-                $('table#operation_list tr.item').empty();
+                str= "<tr><th><b>Название</b></th><th><b>Тип счета</b></th><th><b>Комментарий</b></th><tr>";
+                $('table#operation_list').empty();
                 for (i = 0;i < len;i++ )
                 {
                     str = str + '<tr id="item"><td>'+
@@ -52,8 +52,6 @@ $(document).ready(function() {
                                     +'</ul></div></td></tr>';               
                 }
                 $('table#operation_list').append(str);
-                $('div.cont').hide();
-                
             },
             'json'
         );
@@ -65,7 +63,11 @@ $(document).ready(function() {
         function(){
             $('tr#item').removeAttr('class');
             $(this).attr('class','act');
-            $(this).find('div.cont').show();
+    });
+
+    $('tr#item').live('mouseout',
+        function(){
+            $(this).removeAttr('class');
     });
     //del accoun click
     $('li.del').live('click',
