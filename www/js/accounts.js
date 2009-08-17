@@ -3,7 +3,7 @@ $(document).ready(function() {
     var new_acc = 1;
     var aid;
     var tid;
-    $('#add_account').click(function(){
+    $('#addacc').click(function(){
         new_acc = 1;
         accountAddVisible();
     });
@@ -23,19 +23,6 @@ $(document).ready(function() {
         deleteAccount($(this).attr('value'));
     });
 
-    //$('#statement_date').click(function(){ alert('123'); $("#statement_date").datepicker(); })
-    $('#statement_date').focus(function(){ 
-        alert('123');
-    });
-
-    $('.cat_tr').hover(function () {
-        $(this).css('backgroundColor','#F8F6EA');
-        $('#ico_del_' + $(this).attr('value')).show();
-    }, function () {
-        $(this).css('backgroundColor','#FFFFFF');
-        $('#ico_del_' + $(this).attr('value')).hide();
-    });
-
     function accountAddUnvisible() {
         $('#blockCreateAccounts').hide();
     }
@@ -53,28 +40,31 @@ $(document).ready(function() {
             function(data){
                 len = data.length;
                 str= '';
-                $('table#list tr.item').empty();
+                $('table#operation_list tr.item').empty();
                 for (i = 0;i < len;i++ )
                 {
-                    str = str + '<tr class="item"><td>'+
+                    str = str + '<tr id="item"><td>'+
                         data[i]['account_name']+'</td><td>'+
                         data[i]['account_type_name']+'</td><td>'+
                         data[i]['account_description']+'<div class="cont"><ul>'
-                                    +'<li class="edit" id="'+data[i]['account_type_id']+'">Редактировать</li>'
-                                    +'<li class="del" id="'+data[i]['account_id']+'">Удалить</li>'
-                                    +'</ul></div></td></tr>';
+                                    +'<li class="edit" id="'+data[i]['account_type_id']+'"><a></a></li>'
+                                    +'<li class="del" id="'+data[i]['account_id']+'"><a></a></li>'
+                                    +'</ul></div></td></tr>';               
                 }
-                $('table#list').append(str);
+                $('table#operation_list').append(str);
                 $('div.cont').hide();
+                
             },
             'json'
         );
     };
     update_list();
     //acount click
-    $('tr.item').live('click',
+    
+    $('tr#item').live('mouseover',
         function(){
-             $('div.cont').hide();
+            $('tr#item').removeAttr('class');
+            $(this).attr('class','act');
             $(this).find('div.cont').show();
     });
     //del accoun click
@@ -84,7 +74,7 @@ $(document).ready(function() {
                 {id :$(this).attr('id') },
                 function(data){},
                 'text');
-            $(this).closest('tr').empty();
+            $(this).closest('#item').empty();
         }
     );
     //edit account lick

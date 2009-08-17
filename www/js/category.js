@@ -18,6 +18,9 @@ $(document).ready(function() {
     $('#btnAddCategory').click(function(){//++
         createNewCategory();
     });
+    $('#btnCancelAdd').click(function(){
+        categoryAddUnvisible();
+    });
 
     function categoryAddUnvisible() {
         $('#add_form').hide();
