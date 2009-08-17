@@ -282,18 +282,6 @@ class Targets_Model {
      * @return bool
      */
     public function addTargetOperation($bill_id, $target_id, $money, $comment, $date, $close) {
-        if ((int)$bill_id == 0){
-            trigger_error("Указанный счёт '{$bill_id}' не существует. ", E_USER_ERROR);
-            return false;
-        }
-        if ((int)$target_id == 0) {
-            trigger_error("Указанная финансовая цель '{$target_id}' не существует. ", E_USER_ERROR);
-            return false;
-        }
-        if (!is_float($money) && (int)$money == 0 ) {
-            trigger_error("Указано не число", E_USER_WARNING);
-            return false;
-        }
         $comment = strip_tags($comment);
         $date = explode('.', $date);
         $date = "{$date['2']}-{$date['1']}-{$date['0']}";

@@ -156,14 +156,15 @@ class Operation_Model {
         // - Перевод со счёта на счёт
         if ($valid['type'] == 2) {
             $valid['convert'] = round($valid['amount'] /  (float)$_POST['currency'], 2);
+            $valid['toAccount'] = (int)@$_POST['toAccount'];
         // - Финансовая цель
         } elseif($valid['type'] == 4) {
+            $valid['target'] = (int)@$_POST['target'];
             if (isset ($_POST['close'])) {
                 $valid['close'] = 1;
             } else {
                 $valid['close'] = 0;
             }
-            // target
         }
 
 
@@ -193,7 +194,7 @@ class Operation_Model {
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . (int)$last_id . "," . htmlspecialchars(addslashes($tag)) . ")";
+                $sql .= "(". $this->user->getId() . "," . (int)$last_id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
@@ -210,15 +211,16 @@ class Operation_Model {
 
     /**
      * Добавляет трансфер с одного на другой счёт
-     * @param $money float Деньги
-     * @param $convert Конвертированные в нужную валюту деньги
-     * @param $date Дата, когда совершаем трансфер
-     * @param $from_account Из счёта
-     * @param $to_account В счёт
-     * @param $comment Комментарий
+     * @param $money        float     Деньги
+     * @param $convert      float     Конвертированные в нужную валюту деньги
+     * @param $date         string    Дата, когда совершаем трансфер
+     * @param $from_account int       Со счёта
+     * @param $to_account   int       На счёт
+     * @param $comment      string    Комментарий
+     * @param $tags         array     Тег
      * @return bool
      */
-	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment)
+	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
 	{
         $drain_money = $money * -1;
 
@@ -233,7 +235,7 @@ class Operation_Model {
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment,
             $from_account, mysql_insert_id());
-        $this->user->initUserAccount();
+        $this->user->initUserAccounts();
         $this->user->save();
         return '[]';
 	}
@@ -255,16 +257,14 @@ class Operation_Model {
         if ($tags) {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
 
-            $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`, `tags`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain,
-                $comment, implode(', ', $tags));
-            $last_id = mysql_insert_id();
+            $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?
+                WHERE user_id = ? AND id = ?";
+            $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, implode(', ', $tags), $this->user->getId(), $id);
 
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . (int)$last_id . "," . htmlspecialchars(addslashes($tag)) . ")";
+                $sql .= "(". $this->user->getId() . "," . $id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {

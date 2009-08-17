@@ -92,10 +92,14 @@ class Operation_Controller extends Template_Controller
                     $array['drain'], $array['comment'], $array['account'], $array['tags']));
             case 2: // Перевод со счёта
                 $array['category'] = -1;
-                die($this->model->addTransfer($array['amount'], $array['convert'], $array['date'], $array['account'],$array['toAccount'],$array['comment'],$array['tags']));
+                die($this->model->addTransfer($array['amount'], $array['convert'], $array['date'],
+                    $array['account'],$array['toAccount'],$array['comment'],$array['tags']));
             case 3: //
                 break;
             case 4: // Перевод на финансовую цель
+                $target = new Targets_Model();
+                $target->addTargetOperation($array['account'], $array['target'], $array['money'], $array['comment'], $array['date'], $array['close']);
+                die($targets->getLastList(0, 100));
                 break;
         }
 

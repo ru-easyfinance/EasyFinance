@@ -39,7 +39,7 @@ $(function() {
             $(this).text(" "+$("#target :selected").attr("currency"));
         });
         $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
-        $("#amount").text(formatCurrency($("#target :selected").attr("amount")));
+        $("#amount_target").text(formatCurrency($("#target :selected").attr("amount")));
         $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
         $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
     });
@@ -65,8 +65,17 @@ $(function() {
                 // Собираем данные для заполнения в таблицу
                 for(v in data) {
                     tg = (data[v].tags!=null) ? data[v].tags : '';
+                    if (data[v].tr_id > 0) {
+                        tp = 'Перевод';
+                    } else {
+                        if (data[v].drain == 1) {
+                            tp = 'Расход';
+                        } else {
+                            tp = 'Доход';
+                        }
+                    }
                     tr += "<tr value='"+data[v].id+"'><td><input type='checkbox' /></td>"
-                        + '<td><a href="#">' +((data[v].drain == 1) ? 'Расход' : 'Доход') + '</td>'
+                        + '<td><a href="#">' + tp + '</td>'
                         + '<td><b>'+data[v].money+'</b></td>'
                         + '<td>'+data[v].date+'</td>'
                         + '<td>'+data[v].cat_name+'</td>'
@@ -77,17 +86,17 @@ $(function() {
                             +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                             +'<li class="del"><a title="Удалить">Удалить</a></li>'
                             +'<li class="add"><a title="Копировать">Копировать</a></li>'
-                            +'</ul></div></td></tr>';
+                            +'</ul></div>'
+                        +'</td></tr>';
                 }
                 // Очищаем таблицу
                 $('#operations_list tr:not(:first)').each(function(){
                     $(this).remove();
                 });
                 // Заполняем таблицу и биндим показ и скрытие тулбокса
-                $('#operations_list').append(tr).find('td')
-                    .unbind('mouseover.namespace').bind('mouseover.namespace', function(){
-                        $(this).parent().find('ul').show();
-                }).unbind('mouseout.panel').bind('mouseout.panel', function(){
+                $('#operations_list').append(tr).find('td').live('mouseover',function(){
+                    $(this).parent().find('ul').show();
+                }).live('mouseout', function(){
                     $(this).parent().find('ul').hide();
                 });
                 // Биндим щелчки на кнопках тулбокса (править, удалить, копировать)
@@ -192,6 +201,7 @@ $(function() {
         $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
         $('#close').removeAttr('checked');
         $('form').attr('action','/operation/add/');
+        $('#type').change();
     }
 
     /**
@@ -266,8 +276,7 @@ $(function() {
         } else if ($('#type').val() == 4) {
             $("#target_fields").show();
             $("#tags_fields,#transfer_fields,#category_fields").hide();
-            changeTarget();
-            changeTargetEdit();
+            $('#target').change();
         }
     }
 
