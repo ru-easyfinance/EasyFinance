@@ -45,8 +45,8 @@ $(document).ready(function() {
                 {
                     str = str + '<tr id="item"><td>'+
                         data[i]['account_name']+'</td><td>'+
-                        data[i]['account_type_name']+'</td><td>'+
-                        data[i]['account_description']+'<div class="cont"><ul>'
+                        data[i]['account_type_name']+'</td><td><div class="cont">'+
+                        data[i]['account_description']+'<ul>'
                                     +'<li class="edit" id="'+data[i]['account_type_id']+'"><a></a></li>'
                                     +'<li class="del" id="'+data[i]['account_id']+'"><a></a></li>'
                                     +'</ul></div></td></tr>';               
