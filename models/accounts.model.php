@@ -33,7 +33,7 @@ class Accounts_Model
      * @return array
      */
     public function getTypeAccounts() {
-        return $this->db->selectRow("SELECT * FROM account_types ORDER BY account_type_name");
+        return $this->db->select("SELECT * FROM account_types ORDER BY account_type_name");
     }
 //@todo accounts_field;
     /**
