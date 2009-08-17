@@ -147,6 +147,7 @@ $(document).ready(function() {
                 $('#dataAccounts').html(data);
                 $('#information_text').show();
                 update_list();
+                accountAddUnvisible();
             }
         });
     }
@@ -167,6 +168,7 @@ $(document).ready(function() {
                 $('#dataAccounts').html(data);
                 $('#information_text').show();
                 update_list();
+                accountAddUnvisible();
             },
             'text'
         );

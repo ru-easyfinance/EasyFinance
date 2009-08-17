@@ -1,5 +1,7 @@
 // {* $Id: category.js 113 2009-07-29 11:54:49Z ukko $ *}
 $(document).ready(function() {
+    $('#add_form').hide();
+
     $('#add_category').click(function(){
         categoryAddVisible();
     });
@@ -12,29 +14,24 @@ $(document).ready(function() {
     $('.delCategory').click(function(){
         delCategory($(this).val());
     });
-    $('.cat_tr').hover(function () {
-        $(this).css('backgroundColor','#F8F6EA');
-        $('#ico_del_' + $(this).attr('value')).show();
-    }, function () {
-        $(this).css('backgroundColor','#FFFFFF');
-        $('#ico_dхel_' + $(this).attr('value')).hide();
-    });
-    $('#btnAddCategory').click(function(){
+    
+    $('#btnAddCategory').click(function(){//++
         createNewCategory();
     });
+
     function categoryAddUnvisible() {
-        $('#blockCreateCategories').hide();
-        $('#name,#category_id').val('');
-        $('#parent,#type,#system').val(0);
+        $('#add_form').hide();
+        //$('#name,#category_id').val('');
+        //$('#parent,#type,#system').val(0);
     }
 
     function categoryAddVisible() {
-        $('#blockCreateCategories').show();
+        $('#add_form').show();
     }
 
     function createNewCategory() {
-        $('#loader').html('Подождите, идет сохранение...');
-        $('#information_text').hide();
+        //$('#loader').html('Подождите, идет сохранение...');
+        //$('#information_text').hide();
         $.ajax({
             type: "POST",
             url: "/category/add/",
@@ -46,9 +43,9 @@ $(document).ready(function() {
                 category_id: $('#category_id').val()
             },
             success: function(data) {
-                $('#loader').html(" ");
-                $('#dataCategories').html(data);
-                $('#information_text').show();
+                //$('#loader').html(" ");
+                //$('#dataCategories').html(data);
+                //$('#information_text').show();
                 categoryAddUnvisible();
             }
         });
