@@ -948,3 +948,78 @@ span.tagMatches span {
     cursor: pointer;
     z-index: 1000;
 }
+
+
+/*------------------------------------------- crack jQuery Start --------------------------------------*/
+#views.ui-widget-content {
+    background: none;
+    border: none;
+}
+#views.ui-tabs {
+    padding: 0;
+}
+#views.ui-widget-content #calendar table {
+    font-size: 80%;
+}
+#views.ui-widget-content #calendar .ui-corner-bottom {
+    -moz-border-radius: 0;
+}
+#views.ui-widget-content #calendar table th {
+    padding: .2em 0;
+    background: #dadada url('/img/i/bg_table_calendar_th.gif') repeat-x 0 0;
+    border: none;
+}
+#views.ui-widget-content #calendar table td .day-number {
+    margin-top: .3em;
+    margin-left: .8em;
+    text-align: left;
+}
+#views.ui-widget-content #calendar table td.today {
+    background-color: #e4ffe0;
+}
+
+#views.ui-widget-content .hasDatepicker .ui-widget-content {
+    margin-top: 1em;
+    font-size: 80%;
+    background: none;
+    border: none;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group {
+    width: 32.9%;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-first {
+    margin-right: .3em;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-last {
+    margin-left: .3em;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-widget-header {
+    width: 100%;
+    -moz-border-radius: 0;
+    border: 0;
+    background: #dadada url('/img/i/bg_table_calendar_th.gif') repeat-x 0 0;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group table {
+    width: 100%;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th {
+    color: #b4b4b4;
+    border-bottom: solid 1px #d9d9d9;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th.ui-datepicker-week-end span {
+    font-weight: bold;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default {
+    text-align: center;
+    color: #000;
+    background: none;
+    border: none;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td.ui-datepicker-today a.ui-state-default {
+    background-color: #e4ffe0;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default:hover {
+    background-color: #e5e5e5;
+}
+
+/*------------------------------------------- crack jQuery End --------------------------------------*/
