@@ -369,8 +369,21 @@ class Operation_Model {
                 if (!empty($currentCategory)) {
                     $sql .= " AND (o.cat_id = '{$currentCategory}') ";
                 }
+            $sql .= " UNION ".
+            " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), ".
+            " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags ".
+            " FROM target_bill t ".
+            " LEFT JOIN target tt ON t.target_id=tt.id ".
+            " WHERE t.user_id = ? ".
+                " AND (t.`date` BETWEEN ? AND ?) ";
+                if (!empty($currentCategory)) {
+                    $sql .= " AND (tt.category_id = '{$currentCategory}') ";
+                }
+            $sql .= " ORDER BY `date` DESC, id ";
+
             $accounts = Core::getInstance()->user->getUserAccounts();
-            $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom, $dateTo);
+            $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom, 
+                $dateTo, $this->user->getId(), $dateFrom, $dateTo);
             // Добавляем данные, которых не хватает
             foreach ($operations as $key => $val) {
                 $val['cat_name']            = $category[$val['cat_id']]['cat_name'];

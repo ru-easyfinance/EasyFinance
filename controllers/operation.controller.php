@@ -98,9 +98,11 @@ class Operation_Controller extends Template_Controller
                 break;
             case 4: // Перевод на финансовую цель
                 $target = new Targets_Model();
-                $target->addTargetOperation($array['account'], $array['target'], $array['money'], $array['comment'], $array['date'], $array['close']);
-                die($targets->getLastList(0, 100));
-                break;
+                $target->addTargetOperation($array['account'], $array['target'], $array['amount'], 
+                    $array['comment'], $array['date'], $array['close']);
+                //@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
+                //die(json_encode($target->getLastList(0, 100)));
+                die('[]');
         }
 
     }

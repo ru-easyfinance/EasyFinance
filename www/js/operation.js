@@ -18,6 +18,9 @@ $(function() {
     $('#btn_Save').click(function(){ saveOperation(); })
     $('#btn_Cancel').click(function(){ clearForm() });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
+    $('li.over3 a').click(function() {
+        $(this).closest('div.ramka3').find('div.inside').toggle();
+    });
 
     $('#amount,#currency').change(function(){
         if ($('#type').val() == 2) {
@@ -67,6 +70,8 @@ $(function() {
                     tg = (data[v].tags!=null) ? data[v].tags : '';
                     if (data[v].tr_id > 0) {
                         tp = 'Перевод';
+                    }else if (data[v].virt == 1) {
+                        tp = 'Фин.цель';
                     } else {
                         if (data[v].drain == 1) {
                             tp = 'Расход';

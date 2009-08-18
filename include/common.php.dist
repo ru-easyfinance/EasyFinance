@@ -50,6 +50,7 @@ $tpl->force_compile   =  false;
 $tpl->assign('revision',REVISION);
 $tpl->append('css', 'main.css');
 $tpl->append('js', 'jquery/jquery.min.js');
+$tpl->append('js','main.js');
 
 // Добавляем ссылки на БД, Смарти, Пользователя и Валюты - в наше ядро
 Core::getInstance()->db = $db;

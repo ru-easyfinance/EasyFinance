@@ -2,10 +2,13 @@
 <div id="auth" class="ramka1">
     <div class="ct"><div></div></div>
     <div class="inside">
-        <div class="f"><span></span><img src="/img/images/pic2.jpg" alt="Ромка Абрамович" /></div>
-            <div class="txt">Добро пожаловать, <b>{$user.user_name}</b></div>
+        <div class="f" ><span></span>
+            <img src="/img/images/pic2.jpg" alt="Ромка Абрамович" style="display:none" />
+        </div>
+        <div class="txt"><b>{$user.user_name}</b>
+        </div>
             <ul>
-                <li><a href="#">Личный кабинет</a></li>
+                <li><a href="/profile/">Личный кабинет</a></li>
                 <li class="exit"><a href="/logout/">Выход</a></li>
             </ul>
     </div>

@@ -222,7 +222,8 @@ class Targets_Model {
 
     /**
      * Редактируем событие
-     * @return json Массив в формате json. Если пустой, значит успешно отредактировано, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
+     * @return json Массив в формате json. Если пустой, значит успешно отредактировано, если со
+     * значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function edit() {
         $data = $this->checkData();
@@ -242,13 +243,15 @@ class Targets_Model {
 
     /**
      * Удаляет указанное событие
-     * @return json Массив в формате json. Если пустой, значит успешно удалено, если со значениями - значит ошибка. И в них содержится ошибка.
+     * @return json Массив в формате json. Если пустой, значит успешно удалено, если со значениями -
+     * значит ошибка. И в них содержится ошибка.
      */
     function del() {
         $id    = (int)@$_POST['id'];
         $this->db->query("DELETE FROM target WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
         return true;
     }
+
     /**
      * Обновляет статистику для указанной финансовой цели, или указанного или текущего пользователя
      * @param $target_id int
@@ -283,12 +286,10 @@ class Targets_Model {
      */
     public function addTargetOperation($bill_id, $target_id, $money, $comment, $date, $close) {
         $comment = strip_tags($comment);
-        $date = explode('.', $date);
-        $date = "{$date['2']}-{$date['1']}-{$date['0']}";
         $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt`, `comment`, `date`)
-            VALUES(?,?,?,?,NOW(),?,?);",$bill_id, $target_id, $_SESSION['user']['user_id'], $money, $comment, $date);
+            VALUES(?,?,?,?,NOW(),?,?);",$bill_id, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
         if (!empty($close)) {
-            $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", $_SESSION['user']['user_id'], $target_id);
+            $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
         }
         $this->staticTargetUpdate($target_id);
         return true;
@@ -327,7 +328,7 @@ class Targets_Model {
         $this->db->query("UPDATE target_bill SET bill_id=?, money=?, date=?, comment=?,
             WHERE id=? AND user_id=? LIMIT 1;", $bill_id, $money, $date, $comment, $target_bill_id, $_SESSION['user']['user_id']);
         if (!empty($close)) {
-            $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", $_SESSION['user']['user_id'], $target_id);
+            $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
         }
         return true;
     }
@@ -352,7 +353,7 @@ class Targets_Model {
      * @return bool
      */
     public function delTargetOperation($tar_oper_id = 0, $tr_id = 0) {
-        $this->db->query("DELETE FROM target_bill WHERE user_id=? AND id=?;", $_SESSION['user']['user_id'], $tar_oper_id);
+        $this->db->query("DELETE FROM target_bill WHERE user_id=? AND id=?;", Core::getInstance()->user->getId(), $tar_oper_id);
         return $this->staticTargetUpdate($tr_id);
     }
 
@@ -367,6 +368,6 @@ class Targets_Model {
             t.title as title, t.close
         FROM `target_bill` tb
         LEFT JOIN target t on tb.target_id = t.id
-        WHERE tb.id = ? AND tb.`user_id` = ?", $target_id, $_SESSION['user']['user_id']);
+        WHERE tb.id = ? AND tb.`user_id` = ?", $target_id, Core::getInstance()->user->getId());
     }
 }
