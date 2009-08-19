@@ -64,7 +64,7 @@ $(document).ready(function() {
                     str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';
                     str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+data[key]['def_cur']+' руб.</td>';
                     summ[i] = summ[i]+data[key]['def_cur'];
-                    alert(data[key]['def_cur']);
+                    //alert(data[key]['def_cur']);
                     if (!val[data[key]['cur']]) {
                         val[data[key]['cur']]=0;
                     }
@@ -99,8 +99,8 @@ $(document).ready(function() {
                 total = 0;
                 for(key in arr)
                 {
-                    total = total+summ[key];
-                    s='<b>'+ g_name[key] + '</b> : '+summ[key]+' руб.<table>'+arr[key]+'</table>';
+                    total = total+(parseInt(summ[key]*100))/100;
+                    s='<b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+arr[key]+'</table>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
