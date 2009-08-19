@@ -9,13 +9,13 @@ class Category_Controller extends Template_Controller
 {
     /**
      * Ссылка на класс модели категории
-     * @var <Category_Model>
+     * @var Category_Model
      */
     private $model = null;
 
     /**
      * Ссылка на Шаблон Смарти
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
 
