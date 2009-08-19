@@ -106,7 +106,7 @@ class Accounts_Controller extends Template_Controller
      */
     public function accountslist()
     {
-        $this->model->accounts_list();
+        die(json_encode($this->model->accounts_list()));
     }
 
     public function get_fields()

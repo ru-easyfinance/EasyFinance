@@ -35,7 +35,6 @@ class Accounts_Model
     public function getTypeAccounts() {
         return $this->db->select("SELECT * FROM account_types ORDER BY account_type_name");
     }
-//@todo accounts_field;
     /**
      * Получаем поля для счета
      * @return array
@@ -80,13 +79,14 @@ class Accounts_Model
     private function loadEnumList($table)
     {
         $list = $this->db->select("SELECT * FROM ".$table);
+        $enum = array();
         foreach ($list as $element)
         {
             $enum[($element['name']!=""? $element['name'] : $element['id'])] = $element['value'];
         }
 	return $enum;
     }
-	
+
     /**
      * Формируем форму
      * @return string
@@ -145,7 +145,7 @@ class Accounts_Model
         }
     }
 
-	/**
+    /**
      * Возвращаем сформированый список полей
      * @return array
      */
@@ -260,24 +260,78 @@ class Accounts_Model
     public function accounts_list()
     {
         $sql='SELECT
-                   `account_id`, `account_name`,accounts.account_type_id , `account_description`, `account_type_name`
+                   account_id, account_type_id, cur_name, cur_id
                 FROM
                     accounts
                 LEFT JOIN
-                    account_types
+                    currency
                 ON
-                    (accounts.account_type_id=account_types.account_type_id)
+                    (account_currency_id=cur_id)
                 WHERE
                     user_id=?';
         $ret = $this->db->select($sql,$this->user_id);
-        die(json_encode($ret));
+
+        $id = array();
+        $type = array();
+        $cur = array();
+        $cur_id = array();
+        foreach ($ret as $key=>$val)
+        {
+            $id[]=$val['account_id'];
+            $type[]=$val['account_type_id'];
+            $cur[]=$cur['cur_name'];
+            $cur_id[]=$cur_id['cur_id'];
+        }
+        $id_str = implode(',', $id);
+        $type_str = implode(',', $type);
+        $sql = "SELECT
+                    `int_value`, `date_value`, `string_value`, account_fieldsaccount_field_id
+                FROM
+                     account_field_values
+                WHERE
+                     account_fieldsaccount_field_id IN ($id_str)";
+        $values = $this->db->select($sql);
+
+        $fields = $this->db->select("SELECT * FROM account_fields af
+                                        LEFT JOIN account_field_descriptions afd
+                                        ON af.field_descriptionsfield_description_id = afd.field_description_id
+                                        WHERE af.account_typesaccount_type_id IN ($type_str)");
+        
+
+ //               $this->fields[$field["field_name"]] = $this->setAccountField($field);
+        $res = array();
+        $i=0;
+        $o_model = new Operation_Model();
+        foreach ($id as $key=>$val)
+        {
+            $res[$val]['type']=$type[$key];
+            $res[$val]['cur']=$cur[$key];
+             
+            $temp=array_keys(Core::getInstance()->user->getUserCurrency());
+            $_POST['SourceId']=$temp[0];
+            $_POST['TargetId']=$cur_id[$key];
+            $res[$val]['def_cur'] = $o_model->getCurrency();
+            
+            $res[$val]['fields']=array();
+            foreach ($fields as $k=>$v)
+            {
+                if ($v['account_typesaccount_type_id']==$type[$key])
+                {
+
+                    $value = $values[$i]['int_value'] . $values[$i]['date_value'] . $values[$i]['string_value'];
+                    $res[$val]['fields'][$v['field_name']]=$value;//value
+                    $i++;
+                }
+            }
+            $res[$val]['info']=array();
+        }
+        die(json_encode($res));
     }
 
     public function get_fields($type,$id)
     {
 
         $this->newEmptyBill($type);
-        
         $sql = "SELECT `int_value`, `date_value`, `string_value` FROM account_field_values WHERE account_fieldsaccount_field_id = ?";
         $res = $this->db->select($sql,$id);
         $cnt = count($this->fields());
@@ -300,7 +354,7 @@ class Accounts_Model
            }
            $i++;  
         }
-        die(json_encode($ret));
+        return $ret;
     }
      /**
      * Редактирует счёт

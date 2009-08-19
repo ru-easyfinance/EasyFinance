@@ -35,23 +35,53 @@ $(document).ready(function() {
     // upload account
     function update_list()
     {
+        g_types = [0,0,0,1,2,0,3,3,3,3,4,0];
+        g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];
+        var arr = ['','','','',''];
         $.post('/accounts/accountslist/',
             {},
             function(data){
                 len = data.length;
-                str= "<tr><th><b>Название</b></th><th><b>Тип счета</b></th><th><b>Комментарий</b></th><tr>";
-                $('table#operation_list').empty();
-                for (i = 0;i < len;i++ )
+                div = "<div class='cont'>&nbsp;<ul>\n\
+                        <li class='edit'><a></a></li>\n\
+                        <li class='del'><a></a></li>\n\
+                      </ul></div>";
+                //str = '';
+                //str= "<tr><th><ob>Название</b></th><th><b>Тип счета</b></th><th><b>Комментарий</b></th><tr>";
+                $('#operation_list').empty();
+                for (key in data )//пробег по категориям счетов @todo
                 {
-                    str = str + '<tr id="item"><td>'+
-                        data[i]['account_name']+'</td><td>'+
-                        data[i]['account_type_name']+'</td><td><div class="cont">'+
-                        data[i]['account_description']+'<ul>'
-                                    +'<li class="edit" id="'+data[i]['account_type_id']+'"><a></a></li>'
-                                    +'<li class="del" id="'+data[i]['account_id']+'"><a></a></li>'
-                                    +'</ul></div></td></tr>';               
+                    //i = data[key]['type'];
+                    //str = '<b>'+ g_name[data[key]['type']] + '</b>';// + data[i]['summ'];
+                    str = '<tr id="item">';
+
+                        for( k in data[key]['fields'])//добавляются все поля
+                        {
+                            str = str + '<td id='+k+'>';
+
+                                str = str +data[key]['fields'][k]+ '</td>';
+                  
+                        }
+                    str = str+'<td id="mark">'+ div +'</td></tr>';
+                    //alert(g_types[data[key]['type']]);
+                    i = g_types[data[key]['type']];
+                    
+                    arr[i] = arr[i]+str;
+                    //alert(arr[i]);
+                    //todo hide show
                 }
-                $('table#operation_list').append(str);
+                
+                for(key in arr)
+                {
+                    s='<b>'+ g_name[key] + '</b><table>'+arr[key]+'</table>';
+                    if (arr[key])
+                    $('#operation_list').append(s);
+                }
+                $('#item td').hide();
+                $('#item td#name').show();
+                $('#item td#description').show();
+                $('#item td#total_balance').show();
+                $('#item td#mark').show();     
             },
             'json'
         );
@@ -82,7 +112,6 @@ $(document).ready(function() {
     //edit account lick
     $('li.edit').live('click',
         function(){
-            
                 id =$(this).attr('id');
                 aid = $(this).closest('div').find('li.del').attr('id');
                 tid = id;
