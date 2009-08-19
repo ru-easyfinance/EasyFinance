@@ -19,8 +19,8 @@ $(document).ready(function() {
         else
             correctaccount();
     });
-    $('.delAccount').click(function(){ 
-        deleteAccount($(this).attr('value'));
+    $('.delAccount').click(function(){
+        
     });
 
     function accountAddUnvisible() {
@@ -46,28 +46,45 @@ $(document).ready(function() {
                         <li class='edit'><a></a></li>\n\
                         <li class='del'><a></a></li>\n\
                       </ul></div>";
-                //str = '';
-                //str= "<tr><th><ob>Название</b></th><th><b>Тип счета</b></th><th><b>Комментарий</b></th><tr>";
+                
                 $('#operation_list').empty();
-                for (key in data )//пробег по категориям счетов @todo
+                for (key in data )
                 {
-                    //i = data[key]['type'];
-                    //str = '<b>'+ g_name[data[key]['type']] + '</b>';// + data[i]['summ'];
+                  i = g_types[data[key]['type']];
                     str = '<tr id="item">';
-
+                    str = str + '<td id="type" value="'+data[key]['type']+'"></td>';
                         for( k in data[key]['fields'])//добавляются все поля
                         {
-                            str = str + '<td id='+k+'>';
-
-                                str = str +data[key]['fields'][k]+ '</td>';
-                  
+                            str = str + '<td id='+k+' value='+data[key]['fields'][k]+'>';
+                            str = str +data[key]['fields'][k]+ '</td>';
                         }
+                    str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';
+                    str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+data[key]['def_cur']+' руб.</td>';
+                    switch (i)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            str = str + '<td id="special" value="'+data[key]['special'][0]+'">'+data[key]['special'][0]+'%</td>';
+                            str = str + '<td id="special" value="'+data[key]['special'][1]+'">'+data[key]['special'][1]+'%</td>';
+                            break;
+                        case 2:
+                            str = str + '<td id="special" value="'+data[key]['special'][0]+'">'+data[key]['special'][0]+'%</td>';
+                            str = str + '<td id="special" value="'+data[key]['special'][1]+'">'+data[key]['special'][1]+'%</td>';
+                            str = str + '<td id="special" value="'+data[key]['special'][2]+'">'+data[key]['special'][2]+'</td>';
+                            break;
+                        case 3:
+                            str = str + '<td id="special" value="'+data[key]['special'][0]+'">'+data[key]['special'][0]+'%</td>';
+                            break;
+                        case 4:
+                            str = str + '<td id="special" value="'+data[key]['special'][1]+'">'+data[key]['special'][1]+'%</td>';
+                            str = str + '<td id="special" value="'+data[key]['special'][2]+'">'+data[key]['special'][2]+'</td>';
+                            break;
+                    }
                     str = str+'<td id="mark">'+ div +'</td></tr>';
-                    //alert(g_types[data[key]['type']]);
                     i = g_types[data[key]['type']];
-                    
                     arr[i] = arr[i]+str;
-                    //alert(arr[i]);
+
                     //todo hide show
                 }
                 
@@ -77,8 +94,12 @@ $(document).ready(function() {
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
+                
                 $('#item td').hide();
                 $('#item td#name').show();
+                $('#item td#cur').show();
+                 $('#item td#def_cur').show();
+                $('#item td#special').show();
                 $('#item td#description').show();
                 $('#item td#total_balance').show();
                 $('#item td#mark').show();     
@@ -102,33 +123,42 @@ $(document).ready(function() {
     //del accoun click
     $('li.del').live('click',
         function(){
-            $.post('/accounts/del/',
-                {id :$(this).attr('id') },
-                function(data){},
-                'text');
-            $(this).closest('#item').empty();
+            if (confirm("Вы уверены что хотите удалить счёт?"))
+            {
+                $.post('/accounts/del/',
+                    {id :$(this).closest('#item').find('#name').attr('value') },
+                    function(data){},
+                    'text');
+                $(this).closest('#item').empty();
+                return false;
+            }
         }
     );
     //edit account lick
     $('li.edit').live('click',
         function(){
-                id =$(this).attr('id');
-                aid = $(this).closest('div').find('li.del').attr('id');
+                $('#blockCreateAccounts').show();
+                id =$(this).closest('#item').find('#type').attr('value');
+                new_acc=0;
                 tid = id;
-               changeTypeAccount(id);
-               $('#blockCreateAccounts').show();
-               
-            $.post('/accounts/get_fields/',
-            {id :id,
-             aid : $(this).closest('div').find('li.del').attr('id')},
-            function(data){
-                for(key in data)
-                {                
-                    $('#blockCreateAccounts').find('#'+key).val(data[key]) ;
-                }
-                new_acc = 0;
-            },
-            'json');
+                var th = $(this);
+                $.post(
+                    "/accounts/changeType/",
+                    {
+                        id: id
+                    },
+                     function(data) {
+                        $('#account_fields').html(data);
+                        $(th).closest('#item').find('td').each(function(){
+                            key = $(this).attr('id');
+                            val = $(this).attr('value');
+                            $('#blockCreateAccounts').find('#'+key).val(val) ;
+
+                        });
+                    },
+                    'text'
+                );
+                
         }
     );
 
@@ -138,18 +168,18 @@ $(document).ready(function() {
     function changeTypeAccount(id) {
         $('#loader').html('Подождите, идет загрузка...');
         $('#information_text').hide();
-        $.ajax({
-            type: "POST",
-            url: "/accounts/changeType/",
-            data: {
+        $.post(
+            "/accounts/changeType/",
+            {
                 id: id
             },
-            success: function(data) {
+             function(data) {
                 $('#account_fields').html(data);
                 $('#loader').html(' ');
                 $('#information_text').show();
-            }
-        });
+            },
+            'text'
+        );
     }
 
         function createNewAccount() {

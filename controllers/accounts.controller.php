@@ -67,8 +67,23 @@ class Accounts_Controller extends Template_Controller
 	$id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
 	$this->model->newEmptyBill($id);
 	$this->tpl->assign("fields", $this->model->formatFields());
-	$this->tpl->assign("type_id", $id);     
-	die($this->tpl->fetch("accounts/accounts.fields.html"));
+	$this->tpl->assign("type_id", $id);
+         $c_arr=Core::getInstance()->user->getUserCurrency();
+         $arr = array();
+         $i=0;
+         foreach ($c_arr as $key=>$val)
+         {
+             if (is_array($val))
+             {
+                $arr[$i]['name']=$val['abbr'];
+                $arr[$i]['key']=$key;
+                $i++;
+             }
+         }
+         //die(print_r($arr));
+        $this->tpl->assign("currency", $arr);
+
+        die($this->tpl->fetch("accounts/accounts.fields.html"));
     }
 
     /**
@@ -94,7 +109,7 @@ class Accounts_Controller extends Template_Controller
      */
     function del ($args)
     {
-        $id = (int)$_POST['id'];
+        $id = $_POST['id'];
         if (!$this->model->deleteAccount($id)) {
             $this->tpl->assign("error", "Счет не удален");
         }

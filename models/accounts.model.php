@@ -244,14 +244,22 @@ class Accounts_Model
      */
     public function deleteAccount($id)
     {
-        $sql = "DELETE FROM accounts WHERE `account_id` = ? and `user_id` = ?";
-        if (!$this->db->query($sql, $id, $this->user_id)) {
-            return false;
-        }
-	$sql = "DELETE FROM account_field_values WHERE  `accountsaccount_id` = ?";
-        if (!$this->db->query($sql, $id)) {
-            return false;
-        }
+        
+
+	$sql = "DELETE FROM
+                    account_field_values
+                WHERE
+                    account_fieldsaccount_field_id = (
+                        SELECT
+                            account_id
+                        FROM
+                            accounts
+                        WHERE
+                            `account_name` = ?)";
+        $this->db->query($sql, $id);
+
+        $sql = "DELETE FROM accounts WHERE `account_name` = ? and `user_id` = ?";
+        $this->db->query($sql, $id, $this->user_id);
         return true;
     }
     /**
@@ -279,8 +287,8 @@ class Accounts_Model
         {
             $id[]=$val['account_id'];
             $type[]=$val['account_type_id'];
-            $cur[]=$cur['cur_name'];
-            $cur_id[]=$cur_id['cur_id'];
+            $cur[]=$val['cur_name'];
+            $cur_id[]=$val['cur_id'];
         }
         $id_str = implode(',', $id);
         $type_str = implode(',', $type);
@@ -298,20 +306,22 @@ class Accounts_Model
                                         WHERE af.account_typesaccount_type_id IN ($type_str)");
         
 
- //               $this->fields[$field["field_name"]] = $this->setAccountField($field);
         $res = array();
         $i=0;
-        $o_model = new Operation_Model();
+        
+        
+        
         foreach ($id as $key=>$val)
         {
             $res[$val]['type']=$type[$key];
             $res[$val]['cur']=$cur[$key];
              
-            $temp=array_keys(Core::getInstance()->user->getUserCurrency());
-            $_POST['SourceId']=$temp[0];
-            $_POST['TargetId']=$cur_id[$key];
-            $res[$val]['def_cur'] = $o_model->getCurrency();
-            
+            //$temp=array_keys(Core::getInstance()->user->getUserCurrency());
+            //$_POST['SourceId']=$temp[0];
+            //$_POST['TargetId']=$cur_id[$key];
+            //die(strval(Core::getInstance()->currency[1]['value']));
+            $res[$val]['def_cur'] = Core::getInstance()->currency[$cur_id[$key]]['value'];
+            //die(strval($res[$val]['def_cur']));
             $res[$val]['fields']=array();
             foreach ($fields as $k=>$v)
             {
@@ -323,7 +333,15 @@ class Accounts_Model
                     $i++;
                 }
             }
-            $res[$val]['info']=array();
+            $res[$val]['def_cur'] =round(
+                $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],
+            2
+        );
+
+
+
+            $res[$val]['special'] = array(0,0,0);//todo tz
+
         }
         die(json_encode($res));
     }

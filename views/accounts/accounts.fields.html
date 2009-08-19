@@ -4,9 +4,9 @@
     <td class="cat_add" width="20%" align="right">Валюта счета:</td>
     <td class="cat_add" width="80%" align="left">
     	<select name="currency_id">
-            <option value="0">Руб.</option>
-            <option value="0">$</option>
-            <option value="0">&euro;</option>
+            {foreach from=$currency item=data}
+                <option value="{$data.key}">{$data.name}</option>
+            {/foreach}
         </select>
 	</td>
 </tr>
