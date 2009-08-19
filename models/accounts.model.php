@@ -255,7 +255,7 @@ class Accounts_Model
                         FROM
                             accounts
                         WHERE
-                            `account_name` = ?)";
+                            `account_id` = ?)";
         $this->db->query($sql, $id);
 
         $sql = "DELETE FROM accounts WHERE `account_name` = ? and `user_id` = ?";
@@ -315,13 +315,8 @@ class Accounts_Model
         {
             $res[$val]['type']=$type[$key];
             $res[$val]['cur']=$cur[$key];
-             
-            //$temp=array_keys(Core::getInstance()->user->getUserCurrency());
-            //$_POST['SourceId']=$temp[0];
-            //$_POST['TargetId']=$cur_id[$key];
-            //die(strval(Core::getInstance()->currency[1]['value']));
-            $res[$val]['def_cur'] = Core::getInstance()->currency[$cur_id[$key]]['value'];
-            //die(strval($res[$val]['def_cur']));
+            $res[$val]['id']=$id[$key];
+            
             $res[$val]['fields']=array();
             foreach ($fields as $k=>$v)
             {

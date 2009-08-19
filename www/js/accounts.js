@@ -38,6 +38,8 @@ $(document).ready(function() {
         g_types = [0,0,0,1,2,0,3,3,3,3,4,0];
         g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];
         var arr = ['','','','',''];
+        var summ = [0,0,0,0,0];
+        var val = {};
         $.post('/accounts/accountslist/',
             {},
             function(data){
@@ -50,9 +52,10 @@ $(document).ready(function() {
                 $('#operation_list').empty();
                 for (key in data )
                 {
-                  i = g_types[data[key]['type']];
+                    i = g_types[data[key]['type']];
                     str = '<tr id="item">';
                     str = str + '<td id="type" value="'+data[key]['type']+'"></td>';
+                    str = str + '<td id="id" value="'+data[key]['id']+'"></td>';
                         for( k in data[key]['fields'])//добавляются все поля
                         {
                             str = str + '<td id='+k+' value='+data[key]['fields'][k]+'>';
@@ -60,6 +63,13 @@ $(document).ready(function() {
                         }
                     str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';
                     str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+data[key]['def_cur']+' руб.</td>';
+                    summ[i] = summ[i]+data[key]['def_cur'];
+                    alert(data[key]['def_cur']);
+                    if (!val[data[key]['cur']]) {
+                        val[data[key]['cur']]=0;
+                    }
+                    val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
+                        + parseFloat(data[key]['fields']['total_balance']);
                     switch (i)
                     {
                         case 0:
@@ -82,23 +92,34 @@ $(document).ready(function() {
                             break;
                     }
                     str = str+'<td id="mark">'+ div +'</td></tr>';
-                    i = g_types[data[key]['type']];
                     arr[i] = arr[i]+str;
 
                     //todo hide show
                 }
-                
+                total = 0;
                 for(key in arr)
                 {
-                    s='<b>'+ g_name[key] + '</b><table>'+arr[key]+'</table>';
+                    total = total+summ[key];
+                    s='<b>'+ g_name[key] + '</b> : '+summ[key]+' руб.<table>'+arr[key]+'</table>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
-                
+                /////////////////////формирование итогового поля//////////////////////
+                str='<b> Итог </b><table>';
+                for(key in val)
+                {
+                    str = str+'<tr><td>'+val[key]+'</td><td>'+key+'</td></tr>';
+                }
+                str = str+'<tr><td>Итого:  '+total+'</td><td> руб.</td></tr>';
+                str = str + '</table>';
+                 $('#operation_list').append(str);
+                ////////////////////////////////////////////////////////////////
+
+
                 $('#item td').hide();
                 $('#item td#name').show();
                 $('#item td#cur').show();
-                 $('#item td#def_cur').show();
+                $('#item td#def_cur').show();
                 $('#item td#special').show();
                 $('#item td#description').show();
                 $('#item td#total_balance').show();
@@ -126,7 +147,7 @@ $(document).ready(function() {
             if (confirm("Вы уверены что хотите удалить счёт?"))
             {
                 $.post('/accounts/del/',
-                    {id :$(this).closest('#item').find('#name').attr('value') },
+                    {id :$(this).closest('#item').find('#id').attr('value') },
                     function(data){},
                     'text');
                 $(this).closest('#item').empty();
@@ -204,24 +225,10 @@ $(document).ready(function() {
     }
 
     function correctaccount() {
-        $('#loader').html('Подождите, идет сохранение...');
-        $('#information_text').hide();
-        var qString = $("#formAccount").formSerialize();
-        $.post(
-            "/accounts/correct/",
-            {
-                qString: qString,
-                aid :aid,
-                tid :tid
-            },
-            function(data) {
-                $('#loader').html(' ');
-                $('#dataAccounts').html(data);
-                $('#information_text').show();
-                update_list();
-                accountAddUnvisible();
-            },
-            'text'
-        );
+        $.post('/accounts/del/',
+                    {id :$('#blockCreateAccounts').find('input#name').attr('value') },
+                    function(data){},
+                    'text');
+        createNewAccount();
     }
 });
