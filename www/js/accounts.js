@@ -196,7 +196,7 @@ $(document).ready(function() {
                         $('#account_fields').html(data);
                         $(th).closest('#item').find('td').each(function(){
                             key = $(this).attr('id');
-                            val = $(this).attr('value');
+                            val = $(this).text();
                             $('#blockCreateAccounts').find('#'+key).val(val) ;
 
                         });

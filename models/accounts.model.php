@@ -234,6 +234,8 @@ class Accounts_Model
                 return false;
             }
 	}
+        Core::getInstance()->user->initUserAccounts();
+        Core::getInstance()->user->save();
 	return true;
     }
 	
@@ -249,17 +251,13 @@ class Accounts_Model
 	$sql = "DELETE FROM
                     account_field_values
                 WHERE
-                    account_fieldsaccount_field_id = (
-                        SELECT
-                            account_id
-                        FROM
-                            accounts
-                        WHERE
-                            `account_id` = ?)";
+                    account_fieldsaccount_field_id = ?;";
         $this->db->query($sql, $id);
 
-        $sql = "DELETE FROM accounts WHERE `account_name` = ? and `user_id` = ?";
+        $sql = "DELETE FROM accounts WHERE `account_id` = ? and `user_id` = ?;";
         $this->db->query($sql, $id, $this->user_id);
+        Core::getInstance()->user->initUserAccounts();
+        Core::getInstance()->user->save();
         return true;
     }
     /**
@@ -429,6 +427,8 @@ class Accounts_Model
 
             $i++;
 	}
+                Core::getInstance()->user->initUserAccounts();
+        Core::getInstance()->user->save();
 	return true;
     }
 }
