@@ -1,15 +1,15 @@
-<table width="100%">
 {foreach from=$list_fields item=data}
-<tr onMouseOver=this.style.backgroundColor='#f8f6ea';
-						   		onMouseOut=this.style.backgroundColor='#FFFFFF';>
-	<td class="money" height="22">{$data.field_visual_name}&nbsp;</td>
-    <td class="money">{$data.field_name}&nbsp;</td>
-    <td class="money">{$data.field_type}&nbsp;</td>
-    <td class="money">{$data.field_regexp}&nbsp;</td>
-    <td class="money">{$data.field_permissions}&nbsp;</td>
-    <td class="money">{$data.field_default_value}&nbsp;</td>
-	<td class="money" width="50" align="center"><img src="/img/edit.gif" class="edit" value="{$data.field_description_id}" /></td>
-	<td class="money" width="50" align="center"><img src="/img/delete.gif" class="del" value="{$data.field_description_id}" /></td>
+<tr>
+    <td>{$data.field_visual_name}&nbsp;</td>
+    <td>{$data.field_name}&nbsp;</td>
+
+    <td>{$data.field_regexp}&nbsp;</td>
+    <td>{$data.field_permissions}&nbsp;</td>
+    <td>{$data.field_default_value}&nbsp;</td>
+    <td>
+        <div class="del" value="{$data.field_description_id}">
+            Удалить
+        </div>
+    </td>
 </tr>
 {/foreach}
-</table>

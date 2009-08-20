@@ -1,141 +1,49 @@
-{literal}
-<style type="text/css">
-    .editTypeAccount { 
-        /*title : "Редактировать";
-        alt: "Редактировать";
-        border: 0;*/
-        cursor:pointer; 
-    }
-    .delTypeAccount {
-        /*title:"Удалить";
-        border: 0;
-        alt:"Удалить";*/
-        cursor:pointer; 
-    }
-    cat_tr {
-        background-color: rgb(255, 255, 255);
-    }
- </style>
-{/literal}
-<script language="javascript">
-{literal}
-$(document).ready(function(){
-	$('#btnAdd').click(function(){ save(); });
-	$('#btnCancel').click(function(){ location.href="/admin/accounts/"; });
-	$('.del').click(function(){ deleteTypeAccount($(this).attr('value')); });
-	
-	function save()
-	{
-		$('#loader').html('Подождите, идет сохранение...');
-		$('#information_text').hide();
-		
-		$.ajax({
-			type: "POST",
-			url: "/admin/accounts/fields/",
-			data: {
-				field_visual_name: $('#field_visual_name').val(),
-				field_name: $('#field_name').val(),
-				field_type: $('#field_type').val(),
-				field_regexp: $('#field_regexp').val(),
-				field_permissions: $('#field_permissions').val(),
-				field_default_value: $('#field_default_value').val(),
-				id: $('#id').val(),
-				ajax: true
-			},
-			success: function(data) {
-				$('#loader').html(' ');
-				$('#data').html(data);
-				$('#information_text').show();
-			}
-		});
-	}
-})
-{/literal}
-</script>
-
+<div class="fields">
 <form action="/admin/accounts/type/" method="post" id="formAccount">
-<table style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 15px; padding-bottom: 15px;" width="100%">
-<tr>
-	<td class="cat_add" width="20%" align="right">Название поля:</td>
-	<td class="cat_add" width="80%" align="left"><input type="text" name="field_visual_name" id="field_visual_name" value="{$fields.account_type_name}"></td>
-</tr>
-<tr>
-	<td class="cat_add" width="20%" align="right">Имя в шаблоне:</td>
-	<td class="cat_add" width="80%" align="left"><input type="text" name="field_name" id="field_name" value="{$fields.field_name}"></td>
-</tr>
-<tr>
-	<td class="cat_add" width="20%" align="right">Тип поля:</td>
-	<td class="cat_add" width="80%" align="left">
-    	<select name="field_type" id="field_type">
-    	    <option value="numeric">numeric</option>
-            <option value="string">string</option>
-            <option value="date">date</option>
-            <option value="html">html</option>
-            <option value="enum">enum</option>
-        </select>
-    </td>
-</tr>
-<tr>
-	<td class="cat_add" width="20%" align="right">Регулярка:</td>
-	<td class="cat_add" width="80%" align="left"><input type="text" name="field_regexp" id="field_regexp" value="{$fields.field_regexp}"></td>
-</tr>
-<tr>
-	<td class="cat_add" width="20%" align="right">Шаблон формы:</td>
-	<td class="cat_add" width="80%" align="left">
-    	<select name="field_permissions" id="field_permissions">
-            <option value="select">select</option>
-            <option value="input">input</option>
-            <option value="hidden">hidden</option>
-        </select>
-    </td>
-</tr>
-<tr>
-	<td class="cat_add" width="20%" align="right">Значение по умолчанию:</td>
-	<td class="cat_add" width="80%" align="left"><input type="text" name="field_default_value" id="field_default_value" value="{$fields.field_default_value}"></td>
-</tr>
-<tr>
-	<td class="cat_add">&nbsp;</td>
-	<td class="cat_add" colspan="2">
-		<input type="hidden" value="{$fields.field_description_id}" name="id" id="id">
-		<input type="button" id="btnAdd" value="Сохранить" class="inputsubmit" />
-        <input type="button" id="btnCancel" value="Отмена" class="inputsubmit" />
-	</td>
-</tr>
-<tr>
-	<td colspan="3">&nbsp;</td>
-</tr>
-</table>
-</form>
+    <div style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 15px; padding-bottom: 15px;">
+        <div>
+                Название поля:
+                <input type="text" name="field_visual_name" id="field_visual_name" value="{$fields.account_type_name}">
+        </div>
+        <div>
+                Имя в шаблоне:
+                <input type="text" name="field_name" id="field_name" value="{$fields.field_name}">
+        </div>
+        <div>
+                Регулярка:
+                <input type="text" name="field_regexp" id="field_regexp" value="{$fields.field_regexp}">
+        </div>
+        <div>
+                Шаблон формы:
+                <select name="field_permissions" id="field_permissions">
+                    <option value="select">select</option>
+                    <option value="input">input</option>
+                    <option value="hidden">hidden</option>
+                </select>
 
-<table width="100%">
-	<tr>
-		<td valign="top" width="100%" style=" background-color:#f8f8d8; padding:5px;">
-			<table width="100%" bgcolor="#ffffff" border="0" cellspacing="0">
-        	<tbody>
-            <tr>
-            	<td class="cat_add" colspan="3" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 15px 5px; 
-                                                       background-color: rgb(248, 248, 216);">
-                <span style="color: rgb(56, 120, 215);" id="loader"></span>
-                <span style="color: rgb(56, 120, 215);" id="information_text">Для редактирования выберите из списка.</span>
-           		</td>
-        	</tr>
-        	<tr>
-            	<td class="cat_add" style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px 0pt 5px 25px;" colspan="3">        	
-                	<b>Название</b>
-            	</td>
-			</tr>
-            <tr>
-                <td class="cat_add" colspan="3">
-                    <div id="data">        
-                        {include file="admin/accounts/accounts.fields_list.html"}        
-                    </div>
-                </td>
-            </tr>                        
-			</tbody>
-            </table>
-		</td>
-	</tr>    
+        </div>
+        <div>
+                Значение по умолчанию:
+                <input type="text" name="field_default_value" id="field_default_value" value="{$fields.field_default_value}">
+        </div>
+        <div>
+                <input type="hidden" value="{$fields.field_description_id}" name="id" id="id">
+                <input type="button" id="btnAdd" value="Сохранить" class="inputsubmit" />
+                <input type="button" id="btnCancel" value="Отмена" class="inputsubmit" />
+        </div>
+    </div>
+</form>
+<table style="border: 1px solid rgb(204, 204, 204); padding: 5px 5px 5px 25px;width:100%">
+    <tr style="border: 1px solid rgb(204, 204, 204);text-align:left">
+        <th>Название</th>
+        <th>Имя в шаблоне</th>
+        <th>Регулярка</th>
+        <th>Тип поля</th>
+        <th>Значение по умолчанию</th>
+        <th>Удалить поле</th>
+    </tr>
+    {include file="admin/accounts/accounts.fields_list.html}
 </table>
-			   
+</div>
 
 
