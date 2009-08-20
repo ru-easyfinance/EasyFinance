@@ -4,9 +4,9 @@
 							<div class="head">
 								<h1>Категории</h1>
 								<ul class="action">
-									<li class="over1"><a href="#" title="настройки">настройки</a></li>
-									<li class="over2"><a href="#" title="закрыть">закрыть</a></li>
-									<li class="over3"><a href="#" title="свернуть">свернуть</a></li>
+									<li class="over1"><a title="настройки">настройки</a></li>
+									<li class="over2"><a title="закрыть">закрыть</a></li>
+									<li class="over3"><a title="свернуть">свернуть</a></li>
 								</ul>
 							</div>
 						</div>
@@ -15,23 +15,25 @@
 <!--добавить новую категорию-->
 <form action="">
     <div class="addcategories">
-        <a href="#" id="add_category">Добавить новую категорию</a>
+        <a id="add_category">Добавить новую категорию</a>
         <div id="add_form">
         <div class="form_block" style="display: block;">
             <div class="f_field">
-                <label for="f_namecat">Название категории</label>
-                <input type="text" value="" id="f_namecat" />
+                <label for="namecat">Название категории</label>
+                <input type="text" id="namecat" />
             </div>
             <div class="f_field">
                 <label for="f_subcat">Подкатегория для</label>
                 <select id="f_subcat">
-                    <option>?????</option>
+                    <option></option>
                 </select>
             </div>
             <div class="f_field">
                 <label for="f_cattype">Тип катагории <span class="star">*</span></label>
                 <select id="f_cattype">
-                    <option>??????</option>
+                    <option>Доходная</option>
+                    <option>Расходная</option>
+                    <option>Универсальная</option>
                 </select>
             </div>
             <div class="f_field">

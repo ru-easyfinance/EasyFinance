@@ -42,12 +42,11 @@ class Category_Controller extends Template_Controller
         $date['start'] = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
         $date['finish'] = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
 
-        $this->model->loadUserTree();
+        //@FIXME ТА ЕЩЁ ДЫРА!
         $this->model->loadSumCategories($sys_currency, $date['start'], $date['finish']);
 
-        $this->tpl->assign("categories", $this->model->tree);
+        //$this->tpl->assign("category", Core::getInstance()->user->getUserCategory());
         $this->tpl->assign("sys_categories", $this->model->system_categories);
-        $this->tpl->assign("template", "default");
     }
 
     /**
@@ -138,6 +137,46 @@ class Category_Controller extends Template_Controller
 
         $this->tpl->assign("categories", $this->model->tree);
         die($this->tpl->fetch("categories/categories.list.html"));
+    }
+
+    /**
+     * Возвращает список пользовательских и системных категорий в формате JSON
+     * @param array $args
+     */
+    function getCategory ($args) {
+        $users = array();
+        foreach (Core::getInstance()->user->getUserCategory() as $val) {
+            $users[$val['cat_id']] = array(
+                'id'      => $val['cat_id'],
+                'parent'  => $val['cat_parent'],
+                'system'  => $val['system_category_id'],
+                'name'    => $val['cat_name'],
+                'type'    => $val['type'],
+                'visible' => $val['visible'],
+//                'often' => $val['often'],
+//                'active' => $val['active']
+            );
+        }
+        $systems = array();
+        foreach ($this->model->system_categories as $val) {
+            $systems[$val['system_category_id']] = array(
+                'id'     => $val['system_category_id'],
+                'name'   => $val['system_category_name'],
+                'group'  => $val['system_group_id'],
+                'parent' => $val['parent_id']
+            );
+        }
+        $systems['0'] = array(
+            'id'     => 0,
+            'name'   => 'Не установлена',
+            'group'  => 0,
+            'parent' => 0
+        );
+        die ( json_encode(
+            array(
+                'user'=>$users,
+                'system'=>$systems)
+        ));
     }
 
     /**

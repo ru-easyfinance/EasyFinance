@@ -87,10 +87,10 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
 */
 function error_404 ($path='')
 {
-//TODO
-header("HTTP/1.1 404 Not Found");
-die('404');
-//die(file_get_contents('/404.html'));
+    //TODO
+    header("HTTP/1.1 404 Not Found");
+    die('404');
+    //die(file_get_contents('/404.html'));
 }
 
 /**
@@ -101,39 +101,45 @@ die('404');
 */
 function formatRussianDate2MysqlDate($date, $time)
 {
-/**
-* Собирает в себе отформатированную дату
-* @var <string>
-*/
-$retval = '';
-if (empty ($date)) {
-return false;
-}
-$date = explode('.', $date);
-if (count($date) == 3) {
-// Добавляем год
-$retval = (int)$date[2].'-';
-// Добавляем месяц
-if ((int)$date[1] < 10) {
-$retval .= '0'.(int)$date[1] .'-';
-} else {
-$retval .= (int)$date[1] .'-';
-}
-// Добавляем день
-if((int)$date[0] < 10) {
-$retval .= '0'.(int)$date[0];
-} else {
-$retval .= (int)$date[0];
-}
-//  Добавляем время (если есть)
-if (empty ($time)) {
-return $retval;
-} elseif (preg_match("/^([0-9]{2}):([0-9]{2})$/", $time)) {
-return $retval . ' ' . $time . ':00';
-}
-} else {
-return false;
-}
+    /**
+    * Собирает в себе отформатированную дату
+    * @var <string>
+    */
+    $retval = '';
+    if (empty ($date)) {
+        return false;
+    }
+
+    $date = explode('.', $date);
+    if (count($date) == 3) {
+
+        // Добавляем год
+        $retval = (int)$date[2].'-';
+
+        // Добавляем месяц
+        if ((int)$date[1] < 10) {
+            $retval .= '0'.(int)$date[1] .'-';
+        } else {
+            $retval .= (int)$date[1] .'-';
+        }
+
+        // Добавляем день
+        if((int)$date[0] < 10) {
+            $retval .= '0'.(int)$date[0];
+        } else {
+            $retval .= (int)$date[0];
+        }
+
+        //  Добавляем время (если есть)
+        if (empty ($time)) {
+            return $retval;
+        } elseif (preg_match("/^([0-9]{2}):([0-9]{2})$/", $time)) {
+            return $retval . ' ' . $time . ':00';
+        }
+
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -143,16 +149,16 @@ return false;
 */
 function formatMysqlDate2UnixTimestamp($date)
 {
-$date = trim($date);
-// Таймштамп
-if (preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$/", $date)) {
-return strtotime($date);
-// Дата
-} elseif (preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date)) {
-return strtotime($date);
-} else {
-return false;
-}
+    $date = trim($date);
+    // Таймштамп
+    if (preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$/", $date)) {
+        return strtotime($date);
+    // Дата
+    } elseif (preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date)) {
+        return strtotime($date);
+    } else {
+        return false;
+    }
 }
 
  /**

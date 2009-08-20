@@ -1,5 +1,99 @@
 // {* $Id: category.js 113 2009-07-29 11:54:49Z ukko $ *}
 $(document).ready(function() {
+    // TRUSTED
+    var cat;
+
+    loadCategory();
+
+
+    /**
+     * Загружает пользовательские и системные категории
+     */
+    function loadCategory() {
+        $.get('/category/getCategory/', '',function(data) {
+
+            cat = {};
+            cat = $.extend(data);
+            $('div.categories').remove('div');
+            
+            c=s='';
+            for(var id in data.user) {
+                if (data.user[id]['parent'] == 0) {
+                    if (c != '') {
+                        if (s != '') {
+                            c = c + s + '</table></div><div class="line open" id="'+id+'">';
+                        } else {
+                            c += '</div><div class="line open" id="'+id+'">';
+                        }
+                        s = '';
+                    } else {
+                        c += '<div class="line open" id="'+id+'">';
+                    }
+                    c += '<a class="name" href="#">'+data.user[id]['name']+'</a>';
+                } else {
+                    if (s == '') s += '<table>';
+                    s += '<tr>'
+                        +'<td class="w1">'
+                            +'<a href="#">'+data.user[id]['name']+'</a>'
+                        +'</td>'
+                        +'<td class="w2">';
+                            if (data.user[id]['type'] > 0) { // Доходная
+                                s +='<div class="t3" title="Доходная">Доходная</div>';
+                            } else if (data.user[id]['type'] < 0) { // Расходная
+                                s +='<div class="t1" title="Расходная">Расходная</div>';
+                            } else { //Универсальная
+                                s +='<div class="t2" title="Универсальная">Универсальная</div>';
+                            }
+                        s +='</td>'
+                        //
+                        +'<td class="w3">'+data.system[data.user[id]['id']]['system_category_name']+'</td>'
+
+
+
+
+
+                        +'<td class="w4">'
+
+                            +'<div class="cont"><b>500 руб.</b>'
+                                +'<div class="indicator">'
+                                    +'<div style="width: 10%;">'
+                                        +'<span>10%</span>'
+                                    +'</div>'
+                                +'</div>'
+                                +'<ul><li class="edit"><a title="Редактировать">Редактировать</a></li><li class="del"><a title="Удалить">Удалить</a></li><li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
+                        +'</td>'
+                    +'</tr>';
+                }
+            }
+            if (c != '') {
+                if (s != '') {
+                    c += s +'</table></div>';
+                } else {
+                    c += '</div>';
+                }
+            }
+            $('div.categories').append(c);
+        }, 'json');
+    }
+
+
+    // ПОДОЗРИТЕЛЬНАЯ ХУЙНЯ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $('#add_form').hide();
 
     $('#add_category').click(function(){

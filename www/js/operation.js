@@ -319,7 +319,6 @@ $(function() {
                 id : id
             }, function(data) {
                 delete operationList[id];
-                //operationList.splice(operationList.indexOf(id), 0);
                 $(tr).remove();
             }, 'json');
     }
