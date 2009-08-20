@@ -35,11 +35,16 @@ $(document).ready(function() {
     // upload account
     function update_list()
     {
-        g_types = [0,0,0,1,2,0,3,3,3,3,4,0];
-        g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];
-        var arr = ['','','','',''];
-        var summ = [0,0,0,0,0];
-        var val = {};
+        g_types = [0,0,0,1,2,0,3,3,3,3,4,0];//Жуткий масив привязки типов к группам
+        g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+        spec_th = [ '',
+                    '<th>% годовых</th><th>Доходность, % годовых</th>',
+                    '<th>% годовых</th>Доходность, % годовых<th></th><th>Изменение с даты открытия</th>',
+                    '<th>% годовых</th>',
+                    '<th>Доходность, % годовых</th><th>Изменение с даты открытия</th>'];//доп графы для групп
+        var arr = ['','','','',''];//содержимое каждой группы
+        var summ = [0,0,0,0,0];// сумма средств по каждой группе
+        var val = {};//сумма средств по каждой используемой валюте
         $.post('/accounts/accountslist/',
             {},
             function(data){
@@ -100,17 +105,36 @@ $(document).ready(function() {
                 for(key in arr)
                 {
                     total = total+(parseInt(summ[key]*100))/100;
-                    s='<b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+arr[key]+'</table>';
+                    head_tr = '<tr>\n\
+                                    <th> \n\
+                                        Имя \n\
+                                    </th>\n\
+                                    <th> \n\
+                                        Описание \n\
+                                    </th>\n\
+                                    <th> \n\
+                                        Остаток \n\
+                                    </th>\n\
+                                    <th> \n\
+                                        Валюта \n\
+                                    </th>\n\
+                                    <th> \n\
+                                        Рублёвый эквивалент \n\
+                                    </th>';
+                    head_tr = head_tr + spec_th[key];
+                    head_tr = head_tr + '<tr>';
+                    s='<b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
                 /////////////////////формирование итогового поля//////////////////////
-                str='<b> Итог </b><table>';
+                str='<b> Итог </b><table>\n\
+                        <tr><th>Сумма</th><th>Валюта</th></tr>';
                 for(key in val)
                 {
                     str = str+'<tr><td>'+val[key]+'</td><td>'+key+'</td></tr>';
                 }
-                str = str+'<tr><td>Итого:  '+total+'</td><td> руб.</td></tr>';
+                str = str+'<tr><td><b>Итого:</b>  '+total+'</td><td> руб.</td></tr>';
                 str = str + '</table>';
                  $('#operation_list').append(str);
                 ////////////////////////////////////////////////////////////////
