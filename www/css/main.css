@@ -21,6 +21,7 @@ a img, fieldset { border:0 none; }
 
 .fl_l { float: left; }
 .fl_r { float: right; }
+.clr {clear:both;}
 
 
 .ramka1 {  border: 1px solid #dce4da; background: #ffffff; //zoom: 1; }
@@ -951,6 +952,8 @@ span.tagMatches span {
 
 
 /*------------------------------------------- crack jQuery Start --------------------------------------*/
+
+/* jQuery Calendar */
 #views.ui-widget-content {
     background: none;
     border: none;
@@ -958,6 +961,29 @@ span.tagMatches span {
 #views.ui-tabs {
     padding: 0;
 }
+
+#views.ui-widget-content #calendar .full-calendar-header {
+
+}
+#views.ui-widget-content #calendar .full-calendar-title {
+    text-align: center;
+}
+#views.ui-widget-content #calendar .full-calendar-buttons {
+    float: none;
+}
+#views.ui-widget-content #calendar .full-calendar-buttons .prev-year, #views.ui-widget-content #calendar .full-calendar-buttons .next-year {
+    display: none;
+}
+#views.ui-widget-content #calendar .full-calendar-buttons .prev-month, #views.ui-widget-content #calendar .full-calendar-buttons .next-month {
+    -moz-border-radius: 0;
+}
+#views.ui-widget-content #calendar .full-calendar-buttons .prev-month{
+    float: left;
+}
+#views.ui-widget-content #calendar .full-calendar-buttons .next-month{
+    float: right;
+}
+
 #views.ui-widget-content #calendar table {
     font-size: 80%;
 }
@@ -978,40 +1004,57 @@ span.tagMatches span {
     background-color: #e4ffe0;
 }
 
+#views.ui-widget-content .hasDatepicker {
+
+}
 #views.ui-widget-content .hasDatepicker .ui-widget-content {
+    padding: 0;
     margin-top: 1em;
     font-size: 80%;
+    width: auto!important;
+    -moz-border-radius: 0;
     background: none;
     border: none;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group {
-    width: 32.9%;
+    padding: 0 7px;
+    width: 161px;
+    height: 160px;
+    border: solid 1px #d9d9d9;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-first {
-    margin-right: .3em;
+    margin-right: 8px;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-last {
-    margin-left: .3em;
+    margin-left: 8px;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-widget-header {
-    width: 100%;
+    margin: -1px -8px 0 -8px;
     -moz-border-radius: 0;
     border: 0;
     background: #dadada url('/img/i/bg_table_calendar_th.gif') repeat-x 0 0;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group table {
-    width: 100%;
+
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th {
+    padding: 0;
     color: #b4b4b4;
     border-bottom: solid 1px #d9d9d9;
 }
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th span {
+    font-size: 110%;
+}
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th.ui-datepicker-week-end span {
+    font-size: 115%;
     font-weight: bold;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td {
+    padding: 0;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default {
     text-align: center;
-    color: #000;
+    color: #20201e;
     background: none;
     border: none;
 }
