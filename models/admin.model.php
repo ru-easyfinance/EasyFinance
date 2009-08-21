@@ -61,10 +61,11 @@ class Admin_Model
 	{
 		if (!empty($id))
 		{
-			
+                    $sql = "UPDATE account_types SET`account_type_name`=? WHERE `account_type_id`=? ;";
+                    $this->db->query($sql, $name, $id);
 		}else{
-			$sql = "INSERT INTO account_types (`account_type_id`, `account_type_name`) VALUES (?,?);";
-			$this->db->query($sql, '', $name);
+                    $sql = "INSERT INTO account_types (`account_type_id`, `account_type_name`) VALUES (?,?);";
+                    $this->db->query($sql, '', $name);
 		}
 	}
 	
@@ -99,4 +100,33 @@ class Admin_Model
 			$this->db->query($sql, '', $type, $field);
 		}
 	}
+
+        /**
+         *
+         */
+        public function del_type($id)
+        {
+            $sql = "DELETE FROM account_types WHERE account_type_id=?";
+            $this->db->query($sql, $id);
+            $sql = "DELETE FROM account_fields WHERE account_typesaccount_type_id=?";
+            $this->db->query($sql, $id);
+        }
+        /**
+         *
+         */
+        public function del_fields($id)
+        {
+            $sql = "DELETE FROM account_field_descriptions WHERE field_description_id=?";
+            $this->db->query($sql, $id);
+            $sql = "DELETE FROM account_fields WHERE field_descriptionsfield_description_id=?";
+            $this->db->query($sql, $id);
+        }
+        /**
+         *
+         */
+        public function del_type_fields($id)
+        {
+            $sql = "DELETE FROM account_fields WHERE account_field_id=?";
+            $this->db->query($sql, $id);
+        }
 }

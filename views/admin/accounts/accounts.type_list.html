@@ -1,13 +1,13 @@
 {foreach from=$list_type item=data}
-<tr>
-    <td>{$data.account_type_name}</td>
+<tr id ="{$data.account_type_id}">
+    <td id="name">{$data.account_type_name}</td>
     <td>
-        <div class="del" value="{$data.field_description_id}">
+        <div class="del">
             Удалить
         </div>
     </td>
     <td>
-        <div class="edit" value="{$data.field_description_id}">
+        <div class="edit">
             Редактировать
         </div>
     </td>

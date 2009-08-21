@@ -1,5 +1,5 @@
 {foreach from=$list_fields item=data}
-<tr>
+<tr id ="{$data.field_description_id}">
     <td>{$data.field_visual_name}&nbsp;</td>
     <td>{$data.field_name}&nbsp;</td>
 
@@ -7,7 +7,7 @@
     <td>{$data.field_permissions}&nbsp;</td>
     <td>{$data.field_default_value}&nbsp;</td>
     <td>
-        <div class="del" value="{$data.field_description_id}">
+        <div class="del">
             Удалить
         </div>
     </td>
