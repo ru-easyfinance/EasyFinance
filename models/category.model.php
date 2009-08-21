@@ -220,20 +220,6 @@ class Category_Model {
     }
 
     /**
-     * Создаёт новую категорию
-     * @return bool
-     */
-    public function createNewCategory($category)
-    {
-        //XXX Почему бы массив с ключами и значениями не передавать прямиком в эту функцию?
-        $sql = "INSERT INTO category(?#) VALUES(?a)";
-        if (!$this->db->query($sql, array_keys($category), array_values($category))) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Добавляет новую категорию
      * @return bool
      */
@@ -297,28 +283,10 @@ class Category_Model {
     }
 
     /**
-     * Обновляет категорию
-     * @param $category array mixed
-     * @return bool
-     */
-    public function updateCategory($category)
-    {
-        $sql = "UPDATE category SET ?a WHERE cat_id = ?d";
-        if (!$this->db->query($sql, $category, $category['cat_id'], $this->user_id)) {
-            return false;
-        }
-
-        if ($category['type'] != 2) {
-            $sql = "UPDATE category SET `type` = ? WHERE cat_parent = ?";
-            $this->db->query($sql, $category['type'], $category['cat_id']);
-        }
-        return true;
-    }
-
-    /**
      * Устанавливает видимость категории
      * @param $id int Ид категории
      * @param $visible int Видимость категории (1 - видна, 0 - скрыта)
+     * @deprecated
      * @return bool
      */
     public function visibleCategory($id, $visible)
@@ -341,23 +309,11 @@ class Category_Model {
         return true;
     }
 
-    /**
-     * Удаляет указанную категорию
-     * @param $id int Ид категории
-     * @return bool
-     */
-    public function deleteCategory($id)
-    {
-        $sql = "UPDATE category SET cat_active = '0' WHERE cat_parent = ? AND user_id = ?";
-        if (!$this->db->query($sql, $id, $this->user_id)) {
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Получить информацию из родительской категории
      * @param $id int Ид категории
+     * @deprecated
      * @return array mixed
      */
     private function getParentInfo($id)

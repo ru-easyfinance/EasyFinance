@@ -84,66 +84,67 @@ $(document).ready(function() {
             cat = {};
             cat = data;
             $('div.categories div').remove('div');
+            // Обновляем системные категории
             sys = '';
             for(var id in data.system) {
                 sys += '<option value="'+data.system[id]['id']+'">'+data.system[id]['name']+'</option>';
-            }
-            $('#catsys').empty().append(sys);
-            c=s=m='';
+            } $('#catsys').empty().append(sys);
+
+            // Обновляем список категорий
+            m=''; p=[];
             for(var id in data.user) {
+                // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
                     m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>';
-                    if (c != '') {
-                        if (s != '') {
-                            c = c + s + '</table></div><div class="line open" id="'+id+'">';
-                        } else {
-                            c += '</div><div class="line open" id="'+id+'">';
-                        }
-                        s = '';
-                    } else {
-                        c += '<div class="line open" id="'+id+'">';
-                    }
-                    c += '<a class="name" href="#">'+data.user[id]['name']+'</a>';
+                    p[id] = $('<div class="line open" id="cat_'+id+'"><a class="name" href="#">'+data.user[id]['name']+'</a></div>').appendTo('div.categories');
                 } else {
-                    if (s == '') s += '<table>';
-                    s += '<tr id="'+id+'">'
+                    if (data.user[id]['type'] > 0) { // Доходная
+                        ct ='<div class="t3" title="Доходная">Доходная</div>';
+                    } else if (data.user[id]['type'] < 0) { // Расходная
+                        ct ='<div class="t1" title="Расходная">Расходная</div>';
+                    } else { //Универсальная
+                        ct ='<div class="t2" title="Универсальная">Универсальная</div>';
+                    }
+                        $('<table></table>').appendTo($(p[id]));
+                        alert($(p[id]).html());
+                    if ($(p[id]).find(':note(table)')) {
+                        $('<table></table>').appendTo($('#cat_'+id));
+                        alert($(p[id]).html());
+                    }
+                    
+                    $('#cat_'+id+' table').append(
+                        '<tr id="'+id+'">'
                         +'<td class="w1">'
                             +'<a href="#">'+data.user[id]['name']+'</a>'
                         +'</td>'
-                        +'<td class="w2">';
-                            if (data.user[id]['type'] > 0) { // Доходная
-                                s +='<div class="t3" title="Доходная">Доходная</div>';
-                            } else if (data.user[id]['type'] < 0) { // Расходная
-                                s +='<div class="t1" title="Расходная">Расходная</div>';
-                            } else { //Универсальная
-                                s +='<div class="t2" title="Универсальная">Универсальная</div>';
-                            }
-                        s +='</td>'
-                        //
+                        +'<td class="w2">'
+                            + ct
+                        +'</td>'
                         +'<td class="w3">'+data.system[data.user[id]['system']]['name']+'</td>'
                         +'<td class="w4">'
-
                             +'<div class="cont"><b>500 руб.</b>'
                                 +'<div class="indicator">'
                                     +'<div style="width: 10%;">'
                                         +'<span>10%</span>'
                                     +'</div>'
                                 +'</div>'
-                                +'<ul><li class="edit"><a title="Редактировать">Редактировать</a></li><li class="del"><a title="Удалить">Удалить</a></li><li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
-                        +'</td>'
-                    +'</tr>';
+                                +'<ul><li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                                    +'<li class="del"><a title="Удалить">Удалить</a></li>'
+                                    +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
+                        +'</td></tr>'
+                    );
                 }
             }
-            if (c != '') {
-                if (s != '') {
-                    c += s +'</table></div>';
-                } else {
-                    c += '</div>';
-                }
-            }
-            $('div.categories').append(c);
+            //$('div.categories').append(c);
             $('#subcat').append(m);
         }, 'json');
+    }
+
+    /**
+     * Заполняет список категорий
+     */
+    function fillListCategory() {
+
     }
 
     /**
