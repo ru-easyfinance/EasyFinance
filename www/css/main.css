@@ -962,26 +962,39 @@ span.tagMatches span {
     padding: 0;
 }
 
-#views.ui-widget-content #calendar .full-calendar-header {
+#calend .full-calendar-header {
 
 }
-#views.ui-widget-content #calendar .full-calendar-title {
+#calend .full-calendar-title {
     text-align: center;
+    color: #4b4b4b;
 }
-#views.ui-widget-content #calendar .full-calendar-buttons {
+#calend .full-calendar-buttons {
     float: none;
 }
-#views.ui-widget-content #calendar .full-calendar-buttons .prev-year, #views.ui-widget-content #calendar .full-calendar-buttons .next-year {
+#calend .full-calendar-buttons .prev-year, #calend .full-calendar-buttons .next-year , #calend .full-calendar-buttons .today {
     display: none;
 }
-#views.ui-widget-content #calendar .full-calendar-buttons .prev-month, #views.ui-widget-content #calendar .full-calendar-buttons .next-month {
+#calend .full-calendar-buttons .prev-month, #calend .full-calendar-buttons .next-month {
     -moz-border-radius: 0;
 }
-#views.ui-widget-content #calendar .full-calendar-buttons .prev-month{
+#calend .full-calendar-buttons button.prev-month, #calend .full-calendar-buttons button.next-month {
+    padding-left: 1.4em;
+    padding-right: 0;
     float: left;
+    color: #949494;
+    cursor: pointer;
+    background: url('/img/i/arrow_prev-month.gif') no-repeat 0 50%;
+    border: none;
 }
-#views.ui-widget-content #calendar .full-calendar-buttons .next-month{
+#calend .full-calendar-buttons button.next-month {
+    padding-right: 1.4em;
     float: right;
+    background: url('/img/i/arrow_next-month.gif') no-repeat right 50%;
+}
+#calend .full-calendar-buttons .prev-month span, #calend .full-calendar-buttons .next-month span {
+    padding: 0;
+    border-bottom: solid 1px #949494;
 }
 
 #views.ui-widget-content #calendar table {
