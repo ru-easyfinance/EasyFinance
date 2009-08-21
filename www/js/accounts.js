@@ -30,6 +30,7 @@ $(document).ready(function() {
     function accountAddVisible() {
         changeTypeAccount($('#type_account').val());
         $('#blockCreateAccounts').show();
+        $('#blockCreateAccounts').val('');
     }
 
     // upload account
