@@ -176,13 +176,19 @@ class Accounts_Model
      * @return bool
      */
     function add($data) {
+        foreach($data as $key=>$value)
+        {
+            if (!$data[$key])
+                $data[$key]='';
+        }
 	$fields = $this->db->select("SELECT af.account_field_id, afd.field_name, afd.field_type
                                     FROM account_fields af
                                     LEFT JOIN account_field_descriptions afd
                                     ON afd.field_description_id = af.field_descriptionsfield_description_id");
 	foreach($data as $key=>$value)
 	{			
-            list($field_key, $field_value) = explode("=", $value);
+            $field_key = $key;
+            $field_value = $value;
             if ($field_key == 'type_id') $type_id = $field_value;
             if ($field_key == 'currency_id') $currency_id = $field_value;
             foreach($fields as $values)
