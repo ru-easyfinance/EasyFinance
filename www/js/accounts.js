@@ -229,20 +229,13 @@ $(document).ready(function() {
     }
 
         function createNewAccount() {
-        $('#loader').html('Подождите, идет сохранение...');
-        $('#information_text').hide();
-        var qString = $("#formAccount").formSerialize();
+        var qString = $("#formAccount input,select,textarea")
         $.ajax({
             type: "POST",
             url: "/accounts/add/",
-            data: {
-                qString: qString,
-                ajax: true
-            },
+            data: $("#formAccount input,select,textarea"),
             success: function(data) {
-                $('#loader').html(' ');
                 $('#dataAccounts').html(data);
-                $('#information_text').show();
                 update_list();
                 accountAddUnvisible();
             }
