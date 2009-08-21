@@ -18,7 +18,9 @@ $(document).ready(function(){
             });
 	$('.fields .del').live('click',
             function(){
+                if (confirm('Вы уверены ?')){
                 del_fields($(this).closest('tr').attr('id'));
+                }
             });
 
 	function save_fields()
@@ -63,7 +65,9 @@ $(document).ready(function(){
             });
 	$('.type .del').live('click',
             function(){
+                if (confirm('Вы уверены ?')){
                 delete_type($(this).closest('tr').attr('id'));
+                }
             });
         $('.type .edit').live('click',
             function(){
@@ -112,7 +116,9 @@ $(document).ready(function(){
             });
 	$('.type_fields .del').live('click',
             function(){
+                if (confirm('Вы уверены ?')){
                 delete_type_fields($(this).closest('tr').attr('id'));
+                }
             });
 
 	function save_type_fields()
