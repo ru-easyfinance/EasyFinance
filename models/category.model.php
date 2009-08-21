@@ -234,6 +234,58 @@ class Category_Model {
     }
 
     /**
+     * Добавляет новую категорию
+     * @return bool
+     */
+    function add()
+    {
+        // id	name parent system type
+        $name   = htmlspecialchars(@$_POST['name']);
+        $parent = (int)@$_POST['parent'];
+        $system = (int)@$_POST['system'];
+        $type   = (int)@$_POST['type'];
+        
+        $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type,
+            dt_create) VALUES(?, ?, ?, ?, ?, NOW())";
+        $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
+        Core::getInstance()->user->initUserCategory();
+        Core::getInstance()->user->save();
+        return true;
+    }
+
+    function edit()
+    {
+        $id     = (int)@$_POST['id'];
+        $name   = htmlspecialchars(@$_POST['name']);
+        $parent = (int)@$_POST['parent'];
+        $system = (int)@$_POST['system'];
+        $type   = (int)@$_POST['type'];
+        
+        $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?
+            WHERE user_id = ? AND cat_id = ?";
+        if ($this->db->query($sql, $parent, $system, $name, $type, Core::getInstance()->user->getId(), $id)) {
+            Core::getInstance()->user->initUserCategory();
+            Core::getInstance()->user->save();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Удаляет выбранную категорию (и все подкатегории, если это родительская категория)
+     * @param int $id 
+     */
+    function del($id = 0)
+    {
+        $sql = "DELETE FROM category WHERE cat_id=? AND user_id=? OR cat_parent=?";
+        $this->db->query($sql, $id, Core::getInstance()->user->getId(), $id);
+        Core::getInstance()->user->initUserCategory();
+        Core::getInstance()->user->save();
+        return true;
+    }
+
+    /**
      * Возвращает выбранную категорию пользователя
      * @param $id int Ид выбранной категории
      * @return array mixed

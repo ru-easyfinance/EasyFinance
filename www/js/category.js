@@ -4,7 +4,76 @@ $(document).ready(function() {
     var cat;
 
     loadCategory();
+    $('#add_form').hide();
 
+    //BIND
+    $('#btnSave').click(function(){
+        saveCategory()
+    });
+    $('#btnCancel').click(function(){
+        clearForm(); $('#add_form').hide();
+    });
+    $('#add_category').click(function(){
+        $('#add_form').toggle();
+        $('form').attr('action','/category/add/');
+    });
+    // При наведении мыши
+    $('div.line tr').live('mouseover', function() {
+        $(this).addClass('act').find('ul').show();
+
+    });
+    $('div.line tr').live('mouseout', function() {
+        $('div.line ul').hide();
+        $('div.line tr').removeClass('act');
+    });
+    $('li.edit').live('click',function(){
+        clearForm();
+        fillForm($(this).closest('tr').attr('id'));
+        $('#add_form').show();
+        $(document).scrollTop(300);
+        $('form').attr('action','/category/edit/');
+
+    });
+    $('li.del').live('click',function(){
+        if (confirm('Удалить категорию?')) {
+            delCategory($(this).closest('tr').attr('id'));
+        }
+    });
+    $('li.add').live('click',function(){
+        clearForm();
+        fillForm($(this).closest('tr').attr('id'));
+        $('#id').val('');
+        $('#add_form').show();
+        $(document).scrollTop(300);
+        $('form').attr('action','/category/add/');
+    });
+
+    /**
+     * Заполняет форму значениями
+     * @param id
+     */
+    function fillForm(id) {
+        $('#id').val(cat.user[id]['id']);
+        $('#namecat').val(cat.user[id]['name']);
+        $('#subcat').val(cat.user[id]['parent']);
+        $('#cattype').val(cat.user[id]['type']);
+        $('#catsys').val(cat.user[id]['system']);
+    }
+
+    /**
+     * Очищает форму
+     */
+    function clearForm() {
+        $('#namecat,#id').val('');
+        $('#subcat,#cattype,#catsys').removeAttr('selected');
+    }
+
+    /**
+     * Проверяет валидность заполненных данных
+     */
+    function checkForm() {
+        return true;
+    }
 
     /**
      * Загружает пользовательские и системные категории
@@ -13,12 +82,17 @@ $(document).ready(function() {
         $.get('/category/getCategory/', '',function(data) {
 
             cat = {};
-            cat = $.extend(data);
-            $('div.categories').remove('div');
-            
-            c=s='';
+            cat = data;
+            $('div.categories div').remove('div');
+            sys = '';
+            for(var id in data.system) {
+                sys += '<option value="'+data.system[id]['id']+'">'+data.system[id]['name']+'</option>';
+            }
+            $('#catsys').empty().append(sys);
+            c=s=m='';
             for(var id in data.user) {
                 if (data.user[id]['parent'] == 0) {
+                    m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>';
                     if (c != '') {
                         if (s != '') {
                             c = c + s + '</table></div><div class="line open" id="'+id+'">';
@@ -32,7 +106,7 @@ $(document).ready(function() {
                     c += '<a class="name" href="#">'+data.user[id]['name']+'</a>';
                 } else {
                     if (s == '') s += '<table>';
-                    s += '<tr>'
+                    s += '<tr id="'+id+'">'
                         +'<td class="w1">'
                             +'<a href="#">'+data.user[id]['name']+'</a>'
                         +'</td>'
@@ -46,12 +120,7 @@ $(document).ready(function() {
                             }
                         s +='</td>'
                         //
-                        +'<td class="w3">'+data.system[data.user[id]['id']]['system_category_name']+'</td>'
-
-
-
-
-
+                        +'<td class="w3">'+data.system[data.user[id]['system']]['name']+'</td>'
                         +'<td class="w4">'
 
                             +'<div class="cont"><b>500 руб.</b>'
@@ -73,189 +142,37 @@ $(document).ready(function() {
                 }
             }
             $('div.categories').append(c);
+            $('#subcat').append(m);
         }, 'json');
     }
 
-
-    // ПОДОЗРИТЕЛЬНАЯ ХУЙНЯ
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    $('#add_form').hide();
-
-    $('#add_category').click(function(){
-        categoryAddVisible();
-    });
-    $('.editCategory').click(function(){
-        editCategory($(this).attr('value'));
-    });
-    $('.visibleCategory').click(function(){
-        visibleCategory($(this).val(), $(this).attr('visible'));
-    });
-    $('.delCategory').click(function(){
-        delCategory($(this).val());
-    });
-    
-    $('#btnAddCategory').click(function(){//++
-        createNewCategory();
-    });
-
-    $('#btnCancelAdd').click(function(){
-        categoryAddUnvisible();
-    });
-
-    function categoryAddUnvisible() {
-        $('#add_form').hide();
-        //$('#name,#category_id').val('');
-        //$('#parent,#type,#system').val(0);
-    }
-
-    function categoryAddVisible() {
-        $('#add_form').show();
-    }
-
-    function createNewCategory() {
-        //$('#loader').html('Подождите, идет сохранение...');
-        //$('#information_text').hide();
-        $.ajax({
-            type: "POST",
-            url: "/category/add/",
-            data: {
-                name:        $('#name').val(),
-                parent:      $('#parent').val(),
-                type:        $('#type').val(),
-                system:      $('#system').val(),
-                category_id: $('#category_id').val()
-            },
-            success: function(data) {
-                //$('#loader').html(" ");
-                //$('#dataCategories').html(data);
-                //$('#information_text').show();
-                categoryAddUnvisible();
-            }
-        });
-    }
-
-    function deleteCategory(id) {
-        if (!confirm("Вы действительно хотите удалить эту категорию?")) {
-            return false;
+    /**
+     * Сохраняет категорию
+     */
+    function saveCategory() {
+        if (checkForm()) {
+            $.post($('form').attr('action'), {
+                id     : $('#id').val(),
+                name   : $('#namecat').val(),
+                parent : $('#subcat').val(),
+                type   : $('#cattype').val(),
+                system : $('#catsys').val()
+            }, function() {
+                $('#add_form').hide();
+                loadCategory();
+            }, 'json');
         }
-
-        $('#information_text').hide();
-        $('#loader').html('Подождите, идет удаление...');
-
-        $.ajax({
-            type: "POST",
-            url: "/category/del/",
-            data: {
-                id: id
-            },
-            success: function(data) {
-                $('#loader').html(" ");
-                $('#dataCategories').html(data);
-                $('#information_text').show();
-                $('#blockCreateCategories').load('/category/reload_block_create *');
-            }
-        });
     }
 
-    function editCategory(id)
-    {
-        categoryAddVisible();
-        $('#loader').html('Подождите, идет загрузка...');
-        $('#information_text').hide();
-        $.ajax({
-            type: "POST",
-            url: "/category/edit/",
-            data: {
-                id: id
-            },
-            success: function(data) {
-                $('#blockCreateCategories').html(data);
-                $('#loader').html(' ');
-                $('#information_text').show();
-            }
-        });
-        scrollTo(0,0);
-    }
-
-    function acceptFiltrCategories()
-    {
-        $('#loader').html('Подождите, идет загрузка...');
-        $('#information_text').hide();
-        $.ajax({
-            type: "GET",
-            url: "/category/filtr/",
-            data: {
-                modules: "categories",
-                action: "change_filtr",
-                filtr_type: $('#filtr_type').val(),
-                filtr_visible: $('#filtr_visible').val(),
-                filtr_period: $('#filtr_period').val(),
-                ajax: true
-            },
-            success: function(data) {
-                $('#dataCategories').html(data);
-                $('#loader').html(' ');
-                $('#information_text').show();
-            }
-        });
-    }
-
-    function changePeriodFact()
-    {
-        var period = document.getElementById('period_fact').value;
-        $('#loader').html('Подождите, идет загрузка...');
-        $('#information_text').hide();
-        $.ajax({
-            type: "GET",
-            url: "/index.php",
-            data: {
-                modules: "categories",
-                action: "change_period_fact",
-                period: period,
-                ajax: true
-            },
-            success: function(data) {
-                $('#dataCategories').html(data);
-                $('#loader').html(' ');
-                $('#information_text').show();
-            }
-        });
-    }
-
-    function visibleCategory(id, visible)
-    {
-        $('#loader').html('Подождите, идет загрузка...');
-        $('#information_text').hide();
-        $.ajax({
-            type: "GET",
-            url: "/index.php",
-            data: {
-                modules: "categories",
-                action: "visible_category",
-                id: id,
-                visible: visible,
-                ajax: true
-            },
-            success: function(data) {
-                $('#dataCategories').html(data);
-                $('#loader').html(' ');
-                $('#information_text').show();
-            }
-        });
+    /**
+     * Удаляет категорию
+     * @param id
+     */
+    function delCategory(id) {
+        $.post('/category/del/', {id:id}, function() {
+            clearForm();
+            $('#add_form').hide();
+            loadCategory();
+        }, 'json');
     }
 });

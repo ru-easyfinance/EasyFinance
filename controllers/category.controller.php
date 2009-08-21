@@ -56,27 +56,7 @@ class Category_Controller extends Template_Controller
      */
     function add($args)
     {
-        $category['user_id']            = Core::getInstance()->user->getId();
-        $category['cat_name']           = htmlspecialchars(@$_POST['name']);
-        $category['type']               = htmlspecialchars(@$_POST['type']);
-        $category['cat_parent']         = htmlspecialchars(@$_POST['parent']);
-        $category['system_category_id'] = (int)@$_POST['system'];
-        $category['cat_id']             = (int)@$_POST['category_id'];
-        $category['visible']            = 1;
-        $category['cat_active']         = 1;
-        $category['often']              = htmlspecialchars(@$_POST['often']);
-
-        if (!empty($category['cat_id'])) {
-            $this->model->updateCategory($category);
-        } elseif (!$this->model->createNewCategory($category)) {
-            $this->tpl->assign("error", "Категория не добавлена");
-        }
-        $this->model->loadUserTree();
-        $this->model->loadSumCategories($sys_currency); //FIXME Откуда она взялась? Из конфига?
-
-        $this->tpl->assign("categories", $this->model->tree);
-        $this->tpl->assign("sys_categories", $this->model->system_categories);
-        die ($this->tpl->fetch("categories/categories.list.html"));
+        die($this->model->add());
     }
 
     /**
@@ -86,18 +66,7 @@ class Category_Controller extends Template_Controller
      */
     function edit($args)
     {
-        $id = (int)$_POST['id'];
-
-        $edit = $this->model->selectCategoryId($id);
-        $this->tpl->assign("edit", $edit);
-
-        if (count($edit) == 0) {
-            die('<div class="error">Похоже что у вас нет прав для редактирования этой категории</div>');
-        } else {
-            $this->tpl->assign("categories", $this->model->tree);
-            $this->tpl->assign("sys_categories", $this->model->system_categories);
-            die ($this->tpl->fetch("categories/categories.block_create.html"));
-        }
+        die($this->model->edit());
     }
 
     /**
@@ -108,15 +77,7 @@ class Category_Controller extends Template_Controller
     function del ($args)
     {
         $id = (int)$_POST['id'];
-        if (!$this->model->deleteCategory($id)) {
-            $this->tpl->assign("error", "Категория не удалена");
-        }
-        $this->model->loadUserTree();
-        //FIXME не ясно что делать с $sys_currency
-        $this->model->loadSumCategories($sys_currency);
-
-        $this->tpl->assign("categories", $cc->tree);
-        die ($this->tpl->fetch("categories/categories.list.html"));
+        die(json_encode($this->model->del($id)));
     }
 
     /**
@@ -157,7 +118,15 @@ class Category_Controller extends Template_Controller
 //                'active' => $val['active']
             );
         }
-        $systems = array();
+        $systems = array(
+            0  => array(
+                'id'     => 0,
+                'name'   => 'Не установлена',
+                'group'  => 0,
+                'parent' => 0
+            )
+        );
+
         foreach ($this->model->system_categories as $val) {
             $systems[$val['system_category_id']] = array(
                 'id'     => $val['system_category_id'],
@@ -166,12 +135,7 @@ class Category_Controller extends Template_Controller
                 'parent' => $val['parent_id']
             );
         }
-        $systems['0'] = array(
-            'id'     => 0,
-            'name'   => 'Не установлена',
-            'group'  => 0,
-            'parent' => 0
-        );
+        
         die ( json_encode(
             array(
                 'user'=>$users,
