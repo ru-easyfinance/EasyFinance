@@ -423,7 +423,7 @@ class Operation_Model {
      */
     function getTotalSum($bill_id)
     {
-        $sql = "SELECT SUM(money) as sum FROM money WHERE user_id = ? AND bill_id = ?";
+        $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND account_id = ?";
         $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $bill_id);
         return $this->total_sum;
     }
