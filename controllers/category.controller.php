@@ -39,12 +39,6 @@ class Category_Controller extends Template_Controller
      */
     function index($args)
     {
-        $date['start'] = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
-        $date['finish'] = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
-
-        //@FIXME ТА ЕЩЁ ДЫРА!
-        $this->model->loadSumCategories($sys_currency, $date['start'], $date['finish']);
-
         //$this->tpl->assign("category", Core::getInstance()->user->getUserCategory());
         $this->tpl->assign("sys_categories", $this->model->system_categories);
     }
@@ -82,6 +76,7 @@ class Category_Controller extends Template_Controller
 
     /**
      * Сдела
+     * @deprecated
      * @param $args
      * @return unknown_type
      */
@@ -105,6 +100,10 @@ class Category_Controller extends Template_Controller
      * @param array $args
      */
     function getCategory ($args) {
+        $date['start'] = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
+        $date['finish'] = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
+        $sum = $this->model->loadSumCategories($sys_currency, $date['start'], $date['finish']);
+
         $users = array();
         foreach (Core::getInstance()->user->getUserCategory() as $val) {
             $users[$val['cat_id']] = array(
@@ -117,6 +116,10 @@ class Category_Controller extends Template_Controller
 //                'often' => $val['often'],
 //                'active' => $val['active']
             );
+            if ($val['cat_id'] == $sum['cat_id']) {
+                $users[$val['cat_id']]['summ'] = $sum['sum'];
+                //$users[$val['cat_id']]['cur'] = Core::
+            }
         }
         $systems = array(
             0  => array(
@@ -141,16 +144,5 @@ class Category_Controller extends Template_Controller
                 'user'=>$users,
                 'system'=>$systems)
         ));
-    }
-
-    /**
-     * Возвращает форму для создания новой категории
-     * @return html
-     */
-    function reload_block_create()
-    {
-        $this->tpl->assign("categories", $this->model->tree);
-        $this->tpl->assign("sys_categories", $this->model->system_categories);
-        die($this->tpl->fetch("categories/categories.block_create.html"));
     }
 }

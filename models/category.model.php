@@ -114,19 +114,38 @@ class Category_Model {
     {
         //TODO Переписать математические расчёты в функции, на использование BCMATH
         if (!empty ($start)) {
-            $param = "and o.date > '{$start}' and o.date < '$finish}'";
+            $param = "AND o.date BETWEEN '{$start}' AND '{$finish}'";
         }
-        $sql = "SELECT SUM( o.money ) AS `sum`, o.cat_id, a.account_currency_id
+
+        $sql = "SELECT SUM( o.money ) AS `sum`, o.cat_id, a.account_currency_id AS cur
             FROM operation o
-            LEFT JOIN accounts a
-            ON a.account_id = o.account_id AND a.user_id = o.user_id
+            LEFT JOIN accounts a ON a.account_id = o.account_id AND a.user_id = o.user_id
             WHERE o.user_id = ? {$param} GROUP BY o.cat_id, a.account_currency_id";
+        
+        $accounts = Core::getInstance()->user->getUserAccounts();
         $rows = $this->db->select($sql, $this->user_id);
+        
+        $array = array();
+        foreach ($rows as $val) {
+            if ($val['cur'] != 1) {
+                // Общая сумма
+                $array[$val['cat_id']][0] = (int)@$val[$val['cat_id']][0] +
+                    ($val['sum'] * Core::getInstance()->currency[$val['cur']]['value']);
+            } else {
+                $array[ $val['cat_id'] ][0] = (int)@$val[$val['cat_id']][0] + $val['sum'];
+            }
+            // Конкретно сумма по валюте
+            $array[$val['cat_id']][$val['cur']] = $val['sum'][$val['cur']];
+        }
+
+        die(print_r($array));
+
         $cnt = count($row);
         for ($i=0; $i<$cnt; $i++) {
             $id = $rows[$i]['cat_id'];
             for ($j=0; $j<$cnt; $j++) {
                 if ($id == $rows[$j]['cat_id']) {
+
                     if ($rows[$j]['currency'] != 1) {
                         $sum = $rows[$j]['sum'] * $sys_currency[$rows[$j]['bill_currency']];
                     }
