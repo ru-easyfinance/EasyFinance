@@ -23,6 +23,52 @@ $(function() {
         $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
     }).find('a').removeAttr('href');
 
+
+    $('#footer #popupreport').hide();
+    $('#footer .addmessage').click(
+        function(){
+            $('#footer #popupreport').show();
+        });
+
+    function getClientWidth()
+    {
+      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
+    }
+
+    function getClientHeight()
+    {
+      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
+    }
+   
+    $('#footer .but').click(
+        function (){
+            var num_of_plugins = navigator.plugins.length;
+            str='';
+            for (var i=0; i < num_of_plugins; i++) {
+                str = str+"[" + navigator.plugins[i].name + ";" + navigator.plugins[i].filename + "]";
+            }
+            $.post(
+                '/feedback/add_message/',
+                {
+                    msg: $('#footer #ffmes').val(),
+                    width : screen.width,
+                    height : screen.height,
+                    cwidth : getClientWidth(),
+                    cheight : getClientHeight(),
+                    colors : screen.colorDepth,
+                    plugins: str
+                }
+            );
+            $('#footer .f_field lable').show();
+            $('#footer .f_field textarea').text('');
+            $('#footer #popupreport').hide();
+        }
+    );
+    $('#footer .f_field').click(
+        function (){
+            $(this).find('label').hide();
+        }
+    );
     /**
      * Форматирует валюту
      * @param num float Сумма, число
