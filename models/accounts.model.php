@@ -324,24 +324,29 @@ class Accounts_Model
         $id_str = implode(',', $id);
         $type_str = implode(',', $type);
         $sql = "SELECT
-                    `int_value`, `date_value`, `string_value`, account_fieldsaccount_field_id
+                    `int_value`,
+                    `date_value`,
+                    `string_value`,
+                    account_fieldsaccount_field_id,
+                    field_name
                 FROM
-                     account_field_values
+                    account_field_values
+                    LEFT JOIN
+                        account_fields
+                      ON
+                        account_fields.account_field_id = account_field_values.accountsaccount_id
+                        LEFT JOIN
+                            account_field_descriptions
+                        ON
+                            account_field_descriptions.field_description_id = account_fields.field_descriptionsfield_description_id
                 WHERE
-                     account_fieldsaccount_field_id IN ($id_str)";
+                    account_fieldsaccount_field_id
+                IN ($id_str)";
         $values = $this->db->select($sql);
-
-        $fields = $this->db->select("SELECT * FROM account_fields af
-                                        LEFT JOIN account_field_descriptions afd
-                                        ON af.field_descriptionsfield_description_id = afd.field_description_id
-                                        WHERE af.account_typesaccount_type_id IN ($type_str)");
         
-//die(print_r($values));
+        //die(print_r($values));
         $res = array();
-        $i=0;
-        
-        
-        
+
         foreach ($id as $key=>$val)
         {
             $res[$val]['type']=$type[$key];
@@ -350,16 +355,11 @@ class Accounts_Model
             
             $res[$val]['fields']=array();
 
-            foreach ($fields as $k=>$v)
+            foreach ($values as $k=>$v)
             {
-                if ($v['account_typesaccount_type_id']==$type[$key])
-                {
-
-                    $res[$val]['fields'][$v['field_name']]=$values[$i]['int_value'] .
-                    $values[$i]['date_value'] .
-                    $values[$i]['string_value'];//value
-                    $i++;
-                }
+                    $res[$val]['fields'][$values[$k]['field_name']]=$values[$k]['int_value'] .
+                    $values[$k]['date_value'] .
+                    $values[$k]['string_value'];//value   
             }
             $res[$val]['def_cur'] =round(
                 $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],
