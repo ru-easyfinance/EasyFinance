@@ -112,6 +112,7 @@ class Category_Model {
      */
     public function loadSumCategories($sys_currency, $start, $finish)
     {
+        return '';
         //TODO Переписать математические расчёты в функции, на использование BCMATH
         if (!empty ($start)) {
             $param = "AND o.date BETWEEN '{$start}' AND '{$finish}'";

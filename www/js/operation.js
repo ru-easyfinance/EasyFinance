@@ -201,7 +201,7 @@ $(function() {
      * @return void
      */
     function clearForm() {
-        $('#account,#type,#category,#target').val(0);
+        $('#type,#category,#target').val(0);
         $('#amount,#AccountForTransfer,#comment,#tags,#date').val('');
         $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
         $('#close').removeAttr('checked');

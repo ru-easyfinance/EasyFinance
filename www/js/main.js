@@ -23,6 +23,12 @@ $(function() {
         $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
     }).find('a').removeAttr('href');
 
+    $('ul.control li').click(function(){
+	$('ul.control li').each(function(){
+		$(this).removeClass('act');
+	});
+	$(this).addClass('act');
+    });
 
     $('#footer #popupreport').hide();
     $('#footer .addmessage').click(
@@ -69,6 +75,7 @@ $(function() {
             $(this).find('label').hide();
         }
     );
+
     /**
      * Форматирует валюту
      * @param num float Сумма, число
