@@ -343,10 +343,8 @@ class Accounts_Model
                     account_fieldsaccount_field_id
                 IN ($id_str)";
         $values = $this->db->select($sql);
-        
-        //die(print_r($values));
-        $res = array();
 
+        $mod = new Operation_Model();
         foreach ($id as $key=>$val)
         {
             $res[$val]['type']=$type[$key];
@@ -364,6 +362,9 @@ class Accounts_Model
                     $values[$k]['string_value'];
                 }//value
             }
+
+            $total=(int)($mod->getTotalSum($val));
+            $res[$val]['fields']['total_balance'] = $total;
             $res[$val]['def_cur'] =round(
                 $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],
             2
