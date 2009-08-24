@@ -54,6 +54,11 @@ $(document).ready(function(){
                 'json'
             );
         }
+
+        function edit_fields(mark)
+        {
+            del_fields(mark);
+        }
         //type
         $('.type #btnAddAccount').live('click',
             function(){
