@@ -167,7 +167,7 @@ $(document).ready(function() {
                                     </th>';
                     head_tr = head_tr + spec_th[key];
                     head_tr = head_tr + '<tr>';
-                    s='<b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></br>';
+                    s='<div Style="margin-bottom:20px"><b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></div>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
