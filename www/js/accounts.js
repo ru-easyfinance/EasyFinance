@@ -64,7 +64,7 @@ $(document).ready(function() {
                     str = str + '<td id="id" value="'+data[key]['id']+'"></td>';
                         for( k in data[key]['fields'])//добавляются все поля
                         {
-                            str = str + '<td id='+k+' value='+data[key]['fields'][k]+'>';
+                            str = str + '<td id='+k+'>';// value='+data[key]['fields'][k]+'
                             str = str +data[key]['fields'][k]+ '</td>';
                         }
                     str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';

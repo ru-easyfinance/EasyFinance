@@ -256,8 +256,9 @@ class Accounts_Model
 
     function new_operation($data)
     {
+        //alert( date('d.m.Y'));
        $model = new Operation_Model();
-       $model->add($data['starter_balance'], 'NOW()', 0,1,
+       $model->add($data['starter_balance'], date('Y.m.d'), 0,0,
            'Новый счёт', $data['id']);
     }
 
@@ -266,7 +267,7 @@ class Accounts_Model
         $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `date`";
         $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
         $model = new Operation_Model();
-       $model->edit($oid,$data['starter_balance'],'NOW()',0,1,'Новый счёт', $data['id']);
+       $model->edit($oid,$data['starter_balance'],date('Y.m.d'),0,0,'Новый счёт', $data['id']);
        $model->save();
     }
 
