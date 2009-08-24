@@ -92,12 +92,15 @@ $(document).ready(function() {
 
             // Обновляем список категорий
             m=''; p=[];
+            
             for(var id in data.user) {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
-                    m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>';
+                    m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
                     p[id] = $('<div class="line open" id="cat_'+id+'"><a class="name" href="#">'+data.user[id]['name']+'</a></div>').appendTo('div.categories');
                 } else {
+		    pr = data.user[id]['parent'];
+
                     if (data.user[id]['type'] > 0) { // Доходная
                         ct ='<div class="t3" title="Доходная">Доходная</div>';
                     } else if (data.user[id]['type'] < 0) { // Расходная
@@ -105,14 +108,11 @@ $(document).ready(function() {
                     } else { //Универсальная
                         ct ='<div class="t2" title="Универсальная">Универсальная</div>';
                     }
-                        $('<table></table>').appendTo($(p[id]));
-                        alert($(p[id]).html());
-                    if ($(p[id]).find(':note(table)')) {
-                        $('<table></table>').appendTo($('#cat_'+id));
-                        alert($(p[id]).html());
+
+                    if ($('#cat_'+pr+' table').length == 0) {
+                        $('<table/>').appendTo($('#cat_'+pr));
                     }
-                    
-                    $('#cat_'+id+' table').append(
+                    $('#cat_'+pr+' table').append(
                         '<tr id="'+id+'">'
                         +'<td class="w1">'
                             +'<a href="#">'+data.user[id]['name']+'</a>'
