@@ -954,17 +954,10 @@ span.tagMatches span {
 /*------------------------------------------- crack jQuery Start --------------------------------------*/
 
 /* jQuery Calendar */
-#views.ui-widget-content {
-    background: none;
-    border: none;
-}
 #views.ui-tabs {
     padding: 0;
 }
 
-#calend .full-calendar-header {
-
-}
 #calend .full-calendar-title {
     text-align: center;
     color: #4b4b4b;
@@ -972,11 +965,23 @@ span.tagMatches span {
 #calend .full-calendar-buttons {
     float: none;
 }
-#calend .full-calendar-buttons .prev-year, #calend .full-calendar-buttons .next-year , #calend .full-calendar-buttons .today {
+#calend .full-calendar-buttons .today {
     display: none;
 }
-#calend .full-calendar-buttons .prev-month, #calend .full-calendar-buttons .next-month {
-    -moz-border-radius: 0;
+#calend .full-calendar-buttons .prev-year, #calend .full-calendar-buttons .next-year {
+    padding-left: 1.4em;
+    padding-right: 1em;
+    float: left;
+    color: #949494;
+    cursor: pointer;
+    background: url('/img/i/jQuery/calendar/arrow_prev-month.gif') no-repeat 0 50%;
+    border: none;
+}
+#calend .full-calendar-buttons .next-year {
+    padding-right: 1.4em;
+    padding-left: 1em;
+    float: right;
+    background: url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat right 50%;
 }
 #calend .full-calendar-buttons button.prev-month, #calend .full-calendar-buttons button.next-month {
     padding-left: 1.4em;
@@ -984,15 +989,16 @@ span.tagMatches span {
     float: left;
     color: #949494;
     cursor: pointer;
-    background: url('/img/i/arrow_prev-month.gif') no-repeat 0 50%;
+    background: url('/img/i/jQuery/calendar/arrow_prev-month.gif') no-repeat 0 50%;
     border: none;
 }
 #calend .full-calendar-buttons button.next-month {
     padding-right: 1.4em;
+    padding-left: 0;
     float: right;
-    background: url('/img/i/arrow_next-month.gif') no-repeat right 50%;
+    background: url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat right 50%;
 }
-#calend .full-calendar-buttons .prev-month span, #calend .full-calendar-buttons .next-month span {
+#calend .full-calendar-buttons .prev-month span, #calend .full-calendar-buttons .next-month span, #calend .full-calendar-buttons .prev-year span, #calend .full-calendar-buttons .next-year span {
     padding: 0;
     border-bottom: solid 1px #949494;
 }
@@ -1000,12 +1006,9 @@ span.tagMatches span {
 #views.ui-widget-content #calendar table {
     font-size: 80%;
 }
-#views.ui-widget-content #calendar .ui-corner-bottom {
-    -moz-border-radius: 0;
-}
 #views.ui-widget-content #calendar table th {
     padding: .2em 0;
-    background: #dadada url('/img/i/bg_table_calendar_th.gif') repeat-x 0 0;
+    background: #dadada url('/img/i/jQuery/calendar/bg_table_calendar_th.gif') repeat-x 0 0!important;
     border: none;
 }
 #views.ui-widget-content #calendar table td .day-number {
@@ -1025,15 +1028,18 @@ span.tagMatches span {
     margin-top: 1em;
     font-size: 80%;
     width: auto!important;
-    -moz-border-radius: 0;
-    background: none;
-    border: none;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group {
     padding: 0 7px;
-    width: 161px;
-    height: 160px;
+    width: 159px;
+    height: 170px;
     border: solid 1px #d9d9d9;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-middle {
+    height: 167px;
+    border-bottom: solid 4px #d9d9d9;
+    border-left: solid 4px #d9d9d9;
+    border-right: solid 4px #d9d9d9;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-first {
     margin-right: 8px;
@@ -1045,13 +1051,17 @@ span.tagMatches span {
     margin: -1px -8px 0 -8px;
     -moz-border-radius: 0;
     border: 0;
-    background: #dadada url('/img/i/bg_table_calendar_th.gif') repeat-x 0 0;
+    background: #dadada url('/img/i/jQuery/calendar/bg_table_calendar_th.gif') repeat-x 0 0!important;
+}
+#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-middle .ui-widget-header {
+    margin-left: -11px;
+    margin-right: -11px;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group table {
 
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th {
-    padding: 0;
+    padding: .3em;
     color: #b4b4b4;
     border-bottom: solid 1px #d9d9d9;
 }
@@ -1077,5 +1087,73 @@ span.tagMatches span {
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default:hover {
     background-color: #e5e5e5;
 }
+
+.ui-dialog.ui-widget-content {
+    background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
+}
+.ui-dialog.ui-widget-content .ui-resizable-nw {
+    top: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    background: url('/img/i/jQuery/calendar/bg_ui-dialog_topleft.gif') no-repeat right bottom;
+    border: none;
+}
+.ui-dialog.ui-widget-content .ui-resizable-ne {
+    top: 0;
+    right: 0;
+    width: 9px;
+    height: 9px;
+    background: url('/img/i/jQuery/calendar/bg_ui-dialog_topright.gif') no-repeat right bottom;
+    border: none;
+}
+.ui-dialog.ui-widget-content .ui-resizable-sw {
+    bottom: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    background: url('/img/i/jQuery/calendar/bg_ui-dialog_bottomleft.gif') no-repeat right bottom;
+    border: none;
+}
+.ui-dialog .ui-dialog-titlebar {
+    -moz-border-radius: 0;
+    background: none;
+    border: none;
+}
+.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close {
+    padding: 0;
+}
+.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
+    background: url('/img/i/jQuery/ico_close.gif') no-repeat 50% 50%;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 0!important;
+}
+.ui-dialog ul.ui-tabs-nav li.ui-state-default, .ui-dialog ul.ui-tabs-nav li.ui-state-active {
+    -moz-border-radius: 0;
+    background: none;
+    border: none;
+}
+.ui-dialog ul.ui-tabs-nav li.ui-state-default a {
+    margin: 0 .5em;
+    padding: 0;
+    color: #50c319;
+    border-bottom: dotted 1px #50c319;
+}
+.ui-dialog ul.ui-tabs-nav li.ui-state-active a {
+    padding: .2em .5em;
+    color: #fff;
+    background-color: #50c319;
+    border: none;
+}
+
+.ui-dialog form table td {
+    padding: .3em;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+    padding: .1em .3em!important;
+}
+
 
 /*------------------------------------------- crack jQuery End --------------------------------------*/
