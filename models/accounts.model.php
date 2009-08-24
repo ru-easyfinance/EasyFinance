@@ -357,9 +357,12 @@ class Accounts_Model
 
             foreach ($values as $k=>$v)
             {
+                if ($values[$k]['account_fieldsaccount_field_id'] == $val)
+                {
                     $res[$val]['fields'][$values[$k]['field_name']]=$values[$k]['int_value'] .
                     $values[$k]['date_value'] .
-                    $values[$k]['string_value'];//value   
+                    $values[$k]['string_value'];
+                }//value
             }
             $res[$val]['def_cur'] =round(
                 $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],
