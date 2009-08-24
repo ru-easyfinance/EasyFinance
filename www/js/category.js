@@ -47,6 +47,9 @@ $(document).ready(function() {
         $(document).scrollTop(300);
         $('form').attr('action','/category/add/');
     });
+    $('a.name').live('click',function(){
+        $(this).closest('div.line').toggleClass('open').toggleClass('close');
+    });
 
     /**
      * Заполняет форму значениями
@@ -97,7 +100,7 @@ $(document).ready(function() {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
                     m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
-                    p[id] = $('<div class="line open" id="cat_'+id+'"><a class="name" href="javascript: void(0);">'
+                    p[id] = $('<div class="line open" id="cat_'+id+'"><a class="name">'
 			    +data.user[id]['name']+'</a></div>').appendTo('div.categories');
                 } else {
 		    pr = data.user[id]['parent'];
@@ -116,7 +119,7 @@ $(document).ready(function() {
                     $('#cat_'+pr+' table').append(
                         '<tr id="'+id+'">'
                         +'<td class="w1">'
-                            +'<a href="javascript: void(0);">'+data.user[id]['name']+'</a>'
+                            +'<a>'+data.user[id]['name']+'</a>'
                         +'</td>'
                         +'<td class="w2">'
                             + ct
