@@ -176,6 +176,7 @@ class Accounts_Model
      * @return bool
      */
     function add($data) {
+        $id = $data['id'];
         foreach($data as $key=>$value)
         {
             if (!$data[$key])
@@ -201,12 +202,11 @@ class Accounts_Model
 		}
             }
 	}
-
 	$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`,
                                         `account_currency_id`, `user_id`)
                 VALUES (?,?,?,?,?,?);";
         if (!$this->db->query($sql,
-                    '',
+                    $id,
                     $account['name']['value'],
                     $type_id, $account['description']['value'],
                     $currency_id,
@@ -215,6 +215,15 @@ class Accounts_Model
             return false;
 	}	
 	$next_id = mysql_insert_id();
+        $data['id']=$next_id;
+
+        //die(strval($data['id']));
+
+        
+        if (!intval($id))
+            $this->new_operation($data);
+        else
+            $this->update_operation($data);
         foreach($account as $value)
 	{
             switch ($value['field_type'])
@@ -244,7 +253,24 @@ class Accounts_Model
         Core::getInstance()->user->save();
 	return true;
     }
-	
+
+    function new_operation($data)
+    {
+       $model = new Operation_Model();
+       $model->add($data['starter_balance'], 'NOW()', 0,1,
+           'Новый счёт', $data['id']);
+    }
+
+    function update_operation($data)
+    {
+        $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `date`";
+        $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
+        $model = new Operation_Model();
+       $model->edit($oid,$data['starter_balance'],'NOW()',0,1,'Новый счёт', $data['id']);
+       $model->save();
+    }
+
+
     /**
      * Удаляет указанный счет
      * @param $id int Ид счета
@@ -309,7 +335,7 @@ class Accounts_Model
                                         ON af.field_descriptionsfield_description_id = afd.field_description_id
                                         WHERE af.account_typesaccount_type_id IN ($type_str)");
         
-
+//die(print_r($values));
         $res = array();
         $i=0;
         
@@ -322,13 +348,15 @@ class Accounts_Model
             $res[$val]['id']=$id[$key];
             
             $res[$val]['fields']=array();
+
             foreach ($fields as $k=>$v)
             {
                 if ($v['account_typesaccount_type_id']==$type[$key])
                 {
 
-                    $value = $values[$i]['int_value'] . $values[$i]['date_value'] . $values[$i]['string_value'];
-                    $res[$val]['fields'][$v['field_name']]=$value;//value
+                    $res[$val]['fields'][$v['field_name']]=$values[$i]['int_value'] .
+                    $values[$i]['date_value'] .
+                    $values[$i]['string_value'];//value
                     $i++;
                 }
             }

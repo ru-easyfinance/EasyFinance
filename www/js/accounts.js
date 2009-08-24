@@ -199,8 +199,10 @@ $(document).ready(function() {
                             key = $(this).attr('id');
                             val = $(this).text();
                             $('#blockCreateAccounts').find('#'+key).val(val) ;
-
                         });
+                        //alert($(th).closest('#item').find('#id').attr('value'));
+                        $('#account_fields table').attr('id',$(th).closest('#item').find('#id').attr('value'));
+                        $('#account_fields table').append('<input type="hidden" name="id" id="id" value="'+$(th).closest('#item').find('#id').attr('value')+'" />');
                     },
                     'text'
                 );
@@ -229,7 +231,6 @@ $(document).ready(function() {
     }
 
         function createNewAccount() {
-        var qString = $("#formAccount input,select,textarea")
         $.ajax({
             type: "POST",
             url: "/accounts/add/",
@@ -244,7 +245,7 @@ $(document).ready(function() {
 
     function correctaccount() {
         $.post('/accounts/del/',
-                    {id :$('#blockCreateAccounts').find('input#name').attr('value') },
+                    {id :$('#blockCreateAccounts').find('table').attr('id') },
                     function(data){},
                     'text');
         createNewAccount();
