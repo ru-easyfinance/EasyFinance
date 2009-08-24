@@ -21,6 +21,7 @@ class Login_Controller extends Template_Controller
     {
         $this->model = new Login_Model();
         Core::getInstance()->tpl->assign('name_page', 'welcome');
+        Core::getInstance()->tpl->append('js','welcome.js');
     }
 
     /**
