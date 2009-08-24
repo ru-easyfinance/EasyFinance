@@ -230,15 +230,15 @@ class Operation_Model {
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $from_account, 1,
             $comment, $to_account);
-
+        $last_id = mysql_insert_id();
         $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, drain, comment, transfer, tr_id)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment,
-            $from_account, mysql_insert_id());
+            $from_account, $last_id);
         $this->user->initUserAccounts();
         $this->user->save();
-        return '[]';
+        return $last_id;
 	}
 
     /**

@@ -124,18 +124,25 @@ class Operation_Controller extends Template_Controller
         switch ($array['type']) {
             case 0: //Расход
                 $array['amount'] = abs($array['amount']) * -1;
-                die($this->model->edit($array['id'],$array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags']));
+                if ($this->model->edit($array['id'],$array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
+                        die('[]');
+                    }
             case 1: // Доход
                 $array['drain'] = 0;
-                die($this->model->edit($array['id'],$array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags']));
+                if($this->model->edit($array['id'],$array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
+                        die('[]');
+                    }
             case 2: // Перевод со счёта
                 $array['category'] = -1;
-                die($this->model->editTransfer($array['id'], $array['amount'], $array['convert'], $array['date'], $array['account'],$array['toAccount'],$array['comment'],$array['tags']));
-            case 3: //
+                if($this->model->editTransfer($array['id'], $array['amount'], $array['convert'], $array['date'],
+                    $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
+                        die('[]');
+                    }
+            case 3: // ПРОПУСК
                 break;
-            case 4: // Перевод на финансовую цель
+            case 4: // Перевод на финансовую цель см. в модуле фин.цели
                 break;
         }
     }
@@ -160,6 +167,7 @@ class Operation_Controller extends Template_Controller
         $dateTo = formatRussianDate2MysqlDate(@$_GET['dateTo']);
         $category = (int)@$_GET['category'];
         $account     = (int)@$_GET['account'];
+        $array = array();
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account);
         //@TODO Похоже, что тут надо что-то дописать в массиве
         foreach ($list as $val) {
