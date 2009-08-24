@@ -33,6 +33,15 @@ $(document).ready(function() {
         $('#blockCreateAccounts').val('');
     }
 
+    function in_array(a,arr)
+    {
+        for (k in arr)
+        {
+            if (a==arr[k])
+                return true;
+        } 
+        return false;
+    }
     // upload account
     function update_list()
     {
@@ -46,6 +55,7 @@ $(document).ready(function() {
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
+        var main_keys = ['name','description','total_balance'];
         $.post('/accounts/accountslist/',
             {},
             function(data){
@@ -62,11 +72,19 @@ $(document).ready(function() {
                     str = '<tr id="item">';
                     str = str + '<td id="type" value="'+data[key]['type']+'"></td>';
                     str = str + '<td id="id" value="'+data[key]['id']+'"></td>';
-                        for( k in data[key]['fields'])//добавляются все поля
+                    for (l in main_keys)
+                    {
+                        k = main_keys[l];
+                        str = str + '<td id='+k+'>'+data[key]['fields'][k]+ '</td>';
+                    }
+                    for( k in data[key]['fields'])//добавляются все поля
+                    {
+                        if (!in_array(k,main_keys))
                         {
                             str = str + '<td id='+k+'>';// value='+data[key]['fields'][k]+'
                             str = str +data[key]['fields'][k]+ '</td>';
                         }
+                    }
                     str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';
                     str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+data[key]['def_cur']+' руб.</td>';
                     summ[i] = summ[i]+data[key]['def_cur'];
