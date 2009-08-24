@@ -350,7 +350,7 @@ class Accounts_Model
             $res[$val]['type']=$type[$key];
             $res[$val]['cur']=$cur[$key];
             $res[$val]['id']=$id[$key];
-            
+
             $res[$val]['fields']=array();
 
             foreach ($values as $k=>$v)
