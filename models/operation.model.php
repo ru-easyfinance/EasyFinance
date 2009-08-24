@@ -180,7 +180,7 @@ class Operation_Model {
 	 * @param string $comment    Комментарий транзакции
 	 * @param int    $account_id Ид счета
      * 
-	 * @return bool true - Регистрация прошла успешно
+	 * @return int $id Если
 	 */
 	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
     {
@@ -201,12 +201,13 @@ class Operation_Model {
             $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
                 `drain`, `comment`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
             $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment);
+            $last_id = mysql_insert_id();
         }
         // Обновляем данные о счетах пользователя
         Core::getInstance()->user->initUserAccounts();
         //$this->selectMoney($user_id);
         $this->save();
-        return '[]';
+        return $last_id;
 	}
 
     /**

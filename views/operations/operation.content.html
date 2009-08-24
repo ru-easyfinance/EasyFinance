@@ -1,4 +1,4 @@
-<!--Журнал операций-->
+<!-- Журнал операций -->
 					<div class="ramka3">
 						<div class="ct">
 							<div class="head">
@@ -21,6 +21,10 @@
 										по
 										<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
 									</div>
+                                    <select id="cat_filtr">
+                                        <option label="Все" value=""> --- Все ---</option>
+                                        {$cat_filtr}
+                                    </select>
 									<input type="button" value="Показать" id="btn_ReloadData"/>
 								</div>
 							</form>

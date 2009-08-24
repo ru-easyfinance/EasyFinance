@@ -6,14 +6,16 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="Keywords" content="" />
 	<meta name="Description" content="" />
-        <!-- Подключениее стилей и скриптов -->
-        {foreach from=$css item=i}
-        <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  />
-        {/foreach}
-        {foreach from=$js item=i}
-        <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
-        {/foreach}
-        <!-- /Подключениее стилей и скриптов -->
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Подключениее стилей и скриптов -->
+    {foreach from=$css item=i}
+    <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  />
+    {/foreach}
+    {foreach from=$js item=i}
+    <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
+    {/foreach}
+    <!-- /Подключениее стилей и скриптов -->
 </head>
 <body id="p_index">
 <!-- верхнее меню -->
