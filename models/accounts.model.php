@@ -299,13 +299,17 @@ class Accounts_Model
     public function accounts_list()
     {
         $sql='SELECT
-                   account_id, account_type_id, cur_name, cur_id
+                   account_id, accounts.account_type_id, cur_name, cur_id,account_type_name
                 FROM
                     accounts
                 LEFT JOIN
                     currency
                 ON
                     (account_currency_id=cur_id)
+                LEFT JOIN
+                    account_types
+                ON
+                   (accounts.account_type_id=account_types.account_type_id)
                 WHERE
                     user_id=?';
         $ret = $this->db->select($sql,$this->user_id);
@@ -314,12 +318,14 @@ class Accounts_Model
         $type = array();
         $cur = array();
         $cur_id = array();
+        $type_name = array();
         foreach ($ret as $key=>$val)
         {
             $id[]=$val['account_id'];
             $type[]=$val['account_type_id'];
             $cur[]=$val['cur_name'];
             $cur_id[]=$val['cur_id'];
+            $type_name[]=$val['account_type_name'];
         }
         $id_str = implode(',', $id);
         $type_str = implode(',', $type);
@@ -343,7 +349,6 @@ class Accounts_Model
                     account_fieldsaccount_field_id
                 IN ($id_str)";
         $values = $this->db->select($sql);
-
         $mod = new Operation_Model();
         foreach ($id as $key=>$val)
         {
@@ -362,13 +367,13 @@ class Accounts_Model
                     $values[$k]['string_value'];
                 }//value
             }
-
+            $res[$val]['cat'] = $type_name[$key];
             $total=(int)($mod->getTotalSum($val));
             $res[$val]['fields']['total_balance'] = $total;
             $res[$val]['def_cur'] =round(
                 $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],
-            2
-        );
+                2
+                );
 
 
 

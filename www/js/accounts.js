@@ -1,5 +1,23 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
+
 $(document).ready(function() {
+
+        function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
+        }
+
     var new_acc = 1;
     var aid;
     var tid;
@@ -75,7 +93,10 @@ $(document).ready(function() {
                     for (l in main_keys)
                     {
                         k = main_keys[l];
-                        str = str + '<td id='+k+'>'+data[key]['fields'][k]+ '</td>';
+                        if (k == 'total_balance')
+                            str = str + '<td id='+k+'>'+formatCurrency(data[key]['fields'][k])+ '</td>';
+                        else
+                            str = str + '<td id='+k+'>'+data[key]['fields'][k]+ '</td>';
                     }
                     for( k in data[key]['fields'])//добавляются все поля
                     {
@@ -85,8 +106,9 @@ $(document).ready(function() {
                             str = str +data[key]['fields'][k]+ '</td>';
                         }
                     }
+                    str = str + '<td id="cat" value="'+data[key]['cat']+'">'+data[key]['cat']+'</td>';
                     str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';
-                    str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+data[key]['def_cur']+' руб.</td>';
+                    str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
                     summ[i] = summ[i]+data[key]['def_cur'];
                     //alert(data[key]['def_cur']);
                     if (!val[data[key]['cur']]) {
@@ -99,20 +121,20 @@ $(document).ready(function() {
                         case 0:
                             break;
                         case 1:
-                            str = str + '<td id="special" value="'+data[key]['special'][0]+'">'+data[key]['special'][0]+'%</td>';
-                            str = str + '<td id="special" value="'+data[key]['special'][1]+'">'+data[key]['special'][1]+'%</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
                             break;
                         case 2:
-                            str = str + '<td id="special" value="'+data[key]['special'][0]+'">'+data[key]['special'][0]+'%</td>';
-                            str = str + '<td id="special" value="'+data[key]['special'][1]+'">'+data[key]['special'][1]+'%</td>';
-                            str = str + '<td id="special" value="'+data[key]['special'][2]+'">'+data[key]['special'][2]+'</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][2])+'</td>';
                             break;
                         case 3:
-                            str = str + '<td id="special" value="'+data[key]['special'][0]+'">'+data[key]['special'][0]+'%</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
                             break;
                         case 4:
-                            str = str + '<td id="special" value="'+data[key]['special'][1]+'">'+data[key]['special'][1]+'%</td>';
-                            str = str + '<td id="special" value="'+data[key]['special'][2]+'">'+data[key]['special'][2]+'</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
+                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][2])+'</td>';
                             break;
                     }
                     str = str+'<td id="mark">'+ div +'</td></tr>';
@@ -135,6 +157,9 @@ $(document).ready(function() {
                                         Остаток \n\
                                     </th>\n\
                                     <th> \n\
+                                        Тип \n\
+                                    </th>\n\
+                                    <th> \n\
                                         Валюта \n\
                                     </th>\n\
                                     <th> \n\
@@ -142,7 +167,7 @@ $(document).ready(function() {
                                     </th>';
                     head_tr = head_tr + spec_th[key];
                     head_tr = head_tr + '<tr>';
-                    s='<b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table>';
+                    s='<b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></br>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
@@ -151,9 +176,9 @@ $(document).ready(function() {
                         <tr><th>Сумма</th><th>Валюта</th></tr>';
                 for(key in val)
                 {
-                    str = str+'<tr><td>'+val[key]+'</td><td>'+key+'</td></tr>';
+                    str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
                 }
-                str = str+'<tr><td><b>Итого:</b>  '+total+'</td><td> руб.</td></tr>';
+                str = str+'<tr><td><b>Итого:</b>  '+formatCurrency(total)+'</td><td> руб.</td></tr>';
                 str = str + '</table>';
                  $('#operation_list').append(str);
                 ////////////////////////////////////////////////////////////////
@@ -162,6 +187,7 @@ $(document).ready(function() {
                 $('#item td').hide();
                 $('#item td#name').show();
                 $('#item td#cur').show();
+                $('#item td#cat').show();
                 $('#item td#def_cur').show();
                 $('#item td#special').show();
                 $('#item td#description').show();
