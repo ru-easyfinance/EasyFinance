@@ -84,16 +84,22 @@ class Operation_Controller extends Template_Controller
         switch ($array['type']) {
             case 0: //Расход
                 $array['amount'] = abs($array['amount']) * -1;
-                die($this->model->add($array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags']));
+                if($this->model->add($array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
+                        die ('[]');
+                    }
             case 1: // Доход
                 $array['drain'] = 0;
-                die($this->model->add($array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags']));
+                if($this->model->add($array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
+                        die('[]');
+                    }
             case 2: // Перевод со счёта
                 $array['category'] = -1;
-                die($this->model->addTransfer($array['amount'], $array['convert'], $array['date'],
-                    $array['account'],$array['toAccount'],$array['comment'],$array['tags']));
+                if($this->model->addTransfer($array['amount'], $array['convert'], $array['date'],
+                    $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
+                        die('[]');
+                    }
             case 3: //
                 break;
             case 4: // Перевод на финансовую цель

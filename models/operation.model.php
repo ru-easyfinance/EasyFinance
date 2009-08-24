@@ -361,6 +361,14 @@ class Operation_Model {
  */
 
             $category = Core::getInstance()->user->getUserCategory();
+            $cat_in = '';
+            foreach ($category as $var) {
+                if ($var['cat_parent'] == $currentCategory) {
+                    if ($cat_in) $cat_in .= ',';
+                    $cat_in .= $var['cat_id'];
+                }
+            }
+
             $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
             "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
             "FROM operation o ".
@@ -368,7 +376,11 @@ class Operation_Model {
                 "AND o.user_id = ? ".
                 "AND (o.`date` BETWEEN ? AND ?) ";
                 if (!empty($currentCategory)) {
-                    $sql .= " AND (o.cat_id = '{$currentCategory}') ";
+                    if ($cat[$currentCategory]['cat_parent'] == 0) {
+                        $sql .= " AND (o.cat_id IN ({$cat_in})) ";
+                    } else {
+                        $sql .= " AND (o.cat_id = '{$currentCategory}') ";
+                    }
                 }
             $sql .= " UNION ".
             " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), ".
@@ -378,7 +390,11 @@ class Operation_Model {
             " WHERE t.user_id = ? ".
                 " AND (t.`date` BETWEEN ? AND ?) ";
                 if (!empty($currentCategory)) {
-                    $sql .= " AND (tt.category_id = '{$currentCategory}') ";
+                    if ($cat[$currentCategory]['cat_parent'] == 0) {
+                        $sql .= " AND (tt.category_id IN ({$cat_in})) ";
+                    } else {
+                        $sql .= " AND (tt.category_id = '{$currentCategory}') ";
+                    }
                 }
             $sql .= " ORDER BY `date` DESC, id ";
 
