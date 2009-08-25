@@ -966,6 +966,45 @@ span.tagMatches span {
     z-index: 1000;
 }
 
+/*------------------------------------------- form Start --------------------------------------*/
+.formRegister {
+    margin: 2em 4em;
+}
+.formRegister h2 {
+    margin-left: 5.7em;
+}
+.formRegister table td {
+    padding: .2em;
+}
+.formRegister table td.name {
+    width: 10em;
+    text-align: right;
+}
+.formRegister table td label.error {
+    margin-left: .2em;
+    color: #cc0000;
+}
+.formRegister input {
+    padding: .1em;
+    width: 25em;
+    border: solid 1px #e3e3eb;
+    border-top: solid 1px #aaadb4;
+}
+.formRegister input.error {
+    border: solid 1px #cc0000;
+}
+.formRegister input.butt {
+    display: block;
+    width: 142px;
+    height: 47px;
+    text-indent: -999px;
+    overflow: hidden;
+    cursor: pointer;
+    background: url('/img/i/buttons.png') no-repeat 0 -160px;
+    border: none;
+}
+/*------------------------------------------- form end --------------------------------------*/
+
 
 /*------------------------------------------- crack jQuery Start --------------------------------------*/
 

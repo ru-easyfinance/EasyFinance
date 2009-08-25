@@ -59,19 +59,19 @@ class User
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        
+
         // Если соединение пользователя защищено, то пробуем авторизироваться
-        if (isset($_SERVER['HTTPS'])) {
+        //if (isset($_SERVER['HTTPS'])) {
             // Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME])) {
                 $array = decrypt($_COOKIE[COOKIE_NAME]);
                 $this->initUser($array[0],$array[1]);
             }
         // иначе, переходим в защищённое соединение, и снова пробуем авторизироваться
-        } else {
-            header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            exit;
-        }
+        //} else {
+            //header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            //exit;
+        //}
 
         $this->load(); //Пробуем загрузить из сессии данные
     }
