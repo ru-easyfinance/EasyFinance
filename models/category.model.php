@@ -112,7 +112,7 @@ class Category_Model {
      */
     public function loadSumCategories($sys_currency, $start, $finish)
     {
-        //return '';
+        return '';
         //TODO Переписать математические расчёты в функции, на использование BCMATH
         if (!empty ($start)) {
             $param = "AND o.date BETWEEN '{$start}' AND '{$finish}'";
@@ -130,16 +130,15 @@ class Category_Model {
         foreach ($rows as $val) {
             // Общая сумма
             if ($val['cur'] != 1) { // Конвертируем валюту в рубли
-                $array[$val['cat_id']][0] = (int)@$val[$val['cat_id']][0] + ($val['sum'] * Core::getInstance()->currency[$val['cur']]['value']);
+                $array[$val['cat_id']]['sum'] = (int)@$val[$val['cat_id']]['sum'] + ($val['sum'] * Core::getInstance()->currency[$val['cur']]['value']);
             } else { // Конкретно сумма по валюте
-                $array[$val['cat_id']][0] = (int)@$val[$val['cat_id']][0] + $val['sum'];
+                $array[$val['cat_id']]['sum'] = (int)@$val[$val['cat_id']]['sum'] + $val['sum'];
             }
-            
-            //$array[$val['cat_id']][$val['cur']] = $val['sum'][$val['cur']];
         }
-        //die(print_r($rows));
-        die(print_r($array));
 
+        //die(print_r($rows));
+        //die(print_r($array));
+/*
         $cnt = count($row);
         for ($i=0; $i<$cnt; $i++) {
             $id = $rows[$i]['cat_id'];
@@ -162,7 +161,7 @@ class Category_Model {
                 }
             }
         }
-
+*/
         // считаем общую сумму
         if (!empty($forest)) {
             foreach($forest as $key=>$value) {

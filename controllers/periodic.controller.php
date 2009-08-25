@@ -1,6 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля периодических транзакций
+ * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @category periodic
  * @copyright http://home-money.ru/
  * @version SVN $Id$
@@ -9,13 +10,13 @@ class Periodic_Controller extends Template_Controller
 {
     /**
      * Модель класса календарь
-     * @var <Periodic_Model>
+     * @var Periodic_Model
      */
     private $model = null;
 
     /**
      * Ссылка на класс Смарти
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
 
@@ -25,31 +26,29 @@ class Periodic_Controller extends Template_Controller
      */
     public function __construct()
     {
-        $this->tpl = Core::getInstance()->tpl;
-        $this->tpl->assign('name_page', 'periodic');
         $this->model = new Periodic_Model();
+        $this->tpl = Core::getInstance()->tpl;
+        $this->tpl->assign('name_page', 'periodic/periodic');
+        //$this->tpl->assign('js','jquery/jquery.calculator.min.js');
+//        $this->tpl->assign('js','jquery/jquery.calculator-ru.js');
+//        $this->tpl->assign('js','periodic.js');
+//        $this->tpl->assign('css','jquery/jquery.calculator.css');
     }
     
     /**
      * Индексная страница
-     * @param <array> $args mixed
+     * @param array $args mixed
      * @return void
      */
     public function index($args)
     {
-		$this->tpl->assign('periodic', $this->model->getAllPeriodic());
-
-        //@XXX WTF????
-		if ($_SESSION['good_text']) {
-			$this->tpl->assign('good_text', $_SESSION['good_text']);
-			$_SESSION['good_text'] = false;
-		}
+		//$this->tpl->assign('periodic', $this->model->getAllPeriodic());
     }
 
     /**
      * Добавляет регулярную транзакцию
-     * @param <array> $args mixed
-     * @return <int> Ид добавленной транзакции
+     * @param array $args mixed
+     * @return int Ид добавленной транзакции
      */
     public function add($args)
     {
@@ -71,7 +70,7 @@ class Periodic_Controller extends Template_Controller
 
     /**
      * Редактирует периодическую транзакцию
-     * @param <int> $id Ид транзакции которую нужно отредактировать
+     * @param int $id Ид транзакции которую нужно отредактировать
      * @return void
      */
     public function edit($id)

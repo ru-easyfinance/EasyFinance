@@ -1,7 +1,6 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Модель для управления периодическими транзакциями
- * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @category periodic
  * @copyright http://home-money.ru/
