@@ -14,6 +14,7 @@ $(function() {
     $('li.over2').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').hide();
+        $(this).closest('div#popupreport').hide();
     }).find('a').removeAttr('href');
 
     // Кнопка настроек виджета
@@ -31,6 +32,7 @@ $(function() {
     });
 // Footer
     var r_list;
+    var temp_obj={13:27,11:28,9:29,10:30,12:31};
 //скрытие сообщений
     $('#footer #popupreport').hide();
     //открытие сообщений
@@ -41,9 +43,9 @@ $(function() {
                 '/feedback/r_list/',
                 {},
                 function (data){
-                    r_list = data;
+                    
                     str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг </th>';
-                    for (i=0; i<4; i++)
+                    for (i=0; i<7; i++)
                     {
                         if (data[i])
                         {
@@ -51,11 +53,19 @@ $(function() {
                                 c=' class="act" ';
                             else
                                 c='';
+                            if (data[i]['user_name']<15)
+                                data[i]['user_name'] = temp_obj[data[i]['user_name']];
+                            else if(data[i]['user_name']>41)
+                                data[i]['user_name'] = data[i]['user_name']-9;
+                            else
+                                data[i]['user_name'] = data[i]['user_name']-14;
                             str = str + '<tr'+c+'><td>' +
-                                    data[i]['user_name'] + '</td><td class="link">' +
+                                    'тестировщик'+data[i]['user_name']  + '</td><td class="link">' +
                                     data[i]['SUM(rating)'] + '</td></tr>';
                         }
                     }
+                    r_list = data;
+
                     str = str + '</table>';
                     $('#footer #rating').html(str);
                     
@@ -76,9 +86,10 @@ $(function() {
                     else
                         c='';
                     str = str + '<tr'+c+'><td>' +
-                         r_list[key]['user_name'] + '</td><td class="link">' +
+                         'тестировщик' + r_list[key]['user_name'] + '</td><td class="link">' +
                          r_list[key]['SUM(rating)'] + '</td></tr>';
                 }
+
                 str = str + '</table>';
 
                 $('#dialog_rating').html(str);

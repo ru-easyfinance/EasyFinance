@@ -27,7 +27,7 @@ class Feedback_Model
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        $this->user = Core::getInstance()->user->getId();
+        $this->user = (int)Core::getInstance()->user->getId();
         //$uid = Core::getInstance()->user->getId();
         //$this->user = Core::getInstance()->user->getProfile($uid);
     }
@@ -53,7 +53,7 @@ class Feedback_Model
         $headers .= 'To: support@home-money.ru' . "\r\n";
         $headers .= 'From: <'.$this->user['user_mail'].'>' . "\r\n";
 
-        //mail('support@home-money.ru', $this->user['user_mail'], $html_mail, $headers);
+        mail('support@home-money.ru', $this->user['user_mail'], $html_mail, $headers);
     }
 
     public function get_rlist()
