@@ -1,6 +1,5 @@
 // {* $Id: category.js 113 2009-07-29 11:54:49Z ukko $ *}
 $(document).ready(function() {
-    // TRUSTED
     var cat;
 
     loadCategory();
@@ -142,13 +141,6 @@ $(document).ready(function() {
             //$('div.categories').append(c);
             $('#subcat').append(m);
         }, 'json');
-    }
-
-    /**
-     * Заполняет список категорий
-     */
-    function fillListCategory() {
-
     }
 
     /**
