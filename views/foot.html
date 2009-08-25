@@ -22,20 +22,35 @@
 <!--popup оставить отзыв-->
 	<div id="popupreport" style="display: block;">
 		<div class="bg"></div>
-                <div class="reit"></div>
+                
 		<form action="">
 			<div class="inside">
-				<h2>оставить отзыв</h2>
-				<div class="f_field">
-					<label for="ffmes">Ваш отзыв</label>
-					<textarea cols="1" rows="1" id="ffmes"></textarea>
-				</div>
-				<img src="/img/i/pix.gif" class="but" />
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h2>список лидеров</h2>
+                                    </td>
+                                    <td>
+                                        <a class="rating_list" id="">все тестеры</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <div id="rating"></div>
+
+                            <h2>оставить отзыв</h2>
+                            <div class="f_field">
+                                <label for="ffmes">Ваш отзыв</label>
+				<textarea cols="1" rows="1" id="ffmes"></textarea>
+                            </div>
+                            <img src="/img/i/pix.gif" class="but" />
 			</div>
 		</form>
 	</div>
+<div id='dialog_rating'></div>
 <!--/popup оставить отзыв-->
 </div>
 <!--/подвал-->
+
 </body>
 </html>

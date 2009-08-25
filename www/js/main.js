@@ -29,25 +29,78 @@ $(function() {
 	});
 	$(this).addClass('act');
     });
-
+// Footer
+    var r_list;
+//скрытие сообщений
     $('#footer #popupreport').hide();
+    //открытие сообщений
     $('#footer .addmessage').click(
         function(){
             $('#footer #popupreport').show();
             $.post(
-                '/feedback/add_message/',
+                '/feedback/r_list/',
                 {},
                 function (data){
-                    for (i=0;i<5;i++)
+                    r_list = data;
+                    str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг </th>';
+                    for (i=0; i<4; i++)
                     {
                         if (data[i])
-                        str = str+data[i]['user_name']+data[i]['reiting'];
+                        {
+                            if (data[0]['uid']==data[i]['user_name'])
+                                c=' class="act" ';
+                            else
+                                c='';
+                            str = str + '<tr'+c+'><td>' +
+                                    data[i]['user_name'] + '</td><td class="link">' +
+                                    data[i]['SUM(rating)'] + '</td></tr>';
+                        }
                     }
+                    str = str + '</table>';
+                    $('#footer #rating').html(str);
+                    
                 },
                 'json'
-            )
+            );
+            return false;
         });
 
+        //лист тестеров
+        $('#footer .rating_list').click(
+            function(){
+                str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг </th>';
+                for (key in r_list)
+                {
+                    if (r_list[0]['uid']==r_list[key]['user_name'])
+                        c=' class="act" ';
+                    else
+                        c='';
+                    str = str + '<tr'+c+'><td>' +
+                         r_list[key]['user_name'] + '</td><td class="link">' +
+                         r_list[key]['SUM(rating)'] + '</td></tr>';
+                }
+                str = str + '</table>';
+
+                $('#dialog_rating').html(str);
+                $('#dialog_rating').dialog('open');
+                
+                
+            });
+
+      $("#dialog_rating").dialog({
+        bgiframe: true,
+        autoOpen: false,
+        width: 450,
+        modal: true,
+        buttons: {
+            'Ок': function() {
+                $("#dialog_rating").dialog('close');
+            }           
+        },
+        close: function() {
+        }
+    });
+        //получение клиентских настроек
     function getClientWidth()
     {
       return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
@@ -57,7 +110,7 @@ $(function() {
     {
       return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
     }
-   
+   //отправление сообщения
     $('#footer .but').click(
         function (){
             var num_of_plugins = navigator.plugins.length;
@@ -82,6 +135,7 @@ $(function() {
             $('#footer #popupreport').hide();
         }
     );
+    //скрытие лишнего текста на поле ввода
     $('#footer .f_field').click(
         function (){
             $(this).find('label').hide();
