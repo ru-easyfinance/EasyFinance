@@ -14,7 +14,6 @@ $(function() {
     $('li.over2').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').hide();
-        $(this).closest('div#popupreport').hide();
     }).find('a').removeAttr('href');
 
     // Кнопка настроек виджета
@@ -35,6 +34,10 @@ $(function() {
     var temp_obj={13:27,11:28,9:29,10:30,12:31};
 //скрытие сообщений
     $('#footer #popupreport').hide();
+    $('#popupreport .close').click(
+        function(){
+            $('#popupreport').hide();
+        });
     //открытие сообщений
     $('#footer .addmessage').click(
         function(){
