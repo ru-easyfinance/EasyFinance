@@ -58,7 +58,7 @@ class Feedback_Model
 
     public function get_rlist()
     {
-        $sql = "SELECT user_name, SUM(rating) FROM feedback_message GROUP BY uid";
+        $sql = "SELECT user_name, SUM(rating) FROM feedback_message GROUP BY uid ORDER BY SUM(rating) DESC";
         $ret = $this->db->select($sql);
         $ret[0]['uid']=$this->user;
         return $ret;

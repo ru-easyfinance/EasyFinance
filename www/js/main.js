@@ -67,8 +67,7 @@ $(function() {
                     r_list = data;
 
                     str = str + '</table>';
-                    $('#footer #rating').html(str);
-                    
+                    $('#footer #rating').html(str);                   
                 },
                 'json'
             );
