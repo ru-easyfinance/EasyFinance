@@ -1,67 +1,106 @@
+                    <!--Ввод операции-->
+                    <div class="inside">
+                        <ul class="buttons_block">
+                            <li id="addoperation_but" class="act"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
+                            <li id="addtocalendar_but"><a href="#"title="Добавить в календарь">Добавить в календарь</a></li>
+                        </ul>
+                    </div>
+                    <!--/Ввод операции-->
 
-<h3>Регулярные транзакции</h3>
-<table class="tab1">
-    <tbody>
-        <tr>
-            <th class="chk"> </th>
-            <th>Дата</th>
-            <th>Название</th>
-            <th>Категория</th>
-            <th>Счет</th>
-            <th>Часота повт.</th>
-            <th>Сумма</th>
-        </tr>
-        <tr>
-            <td class="chk">
-                <input type="checkbox" value=""/>
-            </td>
-            <td>20.03.09</td>
-            <td>Покупка дома</td>
-            <td>Работа</td>
-            <td>евро</td>
-            <td>125000</td>
-            <td class="types">
-                <span class="t1" title="тип 1">тип 1</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="chk">
-                <input type="checkbox" value=""/>
-            </td>
-            <td>20.03.09</td>
-            <td>Покупка дома</td>
-            <td>Работа</td>
-            <td>евро</td>
-            <td>125000</td>
-            <td class="types">
-                <span class="t2" title="тип 2">тип 2</span>
-            </td>
-        </tr>
-        <tr class="act">
-            <td class="chk">
-                <input type="checkbox" checked="checked" value=""/>
-            </td>
-            <td>20.03.09</td>
-            <td>Покупка дома</td>
-            <td>Работа</td>
-            <td>евро</td>
-            <td>125000</td>
-            <td class="types">
-                <span class="t1" title="тип 3">тип 3</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="chk">
-                <input type="checkbox" value=""/>
-            </td>
-            <td>20.03.09</td>
-            <td>Покупка дома</td>
-            <td>Работа</td>
-            <td>евро</td>
-            <td>125000</td>
-            <td class="types">
-                <span class="t1" title="тип 1">тип 1</span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                    <div class="ramka3">
+						<div class="ct">
+							<div class="head">
+								<h1>Регулярные транзакции</h1>
+								<ul class="action">
+									<li class="over1"><a title="настройки">настройки</a></li>
+									<li class="over2"><a title="закрыть">закрыть</a></li>
+									<li class="over3"><a title="свернуть">свернуть</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="inside">
+                            <form action="/periodic/add/" id="form">
+                                <input type="hidden" id="id">
+                                <div class="addcategories">
+                                    <a id="add_periodic">Добавить регулярную транзакцию</a>
+                                    <div id="add_form">
+                                        <div class="form_block" style="display: hide;">
+                                            <div class="f_field">
+                                                <label for="title">Название транзакции</label>
+                                                <input type="text" id="title" />
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="category">Категория</label>
+                                                <select id="category">
+                                                    {$category}
+                                                </select>
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="type">Тип транзакции</label>
+                                                <select id="type">
+                                                    <option value="-1">Расход</option>
+                                                    <option value="1">Доход</option>
+                                                </select>
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="account">Счёт</label>
+                                                <select id="account">
+                                                {foreach from=$account item=val}
+                                                    <option value="{$val.account_id}" ext="{$val.account_description}" title="{$val.account_name}" cur_id="{$val.account_currency_id}">{$val.account_name} ({$val.account_currency_name})</option>
+                                                {/foreach}
+                                                </select>
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="amount">Сумма</label>
+                                                <input type="text" id="amount" />
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="date">Дата</label>
+                                                <input type="text" id="date" />
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="repeat">Периодичность</label>
+                                                <select id="repeat">
+                                                    <option value="0">Без повторения</option>
+                                                    <option value="1">Ежедневно</option>
+                                                    <option value="7">Еженедельно</option>
+                                                    <option value="30">Ежемесячно</option>
+                                                    <option value="90">Ежеквартально</option>
+                                                    <option value="365">Ежегодно</option>
+                                                </select>
+                                            </div>
+                                            <div class="f_field">
+                                                <label>Повторения</label>
+                                                <input type="radio" name="count" id="infinity" value="0" checked="checked"/><span id="spinfinity">Бесконечно</span>
+                                                <input type="radio" name="count" id="count" value="1" /> <span id="spcount">Количество раз</span>&nbsp;
+                                                <select id="counts" disabled="disabled" />
+                                            </div>
+                                            <div class="f_field">
+                                                <label for="comment">Комментарий</label>
+                                                <textarea id="comment"></textarea>
+                                            </div>
+                                            <input type="button" id="btnSave" value="Сохранить" />
+                                            <input type="button" id="btnCancel" value="Отменить" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- Список регулярок -->
+                            <table class="tab1" id="tab1">
+                                <thead>
+                                    <tr>
+                                        <th class="chk"> </th>
+                                        <th>Дата</th>
+                                        <th>Название</th>
+                                        <th>Категория</th>
+                                        <th>Счет</th>
+                                        <th>Часота повт.</th>
+                                        <th>Сумма</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>

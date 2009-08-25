@@ -222,9 +222,9 @@ function get_tree_select ($selected = 0)
         }
 
         if ($val['cat_parent'] == 0) {
-            $result .= "<option value='{$val['cat_id']}' {$s}>{$val['cat_name']}</option>";
+            $result .= "<option value='{$val['cat_id']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
         } else {
-            $result .= "<option value='{$val['cat_id']}' {$s}>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+            $result .= "<option value='{$val['cat_id']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
         }
     }
     return $result;
