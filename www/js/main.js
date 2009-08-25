@@ -34,6 +34,18 @@ $(function() {
     $('#footer .addmessage').click(
         function(){
             $('#footer #popupreport').show();
+            $.post(
+                '/feedback/add_message/',
+                {},
+                function (data){
+                    for (i=0;i<5;i++)
+                    {
+                        if (data[i])
+                        str = str+data[i]['user_name']+data[i]['reiting'];
+                    }
+                },
+                'json'
+            )
         });
 
     function getClientWidth()
