@@ -1,25 +1,22 @@
 <form action="/accounts/" method="post" id="formAccount">
-<table width="100%">
-<tr>
-    <td class="cat_add" width="20%" align="right">Валюта счета:</td>
-    <td class="cat_add" width="80%" align="left">
-    	<select name="currency_id">
-            {foreach from=$currency item=data}
-                <option value="{$data.key}">{$data.name}</option>
-            {/foreach}
-        </select>
-	</td>
-</tr>
+
+<div class="f_field">
+    <label>Валюта счета:</label>
+    <select name="currency_id">
+        {foreach from=$currency item=data}
+            <option value="{$data.key}">{$data.name}</option>
+        {/foreach}
+    </select>
+</div>
+<br class="clr"/>
+<table class="tableForm" cellspacing="0" cellpadding="0">
 {foreach from=$fields item=data}
 <tr>
-    <td class="cat_add" width="20%" align="right">{$data.display}:</td>
-    <td class="cat_add" width="80%" align="left">
-    	{$data.value}
-	</td>
+    <td><label>{$data.display}:</label></td>
+</tr><tr>
+    <td>{$data.value}</td>
 </tr>
 {/foreach}
-<tr>
-    <td class="cat_add" colspan="2"><input type="hidden" name="type_id" value="{$type_id}" /></td>
-</tr>
 </table>
+<input type="hidden" name="type_id" value="{$type_id}" />
 </form>

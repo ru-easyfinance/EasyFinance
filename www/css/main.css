@@ -1003,6 +1003,16 @@ span.tagMatches span {
     background: url('/img/i/buttons.png') no-repeat 0 -160px;
     border: none;
 }
+
+table.tableForm td label {
+    margin: .2em .3em 0 0;
+    display: block;
+}
+table.tableForm input, table.tableForm select, table.tableForm textarea {
+    font-family:Arial,Tahoma,sans-serif;
+    font-size:12px;
+    color: #b2b2b2;
+}
 /*------------------------------------------- form end --------------------------------------*/
 
 
