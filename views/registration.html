@@ -1,3 +1,4 @@
+{* $Id$ *}
 <div class="ramka2">
 <div class="cct"></div>
 <div class="formRegister">
@@ -34,66 +35,6 @@
 <div class="ccb"></div>
 </div>
 <!--
-{* $Id$ *}
-<table width="100%" class="menu">
-	{if !empty($good_activation)}
-	<tr>
-		<td width="5%" height="100%" class="menu">&nbsp;</td>
-		<td width="95%" height="100%"><br />
-		<font size="+1" color="#76b900"> {$good_activation} </font></td>
-	</tr>
-	{else} {if empty($good_text)}
-	<form action="/registration/new_user/" method="post">
-	<tr>
-		<td width="20%" class="reg">Имя:</td>
-		<td width="80%" class="reg"><input type="text" name="register[name]" style="width: 200px;"
-			value={if !empty($register.name)}{$register.name}{/if}></td>
-	</tr>
-	<tr>
-		<td height="100%" class="reg">{if !empty($error_text.login)}<font color="#FF0000">Логин:</font>{else}Логин:{/if}</td>
-		<td height="100%" class="reg"><input type="text" name="register[login]"
-			style="width: 200px;" value={if !empty($register.login)}{$register.login}{/if}></td>
-	</tr>
-	<tr>
-		<td height="100%" class="reg">{if !empty($error_text.pass)}<font color="#FF0000">Пароль:</font>{else}Пароль:{/if}</td>
-		<td height="100%" class="reg"><input type="password" name="register[pass]"
-			style="width: 200px;" value=''></td>
-	</tr>
-	<tr>
-		<td height="100%" class="reg">{if !empty($error_text.pass)}<font color="#FF0000">Повтор
-		пароля:</font>{else}Повтор пароля:{/if}</td>
-		<td height="100%" class="reg"><input type="password" name="register[pass_r]"
-			style="width: 200px;" value=''></td>
-	</tr>
-	<tr>
-		<td height="100%" class="reg">{if !empty($error_text.mail)}<font color="#FF0000">e-mail:</font>{else}e-mail:{/if}</td>
-		<td height="100%" class="reg"><input type="text" name="register[mail]" style="width: 200px;"
-			value={if !empty($register.mail)}{$register.mail}{/if}></td>
-	</tr>
-	<tr>
-		<td height="100%" class="reg">&nbsp;</td>
-		<td height="100%" class="reg"><br />
-		<input type="submit" class="inputsubmit" style="width: 200px;" value="Зарегистрироваться" /></td>
-	</tr>
-	{/if} {/if}
-	</form>
-	{if !empty($error_text)}
-	<tr>
-		<td align="left" class="cat_add">&nbsp;</td>
-		<td align="left" class="cat_add"><br />
-		<font size="+1" color="#FF0000">Внимание, ошибка!</font>
-		<ul>
-			{foreach from=$error_text item=err_text}
-			<li>{$err_text}</li>
-			{/foreach}
-		</ul>
-		</td>
-	</tr>
-	{/if} {if !empty($good_text)}
-	<tr>
-		<td align="left" class="cat_add" colspan="2" width="100%">
-		<div
-			style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding: 15px;">
 		<p align="justify">Уважаемый пользователь системы домашнего бюджетирования Home-money.ru!</p>
 		<p align="justify">Вы успешно зарегистрировались в системе. На указанный при регистрации
 		e-mail отправлено письмо со ссылкой,<br>
@@ -103,8 +44,4 @@
 		Home-Money.ru по e-mail <b>support@home-money.ru</b></p>
 		<p align="justify">C уважением,<br>
 		Администрация системы Home-money.ru</p>
-		</div>
-		</td>
-	</tr>
-	{/if}
 </table>-->
