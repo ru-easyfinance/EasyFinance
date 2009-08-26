@@ -244,6 +244,7 @@ $(document).ready(function() {
                             key = $(this).attr('class');
                             val = $(this).text();
                             $('#blockCreateAccounts').find('#'+key).val(val) ;
+                            $(document).scrollTop(300);
                         });
                         //alert($(th).closest('#item').find('#id').attr('value'));
                         $('#account_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
