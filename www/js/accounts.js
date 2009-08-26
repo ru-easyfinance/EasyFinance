@@ -87,28 +87,28 @@ $(document).ready(function() {
                 for (key in data )
                 {
                     i = g_types[data[key]['type']];
-                    str = '<tr id="item">';
-                    str = str + '<td id="type" value="'+data[key]['type']+'"></td>';
-                    str = str + '<td id="id" value="'+data[key]['id']+'"></td>';
+                    str = '<tr class="item">';
+                    str = str + '<td class="type" value="'+data[key]['type']+'"></td>';
+                    str = str + '<td class="id" value="'+data[key]['id']+'"></td>';
                     for (l in main_keys)
                     {
                         k = main_keys[l];
                         if (k == 'total_balance')
-                            str = str + '<td id='+k+'>'+formatCurrency(data[key]['fields'][k])+ '</td>';
+                            str = str + '<td class='+k+'>'+formatCurrency(data[key]['fields'][k])+ '</td>';
                         else
-                            str = str + '<td id='+k+'>'+data[key]['fields'][k]+ '</td>';
+                            str = str + '<td class='+k+'>'+data[key]['fields'][k]+ '</td>';
                     }
                     for( k in data[key]['fields'])//добавляются все поля
                     {
                         if (!in_array(k,main_keys))
                         {
-                            str = str + '<td id='+k+'>';// value='+data[key]['fields'][k]+'
+                            str = str + '<td class='+k+'>';// value='+data[key]['fields'][k]+'
                             str = str +data[key]['fields'][k]+ '</td>';
                         }
                     }
-                    str = str + '<td id="cat" value="'+data[key]['cat']+'">'+data[key]['cat']+'</td>';
-                    str = str + '<td id="cur" value="'+data[key]['cur']+'">'+data[key]['cur']+'</td>';
-                    str = str + '<td id="def_cur" value="'+data[key]['def_cur']+'">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
+                    str = str + '<td class="cat">'+data[key]['cat']+'</td>';
+                    str = str + '<td class="cur">'+data[key]['cur']+'</td>';
+                    str = str + '<td class="def_cur">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
                     summ[i] = summ[i]+data[key]['def_cur'];
                     //alert(data[key]['def_cur']);
                     if (!val[data[key]['cur']]) {
@@ -121,23 +121,23 @@ $(document).ready(function() {
                         case 0:
                             break;
                         case 1:
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
                             break;
                         case 2:
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][2])+'</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][2])+'</td>';
                             break;
                         case 3:
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
                             break;
                         case 4:
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
-                            str = str + '<td id="special">'+formatCurrency(data[key]['special'][2])+'</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
+                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][2])+'</td>';
                             break;
                     }
-                    str = str+'<td id="mark">'+ div +'</td></tr>';
+                    str = str+'<td class="mark">'+ div +'</td></tr>';
                     arr[i] = arr[i]+str;
 
                     //todo hide show
@@ -185,15 +185,15 @@ $(document).ready(function() {
                 ////////////////////////////////////////////////////////////////
 
 
-                $('#item td').hide();
-                $('#item td#name').show();
-                $('#item td#cur').show();
-                $('#item td#cat').show();
-                $('#item td#def_cur').show();
-                $('#item td#special').show();
-                $('#item td#description').show();
-                $('#item td#total_balance').show();
-                $('#item td#mark').show();     
+                $('.item td').hide();
+                $('.item td.name').show();
+                $('.item td.cur').show();
+                $('.item td.cat').show();
+                $('.item td.def_cur').show();
+                $('.item td.special').show();
+                $('.item td.description').show();
+                $('.item td.total_balance').show();
+                $('.item td.mark').show();
             },
             'json'
         );
@@ -201,13 +201,13 @@ $(document).ready(function() {
     update_list();
     //acount click
     
-    $('tr#item').live('mouseover',
+    $('tr.item').live('mouseover',
         function(){
-            $('tr#item').removeAttr('class');
+            $('tr.item').removeAttr('class');
             $(this).attr('class','act');
     });
 
-    $('tr#item').live('mouseout',
+    $('tr.item').live('mouseout',
         function(){
             $(this).removeAttr('class');
     });
@@ -217,10 +217,10 @@ $(document).ready(function() {
             if (confirm("Вы уверены что хотите удалить счёт?"))
             {
                 $.post('/accounts/del/',
-                    {id :$(this).closest('#item').find('#id').attr('value') },
+                    {id :$(this).closest('.item').find('.id').attr('value') },
                     function(data){},
                     'text');
-                $(this).closest('#item').empty();
+                $(this).closest('.item').empty();
                 return false;
             }
         }
@@ -229,7 +229,7 @@ $(document).ready(function() {
     $('li.edit').live('click',
         function(){
                 $('#blockCreateAccounts').show();
-                id =$(this).closest('#item').find('#type').attr('value');
+                id =$(this).closest('.item').find('.type').attr('value');
                 new_acc=0;
                 tid = id;
                 var th = $(this);
@@ -240,14 +240,14 @@ $(document).ready(function() {
                     },
                      function(data) {
                         $('#account_fields').html(data);
-                        $(th).closest('#item').find('td').each(function(){
-                            key = $(this).attr('id');
+                        $(th).closest('.item').find('td').each(function(){
+                            key = $(this).attr('class');
                             val = $(this).text();
-                            $('#blockCreateAccounts').find('#'+key).val(val) ;
+                            $('#blockCreateAccounts').find('.'+key).val(val) ;
                         });
                         //alert($(th).closest('#item').find('#id').attr('value'));
-                        $('#account_fields table').attr('id',$(th).closest('#item').find('#id').attr('value'));
-                        $('#account_fields table').append('<input type="hidden" name="id" id="id" value="'+$(th).closest('#item').find('#id').attr('value')+'" />');
+                        $('#account_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
+                        $('#account_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
                     },
                     'text'
                 );
@@ -259,8 +259,6 @@ $(document).ready(function() {
 
 
     function changeTypeAccount(id) {
-        $('#loader').html('Подождите, идет загрузка...');
-        $('#information_text').hide();
         $.post(
             "/accounts/changeType/",
             {
@@ -268,8 +266,6 @@ $(document).ready(function() {
             },
              function(data) {
                 $('#account_fields').html(data);
-                $('#loader').html(' ');
-                $('#information_text').show();
             },
             'text'
         );
@@ -290,7 +286,7 @@ $(document).ready(function() {
 
     function correctaccount() {
         $.post('/accounts/del/',
-                    {id :$('#blockCreateAccounts').find('table').attr('id') },
+                    {id :$('#blockCreateAccounts').find('table').attr('class') },
                     function(data){},
                     'text');
         createNewAccount();
