@@ -51,7 +51,7 @@ function panel2_print(){
             {element: arr[i],
             date: c_list[5]},
             function (data){
-                    var chartSample_1 = new AnyChart('/swf/anychart/Gauge.swf');
+                    var chartSample_1 = new AnyChart('/swf/anychart/gauge.swf');
                     chartSample_1.width = '109px';
                     chartSample_1.height = '120px';
                     chartSample_1.setData(data);
