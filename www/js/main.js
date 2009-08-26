@@ -111,6 +111,7 @@ $(function() {
             }           
         },
         close: function() {
+            $("#dialog_rating").dialog('close');
         }
     });
         //получение клиентских настроек
