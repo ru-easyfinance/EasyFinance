@@ -1,4 +1,4 @@
-$().ready(function() {
+$(document).ready(function() {
 	$("#formRegister").validate({
 		rules: {
 			name: "required",
