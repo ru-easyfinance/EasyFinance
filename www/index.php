@@ -16,8 +16,6 @@ require_once dirname(dirname(__FILE__)). "/include/common.php";
 Core::getInstance()->authUser();
 Core::getInstance()->parseUrl();
 
-//if (!empty(Core::getInstance()->user->getId())) {
-if (!empty($_SESSION['user'])) {
-    $tpl->assign("user", $_SESSION['user']);
-}
-$tpl->display("index.html");
+$uar = array('user_name'=>$_SESSION['user']['user_name'],'user_type'=>$_SESSION['user']['user_type']);
+Core::getInstance()->tpl->assign('user_info', $uar);
+Core::getInstance()->tpl->display("index.html");

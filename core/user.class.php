@@ -105,7 +105,7 @@ class User
         //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
         $sql = "SELECT id, user_name, user_login, user_pass, user_mail,
                     DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
-                    user_currency_default, user_currency_list
+                    user_currency_default, user_currency_list, user_type
                 FROM users
                 WHERE user_login  = ?
                     AND user_pass = ?
@@ -121,9 +121,14 @@ class User
             $this->destroy();
             return false;
         }
-
-        if (!$this->init($this->getId())) {
-            //@TODO Вызывать мастера настройки счетов, категорий и валют
+        if ($this->props['user_type'] == 0){
+            if (!$this->init($this->getId())) {
+               //@TODO Вызывать мастера настройки счетов, категорий и валют
+            }
+        }
+        else
+        {
+            die('supper');
         }
         $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
         $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
@@ -136,6 +141,7 @@ class User
      */
     public function save ()
     {
+        
         $_SESSION['user']          = $this->props;
         $_SESSION['user_category'] = $this->user_category;
         $_SESSION['user_account']  = $this->user_account;
@@ -173,6 +179,7 @@ class User
      */
     public function load()
     {
+
         if (isset($_SESSION['user']) && is_array($_SESSION['user'])) {
             $this->props = $_SESSION['user'];
         } else {
@@ -245,6 +252,7 @@ class User
             LEFT JOIN account_types act
                 ON act.account_type_id = a.account_type_id
             WHERE user_id= ? ";
+        $this->user_account= array();
         $accounts = $this->db->select($sql, $this->getId());
         foreach ($accounts as $val) {
             $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];

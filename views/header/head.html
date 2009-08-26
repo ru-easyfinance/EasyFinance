@@ -22,7 +22,7 @@
 <div id="container1">
 	<div id="menumain">
 		<ul class="menu1">
-            {if empty($user)}
+            {if empty($user_info)}
                 <li class="first act"><a href="/">Главная</a></li>
             {else}
                 <li class="first act"><a href="/accounts/">Главная</a></li>
@@ -44,7 +44,7 @@
 		<div class="logo">Homemoney.ru</div>
 		<div class="slogan">Система управления личными финансам</div>
 	<!-- пользователь или поля для авторизации-->
-		{if empty($user)}
+		{if empty($user_info)}
                     {include file="header/login.html"}
                     {include file="head_adv.html"}
                 {else}
