@@ -243,7 +243,7 @@ $(document).ready(function() {
                         $(th).closest('.item').find('td').each(function(){
                             key = $(this).attr('class');
                             val = $(this).text();
-                            $('#blockCreateAccounts').find('.'+key).val(val) ;
+                            $('#blockCreateAccounts').find('#'+key).val(val) ;
                         });
                         //alert($(th).closest('#item').find('#id').attr('value'));
                         $('#account_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
