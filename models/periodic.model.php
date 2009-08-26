@@ -180,7 +180,12 @@ class Periodic_Model
         } else {
             $amount = abs($amount);
         }
+
         $sql = '';
+
+        if ($infinity == 1) {
+            $counts = 90;
+        }
         for ($i = 0; $i <= $counts ; $i++) {
             if (!empty ($sql)) { $sql .= ','; }
             $sql .= "('".Core::getInstance()->user->getId()."','".addslashes($title)."','{$date}',
@@ -188,7 +193,7 @@ class Periodic_Model
                 "ADDDATE('{$date}', INTERVAL {$i} {$period}),'','per','{$id}','{$amount}')";
 
         }
-        if (!empty($sql)) {
+        if (!empty($sql) or $period = 0) {
             $this->db->query("INSERT INTO calendar (`user_id`,`title`,`start_date`,`type_repeat`,".
                 "`count_repeat`, `comment`, `dt_create`, `near_date`,`week`,`event`,`chain`,`amount`) VALUES "
                     . $sql);
