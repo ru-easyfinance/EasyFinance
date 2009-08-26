@@ -166,9 +166,9 @@ class Infopanel_Model
             $_SESSION['infopanel'] =$this->db->selectcol($sql, /*$date,*/ $this->user_id);
         }
         $i=$key[$type];
-        $value = $_SESSION['infopanel'][$i];
-        if (!$value)
-            die(print_r($_SESSION['infopanel']));
+        //$value = $_SESSION['infopanel'][$i];
+        //if (!$value)
+        //    die(print_r($_SESSION['infopanel']));
         $sql = "SELECT MAX(`start`),MAX(`end`) FROM infopanel_desc WHERE type=?;";
         $row = $this->db->selectRow($sql, $type);
 	$start = ($row['start']) ? ($row['start']) : 0;
@@ -192,7 +192,7 @@ class Infopanel_Model
                     <major_tickmark enabled='false'/>
                     <minor_tickmark enabled='false'/>
                     <color_ranges>
-                        <color_range start='$start' end='$end' align='Inside' start_size='15' end_size='15' padding='6'>
+                        <color_range start='".(int)$start."' end='".(int)$end."' align='Inside' start_size='15' end_size='15' padding='6'>
                             <fill type='Gradient'>
                                 <gradient>
                                     <key color='Red'/>
@@ -207,7 +207,7 @@ class Infopanel_Model
 		<frame enabled='false'>
 		</frame>
 		<pointers>
-                    <pointer value='$value'><!-- my count-->
+                    <pointer value='".(int)$value."'><!-- my count-->
                         <label enabled='true' under_pointers='true'>
                             <position placement_mode='ByPoint' x='50' y='100'/>
                             <format>{%Value}</format>

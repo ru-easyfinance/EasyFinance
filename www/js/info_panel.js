@@ -88,6 +88,11 @@ function print_stat(i){
             type: arr[i],
             date: i_date},
             function (data){
+                if (!data['year'])
+                    data['year'] = 0;
+                if (!data['day'])
+                    data['day'] = 0;
+
                 b0 = (data['year']>0)?'class="block up"':
                     (data['year']<0?'class="block down"':
                     'class="block null"');
@@ -96,9 +101,9 @@ function print_stat(i){
                     'class="block day null"');
                 str = '<a href="#">'+data['name']+'</a>';
                 str = str + '<span '+b0+'">';
-                str = str + '<span class="pct">'+data['year']+'%</span><span class="period">за год</span>';
+                str = str + '<span class="pct">'+parseInt(data['year'])+'%</span><span class="period">за год</span>';
                 str = str + '</span><span '+b1+'">';
-                str = str + '<span class="pct">'+data['day']+'%</span><span class="period">за день</span>';
+                str = str + '<span class="pct">'+parseInt(data['day'])+'%</span><span class="period">за день</span>';
                 str = str + '</span></div>';
                 $('.ramka3#3').find('#'+i).html(str);
                     },

@@ -20,7 +20,7 @@ class Infopanel_Controller extends Template_Controller
     /**
      * коичество отображаемых фин целей
      */
-    private $targets_count = 3;
+    private $targets_count = 0;
 
     /**
      * Конструктор класса
@@ -42,7 +42,7 @@ class Infopanel_Controller extends Template_Controller
 
 
         if (!$_SESSION['targets_count'])
-            $_SESSION['targets_count']=2;   //default 
+            $_SESSION['targets_count']=0;   //default
 
 
         $this->targets_count = (int)$_SESSION['targets_count'];
