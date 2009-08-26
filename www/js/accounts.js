@@ -203,13 +203,13 @@ $(document).ready(function() {
     
     $('tr.item').live('mouseover',
         function(){
-            $('tr.item').removeAttr('class');
-            $(this).attr('class','act');
+            $('tr.item').attr('class','item');
+            $(this).attr('class','item act');
     });
 
     $('tr.item').live('mouseout',
         function(){
-            $(this).removeAttr('class');
+            $(this).attr('class','item');
     });
     //del accoun click
     $('li.del').live('click',
