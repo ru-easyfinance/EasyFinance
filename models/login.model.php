@@ -80,10 +80,10 @@ class Login_Model
                     $model->activate_user();
                 } else {
                     //@FIXME Перенести отсюда создание периодических транзакций и повесить их на крон
-                    $periodic = new Periodic_Model();
-                    $periodic->getInsertPeriodic();
-                    $user->init($user->getId());
-                    $user->save($user->getId());
+//                    $periodic = new Periodic_Model();
+//                    $periodic->getInsertPeriodic();
+//                    $user->init($user->getId());
+//                    $user->save($user->getId());
                     // Если у нас есть запись в сессии, куда пользователь хотел попасть, то перенаправляем его туда
                     if (isset($_SESSION['REQUEST_URI'])) {
                         header("Location: ".$_SESSION['REQUEST_URI']);

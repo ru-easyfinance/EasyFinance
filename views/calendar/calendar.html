@@ -114,10 +114,55 @@
                 </div>
                 <div id="tabs-2">
                     <!-- Форма для Регулярной транзакции -->
+                    <form id="perform">
+                        <input type="hidden" name="key" id="pkey" />
+                        <input type="hidden" name="chain" id="pchain" />
+                        <table>
+                            <tr>
+                                <td><label for="ptitle">Заголовок</label></td>
+                                <td><input type="text" name="title" id="ptitle" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="pdate">Дата</label></td>
+                                <td><input type="text" name="date" id="pdate" value="" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="pamount">Сумма</label></td>
+                                <td><input type="text" name="amount" id="pamount" value="" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="prepeat">Повторять</label></td>
+                                <td><select name="repeat" id="prepeat" class="ui-widget-content">
+                                    <option value="0">Без повторения</option>
+                                    <option value="1">Каждый день</option>
+                                    <option value="7">Каждую неделю</option>
+                                    <option value="30">Каждый месяц</option>
+                                    <option value="90">Ежеквартально</option>
+                                    <option value="365">Каждый год</option>
+                                </select></td>
+                            </tr>
+                            <tr>
+                                <td><label for="pcount">Повторить</label></td>
+                                <td>
+                                    <div>
+                                        <select name="count" id="pcount" class="ui-widget-content"></select>
+                                        <label for="pcount">&nbsp;раз&nbsp;</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="infinity" id="pinfinity" value="1"><label for="pinfinity">Бесконечно</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="pcomment">Комментарий</label></td>
+                                <td><textarea id="pcomment" name="comment" class="text ui-widget-content"></textarea></td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
             </div>
-</div>
         </div>
+    </div>
         <!--правая колонка-->
             {include file="$name_page.right.html"}
         <!--/правая колонка-->

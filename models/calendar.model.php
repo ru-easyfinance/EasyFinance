@@ -417,11 +417,16 @@ class Calendar_Model {
 
         $array = $this->getEventsArray($start, $end);
         foreach ($array as $key => $val) {
-            $array[$key]['className'] = 'yellow'; //'green','red','blue'
             $array[$key]['draggable'] = true;
             $array[$key]['date'] = (int)$val['date'];
             $array[$key]['start_date'] = (int)$val['start_date'];
             $array[$key]['last_date'] = (int)$val['last_date'];
+            $array[$key]['amount'] = (float)$val['amount'];
+            if ((float)$val['amount']) {
+                $array[$key]['className'] = 'blue'; //'green','red',''
+            } else {
+                $array[$key]['className'] = 'yellow'; //'green','red','blue'
+            }
         }
         return json_encode($array);
     }
@@ -441,8 +446,8 @@ class Calendar_Model {
         $sql = "SELECT
             id, title, UNIX_TIMESTAMP(near_date) AS `date`,
             UNIX_TIMESTAMP(start_date) AS `start_date`, UNIX_TIMESTAMP(last_date) AS `last_date`,
-            type_repeat AS `repeat`, count_repeat AS `count`, comment, chain, infinity
-        FROM calendar WHERE user_id=? AND DATE(near_date) BETWEEN DATE(FROM_UNIXTIME(?)) AND DATE(FROM_UNIXTIME(?)) ORDER BY near_date;";
+            type_repeat AS `repeat`, count_repeat AS `count`, comment, chain, infinity, amount
+        FROM calendar WHERE user_id=? AND DATE(near_date) BETWEEN DATE(FROM_UNIXTIME(?)) AND DATE(FROM_UNIXTIME(?)) ORDER BY near_date";
         $array = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
         return $array;
     }

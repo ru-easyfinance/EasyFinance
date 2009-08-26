@@ -94,9 +94,9 @@ class Periodic_Controller extends Template_Controller
         }
         
         if (count($this->model->error) == 0) {
-            die(json_encode($this->model->edit($array['account'],$array['amount'],$array['category'],
-                $array['comment'],$array['counts'],$array['date'],$array['id'],$array['infinity'],
-                $array['repeat'],$array['title'],$array['drain'])));
+            die(json_encode($this->model->edit($array['id'], $array['account'],$array['amount'],
+                $array['category'],$array['comment'],$array['counts'],$array['date'],$array['id'],
+                $array['infinity'],$array['repeat'],$array['title'],$array['drain'])));
         } else {
             die(json_encode($this->model->error));
         }
