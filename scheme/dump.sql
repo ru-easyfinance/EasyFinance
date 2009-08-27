@@ -160,7 +160,7 @@ CREATE TABLE `operation` (
   `imp_date` datetime DEFAULT NULL,
   `imp_id` varchar(32) DEFAULT NULL,
   `tags` varchar(255) DEFAULT NULL COMMENT 'Поле с тегами. Дублирует теги из таблицы тегов, но позволяет по быстрому получать все теги',
-  `type` tinyint(1) unsigned NOT NULL COMMENT 'Тип операции : 0-расход, 1-доход, 2-перевод со счёта, 3-Покупка валюты (отключено), 4-Перевод на фин.цель',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT 'Тип операции : 0-расход, 1-доход, 2-перевод со счёта, 3-Покупка валюты (отключено), 4-Перевод на фин.цель',
   `dt_create` datetime NOT NULL COMMENT 'Дата и время создания проставляется в скрипте',
   `dt_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время модификации',
   PRIMARY KEY (`id`),
