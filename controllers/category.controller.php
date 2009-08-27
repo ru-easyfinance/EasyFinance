@@ -50,7 +50,11 @@ class Category_Controller extends Template_Controller
      */
     function add($args)
     {
-        die($this->model->add());
+        if ($this->model->add()){
+            die('[]');
+        } else {
+            die(false);
+        }
     }
 
     /**
@@ -60,7 +64,11 @@ class Category_Controller extends Template_Controller
      */
     function edit($args)
     {
-        die($this->model->edit());
+        if ($this->model->edit()) {
+            die('[]');
+        } else {
+            die(false);
+        }
     }
 
     /**
@@ -71,7 +79,11 @@ class Category_Controller extends Template_Controller
     function del ($args)
     {
         $id = (int)$_POST['id'];
-        die(json_encode($this->model->del($id)));
+        if ($this->model->del($id)) {
+            die('[]');
+        } else {
+            die(false);
+        }
     }
 
     /**

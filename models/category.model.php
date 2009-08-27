@@ -81,7 +81,7 @@ class Category_Model {
     private function loadSystemCategories()
     {
         $this->system_categories = array();
-        $array = $this->db->select("SELECT * FROM system_categories ORDER BY id");
+        $array = $this->db->select("SELECT * FROM system_categories ORDER BY name");
         foreach ($array as $val) {
             $this->system_categories[$val['id']] = array('id' => $val['id'], 'name' => $val['name']);
         }

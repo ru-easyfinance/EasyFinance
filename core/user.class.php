@@ -213,6 +213,7 @@ class User
     {
         $sql = "SELECT * FROM category
             WHERE user_id = ? AND cat_active = '1' ORDER BY cat_parent, cat_name;";
+        $this->user_category = array();
         $category = $this->db->select($sql, $this->getId());
         foreach ($category as $val) {
             $this->user_category[$val['cat_id']] = $val;
@@ -230,6 +231,7 @@ class User
             trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
             $currency = array(1);
         }
+        $this->user_currency = array();
         foreach (Core::getInstance()->currency as $key => $val) {
             if (in_array($key, $currency)) {
                 // В начало массива добавляем валюту  по умолчанию
@@ -325,13 +327,13 @@ class User
     /**
      * Получить свойство пользователя
      * @param $prop string
-     *      <int> user_id
-     *      <string> user_name
-     *      <string> user_login
-     *      <string> user_pass //WTF???
-     *      <string> user_mail
-     *      <date> user_created (%d.%m.%Y)
-     *      <int> user_active  0 - аккаунт неактивен
+     *      int user_id
+     *      string user_name
+     *      string user_login
+     *      string user_pass //WTF???
+     *      string user_mail
+     *      date user_created (%d.%m.%Y)
+     *      int user_active  0 - аккаунт неактивен
      * @return mixed
      */
     function getUserProps($prop)
@@ -340,267 +342,5 @@ class User
             return $this->props['$prop'];
         }
     }
-    
-/**
- * @deprecated Всякий хлам будет снизу
- */
 
-    /**
-     * @deprecated ????
-     * @param $id
-     * @return bool
-     */
-    public function restoreCategory($id)
-    {
-        $sql = "SELECT cat_id, cat_parent from category WHERE user_id = ? AND cat_id = ?";
-        $row = $this->db->selectRow($sql, $this->getId(), $id);
-        if ($row['cat_parent'] > 0) {
-            $id = $row['cat_parent'];
-        }
-
-        $sql = "UPDATE category SET cat_active = '1' WHERE user_id = ? AND (cat_id = ? OR cat_parent = ?)";
-        $this->db->query($sql, $this->getId(), $id, $id);
-        $this->initUserCategory($this->getId());
-        $this->save();
-        return true;
-    }
-
-    /**
-     * @deprecated ???
-     * @param $user_id
-     * @return unknown_type
-     */
-    public function getDemoOperations($user_id)
-    {
-        $lnk = mysql_connect('localhost', 'homemone', 'lw0Hraec') or die ('Not connected : ' . mysql_error());
-        mysql_select_db('homemoney', $lnk) or die ('Can\'t use foo : ' . mysql_error());
-        mysql_query("SET NAMES utf8;");
-
-        if (IS_DEMO) {
-            $q = "select * from money where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-            $res = mysql_query($q);
-            while($row = mysql_fetch_array($res))
-            {
-                $m_row[] = $row;
-            }
-            $m_cnt = count($m_row);
-
-            /*$q = "select * from budget where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-             $res = mysql_query($q);
-             while($row = mysql_fetch_array($res))
-             {
-             $b_row[] = $row;
-             }
-             $b_cnt = count($b_row);*/
-
-            $q = "select * from periodic where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-            $res = mysql_query($q);
-            while($row = mysql_fetch_array($res))
-            {
-                $p_row[] = $row;
-            }
-            $p_cnt = count($p_row);
-        }
-
-        $sql = "select * from category where user_id='9e08f78840c8fefd7882ffa03813e6d1' and cat_active=1 order by cat_parent, cat_name";
-        $result = mysql_query($sql);
-        $i = 0;
-        while ($row = mysql_fetch_array($result))
-        {
-            $rows[$i]['cat_name']	= $row['cat_name'];
-            $rows[$i]['cat_parent'] = $row['cat_parent'];
-            $rows[$i]['cat_id'] = $row['cat_id'];
-            $i++;
-        }
-        $cnt = count($rows);
-
-        for ($i=0; $i<$cnt; $i++)
-        {
-            if ($rows[$i]['cat_parent'] == 0)
-            {
-                $sql = "INSERT INTO `category` VALUES ('', '0', '".$user_id."', '".$rows[$i]['cat_name']."', '1')";
-                $this->db->sql_query($sql);
-                $next_id = $this->db->sql_nextid();
-                for ($j=0; $j<$cnt; $j++)
-                {
-                    if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id'])
-                    {
-                        $sql = "INSERT INTO `category` VALUES ('', '".$next_id."', '".$user_id."', '".$rows[$j]['cat_name']."', '1')";
-                        $this->db->sql_query($sql);
-                        if (IS_DEMO)
-                        {
-                            $next_cat_id = $this->db->sql_nextid();
-
-                            for ($k=0; $k<$m_cnt; $k++)
-                            {
-                                //$m_row[$k]['new_cat_id'] = 0;
-                                if ($rows[$j]['cat_id'] == $m_row[$k]['cat_id'])
-                                {
-                                    $m_row[$k]['new_cat_id'] = $next_cat_id;
-                                }
-
-                                if ($m_row[$k]['cat_id'] == 0)
-                                {
-                                    $m_row[$k]['new_cat_id'] = 0;
-                                }
-
-                                if ($m_row[$k]['cat_id'] == "-1")
-                                {
-                                    $m_row[$k]['new_cat_id'] = "-1";
-                                }
-                            }
-
-                            for ($p=0; $p<$p_cnt; $p++)
-                            {
-                                if ($rows[$j]['cat_id'] == $p_row[$p]['cat_id'])
-                                {
-                                    $p_row[$p]['new_cat_id'] = $next_cat_id;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (IS_DEMO)
-        {
-            $sql = "select * from bill where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-            $result = mysql_query($sql);
-            $i = 0;
-            while ($row = mysql_fetch_array($result))
-            {
-                $rows[$i]['bill_name'] = $row['bill_name'];
-                $rows[$i]['bill_type'] = $row['bill_type'];
-                $rows[$i]['bill_id'] = $row['bill_id'];
-                $rows[$i]['bill_currency'] = $row['bill_currency'];
-                $i++;
-            }
-
-            $cnt = count($rows);
-
-            for ($i=0; $i<$cnt; $i++)
-            {
-                if (!empty($rows[$i]['bill_name']))
-                {
-                    $sql = "INSERT INTO `bill` VALUES ('".$rows[$i]['bill_id']."', '".$rows[$i]['bill_name']."', '".$user_id."', '".$rows[$i]['bill_type']."', '".$rows[$i]['bill_currency']."')";
-                    $this->db->sql_query($sql);
-                    //$next_id = $this->db->sql_nextid();
-                    $next_id = $rows[$i]['bill_id'];
-
-                    for ($k=0; $k<$m_cnt; $k++)
-                    {
-                        if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'] && $m_row[$k]['cat_id'] == 0)
-                        {
-                            $sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-																	'".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-																	'".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-																	'".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-                            $this->db->sql_query($sql);
-                        }
-                    }
-                }
-
-                for ($k=0; $k<$m_cnt; $k++)
-                {
-                    if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'] && $m_row[$k]['cat_id'] != 0)
-                    {
-                        $sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-																'".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-																'".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-																'".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-                        $this->db->sql_query($sql);
-                    }
-                }
-
-                for ($p=0; $p<$p_cnt; $p++)
-                {
-                    if ($p_row[$p]['bill_id'] == $rows[$i]['bill_id'])
-                    {
-                        $sql = "INSERT INTO `periodic` VALUES ('', '".$user_id."', '".$next_id."', '".$p_row[$p]['period']."',
-																   '".$p_row[$p]['date_from']."', '".$p_row[$p]['povtor']."',
-																   '".$p_row[$p]['insert']."', '".$p_row[$p]['remind']."',
-																   '".$p_row[$p]['remind_num']."', '".$p_row[$p]['drain']."',
-																   '".$p_row[$p]['money']."', '".$p_row[$p]['new_cat_id']."',
-																   '".$p_row[$p]['comment']."', '".$p_row[$p]['povtor_num']."')";
-                        $this->db->sql_query($sql);
-                    }
-                }
-            }
-
-        }
-    }
-
-    /**
-     * Возвращает категории
-     * @deprecated ???
-     * @param $user_id int
-     * @return bool
-     */
-    function getCategory($user_id)
-    {
-//        //FIXME WTF??? // Данные пользователя "ДЕМО"
-//        $sql = "SELECT * FROM category WHERE user_id='9e08f78840c8fefd7882ffa03813e6d1' AND cat_active = 1 ORDER BY cat_parent, cat_name;";
-//        $result = $this->db->select($sql);
-//        foreach ($result as $i => $row) {
-//            $rows[$i]['cat_name']   = $row['cat_name'];
-//            $rows[$i]['cat_parent'] = $row['cat_parent'];
-//            $rows[$i]['cat_id']     = $row['cat_id'];
-//        }
-
-        $cnt = count($rows); //@FIXME WTF??? Перебор по все колонкам?
-        for ($i=0; $i<$cnt; $i++) {
-            if ($rows[$i]['cat_parent'] == 0) {
-                $sql = "INSERT INTO `category` VALUES ('', '0', ?, ?, '1')";
-                $this->db->query($sql, $user_id, $rows[$i]['cat_name']);
-                //$next_id = $this->db->sql_nextid();
-                for ($j=0; $j<$cnt; $j++) {
-                    if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id']) {
-                        $sql = "INSERT INTO `category` VALUES ('', ? , ?, ?, '1')";
-                        $this->db->query($sql, $next_id, $user_id, $rows[$j]['cat_name']);
-                        if (IS_DEMO) {
-                            $next_cat_id = $this->db->sql_nextid();
-
-                            for ($k=0; $k<$m_cnt; $k++) {
-                                if ($rows[$j]['cat_id'] == $m_row[$k]['cat_id']) {
-                                    $m_row[$k]['new_cat_id'] = $next_cat_id;
-                                }
-
-                                if ($m_row[$k]['cat_id'] == 0) {
-                                    $m_row[$k]['new_cat_id'] = 0;
-                                }
-
-                                if ($m_row[$k]['cat_id'] == "-1") {
-                                    $m_row[$k]['new_cat_id'] = "-1";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->initUserCategory($user_id);
-        $this->save();
-
-        return true;
-    }
-
-
-    /**
-     * @deprecated ???
-     * @return unknown_type
-     */
-    function demoNewUser()
-    {
-        $login = substr(md5(microtime().uniqid()), 0, 5);
-
-        $this->db->sql_query("select user_id from users where user_login = '".$login."'");
-        if ($this->db->sql_numrows() == 1)
-        {
-            $this->demoNewUser();
-        }
-
-        return $login;
-    }
 }
