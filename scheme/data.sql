@@ -107,5 +107,3 @@ INSERT INTO `system_categories` (`system_category_id`, `system_category_name`, `
 (5, 'Налоги', 0, 0),
 (6, 'Налоги2', 1, 0),
 (7, 'Налоги4', 0, 0);
-INSERT INTO `system_categories_group` (`system_group_id`, `system_group_name`) VALUES
-(1, 'комунальные');

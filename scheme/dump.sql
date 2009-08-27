@@ -1,4 +1,4 @@
-DROP TABLE `account_field_descriptions`;
+DROP TABLE IF EXISTS`account_field_descriptions`;
 CREATE TABLE `account_field_descriptions` (
   `field_description_id` int(20) NOT NULL AUTO_INCREMENT,
   `field_visual_name` varchar(150) DEFAULT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `account_field_descriptions` (
   PRIMARY KEY (`field_description_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `account_field_values`;
+DROP TABLE  IF EXISTS`account_field_values`;
 CREATE TABLE `account_field_values` (
   `field_value_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account_fieldsaccount_field_id` int(11) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE `account_field_values` (
   KEY `FK_02` (`accountsaccount_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `account_fields`;
+DROP TABLE  IF EXISTS`account_fields`;
 CREATE TABLE `account_fields` (
   `account_field_id` int(10) NOT NULL AUTO_INCREMENT,
   `account_typesaccount_type_id` int(11) NOT NULL,
@@ -33,14 +33,14 @@ CREATE TABLE `account_fields` (
   KEY `FKaccount_fi715328` (`account_typesaccount_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `account_types`;
+DROP TABLE  IF EXISTS`account_types`;
 CREATE TABLE `account_types` (
   `account_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_type_name` varchar(255) NOT NULL,
   PRIMARY KEY (`account_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `accounts`;
+DROP TABLE  IF EXISTS`accounts`;
 CREATE TABLE `accounts` (
   `account_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_name` varchar(255) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `accounts` (
   KEY `FKaccounts554525` (`account_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `calendar`;
+DROP TABLE  IF EXISTS`calendar`;
 CREATE TABLE `calendar` (
   `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид события',
   `user_id` int(100) unsigned NOT NULL COMMENT 'Ид пользователя',
@@ -73,7 +73,7 @@ CREATE TABLE `calendar` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Календарь';
 
-DROP TABLE `category`;
+DROP TABLE  IF EXISTS`category`;
 CREATE TABLE `category` (
   `cat_id` int(255) NOT NULL AUTO_INCREMENT COMMENT 'Ид категории',
   `cat_parent` int(255) NOT NULL DEFAULT '0' COMMENT 'Ид родительской категории (если 0, то она сам себе родитель)',
@@ -90,7 +90,7 @@ CREATE TABLE `category` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
 
-DROP TABLE `currency`;
+DROP TABLE  IF EXISTS`currency`;
 CREATE TABLE `currency` (
   `cur_id` int(11) NOT NULL AUTO_INCREMENT,
   `cur_name` varchar(20) NOT NULL DEFAULT '',
@@ -99,7 +99,7 @@ CREATE TABLE `currency` (
   PRIMARY KEY (`cur_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `daily_currency`;
+DROP TABLE  IF EXISTS`daily_currency`;
 CREATE TABLE `daily_currency` (
   `currency_id` int(11) NOT NULL,
   `currency_date` date NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `daily_currency` (
   KEY `new_index` (`currency_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `feedback_message`;
+DROP TABLE  IF EXISTS`feedback_message`;
 CREATE TABLE `feedback_message` (
   `uid` int(100) NOT NULL COMMENT 'id пользователя',
   `user_settings` text NOT NULL COMMENT 'сис настройки пользователя',
@@ -120,7 +120,7 @@ CREATE TABLE `feedback_message` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='таблица сообщений от тестеров';
 
-DROP TABLE `infopanel_desc`;
+DROP TABLE  IF EXISTS`infopanel_desc`;
 CREATE TABLE `infopanel_desc` (
   `type` enum('fcon','money','budget','cost','credit','akc','pif','ofbu','oms','estat') NOT NULL,
   `start` int(1) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE `infopanel_desc` (
   `desc` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `infopanel_users`;
+DROP TABLE  IF EXISTS`infopanel_users`;
 CREATE TABLE `infopanel_users` (
   `user_id` int(100) unsigned NOT NULL,
   `type` enum('fcon','money','budget','cost','credit','akc','pif','ofbu','oms','estat') DEFAULT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE `infopanel_users` (
   `order` enum('0','1','2') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `infopanel_value`;
+DROP TABLE  IF EXISTS`infopanel_value`;
 CREATE TABLE `infopanel_value` (
   `uid` int(100) unsigned NOT NULL,
   `type` enum('fcon','money','budget','cost','credit','akc','pif','ofbu','oms','estat','akc_year','pif_year','ofbu_year','oms_year','estat_year') NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE `infopanel_value` (
   `value` int(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `operation`;
+DROP TABLE  IF EXISTS`operation`;
 CREATE TABLE `operation` (
   `id` bigint(255) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид операции',
   `user_id` int(100) unsigned NOT NULL COMMENT 'Ид пользователя',
@@ -168,7 +168,7 @@ CREATE TABLE `operation` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `periodic`;
+DROP TABLE  IF EXISTS`periodic`;
 CREATE TABLE `periodic` (
   `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид события',
   `user_id` int(100) unsigned NOT NULL COMMENT 'Ид пользователя',
@@ -187,14 +187,14 @@ CREATE TABLE `periodic` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Периодическая транзакция';
 
-DROP TABLE `registration`;
+DROP TABLE  IF EXISTS`registration`;
 CREATE TABLE `registration` (
   `user_id` int(100) unsigned NOT NULL,
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `reg_id` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `system_categories`;
+DROP TABLE  IF EXISTS`system_categories`;
 CREATE TABLE `system_categories` (
   `system_category_id` int(255) NOT NULL AUTO_INCREMENT,
   `system_category_name` varchar(255) NOT NULL,
@@ -203,7 +203,7 @@ CREATE TABLE `system_categories` (
   PRIMARY KEY (`system_category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `tags`;
+DROP TABLE  IF EXISTS`tags`;
 CREATE TABLE `tags` (
   `user_id` int(100) unsigned NOT NULL COMMENT 'ИД пользователя',
   `oper_id` int(100) unsigned NOT NULL COMMENT 'Ид операции',
@@ -213,7 +213,7 @@ CREATE TABLE `tags` (
   KEY `op_idx` (`oper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Теги';
 
-DROP TABLE `target`;
+DROP TABLE  IF EXISTS`target`;
 CREATE TABLE `target` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ИД ',
   `user_id` int(100) unsigned NOT NULL COMMENT 'ИД пользователя',
@@ -238,7 +238,7 @@ CREATE TABLE `target` (
   KEY `title_index` (`title`,`visible`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Финансовые цели';
 
-DROP TABLE `target_bill`;
+DROP TABLE  IF EXISTS`target_bill`;
 CREATE TABLE `target_bill` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид',
   `bill_id` int(255) unsigned NOT NULL COMMENT 'Ид счёта на котором храним',
@@ -254,7 +254,7 @@ CREATE TABLE `target_bill` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Виртуальный субсчёт для финансовой цели';
 
-DROP TABLE `users`;
+DROP TABLE  IF EXISTS`users`;
 CREATE TABLE `users` (
   `id` int(100) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Наш новый ИД для пользователей',
   `user_name` varchar(100) DEFAULT NULL COMMENT 'Псевдоним, который будет виден остальным на форуме',
