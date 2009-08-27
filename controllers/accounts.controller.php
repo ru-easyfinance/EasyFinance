@@ -43,7 +43,7 @@ class Accounts_Controller extends Template_Controller
      * @param $args array mixed
      * @return void
      */
-    function index($args)
+    function index()
     {
         if ($_SESSION['account'] == "reload") { //@FIXME Переписать эту конструкцию
             $this->user->initUserAccount($this->user->getId());
@@ -91,7 +91,7 @@ class Accounts_Controller extends Template_Controller
      * @param $args
      * @return bool
      */
-    function add($args)
+    function add()
     {
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());

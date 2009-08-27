@@ -205,19 +205,15 @@ class Accounts_Model
 	$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`,
                                         `account_currency_id`, `user_id`)
                 VALUES (?,?,?,?,?,?);";
-        if (!$this->db->query($sql,
+    $this->db->query($sql,
                     $id,
                     $account['name']['value'],
                     $type_id, $account['description']['value'],
                     $currency_id,
-                    $this->user_id))
-	{
-            return false;
-	}	
+                    $this->user_id);
+	
 	$next_id = mysql_insert_id();
         $data['id']=$next_id;
-
-        //die(strval($data['id']));
 
         
         if (!intval($id))
@@ -244,10 +240,8 @@ class Accounts_Model
             $sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`,
                                                         `".$type."`, `accountsaccount_id`)
                     VALUES (?,?,?,?);";
-            if (!$this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']))
-            {
-                return false;
-            }
+            $this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']);
+
 	}
         Core::getInstance()->user->initUserAccounts();
         Core::getInstance()->user->save();
