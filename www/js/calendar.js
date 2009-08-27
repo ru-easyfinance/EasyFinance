@@ -212,7 +212,8 @@ $(window).load(function() {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
             //$('div #calendar-buttons').html($('#div #full-calendar-header').html());
-            $('#button.prev-year').text('<span>sfdsd</span>');
+            $('button.prev-year').text(year-1);
+            $('button.next-year').text(year+1);
         },
         dayClick: function(dayDate) {
             clearForm();

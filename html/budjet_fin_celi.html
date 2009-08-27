@@ -6,6 +6,8 @@
 	<meta name="Keywords" content="" />
 	<meta name="Description" content="" />
 	<link rel="stylesheet" type="text/css" href="./css/main.css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
 <div id="container1">
@@ -334,7 +336,7 @@
 						</div>
 						<div class="inside">
 							<ul class="buttons_block">
-								<li id="addoperation_but"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
+								<li id="addoperation_but" class="add_operation_but"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
 								<li id="addtocalendar_but"><a href="#"title="Добавить в календарь">Добавить в календарь</a></li>
 							</ul>
 							<form action="">
@@ -377,6 +379,36 @@
 											<input type="text" value="машина" id="ftags" class="inp" />
 										</div>
 										<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>
+									</div>
+                                    <div class="line additional" style="display:none;">
+										<div class="f_field">
+											Способ платежа
+											<select>
+												<option>Карточкой Visa</option>
+											</select>
+										</div>
+										<div class="f_field">
+											Тип платежа
+											<select>
+												<option>Расход</option>
+											</select>
+										</div>
+										<div class="f_field amount">
+											Получатель
+											<select>
+												<option>Собственник</option>
+											</select>
+										</div>
+										<div class="f_field tags">
+											<label for="ftags">Счет</label>
+											<input type="text" value="#" id="fcount" class="inp" />
+										</div>
+                                        <div class="f_field">
+											Валюта
+											<select>
+												<option>&euro; euro</option>
+											</select>
+										</div>
 									</div>
 									<div class="line">
 										<label for="fmes">Комментарии</label>
@@ -567,7 +599,7 @@
 	</div>
 <!--/середина-->
 <!--popup добавить цель-->
-	<div id="popupaddobject" style="top: 494px; left: 185px; display: block;">
+	<div id="popupaddobject" style="top: 494px; left: 185px; display: none;">
 		<div class="cont">
 			<div class="ct"></div>
 			<form action="">
@@ -637,6 +669,50 @@
 		<div class="cb"><div></div></div>
 	</div>
 <!--/popup добавить цель-->
+<!--popup добавить в календарь-->
+	<div id="popupadd_calendar" style="top: 340px; left: 592px;">
+		<div class="cont">
+			<div class="ct"></div>
+			<form action="">
+				<div class="inside">
+					<div class="close" title="Закрыть">Закрыть</div>
+					<ul class="menu4">
+						<li id="m_first2" class="act"><span><b>Событие календаря</b></span></li>
+						<li><span><b>Регулярные транзакции</b></span></li>
+					</ul>
+					<div class="f_field">
+						<label for="fpname">Название</label>
+						<input type="text" value="" id="fpname" />
+					</div>
+					<div class="f_field">
+						<label for="fpperiod">Срок действия</label>
+						<select id="fpperiod">
+							<option>???</option>
+						</select>
+					</div>
+					<div class="f_field">
+						<label for="fprepeat">Частота повторения</label>
+						<select id="fprepeat">
+							<option>???</option>
+						</select>
+					</div>
+					<div class="f_field">
+						<label for="fpdate">Ближайшая дата</label>
+						<input type="text" value="" id="fpdate" />
+						<a href="#" title="выбрать">выбрать</a>
+					</div>
+					<div class="f_field">
+						<label for="fpdate2">Последняя дата</label>
+						<input type="text" value="" id="fpdate2" />
+						<a href="#" title="выбрать">выбрать</a>
+					</div>
+					<input type="submit" value="Сохранить" class="but" />
+				</div>
+			</form>
+		</div>
+		<div class="cb"><div></div></div>
+	</div>
+<!--/popup добавить в календарь-->
 </div>
 <!--подвал-->
 <div id="footer">

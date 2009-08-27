@@ -6,6 +6,8 @@
 	<meta name="Keywords" content="" />
 	<meta name="Description" content="" />
 	<link rel="stylesheet" type="text/css" href="./css/main.css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
 <div id="container1">
@@ -332,28 +334,34 @@
 						</div>
 						<div class="inside">
 							<ul class="buttons_block">
-								<li id="addoperation_but" class="act"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
+								<li id="addoperation_but" class="add_operation_but"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
 								<li id="addtocalendar_but"><a href="#"title="Добавить в календарь">Добавить в календарь</a></li>
 							</ul>
 							<form action="">
-								<div class="addoperation" style="display: block;">
+								<div class="addoperation">
 									<div class="line">
-										<div class="f_field">
+										<div class="f_field" id="money_type">
 											Счет
 											<select>
-												<option>&euro; euro</option>
+												<option>euro</option>
+												<option>usd</option>
+												<option>rub</option>
 											</select>
 										</div>
-										<div class="f_field">
+										<div class="f_field" id="f_oper_type">
 											Тип операции
 											<select>
 												<option>Расход</option>
+												<option>Доход</option>
+												<option>Инвестиция</option>
 											</select>
 										</div>
 										<div class="f_field amount">
 											Сумма
 											<select>
-												<option>15 100 500</option>
+												<option>150</option>
+												<option>160</option>
+												<option>170</option>
 											</select>
 											<a href="#" title="Пересчитать">Пересчитать</a>
 										</div>
@@ -361,6 +369,8 @@
 											Категория
 											<select>
 												<option>Кредит</option>
+												<option>Депозит</option>
+												<option>алименты</option>
 											</select>
 											<a href="#" title="Редактировать">Редактировать</a>
 										</div>
@@ -375,6 +385,36 @@
 											<input type="text" value="машина" id="ftags" class="inp" />
 										</div>
 										<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>
+									</div>
+                                    <div class="line additional" style="display:none;">
+										<div class="f_field">
+											Способ платежа
+											<select>
+												<option>Карточкой Visa</option>
+											</select>
+										</div>
+										<div class="f_field">
+											Тип платежа
+											<select>
+												<option>Расход</option>
+											</select>
+										</div>
+										<div class="f_field amount">
+											Получатель
+											<select>
+												<option>Собственник</option>
+											</select>
+										</div>
+										<div class="f_field tags">
+											<label for="ftags">Счет</label>
+											<input type="text" value="#" id="fcount" class="inp" />
+										</div>
+                                        <div class="f_field">
+											Валюта
+											<select>
+												<option>&euro; euro</option>
+											</select>
+										</div>
 									</div>
 									<div class="line">
 										<label for="fmes">Комментарии</label>
@@ -452,7 +492,7 @@
 												<span class="sort" title="отсортировать"><span class="up">вверх</span>Сумма</span>
 												<span class="select" title="выбрать">выбрать</span>
 											</div>
-											<ul class="select_list" style="display: block;">
+											<ul class="select_list">
 												<li><a href="#">пункт 1</a></li>
 												<li><a href="#">пункт 2</a></li>
 												<li><a href="#">пункт 3</a></li>
@@ -529,35 +569,18 @@
 									</th>
 								</tr>
 								<tr class="first">
-									<td><input type="checkbox" value="" /></td>
-									<td><a href="#">Доход</a></td>
-									<td><b>5 000</b></td>
-									<td>04.05.09</td>
-									<td>алименты</td>
-									<td>руб.</td>
-									<td>баблос..</td>
-									<td>
+									<td class="el_1"><input type="checkbox" value="" /></td>
+									<td class="el_2"><a href="#">Доход</a></td>
+									<td class="el_3"><b>150</b></td>
+									<td class="el_4">04.05.09</td>
+									<td class="el_5">алименты</td>
+									<td class="el_6">rub</td>
+									<td class="el_7">баблос..</td>
+									<td class="el_8">
 										<div class="cont">
+                                            <p>
 											Стратегическое...
-											<ul>
-												<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
-												<li class="del"><a href="#" title="Удалить">Удалить</a></li>
-												<li class="add"><a href="#" title="Добавить">Добавить</a></li>
-											</ul>
-										</div>
-									</td>
-								</tr>
-								<tr class="act">
-									<td><input type="checkbox" value="" checked="checked" /></td>
-									<td><a href="#">Доход</a></td>
-									<td><b>5 000</b></td>
-									<td>04.05.09</td>
-									<td>алименты</td>
-									<td>руб.</td>
-									<td>баблос..</td>
-									<td>
-										<div class="cont">
-											Стратегическое...
+                                            </p>
 											<ul>
 												<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
 												<li class="del"><a href="#" title="Удалить">Удалить</a></li>
@@ -567,16 +590,18 @@
 									</td>
 								</tr>
 								<tr>
-									<td><input type="checkbox" value="" /></td>
-									<td><a href="#">Доход</a></td>
-									<td><b>5 000</b></td>
-									<td>04.05.09</td>
-									<td>алименты</td>
-									<td>руб.</td>
-									<td>баблос..</td>
-									<td>
+									<td class="el_1"><input type="checkbox" value="" /></td>
+									<td class="el_2"><a href="#">Расход</a></td>
+									<td class="el_3"><b>160</b></td>
+									<td class="el_4">04.05.09</td>
+									<td class="el_5">алименты</td>
+									<td class="el_6">usd</td>
+									<td class="el_7">баблос..</td>
+									<td class="el_8">
 										<div class="cont">
+											<p>
 											Стратегическое...
+                                            </p>
 											<ul>
 												<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
 												<li class="del"><a href="#" title="Удалить">Удалить</a></li>
@@ -585,17 +610,40 @@
 										</div>
 									</td>
 								</tr>
-								<tr class="act">
-									<td><input type="checkbox" value="" checked="checked" /></td>
-									<td><a href="#">Доход</a></td>
-									<td><b>5 000</b></td>
-									<td>04.05.09</td>
-									<td>алименты</td>
-									<td>руб.</td>
-									<td>баблос..</td>
-									<td>
+                                <tr>
+									<td class="el_1"><input type="checkbox" value="" /></td>
+									<td class="el_2"><a href="#">Инвестиция</a></td>
+									<td class="el_3"><b>170</b></td>
+									<td class="el_4">04.05.09</td>
+									<td class="el_5">алименты</td>
+									<td class="el_6">usd</td>
+									<td class="el_7">баблос..</td>
+									<td class="el_8">
 										<div class="cont">
+											<p>
 											Стратегическое...
+                                            </p>
+											<ul>
+												<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
+												<li class="del"><a href="#" title="Удалить">Удалить</a></li>
+												<li class="add"><a href="#" title="Добавить">Добавить</a></li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+                                <tr>
+									<td class="el_1"><input type="checkbox" value="" /></td>
+									<td class="el_2"><a href="#">Доход</a></td>
+									<td class="el_3"><b>5 000</b></td>
+									<td class="el_4">04.05.09</td>
+									<td class="el_5">алименты</td>
+									<td class="el_6">euro</td>
+									<td class="el_7">баблос..</td>
+									<td class="el_8">
+										<div class="cont">
+											<p>
+											Стратегическое...
+                                            </p>
 											<ul>
 												<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
 												<li class="del"><a href="#" title="Удалить">Удалить</a></li>
@@ -753,7 +801,7 @@
 	</div>
 <!--/середина-->
 <!--popup добавить в календарь-->
-	<div id="popupadd_calendar" style="top: 340px; left: 592px; display: block;">
+	<div id="popupadd_calendar" style="top: 340px; left: 592px;">
 		<div class="cont">
 			<div class="ct"></div>
 			<form action="">
@@ -818,7 +866,7 @@
 	</form>
 	<div class="creator"><a href="http://notamedia.ru">дизайн и разработка сайта - Нотамедиа</a><br />2009</div>
 <!--popup оставить отзыв-->
-	<div id="popupreport" style="display: block;">
+	<div id="popupreport">
 		<div class="bg"></div>
 		<form action="">
 			<div class="inside">

@@ -6,6 +6,8 @@
 	<meta name="Keywords" content="" />
 	<meta name="Description" content="" />
 	<link rel="stylesheet" type="text/css" href="./css/main.css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/scripts.js"></script>
 </head>
 <body>
 <div id="container1">
@@ -332,7 +334,7 @@
 						</div>
 						<div class="inside">
 							<ul class="buttons_block">
-								<li id="addoperation_but"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
+								<li id="addoperation_but" class="add_operation_but"><a href="#" title="Добавить операцию">Добавить операцию</a></li>
 								<li id="addtocalendar_but"><a href="#"title="Добавить в календарь">Добавить в календарь</a></li>
 							</ul>
 							<form action="">
@@ -376,6 +378,36 @@
 										</div>
 										<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>
 									</div>
+                                    <div class="line additional" style="display:none;">
+										<div class="f_field">
+											Способ платежа
+											<select>
+												<option>Карточкой Visa</option>
+											</select>
+										</div>
+										<div class="f_field">
+											Тип платежа
+											<select>
+												<option>Расход</option>
+											</select>
+										</div>
+										<div class="f_field amount">
+											Получатель
+											<select>
+												<option>Собственник</option>
+											</select>
+										</div>
+										<div class="f_field tags">
+											<label for="ftags">Счет</label>
+											<input type="text" value="#" id="fcount" class="inp" />
+										</div>
+                                        <div class="f_field">
+											Валюта
+											<select>
+												<option>&euro; euro</option>
+											</select>
+										</div>
+									</div>
 									<div class="line">
 										<label for="fmes">Комментарии</label>
 										<textarea rows="1" cols="1" id="fmes"></textarea>
@@ -407,8 +439,10 @@
 						<!--добавить новую категорию-->
 							<form action="">
 								<div class="addcategories">
-									<a href="#">Добавить новую категорию</a>
-									<div class="form_block" style="display: block;">
+									<a href="#" class="trigger">Добавить новую категорию</a>
+                                    <div class="tooltip"><img src="i/tooltip_arrow.gif" alt="arrow" />Категория – это наименование вашей статьи расхода или дохода. Для вашего удобства категории представлены в виде справочника с древовидной иерархией, в которой категории объединены в группы. По умолчанию справочник уже содержит наиболее распространенные группы и категории. После регистрации вы можете создавать и редактировать группы и категории.
+                                    </div>
+									<div class="form_block">
 										<div class="f_field">
 											<label for="f_namecat">Название категории</label>
 											<input type="text" value="" id="f_namecat" />
@@ -422,13 +456,16 @@
 										<div class="f_field">
 											<label for="f_cattype">Тип катагории <span class="star">*</span></label>
 											<select id="f_cattype">
-												<option>??????</option>
+												<option>тип 1</option>
+												<option>тип 2</option>
+												<option>тип 3</option>
 											</select>
 										</div>
 										<div class="f_field">
 											<label for="f_catsys">Системная категория</label>
 											<select id="f_catsys">
-												<option>??????</option>
+                                                <option>Коммунальные услуги</option>
+                                                <option>Личные расходы</option>
 											</select>
 										</div>
 										<input type="submit" value="Сохранить" />
@@ -463,9 +500,9 @@
 														<div style="width:87%;"><span>87%</span></div>
 													</div> 		
 													<ul>
-														<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
-														<li class="del"><a href="#" title="Удалить">Удалить</a></li>
-														<li class="add"><a href="#" title="Добавить">Добавить</a></li>
+														<li class="edit"><a class="cat" href="#" title="Редактировать">Редактировать</a></li>
+														<li class="del"><a class="cat" href="#" title="Удалить">Удалить</a></li>
+														<li class="add"><a class="cat" href="#" title="Добавить">Добавить</a></li>
 													</ul>													
 												</div>
 											</td>
@@ -480,17 +517,17 @@
 													<div class="indicator">
 														<div style="width:87%;"><span>87%</span></div>
 													</div> 		
-													<ul style="display: block;">
-														<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
-														<li class="del"><a href="#" title="Удалить">Удалить</a></li>
-														<li class="add"><a href="#" title="Добавить">Добавить</a></li>
+													<ul>
+														<li class="edit"><a class="cat" href="#" title="Редактировать">Редактировать</a></li>
+														<li class="del"><a class="cat" href="#" title="Удалить">Удалить</a></li>
+														<li class="add"><a class="cat" href="#" title="Добавить">Добавить</a></li>
 													</ul>													
 												</div>						
 											</td>
 										</tr>
 										<tr>
 											<td class="w1"><a href="#">Комиссия банкомата</a></td>
-											<td class="w2"><div title="тип 1" class="t1">тип 1</div></td>
+											<td class="w2"><div title="тип 1" class="t1">тип 3</div></td>
 											<td class="w3">Личные расходы</td>
 											<td class="w4">
 												<div class="cont">
@@ -499,9 +536,9 @@
 														<div style="width:87%;"><span>87%</span></div>
 													</div> 		
 													<ul>
-														<li class="edit"><a href="#" title="Редактировать">Редактировать</a></li>
-														<li class="del"><a href="#" title="Удалить">Удалить</a></li>
-														<li class="add"><a href="#" title="Добавить">Добавить</a></li>
+														<li class="edit"><a class="cat" href="#" title="Редактировать">Редактировать</a></li>
+														<li class="del"><a class="cat" href="#" title="Удалить">Удалить</a></li>
+														<li class="add"><a class="cat" href="#" title="Добавить">Добавить</a></li>
 													</ul>													
 												</div>
 											</td>
@@ -514,7 +551,7 @@
 									<table>
 										<tr>
 											<td class="w1"><a href="#">Аренда автомобиля</a></td>
-											<td class="w2"><div title="тип 3" class="t3">тип 3</div></td>
+											<td class="w2"><div title="тип 3" class="t3">тип 4</div></td>
 											<td class="w3">Коммунальные услуги</td>
 											<td class="w4">
 												<b>1 196 500</b>
@@ -532,7 +569,7 @@
 									<table>
 										<tr>
 											<td class="w1"><a href="#">Аренда автомобиля</a></td>
-											<td class="w2"><div title="тип 1" class="t1">тип 1</div></td>
+											<td class="w2"><div title="тип 1" class="t1">тип 5</div></td>
 											<td class="w3">Коммунальные услуги</td>
 											<td class="w4">
 												<b>500 руб.</b>
