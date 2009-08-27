@@ -212,8 +212,9 @@ function make_float($var)
 
 function get_tree_select ($selected = 0)
 {
-    $result = '';
     $cat = Core::getInstance()->user->getUserCategory();
+    $array = array();
+    $result = '';
     foreach ($cat as $val) {
         if ($selected == $val['cat_id']) {
             $s = "selected='selected'";
@@ -222,155 +223,13 @@ function get_tree_select ($selected = 0)
         }
 
         if ($val['cat_parent'] == 0) {
-            $result .= "<option value='{$val['cat_id']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
+            $array[$val['cat_id']][] = "<option value='{$val['cat_id']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
         } else {
-            $result .= "<option value='{$val['cat_id']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+            $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
         }
     }
+    foreach ($array as $v) {
+        $result .= implode('', $v);
+    }
     return $result;
-}
-
-/**
-*  @deprecated Избавиться от неё позже
-*/
-function get_three ($data, $parent = 0)
-{
-global $three;
-static $counter = 0;
-
-$counter += 1;
-
-for ($i = 0; $i < count ($data); $i ++)
-{
-if ($data [$i] ['cat_parent'] == $parent)
-{
-$three .= "<tr onMouseOver=this.style.backgroundColor='#f8f6ea';
-						   onMouseOut=this.style.backgroundColor='#FFFFFF';>
-						   <td class=cat_add width=100%>";
-for ($j = 0; $j < $counter; $j ++)
-$three .= "<img src=img/tree/empty.gif>";
-
-$folderopen = "<img src=img/tree/folderopen.gif>";
-
-if ($counter == 2)
-{
-$folderopen = "<img src=img/tree/joinbottom.gif><img src=img/tree/page.gif>";
-}
-
-$three .= "
-							".$folderopen."
-								<a href=index.php?modules=category&action=edit&id=".$data[$i]['cat_id'].">".$data[$i]['cat_name']. "</a>
-							</td>
-						</tr>";
-
-get_three ($data, $data [$i] ['cat_id']);
-}
-}
-$counter -= 1;
-return $three;
-}
-
-/**
-*  @deprecated Избавиться от неё позже
-*/
-function get_three_select ($data, $parent = 0, $selected = 0)
-{
-global $three_select;
-static $counter_select = 0;
-
-$counter_select += 1;
-
-for ($i = 0; $i < count ($data); $i ++)
-{
-if ($data [$i] ['cat_parent'] == $parent)
-{
-for ($j = 0; $j < $counter_select; $j ++)
-
-$folderopen = "";
-
-if ($counter_select == 2)
-{
-$folderopen = "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;";
-}
-
-if ($data[$i]['cat_id'] == $selected)
-{
-$select = "selected = 'selected'";
-//echo $data[$i]['cat_id']." = ".$selected." - $select<br>";
-$check = true;
-}else{
-$select = "";
-}
-$three_select .= "
-								<option value=".$data[$i]['cat_id']." ".$select.">".$folderopen."".$data[$i]['cat_name']."</option>";
-
-get_three_select ($data, $data [$i] ['cat_id'], $selected);
-}
-}
-$counter_select -= 1;
-
-return $three_select;
-}
-
-/**
-*  @deprecated Избавиться от неё позже
-*/
-function get_three_select2 ($data, $parent = 0, $selected = 0)
-{
-global $three_select2;
-static $counter_select2 = 0;
-
-$counter_select2 += 1;
-
-for ($i = 0; $i < count ($data); $i ++)
-{
-if ($data [$i] ['cat_parent'] == $parent)
-{
-for ($j = 0; $j < $counter_select; $j ++)
-
-$folderopen = "";
-
-if ($counter_select2 == 2)
-{
-$folderopen = "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;";
-}
-
-if ($data[$i]['cat_id'] == $selected)
-{
-$select = "selected = 'selected'";
-//echo $data[$i]['cat_id']." = ".$selected." - $select<br>";
-$check = true;
-}else{
-$select = "";
-}
-$three_select2 .= "
-								<option value=".$data[$i]['cat_id']." ".$select.">".$folderopen."".$data[$i]['cat_name']."</option>";
-
-get_three_select2 ($data, $data [$i] ['cat_id'], $selected);
-}
-}
-$counter_select2 -= 1;
-
-return $three_select2;
-}
-
-/**
-*  @deprecated Избавиться от неё позже
-*/
-function get_number_format($number)
-{
-if ($number > 0)
-{
-return '<span style="color: green;">'.number_format($number, 2, '.', ' ').'</span>';
-}
-else
-{
-if (!empty($number))
-{
-$result = substr($number, 1);
-$result = "-".number_format($result, 2, '.', ' ');
-return '<span style="color: red;">'.$result.'</span>';
-}
-return $number;
-}
 }

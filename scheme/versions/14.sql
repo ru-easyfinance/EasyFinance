@@ -3,5 +3,5 @@ ALTER TABLE `system_categories` CHANGE COLUMN `system_category_id` `id` INT(255)
  DROP COLUMN `system_group_id`,
  DROP COLUMN `parent_id`,
  DROP PRIMARY KEY,
- ADD PRIMARY KEY  USING BTREE(`id`);
+ ADD PRIMARY KEY  (`id`);
 
