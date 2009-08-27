@@ -33,8 +33,8 @@ $(window).load(function() {
 
         // Периодическая транзакция
         if (el.amount != 0) {
-            $('#tabs').tabs( 'select',1);
-            $('#dialog_event').dialog('option', 'buttons', {});
+            $('#tabs').tabs('enable',1).tabs('disable',0).tabs( 'select',1);
+            //$('#dialog_event').dialog('option', 'buttons', {});
             $('#pkey').val(el.id);
             $('#pchain').val(el.chain);
             $('#ptitle').val(el.title);
