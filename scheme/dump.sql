@@ -235,7 +235,7 @@ CREATE TABLE `target` (
   PRIMARY KEY (`id`),
   KEY `user_index` (`user_id`),
   KEY `date_end_index` (`date_end`),
-  KEY `title_index` (`title`,`visible`) USING BTREE
+  KEY `title_index` (`title`,`visible`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Финансовые цели';
 
 DROP TABLE  IF EXISTS`target_bill`;
