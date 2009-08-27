@@ -3,6 +3,7 @@ $(window).load(function() {
     var d = new Date();
     var y = d.getFullYear();
     var m = d.getMonth();
+    var event_list;
     
     $.fullCalendar.monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
@@ -145,7 +146,7 @@ $(window).load(function() {
             }
         }
     }
-
+    
     // Init
     $('#infinity').attr('disabled','disabled');
     $('#tr_date_start,#tr_count').hide();
@@ -197,23 +198,27 @@ $(window).load(function() {
         month: m,
         fixedWeeks: false,
         abbrevDayHeadings: true,
-        title: true,
+        title: false,
         titleFormat: 'F Y',
-        buttons: {
-            today: false,
-            prevYear:  '2008',
-            nextYear:  '2010',
-            prevMonth: 'Июль',
-            nextMonth: 'Август'
-        },
+        buttons: false,
         showTime: 'guess',
         timeFormat: "G:i",
         monthDisplay: function(year, month, monthTitle) {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
-            //$('div #calendar-buttons').html($('#div #full-calendar-header').html());
-            $('button.prev-year').text(year-1);
-            $('button.next-year').text(year+1);
+            $('li.y_prev a').text(year-1);
+            $('li.y_next a').text(year+1);
+            if (month == 11) {
+                $('li.m_next a').text($.fullCalendar.monthNames[0]);
+            } else {
+                $('li.m_next a').text($.fullCalendar.monthNames[month+1]);
+            }
+            if (month == 0) {
+                $('li.m_prev a').text($.fullCalendar.monthNames[11]);
+            } else {
+                $('li.m_prev a').text($.fullCalendar.monthNames[month-1]);
+            }
+            $('li.cur').text(monthTitle);
         },
         dayClick: function(dayDate) {
             clearForm();
@@ -223,35 +228,46 @@ $(window).load(function() {
         },
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
-        events: function(start, end, callback) {
-            // Получаем события
-            $.getJSON('/calendar/events/',
-                {
+        events: function(start, end, calback) {
+            if (start.getDate() > 1) {
+                s = new Date(start.getFullYear(), start.getMonth()+1, 1);
+            } else {
+                s = new Date(start.getFullYear(), start.getMonth(), 1);
+            }
+            e = new Date(s.getFullYear(), s.getMonth()+1, 1);
+            $.getJSON('/calendar/events/', {
                     start: start.getTime(),
-                    end: end.getTime()
+                    end:   end.getTime()
                 },   function(result) {
                     // Заполняем список событий
-                    $('div#cal_events').empty();
+                    $('#per_tabl tbody, #ev_tabl tbody').empty();
                     n = new Date();
                     for(v in result){
                         l = result[v];
                         n.setTime(l.date*1000);
-                        if (start.getTime() <= n.getTime() && n.getTime() <= end.getTime()) {
-                            $('div#cal_events').append(
-                                $('<div>').attr({
-                                    key: l.id,
-                                    title: l.comment
-                                }).html("<span style='background: yellow;'>"+$.datepicker.formatDate('dd.mm',n)+"</span> "+l.title)
-                            );
+                        if (n >= s && n < e) {
+                            if (l.amount > 0) {
+                                t = '<td class="types"><span title="" class="t1"></span></td>';
+                            }else{
+                                t ='<td class="types"><span title="" class="t2"></span></td>';
+                            }
+                            $('#per_tabl tbody').append(
+                                '<tr id="ev_+'+l.id+'"><td class="chk"><input type="checkbox" value="" /></td>'
+                                    +'<td>'+$.datepicker.formatDate('dd.mm.yy',n)+'</td>'
+                                    +'<td title="'+l.comment+'">'+l.title+'</td>'
+                                    +'<td>Работа</td>'
+                                    +'<td>евро</td>'
+                                    +'<td>'+l.amount+'</td>'+t
+                                    +'</tr>');
                         }
                     }
                     // Устанавливаем хук на щелчок
-                    $('div#cal_events div').click(function(){
-                        el = $('#calendar').fullCalendar( 'getEventsById', $(this).attr('key'));
-                        beforeOpenForm(el[0]);
-                        $('#dialog_event').dialog('open');
-                    });
-                    callback(result);
+    //                $('div#cal_events div').click(function(){
+    //                    el = $('#calendar').fullCalendar( 'getEventsById', $(this).attr('key'));
+    //                    beforeOpenForm(el[0]);
+    //                    $('#dialog_event').dialog('open');
+    //                });
+                    calback(result);
                 }
             )
         },
@@ -276,6 +292,12 @@ $(window).load(function() {
     }
     });
     $('.full-calendar-buttons .today, .prev-month, .prev-year, .next-month, .next-year').addClass('ui-fullcalendar-button ui-button ui-state-default ui-corner-all');
+    $('li.m_prev').click(function(){$('#calendar').fullCalendar('prevMonth')});
+    $('li.m_next').click(function(){$('#calendar').fullCalendar('nextMonth')});
+    $('li.y_prev').click(function(){$('#calendar').fullCalendar('prevYear')});
+    $('li.y_next').click(function(){$('#calendar').fullCalendar('nextYear')});
+    $('li.cur').click(function(){$('#calendar').fullCalendar('today')});
+
     $('#calendar .full-calendar-month-wrap').addClass('ui-corner-bottom');
     $("#dialog_event").dialog({
         bgiframe: true,

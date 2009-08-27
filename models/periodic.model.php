@@ -75,7 +75,7 @@ class Periodic_Model
             count_repeat, comment, dt_create, infinity) VALUES(?,?,?,?,?,?,?,?,?,?,NOW(),?)";
         $last_id = $this->db->query($sql, Core::getInstance()->user->getId(), $category, $account, $drain,
             $title,$date, $amount, $repeat, $counts, $comment, $infinity);
-        $this->addEvents($last_id, $amount, $comment, $counts, $date, $infinity, $repeat, $title, $drain);
+        $this->addEvents($last_id, $amount, $comment, $counts, $date, $infinity, $repeat, $title, $drain, $category);
         return array();
     }
 
@@ -159,7 +159,7 @@ class Periodic_Model
         return $array;
     }
 
-    private function addEvents($id, $amount, $comment, $counts, $date, $infinity, $repeat, $title, $drain) {
+    private function addEvents($id, $amount, $comment, $counts, $date, $infinity, $repeat, $title, $drain, $category) {
         // Если у нас есть повторения события, то добавляем и их тоже
         if ($repeat == 1) {
             $period = "DAY";
@@ -190,12 +190,12 @@ class Periodic_Model
             if (!empty ($sql)) { $sql .= ','; }
             $sql .= "('".Core::getInstance()->user->getId()."','".addslashes($title)."','{$date}',
                 '{$repeat}','{$counts}','".addslashes($comment)."', NOW(), ".
-                "ADDDATE('{$date}', INTERVAL {$i} {$period}),'','per','{$id}','{$amount}')";
+                "ADDDATE('{$date}', INTERVAL {$i} {$period}),'','per','{$id}','{$amount}','{$category}')";
 
         }
         if (!empty($sql) or $period = 0) {
             $this->db->query("INSERT INTO calendar (`user_id`,`title`,`start_date`,`type_repeat`,".
-                "`count_repeat`, `comment`, `dt_create`, `near_date`,`week`,`event`,`chain`,`amount`) VALUES "
+                "`count_repeat`, `comment`, `dt_create`, `near_date`,`week`,`event`,`chain`,`amount`,`category`) VALUES "
                     . $sql);
         }
         return true;

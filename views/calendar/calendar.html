@@ -9,6 +9,17 @@
             {include file="$name_page.left.html"}
 		<!--/левая колонка-->
         <div id="views" class="block2">
+            <ul>
+                <li><a href="#calend">Календарь</a></li>
+                <li><a href="#events">Список событий</a></li>
+            </ul>
+            <ul class="month_cal">
+                <li class="y_prev"><a></a></li>
+                <li class="m_prev"><a></a></li>
+                <li class="cur"></li>
+                <li class="m_next"><a></a></li>
+                <li class="y_next"><a></a></li>
+            </ul>
             <div id="calend">
                 <!-- Вкладка календаря -->
                 <div id='calendar'></div>
@@ -17,7 +28,39 @@
             </div>
             <div id="events">
                 <!-- Вкладка списка событий -->
-                <div id="cal_events"></div>
+                <div id="cal_events">
+                <form action="">
+                    <h3>Регулярные транзакции</h3>
+                    <table id="per_tabl" class="tab1">
+                        <thead>
+                        <tr>
+                            <th class="chk">&nbsp;</th>
+                            <th>Дата</th>
+                            <th>Название</th>
+                            <th>Категория</th>
+                            <th>Счет</th>
+                            <th>Часота повт.</th>
+                            <th>Сумма</th>
+                        </tr>
+                        </thead>
+                        <tbody/>
+                    </table>
+                    <h3>События</h3>
+                    <table id="ev_tabl" class="tab1">
+                        <thead>
+                        <tr>
+                            <th class="chk">&nbsp;</th>
+                            <th>Дата</th>
+                            <th>Название</th>
+                            <th>Категория</th>
+                            <th>Счет</th>
+                            <th>Часота повт.</th>
+                            <th>Сумма</th>
+                        </tr>
+                        </thead>
+                        <tbody/>
+                    </table>
+                </div>
             </div>
             <div id="dialog_event" title="Событие" style="display: none;">
             <div id="tabs">
