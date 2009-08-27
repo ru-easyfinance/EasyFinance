@@ -1,0 +1,68 @@
+<!--Категории-->
+					<div class="ramka3">
+						<div class="ct">
+							<div class="head">
+								<h1>Категории</h1>
+								<ul class="action">
+									<li class="over1"><a title="настройки">настройки</a></li>
+									<li class="over2"><a title="закрыть">закрыть</a></li>
+									<li class="over3"><a title="свернуть">свернуть</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="inside">
+
+<!--добавить новую категорию-->
+<form action="">
+    <input type="hidden" id="id">
+    <div class="addcategories">
+        <a id="add_category">Добавить новую категорию</a>
+        <div id="add_form">
+        <div class="form_block" style="display: block;">
+            <div class="f_field">
+                <label for="namecat">Название категории</label>
+                <input type="text" id="namecat" />
+            </div>
+            <div class="f_field">
+                <label for="subcat">Подкатегория для</label>
+                <select id="subcat">
+                    <option value=""> --- </option>
+                </select>
+            </div>
+            <div class="f_field">
+                <label for="f_cattype">Тип катагории <span class="star">*</span></label>
+                <select id="cattype">
+                    <option value="1">Доходная</option>
+                    <option value="-1">Расходная</option>
+                    <option value="0">Универсальная</option>
+                </select>
+            </div>
+            <div class="f_field">
+                <label for="catsys">Системная категория</label>
+                <select id="catsys">
+                </select>
+            </div>
+            <input type="button" id="btnSave" value="Сохранить" />
+            <input type="button" id="btnCancel" value="Отменить" />
+            <small><span class="star">*</span> Универсальная категория может быть как расходной, так и доходной</small>
+        </div>
+        </div>
+    </div>
+</form>
+<!--/добавить новую категорию-->
+
+
+							<div class="categories">
+								<table class="h">
+									<tr>
+										<td class="w1">Категория <span></span></td>
+										<td class="w2">Тип <span></span></td>
+										<td class="w3">Сис. категория <span></span></td>
+										<td class="w4">Сумма <span></span></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="cb"><div></div></div>
+					</div>
+				<!--/Категории-->

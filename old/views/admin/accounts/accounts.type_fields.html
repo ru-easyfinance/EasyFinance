@@ -1,0 +1,41 @@
+<div style="padding-bottom:6px;border:0px;width:20%">
+    <h4>
+        <a href="/admin/accounts/">Назад</a>
+    </h4>
+</div>
+<div class="type_fields">
+<form action="/admin/accounts/type/" method="post" id="formAccount">
+    <div style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 10px; padding-bottom: 10px;">
+        <div>
+            Тип счета:
+            <select name="type" id="type">
+                {foreach from=$list_type item=data}
+                    <option value="{$data.account_type_id}">{$data.account_type_name}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div>
+            Поле счета:
+            <select name="field" id="field">
+                {foreach from=$list_fields item=data}
+                    <option value="{$data.field_description_id}">{$data.field_visual_name}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div>
+                <input type="hidden" value="" name="id" id="id">
+                <input type="button" id="btnAdd" value="Сохранить" class="inputsubmit" />
+                <input type="button" id="btnCancel" value="Отмена" class="inputsubmit" />
+        </div>
+    </div>
+</form>
+
+<table style="border: 1px solid rgb(204, 204, 204); padding: 5px 5px 5px 25px;width:100%">
+    <tr style="border: 1px solid rgb(204, 204, 204);text-align:left">
+        <th>Тип счёта</th>
+        <th>Поле</th>
+        <th>Удалить связку</th>
+    </tr>
+    {include file="admin/accounts/accounts.type_fields_list.html"}        
+</table>
+</div>

@@ -1,0 +1,73 @@
+<!-- Журнал операций -->
+					<div class="ramka3">
+						<div class="ct">
+							<div class="head">
+								<h2>Журнал счетов</h2>
+								<ul class="action">
+									<li class="over1"><a title="настройки">настройки</a></li>
+									<li class="over2"><a title="закрыть">закрыть</a></li>
+									<li class="over3"><a title="свернуть">свернуть</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="inside operation_list">
+							<form action="">
+								<div class="sorting">
+									<div class="f_field">
+										Операции с
+                                        <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
+									</div>
+									<div class="f_field">
+										по
+										<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
+									</div>
+                                    <select id="cat_filtr">
+                                        <option label="Все" value=""> --- Все ---</option>
+                                        {$cat_filtr}
+                                    </select>
+									<input type="button" value="Показать" id="btn_ReloadData"/>
+								</div>
+							</form>
+							<ul class="period">
+								<li><span>Год</span></li>
+								<li class="act"><span>Месяц</span></li>
+								<li><span>Неделя</span></li>
+								<li><span>Сегодня</span></li>
+							</ul>
+							<table id="operations_list">
+								<tr>
+									<th>&nbsp;</th>
+									<th>
+										<span class="sort" title="отсортировать"><span class="down">вниз</span>Тип</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+									<th>
+										<span class="sort" title="отсортировать"><span class="up">вверх</span>Сумма</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+									<th>
+										<span class="sort" title="отсортировать">Дата</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+									<th>
+										<span class="sort" title="отсортировать">Категория</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+									<th>
+										<span class="sort" title="отсортировать">Счет</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+									<th>
+										<span class="sort" title="отсортировать">Тэги</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+									<th>
+										<span class="sort" title="отсортировать">Комментарии</span>
+										<span class="select" title="выбрать">выбрать</span>
+									</th>
+                                </tr>
+							</table>
+						</div>
+						<div class="cb"><div></div></div>
+					</div>
+				<!--/Журнал операций-->
