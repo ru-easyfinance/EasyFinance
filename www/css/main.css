@@ -1054,12 +1054,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background: url('/img/i/jQuery/calendar/arrow_prev-month.gif') no-repeat 0 50%;
     border: none;
 }
-#calend .full-calendar-buttons .next-year {
-    padding-right: 1.4em;
-    padding-left: 1em;
-    float: right;
-    background: url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat right 50%;
-}
+
 #calend .full-calendar-buttons button.prev-month, #calend .full-calendar-buttons button.next-month {
     padding-left: 1.4em;
     padding-right: 0;
@@ -1069,12 +1064,16 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background: url('/img/i/jQuery/calendar/arrow_prev-month.gif') no-repeat 0 50%;
     border: none;
 }
-#calend .full-calendar-buttons button.next-month {
+
+#calend .full-calendar-buttons .next-year {
     padding-right: 1.4em;
-    padding-left: 0;
+    padding-left: 1em;
     float: right;
     background: url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat right 50%;
 }
+
+
+
 #calend .full-calendar-buttons .prev-month span, #calend .full-calendar-buttons .next-month span, #calend .full-calendar-buttons .prev-year span, #calend .full-calendar-buttons .next-year span {
     padding: 0;
     border-bottom: solid 1px #949494;

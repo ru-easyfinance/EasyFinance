@@ -200,12 +200,11 @@ $(window).load(function() {
         title: true,
         titleFormat: 'F Y',
         buttons: {
-            prevYear:  '<<',
-            prevMonth: '<',
-            today:     'Сегодня',
-            nextYear:  '>>',
-            nextMonth: '>'
-            
+            today: false,
+            prevYear:  '2008',
+            nextYear:  '2010',
+            prevMonth: 'Июль',
+            nextMonth: 'Август'
         },
         showTime: 'guess',
         timeFormat: "G:i",
@@ -213,6 +212,7 @@ $(window).load(function() {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
             //$('div #calendar-buttons').html($('#div #full-calendar-header').html());
+            $('#button.prev-year').text('<span>sfdsd</span>');
         },
         dayClick: function(dayDate) {
             clearForm();
@@ -258,6 +258,7 @@ $(window).load(function() {
             if (calEvent.draggable === true) {
                 beforeOpenForm(calEvent);
                 $('#dialog_event').dialog('open');
+                
             }
         },
     //eventMouseover, eventMouseout: function(calEvent, jsEvent)
