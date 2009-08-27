@@ -61,6 +61,12 @@ $(function () {
             ,'json');
         }
     });
+    $('#tab1 tbody tr').live('mouseout', function(){
+
+    });
+    $('#tab1 tbody tr').live('mouseover', function() {
+        $(this).filter('ul').show();
+    });
 
     // FUNCTIONS
 

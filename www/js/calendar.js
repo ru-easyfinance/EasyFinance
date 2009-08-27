@@ -33,6 +33,7 @@ $(window).load(function() {
         // Периодическая транзакция
         if (el.amount != 0) {
             $('#tabs').tabs( 'select',1);
+            $('#dialog_event').dialog('option', 'buttons', {});
             $('#pkey').val(el.id);
             $('#pchain').val(el.chain);
             $('#ptitle').val(el.title);
@@ -77,6 +78,70 @@ $(window).load(function() {
                 $('#repeat').change();
             } else {
                 $('.rep_type[value=3]').attr('checked','checked');
+            }
+        }
+    }
+
+    /**
+     * Сохранить значение
+     */
+    function save() {
+        //@TODO Проверить вводимые значения
+        $.post(
+            $('form').attr('action'),
+            {
+                key: $('form #key').attr('value'),
+                title: $('form #title').attr('value'),
+                date_start: $('form #date_start').attr('value'),
+                date_end: $('form #date_end').attr('value'),
+                date: $('form #date').attr('value'),
+                time: $('form #time').attr('value'),
+                repeat: $('form #repeat option:selected').attr('value'),
+                count: $('form #count').attr('value'),
+                comment: $('form #comment').attr('value'),
+                infinity: $('form #infinity').attr('value'),
+                rep_type: $('form .rep_type[checked]').val(),
+                mon: $('form #mon').attr('checked') ? 1 : 0,
+                tue: $('form #tue').attr('checked') ? 1 : 0,
+                wed: $('form #wed').attr('checked') ? 1 : 0,
+                thu: $('form #thu').attr('checked') ? 1 : 0,
+                fri: $('form #fri').attr('checked') ? 1 : 0,
+                sat: $('form #sat').attr('checked') ? 1 : 0,
+                sun: $('form #sun').attr('checked') ? 1 : 0
+            }, function(data, textStatus){
+                // data could be xmlDoc, jsonObj, html, text, etc...
+                // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
+                for (var v in data) {
+                    //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                    alert('Ошибка в ' + v);
+                }
+                // В случае успешного добавления, закрываем диалог и обновляем календарь
+                if (data.length == 0) {
+                    $('#dialog_event').dialog('close');
+                    $('#calendar').fullCalendar('refresh');
+                }
+            },
+            'json'
+        );
+    }
+
+    /**
+     * Удалить значение
+     */
+    function del() {
+        el = $('#calendar').fullCalendar( 'getEventsById', $('form #key').val());
+        if (confirm('Удалить событие?')) {
+            if (($('form #chain').val() > 0 || el[0].date < el[0].last_date || el[0].infinity == 1) &&
+             confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
+                $.post('/calendar/del/', {id:$('form #key').val(), chain: $('form #chain').val()}, function(){
+                    $('#dialog_event').dialog('close');
+                    $('#calendar').fullCalendar('refresh');
+                }, 'json');
+            } else {
+                $.post('/calendar/del/', {id:$('form #key').val(), chain: false}, function(){
+                    $('#dialog_event').dialog('close');
+                    $('#calendar').fullCalendar('refresh');
+                }, 'json')
             }
         }
     }
@@ -217,63 +282,13 @@ $(window).load(function() {
         modal: true,
         buttons: {
             'Сохранить': function() {
-                //@TODO Проверить вводимые значения
-                $.post(
-                    $('form').attr('action'),
-                    {
-                        key: $('form #key').attr('value'),
-                        title: $('form #title').attr('value'),
-                        date_start: $('form #date_start').attr('value'),
-                        date_end: $('form #date_end').attr('value'),
-                        date: $('form #date').attr('value'),
-                        time: $('form #time').attr('value'),
-                        repeat: $('form #repeat option:selected').attr('value'),
-                        count: $('form #count').attr('value'),
-                        comment: $('form #comment').attr('value'),
-                        infinity: $('form #infinity').attr('value'),
-                        rep_type: $('form .rep_type[checked]').val(),
-                        mon: $('form #mon').attr('checked') ? 1 : 0,
-                        tue: $('form #tue').attr('checked') ? 1 : 0,
-                        wed: $('form #wed').attr('checked') ? 1 : 0,
-                        thu: $('form #thu').attr('checked') ? 1 : 0,
-                        fri: $('form #fri').attr('checked') ? 1 : 0,
-                        sat: $('form #sat').attr('checked') ? 1 : 0,
-                        sun: $('form #sun').attr('checked') ? 1 : 0
-                    }, function(data, textStatus){
-                        // data could be xmlDoc, jsonObj, html, text, etc...
-                        // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
-                        for (var v in data) {
-                            //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                            alert('Ошибка в ' + v);
-                        }
-                        // В случае успешного добавления, закрываем диалог и обновляем календарь
-                        if (data.length == 0) {
-                            $('#dialog_event').dialog('close');
-                            $('#calendar').fullCalendar('refresh');
-                        }
-                    },
-                    'json'
-                );                
+                save();
             },
             'Отмена': function() {
                 $(this).dialog('close');
             },
             'Удалить': function () {
-                el = $('#calendar').fullCalendar( 'getEventsById', $('form #key').val());
-                if (confirm('Удалить событие?')) {
-                    if (($('form #chain').val() > 0 || el[0].date < el[0].last_date || el[0].infinity == 1) &&
-                     confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
-                        $.post('/calendar/del/', {id:$('form #key').val(), chain: $('form #chain').val()}, function(){
-                            $('#dialog_event').dialog('close');
-                            $('#calendar').fullCalendar('refresh');
-                        }, 'json');
-                    } else {
-                        $.post('/calendar/del/', {id:$('form #key').val(), chain: false}, function(){
-                            $('#dialog_event').dialog('close');
-                            $('#calendar').fullCalendar('refresh');
-                        }, 'json')
-                    }
-                }
+                del();
             }
         },
         close: function() {

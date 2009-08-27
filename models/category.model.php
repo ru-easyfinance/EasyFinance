@@ -81,9 +81,9 @@ class Category_Model {
     private function loadSystemCategories()
     {
         $this->system_categories = array();
-        $array = $this->db->select("SELECT * FROM system_categories WHERE parent_id = 0");
+        $array = $this->db->select("SELECT * FROM system_categories ORDER BY id");
         foreach ($array as $val) {
-            $this->system_categories[$val['system_category_id']] = $val;
+            $this->system_categories[$val['id']] = array('id' => $val['id'], 'name' => $val['name']);
         }
 
     }
@@ -97,8 +97,8 @@ class Category_Model {
         $where = $_SESSION['categories_filtr'];
 
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
-            sc.system_category_name FROM category c
-                LEFT JOIN system_categories sc ON sc.system_category_id = c.system_category_id
+            sc.name FROM category c
+                LEFT JOIN system_categories sc ON sc.id = c.system_category_id
                 WHERE c.user_id = ? ".$where." AND c.cat_active=1 ORDER BY cat_name", Core::getInstance()->user->getId());
         $this->tree = $forest;
         $this->saveCache();

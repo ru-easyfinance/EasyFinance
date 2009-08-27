@@ -121,6 +121,9 @@ class Category_Controller extends Template_Controller
                 //$users[$val['cat_id']]['cur'] = Core::
             }
         }
+        $systems = $this->model->system_categories;
+        $systems[0] = array('id'=>'0','name'=>'Не установлена');
+/*
         $systems = array(
             0  => array(
                 'id'     => 0,
@@ -138,7 +141,7 @@ class Category_Controller extends Template_Controller
                 'parent' => $val['parent_id']
             );
         }
-        
+  */
         die ( json_encode(
             array(
                 'user'=>$users,
