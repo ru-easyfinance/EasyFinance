@@ -214,7 +214,6 @@ class Accounts_Model
 	
 	$next_id = mysql_insert_id();
         $data['id']=$next_id;
-
         
         if (!intval($id))
             $this->new_operation($data);
@@ -240,8 +239,7 @@ class Accounts_Model
             $sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`,
                                                         `".$type."`, `accountsaccount_id`)
                     VALUES (?,?,?,?);";
-            $this->db->query($sql, '', $next_id, $value['value'],$value['account_field_id']);
-
+            $this->db->query($sql, '0', $next_id, $value['value'],$value['account_field_id']);
 	}
         Core::getInstance()->user->initUserAccounts();
         Core::getInstance()->user->save();
