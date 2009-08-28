@@ -418,13 +418,33 @@ class Operation_Model {
 
     /**
      * Возвращает все деньги пользователя по определённому счёту
-     * @param string $bill_id Ид счёта
-     * @return int
+     * @param int|array|0 $account_id Ид счёта.
+     * Если $account_id = 0, то будем считать по всем счетам пользователя
+     * Если (int)$account_id > 0 значит будем считать только по этому счёту пользователя
+     * Если $account_id = array(123, 234, 345) значит будем считать по всем счетам пользователя указанным в массиве
+     * @param int $drain = 1 - расход, 0 - доход, null - по расходу и доходу
+     * @return float
      */
-    function getTotalSum($bill_id)
+    function getTotalSum($account_id = 0, $drain = null)
     {
-        $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND account_id = ?";
-        $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $bill_id);
+        if (!is_null($drain)) {
+            $dr = " AND drain = '" . (int)$drain . "'";
+        } else {
+            $dr = '';
+        }
+        if (is_array($account_id) && count($account_id) > 0) {
+            $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND account_id IN (?a) {$dr}";
+            $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
+        } elseif ((int)$account_id > 0 ) {
+            $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND account_id = ?d  {$dr}";
+            $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
+        } elseif((int)$account_id == 0) {
+            $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ?  {$dr}";
+            $this->total_sum = $this->db->selectCell($sql, $this->user->getId());
+        } else {
+            trigger_error(E_USER_NOTICE, 'Ошибка получения всей суммы пользователя');
+            return 0;
+        }
         return $this->total_sum;
     }
 
