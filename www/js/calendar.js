@@ -160,7 +160,13 @@ $(window).load(function() {
         $('#count').append('<option>'+i+'</option>').val(i);
         $('#pcount').append('<option>'+i+'</option>').val(i);
     }
-
+    $('#per_tabl thead input,#ev_tabl thead input').click(function(){
+        if ($(this).is(':checked')) {
+            $(this).closest('table').filter('tbody input').attr('checked','checked');
+        } else {
+            $(this).closest('table').filter('tbody input').removeAttr('checked');
+        }
+    });
     // Hooks
     $('#repeat').change(function(){
         $('#tr_count').show();
@@ -246,19 +252,33 @@ $(window).load(function() {
                         l = result[v];
                         n.setTime(l.date*1000);
                         if (n >= s && n < e) {
-                            if (l.amount > 0) {
-                                t = '<td class="types"><span title="" class="t1"></span></td>';
-                            }else{
-                                t ='<td class="types"><span title="" class="t2"></span></td>';
+                            // Если это событие
+                            if (l.amount == 0) {
+                                $('#ev_tabl tbody').append(
+                                    '<tr id="ev_+'+l.id+'"><td class="chk"><input type="checkbox" value="" /></td>'
+                                        +'<td>'+$.datepicker.formatDate('dd.mm.yy',n)+'</td>'
+                                        +'<td><b>'+n.toLocaleTimeString().substr(0, 5)+'</b></td>'
+                                        +'<td>'+l.title+'</td>'
+                                        +'<td>'+l.comment+'</td>'
+                                        +'</tr>');
+                            // Если периодическая транзакция
+                            } else {
+                                if (l.amount > 0) {
+                                    t = '<td class="types"><span title="" class="t1"></span></td>';
+
+                                }else {
+                                    t ='<td class="types"><span title="" class="t2"></span></td>';
+                                }
+                                $('#per_tabl tbody').append(
+                                    '<tr id="ev_+'+l.id+'"><td class="chk"><input type="checkbox" value="" /></td>'
+                                        +'<td>'+$.datepicker.formatDate('dd.mm.yy',n)+'</td>'
+                                        +'<td title="'+l.comment+'">'+l.title+'</td>'
+                                        +'<td>Работа</td>'
+                                        +'<td>евро</td>'
+                                        +'<td>'+l.amount+'</td>'+t
+                                        +'</tr>');
                             }
-                            $('#per_tabl tbody').append(
-                                '<tr id="ev_+'+l.id+'"><td class="chk"><input type="checkbox" value="" /></td>'
-                                    +'<td>'+$.datepicker.formatDate('dd.mm.yy',n)+'</td>'
-                                    +'<td title="'+l.comment+'">'+l.title+'</td>'
-                                    +'<td>Работа</td>'
-                                    +'<td>евро</td>'
-                                    +'<td>'+l.amount+'</td>'+t
-                                    +'</tr>');
+
                         }
                     }
                     // Устанавливаем хук на щелчок

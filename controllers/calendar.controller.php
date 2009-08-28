@@ -1,6 +1,6 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс контроллера для модуля категорий
+ * Класс контроллера для модуля календаря
  * @category calendar
  * @copyright http://home-money.ru/
  * @version SVN $Id$
@@ -9,13 +9,13 @@ class Calendar_Controller extends Template_Controller
 {
     /**
      * Модель класса календарь
-     * @var <Calendar_Model>
+     * @var Calendar_Model
      */
     private $model = null;
 
     /**
      * Ссылка на класс Смарти
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
     
@@ -61,7 +61,7 @@ class Calendar_Controller extends Template_Controller
     /**
      * Добавляет новое событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function add($args)
     {
@@ -71,7 +71,7 @@ class Calendar_Controller extends Template_Controller
     /**
      * Редактирует событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function edit($args)
     {
@@ -81,7 +81,7 @@ class Calendar_Controller extends Template_Controller
     /**
      * Удаляет выбранное событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function del($args)
     {
@@ -90,7 +90,7 @@ class Calendar_Controller extends Template_Controller
 
     /**
      * Возвращает список событий, в формате JSON
-     * @return <void>
+     * @return void
      */
     function events($args) {
         $start = $_GET['start'];

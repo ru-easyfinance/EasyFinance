@@ -16,6 +16,8 @@ define('SYS_DIR_HTML',    SYS_DIR_ROOT."/templates/");
 define('SYS_DIR_CACHE',   SYS_DIR_ROOT."/cache/");
 define('UPLOAD_DIR',      SYS_DIR_ROOT."/home-money.ru/upload/photo_experts/");
 
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
+
 // Other
 define('URL_ROOT',        "http://hm/");
 define('IS_DEMO',         false);
