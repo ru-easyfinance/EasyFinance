@@ -734,16 +734,17 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 
 ul.menu5 { margin-bottom: 19px; padding-top: 7px; //zoom: 1; }
 ul.menu5:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-ul.menu5 li { float: left; margin-right: 15px; padding: 5px 13px 6px 13px; font-size: 11px; color: #6ebe41; }
-ul.menu5 li.act { padding: 0 13px 0 0; background: url('/img/i/bg15.png') no-repeat 100% 0; }
-ul.menu5 li.act div { padding: 5px 0 6px 13px !important; background: url('/img/i/bg15.png') no-repeat 0 0 !important; }
-ul.menu5 li div span { cursor: pointer; //cursor: hand; border-bottom: 1px dashed #6ebe41; }
-ul.menu5 li.act div span { cursor: default; border-bottom: 0 none; }
+ul.menu5 li { float: left; margin-right: 15px!important; padding: 0 16px 20px 0; font-size: 11px; color: #6ebe41; }
+ul.menu5 li.act, ul.menu5 li.ui-state-active { padding: 0 16px 20px 0!important; background: url('/img/i/bg15.png') no-repeat 100% 0; }
+ul.menu5 li div { padding: 5px 0 22px 13px !important; }
+ul.menu5 li.act div, ul.menu5 li.ui-state-active div {background: url('/img/i/bg15.png') no-repeat 0 0 !important; }
+ul.menu5 li div span, ul.menu5 li div a { cursor: pointer; //cursor: hand; border-bottom: 1px dashed #6ebe41; }
+ul.menu5 li.act div span, ul.menu5 li.act div a, ul.menu5 li.ui-state-active div a { cursor: default; border-bottom: 0 none; }
 
 ul.menu5 li#ic1 div, ul.menu5 li#ic1.act span, ul.menu5 li#ic1 a { display: block; padding: 0 24px 2px 0; background: url('/img/i/icons.gif') no-repeat 100% -490px; }
 ul.menu5 li#ic2 div, ul.menu5 li#ic2.act span, ul.menu5 li#ic2 a { display: block; padding: 0 32px 0 0; background: url('/img/i/icons.gif') no-repeat 100% -518px; }
-ul.menu5 li#ic3 div, ul.menu5 li#ic3.act span, ul.menu5 li#ic3 a { display: block; padding: 0 27px 2px 0; background: url('/img/i/icons.gif') no-repeat 100% -579px; }
-ul.menu5 li#ic4 div, ul.menu5 li#ic4.act span, ul.menu5 li#ic4 a { display: block; padding: 0 26px 0 0; background: url('/img/i/icons.gif') no-repeat 100% -609px; }
+ul.menu5 li#ic3.act span, ul.menu5 li#ic3 a { display: block; padding: 0 27px 2px 0; background: url('/img/i/icons.gif') no-repeat 100% -579px; }
+ul.menu5 li#ic4.act span, ul.menu5 li#ic4 a { display: block; padding: 0 26px 0 0; background: url('/img/i/icons.gif') no-repeat 100% -609px; }
 
 
 
