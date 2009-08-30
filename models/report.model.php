@@ -6,7 +6,8 @@
  * @copyright http://home-money.ru/
  * @version SVN $Id$
  */
-class Report_Model {
+class Report_Model
+{
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
@@ -17,7 +18,8 @@ class Report_Model {
      * Конструктор
      * @return void
      */
-    function  __construct() {
+    function  __construct()
+    {
         $this->db   = Core::getInstance()->db;
         require_once 'OFC/OFC_Chart.php';
     }
@@ -30,7 +32,8 @@ class Report_Model {
      * @param string timestamp $end
      * @return json
      */
-    function getPie($drain = 0, $start = '', $end = '', $account = 0) {
+    function getPie($drain = 0, $start = '', $end = '', $account = 0)
+    {
         if ($drain == 1) {
             $title = new OFC_Elements_Title('Расход за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
         } else {
@@ -69,4 +72,31 @@ class Report_Model {
         return $ofc->toPrettyString();
     }
 
+    /**
+     * Возвращает сформированный JSON для двойной диаграммы
+     * @see http://teethgrinder.co.uk/open-flash-chart-2/bar-2-bars.php
+     */
+    function getBars()
+    {
+
+//$title = new title( date("D M d Y") );
+//
+//$data = array(9,8,7,6,5,4,3,2,1);
+//$bar = new bar_glass();
+//$bar->colour( '#BF3B69');
+//$bar->key('Last year', 12);
+//$bar->set_values( $data );
+//
+//$data2 = array(10,9,8,7,6,5,4,3,2);
+//$bar2 = new bar_glass();
+//$bar2->colour( '#5E0722' );
+//$bar2->key('This year', 12);
+//$bar2->set_values( $data2 );
+//
+//$chart = new open_flash_chart();
+//$chart->set_title( $title );
+//$chart->add_element( $bar );
+//$chart->add_element( $bar2 );
+
+    }
 }

@@ -84,6 +84,7 @@ class Report_Controller extends Template_Controller
             case 'graph_loss':   // Расходы
                 die($this->model->getPie(1, $start, $end));
             case 'graph_profit_loss': //Сравнение расходов и доходов
+                die($this->model->getBars());
             case 'txt_profit': //Детальные доходы
             case 'txt_loss': //Детальные расходы
             case 'txt_loss_difference': //Сравнение расходов за периоды
