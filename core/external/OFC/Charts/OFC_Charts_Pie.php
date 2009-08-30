@@ -25,7 +25,7 @@ class OFC_Charts_Pie_Value
 	function OFC_Charts_Pie_Value( $value, $text )
     {
 		$this->value = $value;
-		$this->text = $text;
+		$this->label = $text;
 	}
 }
 

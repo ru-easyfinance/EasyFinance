@@ -52,6 +52,7 @@ class Report_Controller extends Template_Controller
      */
     function index($args)
     {
+
         // JS & CSS
         $this->tpl->append('css','jquery/south-street/ui.all.css');
         $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
@@ -62,11 +63,11 @@ class Report_Controller extends Template_Controller
 
         $this->tpl->append('js','report.js');
 
-        $this->tpl->assign('reports', $this->reports);
+        $this->tpl->assign('reports',  $this->reports);
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-        $this->tpl->assign('dateFrom',       date('01.m.Y'));
-        $this->tpl->assign('dateTo',         date(date('t').'.m.Y'));
+        $this->tpl->assign('dateFrom', date('01.m.Y'));
+        $this->tpl->assign('dateTo',   date(date('t').'.m.Y'));
     }
 
     /**
@@ -74,14 +75,32 @@ class Report_Controller extends Template_Controller
      */
     function getData()
     {
-        die('
-        "elements": [{
-            "type": "pie",
-            "alpha": 0.6,
-            "start-angle": 35,
-            "animate": [ { "type": "fade" } ],
-            "colours": [ "#1C9E05", "#FF368D" ],
-            "values": [1,2,3,4,5,6,7]}]'
-        );
+        $report = trim(@$_GET['report']);
+        $start = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
+        $end   = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+        switch ($report) {
+            case 'graph_profit': //Доходы
+                die($this->model->getPie(0, $start, $end));
+            case 'graph_loss':   // Расходы
+                die($this->model->getPie(1, $start, $end));
+            case 'graph_profit_loss': //Сравнение расходов и доходов
+            case 'txt_profit': //Детальные доходы
+            case 'txt_loss': //Детальные расходы
+            case 'txt_loss_difference': //Сравнение расходов за периоды
+            case 'txt_profit_difference': //Сравнение доходов за периоды
+            case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
+            case 'txt_loss_avg_difference': //Сравнение расходов со средним за периоды
+            default:
+                die('
+                    "elements": [{
+                        "type": "pie",
+                        "alpha": 0.6,
+                        "start-angle": 35,
+                        "animate": [ { "type": "fade" } ],
+                        "colours": [ "#1C9E05", "#FF368D" ],
+                        "values": [1,2,3,4,5,6,7]
+                    }]');
+        }
+
     }
 }

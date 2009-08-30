@@ -1,20 +1,4 @@
 // {* $Id$ *}
-$(window).load(function() {
-    $('#dateFrom,#dateTo').datepicker();
-    $('#btnShow').click(function(){
-        l = $.getJSON('/report/getData/', {
-            report: $('#report'),
-            dateFrom: $('#dateFrom'),
-            dateStart: $('#dateStart'),
-            account: $('#account'),
-            currency: $('#currency')
-        }, function(d) {
-            tmp = findSWF("chart");
-            x = tmp.load( JSON.stringify(d) );
-        });
-    });
-});
-
 swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0");
 var data = {
     "elements": [{
@@ -33,7 +17,6 @@ function ofc_ready() {
 }
 
 function open_flash_chart_data() {
-    alert('asd');
     return JSON.stringify(data);
 }
 
@@ -45,4 +28,18 @@ function findSWF(movieName) {
   }
 }
 
-
+$(window).load(function() {
+    $('#dateFrom,#dateTo').datepicker({dateFormat: 'dd.mm.yy'});
+    $('#btnShow').click(function(){
+        l = $.get('/report/getData/', {
+            report: $('#report :selected').attr('id'),
+            dateFrom: $('#dateFrom').val(),
+            dateTo: $('#dateTo').val(),
+            account: $('#account :selected').val(),
+            currency: $('#currency :selected').val()
+        }, function(d) {
+            tmp = findSWF("chart");
+            x = tmp.load( JSON.stringify(d) );
+        }, 'json');
+    });
+});
