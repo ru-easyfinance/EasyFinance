@@ -16,6 +16,13 @@ require_once dirname(dirname(__FILE__)). "/include/common.php";
 Core::getInstance()->authUser();
 Core::getInstance()->parseUrl();
 
-$uar = array('user_name'=>$_SESSION['user']['user_name'],'user_type'=>$_SESSION['user']['user_type']);
+// Определяем информацию о пользователе
+//@TODO Переместить это в другой блок ()
+$uar = array(
+    'user_name'=>$_SESSION['user']['user_name'],
+    'user_type'=>$_SESSION['user']['user_type']);
 Core::getInstance()->tpl->assign('user_info', $uar);
+
+//Выводим страницу в браузер
+//@TODO Тут можно организовать отдачу данных в gzip, если поддерживается сжатие на клиенте
 Core::getInstance()->tpl->display("index.html");
