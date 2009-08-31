@@ -1,5 +1,5 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
-$(function() {
+$(function(document) {
     var operationList;
     // Init
     $('#amount').calculator({

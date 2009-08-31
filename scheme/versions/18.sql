@@ -1,32 +1,16 @@
---
--- База данных: `homemoney`
---
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `info_calc`
---
-
 DROP TABLE IF EXISTS `info_calc`;
 CREATE TABLE IF NOT EXISTS `info_calc` (
-  `m_r` int(11) NOT NULL COMMENT 'мин грань . красная',
-  `m_y` int(11) NOT NULL COMMENT 'мин грань.жёлтая',
-  `m_b` int(11) NOT NULL COMMENT 'мин грань. зелёная',
-  `c_r` int(11) NOT NULL COMMENT 'грубый расчёт.красный',
-  `c_y` int(11) NOT NULL COMMENT 'грубый расчёт.жёлтый',
-  `c_g` int(11) NOT NULL COMMENT 'грубый расчт.зелёный',
-  `u_r` int(11) NOT NULL COMMENT 'повышение.красный',
-  `u_y` int(11) NOT NULL COMMENT 'повышение.жёлый',
-  `u_g` int(11) NOT NULL COMMENT 'повышение. зелёный',
-  `weight` int(11) NOT NULL COMMENT 'вес'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `info_desc`
---
+  `m_r` int(11) NOT NULL COMMENT 'РјРёРЅ РіСЂР°РЅСЊ . РєСЂР°СЃРЅР°СЏ',
+  `m_y` int(11) NOT NULL COMMENT 'РјРёРЅ РіСЂР°РЅСЊ.Р¶С‘Р»С‚Р°СЏ',
+  `m_b` int(11) NOT NULL COMMENT 'РјРёРЅ РіСЂР°РЅСЊ. Р·РµР»С‘РЅР°СЏ',
+  `c_r` int(11) NOT NULL COMMENT 'РіСЂСѓР±С‹Р№ СЂР°СЃС‡С‘С‚.РєСЂР°СЃРЅС‹Р№',
+  `c_y` int(11) NOT NULL COMMENT 'РіСЂСѓР±С‹Р№ СЂР°СЃС‡С‘С‚.Р¶С‘Р»С‚С‹Р№',
+  `c_g` int(11) NOT NULL COMMENT 'РіСЂСѓР±С‹Р№ СЂР°СЃС‡С‚.Р·РµР»С‘РЅС‹Р№',
+  `u_r` int(11) NOT NULL COMMENT 'РїРѕРІС‹С€РµРЅРёРµ.РєСЂР°СЃРЅС‹Р№',
+  `u_y` int(11) NOT NULL COMMENT 'РїРѕРІС‹С€РµРЅРёРµ.Р¶С‘Р»С‹Р№',
+  `u_g` int(11) NOT NULL COMMENT 'РїРѕРІС‹С€РµРЅРёРµ. Р·РµР»С‘РЅС‹Р№',
+  `weight` int(11) NOT NULL COMMENT 'РІРµСЃ'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `info_desc`;
 CREATE TABLE IF NOT EXISTS `info_desc` (
@@ -35,4 +19,4 @@ CREATE TABLE IF NOT EXISTS `info_desc` (
   `min` int(11) NOT NULL,
   `color` int(11) NOT NULL,
   `description` text NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
