@@ -372,7 +372,7 @@ class Accounts_Model
             $res[$val]['special'] = array(0,0,0);//todo tz
 
         }
-        die(json_encode($res));
+        return $res;
     }
 
     public function get_fields($type,$id)

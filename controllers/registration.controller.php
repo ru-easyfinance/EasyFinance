@@ -18,8 +18,10 @@ class Registration_Controller extends Template_Controller {
      * @return void
      */
     function __construct() {
+        header('Location: /');
         $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
+        
         $tpl->append('js','jquery/jquery.validate.js');
         $tpl->append('js','registration.js');
 

@@ -246,6 +246,8 @@ $(document).ready(function() {
                             $('#blockCreateAccounts').find('#'+key).val(val) ;
                             $(document).scrollTop(300);
                         });
+                        val = $(th).closest('.item').find('#total_balance').text();
+                        $('#blockCreateAccounts').find('#starter_balance').val(val);
                         //alert($(th).closest('#item').find('#id').attr('value'));
                         $('#account_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
                         $('#account_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
@@ -287,7 +289,7 @@ $(document).ready(function() {
 
     function correctaccount() {
         $.post('/accounts/del/',
-                    {id :$('#blockCreateAccounts').find('table').attr('class') },
+                    {id :$('#blockCreateAccounts').find('table').attr('id') },
                     function(data){},
                     'text');
         createNewAccount();
