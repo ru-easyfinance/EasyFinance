@@ -35,22 +35,26 @@ class Report_Model
     function getPie($drain = 0, $start = '', $end = '', $account = 0)
     {
         if ($drain == 1) {
-            $title = new OFC_Elements_Title('Расход за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
+            $title = new OFC_Elements_Title('Расходы за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
         } else {
-            $title = new OFC_Elements_Title('Доход за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
+            $title = new OFC_Elements_Title('Доходы за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
         }
         if ($account > 0) {
             $sql = "SELECT o.money, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN category c ON c.cat_id = o.cat_id
                 WHERE o.user_id = ? AND o.account_id = ? AND o.drain = ?
+                    AND `date` BETWEEN ? AND ?
                 GROUP BY o.cat_id";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $account, $drain);
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), 
+                $account, $drain, $start, $end);
         } else {
             $sql = "SELECT o.money, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN category c ON c.cat_id = o.cat_id
                 WHERE o.user_id = ? AND o.drain = ?
+                    AND `date` BETWEEN ? AND ?
                 GROUP BY o.cat_id";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $drain);
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), 
+                $drain, $start, $end);
         }
         
         $pie = new OFC_Charts_Pie();
@@ -59,8 +63,7 @@ class Report_Model
              $array[]= new OFC_Charts_Pie_Value((float)$v['money'], $v['cat']);
         }
         $pie->values = $array;
-//        $pie->type   = 'pie';
-        $pie->tip = '#val# из #total#<br>#percent# из 100%';
+        $pie->tip = '#label# #val# из #total#<br>#percent# из 100%';
         $pie->alpha   = 0.6;
         $pie->border  = 2;
 
@@ -76,11 +79,8 @@ class Report_Model
      * Возвращает сформированный JSON для двойной диаграммы
      * @see http://teethgrinder.co.uk/open-flash-chart-2/bar-2-bars.php
      */
-    function getBars()
+    function getBars($start = '', $end = '', $account=0)
     {
-
-//$title = new title( date("D M d Y") );
-//
 //$data = array(9,8,7,6,5,4,3,2,1);
 //$bar = new bar_glass();
 //$bar->colour( '#BF3B69');
@@ -98,5 +98,40 @@ class Report_Model
 //$chart->add_element( $bar );
 //$chart->add_element( $bar2 );
 
+        if ($account > 0) {
+            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y-%m') as `datef`, drain
+                FROM operation o GROUP BY drain, `datef`
+                WHERE user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ?";
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account);
+        } else {
+            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y-%m') as `datef`, drain
+                FROM operation o GROUP BY drain, `datef`
+                WHERE user_id = ? AND `date` BETWEEN ? AND ?";
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
+        }
+        $title = new OFC_Elements_Title('Сравнение расходов и доходов за период с '.
+            @$_GET['dateFrom'].' по '.@$_GET['dateTo']);
+        $drain = $profit = array();
+        foreach ($result as $v) {
+            if ($v['drain'] == 0) { //Доход
+                //$v['money']
+            } else {
+
+            }
+        }
+        $bar1 = new OFC_Charts_Bar();
+        $bar1->set_colour('#BF3B69');
+        $bar1->set_key('Расходы', 12);
+        $bar1->set_values($v1);
+        $bar2 = new OFC_Charts_Bar();
+        $bar2->set_colour('#5E0722');
+        $bar2->set_key('Доходы', 12);
+        $bar1->set_values($v2);
+
+        $ofc = new OFC_Chart();
+        $ofc->set_title($title);
+        $ofc->add_element($bar1);
+        $ofc->add_element($bar2);
+        return $ofc->toPrettyString();
     }
 }
