@@ -75,16 +75,17 @@ class Report_Controller extends Template_Controller
      */
     function getData()
     {
-        $report = trim(@$_GET['report']);
-        $start = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
-        $end   = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+        $report  = trim(@$_GET['report']);
+        $start   = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
+        $end     = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+        $account = (int)@$_GET['account'];
         switch ($report) {
             case 'graph_profit': //Доходы
-                die($this->model->getPie(0, $start, $end));
+                die($this->model->getPie(0, $start, $end, $account));
             case 'graph_loss':   // Расходы
-                die($this->model->getPie(1, $start, $end));
+                die($this->model->getPie(1, $start, $end, $account));
             case 'graph_profit_loss': //Сравнение расходов и доходов
-                die($this->model->getBars());
+                die($this->model->getBars($start, $end, $account));
             case 'txt_profit': //Детальные доходы
             case 'txt_loss': //Детальные расходы
             case 'txt_loss_difference': //Сравнение расходов за периоды

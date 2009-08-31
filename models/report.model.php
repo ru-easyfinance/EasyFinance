@@ -81,57 +81,87 @@ class Report_Model
      */
     function getBars($start = '', $end = '', $account=0)
     {
-//$data = array(9,8,7,6,5,4,3,2,1);
-//$bar = new bar_glass();
-//$bar->colour( '#BF3B69');
-//$bar->key('Last year', 12);
-//$bar->set_values( $data );
-//
-//$data2 = array(10,9,8,7,6,5,4,3,2);
-//$bar2 = new bar_glass();
-//$bar2->colour( '#5E0722' );
-//$bar2->key('This year', 12);
-//$bar2->set_values( $data2 );
-//
-//$chart = new open_flash_chart();
-//$chart->set_title( $title );
-//$chart->add_element( $bar );
-//$chart->add_element( $bar2 );
-
         if ($account > 0) {
-            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y-%m') as `datef`, drain
-                FROM operation o GROUP BY drain, `datef`
-                WHERE user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ?";
+            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
+                FROM operation o 
+                WHERE user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ?
+                GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account);
         } else {
-            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y-%m') as `datef`, drain
-                FROM operation o GROUP BY drain, `datef`
-                WHERE user_id = ? AND `date` BETWEEN ? AND ?";
+            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
+                FROM operation o 
+                WHERE user_id = ? AND `date` BETWEEN ? AND ?
+                GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
         }
-        $title = new OFC_Elements_Title('Сравнение расходов и доходов за период с '.
-            @$_GET['dateFrom'].' по '.@$_GET['dateTo']);
-        $drain = $profit = array();
+        
+        $array = array();
         foreach ($result as $v) {
             if ($v['drain'] == 0) { //Доход
-                //$v['money']
+                $array[$v['datef']]['p'] = $v['money'];
             } else {
-
+                $array[$v['datef']]['d'] = abs($v['money']);
             }
         }
+        $startf = formatMysqlDate2UnixTimestamp($start);
+        $endf = formatMysqlDate2UnixTimestamp($endf);
+        if (date('Y', $startf) < date('Y', $endf)) {
+            return '';
+        } else { //2004 - 2009
+            for ($i = date('Y', $startf); $i <= date('Y', $endf); $i++) {
+                for ($j = 1; $j > 12; $j++) {
+                    $c = mktime(0, 0, 0, $j, 1, $i);
+                    if ($startf <= $c && $endf >= $c) {
+                        $array[$i.'.'.$j]['p'] = (int)@$array[$i.'.'.$j]['p'];
+                        $array[$i.'.'.$j]['d'] = (int)@$array[$i.'.'.$j]['d'];
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        $data1 = $data2 = $labels = array();
+        
+        foreach ($array as $key => $val) {
+            $data1[] = $val['p'];
+            $data2[] = $val['d'];
+            $labels[] = new OFC_Elements_Axis_X_Label(substr($key, 0, 7));
+        }
+
+        $title = new OFC_Elements_Title('Сравнение расходов и доходов за период с '.
+            @$_GET['dateFrom'].' по '.@$_GET['dateTo']);
         $bar1 = new OFC_Charts_Bar();
         $bar1->set_colour('#BF3B69');
         $bar1->set_key('Расходы', 12);
-        $bar1->set_values($v1);
+        $bar1->set_values($data2);
+
         $bar2 = new OFC_Charts_Bar();
         $bar2->set_colour('#5E0722');
         $bar2->set_key('Доходы', 12);
-        $bar1->set_values($v2);
+        $bar2->set_values($data1);
+
+        $x = new OFC_Elements_Axis_X_Label();
+        $x->set_labels($labels);
+        $x->set_vertical();
+        $x->set_colour('#A2ACBA');
+        $x->
+        
+
+//$tooltip->set_hover();
+//$tooltip->set_stroke( 1 );
+//$tooltip->set_colour( "#000000" );
+//$tooltip->set_background_colour( "#ffffff" );
+//$chart->set_tooltip( $tooltip );
+
+
 
         $ofc = new OFC_Chart();
         $ofc->set_title($title);
         $ofc->add_element($bar1);
         $ofc->add_element($bar2);
+        $ofc->add_element($x);
+
+
         return $ofc->toPrettyString();
     }
 }
