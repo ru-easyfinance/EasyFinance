@@ -476,6 +476,34 @@
 							</form>
 						<!--/добавить новую категорию-->
 
+                            <div class="line">
+                                <div class="f_field" id="money_type">
+                                    Вывести категории
+                                    <select>
+                                        <option selected="selected">Все</option>
+                                        <option>Расходные</option>
+                                        <option>Доходные</option>
+                                        <option>Универсальные</option>
+                                    </select>
+                                </div>
+                                <div class="f_field" id="f_oper_type">
+                                    Показать
+                                    <select>
+                                        <option>Все</option>
+                                        <option selected="selected">Видимые</option>
+                                        <option>Скрытые</option>
+                                    </select>
+                                </div>
+                                <div class="f_field amount">
+                                    Период
+                                    <select>
+                                        <option>Текущая неделя</option>
+                                        <option selected="selected">Текущий месяц</option>
+                                        <option>Текущий год</option>
+                                        <option>Весь период</option>
+                                    </select>
+                                </div>
+                            </div>
 
 							<div class="categories">
 								<table class="h">
@@ -684,6 +712,46 @@
 		<div class="cb"><div></div></div>
 	</div>
 <!--/popup добавить в календарь-->
+<!--popup изменение имени тега-->
+	<div id="poputags_edit">
+		<div class="cont">
+			<div class="ct"></div>
+			<form action="">
+				<div class="inside">
+					<div class="close" title="Закрыть">Закрыть</div>
+					<div class="f_field">
+						<label for="fptags">Тег</label>
+						<input type="text" value="" id="fptags" />
+					</div>
+					<div class="tags">
+					</div>
+					<input type="submit" value="Изменить" class="but" />
+				</div>
+			</form>
+		</div>
+		<div class="cb"><div></div></div>
+	</div>
+<!--/popup изменение имени тега-->
+<!--popup добавление нового тега-->
+	<div id="poputags_add">
+		<div class="cont">
+			<div class="ct"></div>
+			<form action="">
+				<div class="inside">
+					<div class="close" title="Закрыть">Закрыть</div>
+					<div class="f_field">
+						<label for="fptags">Тег</label>
+						<input type="text" value="" id="fpatags" />
+					</div>
+					<div class="tags">
+					</div>
+					<input type="submit" value="Добавить" class="but" />
+				</div>
+			</form>
+		</div>
+		<div class="cb"><div></div></div>
+	</div>
+<!--/popup добавление нового тега-->
 </div>
 <!--подвал-->
 <div id="footer">
