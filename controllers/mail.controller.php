@@ -30,6 +30,7 @@ class Mail_Controller extends Template_Controller
     function index()
     {
         $this->model->index();
+        die();
     }
 
     /**
@@ -50,7 +51,7 @@ class Mail_Controller extends Template_Controller
         $param['text']=htmlspecialchars($_POST['text']);
         $param['category']=htmlspecialchars($_POST['category']);
         if(!$param['category'])
-            die();
+            die(0);
         $param['title']=htmlspecialchars($_POST['title']);
         $param['to']=(int)$_POST['to'];
         $param['date'] = formatRussianDate2MysqlDate($_POST['date']);

@@ -47,8 +47,10 @@ class Mail_Model extends Template_Controller
                 FROM
                     mail
                 WHERE
-                    `from`=? OR `to`=?";
-        $this->mails = $this->db->select($sql,$this->user_id,$this->user_id);
+                    (`from`=? AND a_vis='1') OR (`to`=? AND t_vis='1')";
+        $mails = $this->db->select($sql,$this->user_id,$this->user_id);
+        foreach ($mails as $key=>$val)
+        $this->mails[$mails[$key]['id']] = $mails[$key];
     }
         /**
      * отдаёт список писем,при необходимости формирует его
@@ -97,28 +99,29 @@ class Mail_Model extends Template_Controller
      */
     function del_mail($param)
     {
+        
         if (!$this->mails)
             $this->index();
-            
         $id = $param['id'];
 
-        unset($this->mails[$id]);
+        //print_r($this->mails);
 
-        $author = $param['to'];
+        $author = $this->mails[$id]['from'];
         if ($author == $this->user_id)
             $field = 'a_vis';//от кого
         else
             $field = 't_vis';//к кому
+
+
+
+        if (!is_null($id))
+        {
             
-        if ($id)
-        {
             $sql = "UPDATE mail SET $field='0' WHERE `id`=?;";
-            return $this->db->query($sql, $id);
+            $this->db->query($sql, $this->mails[$id]['id']);
         }
-        else
-        {
-        return 1;
-        } 
+        unset($this->mails[$id]);
+        return '1';
     }
 
     /**
