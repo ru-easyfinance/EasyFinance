@@ -19,6 +19,8 @@ a { color:#6cbd45; }
 a:hover { text-decoration: none; }
 a img, fieldset { border:0 none; }
 
+td.time{padding-right: 5px;  }
+
 .fl_l { float: left; }
 .fl_r { float: right; }
 .clr {clear:both;}
@@ -928,8 +930,8 @@ ul.pager li.act { color: #ffffff; background: #38ad00; }
 
 
 ul.month_cal { position: relative; margin-bottom: 17px; padding-bottom: 6px; border-bottom: 1px solid #e5e5e5; //-zoom: 1; }
-ul.month_cal li{cursor :pointer}
-ul.month_cal li a { color: #949494; background: url('/img/i/arrow.gif') no-repeat 0 0; }
+ul.month_cal li{cursor :pointer; }
+ul.month_cal li a, .ui-datepicker-prev , .ui-datepicker-next{ color: #949494; background: url('/img/i/arrow.gif') no-repeat 0 0; }
 ul.month_cal li.cur { font-size: 18px; line-height: 20px; color: #4b4b4b; text-align: center; }
 ul.month_cal li.y_prev,
 ul.month_cal li.m_prev,
@@ -940,8 +942,8 @@ ul.month_cal li.m_prev { left: 85px; }
 ul.month_cal li.m_next { right: 85px; }
 ul.month_cal li.y_next { right: 5px; }
 
-ul.month_cal li.y_prev a, ul.month_cal li.m_prev a { padding-left: 22px; background-position: 0 5px; }
-ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; background-position: 100% -15px; }
+ul.month_cal li.y_prev a, ul.month_cal li.m_prev a , .ui-datepicker-prev{ padding-left: 22px; background-position: 0 5px; }
+ul.month_cal li.y_next a, ul.month_cal li.m_next a , .ui-datepicker-next{ padding-right: 22px; background-position: 100% -15px; }
 
 
 
