@@ -106,6 +106,7 @@ $(function() {
                                         'тестировщик '+arr[data[i]['user_name']]  + '</td><td class="link">' +
                                         data[i]['SUM(rating)'] + '</td></tr>';
                                     //alert(data[i]['SUM(rating)'])
+                                    data[i]['user_name'] = arr[data[i]['user_name']];
                         }
                     }
                     r_list = data;
