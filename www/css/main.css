@@ -928,6 +928,7 @@ ul.pager li.act { color: #ffffff; background: #38ad00; }
 
 
 ul.month_cal { position: relative; margin-bottom: 17px; padding-bottom: 6px; border-bottom: 1px solid #e5e5e5; //-zoom: 1; }
+ul.month_cal li{cursor :pointer}
 ul.month_cal li a { color: #949494; background: url('/img/i/arrow.gif') no-repeat 0 0; }
 ul.month_cal li.cur { font-size: 18px; line-height: 20px; color: #4b4b4b; text-align: center; }
 ul.month_cal li.y_prev,
@@ -1082,7 +1083,6 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 #views.ui-widget-content #calendar table {
     font-size: 80%;
-	cursor : pointer;
 }
 #views.ui-widget-content #calendar table th {
     padding: .2em 0;
