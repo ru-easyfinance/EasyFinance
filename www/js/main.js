@@ -119,7 +119,7 @@ $(function() {
         //лист тестеров
         $('#footer .rating_list').click(
             function(){
-                str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг </th>';
+                str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг * </th>';
                 for (key in r_list)
                 {
                     if (r_list[0]['uid']==r_list[key]['user_name'])

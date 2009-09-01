@@ -447,8 +447,8 @@ div.addoperation { position: relative; display: none; padding-top: 22px; }
 div.addoperation .line { position: relative; margin-bottom: 14px; color: #4c4c4c; //zoom: 1; }
 div.addoperation .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; }
-div.addoperation .line .f_field select { display: block; margin-top: 2px; color: #b2b2b2; }
-div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #b2b2b2; }
+div.addoperation .line .f_field select { display: block; margin-top: 2px; color: #20201E; }
+div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #20201E; }
 div.addoperation .line label { display: block; margin-bottom: 2px; }
 div.addoperation .line textarea { width: 495px; //width: 489px; height: 96px; //height: 90px; }
 div.addoperation .but input { margin-right: 21px; }
@@ -478,7 +478,7 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .operation_list .sorting { position: relative; margin-bottom: 7px; //zoom: 1; }
 .operation_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list .sorting .f_field { position: relative; float: left; margin-right: 51px; }
-.operation_list .sorting .f_field select { margin-left: 11px; color: #b2b2b2; }
+.operation_list .sorting .f_field select { margin-left: 11px; color: #20201E; }
 .operation_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
 
 .operation_list ul.period { margin: 0 0 21px 71px; //zoom: 1; }
@@ -866,7 +866,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #poputags .inside { padding: 20px 0 4px 23px; }
 #poputags .f_field { position: relative; margin: 0 0 8px 40px; }
 #poputags .f_field label { display: block; position: absolute; top: 3px; left: -40px; color: #4c4c4c; }
-#poputags .f_field input { color: #b2b2b2; width: 158px; //width: 152px;}
+#poputags .f_field input { color: #20201E; width: 158px; //width: 152px;}
 
 #poputags .tags { margin: 0 22px 13px 0; line-height: 19px; color: #989898; }
 #poputags .tags a { margin-right: 6px; color: #989898; text-decoration: none; }
@@ -877,10 +877,10 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupadd_calendar .inside { padding: 20px 0 14px 0; }
 #popupadd_calendar .f_field { position: relative; margin: 0 0 8px 168px; }
 #popupadd_calendar .f_field label, #popupaddobject .f_field label { display: block; position: absolute; top: 3px; left: -140px; width: 125px; text-align: right; }
-#popupadd_calendar .f_field input, #popupaddobject .f_field input { color: #b2b2b2; width: 158px; //width: 152px; }
+#popupadd_calendar .f_field input, #popupaddobject .f_field input { color: #20201E; width: 158px; //width: 152px; }
 #popupadd_calendar .f_field input#fpdate, #popupadd_calendar .f_field input#fpdate2,
 #popupaddobject .f_field input#fpdate3, #popupaddobject .f_field input#fpdate4 { width: 67px; //width: 61px; }
-#popupadd_calendar .f_field select { width: 158px; color: #b2b2b2; }
+#popupadd_calendar .f_field select { width: 158px; color: #20201E; }
 #popupadd_calendar .f_field a, #popupaddobject .f_field a { top: 5px; left: 71px; width: 19px; background-position: 0 -390px; }
 #popupadd_calendar .but { margin: 10px 0 0 168px; }
 
@@ -896,7 +896,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupaddobject .form_block { margin-right: -1px; padding-right: 30px; border-right: 1px solid #d9d9d9; }
 #popupaddobject .gr { padding: 48px 0 0 23px; border-left: 1px solid #d9d9d9; }
 #popupaddobject .f_field { position: relative; margin: 0 0 8px 139px; }
-#popupaddobject .f_field select { color: #b2b2b2; }
+#popupaddobject .f_field select { color: #20201E; }
 #popupaddobject .showall { display: block; position: relative; margin: 10px 0 18px 159px; }
 #popupaddobject .showall input { display: block; position: absolute; top: -2px; //top: -3px; left: -23px; }
 #popupaddobject .but { margin: 10px 0 0 139px; }
@@ -1027,7 +1027,7 @@ table.tableForm td label {
 table.tableForm input, table.tableForm select, table.tableForm textarea {
     font-family:Arial,Tahoma,sans-serif;
     font-size:12px;
-    color: #b2b2b2;
+    color: #20201E;
 }
 /*------------------------------------------- form end --------------------------------------*/
 
