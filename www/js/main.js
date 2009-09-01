@@ -11,6 +11,8 @@ $(function() {
     }).find('a').removeAttr('href');
 
     // Кнопка закрыть
+    $('li.over2').hide();
+        $('li.over1').hide();
     $('li.over2').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').hide();
@@ -31,7 +33,7 @@ $(function() {
     });
 // Footer
     var r_list;
-    var temp_obj={13:27,11:28,9:29,10:30,12:31};
+
 //скрытие сообщений
     $('#footer #popupreport').hide();
     $('#popupreport .close').click(

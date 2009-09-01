@@ -262,10 +262,6 @@ $(window).load(function() {
                     $('#per_tabl tbody, #ev_tabl tbody').empty();
                     n = new Date();
                     $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
-                    $('ui-datepicker-calendar td').each(function(){
-                        alert ('asd');
-                            //this.css('font-weight', 'bold')
-                        });
                     for(v in result){
                         
                         l = result[v];
@@ -331,6 +327,8 @@ $(window).load(function() {
     $('li.y_prev').click(function(){$('#calendar').fullCalendar('prevYear')});
     $('li.y_next').click(function(){$('#calendar').fullCalendar('nextYear')});
     $('li.cur').click(function(){$('#calendar').fullCalendar('today')});
+
+    $('#ui-datepicker-div').datepicker('setDate');
 
     $('#calendar .full-calendar-month-wrap').addClass('ui-corner-bottom');
     $("#dialog_event").dialog({
