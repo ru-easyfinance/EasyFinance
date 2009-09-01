@@ -39,6 +39,17 @@ $(function() {
             $('#popupreport').hide();
         });
     //открытие сообщений
+    function inarray(key,arr)
+    {
+        for(k in arr)
+        {
+            if (key == arr[k])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     $('#footer .addmessage').click(
         function(){
             $('#footer #popupreport').show();
@@ -46,25 +57,30 @@ $(function() {
                 '/feedback/r_list/',
                 {},
                 function (data){
-                    
+                    arr=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42];
                     str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг </th>';
                     for (i=0; i<7; i++)
                     {
                         if (data[i])
                         {
-                            if (data[0]['uid']==data[i]['user_name'])
-                                c=' class="act" ';
-                            else
-                                c='';
-                            if (data[i]['user_name']<15)
-                                data[i]['user_name'] = temp_obj[data[i]['user_name']];
-                            else if(data[i]['user_name']>41)
-                                data[i]['user_name'] = data[i]['user_name']-9;
-                            else
-                                data[i]['user_name'] = data[i]['user_name']-14;
-                            str = str + '<tr'+c+'><td>' +
-                                    'тестировщик'+data[i]['user_name']  + '</td><td class="link">' +
-                                    data[i]['SUM(rating)'] + '</td></tr>';
+                            if (inarray(data[i]['user_name'],arr))
+                            {
+                                if (data[0]['uid']==data[i]['user_name'])
+                                    c=' class="act" ';
+                                else
+                                    c='';
+
+                                if (data[i]['user_name']<15)
+                                    data[i]['user_name'] = temp_obj[data[i]['user_name']];
+                                else if(data[i]['user_name']>41)
+                                    data[i]['user_name'] = data[i]['user_name']-9;
+                                else
+                                    data[i]['user_name'] = data[i]['user_name']-14;
+                                str = str + '<tr'+c+'><td>' +
+                                        'тестировщик '+data[i]['user_name']  + '</td><td class="link">' +
+                                        data[i]['SUM(rating)'] + '</td></tr>';
+                                    //alert(data[i]['SUM(rating)'])
+                            }
                         }
                     }
                     r_list = data;
