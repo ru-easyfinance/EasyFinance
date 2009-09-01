@@ -94,7 +94,7 @@ $(function() {
                         41:33,
                         42:34};
                     str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг * </th>';
-                    for (i=0; i<7; i++)
+                    for (i=0; i<5; i++)
                     {
                         if (data[i])
                         {
