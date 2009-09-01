@@ -1082,6 +1082,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 #views.ui-widget-content #calendar table {
     font-size: 80%;
+	cursor : pointer;
 }
 #views.ui-widget-content #calendar table th {
     padding: .2em 0;
