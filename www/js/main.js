@@ -4,6 +4,19 @@
  * {* $Id$ *}
  */
 $(function() {
+	//верхнее меню
+	head = $('#menumain').attr('value');
+	if (!head)
+		head = '/';
+	$('#menumain li').attr('class','');
+	$('#menumain li').each(function(){
+		if ($(this).find('a').attr('href')==head)
+			$(this).attr('class','act');
+	});
+
+
+
+
     // Кнопка сворачивания / разворачивания
     $('li.over3').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков

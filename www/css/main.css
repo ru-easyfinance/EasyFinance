@@ -75,6 +75,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #menumain ul.menu1 li.act span { text-decoration: underline; }
 #menumain ul.menu1 li.act a { color: #f2f172; text-decoration: underline; }
 
+#menumain ul.menu2 li.act a { color: #f2f172; text-decoration: underline; }
 #menumain ul.menu2 { position: absolute; top: 10px; right: 44px; width: 340px; overflow: hidden; }
 #menumain ul.menu2 li { display: inline; margin-left: 25px; font-size: 11px; line-height: 12px; color: #f2f172; }
 
@@ -144,7 +145,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 
-#mainwrap { position: relative; padding-bottom: 160px; }
+#mainwrap { position: relative; padding-bottom: 10px; }
 
 .general_cont { position: relative; //zoom: 1; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -958,7 +959,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search input.inp{ display: block; width: 191px; //width: 173px; padding: 0 0 0 12px; margin-bottom: 1px; font-size: 11px; color: #a7a7a7; }
 #footer .search input.but{ display: block; position: absolute; top: 0; right: 5px; width: 17px; height: 19px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat 5px 3px; }
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
-#footer .creator { position: absolute; bottom: 20px; right: 5px; width: 210px; padding-top: 19px; font-size: 10px; line-height: 11px; color: #7f7f7f; text-align: right; background: url('/img/i/nota.gif') no-repeat 100% 0; }
+#footer .creator { position: absolute; top: 32px; right: 5px; width: 210px; padding-bottom: 19px; font-size: 10px; line-height: 11px; color: #7f7f7f; text-align: right; background: url('/img/i/nota.gif') no-repeat 100% 100%; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
 #footer .addmessage { top: 15px; left: 20px; }
 
@@ -966,7 +967,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 
 #p_index #header { height: 178px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
-#p_index #footer dfn { display: block; margin: -1px 0 0 0; padding: 12px 0 0 33px; width: 184px; border-top: 1px solid #f8fcf6; //zoom: 1; }
+#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 33px; width: 184px; //zoom: 1; }
 
 span.tagMatches {
     margin-left: 10px;

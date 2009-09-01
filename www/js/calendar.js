@@ -296,7 +296,11 @@ $(window).load(function() {
 
                         }
                     }
-                    
+
+                    $('#datepicker .ui-state-default').each(function(){
+                        $(this).css('color','#e4e4e4')
+                    });
+                    alert($('#datepicker .ui-state-default').length);
                     calback(result);
                 }
             )
