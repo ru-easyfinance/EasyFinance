@@ -515,6 +515,12 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .operation_list table tr.first td { background: none; }
 .operation_list table div.cont { position: relative; }
 
+.line div.cont ul { display: none; position: absolute; top: -4px; right: 235px; width: 59px; height: 31px; padding-left: 16px; background: url('../i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
+.line div.cont ul li:after{ display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.line div.cont ul li{ float: left; margin: 9px 8px 0 0; height: 12px; }
+.line div.cont ul li.add{ margin-right: 0; }
+.line div.cont ul li a{ display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden; }
+
 .operation_list table td div.cont ul,
 .categories table td div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('../i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 .operation_list table td div.cont ul:after,
@@ -635,6 +641,7 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .budget .waste_list .open table, .categories .open table { display: block; }
 .budget .waste_list .close a.name, .categories .close a.name { background: url('../i/plus.gif') no-repeat 6px 4px; }
 .budget .waste_list .close table, .categories .close table { display: none; }
+
 
 .categories { position: relative; width: 517px; border: 1px solid #e8e8e8; }
 .categories .line { width: auto; padding: 7px 0 9px 0; overflow: visible; }
@@ -980,3 +987,4 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 
 .ul_cat{background:transparent url(../i/icons_control3_1.gif) no-repeat scroll 0 0;}
 .hided{display:none;}
+.l_n_cont{width:100%;}

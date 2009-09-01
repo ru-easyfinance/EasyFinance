@@ -104,4 +104,14 @@ $(document).ready(function(){
         $(this).slideUp("fast");
         $(".hided").slideDown("fast");
     });
+
+    /* Show/ Hide Mini-Menu For List Container */
+    $(".l_n_cont").hover(
+            function(){$(this).next().find("ul").show();},
+            function(){$(this).next().find("ul").hide();}
+            );
+    $(".cont ul").hover(
+        function(){$(this).show();},
+        function(){$(this).hide();}
+        );
 });
