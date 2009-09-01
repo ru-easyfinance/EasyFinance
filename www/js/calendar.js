@@ -1,4 +1,6 @@
 // {* $Id$ *}
+
+
 $(window).load(function() {
     var d = new Date();
     var y = d.getFullYear();
@@ -9,6 +11,17 @@ $(window).load(function() {
     $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
     $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
     $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+
+    	/**
+	 * autor: CTAPbIu_MABP
+	 * email: ctapbiumabp@gmail.com
+	 * site: http://mabp.kiev.ua/2009/08/11/customized-datapicker/
+	 * license: MIT & GPL
+	 * last update: 11.08.2009
+	 * version: 1.0
+	 */
+
+
     /**
      * Очищаем форму
      */
@@ -151,7 +164,7 @@ $(window).load(function() {
     $('#infinity').attr('disabled','disabled');
     $('#tr_date_start,#tr_count').hide();
     $('#date,#date_start,#date_end,#pdate').datepicker();
-    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
+    //$('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
     //$('textarea#comment').jGrow();
     $("#tabs,#views").tabs();
     $('#time').timePicker().mask('99:99');
@@ -248,7 +261,13 @@ $(window).load(function() {
                     // Заполняем список событий
                     $('#per_tabl tbody, #ev_tabl tbody').empty();
                     n = new Date();
+                    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
+                    $('ui-datepicker-calendar td').each(function(){
+                        alert ('asd');
+                            //this.css('font-weight', 'bold')
+                        });
                     for(v in result){
+                        
                         l = result[v];
                         n.setTime(l.date*1000);
                         if (n >= s && n < e) {
@@ -281,12 +300,7 @@ $(window).load(function() {
 
                         }
                     }
-                    // Устанавливаем хук на щелчок
-    //                $('div#cal_events div').click(function(){
-    //                    el = $('#calendar').fullCalendar( 'getEventsById', $(this).attr('key'));
-    //                    beforeOpenForm(el[0]);
-    //                    $('#dialog_event').dialog('open');
-    //                });
+                    
                     calback(result);
                 }
             )
@@ -336,8 +350,7 @@ $(window).load(function() {
             }
         },
         close: function() {
-            //alert('close');
-            //allFields.val('').removeClass('ui-state-error');
+          $('#ui-datepicker-div').hide();
         }
     });
 });
