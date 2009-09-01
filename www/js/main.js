@@ -57,30 +57,53 @@ $(function() {
                 '/feedback/r_list/',
                 {},
                 function (data){
-                    arr=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42];
+                    arr={9:29,
+                        10:30,
+                        11:28,
+                        12:31,
+                        13:27,
+                        14:1,
+                        15:2,
+                        16:3,
+                        17:4,
+                        18:5,
+                        19:6,
+                        20:7,
+                        21:8,
+                        22:9,
+                        23:10,
+                        24:11,
+                        25:12,
+                        26:13,
+                        27:14,
+                        28:15,
+                        29:16,
+                        30:17,
+                        31:18,
+                        32:19,
+                        33:20,
+                        34:21,
+                        35:22,
+                        36:23,
+                        37:24,
+                        38:25,
+                        39:26,
+                        40:32,
+                        41:33,
+                        42:34};
                     str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг </th>';
                     for (i=0; i<7; i++)
                     {
                         if (data[i])
                         {
-                            if (inarray(data[i]['user_name'],arr))
-                            {
                                 if (data[0]['uid']==data[i]['user_name'])
                                     c=' class="act" ';
                                 else
                                     c='';
-
-                                if (data[i]['user_name']<15)
-                                    data[i]['user_name'] = temp_obj[data[i]['user_name']];
-                                else if(data[i]['user_name']>41)
-                                    data[i]['user_name'] = data[i]['user_name']-9;
-                                else
-                                    data[i]['user_name'] = data[i]['user_name']-14;
                                 str = str + '<tr'+c+'><td>' +
-                                        'тестировщик '+data[i]['user_name']  + '</td><td class="link">' +
+                                        'тестировщик '+arr[data[i]['user_name']]  + '</td><td class="link">' +
                                         data[i]['SUM(rating)'] + '</td></tr>';
                                     //alert(data[i]['SUM(rating)'])
-                            }
                         }
                     }
                     r_list = data;
