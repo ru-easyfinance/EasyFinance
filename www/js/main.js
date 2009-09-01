@@ -181,8 +181,10 @@ $(function() {
                     cheight : getClientHeight(),
                     colors : screen.colorDepth,
                     plugins: str
-                }
+                },
+                function(data){$('#footer #ffmes').val('')}
             );
+            $('#footer #ffmes').val('')
             $('#footer .f_field lable').show();
             $('#footer .f_field textarea').text('');
             $('#footer #popupreport').hide();
