@@ -37,10 +37,14 @@ function databaseErrorHandler($message, $info)
     // Если использовалась @, ничего не делать.
     if (!error_reporting()) return;
     // Выводим подробную информацию об ошибке.
-    echo "SQL Error: $message<br><pre>";
-    print_r($info);
-    echo "</pre>";
-    exit();
+    if (DEBUG) {
+        echo "SQL Error: $message<br><pre>";
+        print_r($info);
+        echo "</pre>";
+        exit();
+    } else {
+        trigger_error('SQL Error: ' . $message, E_USER_ERROR);
+    }
 }
 
 function databaseLogger($db, $sql)
@@ -75,7 +79,6 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
             } else {
                 FirePHP::getInstance(true)->info($errstr);
             }
-//            $tpl->append("notice", '"'.nl2br(htmlspecialchars($errstr)).' line: $errline in file: $errfile"');
             break;
     }
     return true;
