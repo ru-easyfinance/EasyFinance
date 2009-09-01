@@ -53,28 +53,28 @@ $(window).load(function() {
         // Событие календаря
         } else {
             $('#tabs').tabs('enable',0).tabs('disable',1).tabs( 'select',0);
-            $('form #key').val(el.id);
-            $('form #chain').val(el.chain);
-            $('form #title').val(el.title);
+            $('#key').val(el.id);
+            $('#chain').val(el.chain);
+            $('#title').val(el.title);
             $('form').attr('action', '/calendar/edit/');
             dt = new Date(); dt.setTime(el.start);
-            $('form #date').val($.datepicker.formatDate('dd.mm.yy', dt));
-            $('form #time').val(dt.toLocaleTimeString().substr(0, 5));
-            $('form #repeat option').each(function(){ //@FIXME Оптимизировать
+            $('#date').val($.datepicker.formatDate('dd.mm.yy', dt));
+            $('#time').val(dt.toLocaleTimeString().substr(0, 5));
+            $('#repeat option').each(function(){ //@FIXME Оптимизировать
                 if (el.repeat == $(this).attr('value')) {
                     $(this).attr('selected','selected');
                 }
             });
-            $('form #count option').each(function(){ //@FIXME Оптимизировать
+            $('#count option').each(function(){ //@FIXME Оптимизировать
                 if (el.count == $(this).attr('value')) {
                     $(this).attr('selected','selected');
                 }
             });
-            $('form #comment').val(el.comment);
+            $('#comment').val(el.comment);
             if (el.infinity == 0) {
                 $('.rep_type[value=1]').attr('checked','checked');
             }else if (el.infinity == 1) {
-                $('form #infinity').attr('checked','checked');
+                $('#infinity').attr('checked','checked');
                 $('.rep_type[value=2]').attr('checked','checked');
                 $('#repeat').change();
             } else {
@@ -91,30 +91,30 @@ $(window).load(function() {
         $.post(
             $('form').attr('action'),
             {
-                key: $('form #key').attr('value'),
-                title: $('form #title').attr('value'),
-                date_start: $('form #date_start').attr('value'),
-                date_end: $('form #date_end').attr('value'),
-                date: $('form #date').attr('value'),
-                time: $('form #time').attr('value'),
-                repeat: $('form #repeat option:selected').attr('value'),
-                count: $('form #count').attr('value'),
-                comment: $('form #comment').attr('value'),
-                infinity: $('form #infinity').attr('value'),
-                rep_type: $('form .rep_type[checked]').val(),
-                mon: $('form #mon').attr('checked') ? 1 : 0,
-                tue: $('form #tue').attr('checked') ? 1 : 0,
-                wed: $('form #wed').attr('checked') ? 1 : 0,
-                thu: $('form #thu').attr('checked') ? 1 : 0,
-                fri: $('form #fri').attr('checked') ? 1 : 0,
-                sat: $('form #sat').attr('checked') ? 1 : 0,
-                sun: $('form #sun').attr('checked') ? 1 : 0
+                key:        $('#key').attr('value'),
+                title:      $('#title').attr('value'),
+                date_start: $('#date_start').attr('value'),
+                date_end:   $('#date_end').attr('value'),
+                date:       $('#date').attr('value'),
+                time:       $('#time').attr('value'),
+                repeat:     $('#repeat option:selected').attr('value'),
+                count:      $('#count').attr('value'),
+                comment:    $('#comment').attr('value'),
+                infinity:   $('#infinity').attr('value'),
+                rep_type:   $('.rep_type[checked]').val(),
+                mon:        $('#mon').attr('checked') ? 1 : 0,
+                tue:        $('#tue').attr('checked') ? 1 : 0,
+                wed:        $('#wed').attr('checked') ? 1 : 0,
+                thu:        $('#thu').attr('checked') ? 1 : 0,
+                fri:        $('#fri').attr('checked') ? 1 : 0,
+                sat:        $('#sat').attr('checked') ? 1 : 0,
+                sun:        $('#sun').attr('checked') ? 1 : 0
             }, function(data, textStatus){
                 // data could be xmlDoc, jsonObj, html, text, etc...
                 // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
                 for (var v in data) {
                     //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                    alert('Ошибка в ' + v);
+                    alert('Ошибка в ' + data[v]);
                 }
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
