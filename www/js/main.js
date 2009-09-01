@@ -7,7 +7,7 @@ $(function() {
     // Кнопка сворачивания / разворачивания
     $('li.over3').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
-        $(this).closest('div.ramka3 div.inside').toggle();
+        $(this).closest('div.ramka3').find('div.inside').toggle();
     }).find('a').removeAttr('href');
 
     // Кнопка закрыть
