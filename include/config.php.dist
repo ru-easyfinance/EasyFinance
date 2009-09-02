@@ -25,7 +25,7 @@ define('DEBUG',           true);
 //define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
 define('SYS_MAX_PERPAGE', 3); //WTF???
 define('DEFAULT_MODULE', 'welcome');
-define('GUEST_MODULES', 'welcome,help,articles,login,registration');
+define('GUEST_MODULES', 'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
 
 //COOKIE
 define('COOKIE_NAME',  'a');
