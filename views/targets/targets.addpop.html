@@ -1,71 +1,62 @@
 <!--popup добавить цель-->
-	<div id="popupaddobject" style="top: 494px; left: 185px; display: block;">
-		<div class="cont">
-			<div class="ct"></div>
-			<form action="">
-				<div class="inside">
-					<div class="close" title="Закрыть">Закрыть</div>
-					<div class="general_cont">
-						<div class="form_block">
-							<div class="f_field">
-								<label for="fptype">Тип цели</label>
-								<select id="fptype">
-									<option>???</option>
-								</select>
-							</div>
-							<div class="f_field">
-								<label for="fpcat">Категория</label>
-								<select id="fpcat">
-									<option>???</option>
-								</select>
-							</div>
-							<div class="f_field">
-								<label for="fpname2">Наименование</label>
-								<input type="text" value="" id="fpname2" />
-							</div>
-							<div class="f_field">
-								<label for="fpamount">Сумма</label>
-								<input type="text" value="" id="fpamount" />
-							</div>
-							<div class="f_field">
-								<label for="fpdate3">Дата начала</label>
-								<input type="text" value="" id="fpdate3" />
-								<a href="#" title="выбрать">выбрать</a>
-							</div>
-							<div class="f_field">
-								<label for="fpdate4">Дата окончания</label>
-								<input type="text" value="" id="fpdate4" />
-								<a href="#" title="выбрать">выбрать</a>
-							</div>
-							<div class="f_field">
-								<label for="fpamount2">Сумма пер. плат.</label>
-								<input type="text" value="" id="fpamount2" />
-							</div>
-							<div class="f_field">
-								<label for="fpwaste">Счет расхода</label>
-								<select id="fpwaste">
-									<option>???</option>
-								</select>
-							</div>
-							<div class="f_field">
-								<label for="fppayment">Периодичность платежа</label>
-								<select id="fppayment">
-									<option>???</option>
-								</select>
-							</div>
-							<label for="fpshowall" class="showall">
-								<input type="checkbox" value="" id="fpshowall" />
-								Видимая для других
-							</label>
-						</div>
-						<div class="gr">
-							<img src="/img/images/pic14.gif" alt="" />
-						</div>
-					</div>
-					<input type="submit" value="Сохранить" class="but" />
-				</div>
-			</form>
-		</div>
-		<div class="cb"><div></div></div>
-	</div>
+	<div id="tpopup" title="Финансовая цель" style="display: none;">
+        <form action="">
+            <input type="hidden" id="key">
+        <table>
+            <tr>
+                <td><label for="type">Тип цели</label></td>
+                <td><select id="type" class="text ui-widget-content">
+                        <option value="r">Расходная</option>
+                        <option value="d">Доходная</option>
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="category">Категория</label></td>
+                <td><select id="category" class="text ui-widget-content">
+                    {$category}
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="title">Наименование</label></td>
+                <td><input type="text" value="" id="title" class="text ui-widget-content" /></td>
+            </tr>
+            <tr>
+                <td><label for="amount">Сумма</label></td>
+                <td><input type="text" value="" id="amount" /></td>
+            </tr>
+            <tr>
+                <td><label for="start">Дата начала</label></td>
+                <td><input type="text" value="" id="start" />
+                <a href="#" title="выбрать">выбрать</a></td>
+            </tr>
+            <tr>
+                <td><label for="end">Дата окончания</label></td>
+                <td><input type="text" value="" id="end" />
+                    <a href="#" title="выбрать">выбрать</a></td>
+            </tr>
+            <tr>
+                <td><label for="amountf">Сумма пер. плат.</label></td>
+                <td><input type="text" value="" id="amountf" /></td>
+            </tr>
+            <tr>
+                <td><label for="account">Счет расхода</label></td>
+                <td><select id="account">
+                    {foreach from=$accounts item=acc_data}
+                    <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                    {/foreach}
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="comment">Комментарий</label></td>
+                <td><textarea id="comment"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label for="visible" class="showall">
+                    <input type="checkbox" value="" id="visible" />
+                    Видимая для других
+                </label></td>
+            </tr>
+        </table>
+        </form>
+    </div>
 <!--/popup добавить цель-->

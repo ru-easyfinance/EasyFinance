@@ -53,12 +53,10 @@ class Targets_Controller extends Template_Controller
      */
     function index($args)
     {
-        // Список ближайших целей пользователя
         $this->tpl->assign('user_list_targets', $this->model->getLastList());
-
-        //Список популярных целей у остальных
-        $pop = $this->model->getPopList();
-        $this->tpl->assign('pop_list_targets', $pop);
+        $this->tpl->assign('pop_list_targets', $this->model->getPopList());     
+        $this->tpl->assign('category',get_tree_select());
+        $this->tpl->assign('accounts',Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('template','default');
     }
 
@@ -106,11 +104,12 @@ class Targets_Controller extends Template_Controller
         }
     }
 
+    /**
+     *
+     */
     function user_list()
     {
-        $this->tpl->assign('user_list_targets',$this->model->getLastList($index));
-        $this->tpl->assign('template','pages.list');
-        $this->tpl->assign('view_list','user_list');
+        die(json_encode($this->model->getLastList($index)));
     }
 
     function pop_list()

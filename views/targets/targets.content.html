@@ -12,56 +12,40 @@
 						</div>
 						<div class="inside financobject_block">
 							<div class="add"><span>Добавить цель</span></div>
-							<div class="object">
-								<div class="ban"><a href="#"><img src="/img/images/pic7.gif" alt="" /></a></div>
+                            {foreach from=$user_list_targets item=i}
+							<div class="object" tid="{$i.id}" type="{$i.type}" amount="{$i.amount}" start="{$i.start}" end="{$i.end}"
+                                 photo="{$i.photo}" url="{$i.url}" account="{$i.account}" visible="{$i.visible}" title="{$i.title}" comment="{$i.comment}">
+								<div class="ban">
+                                    <!-- <a href="#"><img src="/img/images/pic7.gif" alt="" /></a> -->
+                                </div>
 								<div class="descr">
-									<img src="/img/images/pic6.jpg" alt="" />
-									<a href="#">Купить очень, очень хорошую машину.</a>
-									Отечественный рынок акций продолжает движение в зеленой зоне. Поддержку инвесторам оказывают рост стоимости
+									{if $i.photo != ''}
+                                        <img src="/img/images/pic6.jpg" alt="" />
+                                    {else}
+                                        <img src="/img/images/pic2.gif" alt="" />
+                                    {/if}
+									<a href="#">{$i.title}</a>
+									{$i.comment}
 								</div>
 								<div class="indicator_block">
 									<div class="money">
-										1 500 000 руб.<br />
-										<span>1 000 000 руб.</span>
+										{$i.amount} руб.<br />
+										<span>{$i.amount_done} руб.</span>
 									</div>
 									<div class="indicator">
-										<div style="width:15%;"><span>15%</span></div>
+										<div style="width:{$i.percent_done}%;"><span>{$i.percent_done}%</span></div>
 									</div>
 								</div>
 								<div class="date">
-									Целевая дата: 15.05.09 &nbsp;&nbsp;&nbsp; Прогнозная дата: 22.08.09
+									Целевая дата: {$i.end} &nbsp;&nbsp;&nbsp; <!-- Прогнозная дата: -->
 								</div>
 								<ul>
-									<li><a href="#">редактировать</a></li>
-									<li><a href="#">копировать</a></li>
-									<li><a href="#">удалить</a></li>
+									<li><a href="#" class="f_f_edit">редактировать</a></li>
+									<li><a href="#" class="f_f_copy">копировать</a></li>
+									<li><a href="#" class="f_f_del">удалить</a></li>
 								</ul>
 							</div>
-							<div class="object">
-								<div class="ban"><a href="#"><img src="/img/images/pic7.gif" alt="" /></a></div>
-								<div class="descr">
-									<img src="/img/images/pic6.jpg" alt="" />
-									<a href="#">Купить очень, очень хорошую машину.</a>
-									Отечественный рынок акций продолжает движение в зеленой зоне. Поддержку инвесторам оказывают рост стоимости
-								</div>
-								<div class="indicator_block">
-									<div class="money">
-										1 000 руб.<br />
-										<span>500 руб.</span>
-									</div>
-									<div class="indicator">
-										<div style="width:50%;"><span>50%</span></div>
-									</div>
-								</div>
-								<div class="date">
-									Целевая дата: 15.05.09 &nbsp;&nbsp;&nbsp; Прогнозная дата: 22.08.09
-								</div>
-								<ul>
-									<li><a href="#">редактировать</a></li>
-									<li><a href="#">копировать</a></li>
-									<li><a href="#">удалить</a></li>
-								</ul>
-							</div>
+                            {/foreach}
 							<div class="show_all"><span>Смотреть все цели</span></div>
 						</div>
 						<div class="cb"><div></div></div>
@@ -80,44 +64,24 @@
 							</div>
 						</div>
 						<div class="inside">
-							<ul class="popularobject">
+                            <ul class="popularobject">
+                            {foreach from=$pop_list_targets item=i}
+                            {if $i.title != ''}
 								<li>
 									<img src="/img/images/pic5.jpg" alt="" />
-									<span class="num">1.</span>
-									<a href="#" class="name">В Москве завершился эксперимент по моделированию полета на Марс</a>
-									<a href="#">Присоединиться</a>
+									<span class="num">{counter}.</span>
+									<a href="#" class="name">{$i.title}</a>
+									<a href="#" class="join">Присоединиться</a>
 									<div class="statistics">
 										<div>
-											<span class="green">1234</span> Последователей
-											<span class="red">3200</span> Достигло цель
+                                            <span class="green">{$i.cnt}</span> Последователей<br/>
+											<span class="red">0</span> Достигло цель
 										</div>
 									</div>
 								</li>
-								<li>
-									<img src="/img/images/pic5.jpg" alt="" />
-									<span class="num">2.</span>
-									<a href="#" class="name">В Москве завершился эксперимент по моделированию полета на Марс</a>
-									<a href="#">Присоединиться</a>
-									<div class="statistics">
-										<div>
-											<span class="green">123</span> Последователей
-											<span class="red">320</span> Достигло цель
-										</div>
-									</div>
-								</li>
-								<li class="last">
-									<img src="/img/images/pic5.jpg" alt="" />
-									<span class="num">9993.</span>
-									<a href="#" class="name">В Москве завершился эксперимент по моделированию полета на Марс</a>
-									<a href="#">Присоединиться</a>
-									<div class="statistics">
-										<div>
-											<span class="green">123</span> Последователей
-											<span class="red">320</span> Достигло цель
-										</div>
-									</div>
-								</li>
-							</ul>
+                            {/if}
+                            {/foreach}
+                            </ul>
 						</div>
 						<div class="cb"><div></div></div>
 					</div>

@@ -65,7 +65,9 @@ class Targets_Model {
         } else {
             $start = (((int)$index - 1) * $limit);
         }
-        $list = $this->db->selectPage($total, "SELECT *, 'Account' as periodic_account
+        $list = $this->db->selectPage($total, "SELECT id, category_id as category, title, amount,
+            DATE_FORMAT(date_begin,'%d.%m.%Y') as start, DATE_FORMAT(date_end,'%d.%m.%Y') as end, percent_done,
+            forecast_done, visible, photo,url, comment, target_account_id AS account, amount_done, close
             FROM target WHERE user_id = ? ORDER BY date_end ASC LIMIT ?d,?d;",
             Core::getInstance()->user->getId(), $start, $limit);
 		if (!is_array($list)) $list = array();

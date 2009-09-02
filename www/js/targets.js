@@ -1,56 +1,56 @@
 // {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
-
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
 
-    $('#amount').calculator({
+    $('#amount,#amountf').calculator({
         layout: [
             $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
             'MR_7_8_9_-' + $.calculator.UNDO,
             'MS_4_5_6_*' + $.calculator.PERCENT ,
             'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-            'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-        showOn: 'opbutton',
-        buttonImageOnly: true,
-        buttonImage: '/img/calculator.png'
+            'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS]
+        //showOn: 'opbutton',
     });
-   
+    $('#calculator-div').css('z-index', 1005);
     $("#start,#end").datepicker({dateFormat: 'dd.mm.yy'});
 
+    // Добавить фин.цель
     $("div.financobject_block .add span").click(function(){
         clearForm();
-        $('#popupaddobject form').attr('action','/targets/add/');
+        $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
     });
 
-    $("input[type=button]#button_save_cancel").click(function(){
-        if (confirm("Отказаться от сохранения цели?")) {
-            clearForm();
-            $('#tpopup').dialog('close');
-        }
-    });
-
+    
     // Присоединиться к популярной финансовой цели
-    $("[action=join]").click(function(event){
+    $(".join").live('click', function(){
         clearForm();
-        $('#category').val($(event.target).parents("td").prev().prev().text());
-        $('#title').val(title = $(event.target).parents("td").prev(":first").text());
-        $('form#target').attr('action','/targets/add/');
+        $('#title').val($(this).closest('li').find('a:first').html());
+        $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
+        return false;
     });
 
     // Редактируем одну из наших целей
-    $("[action=edit]").click(function(event){
+    $(".f_f_edit").click(function(){
+        f = $(this).closest('.object');
         clearForm();
-        var id = $(event.target).parents("tr[target_id]").attr("target_id");
-        $.getJSON('/targets/get/'+id,'',function(data) {
-            fillForm(data);
-            $('form#target').attr('action','/targets/edit/');
-            $('#tpopup').dialog('open');
-        });
+        $('#key').val(f.attr('tid'));
+        $('#type').val(f.attr('type'));
+        $('#title').val(f.attr('title'));
+        $('#amount').val(f.attr('amount'));
+        $('#start').val(f.attr('start'));
+        $('#end').val(f.attr('end'));
+        $('#photo').val(f.attr('photo'));
+        $('#url').val(f.attr('url'));
+        $('#comment').val(f.attr('comment'));
+        $('#account').val(f.attr('account'));
+        $('#visible').val(f.attr('visible'));
+        $('#tpopup').dialog('open');
+        return false;
     });
 
-    $(".f_f_del").live('click', function(event){
+    $(".f_f_del").live('click', function(){
         $(this).closest('.object').attr('tid')
         if (confirm("Вы уверены, что хотите удалить финансовую цель '"+$(this).closest('.object .descr a').text()+"'?")) {
             $.post('/targets/del/', {
@@ -59,29 +59,6 @@ $(document).ready(function(){
                 $(this).closest('.object').remove();
             }, 'json');
         }
-    });
-
-    $("#button_save_target").click(function(){
-        //TODO Проверяем валидность и сабмитим
-        $.post($('form#target').attr('action'), {
-            id      : $('#id').val(),
-            type    : $('#type').val(),
-            title   : $('#title').val(),
-            amount  : $('#amount').val(),
-            start   : $('#start').val(),
-            end     : $('#end').val(),
-            photo   : $('#photo').val(),
-            url     : $('#url').val(),
-            comment : $('#comment').val(),
-            account : $('#account').val(),
-            visible : $('#visible').val()
-        }, function(){
-            $('#tpopup').dialog('close');
-        }, 'json')
-    });
-
-    $("input#url").change(function(event){
-        $("#url_click").attr("href",$("input#url").val());
     });
 
     $('div.show_all span').click(function() {
@@ -106,27 +83,29 @@ $(document).ready(function(){
     });
 
     $("#tpopup").dialog({
+        bgiframe: true,
         autoOpen: false,
         width: 450,
         modal: true,
         buttons: {
             'Сохранить': function() {
+                //TODO Проверяем валидность и сабмитим
                 $.post(
-                    $('form#target').attr('action'),
+                    $('#tpopup form').attr('action'),
                     {
-                        id       : $('form #id').attr('value'),
-                        type     : $('form #type').attr('value'),
-                        category : $('form #category').attr('value'),
-                        title    : $('form #title').attr('value'),
-                        amount   : $('form #amount').attr('value'),
-                        start    : $('form #start').attr('value'),
-                        end      : $('form #end').attr('value'),
-                        photo    : $('form #photo').attr('value'),
-                        url      : $('form #url').attr('value'),
-                        comment  : $('form #comment').attr('value'),
-                        account  : $('form #account').attr('value'),
-                        visible  : $('form #visible:checked').length
-                    }, function(data, textStatus){
+                        id       : $('#key').attr('value'),
+                        type     : $('#type').attr('value'),
+                        category : $('#category').attr('value'),
+                        title    : $('#title').attr('value'),
+                        amount   : $('#amount').attr('value'),
+                        start    : $('#start').attr('value'),
+                        end      : $('#end').attr('value'),
+                        photo    : $('#photo').attr('value'),
+                        url      : $('#url').attr('value'),
+                        comment  : $('#comment').attr('value'),
+                        account  : $('#account').attr('value'),
+                        visible  : $('#visible:checked').length
+                    }, function(data){
                         for (var v in data) {
                             //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
                             alert('Ошибка в ' + v);
@@ -140,28 +119,9 @@ $(document).ready(function(){
                 );
             },
             'Отмена': function() {
-                $(this).dialog('close');
-            },
-            'Удалить': function () {
-                if (confirm('Удалить событие?')) {
-                    if (($('form #chain').val() > 0 || el[0].date < el[0].last_date || el[0].infinity == 1) &&
-                     confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
-                        $.post('/calendar/del/', {id:$('form #key').val(), chain: $('form #chain').val()}, function(){
-                            $(this).dialog('close');
-                            $('#calendar').fullCalendar('refresh');
-                        }, 'json');
-                    } else {
-                        $.post('/calendar/del/', {id:$('form #key').val(), chain: false}, function(){
-                            $('#tpopup').dialog('close');
-                            $('#calendar').fullCalendar('refresh');
-                        }, 'json')
-                    }
-                }
+                clearForm();
+                $('#tpopup').dialog('close');
             }
-        },
-        close: function() {
-            //alert('close');
-            //allFields.val('').removeClass('ui-state-error');
         }
     });
 
@@ -181,7 +141,7 @@ $(document).ready(function(){
      * @return void
      */
     function fillForm(data) {
-        $('#id').val(data.id);
+        $('#key').val(data.id);
         $('#category').val(data.category); //
         $('#title').val(data.title);
         $('#type').val(data.type); //
@@ -193,13 +153,6 @@ $(document).ready(function(){
         $('#url').val(data.url);
         $('#comment').val(data.comment);
         $('#account').val(data.account);
-    }
-
-    /**
-     * 
-     */
-    function loadUserTargets() {
-
     }
 // </editor-fold>
 });
