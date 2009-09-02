@@ -118,7 +118,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #presentation ul.inf { position: absolute; top: 168px; right: 70px; width: 217px; height: 41px; background: url('/img/i/bg04.gif') no-repeat center top; }
 #presentation ul.inf li { width: 88px; font: 11px/20px Helvetica, Arial, Tahoma; color: #414a3c; overflow: hidden; }
 #presentation ul.inf li b { display: block; font-size: 19px; }
-#presentation ul.inf li.u { float: left; padding-right: 13px; }
+#presentation ul.inf li.u { text-align:right; float: left; padding-right: 13px; }
 #presentation ul.inf li.t { float: right; padding-left: 13px; width: 100px; }
 #presentation ul.steps { position: absolute; bottom: 46px; left: 347px; width: 231px; height: 31px; overflow: hidden; z-index: 1; background: url('/img/i/steps.png') no-repeat 0 0; }
 #presentation ul.steps li { float: left; width: 46px; height: 31px; cursor: pointer; //cursor: hand; text-indent: -999px; overflow: hidden; }
@@ -157,7 +157,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #aboutproject { margin-bottom: 33px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
 #aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.jpg') no-repeat 0 0; }
-#aboutproject .inside h2 { margin: 0; height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
+#aboutproject .inside h2 { cursor: pointer; margin: 0; height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
 #aboutproject .inside h2 a { display: block; height: 23px; text-indent: -999px; overflow: hidden; }
 
 #aboutproject .inside .monitors { left: 13px; background-position: 0 15px;}
@@ -823,7 +823,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupreport .inside .f_field img { display: block; position: absolute; top: 0; left: 161px; }
 #popupreport .inside .f_field input#ffnum { width: 136px; //width: 130px; }
 #popupreport .inside .but { margin-right: 62px; display: block; width: 142px; height: 47px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/buttons.png') no-repeat 0 -160px; }
-#popupreport .inside .rating_list {line-height:24px;vertical-align: bottom;text-decoration:underline}
+#popupreport .inside .rating_list {cursor : pointer; line-height:24px;vertical-align: bottom;text-decoration:underline}
 #popupreport .inside table {width:90%;text-align: left; padding-right: 30px}
 #popupreport .inside td   {width: 60%;}
 #popupreport .inside #hr{width: 90%;height: 10px;background:transparent url(/img/i/point_x.gif) repeat-x scroll left top}
@@ -831,7 +831,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupreport .inside table.header {width: 97%;}
 #popupreport .inside td.header {width: 90%;}
 #popupreport .inside #rating td{border-bottom:1px solid #DFDEDE}
-#popupreport .inside .close{background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
+#popupreport .inside .close{cursor: pointer; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
 #popupreport .inside h3{ margin-bottom: 5px; font-size: 16px; color: #2bb4d6; font-weight: bold;}
 #popupreport .inside h3 div{position:absolute;left:36.5%;top:285px; width:30px;height:15px; background: url('/img/i/icons.gif') no-repeat -35px -350px; }
 #dialog_rating .act,#popupreport .inside #rating .act{background-color:#FFFFF0}
@@ -964,13 +964,15 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
 #footer .creator { position: absolute; top: 32px; right: 5px; width: 210px; padding-bottom: 19px; font-size: 10px; line-height: 11px; color: #7f7f7f; text-align: right; background: url('/img/i/nota.gif') no-repeat 100% 100%; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
-#footer .addmessage { top: 15px; left: 20px; }
+#footer .addmessage { cursor: pointer; top: 15px; left: 20px; }
 
 
 #aboutproject .inside div.w_dialog{width:250px; height:306px; z-index:100;  background: transparent url(/img/i/welcome_dialog_bg.png) no-repeat scroll 0 0;}
-#aboutproject .inside .close{top:5px; right:17px; position: absolute; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
+#aboutproject .inside .close{ cursor: pointer; top:5px; right:17px; position: absolute; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
 #aboutproject .inside .header{width:100%; }
 #aboutproject .inside .text{top:25px; position: absolute;}
+
+
 #p_index #header { height: 178px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
 #p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 33px; width: 184px; //zoom: 1; }
@@ -1202,6 +1204,12 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background: url('/img/i/jQuery/calendar/bg_ui-dialog_bottomleft.gif') no-repeat right bottom;
     border: none;
 }
+
+
+.ui-widget-overlay{background-color:#666666; opacity:0.5;}
+.ui-widget-header{background-color:#EEEEEE}
+
+
 .ui-dialog .ui-dialog-titlebar {
     -moz-border-radius: 0;
     background: none;
