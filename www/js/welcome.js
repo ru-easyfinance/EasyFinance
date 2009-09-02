@@ -28,13 +28,13 @@ update_text(id);
 	c_settings = {
 	monitors : {top:20,
 			left:100,
-			text:'Управляй'},
+			text:''},
         control : {top:20,
 			left:350,
-			text:'Вкладка Контролируй'},
+			text:''},
         economy : {top:20,
 			left:650,
-			text:'Эк<b>о</b>'}
+			text:''}
 	
 	}
         var w_dialog = 0;
