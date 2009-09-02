@@ -115,11 +115,11 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #presentation a.reg, #presentation a.demo { display: block; position: absolute; width: 217px; height: 36px; text-indent: -999px; overflow: hidden; }
 #presentation a.reg { top: 59px; right: 25px; }
 #presentation a.demo { top: 112px; right: 65px; }
-#presentation ul.inf { position: absolute; top: 168px; right: 70px; width: 205px; height: 41px; background: url('/img/i/bg04.gif') no-repeat center top; }
+#presentation ul.inf { position: absolute; top: 168px; right: 70px; width: 217px; height: 41px; background: url('/img/i/bg04.gif') no-repeat center top; }
 #presentation ul.inf li { width: 88px; font: 11px/20px Helvetica, Arial, Tahoma; color: #414a3c; overflow: hidden; }
 #presentation ul.inf li b { display: block; font-size: 19px; }
 #presentation ul.inf li.u { float: left; padding-right: 13px; }
-#presentation ul.inf li.t { float: right; padding-left: 13px;  }
+#presentation ul.inf li.t { float: right; padding-left: 13px; width: 100px; }
 #presentation ul.steps { position: absolute; bottom: 46px; left: 347px; width: 231px; height: 31px; overflow: hidden; z-index: 1; background: url('/img/i/steps.png') no-repeat 0 0; }
 #presentation ul.steps li { float: left; width: 46px; height: 31px; cursor: pointer; //cursor: hand; text-indent: -999px; overflow: hidden; }
 #presentation ul.steps li.act { cursor: default; background: url('/img/i/steps.png') no-repeat 0 0; }
@@ -1244,3 +1244,10 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 
 /*------------------------------------------- crack jQuery End --------------------------------------*/
+.hided{display:none;}
+.l_n_cont{width:100%;}
+.line div.cont ul { display: none; position: absolute; top: -4px; right: 235px; width: 59px; height: 31px; padding-left: 16px; background: url('../i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
+.line div.cont ul li:after{ display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.line div.cont ul li{ float: left; margin: 9px 8px 0 0; height: 12px; }
+.line div.cont ul li.add{ margin-right: 0; }
+.line div.cont ul li a{ display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden; }
