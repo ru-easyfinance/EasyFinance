@@ -157,16 +157,12 @@ $(window).load(function() {
             }
         }
     }
-    list[new Date(date[2], date[0] - 1, date[1])] = true;
-  console.log(list);
+
     // Init
     $('#infinity').attr('disabled','disabled');
     $('#tr_date_start,#tr_count').hide();
     $('#date,#date_start,#date_end,#pdate').datepicker();
-    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker({beforeShowDay: function(date) {
-    console.log([date, list[date]]);
-    return[list[date], 'event'];
-}});
+    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker();
 
     //$('textarea#comment').jGrow();
     $("#tabs,#views").tabs();
