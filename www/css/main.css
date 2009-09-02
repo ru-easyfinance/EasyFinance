@@ -1253,7 +1253,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 /*------------------------------------------- crack jQuery End --------------------------------------*/
 .hided{display:none;}
 .l_n_cont{width:100%;}
-.line div.cont ul { display: none; position: absolute; top: -4px; right: 235px; width: 59px; height: 31px; padding-left: 16px; background: url('../i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
+.line div.cont ul { display: none; position: absolute; top: -4px; right: -60px; width: 59px; height: 31px; padding-left: 16px;}
 .line div.cont ul li:after{ display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .line div.cont ul li{ float: left; margin: 9px 8px 0 0; height: 12px; }
 .line div.cont ul li.add{ margin-right: 0; }

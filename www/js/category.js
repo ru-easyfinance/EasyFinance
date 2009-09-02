@@ -27,7 +27,7 @@ $(document).ready(function() {
     });
     $('li.edit').live('click',function(){
         clearForm();
-        fillForm($(this).closest('tr').attr('id'));
+        fillForm($(this).closest('tr,.line').attr('id'));
         $('#add_form').show();
         $(document).scrollTop(300);
         $('form').attr('action','/category/edit/');
@@ -35,12 +35,12 @@ $(document).ready(function() {
     });
     $('li.del').live('click',function(){
         if (confirm('Удалить категорию?')) {
-            delCategory($(this).closest('tr').attr('id'));
+            delCategory($(this).closest('tr,.line').attr('id'));
         }
     });
     $('li.add').live('click',function(){
         clearForm();
-        fillForm($(this).closest('tr').attr('id'));
+        fillForm($(this).closest('tr,.line').attr('id'));
         $('#id').val('');
         $('#add_form').show();
         $(document).scrollTop(300);
@@ -99,8 +99,15 @@ $(document).ready(function() {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
                     m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
-                    p[id] = $('<div class="line open" id="cat_'+id+'"><a class="name">'
-			    +data.user[id]['name']+'</a></div>').appendTo('div.categories');
+                    p[id] = $('<div class="line open" id="'+id+'"><div class="l_n_cont"><a href="#" class="name">'
+			    +data.user[id]['name']+'</a>'
+                                        +'<div class="cont">'
+                                            +'<ul class="ul_head">'
+                                                +'<li class="edit"><a class="cat" href="#" title="Редактировать">Редактировать</a></li>'
+                                                +'<li class="del"><a class="cat" href="#" title="Удалить">Удалить</a></li>'
+                                                +'<li class="add"><a class="cat" href="#" title="Добавить">Добавить</a></li>'
+                                            +'</ul></div>'
+                                        +'</div></div>').appendTo('div.categories');
                 } else {
 		    pr = data.user[id]['parent'];
 
@@ -112,10 +119,10 @@ $(document).ready(function() {
                         ct ='<div class="t2" title="Универсальная">Универсальная</div>';
                     }
 
-                    if ($('#cat_'+pr+' table').length == 0) {
-                        $('<table/>').appendTo($('#cat_'+pr));
+                    if ($('#'+pr+' table').length == 0) {
+                        $('<table/>').appendTo($('#'+pr));
                     }
-                    $('#cat_'+pr+' table').append(
+                    $('#'+pr+' table').append(
                         '<tr id="'+id+'">'
                         +'<td class="w1">'
                             +'<a>'+data.user[id]['name']+'</a>'
@@ -140,6 +147,10 @@ $(document).ready(function() {
             }
             //$('div.categories').append(c);
             $('#subcat').append(m);
+			$(".l_n_cont").live('mouseover',function(){
+				$(this).closest('.line').find(".ul_head").show();
+			});
+			$(".l_n_cont").live('mouseout',function(){$(this).closest('.line').find("ul").hide()});
         }, 'json');
     }
 
@@ -172,4 +183,16 @@ $(document).ready(function() {
             loadCategory();
         }, 'json');
     }
+	
+
+	
+	    /* Show/ Hide Mini-Menu For List Container */
+    //$(".l_n_cont").hover(
+    //        function(){$(this).next().find("ul").show();},
+    //        function(){$(this).next().find("ul").hide();}
+    //        );
+    //$(".cont ul").hover(
+    //    function(){$(this).show();},
+    //    function(){$(this).hide();}
+    //    );
 });
