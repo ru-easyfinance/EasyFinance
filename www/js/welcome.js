@@ -44,7 +44,7 @@ update_text(id);
                 $('#dialog').hide();
                 w_dialog = 0;
             }
-            return false;
+           // return false;
         })
         
 	$('.inside h2').click(function(){
