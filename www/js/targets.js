@@ -17,16 +17,16 @@ $(document).ready(function(){
    
     $("#start,#end").datepicker({dateFormat: 'dd.mm.yy'});
 
-    $("#button_add_target").click(function(){
+    $("div.financobject_block .add span").click(function(){
         clearForm();
-        $('form#target').attr('action','/targets/add/');
-        $('#dialog_event').dialog('open');
+        $('#popupaddobject form').attr('action','/targets/add/');
+        $('#tpopup').dialog('open');
     });
 
     $("input[type=button]#button_save_cancel").click(function(){
         if (confirm("Отказаться от сохранения цели?")) {
             clearForm();
-            $('#dialog_event').dialog('close');
+            $('#tpopup').dialog('close');
         }
     });
 
@@ -36,7 +36,7 @@ $(document).ready(function(){
         $('#category').val($(event.target).parents("td").prev().prev().text());
         $('#title').val(title = $(event.target).parents("td").prev(":first").text());
         $('form#target').attr('action','/targets/add/');
-        $('#dialog_event').dialog('open');
+        $('#tpopup').dialog('open');
     });
 
     // Редактируем одну из наших целей
@@ -46,17 +46,17 @@ $(document).ready(function(){
         $.getJSON('/targets/get/'+id,'',function(data) {
             fillForm(data);
             $('form#target').attr('action','/targets/edit/');
-            $('#dialog_event').dialog('open');
+            $('#tpopup').dialog('open');
         });
     });
 
-    $("[action=del]").click(function(event){
-        var title = $(event.target).parents("tr[target_id]").children().eq(1).text(); //@TODO Упростить
-        if (confirm("Вы уверены, что хотите удалить финансовую цель '"+title+"'?")) {
+    $(".f_f_del").live('click', function(event){
+        $(this).closest('.object').attr('tid')
+        if (confirm("Вы уверены, что хотите удалить финансовую цель '"+$(this).closest('.object .descr a').text()+"'?")) {
             $.post('/targets/del/', {
-                id:$(event.target).parents("tr[target_id]").attr("target_id")
+                id: $(this).closest('.object').attr('tid')
             }, function(){
-                $(event.target).parents("tr[target_id]").remove();
+                $(this).closest('.object').remove();
             }, 'json');
         }
     });
@@ -76,7 +76,7 @@ $(document).ready(function(){
             account : $('#account').val(),
             visible : $('#visible').val()
         }, function(){
-            $('#dialog_event').dialog('close');
+            $('#tpopup').dialog('close');
         }, 'json')
     });
 
@@ -84,8 +84,28 @@ $(document).ready(function(){
         $("#url_click").attr("href",$("input#url").val());
     });
 
-    $("#dialog_event").dialog({
-        bgiframe: true,
+    $('div.show_all span').click(function() {
+        $.get('/targets/user_list/', '', function(data){
+            s = '';
+            for(v in data) {
+                s += '<div class="object"><div class="ban"></div>'
+                    +'<div class="descr">';
+                    s += (data[v]['photo']!='')? '<img src="/img/images/pic6.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
+                        s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
+						+'</div><div class="indicator_block"><div class="money">'
+						+data[v]['amount']+' руб.<br /><span>'
+                        +data[v]['amount_done']+' руб.</span></div><div class="indicator">'
+                        +'<div style="width:'+data[v]['percent_done']+'%;"><span>'+data[v]['percent_done']
+                        +'%</span></div></div></div><div class="date">Целевая дата: '
+                        +data[v]['date_end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
+                        +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
+            }
+            $('div.object,div.show_all').remove();
+            $('div.financobject_block').append(s);
+        }, 'json');
+    });
+
+    $("#tpopup").dialog({
         autoOpen: false,
         width: 450,
         modal: true,
@@ -113,7 +133,7 @@ $(document).ready(function(){
                         }
                         // В случае успешного добавления, закрываем диалог и обновляем календарь
                         if (data.length == 0) {
-                            $('#dialog_event').dialog('close');
+                            $('#tpopup').dialog('close');
                         }
                     },
                     'json'
@@ -127,12 +147,12 @@ $(document).ready(function(){
                     if (($('form #chain').val() > 0 || el[0].date < el[0].last_date || el[0].infinity == 1) &&
                      confirm("Это событие не единично.\nУдалить цепочку последующих событий?")) {
                         $.post('/calendar/del/', {id:$('form #key').val(), chain: $('form #chain').val()}, function(){
-                            $('#dialog_event').dialog('close');
+                            $(this).dialog('close');
                             $('#calendar').fullCalendar('refresh');
                         }, 'json');
                     } else {
                         $.post('/calendar/del/', {id:$('form #key').val(), chain: false}, function(){
-                            $('#dialog_event').dialog('close');
+                            $('#tpopup').dialog('close');
                             $('#calendar').fullCalendar('refresh');
                         }, 'json')
                     }
@@ -175,5 +195,11 @@ $(document).ready(function(){
         $('#account').val(data.account);
     }
 
+    /**
+     * 
+     */
+    function loadUserTargets() {
+
+    }
 // </editor-fold>
 });

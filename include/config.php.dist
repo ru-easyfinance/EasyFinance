@@ -14,7 +14,7 @@ define('SYS_DIR_INC',     SYS_DIR_ROOT."/include/");
 define('SYS_DIR_MOD',     SYS_DIR_ROOT."/modules/");
 define('SYS_DIR_HTML',    SYS_DIR_ROOT."/templates/");
 define('SYS_DIR_CACHE',   SYS_DIR_ROOT."/cache/");
-define('UPLOAD_DIR',      SYS_DIR_ROOT."/home-money.ru/upload/photo_experts/");
+define('UPLOAD_DIR',      SYS_DIR_ROOT."/upload/");
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
@@ -23,13 +23,12 @@ define('URL_ROOT',        "http://hm/");
 define('IS_DEMO',         false);
 define('DEBUG',           true);
 //define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
-define('SYS_MAX_PERPAGE', 3); //WTF???
 define('DEFAULT_MODULE', 'welcome');
 define('GUEST_MODULES', 'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
 
 //COOKIE
 define('COOKIE_NAME',  'a');
-define('COOKIE_DOMEN', '.home-money.ru');
+define('COOKIE_DOMEN', '.easyfinance.ru');
 define('COOKIE_PATH',  '/');
 define('COOKIE_HTTPS', true);
 define('COOKIE_EXPIRE', 1209600); // две недели
@@ -39,6 +38,6 @@ define('CRYPT_KEY','mpnGA3cNNrgwGrU7er4ywLmd'); // 24 битный ключ
 
 // DB settings
 define('SYS_DB_HOST',   'localhost');
-define('SYS_DB_USER',   'homemone');
-define('SYS_DB_PASS',   'lw0Hraec');
-define('SYS_DB_BASE',   'homemoney');
+define('SYS_DB_USER',   '');
+define('SYS_DB_PASS',   '');
+define('SYS_DB_BASE',   '');

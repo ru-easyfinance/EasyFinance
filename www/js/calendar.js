@@ -4,21 +4,11 @@ $(window).load(function() {
     var y = d.getFullYear();
     var m = d.getMonth();
     var event_list;
-    
+
     $.fullCalendar.monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
     $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
     $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-
-    	/**
-	 * autor: CTAPbIu_MABP
-	 * email: ctapbiumabp@gmail.com
-	 * site: http://mabp.kiev.ua/2009/08/11/customized-datapicker/
-	 * license: MIT & GPL
-	 * last update: 11.08.2009
-	 * version: 1.0
-	 */
-
 
     /**
      * Очищаем форму
@@ -295,6 +285,9 @@ $(window).load(function() {
 
                         }
                     }
+                    $('#datepicker .ui-state-default').each(function(){
+                        $(this).css('color','#e4e4e4')
+                    });
                     calback(result);
                 }
             )
