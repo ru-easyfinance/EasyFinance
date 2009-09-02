@@ -21,6 +21,8 @@ a img, fieldset { border:0 none; }
 
 td.time{padding-right: 5px;  }
 
+.PEND,.CLOSED {color: #FF0000; }
+
 
 .fl_l { float: left; }
 .fl_r { float: right; }

@@ -1,6 +1,4 @@
 // {* $Id$ *}
-
-
 $(window).load(function() {
     var d = new Date();
     var y = d.getFullYear();
@@ -159,12 +157,17 @@ $(window).load(function() {
             }
         }
     }
-    
+    list[new Date(date[2], date[0] - 1, date[1])] = true;
+  console.log(list);
     // Init
     $('#infinity').attr('disabled','disabled');
     $('#tr_date_start,#tr_count').hide();
     $('#date,#date_start,#date_end,#pdate').datepicker();
-    //$('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
+    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker({beforeShowDay: function(date) {
+    console.log([date, list[date]]);
+    return[list[date], 'event'];
+}});
+
     //$('textarea#comment').jGrow();
     $("#tabs,#views").tabs();
     $('#time').timePicker().mask('99:99');
@@ -261,7 +264,7 @@ $(window).load(function() {
                     // Заполняем список событий
                     $('#per_tabl tbody, #ev_tabl tbody').empty();
                     n = new Date();
-                    $('#datepicker').datepicker({ numberOfMonths: 3 }).datepicker('disable');
+                    
                     for(v in result){
                         
                         l = result[v];
@@ -296,11 +299,6 @@ $(window).load(function() {
 
                         }
                     }
-
-                    $('#datepicker .ui-state-default').each(function(){
-                        $(this).css('color','#e4e4e4')
-                    });
-                    alert($('#datepicker .ui-state-default').length);
                     calback(result);
                 }
             )
