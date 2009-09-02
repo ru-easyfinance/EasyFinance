@@ -114,4 +114,8 @@ $(document).ready(function(){
         function(){$(this).show();},
         function(){$(this).hide();}
         );
+
+    $(".partner_img").next().css("width", 325 + "px");
+    $(".partner_img").next().children(".date").css("paddingLeft", 15 + "px");
+   //$(".partner_img").next().children().hasClass("date").css("paddingLeft", 0 + "px");
 });

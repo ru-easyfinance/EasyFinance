@@ -698,13 +698,13 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .financobject_block .object .ban {  position: absolute; top: 1px; right: 0; width: 195px; height: 115px; overflow: hidden; }
 .financobject_block  ul li { display: inline; margin-right: 12px; }
 
-.financobject_block .indicator_block { position: relative; margin: 0 0 1px -3px; width: 322px; }
-.financobject_block .indicator { position: relative; width: 240px; height: 24px; padding-top: 3px; background: url('../i/bg11.png') no-repeat 0 0; }
+.financobject_block .indicator_block { position: relative; margin: 0 0 1px -3px; width:350px; margin:0 auto;}
+.financobject_block .indicator { position: relative; width: 240px; height: 24px; padding-top: 3px; left:13px; background: url('../i/bg11.png') no-repeat 0 0; }
 .financobject_block .indicator div { position: relative; margin: 0 3px; height: 22px; border-left: 1px solid #ced791; border-right: 1px solid #ced791; background: url('../i/bg12.png') repeat-x 0 0; }
 .financobject_block .indicator div span { display: block; padding: 4px 5px 0 0; font-size: 11px; color: #3d3d3d; text-align: right; }
-.financobject_block .indicator_block .money { position: absolute; top: -3px; right: -10px; width: 84px; font-size: 11px; z-index: 1; text-align: right; }
+.financobject_block .indicator_block .money { position: absolute; top: -3px; right: 15px; width: 84px; font-size: 11px; z-index: 1; text-align: right; }
 .financobject_block .indicator_block .money span { padding: 0 3px 0 10px; font-size: 10px; line-height: 14px; background: #e0f066  url('../i/bg13.png') no-repeat 0 0; }
-.financobject_block .date { margin-bottom: 6px; font-size: 11px;  color: #929292; }
+.financobject_block .date { margin-bottom: 6px; font-size: 11px;  color: #929292; padding-left: 100px;}
 .financobject_block .date span { color: #1289c0; }
 
 .financobject_block .advice { display: block; position: absolute; top: 11px; right: 0; width: 50px; margin: 0; padding-top: 30px; font-size: 10px; color: #9d9d9d; line-height: 9px; font-weight: bold; text-align: center; text-decoration: none; z-index: 2; background: url('../i/icons.gif') no-repeat 0 -440px; }
@@ -990,4 +990,5 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 .ul_cat{background:transparent url(../i/icons_control3_1.gif) no-repeat scroll 0 0;}
 .hided{display:none;}
 .l_n_cont{width:100%;}
-.partner_img{}
+.partner_img{display:block; float:right;}
+.data_wrapper{}
