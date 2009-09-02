@@ -21,6 +21,7 @@ a img, fieldset { border:0 none; }
 
 td.time{padding-right: 5px;  }
 
+
 .fl_l { float: left; }
 .fl_r { float: right; }
 .clr {clear:both;}
@@ -964,7 +965,10 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .addmessage { top: 15px; left: 20px; }
 
 
-
+#aboutproject .inside div.w_dialog{width:250px; height:306px; z-index:100;  background: transparent url(/img/i/welcome_dialog_bg.png) no-repeat scroll 0 0;}
+#aboutproject .inside .close{top:5px; right:17px; position: absolute; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
+#aboutproject .inside .header{width:100%; }
+#aboutproject .inside .text{top:25px; position: absolute;}
 #p_index #header { height: 178px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
 #p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 33px; width: 184px; //zoom: 1; }

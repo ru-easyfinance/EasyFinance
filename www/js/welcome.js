@@ -24,6 +24,50 @@ update_text(id);
         update_text(id);    
     });
 
+////////////////////////////////////////////////////////////контролируй управляй...
+	c_settings = {
+	monitors : {top:20,
+			left:100,
+			text:'Управляй'},
+        control : {top:20,
+			left:350,
+			text:'Вкладка Контролируй'},
+        economy : {top:20,
+			left:650,
+			text:'Эк<b>о</b>'}
+	
+	}
+        var w_dialog = 0;
+        $('body').click(function(){
+            if (w_dialog)
+            {
+                $('#dialog').hide();
+                w_dialog = 0;
+            }
+            return false;
+        })
+        
+	$('.inside h2').click(function(){
+		c = $(this).closest('div').attr('class');
+		switch (c)
+		{
+			case 'monitors':
+			$('#dialog').show().css('left',c_settings[c]['left']).css('top',c_settings[c]['top']).find('.text').html(c_settings[c]['text']);
+				break;
+			case 'control':
+                            $('#dialog').show().css('left',c_settings[c]['left']).css('top',c_settings[c]['top']).find('.text').html(c_settings[c]['text']);
+				break;
+			case 'economy':
+                            $('#dialog').show().css('left',c_settings[c]['left']).css('top',c_settings[c]['top']).find('.text').html(c_settings[c]['text']);
+				break;
+		}
+                w_dialog = 1;
+                return false;
+	});
+        $('#dialog').hide();
+        $('.close').click(function(){
+            $('#dialog').hide();
+        });
 
 });
 

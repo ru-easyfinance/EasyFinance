@@ -32,7 +32,7 @@ class Welcome_Model
      */
     function getAtricles ()
     {
-        return Core::getInstance()->db->query("SELECT title, id FROM articles ORDER BY `date` DESC LIMIT 0,5");
+        //return Core::getInstance()->db->query("SELECT title, id FROM articles ORDER BY `date` DESC LIMIT 0,5");
     }
 
     /**
