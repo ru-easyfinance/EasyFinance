@@ -23,7 +23,7 @@ td.time{padding-right: 5px;  }
 
 .PEND,.CLOSED {color: #FF0000; }
 
-
+.mid span{position: relative; padding-right : 30px; left : 15px; }
 .fl_l { float: left; }
 .fl_r { float: right; }
 .clr {clear:both;}
