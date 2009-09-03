@@ -811,7 +811,6 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 .files .line .last { margin-right: 0; }
 
 
-
 #popupreport { display: none; position: absolute; bottom: 0; left: 12px; width: 450px; height: 450px; z-index: 1000; }
 #popupreport .bg { position: absolute; top: 0; left: 0; width: 450px; height: 450px; z-index: 0; background: url('/img/i/ramka4.png') no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka4.png", sizingMethod="crop"); }
 #popupreport .inside { position: relative; padding: 18px 0 0 35px; z-index: 2; height:450px}
