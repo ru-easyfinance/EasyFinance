@@ -20,27 +20,23 @@
 								<div class="addoperation" style="display: block;">
 									<div class="line">
 										<div class="f_field" id="account_fields">
-											Счет
+											<div><label for="account">Счет</label>
 											<select id="account">
                                                 {foreach from=$accounts item=acc_data}
                                                     <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
                                                 {/foreach}
-											</select>
-										</div>
-										<div class="f_field" id="type_fields">
-											Тип операции
+											</select></div>
+
+											<div><label for="type">Тип операции</label>
 											<select id="type">
                                                 <option value="0">Расход</option>
                                                 <option value="1">Доход</option>
                                                 <option value="2">Перевод со счета</option>
                                                 {*<!-- <option value="3">Покупка валюты</option> -->*}
                                                 <option value="4">Перевод на фин. цель</option>
-											</select>
+											</select></div>
 										</div>
-										<div class="f_field amount" id="amount_fields">
-											Сумма
-                                            <input type="text" id="amount">
-										</div>
+
                                     </div>
                                     <div class="line">
 										<div class="f_field category" id="category_fields">
@@ -112,11 +108,17 @@
 											<label for="date">Дата</label>
                                             <input type="text" value="{$date}" id="date" autocomplete="off" class="inp">
 										</div>
+										<div class="f_field amount" id="amount_fields">
+											<label for="amount">Сумма</label>
+                                            <input type="text" id="amount">
+										</div>
+										<!--<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>-->
+									</div>
+									<div class="line">
 										<div class="f_field tags">
 											<label for="tags">Теги</label>
 											<input type="text" value="" id="tags" class="inp" autocomplete="off" />
 										</div>
-										<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>
 									</div>
 									<div class="line">
 										<label for="comment">Комментарии</label>

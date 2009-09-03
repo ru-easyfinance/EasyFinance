@@ -13,19 +13,25 @@
 						<div class="inside operation_list">
 							<form action="">
 								<div class="sorting">
-									<div class="f_field">
-										Операции с
-                                        <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
+									<div class="line">
+										<div class="f_field">
+											Операции с
+											<input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
+										</div>
+										<div class="f_field">
+											по
+											<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
+										</div>
 									</div>
-									<div class="f_field">
-										по
-										<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
+									<div class="line">
+										<select id="cat_filtr">
+											<option label="Все" value=""> --- Все ---</option>
+											{$cat_filtr}
+										</select>
 									</div>
-                                    <select id="cat_filtr">
-                                        <option label="Все" value=""> --- Все ---</option>
-                                        {$cat_filtr}
-                                    </select>
-									<input type="button" value="Показать" id="btn_ReloadData"/>
+									<div class="line">
+										<input type="button" value="Показать" id="btn_ReloadData"/>
+									</div>
 								</div>
 							</form>
 							<ul class="period">

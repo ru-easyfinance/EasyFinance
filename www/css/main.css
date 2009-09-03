@@ -23,7 +23,7 @@ td.time{padding-right: 5px;  }
 
 .PEND,.CLOSED {color: #FF0000; }
 
-.mid span{position: relative; padding-right : 30px; left : 15px; }
+.mid span.mid_text{position: relative; padding-right : 30px; left : 15px; }
 .fl_l { float: left; }
 .fl_r { float: right; }
 .clr {clear:both;}
@@ -435,7 +435,7 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 .block2 .ramka3 { margin-bottom: 20px; }
 .block2 .ramka3 .inside { position: relative; padding: 9px 13px 8px 13px; }
 
-ul.buttons_block { position: relative; //zoom: 1; }
+ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.buttons_block li { float: left; margin-right: 13px; height: 40px; background: url('/img/i/buttons.png') no-repeat 0 0; }
 ul.buttons_block li a { display: block; height: 25px; text-indent: -999px; overflow: hidden; }
@@ -447,9 +447,9 @@ ul.buttons_block li#addtocalendar_but a { width: 185px; }
 ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
 
-
-div.addoperation { position: relative; display: none; padding-top: 22px; }
-div.addoperation .line { text-align: center; position: relative;  color: #4c4c4c; //zoom: 1; }
+div.addacc{ position: relative; padding-top: 10px;left: 70px }
+div.addoperation { position: relative; display: none; padding-top: 22px;left: 70px }
+div.addoperation .line { position: relative;  color: #4c4c4c; //zoom: 1; }
 div.addoperation .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
 div.addoperation .line .f_field select { display: block; margin-top: 2px; color: #20201E; }
@@ -459,7 +459,7 @@ div.addoperation .line .f_field select#type {width: 150px;  overflow: hidden; }
 div.addoperation .line .f_field select#type option {width: 123px;}
 
 div.addoperation .line .f_field select#category {width: 350px;  overflow: hidden; }
-div.addoperation .line .f_field select#category option {width: 350px;}
+div.addoperation .line .f_field select#category option {width: 323px;}
 
 div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float: left; } 
 
@@ -470,7 +470,7 @@ div.addoperation .line  .amount {float: right; margin-right: 170px; }
 div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #20201E; }
 div.addoperation .line label { display: block; margin-bottom: 2px;}
 div.addoperation .line textarea { width: 350px; //width: 489px; height: 96px; //height: 90px; }
-div.addoperation .but input { margin-right: 21px; }
+div.addoperation .but input { margin-right: 21px; margin-top:14px;}
 
 div.addoperation .line .category { margin-right: 0; }
 div.addoperation .line .amount a, 
@@ -494,10 +494,12 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 */
 
 .operation_list { padding-top: 21px !important; }
-.operation_list .sorting { position: relative; margin-bottom: 7px; //zoom: 1; }
+.operation_list .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px;//zoom: 1; }
 .operation_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.operation_list .sorting div{margin-bottom: 7px;}
 .operation_list .sorting .f_field { position: relative; float: left; margin-right: 51px; }
-.operation_list .sorting .f_field select { margin-left: 11px; color: #20201E; }
+.operation_list .sorting .f_field input {width: 90px}
+.operation_list .sorting  select { color: #20201E; width : 350px; }
 .operation_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
 
 .operation_list ul.period { margin: 0 0 21px 71px; //zoom: 1; }
@@ -507,11 +509,11 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .operation_list ul.period li.act { padding: 0 10px 0 0; font-weight: bold; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 100% 0; }
 .operation_list ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 0 0; }
 
-.operation_list table { position: relative; width:100%; border: 2px solid #dfdede; }
+.operation_list table { position: relative; width:100%; border: 2px solid #dfdede; padding : 5px;}
 .operation_list table th, .operation_list table td, table.tab1 th { font-size: 11px; }
 .operation_list table th { padding: 8px 0 5px 0; color: #222222; text-align: left; border-bottom: 1px solid #e5e5e5; }
 .operation_list table th span.sort, .operation_list table th span.select { display: block; float: left; }
-.operation_list table th span.sort { position: relative; margin-right: 6px; cursor: pointer; //cursor: hand; z-index: 0; }
+.operation_list table th span.sort { position: relative; margin-right: 6px;   margin-left: 10px; cursor: pointer; //cursor: hand; z-index: 0; }
 .operation_list table th span.sort span { display: block; position: absolute; top: 4px; left: -9px; width: 5px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat -40px 0; }
 .operation_list table th span.sort span.up { background-position: -50px 0; }
 .operation_list table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat -20px 0; }
@@ -521,8 +523,16 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .operation_list table th ul.select_list {  display: none; position: absolute; top: 16px; left: -5px; width: 100px; padding-bottom: 5px; z-index: 10; background: #ffffff; border: 1px solid #e5e5e5; }
 .operation_list table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }
 
+.operation_list table td.check{max-width: 20px}
+.operation_list table td.summ{max-width: 60px}
+.operation_list table td.big{max-width: 100px}
+.operation_list table td.light{max-width: 60px}
+.operation_list table td{ border-left: 1px solid #dfdede;padding-right:2px}
+
+
 .operation_list table td a { color: #666666; }
-.operation_list table td, table.tab1 td { padding: 5px 0 5px 0; background: url('/img/i/point_x.gif') repeat-x top left; }
+.operation_list table td, table.tab1 td { padding: 5px 0px 5px 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
+.operation_list table td.no_over{overflow: visible}
 .operation_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
