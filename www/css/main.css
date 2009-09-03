@@ -157,6 +157,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #aboutproject { margin-bottom: 33px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
 #aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.jpg') no-repeat 0 0; }
+#aboutproject .inside div#dialog{padding-left: 27px; }
 #aboutproject .inside h2 { cursor: pointer; margin: 0; height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
 #aboutproject .inside h2 a { display: block; height: 23px; text-indent: -999px; overflow: hidden; }
 
@@ -448,16 +449,29 @@ ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; 
 
 
 div.addoperation { position: relative; display: none; padding-top: 22px; }
-div.addoperation .line { position: relative; margin-bottom: 14px; color: #4c4c4c; //zoom: 1; }
+div.addoperation .line { text-align: center; position: relative;  color: #4c4c4c; //zoom: 1; }
 div.addoperation .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; }
+div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
 div.addoperation .line .f_field select { display: block; margin-top: 2px; color: #20201E; }
+div.addoperation .line .f_field select#account {width: 150px;  overflow: hidden; }
+div.addoperation .line .f_field select#account option {width: 123px;}
+div.addoperation .line .f_field select#type {width: 150px;  overflow: hidden; }
+div.addoperation .line .f_field select#type option {width: 123px;}
+
+div.addoperation .line .f_field select#category {width: 350px;  overflow: hidden; }
+div.addoperation .line .f_field select#category option {width: 350px;}
+
+div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float: left; } 
+
+div.addoperation .line .date{float: left; }
+div.addoperation .line .f_field .date input.inp { width: 106px; //width: 100px; }
+div.addoperation .line  .amount {float: right; margin-right: 170px; }
+
 div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #20201E; }
-div.addoperation .line label { display: block; margin-bottom: 2px; }
-div.addoperation .line textarea { width: 495px; //width: 489px; height: 96px; //height: 90px; }
+div.addoperation .line label { display: block; margin-bottom: 2px;}
+div.addoperation .line textarea { width: 350px; //width: 489px; height: 96px; //height: 90px; }
 div.addoperation .but input { margin-right: 21px; }
 
-div.addoperation .line .amount { margin-right: 43px; }
 div.addoperation .line .category { margin-right: 0; }
 div.addoperation .line .amount a, 
 div.addoperation .line .category a, 
@@ -472,11 +486,12 @@ div.addoperation .line .category a,
 div.addoperation .line .amount a { width: 17px; }
 div.addoperation .line .category a { width: 17px; top: 22px; background-position: 0 -370px; }
 
+/*
 div.addoperation .line .date input.inp { width: 61px; //width: 55px; }
 div.addoperation .line .tags input.inp { width: 132px; //width: 126px; }
 div.addoperation .line label.online { position: absolute; top: 21px; left: 300px; margin: 0; }
 div.addoperation .line label.online input { display: block; position: absolute; top: -1px; //top: -2px; left: -23px; }
-
+*/
 
 .operation_list { padding-top: 21px !important; }
 .operation_list .sorting { position: relative; margin-bottom: 7px; //zoom: 1; }
@@ -967,10 +982,10 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .addmessage { cursor: pointer; top: 15px; left: 20px; }
 
 
-#aboutproject .inside div.w_dialog{width:250px; height:306px; z-index:100;  background: transparent url(/img/i/welcome_dialog_bg.png) no-repeat scroll 0 0;}
-#aboutproject .inside .close{ cursor: pointer; top:5px; right:17px; position: absolute; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
-#aboutproject .inside .header{width:100%; }
-#aboutproject .inside .text{top:25px; position: absolute;}
+#aboutproject .inside div.w_dialog{width:400px; height:306px; z-index:100;  background: transparent url(/img/i/welcome_dialog_bg.png) no-repeat scroll 0 0;}
+#aboutproject .inside .close{ cursor: pointer; top:5px; right:107px; position: absolute; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
+#aboutproject .inside .header{width:100%;}
+#aboutproject .inside .text{top:40px; position: absolute; margin-right: 110px; font-size: 14px; line-height:17px;}
 
 
 #p_index #header { height: 178px; }
