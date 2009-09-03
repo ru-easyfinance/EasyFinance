@@ -44,7 +44,7 @@ class Tags_Model {
 
     /**
      * Возвращает массив тегов с количеством их повторов (если указано)
-     * @param bool $cloud Возвращать для составления облака?
+     * @param bool $cloud Возвращать статистику для составления облака?
      * @return JSON
      */
     function getTags($cloud = true) {
