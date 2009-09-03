@@ -96,10 +96,10 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #auth input.but{ display: block; position: absolute; top: 16px; right: 19px; width: 23px; height: 23px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat 0 -90px; }
 #header #auth .inside a.forget { display: block; margin: -8px 0 0 79px; font-size: 11px; }
 
-#header #auth .txt { margin: 0 24px 6px 94px; padding-bottom: 7px; line-height: 19px;  background: url('/img/i/point_x.gif') repeat-x bottom left; }
-#header #auth ul { margin-left: 94px; }
+#header #auth .txt { margin: 0 24px 6px 24px; padding-bottom: 7px; line-height: 23px; text-align:center; font-size:14px; background: url('/img/i/point_x.gif') repeat-x bottom left; }
+#header #auth ul { margin-left: 24px; }
 #header #auth ul li { display: inline; font-size: 11px; }
-#header #auth ul li.exit { margin-left: 17px; }
+#header #auth ul li.exit { margin-right: 24px; float: right; }
 #header #auth ul li.exit a { padding-left: 14px; background: url('/img/i/icons.gif') no-repeat 0 -186px; }
 #header #auth .f { position: absolute; top: 5px; left: 17px; }
 #header #auth .f img { display: block; width: 60px; height: 60px; }
