@@ -18,9 +18,6 @@ $(function(document) {
     $('#btn_Save').click(function(){ saveOperation(); })
     $('#btn_Cancel').click(function(){ clearForm() });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
-    $('li.over3 a').click(function() {
-        $(this).closest('div.ramka3').find('div.inside').toggle();
-    });
 
     $('#amount,#currency').change(function(){
         if ($('#type').val() == 2) {

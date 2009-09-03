@@ -137,7 +137,7 @@ $(document).ready(function() {
                             str = str + '<td class="special">'+formatCurrency(data[key]['special'][2])+'</td>';
                             break;
                     }
-                    str = str+'<td class="mark">'+ div +'</td></tr>';
+                    str = str+'<td class="mark no_over">'+ div +'</td></tr>';
                     arr[i] = arr[i]+str;
 
                     //todo hide show
