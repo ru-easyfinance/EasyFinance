@@ -105,17 +105,19 @@ class Targets_Controller extends Template_Controller
     }
 
     /**
-     *
+     * Возвращает список пользовательских целей
      */
     function user_list()
     {
-        die(json_encode($this->model->getLastList($index)));
+        die(json_encode($this->model->getLastList()));
     }
 
-    function pop_list()
+    /**
+     * Список популярных целей
+     */
+    function pop_list($args)
     {
-        $tpl->assign('pop_list_targets',$targets->getPopList($index));
-        $tpl->assign('template','pages.list');
-        $tpl->assign('view_list','pop_list');
+        $index = (int)$args[0];
+        die(json_encode($this->model->getPopList($index)));
     }
 }

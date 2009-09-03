@@ -97,16 +97,28 @@ class Targets_Model {
             $limit = $this->limitFull;
             $start = (((int)$index - 1) * $limit);
         }
-        $list = $this->db->selectPage($total, "SELECT category_id, title, COUNT(*) AS cnt
-            FROM target WHERE visible=1 GROUP BY title ORDER BY cnt DESC, title ASC LIMIT ?d, ?d;",
-            $start, $limit);
-        
-        $category = Core::getInstance()->user->getUserCategory();
-        $list['cat_name'] = $category[$list['category_id']]['cat_name'];
-        $this->tpl->assign('total', $total);
-        $this->tpl->assign('index', $index);
-        $this->tpl->assign('index_limit', $limit);
-        return $list;
+        $list = $this->db->selectPage($total, "SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS 
+            cl, s.name FROM target t LEFT JOIN category c ON c.cat_id = t.category_id LEFT JOIN
+            system_categories s ON c.system_category_id = s.id WHERE t.visible=1 GROUP BY t.title, 
+            t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", $start, $limit);
+        $array = array();
+        foreach ($list as $k => $v) {
+            //@FIXME Дописать работу с системными категориями
+            $array[] = array(
+                'cat_id' => $v['category_id'],
+                'title'    => $v['title'],
+                'count'    => $v['cnt'],
+                'cat_name' => 'АБА-ХАБА',
+                'cl' => $v['cl']
+            );
+        }
+        return array(
+            'options'=>array(
+                'total'=>$total,
+                'index'=>$index,
+                'limit'=>$limit),
+            'list' => $array
+        );
     }
 
     /**

@@ -50,17 +50,20 @@ $(document).ready(function(){
         return false;
     });
 
+    // Удаляем цель
     $(".f_f_del").live('click', function(){
-        $(this).closest('.object').attr('tid')
+        o = $(this).closest('.object');
         if (confirm("Вы уверены, что хотите удалить финансовую цель '"+$(this).closest('.object .descr a').text()+"'?")) {
             $.post('/targets/del/', {
-                id: $(this).closest('.object').attr('tid')
+                id: o.attr('tid')
             }, function(){
-                $(this).closest('.object').remove();
+                o.remove();
             }, 'json');
+            return false;
         }
     });
 
+    // Загружаем и показываем ВСЕ цели пользователя
     $('div.show_all span').click(function() {
         $.get('/targets/user_list/', '', function(data){
             s = '';
@@ -82,6 +85,7 @@ $(document).ready(function(){
         }, 'json');
     });
 
+    // Диалог редактирования финансовой цели
     $("#tpopup").dialog({
         bgiframe: true,
         autoOpen: false,
@@ -89,34 +93,7 @@ $(document).ready(function(){
         modal: true,
         buttons: {
             'Сохранить': function() {
-                //TODO Проверяем валидность и сабмитим
-                $.post(
-                    $('#tpopup form').attr('action'),
-                    {
-                        id       : $('#key').attr('value'),
-                        type     : $('#type').attr('value'),
-                        category : $('#category').attr('value'),
-                        title    : $('#title').attr('value'),
-                        amount   : $('#amount').attr('value'),
-                        start    : $('#start').attr('value'),
-                        end      : $('#end').attr('value'),
-                        photo    : $('#photo').attr('value'),
-                        url      : $('#url').attr('value'),
-                        comment  : $('#comment').attr('value'),
-                        account  : $('#account').attr('value'),
-                        visible  : $('#visible:checked').length
-                    }, function(data){
-                        for (var v in data) {
-                            //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                            alert('Ошибка в ' + v);
-                        }
-                        // В случае успешного добавления, закрываем диалог и обновляем календарь
-                        if (data.length == 0) {
-                            $('#tpopup').dialog('close');
-                        }
-                    },
-                    'json'
-                );
+                saveTarget();
             },
             'Отмена': function() {
                 clearForm();
@@ -154,5 +131,84 @@ $(document).ready(function(){
         $('#comment').val(data.comment);
         $('#account').val(data.account);
     }
+
+    /**
+     * Cохранение объекта
+     */
+    function saveTarget() {
+        //TODO Проверяем валидность и сабмитим
+        $.post(
+            $('#tpopup form').attr('action'),
+            {
+                id       : $('#key').attr('value'),
+                type     : $('#type').attr('value'),
+                category : $('#category').attr('value'),
+                title    : $('#title').attr('value'),
+                amount   : $('#amount').attr('value'),
+                start    : $('#start').attr('value'),
+                end      : $('#end').attr('value'),
+                photo    : $('#photo').attr('value'),
+                url      : $('#url').attr('value'),
+                comment  : $('#comment').attr('value'),
+                account  : $('#account').attr('value'),
+                visible  : $('#visible:checked').length
+            }, function(data){
+                for (var v in data) {
+                    //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                    alert('Ошибка в ' + v);
+                }
+                // В случае успешного добавления, закрываем диалог и обновляем календарь
+                if (data.length == 0) {
+                    $('#tpopup').dialog('close');
+                }
+
+                s = '<div class="object"><div class="ban"></div>'
+                    +'<div class="descr">';
+                    s += ($('#photo').attr('value'))? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/i/fintarget1.jpg" alt="" />';
+                        s += '<a href="#">'+$('#title').attr('value')+'</a>'+$('#comment').attr('value')
+						+'</div><div class="indicator_block"><div class="money">'
+						+$('#amount').attr('value')+' руб.<br /><span>'
+                        +'0 руб.</span></div><div class="indicator">'
+                        +'<div style="width:0%;"><span>0'
+                        +'%</span></div></div></div><div class="date">Целевая дата: '
+                        +$('#end').attr('value')+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
+                        +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
+
+                $('div.financobject_block').append(s);
+                if ($('#visible:checked').length == 1) {
+                    loadPopular();
+                }
+                clearForm();
+            },
+            'json'
+        );
+    }
+
+    /**
+     * Загружаем список из популярных целей пользователей
+     */
+    function loadPopular(i) {
+        if (isNaN(i)) {
+            i = 0;
+        }
+        $.get('/targets/pop_list/'+i, '', function(data){
+            s = '';
+            for(v in data.list) {
+                c = 1+parseInt(v);
+                s += '<li><img src="/img/i/fintarget.jpg" alt="" /><span class="num">'
+                    +c+'.</span><a href="#" class="name">'
+                    +data.list[v]['title']+'</a><a href="#" class="join">Присоединиться</a>'
+                    +'<div class="statistics"><div><span class="green">'
+                    +data.list[v]['count']+'</span> Последователей<br/>'
+                    +'<span class="red">'+data.list[v]['cl']+'</span> Достигло цель</div></div></li>';
+            }
+            
+            $('ul.popularobject').empty().append(s);
+        }, 'json');
+    }
+    
+    loadPopular();
 // </editor-fold>
 });
+
+    
