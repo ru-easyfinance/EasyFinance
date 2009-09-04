@@ -18,7 +18,7 @@ $(function(document) {
     $('#btn_Save').click(function(){ saveOperation(); })
     $('#btn_Cancel').click(function(){ clearForm() });
     $('#btn_ReloadData').click(function(){ loadOperationList(); });
-
+    //$('#category').autocomplete();
     $('#amount,#currency').change(function(){
         if ($('#type').val() == 2) {
             //@TODO Дописать округление

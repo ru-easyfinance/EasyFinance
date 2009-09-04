@@ -32,7 +32,7 @@ $(document).ready(function(){
     });
 
     // Редактируем одну из наших целей
-    $(".f_f_edit").click(function(){
+    $(".f_f_edit").live('click', function(){
         f = $(this).closest('.object');
         clearForm();
         $('#key').val(f.attr('tid'));
@@ -61,6 +61,21 @@ $(document).ready(function(){
             }, 'json');
             return false;
         }
+    });
+
+    // Копируем
+    $('.f_f_copy').live('click', function(){
+        f = $(this).closest('.object');
+        clearForm();
+        $('#type').val(f.attr('type'));
+        $('#title').val(f.attr('title'));
+        $('#photo').val(f.attr('photo'));
+        $('#url').val(f.attr('url'));
+        $('#comment').val(f.attr('comment'));
+        $('#account').val(f.attr('account'));
+        $('#visible').val(f.attr('visible'));
+        $('#tpopup').dialog('open');
+        return false;
     });
 
     // Загружаем и показываем ВСЕ цели пользователя
@@ -114,7 +129,7 @@ $(document).ready(function(){
 
     /**
      * Заполняет поля формы результатами из массива data
-     * @param <array> data Массив с данными финансовой цели
+     * @param array data Массив с данными финансовой цели
      * @return void
      */
     function fillForm(data) {
