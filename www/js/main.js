@@ -240,35 +240,66 @@ $(function() {
 
     var page_mid = $('.menu3 span').closest('li').attr('id');
     var submenu = {
-        'm1':[],
+        'm1':[''],
         'm2':[  '<a href="/accounts/">Счета</a>',
                 '<a href="/operation/">Журнал операций</a>',
                 '<a href="/category/">Категории</a>'],
         'm3':[  '<a href="/budget/">Бюджет</a>',
                 '<a href="/targets/">Финансовые цели</a>'],
-        'm4':[],
+        'm4':[''],
         'm5':[  '<a href="/calendar/">Календарь</a>',
                 '<a href="/periodic/">Регулярные транзакции</a>'],
-        'm6':[]
+        'm6':['']
     };
     //var mod =
-
+    c = $('.menu4').length;
+    if ($('.menu4').length==0)
+        $('.cct').after('<ul clas="menu4" >&nbsp</ul>');
+    
     $('.menu3 span').mouseover(function(){
         txt = $(this).text();
         $(this).hide();
         $(this).closest('li').append('<a class="span">'+txt+'</a>');
     })
 
-    $('.menu3 .span').live('mouseout',function(){
-        $(this).closest('li').find('span').show();
-        $(this).remove();
+    //$(':not(.menu3 .span, .cct, .menu4)').live('mouseover',function(){
+    //    $('.menu3 .span').closest('li').find('span').show();
+     //   $('.menu3 .span').remove();
+    //})
+
+    $('#header, .mid :not(.menu3, .cct, .menu4)').mouseover(function(){
+        $('.menu3 li').removeClass('act');
+        $('.menu3 li#'+page_mid).addClass('act');
+        $('.menu3 li#'+page_mid).hover();
+        $('.menu3 .span').closest('li').find('span').show();
+        $('.menu3 .span').remove();
     })
+    $('#container1').mouseout(function(){
+        $('.menu3 li').removeClass('act');
+        $('.menu3 li#'+page_mid).addClass('act');
+        $('.menu3 li#'+page_mid).hover();
+        $('.menu3 .span').closest('li').find('span').show();
+        $('.menu3 .span').remove();
+    });
+
 
     $('.menu3 li').mouseover(function(){
         var act_id = $(this).attr('id');
+        $('.menu3 li').removeClass('act');
+        $(this).addClass('act');
         //$('menu3') создадим субменю
-        
+        sm = submenu[act_id];
+        str='';
+        l = sm.length;
+        k = 0;
+        for(k=0; k<l; k++)
+        {
+            str = str+'<li>'+sm[k]+'</li>';
+        }
+        $('ul.menu4 ').html(str);
+        return false;
     })
+    //$('#abc :not(#abc1, $abc2)').mouseover();
 });
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}

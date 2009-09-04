@@ -116,15 +116,13 @@ $(function(document) {
                 })
             }
         },'json');
-        $('.tags input').dblclick(function(){
+        $('a#tags').removeAttr('href');
+        $('a#tags').click(function(){
             $('.tags_could').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
+            $('.tags_could li').show();
         });
-
-        $('.tags input').focus(function(){
-               $('.tags_could li').show();
-        })
 		$('.tags input').keyup(function(){
                     $('.tags_could li').show();
 

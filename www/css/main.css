@@ -192,34 +192,34 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
 .menu3 ul li#m1 a { background-position: 0 1px; }
 .menu3 ul li#m1 span{ background-position: 0 -39px; }
-.menu3 ul li#m1 a:hover { background-position: 0 -80px; }
+.menu3 ul li#m1.act a { background-position: 0 -80px; }
 
 .menu3 ul li#m2 a { background-position: -135px 1px; }
 .menu3 ul li#m2 span{ background-position: -135px -39px; }
-.menu3 ul li#m2 a:hover { background-position: -135px -80px; }
+.menu3 ul li#m2.act a  { background-position: -135px -80px; }
 
 .menu3 ul li#m3 a { background-position: -259px 1px; }
 .menu3 ul li#m3 span { background-position: -259px -39px; }
-.menu3 ul li#m3 a:hover { background-position: -259px -80px; }
+.menu3 ul li#m3.act a  { background-position: -259px -80px; }
 
 .menu3 ul li#m4 a { background-position: -383px 1px; }
 .menu3 ul li#m4 span { background-position: -383px -39px; }
-.menu3 ul li#m4 a:hover { background-position: -383px -80px; }
+.menu3 ul li#m4.act a  { background-position: -383px -80px; }
 
 .menu3 ul li#m5 a { background-position: -507px 1px; }
 .menu3 ul li#m5 span{ background-position: -507px -39px; }
-.menu3 ul li#m5 a:hover { background-position: -507px -80px; }
+.menu3 ul li#m5.act a  { background-position: -507px -80px; }
 
 .menu3 ul li#m6 a { background-position: -631px 1px; }
 .menu3 ul li#m6 span { background-position: -631px -39px; }
-.menu3 ul li#m6 a:hover { background-position: -631px -80px; }
+.menu3 ul li#m6.act a  { background-position: -631px -80px; }
 
 .menu3 .popup_info { display: none; position: absolute; top: -20px; left: 627px; width: 182px; padding: 10px 11px 11px 14px; font-size: 11px; line-height: 14px; color: #737373;  z-index: 10; background: #ffffff; border: 1px solid #c4c4c4; }
 .menu3 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url('/img/i/icons.gif') no-repeat 0 -420px;  }
 
 
 
-ul.menu4 { position: relative; margin: -3px 0 22px 2px; padding-left: 24px; //zoom: 1; }
+ul.menu4 { position: relative; margin: -3px 0 22px 2px; padding-left: 24px; height: 30px; //zoom: 1; }
 ul.menu4:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.menu4 li { position: relative; float: left; margin-right: 20px; font-family: Helvetica, Arial, Tahoma; z-index: 0; }
 ul.menu4 li a { display: block; padding: 3px 7px 5px 0; background: url('/img/i/bg06.gif') no-repeat 100% 2px; }
@@ -537,9 +537,9 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
 
 div.addoperation .line .date{float: left; }
 div.addoperation .line .f_field .date input.inp { width: 106px; //width: 100px; }
-div.addoperation .line  .amount {float: right; margin-right: 170px; }
+div.addoperation .line  .amount {float: left; margin-right: 170px; }
 
-div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #20201E; }
+div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #20201E; width:350px}
 div.addoperation .line label { display: block; margin-bottom: 2px;}
 div.addoperation .line textarea { width: 350px; //width: 489px; height: 96px; //height: 90px; }
 div.addoperation .but input { margin-right: 21px; margin-top:14px;}
@@ -552,9 +552,13 @@ div.addoperation .line .category a,
 .budget .f_field2 a,
 .budget .waste_list  table td .cont a,
 #popupadd_calendar .f_field a,
+
+div.addoperation .line a#tags { display: block; position: absolute; top: 21px; right: -18px; height: 16px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -350px; }
+
 /* #popupaddobject .f_field a { display: block; position: absolute; top: 21px; right: -18px; height: 16px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -350px; } */
 
 
+div.addoperation .line a#tags{ width: 17px; top: 22px; background-position: 0 -551px; }
 div.addoperation .line .amount a { width: 17px; }
 div.addoperation .line .category a { width: 17px; top: 22px; background-position: 0 -370px; }
 
