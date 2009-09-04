@@ -22,19 +22,18 @@
 											по
 											<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
 										</div>
-									</div>
-									<div class="line">
-										<select id="cat_filtr">
-											<option label="Все" value=""> --- Все ---</option>
-											{$cat_filtr}
-										</select>
-									</div>
-									<div class="line">
+                                        <div class="f_field" style="display:none">
+                                            Категории
+                                            <select id="cat_filtr" >
+                                                <option label="Все" value=""> --- Все ---</option>
+                                                {$cat_filtr}
+                                            </select>
+                                        </div>
 										<input type="button" value="Показать" id="btn_ReloadData"/>
 									</div>
 								</div>
 							</form>
-							<ul class="period">
+                            <ul class="period" style="display:none;">
 								<li><span>Год</span></li>
 								<li class="act"><span>Месяц</span></li>
 								<li><span>Неделя</span></li>

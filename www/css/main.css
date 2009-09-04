@@ -458,7 +458,7 @@ div.addoperation .line .f_field select#account option {width: 123px;}
 div.addoperation .line .f_field select#type {width: 150px;  overflow: hidden; }
 div.addoperation .line .f_field select#type option {width: 123px;}
 
-div.addoperation .line .f_field select#category {width: 350px;  overflow: hidden; }
+/* div.addoperation .line .f_field select#category {width: 350px;  overflow: hidden; } */
 div.addoperation .line .f_field select#category option {width: 323px;}
 
 div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float: left; } 
@@ -552,7 +552,7 @@ div.addoperation .line .category a,
 .budget .f_field2 a,
 .budget .waste_list  table td .cont a,
 #popupadd_calendar .f_field a,
-#popupaddobject .f_field a { display: block; position: absolute; top: 21px; right: -18px; height: 16px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -350px; }
+/* #popupaddobject .f_field a { display: block; position: absolute; top: 21px; right: -18px; height: 16px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -350px; } */
 
 
 div.addoperation .line .amount a { width: 17px; }

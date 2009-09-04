@@ -14,20 +14,23 @@ $(window).load(function() {
      * Очищаем форму
      */
     function clearForm() {
-        $('form #key,#title,#date_start,#date_end,#date,#time,#count,#comment,#chain').val('');
-        $('form #tr_count').hide();
-        $('form #repeat option').each(function(){ 
+        // Событие календаря
+        $('#key,#title,#date_start,#date_end,#date,#time,#count,#comment,#chain').val('');
+        $('#tr_count').hide();
+        $('#repeat option').each(function(){ 
             $(this).removeAttr('selected').removeAttr('disabled');
         });
-        $('form #count option').each(function(){
+        $('#count option').each(function(){
             $(this).removeAttr('selected');
         });
-        $('form #infinity').removeAttr('checked');
+        $('#infinity').removeAttr('checked');
+        // Периодическая транзакция
+        $('#pkey,#pchain,#ptitle,#pdate,#prepeat,#pcount,#pcomment,#pinfinity').val('');
     }
 
     /**
      * Перед открытием формы
-     * @param CalEvent el Элемент календаря, т.е. объект - событие
+     * @param el Элемент календаря, т.е. объект - событие
      */
     function beforeOpenForm(el) {
         clearForm();
@@ -213,7 +216,7 @@ $(window).load(function() {
         timeFormat: "G:i",
         monthDisplay: function(year, month, monthTitle) {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
-            $("div.ui-datepicker-header a.ui-datepicker-prev,div.ui-datepicker-header a.ui-datepicker-next").hide();
+            $("a.ui-datepicker-prev,a.ui-datepicker-next",'div.ui-datepicker-header').hide();
             $('li.y_prev a').text(year-1);
             $('li.y_next a').text(year+1);
             if (month == 11) {
@@ -232,6 +235,7 @@ $(window).load(function() {
             clearForm();
             $('#date,#date_start,#date_end').val($.datepicker.formatDate('dd.mm.yy',dayDate));
             $('form').attr('action','/calendar/add/');
+            $('#tabs').tabs('enable',0).tabs('disable',1).tabs( 'select',0);
             $('#dialog_event').dialog('open');
         },
         eventDragOpacity: 0.5,
@@ -340,6 +344,7 @@ $(window).load(function() {
         },
         close: function() {
           $('#ui-datepicker-div').hide();
+          clearForm();
         }
     });
 });

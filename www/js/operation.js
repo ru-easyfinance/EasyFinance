@@ -9,8 +9,6 @@ $(function(document) {
                 'M+_1_2_3_/' + $.calculator.HALF_SPACE,
                 'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
         showOn: 'focus' //opbutton
-        //,buttonImageOnly: true
-        //,buttonImage: '/img/calculator.png'
     });
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
 
