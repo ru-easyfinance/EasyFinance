@@ -233,6 +233,42 @@ $(function() {
             num.substring(num.length-(4*i+3));
         return (((sign)?'':'-') + '' + num + '.' + cents);
     }
+
+
+
+
+
+    var page_mid = $('.menu3 span').closest('li').attr('id');
+    var submenu = {
+        'm1':[],
+        'm2':[  '<a href="/accounts/">Счета</a>',
+                '<a href="/operation/">Журнал операций</a>',
+                '<a href="/category/">Категории</a>'],
+        'm3':[  '<a href="/budget/">Бюджет</a>',
+                '<a href="/targets/">Финансовые цели</a>'],
+        'm4':[],
+        'm5':[  '<a href="/calendar/">Календарь</a>',
+                '<a href="/periodic/">Регулярные транзакции</a>'],
+        'm6':[]
+    };
+    //var mod =
+
+    $('.menu3 span').mouseover(function(){
+        txt = $(this).text();
+        $(this).hide();
+        $(this).closest('li').append('<a class="span">'+txt+'</a>');
+    })
+
+    $('.menu3 .span').live('mouseout',function(){
+        $(this).closest('li').find('span').show();
+        $(this).remove();
+    })
+
+    $('.menu3 li').mouseover(function(){
+        var act_id = $(this).attr('id');
+        //$('menu3') создадим субменю
+        
+    })
 });
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}

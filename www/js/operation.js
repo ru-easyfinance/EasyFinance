@@ -118,26 +118,22 @@ $(function(document) {
                 })
             }
         },'json');
-        $('.tags input').focus(function(){
+        $('.tags input').dblclick(function(){
             $('.tags_could').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
         });
 
-
+        $('.tags input').focus(function(){
+               $('.tags_could li').show();
+        })
 		$('.tags input').keyup(function(){
-                    var txt = $(this).val();
-                    $('.tags_could li').each(function(){
-                        txt2 = $(this).text();
-			m= txt2.substr(0,txt.length);
-			if ((txt2.length > txt.length - 1)&(m == txt))
-                            $(this).show();
-			else
-                            $(this).hide();
-			});
+                    $('.tags_could li').show();
+
 		})
                 $('.tags_could li').live('click',function(){
-                    $('.tags input').val($(this).text());
+                    txt=$('.tags input').val()+$(this).text()+', ';
+                    $('.tags input').val(txt);
                     $('.tags_could').dialog("close");
                 });
         // Загружаем теги
@@ -149,7 +145,7 @@ $(function(document) {
                 n = Math.floor(k*5);
                 str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
             }
-            $('.tags_could').append(str+'</ul>');
+            $('.tags_could').html(str+'</ul>');
             
             $('.tags_could li').hide();
         }, 'json');
