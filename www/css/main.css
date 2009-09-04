@@ -463,6 +463,9 @@ div.addoperation .line .f_field select#category option {width: 323px;}
 
 div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float: left; } 
 
+div.addoperation .line .tags_could{position: static; left:130px; top:-5px; max-width:200px ;float : left;}
+div.addoperation .line .tags_could div{position : relative; width: 100px;float: top;}
+
 div.addoperation .line .date{float: left; }
 div.addoperation .line .f_field .date input.inp { width: 106px; //width: 100px; }
 div.addoperation .line  .amount {float: right; margin-right: 170px; }

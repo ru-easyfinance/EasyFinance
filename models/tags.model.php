@@ -49,7 +49,7 @@ class Tags_Model {
      */
     function getTags($cloud = true) {
         if ($cloud) {
-            $sql = "SELECT name, COUNT(id) FROM tags WHERE user_id = ? GROUP BY name ORDER BY name";
+            $sql = "SELECT name, COUNT(name) FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
             return json_encode($this->db->select($sql, Core::getInstance()->user->getId()));
         } else {
             $sql = "SELECT name FROM tags WHERE user_id = ? GROUP BY name ORDER BY name";

@@ -118,12 +118,33 @@ $(function(document) {
                 })
             }
         },'json');
+		$('.tags input').keyup(function(){
+			var txt = $(this).val();
+			$('.tags_could div').each(function(){
+				txt2 = $(this).text();
+				 m= txt2.substr(0,txt.length);
+				if ((txt2.length > txt.length - 1)&(m == txt))
+					$(this).show();
+				else
+					$(this).hide();
+			});
+		})
+                $('.tags_could div').live('click',function(){
+                    $('.tags input').val($(this).text());
+                    $('.tags_could div').hide();
+                });
         // Загружаем теги
-        $.get('/tags/getTags/', '', function(data) {
-            $('input#tags').tagSuggest({
-                tags: data,
-                separator: ', '
-            });
+        $.get('/tags/getCloudTags/', '', function(data) {
+            for (key in data)
+			{//231255219 to 150 165 142 //81 90 77
+				k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
+				red = Math.floor(81*(1-k)+150);
+                                green = Math.floor(90*(1-k)+165);
+                                blue = Math.floor(77*(1-k)+142);
+				$('.tags_could').append('<div id="'+key+'">'+data[key]['name']+'</div>');
+				$('.tags_could #'+key).css('background-color','rgb('+red+','+green+','+blue+')');
+			}
+			$('.tags_could div').hide();
         }, 'json');
     }
 
