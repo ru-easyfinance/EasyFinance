@@ -54,7 +54,7 @@ class Operation_Controller extends Template_Controller
         $this->tpl->append('js','jquery/ui.datepicker.js');
         $this->tpl->append('js','jquery/jquery.calculator.min.js');
         $this->tpl->append('js','jquery/jquery.calculator-ru.js');
-        $this->tpl->append('js','jquery/tag.js');
+        $this->tpl->append('js','jquery/tinysort.js');
         //$this->tpl->append('js','jquery/jquery.autocomplete.js');
         $this->tpl->append('js','operation.js');
     }

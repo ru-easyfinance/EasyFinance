@@ -118,34 +118,77 @@ $(function(document) {
                 })
             }
         },'json');
+        $('.tags input').focus(function(){
+            $('.tags_could').dialog({
+                close: function(event, ui){$(this).dialog( "destroy" )}
+            }).dialog("open");
+        });
+
+
 		$('.tags input').keyup(function(){
-			var txt = $(this).val();
-			$('.tags_could div').each(function(){
-				txt2 = $(this).text();
-				 m= txt2.substr(0,txt.length);
-				if ((txt2.length > txt.length - 1)&(m == txt))
-					$(this).show();
-				else
-					$(this).hide();
+                    var txt = $(this).val();
+                    $('.tags_could li').each(function(){
+                        txt2 = $(this).text();
+			m= txt2.substr(0,txt.length);
+			if ((txt2.length > txt.length - 1)&(m == txt))
+                            $(this).show();
+			else
+                            $(this).hide();
 			});
 		})
-                $('.tags_could div').live('click',function(){
+                $('.tags_could li').live('click',function(){
                     $('.tags input').val($(this).text());
-                    $('.tags_could div').hide();
+                    $('.tags_could').dialog("close");
                 });
         // Загружаем теги
         $.get('/tags/getCloudTags/', '', function(data) {
+            str = '<ul>';
             for (key in data)
-			{//231255219 to 150 165 142 //81 90 77
-				k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
-				red = Math.floor(81*(1-k)+150);
-                                green = Math.floor(90*(1-k)+165);
-                                blue = Math.floor(77*(1-k)+142);
-				$('.tags_could').append('<div id="'+key+'">'+data[key]['name']+'</div>');
-				$('.tags_could #'+key).css('background-color','rgb('+red+','+green+','+blue+')');
-			}
-			$('.tags_could div').hide();
+            {
+                k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
+                n = Math.floor(k*5);
+                str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
+            }
+            $('.tags_could').append(str+'</ul>');
+            
+            $('.tags_could li').hide();
         }, 'json');
+
+
+
+        // create a style switch button
+	var switcher = $('<a href="javascript:void(0)" class="btn">Change appearance</a>').toggle(
+		function(){
+			$("#tags ul").hide().addClass("alt").fadeIn("fast");
+		},
+		function(){
+			$("#tags ul").hide().removeClass("alt").fadeIn("fast");
+		}
+	);
+ 	$('.tags_could').append(switcher);
+
+	// create a sort by alphabet button
+	var sortabc = $('<a href="javascript:void(0)" class="btn">Sort alphabetically</a>').toggle(
+		function(){
+			$("#tags ul li").tsort({order:"asc"});
+		},
+		function(){
+			$("#tags ul li").tsort({order:"desc"});
+		}
+		);
+ 	$('.tags_could').append(sortabc);
+
+	// create a sort by alphabet button
+	var sortstrength = $('<a href="javascript:void(0)" class="btn">Sort by strength</a>').toggle(
+		function(){
+			$("#tags ul li").tsort({order:"desc",attr:"class"});
+		},
+		function(){
+			$("#tags ul li").tsort({order:"asc",attr:"class"});
+		}
+		);
+ 	$('.tags_could').append(sortstrength);
+        $('.tags_could').hide();
     }
 
     /**
