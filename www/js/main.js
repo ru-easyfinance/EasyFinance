@@ -239,6 +239,7 @@ $(function() {
 
 
     var page_mid = $('.menu3 span').closest('li').attr('id');
+    var act_id = page_mid;
     var submenu = {
         'm1':[''],
         'm2':[  '<a href="/accounts/">Счета</a>',
@@ -256,35 +257,51 @@ $(function() {
     if ($('.menu4').length==0)
         $('.cct').after('<ul clas="menu4" >&nbsp</ul>');
     
-    $('.menu3 span').mouseover(function(){
+    $('.menu3 span').live('mouseover',function(){
         txt = $(this).text();
         $(this).hide();
         $(this).closest('li').append('<a class="span">'+txt+'</a>');
     })
 
-    //$(':not(.menu3 .span, .cct, .menu4)').live('mouseover',function(){
-    //    $('.menu3 .span').closest('li').find('span').show();
-     //   $('.menu3 .span').remove();
-    //})
-
-    $('#header, .mid :not(.menu3, .cct, .menu4)').mouseover(function(){
-        $('.menu3 li').removeClass('act');
-        $('.menu3 li#'+page_mid).addClass('act');
-        $('.menu3 li#'+page_mid).hover();
-        $('.menu3 .span').closest('li').find('span').show();
-        $('.menu3 .span').remove();
+/*    $('.menu3 .span').live('mouseout',function(){
+        $(this).closest('li').find('span').show();
+        $(this).remove();
     })
-    $('#container1').mouseout(function(){
+*/
+
+    $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
         $('.menu3 li').removeClass('act');
-        $('.menu3 li#'+page_mid).addClass('act');
-        $('.menu3 li#'+page_mid).hover();
-        $('.menu3 .span').closest('li').find('span').show();
-        $('.menu3 .span').remove();
-    });
-
-
-    $('.menu3 li').mouseover(function(){
-        var act_id = $(this).attr('id');
+        txt = $('.menu3 span').text();
+        $('.menu3 span').closest('li').html('<span>Бюджет</span><a class="span">'+txt+'</a>');
+        $('.menu3 span').hide();
+        $('.menu3 span').closest('li').addClass('act');
+        sm = submenu[page_mid];
+        str='';
+        l = sm.length;
+        k = 0;
+        for(k=0; k<l; k++)
+        {
+            str = str+'<li>'+sm[k]+'</li>';
+        }
+        $('ul.menu4 ').html(str);
+        return false;
+    })
+/*    $('.menu4, .cct').mouseover(function(){
+        if(act_id == page_mid)
+        {
+            
+        }
+        
+    })
+*/
+    $('.menu3 li').live('mouseover',function(){
+        
+        act_id = $(this).attr('id');
+        if(act_id != page_mid)
+        {
+            $('.menu3 .span').closest('li').find('span').show();
+            $('.menu3 .span').remove();
+        }
         $('.menu3 li').removeClass('act');
         $(this).addClass('act');
         //$('menu3') создадим субменю
