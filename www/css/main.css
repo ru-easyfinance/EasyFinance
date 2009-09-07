@@ -95,7 +95,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #auth .inside .f_field input { width: 128px; //width: 122px; }
 #header #auth input.but{ display: block; position: absolute; top: 16px; right: 19px; width: 23px; height: 23px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat 0 -90px; }
 #header #auth .inside a.forget { display: block; margin: 35px 0 0 0px; font-size: 11px; text-align: center; }
-#header #auth .inside input.forget{position: relative; left: 33px;}
+#header #auth .inside input.forget{position: relative; left: 40px;width : 13px}
 
 #header #auth .txt { margin: 0 24px 6px 24px; padding-bottom: 7px; line-height: 23px; text-align:center; font-size:14px; background: url('/img/i/point_x.gif') repeat-x bottom left; }
 #header #auth ul { margin-left: 24px; }
