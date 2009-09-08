@@ -449,11 +449,11 @@ ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
 
 div.report { position: relative; display: none; padding-top: 22px;left: 70px }
-div.report .line { position: relative; float: top;  color: #4c4c4c; //zoom: 1; }
+div.report .line { position: relative; float: top; margin-top:10px;  color: #4c4c4c; //zoom: 1; }
 div.report .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.report .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
-div.report .line .f_field .hasDatepicker{ position: absolute; left: 198px;}
-div.report .line .f_field select { display: block; margin-top: 2px; color: #20201E; }
+div.report .line .f_field .hasDatepicker{ position: absolute; left: 198px;top: 0px}
+div.report .line .f_field select { display: block; color: #20201E; }
 div.report .line .f_field select#account {width: 150px;  overflow: hidden; }
 div.report .line .f_field select#account option {width: 123px;}
 div.report .line .f_field select#report {width: 332px;  overflow: hidden; }
@@ -466,7 +466,7 @@ div.addoperation { position: relative; display: none; padding-top: 22px;left: 70
 div.addoperation .line { position: relative;  color: #4c4c4c; //zoom: 1; }
 div.addoperation .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
-div.addoperation .line .f_field select { display: block; margin-top: 2px; color: #20201E; }
+div.addoperation .line .f_field select { display: block; color: #20201E; }
 div.addoperation .line .f_field select#account {width: 150px;  overflow: hidden; }
 div.addoperation .line .f_field select#account option {width: 123px;}
 div.addoperation .line .f_field select#type {width: 150px;  overflow: hidden; }
