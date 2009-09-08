@@ -6,7 +6,8 @@ $.post(
         {
             if (!data[1][i])
                 data[1][i]={color :1,title:'none'};
-            name = data[1][i]['title'];
+            //alert(data[1][i]['title'])
+            name = (!data[1][i]['title'])?'':data[1][i]['title'];
             end = data[0][i]*3/data[1][i]['color'] ;
             value = data[0][i] ;
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
