@@ -221,21 +221,7 @@ class Accounts_Model
             $this->update_operation($data);
         foreach($account as $value)
 	{
-            switch ($value['field_type'])
-            {
-                case "numeric":
-                    $type = "int_value";
-                    break;
-		case "percent":
-                    $type = "int_value";
-                    break;
-		case "date":
-                    $type = "date_value";
-                    break;
-                default:
-                    $type = "string_value";
-		break;
-            }
+            $type = "string_value";
             $sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`,
                                                         `".$type."`, `accountsaccount_id`)
                     VALUES (?,?,?,?);";
@@ -360,7 +346,7 @@ class Accounts_Model
                 }//value
             }
             $res[$val]['cat'] = $type_name[$key];
-            $total=(int)($mod->getTotalSum($val));
+            $total=(float)($mod->getTotalSum($val));
             $res[$val]['fields']['total_balance'] = $total;
             $res[$val]['def_cur'] =round(
                 $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],

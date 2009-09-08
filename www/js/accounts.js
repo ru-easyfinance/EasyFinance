@@ -145,7 +145,7 @@ $(document).ready(function() {
                 total = 0;
                 for(key in arr)
                 {
-                    total = total+(parseInt(summ[key]*100))/100;
+                    total = total+(parseFloat(summ[key]*100))/100;
                     head_tr = '<tr>\n\
                                     <th> \n\
                                         Имя \n\
@@ -168,7 +168,7 @@ $(document).ready(function() {
                     head_tr = head_tr + spec_th[key];
                     head_tr = head_tr + '<tr>';
                     
-                    s='<div Style="margin-bottom:20px"><b>'+ g_name[key] + '</b> : '+(parseInt(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></div>';
+                    s='<div Style="margin-bottom:20px"><b>'+ g_name[key] + '</b> : '+(parseFloat(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></div>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
