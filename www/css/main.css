@@ -901,7 +901,7 @@ ul.rating li.result b { font-size: 14px; color: #222222; }
 .addquestion .form_block .f_field textarea, .addcategories .form_block .f_field textarea { height: 123px; //height: 117px; }
 .addquestion .form_block label, .addcategories .form_block label { display: block; position: absolute; top: 3px; left: -144px; }
 
-.addcategories a { padding-left: 0; border-bottom: 1px dashed #6bbe4c; background: none; }
+.addcategories a { padding-left: 0; border-bottom: 1px dashed #6bbe4c; background: none; cursor:pointer;}
 .addcategories span.star { color: #ff6060; }
 .addcategories small { display: block; margin-top: 17px; font-size: 11px; line-height: 13px; color: #898989; }
 
