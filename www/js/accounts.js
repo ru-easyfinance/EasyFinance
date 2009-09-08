@@ -168,12 +168,12 @@ $(document).ready(function() {
                     head_tr = head_tr + spec_th[key];
                     head_tr = head_tr + '<tr>';
                     
-                    s='<div Style="margin-bottom:20px"><b>'+ g_name[key] + '</b> : '+(parseFloat(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></div>';
+                    s='<div><strong class="title">'+ g_name[key] + '</strong> : '+(parseFloat(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></div>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
                 /////////////////////формирование итогового поля//////////////////////
-                str='<b> Итог </b><table>\n\
+                str='<strong class="title"> Итог </strong><table>\n\
                         <tr><th>Сумма</th><th>Валюта</th></tr>';
                 for(key in val)
                 {

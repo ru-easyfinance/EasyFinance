@@ -599,9 +599,9 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .operation_list ul.period li.act { padding: 0 10px 0 0; font-weight: bold; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 100% 0; }
 .operation_list ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 0 0; }
 
-.operation_list table { position: relative; width:100%; border: 2px solid #dfdede; padding : 5px;}
-.operation_list table th, .operation_list table td, table.tab1 th { font-size: 11px; }
-.operation_list table th { padding: 8px 0 5px 0; color: #222222; text-align: left; border-bottom: 1px solid #e5e5e5; }
+.operation_list table { margin: .3em 0 1.5em 0;position: relative; width:100%; border-collapse:inherit!important; border: 2px solid #dfdede;}
+.operation_list table th, .operation_list table td, table.tab1 th { font-size: 90%;}
+.operation_list table th { padding: 8px 5px 5px 5px; color: #222222; text-align: left; /*border-bottom: 1px solid #e5e5e5;*/ }
 .operation_list table th span.sort, .operation_list table th span.select { display: block; float: left; }
 .operation_list table th span.sort { position: relative; margin-right: 6px;   margin-left: 10px; cursor: pointer; //cursor: hand; z-index: 0; }
 .operation_list table th span.sort span { display: block; position: absolute; top: 4px; left: -9px; width: 5px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat -40px 0; }
@@ -617,12 +617,11 @@ div.addoperation .line label.online input { display: block; position: absolute; 
 .operation_list table td.summ{max-width: 60px}
 .operation_list table td.big{max-width: 100px}
 .operation_list table td.light{max-width: 60px}
-.operation_list table td{ border-left: 1px solid #dfdede;padding-right:2px}
 
 
 .operation_list table td a { color: #666666; }
-.operation_list table td, table.tab1 td { padding: 5px 0px 5px 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
-.operation_list table td.no_over{overflow: visible}
+.operation_list table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
+.operation_list table td.no_over{padding:0;overflow: visible;}
 .operation_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
