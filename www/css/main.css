@@ -222,7 +222,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 ul.menu4 { position: relative; margin: -3px 0 22px 2px; padding-left: 24px; height: 30px; //zoom: 1; }
 ul.menu4:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-ul.menu4 li { position: relative; float: left; margin-right: 20px; font-family: Helvetica, Arial, Tahoma; z-index: 0; }
+ul.menu4 li { position: relative; float: left; margin-right: 20px; font-family: Helvetica, Arial, Tahoma; z-index: 0;height: 30px; }
 ul.menu4 li a { display: block; padding: 3px 7px 5px 0; background: url('/img/i/bg06.gif') no-repeat 100% 2px; }
 ul.menu4 li span { display: block; padding: 3px 7px 5px 0; color: #3d9814; }
 ul.menu4 li span b { font-weight: normal; border-bottom: 1px dashed #3d9814; cursor: pointer; //cursor: hand; }
@@ -447,6 +447,19 @@ ul.buttons_block li#addtocalendar_but a { width: 185px; }
 
 ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
+
+div.report { position: relative; display: none; padding-top: 22px;left: 70px }
+div.report .line { position: relative; float: top;  color: #4c4c4c; //zoom: 1; }
+div.report .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+div.report .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
+div.report .line .f_field .hasDatepicker{ position: absolute; left: 198px;}
+div.report .line .f_field select { display: block; margin-top: 2px; color: #20201E; }
+div.report .line .f_field select#account {width: 150px;  overflow: hidden; }
+div.report .line .f_field select#account option {width: 123px;}
+div.report .line .f_field select#report {width: 332px;  overflow: hidden; }
+div.report .line .f_field select#report option {width: 305px;}
+div.report .line .f_field select#currency {width: 156px;  overflow: hidden; }
+div.report .line .f_field select#currency option {width: 129px;}
 
 div.addacc{ position: relative; padding-top: 10px;left: 70px }
 div.addoperation { position: relative; display: none; padding-top: 22px;left: 70px }
