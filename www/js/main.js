@@ -253,7 +253,7 @@ $(function() {
         'm6':['']
     };
     //var mod =
-    c = $('.menu4').length;
+    //c = $('.menu4').length;
     if ($('.menu4').length == 0)
         $('div.cct').after('<ul class="menu4" >&nbsp</ul>');
     
@@ -262,15 +262,8 @@ $(function() {
         $(this).hide();
         $(this).closest('li').append('<a class="span">'+txt+'</a>');
     })
-
-/*    $('.menu3 .span').live('mouseout',function(){
-        $(this).closest('li').find('span').show();
-        $(this).remove();
-    })
-*/
-
     $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
-        $('.menu3 li').removeClass('act');
+        //$('.menu3 li').removeClass('act');/
         txt = $('.menu3 span').text();
         $('.menu3 span').closest('li').html('<span>Бюджет</span><a class="span">'+txt+'</a>');
         $('.menu3 span').hide();
@@ -284,16 +277,7 @@ $(function() {
             str = str+'<li>'+sm[k]+'</li>';
         }
         $('ul.menu4 ').html(str);
-        return false;
     })
-/*    $('.menu4, .cct').mouseover(function(){
-        if(act_id == page_mid)
-        {
-            
-        }
-        
-    })
-*/
     $('.menu3 li').live('mouseover',function(){
         
         act_id = $(this).attr('id');
@@ -302,7 +286,7 @@ $(function() {
             $('.menu3 .span').closest('li').find('span').show();
             $('.menu3 .span').remove();
         }
-        $('.menu3 li').removeClass('act');
+        //$('.menu3 li').removeClass('act');
         $(this).addClass('act');
         //$('menu3') создадим субменю
         sm = submenu[act_id];
@@ -316,7 +300,6 @@ $(function() {
         $('ul.menu4 ').html(str);
         return false;
     })
-    //$('#abc :not(#abc1, $abc2)').mouseover();
 });
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
