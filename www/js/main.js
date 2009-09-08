@@ -254,8 +254,8 @@ $(function() {
     };
     //var mod =
     c = $('.menu4').length;
-    if ($('.menu4').length==0)
-        $('.cct').after('<ul clas="menu4" >&nbsp</ul>');
+    if ($('.menu4').length == 0)
+        $('div.cct').after('<ul class="menu4" >&nbsp</ul>');
     
     $('.menu3 span').live('mouseover',function(){
         txt = $(this).text();
