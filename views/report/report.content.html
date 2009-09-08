@@ -37,6 +37,8 @@
                         Дата начала
                         <input type="text" id="dateFrom" value="{$dateFrom}">
                     </div>
+                </div>
+                <div class="line">
                     <div class="f_field">
                         Дата окончания
                         <input type="text" id="dateTo" value="{$dateTo}">
@@ -53,13 +55,11 @@
                             {/foreach}
                         </select>
                     </div>
-                </div>
-                <div class="line">
                     <div class="f_field category" id="currency_fields">
                         Показывать сумму в
                         <select id="currency">
                             {foreach from=$currency item=cur}
-                            <option value="{$cur.id}">{$cur.name} ({$cur.abbr})</option>
+                            <option value="{$cur.id}">{$cur.name}({$cur.abbr})</option>
                             {/foreach}
                         </select>
                     </div>
