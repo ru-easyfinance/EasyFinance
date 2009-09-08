@@ -1,5 +1,5 @@
 // {* $Id$ *}
-swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0");
+swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0" ,null, null, {menu:"false", wmode:"opaque"});
 var data = {
     "elements": [{
         "type": "pie",
@@ -39,7 +39,7 @@ $(window).load(function() {
             currency: $('#currency :selected').val()
         }, function(d) {
             tmp = findSWF("chart");
-            x = tmp.load( JSON.stringify(d) );
+            x = tmp.load( JSON.stringify(d));
         }, 'json');
     });
 });
