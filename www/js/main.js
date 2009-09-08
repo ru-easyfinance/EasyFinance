@@ -263,7 +263,7 @@ $(function() {
         $(this).closest('li').append('<a class="span">'+txt+'</a>');
     })
     $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
-        //$('.menu3 li').removeClass('act');/
+        $('.menu3 li').removeClass('act');
         txt = $('.menu3 span').text();
         $('.menu3 span').closest('li').html('<span>Бюджет</span><a class="span">'+txt+'</a>');
         $('.menu3 span').hide();
@@ -286,7 +286,7 @@ $(function() {
             $('.menu3 .span').closest('li').find('span').show();
             $('.menu3 .span').remove();
         }
-        //$('.menu3 li').removeClass('act');
+        $('.menu3 li').removeClass('act');
         $(this).addClass('act');
         //$('menu3') создадим субменю
         sm = submenu[act_id];
