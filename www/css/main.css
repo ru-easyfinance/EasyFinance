@@ -1108,6 +1108,63 @@ span.tagMatches span {
     z-index: 1000;
 }
 
+.col {
+    width: 46%;
+    float: left;
+}
+.col.second {
+    float: right;
+}
+
+table.currency {
+    margin-bottom: 1em;
+    width: 80%;
+    border-top: solid 1px #e0e3de; 
+    border-left: solid 1px #e0e3de;
+}
+table.currency th, table.currency td {
+    padding: .2em .4em;
+    border-bottom: solid 1px #e0e3de;
+    border-right: solid 1px #e0e3de;
+}
+table.currency th {
+    font-weight: normal;
+    text-align: left;
+    border-right: none; 
+}
+table.currency td {
+    text-align: right; 
+}
+table.currency td a.delete {
+    padding: .3em;
+    text-decoration: none;
+    background: url(/img/i/icoDelete.gif) no-repeat scroll 0 45%;
+}
+table.currency td a.add {
+    padding: .3em;
+    text-decoration: none;
+    background: url(/img/i/icoAdd.gif) no-repeat scroll 0 45%;
+}
+
+ul.currency {
+    margin-bottom: 1em;
+    width: 80%;
+}
+ul.currency li a {
+    margin-bottom: .1em;
+    padding: .2em .4em;
+    display: block;
+}
+ul.currency li a:hover {
+    background-color: #e3ffdf!important;
+}
+ul.currency.user li a {
+    background: url(/img/i/icoDelete.gif) no-repeat scroll 95% 45%;
+}
+ul.currency.all li a {
+    background: url(/img/i/icoAdd.gif) no-repeat scroll 95% 45%;
+}
+
 /*------------------------------------------- form Start --------------------------------------*/
 .formRegister {
     margin: 2em 4em;
@@ -1136,6 +1193,12 @@ span.tagMatches span {
 .formRegister input {
     padding: .1em;
     width: 25em;
+    border: solid 1px #e3e3eb;
+    border-top: solid 1px #aaadb4;
+}
+.formRegister select {
+    padding: .1em;
+    width: 20em;
     border: solid 1px #e3e3eb;
     border-top: solid 1px #aaadb4;
 }
