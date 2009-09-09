@@ -125,6 +125,7 @@ class User
             if (!$this->init($this->getId())) {
                //@TODO Вызывать мастера настройки счетов, категорий и валют
             }
+            $_SESSION['user']            = $this->props;
             $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
             $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
             return $this->save();
@@ -134,6 +135,7 @@ class User
             $_SESSION['user']            = $this->props;
             $_SESSION['REMOTE_ADDR']     = '/experts/';
             $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+            return $this->save();
         }
         
     }
