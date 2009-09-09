@@ -5,6 +5,56 @@
     <div class="mid general_cont">
         <!--левая колонка-->{include file="$name_page.left.html"}<!--/левая колонка-->
         <div class="block2">
+            
+            <div class="ramka3">
+                <div class="ct">
+                    <div class="head">
+                        <h2>Личные данные</h2>
+                        <ul class="action">
+                            <li class="over3"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="content" class="inside form">
+                    <div class="formRegister">
+                        <table>
+                        <tr>
+                            <td><label>Логин:</label></td>
+                            <td><input class="disabled" type="text" value="kot" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><label>Пароль:</label></td>
+                            <td><input type="password" value="111111"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><h3>Смена пароля</h3></td>
+                        </tr>
+                        <tr>
+                            <td><label>Новый пароль:</label></td>
+                            <td><input type="password" value="111111"/> <em class="red">*</em></td>
+                        </tr>
+                        <tr>
+                            <td><label>Повтор пароля:</label></td>
+                            <td><input type="password" value="111111"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><h3>Смена e-mail</h3></td>
+                        </tr>
+                        <tr>
+                            <td><label>e-mail:</label></td>
+                            <td><input type="text" value="kot@mail.ru"/> <em class="red">*</em></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button>Сохранить</button> <button>Отмена</button>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="cb"><div></div></div>
+            </div>
             <!--наполнение-->
             {include file="$name_page.content.html"}
             <!--/наполнение-->

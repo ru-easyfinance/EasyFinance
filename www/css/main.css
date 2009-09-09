@@ -682,7 +682,7 @@ div.cont ul li.add a { width: 12px; }
 
 
 .budget { padding-top: 17px !important; }
-.budget .f_field1, .budget .f_field2 { position: relative; margin-bottom: 18px; padding-bottom: 17px; border-bottom: 1px solid #e5e5e5; //zoom: 1; }
+.budget .f_field1, .budget .f_field2, .form .f_field1 { position: relative; margin-bottom: 18px; padding-bottom: 17px; border-bottom: 1px solid #e5e5e5; //zoom: 1; }
 .budget .f_field1:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .budget .f_field1 div { position: relative; float: left; }
 .budget .f_field1 span { margin-right: 17px; font-size: 14px; }
@@ -1115,6 +1115,13 @@ span.tagMatches span {
 .formRegister h2 {
     margin-left: 5.7em;
 }
+.formRegister h3 {
+    margin: 1em 0 .5em 0;
+    border-bottom: solid 1px #e5e5e5;
+}
+.formRegister .red {
+    color: #cc0000;
+}
 .formRegister table td {
     padding: .2em;
 }
@@ -1131,6 +1138,13 @@ span.tagMatches span {
     width: 25em;
     border: solid 1px #e3e3eb;
     border-top: solid 1px #aaadb4;
+}
+.formRegister input.disabled {
+    background-color: #e3e3eb;
+}
+.formRegister button {
+    margin-top: 1em;
+    margin-right: .3em;
 }
 .formRegister input.error {
     border: solid 1px #cc0000;
