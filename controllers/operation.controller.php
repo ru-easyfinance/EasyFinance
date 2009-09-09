@@ -23,25 +23,7 @@ class Operation_Controller extends Template_Controller
      * Ссылка на экземпляр класса User
      * @var User
      */
-    private $user = null;
-
-    function neo(){
-        $row = 1;
-        $handle = fopen("/home/ukko/Public/currency_types.csv", "r");
-        $sql = "";
-        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            if (!empty ($sql)) $sql .= ",";
-            $sql .= "('".mysql_real_escape_string($data['0'])."','".mysql_real_escape_string($data['1'])."','".
-                mysql_real_escape_string($data['2'])."','".mysql_real_escape_string($data['3'])."','".
-                mysql_real_escape_string($data['4'])."','".mysql_real_escape_string($data['5'])."','".
-                mysql_real_escape_string($data['6'])."')";
-        }
-        fclose($handle);
-        $sql = "INSERT INTO daily_currency VALUES" . $sql;
-        die($sql);
-    }
-
-    
+    private $user = null; 
 
 
     /**
