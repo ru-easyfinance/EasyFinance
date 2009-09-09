@@ -117,6 +117,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #presentation a.reg { top: 59px; right: 25px; }
 #presentation a.demo { top: 112px; right: 65px; }
 #presentation span.reg{ display: block; top: 59px; right: 33px; position: absolute; width: 235px;font-size:11px;}
+#presentation span.reg div{text-align: center;float: top; margin-bottom: 11px;}
 
 #presentation ul.inf { position: absolute; top: 168px; right: 70px; width: 217px; height: 41px; background: url('/img/i/bg04.gif') no-repeat center top; }
 #presentation ul.inf li { width: 88px; font: 11px/20px Helvetica, Arial, Tahoma; color: #414a3c; overflow: hidden; }
