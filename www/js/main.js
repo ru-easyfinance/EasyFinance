@@ -237,7 +237,7 @@ $(function() {
 
 
 
-
+    // Динамическое меню
     var page_mid = $('.menu3 span').closest('li').attr('id');
     var act_id = page_mid;
     var submenu = {
@@ -252,22 +252,23 @@ $(function() {
                 '<a href="/periodic/">Регулярные транзакции</a>'],
         'm6':['']
     };
+    //@TODO Цикл по submenu и если находит текущую таблицу, то окружает её SPAN
+
     //var mod =
     //c = $('.menu4').length;
-    if ($('.menu4').length == 0)
+    if ($('.menu4').length == 0) {
         $('div.cct').after('<ul class="menu4" >&nbsp</ul>');
+    }
     
     $('.menu3 span').live('mouseover',function(){
         txt = $(this).text();
-        $(this).hide();
-        $(this).closest('li').append('<a class="span">'+txt+'</a>');
+        $(this).hide().closest('li').append('<a class="span">'+txt+'</a>');
     })
     $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
         $('.menu3 li').removeClass('act');
         txt = $('.menu3 span').text();
-        $('.menu3 span').closest('li').html('<span>Бюджет</span><a class="span">'+txt+'</a>');
-        $('.menu3 span').hide();
-        $('.menu3 span').closest('li').addClass('act');
+        $('.menu3 span').closest('li').html('<span>'+txt+'</span><a class="span">'+txt+'</a>');
+        $('.menu3 span').hide().closest('li').addClass('act');
         sm = submenu[page_mid];
         str='';
         l = sm.length;
@@ -300,6 +301,54 @@ $(function() {
         $('ul.menu4 ').html(str);
         return false;
     })
+
+    // Операции
+     $("#addoperation_but").click(function(){
+        $(this).toggleClass("act");
+        if($(this).hasClass("act")){
+            $(".addoperation").show();
+        } else {
+            $(".addoperation").hide();
+        }
+    });
+
+    // Init
+    $('#amount').calculator({
+        layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
+                'MR_7_8_9_-' + $.calculator.UNDO,
+                'MS_4_5_6_*' + $.calculator.PERCENT ,
+                'M+_1_2_3_/' + $.calculator.HALF_SPACE,
+                'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
+        showOn: 'focus' //opbutton
+    });
+    
+    $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
+    $("#date").datepicker();
+    
+    
+    $('#amount,#currency').change(function(){
+        if ($('#type').val() == 2) {
+            //@TODO Дописать округление
+            var result = Math.round($('#amount').val() / $('#currency').val());
+            if (!isNaN(result) && result != 'Infinity') {
+                $("#convertSumCurrency").html("конвертация: "+result);
+            }
+        }
+    });
+
+//    $('#account').change(function(){ changeAccountForTransfer(); });
+//    $('#AccountForTransfer').change( function(){ changeAccountForTransfer(); });
+//    $('#type').change(function(){ changeTypeOperation('add'); });
+    $('#target').change(function(){
+        $("span.currency").each(function(){
+            $(this).text(" "+$("#target :selected").attr("currency"));
+        });
+        $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
+        $("#amount_target").text(formatCurrency($("#target :selected").attr("amount")));
+        $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
+        $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
+    });
+
 });
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}

@@ -51,9 +51,19 @@ class Accounts_Controller extends Template_Controller
             unset($_SESSION['account']);
         }
         $this->tpl->assign("page_title", "account all");
-	$this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
-	$this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
-	$this->tpl->assign("template", "default");
+        $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+        $this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
+        $this->tpl->assign("template", "default");
+
+        // Добавляем js и css файлы в начало
+        $this->tpl->append('css','jquery/jquery.calculator.css');
+        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.datepicker.js');
+        $this->tpl->append('js','jquery/i18n/jquery-ui-i18n.js');
+        $this->tpl->append('js','jquery/jquery.calculator.min.js');
+        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
+        $this->tpl->append('js','jquery/tinysort.js');
     }
 	
     /**
@@ -64,22 +74,20 @@ class Accounts_Controller extends Template_Controller
     function changeType()
     {
         $this->tpl->assign("page_title","account add");
-	$id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
-	$this->model->newEmptyBill($id);
-	$this->tpl->assign("fields", $this->model->formatFields());
-	$this->tpl->assign("type_id", $id);
-         $c_arr=Core::getInstance()->user->getUserCurrency();
-         $arr = array();
-         $i=0;
-         foreach ($c_arr as $key=>$val)
-         {
-             if (is_array($val))
-             {
+        $id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
+        $this->model->newEmptyBill($id);
+        $this->tpl->assign("fields", $this->model->formatFields());
+        $this->tpl->assign("type_id", $id);
+        $c_arr=Core::getInstance()->user->getUserCurrency();
+        $arr = array();
+        $i=0;
+        foreach ($c_arr as $key=>$val) {
+            if (is_array($val)) {
                 $arr[$i]['name']=$val['abbr'];
                 $arr[$i]['key']=$key;
                 $i++;
-             }
-         }
+            }
+        }
          //die(print_r($arr));
         $this->tpl->assign("currency", $arr);
 
@@ -96,7 +104,7 @@ class Accounts_Controller extends Template_Controller
         $this->tpl->assign("page_title","account add");
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
         $this->model->add($_POST);
-	$this->accountslist();
+        $this->accountslist();
         die ();
     }
 	
@@ -133,10 +141,10 @@ class Accounts_Controller extends Template_Controller
     function correct()
     {
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-	$qString = urldecode($_POST['qString']);
+        $qString = urldecode($_POST['qString']);
         $aid=$_POST['aid'];
         $tid=$_POST['tid'];
-	$qString = explode("&", $qString);
+        $qString = explode("&", $qString);
         $this->model->correct($qString,$aid,$tid);
         die ();
     }
