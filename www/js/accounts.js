@@ -2,7 +2,7 @@
 
 $(document).ready(function() {
 
-        function formatCurrency(num) {
+    function formatCurrency(num) {
         if (num=='undefined') num = 0;
         //num = num.toString().replace(/\$|\,/g,'');
         if(isNaN(num)) num = "0";
@@ -16,7 +16,7 @@ $(document).ready(function() {
             num = num.substring(0,num.length-(4*i+3))+' '+
             num.substring(num.length-(4*i+3));
         return (((sign)?'':'-') + '' + num + '.' + cents);
-        }
+    }
 
     var new_acc = 1;
     var aid;

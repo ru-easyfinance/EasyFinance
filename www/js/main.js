@@ -87,28 +87,6 @@ $(function(document) {
     }
 
     /**
-     * Форматирует валюту
-     * @param num float Сумма, число
-     * @return string
-     */
-    var formatCurrency = function (num) {
-        if (num=='undefined') num = 0;
-        //num = num.toString().replace(/\$|\,/g,'');
-        if(isNaN(num)) num = "0";
-        sign = (num == (num = Math.abs(num)));
-        num = Math.floor(num*100+0.50000000001);
-        cents = num%100;
-        num = Math.floor(num/100).toString();
-        if(cents<10)
-            cents = "0" + cents;
-        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-            num = num.substring(0,num.length-(4*i+3))+' '+
-            num.substring(num.length-(4*i+3));
-        return (((sign)?'':'-') + '' + num + '.' + cents);
-    }
-
-    
-    /**
      * Получает список тегов
      */
     function getTags() {
@@ -261,6 +239,7 @@ $(function(document) {
             $('#target').change();
         }
     }
+    
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
@@ -269,7 +248,7 @@ $(function(document) {
         $('#btn_Save').click(function(){ saveOperation(); })
         $('#btn_Cancel').click(function(){ clearForm() });
 
-         $("#addoperation_but").click(function(){
+        $("#addoperation_but").click(function(){
             $(this).toggleClass("act");
             if($(this).hasClass("act")){
                 $(".addoperation").show();
@@ -568,5 +547,27 @@ $(function(document) {
 
 
     });
+
+/**
+ * Форматирует валюту
+ * @param num float Сумма, число
+ * @return string
+ */
+ function formatCurrency(num) {
+    if (num=='undefined') num = 0;
+    //num = num.toString().replace(/\$|\,/g,'');
+    if(isNaN(num)) num = "0";
+    sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num*100+0.50000000001);
+    cents = num%100;
+    num = Math.floor(num/100).toString();
+    if(cents<10)
+        cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+        num = num.substring(0,num.length-(4*i+3))+' '+
+        num.substring(num.length-(4*i+3));
+    return (((sign)?'':'-') + '' + num + '.' + cents);
+}
+
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}

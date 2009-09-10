@@ -30,11 +30,11 @@ class Info_Controller extends Template_Controller
      * @var int
      */
     private $count = 5;
+
     /**
      * Конструктор класса
      * @return void
      */
-
     function __construct()
     {
         $this->tpl = Core::getInstance()->tpl;
@@ -58,7 +58,22 @@ class Info_Controller extends Template_Controller
         $this->tpl->append('js','anychart/AnyChart.js');
         $this->tpl->append('js','info/functions.js');
         $this->tpl->append('js','info/view.js');
+
+        // Операция
+        $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+        $this->tpl->assign('category', get_tree_select());
+        $targets = new Targets_Model();
+        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
+        $this->tpl->append('css','jquery/jquery.calculator.css');
+        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.datepicker.js');
+        $this->tpl->append('js','jquery/i18n/jquery-ui-i18n.js');
+        $this->tpl->append('js','jquery/jquery.calculator.min.js');
+        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
+        $this->tpl->append('js','jquery/tinysort.js');
     }
+
 ////////////targets/////////////////////////////////////////
     function targets_list()
     {

@@ -31,6 +31,19 @@ class Report_Controller extends Template_Controller
         $this->tpl->assign('name_page', 'report/report');
         $this->model = new Report_Model();
 
+        // Операция
+        $this->tpl->assign('category', get_tree_select());
+        $targets = new Targets_Model();
+        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
+        $this->tpl->append('css','jquery/jquery.calculator.css');
+        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.datepicker.js');
+        $this->tpl->append('js','jquery/i18n/jquery-ui-i18n.js');
+        $this->tpl->append('js','jquery/jquery.calculator.min.js');
+        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
+        $this->tpl->append('js','jquery/tinysort.js');
+
         // Виды и названия отчетов
         $this->reports = array(
             'graph_profit' => 'Доходы',

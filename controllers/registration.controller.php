@@ -18,7 +18,7 @@ class Registration_Controller extends Template_Controller {
      * @return void
      */
     function __construct() {
-        header('Location: /');
+        header('Location: /'); exit;        
         $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
         
@@ -26,6 +26,8 @@ class Registration_Controller extends Template_Controller {
         $tpl->append('js','registration.js');
 
         $tpl->assign('name_page', 'registration');
+        $tpl->assign('no_menu', '1');
+
         //$tpl->assign('register', array());
     }
 
