@@ -353,7 +353,7 @@ $(function(document) {
             $('.menu3 li').removeClass('act');
             $(this).addClass('act');
             //$('menu3') создадим субменю
-            sm = submenu[act_id];
+            sm = submenu[act_id]?submenu[act_id]:'';
             str='';
             l = sm.length;
             k = 0;

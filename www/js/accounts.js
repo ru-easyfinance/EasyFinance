@@ -1,47 +1,6 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
 
 $(document).ready(function() {
-
-
-
-
-
-
-
-$('#header').qtip({
-               content: 'corners[i]', // Set the tooltip content to the current corner
-               position: {
-                  corner: {
-                     tooltip: 'rightMiddle', // Use the corner...
-                     target: 'leftMiddle' // ...and opposite corner
-                  }
-               },
-               show: {
-                  when: false, // Don't specify a show event
-                  ready: true // Show the tooltip when ready
-               },
-               hide: false, // Don't specify a hide event
-               style: {
-                  border: {
-                     width: 5,
-                     radius: 10
-                  },
-                  padding: 10,
-                  textAlign: 'center',
-                  tip: true, // Give it a speech bubble tip with automatic corner detection
-                  name: 'cream' // Style it according to the preset 'cream' style
-               }
-            });
-
-
-
-
-
-
-
-
-
-
         function formatCurrency(num) {
         if (num=='undefined') num = 0;
         //num = num.toString().replace(/\$|\,/g,'');
