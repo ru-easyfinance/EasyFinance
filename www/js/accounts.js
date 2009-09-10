@@ -2,7 +2,47 @@
 
 $(document).ready(function() {
 
-    function formatCurrency(num) {
+
+
+
+
+
+
+$('#header').qtip({
+               content: 'corners[i]', // Set the tooltip content to the current corner
+               position: {
+                  corner: {
+                     tooltip: 'rightMiddle', // Use the corner...
+                     target: 'leftMiddle' // ...and opposite corner
+                  }
+               },
+               show: {
+                  when: false, // Don't specify a show event
+                  ready: true // Show the tooltip when ready
+               },
+               hide: false, // Don't specify a hide event
+               style: {
+                  border: {
+                     width: 5,
+                     radius: 10
+                  },
+                  padding: 10,
+                  textAlign: 'center',
+                  tip: true, // Give it a speech bubble tip with automatic corner detection
+                  name: 'cream' // Style it according to the preset 'cream' style
+               }
+            });
+
+
+
+
+
+
+
+
+
+
+        function formatCurrency(num) {
         if (num=='undefined') num = 0;
         //num = num.toString().replace(/\$|\,/g,'');
         if(isNaN(num)) num = "0";
@@ -66,10 +106,10 @@ $(document).ready(function() {
         g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
         g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         spec_th = [ '',
-                    '<th>% годовых</th><th>Доходность, % годовых</th>',
-                    '<th>% годовых</th>Доходность, % годовых<th></th><th>Изменение с даты открытия</th>',
-                    '<th>% годовых</th>',
-                    '<th>Доходность, % годовых</th><th>Изменение с даты открытия</th>'];//доп графы для групп
+                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
+                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>',
+                    '<th Style="display:none">% годовых</th>',
+                    '<th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>'];//доп графы для групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
@@ -150,19 +190,16 @@ $(document).ready(function() {
                                     <th> \n\
                                         Имя \n\
                                     </th>\n\
-                                    <th> \n\
+                                    <th Style="display:none"> \n\
                                         Описание \n\
                                     </th>\n\
-                                    <th> \n\
+                                    <th Style="position:absolute;left:200px"> \n\
                                         Остаток \n\
                                     </th>\n\
-                                    <th> \n\
+                                    <th Style="display:none"> \n\
                                         Тип \n\
                                     </th>\n\
-                                    <th> \n\
-                                        Валюта \n\
-                                    </th>\n\
-                                    <th> \n\
+                                    <th Style="position:absolute;right:150px"> \n\
                                         Рублёвый эквивалент \n\
                                     </th>';
                     head_tr = head_tr + spec_th[key];
@@ -187,12 +224,12 @@ $(document).ready(function() {
 
                 $('.item td').hide();
                 $('.item td.name').show();
-                $('.item td.cur').show();
-                $('.item td.cat').show();
+                $('.item td.cur').show().css('width','50px');
+                //$('.item td.cat').show();
                 $('.item td.def_cur').show();
-                $('.item td.special').show();
-                $('.item td.description').show();
-                $('.item td.total_balance').show();
+                //$('.item td.special').show();
+                //$('.item td.description').show();
+                $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
                 $('.item td.mark').show();
             },
             'json'
@@ -203,12 +240,64 @@ $(document).ready(function() {
     
     $('tr.item').live('mouseover',
         function(){
+            var texts=[];
+            var i=0;
+            var cur=$(this).find('.cur').text();
+            $(this).find('td').each(function(){
+                texts[i]=$(this).text();
+                cls = $(this).attr('class');
+                if(cls == 'total_balance')
+                    texts[i] = texts[i] +' '+cur;
+                //alert(texts[i]);
+                if (texts[i]=='undefined')
+                    i = i -1;
+                if ((cls =='type')||(cls == 'id')||(cls == 'cur'))
+                    i = i -1;
+                i++;
+            });
+            var headers=[];
+            i=0;
+            $(this).closest('table').find('th').each(function(){
+                headers[i]=$(this).text();
+                i++;
+            });
+            str = '<table Stile="padding:3px">';
+            for(key in headers)
+            {
+                str = str + '<tr><th>' +
+                        headers[key] + '</th><td style="width:10px">&nbsp;</td><td>'+
+                        texts[key] + '</td>';
+            }
+            str = str + '<table>';
+            //alert(texts.toString());
+            $(this).qtip({
+               content: str, // Set the tooltip content to the current corner
+               position: {
+                  corner: {
+                     tooltip: 'rightMiddle', // Use the corner...
+                     target: 'leftMiddle' // ...and opposite corner
+                  }
+               },
+               show: {
+                  when: false, // Don't specify a show event
+                  ready: true // Show the tooltip when ready
+               },
+               hide: false, // Don't specify a hide event
+
+               style: {
+                  name: 'light',
+                  //width: { max: 700 }, // Set a high max width so the text doesn't wrap
+                  tip: true // Give them tips with auto corner detection
+               }
+            });
             $('tr.item').attr('class','item');
             $(this).attr('class','item act');
     });
 
     $('tr.item').live('mouseout',
         function(){
+            if($(this).data("qtip"))
+                    $(this).qtip("destroy");
             $(this).attr('class','item');
     });
     //del accoun click
@@ -271,7 +360,7 @@ $(document).ready(function() {
                 id: id
             },
              function(data) {
-                $('#account_fields').html(data);
+                $('#account_form_fields').html(data);
             },
             'text'
         );
