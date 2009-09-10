@@ -62,7 +62,6 @@ $(function(document) {
             if (data != null) {
                 // Собираем данные для заполнения в таблицу
                 for(v in data) {
-                    tg = (data[v].tags!=null) ? data[v].tags : '';
                     if (data[v].tr_id > 0) {
                         tp = 'Перевод';
                     }else if (data[v].virt == 1) {
@@ -76,13 +75,11 @@ $(function(document) {
                     }
                     tr += "<tr value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                         + '<td class="light"><a href="#">' + tp + '</a></td>'
-                        + '<td class="summ"><span><b>'+data[v].money+'</b></span></td>'
+                        + '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
                         + '<td class="light"><span>'+data[v].date+'</span></td>'
                         + '<td class="big"><span>'+data[v].cat_name+'</span></td>'
-                        + '<td class="light"><span>'+data[v].account_name+'</span></td>'
-                        + '<td class="light"><span>'+tg+'</span></td>'
-                        + '<td class="no_over big">'
-                            +'<div class="cont"><span>'+data[v].comment+'</span><ul>'
+                        + '<td class="no_over big"'
+                            +'<div class="cont"><span>'+data[v].account_name+'</span><ul>'
                             +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                             +'<li class="del"><a title="Удалить">Удалить</a></li>'
                             +'<li class="add"><a title="Копировать">Копировать</a></li>'
@@ -100,7 +97,7 @@ $(function(document) {
                     $(this).parent().find('ul').hide();
                 });
                 // Биндим щелчки на кнопках тулбокса (править, удалить, копировать)
-                $('#operations_list a').unbind('click.panel').bind('click.panel', function(){
+                $('#operations_list a').live('click', function(){
                     if ($(this).parent().attr('class') == 'edit') {
                         fillForm(operationList[$(this).closest('tr').attr('value')]);
                         $('form').attr('action','/operation/edit/');

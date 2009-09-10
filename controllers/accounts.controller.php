@@ -55,7 +55,10 @@ class Accounts_Controller extends Template_Controller
         $this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
         $this->tpl->assign("template", "default");
 
-        // Добавляем js и css файлы в начало
+        // Операция
+        $this->tpl->assign('category', get_tree_select());
+        $targets = new Targets_Model();
+        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
         $this->tpl->append('css','jquery/jquery.calculator.css');
         $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
         $this->tpl->append('js','jquery/ui.core.js');

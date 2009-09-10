@@ -35,6 +35,17 @@ class Core
     /**
      * Ссылка на экземпляр класса с валютами
      * @var Currency
+     * @example Core::getInstance->currency[$id] Так можно получить системную валюту по id
+     * @example Пример части массива системных валют
+     * <code>array(
+     * '2'=>array(
+     *      'name'=>'Доллар США',
+     *      'abbr'=>'$',
+     *      'charCode'=>'USD',
+     *      'value'=>'31.2424',
+     *      'dirrection'=>'up'
+     *  )),
+     * </code>
      */
     public static $currency = null;
 

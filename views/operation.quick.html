@@ -92,7 +92,7 @@
                                             <label for="AccountForTransfer">На счет:</label>
                                             <select id="AccountForTransfer">
                                                 {foreach from=$accounts item=acc_data}
-                                                <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                                                <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
                                                 {/foreach}
                                             </select>
                                             <span id="operationTransferCurrency" style="display:none;">
@@ -117,7 +117,7 @@
 										<div class="f_field tags">
 											<label for="tags">Теги</label>
 											<input type="text" value="" id="tags" class="inp" autocomplete="off" />
-											<a href="#" id="tags" title="Редактировать"></a>
+											<a id="tags" title="Редактировать"></a>
 										</div>
 										<div class="tags_could" id="tags">
 

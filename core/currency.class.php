@@ -59,6 +59,7 @@ class Currency implements IteratorAggregate,  ArrayAccess
             $daily = $this->db->select($sql);
             foreach ($daily as $val) {
                 $this->sys_list_currency[$val['currency_id']] = array(
+                   'id'        => $val['currency_id'],
                    'name'      => $daily['name'],
                    'abbr'      => $daily['abbr'],
                    'charCode'  => $daily['charCode'],
