@@ -29,16 +29,19 @@ class Profile_Model
     }
 
     private function ident($pass){
-        $sql = "SELECT COUNT(*) FROM users WHERE user_pass=SHA1('$pass') AND id='".$this->user_id."'" ;
+        $sql = (int)(sha1($pass) == $_SESSION['user']['user_pass']) ;
         return $sql;
     }
 
     private function save($table, $set, $ident = 1){
-        $set_str = " ";
+        $set_str = "";
         foreach($set as $key => $val){
             $set_str .=", `$key`='$val'";
         }
+        $set_str .=' ';
         $set_str = substr($set_str, 1);
+        if (!$ident)
+        return 'nopass';
         $sql = "UPDATE $table SET $set_str WHERE id=? AND $ident;";
         return $this->db->query($sql,$this->user_id);
     }
@@ -49,18 +52,17 @@ class Profile_Model
             case 'save':
                 $ident = $this->ident($prop['user_pass']);
                 $prop['user_pass'] = $prop['newpass'] ?
-                                    $prop['newpass'] :
-                                    $prop['user_pass'];
+                                    sha1($prop['newpass']) :
+                                    sha1($prop['user_pass']);
                 unset($prop['newpass']);
                 $ret['profile'] = $this->save('users', $prop, $ident);
+                Core::getInstance()->user->initUserCurrency();
+                Core::getInstance()->user->save();
                 break;
             case 'load':
                 $ret['profile']['login']=$_SESSION['user']['user_login'];
                 $ret['profile']['name']=$_SESSION['user']['user_name'];
                 $ret['profile']['mail']=$_SESSION['user']['user_mail'];
-                $ret['profile']['currency']=$_SESSION['user_currency'];
-                $sql = "SELECT * FROM currency";
-                $ret['currency'] = $this->db->select($sql);
                 break;
         }
         return json_encode($ret);
@@ -75,8 +77,10 @@ class Profile_Model
                 break;
             case 'load':
                 $ret['profile']['currency']=$_SESSION['user_currency'];
-                $sql = "SELECT * FROM currency";
-                $ret['currency'] = $this->db->select($sql);
+                $ret['currency'] = array();
+                foreach (Core::getInstance()->currency as $key => $val) {
+                    $ret['currency'][$key]=$val;
+                }
                 break;
         }
         return json_encode($ret);

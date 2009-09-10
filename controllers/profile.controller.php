@@ -28,7 +28,9 @@ class Profile_Controller extends Template_Controller
 
         $this->tpl = Core::getInstance()->tpl;
         $this->model = new Profile_Model();
-        //$this->tpl->assign('name_page', 'profile/profile');
+        $this->tpl->assign('name_page', 'profile/profile');
+        $this->tpl->append('js','profile/functions.js');
+        $this->tpl->append('js','profile/main.js');
     }
 
     function index()
@@ -58,11 +60,10 @@ class Profile_Controller extends Template_Controller
 
     function save_currency(){
         $prop = array();
-        $prop['user_currency_list'] = serialize($_POST['currency']);//arr
+        $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));//arr
         $prop['user_currency_default'] = (int)$_POST['currency_default'];
-        Core::getInstance()->user->initUserCurrency();
-        Core::getInstance()->user->save();
-        die($this->model->mainsettings('save',$prop));
+        
+        die($this->model->currency('save',$prop));
     }
 }
 ?>
