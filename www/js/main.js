@@ -3,6 +3,66 @@
  * 
  * {* $Id$ *}
  */
+//conf href to modul
+function get_array_key($arr, $val)
+{
+    $ret = -1;
+    for(key in $arr)
+    {
+        if ($val == $arr[key])
+        {
+            $ret = key;
+            break;
+        }
+    }
+    return $ret;
+}
+
+aPath=['//',
+    '/about/',
+    '/accounts/',
+    '/admin/',
+    '/blog/',
+    '/budget/',
+    '/calendar/',
+    '/category/',
+    '/experts/',
+    '/feedback/',
+    '/forum/',
+    '/info/',
+    '/login/',
+    '/logout/',
+    '/mail/',
+    '/operation/',
+    '/periodic/',
+    '/profile/',
+    '/registration/',
+    '/report/',
+    '/review/',
+    '/rules/',
+    '/security/',
+    '/start/',
+    '/tags/',
+    '/targets/',
+    '/welcome/',
+    '/template/']//данный контроллер можно использовать как системный))
+href = location.pathname;
+href = href.toLowerCase() + '/';
+b=0;
+nhref=new String;
+for(i=0;i<href.length;i++)
+{
+    if (href[i] == '/')
+            b++;
+    nhref = nhref + href[i];
+    if(b == 2)
+        break;
+}
+var Current_module = get_array_key(aPath, nhref);
+var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
+                            menu:[2,5,6,7,8,11,15,16,17,19,25]};
+
+
 $(function(document) {
     
     // *** Функции ***
@@ -201,9 +261,8 @@ $(function(document) {
             $('#target').change();
         }
     }
-
     // Выводим окно с операциями, если у нас пользователь авторизирован
-    if (location.pathname != '/' && location.pathname != '/profile') {
+    if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
         getTags();
 
@@ -253,7 +312,8 @@ $(function(document) {
             $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
             $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
         });
-
+    }
+    if(inarray(Current_module, Connected_functional.menu)){//////////////////////////////////
         //верхнее меню
         head = $('#menumain').attr('value');
         if (!head)
@@ -325,8 +385,8 @@ $(function(document) {
             $('ul.menu4 ').html(str);
             return false;
         })
-
     }
+    
 
     // Кнопка сворачивания / разворачивания
     $('li.over3').click(function() {
@@ -336,7 +396,7 @@ $(function(document) {
 
     // Кнопка закрыть
     $('li.over2').hide();
-        $('li.over1').hide();
+    $('li.over1').hide();
     $('li.over2').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').hide();
