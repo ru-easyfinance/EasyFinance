@@ -22,7 +22,7 @@ a img, fieldset { border:0 none; }
 td.time{padding-right: 5px;  }
 
 .PEND,.CLOSED {color: #FF0000; }
-
+#header #auth ul li.user_link{position:relative; float: top;display:block;}
 .mid span.mid_text{position: relative; padding-right : 30px; left : 15px; }
 .fl_l { float: left; }
 .fl_r { float: right; }
@@ -247,7 +247,7 @@ ul.menu4 li#m_last a { background: none; }
 .block2 { float: left; margin-right: 22px; width: 547px; z-index: 1; }
 .block3 { float: left; width: 176px; padding-bottom: 17px; z-index: 0; border: 1px solid #ebebeb; }
 
-.block1 .listing { display: none; }
+/*.block1 .listing { display: none; }*/
 .block1 .financobject, .block1 .experts, .block1 .budget2 { margin: 0 10px 0 11px; padding-bottom: 18px; }
 
 
@@ -983,7 +983,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 
 #poputags { display: none; position: absolute; width: 271px; z-index: 1000; }
 #poputags .cont, #poputags .cb {  width: 271px; }
-#poputags .cont .ct, #poputags .cb div { left: -400px; }
+#poputags .cont .ct { left: -400px; }
 #poputags .inside { padding: 20px 0 4px 23px; }
 #poputags .f_field { position: relative; margin: 0 0 8px 40px; }
 #poputags .f_field label { display: block; position: absolute; top: 3px; left: -40px; color: #4c4c4c; }
@@ -994,7 +994,17 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #poputags .tags a:hover { text-decoration: underline; }
 #poputags .but { margin-left: 61px; }
 
-
+#poputags_edit { position: absolute; width: 271px; z-index: 1000; }
+#poputags_edit .cont, #poputags_edit .cb {  width: 271px; }
+#poputags_edit .cont .ct, #poputags_edit .cb div { left: -400px; }
+#poputags_edit .inside { padding: 20px 0 4px 23px; }
+#poputags_edit .f_field { position: relative; margin: 0 0 8px 40px; }
+#poputags_edit .f_field label { display: block; position: absolute; top: 3px; left: -40px; color: #4c4c4c; }
+#poputags_edit .f_field input { color: #b2b2b2; width: 158px; //width: 152px;}
+#poputags_edit .tags { margin: 0 22px 13px 0; line-height: 19px; color: #989898; }
+#poputags_edit .tags a { margin-right: 6px; color: #989898; text-decoration: none; }
+#poputags_edit .tags a:hover { text-decoration: underline; }
+#poputags_edit .but { margin-left: 61px; }
 #popupadd_calendar .inside { padding: 20px 0 14px 0; }
 #popupadd_calendar .f_field { position: relative; margin: 0 0 8px 168px; }
 #popupadd_calendar .f_field label, #popupaddobject .f_field label { display: block; position: absolute; top: 3px; left: -140px; width: 125px; text-align: right; }
