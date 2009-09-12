@@ -571,7 +571,7 @@ $(function(document) {
 ///////////////////////////////////////////////////////////////////////////////
 // left
 // nav bar
-$(document).ready(function(){
+/*$(document).ready(function(){
 $('.navigation  li ul').hide()
 $('.navigation li.act ul').show()
 $('.navigation  li span').click(function(){
@@ -698,7 +698,7 @@ var val = {};//сумма средств по каждой используем�
         );
 });
 
-
+*/
 
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
