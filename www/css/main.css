@@ -21,6 +21,9 @@ a img, fieldset { border:0 none; }
 
 td.time{padding-right: 5px;  }
 
+.operation_list table.noborder{border:0}
+.operation_list table.noborder td{width:30px}
+.operation_list table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .PEND,.CLOSED {color: #FF0000; }
 #header #auth ul li.user_link{position:relative; float: top;display:block;}
 .mid span.mid_text{position: relative; padding-right : 30px; left : 15px; }

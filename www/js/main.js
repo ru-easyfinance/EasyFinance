@@ -568,6 +568,137 @@ $(function(document) {
         num.substring(num.length-(4*i+3));
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
+///////////////////////////////////////////////////////////////////////////////
+// left
+// nav bar
+$(document).ready(function(){
+$('.navigation  li ul').hide()
+$('.navigation li.act ul').show()
+$('.navigation  li span').click(function(){
+    $('.navigation  li span').closest('li').removeClass('act');
+    $(this).closest('li').addClass('act');
+    $('.navigation  li ul').hide()
+    $('.navigation li.act ul').show()
+})
+// tags
+$.get('/tags/getCloudTags/', '', function(data) {
+            str = '<div class="title">\n\
+                        <h2>Теги</h2>\n\
+                        <a title="Добавить" class="add">Добавить</a>\n\
+                    </div>\n\
+                    <ul>';
+            for (key in data)
+            {
+                str = str + '<li><a>'+data[key]['name']+'</a></li>';
+            }
+            $('.tags_list').html(str+'</ul>');
+
+        }, 'json');
+        $('.tags_list li a').live('click', function(){
+            $('.edit_tag').dialog('open');
+            $('.edit_tag input').val($(this).text());
+            $('.edit_tag').dialog({
+                width: 260,
+                minHeight: 50,
+                buttons: {
+                    'Сохранить': function() {
+                        if($('input#tag').val())
+                        $.post('/tags/edit/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                    },
+                    'Удалить': function() {
+                        $.post('/tags/del/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                    }
+
+            }});
+  
+        });
+        $('.tags_list .add').live('click', function(){
+            $('.edit_tag').show();
+            $('.edit_tag').dialog('open');
+            $('.edit_tag input').val($(this).text());
+            $('.edit_tag').dialog({
+                width: 260,
+                minHeight: 50,
+                buttons: {
+                    'Сохранить': function() {
+                        if($('input#tag').val())
+                        {
+                            $.post('/tags/add/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                            $('.edit_tag').dialog('close');
+                        }
+                    }
+
+            }});
+
+        });
+//accounts
+g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+var arr = ['','','','',''];//содержимое каждой группы
+var summ = [0,0,0,0,0];// сумма средств по каждой группе
+var val = {};//сумма средств по каждой используемой валюте
+        $.post('/accounts/accountslist/',
+            {},
+            function(data){
+                len = data.length;
+                div = "<div class='cont'>&nbsp;<ul>\n\
+                        <li class='edit'><a></a></li>\n\
+                        <li class='del'><a></a></li>\n\
+                      </ul></div>";
+
+                $('#operation_list').empty();
+                for (key in data )
+                {
+                    i = g_types[data[key]['type']];
+                    str = '<li><a>';
+                    str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
+                    str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
+                    str = str + '<span>'+data[key]['fields']['name']+'</span>';
+                    str = str + '<b>'+formatCurrency(data[key]['fields']['total_balance']);
+                    str = str + data[key]['cur']+ '</b>'+'</a></li>';
+                    summ[i] = summ[i]+data[key]['def_cur'];
+                    if (!val[data[key]['cur']]) {
+                        val[data[key]['cur']]=0;
+                    }
+                    val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
+                        + parseFloat(data[key]['fields']['total_balance']);
+                    
+                    arr[i] = arr[i]+str;
+                }
+                total = 0;
+                for(key in arr)
+                {
+                    total = total+(parseInt(summ[key]*100))/100;
+                    s='<ul>'+arr[key]+'</ul>';
+                    if (arr[key])
+                        $('.accounts #'+key).html(s);
+                }
+                /////////////////////формирование итогового поля//////////////////////
+                for(key in val)
+                {
+                    str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
+                }
+                str = str+'<tr><td><b>Итого:</b>  '+formatCurrency(total)+'</td><td> руб.</td></tr>';
+                str = str + '</table>';
+                 $('#operation_list').append(str);
+                ////////////////////////////////////////////////////////////////
+
+
+                $('.item td').hide();
+                $('.item td.name').show();
+                $('.item td.cur').show().css('width','50px');
+                //$('.item td.cat').show();
+                $('.item td.def_cur').show();
+                //$('.item td.special').show();
+                //$('.item td.description').show();
+                $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
+                $('.item td.mark').show();
+            },
+            'json'
+        );
+});
+
+
 
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}

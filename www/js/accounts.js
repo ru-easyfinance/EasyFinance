@@ -152,7 +152,7 @@ $(document).ready(function() {
                                     <th Style="display:none"> \n\
                                         Описание \n\
                                     </th>\n\
-                                    <th Style="position:absolute;left:200px"> \n\
+                                    <th Style="position:absolute;left:200px" COLSPAN=2> \n\
                                         Остаток \n\
                                     </th>\n\
                                     <th Style="display:none"> \n\
@@ -164,12 +164,12 @@ $(document).ready(function() {
                     head_tr = head_tr + spec_th[key];
                     head_tr = head_tr + '<tr>';
                     
-                    s='<div><strong class="title">'+ g_name[key] + '</strong> : '+(parseFloat(summ[key]*100))/100+' руб.<table>'+head_tr+arr[key]+'</table></div>';
+                    s='<div><strong class="title">'+ g_name[key] + '</strong> : '+formatCurrency(parseFloat(summ[key]*100)/100)+' руб.<table  class="noborder">'+head_tr+arr[key]+'</table></div>';
                     if (arr[key])
                     $('#operation_list').append(s);
                 }
                 /////////////////////формирование итогового поля//////////////////////
-                str='<strong class="title"> Итог </strong><table>\n\
+                str='<strong class="title"> Итог </strong><table class="noborder">\n\
                         <tr><th>Сумма</th><th>Валюта</th></tr>';
                 for(key in val)
                 {
@@ -255,8 +255,12 @@ $(document).ready(function() {
 
     $('tr.item').live('mouseout',
         function(){
-            if($(this).data("qtip"))
-                    $(this).qtip("destroy");
+//            if($(this).data("qtip"))
+//                {
+//                    $(this).qtip("destroy");
+//                }
+
+            $('.qtip').remove();
             $(this).attr('class','item');
     });
     //del accoun click
