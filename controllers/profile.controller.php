@@ -25,7 +25,6 @@ class Profile_Controller extends Template_Controller
      */
     function __construct()
     {
-
         $this->tpl = Core::getInstance()->tpl;
         $this->model = new Profile_Model();
         $this->tpl->assign('name_page', 'profile/profile');
@@ -39,7 +38,7 @@ class Profile_Controller extends Template_Controller
     }
     /**
      * отдаёт логин имя мыло
-     * return void;
+     * @return void;
      */
     function load_main_settings(){
         die($this->model->mainsettings('load'));
@@ -58,6 +57,9 @@ class Profile_Controller extends Template_Controller
         die($this->model->currency('load'));
     }
 
+    /**
+     *
+     */
     function save_currency(){
         $prop = array();
         $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));//arr

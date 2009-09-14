@@ -10,19 +10,19 @@ class Accounts_Controller extends Template_Controller
 
     /**
      * Ссылка на класс User
-     * @var <User>
+     * @var User
      */
     private $user = null;
 
     /**
      * Ссылка на класс Smarty
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
 
     /**
      * Ссылка на класс модель
-     * @var <Accounts_Model>
+     * @var Accounts_Model
      */
     private $model = null;	
 
@@ -32,7 +32,7 @@ class Accounts_Controller extends Template_Controller
      */
     function __construct()
     {
-	$this->user  = Core::getInstance()->user;
+        $this->user  = Core::getInstance()->user;
         $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Accounts_Model();
         $this->tpl->assign('name_page', 'accounts/accounts');
@@ -54,6 +54,7 @@ class Accounts_Controller extends Template_Controller
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
         $this->tpl->assign("template", "default");
+
 
         // Операция
         $this->tpl->assign('category', get_tree_select());

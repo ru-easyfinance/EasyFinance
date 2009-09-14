@@ -5,7 +5,6 @@ $(function () {
     loadPeriodic();
 
     // INIT
-
     $('#amount').calculator({
         layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                 'MR_7_8_9_-' + $.calculator.UNDO,

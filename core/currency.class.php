@@ -50,23 +50,54 @@ class Currency implements IteratorAggregate,  ArrayAccess
         if (!include_once (dirname(dirname(__FILE__)).'/include/daily_currency.php')) {
             $daily = null;
         }
+        $daily = null;
         if ($daily == null) {
-            $sql = "SELECT cur_name_value AS name, cur_char_code AS `charCode`,
-                    cur_name AS abbr, currency_sum AS value, direction
-                FROM currency
-                LEFT JOIN daily_currency ON cur_id=currency_id
-                WHERE currency_date=CURRENT_DATE OR cur_id=1";
-            $daily = $this->db->select($sql);
-            foreach ($daily as $val) {
-                $this->sys_list_currency[$val['currency_id']] = array(
-                   'id'        => $val['currency_id'],
-                   'name'      => $daily['name'],
-                   'abbr'      => $daily['abbr'],
-                   'charCode'  => $daily['charCode'],
-                   'value'     => $daily['value'],
-                   'direction' => $daily['direction'],
+
+            $currency = $this->db->select("SELECT * FROM currency c");
+            $daily = $this->db->select("SELECT currency_id, user_id, direction, currency_sum AS value,
+                MAX(currency_date) AS `date` FROM daily_currency GROUP BY currency_id, user_id");
+
+            foreach ($currency as $v) {
+                $this->sys_list_currency[$v['cur_id']] = array(
+                   'id'        => $v['cur_id'],
+                   'name'      => $v['cur_name_value'],
+                   'abbr'      => $v['cur_name'],
+                   'charCode'  => $v['cur_char_code'],
+                   'okv'       => $v['cur_okv_id'],
+                   'country'   => $v['cur_country'],
+                   'uses'      => $v['cur_uses']
                 );
+                foreach ($daily as $k => $val) {
+                    if ($val['currency_id'] == $v['cur_id']) {
+                        if ($val['user_id'] > 0) {
+                            $this->sys_list_currency[$v['cur_id']]['value_user']  = $val['value'];
+                            $this->sys_list_currency[$v['cur_id']]['date_user']   = $val['date'];
+                            $this->sys_list_currency[$v['cur_id']]['direct_user'] = $val['direction'];
+                        } else {
+                            $this->sys_list_currency[$v['cur_id']]['value']       = $val['value'];
+                            $this->sys_list_currency[$v['cur_id']]['date']        = $val['date'];
+                            $this->sys_list_currency[$v['cur_id']]['direct']      = $val['direction'];
+                        }
+                    }
+                }
             }
+
+//            $sql = "SELECT cur_name_value AS name, cur_char_code AS `charCode`,
+//                    cur_name AS abbr, currency_sum AS value, direction
+//                FROM currency
+//                LEFT JOIN daily_currency ON cur_id=currency_id
+//                WHERE currency_date=CURRENT_DATE OR cur_id=1";
+//            $daily = $this->db->select($sql);
+//            foreach ($daily as $val) {
+//                $this->sys_list_currency[$val['currency_id']] = array(
+//                   'id'        => $val['currency_id'],
+//                   'name'      => $daily['name'],
+//                   'abbr'      => $daily['abbr'],
+//                   'charCode'  => $daily['charCode'],
+//                   'value'     => $daily['value'],
+//                   'direction' => $daily['direction'],
+//                );
+//            }
         } else {
             $this->sys_list_currency = $daily;
         }

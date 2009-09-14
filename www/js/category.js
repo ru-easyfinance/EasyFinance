@@ -100,7 +100,7 @@ $(document).ready(function() {
                 if (data.user[id]['parent'] == 0) {
                     m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
                     p[id] = $('<div class="line open" id="'+id+'"><div class="l_n_cont"><a href="#" class="name">'
-			    +data.user[id]['name']+'</a>'
+                    +data.user[id]['name']+'</a>'
                                         +'<div class="cont">'
                                             +'<ul class="ul_head">'
                                                 +'<li class="edit"><a class="cat" href="#" title="Редактировать">Редактировать</a></li>'
@@ -109,7 +109,7 @@ $(document).ready(function() {
                                             +'</ul></div>'
                                         +'</div></div>').appendTo('div.categories');
                 } else {
-		    pr = data.user[id]['parent'];
+                    pr = data.user[id]['parent'];
 
                     if (data.user[id]['type'] > 0) { // Доходная
                         ct ='<div class="t3" title="Доходная">Доходная</div>';
@@ -132,12 +132,13 @@ $(document).ready(function() {
                         +'</td>'
                         +'<td class="w3">'+data.system[data.user[id]['system']]['name']+'</td>'
                         +'<td class="w4">'
-                            +'<div class="cont"><b>500 руб.</b>'
-                                +'<div class="indicator">'
-                                    +'<div style="width: 10%;">'
-                                        +'<span>10%</span>'
-                                    +'</div>'
-                                +'</div>'
+                            +'<div class="cont">'
+//                                +'<b>500 руб.</b>'
+//                                +'<div class="indicator">'
+//                                    +'<div style="width: 10%;">'
+//                                        +'<span>10%</span>'
+//                                    +'</div>'
+//                                +'</div>'
                                 +'<ul><li class="edit"><a title="Редактировать">Редактировать</a></li>'
                                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
                                     +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'

@@ -40,8 +40,9 @@ class Profile_Model
         }
         $set_str .=' ';
         $set_str = substr($set_str, 1);
-        if (!$ident)
-        return 'nopass';
+        if (!$ident) {
+            return 'nopass';
+        }
         $sql = "UPDATE $table SET $set_str WHERE id=? AND $ident;";
         return $this->db->query($sql,$this->user_id);
     }
@@ -56,8 +57,6 @@ class Profile_Model
                                     sha1($prop['user_pass']);
                 unset($prop['newpass']);
                 $ret['profile'] = $this->save('users', $prop, $ident);
-                Core::getInstance()->user->initUserCurrency();
-                Core::getInstance()->user->save();
                 break;
             case 'load':
                 $ret['profile']['login']=$_SESSION['user']['user_login'];
@@ -69,11 +68,14 @@ class Profile_Model
     }
 
 
-    public function currency($mod,$prop){
+    public function currency($mod,$prop)
+    {
         $ret = array();
-        switch($mod){
+        switch($mod) {
             case 'save':
                 $ret['profile'] = $this->save('users', $prop);
+                Core::getInstance()->user->initUserCurrency($prop['user_currency_list'], $prop['user_currency_default']);
+                Core::getInstance()->user->save();
                 break;
             case 'load':
                 $ret['profile']['currency']=$_SESSION['user_currency'];

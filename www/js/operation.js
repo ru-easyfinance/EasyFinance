@@ -77,7 +77,7 @@ $(function(document) {
                         + '<td class="light"><a href="#">' + tp + '</a></td>'
                         + '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
                         + '<td class="light"><span>'+data[v].date+'</span></td>'
-                        + '<td class="big"><span>'+data[v].cat_name+'</span></td>'
+                        + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                         + '<td class="no_over big"'
                             +'<div class="cont"><span>'+data[v].account_name+'</span><ul>'
                             +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'

@@ -8,7 +8,6 @@
 
 class Budget_Controller extends Template_Controller
 {
-    private $money = null;
     private $user = null;
     private $tpl = null;
     private $model = null;	
@@ -19,14 +18,10 @@ class Budget_Controller extends Template_Controller
      */
     function __construct()
     {
-		
-        $this->user = Core::getInstance()->user;
-        $this->tpl = Core::getInstance()->tpl;
+        $this->user  = Core::getInstance()->user;
+        $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Budget_Model();
-
-        $this->tpl->append('js','jquery/zforms.js');
-
-        $this->tpl->assign('name_page', 'budget/budget');
+        
     }
 
     /**

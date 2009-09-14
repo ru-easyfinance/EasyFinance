@@ -48,7 +48,7 @@ class User
 
     /**
      * Массив с недостающими параметрами пользователя
-     * @var <array> 
+     * @var array
      */
     private $wizard = array();
 
@@ -78,7 +78,7 @@ class User
 
     /**
      * Возвращает Id пользователя
-     * @return <int> || false
+     * @return int || false
      */
     public function getId()
     {
@@ -91,8 +91,8 @@ class User
 
     /**
      * Иниализирует пользователя, достаёт из базы некоторые его свойства
-     * @param <string> $login
-     * @param <string> $pass  MD5 пароля
+     * @param string $login
+     * @param string $pass  SHA1 пароля
      * @return bool
      */
     public function initUser($login, $pass)
@@ -121,17 +121,15 @@ class User
             $this->destroy();
             return false;
         }
-        if ($this->props['user_type'] == 0){
+        if ($this->props['user_type'] == 0) {
             if (!$this->init($this->getId())) {
                //@TODO Вызывать мастера настройки счетов, категорий и валют
             }
             $_SESSION['user']            = $this->props;
-            $_SESSION['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
             $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
             return $this->save();
-        }
-        else if ($this->props['user_type'] == 1)
-        {
+        } else if ($this->props['user_type'] == 1) {
             $_SESSION['user']            = $this->props;
             $_SESSION['REMOTE_ADDR']     = '/experts/';
             $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
@@ -227,11 +225,24 @@ class User
 
     /**
      * Получает список валют
+     * @param array mixed $user_currency_list
+     * @param int $currency_default
      * @return void
      */
-    public function initUserCurrency ()
+    public function initUserCurrency ($user_currency_list = null, $currency_default = null)
     {
-        $currency = unserialize($this->props['user_currency_list']);
+        // Если обновляем список валют с нуля
+        if (!$user_currency_list) {
+            $currency = unserialize($this->props['user_currency_list']);
+        } else { // Если мы переназначаем список валют пользователя
+            $currency = $user_currency_list;
+            $this->props['user_currency_list'] = serialize($user_currency_list);
+        }
+        // Если нужно сменить валюту по умолчанию
+        if ($currency_default) {
+            $this->props['user_currency_default'] = (int)$currency_default;
+        }
+
         if (!is_array($currency)) {
             trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
             $currency = array(1);
@@ -271,6 +282,7 @@ class User
      * Возвращает массив с профилем пользователя, с полями : ид, имя, логин, почта
      * @param $id int
      * @return array mixed
+     * @deprecated
      */
     function getProfile($id)
     {
@@ -285,20 +297,20 @@ class User
      * @param $user_name string
      * @param $user_mail string
      * @param $user_login string
+     * @deprecated
      * @return bool
      */
     function updateProfile($user_pass, $new_passwd, $user_name, $user_mail, $user_login)
     {
-        //XXX Сделать шифрование пароля в SHA1
         if (!empty($new_passwd)) {
             $sql = "UPDATE users SET user_name = ?, user_mail = ?,user_pass = ?
                         WHERE id = ? AND user_pass = ? LIMIT 1;";
-            $this->db->query($sql, $user_name, $user_mail, MD5($new_passwd), $this->getId(), MD5($user_pass));
+            $this->db->query($sql, $user_name, $user_mail, SHA1($new_passwd), $this->getId(), SHA1($user_pass));
             return $this->initUser($user_login, $new_passwd);
         }else{
             $sql = "UPDATE users SET user_name = ?, user_mail = ?
                         WHERE id = ? AND user_pass = ? LIMIT 1;";
-            $this->db->query($sql, $user_name, $user_mail, $this->getId(), MD5($user_pass));
+            $this->db->query($sql, $user_name, $user_mail, $this->getId(), SHA1($user_pass));
             return $this->initUser($user_login, $user_pass);
         }
     }

@@ -9,19 +9,19 @@
 class Budget_Model {
     /**
      * Ссылка на экземпляр класса базы данных
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql
      */
     private $db = null;
 
     /**
      * Ссылка на экземпляр класса пользователя
-     * @var <User>
+     * @var User
      */
     private $user = null;
 
     /**
      * Массив со списком ошибок, появляющимися при добавлении, удалении или редактировании (если есть)
-     * @var <array> mixed
+     * @var array mixed
      */
     public $errorData = array();
 
@@ -36,7 +36,7 @@ class Budget_Model {
         return true;
     }
 
-    /**
+  /**
    * Получает план бюджета
    * @param string $date период, за который надо показать план
    *
@@ -48,13 +48,13 @@ class Budget_Model {
       list($year,$month,$day) = explode("-", $dateFrom);
       $dateTo = date("Y-m-d", mktime(0, 0, 0, $month+2, "01", $year));
 
-      $sql = "select * from plan_settings where user_id=? and date_start_plan>=? and date_finish_plan <=?";
+      $sql = "SELECT * FROM plan_settings WHERE user_id=? AND date_start_plan>=? AND date_finish_plan <=?";
       $plan = $this->db->select($sql, $this->user->getId(), $dateFrom, $dateTo);
 
       return $plan;
   }
 
-    /**
+  /**
    * Получает категории для бюджета
    * @param string $drain доход или расход
    *
