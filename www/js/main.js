@@ -290,7 +290,7 @@ $(function(document) {
      * @return void
      */
     function op_saveOperation() {
-        if (!validateForm()){
+        if (!op_validateForm()){
             return false;
         }
         $.post(($('form').attr('action')), {
@@ -752,7 +752,9 @@ $(function(document) {
 ///////////////////////////////////////////////////////////////////////////////
 // left
 // nav bar
-/*$(document).ready(function(){
+/*
+$(document).ready(function(){
+
 $('.navigation  li ul').hide()
 $('.navigation li.act ul').show()
 $('.navigation  li span').click(function(){
@@ -761,8 +763,10 @@ $('.navigation  li span').click(function(){
     $('.navigation  li ul').hide()
     $('.navigation li.act ul').show()
 })
+var res = {tags:['asd'],
+    accounts : {1:{type:'1',id:'1',cur:'rur',def_cur:'12',name:'a',total_balance:'123'}}};
 // tags
-$.get('/tags/getCloudTags/', '', function(data) {
+            data = res['tags'];
             str = '<div class="title">\n\
                         <h2>Теги</h2>\n\
                         <a title="Добавить" class="add">Добавить</a>\n\
@@ -770,11 +774,10 @@ $.get('/tags/getCloudTags/', '', function(data) {
                     <ul>';
             for (key in data)
             {
-                str = str + '<li><a>'+data[key]['name']+'</a></li>';
+                str = str + '<li><a>'+data[key]+'</a></li>';
             }
             $('.tags_list').html(str+'</ul>');
 
-        }, 'json');
         $('.tags_list li a').live('click', function(){
             $('.edit_tag').dialog('open');
             $('.edit_tag input').val($(this).text());
@@ -818,9 +821,11 @@ g_name = ['Деньги','Долги мне','Мои долги','Инвести
 var arr = ['','','','',''];//содержимое каждой группы
 var summ = [0,0,0,0,0];// сумма средств по каждой группе
 var val = {};//сумма средств по каждой используемой валюте
-        $.post('/accounts/accountslist/',
-            {},
-            function(data){
+///////////////////////
+
+
+//////////////////
+        data=res['accounts'];
                 len = data.length;
                 div = "<div class='cont'>&nbsp;<ul>\n\
                         <li class='edit'><a></a></li>\n\
@@ -834,15 +839,15 @@ var val = {};//сумма средств по каждой используем�
                     str = '<li><a>';
                     str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
                     str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-                    str = str + '<span>'+data[key]['fields']['name']+'</span>';
-                    str = str + '<b>'+formatCurrency(data[key]['fields']['total_balance']);
+                    str = str + '<span>'+data[key]['name']+'</span>';
+                    str = str + '<b>'+formatCurrency(data[key]['total_balance']);
                     str = str + data[key]['cur']+ '</b>'+'</a></li>';
                     summ[i] = summ[i]+data[key]['def_cur'];
                     if (!val[data[key]['cur']]) {
                         val[data[key]['cur']]=0;
                     }
                     val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                        + parseFloat(data[key]['fields']['total_balance']);
+                        + parseFloat(data[key]['total_balance']);
                     
                     arr[i] = arr[i]+str;
                 }
@@ -855,31 +860,22 @@ var val = {};//сумма средств по каждой используем�
                         $('.accounts #'+key).html(s);
                 }
                 /////////////////////формирование итогового поля//////////////////////
+                str = '<ul>';
                 for(key in val)
                 {
-                    str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
+                    str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
                 }
-                str = str+'<tr><td><b>Итого:</b>  '+formatCurrency(total)+'</td><td> руб.</td></tr>';
-                str = str + '</table>';
-                 $('#operation_list').append(str);
+                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' руб.</div></li>';
+                str = str + '</ul>';
+                 $('.accounts #l_amount').html(str);
+
+
+       $('.accounts .add').click(function(){
+           document.location='/accounts/#add';
+       })
                 ////////////////////////////////////////////////////////////////
-
-
-                $('.item td').hide();
-                $('.item td.name').show();
-                $('.item td.cur').show().css('width','50px');
-                //$('.item td.cat').show();
-                $('.item td.def_cur').show();
-                //$('.item td.special').show();
-                //$('.item td.description').show();
-                $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
-                $('.item td.mark').show();
-            },
-            'json'
-        );
 });
 
 */
-
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
