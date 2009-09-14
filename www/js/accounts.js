@@ -1,5 +1,4 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
-
 $(document).ready(function() {
         function formatCurrency(num) {
         if (num=='undefined') num = 0;

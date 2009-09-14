@@ -1,5 +1,5 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
-$(function(document) {
+$(document).ready(function() {
     var operationList;
     // Init
     $('#amount').calculator({
@@ -13,9 +13,9 @@ $(function(document) {
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
 
     // Bind
-    $('#btn_Save').click(function(){ saveOperation(); })
-    $('#btn_Cancel').click(function(){ clearForm() });
-    $('#btn_ReloadData').click(function(){ loadOperationList(); });
+    $('#btn_Save').click(function(){saveOperation();})
+    $('#btn_Cancel').click(function(){clearForm()});
+    $('#btn_ReloadData').click(function(){loadOperationList();});
     //$('#category').autocomplete();
     $('#amount,#currency').change(function(){
         if ($('#type').val() == 2) {
@@ -30,8 +30,8 @@ $(function(document) {
         changeAccountForTransfer();
         loadOperationList();
     });
-    $('#AccountForTransfer').change( function(){ changeAccountForTransfer(); });
-    $('#type').change(function(){ changeTypeOperation('add'); });
+    $('#AccountForTransfer').change( function(){changeAccountForTransfer();});
+    $('#type').change(function(){changeTypeOperation('add');});
     $('#target').change(function(){
         $("span.currency").each(function(){
             $(this).text(" "+$("#target :selected").attr("currency"));
@@ -40,6 +40,26 @@ $(function(document) {
         $("#amount_target").text(formatCurrency($("#target :selected").attr("amount")));
         $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
         $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
+    });
+
+    // Биндим щелчки на кнопках тулбокса (править, удалить, копировать)
+    $('#operations_list a').live('click', function(){
+        if ($(this).parent().attr('class') == 'edit') {
+            fillForm(operationList[$(this).closest('tr').attr('value')]);
+            $('form').attr('action','/operation/edit/');
+        } else if($(this).parent().attr('class') == 'del') {
+            deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
+        } else if($(this).parent().attr('class') == 'add') {
+            fillForm(operationList[$(this).closest('tr').attr('value')]);
+            $(this).closest('form').attr('action','/operation/add/');
+            $('#date').datepicker('setDate', new Date() );
+        }
+    });
+
+    $('tr:not(:first)','#operations_list').live('mouseover',function(){
+        $(this).closest('tr').addClass('act');
+    }).live('mouseout', function(){
+        $(this).closest('tr').removeClass('act');
     });
 
     // Autoload
@@ -87,30 +107,14 @@ $(function(document) {
                         +'</td></tr>';
                 }
                 // Очищаем таблицу
-                $('#operations_list tr:not(:first)').each(function(){
+                //биндим показ и скрытие тулбокса
+                $('tr:not(:first)','#operations_list').each(function(){
                     $(this).remove();
                 });
-                // Заполняем таблицу и биндим показ и скрытие тулбокса
-                $('#operations_list').append(tr).find('td').live('mouseover',function(){
-                    $(this).parent().find('ul').show();
-                }).live('mouseout', function(){
-                    $(this).parent().find('ul').hide();
-                });
-                // Биндим щелчки на кнопках тулбокса (править, удалить, копировать)
-                $('#operations_list a').live('click', function(){
-                    if ($(this).parent().attr('class') == 'edit') {
-                        fillForm(operationList[$(this).closest('tr').attr('value')]);
-                        $('form').attr('action','/operation/edit/');
-                        $(document).scrollTop(300);
-                    } else if($(this).parent().attr('class') == 'del') {
-                        deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
-                    } else if($(this).parent().attr('class') == 'add') {
-                        fillForm(operationList[$(this).closest('tr').attr('value')]);
-                        $(this).closest('form').attr('action','/operation/add/');
-                        $('#date').datepicker('setDate', new Date() );
-                        $(document).scrollTop(300);
-                    }
-                })
+                // Заполняем таблицу 
+                $('#operations_list').append(tr);
+                
+
             }
         },'json');
         $('a#tags').removeAttr('href');
@@ -235,8 +239,8 @@ $(function(document) {
 
         if ($('#type') == 4) {
             //@FIXME Написать обновление финцелей
-            amount = parseFloat($("#target_sel option:selected").attr("amount")); $("#amount").text(amount);
-            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done")); $("#amount_done").text(amount_done);
+            amount = parseFloat($("#target_sel option:selected").attr("amount"));$("#amount").text(amount);
+            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done"));$("#amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
                     $("#close").attr("checked","checked");
@@ -289,6 +293,7 @@ $(function(document) {
         $('#date').val(data.date);
         $('#tags').val(data.tags);
         $('#comment').val(data.comment);
+        $(document).scrollTop(300);
     }
 
     /**
@@ -448,7 +453,6 @@ function editOperation(id) {
     }, function() {
         $("#addOperation").hide();
         $("#editOperation").html();
-        $("#editOperation").show();
         $("#editOperation").show();
         changeTypeOperation('edit');
         scrollTo(0,0);

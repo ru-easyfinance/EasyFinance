@@ -8,6 +8,7 @@
 
 class Budget_Controller extends Template_Controller
 {
+    private $money = null;
     private $user = null;
     private $tpl = null;
     private $model = null;	
@@ -21,7 +22,21 @@ class Budget_Controller extends Template_Controller
         $this->user  = Core::getInstance()->user;
         $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Budget_Model();
-        
+        $this->tpl->assign('name_page', 'budget/budget');
+
+        // Операция
+        $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+        $this->tpl->assign('category', get_tree_select());
+        $targets = new Targets_Model();
+        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
+        $this->tpl->append('css','jquery/jquery.calculator.css');
+        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+        $this->tpl->append('js','jquery/ui.core.js');
+        $this->tpl->append('js','jquery/ui.datepicker.js');
+        $this->tpl->append('js','jquery/i18n/jquery-ui-i18n.js');
+        $this->tpl->append('js','jquery/jquery.calculator.min.js');
+        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
+        $this->tpl->append('js','jquery/tinysort.js');
     }
 
     /**
