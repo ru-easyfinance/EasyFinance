@@ -63,7 +63,7 @@ var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
 
 
-$(function(document) {
+$(document).ready(function() {
     
     // *** Функции ***
     
@@ -873,9 +873,9 @@ var val = {};//сумма средств по каждой используем�
        $('.accounts .add').click(function(){
            document.location='/accounts/#add';
        })
-                ////////////////////////////////////////////////////////////////
-});
+*/                ////////////////////////////////////////////////////////////////
+//});
 
-*/
+
 //Google Analytics
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
