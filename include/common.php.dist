@@ -58,6 +58,7 @@ $tpl->append('js','jquery/ui.core.js');
 $tpl->append('js','jquery/ui.resizable.js');
 $tpl->append('js','jquery/ui.draggable.js');
 $tpl->append('js','jquery/ui.dialog.js');
+$tpl->append('js', 'jquery/jquery.qtip.js');
 ///-->
 
 $tpl->append('js','main.js');

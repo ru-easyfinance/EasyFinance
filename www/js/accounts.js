@@ -249,19 +249,16 @@ $(document).ready(function() {
                   tip: true // Give them tips with auto corner detection
                }
             });
-            $('tr.item').attr('class','item');
-            $(this).attr('class','item act');
+            $('tr.item').removeClass('act');
+            $(this).addClass('act');
     });
 
-    $('tr.item').live('mouseout',
-        function(){
-//            if($(this).data("qtip"))
-//                {
-//                    $(this).qtip("destroy");
-//                }
-
-            $('.qtip').remove();
-            $(this).attr('class','item');
+    $('.mid').mousemove(function(){
+            if (!$('ul:hover').length && !$('.act:hover').length)
+            {
+                $('.qtip').remove();
+                $('tr.item').removeClass('act');
+            }
     });
     //del accoun click
     $('li.del').live('click',

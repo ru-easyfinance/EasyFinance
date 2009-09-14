@@ -239,24 +239,205 @@ $(function(document) {
             $('#target').change();
         }
     }
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+     /**
+     * Получает список тегов
+     */
+    function op_getTags() {
+        $('a#op_tags').click(function(){
+            $('.op_tags_could').dialog({
+                close: function(event, ui){$(this).dialog( "destroy" )}
+            }).dialog("open");
+            $('.op_tags_could li').show();
+        });
+		$('.op_tags input').keyup(function(){
+                    $('.op_tags_could li').show();
+
+		})
+                $('.op_tags_could li').live('click',function(){
+                    txt=$('.op_tags input').val()+$(this).text()+', ';
+                    $('.op_tags input').val(txt);
+                    $('.op_tags_could').dialog("close");
+                });
+        // Загружаем теги
+        $.get('/tags/getCloudTags/', '', function(data) {
+            str = '<ul>';
+            for (key in data) {
+                k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
+                n = Math.floor(k*5);
+                str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
+            }
+            $('.op_tags_could').html(str+'</ul>');
+
+            $('.op_tags_could li').hide();
+        }, 'json');
+    }
+
+    /**
+     * Добавляет новую операцию
+     * @return void
+     */
+    function op_saveOperation() {
+        if (!validateForm()){
+            return false;
+        }
+        $.post(($('form').attr('action')), {
+            id        : $('#op_id').val(),
+            type      : $('#op_type').val(),
+            account   : $('#op_account').val(),
+            category  : $('#op_category').val(),
+            date      : $('#op_date').val(),
+            comment   : $('#op_comment').val(),
+            amount    : $('#op_amount').val(),
+            toAccount : $('#op_AccountForTransfer').val(),
+            currency  : $('#op_currency').val(),
+            target    : $('#op_target').val(),
+            close     : $('#op_close:checked').length,
+            tags      : $('#op_tags').val()
+        }, function(data, textStatus){
+            for (var v in data) {
+                //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                alert('Ошибка в ' + v);
+            }
+            // В случае успешного добавления, закрываем диалог и обновляем календарь
+            if (data.length == 0) {
+                op_clearForm();
+            }
+           // data could be xmlDoc, jsonObj, html, text, etc...
+           //this; // the options for this ajax request
+           // textStatus can be one of:
+           //   "timeout"
+           //   "error"
+           //   "notmodified"
+           //   "success"
+           //   "parsererror"
+        }, 'json');
+        return true;
+    }
+
+    /**
+     * Проверяет валидность введённых данных
+     */
+    function op_validateForm() {
+        $error = '';
+        if (isNaN(parseFloat($('#op_amount').val()))){
+            alert('Вы ввели неверное значение в поле "сумма"!');
+            return false;
+        }
+
+        if ($('#op_type') == 4) {
+            //@FIXME Написать обновление финцелей
+            amount = parseFloat($("#op_target_sel option:selected").attr("amount")); $("#op_amount").text(amount);
+            amount_done = parseFloat($("#op_target_sel option:selected").attr("amount_done")); $("#op_amount_done").text(amount_done);
+            if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
+                if (confirm('Закрыть финансовую цель?')) {
+                    $("#op_close").attr("checked","checked");
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Очищает форму
+     * @return void
+     */
+    function op_clearForm() {
+        $('#op_type,#op_category,#op_target').val(0);
+        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
+        $('#op_amount_target,#op_amount_done,#op_forecast_done,#op_percent_done').text('');
+        $('#op_close').removeAttr('checked');
+        $('form').attr('action','/operation/add/');
+        $('#op_type').change();
+    }
+
+    /**
+     * При переводе со счёта на счёт, проверяем валюты
+     * @return void
+     */
+    function op_changeAccountForTransfer() {
+        if ($('#op_type :selected').val() == 2 &&
+            $('#op_account :selected').attr('currency') != $('#op_AccountForTransfer :selected').attr('currency')) {
+                $('#op_operationTransferCurrency').show();
+                $.post('/operation/get_currency/', {
+                        SourceId : $("#op_account").val(),
+                        TargetId : $("#op_AccountForTransfer").val()
+                    }, function(data){
+                        $('#op_operationTransferCurrency :first-child').html('Курс <b>'+
+                            $('#op_account :selected').attr('abbr')+'</b> к <b>'+$('#op_AccountForTransfer :selected').attr('abbr')+'</b>');
+                        $('#op_currency').val(data);
+                    }, 'json'
+                );
+        } else {
+            $('#op_operationTransferCurrency').hide();
+        }
+    }
+
+    /**
+     * При изменении типа операции
+     */
+    function op_changeTypeOperation() {
+        // Расход или Доход
+        if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
+            $("#op_category_fields,#op_tags_fields").show();
+            $("#op_target_fields,#op_transfer_fields").hide();
+        //Перевод со счёта
+        } else if ($('#op_type').val() == 2) {
+            $("#op_category_fields,#op_target_fields").hide();
+            $("#op_tags_fields,#op_transfer_fields").show();
+            op_changeAccountForTransfer();
+        //Перевод на финансовую цель
+        } else if ($('#op_type').val() == 4) {
+            $("#op_target_fields").show();
+            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
+            $('#op_target').change();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
-        getTags();
+        op_getTags();
 
-        $('#btn_Save').click(function(){ saveOperation(); })
-        $('#btn_Cancel').click(function(){ clearForm() });
+        $('#op_btn_Save').click(function(){ op_saveOperation(); })
+        $('#op_btn_Cancel').click(function(){ op_clearForm() });
 
-        $("#addoperation_but").click(function(){
+        $("#op_addoperation_but").click(function(){
             $(this).toggleClass("act");
             if($(this).hasClass("act")){
-                $(".addoperation").show();
+                $(".op_addoperation").show();
             } else {
-                $(".addoperation").hide();
+                $(".op_addoperation").hide();
             }
         });
-        $('#amount').calculator({
+        $('#op_amount').calculator({
             layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                     'MR_7_8_9_-' + $.calculator.UNDO,
                     'MS_4_5_6_*' + $.calculator.PERCENT ,
@@ -266,30 +447,30 @@ $(function(document) {
         });
 
         $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
-        $("#date").datepicker();
+        $("#op_date").datepicker();
 
 
-        $('#amount,#currency').change(function(){
-            if ($('#type').val() == 2) {
+        $('#op_amount,#op_currency').change(function(){
+            if ($('#op_type').val() == 2) {
                 //@TODO Дописать округление
-                var result = Math.round($('#amount').val() / $('#currency').val());
+                var result = Math.round($('#op_amount').val() / $('#op_currency').val());
                 if (!isNaN(result) && result != 'Infinity') {
-                    $("#convertSumCurrency").html("конвертация: "+result);
+                    $("#op_convertSumCurrency").html("конвертация: "+result);
                 }
             }
         });
 
-        $('#account').change(function(){ changeAccountForTransfer(); });
-        $('#AccountForTransfer').change( function(){ changeAccountForTransfer(); });
-        $('#type').change(function(){ changeTypeOperation('add'); });
-        $('#target').change(function(){
-            $("span.currency").each(function(){
+        $('#op_account').change(function(){ op_changeAccountForTransfer(); });
+        $('#op_AccountForTransfer').change( function(){ op_changeAccountForTransfer(); });
+        $('#op_type').change(function(){ op_changeTypeOperation('add'); });
+        $('#op_target').change(function(){
+            $("span.op_currency").each(function(){
                 $(this).text(" "+$("#target :selected").attr("currency"));
             });
-            $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
-            $("#amount_target").text(formatCurrency($("#target :selected").attr("amount")));
-            $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
-            $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
+            $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
+            $("#op_amount_target").text(formatCurrency($("#op_target :selected").attr("amount")));
+            $("#op_percent_done").text(formatCurrency($("#op_target :selected").attr("percent_done")));
+            $("#op_forecast_done").text(formatCurrency($("#op_target_sel :selected").attr("forecast_done")));
         });
     }
     if(inarray(Current_module, Connected_functional.menu)){//////////////////////////////////
