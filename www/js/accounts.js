@@ -316,7 +316,7 @@ $(document).ready(function() {
                         id: id
                     },
                      function(data) {
-                        $('#account_fields').html(data);
+                        $('#account_form_fields').html(data);
                         $(th).closest('.item').find('td').each(function(){
                             key = $(this).attr('class');
                             val = $(this).text();
