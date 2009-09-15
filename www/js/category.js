@@ -93,7 +93,7 @@ $(document).ready(function() {
             } $('#catsys').empty().append(sys);
 
             // Обновляем список категорий
-            m=''; p=[];
+            m='<option value=""> --- </option>'; p=[];
             
             for(var id in data.user) {
                 // Если это родительская категория
