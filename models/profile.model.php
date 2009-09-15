@@ -51,7 +51,7 @@ class Profile_Model
         $ret = array();
         switch($mod){
             case 'save':
-                $ident = $this->ident($prop['user_pass']);
+                $ident = $this->ident($prop['newpass']);
                 $prop['user_pass'] = $prop['newpass'] ?
                                     sha1($prop['newpass']) :
                                     sha1($prop['user_pass']);
