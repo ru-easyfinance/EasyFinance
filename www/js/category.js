@@ -122,7 +122,7 @@ $(document).ready(function() {
                     if ($('#'+pr+' table').length == 0) {
                         $('<table/>').appendTo($('#'+pr));
                     }
-                    $('#'+pr+' table').append(
+                    $('.categories #'+pr+' table').append(
                         '<tr id="'+id+'">'
                         +'<td class="w1">'
                             +'<a>'+data.user[id]['name']+'</a>'
@@ -147,7 +147,7 @@ $(document).ready(function() {
                 }
             }
             //$('div.categories').append(c);
-            $('#subcat').append(m);
+            $('#subcat').html(m);
 			$(".l_n_cont").live('mouseover',function(){
 				$(this).closest('.line').find(".ul_head").show();
 			});

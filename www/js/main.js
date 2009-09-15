@@ -58,6 +58,7 @@ for(i=0;i<href.length;i++)
     if(b == 2)
         break;
 }
+var pathName = nhref;
 var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
@@ -648,7 +649,6 @@ var res = {tags:['asd'],
     $('dl.info dd').html(str);
 //calendar
     $('.calendar_block .calendar').datepicker();
-    //$('.calendar_block .calendar .ui-widget-content').css('margin-top','-0.4em;')
 //flash
     data = res['flash']
 
@@ -701,6 +701,9 @@ $('.calculator_block .calculator').calculator({
                     '<a href="/periodic/">Регулярные транзакции</a>'],
             'm6':['']
         };
+
+
+        
         //@TODO Цикл по submenu и если находит текущую таблицу, то окружает её SPAN
 
         if ($('.menu4').length == 0) {
@@ -716,7 +719,7 @@ $('.calculator_block .calculator').calculator({
             txt = $('.menu3 span').text();
             $('.menu3 span').closest('li').html('<span>'+txt+'</span><a class="span">'+txt+'</a>');
             $('.menu3 span').hide().closest('li').addClass('act');
-            sm = submenu[page_mid];
+            sm = submenu[page_mid]?submenu[page_mid]:'';
             str='';
             l = sm.length;
             k = 0;
@@ -745,6 +748,11 @@ $('.calculator_block .calculator').calculator({
                 str = str+'<li>'+sm[k]+'</li>';
             }
             $('ul.menu4 ').html(str);
+            str = $('ul.menu4 a[href="'+pathName+'"]').text();
+            if (str){
+                $('ul.menu4 a[href="'+pathName+'"]').closest('li').html('<span><b>'+str+'</b></span>');
+                //$('ul.menu4 a[href="'+pathName+'"]').remove();
+            }
             return false;
         })
     }

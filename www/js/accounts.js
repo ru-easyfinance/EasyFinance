@@ -72,7 +72,7 @@ $(document).ready(function() {
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
-        var main_keys = ['name','description','total_balance'];
+        var main_keys = ['name','total_balance', 'cur', 'def_cur'];
         $.post('/accounts/accountslist/',
             {},
             function(data){
@@ -87,15 +87,19 @@ $(document).ready(function() {
                 {
                     i = g_types[data[key]['type']];
                     str = '<tr class="item">';
-                    str = str + '<td class="type" value="'+data[key]['type']+'"></td>';
-                    str = str + '<td class="id" value="'+data[key]['id']+'"></td>';
+                    str = str + '<td class="type" value="'+data[key]['type']+'">'+data[key]['type']+'</td>';
+                    str = str + '<td class="id" value="'+data[key]['id']+'">'+data[key]['id']+'</td>';
                     for (l in main_keys)
                     {
                         k = main_keys[l];
                         if (k == 'total_balance')
                             str = str + '<td class='+k+'>'+formatCurrency(data[key]['fields'][k])+ '</td>';
-                        else
+                        else if( k == 'name')
                             str = str + '<td class='+k+'>'+data[key]['fields'][k]+ '</td>';
+                        else if(k=='def_cur')
+                            str = str + '<td class='+k+'>'+data[key][k]+ ' руб. </td>';
+                        else
+                            str = str + '<td class='+k+'>'+data[key][k]+ '</td>';
                     }
                     for( k in data[key]['fields'])//добавляются все поля
                     {
@@ -106,8 +110,8 @@ $(document).ready(function() {
                         }
                     }
                     str = str + '<td class="cat">'+data[key]['cat']+'</td>';
-                    str = str + '<td class="cur">'+data[key]['cur']+'</td>';
-                    str = str + '<td class="def_cur">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
+                    //str = str + '<td class="cur">'+data[key]['cur']+'</td>';
+                    //str = str + '<td class="def_cur">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
                     summ[i] = summ[i]+data[key]['def_cur'];
                     //alert(data[key]['def_cur']);
                     if (!val[data[key]['cur']]) {
@@ -149,18 +153,12 @@ $(document).ready(function() {
                                     <th> \n\
                                         Имя \n\
                                     </th>\n\
-                                    <th Style="display:none"> \n\
-                                        Описание \n\
-                                    </th>\n\
-                                    <th Style="position:absolute;left:200px" COLSPAN=2> \n\
+                                    <th COLSPAN=2 Style="padding-left:40px"> \n\
                                         Остаток \n\
                                     </th>\n\
-                                    <th Style="display:none"> \n\
-                                        Тип \n\
-                                    </th>\n\
-                                    <th Style="position:absolute;right:150px"> \n\
+                                    <th> \n\
                                         Рублёвый эквивалент \n\
-                                    </th>';
+                                    </th><th></th>';
                     head_tr = head_tr + spec_th[key];
                     head_tr = head_tr + '<tr>';
                     

@@ -78,10 +78,12 @@ $(function () {
             pobj = data;
             c = '';
             for(var id in data) {
+                cat = $('#ca_'+data[id]['category']).attr('title')
+                cat = (!cat)?'нет':cat;
                 c += '<tr id="'+id+'"><td class="chk"><input type="checkbox" /></td>'
                     +'<td>'+data[id]['date']+'</td>'
                     +'<td>'+data[id]['title']+'</td>'
-                    +'<td>'+$('#ca_'+data[id]['category']).attr('title')+'</td>'
+                    +'<td>'+cat+'</td>'
                     +'<td>'+$('#account [value='+data[id]['account']+']').attr('title')+'</td>'
                     +'<td>'+$('#repeat [value='+data[id]['repeat']+']').text()+'</td>'
                     +'<td>'+'<div class="cont">'+ data[id]['amount']
