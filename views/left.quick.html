@@ -1,13 +1,13 @@
 <!--левая колонка-->
     <div class="block1">
         <ul class="control">
-            <li id="c1"><a title="Навигация">действие 1</a></li>
-            <li id="c2" class="act" title="действие 2"></li>
+            <li id="c1"><a title="Навигация"></a></li>
+            <li id="c2" class="act"><a title="Счета"></a></li>
             <li id="c3"><a title="Tags">Tags</a></li>
-            <li id="c4"><a href="#" title="действие 4">действие 4</a></li>
-            <li id="c5"><a href="#" title="действие 5">действие 5</a></li>
+            <li id="c4"><a title="Транзакции"></a></li>
+            <li id="c5"><a title="Фин. цели"></a></li>
 	</ul>
-        <div class="listing navigation" style="display:none">
+        <div class="listing navigation" id="c1" style="display:none">
 	<ul>
             <li class="act"><span>Навигация</span>
                 <ul>
@@ -62,7 +62,7 @@
 	</ul>
     </div>
 <!--Теги-->
-    <div class="listing tags_list">
+<div class="listing tags_list" id="c3">
         <div class="title">
             <h2>Теги</h2>
             <a href="#" title="Добавить" class="add">Добавить</a>
@@ -79,7 +79,7 @@
     </div>
 <!--/Теги-->
 <!--счета-->
-    <div class="listing accounts">
+    <div class="listing accounts" id="c2">
         <div class="title">
             <h2>Виды счетов</h2>
             <a title="Добавить" class="add">Добавить</a>
@@ -101,11 +101,11 @@
     </div>
 <!--/счета-->
 <!--Финансовые цели-->
-    <div class="listing financobject" style="display: block;">
- <!-- --> 
+    <div class="listing financobject" id="c5">
+ <!-- -->
     </div>
 <!--/Финансовые цели-->
-    <div class="listing transaction">
+    <div class="listing transaction" id="c4">
         <!-- -->
     </div>
 <!--/Регулярные транзакции-->
