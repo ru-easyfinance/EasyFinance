@@ -1,4 +1,4 @@
-$(document).ready(function(){
+﻿$(document).ready(function(){
     /* Display or Hide Mini-Menu For Categories List & Operations List + Adding and Removing Class "act" */
     $(".line tr, .operation_list tr").hover(
             function(){$(this).addClass("act"); $(this).find(".cont > ul:not(.select_list)").show();},
@@ -118,4 +118,78 @@ $(document).ready(function(){
     $(".partner_img").next().css("width", 325 + "px");
     $(".partner_img").next().children(".date").css("paddingLeft", 15 + "px");
    //$(".partner_img").next().children().hasClass("date").css("paddingLeft", 0 + "px");
+   /* Show/Hide DropDown List in Mail Table */
+    $(".cont .sort, .cont .select").click(function(){
+        if($("ul.select_list").hasClass("close")){
+            $("ul.select_list").show();
+            $("ul.select_list").removeClass("close").addClass("open");
+        }
+        else if($("ul.select_list").hasClass("open")){
+            $("ul.select_list").hide();
+            $("ul.select_list").removeClass("open").addClass("close");
+        }
+    });
+
+    /* Onhover Effect For Mail Table */
+    $(".operation_list table tr").hover(
+            function(){$(this).addClass("act");},
+            function(){$(this).removeClass("act");}
+            );
+
+    /* Write New Message Popup Window */
+    $('#mail-popup').dialog({
+        autoOpen: false,
+        title: 'Новое сообщение',
+        width: 600,
+        buttons: {
+            "Закрыть": function() {
+                $(this).dialog("close"); 
+            }
+        }
+    });
+    $('#mail-write').click(function(){
+        $('#mail-popup').dialog('open');
+        return false;
+    });
+
+    /* Read New Message Popup Window */
+    $('#mail-popup-read').dialog({
+        autoOpen: false,
+        title: 'Cообщение',
+        width: 600,
+        buttons: {
+            "Закрыть": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $('.mail-title').click(function(){
+        $('#mail-popup-read').dialog('open');
+        var mail_subj = $(this).children().text();
+        var mail_date = $(this).next().next().text();
+        $("#mail-subject-read").text(mail_subj);
+        $("#ui-dialog-title-mail-popup-read").text(mail_subj);
+        $("#mail-date").text(mail_date);
+        return false;
+    });
+
+    /* New Суке Popup Window */
+    $('#cert-popup').dialog({
+        autoOpen: false,
+        title: 'Добавить сертификат',
+        width: 600,
+        buttons: {
+            "Закрыть": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+    $('.add_cert').click(function(){
+        $('#cert-popup').dialog('open');
+        return false;
+    });
+
+    $('.rte-zone').rte("css url", "toolbox images url");
+    $("a.userimage").fancybox();
 });
