@@ -50,7 +50,6 @@ class Info_Controller extends Template_Controller
     function index()
     {
         $this->tpl->append('js','jquery/jquery.js');
-        $this->tpl->append('js','jquery/jquery.cookie.js');
         $this->tpl->append('js','jquery/ui.core.js');
         $this->tpl->append('js','jquery/ui.sortable.js');
         $this->tpl->append('js','jquery/ui.draggable.js');

@@ -19,33 +19,7 @@ $(document).ready(function() {
     var new_acc = 1;
     var aid;
     var tid;
-     s = location.pathname;
 
-
-//    alert(s);
-    if (location.href=='/accounts/#add')
-    {
-//        alert('asd')
-        $("#addacc").click();
-    }
-    s = location.href;
-    if(s.substr(5,2)=='##')
-    {
-        f = s.substr(7);
-        clearForm();
-        $('#key').val(f.attr('tid'));
-        $('#type').val(f.attr('type'));
-        $('#title').val(f.attr('title'));
-        $('#amount').val(f.attr('amount'));
-        $('#start').val(f.attr('start'));
-        $('#end').val(f.attr('end'));
-        $('#photo').val(f.attr('photo'));
-        $('#url').val(f.attr('url'));
-        $('#comment').val(f.attr('comment'));
-        $('#account').val(f.attr('account'));
-        $('#visible').val(f.attr('visible'));
-        $('#tpopup').dialog('open');
-    }
     $('#addacc').click(function(){
         new_acc = 1;
         accountAddVisible();
@@ -216,6 +190,45 @@ $(document).ready(function() {
                 //$('.item td.description').show();
                 $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
                 $('.item td.mark').show();
+                    s = location.hash;
+    if (s=='#add')
+    {
+        alert(s);
+        new_acc = 1;
+        accountAddVisible();
+    }
+    if(s.substr(0,2)=='#?')
+    {
+        f = s.substr(2);
+        $('#blockCreateAccounts').show();
+                id =f;
+                new_acc=0;
+                a = 'tr.item .id[value="'+f+'"]'
+                tid = $('tr.item .id[value="'+f+'"]').closest('.item').find('.type').attr('value');
+                var th = $('tr.item .id[value="'+f+'"]').closest('.item');
+                $.post(
+                    "/accounts/changeType/",
+                    {
+                        id: tid
+                    },
+                     function(data) {
+                        $('#account_form_fields').html(data);
+                        $(th).find('td').each(function(){
+                            key = $(this).attr('class');
+                            val = $(this).text();
+                            $('#blockCreateAccounts').find('#'+key).val(val) ;
+                            $(document).scrollTop(300);
+                        });
+                        val = $(th).find('.total_balance').text();
+
+
+                        $('#blockCreateAccounts').find('#starter_balance').val(val);
+                        $('#account_form_fields table').attr('id',$(th).find('.id').attr('value'));
+                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).find('.id').attr('value')+'" />');
+                    },
+                    'text'
+                );
+    }
             },
             'json'
         );
@@ -327,9 +340,9 @@ $(document).ready(function() {
                         
                         $('#blockCreateAccounts').find('#starter_balance').val(val);
                         //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
-                        //alert($(th).closest('#item').find('#id').attr('value'));
-                        $('#account_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
-                        $('#account_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
+                        //alert($(th).closest('.item').find('.id').attr('value'));
+                        $('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
+                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
                     },
                     'text'
                 );
@@ -373,4 +386,5 @@ $(document).ready(function() {
                     'text');
         createNewAccount();
     }
+     
 });

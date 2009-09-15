@@ -195,16 +195,16 @@ $(document).ready(function() {
         $.post(($('form').attr('action')), {
             id        : $('#id').val(),
             type      : $('#type').val(),
-            account   : $('#account').val(),
-            category  : $('#category').val(),
-            date      : $('#date').val(),
-            comment   : $('#comment').val(),
-            amount    : $('#amount').val(),
-            toAccount : $('#AccountForTransfer').val(),
-            currency  : $('#currency').val(),
-            target    : $('#target').val(),
-            close     : $('#close:checked').length,
-            tags      : $('#tags').val()
+            account   : $('#op_account').val(),
+            category  : $('#op_category').val(),
+            date      : $('#op_date').val(),
+            comment   : $('#op_comment').val(),
+            amount    : $('#op_amount').val(),
+            toAccount : $('#op_AccountForTransfer').val(),
+            currency  : $('#op_currency').val(),
+            target    : $('#op_target').val(),
+            close     : $('#op_close:checked').length,
+            tags      : $('#op_tags').val()
         }, function(data, textStatus){
             for (var v in data) {
                 //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
@@ -318,25 +318,44 @@ $(document).ready(function() {
             $('#operationTransferCurrency').hide();
         }
     }
+       
 
     /**
      * При изменении типа операции
      */
-    function changeTypeOperation() {
+    function changeop_TypeOperation() {
         // Расход или Доход
         if ($('#type').val() == 0 || $('#type').val() == 1) {
-            $("#category_fields,#tags_fields").show();
-            $("#target_fields,#transfer_fields").hide();
+            $("#op_category_fields,#op_tags_fields").show();
+            $("#op_target_fields,#op_transfer_fields").hide();
         //Перевод со счёта
         } else if ($('#type').val() == 2) {
-            $("#category_fields,#target_fields").hide();
-            $("#tags_fields,#transfer_fields").show();
+            $("#op_category_fields,#op_target_fields").hide();
+            $("#op_tags_fields,#op_transfer_fields").show();
             changeAccountForTransfer();
         //Перевод на финансовую цель
         } else if ($('#type').val() == 4) {
-            $("#target_fields").show();
-            $("#tags_fields,#transfer_fields,#category_fields").hide();
-            $('#target').change();
+            $("#op_target_fields").show();
+            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
+            $('#op_target').change();
+        }
+    }
+
+    function changeop_TypeOperation() {
+        // Расход или Доход
+        if ($('#type').val() == 0 || $('#type').val() == 1) {
+            $("#op_category_fields,#op_tags_fields").show();
+            $("#op_target_fields,#op_transfer_fields").hide();
+        //Перевод со счёта
+        } else if ($('#type').val() == 2) {
+            $("#op_category_fields,#op_target_fields").hide();
+            $("#op_tags_fields,#op_transfer_fields").show();
+            changeAccountForTransfer();
+        //Перевод на финансовую цель
+        } else if ($('#type').val() == 4) {
+            $("#op_target_fields").show();
+            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
+            $('#op_target').change();
         }
     }
   

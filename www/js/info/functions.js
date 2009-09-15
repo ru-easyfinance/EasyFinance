@@ -9,7 +9,7 @@ $.post(
             //alert(data[1][i]['title'])
             name = (!data[1][i]['title'])?'':data[1][i]['title'];
             end = data[0][i]*3/data[1][i]['color'] ;
-            value = data[0][i] ;
+            value = parseInt(data[0][i]) ;
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
                 '<text>'+name+'</text>'+
 		"</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
@@ -61,11 +61,11 @@ function print_targets(count)
 };
 function add_target()
 {
-    document.location = '/targets/' ;//@todo :(( неполучается наладить((
+    document.location = '/targets/#add' ;//@todo :(( неполучается наладить((
 };
-function edit_target()
+function edit_target(target)
 {
-    document.location = '/targets/' ;//@todo :(( неполучается наладить((
+    document.location = '/targets/##'+target ;//@todo :(( неполучается наладить((
 };
 
 function del_target(target)

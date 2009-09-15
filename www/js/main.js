@@ -173,8 +173,8 @@ $(document).ready(function() {
 
         if ($('#type') == 4) {
             //@FIXME Написать обновление финцелей
-            amount = parseFloat($("#target_sel option:selected").attr("amount")); $("#amount").text(amount);
-            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done")); $("#amount_done").text(amount_done);
+            amount = parseFloat($("#target_sel option:selected").attr("amount"));$("#amount").text(amount);
+            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done"));$("#amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
                     $("#close").attr("checked","checked");
@@ -339,8 +339,8 @@ $(document).ready(function() {
 
         if ($('#op_type') == 4) {
             //@FIXME Написать обновление финцелей
-            amount = parseFloat($("#op_target_sel option:selected").attr("amount")); $("#op_amount").text(amount);
-            amount_done = parseFloat($("#op_target_sel option:selected").attr("amount_done")); $("#op_amount_done").text(amount_done);
+            amount = parseFloat($("#op_target_sel option:selected").attr("amount"));$("#op_amount").text(amount);
+            amount_done = parseFloat($("#op_target_sel option:selected").attr("amount_done"));$("#op_amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
                     $("#op_close").attr("checked","checked");
@@ -426,8 +426,8 @@ $(document).ready(function() {
         // Автоматически подгружаем теги
         op_getTags();
 
-        $('#op_btn_Save').click(function(){ op_saveOperation(); })
-        $('#op_btn_Cancel').click(function(){ op_clearForm() });
+        $('#op_btn_Save').click(function(){op_saveOperation();})
+        $('#op_btn_Cancel').click(function(){op_clearForm()});
 
         $("#op_addoperation_but").click(function(){
             $(this).toggleClass("act");
@@ -460,9 +460,9 @@ $(document).ready(function() {
             }
         });
 
-        $('#op_account').change(function(){ op_changeAccountForTransfer(); });
-        $('#op_AccountForTransfer').change( function(){ op_changeAccountForTransfer(); });
-        $('#op_type').change(function(){ op_changeTypeOperation('add'); });
+        $('#op_account').change(function(){op_changeAccountForTransfer();});
+        $('#op_AccountForTransfer').change( function(){op_changeAccountForTransfer();});
+        $('#op_type').change(function(){op_changeTypeOperation('add');});
         $('#op_target').change(function(){
             $("span.op_currency").each(function(){
                 $(this).text(" "+$("#target :selected").attr("currency"));
@@ -474,6 +474,208 @@ $(document).ready(function() {
         });
     }
     if(inarray(Current_module, Connected_functional.menu)){//////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////
+// left
+// nav bar
+
+
+$('.navigation  li ul').hide()
+$('.navigation li.act ul').show()
+$('.navigation  li span').click(function(){
+    $('.navigation  li span').closest('li').removeClass('act');
+    $(this).closest('li').addClass('act');
+    $('.navigation  li ul').hide()
+    $('.navigation li.act ul').show()
+})
+var res = {tags:['asd'],
+    accounts : {1:{type:'1',id:'1',cur:'rur',def_cur:'12',name:'a',total_balance:'123'}},
+    periodic:{1:{id:1,title:'asd',date:'12.12.1111',amount:'1231231.12'}},
+    user_targets:{1:{title:'asd',amount_done:'134',percent_done:'34',date_end:'12.12.1211'}},
+    popup_targets:{1:{title:'asd'}},
+    currency:{1:{cost:'12',name:'ero',progress:'down'}},
+    flash:{title:'asdad',value:100,color:1}};
+// tags
+            data = res['tags'];
+            str = '<div class="title">\n\
+                        <h2>Теги</h2>\n\
+                        <a title="Добавить" class="add">Добавить</a>\n\
+                    </div>\n\
+                    <ul>';
+            for (key in data)
+            {
+                str = str + '<li><a>'+data[key]+'</a></li>';
+            }
+            $('.tags_list').html(str+'</ul>');
+
+        $('.tags_list li a').live('click', function(){
+            $('.edit_tag').dialog('open');
+            $('.edit_tag input').val($(this).text());
+            $('.edit_tag').dialog({
+                width: 260,
+                minHeight: 50,
+                buttons: {
+                    'Сохранить': function() {
+                        if($('input#tag').val())
+                        $.post('/tags/edit/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                    },
+                    'Удалить': function() {
+                        $.post('/tags/del/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                    }
+
+            }});
+  
+        });
+        $('.tags_list .add').live('click', function(){
+            $('.edit_tag').show();
+            $('.edit_tag').dialog('open');
+            $('.edit_tag input').val($(this).text());
+            $('.edit_tag').dialog({
+                width: 260,
+                minHeight: 50,
+                buttons: {
+                    'Сохранить': function() {
+                        if($('input#tag').val())
+                        {
+                            $.post('/tags/add/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                            $('.edit_tag').dialog('close');
+                        }
+                    }
+
+            }});
+
+        });
+//accounts
+        g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+        g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+        var arr = ['','','','',''];//содержимое каждой группы
+        var summ = [0,0,0,0,0];// сумма средств по каждой группе
+        var val = {};//сумма средств по каждой используемой валюте
+        data=res['accounts'];
+                len = data.length;
+                div = "<div class='cont'>&nbsp;<ul>\n\
+                        <li class='edit'><a></a></li>\n\
+                        <li class='del'><a></a></li>\n\
+                      </ul></div>";
+
+                $('#operation_list').empty();
+                for (key in data )
+                {
+                    i = g_types[data[key]['type']];
+                    str = '<li><a>';
+                    str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
+                    str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
+                    str = str + '<span>'+data[key]['name']+'</span>';
+                    str = str + '<b>'+formatCurrency(data[key]['total_balance']);
+                    str = str + data[key]['cur']+ '</b>'+'</a></li>';
+                    summ[i] = summ[i]+data[key]['def_cur'];
+                    if (!val[data[key]['cur']]) {
+                        val[data[key]['cur']]=0;
+                    }
+                    val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
+                        + parseFloat(data[key]['total_balance']);
+                    
+                    arr[i] = arr[i]+str;
+                }
+                total = 0;
+                for(key in arr)
+                {
+                    total = total+(parseInt(summ[key]*100))/100;
+                    s='<ul>'+arr[key]+'</ul>';
+                    if (arr[key])
+                        $('.accounts #'+key).html(s);
+                }
+                /////////////////////формирование итогового поля//////////////////////
+                str = '<ul>';
+                for(key in val)
+                {
+                    str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
+                }
+                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' руб.</div></li>';
+                str = str + '</ul>';
+                 $('.accounts #l_amount').html(str);
+
+
+       $('.accounts .add').click(function(){
+           document.location='/accounts/#add';
+       })
+       $('.accounts li a').live('click',function(){
+           document.location='/accounts/#?'+$(this).find('div.id').attr('value');
+       })
+      ///////////////////////periodic/////////////////////////////////////////
+      data = res['periodic'];
+            c = '<h2>Регулярные транзакции</h2><ul>';
+            for(var id in data) {
+                c += '<li id="'+id+'">'
+                    +'<a href="/periodic/">'+data[id]['title']+'</a>'
+                    +'<b>'+ data[id]['amount']+'</b>'
+                    +'<span class="date">'+data[id]['date']+'</span></li>';
+            }
+            c = c + '</ul>';
+            $('.transaction').html(c);
+      /////////////////////////targets///////////////////////////////////
+      data = res['user_targets'];
+            s = '<div class="title"><h2>Финансовые цели</h2><a href="#" title="Добавить" class="add">Добавить</a></div><ul>';
+            for(v in data)
+            {
+                        s += '<li><a href="/targets/">'+data[v]['title']+'</a><b>'
+                        +data[v]['amount_done']+' руб.</b><span>('
+                        +data[v]['percent_done']+'%)</span><span class="date">'
+                        +data[v]['date_end']+'</span></li>';
+            }
+            s = s+'</ul>';
+            
+
+            data = res['popup_targets'];
+            s = s + '<h2>5 самых популярных</h2><ul class="popular">';
+            for(v in data) {
+                s += '<li><a href="#">'
+                    +data[v]['title']+'</a></li>';
+            }
+            s = s + '<ul>';
+        $('.financobject').append(s);
+//////////////////////////////////////////////////////////////////////
+//right
+//currency
+    data = res['currency'];
+    str = '';
+    for(key in data)
+    {
+        cost = data[key]['cost'];
+        name = data[key]['name'];
+        progres = data[key]['progress'];
+        str = '<div class="line"><span class="valuta">'+name+'</span><span class="'+progres+'">'+cost+'</span>'
+    }
+    $('dl.info dd').html(str);
+//calendar
+    $('.calendar_block .calendar').datepicker();
+    //$('.calendar_block .calendar .ui-widget-content').css('margin-top','-0.4em;')
+//flash
+    data = res['flash']
+
+            name = (!data['title'])?'':['title'];
+            //end = data['value']*3/data[1][i]['color'] ;
+            value = data['value'] ;
+            xml = '<anychart><gauges><gauge><chart_settings><title>'+
+                '<text>'+name+'</text>'+
+		"</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
+                "<color_range start='0' end='100' align='Inside' start_size='15' end_size='15' padding='6'>"+
+                "<fill type='Gradient'><gradient><key color='Red'/><key color='Yellow'/><key color='Green'/></gradient></fill><border enabled='true' color='#FFFFFF' opacity='0.4'/></color_range></color_ranges></axis><frame enabled='false'></frame><pointers>"+
+                "<pointer value='"+value+"'>"+
+                "<label enabled='true' under_pointers='true'><position placement_mode='ByPoint' x='50' y='100'/><format>{%Value}</format><background enabled='false'/></label><needle_pointer_style thickness='7' point_thickness='5' point_radius='3'><fill color='Rgb(230,230,230)'/><border color='Black' opacity='0.7'/><effects enabled='false'></effects><cap enabled='false'></cap></needle_pointer_style><animation enabled='false'/></pointer></pointers></circular></gauge></gauges></anychart>";
+            chartSample_1 = new AnyChart('/swf/anychart/gauge.swf');
+                    chartSample_1.width = '170px';
+                    chartSample_1.height = '170px';
+                    chartSample_1.setData(xml);
+                    chartSample_1.wMode="opaque";
+                    chartSample_1.write('flash');
+                    chartSample_1 = null;
+
+$('.calculator_block .calculator').calculator({
+    layout: [
+                    '_7_8_9_+CA',
+                    '_4_5_6_-M+',
+                    '_1_2_3_/M-',
+                    '_0_._=_*MS']});  //
         //верхнее меню
         head = $('#menumain').attr('value');
         if (!head)
@@ -569,13 +771,16 @@ $(document).ready(function() {
         $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
     }).find('a').removeAttr('href');
 
-
+    $('.listing#c2').css('display', 'block');
     $('ul.control li').click(function(){
-        $('ul.control li').each(function(){
-            $(this).removeClass('act');
-        });
+        $('ul.control li').removeClass('act');
+
         $(this).addClass('act');
+        id = $(this).attr('id');
+        $('.listing').css('display', 'none');
+        $('.listing#'+id).css('display', 'block');
     });
+
     // Footer
     var r_list;
 
@@ -594,7 +799,7 @@ $(document).ready(function() {
                 '/feedback/r_list/',
                 {},
                 function (data) {
-                    arr={ 9:29,
+                    arr={9:29,
                         10:30,
                         11:28,
                         12:31,
@@ -749,132 +954,7 @@ $(document).ready(function() {
         num.substring(num.length-(4*i+3));
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
-///////////////////////////////////////////////////////////////////////////////
-// left
-// nav bar
-/*
-$(document).ready(function(){
 
-$('.navigation  li ul').hide()
-$('.navigation li.act ul').show()
-$('.navigation  li span').click(function(){
-    $('.navigation  li span').closest('li').removeClass('act');
-    $(this).closest('li').addClass('act');
-    $('.navigation  li ul').hide()
-    $('.navigation li.act ul').show()
-})
-var res = {tags:['asd'],
-    accounts : {1:{type:'1',id:'1',cur:'rur',def_cur:'12',name:'a',total_balance:'123'}}};
-// tags
-            data = res['tags'];
-            str = '<div class="title">\n\
-                        <h2>Теги</h2>\n\
-                        <a title="Добавить" class="add">Добавить</a>\n\
-                    </div>\n\
-                    <ul>';
-            for (key in data)
-            {
-                str = str + '<li><a>'+data[key]+'</a></li>';
-            }
-            $('.tags_list').html(str+'</ul>');
-
-        $('.tags_list li a').live('click', function(){
-            $('.edit_tag').dialog('open');
-            $('.edit_tag input').val($(this).text());
-            $('.edit_tag').dialog({
-                width: 260,
-                minHeight: 50,
-                buttons: {
-                    'Сохранить': function() {
-                        if($('input#tag').val())
-                        $.post('/tags/edit/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
-                    },
-                    'Удалить': function() {
-                        $.post('/tags/del/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
-                    }
-
-            }});
-  
-        });
-        $('.tags_list .add').live('click', function(){
-            $('.edit_tag').show();
-            $('.edit_tag').dialog('open');
-            $('.edit_tag input').val($(this).text());
-            $('.edit_tag').dialog({
-                width: 260,
-                minHeight: 50,
-                buttons: {
-                    'Сохранить': function() {
-                        if($('input#tag').val())
-                        {
-                            $.post('/tags/add/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
-                            $('.edit_tag').dialog('close');
-                        }
-                    }
-
-            }});
-
-        });
-//accounts
-g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
-g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
-var arr = ['','','','',''];//содержимое каждой группы
-var summ = [0,0,0,0,0];// сумма средств по каждой группе
-var val = {};//сумма средств по каждой используемой валюте
-///////////////////////
-
-
-//////////////////
-        data=res['accounts'];
-                len = data.length;
-                div = "<div class='cont'>&nbsp;<ul>\n\
-                        <li class='edit'><a></a></li>\n\
-                        <li class='del'><a></a></li>\n\
-                      </ul></div>";
-
-                $('#operation_list').empty();
-                for (key in data )
-                {
-                    i = g_types[data[key]['type']];
-                    str = '<li><a>';
-                    str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
-                    str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-                    str = str + '<span>'+data[key]['name']+'</span>';
-                    str = str + '<b>'+formatCurrency(data[key]['total_balance']);
-                    str = str + data[key]['cur']+ '</b>'+'</a></li>';
-                    summ[i] = summ[i]+data[key]['def_cur'];
-                    if (!val[data[key]['cur']]) {
-                        val[data[key]['cur']]=0;
-                    }
-                    val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                        + parseFloat(data[key]['total_balance']);
-                    
-                    arr[i] = arr[i]+str;
-                }
-                total = 0;
-                for(key in arr)
-                {
-                    total = total+(parseInt(summ[key]*100))/100;
-                    s='<ul>'+arr[key]+'</ul>';
-                    if (arr[key])
-                        $('.accounts #'+key).html(s);
-                }
-                /////////////////////формирование итогового поля//////////////////////
-                str = '<ul>';
-                for(key in val)
-                {
-                    str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
-                }
-                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' руб.</div></li>';
-                str = str + '</ul>';
-                 $('.accounts #l_amount').html(str);
-
-
-       $('.accounts .add').click(function(){
-           document.location='/accounts/#add';
-       })
-*/                ////////////////////////////////////////////////////////////////
-//});
 
 
 //Google Analytics
