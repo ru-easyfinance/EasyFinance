@@ -1,6 +1,6 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
 $(document).ready(function() {
-        function formatCurrency(num) {
+    function formatCurrency (num) {
         if (num=='undefined') num = 0;
         //num = num.toString().replace(/\$|\,/g,'');
         if(isNaN(num)) num = "0";
@@ -19,6 +19,28 @@ $(document).ready(function() {
     var new_acc = 1;
     var aid;
     var tid;
+    if (location.href=='/accounts/#add')
+    {
+        $("#addacc").click();
+    }
+    s = location.href;
+    if(s.substr(5,2)=='##')
+    {
+        f = s.substr(7);
+        clearForm();
+        $('#key').val(f.attr('tid'));
+        $('#type').val(f.attr('type'));
+        $('#title').val(f.attr('title'));
+        $('#amount').val(f.attr('amount'));
+        $('#start').val(f.attr('start'));
+        $('#end').val(f.attr('end'));
+        $('#photo').val(f.attr('photo'));
+        $('#url').val(f.attr('url'));
+        $('#comment').val(f.attr('comment'));
+        $('#account').val(f.attr('account'));
+        $('#visible').val(f.attr('visible'));
+        $('#tpopup').dialog('open');
+    }
 
     $('#addacc').click(function(){
         new_acc = 1;

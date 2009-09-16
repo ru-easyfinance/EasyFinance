@@ -1,5 +1,5 @@
 // {* $Id: periodic.js 108 2009-07-23 10:21:50Z ukko $ *}
-$(function () {
+$(document).ready(function() {
     var pobj;
     
     loadPeriodic();

@@ -420,13 +420,13 @@ $(document).ready(function() {
 
 
 
-
+    $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
         op_getTags();
-
+        
         $('#op_btn_Save').click(function(){op_saveOperation();})
         $('#op_btn_Cancel').click(function(){op_clearForm()});
 
@@ -447,7 +447,7 @@ $(document).ready(function() {
             showOn: 'focus' //opbutton
         });
 
-        $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
+        
         $("#op_date").datepicker();
 
 

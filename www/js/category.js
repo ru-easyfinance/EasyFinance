@@ -99,13 +99,13 @@ $(document).ready(function() {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
                     m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
-                    p[id] = $('<div class="line open" id="'+id+'"><div class="l_n_cont"><a href="#" class="name">'
+                    p[id] = $('<div class="line open" id="'+id+'"><div class="l_n_cont"><a class="name">'
                     +data.user[id]['name']+'</a>'
                                         +'<div class="cont">'
                                             +'<ul class="ul_head">'
-                                                +'<li class="edit"><a class="cat" href="#" title="Редактировать">Редактировать</a></li>'
-                                                +'<li class="del"><a class="cat" href="#" title="Удалить">Удалить</a></li>'
-                                                +'<li class="add"><a class="cat" href="#" title="Добавить">Добавить</a></li>'
+                                                +'<li class="edit"><a class="cat" title="Редактировать">Редактировать</a></li>'
+                                                +'<li class="del"><a class="cat" title="Удалить">Удалить</a></li>'
+                                                +'<li class="add"><a class="cat" title="Добавить">Добавить</a></li>'
                                             +'</ul></div>'
                                         +'</div></div>').appendTo('div.categories');
                 } else {
@@ -130,7 +130,8 @@ $(document).ready(function() {
                         +'<td class="w2">'
                             + ct
                         +'</td>'
-                        +'<td class="w3">'+data.system[data.user[id]['system']]['name']+'</td>'
+                        +'<td class="w3">'+data.system[data.user[id]['system']]['name']
+                        +'</td>'
                         +'<td class="w4">'
                             +'<div class="cont">'
 //                                +'<b>500 руб.</b>'
