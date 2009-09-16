@@ -4,62 +4,73 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>nolog</title>
+<title>reports</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">nolog</td></tr>
+<tr><td rowspan="1" colspan="3">reports</td></tr>
 </thead><tbody>
+<!--тест проверяет составляются ли отчёты-->
 <tr>
 	<td>open</td>
-	<td>/</td>
+	<td>/report/</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Главная</td>
-	<td>150000</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Обзор сервиса</td>
-	<td>150000</td>
+	<td>link=Личный кабинет</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Отзывы</td>
-	<td>150000</td>
+	<td>link=Отчеты</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>report</td>
+	<td>label=Расходы</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Блог</td>
-	<td>150000</td>
+	<td>graph_profit</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Форум</td>
-	<td>150000</td>
+	<td>click</td>
+	<td>btnShow</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Правила использования</td>
-	<td>150000</td>
+	<td>verifyTextPresent</td>
+	<td>расходы</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Безопасность</td>
-	<td>150000</td>
+	<td>select</td>
+	<td>report</td>
+	<td>label=Доходы</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=О Компании</td>
-	<td>150000</td>
+	<td>click</td>
+	<td>graph_loss</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Главная</td>
-	<td>150000</td>
+	<td>click</td>
+	<td>btnShow</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>доходы</td>
+	<td></td>
 </tr>
 
 </tbody></table>

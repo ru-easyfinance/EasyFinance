@@ -11,6 +11,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3">unlogin</td></tr>
 </thead><tbody>
+<!--"жамкает" по кнопочке выхода и проверяет браузирную строку-->
 <tr>
 	<td>open</td>
 	<td>/accounts/</td>

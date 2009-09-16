@@ -11,6 +11,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3">login</td></tr>
 </thead><tbody>
+<!--логинится под тестовым логином и проверяет получен ли доступ к кабинету-->
 <tr>
 	<td>open</td>
 	<td>/</td>
@@ -24,7 +25,7 @@
 <tr>
 	<td>type</td>
 	<td>pass</td>
-	<td>qwertty</td>
+	<td>qwertty2</td>
 </tr>
 <tr>
 	<td>click</td>

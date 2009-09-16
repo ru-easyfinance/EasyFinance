@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
+<link rel="selenium.base" href="https://easyfinance.ru/" />
 <title>wronglogin</title>
 </head>
 <body>
@@ -19,12 +19,12 @@
 <tr>
 	<td>type</td>
 	<td>login</td>
-	<td>challenger23</td>
+	<td>this_is_wronglogin</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>pass</td>
-	<td>123</td>
+	<td>this_is_wrongpassword</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -32,8 +32,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//input[@value='Войти']</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/login/</td>
 	<td></td>
 </tr>
 
