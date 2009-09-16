@@ -1001,13 +1001,16 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 .e-l-p{height:65px; overflow:hidden;}
 .btn_save_profile{position:absolute; right:12px; bottom:0;}
 .btn_reset_profile{position:absolute; right:120px; bottom:0;}
-#profile-short, #profile-long{width:100%; margin:0 0 25px 0;}
+#profile-short, #profile-long{width:100%; margin:0 0 25px 0; border:1px solid #ddd;}
 .rte-toolbar p{float:left; margin:0;}
 .userpic{float: left;}
-.select_image{position: absolute; left:147px; bottom:0; height:24px;}
+.select_image{position: absolute; left:150px; top:150px; height:24px;}
 .o-l-moder{display:block; width:100%;}
 .o-l-red{color:red;}
 .cert-title{padding:0 0 0 5px;}
 .add_cert{margin:15px 0 0 0;}
 .service-buttons{margin:10px 0 0 0;}
 .p-s-input{width:95%; margin:0 5px 0 0;}
+.st-red{background:red;}
+.st-green{background:yellowgreen;}
+.st-yellow{background:yellow;}
