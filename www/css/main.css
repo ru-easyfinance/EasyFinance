@@ -555,7 +555,7 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.buttons_block li { float: left; margin-right: 13px; height: 40px; background: url('/img/i/buttons.png') no-repeat 0 0; }
-ul.buttons_block li a { display: block; height: 25px; text-indent: -999px; overflow: hidden; }
+ul.buttons_block li a { display: block; height: 25px; text-indent: -999px; overflow: hidden; cursor: pointer; }
 ul.buttons_block li#addoperation_but { width: 183px; background-position: 0 -60px; }
 ul.buttons_block li#addoperation_but a { width: 170px; }
 ul.buttons_block li#addtocalendar_but { width: 198px; background-position: 0 -100px; }
