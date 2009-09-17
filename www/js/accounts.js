@@ -19,28 +19,6 @@ $(document).ready(function() {
     var new_acc = 1;
     var aid;
     var tid;
-    if (location.href=='/accounts/#add')
-    {
-        $("#addacc").click();
-    }
-    s = location.href;
-    if(s.substr(5,2)=='##')
-    {
-        f = s.substr(7);
-        clearForm();
-        $('#key').val(f.attr('tid'));
-        $('#type').val(f.attr('type'));
-        $('#title').val(f.attr('title'));
-        $('#amount').val(f.attr('amount'));
-        $('#start').val(f.attr('start'));
-        $('#end').val(f.attr('end'));
-        $('#photo').val(f.attr('photo'));
-        $('#url').val(f.attr('url'));
-        $('#comment').val(f.attr('comment'));
-        $('#account').val(f.attr('account'));
-        $('#visible').val(f.attr('visible'));
-        $('#tpopup').dialog('open');
-    }
 
     $('#addacc').click(function(){
         new_acc = 1;

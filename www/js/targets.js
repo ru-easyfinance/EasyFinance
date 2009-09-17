@@ -20,28 +20,7 @@ $(document).ready(function(){
         $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
     });
-//    if (location.href=='/info/#add')
-//    {
-//        $("div.financobject_block .add span").click();
-//    }
-//    s = location.href;
-//    if(s.substr(5,2)=='##')
-//    {
-//        f = s.substr(7);
-//        clearForm();
-//        $('#key').val(f.attr('tid'));
-//        $('#type').val(f.attr('type'));
-//        $('#title').val(f.attr('title'));
-//        $('#amount').val(f.attr('amount'));
-//        $('#start').val(f.attr('start'));
-//        $('#end').val(f.attr('end'));
-//        $('#photo').val(f.attr('photo'));
-//        $('#url').val(f.attr('url'));
-//        $('#comment').val(f.attr('comment'));
-//        $('#account').val(f.attr('account'));
-//        $('#visible').val(f.attr('visible'));
-//        $('#tpopup').dialog('open');
-//    }
+
     // Присоединиться к популярной финансовой цели
     $(".join").live('click', function(){
         clearForm();
@@ -117,6 +96,7 @@ $(document).ready(function(){
             }
             $('div.object,div.show_all').remove();
             $('div.financobject_block').append(s);
+
         }, 'json');
     });
 
@@ -243,7 +223,14 @@ $(document).ready(function(){
     }
     
     loadPopular();
-// </editor-fold>
+    ////////////////////////////////////////////////hash api
+    s = location.hash;
+    if (s=='#add')
+    {
+        $("div.financobject_block .add span").click()
+    }
+
+    ///////////////////////////////////////////////////////////
 });
 
     
