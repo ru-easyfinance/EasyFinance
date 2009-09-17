@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    alert('asd')
     $.post(
     '/info/get_data/',
     {},
@@ -43,7 +42,7 @@ function print_targets(count)
             for (key in data)
             {
                 if(!data[key]['image'])
-                    data[key]['image']='/img/images/pic2.gif';
+                    data[key]['image']='/img/i/fintarget.jpg';
                 
                 str = str + "<div class='object2' id='"+
                     data[key]['id'] + "'><a class='advice'>Получить совет</a><div class='descr'><img src='" +
