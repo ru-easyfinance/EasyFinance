@@ -1,13 +1,16 @@
-$.post(
+$(document).ready(function(){
+    alert('asd')
+    $.post(
     '/info/get_data/',
     {},
     function(data){
         for (i=0;i<5;i++)
         {
+            titles = ['Деньги','Бюджет','Кредиты','Расходы','Фин.состояние'];
             if (!data[1][i])
                 data[1][i]={color :1,title:'none'};
             //alert(data[1][i]['title'])
-            name = (!data[1][i]['title'])?'':data[1][i]['title'];
+            name = (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
             end = data[0][i]*3/data[1][i]['color'] ;
             value = parseInt(data[0][i]) ;
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
@@ -27,7 +30,7 @@ $.post(
         }
     },
     'json');
-
+})
 
 ///////////////////////////////targets
 function print_targets(count)
