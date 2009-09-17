@@ -9,6 +9,7 @@ define('INDEX', true);
 
 // @FIXME не создавать сессию, если на странице случайный посетитель
 session_start();
+
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
@@ -18,6 +19,7 @@ Core::getInstance()->parseUrl();
 // Определяем информацию о пользователе
 //@TODO Переместить это в другой блок ()
 $uar = array(
+    'user_id'=>Core::getInstance()->user->getId(),
     'user_name'=>$_SESSION['user']['user_name'],
     'user_type'=>$_SESSION['user']['user_type']);
 
