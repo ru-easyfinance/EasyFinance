@@ -13,13 +13,15 @@ class Mail_Controller extends Template_Controller
      */
     private $model = null;
 
+
+    private $tpl = null;
     /**
      * Конструктор класса
      * @return void
      */
     function __construct()
     {
-
+        $this->tpl = Core::getInstance()->tpl;
         $this->model = new Mail_Model();
     }
 
@@ -29,8 +31,10 @@ class Mail_Controller extends Template_Controller
      */
     function index()
     {
+        $this->tpl->assign('name_page', 'mail/mail');
+        $this->tpl->append('js','mail.js');
         $this->model->index();
-        die();
+        //die();
     }
 
     /**
@@ -54,7 +58,7 @@ class Mail_Controller extends Template_Controller
             die(0);
         $param['title']=htmlspecialchars($_POST['title']);
         $param['to']=(int)$_POST['to'];
-        $param['date'] = formatRussianDate2MysqlDate($_POST['date']);
+        //$param['date'] = formatRussianDate2MysqlDate($_POST['date']);
         die(json_encode($this->model->add_mail($param)));
     }
 
@@ -64,8 +68,7 @@ class Mail_Controller extends Template_Controller
      */
     function del_mail()
     {
-        $param['id']=$_POST['id'];
-        $param['to']=$_POST['to'];
+        $param['ids']=explode(',', $_POST['ids']);
         die($this->model->del_mail($param));
     }
 

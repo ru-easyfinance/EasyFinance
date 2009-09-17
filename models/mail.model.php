@@ -47,12 +47,12 @@ class Mail_Model extends Template_Controller
                 FROM
                     mail
                 WHERE
-                    (`from`=? AND a_vis='1') OR (`to`=? AND t_vis='1')";
+                    (`from`=? AND visible>='0') OR (`to`=? AND visible<='0'AND visible>'-2')";
         $mails = $this->db->select($sql,$this->user_id,$this->user_id);
         foreach ($mails as $key=>$val)
         $this->mails[$mails[$key]['id']] = $mails[$key];
     }
-        /**
+    /**
      * отдаёт список писем,при необходимости формирует его
      * @return json список писем
      */
@@ -79,9 +79,9 @@ class Mail_Model extends Template_Controller
         $from = $this->user_id;
         $sql = "INSERT INTO
                     mail
-                    (`to`, `from`, `text`, `category`, `title`, a_vis, t_vis, is_new)
+                    (`to`, `from`, `text`, `category`, `title`, `visible`, `is_new`)
                 VALUES
-                    (?,?,?,?,?,'1','1','1')";
+                    (?,?,?,?,?,'0','1')";
         $this->db->query($sql, $to, $from, $text, $category, $title);
         $id = mysql_insert_id();
 
@@ -90,8 +90,10 @@ class Mail_Model extends Template_Controller
         $this->mails[$id]['text'] = $text;
         $this->mails[$id]['category'] = $category;
         $this->mails[$id]['title'] = $title;
+        $this->mails[$id]['date']=date('D.m.Y');
+        $ret = array('sucess'=>1,'mail'=>array($id => $this->mails[$id]));
 
-        return  $id;
+        return  $ret;
     }
     /**
      * удаляет письмо из базы данных
@@ -102,25 +104,29 @@ class Mail_Model extends Template_Controller
         
         if (!$this->mails)
             $this->index();
-        $id = $param['id'];
+        $ids = $param['ids'];
 
-        //print_r($this->mails);
-
-        $author = $this->mails[$id]['from'];
-        if ($author == $this->user_id)
-            $field = 'a_vis';//от кого
-        else
-            $field = 't_vis';//к кому
-
-
-
-        if (!is_null($id))
+        foreach ($ids  as $key=>$val)
         {
-            
-            $sql = "UPDATE mail SET $field='0' WHERE `id`=?;";
-            $this->db->query($sql, $this->mails[$id]['id']);
+            $id = $val;
+            $author = $this->mails[$id]['from'];
+            if ($author == $this->user_id)
+                $field = 'visible="-1"';//от кого
+            else
+                $field = 'visible="1"';//к кому
+            if ($this->mails[$id]['visible']!='0')
+            {
+                $field = 'visible="-2"';
+            }
+
+            if (!is_null($id))
+            {
+
+                $sql = "UPDATE mail SET $field WHERE `id`=IN($id_str);";
+                $this->db->query($sql, $this->mails[$id]['id']);
+            }
+            unset($this->mails[$id]);
         }
-        unset($this->mails[$id]);
         return '1';
     }
 

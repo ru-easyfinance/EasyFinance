@@ -245,7 +245,7 @@ class Accounts_Model
 
     function update_operation($data)
     {
-        $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `date`";
+        $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `dt_create`";
         $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
         $model = new Operation_Model();
        $model->edit($oid,str_replace(' ', '', $data['starter_balance']),date('Y.m.d'),0,0,'Начальный остаток', $data['id']);
