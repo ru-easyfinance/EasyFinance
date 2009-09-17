@@ -19,8 +19,84 @@ a { color:#6cbd45; }
 a:hover { text-decoration: none; }
 a img, fieldset { border:0 none; }
 
-td.time{padding-right: 5px;  }
+.mail_control{width:100%;cursor:pointer}
+.mail_control li{float:left; display:block; margin:10px 15px 0;}
+.mail_control li a{outline:none;}
+.mail_control li a .m-c-img{display:block; height:20px; margin:0 0 0 14px;}td.time{padding-right: 5px;  }
 
+.mail-wrapper{width:100%;}
+.mail-wrapper tr{}
+.mail-wrapper tr td{text-align:right;}
+.mail-wrapper tr td.m-w-left{width:100px;}
+.mail-wrapper tr td.m-w-right{text-align:left; line-height:28px;}
+.mail-wrapper tr td label{line-height:30px; padding:0 10px 0 0;}
+.mail-wrapper #mail-subject, #mail-to, #mail-text, #mail-text-read, #cert-subject, #cert-type, #cert-status{width:100%; margin:5px 0;}
+#mail_save, #mail_send, #mail_answer, #mail_save_read, #mail_edit, .service-cancel{float:right; margin:0 0 0 10px;}
+#mail-from{text-align:left;}
+#mail-date{position:absolute; right:15px; top:41px;}
+
+.m-d-label{position:absolute; right:72px; top:40px;}
+.e-l-p{height:65px; overflow:hidden;}
+.btn_save_profile{position:absolute; right:12px; bottom:0;}
+.btn_reset_profile{position:absolute; right:120px; bottom:0;}
+#profile-short, #profile-long{width:100%; margin:0 0 25px 0; border:1px solid #ddd;}
+.rte-toolbar p{float:left; margin:0;}
+.userpic{float: left;}
+.select_image{position: absolute; left:150px; top:150px; height:24px;}
+.o-l-moder{display:block; width:100%;}
+.o-l-red{color:red;}
+.cert-title{padding:0 0 0 5px;}
+.add_cert{margin:15px 0 0 0;}
+.service-buttons{margin:10px 0 0 0;}
+.p-s-input{width:95%; margin:0 5px 0 0;}
+.st-red{background:red;}
+.st-green{background:yellowgreen;}
+.st-yellow{background:yellow;}
+/* ClearFix */
+.clearfix:after {content: ""; display: block; clear: both; visibility: hidden; line-height: 0; height: 0;}
+.clearfix {display: inline-block;}
+/* //////////////////////////////////////////////////////////////////////////////////////////  */
+.mail_list { padding-top: 21px !important; }
+.mail_list .sorting { position: relative; margin-bottom: 7px; //zoom: 1; }
+.mail_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.mail_list .sorting .f_field { position: relative; float: left; margin-right: 51px; }
+.mail_list .sorting .f_field select { margin-left: 11px; color: #b2b2b2; }
+.mail_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
+
+.mail_list ul.period { margin: 0 0 21px 71px; //zoom: 1; }
+.mail_list ul.period:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.mail_list ul.period li { float: left; padding: 1px 10px 2px 10px; font-size: 11px;  }
+.mail_list ul.period li span { display: block; color: #666666; cursor: pointer; //cursor: hand; background: url("../i/point_x2.gif"/*tpa=https://home-money.ru/preview/i/point_x2.gif*/) repeat-x bottom left; }
+.mail_list ul.period li.act { padding: 0 10px 0 0; font-weight: bold; cursor: default; background: url("../i/plashka_pink.png"/*tpa=https://home-money.ru/preview/i/plashka_pink.png*/) no-repeat 100% 0; }
+.mail_list ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url("../i/plashka_pink.png"/*tpa=https://home-money.ru/preview/i/plashka_pink.png*/) no-repeat 0 0; }
+
+.mail_list table { position: relative; width:100%; border: 2px solid #dfdede; }
+.mail_list table th, .mail_list table td, table.tab1 th { font-size: 11px; }
+.mail_list table th { padding: 8px 0 5px 0; color: #222222; text-align: left; border-bottom: 1px solid #e5e5e5; }
+.mail_list table th span.sort, .mail_list table th span.select { display: block; float: left; }
+.mail_list table th span.sort { position: relative; margin-right: 6px; cursor: pointer; //cursor: hand; z-index: 0; }
+.mail_list table th span.sort span { display: block; position: absolute; top: 4px; left: -9px; width: 5px; height: 9px; text-indent: -999px; overflow: hidden; background: url("../i/icons.gif"/*tpa=https://home-money.ru/preview/i/icons.gif*/) no-repeat -40px 0; }
+.mail_list table th span.sort span.up { background-position: -50px 0; }
+.mail_list table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url("../i/icons.gif"/*tpa=https://home-money.ru/preview/i/icons.gif*/) no-repeat -20px 0; }
+.mail_list table th div.cont {  z-index: 2; }
+.mail_list table th div.cont div { //zoom: 1; }
+.mail_list table th div.cont div:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.mail_list table th ul.select_list {  display: none; position: absolute; top: 16px; left: -5px; width: 100px; padding-bottom: 5px; z-index: 10; background: #ffffff; border: 1px solid #e5e5e5; }
+.mail_list table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }
+
+.mail_list table td a { color: #666666; }
+.mail_list table td, table.tab1 td { padding: 5px 0 5px 0; background: url("../i/point_x.gif"/*tpa=https://home-money.ru/preview/i/point_x.gif*/) repeat-x top left; }
+.mail_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; }
+.mail_list table tr.act td div.cont ul { display: block; }
+.mail_list table tr.first td { background: none; }
+ul.menu6 { margin-bottom: 19px; padding-top: 7px; //zoom: 1; width:100%; }
+ul.menu6:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+ul.menu6 li { float: left; margin-right: 15px; padding: 5px 13px 6px 13px; font-size: 11px; color: #6ebe41; }
+ul.menu6 li.act { padding: 0 13px 0 0; background: url("../i/bg15.png"/*tpa=https://home-money.ru/preview/i/bg15.png*/) no-repeat 100% 0; }
+ul.menu6 li.act div { padding: 5px 0 6px 13px !important; background: url("../i/bg15.png"/*tpa=https://home-money.ru/preview/i/bg15.png*/) no-repeat 0 0 !important; }
+ul.menu6 li div span { cursor: pointer; //cursor: hand; border-bottom: 1px dashed #6ebe41; }
+ul.menu6 li.act div span { cursor: default; border-bottom: 0 none; }
+/* //////////////////////////////////////////////////////////////////////////////////////////  */
 .operation_list table.noborder{border:0}
 .operation_list table.noborder td{width:30px}
 .operation_list table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
@@ -224,9 +300,42 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .menu3 .popup_info { display: none; position: absolute; top: -20px; left: 627px; width: 182px; padding: 10px 11px 11px 14px; font-size: 11px; line-height: 14px; color: #737373;  z-index: 10; background: #ffffff; border: 1px solid #c4c4c4; }
 .menu3 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url('/img/i/icons.gif') no-repeat 0 -420px;  }
 
+.menu31 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
 
+.menu31 ul { position: absolute; top: 3px; left: 0; height: 37px; //zoom: 1; }
+.menu31 ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.menu31 ul li { float: left; margin-right: 4px; width: 120px; height: 37px; }
+.menu31 ul li a, .menu31 ul li span { display: block; width: 120px; height: 37px; text-indent: -999px; overflow: hidden; background: url("../i/menu4.png"/*tpa=https://home-money.ru/preview/i/menu4.png*/) no-repeat 0 0; }
 
-ul.menu4 { position: relative; margin: -3px 0 22px 2px; padding-left: 24px; height: 30px; //zoom: 1; }
+.menu31 ul li#m1, .menu31 ul li#m1 a, .menu31 ul li#m1 span { width: 131px; }
+.menu31 ul li#m1 a { background-position: 0 1px; }
+.menu31 ul li#m1 a:hover { background-position: 0 -39px; }
+.menu31 ul li#m1 span { background-position: 0 -80px; }
+
+.menu31 ul li#m2 a { background-position: -135px 1px; }
+.menu31 ul li#m2 a:hover { background-position: -135px -39px; }
+.menu31 ul li#m2 span { background-position: -135px -80px; }
+
+.menu31 ul li#m3 a { background-position: -259px 1px; }
+.menu31 ul li#m3 a:hover { background-position: -259px -39px; }
+.menu31 ul li#m3 span { background-position: -259px -80px; }
+
+.menu31 ul li#m4 a { background-position: -383px 1px; }
+.menu31 ul li#m4 a:hover { background-position: -383px -39px; }
+.menu31 ul li#m4 span { background-position: -383px -80px; }
+
+.menu31 ul li#m5 a { background-position: -507px 1px; }
+.menu31 ul li#m5 a:hover { background-position: -507px -39px; }
+.menu31 ul li#m5 span { background-position: -507px -80px; }
+
+.menu31 ul li#m6 a { background-position: -631px 1px; }
+.menu31 ul li#m6 a:hover { background-position: -631px -39px; }
+.menu31 ul li#m6 span { background-position: -631px -80px; }
+
+.menu31 .popup_info { display: none; position: absolute; top: -20px; left: 627px; width: 182px; padding: 10px 11px 11px 14px; font-size: 11px; line-height: 14px; color: #737373;  z-index: 10; background: #ffffff; border: 1px solid #c4c4c4; }
+.menu31 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url("../i/icons.gif"/*tpa=https://home-money.ru/preview/i/icons.gif*/) no-repeat 0 -420px;  }
+
+ul.menu4 { position: relative; margin: -3px 0 22px 2px; padding-left: 24px; //zoom: 1; }
 ul.menu4:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.menu4 li { position: relative; float: left; margin-right: 20px; font-family: Helvetica, Arial, Tahoma; z-index: 0;height: 30px; }
 ul.menu4 li a { display: block; padding: 3px 7px 5px 0; background: url('/img/i/bg06.gif') no-repeat 100% 2px; }
