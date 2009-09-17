@@ -74,9 +74,9 @@ $(document).ready(function() {
 
     function in_array(a,arr)
     {
-        for (k in arr)
+        for (keyssasdsadfasf in arr)
         {
-            if (a==arr[k])
+            if (a == arr[keyssasdsadfasf])
                 return true;
         } 
         return false;
@@ -127,7 +127,7 @@ $(document).ready(function() {
                     {
                         if (!in_array(k,main_keys))
                         {
-                            str = str + '<td class='+k+'>';// value='+data[key]['fields'][k]+'
+                            str = str + '<td class="'+k+'">';// value='+data[key]['fields'][k]+'
                             str = str +data[key]['fields'][k]+ '</td>';
                         }
                     }
@@ -242,7 +242,7 @@ $(document).ready(function() {
                         val = $(th).find('.total_balance').text();
 
 
-                        $('#blockCreateAccounts').find('#starter_balance').val(val);
+                        $('#blockCreateAccounts').find('#starter_balance').val($(th).find('.starter_balance').text());
                         $('#account_form_fields table').attr('id',$(th).find('.id').attr('value'));
                         $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).find('.id').attr('value')+'" />');
                     },
@@ -358,7 +358,7 @@ $(document).ready(function() {
                         val = $(th).closest('.item').find('.total_balance').text();
 
                         
-                        $('#blockCreateAccounts').find('#starter_balance').val(val);
+                        $('#blockCreateAccounts').find('#starter_balance').val($(th).closest('.item').find('.starter_balance').text());
                         //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
                         //alert($(th).closest('.item').find('.id').attr('value'));
                         $('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));

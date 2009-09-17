@@ -105,7 +105,7 @@ class Accounts_Model
                         $style,
                         $field['field_default_value']);
 		} else {
-                    return sprintf("<input type=\"hidden\" name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">",
+                    return sprintf("<input type=\"text\" DISABLED name=\"%s\" id=\"%s\" class=\"%s\" style=\"%s\" value=\"%s\">",
 			$field['field_name'],
                         $field['field_name'],
                         $class,
