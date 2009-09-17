@@ -1406,7 +1406,9 @@ table.currency td a.add {
 
 ul.currency {
     margin-bottom: 1em;
-    width: 80%;
+    width: 95%;
+    height:300px;
+    overflow:auto;
 }
 ul.currency li a {
     margin-bottom: .1em;

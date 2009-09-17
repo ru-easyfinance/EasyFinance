@@ -84,8 +84,14 @@ function cur_upd(list)
     $('.col .all').html(str);
 }
 
-function def_upd()//not work
+function def_upd()
 {
+    $('.col li').each(function(){
+        txt = $(this).html();
+        id = $(this).attr('id');
+        if(cur_list[id]['uses']=='1')
+            $(this).html('<b>'+txt+'</b>')
+    })
     opt ="";
     id = $('#def_cur :selected').attr('id');
     did = (isNaN(id))?did:id;
