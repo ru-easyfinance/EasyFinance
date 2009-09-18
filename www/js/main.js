@@ -702,15 +702,15 @@ $('.navigation  li span').click(function(){
                     chartSample_1.wMode="opaque";
                     chartSample_1.write('flash');
                     chartSample_1 = null;
-        $('.calculator_block .calculator').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        })
-       /*$('.calculator_block .calculator').calculator({
+        //$('.calculator_block .calculator').live('keyup',function(e){
+        //    FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        //})
+       $('.calculator_block .calculator').calculator({
     layout: [
                     '_7_8_9_+CA',
                     '_4_5_6_-M+',
                     '_1_2_3_/M-',
-                    '_0_._=_*MS']});*/  //
+                    '_0_._=_*MS']});  //
         //верхнее меню
         head = $('#menumain').attr('value');
         if (!head)
