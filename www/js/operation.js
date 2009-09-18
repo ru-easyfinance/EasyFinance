@@ -1,5 +1,9 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
 $(document).ready(function() {
+    $('#op_addoperation_but').click();
+    $('#op_btn_Save').click(function(){
+        loadOperationList();
+        })
     var operationList;
     // Init
     $('#amount').live('keyup',function(e){
@@ -17,7 +21,6 @@ $(document).ready(function() {
 
     // Bind
     $('#btn_Save').click(function(){saveOperation();})
-    $('#btn_Cancel').click(function(){clearForm()});
     $('#btn_ReloadData').click(function(){loadOperationList();});
     //$('#category').autocomplete();
     $('#amount,#currency').change(function(){
@@ -76,8 +79,8 @@ $(document).ready(function() {
         $.get('/operation/listOperations/',{
             dateFrom: $('#dateFrom').val(),
             dateTo: $('#dateTo').val(),
-            category: $('#cat_filtr :selected').val(),
-            account: $('#account :selected').val()
+            category: $('#op_cat_filtr :selected').val(),
+            account: $('#op_account :selected').val()
         }, function(data) {
             delete operationList;
             operationList = $.extend(data);
@@ -230,41 +233,7 @@ $(document).ready(function() {
         return true;
     }
 
-    /**
-     * Проверяет валидность введённых данных
-     */
-    function validateForm() {
-        $error = '';
-        if (isNaN(parseFloat($('#amount').val()))){
-            alert('Вы ввели неверное значение в поле "сумма"!');
-            return false;
-        }
-
-        if ($('#type') == 4) {
-            //@FIXME Написать обновление финцелей
-            amount = parseFloat($("#target_sel option:selected").attr("amount"));$("#amount").text(amount);
-            amount_done = parseFloat($("#target_sel option:selected").attr("amount_done"));$("#amount_done").text(amount_done);
-            if ((amount_done + parseFloat($("#amount").val())) >= amount) {
-                if (confirm('Закрыть финансовую цель?')) {
-                    $("#close").attr("checked","checked");
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Очищает форму
-     * @return void
-     */
-    function clearForm() {
-        $('#type,#category,#target').val(0);
-        $('#amount,#AccountForTransfer,#comment,#tags,#date').val('');
-        $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
-        $('#close').removeAttr('checked');
-        $('form').attr('action','/operation/add/');
-        $('#type').change();
-    }
+ $('#type').change();
 
     /**
      * Функция заполняет форму данными c массива
