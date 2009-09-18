@@ -26,9 +26,8 @@ $(document).ready(function() {
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id'));
         $('#add_form').show();
-        //(document).scrollTop(300);
         $('form').attr('action','/category/edit/');
-        (document).scrollTop(300);
+        $(document).scrollTop(300);
     });
     $('div.line tr').live('mouseout', function() {
         $('div.line ul').hide();
@@ -64,7 +63,6 @@ $(document).ready(function() {
      * @param id
      */
     function fillForm(id) {
-        alert(parseInt(cat.user[id]['type']));
         if (parseInt(cat.user[id]['type']) == -1) {
             $('#subcat').attr('disabled', 'disabled');
         } else {
