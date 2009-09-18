@@ -224,18 +224,34 @@ class Operation_Model {
 	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
 	{
         $drain_money = $money * -1;
-
+                // tr_id. было drain
 		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, drain, comment, transfer)
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $from_account, 1,
             $comment, $to_account);
+
         $last_id = mysql_insert_id();
+            $sql = "INSERT INTO operation
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, 1,
+            $comment, $from_account);
+
+        /*$last_id = mysql_insert_id();
         $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, drain, comment, transfer, tr_id)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, 0, $comment,
             $from_account, $last_id);
+
+        $last_id = mysql_insert_id();
+        $sql = "INSERT INTO operation
+                    (user_id, money, date, cat_id, account_id, drain, comment, transfer, tr_id)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $from_account, 0, $comment,
+            $to_account, $last_id);*/
+
         $this->user->initUserAccounts();
         $this->user->save();
         return $last_id;

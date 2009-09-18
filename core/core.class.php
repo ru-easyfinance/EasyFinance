@@ -60,7 +60,7 @@ class Core
     public static function getInstance ( )
     {
         if ( is_null ( self::$instance ) ) {
-            self::$instance = new Core ( );
+            self::$instance = new Core ();
         }
 
         return self::$instance;

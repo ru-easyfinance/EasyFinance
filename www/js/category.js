@@ -21,6 +21,15 @@ $(document).ready(function() {
         $(this).addClass('act').find('ul').show();
 
     });
+    // При двойном клике
+    $('div.line tr').live('dblclick', function() {
+        clearForm();
+        fillForm($(this).closest('tr,.line').attr('id'));
+        $('#add_form').show();
+        //(document).scrollTop(300);
+        $('form').attr('action','/category/edit/');
+        (document).scrollTop(300);
+    });
     $('div.line tr').live('mouseout', function() {
         $('div.line ul').hide();
         $('div.line tr').removeClass('act');
@@ -29,7 +38,7 @@ $(document).ready(function() {
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id'));
         $('#add_form').show();
-        $(document).scrollTop(300);
+        (document).scrollTop(300);
         $('form').attr('action','/category/edit/');
 
     });

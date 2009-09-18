@@ -1,8 +1,7 @@
 <?php
-ini_set("include_path", "../core".PATH_SEPARATOR."../../core".PATH_SEPARATOR.ini_get("include_path"));
+//ini_set("include_path", "core/".ini_get("include_path"));
 require_once 'PHPUnit/Framework.php';
-
-require_once 'currency.class.php';
+require_once 'C:\WebServers\home\hm\core\currency.class.php';
 
 /**
  * Test class for Currency.

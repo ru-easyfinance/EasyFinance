@@ -1,9 +1,7 @@
 <?php
-//ini_set("include_path", dirname(dirname(dirname(__FILE__))).PATH_SEPARATOR.ini_get("include_path"));
-define('INDEX', true);
+//define('INDEX',true);
 require_once 'PHPUnit/Framework.php';
-require_once 'include/functions.php';
-require_once 'core.class.php';
+require_once 'C:\WebServers\home\hm\core\core.class.php';
 
 /**
  * Test class for Core.
@@ -25,8 +23,7 @@ class CoreTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Core;
-        $this->assertEquals(8, 8);
+        $this->object = Core::getInstance();
     }
 
     /**
@@ -37,7 +34,7 @@ class CoreTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->assertEquals(8, 8);
+        $this->object = NULL;
     }
 
     /**
@@ -45,7 +42,8 @@ class CoreTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstance()
     {
-        $this->assertEquals(8, 8);
+        $this->assertNotEquals(NULL, $this->object->getInstance());
+        //$this->assertEquals(8, 8);
     }
 
     /**
@@ -54,9 +52,7 @@ class CoreTest extends PHPUnit_Framework_TestCase
     public function testParseUrl()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals(8, 8);
     }
 
     /**
@@ -64,10 +60,8 @@ class CoreTest extends PHPUnit_Framework_TestCase
      */
     public function testAuthUser()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        //$this->assertNotEquals(NULL, $this->object->authUser());
+        //$this->assertNotEquals(123, $this->object->authUser());
     }
 }
 ?>

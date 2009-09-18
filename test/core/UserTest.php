@@ -35,6 +35,7 @@ class UserTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $this->object = NULL;
     }
 
     /**
@@ -42,7 +43,7 @@ class UserTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertFalse(true);
+        $this->assertNotEquals(NULL, $this->object->Init(1));
     }
 
 //    /**

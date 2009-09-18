@@ -304,6 +304,40 @@ $(document).ready(function() {
             $('tr.item').removeClass('act');
             $(this).addClass('act');
     });
+    //Редактирование по двойному щелчку
+    $('tr.item').live('dblclick',
+        function(){
+                    $('#blockCreateAccounts').show();
+                id =$(this).closest('.item').find('.type').attr('value');
+                new_acc=0;
+                tid = id;
+                var th = $(this);
+                $.post(
+                    "/accounts/changeType/",
+                    {
+                        id: id
+                    },
+                     function(data) {
+                        $('#account_form_fields').html(data);
+                        $(th).closest('.item').find('td').each(function(){
+                            key = $(this).attr('class');
+                            val = $(this).text();
+                            $('#blockCreateAccounts').find('#'+key).val(val) ;
+                            $(document).scrollTop(300);
+                        });
+                        val = $(th).closest('.item').find('.total_balance').text();
+
+
+                        $('#blockCreateAccounts').find('#starter_balance').val($(th).closest('.item').find('.starter_balance').text());
+                        //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
+                        //alert($(th).closest('.item').find('.id').attr('value'));
+                        $('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
+                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
+                    },
+                    'text'
+                );
+               }
+    );
 
     $('.mid').mousemove(function(){
             if (!$('ul:hover').length && !$('.act:hover').length)
