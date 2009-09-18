@@ -33,12 +33,14 @@ $(document).ready(function() {
     $('#btnAddAccount').click(function(){
         str = $('#blockCreateAccounts #name').val();
         l = 1;
+        if ($('.item .name')){
         $('.item .name').each(function(){
             s = $(this).text();
             if(s==str)
                 l=0;
         });
-        if (''){
+        }
+        if (l){
             if (new_acc)
                 createNewAccount();
             else
