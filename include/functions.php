@@ -2,7 +2,6 @@
 /**
 * Сборник полезных функций
 * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
-* @author korogen
 * @copyright http://home-money.ru/
 * SVN $Id$
 */

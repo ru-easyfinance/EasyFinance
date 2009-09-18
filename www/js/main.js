@@ -677,7 +677,7 @@ $('.navigation  li span').click(function(){
         cost = data[key]['cost'];
         name = data[key]['name'];
         progres = data[key]['progress'];
-        str = '<div class="line"><span class="valuta">'+name+'</span><span class="'+progres+'">'+cost+'</span>'
+        str += '<div class="line"><span class="valuta">'+name+'</span><span class="'+progres+'">'+cost+'</span></div>'
     }
     $('dl.info dd').html(str);
 //calendar
