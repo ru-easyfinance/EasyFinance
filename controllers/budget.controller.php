@@ -2,13 +2,12 @@
 /**
  * Класс контроллера для бюджета
  * @copyright http://home-money.ru/
- * @author Roman Korostov
- * SVN $Id: budget.controller.php 90 2009-07-13 13:33:37Z korogen $
+ * @author Max Kamashev <max.kamashev@gmail.com>
+ * SVN $Id:  $
  */
 
 class Budget_Controller extends Template_Controller
 {
-    private $money = null;
     private $user = null;
     private $tpl = null;
     private $model = null;	

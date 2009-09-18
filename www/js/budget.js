@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     $('#prev_month').click(function(){
         loadBudget('prev');
     });

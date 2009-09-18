@@ -2,7 +2,7 @@
 /**
  * Класс модели для управления бюджетом
  * @category budget
- * @author Roman Korostov (korogen) <korogen@gmail.com>
+ * @author Max Kamashev <max.kamashev@gmail.com>
  * @copyright http://home-money.ru/
  * @version SVN $Id: budget.model.php 119 2009-08-04 15:40:26Z korogen $
  */
@@ -54,17 +54,17 @@ class Budget_Model {
       return $plan;
   }
 
-  /**
-   * Получает категории для бюджета
-   * @param string $drain доход или расход
-   *
-   * @return array список категорий
-   * @access public
-   */
-  public function getCategories($type)
-  {
-      $sql = "select * from category where user_id=? and (type=? or type=2) order by cat_name";
-      $plan = $this->db->select($sql, $this->user->getId(), $type);
-      pre($plan);
-  }
+    /**
+    * Получает категории для бюджета
+    * @param string $drain доход или расход
+    *
+    * @return array список категорий
+    * @access public
+    */
+    public function getCategories($type)
+    {
+        $sql = "select * from category where user_id=? and (type=? or type=2) order by cat_name";
+        $plan = $this->db->select($sql, $this->user->getId(), $type);
+        pre($plan);
+    }
 }
