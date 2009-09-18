@@ -31,10 +31,19 @@ $(document).ready(function() {
         changeTypeAccount($(this).attr('value'));
     });
     $('#btnAddAccount').click(function(){
-        if (new_acc)
-            createNewAccount();
-        else
-            correctaccount();
+        str = $('#blockCreateAccounts #name').val();
+        l = 1;
+        $('.item .name').each(function(){
+            s = $(this).text();
+            if(s==str)
+                l=0;
+        });
+        if (''){
+            if (new_acc)
+                createNewAccount();
+            else
+                correctaccount();
+        }
     });
     $('.delAccount').click(function(){
         
@@ -80,8 +89,8 @@ $(document).ready(function() {
                 div = "<div class='cont'>&nbsp;<ul>\n\
                         <li class='edit'><a></a></li>\n\
                         <li class='del'><a></a></li>\n\
-                      </ul></div>";
-                
+                        <li class='add'><a></a></li>\n\
+                    </ul></div>";
                 $('#operation_list').empty();
                 for (key in data )
                 {
@@ -113,7 +122,6 @@ $(document).ready(function() {
                     //str = str + '<td class="cur">'+data[key]['cur']+'</td>';
                     //str = str + '<td class="def_cur">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
                     summ[i] = summ[i]+data[key]['def_cur'];
-                    //alert(data[key]['def_cur']);
                     if (!val[data[key]['cur']]) {
                         val[data[key]['cur']]=0;
                     }
@@ -253,7 +261,6 @@ $(document).ready(function() {
                 cls = $(this).attr('class');
                 if(cls == 'total_balance')
                     texts[i] = texts[i] +' '+cur;
-                //alert(texts[i]);
                 if (texts[i]=='undefined')
                     i = i -1;
                 if ((cls =='type')||(cls == 'id')||(cls == 'cur'))
@@ -274,7 +281,6 @@ $(document).ready(function() {
                         texts[key] + '</td>';
             }
             str = str + '<table>';
-            //alert(texts.toString());
             $(this).qtip({
                content: str, // Set the tooltip content to the current corner
                position: {
@@ -353,7 +359,7 @@ $(document).ready(function() {
                         
                         $('#blockCreateAccounts').find('#starter_balance').val($(th).closest('.item').find('.starter_balance').text());
                         //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
-                        //alert($(th).closest('.item').find('.id').attr('value'));
+                        
                         $('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
                         $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
                     },
@@ -363,7 +369,42 @@ $(document).ready(function() {
         }
     );
 
+    $('li.add').live('click',
+        function(){
+            //alert('as')
 
+                $('#blockCreateAccounts').show();
+                id =$(this).closest('.item').find('.type').attr('value');
+                new_acc=0;
+                tid = id;
+                var th = $(this);
+                $.post(
+                    "/accounts/changeType/",
+                    {
+                        id: id
+                    },
+                     function(data) {
+                        $('#account_form_fields').html(data);
+                        $(th).closest('.item').find('td').each(function(){
+                            key = $(this).attr('class');
+                            val = $(this).text();
+                            $('#blockCreateAccounts').find('#'+key).val(val) ;
+                            $(document).scrollTop(300);
+                        });
+
+                        $('#blockCreateAccounts #total_balance').val($(th).closest('.item').find('.starter_balance').text());
+                        $('#blockCreateAccounts #starter_balance').val($(th).closest('.item').find('.starter_balance').text());
+                        //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
+                        $('#blockCreateAccounts #name').val($('#blockCreateAccounts #name').val()+'(2)');
+                        //$('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
+                        //$('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
+                    },
+                    'text'
+                );
+
+        
+        }
+    );
 
 
     function changeTypeAccount(id) {
