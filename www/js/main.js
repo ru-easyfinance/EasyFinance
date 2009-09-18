@@ -72,26 +72,25 @@ function FloatFormat(obj, in_string )
     c=0;
     p =1;
     newstr ='';
-    k = l+3;
-    for(i=1;i<=l;i++)
+    k = 0;
+    for(a=1;a<=l;a++)
     {
-        if (k==i)
-        {break;}
+        i=l-a+1;
         if (rgx.test(in_string[i]))
         {
             if (c == 3)
             {
-                newstr += ' ';
+                newstr = ' ' + newstr;
                 c = 0
             }
-            newstr +=in_string[i]
+            newstr =in_string[i]+newstr
             c++;
         }
         if (in_string[i]=='.' || in_string[i]==',')
         {
             if (p){
-                newstr +='.';
-                k = i+3;
+                newstr = newstr.substr(0,2)
+                newstr ='.'+newstr;
             }
             c=0;
             p = 0;
@@ -841,11 +840,11 @@ $('.navigation  li span').click(function(){
     $('.listing#c2').css('display', 'block');
     $('ul.control li').click(function(){
         $('ul.control li').removeClass('act');
-
         $(this).addClass('act');
         id = $(this).attr('id');
-        $('.listing').css('display', 'none');
-        $('.listing#'+id).css('display', 'block');
+        $('.listing').hide();
+        s = '#'+id+'.listing'
+        $(s).show();
     });
 
     // Footer
