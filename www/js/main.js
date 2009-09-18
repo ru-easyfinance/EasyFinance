@@ -63,6 +63,45 @@ var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
 
+function FloatFormat(obj, in_string )
+{
+    //'.'
+    str = in_string;
+    l = in_string.length;
+    rgx = /[0-9]/;
+    c=0;
+    p =1;
+    newstr ='';
+    k = l+3;
+    for(i=1;i<=l;i++)
+    {
+        if (k==i)
+        {break;}
+        if (rgx.test(in_string[i]))
+        {
+            if (c == 3)
+            {
+                newstr += ' ';
+                c = 0
+            }
+            newstr +=in_string[i]
+            c++;
+        }
+        if (in_string[i]=='.' || in_string[i]==',')
+        {
+            if (p){
+                newstr +='.';
+                k = i+3;
+            }
+            c=0;
+            p = 0;
+        }
+    }
+    $(obj).val(newstr)
+}
+
+
+
 
 $(document).ready(function() {
     
@@ -249,6 +288,10 @@ $(document).ready(function() {
             $('#target').change();
         }
     }
+    function tofloat(s)
+    {
+        return s.replace(/[ ]/gi, '');
+    }
 
 
 
@@ -310,7 +353,7 @@ $(document).ready(function() {
             category  : $('#op_category').val(),
             date      : $('#op_date').val(),
             comment   : $('#op_comment').val(),
-            amount    : $('#op_amount').val(),
+            amount    : tofloat($('#op_amount').val()),
             toAccount : $('#op_AccountForTransfer').val(),
             currency  : $('#op_currency').val(),
             target    : $('#op_target').val(),
@@ -432,7 +475,9 @@ $(document).ready(function() {
                 $(".op_addoperation").hide();
             }
         });
-
+        $('#op_amount').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        })
         /*$('#op_amount').calculator({
             layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                     'MR_7_8_9_-' + $.calculator.UNDO,
@@ -657,7 +702,9 @@ $('.navigation  li span').click(function(){
                     chartSample_1.wMode="opaque";
                     chartSample_1.write('flash');
                     chartSample_1 = null;
-
+        $('.calculator_block .calculator').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        })
        /*$('.calculator_block .calculator').calculator({
     layout: [
                     '_7_8_9_+CA',

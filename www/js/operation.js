@@ -2,6 +2,9 @@
 $(document).ready(function() {
     var operationList;
     // Init
+    $('#amount').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        })
     /*$('#amount').calculator({
         layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                 'MR_7_8_9_-' + $.calculator.UNDO,
@@ -199,7 +202,7 @@ $(document).ready(function() {
             category  : $('#op_category').val(),
             date      : $('#op_date').val(),
             comment   : $('#op_comment').val(),
-            amount    : $('#op_amount').val(),
+            amount    : tofloat($('#op_amount').val()),
             toAccount : $('#op_AccountForTransfer').val(),
             currency  : $('#op_currency').val(),
             target    : $('#op_target').val(),

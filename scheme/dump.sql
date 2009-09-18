@@ -259,21 +259,3 @@ CREATE TABLE `target_bill` (
   `dt_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Виртуальный субсчёт для финансовой цели';
-
-DROP TABLE  IF EXISTS`users`;
-CREATE TABLE `users` (
-  `id` int(100) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Наш новый ИД для пользователей',
-  `user_name` varchar(100) DEFAULT NULL COMMENT 'Псевдоним, который будет виден остальным на форуме',
-  `user_login` varchar(100) NOT NULL COMMENT 'Логин пользователя',
-  `user_pass` varchar(40) NOT NULL COMMENT 'Пароль пользователя в формате SHA1',
-  `user_mail` varchar(100) DEFAULT NULL COMMENT 'Почта пользователя',
-  `user_created` date NOT NULL DEFAULT '0000-00-00' COMMENT 'Дата создания пользователя',
-  `user_active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Если 0, значит забанен',
-  `user_new` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Если 1, значит новый',
-  `user_currency_default` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Валюта пользователя по умолчанию',
-  `user_currency_list` varchar(255) NOT NULL DEFAULT 'a:2:{i:0;i:0;i:1;i:1;}' COMMENT 'Сериализованный массив валют пользователя',
-  `user_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'тип пользователя 0-юзер 1-админ 2-эксперт',
-  PRIMARY KEY (`id`),
-  KEY `user_login` (`user_login`,`user_pass`),
-  KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Таблица пользователей';

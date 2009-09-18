@@ -15,7 +15,7 @@ $(document).ready(function() {
         //,buttonImageOnly: true
         //,buttonImage: '/img/calculator.png'
     });*/
-    $('#add_periodic').click(function(){ $('#add_form div.form_block').toggle() });
+    $('#add_periodic').click(function(){$('#add_form div.form_block').toggle()});
     $('#date').datepicker();
     $('#btnSave').click(function(){
         saveOperation();
@@ -100,12 +100,12 @@ $(document).ready(function() {
             $.post($('#form').attr('action'), {
                 id: $('#id').val(),
                 title: $('#title').val(),
-                amount: $('#amount').val(),
+                amount: tofloat($('#amount').val()),
                 date: $('#date').val(),
                 comment: $('#comment').val(),
                 category: $('#category').val(),
                 type: $('#type').val(),
-                account: $('#account').val(),
+                account: tofloat($('#account').val()),
                 repeat: $('#repeat').val(),
                 counts: $('#counts').val(),
                 infinity: $('[name=count]:checked').val()

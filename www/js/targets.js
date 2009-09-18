@@ -1,7 +1,9 @@
 // {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
-
+$('#amount,#amountf').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        })
     /*$('#amount,#amountf').calculator({
         layout: [
             $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
@@ -159,7 +161,7 @@ $(document).ready(function(){
                 type     : $('#type').attr('value'),
                 category : $('#category').attr('value'),
                 title    : $('#title').attr('value'),
-                amount   : $('#amount').attr('value'),
+                amount   : tofloat($('#amount').attr('value')),
                 start    : $('#start').attr('value'),
                 end      : $('#end').attr('value'),
                 photo    : $('#photo').attr('value'),
