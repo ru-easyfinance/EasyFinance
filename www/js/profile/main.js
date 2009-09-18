@@ -1,4 +1,17 @@
 $(document).ready(function(){
+    $('.menu5 #i3').addClass('act');
+    $('.menu5 #i3').live('click',function(){
+        $('.menu5 #i4').removeClass('act');
+        $('.menu5 #i3').addClass('act');
+        $('.block2 .ramka3#money').hide();
+        $('.block2 .ramka3#profile').show();
+    })
+    $('.menu5 #i4').live('click',function(){
+        $('.menu5 #i3').removeClass('act');
+        $('.menu5 #i4').addClass('act');
+        $('.block2 .ramka3#profile').hide();
+        $('.block2 .ramka3#money').show();
+    })
     user_info();
     $('#back_info').live('click',function(){
         user_info_back();
