@@ -232,7 +232,7 @@ class Accounts_Model
 	}
         Core::getInstance()->user->initUserAccounts();
         Core::getInstance()->user->save();
-	return true;
+	return $next_id;
     }
 
     function new_operation($data)

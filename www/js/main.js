@@ -406,22 +406,6 @@ $(document).ready(function() {
             $('#op_target').change();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
@@ -439,14 +423,15 @@ $(document).ready(function() {
                 $(".op_addoperation").hide();
             }
         });
-        $('#op_amount').calculator({
+
+        /*$('#op_amount').calculator({
             layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                     'MR_7_8_9_-' + $.calculator.UNDO,
                     'MS_4_5_6_*' + $.calculator.PERCENT ,
                     'M+_1_2_3_/' + $.calculator.HALF_SPACE,
                     'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
             showOn: 'focus' //opbutton
-        });
+        });*/
 
         
         $("#op_date").datepicker();
@@ -671,12 +656,12 @@ var res = {tags:['asd'],
                     chartSample_1.write('flash');
                     chartSample_1 = null;
 
-$('.calculator_block .calculator').calculator({
+       /*$('.calculator_block .calculator').calculator({
     layout: [
                     '_7_8_9_+CA',
                     '_4_5_6_-M+',
                     '_1_2_3_/M-',
-                    '_0_._=_*MS']});  //
+                    '_0_._=_*MS']});*/  //
         //верхнее меню
         head = $('#menumain').attr('value');
         if (!head)

@@ -2,7 +2,7 @@
 $(document).ready(function(){
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
 
-    $('#amount,#amountf').calculator({
+    /*$('#amount,#amountf').calculator({
         layout: [
             $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
             'MR_7_8_9_-' + $.calculator.UNDO,
@@ -10,7 +10,7 @@ $(document).ready(function(){
             'M+_1_2_3_/' + $.calculator.HALF_SPACE,
             'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS]
         //showOn: 'opbutton',
-    });
+    });*/
     $('#calculator-div').css('z-index', 1005);
     $("#start,#end").datepicker({dateFormat: 'dd.mm.yy'});
 

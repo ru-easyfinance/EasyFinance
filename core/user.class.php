@@ -266,16 +266,16 @@ class User
      */
 	public function initUserAccounts()
 	{
-        $sql = "SELECT a.*, act.* FROM accounts a
-            LEFT JOIN account_types act
-                ON act.account_type_id = a.account_type_id
-            WHERE user_id= ? ";
-        $this->user_account= array();
-        $accounts = $this->db->select($sql, $this->getId());
-        foreach ($accounts as $val) {
-            $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
-            $this->user_account[$val['account_id']] = $val;
-        }
+            $sql = "SELECT a.*, act.* FROM accounts a
+                LEFT JOIN account_types act
+                    ON act.account_type_id = a.account_type_id
+                WHERE user_id= ? ";
+            $this->user_account= array();
+            $accounts = $this->db->select($sql, $this->getId());
+            foreach ($accounts as $val) {
+                $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+                $this->user_account[$val['account_id']] = $val;
+            }
 	}
 
     /**

@@ -5,7 +5,7 @@ $(document).ready(function() {
     loadPeriodic();
 
     // INIT
-    $('#amount').calculator({
+    /*$('#amount').calculator({
         layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                 'MR_7_8_9_-' + $.calculator.UNDO,
                 'MS_4_5_6_*' + $.calculator.PERCENT ,
@@ -14,7 +14,7 @@ $(document).ready(function() {
         showOn: 'focus' //opbutton
         //,buttonImageOnly: true
         //,buttonImage: '/img/calculator.png'
-    });
+    });*/
     $('#add_periodic').click(function(){ $('#add_form div.form_block').toggle() });
     $('#date').datepicker();
     $('#btnSave').click(function(){

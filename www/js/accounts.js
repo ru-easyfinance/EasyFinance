@@ -60,7 +60,7 @@ $(document).ready(function() {
         return false;
     }
     // upload account
-    function update_list()
+    function update_list(param)
     {
         g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
         g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
@@ -188,45 +188,53 @@ $(document).ready(function() {
                 //$('.item td.description').show();
                 $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
                 $('.item td.mark').show();
+
+                id = param.id;
+                cur_id = param.cur_id;
+                abbr = $('tr.item .id#'+id).closest('tr').find('.cur').text();
+                title = $('tr.item .id#'+id).closest('tr').find('.name').text();
+                opt = '<option currency="'+cur_id+'" value="'+id+'" >'+title+'('+abbr+')</option>';
+                $('#op_account').append(opt);
+
+
                     s = location.hash;
-    if (s=='#add')
-    {
-        alert(s);
-        new_acc = 1;
-        accountAddVisible();
-    }
-    if(s.substr(0,2)=='#?')
-    {
-        f = s.substr(2);
-        $('#blockCreateAccounts').show();
-                id =f;
-                new_acc=0;
-                a = 'tr.item .id[value="'+f+'"]'
-                tid = $('tr.item .id[value="'+f+'"]').closest('.item').find('.type').attr('value');
-                var th = $('tr.item .id[value="'+f+'"]').closest('.item');
-                $.post(
-                    "/accounts/changeType/",
+                    if (s=='#add')
                     {
-                        id: tid
-                    },
-                     function(data) {
-                        $('#account_form_fields').html(data);
-                        $(th).find('td').each(function(){
-                            key = $(this).attr('class');
-                            val = $(this).text();
-                            $('#blockCreateAccounts').find('#'+key).val(val) ;
-                            $(document).scrollTop(300);
-                        });
-                        val = $(th).find('.total_balance').text();
+                        new_acc = 1;
+                        accountAddVisible();
+                    }
+                    if(s.substr(0,2)=='#?')
+                    {
+                        f = s.substr(2);
+                        $('#blockCreateAccounts').show();
+                                id =f;
+                                new_acc=0;
+                                a = 'tr.item .id[value="'+f+'"]'
+                                tid = $('tr.item .id[value="'+f+'"]').closest('.item').find('.type').attr('value');
+                                var th = $('tr.item .id[value="'+f+'"]').closest('.item');
+                                $.post(
+                                    "/accounts/changeType/",
+                                    {
+                                        id: tid
+                                    },
+                                     function(data) {
+                                        $('#account_form_fields').html(data);
+                                        $(th).find('td').each(function(){
+                                            key = $(this).attr('class');
+                                            val = $(this).text();
+                                            $('#blockCreateAccounts').find('#'+key).val(val) ;
+                                            $(document).scrollTop(300);
+                                        });
+                                        val = $(th).find('.total_balance').text();
 
 
-                        $('#blockCreateAccounts').find('#starter_balance').val($(th).find('.starter_balance').text());
-                        $('#account_form_fields table').attr('id',$(th).find('.id').attr('value'));
-                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).find('.id').attr('value')+'" />');
-                    },
-                    'text'
-                );
-    }
+                                        $('#blockCreateAccounts').find('#starter_balance').val($(th).find('.starter_balance').text());
+                                        $('#account_form_fields table').attr('id',$(th).find('.id').attr('value'));
+                                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).find('.id').attr('value')+'" />');
+                                    },
+                                    'text'
+                                );
+                    }
             },
             'json'
         );
@@ -303,9 +311,16 @@ $(document).ready(function() {
         function(){
             if (confirm("Вы уверены что хотите удалить счёт?"))
             {
+                id = $(this).closest('.item').find('.id').attr('value')
                 $.post('/accounts/del/',
-                    {id :$(this).closest('.item').find('.id').attr('value') },
-                    function(data){},
+                    {id :$(this).closest('.item').find('.id').attr('value')},
+                    function(data){
+                        $('#op_account option').each(function(){
+                            val = $(this).val();
+                            if (val == id)
+                                $(this).remove();
+                        })
+                    },
                     'text');
                 $(this).closest('.item').empty();
                 return false;
@@ -363,23 +378,25 @@ $(document).ready(function() {
             'text'
         );
     }
-
+    var cur_id = 0;
         function createNewAccount() {
-        $.ajax({
-            type: "POST",
-            url: "/accounts/add/",
-            data: $("#formAccount input,select,textarea"),
-            success: function(data) {
-                $('#dataAccounts').html(data);
-                update_list();
-                accountAddUnvisible();
+            cur_id = $("#formAccount select:[name='currency_id']").val();
+            $.ajax({
+                type: "POST",
+                url: "/accounts/add/",
+                data: $("#formAccount input,select,textarea"),
+                success: function(data) {
+                    var id = data;
+                    update_list({id: id,cur_id: cur_id});
+                    accountAddUnvisible();
+                    
             }
         });
     }
 
     function correctaccount() {
         $.post('/accounts/del/',
-                    {id :$('#blockCreateAccounts').find('table').attr('id') },
+                    {id :$('#blockCreateAccounts').find('table').attr('id')},
                     function(data){},
                     'text');
         createNewAccount();
