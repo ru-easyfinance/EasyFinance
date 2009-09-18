@@ -49,11 +49,11 @@ class Tags_Model {
      */
     function getTags($cloud = true) {
         if ($cloud) {
-            $sql = "SELECT name, COUNT(name) FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
-            return json_encode($this->db->select($sql, Core::getInstance()->user->getId()));
+            $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
+            return $this->db->select($sql, Core::getInstance()->user->getId());
         } else {
             $sql = "SELECT name FROM tags WHERE user_id = ? GROUP BY name ORDER BY name";
-            return json_encode($this->db->selectCol($sql, Core::getInstance()->user->getId()));
+            return $this->db->selectCol($sql, Core::getInstance()->user->getId());
         }
     }
 }

@@ -197,7 +197,7 @@ class Login_Model
                     setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
                 // Шифруем, но куки теперь сохраняются лишь до конца сессии
                 } else {
-                    setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time(), COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+                    setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
                 }
                 // У пользователя нет категорий, т.е. надо помочь ему их создать
                 if (count($user->getUserCategory()) == 0) {

@@ -90,7 +90,7 @@ $(document).ready(function() {
     /**
      * Получает список тегов
      */
-    function getTags() {
+   function getTags(ltags) {
         $('a#tags').click(function(){
             $('.tags_could').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
@@ -98,26 +98,35 @@ $(document).ready(function() {
             $('.tags_could li').show();
         });
 		$('.tags input').keyup(function(){
-                    $('.tags_could li').show();
-
+            $('.tags_could li').show();
 		})
-                $('.tags_could li').live('click',function(){
-                    txt=$('.tags input').val()+$(this).text()+', ';
-                    $('.tags input').val(txt);
-                    $('.tags_could').dialog("close");
-                });
-        // Загружаем теги
-        $.get('/tags/getCloudTags/', '', function(data) {
+        $('.tags_could li').live('click',function(){
+            txt=$('.tags input').val()+$(this).text()+', ';
+            $('.tags input').val(txt);
+            $('.tags_could').dialog("close");
+        });
+
+        if (ltags) {
             str = '<ul>';
             for (key in data) {
                 k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
                 n = Math.floor(k*5);
                 str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
             }
-            $('.tags_could').html(str+'</ul>');
-            
-            $('.tags_could li').hide();
-        }, 'json');
+        } else {
+            // Загружаем теги
+            $.get('/tags/getCloudTags/', '', function(data) {
+                str = '<ul>';
+                for (key in data) {
+                    k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
+                    n = Math.floor(k*5);
+                    str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
+                }
+                $('.tags_could').html(str+'</ul>');
+
+                $('.tags_could li').hide();
+            }, 'json');
+        }
     }
 
     /**
@@ -410,8 +419,8 @@ $(document).ready(function() {
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
         $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
-        op_getTags();
-        
+        op_getTags(res['tags']);
+
         $('#op_btn_Save').click(function(){op_saveOperation();})
         $('#op_btn_Cancel').click(function(){op_clearForm()});
 
@@ -474,14 +483,7 @@ $('.navigation  li span').click(function(){
     $('.navigation  li ul').hide()
     $('.navigation li.act ul').show()
 })
-var res = {tags:['asd'],
-    accounts : {1:{type:'1',id:'1',cur:'rur',def_cur:'12',name:'a',total_balance:'123'}},
-    periodic:{1:{id:1,title:'asd',date:'12.12.1111',amount:'1231231.12'}},
-    user_targets:{1:{title:'asd',amount_done:'134',percent_done:'34',date_end:'12.12.1211'}},
-    popup_targets:{1:{title:'asd'}},
-    currency:{1:{cost:'12',name:'ero',progress:'down'}},
-    flash:{title:'asdad',value:100,color:1}};
-// tags
+
             data = res['tags'];
             str = '<div class="title">\n\
                         <h2>Теги</h2>\n\
@@ -972,7 +974,7 @@ var res = {tags:['asd'],
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
 
-
-
 //Google Analytics
+if(document.location.hostname == 'easyfinance.ru'){
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
+}

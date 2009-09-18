@@ -20,29 +20,47 @@ class User
      *      date user_created  Дата создания аккаунта пользователя в формате (%d.%m.%Y)
      *      int user_active 0 - аккаунт неактивирован, 1 - активирован
      */
-    private $props = Array();
+    private $props = array();
 
     /**
      * Массив, хранит категории пользователя
-     * @var <array> mixed
+     * @var array mixed
      */
-    private $user_category = Array();
+    private $user_category = array();
 
     /**
      * Массив, хранит счета пользователя
-     * @var <array> mixed
+     * @var array mixed
      */
-    private $user_account  = Array();
+    private $user_account  = array();
 
     /**
      * Массив, хранит валюты пользователя
-     * @var <array> mixed
+     * @var array mixed
      */
-    private $user_currency = Array();
+    private $user_currency = array();
+
+    /**
+     * Массив, который хранит в себе все теги пользователя
+     * @var array mixed
+     */
+    private $user_tags = array();
+
+    /**
+     * Массив со списком фин.целей пользователя
+     * @var array mixed
+     */
+    private $user_targets = array();
+
+    /**
+     *
+     * @var <type>
+     */
+    private $user_periodic = array();
 
     /**
      * Ссылка на экземпляр DBSimple
-     * @var <DbSimple_Mysql>
+     * @var DbSimple_Mysql
      */
     private $db;
 
@@ -65,7 +83,7 @@ class User
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME])) {
                 $array = decrypt($_COOKIE[COOKIE_NAME]);
-                $this->initUser($array[0],$array[1]);
+                $this->initUser($array[0], $array[1]);
             }
         // иначе, переходим в защищённое соединение, и снова пробуем авторизироваться
         } else {
@@ -78,14 +96,14 @@ class User
 
     /**
      * Возвращает Id пользователя
-     * @return int || false
+     * @return int || null
      */
     public function getId()
     {
         if (isset($this->props['id']) && !empty($this->props['id'])) {
             return $this->props['id'];
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -121,6 +139,7 @@ class User
             $this->destroy();
             return false;
         }
+        // Если у нас подключен профиль пользователя
         if ($this->props['user_type'] == 0) {
             if (!$this->init($this->getId())) {
                //@TODO Вызывать мастера настройки счетов, категорий и валют
@@ -129,6 +148,7 @@ class User
             $_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
             $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
             return $this->save();
+        // Если у нас подключен профиль эксперта
         } else if ($this->props['user_type'] == 1) {
             $_SESSION['user']            = $this->props;
             $_SESSION['REMOTE_ADDR']     = '/experts/';
@@ -149,19 +169,23 @@ class User
         $_SESSION['user_category'] = $this->user_category;
         $_SESSION['user_account']  = $this->user_account;
         $_SESSION['user_currency'] = $this->user_currency;
+        $_SESSION['user_tags']     = $this->user_tags;
+        $_SESSION['user_targets']  = $this->user_targets;
+        $_SESSION['pop_targets']   = $this->pop_targets;
         return true;
     }
 
     /**
      * Вызывает инициализацию пользовательских категорий, счетов, денег
-     * @param $id string user_id
      * @return bool 
      */
-    public function init($id)
+    public function init()
     {
         $this->initUserCurrency();
         $this->initUserCategory();
         $this->initUserAccounts();
+        $this->initUserTags();
+        $this->initUserTargets();
     }
 
     /**
@@ -203,7 +227,17 @@ class User
         } else {
             $this->user_currency = array(1); //Устанавливает валюты пользователя (по умолчанию устанавливается 1 - русский рубль)
         }
+        if (isset($_SESSION['user_tags']) && is_array($_SESSION['user_tags'])) {
+            $this->user_tags = $_SESSION['user_tags'];
+        } else {
+            $this->user_tags = array();
+        }
 
+        if (isset ($_SESSION['user_targets']) && is_array($_SESSION['user_targets']) ) {
+            $this->user_targets = $_SESSION['user_targets'];
+        } else {
+            $this->user_targets = array();
+        }
         return true;
     }
 
@@ -247,6 +281,7 @@ class User
             trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
             $currency = array(1);
         }
+
         $this->user_currency = array();
         foreach (Core::getInstance()->currency as $key => $val) {
             if (in_array($key, $currency)) {
@@ -266,53 +301,48 @@ class User
      */
 	public function initUserAccounts()
 	{
-            $sql = "SELECT a.*, act.* FROM accounts a
-                LEFT JOIN account_types act
-                    ON act.account_type_id = a.account_type_id
-                WHERE user_id= ? ";
-            $this->user_account= array();
-            $accounts = $this->db->select($sql, $this->getId());
-            foreach ($accounts as $val) {
-                $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
-                $this->user_account[$val['account_id']] = $val;
-            }
+        $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=?";
+        $this->user_account= array();
+        $accounts = $this->db->select($sql, $this->getId());
+        foreach ($accounts as $val) {
+            $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+            $this->user_account[$val['account_id']] = $val;
+        }
 	}
 
     /**
-     * Возвращает массив с профилем пользователя, с полями : ид, имя, логин, почта
-     * @param $id int
-     * @return array mixed
-     * @deprecated
+     * Возвращает все теги пользователя
+     * @return void
      */
-    function getProfile($id)
+    public function initUserTags()
     {
-        $sql = "SELECT `id`, `user_name`, `user_login`, `user_mail` FROM `users` WHERE `id` = ? ;";
-        return $this->db->selectRow($sql, $id);
+        $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
+        $array = $this->db->select($sql, $this->getId());
+        $this->user_tags = array();
+        foreach ($array as $v) {
+            $this->user_tags[$v['name']] = $v['cnt'];
+        }
     }
 
     /**
-     * Обновляет профиль пользователя
-     * @param $user_pass string Текущий пароль пользователя
-     * @param $new_passwd string
-     * @param $user_name string
-     * @param $user_mail string
-     * @param $user_login string
-     * @deprecated
-     * @return bool
+     * Возвращает фин. цели
+     * @return void
      */
-    function updateProfile($user_pass, $new_passwd, $user_name, $user_mail, $user_login)
+    public function initUserTargets()
     {
-        if (!empty($new_passwd)) {
-            $sql = "UPDATE users SET user_name = ?, user_mail = ?,user_pass = ?
-                        WHERE id = ? AND user_pass = ? LIMIT 1;";
-            $this->db->query($sql, $user_name, $user_mail, SHA1($new_passwd), $this->getId(), SHA1($user_pass));
-            return $this->initUser($user_login, $new_passwd);
-        }else{
-            $sql = "UPDATE users SET user_name = ?, user_mail = ?
-                        WHERE id = ? AND user_pass = ? LIMIT 1;";
-            $this->db->query($sql, $user_name, $user_mail, $this->getId(), SHA1($user_pass));
-            return $this->initUser($user_login, $user_pass);
-        }
+        $this->user_targets = array();
+        $this->user_targets['user_targets'] = $this->db->select("SELECT id, category_id as category, title, amount,
+            DATE_FORMAT(date_begin,'%d.%m.%Y') as start, DATE_FORMAT(date_end,'%d.%m.%Y') as end, percent_done,
+            forecast_done, visible, photo,url, comment, target_account_id AS account, amount_done, close
+            FROM target WHERE user_id = ? ORDER BY date_end ASC LIMIT ?d,?d;",
+            $this->getId(), 0, 5);
+        
+        $this->user_targets['pop_targets'] = $this->db->select("SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS
+            cl FROM target t WHERE t.visible=1 GROUP BY t.title,
+            t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", 0, 10);
     }
 
     /**
@@ -339,6 +369,32 @@ class User
     function getUserAccounts()
     {
         return $this->user_account;
+    }
+
+    /**
+     * Возвращает все теги пользователя
+     * @param bool $cloud Если установлено true, то возвратит с частотой использования для составления облаков
+     * @example $user->getUserTags() возвратит array('мама','папа','я')
+     * @example $user->getUserTags(true) возвратит array('мама'=>7,'папа'=>10,'я'=>3)
+     * @return array mixed
+     */
+    function getUserTags($cloud = false)
+    {
+        if ($cloud) {
+            return $this->user_tags;
+        } else {
+            return array_keys($this->user_tags);
+        }
+    }
+
+    /**
+     * Возвращает фин.цели пользователя и популярные фин.цели
+     * @FIXME Возвращает ТОЛЬКО последние изменения. Не использовать для страницы фин.целей!
+     * @return array mixed
+     */
+    function getUserTargets()
+    {
+        return $this->user_targets;
     }
 
     /**

@@ -73,7 +73,7 @@ class Tags_Controller extends Template_Controller
      * @return void
      */
     function getTags($args) {
-        die ($this->model->getTags(false));
+        die (json_encode($this->model->getTags(false)));
     }
 
     /**
@@ -81,6 +81,6 @@ class Tags_Controller extends Template_Controller
      * @return void
      */
     function getCloudTags($args) {
-        die ($this->model->getTags(true));
+        die (json_encode($this->model->getTags(true)));
     }
 }

@@ -10,7 +10,7 @@ $(document).ready(function() {
         saveCategory()
     });
     $('#btnCancel').click(function(){
-        clearForm(); $('#add_form').hide();
+        clearForm();$('#add_form').hide();
     });
     $('#add_category').click(function(){
         $('#add_form').toggle();
@@ -55,6 +55,12 @@ $(document).ready(function() {
      * @param id
      */
     function fillForm(id) {
+        alert(parseInt(cat.user[id]['type']));
+        if (parseInt(cat.user[id]['type']) == -1) {
+            $('#subcat').attr('disabled', 'disabled');
+        } else {
+            $('#subcat').removeAttr('disabled');
+        }
         $('#id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);
@@ -90,10 +96,10 @@ $(document).ready(function() {
             sys = '';
             for(var id in data.system) {
                 sys += '<option value="'+data.system[id]['id']+'">'+data.system[id]['name']+'</option>';
-            } $('#catsys').empty().append(sys);
+            }$('#catsys').empty().append(sys);
 
             // Обновляем список категорий
-            m='<option value=""> --- </option>'; p=[];
+            m='<option value=""> --- </option>';p=[];
             
             for(var id in data.user) {
                 // Если это родительская категория
