@@ -673,14 +673,32 @@ var res = {tags:['asd'],
         });
 
         // Динамическое меню
-        var page_mid = $('.menu3 span').closest('li').attr('id');
+        pathtoid = {
+            '/accounts/' :'m2',
+            '/budget/':'m3',
+            '/calendar/':'m4',
+            '/category/':'m2',
+            '/experts/':'m5',
+            '/info/':'m1',
+            '/mail/':'m0',
+            '/operation/':'m2',
+            '/periodic/':'m4',
+            '/profile/':'m0',
+            '/targets/':'m3'}
+            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</span></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
+            $('div#mainwrap').prepend(mmenu);
+            $('div#mainwrap a:[href="'+pathName+'"]').addClass('span').closest('li').append('<span style="display:none"></span>');
+        var page_mid = pathtoid[pathName];//$('.menu3 span').closest('li').attr('id');
+        $('.mid, .ccb, #footer, #header, #menumain').mouseover();
+        //alert(page_mid);
         var act_id = page_mid;
         var submenu = {
+            'm0':[''],
             'm1':[''],
             'm2':[  '<a href="/accounts/">Счета</a>',
                     '<a href="/operation/">Журнал операций</a>',
                     '<a href="/category/">Категории</a>'],
-            'm3':[  /*'<a href="/budget/">Бюджет</a>',
+            'm3':[  ''/*'<a href="/budget/">Бюджет</a>',
                     '<a href="/targets/">Финансовые цели</a>'*/],
             'm4':[''],
             'm5':[  '<a href="/calendar/">Календарь</a>',
@@ -702,9 +720,9 @@ var res = {tags:['asd'],
         })
         $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
             $('.menu3 li').removeClass('act');
-            txt = $('.menu3 span').text();
-            $('.menu3 span').closest('li').html('<span>'+txt+'</span><a class="span">'+txt+'</a>');
-            $('.menu3 span').hide().closest('li').addClass('act');
+            txt = $('.menu3 .span').text();
+            $('.menu3 .span').closest('li').html('<span>'+txt+'</span><a class="span">'+txt+'</a>');
+            $('.menu3 .span').hide().closest('li').addClass('act');
             sm = submenu[page_mid]?submenu[page_mid]:'';
             str='';
             l = sm.length;
@@ -713,6 +731,10 @@ var res = {tags:['asd'],
                 str = str+'<li>'+sm[k]+'</li>';
             }
             $('ul.menu4 ').html(str);
+            str = $('ul.menu4 a[href="'+pathName+'"]').text();
+            if (str){
+                $('ul.menu4 a[href="'+pathName+'"]').closest('li').addClass('act').html('<span><b>'+str+'</b></span>');
+            }
         })
         $('.menu3 li').live('mouseover',function(){
 
@@ -736,8 +758,7 @@ var res = {tags:['asd'],
             $('ul.menu4 ').html(str);
             str = $('ul.menu4 a[href="'+pathName+'"]').text();
             if (str){
-                $('ul.menu4 a[href="'+pathName+'"]').closest('li').html('<span><b>'+str+'</b></span>');
-                //$('ul.menu4 a[href="'+pathName+'"]').remove();
+                $('ul.menu4 a[href="'+pathName+'"]').closest('li').addClass('act').html('<span><b>'+str+'</b></span>');
             }
             return false;
         })

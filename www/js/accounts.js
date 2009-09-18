@@ -188,14 +188,14 @@ $(document).ready(function() {
                 //$('.item td.description').show();
                 $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
                 $('.item td.mark').show();
-
-                id = param.id;
-                cur_id = param.cur_id;
-                abbr = $('tr.item .id#'+id).closest('tr').find('.cur').text();
-                title = $('tr.item .id#'+id).closest('tr').find('.name').text();
-                opt = '<option currency="'+cur_id+'" value="'+id+'" >'+title+'('+abbr+')</option>';
-                $('#op_account').append(opt);
-
+                if (param){
+                    id = param.id;
+                    cur_id = param.cur_id;
+                    abbr = $('tr.item .id#'+id).closest('tr').find('.cur').text();
+                    title = $('tr.item .id#'+id).closest('tr').find('.name').text();
+                    opt = '<option currency="'+cur_id+'" value="'+id+'" >'+title+'('+abbr+')</option>';
+                    $('#op_account').append(opt);
+                }
 
                     s = location.hash;
                     if (s=='#add')

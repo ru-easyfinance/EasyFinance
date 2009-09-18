@@ -1,8 +1,6 @@
 {include file="header/head.html"}
 	<div id="mainwrap">
-            {if !empty($user_info.user_name) and $name_page!='welcome' and empty($no_menu)}
-                {include file="$name_page.menu.html"}
-            {/if}
+
 {include file="$name_page.html"}
 	</div>
 {include file="foot.html"}
