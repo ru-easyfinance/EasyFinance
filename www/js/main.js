@@ -810,12 +810,15 @@ $('.navigation  li span').click(function(){
             return false;
         })
     }
-    
+
 
     // Кнопка сворачивания / разворачивания
     $('li.over3').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').find('div.inside').toggle();
+        this.className = (this.className == 'over3' ? 'uparrow' : 'over3');
+        this.attr(title)  = (this.attr(title) == 'свернуть' ? 'развернуть' : 'свернуть');
+        //$(this).closest('div.ramka3').className("over2");
     }).find('a').removeAttr('href');
 
     // Кнопка закрыть

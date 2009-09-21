@@ -479,9 +479,11 @@ ul.action li.over1 a:hover { background-position: 0 -22px; }
 ul.action li.over2 a { background-position: -28px 0; }
 ul.action li.over2 a:hover { background-position: -28px -22px; }
 
-ul.action li.over3 a { background-position: -55px 0; }
-ul.action li.over3 a:hover { background-position: -55px -22px; }
+ul.action li.uparrow a { background-position: -55px 0; }
+ul.action li.uparrow a:hover { background-position: -55px -22px; }
 
+ul.action li.over3 a { background-position: -78px 0; }
+ul.action li.over3 a:hover { background-position: -78px -22px; }
 
 
 
