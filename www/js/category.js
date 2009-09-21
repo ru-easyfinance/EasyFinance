@@ -165,6 +165,14 @@ $(document).ready(function() {
 				$(this).closest('.line').find(".ul_head").show();
 			});
 			$(".l_n_cont").live('mouseout',function(){$(this).closest('.line').find("ul").hide()});
+            $('.block2 .inside').css({width: '679px'});
+            $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});
+            $('.block2 .inside .line').css({width: '507px'});
+            $('.block2 .inside .h tr').css({width: '507px'});
+            $('.block2 .inside .categories').css({width: '567px', height:'500px',border:'0'}).jScrollPane();
+            $('.line,.h').css('border-left','1px solid #E8E8E8').css('border-right','1px solid #E8E8E8')
+            $('.jScrollPaneTrack').css({'right':'50px','z-index':1})
+            $('ul').css('z-index', 100)
         }, 'json');
     }
 

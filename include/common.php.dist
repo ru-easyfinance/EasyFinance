@@ -65,6 +65,10 @@ $tpl->append('js',  'jquery/jquery.jgrowl.min.js');
 $tpl->append('js',  'anychart/AnyChart.js');
         $tpl->append('js','jquery/jquery.calculator.min.js');
         $tpl->append('js','jquery/jquery.calculator-ru.js');
+$tpl->append('css','jquery/jScrollPane.css');
+$tpl->append('js','jquery/jquery.mousewheel.js');
+$tpl->append('js','jquery/jquery.em.js');
+$tpl->append('js','jquery/jScrollPane.js');
 ///-->
 
 $tpl->append('js','main.js');

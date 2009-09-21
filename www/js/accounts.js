@@ -198,7 +198,10 @@ $(document).ready(function() {
                 //$('.item td.special').show();
                 //$('.item td.description').show();
                 $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
+
                 $('.item td.mark').show();
+                
+                //$('.jScrollPaneContainer').css('height', '500px')
                 if (param){
                     id = param.id;
                     cur_id = param.cur_id;
@@ -207,7 +210,9 @@ $(document).ready(function() {
                     opt = '<option currency="'+cur_id+'" value="'+id+'" >'+title+'('+abbr+')</option>';
                     $('#op_account').append(opt);
                 }
-
+                //$('#operation_list').height('height', '300px');
+                
+              
                     s = location.hash;
                     if (s=='#add')
                     {
@@ -246,7 +251,7 @@ $(document).ready(function() {
                                     'text'
                                 );
                     }
-            },
+            $('.operation_list').jScrollPane();},
             'json'
         );
     };
@@ -254,7 +259,7 @@ $(document).ready(function() {
     //acount click
     
     $('tr.item').live('mouseover',
-        function(){
+        function(e){
             $('.qtip').remove();
             var texts=[];
             var i=0;
@@ -306,12 +311,21 @@ $(document).ready(function() {
             });
             $('tr.item').removeClass('act');
             $(this).addClass('act');
-            //$('.operation_list').css('width', '700px')
-            //$('.operation_list').css('overflow-y', 'hidden')
+//            $('.operation_list').css('width', '570px');
+//            $('#operation_list').css('width', '507px');
+//            //alert($('tr.act').position().top+$('tr.act').closest('table').position().top+);
+//            top = e.pageY- ($('tr.act').position().top+$('tr.act').closest('table').position().top+$('.operation_list').position().top+15);
+//            alert(top);
+//            $('#operation_list').css('top', top+'px');
+//            $('.operation_list').css('overflow-y', 'hidden').css('overflow-x', 'visible');
+//            $('.operation_list tr').css('overflow', 'visible');
+//            $('.operation_list table').css('overflow', 'visible');
+//            $('.operation_list div').css('overflow', 'visible');
             
-
     });
-    $('.operation_list').addClass('.autoscroll').css('height', '250px')
+
+    //$('#operation_list').css('height', '300px');
+    //$('.operation_list').addClass('.autoscroll').css('height', '250px')
     //Редактирование по двойному щелчку
     $('tr.item').live('dblclick',
         function(){
@@ -323,7 +337,8 @@ $(document).ready(function() {
             {
                 $('.qtip').remove();
                 $('tr.item').removeClass('act');
-                //$('.operation_list').css('overflow-y', 'scroll')
+              //  $('.operation_list').css('overflow-y', 'scroll');
+              //  $('.operation_list').css('width', '517px');
             }
     });
     //del accoun click

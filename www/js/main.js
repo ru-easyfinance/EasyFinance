@@ -729,22 +729,23 @@ $('.navigation  li span').click(function(){
             '/profile/':'m0',
             '/report/':'m4',
             '/targets/':'m3'}
-          var page_mid = pathtoid[pathName];
+       var page_mid = pathtoid[pathName];
             mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</span></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
-            $('div#mainwrap').prepend(mmenu);
-            $('div#mainwrap #'+page_mid+' a').closest('li').append('<span style="display:none"></span>').find('a').addClass('span');
-      //$('.menu3 span').closest('li').attr('id');
-        $('.mid, .ccb, #footer, #header, #menumain').mouseover();
+            if(!$('#menu3').length){
+                $('div#mainwrap').prepend(mmenu);
+            }
+            $('div#mainwrap #'+page_mid).html('<span></span><a class="span" style="display:none;"></a>');
+        //$('.menu3 span').closest('li').attr('id');
+        //$('.mid, .ccb, #footer, #header, #menumain').mouseover();
         //alert(page_mid);
         var act_id = page_mid;
         var submenu = {
-            'm0':[''],
+            //'m0':[''],
             'm1':[''],
             'm2':[  '<a href="/accounts/">Счета</a>',
                     '<a href="/operation/">Журнал операций</a>',
                     '<a href="/category/">Категории</a>'],
-            'm3':[  ''/*'<a href="/budget/">Бюджет</a>',
-                    '<a href="/targets/">Финансовые цели</a>'*/],
+            'm3':[''],
             'm4':[''],
             'm5':[  '<a href="/calendar/">Календарь</a>',
                     '<a href="/periodic/">Регулярные транзакции</a>'],
@@ -760,15 +761,11 @@ $('.navigation  li span').click(function(){
         }
 
         $('.menu3 span').live('mouseover',function(){
-            txt = $(this).text();
-            $(this).hide().closest('li').append('<a class="span">'+txt+'</a>');
+            $(this).hide().closest('li').find('a').hasClass("span");
         })
         $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
             $('.menu3 li').removeClass('act');
-            txt = $('.menu3 span').text();
-            $('.menu3 span').closest('li').html('<span>'+txt+'</span><a class="span">'+txt+'</a>');
-            $('.menu3 span').hide().closest('li').addClass('act');
-            //$('.menu3 .span').remove();
+            $('div#mainwrap #'+page_mid).addClass('act');
             sm = submenu[page_mid]?submenu[page_mid]:'';
             str='';
             l = sm.length;
@@ -781,14 +778,16 @@ $('.navigation  li span').click(function(){
             if (str){
                 $('ul.menu4 a[href="'+pathName+'"]').closest('li').addClass('act').html('<span><b>'+str+'</b></span>');
             }
+
         })
         $('.menu3 li').live('mouseover',function(){
 
             act_id = $(this).attr('id');
+            $('.menu3 .span').show();
             if(act_id != page_mid)
             {
                 $('.menu3 .span').closest('li').find('span').show();
-                $('.menu3 .span').remove();
+                $('.menu3 .span').hide();
             }
             $('.menu3 li').removeClass('act');
             $(this).addClass('act');

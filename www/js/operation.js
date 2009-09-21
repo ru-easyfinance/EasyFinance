@@ -70,7 +70,7 @@ $(document).ready(function() {
 
     // Autoload
     loadOperationList();
-
+    $('.operation_list').jScrollPane();//???
     /**
      * Загружает список всех операций (с фильтром)
      * @return void
@@ -119,7 +119,7 @@ $(document).ready(function() {
                 });
                 // Заполняем таблицу 
                 $('#operations_list').append(tr);
-                
+               
 
             }
         },'json');
