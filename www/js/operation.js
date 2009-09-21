@@ -32,6 +32,9 @@ $(document).ready(function() {
             }
         }
     });
+    $('#operations_list tr').live('dblclick',function(){
+        $(this).find('li.edit a').click();
+    })
     $('#account').change(function(){
         changeAccountForTransfer();
         loadOperationList();
@@ -63,9 +66,14 @@ $(document).ready(function() {
     });
 
     $('tr:not(:first)','#operations_list').live('mouseover',function(){
+        $('#operations_list tr').removeClass('act');
         $(this).closest('tr').addClass('act');
-    }).live('mouseout', function(){
-        $(this).closest('tr').removeClass('act');
+    });
+    $('.mid').mousemove(function(){
+            if (!$('ul:hover').length && !$('.act:hover').length)
+            {
+                $('#operations_list tr').removeClass('act');
+            }
     });
 
     // Autoload
@@ -105,7 +113,7 @@ $(document).ready(function() {
                         + '<td class="light"><span>'+data[v].date+'</span></td>'
                         + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                         + '<td class="no_over big"'
-                            +'<div class="cont"><span>'+data[v].account_name+'</span><ul>'
+                            +'<div class="cont"><span>'+data[v].account_name+'</span><ul style="z-index:100">'
                             +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                             +'<li class="del"><a title="Удалить">Удалить</a></li>'
                             +'<li class="add"><a title="Копировать">Копировать</a></li>'
@@ -235,6 +243,14 @@ $(document).ready(function() {
 
  $('#type').change();
 
+    function clearForm() {
+        $('#op_type,#op_category,#op_target').val(0);
+        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
+        $('#op_amount_target,#op_amount_done,#op_forecast_done,#op_percent_done').text('');
+        $('#op_close').removeAttr('checked');
+        $('form').attr('action','/operation/add/');
+        $('#op_type').change();
+    }
     /**
      * Функция заполняет форму данными c массива
      * @param data данные для заполнения
@@ -249,22 +265,22 @@ $(document).ready(function() {
         //"account_name":"\u041d\u0430\u043b\u0438\u043a\u0438",
         //"account_currency_id":"1",
         //"cat_transfer":"1"},
-        $('#id').val(data.id);
-        $('#account').val(data.account_id);
+        $('#op_id').val(data.id);
+        $('#op_account').val(data.account_id);
 //        if (date.drain) {
 //            $('#type').val(1);
 //        } else {
 //            $('#type').val(0);
 //        }
         //$('#type').val(data.type);
-        $('#amount').val(data.money);
-        $('#category').val(data.cat_id);
+        $('#op_amount').val(data.money);
+        $('#op_category').val(data.cat_id);
         //$('#target').val(data.);
         //$('#close').val(data.);
-        $('#AccountForTransfer').val(data.transfer);
-        $('#date').val(data.date);
-        $('#tags').val(data.tags);
-        $('#comment').val(data.comment);
+        $('#op_AccountForTransfer').val(data.transfer);
+        $('#op_date').val(data.date);
+        $('#op_tags').val(data.tags);
+        $('#op_comment').val(data.comment);
         $(document).scrollTop(300);
     }
 

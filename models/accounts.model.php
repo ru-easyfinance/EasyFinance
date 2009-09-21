@@ -331,6 +331,9 @@ class Accounts_Model
                 IN ($id_str)";
         $values = $this->db->select($sql);
         $mod = new Operation_Model();
+
+
+
         foreach ($id as $key=>$val)
         {
             $res[$val]['type']=$type[$key];
@@ -351,16 +354,19 @@ class Accounts_Model
             $res[$val]['cat'] = $type_name[$key];
             $total=(float)($mod->getTotalSum($val));
             $res[$val]['fields']['total_balance'] = $total;
+           //die(print_r( Core::getInstance()->user->getUserCurrency()));
+            $ucur =Core::getInstance()->user->getUserCurrency();
             $res[$val]['def_cur'] =round(
-                $res[$val]['fields']['total_balance']* Core::getInstance()->currency[$cur_id[$key]]['value'],
+                $res[$val]['fields']['total_balance']* $ucur[$cur_id[$key]]['value'],
                 2
                 );
-
+//die(print_r( Core::getInstance()->user->user_currency));
 
 
             $res[$val]['special'] = array(0,0,0);//todo tz
 
         }
+        
         return $res;
     }
 

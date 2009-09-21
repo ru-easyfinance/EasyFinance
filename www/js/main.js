@@ -519,7 +519,8 @@ $(document).ready(function() {
 // left
 // nav bar
 
-
+$('.listing').hide();
+$('.listing').hide();
 $('.navigation  li ul').hide()
 $('.navigation li.act ul').show()
 $('.navigation  li span').click(function(){
@@ -725,14 +726,15 @@ $('.navigation  li span').click(function(){
         pathtoid = {
             '/accounts/' :'m2',
             '/budget/':'m3',
-            '/calendar/':'m4',
+            '/calendar/':'m5',
             '/category/':'m2',
-            '/experts/':'m5',
+            '/experts/':'m6',
             '/info/':'m1',
             '/mail/':'m0',
             '/operation/':'m2',
-            '/periodic/':'m4',
+            '/periodic/':'m5',
             '/profile/':'m0',
+            '/report/':'m4',
             '/targets/':'m3'}
           var page_mid = pathtoid[pathName];
             mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</span></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
@@ -843,7 +845,7 @@ $('.navigation  li span').click(function(){
         $(this).addClass('act');
         id = $(this).attr('id');
         $('.listing').hide();
-        s = '#'+id+'.listing'
+        s = '#'+id+'.listing';
         $(s).show();
     });
 

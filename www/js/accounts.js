@@ -33,19 +33,20 @@ $(document).ready(function() {
     $('#btnAddAccount').click(function(){
         str = $('#blockCreateAccounts #name').val();
         l = 1;
-        if ($('.item .name')){
         $('.item .name').each(function(){
             s = $(this).text();
             if(s==str)
                 l=0;
         });
-        }
-        if (l){
-            if (new_acc)
-                createNewAccount();
-            else
+        
+            if (new_acc){
+                if (l){
+                    createNewAccount();
+                }
+            }
+            else{
                 correctaccount();
-        }
+            }
     });
     $('.delAccount').click(function(){
         
@@ -63,7 +64,7 @@ $(document).ready(function() {
 
     function in_array(a,arr)
     {
-        for (keyssasdsadfasf in arr)
+        for (keyssasdsadfasf in arr)//no uses name=)
         {
             if (a == arr[keyssasdsadfasf])
                 return true;
@@ -88,10 +89,10 @@ $(document).ready(function() {
             {},
             function(data){
                 len = data.length;
-                div = "<div class='cont'>&nbsp;<ul>\n\
-                        <li class='edit'><a></a></li>\n\
-                        <li class='del'><a></a></li>\n\
-                        <li class='add'><a></a></li>\n\
+                div = "<div class='cont'>&nbsp;<ul style='z-index: 100'>\n\
+                        <li class='edit' title='Редактировать'><a></a></li>\n\
+                        <li class='del' title='Удалить'><a></a></li>\n\
+                        <li class='add' title='Копировать'><a></a></li>\n\
                     </ul></div>";
                 $('#operation_list').empty();
                 for (key in data )
@@ -305,47 +306,24 @@ $(document).ready(function() {
             });
             $('tr.item').removeClass('act');
             $(this).addClass('act');
+            //$('.operation_list').css('width', '700px')
+            //$('.operation_list').css('overflow-y', 'hidden')
+            
+
     });
+    $('.operation_list').addClass('.autoscroll').css('height', '250px')
     //Редактирование по двойному щелчку
     $('tr.item').live('dblclick',
         function(){
-                    $('#blockCreateAccounts').show();
-                id =$(this).closest('.item').find('.type').attr('value');
-                new_acc=0;
-                tid = id;
-                var th = $(this);
-                $.post(
-                    "/accounts/changeType/",
-                    {
-                        id: id
-                    },
-                     function(data) {
-                        $('#account_form_fields').html(data);
-                        $(th).closest('.item').find('td').each(function(){
-                            key = $(this).attr('class');
-                            val = $(this).text();
-                            $('#blockCreateAccounts').find('#'+key).val(val) ;
-                            $(document).scrollTop(300);
-                        });
-                        val = $(th).closest('.item').find('.total_balance').text();
-
-
-                        $('#blockCreateAccounts').find('#starter_balance').val($(th).closest('.item').find('.starter_balance').text());
-                        //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
-                        //alert($(th).closest('.item').find('.id').attr('value'));
-                        $('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
-                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
-                    },
-                    'text'
-                );
-               }
-    );
+             $(this).find('li.edit').click();
+        });
 
     $('.mid').mousemove(function(){
             if (!$('ul:hover').length && !$('.act:hover').length)
             {
                 $('.qtip').remove();
                 $('tr.item').removeClass('act');
+                //$('.operation_list').css('overflow-y', 'scroll')
             }
     });
     //del accoun click
@@ -361,6 +339,7 @@ $(document).ready(function() {
                             val = $(this).val();
                             if (val == id)
                                 $(this).remove();
+
                         })
                     },
                     'text');
