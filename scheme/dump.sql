@@ -480,8 +480,8 @@ CREATE TABLE `users` (
   `user_currency_default` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Валюта пользователя по умолчанию',
   `user_currency_list` text NOT NULL COMMENT 'Сериализованный массив валют пользователя',
   `user_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'тип пользователя 0-юзер 1-админ 2-эксперт',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
   KEY `user_login` (`user_login`,`user_pass`),
-  KEY `id` (`id`)
+  KEY `idx` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
