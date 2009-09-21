@@ -12,7 +12,8 @@
 						</div>
 						<div class="inside financobject_block">
 							<div class="add"><span>Добавить цель</span></div>
-                            {foreach from=$user_list_targets item=i}
+                            {foreach from=$user_list_targets item=i key=k}
+                            {if $k < 5}
 							<div class="object" tid="{$i.id}" type="{$i.type}" amount="{$i.amount}" start="{$i.start}" end="{$i.end}"
                                  photo="{$i.photo}" url="{$i.url}" account="{$i.account}" visible="{$i.visible}" title="{$i.title}" comment="{$i.comment}">
 								<div class="ban">
@@ -41,8 +42,11 @@
 									<li><a href="#" class="f_f_del">удалить</a></li>
 								</ul>
 							</div>
+                            {/if}
                             {/foreach}
+                            {if $user_list_targets|@count > 5}                           
 							<div class="show_all"><span>Смотреть все цели</span></div>
+                            {/if}
 						</div>
 						<div class="cb"><div></div></div>
 					</div>

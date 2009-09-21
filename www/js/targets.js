@@ -1,19 +1,10 @@
 // {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
-$('#amount,#amountf').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        })
-    /*$('#amount,#amountf').calculator({
-        layout: [
-            $.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
-            'MR_7_8_9_-' + $.calculator.UNDO,
-            'MS_4_5_6_*' + $.calculator.PERCENT ,
-            'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-            'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS]
-        //showOn: 'opbutton',
-    });*/
-    $('#calculator-div').css('z-index', 1005);
+    $('#amount,#amountf').live('keyup',function(e) {
+        FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+    })
+
     $("#start,#end").datepicker({dateFormat: 'dd.mm.yy'});
 
     // Добавить фин.цель
@@ -86,7 +77,7 @@ $('#amount,#amountf').live('keyup',function(e){
             for(v in data) {
                 s += '<div class="object"><div class="ban"></div>'
                     +'<div class="descr">';
-                    s += (data[v]['photo']!='')? '<img src="/img/images/pic6.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
+                    s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                         s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
 						+'</div><div class="indicator_block"><div class="money">'
 						+data[v]['amount']+' руб.<br /><span>'
@@ -107,7 +98,6 @@ $('#amount,#amountf').live('keyup',function(e){
         bgiframe: true,
         autoOpen: false,
         width: 450,
-        modal: true,
         buttons: {
             'Сохранить': function() {
                 saveTarget();
@@ -161,7 +151,7 @@ $('#amount,#amountf').live('keyup',function(e){
                 type     : $('#type').attr('value'),
                 category : $('#category').attr('value'),
                 title    : $('#title').attr('value'),
-                amount   : tofloat($('#amount').attr('value')),
+                amount   : tofloat($('#amount').val()),
                 start    : $('#start').attr('value'),
                 end      : $('#end').attr('value'),
                 photo    : $('#photo').attr('value'),
@@ -233,6 +223,14 @@ $('#amount,#amountf').live('keyup',function(e){
     }
 
     ///////////////////////////////////////////////////////////
+    function tofloat(s)
+    {
+        if (s != null) {
+            return s.replace(/[ ]/gi, '');
+        } else {
+            return '';
+        }
+    }
 });
 
     

@@ -9,6 +9,9 @@ $(document).ready(function() {
     $('#btnSave').click(function(){
         saveCategory()
     });
+
+    $('form').submit(function(){return false;});
+
     $('#btnCancel').click(function(){
         clearForm();$('#add_form').hide();
     });
@@ -33,7 +36,7 @@ $(document).ready(function() {
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id'));
         $('#add_form').show();
-        (document).scrollTop(500);
+        $(document).scrollTop(500);
         $('form').attr('action','/category/edit/');
 
     });
@@ -45,7 +48,7 @@ $(document).ready(function() {
     $('li.add').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id'));
-        $('#id').val('');
+        $('#cat_id').val('');
         $('#add_form').show();
         $(document).scrollTop(300);
         $('form').attr('action','/category/add/');
@@ -64,7 +67,7 @@ $(document).ready(function() {
         } else {
             $('#subcat').removeAttr('disabled');
         }
-        $('#id').val(cat.user[id]['id']);
+        $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);
         $('#cattype').val(cat.user[id]['type']);
@@ -75,7 +78,7 @@ $(document).ready(function() {
      * Очищает форму
      */
     function clearForm() {
-        $('#namecat,#id').val('');
+        $('#namecat,#cat_id').val('');
         $('#subcat,#cattype,#catsys').removeAttr('selected');
     }
 
@@ -171,13 +174,14 @@ $(document).ready(function() {
     function saveCategory() {
         if (checkForm()) {
             $.post($('form').attr('action'), {
-                id     : $('#id').val(),
+                id     : $('#cat_id').val(),
                 name   : $('#namecat').val(),
                 parent : $('#subcat').val(),
                 type   : $('#cattype').val(),
                 system : $('#catsys').val()
             }, function() {
                 $('#add_form').hide();
+                $.jGrowl("Категория успешно сохранена", { theme: 'green' });
                 loadCategory();
             }, 'json');
         }
@@ -191,19 +195,8 @@ $(document).ready(function() {
         $.post('/category/del/', {id:id}, function() {
             clearForm();
             $('#add_form').hide();
+            $.jGrowl("Категория удалена", { theme: 'red' });
             loadCategory();
         }, 'json');
     }
-	
-
-	
-	    /* Show/ Hide Mini-Menu For List Container */
-    //$(".l_n_cont").hover(
-    //        function(){$(this).next().find("ul").show();},
-    //        function(){$(this).next().find("ul").hide();}
-    //        );
-    //$(".cont ul").hover(
-    //    function(){$(this).show();},
-    //    function(){$(this).hide();}
-    //    );
 });

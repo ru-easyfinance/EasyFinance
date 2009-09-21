@@ -366,15 +366,8 @@ $(document).ready(function() {
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
                 op_clearForm();
+                $.jGrowl("Операция успешно сохранена", { theme: 'green' });
             }
-           // data could be xmlDoc, jsonObj, html, text, etc...
-           //this; // the options for this ajax request
-           // textStatus can be one of:
-           //   "timeout"
-           //   "error"
-           //   "notmodified"
-           //   "success"
-           //   "parsererror"
         }, 'json');
         return true;
     }

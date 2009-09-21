@@ -53,7 +53,7 @@ class Targets_Controller extends Template_Controller
      */
     function index($args)
     {
-        $this->tpl->assign('user_list_targets', $this->model->getLastList());
+        $this->tpl->assign('user_list_targets', $this->model->getLastList(0,6));
         $this->tpl->assign('pop_list_targets', $this->model->getPopList());     
         $this->tpl->assign('category',get_tree_select());
         $this->tpl->assign('accounts',Core::getInstance()->user->getUserAccounts());
@@ -109,7 +109,7 @@ class Targets_Controller extends Template_Controller
      */
     function user_list()
     {
-        die(json_encode($this->model->getLastList()));
+        die(json_encode($this->model->getLastList(0, 100)));
     }
 
     /**

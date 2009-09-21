@@ -9,14 +9,6 @@ $(document).ready(function() {
     $('#amount').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         })
-    /*$('#amount').calculator({
-        layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
-                'MR_7_8_9_-' + $.calculator.UNDO,
-                'MS_4_5_6_*' + $.calculator.PERCENT ,
-                'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-                'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-        showOn: 'focus' //opbutton
-    });*/
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
 
     // Bind
@@ -219,7 +211,7 @@ $(document).ready(function() {
             target    : $('#op_target').val(),
             close     : $('#op_close:checked').length,
             tags      : $('#op_tags').val()
-        }, function(data, textStatus){
+        }, function(data){
             for (var v in data) {
                 //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
                 alert('Ошибка в ' + v);
@@ -227,16 +219,8 @@ $(document).ready(function() {
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
                 clearForm();
-                loadOperationList();
+                loadOperationList();                
             }
-           // data could be xmlDoc, jsonObj, html, text, etc...
-           //this; // the options for this ajax request
-           // textStatus can be one of:
-           //   "timeout"
-           //   "error"
-           //   "notmodified"
-           //   "success"
-           //   "parsererror"
         }, 'json');
         return true;
     }
@@ -361,6 +345,7 @@ $(document).ready(function() {
             }, function(data) {
                 delete operationList[id];
                 $(tr).remove();
+                $.jGrowl("Операция удалена", { theme: 'red' });
             }, 'json');
     }
 
