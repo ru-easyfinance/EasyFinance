@@ -97,9 +97,9 @@ ul.menu6 li.act div { padding: 5px 0 6px 13px !important; background: url("../i/
 ul.menu6 li div span { cursor: pointer; //cursor: hand; border-bottom: 1px dashed #6ebe41; }
 ul.menu6 li.act div span { cursor: default; border-bottom: 0 none; }
 /* //////////////////////////////////////////////////////////////////////////////////////////  */
-.operation_list table.noborder{border:0}
-.operation_list table.noborder td{width:30px}
-.operation_list table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
+table.noborder{border:0}
+table.noborder td{width:30px}
+table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .PEND,.CLOSED {color: #FF0000; }
 #header #auth ul li.user_link{position:relative; float: top;display:block;}
 .mid span.mid_text{position: relative; padding-right : 30px; left : 15px; }
@@ -1710,6 +1710,44 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     padding: .1em .3em!important;
 }
 
+.qtip {
+    padding: 0 14px 0 0;
+    position: absolute;
+    width: 250px;
+    display: block;
+    top: 574.6px;
+    left: 262px;
+    z-index: 6000;
+}
+.qtip-tip {
+    margin: -7px auto 0;
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    line-height: 0.1px;
+    font-size: 1px;
+    right: 0;
+    top: 50%;
+    display: block;
+}
+.qtip-wrapper {
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+}
+.qtip-contentWrapper {
+    border: 3px solid rgb(226, 226, 226);
+    background: white none repeat scroll 0 0;
+    overflow: hidden;
+}
+.qtip-content {
+    padding: 5px 9px;
+    background: white none repeat scroll 0 0;
+    overflow: hidden;
+    color: rgb(69, 69, 69);
+    text-align: left;
+}
+
 
 /*------------------------------------------- crack jQuery End --------------------------------------*/
 .hided{display:none;}
@@ -1719,3 +1757,4 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .line div.cont ul li{ float: left; margin: 9px 8px 0 0; height: 12px; }
 .line div.cont ul li.add{ margin-right: 0; }
 .line div.cont ul li a{ display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden; }
+
