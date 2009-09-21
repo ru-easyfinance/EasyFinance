@@ -333,8 +333,7 @@ $(document).ready(function() {
         });
 
     $('.mid').mousemove(function(){
-            if (!$('ul:hover').length && !$('.act:hover').length)
-            {
+            if (!$('ul:hover').length && !$('.act:hover').length) {
                 $('.qtip').remove();
                 $('tr.item').removeClass('act');
               //  $('.operation_list').css('overflow-y', 'scroll');
@@ -344,16 +343,17 @@ $(document).ready(function() {
     //del accoun click
     $('li.del').live('click',
         function(){
-            if (confirm("Вы уверены что хотите удалить счёт?"))
-            {
+            if (confirm("Вы уверены что хотите удалить счёт?")) {
                 id = $(this).closest('.item').find('.id').attr('value')
                 $.post('/accounts/del/',
                     {id :$(this).closest('.item').find('.id').attr('value')},
                     function(data){
                         $('#op_account option').each(function(){
                             val = $(this).val();
-                            if (val == id)
+                            if (val == id) {
+                                $.jGrowl("Счёт удалён", { theme: 'green'});
                                 $(this).remove();
+                            }
 
                         })
                     },
@@ -401,38 +401,34 @@ $(document).ready(function() {
 
     $('li.add').live('click',
         function(){
-            //alert('as')
+            $('#blockCreateAccounts').show();
+            id =$(this).closest('.item').find('.type').attr('value');
+            new_acc=0;
+            tid = id;
+            var th = $(this);
+            $.post(
+                "/accounts/changeType/",
+                {
+                    id: id
+                },
+                 function(data) {
+                    $('#account_form_fields').html(data);
+                    $(th).closest('.item').find('td').each(function(){
+                        key = $(this).attr('class');
+                        val = $(this).text();
+                        $('#blockCreateAccounts').find('#'+key).val(val) ;
+                        $(document).scrollTop(300);
+                    });
 
-                $('#blockCreateAccounts').show();
-                id =$(this).closest('.item').find('.type').attr('value');
-                new_acc=0;
-                tid = id;
-                var th = $(this);
-                $.post(
-                    "/accounts/changeType/",
-                    {
-                        id: id
-                    },
-                     function(data) {
-                        $('#account_form_fields').html(data);
-                        $(th).closest('.item').find('td').each(function(){
-                            key = $(this).attr('class');
-                            val = $(this).text();
-                            $('#blockCreateAccounts').find('#'+key).val(val) ;
-                            $(document).scrollTop(300);
-                        });
-
-                        $('#blockCreateAccounts #total_balance').val($(th).closest('.item').find('.starter_balance').text());
-                        $('#blockCreateAccounts #starter_balance').val($(th).closest('.item').find('.starter_balance').text());
-                        //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
-                        $('#blockCreateAccounts #name').val($('#blockCreateAccounts #name').val()+'(2)');
-                        //$('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
-                        //$('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
-                    },
-                    'text'
-                );
-
-        
+                    $('#blockCreateAccounts #total_balance').val($(th).closest('.item').find('.starter_balance').text());
+                    $('#blockCreateAccounts #starter_balance').val($(th).closest('.item').find('.starter_balance').text());
+                    //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
+                    $('#blockCreateAccounts #name').val($('#blockCreateAccounts #name').val()+'(2)');
+                    //$('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
+                    //$('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
+                },
+                'text'
+            );
         }
     );
 
@@ -458,6 +454,7 @@ $(document).ready(function() {
                 data: $("#formAccount input,select,textarea"),
                 success: function(data) {
                     var id = data;
+                    $.jGrowl("Добавлен счёт", { theme: 'green'});
                     update_list({id: id,cur_id: cur_id});
                     accountAddUnvisible();
                     
@@ -467,10 +464,14 @@ $(document).ready(function() {
 
     function correctaccount() {
         $.post('/accounts/del/',
-                    {id :$('#blockCreateAccounts').find('table').attr('id')},
-                    function(data){},
-                    'text');
+            {
+                id :$('#blockCreateAccounts').find('table').attr('id')
+            },
+            function(data){
+                $.jGrowl("Счёт сохранён", { theme: 'green'});
+            },
+            'text'
+        );
         createNewAccount();
     }
-     
 });

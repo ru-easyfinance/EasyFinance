@@ -345,7 +345,7 @@ $(document).ready(function() {
             }, function(data) {
                 delete operationList[id];
                 $(tr).remove();
-                $.jGrowl("Операция удалена", { theme: 'red' });
+                $.jGrowl("Операция удалена", { theme: 'green' });
             }, 'json');
     }
 

@@ -85,7 +85,11 @@ $(document).ready(function() {
     /**
      * Проверяет валидность заполненных данных
      */
-    function checkForm() {
+    function cat_checkForm() {
+        if ($('#namecat').val() == '') {
+            $.jGrowl("Необходимо указать название категории", { theme: 'red', life: 5000 });
+            return false;
+        }
         return true;
     }
 
@@ -180,7 +184,7 @@ $(document).ready(function() {
      * Сохраняет категорию
      */
     function saveCategory() {
-        if (checkForm()) {
+        if (cat_checkForm()) {
             $.post($('form').attr('action'), {
                 id     : $('#cat_id').val(),
                 name   : $('#namecat').val(),
@@ -203,7 +207,7 @@ $(document).ready(function() {
         $.post('/category/del/', {id:id}, function() {
             clearForm();
             $('#add_form').hide();
-            $.jGrowl("Категория удалена", { theme: 'red' });
+            $.jGrowl("Категория удалена", { theme: 'green' });
             loadCategory();
         }, 'json');
     }
