@@ -366,7 +366,7 @@ $(document).ready(function() {
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
                 op_clearForm();
-                $.jGrowl("Операция успешно сохранена", { theme: 'green' });
+                $.jGrowl("Операция успешно сохранена", {theme: 'green'});
             }
         }, 'json');
         return true;
@@ -730,7 +730,7 @@ $('.navigation  li span').click(function(){
             '/report/':'m4',
             '/targets/':'m3'}
        var page_mid = pathtoid[pathName];
-            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</span></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
+            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
             if(!$('#menu3').length){
                 $('div#mainwrap').prepend(mmenu);
             }
@@ -741,15 +741,15 @@ $('.navigation  li span').click(function(){
         var act_id = page_mid;
         var submenu = {
             //'m0':[''],
-            'm1':[''],
+            'm1':['<a></a>'],
             'm2':[  '<a href="/accounts/">Счета</a>',
                     '<a href="/operation/">Журнал операций</a>',
                     '<a href="/category/">Категории</a>'],
-            'm3':[''],
-            'm4':[''],
+            'm3':['<a></a>'],
+            'm4':['<a></a>'],
             'm5':[  '<a href="/calendar/">Календарь</a>',
                     '<a href="/periodic/">Регулярные транзакции</a>'],
-            'm6':['']
+            'm6':['<a></a>']
         };
 
 
@@ -765,7 +765,9 @@ $('.navigation  li span').click(function(){
         })
         $('.mid, .ccb, #footer, #header, #menumain').mouseover(function(){
             $('.menu3 li').removeClass('act');
-            $('div#mainwrap #'+page_mid).addClass('act');
+            $('.menu3 span').hide();
+            $('.menu3 .span').show();
+            $('div#mainwrap #'+page_mid).addClass('act').show();
             sm = submenu[page_mid]?submenu[page_mid]:'';
             str='';
             l = sm.length;
