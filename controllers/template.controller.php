@@ -54,6 +54,10 @@ class Template_Controller {
 
 
         $user = Core::getInstance()->user;
+        if (is_null($user->getId())) { 
+            Core::getInstance()->tpl->assign('res', '[]');
+            return false;
+        }
 
         // Подготавливаем счета
         $accounts = array();
