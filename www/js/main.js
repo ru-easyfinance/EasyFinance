@@ -836,7 +836,7 @@ $('.navigation  li span').click(function(){
         $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
     }).find('a').removeAttr('href');
 
-    $('.listing#c2').css('display', 'block');
+    $('.listing.c2').css('display', 'block');
     $('ul.control li').click(function(){
         $('ul.control li').removeClass('act');
         $(this).addClass('act');
