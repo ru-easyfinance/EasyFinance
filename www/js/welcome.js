@@ -1,5 +1,10 @@
+
+
 var id = 'step1';
 $(document).ready(function() {
+
+
+
 var bgpix = {step1: 'bg1',step2: 'bg2',step3:  'bg3',step4: 'bg4',step5: 'bg5'};
 var text = {step1: "<h2></h2>EasyFinance.ru это on-line система управления личными финансами с широкими аналитическими возможностями.",
             step2: "<h2></h2>EasyFinance.ru позволит принимать правильные решения по управлению личными финансами.",
@@ -7,7 +12,7 @@ var text = {step1: "<h2></h2>EasyFinance.ru это on-line система упр
             step4: "<h2></h2>Получайте удовольствие и пользу вместе с EasyFinance.ru – деньги работают, а вы избавляетесь от финансового стресса.",
             step5: "<h2></h2>Воспользуйтесь возможностями системы EasyFinance.ru для планирования семейного бюджета. Умело распределяйте ваши финансы."}
 var head = {step1: 'txt1',step2: 'txt4',step3:  'txt3',step4: 'txt2',step5: 'txt5'}
-
+var timeoutid;
 function update_text(id)
 {
     $('ul.steps li').attr('class','');
@@ -21,6 +26,15 @@ update_text(id);
  $('ul.steps li').click(
     function(){
         id = $(this).attr('id');
+        if (timeoutid){
+            clearInterval(timeoutid);
+        }
+        setTimeout(function(){
+            timeoutid = setInterval(function(){
+                toggle_main();
+            },3000)
+        },7000)
+
         update_text(id);    
     });
 
@@ -42,10 +56,9 @@ update_text(id);
             if (!$('#aboutproject div:hover').length)
             {
                 $('#dialog').hide();
-
             }
            // return false;
-        })
+        })  
         
 	$('#aboutproject .inside div').mouseover(function(){
 		c = $(this).attr('class');
@@ -68,6 +81,20 @@ update_text(id);
         $('.close').click(function(){
             $('#dialog').hide();
         });
+        if (timeoutid){
+            clearInterval(timeoutid);
+        }
+        timeoutid = setInterval(function(){
+            toggle_main();
+        },3000);
+
+        function toggle_main()
+        {
+            var next_step = {step1: 'step2',step2: 'step3',step3:  'step4',step4: 'step5',step5: 'step1'};
+            var id = $('ul.steps li.act').attr('id');
+            update_text(next_step[id]);
+        }
+
 
 });
 

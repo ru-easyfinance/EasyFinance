@@ -813,11 +813,12 @@ $('.navigation  li span').click(function(){
 
 
     // Кнопка сворачивания / разворачивания
-    $('li.over3').click(function() {
+    $('li.over3,li.uparrow').addClass('uparrow').toggleClass('uparrow').click(function() {
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').find('div.inside').toggle();
-        this.className = (this.className == 'over3' ? 'uparrow' : 'over3');
-        this.attr(title)  = (this.attr(title) == 'свернуть' ? 'развернуть' : 'свернуть');
+        $(this).toggleClass('uparrow').toggleClass('over3');
+        var title = $(this).attr('title') == 'свернуть' ? 'развернуть' : 'свернуть'
+        $(this).attr('title',title);
         //$(this).closest('div.ramka3').className("over2");
     }).find('a').removeAttr('href');
 
