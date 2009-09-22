@@ -1,3 +1,4 @@
+AddDefaultCharset utf-8
 php_flag register_globals Off
 php_flag display_errors On
 
