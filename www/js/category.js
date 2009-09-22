@@ -20,18 +20,18 @@ $(document).ready(function() {
         $('form').attr('action','/category/add/');
     });
     // При наведении мыши
-    $('div.line tr').live('mouseover', function() {
-        $(this).addClass('act').find('ul').show();
-
-    });
+//    $('div.line tr').live('mouseover', function() {
+//        $(this).addClass('act').find('ul').show();
+//
+//    });
     // При двойном клике
     $('div.line tr').live('dblclick', function() {
         $(this).find('li.edit').click();
     });
-    $('div.line tr').live('mouseout', function() {
-        $('div.line ul').hide();
-        $('div.line tr').removeClass('act');
-    });
+//    $('div.line tr').live('mouseout', function() {
+//        $('div.line ul').hide();
+//        $('div.line tr').removeClass('act');
+//    });
     $('li.edit').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id'));
@@ -87,7 +87,7 @@ $(document).ready(function() {
      */
     function cat_checkForm() {
         if ($('#namecat').val() == '') {
-            $.jGrowl("Необходимо указать название категории", { theme: 'red', life: 5000 });
+            $.jGrowl("Необходимо указать название категории", {theme: 'red', life: 5000});
             return false;
         }
         return true;
@@ -165,20 +165,36 @@ $(document).ready(function() {
             }
             //$('div.categories').append(c);
             $('#subcat').html(m);
-			$(".l_n_cont").live('mouseover',function(){
-				$(this).closest('.line').find(".ul_head").show();
-			});
-			$(".l_n_cont").live('mouseout',function(){$(this).closest('.line').find("ul").hide()});
+			
             $('.block2 .inside').css({width: '679px'});
+            $('.block2 .inside .form_block').css({width: '353px'});
             $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});
             $('.block2 .inside .line').css({width: '507px'});
             $('.block2 .inside .h tr').css({width: '507px'});
-            $('.block2 .inside .categories').css({width: '567px', height:'500px',border:'0'}).jScrollPane();
+            $('.block2 .inside .categories').css({width: '597px', height:'500px',border:'0'}).jScrollPane();
             $('.line,.h').css('border-left','1px solid #E8E8E8').css('border-right','1px solid #E8E8E8')
-            $('.jScrollPaneTrack').css({'right':'50px','z-index':1})
+            $('.jScrollPaneTrack').css({'right':'80px','z-index':1})
             $('ul').css('z-index', 100)
         }, 'json');
     }
+    /**
+     *slide menu del edit
+     */
+//    $(".l_n_cont").live('mouseover',function(){
+//        $(this).closest('.line').find(".ul_head").show();
+//    });
+    //$(".l_n_cont").live('mouseout',function(){$(this).closest('.line').find("ul").hide()});
+    //('.line').find("ul").show();
+    $('div.line tr,div.l_n_cont').live('mouseover',function(){
+        $('div.line tr,div.l_n_cont').removeClass('act').find('ul').hide();
+        $(this).addClass('act').find('ul').show();
+    });
+    $('body').mousemove(function(){
+            if (!$('ul:hover').length && !$('.act:hover').length)
+            {
+                $('div.line tr,div.l_n_cont').removeClass('act').find('ul').hide();
+            }
+    });
 
     /**
      * Сохраняет категорию
@@ -193,7 +209,7 @@ $(document).ready(function() {
                 system : $('#catsys').val()
             }, function() {
                 $('#add_form').hide();
-                $.jGrowl("Категория успешно сохранена", { theme: 'green' });
+                $.jGrowl("Категория успешно сохранена", {theme: 'green'});
                 loadCategory();
             }, 'json');
         }
@@ -207,7 +223,7 @@ $(document).ready(function() {
         $.post('/category/del/', {id:id}, function() {
             clearForm();
             $('#add_form').hide();
-            $.jGrowl("Категория удалена", { theme: 'green' });
+            $.jGrowl("Категория удалена", {theme: 'green'});
             loadCategory();
         }, 'json');
     }

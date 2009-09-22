@@ -29,6 +29,7 @@ $(document).ready(function(){
                     chartSample_1 = null;
                     $('div#flash_' + i).prepend('<div Style="text-align:center;font-weight:bold;">'+name+'</div>');
         }
+        print_targets(0);
     },
     'json');
 })
@@ -37,7 +38,7 @@ $(document).ready(function(){
 function print_targets(count)
 {
     $.post(
-        '/info/targets_list/',
+        '/targets/user_list/',
         {count : count},
         function(data){
             str='';
@@ -50,11 +51,11 @@ function print_targets(count)
                     data[key]['id'] + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
                     data[key]['image']+"' alt='' /><a>" +
                     data[key]['title']+'</a><div class="indicator_block"><div class="money">' +
-                    data[key]['amount'] + '.<br /><span> ' +
+                    formatCurrency(data[key]['amount']) + ' руб<br /><span> ' +
                     data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
                     data[key]['percent_done'] + '%;"><span>' +
                     data[key]['percent_done'] + '</span></div></div><div class="date"><span>Целевая дата:' +
-                    data[key]['date_end'] + '</span> &nbsp;&nbsp;&nbsp; Прогнозная дата: 0' +
+                    data[key]['end'] + '</span> &nbsp;&nbsp;&nbsp; Прогнозная дата: 0' +
                     "</div><ul><li class='edit'>редактировать</li><li class='del'>удалить</li></ul></div></div></div>";
             }
             str = str + '<div class="add2"><span>Добавить финансовую цель</span></div>';
@@ -69,7 +70,7 @@ function add_target()
 };
 function edit_target(target)
 {
-    document.location = '/targets/##'+target ;//@todo :(( неполучается наладить((
+    document.location = '/targets/#?'+target ;//@todo :(( неполучается наладить((
 };
 
 function del_target(target)

@@ -882,7 +882,7 @@ div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background
 .operation_list table tr.first td { background: none; }
 .operation_list table div.cont { position: relative; }
 
-tr.act td div.cont ul { display: block; }
+.act div.cont ul { display: block; }
 div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.cont ul li { float: left; margin: 9px 8px 0 0; height: 12px; }
