@@ -953,19 +953,19 @@ $('.navigation  li span').click(function(){
                 
             });
 
-      $("#dialog_rating").dialog({
-        bgiframe: true,
+      $("#dialog_rating").dialog('open').dialog({
+        //bgiframe: true,
         autoOpen: false,
-        width: 450,
-        modal: true,
+        //width: 450,
+        //modal: true,
         buttons: {
             'Ок': function() {
                 $("#dialog_rating").dialog('close');
-            }           
-        },
-        close: function() {
-            $("#dialog_rating").dialog('close');
-        }
+            }
+        }//,
+        //close: function() {
+        //    $("#dialog_rating").dialog('close');
+        //}
     });
 
     //отправление сообщения
