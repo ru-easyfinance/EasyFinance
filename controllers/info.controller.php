@@ -54,7 +54,6 @@ class Info_Controller extends Template_Controller
         $this->tpl->append('js','jquery/ui.sortable.js');
         $this->tpl->append('js','jquery/ui.draggable.js');
         $this->tpl->append('js','jquery/ui.dialog.js');
-        $this->tpl->append('js','anychart/AnyChart.js');
         $this->tpl->append('js','info/functions.js');
         $this->tpl->append('js','info/view.js');
 
