@@ -33,7 +33,7 @@ class Login_Controller extends Template_Controller
     {
         $user = Core::getInstance()->user;
         if ($user->getId()) {
-            header("Location: /accounts/");
+            header("Location: /info/");
             exit;
         } else {
             $this->model->auth_user();

@@ -176,7 +176,7 @@ class Login_Model
             $headers .= "From: info@home-money.ru\n";
             $subject = "Успешная регистрация на сайте домашней бухгалтерии Home-Money.ru";
             mail($_SESSION['user']['user_mail'], $subject, $message, $headers);
-            header("Location: /accounts/");
+            header("Location: /info/");
             exit;
         } else {
 
@@ -209,7 +209,7 @@ class Login_Model
                         unset($_SESSION['REQUEST_URI']);
                         exit;
                     } else {
-                        header("Location: /accounts/");
+                        header("Location: /info/");
                         exit;
                     }
                 }
