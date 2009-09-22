@@ -26,10 +26,9 @@ update_text(id);
  $('ul.steps li').click(
     function(){
         id = $(this).attr('id');
-        if (timeoutid){
-            clearInterval(timeoutid);
-        }
+        
         setTimeout(function(){
+            clearInterval(timeoutid);
             timeoutid = setInterval(function(){
                 toggle_main();
             },3000)

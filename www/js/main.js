@@ -858,8 +858,8 @@ $('.navigation  li span').click(function(){
 
 
     $('#footer .addmessage').click(
-        function(){
-            $('#footer #popupreport').show();
+        function(e){
+            $('#footer #popupreport').show().css({top : '30%',position:'fixed',left:'15%'});
             $.post(
                 '/feedback/r_list/',
                 {},
