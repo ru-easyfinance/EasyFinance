@@ -513,7 +513,6 @@ $(document).ready(function() {
 // nav bar
 
 $('.listing').hide();
-$('.listing').hide();
 $('.navigation  li ul').hide()
 $('.navigation li.act ul').show()
 $('.navigation  li span').click(function(){
@@ -843,7 +842,7 @@ $('.navigation  li span').click(function(){
         $(this).addClass('act');
         id = $(this).attr('id');
         $('.listing').hide();
-        s = '#'+id+'.listing';
+        s = '.'+id+'.listing';
         $(s).show();
     });
 
