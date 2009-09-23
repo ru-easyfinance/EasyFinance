@@ -263,6 +263,7 @@ $(document).ready(function()
      */
     function createNewAccount()
     {
+        accountAddUnvisible();
         var cur_id = $("#formAccount select:[name='currency_id']").val();
         $.ajax({
             type: "POST",
@@ -272,7 +273,7 @@ $(document).ready(function()
                 var id = data;
                 $.jGrowl("Добавлен счёт", {theme: 'green'});
                 update_list({id: id,cur_id: cur_id});
-                accountAddUnvisible();
+                
                 
                 $('li#c2').click()
             }
