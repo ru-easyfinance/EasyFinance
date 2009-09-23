@@ -36,6 +36,22 @@
                     </div>
                 </div>
 
+                <div class="line" id="Period21">
+                    <div class="f_field" >
+                        Дата начала
+                        <h6>Период 2</h6>
+                        <input type="text" class="hasDatepicker" id="dateFrom2" value="{$dateFrom2}">
+                    </div>
+                </div>
+                <div class="line" id="Period22">
+                    <div class="f_field">
+                        Дата окончания
+                        <h6>Период 2</h6>
+                        <input type="text" class="hasDatepicker" id="dateTo2" value="{$dateFrom2}">
+                    </div>
+                </div>
+                
+
                 <div class="line">
                     <div class="f_field" id="account_fields">
 			Счет
@@ -46,7 +62,7 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="f_field category" id="currency_fields">
+                    <div class="f_field category" id="currency_fields" hide="">
                         Показывать сумму в
                         <select id="currency">
                             {foreach from=$currency item=cur}
@@ -59,9 +75,28 @@
                     <div class="f_field category" id="currency_fields">
                         <input type="button" value="Показать" id="btnShow">
                     </div>
+                    <input type="button" value="Show" id="buttonShow">
                 </div>
             </div>
         </form>
+        <div class="inside operation_list">
+            <table id="reports_list">
+		<tr>
+                    <th>&nbsp;</th>
+                    <th>
+			<span class="sort" title="отсортировать">Дата</span>
+                    </th>
+                    <th>
+                 	<span class="sort" title="отсортировать">Счёт</span>
+                    </th>
+                    <th>
+			<span class="sort" title="отсортировать">Сумма</span>
+                    </th>
+               </tr>
+            </table>
+        </div>
+        
         <div id="chart">&nbsp;</div>
+
     </div>
-</div></div>
+</div>
