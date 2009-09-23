@@ -394,7 +394,8 @@ ul.action li.over2 a:hover { background-position: -28px -22px; }
 ul.action li.over3 a { background-position: -55px 0; }
 ul.action li.over3 a:hover { background-position: -55px -22px; }
 
-
+ul.action li.uparrow a { background-position: -55px 0; }
+ul.action li.uparrow a:hover { background-position: -55px -22px; }
 
 
 .head h2, .head h1 { margin: 0; padding: 5px 0 0 14px; font: 22px/24px Helvetica, Arial, Tahoma; color: #121212; }

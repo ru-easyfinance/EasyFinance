@@ -21,6 +21,15 @@ $(document).ready(function()
             num.substring(num.length-(4*i+3));
         return (((sign)?'':'-') + '' + num + '.' + cents);
     }
+
+    $('ul:last li.active').qtip({
+        content: 'This is an active list element',
+        show: 'mouseover',
+        hide: 'mouseout'
+    })
+
+
+
     /**
      * Переводит произвольную строку в вещественное число
      * Пример: фы1в31ф3в1в.ф3ю.132вы переведёт в 13131.3132

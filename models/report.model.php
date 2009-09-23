@@ -14,6 +14,8 @@ class Report_Model
      */
     private $db = NULL;
 
+    private $user = NULL;
+
     /**
      * Конструктор
      * @return void
@@ -21,6 +23,7 @@ class Report_Model
     function  __construct()
     {
         $this->db   = Core::getInstance()->db;
+        $this->user = Core::getInstance()->user;
         require_once 'OFC/OFC_Chart.php';
     }
 
@@ -144,7 +147,7 @@ class Report_Model
         $x->set_labels($labels);
         $x->set_vertical();
         $x->set_colour('#A2ACBA');
-        $x->
+        //$x->
         
 
 //$tooltip->set_hover();
@@ -163,5 +166,35 @@ class Report_Model
 
 
         return $ofc->toPrettyString();
+    }
+
+    function SelectDetailedIncome($date1='', $date2='', $account=''){
+        $sql = "SELECT op.id, c.cat_name, op.`date`,
+                                    a.account_name, op.money
+            FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? AND op.money>0
+            ORDER BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
+
+        }
+    
+
+    function SelectDetailedWaste($date1='', $date2='', $account=''){
+        $sql = "SELECT op.id, c.cat_name, op.`date`,
+                                    a.account_name, op.money
+            FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? AND op.money>0
+            ORDER BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
+    }
+
+    function CompareIncome($date1='', $date2='', $date3='', $date4=''){
+
     }
 }

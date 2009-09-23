@@ -19,6 +19,8 @@ class Report_Controller extends Template_Controller
      */
     private $tpl = null;
 
+    private $user = NULL;
+
     private $reports = array();
     
     /**
@@ -28,6 +30,7 @@ class Report_Controller extends Template_Controller
     function __construct()
     {
         $this->tpl = Core::getInstance()->tpl;
+        $this->user = Core::getInstance()->user;
         $this->tpl->assign('name_page', 'report/report');
         $this->model = new Report_Model();
 
@@ -86,21 +89,35 @@ class Report_Controller extends Template_Controller
     /**
      * 
      */
+    function abc(){
+        die(json_encode($this->model->ShowDetailedIncome()));
+    }
+
     function getData()
     {
         $report  = trim(@$_GET['report']);
         $start   = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
         $end     = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+        $start2  = formatRussianDate2MysqlDate(@$_GET['dateFrom2']);
+        $end2    = formatRussianDate2MysqlDate(@$_GET['dateTo2']);
         $account = (int)@$_GET['account'];
+        $currency= (int)@$_GET['currency'];
         switch ($report) {
             case 'graph_profit': //Доходы
                 die($this->model->getPie(0, $start, $end, $account));
+                break;
             case 'graph_loss':   // Расходы
                 die($this->model->getPie(1, $start, $end, $account));
+                break;
             case 'graph_profit_loss': //Сравнение расходов и доходов
                 die($this->model->getBars($start, $end, $account));
+                break;
             case 'txt_profit': //Детальные доходы
+                die(json_encode($this->model->SelectDetailedIncome($start, $end, $account))  );
+                break;
             case 'txt_loss': //Детальные расходы
+                die(json_encode($this->model->SelectDetailedWaste($start, $end, $account))  );
+                break;
             case 'txt_loss_difference': //Сравнение расходов за периоды
             case 'txt_profit_difference': //Сравнение доходов за периоды
             case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
