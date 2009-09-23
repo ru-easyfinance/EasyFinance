@@ -32,7 +32,7 @@ $(document).ready(function()
         var l = str.length;
         var rgx = /[0-9.]/;
         var newstr ='';
-        for(var a=1;a<=l;a++)
+        for(var a=0;a<l;a++)
             {
 
                 rgx.test(str[a])
@@ -143,11 +143,13 @@ $(document).ready(function()
             $('#blockCreateAccounts').show();
             new_acc=0;
             var account = account_list[s.substr(5)];
+            if (!account)
+                return false;
             tid = account.type;
             $.post(
                 "/accounts/changeType/",
                 {
-                    id: tid
+                    id: account.type
                 },
                 function(data) {
                     $('#account_form_fields').html(data);
@@ -202,15 +204,20 @@ $(document).ready(function()
     }
     /**
      * функция - пережиток прошлого;
-     * перезагружает account_list;
-     * не рекомендует
+     * перезагружает account_list и выполняет последующие инструкции;
+     * не рекомендуется к использованию
+     * @return void
+     * @deprecated delete//where rewrite account model, controller
      */
     function update_list(param)
     {
         $.post('/accounts/accountslist/',
             {},
             function(data){
+                if (data == 'n') data=null;
                 account_list = data;
+                res.accounts = data;
+                $('li#c2').click();
                 list();
                 var s = location.hash;
                 hash_api(s);
@@ -221,31 +228,123 @@ $(document).ready(function()
             'json'
         );
     }
+    /**
+     * функция - пережиток прошлого;
+     * перезагружает форму ввода счёта;
+     * @return void
+     * @deprecated rewrite without Ajax//where rewrite account model, controller, admin
+     */
+    function changeTypeAccount(id)
+    {
+        $.post(
+            "/accounts/changeType/",
+            {
+                id: id
+            },
+             function(data) {
+                $('#account_form_fields').html(data);
+            },
+            'text'
+        );
+    }
+    /**
+     * функция добавляет новый счёт
+     * @return void
+     * @deprecated rewrite without update_list//on freetime
+     */
+    function createNewAccount()
+    {
+        var cur_id = $("#formAccount select:[name='currency_id']").val();
+        $.ajax({
+            type: "POST",
+            url: "/accounts/add/",
+            data: $("#formAccount input,select,textarea"),
+            success: function(data) {
+                var id = data;
+                $.jGrowl("Добавлен счёт", {theme: 'green'});
+                update_list({id: id,cur_id: cur_id});
+                accountAddUnvisible();
+                
+                $('li#c2').click()
+            }
+        });
+    }
+    /**
+     * функция редактирует счёт
+     * @return void
+     * @deprecated rewrite all//on freetime where rewrite account model, controller, admin
+     */
+    function correctaccount()
+    {
+        $.post('/accounts/del/',
+            {
+                id :$('#blockCreateAccounts').find('table').attr('id')
+            },
+            function(data){
+                $.jGrowl("Счёт сохранён", {theme: 'green'});
+            },
+            'text'
+        );
+        createNewAccount();
+    }
+    /**
+     * Красивый тултип для таблицы счетов
+     * @param line JQuery link to elem
+     * @param text текст для подсказки
+     * @return void
+     */
+    function print_qtip(line,text)
+    {
+         $('.qtip').remove();
+         $(line).qtip({
+                   content: text.toString(), // Set the tooltip content to the current corner
+                   position: {
+                      corner: {
+                         tooltip: 'rightMiddle', // Use the corner...
+                         target: 'leftMiddle' // ...and opposite corner
+                      }
+                   },
+                   show: {
+                      when: false, // Don't specify a show event
+                      ready: true // Show the tooltip when ready
+                   },
+                   hide: false, // Don't specify a hide event
+                   style: {
+                      name: 'light',
+                      tip: true // Give them tips with auto corner detection
+                   }
+                });
+    }
 
-
+///////////////////////////////////////////////////////////views
     var new_acc = 1;
     var tid;
     var account_list;
+    // upload account
+    update_list();
 
-    $('#addacc').click(function(){
+    $('#addacc').live('click',function(){////button add account click
         new_acc = 1;
         accountAddVisible();
     });
-    $('#btnCancelAdd').click(function(){ 
+    $('#btnCancelAdd').click(function(){ ////button cancel in form click
         accountAddUnvisible();
     });
-    $('#type_account').change(function(){ 
+    /**
+     * select type in form selected change
+     * @deprecated delete //where rewrite account model, controller, admin
+     */
+    $('#type_account').change(function(){
         changeTypeAccount($(this).attr('value'));
     });
-    $('#btnAddAccount').click(function(){
+    
+    $('#btnAddAccount').click(function(){////button save in form click
         var str = $('#blockCreateAccounts #name').val();
         var id =$('#blockCreateAccounts').find('table').attr('id');
         var l = 1;
-        var s;
         $('.item .name').each(function(){
-            s = $(this).text();
             if (id != $(this).closest('tr').find('.id').attr('value')){
-                if(s==str)
+                if($(this).text()==str)
                     l=0;
             }
         });
@@ -264,67 +363,39 @@ $(document).ready(function()
             $.jGrowl("Такой счёт уже существует!", {theme: 'red'});
         }
     });
-
-
-
-
-    // upload account
-    
-    
-    
-
-    update_list();
-    //acount click
-    
     $('tr.item').live('mouseover',
-        function(e){
-            $('.qtip').remove();
-            var texts=[];
-            var i=0;
-            var cur=$(this).find('.cur').text();
-            $(this).find('td').each(function(){
-                texts[i]=$(this).text();
-                cls = $(this).attr('class');
-                if(cls == 'total_balance')
-                    texts[i] = texts[i] +' '+cur;
-                if (texts[i]=='undefined')
-                    i = i -1;
-                if ((cls =='type')||(cls == 'id')||(cls == 'cur'))
-                    i = i -1;
-                i++;
-            });
-            var headers=[];
-            i=0;
-            $(this).closest('table').find('th').each(function(){
-                headers[i]=$(this).text();
-                i++;
-            });
-            str = '<table Stile="padding:3px">';
-            for(key in headers)
+        function(){
+            var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+            var spec_th = [ [],
+                        ['<th>% годовых</th>',
+                            '<th>Доходность, % годовых</th>'],
+                        ['<th>% годовых</th>',
+                            '<th>Доходность, % годовых</th>',
+                            '<th>Изменение с даты открытия</th>'],
+                        ['<th>% годовых</th>'],
+                        ['<th>Доходность, % годовых</th>',
+                            '<th>Изменение с даты открытия</th>']];//доп графы для групп
+            var id =$(this).attr('id');
+            var account = account_list[id];
+            var spec = spec_th[g_types[account.type]];
+             
+            var str = '<table Stile="padding:3px">';
+            str +=  '<tr><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
+                        account.name + '</td>';
+            str +=  '<tr><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
+                        account.description + '</td>';
+            str +=  '<tr><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
+                formatCurrency(account.total_balance) + ' ' +account.cur + '</td>';
+            str +=  '<tr><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
+                formatCurrency(account.def_cur) + '</td>';
+
+            for(var key in spec)
             {
-                str = str + '<tr><th>' +
-                        headers[key] + '</th><td style="width:10px">&nbsp;</td><td>'+
-                        texts[key] + '</td>';
+                str +='<tr>'+spec[key]+account.special[key]+'</tr>'
             }
-            str = str + '<table>';
-            $(this).qtip({
-               content: str, // Set the tooltip content to the current corner
-               position: {
-                  corner: {
-                     tooltip: 'rightMiddle', // Use the corner...
-                     target: 'leftMiddle' // ...and opposite corner
-                  }
-               },
-               show: {
-                  when: false, // Don't specify a show event
-                  ready: true // Show the tooltip when ready
-               },
-               hide: false, // Don't specify a hide event
-               style: {
-                  name: 'light',
-                  tip: true // Give them tips with auto corner detection
-               }
-            });
+///
+            str += '<table>';
+            print_qtip(this, str);
             $('tr.item').removeClass('act');
             $(this).addClass('act');
             
@@ -334,146 +405,53 @@ $(document).ready(function()
              $(this).find('li.edit').click();
         });
 
-    $('.mid').mousemove(function(){
+    $('body').mousemove(function(){
             if (!$('ul:hover').length && !$('.act:hover').length) {
                 $('.qtip').remove();
                 $('tr.item').removeClass('act');
-              //  $('.operation_list').css('overflow-y', 'scroll');
-              //  $('.operation_list').css('width', '517px');
             }
     });
     //del accoun click
     $('li.del').live('click',
         function(){
             if (confirm("Вы уверены что хотите удалить счёт?")) {
-                id = $(this).closest('.item').find('.id').attr('value')
+                var id = $(this).closest('.item').attr('id')
                 $.post('/accounts/del/',
-                    {id :$(this).closest('.item').find('.id').attr('value')},
+                    {id :id},
                     function(data){
+                        var val;
                         $('#op_account option').each(function(){
                             val = $(this).val();
                             if (val == id) {
-                                $.jGrowl("Счёт удалён", {theme: 'green'});
                                 $(this).remove();
                             }
-
                         })
+                        update_list();
+                        //list();
+                        $.jGrowl("Счёт удалён", {theme: 'green'});
                     },
-                    'text');
-                $(this).closest('.item').empty();
-                return false;
+                    'json');
+                
             }
         }
     );
     //edit account lick
     $('li.edit').live('click',
         function(){
-                $('#blockCreateAccounts').show();
-                id =$(this).closest('.item').find('.type').attr('value');
-                new_acc=0;
-                tid = id;
-                var th = $(this);
-                $.post(
-                    "/accounts/changeType/",
-                    {
-                        id: id
-                    },
-                     function(data) {
-                        $('#account_form_fields').html(data);
-                        $(th).closest('.item').find('td').each(function(){
-                            key = $(this).attr('class');
-                            val = $(this).text();
-                            $('#blockCreateAccounts').find('#'+key).val(val) ;
-                            $(document).scrollTop(300);
-                        });
-                        val = $(th).closest('.item').find('.total_balance').text();
-
-                        
-                        $('#blockCreateAccounts').find('#starter_balance').val($(th).closest('.item').find('.starter_balance').text());
-                        //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
-                        
-                        $('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
-                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
-                    },
-                    'text'
-                );
-                
+            $('#blockCreateAccounts').show();
+            var id = $(this).closest('.item').attr('id');
+            hash_api('#edit'+id);
         }
     );
 
     $('li.add').live('click',
         function(){
             $('#blockCreateAccounts').show();
-            id =$(this).closest('.item').find('.type').attr('value');
-            new_acc=0;
-            tid = id;
-            var th = $(this);
-            $.post(
-                "/accounts/changeType/",
-                {
-                    id: id
-                },
-                 function(data) {
-                    $('#account_form_fields').html(data);
-                    $(th).closest('.item').find('td').each(function(){
-                        key = $(this).attr('class');
-                        val = $(this).text();
-                        $('#blockCreateAccounts').find('#'+key).val(val) ;
-                        $(document).scrollTop(300);
-                    });
+            var id = $(this).closest('.item').attr('id');
+            hash_api('#edit'+id);
+            new_acc=1;
 
-                    $('#blockCreateAccounts #total_balance').val($(th).closest('.item').find('.starter_balance').text());
-                    $('#blockCreateAccounts #starter_balance').val($(th).closest('.item').find('.starter_balance').text());
-                    //$('#blockCreateAccounts').find('#starter_balance').attr('readonly','readonly');
-                    $('#blockCreateAccounts #name').val($('#blockCreateAccounts #name').val()+'(2)');
-                    //$('#account_form_fields table').attr('id',$(th).closest('.item').find('.id').attr('value'));
-                    //$('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).closest('.item').find('.id').attr('value')+'" />');
-                },
-                'text'
-            );
+            $('#blockCreateAccounts input#name').val('');
         }
     );
-
-
-    function changeTypeAccount(id) {
-        $.post(
-            "/accounts/changeType/",
-            {
-                id: id
-            },
-             function(data) {
-                $('#account_form_fields').html(data);
-            },
-            'text'
-        );
-    }
-    var cur_id = 0;
-        function createNewAccount() {
-            cur_id = $("#formAccount select:[name='currency_id']").val();
-            $.ajax({
-                type: "POST",
-                url: "/accounts/add/",
-                data: $("#formAccount input,select,textarea"),
-                success: function(data) {
-                    var id = data;
-                    $.jGrowl("Добавлен счёт", {theme: 'green'});
-                    update_list({id: id,cur_id: cur_id});
-                    accountAddUnvisible();
-                    
-            }
-        });
-    }
-
-    function correctaccount() {
-        $.post('/accounts/del/',
-            {
-                id :$('#blockCreateAccounts').find('table').attr('id')
-            },
-            function(data){
-                $.jGrowl("Счёт сохранён", {theme: 'green'});
-            },
-            'text'
-        );
-        createNewAccount();
-    }
 });

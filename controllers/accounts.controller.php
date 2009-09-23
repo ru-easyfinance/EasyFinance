@@ -109,7 +109,7 @@ class Accounts_Controller extends Template_Controller
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
         
         //$this->accountslist();
-        die ($this->model->add($_POST));
+        die (json_encode($this->model->add($_POST)));
     }
 	
 	/**
@@ -123,7 +123,7 @@ class Accounts_Controller extends Template_Controller
         if (!$this->model->deleteAccount($id)) {
             $this->tpl->assign("error", "Счет не удален");
         }
-        die ();
+        die (json_encode(1));
     }
 
     /**

@@ -98,7 +98,7 @@ ul.menu6 li div span { cursor: pointer; //cursor: hand; border-bottom: 1px dashe
 ul.menu6 li.act div span { cursor: default; border-bottom: 0 none; }
 /* //////////////////////////////////////////////////////////////////////////////////////////  */
 table.noborder{border:0}
-table.noborder td{width:30px}
+table.noborder td{width:40px}
 table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .PEND,.CLOSED {color: #FF0000; }
 #header #auth ul li.user_link{position:relative; float: top;display:block;}

@@ -572,13 +572,19 @@ $('.navigation  li span').click(function(){
 
         });
 //accounts
-        g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
-        g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+$('li#c2').click()
+$('li#c2').click(function(){a_list()})
+    function a_list(){
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+        var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
-        data=res['accounts'];
-                len = data.length;
+        var data=res['accounts'];
+        if (!data){
+            data = {};
+        }
+                //len = data.length;
                 div = "<div class='cont'>&nbsp;<ul>\n\
                         <li class='edit'><a></a></li>\n\
                         <li class='del'><a></a></li>\n\
@@ -604,11 +610,12 @@ $('.navigation  li span').click(function(){
                     arr[i] = arr[i]+str;
                 }
                 total = 0;
-                for(key in arr)
+                for(var key in arr)
                 {
                     total = total+(parseInt(summ[key]*100))/100;
                     s='<ul>'+arr[key]+'</ul>';
-                    if (arr[key])
+                    alert(s)
+                    if (key>=0 && key <=6)
                         $('.accounts #'+key).html(s);
                 }
                 /////////////////////формирование итогового поля//////////////////////
@@ -620,17 +627,18 @@ $('.navigation  li span').click(function(){
                 str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' руб.</div></li>';
                 str = str + '</ul>';
                  $('.accounts #l_amount').html(str);
-
+    }
 
        $('.accounts .add').click(function(){
            document.location='/accounts/#add';
-           hash_api('#add');//временный хак до полного перехода на аякс
+          $('#addacc').click();//временный хак до полного перехода на аякс
        })
 
 
        $('.accounts li a').live('click',function(){
            document.location='/accounts/#edit'+$(this).find('div.id').attr('value');
-           hash_api('#edit'+$(this).find('div.id').attr('value'));//временный хак до полного перехода на аякс
+           $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
+           //hash_api('#edit'+$(this).find('div.id').attr('value'));//временный хак до полного перехода на аякс
        })
       ///////////////////////periodic/////////////////////////////////////////
       data = res['periodic'];

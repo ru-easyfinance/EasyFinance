@@ -329,6 +329,8 @@ class Accounts_Model
                 WHERE
                     account_fieldsaccount_field_id
                 IN ($id_str)";
+        if(!$id_str)
+            return 'n';
         $values = $this->db->select($sql);
         $mod = new Operation_Model();
 
