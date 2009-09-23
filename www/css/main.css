@@ -97,7 +97,7 @@ ul.menu6 li.act div { padding: 5px 0 6px 13px !important; background: url("../i/
 ul.menu6 li div span { cursor: pointer; //cursor: hand; border-bottom: 1px dashed #6ebe41; }
 ul.menu6 li.act div span { cursor: default; border-bottom: 0 none; }
 /* //////////////////////////////////////////////////////////////////////////////////////////  */
-table.noborder{border:0}
+.operation_list table.noborder{border:0}
 table.noborder td{width:40px}
 table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .PEND,.CLOSED {color: #FF0000; }
