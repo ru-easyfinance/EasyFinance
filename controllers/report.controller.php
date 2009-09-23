@@ -119,7 +119,11 @@ class Report_Controller extends Template_Controller
                 die(json_encode($this->model->SelectDetailedWaste($start, $end, $account))  );
                 break;
             case 'txt_loss_difference': //Сравнение расходов за периоды
+                die(json_encode($this->model->CompareWaste($start, $end, $start2, $end2, $account))  );
+                break;
             case 'txt_profit_difference': //Сравнение доходов за периоды
+                die(json_encode($this->model->CompareIncome($start, $end, $start2, $end2, $account))  );
+                break;
             case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
             case 'txt_loss_avg_difference': //Сравнение расходов со средним за периоды
             default:

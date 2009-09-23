@@ -169,6 +169,7 @@ class Report_Model
     }
 
     function SelectDetailedIncome($date1='', $date2='', $account=''){
+        if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
                                     a.account_name, op.money
             FROM operation op
@@ -178,23 +179,68 @@ class Report_Model
             AND a.account_id=? AND op.money>0
             ORDER BY c.cat_name";
         return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
-
-        }
-    
-
-    function SelectDetailedWaste($date1='', $date2='', $account=''){
+        } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
                                     a.account_name, op.money
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money>0
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND op.money>0
+            ORDER BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId());    
+        }
+        }
+    
+
+    function SelectDetailedWaste($date1='', $date2='', $account=''){
+        if ($account != 0) {
+        $sql = "SELECT op.id, c.cat_name, op.`date`,
+                                    a.account_name, op.money
+            FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? AND op.money<0
             ORDER BY c.cat_name";
         return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
+        } else {
+            $sql = "SELECT op.id, c.cat_name, op.`date`,
+                                    a.account_name, op.money
+            FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND op.money<0
+            ORDER BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId());
+        }
     }
 
-    function CompareIncome($date1='', $date2='', $date3='', $date4=''){
+    function CompareWaste($date1='', $date2='', $date3='', $date4='', $account=''){
+        $sql = "SELECT c.cat_name, sum(op.money)
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? AND op.money<0
+            GROUP BY op.cat_id
+            ORDER BY c.cat_name";
+        $a = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
+        $sql = "SELECT c.cat_name, sum(op.money)
+            FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? AND op.money<0
+            GROUP BY op.money
+            ORDER BY c.cat_name";
+        $b = $this->db->query($sql, $date3, $date4, $this->user->getId(), $account);
+            return 123;
+
+    }
+
+    function CompareIncome($date1='', $date2='', $date3='', $date4='', $account=''){
 
     }
 }

@@ -103,6 +103,41 @@ function ShowDetailedWaste(){
     },'json');
 }
 
+function ShowCompareWaste(){
+    $.get('/report/getData/',{
+        report: $('#report :selected').attr('id'),
+        dateFrom: $('#dateFrom').val(),
+        dateTo: $('#dateTo').val(),
+        account: $('#account :selected').val(),
+        currency:$('#currency :selected').val(),
+        dateFrom2: $('#dateFrom2').val(),
+        dateTo2: $('#dateTo2').val()
+     }, function(data) {
+        //delete reportList;
+        //reportList = $.extend(data);
+        //$courseUp = Core::getInstance()->currency[2]['value'];
+        var tr = '';
+        for (c in data){
+            if (c>0){
+            if (data[c].cat_name != data[c-1].cat_name) {
+                tr += "<tr>" + '<td class="summ"><span><b>'+data[c].cat_name+
+                    '<span><b></td></tr>';
+            }} else {
+                tr += "<tr>" + '<td class="summ"><span><b>'+data[0].cat_name+
+                    '<span><b></td></tr>';
+            }
+            tr += "<tr>"
+                        //+ '<td class="repdate"><span>'+data[c].cat_name+'</span></td>'
+                        //+ '<td class="repname"><span>'+data[c].account_name+'</span></td>'
+                        //+ '<td class="repsumm"><span>'+data[c].sum(op.money)+'</span></td>'
+                        + '</tr>';
+        }
+        $('tr:not(:first)','#reports_list').each(function(){
+                    $(this).remove();
+                });
+        $('#reports_list').append(tr);
+    },'json');
+}
 
 function BaseReport(){
     switch ( $('#report :selected').val() ) {
@@ -114,7 +149,7 @@ function BaseReport(){
         break;
 
         case "Сравнение расходов за периоды":
-            
+            ShowCompareWaste();
         break;
         case "Сравнение доходов за периоды":
             
