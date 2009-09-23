@@ -263,7 +263,7 @@ $(document).ready(function()
      */
     function createNewAccount()
     {
-        accountAddUnvisible();
+        
         var cur_id = $("#formAccount select:[name='currency_id']").val();
         $.ajax({
             type: "POST",
@@ -349,6 +349,7 @@ $(document).ready(function()
     });
     
     $('#btnAddAccount').click(function(){////button save in form click
+        accountAddUnvisible();
         var str = $('#blockCreateAccounts #name').val();
         var id =$('#blockCreateAccounts').find('table').attr('id');
         var l = 1;
