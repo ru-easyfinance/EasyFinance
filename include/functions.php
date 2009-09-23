@@ -101,7 +101,7 @@ function error_404 ($path='')
 * @param <string> $time Время в формате чч:мм
 * @return <string>
 */
-function formatRussianDate2MysqlDate($date, $time)
+function formatRussianDate2MysqlDate($date, $time='')
 {
     /**
     * Собирает в себе отформатированную дату

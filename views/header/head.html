@@ -12,16 +12,14 @@
     {foreach from=$css item=i}
     <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  />
     {/foreach}
+
     {foreach from=$js item=i}
     <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
     {/foreach}
     <script type="text/javascript">
-
-            var res;
-            res= {$res};
-
+        var res = {$res};
+        //var errors = {$errors};
     </script>
-
 
     <!-- /Подключениее стилей и скриптов -->
 </head>

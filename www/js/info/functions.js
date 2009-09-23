@@ -15,7 +15,7 @@ $(document).ready(function(){
             pointer = data[1][i]['color']*33 - 20;
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
                 '<text>'+value+'</text>'+
-		"</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
+                "</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
                 "<color_range start='0' end='100' align='Inside' start_size='15' end_size='15' padding='6'>"+
                 "<fill type='Gradient'><gradient><key color='Red'/><key color='Yellow'/><key color='Green'/></gradient></fill><border enabled='true' color='#FFFFFF' opacity='0.4'/></color_range></color_ranges></axis><frame enabled='false'></frame><pointers>"+
                 "<pointer value='"+pointer+"'>"+

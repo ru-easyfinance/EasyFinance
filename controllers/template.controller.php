@@ -31,25 +31,13 @@ class Template_Controller {
 //		title	название
 //		date	дата
 //		amount	сумма
-//user_targets	*[key]<=5	title	название
-//		amount_done	сумма
-//		percent_done	проценты
-//		date_end	Дата завершения
-//popup_targets	*[key]=5	title	название			отсортировать по популярности
-///---------------------/
-//currency	*[key]	cost	курс
-//		name	имя
-//		progress	прогресс(up или down)
+
 //flash	title	имя				общее состояние(сумма всех показателей)
 //	value	значение
 //	color	Цвет (1 красный,2 желтый, 3 зелёный)
 
 //var res = {tags:['asd'],
-//    accounts : {1:{type:'1',id:'1',cur:'rur',def_cur:'12',name:'a',total_balance:'123'}},
 //    periodic:{1:{id:1,title:'asd',date:'12.12.1111',amount:'1231231.12'}},
-//    user_targets:{1:{title:'asd',amount_done:'134',percent_done:'34',date_end:'12.12.1211'}},
-//    popup_targets:{1:{title:'asd'}},
-//    currency:{1:{cost:'12',name:'ero',progress:'down'}},
 //    flash:{title:'asdad',value:100,color:1}};
 
 

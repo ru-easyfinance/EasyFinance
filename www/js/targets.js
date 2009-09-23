@@ -50,6 +50,7 @@ $(document).ready(function(){
                 id: o.attr('tid')
             }, function(){
                 o.remove();
+                $.jGrowl("Финансовая цель удалена", { theme: 'green' });
             }, 'json');
             return false;
         }
@@ -167,6 +168,8 @@ $(document).ready(function(){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     $('#tpopup').dialog('close');
+                    $.jGrowl("Финансовая цель сохранена", { theme: 'green' });
+
                 }
 
                 s = '<div class="object"><div class="ban"></div>'
