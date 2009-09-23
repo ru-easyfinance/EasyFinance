@@ -1,5 +1,11 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
-$(document).ready(function() {
+$(document).ready(function()
+{
+    /**
+     * переводит число типа 12341.34535 в 12 341.35
+     * для удобного отображения в виде баланса денег
+     * @return string
+     */
     function formatCurrency (num) {
         if (num=='undefined') num = 0;
         //num = num.toString().replace(/\$|\,/g,'');
@@ -15,10 +21,211 @@ $(document).ready(function() {
             num.substring(num.length-(4*i+3));
         return (((sign)?'':'-') + '' + num + '.' + cents);
     }
+    /**
+     * Переводит произвольную строку в вещественное число
+     * Пример: фы1в31ф3в1в.ф3ю.132вы переведёт в 13131.3132
+     * @return float
+     */
+    function tofloat(s)
+    {
+        var str = s.toString();
+        var l = str.length;
+        var rgx = /[0-9.]/;
+        var newstr ='';
+        for(var a=1;a<=l;a++)
+            {
+
+                rgx.test(str[a])
+                newstr +=str[a]
+            }
+        return parseFloat(newstr);
+    }
+    /**
+     * Печатает счета на траницу из глобального массива счетов
+     * @return void
+     */
+    function list()
+    {
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+        var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+        var spec_th = [ '',
+                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
+                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>',
+                    '<th Style="display:none">% годовых</th>',
+                    '<th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>'];//доп графы для групп
+        var arr = ['','','','',''];//содержимое каждой группы
+        var summ = [0,0,0,0,0];// сумма средств по каждой группе
+        var val = {};//сумма средств по каждой используемой валюте
+        var div = "<div class='cont'>&nbsp;<ul style='z-index: 100'>\n\
+                        <li class='edit' title='Редактировать'><a></a></li>\n\
+                        <li class='del' title='Удалить'><a></a></li>\n\
+                        <li class='add' title='Копировать'><a></a></li>\n\
+                    </ul></div>";
+        $('#operation_list').empty();
+        var type, str='';
+        var total = 0,
+            head_tr='   <tr>\n\
+                            <th> \n\
+                                Имя \n\
+                            </th>\n\
+                            <th COLSPAN=2 Style="padding-left:40px"> \n\
+                                Остаток \n\
+                            </th>\n\
+                            <th> \n\
+                                Рублёвый эквивалент \n\
+                            </th>\n\
+                            <th></th>\n\
+                        <tr>',
+            s='';
+        for (var key in account_list )// формирует массив с таблицей счетов по группам
+        {
+            type = g_types[account_list[key]['type']];
+            if (!isNaN(type)){
+                str = '<tr class="item" id="' + account_list[key]['id'] + '">';
+                str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
+                str = str + '<td class="total_balance">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
+                str = str + '<td class="cur">' + account_list[key]["cur"] + '</td>';
+                str = str + '<td class="def_cur">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
+                summ[type] = summ[type]+account_list[key]['def_cur'];
+                if (!val[account_list[key]['cur']]) {
+                    val[account_list[key]['cur']]=0;
+                }
+                val[account_list[key]['cur']] = tofloat( val[account_list[key]['cur']] )
+                    + tofloat(account_list[key]['total_balance']);
+                str = str + '<td class="mark no_over">' + div + '</td></tr>';
+                arr[type] = arr[type] + str;
+            }
+        }
+        for(key in arr)//выводит конечный массив
+        {
+            if (arr[key]){
+                total = total+tofloat(summ[key]);
+                s='<div><strong class="title">'+ g_name[key]
+                    + '</strong> : ' + formatCurrency(tofloat(summ[key]))
+                    + ' руб.<table  class="noborder">' + head_tr+arr[key]
+                    + '</table></div>';
+                $('#operation_list').append(s);
+            }
+        }
+/////////////////////формирование итогового поля//////////////////////
+        str='<strong class="title"> Итог </strong><table class="noborder">\n\
+            <tr><th>Сумма</th><th>Валюта</th></tr>';
+        for(key in val)
+        {
+            str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
+        }
+        str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td> руб.</td></tr>';
+        str = str + '</table>';
+        $('#operation_list').append(str);
+////////////////////////////////////////////////////////////////@todo перенести в цсс
+        $('.item td.cur').css('width','50px');
+        $('.item td.total_balance').css('text-align','right').css('padding-right','0');
+//////////////////////////////////////////////////////scrollbar
+        $('.operation_list').jScrollPane();
+    }
+    /**
+     * Функция реализует доступ к функциям на странице по стандартизированному запросу.
+     * Используется восновном при переадресации
+     * #add добавить счёт
+     * #edit[num] редактировать счёт
+     * @return void
+     */
+    function hash_api(str)
+    {
+        var s = str.toString();
+        if (s=='#add')
+        {
+            new_acc = 1;
+            accountAddVisible();
+        }
+        if(s.substr(0,5)=='#edit')
+        {
+            $('#blockCreateAccounts').show();
+            new_acc=0;
+            var account = account_list[s.substr(5)];
+            tid = account.type;
+            $.post(
+                "/accounts/changeType/",
+                {
+                    id: tid
+                },
+                function(data) {
+                    $('#account_form_fields').html(data);
+                    var key,val;
+                    $('select,input,textarea','#blockCreateAccounts tr td').each(function(){
+                        key = $(this).attr('id');
+                        val = account[key];
+                        if (val){
+                            $(this).val(val);
+                        }
+
+                    });
+                    $(document).scrollTop(300);
+                    $('#account_form_fields table').attr('id',account.id);
+                    $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+account.id+'" />');
+                },
+                'text'//@todo заменить на ясон; требует изменения модели и контроллера
+            );
+        }
+    }
+    /**
+     * хак для операций.подгружает счёт при его добавлении сразу(раньше требовалось обновить страницу).
+     * @param {}//.id - accoun id; .cur_id - currency id
+     * @return void
+     */
+    function hack4operation(param)
+    {
+        var id = param.id;
+        var cur_id = param.cur_id;
+        var opt =   '<option currency="' + cur_id +
+                    '" value="' + id +
+                    '" >' + account_list[id]['name'] +
+                    '(' + account_list[id]['cur'] +
+                    ')</option>';
+        $('#op_account').append(opt);
+    }
+    /**
+     * скрывает поле с добавлением счёта
+     * @return void
+     */
+    function accountAddUnvisible() {
+        $('#blockCreateAccounts').hide();
+    }
+    /**
+     * раскрывает поле с добавлением счёта
+     * @return void
+     */
+    function accountAddVisible() {
+        changeTypeAccount($('#type_account').val());
+        $('#blockCreateAccounts').show();
+        $('#blockCreateAccounts').val('');
+    }
+    /**
+     * функция - пережиток прошлого;
+     * перезагружает account_list;
+     * не рекомендует
+     */
+    function update_list(param)
+    {
+        $.post('/accounts/accountslist/',
+            {},
+            function(data){
+                account_list = data;
+                list();
+                var s = location.hash;
+                hash_api(s);
+                if (param){
+                    hack4operation(param);
+                }
+            },
+            'json'
+        );
+    }
+
 
     var new_acc = 1;
-    var aid;
     var tid;
+    var account_list;
 
     $('#addacc').click(function(){
         new_acc = 1;
@@ -31,230 +238,41 @@ $(document).ready(function() {
         changeTypeAccount($(this).attr('value'));
     });
     $('#btnAddAccount').click(function(){
-        str = $('#blockCreateAccounts #name').val();
-        l = 1;
+        var str = $('#blockCreateAccounts #name').val();
+        var id =$('#blockCreateAccounts').find('table').attr('id');
+        var l = 1;
+        var s;
         $('.item .name').each(function(){
             s = $(this).text();
-            if(s==str)
-                l=0;
-        });
-        
-            if (new_acc){
-                if (l){
-                    createNewAccount();
-                }
+            if (id != $(this).closest('tr').find('.id').attr('value')){
+                if(s==str)
+                    l=0;
             }
-            else{
+        });
+        if (l){
+            if (new_acc)
+            {
+                createNewAccount();
+            }
+            else
+            {
                 correctaccount();
             }
-    });
-    $('.delAccount').click(function(){
-        
-    });
-
-    function accountAddUnvisible() {
-        $('#blockCreateAccounts').hide();
-    }
-
-    function accountAddVisible() {
-        changeTypeAccount($('#type_account').val());
-        $('#blockCreateAccounts').show();
-        $('#blockCreateAccounts').val('');
-    }
-
-    function in_array(a,arr)
-    {
-        for (keyssasdsadfasf in arr)//no uses name=)
+        }
+        else
         {
-            if (a == arr[keyssasdsadfasf])
-                return true;
-        } 
-        return false;
-    }
+            $.jGrowl("Такой счёт уже существует!", {theme: 'red'});
+        }
+    });
+
+
+
+
     // upload account
-    function update_list(param)
-    {
-        g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
-        g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
-        spec_th = [ '',
-                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
-                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>',
-                    '<th Style="display:none">% годовых</th>',
-                    '<th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>'];//доп графы для групп
-        var arr = ['','','','',''];//содержимое каждой группы
-        var summ = [0,0,0,0,0];// сумма средств по каждой группе
-        var val = {};//сумма средств по каждой используемой валюте
-        var main_keys = ['name','total_balance', 'cur', 'def_cur'];
-        $.post('/accounts/accountslist/',
-            {},
-            function(data){
-                len = data.length;
-                div = "<div class='cont'>&nbsp;<ul style='z-index: 100'>\n\
-                        <li class='edit' title='Редактировать'><a></a></li>\n\
-                        <li class='del' title='Удалить'><a></a></li>\n\
-                        <li class='add' title='Копировать'><a></a></li>\n\
-                    </ul></div>";
-                $('#operation_list').empty();
-                for (key in data )
-                {
-                    i = g_types[data[key]['type']];
-                    str = '<tr class="item">';
-                    str = str + '<td class="type" value="'+data[key]['type']+'">'+data[key]['type']+'</td>';
-                    str = str + '<td class="id" value="'+data[key]['id']+'">'+data[key]['id']+'</td>';
-                    for (l in main_keys)
-                    {
-                        k = main_keys[l];
-                        if (k == 'total_balance')
-                            str = str + '<td class='+k+'>'+formatCurrency(data[key]['fields'][k])+ '</td>';
-                        else if( k == 'name')
-                            str = str + '<td class='+k+'>'+data[key]['fields'][k]+ '</td>';
-                        else if(k=='def_cur')
-                            str = str + '<td class='+k+'>'+data[key][k]+ ' руб. </td>';
-                        else
-                            str = str + '<td class='+k+'>'+data[key][k]+ '</td>';
-                    }
-                    for( k in data[key]['fields'])//добавляются все поля
-                    {
-                        if (!in_array(k,main_keys))
-                        {
-                            str = str + '<td class="'+k+'">';// value='+data[key]['fields'][k]+'
-                            str = str +data[key]['fields'][k]+ '</td>';
-                        }
-                    }
-                    str = str + '<td class="cat">'+data[key]['cat']+'</td>';
-                    //str = str + '<td class="cur">'+data[key]['cur']+'</td>';
-                    //str = str + '<td class="def_cur">'+formatCurrency(data[key]['def_cur'])+' руб.</td>';
-                    summ[i] = summ[i]+data[key]['def_cur'];
-                    if (!val[data[key]['cur']]) {
-                        val[data[key]['cur']]=0;
-                    }
-                    val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                        + parseFloat(data[key]['fields']['total_balance']);
-                    switch (i)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
-                            break;
-                        case 2:
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][2])+'</td>';
-                            break;
-                        case 3:
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][0])+'%</td>';
-                            break;
-                        case 4:
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][1])+'%</td>';
-                            str = str + '<td class="special">'+formatCurrency(data[key]['special'][2])+'</td>';
-                            break;
-                    }
-                    str = str+'<td class="mark no_over">'+ div +'</td></tr>';
-                    arr[i] = arr[i]+str;
+    
+    
+    
 
-                    //todo hide show
-                }
-                total = 0;
-                for(key in arr)
-                {
-                    total = total+(parseFloat(summ[key]*100))/100;
-                    head_tr = '<tr>\n\
-                                    <th> \n\
-                                        Имя \n\
-                                    </th>\n\
-                                    <th COLSPAN=2 Style="padding-left:40px"> \n\
-                                        Остаток \n\
-                                    </th>\n\
-                                    <th> \n\
-                                        Рублёвый эквивалент \n\
-                                    </th><th></th>';
-                    head_tr = head_tr + spec_th[key];
-                    head_tr = head_tr + '<tr>';
-                    
-                    s='<div><strong class="title">'+ g_name[key] + '</strong> : '+formatCurrency(parseFloat(summ[key]*100)/100)+' руб.<table  class="noborder">'+head_tr+arr[key]+'</table></div>';
-                    if (arr[key])
-                    $('#operation_list').append(s);
-                }
-                /////////////////////формирование итогового поля//////////////////////
-                str='<strong class="title"> Итог </strong><table class="noborder">\n\
-                        <tr><th>Сумма</th><th>Валюта</th></tr>';
-                for(key in val)
-                {
-                    str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
-                }
-                str = str+'<tr><td><b>Итого:</b>  '+formatCurrency(total)+'</td><td> руб.</td></tr>';
-                str = str + '</table>';
-                 $('#operation_list').append(str);
-                ////////////////////////////////////////////////////////////////
-
-
-                $('.item td').hide();
-                $('.item td.name').show();
-                $('.item td.cur').show().css('width','50px');
-                //$('.item td.cat').show();
-                $('.item td.def_cur').show();
-                //$('.item td.special').show();
-                //$('.item td.description').show();
-                $('.item td.total_balance').show().css('text-align','right').css('padding-right','0');
-
-                $('.item td.mark').show();
-                
-                //$('.jScrollPaneContainer').css('height', '500px')
-                if (param){
-                    id = param.id;
-                    cur_id = param.cur_id;
-                    abbr = $('tr.item .id#'+id).closest('tr').find('.cur').text();
-                    title = $('tr.item .id#'+id).closest('tr').find('.name').text();
-                    opt = '<option currency="'+cur_id+'" value="'+id+'" >'+title+'('+abbr+')</option>';
-                    $('#op_account').append(opt);
-                }
-                //$('#operation_list').height('height', '300px');
-                
-              
-                    s = location.hash;
-                    if (s=='#add')
-                    {
-                        new_acc = 1;
-                        accountAddVisible();
-                    }
-                    if(s.substr(0,2)=='#?')
-                    {
-                        f = s.substr(2);
-                        $('#blockCreateAccounts').show();
-                                id =f;
-                                new_acc=0;
-                                a = 'tr.item .id[value="'+f+'"]'
-                                tid = $('tr.item .id[value="'+f+'"]').closest('.item').find('.type').attr('value');
-                                var th = $('tr.item .id[value="'+f+'"]').closest('.item');
-                                $.post(
-                                    "/accounts/changeType/",
-                                    {
-                                        id: tid
-                                    },
-                                     function(data) {
-                                        $('#account_form_fields').html(data);
-                                        $(th).find('td').each(function(){
-                                            key = $(this).attr('class');
-                                            val = $(this).text();
-                                            $('#blockCreateAccounts').find('#'+key).val(val) ;
-                                            $(document).scrollTop(300);
-                                        });
-                                        val = $(th).find('.total_balance').text();
-
-
-                                        $('#blockCreateAccounts').find('#starter_balance').val($(th).find('.starter_balance').text());
-                                        $('#account_form_fields table').attr('id',$(th).find('.id').attr('value'));
-                                        $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+$(th).find('.id').attr('value')+'" />');
-                                    },
-                                    'text'
-                                );
-                    }
-            $('.operation_list').jScrollPane();},
-            'json'
-        );
-    };
     update_list();
     //acount click
     
@@ -302,31 +320,15 @@ $(document).ready(function() {
                   ready: true // Show the tooltip when ready
                },
                hide: false, // Don't specify a hide event
-
                style: {
                   name: 'light',
-                  //width: { max: 700 }, // Set a high max width so the text doesn't wrap
                   tip: true // Give them tips with auto corner detection
                }
             });
             $('tr.item').removeClass('act');
             $(this).addClass('act');
-//            $('.operation_list').css('width', '570px');
-//            $('#operation_list').css('width', '507px');
-//            //alert($('tr.act').position().top+$('tr.act').closest('table').position().top+);
-//            top = e.pageY- ($('tr.act').position().top+$('tr.act').closest('table').position().top+$('.operation_list').position().top+15);
-//            alert(top);
-//            $('#operation_list').css('top', top+'px');
-//            $('.operation_list').css('overflow-y', 'hidden').css('overflow-x', 'visible');
-//            $('.operation_list tr').css('overflow', 'visible');
-//            $('.operation_list table').css('overflow', 'visible');
-//            $('.operation_list div').css('overflow', 'visible');
             
     });
-
-    //$('#operation_list').css('height', '300px');
-    //$('.operation_list').addClass('.autoscroll').css('height', '250px')
-    //Редактирование по двойному щелчку
     $('tr.item').live('dblclick',
         function(){
              $(this).find('li.edit').click();
@@ -351,7 +353,7 @@ $(document).ready(function() {
                         $('#op_account option').each(function(){
                             val = $(this).val();
                             if (val == id) {
-                                $.jGrowl("Счёт удалён", { theme: 'green'});
+                                $.jGrowl("Счёт удалён", {theme: 'green'});
                                 $(this).remove();
                             }
 
@@ -454,7 +456,7 @@ $(document).ready(function() {
                 data: $("#formAccount input,select,textarea"),
                 success: function(data) {
                     var id = data;
-                    $.jGrowl("Добавлен счёт", { theme: 'green'});
+                    $.jGrowl("Добавлен счёт", {theme: 'green'});
                     update_list({id: id,cur_id: cur_id});
                     accountAddUnvisible();
                     
@@ -468,7 +470,7 @@ $(document).ready(function() {
                 id :$('#blockCreateAccounts').find('table').attr('id')
             },
             function(data){
-                $.jGrowl("Счёт сохранён", { theme: 'green'});
+                $.jGrowl("Счёт сохранён", {theme: 'green'});
             },
             'text'
         );

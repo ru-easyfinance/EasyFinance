@@ -340,24 +340,22 @@ class Accounts_Model
             $res[$val]['cur']=$cur[$key];
             $res[$val]['id']=$id[$key];
 
-            $res[$val]['fields']=array();
-
             foreach ($values as $k=>$v)
             {
                 if ($values[$k]['account_fieldsaccount_field_id'] == $val)
                 {
-                    $res[$val]['fields'][$values[$k]['field_name']]=$values[$k]['int_value'] .
+                    $res[$val][$values[$k]['field_name']]=$values[$k]['int_value'] .
                     $values[$k]['date_value'] .
                     $values[$k]['string_value'];
                 }//value
             }
             $res[$val]['cat'] = $type_name[$key];
             $total=(float)($mod->getTotalSum($val));
-            $res[$val]['fields']['total_balance'] = $total;
+            $res[$val]['total_balance'] = $total;
            //die(print_r( Core::getInstance()->user->getUserCurrency()));
             $ucur =Core::getInstance()->user->getUserCurrency();
             $res[$val]['def_cur'] =round(
-                $res[$val]['fields']['total_balance']* $ucur[$cur_id[$key]]['value'],
+                $res[$val]['total_balance']* $ucur[$cur_id[$key]]['value'],
                 2
                 );
 //die(print_r( Core::getInstance()->user->user_currency));

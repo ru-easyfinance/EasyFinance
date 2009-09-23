@@ -624,9 +624,13 @@ $('.navigation  li span').click(function(){
 
        $('.accounts .add').click(function(){
            document.location='/accounts/#add';
+           hash_api('#add');//временный хак до полного перехода на аякс
        })
+
+
        $('.accounts li a').live('click',function(){
-           document.location='/accounts/#?'+$(this).find('div.id').attr('value');
+           document.location='/accounts/#edit'+$(this).find('div.id').attr('value');
+           hash_api('#edit'+$(this).find('div.id').attr('value'));//временный хак до полного перехода на аякс
        })
       ///////////////////////periodic/////////////////////////////////////////
       data = res['periodic'];
@@ -816,8 +820,8 @@ $('.navigation  li span').click(function(){
         //@TODO Сохранять значение в куках и потом читать их из куков
         $(this).closest('div.ramka3').find('div.inside').toggle();
         $(this).toggleClass('uparrow').toggleClass('over3');
-        var title = $(this).attr('title') == 'свернуть' ? 'развернуть' : 'свернуть'
-        $(this).attr('title',title);
+        var title = $(this).find('a').attr('title') == 'свернуть' ? 'развернуть' : 'свернуть'
+        $(this).find('a').attr('title',title);
         //$(this).closest('div.ramka3').className("over2");
     }).find('a').removeAttr('href');
 
