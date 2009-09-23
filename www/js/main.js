@@ -614,7 +614,6 @@ $('li#c2').click(function(){a_list()})
                 {
                     total = total+(parseInt(summ[key]*100))/100;
                     s='<ul>'+arr[key]+'</ul>';
-                    alert(s)
                     if (key>=0 && key <=6)
                         $('.accounts #'+key).html(s);
                 }
