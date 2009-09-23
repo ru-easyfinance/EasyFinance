@@ -262,8 +262,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .info_block dl dt.twitter span { padding-right: 63px; background-position: 100% -155px; }
 .info_block dl dd ul li { margin-bottom: 5px; padding-left: 17px; background: url('/img/i/li.gif') no-repeat 0 9px; }
 .info_block dl dd ul li a { color: #474747; }
-.info_block .addmessage, #footer .addmessage { display: block; position: absolute; top: 30px; left: -185px; width: 161px; height: 46px; text-indent: -999px; overflow: hidden; background: url('/img/i/buttons.png') no-repeat 0 0; }
-
+.info_block .addmessage, #footer .addmessage { display: block; position: fixed; top: 35%; right: -10px; width: 28px; height: 161px; text-indent: -999px; overflow: hidden; background: url('/img/i/button_addmsg.jpg') no-repeat 0 0; }
 
 .menu3 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
 
@@ -370,27 +369,27 @@ ul.menu4 li#m_last a { background: none; }
 .block1 .title h2, .block1 .experts h2, .block1 .budget2 h2, .block1 .transaction h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
 .block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; }
 
-.block1 ul.control { position: relative; margin: 0 0 12px 0; width: 163px; overflow: hidden; height: 32px; background: url('/img/i/icons_control.png') no-repeat 0 0; }
+.block1 ul.control { position: relative; margin: 0 0 12px 0; width: 163px; overflow: hidden; height: 32px;}
 .block1 ul.control li { position: absolute; top: 0; width: 32px; height: 32px; }
 .block1 ul.control li a { display:block; width: 32px; height: 32px; text-indent: -999px; overflow: hidden; }
-.block1 ul.control li.act, .block1 ul.control li#c6,  .block1 ul.control li#c7 { background: url('/img/i/icons_control.png') no-repeat 0 0; }
+.block1 ul.control li.act { background: url('/img/i/icons_control.png') no-repeat 0 0; }
 
-.block1 ul.control li#c1 { left: 0; }
+.block1 ul.control li#c1 { width : 34px;left: 0;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: 0px 0px; }
 .block1 ul.control li#c1.act { background-position: 0 -33px; }
-.block1 ul.control li#c2 { left: 33px; }
-.block1 ul.control li#c2.act { background-position: -33px -33px; }
-.block1 ul.control li#c3 { left: 66px; }
+.block1 ul.control li#c2 { left: 33px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -131px 0px; }
+.block1 ul.control li#c2.act { background-position: -131px -33px; }
+.block1 ul.control li#c3 { left: 66px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -65px 0px; }
 .block1 ul.control li#c3.act { background-position: -65px -33px; }
-.block1 ul.control li#c4 { left: 99px; }
-.block1 ul.control li#c4.act { background-position: -97px -33px; }
-.block1 ul.control li#c5 { left: 132px; }
-.block1 ul.control li#c5.act { background-position: -129px -33px; }
-
+.block1 ul.control li#c4 { left: 99px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -33px 0px; }
+.block1 ul.control li#c4.act { background-position: -33px -33px; }
+.block1 ul.control li#c5 { left: 132px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -165px 0px; }
+.block1 ul.control li#c5.act { background-position: -165px -34px; }
+/*
 .block1 ul.control li#c6 { left: 66px; background-position: -165px 0; }
 .block1 ul.control li#c6.act { background-position: -165px -33px; }
 .block1 ul.control li#c7 { left: 99px; background-position: -197px 0; }
 .block1 ul.control li#c7.act { background-position: -197px -33px; }
-
+*/
 
 
 dl.bill_list { margin: 0 10px; }
@@ -1340,7 +1339,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
 #footer .creator { position: absolute; top: 32px; right: 5px; width: 210px; padding-bottom: 19px; font-size: 10px; line-height: 11px; color: #7f7f7f; text-align: right; background: url('/img/i/nota.gif') no-repeat 100% 100%; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
-#footer .addmessage { cursor: pointer; top: 15px; left: 20px; }
+#footer .addmessage { cursor: pointer; left: 0px; }
 
 
 #aboutproject .inside div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:absolute}
