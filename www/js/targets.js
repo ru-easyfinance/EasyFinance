@@ -221,7 +221,26 @@ $(document).ready(function(){
     {
         $("div.financobject_block .add span").click()
     }
-
+    if(s.substr(0,6)=='#edit/')
+    {
+        var id = s.substr(6)
+        
+        var f = $('.object[tid="'+id+'"]');
+        clearForm();
+        $('#key').val(f.attr('tid'));
+        $('#type').val(f.attr('type'));
+        $('#title').val(f.attr('title'));
+        $('#amount').val(f.attr('amount'));
+        $('#start').val(f.attr('start'));
+        $('#end').val(f.attr('end'));
+        $('#photo').val(f.attr('photo'));
+        $('#url').val(f.attr('url'));
+        $('#comment').val(f.attr('comment'));
+        $('#account').val(f.attr('account'));
+        $('#visible').val(f.attr('visible'));
+        $('#tpopup').dialog('open');
+        return false;
+    }
     ///////////////////////////////////////////////////////////
     function tofloat(s)
     {

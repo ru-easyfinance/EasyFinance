@@ -55,7 +55,7 @@ function print_targets(count)
                     data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
                     data[key]['percent_done'] + '%;"><span>' +
                     data[key]['percent_done'] + '</span></div></div><div class="date"><span>Целевая дата:' +
-                    data[key]['end'] + '</span> &nbsp;&nbsp;&nbsp; Прогнозная дата: 0' +
+                    data[key]['end'] + '</span>' +
                     "</div><ul><li class='edit'>редактировать</li><li class='del'>удалить</li></ul></div></div></div>";
             }
             str = str + '<div class="add2"><span>Добавить финансовую цель</span></div>';
@@ -70,7 +70,7 @@ function add_target()
 };
 function edit_target(target)
 {
-    document.location = '/targets/#?'+target ;//@todo :(( неполучается наладить((
+    document.location = '/targets/#edit/'+target ;//@todo :(( неполучается наладить((
 };
 
 function del_target(target)
