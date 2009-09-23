@@ -49,27 +49,15 @@ class Info_Controller extends Template_Controller
      */
     function index()
     {
-        $this->tpl->append('js','jquery/jquery.js');
-        $this->tpl->append('js','jquery/ui.core.js');
-        $this->tpl->append('js','jquery/ui.sortable.js');
-        $this->tpl->append('js','jquery/ui.draggable.js');
-        $this->tpl->append('js','jquery/ui.dialog.js');
-        $this->tpl->append('js','info/functions.js');
-        $this->tpl->append('js','info/view.js');
-
         // Операция
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('category', get_tree_select());
         $targets = new Targets_Model();
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
-        $this->tpl->append('css','jquery/jquery.calculator.css');
-        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
-        $this->tpl->append('js','jquery/ui.core.js');
-        $this->tpl->append('js','jquery/ui.datepicker.js');
-        $this->tpl->append('js','jquery/i18n/jquery-ui-i18n.js');
-        $this->tpl->append('js','jquery/jquery.calculator.min.js');
-        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
+
         $this->tpl->append('js','jquery/tinysort.js');
+        $this->tpl->append('js','info/functions.js');
+        $this->tpl->append('js','info/view.js');
     }
 
 ////////////targets/////////////////////////////////////////
