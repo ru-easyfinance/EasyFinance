@@ -95,7 +95,11 @@ class Core
         // И обработчик ошибок для бд
         $db->setErrorHandler('databaseErrorHandler');
         $db->query("SET character_set_client = 'utf8', character_set_connection = 'utf8',character_set_results = 'utf8'");
-
+        Core::getInstance()->db = $db;
+        //Логгируем все запросы. Только во включенном режиме DEBUG
+        if (DEBUG) {
+            $db->setLogger('databaseLogger');
+        }
     }
 
     /**

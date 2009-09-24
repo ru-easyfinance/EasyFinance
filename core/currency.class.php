@@ -26,6 +26,9 @@ class Currency implements IteratorAggregate,  ArrayAccess
      */
     function __construct()
     {
+        if (is_null(Core::getInstance()->db)) {
+            Core::getInstance()->initDB();
+        }
         $this->db = Core::getInstance()->db;
         
         // Загружаем список валют
