@@ -89,9 +89,6 @@ class Report_Controller extends Template_Controller
     /**
      * 
      */
-    function abc(){
-        die(json_encode($this->model->ShowDetailedIncome()));
-    }
 
     function getData()
     {
@@ -125,7 +122,11 @@ class Report_Controller extends Template_Controller
                 die(json_encode($this->model->CompareIncome($start, $end, $start2, $end2, $account))  );
                 break;
             case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
+                die(json_encode($this->model->AverageIncome($start, $end, $start2, $end2, $account))  );
+                break;
             case 'txt_loss_avg_difference': //Сравнение расходов со средним за периоды
+                die(json_encode($this->model->AverageWaste($start, $end, $start2, $end2, $account))  );
+                break;
             default:
                 die('
                     "elements": [{

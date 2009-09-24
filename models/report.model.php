@@ -176,8 +176,8 @@ class Report_Model
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money>0
-            ORDER BY c.cat_name";
+            AND a.account_id=? AND op.money>0 
+            ORDER BY c.cat_name";   
         return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
@@ -186,7 +186,7 @@ class Report_Model
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money>0
+            AND op.money>0 
             ORDER BY c.cat_name";
         return $this->db->query($sql, $date1, $date2, $this->user->getId());    
         }
@@ -200,8 +200,8 @@ class Report_Model
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money<0
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? AND op.money<0 
             ORDER BY c.cat_name";
         return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else {
@@ -210,37 +210,221 @@ class Report_Model
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money<0
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND op.money<0 
             ORDER BY c.cat_name";
         return $this->db->query($sql, $date1, $date2, $this->user->getId());
         }
     }
 
     function CompareWaste($date1='', $date2='', $date3='', $date4='', $account=''){
-        $sql = "SELECT c.cat_name, sum(op.money)
+        if ($account != 0) {
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=? 
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=?  
+            GROUP BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        }else{
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        }
+    }
+
+    function CompareIncome($date1='', $date2='', $date3='', $date4='', $account=''){
+        if ($account != 0) {
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money<0
-            GROUP BY op.cat_id
-            ORDER BY c.cat_name";
-        $a = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
-        $sql = "SELECT c.cat_name, sum(op.money)
-            FROM operation op
+            AND a.account_id=?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money<0
-            GROUP BY op.money
-            ORDER BY c.cat_name";
-        $b = $this->db->query($sql, $date3, $date4, $this->user->getId(), $account);
-            return 123;
-
+            AND a.account_id=?
+            GROUP BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        }else{
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name";
+        return $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        }
     }
 
-    function CompareIncome($date1='', $date2='', $date3='', $date4='', $account=''){
+    public function calcDaysDiff($dateFrom='',$dateTo='') {
+  	// Переводим даты в формат ISO
+  	list($day,$month,$year) = explode(".", $dateFrom);
+	$dateFrom = $year."-".$month."-".$day;
+	list($day,$month,$year) = explode(".", $dateTo);
+	$dateTo = $year."-".$month."-".$day;
+	// Создаем объекты с датами
+	$dtFromS = strtotime($dateFrom);
+  	$dtToS = strtotime($dateTo);
+  	// Получаем количество секунд с начала эпохи, вычисляем разницу и переводим ее в дни
+  	$dtDiffS = $dtToS-$dtFromS;
+  	$dtDiffM = $dtDiffS/60;
+  	$dtDiffH = $dtDiffM/60;
+  	$dtDiffD = $dtDiffH/24+1;
 
+  	return $dtDiffD;
+  }
+
+    function AverageIncome($date1='', $date2='', $date3='', $date4='', $account=''){
+        //$mas[0] = calcDaysDiff($date1, $date2);
+        //$mas[1] = calcDaysDiff($date3, $date4);
+
+        $dtFromS = strtotime($date1);
+  	$dtToS = strtotime($date2);
+        $dtDiffS = $dtToS-$dtFromS;
+  	$dtDiffM = $dtDiffS/60;
+  	$dtDiffH = $dtDiffM/60;
+  	$dtDiffD = $dtDiffH/24+1;
+        $mas[0] = $dtDiffD;
+
+        $dtFromS = strtotime($date3);
+  	$dtToS = strtotime($date4);
+        $dtDiffS = $dtToS-$dtFromS;
+  	$dtDiffM = $dtDiffS/60;
+  	$dtDiffH = $dtDiffM/60;
+  	$dtDiffD = $dtDiffH/24+1;
+        $mas[1] = $dtDiffD;//*/
+        if ($account != 0) {
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=?
+            GROUP BY c.cat_name";
+        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        }else{
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name";
+        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        }
+        $mas[2] = $que;
+        return $mas;
     }
+
+    function AverageWaste($date1='', $date2='', $date3='', $date4='', $account=''){
+        //$mas[0] = calcDaysDiff($date1, $date2);
+        //$mas[1] = calcDaysDiff($date3, $date4);
+
+        $dtFromS = strtotime($date1);
+  	$dtToS = strtotime($date2);
+        $dtDiffS = $dtToS-$dtFromS;
+  	$dtDiffM = $dtDiffS/60;
+  	$dtDiffH = $dtDiffM/60;
+  	$dtDiffD = $dtDiffH/24+1;
+        $mas[0] = $dtDiffD;
+
+        $dtFromS = strtotime($date3);
+  	$dtToS = strtotime($date4);
+        $dtDiffS = $dtToS-$dtFromS;
+  	$dtDiffM = $dtDiffS/60;
+  	$dtDiffH = $dtDiffM/60;
+  	$dtDiffD = $dtDiffH/24+1;
+        $mas[1] = $dtDiffD;//*/
+        if ($account != 0) {
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND a.account_id=?
+            GROUP BY c.cat_name";
+        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        }else{
+        $sql = "
+            SELECT c.cat_name, sum(op.money) as su, 1 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name
+            UNION
+            SELECT c.cat_name, sum(op.money) as su, 2 as per
+                FROM operation op
+            LEFT JOIN accounts a ON a.account_id=op.account_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
+            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            GROUP BY c.cat_name";
+        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        }
+        $mas[2] = $que;
+        return $mas;
+    }
+
 }
