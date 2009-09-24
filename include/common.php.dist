@@ -69,6 +69,9 @@ $tpl->append('css','jquery/jScrollPane.css');
 $tpl->append('js','jquery/jquery.mousewheel.js');
 $tpl->append('js','jquery/jquery.em.js');
 $tpl->append('js','jquery/jScrollPane.js');
+        $tpl->append('js','jquery/jquery.maskedinput-1.2.2.min.js');
+        $tpl->append('js','jquery/jquery.timepicker-table.min.js');
+        $tpl->append('js','jquery/ui.tabs.js');
 ///-->
 
 $tpl->append('js','main.js');

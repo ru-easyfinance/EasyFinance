@@ -137,3 +137,125 @@
 						<div class="cb"><div></div></div>
 					</div>
 				<!--/Ввод операции-->
+
+                                <div id="op_addtocalend"></div>
+
+
+
+        <div id="op_dialog_event" title="Событие" style="display: none;">
+            <div id="op_tabs">
+                <ul>
+                        <li><a href="#op_tabs-1">Событие</a></li>
+                        <li><a href="#op_tabs-2">Регулярная транзакция</a></li>
+                </ul>
+                <div id="op_tabs-1">
+                    <!-- Форма события календаря -->
+                        <input type="hidden" name="op_key" id="op_key" />
+                        <input type="hidden" name="op_chain" id="op_chain" />
+                        <table>
+                            <tr>
+                                <td><label for="op_title">Заголовок</label></td>
+                                <td><input type="text" name="op_title" id="op_title" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_adate">Дата</label></td>
+                                <td><input type="text" name="op_adate" id="op_adate" value="" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr id="tr_date_start">
+                                <td><label for="op_date_start">Дата начала</label></td>
+                                <td><input type="text" name="op_date_start" id="op_date_start" value="" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_time">Время</label></td>
+                                <td><input type="text" name="op_time" id="op_time" value="" class="text ui-widget-content time" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_repeat">Повторять</label></td>
+                                <td><select name="op_repeat" id="op_repeat" class="ui-widget-content">
+                                    <option value="0">Без повторения</option>
+                                    <option value="1">Каждый день</option>
+                                    <option value="3">Каждый Пн., Ср. и Пт.</option>
+                                    <option value="4">Каждый Вт. и Чт.</option>
+                                    <option value="5">По будням</option>
+                                    <option value="6">По выходным</option>
+                                    <option value="7">Каждую неделю</option>
+                                    <option value="30">Каждый месяц</option>
+                                    <!-- <option value="90">Ежеквартально</option> -->
+                                    <option value="365">Каждый год</option>
+                                </select></td>
+                            </tr>
+                            <tr id="op_tr_count">
+                                <td><label for="op_count">Повторить</label></td>
+                                <td>
+                                    <div>
+                                        <input type="radio" name="op_rep_type" class="rep_type" value="1">
+                                        <select name="op_count" id="op_count" class="ui-widget-content"></select>
+                                        <label for="op_count">&nbsp;раз&nbsp;</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="op_rep_type" class="rep_type" value="2">
+                                        <input type="checkbox" name="op_infinity" id="op_infinity" value="1"><label for="infinity">Бесконечно</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="op_rep_type" class="rep_type" value="3">
+                                        <input type="text" name="op_date_end" id="op_date_end" value="" class="text ui-widget-content" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_comment">Комментарий</label></td>
+                                <td><textarea id="op_comment" name="op_comment" class="text ui-widget-content"></textarea></td>
+                            </tr>
+                        </table>
+
+                </div>
+                <div id="op_tabs-2">
+                    <!-- Форма для Регулярной транзакции -->
+                    <form id="op_perform">
+                        <input type="hidden" name="op_key" id="op_pkey" />
+                        <input type="hidden" name="op_chain" id="op_pchain" />
+                        <table>
+                            <tr>
+                                <td><label for="op_ptitle">Заголовок</label></td>
+                                <td><input type="text" name="op_title" id="op_ptitle" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_pdate">Дата</label></td>
+                                <td><input type="text" name="op_date" id="op_pdate" value="" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_pamount">Сумма</label></td>
+                                <td><input type="text" name="op_amount" id="op_pamount" value="" class="text ui-widget-content" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_prepeat">Повторять</label></td>
+                                <td><select name="op_repeat" id="op_prepeat" class="ui-widget-content">
+                                    <option value="0">Без повторения</option>
+                                    <option value="1">Каждый день</option>
+                                    <option value="7">Каждую неделю</option>
+                                    <option value="30">Каждый месяц</option>
+                                    <option value="90">Ежеквартально</option>
+                                    <option value="365">Каждый год</option>
+                                </select></td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_pcount">Повторить</label></td>
+                                <td>
+                                    <div>
+                                        <select name="op_count" id="op_pcount" class="ui-widget-content"></select>
+                                        <label for="op_pcount">&nbsp;раз&nbsp;</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="op_infinity" id="op_pinfinity" value="1"><label for="op_pinfinity">Бесконечно</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="op_pcomment">Комментарий</label></td>
+                                <td><textarea id="op_pcomment" name="op_comment" class="text ui-widget-content"></textarea></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div></div>
+                                <!-- -->

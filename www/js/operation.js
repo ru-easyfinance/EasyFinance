@@ -105,7 +105,7 @@ $(document).ready(function() {
                         + '<td class="light"><span>'+data[v].date+'</span></td>'
                         + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                         + '<td class="no_over big"'
-                            +'<div class="cont"><span>'+data[v].account_name+'</span><ul style="z-index:100">'
+                            +'<div class="cont"><span>'+data[v].account_name+'</span><ul>'
                             +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                             +'<li class="del"><a title="Удалить">Удалить</a></li>'
                             +'<li class="add"><a title="Копировать">Копировать</a></li>'
