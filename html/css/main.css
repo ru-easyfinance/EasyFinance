@@ -932,7 +932,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 
 
 #popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
-#popupadd_login .f_field { position: relative; margin: 0 0 8px 69px; }
+#popupadd_login .f_field { position: relative; margin: 0 0 8px 68px; }
 #popupadd_login .inlinebottom { height: 20px; width: 230px; margin-top:-5px; }
 #popupadd_login .inlinebottom  a.first{ float:left;font-size:11px;margin-left:0px;margin-top:10px; }
 #popupadd_login .inlinebottom  a { float:left;font-size:11px;margin-left:10px;margin-top:10px; color:#6CBD45;}
@@ -944,7 +944,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 #popupadd_login .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("../i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
 #popupadd_login .cb { height:25px;overflow:hidden;position:relative;width:383px; }
 
-#popupadd_login .f_field label { display:block;left:-70px;position:absolute;text-align:right;top:3px;font-family:Arial;Font-size:12px;color:#8B8C8B;}
+#popupadd_login .f_field label { display:block;left:-67px;position:absolute;text-align:right;top:3px;font-family:Arial;Font-size:12px;color:#8B8C8B;}
 #popupadd_login .f_field input { color: #b2b2b2; width: 158px; //width: 152px;font-family:Arial;Font-size:12px;color:#8B8C8B;border:1px solid #8B8C8B; }
 #popupadd_login  .f_field input { height:20px;width:107px; }
 
