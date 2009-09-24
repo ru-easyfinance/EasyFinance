@@ -31,7 +31,8 @@
 		<ul class="menu2">
 			<li><a href="#">Личный кабинет</a></li>
 			<li><a href="#">Настройки профиля</a></li>
-			<li><a href="#">Войти<img class="loginMenu" src="./i/login.gif" /></a></li>
+			<li style="display:none;"><a href="#">Войти<img class="loginMenu" src="./i/login.gif" /></a></li>
+			<li><a href="#">Ромка Абрамович<img class="loginMenu" src="./i/unlogin.gif" title="Выход"/></a></li>
 		</ul>
 	</div>
 <!--шапка-->
@@ -40,11 +41,11 @@
 		<div class="slogan">Система управления личными финансам</div>
 	<!--авторизация-->
 
-<div id="popupadd_login" style="overflow: hidden; display: block; position: absolute; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 350px; top: 5px; left: 404px;" class="ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog_event">
+<div id="popupadd_login" style="overflow: hidden; display: block; position: absolute; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 260px; top: 5px; left: 404px;" class="ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable ui-resizable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog_event">
 
 <a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button" unselectable="on" style="-moz-user-select: none;">
 
-<span class="ui-icon ui-icon-closethick" unselectable="on" style="-moz-user-select: none;margin-top:-45px;">Закрыть</span></a>
+<span class="ui-icon ui-icon-closethick" unselectable="on" style="-moz-user-select: none;margin-top:-55px;">Закрыть</span></a>
 <div style="height: auto; min-height: 65px; width: auto;" id="dialog_event" class="ui-dialog-content ui-widget-content">
             <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="border:none;">
               <form action="">
@@ -58,16 +59,17 @@
 						<input type="password" id="fpname" value=""/>
 					</div>
 <div class="inlinebottom">
-<a class="first" href="#">Забыли пароль</a>
-<a href="#">Регистрация</a>
-<input type="submit" class="but" value="Войти"/>
-<a href="#" >Отмена</a>
+<a href="#" class="first">Забыли пароль</a>
+<a href="#" tooltip="linkalert-tip">Регистрация</a>
+</div>
+<div class="loginbut"><a href="#" tooltip="linkalert-tip">Отмена</a>
+<input type="submit" value="Войти" class="but"/>
 </div>
 				</div>
 			</form>
             </div>
         </div>		
-		<div class="ui-resizable-handle ui-resizable-n" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-e" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-s" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-w" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se" style="z-index: 1001; -moz-user-select: none;" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 1002; -moz-user-select: none;" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 1003; -moz-user-select: none;" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 1004; -moz-user-select: none;" unselectable="on"></div></div>
+		<div class="ui-resizable-handle ui-resizable-e" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-s" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-w" unselectable="on" style="-moz-user-select: none;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 1002; -moz-user-select: none;" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 1003; -moz-user-select: none;" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 1004; -moz-user-select: none;" unselectable="on"></div></div>
 	<!--авторизация-->
 	
 	

@@ -81,12 +81,12 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #menumain ul.menu2  img.loginMenu{ position: relative; left:3px;top:3px;overflow: visible; }
 
 
-#menumain ul.menu2 li { display: inline; margin-left: 25px; font-size: 11px; line-height: 12px; color: #f2f172; }
+#menumain ul.menu2 li { display: inline; margin-left: 10px; font-size: 11px; line-height: 12px; color: #f2f172; }
 
 
 #header { position: relative; height: 176px; }
-#header .logo { display: block; position: absolute; top: 36px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url("../i/logo.png"/*tpa=https://home-money.ru/preview/i/logo.png*/) no-repeat 0 0; }
-#header .slogan { position: absolute; top: 126px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
+#header .logo { display: block; position: absolute; top: 20px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url("../i/logo.png"/*tpa=https://home-money.ru/preview/i/logo.png*/) no-repeat 0 0; }
+#header .slogan { position: absolute; top: 115px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
 
 #header #auth { position: absolute; top: 43px; left: 213px; width: 263px; }
 #header #auth .cb { margin-top: -2px; }
@@ -932,11 +932,15 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 
 
 #popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
-#popupadd_login .f_field { position: relative; margin: 0 0 8px 138px; }
-#popupadd_login .inlinebottom { height: 20px; width: 230px; display: inline; }
+#popupadd_login .f_field { position: relative; margin: 0 0 8px 69px; }
+#popupadd_login .inlinebottom { height: 20px; width: 230px; margin-top:-5px; }
 #popupadd_login .inlinebottom  a.first{ float:left;font-size:11px;margin-left:0px;margin-top:10px; }
 #popupadd_login .inlinebottom  a { float:left;font-size:11px;margin-left:10px;margin-top:10px; color:#6CBD45;}
-#popupadd_login .but { float:left;margin:8px 0 0 10px; }
+
+#popupadd_login .loginbut {  }
+#popupadd_login .loginbut  a { margin-left:-173px;margin-top:12px; color:#6CBD45;font-size:11px; }
+#popupadd_login .loginbut .but { margin-left:57px;margin-top:10px; }
+
 #popupadd_login .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("../i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
 #popupadd_login .cb { height:25px;overflow:hidden;position:relative;width:383px; }
 
