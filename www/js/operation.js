@@ -230,9 +230,17 @@ $(document).ready(function() {
     function clearForm() {
         $('#op_type,#op_category,#op_target').val(0);
         $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
-        $('#op_amount_target,#op_amount_done,#op_forecast_done,#op_percent_done').text('');
+
+        $('span#op_amount_target').text();
+
+        $('span#op_amount_done').text();
+        $('span#op_forecast_done').text();
+        $('span#op_percent_done').text();
+
         $('#op_close').removeAttr('checked');
+
         $('form').attr('action','/operation/add/');
+
         $('#op_type').change();
     }
     /**

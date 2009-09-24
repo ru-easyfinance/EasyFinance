@@ -599,7 +599,7 @@ $("strong:contains('Имущество')").qtip({
             target    : $('#op_target').val(),
             close     : $('#op_close:checked').length,
             tags      : $('#op_tags').val()
-        }, function(data, textStatus){
+        }, function(data){
             for (var v in data) {
                 //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
                 alert('Ошибка в ' + v);
@@ -641,12 +641,22 @@ $("strong:contains('Имущество')").qtip({
      * @return void
      */
     function op_clearForm() {
+        
         $('#op_type,#op_category,#op_target').val(0);
         $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
-        $('#op_amount_target,#op_amount_done,#op_forecast_done,#op_percent_done').text('');
+
+        $('span#op_amount_target').text();
+
+        $('span#op_amount_done').text();
+        $('span#op_forecast_done').text();
+        $('span#op_percent_done').text();
+
         $('#op_close').removeAttr('checked');
+         
         $('form').attr('action','/operation/add/');
+       
         $('#op_type').change();
+        
     }
 
     /**
@@ -697,8 +707,8 @@ $("strong:contains('Имущество')").qtip({
         $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
         op_getTags(res['tags']);
 
-        $('#op_btn_Save').click(function(){op_saveOperation();})
-        $('#op_btn_Cancel').click(function(){op_clearForm()});
+        $('#op_btn_Save').click(function(){op_saveOperation();return false;})
+        $('#op_btn_Cancel').click(function(){op_clearForm();return false;});
 
         $("#op_addoperation_but").click(function(){
             $(this).toggleClass("act");
@@ -784,10 +794,12 @@ $('.navigation  li span').click(function(){
                 buttons: {
                     'Сохранить': function() {
                         if($('input#tag').val())
-                        $.post('/tags/edit/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                        $.post('/tags/edit/', $('.edit_tag input'),function(data){
+                            $('.edit_tag').dialog('close');},'json');
                     },
                     'Удалить': function() {
-                        $.post('/tags/del/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                        $.post('/tags/del/', $('.edit_tag input'),function(data){
+                            $('.edit_tag').dialog('close');},'json');
                     }
 
             }});
@@ -804,7 +816,10 @@ $('.navigation  li span').click(function(){
                     'Сохранить': function() {
                         if($('input#tag').val())
                         {
-                            $.post('/tags/add/', $('.edit_tag input'),function(data){$('.edit_tag').dialog('close');},'json');
+                            $.post('/tags/add/', {tag:$('.edit_tag input').val()},function(data){
+                                 $('.tags_list ul').append('<li><a>'+$('input#tag').val()+'</a></li>')
+                                $('.edit_tag').dialog('close');
+                            },'json');
                             $('.edit_tag').dialog('close');
                         }
                     }
@@ -892,10 +907,10 @@ $('li#c2').click(function(){a_list()})
             $('.transaction').html(c);
       /////////////////////////targets///////////////////////////////////
       data = res['user_targets'];
-            s = '<div class="title"><h2>Финансовые цели</h2><a href="#" title="Добавить" class="add">Добавить</a></div><ul>';
+            s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
             for(v in data)
             {
-                        s += '<li><a href="/targets/">'+data[v]['title']+'</a><b>'
+                        s += '<li><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
                         +data[v]['amount_done']+' руб.</b><span>('
                         +data[v]['percent_done']+'%)</span><span class="date">'
                         +data[v]['date_end']+'</span></li>';
@@ -911,6 +926,30 @@ $('li#c2').click(function(){a_list()})
             }
             s = s + '<ul>';
         $('.financobject').append(s);
+        $('.financobject div.title a').live('click',function(){
+            $("div.financobject_block .add span").click()
+        })
+        $('.financobject ul a').live('click',function(){
+            var id = $(this).attr('href');
+            doctype.location = id;
+            var str = id.substr(15);
+            var f = $('.object[tid="'+str+'"]');
+            $('input,textarea','#tpopup').val('');
+            $('#key').val(f.attr('tid'));
+            $('#type').val(f.attr('type'));
+            $('#title').val(f.attr('title'));
+            $('#amount').val(f.attr('amount'));
+            $('#start').val(f.attr('start'));
+            $('#end').val(f.attr('end'));
+            $('#photo').val(f.attr('photo'));
+            $('#url').val(f.attr('url'));
+            $('#comment').val(f.attr('comment'));
+            $('#account').val(f.attr('account'));
+            $('#visible').val(f.attr('visible'));
+            $('#tpopup').dialog('open');
+            //return false;
+        })
+        //$('.financobject ')
 //////////////////////////////////////////////////////////////////////
 //right
 //currency
