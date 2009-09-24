@@ -16,20 +16,24 @@
     
     $db->query("SET character_set_client = 'utf8', character_set_connection = 'utf8',character_set_results = 'utf8'");
 
-    // Формируем сегодняшнюю дату и ссылку
-    $date = date("d/m/Y");
-    $link = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=".$date;
+    //Получаем список последних системных валют, и как валюту РУБЛЬ
+    $result = $db->select("SELECT 1, (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0) AS currency_date, 1, 0, 0, 0 UNION
+        SELECT * FROM daily_currency WHERE
+        currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)");
 
-    //Получаем список последних системных валют
-    $result = $db->select("SELECT currency_id, currency_date, currency_sum FROM daily_currency WHERE currency_id BETWEEN 2 AND 19");
     $ar = array();
     foreach ($result as $v) {
         $ar[$v['currency_id']] = (float)$v['currency_sum'];
     }
 
+    // Формируем сегодняшнюю дату и ссылку
+    $date = date("d/m/Y");
+    $link = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=".$date;
+
     //Создаём ДОМ объект
     $dom = new DOMDocument('1.0', 'windows-1251');
     $dom->load($link);
+    
     // Иногда, ЦБР подло меняет разделители знаков в дате на слеш, поэтому перестраховываемся
     $date = str_replace('/', '.', $dom->getElementsByTagName('ValCurs')->item(0)->getAttribute('Date'));
     $date = formatRussianDate2MysqlDate($date);
