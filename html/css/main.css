@@ -933,7 +933,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 
 #popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
 #popupadd_login .f_field { position: relative; margin: 0 0 8px 68px; }
-#popupadd_login .inlinebottom { height: 20px; width: 230px; margin-top:-5px; }
+#popupadd_login .inlinebottom { height: 20px; width: 230px; margin-top:-5px; margin-left:1px; }
 #popupadd_login .inlinebottom  a.first{ float:left;font-size:11px;margin-left:0px;margin-top:10px; }
 #popupadd_login .inlinebottom  a { float:left;font-size:11px;margin-left:10px;margin-top:10px; color:#6CBD45;}
 #popupadd_login .inlinebottom   a.link3 { float:left;font-size:11px;margin-left:10px;margin-top:-15px; color:#6CBD45;}
