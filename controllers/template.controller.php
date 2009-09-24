@@ -8,6 +8,7 @@
  */
 class Template_Controller {
 
+
     /**
      * Если нам были переданы ошибочные данные, генерируем 404 страницу
      * @param $method
@@ -44,9 +45,10 @@ class Template_Controller {
         $user = Core::getInstance()->user;
         if (is_null($user->getId())) { 
             Core::getInstance()->tpl->assign('res', '[]');
+            
             return false;
         }
-
+        Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
         // Подготавливаем счета
         $accounts = array();
         foreach ($user->getUserAccounts() as $v) {
