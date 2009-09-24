@@ -936,10 +936,10 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 #popupadd_login .inlinebottom { height: 20px; width: 230px; margin-top:-5px; }
 #popupadd_login .inlinebottom  a.first{ float:left;font-size:11px;margin-left:0px;margin-top:10px; }
 #popupadd_login .inlinebottom  a { float:left;font-size:11px;margin-left:10px;margin-top:10px; color:#6CBD45;}
+#popupadd_login .inlinebottom   a.link3 { float:left;font-size:11px;margin-left:10px;margin-top:-15px; color:#6CBD45;}
 
-#popupadd_login .loginbut {  }
-#popupadd_login .loginbut  a { margin-left:-173px;margin-top:12px; color:#6CBD45;font-size:11px; }
-#popupadd_login .loginbut .but { margin-left:57px;margin-top:10px; }
+#popupadd_login .loginbut { position:relative;top:-43px; }
+#popupadd_login .loginbut .but { -moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:transparent url(../i/icons.gif) no-repeat scroll 0 -90px;float:right;height:25px; }
 
 #popupadd_login .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("../i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
 #popupadd_login .cb { height:25px;overflow:hidden;position:relative;width:383px; }
@@ -1044,3 +1044,8 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 .st-red{background:red;}
 .st-green{background:yellowgreen;}
 .st-yellow{background:yellow;}
+
+
+#aboutproject .inside div.w_dialog div.w_d_body { -moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;height:auto;position:relative;text-align:justify;width:300px; }
+#aboutproject .inside .text { display:block;font-size:13px;line-height:17px;margin-left:15px;position:relative;right:80px;top:5px;width:250px; }
+
