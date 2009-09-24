@@ -18,18 +18,16 @@ function user_info_back()
 }
 function user_info_save()
 {
-    if(!$('input#pass').val)
-    {
+    if(!$('input#pass').val) {
         return false;
     }
 
-    if((($('input#newpass').val) != ($('input#newpass2').val))&($('input#newpass').val))
-    {
+    if((($('input#newpass').val) != ($('input#newpass2').val))&($('input#newpass').val)) {
         return false;
-    }
-    else if (($('input#newpass').val) == ($('input#newpass2').val))
-    {
-            $.post('/profile/save_main_settings/', $('input'));
+    } else if (($('input#newpass').val) == ($('input#newpass2').val)) {
+        $.post('/profile/save_main_settings/', $('input'), function() {
+            $.jGrowl("Личные данные сохранены", {theme: 'green'});
+        }, 'json');
     }
 }
 
@@ -121,5 +119,10 @@ function user_cur_save()
     })
     def =$('#def_cur :selected').attr('id');
     
-    $.post('/profile/save_currency/', {currency: ids.toString(), currency_default: def});
+    $.post('/profile/save_currency/', {
+        currency: ids.toString(),
+        currency_default: def
+    }, function(){
+        $.jGrowl("Валюты сохранены", {theme: 'green'});
+    });
 }

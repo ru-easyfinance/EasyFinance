@@ -65,23 +65,24 @@ class User
     private $db;
 
     /**
-     * Массив с недостающими параметрами пользователя
-     * @var array
-     */
-    private $wizard = array();
-
-    /**
      * Конструктор
      * @return void
      */
     public function __construct()
     {
-        $this->db = Core::getInstance()->db;
-
         // Если соединение пользователя защищено, то пробуем авторизироваться
         if (isset($_SERVER['HTTPS'])) {
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME])) {
+                if (is_null(Core::getInstance()->db)) {
+                    Core::getInstance()->initDB();
+                }
+                $this->db = Core::getInstance()->db;
+
+                if (!isset($_SESSION)) {
+                    session_start();
+                }
+
                 $array = decrypt($_COOKIE[COOKIE_NAME]);
                 $this->initUser($array[0], $array[1]);
             }
@@ -115,6 +116,10 @@ class User
      */
     public function initUser($login, $pass)
     {
+        if (is_null(Core::getInstance()->db)) {
+            Core::getInstance()->initDB();
+        }
+        $this->db = Core::getInstance()->db;
         if (isset($_SESSION['REMOTE_ADDR']) || isset($_SESSION['HTTP_USER_AGENT'])) {
              if ($_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT']) {
                  $this->destroy();

@@ -7,9 +7,6 @@
  
 define('INDEX', true);
 
-// @FIXME не создавать сессию, если на странице случайный посетитель
-session_start();
-
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
