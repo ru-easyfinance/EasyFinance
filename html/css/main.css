@@ -854,21 +854,23 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 #popupreport .inside .but { margin-left: 62px; display: block; width: 142px; height: 47px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url("../i/buttons.png"/*tpa=https://home-money.ru/preview/i/buttons.png*/) no-repeat 0 -160px; }
 
 
-#popupdiagram, #popupadd_calendar { display: none; position: absolute; width: 383px; z-index: 1000; }
-#popupdiagram .cont, #poputags .cont, #popupadd_calendar .cont { position: relative; width: 383px; overflow: hidden; }
-#popupdiagram .cont .ct, #popupdiagram .cb div,
+#popupdiagram, #popupadd_calendar, #popupadd_login { display: none; position: absolute; width: 383px; z-index: 1000; }
+#popupdiagram .cont, #poputags .cont, #popupadd_calendar .cont, #popupadd_login .cont { position: relative; width: 383px; overflow: hidden; }
+#popupdiagram .cont .ct, #popupdiagram .cb div, #popupadd_login .cb div,
 #poputags .cont .ct, #poputags .cb div, 
 #popupadd_calendar .cont .ct, #popupadd_calendar .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("../i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
-#popupdiagram .cb, #poputags .cb, #popupadd_calendar .cb { position: relative; width: 383px; height: 25px; overflow: hidden; }
+#popupdiagram .cb, #popupadd_login .cb, #poputags .cb, #popupadd_calendar .cb { position: relative; width: 383px; height: 25px; overflow: hidden; }
 #popupdiagram .cb div, #poputags .cb div, #popupadd_calendar .cb div { top: -775px; }
 #popupdiagram .inside, 
 #poputags .inside, 
 #popupadd_calendar .inside, 
+#popupadd_login .inside, 
 #popupaddobject .inside, 
 #popupcalendar .inside { position: relative; z-index: 2; }
 #popupdiagram .inside { padding: 33px 0 0 29px; }
 
 #popupdiagram .close, 
+#popupadd_login .close, 
 #poputags .close, 
 #popupadd_calendar .close, 
 #popupaddobject .close,
@@ -927,6 +929,25 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url("../i/ico
 
 #popupreview2 { padding-top: 35px; }
 #popupreview2 .close { position: absolute; top: 0; right: 9px; width: 18px; height: 18px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; z-index: 10; background: url("../i/icons.gif"/*tpa=https://home-money.ru/preview/i/icons.gif*/) no-repeat -35px -390px; }
+
+
+#popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
+#popupadd_login .f_field { position: relative; margin: 0 0 8px 138px; }
+#popupadd_login .inlinebottom { height: 20px; width: 230px; display: inline; }
+#popupadd_login .inlinebottom  a.first{ float:left;font-size:11px;margin-left:0px;margin-top:10px; }
+#popupadd_login .inlinebottom  a { float:left;font-size:11px;margin-left:10px;margin-top:10px; color:#6CBD45;}
+#popupadd_login .but { float:left;margin:8px 0 0 10px; }
+#popupadd_login .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("../i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
+#popupadd_login .cb { height:25px;overflow:hidden;position:relative;width:383px; }
+
+#popupadd_login .f_field label { display:block;left:-70px;position:absolute;text-align:right;top:3px;font-family:Arial;Font-size:12px;color:#8B8C8B;}
+#popupadd_login .f_field input { color: #b2b2b2; width: 158px; //width: 152px;font-family:Arial;Font-size:12px;color:#8B8C8B;border:1px solid #8B8C8B; }
+#popupadd_login  .f_field input { height:20px;width:107px; }
+
+#popupadd_login .close { position: absolute; top: 14px; right: 27px; width: 11px; height: 11px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; z-index: 10; background: url("../i/icons.gif") no-repeat -20px -390px; }
+
+#popupadd_login .inside { position: relative; z-index: 2; padding:10px 0 0 5px; }
+
 
 #darkening { position: absolute; top: 0; left: 0; width: 100%; z-index: 900; background: #000000; opacity: 0.60; filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60); }
 
