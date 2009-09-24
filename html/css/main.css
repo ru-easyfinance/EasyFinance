@@ -70,13 +70,17 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #menumain ul.menu1 { margin-left: 31px; width: 495px; overflow: hidden; //zoom: 1; }
 #menumain ul.menu1:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 #menumain ul.menu1 li { float: left; margin-right: 17px; padding: 7px 0 2px 15px; font-size: 15px; line-height: 17px; color: #f2f172; background: url("../i/bg01.gif"/*tpa=https://home-money.ru/preview/i/bg01.gif*/) no-repeat 0 8px; }
+
 #menumain ul li a { color: #ffffff; text-decoration: none; }
 #menumain ul li a:hover { text-decoration: underline; }
 #menumain ul.menu1 li.first { padding-left: 0;  background: none; }
 #menumain ul.menu1 li.act span { text-decoration: underline; }
 #menumain ul.menu1 li.act a { color: #f2f172; text-decoration: underline; }
 
-#menumain ul.menu2 { position: absolute; top: 10px; right: 44px; width: 340px; overflow: hidden; }
+#menumain ul.menu2 { position: absolute; top: 8px; right: 28px; width: 340px; overflow: hidden; }
+#menumain ul.menu2  img.loginMenu{ position: relative; left:3px;top:3px;overflow: visible; }
+
+
 #menumain ul.menu2 li { display: inline; margin-left: 25px; font-size: 11px; line-height: 12px; color: #f2f172; }
 
 
