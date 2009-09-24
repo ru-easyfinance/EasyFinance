@@ -50,16 +50,18 @@ class Accounts_Controller extends Template_Controller
             $this->user->save();
             unset($_SESSION['account']);
         }
+        $cur=Core::getInstance()->user->getUserCurrency();
+        $cur_k=array_shift($cur);
         $this->tpl->assign("page_title", "account all");
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
         $this->tpl->assign("template", "default");
-
+        $this->tpl->assign("cur", json_encode($cur_k['abbr']));
 
         // Операция
         $this->tpl->assign('category', get_tree_select());
         $targets = new Targets_Model();
-        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
+        //$this->tpl->assign('targetList', $targets->getLastList(0, 100));
         $this->tpl->append('css','jquery/jquery.calculator.css');
         $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
         $this->tpl->append('js','jquery/ui.core.js');

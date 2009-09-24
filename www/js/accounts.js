@@ -81,7 +81,7 @@ $(document).ready(function()
                                 Остаток \n\
                             </th>\n\
                             <th> \n\
-                                Рублёвый эквивалент \n\
+                                Эквивалент в '+d_cur+' \n\
                             </th>\n\
                             <th></th>\n\
                         <tr>',
@@ -111,7 +111,7 @@ $(document).ready(function()
                 total = total+tofloat(summ[key]);
                 s='<div><strong class="title">'+ g_name[key]
                     + '</strong> : ' + formatCurrency(tofloat(summ[key]))
-                    + ' руб.<table  class="noborder">' + head_tr+arr[key]
+                    +d_cur+ '<table  class="noborder">' + head_tr+arr[key]
                     + '</table></div>';
                 $('#operation_list').append(s);
             }
@@ -123,7 +123,7 @@ $(document).ready(function()
         {
             str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
         }
-        str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td> руб.</td></tr>';
+        str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td>'+d_cur+'</td></tr>';
         str = str + '</table>';
         $('#operation_list').append(str);
 ////////////////////////////////////////////////////////////////@todo перенести в цсс
@@ -226,7 +226,9 @@ $(document).ready(function()
                 if (data == 'n') data=null;
                 account_list = data;
                 res.accounts = data;
+                
                 $('li#c2').click();
+                
                 list();
                 var s = location.hash;
                 hash_api(s);
@@ -332,7 +334,7 @@ $(document).ready(function()
     var account_list;
     // upload account
     update_list();
-
+    
     $('#addacc').live('click',function(){////button add account click
         new_acc = 1;
         accountAddVisible();
@@ -467,4 +469,5 @@ $(document).ready(function()
             $('#blockCreateAccounts input#name').val('');
         }
     );
+        $('li#c1').click();
 });

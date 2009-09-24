@@ -356,8 +356,9 @@ class Accounts_Model
             $res[$val]['total_balance'] = $total;
            //die(print_r( Core::getInstance()->user->getUserCurrency()));
             $ucur =Core::getInstance()->user->getUserCurrency();
+            $cur_k=array_keys($ucur);
             $res[$val]['def_cur'] =round(
-                $res[$val]['total_balance']* $ucur[$cur_id[$key]]['value'],
+                $res[$val]['total_balance']* $ucur[$cur_id[$key]]['value']/$ucur[$cur_k[0]]['value'],
                 2
                 );
 //die(print_r( Core::getInstance()->user->user_currency));
