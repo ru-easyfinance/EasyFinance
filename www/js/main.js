@@ -772,12 +772,14 @@ $("strong:contains('Имущество')").qtip({
             function ac_save() {
             //@TODO Проверить вводимые значения ui-tabs-selected
             var href = '/periodic/add/';
-            var dt = 'a';
+            var dt = 'p';
             if ($('#op_tabs .ui-tabs-selected a').attr('href')=='#op_tabs-1')
             {
                 href = '/calendar/add/';
-                dt = 'p';
+                dt = 'a';
             }
+            //alert($('#op_tabs .ui-tabs-selected a').attr('href'));
+            //return false;
             $.post(
                 href,
                 {
@@ -792,25 +794,12 @@ $("strong:contains('Имущество')").qtip({
                     count:      $('#op_dialog_event #op_'+dt+'count').attr('value'),
                     comment:    $('#op_dialog_event #op_'+dt+'comment').attr('value'),
                     infinity:   $('#op_dialog_event #op_'+dt+'infinity').attr('value'),
-                    amount:     tofloat($('#op_dialog_event #op_'+dt+'amount').val()),
+                    amount:     $('#op_dialog_event #op_'+dt+'amount').val(),
 
                     category: $('#op_dialog_event #op_'+dt+'category').val(),
                     type: $('#op_dialog_event #op_'+dt+'type').val(),
                     account: $('#op_dialog_event #op_'+dt+'account').val(),
                     rep_type:   $('#op_dialog_event .rep_'+dt+'type[checked]').val()
-                    /*
-                     *id: $('#id').val(),
-                title: $('#title').val(),
-                amount: tofloat($('#amount').val()),
-                date: $('#date').val(),
-                comment: $('#comment').val(),
-                category: $('#category').val(),
-                type: $('#type').val(),
-                account: tofloat($('#account').val()),
-                repeat: $('#repeat').val(),
-                counts: $('#counts').val(),
-                infinity: $('[name=count]:checked').val()
-                     */
                 }, function(data){
                     for (var v in data) {
                         //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
@@ -824,6 +813,12 @@ $("strong:contains('Имущество')").qtip({
                 'json'
             );
         }
+        $('#op_pcount').select(function(){
+            $('#op_pcounts').removeAttr('disable');
+        })
+        $('#op_pinfinity').select(function(){
+            $('#op_pcounts').Attr('disable','disable')
+        })
         function add2call()
         {
             $("#op_tabs").tabs();
@@ -845,7 +840,7 @@ $("strong:contains('Имущество')").qtip({
             $('#op_dialog_event').dialog();
             for(i = 1; i < 31; i++){
                 $('#op_dialog_event #op_acount').append('<option>'+i+'</option>').val(i);
-                $('#op_dialog_event #op_pcount').append('<option>'+i+'</option>').val(i);
+                $('#op_dialog_event #op_pcounts').append('<option>'+i+'</option>').val(i);
             }
             $('#op_dialog_event').dialog('open');
             //$('#op_adate,#op_pdate').val(dateText);
@@ -973,7 +968,7 @@ $('li#c2').click(function(){a_list()})
                 {
                     str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
                 }
-                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+d_cur+'</div></li>';
+                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' </div></li>';
                 str = str + '</ul>';
                  $('.accounts #l_amount').html(str);
     }
