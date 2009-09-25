@@ -91,8 +91,12 @@ class User
             header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
             exit;
         }
-
-        $this->load(); //Пробуем загрузить из сессии данные
+        if (isset($_COOKIE['PHPSESSID'])) {
+            if (!isset($_SESSION)) {
+                session_start();
+            }
+            $this->load(); //Пробуем загрузить из сессии данные
+        }
     }
 
     /**
@@ -144,6 +148,8 @@ class User
             $this->destroy();
             return false;
         }
+
+        session_start();
         // Если у нас подключен профиль пользователя
         if ($this->props['user_type'] == 0) {
             if (!$this->init($this->getId())) {
