@@ -10,7 +10,7 @@
     <link href="/favicon.ico" rel="icon" type="image/x-icon" />
     <!-- Подключениее стилей и скриптов -->
     {foreach from=$css item=i}
-    <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  />
+    <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  link="/css/{$i}?r={$revision}"/>
     {/foreach}
 
     {foreach from=$js item=i}

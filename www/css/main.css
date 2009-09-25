@@ -862,7 +862,7 @@ div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background
 .operation_list table th span.sort span.up { background-position: -50px 0; }
 .operation_list table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat -20px 0; }
 .operation_list table th div.cont {  z-index: 2; }
-.operation_list table th div.cont div { //zoom: 1; }
+/*.operation_list table th div.cont div { //zoom: 1; }*/
 .operation_list table th div.cont div:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list table th ul.select_list {  display: none; position: absolute; top: 16px; left: -5px; width: 100px; padding-bottom: 5px; z-index: 10; background: #ffffff; border: 1px solid #e5e5e5; }
 .operation_list table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }

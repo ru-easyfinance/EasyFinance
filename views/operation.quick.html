@@ -20,7 +20,7 @@
 								<div class="op_addoperation" style="display: block;">
 									<div class="op_line">
 										<div class="op_f_field" id="op_account_fields">
-											<div><label for="op_aaccount">Счет</label>
+											<div><label for="op_account">Счет</label>
 											<select id="op_account">
                                                 {foreach from=$accounts item=acc_data}
                                                     <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
@@ -71,14 +71,14 @@
                                                 {foreach from=$targetList item=target}
                                                     <option bill="{$target.target_account_id}" value="{$target.id}"
                                                         target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
-                                                        percent_done='{$target.percent_done}' forecast_done='{$target.forecast_done}' amount={$target.amount}
+                                                        percent_done='{$target.percent_done}' forecast_done='{$target.forecast_done}' amount='{$target.amount}'
                                                         {if $target.id==$target_sel}selected{/if}>
                                                         {$target.title|stripslashes|truncate:50:".."}</option>
                                                 {/foreach}
                                             </select>
                                             <div>
-                                                <div>Стоимость цели: <span id='op_amount_target'/><span class='op_currency'/></div>
-                                                <div>Сумма накопленная: <span id='op_amount_done' /><span class='op_currency' /></div>
+                                                <div>Стоимость цели: <span id='op_amount_target'></span><span class='op_currency'></span></div>
+                                                <div>Сумма накопленная: <span id='op_amount_done'></span><span class='op_currency' ></span></div>
                                                 <div>Прогноз: <span id='op_forecast_done'></span> %</div>
                                                 <div>Процент готовности: <span id='op_percent_done'></span> %</div>
                                             </div>
@@ -211,51 +211,69 @@
                 </div>
                 <div id="op_tabs-2">
                     <!-- Форма для Регулярной транзакции -->
-                    <form id="op_perform">
-                        <input type="hidden" name="op_key" id="op_pkey" />
-                        <input type="hidden" name="op_chain" id="op_pchain" />
-                        <table>
-                            <tr>
-                                <td><label for="op_ptitle">Заголовок</label></td>
-                                <td><input type="text" name="op_title" id="op_ptitle" class="text ui-widget-content" /></td>
-                            </tr>
-                            <tr>
-                                <td><label for="op_pdate">Дата</label></td>
-                                <td><input type="text" name="op_date" id="op_pdate" value="" class="text ui-widget-content" /></td>
-                            </tr>
-                            <tr>
-                                <td><label for="op_pamount">Сумма</label></td>
-                                <td><input type="text" name="op_amount" id="op_pamount" value="" class="text ui-widget-content" /></td>
-                            </tr>
-                            <tr>
-                                <td><label for="op_prepeat">Повторять</label></td>
-                                <td><select name="op_repeat" id="op_prepeat" class="ui-widget-content">
-                                    <option value="0">Без повторения</option>
-                                    <option value="1">Каждый день</option>
-                                    <option value="7">Каждую неделю</option>
-                                    <option value="30">Каждый месяц</option>
-                                    <option value="90">Ежеквартально</option>
-                                    <option value="365">Каждый год</option>
-                                </select></td>
-                            </tr>
-                            <tr>
-                                <td><label for="op_pcount">Повторить</label></td>
-                                <td>
-                                    <div>
-                                        <select name="op_count" id="op_pcount" class="ui-widget-content"></select>
-                                        <label for="op_pcount">&nbsp;раз&nbsp;</label>
+                    <form action="/periodic/add/" id="form">
+                                <input type="hidden" id="op_id">
+                                <div class="op_addcategories">
+                                    
+                                    <div id="op_add_form">
+                                        <div class="op_form_block" style="display:block">
+                                            <div class="op_f_field">
+                                                <label for="op_title">Название транзакции</label>
+                                                <input type="text" id="op_title" />
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_category">Категория</label>
+                                                <select id="op_category">
+                                                    {$category}
+                                                </select>
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_type">Тип транзакции</label>
+                                                <select id="op_type">
+                                                    <option value="-1">Расход</option>
+                                                    <option value="1">Доход</option>
+                                                </select>
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_account">Счёт</label>
+                                                <select id="op_account">
+                                                {foreach from=$account item=val}
+                                                    <option value="{$val.account_id}" ext="{$val.account_description}" title="{$val.account_name}" cur_id="{$val.account_currency_id}">{$val.account_name} ({$val.account_currency_name})</option>
+                                                {/foreach}
+                                                </select>
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_amount">Сумма</label>
+                                                <input type="text" id="op_amount" />
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_adate">Дата</label>
+                                                <input type="text" id="op_adate" />
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_repeat">Периодичность</label>
+                                                <select id="op_repeat">
+                                                    <option value="1">Ежедневно</option>
+                                                    <option value="7">Еженедельно</option>
+                                                    <option value="30">Ежемесячно</option>
+                                                    <option value="90">Ежеквартально</option>
+                                                    <option value="365">Ежегодно</option>
+                                                </select>
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label>Повторения</label>
+                                                <input type="radio" name="op_count" id="op_infinity" value="0" checked="checked"/><span id="op_spinfinity">Бесконечно</span>
+                                                <input type="radio" name="op_count" id="op_count" value="1" /> <span id="op_spcount">Количество раз</span>&nbsp;
+                                                <select id="op_counts" disabled="disabled" />
+                                            </div>
+                                            <div class="op_f_field">
+                                                <label for="op_comment">Комментарий</label>
+                                                <textarea id="op_comment"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input type="checkbox" name="op_infinity" id="op_pinfinity" value="1"><label for="op_pinfinity">Бесконечно</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label for="op_pcomment">Комментарий</label></td>
-                                <td><textarea id="op_pcomment" name="op_comment" class="text ui-widget-content"></textarea></td>
-                            </tr>
-                        </table>
-                    </form>
+                                </div>
+                            </form>
                 </div>
             </div></div>
                                 <!-- -->

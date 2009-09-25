@@ -56,15 +56,15 @@ $(document).ready(function() {
             $('#date').datepicker('setDate', new Date() );
         }
     });
-
+    $('#operations_list .cont').css({position: 'relative'});
     $('tr:not(:first)','#operations_list').live('mouseover',function(){
-        $('#operations_list tr').removeClass('act');
-        $(this).closest('tr').addClass('act');
+        $('#operations_list tr').removeClass('act').find('.cont ul').hide();
+        $(this).closest('tr').addClass('act').find('.cont ul').show();
     });
     $('.mid').mousemove(function(){
             if (!$('ul:hover').length && !$('.act:hover').length)
             {
-                $('#operations_list tr').removeClass('act');
+                $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             }
     });
 
@@ -353,7 +353,7 @@ $(document).ready(function() {
             }, function(data) {
                 delete operationList[id];
                 $(tr).remove();
-                $.jGrowl("Операция удалена", { theme: 'green' });
+                $.jGrowl("Операция удалена", {theme: 'green'});
             }, 'json');
     }
 
