@@ -429,7 +429,7 @@ $("strong:contains('Имущество')").qtip({
             target    : $('#target').val(),
             close     : $('#close:checked').length,
             tags      : $('#tags').val()
-        }, function(data, textStatus){
+        }, function(data){
             for (var v in data) {
                 //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
                 alert('Ошибка в ' + v);
@@ -771,29 +771,32 @@ $("strong:contains('Имущество')").qtip({
             function ac_save() {
             //@TODO Проверить вводимые значения ui-tabs-selected
             var href = '/periodic/add/';
-
+            var dt = 'a';
             if ($('#op_tabs .ui-tabs-selected a').attr('href')=='#op_tabs-1')
+            {
                 href = '/calendar/add/';
+                dt = 'p';
+            }
             $.post(
                 href,
                 {
-                    id :        $('#op_dialog_event #op_id').val(),
-                    key:        $('#op_dialog_event #op_key').attr('value'),
-                    title:      $('#op_dialog_event #op_title').attr('value'),
-                    date_start: $('#op_dialog_event #op_date_start').attr('value'),
-                    date_end:   $('#op_dialog_event #op_date_end').attr('value'),
-                    date:       $('#op_dialog_event #op_adate').attr('value'),
-                    time:       $('#op_dialog_event #op_time').attr('value'),
-                    repeat:     $('#op_dialog_event #op_repeat option:selected').attr('value'),
-                    count:      $('#op_dialog_event #op_count').attr('value'),
-                    comment:    $('#op_dialog_event #op_comment').attr('value'),
-                    infinity:   $('#op_dialog_event #op_infinity').attr('value'),
-                    amount:     tofloat($('#op_dialog_event #op_amount').val()),
+                    id :        $('#op_dialog_event #op_'+dt+'id').val(),
+                    key:        $('#op_dialog_event #op_'+dt+'key').attr('value'),
+                    title:      $('#op_dialog_event #op_'+dt+'title').attr('value'),
+                    date_start: $('#op_dialog_event #op_'+dt+'date_start').attr('value'),
+                    date_end:   $('#op_dialog_event #op_'+dt+'date_end').attr('value'),
+                    date:       $('#op_dialog_event #op_'+dt+'date').attr('value'),
+                    time:       $('#op_dialog_event #op_'+dt+'time').attr('value'),
+                    repeat:     $('#op_dialog_event #op_'+dt+'repeat option:selected').attr('value'),
+                    count:      $('#op_dialog_event #op_'+dt+'count').attr('value'),
+                    comment:    $('#op_dialog_event #op_'+dt+'comment').attr('value'),
+                    infinity:   $('#op_dialog_event #op_'+dt+'infinity').attr('value'),
+                    amount:     tofloat($('#op_dialog_event #op_'+dt+'amount').val()),
 
-                    category: $('#op_dialog_event #op_category').val(),
-                    type: $('#op_dialog_event #op_type').val(),
-                    account: $('#op_dialog_event #op_account').val(),
-                    rep_type:   $('#op_dialog_event .rep_type[checked]').val()
+                    category: $('#op_dialog_event #op_'+dt+'category').val(),
+                    type: $('#op_dialog_event #op_'+dt+'type').val(),
+                    account: $('#op_dialog_event #op_'+dt+'account').val(),
+                    rep_type:   $('#op_dialog_event .rep_'+dt+'type[checked]').val()
                     /*
                      *id: $('#id').val(),
                 title: $('#title').val(),
@@ -823,8 +826,8 @@ $("strong:contains('Имущество')").qtip({
         function add2call()
         {
             $("#op_tabs").tabs();
-            $('#op_adate,#op_adate.i,#op_date_start,#op_date_end,#op_pdate').datepicker();
-            $('#op_time').timePicker().mask('99:99');
+            $('#op_adate,#op_adate_start,#op_adate_end,#op_pdate,#op_pdate_start,#op_pdate_end').datepicker();
+            $('#op_atime').timePicker().mask('99:99');
             $('#op_dialog_event').dialog({
                 bgiframe: true,
                 autoOpen: false,
@@ -840,7 +843,7 @@ $("strong:contains('Имущество')").qtip({
                 }});
             $('#op_dialog_event').dialog();
             for(i = 1; i < 31; i++){
-                $('#op_dialog_event #op_count').append('<option>'+i+'</option>').val(i);
+                $('#op_dialog_event #op_acount').append('<option>'+i+'</option>').val(i);
                 $('#op_dialog_event #op_pcount').append('<option>'+i+'</option>').val(i);
             }
             $('#op_dialog_event').dialog('open');

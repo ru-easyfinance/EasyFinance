@@ -44,6 +44,7 @@ $tpl->append('css', 'jquery/south-street/ui.all.css');
 $tpl->append('css', 'jquery/south-street/ui.dialog.css');
 $tpl->append('css', 'jquery/jquery.jgrowl.css');
 $tpl->append('css','jquery/jScrollPane.css');
+$tpl->append('css','jquery/jquery.calculator.css');
 
 $tpl->append('js',  'jquery/ui.core.js');
 $tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');

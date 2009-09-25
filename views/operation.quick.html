@@ -150,28 +150,28 @@
                 </ul>
                 <div id="op_tabs-1">
                     <!-- Форма события календаря -->
-                        <input type="hidden" name="op_key" id="op_key" />
-                        <input type="hidden" name="op_chain" id="op_chain" />
+                        <input type="hidden" name="op_akey" id="op_akey" />
+                        <input type="hidden" name="op_achain" id="op_achain" />
                         <table>
                             <tr>
-                                <td><label for="op_title">Заголовок</label></td>
-                                <td><input type="text" name="op_title" id="op_title" class="text ui-widget-content" /></td>
+                                <td><label for="op_atitle">Заголовок</label></td>
+                                <td><input type="text" name="op_atitle" id="op_atitle" class="text ui-widget-content" /></td>
                             </tr>
                             <tr>
                                 <td><label for="op_adate">Дата</label></td>
                                 <td><input type="text" name="op_adate" id="op_adate" value="" class="text ui-widget-content" /></td>
                             </tr>
                             <tr id="tr_date_start">
-                                <td><label for="op_date_start">Дата начала</label></td>
-                                <td><input type="text" name="op_date_start" id="op_date_start" value="" class="text ui-widget-content" /></td>
+                                <td><label for="op_adate_start">Дата начала</label></td>
+                                <td><input type="text" name="op_adate_start" id="op_adate_start" value="" class="text ui-widget-content" /></td>
                             </tr>
                             <tr>
-                                <td><label for="op_time">Время</label></td>
-                                <td><input type="text" name="op_time" id="op_time" value="" class="text ui-widget-content time" /></td>
+                                <td><label for="op_atime">Время</label></td>
+                                <td><input type="text" name="op_atime" id="op_atime" value="" class="text ui-widget-content time" /></td>
                             </tr>
                             <tr>
-                                <td><label for="op_repeat">Повторять</label></td>
-                                <td><select name="op_repeat" id="op_repeat" class="ui-widget-content">
+                                <td><label for="op_arepeat">Повторять</label></td>
+                                <td><select name="op_arepeat" id="op_arepeat" class="ui-widget-content">
                                     <option value="0">Без повторения</option>
                                     <option value="1">Каждый день</option>
                                     <option value="3">Каждый Пн., Ср. и Пт.</option>
@@ -184,27 +184,27 @@
                                     <option value="365">Каждый год</option>
                                 </select></td>
                             </tr>
-                            <tr id="op_tr_count">
-                                <td><label for="op_count">Повторить</label></td>
+                            <tr id="op_atr_count">
+                                <td><label for="op_acount">Повторить</label></td>
                                 <td>
                                     <div>
-                                        <input type="radio" name="op_rep_type" class="rep_type" value="1">
-                                        <select name="op_count" id="op_count" class="ui-widget-content"></select>
-                                        <label for="op_count">&nbsp;раз&nbsp;</label>
+                                        <input type="radio" name="op_arep_type" class="rep_type" value="1">
+                                        <select name="op_acount" id="op_acount" class="ui-widget-content"></select>
+                                        <label for="op_acount">&nbsp;раз&nbsp;</label>
                                     </div>
                                     <div>
-                                        <input type="radio" name="op_rep_type" class="rep_type" value="2">
-                                        <input type="checkbox" name="op_infinity" id="op_infinity" value="1"><label for="infinity">Бесконечно</label>
+                                        <input type="radio" name="op_arep_type" class="rep_type" value="2">
+                                        <input type="checkbox" name="op_ainfinity" id="op_ainfinity" value="1"><label for="infinity">Бесконечно</label>
                                     </div>
                                     <div>
-                                        <input type="radio" name="op_rep_type" class="rep_type" value="3">
-                                        <input type="text" name="op_date_end" id="op_date_end" value="" class="text ui-widget-content" />
+                                        <input type="radio" name="op_arep_type" class="rep_type" value="3">
+                                        <input type="text" name="op_adate_end" id="op_adate_end" value="" class="text ui-widget-content" />
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="op_comment">Комментарий</label></td>
-                                <td><textarea id="op_comment" name="op_comment" class="text ui-widget-content"></textarea></td>
+                                <td><label for="op_acomment">Комментарий</label></td>
+                                <td><textarea id="op_acomment" name="op_acomment" class="text ui-widget-content"></textarea></td>
                             </tr>
                         </table>
 
@@ -212,47 +212,47 @@
                 <div id="op_tabs-2">
                     <!-- Форма для Регулярной транзакции -->
                     <form action="/periodic/add/" id="form">
-                                <input type="hidden" id="op_id">
-                                <div class="op_addcategories">
+                                <input type="hidden" id="op_pid">
+                                <div class="op_paddcategories">
                                     
-                                    <div id="op_add_form">
-                                        <div class="op_form_block" style="display:block">
-                                            <div class="op_f_field">
-                                                <label for="op_title">Название транзакции</label>
-                                                <input type="text" id="op_title" />
+                                    <div id="op_padd_form">
+                                        <div class="op_pform_block" style="display:block">
+                                            <div class="op_pf_field">
+                                                <label for="op_ptitle">Название транзакции</label>
+                                                <input type="text" id="op_ptitle" />
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_category">Категория</label>
-                                                <select id="op_category">
+                                            <div class="op_pf_field">
+                                                <label for="op_pcategory">Категория</label>
+                                                <select id="op_pcategory">
                                                     {$category}
                                                 </select>
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_type">Тип транзакции</label>
-                                                <select id="op_type">
+                                            <div class="op_pf_field">
+                                                <label for="op_ptype">Тип транзакции</label>
+                                                <select id="op_ptype">
                                                     <option value="-1">Расход</option>
                                                     <option value="1">Доход</option>
                                                 </select>
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_account">Счёт</label>
-                                                <select id="op_account">
+                                            <div class="op_pf_field">
+                                                <label for="op_paccount">Счёт</label>
+                                                <select id="op_paccount">
                                                 {foreach from=$account item=val}
                                                     <option value="{$val.account_id}" ext="{$val.account_description}" title="{$val.account_name}" cur_id="{$val.account_currency_id}">{$val.account_name} ({$val.account_currency_name})</option>
                                                 {/foreach}
                                                 </select>
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_amount">Сумма</label>
-                                                <input type="text" id="op_amount" />
+                                            <div class="op_pf_field">
+                                                <label for="op_pamount">Сумма</label>
+                                                <input type="text" id="op_pamount" />
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_adate">Дата</label>
-                                                <input type="text" id="op_adate" />
+                                            <div class="op_pf_field">
+                                                <label for="op_padate">Дата</label>
+                                                <input type="text" id="op_padate" />
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_repeat">Периодичность</label>
-                                                <select id="op_repeat">
+                                            <div class="op_pf_field">
+                                                <label for="op_prepeat">Периодичность</label>
+                                                <select id="op_prepeat">
                                                     <option value="1">Ежедневно</option>
                                                     <option value="7">Еженедельно</option>
                                                     <option value="30">Ежемесячно</option>
@@ -260,15 +260,15 @@
                                                     <option value="365">Ежегодно</option>
                                                 </select>
                                             </div>
-                                            <div class="op_f_field">
+                                            <div class="op_pf_field">
                                                 <label>Повторения</label>
-                                                <input type="radio" name="op_count" id="op_infinity" value="0" checked="checked"/><span id="op_spinfinity">Бесконечно</span>
-                                                <input type="radio" name="op_count" id="op_count" value="1" /> <span id="op_spcount">Количество раз</span>&nbsp;
-                                                <select id="op_counts" disabled="disabled" />
+                                                <input type="radio" name="op_pcount" id="op_pinfinity" value="0" checked="checked"/><span id="op_pspinfinity">Бесконечно</span>
+                                                <input type="radio" name="op_pcount" id="op_pcount" value="1" /> <span id="op_pspcount">Количество раз</span>&nbsp;
+                                                <select id="op_pcounts" disabled="disabled" />
                                             </div>
-                                            <div class="op_f_field">
-                                                <label for="op_comment">Комментарий</label>
-                                                <textarea id="op_comment"></textarea>
+                                            <div class="op_pf_field">
+                                                <label for="op_pcomment">Комментарий</label>
+                                                <textarea id="op_pcomment"></textarea>
                                             </div>
                                         </div>
                                     </div>

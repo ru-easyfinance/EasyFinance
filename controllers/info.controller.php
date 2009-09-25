@@ -57,7 +57,7 @@ class Info_Controller extends Template_Controller
 
         $this->tpl->append('js','jquery/tinysort.js');
         $this->tpl->append('js','info/functions.js');
-        $this->tpl->append('js','info/view.js');
+        //$this->tpl->append('js','info/view.js');
     }
 
 ////////////targets/////////////////////////////////////////

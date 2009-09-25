@@ -187,7 +187,7 @@ $(document).ready(function() {
     //('.line').find("ul").show();
     $('div.line tr,div.l_n_cont').live('mouseover',function(){
         $('div.line tr,div.l_n_cont').removeClass('act').find('ul').hide();
-        $(this).addClass('act').find('ul').show();
+        $(this).addClass('act').find('ul').show().css({right:'-59px'});
     });
     $('body').mousemove(function(){
             if (!$('ul:hover').length && !$('.act:hover').length)
