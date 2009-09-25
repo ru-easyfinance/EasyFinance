@@ -104,37 +104,40 @@ function FloatFormat(obj, in_string )
 
 $(document).ready(function() {
 
-
    //Глобальный стиль для qTip элементов
-   $.fn.qtip.styles.mystyle = { // Last part is the name of the style
-   width: 200,
-   background: '#abcdef',
-   color: 'black',
-   textAlign: 'center',
-   position: {
-       target: 'mouse',
-      corner: {
-         target: 'topLeft',
-         tooltip: 'bottomLeft'
-      }
-   },
-   //show: 'mouseover',
-   //show: { delay: 10000 },
-   show: 'mouseover',
-   hide: 'mouseout',
-   border: {
-      width: 3,
-      radius: 2,
-      color: '#f5f5ff'
-   },
-   tip: 'bottomRight',
-   //z-index: 1000,
-   style: {
-      name: 'blue' // Inherit from preset style
-   }
+    $.fn.qtip.styles.mystyle = { // Last part is the name of the style
+        width: 200,
+        background: '#abcdef',
+        color: 'black',
+        textAlign: 'center',
+        position: {
+            target: 'mouse',
+            corner: {
+                target: 'topLeft',
+                tooltip: 'bottomLeft'
+            }
+        },
+        //show: 'mouseover',
+        //show: { delay: 10000 },
+        show: 'mouseover',
+        hide: 'mouseout',
+        border: {
+            width: 3,
+            radius: 2,
+            color: '#f5f5ff'
+        },
+        tip: 'bottomRight',
+        //z-index: 1000,
+        style: {
+            name: 'blue' // Inherit from preset style
+        }
+    }
 
-   //name: 'dark' // Inherit the rest of the attributes from the preset dark style
-}
+    if (res['errors'] != null && res['errors'].length > 0) {
+        for (v in res['errors']) {
+            $.jGrowl(res['errors'][v], {theme: 'red'});
+        }
+    }
 
 $("#review").qtip({
    content: 'Описание основных элементов и сервисов',

@@ -50,6 +50,12 @@ class Core
     public static $currency = null;
 
     /**
+     * Массив с ошибками, которые будут сообщаться пользователю в виде всплывающего облачка
+     * @var array mixed
+     */
+    public static $errors = array();
+
+    /**
      * Возвращает ссылку на себя
      * @example Core::getInstance()->parse_url();
      *

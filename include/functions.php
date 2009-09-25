@@ -63,22 +63,25 @@ function databaseLogger($db, $sql)
 */
 function UserErrorHandler($errno, $errstr, $errfile, $errline)
 {
-    $tpl = Core::getInstance()->tpl;
-    //TODO Нотисы и варнинги - показывать, ерроры - не показывать, только записывать в лог
-    switch ($errno) {
+     switch ($errno) {
         case E_USER_ERROR:
             trigger_error("*USER ERROR* [$errno] $errstr line: $errline in file: $errfile");
+            //Core::getInstance()->errors[] = $errstr;
             exit(1);
         case E_USER_WARNING:
-            trigger_error("*USER WARNING* [$errno] $errstr  line: $errline in file: $errfile");
+            //trigger_error("*USER WARNING* [$errno] $errstr  line: $errline in file: $errfile");
+            Core::getInstance()->errors[] = $errstr;
+            die($errstr);
             break;
         case E_USER_NOTICE:
-            if (substr($errstr, 0, 4) == '  --'){
-                FirePHP::getInstance(true)->log($errstr);
-            } else {
-                FirePHP::getInstance(true)->info($errstr);
+            if (DEBUG) {
+                if (substr($errstr, 0, 4) == '  --'){
+                    FirePHP::getInstance(true)->log($errstr);
+                } else {
+                    FirePHP::getInstance(true)->info($errstr);
+                }
+                break;
             }
-            break;
     }
     return true;
 }

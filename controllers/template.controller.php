@@ -44,8 +44,7 @@ class Template_Controller {
 
         $user = Core::getInstance()->user;
         if (is_null($user->getId())) { 
-            Core::getInstance()->tpl->assign('res', '[]');
-            
+            Core::getInstance()->tpl->assign('res', json_encode(array('errors'=>Core::getInstance()->errors)));
             return false;
         }
         Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
@@ -108,7 +107,8 @@ class Template_Controller {
                 'title' => '',
                 'value' => 0,
 
-            )
+            ),
+            'errors'=>Core::getInstance()->errors,
         )));
     }
 }

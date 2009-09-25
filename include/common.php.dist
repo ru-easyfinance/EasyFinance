@@ -25,13 +25,9 @@ set_error_handler("UserErrorHandler");
 // Настраиваем смарти
 $tpl = new Smarty();
 
-if ($_SESSION['pda'] == 'on') {
-    $tpl->template_dir    =  SYS_DIR_ROOT.'/templates_pda';
-    $tpl->compile_dir     =  SYS_DIR_ROOT.'/cache_pda';
-}else{
-    $tpl->template_dir    =  SYS_DIR_ROOT.'/views';
-    $tpl->compile_dir     =  SYS_DIR_ROOT.'/cache';
-}
+$tpl->template_dir    =  SYS_DIR_ROOT.'/views';
+$tpl->compile_dir     =  SYS_DIR_ROOT.'/cache';
+
 $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;

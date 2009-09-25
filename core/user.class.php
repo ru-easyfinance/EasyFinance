@@ -140,7 +140,7 @@ class User
 
         $this->props = $this->db->selectRow($sql, $login, $pass);
         if (count($this->props) == 0) {
-            trigger_error('Не верный логин или пароль! ' . $login . ' ' . $pass , E_USER_WARNING);
+            trigger_error('Не верный логин или пароль!', E_USER_WARNING);
             $this->destroy();
             return false;
         } elseif ($this->props['user_active'] == 0) {
