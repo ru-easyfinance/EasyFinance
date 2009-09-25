@@ -293,12 +293,7 @@ class Report_Model
         }
     }
 
-    public function calcDaysDiff($dateFrom='',$dateTo='') {
-  	// Переводим даты в формат ISO
-  	list($day,$month,$year) = explode(".", $dateFrom);
-	$dateFrom = $year."-".$month."-".$day;
-	list($day,$month,$year) = explode(".", $dateTo);
-	$dateTo = $year."-".$month."-".$day;
+   function calcDaysDiff($dateFrom='',$dateTo='') {
 	// Создаем объекты с датами
 	$dtFromS = strtotime($dateFrom);
   	$dtToS = strtotime($dateTo);

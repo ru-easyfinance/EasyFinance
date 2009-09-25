@@ -910,6 +910,15 @@ div.cont ul li.add a { width: 12px; }
 .operation_list table td div.cont ul li.add a,
 .categories table td div.cont ul li.add a { width: 12px; }
 
+.categoriesSH table td div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
+.categoriesSH table td div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.categoriesSH table td div.cont ul li { float: left; margin: 9px 8px 0 0; height: 12px; }
+.categoriesSH table td div.cont ul li a { display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden;  }
+.categoriesSH table td div.cont ul li.edit a { width: 13px; }
+.categoriesSH table td div.cont ul li.del a { width: 11px; }
+.categoriesSH table td div.cont ul li.add { margin-right: 0; }
+.categoriesSH table td div.cont ul li.add a { width: 12px; }
+
 
 .calendar_block, .calculator_block { margin-bottom: 14px; }
 .calendar_block h2, .calculator_block h2 { margin: 0 0 11px 16px; font: 14px/16px Helvetica, Arial, Tahoma; color: #ec7b3d; }
@@ -984,6 +993,13 @@ div.cont ul li.add a { width: 12px; }
 .budget .waste_list table td.w1 a, .categories table td.w1 a { display: block; padding-left: 25px; }
 .budget .waste_list table td.w2 { width: 103px; padding-top: 4px; z-index: 10; }
 
+.budget .waste_list .h, .categoriesSH .h { background: url('/img/i/bg09.gif') repeat-x 0 0; }
+.budget .waste_list .h  table td, .categoriesSH table.h td { font-size: 11px; padding: 7px 0 5px 0; }
+.budget .waste_list table td a, .categoriesSH table td a { color: #313131; }
+.budget .waste_list table td .cont, .categoriesSH table td .cont { position: relative; z-index: 10; }
+.budget .waste_list table tr.act td, .categoriesSH table tr.act td { background-color: #daffd4; }
+.budget .waste_list table td.w1 a, .categoriesSH table td.w1 a { display: block; padding-left: 25px; }
+
 .budget .waste_list table td.w3 { width: 81px; }
 .budget .waste_list table td.w4 { width: 97px; font-size: 11px; }
 .budget .waste_list table td.w4 span { display: block; float: left; margin-right: 5px; }
@@ -1004,8 +1020,15 @@ div.cont ul li.add a { width: 12px; }
 .budget .waste_list table .begun .mark { position: absolute; top: 10px; width: 16px; height: 17px; cursor: pointer; //cursor: hand; background: url('/img/i/mark.png') no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/mark.png", sizingMethod="crop");  }
 
 
+.budget .waste_list .line, .categoriesSH .line { position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
+.budget .waste_list .line a.name, .categoriesSH .line a.name { display: block; margin-bottom: 4px; width: 179px; padding-left: 25px; color: #313131; font-weight: bold; }
+.budget .waste_list .open a.name, .categoriesSH .open a.name { background: url('/img/i/minus.gif') no-repeat 6px 4px; }
+.budget .waste_list .open table, .categoriesSH .open table { display: block; }
+.budget .waste_list .close a.name, .categoriesSH .close a.name { background: url('/img/i/plus.gif') no-repeat 6px 4px; }
+.budget .waste_list .close table, .categoriesSH .close table { display: none; }
+
 .budget .waste_list .line, .categories .line { position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
-.budget .waste_list .line a.name, .categories .line a.name { display: block; margin-bottom: 4px; width: 179px; padding-left: 25px; color: #313131; font-weight: bold; } 
+.budget .waste_list .line a.name, .categories .line a.name { display: block; margin-bottom: 4px; width: 179px; padding-left: 25px; color: #313131; font-weight: bold; }
 .budget .waste_list .line .amount { position: absolute; top: 7px; left: 200px; font-weight: bold; }
 
 .budget .waste_list .open a.name, .categories .open a.name { background: url('/img/i/minus.gif') no-repeat 6px 4px; }
@@ -1020,7 +1043,22 @@ div.cont ul li.add a { width: 12px; }
 .categories table.h td span { color: #8d8d8d; }
 .categories table.h td.w1 { width: 187px; padding-left: 25px; }
 .categories table.h td.w4 { padding: 7px 0 5px 0; }
-
+.categoriesSH table.h td span { color: #8d8d8d; }
+.categoriesSH table.h td.w1 { width: 187px; padding-left: 25px; }
+.categoriesSH table.h td.w4 { padding: 7px 0 5px 0; }
+.categoriesSH table { position: relative; width: 517px; }
+.categoriesSH table td { position: relative; padding: 7px 0 5px 0; }
+.categoriesSH table td.w1 { width: 207px; padding-right: 5px; }
+.categoriesSH table td.w2 { width: 48px; }
+.categoriesSH table td.w2 div { display: block; margin: 6px auto 0 auto; width: 8px; height: 8px; text-indent: -999px; overflow: hidden; background: url('/img/i/types.gif') no-repeat 0 0; }
+.categoriesSH table td.w2 div.t2 { background-position: 0 -10px; }
+.categoriesSH table td.w2 div.t3 { background-position: 0 -20px; }
+.categoriesSH table td.w3 { width: 122px; padding-left: 10px; padding-right: 15px; }
+.categoriesSH table td.w4 { width: 110px; font-size: 11px; padding-top: 0; }
+.categoriesSH .indicator { position: relative; width: 94px; height: 13px; background: url('/img/i/bg11.png') no-repeat 0 -100px; }
+.categoriesSH .indicator div { position: relative; height: 13px; border-left: 1px solid #ced791; border-right: 1px solid #ced791; background: url('/img/i/bg16.gif') repeat-x 0 0; }
+.categoriesSH .indicator div span { display: block; padding: 1px 5px 0 0; font-size: 10px; line-height: 11px; color: #3d3d3d; text-align: right; }
+.categoriesSH table td div.cont ul { top: 0; right: -67px;  }
 
 .categories table { position: relative; width: 517px; }
 .categories table td { position: relative; padding: 7px 0 5px 0; }

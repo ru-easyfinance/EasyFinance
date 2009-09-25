@@ -90,12 +90,14 @@ function ShowDetailedWaste(){
                 tr += "<tr>" + '<td class="summ"><span><b>'+data[0].cat_name+
                     '<span><b></td></tr>';
             }
+            if (data[c].cat_name != null){
             tr += "<tr>"
                         + '<td>&nbsp;</td>'
                         + '<td class="repdate"><span>'+data[c].date+'</span></td>'
                         + '<td class="repname"><span>'+data[c].account_name+'</span></td>'
                         + '<td class="repsumm"><span>'+data[c].money+'</span></td>'
                         + '</tr>';
+            }
         }
         $('tr:not(:first)','#reports_list').each(function(){
                     $(this).remove();
@@ -115,6 +117,11 @@ function ShowCompareWaste(){
         dateTo2: $('#dateTo2').val()
      }, function(data) {
         var tr = '';
+        tr += '<tr><th>&nbsp;</th>\n\
+                    <th><span class="sort" title="отсортировать">Период 1</span></th>\n\
+                    <th><span class="sort" title="отсортировать">Период 2</span></th>\n\
+                    <th><span class="sort" title="отсортировать">Разница</span></th>\n\
+               </tr>';//*/
         var sum1=0;
         var sum2=0;
         var delta=0;
@@ -145,6 +152,7 @@ function ShowCompareWaste(){
                 }
             };         
             delta=sum2-sum1;
+           if (data[c].cat_name != null){
             tr +=        '<tr><td ><span><b>'+data[c].cat_name+
                         '<span><b></td>'+
                         '<td class="repdate"><span>'+sum1+'</span></td>'
@@ -153,10 +161,11 @@ function ShowCompareWaste(){
                         + '</tr>';
             ssum1 = parseFloat(ssum1) + parseFloat(sum1);
             ssum2 = parseFloat(ssum2) + parseFloat(sum2);
-            sdelta += delta;
+            sdelta += Math.round(delta);
+           }
         }
         }
-        tr +=        '<tr><td ><span><b>Итого:<span><b></td>'+
+        tr +=        '<tr><td ><span><b>Итого:</span><b></td>'+
                         '<td class="repdate"><span>'+ssum1+'</span></td>'
                         + '<td class="repname"><span>'+ssum2+'</span></td>'
                         + '<td class="repsumm"><span>'+sdelta+'</span></td>'
@@ -180,8 +189,9 @@ function ShowIncome(){
         account: $('#account :selected').val(),
         currency:$('#currency :selected').val()
      }, function(d) {
-            tmp = findSWF("chart");
-            x = tmp.load(JSON.stringify(d));
+            var tmp = findSWF("chart");
+            alert(tmp.toString());
+            setTimeout(function(){tmp.load(JSON.stringify(d));},1000)
                 //BaseReport();
 
     },'json');
@@ -198,6 +208,11 @@ function ShowAverageIncome(){
         dateTo2: $('#dateTo2').val()
      }, function(data) {
         var tr = '';
+        tr += '<tr><th>&nbsp;</th>\n\
+                    <th><span class="sort" title="отсортировать">Период 1</span></th>\n\
+                    <th><span class="sort" title="отсортировать">Период 2</span></th>\n\
+                    <th><span class="sort" title="отсортировать">Разница</span></th>\n\
+               </tr>';//*/
         var sum1=0;
         var sum2=0;
         var delta=0;
@@ -228,6 +243,7 @@ function ShowAverageIncome(){
                 }
             };
             delta=sum2-sum1;
+            if (data[2][c].cat_name != null){
             tr +=        '<tr><td ><span><b>'+data[2][c].cat_name+
                         '<span><b></td>'+
                         '<td class="repdate"><span>'+sum1+'</span></td>'
@@ -236,7 +252,8 @@ function ShowAverageIncome(){
                         + '</tr>';
             ssum1 = Math.round(parseFloat(ssum1)) + Math.round(parseFloat(sum1));
             ssum2 = Math.round(parseFloat(ssum2)) + Math.round(parseFloat(sum2));
-            sdelta += delta;
+            sdelta += Math.round(delta);
+            }
         }
         }
         tr +=        '<tr><td ><span><b>Итого:<span><b></td>'+
@@ -257,10 +274,10 @@ function BaseReport(){
             ShowIncome();
         break;
         case "Расходы":
-            ShowWaste();
+            ShowIncome();
         break;
         case "Сравнение расходов и доходов":
-            ShowIncomeWaste();
+            ShowIncome();
         break;
         case "Детальные доходы":
             ShowDetailedIncome();

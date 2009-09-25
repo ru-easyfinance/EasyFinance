@@ -76,6 +76,9 @@ class Report_Controller extends Template_Controller
         $this->tpl->append('js','jquery/ui.datepicker.js');
         $this->tpl->append('js','ofc/swfobject.js');
         $this->tpl->append('js','ofc/json2.js');
+        $this->tpl->append('js','ofc/ofc.js');
+        $this->tpl->append('js','ofc/open_flash_chart.js');
+        $this->tpl->append('js','anychart/AnyChart.js');
 
         $this->tpl->append('js','report.js');
 
@@ -84,6 +87,8 @@ class Report_Controller extends Template_Controller
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
         $this->tpl->assign('dateFrom', date('01.m.Y'));
         $this->tpl->assign('dateTo',   date(date('t').'.m.Y'));
+        $this->tpl->assign('dateFrom2', date('01.m.Y'));
+        $this->tpl->assign('dateTo2',   date(date('t').'.m.Y'));
     }
 
     /**

@@ -110,7 +110,7 @@ $(document).ready(function() {
 
             // Обновляем список категорий
             m='<option value=""> --- </option>';p=[];
-            
+            $('.categories #table').append('<table>');
             for(var id in data.user) {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
@@ -149,7 +149,7 @@ $(document).ready(function() {
                         +'<td class="w3">'+data.system[data.user[id]['system']]['name']
                         +'</td>'
                         +'<td class="w4">'
-                            +'<div class="cont">'
+                            +'<div class="cont" css: style{z-index: 1;}>'
 //                                +'<b>500 руб.</b>'
 //                                +'<div class="indicator">'
 //                                    +'<div style="width: 10%;">'
@@ -161,20 +161,21 @@ $(document).ready(function() {
                                     +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
                         +'</td></tr>'
                     );
-                }
+                }             
             }
+            $('.categories #table').append('</table>');
             //$('div.categories').append(c);
             $('#subcat').html(m);
 			
             $('.block2 .inside').css({width: '679px'});
             $('.block2 .inside .form_block').css({width: '353px'});
-            $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});
+            $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});//.h
             $('.block2 .inside .line').css({width: '507px'});
             $('.block2 .inside .h tr').css({width: '507px'});
             $('.block2 .inside .categories').css({width: '597px', height:'500px',border:'0'}).jScrollPane();
             $('.line,.h').css('border-left','1px solid #E8E8E8').css('border-right','1px solid #E8E8E8')
-            $('.jScrollPaneTrack').css({'right':'80px','z-index':1})
-            $('ul').css('z-index', 100)
+            $('.jScrollPaneTrack').css({'right':'80px','z-index':1,'top':'0px'})
+            $('ul').css('z-index', 100)//*/
         }, 'json');
     }
     /**

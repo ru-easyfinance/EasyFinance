@@ -128,6 +128,7 @@ $(document).ready(function() {
       color: '#f5f5ff'
    },
    tip: 'bottomRight',
+   //z-index: 1000,
    style: {
       name: 'blue' // Inherit from preset style
    }
