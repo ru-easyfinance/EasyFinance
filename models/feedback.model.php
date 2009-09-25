@@ -34,15 +34,19 @@ class Feedback_Model
 
     public function add_message($msg,$param)
     {
-        $sql = "INSERT INTO feedback_message SET uid=?, user_settings=?, messages=?, user_name=?, `new`='1', rating='0'";
-                $this->db->query($sql, $this->user, serialize($param), $msg, $this->user);
+        if (!empty($msg)) {
+            $sql = "INSERT INTO feedback_message SET uid=?, user_settings=?, messages=?, user_name=?, `new`='1', rating='0'";
+                    $this->db->query($sql, $this->user, serialize($param), $msg, $this->user);
 
-        $to      = 'max.kamashev@gmail.com, bashokov.ae@easyfinance.ru';
-        $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
-        $headers = "From: support@easyfinance.ru \r\nReply-To: support@easyfinance.ru \r\n";
-        $mail    = "Пришло сообщение от тестировщика : {$this->user}</br>{$msg}</br> id сообщения : ".mysql_insert_id();
-        $html_mail = "<html><head><title>Cообщение от тестировщика</title></head><body>{$mail}</body></html>";
-        mail($to, $subject, $message, $headers);
+            $to      = 'max.kamashev@gmail.com, bashokov.ae@easyfinance.ru';
+            $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
+            $headers = "From: support@easyfinance.ru \r\nReply-To: support@easyfinance.ru \r\n";
+            $mail    = "Пришло сообщение от тестировщика : {$this->user}</br>{$msg}</br> id сообщения : ".mysql_insert_id();
+            $html_mail = "<html><head><title>Cообщение от тестировщика</title></head><body>{$mail}</body></html>";
+            mail($to, $subject, $html_mail, $headers);
+        } else {
+            exit;
+        }
     }
 
     public function get_rlist()
