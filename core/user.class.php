@@ -71,9 +71,15 @@ class User
     public function __construct()
     {
         // Если соединение пользователя защищено, то пробуем авторизироваться
-        if (isset($_SERVER['HTTPS'])) {
+        if ($_SERVER['SERVER_PORT'] ==443) {
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME])) {
+                if (isset($_COOKIE['PHPSESSID'])) {
+                    if (!isset($_SESSION)) {
+                        session_start();
+                    }
+                    $this->load(); //Пробуем загрузить из сессии данные
+                }
                 if (is_null(Core::getInstance()->db)) {
                     Core::getInstance()->initDB();
                 }
@@ -91,12 +97,7 @@ class User
             header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
             exit;
         }
-        if (isset($_COOKIE['PHPSESSID'])) {
-            if (!isset($_SESSION)) {
-                session_start();
-            }
-            $this->load(); //Пробуем загрузить из сессии данные
-        }
+
     }
 
     /**
