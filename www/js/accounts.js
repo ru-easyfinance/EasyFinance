@@ -139,7 +139,7 @@ $(document).ready(function()
      * #edit[num] редактировать счёт
      * @return void
      */
-    function hash_api(str)
+    function hash_api(str,flag)
     {
         var s = str.toString();
         if (s=='#add')
@@ -174,6 +174,14 @@ $(document).ready(function()
                     $(document).scrollTop(300);
                     $('#account_form_fields table').attr('id',account.id);
                     $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+account.id+'" />');
+                    if (flag)
+                    {
+                        $('#account_form_fields table').attr('id','0');
+                        $('#account_form_fields table input.id').val('0');
+                        var bk_val = $('#blockCreateAccounts input#name').val();
+                        $('#blockCreateAccounts input#name').val('Копия_' + bk_val);
+                    }
+                    
                 },
                 'text'//@todo заменить на ясон; требует изменения модели и контроллера
             );
@@ -461,13 +469,13 @@ $(document).ready(function()
 
     $('li.add').live('click',
         function(){
+            var flag = 1;
             $('#blockCreateAccounts').show();
             var id = $(this).closest('.item').attr('id');
-            hash_api('#edit'+id);
+            hash_api('#edit'+id,flag);
             new_acc=1;
 
-            $('#blockCreateAccounts input#name').val('');
+
         }
     );
-        $('li#c1').click();
 });
