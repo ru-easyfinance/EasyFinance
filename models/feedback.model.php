@@ -41,9 +41,7 @@ class Feedback_Model
             $to      = 'max.kamashev@gmail.com, bashokov.ae@easyfinance.ru';
             $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
             $headers = "From: support@easyfinance.ru \r\nReply-To: support@easyfinance.ru \r\n";
-            $mail    = "Пришло сообщение от тестировщика : {$this->user}</br>{$msg}</br> id сообщения : ".mysql_insert_id();
-            $html_mail = "<html><head><title>Cообщение от тестировщика</title></head><body>{$mail}</body></html>";
-            mail($to, $subject, $html_mail, $headers);
+            mail($to, $subject, $msg, $headers);
         } else {
             exit;
         }
