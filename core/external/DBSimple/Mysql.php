@@ -24,31 +24,53 @@ require_once dirname(__FILE__) . '/Generic.php';
  */
 class DbSimple_Mysql extends DbSimple_Generic_Database
 {
-    var $link;
+	protected $link = null;
+	protected $dsn;
+	
+	/**
+	 * constructor(string $dsn)
+	 * Connect to MySQL.
+	 */
+	function DbSimple_Mysql($dsn)
+	{
+		$this->dsn = DbSimple_Generic::parseDSN($dsn);
+		
+		if (!is_callable('mysql_connect')) {
+			return $this->_setLastError("-1", "MySQL extension is not loaded", "mysql_pconnect");
+		}
+	}
 
-    /**
-     * constructor(string $dsn)
-     * Connect to MySQL.
-     */
-    function DbSimple_Mysql($dsn)
-    {
-        $p = DbSimple_Generic::parseDSN($dsn);
-        if (!is_callable('mysql_connect')) {
-            return $this->_setLastError("-1", "MySQL extension is not loaded", "mysql_pconnect");
-        }
-        $ok = $this->link = @mysql_pconnect(
-            $p['host'] . (empty($p['port'])? "" : ":".$p['port']),
-            $p['user'],
-            $p['pass'],
-            true
-        );
-        $this->_resetLastError();
-        if (!$ok) return $this->_setDbError('mysql_connect()');
-        $ok = @mysql_select_db(preg_replace('{^/}s', '', $p['path']), $this->link);
-        if (!$ok) return $this->_setDbError('mysql_select_db()');
-    }
-
-
+	/**
+	 * Simple implementation of lazy load
+	 *
+	 */
+	private function initConnection()
+	{
+		$link = @mysql_pconnect(
+			$this->dsn['host'] . (empty($this->dsn['port'])? "" : ":".$this->dsn['port']),
+			$this->dsn['user'],
+			$this->dsn['pass'],
+			true
+		);
+		
+		$this->_resetLastError();
+		if (!$link) return $this->_setDbError('mysql_connect()');
+		$link = @mysql_select_db(preg_replace('{^/}s', '', $this->dsn['path']), $link);
+		if (!$link) return $this->_setDbError('mysql_select_db()');
+		
+		return $link;
+	}
+	
+	function __get( $varName )
+	{
+		if( $varName == 'link' )
+		{
+			$this->link = $this->initConection();
+		}
+		
+		return $this->$varName;
+	}
+	
     function _performEscape($s, $isIdent=false)
     {
         if (!$isIdent) {
