@@ -1051,12 +1051,124 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a { padding-right: 22px; backgr
 
 
 #aboutproject .inside { color:#404040;font-size:11px;line-height:17px; }
-#aboutproject .inside div.w_dialog div.w_d_body { background:transparent url(../i/wel.msg.body.png) no-repeat scroll 0 0;height:auto;position:relative;text-align:justify;width:300px; }
+#aboutproject .inside div.w_dialog div.w_d_body { background:transparent url(../i/jQuery/wel.msg.body.png) no-repeat scroll 0 0;height:auto;position:relative;text-align:justify;width:300px; }
 #aboutproject .inside .text { display:block;font-size:13px;line-height:17px;margin-left:15px;position:relative;right:80px;top:0;width:270px; }
 #aboutproject .inside div#dialog { background:transparent none repeat scroll 0 50%;padding-left:27px; }
 #aboutproject .inside div.w_dialog { height:auto; min-height:50px;position:absolute;width:400px;z-index:100; }
-#aboutproject .inside div { background:transparent url(../i/bg02.jpg) no-repeat scroll 0 0;height:132px;overflow:hidden;padding-left:94px;position:absolute;top:4px;width:176px; }
-#aboutproject .inside div.w_dialog div.w_d_head { background:transparent url(../i/wel.msg.head.png) no-repeat scroll 0 0;height:20px;position:relative;width:400px; }
-#aboutproject .inside div.w_dialog div.w_d_foot { background:transparent url(../i/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:400px; }
-#aboutproject .inside .close { background:transparent url(../i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;right:28px;top:-7px;width:25px; }
+#aboutproject .inside div { background:transparent url(../i/jQuery/bg02.jpg) no-repeat scroll 0 0;height:132px;overflow:hidden;padding-left:94px;position:absolute;top:4px;width:176px; }
+#aboutproject .inside div.w_dialog div.w_d_head { background:transparent url(../i/jQuery/wel.msg.head.png) no-repeat scroll 0 0;height:20px;position:relative;width:400px; }
+#aboutproject .inside div.w_dialog div.w_d_foot { background:transparent url(../i/jQuery/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:400px; }
+#aboutproject .inside .close { background:transparent url(../i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;right:28px;top:-7px;width:25px; }
+
+
+div.op_addoperation .op_line .op_f_field input.op_inp, div.op_addoperation .op_line textarea { color:#20201E;width:100px; }
+
+.operation_list .sorting .f_field input { margin-left:5px; width:90px; }
+div.op_addoperation .op_line textarea { height:56px;width:350px; }
+
+.mid { margin-left:3px;padding-bottom:5px; }
+
+.general_cont { position:relative; }
+
+.mid span.mid_text { left:15px;padding-right:30px;position:relative; }
+.mid span.mid_text  p{ margin:0 40px 17px 16px;text-indent:10px;font-size:12px; }
+
+
+.map { background:transparent url(../i/map.png) no-repeat scroll 0 0;height:1008px;left:85px;padding-bottom:60px;position:relative;text-align:center;top:25px;width:789px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ui-dialog {
+padding:0.2em;
+position:relative;
+width:300px;
+}
+.ui-dialog .ui-dialog-titlebar {
+padding:0.5em 0.3em 0.3em 1em;
+position:relative;
+}
+.ui-dialog .ui-dialog-title {
+float:left;
+margin:0.1em 0 0.2em;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+height:18px;
+margin:-10px 0 0;
+padding:1px;
+position:absolute;
+right:0.3em;
+top:50%;
+width:19px;
+}
+.ui-dialog .ui-dialog-titlebar-close span {
+display:block;
+margin:1px;
+}
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus {
+padding:0;
+}
+.ui-dialog .ui-dialog-content {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent none repeat scroll 0 0;
+border:0 none;
+overflow:auto;
+padding:0.5em 1em;
+}
+.ui-dialog .ui-dialog-buttonpane {
+background-image:none;
+border-width:1px 0 0;
+margin:0.5em 0 0;
+padding:0.3em 1em 0.5em 0.4em;
+text-align:left;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+cursor:pointer;
+float:right;
+line-height:1.4em;
+margin:0.5em 0.4em 0.5em 0;
+overflow:visible;
+padding:0.2em 0.6em 0.3em;
+width:auto;
+}
+.ui-dialog .ui-resizable-se {
+bottom:3px;
+height:14px;
+right:3px;
+width:14px;
+}
+.ui-draggable .ui-dialog-titlebar {
+cursor:move;
+}
+
+.ui-dialog.ui-widget-content {
+-moz-background-clip:border !important;
+-moz-background-inline-policy:continuous !important;
+-moz-background-origin:padding !important;
+background:#FFFFFF url(../i/jQuery/calendar/bg_ui-dialog_bottomright.gif) no-repeat scroll right bottom !important;
+}
 
