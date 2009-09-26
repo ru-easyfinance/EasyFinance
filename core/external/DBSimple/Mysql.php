@@ -46,34 +46,28 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 	 */
 	private function initConnection()
 	{
-		$link = @mysql_pconnect(
-			$this->dsn['host'] . (empty($this->dsn['port'])? "" : ":".$this->dsn['port']),
-			$this->dsn['user'],
-			$this->dsn['pass'],
-			true
-		);
-		
-		$this->_resetLastError();
-		if (!$link) return $this->_setDbError('mysql_connect()');
-		$link = @mysql_select_db(preg_replace('{^/}s', '', $this->dsn['path']), $link);
-		if (!$link) return $this->_setDbError('mysql_select_db()');
-		
-		return $link;
-	}
-	
-	function __get( $varName )
-	{
-		if( $varName == 'link' )
+		if( $this->link === null )
 		{
-			$this->link = $this->initConection();
+			$this->link = @mysql_pconnect(
+				$this->dsn['host'] . (empty($this->dsn['port'])? "" : ":".$this->dsn['port']),
+				$this->dsn['user'],
+				$this->dsn['pass'],
+				true
+			);
+			
+			$this->_resetLastError();
+			if (!$this->link) return $this->_setDbError('mysql_connect()');
+			$link = @mysql_select_db(preg_replace('{^/}s', '', $this->dsn['path']), $this->link);
+			if (!$this->link) return $this->_setDbError('mysql_select_db()');
 		}
 		
-		return $this->$varName;
+		return $this->link;
 	}
 	
     function _performEscape($s, $isIdent=false)
     {
         if (!$isIdent) {
+        	$this->initConnection();
             return "'" . mysql_real_escape_string($s, $this->link) . "'";
         } else {
             return "`" . str_replace('`', '``', $s) . "`";
@@ -173,8 +167,11 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 
     function _performQuery($queryMain)
     {
+    	$this->initConnection();
+    	
         $this->_lastQuery = $queryMain;
         $this->_expandPlaceholders($queryMain, false);
+        
         $result = @mysql_query($queryMain[0], $this->link);
         if ($result === false) return $this->_setDbError($queryMain[0]);
         if (!is_resource($result)) {
@@ -200,12 +197,14 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
     
     function _setDbError($query)
     {
+    	$this->initConnection();
         return $this->_setLastError(mysql_errno($this->link), mysql_error($this->link), $query);
     }
     
     
     function _calcFoundRowsAvailable()
     {
+    	$this->initConnection();
         $ok = version_compare(mysql_get_server_info($this->link), '4.0') >= 0;
         return $ok;
     }
