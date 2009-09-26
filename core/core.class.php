@@ -100,7 +100,7 @@ class Core
         $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
         // И обработчик ошибок для бд
         $db->setErrorHandler('databaseErrorHandler');
-        $db->query("SET character_set_client = 'utf8', character_set_connection = 'utf8',character_set_results = 'utf8'");
+        
         Core::getInstance()->db = $db;
         //Логгируем все запросы. Только во включенном режиме DEBUG
         if (DEBUG) {

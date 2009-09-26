@@ -59,6 +59,8 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 			if (!$this->link) return $this->_setDbError('mysql_connect()');
 			$link = @mysql_select_db(preg_replace('{^/}s', '', $this->dsn['path']), $this->link);
 			if (!$this->link) return $this->_setDbError('mysql_select_db()');
+			
+			$this->query("SET character_set_client = 'utf8', character_set_connection = 'utf8',character_set_results = 'utf8'");
 		}
 		
 		return $this->link;
