@@ -40,13 +40,13 @@ class Registration_Model
     function new_user () {
         $db = Core::getInstance()->db;
         $tpl = Core::getInstance()->tpl;
-
+        
         // Проверяем валидность заполненных данных
         $error_text = array();
-        $register['name'] = htmlspecialchars(@$_POST['register']['name']);
-        if (!empty($_POST['register']['pass']) && !empty($_POST['register']['pass_r'])) {
-            if (@$_POST['register']['pass'] == @$_POST['register']['pass_r']) {
-                $pass = SHA1(@$_POST['register']['pass']);
+        $register['name'] = htmlspecialchars(@$_POST['name']);
+        if (!empty($_POST['password']) && !empty($_POST['confirm_password'])) {
+            if (@$_POST['password'] == @$_POST['confirm_password']) {
+                $pass = SHA1(@$_POST['password']);
             } else {
                 $error_text['pass'] = "Введённые пароли не совпадают!";
             }
@@ -54,18 +54,18 @@ class Registration_Model
             $error_text['pass'] = "Введите пароль!";
         }
 
-        if ($this->validate_login(@$_POST['register']['login'])) {
-            $register['login'] = @$_POST['register']['login'];
+        if ($this->validate_login(@$_POST['login'])) {
+            $register['login'] = @$_POST['login'];
         } else {
             $error_text['login'] = "Неверно введен логин! <i>Логин может содержать только латинские буквы и цифры!</i>";
-            $register['login'] = htmlspecialchars(@$_POST['register']['login']);
+            $register['login'] = htmlspecialchars(@$_POST['login']);
         }
 
-        if (validate_email(@$_POST['register']['mail'])) {
-            $register['mail'] = @$_POST['register']['mail'];
+        if (validate_email(@$_POST['mail'])) {
+            $register['mail'] = @$_POST['mail'];
         }else{
             $error_text['mail'] = "Неверно введен e-mail!";
-            $register['mail'] = htmlspecialchars(@$_POST['register']['mail']);
+            $register['mail'] = htmlspecialchars(@$_POST['mail']);
         }
         $cell = $db->selectCell("SELECT id FROM users WHERE user_login=?", $register['login']);
         if (!empty($cell)) {
@@ -74,7 +74,7 @@ class Registration_Model
 
         // Если нет ошибок, создаём пользователя
         if (empty($error_text)) {
-
+            
             //Добавляем в таблицу пользователей
             $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
                 user_created, user_active, user_new) VALUES (?, ?, ?, ?, CURDATE(), 0, 1)";
@@ -115,10 +115,9 @@ class Registration_Model
             $headers .= "From: info@home-money.ru\n";
             //TODO
             mail($register['mail'], $subject, $body, $headers);
-        } else {
-            $tpl->assign('error_text', $error_text);
-        }
-        $tpl->assign('register', $register);
+            header('/registration/activate/');exit;
+        } 
+       
     }
 
     /**

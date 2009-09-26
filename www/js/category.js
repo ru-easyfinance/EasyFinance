@@ -172,7 +172,7 @@ $(document).ready(function() {
             $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});//.h
             $('.block2 .inside .line').css({width: '507px'});
             $('.block2 .inside .h tr').css({width: '507px'});
-            $('.block2 .inside .categories').css({width: '597px', height:'500px',border:'0'}).jScrollPane();
+            $('.block2 .inside .categories').css({width: '597px',border:'0'}).jScrollPane();
             $('.line,.h').css('border-left','1px solid #E8E8E8').css('border-right','1px solid #E8E8E8')
             $('.jScrollPaneTrack').css({'right':'80px','z-index':1,'top':'0px'})
             $('ul').css('z-index', 100)//*/

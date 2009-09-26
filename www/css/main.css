@@ -839,7 +839,7 @@ div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background
 
 
 
-.operation_list { padding-top: 21px !important; height:500px; width: 557px}
+.operation_list { padding-top: 21px !important; height:250px; width: 557px}
 .operation_list .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px;//zoom: 1; }
 .operation_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list .sorting div{margin-bottom: 7px;}
@@ -1038,7 +1038,7 @@ div.cont ul li.add a { width: 12px; }
 .budget .waste_list .close a.name, .categories .close a.name { background: url('/img/i/plus.gif') no-repeat 6px 4px; }
 .budget .waste_list .close table, .categories .close table { display: none; }
 
-.categories { position: relative; width: 517px; border: 1px solid #e8e8e8; }
+.categories { position: relative; width: 517px;height:300px; border: 1px solid #e8e8e8; }
 .categories .line { width: auto; padding: 7px 0 9px 0; overflow: visible; }
 .categories .last { background: none; }
 
@@ -1146,7 +1146,7 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .flash_block_in .flash { width: 545px; overflow: hidden; }
 
 
-ul.menu5 { margin-bottom: 19px; padding-top: 7px; //zoom: 1; }
+ul.menu5 { margin-bottom: 7px; margin-top: 10px;margin-left:7px; //zoom: 1; }
 ul.menu5:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.menu5 li { float: left; margin-right: 15px!important; padding: 0 16px 20px 0; font-size: 11px; color: #6ebe41; }
 ul.menu5 li.act, ul.menu5 li.ui-state-active { padding: 0 16px 20px 0!important; background: url('/img/i/bg15.png') no-repeat 100% 0; }

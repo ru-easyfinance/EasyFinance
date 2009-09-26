@@ -18,7 +18,7 @@ class Registration_Controller extends Template_Controller {
      * @return void
      */
     function __construct() {
-        header('Location: /'); exit;        
+        //header('Location: /'); exit;
         $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
         
@@ -49,6 +49,7 @@ class Registration_Controller extends Template_Controller {
             $reg_id = $args[0];
             $this->model->activate($reg_id);
         } else {
+            //tpl assign
             return false;
         }
 
@@ -59,7 +60,7 @@ class Registration_Controller extends Template_Controller {
      * @param $args array mixed
      * @return void
      */
-    function new_user ($args) {
+    function new_user () {
         $this->model->new_user();
     }
 }
