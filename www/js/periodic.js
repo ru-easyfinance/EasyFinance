@@ -92,6 +92,7 @@ $(document).ready(function() {
                             +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div></td></tr>';
             }
             $('#tab1 tbody').empty().append(c);
+            //$('#tab1').jScrollPane();
         }, 'json');
     }
 
