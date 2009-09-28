@@ -27,6 +27,10 @@ $(document).ready(function() {
     $('#operations_list tr').live('dblclick',function(){
         $(this).find('li.edit a').click();
     })
+    $('.light a').live('click', function(){
+        $(this).closest('tr').find('li.edit a').click();
+        return false;
+    });
     $('#account').change(function(){
         changeAccountForTransfer();
         loadOperationList();
