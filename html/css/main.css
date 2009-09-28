@@ -1076,16 +1076,16 @@ div.op_addoperation .op_line textarea { height:56px;width:350px; }
 
 .map  { background:transparent url(../i/map.png) no-repeat scroll 0 0;height:1008px;left:85px;padding-bottom:60px;position:relative;text-align:center;top:25px;width:789px; }
 
-.map .registration{ border:1px solid red;cursor:pointer;height:250px;position:absolute;width:360px; }
-.map .CreateSales { border:1px solid red;cursor:pointer;height:200px;left:400px;position:absolute;width:150px; }
-.map .categoryEdit { border:1px solid red;cursor:pointer;height:200px;left:580px;position:absolute;width:180px; }
-.map .closeOperation { border:1px solid red;cursor:pointer;height:160px;left:600px;position:absolute;top:260px;width:220px; }
-.map .infoPanel { border:1px solid red;cursor:pointer;height:240px;left:20px;position:absolute;top:300px;width:180px; }
-.map .createTransaction { border:1px solid red;cursor:pointer;height:220px;left:586px;position:absolute;top:510px;width:200px; }
-.map .expertView { border:1px solid red;cursor:pointer;height:270px;left:12px;position:absolute;top:650px;width:200px; }
-.map .analise { border:1px solid red;cursor:pointer;height:250px;left:230px;position:absolute;top:670px;width:135px; }
-.map .financeTarget { border:1px solid red;cursor:pointer;height:250px;left:370px;position:absolute;top:770px;width:240px; }
-.map .capitalCreate { border:1px solid red;cursor:pointer;height:200px;left:620px;position:absolute;top:800px;width:160px; }
+.map .registration{ cursor:pointer;height:250px;position:absolute;width:360px; }
+.map .CreateSales { cursor:pointer;height:200px;left:400px;position:absolute;width:150px; }
+.map .categoryEdit { cursor:pointer;height:200px;left:580px;position:absolute;width:180px; }
+.map .closeOperation { cursor:pointer;height:160px;left:600px;position:absolute;top:260px;width:220px; }
+.map .infoPanel { cursor:pointer;height:240px;left:20px;position:absolute;top:300px;width:180px; }
+.map .createTransaction { cursor:pointer;height:220px;left:586px;position:absolute;top:510px;width:200px; }
+.map .expertView { cursor:pointer;height:270px;left:12px;position:absolute;top:650px;width:200px; }
+.map .analise { cursor:pointer;height:250px;left:230px;position:absolute;top:670px;width:135px; }
+.map .financeTarget { cursor:pointer;height:250px;left:370px;position:absolute;top:770px;width:240px; }
+.map .capitalCreate { cursor:pointer;height:200px;left:620px;position:absolute;top:800px;width:160px; }
 
 
 
