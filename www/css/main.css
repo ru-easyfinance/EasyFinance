@@ -699,11 +699,12 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 
 
 
-
-
-
-
-
+.event_form select,.event_form input,.event_form textarea {left:125px; position: absolute;width:300px}
+.event_form .week input{position : relative; width:20px ;left : 5px ; margin-right : 1px }
+.event_form .week label{position : relative; width:20px ;margin-left : 11px}
+.event_form .line {position : relative;margin-top :10px}
+.event_form .line div{position : relative;margin-top :10px ;left :50px}
+.event_form .rep_type{left:-35px; position: absolute;width:auto}
 
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
