@@ -241,7 +241,7 @@ $("h3:contains('Регулярные транзакции')").qtip({
    position: {target: 'mouse'},
    style: 'mystyle'
 })
-$("#datepicker").qtip({
+$(".hasDatepicker").qtip({
    content: 'Выбрать месяц для просмотра календаря',
    show: {delay: 1000},
    position: {target: 'mouse'},

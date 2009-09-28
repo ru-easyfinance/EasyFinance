@@ -1,6 +1,7 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
 $(document).ready(function()
 {
+    var accisvis = false; // характеризует активна ли панелька счетов
     /**
      * переводит число типа 12341.34535 в 12 341.35
      * для удобного отображения в виде баланса денег
@@ -217,7 +218,10 @@ $(document).ready(function()
     function accountAddVisible() {
         changeTypeAccount($('#type_account').val());
         $('#blockCreateAccounts').show();
-        $('#blockCreateAccounts').val('');
+        $('#blockCreateAccounts').val('');  
+        //$('#total_balance').enable();
+        //alert('4235');
+
     }
     /**
      * функция - пережиток прошлого;
@@ -340,15 +344,28 @@ $(document).ready(function()
     var new_acc = 1;
     var tid;
     var account_list;
+    accountAddUnvisible();
     // upload account
     update_list();
-    
-    $('#addacc').live('click',function(){////button add account click
+
+    $('#addacc').click(function(){
+    //$('#addacc').live('click',function(){////button add account click
         new_acc = 1;
-        accountAddVisible();
+        if (!accisvis) {
+            //$('#blockCreateAccounts').toggle();
+            accountAddVisible();
+        }else{
+            accountAddUnvisible();
+        }
+        accisvis = !accisvis;
+        //$('#blockCreateAccounts').val('');
+        //accountAddVisible();
+        //$('#blockCreateAccounts').toggle();
     });
     $('#btnCancelAdd').click(function(){ ////button cancel in form click
         accountAddUnvisible();
+        accisvis = false;
+        //$('#blockCreateAccounts').hide();
     });
     /**
      * select type in form selected change

@@ -15,6 +15,7 @@ $(document).ready(function() {
     $('#btnCancel').click(function(){
         clearForm();$('#add_form').hide();
     });
+
     $('#add_category').click(function(){
         $('#add_form').toggle();
         $('form').attr('action','/category/add/');
@@ -110,7 +111,7 @@ $(document).ready(function() {
 
             // Обновляем список категорий
             m='<option value=""> --- </option>';p=[];
-            $('.categories #table').append('<table>');
+            //$('.categories #table').append('<table>');
             for(var id in data.user) {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
@@ -163,7 +164,7 @@ $(document).ready(function() {
                     );
                 }             
             }
-            $('.categories #table').append('</table>');
+            //$('.categories #table').append('</table>');
             //$('div.categories').append(c);
             $('#subcat').html(m);
 			

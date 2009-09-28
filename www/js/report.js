@@ -1,5 +1,6 @@
 // {* $Id$ *}
-swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0" ,null, null, {menu:"false", wmode:"opaque"});
+//swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0" ,null, null, {menu:"false", wmode:"opaque"});
+swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0", "expressInstall.swf" );
 var data = {
     "elements": [{
         "type": "pie",
@@ -188,10 +189,14 @@ function ShowIncome(){
         dateTo: $('#dateTo').val(),
         account: $('#account :selected').val(),
         currency:$('#currency :selected').val()
-     }, function(d) {
-            var tmp = findSWF("chart");
+     }, function(data) {
+            //var tmp = findSWF("chart");
+            
+            var tmp = findSWF('chart');
+            
             alert(tmp.toString());
-            setTimeout(function(){tmp.load(JSON.stringify(d));},1000)
+            //alert(d);
+            x = tmp.load(JSON.stringify(data));
                 //BaseReport();
 
     },'json');

@@ -33,7 +33,16 @@ class Accounts_Model
      * @return array
      */
     public function getTypeAccounts() {
-        return $this->db->select("SELECT * FROM account_types ORDER BY account_type_name");
+        return $this->db->select("
+            SELECT * FROM account_types WHERE account_type_id = 1
+            UNION
+            SELECT * FROM account_types WHERE account_type_id = 9
+            UNION
+            SELECT * FROM account_types
+            WHERE account_type_id = 5  OR account_type_id = 6
+            OR account_type_id = 7 OR account_type_id = 8 
+            OR account_type_id = 15
+            ");
     }
     /**
      * Получаем поля для счета
@@ -164,9 +173,11 @@ class Accounts_Model
         $data = array();
     	foreach($this->fields as $field => $key)
 	{
+            if ($key['field_visual_name']!="Общий баланс") {
             $data[$i]['display'] = $key['field_visual_name'];
             $data[$i]['value'] = $this->formField($key, "", "");
             $i++;
+            }
 	}
 	return $data;
     }
