@@ -4,25 +4,28 @@
             <input type="hidden" id="key">
         <table>
             <tr>
-                <td><label for="type">Тип цели</label></td>
-                <td><select id="type" class="text ui-widget-content">
-                        <option value="r">Расходная</option>
-                        <option value="d">Доходная</option>
+                <td><label for="type">Хочу</label></td>
+                <td><select id="type" class="text ui-widget-content" disabled="disabled">
+                        <option value="r">Накопить</option>
+                        <option value="d">Сэкономить</option>
+                        <option value="d">Снизить долги</option>
                     </select></td>
             </tr>
             <tr>
                 <td><label for="category">Категория</label></td>
-                <td><select id="category" class="text ui-widget-content">
+                <td>
+                    <select id="category" class="text ui-widget-content">
                     {$category}
-                    </select></td>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td><label for="title">Наименование</label></td>
-                <td><input type="text" value="" id="title" class="text ui-widget-content" /></td>
+                <td><input type="text" value="" id="name" class="text ui-widget-content" /></td>
             </tr>
             <tr>
-                <td><label for="amount">Сумма</label></td>
-                <td><input type="text" value="" id="amount" /></td>
+                <td><label for="tg_amount">Сумма</label></td>
+                <td><input type="text" value="" id="tg_amount" /></td>
             </tr>
             <tr>
                 <td><label for="start">Дата начала</label></td>
@@ -40,7 +43,7 @@
                 <td><label for="account">Счет расхода</label></td>
                 <td><select id="account">
                     {foreach from=$accounts item=acc_data}
-                    <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                    <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
                     {/foreach}
                     </select></td>
             </tr>

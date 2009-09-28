@@ -69,13 +69,7 @@
                                             <select id="op_target">
                                                 <option bill="0" value="0" target_account_id='0' amount_done='0' percent_done='0'
                                                         forecast_done='0' amount="0"> -- Все -- </option>
-                                                {foreach from=$targetList item=target}
-                                                    <option bill="{$target.target_account_id}" value="{$target.id}"
-                                                        target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
-                                                        percent_done='{$target.percent_done}' forecast_done='{$target.forecast_done}' amount='{$target.amount}'
-                                                        {if $target.id==$target_sel}selected{/if}>
-                                                        {$target.title|stripslashes|truncate:50:".."}</option>
-                                                {/foreach}
+
                                             </select>
                                             <div>
                                                 <div>Стоимость цели: <span id='op_amount_target'></span><span class='op_currency'></span></div>

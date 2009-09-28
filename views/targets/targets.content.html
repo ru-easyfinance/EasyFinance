@@ -15,7 +15,7 @@
                             {foreach from=$user_list_targets item=i key=k}
                             {if $k < 5}
 							<div class="object" tid="{$i.id}" type="{$i.type}" amount="{$i.amount}" start="{$i.start}" end="{$i.end}"
-                                 photo="{$i.photo}" url="{$i.url}" account="{$i.account}" visible="{$i.visible}" title="{$i.title}" comment="{$i.comment}">
+                                 photo="{$i.photo}" url="{$i.url}" account="{$i.account}" visible="{$i.visible}" name="{$i.title}" comment="{$i.comment}" money="{$i.money}">
 								<div class="ban">
                                     <!-- <a href="#"><img src="/img/images/pic7.gif" alt="" /></a> -->
                                 </div>
@@ -26,8 +26,8 @@
 								</div>
 								<div class="indicator_block">
 									<div class="money">
-										{$i.amount} руб.<br />
-										<span>{$i.amount_done} руб.</span>
+                                        <font title="Сумма финансовой цели">{$i.amount} руб.</font><br />
+										<span title="Накоплено">{$i.amount_done} руб.</span>
 									</div>
 									<div class="indicator">
 										<div style="width:{$i.percent_done}%;"><span>{$i.percent_done}%</span></div>

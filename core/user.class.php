@@ -347,11 +347,11 @@ class User
     public function initUserTargets()
     {
         $this->user_targets = array();
-        $this->user_targets['user_targets'] = $this->db->select("SELECT id, category_id as category, title, amount,
-            DATE_FORMAT(date_begin,'%d.%m.%Y') as start, DATE_FORMAT(date_end,'%d.%m.%Y') as end, percent_done,
-            forecast_done, visible, photo,url, comment, target_account_id AS account, amount_done, close
-            FROM target WHERE user_id = ? ORDER BY date_end ASC LIMIT ?d,?d;",
-            $this->getId(), 0, 5);
+        $this->user_targets['user_targets'] = $this->db->select("SELECT t.id, t.category_id as category, 
+            t.title, t.amount,DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, 
+            t.percent_done,t.forecast_done, t.visible, t.photo,t.url,t.comment,t.target_account_id AS account,t.amount_done,t.close
+            ,(SELECT money FROM target_bill b WHERE b.target_id = t.id ORDER BY dt_create ASC LIMIT 1) AS money
+            FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;", $this->getId(), 0, 5);
         
         $this->user_targets['pop_targets'] = $this->db->select("SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS
             cl FROM target t WHERE t.visible=1 GROUP BY t.title,

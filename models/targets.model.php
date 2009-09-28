@@ -184,6 +184,12 @@ class Targets_Model {
             $data['amount'] = 0;
         }
 
+        if (is_numeric((float)$_POST['money'])) {
+            $data['money'] = (float)$_POST['money'];
+        } else {
+            $data['money'] = 0;
+        }
+
         $data['start'] = formatRussianDate2MysqlDate(@$_POST['start']);
         if (!$data['start']) {
             $this->errors['start'] = "Дата начала";
@@ -229,6 +235,11 @@ class Targets_Model {
                     Core::getInstance()->user->getId(), $data['category'], $data['title'], $data['type'],
                     $data['amount'], $data['start'] , $data['end'], $data['account'], $data['visible'],
                     $data['photo'], $data['url'], $data['comment']);
+                $tid = mysql_insert_id();
+                $this->addTargetOperation($data['account'], $tid, $data['money'], 'Начальный баланс', date('Y-m-d'), 0);
+                $this->staticTargetUpdate($tid);
+                Core::getInstance()->user->initUserTargets();
+                Core::getInstance()->user->save();
                 return '[]';
             }
         }
@@ -251,6 +262,10 @@ class Targets_Model {
                 $data['category'], $data['title'], $data['type'], $data['amount'], $data['start'],
                 $data['end'], $data['visible'], $data['photo'], $data['url'], $data['comment'],
                 Core::getInstance()->user->getId(), $data['id']);
+            $this->editTargetOperation(0, $data['account'], $data['id'], $data['money'], $data['comment'], date('Y-m-d'), $data['close']);
+            $this->staticTargetUpdate($data['id']);
+            Core::getInstance()->user->initUserTargets();
+            Core::getInstance()->user->save();
             return '[]';
         }
     }
@@ -263,6 +278,8 @@ class Targets_Model {
     function del() {
         $id    = (int)@$_POST['id'];
         $this->db->query("DELETE FROM target WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
+        Core::getInstance()->user->initUserTargets();
+        Core::getInstance()->user->save();
         return true;
     }
 
@@ -279,29 +296,29 @@ class Targets_Model {
         }
 
         if ((int)$user_id == 0) {
-            $user_id = $_SESSION['user']['user_id'];
+            $user_id = Core::getInstance()->user->getId();
         }
         $this->db->query("UPDATE target SET
-            amount_done   = (SELECT SUM(money) FROM target_bill WHERE target_id = target.id LIMIT 1)
-            , percent_done  = ROUND ( amount_done / (amount / 100), 2)
-            , forecast_done = ROUND((DATEDIFF(ADDDATE(date_begin,(amount / (amount_done / DATEDIFF(CURRENT_DATE(), date_begin)))), date_begin) / DATEDIFF(date_end, date_begin)) * 100, 2)
-            WHERE id=? AND user_id=?", $target_id, $user_id);
+            amount_done   = IFNULL((SELECT SUM(money) FROM target_bill WHERE target_id = target.id LIMIT 1), 0)
+            , percent_done  = IFNULL(ROUND(amount_done / (amount / 100), 2),0)
+            , forecast_done = IFNULL(ROUND((DATEDIFF(ADDDATE(date_begin,(amount / (amount_done / DATEDIFF(CURRENT_DATE(), date_begin)))), date_begin) / DATEDIFF(date_end, date_begin)) * 100, 2),0)
+            WHERE user_id=5 AND id=65", $user_id, $target_id);
         return true;
     }
 
     /**
      * Пополняет финансовую цель, переводя в резерв субсчёта из основного счёта
-     * @param $bill_id int Ид счёта
+     * @param $account_id int Ид счёта
      * @param $target_id int Ид фин.цели
      * @param $user_id string Ид пользователя
      * @param $money float
      * @param $dt date
      * @return bool
      */
-    public function addTargetOperation($bill_id, $target_id, $money, $comment, $date, $close) {
+    public function addTargetOperation($account_id, $target_id, $money, $comment, $date, $close) {
         $comment = strip_tags($comment);
-        $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt`, `comment`, `date`)
-            VALUES(?,?,?,?,NOW(),?,?);",$bill_id, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
+        $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
+            VALUES(?,?,?,?,NOW(),?,?);",$account_id, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
         if (!empty($close)) {
             $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
         }
@@ -320,8 +337,8 @@ class Targets_Model {
      */
     public function editTargetOperation($target_bill_id, $bill_id, $target_id, $money, $comment, $date, $close) {
         if ((int)$target_bill_id == 0) {
-            trigger_error("Не верно указан ид операции финансовой цели. ". $target_bill_id, E_USER_ERROR);
-            return false;
+            $sql = "SELECT b.id FROM target_bill b WHERE b.target_id =? ORDER BY b.dt_create ASC LIMIT 1";
+            $target_bill_id = $this->db->selectCell($sql, $target_id);
         }
 
         if ((int)$bill_id == 0){
@@ -337,10 +354,9 @@ class Targets_Model {
             return false;
         }
         $comment = strip_tags($comment);
-        $date = explode('.', $date);
-        $date = "{$date['2']}-{$date['1']}-{$date['0']}";
-        $this->db->query("UPDATE target_bill SET bill_id=?, money=?, date=?, comment=?,
-            WHERE id=? AND user_id=? LIMIT 1;", $bill_id, $money, $date, $comment, $target_bill_id, $_SESSION['user']['user_id']);
+        $date = formatRussianDate2MysqlDate($date);
+        $this->db->query("UPDATE target_bill SET bill_id=?, money=?, date=?, comment=? 
+            WHERE id=? AND user_id=? LIMIT 1;", $bill_id, $money, $date, $comment, $target_bill_id, Core::getInstance()->user->getId());
         if (!empty($close)) {
             $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
         }
@@ -354,9 +370,9 @@ class Targets_Model {
      */
     public function delTarget($target_id = 0) {
         $this->db->query("DELETE FROM target WHERE user_id=? AND id=?",
-            $_SESSION['user']['user_id'], $target_id);
+            Core::getInstance()->user->getId(), $target_id);
         $this->db->query("DELETE FROM target_bill WHERE user_id=? AND target_id=?;",
-            $_SESSION['user']['user_id'], $target_id);
+            Core::getInstance()->user->getId(), $target_id);
         return true;
     }
 

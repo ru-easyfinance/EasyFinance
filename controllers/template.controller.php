@@ -71,7 +71,10 @@ class Template_Controller {
                         'title'        => $v['title'],
                         'date_end'     => $v['end'],
                         'amount_done'  => $v['amount_done'],
-                        'percent_done' => $v['percent_done']
+                        'percent_done' => $v['percent_done'],
+                        'money'        => $v['money'],
+                        'account'       => $v['account'],
+                        'amount_done'  => $v['amount_done'],
                     );
                 }
             } elseif ($key == 'pop_targets') {

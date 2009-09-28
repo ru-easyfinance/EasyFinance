@@ -89,8 +89,7 @@ class Core
     {
         //self::$user = self::authUser();
     }
-    
-    
+
     /**
      * Инициализация подключения к БД
      */

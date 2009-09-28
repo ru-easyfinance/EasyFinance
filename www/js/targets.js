@@ -1,7 +1,7 @@
 // {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
-    $('#amount,#amountf').live('keyup',function(e) {
+    $('#tg_amount,#amountf').live('keyup',function(e) {
         FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
     })
 
@@ -15,22 +15,23 @@ $(document).ready(function(){
     });
 
     // Присоединиться к популярной финансовой цели
-    $(".join").live('click', function(){
+    $(".join, .name").live('click', function(){
         clearForm();
-        $('#title').val($(this).closest('li').find('a:first').html());
+        $('#name').val($(this).closest('li').find('a:first').html());
         $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
         return false;
     });
 
     // Редактируем одну из наших целей
-    $(".f_f_edit").live('click', function(){
+    $(".f_f_edit,div.descr a").live('click', function(){
         f = $(this).closest('.object');
         clearForm();
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
-        $('#title').val(f.attr('title'));
-        $('#amount').val(f.attr('amount'));
+        $('#name').val(f.attr('name'));
+        $('#tg_amount').val(f.attr('amount'));
+        $('#amountf').val(f.attr('money'));
         $('#start').val(f.attr('start'));
         $('#end').val(f.attr('end'));
         $('#photo').val(f.attr('photo'));
@@ -38,6 +39,7 @@ $(document).ready(function(){
         $('#comment').val(f.attr('comment'));
         $('#account').val(f.attr('account'));
         $('#visible').val(f.attr('visible'));
+        $('#tpopup form').attr('action','/targets/edit/');
         $('#tpopup').dialog('open');
         return false;
     });
@@ -50,7 +52,7 @@ $(document).ready(function(){
                 id: o.attr('tid')
             }, function(){
                 o.remove();
-                $.jGrowl("Финансовая цель удалена", { theme: 'green' });
+                $.jGrowl("Финансовая цель удалена", {theme: 'green'});
             }, 'json');
             return false;
         }
@@ -61,7 +63,7 @@ $(document).ready(function(){
         f = $(this).closest('.object');
         clearForm();
         $('#type').val(f.attr('type'));
-        $('#title').val(f.attr('title'));
+        $('#name').val(f.attr('name'));
         $('#photo').val(f.attr('photo'));
         $('#url').val(f.attr('url'));
         $('#comment').val(f.attr('comment'));
@@ -85,12 +87,11 @@ $(document).ready(function(){
                         +data[v]['amount_done']+' руб.</span></div><div class="indicator">'
                         +'<div style="width:'+data[v]['percent_done']+'%;"><span>'+data[v]['percent_done']
                         +'%</span></div></div></div><div class="date">Целевая дата: '
-                        +data[v]['date_end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
+                        +data[v]['end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
                         +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
             }
             $('div.object,div.show_all').remove();
             $('div.financobject_block').append(s);
-
         }, 'json');
     });
 
@@ -117,7 +118,7 @@ $(document).ready(function(){
      * Очищает форму для добавления финансовой цели
      */
     function clearForm() {
-        $('#id,#type,#category,#title,#amount,#start,#end,#photo,#url,#comment,#account,#visible').val('');
+        $('#id,#type,#category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
     }
 
     /**
@@ -127,17 +128,19 @@ $(document).ready(function(){
      */
     function fillForm(data) {
         $('#key').val(data.id);
-        $('#category').val(data.category); //
-        $('#title').val(data.title);
-        $('#type').val(data.type); //
-        $('#amount').val(data.amount);
-        $('#start').val(data.start); //
-        $('#end').val(data.end); //
-        $('#visible').val(data.visible); //
+        $('#category').val(data.category);
+        $('#name').val(data.title);
+        $('#type').val(data.type);
+        $('#tg_amount').val(data.amount);
+        $('#start').val(data.start);
+        $('#end').val(data.end);
+        $('#visible').val(data.visible);
         $('#photo').val(data.photo);
         $('#url').val(data.url);
         $('#comment').val(data.comment);
         $('#account').val(data.account);
+        $('#amountf').val(data.money);
+        $('#tpopup form').attr('action','/targets/edit/');
     }
 
     /**
@@ -151,8 +154,9 @@ $(document).ready(function(){
                 id       : $('#key').attr('value'),
                 type     : $('#type').attr('value'),
                 category : $('#category').attr('value'),
-                title    : $('#title').attr('value'),
-                amount   : tofloat($('#amount').val()),
+                title    : $('#name').attr('value'),
+                amount   : tofloat($('#tg_amount').val()),
+                money    : $('#amountf').val(),
                 start    : $('#start').attr('value'),
                 end      : $('#end').attr('value'),
                 photo    : $('#photo').attr('value'),
@@ -168,16 +172,16 @@ $(document).ready(function(){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     $('#tpopup').dialog('close');
-                    $.jGrowl("Финансовая цель сохранена", { theme: 'green' });
+                    $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
 
                 }
 
                 s = '<div class="object"><div class="ban"></div>'
                     +'<div class="descr">';
                     s += ($('#photo').attr('value'))? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/i/fintarget1.jpg" alt="" />';
-                        s += '<a href="#">'+$('#title').attr('value')+'</a>'+$('#comment').attr('value')
+                        s += '<a href="#">'+$('#name').attr('value')+'</a>'+$('#comment').attr('value')
 						+'</div><div class="indicator_block"><div class="money">'
-						+$('#amount').attr('value')+' руб.<br /><span>'
+						+$('#tg_amount').attr('value')+' руб.<br /><span>'
                         +'0 руб.</span></div><div class="indicator">'
                         +'<div style="width:0%;"><span>0'
                         +'%</span></div></div></div><div class="date">Целевая дата: '
@@ -220,30 +224,14 @@ $(document).ready(function(){
     loadPopular();
     ////////////////////////////////////////////////hash api
     s = location.hash;
-    if (s=='#add')
-    {
+    if (s=='#add') {
         $("div.financobject_block .add span").click()
     }
-    if(s.substr(0,6)=='#edit/')
-    {
-        var id = s.substr(6)
-        
-        var f = $('.object[tid="'+id+'"]');
-        clearForm();
-        $('#key').val(f.attr('tid'));
-        $('#type').val(f.attr('type'));
-        $('#title').val(f.attr('title'));
-        $('#amount').val(f.attr('amount'));
-        $('#start').val(f.attr('start'));
-        $('#end').val(f.attr('end'));
-        $('#photo').val(f.attr('photo'));
-        $('#url').val(f.attr('url'));
-        $('#comment').val(f.attr('comment'));
-        $('#account').val(f.attr('account'));
-        $('#visible').val(f.attr('visible'));
-        $('#tpopup').dialog('open');
+    if(s.substr(0,6)=='#edit/') {
+        $('.object[tid="'+ s.substr(6) +'"] .f_f_edit').click();
         return false;
     }
+
     ///////////////////////////////////////////////////////////
     function tofloat(s)
     {

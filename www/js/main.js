@@ -236,7 +236,7 @@ $("#catsys").qtip({
    style: 'mystyle'
 })
 $("h3:contains('Регулярные транзакции')").qtip({
-   content: 'Финансовые операции, совершаемые с определенной регулярностью:раз неделю, 1ого числа, по четным дням; например,,зарплата, алименты и т.д.',
+   content: 'Финансовые операции, совершаемые с определенной регулярностью:раз неделю, 1ого числа, по четным дням; например: зарплата, алименты и т.д.',
    show: {delay: 1000},
    position: {target: 'mouse'},
    style: 'mystyle'
@@ -537,18 +537,6 @@ $("strong:contains('Имущество')").qtip({
         return s.replace(/[ ]/gi, '');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
      /**
      * Получает список тегов
      */
@@ -630,8 +618,11 @@ $("strong:contains('Имущество')").qtip({
 
         if ($('#op_type') == 4) {
             //@FIXME Написать обновление финцелей
-            amount = parseFloat($("#op_target_sel option:selected").attr("amount"));$("#op_amount").text(amount);
-            amount_done = parseFloat($("#op_target_sel option:selected").attr("amount_done"));$("#op_amount_done").text(amount_done);
+
+            amount = parseFloat($("#op_target option:selected").attr("amount"));
+            $("#op_amount").text(amount);
+            amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
+            $("#op_amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
                     $("#op_close").attr("checked","checked");
@@ -701,11 +692,21 @@ $("strong:contains('Имущество')").qtip({
             op_changeAccountForTransfer();
         //Перевод на финансовую цель
         } else if ($('#op_type').val() == 4) {
+            $('#op_target').remove('option :not(:first)');
+            o = '';
+            for (v in res['user_targets']) {
+                t = res['user_targets'][v];
+                o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
+                    '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+            }
             $("#op_target_fields").show();
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
+            $('#op_target').append(o);
             $('#op_target').change();
+
         }
     }
+
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
         // Автоматически подгружаем теги
@@ -758,12 +759,12 @@ $("strong:contains('Имущество')").qtip({
         $('#op_type').change(function(){op_changeTypeOperation('add');});
         $('#op_target').change(function(){
             $("span.op_currency").each(function(){
-                $(this).text(" "+$("#target :selected").attr("currency"));
+                $(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
             });
             $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
             $("#op_amount_target").text(formatCurrency($("#op_target :selected").attr("amount")));
             $("#op_percent_done").text(formatCurrency($("#op_target :selected").attr("percent_done")));
-            $("#op_forecast_done").text(formatCurrency($("#op_target_sel :selected").attr("forecast_done")));
+            $("#op_forecast_done").text(formatCurrency($("#op_target :selected").attr("forecast_done")));
         });
         ////////////////////////////////////add to calendar
         
