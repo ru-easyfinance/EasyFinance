@@ -1074,10 +1074,39 @@ div.op_addoperation .op_line textarea { height:56px;width:350px; }
 .mid span.mid_text  p{ margin:0 40px 17px 16px;text-indent:10px;font-size:12px; }
 
 
-.map { background:transparent url(../i/map.png) no-repeat scroll 0 0;height:1008px;left:85px;padding-bottom:60px;position:relative;text-align:center;top:25px;width:789px; }
+.map  { background:transparent url(../i/map.png) no-repeat scroll 0 0;height:1008px;left:85px;padding-bottom:60px;position:relative;text-align:center;top:25px;width:789px; }
+
+.map .registration{ border:1px solid red;cursor:pointer;height:250px;position:absolute;width:360px; }
+.map .CreateSales { border:1px solid red;cursor:pointer;height:200px;left:400px;position:absolute;width:150px; }
+.map .categoryEdit { border:1px solid red;cursor:pointer;height:200px;left:580px;position:absolute;width:180px; }
+.map .closeOperation { border:1px solid red;cursor:pointer;height:160px;left:600px;position:absolute;top:260px;width:220px; }
+.map .infoPanel { border:1px solid red;cursor:pointer;height:240px;left:20px;position:absolute;top:300px;width:180px; }
+.map .createTransaction { border:1px solid red;cursor:pointer;height:220px;left:586px;position:absolute;top:510px;width:200px; }
+.map .expertView { border:1px solid red;cursor:pointer;height:270px;left:12px;position:absolute;top:650px;width:200px; }
+.map .analise { border:1px solid red;cursor:pointer;height:250px;left:230px;position:absolute;top:670px;width:135px; }
+.map .financeTarget { border:1px solid red;cursor:pointer;height:250px;left:370px;position:absolute;top:770px;width:240px; }
+.map .capitalCreate { border:1px solid red;cursor:pointer;height:200px;left:620px;position:absolute;top:800px;width:160px; }
 
 
 
+
+.map  .popup_map .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("../i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
+.map  .popup_map .cb { height:25px;overflow:hidden;position:relative;width:383px; }
+
+
+.map  .popup_map div.w_dialog div.w_d_body { background:transparent url(../i/jQuery/review/wel.msg.body.png) no-repeat scroll 0 0;height:auto;position:relative;text-align:justify;width:400px;margin-left:1px; }
+
+.map  .popup_map div#dialog { background:transparent none repeat scroll 0 50%;padding-left:27px; }
+.map  .popup_map div.w_dialog { height:auto; min-height:50px;position:absolute;width:400px;z-index:100; }
+.map  .popup_map div { background:transparent url(../i/bg02.jpg) no-repeat scroll 0 0;height:132px;overflow:hidden;padding-left:18px;position:absolute;top:4px;width:176px; }
+.map  .popup_map div.w_dialog div.w_d_head { background:transparent url(../i/jQuery/review/wel.msg.head.png) no-repeat scroll 0 0;height:20px;position:relative;width:400px; }
+.map  .popup_map  div.w_d_foot { background:transparent url(../i/jQuery/review/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:400px; }
+.map  .popup_map .close { background:transparent url(../i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;right:5px;top:12px;width:25px;z-index:9999999; }
+
+.mapContent img { float:left; margin:13px 15px 5px 5px; border:1px solid gray; }
+.mapContent p { margin:10px 50px 0 7px; text-align:justify; font-family:Arial; Font-size:11px; }
+
+.popup_map {display:block; z-index:100000;}
 
 
 
@@ -1172,3 +1201,70 @@ cursor:move;
 background:#FFFFFF url(../i/jQuery/calendar/bg_ui-dialog_bottomright.gif) no-repeat scroll right bottom !important;
 }
 
+.ui-dialog.ui-widget-content .ui-resizable-nw {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(../i/jQuery/calendar/bg_ui-dialog_topleft.gif) no-repeat scroll right bottom;
+border:medium none;
+height:9px;
+left:0;
+top:0;
+width:9px;
+}
+
+.ui-dialog.ui-widget-content .ui-resizable-ne {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(../i/jQuery/calendar/bg_ui-dialog_topright.gif) no-repeat scroll right bottom;
+border:medium none;
+height:9px;
+right:0;
+top:0;
+width:9px;
+}
+
+.ui-dialog.ui-widget-content .ui-resizable-sw {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(../i/jQuery/calendar/bg_ui-dialog_bottomleft.gif) no-repeat scroll right bottom;
+border:medium none;
+bottom:0;
+height:9px;
+left:0;
+width:9px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+-moz-border-radius-bottomleft:0;
+-moz-border-radius-bottomright:0;
+-moz-border-radius-topleft:0;
+-moz-border-radius-topright:0;
+background:transparent none repeat scroll 0 0;
+border:medium none;
+}
+
+.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(../i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;
+}
+
+.ui-dialog .ui-dialog-content {
+padding:0 !important;
+}
+
+.ui-widget-content {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:#FFFFFF url(images/ui-bg_flat_75_ffffff_40x100.png) repeat-x scroll 50% 50%;
+border:none;
+color:#222222;
+}
