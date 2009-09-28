@@ -146,9 +146,11 @@
     <div id="op_dialog_event" title="Событие" style="display: none;">
         <div class="event_form">
             <div class="line periodic event">
+                <input id="cal_key" type="hidden" value ="0" />
+                <input id="cal_chain" type="hidden" value ="0" />
                 <label>&nbsp;</label>
-                    <select>
-                            <option value="event">Событие</option>
+                    <select id="cal_mainselect">
+                        <option value="event" selected="selected">Событие</option>
                             <option value="periodic">Периодические транзакции</option>
                     </select>
             </div>
@@ -203,8 +205,8 @@
                     </select>
             </div>
             <div class="line periodic event">
-                    <h4>Дни недели</h4>
                     <div class='week' id='week'>
+                        <h4>Дни недели</h4>
                         <div>
                             <label for="cal_mon">Пн</label>
                             <label for="cal_tue">Вт</label>
@@ -226,20 +228,20 @@
                     </div>
             </div>
             <div class="line periodic event">
-                    <div class="count">
+                    <div class="count repeat">
                             <span for="cal_count">Повторить</span>
                             <input name="rep_type" class="rep_type" value="1" type="radio">
                             <select name="count" id="cal_count" class="ui-widget-content"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option></select>
                             <span>раз</span>
                     </div>
-                    <div class="infinity">
+                    <div class="infinity repeat">
                             <input name="rep_type" class="rep_type" value="2" type="radio">
-                            <input disabled="disabled" name="infinity" id="cal_infinity" value="1" type="checkbox"><label for="cal_infinity">Бесконечно</label>
+                            <label>Бесконечно</label>
                     </div>
-                    <div class="todate">
+                    <div class="todate repeat">
                         <label for="cal_date_end">До даты</label>
                             <input name="rep_type" class="rep_type" value="3" type="radio">
-                            <input name="date_end" id="cal_date_end" value="" class="text ui-widget-content hasDatepicker" type="text">
+                            <input name="date_end" id="cal_date_end" value="" type="text">
                     </div>
             </div>
 

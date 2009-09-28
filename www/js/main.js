@@ -765,44 +765,41 @@ $("strong:contains('Имущество')").qtip({
         ////////////////////////////////////add to calendar
         
         $('#op_addtocalendar_but').click(function(){
-            //$('#op_addtocalend').css({position:'absolute',top: '50px',right:'50px',background:'#FFFFFF',zIndex:100})
-            add2call()
-//            $('#op_addtocalend').datepicker({onSelect: function(dateText, inst){add2call(dateText)}});
-//            $('#op_addtocalend').hide();
-//            $('#op_addtocalend').toggle();
-//            $('#op_addtocalend').datepicker();
-        })
+            add2call();
+        });
             function ac_save() {
             //@TODO Проверить вводимые значения ui-tabs-selected
             var href = '/periodic/add/';
-            var dt = 'p';
-            if ($('#op_tabs .ui-tabs-selected a').attr('href')=='#op_tabs-1')
+            if ($('#cal_mainselect').val()=='event')
             {
                 href = '/calendar/add/';
-                dt = 'a';
             }
-            //alert($('#op_tabs .ui-tabs-selected a').attr('href'));
-            //return false;
             $.post(
                 href,
                 {
-                    id :        $('#op_dialog_event #op_'+dt+'id').val(),
-                    key:        $('#op_dialog_event #op_'+dt+'key').attr('value'),
-                    title:      $('#op_dialog_event #op_'+dt+'title').attr('value'),
-                    date_start: $('#op_dialog_event #op_'+dt+'date_start').attr('value'),
-                    date_end:   $('#op_dialog_event #op_'+dt+'date_end').attr('value'),
-                    date:       $('#op_dialog_event #op_'+dt+'date').attr('value'),
-                    time:       $('#op_dialog_event #op_'+dt+'time').attr('value'),
-                    repeat:     $('#op_dialog_event #op_'+dt+'repeat option:selected').attr('value'),
-                    count:      $('#op_dialog_event #op_'+dt+'count').attr('value'),
-                    comment:    $('#op_dialog_event #op_'+dt+'comment').attr('value'),
-                    infinity:   $('#op_dialog_event #op_'+dt+'infinity').attr('value'),
-                    amount:     $('#op_dialog_event #op_'+dt+'amount').val(),
-
-                    category: $('#op_dialog_event #op_'+dt+'category').val(),
-                    type: $('#op_dialog_event #op_'+dt+'type').val(),
-                    account: $('#op_dialog_event #op_'+dt+'account').val(),
-                    rep_type:   $('#op_dialog_event .rep_'+dt+'type[checked]').val()
+                    //id :        $('#op_dialog_event #op_'+dt+'id').val(),
+                    key:        $('#op_dialog_event #cal_key').attr('value'),
+                    title:      $('#op_dialog_event #cal_title').attr('value'),
+                    //date_start: $('#op_dialog_event #op_'+dt+'date_start').attr('value'),
+                    date_end:   $('#op_dialog_event #cal_date_end').attr('value'),
+                    date:       $('#op_dialog_event #cal_date').attr('value'),
+                    time:       $('#op_dialog_event #cal_time').attr('value'),
+                    repeat:     $('#op_dialog_event #cal_repeat option:selected').attr('value'),
+                    count:      $('#op_dialog_event #cal_count').attr('value'),
+                    comment:    $('#op_dialog_event #cal_comment').attr('value'),
+                    infinity:   $('#op_dialog_event #cal_infinity').attr('value'),
+                    amount:     $('#op_dialog_event #cal_amount').val(),
+                    category:   $('#op_dialog_event #cal_category').val(),
+                    type:       $('#op_dialog_event #cal_type').val(),
+                    account:    $('#op_dialog_event #cal_account').val(),
+                    rep_type:   $('#op_dialog_event .rep_type[checked]').val(),
+                    mon:        $('.week #mon').attr('checked') ? 1 : 0,
+                    tue:        $('.week #tue').attr('checked') ? 1 : 0,
+                    wed:        $('.week #wed').attr('checked') ? 1 : 0,
+                    thu:        $('.week #thu').attr('checked') ? 1 : 0,
+                    fri:        $('.week #fri').attr('checked') ? 1 : 0,
+                    sat:        $('.week #sat').attr('checked') ? 1 : 0,
+                    sun:        $('.week #sun').attr('checked') ? 1 : 0
                 }, function(data){
                     for (var v in data) {
                         //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
@@ -824,13 +821,36 @@ $("strong:contains('Имущество')").qtip({
         })
         function add2call()
         {
-            $("#op_tabs").tabs();
-            $('#op_adate,#op_adate_start,#op_adate_end,#op_pdate,#op_pdate_start,#op_pdate_end').datepicker();
-            $('#op_atime').timePicker().mask('99:99');
+            $('#cal_amount').keyup(function(e){
+                FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+            });
+            $('input#cal_date,input#cal_date_end').datepicker();
+            $('#cal_time').timePicker().mask('99:99');
+            $('#week.week').hide();
+            $('#cal_repeat').change(function(){    
+                if ($('#cal_repeat').val()=="7")
+                    $('#week.week').show();
+                else
+                    $('#week.week').hide();
+            });
+            $('.repeat .rep_type').change(function(){
+                $('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
+                $('.repeat .rep_type:checked').closest('div').find('input,select').removeAttr('disabled');
+            })
+            $('#op_dialog_event div.line').hide();
+            $('#op_dialog_event div.line').hide();
+            $('#op_dialog_event .event').show();
+            $('#cal_mainselect').change(function(){
+                $('#op_dialog_event div.line').hide();
+                $('#op_dialog_event .'+$(this).val()).show();
+            });
+            $('#op_dialog_event').css({width:'500px',height:'auto',overflow:'visible'});
+            //$('.repeat input:not[.rep_type],.repeat select').attr('disabled','disabled');
             $('#op_dialog_event').dialog({
                 bgiframe: true,
                 autoOpen: false,
                 width: 600,
+                height: 500,
                 modal: true,
                 buttons: {
                     'Сохранить': function() {
@@ -839,12 +859,14 @@ $("strong:contains('Имущество')").qtip({
                     'Отмена': function() {
                         $(this).dialog('close');
                     }
-                }});
+                },
+                close : function(){$('#cal_mainselect').removeAttr('disabled')}
+            });
             $('#op_dialog_event').dialog();
-            for(i = 1; i < 31; i++){
-                $('#op_dialog_event #op_acount').append('<option>'+i+'</option>').val(i);
-                $('#op_dialog_event #op_pcounts').append('<option>'+i+'</option>').val(i);
-            }
+//            for(i = 1; i < 31; i++){
+//                $('#op_dialog_event #op_acount').append('<option>'+i+'</option>').val(i);
+//                $('#op_dialog_event #op_pcounts').append('<option>'+i+'</option>').val(i);
+//            }
             $('#op_dialog_event').dialog('open');
             //$('#op_adate,#op_pdate').val(dateText);
             
