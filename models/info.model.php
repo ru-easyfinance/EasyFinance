@@ -279,7 +279,7 @@ class Info_Model
         $credit = $this->credit($d_credit);
         $expens = $this->expens($d_expens);
         $this->calc['fin_cond']=$money+$upper+$credit+$expens;
-        $ret = array($money,$upper,$credit,$expens,$money+$upper+$credit+$expens);
+        $ret = array($money+$upper+$credit+$expens,$money,$upper,$credit,$expens);
         return $ret;
 
     }

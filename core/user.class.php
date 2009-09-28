@@ -313,16 +313,17 @@ class User
      */
 	public function initUserAccounts()
 	{
-        $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
-            FROM accounts a
-            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-            WHERE a.user_id=?";
-        $this->user_account= array();
-        $accounts = $this->db->select($sql, $this->getId());
-        foreach ($accounts as $val) {
-            $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
-            $this->user_account[$val['account_id']] = $val;
-        }
+            $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+                FROM accounts a
+                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+                WHERE a.user_id=? ORDER BY o_count DESC";
+            $this->user_account= array();
+            $accounts = $this->db->select($sql, $this->getId());
+            foreach ($accounts as $val) {
+                $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+                $this->user_account[$val['account_id']] = $val;
+            }
 	}
 
     /**

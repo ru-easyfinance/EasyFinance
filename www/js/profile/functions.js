@@ -84,6 +84,7 @@ function cur_upd(list)
 
 function def_upd()
 {
+    var id;
     $('.col li').each(function(){
         txt = $(this).html();
         id = $(this).attr('id');

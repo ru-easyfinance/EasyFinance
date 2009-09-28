@@ -1,4 +1,4 @@
-﻿/* http://keith-wood.name/calculator.html
+/* http://keith-wood.name/calculator.html
    Calculator field entry extension for jQuery v1.2.0.
    Written by Keith Wood (kbwood{at}iinet.com.au) October 2008.
    Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
@@ -340,6 +340,7 @@ $.extend(Calculator.prototype, {
 	/* Enable the calculator for a jQuery selection.
 	   @param  target  (element) the target input field or division/span */
 	_enableCalculator: function(target) {
+            
 		var control = $(target);
 		if (!control.hasClass(this.markerClassName)) {
 			return;
@@ -429,6 +430,7 @@ $.extend(Calculator.prototype, {
 	   @param  input  (element) the control attached to the calculator or
 	                  (event) if triggered by focus */
 	_showCalculator: function(input) {
+            
 		input = input.target || input;
 		if ($.calculator._isDisabledCalculator(input) ||
 				$.calculator._lastInput == input) { // already here
@@ -453,6 +455,7 @@ $.extend(Calculator.prototype, {
 		// determine sizing offscreen
 		inst._mainDiv.css({position: 'absolute', display: 'block', top: '-1000px',
 			width: ($.browser.opera ? '1000px' : 'auto')});
+                    
 		$.calculator._reset(inst, inst._input.val(), true);
 		$.calculator._updateCalculator(inst);
 		// and adjust position before showing
@@ -495,6 +498,7 @@ $.extend(Calculator.prototype, {
 		var base = this._get(inst, 'base');
 		var decimalChar = this._get(inst, 'decimalChar');
 		value = '' + (value || 0);
+
 		value = (decimalChar != '.' ? value.replace(new RegExp(decimalChar), '.') : value);
 		inst.curValue = (base == 10 ? parseFloat(value) : parseInt(value, base)) || 0;
 		inst.dispValue = this._setDisplay(inst);

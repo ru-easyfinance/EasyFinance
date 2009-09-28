@@ -11,14 +11,14 @@ $('li.edit').live('click',
     function(){
         edit_target($(this).closest('div.object2').attr('id'))
     });
-    $.post(
+$.post(
     '/info/get_data/',
     {},
     function(data){
         var titles,name,value,pointer,xml,chartSample_1;
         for (var i=0;i<5;i++)
         {
-            titles = ['Деньги','Бюджет','Кредиты','Расходы','Фин.состояние'];
+            titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
             if (isNaN(data[1][i]['color']))
                 data[1][i]['color'] = 1;
             //alert(data[1][i]['title'])
@@ -33,8 +33,8 @@ $('li.edit').live('click',
                 "<pointer value='"+pointer+"'>"+
                 "<needle_pointer_style thickness='7' point_thickness='5' point_radius='3'><fill color='Rgb(230,230,230)'/><border color='Black' opacity='0.7'/><effects enabled='false'></effects><cap enabled='false'></cap></needle_pointer_style><animation enabled='false'/></pointer></pointers></circular></gauge></gauges></anychart>";
             chartSample_1 = new AnyChart('/swf/anychart/gauge.swf');
-                    chartSample_1.width = '109px';
-                    chartSample_1.height = '120px';
+                    chartSample_1.width = !i==0?'109px':'120px';
+                    chartSample_1.height = !i==0?'120px':'139px';
                     chartSample_1.setData(xml);
                     chartSample_1.wMode="opaque";
                     chartSample_1.write('flash_' + i);

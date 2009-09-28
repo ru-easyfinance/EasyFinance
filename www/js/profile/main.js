@@ -36,9 +36,9 @@ $(document).ready(function(){
     })
     $('.all li').live('click',function(){
         //$(this).remove();
-        id = $(this).attr('id');
+        var id = $(this).attr('id');
         //alert(u_cur_list[id]['charCode'])
-        s=cur_ids[id];
+        var s=cur_ids[id];
         cur_ids[id]=1;
         if (!s)
             $('ul.user').append($(this));

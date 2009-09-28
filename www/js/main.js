@@ -726,17 +726,20 @@ $("strong:contains('Имущество')").qtip({
         $('#op_amount').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         });
-/*
-        $('#op_amount').calculator({
+
+        /*$('#op_amount').calculator({
             layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
                     'MR_7_8_9_-' + $.calculator.UNDO,
                     'MS_4_5_6_*' + $.calculator.PERCENT ,
                     'M+_1_2_3_/' + $.calculator.HALF_SPACE,
                     'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-            showOn: 'focus' //opbutton
-        });
-*/
-        
+            showOn: 'button',
+            buttonImageOnly: true,
+            buttonImage: '/img/i/unordered.gif' //opbutton
+        });*/
+        $('.calculator-trigger').click(function(){
+            $(this).closest('div').find('#op_amount,#amount').val(tofloat($('#op_amount').val()));
+        })
         $("#op_date").datepicker();
 
 

@@ -113,7 +113,7 @@ $(document).ready(function() {
                 fri:        $('#fri').attr('checked') ? 1 : 0,
                 sat:        $('#sat').attr('checked') ? 1 : 0,
                 sun:        $('#sun').attr('checked') ? 1 : 0
-            }, function(data, textStatus){
+            }, function(data){
                 // data could be xmlDoc, jsonObj, html, text, etc...
                 // textStatus can be one of: "timeout", "error", "notmodified", "success", "parsererror"
                 for (var v in data) {
@@ -161,7 +161,7 @@ $(document).ready(function() {
     $("#tabs,#views").tabs();
     $('#time').timePicker().mask('99:99');
     //$('#count').mask('99');
-    for(i = 1; i < 31; i++){
+    for(var i = 1; i < 31; i++){
         $('#count').append('<option>'+i+'</option>').val(i);
         $('#pcount').append('<option>'+i+'</option>').val(i);
     }

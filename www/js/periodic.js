@@ -6,15 +6,15 @@ $(document).ready(function() {
 
     // INIT
     /*$('#amount').calculator({
-        layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
-                'MR_7_8_9_-' + $.calculator.UNDO,
-                'MS_4_5_6_*' + $.calculator.PERCENT ,
-                'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-                'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-        showOn: 'focus' //opbutton
-        //,buttonImageOnly: true
-        //,buttonImage: '/img/calculator.png'
-    });*/
+            layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
+                    'MR_7_8_9_-' + $.calculator.UNDO,
+                    'MS_4_5_6_*' + $.calculator.PERCENT ,
+                    'M+_1_2_3_/' + $.calculator.HALF_SPACE,
+                    'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
+            showOn: 'button',
+            buttonImageOnly: true,
+            buttonImage: '/img/i/unordered.gif' //opbutton
+        });*/
     $('#add_periodic').click(function(){$('#add_form div.form_block').toggle()});
     $('#date').datepicker();
     $('#btnSave').click(function(){

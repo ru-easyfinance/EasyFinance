@@ -2,6 +2,7 @@
 $(document).ready(function()
 {
     var accisvis = false; // характеризует активна ли панелька счетов
+    
     /**
      * переводит число типа 12341.34535 в 12 341.35
      * для удобного отображения в виде баланса денег
@@ -266,6 +267,16 @@ $(document).ready(function()
             },
              function(data) {
                 $('#account_form_fields').html(data);
+                /*$('#starter_balance').calculator({
+            layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
+                    'MR_7_8_9_-' + $.calculator.UNDO,
+                    'MS_4_5_6_*' + $.calculator.PERCENT ,
+                    'M+_1_2_3_/' + $.calculator.HALF_SPACE,
+                    'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
+            showOn: 'button',
+            buttonImageOnly: true,
+            buttonImage: '/img/i/unordered.gif' //opbutton
+        });*/
             },
             'text'
         );
@@ -332,8 +343,10 @@ $(document).ready(function()
                       when: false, // Don't specify a show event
                       ready: true // Show the tooltip when ready
                    },
+                   
                    hide: false, // Don't specify a hide event
                    style: {
+                      width: {max: 300},
                       name: 'light',
                       tip: true // Give them tips with auto corner detection
                    }
@@ -420,22 +433,22 @@ $(document).ready(function()
             var spec = spec_th[g_types[account.type]];
              
             var str = '<table Stile="padding:3px">';
-            str +=  '<tr><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
+            str +=  '<tr style="line-height:19px;"><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
                         account.name + '</td>';
-            str +=  '<tr><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
+            str +=  '<tr style="line-height:19px;"><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
                         account.description + '</td>';
-            str +=  '<tr><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
+            str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
                 formatCurrency(account.total_balance) + ' ' +account.cur + '</td>';
-            str +=  '<tr><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
+            str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
                 formatCurrency(account.def_cur) + '</td>';
 
             for(var key in spec)
             {
-                str +='<tr>'+spec[key]+account.special[key]+'</tr>'
+                str +='<tr style="line-height:19px;">'+spec[key]+'<td /><td>'+account.special[key]+'</td></tr>'
             }
 ///
             str += '<table>';
-            print_qtip(this, str);
+            print_qtip($(this).find('.total_balance'), str);
             $('tr.item').removeClass('act');
             $(this).addClass('act');
             
