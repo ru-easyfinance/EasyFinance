@@ -1,0 +1,103 @@
+<div class="ramka3">
+    <div class="ct">
+        <div class="head">
+            <h1>Отчёты</h1>
+            <ul class="action">
+                <li class="over1"><a title="настройки">настройки</a></li>
+                <li class="over2"><a title="закрыть">закрыть</a></li>
+                <li class="over3"><a title="свернуть">свернуть</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="inside">
+        <form action="/operation/add/">
+            <div class="report" style="display: block;">
+                <div class="line">
+                    <div class="f_field">
+                        Отчёты
+                        <select id="report">
+                            {foreach from=$reports key=key item=item}
+                            <option id="{$key}" >{$item}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="f_field">
+                        Дата начала
+                        <input type="text" id="dateFrom" value="{$dateFrom}">
+                    </div>
+                </div>
+                <div class="line" >
+                    <div class="f_field">
+                        Дата окончания
+                        <input type="text" id="dateTo" value="{$dateTo}">
+                    </div>
+                </div>
+
+                <div class="line" id="Period21">
+                    <div class="f_field" >
+                        Дата начала
+                        <h6>Период 2</h6>
+                        <input type="text"  id="dateFrom2" value="{$dateFrom2}">
+                    </div>
+                </div>
+                <div class="line" id="Period22">
+                    <div class="f_field">
+                        Дата окончания
+                        <h6>Период 2</h6>
+                        <input type="text"  id="dateTo2" value="{$dateFrom2}">
+                    </div>
+                </div>
+
+
+                <div class="line">
+                    <div class="f_field" id="account_fields">
+			Счет
+                        <select id="account">
+                            <option value="" currency="" abbr="">---Все---</option>
+                            {foreach from=$accounts item=acc_data}
+                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="f_field category" id="currency_fields" hide="">
+                        Показывать сумму в
+                        <select id="currency">
+                            {foreach from=$currency item=cur}
+                            <option value="{$cur.id}">{$cur.name}({$cur.abbr})</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="f_field category" id="currency_fields">
+                        <input type="button" value="Показать" id="btnShow">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="inside operation_list">
+            <table id="reports_list">
+		<tr>
+                    <!--
+                    <th>&nbsp;</th>
+                    <th>
+			<span class="sort" title="отсортировать">Дата</span>
+                    </th>
+                    <th>
+                 	<span class="sort" title="отсортировать">Счёт</span>
+                    </th>
+                    <th>
+			<span class="sort" title="отсортировать">Сумма</span>
+                    </th>
+                    --->
+               </tr>
+            </table>
+        </div>
+
+         <div id="chart"></div>
+
+    </div>
+</div>

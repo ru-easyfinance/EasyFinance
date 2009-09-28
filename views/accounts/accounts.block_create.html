@@ -1,0 +1,31 @@
+
+<div class="inside">
+    <div class="addcategories">
+    <a id="addacc">Добавление счёта</a>
+    </div>
+	<!--<div class='addacc'>
+		<div class="but">
+			<input type="button" id="addacc" class="act" value="Добавление счёта"/>
+		</div>
+	</div>-->
+	<div id="blockCreateAccounts" class="addoperation" style="display:none;">
+        <div class="line">
+            <div class="f_field">
+                <label>Тип счета:</label>
+                <select name="type" id="type_account" style="width:200px;">
+                  {foreach from=$type_accounts item=data}
+                    <option value="{$data.account_type_id}">{$data.account_type_name}</option>
+                  {/foreach}
+                </select>
+            </div>
+            <div id="account_form_fields">&nbsp;</div>
+        </div>
+
+
+    <div class="but">
+        <input type="button" id="btnAddAccount" value="Сохранить"/>
+	<input type="button" id="btnCancelAdd" value="Отмена" />
+    </div>
+
+    </div>
+</div>

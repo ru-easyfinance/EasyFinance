@@ -1,0 +1,54 @@
+<div style="padding-bottom:6px;border:0px;width:20%">
+    <h4>
+        <a href="/admin/accounts/">Назад</a>
+    </h4>
+</div>
+<div class="fields">
+<form action="/admin/accounts/type/" method="post" id="formAccount">
+    <div style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 15px; padding-bottom: 15px;">
+        <div>
+                Название поля:
+                <input type="text" name="field_visual_name" id="field_visual_name" value="{$fields.account_type_name}">
+        </div>
+        <div>
+                Имя в шаблоне:
+                <input type="text" name="field_name" id="field_name" value="{$fields.field_name}">
+        </div>
+        <div>
+                Регулярка:
+                <input type="text" name="field_regexp" id="field_regexp" value="{$fields.field_regexp}">
+        </div>
+        <div>
+                Шаблон формы:
+                <select name="field_permissions" id="field_permissions">
+                    <option value="select">select</option>
+                    <option value="input">input</option>
+                    <option value="hidden">hidden</option>
+                </select>
+
+        </div>
+        <div>
+                Значение по умолчанию:
+                <input type="text" name="field_default_value" id="field_default_value" value="{$fields.field_default_value}">
+        </div>
+        <div>
+                <input type="hidden" value="{$fields.field_description_id}" name="id" id="id">
+                <input type="button" id="btnAdd" value="Сохранить" class="inputsubmit" />
+                <input type="button" id="btnCancel" value="Отмена" class="inputsubmit" />
+        </div>
+    </div>
+</form>
+<table style="border: 1px solid rgb(204, 204, 204); padding: 5px 5px 5px 25px;width:100%">
+    <tr style="border: 1px solid rgb(204, 204, 204);text-align:left">
+        <th>Название</th>
+        <th>Имя в шаблоне</th>
+        <th>Регулярка</th>
+        <th>Тип поля</th>
+        <th>Значение по умолчанию</th>
+        <th>Удалить поле</th>
+    </tr>
+    {include file="admin/accounts/accounts.fields_list.html}
+</table>
+</div>
+
+

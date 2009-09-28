@@ -1,0 +1,57 @@
+{* $Id: $ *}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+<title>EasyFinance.ru</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="Keywords" content="" />
+	<meta name="Description" content="" />
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Подключениее стилей и скриптов -->
+    {foreach from=$css item=i}
+    <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  link="/css/{$i}?r={$revision}"/>
+    {/foreach}
+
+    {foreach from=$js item=i}
+    <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
+    {/foreach}
+    <script type="text/javascript">
+        var res = {$res};
+    </script>
+
+    <!-- /Подключениее стилей и скриптов -->
+</head>
+<body id="p_index">
+<!-- верхнее меню -->
+<div id="container1">
+	<div id="menumain"  value="{$head_val}">
+		<ul class="menu1">
+            <li class="first act"><a href="/">Главная</a></li>
+			<li><a href="/review/" id="review">Обзор сервиса</a></li>
+			<li><a href="/feedback/" id="feed">Отзывы</a></li>
+			<li><a href="http://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блог</a></li>
+			<li><a href="/forum/" id="forum">Форум</a></li>
+		</ul>
+		<ul class="menu2">
+			<li><a href="/rules/" id="rules">Правила использования</a></li>
+			<li><a href="/security/" id="secur">Безопасность</a></li>
+			<li><a href="/about/" id="about">О Компании</a></li>
+		</ul>
+	</div>
+<!-- верхнее меню -->
+<!--шапка-->
+	<div id="header">
+		<div class="logo">Homemoney.ru</div>
+		<div class="slogan">Система управления личными финансам</div>
+	<!-- пользователь или поля для авторизации-->
+            	{if $user_info.user_id <= 0}
+                    {include file="header/login.html"}
+                    {include file="head_adv.html"}
+                {else}
+                    {include file="header/user.html"}
+                    {include file="head_adv.html"}
+                {/if}
+	<!-- /пользователь или поля для авторизации -->
+	</div>
+<!-- /шапка -->

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>upmainframe</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">upmainframe</td></tr>
+</thead><tbody>
+<!--проходит верхнюю "менюшку"-->
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Главная</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Обзор сервиса</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/review/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Отзывы</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/feedback/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Форум</td>
+	<td>300000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/forum/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Правила использования</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/rules/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Безопасность</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/security/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=О Компании</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>https://easyfinance.ru/about/</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

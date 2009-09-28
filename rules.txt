@@ -1,0 +1,3 @@
+1. ПРОЧИТАТЬ ТУТ http://framework.zend.com/manual/ru/coding-standard.html 
+2. ПРОСМОТРЕТЬ КОД
+3. И НЕ ЗАДАВАТЬ ГЛУППЫХ ВОПРОСОВ

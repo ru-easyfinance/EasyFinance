@@ -1,0 +1,92 @@
+{* SVN: $Id$ *}
+<h3>Список финансовых целей</h3>
+<table class="list">
+    <tr  bgcolor="#f8f8d8">
+        <td class="td_data_content"><input type="button" value="Добавить новую цель" id="button_add_target" class="inputsubmit" /></td>
+    </tr>
+    <tr bgcolor="#f8f8d8">
+        <td><h4>Мои цели</h4></td>
+    </tr>
+    <tr  bgcolor="#f8f8d8">
+        <td bgcolor="#ffffff">
+            {include file="targets/targets.user_list.html"}
+            {if $user_list_targets|@count == 5}
+                <a href="/targets/user_list/1">...</a>
+            {/if}
+        </td>
+    </tr>
+    <tr  bgcolor="#f8f8d8">
+        <td><h4>Популярные цели</h4></td>
+    </tr>
+    <tr  bgcolor="#f8f8d8">
+        <td  bgcolor="#ffffff">
+            {include file="targets/targets.pop_list.html"}
+            {if $pop_list_targets|@count == 5}
+                <a href="/targets/pop_list/1">...</a>
+            {/if}
+        </td>
+    </tr>
+</table>
+<div id="views">
+    <div id="dialog_event" title="Событие" style="display: none;">
+            <form id="target" action="/targets/add/" >
+                <fieldset>
+                    <input type="hidden" id="id" />
+                    <div id="type_fields">
+                        <label for="type">Тип цели:</label>
+                        <select id="type" name="type" class="text ui-widget-content">
+                            {html_options options=$type_options selected=$data.type_sel}
+            		</select>
+                    </div>
+                    <div id="category_fields">
+                        <label for="title">Категория:</label>
+                        <select id="category" name="category" class="text ui-widget-content">
+                            {$category_options}
+                        </select>
+                    </div>
+                    <div id="title_fields">
+                        <label for="title">Наименование:</label>
+                        <input type="text" id="title" value="{$data.title|htmlspecialchars|stripslashes}" class="text ui-widget-content" />
+                    </div>
+                    <div id="amount_fields">
+                        <label for="amount">Сумма:</label>
+                        <input type="text" id="amount" value="{if !empty($data.amount)}{$data.amount}{else}0.0{/if}" class="text ui-widget-content" />
+                    </div>
+                    <div id="start_fields">
+                        <label for="start">Дата начала:</label>
+                        <input type="text" id="start" value="{$data.start}" class="text ui-widget-content" />
+                    </div>
+                    <div id="end_fields">
+                        <label for="end">Дата окончания:</label>
+                        <input type="text" id="end" value="{$data.end}" class="text ui-widget-content" />
+                    </div>
+                    <div id="photo_fields">
+                        <label for="photo">Фото:</label>
+                        <input type="text" id="photo" value="{$data.photo}" class="text ui-widget-content" />
+                        <a id="photo_click" target="_blank" href="{$data.photo}" title="Открыть ссылку в новом окне">
+                            <img border="0" src="/img/external.png" /></a>
+                    </div>
+                    <div id="url_fields">
+                        <label for="url">Ссылка:</label>
+                        <input type="text" id="url" value="{$data.url}" class="text ui-widget-content" />
+                        <a id="url_click" target="_blank" href="{$data.url}" title="Открыть ссылку в новом окне">
+                            <img border="0" src="/img/external.png" /></a>
+                    </div>
+                    <div id="comment_fields">
+                        <label for="comment">Комментарий:</label>
+                        <textarea id="comment" cols="30" rows="4" class="text ui-widget-content" />{$data.comment|stripslashes}</textarea>
+                    </div>
+                    <div id="account_fields">
+                        <label for="account">Счёт финансовой цели:</label>
+                        <select id="account" class="text ui-widget-content" >
+                            {html_options options=$target_account_id_options selected=$data.target_account_id_sel}
+                        </select>
+                    </div>
+                    <div id="visible_fields">
+                        <label for="visible">Видимая для других</label>
+                        <input id="visible" type="checkbox" {if $data.visible==1}checked="on"{/if} class="text ui-widget-content" />
+                    </div>
+                </fieldset>
+            </form>
+    </div>
+</div>

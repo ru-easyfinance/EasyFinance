@@ -1,0 +1,60 @@
+<!--popup добавить цель-->
+	<div id="tpopup" title="Финансовая цель" style="display: none;">
+        <form action="">
+            <input type="hidden" id="key">
+        <table>
+            <tr>
+                <td><label for="type">Тип цели</label></td>
+                <td><select id="type" class="text ui-widget-content">
+                        <option value="r">Расходная</option>
+                        <option value="d">Доходная</option>
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="category">Категория</label></td>
+                <td><select id="category" class="text ui-widget-content">
+                    {$category}
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="title">Наименование</label></td>
+                <td><input type="text" value="" id="title" class="text ui-widget-content" /></td>
+            </tr>
+            <tr>
+                <td><label for="amount">Сумма</label></td>
+                <td><input type="text" value="" id="amount" /></td>
+            </tr>
+            <tr>
+                <td><label for="start">Дата начала</label></td>
+                <td><input type="text" value="" id="start" />
+            </tr>
+            <tr>
+                <td><label for="end">Дата окончания</label></td>
+                <td><input type="text" value="" id="end" />
+            </tr>
+            <tr>
+                <td><label for="amountf">Сумма пер. плат.</label></td>
+                <td><input type="text" value="" id="amountf" /></td>
+            </tr>
+            <tr>
+                <td><label for="account">Счет расхода</label></td>
+                <td><select id="account">
+                    {foreach from=$accounts item=acc_data}
+                    <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                    {/foreach}
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="comment">Комментарий</label></td>
+                <td><textarea id="comment"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label for="visible" class="showall">
+                    <input type="checkbox" value="" id="visible" />
+                    Видимая для других
+                </label></td>
+            </tr>
+        </table>
+        </form>
+    </div>
+<!--/popup добавить цель-->

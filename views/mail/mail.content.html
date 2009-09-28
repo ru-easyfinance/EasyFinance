@@ -1,0 +1,111 @@
+<!--Эксперты-->
+<div class="ramka3">
+        <div class="ct">
+                <div class="head">
+                        <h1>Почта</h1>
+                        <ul class="action">
+                                <li class="over1"><a href="#" title="настройки">настройки</a></li>
+                                <li class="over2"><a href="#" title="закрыть">закрыть</a></li>
+                                <li class="over3"><a href="#" title="свернуть">свернуть</a></li>
+                        </ul>
+                </div>
+        </div>
+    <div class="inside">
+    <ul class="mail_control clearfix">
+        <li><a href="#" id="mail-write"><img src="/img/i/btn_mail_write.gif" alt="Написать письмо" class="m-c-img" /><span>Написать</span></a></li>
+        <li><a href="#" id="mails-delete" ><img src="/img/i/btn_mail_del.gif" alt="Удалить" class="m-c-img" /><span>Удалить</span></a></li>
+        <li><a href="#" id="mails-reload"><img src="/img/i/btn_mail_reload.gif" alt="Обновить" class="m-c-img" /><span>Обновить</span></a></li>
+    </ul>
+    <div class="inside mail_list">
+        <table>
+            <tr>
+                <th><input id="checked" type="checkbox" value="" /></th>
+                <th class="cl-2">
+                    <div class="cont">
+                        <div>
+                            <span class="sort" title="отсортировать">Тема</span>
+                        </div>
+                    </div>
+                </th>
+                <th>
+                    <div class="cont">
+                        <div>
+                            <span class="sort" title="отсортировать">Категория</span>
+                            <span class="select" title="выбрать">выбрать</span>
+                        </div>
+                        <!--<ul class="select_list close">
+                            <li><a href="#">пункт 1</a></li>
+                            <li><a href="#">пункт 2</a></li>
+                            <li><a href="#">пункт 3</a></li>
+                            <li><a href="#">пункт 4</a></li>
+                            <li><a href="#">пункт 5</a></li>
+                        </ul>-->
+                    </div>
+                </th>
+                <th>
+                    <div class="cont">
+                        <div>
+                            <span class="sort" title="отсортировать">Дата</span>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+        </table>
+    </div>
+    <!--<ul class="menu6 clearfix">
+            <li><a href="#">Предыдущие</a></li>
+            <li><a href="#">Следущие</a></li>
+    </ul>-->
+    <div id="mail-popup" title="Новое сообщение">
+        <table class="mail-wrapper">
+            <tr>
+                <td class="m-w-left"><label for="mail-subject">Тема</label></td>
+                <td><input type="text" id="mail-subject" name="title"/></td>
+            </tr>
+            <tr>
+                <td class="m-w-left"><label for="mail-to">Кому</label></td>
+                <td>
+                    <input type="text" id="mail-to" name="to"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="m-w-left"><label for="mail-text">Сообщение:</label></td>
+                <td>
+                    <textarea rows="10" cols="10" id="mail-text" name="text"></textarea>
+                </td>
+            </tr>
+            <input type="hidden" id="category" name="category" value=""/>
+        </table>
+        <button type="button" class="ui-state-default ui-corner-all" id="mail_send">Отправить</button>
+        <button type="button" class="ui-state-default ui-corner-all" id="mail_save">Сохранить черновик</button>
+    </div>
+    <div id="mail-popup-read" title="Сообщение">
+            <table class="mail-wrapper">
+                <tr>
+                    <td class="m-w-left"><label for="mail-from">От кого:</label></td>
+                    <td class="m-w-right">
+                        <a href="#" id="mail-from">Сидоров Петр</a>
+                        <label for="mail-date" class="m-d-label">Дата:</label><span id="mail-date">04.02.09</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="m-w-left"><label for="mail-subject-read">Тема:</label></td>
+                    <td class="m-w-right"><a href="#" id="mail-subject-read">Инвестиционный план</a></td>
+                </tr>
+
+                <tr>
+                    <td class="m-w-left"><label for="mail-text-read">Сообщение:</label></td>
+                    <td>
+                        <textarea rows="10" cols="10" id="mail-text-read"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" id="category" name="category" value=""/>
+            <button type="button" class="ui-state-default ui-corner-all" id="mail_answer">Ответить</button>
+            <!--<button type="button" class="ui-state-default ui-corner-all" id="mail_save_read">Сохранить в...</button>
+            <button type="button" class="ui-state-default ui-corner-all" id="mail_edit">Редактировать</button>-->
+    </div>
+</div>
+<div class="cb"><div></div></div>
+</div>
+				<!--/Эксперты-->

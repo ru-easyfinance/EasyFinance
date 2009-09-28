@@ -14,7 +14,7 @@
  * @author Dmitry Koterov, http://forum.dklab.ru/users/DmitryKoterov/
  * @author Konstantin Zhinko, http://forum.dklab.ru/users/KonstantinGinkoTit/
  * 
- * @version 2.x $Id: Mysql.php 163 2007-01-10 09:47:49Z dk $
+ * @version 2.x $Id$
  */
 require_once dirname(__FILE__) . '/Generic.php';
 
@@ -24,34 +24,52 @@ require_once dirname(__FILE__) . '/Generic.php';
  */
 class DbSimple_Mysql extends DbSimple_Generic_Database
 {
-    var $link;
+	protected $link = null;
+	protected $dsn;
+	
+	/**
+	 * constructor(string $dsn)
+	 * Connect to MySQL.
+	 */
+	function DbSimple_Mysql($dsn)
+	{
+		$this->dsn = DbSimple_Generic::parseDSN($dsn);
+		
+		if (!is_callable('mysql_connect')) {
+			return $this->_setLastError("-1", "MySQL extension is not loaded", "mysql_pconnect");
+		}
+	}
 
-    /**
-     * constructor(string $dsn)
-     * Connect to MySQL.
-     */
-    function DbSimple_Mysql($dsn)
-    {
-        $p = DbSimple_Generic::parseDSN($dsn);
-        if (!is_callable('mysql_connect')) {
-            return $this->_setLastError("-1", "MySQL extension is not loaded", "mysql_connect");
-        }
-        $ok = $this->link = @mysql_connect(
-            $p['host'] . (empty($p['port'])? "" : ":".$p['port']),
-            $p['user'],
-            $p['pass'],
-            true
-        );
-        $this->_resetLastError();
-        if (!$ok) return $this->_setDbError('mysql_connect()');
-        $ok = @mysql_select_db(preg_replace('{^/}s', '', $p['path']), $this->link);
-        if (!$ok) return $this->_setDbError('mysql_select_db()');
-    }
-
-
+	/**
+	 * Simple implementation of lazy load
+	 *
+	 */
+	private function initConnection()
+	{
+		if( $this->link === null )
+		{
+			$this->link = @mysql_pconnect(
+				$this->dsn['host'] . (empty($this->dsn['port'])? "" : ":".$this->dsn['port']),
+				$this->dsn['user'],
+				$this->dsn['pass'],
+				true
+			);
+			
+			$this->_resetLastError();
+			if (!$this->link) return $this->_setDbError('mysql_connect()');
+			$link = @mysql_select_db(preg_replace('{^/}s', '', $this->dsn['path']), $this->link);
+			if (!$this->link) return $this->_setDbError('mysql_select_db()');
+			
+			$this->query("SET character_set_client = 'utf8', character_set_connection = 'utf8',character_set_results = 'utf8'");
+		}
+		
+		return $this->link;
+	}
+	
     function _performEscape($s, $isIdent=false)
     {
         if (!$isIdent) {
+        	$this->initConnection();
             return "'" . mysql_real_escape_string($s, $this->link) . "'";
         } else {
             return "`" . str_replace('`', '``', $s) . "`";
@@ -151,8 +169,11 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 
     function _performQuery($queryMain)
     {
+    	$this->initConnection();
+    	
         $this->_lastQuery = $queryMain;
         $this->_expandPlaceholders($queryMain, false);
+        
         $result = @mysql_query($queryMain[0], $this->link);
         if ($result === false) return $this->_setDbError($queryMain[0]);
         if (!is_resource($result)) {
@@ -178,12 +199,14 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
     
     function _setDbError($query)
     {
-        return $this->_setLastError(mysql_errno(), mysql_error(), $query);
+    	$this->initConnection();
+        return $this->_setLastError(mysql_errno($this->link), mysql_error($this->link), $query);
     }
     
     
     function _calcFoundRowsAvailable()
     {
+    	$this->initConnection();
         $ok = version_compare(mysql_get_server_info($this->link), '4.0') >= 0;
         return $ok;
     }

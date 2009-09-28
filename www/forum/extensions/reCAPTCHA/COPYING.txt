@@ -1,8 +1,0 @@
-reCAPTCHA: Add reCAPTCHA validation to the registration form.
-2008 squirrel <szquirrel@gmail.com>
-
-The author of this code hereby releases it into the public domain.
-Do what you will with it.
-
-Note that this package may contain other code that is under different
-copyright and license terms.

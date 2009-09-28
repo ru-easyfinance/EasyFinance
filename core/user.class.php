@@ -1,660 +1,431 @@
-<?
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
-* file: user.class.php
-* author: Roman Korostov
-* date: 23/01/07
-**/
-
+ * Класс для управления пользователями
+ * @author korogen
+ * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
+ * @copyright http://home-money.ru/
+ * @category user
+ * @version SVN $Id$
+ */
 class User
 {
-	var $props = Array();
-	var $user_category = Array();
-	var $user_account = Array();
-	var $user_currency = Array();
-	var $db;
+    /**
+     * Массив, хранит свойства пользователя
+     * @var array mixed
+     *      int user_id       Ид пользователя
+     *      string user_name  Имя пользователя, отображаемое на форуме
+     *      string user_login Логин
+     *      string user_pass  Пароль в формате SHA-1
+     *      string user_mail  е-мейл
+     *      date user_created  Дата создания аккаунта пользователя в формате (%d.%m.%Y)
+     *      int user_active 0 - аккаунт неактивирован, 1 - активирован
+     */
+    private $props = array();
 
-	function User(&$db)
-	{
-		if (is_object($db))
-		{
-			$this->db = $db;
-		}
+    /**
+     * Массив, хранит категории пользователя
+     * @var array mixed
+     */
+    private $user_category = array();
 
-		$this->load();
-	}
+    /**
+     * Массив, хранит счета пользователя
+     * @var array mixed
+     */
+    private $user_account  = array();
 
-	function initUser($login, $pass)
-	{
-		if (URL_ROOT == "http://easyfinance.ru")
-		{
-	    $sql = "
-				SELECT `user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`, DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, `user_active` FROM `users`
-				WHERE `user_login` = '" . str_replace("\\'", "''", $login) . "'
-					   and `user_pass` = '".$pass."'
-					   and `user_new` = '0'
-			   ";
-		}else{
-        $sql = "SELECT
-            `users`.`user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`,
-            DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, `user_active`,
-            `forum_User`.`UserID` AS forum_user_id, `forum_User`.`VerificationKey` AS forum_user_key
-        FROM `users`
-            LEFT JOIN
-                forum_User
-            ON users.user_id = forum_User.user_id
-        WHERE
-            `user_login` = '" . str_replace("\\'", "''", $login) . "'
-                AND `user_pass` = '".$pass."' and `user_new` = '0';";
-		}
+    /**
+     * Массив, хранит валюты пользователя
+     * @var array mixed
+     */
+    private $user_currency = array();
 
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в авторизации пользователя!', '', __LINE__, __FILE__, $sql);
-		}
+    /**
+     * Массив, который хранит в себе все теги пользователя
+     * @var array mixed
+     */
+    private $user_tags = array();
 
-		if( $row = $this->db->sql_fetchrow($result) )
-		{
-			if ($row['user_active'] == 0)
-			{
-				message_error(GENERAL_MESSAGE, 'Ваш профиль был заблокирован!');
-				return false;
-			}
+    /**
+     * Массив со списком фин.целей пользователя
+     * @var array mixed
+     */
+    private $user_targets = array();
 
-			$this->props = $row;
+    /**
+     *
+     * @var <type>
+     */
+    private $user_periodic = array();
 
-			if ( $this->init($row['user_id']) )
-			{
-                @setcookie("f1", $row['forum_user_id'], time() + 1209600);
-                @setcookie("f2", $row['forum_user_key'], time() + 1209600);
-				$this->save();
-				return true;
-			}
-		}
-		message_error(GENERAL_MESSAGE, 'Неверно введен логин/пароль!');
-	}
+    /**
+     * Ссылка на экземпляр DBSimple
+     * @var DbSimple_Mysql
+     */
+    private $db;
 
-	function save () {
-	    $_SESSION['user'] = $this->props;
-		$_SESSION['user_category'] = $this->user_category;
-		$_SESSION['user_account'] = $this->user_account;
-		$_SESSION['user_currency'] = $this->user_currency;
-    }
+    /**
+     * Конструктор
+     * @return void
+     */
+    public function __construct()
+    {
+        // Если соединение пользователя защищено, то пробуем авторизироваться
+        if ($_SERVER['SERVER_PORT'] ==443) {
+             //Если есть кук с авторизационными данными, то пробуем авторизироваться
+            if (isset($_COOKIE[COOKIE_NAME])) {
+                if (isset($_COOKIE['PHPSESSID'])) {
+                    if (!isset($_SESSION)) {
+                        session_start();
+                    }
+                    $this->load(); //Пробуем загрузить из сессии данные
+                }
+                if (is_null(Core::getInstance()->db)) {
+                    Core::getInstance()->initDB();
+                }
+                $this->db = Core::getInstance()->db;
 
-	function init($id) {
+                if (!isset($_SESSION)) {
+                    session_start();
+                }
 
-		if ($this->initUserCategory($id) &&
-			$this->initUserAccount($id) &&
-			$this->initUserCurrency($id))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	function load()
-	{
-		$this->props = $_SESSION['user'];
-		$this->user_category = $_SESSION['user_category'];
-		$this->user_account = $_SESSION['user_account'];
-		$this->user_currency = $_SESSION['user_currency'];
-	}
-
-	function initUserCategory ($id)
-	{
-		$sql = "
-				SELECT `cat_id`, `cat_name`, `cat_parent`, `cat_active` from `category`
-					WHERE `user_id` = '".$id."'
-						  AND `cat_active` = '1'
-					ORDER BY `cat_name`
-			   ";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в авторизации пользователя!', '', __LINE__, __FILE__, $sql);
-		}
-
-		$row = $this->db->sql_fetchrowset($result);
-		$this->user_category = $row;
-		return true;
-	}
-
-	function initUserCurrency ($id)
-	{
-		$sql = "
-				SELECT `cur_id`, `cur_name` from `currency`
-					ORDER BY `cur_id`
-			   ";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в авторизации пользователя!', '', __LINE__, __FILE__, $sql);
-		}
-
-		$row = $this->db->sql_fetchrowset($result);
-		$this->user_currency = $row;
-		return true;
-	}
-
-	function initUserAccount ($id)
-	{
-		if (IS_DEMO == 'demo')
-		{
-		$sql = "
-				SELECT round(sum(m.`money`),2) as sum,
-					   b.`bill_id` as id,
-					   b.`bill_name` as name,
-					   b.`bill_type` as type,
-					   b.`bill_currency` as currency,
-					   c.`cur_name` as currency_name
-				FROM `bill` b
-					 LEFT JOIN `money` m on m.`bill_id` = b.`bill_id` and m.user_id = '".$id."'
-					 LEFT JOIN `currency` c on c.`cur_id` = b.`bill_currency`
-				WHERE b.`user_id` = '".$id."'
-				GROUP BY b.`bill_id`, b.`bill_type`
-			   ";
-		}else{
-			$sql = "
-				SELECT round(sum(m.`money`),2) as sum,
-					   b.`bill_id` as id,
-					   b.`bill_name` as name,
-					   b.`bill_type` as type,
-					   b.`bill_currency` as currency,
-					   c.`cur_name` as currency_name
-				FROM `bill` b
-					 LEFT JOIN `money` m on m.`bill_id` = b.`bill_id`
-					 LEFT JOIN `currency` c on c.`cur_id` = b.`bill_currency`
-				WHERE b.`user_id` = '".$id."'
-				GROUP BY b.`bill_id`, b.`bill_type` order by b.`bill_name`";
-		}
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в авторизации пользователя!', '', __LINE__, __FILE__, $sql);
-		}
-
-		$row = $this->db->sql_fetchrowset($result);
-
-		$this->user_account = $row;
-		return true;
-	}
-
-	function getId()
-	{
-        if (isset($this->props['user_id'])) {
-            return $this->props['user_id'];
+                $array = decrypt($_COOKIE[COOKIE_NAME]);
+                $this->initUser($array[0], $array[1]);
+            }
+        // иначе, переходим в защищённое соединение, и снова пробуем авторизироваться
+        } else {
+            header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            exit;
         }
-        return false;
+
     }
 
-	function restoreCategory($id)
+    /**
+     * Возвращает Id пользователя
+     * @return int || null
+     */
+    public function getId()
+    {
+        if (isset($this->props['id']) && !empty($this->props['id'])) {
+            return $this->props['id'];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Иниализирует пользователя, достаёт из базы некоторые его свойства
+     * @param string $login
+     * @param string $pass  SHA1 пароля
+     * @return bool
+     */
+    public function initUser($login, $pass)
+    {
+        if (is_null(Core::getInstance()->db)) {
+            Core::getInstance()->initDB();
+        }
+        $this->db = Core::getInstance()->db;
+        if (isset($_SESSION['REMOTE_ADDR']) || isset($_SESSION['HTTP_USER_AGENT'])) {
+             if ($_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT']) {
+                 $this->destroy();
+             }
+        }
+        //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
+        $sql = "SELECT id, user_name, user_login, user_pass, user_mail,
+                    DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
+                    user_currency_default, user_currency_list, user_type
+                FROM users
+                WHERE user_login  = ?
+                    AND user_pass = ?
+                    AND user_new  = 0";
+
+        $this->props = $this->db->selectRow($sql, $login, $pass);
+        if (count($this->props) == 0) {
+            trigger_error('Не верный логин или пароль!', E_USER_WARNING);
+            $this->destroy();
+            return false;
+        } elseif ($this->props['user_active'] == 0) {
+            trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
+            $this->destroy();
+            return false;
+        }
+
+        session_start();
+        // Если у нас подключен профиль пользователя
+        if ($this->props['user_type'] == 0) {
+            if (!$this->init($this->getId())) {
+               //@TODO Вызывать мастера настройки счетов, категорий и валют
+            }
+            $_SESSION['user']            = $this->props;
+            $_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+            return $this->save();
+        // Если у нас подключен профиль эксперта
+        } else if ($this->props['user_type'] == 1) {
+            $_SESSION['user']            = $this->props;
+            $_SESSION['REMOTE_ADDR']     = '/experts/';
+            $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+            return $this->save();
+        }
+        
+    }
+
+    /**
+     * Сериализуем данные в сессии
+     * @return bool
+     */
+    public function save ()
+    {
+        
+        $_SESSION['user']          = $this->props;
+        $_SESSION['user_category'] = $this->user_category;
+        $_SESSION['user_account']  = $this->user_account;
+        $_SESSION['user_currency'] = $this->user_currency;
+        $_SESSION['user_tags']     = $this->user_tags;
+        $_SESSION['user_targets']  = $this->user_targets;
+        $_SESSION['pop_targets']   = $this->pop_targets;
+        return true;
+    }
+
+    /**
+     * Вызывает инициализацию пользовательских категорий, счетов, денег
+     * @return bool 
+     */
+    public function init()
+    {
+        $this->initUserCurrency();
+        $this->initUserCategory();
+        $this->initUserAccounts();
+        $this->initUserTags();
+        $this->initUserTargets();
+    }
+
+    /**
+     * Удаляет сессию и куки пользователя, очищает авторизацию
+     * @return void
+     */
+    public function destroy()
+    {
+        if (!empty ($_SESSION)) {
+            session_destroy();
+        }
+        setcookie(COOKIE_NAME, '', COOKIE_EXPIRE - 60, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+    }
+
+    /**
+     * Загружает ранее объявленные параметры пользователя из сессии
+     * @return void
+     */
+    public function load()
+    {
+
+        if (isset($_SESSION['user']) && is_array($_SESSION['user'])) {
+            $this->props = $_SESSION['user'];
+        } else {
+            $this->props = array();
+        }
+        if (isset($_SESSION['user_category']) && is_array($_SESSION['user_category'])) {
+            $this->user_category = $_SESSION['user_category'];
+        } else {
+            $this->user_category = array();
+        }
+        if (isset($_SESSION['user_account']) && is_array($_SESSION['user_account'])) {
+            $this->user_account = $_SESSION['user_account'];
+        } else {
+            $this->user_account = array();
+        }
+        if (isset($_SESSION['user_currency']) && is_array($_SESSION['user_currency'])) {
+            $this->user_currency = $_SESSION['user_currency'];
+        } else {
+            $this->user_currency = array(1); //Устанавливает валюты пользователя (по умолчанию устанавливается 1 - русский рубль)
+        }
+        if (isset($_SESSION['user_tags']) && is_array($_SESSION['user_tags'])) {
+            $this->user_tags = $_SESSION['user_tags'];
+        } else {
+            $this->user_tags = array();
+        }
+
+        if (isset ($_SESSION['user_targets']) && is_array($_SESSION['user_targets']) ) {
+            $this->user_targets = $_SESSION['user_targets'];
+        } else {
+            $this->user_targets = array();
+        }
+        return true;
+    }
+
+    /**
+     * Инициализирует пользовательские категории
+     * @param string $id хэш-MD5 ид пользователя
+     * @return void
+     */
+    public function initUserCategory ()
+    {
+        $sql = "SELECT * FROM category
+            WHERE user_id = ? AND cat_active = '1' ORDER BY cat_parent, cat_name;";
+        $this->user_category = array();
+        $category = $this->db->select($sql, $this->getId());
+        foreach ($category as $val) {
+            $this->user_category[$val['cat_id']] = $val;
+        }
+    }
+
+    /**
+     * Получает список валют
+     * @param array mixed $user_currency_list
+     * @param int $currency_default
+     * @return void
+     */
+    public function initUserCurrency ($user_currency_list = null, $currency_default = null)
+    {
+        // Если обновляем список валют с нуля
+        if (!$user_currency_list) {
+            $currency = unserialize($this->props['user_currency_list']);
+        } else { // Если мы переназначаем список валют пользователя
+            $currency = $user_currency_list;
+            $this->props['user_currency_list'] = serialize($user_currency_list);
+        }
+        // Если нужно сменить валюту по умолчанию
+        if ($currency_default) {
+            $this->props['user_currency_default'] = (int)$currency_default;
+        }
+
+        if (!is_array($currency)) {
+            trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
+            $currency = array(1);
+        }
+
+        $this->user_currency = array();
+        foreach (Core::getInstance()->currency as $key => $val) {
+            if (in_array($key, $currency)) {
+                // В начало массива добавляем валюту  по умолчанию
+                if ( $this->props['user_currency_default'] == $key ) {
+                    $this->user_currency = array($key=>$val) + $this->user_currency;
+                } else {
+                    $this->user_currency[$key] = $val;
+                }
+            }
+        }
+    }
+
+  	/**
+     * Возвращает счета пользователя
+     * @return void
+     */
+	public function initUserAccounts()
 	{
-		$sql = "SELECT `cat_id`, `cat_parent` from `category`
-				WHERE `user_id` = '".$this->getId()."' AND `cat_id` = ".$id."";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в получении категории!', '', __LINE__, __FILE__, $sql);
-		}else{
-			$row = $this->db->sql_fetchrow($result);
-
-			if ($row['cat_parent'] > 0)
-			{
-				$id = $row['cat_parent'];
-			}
-		}
-
-
-		$sql = "UPDATE `category` SET
-					`cat_active` = '1'
-				WHERE `user_id` = '".$this->getId()."' and (`cat_id` = '".$id."' or `cat_parent` = '".$id."')
-				";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в cохранении категории!', '', __LINE__, __FILE__, $sql);
-		}
-		else
-		{
-			$this->initUserCategory($this->getId());
-			$this->save();
-
-			return true;
-		}
+        $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=?";
+        $this->user_account= array();
+        $accounts = $this->db->select($sql, $this->getId());
+        foreach ($accounts as $val) {
+            $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+            $this->user_account[$val['account_id']] = $val;
+        }
 	}
 
-	function getDemoOperations($user_id)
-	{
-		$lnk = mysql_connect('localhost', 'homemone', 'lw0Hraec') or die ('Not connected : ' . mysql_error());
-			mysql_select_db('homemoney', $lnk) or die ('Can\'t use foo : ' . mysql_error());
-			mysql_query("SET NAMES utf8;");
+    /**
+     * Возвращает все теги пользователя
+     * @return void
+     */
+    public function initUserTags()
+    {
+        $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
+        $array = $this->db->select($sql, $this->getId());
+        $this->user_tags = array();
+        foreach ($array as $v) {
+            $this->user_tags[$v['name']] = $v['cnt'];
+        }
+    }
 
-			if (IS_DEMO)
-			{
-				$q = "select * from money where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$res = mysql_query($q);
-				while($row = mysql_fetch_array($res))
-				{
-					$m_row[] = $row;
-				}
-				$m_cnt = count($m_row);
+    /**
+     * Возвращает фин. цели
+     * @return void
+     */
+    public function initUserTargets()
+    {
+        $this->user_targets = array();
+        $this->user_targets['user_targets'] = $this->db->select("SELECT id, category_id as category, title, amount,
+            DATE_FORMAT(date_begin,'%d.%m.%Y') as start, DATE_FORMAT(date_end,'%d.%m.%Y') as end, percent_done,
+            forecast_done, visible, photo,url, comment, target_account_id AS account, amount_done, close
+            FROM target WHERE user_id = ? ORDER BY date_end ASC LIMIT ?d,?d;",
+            $this->getId(), 0, 5);
+        
+        $this->user_targets['pop_targets'] = $this->db->select("SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS
+            cl FROM target t WHERE t.visible=1 GROUP BY t.title,
+            t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", 0, 10);
+    }
 
-				/*$q = "select * from budget where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$res = mysql_query($q);
-				while($row = mysql_fetch_array($res))
-				{
-					$b_row[] = $row;
-				}
-				$b_cnt = count($b_row);*/
+    /**
+     * Возвращает пользовательские категории
+     * @return array mixed
+     */
+    function getUserCategory()
+    {
+        return $this->user_category;
+    }
+    /**
+     * Возвращает пользовательские валюты
+     * @return array mixed
+     */
+    function getUserCurrency()
+    {
+        return $this->user_currency;
+    }
 
-				$q = "select * from periodic where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$res = mysql_query($q);
-				while($row = mysql_fetch_array($res))
-				{
-					$p_row[] = $row;
-				}
-				$p_cnt = count($p_row);
-			}
+    /**
+     * Возвращает пользовательские счета
+     * @return array mixed
+     */
+    function getUserAccounts()
+    {
+        return $this->user_account;
+    }
 
-			$sql = "select * from category where user_id='9e08f78840c8fefd7882ffa03813e6d1' and cat_active=1 order by cat_parent, cat_name";
-			$result = mysql_query($sql);
-			$i = 0;
-			while ($row = mysql_fetch_array($result))
-			{
-				$rows[$i]['cat_name']	= $row['cat_name'];
-				$rows[$i]['cat_parent'] = $row['cat_parent'];
-				$rows[$i]['cat_id'] = $row['cat_id'];
-				$i++;
-			}
-			$cnt = count($rows);
+    /**
+     * Возвращает все теги пользователя
+     * @param bool $cloud Если установлено true, то возвратит с частотой использования для составления облаков
+     * @example $user->getUserTags() возвратит array('мама','папа','я')
+     * @example $user->getUserTags(true) возвратит array('мама'=>7,'папа'=>10,'я'=>3)
+     * @return array mixed
+     */
+    function getUserTags($cloud = false)
+    {
+        if ($cloud) {
+            return $this->user_tags;
+        } else {
+            return array_keys($this->user_tags);
+        }
+    }
 
-			for ($i=0; $i<$cnt; $i++)
-			{
-				if ($rows[$i]['cat_parent'] == 0)
-				{
-					$sql = "INSERT INTO `category` VALUES ('', '0', '".$user_id."', '".$rows[$i]['cat_name']."', '1')";
-					$this->db->sql_query($sql);
-					$next_id = $this->db->sql_nextid();
-					for ($j=0; $j<$cnt; $j++)
-					{
-						if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id'])
-						{
-							$sql = "INSERT INTO `category` VALUES ('', '".$next_id."', '".$user_id."', '".$rows[$j]['cat_name']."', '1')";
-							$this->db->sql_query($sql);
-							if (IS_DEMO)
-							{
-								$next_cat_id = $this->db->sql_nextid();
+    /**
+     * Возвращает фин.цели пользователя и популярные фин.цели
+     * @FIXME Возвращает ТОЛЬКО последние изменения. Не использовать для страницы фин.целей!
+     * @return array mixed
+     */
+    function getUserTargets()
+    {
+        return $this->user_targets;
+    }
 
-								for ($k=0; $k<$m_cnt; $k++)
-								{
-									//$m_row[$k]['new_cat_id'] = 0;
-									if ($rows[$j]['cat_id'] == $m_row[$k]['cat_id'])
-									{
-										$m_row[$k]['new_cat_id'] = $next_cat_id;
-									}
+    /**
+     * Получить свойство пользователя
+     * @param $prop string
+     *      int user_id
+     *      string user_name
+     *      string user_login
+     *      string user_pass //WTF???
+     *      string user_mail
+     *      date user_created (%d.%m.%Y)
+     *      int user_active  0 - аккаунт неактивен
+     * @return mixed
+     */
+    function getUserProps($prop)
+    {
+        if (isset($this->props['$prop'])) {
+            return $this->props['$prop'];
+        }
+    }
 
-									if ($m_row[$k]['cat_id'] == 0)
-									{
-										$m_row[$k]['new_cat_id'] = 0;
-									}
-
-									if ($m_row[$k]['cat_id'] == "-1")
-									{
-										$m_row[$k]['new_cat_id'] = "-1";
-									}
-								}
-
-								for ($p=0; $p<$p_cnt; $p++)
-								{
-									if ($rows[$j]['cat_id'] == $p_row[$p]['cat_id'])
-									{
-										$p_row[$p]['new_cat_id'] = $next_cat_id;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			if (IS_DEMO)
-			{
-				$sql = "select * from bill where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$result = mysql_query($sql);
-				$i = 0;
-				while ($row = mysql_fetch_array($result))
-				{
-					$rows[$i]['bill_name'] = $row['bill_name'];
-					$rows[$i]['bill_type'] = $row['bill_type'];
-					$rows[$i]['bill_id'] = $row['bill_id'];
-					$rows[$i]['bill_currency'] = $row['bill_currency'];
-					$i++;
-				}
-
-				$cnt = count($rows);
-
-				for ($i=0; $i<$cnt; $i++)
-				{
-					if (!empty($rows[$i]['bill_name']))
-					{
-						$sql = "INSERT INTO `bill` VALUES ('".$rows[$i]['bill_id']."', '".$rows[$i]['bill_name']."', '".$user_id."', '".$rows[$i]['bill_type']."', '".$rows[$i]['bill_currency']."')";
-						$this->db->sql_query($sql);
-						//$next_id = $this->db->sql_nextid();
-						$next_id = $rows[$i]['bill_id'];
-
-						for ($k=0; $k<$m_cnt; $k++)
-						{
-							if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'] && $m_row[$k]['cat_id'] == 0)
-							{
-								$sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-																	'".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-																	'".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-																	'".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-								$this->db->sql_query($sql);
-							}
-						}
-					}
-
-					for ($k=0; $k<$m_cnt; $k++)
-					{
-						if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'] && $m_row[$k]['cat_id'] != 0)
-						{
-							$sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-																'".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-																'".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-																'".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-							$this->db->sql_query($sql);
-						}
-					}
-
-					for ($p=0; $p<$p_cnt; $p++)
-					{
-						if ($p_row[$p]['bill_id'] == $rows[$i]['bill_id'])
-						{
-							$sql = "INSERT INTO `periodic` VALUES ('', '".$user_id."', '".$next_id."', '".$p_row[$p]['period']."',
-																   '".$p_row[$p]['date_from']."', '".$p_row[$p]['povtor']."',
-																   '".$p_row[$p]['insert']."', '".$p_row[$p]['remind']."',
-																   '".$p_row[$p]['remind_num']."', '".$p_row[$p]['drain']."',
-																   '".$p_row[$p]['money']."', '".$p_row[$p]['new_cat_id']."',
-																   '".$p_row[$p]['comment']."', '".$p_row[$p]['povtor_num']."')";
-							$this->db->sql_query($sql);
-						}
-					}
-				}
-
-			}
-	}
-
-	function getCategory($user_id)
-	{
-
-			$lnk = mysql_connect(SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS) or die ('Not connected : ' . mysql_error());
-			mysql_select_db(SYS_DB_BASE, $lnk) or die ('Can\'t use foo : ' . mysql_error());
-			mysql_query("SET NAMES utf8;");
-
-			/*if (IS_DEMO)
-			{
-				$q = "select * from money where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$res = mysql_query($q);
-				while($row = mysql_fetch_array($res))
-				{
-					$m_row[] = $row;
-				}
-				$m_cnt = count($m_row);
-
-				$q = "select * from budget where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$res = mysql_query($q);
-				while($row = mysql_fetch_array($res))
-				{
-					$b_row[] = $row;
-				}
-				$b_cnt = count($b_row);
-			}*/
-
-			$sql = "select * from category where user_id='9e08f78840c8fefd7882ffa03813e6d1' and cat_active=1 order by cat_parent, cat_name";
-			$result = mysql_query($sql);
-			$i = 0;
-			while ($row = mysql_fetch_array($result))
-			{
-				$rows[$i]['cat_name']	= $row['cat_name'];
-				$rows[$i]['cat_parent'] = $row['cat_parent'];
-				$rows[$i]['cat_id'] = $row['cat_id'];
-				$i++;
-			}
-			$cnt = count($rows);
-
-			for ($i=0; $i<$cnt; $i++)
-			{
-				if ($rows[$i]['cat_parent'] == 0)
-				{
-					$sql = "INSERT INTO `category` VALUES ('', '0', '".$user_id."', '".$rows[$i]['cat_name']."', '1')";
-					$this->db->sql_query($sql);
-					$next_id = $this->db->sql_nextid();
-					for ($j=0; $j<$cnt; $j++)
-					{
-						if ($rows[$j]['cat_parent'] == $rows[$i]['cat_id'])
-						{
-							$sql = "INSERT INTO `category` VALUES ('', '".$next_id."', '".$user_id."', '".$rows[$j]['cat_name']."', '1')";
-							$this->db->sql_query($sql);
-							if (IS_DEMO)
-							{
-								$next_cat_id = $this->db->sql_nextid();
-
-								for ($k=0; $k<$m_cnt; $k++)
-								{
-									//$m_row[$k]['new_cat_id'] = 0;
-									if ($rows[$j]['cat_id'] == $m_row[$k]['cat_id'])
-									{
-										$m_row[$k]['new_cat_id'] = $next_cat_id;
-									}
-
-									if ($m_row[$k]['cat_id'] == 0)
-									{
-										$m_row[$k]['new_cat_id'] = 0;
-									}
-
-									if ($m_row[$k]['cat_id'] == "-1")
-									{
-										$m_row[$k]['new_cat_id'] = "-1";
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			/*if (IS_DEMO)
-			{
-				$sql = "select * from bill where user_id='9e08f78840c8fefd7882ffa03813e6d1'";
-				$result = mysql_query($sql);
-				$i = 0;
-				while ($row = mysql_fetch_array($result))
-				{
-					$rows[$i]['bill_name'] = $row['bill_name'];
-					$rows[$i]['bill_type'] = $row['bill_type'];
-					$rows[$i]['bill_id'] = $row['bill_id'];
-					$rows[$i]['bill_currency'] = $row['bill_currency'];
-					$i++;
-				}
-
-				$cnt = count($rows);
-
-				for ($i=0; $i<$cnt; $i++)
-				{
-					if (!empty($rows[$i]['bill_name']))
-					{
-						$sql = "INSERT INTO `bill` VALUES ('', '".$rows[$i]['bill_name']."', '".$user_id."', '".$rows[$i]['bill_type']."', '".$rows[$i]['bill_currency']."')";
-						$this->db->sql_query($sql);
-						$next_id = $this->db->sql_nextid();
-
-						for ($k=0; $k<$m_cnt; $k++)
-						{
-							if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'] && $m_row[$k]['cat_id'] == 0)
-							{
-								$sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-																	'".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-																	'".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-																	'".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-								$this->db->sql_query($sql);
-							}
-						}
-					}
-
-					for ($k=0; $k<$m_cnt; $k++)
-					{
-						if ($m_row[$k]['bill_id'] == $rows[$i]['bill_id'])
-						{
-							$sql = "INSERT INTO `money` VALUES ('', '".$user_id."', '".$m_row[$k]['money']."', '".$m_row[$k]['date']."',
-																'".$m_row[$k]['new_cat_id']."', '".$next_id."', '".$m_row[$k]['drain']."',
-																'".$m_row[$k]['comment']."','".$m_row[$k]['transfer']."','".$m_row[$k]['tr_id']."',
-																'".$m_row[$k]['imp_date']."', '".$m_row[$k]['imp_id']."')";
-							$this->db->sql_query($sql);
-						}
-					}
-				}
-
-			}*/
-
-		/*
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Коммунальные услуги', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Личные расходы', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Обучение', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Одежда', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Отдых и развлечение', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Продукты', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Подарки', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Работа', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Семейные расходы', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Телефон', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Транспорт', '1')";
-			$this->db->sql_query($sql);
-			$sql = "INSERT INTO `category` VALUES ('', 0, '".$user_id."', 'Хозяйственные расходы', '1')";
-			$this->db->sql_query($sql);
-		*/
-		//pre($arr,true);
-
-		/*for($i=0; $i<=count($arr); $i++)
-		{
-			$sql = $arr[$i];
-			//echo $sql;
-			$result = $this->db->sql_query($sql);
-		}*/
-
-		$this->initUserCategory($user_id);
-		$this->save();
-
-		return true;
-	}
-
-	function getCountusers ()
-	{
-		$sql = "
-				SELECT count(u.`user_id`) as user_count FROM `users` u WHERE u.`user_active` = '1'
-			   ";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка подсчета пользователей!', '', __LINE__, __FILE__, $sql);
-		}
-
-		$row = $this->db->sql_fetchrow($result);
-		return $row['user_count'];
-	}
-
-	function getAllTransaction ()
-	{
-		$sql = "
-				SELECT count(m.`money`) as money_count FROM `money` m
-			   ";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка подсчета транзакций!', '', __LINE__, __FILE__, $sql);
-		}
-
-		$row = $this->db->sql_fetchrow($result);
-		return $row['money_count'];
-	}
-
-	function getProfile($id)
-	{
-		$sql = "
-				SELECT `user_id`, `user_name`, `user_login`, `user_mail` from `users` where `user_id` = '".$id."'
-			   ";
-
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка получния профиля!', '', __LINE__, __FILE__, $sql);
-		}
-
-		$row = $this->db->sql_fetchrow($result);
-		return $row;
-	}
-
-	function updateProfile($new_passwd, $user_name, $user_mail, $user_login)
-	{
-		if (!empty($new_passwd))
-		{
-			$user_passwd = ", `user_pass` = '".$new_passwd."'";
-		}else{
-			$user_passwd = "";
-		}
-		$user_id = $this->getId();
-
-		$sql = "UPDATE `users` SET
-					`user_name` = '".$user_name."',
-					`user_mail` = '".$user_mail."'
-					".$user_passwd."
-				WHERE `user_id` = '".$user_id."'
-				";
-		if ( !($result = $this->db->sql_query($sql)) )
-		{
-			message_error(GENERAL_ERROR, 'Ошибка в cохранении профиля!', '', __LINE__, __FILE__, $sql);
-		}
-		else
-		{
-			$sql2 = "
-					SELECT `user_id`, `user_name`, `user_login`, `user_pass`, `user_mail`, `user_created`,
-							`user_active` FROM `users`
-					WHERE `user_id` = '".$user_id."' and `user_login` = '".$user_login."'
-				   ";
-			if ( $result2 = $this->db->sql_query($sql2) )
-			{
-				if( $row2 = $this->db->sql_fetchrow($result2) )
-				{
-					$this->props = $row2;
-					$this->save();
-				}
-			}
-
-			return true;
-		}
-	}
-
-	function demoNewUser()
-	{
-		$login = substr(md5(microtime().uniqid()), 0, 5);
-
-		$this->db->sql_query("select user_id from users where user_login = '".$login."'");
-		if ($this->db->sql_numrows() == 1)
-		{
-			$this->demoNewUser();
-		}
-
-		return $login;
-	}
-} //end class
-?>
+}

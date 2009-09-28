@@ -1,7 +1,0 @@
-<html>
-<head>
-<link href="../images/e-pos.ico" rel="shortcut icon">
-<title>Payment Processing</title>
-</head>
-
-<body onload="document.go.submit()"><form name=go action=https://merchant.webmoney.ru/lmi/payment.asp method=POST><input type=hidden name=ID value="1372234296R02"><input type=hidden name=LMI_PAYMENT_NO value="137223429"><input type=hidden name=LMI_PAYMENT_DESC value="Пополнение счёта 9636121665 [Билайн] на сумму 2.00 RUR."><input type=hidden name=LMI_SIM_MODE value=2><input type=hidden name=LMI_PAYEE_PURSE value="R316686640221"><input type=hidden name=LMI_PAYMENT_AMOUNT value="2.02"></form></body>

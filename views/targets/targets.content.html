@@ -1,0 +1,88 @@
+<!--Финансовые цели-->
+					<div class="ramka3">
+						<div class="ct">
+							<div class="head">
+								<h1>Финансовые цели</h1>
+								<ul class="action">
+									
+									
+									<li class="over3"><a href="#" title="свернуть">свернуть</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="inside financobject_block">
+							<div class="add"><span>Добавить цель</span></div>
+                            {foreach from=$user_list_targets item=i key=k}
+                            {if $k < 5}
+							<div class="object" tid="{$i.id}" type="{$i.type}" amount="{$i.amount}" start="{$i.start}" end="{$i.end}"
+                                 photo="{$i.photo}" url="{$i.url}" account="{$i.account}" visible="{$i.visible}" title="{$i.title}" comment="{$i.comment}">
+								<div class="ban">
+                                    <!-- <a href="#"><img src="/img/images/pic7.gif" alt="" /></a> -->
+                                </div>
+								<div class="descr">
+                                    <img src="/img/i/fintarget1.jpg" alt="" />
+									<a href="#">{$i.title}</a>
+									{$i.comment}
+								</div>
+								<div class="indicator_block">
+									<div class="money">
+										{$i.amount} руб.<br />
+										<span>{$i.amount_done} руб.</span>
+									</div>
+									<div class="indicator">
+										<div style="width:{$i.percent_done}%;"><span>{$i.percent_done}%</span></div>
+									</div>
+								</div>
+								<div class="date">
+									Целевая дата: {$i.end} &nbsp;&nbsp;&nbsp; <!-- Прогнозная дата: -->
+								</div>
+								<ul>
+									<li><a href="#" class="f_f_edit">редактировать</a></li>
+									<li><a href="#" class="f_f_copy">копировать</a></li>
+									<li><a href="#" class="f_f_del">удалить</a></li>
+								</ul>
+							</div>
+                            {/if}
+                            {/foreach}
+                            {if $user_list_targets|@count > 5}                           
+							<div class="show_all"><span>Смотреть все цели</span></div>
+                            {/if}
+						</div>
+						<div class="cb"><div></div></div>
+					</div>
+				<!--/Финансовые цели-->
+				<!--Популярные цели-->
+					<div class="ramka3">
+						<div class="ct">
+							<div class="head">
+								<h2>Популярные цели</h2>
+								<ul class="action">
+									
+									
+									<li class="over3"><a href="#" title="свернуть">свернуть</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="inside">
+                            <ul class="popularobject">
+                            {foreach from=$pop_list_targets item=i}
+                            {if $i.title != ''}
+								<li>
+									<img src="/img/i/fintarget.jpg" alt="" />
+									<span class="num">{counter}.</span>
+									<a href="#" class="name">{$i.title}</a>
+									<a href="#" class="join">Присоединиться</a>
+									<div class="statistics">
+										<div>
+                                            <span class="green">{$i.cnt}</span> Последователей<br/>
+											<span class="red">0</span> Достигло цель
+										</div>
+									</div>
+								</li>
+                            {/if}
+                            {/foreach}
+                            </ul>
+						</div>
+						<div class="cb"><div></div></div>
+					</div>
+				<!--/Популярные цели-->

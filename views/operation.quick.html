@@ -1,0 +1,255 @@
+<!--Ввод операции-->
+<div class="ramka3">
+    <div class="ct">
+	<div class="head">
+            <h2>Ввод операции</h2>
+            <ul class="action">
+                <li class="over1"><a title="настройки">настройки</a></li>
+		<li class="over2"><a title="закрыть">закрыть</a></li>
+		<li class="over3"><a title="свернуть">свернуть</a></li>
+            </ul>
+	</div>
+    </div>
+    <div class="inside">
+    <ul class="buttons_block">
+        <li id="op_addoperation_but"><a title="Добавить операцию">Добавить операцию</a></li>
+	<li id="op_addtocalendar_but"><a title="Добавить в календарь">Добавить в календарь</a></li>
+    </ul>
+    <form action="/operation/add/" style="display:none;" class="op_addoperation">
+        <input type="hidden" id="op_id" />
+	<div class="op_addoperation" style="display: block;">
+            <div class="op_line">
+                <div class="op_f_field" id="op_account_fields">
+                    <div><label for="op_account">Счет</label>
+                        <select id="op_account">
+                            {foreach from=$accounts item=acc_data}
+                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                            {/foreach}
+			</select>
+                    </div>
+                    <div>
+                        <label for="op_type">Тип операции</label>
+                        <select id="op_type">
+                            <option value="0">Расход</option>
+                            <option value="1">Доход</option>
+                            <option value="2">Перевод со счета</option>
+                            {*<!-- <option value="3">Покупка валюты</option> -->*}
+                            <option value="4">Перевод на фин. цель</option>
+                        </select>
+                    </div>
+		</div>
+            </div>
+            <div class="op_line">
+                <div class="op_f_field op_category" id="op_category_fields">
+		Категория
+                    {if !empty($list)}
+                    <select id="op_category">
+                        {if !empty($often)}
+                        <optgroup id="op_often" label="&nbsp;Часто используемые">
+                            {foreach from=$often item=data}
+                            <option value="{$data.cat_id}">{$data.cat_name}</option>
+                                {/foreach}
+                        </optgroup>
+                        {/if}
+                        <optgroup id="op_all" label="&nbsp;Все категории">
+                            {$category}
+                        </optgroup>
+                    </select>
+                    {else}
+                    <select id="op_category">
+                    {$category}
+                                            </select>
+                                            {/if}
+										</div>
+									</div>
+                                    {* <!-- Финансовая цель --> *}
+                                    <div class="op_line" >
+                                        <div class="op_field" id="op_target_fields" style="display:none;">
+                                           <label for="op_target">Финансовая цель:</label>
+                                            <select id="op_target">
+                                                <option bill="0" value="0" target_account_id='0' amount_done='0' percent_done='0'
+                                                        forecast_done='0' amount="0"> -- Все -- </option>
+                                                {foreach from=$targetList item=target}
+                                                    <option bill="{$target.target_account_id}" value="{$target.id}"
+                                                        target_account_id='{$target.target_account_id}' amount_done='{$target.amount_done}'
+                                                        percent_done='{$target.percent_done}' forecast_done='{$target.forecast_done}' amount='{$target.amount}'
+                                                        {if $target.id==$target_sel}selected{/if}>
+                                                        {$target.title|stripslashes|truncate:50:".."}</option>
+                                                {/foreach}
+                                            </select>
+                                            <div>
+                                                <div>Стоимость цели: <span id='op_amount_target'></span><span class='op_currency'></span></div>
+                                                <div>Сумма накопленная: <span id='op_amount_done'></span><span class='op_currency' ></span></div>
+                                                <div>Прогноз: <span id='op_forecast_done'></span> %</div>
+                                                <div>Процент готовности: <span id='op_percent_done'></span> %</div>
+                                            </div>
+                                            <input type="checkbox" id="op_close" name="op_close" value="Закрытая финансовая цель" />
+                                            <label for="op_close">Закрытая финансовая цель</label>
+                                        </div>
+                                    </div>
+                                    {*<!-- Трансфер -->*}
+                                    <div class="op_line" >
+                                        <div class="op_field" id="op_transfer_fields" style="display:none;">
+                                            <label for="op_AccountForTransfer">На счет:</label>
+                                            <select id="op_AccountForTransfer">
+                                                {foreach from=$accounts item=acc_data}
+                                                <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                                                {/foreach}
+                                            </select>
+                                            <span id="op_operationTransferCurrency" style="display:none;">
+                                                <span></span>
+                                                <input type='text' id='op_currency'><span id="op_convertSumCurrency"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {*<!-- Основные поля -->*}
+									<div class="op_line" >
+										<div class="op_f_field date" id="op_date_fields">
+											<label for="op_date">Дата</label>
+                                            <input type="text" value="{$date}" id="op_date" autocomplete="off" class="op_inp">
+										</div>
+										<div class="op_f_field op_amount" id="op_amount_fields">
+											<label for="op_amount">Сумма</label>
+                                            <input type="text" id="op_amount">
+										</div>
+										<!--<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>-->
+									</div>
+									<div class="op_line">
+										<div class="op_f_field op_tags">
+											<label for="op_tags">Теги</label>
+											<input type="text" value="" id="op_tags" class="op_inp" autocomplete="off" />
+											<a id="op_tags" title="Редактировать"></a>
+										</div>
+										<div class="op_tags_could" id="op_tags">
+
+										</div>
+									</div>
+									<div class="op_line">
+										<label for="op_comment">Комментарии</label>
+										<textarea rows="1" cols="1" id="op_comment"></textarea>
+									</div>
+									<div class="but">
+										<input type="button" id="op_btn_Save" value="Сохранить" />
+										<input type="button" id="op_btn_Cancel" value="Отменить" />
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="cb"><div></div></div>
+					</div>
+				<!--/Ввод операции-->
+
+                                <div id="op_addtocalend"></div>
+
+
+
+    <div id="op_dialog_event" title="Событие" style="display: none;">
+        <div class="event_form">
+            <div class="line periodic event">
+                <input id="cal_key" type="hidden" value ="0" />
+                <input id="cal_chain" type="hidden" value ="0" />
+                <label>&nbsp;</label>
+                    <select id="cal_mainselect">
+                        <option value="event" selected="selected">Событие</option>
+                            <option value="periodic">Периодические транзакции</option>
+                    </select>
+            </div>
+            <div class="line periodic event">
+                    <label for="cal_title">Название</label>
+                    <input type="text" name="title" id="cal_title" />
+            </div>
+            <div class="line periodic">
+                    <label for="cal_category">Категория</label>
+                    <select name="category" id="cal_category">{$category}</select>
+            </div>
+            <div class="line periodic">
+                <label for="cal_type">Тип</label>
+                <select name="type" id="cal_type">
+                    <option value="-1">Расход</option>
+                    <option value="1">Доход</option>
+                </select>
+            </div>
+            <div class="line periodic">
+                    <label for="cal_account">Счёт</label>
+                    <select name="account" id="cal_account">
+                        {foreach from=$accounts item=acc_data}
+                        <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                        {/foreach}
+                    </select>
+            </div>
+            <div class="line periodic">
+                    <label for="cal_amount">Сумма</label>
+                    <input type="text" name="amount" id="cal_amount" />
+            </div>
+            <div class="line periodic event">
+                    <label for="cal_date">Дата</label>
+                    <input type="text" name="date" id="cal_date" />
+            </div>
+            <div class="line event">
+                    <label for="cal_time">Время</label>
+                    <input type="text" name="time" id="cal_time" />
+            </div>
+            <div class="line periodic event">
+                    <label for="cal_repeat">Повторить</label>
+                    <select name="repeat" id="cal_repeat">
+                            <option value="0">Без повторения</option>
+                            <option value="1">Каждый день</option>
+                            <option value="3">Каждый Пн., Ср. и Пт.</option>
+                            <option value="4">Каждый Вт. и Чт.</option>
+                            <option value="5">По будням</option>
+                            <option value="6">По выходным</option>
+                            <option value="7">Каждую неделю</option>
+                            <option value="30">Каждый месяц</option>
+                            <!-- <option value="90">Ежеквартально</option> -->
+                            <option value="365">Каждый год</option>
+                    </select>
+            </div>
+            <div class="line periodic event">
+                    <div class='week' id='week'>
+                        <h4>Дни недели</h4>
+                        <div>
+                            <label for="cal_mon">Пн</label>
+                            <label for="cal_tue">Вт</label>
+                            <label for="cal_wed">Ср</label>
+                            <label for="cal_thu">Чт</label>
+                            <label for="cal_fri">Пт</label>
+                            <label for="cal_sat">Сб</label>
+                            <label for="cal_sun">Вс</label>
+                        </div>
+                        <div>
+                            <input name="mon" id="cal_mon" value="1" type="checkbox">
+                            <input name="tue" id="cal_tue" value="1" type="checkbox">
+                            <input name="wed" id="cal_wed" value="1" type="checkbox">
+                            <input name="thu" id="cal_thu" value="1" type="checkbox">
+                            <input name="fri" id="cal_fri" value="1" type="checkbox">
+                            <input name="sat" id="cal_sat" value="1" type="checkbox">
+                            <input name="sun" id="cal_sun" value="1" type="checkbox">
+                        </div>
+                    </div>
+            </div>
+            <div class="line periodic event">
+                    <div class="count repeat">
+                            <span for="cal_count">Повторить</span>
+                            <input name="rep_type" class="rep_type" value="1" type="radio">
+                            <select name="count" id="cal_count" class="ui-widget-content"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option></select>
+                            <span>раз</span>
+                    </div>
+                    <div class="infinity repeat">
+                            <input name="rep_type" class="rep_type" value="2" type="radio">
+                            <label>Бесконечно</label>
+                    </div>
+                    <div class="todate repeat">
+                        <label for="cal_date_end">До даты</label>
+                            <input name="rep_type" class="rep_type" value="3" type="radio">
+                            <input name="date_end" id="cal_date_end" value="" type="text">
+                    </div>
+            </div>
+
+            <div class="line event periodic">
+                <label for="cal_comment">Комментарий</label>
+                <textarea id="cal_comment" name="comment" class="text ui-widget-content"></textarea>
+            </div>
+        </div>
+    </div>
+      
+                                <!-- -->

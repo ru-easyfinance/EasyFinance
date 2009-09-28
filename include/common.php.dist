@@ -1,0 +1,68 @@
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+/**
+ * Файл с общими настройками проекта
+ * @copyright http://home-money.ru/
+ * SVN $Id$
+ */
+
+require_once dirname(__FILE__)."/config.php";
+require_once SYS_DIR_INC.'/functions.php';
+
+if (DEBUG) {
+    // В режиме DEBUG выводим отладочные сообщения в консоль firebug < http://getfirebug.com/ > через плагин firephp < http://www.firephp.org/ >
+    require_once SYS_DIR_LIBS . 'external/FirePHPCore/FirePHP.class.php';
+}
+
+// Подгружаем внешние библиотеки
+require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
+require_once SYS_DIR_LIBS . 'external/smarty/Smarty.class.php';
+require_once SYS_DIR_LIBS . 'external/smarty/Smarty_Compiler.class.php';
+require_once SYS_DIR_LIBS . 'external/smarty/Config_File.class.php';
+
+// Устанавливаем обработчик ошибок
+set_error_handler("UserErrorHandler");
+
+// Настраиваем смарти
+$tpl = new Smarty();
+
+$tpl->template_dir    =  SYS_DIR_ROOT.'/views';
+$tpl->compile_dir     =  SYS_DIR_ROOT.'/cache';
+
+$tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
+$tpl->compile_check   =  true;
+$tpl->force_compile   =  false;
+$tpl->assign('revision',REVISION);
+$tpl->append('css', 'main.css');
+$tpl->append('js', 'jquery/jquery.min.js');
+
+///временно<--
+$tpl->append('css', 'jquery/south-street/ui.all.css');
+$tpl->append('css', 'jquery/south-street/ui.dialog.css');
+$tpl->append('css', 'jquery/jquery.jgrowl.css');
+$tpl->append('css','jquery/jScrollPane.css');
+$tpl->append('css','jquery/jquery.calculator.css');
+
+$tpl->append('js',  'jquery/ui.core.js');
+$tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');
+$tpl->append('js',  'jquery/ui.resizable.js');
+$tpl->append('js',  'jquery/ui.draggable.js');
+$tpl->append('js',  'jquery/ui.dialog.js');
+$tpl->append('js',  'jquery/ui.datepicker.js');
+$tpl->append('js',  'jquery/jquery.qtip.js');
+$tpl->append('js',  'jquery/jquery.jgrowl.min.js');
+$tpl->append('js',  'anychart/AnyChart.js');
+$tpl->append('js',  'jquery/jquery.calculator.min.js');
+$tpl->append('js',  'jquery/jquery.calculator-ru.js');
+$tpl->append('js',  'jquery/jquery.mousewheel.js');
+$tpl->append('js',  'jquery/jquery.em.js');
+$tpl->append('js',  'jquery/jScrollPane.js');
+$tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js');
+$tpl->append('js',  'jquery/jquery.timepicker-table.min.js');
+$tpl->append('js',  'jquery/ui.tabs.js');
+///-->
+$tpl->append('js','main.js');
+
+// Добавляем ссылки на БД, Смарти, Пользователя и Валюты - в наше ядро
+Core::getInstance()->tpl = $tpl;
+Core::getInstance()->currency = new Currency();
+Core::getInstance()->user = new User();

@@ -1,0 +1,28 @@
+<div style="padding-bottom:6px;border:0px;width:20%">
+    <h4>
+        <a href="/admin/accounts/">Назад</a>
+    </h4>
+</div>
+<div class="type">
+<form action="/admin/accounts/type/" method="post" id="formAccount">
+    <div style="border: 1px dotted rgb(255, 96, 2); background-color: rgb(248, 248, 216); padding-top: 15px; padding-bottom: 15px;">
+        <div>
+                Тип счета:
+                <input type="text" name="type_name" id="type_name" value="{$type.account_type_name}">
+        </div>
+        <div>
+                <input type="hidden" value="{$type.account_type_id}" name="type_id" id="type_id">
+                <input type="button" id="btnAddAccount" value="Сохранить" class="inputsubmit" />
+                <input type="button" id="btnCancelAdd" value="Отмена" class="inputsubmit" />
+        </div>
+    </div>
+</form>
+<table style="border: 1px solid rgb(204, 204, 204); padding: 5px 5px 5px 25px;width:100%;">
+    <tr style="border: 1px solid rgb(204, 204, 204);text-align:left">
+        <th>Название счёта</th>
+        <th>Удалить счёт</th>
+        <th>Редактировать счёт</th>
+    </tr>
+            {include file="admin/accounts/accounts.type_list.html"}
+</table>
+</div>
