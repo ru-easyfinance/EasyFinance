@@ -758,8 +758,12 @@ $("strong:contains('Имущество')").qtip({
         $('#op_AccountForTransfer').change( function(){op_changeAccountForTransfer();});
         $('#op_type').change(function(){op_changeTypeOperation('add');});
         $('#op_target').change(function(){
+            t = parseInt($("#op_target :selected").attr("target_account_id"));
             $("span.op_currency").each(function(){
-                $(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
+                if (t != 0){
+                    alert(res['accounts'][t]['cur']);
+                    //$(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
+                }
             });
             $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
             $("#op_amount_target").text(formatCurrency($("#op_target :selected").attr("amount")));

@@ -26,7 +26,8 @@ function __autoload($class_name) {
     } elseif (file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php')) {
         require_once SYS_DIR_LIBS . strtolower($array[0]) . '.class.php';
     } else {
-        trigger_error("Не удалось найти файл с классом {$class_name} ".var_dump($array), E_USER_ERROR);
+        //trigger_error("Не удалось найти файл с классом {$class_name} ".var_dump($array), E_USER_ERROR);
+        error_404();
     }
 }
 
@@ -93,8 +94,9 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
 function error_404 ($path='')
 {
     //TODO
-    header("HTTP/1.1 404 Not Found");
-    die('404');
+    //header("HTTP/1.1 404 Not Found");
+    header('HTTP', true, 404);
+    exit;
     //die(file_get_contents('/404.html'));
 }
 

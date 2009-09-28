@@ -38,7 +38,11 @@ $(document).ready(function(){
         $('#url').val(f.attr('url'));
         $('#comment').val(f.attr('comment'));
         $('#account').val(f.attr('account'));
-        $('#visible').val(f.attr('visible'));
+        if (f.attr('visible')==1){
+            $('#visible').attr('checked','checked');
+        }else{
+            $('#visible').removeAttr('checked');
+        }
         $('#tpopup form').attr('action','/targets/edit/');
         $('#tpopup').dialog('open');
         return false;
@@ -76,22 +80,7 @@ $(document).ready(function(){
     // Загружаем и показываем ВСЕ цели пользователя
     $('div.show_all span').click(function() {
         $.get('/targets/user_list/', '', function(data){
-            s = '';
-            for(v in data) {
-                s += '<div class="object"><div class="ban"></div>'
-                    +'<div class="descr">';
-                    s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
-                        s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
-						+'</div><div class="indicator_block"><div class="money">'
-						+data[v]['amount']+' руб.<br /><span>'
-                        +data[v]['amount_done']+' руб.</span></div><div class="indicator">'
-                        +'<div style="width:'+data[v]['percent_done']+'%;"><span>'+data[v]['percent_done']
-                        +'%</span></div></div></div><div class="date">Целевая дата: '
-                        +data[v]['end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
-                        +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
-            }
-            $('div.object,div.show_all').remove();
-            $('div.financobject_block').append(s);
+            loadTargets(data);
         }, 'json');
     });
 
@@ -114,6 +103,7 @@ $(document).ready(function(){
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc=" Функции ">
+
     /**
      * Очищает форму для добавления финансовой цели
      */
@@ -121,6 +111,27 @@ $(document).ready(function(){
         $('#id,#type,#category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
     }
 
+    /**
+     * Показывает финцели пользователя
+     */
+    function loadTargets(data) {
+        s = '';
+        for(v in data) {
+            s += '<div class="object"><div class="ban"></div>'
+                +'<div class="descr">';
+                s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
+                    s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
+                    +'</div><div class="indicator_block"><div class="money">'
+                    +data[v]['amount']+' руб.<br /><span>'
+                    +data[v]['amount_done']+' руб.</span></div><div class="indicator">'
+                    +'<div style="width:'+data[v]['percent_done']+'%;"><span>'+data[v]['percent_done']
+                    +'%</span></div></div></div><div class="date">Целевая дата: '
+                    +data[v]['end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
+                    +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
+        }
+        $('div.object,div.show_all').remove();
+        $('div.financobject_block').append(s);
+    }
     /**
      * Заполняет поля формы результатами из массива data
      * @param array data Массив с данными финансовой цели
@@ -165,30 +176,29 @@ $(document).ready(function(){
                 account  : $('#account').attr('value'),
                 visible  : $('#visible:checked').length
             }, function(data){
-                for (var v in data) {
-                    //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                    alert('Ошибка в ' + v);
-                }
+//                for (var v in data) {
+//                    //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+//                    alert('Ошибка в ' + v);
+//                }
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
-                if (data.length == 0) {
+                if (data.length > 0) {
                     $('#tpopup').dialog('close');
                     $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
-
+                    loadTargets(data);
                 }
-
-                s = '<div class="object"><div class="ban"></div>'
-                    +'<div class="descr">';
-                    s += ($('#photo').attr('value'))? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/i/fintarget1.jpg" alt="" />';
-                        s += '<a href="#">'+$('#name').attr('value')+'</a>'+$('#comment').attr('value')
-						+'</div><div class="indicator_block"><div class="money">'
-						+$('#tg_amount').attr('value')+' руб.<br /><span>'
-                        +'0 руб.</span></div><div class="indicator">'
-                        +'<div style="width:0%;"><span>0'
-                        +'%</span></div></div></div><div class="date">Целевая дата: '
-                        +$('#end').attr('value')+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
-                        +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
-
-                $('div.financobject_block').append(s);
+//                s = '<div class="object"><div class="ban"></div>'
+//                    +'<div class="descr">';
+//                    s += ($('#photo').attr('value'))? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/i/fintarget1.jpg" alt="" />';
+//                        s += '<a href="#">'+$('#name').attr('value')+'</a>'+$('#comment').attr('value')
+//						+'</div><div class="indicator_block"><div class="money">'
+//						+$('#tg_amount').attr('value')+' руб.<br /><span>'
+//                        +'0 руб.</span></div><div class="indicator">'
+//                        +'<div style="width:0%;"><span>0'
+//                        +'%</span></div></div></div><div class="date">Целевая дата: '
+//                        +$('#end').attr('value')+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
+//                        +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
+//
+//                $('div.financobject_block').append(s);
                 if ($('#visible:checked').length == 1) {
                     loadPopular();
                 }

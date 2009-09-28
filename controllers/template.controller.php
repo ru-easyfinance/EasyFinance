@@ -61,7 +61,7 @@ class Template_Controller {
                 'total_balance' => $v['total_sum']
             );
         }
-
+        
         // Подготавливаем фин.цели
         $targets = array();
         foreach ($user->getUserTargets() as $key => $var) {
@@ -73,7 +73,7 @@ class Template_Controller {
                         'amount_done'  => $v['amount_done'],
                         'percent_done' => $v['percent_done'],
                         'money'        => $v['money'],
-                        'account'       => $v['account'],
+                        'account'      => $v['account'],
                         'amount_done'  => $v['amount_done'],
                     );
                 }

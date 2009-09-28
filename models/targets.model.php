@@ -65,10 +65,11 @@ class Targets_Model {
         } else {
             $start = (((int)$index - 1) * $limit);
         }
-        $list = $this->db->selectPage($total, "SELECT id, category_id as category, title, amount,
-            DATE_FORMAT(date_begin,'%d.%m.%Y') as start, DATE_FORMAT(date_end,'%d.%m.%Y') as end, percent_done,
-            forecast_done, visible, photo,url, comment, target_account_id AS account, amount_done, close
-            FROM target WHERE user_id = ? ORDER BY date_end ASC LIMIT ?d,?d;",
+        $list = $this->db->selectPage($total, "SELECT t.id, t.category_id as category, t.title, t.amount,
+            DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
+            t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close
+            ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
+            FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;",
             Core::getInstance()->user->getId(), $start, $limit);
 		if (!is_array($list)) $list = array();
         
@@ -240,7 +241,7 @@ class Targets_Model {
                 $this->staticTargetUpdate($tid);
                 Core::getInstance()->user->initUserTargets();
                 Core::getInstance()->user->save();
-                return '[]';
+                return Core::getInstance()->user->getUserTargets();
             }
         }
     }
@@ -266,7 +267,7 @@ class Targets_Model {
             $this->staticTargetUpdate($data['id']);
             Core::getInstance()->user->initUserTargets();
             Core::getInstance()->user->save();
-            return '[]';
+            return Core::getInstance()->user->getUserTargets();
         }
     }
 
