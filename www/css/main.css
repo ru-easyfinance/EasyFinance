@@ -1269,7 +1269,7 @@ ul.rating li.result { font-size: 11px; color: #7c7c7c; }
 ul.rating li.result b { font-size: 14px; color: #222222; }
 
 
-.addquestion, .addcategories { position: relative; margin-bottom: 33px; min-height: 25px; //-height: 25px; }
+.addquestion, .addcategories { position: relative; margin-bottom: 5px; min-height: 25px; //-height: 25px; }
 .addquestion a, .addcategories a { display: block; position: absolute; top: 12px; left: 27px; padding-left: 27px; font-size: 14px; line-height: 18px; text-decoration: none; background: url('/img/i/icons.gif') no-repeat -20px -368px; }
 .addquestion a span { border-bottom: 1px dashed #6bbe4c; }
 .addquestion .form_block, .addcategories .form_block { display: none; padding: 50px 0 17px 170px; background: #f2f5ee; }

@@ -538,10 +538,9 @@ $("strong:contains('Имущество')").qtip({
             }).dialog("open");
             $('.op_tags_could li').show();
         });
-		$('.op_tags input').keyup(function(){
-                    $('.op_tags_could li').show();
-
-		})
+		//$('.op_tags input').keyup(function(){
+                  //  $('.op_tags_could li').show();
+		//})
                 $('.op_tags_could li').live('click',function(){
                     txt=$('.op_tags input').val()+$(this).text()+', ';
                     $('.op_tags input').val(txt);

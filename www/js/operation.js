@@ -284,12 +284,31 @@ $(document).ready(function() {
         //"cat_transfer":"1"},
         $('#op_id').val(data.id);
         $('#op_account').val(data.account_id);
-//        if (date.drain) {
-//            $('#type').val(1);
-//        } else {
-//            $('#type').val(0);
-//        }
+        
+        if (data.transfer=='1')
+        {
+            $('#op_type').val(2);
+        }
+        else
+        {
+
+            if (data.virt=='1')
+            {
+                $('#op_type').val(4);
+            }
+            else
+            {
+                if (data.drain=='1') {
+                    $('#op_type').val(0);
+                } else {
+                    $('#op_type').val(1);//@todo
+                }
+            }
+        }
         //$('#type').val(data.type);
+        //alert(data.toString());
+        //$('#op_type').val(data.drain);
+        //////////////////////////
         $('#op_amount').val(data.money);
         $('#op_category').val(data.cat_id);
         //$('#target').val(data.);
