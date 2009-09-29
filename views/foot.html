@@ -1,11 +1,12 @@
 {* $Id: index_old.html -1   $ *}
 <!--подвал-->
 <div id="footer">
-<dfn>© 2009 «EasyFinance»</dfn>
+	<a  class="addmessage">оставить отзыв</a>
+	<dfn>© 2009 «EasyFinance»</dfn>
 <ul class="contacts">
-		<li><a href="#">Правила использования</a></li>
-		<li><a href="#">О компании</a></li>
-		<li><a href="#">Безопасность</a></li>
+		<li><a href="/rules/">Правила использования</a></li>
+		<li><a href="/about/">О компании</a></li>
+		<li><a href="/secur/">Безопасность</a></li>
 		<li class="tel tel1">Телефон:  (495)-777-77-77</li>
 		<li class="tel tel2">Клиентская служба:  <a href="mailto:info@home-money.ru">info@home-money.ru</a></li>
 		<li class="tel tel3">Техническая поддержка:  <a href="mailto:support@home-money.ru">support@home-money.ru</a></li>
@@ -15,27 +16,50 @@
 <div class="creator" tooltip="linkalert-tip">дизайн сайта - Нотамедиа<br/>2009</div>
 <!--popup оставить отзыв-->
 	<div id="popupreport">
-		<div class="bg"/>
+		<div class="bg"></div>
+
 		<form action="">
 			<div class="inside">
-				<h2>оставить отзыв</h2>
-				<div class="f_field">
-					<label for="ffemail">e-mail</label>
-					<input type="text" id="ffemail" value=""/>
-				</div>
-				<div class="f_field">
-					<label for="ffmes">Ваш отзыв</label>
-					<textarea id="ffmes" rows="1" cols="1"/>
-				</div>
-				<div class="f_field">
-					<label for="ffnum">Введите цифры</label>
-					<input type="text" id="ffnum" value=""/>
-					<img alt="" src="./images/pic13.gif"/>
-				</div>
-				<input type="image" class="but" value="отправить" src="./i/pix.gif"/>
+                            <table class="header">
+                                <tr>
+                                    <td class="header">
+                                        <h2>Оставить отзыв</h2>
+                                     </td>
+
+                                     <td class="link close">
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="f_field">
+                                <label for="ffmes">Ваш отзыв</label>
+				<textarea cols="1" rows="1" id="ffmes"></textarea>
+                            </div>
+                            <center>
+                                <img src="/img/i/pix.gif" class="but" />
+                            </center>
+                            <div id="hr"></div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h3>Список лидеров <div></div></h3>
+                                    </td>
+                                    <td class="link">
+                                        <a class="rating_list" id="">все тестеры</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div id="rating"></div>
+                            <div style="font-size:8;">*рейтинг обновляется ежедневно, после оценки замечаний</div>
+
+
 			</div>
 		</form>
 	</div>
+<!--/popup оставить отзыв-->
+	
+<div id='dialog_rating'></div>
 <!--/popup оставить отзыв-->
 </div>
 <!--/подвал-->

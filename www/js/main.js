@@ -517,6 +517,13 @@ $("strong:contains('Имущество')").qtip({
         if ($('#type').val() == 0 || $('#type').val() == 1) {
             $("#category_fields,#tags_fields").show();
             $("#target_fields,#transfer_fields").hide();
+            /*alert('у');
+            if ($('#type').val() == 0) {
+                alert('у');
+            }
+            if ($('#type').val() == 1) {
+                alert('ы');
+            }//*/
         //Перевод со счёта
         } else if ($('#type').val() == 2) {
             $("#category_fields,#target_fields").hide();
@@ -674,6 +681,12 @@ $("strong:contains('Имущество')").qtip({
         }
     }
 
+    function IncomeOnCategories(){
+        
+    }
+    function WasteOnCategories(){
+
+    }
     /**
      * При изменении типа операции
      */
@@ -682,6 +695,12 @@ $("strong:contains('Имущество')").qtip({
         if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();
+            if ($('#op_type').val() == 0) {
+                IncomeOnCategories();//отображает в списке категорий для добавления операции доходные
+            }
+            if ($('#op_type').val() == 1) {
+                WasteOnCategories();
+            }
         //Перевод со счёта
         } else if ($('#op_type').val() == 2) {
             $("#op_category_fields,#op_target_fields").hide();

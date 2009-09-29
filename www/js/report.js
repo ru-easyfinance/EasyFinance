@@ -190,7 +190,7 @@ function ShowIncome(){
         account: $('#account :selected').val(),
         currency:$('#currency :selected').val()
      }, function(data) {
-            //var tmp = findSWF("chart");
+            var tmp = findSWF("chart");
             var tr;
              //tr += '';
             $('tr:not(:first)','#reports_list').each(function(){

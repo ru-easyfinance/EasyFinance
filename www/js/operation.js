@@ -1,9 +1,8 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
 
-    var catlast ;
-    var datelast ;
+    /*var catlast ;
+    var datelast ;*/
 $(document).ready(function() {
-
 
     $('#op_addoperation_but').click();
     $('#op_btn_Save').click(function(){
@@ -18,9 +17,9 @@ $(document).ready(function() {
 
     // Bind
     $('#btn_Save').click(function(){
-        alert('1');
+        //alert('1');
         saveOperation();
-        alert('3');
+        //alert('3');
         /*fillForm(operationList[$(this).closest('tr').attr('value')]);
         alert('12');
             $(this).closest('form').attr('action','/operation/add/');
@@ -219,11 +218,11 @@ $(document).ready(function() {
         if (!validateForm()){
             return false;
         }
-        alert('2');
+        /*alert('2');
         catlast = $('#op_category').val();
         datelast = $('#op_date').val();
         alert (catlast);
-        alert (datelast);
+        alert (datelast);*/
         
         $.post(($('form').attr('action')), {
             id        : $('#id').val(),
@@ -256,7 +255,7 @@ $(document).ready(function() {
  $('#type').change();
 
     function clearForm() {
-        /*$('#op_type,#op_category,#op_target').val(0);
+        $('#op_type,#op_category,#op_target').val(0);
         $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
 
         $('span#op_amount_target').text();
@@ -269,7 +268,7 @@ $(document).ready(function() {
 
         $('form').attr('action','/operation/add/');
 
-        $('#op_type').change();*/
+        $('#op_type').change();//*/
     }
     /**
      * Функция заполняет форму данными c массива
@@ -334,26 +333,16 @@ $(document).ready(function() {
     function changeop_TypeOperation() {
         // Расход или Доход
         if ($('#type').val() == 0 || $('#type').val() == 1) {
+            alert('1');
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();
-        //Перевод со счёта
-        } else if ($('#type').val() == 2) {
-            $("#op_category_fields,#op_target_fields").hide();
-            $("#op_tags_fields,#op_transfer_fields").show();
-            changeAccountForTransfer();
-        //Перевод на финансовую цель
-        } else if ($('#type').val() == 4) {
-            $("#op_target_fields").show();
-            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
-            $('#op_target').change();
-        }
-    }
-
-    function changeop_TypeOperation() {
-        // Расход или Доход
-        if ($('#type').val() == 0 || $('#type').val() == 1) {
-            $("#op_category_fields,#op_tags_fields").show();
-            $("#op_target_fields,#op_transfer_fields").hide();
+            alert('2');
+            if ($('#type').val() == 0){
+               alert('у');
+            }
+            if ($('#type').val() == 1){
+                alert('ы');
+            }
         //Перевод со счёта
         } else if ($('#type').val() == 2) {
             $("#op_category_fields,#op_target_fields").hide();
