@@ -19,7 +19,7 @@ define('UPLOAD_DIR',      SYS_DIR_ROOT."/upload/");
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
 // Other
-define('URL_ROOT',        "http://hm/");
+define('URL_ROOT',        "hm/");
 define('IS_DEMO',         false);
 define('DEBUG',           true);
 //define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);

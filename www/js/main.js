@@ -1455,8 +1455,15 @@ $('li#c2').click(function(){a_list()})
     );
 
 ///////////////////////////////////////////login/////////////////////////
-        $('#show_login').click(function(){
+
+        if (pathName=='/login/')
             $('#login').show();
+
+        $('#show_login').click(function(){
+            //if (window.location.protocol!='https:')
+                //window.location.href='https://hm/#login';
+            $('#login').show();
+        //return false;
         })
         $('#login .close').click(function(){
             $('#login').hide();
