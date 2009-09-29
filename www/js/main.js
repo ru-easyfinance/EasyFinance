@@ -122,11 +122,6 @@ $(document).ready(function() {
         }
     }
 
-    if (res['errors'] != null && res['errors'].length > 0) {
-        for (v in res['errors']) {
-            $.jGrowl(res['errors'][v], {theme: 'red'});
-        }
-    }
 
 $("#review").qtip({
    content: 'Описание основных элементов и сервисов',
@@ -237,7 +232,7 @@ $(".hasDatepicker").qtip({
    style: 'mystyle'
 })
 $("#op_account").qtip({
-   content: 'Счет, по которому будет проведена операция',
+   content: 'Счет с которого Вы переводите деньги',
    show: {delay: 1000},
    position: {target: 'mouse'},
    style: 'mystyle'
@@ -339,7 +334,13 @@ $("strong:contains('Имущество')").qtip({
    style: 'mystyle'
 })
     // *** Функции ***
-    
+
+    if (res['errors'] != null && res['errors'].length > 0) {
+        for (v in res['errors']) {
+            $.jGrowl(res['errors'][v], {theme: 'red'});
+        }
+    }
+
     //открытие сообщений
     function inarray(key,arr) {
         for(k in arr) {
@@ -454,8 +455,9 @@ $("strong:contains('Имущество')").qtip({
         }
 
         if ($('#type') == 4) {
-            //@FIXME Написать обновление финцелей
-            amount = parseFloat($("#target_sel option:selected").attr("amount"));$("#amount").text(amount);
+            //FIXME Написать обновление финцелей
+            amount = parseFloat($("#target_sel option:selected").attr("amount"));
+            $("#amount").text(amount);
             amount_done = parseFloat($("#target_sel option:selected").attr("amount_done"));$("#amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
@@ -509,13 +511,6 @@ $("strong:contains('Имущество')").qtip({
         if ($('#type').val() == 0 || $('#type').val() == 1) {
             $("#category_fields,#tags_fields").show();
             $("#target_fields,#transfer_fields").hide();
-            /*alert('у');
-            if ($('#type').val() == 0) {
-                alert('у');
-            }
-            if ($('#type').val() == 1) {
-                alert('ы');
-            }//*/
         //Перевод со счёта
         } else if ($('#type').val() == 2) {
             $("#category_fields,#target_fields").hide();
@@ -590,6 +585,10 @@ $("strong:contains('Имущество')").qtip({
             tags      : $('#op_tags').val()
             
         }, function(data){
+            for (var v in data) {
+                //FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                alert('Ошибка в ' + v);
+            }
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
                 op_clearForm();
@@ -616,7 +615,9 @@ $("strong:contains('Имущество')").qtip({
         }
 
         if ($('#op_type') == 4) {
-            //@FIXME Написать обновление финцелей
+            /**
+             *@FIXME Написать обновление финцелей
+             */
 
             amount = parseFloat($("#op_target option:selected").attr("amount"));
             $("#op_amount").text(amount);
@@ -764,7 +765,9 @@ $("strong:contains('Имущество')").qtip({
 
         $('#op_amount,#op_currency').change(function(){
             if ($('#op_type').val() == 2) {
-                //@TODO Дописать округление
+                /*
+                 *@TODO Дописать округление
+                 */
                 var result = Math.round($('#op_amount').val() / $('#op_currency').val());
                 if (!isNaN(result) && result != 'Infinity') {
                     $("#op_convertSumCurrency").html("конвертация: "+result);
@@ -793,7 +796,11 @@ $("strong:contains('Имущество')").qtip({
             add2call();
         });
             function ac_save() {
-            //@TODO Проверить вводимые значения ui-tabs-selected
+
+            }
+            /*
+             *@TODO Проверить вводимые значения ui-tabs-selected
+             */
             var href = '/calendar/add/';
             if ($('#cal_mainselect .act').attr('id')=='periodic')
             {
@@ -827,7 +834,9 @@ $("strong:contains('Имущество')").qtip({
                     sun:        $('.week #sun').attr('checked') ? 1 : 0
                 }, function(data){
                     for (var v in data) {
-                        //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                        /*
+                         *@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                        */
                         alert('Ошибка в ' + data[v]);
                     }
                     // В случае успешного добавления, закрываем диалог и обновляем календарь
@@ -838,6 +847,7 @@ $("strong:contains('Имущество')").qtip({
                 'json'
             );
         }
+
         $('#op_pcount').select(function(){
             $('#op_pcounts').removeAttr('disable');
         })
@@ -920,21 +930,17 @@ $("strong:contains('Имущество')").qtip({
             
         }
 
-    }
-    if(inarray(Current_module, Connected_functional.menu)){//////////////////////////////////
-      ///////////////////////////////////////////////////////////////////////////////
-// left
-// nav bar
-//$('li#c1').click()
-$('.listing').hide();
-$('.navigation  li ul').hide()
-$('.navigation li.act ul').show()
-$('.navigation  li span').click(function(){
-    $('.navigation  li span').closest('li').removeClass('act');
-    $(this).closest('li').addClass('act');
-    $('.navigation  li ul').hide()
-    $('.navigation li.act ul').show()
-});
+    //}
+    if(inarray(Current_module, Connected_functional.menu)){
+        $('.listing').hide();
+        $('.navigation  li ul').hide()
+        $('.navigation li.act ul').show()
+        $('.navigation  li span').click(function(){
+            $('.navigation  li span').closest('li').removeClass('act');
+            $(this).closest('li').addClass('act');
+            $('.navigation  li ul').hide()
+            $('.navigation li.act ul').show()
+    })};
 
 /**
  * Загружаем теги для левой панели
@@ -999,8 +1005,9 @@ $('.tags_list li a').live('click', function(){
                     },'json');
                 }
             }
-    }});
-});
+    }})
+})
+
 $('.tags_list .add').live('click', function(){
     add = $('.add_tag');
     $(add).show().dialog('open').dialog({
@@ -1030,13 +1037,16 @@ $('.tags_list .add').live('click', function(){
                 }
             }
         }
-    });
-});
+    })
+})
 
 //accounts
 $('li#c2').click(function(){a_list()})
     function a_list(){
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];
+        /*
+         *@todo Жуткий масив привязки типов к группам
+         */
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
@@ -1172,7 +1182,7 @@ $('li#c2').click(function(){a_list()})
 //calendar
     $('.calendar_block .calendar').datepicker();
 //flash
-    data = res['flash']
+    /*data = res['flash'];
 
             name = (!data['title'])?'':['title'];
             //end = data['value']*3/data[1][i]['color'] ;
@@ -1190,7 +1200,7 @@ $('li#c2').click(function(){a_list()})
                     chartSample_1.setData(xml);
                     chartSample_1.wMode="opaque";
                     chartSample_1.write('flash');
-                    chartSample_1 = null;
+                    chartSample_1 = null;//*/
         $('.calculator_block .calculator').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         })
@@ -1248,9 +1258,9 @@ $('li#c2').click(function(){a_list()})
         };
 
 
-        
+        /*
         //@TODO Цикл по submenu и если находит текущую таблицу, то окружает её SPAN
-
+        */
         if ($('.menu4').length == 0) {
             $('div.cct').after('<ul class="menu4" >&nbsp</ul>');
         }
@@ -1304,12 +1314,14 @@ $('li#c2').click(function(){a_list()})
             }
             return false;
         })
-    }
+    //}
 
 
     // Кнопка сворачивания / разворачивания
     $('li.over3,li.uparrow').addClass('uparrow').toggleClass('uparrow').click(function() {
+        /*
         //@TODO Сохранять значение в куках и потом читать их из куков
+        */
         $(this).closest('div.ramka3').find('div.inside').toggle();
         $(this).toggleClass('uparrow').toggleClass('over3');
         var title = $(this).find('a').attr('title') == 'свернуть' ? 'развернуть' : 'свернуть'
@@ -1321,14 +1333,18 @@ $('li#c2').click(function(){a_list()})
     $('li.over2').hide();
     $('li.over1').hide();
     $('li.over2').click(function() {
+        /*
         //@TODO Сохранять значение в куках и потом читать их из куков
+        */
         $(this).closest('div.ramka3').hide();
     }).find('a').removeAttr('href');
 
     // Кнопка настроек виджета
     $('li.over1').click(function() {
+        /*
         //@TODO Сохранять значение в куках и потом читать их из куков
-        //@TODO Сделать нормальную 
+        //@TODO Сделать нормальную
+        */
         $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
     }).find('a').removeAttr('href');
 
@@ -1342,7 +1358,10 @@ $('li#c2').click(function(){a_list()})
         $(s).show();
         return false;
     });
-    setTimeout(function(){$('ul.control li#c1').click()},500)//@todo account hack
+    setTimeout(function(){$('ul.control li#c1').click()},500);
+    /*
+    @todo account hack
+    */
     // Footer
     var r_list;
 
@@ -1497,7 +1516,7 @@ $('li#c2').click(function(){a_list()})
             $(this).find('label').hide();
         }
     );
-
+    
 ///////////////////////////////////////////login/////////////////////////
 
         if (pathName=='/login/')
@@ -1512,8 +1531,8 @@ $('li#c2').click(function(){a_list()})
         $('#login .close').click(function(){
             $('#login').hide();
         })
-
-    });
+    //}
+    //});
 
 /**
  * Форматирует валюту
@@ -1540,3 +1559,4 @@ $('li#c2').click(function(){a_list()})
 if(document.location.hostname == 'easyfinance.ru'){
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
 }
+})
