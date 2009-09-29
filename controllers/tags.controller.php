@@ -47,7 +47,8 @@ class Tags_Controller extends Template_Controller
      */
     function add($args)
     {
-        die($this->model->add());
+        $tag = trim(htmlspecialchars(@$_POST['tag']));
+        die(json_encode($this->model->add($tag)));
     }
 
     /**
@@ -56,7 +57,9 @@ class Tags_Controller extends Template_Controller
      */
     function edit($args)
     {
-        die($this->model->edit());
+        $tag = trim(htmlspecialchars(@$_POST['tag']));
+        $old_tag = htmlspecialchars(@$_POST['old_tag']);
+        die(json_encode($this->model->edit($tag, $old_tag)));
     }
     
     /**
@@ -65,7 +68,8 @@ class Tags_Controller extends Template_Controller
      */
     function del($args)
     {
-        die($this->model->del());
+        $tag = trim(htmlspecialchars(@$_POST['tag']));
+        die(json_encode($this->model->del($tag)));
     }
 
     /**

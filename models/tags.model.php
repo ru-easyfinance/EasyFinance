@@ -24,22 +24,50 @@ class Tags_Model {
     /**
      * @return json 
      */
-    function add() {
-
+    function add($tag) {
+        if (empty($tag)){
+            return false;
+        }
+        $sql = "INSERT INTO tags VALUES(? ,0, ?)";
+        $this->db->query($sql, Core::getInstance()->user->getId(), $tag);
+        Core::getInstance()->user->initUserTags();
+        Core::getInstance()->user->save();
+        return Core::getInstance()->user->getUserTags();
     }
 
     /**
      * @return json 
      */
-    function edit() {
-
+    function edit($tag = '', $old_tag) {
+        if (empty($tag) || empty($old_tag)) {
+            return false;
+        } else {
+            //@TODO Оптимизировать запросы
+            $sql = "UPDATE operation o SET tags = REPLACE(tags, ?, ?) WHERE user_id=?";
+            $this->db->query($sql, $old_tag, $tag, Core::getInstance()->user->getId());
+            $sql = "UPDATE tags SET name= ? WHERE name=? AND user_id=?";
+            $this->db->query($sql, $tag, $old_tag, Core::getInstance()->user->getId());
+            Core::getInstance()->user->initUserTags();
+            Core::getInstance()->user->save();
+            return Core::getInstance()->user->getUserTags();
+        }
     }
 
     /**
-     * @return json 
+     * @return json
      */
-    function del() {
-
+    function del($tag = '') {
+        if (empty ($tag)) {
+            return false;
+        } else {
+            $sql = "DELETE FROM tags WHERE name=? AND user_id=?";
+            $this->db->query($sql, $tag, Core::getInstance()->user->getId());
+            $sql = "UPDATE operation o SET tags = REPLACE(tags, ?, '') WHERE user_id=?";
+            $this->db->query($sql, $tag, Core::getInstance()->user->getId());
+            Core::getInstance()->user->initUserTags();
+            Core::getInstance()->user->save();
+            return Core::getInstance()->user->getUserTags();
+        }
     }
 
     /**

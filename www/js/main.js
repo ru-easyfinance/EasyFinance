@@ -965,23 +965,24 @@ $('.tags_list li a').live('click', function(){
         minHeight: 50,
         buttons: {
             'Сохранить': function() {
-                if($('input#tag').val())
-                $.post('/tags/edit/', {
-                    tag: $('.edit_tag #tag').val(),
-                    old_tag: $('.edit_tag #old_tag').val()
-                },function(data){
-                    if (data) {
-                        delete res['tags'];
-                        tags = {tags: data}
-                        res = $.extend(res, tags);
-                        loadLPTags();
-                        $('.edit_tag').dialog('close');
-                        $('.edit_tag #tag,.edit_tag #old_tag').val('');
-                        $.jGrowl('Тег успешно сохранён', {theme: 'green'});
-                    } else {
-                        $.jGrowl('Ошибка при сохранении тега', {theme: 'red'});
-                    }
-                },'json');
+                if($('.edit_tag #tag').val()) {
+                    $.post('/tags/edit/', {
+                        tag: $('.edit_tag #tag').val(),
+                        old_tag: $('.edit_tag #old_tag').val()
+                    },function(data){
+                        if (data) {
+                            delete res['tags'];
+                            tags = {tags: data}
+                            res = $.extend(res, tags);
+                            loadLPTags();
+                            $('.edit_tag').dialog('close');
+                            $('.edit_tag #tag,.edit_tag #old_tag').val('');
+                            $.jGrowl('Тег успешно сохранён', {theme: 'green'});
+                        } else {
+                            $.jGrowl('Ошибка при сохранении тега', {theme: 'red'});
+                        }
+                    },'json');
+                }
             },
             'Удалить': function() {
                 if (confirm('Тег "'+$('.edit_tag #old_tag').val()+'" будет удалён. Удалить?')) {
