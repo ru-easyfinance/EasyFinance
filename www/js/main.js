@@ -117,8 +117,6 @@ $(document).ready(function() {
                 tooltip: 'bottomLeft'
             }
         },
-        //show: 'mouseover',
-        //show: { delay: 10000 },
         show: 'mouseover',
         hide: 'mouseout',
         border: {
@@ -127,7 +125,6 @@ $(document).ready(function() {
             color: '#f5f5ff'
         },
         tip: 'bottomRight',
-        //z-index: 1000,
         style: {
             name: 'blue' // Inherit from preset style
         }
@@ -142,7 +139,7 @@ $(document).ready(function() {
 $("#review").qtip({
    content: 'Описание основных элементов и сервисов',
    show: {delay: 1000},
-   position: {target: 'mouse'}, 
+   position: {target: 'mouse'},
    style: 'mystyle'
 })
 $("#feed").qtip({
@@ -638,8 +635,8 @@ $("strong:contains('Имущество')").qtip({
      */
     function op_clearForm() {
         
-        $('#op_type,#op_category,#op_target').val(0);
-        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
+        //$('#op_type,#op_category,#op_target').val(0);
+        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');//#op_date убрал
 
         $('span#op_amount_target').text();
 

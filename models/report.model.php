@@ -406,7 +406,7 @@ class Report_Model
             SELECT c.cat_name, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
+            LEFT JOIN category c ON nvc.cat_id=op.cat_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             GROUP BY c.cat_name
             UNION

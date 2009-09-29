@@ -1,6 +1,6 @@
 // {* $Id$ *}
 //swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0" ,null, null, {menu:"false", wmode:"opaque"});
-swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0", "expressInstall.swf" );
+swfobject.embedSWF("/swf/open-flash-chart.swf", "chart", "500", "500", "9.0.0" );
 var data = {
     "elements": [{
         "type": "pie",
@@ -11,7 +11,7 @@ var data = {
         "values": []
     }
   ]
-};
+};//*/
 
 function ofc_ready() {
     //alert('ofc_ready');
@@ -135,7 +135,7 @@ function ShowCompareWaste(){
                 sum1=data[c].su;
                 sum2=0;
                 for (v in data){
-                    if (data[v].cat_name == data[c].cat_name) 
+                    if (data[v].cat_name == data[c].cat_name)
                         if (data[v].per == 2){
                             sum2=data[v].su   ;
                             data[v].su = null;
@@ -151,7 +151,7 @@ function ShowCompareWaste(){
                            data[v].su = null;
                         }
                 }
-            };         
+            };
             delta=sum2-sum1;
            if (data[c].cat_name != null){
             tr +=        '<tr><td ><span><b>'+data[c].cat_name+
@@ -179,9 +179,9 @@ function ShowCompareWaste(){
 }
 
 function ShowCompareIncome(){
- 
+
   }
-       
+
 function ShowIncome(){
     l = $.get('/report/getData/',{
         report: $('#report :selected').attr('id'),
@@ -191,12 +191,15 @@ function ShowIncome(){
         currency:$('#currency :selected').val()
      }, function(data) {
             //var tmp = findSWF("chart");
-            
+            var tr;
+             //tr += '';
+            $('tr:not(:first)','#reports_list').each(function(){
+                    $(this).remove();
+                });
+            $('#reports_list').append(tr);
+            //var qwe = document.getElementsByName('chart');
             var tmp = findSWF('chart');
-            
-            alert(tmp.toString());
-            //alert(d);
-            x = tmp.load(JSON.stringify(data));
+            //x = tmp.load(JSON.stringify(data));
                 //BaseReport();
 
     },'json');
@@ -325,7 +328,7 @@ $(window).load(function() {
             //tmp = findSWF("chart");
             //x = tmp.load(JSON.stringify(d));
                 BaseReport();
-            
+
         }, 'json');*/
         BaseReport();
     });
@@ -371,7 +374,7 @@ $(window).load(function() {
             $('#Period22').show();
         break;
     }
-    
+
     });
 
 });

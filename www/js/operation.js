@@ -1,5 +1,10 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
+
+    var catlast ;
+    var datelast ;
 $(document).ready(function() {
+
+
     $('#op_addoperation_but').click();
     $('#op_btn_Save').click(function(){
         loadOperationList();
@@ -12,7 +17,15 @@ $(document).ready(function() {
     $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
 
     // Bind
-    $('#btn_Save').click(function(){saveOperation();})
+    $('#btn_Save').click(function(){
+        alert('1');
+        saveOperation();
+        alert('3');
+        /*fillForm(operationList[$(this).closest('tr').attr('value')]);
+        alert('12');
+            $(this).closest('form').attr('action','/operation/add/');
+            $('#date').datepicker('setDate', new Date() );*/
+    })
     $('#btn_ReloadData').click(function(){loadOperationList();});
     //$('#category').autocomplete();
     $('#amount,#currency').change(function(){
@@ -71,10 +84,11 @@ $(document).ready(function() {
                 $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             }
     });
-
+    //$('.operation_list').jScrollPane();
     // Autoload
     loadOperationList();
-    $('.operation_list').jScrollPane();//???
+
+    //$('.operation_list').jScrollPane();//???
     /**
      * Загружает список всех операций (с фильтром)
      * @return void
@@ -155,6 +169,9 @@ $(document).ready(function() {
             $('.tags_could').html(str+'</ul>');
             
             $('.tags_could li').hide();
+
+            $('.operation_list').jScrollPane();
+
         }, 'json');
 
 
@@ -202,6 +219,12 @@ $(document).ready(function() {
         if (!validateForm()){
             return false;
         }
+        alert('2');
+        catlast = $('#op_category').val();
+        datelast = $('#op_date').val();
+        alert (catlast);
+        alert (datelast);
+        
         $.post(($('form').attr('action')), {
             id        : $('#id').val(),
             type      : $('#type').val(),
@@ -222,8 +245,9 @@ $(document).ready(function() {
             }
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
+                //alert('123');
                 clearForm();
-                loadOperationList();                
+                loadOperationList();
             }
         }, 'json');
         return true;
@@ -232,7 +256,7 @@ $(document).ready(function() {
  $('#type').change();
 
     function clearForm() {
-        $('#op_type,#op_category,#op_target').val(0);
+        /*$('#op_type,#op_category,#op_target').val(0);
         $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
 
         $('span#op_amount_target').text();
@@ -245,7 +269,7 @@ $(document).ready(function() {
 
         $('form').attr('action','/operation/add/');
 
-        $('#op_type').change();
+        $('#op_type').change();*/
     }
     /**
      * Функция заполняет форму данными c массива

@@ -839,6 +839,50 @@ div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background
 
 
 
+.operation_listSH { padding-top: 21px !important; height:250px; width: 557px}
+.operation_listSH .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px;//zoom: 1; }
+.operation_listSH .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.operation_listSH .sorting div{margin-bottom: 7px;}
+.operation_listSH .sorting .f_field { position: relative; float: left; margin-right: 51px; }
+.operation_listSH .sorting .f_field input {width: 90px}
+.operation_listSH .sorting  select { color: #20201E; width : 350px; }
+.operation_listSH .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
+
+.operation_listSH ul.period { margin: 0 0 21px 71px; //zoom: 1; }
+.operation_listSH ul.period:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.operation_listSH ul.period li { float: left; padding: 1px 10px 2px 10px; font-size: 11px;  }
+.operation_listSH ul.period li span { display: block; color: #666666; cursor: pointer; //cursor: hand; background: url('/img/i/point_x2.gif') repeat-x bottom left; }
+.operation_listSH ul.period li.act { padding: 0 10px 0 0; font-weight: bold; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 100% 0; }
+.operation_listSH ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 0 0; }
+
+.operation_listSH table { margin: .3em 0 1.5em 0;position: relative; width:500px; border-collapse:inherit!important; border: 2px solid #dfdede;}
+.operation_listSH table th, .operation_list table td, table.tab1 th { font-size: 90%;}
+.operation_listSH table th { padding: 8px 5px 5px 5px; color: #222222; text-align: left; /*border-bottom: 1px solid #e5e5e5;*/ }
+.operation_listSH table th span.sort, .operation_list table th span.select { display: block; float: left; }
+.operation_listSH table th span.sort { position: relative; margin-right: 6px;   margin-left: 10px; cursor: pointer; //cursor: hand; z-index: 0; }
+.operation_listSH table th span.sort span { display: block; position: absolute; top: 4px; left: -9px; width: 5px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat -40px 0; }
+.operation_listSH table th span.sort span.up { background-position: -50px 0; }
+.operation_listSH table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat -20px 0; }
+.operation_listSH table th div.cont {  z-index: 2; }
+/*.operation_list table th div.cont div { //zoom: 1; }*/
+.operation_listSH table th div.cont div:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.operation_listSH table th ul.select_list {  display: none; position: absolute; top: 16px; left: -5px; width: 100px; padding-bottom: 5px; z-index: 10; background: #ffffff; border: 1px solid #e5e5e5; }
+.operation_listSH table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }
+
+.operation_listSH table td.check{max-width: 20px}
+.operation_listSH table td.summ{max-width: 60px}
+.operation_listSH table td.big{max-width: 100px}
+.operation_listSH table td.light{max-width: 60px}
+
+
+.operation_listSH table td a { color: #666666; }
+.operation_listSH table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
+.operation_listSH table td.no_over{padding:0;overflow: visible;}
+.operation_listSH table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; }
+.operation_listSH table tr.act td div.cont ul { display: block; }
+.operation_listSH table tr.first td { background: none; }
+.operation_listSH table div.cont { position: relative; }
+
 
 
 
@@ -918,6 +962,15 @@ div.cont ul li.add a { width: 12px; }
 .categories table td div.cont ul li.add { margin-right: 0; }
 .operation_list table td div.cont ul li.add a,
 .categories table td div.cont ul li.add a { width: 12px; }
+
+.operation_listSH table td div.cont ul,
+.operation_listSH table td div.cont ul:after,
+.operation_listSH table td div.cont ul li,
+.operation_listSH table td div.cont ul li a,
+.operation_listSH table td div.cont ul li.edit a,
+.operation_listSH table td div.cont ul li.del a,
+.operation_listSH table td div.cont ul li.add,
+.operation_listSH table td div.cont ul li.add a,
 
 .categoriesSH table td div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 .categoriesSH table td div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }

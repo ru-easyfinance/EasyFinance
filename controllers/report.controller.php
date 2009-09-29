@@ -40,6 +40,7 @@ class Report_Controller extends Template_Controller
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
 
         $this->tpl->append('js','jquery/ui.core.js');
+        //$this->tpl->append('js','ofc/swfobject.js');
        
 
         // Виды и названия отчетов
@@ -68,10 +69,10 @@ class Report_Controller extends Template_Controller
         $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
         $this->tpl->append('js','jquery/ui.core.js');
         $this->tpl->append('js','jquery/ui.datepicker.js');
-        $this->tpl->append('js','ofc/swfobject.js');
-        $this->tpl->append('js','ofc/json2.js');
-        $this->tpl->append('js','ofc/ofc.js');
-        $this->tpl->append('js','ofc/open_flash_chart.js');   
+        //$this->tpl->append('js','ofc/swfobject.js');
+        //$this->tpl->append('js','ofc/json2.js');
+        //$this->tpl->append('js','ofc/ofc.js');
+        //$this->tpl->append('js','ofc/open_flash_chart.js');
         $this->tpl->append('js','report.js');
 
         $this->tpl->assign('reports',   $this->reports);

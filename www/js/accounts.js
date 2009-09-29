@@ -30,6 +30,9 @@ $(document).ready(function()
         hide: 'mouseout'
     })
 
+    $('#op_btn_Save').click(function(){
+        update_list();
+        })
 
 
     /**
