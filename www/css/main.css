@@ -1486,8 +1486,6 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
 #footer .creator { -moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:transparent url(../img/i/nota.gif) no-repeat scroll 100% 100%;color:#7F7F7F;font-size:10px;line-height:11px;padding-bottom:19px;position:absolute;right:5px;text-align:right;top:32px;width:210px; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
-#footer .addmessage { top: 15px; left: 20px; }
-
 
 #aboutproject .inside div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:absolute}
 
