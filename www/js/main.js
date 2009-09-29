@@ -109,13 +109,6 @@ $(document).ready(function() {
         background: '#abcdef',
         color: 'black',
         textAlign: 'center',
-        position: {
-            target: 'mouse',
-            corner: {
-                target: 'topLeft',
-                tooltip: 'bottomLeft'
-            }
-        },
         show: 'mouseover',
         hide: 'mouseout',
         border: {
