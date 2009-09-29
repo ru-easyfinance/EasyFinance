@@ -58,10 +58,13 @@ function ShowDetailedIncome(){
                         + '<td class="big"><span>'+data[c].money+'</span></td>'
                         + '</tr>';
         }
+
         $('tr:not(:first)','#reports_list').each(function(){
                     $(this).remove();
                 });
-        $('#reports_list').append(tr);
+         $('#reports_list').append(tr);
+         $('#chart').hide();
+        $('.operation_list').jScrollPane();//.operation_list
     },'json');
 
 }
@@ -104,6 +107,8 @@ function ShowDetailedWaste(){
                     $(this).remove();
                 });
         $('#reports_list').append(tr);
+        $('#chart').hide();
+        $('.operation_list').jScrollPane();
     },'json');
 }
 
@@ -175,6 +180,8 @@ function ShowCompareWaste(){
                     $(this).remove();
                 });
         $('#reports_list').append(tr);
+        $('#chart').hide();
+        $('.operation_list').jScrollPane();
     },'json');
 }
 
@@ -196,10 +203,12 @@ function ShowIncome(){
             $('tr:not(:first)','#reports_list').each(function(){
                     $(this).remove();
                 });
-            $('#reports_list').append(tr);
+        $('#reports_list').append(tr);
+        $('#reports_list').hide();
+        $('.operation_list').jScrollPane();
             //var qwe = document.getElementsByName('chart');
             var tmp = findSWF('chart');
-            //x = tmp.load(JSON.stringify(data));
+            x = tmp.load(JSON.stringify(data));
                 //BaseReport();
 
     },'json');
@@ -273,6 +282,8 @@ function ShowAverageIncome(){
                     $(this).remove();
                 });
         $('#reports_list').append(tr);
+        $('#chart').hide();
+        $('.operation_list').jScrollPane();
     },'json');
 }
 
@@ -330,7 +341,9 @@ $(window).load(function() {
                 BaseReport();
 
         }, 'json');*/
+        $('.operation_list').jScrollPane();
         BaseReport();
+
     });
 
 
