@@ -72,7 +72,6 @@ function UserErrorHandler($errno, $errstr, $errfile, $errline)
         case E_USER_WARNING:
             //trigger_error("*USER WARNING* [$errno] $errstr  line: $errline in file: $errfile");
             Core::getInstance()->errors[] = $errstr;
-            die($errstr);
             break;
         case E_USER_NOTICE:
             if (DEBUG) {
