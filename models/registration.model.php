@@ -86,7 +86,7 @@ class Registration_Model
             $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, NOW(), ?);";
             $db->query($sql, $user_id, $reg_id);
 
-            $tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
+            //$tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
             $reg_href = URL_ROOT."registration/activate/".$reg_id;
             $body = "<html><head><title>
@@ -99,23 +99,19 @@ class Registration_Model
 
                 <p>Для входа в систему используйте:<br>
                 Логин: {$register['login']}<br/>
-                Пароль: {$_POST['register']['pass']}</p>
+                Пароль: {$_POST['pass']}</p>
 
                 <p>C уважением,<br/>Администрация системы <a href=".URL_ROOT."/>Home-money.ru</a>
                 </body>
                 </html>";
 
             $subject = "Подтверждение регистрации на сайте домашней бухгалтерии Home-Money.ru";
-            $message = "<html><head><title>From home-money.ru</title></head>
-                        <body>
-                            <a href=".URL_ROOT."/index.php?modules=reg&id=".$reg.">".URL_ROOT."/index.php?modules=reg&id=$reg</a>
-                        </body>
-                        </html>";
             $headers = "Content-type: text/html; charset=utf-8\n";
             $headers .= "From: info@home-money.ru\n";
             //TODO
+            //echo 2;
             mail($register['mail'], $subject, $body, $headers);
-            header('/registration/activate/');exit;
+            header('/registration/#send');exit;
         } 
        
     }

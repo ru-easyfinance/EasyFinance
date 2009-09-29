@@ -37,5 +37,9 @@ $(document).ready(function() {
 	$("#password").blur(function() {
 		$("#confirm_password").valid();
 	});
-
+        if (window.location.hash=='#send')
+        {
+            $.jGrowl('На указанный при регистрации e-mail отправлено письмо со ссылкой, \n\
+                        перейдя по которой, вы активируете вашу учетную запись', {theme: 'yellow'});
+        }
 });
