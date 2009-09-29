@@ -192,13 +192,13 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #auth .f img { display: block; width: 60px; height: 60px; }
 #header #auth .f span { display: block; position: absolute; top: 0; left: 0; width: 60px; height: 60px; background: url('/img/i/coners.gif') no-repeat 0 -90px; }
 
-#header #advertisement { position: absolute; top: 22px; left: 508px; width: 419px; }
+#header #advertisement { position: absolute; top: 7px; left: 508px; width: 419px; }
 #header #advertisement .ct { margin-bottom: -4px; }
 #header #advertisement .cb { margin-top: -4px; }
 #header #advertisement .inside { position: relative; margin: 0 auto 0 auto; width: 400px; height: 80px; overflow: hidden; }
 #header #advertisement dt { margin-right: 5px; font-size: 10px; line-height: 11px; color: #cdd8cb; text-align: right; }
 
-#presentation { position: relative; height: 270px; background: url('/img/i/bg_presentation2.png') no-repeat 0 0; }
+#presentation { position: relative; height: 270px; background: url('/img/i/bg_presentation2.png') no-repeat 0 0; top :-15px}
 #presentation a.reg, #presentation a.demo { display: block; position: absolute; width: 217px; height: 36px; text-indent: -999px; overflow: hidden; }
 #presentation a.reg { top: 59px; right: 25px; }
 #presentation a.demo { top: 112px; right: 65px; }
