@@ -71,7 +71,7 @@ class User
     public function __construct()
     {
         // Если соединение пользователя защищено, то пробуем авторизироваться
-        if ($_SERVER['SERVER_PORT'] ==443) {
+        if ($_SERVER['SERVER_PORT'] == 443) {
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME])) {
                 if (isset($_COOKIE['PHPSESSID'])) {

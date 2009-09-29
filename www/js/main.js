@@ -574,6 +574,7 @@ $("strong:contains('Имущество')").qtip({
         if (!op_validateForm()){
             return false;
         }
+
         $.post(($('form').attr('action')), {
             id        : $('#op_id').val(),
             type      : $('#op_type').val(),
@@ -589,14 +590,16 @@ $("strong:contains('Имущество')").qtip({
             tags      : $('#op_tags').val()
             
         }, function(data){
-            for (var v in data) {
-                //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                alert('Ошибка в ' + v);
-            }
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
                 op_clearForm();
                 $.jGrowl("Операция успешно сохранена", {theme: 'green'});
+            } else {
+                e = '';
+                for (var v in data) {
+                    e += v;
+                }
+                $.jGrowl("Ошибки при сохранении операции: " + e, {theme: 'green', stick: true});
             }
         }, 'json');
         return true;
