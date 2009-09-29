@@ -75,16 +75,15 @@ function print_targets(count)
         },
         'json'
     );
-};
+}
 function add_target()
 {
     document.location = '/targets/#add' ;//@todo :(( неполучается наладить((
-};
+}
 function edit_target(target)
 {
     document.location = '/targets/#edit/'+target ;//@todo :(( неполучается наладить((
-};
-
+}
 function del_target(target)
 {
     if (!confirm('Вы уверены что хотите удалить данную Финансовую цель?'))
@@ -97,4 +96,4 @@ function del_target(target)
         },
         'json'
      );
-};
+}

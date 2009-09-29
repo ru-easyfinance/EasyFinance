@@ -26,7 +26,7 @@ $(document).ready(function(){
     $('.user li').live('click',function(){
         if ($('.user li').length>1)
         {
-            id = $(this).attr('id');
+            var id = $(this).attr('id');
             //alert(u_cur_list[id]['charCode'])
             cur_ids[id]=0;
             $('ul.all').append($(this));
