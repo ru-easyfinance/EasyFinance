@@ -49,7 +49,7 @@ aPath=['//',
 href = location.pathname;
 href = href.toLowerCase() + '/';
 b=0;
-nhref=new String;
+var nhref=new String;
 for(i=0;i<href.length;i++)
 {
     if (href[i] == '/')
@@ -1021,7 +1021,7 @@ $('li#c2').click(function(){a_list()})
                 {
                     str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
                 }
-                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' </div></li>';
+                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+key+'</div></li>';
                 str = str + '</ul>';
                  $('.accounts #l_amount').html(str);
     }
