@@ -93,6 +93,10 @@ update_text(id);
             var id = $('ul.steps li.act').attr('id');
             update_text(next_step[id]);
         }
+if (window.location.hash == '#activate')
+{
+    $.jGrowl('Ваш аккаунт успешно активирован.', {theme: 'green'});
+}
 
 
 });

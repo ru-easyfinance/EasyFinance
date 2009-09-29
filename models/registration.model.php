@@ -24,11 +24,10 @@ class Registration_Model
 
             $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE id = ?";
             $db->query($sql, $user_id);
-
-            Core::getInstance()->tpl->assign('good_activation', 'Вы успешно активированы на сайте!');
+            header('Location: /#activate');exit;
             return true;
         } else {
-            trigger_error('Ключ не верен, или он устарел!', E_USER_WARNING);
+            //trigger_error('Ключ не верен, или он устарел!', E_USER_WARNING);
             return false;
         }
     }
@@ -88,7 +87,7 @@ class Registration_Model
 
             //$tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
-            $reg_href = URL_ROOT."registration/activate/".$reg_id;
+            $reg_href = 'https://'.URL_ROOT."registration/activate/".$reg_id;
             $body = "<html><head><title>
                 Подтверждение регистрации на сайте домашней бухгалтерии Home-Money.ru
                 </title></head>
@@ -99,19 +98,19 @@ class Registration_Model
 
                 <p>Для входа в систему используйте:<br>
                 Логин: {$register['login']}<br/>
-                Пароль: {$_POST['pass']}</p>
+                Пароль: {$_POST['password']}</p>
 
-                <p>C уважением,<br/>Администрация системы <a href=".URL_ROOT."/>Home-money.ru</a>
+                <p>C уважением,<br/>Администрация системы <a href='https://".URL_ROOT."' />EasyFinance.ru</a>
                 </body>
                 </html>";
 
-            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии Home-Money.ru";
+            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
             $headers = "Content-type: text/html; charset=utf-8\n";
-            $headers .= "From: info@home-money.ru\n";
+            $headers .= "From: info@easyfinance.ru\n";
             //TODO
             //echo 2;
             mail($register['mail'], $subject, $body, $headers);
-            header('/registration/#send');exit;
+            header('Location: /registration/#send');exit;
         } 
        
     }
