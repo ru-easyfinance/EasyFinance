@@ -142,11 +142,11 @@
             <div class="line periodic event">
                 <input id="cal_key" type="hidden" value ="0" />
                 <input id="cal_chain" type="hidden" value ="0" />
-                <label>&nbsp;</label>
-                    <select id="cal_mainselect">
-                        <option value="event" selected="selected">Событие</option>
-                            <option value="periodic">Периодические транзакции</option>
-                    </select>
+                
+                    <ul id="cal_mainselect">
+                        <li id="event" class="act"><span>Событие</span></li>
+                        <li id="periodic"><span>Периодические транзакции</span></li>
+                    </ul>
             </div>
             <div class="line periodic event">
                     <label for="cal_title">Название</label>
@@ -188,19 +188,15 @@
                     <select name="repeat" id="cal_repeat">
                             <option value="0">Без повторения</option>
                             <option value="1">Каждый день</option>
-                            <option value="3">Каждый Пн., Ср. и Пт.</option>
-                            <option value="4">Каждый Вт. и Чт.</option>
-                            <option value="5">По будням</option>
-                            <option value="6">По выходным</option>
                             <option value="7">Каждую неделю</option>
                             <option value="30">Каждый месяц</option>
                             <!-- <option value="90">Ежеквартально</option> -->
                             <option value="365">Каждый год</option>
                     </select>
             </div>
-            <div class="line periodic event">
+            <div class="line periodic event"  style="display:none">
                     <div class='week' id='week'>
-                        <h4>Дни недели</h4>
+                        <h4 style="position:absolute">Дни недели</h4>
                         <div>
                             <label for="cal_mon">Пн</label>
                             <label for="cal_tue">Вт</label>
@@ -221,11 +217,11 @@
                         </div>
                     </div>
             </div>
-            <div class="line periodic event">
-                    <div class="count repeat">
-                            <span for="cal_count">Повторить</span>
-                            <input name="rep_type" class="rep_type" value="1" type="radio">
-                            <select name="count" id="cal_count" class="ui-widget-content"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option></select>
+            <div class="line periodic event" style="display:none">
+                <div class="count repeat">
+                            <span>Повторить</span>
+                            <input name="rep_type" class="rep_type" value="1" type="radio" checked="checked">
+                            <select name="count" id="cal_count" class="ui-widget-content"><option selected="selected">1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option></select>
                             <span>раз</span>
                     </div>
                     <div class="infinity repeat">

@@ -435,7 +435,7 @@ $("strong:contains('Имущество')").qtip({
             tags      : $('#tags').val()
         }, function(data){
             for (var v in data) {
-                //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                /*/@FIXME ;Дописать ;обработку ;ошибок ;и ;подсветку ;олей ;с ;ошибками*/
                 alert('Ошибка в ' + v);
             }
             // В случае успешного добавления, закрываем диалог и обновляем календарь
@@ -777,10 +777,10 @@ $("strong:contains('Имущество')").qtip({
         });
             function ac_save() {
             //@TODO Проверить вводимые значения ui-tabs-selected
-            var href = '/periodic/add/';
-            if ($('#cal_mainselect').val()=='event')
+            var href = '/calendar/add/';
+            if ($('#cal_mainselect .act').attr('id')=='periodic')
             {
-                href = '/calendar/add/';
+                href = '/periodic/add/';
             }
             $.post(
                 href,
@@ -829,17 +829,23 @@ $("strong:contains('Имущество')").qtip({
         })
         function add2call()
         {
+            
             $('#cal_amount').keyup(function(e){
                 FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
             });
             $('input#cal_date,input#cal_date_end').datepicker();
             $('#cal_time').timePicker().mask('99:99');
-            $('#week.week').hide();
             $('#cal_repeat').change(function(){    
-                if ($('#cal_repeat').val()=="7")
-                    $('#week.week').show();
-                else
-                    $('#week.week').hide();
+                if ($('#cal_repeat').val()=="7"){
+                    $('#week.week').closest('.line').show();
+                    $('.repeat').closest('.line').show()
+                }else if($('#cal_repeat').val()=="0"){
+                    $('#week.week').closest('.line').hide();
+                    $('.repeat').closest('.line').hide()
+                }else{
+                    $('#week.week').closest('.line').hide();
+                    $('.repeat').closest('.line').show()
+                }
             });
             $('.repeat .rep_type').change(function(){
                 $('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
@@ -848,17 +854,32 @@ $("strong:contains('Имущество')").qtip({
             $('#op_dialog_event div.line').hide();
             $('#op_dialog_event div.line').hide();
             $('#op_dialog_event .event').show();
-            $('#cal_mainselect').change(function(){
+            var k;
+            $('#cal_mainselect li').click(function(){
                 $('#op_dialog_event div.line').hide();
-                $('#op_dialog_event .'+$(this).val()).show();
+                $('#cal_mainselect li').removeClass('act');
+                $('#op_dialog_event .'+$(this).addClass('act').attr('id')).show();
+                if ($('#cal_repeat').val()=="7"){
+                    $('#week.week').closest('.line').show();
+                    $('.repeat').closest('.line').show()
+                }else if($('#cal_repeat').val()=="0"){
+                    $('#week.week').closest('.line').hide();
+                    $('.repeat').closest('.line').hide()
+                }else{
+                    $('#week.week').closest('.line').hide();
+                    $('.repeat').closest('.line').show()
+                }
             });
+            $('#week.week').closest('.line').hide();
+            $('.repeat').closest('.line').hide()
+            
             $('#op_dialog_event').css({width:'500px',height:'auto',overflow:'visible'});
             //$('.repeat input:not[.rep_type],.repeat select').attr('disabled','disabled');
             $('#op_dialog_event').dialog({
                 bgiframe: true,
                 autoOpen: false,
-                width: 600,
-                height: 500,
+                width: 447,
+                //height: 350,
                 modal: true,
                 buttons: {
                     'Сохранить': function() {
@@ -870,12 +891,14 @@ $("strong:contains('Имущество')").qtip({
                 },
                 close : function(){$('#cal_mainselect').removeAttr('disabled')}
             });
+            
             $('#op_dialog_event').dialog();
 //            for(i = 1; i < 31; i++){
 //                $('#op_dialog_event #op_acount').append('<option>'+i+'</option>').val(i);
 //                $('#op_dialog_event #op_pcounts').append('<option>'+i+'</option>').val(i);
 //            }
             $('#op_dialog_event').dialog('open');
+            $('.ui-dialog-buttonpane').css('margin-top','30px');
             //$('#op_adate,#op_pdate').val(dateText);
             
         }

@@ -698,13 +698,19 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 
 
 
-
+.event_form{margin:11px;width: 447px}
+.event_form #cal_mainselect{width : 100%}
+.event_form #cal_mainselect li {cursor:pointer;position:relative;float:left;line-height:15px;min-width:100px;font-size:14px;color:#6CBD45;}
+.event_form #cal_mainselect li.act span{border-bottom:1px dashed #6BBE4C;}
 .event_form select,.event_form input,.event_form textarea {left:125px; position: absolute;width:300px}
-.event_form .week input{position : relative; width:20px ;left : 5px ; margin-right : 1px }
-.event_form .week label{position : relative; width:20px ;margin-left : 11px}
-.event_form .line {position : relative;margin-top :10px}
-.event_form .line div{position : relative;margin-top :10px ;left :50px}
-.event_form .rep_type{left:-35px; position: absolute;width:auto}
+
+.event_form .week input{position : relative; width:20px ;left : -15px ; margin-right : 1px }
+.event_form .line div.week {margin-top:20px;}
+.event_form .week label{position : relative; width:20px ;margin-left : 11px;left:-25px}
+.event_form .line {position : relative;margin-top :10px;min-height:20px}
+.event_form .line div{position : relative;margin-top :10px ;left :125px}
+.event_form .rep_type{left:10px; position: absolute;width:auto}
+.event_form .repeat input,.event_form .repeat select {width:175px}
 
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
