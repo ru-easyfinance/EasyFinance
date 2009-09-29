@@ -17,7 +17,6 @@ function get_array_key($arr, $val)
     }
     return $ret;
 }
-
 aPath=['//',
     '/about/',
     '/accounts/',
@@ -178,7 +177,7 @@ $("#about").qtip({
    position: {target: 'mouse'},
    style: 'mystyle'
 })
-$("#login").qtip({
+$("#flogin").qtip({
    content: 'Имя Вашего аккаунта на сайте',
    show: {delay: 1000},
    position: {target: 'mouse'},
@@ -681,12 +680,21 @@ $("strong:contains('Имущество')").qtip({
         }
     }
 
-    function IncomeOnCategories(){
-        
+    /**
+     * Переключает видимость категорий
+     * @param field Gj
+     * @param type 1 - доход, -1 - расход
+     */
+    function toggleVisibleCategory(field, type) {
+        $('option',field).each(function(){
+            if ( ($(this).attr('iswaste') == type) ||
+                    ($(this).attr('iswaste') == '0') )
+                $(this).show();
+            else
+                $(this).hide();
+        });
     }
-    function WasteOnCategories(){
 
-    }
     /**
      * При изменении типа операции
      */
@@ -694,13 +702,11 @@ $("strong:contains('Имущество')").qtip({
         // Расход или Доход
         if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
             $("#op_category_fields,#op_tags_fields").show();
-            $("#op_target_fields,#op_transfer_fields").hide();
-            if ($('#op_type').val() == 0) {
-                IncomeOnCategories();//отображает в списке категорий для добавления операции доходные
-            }
-            if ($('#op_type').val() == 1) {
-                WasteOnCategories();
-            }
+            $("#op_target_fields,#op_transfer_fields").hide();  
+            if ($('#op_type').val() == 1)
+                toggleVisibleCategory($('#op_category'),1);
+            if ($('#op_type').val() == 0)
+                toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
         //Перевод со счёта
         } else if ($('#op_type').val() == 2) {
             $("#op_category_fields,#op_target_fields").hide();

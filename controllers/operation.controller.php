@@ -70,6 +70,15 @@ class Operation_Controller extends Template_Controller
 
     }
 
+  /*  function catincome(){
+        //die(json_encode($this->model->catincome()));
+        die(get_tree_select());
+    }
+    function catwaste(){
+        //die(json_encode($this->model->catwaste()));
+        die(get_tree_select());
+    }
+*/
     /**
      * Добавляет новое событие
      * @param $args array mixed Какие-нибудь аргументы

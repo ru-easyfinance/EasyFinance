@@ -43,7 +43,7 @@
 											Категория
                                             {if !empty($list)}
                                             <select id="category">
-                                                {if !empty($often)}
+                                                <!--{if !empty($often)}
                                                 <optgroup id="often" label="&nbsp;Часто используемые">
                                                 {foreach from=$often item=data}
                                                     <option value="{$data.cat_id}">{$data.cat_name}</option>
@@ -52,7 +52,7 @@
                                                 {/if}
                                                 <optgroup id="all" label="&nbsp;Все категории">
                                                     {$category}
-                                                </optgroup>
+                                                </optgroup>-->
                                             </select>
                                             {else}
                                             <select id="category">

@@ -17,9 +17,7 @@ $(document).ready(function() {
 
     // Bind
     $('#btn_Save').click(function(){
-        //alert('1');
         saveOperation();
-        //alert('3');
         /*fillForm(operationList[$(this).closest('tr').attr('value')]);
         alert('12');
             $(this).closest('form').attr('action','/operation/add/');
@@ -333,16 +331,8 @@ $(document).ready(function() {
     function changeop_TypeOperation() {
         // Расход или Доход
         if ($('#type').val() == 0 || $('#type').val() == 1) {
-            alert('1');
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();
-            alert('2');
-            if ($('#type').val() == 0){
-               alert('у');
-            }
-            if ($('#type').val() == 1){
-                alert('ы');
-            }
         //Перевод со счёта
         } else if ($('#type').val() == 2) {
             $("#op_category_fields,#op_target_fields").hide();
