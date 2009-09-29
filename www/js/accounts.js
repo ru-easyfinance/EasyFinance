@@ -397,7 +397,7 @@ $(document).ready(function()
         var id =$('#blockCreateAccounts').find('table').attr('id');
         var l = 1;
         $('.item .name').each(function(){
-            if (id != $(this).closest('tr').find('.id').attr('value')){
+            if (id != $(this).closest('tr').attr('id')){
                 if($(this).text()==str)
                     l=0;
             }
