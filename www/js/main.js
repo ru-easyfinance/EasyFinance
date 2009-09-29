@@ -1021,7 +1021,7 @@ $('li#c2').click(function(){a_list()})
                 {
                     str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
                 }
-                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+key+'</div></li>';
+                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+key+'</div></li>';//@todo
                 str = str + '</ul>';
                  $('.accounts #l_amount').html(str);
     }
