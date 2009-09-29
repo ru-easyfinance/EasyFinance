@@ -25,7 +25,7 @@ function update_text(id)
 update_text(id);
  $('ul.steps li').click(
     function(){
-        id = $(this).attr('id');
+        var id = $(this).attr('id');
         
         setTimeout(function(){
             clearInterval(timeoutid);
@@ -38,7 +38,7 @@ update_text(id);
     });
 
 ////////////////////////////////////////////////////////////контролируй управляй...
-	c_settings = {
+	var c_settings = {
 	monitors : {top:20,
 			left:100,
 			text:'Деньги  тают в руках?!<br> Пора разобраться с  тратами. Нас окружают миллионы полезных вещей, которые хотелось бы купить, и сотни, которые мы обязаны приобрести. Но для того, чтобы не стать шопоголиком и не упустить важное приобретение или вовремя оплатить счет необходимо заранее планировать доходы и расходы, и в этом Вам поможет наш сервис. <br><br>'},
@@ -60,7 +60,7 @@ update_text(id);
         })  
         
 	$('#aboutproject .inside div').mouseover(function(){
-		c = $(this).attr('class');
+		var c = $(this).attr('class');
 		switch (c)
 		{
 			case 'monitors':
