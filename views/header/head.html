@@ -35,11 +35,11 @@
                 {if $user_info.user_id <= 0}
                     <li>Личный кабинет</li>
                     <li>Настройки профиля</li>
-                    <li id="show_login"><a href="https://easyfinance.ru/login/">Войти<img class="loginMenu" src="/img/i/login.gif" /></a></li>
+                    <li id="show_login"><a href="https://easyfinance.ru/login/">Войти&nbsp;<img class="loginMenu" src="/img/i/login.gif" /></a></li>
                 {else}
                     <li><a href="/info/">Личный кабинет</a></li>
                     <li><a href="/profile/">Настройки профиля</a></li>
-                    <li><a href="/profile/">{$user_info.user_name}</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
+                    <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
                 {/if}
                 
             </ul>
@@ -60,8 +60,8 @@
                         <div class="inside">
                             <form action="/login/" method="post">
                                 <div class="f_field">
-                                    <label for="login">логин:</label>
-                                    <input type="text" value="" name="login" id="login"/>
+                                    <label for="flogin">логин:</label>
+                                    <input type="text" value="" name="login" id="flogin"/>
                                 </div>
                                 <div class="f_field">
                                     <label for="password">пароль:</label>

@@ -160,7 +160,9 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #menumain ul.menu1 li.act a { color: #f2f172; text-decoration: underline; }
 
 #menumain ul.menu2 li.act a { color: #f2f172; text-decoration: underline; }
-#menumain ul.menu2 { position: absolute; top: 10px; right: -44px; overflow: hidden; width : 400px }
+#menumain ul.menu2 { position: absolute; top: 8px; right: -44px; overflow: hidden; width : 400px }
+#menumain ul.menu2 img{ position: absolute; top: 3px;}
+
 #menumain ul.menu2 li { display: inline; margin-left: 25px; font-size: 11px; line-height: 12px; color: #f2f172; }
 
 
@@ -168,8 +170,8 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header .logo { display: block; position: absolute; top: 36px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url('/img/i/logo.png') no-repeat 0 0; }
 #header .slogan { position: absolute; top: 126px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
 */#header { position: relative; height: 176px; }
-#header .logo { display: block; position: absolute; top: 17px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url("/img/i/logo.png") no-repeat 0 0; }
-#header .slogan { position: absolute; top: 112px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
+#header .logo { display: block; position: absolute; top: 7px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url("/img/i/logo.png") no-repeat 0 0; }
+#header .slogan { position: absolute; top: 102px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
 
 #header #auth { position: absolute; top: 43px; left: 213px; width: 263px; }
 #header #auth .cb { margin-top: -2px; }
@@ -190,7 +192,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #auth .f img { display: block; width: 60px; height: 60px; }
 #header #auth .f span { display: block; position: absolute; top: 0; left: 0; width: 60px; height: 60px; background: url('/img/i/coners.gif') no-repeat 0 -90px; }
 
-#header #advertisement { position: absolute; top: 32px; left: 508px; width: 419px; }
+#header #advertisement { position: absolute; top: 22px; left: 508px; width: 419px; }
 #header #advertisement .ct { margin-bottom: -4px; }
 #header #advertisement .cb { margin-top: -4px; }
 #header #advertisement .inside { position: relative; margin: 0 auto 0 auto; width: 400px; height: 80px; overflow: hidden; }
@@ -1498,7 +1500,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #aboutproject .inside .text{top:5px;width:250px; position: relative; right: 80px; font-size: 14px; line-height:17px;}
 
 
-#p_index #header { height: 178px; }
+#p_index #header { height: 130px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
 #p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 33px; width: 184px; //zoom: 1; }
 
