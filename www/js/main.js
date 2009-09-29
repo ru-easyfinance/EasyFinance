@@ -777,7 +777,6 @@ $("strong:contains('Имущество')").qtip({
             t = parseInt($("#op_target :selected").attr("target_account_id"));
             $("span.op_currency").each(function(){
                 if (t != 0){
-                    alert(res['accounts'][t]['cur']);
                     //$(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
                 }
             });
@@ -933,62 +932,104 @@ $('.navigation  li span').click(function(){
     $(this).closest('li').addClass('act');
     $('.navigation  li ul').hide()
     $('.navigation li.act ul').show()
-})
+});
 
-            data = res['tags'];
-            str = '<div class="title">\n\
-                        <h2>Теги</h2>\n\
-                        <a title="Добавить" class="add">Добавить</a>\n\
-                    </div>\n\
-                    <ul>';
-            for (key in data)
-            {
-                str = str + '<li><a>'+data[key]+'</a></li>';
-            }
-            $('.tags_list').html(str+'</ul>');
-
-        $('.tags_list li a').live('click', function(){
-            $('.edit_tag').dialog('open');
-            $('.edit_tag input').val($(this).text());
-            $('.edit_tag').dialog({
-                width: 260,
-                minHeight: 50,
-                buttons: {
-                    'Сохранить': function() {
-                        if($('input#tag').val())
-                        $.post('/tags/edit/', $('.edit_tag input'),function(data){
-                            $('.edit_tag').dialog('close');},'json');
-                    },
-                    'Удалить': function() {
-                        $.post('/tags/del/', $('.edit_tag input'),function(data){
-                            $('.edit_tag').dialog('close');},'json');
+/**
+ * Загружаем теги для левой панели
+ */
+function loadLPTags(){
+    data = res['tags'];
+    str = '<div class="title">\n\
+                <h2>Теги</h2>\n\
+                <a title="Добавить" class="add">Добавить</a>\n\
+            </div>\n\
+            <ul>';
+    for (key in data)
+    {
+        str = str + '<li><a>'+data[key]+'</a></li>';
+    }
+    $('.tags_list').html(str+'</ul>');
+}
+loadLPTags();
+$('.tags_list li a').live('click', function(){
+    $('.edit_tag').dialog('open');
+    $('.edit_tag input').val($(this).text());
+    $('.edit_tag').dialog({
+        width: 260,
+        minHeight: 50,
+        buttons: {
+            'Сохранить': function() {
+                if($('input#tag').val())
+                $.post('/tags/edit/', {
+                    tag: $('.edit_tag #tag').val(),
+                    old_tag: $('.edit_tag #old_tag').val()
+                },function(data){
+                    if (data) {
+                        delete res['tags'];
+                        tags = {tags: data}
+                        res = $.extend(res, tags);
+                        loadLPTags();
+                        $('.edit_tag').dialog('close');
+                        $('.edit_tag #tag,.edit_tag #old_tag').val('');
+                        $.jGrowl('Тег успешно сохранён', {theme: 'green'});
+                    } else {
+                        $.jGrowl('Ошибка при сохранении тега', {theme: 'red'});
                     }
-
-            }});
-  
-        });
-        $('.tags_list .add').live('click', function(){
-            $('.edit_tag').show();
-            $('.edit_tag').dialog('open');
-            $('.edit_tag input').val($(this).text());
-            $('.edit_tag').dialog({
-                width: 260,
-                minHeight: 50,
-                buttons: {
-                    'Сохранить': function() {
-                        if($('input#tag').val())
-                        {
-                            $.post('/tags/add/', {tag:$('.edit_tag input').val()},function(data){
-                                 $('.tags_list ul').append('<li><a>'+$('input#tag').val()+'</a></li>')
-                                $('.edit_tag').dialog('close');
-                            },'json');
+                },'json');
+            },
+            'Удалить': function() {
+                if (confirm('Тег "'+$('.edit_tag #old_tag').val()+'" будет удалён. Удалить?')) {
+                    $.post('/tags/del/', {
+                        tag: $('.edit_tag #old_tag').val()
+                    },function(data){
+                        if (data) {
+                            delete res['tags'];
+                            tags = {tags: data}
+                            res = $.extend(res, tags);
+                            loadLPTags();
                             $('.edit_tag').dialog('close');
+                            $('.edit_tag #tag,.edit_tag #old_tag').val('');
+                            $.jGrowl('Тег удалён', {theme: 'green'});
+                        } else {
+                            $.jGrowl('Ошибка при удалении тега', {theme: 'red'});
                         }
-                    }
+                    },'json');
+                }
+            }
+    }});
+});
+$('.tags_list .add').live('click', function(){
+    add = $('.add_tag');
+    $(add).show().dialog('open').dialog({
+        width: 260,
+        minHeight: 50,
+        buttons: {
+            'Сохранить': function() {
+                if($('input#tag',add).val()) {
+                    $.post('/tags/add/', {
+                        tag:$('.add_tag input').val()
+                    }, function(data){
+                        if (data) {
+                            delete res['tags'];
+                            tags = {tags: data}
+                            res = $.extend(res, tags);
+                            loadLPTags();
+                            $('.add_tag').dialog('close');
+                            $('.add_tag input').val('');
+                            $.jGrowl('Новый тег успешно добавлен', {theme: 'green'});
+                        } else {
+                            $.jGrowl('Ошибка при добавлении тега', {theme: 'red'});
+                        }
+                        $('.tags_list ul').append('<li><a>'+$('input#tag').val()+'</a></li>')
+                        $('.add_tag').dialog('close');
+                    },'json');
+                    $('.add_tag').dialog('close');
+                }
+            }
+        }
+    });
+});
 
-            }});
-
-        });
 //accounts
 $('li#c2').click(function(){a_list()})
     function a_list(){
