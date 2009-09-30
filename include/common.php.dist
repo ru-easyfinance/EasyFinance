@@ -32,16 +32,15 @@ $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 $tpl->assign('revision',REVISION);
-
 $tpl->append('css', 'main.css');
 $tpl->append('js', 'jquery/jquery.min.js');
 
 ///временно<--
 $tpl->append('css', 'jquery/south-street/ui.all.css');
+$tpl->append('css', 'jquery/south-street/ui.dialog.css');
 $tpl->append('css', 'jquery/jquery.jgrowl.css');
-$tpl->append('css', 'jquery/jScrollPane.css');
-$tpl->append('css', 'jquery/jquery.calculator.css');
-$tpl->append('css', 'jquery/fullcalendar.css');
+$tpl->append('css','jquery/jScrollPane.css');
+$tpl->append('css','jquery/jquery.calculator.css');
 
 $tpl->append('js',  'jquery/ui.core.js');
 $tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');
@@ -65,6 +64,11 @@ $tpl->append('js',  'jquery/tinysort.js');
 $tpl->append('js',  'jquery/fullcalendar.js');
 $tpl->append('js',  'anychart/AnyChart.js');
 $tpl->append('js',  'jquery/jquery.form.js');
+
+/*$tpl->append('js','ofc/swfobject.js');
+$tpl->append('js','ofc/json2.js');
+$tpl->append('js','ofc/ofc.js');
+$tpl->append('js','ofc/open_flash_chart.js');*/
 ///-->
 $tpl->append('js','main.js');
 
@@ -86,5 +90,6 @@ Core::getInstance()->js = array(
     'category' => array('category'),
     'calendar' => array('calendar'),
     'admin' => array( 'admin'),
-    'accounts' => array('accounts')
+    'accounts' => array('accounts'),
+	'review' => array('review')
 );
