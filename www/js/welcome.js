@@ -116,8 +116,8 @@ function detectIE6(){
 
 //var ua = navigator.userAgent.toLowerCase();
 //if  (ua.indexOf("msie") != -1)
-if (detectIE6())
-    DropThisShirt();
+/*if (detectIE6())
+    DropThisShirt();*/
 
     //alert("Выкиньте свой браузер на помойку!!!");
 
