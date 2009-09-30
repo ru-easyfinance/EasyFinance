@@ -29,13 +29,14 @@ class Template_Controller {
     private function loadJS ()
     {
         $mdl = strtolower(Core::getInstance()->url[0]);
-        if (DEBUG) {
+//        if (DEBUG) {
             $sfx='.js';
-        } else {
-            $sfx='.min.js';
-        }
-        
-        foreach (Core::getInstance()->js[$mdl] as $v) {
+//        } else {
+//            $sfx='.min.js';
+//        }
+        $js = Core::getInstance()->js[$mdl];
+        if(!is_array($js)){$js = array();}
+        foreach ($js as $v) {
             Core::getInstance()->tpl->append('js', $v.$sfx);
         }
     }

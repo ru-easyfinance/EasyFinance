@@ -173,7 +173,7 @@ function formatMysqlDate2UnixTimestamp($date)
  * @param <string> $key // 24 битный ключ
  * @return <string> Возвращает зашифрованный ключ в обёртке base64
  */
-function encrypt($text, $key) {
+function encrypt($text, $key = CRYPT_KEY) {
     $text = trim(serialize($text));
     $iv = substr(md5($key), 0,mcrypt_get_iv_size (MCRYPT_CAST_256,MCRYPT_MODE_CFB));
     $c_t = mcrypt_cfb (MCRYPT_CAST_256, $key, $text, MCRYPT_ENCRYPT, $iv);
@@ -186,7 +186,7 @@ function encrypt($text, $key) {
  * @param <string> $key // 24 битный ключ
  * @return <string> Расшифрованную строку
  */
-function decrypt($text, $key) {
+function decrypt($text, $key = CRYPT_KEY) {
     $text = base64_decode($text);
     $iv = substr(md5($key), 0,mcrypt_get_iv_size (MCRYPT_CAST_256,MCRYPT_MODE_CFB));
     $p_t = mcrypt_cfb (MCRYPT_CAST_256, $key, $text, MCRYPT_DECRYPT, $iv);
