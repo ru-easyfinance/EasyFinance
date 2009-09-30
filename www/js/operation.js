@@ -149,7 +149,7 @@ $(document).ready(function() {
                 });
                 // Заполняем таблицу 
                 $('#operations_list').append(tr);
-               
+               $('.operation_list').jScrollPane();
 
             }
         },'json');
@@ -171,7 +171,7 @@ $(document).ready(function() {
                 });
         // Загружаем теги
 
-            $('.operation_list').jScrollPane();
+            
 
         
 
