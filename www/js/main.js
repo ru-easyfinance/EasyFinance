@@ -382,7 +382,7 @@ $("strong:contains('Имущество')").qtip({
         if (ltags) {
             str = '<ul>';
             for (key in data) {
-                k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
+                k = data[key]['cnt']/data[0]['cnt'];
                 n = Math.floor(k*5);
                 str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
             }
@@ -547,8 +547,10 @@ $("strong:contains('Имущество')").qtip({
             var k,n;
             var data = res.cloud;
             var str = '<ul>';
+            m = -1;
             for (var key in data) {
-                k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
+                if (m == -1) m = data[key]['cnt'];
+                k = data[key]['cnt']/m;
                 n = Math.floor(k*5);
                 str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
             }
@@ -790,55 +792,51 @@ $("strong:contains('Имущество')").qtip({
         $('#op_addtocalendar_but').click(function(){
             add2call();
         });
-            function ac_save() {
+
+        function ac_save() {
             /*
              *@TODO Проверить вводимые значения ui-tabs-selected
              */
             var href = '/calendar/add/';
-            if ($('#cal_mainselect .act').attr('id')=='periodic')
-            {
+            if ($('#cal_mainselect .act').attr('id')=='periodic') {
                 href = '/periodic/add/';
             }
-            $.post(
-                href,
-                {
-                    //id :        $('#op_dialog_event #op_'+dt+'id').val(),
-                    key:        $('#op_dialog_event #cal_key').attr('value'),
-                    title:      $('#op_dialog_event #cal_title').attr('value'),
-                    //date_start: $('#op_dialog_event #op_'+dt+'date_start').attr('value'),
-                    date_end:   $('#op_dialog_event #cal_date_end').attr('value'),
-                    date:       $('#op_dialog_event #cal_date').attr('value'),
-                    time:       $('#op_dialog_event #cal_time').attr('value'),
-                    repeat:     $('#op_dialog_event #cal_repeat option:selected').attr('value'),
-                    count:      $('#op_dialog_event #cal_count').attr('value'),
-                    comment:    $('#op_dialog_event #cal_comment').attr('value'),
-                    infinity:   $('#op_dialog_event #cal_infinity').attr('value'),
-                    amount:     $('#op_dialog_event #cal_amount').val(),
-                    category:   $('#op_dialog_event #cal_category').val(),
-                    type:       $('#op_dialog_event #cal_type').val(),
-                    account:    $('#op_dialog_event #cal_account').val(),
-                    rep_type:   $('#op_dialog_event .rep_type[checked]').val(),
-                    mon:        $('.week #mon').attr('checked') ? 1 : 0,
-                    tue:        $('.week #tue').attr('checked') ? 1 : 0,
-                    wed:        $('.week #wed').attr('checked') ? 1 : 0,
-                    thu:        $('.week #thu').attr('checked') ? 1 : 0,
-                    fri:        $('.week #fri').attr('checked') ? 1 : 0,
-                    sat:        $('.week #sat').attr('checked') ? 1 : 0,
-                    sun:        $('.week #sun').attr('checked') ? 1 : 0
+            $.post( href, {
+                //id :        $('#op_dialog_event #op_'+dt+'id').val(),
+                key:        $('#op_dialog_event #cal_key').attr('value'),
+                title:      $('#op_dialog_event #cal_title').attr('value'),
+                //date_start: $('#op_dialog_event #op_'+dt+'date_start').attr('value'),
+                date_end:   $('#op_dialog_event #cal_date_end').attr('value'),
+                date:       $('#op_dialog_event #cal_date').attr('value'),
+                time:       $('#op_dialog_event #cal_time').attr('value'),
+                repeat:     $('#op_dialog_event #cal_repeat option:selected').attr('value'),
+                count:      $('#op_dialog_event #cal_count').attr('value'),
+                comment:    $('#op_dialog_event #cal_comment').attr('value'),
+                infinity:   $('#op_dialog_event #cal_infinity').attr('value'),
+                amount:     $('#op_dialog_event #cal_amount').val(),
+                category:   $('#op_dialog_event #cal_category').val(),
+                type:       $('#op_dialog_event #cal_type').val(),
+                account:    $('#op_dialog_event #cal_account').val(),
+                rep_type:   $('#op_dialog_event .rep_type[checked]').val(),
+                mon:        $('.week #mon').attr('checked') ? 1 : 0,
+                tue:        $('.week #tue').attr('checked') ? 1 : 0,
+                wed:        $('.week #wed').attr('checked') ? 1 : 0,
+                thu:        $('.week #thu').attr('checked') ? 1 : 0,
+                fri:        $('.week #fri').attr('checked') ? 1 : 0,
+                sat:        $('.week #sat').attr('checked') ? 1 : 0,
+                sun:        $('.week #sun').attr('checked') ? 1 : 0
                 }, function(data){
-                    for (var v in data) {
-                        /*
-                         *@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                        */
-                        alert('Ошибка в ' + data[v]);
-                    }
-                    // В случае успешного добавления, закрываем диалог и обновляем календарь
-                    if (data.length == 0) {
-                        $('#op_dialog_event').dialog('close');
-                    }
-                },
-                'json'
-            );
+                for (var v in data) {
+                    /*
+                     *@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                    */
+                    alert('Ошибка в ' + data[v]);
+                }
+                // В случае успешного добавления, закрываем диалог и обновляем календарь
+                if (data.length == 0) {
+                    $('#op_dialog_event').dialog('close');
+                }
+            }, 'json');
         }
 
         $('#op_pcount').select(function(){
@@ -847,22 +845,22 @@ $("strong:contains('Имущество')").qtip({
         $('#op_pinfinity').select(function(){
             $('#op_pcounts').Attr('disable','disable')
         })
+
         function add2call()
         {
-            
             $('#cal_amount').keyup(function(e){
                 FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
             });
             $('input#cal_date,input#cal_date_end').datepicker();
             $('#cal_time').timePicker().mask('99:99');
-            $('#cal_repeat').change(function(){    
-                if ($('#cal_repeat').val()=="7"){
+            $('#cal_repeat').change(function(){
+                if ($('#cal_repeat').val()=="7"){ // Неделя
                     $('#week.week').closest('.line').show();
                     $('.repeat').closest('.line').show()
-                }else if($('#cal_repeat').val()=="0"){
+                }else if($('#cal_repeat').val()=="0"){ // Не повторять
                     $('#week.week').closest('.line').hide();
                     $('.repeat').closest('.line').hide()
-                }else{
+                }else{ // Иначе
                     $('#week.week').closest('.line').hide();
                     $('.repeat').closest('.line').show()
                 }
@@ -911,7 +909,7 @@ $("strong:contains('Имущество')").qtip({
                 },
                 close : function(){
                     $('#cal_mainselect').removeAttr('disabled')
-                    $('input,select,textarea','#op_dialog_event').val('');
+                    $('input[type="text"],select,textarea','#op_dialog_event').val('');
                     $('#op_dialog_event #cal_repeat').val(0);
                 }
             });
@@ -1249,7 +1247,6 @@ $('li#c2').click(function(){a_list()})
             $('div#mainwrap #'+page_mid).html('<span></span><a class="span" style="display:none;"></a>');
         //$('.menu3 span').closest('li').attr('id');
         //$('.mid, .ccb, #footer, #header, #menumain').mouseover();
-        //alert(page_mid);
         var act_id = page_mid;
         var submenu = {
             //'m0':[''],
