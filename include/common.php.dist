@@ -32,15 +32,16 @@ $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 $tpl->assign('revision',REVISION);
+
 $tpl->append('css', 'main.css');
 $tpl->append('js', 'jquery/jquery.min.js');
 
 ///временно<--
 $tpl->append('css', 'jquery/south-street/ui.all.css');
-$tpl->append('css', 'jquery/south-street/ui.dialog.css');
 $tpl->append('css', 'jquery/jquery.jgrowl.css');
-$tpl->append('css','jquery/jScrollPane.css');
-$tpl->append('css','jquery/jquery.calculator.css');
+$tpl->append('css', 'jquery/jScrollPane.css');
+$tpl->append('css', 'jquery/jquery.calculator.css');
+$tpl->append('css', 'jquery/fullcalendar.css');
 
 $tpl->append('js',  'jquery/ui.core.js');
 $tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');
@@ -50,8 +51,7 @@ $tpl->append('js',  'jquery/ui.dialog.js');
 $tpl->append('js',  'jquery/ui.datepicker.js');
 $tpl->append('js',  'jquery/jquery.qtip.js');
 $tpl->append('js',  'jquery/jquery.jgrowl.min.js');
-$tpl->append('js',  'anychart/AnyChart.js');
-$tpl->append('js',  'jquery/jquery.calculator.min.js');
+$tpl->append('js',  'jquery/jquery.calculator.js');
 $tpl->append('js',  'jquery/jquery.calculator-ru.js');
 $tpl->append('js',  'jquery/jquery.mousewheel.js');
 $tpl->append('js',  'jquery/jquery.em.js');
@@ -59,6 +59,12 @@ $tpl->append('js',  'jquery/jScrollPane.js');
 $tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js');
 $tpl->append('js',  'jquery/jquery.timepicker-table.min.js');
 $tpl->append('js',  'jquery/ui.tabs.js');
+$tpl->append('js',  'jquery/i18n/ui.datepicker-ru.js');
+$tpl->append('js',  'jquery/jquery.validate.js');
+$tpl->append('js',  'jquery/tinysort.js');
+$tpl->append('js',  'jquery/fullcalendar.js');
+$tpl->append('js',  'anychart/AnyChart.js');
+$tpl->append('js',  'jquery/jquery.form.js');
 ///-->
 $tpl->append('js','main.js');
 
@@ -66,3 +72,19 @@ $tpl->append('js','main.js');
 Core::getInstance()->tpl = $tpl;
 Core::getInstance()->currency = new Currency();
 Core::getInstance()->user = new User();
+Core::getInstance()->js = array(
+    'welcome' => array('welcome'),
+    'targets' => array('targets'),
+    'report' => array('report'),
+    'registration' => array('registration'),
+    'profile' => array('profile'),
+    'periodic' => array('periodic'),
+    'operation' => array('operation'),
+    'mail' => array('mail'),
+    'login' => array('welcome'),
+    'info' => array('info'),
+    'category' => array('category'),
+    'calendar' => array('calendar'),
+    'admin' => array( 'admin'),
+    'accounts' => array('accounts')
+);

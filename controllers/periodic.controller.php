@@ -34,12 +34,10 @@ class Periodic_Controller extends Template_Controller
         $this->tpl->assign('category', get_tree_select());
         $targets = new Targets_Model();
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
-        $this->tpl->append('css','jquery/jquery.calculator.css');
-        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
 
 
         $this->tpl->assign('name_page', 'periodic/periodic');
-        $this->tpl->append('css','jquery/south-street/ui.all.css');
+        
         
 
 

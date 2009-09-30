@@ -47,10 +47,7 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
 
         // Добавляем js и css файлы в начало
-        $this->tpl->append('css','jquery/jquery.calculator.css');
-        $this->tpl->append('css','jquery/south-street/ui.all.css');
-        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
-        $this->tpl->append('css','jquery/jquery.autocomplete.css');
+
 
     }
 

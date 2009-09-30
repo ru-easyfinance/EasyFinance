@@ -34,14 +34,7 @@ class Calendar_Controller extends Template_Controller
         $this->tpl->assign('category', get_tree_select());
         $targets = new Targets_Model();
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
-        $this->tpl->append('css','jquery/jquery.calculator.css');
-        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
-        
 
-        // Календарь
-        $this->tpl->append('css','jquery/fullcalendar.css');
-        $this->tpl->append('css','jquery/south-street/ui.dialog.css');
-        $this->tpl->append('css','jquery/south-street/ui.all.css');
 
         
     }

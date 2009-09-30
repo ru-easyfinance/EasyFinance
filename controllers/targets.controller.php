@@ -30,10 +30,6 @@ class Targets_Controller extends Template_Controller
         $this->model = new Targets_Model();
         $this->model->_setFormSelectBoxs();
 
-        $this->tpl->append('css','jquery/jquery.calculator.css');
-        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
-        $this->tpl->append('css','jquery/south-street/ui.dialog.css');
-        $this->tpl->append('css','jquery/south-street/ui.all.css');
 
 
     }

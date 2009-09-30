@@ -65,8 +65,7 @@ class Report_Controller extends Template_Controller
     function index($args)
     {
         // JS & CSS
-        $this->tpl->append('css','jquery/south-street/ui.all.css');
-        $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
+
 
         
 
