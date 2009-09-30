@@ -1177,11 +1177,13 @@ $('li#c2').click(function(){a_list()})
 //currency
     data = res['currency'];
     str = '';
+    var cost,name,progres;
     for(key in data)
     {
         cost = data[key]['cost'];
         name = data[key]['name'];
         progres = data[key]['progress'];
+        if (!cost){continue;}
         str += '<div class="line"><span class="valuta">'+name+'</span><span class="'+progres+'">'+cost+'</span></div>'
     }
     $('dl.info dd').html(str);
