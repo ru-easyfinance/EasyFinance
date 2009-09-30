@@ -57,10 +57,12 @@ $.post(
      * Выводит список финансовых целей пользователя
      */
     function print_targets(count) {
-        data = res['user_targets']; str ='';
-        for (key in data) {
+        var data = res['user_targets'];
+        var str ='';
+        for (var key in data) {
             if(!data[key]['image']) {
                 data[key]['image']='/img/i/fintarget.jpg';
+
             }
             str += "<div class='object2' id='"
                 + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
