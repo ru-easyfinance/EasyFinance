@@ -113,9 +113,13 @@ class Template_Controller {
                 'progress' => ''
             );
         }
-
+        
+        $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
+        $cloud = Core::getInstance()->db->select($sql, Core::getInstance()->user->getId());
+        
         Core::getInstance()->tpl->assign('res', json_encode(array(
             'tags' => $user->getUserTags(),
+            'cloud' => $cloud,
             'accounts' => $accounts,
             'periodic' => array(
                 'id' => array(

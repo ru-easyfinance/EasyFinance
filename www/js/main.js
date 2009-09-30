@@ -538,26 +538,22 @@ $("strong:contains('Имущество')").qtip({
             }).dialog("open");
             $('.op_tags_could li').show();
         });
-		//$('.op_tags input').keyup(function(){
-                  //  $('.op_tags_could li').show();
-		//})
-                $('.op_tags_could li').live('click',function(){
-                    txt=$('.op_tags input').val()+$(this).text()+', ';
-                    $('.op_tags input').val(txt);
-                    $('.op_tags_could').dialog("close");
-                });
+        $('.op_tags_could li').live('click',function(){
+            var txt=$('.op_tags input').val()+$(this).text()+', ';
+            $('.op_tags input').val(txt);
+            $('.op_tags_could').dialog("close");
+        });
         // Загружаем теги
-        $.get('/tags/getCloudTags/', '', function(data) {
-            str = '<ul>';
-            for (key in data) {
+            var k,n;
+            var data = res.cloud;
+            var str = '<ul>';
+            for (var key in data) {
                 k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
                 n = Math.floor(k*5);
                 str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
             }
             $('.op_tags_could').html(str+'</ul>');
-
             $('.op_tags_could li').hide();
-        }, 'json');
     }
 
     /**
