@@ -153,6 +153,7 @@ $(document).ready(function()
         {
             new_acc = 1;
             accountAddVisible();
+            //$('#type_account').removeAttr('disabled');
         }
         if(s.substr(0,5)=='#edit')
         {
@@ -179,6 +180,8 @@ $(document).ready(function()
 
                     });
                     $(document).scrollTop(300);
+                    $('#type_account').val(account.type);
+                    $('#type_account').attr('disabled', 'disabled')
                     $('#account_form_fields table').attr('id',account.id);
                     $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+account.id+'" />');
                     if (flag)
@@ -292,6 +295,7 @@ $(document).ready(function()
     {
         
         var cur_id = $("#formAccount select:[name='currency_id']").val();
+        //var type = $("#formAccount id='type_account']").val();
         $.ajax({
             type: "POST",
             url: "/accounts/add/",
@@ -312,17 +316,18 @@ $(document).ready(function()
      * @deprecated rewrite all//on freetime where rewrite account model, controller, admin
      */
     function correctaccount()
-    {
+    {//del
         $.post('/accounts/del/',
             {
                 id :$('#blockCreateAccounts').find('table').attr('id')
             },
             function(data){
-                $.jGrowl("Счёт сохранён", {theme: 'green'});
+                //$.jGrowl("Счёт Изменён", {theme: 'green'});
+                createNewAccount();
             },
             'text'
         );
-        createNewAccount();
+        
     }
     /**
      * Красивый тултип для таблицы счетов
@@ -373,9 +378,7 @@ $(document).ready(function()
             accountAddUnvisible();
         }
         accisvis = !accisvis;
-        //$('#blockCreateAccounts').val('');
-        //accountAddVisible();
-        //$('#blockCreateAccounts').toggle();
+        $('#type_account').removeAttr('disabled');
     });
     $('#btnCancelAdd').click(function(){ ////button cancel in form click
         accountAddUnvisible();
@@ -432,6 +435,7 @@ $(document).ready(function()
                             '<th>Изменение с даты открытия</th>']];//доп графы для групп
             var id =$(this).attr('id');
             var account = account_list[id];
+            //var account = id;
             var spec = spec_th[g_types[account.type]];
              
             var str = '<table Stile="padding:3px">';

@@ -174,9 +174,9 @@ class Accounts_Model
     	foreach($this->fields as $field => $key)
 	{
             if ($key['field_visual_name']!="Общий баланс") {
-            $data[$i]['display'] = $key['field_visual_name'];
-            $data[$i]['value'] = $this->formField($key, "", "");
-            $i++;
+                $data[$i]['display'] = $key['field_visual_name'];
+                $data[$i]['value'] = $this->formField($key, "", "");
+                $i++;
             }
 	}
 	return $data;

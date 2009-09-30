@@ -83,6 +83,23 @@ $(document).ready(function() {
     // Autoload
     loadOperationList();
 
+
+    function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
+    }
+
     //$('.operation_list').jScrollPane();//???
     /**
      * Загружает список всех операций (с фильтром)
@@ -111,7 +128,7 @@ $(document).ready(function() {
                         } else {
                             tp = 'Доход';
                         }
-                    }
+                    };
                     tr += "<tr value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                         + '<td class="light"><a href="#">' + tp + '</a></td>'
                         + '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'

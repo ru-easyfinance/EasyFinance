@@ -146,7 +146,6 @@ class Accounts_Controller extends Template_Controller
         $tid=$_POST['tid'];
         $qString = explode("&", $qString);
         $this->model->correct($qString,$aid,$tid);
-        die ();
     }
 
 }
