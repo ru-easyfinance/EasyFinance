@@ -37,11 +37,7 @@ class Report_Model
      */
     function getPie($drain = 0, $start = '', $end = '', $account = 0)
     {
-        if ($drain == 1) {
-            $title = new OFC_Elements_Title('Расходы за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
-        } else {
-            $title = new OFC_Elements_Title('Доходы за период с '.@$_GET['dateFrom'].' по '.@$_GET['dateTo']);
-        }
+
         if ($account > 0) {
             $sql = "SELECT o.money, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN category c ON c.cat_id = o.cat_id
@@ -59,23 +55,11 @@ class Report_Model
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), 
                 $drain, $start, $end);
         }
-        
-        $pie = new OFC_Charts_Pie();
         $array = array();
         foreach ($result as $v) {
-             $array[]= new OFC_Charts_Pie_Value((float)$v['money'], $v['cat']);
+             $array[] = array($v['cat'], (float)$v['money']);
         }
-        $pie->values = $array;
-        $pie->tip = '#label# #val# из #total#<br>#percent# из 100%';
-        $pie->alpha   = 0.6;
-        $pie->border  = 2;
-
-        $ofc = new OFC_Chart();
-        $ofc->set_title($title);
-        $ofc->add_element($pie);
-        //$ofc->set_x_axis(null);
-        
-        return $ofc->toPrettyString();
+        return $array;
     }
 
     /**
@@ -124,48 +108,12 @@ class Report_Model
             }
         }
         $data1 = $data2 = $labels = array();
-        
         foreach ($array as $key => $val) {
-            $data1[] = $val['p'];
-            $data2[] = $val['d'];
-            $labels[] = new OFC_Elements_Axis_X_Label(substr($key, 0, 7));
+            $data1[] = (float)$val['p'];
+            $data2[] = (float)$val['d'];
+            $labels[] = substr($key, 0, 7);
         }
-
-        $title = new OFC_Elements_Title('Сравнение расходов и доходов за период с '.
-            @$_GET['dateFrom'].' по '.@$_GET['dateTo']);
-        $bar1 = new OFC_Charts_Bar();
-        $bar1->set_colour('#BF3B69');
-        $bar1->set_key('Расходы', 12);
-        $bar1->set_values($data2);
-
-        $bar2 = new OFC_Charts_Bar();
-        $bar2->set_colour('#5E0722');
-        $bar2->set_key('Доходы', 12);
-        $bar2->set_values($data1);
-
-        $x = new OFC_Elements_Axis_X_Label();
-        $x->set_labels($labels);
-        $x->set_vertical();
-        $x->set_colour('#A2ACBA');
-        //$x->
-        
-
-//$tooltip->set_hover();
-//$tooltip->set_stroke( 1 );
-//$tooltip->set_colour( "#000000" );
-//$tooltip->set_background_colour( "#ffffff" );
-//$chart->set_tooltip( $tooltip );
-
-
-
-        $ofc = new OFC_Chart();
-        $ofc->set_title($title);
-        $ofc->add_element($bar1);
-        $ofc->add_element($bar2);
-        $ofc->add_element($x);
-
-
-        return $ofc->toPrettyString();
+        return array('p'=>$data1,'d'=>$data2,'l'=>$labels);
     }
 
     function SelectDetailedIncome($date1='', $date2='', $account=''){

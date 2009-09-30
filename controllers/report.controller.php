@@ -39,10 +39,6 @@ class Report_Controller extends Template_Controller
         $targets = new Targets_Model();
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
 
-        
-        $this->tpl->append('js','ofc/swfobject.js');
-       
-
         // Виды и названия отчетов
         $this->reports = array(
             'graph_profit' => 'Доходы',
@@ -93,13 +89,13 @@ class Report_Controller extends Template_Controller
         $currency= (int)@$_GET['currency'];
         switch ($report) {
             case 'graph_profit': //Доходы
-                die($this->model->getPie(0, $start, $end, $account));
+                die(json_encode($this->model->getPie(0, $start, $end, $account)));
                 break;
             case 'graph_loss':   // Расходы
-                die($this->model->getPie(1, $start, $end, $account));
+                die(json_encode($this->model->getPie(1, $start, $end, $account)));
                 break;
             case 'graph_profit_loss': //Сравнение расходов и доходов
-                die($this->model->getBars($start, $end, $account));
+                die(json_encode($this->model->getBars($start, $end, $account)));
                 break;
             case 'txt_profit': //Детальные доходы
                 die(json_encode($this->model->SelectDetailedIncome($start, $end, $account))  );

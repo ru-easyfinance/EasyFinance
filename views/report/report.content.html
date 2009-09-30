@@ -53,8 +53,7 @@
 
 
                 <div class="line">
-                    <div class="f_field" id="account_fields">
-			Счет
+                    <div class="f_field" id="account_fields">Счет
                         <select id="account">
                             <option value="" currency="" abbr="">---Все---</option>
                             {foreach from=$accounts item=acc_data}
@@ -78,27 +77,11 @@
                 </div>
             </div>
         </form>
+        <div id="chart"></div>
         <div id="rep" class="inside operation_list">
-            <table id="reports_list">
-		<tr>
-                    <!--
-                    <th>&nbsp;</th>
-                    <th>
-			<span class="sort" title="отсортировать">Дата</span>
-                    </th>
-                    <th>
-                 	<span class="sort" title="отсортировать">Счёт</span>
-                    </th>
-                    <th>
-			<span class="sort" title="отсортировать">Сумма</span>
-                    </th>
-                    --->
-               </tr>
-            </table>
-            <div id="chart"></div>
+        <table id="reports_list">
+           <tr></tr>
+        </table>
         </div>
-
-         <div id="chart"></div>
-
     </div>
 </div>

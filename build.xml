@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="phpdoc" default="clear" basedir=".">
+    
+    <property name="DUMP_FILE" value="homemoney_dump.sql"/>
+    <property name="MYSQL_PATH" value="/usr/bin/"/>
+    <property name="DB_NAME" value="wwwhomemoneyru"/>
+    <property name="DB_HOST" value="localhost"/>
+    <property name="DB_USER" value="root"/>
+    <property name="DB_PASS" value="gfh0km"/>
+    <property name="SVN_PATH" value="/usr/local/bin/svn"/>
+    <property name="SVN_USER" value="ukko"/>
+    <property name="SVN_PASS" value="gfh0km"/>
+
+    <target name="backup">
+        <exec command="${MYSQL_PATH}mysqldump -u${DB_USER} -p${DB_PASS} ${DB_NAME} &gt; ${DUMP_FILE}" dir="."/>
+    </target>
+
+    <target name="prepare">
+        <echo msg="Cleaning up..."/>
+        <delete dir="./build"/>
+        <echo msg="Create directory build..."/>
+        <mkdir dir="./build"/>
+    </target>
+
+    <target name="svn_export" depends="prepare">
+        <echo msg="Svn export last revision..."/>
+        <svnexport svnpath="${SVN_PATH}" username="${SVN_USER}" password="${SVN_PASS}" force="true" nocache="true" repositoryurl="svn://localhost/branches/old/" todir="/var/www/hm/build/"/>
+          </target>
+
+      <taskdef name="minify" classname="extended.tasks.kpMinTask"/>
+      <target name="minify-js">
+          <echo>--------------------------------</echo>
+          <echo>| Minify javascript to release |</echo>
+          <echo>--------------------------------</echo>
+          <minify targetDir="../www/resources/js/min" yuiPath="tools/yuicompressor.jar">
+              <fileset dir="../www/resources/js/">
+                <include name="*.js"/>
+              </fileset>
+          </minify>
+      </target>
+      <target name="minify-css">
+          <echo>--------------------------------</echo>
+          <echo>| Minify CSS to release |</echo>
+          <echo>--------------------------------</echo>
+          <minify targetDir="../www/resources/v2_css/min" yuiPath="tools/yuicompressor.jar">
+              <fileset dir="../www/resources/v2_css/">
+                <include name="*.css"/>
+              </fileset>
+          </minify>
+      </target>
+    <target name="mini" depends="svn_export">
+        <fileset dir="/var/www/hm/build/www/">
+            <include name="**.js"/>
+            <include name="**.css"/>
+       </fileset>
+       <exec command="" dir="."/>
+    </target>
+
+    <target name="clear" depends="mini">
+        <echo msg=""/>
+    </target>
+</project>
