@@ -48,6 +48,11 @@ $(document).ready(function(){
         return false;
     });
 
+    $('#targets_category').empty();
+    for (v in res['targets_category']) {
+        $('#targets_category').append('<option value="'+v+'">'+res['targets_category'][v]+'</option>');
+    }
+
     // Удаляем цель
     $(".f_f_del").live('click', function(){
         o = $(this).closest('.object');
@@ -103,7 +108,6 @@ $(document).ready(function(){
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc=" Функции ">
-
     /**
      * Очищает форму для добавления финансовой цели
      */
@@ -164,7 +168,7 @@ $(document).ready(function(){
             {
                 id       : $('#key').attr('value'),
                 type     : $('#type').attr('value'),
-                category : $('#category').attr('value'),
+                category : $('#targets_category').attr('value'),
                 title    : $('#name').attr('value'),
                 amount   : tofloat($('#tg_amount').val()),
                 money    : $('#amountf').val(),
@@ -181,10 +185,14 @@ $(document).ready(function(){
 //                    alert('Ошибка в ' + v);
 //                }
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
-                if (data.length > 0) {
+                if (data.length == 0) {
                     $('#tpopup').dialog('close');
                     $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
                     loadTargets(data);
+                } else {
+                    for (var v in data) {
+                        alert('Ошибка в ' + v);
+                    }
                 }
 //                s = '<div class="object"><div class="ban"></div>'
 //                    +'<div class="descr">';
@@ -231,7 +239,7 @@ $(document).ready(function(){
         }, 'json');
     }
     
-    loadPopular();
+    //loadPopular();
     ////////////////////////////////////////////////hash api
     s = location.hash;
     if (s=='#add') {

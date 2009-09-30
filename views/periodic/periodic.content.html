@@ -11,71 +11,9 @@
 						</div>
 
 						<div class="inside">
-                            <form action="/periodic/add/" id="form">
-                                <input type="hidden" id="id">
-                                <div class="addcategories">
+                            <div class="addcategories">
                                     <a id="add_periodic">Добавить регулярную транзакцию</a>
-                                    <div id="add_form">
-                                        <div class="form_block" style="display: hide;">
-                                            <div class="f_field">
-                                                <label for="title">Название транзакции</label>
-                                                <input type="text" id="title" />
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="category">Категория</label>
-                                                <select id="category">
-                                                    {$category}
-                                                </select>
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="type">Тип транзакции</label>
-                                                <select id="type">
-                                                    <option value="-1">Расход</option>
-                                                    <option value="1">Доход</option>
-                                                </select>
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="account">Счёт</label>
-                                                <select id="account">
-                                                {foreach from=$account item=val}
-                                                    <option value="{$val.account_id}" ext="{$val.account_description}" title="{$val.account_name}" cur_id="{$val.account_currency_id}">{$val.account_name} ({$val.account_currency_name})</option>
-                                                {/foreach}
-                                                </select>
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="amount">Сумма</label>
-                                                <input type="text" id="amount" />
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="date">Дата</label>
-                                                <input type="text" id="date" />
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="repeat">Периодичность</label>
-                                                <select id="repeat">
-                                                    <option value="1">Ежедневно</option>
-                                                    <option value="7">Еженедельно</option>
-                                                    <option value="30">Ежемесячно</option>
-                                                    <option value="90">Ежеквартально</option>
-                                                    <option value="365">Ежегодно</option>
-                                                </select>
-                                            </div>
-                                            <div class="f_field">
-                                                <label>Повторения</label>
-                                                <input type="radio" name="count" id="infinity" value="0" checked="checked"/><span id="spinfinity">Бесконечно</span>
-                                                <input type="radio" name="count" id="count" value="1" /> <span id="spcount">Количество раз</span>&nbsp;
-                                                <select id="counts" disabled="disabled" />
-                                            </div>
-                                            <div class="f_field">
-                                                <label for="comment">Комментарий</label>
-                                                <textarea id="comment"></textarea>
-                                            </div>
-                                            <input type="button" id="btnSave" value="Сохранить" />
-                                            <input type="button" id="btnCancel" value="Отменить" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                             <!-- Список регулярок -->
                             <div class="inside operation_list">
                             <table class="tab1 noborder" id="tab1">
@@ -88,41 +26,6 @@
                                         <th>Счет</th>
                                         <th>Часота повт.</th>
                                         <th>Сумма</th>
-                                    </tr>
-                                    <tr id="2" class="item act">
-                                    <td class="chk">
-                                    <input type="checkbox"/>
-                                    </td>
-                                    <td>21.09.2009</td>
-                                    <td>Заголовок</td>
-                                    <td>нет</td>
-                                    <td>undefined</td>
-                                    <td>Ежедневно</td>
-                                    <td class="mark no_over" style="display: table-cell;">
-                                        <div class="cont">
-                                            100.00
-                                            <ul style="z-index: 100;">
-                                    <li class="edit">
-                                    <a title="Редактировать">Редактировать</a>
-                                    </li>
-                                    <li class="del">
-                                    <a title="Удалить">Удалить</a>
-                                    </li>
-                                    <li class="add">
-                                    <a title="Добавить">Добавить</a>
-                                    </li>
-                                    </ul>
-                                    </div>
-                                    </td>
-                                    <!--<td class="mark no_over" style="display: table-cell;">
-                                    <div class="cont">
-                                    <ul style="z-index: 100;">
-                                    <li class="edit" title="Редактировать"></li>
-                                    <li class="del" title="Удалить"></li>
-                                    <li class="add" title="Копировать"></li>
-                                    </ul>
-                                    </div>
-                                    </td>-->
                                     </tr>
                                 </thead>
                                 <tbody>

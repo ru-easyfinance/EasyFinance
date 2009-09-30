@@ -65,31 +65,27 @@ class Targets_Controller extends Template_Controller
      */
     function add($args)
     {
-        die($this->model->add());
+        die(json_encode($this->model->add()));
     }
 
     /**
      * Редактирует событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function edit($args)
     {
-        die($this->model->edit());
+        die(json_encode($this->model->edit()));
     }
     
     /**
      * Удаляет выбранное событие
      * @param $args array mixed Какие-нибудь аргументы
-     * @return <void>
+     * @return void
      */
     function del($args)
     {
-        if ($this->model->del()) {
-            die('[]');
-        } else {
-            trigger_error('Не удалось удалить фин.цель', E_USER_NOTICE); exit;
-        }
+        die(json_encode($this->model->del()));
     }
 
     /**

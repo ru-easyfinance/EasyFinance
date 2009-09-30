@@ -117,18 +117,24 @@ class Template_Controller {
             'tags' => $user->getUserTags(),
             'accounts' => $accounts,
             'periodic' => array(
-                'id' => '',
-                'title' => '',
-                'date' => '',
-                'amount'=>''),
-
+                'id' => array(
+                    'title' => '',
+                    'date' => '',
+                    'amount'=>'')
+                ),
             'user_targets' => $targets['user_targets'],
             'popup_targets' => $targets['pop_targets'],
             'currency' => $currency,
             'flash' => array(
                 'title' => '',
                 'value' => 0,
-
+            ),
+            'targets_category'=>array(
+                '1' => 'Квартира',
+                '2' => 'Автомобиль',
+                '3' => 'Отпуск',
+                '4' => 'Финансовая подушка',
+                '0' => 'Прочее'
             ),
             'errors'=>Core::getInstance()->errors,
         )));
