@@ -913,7 +913,11 @@ $("strong:contains('Имущество')").qtip({
                         $(this).dialog('close');
                     }
                 },
-                close : function(){$('#cal_mainselect').removeAttr('disabled')}
+                close : function(){
+                    $('#cal_mainselect').removeAttr('disabled')
+                    $('input,select,textarea','#op_dialog_event').val('');
+                    $('#op_dialog_event #cal_repeat').val(0);
+                }
             });
             
             $('#op_dialog_event').dialog();

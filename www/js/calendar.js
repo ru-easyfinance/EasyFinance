@@ -352,6 +352,16 @@ $(document).ready(function() {
                     }
                 }
                 $('#cal_mainselect').attr('disabled','disabled');
+                if ($('#cal_repeat').val()=="7"){
+                    $('#week.week').closest('.line').show();
+                    $('.repeat').closest('.line').show()
+                }else if($('#cal_repeat').val()=="0"){
+                    $('#week.week').closest('.line').hide();
+                    $('.repeat').closest('.line').hide()
+                }else{
+                    $('#week.week').closest('.line').hide();
+                    $('.repeat').closest('.line').show()
+                }
                 //$('#op_dialog_event input').val('');
                 //$('#op_dialog_event textarea').val('').text('');
             //$('#cal_date,#cal_date_end','#op_dialog_event').val($.datepicker.formatDate('dd.mm.yy',dayDate));
