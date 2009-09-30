@@ -802,7 +802,7 @@ $("strong:contains('Имущество')").qtip({
             } else {
                 infinity = 0;
             }
-            $.post( href, {
+            d = {
                 //id :        $('#op_dialog_event #op_'+dt+'id').val(),
                 key:        $('#op_dialog_event #cal_key').attr('value'),
                 title:      $('#op_dialog_event #cal_title').attr('value'),
@@ -826,12 +826,13 @@ $("strong:contains('Имущество')").qtip({
                 fri:        $('.week #fri').attr('checked') ? 1 : 0,
                 sat:        $('.week #sat').attr('checked') ? 1 : 0,
                 sun:        $('.week #sun').attr('checked') ? 1 : 0
-            }, function(data){
+            };
+            $.post( href, d, function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     $('#op_dialog_event').dialog('close');
                     $.jGrowl("Данные сохранены", {theme: 'green'});
-                    
+                     $(window).trigger("saveSuccess", [d]);
                 } else {
                     e = '';
                     for (var v in data) {

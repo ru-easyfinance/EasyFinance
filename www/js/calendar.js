@@ -28,6 +28,10 @@ $(document).ready(function() {
         $('#pkey,#pchain,#ptitle,#pdate,#prepeat,#pcount,#pcomment,#pinfinity').val('');
     }
 
+    $(window).bind("saveSuccess", function(e, data){
+        $('#calendar').fullCalendar('refresh');
+    });
+
     /**
      * Перед открытием формы
      * @param el Элемент календаря, т.е. объект - событие

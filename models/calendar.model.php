@@ -104,13 +104,40 @@ class Calendar_Model {
             }
         }
 
-        // Проверяем дату окончания
-        if (in_array('last_date', $params) || count($params) == 0) {
-            $valid['last_date'] = formatRussianDate2MysqlDate(@$_POST['date_end']);
-            if (!$valid['last_date']) {
-                $this->errorData['last_date'][] = 'Не верно указана дата окончания';
+//account	58
+//amount
+//category	240
+//comment	ewrtwer
+//count	1
+//date	01.10.2009
+//date_end
+//fri	0
+//infinity	0
+//key	0
+//mon	0
+//rep_type	1
+//repeat	0
+//sat	0
+//sun	0
+//thu	0
+//time
+//title	1234
+//tue	0
+//type	-1
+//wed	0
+
+        if ($valid['type_repeat'] > 0) {
+            // Проверяем дату окончания
+            if (in_array('last_date', $params) || count($params) == 0) {
+                $valid['last_date'] = formatRussianDate2MysqlDate(@$_POST['date_end']);
+                if (!$valid['last_date']) {
+                    $this->errorData['last_date'][] = 'Не верно указана дата окончания';
+                }
             }
+        } else {
+            $valid['last_date'] = $valid['near_date'];
         }
+        
 /*
         if (in_array('start_date', $params) && in_array('last_date', $params)  || count($params) == 0) {
             if ((!isset($this->errorData['start_date']) && !isset($this->errorData['last_date'])
@@ -141,6 +168,7 @@ class Calendar_Model {
     // Проверяем корректность отправленных данных
         $array = array('title','near_date','last_date','type_repeat','count_repeat','comment');
         $array = $this->checkData($array);
+
 
         // Если есть ошибки, то возвращаем их пользователю в виде массива
         if ($array == false) {

@@ -49,13 +49,21 @@ $(document).ready(function() {
     $('li.add a').live('click',function(){
         alert('add');
     });
-    
-    $('#tab1 tbody tr').live('mouseout', function(){
-        $(this).removeClass('act');
+
+    $('div.operation_list').mousemove(function(){
+        if (!$('ul:hover').length && !$('.act:hover').length) {
+            $('tr.item').removeClass('act');
+        }
     });
     $('#tab1 tbody tr').live('mouseover', function() {
+        $('tr.item').removeClass('act');
         $(this).addClass('act');
     });
+
+    $(window).bind("saveSuccess", function(e, data){
+        loadPeriodic();
+    });
+
 
     // FUNCTIONS
     /**
@@ -73,8 +81,7 @@ $(document).ready(function() {
                     +'<td>'+data[id]['date']+'</td>'
                     +'<td>'+data[id]['title']+'</td>'
                     +'<td>'+cat+'</td>'
-                    +'<td>'+$('#op_account [value='+data[id]['account']+']').attr('title')+'</td>'
-                    +'<td>'+$('#repeat [value='+data[id]['repeat']+']').text()+'</td>'
+                    +'<td>'+res['accounts'][data[id]['account']]['name'] +'</td>'
                     +'<td class="mark no_over" style="display: table-cell;">'+'<div class="cont">'+ data[id]['amount']
                            +'<ul style="z-index: 100;">'
                             +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
