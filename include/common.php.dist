@@ -79,8 +79,13 @@ Core::getInstance()->user = new User();
 Core::getInstance()->js = array(
     'welcome' => array('welcome'),
     'targets' => array('targets'),
-    'report' => array('report'),
-    'registration' => array('registration'),
+    'report' => array(
+        'report',
+        'jquery/jquery.jqplot.min',
+        'jquery/jqplot.categoryAxisRenderer.min',
+        'jquery/jqplot.barRenderer.min',
+        'jquery/jqplot.pieRenderer.min'),
+   'registration' => array('registration'),
     'profile' => array('profile'),
     'periodic' => array('periodic'),
     'operation' => array('operation'),
