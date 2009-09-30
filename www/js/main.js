@@ -1153,7 +1153,7 @@ $('li#c2').click(function(){a_list()})
         })
         $('.financobject ul a').live('click',function(){
             var id = $(this).attr('href');
-            doctype.location = id;
+            window.location = id;
             var str = id.substr(15);
             var f = $('.object[tid="'+str+'"]');
             $('input,textarea','#tpopup').val('');
