@@ -15,40 +15,11 @@ $(document).ready(function() {
             buttonImageOnly: true,
             buttonImage: '/img/i/unordered.gif' //opbutton
         });*/
-    $('#add_periodic').click(function(){$('#add_form div.form_block').toggle()});
-    $('#date').datepicker();
-    $('#btnSave').click(function(){
-        saveOperation();
+    $('#add_periodic').click(function(){
+        $('#op_addtocalendar_but').click();
+        $('#periodic').click();
     });
-    $('#btnCancel').click(function(){
-        clearForm();
-        $('#add_form div.form_block').hide();
-    });
-    
-    for(i = 1; i < 32; i++){
-        $('form #counts').append('<option>'+i+'</option>').val(i);
-    }
-    $('#counts').val('');
 
-    $('#infinity, #spinfinity').click(function(){
-        $('#counts').attr('disabled','disabled');
-        $('#infinity').attr('checked', 'checked');
-        $('#count').removeAttr('checked');
-    });
-    $('#count,#spcount').click(function(){
-        $('#counts').removeAttr('disabled');
-        $('#infinity').removeAttr('checked');
-        $('#count').attr('checked', 'checked');
-    });
-    $('li.edit a').live('click',function(){
-        fillForm($(this).closest('tr').attr('id'));
-        $('#form').attr('action', '/periodic/edit/');
-    });
-    $('li.add a').live('click',function(){
-        fillForm($(this).closest('tr').attr('id'));
-        $('#form').attr('action', '/periodic/add/');
-        $('#id,#date').val('');
-    });
     $('li.del a').live('click',function(){
         if (confirm('Удалить регулярную транзакцию и все её события?')) {
             tr = $(this).closest('tr');
@@ -60,15 +31,33 @@ $(document).ready(function() {
             ,'json');
         }
     });
-    $('#tab1 tbody tr').live('mouseout', function(){
+    
+    $('li.edit a').live('click',function(){
+        clearForm();
+        $('#op_addtocalendar_but').click();
+        $('#periodic').click();
+        fillForm($(this).closest('tr').attr('id'));
+    });
 
+    $('#tab1 tbody tr').live('dblclick', function(){
+        clearForm();
+        $('#op_addtocalendar_but').click();
+        $('#periodic').click();
+        fillForm($(this).closest('tr').attr('id'));
+    });
+
+    $('li.add a').live('click',function(){
+        alert('add');
+    });
+    
+    $('#tab1 tbody tr').live('mouseout', function(){
+        $(this).removeClass('act');
     });
     $('#tab1 tbody tr').live('mouseover', function() {
-        $(this).filter('ul').show();
+        $(this).addClass('act');
     });
 
     // FUNCTIONS
-
     /**
      * Загружает список периодических транзакций (правила)
      */
@@ -76,22 +65,23 @@ $(document).ready(function() {
         $.get('/periodic/getList/', '', function(data){
             pobj = {};
             pobj = data;
-            c = '';
+            var c = '';
             for(var id in data) {
-                cat = $('#ca_'+data[id]['category']).attr('title')
+                cat = $('#ca_'+data[id]['category']).attr('title');
                 cat = (!cat)?'нет':cat;
-                c += '<tr id="'+id+'"><td class="chk"><input type="checkbox" /></td>'
+                c += '<tr id="'+id+'" class="item"><td class="chk"><input type="checkbox"/></td>'
                     +'<td>'+data[id]['date']+'</td>'
                     +'<td>'+data[id]['title']+'</td>'
                     +'<td>'+cat+'</td>'
-                    +'<td>'+$('#account [value='+data[id]['account']+']').attr('title')+'</td>'
+                    +'<td>'+$('#op_account [value='+data[id]['account']+']').attr('title')+'</td>'
                     +'<td>'+$('#repeat [value='+data[id]['repeat']+']').text()+'</td>'
-                    +'<td>'+'<div class="cont">'+ data[id]['amount']
-                           +'<ul><li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                    +'<td class="mark no_over" style="display: table-cell;">'+'<div class="cont">'+ data[id]['amount']
+                           +'<ul style="z-index: 100;">'
+                            +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                             +'<li class="del"><a title="Удалить">Удалить</a></li>'
                             +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div></td></tr>';
             }
-            $('#tab1 tbody').empty().append(c);
+            $('#tab1 tbody').html(c);
             $('.operation_list').jScrollPane();
         }, 'json');
     }
@@ -99,22 +89,25 @@ $(document).ready(function() {
     function saveOperation() {
         if (checkForm()) {
             $.post($('#form').attr('action'), {
-                id: $('#id').val(),
-                title: $('#title').val(),
-                amount: tofloat($('#amount').val()),
-                date: $('#date').val(),
-                comment: $('#comment').val(),
-                category: $('#category').val(),
+                id: $('#cal_key').val(),
+                title: $('#cal_title').val(),
+                amount: tofloat($('#cal_amount').val()),
+                date: $('#cal_date').val(),
+                comment: $('#cal_comment').val(),
+                category: $('#cal_category').val(),
                 type: $('#type').val(),
-                account: tofloat($('#account').val()),
-                repeat: $('#repeat').val(),
-                counts: $('#counts').val(),
+                account: tofloat($('#cal_account').val()),
+                repeat: $('#cal_repeat').val(),
+                counts: $('#cal_counts').val(),
                 infinity: $('[name=count]:checked').val()
             }, function(data){
+
                 if (data.length != 0) {
+                    m = 'Не заполнены:\n';
                     for (var v in data) {
-                        alert(data[v]);
+                        m += data[v]+"\n";
                     }
+                    $.jGrowl(m, {theme: 'red',sticky: true});
                 } else {
                     $('#btnCancel').click();
                     loadPeriodic();
@@ -124,28 +117,29 @@ $(document).ready(function() {
     }
 
     function clearForm() {
-        $('#title,#amount,#date,#comment,#category,#type,#account,#repeat,#counts').val('');
-        $('#infinity').click();
+
     }
 
     function fillForm(id) {
-        $('#id').val(pobj[id]['id']);
-        $('#title').val(pobj[id]['title']);
-        $('#amount').val(pobj[id]['amount']);
-        $('#date').val(pobj[id]['date']);
-        $('#comment').val(pobj[id]['comment']);
-        $('#category').val(pobj[id]['category']);
-        $('#type').val(pobj[id]['type']);
-        $('#account').val(pobj[id]['account']);
-        $('#repeat').val(pobj[id]['repeat']);
-        $('#counts').val(pobj[id]['counts']);
-        if (pobj[id]['infinity'] == 0) {
-            $('#infinity').click();
-        } else {
-            $('#count').click();
+        $('#cal_key').val(pobj[id]['id']);
+        $('#cal_title').val(pobj[id]['title']);
+        $('#cal_amount').val(pobj[id]['amount']);
+        $('#cal_date').val(pobj[id]['date']);
+        $('#cal_comment').val(pobj[id]['comment']);
+        $('#cal_category').val(pobj[id]['category']);
+        if (pobj[id]['repeat'] > 0){
+            $('.rep_type').removeAttr('checked');
+            if (pobj[id]['infinity'] == 1) {
+                $('.rep_type[value=1]').attr('checked','checked');
+            } else if (pobj[id]['end'] != '00.00.0000') {
+                $('.rep_type[value=2]').attr('checked','checked');
+            } else {
+                $('.rep_type[value=3]').attr('checked','checked');
+            }
         }
-        $('#add_form div.form_block').show();
-        $(document).scrollTop(300);
+        $('#cal_account').val(pobj[id]['account']);
+        $('#cal_repeat').val(pobj[id]['repeat']).change();
+        $('#cal_count').val(pobj[id]['counts']);
     }
 
     function checkForm() {

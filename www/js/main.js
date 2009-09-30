@@ -582,10 +582,6 @@ $("strong:contains('Имущество')").qtip({
             tags      : $('#op_tags').val()
             
         }, function(data){
-            for (var v in data) {
-                //FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                alert('Ошибка в ' + v);
-            }
             // В случае успешного добавления, закрываем диалог и обновляем календарь
             if (data.length == 0) {
                 op_clearForm();
@@ -593,9 +589,9 @@ $("strong:contains('Имущество')").qtip({
             } else {
                 e = '';
                 for (var v in data) {
-                    e += v;
+                    e += data[v]+"\n";
                 }
-                $.jGrowl("Ошибки при сохранении операции: " + e, {theme: 'green', stick: true});
+                $.jGrowl("Ошибки при сохранении : " + e, {theme: 'red', stick: true});
             }
         }, 'json');
         return true;
@@ -607,7 +603,7 @@ $("strong:contains('Имущество')").qtip({
     function op_validateForm() {
         $error = '';
         if (isNaN(parseFloat($('#op_amount').val()))){
-            alert('Вы ввели неверное значение в поле "сумма"!');
+            $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;
         }
 
@@ -801,6 +797,11 @@ $("strong:contains('Имущество')").qtip({
             if ($('#cal_mainselect .act').attr('id')=='periodic') {
                 href = '/periodic/add/';
             }
+            if ( $('.rep_type[checked]').val() == 2 ) {
+                infinity = 1;
+            } else {
+                infinity = 0;
+            }
             $.post( href, {
                 //id :        $('#op_dialog_event #op_'+dt+'id').val(),
                 key:        $('#op_dialog_event #cal_key').attr('value'),
@@ -812,7 +813,7 @@ $("strong:contains('Имущество')").qtip({
                 repeat:     $('#op_dialog_event #cal_repeat option:selected').attr('value'),
                 count:      $('#op_dialog_event #cal_count').attr('value'),
                 comment:    $('#op_dialog_event #cal_comment').attr('value'),
-                infinity:   $('#op_dialog_event #cal_infinity').attr('value'),
+                infinity:   infinity,
                 amount:     $('#op_dialog_event #cal_amount').val(),
                 category:   $('#op_dialog_event #cal_category').val(),
                 type:       $('#op_dialog_event #cal_type').val(),
@@ -825,16 +826,18 @@ $("strong:contains('Имущество')").qtip({
                 fri:        $('.week #fri').attr('checked') ? 1 : 0,
                 sat:        $('.week #sat').attr('checked') ? 1 : 0,
                 sun:        $('.week #sun').attr('checked') ? 1 : 0
-                }, function(data){
-                for (var v in data) {
-                    /*
-                     *@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-                    */
-                    alert('Ошибка в ' + data[v]);
-                }
+            }, function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     $('#op_dialog_event').dialog('close');
+                    $.jGrowl("Данные сохранены", {theme: 'green'});
+                    
+                } else {
+                    e = '';
+                    for (var v in data) {
+                        e += data[v]+"\n";
+                    }
+                    $.jGrowl("Ошибки при сохранении : \n" + e, {theme: 'red', stick: true});
                 }
             }, 'json');
         }
@@ -846,8 +849,7 @@ $("strong:contains('Имущество')").qtip({
             $('#op_pcounts').Attr('disable','disable')
         })
 
-        function add2call()
-        {
+        function add2call() {
             $('#cal_amount').keyup(function(e){
                 FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
             });
@@ -869,6 +871,9 @@ $("strong:contains('Имущество')").qtip({
                 $('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
                 $('.repeat .rep_type:checked').closest('div').find('input,select').removeAttr('disabled');
             })
+            $('#cal_type').change(function(){
+               toggleVisibleCategory('cal_category', $('option[selected]',this).val());
+            });
             $('#op_dialog_event div.line').hide();
             $('#op_dialog_event div.line').hide();
             $('#op_dialog_event .event').show();

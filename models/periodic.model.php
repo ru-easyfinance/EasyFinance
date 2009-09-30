@@ -39,7 +39,7 @@ class Periodic_Model
     {
         $sql = "SELECT id, category, account, drain, title, DATE_FORMAT(date,'%d.%m.%Y') AS `date`,
                     `amount`, type_repeat AS `repeat`, count_repeat AS `counts`, `comment`,
-                    `infinity` FROM periodic  WHERE user_id = ?";
+                    `infinity`, DATE_FORMAT(last_date,'%d.%m.%Y') AS end FROM periodic  WHERE user_id = ?";
         $array = $this->db->select($sql, Core::getInstance()->user->getId());
         $ret = array();
         foreach ($array as $val) {
@@ -55,6 +55,7 @@ class Periodic_Model
                 'type'      => $type,
                 'title'     => $val['title'],
                 'date'      => $val['date'],
+                'end'       => $val['end'],
                 'amount'    => $val['amount'],
                 'repeat'    => $val['repeat'],
                 'counts'    => $val['counts'],
@@ -159,6 +160,20 @@ class Periodic_Model
         return $array;
     }
 
+    /**
+     * Добавляет события рег.транзакций в календарь
+     * @param <type> $id
+     * @param <type> $amount
+     * @param <type> $comment
+     * @param <type> $counts
+     * @param <type> $date
+     * @param <type> $infinity
+     * @param <type> $repeat
+     * @param <type> $title
+     * @param <type> $drain
+     * @param <type> $category
+     * @return <type>
+     */
     private function addEvents($id, $amount, $comment, $counts, $date, $infinity, $repeat, $title, $drain, $category) {
         // Если у нас есть повторения события, то добавляем и их тоже
         if ($repeat == 1) {
