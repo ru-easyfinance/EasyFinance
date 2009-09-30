@@ -333,10 +333,10 @@ class User
     {
         $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY cnt DESC";
         $array = $this->db->select($sql, $this->getId());
-        $this->user_tags = array();
-        foreach ($array as $v) {
-            $this->user_tags[$v['name']] = $v['cnt'];
-        }
+        $this->user_tags = $array;
+//        foreach ($array as $v) {
+//            $this->user_tags[$v['name']] = $v['cnt'];
+//        }
     }
 
     /**
@@ -395,7 +395,10 @@ class User
         if ($cloud) {
             return $this->user_tags;
         } else {
-            return array_keys($this->user_tags);
+            foreach ($this->user_tags as $v) {
+                $user_tags[$v['name']] = $v['cnt'];
+            }
+            return array_keys($user_tags);
         }
     }
 
