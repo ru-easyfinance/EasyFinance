@@ -60,7 +60,7 @@ $(document).ready(function()
      */
     function list()
     {
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];/*  //@todo Жуткий масив привязки типов к группам */
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var spec_th = [ '',
                     '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
@@ -188,7 +188,7 @@ $(document).ready(function()
                     }
                     
                 },
-                'text'//@todo заменить на ясон; требует изменения модели и контроллера
+                'text'/* /@todo заменить на ясон; требует изменения модели и контроллера*/
             );
         }
     }
@@ -223,9 +223,6 @@ $(document).ready(function()
         changeTypeAccount($('#type_account').val());
         $('#blockCreateAccounts').show();
         $('#blockCreateAccounts').val('');  
-        //$('#total_balance').enable();
-        //alert('4235');
-
     }
     /**
      * функция - пережиток прошлого;
@@ -421,7 +418,7 @@ $(document).ready(function()
     });
     $('tr.item').live('mouseover',
         function(){
-            var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];//@todo Жуткий масив привязки типов к группам
+            var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];/*/@todo Жуткий масив привязки типов к группам*/
             var spec_th = [ [],
                         ['<th>% годовых</th>',
                             '<th>Доходность, % годовых</th>'],

@@ -40,7 +40,7 @@ class Report_Controller extends Template_Controller
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
 
         $this->tpl->append('js','jquery/ui.core.js');
-        //$this->tpl->append('js','ofc/swfobject.js');
+        $this->tpl->append('js','ofc/swfobject.js');
        
 
         // Виды и названия отчетов

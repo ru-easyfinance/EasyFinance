@@ -18,16 +18,12 @@ $(document).ready(function() {
     // Bind
     $('#btn_Save').click(function(){
         saveOperation();
-        /*fillForm(operationList[$(this).closest('tr').attr('value')]);
-        alert('12');
-            $(this).closest('form').attr('action','/operation/add/');
-            $('#date').datepicker('setDate', new Date() );*/
     })
     $('#btn_ReloadData').click(function(){loadOperationList();});
     //$('#category').autocomplete();
     $('#amount,#currency').change(function(){
         if ($('#type').val() == 2) {
-            //@TODO Дописать округление
+            /*//@TODO Дописать округление*/
             var result = Math.round($('#amount').val() / $('#currency').val());
             if (!isNaN(result) && result != 'Infinity') {
                 $("#convertSumCurrency").html("конвертация: "+result);
@@ -62,9 +58,11 @@ $(document).ready(function() {
         if ($(this).parent().attr('class') == 'edit') {
             fillForm(operationList[$(this).closest('tr').attr('value')]);
             $('form').attr('action','/operation/edit/');
-        } else if($(this).parent().attr('class') == 'del') {
+        }
+        else if($(this).parent().attr('class') == 'del') {
             deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
-        } else if($(this).parent().attr('class') == 'add') {
+        }
+        else if($(this).parent().attr('class') == 'add') {
             fillForm(operationList[$(this).closest('tr').attr('value')]);
             $(this).closest('form').attr('action','/operation/add/');
             $('#date').datepicker('setDate', new Date() );
@@ -216,11 +214,6 @@ $(document).ready(function() {
         if (!validateForm()){
             return false;
         }
-        /*alert('2');
-        catlast = $('#op_category').val();
-        datelast = $('#op_date').val();
-        alert (catlast);
-        alert (datelast);*/
         
         $.post(($('form').attr('action')), {
             id        : $('#id').val(),
@@ -237,7 +230,7 @@ $(document).ready(function() {
             tags      : $('#op_tags').val()
         }, function(data){
             for (var v in data) {
-                //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                /*//@FIXME Дописать обработку ошибок и подсветку полей с ошибками*/
                 alert('Ошибка в ' + v);
             }
             // В случае успешного добавления, закрываем диалог и обновляем календарь
@@ -325,7 +318,7 @@ $(document).ready(function() {
      * @return void
      */
     function changeAccountForTransfer() {
-        //@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах
+        /*//@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах */
         if ($('#type :selected').val() == 2 &&
             $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
                 $('#operationTransferCurrency').show();
