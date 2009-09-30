@@ -1385,120 +1385,15 @@ $('li#c2').click(function(){a_list()})
 
 
     $('#footer .addmessage').click(
-        function(e){
-            $('#footer #popupreport').show().css({top : '30%',position:'fixed',left:'15%'});
-            $.post(
-                '/feedback/r_list/',
-                {},
-                function (data) {
-                    arr={9:29,
-                        10:30,
-                        11:28,
-                        12:31,
-                        13:27,
-                        14:1,
-                        15:2,
-                        16:3,
-                        17:4,
-                        18:5,
-                        19:6,
-                        20:7,
-                        21:8,
-                        22:9,
-                        23:10,
-                        24:11,
-                        25:12,
-                        26:13,
-                        27:14,
-                        28:15,
-                        29:16,
-                        30:17,
-                        31:18,
-                        32:19,
-                        33:20,
-                        34:21,
-                        35:22,
-                        36:23,
-                        37:24,
-                        38:25,
-                        39:26,
-                        43:32,
-                        41:33,
-                        42:34,
-                        44:35,
-                        45:36,
-                        46:37,
-                        47:38
-                    };
-                    str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг * </th>';
-                    for (i=0; i<5; i++)
-                    {
-                        if (data[i])
-                        {
-                                if (data[0]['uid']==data[i]['user_name'])
-                                    c=' class="act" ';
-                                else
-                                    c='';
-                                str = str + '<tr'+c+'><td>' +
-                                        'тестировщик '+arr[data[i]['user_name']]  + '</td><td class="link">' +
-                                        data[i]['SUM(rating)'] + '</td></tr>';
-                                    //alert(data[i]['SUM(rating)'])
-                                    data[i]['user_name'] = arr[data[i]['user_name']];
-                        }
-                    }
-                    r_list = data;
-
-                    str = str + '</table>';
-                    $('#footer #rating').html(str);                   
-                },
-                'json'
-            );
-            return false;
+        function(){
+            $('#footer #popupreport').css({top : '30%',position:'fixed',left:'0px'}).toggle();
         });
-
-        //лист тестеров
-        $('#footer .rating_list').click(
-            function(){
-                str = '<table><th>Имя тестировщика </th><th class="link"> Рейтинг * </th>';
-                for (key in r_list)
-                {
-                    if (r_list[0]['uid']==r_list[key]['user_name'])
-                        c=' class="act" ';
-                    else
-                        c='';
-                    str = str + '<tr'+c+'><td>' +
-                         'тестировщик' + r_list[key]['user_name'] + '</td><td class="link">' +
-                         r_list[key]['SUM(rating)'] + '</td></tr>';
-                }
-
-                str = str + '</table>';
-
-                $('#dialog_rating').html(str);
-                $('#dialog_rating').dialog('open');
-                
-                
-            });
-
-      $("#dialog_rating").dialog('open').dialog({
-        //bgiframe: true,
-        autoOpen: false,
-        //width: 450,
-        //modal: true,
-        buttons: {
-            'Ок': function() {
-                $("#dialog_rating").dialog('close');
-            }
-        }//,
-        //close: function() {
-        //    $("#dialog_rating").dialog('close');
-        //}
-    });
 
     //отправление сообщения
     $('#footer .but').click(
         function (){
             var num_of_plugins = navigator.plugins.length;
-            str='';
+            var str='';
             for (var i=0; i < num_of_plugins; i++) {
                 str = str+"[" + navigator.plugins[i].name + ";" + navigator.plugins[i].filename + "]";
             }
