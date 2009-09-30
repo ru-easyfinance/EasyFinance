@@ -1052,48 +1052,57 @@ $('li#c2').click(function(){a_list()})
         if (!data){
             data = {};
         }
-                //len = data.length;
+        var i = 0;
+        var total = 0;
+        var str = '';
+        var key;
+        var s = '';
+        for (key in data )
+        {
+            i = g_types[data[key]['type']];
+            str = '<li><a>';
+            str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
+            str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
+            str = str + '<span>'+data[key]['name']+'</span>';
+            str = str + '<b>'+formatCurrency(data[key]['total_balance']);
+            str = str + data[key]['cur']+ '</b>'+'</a></li>';
+            summ[i] = summ[i]+data[key]['def_cur'];
+            if (!val[data[key]['cur']]) {
+                val[data[key]['cur']]=0;
+            }
+            val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
+                + parseFloat(data[key]['total_balance']);
 
-                //$('#operation_list').empty();
-                for (key in data )
-                {
-                    i = g_types[data[key]['type']];
-                    str = '<li><a>';
-                    str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
-                    str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-                    str = str + '<span>'+data[key]['name']+'</span>';
-                    str = str + '<b>'+formatCurrency(data[key]['total_balance']);
-                    str = str + data[key]['cur']+ '</b>'+'</a></li>';
-                    summ[i] = summ[i]+data[key]['def_cur'];
-                    if (!val[data[key]['cur']]) {
-                        val[data[key]['cur']]=0;
-                    }
-                    val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                        + parseFloat(data[key]['total_balance']);
-                    
-                    arr[i] = arr[i]+str;
-                }
-                total = 0;
-                for(var key in arr)
-                {
-                    total = total+(parseInt(summ[key]*100))/100;
-                    s='<ul>'+arr[key]+'</ul>';
-                    if (key>=0 && key <=6)
-                        $('.accounts #'+key).html(s);
-                    if (s!='<ul></ul>')
-                        $('.accounts #'+key).show().prev().show();
-                    else
-                        $('.accounts #'+key).hide().prev().hide();
-                }
-                /////////////////////формирование итогового поля//////////////////////
-                str = '<ul>';
-                for(key in val)
-                {
-                    str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
-                }
-                str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+key+'</div></li>';//@todo
-                str = str + '</ul>';
-                 $('.accounts #l_amount').html(str);
+            arr[i] = arr[i]+str;
+        }
+        total = 0;
+        for(key in arr)
+        {
+            total = total+(parseInt(summ[key]*100))/100;
+            s='<ul>'+arr[key]+'</ul>';
+            if (key>=0 && key <=6)
+                $('.accounts #'+key).html(s);
+            if (s!='<ul></ul>')
+                $('.accounts #'+key).show().prev().show();
+            else
+                $('.accounts #'+key).hide().prev().hide();
+        }
+        /////////////////////формирование итогового поля//////////////////////
+        str = '<ul>';
+        for(key in res['currency'])
+            break;
+        var c_key = res['currency'][key];
+        i = 0
+        for(key in val)
+        {
+            if(!i)
+                c_key = key;
+            i++;
+            str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
+        }
+        str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';//@todo
+        str = str + '</ul>';
+         $('.accounts #l_amount').html(str);
     }
 
        $('.accounts .add').click(function(){
