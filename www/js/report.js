@@ -208,7 +208,7 @@ function ShowIncome(){
         $('.operation_list').jScrollPane();
             //var qwe = document.getElementsByName('chart');
             var tmp = findSWF('chart');
-            x = tmp.load(JSON.stringify(data));
+             tmp.load(JSON.stringify(data));
                 //BaseReport();
 
     },'json');

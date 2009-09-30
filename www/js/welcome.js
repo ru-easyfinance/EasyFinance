@@ -98,7 +98,32 @@ if (window.location.hash == '#activate')
     $.jGrowl('Ваш аккаунт успешно активирован.', {theme: 'green'});
 }
 
+//функция выводит окошко предлагающее обновить explorer
+function DropThisShirt(){
+    //alert("Выкиньте свой браузер на помойку!!!");
+    $('.w_dialog').show();
+}
+function detectIE6(){
+  var browser = navigator.appName;
+  var b_version = navigator.appVersion;
+  var version = parseFloat(b_version);
+  if ((browser == "Microsoft Internet Explorer") && (version <= 6)){
+    return true;
+  }else{
+    return false;
+  }
+}
 
+//var ua = navigator.userAgent.toLowerCase();
+//if  (ua.indexOf("msie") != -1)
+if (detectIE6())
+    DropThisShirt();
+
+    //alert("Выкиньте свой браузер на помойку!!!");
+
+$('.link.close').click(function(){
+            $('.w_dialog').hide();
+        });
 });
 
 

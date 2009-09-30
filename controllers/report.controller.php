@@ -47,7 +47,7 @@ class Report_Controller extends Template_Controller
         $this->reports = array(
             'graph_profit' => 'Доходы',
             'graph_loss' => 'Расходы',
-            'graph_profit_loss' => 'Сравнение расходов и доходов',
+            'graph_profit_loss' => 'Сравнение расходов и доходов',//*/
             'txt_profit' => 'Детальные доходы',
             'txt_loss' => 'Детальные расходы',
             'txt_loss_difference' => 'Сравнение расходов за периоды',
