@@ -104,15 +104,16 @@ $(document).ready(function() {
             cat = data;
             $('div.categories div').remove('div');
             // Обновляем системные категории
-            sys = '';
-            for(var id in data.system) {
+            var sys = '';
+            var id,pr,ct;
+            for(id in data.system) {
                 sys += '<option value="'+data.system[id]['id']+'">'+data.system[id]['name']+'</option>';
             }$('#catsys').empty().append(sys);
 
             // Обновляем список категорий
-            m='<option value=""> --- </option>';p=[];
+            var m='<option value=""> --- </option>',p=[];
             //$('.categories #table').append('<table>');
-            for(var id in data.user) {
+            for(id in data.user) {
                 // Если это родительская категория
                 if (data.user[id]['parent'] == 0) {
                     m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
