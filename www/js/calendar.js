@@ -5,11 +5,6 @@ $(document).ready(function() {
     var m = d.getMonth();
     var event_list;
 
-    $.fullCalendar.monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-    $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
-    $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
-    $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-
     /**
      * Очищаем форму
      */
@@ -175,17 +170,6 @@ $(document).ready(function() {
     // Hooks
     $('#repeat').change(function(){
         $('#tr_count').show();
-/*
-        // Если указано повторять каждый: день, неделю, месяц, год
-        if ($(this).val() == 1 || $(this).val() == 7 || $(this).val() == 30 || $(this).val() == 365) {
-            $('#tr_count').show();
-        // Если повторять не нужно
-        } else if ($(this).val() == 0) {
-            $('#tr_count').hide();
-        } else{
-            $('#tr_count').hide();
-        }
-*/
     });
     $('.rep_type').click(function(){
         if ($(this).val() == 1) {
@@ -202,9 +186,44 @@ $(document).ready(function() {
             $('#date_end').removeAttr('disabled');
         }
     });
+
+
+    /**
+     * Загружает месяц
+     */
+    function loadMonth(view, month, year) {
+        if (view != null) {
+            year  = view['options']['year'];
+            month = view['options']['month'];
+            monthTitle = view['options']['monthNames'][view['options']['month']] + ' ' + year;
+        } else {
+            //alert($.fullCalendar.monthNames);
+        }
+        $('#datepicker').datepicker('setDate' , new Date(year, month-1));
+        $("a.ui-datepicker-prev,a.ui-datepicker-next",'div.ui-datepicker-header').hide();
+        $('li.y_prev a').text(year-1);
+        $('li.y_next a').text(year+1);
+        if (month == 11) {
+            $('li.m_next a').text(view['options']['monthNames'][0]);
+        } else {
+            $('li.m_next a').text(view['options']['monthNames'][month+1]);
+        }
+        if (month == 0) {
+            $('li.m_prev a').text(view['options']['monthNames'][11]);
+        } else {
+            $('li.m_prev a').text(view['options']['monthNames'][month-1]);
+        }
+        $('li.cur').text(monthTitle);
+    }
+
     $('#calendar').fullCalendar({
-        weekStart: 1,
+        header: false,
+        firstDay: 1,
         draggable: false,
+        monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+        monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'],
+        dayNames: ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],
+        dayNamesShort: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
         year: y,
         month: m,
         fixedWeeks: false,
@@ -214,22 +233,8 @@ $(document).ready(function() {
         buttons: false,
         showTime: 'guess',
         timeFormat: "G:i",
-        monthDisplay: function(year, month, monthTitle) {
-            $('#datepicker').datepicker('setDate' , new Date(year, month-1));
-            $("a.ui-datepicker-prev,a.ui-datepicker-next",'div.ui-datepicker-header').hide();
-            $('li.y_prev a').text(year-1);
-            $('li.y_next a').text(year+1);
-            if (month == 11) {
-                $('li.m_next a').text($.fullCalendar.monthNames[0]);
-            } else {
-                $('li.m_next a').text($.fullCalendar.monthNames[month+1]);
-            }
-            if (month == 0) {
-                $('li.m_prev a').text($.fullCalendar.monthNames[11]);
-            } else {
-                $('li.m_prev a').text($.fullCalendar.monthNames[month-1]);
-            }
-            $('li.cur').text(monthTitle);
+        viewDisplay: function(view) {
+            loadMonth(view);
         },
         dayClick: function(dayDate) {
             $('#op_addtocalendar_but').click();
@@ -368,31 +373,39 @@ $(document).ready(function() {
                 
             }
         },
-    //eventMouseover, eventMouseout: function(calEvent, jsEvent)
-    eventRender: function(calEvent, element){
-        element.attr('title', calEvent.comment);
-    },
-//    eventDragStart, eventDragStop: function(calEvent, jsEvent, ui)
-//    eventDrop: function(calEvent, dayDelta, jsEvent, ui),
-//    resize: function() { alert ('resize');}
-    loading: function(isLoading) {
-        if (!isLoading) {
-            //$('#cal_events').empty();
+        eventRender: function(calEvent, element){
+            element.attr('title', calEvent.comment);
         }
-    }
     });
     $('.full-calendar-buttons .today, .prev-month, .prev-year, .next-month, .next-year').addClass('ui-fullcalendar-button ui-button ui-state-default ui-corner-all');
-    $('li.m_prev').click(function(){$('#calendar').fullCalendar('prevMonth')});
-    $('li.m_next').click(function(){$('#calendar').fullCalendar('nextMonth')});
-    $('li.y_prev').click(function(){$('#calendar').fullCalendar('prevYear')});
-    $('li.y_next').click(function(){$('#calendar').fullCalendar('nextYear')});
-    $('li.cur').click(function(){$('#calendar').fullCalendar('today')});
+    $('li.m_prev').click(function(){
+        loadMonth(null, month-1, year);
+        $('#calendar').fullCalendar('prev');
+    });
+    $('li.m_next').click(function(){
+        loadMonth(null, month+1, year);
+        $('#calendar').fullCalendar('next');
+        
+    });
+    $('li.y_prev').click(function(){
+        $('#calendar').fullCalendar('incrementDate',year-1);
+        loadMonth(null, month, year-1);
+    });
+    $('li.y_next').click(function(){
+        loadMonth(null, month, year+1);
+        $('#calendar').fullCalendar('incrementDate',year+1);
+    });
+
+    $('li.cur').click(function(){
+        var d = new Date();
+        loadMonth(null, d.getMonth(), d.getFullYear());
+        $('#calendar').fullCalendar('today');
+    });
 
     $('#ui-datepicker-div').datepicker('setDate');
 
     $('#calendar .full-calendar-month-wrap').addClass('ui-corner-bottom');
     $("#dialog_event").dialog({
-        bgiframe: true,
         autoOpen: false,
         width: 450,
         modal: true,

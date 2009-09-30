@@ -331,7 +331,7 @@ class User
      */
     public function initUserTags()
     {
-        $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY COUNT(name) DESC";
+        $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY cnt DESC";
         $array = $this->db->select($sql, $this->getId());
         $this->user_tags = array();
         foreach ($array as $v) {

@@ -180,33 +180,16 @@ $(document).ready(function(){
                 account  : $('#account').attr('value'),
                 visible  : $('#visible:checked').length
             }, function(data){
-//                for (var v in data) {
-//                    //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
-//                    alert('Ошибка в ' + v);
-//                }
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
-                if (data.length == 0) {
+//                if (data.length == 0) {
                     $('#tpopup').dialog('close');
                     $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
                     loadTargets(data);
-                } else {
-                    for (var v in data) {
-                        alert('Ошибка в ' + v);
-                    }
-                }
-//                s = '<div class="object"><div class="ban"></div>'
-//                    +'<div class="descr">';
-//                    s += ($('#photo').attr('value'))? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/i/fintarget1.jpg" alt="" />';
-//                        s += '<a href="#">'+$('#name').attr('value')+'</a>'+$('#comment').attr('value')
-//						+'</div><div class="indicator_block"><div class="money">'
-//						+$('#tg_amount').attr('value')+' руб.<br /><span>'
-//                        +'0 руб.</span></div><div class="indicator">'
-//                        +'<div style="width:0%;"><span>0'
-//                        +'%</span></div></div></div><div class="date">Целевая дата: '
-//                        +$('#end').attr('value')+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
-//                        +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
-//
-//                $('div.financobject_block').append(s);
+//                } else {
+//                    for (var v in data) {
+//                        alert('Ошибка в ' + v);
+//                    }
+//                }
                 if ($('#visible:checked').length == 1) {
                     loadPopular();
                 }
@@ -239,7 +222,7 @@ $(document).ready(function(){
         }, 'json');
     }
     
-    //loadPopular();
+    loadPopular();
     ////////////////////////////////////////////////hash api
     s = location.hash;
     if (s=='#add') {
