@@ -795,8 +795,6 @@ $("strong:contains('Имущество')").qtip({
             add2call();
         });
             function ac_save() {
-
-            }
             /*
              *@TODO Проверить вводимые значения ui-tabs-selected
              */
@@ -929,7 +927,7 @@ $("strong:contains('Имущество')").qtip({
             
         }
 
-    //}
+    }
     if(inarray(Current_module, Connected_functional.menu)){
         $('.listing').hide();
         $('.navigation  li ul').hide()
@@ -939,7 +937,7 @@ $("strong:contains('Имущество')").qtip({
             $(this).closest('li').addClass('act');
             $('.navigation  li ul').hide()
             $('.navigation li.act ul').show()
-    })};
+    });
 
 /**
  * Загружаем теги для левой панели
@@ -1181,8 +1179,7 @@ $('li#c2').click(function(){a_list()})
 //calendar
     $('.calendar_block .calendar').datepicker();
 //flash
-    /*data = res['flash'];
-
+    data = res['flash'];
             name = (!data['title'])?'':['title'];
             //end = data['value']*3/data[1][i]['color'] ;
             value = data['value'] ;
@@ -1313,7 +1310,7 @@ $('li#c2').click(function(){a_list()})
             }
             return false;
         })
-    //}
+    }
 
 
     // Кнопка сворачивания / разворачивания
