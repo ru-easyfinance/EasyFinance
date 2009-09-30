@@ -71,7 +71,7 @@ class User
     public function __construct()
     {
         // Если соединение пользователя защищено, то пробуем авторизироваться
-        if ($_SERVER['SERVER_PORT'] == 443) {
+        //if ($_SERVER['SERVER_PORT'] == 443) {
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME])) {
                 if (isset($_COOKIE['PHPSESSID'])) {
@@ -93,11 +93,10 @@ class User
                 $this->initUser($array[0], $array[1]);
             }
         // иначе, переходим в защищённое соединение, и снова пробуем авторизироваться
-        } else {
-            header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            exit;
-        }
-
+//        } else {
+//            header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+//            exit;
+//        }
     }
 
     /**
@@ -121,6 +120,7 @@ class User
      */
     public function initUser($login, $pass)
     {
+        session_start();
         if (is_null(Core::getInstance()->db)) {
             Core::getInstance()->initDB();
         }
@@ -150,7 +150,6 @@ class User
             return false;
         }
 
-        session_start();
         // Если у нас подключен профиль пользователя
         if ($this->props['user_type'] == 0) {
             if (!$this->init($this->getId())) {

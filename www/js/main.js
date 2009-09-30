@@ -1514,19 +1514,21 @@ $('li#c2').click(function(){a_list()})
     );
     
 ///////////////////////////////////////////login/////////////////////////
-
-        if (pathName=='/login/')
+        if (pathName=='/login/' && window.location.protocol=='https:') {
             $('#login').show();
+        }
 
         $('#show_login').click(function(){
-            //if (window.location.protocol!='https:')
-                //window.location.href='https://hm/#login';
-            $('#login').show();
-        //return false;
-        })
+            if (window.location.protocol!='https:') {
+                window.location.href='https://'+window.location.hostname+'/login/';
+            } else {
+                $('#login').show();
+            }
+            return false;
+        });
         $('#login .close').click(function(){
             $('#login').hide();
-        })
+        });
     //}
     //});
 
