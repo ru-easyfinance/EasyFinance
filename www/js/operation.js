@@ -170,21 +170,10 @@ $(document).ready(function() {
                     $('.tags_could').dialog("close");
                 });
         // Загружаем теги
-        $.get('/tags/getCloudTags/', '', function(data) {
-            str = '<ul>';
-            for (key in data)
-            {
-                k = data[key]['COUNT(name)']/data[0]['COUNT(name)'];
-                n = Math.floor(k*5);
-                str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
-            }
-            $('.tags_could').html(str+'</ul>');
-            
-            $('.tags_could li').hide();
 
             $('.operation_list').jScrollPane();
 
-        }, 'json');
+        
 
 
 
