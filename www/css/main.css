@@ -716,7 +716,7 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 .event_form .line div{position : relative;margin-top :10px ;left :125px}
 .event_form .rep_type{left:10px; position: absolute;width:auto}
 .event_form .repeat input,.event_form .repeat select {width:175px}
-
+.event_form .repeat input.rep_type{width:auto;left : 90px;}
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.buttons_block li { float: left; margin-right: 13px; height: 40px; background: url('/img/i/buttons.png') no-repeat 0 0; }
