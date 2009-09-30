@@ -34,7 +34,9 @@ $(document).ready(function()
         update_list();
         })
 
-
+    $('#starter_balance').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        });
     /**
      * Переводит произвольную строку в вещественное число
      * Пример: фы1в31ф3в1в.ф3ю.132вы переведёт в 13131.3132
