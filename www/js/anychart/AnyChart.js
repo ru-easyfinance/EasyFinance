@@ -18,7 +18,7 @@ AnyChart.platform.isWin = tmpUp ? /win/.test(tmpUp) : /win/.test(tmpUa);
 AnyChart.platform.isMac = !AnyChart.platform.isWin && (tmpUp ? /mac/.test(tmpUp) : /mac/.test(tmpUa));
 AnyChart.platform.hasDom = AnyChart.utils.hasProp(document.getElementById) && AnyChart.utils.hasProp(document.getElementsByTagName) && AnyChart.utils.hasProp(document.createElement);
 AnyChart.platform.webKit = /webkit/.test(tmpUa) ? parseFloat(tmpUa.replace(/^.*webkit\/(\d+(\.\d+)?).*$/, "$1")) : false;
-AnyChart.platform.isIE = ! +"\v1";
+//AnyChart.platform.isIE = ! +"\v1";
 AnyChart.platform.isFirefox = /firefox/.test(tmpUa);
 
 AnyChart.platform.protocol = location.protocol == "https:" ? "https:" : "http:";
