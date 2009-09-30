@@ -1,16 +1,24 @@
-$(document).ready(function(){
-    $('.add2 span').live('click',
-    function(){
-        add_target()
-    });
-$('li.del').live('click',
-    function(){
-        del_target($(this).closest('div.object2'))
-    });
-$('li.edit').live('click',
-    function(){
-        edit_target($(this).closest('div.object2').attr('id'))
-    });
+/** $Id: main.js 627 2009-09-30 07:04:37Z rewle $ */
+$(document).ready( function(){
+
+// # BIND
+$('.add2 span').live('click', function(){
+    document.location = '/targets/#add';
+});
+$('li.del').live('click', function(){
+    target = $(this).closest('div.object2');
+    if (confirm('Вы уверены что хотите удалить данную Финансовую цель?')) {
+        $.post( '/targets/del/', {
+                id: target.attr('id')
+            }, function() {
+                target.remove();
+            }, 'json'
+         );
+    }
+});
+$('li.edit').live('click', function(){
+    document.location = '/targets/#edit/'+$(this).closest('div.object2').attr('id');
+});
 $.post(
     '/info/get_data/',
     {},
@@ -44,56 +52,50 @@ $.post(
         print_targets(0);
     },
     'json');
+    
+    /**
+     * Выводит список финансовых целей пользователя
+     */
+    function print_targets(count) {
+        data = res['user_targets']; str ='';
+        for (key in data) {
+            if(!data[key]['image']) {
+                data[key]['image']='/img/i/fintarget.jpg';
+            }
+            str += "<div class='object2' id='"
+                + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
+                data[key]['image']+"' alt='' /><a>" +
+                data[key]['title']+'</a><div class="indicator_block"><div class="money">' +
+                formatCurrency(data[key]['money']) + ' руб<br /><span> ' +
+                data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
+                data[key]['percent_done'] + '%;"><span>' +
+                data[key]['percent_done'] + '</span></div></div><div class="date"><span>Целевая дата:' +
+                data[key]['date_end'] + '</span>' +
+                "</div><ul><li class='edit'>редактировать</li><li class='del'>удалить</li></ul></div></div></div>";
+        }
+        str += '<div class="add2"><span>Добавить финансовую цель</span></div>';
+        $('.financobject_block').html(str);
+    }
+
+    /**
+     * Форматирует валюту
+     * @param num float Сумма, число
+     * @return string
+     */
+     function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
+    }
 })
 
-///////////////////////////////targets
-function print_targets(count)
-{
-    $.post(
-        '/targets/user_list/',
-        {count : count},
-        function(data){
-            str='';
-            for (key in data)
-            {
-                if(!data[key]['image'])
-                    data[key]['image']='/img/i/fintarget.jpg';
-                
-                str = str + "<div class='object2' id='"+
-                    data[key]['id'] + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
-                    data[key]['image']+"' alt='' /><a>" +
-                    data[key]['title']+'</a><div class="indicator_block"><div class="money">' +
-                    formatCurrency(data[key]['amount']) + ' руб<br /><span> ' +
-                    data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
-                    data[key]['percent_done'] + '%;"><span>' +
-                    data[key]['percent_done'] + '</span></div></div><div class="date"><span>Целевая дата:' +
-                    data[key]['end'] + '</span>' +
-                    "</div><ul><li class='edit'>редактировать</li><li class='del'>удалить</li></ul></div></div></div>";
-            }
-            str = str + '<div class="add2"><span>Добавить финансовую цель</span></div>';
-            $('.financobject_block').html(str);
-        },
-        'json'
-    );
-}
-function add_target()
-{
-    document.location = '/targets/#add' ;//@todo :(( неполучается наладить((
-}
-function edit_target(target)
-{
-    document.location = '/targets/#edit/'+target ;//@todo :(( неполучается наладить((
-}
-function del_target(target)
-{
-    if (!confirm('Вы уверены что хотите удалить данную Финансовую цель?'))
-        return false;
-    $.post(
-        '/targets/del/',
-        {id: target.attr('id')},
-        function(){
-            target.remove();
-        },
-        'json'
-     );
-}
