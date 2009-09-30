@@ -28,8 +28,7 @@ class Profile_Controller extends Template_Controller
         $this->tpl = Core::getInstance()->tpl;
         $this->model = new Profile_Model();
         $this->tpl->assign('name_page', 'profile/profile');
-        $this->tpl->append('js','profile/functions.js');
-        $this->tpl->append('js','profile/main.js');
+
     }
 
     function index()

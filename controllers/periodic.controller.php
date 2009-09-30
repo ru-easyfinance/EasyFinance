@@ -36,17 +36,11 @@ class Periodic_Controller extends Template_Controller
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
         $this->tpl->append('css','jquery/jquery.calculator.css');
         $this->tpl->append('css','jquery/south-street/ui.datepicker.css');
-        $this->tpl->append('js','jquery/ui.core.js');
-        $this->tpl->append('js','jquery/ui.datepicker.js');
-        $this->tpl->append('js','jquery/i18n/jquery-ui-i18n.js');
-        $this->tpl->append('js','jquery/jquery.calculator.min.js');
-        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
-        $this->tpl->append('js','jquery/tinysort.js');
 
 
         $this->tpl->assign('name_page', 'periodic/periodic');
         $this->tpl->append('css','jquery/south-street/ui.all.css');
-        $this->tpl->append('js','periodic.js');
+        
 
 
 

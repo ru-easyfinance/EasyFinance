@@ -32,7 +32,7 @@ class Mail_Controller extends Template_Controller
     function index()
     {
         $this->tpl->assign('name_page', 'mail/mail');
-        $this->tpl->append('js','mail.js');
+        
         $this->model->index();
         //die();
     }

@@ -21,6 +21,12 @@ class Core
     public static $db = null;
 
     /**
+     * Массив зависимостей от загружаемых скриптов от подключаемых модулей
+     * @var array
+     */
+    public static $js = array();
+
+    /**
      * Ссылка на экземпляр Smarty
      * @var Smarty
      */
@@ -54,6 +60,13 @@ class Core
      * @var array mixed
      */
     public static $errors = array();
+
+    /**
+     * Хранит массив с текущим путём
+     * @var array
+     * @example array('accounts','edit','14')
+     */
+    public static $url = array();
 
     /**
      * Возвращает ссылку на себя
@@ -135,7 +148,7 @@ class Core
     public function parseUrl()
     {
         $args   = explode('/',$_SERVER['REQUEST_URI']);
-
+        
         $module = array_shift($args);
         if (empty($module)) {
             $module = array_shift($args);
@@ -145,19 +158,24 @@ class Core
         } elseif (substr($module,0, 7) == '?XDEBUG') { //@XXX Грязный хак, потом можно убрать
             $module = DEFAULT_MODULE;
         }
+        
 
         // Смотрим разрешения на использование модуля
         if (!$this->isAllowedModule($module)) {
-			header("Location: /login/");
-			exit;
+            header("Location: /login/");
+            exit;
         }
-        $module .= '_Controller';
-
+        
         $action = array_shift($args);
         if(!$action) {
             $action = 'index';
         }
 
+        Core::getInstance()->url[] = $module;
+        Core::getInstance()->url[] = $action;
+        //array_push(Core::getInstance()->$url, $args); //@FIXME
+
+        $module .= '_Controller';
         $m = new $module();
         $m->$action($args);
     }

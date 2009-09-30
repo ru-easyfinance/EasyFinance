@@ -31,8 +31,6 @@ class Admin_Controller extends Template_Controller
 
         $this->tpl->assign('name_page', 'admin/admin');
 
-        $this->tpl->append('js', 'jquery/jquery.js');
-        $this->tpl->append('js', 'admin.js');
     }
 	
 	/**

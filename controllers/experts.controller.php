@@ -43,10 +43,7 @@ class Experts_Controller extends Template_Controller
         $this->tpl->assign('desktop',($this->model->get_desktop()));//main div class
         $js_list = $this->model->js_list();//array js with indeficators;
 
-        foreach ($js_list as $key=>$val)
-        {
-            $this->tpl->append('js',"experts/$val.js");
-        }
+
 
     }
 //////////////////////////////////experts///////////////////////////////////////

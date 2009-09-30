@@ -22,8 +22,7 @@ class Registration_Controller extends Template_Controller {
         $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
         
-        $tpl->append('js','jquery/jquery.validate.js');
-        $tpl->append('js','registration.js');
+        
 
         $tpl->assign('name_page', 'registration');
         $tpl->assign('no_menu', '1');

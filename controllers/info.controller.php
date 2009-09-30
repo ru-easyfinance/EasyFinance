@@ -55,8 +55,7 @@ class Info_Controller extends Template_Controller
         $targets = new Targets_Model();
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
 
-        $this->tpl->append('js','jquery/tinysort.js');
-        $this->tpl->append('js','info/functions.js');
+        
         //$this->tpl->append('js','info/view.js');
     }
 

@@ -29,7 +29,7 @@ class Category_Controller extends Template_Controller
 
         $this->tpl->assign('name_page', 'category/category');
         $this->model = new Category_Model();
-        $this->tpl->append('js','category.js');
+        
     }
 
     /**

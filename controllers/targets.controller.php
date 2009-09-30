@@ -35,15 +35,7 @@ class Targets_Controller extends Template_Controller
         $this->tpl->append('css','jquery/south-street/ui.dialog.css');
         $this->tpl->append('css','jquery/south-street/ui.all.css');
 
-        $this->tpl->append('js','jquery/ui.core.js');
-        $this->tpl->append('js','jquery/ui.resizable.js');
-        $this->tpl->append('js','jquery/ui.draggable.js');
-        $this->tpl->append('js','jquery/ui.dialog.js');
-        $this->tpl->append('js','jquery/ui.datepicker.js');
-        $this->tpl->append('js','jquery/i18n/ui.datepicker-ru.js');
-        $this->tpl->append('js','jquery/jquery.calculator.min.js');
-        $this->tpl->append('js','jquery/jquery.calculator-ru.js');
-        $this->tpl->append('js','targets.js');
+
     }
 
     /**

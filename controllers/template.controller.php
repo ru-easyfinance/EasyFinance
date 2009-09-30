@@ -22,12 +22,30 @@ class Template_Controller {
             error_404();
         }
     }
+    
+    /**
+     * 
+     */
+    private function loadJS ()
+    {
+        $mdl = strtolower(Core::getInstance()->url[0]);
+        if (DEBUG) {
+            $sfx='.js';
+        } else {
+            $sfx='.min.js';
+        }
+        
+        foreach (Core::getInstance()->js[$mdl] as $v) {
+            Core::getInstance()->tpl->append('js', $v.$sfx);
+        }
+    }
 
     /**
      * При завершении работы, контроллера
      */
     function __destruct()
     {
+        $this->loadJS();
 //periodic	*[key]	id	ид			выводить за сегодня и завтра
 //		title	название
 //		date	дата
