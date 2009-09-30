@@ -151,6 +151,7 @@ $(document).ready(function() {
     }
 
     function ShowCompareIncome(){
+        $('#chart').empty();
         l = $.get('/report/getData/',{
             report: $('#report :selected').attr('id'),
             dateFrom: $('#dateFrom').val(),
@@ -181,6 +182,7 @@ $(document).ready(function() {
     }
 
     function ShowIncome(){
+        $('#chart').empty();
         l = $.get('/report/getData/',{
             report: $('#report :selected').attr('id'),
             dateFrom: $('#dateFrom').val(),
