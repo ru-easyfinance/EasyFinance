@@ -21,9 +21,6 @@ class Registration_Controller extends Template_Controller {
         //header('Location: /'); exit;
         $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
-        
-        
-
         $tpl->assign('name_page', 'registration');
         $tpl->assign('no_menu', '1');
 
