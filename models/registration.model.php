@@ -89,7 +89,7 @@ class Registration_Model
 
             $reg_href = 'https://'.URL_ROOT."registration/activate/".$reg_id;
             $body = "<html><head><title>
-                Подтверждение регистрации на сайте домашней бухгалтерии Home-Money.ru
+                Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru
                 </title></head>
                 <body><p>Здравствуйте, {$register['name']}!</p>
                 <p>Ваш e-mail был указан при регистрации в системе.<br/>
