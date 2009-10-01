@@ -1427,11 +1427,15 @@ $('li#c2').click(function(){a_list()})
             $('#login').show();
         }
 
-        $('#show_login').click(function(){
-            if (window.location.protocol!='https:') {
-                window.location.href='https://easyfinance.ru/login/';
-            } else {
-                $('#login').show();
+        $('#show_login').click(function()
+        {
+            if (window.location.protocol!='https:')
+            {
+            	window.location.href='https://easyfinance.ru/login/';
+            }
+            else
+            {
+                	$('#login').show();
             }
             return false;
         });
@@ -1461,15 +1465,4 @@ $('li#c2').click(function(){a_list()})
         num.substring(num.length-(4*i+3));
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
-
-	//Google Analytics
-	if(document.location.hostname == 'easyfinance.ru')
-	{
-		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-
-		var pageTracker = _gat._getTracker("UA-10398211-2");
-		pageTracker._initData();
-		pageTracker._ trackPageview();
-	}
 })
