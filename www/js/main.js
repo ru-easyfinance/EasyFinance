@@ -1422,8 +1422,14 @@ $('li#c2').click(function(){a_list()})
         }
     );
     
-///////////////////////////////////////////login/////////////////////////
+	/*
+	*Открытие окна для авторизации. 
+	*
+	*@todo Заменить на адекватную авторизацию в отдельной странице.
+	*/
+	
         if (pathName=='/login/' && window.location.protocol=='https:') {
+        	
             $('#login').show();
         }
 
@@ -1431,7 +1437,7 @@ $('li#c2').click(function(){a_list()})
         {
             if (window.location.protocol!='https:')
             {
-            	window.location.href='https://easyfinance.ru/login/';
+            	window.location.href='https://' + window.location.host + '/login/';
             }
             else
             {
@@ -1439,6 +1445,7 @@ $('li#c2').click(function(){a_list()})
             }
             return false;
         });
+        
         $('#login .close').click(function(){
             $('#login').hide();
         });
