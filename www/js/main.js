@@ -165,7 +165,7 @@ $("#about").qtip({
    position: {target: 'mouse'},
    style: 'mystyle'
 })
-$("#flogin").qtip({
+$("#fnlogin").qtip({
    content: 'Имя Вашего аккаунта на сайте',
    show: {delay: 1000},
    position: {target: 'mouse'},
@@ -1429,7 +1429,7 @@ $('li#c2').click(function(){a_list()})
 
         $('#show_login').click(function(){
             if (window.location.protocol!='https:') {
-                window.location.href='https://'+window.location.hostname+'/login/';
+                window.location.href='https://easyfinance.ru/login/';
             } else {
                 $('#login').show();
             }
@@ -1462,8 +1462,14 @@ $('li#c2').click(function(){a_list()})
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
 
-//Google Analytics
-if(document.location.hostname == 'easyfinance.ru'){
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));try {var pageTracker = _gat._getTracker("UA-10398211-2");pageTracker._trackPageview();} catch(err) {}
-}
+	//Google Analytics
+	if(document.location.hostname == 'easyfinance.ru')
+	{
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+		var pageTracker = _gat._getTracker("UA-10398211-2");
+		pageTracker._initData();
+		pageTracker._ trackPageview();
+	}
 })
