@@ -41,7 +41,7 @@ class Feedback_Model
             $to      = 'max.kamashev@gmail.com, bashokov.ae@easyfinance.ru';
             $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
             $headers = "From: support@easyfinance.ru \r\nReply-To: support@easyfinance.ru \r\n";
-            mail($to, $subject, $msg, $headers);
+            mail($to, $subject, stripslashes($msg) . "\n\n" . var_export($param, true) , $headers);
         } else {
             exit;
         }
