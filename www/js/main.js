@@ -47,17 +47,9 @@ aPath=['//',
     '/template/']//данный контроллер можно использовать как системный))
 href = location.pathname;
 href = href.toLowerCase() + '/';
-b=0;
-var nhref=new String;
-for(i=0;i<href.length;i++)
-{
-    if (href[i] == '/')
-            b++;
-    nhref = nhref + href[i];
-    if(b == 2)
-        break;
-}
-var pathName = nhref;
+var b=0;
+var nhref=href.match(/\/[a-z]{0,}\//);
+var pathName = nhref[0];
 var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
