@@ -19,6 +19,11 @@ $(document).ready(function() {
     $('#btn_Save').click(function(){
         saveOperation();
     })
+
+    $('#op_account').change(function(){
+        $('#btn_ReloadData').click();
+    })
+
     $('#btn_ReloadData').click(function(){loadOperationList();});
     //$('#category').autocomplete();
     $('#amount,#currency').change(function(){
