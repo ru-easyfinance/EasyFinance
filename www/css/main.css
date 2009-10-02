@@ -1607,13 +1607,21 @@ ul.currency.all li a {
 }
 .formRegister input {
     padding: .1em;
-    width: 25em;
+    width: 23em;
     border: solid 1px #e3e3eb;
     border-top: solid 1px #aaadb4;
 }
-.formRegister select {
+
+.formRegister chek {
     padding: .1em;
-    width: 20em;
+    width: 10em;
+    border: solid 1px #e3e3eb;
+    border-top: solid 1px #aaadb4;
+}
+
+.formRegister input select {
+    padding: .1em;
+    width: 5em;
     border: solid 1px #e3e3eb;
     border-top: solid 1px #aaadb4;
 }

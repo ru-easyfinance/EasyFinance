@@ -49,6 +49,11 @@ class Profile_Model
 
     public function mainsettings($mod,$prop){
         $ret = array();
+        if ( $prop['help'] == 1 ){
+            setCookie("help", "124",0,"/"); //записываем в кук нужно ли выводить всплывающие подсказки
+        }else{
+            setCookie("help","",0,"/");
+        }
         switch($mod){
             case 'save':
                 $ident = $this->ident($prop['newpass']);

@@ -25,7 +25,13 @@ function user_info_save()
     if((($('input#newpass').val) != ($('input#newpass2').val))&($('input#newpass').val)) {
         return false;
     } else if (($('input#newpass').val) == ($('input#newpass2').val)) {
-        $.post('/profile/save_main_settings/', $('input'), function() {
+        $.post('/profile/save_main_settings/', {
+            help: ($('#help:checked').length == 1)? 1 : 0,
+            login: $('#login').val(),
+            pass: $('#pass').val(),
+            newpass: $('#newpass').val(),
+            mail: $('#mail').val()
+        }, function() {
             $.jGrowl("Личные данные сохранены", {theme: 'green'});
         }, 'json');
     }
