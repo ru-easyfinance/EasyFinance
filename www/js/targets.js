@@ -25,7 +25,7 @@ $(document).ready(function(){
 
     // Редактируем одну из наших целей
     $(".f_f_edit,div.descr a").live('click', function(){
-        f = $(this).closest('.object');
+        var f = $(this).closest('.object');
         clearForm();
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
@@ -49,13 +49,13 @@ $(document).ready(function(){
     });
 
     $('#targets_category').empty();
-    for (v in res['targets_category']) {
+    for (var v in res['targets_category']) {
         $('#targets_category').append('<option value="'+v+'">'+res['targets_category'][v]+'</option>');
     }
 
     // Удаляем цель
     $(".f_f_del").live('click', function(){
-        o = $(this).closest('.object');
+        var o = $(this).closest('.object');
         if (confirm("Вы уверены, что хотите удалить финансовую цель '"+$(this).closest('.object .descr a').text()+"'?")) {
             $.post('/targets/del/', {
                 id: o.attr('tid')
@@ -69,7 +69,7 @@ $(document).ready(function(){
 
     // Копируем
     $('.f_f_copy').live('click', function(){
-        f = $(this).closest('.object');
+        var f = $(this).closest('.object');
         clearForm();
         $('#type').val(f.attr('type'));
         $('#name').val(f.attr('name'));
@@ -119,7 +119,7 @@ $(document).ready(function(){
      * Показывает финцели пользователя
      */
     function loadTargets(data) {
-        s = '';
+        var s = '';
         for(v in data) {
             s += '<div class="object"><div class="ban"></div>'
                 +'<div class="descr">';
@@ -184,7 +184,7 @@ $(document).ready(function(){
 //                if (data.length == 0) {
                     $('#tpopup').dialog('close');
                     $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
-                    loadTargets(data);
+                    loadTargets(data['user_targets']);
 //                } else {
 //                    for (var v in data) {
 //                        alert('Ошибка в ' + v);
@@ -207,7 +207,7 @@ $(document).ready(function(){
             i = 0;
         }
         $.get('/targets/pop_list/'+i, '', function(data){
-            s = '';
+            var s = '',c;
             for(v in data.list) {
                 c = 1+parseInt(v);
                 s += '<li><img src="/img/i/fintarget.jpg" alt="" /><span class="num">'
