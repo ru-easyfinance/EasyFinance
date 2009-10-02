@@ -6,8 +6,6 @@
 * SVN $Id$
 */
 
-require_once dirname(__FILE__).'/version.php';
-
 /**
 * Реализация функции __autoload для всех классов
 * @param string $class_name Строка с названием класса
