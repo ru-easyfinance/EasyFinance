@@ -57,27 +57,27 @@ var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
 function FloatFormat(obj, in_string )
 {
     //'.'
-    str = in_string;
-    l = in_string.length;
-    rgx = /[0-9]/;
-    c=0;
-    p =1;
-    newstr ='';
-    k = 0;
-    for(a=1;a<=l;a++)
+    var l = in_string.length;
+    var rgx = /[0-9]/;
+    var c=0;
+    var p =1;
+    var newstr ='';
+    var i = 0;
+
+    for(var a=1;a<=l;a++)
     {
         i=l-a+1;
-        if (rgx.test(in_string[i]))
+        if (rgx.test(in_string.substr(i,1)))
         {
             if (c == 3)
             {
                 newstr = ' ' + newstr;
                 c = 0
             }
-            newstr =in_string[i]+newstr
+            newstr =in_string.substr(i,1)+newstr
             c++;
         }
-        if (in_string[i]=='.' || in_string[i]==',')
+        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==',')
         {
             if (p){
                 newstr = newstr.substr(0,2)
