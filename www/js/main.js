@@ -858,7 +858,7 @@ $('li#c2').click(function(){a_list()})
         str = '<ul>';
         for(key in res['currency'])
             break;
-        var c_key = res['currency'][key];
+        var c_key = res['currency'][key]['abbr']||'';
         i = 0
         for(key in val)
         {
