@@ -19,7 +19,7 @@ $(document).ready(function() {
         }
     }
 
-if($.cookie('help')){
+if(!$.cookie('help')){
 
  $("#review").qtip({
    content: 'Описание основных элементов и сервисов',
