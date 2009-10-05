@@ -38,7 +38,7 @@ class Tags_Model {
     /**
      * @return json 
      */
-    function edit($tag = '', $old_tag) {
+    function edit($tag = '', $old_tag = '') {
         if (empty($tag) || empty($old_tag)) {
             return false;
         } else {
@@ -59,15 +59,15 @@ class Tags_Model {
     function del($tag = '') {
         if (empty ($tag)) {
             return false;
-        } else {
-            $sql = "DELETE FROM tags WHERE name=? AND user_id=?";
-            $this->db->query($sql, $tag, Core::getInstance()->user->getId());
-            $sql = "UPDATE operation o SET tags = REPLACE(tags, ?, '') WHERE user_id=?";
-            $this->db->query($sql, $tag, Core::getInstance()->user->getId());
-            Core::getInstance()->user->initUserTags();
-            Core::getInstance()->user->save();
-            return Core::getInstance()->user->getUserTags();
         }
+        $sql = "DELETE FROM tags WHERE name=? AND user_id=?";
+        $this->db->query($sql, $tag, Core::getInstance()->user->getId());
+        $sql = "UPDATE operation o SET tags = REPLACE(tags, ?, '') WHERE user_id=?";
+        $this->db->query($sql, $tag, Core::getInstance()->user->getId());
+        Core::getInstance()->user->initUserTags();
+        Core::getInstance()->user->save();
+        return Core::getInstance()->user->getUserTags();
+        
     }
 
     /**

@@ -714,16 +714,15 @@ $(document).ready(function() {
  */
 function loadLPTags(){
     var data = res['tags'];
-    var str = '<div class="title">\n\
-                <h2>Теги</h2>\n\
-                <a title="Добавить" class="add">Добавить</a>\n\
-            </div>\n\
-            <ul>';
+    var str = '<div class="title"><h2>Теги</h2><a title="Добавить" class="add">Добавить</a></div><ul>';
     for (var key in data)
     {
         str = str + '<li><a>'+data[key]+'</a></li>';
+        
     }
-    $('.tags_list').html(str+'</ul>');
+    str += '</ul>';
+    $('.tags_list').empty().append(str);
+
 }
 loadLPTags();
 $('.tags_list li a').live('click', function(){
@@ -734,10 +733,9 @@ $('.tags_list li a').live('click', function(){
         minHeight: 50,
         buttons: {
             'Сохранить': function() {
-                if($('.edit_tag #tag').val()) {
                     $.post('/tags/edit/', {
-                        tag: $('.edit_tag #tag').val()||'',
-                        old_tag: $('.edit_tag #old_tag').val()||''
+                        tag: $('.edit_tag').find('#tag').val(),
+                        old_tag: $('.edit_tag #old_tag').val()
                     },function(data){
                         if (data) {
                             $.jGrowl('Тег успешно сохранён', {theme: 'green'});
@@ -751,28 +749,27 @@ $('.tags_list li a').live('click', function(){
                             $.jGrowl('Ошибка при сохранении тега', {theme: 'red'});
                         }
                     },'json');
-                }
             },
             'Удалить': function() {
                 if (confirm('Тег "'+$('.edit_tag #old_tag').val()+'" будет удалён. Удалить?')) {
+                    var tag = $('.edit_tag #old_tag').val();
                     $.post('/tags/del/', {
-                        tag: $('.edit_tag #old_tag').val()
-                    },function(data){
-                        if (data) {
-                            $.jGrowl('Тег удалён', {theme: 'green'});
-                            loadLPTags();
-                            $('.edit_tag #tag,.edit_tag #old_tag').val(0);
-                            res.tags = null;
-                            var tags = {tags: data}
-                            res = $.extend(res, tags);
-                            
-                            $('.edit_tag').dialog('close');
-                            
-                            
-                        //} else {
-                            //$.jGrowl('Ошибка при удалении тега', {theme: 'red'});
-                        }
-                    },'json');
+                        tag: tag
+                        },function(data){
+                            if (!data) {
+                                data={};
+                            }
+                                $.jGrowl('Тег удалён', {theme: 'green'});
+
+                                $('.edit_tag #tag,.edit_tag #old_tag').val(0);
+                                delete res.tags;
+                                var tags = {tags: data}
+                                res = $.extend(res, tags);
+                                loadLPTags();
+                                $('.edit_tag').dialog('close');
+                        },
+                        'json'
+                    );
                 }
             }
     }})
@@ -800,7 +797,6 @@ $('.tags_list .add').live('click', function(){
                         } else {
                             $.jGrowl('Ошибка при добавлении тега', {theme: 'red'});
                         }
-                        $('.tags_list ul').append('<li><a>'+$('input#tag').val()+'</a></li>')
                         $('.add_tag').dialog('close');
                     },'json');
                     $('.add_tag').dialog('close');
