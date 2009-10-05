@@ -143,8 +143,9 @@ $(document).ready(function() {
         });
 
         if (ltags) {
-            str = '<ul>';
-            for (key in data) {
+            var str = '<ul>';
+                var n,k;
+            for (var key in data) {
                 k = data[key]['cnt']/data[0]['cnt'];
                 n = Math.floor(k*5);
                 str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
@@ -310,7 +311,7 @@ $(document).ready(function() {
             var k,n;
             var data = res.cloud;
             var str = '<ul>';
-            m = -1;
+            var m = -1;
             for (var key in data) {
                 if (m == -1) m = data[key]['cnt'];
                 k = data[key]['cnt']/m;
@@ -350,7 +351,7 @@ $(document).ready(function() {
                 op_clearForm();
                 $.jGrowl("Операция успешно сохранена", {theme: 'green'});
             } else {
-                e = '';
+                var e = '';
                 for (var v in data) {
                     e += data[v]+"\n";
                 }
@@ -375,9 +376,9 @@ $(document).ready(function() {
              *@FIXME Написать обновление финцелей
              */
 
-            amount = parseFloat($("#op_target option:selected").attr("amount"));
+            var amount = parseFloat($("#op_target option:selected").attr("amount"));
             $("#op_amount").text(amount);
-            amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
+            var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
             $("#op_amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
@@ -468,8 +469,9 @@ $(document).ready(function() {
         //Перевод на финансовую цель
         } else if ($('#op_type').val() == 4) {
             $('#op_target').remove('option :not(:first)');
-            o = '';
-            for (v in res['user_targets']) {
+            var o = '';
+            var t;
+            for (var v in res['user_targets']) {
                 t = res['user_targets'][v];
                 o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
                     '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
@@ -560,12 +562,13 @@ $(document).ready(function() {
             if ($('#cal_mainselect .act').attr('id')=='periodic') {
                 href = '/periodic/add/';
             }
+            var infinity;
             if ( $('.rep_type[checked]').val() == 2 ) {
                 infinity = 1;
             } else {
                 infinity = 0;
             }
-            d = {
+            var d = {
                 //id :        $('#op_dialog_event #op_'+dt+'id').val(),
                 key:        $('#op_dialog_event #cal_key').attr('value'),
                 title:      $('#op_dialog_event #cal_title').attr('value'),
@@ -597,7 +600,7 @@ $(document).ready(function() {
                     $.jGrowl("Данные сохранены", {theme: 'green'});
                      $(window).trigger("saveSuccess", [d]);
                 } else {
-                    e = '';
+                    var e = '';
                     for (var v in data) {
                         e += data[v]+"\n";
                     }
@@ -710,13 +713,13 @@ $(document).ready(function() {
  * Загружаем теги для левой панели
  */
 function loadLPTags(){
-    data = res['tags'];
-    str = '<div class="title">\n\
+    var data = res['tags'];
+    var str = '<div class="title">\n\
                 <h2>Теги</h2>\n\
                 <a title="Добавить" class="add">Добавить</a>\n\
             </div>\n\
             <ul>';
-    for (key in data)
+    for (var key in data)
     {
         str = str + '<li><a>'+data[key]+'</a></li>';
     }
@@ -733,17 +736,17 @@ $('.tags_list li a').live('click', function(){
             'Сохранить': function() {
                 if($('.edit_tag #tag').val()) {
                     $.post('/tags/edit/', {
-                        tag: $('.edit_tag #tag').val(),
-                        old_tag: $('.edit_tag #old_tag').val()
+                        tag: $('.edit_tag #tag').val()||'',
+                        old_tag: $('.edit_tag #old_tag').val()||''
                     },function(data){
                         if (data) {
-                            delete res['tags'];
-                            tags = {tags: data}
+                            $.jGrowl('Тег успешно сохранён', {theme: 'green'});
+                            res.tags = null;
+                            var tags = {tags: data}
                             res = $.extend(res, tags);
                             loadLPTags();
                             $('.edit_tag').dialog('close');
                             $('.edit_tag #tag,.edit_tag #old_tag').val('');
-                            $.jGrowl('Тег успешно сохранён', {theme: 'green'});
                         } else {
                             $.jGrowl('Ошибка при сохранении тега', {theme: 'red'});
                         }
@@ -756,15 +759,18 @@ $('.tags_list li a').live('click', function(){
                         tag: $('.edit_tag #old_tag').val()
                     },function(data){
                         if (data) {
-                            delete res['tags'];
-                            tags = {tags: data}
-                            res = $.extend(res, tags);
-                            loadLPTags();
-                            $('.edit_tag').dialog('close');
-                            $('.edit_tag #tag,.edit_tag #old_tag').val('');
                             $.jGrowl('Тег удалён', {theme: 'green'});
-                        } else {
-                            $.jGrowl('Ошибка при удалении тега', {theme: 'red'});
+                            loadLPTags();
+                            $('.edit_tag #tag,.edit_tag #old_tag').val(0);
+                            res.tags = null;
+                            var tags = {tags: data}
+                            res = $.extend(res, tags);
+                            
+                            $('.edit_tag').dialog('close');
+                            
+                            
+                        //} else {
+                            //$.jGrowl('Ошибка при удалении тега', {theme: 'red'});
                         }
                     },'json');
                 }
@@ -773,7 +779,7 @@ $('.tags_list li a').live('click', function(){
 })
 
 $('.tags_list .add').live('click', function(){
-    add = $('.add_tag');
+    var add = $('.add_tag');
     $(add).show().dialog('open').dialog({
         width: 260,
         minHeight: 50,
@@ -785,7 +791,7 @@ $('.tags_list .add').live('click', function(){
                     }, function(data){
                         if (data) {
                             delete res['tags'];
-                            tags = {tags: data}
+                            var tags = {tags: data}
                             res = $.extend(res, tags);
                             loadLPTags();
                             $('.add_tag').dialog('close');

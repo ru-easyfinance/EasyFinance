@@ -2,86 +2,87 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
     <head>
-<title>EasyFinance.ru</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="Keywords" content="" />
-    <meta name="Description" content="" />
-    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
-    <!-- Подключениее стилей и скриптов -->
-    {foreach from=$css item=i}
-    <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  link="/css/{$i}?r={$revision}"/>
-    {/foreach}
+        <title>EasyFinance.ru</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="Keywords" content="" />
+        <meta name="Description" content="" />
+        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+        <!-- Подключениее стилей и скриптов -->
+        {foreach from=$css item=i}
+            <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  link="/css/{$i}?r={$revision}"/>
+        {/foreach}
 
-    {foreach from=$js item=i}
-    <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
-    {/foreach}
-    <script type="text/javascript">
-        var res = {$res};
-    </script>
+        {foreach from=$js item=i}
+            <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
+        {/foreach}
+        <script type="text/javascript">
+            var res = {$res};
+        </script>
 
     <!-- /Подключениее стилей и скриптов -->
-</head>
-<body id="p_index">
-    <div id="container1">
-	<div id="menumain"  value="{$head_val}">
-            <ul class="menu1">
-            <li class="first act"><a href="/">Главная</a></li>
-			<li><a href="/review/" id="review">Обзор сервиса</a></li>
-			<li><a href="/feedback/" id="feed">Отзывы</a></li>
-			<li><a href="http://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блоги</a></li>
-            </ul>
-            <ul class="menu2">
-                {if $user_info.user_id <= 0}
-                    <li>Личный кабинет</li>
-                    <li>Настройки профиля</li>
-                    <li id="show_login"><a href="https://{$smarty.const.URL_ROOT}login/">Войти<img class="loginMenu" src="/img/i/login.gif" /></a></li>
-                {else}
-                    <li><a href="/info/">Личный кабинет</a></li>
-                    <li><a href="/profile/">Настройки профиля</a></li>
-                    <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
-                {/if}
+    </head>
+    <body id="p_index">
+        <div id="container1">
+            <div id="menumain"  value="{$head_val}">
+                <ul class="menu1">
+                    <li class="first act"><a href="/">Главная</a></li>
+                    <li><a href="/review/" id="review">Обзор сервиса</a></li>
+                    <li><a href="/feedback/" id="feed">Отзывы</a></li>
+                    <li><a href="http://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блоги</a></li>
+                </ul>
+                <ul class="menu2">
+                    {if $user_info.user_id <= 0}
+                        <li>Личный кабинет</li>
+                        <li>Настройки профиля</li>
+                        <li id="show_login"><a href="https://{$smarty.const.URL_ROOT}login/">Войти<img class="loginMenu" src="/img/i/login.gif" /></a></li>
+                    {else}
+                        <li><a href="/info/">Личный кабинет</a></li>
+                        <li><a href="/profile/">Настройки профиля</a></li>
+                        <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
+                    {/if}
                 
-            </ul>
-        </div>
+                </ul>
+            </div>
 <!-- верхнее меню -->
 <!--шапка-->
-	<div id="header">
-            <div class="logo">EasyFinance.ru</div>
-            <div class="slogan">Система управления личными финансам</div>
-	<!--авторизация-->
-        {if !isset($user_info)}
-            <div id="popupadd_login">
-                <div id="login" class="w_dialog" style="overflow: hidden; display: none; position: absolute; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 342px; top: 5px; left: 460px;">
-                    <div class="w_d_head"><div></div></div>
-                    <div class="w_d_body">
-                        <div class="link close"><div></div></div>
-                        <div class="inside">
-                            <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
-                                <div class="f_field">
-                                    <label for="flogin">логин:</label>
-                                    <input type="text" value="" name="login" id="flogin"/>
+            <div id="header">
+                <div class="logo">EasyFinance.ru</div>
+                <div class="slogan">Система управления личными финансам</div>
+<!--авторизация-->
+                {if !isset($user_info)}
+                    <div id="popupadd_login">
+                        <div id="login" class="w_dialog" style="overflow: hidden; display: none; position: absolute; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 342px; top: 5px; left: 460px;">
+                            <div class="w_d_head"><div></div></div>
+                            <div class="w_d_body">
+                                <div class="link close"><div></div></div>
+                                <div class="inside">
+                                    <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
+                                        <div class="f_field">
+                                            <label for="flogin">логин:</label>
+                                            <input type="text" value="" name="login" id="flogin"/>
+                                        </div>
+                                        <div class="f_field">
+                                            <label for="password">пароль:</label>
+                                            <input type="password" value="" name="pass" id="pass"/>
+                                        </div>
+                                        <div class="f_field">
+                                            <label for="autoLogin">запомнить меня</label>
+                                            <input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" />
+                                        </div>
+                                        <div class="inlinebottom">
+                                            <ul>
+                                                <li><a href="/registration/">Регистрация</a> </li>
+                                            </ul>
+                                        </div>
+                                        <input type="submit" value="Войти" class="but"/>
+                                    </form>
                                 </div>
-                                <div class="f_field">
-                                    <label for="password">пароль:</label>
-                                    <input type="password" value="" name="pass" id="pass"/>
-                                </div>
-                                <div class="f_field">
-                                    <label for="autoLogin">запомнить меня</label>
-                                    <input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" />
-                                </div>
-                                <div class="inlinebottom">
-                                    <ul>
-                                        <li><a href="/registration/">Регистрация</a> </li>
-                                    </ul>
-                                </div>
-                                <input type="submit" value="Войти" class="but"/>
-                            </form>
+                            </div>
+                            <div class="w_d_foot"><div></div></div>
                         </div>
                     </div>
-                    <div class="w_d_foot"><div></div></div>
-                </div>
+                {/if}
+                {include file="head_adv.html"}
             </div>
-        {/if}
-        {include file="head_adv.html"}
-        </div>
+        
