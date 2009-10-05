@@ -18,22 +18,25 @@ $(document).ready(function() {
                    </tr>';//*/
             for (c in data){
                 if (c>0)
-                if (data[c].cat_name != data[c-1].cat_name) {
+                if (data[c].cat_name != data[c-1].cat_name && data[c].cat_name!=null) {
                     tr += "<tr>" + '<td class="summ"><span><b>'+data[c].cat_name+
                         '<span><b></td></tr>';
                 }
-                tr += "<tr>"
-                            + '<td>&nbsp;</td>'
-                            + '<td class="summ"><span>'+data[c].date+'</span></td>'
-                            + '<td class="light"><span>'+data[c].account_name+'</span></td>'
-                            + '<td class="big"><span>'+data[c].money+'</span></td>'
-                            + '</tr>';
+                if (data[c].account_name != null) {
+                    tr += "<tr>"
+                                + '<td>&nbsp;</td>'
+                                + '<td class="summ"><span>'+data[c].date+'</span></td>'
+                                + '<td class="light"><span>'+data[c].account_name+'</span></td>'
+                                + '<td class="big"><span>'+data[c].money+'</span></td>'
+                                + '</tr>';
+                }
             }
 
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
              $('#reports_list').append(tr);
+             $('.operation_list').jScrollPane();
         },'json');
 
     }
@@ -63,7 +66,7 @@ $(document).ready(function() {
                     tr += "<tr>" + '<td class="summ"><span><b>'+data[0].cat_name+
                         '<span><b></td></tr>';
                 }
-                if (data[c].cat_name != null){
+                if (data[c].cat_name != null && data[c].account_name != null){
                 tr += "<tr>"
                             + '<td>&nbsp;</td>'
                             + '<td class="repdate"><span>'+data[c].date+'</span></td>'
@@ -76,6 +79,7 @@ $(document).ready(function() {
                         $(this).remove();
                     });
             $('#reports_list').append(tr);
+            $('.operation_list').jScrollPane();
         },'json');
     }
 
@@ -125,7 +129,7 @@ $(document).ready(function() {
                     }
                 };
                 delta=sum2-sum1;
-               if (data[c].cat_name != null){
+               if (data[c].cat_name != null && data[c].account_name != null){
                 tr +=        '<tr><td ><span><b>'+data[c].cat_name+
                             '<span><b></td>'+
                             '<td class="repdate"><span>'+sum1+'</span></td>'
@@ -147,6 +151,7 @@ $(document).ready(function() {
                         $(this).remove();
                     });
             $('#reports_list').append(tr);
+            $('.operation_list').jScrollPane();
         },'json');
     }
 

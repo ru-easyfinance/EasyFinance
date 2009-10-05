@@ -4,6 +4,9 @@
     var datelast ;*/
 $(document).ready(function() {
 
+    $('#op_amount').removeAttr('disabled');
+    $('#op_comment').removeAttr('disabled');
+
     $('#op_addoperation_but').click();
     $('#op_btn_Save').click(function(){
         loadOperationList();
@@ -63,6 +66,13 @@ $(document).ready(function() {
     $('#operations_list a').live('click', function(){
         if ($(this).parent().attr('class') == 'edit') {
             fillForm(operationList[$(this).closest('tr').attr('value')]);
+            if ($('#op_comment').val() == "Начальный остаток"){
+                $('#op_amount').attr('disabled', 'disabled');
+                $('#op_comment').attr('disabled', 'disabled');
+            }else{
+                $('#op_amount').removeAttr('disabled');
+                $('#op_comment').removeAttr('disabled');
+            }
             $('form').attr('action','/operation/edit/');
         }
         else if($(this).parent().attr('class') == 'del') {

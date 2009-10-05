@@ -73,7 +73,7 @@ $(document).ready(function()
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
-        var div = "<div class='cont'>&nbsp;<ul style='z-index: 100'>\n\
+        var div = "<div class='cont'>&nbsp;<ul style='z-index: 1006'>\n\
                         <li class='edit' title='Редактировать'><a></a></li>\n\
                         <li class='del' title='Удалить'><a></a></li>\n\
                         <li class='add' title='Копировать'><a></a></li>\n\
@@ -182,7 +182,9 @@ $(document).ready(function()
                     });
                     $(document).scrollTop(300);
                     $('#type_account').val(account.type);
-                    $('#type_account').attr('disabled', 'disabled')
+
+                    $('#type_account').attr('disabled', 'disabled');
+
                     $('#account_form_fields table').attr('id',account.id);
                     $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+account.id+'" />');
                     if (flag)
