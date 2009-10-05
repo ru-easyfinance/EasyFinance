@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $('.steps').hide();
-})
+
+
 var msg1 = "А вы знаете, что ваш браузер Internet Explorer безнадёжно устарел?";
 var msg2 = "Для лучшего отображения нашего сайта, мы рекомендуем обновить браузер до самой новейшей версии или воспользоваться другим браузером. Список самых популярных веб-браузеров можно увидеть ниже. ";
 var msg3 = "Просто щёлкните на значке, что бы перейти к странице загрузки.";
@@ -185,5 +186,4 @@ _lit1ds.height = _lit2ds.height = _lit3ds.height = _lit4ds.height = _lit5ds.heig
 _lit1ds.lineHeight = _lit2ds.lineHeight = _lit3ds.lineHeight = _lit4ds.lineHeight = _lit5ds.lineHeight = "17px";
 _lit1ds.margin = _lit2ds.margin = _lit3ds.margin = _lit4ds.margin = _lit5ds.margin = "1px auto";
 _lit1ds.width = _lit2ds.width = _lit3ds.width = _lit4ds.width = _lit5ds.width = "118px";
-_lit1ds.textAlign = _lit2ds.textAlign = _lit3ds.textAlign = _lit4ds.textAlign = _lit5ds.textAlign = "center";
-
+_lit1ds.textAlign = _lit2ds.textAlign = _lit3ds.textAlign = _lit4ds.textAlign = _lit5ds.textAlign = "center";})
