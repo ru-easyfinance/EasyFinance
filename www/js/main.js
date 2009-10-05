@@ -813,7 +813,7 @@ $('.tags_list .add').live('click', function(){
 //accounts
 $('li#c2').click(function(){a_list()})
     function a_list(){
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];
+        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];
         /*
          *@todo Жуткий масив привязки типов к группам
          */

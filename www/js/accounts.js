@@ -2,6 +2,7 @@
 $(document).ready(function()
 {
     var accisvis = false; // характеризует активна ли панелька счетов
+    var isaccountediting = false; //характеризует редактируется ли акк или создаётся новый. true - редактируется.
     
     /**
      * переводит число типа 12341.34535 в 12 341.35
@@ -62,7 +63,7 @@ $(document).ready(function()
      */
     function list()
     {
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];/*  //@todo Жуткий масив привязки типов к группам */
+        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];/*  //@todo Жуткий масив привязки типов к группам */
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var spec_th = [ '',
                     '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
@@ -302,7 +303,12 @@ $(document).ready(function()
             data: $("#formAccount input,select,textarea"),
             success: function(data) {
                 var id = data;
-                $.jGrowl("Добавлен счёт", {theme: 'green'});
+                if (!isaccountediting){
+                    $.jGrowl("Добавлен счёт", {theme: 'green'});
+                }else{
+                    $.jGrowl("Cчёт изменён", {theme: 'green'});
+                    isaccountediting = false;
+                }
                 update_list({id: id,cur_id: cur_id});
                 
                 
@@ -323,6 +329,7 @@ $(document).ready(function()
             },
             function(data){
                 //$.jGrowl("Счёт Изменён", {theme: 'green'});
+                isaccountediting = true;
                 createNewAccount();
             },
             'text'
@@ -423,7 +430,7 @@ $(document).ready(function()
     });
     $('tr.item').live('mouseover',
         function(){
-            var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];/*/@todo Жуткий масив привязки типов к группам*/
+            var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];/*/@todo Жуткий масив привязки типов к группам*/
             var spec_th = [ [],
                         ['<th>% годовых</th>',
                             '<th>Доходность, % годовых</th>'],

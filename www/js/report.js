@@ -271,6 +271,7 @@ $(document).ready(function() {
                         $(this).remove();
                     });
             $('#reports_list').append(tr);
+            $('.operation_list').jScrollPane();
         },'json');
     }
 

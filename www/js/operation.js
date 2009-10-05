@@ -7,6 +7,7 @@ $(document).ready(function() {
     $('#op_addoperation_but').click();
     $('#op_btn_Save').click(function(){
         loadOperationList();
+        $('#btn_ReloadData').click();
         })
     var operationList;
     // Init

@@ -280,7 +280,9 @@ class Accounts_Model
         $this->db->query($sql, $id);
 
         $sql = "DELETE FROM accounts WHERE `account_id` = ? and `user_id` = ?;";
-        $this->db->query($sql, $id, $this->user_id);
+        $this->db->query($sql, $id, $this->user_id);//удаляем счёт.
+        $sql = "DELETE FROM operation WHERE `account_id` = ? and `user_id` = ?;;";
+        $this->db->query($sql, $id, $this->user_id);//удаляем операции со счётом.
         Core::getInstance()->user->initUserAccounts();
         Core::getInstance()->user->save();
         return true;
