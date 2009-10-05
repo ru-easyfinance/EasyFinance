@@ -835,12 +835,23 @@ $('li#c2').click(function(){a_list()})
             str = str + '<span>'+data[key]['name']+'</span>';
             str = str + '<b>'+formatCurrency(data[key]['total_balance']);
             str = str + data[key]['cur']+ '</b>'+'</a></li>';
-            summ[i] = summ[i]+data[key]['def_cur'];
+            if ( i!=2 ){
+                summ[i] = summ[i]+data[key]['def_cur'];
+            }else{
+                summ[i] = summ[i]-data[key]['def_cur'];
+            }
+
             if (!val[data[key]['cur']]) {
                 val[data[key]['cur']]=0;
             }
+            
+            if ( i!=2 ){
             val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
                 + parseFloat(data[key]['total_balance']);
+            }else{
+                 val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
+                - parseFloat(data[key]['total_balance']);
+            }
 
             arr[i] = arr[i]+str;
         }
