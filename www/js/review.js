@@ -58,8 +58,6 @@ $(document).ready(function() {
             for (var N=1; N<=10; N++)
             $('.w_dialog.mapContent'+N).hide();
         });
-        <a href='http://www.microsoft.com/rus/windows/internet-explorer/'>http://www.microsoft.com/rus/windows/internet-explorer/</a>
-//У Вас установлена старая старая версия браузера!<br>Для стабильной работы Системы личного управления финансами<br> рекомендуем Вам обновить свой браузер
 });
 
 
