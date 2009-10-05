@@ -82,7 +82,9 @@ else
 	$tpl->append('js',  'main.js');
 }
 $tpl->append('js',  'jquery/jquery.cookie.js');
-
+if(IS_DEMO){
+    $tpl->append('js',  'demo_message.js');
+}
 
 $tpl->append('js',  'jquery/jquery.cookie.js');
 $tpl->append('js','helpers.js');
