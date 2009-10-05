@@ -8,36 +8,41 @@
  */
 
 // Path settings
-define('SYS_DIR_ROOT',    "/var/www/hm");
-define('SYS_DIR_LIBS',    SYS_DIR_ROOT."/core/");
-define('SYS_DIR_INC',     SYS_DIR_ROOT."/include/");
-define('SYS_DIR_MOD',     SYS_DIR_ROOT."/modules/");
-define('SYS_DIR_HTML',    SYS_DIR_ROOT."/templates/");
-define('SYS_DIR_CACHE',   SYS_DIR_ROOT."/cache/");
-define('UPLOAD_DIR',      SYS_DIR_ROOT."/upload/");
+define('SYS_DIR_ROOT',	dirname(dirname(__FILE__)) );
+define('SYS_DIR_LIBS',		SYS_DIR_ROOT."/core/");
+define('SYS_DIR_INC',		SYS_DIR_ROOT."/include/");
+define('SYS_DIR_MOD',		SYS_DIR_ROOT."/modules/");
+define('SYS_DIR_HTML',	SYS_DIR_ROOT."/templates/");
+define('SYS_DIR_CACHE', 	"${project.basedir}/tmp");
+define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
+define('UPLOAD_DIR',		SYS_DIR_ROOT."/upload/");
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
 // Other
-define('URL_ROOT',        "hm/");
-define('IS_DEMO',         false);
-define('DEBUG',           true);
-//define('URL_ROOT',      "http://".$_SERVER['HTTP_HOST']);
-define('DEFAULT_MODULE', 'welcome');
-define('GUEST_MODULES', 'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
+define('URL_ROOT',		"${project.url.root}/");
+define('IS_DEMO',		${project.demo} );
+define('DEBUG',			${project.debug} );
+define('DEFAULT_MODULE',	'welcome');
+define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
 
 //COOKIE
-define('COOKIE_NAME',  'a');
-define('COOKIE_DOMEN', '.easyfinance.ru');
-define('COOKIE_PATH',  '/');
-define('COOKIE_HTTPS', true);
-define('COOKIE_EXPIRE', 1209600); // две недели
+define('COOKIE_NAME', 	"${project.cookie.name}" );
+define('COOKIE_DOMEN', 	${project.cookie.domain} );
+define('COOKIE_PATH',  	"${project.cookie.path}" );
+define('COOKIE_HTTPS', 	${project.cookie.https} );
+define('COOKIE_EXPIRE', 	${project.cookie.expire} ); // две недели
 
 //CRYPT
-define('CRYPT_KEY','mpnGA3cNNrgwGrU7er4ywLmd'); // 24 битный ключ
+define('CRYPT_KEY',		"${project.crypt.key}"); // 24 битный ключ
 
 // DB settings
-define('SYS_DB_HOST',   'localhost');
-define('SYS_DB_USER',   '');
-define('SYS_DB_PASS',   '');
-define('SYS_DB_BASE',   '');
+define('SYS_DB_HOST',		"${project.db.host}");
+define('SYS_DB_USER',		"${project.db.user}");
+define('SYS_DB_PASS',		"${project.db.pass}");
+define('SYS_DB_BASE',		"${project.db.base}");
+
+define('JS_MINIFY',		${project.jsmin.enabled} );
+define('CSS_MINIFY',		${project.cssmin.enabled} );
+
+define('REVISION', 		"${project.svn.revision}");

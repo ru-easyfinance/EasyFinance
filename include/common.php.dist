@@ -25,52 +25,72 @@ set_error_handler("UserErrorHandler");
 // Настраиваем смарти
 $tpl = new Smarty();
 
-$tpl->template_dir    =  SYS_DIR_ROOT.'/views';
-$tpl->compile_dir     =  SYS_DIR_ROOT.'/cache';
+$tpl->template_dir    =  SYS_DIR_ROOT . '/views';
+$tpl->compile_dir     =  TMP_DIR_SMARTY.'/cache';
 
 $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 $tpl->assign('revision',REVISION);
-$tpl->append('css', 'main.css');
+
 $tpl->append('js', 'jquery/jquery.min.js');
 
 ///временно<--
-$tpl->append('css', 'jquery/south-street/ui.all.css');
-$tpl->append('css', 'jquery/south-street/ui.dialog.css');
-$tpl->append('css', 'jquery/jquery.jgrowl.css');
-$tpl->append('css','jquery/jScrollPane.css');
-$tpl->append('css','jquery/jquery.calculator.css');
+if ( CSS_MINIFY )
+{
+	$tpl->append('css', 'global-min.css');
+}
+else
+{
+	$tpl->append('css', 'main.css');
+	
+	$tpl->append('css', 'jquery/south-street/ui.all.css');
+	$tpl->append('css', 'jquery/jquery.jgrowl.css');
+	$tpl->append('css', 'jquery/jScrollPane.css');
+	$tpl->append('css', 'jquery/jquery.calculator.css');
+	$tpl->append('css', 'jquery/fullcalendar.css');
+}
 
-$tpl->append('js',  'jquery/ui.core.js');
-$tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');
-$tpl->append('js',  'jquery/ui.resizable.js');
-$tpl->append('js',  'jquery/ui.draggable.js');
-$tpl->append('js',  'jquery/ui.dialog.js');
-$tpl->append('js',  'jquery/ui.datepicker.js');
-$tpl->append('js',  'jquery/jquery.qtip.js');
-$tpl->append('js',  'jquery/jquery.jgrowl.min.js');
-$tpl->append('js',  'jquery/jquery.calculator.js');
-$tpl->append('js',  'jquery/jquery.calculator-ru.js');
-$tpl->append('js',  'jquery/jquery.mousewheel.js');
-$tpl->append('js',  'jquery/jquery.em.js');
-$tpl->append('js',  'jquery/jScrollPane.js');
-$tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js');
-$tpl->append('js',  'jquery/jquery.timepicker-table.min.js');
-$tpl->append('js',  'jquery/ui.tabs.js');
-$tpl->append('js',  'jquery/i18n/ui.datepicker-ru.js');
-$tpl->append('js',  'jquery/jquery.validate.js');
-$tpl->append('js',  'jquery/tinysort.js');
-$tpl->append('js',  'jquery/fullcalendar.js');
-$tpl->append('js',  'anychart/AnyChart.js');
-$tpl->append('js',  'jquery/jquery.form.js');
+if( JS_MINIFY )
+{
+	$tpl->append('js',  'global-min.js');
+}
+else
+{
+	$tpl->append('js',  'jquery/ui.core.js');
+	$tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');
+	$tpl->append('js',  'jquery/ui.resizable.js');
+	$tpl->append('js',  'jquery/ui.draggable.js');
+	$tpl->append('js',  'jquery/ui.dialog.js');
+	$tpl->append('js',  'jquery/ui.datepicker.js');
+	$tpl->append('js',  'jquery/jquery.qtip.js');
+	$tpl->append('js',  'jquery/jquery.jgrowl.min.js');
+	$tpl->append('js',  'jquery/jquery.calculator.js');
+	$tpl->append('js',  'jquery/jquery.calculator-ru.js');
+	$tpl->append('js',  'jquery/jquery.mousewheel.js');
+	$tpl->append('js',  'jquery/jquery.em.js');
+	$tpl->append('js',  'jquery/jScrollPane.js');
+	$tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js');
+	$tpl->append('js',  'jquery/jquery.timepicker-table.min.js');
+	$tpl->append('js',  'jquery/ui.tabs.js');
+	$tpl->append('js',  'jquery/i18n/ui.datepicker-ru.js');
+	$tpl->append('js',  'jquery/jquery.validate.js');
+	$tpl->append('js',  'jquery/tinysort.js');
+	$tpl->append('js',  'jquery/fullcalendar.js');
+	$tpl->append('js',  'anychart/AnyChart.js');
+	$tpl->append('js',  'jquery/jquery.form.js');
+	$tpl->append('js',  'main.js');
+}
+
+
+$tpl->append('js',  'jquery/jquery.cookie.js');
+$tpl->append('js','helpers.js');
 
 /*$tpl->append('js','ofc/swfobject.js');
 $tpl->append('js','ofc/json2.js');
 $tpl->append('js','ofc/ofc.js');
 $tpl->append('js','ofc/open_flash_chart.js');*/
 ///-->
-$tpl->append('js','main.js');
 
 // Добавляем ссылки на БД, Смарти, Пользователя и Валюты - в наше ядро
 Core::getInstance()->tpl = $tpl;
