@@ -61,13 +61,13 @@ function currency()
 }
 function ucur_upd(list)
 {
-    str = "";
+    var str = "";
     //opt ="";
-    for (k in cur_ids)
+    for (var k in cur_ids)
     {
         cur_ids[k]=0;
     }
-    for(key in list)
+    for(var key in list)
     {
         cur_ids[key]=1;
         $('.col .all #'+key).remove();
@@ -159,7 +159,7 @@ $(document).ready(function(){
         user_cur_back();
     });
     $('.user li').live('click',function(){
-        if ($('.user li').length>1)
+        if (($('.user li').length>1)&&($(this).attr('id')!='1'))
         {
             var id = $(this).attr('id');
             //alert(u_cur_list[id]['charCode'])
