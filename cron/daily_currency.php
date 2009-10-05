@@ -30,6 +30,8 @@
     $date = date("d/m/Y");
     $link = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=".$date;
 
+    print "\n".$date;
+
     //Создаём ДОМ объект
     $dom = new DOMDocument('1.0', 'windows-1251');
     $dom->load($link);
@@ -38,7 +40,7 @@
     $date = str_replace('/', '.', $dom->getElementsByTagName('ValCurs')->item(0)->getAttribute('Date'));
     $date = formatRussianDate2MysqlDate($date);
 
-    print_r($result);
+    //print_r($result);
 
     //Если на эту дату уже существует, то прекращать выполнение скрипта
     if (trim($result[0]['currency_date']) === trim($date)) {
@@ -97,10 +99,10 @@
         }
         $sql .= "('{$id}','{$date}','{$sum}', '{$dir}', '0.0000', '0')";
     }
-    print_r($ar);
+    //print_r($ar);
     if (!empty ($sql)) {
         $sql = "INSERT INTO daily_currency VALUES ". $sql;
-        //$db->query($sql);
-        print ($sql);
+        $db->query($sql);
+	print " OK";
         //@TODO Записать файл
     }
