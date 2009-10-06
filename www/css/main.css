@@ -3,7 +3,7 @@ ul, dl, dd, dt { list-style:none; }
 
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
 
-input, select, textarea { font: 12px Arial, Tahoma, sans-serif; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
+input, select, textarea { font: 12px Arial, Tahoma, sans-serif; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; -moz-border-radius:5px; border:#CCCCCC solid 1px;}
 
 html, body { width:100%; height: 100%; }
 body { position: relative; font: 12px/16px Arial, Tahoma, sans-serif; color:#20201e; background: #f8fcf6; }
@@ -732,7 +732,7 @@ ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100p
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 70px }
 div.op_addoperation .op_line { position: relative;  color: #4c4c4c; //zoom: 1; }
 div.op_addoperation .op_line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-div.op_addoperation .op_line .op_f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
+div.op_addoperation .op_line .op_f_field { position: relative; float: left; margin-right: 80px; margin-bottom: 7px; }
 div.op_addoperation .op_line .op_f_field select { display: block; color: #20201E; }
 div.op_addoperation .op_line .op_f_field select#op_account {width: 150px;  overflow: hidden; }
 div.op_addoperation .op_line .op_f_field select#op_account option {width: 123px;}
@@ -821,6 +821,7 @@ div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px; /
 div.op_addoperation .op_line  .op_amount {float: left; margin-right: 170px; }
 
 div.op_addoperation .op_line .op_f_field input.op_inp, div.op_addoperation .op_line textarea { color: #20201E; width:350px}
+div.op_addoperation .op_line .op_f_field #op_date {width:auto;}
 div.op_addoperation .op_line label { display: block; margin-bottom: 2px;}
 div.op_addoperation .op_line textarea { width: 350px; //width: 489px; height: 96px; //height: 90px; }
 div.op_addoperation .op_but input { margin-right: 21px; margin-top:14px;}
@@ -900,7 +901,7 @@ div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background
 .operation_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list .sorting div{margin-bottom: 7px;}
 .operation_list .sorting .f_field { position: relative; float: left; margin-right: 51px; }
-.operation_list .sorting .f_field input {width: 90px}
+.operation_list .sorting .f_field input {width: 90px; margin-left:3px;}
 .operation_list .sorting  select { color: #20201E; width : 350px; }
 .operation_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
 
@@ -1008,8 +1009,9 @@ div.cont ul li.add a { width: 12px; }
 
 
 .calendar_block, .calculator_block { margin-bottom: 14px; }
+.calendar_block {border-bottom:#E5E5E5 solid 1px;}
 .calendar_block h2, .calculator_block h2 { margin: 0 0 11px 16px; font: 14px/16px Helvetica, Arial, Tahoma; color: #ec7b3d; }
-
+.calendar_block h2 {margin-bottom:0;}
 .calendar_block .calendar { margin: 0 auto; width: 168px;  overflow: hidden; border: 1px solid #e5e5e5; //zoom: 1;  }
 .calendar_block .calendar .days { width: 140px; margin: 0 auto; overflow: hidden; }
 .calendar_block .calendar .days div { width: 143px; padding: 2px 0 7px 0; font-size: 11px; //zoom: 1; }
@@ -1769,7 +1771,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th, .calendar_block .calendar {
     padding: .3em;
     color: #b4b4b4;
-    border-bottom: solid 1px #d9d9d9;
+    border:none;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th span, .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar th span{
     font-size: 110%;
@@ -1797,7 +1799,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .ui-dialog.ui-widget-content {
     background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
 }
-.ui-dialog.ui-widget-content .ui-resizable-nw {
+/*.ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
     left: 0;
     width: 9px;
@@ -1820,7 +1822,16 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     height: 9px;
     background: url('/img/i/jQuery/calendar/bg_ui-dialog_bottomleft.gif') no-repeat right bottom;
     border: none;
-}
+}*/
+
+.ui-resizable-n { cursor: n-resize; height: 21px; width: 100%; top: -21px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.head_c.png) repeat-x scroll left top; }
+.ui-resizable-s { cursor: s-resize; height: 30px; width: 100%; bottom: -30px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.foot_c.png) repeat-x scroll left bottom; }
+.ui-resizable-e { cursor: e-resize; width: 33px; right: -33px; top: 0px; height: 100%; background:transparent url(/img/i/dialog/wel.msg.body_r.png) repeat-y scroll right top; }
+.ui-resizable-w { cursor: w-resize; width: 24px; left: -24px; top: 0px; height: 100%; background:transparent url(/img/i/dialog/wel.msg.body_l.png) repeat-y scroll left top; }
+.ui-resizable-se { cursor: se-resize; width: 32px; height: 30px; right: -32px; bottom: -30px; background:transparent url(/img/i/dialog/wel.msg.foot_r.png) no-repeat scroll right bottom; }
+.ui-resizable-sw { cursor: sw-resize; width: 25px; height: 30px; left: -25px; bottom: -30px; background:transparent url(/img/i/dialog/wel.msg.foot_l.png) no-repeat scroll left bottom; }
+.ui-resizable-nw { cursor: nw-resize; width: 25px; height: 21px; left: -25px; top: -21px; background:transparent url(/img/i/dialog/wel.msg.head_l.png) repeat-x scroll left top; }
+.ui-resizable-ne { cursor: ne-resize; width: 32px; height: 21px; right: -32px; top: -21px; background:transparent url(/img/i/dialog/wel.msg.head_r.png) repeat-x scroll right top;}
 
 
 .ui-widget-overlay{background-color:#666666; opacity:0.5;}
@@ -1957,3 +1968,5 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .popup_map2 div.w_dialog div.w_d_head { background:transparent url(/img/i/jQuery/review/wel.msg.head.png) no-repeat scroll 0 0;height:20px;position:relative;width:400px; }
 .popup_map2  div.w_d_foot { background:transparent url(/img/i/jQuery/review/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:400px; }
 .popup_map2 .close { background:transparent url(/img/i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;right:5px;top:12px;width:25px;z-index:9999999; }
+
+@import izmeneniya.css

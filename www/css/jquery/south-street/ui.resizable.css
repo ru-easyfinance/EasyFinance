@@ -3,11 +3,20 @@
 .ui-resizable { position: relative;}
 .ui-resizable-handle { position: absolute;font-size: 0.1px;z-index: 99999; display: block;}
 .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
-.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0px; }
+/*.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0px; }
 .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0px; }
 .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0px; height: 100%; }
 .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0px; height: 100%; }
 .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
 .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
 .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
-.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}
+.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}*/
+
+.ui-resizable-n { cursor: n-resize; height: 21px; width: 100%; top: -21px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.head_c.png) repeat-x scroll left top; }
+.ui-resizable-s { cursor: s-resize; height: 30px; width: 100%; bottom: -30px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.foot_c.png) repeat-x scroll left bottom; }
+.ui-resizable-e { cursor: e-resize; width: 33px; right: -33px; top: 0px; height: 100%; background:transparent url(/img/i/dialog/wel.msg.body_r.png) repeat-y scroll right top; }
+.ui-resizable-w { cursor: w-resize; width: 24px; left: -24px; top: 0px; height: 100%; background:transparent url(/img/i/dialog/wel.msg.body_l.png) repeat-y scroll left top; }
+.ui-resizable-se { cursor: se-resize; width: 32px; height: 30px; right: -32px; bottom: -30px; background:transparent url(/img/i/dialog/wel.msg.foot_r.png) no-repeat scroll right bottom; }
+.ui-resizable-sw { cursor: sw-resize; width: 25px; height: 30px; left: -25px; bottom: -30px; background:transparent url(/img/i/dialog/wel.msg.foot_l.png) no-repeat scroll left bottom; }
+.ui-resizable-nw { cursor: nw-resize; width: 25px; height: 21px; left: -25px; top: -21px; background:transparent url(/img/i/dialog/wel.msg.head_l.png) repeat-x scroll left top; }
+.ui-resizable-ne { cursor: ne-resize; width: 32px; height: 21px; right: -32px; top: -21px; background:transparent url(/img/i/dialog/wel.msg.head_r.png) repeat-x scroll right top;}
