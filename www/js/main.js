@@ -551,6 +551,7 @@ $(document).ready(function() {
         ////////////////////////////////////add to calendar
         
         $('#op_addtocalendar_but').click(function(){
+            $('button#remove_event').remove();//@deprecate IE7 opera8 @todo delete when no use;
             add2call();
         });
 

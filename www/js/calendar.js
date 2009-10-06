@@ -244,21 +244,22 @@ $(document).ready(function() {
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
         events: function(start, end, calback) {
+            var s;
             if (start.getDate() > 1) {
                 s = new Date(start.getFullYear(), start.getMonth()+1, 1);
             } else {
                 s = new Date(start.getFullYear(), start.getMonth(), 1);
             }
-            e = new Date(s.getFullYear(), s.getMonth()+1, 1);
+            var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
             $.getJSON('/calendar/events/', {
                     start: start.getTime(),
                     end:   end.getTime()
                 },   function(result) {
                     // Заполняем список событий
                     $('#per_tabl tbody, #ev_tabl tbody').empty();
-                    n = new Date();
-                    
-                    for(v in result){
+                    var n = new Date();
+                    var l,t='';
+                    for(var v in result){
                         
                         l = result[v];
                         n.setTime(l.date*1000);
@@ -304,15 +305,16 @@ $(document).ready(function() {
                 //beforeOpenForm(calEvent);
                 //$('#dialog_event').dialog('open');
                 $('#op_addtocalendar_but').click();
-                
+                var dt = new Date();
                 var el = calEvent;
+                var flag = 0;
                 if (el.amount != 0) {//@depricate переписать
-                    $('#cal_mainselect option:[value="periodic"]').attr('selected','selected');
+                    $('#cal_mainselect #periodic').click();
                     //$('#dialog_event').dialog('option', 'buttons', {});
                     $('#cal_key').val(el.id);//hidden
                     $('#cal_chain').val(el.chain);//hidden
                     $('#cal_title').val(el.title);
-                    dt = new Date();dt.setTime(el.start);
+                    dt.setTime(el.start);
                     $('#cal_date').val($.datepicker.formatDate('dd.mm.yy', dt));
                     $('#cal_repeat').val(el.repeat);
                     $('#cal_count').val(el.count);
@@ -326,12 +328,14 @@ $(document).ready(function() {
                     }
                 // Событие календаря
                 } else {
-                    $('#cal_mainselect option:[value="event"]').attr('selected','selected');
+                    flag = 1;
+                    $('#cal_mainselect #event').click();
                     $('#cal_key').val(el.id);
+
                     $('#cal_chain').val(el.chain);
                     $('#cal_title').val(el.title);
                     //$('form').attr('action', '/calendar/edit/');
-                    dt = new Date();dt.setTime(el.start);
+                    dt.setTime(el.start);
                     $('#cal_date').val($.datepicker.formatDate('dd.mm.yy', dt));
                     $('#cal_time').val(dt.toLocaleTimeString().substr(0, 5));
                     $('#cal_repeat option').each(function(){ //@FIXME Оптимизировать
@@ -366,10 +370,27 @@ $(document).ready(function() {
                     $('#week.week').closest('.line').hide();
                     $('.repeat').closest('.line').show()
                 }
-                //$('#op_dialog_event input').val('');
-                //$('#op_dialog_event textarea').val('').text('');
-            //$('#cal_date,#cal_date_end','#op_dialog_event').val($.datepicker.formatDate('dd.mm.yy',dayDate));
+                //@todo addbutton del
                 
+                $('div.ui-dialog-buttonpane').append('<button type="button" id="remove_event" class="ui-state-default ui-corner-all">Удалить</button>');
+                $('button#remove_event').live('click',function(){
+                    if (flag){
+                        $.post('/calendar/del/',
+                            {id:    $('#cal_key').val(),
+                            chain:  $('#cal_chain').val()},
+                            function(data){
+                                $('#op_dialog_event').dialog('close');
+                                $('#calendar').fullCalendar('refresh');
+                            },
+                            'json');
+                    }
+                    else
+                    {
+                        $('#op_dialog_event').dialog('close');
+                        $.jGrowl('В данный момент совершаемая вами операция невозможна',{theme: 'red'})
+                    }
+                    $(this).remove();
+                });
             }
         },
     //eventMouseover, eventMouseout: function(calEvent, jsEvent)
