@@ -80,13 +80,13 @@ else
 	$tpl->append('js',  'anychart/AnyChart.js');
 	$tpl->append('js',  'jquery/jquery.form.js');
 	$tpl->append('js',  'main.js');
+	$tpl->append('js',  'jquery/jquery.cookie.js');
 }
-$tpl->append('js',  'jquery/jquery.cookie.js');
+
 if(IS_DEMO){
     $tpl->append('js',  'demo_message.js');
 }
 
-$tpl->append('js',  'jquery/jquery.cookie.js');
 $tpl->append('js','helpers.js');
 
 /*$tpl->append('js','ofc/swfobject.js');
