@@ -1728,76 +1728,10 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background-color: #e4ffe0;
 }
 
-/*
-#views.ui-widget-content .hasDatepicker .ui-widget-content, .calendar_block .calendar .ui-widget-content {
-    padding: 0;
-    margin-top: 1em;
-    font-size: 80%;
-    width: auto!important;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group,.calendar_block .calendar .ui-widget-content .ui-datepicker-group{
-    padding: 0 7px;
-    width: 147px;
-    height: 170px;
-    border: solid 1px #d9d9d9;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-middle, .calendar_block .calendar  .ui-widget-content .ui-datepicker-group-middle{
-    height: 167px;
-    border-bottom: solid 4px #d9d9d9;
-    border-left: solid 4px #d9d9d9;
-    border-right: solid 4px #d9d9d9;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-first, .calendar_block .calendar .ui-widget-content .ui-datepicker-group-first {
-    margin-right: 8px;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-last, .calendar_block .calendar  .ui-widget-content .ui-datepicker-group-last{
-    margin-left: 8px;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-widget-header, .calendar_block .calendar .ui-widget-content .ui-widget-header{
-    margin: -1px -8px 0 -8px;
-    -moz-border-radius: 0;
-    border: 0;
-    background: #dadada url('/img/i/jQuery/calendar/bg_table_calendar_th.gif') repeat-x 0 0!important;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group-middle .ui-widget-header, .calendar_block .calendar  .ui-widget-content .ui-datepicker-group-middle .ui-widget-header{
-    margin-left: -11px;
-    margin-right: -11px;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content .ui-datepicker-group table, .calendar_block .calendar .ui-widget-content .ui-datepicker-group table {
-
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th, .calendar_block .calendar {
-    padding: .3em;
-    color: #b4b4b4;
-    border:none;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th span, .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar th span{
-    font-size: 110%;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th.ui-datepicker-week-end span, .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar th.ui-datepicker-week-end span {
-    font-size: 115%;
-    font-weight: bold;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td {
-    padding: 0;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default {
-    text-align: center;
-    color: #20201e;
-    background: none;
-    border: none;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td.ui-datepicker-today a.ui-state-default , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td.ui-datepicker-today a.ui-state-default {
-    background-color: #e4ffe0;
-}
-#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default:hover , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default:hover{
-    background-color: #e5e5e5;
-}
-
-*/.ui-dialog.ui-widget-content {
+.ui-dialog.ui-widget-content {
     background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
 }
-/*.ui-dialog.ui-widget-content .ui-resizable-nw {
+.ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
     left: 0;
     width: 9px;
@@ -1820,7 +1754,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     height: 9px;
     background: url('/img/i/jQuery/calendar/bg_ui-dialog_bottomleft.gif') no-repeat right bottom;
     border: none;
-}*/
+}
 
 .ui-resizable-n { cursor: n-resize; height: 21px; width: 100%; top: -21px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.head_c.png) repeat-x scroll left top; }
 .ui-resizable-s { cursor: s-resize; height: 30px; width: 100%; bottom: -30px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.foot_c.png) repeat-x scroll left bottom; }

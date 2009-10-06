@@ -1,6 +1,6 @@
 /* Datepicker
 ----------------------------------*/
-.ui-datepicker { width: 17em; padding: .2em .2em 0; }
+.ui-datepicker { width: 17em; padding: 0.2em 0.2em 0; }
 .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
 .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
 .ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
@@ -15,22 +15,18 @@
 .ui-datepicker select.ui-datepicker-month, 
 .ui-datepicker select.ui-datepicker-year { width: 49%;}
 .ui-datepicker .ui-datepicker-title select.ui-datepicker-year { float: right; }
-.ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
-/*.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
-.ui-datepicker td { border: 0; padding: 1px; }
-.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
-
-*/.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker table {width: 100%; font-size: 0.9em; border-collapse: collapse; margin:0 0 0.4em; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: 0.7em 0 0 0; padding:0 0.2em; border-left: 0; border-right: 0; border-bottom: 0; }
 
 .ui-datepicker td span, .ui-datepicker td a:hover {background:#E4FFE0;}
 
-.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: 0.5em 0.2em 0.4em; cursor: pointer; padding: 0.2em 0.6em 0.3em 0.6em; width:auto; overflow:visible; }
 .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
 
 /* with multiple calendars */
 .ui-datepicker.ui-datepicker-multi { width:auto; }
 .ui-datepicker-multi .ui-datepicker-group { float:left; }
-.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto .4em; }
+.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto 0.4em; }
 /**/.ui-datepicker-multi-2 .ui-datepicker-group { width:50%; }
 .ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
 .ui-datepicker-multi-4 .ui-datepicker-group { width:25%; }
@@ -55,10 +51,10 @@
 /* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
 .ui-datepicker-cover {
     display: none; /*sorry for IE5*/
-    display/**/: block; /*sorry for IE5*/
+    display: block; /*sorry for IE5*/
     position: absolute; /*must have*/
     z-index: -1; /*must have*/
-    filter: mask(); /*must have*/
+    /*filter: mask; must have*/
     top: -4px; /*must have*/
     left: -4px; /*must have*/
     width: 200px; /*must have*/
@@ -124,12 +120,14 @@
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td {
     padding: 0;
 }
-/*цифорки*/#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default {
+/*цифорки*/#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default, .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default {
     text-align: center;
     color: #20201e;
     background: none;
     border: none;
-    display: block; padding: .1em; text-decoration: none;
+    display: block; 
+    padding: 0.1em;
+    text-decoration: none;
 }
 /* подсветка сегодня */#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td.ui-datepicker-today a.ui-state-default , .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td.ui-datepicker-today a.ui-state-default {
     background-color: #e4ffe0;
