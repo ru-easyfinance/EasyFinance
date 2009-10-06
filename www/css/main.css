@@ -1576,10 +1576,10 @@ ul.currency li a:hover {
     background-color: #e3ffdf!important;
 }
 ul.currency.user li a {
-    background: url(/img/i/icoDelete.gif) no-repeat scroll 95% 45%;
+    background: url(/img/i/icoDelete.gif) no-repeat scroll 100% 45%;
 }
 ul.currency.all li a {
-    background: url(/img/i/icoAdd.gif) no-repeat scroll 95% 45%;
+    background: url(/img/i/icoAdd.gif) no-repeat scroll 100% 45%;
 }
 
 /*------------------------------------------- form Start --------------------------------------*/
