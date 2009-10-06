@@ -18,7 +18,7 @@ class Budget_Controller extends Template_Controller
      */
     function __construct()
     {
-        header("Location : /targets/");
+        header('Location: /targets/'); exit;
         $this->user  = Core::getInstance()->user;
         $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Budget_Model();
