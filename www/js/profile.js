@@ -183,3 +183,9 @@ $(document).ready(function(){
         user_cur_save();
     });
 });
+$(document).ready(function() {
+    strokuk = document.cookie.toString();
+    if (strokuk.indexOf('help=124') != -1){
+        $('#help').removeAttr('checked');
+    }
+})

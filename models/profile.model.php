@@ -49,11 +49,11 @@ class Profile_Model
 
     public function mainsettings($mod,$prop){
         $ret = array();
-        if ( $prop['help'] == 1 ){
+        /*if ( $prop['help'] == 1 ){
             setCookie("help","",0,"/");      
         }else{
             setCookie("help", "124",0,"/"); //записываем в кук нужно ли выводить всплывающие подсказки
-        }
+        }*/
         switch($mod){
             case 'save':
                 $ident = $this->ident($prop['newpass']);
@@ -62,6 +62,11 @@ class Profile_Model
                                     sha1($prop['user_pass']);
                 unset($prop['newpass']);
                 $ret['profile'] = $this->save('users', $prop, $ident);
+                if ( $prop['help'] == 1 ){
+                     setCookie("help","",0,"/");
+                }else{
+                setCookie("help", "124",0,"/"); //записываем в кук нужно ли выводить всплывающие подсказки
+                }
                 break;
             case 'load':
                 $ret['profile']['login']=$_SESSION['user']['user_login'];

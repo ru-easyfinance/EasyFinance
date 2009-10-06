@@ -1214,7 +1214,11 @@ $('li#c2').click(function(){a_list()})
         {
             if (window.location.protocol!='https:')
             {
-            	window.location.href='https://' + window.location.host + '/login/';
+                //if (!IS_DEMO){
+                    window.location.href='https://' + window.location.host + '/login/';
+                /*}else{
+                    window.location.href='http://' + window.location.host + '/login/';
+                }//*/
             }
             else
             {
