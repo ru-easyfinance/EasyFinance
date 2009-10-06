@@ -1,4 +1,20 @@
 // {* $Id$ *}
+ function formatCurrency(num) {
+    if (num=='undefined') num = 0;
+    //num = num.toString().replace(/\$|\,/g,'');
+    if(isNaN(num)) num = "0";
+    sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num*100+0.50000000001);
+    cents = num%100;
+    num = Math.floor(num/100).toString();
+    if(cents<10)
+        cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+        num = num.substring(0,num.length-(4*i+3))+' '+
+        num.substring(num.length-(4*i+3));
+    return (((sign)?'':'-') + '' + num + '.' + cents);
+}
+
 $(document).ready(function() {
     function ShowDetailedIncome(){
         $.get('/report/getData/',{
@@ -10,24 +26,46 @@ $(document).ready(function() {
             //dateFrom2: $('#dateFrom').val(),
             //dateTo2: $('#dateTo').val()
          }, function(data) {
+             cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[1][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
             var tr = '';
             tr += '<tr><th>&nbsp;</th>\n\
                         <th><span class="sort" title="отсортировать">Дата</span></th>\n\
                         <th><span class="sort" title="отсортировать">Счёт</span></th>\n\
                         <th><span class="sort" title="отсортировать">Сумма</span></th>\n\
                    </tr>';//*/
-            for (c in data){
+            for (c in data[0]){
                 if (c>0)
-                if (data[c].cat_name != data[c-1].cat_name && data[c].cat_name!=null) {
-                    tr += "<tr>" + '<td class="summ"><span><b>'+data[c].cat_name+
+                if (data[0][c].cat_name != data[0][c-1].cat_name && data[0][c].cat_name!=null) {
+                    tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
                         '<span><b></td></tr>';
                 }
-                if (data[c].account_name != null) {
+                if (data[0][c].account_name != null) {
+                    cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[0][c].cur_char_code)
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
+
                     tr += "<tr>"
                                 + '<td>&nbsp;</td>'
-                                + '<td class="summ"><span>'+data[c].date+'</span></td>'
-                                + '<td class="light"><span>'+data[c].account_name+'</span></td>'
-                                + '<td class="big"><span>'+data[c].money+'</span></td>'
+                                + '<td class="summ"><span>'+data[0][c].date+'</span></td>'
+                                + '<td class="light"><span>'+data[0][c].account_name+'</span></td>'
+                                + '<td class="big"><span>'+formatCurrency(data[0][c].money*oldcur/nowcur)+'</span></td>'
                                 + '</tr>';
                 }
             }
@@ -50,6 +88,18 @@ $(document).ready(function() {
             //dateFrom2: $('#dateFrom').val(),
             //dateTo2: $('#dateTo').val()
          }, function(data) {
+             cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[1][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
+
             var tr = '';
             tr += '<tr><th>&nbsp;</th>\n\
                         <th><span class="sort" title="отсортировать">Дата</span></th>\n\
@@ -57,21 +107,31 @@ $(document).ready(function() {
                         <th><span class="sort" title="отсортировать">Сумма</span></th>\n\
                    </tr>';//*/
 
-            for (c in data){
+            for (c in data[0]){
                 if (c>0)
-                {if (data[c].cat_name != data[c-1].cat_name) {
-                    tr += "<tr>" + '<td class="summ"><span><b>'+data[c].cat_name+
+                {if (data[0][c].cat_name != data[0][c-1].cat_name) {
+                    tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
                         '<span><b></td></tr>';
                 }} else {
-                    tr += "<tr>" + '<td class="summ"><span><b>'+data[0].cat_name+
+                    tr += "<tr>" + '<td class="summ"><span><b>'+data[0][0].cat_name+
                         '<span><b></td></tr>';
                 }
-                if (data[c].cat_name != null && data[c].account_name != null){
+                if (data[0][c].cat_name != null && data[0][c].account_name != null){
+                cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[0][c].cur_char_code)
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
                 tr += "<tr>"
                             + '<td>&nbsp;</td>'
-                            + '<td class="repdate"><span>'+data[c].date+'</span></td>'
-                            + '<td class="repname"><span>'+data[c].account_name+'</span></td>'
-                            + '<td class="repsumm"><span>'+data[c].money+'</span></td>'
+                            + '<td class="repdate"><span>'+data[0][c].date+'</span></td>'
+                            + '<td class="repname"><span>'+data[0][c].account_name+'</span></td>'
+                            + '<td class="repsumm"><span>'+formatCurrency(data[0][c].money*oldcur/nowcur)+'</span></td>'
                             + '</tr>';
                 }
             }
@@ -93,6 +153,17 @@ $(document).ready(function() {
             dateFrom2: $('#dateFrom2').val(),
             dateTo2: $('#dateTo2').val()
          }, function(data) {
+             cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[1][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
             var tr = '';
             tr += '<tr><th>&nbsp;</th>\n\
                         <th><span class="sort" title="отсортировать">Период 1</span></th>\n\
@@ -105,47 +176,57 @@ $(document).ready(function() {
             var ssum1=0;
             var ssum2=0;
             var sdelta=0;
-            for (c in data){
-                if (data[c].su != null){
-                if (data[c].per == 1) {
-                    sum1=data[c].su;
+            for (c in data[0]){
+                if (data[0][c].su != null){
+                if (data[0][c].per == 1) {
+                    sum1=data[0][c].su;
                     sum2=0;
                     for (v in data){
-                        if (data[v].cat_name == data[c].cat_name)
-                            if (data[v].per == 2){
-                                sum2=data[v].su   ;
-                                data[v].su = null;
+                        if (data[0][v].cat_name == data[0][c].cat_name)
+                            if (data[0][v].per == 2){
+                                sum2=data[0][v].su   ;
+                                data[0][v].su = null;
                             }
                     }
                 } else {
-                    sum2 = data[c].su;
+                    sum2 = data[0][c].su;
                     sum1=0;
-                    for (v in data){
-                        if (data[v].cat_name == data[c].cat_name)
-                            if (data[v].per == 1){
-                               sum1=data[v].su;
-                               data[v].su = null;
+                    for (v in data[0]){
+                        if (data[0][v].cat_name == data[0][c].cat_name)
+                            if (data[0][v].per == 1){
+                               sum1=data[0][v].su;
+                               data[0][v].su = null;
                             }
                     }
                 };
                 delta=sum2-sum1;
-               if (data[c].cat_name != null && data[c].account_name != null){
-                tr +=        '<tr><td ><span><b>'+data[c].cat_name+
+               if (data[0][c].cat_name != null && data[0][c].account_name != null){
+                   cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[0][c].cur_char_code)
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
+                tr +=        '<tr><td ><span><b>'+data[0][c].cat_name+
                             '<span><b></td>'+
-                            '<td class="repdate"><span>'+sum1+'</span></td>'
-                            + '<td class="repname"><span>'+sum2+'</span></td>'
-                            + '<td class="repsumm"><span>'+delta+'</span></td>'
+                            '<td class="repdate"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
+                            + '<td class="repname"><span>'+formatCurrency(sum2*oldcur/nowcur)+'</span></td>'
+                            + '<td class="repsumm"><span>'+formatCurrency(delta*oldcur/nowcur)+'</span></td>'
                             + '</tr>';
-                ssum1 = parseFloat(ssum1) + parseFloat(sum1);
-                ssum2 = parseFloat(ssum2) + parseFloat(sum2);
+                ssum1 = parseFloat(ssum1) + parseFloat(sum1*oldcur/nowcur);
+                ssum2 = parseFloat(ssum2) + parseFloat(sum2*oldcur/nowcur);
                 sdelta += Math.round(delta);
                }
             }
             }
             tr +=        '<tr><td ><span><b>Итого:</span><b></td>'+
-                            '<td class="repdate"><span>'+ssum1+'</span></td>'
-                            + '<td class="repname"><span>'+ssum2+'</span></td>'
-                            + '<td class="repsumm"><span>'+sdelta+'</span></td>'
+                            '<td class="repdate"><span>'+formatCurrency(ssum1)+'</span></td>'
+                            + '<td class="repname"><span>'+formatCurrency(ssum2)+'</span></td>'
+                            + '<td class="repsumm"><span>'+formatCurrency(sdelta)+'</span></td>'
                             + '</tr>';
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
@@ -218,6 +299,17 @@ $(document).ready(function() {
             dateFrom2: $('#dateFrom2').val(),
             dateTo2: $('#dateTo2').val()
          }, function(data) {
+             cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[3][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
             var tr = '';
             tr += '<tr><th>&nbsp;</th>\n\
                         <th><span class="sort" title="отсортировать">Период 1</span></th>\n\
@@ -255,11 +347,21 @@ $(document).ready(function() {
                 };
                 delta=sum2-sum1;
                 if (data[2][c].cat_name != null){
+                cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[2][c].cur_char_code)
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
                 tr +=        '<tr><td ><span><b>'+data[2][c].cat_name+
                             '<span><b></td>'+
-                            '<td class="repdate"><span>'+sum1+'</span></td>'
-                            + '<td class="repname"><span>'+sum2+'</span></td>'
-                            + '<td class="repsumm"><span>'+delta+'</span></td>'
+                            '<td class="repdate"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
+                            + '<td class="repname"><span>'+formatCurrency(sum2*oldcur/nowcur)+'</span></td>'
+                            + '<td class="repsumm"><span>'+formatCurrency(delta*oldcur/nowcur)+'</span></td>'
                             + '</tr>';
                 ssum1 = Math.round(parseFloat(ssum1)) + Math.round(parseFloat(sum1));
                 ssum2 = Math.round(parseFloat(ssum2)) + Math.round(parseFloat(sum2));
