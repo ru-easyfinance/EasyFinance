@@ -168,6 +168,19 @@ class Operation_Controller extends Template_Controller
     }
 
     /**
+     * Удаляет выбранные события
+     * @param $args array mixed Какие-нибудь аргументы
+     * @return void
+     */
+    function del_all($args)
+    {
+        $id = explode(',', $_POST['id']);
+        foreach ($id as $k=>$v)
+            $this->model->deleteOperation($v);
+        die('[]');
+    }
+
+    /**
      * Получить список
      */
     function listOperations($args)

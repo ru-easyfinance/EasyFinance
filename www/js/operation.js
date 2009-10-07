@@ -1,5 +1,4 @@
 // {* $Id: operation.js 137 2009-08-10 16:00:50Z ukko $ *}
-
     /*var catlast ;
     var datelast ;*/
 $(document).ready(function() {
@@ -95,6 +94,30 @@ $(document).ready(function() {
                 $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             }
     });
+    $('#remove_all_op').click(function(){
+
+        if (!confirm("Вы действительно хотите удалить эти записи?")) {
+            return false;
+        }
+        var ids = [];
+        var key = 0;
+        var trs = $('#operations_list tr .check input:checked').closest('tr');
+        $(trs).each(function(){
+            ids[key] =$(this).attr('value');
+            key++;
+        });
+
+        $.post('/operation/del_all/', {
+                id : ids.toString()
+            }, function(data) {
+                for (var id in ids){
+                    if (ids[id])
+                    delete operationList[id];
+                }
+                $(trs).remove();
+                $.jGrowl("Операции удалены", {theme: 'green'});
+            }, 'json');
+    })
     //$('.operation_list').jScrollPane();
     // Autoload
     loadOperationList();
@@ -165,6 +188,12 @@ $(document).ready(function() {
                 });
                 // Заполняем таблицу 
                 $('#operations_list').append(tr);
+                $('#operations_list th input').change(function(){
+                    if($('#operations_list th input').attr('checked'))
+                        $('#operations_list .check input').attr('checked','checked');
+                    else
+                        $('#operations_list .check input').removeAttr('checked');
+                })
                $('.operation_list').jScrollPane();
 
             }
@@ -185,12 +214,6 @@ $(document).ready(function() {
                     $('.tags input').val(txt);
                     $('.tags_could').dialog("close");
                 });
-        // Загружаем теги
-
-            
-
-        
-
 
 
         // create a style switch button
