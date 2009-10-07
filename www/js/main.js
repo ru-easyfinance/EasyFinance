@@ -1212,17 +1212,18 @@ $('li#c2').click(function(){a_list()})
 
         $('#show_login').click(function()
         {
-            if (window.location.protocol!='https:')
-            {
-                //if (!IS_DEMO){
-                    window.location.href='https://' + window.location.host + '/login/';
-                /*}else{
-                    window.location.href='http://' + window.location.host + '/login/';
-                }//*/
+            if (window.location.host.toString().substr(0, 5) == "demo."){
+                window.location.protocol = 'http:';
             }
-            else
-            {
-                	$('#login').show();
+            else{
+                if (window.location.protocol!='https:')
+                {
+                        window.location.href='https://' + window.location.host + '/login/';
+                }
+                else
+                {
+                            $('#login').show();
+                }
             }
             return false;
         });

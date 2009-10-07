@@ -40,7 +40,11 @@
                     {if $user_info.user_id <= 0}
                         <li>Личный кабинет</li>
                         <li>Настройки профиля</li>
+                        {if $smarty.const.IS_DEMO == false}
                         <li id="show_login"><a href="https://{$smarty.const.URL_ROOT}login/">Войти<img class="loginMenu" src="/img/i/login.gif" /></a></li>
+                        {else}
+                        <li id="show_login"><a href="http://{$smarty.const.URL_ROOT}login/">Войти<img class="loginMenu" src="/img/i/login.gif" /></a></li>
+                        {/if>
                     {else}
                         <li><a href="/info/">Личный кабинет</a></li>
                         <li><a href="/profile/">Настройки профиля</a></li>
@@ -62,7 +66,11 @@
                             <div class="w_d_body">
                                 <div class="link close"><div></div></div>
                                 <div class="inside">
+                                    {if $smarty.const.IS_DEMO == false}
                                     <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
+                                    {else}
+                                    <form action="http://{$smarty.const.URL_ROOT}login/" method="post">
+                                    {/if}
                                         <div class="f_field">
                                             <label for="flogin">логин:</label>
                                             <input type="text" value="" name="login" id="flogin"/>
