@@ -1213,7 +1213,6 @@ $('li#c2').click(function(){a_list()})
         $('#show_login').click(function()
         {
             if (window.location.host.toString().substr(0, 5) == "demo."){
-                alert("123")
                 window.location.protocol = 'http:';
             }
             else{
