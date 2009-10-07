@@ -6,8 +6,8 @@
 //conf href to modul
 function get_array_key($arr, $val)
 {
-    $ret = -1;
-    for(key in $arr)
+    var $ret = -1;
+    for(var key in $arr)
     {
         if ($val == $arr[key])
         {
@@ -17,7 +17,7 @@ function get_array_key($arr, $val)
     }
     return $ret;
 }
-aPath=['//',
+var aPath=['//',
     '/about/',
     '/accounts/',
     '/admin/',
@@ -94,8 +94,6 @@ function FloatFormat(obj, in_string )
 
 
 $(document).ready(function() {
-
-
     // *** Функции ***
 
     if (res['errors'] != null && res['errors'].length > 0) {
@@ -970,6 +968,30 @@ $('li#c2').click(function(){a_list()})
     $('dl.info dd').html(str);
 //calendar
     $('.calendar_block .calendar').datepicker();
+    $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
+    $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
+    $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
+
+    //$('.calendar_block .calendar a span').click(function(){
+        setInterval(function(){//@todo !избавиться как только будет время от этой конструкции!
+            $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
+            $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
+            $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
+        },100);
+    //})
+
+//    $('.calendar_block .ui-datepicker-prev').live('click',function(){
+//        alert('a');
+//        $('.calendar_block .calendar').datepicker('option', 'defaultDate', '-1M');
+//
+//        $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
+//        $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
+//        $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
+//        return false;
+//    })
+
+
+
 //flash
     data = res['flash'];
             name = (!data['title'])?'':['title'];

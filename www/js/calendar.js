@@ -221,6 +221,8 @@ $(document).ready(function() {
         monthDisplay: function(year, month, monthTitle) {
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("a.ui-datepicker-prev,a.ui-datepicker-next",'div.ui-datepicker-header').hide();
+            $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
+            $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
             $('li.y_prev a').text(year-1);
             $('li.y_next a').text(year+1);
             if (month == 11) {
@@ -246,20 +248,28 @@ $(document).ready(function() {
         events: function(start, end, calback) {
             var s;
             if (start.getDate() > 1) {
-                s = new Date(start.getFullYear(), start.getMonth()+1, 1);
+                s = new Date(start.getFullYear(), start.getMonth()-1, 1);
             } else {
                 s = new Date(start.getFullYear(), start.getMonth(), 1);
             }
-            var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
+            var e = new Date(s.getFullYear(), s.getMonth()+4, 1);
+            
+
             $.getJSON('/calendar/events/', {
-                    start: start.getTime(),
-                    end:   end.getTime()
+                    start: s.getTime(),
+                    end:   e.getTime()
                 },   function(result) {
+                    $('.hasDatepicker td a').css('color', '#e4e4e4').click(function(){return false;});
                     // Заполняем список событий
                     $('#per_tabl tbody, #ev_tabl tbody').empty();
                     var n = new Date();
                     var l,t='';
+                    var ddt = new Date();
+                    var ddt_day , ddt_month;
+                    var i = 0
+                    var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
                     for(var v in result){
+                        
                         
                         l = result[v];
                         n.setTime(l.date*1000);
@@ -290,12 +300,34 @@ $(document).ready(function() {
                                         +'<td>'+l.amount+'</td>'+t
                                         +'</tr>');
                             }
+                            }
+///////////////////////////////hard huk .. so ..//////////////////////////////////
+                        ddt.setTime(result[v].date*1000);
+                        //get calendar month
+                        ddt_month = ddt2month[ddt.getMonth()];
+                        $('.hasDatepicker .ui-datepicker-month').each(function(){
 
-                        }
+                            if ($(this).text()==ddt_month)
+                            {
+
+                                //search daty
+                                ddt_day = ddt.getDate();
+                                $(this).closest('.ui-datepicker-group').find('td a').each(function(){
+                                   
+
+                                    if ($(this).text() == ddt_day)
+                                    {
+                                        $(this).css('color', '#000000');
+                                    }
+                                })
+                            }
+                        })
+                        /////////////////////////////////////////////////////////////////
+                        
                     }
-                    $('#datepicker .ui-state-default').each(function(){
-                        $(this).css('color','#e4e4e4')
-                    });
+                    //$('#datepicker .ui-state-default').each(function(){
+                    //    $(this).css('color','#e4e4e4')
+                    //});
                     calback(result);
                 }
             )
@@ -437,4 +469,9 @@ $(document).ready(function() {
           clearForm();
         }
     });
+    function underlight(){
+        $('#datepicker td a').each(function(){
+            
+        })
+    }
 });
