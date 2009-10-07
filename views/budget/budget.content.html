@@ -13,31 +13,29 @@
 								<div class="f_field1">
 									<div>
 										<span>Показать план бюджета за </span>
-										<select>
-											<option>Сентябрь</option>
+										<select id="month" name="month">
+											<option value="1">Январь</option>
+                                                                                        <option value="2">Февраль</option>
+                                                                                        <option value="3">Март</option>
+                                                                                        <option value="4">Апрель</option>
+                                                                                        <option value="5">Май</option>
+                                                                                        <option value="6">Июнь</option>
+                                                                                        <option value="7">Июль</option>
+                                                                                        <option value="8">Август</option>
+                                                                                        <option value="9">Сентябрь</option>
+                                                                                        <option value="10">Октябрь</option>
+                                                                                        <option value="11">Ноябрь</option>
+                                                                                        <option value="12">Декабрь</option>
 										</select>
-										<select>
-											<option>2009</option>
-										</select>
-										
+										<input type="text" value="" id="year" name="year"/>
 									</div>
 								</div>
 								<div class="f_field2">
 									<div class="field">
 										<span>Общий бюджет</span>
-										<input type="text" value="12 500 00" />
-										<a href="#" title="Пересчитать">Пересчитать</a>
+                                                                                <input id="total_budget" type="text" value="12 500 00" readonly="readonly"/>
+										
 									</div>
-							<!--бегун-->
-									<div class="begun">
-										<div class="mark" style="left: 14px;"></div>
-									</div>
-							<!--/бегун-->
-							<!--индикатор-->
-									<div class="indicator">
-										?????
-									</div>
-							<!--/индикатор-->
 								</div>
 								<div class="f_field3">
 									<div class="income">Итого доходов: <span><b>1 131 200</b> руб.</span></div>
@@ -83,13 +81,13 @@
 													<td class="w4"><span>14 500 руб.</span><span title="график" class="graph">график</span></td>
 													<td class="w5"><span title="список тегов">список тегов</span></td>
 												</tr>
-												<tr class="act">
+												<tr>
 													<td class="w1"><a href="#">Бензин</a></td>
 													<td class="w2">
 														<div class="cont">
 															<input type="text" value="100 000" />
 															<a href="#" title="Пересчитать">Пересчитать</a>
-															<div class="begun" style="display:block;">
+															<div class="begun">
 																<div class="bg"></div>
 																<div class="mark" style="left: 15px;"></div>
 															</div>
