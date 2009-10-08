@@ -452,7 +452,6 @@ $(document).ready(function() {
         bgiframe: true,
         autoOpen: false,
         width: 450,
-        modal: true,
         buttons: {
             'Сохранить': function() {
                 save();

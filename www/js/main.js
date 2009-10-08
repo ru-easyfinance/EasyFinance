@@ -556,7 +556,7 @@ $(document).ready(function() {
             /*
              *@TODO Проверить вводимые значения ui-tabs-selected
              */
-            if ($('#cal_href').val() == '') {
+            if ($('#cal_href').val() == '' || $('#cal_href').val() == 0) {
                 if ($('#cal_mainselect .act').attr('id')=='periodic') {
                     href = '/periodic/add/';
                 } else {
@@ -673,7 +673,6 @@ $(document).ready(function() {
                 autoOpen: false,
                 width: 447,
                 //height: 350,
-                modal: true,
                 buttons: {
                     'Сохранить': function() {
                         ac_save();
@@ -1357,10 +1356,15 @@ $('li#c2').click(function(){a_list()})
         if (type == null) {type = '';}
         if (page == null) {page = 1 ;}
         if ((res['events']) != null) {
-            ptr = '';ctr = '';p = 0;c = 0;pc = 0;cc = 0;
-            count = 4;
-            start = (page-1) * count;
-            end   = count * page;
+            var ptr = '';
+            var ctr = '';
+            var p = 0;
+            var c = 0;
+            var pc = 0;
+            var cc = 0;
+            var count = 4;
+            var start = (page-1) * count;
+            var end   = count * page;
             for (v in res['events']) {
                 if (res['events'][v]['event'] == 'per') {
                     if (p >= start && p <= end) {
