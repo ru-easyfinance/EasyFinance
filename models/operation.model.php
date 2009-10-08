@@ -384,75 +384,60 @@ class Operation_Model {
      */
     function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount)
     {
-        if (IS_DEMO) { //@TODO DEMO
-        }else{
-/*
-    UNION
-        SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), tt.id,
-        t.bill_id, (IF(LENGTH(tt.title)>30,CONCAT(LEFT(tt.title, 30),'..'),tt.title)), cy.cat_parent, bl.bill_name , 0, t.comment, bl.bill_currency, '', '', '', '', 1 AS virt
-        FROM target_bill t
-            LEFT JOIN target tt ON t.target_id=tt.id
-            LEFT JOIN bill bl ON t.bill_id=bl.bill_id
-            LEFT JOIN category cy ON cy.cat_id = tt.category_id
-        WHERE t.user_id= ? {$order1}
-    ORDER BY `date` DESC, `id` DESC";
- */
-
-            $category = Core::getInstance()->user->getUserCategory();
-            $cat_in = '';
-            foreach ($category as $var) {
-                if ($var['cat_parent'] == $currentCategory) {
-                    if ($cat_in) $cat_in .= ',';
-                    $cat_in .= $var['cat_id'];
-                }
+        $category = Core::getInstance()->user->getUserCategory();
+        $cat_in = '';
+        foreach ($category as $var) {
+            if ($var['cat_parent'] == $currentCategory) {
+                if ($cat_in) $cat_in .= ',';
+                $cat_in .= $var['cat_id'];
             }
-
-            $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
-            "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
-            "FROM operation o ".
-            "WHERE o.account_id = ? ".
-                "AND o.user_id = ? ".
-                "AND (o.`date` BETWEEN ? AND ?) ";
-                if (!empty($currentCategory)) {
-                    if ($cat[$currentCategory]['cat_parent'] == 0) {
-                        $sql .= " AND (o.cat_id IN ({$cat_in})) ";
-                    } else {
-                        $sql .= " AND (o.cat_id = '{$currentCategory}') ";
-                    }
-                }
-            $sql .= " UNION ".
-            " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), ".
-            " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags ".
-            " FROM target_bill t ".
-            " LEFT JOIN target tt ON t.target_id=tt.id ".
-            " WHERE t.user_id = ? ".
-                " AND (t.`date` BETWEEN ? AND ?) ".
-                " AND t.bill_id = ? ";
-                if (!empty($currentCategory)) {
-                    if ($cat[$currentCategory]['cat_parent'] == 0) {
-                        $sql .= " AND (tt.category_id IN ({$cat_in})) ";
-                    } else {
-                        $sql .= " AND (tt.category_id = '{$currentCategory}') ";
-                    }
-                }
-            $sql .= " ORDER BY `date` DESC, id ";
-
-            $accounts = Core::getInstance()->user->getUserAccounts();
-            $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom, 
-                $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount);
-            // Добавляем данные, которых не хватает
-            foreach ($operations as $key => $val) {
-                $val['cat_name']            = $category[$val['cat_id']]['cat_name'];
-                $val['cat_parent']          = $category[$val['cat_id']]['cat_parent'];
-                $val['account_name']        = $accounts[$val['account_id']]['account_name'];
-                $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
-                $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
-                //$val['cur_name'] = $accounts[$val['cur_id']]['cur_name'];
-                $operations[$key] = $val;
-            }
-            //bt.account_name as cat_transfer, //@TODO
-            return $operations;
         }
+
+        $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
+        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
+        "FROM operation o ".
+        "WHERE o.account_id = ? ".
+            "AND o.user_id = ? ".
+            "AND (o.`date` BETWEEN ? AND ?) ";
+            if (!empty($currentCategory)) {
+                if ($cat[$currentCategory]['cat_parent'] == 0) {
+                    $sql .= " AND (o.cat_id IN ({$cat_in})) ";
+                } else {
+                    $sql .= " AND (o.cat_id = '{$currentCategory}') ";
+                }
+            }
+        $sql .= " UNION ".
+        " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), ".
+        " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags ".
+        " FROM target_bill t ".
+        " LEFT JOIN target tt ON t.target_id=tt.id ".
+        " WHERE t.user_id = ? ".
+            " AND (t.`date` BETWEEN ? AND ?) ".
+            " AND t.bill_id = ? ";
+            if (!empty($currentCategory)) {
+                if ($cat[$currentCategory]['cat_parent'] == 0) {
+                    $sql .= " AND (tt.category_id IN ({$cat_in})) ";
+                } else {
+                    $sql .= " AND (tt.category_id = '{$currentCategory}') ";
+                }
+            }
+        $sql .= " ORDER BY `date` DESC, id ";
+
+        $accounts = Core::getInstance()->user->getUserAccounts();
+        $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom,
+            $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount);
+        // Добавляем данные, которых не хватает
+        foreach ($operations as $key => $val) {
+            $val['cat_name']            = $category[$val['cat_id']]['cat_name'];
+            $val['cat_parent']          = $category[$val['cat_id']]['cat_parent'];
+            $val['account_name']        = $accounts[$val['account_id']]['account_name'];
+            $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
+            $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
+            //$val['cur_name'] = $accounts[$val['cur_id']]['cur_name'];
+            $operations[$key] = $val;
+        }
+        //bt.account_name as cat_transfer, //@TODO
+        return $operations;
     }
 
     /**
