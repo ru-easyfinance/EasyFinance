@@ -2,9 +2,37 @@
 /**
  * @desc Модель бюджета
  * @author rewle
- * @todo init
+ * @param {json} bdgt все данные по бюджету сформированные в формате:
+        {
+            list : {
+                _key{int} : {
+                        name : {String},
+                        total : {Int},
+                        children :[{array}
+                            {
+                            id : {Int},
+                            name : {String},
+                            total : {Int},
+                            cur : {String},
+                            limit_red : {Int},
+                            limit_green : {Int},
+                            limit_strip : {Int},
+                            mean_expenses : {Float},//вроде средний расход
+                            type : {0|1}//расходная - 0,доходный-1
+                            }
+                        ]
+                    }
+                },
+            main :  {
+                total:{Int},
+                cur : {String},
+                expense_all : {Int},
+                income_all : {Int},
+                balance : {Int}
+            }
+        });
  */
-easyFinance.models.budget = function()
+easyFinance.models.budget = function(bdgt)
     {
         /**
          * @desc {json} все данные по бюджету сформированные по формату:
@@ -37,7 +65,7 @@ easyFinance.models.budget = function()
                 }
             });
          */
-        var _data;
+        var _data = bdgt;
         /**@deprecated
          * @desc устанавливает список
          * @param data {}
