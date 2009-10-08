@@ -71,15 +71,15 @@ easyFinance.models.budget = function(bdgt)
          * @param data {}
          * @return void
          */
-        var setup_list = function (data){
+        function setup_list (data){
             _data = data;
-        };
+        }
         /**
          * @desc возвращает сформированный список бюджетов
          * @param {0|1}type //расходная - 0,доходный-1
          * @return {String} html for $().append(html)
          */
-        var print_list = function(type){
+         function print_list(type){
             type = parseInt(type);
             if (isNaN(type)){return '';}
             var bud_list = _data.list;
@@ -109,7 +109,7 @@ easyFinance.models.budget = function(bdgt)
                 str+='</table></div>';
             }
             return str;
-        };
+        }
         /**
          * @desc добавляет бюджет
          * @param month {int} 1 - 12
@@ -117,7 +117,7 @@ easyFinance.models.budget = function(bdgt)
          * @param jQuery - jQuery selector on form
          * @return {String} html for $().append(html)
          */
-        var add = function (month, year, jQuery){
+        function add (month, year, jQuery){
             $.post('/budget/add',
                     {
                         month : month,
@@ -131,13 +131,13 @@ easyFinance.models.budget = function(bdgt)
                     },
                     'json'
                 ); //add
-        };
+        }
         /**
          * @desc удаляет бюджет
          * @param id {int}
          * @return {String} html for $().append(html)
          */
-        var del = function(id){
+        function del (id){
             $.post('/budget/del',
                 {
                     id:id
@@ -149,14 +149,14 @@ easyFinance.models.budget = function(bdgt)
                 },
                 'json'
             );//del
-        };
+        }
         /**
          * @desc редактирует бюджет
          * @param id {int}
          * @param jQuery - jQuery selector on form
          * @return {String} html for $().append(html)
          */
-        var edit = function (id, jQuery){
+        function edit (id, jQuery){
             $.post('/budget/add',
                     {
                         id : id,
@@ -169,19 +169,19 @@ easyFinance.models.budget = function(bdgt)
                     },
                     'json'
                 ); //edit
-        };
+        }
         /**
          * @desc возвращает общее сформированное инфо о бюджете
          * @return {} {total:html,group:html} for $().append(html)
          */
-        var print_info = function (){
+        function print_info (){
             var ret = {total:'',group:''};
             ret.total=_data.main.total;
             var str = '<div class="income">Итого доходов: <span><b>'+_data.main.income_all+'</b> '+_data.main.cur+'</span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+_data.main.expense_all+'</b> '+_data.main.cur+'</span></div>';
                 str += '<div class="rest">Остаток: <span><b>'+_data.main.balance+'</b> '+_data.main.cur+'</span></div>';
             ret.group=str;
-        };
+        }
 
         return {setup_list:setup_list, print_info:print_info, print_list:print_list, add:add, del:del, edit:edit}
     }
