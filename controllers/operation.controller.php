@@ -166,6 +166,11 @@ class Operation_Controller extends Template_Controller
         $id = abs((int)$_POST['id']);
         die($this->model->deleteOperation($id));
     }
+    function deleteTargetOp($args)
+    {
+        $id = abs((int)$_POST['id']);
+        die($this->model->deleteTargetOperation($id));
+    }
 
     /**
      * Удаляет выбранные события

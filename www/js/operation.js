@@ -75,7 +75,13 @@ $(document).ready(function() {
             $('form').attr('action','/operation/edit/');
         }
         else if($(this).parent().attr('class') == 'del') {
-            deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
+            if (operationList[$(this).closest('tr').attr('value')].virt == "1"){
+                deleteTarget($(this).closest('tr').attr('value'), $(this).closest('tr'));
+            }
+            else{
+                deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
+            }
+            //deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
         }
         else if($(this).parent().attr('class') == 'add') {
             fillForm(operationList[$(this).closest('tr').attr('value')]);
@@ -413,6 +419,18 @@ $(document).ready(function() {
             return false;
         }
         $.post('/operation/del/', {
+                id : id
+            }, function(data) {
+                delete operationList[id];
+                $(tr).remove();
+                $.jGrowl("Операция удалена", {theme: 'green'});
+            }, 'json');
+    }
+    function deleteTarget(id, tr){
+        if (!confirm("Вы действительно хотите удалить перевод на фин.цель?")) {
+            return false;
+        }
+        $.post('/operation/deleteTargetOp/', {
                 id : id
             }, function(data) {
                 delete operationList[id];

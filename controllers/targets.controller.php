@@ -85,7 +85,8 @@ class Targets_Controller extends Template_Controller
      */
     function del($args)
     {
-        die(json_encode($this->model->del()));
+        $id = abs((int)$_POST['id']);
+        die(json_encode($this->model->del($id)));
     }
 
     /**

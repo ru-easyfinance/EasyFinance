@@ -322,6 +322,15 @@ class Operation_Model {
             return false;
         }
     }
+    function deleteTargetOperation($id=0) {
+        //$que = $this->db->query("SELECT target_id FRON target_bill WHERE id=?", $id);
+        $this->db->query("DELETE FROM target_bill WHERE id=? AND user_id=?", $id, Core::getInstance()->user->getId());
+        Core::getInstance()->user->initUserTargets();
+        Core::getInstance()->user->save();
+        return true;
+        //return $this->staticTargetUpdate($que);
+        //return $this->staticTargetUpdate($tr_id);
+    }
 
     /**
      * Получает сумму всех счетов пользователя
@@ -417,7 +426,8 @@ class Operation_Model {
             " FROM target_bill t ".
             " LEFT JOIN target tt ON t.target_id=tt.id ".
             " WHERE t.user_id = ? ".
-                " AND (t.`date` BETWEEN ? AND ?) ";
+                " AND (t.`date` BETWEEN ? AND ?) ".
+                " AND t.bill_id = ? ";
                 if (!empty($currentCategory)) {
                     if ($cat[$currentCategory]['cat_parent'] == 0) {
                         $sql .= " AND (tt.category_id IN ({$cat_in})) ";
@@ -429,7 +439,7 @@ class Operation_Model {
 
             $accounts = Core::getInstance()->user->getUserAccounts();
             $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom, 
-                $dateTo, $this->user->getId(), $dateFrom, $dateTo);
+                $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount);
             // Добавляем данные, которых не хватает
             foreach ($operations as $key => $val) {
                 $val['cat_name']            = $category[$val['cat_id']]['cat_name'];

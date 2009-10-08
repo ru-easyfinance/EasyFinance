@@ -85,7 +85,7 @@ class Template_Controller {
                         'date_end'     => $v['end'],
                         'amount_done'  => $v['amount_done'],
                         'percent_done' => $v['percent_done'],
-                        'money'        => $v['money'],
+                        'money'        => $v['amount'],
                         'account'      => $v['account'],
                         'amount_done'  => $v['amount_done'],
                     );

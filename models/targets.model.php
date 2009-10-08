@@ -276,9 +276,9 @@ class Targets_Model {
      * @return json Массив в формате json. Если пустой, значит успешно удалено, если со значениями -
      * значит ошибка. И в них содержится ошибка.
      */
-    function del() {
-        $id    = (int)@$_POST['id'];
-        $this->db->query("DELETE FROM target WHERE id=?d AND user_id=?", $id, Core::getInstance()->user->getId());
+    function del($id=0) {
+        //$id    = (int)@$_POST['id'];
+        $this->db->query("DELETE FROM target WHERE id=? AND user_id=?", $id, Core::getInstance()->user->getId());
         Core::getInstance()->user->initUserTargets();
         Core::getInstance()->user->save();
         return true;

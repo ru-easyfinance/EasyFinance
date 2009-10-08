@@ -368,12 +368,11 @@ $(document).ready(function() {
             $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;
         }
-
-        if ($('#op_type') == 4) {
+        if ($('#op_type').val() == 4) {
             /**
              *@FIXME Написать обновление финцелей
              */
-
+             //alert("tratata");
             var amount = parseFloat($("#op_target option:selected").attr("amount"));
             $("#op_amount").text(amount);
             var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));

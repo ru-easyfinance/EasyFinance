@@ -163,6 +163,10 @@ $(document).ready(function(){
      */
     function saveTarget() {
         //TODO Проверяем валидность и сабмитим
+        if ( ($('#amountf').val()) > ($('#tg_amount').val()) ){
+            $.jGrowl("Сумма начального платежа превышает накопительную сумму!!!", {theme: 'red'});
+            return false;
+        }
         $.post(
             $('#tpopup form').attr('action'),
             {
