@@ -171,7 +171,7 @@ $(document).ready(function(){
                 category : $('#targets_category').attr('value'),
                 title    : $('#name').attr('value'),
                 amount   : tofloat($('#tg_amount').val()),
-                money    : $('#amountf').val(),
+                money    : tofloat($('#amountf').val()),
                 start    : $('#start').attr('value'),
                 end      : $('#end').attr('value'),
                 photo    : $('#photo').attr('value'),

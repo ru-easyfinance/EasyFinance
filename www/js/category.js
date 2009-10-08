@@ -204,6 +204,7 @@ $(document).ready(function() {
      */
     function saveCategory() {
         if (cat_checkForm()) {
+            $.jGrowl("Категория сохраняется", {theme: 'green'});
             $.post($('form').attr('action'), {
                 id     : $('#cat_id').val(),
                 name   : $('#namecat').val(),

@@ -328,7 +328,7 @@ $(document).ready(function() {
         if (!op_validateForm()){
             return false;
         }
-
+        $.jGrowl("Операция сохраняется", {theme: 'green'});
         $.post(($('form').attr('action')), {
             id        : $('#op_id').val(),
             type      : $('#op_type').val(),

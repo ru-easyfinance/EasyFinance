@@ -303,7 +303,7 @@ class Targets_Model {
             amount_done   = IFNULL((SELECT SUM(money) FROM target_bill WHERE target_id = target.id LIMIT 1), 0)
             , percent_done  = IFNULL(ROUND(amount_done / (amount / 100), 2),0)
             , forecast_done = IFNULL(ROUND((DATEDIFF(ADDDATE(date_begin,(amount / (amount_done / DATEDIFF(CURRENT_DATE(), date_begin)))), date_begin) / DATEDIFF(date_end, date_begin)) * 100, 2),0)
-            WHERE user_id=5 AND id=65", $user_id, $target_id);
+            WHERE user_id=? AND id=?", $user_id, $target_id);//5 65
         return true;
     }
 
