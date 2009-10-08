@@ -54,9 +54,9 @@ class User
 
     /**
      *
-     * @var <type>
+     * @var type
      */
-    private $user_periodic = array();
+    private $user_events = array();
 
     /**
      * Ссылка на экземпляр DBSimple
@@ -197,6 +197,7 @@ class User
         $this->initUserAccounts();
         $this->initUserTags();
         $this->initUserTargets();
+        $this->initUserEvents();
     }
 
     /**
@@ -248,6 +249,12 @@ class User
             $this->user_targets = $_SESSION['user_targets'];
         } else {
             $this->user_targets = array();
+        }
+
+        if (isset ($_SESSION['user_events']) && is_array($_SESSION['user_events']) ) {
+            $this->user_events = $_SESSION['user_events'];
+        } else {
+            $this->user_events = array();
         }
         return true;
     }
@@ -358,6 +365,23 @@ class User
     }
 
     /**
+     * Возвращает Текущие События пользователя
+     */
+    public function initUserEvents()
+    {
+        $array = $this->db->select("SELECT c.id, c.chain, c.title, DATE_FORMAT(c.near_date,'%d.%m.%Y') as date,
+            c.comment, c.event, c.amount, c.category, DATEDIFF(NOW(),c.near_date) AS diff, IFNULL(p.account,0) AS account, 
+            IFNULL(p.drain,0) AS drain
+            FROM calendar c
+            LEFT JOIN periodic p ON c.chain = p.id
+            WHERE c.close=0 AND c.near_date < NOW() AND c.user_id=?  ORDER BY date DESC", $this->getId());
+        $this->user_events = array();
+        foreach ($array as $var) {
+            $this->user_events[$var['id']] = $var;
+        }
+    }
+
+    /**
      * Возвращает пользовательские категории
      * @return array mixed
      */
@@ -410,6 +434,14 @@ class User
     function getUserTargets()
     {
         return $this->user_targets;
+    }
+
+    /**
+     * Возвращает текущие события пользователя
+     */
+    public function getUserEvents()
+    {
+        return $this->user_events;
     }
 
     /**

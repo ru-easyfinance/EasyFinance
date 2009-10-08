@@ -47,18 +47,11 @@ class Template_Controller {
     function __destruct()
     {
         $this->loadJS();
+
 //periodic	*[key]	id	ид			выводить за сегодня и завтра
 //		title	название
 //		date	дата
 //		amount	сумма
-
-//flash	title	имя				общее состояние(сумма всех показателей)
-//	value	значение
-//	color	Цвет (1 красный,2 желтый, 3 зелёный)
-
-//var res = {tags:['asd'],
-//    periodic:{1:{id:1,title:'asd',date:'12.12.1111',amount:'1231231.12'}},
-//    flash:{title:'asdad',value:100,color:1}};
 
 
         $user = Core::getInstance()->user;
@@ -117,12 +110,13 @@ class Template_Controller {
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'accounts' => $accounts,
-            'periodic' => array(
-                'id' => array(
-                    'title' => '',
-                    'date' => '',
-                    'amount'=>'')
-                ),
+//            'periodic' => array(
+//                'id' => array(
+//                    'title' => '',
+//                    'date' => '',
+//                    'amount'=>'')
+//                ),
+            'events' => Core::getInstance()->user->getUserEvents(),
             'user_targets' => $targets['user_targets'],
             'popup_targets' => $targets['pop_targets'],
             'currency' => $currency,

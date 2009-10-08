@@ -15,7 +15,7 @@ var head = {step1: 'txt1',step2: 'txt4',step3:  'txt3',step4: 'txt2',step5: 'txt
 var timeoutid;
 function update_text(id)
 {
-    $('ul.steps li').attr('class','');
+    $('ul.steps li').removeAttr('class');
     $('li#'+id).attr('class','act');
     $('div.descr').html('<div class="'+head[id]+'" style="display: block;">'+text[id]+'</div>');
     $('#bgpics').attr('class',bgpix[id]);

@@ -557,21 +557,26 @@ $(document).ready(function() {
             /*
              *@TODO Проверить вводимые значения ui-tabs-selected
              */
-            var href = '/calendar/add/';
-            if ($('#cal_mainselect .act').attr('id')=='periodic') {
-                href = '/periodic/add/';
+            if ($('#cal_href').val() == '') {
+                if ($('#cal_mainselect .act').attr('id')=='periodic') {
+                    href = '/periodic/add/';
+                } else {
+                    href = '/calendar/add/';
+                }
+            } else {
+                href = $('#cal_href').val();
             }
+
             var infinity;
+
             if ( $('.rep_type[checked]').val() == 2 ) {
                 infinity = 1;
             } else {
                 infinity = 0;
             }
             var d = {
-                //id :        $('#op_dialog_event #op_'+dt+'id').val(),
-                key:        $('#op_dialog_event #cal_key').attr('value'),
+                id:         $('#op_dialog_event #cal_key').attr('value'),
                 title:      $('#op_dialog_event #cal_title').attr('value'),
-                //date_start: $('#op_dialog_event #op_'+dt+'date_start').attr('value'),
                 date_end:   $('#op_dialog_event #cal_date_end').attr('value'),
                 date:       $('#op_dialog_event #cal_date').attr('value'),
                 time:       $('#op_dialog_event #cal_time').attr('value'),
@@ -1228,7 +1233,6 @@ $('li#c2').click(function(){a_list()})
 	*/
 	
         if (pathName=='/login/' && window.location.protocol=='https:') {
-        	
             $('#login').show();
         }
 
@@ -1256,24 +1260,179 @@ $('li#c2').click(function(){a_list()})
     //}
     //});
 
-/**
- * Форматирует валюту
- * @param num float Сумма, число
- * @return string
- */
- function formatCurrency(num) {
-    if (num=='undefined') num = 0;
-    //num = num.toString().replace(/\$|\,/g,'');
-    if(isNaN(num)) num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num*100+0.50000000001);
-    cents = num%100;
-    num = Math.floor(num/100).toString();
-    if(cents<10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-        num = num.substring(0,num.length-(4*i+3))+' '+
-        num.substring(num.length-(4*i+3));
-    return (((sign)?'':'-') + '' + num + '.' + cents);
-}
+    /**
+     * Форматирует валюту
+     * @param num float Сумма, число
+     * @return string
+     */
+     function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
+    }
+
+    /**
+     * Вслывающее окно с регулярными транзакциями и событиями календаря
+     */
+    // Щелчок по кнопке закрытия окна
+    $('#popupcalendar .inside .close').click(function(){
+        $('#popupcalendar').hide();
+    });
+    // Щелчок по кнопке "Подтвердить"
+    $('#btnAccept').click(function(){
+        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
+            var obj = new Array ();
+            $(ch).each(function(){
+                obj.push($(this).closest('tr').attr('value'));
+            });
+            $.post('/calendar/events_accept/', {
+                ids: obj.toString()
+            }, function(data){
+                for(v in obj) {
+                    delete res.events[obj[v]];
+                }
+                $.jGrowl('Отмеченные события подтверждены', {theme: 'green'});
+                ShowEvents();
+
+            }, 'json');
+        }
+    });
+    // Щелчок по кнопке "Пропустить"
+    $('#btnContinue').click(function(){
+
+    });
+    // Щелчок по кнопке "Редактировать"
+    $('#btnEdit').click(function(){
+
+    });
+    // Щелчок по кнопке "Удалить"
+    $('#btnDel').click(function(){
+        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+        if ($(ch).length > 0 && confirm('Удалить отмеченные?')) {
+            var obj = new Array ();
+            $(ch).each(function(){
+                obj.push($(this).closest('tr').attr('value'));
+            });
+            $.post('/calendar/events_del/', {
+                ids: obj.toString()
+            }, function(data){
+                for(v in obj) {
+                    delete res.events[obj[v]];
+                }
+                $.jGrowl('Отмеченные события удалены', {theme: 'green'});
+                ShowEvents();
+
+            }, 'json');
+        }
+    });
+    // При щелчке по родительскому чекбоксу
+    $('#events_periodic thead .chk input,#events_calendar thead .chk input').click(function(){
+        var parentCheckbox = this;
+        $('tbody .chk input', $(parentCheckbox).closest('table')).each(function(){
+            if ($(parentCheckbox).attr('checked')) {
+                $(this).attr('checked','checked');
+            } else {
+                $(this).removeAttr('checked');
+            }
+        });
+    });
+
+
+    ShowEvents();
+    
+    /**
+     * Выводит окошко пользователя для управления событиями
+     */
+    function ShowEvents(type,page) {
+        if (type == null) {type = '';}
+        if (page == null) {page = 1 ;}
+        if ((res['events']) != null) {
+            ptr = '';ctr = '';p = 0;c = 0;pc = 0;cc = 0;
+            count = 4;
+            start = (page-1) * count;
+            end   = count * page;
+            for (v in res['events']) {
+                if (res['events'][v]['event'] == 'per') {
+                    if (p >= start && p <= end) {
+                        var cat_name = $('#ca_'+parseInt(res['events'][v]['category'])).attr('title');
+                        if (cat_name === undefined) { 
+                            cat_name = ' ';
+                        }
+
+                        var account_name = '';
+                        if (res.accounts[res.events[v]['account']] !== undefined) {
+                            account_name = res.accounts[res.events[v]['account']]['name'];
+                        }
+                        
+                        ptr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
+                                    +'<td>'+res['events'][v]['date']+'</td>'
+                                    +'<td>'+res['events'][v]['title']+'</td>'
+                                    +'<td>'+res['events'][v]['diff']+'</td>'
+                                    +'<td>'+cat_name+'</td>'
+                                    +'<td>'+account_name+'</td>'
+                                    +'<td class="money">'+res['events'][v]['amount']+'</td></tr>';
+                        p++;
+                    }
+                    pc++;
+                } else if (res['events'][v]['event'] == 'cal') {
+                    if (c >= start && c <= end) {
+                        if (res['events'][v]['drain'] == 1) {
+                            drain = 'Расход';
+                        } else {
+                            drain = 'Доход';
+                        }
+                        ctr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
+                                    +'<td>'+res['events'][v]['date']+'</td>'
+                                    +'<td>'+res['events'][v]['comment']+'</td>'
+                                    +'<td>'+res['events'][v]['diff']+'</td>'
+                                    +'<td>'+drain+'</td></tr>';
+                        c++;
+                    }
+                    cc++;
+                }
+            }
+            $('#events_periodic tbody').html(ptr);
+            $('#events_calendar tbody').html(ctr);
+//            ppages = parseInt(pc / p);
+//            cpages = parseInt(cc / c);
+//            for (i = 0; i < ppages; i++) {
+//
+//            }
+//            $('#pages_periodic').html();
+            if (pc > 0 || cc > 0) {
+                $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
+                $('#popupcalendar').show();
+            } else {
+                $('#popupcalendar').hide();
+            }
+//            <th>Пр. дней</th>
+//            <th>Категория</th>
+//            <th>Счет</th>
+//            <th class="money">Сумма</th>
+
+
+//            {"id":"5355",
+//            "chain":"36",
+//            "title":"\u041d\u043e\u0432\u0430\u044f \u0442\u0440\u0430\u043d\u0437\u0430\u043a\u0446\u0438\u044f",
+//            "near_date":"2009-10-05 00:00:00",
+//            "comment":"\u044b\u0432\u0430",
+//            "event":"per",
+//            "amount":"-123.00",
+//            "category":"284"}
+        }
+    }
+
+
+
 })

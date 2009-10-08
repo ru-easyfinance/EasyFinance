@@ -431,6 +431,58 @@ class Calendar_Model {
             return '[]';
         }
     }
+    
+    
+    /**
+     * Удаляет массив событий из календаря
+     * @param array mixed $ids
+     * @return json
+     */
+    function events_del($ids = array())
+    {        
+        $sql = '';
+        foreach ($ids as $v) {
+            if (!empty($sql)) $sql .= ',';
+            $sql .= (int)$v;
+        }
+        if (!empty($sql)) {
+            $sql = "DELETE FROM calendar WHERE id IN ({$sql}) AND user_id=?";
+            Core::getInstance()->db->query($sql, Core::getInstance()->user->getId());
+            Core::getInstance()->user->initUserEvents();
+            Core::getInstance()->user->save();
+        }
+        return '[]';
+    }
+
+    /**
+     * Подтверждает события в календаре
+     * @param array mixed $ids
+     * @return json
+     */
+    function events_accept($ids = array())
+    {
+        $events = Core::getInstance()->user->getUserEvents();
+        $oper = new Operation_Model();
+        $sql = '';
+        foreach ($ids as $v) {
+            if (!empty($sql)) $sql .= ',';
+            $sql .= (int)$v;
+
+            if ($events[$v]['event'] == 'per') {
+                $oper->add($events[$v]['amount'], formatRussianDate2MysqlDate($events[$v]['date']), 
+                    $events[$v]['category'], $events[$v]['drain'], $events[$v]['comment'],
+                    $events[$v]['account'], array('регулярная транзакция'));
+            }
+        }
+        if (!empty($sql)) {
+            $sql = "UPDATE calendar SET close=1 WHERE id IN ({$sql}) AND user_id=?";
+            Core::getInstance()->db->query($sql, Core::getInstance()->user->getId());
+            Core::getInstance()->user->initUserEvents();
+            Core::getInstance()->user->save();
+        }
+        return '[]';
+    }
+
 
     /**
      * Возвращает массив событий в формате JSON за указанный период

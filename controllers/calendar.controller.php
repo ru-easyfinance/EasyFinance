@@ -88,4 +88,22 @@ class Calendar_Controller extends Template_Controller
         $end   = $_GET['end'];
         die ($this->model->getEvents($start, $end));
     }
+
+    /**
+     * Удаляем события из календаря
+     */
+    function events_del()
+    {
+        $ids = explode(',', $_POST['ids']);
+        die($this->model->events_del($ids));
+    }
+
+    /**
+     * Подтверждаем события
+     */
+    function events_accept()
+    {
+        $ids = explode(',', $_POST['ids']);
+        die($this->model->events_accept($ids));
+    }
 }
