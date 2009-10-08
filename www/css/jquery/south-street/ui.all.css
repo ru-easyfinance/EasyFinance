@@ -129,7 +129,7 @@
 .ui-datepicker .ui-datepicker-title select.ui-datepicker-year { float: right; }
 .ui-datepicker table {width: 100%; font-size: 0.9em; border-collapse: collapse; margin:0 0 0.4em; }
 .ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: 0.7em 0 0 0; padding:0 0.2em; border-left: 0; border-right: 0; border-bottom: 0; }
-
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
 .ui-datepicker td span, .ui-datepicker td a:hover {background:#E4FFE0;}
 
 .ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: 0.5em 0.2em 0.4em; cursor: pointer; padding: 0.2em 0.6em 0.3em 0.6em; width:auto; overflow:visible; }
