@@ -2,37 +2,8 @@
 /**
  * @desc Модель бюджета
  * @author rewle
- * @param {json} bdgt все данные по бюджету сформированные в формате:
-        {
-            list : {
-                _key{int} : {
-                        name : {String},
-                        total : {Int},
-                        children :[{array}
-                            {
-                            id : {Int},
-                            name : {String},
-                            total : {Int},
-                            cur : {String},
-                            limit_red : {Int},
-                            limit_green : {Int},
-                            limit_strip : {Int},
-                            mean_expenses : {Float},//вроде средний расход
-                            type : {0|1}//расходная - 0,доходный-1
-                            }
-                        ]
-                    }
-                },
-            main :  {
-                total:{Int},
-                cur : {String},
-                expense_all : {Int},
-                income_all : {Int},
-                balance : {Int}
-            }
-        });
  */
-easyFinance.models.budget = function(bdgt)
+easyFinance.models.budget = function()
     {
         /**
          * @desc {json} все данные по бюджету сформированные по формату:
@@ -65,13 +36,14 @@ easyFinance.models.budget = function(bdgt)
                 }
             });
          */
-        var _data = bdgt;
-        /**@deprecated
+        //var _data = $.extend(bdgt);
+        /**
          * @desc устанавливает список
          * @param data {}
          * @return void
          */
-        function setup_list (data){
+        var _data;
+        function load (data){
             _data = data;
         }
         /**
@@ -86,7 +58,7 @@ easyFinance.models.budget = function(bdgt)
             var children,str = '';
             for (var key in bud_list)
             {
-                str += '<div class="line open">';
+                str += '<div class="line open" id="'+key+'">';
                 str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
                 str += '<div class="amount">'+bud_list[key]['total']+'</div>';
                 children = bud_list[key]['children'];
@@ -174,14 +146,15 @@ easyFinance.models.budget = function(bdgt)
          * @desc возвращает общее сформированное инфо о бюджете
          * @return {} {total:html,group:html} for $().append(html)
          */
-        function print_info (){
+        function print_info(){
             var ret = {total:'',group:''};
             ret.total=_data.main.total;
             var str = '<div class="income">Итого доходов: <span><b>'+_data.main.income_all+'</b> '+_data.main.cur+'</span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+_data.main.expense_all+'</b> '+_data.main.cur+'</span></div>';
                 str += '<div class="rest">Остаток: <span><b>'+_data.main.balance+'</b> '+_data.main.cur+'</span></div>';
             ret.group=str;
+            return ret;
         }
 
-        return {setup_list:setup_list, print_info:print_info, print_list:print_list, add:add, del:del, edit:edit}
+        return {load:load, print_info:print_info, print_list:print_list, add:add, del:del, edit:edit}
     }

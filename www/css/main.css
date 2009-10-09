@@ -1032,7 +1032,8 @@ div.cont ul li.add a { width: 12px; }
 .budget .f_field1, .budget .f_field2, .form .f_field1 { position: relative; margin-bottom: 18px; padding-bottom: 17px; border-bottom: 1px solid #e5e5e5; //zoom: 1; }
 .budget .f_field1:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .budget .f_field1 div { position: relative; float: left; }
-.budget .f_field1 span { margin-right: 17px; font-size: 14px; }
+.budget .f_field1 span {  font-size: 14px; }
+.budget .f_field1 input#year { width: 35px}
 .budget .f_field1 select { margin-right: 5px; }
 .budget .f_field1 a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
 

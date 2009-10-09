@@ -1,15 +1,14 @@
 $(document).ready(function() {
 
-////заглушка
-budget.setup_list(
-{
+var budget = easyFinance.models.budget();
+budget.load({
     list : {
         1 : {
                 name : 'name',
                 total : 667,
                 children :[
                     {
-                    id : 1,    
+                    id : 1,
                     name : 'c_name',
                     total : 667,
                     cur : 'rur',
@@ -29,5 +28,6 @@ budget.setup_list(
         income_all : 676,
         balance : 333
     }
-});
+})
+easyFinance.widgets.budget(budget);
 })

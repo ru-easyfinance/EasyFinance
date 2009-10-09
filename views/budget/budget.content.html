@@ -8,11 +8,65 @@
 								</ul>
 							</div>
 						</div>
+                                            <!-- b_ - prefix -->
+                                            <div id="edit_budget" class="b_form" style="display:none">
+                                                        <div  class="line">
+                                                            <span class="b_category" id="0"></span>
+                                                        </div>
+                                                        <div  class="line">
+                                                                <select id="b_drain_type" name="b_drain_type">
+                                                                        <option value="0">Расходный</option>
+                                                                        <option value="0">Доходный</option>
+                                                                </select>
+                                                        </div>
+                                                        <div class="line">
+                                                                <span>Планировать бюджет на </span>
+                                                                <select id="b_period" name="period">
+                                                                        <option value="30">Месяц</option>
+                                                                        <option value="90">Квартал</option>
+                                                                        <option value="365">Год</option>
+                                                                </select>
+                                                                <span>начиная с</span>
+                                                                <select id="b_month" name="month">
+                                                                        <option value="1">Января</option>
+                                                                        <option value="2">Февраля</option>
+                                                                        <option value="3">Марта</option>
+                                                                        <option value="4">Апреля</option>
+                                                                        <option value="5">Мая</option>
+                                                                        <option value="6">Июня</option>
+                                                                        <option value="7">Июля</option>
+                                                                        <option value="8">Августа</option>
+                                                                        <option value="9">Сентября</option>
+                                                                        <option value="10">Октября</option>
+                                                                        <option value="11">Ноября</option>
+                                                                        <option value="12">Декабря</option>
+                                                                </select>
+                                                                <input type="text" value="2009" id="b_year" name="year"/>
+                                                        </div>
+                                                        <div class="line">
+                                                                <span class="amount">Сумма :</span>
+                                                                <input type="text" class="amount" id="b_amount" name="b_amount" />
+                                                        </div>
+                                                        <div class="line buttonpane">
+                                                                <div>
+                                                                        <input type="button" id="b_save" value="Сохранить"/>
+                                                                </div>
+                                                                <div>
+                                                                        <input type="button" id="b_cancel" value="Отменить"/>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                            <!-- -->
 						<div class="inside budget">
 							<form action="">
 								<div class="f_field1">
 									<div>
-										<span>Показать план бюджета за </span>
+										<span>Показать </span>
+                                                                                <select>
+                                                                                    <option value="0">расходный</option>
+                                                                                    <option value="1">доходный</option>
+                                                                                </select>
+                                                                                <span> план бюджета за </span>
 										<select id="month" name="month">
 											<option value="1">Январь</option>
                                                                                         <option value="2">Февраль</option>

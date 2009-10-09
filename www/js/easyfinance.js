@@ -5,7 +5,7 @@
 var easyFinance = {};
 
 easyFinance.models = {};
-
+easyFinance.widgets = {};
 $(document).ready(function() {
-    easyFinance.models.category.load();
+    //easyFinance.models.category.load();
 });
