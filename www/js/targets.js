@@ -131,7 +131,7 @@ $(document).ready(function(){
     function loadTargets(data) {
         var s = '';
         for(v in data) {
-            s += '<div class="object" tid='+data[v]["id"]+' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
+            s += '<div class="object" tid='+data[v]["id"]+' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
