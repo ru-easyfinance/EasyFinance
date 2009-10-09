@@ -133,12 +133,12 @@ $(document).ready(function()
         }
         str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td>'+d_cur+'</td></tr>';
         str = str + '</table>';
-        $('#operation_list').append(str);
+        $('#total_amount').html(str);
 ////////////////////////////////////////////////////////////////@todo перенести в цсс
         $('.item td.cur').css('width','50px');
         $('.item td.total_balance').css('text-align','right').css('padding-right','0');
 //////////////////////////////////////////////////////scrollbar
-        $('.operation_list').jScrollPane();
+        $('#operation_list').jScrollPane();
     }
     /**
      * Функция реализует доступ к функциям на странице по стандартизированному запросу.

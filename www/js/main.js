@@ -1356,16 +1356,11 @@ $('li#c2').click(function(){a_list()})
         if (type == null) {type = '';}
         if (page == null) {page = 1 ;}
         if ((res['events']) != null) {
-            var ptr = '';
-            var ctr = '';
-            var p = 0;
-            var c = 0;
-            var pc = 0;
-            var cc = 0;
+            var ptr = '',ctr = '',p = 0,c = 0,pc = 0,cc = 0;
             var count = 4;
             var start = (page-1) * count;
             var end   = count * page;
-            for (v in res['events']) {
+            for (var v in res['events']) {
                 if (res['events'][v]['event'] == 'per') {
                     if (p >= start && p <= end) {
                         var cat_name = $('#ca_'+parseInt(res['events'][v]['category'])).attr('title');

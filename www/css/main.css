@@ -192,13 +192,13 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #auth .f img { display: block; width: 60px; height: 60px; }
 #header #auth .f span { display: block; position: absolute; top: 0; left: 0; width: 60px; height: 60px; background: url('/img/i/coners.gif') no-repeat 0 -90px; }
 
-#header #advertisement { position: absolute; top: 7px; left: 508px; width: 419px; }
+#header #advertisement { position: absolute; top: 7px; left: 208px; width: 729px; }
 #header #advertisement .ct { margin-bottom: -4px; }
 #header #advertisement .cb { margin-top: -4px; }
 #header #advertisement .inside { position: relative; margin: 0 auto 0 auto; width: 400px; height: 80px; overflow: hidden; }
 #header #advertisement dt { margin-right: 5px; font-size: 10px; line-height: 11px; color: #cdd8cb; text-align: right; }
 
-#presentation { position: relative; height: 270px; background: url('/img/i/bg_presentation.png') no-repeat 0 0; top :-15px}
+#presentation { position: relative; height: 270px; background: url('/img/i/bg_presentation.png') no-repeat 0 0;}
 #presentation a.reg, #presentation a.demo { display: block; position: absolute; width: 217px; height: 36px; text-indent: -999px; overflow: hidden; }
 #presentation a.reg { top: 59px; right: 25px; }
 #presentation a.demo { top: 112px; right: 65px; }
@@ -1124,6 +1124,13 @@ div.cont ul li.add a { width: 12px; }
 .budget .waste_list .open table, .categories .open table { display: block; }
 .budget .waste_list .close a.name, .categories .close a.name { background: url('/img/i/plus.gif') no-repeat 6px 4px; }
 .budget .waste_list .close table, .categories .close table { display: none; }
+
+.b_form .line{margin-top:10px;
+              margin-left:10px;
+min-height:20px;
+position:relative;}
+.b_form .buttonpane div{float:left;margin :5px}
+
 
 .categories { position: relative; width: 517px;height:300px; border: 1px solid #e8e8e8; }
 .categories .line { width: auto; padding: 7px 0 9px 0; overflow: visible; }
