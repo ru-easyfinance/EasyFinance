@@ -57,8 +57,15 @@ class Category_Controller extends Template_Controller
      */
     function add($args)
     {
-        if ($this->model->add()){
-            die('[]');
+        $newID = $this->model->add();
+        
+        if ($newID){
+            die ( json_encode(
+                array(
+                    'id' => $newID,
+                )
+            ));
+
         } else {
             die(false);
         }

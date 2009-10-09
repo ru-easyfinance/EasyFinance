@@ -1,8 +1,22 @@
 // {* $Id: category.js 113 2009-07-29 11:54:49Z ukko $ *}
+
+// @todo: оптимизировать редактирование категории
+// @todo: сейчас в этом случае делается запрос на сервер и перерисовываются все категории
+
 $(document).ready(function() {
     var cat;
 
-    loadCategory();
+    easyFinance.models.category.load(function(data) {
+        // Обновляем список системных категорий
+        drawSystemCategoriesCombo();
+        
+        // Обновляем список родительских категорий
+        drawParentCategoriesCombo();
+
+        // Выводим список пользовательских категорий
+        drawUserCategoriesList();
+    });
+
     $('#add_form').hide();
 
     //BIND
@@ -63,7 +77,7 @@ $(document).ready(function() {
      * @param id
      */
     function fillForm(id) {
-        if (parseInt(cat.user[id]['type']) == -1) {
+        if (cat.user[id]['parent'] == "0") {
             $('#subcat').attr('disabled', 'disabled');
         } else {
             $('#subcat').removeAttr('disabled');
@@ -94,91 +108,115 @@ $(document).ready(function() {
         return true;
     }
 
-    /**
-     * Загружает пользовательские и системные категории
-     */
-    function loadCategory() {
-        $.get('/category/getCategory/', '',function(data) {
+    // Заполняем список системных категорий
+    function drawSystemCategoriesCombo() {
+        var system = easyFinance.models.category.getAllCategories().system;
 
-            cat = {};
-            cat = data;
-            $('div.categories div').remove('div');
-            // Обновляем системные категории
-            var sys = '';
-            var id,pr,ct;
-            for(id in data.system) {
-                sys += '<option value="'+data.system[id]['id']+'">'+data.system[id]['name']+'</option>';
-            }$('#catsys').empty().append(sys);
+        var sys = '';
+        for(id in system) {
+            sys += '<option value="'+system[id]['id']+'">'+system[id]['name']+'</option>';
+        }$('#catsys').empty().append(sys);
+    }
 
-            // Обновляем список категорий
-            var m='<option value=""> --- </option>',p=[];
-            //$('.categories #table').append('<table>');
-            for(id in data.user) {
-                // Если это родительская категория
-                if (data.user[id]['parent'] == 0) {
-                    m += '<option value="'+data.user[id]['id']+'">'+data.user[id]['name']+'</option>'; // Заполняем список родительских категорий
-                    p[id] = $('<div class="line open" id="'+id+'"><div class="l_n_cont"><a class="name">'
-                    +data.user[id]['name']+'</a>'
-                                        +'<div class="cont">'
-                                            +'<ul class="ul_head">'
-                                                +'<li class="edit"><a class="cat" title="Редактировать">Редактировать</a></li>'
-                                                +'<li class="del"><a class="cat" title="Удалить">Удалить</a></li>'
-                                                +'<li class="add"><a class="cat" title="Добавить">Добавить</a></li>'
-                                            +'</ul></div>'
-                                        +'</div></div>').appendTo('div.categories');
-                } else {
-                    pr = data.user[id]['parent'];
+    // Заполняем список родительских категорий
+    function drawParentCategoriesCombo () {
+        var user = easyFinance.models.category.getAllCategories().user;
 
-                    if (data.user[id]['type'] > 0) { // Доходная
-                        ct ='<div class="t3" title="Доходная">Доходная</div>';
-                    } else if (data.user[id]['type'] < 0) { // Расходная
-                        ct ='<div class="t1" title="Расходная">Расходная</div>';
-                    } else { //Универсальная
-                        ct ='<div class="t2" title="Универсальная">Универсальная</div>';
-                    }
+        var m='<option value=""> --- </option>';
+        for(id in user) {
+            if (user[id]['parent'] == 0) {
+                // родительская категория
+                m += '<option value="'+user[id]['id']+'">'+user[id]['name']+'</option>';
+            }
+        }
+        $('#subcat').html(m);
+    }
+    
+    function listInsertCategory(cat){
+        if (cat.parent == 0) {
+            listInsertParentCategory(cat);
+        } else {
+            listInsertChildCategory(cat);
+        }
 
-                    if ($('#'+pr+' table').length == 0) {
-                        $('<table/>').appendTo($('#'+pr));
-                    }
-                    $('.categories #'+pr+' table').append(
-                        '<tr id="'+id+'">'
-                        +'<td class="w1">'
-                            +'<a>'+data.user[id]['name']+'</a>'
-                        +'</td>'
-                        +'<td class="w2">'
-                            + ct
-                        +'</td>'
-                        +'<td class="w3">'+data.system[data.user[id]['system']]['name']
-                        +'</td>'
-                        +'<td class="w4">'
-                            +'<div class="cont" css: style{z-index: 1;}>'
+        $('.block2 .inside .categories').css({width: '597px',border:'0'}).jScrollPane();
+        $('.jScrollPaneTrack').css({'right':'80px','z-index':1,'top':'0px'});
+    }
+
+    function listInsertParentCategory(cat){
+        $('<div class="line open" id="'+cat.id+'"><div class="l_n_cont"><a class="name">'
+            +cat.name+'</a>'
+                +'<div class="cont">'
+                    +'<ul class="ul_head" style="z-index:100">'
+                        +'<li class="edit"><a class="cat" title="Редактировать">Редактировать</a></li>'
+                        +'<li class="del"><a class="cat" title="Удалить">Удалить</a></li>'
+                        +'<li class="add"><a class="cat" title="Добавить">Добавить</a></li>'
+                    +'</ul></div>'
+                +'</div></div>').appendTo('div.categories');
+    }
+
+    function listInsertChildCategory(cat){
+        var system = easyFinance.models.category.getSystemCategories()[cat.system];
+
+        var pr = cat['parent'];
+
+        if (cat['type'] > 0) { // Доходная
+            ct ='<div class="t3" title="Доходная">Доходная</div>';
+        } else if (cat['type'] < 0) { // Расходная
+            ct ='<div class="t1" title="Расходная">Расходная</div>';
+        } else { //Универсальная
+            ct ='<div class="t2" title="Универсальная">Универсальная</div>';
+        }
+
+        if ($('#'+pr+' table').length == 0) {
+            $('<table/>').appendTo($('#'+pr));
+        }
+
+        $('.categories #'+pr+' table').append(
+            '<tr id="'+cat.id+'">'
+            +'<td class="w1">'
+                +'<a>'+cat['name']+'</a>'
+            +'</td>'
+            +'<td class="w2">'
+                + ct
+            +'</td>'
+            +'<td class="w3">'+system['name']
+            +'</td>'
+            +'<td class="w4">'
+                +'<div class="cont" css: style{z-index: 1;}>'
 //                                +'<b>500 руб.</b>'
 //                                +'<div class="indicator">'
 //                                    +'<div style="width: 10%;">'
 //                                        +'<span>10%</span>'
 //                                    +'</div>'
 //                                +'</div>'
-                                +'<ul><li class="edit"><a title="Редактировать">Редактировать</a></li>'
-                                    +'<li class="del"><a title="Удалить">Удалить</a></li>'
-                                    +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
-                        +'</td></tr>'
-                    );
-                }             
+                    +'<ul style="z-index:100"><li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                        +'<li class="del"><a title="Удалить">Удалить</a></li>'
+                        +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
+            +'</td></tr>'
+        );
+    }
+
+
+     /**
+     * Выводит таблицу пользовательских категорий
+     */
+    function drawUserCategoriesList() {
+            var data = easyFinance.models.category.getAllCategories();
+
+            cat = data;
+            //$('div.categories div').remove('div');
+            $('div.categories').empty();
+
+            // Обновляем список родительских категорий
+            drawParentCategoriesCombo(data.user);
+
+            var id,pr,ct;
+            //var p=[];
+            //$('.categories #table').append('<table>');
+            for(id in data.user) {
+                listInsertCategory(data.user[id]);
             }
-            //$('.categories #table').append('</table>');
-            //$('div.categories').append(c);
-            $('#subcat').html(m);
-			
-            $('.block2 .inside').css({width: '679px'});
-            $('.block2 .inside .form_block').css({width: '353px'});
-            $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});//.h
-            $('.block2 .inside .line').css({width: '507px'});
-            $('.block2 .inside .h tr').css({width: '507px'});
-            $('.block2 .inside .categories').css({width: '597px',border:'0'}).jScrollPane();
-            $('.line,.h').css('border-left','1px solid #E8E8E8').css('border-right','1px solid #E8E8E8')
-            $('.jScrollPaneTrack').css({'right':'80px','z-index':1,'top':'0px'})
-            $('ul').css('z-index', 100)//*/
-        }, 'json');
     }
     /**
      *slide menu del edit
@@ -205,17 +243,36 @@ $(document).ready(function() {
     function saveCategory() {
         if (cat_checkForm()) {
             $.jGrowl("Категория сохраняется", {theme: 'green'});
-            $.post($('form').attr('action'), {
-                id     : $('#cat_id').val(),
-                name   : $('#namecat').val(),
-                parent : $('#subcat').val(),
-                type   : $('#cattype').val(),
-                system : $('#catsys').val()
-            }, function() {
-                $('#add_form').hide();
-                $.jGrowl("Категория успешно сохранена", {theme: 'green'});
-                loadCategory();
-            }, 'json');
+
+            var id = $('#cat_id').val();
+            var name = $('#namecat').val();
+            var subcat = $('#subcat').val();
+            var type = $('#cattype').val();
+            var sys = $('#catsys').val();
+
+            var done = function(cat) {
+                    $('#add_form').hide();
+                    $.jGrowl("Категория успешно сохранена", {theme: 'green'});
+                    
+                    if (act == '/category/add/') {
+                        // категория была добавлена
+                        listInsertCategory(cat);
+                    } else {
+                        // категория была отредактирована
+                        // @todo сделать функцию обновления категории
+                        drawUserCategoriesList();
+                    }
+
+                    // Обновляем список родительских категорий
+                    if (cat.parent == "0")
+                        drawParentCategoriesCombo();
+            }
+
+            var act = $('form').attr('action');
+            if (act == '/category/add/')
+                easyFinance.models.category.add(name, subcat, type, sys, done);
+            else
+                easyFinance.models.category.editById(id, name, subcat, type, sys, done);
         }
     }
 
@@ -224,11 +281,19 @@ $(document).ready(function() {
      * @param id
      */
     function delCategory(id) {
-        $.post('/category/del/', {id:id}, function() {
+        var isParent = easyFinance.models.category.isParentCategory(id);
+        
+        easyFinance.models.category.deleteById(id, function() {
+            // Удаляем категорию из списка
+            $('#'+id).remove();
+
+            // Обновляем список родительских категорий
+            if (isParent == true)
+                drawParentCategoriesCombo();
+            
             clearForm();
             $('#add_form').hide();
             $.jGrowl("Категория удалена", {theme: 'green'});
-            loadCategory();
-        }, 'json');
+        });
     }
 });

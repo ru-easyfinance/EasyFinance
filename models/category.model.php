@@ -251,10 +251,11 @@ class Category_Model {
         
         $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type,
             dt_create) VALUES(?, ?, ?, ?, ?, NOW())";
-        $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
+        $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        return true;
+        
+        return $newID;
     }
 
     function edit()
