@@ -98,6 +98,16 @@ $(document).ready(function()
         {
             type = g_types[account_list[key]['type']];
             if (!isNaN(type)){
+                /*$.post(
+                    '/accounts/newacclogic/',
+                    {
+
+                    },
+                    function(data){
+                        q = data[0]['user_id'];
+                        alert(q);
+                    }
+                );*/
                 str = '<tr class="item" id="' + account_list[key]['id'] + '">';
                 str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
                 str = str + '<td class="total_balance">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
@@ -454,6 +464,13 @@ $(document).ready(function()
                         account.description + '</td>';
             str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
                 formatCurrency(account.total_balance) + ' ' +account.cur + '</td>';
+            if (account_list[id]["reserve"] != 0){
+                delta = (formatCurrency(account.total_balance-account_list[id]["reserve"]));
+                str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+'</td>'
+                str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+account_list[id]["reserve"]+'</td>'
+            }
+
+
             str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
                 formatCurrency(account.def_cur) + '</td>';
 

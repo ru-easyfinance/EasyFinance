@@ -152,6 +152,9 @@ class Operation_Controller extends Template_Controller
             case 3: // ПРОПУСК
                 break;
             case 4: // Перевод на финансовую цель см. в модуле фин.цели
+                $target = new Targets_Model();
+                $target->model->editTargetOperation($array['id'],$array['amount'], $array['date'], $array['category'],
+                    $array['drain'], $array['comment'], $array['account'], $array['tags']);
                 break;
         }
     }

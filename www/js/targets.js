@@ -25,7 +25,7 @@ $(document).ready(function(){
 
     // Редактируем одну из наших целей
     $(".f_f_edit,div.descr a").live('click', function(){
-        var f = $(this).closest('.object');
+       var f = $(this).closest('.object');
         clearForm();
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
@@ -48,7 +48,7 @@ $(document).ready(function(){
         return false;
     });
 
-    $('#targets_category').empty();
+    //$('#targets_category').empty();
     for (var v in res['targets_category']) {
         $('#targets_category').append('<option value="'+v+'">'+res['targets_category'][v]+'</option>');
     }
@@ -69,15 +69,25 @@ $(document).ready(function(){
 
     // Копируем
     $('.f_f_copy').live('click', function(){
-        var f = $(this).closest('.object');
+       var f = $(this).closest('.object');
         clearForm();
+        $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
         $('#name').val(f.attr('name'));
+        $('#tg_amount').val(f.attr('amount'));
+        $('#amountf').val(f.attr('money'));
+        $('#start').val(f.attr('start'));
+        $('#end').val(f.attr('end'));
         $('#photo').val(f.attr('photo'));
         $('#url').val(f.attr('url'));
         $('#comment').val(f.attr('comment'));
         $('#account').val(f.attr('account'));
-        $('#visible').val(f.attr('visible'));
+        if (f.attr('visible')==1){
+            $('#visible').attr('checked','checked');
+        }else{
+            $('#visible').removeAttr('checked');
+        }
+        $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
         return false;
     });
@@ -121,7 +131,7 @@ $(document).ready(function(){
     function loadTargets(data) {
         var s = '';
         for(v in data) {
-            s += '<div class="object"><div class="ban"></div>'
+            s += '<div class="object" tid='+data[v]["id"]+' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
@@ -163,10 +173,10 @@ $(document).ready(function(){
      */
     function saveTarget() {
         //TODO Проверяем валидность и сабмитим
-        if ( ($('#amountf').val()) > ($('#tg_amount').val()) ){
+        /*if ( ($('#amountf').val()) > ($('#tg_amount').val()) ){
             $.jGrowl("Сумма начального платежа превышает накопительную сумму!!!", {theme: 'red'});
             return false;
-        }
+        }*/
         $.post(
             $('#tpopup form').attr('action'),
             {

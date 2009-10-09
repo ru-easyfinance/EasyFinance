@@ -67,7 +67,13 @@ class Accounts_Model
 
     }
 
-	
+
+    /*function newaccmlogic(){
+        return $this->db->select("SELECT user id
+                                    FROM operation
+                                    WHERE id = 1");
+    }
+	*/
     /**
      * Проверяем тип поля
      * @return array
@@ -349,12 +355,25 @@ class Accounts_Model
 
 
 
+
+
+
+
+
         foreach ($id as $key=>$val)
         {
             $res[$val]['type']=$type[$key];
             $res[$val]['cur']=$cur[$key];
             $res[$val]['id']=$id[$key];
+            //
+            $reservsqlquery = "SELECT sum(money) AS s FROM target_bill WHERE bill_id = ?";
+            $que = $this->db->select($reservsqlquery,$id[$key]);
 
+            if ( $que[0]['s'] != null )
+                $res[$val]['reserve']=$que[0]['s'];
+            else
+                $res[$val]['reserve']=0;
+            //
             foreach ($values as $k=>$v)
             {
                 if ($values[$k]['account_fieldsaccount_field_id'] == $val)

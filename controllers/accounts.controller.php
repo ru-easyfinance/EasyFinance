@@ -94,6 +94,10 @@ class Accounts_Controller extends Template_Controller
         die($this->tpl->fetch("accounts/accounts.fields.html"));
     }
 
+   /* function newacclogic(){
+        die ( json_encode($this->model->newaccmlogic()) );
+    }
+*/
     /**
      * Добавляет новый счёт пользователя
      * @param $args
