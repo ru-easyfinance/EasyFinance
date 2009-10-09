@@ -368,6 +368,24 @@ $(document).ready(function() {
             $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;
         }
+        //Запрос подтверждения на выполнение операции в случае ухода в минус.
+        if ( (tofloat($('#op_amount').val()) > res['accounts'][$("#op_account option:selected").val()]['total_balance'] ) && $("#op_type option:selected").val() != 1){
+            if (!confirm('Данная транзакция превышает остаток средств на вашем счёте. Продолжить ?'))
+            //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
+            return false;
+        }//*/
+
+        //alert(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
+        //alert(res['accounts'][$("#op_account option:selected").val()]['reserve']);
+        //если сумма совершаемой операции превышает сумму доступного остатка(Общий - резерв на финцели)
+        // тогда предупреждаем пользователя и в случае согласия снимаем нехватающую часть денег с фин цели.
+        if ( tofloat($('#op_amount').val()) > ( res['accounts'][$("#op_account option:selected").val()]['total_balance']
+                                - res['accounts'][$("#op_account option:selected").val()]['reserve'])   ) {
+            alert ("Введённая сумма операции превышает доступный остаток счёта.\n\
+Переведите деньги с финансовой цели и повторите операцию ещё раз!");
+        }
+
+
         if ($('#op_type').val() == 4) {
             /**
              *@FIXME Написать обновление финцелей
@@ -830,6 +848,11 @@ $('li#c2').click(function(){a_list()})
         var s = '';
         for (key in data )
         {
+
+
+
+
+            
             i = g_types[data[key]['type']];
             str = '<li><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
@@ -1356,11 +1379,13 @@ $('li#c2').click(function(){a_list()})
         if (type == null) {type = '';}
         if (page == null) {page = 1 ;}
         if ((res['events']) != null) {
+
             var ptr = '',ctr = '',p = 0,c = 0,pc = 0,cc = 0;
-            var count = 4;
-            var start = (page-1) * count;
-            var end   = count * page;
+            var counti = 4;//не работает count
+            var start = (page-1) * counti;
+            var end   = counti * page;
             for (var v in res['events']) {
+
                 if (res['events'][v]['event'] == 'per') {
                     if (p >= start && p <= end) {
                         var cat_name = $('#ca_'+parseInt(res['events'][v]['category'])).attr('title');
