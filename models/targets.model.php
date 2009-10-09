@@ -43,7 +43,7 @@ class Targets_Model {
      * Количество целей, показываемых на совмёщённой странице
      * @var int
      */
-    private $limitCommon = 5;
+    private $limitCommon = 10;
 
 
     /**

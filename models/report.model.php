@@ -237,6 +237,8 @@ class Report_Model
         $arr = array();
         if ($account != 0) {
         $sql = "
+
+
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id

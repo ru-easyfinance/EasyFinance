@@ -369,7 +369,10 @@ $(document).ready(function() {
             return false;
         }
         //Запрос подтверждения на выполнение операции в случае ухода в минус.
-        if ( (tofloat($('#op_amount').val()) > res['accounts'][$("#op_account option:selected").val()]['total_balance'] ) && $("#op_type option:selected").val() != 1){
+        var am = tofloat($('#op_amount').val()+'.0');
+        var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
+        //* && $("#op_type option:selected").val() != 1*/)
+        if ((am-tb)>0){
             if (!confirm('Данная транзакция превышает остаток средств на вашем счёте. Продолжить ?'))
             //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
             return false;
@@ -379,20 +382,22 @@ $(document).ready(function() {
         //alert(res['accounts'][$("#op_account option:selected").val()]['reserve']);
         //если сумма совершаемой операции превышает сумму доступного остатка(Общий - резерв на финцели)
         // тогда предупреждаем пользователя и в случае согласия снимаем нехватающую часть денег с фин цели.
-        if ( tofloat($('#op_amount').val()) > ( res['accounts'][$("#op_account option:selected").val()]['total_balance']
-                                - res['accounts'][$("#op_account option:selected").val()]['reserve'])   ) {
+        if ((am - ( tb- res['accounts'][$("#op_account option:selected").val()]['reserve']))>0) {
             alert ("Введённая сумма операции превышает доступный остаток счёта.\n\
 Переведите деньги с финансовой цели и повторите операцию ещё раз!");
         }
 
 
-        if ($('#op_type').val() == 4) {
+        if ($('#op_type').val() == '4') {
             /**
              *@FIXME Написать обновление финцелей
              */
              //alert("tratata");
-            var amount = parseFloat($("#op_target option:selected").attr("amount"));
-            $("#op_amount").text(amount);
+
+            //var amount = parseFloat($("#op_target option:selected").attr("amount"));
+            //alert(amount);
+            //$("#op_amount").val(amount);
+
             var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
             $("#op_amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
