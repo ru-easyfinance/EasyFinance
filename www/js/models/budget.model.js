@@ -148,13 +148,26 @@ easyFinance.models.budget = function()
          */
         function print_info(){
             var ret = {total:'',group:''};
-            ret.total=_data.main.total;
+            //ret.total=_data.main.total;
             var str = '<div class="income">Итого доходов: <span><b>'+_data.main.income_all+'</b> '+_data.main.cur+'</span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+_data.main.expense_all+'</b> '+_data.main.cur+'</span></div>';
                 str += '<div class="rest">Остаток: <span><b>'+_data.main.balance+'</b> '+_data.main.cur+'</span></div>';
             ret.group=str;
             return ret;
         }
-
-        return {load:load, print_info:print_info, print_list:print_list, add:add, del:del, edit:edit}
+        /**
+         * @desc возвращает объект для редактирования и тп
+         * @return {} {}
+         */
+        function get_data(p_id,c_id){
+            var tmp = _data.list[p_id]['children'];
+            for (var key in tmp)
+            {
+                if( tmp[key]['id'] == c_id ){
+                    return tmp[key];
+                }
+            }
+            return {};
+        }
+        return {load:load, print_info:print_info, print_list:print_list, add:add, del:del, edit:edit, get_data : get_data}
     }

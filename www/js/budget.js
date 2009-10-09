@@ -26,7 +26,8 @@ budget.load({
         cur : 'rur',
         expense_all : 999,
         income_all : 676,
-        balance : 333
+        balance : 333,
+        period : 30
     }
 })
 easyFinance.widgets.budget(budget);
