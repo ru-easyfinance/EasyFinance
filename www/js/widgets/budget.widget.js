@@ -20,7 +20,7 @@ easyFinance.widgets.budget = function(model){
     //var _$_total = model.print_info().total;
 
 
-    $('.budget .waste_list form').append(_$_list);
+    $('.budget .waste_list form').html(_$_list);
     $('.budget .f_field3').html(_$_group);
     //$('.budget #total_budget').val(_$_total);
 
@@ -31,8 +31,30 @@ easyFinance.widgets.budget = function(model){
 //    $('#edit_budget').dialog({bgiframe: true,
 //                autoOpen: false,
 //                width: 647});
-    $('#master').dialog({bgiframe: true,autoOpen: false});
-    
+    $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
+    $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520});
+    $('#addacc').click(function(){$('#sel_date').dialog('open');})
+var ret,date;
+    $('.next').click(function(){
+        date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
+        $('#sel_date').dialog('close');
+        $('#master').dialog('open');
+        $('#master button').click(function(){
+            var id =$(this).attr('id');
+            $('#master .waste_list form tr').each(function(){
+              ret[id][$(this).attr('id')] = $(this).find('input').val();
+            })
+            $('#master .waste_list form').html(model.print_list(id))
+            
+        });
+        $('#master .w3').hide();
+    })
+    $('#master #b_save').click(function(){
+        $('#master button').click();
+        var r_str = ret.toString();
+        $.get('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
+            }, 'json')
+    });
     /**
      * bind events with budgets
      */

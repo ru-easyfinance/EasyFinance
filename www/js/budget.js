@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 var budget = easyFinance.models.budget();
-budget.load({
+budget.load(res.budget/*{
     list : {
         1 : {
                 name : 'name',
@@ -29,6 +29,6 @@ budget.load({
         balance : 333,
         period : 30
     }
-})
+}*/)
 easyFinance.widgets.budget(budget);
 })

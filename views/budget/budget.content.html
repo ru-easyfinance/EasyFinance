@@ -59,8 +59,7 @@
                                             <!-- -->
 						<div class="inside budget">
                                                     <div class="addcategories" style="margin-bottom:20px;right:25px;top:-10px;"><a id="addacc">Мастер создания бюджета</a></div>
-                                                    <form action="">
-                                                            
+                                                 
 								<div class="f_field1">
 									<div>
 										<span>Показать </span>
@@ -89,23 +88,61 @@
                                                                                 <input type="button" value="Показать" id="reload_bdg" name="reoad_bdg"/>
 									</div>
 								</div>
-								<!-- <div class="f_field2">
-									<div class="field">
-										<span>Общий бюджет</span>
-                                                                                <input id="total_budget" type="text" value="12 500 00" readonly="readonly"/>
-										
-									</div>
-								</div> -->
 								<div class="f_field3">
 									<div class="income">Итого доходов: <span><b>1 131 200</b> руб.</span></div>
 									<div class="waste">Итого расходов: <span><b>1 131 200</b> руб.</span></div>
 									<div class="rest">Остаток: <span><b>1 131 200</b> руб.</span></div>
 								</div>
-							</form>
+                                                                <div class="waste_list">
+								<div class="h">
+									<table>
+										<tr>
+											<td class="w1">Категория</td>
+											<td class="w2">Сумма</td>
+											<td class="w3">Год. лимит</td>
+											<td class="w4">Сред. расход</td>
+
+										</tr>
+									</table>
+								</div>
+								<div class="scroll_cont">
+									<div class="scroll" style="top: 0; height: 67px;"></div>
+									<form action="">
+
+
+                                        <!-- СЮДА ВСТАВЛЯТЬ -->
+									</form>
+								</div>
+							</div>
+                                                    </div>
 						<!--таблица-->
-							<div id="master" class="waste_list" style="display:none">
-                                                                <button id="0" class="tab">Расходы</button>
-                                                                <button id="0" class="tab">Доходы</button>
+                                                <div id="sel_date">
+                                                    <span>Пожалуйста выберете месяц, с которого начали планировать бюджет</span>
+                                                    <select id="month" name="month">
+											<option value="01">Январь</option>
+                                                                                        <option value="02">Февраль</option>
+                                                                                        <option value="03">Март</option>
+                                                                                        <option value="04">Апрель</option>
+                                                                                        <option value="05">Май</option>
+                                                                                        <option value="06">Июнь</option>
+                                                                                        <option value="07">Июль</option>
+                                                                                        <option value="08">Август</option>
+                                                                                        <option value="09">Сентябрь</option>
+                                                                                        <option value="10">Октябрь</option>
+                                                                                        <option value="11">Ноябрь</option>
+                                                                                        <option value="12">Декабрь</option>
+										</select>
+										<input type="text" value="2009" id="year" name="year"/>
+                                                                                <br>
+                                                                                <button class="next">Следующий шаг</button>
+                                                </div>
+
+                                                <div id="master" class="inside budget">
+                                                    <button id="0" class="tab">Расходы</button>
+                                                    <button id="1" class="tab">Доходы</button>
+                                                    
+                                                    <div class="waste_list" style="background:0">
+                                                                
 								<div class="h">
 									<table>
 										<tr>
@@ -117,8 +154,8 @@
 										</tr>
 									</table>
 								</div>
-								<div class="scroll_cont">
-									<div class="scroll" style="top: 0; height: 67px;"></div>
+								<div>
+									
 									<form action="">
 
 										
@@ -126,29 +163,11 @@
 									</form>
 								</div>
 							</div>
-                                                        <div class="waste_list">
-								<div class="h">
-									<table>
-										<tr>
-											<td class="w1">Категория</td>
-											<td class="w2">Сумма</td>
-											<td class="w3">Год. лимит</td>
-											<td class="w4">Сред. расход</td>
-
-										</tr>
-									</table>
-								</div>
-								<div class="scroll_cont">
-									<div class="scroll" style="top: 0; height: 67px;"></div>
-									<form action="">
-
-
-                                        <!-- СЮДА ВСТАВЛЯТЬ -->
-									</form>
-								</div>
-							</div>
+                                                    <input type="button" id="b_save" value="Сохранить">
+                                                        
+                                                </div>
 						<!--/таблица-->
-						</div>
+						
 						<div class="cb"><div></div></div>
 					</div>
 				<!--/Бюджет-->

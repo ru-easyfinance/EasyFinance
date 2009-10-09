@@ -7,34 +7,31 @@ easyFinance.models.budget = function()
     {
         /**
          * @desc {json} все данные по бюджету сформированные по формату:
+  list : {
+    _key : {                             // {int} Ид родительской категории
+        name : {String},                 // Имя!!!!!!!!!!
+        total_drain : {Int},             // Итого по расходам
+        total_profit : {Int},            // Итого по доходам
+        children :[{array}
             {
-                list : {
-                    _key{int} : {
-                            name : {String},
-                            total : {Int},
-                            children :[{array}
-                                {
-                                id : {Int},
-                                name : {String},
-                                total : {Int},
-                                cur : {String},
-                                limit_red : {Int},
-                                limit_green : {Int},
-                                limit_strip : {Int},
-                                mean_expenses : {Float},//вроде средний расход
-                                type : {0|1}//расходная - 0,доходный-1
-                                }
-                            ]
-                        }
-                    },
-                main :  {
-                    total:{Int},
-                    cur : {String},
-                    expense_all : {Int},
-                    income_all : {Int},
-                    balance : {Int}
-                }
-            });
+                id : {Int},              // ид ребёнка (может дублироваться)
+                name : {String},         // имя!!!!!!!!!1
+                amount : {Int},          // сумма
+                cur : {String},          // валюта!!!!!!!!
+//                limit_red : {Int},       // Превышение среднего за 3 мес (0 - 100%)
+//                limit_green : {Int},     // мес. расх.
+                mean_drain : {Float}, //средний расход
+                type : {0|1}//расходная - 0,доходный-1
+            }
+        ]
+    }
+    }, main :  {
+        drain_all :  {Int},
+        profit_all:  {Int},
+        start:       {dd.mm.yyyy},
+        end:         {dd.mm.yyyy}
+    }
+});
          */
         //var _data = $.extend(bdgt);
         /**
@@ -60,21 +57,22 @@ easyFinance.models.budget = function()
             {
                 str += '<div class="line open" id="'+key+'">';
                 str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
-                str += '<div class="amount">'+bud_list[key]['total']+'</div>';
+                str += '<div class="amount">'+bud_list[key]['total'+(type?'_drain':'_profit')]+'</div>';
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children)
                 {
                     if (type==children[k]['type']){
+                        var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['id']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+children[k]['total']+'" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
-                        str += '<div class="green" style="width: '+children[k]['limit_green']+'%;"></div>';
-                        str += '<div class="red" style="width: '+children[k]['limit_red']+'%;"></div>';
-                        str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
+                        str += '<div class="green" style="width: '+((rgb-1)<0)?'100':(rgb-2*(rgb-1))+'%;"></div>';
+                        str += '<div class="red" style="width: 100%;"></div>';
+                        //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
-                        str += '<td class="w4"><span>'+children[k]['mean_expenses']+children[k]['cur']+'</span></td>';
+                        str += '<td class="w4"><span>'+children[k]['mean_drain']+children[k]['cur']+'</span></td>';
                         str += '</tr>';
                     }
                 }
@@ -149,9 +147,9 @@ easyFinance.models.budget = function()
         function print_info(){
             var ret = {total:'',group:''};
             //ret.total=_data.main.total;
-            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.income_all+'</b> '+_data.main.cur+'</span></div>';
-                str += '<div class="waste">Итого расходов: <span><b>'+_data.main.expense_all+'</b> '+_data.main.cur+'</span></div>';
-                str += '<div class="rest">Остаток: <span><b>'+_data.main.balance+'</b> '+_data.main.cur+'</span></div>';
+            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b> '+_data.main.cur+'</span></div>';
+                str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b> '+_data.main.cur+'</span></div>';
+                str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b> '+_data.main.cur+'</span></div>';
             ret.group=str;
             return ret;
         }

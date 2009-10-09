@@ -1076,7 +1076,7 @@ $('li#c2').click(function(){a_list()})
             '/report/':'m4',
             '/targets/':'m3'}
        var page_mid = pathtoid[pathName];
-            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
+            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/budget/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
             if(!$('#menu3').length){
                 $('div#mainwrap').prepend(mmenu);
             }
@@ -1090,7 +1090,8 @@ $('li#c2').click(function(){a_list()})
             'm2':[  '<a href="/accounts/">Счета</a>',
                     '<a href="/operation/">Журнал операций</a>',
                     '<a href="/category/">Категории</a>'],
-            'm3':['<a></a>'],
+            'm3':['<a href="/targets/">Фин цели</a>',
+                    '<a href="/budget/">Бюджет</a>'],
             'm4':['<a></a>'],
             'm5':[  '<a href="/calendar/">Календарь</a>',
                     '<a href="/periodic/">Регулярные транзакции</a>'],
