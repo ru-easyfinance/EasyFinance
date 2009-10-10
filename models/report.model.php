@@ -77,14 +77,14 @@ class Report_Model
             $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ?
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ?
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
         } else {
             $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
         }
