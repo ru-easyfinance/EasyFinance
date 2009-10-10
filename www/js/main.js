@@ -91,7 +91,7 @@ function FloatFormat(obj, in_string )
 }
 
 
-
+//запланировано 
 
 $(document).ready(function() {
     // *** Функции ***
@@ -1442,6 +1442,7 @@ $('li#c2').click(function(){a_list()})
             if (pc > 0 || cc > 0) {
                 $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
                 $('#popupcalendar').show();
+                $('#popupcalendar .inside').css('width', 'auto');
             } else {
                 $('#popupcalendar').hide();
             }
