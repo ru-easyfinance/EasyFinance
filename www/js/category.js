@@ -259,8 +259,12 @@ $(document).ready(function() {
                         listInsertCategory(cat);
                     } else {
                         // категория была отредактирована
-                        // @todo сделать функцию обновления категории
-                        drawUserCategoriesList();
+                        //drawUserCategoriesList();
+                        // @ticket 156
+                        // Удаляем старую версию категории из списка
+                        $('#'+id).remove();
+                        // Вставляем обновлённую версию категории
+                        listInsertCategory(cat);
                     }
 
                     // Обновляем список родительских категорий
