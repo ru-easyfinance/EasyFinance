@@ -1908,12 +1908,4 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .popup_map2  div.w_d_foot { background:transparent url(/img/i/jQuery/review/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:400px; }
 .popup_map2 .close { background:transparent url(/img/i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;right:5px;top:12px;width:25px;z-index:9999999; }
 
-/* used for categories list */
-.block2 .inside { width: 679px; }
-.block2 .inside .form_block {width: 353px; }
-.block2 .inside .h {width: 507px; border-top: 1px solid #E8E8E8; }
-.block2 .inside .line {width: 507px; }
-.block2 .inside .h tr {width: 507px; }
-.line,.h { border-left: 1px solid #E8E8E8; border-right: 1px solid #E8E8E8; }
-
 @import izmeneniya.css
