@@ -176,7 +176,6 @@ $(document).ready(function() {
             var ssum1=0;
             var ssum2=0;
             var sdelta=0;
-            alert('1');
             for (c in data[0]){
                 if (data[0][c].su != null){
                 if (data[0][c].per == 1) {
@@ -212,7 +211,6 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
-                        alert('2');
                 tr +=        '<tr><td ><span><b>'+data[0][c].cat_name+
                             '<span><b></td>'+
                             '<td class="repdate"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
