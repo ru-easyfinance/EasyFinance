@@ -219,7 +219,7 @@ function get_tree_select ($selected = 0)
     $cat = Core::getInstance()->user->getUserCategory();
     $array = array();
     $result = '';
-
+/////////////
     $arrayoften = array();
     $arr = array();
     array_pop(&$arr);
