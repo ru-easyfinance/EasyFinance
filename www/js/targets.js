@@ -171,38 +171,48 @@ $(document).ready(function(){
 
     function ValidateForm(){
         che = 1;
+        str = '';
         if ($('#category').val() == ''){
-            $.jGrowl("Неверно введена категория!!!", {theme: 'red'});
+            str += "Неверно введена категория!!!<br>"
+            //$.jGrowl("Неверно введена категория!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if ($('#tg_amount').val() == ''){
-            $.jGrowl("Неверно введена сумма финцели!!!", {theme: 'red'});
+            str += "Неверно введена сумма финцели!!!<br>"
+            //$.jGrowl("Неверно введена сумма финцели!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if ($('#name').val() == ''){
-            $.jGrowl("Неверно введено имя!!!", {theme: 'red'});
+            str += "Неверно введено имя!!!<br>"
+            //$.jGrowl("Неверно введено имя!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if ($('#start').val() == ''){
-            $.jGrowl("Неверно введена начальная дата!!!", {theme: 'red'});
+            str += "Неверно введена начальная дата!!!<br>"
+            //$.jGrowl("Неверно введена начальная дата!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if ($('#end').val() == ''){
-            $.jGrowl("Неверно введена конечная дата!!!", {theme: 'red'});
+            str += "Неверно введена конечная дата!!!<br>"
+            //$.jGrowl("Неверно введена конечная дата!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if ($('#name').val() == ''){
-            $.jGrowl("Неверно введено имя!!!", {theme: 'red'});
+            str += "Неверно введено имя!!!<br>"
+            //$.jGrowl("Неверно введено имя!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if ($('#amountf').val() == ''){
-            $.jGrowl("Неверно введены начальная сумма!!!", {theme: 'red'});
+            str += "Неверно введены начальная сумма!!!<br>"
+            //$.jGrowl("Неверно введены начальная сумма!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         if (che == 1)
             return true;
-        else
+        else{
+            $.jGrowl(str, {theme: 'red', sticky: true});
             return false;
+        }
     };
 
     /**
