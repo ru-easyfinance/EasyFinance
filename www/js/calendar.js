@@ -253,7 +253,6 @@ $(document).ready(function() {
                 s = new Date(start.getFullYear(), start.getMonth(), 1);
             }
             var e = new Date(s.getFullYear(), s.getMonth()+4, 1);
-            
 
             $.getJSON('/calendar/events/', {
                     start: s.getTime(),

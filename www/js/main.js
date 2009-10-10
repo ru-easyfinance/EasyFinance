@@ -818,6 +818,8 @@ $('.tags_list .add').live('click', function(){
     })
 })
 
+
+
 //accounts
 $('li#c2').click(function(){a_list()})
     function a_list(){
@@ -914,16 +916,43 @@ $('li#c2').click(function(){a_list()})
            //hash_api('#edit'+$(this).find('div.id').attr('value'));//временный хак до полного перехода на аякс
        })
       ///////////////////////periodic/////////////////////////////////////////
-      data = res['periodic'];
-            c = '<h2>Регулярные транзакции</h2><ul>';
+      var data = res['events'];
+      //events:{
+      //"5694":{
+      //    "id":"5694",
+      //    "chain":"0",
+      //    "title":"1234",
+      //    "date":"10.10.2009",
+      //    "comment":"",
+      //    "event":"cal",
+      //    "amount":"0.00",
+      //    "category":"0",
+      //    "diff":"0",
+      //    "account":"0",
+      //    "drain":"0"}
+            var p = '';var c = '';
             for(var id in data) {
-                c += '<li id="'+id+'">'
-                    +'<a href="/periodic/">'+data[id]['title']+'</a>'
-                    +'<b>'+ data[id]['amount']+'</b>'
-                    +'<span class="date">'+data[id]['date']+'</span></li>';
+                if (data[id]['event']=='cal') {
+                    c += '<li id="'+id+'">'
+                        +'<a href="/calendar/">'+data[id]['title']+'</a>'
+                        +'<span class="date">'+data[id]['date']+'</span></li>';
+                } else {
+                    p += '<li id="'+id+'">'
+                        +'<a href="/periodic/">'+data[id]['title']+'</a>'
+                        +'<b>'+ data[id]['amount']+'</b>'
+                        +'<span class="date">'+data[id]['date']+'</span></li>';
+                }
+
             }
-            c = c + '</ul>';
-            $('.transaction').html(c);
+            if (c != '') {
+                c = '<h2>События календаря</h2><ul>' + c + '</ul>';
+            }
+            if (p != '') {
+                p = '<h2>Регулярные транзакции</h2><ul>' + p + '</ul>';
+            }
+            if ((c+p) != '') {
+                $('.transaction').html(c+p+'&nbsp;<a href="#" id="AshowEvents">Показать события</a>');
+            }
       /////////////////////////targets///////////////////////////////////
       data = res['user_targets'];
             s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
@@ -1063,7 +1092,7 @@ $('li#c2').click(function(){a_list()})
             '/report/':'m4',
             '/targets/':'m3'}
        var page_mid = pathtoid[pathName];
-            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/budget/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
+            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
             if(!$('#menu3').length){
                 $('div#mainwrap').prepend(mmenu);
             }
@@ -1077,7 +1106,8 @@ $('li#c2').click(function(){a_list()})
             'm2':[  '<a href="/accounts/">Счета</a>',
                     '<a href="/operation/">Журнал операций</a>',
                     '<a href="/category/">Категории</a>'],
-            'm3':['<a href="/budget/">Бюджет</a>',
+            'm3':[
+                //'<a href="/budget/">Бюджет</a>',
                     '<a href="/targets/">Фин цели</a>'],
             'm4':['<a></a>'],
             'm5':[  '<a href="/calendar/">Календарь</a>',
@@ -1301,6 +1331,13 @@ $('li#c2').click(function(){a_list()})
     // Щелчок по кнопке закрытия окна
     $('#popupcalendar .inside .close').click(function(){
         $('#popupcalendar').hide();
+        $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
+        $.cookie('events_hide', 1, {path: '/'});
+    });
+    $('#AshowEvents').live('click',function(){
+         $.cookie('events_hide', null, {path: '/'});
+         ShowEvents();
+         return false;
     });
     // Щелчок по кнопке "Подтвердить"
     $('#btnAccept').click(function(){
@@ -1322,6 +1359,7 @@ $('li#c2').click(function(){a_list()})
             }, 'json');
         }
     });
+
     // Щелчок по кнопке "Пропустить"
     $('#btnContinue').click(function(){
 
@@ -1428,8 +1466,10 @@ $('li#c2').click(function(){a_list()})
 //            $('#pages_periodic').html();
             if (pc > 0 || cc > 0) {
                 $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
-                $('#popupcalendar').show();
-                $('#popupcalendar .inside').css('width', 'auto');
+                if ($.cookie('events_hide') != 1) {
+                    $('#popupcalendar').show();
+                }
+                //$('#popupcalendar .inside').css('width', 'auto');
             } else {
                 $('#popupcalendar').hide();
             }

@@ -75,9 +75,12 @@ var ret,date;
 //         $('#edit_budget #b_year').val($('.budget #r_year').val());
 //     })
      $('#reload_bdg').click(function(){
-         if ( ($('.budget #r_month').val()!=$('.budget #month').val())||($('.budget #r_year').val()!=$('.budget #year').val()) )
-         {
-                 $.post('/budget/load/',{date:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()},function(data){model.load(data)},'json')
+         if ( ($('.budget #r_month').val()!=$('.budget #month').val())||($('.budget #r_year').val()!=$('.budget #year').val()) ) {
+            $.post('/budget/load/',{
+                date:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
+            },function(data){
+                model.load(data)
+            },'json')
          }
         $('.budget #r_month').val($('.budget #month').val())
         $('.budget #r_year').val($('.budget #year').val())

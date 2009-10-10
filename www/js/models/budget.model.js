@@ -53,8 +53,8 @@ easyFinance.models.budget = function()
             if (isNaN(type)){return '';}
             var bud_list = _data.list;
             var children,str = '';
-            for (var key in bud_list)
-            {
+            
+            for (var key in bud_list) {
                 str += '<div class="line open" id="'+key+'">';
                 str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
                 str += '<div class="amount">'+bud_list[key]['total'+(type?'_drain':'_profit')]+'</div>';
@@ -147,9 +147,16 @@ easyFinance.models.budget = function()
         function print_info(){
             var ret = {total:'',group:''};
             //ret.total=_data.main.total;
-            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b> '+_data.main.cur+'</span></div>';
-                str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b> '+_data.main.cur+'</span></div>';
-                str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b> '+_data.main.cur+'</span></div>';
+/**
+ * @FIXME Откуда тут берётся валюта? Её негде указывать, разве что её нужно брать из валюты по умолчанию
+ *
+ *            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b> '+_data.main.cur+'</span></div>';
+ *               str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b> '+_data.main.cur+'</span></div>';
+ *               str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b> '+_data.main.cur+'</span></div>';
+ */
+            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b></span></div>';
+                str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b></span></div>';
+                str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
             ret.group=str;
             return ret;
         }

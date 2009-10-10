@@ -53,10 +53,16 @@ class User
     private $user_targets = array();
 
     /**
-     *
-     * @var type
+     * Массив с событиями 
+     * @var array mixed
      */
     private $user_events = array();
+
+    /**
+     * Массив с бюджетом пользователя
+     * @var array mixed
+     */
+    private $user_budget = array();
 
     /**
      * Ссылка на экземпляр DBSimple
@@ -198,6 +204,7 @@ class User
         $this->initUserTags();
         $this->initUserTargets();
         $this->initUserEvents();
+        $this->initUserBudget();
     }
 
     /**
@@ -255,6 +262,12 @@ class User
             $this->user_events = $_SESSION['user_events'];
         } else {
             $this->user_events = array();
+        }
+
+        if (isset ($_SESSION['user_budget']) && is_array($_SESSION['user_budget']) ) {
+            $this->user_budget = $_SESSION['user_budget'];
+        } else {
+            $this->user_budget = array();
         }
         return true;
     }
@@ -382,6 +395,67 @@ class User
             $this->user_events[$var['id']] = $var;
         }
     }
+    
+    /**
+     * Возвращает бюджет пользователя на текущий месяц
+     */
+    public function initUserBudget()
+    {
+        $sql = "SELECT b.id, b.category, b.drain, b.currency, b.amount, 
+            DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start, DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
+                , (SELECT AVG(amount)
+                    FROM budget t
+                    WHERE (t.date_start BETWEEN ADDDATE(b.date_start, INTERVAL -3 MONTH) AND LAST_DAY(NOW()))
+                    AND b.category = t.category AND b.user_id=t.user_id
+                ) AS avg_3m
+                FROM budget b
+                WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(NOW())";
+        $array = $this->db->select($sql, $this->getId(), date('Y-m-01'));
+
+        
+        $list = array();
+        $category = $this->getUserCategory();
+        $drain_all = 0; $profit_all = 0;
+        foreach ($array as $var) {
+            // Создаём родительскую категорию
+            if ( !isset($list['c_'.$category[$var['category']]['cat_parent']]) ) {
+                $list['c_'.$category[$var['category']]['cat_parent']] = array (
+                    'name'         => $category[$var['category']]['cat_name'],
+                    'category'     => $var['category'],
+                    'total_drain'  => 0,
+                    'total_profit' => 0,
+                    'children'     => array()
+                );
+            }
+            // Добавляем ребёнка к родителю
+            $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
+                'id'         => $var['id'],
+                'name'       => $category[$var['category']]['cat_name'],
+                'amount'     => $var['amount'],
+                'cur'        => Core::getInstance()->currency[$var['currency']]['name'],
+                'mean_drain' => round($var['avg_3m'],2),//средний расход
+                'type'       => ($var['drain']==1)? 0 : 1 //расходная - 0,доходный-1
+            );
+
+            // Обновляем суммы
+            if ($var['drain'] == 1) {
+                $drain_all += $var['amount'];
+                $list['c_'.$category[$var['category']]['cat_parent']]['total_drain'] += $var['amount'];
+            } else {
+                $profit_all += $var['amount'];
+                $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] += $var['amount'];
+            }
+        }
+        $this->user_budget = array (
+            'list' => $list,
+            'main' => array (
+                'drain_all'  => $drain_all,
+                'profit_all' => $profit_all,
+                'start'      => $var['date_start'],
+                'end'        => $var['date_end']
+            )
+        );
+    }
 
     /**
      * Возвращает пользовательские категории
@@ -444,6 +518,15 @@ class User
     public function getUserEvents()
     {
         return $this->user_events;
+    }
+
+    /**
+     * Возвращает пользовательский бюджет
+     * @return array
+     */
+    public function getUserBudget()
+    {
+        return $this->user_budget;
     }
 
     /**
