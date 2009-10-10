@@ -170,21 +170,39 @@ $(document).ready(function(){
 
 
     function ValidateForm(){
-        if ($('#category').val() == '')
+        che = 1;
+        if ($('#category').val() == ''){
+            $.jGrowl("Неверно введена категория!!!", {theme: 'red'});
+            che = 0;
+        }
+        if ($('#tg_amount').val() == ''){
+            $.jGrowl("Неверно введена сумма финцели!!!", {theme: 'red'});
+            che = 0;
+        }
+        if ($('#name').val() == ''){
+            $.jGrowl("Неверно введено имя!!!", {theme: 'red'});
+            che = 0;
+        }
+        if ($('#start').val() == ''){
+            $.jGrowl("Неверно введена начальная дата!!!", {theme: 'red'});
+            che = 0;
+        }
+        if ($('#end').val() == ''){
+            $.jGrowl("Неверно введена конечная дата!!!", {theme: 'red'});
+            che = 0;
+        }
+        if ($('#name').val() == ''){
+            $.jGrowl("Неверно введено имя!!!", {theme: 'red'});
+            che = 0;
+        }
+        if ($('#amountf').val() == ''){
+            $.jGrowl("Неверно введены начальная сумма!!!", {theme: 'red'});
+            che = 0;
+        }
+        if (che == 1)
+            return true;
+        else
             return false;
-        if ($('#tg_amount').val() == '')
-            return false;
-        if ($('#name').val() == '')
-            return false;
-        if ($('#start').val() == '')
-            return false;
-        if ($('#end').val() == '')
-            return false;
-        if ($('#name').val() == '')
-            return false;
-        if ($('#amountf').val() == '')
-            return false;
-        return true;
     };
 
     /**
@@ -197,7 +215,7 @@ $(document).ready(function(){
             return false;
         }*/
         if (!ValidateForm()){
-            $.jGrowl("Неверно введены входные данные!!!", {theme: 'red'});
+            //$.jGrowl("Неверно введены входные данные!!!", {theme: 'red'});
             return false;
         }
         $.post(
