@@ -525,16 +525,6 @@ $(document).ready(function() {
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         });
 
-        /*$('#op_amount').calculator({
-            layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
-                    'MR_7_8_9_-' + $.calculator.UNDO,
-                    'MS_4_5_6_*' + $.calculator.PERCENT ,
-                    'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-                    'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-            showOn: 'button',
-            buttonImageOnly: true,
-            buttonImage: '/img/i/unordered.gif' //opbutton
-        });*/
         $('.calculator-trigger').click(function(){
             $(this).closest('div').find('#op_amount,#amount').val(tofloat($('#op_amount').val()));
         })
@@ -1090,8 +1080,8 @@ $('li#c2').click(function(){a_list()})
             'm2':[  '<a href="/accounts/">Счета</a>',
                     '<a href="/operation/">Журнал операций</a>',
                     '<a href="/category/">Категории</a>'],
-            'm3':['<a href="/targets/">Фин цели</a>',
-                    '<a href="/budget/">Бюджет</a>'],
+            'm3':['<a href="/budget/">Бюджет</a>',
+                    '<a href="/targets/">Фин цели</a>'],
             'm4':['<a></a>'],
             'm5':[  '<a href="/calendar/">Календарь</a>',
                     '<a href="/periodic/">Регулярные транзакции</a>'],
