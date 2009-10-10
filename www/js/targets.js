@@ -168,6 +168,25 @@ $(document).ready(function(){
         $('#tpopup form').attr('action','/targets/edit/');
     }
 
+
+    function ValidateForm(){
+        if ($('#category').val() == '')
+            return false;
+        if ($('#tg_amount').val() == '')
+            return false;
+        if ($('#name').val() == '')
+            return false;
+        if ($('#start').val() == '')
+            return false;
+        if ($('#end').val() == '')
+            return false;
+        if ($('#name').val() == '')
+            return false;
+        if ($('#amountf').val() == '')
+            return false;
+        return true;
+    };
+
     /**
      * Cохранение объекта
      */
@@ -177,6 +196,10 @@ $(document).ready(function(){
             $.jGrowl("Сумма начального платежа превышает накопительную сумму!!!", {theme: 'red'});
             return false;
         }*/
+        if (!ValidateForm()){
+            $.jGrowl("Неверно введены входные данные!!!", {theme: 'red'});
+            return false;
+        }
         $.post(
             $('#tpopup form').attr('action'),
             {
