@@ -1,7 +1,7 @@
-/*
+/**
  * Тут только общие функции и события для всех страниц сайта
  * 
- * {* $Id$ *}
+ * $Id$ 
  */
 //conf href to modul
 function get_array_key($arr, $val)
