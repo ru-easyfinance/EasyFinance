@@ -245,14 +245,19 @@ $(document).ready(function() {
             account: $('#account :selected').val(),
             currency:$('#currency :selected').val()
          }, function(data) {
-            plot2 = $.jqplot('chart', [data['p'], data['d']], {
-                legend:{show:true, location:'ne', xoffset:55},
-                title:'Сравнение расходов и доходов',
+            //var plot2 = $.jqplot('chart', [data['p'], data['d']], {
+            var plot2 = $.jqplot('chart', [data], {
+                //legend:{show:true, location:'ne', xoffset:55},
+                //title:'Сравнение расходов и доходов',
                 seriesDefaults:{
-                    renderer:$.jqplot.BarRenderer,
-                    rendererOptions:{barPadding: 8, barMargin: 20}
+                    //renderer:$.jqplot.BarRenderer,
+                    renderer:$.jqplot.PieRenderer,
+                    //rendererOptions:{barPadding: 8, barMargin: 20}
+                    rendererOptions:{
+                        sliceMargin:8
+                    }
                 },
-                series:[
+                /*series:[
                     {label:'Расходы'},
                     {label:'Доходы'},
                 ],
@@ -262,7 +267,8 @@ $(document).ready(function() {
                         ticks: data['labels']
                     },
                     yaxis:{min:0}
-                }
+                }*/
+             legend:{show:true}
             });
          }, 'json');
     }

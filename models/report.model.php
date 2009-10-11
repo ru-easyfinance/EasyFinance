@@ -73,7 +73,7 @@ class Report_Model
      */
     function getBars($start = '', $end = '', $account=0, $currency=0)
     {
-        if ($account > 0) {
+        /*if ($account > 0) {
             $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
@@ -87,9 +87,48 @@ class Report_Model
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
+        }*/
+        if ($account > 0) {
+            $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+                FROM operation o
+                LEFT JOIN accounts a ON a.account_id=o.account_id
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ? AND drain='1'
+                GROUP BY drain, `datef`";
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
+        } else {
+            $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+                FROM operation o
+                LEFT JOIN accounts a ON a.account_id=o.account_id
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ? AND drain='1'
+                GROUP BY drain, `datef`";
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
         }
-        
-        $array = array();
+        $array=array();
+        foreach ($result as $v) {
+            $array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+        }
+        if ($account > 0) {
+            $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+                FROM operation o
+                LEFT JOIN accounts a ON a.account_id=o.account_id
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ? AND drain='0'
+                GROUP BY drain, `datef`";
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
+        } else {
+            $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+                FROM operation o
+                LEFT JOIN accounts a ON a.account_id=o.account_id
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ? AND drain='0'
+                GROUP BY drain, `datef`";
+            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
+        }
+        foreach ($result as $v) {
+            $array[]=array('Доходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+        }
+
+
+        return $array;
+        /*$array = array();
         foreach ($result as $v) {
             if ($v['drain'] == 0) { //Доход
                 $array[$v['datef']]['p'] = $v['money'];
@@ -120,7 +159,7 @@ class Report_Model
             $data2[] = (float)$val['d'];
             $labels[] = substr($key, 0, 7);
         }
-        return array('p'=>$data1,'d'=>$data2,'l'=>$labels);
+        return array('p'=>$data1,'d'=>$data2,'l'=>$labels);*/
     }
 
     function SelectDetailedIncome($date1='', $date2='', $account='', $cursshow=''){
