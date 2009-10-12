@@ -405,7 +405,7 @@ class User
             DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start, DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
                 , (SELECT AVG(amount)
                     FROM budget t
-                    WHERE (t.date_start BETWEEN ADDDATE(b.date_start, INTERVAL -3 MONTH) AND LAST_DAY(NOW()))
+                    WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH) AND t.date_start <= LAST_DAY(NOW()))
                     AND b.category = t.category AND b.user_id=t.user_id
                 ) AS avg_3m
                 FROM budget b

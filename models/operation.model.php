@@ -412,7 +412,7 @@ class Operation_Model {
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
         " WHERE t.user_id = ? ".
-            " AND (t.`date` BETWEEN ? AND ?) ".
+            " AND (t.`date` >= ? AND t.`date` <= ?) ".
             " AND t.bill_id = ? ";
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
