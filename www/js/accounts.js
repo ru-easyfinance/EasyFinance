@@ -143,7 +143,8 @@ $(document).ready(function()
         }
         str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td>'+d_cur+'</td></tr>';
         str = str + '</table>';
-        $('#total_amount').html(str);
+        //$('#total_amount').html(str);
+        $('#total_amount').append(str);
 ////////////////////////////////////////////////////////////////@todo перенести в цсс
         $('.item td.cur').css('width','50px');
         $('.item td.total_balance').css('text-align','right').css('padding-right','0');
@@ -466,13 +467,13 @@ $(document).ready(function()
                 formatCurrency(account.total_balance) + ' ' +account.cur + '</td>';
             if (account_list[id]["reserve"] != 0){
                 delta = (formatCurrency(account.total_balance-account_list[id]["reserve"]));
-                str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+'</td>'
-                str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+account_list[id]["reserve"]+'</td>'
+                str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+account.cur+'</td>'
+                str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+account_list[id]["reserve"]+' '+account.cur+'</td>'
             }
 
 
             str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
-                formatCurrency(account.def_cur) + '</td>';
+                formatCurrency(account.def_cur) + ' '+account.cur+'</td>';
 
             for(var key in spec)
             {
