@@ -29,6 +29,7 @@ $(document).ready(function(){
         clearForm();
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
+        $('#targets_category').val(f.attr('category'));
         $('#name').val(f.attr('name'));
         $('#tg_amount').val(f.attr('amount'));
         $('#amountf').val(f.attr('money'));
@@ -122,7 +123,7 @@ $(document).ready(function(){
      * Очищает форму для добавления финансовой цели
      */
     function clearForm() {
-        $('#id,#type,#category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
+        $('#id,#type,#targets_category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
     }
 
     /**
@@ -131,7 +132,7 @@ $(document).ready(function(){
     function loadTargets(data) {
         var s = '';
         for(v in data) {
-            s += '<div class="object" tid='+data[v]["id"]+' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
+            s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
@@ -154,6 +155,7 @@ $(document).ready(function(){
     function fillForm(data) {
         $('#key').val(data.id);
         $('#category').val(data.category);
+        $('#targets_category').val(data.category);
         $('#name').val(data.title);
         $('#type').val(data.type);
         $('#tg_amount').val(data.amount);
