@@ -1,4 +1,4 @@
-/* 
+/**
  * @desc Category Model
  * @author Andrey [Jet] Zharikov
  */
@@ -28,10 +28,12 @@ easyFinance.models.category = function(){
 
     // public functions
 
-    // @desc read initial data from json/server
-    // @usage load(json)
-    // @usage load(json, callback)
-    // @usage load(callback)
+    /**
+     * @desc read initial data from json/server
+     * @usage load(json)
+     * @usage load(json, callback)
+     * @usage load(callback)
+     */
     function load(param1, param2){
         if (typeof param == 'string') {
             _categories = param1;

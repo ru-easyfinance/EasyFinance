@@ -124,7 +124,6 @@ $(document).ready(function() {
                 $.jGrowl("Операции удалены", {theme: 'green'});
             }, 'json');
     })
-    //$('.operation_list').jScrollPane();
     // Autoload
     loadOperationList();
 
@@ -145,7 +144,6 @@ $(document).ready(function() {
         return (((sign)?'':'-') + '' + num + '.' + cents);
     }
 
-    //$('.operation_list').jScrollPane();//???
     /**
      * Загружает список всех операций (с фильтром)
      * @return void
@@ -200,7 +198,7 @@ $(document).ready(function() {
                     else
                         $('#operations_list .check input').removeAttr('checked');
                 })
-               $('.operation_list').jScrollPane();
+               //$('.operation_list').jScrollPane();
 
             }
         },'json');

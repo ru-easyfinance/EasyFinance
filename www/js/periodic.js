@@ -93,14 +93,14 @@ $(document).ready(function() {
                 +'<td>'+data[id]['title']+'</td>'
                 +'<td>'+cat+'</td>'
                 +'<td>'+res['accounts'][data[id]['account']]['name'] +'</td>'
-                +'<td class="mark no_over" style="display: table-cell;">'+'<div class="cont">'+ data[id]['amount']
+                +'<td class="mark no_over" style="display: table-cell;">'+data[id]['amount']+'<div class="cont" style="position:relative; top:-20px">'
                 +'<ul style="z-index: 100;">'
                 +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                 +'<li class="del"><a title="Удалить">Удалить</a></li>'
                 +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div></td></tr>';
             }
             $('#tab1 tbody').html(c);
-            $('.operation_list').jScrollPane();
+            //$('.operation_list').jScrollPane();
         }, 'json');
     }
 

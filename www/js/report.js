@@ -79,7 +79,7 @@ $(document).ready(function() {
                         $(this).remove();
                     });
              $('#reports_list').append(tr);
-             $('.operation_list').jScrollPane();
+             //$('.operation_list').jScrollPane();
         },'json');
 
     }
@@ -144,7 +144,7 @@ $(document).ready(function() {
                         $(this).remove();
                     });
             $('#reports_list').append(tr);
-            $('.operation_list').jScrollPane();
+            //$('.operation_list').jScrollPane();
         },'json');
     }
 
@@ -237,7 +237,7 @@ $(document).ready(function() {
                         $(this).remove();
                     });
             $('#reports_list').append(tr);
-            $('.operation_list').jScrollPane();
+            //$('.operation_list').jScrollPane();
         },'json');
     }
 
@@ -296,7 +296,7 @@ $(document).ready(function() {
                 },
                 legend:{show:true}
             });
-            $('.operation_list').jScrollPane();
+            //$('.operation_list').jScrollPane();
         },'json');
     }
 
@@ -389,12 +389,12 @@ $(document).ready(function() {
                         $(this).remove();
                     });
             $('#reports_list').append(tr);
-            $('.operation_list').jScrollPane();
+            //$('.operation_list').jScrollPane();
         },'json');
     }
 
     $('#Period21,#Period22').hide();
-    $('.operation_list').jScrollPane();
+    //$('.operation_list').jScrollPane();
     $('#dateFrom,#dateTo,#dateFrom2,#dateTo2').datepicker({dateFormat: 'dd.mm.yy'});
     $('#report').change();
     $('#btnShow').click(function(){
@@ -437,47 +437,47 @@ $(document).ready(function() {
         case "graph_profit": //Доходы":
             $('#chart').show();
             $('#Period21,#Period22').hide();
-            $('.jScrollPaneContainer').hide();
+            $('.operation_list').hide();
             break;
         case "graph_loss": //"Расходы":
             $('#chart').show();
             $('#Period21,#Period22').hide();
-            $('.jScrollPaneContainer').hide();
+            $('.operation_list').hide();
             break;
         case "graph_profit_loss": //"Сравнение расходов и доходов":
             $('#chart').show();
             $('#Period21,#Period22').hide();
-            $('.jScrollPaneContainer').hide();
+            $('.operation_list').hide();
             break;
         case "txt_profit"://"Детальные доходы":
             $('#chart').hide();
             $('#Period21,#Period22').hide();
-            $('.jScrollPaneContainer').show();
+            $('.operation_list').show();
             break;
         case "txt_loss"://"Детальные расходы":
             $('#chart').hide();
             $('#Period21,#Period22').hide();
-            $('.jScrollPaneContainer').show();
+            $('.operation_list').show();
             break;
         case "txt_loss_difference"://"Сравнение расходов за периоды":
             $('#chart').hide();
             $('#Period21,#Period22').show();
-            $('.jScrollPaneContainer').show();
+            $('.operation_list').show();
             break;
         case "txt_profit_difference"://"Сравнение доходов за периоды":
             $('#chart').hide();
             $('#Period21,#Period22').show();
-            $('.jScrollPaneContainer').show();
+            $('.operation_list').show();
             break;
         case "txt_profit_avg_difference": //"Сравнение доходов со средним за периоды":
             $('#chart').hide();
             $('#Period21,#Period22').show();
-            $('.jScrollPaneContainer').show();
+            $('.operation_list').show();
             break;
         case "txt_loss_avg_difference"://"Сравнение расходов со средним за периоды":
             $('#chart').hide();
             $('#Period21,#Period22').show();
-            $('.jScrollPaneContainer').show();
+            $('.operation_list').show();
             break;
     }
 

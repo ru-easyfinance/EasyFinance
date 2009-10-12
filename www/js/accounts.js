@@ -73,7 +73,7 @@ $(document).ready(function()
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
-        var div = "<div class='cont'>&nbsp;<ul style='z-index: 1006'>\n\
+        var div = "<div class='cont'><ul style='z-index: 1006'>\n\
                         <li class='edit' title='Редактировать'><a></a></li>\n\
                         <li class='del' title='Удалить'><a></a></li>\n\
                         <li class='add' title='Копировать'><a></a></li>\n\
@@ -148,8 +148,6 @@ $(document).ready(function()
 ////////////////////////////////////////////////////////////////@todo перенести в цсс
         $('.item td.cur').css('width','50px');
         $('.item td.total_balance').css('text-align','right').css('padding-right','0');
-//////////////////////////////////////////////////////scrollbar
-        $('#operation_list').jScrollPane();
     }
     /**
      * Функция реализует доступ к функциям на странице по стандартизированному запросу.
