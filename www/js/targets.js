@@ -74,6 +74,7 @@ $(document).ready(function(){
         clearForm();
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
+        $('#targets_category').val(f.attr('category'));
         $('#name').val(f.attr('name'));
         $('#tg_amount').val(f.attr('amount'));
         $('#amountf').val(f.attr('money'));

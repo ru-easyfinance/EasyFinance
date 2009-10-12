@@ -113,7 +113,7 @@ class Targets_Model {
             $limit = $this->limitFull;
             $start = (((int)$index ) * $limit);//-1
         }
-        $list = $this->db->selectPage($total, "SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS 
+        $list = $this->db->selectPage($total, "SELECT t.title, t.category_id as category, COUNT(t.id) AS cnt, SUM(`close`) AS
             cl, s.name FROM target t LEFT JOIN category c ON c.cat_id = t.category_id LEFT JOIN
             system_categories s ON c.system_category_id = s.id WHERE t.visible=1 GROUP BY t.title, 
             t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", $start, $limit);
