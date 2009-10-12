@@ -6,6 +6,30 @@
  * @copyright http://home-money.ru/
  * @version SVN $Id$
  */
+if ( get_magic_quotes_gpc() )
+{
+    $_GET     = stripslashes_deep($_GET);
+    $_POST    = stripslashes_deep($_POST);
+    $_COOKIE  = stripslashes_deep($_COOKIE);
+    $_REQUEST = stripslashes_deep($_REQUEST);
+    $_SESSION = stripslashes_deep($_SESSION);
+    $_SERVER  = stripslashes_deep($_SERVER);
+    $_FILES   = stripslashes_deep($_FILES);
+    $_ENV     = stripslashes_deep($_ENV);
+}
+
+function stripslashes_deep($value)
+{
+    if( is_array($value) )
+    {
+      $value = array_map('stripslashes_deep', $value);
+    }
+    elseif ( !empty($value) && is_string($value) )
+    {
+      $value = stripslashes($value);
+    }
+    return $value;
+}
 class Targets_Model {
     
     /**
@@ -78,7 +102,7 @@ class Targets_Model {
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;",
             Core::getInstance()->user->getId(), $start, $limit);
-		if (!is_array($list)) $list = array();
+		if (!is_array($list)) $list = array();//*/
 
         /*$list = $this->db->selectPage($total, "SELECT t.id, t.category_id as category, t.title, t.amount,
             DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
@@ -220,6 +244,8 @@ class Targets_Model {
         $data['url']     = htmlspecialchars(@$_POST['url']);
         $data['comment'] = htmlspecialchars(@$_POST['comment']);
         $data['account'] = (int)@$_POST['account'];
+        //$data['comment'] = htmlspecialchars( $data['comment'] , ENT_NOQUOTES);
+        //$data['title'] = htmlspecialchars( $data['title'] , ENT_NOQUOTES);
 
         if ((int)$_POST['visible']){
             $data['visible'] = 1;
