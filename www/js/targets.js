@@ -171,6 +171,21 @@ $(document).ready(function(){
         $('#tpopup form').attr('action','/targets/edit/');
     }
 
+    function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
+    }
 
     function ValidateForm(){
         che = 1;
@@ -183,6 +198,12 @@ $(document).ready(function(){
         if ($('#tg_amount').val() == ''){
             str += "Неверно введена сумма финцели<br>"
             //$.jGrowl("Неверно введена сумма финцели!!!", {theme: 'red', sticky: true});
+            che = 0;
+        }
+        a = tofloat($('#amountf').val());
+        b = tofloat($('#tg_amount').val());
+        if ( a-b > 0){
+            str += "Неверно введена нач. сумма<br>";
             che = 0;
         }
         if ($('#name').val() == ''){
@@ -198,11 +219,6 @@ $(document).ready(function(){
         if ($('#end').val() == ''){
             str += "Неверно введена конечная дата<br>"
             //$.jGrowl("Неверно введена конечная дата!!!", {theme: 'red', sticky: true});
-            che = 0;
-        }
-        if ($('#name').val() == ''){
-            str += "Неверно введено имя<br>"
-            //$.jGrowl("Неверно введено имя!!!", {theme: 'red', sticky: true});
             che = 0;
         }
         /*if ($('#amountf').val() == ''){
@@ -231,6 +247,7 @@ $(document).ready(function(){
             //$.jGrowl("Неверно введены входные данные!!!", {theme: 'red'});
             return false;
         }
+        $.jGrowl("Финансовая цель сохраняется", {theme: 'green'});
         $.post(
             $('#tpopup form').attr('action'),
             {
