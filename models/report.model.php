@@ -39,29 +39,30 @@ class Report_Model
     {
 
         if ($account > 0) {
-            $sql = "SELECT o.money, cur.cur_char_code, IFNULL(c.cat_name, '') AS cat FROM operation o
+            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND o.account_id = ? AND o.drain = ?
-                    AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
+                    AND `date` BETWEEN ? AND ? AND a.account_currency_id = ? 
                 GROUP BY o.cat_id";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), 
                 $account, $drain, $start, $end, $currency);
 
         } else {
-            $sql = "SELECT o.money, cur.cur_char_code, IFNULL(c.cat_name, '') AS cat FROM operation o
+            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND o.drain = ?
-                    AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
+                    AND `date` BETWEEN ? AND ? AND a.account_currency_id = ? 
                 GROUP BY o.cat_id";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), 
                 $drain, $start, $end, $currency);
         }
         $array = array();
         foreach ($result as $v) {
+            if ($v['cat'] != '')
              $array[] = array($v['cat'].' &nbsp;&nbsp;&nbsp; '.(float)$v['money'].'&nbsp;'.$v['cur_char_code'], (float)$v['money']);
         }
         return $array;
@@ -105,25 +106,55 @@ class Report_Model
         }
         $array=array();
         foreach ($result as $v) {
-            $array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+            switch (substr($v['datef'],5,2)){
+                case '01' : $array[]=array('Расходы за январь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '02' : $array[]=array('Расходы за февраль'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '03' : $array[]=array('Расходы за март'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '04' : $array[]=array('Расходы за апрель'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '05' : $array[]=array('Расходы за май'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '06' : $array[]=array('Расходы за июнь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '07' : $array[]=array('Расходы за июль'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '08' : $array[]=array('Расходы за август'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '09' : $array[]=array('Расходы за сентябрь'.' &nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '10' : $array[]=array('Расходы за октябрь'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '11' : $array[]=array('Расходы за ноябрь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '12' : $array[]=array('Расходы за декабрь'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                default : $array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+            }
         }
         if ($account > 0) {
             $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ? AND drain='0'
+                LEFT JOIN category c ON c.cat_id = o.cat_id
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ? AND drain='0' AND c.cat_name <> ''
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
         } else {
             $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ? AND drain='0'
+                LEFT JOIN category c ON c.cat_id = o.cat_id
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ? AND drain='0' AND c.cat_name <> ''
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
         }
         foreach ($result as $v) {
-            $array[]=array('Доходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+            switch (substr($v['datef'],5,2)){
+                case '01' : $array[]=array('Доходы за январь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '02' : $array[]=array('Доходы за февраль'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '03' : $array[]=array('Доходы за март'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '04' : $array[]=array('Доходы за апрель'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '05' : $array[]=array('Доходы за май'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '06' : $array[]=array('Доходы за июнь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '07' : $array[]=array('Доходы за июль'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '08' : $array[]=array('Доходы за август'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '09' : $array[]=array('Доходы за сентябрь'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '10' : $array[]=array('Доходы за октябрь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '11' : $array[]=array('Доходы за ноябрь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                case '12' : $array[]=array('Доходы за декабрь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
+                default : $array[]=array('Доходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+            }
         }
 
 
@@ -172,7 +203,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money>0 
+            AND a.account_id=? AND op.money>0 AND c.cat_name <> ''
             ORDER BY c.cat_name";   
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
@@ -183,7 +214,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money>0 
+            AND op.money>0 AND c.cat_name <> ''
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
         }
@@ -204,7 +235,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money<0 
+            AND a.account_id=? AND op.money<0 AND c.cat_name <> ''
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else {
@@ -215,7 +246,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money<0 
+            AND op.money<0 AND c.cat_name <> ''
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
         $sql = "SELECT cur_char_code FROM currency

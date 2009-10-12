@@ -44,8 +44,13 @@ $(document).ready(function() {
                         <th><span class="sort" title="отсортировать">Сумма</span></th>\n\
                    </tr>';//*/
             for (c in data[0]){
-                if (c>0)
-                if (data[0][c].cat_name != data[0][c-1].cat_name && data[0][c].cat_name!=null) {
+                if (c>0){
+                    if (data[0][c].cat_name != data[0][c-1].cat_name && data[0][c].cat_name!=null) {
+                      tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
+                        '<span><b></td></tr>';
+                     }
+                }
+                else {
                     tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
                         '<span><b></td></tr>';
                 }
@@ -341,12 +346,12 @@ $(document).ready(function() {
                             }
                     }
                 } else {
-                    sum2 = data[2][c].su * data[0] * data[1];
+                    sum2 = data[2][c].su * data[0] / data[1];
                     sum1=0;
                     for (v in data[2]){
                         if (data[2][v].cat_name == data[2][c].cat_name)
                             if (data[2][v].per == 1){
-                               sum1=data[2][v].su * data[0] * data[1];
+                               sum1=data[2][v].su * data[0] / data[1];
                                data[2][v].su = null;
                             }
                     }
