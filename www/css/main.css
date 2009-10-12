@@ -1133,13 +1133,15 @@ position:relative;}
 .b_form .buttonpane div{float:left;margin :5px}
 
 
-.categories { position: relative; width: 517px;height:300px; border: 1px solid #e8e8e8; }
+.categories { position: relative; width: 516px; height:300px; border: 1px solid #e8e8e8; overflow: auto;}
 .categories .line { width: auto; padding: 7px 0 9px 0; overflow: visible; }
 .categories .last { background: none; }
 
 .categories table.h td span { color: #8d8d8d; }
 .categories table.h td.w1 { width: 187px; padding-left: 25px; }
 .categories table.h td.w4 { padding: 7px 0 5px 0; }
+.categoriesSH table.h {border-top: 1px solid #E8E8E8};
+.categoriesSH table.h tr {width: 482px};
 .categoriesSH table.h td span { color: #8d8d8d; }
 .categoriesSH table.h td.w1 { width: 187px; padding-left: 25px; }
 .categoriesSH table.h td.w4 { padding: 7px 0 5px 0; }
@@ -1157,7 +1159,7 @@ position:relative;}
 .categoriesSH .indicator div span { display: block; padding: 1px 5px 0 0; font-size: 10px; line-height: 11px; color: #3d3d3d; text-align: right; }
 .categoriesSH table td div.cont ul { top: 0; right: -67px;  }
 
-.categories table { position: relative; width: 517px; }
+.categories table { position: relative; width: 485px; }
 .categories table td { position: relative; padding: 7px 0 5px 0; }
 .categories table td.w1 { width: 207px; padding-right: 5px; }
 .categories table td.w2 { width: 48px; }

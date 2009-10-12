@@ -6,6 +6,9 @@
 $(document).ready(function() {
     var cat;
 
+    $('.block2 .inside').css({width: '679px'});
+    $('.block2 .inside .form_block').css({width: '353px'});
+
     easyFinance.models.category.load(function(data) {
         // Обновляем список системных категорий
         drawSystemCategoriesCombo();
@@ -138,24 +141,13 @@ $(document).ready(function() {
         } else {
             listInsertChildCategory(cat);
         }
-
-        $('.block2 .inside').css({width: '679px'});
-        $('.block2 .inside .form_block').css({width: '353px'});
-        $('.block2 .inside .h').css({width: '507px','border-top':'1px solid #E8E8E8'});//.h
-        $('.block2 .inside .line').css({width: '507px'});
-        $('.block2 .inside .h tr').css({width: '507px'});
-        $('.line,.h').css('border-left','1px solid #E8E8E8').css('border-right','1px solid #E8E8E8')
-        $('ul').css('z-index', 100)//*/
-
-        $('.block2 .inside .categories').css({width: '597px',border:'0'}).jScrollPane();
-        $('.jScrollPaneTrack').css({'right':'80px','z-index':1,'top':'0px'});
     }
 
     function listInsertParentCategory(cat){
-        $('<div class="line open" id="'+cat.id+'"><div class="l_n_cont"><a class="name">'
+        $('<div class="line open" id="'+cat.id+'" style="width:496px"><div class="l_n_cont"><a class="name">'
             +cat.name+'</a>'
                 +'<div class="cont">'
-                    +'<ul class="ul_head" style="z-index:100">'
+                    +'<ul class="ul_head" style="z-index:100; right:0px">'
                         +'<li class="edit"><a class="cat" title="Редактировать">Редактировать</a></li>'
                         +'<li class="del"><a class="cat" title="Удалить">Удалить</a></li>'
                         +'<li class="add"><a class="cat" title="Добавить">Добавить</a></li>'
@@ -191,14 +183,14 @@ $(document).ready(function() {
             +'<td class="w3">'+system['name']
             +'</td>'
             +'<td class="w4">'
-                +'<div class="cont" css: style{z-index: 1;}>'
+                +'<div class="cont">'
 //                                +'<b>500 руб.</b>'
 //                                +'<div class="indicator">'
 //                                    +'<div style="width: 10%;">'
 //                                        +'<span>10%</span>'
 //                                    +'</div>'
 //                                +'</div>'
-                    +'<ul style="z-index:100"><li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                    +'<ul style="z-index:100; right: -10px;"><li class="edit"><a title="Редактировать">Редактировать</a></li>'
                         +'<li class="del"><a title="Удалить">Удалить</a></li>'
                         +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
             +'</td></tr>'
@@ -236,7 +228,7 @@ $(document).ready(function() {
     //('.line').find("ul").show();
     $('div.line tr,div.l_n_cont').live('mouseover',function(){
         $('div.line tr,div.l_n_cont').removeClass('act').find('ul').hide();
-        $(this).addClass('act').find('ul').show().css({right:'-59px'});
+        $(this).addClass('act').find('ul').show();
     });
     $('body').mousemove(function(){
             if (!$('ul:hover').length && !$('.act:hover').length)
