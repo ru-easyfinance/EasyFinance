@@ -36,7 +36,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 		$this->dsn = DbSimple_Generic::parseDSN($dsn);
 		
 		if (!is_callable('mysql_connect')) {
-			return $this->_setLastError("-1", "MySQL extension is not loaded", "mysql_pconnect");
+			return $this->_setLastError("-1", "MySQL extension is not loaded", "mysql_connect");
 		}
 	}
 
@@ -48,7 +48,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 	{
 		if( $this->link === null )
 		{
-			$this->link = @mysql_pconnect(
+			$this->link = @mysql_connect(
 				$this->dsn['host'] . (empty($this->dsn['port'])? "" : ":".$this->dsn['port']),
 				$this->dsn['user'],
 				$this->dsn['pass'],
