@@ -1280,19 +1280,14 @@ $('li#c2').click(function(){a_list()})
             $('#login').show();
         }
 
-        $('#show_login').click(function()
-        {
-            if (window.location.host.toString().substr(0, 5) == "demo."){
-                window.location.protocol = 'http:';
-            }
-            else{
-                if (window.location.protocol!='https:')
-                {
-                        window.location.href='https://' + window.location.host + '/login/';
-                }
-                else
-                {
-                            $('#login').show();
+        $('#show_login').click(function() {
+            if (window.location.host.toString().substr(0, 5) == "demo.") {
+                window.location.href='http://' + window.location.host + '/login/';
+            } else {
+                if (window.location.protocol!='https:') {
+                    window.location.href='https://' + window.location.host + '/login/';
+                } else {
+                    $('#login').show();
                 }
             }
             return false;
