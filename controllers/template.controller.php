@@ -48,12 +48,6 @@ class Template_Controller {
     {
         $this->loadJS();
 
-//periodic	*[key]	id	ид			выводить за сегодня и завтра
-//		title	название
-//		date	дата
-//		amount	сумма
-
-
         $user = Core::getInstance()->user;
         if (is_null($user->getId())) { 
             Core::getInstance()->tpl->assign('res', json_encode(array('errors'=>Core::getInstance()->errors)));
