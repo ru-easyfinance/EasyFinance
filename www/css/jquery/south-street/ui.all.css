@@ -236,7 +236,7 @@
     padding: 0;
 }
 /*хак красивый стиль*/
-.ui-widget {font-size:1.1em;}
+/*.ui-widget {font-size:1.1em;}*/
 .ui-tabs .ui-tabs-nav {padding:0.2em 0.2em 0;}
 /*.ui-widget-header {border:1px solid #AAAAAA;}*/
 .body {line-height:16px;}
