@@ -39,7 +39,10 @@ $(document).ready(function() {
 	});
         if (window.location.hash=='#send')
         {
-            $.jGrowl('На указанный при регистрации e-mail отправлено письмо со ссылкой, \n\
-                        перейдя по которой, вы активируете вашу учетную запись', {theme: 'green', sticky: true});
+            //$.jGrowl('На указанный при регистрации e-mail отправлено письмо со ссылкой, \n\
+            //            перейдя по которой, вы активируете вашу учетную запись', {theme: 'green', stick: true});
+            $('#formRegister').hide();
+            $('#formConfirm').show();
+
         }
 });
