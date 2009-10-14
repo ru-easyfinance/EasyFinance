@@ -1606,7 +1606,7 @@ function getCookie(name) {
             });
             $('#conf').show();
             $('#conf').dialog({
-                modal: true
+                //modal: true
             })
         });
         
