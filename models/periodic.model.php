@@ -88,7 +88,8 @@ class Periodic_Model
     {
         $sql = "DELETE FROM periodic WHERE user_id=? AND id=?";
         $this->db->query($sql, Core::getInstance()->user->getId(), $id);
-        // @FIXME Дописать удаление транзакций из календаря
+        $sql = "DELETE FROM calendar WHERE user_id=? AND chain=? AND near_date > NOW() ";
+        $this->db->query($sql, Core::getInstance()->user->getId(), $id);
         return array();
     }
 
@@ -120,7 +121,7 @@ class Periodic_Model
             $this->error['account'] = 'Необходимо указать счёт для транзакции';
         }
 
-        $array['amount'] = abs((int)@$_POST['amount']);
+        $array['amount'] = abs((float)str_replace(' ', '', @$_POST['amount']));
         if ($array['amount'] == 0) {
             $this->error['amount'] = 'Указанная сумма не должна быть нулём';
         }
@@ -139,12 +140,12 @@ class Periodic_Model
             $this->error['date'] = 'Необходимо правильно указать дату';
         }
 
-        if (abs((int)@$_POST['infinity']) == 0) {
-            $array['infinity'] = 1;
-        } else {
+        if ((int)@$_POST['infinity'] == 0) {
             $array['infinity'] = 0;
+        } else {
+            $array['infinity'] = 1;
         }
-        
+
         $array['repeat'] = abs((int)@$_POST['repeat']);
 
         $array['title'] = htmlspecialchars(@$_POST['title']);
@@ -176,7 +177,9 @@ class Periodic_Model
      */
     private function addEvents($id, $amount, $comment, $counts, $date, $infinity, $repeat, $title, $drain, $category) {
         // Если у нас есть повторения события, то добавляем и их тоже
-        if ($repeat == 1) {
+        if ($repeat == 0) {
+            $period = "DAY";
+        } elseif ($repeat == 1) {
             $period = "DAY";
         } elseif ($repeat == 7) {
             $period = "WEEK";

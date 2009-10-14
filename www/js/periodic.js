@@ -4,6 +4,12 @@ $(document).ready(function() {
     loadPeriodic();
 
     // BIND
+    // Биндим события для обновления списка
+    $(window).bind("saveSuccess", function(e, data){
+        loadPeriodic();
+    });
+
+
     /**
      * При добавлении новой транзакции
      */
@@ -69,10 +75,7 @@ $(document).ready(function() {
         $('#cal_href').val('/periodic/edit/');
     });
 
-    // Биндим события для обновления списка 
-    $(window).bind("saveSuccess", function(e, data){
-        loadPeriodic();
-    });
+
 
 
     // FUNCTIONS
@@ -93,7 +96,7 @@ $(document).ready(function() {
                 +'<td>'+data[id]['title']+'</td>'
                 +'<td>'+cat+'</td>'
                 +'<td>'+res['accounts'][data[id]['account']]['name'] +'</td>'
-                +'<td class="mark no_over" style="display: table-cell;">'+data[id]['amount']+'<div class="cont" style="position:relative; top:-20px">'
+                +'<td class="mark no_over" style="display: table-cell;">'+formatCurrency(data[id]['amount'])+'<div class="cont" style="position:relative; top:-20px">'
                 +'<ul style="z-index: 100;">'
                 +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                 +'<li class="del"><a title="Удалить">Удалить</a></li>'
@@ -102,6 +105,27 @@ $(document).ready(function() {
             $('#tab1 tbody').html(c);
             //$('.operation_list').jScrollPane();
         }, 'json');
+    }
+
+    /**
+     * Форматирует валюту
+     * @param num float Сумма, число
+     * @return string
+     */
+     function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
     }
 
     /**
