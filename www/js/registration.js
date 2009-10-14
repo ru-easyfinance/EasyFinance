@@ -49,8 +49,20 @@ $(document).ready(function() {
             //$.jGrowl('На указанный при регистрации e-mail отправлено письмо со ссылкой, \n\
             //            перейдя по которой, вы активируете вашу учетную запись', {theme: 'green', stick: true});
             if ($("#formRegister").valid()) {
+                $.post("/registration/new_user/",{
+                    password: $('#passw').val(),
+                    confirm_password: $('#confirm_password').val(),
+                    login: $('#log').val(),
+                    name: $('#name').val(),
+                    mail: $('#mail').val()
+                })
                 $('.formRegister').hide();
-                $('.formConfirm').show();
+                $('#formConfirm').show();
+                //$('#formConfirm').dialog('option', 'stack', true);
+                /*$('#formConfirm').dialog({
+                })*/
+
+                //$('.formConfirm').show();
             }
         })
 });
