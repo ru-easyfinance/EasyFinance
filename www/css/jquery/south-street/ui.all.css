@@ -17,8 +17,9 @@
 /* end clearfix */
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
 
-.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
-
+/*для гида
+.ui-widget-header2 { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+*/
 /* Interaction Cues
 ----------------------------------*/
 .ui-state-disabled { cursor: default !important; }
@@ -237,7 +238,7 @@
 /*хак красивый стиль*/
 .ui-widget {font-size:1.1em;}
 .ui-tabs .ui-tabs-nav {padding:0.2em 0.2em 0;}
-.ui-widget-header {border:1px solid #AAAAAA;}
+/*.ui-widget-header {border:1px solid #AAAAAA;}*/
 .body {line-height:16px;}
 /*хак красивый стиль*/
 /*цифорки*/#views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default, .calendar_block .calendar .ui-widget-content table.ui-datepicker-calendar td a.ui-state-default {
