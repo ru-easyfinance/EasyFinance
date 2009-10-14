@@ -3,14 +3,14 @@ $(document).ready(function() {
 		rules: {
 			name: "required",
 			login: "required",
-			password: {
+			passw: {
 				required: true,
 				minlength: 5
 			},
 			confirm_password: {
 				required: true,
 				minlength: 5,
-				equalTo: "#password"
+				equalTo: $("#passw")
 			},
 			mail: {
 				required: true,
@@ -20,7 +20,7 @@ $(document).ready(function() {
 		messages: {
 			name: "Вы не ввели имя!",
 			login: "Вы не ввели логин!",
-			password: {
+			passw: {
 				required: "Вы не ввели пароль!",
 				minlength: "Ваш пароль должен состоять как минимум из 5 символов"
 			},
@@ -32,17 +32,25 @@ $(document).ready(function() {
 			mail: "Пожалуйста, введите правильный адрес электронной почты!"
 		}
 	});
-
+        $('#butt').click($("#formRegister").validate);
 	// check if confirm password is still valid after password changed
 	$("#password").blur(function() {
 		$("#confirm_password").valid();
 	});
-        if (window.location.hash=='#send')
+        //if (window.location.hash=='#send')
+        $('#butt').click(function()
         {
+            
+            /*$.post("/registration/new_user/",{
+
+            },function(data) {
+
+            },'json');*/
             //$.jGrowl('На указанный при регистрации e-mail отправлено письмо со ссылкой, \n\
             //            перейдя по которой, вы активируете вашу учетную запись', {theme: 'green', stick: true});
-            $('#formRegister').hide();
-            $('#formConfirm').show();
-
-        }
+            if ($("#formRegister").valid()) {
+                $('.formRegister').hide();
+                $('.formConfirm').show();
+            }
+        })
 });

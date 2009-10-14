@@ -341,7 +341,7 @@
     display: none; /*sorry for IE5*/
     display/**/: block; /*sorry for IE5*/
     position: absolute; /*must have*/
-    z-index: -1; /*must have*/
+    z-index: 99999; /*must have*/
     filter: mask(); /*must have*/
     top: -4px; /*must have*/
     left: -4px; /*must have*/
@@ -378,8 +378,8 @@
 .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}/* Slider
 ----------------------------------*/
 .ui-slider { position: relative; text-align: left; }
-.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 1.2em; height: 1.2em; cursor: default; }
-.ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; }
+.ui-slider .ui-slider-handle { position: absolute; z-index: 99999; width: 1.2em; height: 1.2em; cursor: default; }
+.ui-slider .ui-slider-range { position: absolute; z-index: 99999; font-size: .7em; display: block; border: 0; }
 
 .ui-slider-horizontal { height: .8em; }
 .ui-slider-horizontal .ui-slider-handle { top: -.3em; margin-left: -.6em; }
@@ -402,3 +402,6 @@
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
 .ui-tabs .ui-tabs-hide { display: none !important; }
+
+
+

@@ -1,9 +1,9 @@
 {* $Id$ *}
 <div class="ramka2">
 <div class="cct"></div>
-<div id="formRegister" class="formRegister" >
+<div class="formRegister" >
     <h2>Регистрация</h2>
-    <form action="/registration/new_user/" id="formRegister" method="post">
+    <form id="formRegister" >
         <table cellpadding="0" cellspacing="0">
         <tr>
             <td class="name">Имя:</td>
@@ -15,7 +15,7 @@
         </tr>
         <tr>
             <td class="name">Пароль:</td>
-            <td><input type="password" id="password" name="password" /></td>
+            <td><input type="password" id="passw" name="passw" /></td>
         </tr>
         <tr>
             <td class="name">Повтор пароля:</td>
@@ -27,12 +27,12 @@
         </tr>
         <tr>
             <td></td>
-            <td><input class="butt" type="submit" value=""/></td>
+            <td><input id="butt" class="butt" type="button" value=""/></td>
         </tr>
         </table>
     </form>
 </div>
-<div id="formConfirm" class="formConfirm" style="display: none; padding: 10px">
+<div  class="formConfirm" style="display: none; padding: 10px">
     <p >На указанный при регистрации e-mail отправлено письмо со ссылкой, перейдя по которой, вы активируете вашу учетную запись</p>
 </div>
 <div id="formActivate" class="formActivate" style="display: none; padding: 10px">
