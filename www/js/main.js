@@ -1594,7 +1594,9 @@ function getCookie(name) {
         {  width: 600}
         );
         $('.dial').bind('dialogclose', function(event, ui) {
-            $('#conf').bind('dialogclose', function(event, ui) {
+            setCookie('guide','',1);
+            $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {theme: 'green', stick: true});
+            /*$('#conf').bind('dialogclose', function(event, ui) {
                 setCookie('guide','',1);
                 /*if ($('#ch').attr('checked')){
                     //не показываем очень-очень долго
@@ -1603,11 +1605,11 @@ function getCookie(name) {
                     //не показываем в эту сессию
                     setCookie('guide','');
                 }*/
-            });
-            $('#conf').show();
+            //});*/
+            /*$('#conf').show();
             $('#conf').dialog({
                 //modal: true
-            })
+            })*/
         });
         
         //$("#guide").draggable();
