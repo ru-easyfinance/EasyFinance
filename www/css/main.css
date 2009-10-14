@@ -1739,6 +1739,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 .ui-dialog.ui-widget-content {
     background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
+	border: 1px solid grey;
 }
 .ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
@@ -1817,6 +1818,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .ui-dialog .ui-dialog-buttonpane button {
     padding: .1em .3em!important;
 }
+
 .qtip {
     padding: 0 14px 0 0;
     position: absolute;
