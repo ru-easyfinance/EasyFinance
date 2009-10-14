@@ -199,6 +199,11 @@ class Login_Model
                 } else {
                     setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
                 }
+                $sql = "SELECT count(*) AS cou FROM `accounts` WHERE user_id = ?";
+                $this->db = Core::getInstance()->db;
+                $a = $this->db->query($sql , Core::getInstance()->user->getId());
+                if ($a[0]['cou'] == 0)
+                    setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
                 // У пользователя нет категорий, т.е. надо помочь ему их создать
                 if (count($user->getUserCategory()) == 0) {
                     $model = new Login_Model();

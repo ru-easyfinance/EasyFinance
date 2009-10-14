@@ -151,5 +151,9 @@ class Accounts_Controller extends Template_Controller
         $qString = explode("&", $qString);
         $this->model->correct($qString,$aid,$tid);
     }
+    //количество счётов пользователя. 0 - счетов нету.
+    function countacc(){
+        die(json_encode($this->model->countacc()));
+    }
 
 }

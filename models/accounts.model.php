@@ -495,4 +495,11 @@ class Accounts_Model
         Core::getInstance()->user->save();
 	return true;
     }
+
+    public function countacc(){
+        $sql = "SELECT count(*) AS cou FROM `accounts` WHERE user_id = ?";
+        $a = $this->db->query($sql , Core::getInstance()->user->getId());
+        return $a;
+    }
+
 }

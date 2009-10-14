@@ -27,6 +27,7 @@ function user_info_save()
     } else if (($('input#newpass').val) == ($('input#newpass2').val)) {
         $.post('/profile/save_main_settings/', {
             help: ($('#help:checked').length == 1)? 1 : 0,
+            guide:($('#guide:checked').length == 1)? 1 : 0,
             login: $('#login').val(),
             pass: $('#pass').val(),
             newpass: $('#newpass').val(),
@@ -187,5 +188,8 @@ $(document).ready(function() {
     strokuk = document.cookie.toString();
     if (strokuk.indexOf('help=124') != -1){
         $('#help').removeAttr('checked');
+    }
+    if (strokuk.indexOf('guide=uyjsdhf') == -1){
+        $('#guide').removeAttr('checked');
     }
 })

@@ -241,7 +241,7 @@ function get_tree_select ($selected = 0)
         $howmuch = 10; // указывает сколько их, последних наиболее часто юзаемых категорий
         $count = 0;
         foreach ($arr as $val){
-            if ($count < $howmuch){
+            if ($count - $howmuch < 0){
                 $arrayoften[]=$val;
                 $count++;
             }

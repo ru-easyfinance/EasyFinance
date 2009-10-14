@@ -50,6 +50,7 @@ class Profile_Controller extends Template_Controller
         $prop['user_mail'] = htmlspecialchars($_POST['mail']);
         $prop['newpass'] = htmlspecialchars($_POST['newpass']);
         $prop['help'] = $_POST['help'];
+        $prop['guide'] = $_POST['guide'];
         die($this->model->mainsettings('save',$prop));
     }
 

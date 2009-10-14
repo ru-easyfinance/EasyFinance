@@ -67,6 +67,11 @@ class Profile_Model
                 }else{
                 setCookie("help", "124",0,"/"); //записываем в кук нужно ли выводить всплывающие подсказки
                 }
+                if ( $prop['guide'] != 1 ){
+                     setCookie("guide","",0,"/");
+                }else{
+                setCookie("guide", "uyjsdhf",0,"/"); //записываем в кук нужно ли выводить всплывающие подсказки
+                }
                 break;
             case 'load':
                 $ret['profile']['login']=$_SESSION['user']['user_login'];

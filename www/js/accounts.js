@@ -466,7 +466,7 @@ $(document).ready(function()
             if (account_list[id]["reserve"] != 0){
                 delta = (formatCurrency(account.total_balance-account_list[id]["reserve"]));
                 str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+account.cur+'</td>'
-                str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+account_list[id]["reserve"]+' '+account.cur+'</td>'
+                str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(account_list[id]["reserve"])+' '+account.cur+'</td>'
             }
 
 

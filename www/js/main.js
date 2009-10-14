@@ -1,6 +1,60 @@
 //Тут только общие функции и события для всех страниц сайта
 // $Id$
 //conf href to modul
+
+
+ /*function createDynamicDropdown(dropDown1, dropDown2) {
+
+ /*     dropdown1 = lists all the countries
+     dropdown2 = this drop down is not used by users. Think of it as just a struture that holds ALL the cities for ALL countries from dropdown1.
+     dropdown3 = is a dynamically generated dropdown list which changes based on what is selected in dropdown1. the <option> nodes are copied out from dropdown2 and dynamically rendered in dropdown3.
+ */
+
+   /*      var dropDown1 = document.getElementById(dropDown1);
+         var dropDown2 = document.getElementById(dropDown2);
+         var dropDown3;
+        // var dropDown3 = document.getElementById(dropDown3);
+         var allDropDown2Elements = dropDown2.childNodes; // 'childNodes' used so you can also include <optgroup label="xxxxxxx" name="xxx"/> in dropDown2 if required
+
+
+         // remove all <option>s in dropDown3
+         while (dropDown3.hasChildNodes()){
+             dropDown3.removeChild(dropDown3.firstChild);
+         }
+
+         // loop though and insert into dropDown3 all of the city <option>s in dropdown2 that relate to the country value selected in dropdown1
+         for(var i = 0; i < allDropDown2Elements.length; i++){
+
+                 if (allDropDown2Elements[i].nodeType == 1 && allDropDown2Elements[i].getAttribute("iswaste") == dropDown1.value) {
+
+                     dropDown3.appendChild(newDropDown3Element);
+                 }
+
+         } // END - for loop
+
+         // if '-- Country --' is selected insert the 'default' node into dropDown3
+         if(dropDown1.value == 0) {
+               dropDown3.options[0] = new Option("Please select a country first", "0")
+        }
+
+         // (if you have server side logic that adds selected="selected" in dropdown2) extra code for IE to display the correct 'slected="selected"' value in the select box dropdown3
+         if (navigator.userAgent.indexOf('MSIE') !=-1){
+
+             for (var i=0; i < dropDown3.length; i++) {
+                 if(dropDown3[i].value == dropDown2.value) {
+                     dropDown3[i].selected = true;
+                 }
+             }
+
+         }
+
+
+ }*/
+
+
+
+
+
 function get_array_key($arr, $val)
 {
     var $ret = -1;
@@ -458,11 +512,12 @@ $(document).ready(function() {
      */
     function toggleVisibleCategory(field, type) {
         $('option',field).each(function(){
-            if ( ($(this).attr('iswaste') == type) ||
-                    ($(this).attr('iswaste') == '0') )
-                $(this).show();
-            else
-                $(this).hide();
+            var opt = this;
+            if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
+                $(opt).css('display','block');
+            } else {
+                $(opt).css('display','none');
+            }
         });
     }
 
@@ -542,7 +597,12 @@ $(document).ready(function() {
 
         $('#op_account').change(function(){op_changeAccountForTransfer();});
         $('#op_AccountForTransfer').change( function(){op_changeAccountForTransfer();});
-        $('#op_type').change(function(){op_changeTypeOperation('add');});
+        $('#op_type').change(function(){
+
+            //createDynamicDropdown('op_type', 'op_category');
+            
+            op_changeTypeOperation('add');
+        });
         $('#op_target').change(function(){
             t = parseInt($("#op_target :selected").attr("target_account_id"));
             $("span.op_currency").each(function(){
@@ -1485,6 +1545,74 @@ $('li#c2').click(function(){a_list()})
         }
     }
 
+
+
+    // Установить куки
+    // del если 1 то удаляем
+function setCookie(name, value, del) {
+      var valueEscaped = escape(value);
+      var expiresDate = new Date();
+      expiresDate.setTime(expiresDate.getTime() + 30 * 24 * 60 * 60 * 1000); // срок - 1 год, но его можно изменить
+      var expires = expiresDate.toGMTString();
+      if (del == 1){
+          var newCookie = name + "=" + valueEscaped + "; path=/; expires=Thu, 01-Jan-70 00:00:01 GMT";
+      }else{
+        var newCookie = name + "=" + valueEscaped + "; path=/; expires=" + expires;
+      }
+      if (valueEscaped.length <= 4000) document.cookie = newCookie + ";";
+}
+
+// Получить куки
+function getCookie(name) {
+      var prefix = name + "=";
+      var cookieStartIndex = document.cookie.indexOf(prefix);
+      if (cookieStartIndex == -1) return null;
+      var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length);
+      if (cookieEndIndex == -1) cookieEndIndex = document.cookie.length;
+      return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+
+    //Функция показывает гид.
+    /*$.post('/accounts/countacc/', {},
+    function(data){
+        if (data[0]['cou'] == 0){
+            setCookie('guide','uyjsdhf');
+        }
+    }, 'json');*/
+    if ( getCookie('guide') == "uyjsdhf")
+        ShowGuide();
+
+
+    function ShowGuide(){
+        //alert('гид!');
+        //$("#tabs").tabs();
+        $('#guide').tabs();
+        $('#guide').show();
+        $('#dial').show();
+        $('#dial').dialog(
+        {  width: 600}
+        );
+        $('.dial').bind('dialogclose', function(event, ui) {
+            $('#conf').bind('dialogclose', function(event, ui) {
+                setCookie('guide','',1);
+                /*if ($('#ch').attr('checked')){
+                    //не показываем очень-очень долго
+                    setCookie('guide','uyjsdhf');
+                }else{
+                    //не показываем в эту сессию
+                    setCookie('guide','');
+                }*/
+            });
+            $('#conf').show();
+            $('#conf').dialog({
+                modal: true
+            })
+        });
+        
+        //$("#guide").draggable();
+        //$("#guide").resizable();
+    }
 
 
 })
