@@ -21,10 +21,10 @@ class Registration_Controller extends Template_Controller {
         //header('Location: /'); exit;
         $this->model = new Registration_Model();
         $tpl = Core::getInstance()->tpl;
-        if (substr($_SERVER['REQUEST_URI'], 0, 23) != '/registration/activate/')
+        //if (substr($_SERVER['REQUEST_URI'], 0, 23) != '/registration/activate/')
             $tpl->assign('name_page', 'registration');
-        else
-            $tpl->assign('name_page', 'registractive');
+        //else
+        //   $tpl->assign('name_page', 'registractive');
         $tpl->assign('no_menu', '1');
 
         //$tpl->assign('register', array());

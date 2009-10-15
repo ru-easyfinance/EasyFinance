@@ -64,5 +64,16 @@ $(document).ready(function() {
 
                 //$('.formConfirm').show();
             }
+            
         })
+        if (location.hash == '#activate'){
+            $('.formRegister').hide();
+            $('#formConfirm').show().css('height','200px');
+            $('#formConfirm h2').text('Регистрацич завершена.')
+            $('#formConfirm .inside').html('<p>Поздравляем, Ваша учётная запись успешно активирована.</p>\n\
+                <p>Теперь Вы можете авторизироваться в системе. </p>\n\
+                <p>Для входа, нужно щёлкнуть по иконке в правом верхнем углу экрана, или перейти по ссылке \n\
+                    <a href="https://easyfinance.ru/login/">https://easyfinance.ru/login/</a>\n\
+                 и указать свой логин и пароль.</p>')
+        }
 });
