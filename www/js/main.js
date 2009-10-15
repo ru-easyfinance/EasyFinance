@@ -338,7 +338,12 @@ $(document).ready(function() {
     }
     function tofloat(s)
     {
-        return s.replace(/[ ]/gi, '');
+        s = s.toString();
+        if (s != null) {
+            return s.replace(/[ ]/gi, '');
+        } else {
+            return '';
+        }
     }
 
      /**
