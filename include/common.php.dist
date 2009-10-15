@@ -82,6 +82,7 @@ else
 	$tpl->append('js',  'jquery/jquery.form.js');
 	$tpl->append('js',  'main.js');
 	$tpl->append('js',  'jquery/jquery.cookie.js');
+        $tpl->append('js',  'calculator/calculator.js');
     $tpl->append('js',  'easyfinance.js');
     $tpl->append('js',  'models/category.model.js');
 }
