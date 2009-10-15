@@ -8,7 +8,7 @@ $(document).ready(function() {
 
     $('#op_addoperation_but').click();
     $('#op_btn_Save').click(function(){
-        loadOperationList();
+        //loadOperationList();
         $('#btn_ReloadData').click();
         })
     var operationList;
@@ -132,9 +132,9 @@ $(document).ready(function() {
         if (num=='undefined') num = 0;
         //num = num.toString().replace(/\$|\,/g,'');
         if(isNaN(num)) num = "0";
-        sign = (num == (num = Math.abs(num)));
+        var sign = (num == (num = Math.abs(num)));
         num = Math.floor(num*100+0.50000000001);
-        cents = num%100;
+        var cents = num%100;
         num = Math.floor(num/100).toString();
         if(cents<10)
             cents = "0" + cents;
@@ -157,10 +157,10 @@ $(document).ready(function() {
         }, function(data) {
             delete operationList;
             operationList = $.extend(data);
-            var tr = '';
+            var tr = '',tp;
             if (data != null) {
                 // Собираем данные для заполнения в таблицу
-                for(v in data) {
+                for(var v in data) {
                     if (data[v].tr_id > 0) {
                         tp = 'Перевод';
                     }else if (data[v].virt == 1) {
@@ -214,7 +214,7 @@ $(document).ready(function() {
 
 		})
                 $('.tags_could li').live('click',function(){
-                    txt=$('.tags input').val()+$(this).text()+', ';
+                    var txt=$('.tags input').val()+$(this).text()+', ';
                     $('.tags input').val(txt);
                     $('.tags_could').dialog("close");
                 });
@@ -465,14 +465,14 @@ function updateOperation() {
             return false;
         }
     }
-    target_sel = $("#target_sel_ed option:selected").val();
+    var target_sel = $("#target_sel_ed option:selected").val();
     if (sum == 0 || sum == 'NaN'){
         alert('Вы ввели неверное значение в поле "сумма"!');return false;
     }
     if (!validateForm()){
         return false;
     }
-    close = $("#close_ed").attr('checked')?1:0;
+    var close = $("#close_ed").attr('checked')?1:0;
     //alert(type+'-'+action+'-'+m_id+'-'+currency+'-'+toAccount);
     //return false;
     $.get('/index.php',{
