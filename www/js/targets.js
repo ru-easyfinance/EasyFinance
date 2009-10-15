@@ -16,7 +16,8 @@ $(document).ready(function(){
 
     // Присоединиться к популярной финансовой цели
     $(".join, .name").live('click', function(){
-        clearForm();
+        var f = $(this).closest('li');
+        $('#targets_category').val(f.attr('category'));
         $('#name').val($(this).closest('li').find('a:first').html());
         $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
@@ -295,7 +296,7 @@ $(document).ready(function(){
             var s = '',c;
             for(v in data.list) {
                 c = 1+parseInt(v);
-                s += '<li><img src="/img/i/fintarget.jpg" alt="" /><span class="num">'
+                s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/fintarget.jpg"  alt="" /><span class="num">'
                     +c+'.</span><a href="#" class="name">'
                     +data.list[v]['title']+'</a><a href="#" class="join">Присоединиться</a>'
                     +'<div class="statistics"><div><span class="green">'
