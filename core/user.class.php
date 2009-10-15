@@ -437,7 +437,7 @@ class User
                 'id'         => $var['id'],
                 'name'       => $category[$var['category']]['cat_name'],
                 'amount'     => $var['amount'],
-                'cur'        => Core::getInstance()->currency[$var['currency']]['name'],
+                'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
                 'mean_drain' => round($var['avg_3m'],2),//средний расход
                 'type'       => ($var['drain']==1)? 0 : 1 //расходная - 0,доходный-1
             );

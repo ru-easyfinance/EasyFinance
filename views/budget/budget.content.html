@@ -1,173 +1,168 @@
 <!--Бюджет-->
-					<div class="ramka3">
-						<div class="ct">
-							<div class="head">
-								<h2>Бюджет</h2>
-								<ul class="action">
-									<li class="over3"><a href="#" title="свернуть">свернуть</a></li>
-								</ul>
-							</div>
-						</div>
-                                            <!-- b_ - prefix -->
-                                            <div id="edit_budget" class="b_form" style="display:none">
-                                                        <div  class="line">
-                                                            <span class="b_category" id="0"></span>
-                                                        </div>
-                                                        <div  class="line">
-                                                                <select id="b_drain_type" name="b_drain_type" readonly="readonly">
-                                                                        <option value="0">Расходный</option>
-                                                                        <option value="1">Доходный</option>
-                                                                </select>
-                                                        </div>
-                                                        <div class="line">
-                                                                <span>Планировать бюджет на </span>
-                                                                <select id="b_period" name="period">
-                                                                        <option value="30">Месяц</option>
-                                                                        <option value="90">Квартал</option>
-                                                                        <option value="365">Год</option>
-                                                                </select>
-                                                                <span>начиная с</span>
-                                                                <select id="b_month" name="month">
-                                                                        <option value="1">Января</option>
-                                                                        <option value="2">Февраля</option>
-                                                                        <option value="3">Марта</option>
-                                                                        <option value="4">Апреля</option>
-                                                                        <option value="5">Мая</option>
-                                                                        <option value="6">Июня</option>
-                                                                        <option value="7">Июля</option>
-                                                                        <option value="8">Августа</option>
-                                                                        <option value="9">Сентября</option>
-                                                                        <option value="10">Октября</option>
-                                                                        <option value="11">Ноября</option>
-                                                                        <option value="12">Декабря</option>
-                                                                </select>
-                                                                <input type="text" value="2009" id="b_year" name="year"/>
-                                                        </div>
-                                                        <div class="line">
-                                                                <span class="amount">Сумма :</span>
-                                                                <input type="text" class="amount" id="b_amount" name="b_amount" />
-                                                        </div>
-                                                        <div class="line buttonpane">
-                                                                <div>
-                                                                        <input type="button" id="b_save" value="Сохранить"/>
-                                                                </div>
-                                                                <div>
-                                                                        <input type="button" id="b_cancel" value="Отменить"/>
-                                                                </div>
-                                                        </div>
-                                                </div>
-                                            <!-- -->
-						<div class="inside budget">
-                                                    <div class="addcategories" style="margin-bottom:20px;right:25px;top:-10px;"><a id="addacc">Мастер создания бюджета</a></div>
-                                                 
-								<div class="f_field1">
-									<div>
-										<span>Показать </span>
-                                                                                <select id="r_type">
-                                                                                    <option value="0">расходный</option>
-                                                                                    <option value="1">доходный</option>
-                                                                                </select>
-                                                                                <span> план бюджета за </span>
-                                                                                <input type="hidden" id ="r_month" value="0"/>
-										<select id="month" name="month">
-											<option value="01">Январь</option>
-                                                                                        <option value="02">Февраль</option>
-                                                                                        <option value="03">Март</option>
-                                                                                        <option value="04">Апрель</option>
-                                                                                        <option value="05">Май</option>
-                                                                                        <option value="06">Июнь</option>
-                                                                                        <option value="07">Июль</option>
-                                                                                        <option value="08">Август</option>
-                                                                                        <option value="09">Сентябрь</option>
-                                                                                        <option value="10">Октябрь</option>
-                                                                                        <option value="11">Ноябрь</option>
-                                                                                        <option value="12">Декабрь</option>
-										</select>
-										<input type="text" value="2009" id="year" name="year"/>
-                                                                                <input type="hidden" id="r_year" value="0"/>
-                                                                                <input type="button" value="Показать" id="reload_bdg" name="reoad_bdg"/>
-									</div>
-								</div>
-								<div class="f_field3">
-									<div class="income">Итого доходов: <span><b>1 131 200</b> руб.</span></div>
-									<div class="waste">Итого расходов: <span><b>1 131 200</b> руб.</span></div>
-									<div class="rest">Остаток: <span><b>1 131 200</b> руб.</span></div>
-								</div>
-                                                                <div class="waste_list">
-								<div class="h">
-									<table>
-										<tr>
-											<td class="w1">Категория</td>
-											<td class="w2">Сумма</td>
-											<td class="w3">Год. лимит</td>
-											<td class="w4">Сред. расход</td>
+<div class="ramka3">
+    <div class="ct">
+        <div class="head">
+            <h2>Бюджет</h2>
+            <ul class="action">
+                <li class="over3"><a href="#" title="свернуть">свернуть</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- b_ - prefix -->
+    <div id="edit_budget" class="b_form" style="display:none">
+        <div  class="line">
+            <span class="b_category" id="0"></span>
+        </div>
+        <div  class="line">
+            <select id="b_drain_type" name="b_drain_type" readonly="readonly">
+                <option value="0">Расходный</option>
+                <option value="1">Доходный</option>
+            </select>
+        </div>
+        <div class="line">
+            <span>Планировать бюджет на </span>
+            <select id="b_period" name="period">
+                <option value="30">Месяц</option>
+                <option value="90">Квартал</option>
+                <option value="365">Год</option>
+            </select>
+            <span>начиная с</span>
+            <select id="b_month" name="month">
+                <option value="1">Января</option>
+                <option value="2">Февраля</option>
+                <option value="3">Марта</option>
+                <option value="4">Апреля</option>
+                <option value="5">Мая</option>
+                <option value="6">Июня</option>
+                <option value="7">Июля</option>
+                <option value="8">Августа</option>
+                <option value="9">Сентября</option>
+                <option value="10">Октября</option>
+                <option value="11">Ноября</option>
+                <option value="12">Декабря</option>
+            </select>
+            <input type="text" value="2009" id="b_year" name="year"/>
+        </div>
+        <div class="line">
+            <span class="amount">Сумма :</span>
+            <input type="text" class="amount" id="b_amount" name="b_amount" />
+        </div>
+        <div class="line buttonpane">
+            <div>
+                <input type="button" id="b_save" value="Сохранить"/>
+            </div>
+            <div>
+                <input type="button" id="b_cancel" value="Отменить"/>
+            </div>
+        </div>
+    </div>
+    <!-- -->
+    <div class="inside budget">
+        <div class="addcategories" style="margin-bottom:20px;right:25px;top:-10px;"><a id="addacc">Мастер создания бюджета</a></div>
 
-										</tr>
-									</table>
-								</div>
-								<div class="scroll_cont">
-									<div class="scroll" style="top: 0; height: 67px;"></div>
-									<form action="">
+        <div class="f_field1">
+            <div>
+                <span>Показать </span>
+                <select id="r_type">
+                    <option value="0">расходный</option>
+                    <option value="1">доходный</option>
+                </select>
+                <span> план бюджета за </span>
+                <input type="hidden" id ="r_month" value="0"/>
+                <select id="month" name="month">
+                    <option value="01">Январь</option>
+                    <option value="02">Февраль</option>
+                    <option value="03">Март</option>
+                    <option value="04">Апрель</option>
+                    <option value="05">Май</option>
+                    <option value="06">Июнь</option>
+                    <option value="07">Июль</option>
+                    <option value="08">Август</option>
+                    <option value="09">Сентябрь</option>
+                    <option value="10">Октябрь</option>
+                    <option value="11">Ноябрь</option>
+                    <option value="12">Декабрь</option>
+                </select>
+                <input type="text" value="2009" id="year" name="year"/>
+                <input type="hidden" id="r_year" value="0"/>
+                <input type="button" value="Показать" id="reload_bdg" name="reoad_bdg"/>
+            </div>
+        </div>
+        <div class="f_field3">
+            <div class="income">Итого доходов: <span><b>1 131 200</b> руб.</span></div>
+            <div class="waste">Итого расходов: <span><b>1 131 200</b> руб.</span></div>
+            <div class="rest">Остаток: <span><b>1 131 200</b> руб.</span></div>
+        </div>
+        <div class="waste_list">
+            <div class="h">
+                <table>
+                    <tr>
+                        <td class="w1">Категория</td>
+                        <td class="w2">Сумма</td>
+                        <td class="w3">Год. лимит</td>
+                        <td class="w4">Сред. расход</td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="scroll_cont">
+                <div class="scroll" style="top: 0; height: 67px;"></div>
+                <form action="">
 
 
-                                        <!-- СЮДА ВСТАВЛЯТЬ -->
-									</form>
-								</div>
-							</div>
-                                                    </div>
-						<!--таблица-->
-                                                <div id="sel_date">
-                                                    <span>Пожалуйста выберете месяц, с которого начали планировать бюджет</span>
-                                                    <select id="month" name="month">
-											<option value="01">Январь</option>
-                                                                                        <option value="02">Февраль</option>
-                                                                                        <option value="03">Март</option>
-                                                                                        <option value="04">Апрель</option>
-                                                                                        <option value="05">Май</option>
-                                                                                        <option value="06">Июнь</option>
-                                                                                        <option value="07">Июль</option>
-                                                                                        <option value="08">Август</option>
-                                                                                        <option value="09">Сентябрь</option>
-                                                                                        <option value="10">Октябрь</option>
-                                                                                        <option value="11">Ноябрь</option>
-                                                                                        <option value="12">Декабрь</option>
-										</select>
-										<input type="text" value="2009" id="year" name="year"/>
-                                                                                <br>
-                                                                                <button class="next">Следующий шаг</button>
-                                                </div>
+                    <!-- СЮДА ВСТАВЛЯТЬ -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--таблица-->
+    <div id="sel_date">
+        <span>Пожалуйста выберете месяц, с которого начали планировать бюджет</span>
+        <select id="month" name="month">
+            <option value="01">Январь</option>
+            <option value="02">Февраль</option>
+            <option value="03">Март</option>
+            <option value="04">Апрель</option>
+            <option value="05">Май</option>
+            <option value="06">Июнь</option>
+            <option value="07">Июль</option>
+            <option value="08">Август</option>
+            <option value="09">Сентябрь</option>
+            <option value="10">Октябрь</option>
+            <option value="11">Ноябрь</option>
+            <option value="12">Декабрь</option>
+        </select>
+        <input type="text" value="2009" id="year" name="year"/>
+        <br>
+        <button class="next">Следующий шаг</button>
+    </div>
 
-                                                <div id="master" class="inside budget">
-                                                    <button id="0" class="tab">Расходы</button>
-                                                    <button id="1" class="tab">Доходы</button>
-                                                    
-                                                    <div class="waste_list" style="background:0">
-                                                                
-								<div class="h">
-									<table>
-										<tr>
-											<td class="w1">Категория</td>
-											<td class="w2">Сумма</td>
-											<td class="w3">Год. лимит</td>
-											<td class="w4">Сред. расход</td>
-											
-										</tr>
-									</table>
-								</div>
-								<div>
-									
-									<form action="">
+    <div id="master" class="inside budget">
+        <button id="0" class="tab">Расходы</button>
+        <button id="1" class="tab">Доходы</button>
 
-										
-                                        <!-- СЮДА ВСТАВЛЯТЬ -->
-									</form>
-								</div>
-							</div>
-                                                    <input type="button" id="b_save" value="Сохранить">
-                                                        
-                                                </div>
-						<!--/таблица-->
-						
-						<div class="cb"><div></div></div>
-					</div>
-				<!--/Бюджет-->
+        <div class="waste_list" style="background:0">
+
+            <div class="h">
+                <table>
+                    <tr>
+                        <td class="w1">Категория</td>
+                        <td class="w2">Сумма</td>
+                        <td class="w3">Год. лимит</td>
+                        <td class="w4">Сред. расход</td>
+
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <form action="">
+                    <!-- СЮДА ВСТАВЛЯТЬ -->
+                </form>
+            </div>
+        </div>
+        <input type="button" id="b_save" value="Сохранить" />
+    </div>
+    <!--/таблица-->
+    <div class="cb"><div></div></div>
+</div>
+<!--/Бюджет-->

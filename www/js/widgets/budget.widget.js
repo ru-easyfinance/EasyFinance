@@ -34,7 +34,9 @@ easyFinance.widgets.budget = function(model){
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
     $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520});
     $('#addacc').click(function(){$('#sel_date').dialog('open');})
-var ret,date;
+    
+    var ret,date;
+    
     $('.next').click(function(){
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
         $('#sel_date').dialog('close');
@@ -79,12 +81,18 @@ var ret,date;
             $.post('/budget/load/',{
                 date:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
             },function(data){
-                model.load(data)
+                model.load(data);
+                _$_list = model.print_list($('.budget #r_type').val());
             },'json')
          }
+         else
+         {
+             _$_list = model.print_list($('.budget #r_type').val());
+         }
+
         $('.budget #r_month').val($('.budget #month').val())
         $('.budget #r_year').val($('.budget #year').val())
-        _$_list = model.print_list($('.budget #r_type'));
+        
         $('.budget .waste_list form').html(_$_list);
      })
     /**

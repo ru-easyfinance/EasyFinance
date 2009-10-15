@@ -40,9 +40,10 @@ easyFinance.models.budget = function()
          * @return void
          */
         var _data;
-        function load (data){
+        function load (data) {
             _data = data;
         }
+
         /**
          * @desc возвращает сформированный список бюджетов
          * @param {0|1}type //расходная - 0,доходный-1
@@ -60,19 +61,18 @@ easyFinance.models.budget = function()
                 str += '<div class="amount">'+bud_list[key]['total'+(type?'_drain':'_profit')]+'</div>';
                 children = bud_list[key]['children'];
                 str += '<table>';
-                for (var k in children)
-                {
+                for (var k in children) {
                     if (type==children[k]['type']){
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['id']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
-                        str += '<input type="text" value="'+children[k]['total']+'" /></div></td>';
+                        str += '<input type="text" value="'+children[k]['amount']+'" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
                         str += '<div class="green" style="width: '+((rgb-1)<0)?'100':(rgb-2*(rgb-1))+'%;"></div>';
                         str += '<div class="red" style="width: 100%;"></div>';
                         //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
-                        str += '<td class="w4"><span>'+children[k]['mean_drain']+children[k]['cur']+'</span></td>';
+                        str += '<td class="w4"><span>'+children[k]['mean_drain']+' '+children[k]['cur']+'</span></td>';
                         str += '</tr>';
                     }
                 }
@@ -80,6 +80,7 @@ easyFinance.models.budget = function()
             }
             return str;
         }
+        
         /**
          * @desc добавляет бюджет
          * @param month {int} 1 - 12
@@ -174,5 +175,14 @@ easyFinance.models.budget = function()
             }
             return {};
         }
-        return {load:load, print_info:print_info, print_list:print_list, add:add, del:del, edit:edit, get_data : get_data}
+        
+        return {
+            load:load,
+            print_info:print_info,
+            print_list:print_list,
+            add:add,
+            del:del,
+            edit:edit,
+            get_data:get_data
+        }
     }
