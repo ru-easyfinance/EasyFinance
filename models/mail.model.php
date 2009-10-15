@@ -5,7 +5,7 @@
  * @version SVN $Id: $
  */
 
-class Mail_Model extends Template_Controller
+class Mail_Model
 {
 
     /**
