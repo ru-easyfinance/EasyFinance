@@ -42,10 +42,18 @@ easyFinance.widgets.budget = function(model){
         
         $('#master').dialog('open');
         $('#master input').removeAttr('readonly');
-        
+        $('#master div.amount').each(function(){
+            var txt = $(this).text();
+            $(this).html('<input type="text" value="'+txt+'"/>')
+        })
         $('#master .button').click(function(){
             var id =$(this).attr('id');
             $('#master .waste_list form tr').each(function(){
+              if(!ret[id]){ret[id] = new Array}
+              ret[id][$(this).attr('id')] = $(this).find('input').val();
+            })
+            $('#master .amount').each(function(){
+                if(!ret[id]){ret[id] = new Array}
               ret[id][$(this).attr('id')] = $(this).find('input').val();
             })
             $('#master .waste_list form').html(model.print_list(id))
@@ -64,7 +72,9 @@ easyFinance.widgets.budget = function(model){
         $.get('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
             }, 'json')
     });
-
+    $('div.line').live('click',function(){
+        $(this).toggleClass('open').toggleClass('close');
+    })
     /**
      * bind events with budgets
      */
