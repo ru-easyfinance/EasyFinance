@@ -740,7 +740,19 @@ $(document).ready(function() {
             });
             $('#week.week').closest('.line').hide();
             $('.repeat').closest('.line').hide()
-            
+
+            /**
+             * Изменение типа операции. показываем расходные и доходные категории.+универсальные
+             */
+            $('#cal_type').change(function(){
+                if ($('#cal_type').val() == 1)
+                    toggleVisibleCategory($('#cal_category'),1);
+                if ($('#cal_type').val() == 0)
+                    toggleVisibleCategory($('#cal_category'),-1);//отображает в списке категорий для добавления операции доходные
+
+            });
+
+
             $('#op_dialog_event').css({width:'500px',height:'auto',overflow:'visible'});
             //$('.repeat input:not[.rep_type],.repeat select').attr('disabled','disabled');
             $('#op_dialog_event').dialog({
