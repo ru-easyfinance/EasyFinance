@@ -145,7 +145,7 @@ class Targets_Model {
         foreach ($list as $k => $v) {
             //@FIXME Дописать работу с системными категориями
             $array[] = array(
-                'cat_id' => $v['category_id'],
+                'cat_id' => $v['category'],//category_id
                 'title'    => $v['title'],
                 'count'    => $v['cnt'],
                 'cat_name' => 'АБА-ХАБА',
