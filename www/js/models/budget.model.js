@@ -66,7 +66,7 @@ easyFinance.models.budget = function()
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['id']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
-                        str += '<input type="text" value="'+children[k]['amount']+'" /></div></td>';
+                        str += '<input type="text" value="'+children[k]['amount']+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
                         str += '<div class="green" style="width: '+((rgb-1)<0)?'100':(rgb-2*(rgb-1))+'%;"></div>';
                         str += '<div class="red" style="width: 100%;"></div>';

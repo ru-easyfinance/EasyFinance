@@ -117,7 +117,8 @@
     </div>
     <!--таблица-->
     <div id="sel_date">
-        <span>Пожалуйста выберете месяц, с которого начали планировать бюджет</span>
+        <div style="margin:10px">Пожалуйста выберете месяц, с которого начали планировать бюджет</div>
+        <div style="margin:10px">
         <select id="month" name="month">
             <option value="01">Январь</option>
             <option value="02">Февраль</option>
@@ -133,17 +134,20 @@
             <option value="12">Декабрь</option>
         </select>
         <input type="text" value="2009" id="year" name="year"/>
-        <br>
+        </div>
+        <div style="margin:10px;text-align:right">
         <button class="next">Следующий шаг</button>
+        </div>
     </div>
 
     <div id="master" class="inside budget">
-        <button id="0" class="tab">Расходы</button>
-        <button id="1" class="tab">Доходы</button>
+        <div style="position:relative;height:35px">
+            <div id="0" class="tab button" style="cursor:pointer;margin:10px;float:left;background:#50C319;color:#FFFFFF;border-bottom:0">Расходы</div>
+            <div id="1" class="tab button" style="cursor:pointer;margin:10px;float:left;background:#FFFFFF;color:#50C319;border-bottom:1px dotted #50C319">Доходы</div>
+        </div>
+        <div class="waste_list" style="background:0;position:relative">
 
-        <div class="waste_list" style="background:0">
-
-            <div class="h">
+            <div class="h" style="clear:both;width:100%">
                 <table>
                     <tr>
                         <td class="w1">Категория</td>
@@ -159,8 +163,11 @@
                     <!-- СЮДА ВСТАВЛЯТЬ -->
                 </form>
             </div>
+            
         </div>
-        <input type="button" id="b_save" value="Сохранить" />
+        <div style="position:relative;text-align:right;margin-top:5px">
+            <input type="button" id="b_save" value="Сохранить" />
+        </div>
     </div>
     <!--/таблица-->
     <div class="cb"><div></div></div>

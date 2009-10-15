@@ -32,31 +32,39 @@ easyFinance.widgets.budget = function(model){
 //                autoOpen: false,
 //                width: 647});
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
-    $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520});
+    $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520,minHeight:'auto'});
     $('#addacc').click(function(){$('#sel_date').dialog('open');})
     
-    var ret,date;
+    var ret =new Array,date;
     
     $('.next').click(function(){
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
-        $('#sel_date').dialog('close');
+        
         $('#master').dialog('open');
-        $('#master button').click(function(){
+        $('#master input').removeAttr('readonly');
+        
+        $('#master .button').click(function(){
             var id =$(this).attr('id');
             $('#master .waste_list form tr').each(function(){
               ret[id][$(this).attr('id')] = $(this).find('input').val();
             })
             $('#master .waste_list form').html(model.print_list(id))
-            
         });
         $('#master .w3').hide();
+        $('#master .button#0').click()
+        $('#sel_date').dialog('close');
     })
+    $('#master .button').click(function(){
+        $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
+        $(this).css({background:'#50C319',color:'#FFFFFF',borderBottom:'0'});
+    });
     $('#master #b_save').click(function(){
-        $('#master button').click();
+        $('#master .button').click();
         var r_str = ret.toString();
         $.get('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
             }, 'json')
     });
+
     /**
      * bind events with budgets
      */
