@@ -143,8 +143,8 @@ $(document).ready(function()
         }
         str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td>'+d_cur+'</td></tr>';
         str = str + '</table>';
-        //$('#total_amount').html(str);
-        $('#total_amount').append(str);
+        $('#total_amount').html(str);
+        //$('#total_amount').append(str);
 ////////////////////////////////////////////////////////////////@todo перенести в цсс
         $('.item td.cur').css('width','50px');
         $('.item td.total_balance').css('text-align','right').css('padding-right','0');
