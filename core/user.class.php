@@ -406,16 +406,17 @@ class User
      */
     public function initUserBudget()
     {
-        $sql = "SELECT b.id, b.category, b.drain, b.currency, b.amount, 
-            DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start, DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
-                , (SELECT AVG(amount)
-                    FROM budget t
-                    WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH) AND t.date_start <= LAST_DAY(NOW()))
-                    AND b.category = t.category AND b.user_id=t.user_id
-                ) AS avg_3m
-                FROM budget b
-                WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(NOW())";
-        $array = $this->db->select($sql, $this->getId(), date('Y-m-01'));
+        $sql = "SELECT b.id, c.cat_id as category, b.drain, b.currency, b.amount,
+            DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
+            DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
+            , (SELECT AVG(amount)
+                    FROM budget t WHERE
+                    (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
+                            AND t.date_start <= LAST_DAY(NOW())) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
+            FROM category c
+            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(NOW())
+            WHERE c.user_id= ?";
+        $array = $this->db->select($sql, date('Y-m-01'), $this->getId());
 
         
         $list = array();
@@ -434,7 +435,7 @@ class User
             }
             // Добавляем ребёнка к родителю
             $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
-                'id'         => $var['id'],
+                'id'         => is_null($var['id'])? 0 : $var['id'],
                 'name'       => $category[$var['category']]['cat_name'],
                 'amount'     => $var['amount'],
                 'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
@@ -460,6 +461,8 @@ class User
                 'end'        => $var['date_end']
             )
         );
+//        print '<pre>';
+//        print_r($this->user_budget);
     }
 
     /**
