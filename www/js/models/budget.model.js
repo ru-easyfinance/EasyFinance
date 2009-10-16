@@ -58,18 +58,18 @@ easyFinance.models.budget = function()
             for (var key in bud_list) {
                 str += '<div class="line open" id="'+key+'">';
                 str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
-                str += '<div class="amount">'+bud_list[key]['total'+(type?'_drain':'_profit')]+'</div>';
+                str += '<div class="amount">'+bud_list[key]['total'+((!type)?'_drain':'_profit')]+'</div>';
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
                     if (((parseInt(type)*2-1)==res.category[children[k]['category']]['type'])||(children[k]['type']==type)){
-
+                    var tmp =((rgb-1)<0)?'100':(rgb-2*(rgb-1))
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+children[k]['amount']+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
-                        str += '<div class="green" style="width: '+((rgb-1)<0)?'100':(rgb-2*(rgb-1))+'%;"></div>';
+                        str += '<div class="green" style="width: '+tmp+'%;"></div>';
                         str += '<div class="red" style="width: 100%;"></div>';
                         //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
