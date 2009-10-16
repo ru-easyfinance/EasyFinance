@@ -40,6 +40,7 @@ a img, fieldset { border:0 none; }
 .mail-wrapper #mail-subject, #mail-to, #mail-text, #mail-text-read, #cert-subject, #cert-type, #cert-status{width:100%; margin:5px 0;}
 #mail_save, #mail_send, #mail_answer, #mail_save_read, #mail_edit, .service-cancel{float:right; margin:0 0 0 10px;}
 #mail-from{text-align:left;}
+#mail-html-read {margin: 7px 0 0 0; text-align: start; }
 #mail-date{position:absolute; right:15px; top:41px;}
 
 .m-d-label{position:absolute; right:72px; top:40px;}
