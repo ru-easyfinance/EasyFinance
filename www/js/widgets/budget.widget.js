@@ -40,9 +40,9 @@ easyFinance.widgets.budget = function(model){
         if($('.budget #r_month').val() == 12)
         {
             $('#sel_date #month').val(1);
-            $('#sel_date #year').val($('.budget #r_year').val()+1);
+            $('#sel_date #year').val(parseInt($('.budget #r_year').val())+1);
         }else{
-            $('#sel_date #month').val($('.budget #r_month').val());
+            $('#sel_date #month').val(parseInt($('.budget #r_month').val())+1);
             $('#sel_date #year').val($('.budget #r_year').val());
         }
     })
@@ -51,27 +51,34 @@ easyFinance.widgets.budget = function(model){
     
     $('.next').click(function(){
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
-        
         $('#master').dialog('open');
+        $('#master .button').click(function(){
+            var id =$(this).attr('id');
+            $('#master .waste_list form tr').each(function(){
+                if(!ret[id]){ret[id] = new Array}
+                    ret[id][$(this).attr('id')] = $(this).find('input').val();
+            })
+            $('#master .amount').each(function(){
+                if(!ret[id]){ret[id] = new Array}
+                    ret[id][$(this).attr('id')] = $(this).find('input').val();
+            })
+            $('#master .waste_list form').html(model.print_list(id))
+
+            $('#master input').removeAttr('readonly');
+            $('#master div.amount').each(function(){
+                var txt = $(this).text();
+                $(this).html('<input type="text" value="'+txt+'"/>')
+            })
+            $('#master .w3').hide();
+        });
+        $('#master .waste_list form').html(model.print_list(id))
         $('#master input').removeAttr('readonly');
         $('#master div.amount').each(function(){
             var txt = $(this).text();
             $(this).html('<input type="text" value="'+txt+'"/>')
         })
-        $('#master .button').click(function(){
-            var id =$(this).attr('id');
-            $('#master .waste_list form tr').each(function(){
-              if(!ret[id]){ret[id] = new Array}
-              ret[id][$(this).attr('id')] = $(this).find('input').val();
-            })
-            $('#master .amount').each(function(){
-                if(!ret[id]){ret[id] = new Array}
-              ret[id][$(this).attr('id')] = $(this).find('input').val();
-            })
-            $('#master .waste_list form').html(model.print_list(id))
-        });
         $('#master .w3').hide();
-        $('#master .button#0').click()
+        //$('#master .button').click()
         $('#sel_date').dialog('close');
     })
     $('#master .button').click(function(){

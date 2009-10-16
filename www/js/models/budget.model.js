@@ -62,9 +62,9 @@ easyFinance.models.budget = function()
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
-                    if (type==children[k]['type']){
+                    if (((type*2-1)==res.category[children[k]['c_id']]['type'])||(children[k]['type']==type)){
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
-                        str += '<tr id="'+children[k]['id']+'"><td class="w1"><a href="#">';
+                        str += '<tr id="'+children[k]['c_id']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+children[k]['amount']+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
