@@ -126,7 +126,8 @@ class Template_Controller {
                 '0' => 'Прочее'
             ),
             'errors'=>Core::getInstance()->errors,
-            'budget'=>Core::getInstance()->user->getUserBudget()
+            'budget'=>Core::getInstance()->user->getUserBudget(),
+            'category' => Core::getInstance()->user->getUserCategory()
         )));
     }
 }
