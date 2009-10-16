@@ -71,7 +71,7 @@ $.post(
                 formatCurrency(data[key]['money']) + ' руб<br /><span> ' +
                 data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
                 data[key]['percent_done'] + '%;"><span>' +
-                data[key]['percent_done'] + '</span></div></div><div class="date"><span>Целевая дата:' +
+                data[key]['percent_done'] + '%</span></div></div><div class="date"><span>Целевая дата:' +
                 data[key]['date_end'] + '</span>' +
                 "</div><ul><li class='edit'>редактировать</li><li class='del'>удалить</li></ul></div></div></div>";
         }
