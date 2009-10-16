@@ -454,6 +454,7 @@ $(document).ready(function() {
             //alert(amount);
             //$("#op_amount").val(amount);
 
+            var amount = parseFloat($("#op_target option:selected").attr("amount"));
             var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
             $("#op_amount_done").text(amount_done);
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
