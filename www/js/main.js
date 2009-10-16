@@ -556,7 +556,7 @@ $(document).ready(function() {
             }
             $("#op_target_fields").show();
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
-            $('#op_target').append(o);
+            $('#op_target').html(o);
             $('#op_target').change();
 
         }
