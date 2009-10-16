@@ -63,6 +63,7 @@ easyFinance.models.budget = function()
                 str += '<table>';
                 for (var k in children) {
                     if (((parseInt(type)*2-1)==res.category[children[k]['category']]['type'])||(children[k]['type']==type)){
+
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';

@@ -21,7 +21,7 @@ easyFinance.widgets.budget = function(model){
 
 
     $('.budget .waste_list form').html(_$_list);
-    $('.cont input[value="null"]').closest('tr').remove();
+    $('.cont input[value="0"]').closest('tr').remove();
     $('.budget .f_field3').html(_$_group);
     //$('.budget #total_budget').val(_$_total);
     var d = new Date();
