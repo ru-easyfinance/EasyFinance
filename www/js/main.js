@@ -2,59 +2,6 @@
 // $Id$
 //conf href to modul
 
-
- /*function createDynamicDropdown(dropDown1, dropDown2) {
-
- /*     dropdown1 = lists all the countries
-     dropdown2 = this drop down is not used by users. Think of it as just a struture that holds ALL the cities for ALL countries from dropdown1.
-     dropdown3 = is a dynamically generated dropdown list which changes based on what is selected in dropdown1. the <option> nodes are copied out from dropdown2 and dynamically rendered in dropdown3.
- */
-
-   /*      var dropDown1 = document.getElementById(dropDown1);
-         var dropDown2 = document.getElementById(dropDown2);
-         var dropDown3;
-        // var dropDown3 = document.getElementById(dropDown3);
-         var allDropDown2Elements = dropDown2.childNodes; // 'childNodes' used so you can also include <optgroup label="xxxxxxx" name="xxx"/> in dropDown2 if required
-
-
-         // remove all <option>s in dropDown3
-         while (dropDown3.hasChildNodes()){
-             dropDown3.removeChild(dropDown3.firstChild);
-         }
-
-         // loop though and insert into dropDown3 all of the city <option>s in dropdown2 that relate to the country value selected in dropdown1
-         for(var i = 0; i < allDropDown2Elements.length; i++){
-
-                 if (allDropDown2Elements[i].nodeType == 1 && allDropDown2Elements[i].getAttribute("iswaste") == dropDown1.value) {
-
-                     dropDown3.appendChild(newDropDown3Element);
-                 }
-
-         } // END - for loop
-
-         // if '-- Country --' is selected insert the 'default' node into dropDown3
-         if(dropDown1.value == 0) {
-               dropDown3.options[0] = new Option("Please select a country first", "0")
-        }
-
-         // (if you have server side logic that adds selected="selected" in dropdown2) extra code for IE to display the correct 'slected="selected"' value in the select box dropdown3
-         if (navigator.userAgent.indexOf('MSIE') !=-1){
-
-             for (var i=0; i < dropDown3.length; i++) {
-                 if(dropDown3[i].value == dropDown2.value) {
-                     dropDown3[i].selected = true;
-                 }
-             }
-
-         }
-
-
- }*/
-
-
-
-
-
 function get_array_key($arr, $val)
 {
     var $ret = -1;
