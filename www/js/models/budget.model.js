@@ -73,7 +73,7 @@ easyFinance.models.budget = function()
                         str += '<div class="red" style="width: 100%;"></div>';
                         //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
-                        str += '<td class="w4"><span>'+children[k]['mean_drain']+' </span></td>';
+                        str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
                         str += '</tr>';
                     }
                 }
