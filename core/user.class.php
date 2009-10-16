@@ -436,11 +436,12 @@ class User
             // Добавляем ребёнка к родителю
             $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
                 'id'         => is_null($var['id'])? 0 : $var['id'],
+                'category'   => $var['category'],
                 'name'       => $category[$var['category']]['cat_name'],
                 'amount'     => $var['amount'],
                 'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
                 'mean_drain' => round($var['avg_3m'],2),//средний расход
-                'type'       => ($var['drain']==1)? 0 : 1 //расходная - 0,доходный-1
+                'type'       => ($var['drain'] == 1)? 0 : 1 //расходная - 0,доходный-1
             );
 
             // Обновляем суммы

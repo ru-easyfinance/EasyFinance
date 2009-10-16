@@ -1,7 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Файл с общими настройками проекта
- * @copyright http://home-money.ru/
+ * @copyright https://easyfinance.ru/
  * SVN $Id$
  */
 
@@ -35,7 +35,6 @@ $tpl->assign('revision', REVISION);
 
 $tpl->append('js', 'jquery/jquery.min.js');
 
-///временно<--
 if ( CSS_MINIFY )
 {
     $tpl->append('css', 'global-min.css');
@@ -45,9 +44,15 @@ else
     $tpl->append('css', 'main.css');
 
     $tpl->append('css', 'jquery/south-street/ui.all.css');
-    $tpl->append('css', 'jquery/south-street/ui.base.css');
+    //$tpl->append('css', 'jquery/south-street/ui.base.css');
+    $tpl->append('css', 'jquery/south-street/ui.core.css');
+    $tpl->append('css', 'jquery/south-street/ui.resizable.css');
+    $tpl->append('css', 'jquery/south-street/ui.dialog.css');
+    $tpl->append('css', 'jquery/south-street/ui.tabs.css');
+    $tpl->append('css', 'jquery/south-street/ui.datepicker.css');
+
     $tpl->append('css', 'jquery/jquery.jgrowl.css');
-    $tpl->append('css', 'jquery/jScrollPane.css');
+//    $tpl->append('css', 'jquery/jScrollPane.css');
     $tpl->append('css', 'jquery/jquery.calculator.css');
     $tpl->append('css', 'jquery/fullcalendar.css');
 }
@@ -67,17 +72,18 @@ else
     $tpl->append('js',  'jquery/ui.datepicker.js');
     $tpl->append('js',  'jquery/jquery.qtip.js');
     $tpl->append('js',  'jquery/jquery.jgrowl.min.js');
+
     $tpl->append('js',  'jquery/jquery.calculator.js');
     $tpl->append('js',  'jquery/jquery.calculator-ru.js');
-    $tpl->append('js',  'jquery/jquery.mousewheel.js');
-    $tpl->append('js',  'jquery/jquery.em.js');
-    $tpl->append('js',  'jquery/jScrollPane.js'); /** @deprecated */
-    $tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js'); /** @deprecated */
-    $tpl->append('js',  'jquery/jquery.timepicker-table.min.js');
+    $tpl->append('js',  'jquery/jquery.mousewheel.js');             // хз где юзается
+    $tpl->append('js',  'jquery/jquery.em.js');                     // Пока Используется в jQuery.plots и jScrollPane
+//    $tpl->append('js',  'jquery/jScrollPane.js');                   /** @deprecated */
+    $tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js');  /** @deprecated */
+    $tpl->append('js',  'jquery/jquery.timepicker-table.min.js');   // Используется в календаре
     $tpl->append('js',  'jquery/ui.tabs.js');
     //$tpl->append('js',  'jquery/i18n/ui.datepicker-ru.js');       /** @deprecated */ // Дублирует jquery/i18n/jquery-ui-i18n.js
     $tpl->append('js',  'jquery/jquery.validate.js');               // Используется только для валидации при регистрации, возможно стоит от него избавится!
-    $tpl->append('js',  'jquery/tinysort.js');                      //Используется для тегов
+    $tpl->append('js',  'jquery/tinysort.js');                      // Используется для тегов
     $tpl->append('js',  'jquery/fullcalendar.js');                  // Большой календарь
     $tpl->append('js',  'jquery/jquery.form.js');                   /** @deprecated */
     $tpl->append('js',  'jquery/jquery.cookie.js');                 /** @deprecated */ //Проверить где он сейчас используется и изменить все связи
@@ -88,7 +94,7 @@ else
 
     // internal
     $tpl->append('js',  'main.js');
-    $tpl->append('js',  'helpers.js'); //WTF???
+    $tpl->append('js',  'helpers.js');                              //WTF???
     $tpl->append('js',  'easyfinance.js');
     $tpl->append('js',  'models/category.model.js');
     $tpl->append('js',  'models/budget.model.js');
