@@ -436,21 +436,21 @@ class User
             // Добавляем ребёнка к родителю
             $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
                 'id'         => is_null($var['id'])? 0 : $var['id'],
-                'category'   => $var['category'],
-                'name'       => $category[$var['category']]['cat_name'],
-                'amount'     => $var['amount'],
+                'category'   => (int)$var['category'],
+                'name'       => (string)$category[$var['category']]['cat_name'],
+                'amount'     => (float)$var['amount'],
                 'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
-                'mean_drain' => round($var['avg_3m'],2),//средний расход
+                'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
                 'type'       => ($var['drain'] == 1)? 0 : 1 //расходная - 0,доходный-1
             );
 
             // Обновляем суммы
             if ($var['drain'] == 1) {
-                $drain_all += $var['amount'];
-                $list['c_'.$category[$var['category']]['cat_parent']]['total_drain'] += $var['amount'];
+                $drain_all += (float)$var['amount'];
+                $list['c_'.$category[$var['category']]['cat_parent']]['total_drain']  += (float)$var['amount'];
             } else {
-                $profit_all += $var['amount'];
-                $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] += $var['amount'];
+                $profit_all += (float)$var['amount'];
+                $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] += (float)$var['amount'];
             }
         }
         $this->user_budget = array (
