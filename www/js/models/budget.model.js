@@ -62,9 +62,9 @@ easyFinance.models.budget = function()
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
-                    if (((type*2-1)==res.category[children[k]['c_id']]['type'])||(children[k]['type']==type)){
+                    if (((parseInt(type)*2-1)==res.category[children[k]['category']]['type'])||(children[k]['type']==type)){
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
-                        str += '<tr id="'+children[k]['c_id']+'"><td class="w1"><a href="#">';
+                        str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+children[k]['amount']+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
@@ -72,7 +72,7 @@ easyFinance.models.budget = function()
                         str += '<div class="red" style="width: 100%;"></div>';
                         //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
-                        str += '<td class="w4"><span>'+children[k]['mean_drain']+' '+children[k]['cur']+'</span></td>';
+                        str += '<td class="w4"><span>'+children[k]['mean_drain']+' </span></td>';
                         str += '</tr>';
                     }
                 }

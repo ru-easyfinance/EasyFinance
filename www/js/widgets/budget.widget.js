@@ -21,6 +21,7 @@ easyFinance.widgets.budget = function(model){
 
 
     $('.budget .waste_list form').html(_$_list);
+    $('.cont input[value="null"]').closest('tr').remove();
     $('.budget .f_field3').html(_$_group);
     //$('.budget #total_budget').val(_$_total);
     var d = new Date();
@@ -67,14 +68,18 @@ easyFinance.widgets.budget = function(model){
             $('#master input').removeAttr('readonly');
             $('#master div.amount').each(function(){
                 var txt = $(this).text();
+                txt = (txt =='null')?0:txt;
                 $(this).html('<input type="text" value="'+txt+'"/>')
             })
             $('#master .w3').hide();
+            //$('.cont input[value="null"]').closest('tr').remove();
+            
         });
-        $('#master .waste_list form').html(model.print_list(id))
+        $('#master .waste_list form').html(model.print_list('0'))
         $('#master input').removeAttr('readonly');
         $('#master div.amount').each(function(){
             var txt = $(this).text();
+            txt = (txt =='null')?0:txt;
             $(this).html('<input type="text" value="'+txt+'"/>')
         })
         $('#master .w3').hide();
@@ -91,8 +96,9 @@ easyFinance.widgets.budget = function(model){
         $.get('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
             }, 'json')
     });
-    $('div.line').live('click',function(){
-        $(this).toggleClass('open').toggleClass('close');
+    $('div.line a.name').live('click',function(){
+        $(this).closest('.line').toggleClass('open').toggleClass('close');
+        return false;
     })
     $('#reload_bdg').click(function(){
     if ( ($('.budget #r_month').val()!=$('.budget #month').val())||($('.budget #r_year').val()!=$('.budget #year').val()) ) {
@@ -100,6 +106,7 @@ easyFinance.widgets.budget = function(model){
                 date:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
             },function(data){
                 model.load(data);
+                $('.cont input[value="0"]').closest('tr').remove();
                 _$_list = model.print_list($('.budget #r_type').val());
             },'json')
          }
@@ -107,11 +114,12 @@ easyFinance.widgets.budget = function(model){
          {
              _$_list = model.print_list($('.budget #r_type').val());
          }
-
+        
         $('.budget #r_month').val($('.budget #month').val())
         $('.budget #r_year').val($('.budget #year').val())
         
         $('.budget .waste_list form').html(_$_list);
+        $('.cont input[value="0"]').closest('tr').remove();
      })
     /**
      * @desc маска для инпута с годом
