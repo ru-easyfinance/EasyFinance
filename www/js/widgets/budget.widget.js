@@ -23,7 +23,9 @@ easyFinance.widgets.budget = function(model){
     $('.budget .waste_list form').html(_$_list);
     $('.budget .f_field3').html(_$_group);
     //$('.budget #total_budget').val(_$_total);
-
+    var d = new Date();
+    $('.budget #month').val(d.getMonth()+1)
+    $('.budget #year').val(d.getFullYear())
     $('.budget #r_month').val($('.budget #month').val())
     $('.budget #r_year').val($('.budget #year').val())
 
@@ -33,7 +35,17 @@ easyFinance.widgets.budget = function(model){
 //                width: 647});
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
     $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520,minHeight:'auto'});
-    $('#addacc').click(function(){$('#sel_date').dialog('open');})
+    $('#addacc').click(function(){
+        $('#sel_date').dialog('open');
+        if($('.budget #r_month').val() == 12)
+        {
+            $('#sel_date #month').val(1);
+            $('#sel_date #year').val($('.budget #r_year').val()+1);
+        }else{
+            $('#sel_date #month').val($('.budget #r_month').val());
+            $('#sel_date #year').val($('.budget #r_year').val());
+        }
+    })
     
     var ret =new Array,date;
     
@@ -75,28 +87,9 @@ easyFinance.widgets.budget = function(model){
     $('div.line').live('click',function(){
         $(this).toggleClass('open').toggleClass('close');
     })
-    /**
-     * bind events with budgets
-     */
-//     $('.budget .waste_list form tr').live('dblclick',function(){
-//         var cat_id = $(this).attr('id');
-//         var p_id = $(this).closest('div.line').attr('id');
-//         var e_budget = model.get_data(p_id, cat_id);
-//         $('#edit_budget').show()
-//
-//         $('#edit_budget').dialog('open');
-//
-//         $('#edit_budget #b_drain_type').val(e_budget.type);
-//         $('#edit_budget .b_category').attr('id',e_budget.id).text(e_budget.name);
-//         $('#edit_budget #b_period').val(e_budget.period);
-//         $('#edit_budget #b_amount').val(e_budget.total);
-//
-//         $('#edit_budget #b_month').val($('.budget #r_month').val());
-//         $('#edit_budget #b_year').val($('.budget #r_year').val());
-//     })
-     $('#reload_bdg').click(function(){
-         if ( ($('.budget #r_month').val()!=$('.budget #month').val())||($('.budget #r_year').val()!=$('.budget #year').val()) ) {
-            $.post('/budget/load/',{
+    $('#reload_bdg').click(function(){
+    if ( ($('.budget #r_month').val()!=$('.budget #month').val())||($('.budget #r_year').val()!=$('.budget #year').val()) ) {
+        $.post('/budget/load/',{
                 date:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
             },function(data){
                 model.load(data);
