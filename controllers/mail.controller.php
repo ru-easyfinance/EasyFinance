@@ -138,7 +138,7 @@ class Mail_Controller extends Template_Controller
                 from: "Эксперт",
                 to: "Jet",
                 date: "21.11.1986",
-                text: "Greeting from England, sir!"
+                text: "Greeting from <b>England</b>, sir!<br><br>Good bye."
             }',
             '{
                 id:'. $_POST['id'] .',
@@ -148,7 +148,7 @@ class Mail_Controller extends Template_Controller
                 from: "Вова Путин",
                 to: "Jet",
                 date: "21.11.1986",
-                text: "Здаров, чувак!"
+                text: "<h1>Здаров, чувак!</h1><br><br>Bye."
             }',
             '{
                 id:'. $_POST['id'] .',
@@ -158,7 +158,7 @@ class Mail_Controller extends Template_Controller
                 from: "Блондинка",
                 to: "Jet",
                 date: "21.11.1986",
-                text: "Greeting from England, sir!"
+                text: "Greeting from England, <i>sir</i>!<br><br>Kiss you ;)"
             }'
         );
 
