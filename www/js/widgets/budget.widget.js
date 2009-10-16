@@ -22,6 +22,10 @@ easyFinance.widgets.budget = function(model){
 
     $('.budget .waste_list form').html(_$_list);
     $('.cont input[value="0"]').closest('tr').remove();
+    $('.cont').each(function(){
+        var str = '<span>'+$(this).find('input').val()+'</span>'
+        $(this).html(str);
+    })
     $('.budget .f_field3').html(_$_group);
     //$('.budget #total_budget').val(_$_total);
     var d = new Date();
@@ -133,13 +137,20 @@ easyFinance.widgets.budget = function(model){
                 model.load(data);
                 $('.cont input[value="0"]').closest('tr').remove();
                 _$_list = model.print_list($('.budget #r_type').val());
+                $('.cont').each(function(){
+                    var str = '<span>'+$(this).find('input').val()+'</span>'
+                    $(this).html(str);
+                })
             },'json')
          }
          else
          {
              _$_list = model.print_list($('.budget #r_type').val());
          }
-        
+        $('.cont').each(function(){
+            var str = '<span>'+$(this).find('input').val()+'</span>'
+            $(this).html(str);
+        })
         $('.budget #r_month').val($('.budget #month').val())
         $('.budget #r_year').val($('.budget #year').val())
         
@@ -162,4 +173,5 @@ easyFinance.widgets.budget = function(model){
         $(this).removeClass('act');
     });
     return {};
+
 }

@@ -58,7 +58,7 @@ easyFinance.models.budget = function()
             for (var key in bud_list) {
                 str += '<div class="line open" id="'+key+'">';
                 str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
-                str += '<div class="amount">'+bud_list[key]['total'+((!type)?'_drain':'_profit')]+'</div>';
+                str += '<div class="amount">'+formatCurrency(bud_list[key]['total'+((!type)?'_drain':'_profit')])+'</div>';
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
@@ -67,7 +67,7 @@ easyFinance.models.budget = function()
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
-                        str += '<input type="text" value="'+children[k]['amount']+'" readonly="readonly" /></div></td>';
+                        str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
                         str += '<div class="green" style="width: '+tmp+'%;"></div>';
                         str += '<div class="red" style="width: 100%;"></div>';
@@ -186,4 +186,24 @@ easyFinance.models.budget = function()
             edit:edit,
             get_data:get_data
         }
+    }
+            /**
+     * Форматирует валюту
+     * @param num float Сумма, число
+     * @return string
+     */
+     function formatCurrency(num) {
+        if (num=='undefined') num = 0;
+        //num = num.toString().replace(/\$|\,/g,'');
+        if(isNaN(num)) num = "0";
+        var sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num*100+0.50000000001);
+        var cents = num%100;
+        num = Math.floor(num/100).toString();
+        if(cents<10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+' '+
+            num.substring(num.length-(4*i+3));
+        return (((sign)?'':'-') + '' + num + '.' + cents);
     }
