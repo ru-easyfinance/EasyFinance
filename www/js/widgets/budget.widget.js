@@ -21,7 +21,7 @@ easyFinance.widgets.budget = function(model){
 
 
     $('.budget .waste_list form').html(_$_list);
-    $('.cont input[value="0"]').closest('tr').remove();
+    $('.cont input[value="0.00"]').closest('tr').remove();
     $('.cont').each(function(){
         var str = '<span>'+$(this).find('input').val()+'</span>'
         $(this).html(str);
@@ -135,7 +135,7 @@ easyFinance.widgets.budget = function(model){
                 start:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
             },function(data){
                 model.load(data);
-                $('.cont input[value="0"]').closest('tr').remove();
+                $('.cont input[value="0.00"]').closest('tr').remove();
                 _$_list = model.print_list($('.budget #r_type').val());
                 $('.cont').each(function(){
                     var str = '<span>'+$(this).find('input').val()+'</span>'
