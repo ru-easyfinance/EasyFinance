@@ -57,7 +57,7 @@
                         <select id="account">
                             <option value="" currency="" abbr="">---Все---</option>
                             {foreach from=$accounts item=acc_data}
-                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name}</option>
+                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
                             {/foreach}
                         </select>
                     </div>
