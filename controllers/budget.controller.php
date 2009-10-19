@@ -48,17 +48,6 @@ class Budget_Controller extends Template_Controller
         }
     }
 
-    function json_code ($json) {
-
-        //remove curly brackets to beware from regex errors
-
-        $json = substr($json, strpos($json,'{')+1, strlen($json));
-        $json = substr($json, 0, strrpos($json,'}'));
-        $json = preg_replace('/(^|,)([\\s\\t]*)([^:]*) (([\\s\\t]*)):(([\\s\\t]*))/s', '$1"$3"$4:', trim($json));
-        return json_decode('{'.$json.'}', true);
-    }
-
-
     /**
      * Добавляет данные из мастера
      */
@@ -67,22 +56,22 @@ class Budget_Controller extends Template_Controller
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
         $end   = null;
         $json = json_decode(@$_POST['data']);
-        print_r($json);
+        
         $budget = array();
-        foreach ($json['d'] as $val) {
+        foreach ($json->d as $val) {
             foreach ($val as $k => $v) {
                 if ((float)$v <> 0) {
                     $budget['d'][$k] = (float)$v;
                 }
             }
         }
-        foreach ($json['r'] as $val) {
+        foreach ($json->r as $val) {
             foreach ($val as $k => $v) {
                 if ((float)$v <> 0) {
                     $budget['d'][$k] = (float)$v;
                 }
             }
         }
-        return json_encode($this->model->add($budget));
+        die(json_encode($this->model->add($budget, $start)));
     }
 }
