@@ -109,11 +109,19 @@ $('#master input').live('keyup',function(e){
         $('#master #b_save').hide()
         $('#master .waste_list form').html('')
         $.get('/budget/load/', {date: date},function(data){
-                model.load(data);
-                $('.cont input[value="0.00"]').closest('tr').remove();
-                $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
-                _$_list = model.print_list($('.budget #r_type').val());
+                model.load(data);             
+                _$_list = model.print_list('0');
                 $('.budget .waste_list form').html(_$_list);
+                $('#master input').removeAttr('readonly');
+                $('#master div.amount').each(function(){
+                    var txt = $(this).text();
+                    txt = (txt =='null')?0:txt;
+                    $(this).html('<input type="text" value="'+txt+'"/>')
+                })
+                $('#master .w3').hide();
+                $('#master .cont').css('width','180px');
+                //$('#master .button').click()
+                $('#sel_date').dialog('close');
                 } , 'json')
         $('#master .button').click(function(){
             $(this).hide();
@@ -149,15 +157,7 @@ $('#master input').live('keyup',function(e){
             
         });
         $('#master .waste_list form').html(model.print_list('0'))
-        $('#master input').removeAttr('readonly');
-        $('#master div.amount').each(function(){
-            var txt = $(this).text();
-            txt = (txt =='null')?0:txt;
-            $(this).html('<input type="text" value="'+txt+'"/>')
-        })
-        $('#master .w3').hide();
-        //$('#master .button').click()
-        $('#sel_date').dialog('close');
+        
     })
     $('#master .button').click(function(){
         $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
