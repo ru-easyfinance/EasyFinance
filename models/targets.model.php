@@ -30,6 +30,7 @@ function stripslashes_deep($value)
     }
     return $value;
 }
+
 class Targets_Model {
     
     /**
@@ -213,7 +214,7 @@ class Targets_Model {
             $this->errors['category'] = "Категория цели";
         }
 
-        $data['title'] = @$_POST['title'];
+        $data['title'] = htmlspecialchars(@$_POST['title']);
         if (empty($data['title'])) {
             $this->errors['title'] = "Наименование цели";
         }

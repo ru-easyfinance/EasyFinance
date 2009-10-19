@@ -165,7 +165,7 @@ class Calendar_Model {
      * @return json Массив в формате json. Если пустой, значит успешно добавлено, если со значениями - значит ошибка. И в них содержится информация о том, что введено не верно.
      */
     function add() {
-    // Проверяем корректность отправленных данных
+        // Проверяем корректность отправленных данных
         $array = array('title','near_date','last_date','type_repeat','count_repeat','comment');
         $array = $this->checkData($array);
 
@@ -182,7 +182,7 @@ class Calendar_Model {
         $last_id = $this->db->query($sql, Core::getInstance()->user->getId(), $array['title'],
             $array['near_date'], $array['near_date'],$array['last_date'], $array['type_repeat'],
             $array['count_repeat'], $array['comment']);
-        print_r($array);
+
         // Если у нас есть повторения события, то добавляем и их тоже
         if ($array['type_repeat'] == 1) {
             $sql = $this->_repeatDay($array, $last_id);

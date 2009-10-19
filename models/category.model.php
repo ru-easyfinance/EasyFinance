@@ -243,7 +243,6 @@ class Category_Model {
      */
     function add()
     {
-        // id	name parent system type
         $name   = htmlspecialchars(@$_POST['name']);
         $parent = (int)@$_POST['parent'];
         $system = (int)@$_POST['system'];
