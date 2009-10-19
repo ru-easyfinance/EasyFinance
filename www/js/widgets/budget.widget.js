@@ -60,7 +60,10 @@ easyFinance.widgets.budget = function(model){
     $('.next').click(function(){
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
         $('#master').dialog('open');
+        $('#master #b_save').hide()
         $('#master .button').click(function(){
+            $(this).hide();
+            $('#master #b_save').show();
             var id =-parseInt($(this).attr('id'))+1;
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
@@ -125,7 +128,10 @@ easyFinance.widgets.budget = function(model){
             })
             ret[id] +='{"0":0}]';//@deprecate переписать
         var r_str = '{"1":'+ret[1]+'},"0":{'+ret[0]+'}';
-        $.post('/budget/add/',{data:r_str,start:date} , function(data){model.load(data)
+        $.post('/budget/add/',{data:r_str,start:date} , function(data){
+            model.load(data);
+            $('#master .button').show()
+            $('#master').dialog('close');
             }, 'json')
     });
     $('div.line a.name').live('click',function(){
