@@ -62,7 +62,8 @@ easyFinance.models.budget = function()
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
-                    if (((parseInt(type)*2-1)==res.category[children[k]['category']]['type'])||(children[k]['type']==type)){
+                    //if (((parseInt(type)*2-1)==res.category[children[k]['category']]['type'])||(children[k]['type']==type)){
+                    if ((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
                     var tmp =((rgb-1)<0)?'100':(rgb-2*(rgb-1))
                         var rgb = children[k]['mean_drain']*100/children[k]['amount'];
                         str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';

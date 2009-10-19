@@ -81,7 +81,7 @@ easyFinance.widgets.budget = function(model){
                 }
             })
             ret[id] +=']';
-            $('#master .waste_list form').html(model.print_list(id))
+            $('#master .waste_list form').html(model.print_list('1'))
 
             $('#master input').removeAttr('readonly');
             $('#master div.amount').each(function(){
