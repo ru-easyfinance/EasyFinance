@@ -1,5 +1,48 @@
 
 easyFinance.widgets.budget = function(model){
+    /**
+     * @deprecated
+     */
+    function FloatFormat(obj, in_string )
+{
+    //'.'
+    var l = in_string.length;
+    var rgx = /[0-9]/;
+    var c=0;
+    var p =1;
+    var newstr ='';
+    var i = 0;
+
+    for(var a=1;a<=l;a++)
+    {
+        i=l-a+1;
+        if (rgx.test(in_string.substr(i,1)))
+        {
+            if (c == 3)
+            {
+                newstr = ' ' + newstr;
+                c = 0
+            }
+            newstr =in_string.substr(i,1)+newstr
+            c++;
+        }
+        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==',')
+        {
+            if (p){
+                newstr = newstr.substr(0,2)
+                newstr ='.'+newstr;
+            }
+            c=0;
+            p = 0;
+        }
+    }
+    $(obj).val(newstr)
+}
+
+$('#master input').live('keypress',function(e){
+    FloatFormat($(this),String.fromCharCode(e.which) + $(this).val())
+})
+
     if (!model){return {};}
 
     /**
@@ -64,10 +107,11 @@ easyFinance.widgets.budget = function(model){
         $('#master .button').click(function(){
             $(this).hide();
             $('#master #b_save').show();
+            
             var id =-parseInt($(this).attr('id'))+1;
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
-                if(parseFloat($(this).find('input').val().toString())!='0'){
+                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
                     var tmp = '{"'+$(this).attr('id')+'": '+parseFloat($(this).find('input').val())+'},'
                     ret[id] += tmp
                 }
@@ -75,7 +119,7 @@ easyFinance.widgets.budget = function(model){
             })
 
             $('#master .amount').each(function(){
-                if(parseFloat($(this).find('input').val().toString())!='0'){
+                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
                     var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9]/gi,'')+'": '+parseFloat($(this).find('input').val())+'},'
                     ret[id] += tmp
                 }
@@ -109,11 +153,11 @@ easyFinance.widgets.budget = function(model){
         $(this).css({background:'#50C319',color:'#FFFFFF',borderBottom:'0'});
     });
     $('#master #b_save').click(function(){
-        $('#master .button#1').click();
+        //$('#master .button#1').click();
         var id =1
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
-                if(parseFloat($(this).find('input').val())!='0'){
+                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
                     var tmp = '{"'+$(this).attr('id')+'": '+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'},'
                     ret[id] += tmp
                 }
@@ -121,14 +165,14 @@ easyFinance.widgets.budget = function(model){
             })
 
             $('#master .amount').each(function(){
-                if($(this).find('input').val()!='0'){
+                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
                     var tmp = '{"'+$(this).closest('.line').attr('id')+'": '+parseFloat($(this).find('input').val())+'},'
                     ret[id] += tmp
                 }
             })
-            ret[id] +='{"0":0}]';//@deprecate переписать
+            ret[id] +=']';//@deprecate переписать
         var r_str = '{"1":'+ret[1]+'},"0":{'+ret[0]+'}';
-        $.post('/budget/add/',{data:r_str,start:date} , function(data){
+        $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
             model.load(data);
             $('#master .button').show()
             $('#master').dialog('close');
