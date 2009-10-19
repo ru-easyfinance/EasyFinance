@@ -1,3 +1,6 @@
+<SCRIPT LANGUAGE="Javascript" SRC="/swf/fusioncharts/Code/FusionCharts/FusionCharts.js"></SCRIPT>
+
+
 <div class="ramka3">
     <div class="ct">
         <div class="head">
@@ -65,7 +68,7 @@
                         Показывать сумму в
                         <select id="currency">
                             {foreach from=$currency item=cur}
-                            <option value="{$cur.id}" >{$cur.name}({$cur.abbr})</option>
+                            <option abbr ="{$cur.abbr}" value="{$cur.id}" >{$cur.name}({$cur.abbr})</option>
                             {/foreach}
                         </select>
                     </div>
@@ -79,7 +82,10 @@
         </form>
         <div id="chart"></div>
         <div id="rep" class="inside operation_list">
+        <div id="tmp">
+        </div>
         <table id="reports_list">
+           
            <tr></tr>
         </table>
         </div>

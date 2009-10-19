@@ -14,6 +14,21 @@
         num.substring(num.length-(4*i+3));
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
+function formatCurrencyFusion(num) {
+    if (num=='undefined') num = 0;
+    //num = num.toString().replace(/\$|\,/g,'');
+    if(isNaN(num)) num = "0";
+    sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num*100+0.50000000001);
+    cents = num%100;
+    num = Math.floor(num/100).toString();
+    if(cents<10)
+        cents = "0" + cents;
+    /*for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+        num = num.substring(0,num.length-(4*i+3))+' '+
+        num.substring(num.length-(4*i+3));*/
+    return (((sign)?'':'-') + '' + num + '.' + cents);
+}
 
 $(document).ready(function() {
     function ShowDetailedIncome(){
@@ -78,7 +93,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-             $('#reports_list').append(tr);
+             $('#reports_list').html(tr);
              //$('.operation_list').jScrollPane();
         },'json');
 
@@ -143,7 +158,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-            $('#reports_list').append(tr);
+            $('#reports_list').html(tr);
             //$('.operation_list').jScrollPane();
         },'json');
     }
@@ -203,7 +218,7 @@ $(document).ready(function() {
                                data[0][v].su = null;
                             }
                     }
-                };
+                }
                 delta=sum2-sum1;
                if (data[0][c].cat_name != null /*&& data[0][c].account_name != null*/){
                    cur = res['currency'];
@@ -236,7 +251,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-            $('#reports_list').append(tr);
+            $('#reports_list').html(tr);
             //$('.operation_list').jScrollPane();
         },'json');
     }
@@ -251,7 +266,7 @@ $(document).ready(function() {
             currency:$('#currency :selected').val()
          }, function(data) {
             //var plot2 = $.jqplot('chart', [data['p'], data['d']], {
-            var plot2 = $.jqplot('chart', [data], {
+            /*var plot2 = $.jqplot('chart', [data], {
                 //legend:{show:true, location:'ne', xoffset:55},
                 //title:'Сравнение расходов и доходов',
                 seriesDefaults:{
@@ -261,7 +276,7 @@ $(document).ready(function() {
                     rendererOptions:{
                         sliceMargin:8
                     }
-                },
+                },*/
                 /*series:[
                     {label:'Расходы'},
                     {label:'Доходы'},
@@ -273,8 +288,102 @@ $(document).ready(function() {
                     },
                     yaxis:{min:0}
                 }*/
-             legend:{show:true}
-            });
+             /*legend:{show:true}
+            });*/
+            //возвращаемые данные имеют следующий формат . лейбл и сумма. например:
+            //data[c]['lab'] = "Расходы за октябрь"
+            //data[c]['sum'] = "4200"
+            /*
+             * @todo дописать формирование отчётов.
+             * работает если есть доходы и расходы в одном и том же месяце.
+             * а если например в марте доходы , а в мае расходы то не корректно.
+             */
+            cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[1][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
+
+        var  a=0;//половина возвращаемых данных. индекс.
+            for (c in data[0]){
+              a = a + 1;
+          }
+          a = a/2;
+
+          //stri - строка xml, которую пихаем в fusionchart
+          var msm =new Array(); //массив , запись в котором название месяца. "Сентябрь" "Октябрь"
+          var ind = 0; //его индекс
+          
+         var stri = "<div id='chart1div'>FusionCharts</div>";
+          $('#chart').html(stri);
+
+          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
+          stri += "<categories>";
+          for (c in data[0]){
+              if (c < a)
+              if (data[0][c]['cat'] != ''){
+                  za = data[0][c]['lab'].indexOf('за');
+                  sub = data[0][c]['lab'].substring(za+3, 20);
+                  //msm[i] = sub;
+                  //ind++;
+                  stri += "<category label='"+sub+"'  />";
+              }
+          }
+          stri += "</categories>";
+          stri += "<dataset seriesName='Доходы'>";
+          for (c in data[0]){
+              if (c < a)
+              if (data[0][c]['cat'] != ''){
+                  cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[0][c]['curs'])
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
+                  stri += "<set value='"+formatCurrencyFusion(data[0][c]['sum']*oldcur/nowcur)+"'  />";
+              }
+          }
+          stri += "</dataset>";
+          stri += "<dataset seriesName='Расходы'>";
+          for (c in data[0]){
+              if (c >= a)
+              if (data[0][c]['cat'] != ''){
+                  cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[0][c]['curs'])
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
+                  stri += "<set value='"+formatCurrencyFusion(data[0][c]['sum']*oldcur/nowcur)+"'  />";
+              }
+          }
+          stri += "</dataset>";
+
+          /*for (c in data){
+              if (data[c]['cat'] != '')
+                stri += "<set label='"+data[c]['lab']+"' value='"+data[c]['sum']+"' />";
+                    //stri += "<set label='Пам' value='']+"' />";
+          }*/
+
+          stri += "</chart>";
+          //alert(stri);
+            var chart1 = new FusionCharts("/swf/fusioncharts/MSColumn3D.swf", "chart1Id", "500", "400", "0", "1");
+            chart1.setDataXML(stri);
+            chart1.render("chart1div");//*/MSColumn3D
          }, 'json');
     }
 
@@ -287,15 +396,52 @@ $(document).ready(function() {
             account: $('#account :selected').val(),
             currency:$('#currency :selected').val()
          }, function(data) {
-            var plot2 = $.jqplot('chart', [data], {
+             cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[1][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
+             
+            /*var plot2 = $.jqplot('chart', [data], {
                 seriesDefaults:{
                     renderer:$.jqplot.PieRenderer,
                     rendererOptions:{
                         sliceMargin:8
                     }
                 },
-                legend:{show:true}
-            });
+                legend:{show:true}*/
+         var stri = "<div id='chart1div'>FusionCharts</div>";
+          $('#chart').html(stri);
+          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
+          for (c in data[0]){
+              if (data[0][c]['cat'] != ''){
+                  cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[0][c].cur_char_code)
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
+                  stri += "<set label='"+data[0][c]['cat']+"' value='"+formatCurrencyFusion(data[0][c]['money']*oldcur/nowcur)+"' />";
+              }
+          }
+          stri += "</chart>";
+          //alert(stri);
+          //stri = "<chart><set label='Домашнее хозяйство' value='500.06' /><set label='Аренда автомобиля' value='55' /><set label='Бонусы' value='1100' /><set label='Доход предпринимателя' value='1.03' /><set label='test' value='1050.07' /><set label='тетс chromeа' value='16' /><set label='rwefesr' value='4' /><set label='fewfew5345' value='1002' /></chart>"
+          //stri = "<chart><set label='A' value='10' /><set label='B' value='11' /></chart>";
+            var chart1 = new FusionCharts("/swf/fusioncharts/Pie3D.swf", "chart1Id", "500", "400", "0", "1");
+            chart1.setDataXML(stri);
+            chart1.render("chart1div");//*/
+
             //$('.operation_list').jScrollPane();
         },'json');
     }
