@@ -108,7 +108,7 @@ $('#master input').live('keyup',function(e){
         $('#master .button').show()
         $('#master #b_save').hide()
         $('#master .waste_list form').html('')
-        $.get('/budget/load/', {date: date},function(data){
+        $.post('/budget/load/', {start: date},function(data){
                 model.load(data);             
                 _$_list = model.print_list('0');
                 $('.budget .waste_list form').html(_$_list);
