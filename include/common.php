@@ -26,7 +26,7 @@ set_error_handler("UserErrorHandler");
 $tpl = new Smarty();
 
 $tpl->template_dir    =  SYS_DIR_ROOT.'/views';
-$tpl->compile_dir     =  SYS_DIR_ROOT.'/cache';
+$tpl->compile_dir     =  TMP_DIR_SMARTY.'/cache';
 
 $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
