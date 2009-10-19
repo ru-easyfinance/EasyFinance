@@ -39,8 +39,9 @@ easyFinance.widgets.budget = function(model){
     $(obj).val(newstr)
 }
 
-$('#master input').live('keypress',function(e){
+$('#master input').live('keyup',function(e){
     FloatFormat($(this),String.fromCharCode(e.which) + $(this).val())
+
 })
 
     if (!model){return {};}
@@ -112,7 +113,7 @@ $('#master input').live('keypress',function(e){
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
                 if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).attr('id')+'": '+parseFloat($(this).find('input').val())+'},'
+                    var tmp = '{"'+$(this).attr('id')+'": "'+parseFloat($(this).find('input').val())+'"},'
                     ret[id] += tmp
                 }
                     
@@ -120,7 +121,7 @@ $('#master input').live('keypress',function(e){
 
             $('#master .amount').each(function(){
                 if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9]/gi,'')+'": '+parseFloat($(this).find('input').val())+'},'
+                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9]/gi,'')+'": "'+parseFloat($(this).find('input').val())+'"},'
                     ret[id] += tmp
                 }
             })
@@ -158,7 +159,7 @@ $('#master input').live('keypress',function(e){
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
                 if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).attr('id')+'": '+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'},'
+                    var tmp = '{"'+$(this).attr('id')+'": "'+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'"},'
                     ret[id] += tmp
                 }
 
@@ -166,7 +167,7 @@ $('#master input').live('keypress',function(e){
 
             $('#master .amount').each(function(){
                 if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id')+'": '+parseFloat($(this).find('input').val())+'},'
+                    var tmp = '{"'+$(this).closest('.line').attr('id')+'": "'+parseFloat($(this).find('input').val())+'"},'
                     ret[id] += tmp
                 }
             })
