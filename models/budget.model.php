@@ -85,4 +85,12 @@ class Budget_Model {
             )
         );
     }
+
+    /**
+     * Добавляет новые данные в бюдждет
+     */
+    function add($data)
+    {
+        print_r($data);
+    }
 }
