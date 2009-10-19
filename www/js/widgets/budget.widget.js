@@ -125,7 +125,7 @@ easyFinance.widgets.budget = function(model){
             })
             ret[id] +='{"0":0}]';//@deprecate переписать
         var r_str = '{"1":'+ret[1]+'},"0":{'+ret[0]+'}';
-        $.post('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
+        $.post('/budget/add/',{data:r_str,start:date} , function(data){model.load(data)
             }, 'json')
     });
     $('div.line a.name').live('click',function(){
