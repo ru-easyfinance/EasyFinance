@@ -105,7 +105,16 @@ $('#master input').live('keyup',function(e){
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
         $('#master').dialog('open');
         $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+        $('#master .button').show()
         $('#master #b_save').hide()
+        $('#master .waste_list form').html('')
+        $.get('/budget/load/', {date: date},function(data){
+                model.load(data);
+                $('.cont input[value="0.00"]').closest('tr').remove();
+                $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
+                _$_list = model.print_list($('.budget #r_type').val());
+                $('.budget .waste_list form').html(_$_list);
+                } , 'json')
         $('#master .button').click(function(){
             $(this).hide();
             $('#master #b_save').show();
@@ -163,7 +172,6 @@ $('#master input').live('keyup',function(e){
                     var tmp = '{"'+$(this).attr('id')+'": "'+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'"},'
                     ret[id] += tmp
                 }
-
             })
 
             $('#master .amount').each(function(){
@@ -193,6 +201,7 @@ $('#master input').live('keyup',function(e){
                 $('.cont input[value="0.00"]').closest('tr').remove();
                 $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
                 _$_list = model.print_list($('.budget #r_type').val());
+                $('.budget .waste_list form').html(_$_list);
                 $('.cont').each(function(){
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
@@ -201,18 +210,19 @@ $('#master input').live('keyup',function(e){
          }
          else
          {
-             _$_list = model.print_list($('.budget #r_type').val());
+            _$_list = model.print_list($('.budget #r_type').val());
+            $('.budget #r_month').val($('.budget #month').val())
+            $('.budget #r_year').val($('.budget #year').val())
+
+            $('.budget .waste_list form').html(_$_list);
+            $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
+            $('.cont input[value="0.00"]').closest('tr').remove();
+            $('.cont').each(function(){
+                var str = '<span>'+$(this).find('input').val()+'</span>'
+                $(this).html(str);
+            })
          }
-        $('.cont').each(function(){
-            var str = '<span>'+$(this).find('input').val()+'</span>'
-            $(this).html(str);
-        })
-        $('.budget #r_month').val($('.budget #month').val())
-        $('.budget #r_year').val($('.budget #year').val())
         
-        $('.budget .waste_list form').html(_$_list);
-        $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
-        $('.cont input[value="0.00"]').closest('tr').remove();
      })
     /**
      * @desc маска для инпута с годом
@@ -230,5 +240,4 @@ $('#master input').live('keyup',function(e){
         $(this).removeClass('act');
     });
     return {};
-
 }
