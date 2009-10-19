@@ -1,0 +1,122 @@
+<div class="ramka3">
+    <div class="ct">
+        <div class="head">
+            <h2>Фото</h2>
+        </div>
+    </div>
+
+    <div class="inside">
+        <div id="widgetExpertPhoto" class="inside" align="center">
+            <form id="formExpertPhoto" method="POST" action="/expert/uploadPhoto/">
+                <p id="divExpertPhoto" class="profile-p"></p>
+                <div>
+                    <button id="btnDeleteExpertPhoto">Удалить</button>
+                    <input id="profile-photo" type="file" name="profile-photo"></input>
+                    <button id="btnUploadExpertPhoto" type="submit">Загрузить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- rounded bottom -->
+    <div class="cb"><div></div></div>
+</div>
+
+<div class="ramka3">
+    <div class="ct">
+        <div class="head">
+            <h2>О себе</h2>
+        </div>
+    </div>
+
+    <div class="inside">
+        <div id="widgetExpertEditInfo" class="inside">
+            <form id="formExpertInfo" method="POST" action="/expert/editInfo/">
+                <p class="profile-p">
+                    Краткая информация (до 500 символов):
+                </p>
+                <div>
+                    <textarea id="profile-short" name="profile-short" cols="10" rows="4"></textarea>
+                </div>
+                <p class="profile-p">
+                    Полная информация (до 5000 символов):
+                </p>
+                <div>
+                    <textarea id="profile-long" name="profile-long" cols="10" rows="10"></textarea>
+                    <!--<button class="btn_reset_profile" type="reset">Очистить</button>-->
+                    <button id="btnEditExpertInfo" type="submit">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- rounded bottom -->
+    <div class="cb"><div></div></div>
+</div>
+
+<div class="ramka3">
+    <div class="ct">
+        <div class="head">
+            <h2>Сертификаты</h2>
+        </div>
+    </div>
+
+    <div class="inside">
+        <div id="widgetExpertEditCertificates" class="inside">
+            <table id="tableExpertCertificates" width="100%" >
+                <tr>
+                    <th>Изображение</th><th width="100%">Описание</th>
+                </tr>
+            </table>
+            <br>
+            <div align="right">
+                <button id="btnAddCertificate">Добавить сертификат</button>
+            </div>
+
+            <div id="certificate-popup" title="Добавление сертификата" class="hidden">
+                <form id="formAddCertificate" method="post" action="/expert/addCertificate/">
+                    <table class="mail-wrapper">
+                        <tbody><tr>
+                            <td class="m-w-left"><label for="cert-subject">Комментарий:</label></td>
+                            <td><input type="text" id="cert-subject" name="cert-subject"/></td>
+                        </tr>
+                        <tr>
+                            <td class="m-w-left"><label for="cert-file">Файл:</label></td>
+                            <td class="m-w-right"><input type="file" id="cert-file" name="cert-file" /></td>
+                        </tr>
+                    </tbody></table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- rounded bottom -->
+    <div class="cb"><div></div></div>
+</div>
+
+<div class="ramka3">
+    <div class="ct">
+        <div class="head">
+            <h2>Услуги</h2>
+        </div>
+    </div>
+
+    <div class="inside">
+        <div id="widgetExpertEditServices" class="inside">
+            <form id="formEditServices" method="post" action="/expert/editServices/">
+                <table id="tableExpertServices" width="100%" >
+                    <tr>
+                        <th>&nbsp;</th><th>Название</th><th>Комментарий</th><th>Цена, руб.</th><th>Срок, дн.</th>
+                    </tr>
+                </table>
+                <br>
+                <div align="right">
+                    <button id="btnSaveServices">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- rounded bottom -->
+    <div class="cb"><div></div></div>
+</div>
