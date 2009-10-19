@@ -85,18 +85,18 @@ $('#master input').live('keyup',function(e){
 //    $('#edit_budget').dialog({bgiframe: true,
 //                autoOpen: false,
 //                width: 647});
+    if($('.budget #r_month').val() == 12)
+    {
+        $('#sel_date #month').val(1);
+        $('#sel_date #year').val(parseInt($('.budget #r_year').val())+1);
+    }else{
+        $('#sel_date #month').val(parseInt($('.budget #r_month').val())+1);
+        $('#sel_date #year').val(parseInt($('.budget #r_year').val()));
+    }
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
     $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520,minHeight:'auto'});
     $('#addacc').click(function(){
         $('#sel_date').dialog('open');
-        if($('.budget #r_month').val() == 12)
-        {
-            $('#sel_date #month').val(1);
-            $('#sel_date #year').val(parseInt($('.budget #r_year').val())+1);
-        }else{
-            $('#sel_date #month').val(parseInt($('.budget #r_month').val())+1);
-            $('#sel_date #year').val($('.budget #r_year').val());
-        }
     })
     
     var ret =new Array,date;
@@ -104,12 +104,12 @@ $('#master input').live('keyup',function(e){
     $('.next').click(function(){
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
         $('#master').dialog('open');
-        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Планирование расходов на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
         $('#master #b_save').hide()
         $('#master .button').click(function(){
             $(this).hide();
             $('#master #b_save').show();
-            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Планирование доходов на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
             var id =-parseInt($(this).attr('id'))+1;
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
@@ -217,9 +217,9 @@ $('#master input').live('keyup',function(e){
     /**
      * @desc маска для инпута с годом
      */
-    $('input#year').keyup(function(){
-        var str = $('input#year').val();
-        $('input#year').val(str.match(/[0-9]{0,4}/));
+    $('#sel_date input#year').keyup(function(){
+        var str = $('#sel_date input#year').val();
+        $('#sel_date input#year').val(str.match(/[0-9]{0,4}/)[0]);
     });
     /**
      * @desc подсветка строки в списке при наведении
