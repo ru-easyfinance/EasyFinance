@@ -25,8 +25,8 @@ set_error_handler("UserErrorHandler");
 // Настраиваем смарти
 $tpl = new Smarty();
 
-$tpl->template_dir    =  SYS_DIR_ROOT . '/views';
-$tpl->compile_dir     =  TMP_DIR_SMARTY.'/cache';
+$tpl->template_dir    =  SYS_DIR_ROOT.'/views';
+$tpl->compile_dir     =  SYS_DIR_ROOT.'/cache';
 
 $tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
 $tpl->compile_check   =  true;
@@ -52,9 +52,11 @@ else
     $tpl->append('css', 'jquery/south-street/ui.datepicker.css');
 
     $tpl->append('css', 'jquery/jquery.jgrowl.css');
-//    $tpl->append('css', 'jquery/jScrollPane.css');
     $tpl->append('css', 'jquery/jquery.calculator.css');
     $tpl->append('css', 'jquery/fullcalendar.css');
+
+    $tpl->append('css', 'jquery/jHtmlArea.css');
+    $tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
 }
 
 if( JS_MINIFY )
@@ -95,8 +97,8 @@ else
     // internal
     $tpl->append('js',  'main.js');
     $tpl->append('js',  'helpers.js');                              //WTF???
-    $tpl->append('js',  'easyfinance.js');
-    $tpl->append('js',  'models/category.model.js');
+        $tpl->append('js',  'easyfinance.js');
+        $tpl->append('js',  'models/category.model.js');
     $tpl->append('js',  'models/budget.model.js');
     $tpl->append('js',  'widgets/budget.widget.js');
 }
@@ -123,7 +125,8 @@ Core::getInstance()->js = array(
     'profile' => array('profile'),
     'periodic' => array('periodic'),
     'operation' => array('operation'),
-    'mail' => array('mail'),
+    'mail' => array('mail', 'models/mail.model', 'widgets/mail.widget'),
+    'expert' => array('jquery/form', 'jquery/jHtmlArea-0.6.0', 'jquery/jHtmlArea.ColorPickerMenu-0.6.0', 'models/expert.model', 'widgets/expert/expertEditInfo.widget', 'widgets/expert/expertEditPhoto.widget', 'widgets/expert/expertEditCertificates.widget', 'widgets/expert/expertEditServices.widget', 'screens/expert.screen'),
     'login' => array('welcome'),
     'info' => array('info'),
     'category' => array('category'),
