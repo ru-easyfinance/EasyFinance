@@ -173,7 +173,7 @@ $('#master input').live('keyup',function(e){
                 }
             })
             ret[id] +=']';
-        var r_str = '{"1":'+ret[1]+'},{"0":'+ret[0]+'}';
+        var r_str = '{"1":'+ret[1]+', "0":'+ret[0]+'}';
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
             model.load(data);
             $('#master .button').show()
