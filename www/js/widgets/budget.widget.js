@@ -64,16 +64,16 @@ easyFinance.widgets.budget = function(model){
             var id =-parseInt($(this).attr('id'))+1;
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
-                if($(this).find('input').val()!='null'){
-                    var tmp = '{"'+$(this).attr('id')+'": '+$(this).find('input').val()+'}'
+                if(parseFloat($(this).find('input').val().toString())!='0'){
+                    var tmp = '{"'+$(this).attr('id')+'": '+parseFloat($(this).find('input').val())+'},'
                     ret[id] += tmp
                 }
                     
             })
 
             $('#master .amount').each(function(){
-                if($(this).find('input').val()!='null'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9]/gi,'')+'": '+parseFloat($(this).find('input').val())+'}'
+                if(parseFloat($(this).find('input').val().toString())!='0'){
+                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9]/gi,'')+'": '+parseFloat($(this).find('input').val())+'},'
                     ret[id] += tmp
                 }
             })
@@ -110,22 +110,22 @@ easyFinance.widgets.budget = function(model){
         var id =1
             ret[id] = '['
             $('#master .waste_list form tr').each(function(){
-                if($(this).find('input').val()!='null'){
-                    var tmp = '{"'+$(this).attr('id')+'": '+$(this).find('input').val()+'}'
+                if(parseFloat($(this).find('input').val())!='0'){
+                    var tmp = '{"'+$(this).attr('id')+'": '+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'},'
                     ret[id] += tmp
                 }
 
             })
 
             $('#master .amount').each(function(){
-                if($(this).find('input').val()!='null'){
+                if($(this).find('input').val()!='0'){
                     var tmp = '{"'+$(this).closest('.line').attr('id')+'": '+parseFloat($(this).find('input').val())+'},'
                     ret[id] += tmp
                 }
             })
-            ret[id] +='{"0":0}]';
+            ret[id] +='{"0":0}]';//@deprecate переписать
         var r_str = '{"1":'+ret[1]+'},"0":{'+ret[0]+'}';
-        $.get('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
+        $.post('/budget/add/',{data:r_str,date:date} , function(data){model.load(data)
             }, 'json')
     });
     $('div.line a.name').live('click',function(){
