@@ -46,6 +46,8 @@ $('#master input').live('keyup',function(e){
 
     if (!model){return {};}
 
+    model.load(res.budget);
+
     /**
      * @desc {html} список бюджетов сформированный в хтмл
      */
@@ -64,7 +66,7 @@ $('#master input').live('keyup',function(e){
     
 
 
-    $('.budget .waste_list form').html(_$_list);
+    $('#list.budget .waste_list form').html(_$_list);
 
     /*********************************************************************
      * Заплатка на вёрстку требует последующий модификации модели и т.п.
@@ -278,8 +280,8 @@ $('#master input').live('keyup',function(e){
                 model.load(data);
                 _$_list = model.print_list($('.budget #r_type').val());
                 _$_group = model.print_info().group;
-                $('.budget .f_field3').html(_$_group);
-                $('.budget .waste_list form').html(_$_list);
+                $('#list.budget .f_field3').html(_$_group);
+                $('#list.budget .waste_list form').html(_$_list);
                 $('.cont input[value="0.00"]').closest('tr').remove();
                 $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').remove()})
                 
@@ -293,10 +295,10 @@ $('#master input').live('keyup',function(e){
          else
          {
             _$_list = model.print_list($('.budget #r_type').val());
-            $('.budget #r_month').val($('.budget #month').val())
-            $('.budget #r_year').val($('.budget #year').val())
+            $('#list.budget #r_month').val($('.budget #month').val())
+            $('#list.budget #r_year').val($('.budget #year').val())
 
-            $('.budget .waste_list form').html(_$_list);
+            $('#list.budget .waste_list form').html(_$_list);
             $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
             $('.cont input[value="0.00"]').closest('tr').remove();
             $('.cont').each(function(){
