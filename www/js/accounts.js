@@ -47,7 +47,7 @@ $(document).ready(function()
     {
         var str = s.toString();
         var l = str.length;
-        var rgx = /[0-9.]/;
+        var rgx = /[0-9\-\.]/;
         var newstr ='';
         for(var a=0;a<l;a++)
             {
