@@ -282,8 +282,9 @@ class Category_Model {
      */
     function del($id = 0)
     {
-        $sql = "DELETE FROM category WHERE cat_id=? AND user_id=? OR cat_parent=?";
-        $this->db->query($sql, $id, Core::getInstance()->user->getId(), $id);//удаляет категорию, заодно и дочерние
+        $sql = "DELETE FROM category WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
+        $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);//удаляет категорию, заодно и дочерние
+        
         $sql = "DELETE FROM operation WHERE cat_id=? AND user_id=?";
         $this->db->query($sql, $id, Core::getInstance()->user->getId());//удаляет все операции по удаляемой категории.
         Core::getInstance()->user->initUserCategory();

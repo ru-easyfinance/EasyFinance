@@ -56,10 +56,11 @@ class Budget_Controller extends Template_Controller
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
         $end   = null;
         $json = json_decode(@$_POST['data']);
-        
+
         $budget = array();
         foreach ($json->d as $val) {
             foreach ($val as $k => $v) {
+                $v = str_replace(' ', '', $v);
                 if ((float)$v <> 0) {
                     $budget['d'][$k] = (float)$v;
                 }
@@ -67,6 +68,7 @@ class Budget_Controller extends Template_Controller
         }
         foreach ($json->r as $val) {
             foreach ($val as $k => $v) {
+                $v = str_replace(' ', '', $v);
                 if ((float)$v <> 0) {
                     $budget['d'][$k] = (float)$v;
                 }

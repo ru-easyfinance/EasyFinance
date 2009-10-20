@@ -283,7 +283,7 @@ class User
             WHERE c.user_id = ? AND c.cat_active = '1' ORDER BY c.cat_parent, c.cat_name;";
         $sql = "SELECT distinct c.*,(SELECT count(*) FROM operation o WHERE o.cat_id=c.cat_id AND c.user_id=? ) AS howoften FROM category AS c , operation AS op
             WHERE c.user_id = ? AND c.cat_active = '1' ORDER BY c.cat_parent, c.cat_name;";*/
-        $sql = "SELECT distinct c.*, 
+        $sql = "SELECT DISTINCT c.*,
             (SELECT count(id) FROM operation o WHERE o.cat_id=c.cat_id AND c.user_id=o.user_id) AS howoften
             FROM category AS c
             WHERE c.user_id = ? AND c.cat_active = '1'
@@ -406,7 +406,7 @@ class User
      */
     public function initUserBudget()
     {
-        $sql = "SELECT b.id, c.cat_id as category, b.drain, b.currency, b.amount,
+        $sql = "SELECT c.cat_id as category, b.drain, b.currency, b.amount,
             DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
             DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
             , (SELECT AVG(amount)
@@ -424,7 +424,15 @@ class User
         $drain_all = 0; $profit_all = 0;
         foreach ($array as $var) {
             // Создаём родительскую категорию
-            if ( !isset($list['c_'.$category[$var['category']]['cat_parent']]) ) {
+            if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
+                $list['c_'.$var['category']] = array (
+                    'name'         => $category[$var['category']]['cat_name'],
+                    'category'     => $var['category'],
+                    'total_drain'  => 0,
+                    'total_profit' => 0,
+                    'children'     => array()
+                );
+            } else if ( !isset($list['c_'.$category[$var['category']]['cat_parent']]) ) {
                 $list['c_'.$category[$var['category']]['cat_parent']] = array (
                     'name'         => $category[$var['category']]['cat_name'],
                     'category'     => $var['category'],
@@ -432,25 +440,27 @@ class User
                     'total_profit' => 0,
                     'children'     => array()
                 );
-            }
-            // Добавляем ребёнка к родителю
-            $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
-                'id'         => is_null($var['id'])? 0 : $var['id'],
-                'category'   => (int)$var['category'],
-                'name'       => (string)$category[$var['category']]['cat_name'],
-                'amount'     => (float)$var['amount'],
-                'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
-                'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
-                'type'       => ($var['drain'] == 1)? 0 : 1 //расходная - 0,доходный-1
-            );
-
-            // Обновляем суммы
-            if ($var['drain'] == 1) {
-                $drain_all += (float)$var['amount'];
-                $list['c_'.$category[$var['category']]['cat_parent']]['total_drain']  += (float)$var['amount'];
             } else {
-                $profit_all += (float)$var['amount'];
-                $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] += (float)$var['amount'];
+                // Добавляем ребёнка к родителю
+                $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
+    //                'id'         => is_null($var['id'])? 0 : $var['id'],
+                    'id'         => (int)$var['category'],
+                    'category'   => (int)$var['category'],
+                    'name'       => (string)$category[$var['category']]['cat_name'],
+                    'amount'     => (float)$var['amount'],
+                    'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
+                    'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
+                    'type'       => ($var['drain'] == 1)? 0 : 1 //расходная - 0,доходный-1
+                );
+                // Обновляем суммы
+                if ($var['drain'] == 1) {
+                    $drain_all += (float)$var['amount'];
+                    $list['c_'.$category[$var['category']]['cat_parent']]['total_drain']  += (float)$var['amount'];
+
+                } else {
+                    $profit_all += (float)$var['amount'];
+                    $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] += (float)$var['amount'];
+                }
             }
         }
         $this->user_budget = array (
@@ -462,8 +472,6 @@ class User
                 'end'        => $var['date_end']
             )
         );
-//        print '<pre>';
-//        print_r($this->user_budget);
     }
 
     /**
