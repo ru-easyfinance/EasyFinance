@@ -111,7 +111,7 @@ $('#master input').live('keyup',function(e){
         $.post('/budget/load/', {start: date},function(data){
                 model.load(data);             
                 _$_list = model.print_list('0');
-                $('.budget .waste_list form').html(_$_list);
+                $('#master .waste_list form').html(_$_list);
                 $('#master input').removeAttr('readonly');
                 $('#master div.amount').each(function(){
                     var txt = $(this).text();
@@ -183,7 +183,20 @@ $('#master input').live('keyup',function(e){
             ret[id] +=']';
         var r_str = '{"d":'+ret[1]+', "r":'+ret[0]+'}';
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
-            //model.load(data);
+            $('.budget #r_year').val('0');
+            if (!data['errors'] || data.errors == [])
+            {
+               $.jGrowl("Бюджет сохранён", {theme: 'green'});
+            }
+            else
+            {
+                var err = '<ul>';
+                for(var key in data.errors)
+                {
+                    err += '<li>' + data.errors[key] + '</li>';
+                }
+                $.jGrowl(err+'</ul>', {theme: 'red'});
+            }
             $('#master .button').show()
             $('#master').dialog('close');
             }, 'json')
@@ -239,5 +252,6 @@ $('#master input').live('keyup',function(e){
     }).live('mouseout',function(){
         $(this).removeClass('act');
     });
+
     return {};
 }
