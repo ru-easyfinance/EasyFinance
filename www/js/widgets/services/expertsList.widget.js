@@ -48,7 +48,7 @@ easyFinance.widgets.expertsList = function(){
             $dd.append($('<p>').addClass('e-l-p').html(profile.fullInfo));
             
             // mail link
-            _$detailsMenu.find('#ic2 a').attr('href', '/mail#' + key);
+            _$detailsMenu.find('#ic2 a').attr('href', '/mail#' + profile.id + ";" + profile.fio);
 
             $expert.append($dd);
 
@@ -63,7 +63,7 @@ easyFinance.widgets.expertsList = function(){
                             .text('(' + profile.services[key].price + ' руб.)'))
                         .append($('<a>')
                             .text('Заказать услугу')
-                            .attr('href', '/mail#' + profile.fio + ";" + profile.services[key].title))
+                            .attr('href', '/mail#' + profile.id + ";" + profile.fio + ";" + profile.services[key].title))
                     );
 
                     $services.append(

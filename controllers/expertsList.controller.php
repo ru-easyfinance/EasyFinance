@@ -90,6 +90,7 @@ class ExpertsList_Controller extends Template_Controller
     function getProfileById()//expert foolinfo
     {
         die ('{
+            id: 3,
             fio: "Скрудж Макдак",
             shortInfo: "Short info",
             fullInfo: "Full info.\n Multiline with <b>formatting</b>!",

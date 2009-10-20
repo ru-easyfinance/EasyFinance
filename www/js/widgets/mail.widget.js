@@ -34,12 +34,13 @@ easyFinance.widgets.mail = function(){
         });
 
         var hashParams = window.location.hash.substr(1).split(";");
-        if (hashParams.length > 0) {
+        if (hashParams.length > 1) {
             $('#mail-popup').dialog('open');
 
-            $('#mail-popup #mail-to').val(hashParams[0]);
-            $('#mail-popup #mail-subject').val(hashParams[1] ? hashParams[1] : '').focus();
-            if(hashParams.length == 2)
+            $('#mail-popup #mail-to-id').val(hashParams[0]);
+            $('#mail-popup #mail-to').val(hashParams[1]);
+            $('#mail-popup #mail-subject').val(hashParams[2] ? hashParams[2] : '').focus();
+            if(hashParams.length == 3)
                 $('#mail-popup #mail-text').focus();
         }
 
