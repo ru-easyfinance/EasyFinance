@@ -123,7 +123,7 @@ class Operation_Controller extends Template_Controller
      */
     function edit($args)
     {
-        $array = array('id','account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert');
+        $array = array('id','account', 'toAccount','amount', 'category', 'date', 'comment', 'tags', 'type', 'convert');
         $array = $this->model->checkData($array);
         if (count($this->model->errorData) > 0) {
             // Если есть ошибки, то возвращаем их пользователю в виде массива
@@ -145,7 +145,7 @@ class Operation_Controller extends Template_Controller
                     }
             case 2: // Перевод со счёта
                 $array['category'] = -1;
-                if($this->model->editTransfer($array['id'], $array['amount'], $array['convert'], $array['date'],
+                if($this->model->editTransfer($array['id'], $array['amount']/*, $array['convert']*/, $array['date'],
                     $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
                         die('[]');
                     }

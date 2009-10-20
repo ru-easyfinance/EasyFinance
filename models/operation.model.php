@@ -234,6 +234,28 @@ class Operation_Model {
      * @param $tags         array     Тег
      * @return bool
      */
+
+        function editTransfer($id=0, $money = 0, $date = '', /*$category = 0, $drain = 0,*/ $account = 0, $toAccount=0, $comment = '', $tags = null){
+        if ($tags) {
+            $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
+
+            $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?
+                WHERE user_id = ? AND id = ?";
+            $this->db->query($sql, $money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);
+
+            $sql = "";
+            foreach ($tags as $tag) {
+                if (!empty($sql)) { $sql .= ','; }
+                $sql .= "(". $this->user->getId() . "," . $id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+            }
+            $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
+        } else {
+            $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?
+                WHERE user_id = ? AND id = ?";
+            $this->db->query($sql, $money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);
+        }
+        }
+
 	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
 	{
         $drain_money = $money * -1;
