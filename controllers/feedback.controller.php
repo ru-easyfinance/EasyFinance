@@ -60,9 +60,9 @@ class Feedback_Controller extends Template_Controller
          die();
      }
 
-     function r_list()
-     {
-        die(json_encode($this->model->get_rlist()));
-     }
+//     function r_list()
+//     {
+//        die(json_encode($this->model->get_rlist()));
+//     }
 }
 ?>
