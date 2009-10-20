@@ -107,7 +107,6 @@ $('#master input').live('keyup',function(e){
         $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
         $('#master .button').show()
         $('#master #b_save').hide()
-        $('#master .waste_list form').html('')
         $.post('/budget/load/', {start: date},function(data){
                 model.load(data);             
                 _$_list = model.print_list('0');
@@ -116,54 +115,81 @@ $('#master input').live('keyup',function(e){
                 $('#master div.amount').each(function(){
                     var txt = $(this).text();
                     txt = (txt =='null')?0:txt;
-                    $(this).html('<input type="text" value="'+txt+'"/>')
+                    if (!$(this).closest('.line').find('tr').html()){
+                        $(this).closest('.amount').html('<input type="text" value="'+txt+'"/>')
+                    }
                 })
                 $('#master .w3').hide();
                 $('#master .cont').css('width','180px');
-                //$('#master .button').click()
                 $('#sel_date').dialog('close');
-                } , 'json')
+                $('#master tr input').blur(function(){
+                    var summ = 0;
+                    $(this).closest('table').find('input').each(function(){
+                        var str = $(this).val().toString()||'0'
+                        summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+                    })
+                    $(this).closest('.line').find('.amount').text(formatCurrency(summ));
+                })
+        } , 'json');
+
+        
+
         $('#master .button').click(function(){
+            $('#master .line').each(function(){
+                var summ = 0;
+                $(this).find('table input').each(function(){
+                    var str = $(this).val().toString()||'0'
+                    summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+                })
+                $(this).find('.amount').text(formatCurrency(summ));
+            })
             $(this).hide();
             $('#master #b_save').show();
             $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
-            var id =-parseInt($(this).attr('id'))+1;
-            ret[id] = '['
+            ret['0'] = '['
             $('#master .waste_list form tr').each(function(){
                 if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).attr('id')+'": "'+parseFloat($(this).find('input').val())+'"},'
-                    ret[id] += tmp
+                    var tmp = '{"'+$(this).attr('id')+'": "'+parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))+'"},'
+                    ret['0'] += tmp
                 }
                     
             })
 
             $('#master .amount').each(function(){
-                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9]/gi,'')+'": "'+parseFloat($(this).find('input').val())+'"},'
-                    ret[id] += tmp
+                var str = $(this).find('input').val() || $(this).text();
+                if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
+                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str+'"},'
+                    ret['0'] += tmp
                 }
             })
-            ret[id] +=']';
+            ret['0'] +=']';
+
             $('#master .waste_list form').html(model.print_list('1'))
 
             $('#master input').removeAttr('readonly');
             $('#master div.amount').each(function(){
                 var txt = $(this).text();
                 txt = (txt =='null')?0:txt;
-                $(this).html('<input type="text" value="'+txt+'"/>')
+                if (!$(this).closest('.line').find('tr').html()){
+                    $(this).closest('.amount').html('<input type="text" value="'+txt+'"/>')
+                }
             })
             $('#master .w3').hide();
-            //$('.cont input[value="null"]').closest('tr').remove();
-            
         });
-        $('#master .waste_list form').html(model.print_list('0'))
-        
     })
     $('#master .button').click(function(){
         $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
         $(this).css({background:'#50C319',color:'#FFFFFF',borderBottom:'0'});
     });
     $('#master #b_save').click(function(){
+        $('#master .line').each(function(){
+            var summ = 0;
+            $(this).find('table input').each(function(){
+                var str = $(this).val().toString()||'0'
+                summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+            })
+            $(this).find('.amount').text(formatCurrency(summ));   
+        })
         //$('#master .button#1').click();
         var id =1
             ret[id] = '['
@@ -175,15 +201,16 @@ $('#master input').live('keyup',function(e){
             })
 
             $('#master .amount').each(function(){
-                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id')+'": "'+parseFloat($(this).find('input').val())+'"},'
-                    ret[id] += tmp
+                var str = $(this).find('input').val() || $(this).text();
+                if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
+                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str+'"},'
+                    ret['1'] += tmp
                 }
             })
             ret[id] +=']';
         var r_str = '{"d":'+ret[1]+', "r":'+ret[0]+'}';
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
-            $('.budget #r_year').val('0');
+
             if (!data['errors'] || data.errors == [])
             {
                $.jGrowl("Бюджет сохранён", {theme: 'green'});
@@ -196,6 +223,10 @@ $('#master input').live('keyup',function(e){
                     err += '<li>' + data.errors[key] + '</li>';
                 }
                 $.jGrowl(err+'</ul>', {theme: 'red'});
+            }
+            if (date =='01.'+$('#r_month').val()+'.'+$('#r_year').val()){
+                $('.budget #r_year').val('0');
+                $('#reload_bdg').click()
             }
             $('#master .button').show()
             $('#master').dialog('close');
@@ -211,10 +242,11 @@ $('#master input').live('keyup',function(e){
                 start:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
             },function(data){
                 model.load(data);
-                $('.cont input[value="0.00"]').closest('tr').remove();
-                $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
                 _$_list = model.print_list($('.budget #r_type').val());
                 $('.budget .waste_list form').html(_$_list);
+                $('.cont input[value="0.00"]').closest('tr').remove();
+                $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').remove()})
+                
                 $('.cont').each(function(){
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
