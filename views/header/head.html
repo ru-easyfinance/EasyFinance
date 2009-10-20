@@ -48,7 +48,11 @@
                     {else}
                         <li><a href="/info/">Личный кабинет</a></li>
                         <li><a href="/profile/">Настройки профиля</a></li>
+                        {if $smarty.const.IS_DEMO == false}
                         <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
+                        {else}
+                        <li><a href="https://{$nodemo}profile/">{$user_info.user_name}&nbsp;</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
+                        {/if}
                     {/if}
                 
                 </ul>
