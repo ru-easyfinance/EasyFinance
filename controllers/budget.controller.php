@@ -70,7 +70,7 @@ class Budget_Controller extends Template_Controller
             foreach ($val as $k => $v) {
                 $v = str_replace(' ', '', $v);
                 if ((float)$v <> 0) {
-                    $budget['d'][$k] = (float)$v;
+                    $budget['r'][$k] = (float)$v;
                 }
             }
         }

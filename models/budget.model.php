@@ -35,9 +35,9 @@ class Budget_Model {
             , (SELECT AVG(amount)
                     FROM budget t WHERE
                     (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-                            AND t.date_start <= LAST_DAY(NOW())) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
+                            AND t.date_start <= LAST_DAY(b.date_start)) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
             FROM category c
-            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(NOW())
+            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
             WHERE c.user_id= ?";
         $array = $this->db->select($sql, $start, Core::getInstance()->user->getId());
 
@@ -104,11 +104,10 @@ class Budget_Model {
         foreach ($data as $key => $value) {
             if ((string)$key == 'r') {
                 $drain = 1;
-                print '1';
             } elseif ((string)$key == 'd') {
                 $drain = 0;
-                print '0';
             }
+            
             foreach ($value as $k => $v) {
                 $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
                 if (!empty ($sql)) $sql .= ',';

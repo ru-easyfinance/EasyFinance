@@ -412,9 +412,9 @@ class User
             , (SELECT AVG(amount)
                     FROM budget t WHERE
                     (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-                            AND t.date_start <= LAST_DAY(NOW())) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
+                            AND t.date_start <= LAST_DAY(b.date_start)) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
             FROM category c
-            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(NOW())
+            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
             WHERE c.user_id= ?";
         $array = $this->db->select($sql, date('Y-m-01'), $this->getId());
 
