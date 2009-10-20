@@ -56,6 +56,8 @@ easyFinance.models.budget = function()
             var children,str = '';
             
             for (var key in bud_list) {
+                if ((type=='0' && (res.category[bud_list[key]['category']]['type']<=0))||(type=='1' && (res.category[bud_list[key]['category']]['type']>=0))){
+
                 str += '<div class="line open" id="'+key+'">';
                 str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
                 str += '<div class="amount">'+formatCurrency(bud_list[key]['total'+((!type)?'_drain':'_profit')])+'</div>';
@@ -63,23 +65,24 @@ easyFinance.models.budget = function()
                 str += '<table>';
                 for (var k in children) {
                     //if (((parseInt(type)*2-1)==res.category[children[k]['category']]['type'])||(children[k]['type']==type)){
-                    if ((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
                         
-                        var rgb = children[k]['mean_drain']*100/children[k]['amount'];
-                        var tmp =((rgb-1)<0)?'100':(rgb-2*(rgb-1))
+                        var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
+                        if (isNaN(rgb))
+                            rgb = '0';
                         str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
-                        str += '<div class="green" style="width: '+tmp+'%;"></div>';
+                        str += '<div class="green" style="width: '+rgb+'%;"></div>';
                         str += '<div class="red" style="width: 100%;"></div>';
                         //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
                         str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
                         str += '</tr>';
                     }
-                }
+                
                 str+='</table></div>';
+                }
             }
             return str;
         }
