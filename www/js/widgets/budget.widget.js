@@ -61,10 +61,14 @@ $('#master input').live('keyup',function(e){
     /**
      * @desc {Int} Общий бюджет
      */
-    //var _$_total = model.print_info().total;
+    
 
 
     $('.budget .waste_list form').html(_$_list);
+
+    /*********************************************************************
+     * Заплатка на вёрстку требует последующий модификации модели и т.п.
+     */
     $('.line .amount').each(function(){
         if ($(this).text()=='0.00') $(this).closest('.line').remove()
     })
@@ -73,18 +77,19 @@ $('#master input').live('keyup',function(e){
         var str = '<span>'+$(this).find('input').val()+'</span>'
         $(this).html(str);
     })
+    //********************************************************************
+
     $('.budget .f_field3').html(_$_group);
-    //$('.budget #total_budget').val(_$_total);
+    
+    
+    /**********************************************************************
+     * Появилась дата в мастере.Самое простое решение
+     */
     var d = new Date();
     $('.budget #month').val(d.getMonth()+1)
     $('.budget #year').val(d.getFullYear())
     $('.budget #r_month').val($('.budget #month').val())
     $('.budget #r_year').val($('.budget #year').val())
-
-
-//    $('#edit_budget').dialog({bgiframe: true,
-//                autoOpen: false,
-//                width: 647});
     if($('.budget #r_month').val() == 12)
     {
         $('#sel_date #month').val(1);
@@ -93,24 +98,41 @@ $('#master input').live('keyup',function(e){
         $('#sel_date #month').val(parseInt($('.budget #r_month').val())+1);
         $('#sel_date #year').val(parseInt($('.budget #r_year').val()));
     }
+    //********************************************************************
+
+
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
     $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520,minHeight:'auto'});
+
+
+    /*********************************************************************
+     *Появилась кнопочка для мастера. верстка началась в 8 писалось в очень спехе 
+     */
     $('#addacc').click(function(){
         $('#sel_date').dialog('open');
     })
-    
+    //*********************************************************************
+    ///////////////////////////////////////////////////////////////////////
+    //////////////////////////Мастер///////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     var ret =new Array,date;
     
     $('.next').click(function(){
-        date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();
-        $('#master').dialog('open');
-        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
-        $('#master .button').show()
-        $('#master #b_save').hide()
+        date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();//Формирование удобной серверу даты
+        $('#master').dialog('open');//а вот и сам мастер
+        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
+        $('#master .button').show()//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
+        $('#master #b_save').hide()//см на строку выше
+
+        /*
+         * Оказалось что мастер грузится с сервера .....
+         */
         $.post('/budget/load/', {start: date},function(data){
                 model.load(data);             
                 _$_list = model.print_list('0');
                 $('#master .waste_list form').html(_$_list);
+
+                //дальше костыли, причём часть из них не актуальна в свете изменяющихся, в то время постоянно, требований к отображению
                 $('#master input').removeAttr('readonly');
                 $('#master div.amount').each(function(){
                     var txt = $(this).text();
@@ -122,6 +144,11 @@ $('#master input').live('keyup',function(e){
                 $('#master .w3').hide();
                 $('#master .cont').css('width','180px');
                 $('#sel_date').dialog('close');
+                /////////////////////////////////////////////////////////////
+
+                /**
+                 *по сути тоже костыль но не очень страшный и даже более мение оптимизированный
+                 */
                 $('#master tr input').blur(function(){
                     var summ = 0;
                     $(this).closest('table').find('input').each(function(){
@@ -133,8 +160,11 @@ $('#master input').live('keyup',function(e){
         } , 'json');
 
         
-
+        /*
+         * 2 ая страница бюджета
+         */
         $('#master .button').click(function(){
+            //статистика пока хук
             $('#master .line').each(function(){
                 var summ = 0;
                 $(this).find('table input').each(function(){
@@ -143,9 +173,13 @@ $('#master input').live('keyup',function(e){
                 })
                 $(this).find('.amount').text(formatCurrency(summ));
             })
+            //Чтоб не тыкался
             $(this).hide();
+            //Чтоб тыкался
             $('#master #b_save').show();
+            //Опять динамический заголовок
             $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+            //статистика... не самый удачный вариант(оч много иттераций),но это кастыль.
             ret['0'] = '['
             $('#master .waste_list form tr').each(function(){
                 if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
@@ -154,7 +188,6 @@ $('#master input').live('keyup',function(e){
                 }
                     
             })
-
             $('#master .amount').each(function(){
                 var str = $(this).find('input').val() || $(this).text();
                 if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
@@ -163,7 +196,7 @@ $('#master input').live('keyup',function(e){
                 }
             })
             ret['0'] +=']';
-
+            /////////////////////////////////////////////////////////////////////////////////
             $('#master .waste_list form').html(model.print_list('1'))
 
             $('#master input').removeAttr('readonly');
@@ -190,27 +223,24 @@ $('#master input').live('keyup',function(e){
             })
             $(this).find('.amount').text(formatCurrency(summ));   
         })
-        //$('#master .button#1').click();
-        var id =1
-            ret[id] = '['
-            $('#master .waste_list form tr').each(function(){
-                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).attr('id')+'": "'+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'"},'
-                    ret[id] += tmp
-                }
-            })
+        ret['1'] = '['
+        $('#master .waste_list form tr').each(function(){
+            if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
+                var tmp = '{"'+$(this).attr('id')+'": "'+$(this).find('input').val().toString().replace(/[^0-9\.]/gi, '')+'"},'
+                ret['1'] += tmp
+            }
+        })
 
-            $('#master .amount').each(function(){
-                var str = $(this).find('input').val() || $(this).text();
-                if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str+'"},'
-                    ret['1'] += tmp
-                }
-            })
-            ret[id] +=']';
+        $('#master .amount').each(function(){
+            var str = $(this).find('input').val() || $(this).text();
+            if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
+                var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str+'"},'
+                ret['1'] += tmp
+            }
+        })
+        ret['1'] +=']';
         var r_str = '{"d":'+ret[1]+', "r":'+ret[0]+'}';
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
-
             if (!data['errors'] || data.errors == [])
             {
                $.jGrowl("Бюджет сохранён", {theme: 'green'});
@@ -230,7 +260,8 @@ $('#master input').live('keyup',function(e){
             }
             $('#master .button').show()
             $('#master').dialog('close');
-            }, 'json')
+            },
+        'json')
     });
     $('div.line a.name').live('click',function(){
         $(this).closest('.line').toggleClass('open').toggleClass('close');
@@ -238,12 +269,17 @@ $('#master input').live('keyup',function(e){
     })
     $('#reload_bdg').click(function(){
     if ( ($('.budget #r_month').val()!=$('.budget #month').val())||($('.budget #r_year').val()!=$('.budget #year').val()) ) {
-        $.post('/budget/load/',{
+        $.post('/budget/load/',
+            {
                 start:'01.'+$('.budget #month').val()+'.'+$('.budget #year').val()
-            },function(data){
+            },
+            function(data)
+            {
                 model.load(data);
                 _$_list = model.print_list($('.budget #r_type').val());
-                $('.budget .waste_list form').html(_$_list);
+                _$_group = model.print_info().group;
+                $('.budget .f_field3').html(_$_group);
+                $('.budget:not[#master] .waste_list form').html(_$_list);
                 $('.cont input[value="0.00"]').closest('tr').remove();
                 $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').remove()})
                 
@@ -251,7 +287,8 @@ $('#master input').live('keyup',function(e){
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
                 })
-            },'json')
+            },
+            'json')
          }
          else
          {
@@ -266,8 +303,7 @@ $('#master input').live('keyup',function(e){
                 var str = '<span>'+$(this).find('input').val()+'</span>'
                 $(this).html(str);
             })
-         }
-        
+         }        
      })
     /**
      * @desc маска для инпута с годом
@@ -284,6 +320,5 @@ $('#master input').live('keyup',function(e){
     }).live('mouseout',function(){
         $(this).removeClass('act');
     });
-
     return {};
 }
