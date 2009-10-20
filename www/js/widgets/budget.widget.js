@@ -280,6 +280,8 @@ $('#master input').live('keyup',function(e){
                 model.load(data);
                 _$_list = model.print_list($('.budget #r_type').val());
                 _$_group = model.print_info().group;
+                $('#list.budget #r_month').val($('.budget #month').val())
+                $('#list.budget #r_year').val($('.budget #year').val())
                 $('#list.budget .f_field3').html(_$_group);
                 $('#list.budget .waste_list form').html(_$_list);
                 $('.cont input[value="0.00"]').closest('tr').remove();
