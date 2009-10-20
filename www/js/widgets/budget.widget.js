@@ -191,7 +191,7 @@ $('#master input').live('keyup',function(e){
             $('#master .amount').each(function(){
                 var str = $(this).find('input').val() || $(this).text();
                 if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
-                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str+'"},'
+                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str.replace(/[^\-0-9.]/)+'"},'
                     ret['0'] += tmp
                 }
             })
@@ -234,7 +234,7 @@ $('#master input').live('keyup',function(e){
         $('#master .amount').each(function(){
             var str = $(this).find('input').val() || $(this).text();
             if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
-                var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str+'"},'
+                var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str.replace(/[^\-0-9.]/)+'"},'
                 ret['1'] += tmp
             }
         })
