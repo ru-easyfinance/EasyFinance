@@ -241,15 +241,15 @@ class Operation_Model {
 		$sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $from_account, 1,
+        $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
             $comment, $to_account);
 
-        $last_id = mysql_insert_id();
+        /*$last_id = mysql_insert_id();
             $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, 1,
-            $comment, $from_account);
+            $comment, $from_account);//*/
 
         /*$last_id = mysql_insert_id();
         $sql = "INSERT INTO operation
@@ -421,11 +421,26 @@ class Operation_Model {
                     $sql .= " AND (tt.category_id = '{$currentCategory}') ";
                 }
             }
+        $sql .= " UNION ".
+        "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
+        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
+        "FROM operation o ".
+        "WHERE o.transfer = ? ".
+            "AND o.user_id = ? ".
+            "AND (o.`date` BETWEEN ? AND ?) ";
+            if (!empty($currentCategory)) {
+                if ($cat[$currentCategory]['cat_parent'] == 0) {
+                    $sql .= " AND (o.cat_id IN ({$cat_in})) ";
+                } else {
+                    $sql .= " AND (o.cat_id = '{$currentCategory}') ";
+                }
+            }
         $sql .= " ORDER BY `date` DESC, id ";
 
         $accounts = Core::getInstance()->user->getUserAccounts();
         $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom,
-            $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount);
+            $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount, $currentAccount, $this->user->getId(), $dateFrom,
+            $dateTo);
         // Добавляем данные, которых не хватает
         foreach ($operations as $key => $val) {
             $val['cat_name']            = $category[$val['cat_id']]['cat_name'];

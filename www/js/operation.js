@@ -174,8 +174,11 @@ $(document).ready(function() {
                     };
                     tr += "<tr value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                         + '<td class="light"><a href="#">' + tp + '</a></td>'
-                        + '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
-                        + '<td class="light"><span>'+data[v].date+'</span></td>'
+                        if (data[v].transfer != $('#op_account :selected').val())
+                            tr += '<td class="summ"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
+                        else
+                            tr += '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
+                        tr += '<td class="light"><span>'+data[v].date+'</span></td>'
                         + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                         + '<td class="no_over big">'+data[v].account_name
                             +'<div class="cont" style="top: -10px"><span>'+'</span><ul>'
@@ -327,7 +330,7 @@ $(document).ready(function() {
         $('#op_id').val(data.id);
         $('#op_account').val(data.account_id);
         
-        if (data.transfer=='1')
+        if (data.tr_id=='1')//transfer
         {
             $('#op_type').val(2);
         }
