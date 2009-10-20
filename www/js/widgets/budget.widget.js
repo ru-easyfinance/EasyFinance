@@ -279,7 +279,7 @@ $('#master input').live('keyup',function(e){
                 _$_list = model.print_list($('.budget #r_type').val());
                 _$_group = model.print_info().group;
                 $('.budget .f_field3').html(_$_group);
-                $('.budget:not[#master] .waste_list form').html(_$_list);
+                $('.budget .waste_list form').html(_$_list);
                 $('.cont input[value="0.00"]').closest('tr').remove();
                 $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').remove()})
                 
