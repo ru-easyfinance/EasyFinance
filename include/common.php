@@ -57,6 +57,10 @@ else
 
     $tpl->append('css', 'jquery/jHtmlArea.css');
     $tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
+
+    $tpl->append('css', 'jquery/fancy.css');
+
+    $tpl->append('css', 'expertsList.css');
 }
 
 if( JS_MINIFY )
@@ -89,6 +93,7 @@ else
     $tpl->append('js',  'jquery/fullcalendar.js');                  // Большой календарь
     $tpl->append('js',  'jquery/jquery.form.js');                   /** @deprecated */
     $tpl->append('js',  'jquery/jquery.cookie.js');                 /** @deprecated */ //Проверить где он сейчас используется и изменить все связи
+    $tpl->append('js',  'jquery/jquery.fancybox-1.0.0.js');
 
     // external libs
     $tpl->append('js',  'anychart/AnyChart.js');
@@ -127,6 +132,7 @@ Core::getInstance()->js = array(
     'operation' => array('operation'),
     'mail' => array('mail', 'models/mail.model', 'widgets/mail.widget'),
     'expert' => array('jquery/form', 'jquery/jHtmlArea-0.6.0', 'jquery/jHtmlArea.ColorPickerMenu-0.6.0', 'models/expert.model', 'widgets/expert/expertEditInfo.widget', 'widgets/expert/expertEditPhoto.widget', 'widgets/expert/expertEditCertificates.widget', 'widgets/expert/expertEditServices.widget', 'screens/expert.screen'),
+    'expertslist' => array('widgets/services/expertsList.widget', 'screens/services.screen'),
     'login' => array('welcome'),
     'info' => array('info'),
     'category' => array('category'),

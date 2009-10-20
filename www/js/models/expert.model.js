@@ -41,7 +41,7 @@ easyFinance.models.expert = function(){
                 _profile = data;
                 _this.isLoaded = true;
                 if (typeof param1 == 'function')
-                    param1(_profile);
+                    param1(_this);
             }, 'json');
         }
     }

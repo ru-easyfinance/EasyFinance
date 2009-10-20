@@ -72,14 +72,6 @@ easyFinance.widgets.expertEditServices = function(){
         if (!model)
             return null;
 
-        _model = model;
-        if (_model.isLoaded == false)
-            _model.load(function(profile){
-                _showInfo(profile.services);
-            });
-        else
-            _showInfo(_model.getProfile().services);
-
         _$node = $(nodeSelector);
         _$table = _$node.find('table:first');
 
@@ -98,6 +90,14 @@ easyFinance.widgets.expertEditServices = function(){
                 $.jGrowl("Ошибка на сервере!", {theme: 'red'});
             }
         });
+
+        _model = model;
+        if (_model.isLoaded == false)
+            _model.load(function(profile){
+                _showInfo(profile.services);
+            });
+        else
+            _showInfo(_model.getProfile().services);
 
         return this;
     }

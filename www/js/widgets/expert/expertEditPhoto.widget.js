@@ -18,7 +18,7 @@ easyFinance.widgets.expertEditPhoto = function(){
             $('#divExpertPhoto').empty().text('нет фото');
         } else {
             $('#divExpertPhoto').empty().append(
-                $('<img>').attr('src', profile.photo)
+                $('<img>').attr('src', profile.smallPhoto)
             );
         }
     }

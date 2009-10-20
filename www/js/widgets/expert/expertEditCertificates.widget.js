@@ -19,30 +19,30 @@ easyFinance.widgets.expertEditCertificates = function(){
         _$table.find('tr:gt(0)').remove();
 
         for (var key in certificates) {
-            var _$row = $('<tr>');
+            var $row = $('<tr>');
 
             // image
-            var _$col = $('<td>').append($('<img>').attr('src', certificates[key].image));
-            _$row.append(_$col);
+            var $col = $('<td>').append($('<img>').attr('src', certificates[key].smallImage));
+            $row.append($col);
 
             // status
-            _$col = $('<td>').html('<b>Статус:</b><br>');
-            var _$div = $('<div>').text(certificates[key].status);
+            $col = $('<td>').html('<b>Статус:</b><br>');
+            var $div = $('<div>').text(certificates[key].status);
             if (certificates[key].processed == false) {
-                _$div.addClass('processing');
+                $div.addClass('processing');
             } else if (certificates[key].accepted == false) {
-                _$div.addClass('denied');
+                $div.addClass('denied');
             } else {
-                _$div.addClass('accepted');
+                $div.addClass('accepted');
             }
-            _$col.append(_$div).append($('<br>'));
+            $col.append($div).append($('<br>'));
 
             // comment
-            _$col.append($('<div>').html('<b>Комментарий:</b><br>' + certificates[key].comment));
-            _$col.append($('<br>'));
+            $col.append($('<div>').html('<b>Комментарий:</b><br>' + certificates[key].comment));
+            $col.append($('<br>'));
 
             // button
-            _$col.append(
+            $col.append(
                 $('<button>').attr('id', 'cert_' + key).text('удалить').click(function(){
                     if (confirm("Удалить сертификат?")) {
                         $.jGrowl("Операция выполняется", {theme: 'green'});
@@ -56,9 +56,9 @@ easyFinance.widgets.expertEditCertificates = function(){
                 })
             );
 
-            _$row.append(_$col);
+            $row.append($col);
             
-            _$table.append(_$row);
+            _$table.append($row);
         }
         _$table.show();
     }
@@ -73,14 +73,6 @@ easyFinance.widgets.expertEditCertificates = function(){
     function init(nodeSelector, model) {
         if (!model)
             return null;
-
-        _model = model;
-        if (_model.isLoaded == false)
-            _model.load(function(profile){
-                _showInfo(profile.certificates);
-            });
-        else
-            _showInfo(_model.getProfile().certificates);
 
         _$node = $(nodeSelector);
         _$table = _$node.find('table:first');
@@ -128,7 +120,15 @@ easyFinance.widgets.expertEditCertificates = function(){
             $('#formAddCertificate').clearForm();
             $('#certificate-popup').dialog('open')
         });
-        
+
+        _model = model;
+        if (_model.isLoaded == false)
+            _model.load(function(profile){
+                _showInfo(profile.certificates);
+            });
+        else
+            _showInfo(_model.getProfile().certificates);
+
         return this;
     }
 

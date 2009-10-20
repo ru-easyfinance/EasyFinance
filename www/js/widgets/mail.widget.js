@@ -33,6 +33,16 @@ easyFinance.widgets.mail = function(){
             }
         });
 
+        var hashParams = window.location.hash.substr(1).split(";");
+        if (hashParams.length > 0) {
+            $('#mail-popup').dialog('open');
+
+            $('#mail-popup #mail-to').val(hashParams[0]);
+            $('#mail-popup #mail-subject').val(hashParams[1] ? hashParams[1] : '').focus();
+            if(hashParams.length == 2)
+                $('#mail-popup #mail-text').focus();
+        }
+
         /* Read Message Popup Window */
         $('#mail-popup-read').dialog({
             autoOpen: false,

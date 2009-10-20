@@ -10,7 +10,7 @@ easyFinance.widgets.expertEditInfo = function(){
     var _model = null;
 
     var _$node = null;
-    var _$fullEditor = null
+    var _$fullEditor = null;
 
     // private functions
     function _showInfo(profile) {
@@ -29,10 +29,6 @@ easyFinance.widgets.expertEditInfo = function(){
     function init(nodeSelector, model) {
         if (!model)
             return null;
-
-        _model = model;
-        if (_model.isLoaded == false)
-            _model.load(_showInfo);
 
         _$node = $(nodeSelector);
 
@@ -61,6 +57,12 @@ easyFinance.widgets.expertEditInfo = function(){
                 $.jGrowl("Ошибка на сервере!", {theme: 'red'});
             }
         });
+
+        _model = model;
+        if (_model.isLoaded == false)
+            _model.load(_showInfo);
+        else
+            _showInfo(_model.getProfile());
 
         return this;
     }

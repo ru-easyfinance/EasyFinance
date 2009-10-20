@@ -108,14 +108,18 @@ class Expert_Controller extends Template_Controller
     function getProfile()//expert foolinfo
     {
         die ('{
+            fio: "Скрудж Макдак",
             shortInfo: "Short info",
             fullInfo: "Full info.\n Multiline with <b>formatting</b>!",
+            rating: 4,
+            votes: 12,
             photo: "/upload/photo.jpg",
+            smallPhoto: "/upload/photo.jpg",
 
             certificates: {
-                1: {image: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
-                2: {image: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"},
-                3: {image: "/upload/cert3.jpg", comment: "Заметка", processed: true, accepted: false, status: "Отвергут. Плохое качество."}
+                1: {image: "/upload/cert1.jpg", smallImage: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
+                2: {image: "/upload/cert2.jpg", smallImage: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"},
+                3: {image: "/upload/cert3.jpg", smallImage: "/upload/cert3.jpg", comment: "Заметка", processed: true, accepted: false, status: "Отвергут. Плохое качество."}
             },
 
             services: {
@@ -144,9 +148,9 @@ class Expert_Controller extends Template_Controller
 
     function getCertificates(){
         $jsonTest = '{
-            1: {image: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
-            2: {image: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"},
-            3: {image: "/upload/cert3.jpg", comment: "Заметка", processed: true, accepted: false, status: "Отвергут. Плохое качество."}
+            1: {image: "/upload/cert1.jpg", smallImage: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
+            2: {image: "/upload/cert2.jpg", smallImage: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"},
+            3: {image: "/upload/cert3.jpg", smallImage: "/upload/cert3.jpg", comment: "Заметка", processed: true, accepted: false, status: "Отвергут. Плохое качество."}
         }';
 
         die($jsonTest);
@@ -154,8 +158,8 @@ class Expert_Controller extends Template_Controller
 
     function deleteCertificate(){
         $jsonTest = '{
-            1: {image: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
-            2: {image: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"}
+            1: {image: "/upload/cert1.jpg", smallImage: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
+            2: {image: "/upload/cert2.jpg", smallImage: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"}
         }';
 
         die($jsonTest);
@@ -163,10 +167,10 @@ class Expert_Controller extends Template_Controller
 
     function addCertificate(){
         $jsonTest = '{
-            1: {image: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
-            2: {image: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"},
-            3: {image: "/upload/cert3.jpg", comment: "Заметка", processed: true, accepted: false, status: "Отвергут. Плохое качество."},
-            4: {image: "/upload/photo.jpg", comment: "Заметка", processed: false, accepted: false, status: "Рассматривается"}
+            1: {image: "/upload/cert1.jpg", smallImage: "/upload/cert1.jpg", comment: "Комментарий", processed: true, accepted: true, status: "Одобрен 21.12.2009"},
+            2: {image: "/upload/cert2.jpg", smallImage: "/upload/cert2.jpg", comment: "Примечание", processed: false, accepted: false, status: "Рассматривается"},
+            3: {image: "/upload/cert3.jpg", smallImage: "/upload/cert3.jpg", comment: "Заметка", processed: true, accepted: false, status: "Отвергут. Плохое качество."},
+            4: {image: "/upload/photo.jpg", smallImage: "/upload/photo.jpg", comment: "Заметка", processed: false, accepted: false, status: "Рассматривается"}
         }';
 
         die($jsonTest);
