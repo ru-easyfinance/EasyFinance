@@ -25,6 +25,9 @@ class Admin_Controller extends Template_Controller
      */
     function __construct()
     {
+        if (Core::getInstance()->user->getUserProps('login')!='Anthrax') {
+            error_404();
+        }
         $this->user = Core::getInstance()->user;
         $this->tpl = Core::getInstance()->tpl;
         $this->model = new Admin_Model();
