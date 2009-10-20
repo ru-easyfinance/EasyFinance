@@ -298,7 +298,7 @@ $(document).ready(function() {
              * работает если есть доходы и расходы в одном и том же месяце.
              * а если например в марте доходы , а в мае расходы то не корректно.
              */
-            cur = res['currency'];
+            var cur = res['currency'];
              nowcur = 0;//курс в знаменателе. в чём отображаем
              oldcur = 0;//курс в числителе. курс валюты счёта
              for(key in cur)
@@ -359,7 +359,7 @@ $(document).ready(function() {
               if (c >= a)
               if (data[0][c]['cat'] != ''){
                   cur = res['currency'];
-                    for(key in cur)
+                  for(key in cur)
                         {
                             cost = cur[key]['cost'];
                             name = cur[key]['name'];
@@ -382,6 +382,7 @@ $(document).ready(function() {
           stri += "</chart>";
           //alert(stri);
             var chart1 = new FusionCharts("/swf/fusioncharts/MSColumn3D.swf", "chart1Id", "500", "400", "0", "1");
+            chart1.addParam("WMode", "Transparent");
             chart1.setDataXML(stri);
             chart1.render("chart1div");//*/MSColumn3D
          }, 'json');
@@ -439,6 +440,7 @@ $(document).ready(function() {
           //stri = "<chart><set label='Домашнее хозяйство' value='500.06' /><set label='Аренда автомобиля' value='55' /><set label='Бонусы' value='1100' /><set label='Доход предпринимателя' value='1.03' /><set label='test' value='1050.07' /><set label='тетс chromeа' value='16' /><set label='rwefesr' value='4' /><set label='fewfew5345' value='1002' /></chart>"
           //stri = "<chart><set label='A' value='10' /><set label='B' value='11' /></chart>";
             var chart1 = new FusionCharts("/swf/fusioncharts/Pie3D.swf", "chart1Id", "500", "400", "0", "1");
+            chart1.addParam("WMode", "Transparent");
             chart1.setDataXML(stri);
             chart1.render("chart1div");//*/
 
