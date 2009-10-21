@@ -240,10 +240,12 @@ class Login_Model
 				}
 			}
 		}
-		
+
+                if (IS_DEMO)
+                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
+
 		if( IS_DEMO && !Core::getInstance()->user->getId() )
 		{
-                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
                     $this->authDemoUser();
 		}
 	}
