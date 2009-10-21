@@ -1092,16 +1092,7 @@ $('li#c2').click(function(){a_list()})
                     '_4_5_6_-M+',
                     '_1_2_3_/M-',
                     '_0_._=_*MS']});
-        //верхнее меню
-        head = $('#menumain').attr('value');
-        if (!head)
-            head = '/';
-        $('#menumain li').attr('class','');
-        $('#menumain li').each(function(){
-            if ($(this).find('a').attr('href')==head)
-                $(this).attr('class','act');
-        });
-
+ 
         // Динамическое меню
         pathtoid = {
             '/accounts/' :'m2',
