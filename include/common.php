@@ -54,14 +54,14 @@ else
     $tpl->append('css', 'jquery/jquery.jgrowl.css');
     $tpl->append('css', 'jquery/jquery.calculator.css');
     $tpl->append('css', 'jquery/fullcalendar.css');
-
-    $tpl->append('css', 'jquery/jHtmlArea.css');
-    $tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
-
-    $tpl->append('css', 'jquery/fancy.css');
-
-    $tpl->append('css', 'expertsList.css');
 }
+
+$tpl->append('css', 'jquery/jHtmlArea.css');
+$tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
+
+$tpl->append('css', 'jquery/fancy.css');
+
+$tpl->append('css', 'expertsList.css');
 
 if( JS_MINIFY )
 {
@@ -93,7 +93,6 @@ else
     $tpl->append('js',  'jquery/fullcalendar.js');                  // Большой календарь
     $tpl->append('js',  'jquery/jquery.form.js');                   /** @deprecated */
     $tpl->append('js',  'jquery/jquery.cookie.js');                 /** @deprecated */ //Проверить где он сейчас используется и изменить все связи
-    $tpl->append('js',  'jquery/jquery.fancybox-1.0.0.js');
 
     // external libs
     $tpl->append('js',  'anychart/AnyChart.js');
@@ -102,11 +101,15 @@ else
     // internal
     $tpl->append('js',  'main.js');
     $tpl->append('js',  'helpers.js');                              //WTF???
-        $tpl->append('js',  'easyfinance.js');
-        $tpl->append('js',  'models/category.model.js');
-    $tpl->append('js',  'models/budget.model.js');
-    $tpl->append('js',  'widgets/budget.widget.js');
 }
+
+$tpl->append('js',  'jquery/jquery.fancybox-1.0.0.js');
+
+$tpl->append('js',  'easyfinance.js');
+$tpl->append('js',  'models/category.model.js');
+$tpl->append('js',  'models/budget.model.js');
+$tpl->append('js',  'widgets/budget.widget.js');
+
 
 if(IS_DEMO){
     $tpl->append('js',  'demo_message.js');
