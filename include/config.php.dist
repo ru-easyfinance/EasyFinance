@@ -20,8 +20,13 @@ define('UPLOAD_DIR',		SYS_DIR_ROOT."/upload/");
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
 // Other
-define('URL_ROOT',		"${project.url.root}/");
 define('IS_DEMO',		${project.demo} );
+
+define('URL_ROOT_MAIN',	"${project.url.root}/");
+define('URL_ROOT_DEMO',	"${demo.url.root}/");
+
+define('URL_ROOT',		IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
+
 define('DEBUG',			${project.debug} );
 define('DEFAULT_MODULE',	'welcome');
 define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
