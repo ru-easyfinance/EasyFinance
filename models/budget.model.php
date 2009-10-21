@@ -120,7 +120,8 @@ class Budget_Model {
             $sql = "REPLACE INTO budget (`user_id`,`category`,`drain`,
                 `amount`,`date_start`,`date_end`,`dt_create`,`key`) VALUES " . $sql;
             $this->db->query($sql);
+            return array();
         }
-        return array();
+        return false;
     }
 }
