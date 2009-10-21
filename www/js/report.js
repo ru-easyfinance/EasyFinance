@@ -314,11 +314,9 @@ $(document).ready(function() {
             for (c in data[0]){
               a = a + 1;
           }
-          a = a/2;
+          //a = a/2;
 
           //stri - строка xml, которую пихаем в fusionchart
-          var msm =new Array(); //массив , запись в котором название месяца. "Сентябрь" "Октябрь"
-          var ind = 0; //его индекс
           
          var stri = "<div id='chart1div'>FusionCharts</div>";
           $('#chart').html(stri);
@@ -326,20 +324,14 @@ $(document).ready(function() {
           stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
           stri += "<categories>";
           for (c in data[0]){
-              if (c < a)
-              if (data[0][c]['cat'] != ''){
-                  za = data[0][c]['lab'].indexOf('за');
-                  sub = data[0][c]['lab'].substring(za+3, 20);
-                  //msm[i] = sub;
-                  //ind++;
-                  stri += "<category label='"+sub+"'  />";
-              }
+             if ( data[0][c]['was'] != 0 || data[0][c]['in'] != 0)
+                 stri += "<category label='"+data[0][c]['lab']+"'  />";
+
           }
           stri += "</categories>";
           stri += "<dataset seriesName='Доходы'>";
           for (c in data[0]){
-              if (c < a)
-              if (data[0][c]['cat'] != ''){
+              if ( data[0][c]['was'] != 0 || data[0][c]['in'] != 0){
                   cur = res['currency'];
                     for(key in cur)
                         {
@@ -350,16 +342,15 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
-                  stri += "<set value='"+formatCurrencyFusion(data[0][c]['sum']*oldcur/nowcur)+"'  />";
+                  stri += "<set value='"+formatCurrencyFusion(data[0][c]['in']*oldcur/nowcur)+"'  />";
               }
           }
           stri += "</dataset>";
           stri += "<dataset seriesName='Расходы'>";
           for (c in data[0]){
-              if (c >= a)
-              if (data[0][c]['cat'] != ''){
+             if ( data[0][c]['was'] != 0 || data[0][c]['in'] != 0){
                   cur = res['currency'];
-                  for(key in cur)
+                    for(key in cur)
                         {
                             cost = cur[key]['cost'];
                             name = cur[key]['name'];
@@ -368,8 +359,10 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
-                  stri += "<set value='"+formatCurrencyFusion(data[0][c]['sum']*oldcur/nowcur)+"'  />";
-              }
+                        //alert(data[0][c]['curs']);
+                        //alert(oldcur);
+                  stri += "<set value='"+formatCurrencyFusion(-data[0][c]['was']*oldcur/nowcur)+"'  />";
+             }
           }
           stri += "</dataset>";
 

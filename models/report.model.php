@@ -119,109 +119,7 @@ class Report_Model
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end/*, $currency*/);
         }
-         $i = -1;
-        $array=array();
 
-        /*foreach ($result as $v) {
-            switch (substr($v['datef'],5,2)){
-                case '01' : $array[]=array('Расходы за январь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '02' : $array[]=array('Расходы за февраль'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '03' : $array[]=array('Расходы за март'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '04' : $array[]=array('Расходы за апрель'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '05' : $array[]=array('Расходы за май'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '06' : $array[]=array('Расходы за июнь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '07' : $array[]=array('Расходы за июль'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '08' : $array[]=array('Расходы за август'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '09' : $array[]=array('Расходы за сентябрь'.' &nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '10' : $array[]=array('Расходы за октябрь'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '11' : $array[]=array('Расходы за ноябрь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '12' : $array[]=array('Расходы за декабрь'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                default : $array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
-            }
-            //$array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
-        }*/
-        foreach ($result as $v) {
-            switch (substr($v['datef'],5,2)){
-                case '01' : {
-                        $array[++$i]['lab']='Расходы за январь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '02' : {
-                        $array[++$i]['lab']='Расходы за февраль';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '03' : {
-                        $array[++$i]['lab']='Расходы за март';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '04' : {
-                        $array[++$i]['lab']='Расходы за апрель';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '05' : {
-                        $array[++$i]['lab']='Расходы за май';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '06' : {
-                        $array[++$i]['lab']='Расходы за июнь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '07' : {
-                        $array[++$i]['lab']='Расходы за июль';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '08' : {
-                        $array[++$i]['lab']='Расходы за август';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '09' : {
-                        $array[++$i]['lab']='Расходы за сентябрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '10' : {
-                        $array[++$i]['lab']='Расходы за октябрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '11' : {
-                        $array[++$i]['lab']='Расходы за ноябрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '12' : {
-                        $array[++$i]['lab']='Расходы за декабрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                default : {
-                        $array[++$i]['lab']='Расходы';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                }
-            }
-            //$array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
-        }
         if ($account > 0) {
             $sql = "SELECT sum(money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 FROM operation o
@@ -230,7 +128,7 @@ class Report_Model
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND drain='0' AND c.cat_name <> ''
                 GROUP BY drain, `datef`";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
+            $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
         } else {
             $sql = "SELECT sum(money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 FROM operation o
@@ -239,89 +137,38 @@ class Report_Model
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND drain='0' AND c.cat_name <> ''
                 GROUP BY drain, `datef`";//AND a.account_currency_id = ?
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end/*, $currency*/);
+            $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end/*, $currency*/);
         }
-        foreach ($result as $v) {
-            switch (substr($v['datef'],5,2)){
-                case '01' : {
-                        $array[++$i]['lab']='Доходы за январь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '02' : {
-                        $array[++$i]['lab']='Доходы за февраль';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '03' : {
-                        $array[++$i]['lab']='Доходы за март';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '04' : {
-                        $array[++$i]['lab']='Доходы за апрель';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '05' : {
-                        $array[++$i]['lab']='Доходы за май';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '06' : {
-                        $array[++$i]['lab']='Доходы за июнь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '07' : {
-                        $array[++$i]['lab']='Доходы за июль';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '08' : {
-                        $array[++$i]['lab']='Доходы за август';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '09' : {
-                        $array[++$i]['lab']='Доходы за сентябрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '10' : {
-                        $array[++$i]['lab']='Доходы за октябрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '11' : {
-                        $array[++$i]['lab']='Доходы за ноябрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                case '12' : {
-                        $array[++$i]['lab']='Доходы за декабрь';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
-                        break;
-                }
-                default : {
-                        $array[++$i]['lab']='Доходы';
-                        $array[$i]['sum']=abs($v['su']);
-                        $array[$i]['curs']=$v['cu'];
+
+         $i = -1;
+        $array=array();
+
+
+        $arr = array();
+        $coun = 0 ;
+        $mon = array ("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+        $monc = array ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+        for ($coun=0; $coun<12; $coun++){
+            $array[$coun]['lab'] = '';
+            $array[$coun]['was'] = '';
+            $array[$coun]['in'] = '';
+        }
+        for ($coun=0; $coun<12; $coun++){
+            $array[$coun]['lab'] = $mon[$coun];
+            foreach ($result as $v){
+                if ( substr($v['datef'],5,2) == $monc[$coun] ) {
+                    $array[$coun]['lab'] = $mon[$coun];
+                    $array[$coun]['was'] = $v['su'];
+                    $array[$coun]['curs']= $v['cu'];
                 }
             }
-            //$array[]=array('Расходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
+            foreach ($result2 as $v){
+                if ( substr($v['datef'],5,2) == $monc[$coun] ) {
+                     $array[$coun]['in'] = $v['su'];//$v['sum']
+                }
+            }
+            //$array[$coun]['in']  = $array2['sum'];
+            //$array[$coun]['curs']= $array1['curs'];
         }
         /*foreach ($result as $v) {
             switch (substr($v['datef'],5,2)){
