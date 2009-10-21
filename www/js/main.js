@@ -285,8 +285,8 @@ $(document).ready(function() {
     }
     function tofloat(s)
     {
-        s = s.toString();
         if (s != null) {
+            s = s.toString();
             return s.replace(/[ ]/gi, '');
         } else {
             return '';
