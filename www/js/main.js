@@ -1410,8 +1410,8 @@ $('li#c2').click(function(){a_list()})
         });
     });
 
-
-    ShowEvents();
+    if (window.location.host.toString().substr(0, 5) != "demo.") 
+        ShowEvents();
     
     /**
      * Выводит окошко пользователя для управления событиями
