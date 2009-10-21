@@ -493,19 +493,27 @@ class Operation_Model {
         } else {
             $dr = '';
         }
+        // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
+        $tr = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND transfer = 0 AND tr_id is NULL";
         if (is_array($account_id) && count($account_id) > 0) {
-            $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND account_id IN (?a) {$dr}";
+            $sql = $tr." AND account_id IN (?a) {$dr}";
             $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
         } elseif ((int)$account_id > 0 ) {
-            $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND account_id = ?d  {$dr}";
+            $sql = $tr." AND account_id = ?d  {$dr}";
             $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
         } elseif((int)$account_id == 0) {
-            $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ?  {$dr}";
+            $sql = $tr."  {$dr}";
             $this->total_sum = $this->db->selectCell($sql, $this->user->getId());
         } else {
             trigger_error(E_USER_NOTICE, 'Ошибка получения всей суммы пользователя');
             return 0;
-        }
+        };
+        $sql = "SELECT SUM(-money) as sum FROM operation WHERE user_id = ? AND transfer != 0 AND account_id=? ";
+        $a = $this->db->selectCell($sql, $this->user->getId(), $account_id);
+        $this->total_sum+=$a;
+        $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND transfer = ? ";
+        $a = $this->db->selectCell($sql, $this->user->getId(), $account_id);
+        $this->total_sum+=$a;//*/
         return $this->total_sum;
     }
 
