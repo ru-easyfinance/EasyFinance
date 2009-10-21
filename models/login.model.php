@@ -243,7 +243,8 @@ class Login_Model
 		
 		if( IS_DEMO && !Core::getInstance()->user->getId() )
 		{
-			$this->authDemoUser();
+                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
+                    $this->authDemoUser();
 		}
 	}
 	
@@ -256,7 +257,6 @@ class Login_Model
 		if ( $user->initUser($auth['login'], $auth['pass'] ) )
 		{
 			setcookie(COOKIE_NAME, encrypt(array($auth['login'], $auth['pass'])), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-                        setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
 			session_commit();
 			header("Location: /info");
 			exit;
