@@ -25,10 +25,12 @@ if( !defined('DEBUG') ) define('DEBUG', false );
 define('INDEX',true);
 include( dirname(dirname(dirname(__FILE__))) . '/include/config.php' );
 
-$db = new PDO( 'mysql:dbname=easyfinance_demo;host=' . SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS );
+if( !IS_DEMO ) die('Must be runned only for demo !');
+
+$db = new PDO( 'mysql:dbname=' . SYS_DB_BASE . ';host=' . SYS_DB_HOST, SYS_DB_USER, SYS_DB_PASS );
 $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
-$userTemplate = file_get_contents( 'UserTemplate.sql' );
+$userTemplate = file_get_contents( dirname(__FILE__) . '/UserTemplate.sql' );
 $usersFile = SYS_DIR_INC . 'demoUsers.php';
 $users = array();
 
@@ -86,6 +88,7 @@ if( file_exists($usersFile) )
 }
 
 file_put_contents(  SYS_DIR_INC . 'generatedUsers.php', '<?php $users = ' . var_export($users,true) . ';');
+chmod( $usersFile, 0777 );
 
 function replaceVariables( $template, array $values)
 {	

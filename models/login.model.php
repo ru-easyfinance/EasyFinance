@@ -182,44 +182,107 @@ class Login_Model
 
         }
     }
-
-    /**
-     * Пользователь авторизируется через диалог ввода логина и пароля
-     */
-    function auth_user() {
-        $user = Core::getInstance()->user;
-        if (!empty($_POST['login']) && !empty($_POST['pass'])) {
-            $login = htmlspecialchars(@$_POST['login']);
-            $pass = sha1(@$_POST['pass']);
-            if ($user->initUser($login,$pass)) {
-                // Шифруем и сохраняем куки
-                if (isset($_POST['autoLogin'])) {
-                    setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-                // Шифруем, но куки теперь сохраняются лишь до конца сессии
-                } else {
-                    setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-                }
-                $sql = "SELECT count(*) AS cou FROM `accounts` WHERE user_id = ?";
-                $this->db = Core::getInstance()->db;
-                $a = $this->db->query($sql , Core::getInstance()->user->getId());
-                if ($a[0]['cou'] == 0){
-                    setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-                }
-                // У пользователя нет категорий, т.е. надо помочь ему их создать
-                if (count($user->getUserCategory()) == 0) {
-                    $model = new Login_Model();
-                    $model->activate_user();
-                } else {
-                    if (isset($_SESSION['REQUEST_URI'])) {
-                        header("Location: ".$_SESSION['REQUEST_URI']);
-                        unset($_SESSION['REQUEST_URI']);
-                        exit;
-                    } else {
-                        header("Location: /info/");
-                        exit;
-                    }
-                }
-            }
-        }
-    }
+	
+	/**
+	 * Пользователь авторизируется через диалог ввода логина и пароля
+	 */
+	function auth_user()
+	{
+		$user = Core::getInstance()->user;
+		
+		if (!empty($_POST['login']) && !empty($_POST['pass']) )
+		{
+			$login = htmlspecialchars($_POST['login']);
+			$pass = sha1($_POST['pass']);
+			
+            		if ($user->initUser($login,$pass))
+            		{
+				// Шифруем и сохраняем куки
+				if (isset($_POST['autoLogin']))
+				{
+					setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+					// Шифруем, но куки теперь сохраняются лишь до конца сессии
+				}
+				else
+				{
+					setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+				}
+				
+				$sql = "SELECT count(*) AS cou FROM `accounts` WHERE user_id = ?";
+				
+				$this->db = Core::getInstance()->db;
+				$a = $this->db->query($sql , Core::getInstance()->user->getId());
+				
+				if ($a[0]['cou'] == 0)
+				{
+					setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
+                			}
+                			
+				// У пользователя нет категорий, т.е. надо помочь ему их создать
+				if (count($user->getUserCategory()) == 0)
+				{
+					$model = new Login_Model();
+					$model->activate_user();
+				}
+				else
+				{
+					if (isset($_SESSION['REQUEST_URI']))
+					{
+						header("Location: ".$_SESSION['REQUEST_URI']);
+						unset($_SESSION['REQUEST_URI']);
+						exit;
+					}
+					else
+					{
+						header("Location: /info/");
+						exit;
+					}
+				}
+			}
+		}
+		
+		if( IS_DEMO && !Core::getInstance()->user->getId() )
+		{
+			$this->authDemoUser();
+		}
+	}
+	
+	private function authDemoUser()
+	{
+		$user = Core::getInstance()->user;
+		
+		$auth = $this->getGenerated();
+		
+		if ( $user->initUser($auth['login'], $auth['pass'] ) )
+		{
+			setcookie(COOKIE_NAME, encrypt(array($auth['login'], $auth['pass'])), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+			session_commit();
+			header("Location: /info");
+			exit;
+		}
+	}
+	
+	private function getGenerated()
+	{
+		$usersFile = SYS_DIR_INC . 'generatedUsers.php';
+		
+		if( file_exists($usersFile) )
+		{
+			@include( $usersFile );
+		}
+		
+		if( !isset($users) || !sizeof($users) )
+		{
+			die('К сожалению, демонстрационные аккаунты закончились. Ожидаем поставки в ближайшее время.');
+		}
+		
+		$user = array(
+			'login' 	=> key($users),
+			'pass'	=> array_shift( $users )
+		);
+		
+		file_put_contents(  $usersFile, '<?php $users = ' . var_export($users,true) . ';');
+		
+		return $user;
+	}
 }
