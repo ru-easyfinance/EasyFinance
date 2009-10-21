@@ -130,17 +130,17 @@ $('#master input').live('keyup',function(e){
             arr = arr.replace(aggl,'');
             var val = aggl.substring(aggl.indexOf(':')).replace(/[^0-9\.]/gi, '')
             if (val){
-                $('#master #'+key+',#master .amount#c_'+key).find('input').val(val);//рекомендуется сразу убиться об стенку
+                $('#master #'+key+',#master .amount#c_'+key).find('input').val(formatCurrency(val));//рекомендуется сразу убиться об стенку
             }
         }
         $('#master .line').each(function(){
-                var summ = 0;
-                $(this).find('table input').each(function(){
-                    var str = $(this).val().toString()||'0'
-                    summ += parseFloat(str.replace(/[^0-9.]/gi,''));
-                })
-                $(this).find('.amount').text(formatCurrency(summ));
+            var summ = 0;
+            $(this).find('table input').each(function(){
+                var str = $(this).val().toString()||'0'
+                summ += parseFloat(str.replace(/[^0-9.]/gi,''));
             })
+            $(this).find('.amount').text(formatCurrency(summ));
+        })
     }
 
     ///////////////////////////////////////////////////////////////////////////
