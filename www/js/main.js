@@ -375,7 +375,7 @@ $(document).ready(function() {
         var am = tofloat($('#op_amount').val()+'.0');
         var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
         //* && $("#op_type option:selected").val() != 1*/)
-        if ((am-tb)>0){
+        if ( (am-tb)>0 && $("#op_type option:selected").val()!=1){
             if (!confirm('Данная транзакция превышает остаток средств на вашем счёте. Продолжить ?'))
             //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
             return false;
