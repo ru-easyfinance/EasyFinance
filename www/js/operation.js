@@ -174,7 +174,7 @@ $(document).ready(function() {
                     };
                     tr += "<tr value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                         + '<td class="light"><a href="#">' + tp + '</a></td>'
-                        if (data[v].transfer != $('#op_account :selected').val())
+                        if (data[v].transfer != $('#op_account :selected').val() && data[v].transfer != 0)
                             tr += '<td class="summ"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
                         else
                             tr += '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
