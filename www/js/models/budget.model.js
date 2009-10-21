@@ -59,7 +59,7 @@ easyFinance.models.budget = function()
                 if ((type=='0' && (res.category[bud_list[key]['category']]['type']<=0))||(type=='1' && (res.category[bud_list[key]['category']]['type']>=0))){
 
                 str += '<div class="line open" id="'+key+'">';
-                str += '<a href="#" class="name">'+bud_list[key]['name']+'</a>';
+                str += '<a style="text-decoration:underline;cursor:pointer" class="name">'+bud_list[key]['name']+'</a>';
                 str += '<div class="amount">'+formatCurrency(bud_list[key]['total'+((!type)?'_drain':'_profit')])+'</div>';
                 children = bud_list[key]['children'];
                 str += '<table>';
@@ -68,13 +68,12 @@ easyFinance.models.budget = function()
                         var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
                         if (isNaN(rgb))
                             rgb = '0';
-                        str += '<tr id="'+children[k]['category']+'"><td class="w1"><a href="#">';
+                        str += '<tr id="'+children[k]['category']+'"><td class="w1"><a style="text-decoration:underline;cursor:pointer">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
                         str += '<div class="green" style="width: '+rgb+'%;"></div>';
                         str += '<div class="red" style="width: 100%;"></div>';
-                        //str += '<div class="strip" style="width: '+children[k]['limit_strip']+'%;"></div>';
                         str += '</div></td>';
                         str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
                         str += '</tr>';
