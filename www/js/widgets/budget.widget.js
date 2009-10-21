@@ -104,7 +104,7 @@ $('#master input').live('keyup',function(e){
 
 
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
-    $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520,minHeight:'auto'});
+    $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520});
 
 
     /*********************************************************************
@@ -124,7 +124,7 @@ $('#master input').live('keyup',function(e){
      */
     function load(arr)//переменная Арррррр
     {
-        while (arr.indexOf('{') != -1){
+        while (arr&&(arr.indexOf('{') != -1)){
             var aggl = arr.toString().match(/\{[A-Za-z0-9\:\ \.\"]+\}/)[0]
             var key = aggl.substring(0,aggl.indexOf(':')).replace(/[^0-9\.]/gi, '')
             arr = arr.replace(aggl,'');
