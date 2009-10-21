@@ -31,9 +31,9 @@
         <div id="container1">
             <div id="menumain"  value="{$head_val}">
                 <ul class="menu1">
-                    <li class="first"><a href="/">Главная</a></li>
-                    <li><a href="/review/" id="review">Обзор сервиса</a></li>
-                    <li><a href="/feedback/" id="feed">Отзывы</a></li>
+                    <li class="first"><a href="http://{$smarty.const.URL_ROOT_MAIN}">Главная</a></li>
+                    <li><a href="http://{$smarty.const.URL_ROOT_MAIN}review/" id="review">Обзор сервиса</a></li>
+                    <li><a href="http://{$smarty.const.URL_ROOT_MAIN}feedback/" id="feed">Отзывы</a></li>
                     <li><a href="http://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блог</a></li>
                 </ul>
                 <ul class="menu2">
@@ -48,7 +48,7 @@
                     {else}
                         <li><a href="/info/">Личный кабинет</a></li>
                         <li><a href="/profile/">Настройки профиля</a></li>
-                        <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a href="/logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
+                        <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a href="http://{$smarty.const.URL_ROOT_MAIN}logout/"><img class="loginMenu" src="/img/i/unlogin.gif" title="Выход"/></a></li>
                     {/if}
                 
                 </ul>
