@@ -82,6 +82,9 @@ class Profile_Model
         return json_encode($ret);
     }
 
+    public function cook(){
+        setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
+    }
 
     public function currency($mod,$prop)
     {

@@ -65,5 +65,8 @@ class Profile_Controller extends Template_Controller
         
         die($this->model->currency('save',$prop));
     }
+    function cook(){
+        die($this->model->cook());
+    }
 }
 ?>

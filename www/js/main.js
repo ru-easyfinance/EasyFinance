@@ -1510,7 +1510,7 @@ function setCookie(name, value, del) {
       expiresDate.setTime(expiresDate.getTime() + 30 * 24 * 60 * 60 * 1000); // срок - 1 год, но его можно изменить
       var expires = expiresDate.toGMTString();
       if (del == 1){
-          var newCookie = name + "=" + valueEscaped + "; path=/; expires=Thu, 01-Jan-70 00:00:01 GMT";
+          var newCookie = name + "=" + valueEscaped + "; path=/; expires=Thu, 01-Jan-70 00:00:01 GMT; ";
       }else{
         var newCookie = name + "=" + valueEscaped + "; path=/; expires=" + expires;
       }
@@ -1549,7 +1549,8 @@ function getCookie(name) {
         {  width: 600}
         );
         $('.dial').bind('dialogclose', function(event, ui) {
-            setCookie('guide','',1);
+            //setCookie2('guide','',0,COOKIE_DOMEN);
+            $.post('/profile/cook/');
             $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {theme: 'green', stick: true});
             /*$('#conf').bind('dialogclose', function(event, ui) {
                 setCookie('guide','',1);
