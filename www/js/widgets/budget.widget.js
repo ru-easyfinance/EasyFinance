@@ -117,9 +117,83 @@ $('#master input').live('keyup',function(e){
     ///////////////////////////////////////////////////////////////////////
     //////////////////////////Мастер///////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
+
+
+    /*
+     * Атцкий хук
+     */
+    function load(arr)//переменная Арррррр
+    {
+        while (arr.indexOf('{') != -1){
+            var aggl = arr.toString().match(/\{[A-Za-z0-9\:\ \.\"]+\}/)[0]
+            var key = aggl.substring(0,aggl.indexOf(':')).replace(/[^0-9\.]/gi, '')
+            arr = arr.replace(aggl,'');
+            var val = aggl.substring(aggl.indexOf(':')).replace(/[^0-9\.]/gi, '')
+            if (val){
+                $('#master #'+key+',#master .amount#c_'+key).find('input').val(val);//рекомендуется сразу убиться об стенку
+            }
+        }
+        $('#master .line').each(function(){
+                var summ = 0;
+                $(this).find('table input').each(function(){
+                    var str = $(this).val().toString()||'0'
+                    summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+                })
+                $(this).find('.amount').text(formatCurrency(summ));
+            })
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     var ret =new Array,date;
-    
+
+    $('#master #prev').click(function(){
+        $('#master #prev').hide()
+        $('#master .button').show()//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
+        $('#master #b_save').hide()//см на строку выше
+        $('#master .line').each(function(){
+                var summ = 0;
+                $(this).find('table input').each(function(){
+                    var str = $(this).val().toString()||'0'
+                    summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+                })
+                $(this).find('.amount').text(formatCurrency(summ));
+            })
+            //Опять динамический заголовок
+            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+            //статистика... не самый удачный вариант(оч много иттераций),но это кастыль.
+            ret['1'] = '['
+            $('#master .waste_list form tr').each(function(){
+                if(parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))!='0'){
+                    var tmp = '{"'+$(this).attr('id')+'": "'+parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))+'"},'
+                    ret['1'] += tmp
+                }
+
+            })
+            $('#master .amount').each(function(){
+                var str = $(this).find('input').val() || $(this).text();
+                if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
+                    var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str.replace(/[^\-0-9.]/,'')+'"},'
+                    ret['1'] += tmp
+                }
+            })
+            ret['1'] +=']';
+            /////////////////////////////////////////////////////////////////////////////////
+            $('#master .waste_list form').html(model.print_list('0'))
+
+            $('#master input').removeAttr('readonly');
+            $('#master div.amount').each(function(){
+                var txt = $(this).text();
+                txt = (txt =='null')?0:txt;
+                if (!$(this).closest('.line').find('tr').html()){
+                    $(this).closest('.amount').html('<input type="text" value="'+txt+'"/>')
+                }
+            })
+            load(ret['0'])
+            $('#master .w3').hide();
+    })
+
     $('.next').click(function(){
+        $('#master #prev').hide()
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();//Формирование удобной серверу даты
         $('#master').dialog('open');//а вот и сам мастер
         $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
@@ -167,6 +241,7 @@ $('#master input').live('keyup',function(e){
          */
         $('#master .button').click(function(){
             //статистика пока хук
+            $('#master #prev').show();
             $('#master .line').each(function(){
                 var summ = 0;
                 $(this).find('table input').each(function(){
@@ -210,6 +285,7 @@ $('#master input').live('keyup',function(e){
                 }
             })
             $('#master .w3').hide();
+            load(ret['1'])
         });
     })
     $('#master .button').click(function(){
@@ -243,6 +319,7 @@ $('#master input').live('keyup',function(e){
         ret['1'] +=']';
         var r_str = '{"d":'+ret[1]+', "r":'+ret[0]+'}';
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
+            ret = ['',''];
             if (!data['errors'] || data.errors == [])
             {
                $.jGrowl("Бюджет сохранён", {theme: 'green'});

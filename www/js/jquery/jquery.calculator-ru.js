@@ -1,4 +1,4 @@
-﻿/* http://keith-wood.name/calculator.html */
+/* http://keith-wood.name/calculator.html */
 (function($) { // hide the namespace
 $.calculator.regional['ru'] = {
 	decimalChar: '.', // Character for the decimal point 
@@ -15,7 +15,7 @@ $.calculator.regional['ru'] = {
 	clearErrorText: 'CE', // Display text for clear error link 
 	clearErrorStatus: 'Erase the last number', // Status text for clear error link 
 	clearText: 'CA', // Display text for clear link 
-	clearStatus: 'Reset the calculator', // Status text for clear link 
+	clearStatus: 'Очистить поле ввода', // Status text for clear link
 	memClearText: 'MC', // Display text for memory clear link 
 	memClearStatus: 'Очистить запомненное', // Status text for memory clear link 
 	memRecallText: 'MR', // Display text for memory recall link 
