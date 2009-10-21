@@ -24,6 +24,4 @@ if (Core::getInstance()->user->getId()) {
 }
 
 //Выводим страницу в браузер
-$smarty = new Smarty;
-$smarty -> assign('nodemo', 'easyfinance.ru');
 Core::getInstance()->tpl->display("index.html");
