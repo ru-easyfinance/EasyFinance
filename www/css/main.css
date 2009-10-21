@@ -1071,7 +1071,7 @@ div.cont ul li.add a { width: 12px; }
 .budget .f_field3 .rest { right: 0; }
 .budget .f_field3 .rest span { color: #868686; }
 
-.budget .waste_list { position: relative;max-height:300px;overflow-y:auto;clear:both; /*background: url('/img/i/bg08.gif') repeat-y 100% 0;*/ border: 1px solid #e8e8e8; //zoom: 1;}
+.budget .waste_list { position: relative;max-height:300px;overflow-y:auto;overflow-x:visible;clear:both; /*background: url('/img/i/bg08.gif') repeat-y 100% 0;*/ border: 1px solid #e8e8e8; //zoom: 1;}
 .budget .waste_list .scroll_cont { position: relative; width: 517px; height: 346px; overflow: hidden; }
 .budget .waste_list .scroll { position: absolute; top: 0; left: 503px; width: 14px; cursor: pointer; //cursor: hand; background: #dbdcdb; }
 
