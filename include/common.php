@@ -106,7 +106,6 @@ else
 $tpl->append('js',  'jquery/jquery.fancybox-1.0.0.js');
 
 $tpl->append('js',  'easyfinance.js');
-$tpl->append('js',  'models/category.model.js');
 $tpl->append('js',  'models/budget.model.js');
 $tpl->append('js',  'widgets/budget.widget.js');
 
@@ -138,7 +137,7 @@ Core::getInstance()->js = array(
     'expertslist' => array('widgets/services/expertsList.widget', 'screens/services.screen'),
     'login' => array('welcome'),
     'info' => array('info'),
-    'category' => array('category'),
+    'category' => array('models/category.model', 'category'),
     'calendar' => array('calendar'),
     'admin' => array( 'admin'),
     'accounts' => array('accounts'),
