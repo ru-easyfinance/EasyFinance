@@ -529,7 +529,9 @@ $(document).ready(function() {
         op_getTags(res['tags']);
 
         $('#op_btn_Save').click(function(){op_saveOperation();return false;})
-        $('#op_btn_Cancel').click(function(){op_clearForm();return false;});
+        $('#op_btn_Cancel').click(function(){op_clearForm();
+            $(".op_addoperation").hide();
+            return false;});
 
         $("#op_addoperation_but").click(function(){
             $(this).toggleClass("act");
