@@ -33,8 +33,6 @@ $tpl->compile_check   =  true;
 $tpl->force_compile   =  false;
 $tpl->assign('revision', REVISION);
 
-$tpl->append('js', 'jquery/jquery.min.js');
-
 if ( CSS_MINIFY )
 {
     $tpl->append('css', 'global-min.css');
@@ -69,46 +67,13 @@ if( JS_MINIFY )
 }
 else
 {
-    // jQuery & plugins
-    $tpl->append('js',  'jquery/ui.core.js');
-    $tpl->append('js',  'jquery/i18n/jquery-ui-i18n.js');
-    $tpl->append('js',  'jquery/ui.resizable.js');
-    $tpl->append('js',  'jquery/ui.draggable.js');
-    $tpl->append('js',  'jquery/ui.dialog.js');
-    $tpl->append('js',  'jquery/ui.datepicker.js');
-    $tpl->append('js',  'jquery/jquery.qtip.js');
-    $tpl->append('js',  'jquery/jquery.jgrowl.min.js');
-
-    $tpl->append('js',  'jquery/jquery.calculator.js');
-    $tpl->append('js',  'jquery/jquery.calculator-ru.js');
-    $tpl->append('js',  'jquery/jquery.mousewheel.js');             // хз где юзается
-    $tpl->append('js',  'jquery/jquery.em.js');                     // Пока Используется в jQuery.plots и jScrollPane
-//    $tpl->append('js',  'jquery/jScrollPane.js');                   /** @deprecated */
-    $tpl->append('js',  'jquery/jquery.maskedinput-1.2.2.min.js');  /** @deprecated */
-    $tpl->append('js',  'jquery/jquery.timepicker-table.min.js');   // Используется в календаре
-    $tpl->append('js',  'jquery/ui.tabs.js');
-    //$tpl->append('js',  'jquery/i18n/ui.datepicker-ru.js');       /** @deprecated */ // Дублирует jquery/i18n/jquery-ui-i18n.js
-    $tpl->append('js',  'jquery/jquery.validate.js');               // Используется только для валидации при регистрации, возможно стоит от него избавится!
-    $tpl->append('js',  'jquery/tinysort.js');                      // Используется для тегов
-    $tpl->append('js',  'jquery/fullcalendar.js');                  // Большой календарь
-    $tpl->append('js',  'jquery/jquery.form.js');                   /** @deprecated */
-    $tpl->append('js',  'jquery/jquery.cookie.js');                 /** @deprecated */ //Проверить где он сейчас используется и изменить все связи
-
-    // external libs
-    $tpl->append('js',  'anychart/AnyChart.js');
-    $tpl->append('js',  'calculator/calculator.js');                // Калькулятор у Саши
-
-    // internal
-    $tpl->append('js',  'main.js');
-    $tpl->append('js',  'helpers.js');                              //WTF???
+	foreach ( file( SYS_DIR_INC . 'js/global.list') as $js )
+	{
+		$tpl->append('js', $js);
+	}
 }
 
 $tpl->append('js',  'jquery/jquery.fancybox-1.0.0.js');
-
-$tpl->append('js',  'easyfinance.js');
-$tpl->append('js',  'models/budget.model.js');
-$tpl->append('js',  'widgets/budget.widget.js');
-
 
 if(IS_DEMO){
     $tpl->append('js',  'demo_message.js');
@@ -142,5 +107,5 @@ Core::getInstance()->js = array(
     'admin' => array( 'admin'),
     'accounts' => array('accounts'),
     'review' => array('review'),
-    'budget' => array('budget')
+    'budget' => array('budget', 'models/budget.model', 'widgets/budget.widget')
 );
