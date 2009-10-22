@@ -382,15 +382,15 @@ class Targets_Model {
 		$sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $drain_money, $date, -1, $account_id, 1,
+            $this->db->query($sql, $this->user->getId(), $money, $date, -1, $account_id, 1,
                 $comment, $a[0]['target_account_id']);
 
-            $last_id = mysql_insert_id();
+            /*$last_id = mysql_insert_id();
                 $sql = "INSERT INTO operation
                         (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $this->db->query($sql, $this->user->getId(), $money, $date, -1, $a[0]['target_account_id'], 1,
-                $comment, $account_id);
+                $comment, $account_id);//*/
             //
             //а теперь добавим перевод на фин цель со счёта фин цели!
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
