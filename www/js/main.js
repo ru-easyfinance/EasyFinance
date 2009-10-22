@@ -52,6 +52,7 @@ var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
 
+var TransferSum = 0; //глобальная переменная которая передаст. сумму при переводе на другую валюту.
 function FloatFormat(obj, in_string )
 {
     //'.'
@@ -342,6 +343,7 @@ $(document).ready(function() {
             amount    : tofloat($('#op_amount').val()),
             toAccount : $('#op_AccountForTransfer').val(),
             currency  : $('#op_currency').val(),
+            convert   : TransferSum,
             target    : $('#op_target').val(),
             close     : $('#op_close:checked').length,
             tags      : $('#op_tags').val()
@@ -544,6 +546,7 @@ $(document).ready(function() {
                 var result = Math.round($('#op_amount').val() / $('#op_currency').val());
                 if (!isNaN(result) && result != 'Infinity') {
                     $("#op_convertSumCurrency").html("конвертация: "+result);
+                    TransferSum = result;
                 }
             }
         });
@@ -983,7 +986,7 @@ $('li#c2').click(function(){a_list()})
             s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
             for(v in data)
             {
-                        s += '<li><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
+                        s += '<li ><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
                         +data[v]['amount_done']+' руб.</b><span>('
                         +data[v]['percent_done']+'%)</span><span class="date">'
                         +data[v]['date_end']+'</span></li>';

@@ -174,10 +174,16 @@ $(document).ready(function() {
                     };
                     tr += "<tr value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                         + '<td class="light"><a href="#">' + tp + '</a></td>'
-                        if (data[v].transfer != $('#op_account :selected').val() && data[v].transfer != 0)
+                        if (data[v].transfer != $('#op_account :selected').val() && data[v].transfer != 0){
+                            //alert(data[v].imp_id);
                             tr += '<td class="summ"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
-                        else
-                            tr += '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
+                        }
+                        else{
+                            if (data[v].imp_id == null)
+                                tr += '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
+                            else
+                                tr += '<td class="summ"><span><b>'+formatCurrency(data[v].imp_id)+'</b></span></td>'
+                        }
                         tr += '<td class="light"><span>'+data[v].date+'</span></td>'
                         + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                         + '<td class="no_over big">'+data[v].account_name

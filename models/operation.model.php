@@ -258,6 +258,18 @@ class Operation_Model {
 
 	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
 	{
+
+        if ($convert != 0)
+        {
+            $drain_money = $money * -1;
+                // tr_id. было drain
+		$sql = "INSERT INTO operation
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, imp_id)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
+            $comment, $to_account, $convert);
+        }else{
+
         $drain_money = $money * -1;
                 // tr_id. было drain
 		$sql = "INSERT INTO operation
@@ -286,7 +298,7 @@ class Operation_Model {
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $from_account, 0, $comment,
             $to_account, $last_id);*/
-
+        }
         $this->user->initUserAccounts();
         $this->user->save();
         return $last_id;
@@ -414,9 +426,10 @@ class Operation_Model {
                 $cat_in .= $var['cat_id'];
             }
         }
-
+        // imp_id по слухам собрались убирать. тогда понадобится другое поле под конвертацию
+        // это операции со счёта
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
-        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
+        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
         "FROM operation o ".
         "WHERE o.account_id = ? ".
             "AND o.user_id = ? ".
@@ -428,9 +441,10 @@ class Operation_Model {
                     $sql .= " AND (o.cat_id = '{$currentCategory}') ";
                 }
             }
+        //это переводы на фин цель
         $sql .= " UNION ".
         " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), ".
-        " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags ".
+        " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL ".
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
         " WHERE t.user_id = ? ".
@@ -443,9 +457,9 @@ class Operation_Model {
                     $sql .= " AND (tt.category_id = '{$currentCategory}') ";
                 }
             }
-        $sql .= " UNION ".
+        $sql .= " UNION ".//это переводы на счёт
         "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
-        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags ".
+        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
         "FROM operation o ".
         "WHERE o.transfer = ? ".
             "AND o.user_id = ? ".
