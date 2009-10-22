@@ -123,6 +123,7 @@ $(document).ready(function() {
     /**
      * Получает список тегов
      */
+    /* Jet: deprecated!
    function getTags(ltags) {
         $('a#tags').click(function(){
             $('.tags_could').dialog({
@@ -162,6 +163,7 @@ $(document).ready(function() {
             }, 'json');
         }
     }
+    */
 
     /**
      * Добавляет новую операцию

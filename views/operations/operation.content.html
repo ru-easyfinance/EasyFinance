@@ -41,28 +41,34 @@
 								<li><span>Неделя</span></li>
 								<li><span>Сегодня</span></li>
 							</ul>
-                                                        <span id="remove_all_op" style="text-decoration:underline;cursor:pointer">Удалить выделеное</span>
+                                                        <span id="remove_all_op" style="text-decoration:underline;cursor:pointer">Удалить выделенные</span>
 							<table id="operations_list">
 								<tr>
                                                                     <th><input type='checkbox' /></th>
 									<th>
-										<span class="sort">Тип</span>
+										<span>Тип</span>
 									</th>
 									<th>
-										<span class="sort">Сумма</span>
+										<span>Сумма</span>
 									</th>
 									<th>
-										<span class="sort">Дата</span>
+										<span>Дата</span>
 									</th>
 									<th>
-										<span class="sort">Категория</span>
+										<span>Категория</span>
 									</th>
 									<th>
-										<span class="sort">Счет</span>
+                                                                                <span id="btnFilterAccount" class="sort">Счет</span>
 									</th>
                                                                 </tr>
-                                                                
 							</table>
+
+                                                        <div id="dialogFilterAccount" class="hidden padding10">
+                                                            <!--<a href="#" value="">Все счета</a><br><hr>-->
+                                                            {foreach from=$accounts item=acc_data}
+                                                                <a href="#" value="{$acc_data.account_id}">{$acc_data.account_name} ({$acc_data.account_currency_name})</a><br>
+                                                            {/foreach}
+                                                        </div>
                                                     
                                                     <!--<div class="operation_list"></div>-->
 						</div>
