@@ -3,27 +3,6 @@ $(document).ready(function()
 {
     var accisvis = false; // характеризует активна ли панелька счетов
     var isaccountediting = false; //характеризует редактируется ли акк или создаётся новый. true - редактируется.
-    
-    /**
-     * переводит число типа 12341.34535 в 12 341.35
-     * для удобного отображения в виде баланса денег
-     * @return string
-     */
-    function formatCurrency (num) {
-        if (num=='undefined') num = 0;
-        //num = num.toString().replace(/\$|\,/g,'');
-        if(isNaN(num)) num = "0";
-        sign = (num == (num = Math.abs(num)));
-        num = Math.floor(num*100+0.50000000001);
-        cents = num%100;
-        num = Math.floor(num/100).toString();
-        if(cents<10)
-            cents = "0" + cents;
-        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-            num = num.substring(0,num.length-(4*i+3))+' '+
-            num.substring(num.length-(4*i+3));
-        return (((sign)?'':'-') + '' + num + '.' + cents);
-    }
 
     $('ul:last li.active').qtip({
         content: 'This is an active list element',

@@ -24,14 +24,7 @@ function clearForm() {
  */
 function fillForm(data) {
     clearForm();
-    //"drain":"1",
-    //"comment":"sadf asdfasdf as",
-    //"tags":"",
-    //"cat_name":"\u0414\u044b\u0440\u043a\u0430 3",
-    //"cat_parent":"6",
-    //"account_name":"\u041d\u0430\u043b\u0438\u043a\u0438",
-    //"account_currency_id":"1",
-    //"cat_transfer":"1"},
+
     $('#op_id').val(data.id);
     $('#op_account').val(data.account_id);
 
@@ -41,7 +34,6 @@ function fillForm(data) {
     }
     else
     {
-
         if (data.virt=='1')
         {
             $('#op_type').val(4);
@@ -55,9 +47,7 @@ function fillForm(data) {
             }
         }
     }
-    //$('#type').val(data.type);
-    //alert(data.toString());
-    //$('#op_type').val(data.drain);
+
     //////////////////////////
     $('#op_amount').val(Math.abs(data.money));
     $('#op_category').val(data.cat_id);
@@ -80,7 +70,6 @@ $(document).ready(function() {
         $('#btn_ReloadData').click();
     });
     
-    var operationList;
     // Init
     $('#amount').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
@@ -117,7 +106,7 @@ $(document).ready(function() {
         easyFinance.widgets.operationsJournal.loadJournal();
     });
     $('#AccountForTransfer').change( function(){changeAccountForTransfer();});
-    $('#type').change(function(){changeTypeOperation('add');});
+    
     $('#target').change(function(){
         $("span.currency").each(function(){
             $(this).text(" "+$("#target :selected").attr("currency"));
@@ -130,46 +119,30 @@ $(document).ready(function() {
 
     $('#operations_list .cont').css({position: 'relative'});
 
-    // Autoload journal
+    // загружаем журнал транзакций
     easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
     easyFinance.widgets.operationsJournal.loadJournal();
 
-        //биндим показ, скрытие и действия диалога выбора тегов
-        $('a#tags').removeAttr('href');
-        $('a#tags').click(function(){
-            $('.tags_could').dialog({
-                close: function(event, ui){$(this).dialog( "destroy" )}
-            }).dialog("open");
-            $('.tags_could li').show();
-        });
+    //биндим показ, скрытие и действия диалога выбора тегов
+    $('a#tags').removeAttr('href');
+    $('a#tags').click(function(){
+        $('.tags_could').dialog({
+            close: function(event, ui){$(this).dialog( "destroy" )}
+        }).dialog("open");
+        $('.tags_could li').show();
+    });
 
-        $('.tags input').keyup(function(){
-            $('.tags_could li').show();
+    $('.tags input').keyup(function(){
+        $('.tags_could li').show();
 
-        })
-        $('.tags_could li').live('click',function(){
-            var txt=$('.tags input').val()+$(this).text()+', ';
-            $('.tags input').val(txt);
-            $('.tags_could').dialog("close");
-        });
+    })
+    $('.tags_could li').live('click',function(){
+        var txt=$('.tags input').val()+$(this).text()+', ';
+        $('.tags input').val(txt);
+        $('.tags_could').dialog("close");
+    });
 
-        $('.tags_could').hide();
-
-    function formatCurrency(num) {
-        if (num=='undefined') num = 0;
-        //num = num.toString().replace(/\$|\,/g,'');
-        if(isNaN(num)) num = "0";
-        var sign = (num == (num = Math.abs(num)));
-        num = Math.floor(num*100+0.50000000001);
-        var cents = num%100;
-        num = Math.floor(num/100).toString();
-        if(cents<10)
-            cents = "0" + cents;
-        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-            num = num.substring(0,num.length-(4*i+3))+' '+
-            num.substring(num.length-(4*i+3));
-        return (((sign)?'':'-') + '' + num + '.' + cents);
-    }
+    $('.tags_could').hide();
 
     /**
      * Добавляет новую операцию
@@ -208,8 +181,6 @@ $(document).ready(function() {
         }, 'json');
         return true;
     }
-
-    $('#type').change();
 
     /**
      * При переводе со счёта на счёт, проверяем валюты
@@ -256,6 +227,16 @@ $(document).ready(function() {
     }
 });
 
+
+    // Jet. Ниже закомментирован старый функционал "Журнала Операций"
+    // Теперь этот функционал реализован в widgets/operations/operationsJournal
+
+//var operationList;
+
+//$('#type').change(function(){changeTypeOperation('add');});
+//$('#type').change();
+
+/* @deprecated нигде не используется
 function updateOperation() {
     onSumChangeEdit();
     var type = document.getElementById("type_edit").value;
@@ -309,9 +290,7 @@ function updateOperation() {
     },changeOperationList);
     visibleMessage('Операция редактируется, подождите несколько секунд...');
 }
-
-    // Jet. Ниже закомментирован старый функционал "Журнала Операций"
-    // Теперь этот функционал реализован в widgets/operations/operationsJournal
+*/
 
     // @deprecated
     /**
