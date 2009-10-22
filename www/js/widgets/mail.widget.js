@@ -94,7 +94,7 @@ easyFinance.widgets.mail = function(){
             if (ids.length == 0) {
                 alert('Отметьте галочками письма для удаления!');
             } else {
-                _model.trashMails(ids, function(){
+                _model.trashMailsById(ids, function(){
                     _showMails(_model.getFolderMails(_folder));
                 });
             }
@@ -106,7 +106,7 @@ easyFinance.widgets.mail = function(){
             if (ids.length == 0) {
                 alert('Отметьте галочками письма для восстановления!');
             } else {
-                _model.restoreMails(ids, function(){
+                _model.restoreMailsById(ids, function(){
                     _showMails(_model.getFolderMails(_folder));
                 });
             }
@@ -193,7 +193,7 @@ easyFinance.widgets.mail = function(){
 
         if (_folder == _model.FOLDER_TRASH) {
             buttons["Восстановить"] = function() {
-                _model.restoreMails([mail.id], function(){
+                _model.restoreMailsById([mail.id], function(){
                     _showMails(_model.getFolderMails(_folder));
                 });
 
@@ -203,7 +203,7 @@ easyFinance.widgets.mail = function(){
 
         if (_folder != _model.FOLDER_TRASH){
             buttons["Удалить"] = function() {
-                _model.trashMails([mail.id], function(){
+                _model.trashMailsById([mail.id], function(){
                     _showMails(_model.getFolderMails(_folder));
                 });
 

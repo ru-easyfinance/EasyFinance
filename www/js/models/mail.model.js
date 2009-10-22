@@ -150,7 +150,7 @@ easyFinance.models.mail = function(){
         }, 'json');
     }
 
-    function trashMails(ids, callback) {
+    function trashMailsById(ids, callback) {
         $.post(TRASH_MAIL_URL, {ids: ids.join(',')}, function(data) {
             for(var id in data) {
                 // move to trash on success
@@ -173,7 +173,7 @@ easyFinance.models.mail = function(){
         }, 'json');
     }
 
-    function restoreMails(ids, callback) {
+    function restoreMailsById(ids, callback) {
         $.post(RESTORE_MAIL_URL, {ids: ids.join(',')}, function(data) {
             for(var id in data) {
                 // move from trash on success
@@ -234,8 +234,8 @@ easyFinance.models.mail = function(){
         getDraftMails: getDraftMails,
         getTrashMails: getTrashMails,
 
-        trashMails: trashMails,
-        restoreMails: restoreMails,
+        trashMailsById: trashMailsById,
+        restoreMailsById: restoreMailsById,
 
         sendMail: sendMail,
         createDraft: createDraft,
