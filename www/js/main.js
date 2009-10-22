@@ -1045,13 +1045,18 @@ $('li#c2').click(function(){a_list()})
     data = res['currency'];
     str = '';
     var cost,name,progres;
-    for(key in data)
+    var fir = 0;//первая валюта в правом списке
+    for(key in data) 
     {
+        if (fir != 0) // валюта по умолчанию первая в списке ! не показываем её в правой панели
+        {
         cost = data[key]['cost'];
         name = data[key]['name'];
         progres = data[key]['progress'];
         if (!cost){continue;}
         str += '<div class="line"><span class="valuta">'+name+'</span><span class="'+progres+'">'+cost+'</span></div>'
+        }
+        fir++;
     }
     $('dl.info dd').html(str);
 //calendar
