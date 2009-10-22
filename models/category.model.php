@@ -347,4 +347,11 @@ class Category_Model {
         }
         return $row;
     }
+    /*
+     * возвращает html строку для селекта в зависимости от типа категории
+     */
+    function cattype($type){
+        return get_tree_select2(0, $type);
+    }
+
 }

@@ -214,7 +214,7 @@ function make_float($var)
     return (float)str_replace(',','.',$var);
 }
 
-function get_tree_select ($selected = 0)
+function get_tree_select ($selected = 0 )
 {
     $cat = Core::getInstance()->user->getUserCategory();
     $array = array();
@@ -228,9 +228,11 @@ function get_tree_select ($selected = 0)
     foreach ($cat as $val) {
         if ($val['howoften'] >= $barier) {
             if ($val['cat_parent'] == 0) {
-                $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+                //if (($type == $val['type']) || ($val['type'] == 0))
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
             } else {
-                $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+                //if (($type == $val['type']) || ($val['type'] == 0))
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
             }
         }
     }
@@ -263,9 +265,75 @@ function get_tree_select ($selected = 0)
         }
 
         if ($val['cat_parent'] == 0) {
-            $array[$val['cat_id']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
+            //if (($type == $val['type']) || ($val['type'] == 0))
+                $array[$val['cat_id']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
         } else {
-            $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+            //if (($type == $val['type']) || ($val['type'] == 0))
+                $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+        }
+    }
+    foreach ($array as $v) {
+        $result .= implode('', $v);
+    }
+    return $result;
+}
+
+function get_tree_select2 ($selected = 0, $type = 0)
+{
+    $cat = Core::getInstance()->user->getUserCategory();
+    $array = array();
+    $result = '';
+/////////////
+    $arrayoften = array();
+    $arr = array();
+    array_pop(&$arr);
+    $barier = 3;//количество совершённых операций по отдельной категории, необходимое для попадания в ЧастыеКат
+    //challenger/вывод часто используемых категорий//список часто используемых категорий за последние три месяца включая текущий.
+    foreach ($cat as $val) {
+        if ($val['howoften'] >= $barier) {
+            if ($val['cat_parent'] == 0) {
+                if ( ($val['type'] == 0) || ($val['type'] == $type) )
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+            } else {
+                if ( ($type == $val['type']) || ($val['type'] == 0) )
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+            }
+        }
+    }
+    if ( !empty($arr) ){
+        asort($arr);
+        $arrayoften[][] = "<optgroup id='often' label=' Часто используемые'></optgroup>";
+
+        $howmuch = 10; // указывает сколько их, последних наиболее часто юзаемых категорий
+        $count = 0;
+        foreach ($arr as $val){
+            if ($count - $howmuch < 0){
+                $arrayoften[]=$val;
+                $count++;
+            }
+        }
+        $arrayoften[][] = "</optgroup>";
+        $arrayoften[][] = "<optgroup id='often' label='Категории'></optgroup>";
+        foreach ($arrayoften as $v) {
+            $result .= implode('', $v);
+        }
+
+    }
+    //
+
+    foreach ($cat as $val) {
+        /*if ($selected == $val['cat_id']) {
+            $s = "selected='selected'";
+        } else {
+            $s = ' ';
+        }*/
+
+        if ($val['cat_parent'] == 0) {
+            if (($val['type'] == 0) || ($val['type'] == $type))
+                $array[$val['cat_id']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
+        } else {
+            if (($val['type'] == 0) || ($val['type'] == $type))
+                $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
         }
     }
     foreach ($array as $v) {

@@ -174,4 +174,11 @@ class Category_Controller extends Template_Controller
                 'system'=>$systems)
         ));
     }
+    /*
+     * возвращает html-строку для категорий. хак вместо show/hide
+     */
+    function cattypechange($args){
+        $type=(int)$_POST['type'];
+        die(json_encode($this->model->cattype($type))  );
+    }
 }

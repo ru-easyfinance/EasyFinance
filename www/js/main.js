@@ -487,9 +487,18 @@ $(document).ready(function() {
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();  
             if ($('#op_type').val() == 1)
-                toggleVisibleCategory($('#op_category'),1);
+                    $.post('/category/cattypechange/',{
+                        type : 1
+                    },function(data){
+                        $("#op_category").html(data);
+                    },'json');
             if ($('#op_type').val() == 0)
-                toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
+                $.post('/category/cattypechange/',{
+                        type : -1
+                    },function(data){
+                        $("#op_category").html(data);
+                    },'json');
+                //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
         //Перевод со счёта
         } else if ($('#op_type').val() == 2) {
             $("#op_category_fields,#op_target_fields").hide();
