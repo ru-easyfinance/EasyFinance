@@ -403,21 +403,14 @@ $(document).ready(function() {
                 
                 $('div.ui-dialog-buttonpane').append('<button type="button" id="remove_event" class="ui-state-default ui-corner-all">Удалить</button>');
                 $('button#remove_event').live('click',function(){
-                    if (flag){
-                        $.post('/calendar/del/',
-                            {id:    $('#cal_key').val(),
-                            chain:  $('#cal_chain').val()},
-                            function(data){
-                                $('#op_dialog_event').dialog('close');
-                                $('#calendar').fullCalendar('refresh');
-                            },
-                            'json');
-                    }
-                    else
-                    {
-                        $('#op_dialog_event').dialog('close');
-                        $.jGrowl('В данный момент совершаемая вами операция невозможна',{theme: 'red'})
-                    }
+                    $.post('/calendar/del/',
+                        {id:    $('#cal_key').val(),
+                        chain:  $('#cal_chain').val()},
+                        function(data){
+                            $('#op_dialog_event').dialog('close');
+                            $('#calendar').fullCalendar('refresh');
+                        },
+                        'json');
                     $(this).remove();
                 });
             }

@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля инфопанелей
  * @copyright http://home-money.ru/
- * @version SVN $Id: rewle $
+ * @version SVN $Id:  $
  */
 class Info_Controller extends Template_Controller
 {
