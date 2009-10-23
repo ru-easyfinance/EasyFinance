@@ -192,6 +192,7 @@ $('#master input').live('keyup',function(e){
             $('#master .w3').hide();
     })
 
+    var isCAmmount;
     $('.next').click(function(){
         $('#master #prev').hide()
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();//Формирование удобной серверу даты
@@ -238,17 +239,19 @@ $('#master input').live('keyup',function(e){
         
         /*
          * 2 ая страница бюджета
-         */
+         */                
         $('#master .button').click(function(){
             //статистика пока хук
             $('#master #prev').show();
             $('#master .line').each(function(){
+                if($(this).find('.amount input').lenght){
                 var summ = 0;
                 $(this).find('table input').each(function(){
                     var str = $(this).val().toString()||'0'
                     summ += parseFloat(str.replace(/[^0-9.]/gi,''));
                 })
                 $(this).find('.amount').text(formatCurrency(summ));
+                }
             })
             //Чтоб не тыкался
             $(this).hide();
@@ -266,15 +269,20 @@ $('#master input').live('keyup',function(e){
                 }
                     
             })
+            isCAmmount = 0;
             $('#master .amount').each(function(){
                 var str = $(this).find('input').val() || $(this).text();
                 if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
                     var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str.replace(/[^\-0-9.]/,'')+'"},'
                     ret['0'] += tmp
+                    isCAmmount += parseFloat(str.replace(/[^0-9.]/,''));
                 }
             })
+            
             ret['0'] +=']';
-            /////////////////////////////////////////////////////////////////////////////////
+        
+            
+            //////////////////////////////////////////////////////////////////////////////////
             $('#master .waste_list form').html(model.print_list('0'))
 
             $('#master input').removeAttr('readonly');
@@ -309,16 +317,23 @@ $('#master input').live('keyup',function(e){
                 ret['1'] += tmp
             }
         })
-
+        var tmpAmm = 0;
         $('#master .amount').each(function(){
             var str = $(this).find('input').val() || $(this).text();
             if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
                 var tmp = '{"'+$(this).closest('.line').attr('id').toString().replace(/[^0-9.]/gi,'')+'": "'+str.replace(/[^\-0-9.]/, '')+'"},'
                 ret['1'] += tmp
+                tmpAmm += parseFloat(str.replace(/[^0-9.]/,''));
             }
         })
         ret['1'] +=']';
         var r_str = '{"d":'+ret[0]+', "r":'+ret[1]+'}';
+    
+        if((tmpAmm-isCAmmount)>='0')
+        {
+            if(confirm('Ваш общий расход превышает общий доход.Продолжить редактирование?'))
+            return false;
+        }
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
             ret = ['',''];
             if (!data['errors'] || data.errors == [])

@@ -2,9 +2,6 @@
 
 var id = 'step1';
 $(document).ready(function() {
-
-
-
 var bgpix = {step1: 'bg1',step2: 'bg2',step3:  'bg3',step4: 'bg4',step5: 'bg5'};
 var text = {step1: "<h2></h2>EasyFinance.ru это on-line система управления личными финансами с широкими аналитическими возможностями.",
             step2: "<h2></h2>EasyFinance.ru позволит принимать правильные решения по управлению личными финансами.",
