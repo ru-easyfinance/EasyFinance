@@ -16,6 +16,7 @@ class Registration_Model
      */
     function activate ($reg_id) {
         $db = Core::getInstance()->db;
+        
         $sql = "SELECT user_id, reg_id FROM registration WHERE reg_id = ?;";
         $row = $db->selectRow($sql, $reg_id);
         if (!empty($row)) {
@@ -107,11 +108,11 @@ class Registration_Model
             $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
             $headers = "Content-type: text/html; charset=utf-8\n";
             $headers .= "From: info@easyfinance.ru\n";
-            //TODO
-            //echo 2;
+            
             mail($register['mail'], $subject, $body, $headers);
-            header('Location: /registration/#send');exit;
-        } 
+            die(json_encode(array('errors'=>'succes')));
+        }
+            die(json_encode(array('errors'=>$error_text)));
        
     }
 

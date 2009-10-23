@@ -159,7 +159,7 @@ $('#master input').live('keyup',function(e){
                 $(this).find('.amount').text(formatCurrency(summ));
             })
             //Опять динамический заголовок
-            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3.Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3. Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
             //статистика... не самый удачный вариант(оч много иттераций),но это кастыль.
             ret['1'] = '['
             $('#master .waste_list form tr').each(function(){
@@ -179,7 +179,7 @@ $('#master input').live('keyup',function(e){
             ret['1'] +=']';
             /////////////////////////////////////////////////////////////////////////////////
             $('#master .waste_list form').html(model.print_list('1'))
-
+            $('#master .h .w4').text('Сред.Доход');
             $('#master input').removeAttr('readonly');
             $('#master div.amount').each(function(){
                 var txt = $(this).text();
@@ -196,7 +196,7 @@ $('#master input').live('keyup',function(e){
         $('#master #prev').hide()
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();//Формирование удобной серверу даты
         $('#master').dialog('open');//а вот и сам мастер
-        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3.Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
+        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3.Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
         $('#master .button').show()//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
         $('#master #b_save').hide()//см на строку выше
 
@@ -207,7 +207,7 @@ $('#master input').live('keyup',function(e){
                 model.load(data);             
                 _$_list = model.print_list('1');
                 $('#master .waste_list form').html(_$_list);
-
+                $('#master .h .w4').text('Сред.Доход');
                 //дальше костыли, причём часть из них не актуальна в свете изменяющихся, в то время постоянно, требований к отображению
                 $('#master input').removeAttr('readonly');
                 $('#master div.amount').each(function(){
@@ -254,8 +254,9 @@ $('#master input').live('keyup',function(e){
             $(this).hide();
             //Чтоб тыкался
             $('#master #b_save').show();
+            $('#master .h .w4').text('Сред.Расход');
             //Опять динамический заголовок
-            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 3 из 3.Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4> Шаг 3 из 3.Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
             //статистика... не самый удачный вариант(оч много иттераций),но это кастыль.
             ret['0'] = '['
             $('#master .waste_list form tr').each(function(){
