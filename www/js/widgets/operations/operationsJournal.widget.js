@@ -90,7 +90,7 @@ easyFinance.widgets.operationsJournal = function(){
             key++;
         });
 
-        _model.deleteOperationsById(ids, function(data) {
+        _model.deleteOperationsByIds(ids, function(data) {
             // remove rows from table
             $trs.remove();
             $.jGrowl("Операции удалены", {theme: 'green'});
@@ -103,7 +103,7 @@ easyFinance.widgets.operationsJournal = function(){
         if (!confirm("Вы действительно хотите удалить эту операцию?"))
             return false;
 
-        _model.deleteOperationsById([id], function(data) {
+        _model.deleteOperationsByIds([id], function(data) {
             // remove row from table
             $('#operations_list tr[id="op' + id + '"]').remove();
             $.jGrowl("Операция удалена", {theme: 'green'});

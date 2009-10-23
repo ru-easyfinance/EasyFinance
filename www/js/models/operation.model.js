@@ -56,9 +56,10 @@ easyFinance.models.operation = function(){
 
     /**
      * @desc delete operations by id
-     * @param ids: arary of operation ids
+     * @param ids: array of operation ids
+     * @param callback: callback function
      */
-    function deleteOperationsById(ids, callback) {
+    function deleteOperationsByIds(ids, callback) {
         var _ids = ids;
 
         $.post(DELETE_OPERATIONS_URL, {id : ids.toString()}, function(data) {
@@ -70,36 +71,48 @@ easyFinance.models.operation = function(){
         }, 'json');
     }
 
-    function addOperation() {
-
+    function addOperation(
+        type, account, category, date, comment,
+        amount, toAccount, currency, convert,
+        target, close, tags,
+        callback) {
+            editOperationById(
+                '', type, account, category, date,
+                comment, amount, toAccount, currency,
+                convert, target, close, tags
+            );
     }
 
     function editOperationById(
         id, type, account, category, date, comment,
-        amount, toAccount, currency, target, close, tags,
+        amount, toAccount, currency, convert,
+        target, close, tags,
         callback){
-            /*
-            $.post(($('form').attr('action')), {
-                id        : $('#id').val(),
-                type      : $('#type').val(),
-                account   : $('#op_account').val(),
-                category  : $('#op_category').val(),
-                date      : $('#op_date').val(),
-                comment   : $('#op_comment').val(),
-                amount    : tofloat($('#op_amount').val()),
-                toAccount : $('#op_AccountForTransfer').val(),
-                currency  : $('#op_currency').val(),
-                target    : $('#op_target').val(),
-                close     : $('#op_close:checked').length,
-                tags      : $('#op_tags').val()
-            };
-            */
+            var url = (id == '') ? ADD_OPERATION_URL : EDIT_OPERATION_URL;
+            
+            $.post(url, {
+                id        : id,
+                type      : type,
+                account   : account,
+                category  : category,
+                date      : date,
+                comment   : comment,
+                amount    : amount,
+                toAccount : toAccount,
+                currency  : currency,
+                convert   : convert,
+                target    : target,
+                close     : close,
+                tags      : tags
+            }, callback, "json");
     }
 
     // reveal some private things by assigning public pointers
     return {
         load: load,
         loadJournal: loadJournal,
-        deleteOperationsById: deleteOperationsById
+        addOperation: addOperation,
+        editOperationById: editOperationById,
+        deleteOperationsByIds: deleteOperationsByIds
     };
 }(); // execute anonymous function to immediatly return object

@@ -89,6 +89,16 @@ function FloatFormat(obj, in_string )
     $(obj).val(newstr)
 }
 
+function tofloat(s)
+{
+    if (s != null) {
+        s = s.toString();
+        return s.replace(/[ ]/gi, '');
+    } else {
+        return '';
+    }
+}
+
 /**
  * Форматирует валюту
  * @param num float Сумма, число
@@ -113,6 +123,8 @@ function FloatFormat(obj, in_string )
 //запланировано 
 
 $(document).ready(function() {
+    $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
+
     // *** Функции ***
 
     if (res['errors'] != null && res['errors'].length > 0) {
@@ -140,317 +152,11 @@ $(document).ready(function() {
       return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
     }
 
-    /**
-     * Очищает форму
-     * @return void
-     */
-    function clearForm() {
-        $('#type,#category,#target').val(0);
-        $('#amount,#AccountForTransfer,#comment,#tags,#date').val('');
-        $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
-        $('#close').removeAttr('checked');
-        $('form').attr('action','/operation/add/');
-        $('#type').change();
-    }
-
-    function tofloat(s)
-    {
-        if (s != null) {
-            s = s.toString();
-            return s.replace(/[ ]/gi, '');
-        } else {
-            return '';
-        }
-    }
-
-     /**
-     * Получает список тегов
-     */
-    function op_getTags() {
-        $('a#op_tags').click(function(){
-            $('.op_tags_could').dialog({
-                close: function(event, ui){$(this).dialog( "destroy" )}
-            }).dialog("open");
-            $('.op_tags_could li').show();
-        });
-        $('.op_tags_could li').live('click',function(){
-            var txt=$('.op_tags input').val()+$(this).text()+', ';
-            $('.op_tags input').val(txt);
-            $('.op_tags_could').dialog("close");
-        });
-        // Загружаем теги
-            var k,n;
-            var data = res.cloud;
-            var str = '<ul>';
-            var m = -1;
-            for (var key in data) {
-                if (m == -1) m = data[key]['cnt'];
-                k = data[key]['cnt']/m;
-                n = Math.floor(k*5);
-                str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
-            }
-            $('.op_tags_could').html(str+'</ul>');
-            $('.op_tags_could li').hide();
-    }
-
-    /**
-     * Добавляет новую операцию
-     * @return void
-     */
-    function op_saveOperation() {
-        if (!op_validateForm()){
-            return false;
-        }
-        $.jGrowl("Операция сохраняется", {theme: 'green'});
-        $.post(($('form').attr('action')), {
-            id        : $('#op_id').val(),
-            type      : $('#op_type').val(),
-            account   : $('#op_account').val(),
-            category  : $('#op_category').val(),
-            date      : $('#op_date').val(),
-            comment   : $('#op_comment').val(),
-            amount    : tofloat($('#op_amount').val()),
-            toAccount : $('#op_AccountForTransfer').val(),
-            currency  : $('#op_currency').val(),
-            convert   : TransferSum,
-            target    : $('#op_target').val(),
-            close     : $('#op_close:checked').length,
-            tags      : $('#op_tags').val()
-            
-        }, function(data){
-            // В случае успешного добавления, закрываем диалог и обновляем календарь
-            if (data.length == 0) {
-                op_clearForm();
-                $.jGrowl("Операция успешно сохранена", {theme: 'green'});
-            } else {
-                var e = '';
-                for (var v in data) {
-                    e += data[v]+"\n";
-                }
-                $.jGrowl("Ошибки при сохранении : " + e, {theme: 'red', stick: true});
-            }
-        }, 'json');
-        return true;
-    }
-
-    /**
-     * Проверяет валидность введённых данных
-     */
-    function op_validateForm() {
-        $error = '';
-        if (isNaN(parseFloat($('#op_amount').val()))){
-            $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
-            return false;
-        }
-        //Запрос подтверждения на выполнение операции в случае ухода в минус.
-        var am = tofloat($('#op_amount').val()+'.0');
-        var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-        //* && $("#op_type option:selected").val() != 1*/)
-        if ( (am-tb)>0 && $("#op_type option:selected").val()!=1){
-            if (!confirm('Данная транзакция превышает остаток средств на вашем счёте. Продолжить ?'))
-            //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
-            return false;
-        }//*/
-
-        //alert(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-        //alert(res['accounts'][$("#op_account option:selected").val()]['reserve']);
-        //если сумма совершаемой операции превышает сумму доступного остатка(Общий - резерв на финцели)
-        // тогда предупреждаем пользователя и в случае согласия снимаем нехватающую часть денег с фин цели.
-        if ((am - ( tb- res['accounts'][$("#op_account option:selected").val()]['reserve']))>0) {
-            alert ("Введённая сумма операции превышает доступный остаток счёта.\n\
-Переведите деньги с финансовой цели и повторите операцию ещё раз!");
-        }
-
-
-        if ($('#op_type').val() == '4') {
-            /**
-             *@FIXME Написать обновление финцелей
-             */
-             //alert("tratata");
-
-            //var amount = parseFloat($("#op_target option:selected").attr("amount"));
-            //alert(amount);
-            //$("#op_amount").val(amount);
-
-            var amount = parseFloat($("#op_target option:selected").attr("amount"));
-            var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
-            $("#op_amount_done").text(amount_done);
-            if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
-                if (confirm('Закрыть финансовую цель?')) {
-                    $("#op_close").attr("checked","checked");
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Очищает форму
-     * @return void
-     */
-    function op_clearForm() {
-        
-        //$('#op_type,#op_category,#op_target').val(0);
-        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');//#op_date убрал
-
-        $('span#op_amount_target').text();
-
-        $('span#op_amount_done').text();
-        $('span#op_forecast_done').text();
-        $('span#op_percent_done').text();
-
-        $('#op_close').removeAttr('checked');
-         
-        $('form').attr('action','/operation/add/');
-       
-        $('#op_type').change();
-        
-    }
-
-    /**
-     * При переводе со счёта на счёт, проверяем валюты
-     * @return void
-     */
-    function op_changeAccountForTransfer() {
-        if ($('#op_type :selected').val() == 2 &&
-            $('#op_account :selected').attr('currency') != $('#op_AccountForTransfer :selected').attr('currency')) {
-                $('#op_operationTransferCurrency').show();
-                $.post('/operation/get_currency/', {
-                        SourceId : $("#op_account").val(),
-                        TargetId : $("#op_AccountForTransfer").val()
-                    }, function(data){
-                        $('#op_operationTransferCurrency :first-child').html('Курс <b>'+
-                            $('#op_account :selected').attr('abbr')+'</b> к <b>'+$('#op_AccountForTransfer :selected').attr('abbr')+'</b>');
-                        $('#op_currency').val(data);
-                    }, 'json'
-                );
-        } else {
-            $('#op_operationTransferCurrency').hide();
-        }
-    }
-
-    /**
-     * Переключает видимость категорий
-     * @param field Gj
-     * @param type 1 - доход, -1 - расход
-     */
-    function toggleVisibleCategory(field, type) {
-        $('option',field).each(function(){
-            var opt = this;
-            if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
-                $(opt).css('display','block');
-            } else {
-                $(opt).css('display','none');
-            }
-        });
-    }
-
-    /**
-     * При изменении типа операции
-     */
-    function op_changeTypeOperation() {
-        // Расход или Доход
-        if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
-            $("#op_category_fields,#op_tags_fields").show();
-            $("#op_target_fields,#op_transfer_fields").hide();  
-            if ($('#op_type').val() == 1)
-                    $.post('/category/cattypechange/',{
-                        type : 1
-                    },function(data){
-                        $("#op_category").html(data);
-                    },'json');
-            if ($('#op_type').val() == 0)
-                $.post('/category/cattypechange/',{
-                        type : -1
-                    },function(data){
-                        $("#op_category").html(data);
-                    },'json');
-                //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
-        //Перевод со счёта
-        } else if ($('#op_type').val() == 2) {
-            $("#op_category_fields,#op_target_fields").hide();
-            $("#op_tags_fields,#op_transfer_fields").show();
-            op_changeAccountForTransfer();
-        //Перевод на финансовую цель
-        } else if ($('#op_type').val() == 4) {
-            $('#op_target').remove('option :not(:first)');
-            var o = '';
-            var t;
-            for (var v in res['user_targets']) {
-                t = res['user_targets'][v];
-                o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
-                    '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
-            }
-            $("#op_target_fields").show();
-            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
-            $('#op_target').html(o);
-            $('#op_target').change();
-
-        }
-    }
-
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
-        // Автоматически подгружаем теги
-        $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
-        op_getTags(res['tags']);
-
-        $('#op_btn_Save').click(function(){op_saveOperation();return false;})
-        $('#op_btn_Cancel').click(function(){op_clearForm();
-            $(".op_addoperation").hide();
-            return false;});
-
-        $("#op_addoperation_but").click(function(){
-            $(this).toggleClass("act");
-            if($(this).hasClass("act")){
-                $(".op_addoperation").show();
-            } else {
-                $(".op_addoperation").hide();
-            }
-        });
-        $('#op_amount').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        });
-
-        $('.calculator-trigger').click(function(){
-            $(this).closest('div').find('#op_amount,#amount').val(tofloat($('#op_amount').val()));
-        })
-        $("#op_date").datepicker();
-
-
-        $('#op_amount,#op_currency').change(function(){
-            if ($('#op_type').val() == 2) {
-                /*
-                 *@TODO Дописать округление
-                 */
-                var result = Math.round($('#op_amount').val() / $('#op_currency').val());
-                if (!isNaN(result) && result != 'Infinity') {
-                    $("#op_convertSumCurrency").html("конвертация: "+result);
-                    TransferSum = result;
-                }
-            }
-        });
-
-        $('#op_account').change(function(){op_changeAccountForTransfer();});
-        $('#op_AccountForTransfer').change( function(){op_changeAccountForTransfer();});
-        $('#op_type').change(function(){
-
-            //createDynamicDropdown('op_type', 'op_category');
-            
-            op_changeTypeOperation('add');
-        });
-        $('#op_target').change(function(){
-            t = parseInt($("#op_target :selected").attr("target_account_id"));
-            $("span.op_currency").each(function(){
-                if (t != 0){
-                    //$(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
-                }
-            });
-            $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
-            $("#op_amount_target").text(formatCurrency($("#op_target :selected").attr("amount")));
-            $("#op_percent_done").text(formatCurrency($("#op_target :selected").attr("percent_done")));
-            $("#op_forecast_done").text(formatCurrency($("#op_target :selected").attr("forecast_done")));
-        });
+        // инициализируем виджет добавления и редактирования операции
+        easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.operation);
+        
         ////////////////////////////////////add to calendar
         
         $('#op_addtocalendar_but').click(function(){
@@ -613,11 +319,10 @@ $(document).ready(function() {
 //            }
             $('#op_dialog_event').dialog('open');
             $('.ui-dialog-buttonpane').css('margin-top','30px');
-            //$('#op_adate,#op_pdate').val(dateText);
-            
+            //$('#op_adate,#op_pdate').val(dateText);   
         }
-
     }
+
     if(inarray(Current_module, Connected_functional.menu)){
         $('.listing').hide();
         $('.navigation  li ul').hide()
@@ -1588,5 +1293,37 @@ function getCookie(name) {
             }
         }
         return true;
+    }
+    */
+
+       /**
+     * Переключает видимость категорий
+     * @param field Gj
+     * @param type 1 - доход, -1 - расход
+     */
+    /*
+    function toggleVisibleCategory(field, type) {
+        $('option',field).each(function(){
+            var opt = this;
+            if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
+                $(opt).css('display','block');
+            } else {
+                $(opt).css('display','none');
+            }
+        });
+    }
+    */
+       /**
+     * Очищает форму
+     * @return void
+     */
+    /*
+    function clearForm() {
+        $('#type,#category,#target').val(0);
+        $('#amount,#AccountForTransfer,#comment,#tags,#date').val('');
+        $('#amount_target,#amount_done,#forecast_done,#percent_done').text('');
+        $('#close').removeAttr('checked');
+        $('form').attr('action','/operation/add/');
+        $('#type').change();
     }
     */

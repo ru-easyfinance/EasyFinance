@@ -289,6 +289,7 @@ $(document).ready(function() {
         
         easyFinance.models.category.deleteById(id, function() {
             // Удаляем категорию из списка
+            // @todo: optimize! use _$node.find
             $('#'+id).remove();
 
             // Обновляем список родительских категорий
