@@ -12,9 +12,7 @@ easyFinance.widgets.operationEdit = function(){
     var _$node = null;
 
     // private functions
-     /**
-     * Получает список тегов
-     */
+
     function _initTags() {
         $('a#op_tags').click(function(){
             $('.op_tags_could').dialog({
@@ -102,9 +100,6 @@ easyFinance.widgets.operationEdit = function(){
         });
     }
 
-    /**
-     * При изменении типа операции
-     */
     function _changeTypeOperation() {
         // Расход или Доход
         if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
@@ -145,10 +140,6 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
-    /**
-     * Добавляет новую операцию
-     * @return void
-     */
     function _saveOperation() {
         if (!_validateForm()){
             return false;
@@ -188,9 +179,6 @@ easyFinance.widgets.operationEdit = function(){
         return true;
     }
 
-    /**
-     * Проверяет валидность введённых данных
-     */
     function _validateForm() {
         $error = '';
         if (isNaN(parseFloat($('#op_amount').val()))){
@@ -238,10 +226,6 @@ easyFinance.widgets.operationEdit = function(){
         return true;
     }
 
-    /**
-     * Очищает форму
-     * @return void
-     */
     function _clearForm() {
         $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');//#op_date убрал
 
@@ -258,10 +242,6 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_type').change();
     }
 
-    /**
-     * При переводе со счёта на счёт, проверяем валюты
-     * @return void
-     */
     function _changeAccountForTransfer() {
         if ($('#op_type :selected').val() == 2 &&
             $('#op_account :selected').attr('currency') != $('#op_AccountForTransfer :selected').attr('currency')) {
