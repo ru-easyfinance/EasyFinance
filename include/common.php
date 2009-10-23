@@ -107,6 +107,6 @@ Core::getInstance()->js = array(
     'calendar' => array('calendar'),
     'admin' => array( 'admin'),
     'accounts' => array('accounts'),
-    'review' => array('review'),
+    'review' => array('jquery/jquery.fancybox-1.0.0', 'review'),
     'budget' => array('budget', 'models/budget.model', 'widgets/budget.widget')
 );

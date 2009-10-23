@@ -270,6 +270,9 @@ $(document).ready(function() {
                     // Обновляем список родительских категорий
                     if (cat.parent == "0")
                         drawParentCategoriesCombo();
+
+                    // Обновляем список категорий в диалоге "Добавление операции"
+                    $('#op_type').change();
             }
 
             var act = $('form').attr('action');
@@ -295,6 +298,9 @@ $(document).ready(function() {
             // Обновляем список родительских категорий
             if (isParent == true)
                 drawParentCategoriesCombo();
+
+            // Обновляем список категорий в диалоге "Добавление операции"
+            $('#op_type').change();
             
             clearForm();
             $('#add_form').hide();

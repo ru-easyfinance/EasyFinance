@@ -1,6 +1,47 @@
 $(document).ready(function() {
+    $('.fancy').fancybox();
 
+    $('.registration').click(function(){
+        $('#aRegistration').click();
+    });
 
+    $('.CreateSales').click(function(){
+        $('#aCreateSales').click();
+    });
+
+    $('.categoryEdit').click(function(){
+        $('#aCategoryEdit').click();
+    });
+
+    $('.closeOperation').click(function(){
+        $('#aCloseOperation').click();
+    });
+
+    $('.infoPanel').click(function(){
+        $('#aInfoPanel').click();
+    });
+
+    $('.createTransaction').click(function(){
+        $('#aCreateTransaction').click();
+    });
+
+    $('.expertView').click(function(){
+        $('#aExpertView').click();
+    });
+
+    $('.analise').click(function(){
+        $('#aAnalise').click();
+    });
+
+    $('.financeTarget').click(function(){
+        $('#aFinanceTarget').click();
+    });
+
+    $('.capitalCreate').click(function(){
+        $('#aCapitalCreate').click();
+    });
+
+    /*
         $('body').mousemove(function(){
             if (!$('.map div:hover').length)
             {
@@ -58,6 +99,7 @@ $(document).ready(function() {
             for (var N=1; N<=10; N++)
             $('.w_dialog.mapContent'+N).hide();
         });
+        */
 });
 
 

@@ -82,7 +82,6 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
         $('#op_type').change(function(){
             //createDynamicDropdown('op_type', 'op_category');
-
             _changeTypeOperation('add');
         });
 

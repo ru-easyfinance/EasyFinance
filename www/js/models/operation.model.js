@@ -1,3 +1,8 @@
+/**
+ * @desc Operation Model
+ * @author Andrey [Jet] Zharikov
+ */
+
 easyFinance.models.operation = function(){
     // constants
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/';
