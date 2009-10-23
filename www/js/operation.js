@@ -2,6 +2,9 @@
     /*var catlast ;
     var datelast ;*/
 
+/**
+ * Функция очищает форму ввода операции
+ */
 function clearForm() {
     $('#op_type,#op_category,#op_target').val(0);
     $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
@@ -16,8 +19,9 @@ function clearForm() {
 
     $('form').attr('action','/operation/add/');
 
-    $('#op_type').change();//*/
+    $('#op_type').change();
 }
+
 /**
  * Функция заполняет форму данными c массива
  * @param data данные для заполнения
@@ -28,18 +32,13 @@ function fillForm(data) {
     $('#op_id').val(data.id);
     $('#op_account').val(data.account_id);
 
-    if (data.tr_id=='1')//transfer
-    {
+    if (data.tr_id=='1') {
+        // transfer
         $('#op_type').val(2);
-    }
-    else
-    {
-        if (data.virt=='1')
-        {
+    } else {
+        if (data.virt=='1') {
             $('#op_type').val(4);
-        }
-        else
-        {
+        } else {
             if (data.drain=='1') {
                 $('#op_type').val(0);
             } else {
@@ -61,78 +60,31 @@ function fillForm(data) {
 }
 
 $(document).ready(function() {
-    $('#op_amount').removeAttr('disabled');
-    $('#op_comment').removeAttr('disabled');
-
-    $('#op_addoperation_but').click();
-    $('#op_btn_Save').click(function(){
+    var journalReload = function(){
         easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
         $('#btn_ReloadData').click();
-    });
-    
-    // Init
-    $('#amount').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        })
-    $("#date, #dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});//+
+    }
 
-    // Bind
-    $('#btn_Save').click(function(){
-        saveOperation();
-    })
-
-    $('#op_account').change(function(){
-        easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
-        $('#btn_ReloadData').click();
-    })
-
-    //$('#category').autocomplete();
-    $('#amount,#currency').change(function(){
-        if ($('#type').val() == 2) {
-            /*//@TODO Дописать округление*/
-            var result = Math.round($('#amount').val() / $('#currency').val());
-            if (!isNaN(result) && result != 'Infinity') {
-                $("#convertSumCurrency").html("конвертация: "+result);
-            }
-        }
-    });
-    $('.light a').live('click', function(){
-        $(this).closest('tr').find('li.edit a').click();
-        return false;
-    });
-    $('#account').change(function(){
-        changeAccountForTransfer();
-        easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
-        easyFinance.widgets.operationsJournal.loadJournal();
-    });
-    $('#AccountForTransfer').change( function(){changeAccountForTransfer();});
-    
-    $('#target').change(function(){
-        $("span.currency").each(function(){
-            $(this).text(" "+$("#target :selected").attr("currency"));
-        });
-        $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
-        $("#amount_target").text(formatCurrency($("#target :selected").attr("amount")));
-        $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
-        $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
-    });
-
-    $('#operations_list .cont').css({position: 'relative'});
+    $('#op_btn_Save').click(journalReload);
+    $('#op_account').change(journalReload);
 
     // загружаем журнал транзакций
     easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
     easyFinance.widgets.operationsJournal.loadJournal();
+});
 
-    //биндим показ, скрытие и действия диалога выбора тегов
-    $('a#tags').removeAttr('href');
-    $('a#tags').click(function(){
-        $('.tags_could').dialog({
-            close: function(event, ui){$(this).dialog( "destroy" )}
-        }).dialog("open");
-        $('.tags_could li').show();
-    });
-
-    $('.tags input').keyup(function(){
+// Jet. Рефакторинг от 22 Октября 2009.
+// @todo УДАЛИТЬ ВСЮ ЭТУ ХЕРНЮ В НОЯБРЕ
+// Ниже закомментирован старый функционал "Журнала Операций"
+// Теперь этот функционал реализован в widgets/operations/operationsJournal
+// и в widgets/operations/operationEdit, widgets/operations/operationCalendarEdit
+/*
+ *$('#op_addoperation_but').click();
+ *
+ *    $('#op_amount').removeAttr('disabled');
+    $('#op_comment').removeAttr('disabled');
+ *
+ *    $('.tags input').keyup(function(){
         $('.tags_could li').show();
 
     })
@@ -143,94 +95,41 @@ $(document).ready(function() {
     });
 
     $('.tags_could').hide();
-
-    /**
-     * Добавляет новую операцию
-     * @return void
-     */
-    function saveOperation() {
-        if (!validateForm()){
-            return false;
-        }
-        
-        $.post(($('form').attr('action')), {
-            id        : $('#id').val(),
-            type      : $('#type').val(),
-            account   : $('#op_account').val(),
-            category  : $('#op_category').val(),
-            date      : $('#op_date').val(),
-            comment   : $('#op_comment').val(),
-            amount    : tofloat($('#op_amount').val()),
-            toAccount : $('#op_AccountForTransfer').val(),
-            currency  : $('#op_currency').val(),
-            target    : $('#op_target').val(),
-            close     : $('#op_close:checked').length,
-            tags      : $('#op_tags').val()
-        }, function(data){
-            for (var v in data) {
-                /*//@FIXME Дописать обработку ошибок и подсветку полей с ошибками*/
-                alert('Ошибка в ' + v);
+ *
+ *  //биндим показ, скрытие и действия диалога выбора тегов
+    $('a#tags').removeAttr('href');
+    $('a#tags').click(function(){
+        $('.tags_could').dialog({
+            close: function(event, ui){$(this).dialog( "destroy" )}
+        }).dialog("open");
+        $('.tags_could li').show();
+    });
+ *
+ *    $('#amount').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        })
+ *
+ *
+     $('#amount,#currency').change(function(){
+        if ($('#type').val() == 2) {
+            //@TODO Дописать округление
+            var result = Math.round($('#amount').val() / $('#currency').val());
+            if (!isNaN(result) && result != 'Infinity') {
+                $("#convertSumCurrency").html("конвертация: "+result);
             }
-            // В случае успешного добавления, закрываем диалог и обновляем календарь
-            if (data.length == 0) {
-                //alert('123');
-                clearForm();
-                easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
-                easyFinance.widgets.operationsJournal.loadJournal();
-            }
-        }, 'json');
-        return true;
-    }
-
-    /**
-     * При переводе со счёта на счёт, проверяем валюты
-     * @return void
-     */
-    function changeAccountForTransfer() {
-        /*//@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах */
-        if ($('#type :selected').val() == 2 &&
-            $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
-                $('#operationTransferCurrency').show();
-                $.post('/operation/get_currency/', {
-                        SourceId : $("#account").val(),
-                        TargetId : $("#AccountForTransfer").val()
-                    }, function(data){
-                        $('#operationTransferCurrency :first-child').html('Курс <b>'+
-                            $('#account :selected').attr('abbr')+'</b> к <b>'+$('#AccountForTransfer :selected').attr('abbr')+'</b>');
-                        $('#currency').val(data);
-                    }, 'json'
-                );
-        } else {
-            $('#operationTransferCurrency').hide();
         }
-    }
+    });
 
-    /**
-     * При изменении типа операции
-     */
-    function changeop_TypeOperation() {
-        // Расход или Доход
-        if ($('#type').val() == 0 || $('#type').val() == 1) {
-            $("#op_category_fields,#op_tags_fields").show();
-            $("#op_target_fields,#op_transfer_fields").hide();
-        //Перевод со счёта
-        } else if ($('#type').val() == 2) {
-            $("#op_category_fields,#op_target_fields").hide();
-            $("#op_tags_fields,#op_transfer_fields").show();
-            changeAccountForTransfer();
-        //Перевод на финансовую цель
-        } else if ($('#type').val() == 4) {
-            $("#op_target_fields").show();
-            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
-            $('#op_target').change();
-        }
-    }
+$('#target').change(function(){
+    $("span.currency").each(function(){
+        $(this).text(" "+$("#target :selected").attr("currency"));
+    });
+    $("#amount_done").text(formatCurrency($("#target :selected").attr("amount_done")));
+    $("#amount_target").text(formatCurrency($("#target :selected").attr("amount")));
+    $("#percent_done").text(formatCurrency($("#target :selected").attr("percent_done")));
+    $("#forecast_done").text(formatCurrency($("#target_sel :selected").attr("forecast_done")));
 });
-
-
-    // Jet. Ниже закомментирован старый функционал "Журнала Операций"
-    // Теперь этот функционал реализован в widgets/operations/operationsJournal
-
+*/
 //var operationList;
 
 //$('#type').change(function(){changeTypeOperation('add');});
@@ -514,3 +413,105 @@ function editTargetOperation(id) {
     },operationAfterEdit);
 }
 */
+
+    // Bind
+    //$('#btn_Save').click(function(){
+    //    saveOperation();
+    //})
+
+    /**
+     * Добавляет новую операцию
+     * @return void
+     */
+    /*
+    function saveOperation() {
+        if (!validateForm()){
+            return false;
+        }
+
+        $.post(($('form').attr('action')), {
+            id        : $('#id').val(),
+            type      : $('#type').val(),
+            account   : $('#op_account').val(),
+            category  : $('#op_category').val(),
+            date      : $('#op_date').val(),
+            comment   : $('#op_comment').val(),
+            amount    : tofloat($('#op_amount').val()),
+            toAccount : $('#op_AccountForTransfer').val(),
+            currency  : $('#op_currency').val(),
+            target    : $('#op_target').val(),
+            close     : $('#op_close:checked').length,
+            tags      : $('#op_tags').val()
+        }, function(data){
+            for (var v in data) {
+                //@FIXME Дописать обработку ошибок и подсветку полей с ошибками
+                alert('Ошибка в ' + v);
+            }
+            // В случае успешного добавления, закрываем диалог и обновляем календарь
+            if (data.length == 0) {
+                //alert('123');
+                clearForm();
+                easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
+                easyFinance.widgets.operationsJournal.loadJournal();
+            }
+        }, 'json');
+        return true;
+    }
+    */
+
+    /*
+    $('#account').change(function(){
+        changeAccountForTransfer();
+        easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
+        easyFinance.widgets.operationsJournal.loadJournal();
+    });
+    $('#AccountForTransfer').change( function(){changeAccountForTransfer();});
+    */
+
+    /**
+     * При переводе со счёта на счёт, проверяем валюты
+     * @return void
+     */
+    /*
+    function changeAccountForTransfer() {
+        /@TODO можно оптимизировать процедуру, и не отсылать данные на сервер, если у нас одинаковая валюта на счетах
+        if ($('#type :selected').val() == 2 &&
+            $('#account :selected').attr('currency') != $('#AccountForTransfer :selected').attr('currency')) {
+                $('#operationTransferCurrency').show();
+                $.post('/operation/get_currency/', {
+                        SourceId : $("#account").val(),
+                        TargetId : $("#AccountForTransfer").val()
+                    }, function(data){
+                        $('#operationTransferCurrency :first-child').html('Курс <b>'+
+                            $('#account :selected').attr('abbr')+'</b> к <b>'+$('#AccountForTransfer :selected').attr('abbr')+'</b>');
+                        $('#currency').val(data);
+                    }, 'json'
+                );
+        } else {
+            $('#operationTransferCurrency').hide();
+        }
+    }
+    */
+
+    /**
+     * При изменении типа операции
+     */
+    /*
+    function changeop_TypeOperation() {
+        // Расход или Доход
+        if ($('#type').val() == 0 || $('#type').val() == 1) {
+            $("#op_category_fields,#op_tags_fields").show();
+            $("#op_target_fields,#op_transfer_fields").hide();
+        //Перевод со счёта
+        } else if ($('#type').val() == 2) {
+            $("#op_category_fields,#op_target_fields").hide();
+            $("#op_tags_fields,#op_transfer_fields").show();
+            changeAccountForTransfer();
+        //Перевод на финансовую цель
+        } else if ($('#type').val() == 4) {
+            $("#op_target_fields").show();
+            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
+            $('#op_target').change();
+        }
+    }
+    */

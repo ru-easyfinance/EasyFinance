@@ -64,7 +64,7 @@ easyFinance.widgets.operationsJournal = function(){
                 tr += '<td class="light"><span>'+data[v].date+'</span></td>'
                 + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                 + '<td class="big">'+data[v].account_name
-                    +'<div class="cont" style="top: -10px"><span>'+'</span><ul>'
+                    +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
                     +'<li class="add"><a title="Копировать">Копировать</a></li>'
@@ -163,6 +163,8 @@ easyFinance.widgets.operationsJournal = function(){
 
         //loadJournal();
 
+        $("#dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
+
         $('#btn_ReloadData').click(loadJournal);
         $('#remove_all_op').click(_deleteChecked);
 
@@ -174,6 +176,11 @@ easyFinance.widgets.operationsJournal = function(){
         })
 
         // Биндим щелчки на строках и кнопках тулбокса (править, удалить, копировать)
+        $('.light a').live('click', function(){
+            $(this).closest('tr').find('li.edit a').click();
+            return false;
+        });
+
         $('#operations_list tr').live('dblclick',function(){
             $(this).find('li.edit a').click();
         })
