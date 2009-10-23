@@ -73,6 +73,9 @@ else
 	}
 }
 
+$tpl->append('js', 'models/operation.model.js');
+$tpl->append('js', 'widgets/operations/operationEdit.widget.js');
+
 if(IS_DEMO){
     $tpl->append('js',  'demo_message.js');
 }

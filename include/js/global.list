@@ -23,5 +23,3 @@ jquery/jquery.cookie.js
 easyfinance.js
 main.js
 helpers.js
-widgets/operations/operationEdit.widget.js
-models/operation.model.js
