@@ -21,6 +21,6 @@ jquery/tinysort.js
 jquery/jquery.form.js
 jquery/jquery.cookie.js
 easyfinance.js
-models/operation.model.js
+widgets/operations/operationEdit.widget.js
 main.js
 helpers.js
