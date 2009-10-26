@@ -12,11 +12,8 @@ $(document).ready(function() {
     easyFinance.models.category.load(function(data) {
         // Обновляем список системных категорий
         drawSystemCategoriesCombo();
-        
-        // Обновляем список родительских категорий
-        drawParentCategoriesCombo();
 
-        // Выводим список пользовательских категорий
+        // Выводим список пользовательских и родительских категорий
         drawUserCategoriesList();
     });
 
@@ -24,6 +21,7 @@ $(document).ready(function() {
 
     //BIND
     $('#btnSave').click(function(){
+        $(this).attr('disabled', true);
         saveCategory()
     });
 
@@ -122,8 +120,8 @@ $(document).ready(function() {
     }
 
     // Заполняем список родительских категорий
-    function drawParentCategoriesCombo () {
-        var user = easyFinance.models.category.getUserCategories();
+    function drawParentCategoriesCombo() {
+        var user = easyFinance.models.category.getUserCategoriesSorted();
 
         var m='<option value=""> --- </option>';
         for(id in user) {
@@ -251,6 +249,7 @@ $(document).ready(function() {
             var sys = $('#catsys').val();
 
             var done = function(cat) {
+                    $('#add_form').find('#btnSave').attr('disabled', false);
                     $('#add_form').hide();
                     $.jGrowl("Категория успешно сохранена", {theme: 'green'});
                     
@@ -268,7 +267,7 @@ $(document).ready(function() {
                     }
 
                     // Обновляем список родительских категорий
-                    if (cat.parent == "0")
+                    if (cat.parent == "")
                         drawParentCategoriesCombo();
 
                     // Обновляем список категорий в диалоге "Добавление операции"
