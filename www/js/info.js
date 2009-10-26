@@ -33,6 +33,7 @@ $.post(
             name = (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
             value = parseInt(data[0][i]) ;
             pointer = data[1][i]['color']*33 - 20;
+            /*
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
                 '<text>'+value+'</text>'+
                 "</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
@@ -48,6 +49,16 @@ $.post(
                     chartSample_1.write('flash_' + i);
                     chartSample_1 = null;
                     $('div#flash_' + i).prepend('<div Style="text-align:center;font-weight:bold;">'+name+'</div>');
+            */
+
+            // init gauges
+            var title = (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
+            $('#flashTitle_'+i).text(title);
+            var size = (i==0) ? "107" : "70";
+            var flashvars = {title: "", value: data[0][i], bgimage: "/img/i/gauge" + size + ".gif"};
+            var params = {wmode: "transparent"};
+            var attributes = {id: "gauge"+i};
+            swfobject.embedSWF("/swf/efGauge.swf", "flash_"+i, size, size, "9.0.0", false, flashvars, params, attributes);
         }
         print_targets(0);
     },

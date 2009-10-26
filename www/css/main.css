@@ -1249,7 +1249,7 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 
 
 .flash_block_in { padding: 14px 0 0 0 !important; }
-.flash_block_in .flash { width: 545px; overflow: hidden; }
+.flash_block_in .flash { width: 100%; overflow: hidden; }
 
 .addquestion, .addcategories { position: relative; margin-bottom: 5px; min-height: 25px; //-height: 25px; }
 .addquestion a, .addcategories a { display: block; position: absolute; top: 12px; left: 27px; padding-left: 27px; font-size: 14px; line-height: 18px; text-decoration: none; background: url('/img/i/icons.gif') no-repeat -20px -368px; }

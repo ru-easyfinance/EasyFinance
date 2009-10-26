@@ -649,13 +649,12 @@ $('li#c2').click(function(){a_list()})
 //        return false;
 //    })
 
-
-
 //flash
-    data = res['flash'];
-            name = (!data['title'])?'':['title'];
+            //data = res['flash'];
+            //name = (!data['title'])?'':['title'];
             //end = data['value']*3/data[1][i]['color'] ;
-            value = data['value'] ;
+            //value = data['value'] ;
+            /*
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
                 '<text>'+name+'</text>'+
 		"</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
@@ -669,7 +668,8 @@ $('li#c2').click(function(){a_list()})
                     chartSample_1.setData(xml);
                     chartSample_1.wMode="opaque";
                     chartSample_1.write('flash');
-                    chartSample_1 = null;//*/
+                    chartSample_1 = null;//
+         */
         $('.calculator_block .calculator').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         })
@@ -1128,6 +1128,11 @@ function getCookie(name) {
     }
 
 
+    // init main finance gauge
+    var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gauge107.gif"};
+    var params = {wmode: "transparent"};
+    var attributes = {id: "gaugeMain"};
+    swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 })
 
     // Jet. Рефакторинг 23.10.2009
