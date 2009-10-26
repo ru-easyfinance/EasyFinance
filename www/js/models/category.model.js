@@ -24,6 +24,18 @@ easyFinance.models.category = function(){
         );
     }
 
+    function _sortUserCategories() {
+        var arr = [];
+
+        for(var cat in _categories.user)
+            arr.push(_categories.user[cat]);
+
+        arr.sort(function(a,b){return a.name.localeCompare(b.name)});
+
+        _categories.user = [];
+        _categories.user = arr;
+    }
+
     // public variables
 
     // public functions
@@ -56,9 +68,11 @@ easyFinance.models.category = function(){
             _categories.user[id] = {};
             _categories.user[id].id = id.toString();
             _categories.user[id].name = name;
-            _categories.user[id].parent = parent;
+            _categories.user[id].parent = parent == "" ? 0 : parent;
             _categories.user[id].type = type;
             _categories.user[id].system = system;
+
+//            _sortUserCategories();
 
            callback(_categories.user[id]);
         });

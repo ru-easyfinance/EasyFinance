@@ -121,7 +121,7 @@ $(document).ready(function() {
 
     // Заполняем список родительских категорий
     function drawParentCategoriesCombo() {
-        var user = easyFinance.models.category.getUserCategoriesSorted();
+        var user = easyFinance.models.category.getUserCategories();
 
         var m='<option value=""> --- </option>';
         for(id in user) {
