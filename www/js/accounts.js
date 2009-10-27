@@ -295,13 +295,13 @@ $(document).ready(function()
                 var id = data;
                 if (!isaccountediting){
                     $.jGrowl("Добавлен счёт", {theme: 'green'});
+                    update_list({id: id,cur_id: cur_id});
                 }else{
                     $.jGrowl("Cчёт изменён", {theme: 'green'});
                     isaccountediting = false;
                 }
-                update_list({id: id,cur_id: cur_id});
-                
-                
+                    
+                 
                 $('li#c2').click()
             }
         });
