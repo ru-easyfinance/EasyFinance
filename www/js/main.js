@@ -154,6 +154,12 @@ $(document).ready(function() {
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
+        // init main finance gauge
+        var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gauge107.gif"};
+        var params = {wmode: "transparent"};
+        var attributes = {id: "gaugeMain"};
+        swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
+        //
         // инициализируем виджет добавления и редактирования операции
         easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.operation);
         
@@ -1126,13 +1132,6 @@ function getCookie(name) {
         //$("#guide").draggable();
         //$("#guide").resizable();
     }
-
-
-    // init main finance gauge
-    var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gauge107.gif"};
-    var params = {wmode: "transparent"};
-    var attributes = {id: "gaugeMain"};
-    swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 })
 
     // Jet. Рефакторинг 23.10.2009
