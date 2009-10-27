@@ -98,7 +98,7 @@ easyFinance.models.budget = function()
                     {
                         month : month,
                         year : year,
-                        data : $(jQuery).srialize()
+                        data : $(jQuery).serialize()
                     },
                     function(data)
                     {
@@ -136,7 +136,7 @@ easyFinance.models.budget = function()
             $.post('/budget/add',
                     {
                         id : id,
-                        data : $(jQuery).srialize()
+                        data : $(jQuery).serialize()
                     },
                     function(data)
                     {
@@ -162,7 +162,7 @@ easyFinance.models.budget = function()
  */
             var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b></span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b></span></div>';
-                str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
+                str += '<div class="rest">Баланс: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
             ret.group=str;
             return ret;
         }

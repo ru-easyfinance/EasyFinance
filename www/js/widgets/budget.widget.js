@@ -39,10 +39,15 @@ easyFinance.widgets.budget = function(model){
     $(obj).val(newstr)
 }
 
-$('#master input').live('keyup',function(e){
-    FloatFormat($(this),String.fromCharCode(e.which) + $(this).val())
-
-})
+$('#master input')
+    .live('keyup',function(e){
+        FloatFormat($(this),String.fromCharCode(e.which) + $(this).val())
+    })
+    .live('click',function(e){
+        if (this.value == '0.00')
+            this.value = '';
+    }
+);
 
     if (!model){return {};}
 
@@ -110,9 +115,49 @@ $('#master input').live('keyup',function(e){
     /*********************************************************************
      *Появилась кнопочка для мастера. верстка началась в 8 писалось в очень спехе 
      */
-    $('#addacc').click(function(){
+    $('#btnBudgetWizard').click(function(){
         $('#sel_date').dialog('open');
     })
+
+    /*** Всплывающие подсказки */
+
+    if(!$.cookie('help')){
+         $('#btnBudgetWizard').qtip({
+           content: 'Создать новый или отредактировать уже существующий бюджет',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('.w1').qtip({
+           content: 'Категория, по которой будет учитываться бюджет',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('.w2').qtip({
+           content: 'Сумма, выделенная в бюджете на эту категорию',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('.w3').qtip({
+           content: 'Лимит годовых расходов по этой категории',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('.w4').qtip({
+           content: 'Средний расход за предыдущие три месяца по выбранной категории',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+    }
+
     //*********************************************************************
     ///////////////////////////////////////////////////////////////////////
     //////////////////////////Мастер///////////////////////////////////////
@@ -197,7 +242,7 @@ $('#master input').live('keyup',function(e){
         $('#master #prev').hide()
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();//Формирование удобной серверу даты
         $('#master').dialog('open');//а вот и сам мастер
-        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3.Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
+        $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3. Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
         $('#master .button').show()//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
         $('#master #b_save').hide()//см на строку выше
 
@@ -233,6 +278,9 @@ $('#master input').live('keyup',function(e){
                         summ += parseFloat(str.replace(/[^0-9.]/gi,''));
                     })
                     $(this).closest('.line').find('.amount').text(formatCurrency(summ));
+
+                    /** @todo: генерить не через модель! */
+                    //$('#master .f_field3').html(model.print_info().group);
                 })
         } , 'json');
 
@@ -259,7 +307,7 @@ $('#master input').live('keyup',function(e){
             $('#master #b_save').show();
             $('#master .h .w4').text('Сред.Расход');
             //Опять динамический заголовок
-            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4> Шаг 3 из 3.Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
+            $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4> Шаг 3 из 3. Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
             //статистика... не самый удачный вариант(оч много иттераций),но это кастыль.
             ret['0'] = '['
             $('#master .waste_list form tr').each(function(){
@@ -299,7 +347,7 @@ $('#master input').live('keyup',function(e){
     })
     $('#master .button').click(function(){
         $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
-        $(this).css({background:'#50C319',color:'#FFFFFF',borderBottom:'0'});
+        //$(this).css({background:'#50C319',color:'#FFFFFF',borderBottom:'0'});
     });
     $('#master #b_save').click(function(){
         $('#master .line').each(function(){
@@ -329,10 +377,10 @@ $('#master input').live('keyup',function(e){
         ret['1'] +=']';
         var r_str = '{"d":'+ret[0]+', "r":'+ret[1]+'}';
     
-        if((tmpAmm-isCAmmount)>='0')
+        if((tmpAmm-isCAmmount)>=0)
         {
-            if(confirm('Ваш общий расход превышает общий доход.Продолжить редактирование?'))
-            return false;
+            if(!confirm('Ваш общий расход превышает общий доход. Продолжить сохранение?'))
+                return false;
         }
         $.post('/budget/add/',{data:r_str.replace(/,]/gi, ']'),start:date} , function(data){
             ret = ['',''];
