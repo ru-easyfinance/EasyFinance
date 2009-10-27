@@ -339,14 +339,35 @@ class User
      */
 	public function initUserAccounts()
 	{
-            $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+            /*$sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+                FROM accounts a
+                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+                WHERE a.user_id=? ORDER BY o_count DESC";*/
+            $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer = 0 AND o.account_id=a.account_id) AS total_sum
                 , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
                 FROM accounts a
                 LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
                 WHERE a.user_id=? ORDER BY o_count DESC";
-            $this->user_account= array();
             $accounts = $this->db->select($sql, $this->getId());
-            foreach ($accounts as $val) {
+
+            $sql = "SELECT (SELECT SUM(-o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer != 0 AND o.account_id=a.account_id) AS total_sum
+            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=? ORDER BY o_count DESC";
+            $accounts2 = $this->db->select($sql, $this->getId());
+
+            $sql = "SELECT (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer = a.account_id) AS total_sum
+            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=? ORDER BY o_count DESC";
+            $accounts3 = $this->db->select($sql, $this->getId());
+
+            $this->user_account= array();
+            foreach ($accounts as $key=>$val) {
+                $val['total_sum'] += $accounts2[$key]['total_sum']+$accounts3[$key]['total_sum'];
                 $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
                 $this->user_account[$val['account_id']] = $val;
             }
