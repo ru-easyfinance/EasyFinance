@@ -123,13 +123,18 @@ $(document).ready(function() {
     function drawParentCategoriesCombo() {
         var user = easyFinance.models.category.getUserCategories();
 
-        var m='<option value=""> --- </option>';
+        var sorted = [];
         for(id in user) {
-            if (user[id]['parent'] == 0) {
-                // родительская категория
-                m += '<option value="'+user[id]['id']+'">'+user[id]['name']+'</option>';
-            }
+            if (user[id]['parent'] == 0)
+                sorted.push (user[id]);
         }
+        sorted.sort(function(a,b){return a.name.localeCompare(b.name)});
+
+        var m='<option value=""> --- </option>';
+        for(key in sorted) {
+            m += '<option value="'+sorted[key]['id']+'">'+sorted[key]['name']+'</option>';
+        }
+        
         $('#subcat').html(m);
     }
     
