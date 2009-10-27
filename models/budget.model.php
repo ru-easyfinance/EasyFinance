@@ -110,13 +110,15 @@ class Budget_Model {
             }
 
             foreach ($value as $k => $v) {
-                if ($cat[$k]['type'] == 0 || $cat[$k]['drain'] == $drain ) {
-                    $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
-                    if (!empty ($sql)) $sql .= ',';
-                    $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
-                        $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
-                } else {
-                    print 'x';
+                if ($cat[$k]['type'] == 0 ||
+                    ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
+
+                        $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
+                        if (!empty ($sql)) $sql .= ',';
+                        $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
+                            $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+                //} else {
+                    // print $k."\n";
                     // Косяк при добавлении/правки категории.
                 }
             }
