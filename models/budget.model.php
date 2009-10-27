@@ -101,19 +101,24 @@ class Budget_Model {
     function add($data, $date)
     {
         $sql = '';
+        $cat = Core::getInstance()->user->getUserCategory();
         foreach ($data as $key => $value) {
             if ((string)$key == 'r') {
                 $drain = 1;
             } elseif ((string)$key == 'd') {
                 $drain = 0;
             }
-            
-            foreach ($value as $k => $v) {
-                $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
-                if (!empty ($sql)) $sql .= ',';
-                $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
-                    $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
 
+            foreach ($value as $k => $v) {
+                if ($cat[$k]['type'] == 0 || $cat[$k]['drain'] == $drain ) {
+                    $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
+                    if (!empty ($sql)) $sql .= ',';
+                    $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
+                        $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+                } else {
+                    print 'x';
+                    // Косяк при добавлении/правки категории.
+                }
             }
         }
         if (!empty ($sql)) {

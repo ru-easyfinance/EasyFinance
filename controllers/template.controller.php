@@ -50,7 +50,12 @@ class Template_Controller {
 
         $user = Core::getInstance()->user;
         if (is_null($user->getId())) { 
-            Core::getInstance()->tpl->assign('res', json_encode(array('errors'=>Core::getInstance()->errors)));
+            Core::getInstance()->tpl->assign('res', json_encode(
+                array(
+                    'errors' => Core::getInstance()->errors,
+                    'flash'  => 0
+                )
+            ));
             Core::getInstance()->tpl->assign('url_root', URL_ROOT);
             return false;
         }

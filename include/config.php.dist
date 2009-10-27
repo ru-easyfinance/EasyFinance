@@ -1,9 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Файл с конфигурацией
- * @author korogen
- * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * SVN $Id$
  */
 
@@ -22,8 +20,8 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 // Other
 define('IS_DEMO',		${project.demo} );
 
-define('URL_ROOT_MAIN',	"${project.url.root}/");
-define('URL_ROOT_DEMO',	"${demo.url.root}/");
+define('URL_ROOT_MAIN',         "${project.url.root}/");
+define('URL_ROOT_DEMO',         "${demo.url.root}/");
 
 define('URL_ROOT',		IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 
@@ -32,10 +30,10 @@ define('DEFAULT_MODULE',	'welcome');
 define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
 
 //COOKIE
-define('COOKIE_NAME', 	"${project.cookie.name}" );
-define('COOKIE_DOMEN', 	${project.cookie.domain} );
-define('COOKIE_PATH',  	"${project.cookie.path}" );
-define('COOKIE_HTTPS', 	${project.cookie.https} );
+define('COOKIE_NAME',           "${project.cookie.name}" );
+define('COOKIE_DOMEN',          ${project.cookie.domain} );
+define('COOKIE_PATH',           "${project.cookie.path}" );
+define('COOKIE_HTTPS',          ${project.cookie.https} );
 define('COOKIE_EXPIRE', 	${project.cookie.expire} ); // две недели
 
 //CRYPT

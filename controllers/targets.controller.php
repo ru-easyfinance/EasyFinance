@@ -29,9 +29,6 @@ class Targets_Controller extends Template_Controller
         $this->tpl->assign('name_page', 'targets/targets');
         $this->model = new Targets_Model();
         $this->model->_setFormSelectBoxs();
-
-
-
     }
 
     /**
