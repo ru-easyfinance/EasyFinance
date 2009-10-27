@@ -29,13 +29,14 @@ $(document).ready(function() {
                    </tr>';//*/
             for (c in data[0]){
                 if (c>0){
-                    if (data[0][c].cat_name != data[0][c-1].cat_name && data[0][c].cat_name!=null) {
+                    if (data[0][c].cat_name != data[0][c-1].cat_name && data[0][c].cat_name!=null ) {
+                      if (data[0][c].account_name!=null)
                       tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
                         '<span><b></td></tr>';
                      }
                 }
                 else {
-                    tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
+                    tr += "<tr>" + '<td class="summ"><span><b>'+data[0][0].cat_name+
                         '<span><b></td></tr>';
                 }
                 if (data[0][c].account_name != null) {
@@ -62,7 +63,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-             $('#reports_list').append(tr);
+             $('#reports_list').html(tr);
              //$('.operation_list').jScrollPane();
         },'json');
 
@@ -99,6 +100,7 @@ $(document).ready(function() {
             for (c in data[0]){
                 if (c>0)
                 {if (data[0][c].cat_name != data[0][c-1].cat_name) {
+                        if (data[0][c].account_name != null)
                     tr += "<tr>" + '<td class="summ"><span><b>'+data[0][c].cat_name+
                         '<span><b></td></tr>';
                 }} else {
@@ -127,7 +129,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-            $('#reports_list').append(tr);
+            $('#reports_list').html(tr);
             //$('.operation_list').jScrollPane();
         },'json');
     }
@@ -170,7 +172,7 @@ $(document).ready(function() {
                 if (data[0][c].per == 1) {
                     sum1=data[0][c].su;
                     sum2=0;
-                    for (v in data){
+                    for (v in data[0]){
                         if (data[0][v].cat_name == data[0][c].cat_name)
                             if (data[0][v].per == 2){
                                 sum2=data[0][v].su   ;
@@ -189,7 +191,7 @@ $(document).ready(function() {
                     }
                 }
                 delta=sum2-sum1;
-               if (data[0][c].cat_name != null /*&& data[0][c].account_name != null*/){
+               if (data[0][c].cat_name != null && data[0][c].cur_char_code != null){
                    cur = res['currency'];
                     for(key in cur)
                         {
@@ -210,7 +212,7 @@ $(document).ready(function() {
                 ssum2 = parseFloat(ssum2) + parseFloat(sum2*oldcur/nowcur);
                 sdelta += Math.round(delta);
                }
-            }
+             }
             }
             tr +=        '<tr><td ><span><b>Итого:</span><b></td>'+
                             '<td class="repdate"><span>'+formatCurrency(ssum1)+'</span></td>'
@@ -220,7 +222,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-            $('#reports_list').append(tr);
+            $('#reports_list').html(tr);
             //$('.operation_list').jScrollPane();
         },'json');
     }
@@ -341,7 +343,7 @@ $(document).ready(function() {
                     }
                 };
                 delta=sum2-sum1;
-                if (data[2][c].cat_name != null){
+                if (data[2][c].cat_name != null && data[2][c].cur_char_code != null){// проверка на валюту чтобы отсеять мусор, те операции что не удалены рпи создании счёта. 
                 cur = res['currency'];
                     for(key in cur)
                         {
@@ -372,7 +374,7 @@ $(document).ready(function() {
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
                     });
-            $('#reports_list').append(tr);
+            $('#reports_list').html(tr);
             //$('.operation_list').jScrollPane();
         },'json');
     }

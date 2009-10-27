@@ -79,7 +79,7 @@ class Report_Model
             $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ?
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND o.account_id = ? AND a.account_currency_id = ?
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
         } else {
@@ -94,7 +94,7 @@ class Report_Model
             $sql = "SELECT sum(money) AS su, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ? AND drain='1'
+                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND o.account_id = ? AND a.account_currency_id = ? AND drain='1'
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
         } else {
@@ -163,7 +163,7 @@ class Report_Model
         $array = array();
         foreach ($result as $v) {
             if ($v['drain'] == 0) { //Доход
-                $array[$v['datef']]['p'] = $v['money'];
+                $array[$v['datef']]['p'] = $v['money']+2000;
             } else {
                 $array[$v['datef']]['d'] = abs($v['money']);
             }
@@ -191,7 +191,7 @@ class Report_Model
             $data2[] = (float)$val['d'];
             $labels[] = substr($key, 0, 7);
         }
-        return array('p'=>$data1,'d'=>$data2,'l'=>$labels);//*/
+        return array('p'=>$data1,'d'=>$data2,'l'=>$labels);
     }
 
     function SelectDetailedIncome($date1='', $date2='', $account='', $cursshow=''){
@@ -236,7 +236,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money<0 AND c.cat_name <> ''
+            AND a.account_id=? AND op.money<0 AND cur_char_code is not null
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else {
@@ -247,7 +247,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money<0 AND c.cat_name <> ''
+            AND op.money<0 AND cur_char_code is not null
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
         $sql = "SELECT cur_char_code FROM currency
@@ -267,7 +267,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? 
+            AND a.account_id=? AND cur_char_code is not null
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -276,7 +276,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=?  
+            AND a.account_id=? AND cur_char_code is not null
             GROUP BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
@@ -287,6 +287,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND cur_char_code is not null
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -295,21 +296,20 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
+            AND cur_char_code is not null
             GROUP BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
         $arr[1] = $this->db->query($sql, $cursshow);
         return $arr;
-        }
     }
 
     function CompareIncome($date1='', $date2='', $date3='', $date4='', $account='', $cursshow=''){
         $arr = array();
         if ($account != 0) {
         $sql = "
-
-
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
@@ -345,13 +345,12 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             GROUP BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());        
+        }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
         $arr[1] = $this->db->query($sql, $cursshow);
         return $arr;
-
-        }
     }
 
    function calcDaysDiff($dateFrom='',$dateTo='') {
@@ -476,7 +475,7 @@ class Report_Model
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON nvc.cat_id=op.cat_id
+            LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             GROUP BY c.cat_name
