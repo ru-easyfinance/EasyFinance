@@ -367,9 +367,9 @@ $(document).ready(function() {
             }
             }
             tr +=        '<tr><td ><span><b>Итого:<span><b></td>'+
-                            '<td class="repdate"><span>'+ssum1+'</span></td>'
-                            + '<td class="repname"><span>'+ssum2+'</span></td>'
-                            + '<td class="repsumm"><span>'+sdelta+'</span></td>'
+                            '<td class="repdate"><span>'+formatCurrency(ssum1)+'</span></td>'
+                            + '<td class="repname"><span>'+formatCurrency(ssum2)+'</span></td>'
+                            + '<td class="repsumm"><span>'+formatCurrency(sdelta)+'</span></td>'
                             + '</tr>';
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
