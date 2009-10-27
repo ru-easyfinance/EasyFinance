@@ -25,10 +25,10 @@ class Registration_Model
 
             $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE id = ?";
             $db->query($sql, $user_id);
-            header('Location: /registration/#activate');exit;
-            return true;
+            header('Location: /registration/#activate');
+            exit;
         } else {
-            //trigger_error('Ключ не верен, или он устарел!', E_USER_WARNING);
+            //trigger_error('Ключ не найден, или он устарел!', E_USER_WARNING);
             return false;
         }
     }
