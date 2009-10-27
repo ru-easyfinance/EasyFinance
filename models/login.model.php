@@ -129,7 +129,7 @@ class Login_Model
         ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=12 AND cat_parent=0), {$uid}, 12, 'Питание дома', -1, NOW()),
         ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=12 AND cat_parent=0), {$uid}, 12, 'Алкоголь, табачные изделия', -1, NOW())";
         Core::getInstance()->db->query($sql);
-        "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`)
+        $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`)
             VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,{$uid})";
         Core::getInstance()->db->query($sql);
     }
