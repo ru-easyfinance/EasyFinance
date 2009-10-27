@@ -56,6 +56,7 @@ function fillForm(data) {
     $('#op_date').val(data.date);
     $('#op_tags').val(data.tags);
     $('#op_comment').val(data.comment);
+    $('#op_type').change();
     $(document).scrollTop(300);
 }
 
