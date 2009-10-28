@@ -462,16 +462,22 @@ class User
                     'children'     => array()
                 );
             } else {
+                if (is_null($var['drain'])) {
+                    $drain = -1;
+                }elseif ($var['drain'] === 1) {
+                    $drain = 0;
+                } elseif ($var['drain'] === 0) {
+                    $drain = 1;
+                }
                 // Добавляем ребёнка к родителю
                 $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
-    //                'id'         => is_null($var['id'])? 0 : $var['id'],
                     'id'         => (int)$var['category'],
                     'category'   => (int)$var['category'],
                     'name'       => (string)$category[$var['category']]['cat_name'],
                     'amount'     => (float)$var['amount'],
                     'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
                     'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
-                    'type'       => ($var['drain'] == 1)? 0 : 1 //расходная - 0,доходный-1
+                    'type'       => $drain //расходная - 0, доходный - 1, -1 - нул
                 );
                 // Обновляем суммы
                 if ($var['drain'] == 1) {
