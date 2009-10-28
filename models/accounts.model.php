@@ -200,12 +200,10 @@ class Accounts_Model
                 $data[$key]='';
         }
 
-        
-
 	$fields = $this->db->select("SELECT af.account_field_id, afd.field_name, afd.field_type
-                                    FROM account_fields af
-                                    LEFT JOIN account_field_descriptions afd
-                                    ON afd.field_description_id = af.field_descriptionsfield_description_id");
+            FROM account_fields af
+            LEFT JOIN account_field_descriptions afd
+            ON afd.field_description_id = af.field_descriptionsfield_description_id");
 	foreach($data as $key=>$value)
 	{			
             $field_key = $key;
@@ -223,14 +221,13 @@ class Accounts_Model
             }
 	}
 	$sql = "INSERT INTO accounts (`account_id`, `account_name`, `account_type_id`, `account_description`,
-                                        `account_currency_id`, `user_id`)
-                VALUES (?,?,?,?,?,?);";
-    $this->db->query($sql,
-                    $id,
-                    $account['name']['value'],
-                    $type_id, $account['description']['value'],
-                    $currency_id,
-                    $this->user_id);
+            `account_currency_id`, `user_id`) VALUES (?,?,?,?,?,?);";
+        $this->db->query($sql,
+            $id,
+            $account['name']['value'],
+            $type_id, $account['description']['value'],
+            $currency_id,
+            $this->user_id);
 	
 	$next_id = mysql_insert_id();
         $data['id']=$next_id;
