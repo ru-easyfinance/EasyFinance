@@ -45,6 +45,7 @@ class Report_Model
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND o.account_id = ? AND o.drain = ?
                     AND `date` BETWEEN ? AND ?
+                    AND o.transfer = 0 AND o.tr_id is null AND comment <>'Начальный остаток'
                 GROUP BY o.cat_id";//AND a.account_currency_id = ?
             $result = $this->db->select($sql, Core::getInstance()->user->getId(),
                 $account, $drain, $start, $end/*, $currency*/);
@@ -56,6 +57,7 @@ class Report_Model
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND o.drain = ? AND a.account_id IN({$acclist})
                     AND `date` BETWEEN ? AND ?
+                AND o.transfer = 0 AND o.tr_id is null AND comment <>'Начальный остаток'
                 GROUP BY o.cat_id";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(),
                 $drain, $start, $end/*, $currency*/);
@@ -104,36 +106,44 @@ class Report_Model
         }*/
         if ($account > 0) {
             $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                FROM operation o
+                , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
+                LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_id = ? AND drain='1'
+                AND o.transfer = 0 AND o.tr_id is null AND comment <>'Начальный остаток'
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
         } else {
             $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                FROM operation o
+                , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
+                LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND drain='1' AND a.account_id IN({$acclist})
+                AND o.transfer = 0 AND o.tr_id is null AND comment <>'Начальный остаток'
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end/*, $currency*/);
         }
 
         if ($account > 0) {
             $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                FROM operation o
+                , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
+                LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_id = ? AND drain='0' 
+                AND o.transfer = 0 AND o.tr_id is null AND comment <>'Начальный остаток'
                 GROUP BY drain, `datef`";
             $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
         } else {
             $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                FROM operation o
+                , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
+                LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND drain='0' AND a.account_id IN({$acclist})
+                AND o.transfer = 0 AND o.tr_id is null AND comment <>'Начальный остаток'
                 GROUP BY drain, `datef`";//AND a.account_currency_id = ?
             $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end/*, $currency*/);
         }
@@ -152,7 +162,7 @@ class Report_Model
             $array[$coun]['in'] = '';
         }
         for ($coun=0; $coun<12; $coun++){
-            $array[$coun]['lab'] = $mon[$coun];
+            //$array[$coun]['lab'] = $mon[$coun];
             foreach ($result as $v){
                 if ( substr($v['datef'],5,2) == $monc[$coun] ) {
                     $array[$coun]['lab'] = $mon[$coun];
@@ -160,13 +170,13 @@ class Report_Model
                     $array[$coun]['curs']= $v['cu'];
                 }
             }
+        }
+        for ($coun=0; $coun<12; $coun++){
             foreach ($result2 as $v){
                 if ( substr($v['datef'],5,2) == $monc[$coun] ) {
                      $array[$coun]['in'] = $v['su'];//$v['sum']
                 }
             }
-            //$array[$coun]['in']  = $array2['sum'];
-            //$array[$coun]['curs']= $array1['curs'];
         }
         /*foreach ($result as $v) {
             switch (substr($v['datef'],5,2)){
@@ -238,6 +248,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=? AND op.money>0 AND c.cat_name <> ''
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";   
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
@@ -249,6 +260,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND op.money>0 AND c.cat_name <> '' AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
         }
@@ -270,6 +282,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=? AND op.money<0 AND cur_char_code is not null
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else {
@@ -281,6 +294,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND op.money<0 AND cur_char_code is not null AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
         $sql = "SELECT cur_char_code FROM currency
@@ -301,6 +315,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=? AND cur_char_code is not null
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -310,6 +325,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=? AND cur_char_code is not null
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
@@ -321,6 +337,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND cur_char_code is not null AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -330,6 +347,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND cur_char_code is not null AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
         }
@@ -350,6 +368,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=?
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -359,6 +378,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=?
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
@@ -369,6 +389,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -377,6 +398,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());        
         }
@@ -427,6 +449,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=?
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -436,6 +459,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=?
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
@@ -446,6 +470,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -454,6 +479,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $que = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
         }
@@ -492,6 +518,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=?
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -501,6 +528,7 @@ class Report_Model
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
             AND a.account_id=?
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
@@ -511,6 +539,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name
             UNION
             SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
@@ -519,6 +548,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND a.account_id IN({$acclist})
+            AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             GROUP BY c.cat_name";
         $que = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
         }
