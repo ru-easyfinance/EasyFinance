@@ -818,9 +818,30 @@ div.op_addoperation .op_line .op_amount a { width: 17px; }
 div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background-position: 0 -370px; }
 
 
+/* иконка информации.*/
+a.infoicon {width: 16px; display: block; /*top: 20px; right: -18px;*/ height: 16px;  background: url('/img/i/info.png') }
+
+ .op_infobut{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
+ .op_infobut div{position : relative; width: 100px;float: top;}
+
+.op_infobut div li{
+		float:left;
+		margin:0;
+		padding:0;
+		list-style:none;
+		display:inline;
+		}
+	.op_infobut a{
+		text-decoration:none;
+		color:#4C4C4C;
+		padding:0 2px;
+		}
+	.op_infobut a:hover{
+		color:#cff400;
+		}
 
 
-
+/*div.op_addoperation .op_line a#infoicon{ width: 16px; top: 2px;  }*/
 
 .operation_listSH { padding-top: 21px !important; height:250px; width: 557px}
 .operation_listSH .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px;//zoom: 1; }

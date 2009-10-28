@@ -14,6 +14,22 @@ easyFinance.widgets.operationEdit = function(){
     // private functions
 
     function _initTags() {
+        /*$('a#infoicon1').click(function(){
+            $('#op_infobut1').dialog({
+                close: function(event, ui){$(this).dialog( "destroy" )}
+            }).dialog("open");
+            $('#op_infobut1').show();
+        })
+        $('a#infoicon2').click(function(){
+            $('#op_infobut2').dialog({
+                close: function(event, ui){$(this).dialog( "destroy" )}
+            }).dialog("open");
+            $('#op_infobut2').show();
+        })
+        //$('#op_infobut1').html('<ul><li>fwfer</li></ul>');
+        $('#op_infobut1').hide();
+        $('#op_infobut2').hide();*/
+
         $('a#op_tags').click(function(){
             $('.op_tags_could').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
