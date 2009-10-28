@@ -113,6 +113,7 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _editOperation(){
+                $(".op_addoperation").show();
         var operation = $(this).parent().attr('class');
         if (operation == 'edit') {
             fillForm(_journal[$(this).closest('tr').attr('value')]);
