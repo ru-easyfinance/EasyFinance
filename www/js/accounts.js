@@ -465,7 +465,10 @@ $(document).ready(function()
     });
     $('tr.item').live('dblclick',
         function(){
-             $(this).find('li.edit').click();
+             //$(this).find('li.edit').click();
+             // создание новой операции для выбранного счёта
+             $(".op_addoperation").show();
+             $('#op_account').val($(this).closest('tr').attr('id'));
         });
 
     $('body').mousemove(function(){
