@@ -219,23 +219,25 @@ $(document).ready(function() {
         showTime: 'guess',
         timeFormat: "G:i",
         monthDisplay: function(year, month, monthTitle) {
+            var _$cal = $('#views');
+
             $('#datepicker').datepicker('setDate' , new Date(year, month-1));
             $("a.ui-datepicker-prev,a.ui-datepicker-next",'div.ui-datepicker-header').hide();
             $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
             $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
-            $('li.y_prev a').text(year-1);
-            $('li.y_next a').text(year+1);
+            _$cal.find('li.y_prev a').text(year-1);
+            _$cal.find('li.y_next a').text(year+1);
             if (month == 11) {
-                $('li.m_next a').text($.fullCalendar.monthNames[0]);
+                _$cal.find('li.m_next a').text($.fullCalendar.monthNames[0]);
             } else {
-                $('li.m_next a').text($.fullCalendar.monthNames[month+1]);
+                _$cal.find('li.m_next a').text($.fullCalendar.monthNames[month+1]);
             }
             if (month == 0) {
-                $('li.m_prev a').text($.fullCalendar.monthNames[11]);
+                _$cal.find('li.m_prev a').text($.fullCalendar.monthNames[11]);
             } else {
-                $('li.m_prev a').text($.fullCalendar.monthNames[month-1]);
+                _$cal.find('li.m_prev a').text($.fullCalendar.monthNames[month-1]);
             }
-            $('li.cur').text(monthTitle);
+            _$cal.find('li.cur').text(monthTitle);
         },
         dayClick: function(dayDate) {
             $('#op_addtocalendar_but').click();
@@ -428,12 +430,14 @@ $(document).ready(function() {
         }
     }
     });
-    $('.full-calendar-buttons .today, .prev-month, .prev-year, .next-month, .next-year').addClass('ui-fullcalendar-button ui-button ui-state-default ui-corner-all');
-    $('li.m_prev').click(function(){$('#calendar').fullCalendar('prevMonth')});
-    $('li.m_next').click(function(){$('#calendar').fullCalendar('nextMonth')});
-    $('li.y_prev').click(function(){$('#calendar').fullCalendar('prevYear')});
-    $('li.y_next').click(function(){$('#calendar').fullCalendar('nextYear')});
-    $('li.cur').click(function(){$('#calendar').fullCalendar('today')});
+
+    var _$cal = $('#views');
+    _$cal.find('.full-calendar-buttons .today, .prev-month, .prev-year, .next-month, .next-year').addClass('ui-fullcalendar-button ui-button ui-state-default ui-corner-all');
+    _$cal.find('li.m_prev').click(function(){$('#calendar').fullCalendar('prevMonth')});
+    _$cal.find('li.m_next').click(function(){$('#calendar').fullCalendar('nextMonth')});
+    _$cal.find('li.y_prev').click(function(){$('#calendar').fullCalendar('prevYear')});
+    _$cal.find('li.y_next').click(function(){$('#calendar').fullCalendar('nextYear')});
+    _$cal.find('li.cur').click(function(){$('#calendar').fullCalendar('today')});
 
     $('#ui-datepicker-div').datepicker('setDate');
 

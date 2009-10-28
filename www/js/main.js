@@ -169,7 +169,7 @@ $(document).ready(function() {
                         </ul> \
                 </li> \
                 <li id="m3"> \
-                        <a href="targets/"></a> \
+                        <a href="/targets/"></a> \
                         <ul> \
                                 <!--<li><a href="/budget/">Бюджет</a></li>--> \
                                 <li><a href="/targets/">Фин. цели</a></li> \
@@ -192,7 +192,7 @@ $(document).ready(function() {
 
         $('#mainwrap').prepend(topmenu);
 
-        pathtoid = {
+        var pathtoid = {
             '/accounts/' :'m2',
             '/budget/':'m3',
             '/calendar/':'m5',
