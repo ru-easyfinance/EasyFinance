@@ -162,8 +162,6 @@ $(document).ready(function() {
         var system = easyFinance.models.category.getSystemCategories()[cat.system];
 
         var pr = cat['parent'];
-        
-        if (cat['id']=="95") debugger;
 
         if (cat['type'] > 0) { // Доходная
             ct ='<div class="t3" title="Доходная">Доходная</div>';
