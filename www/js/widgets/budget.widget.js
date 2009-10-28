@@ -184,7 +184,9 @@ $('#master input')
                 var str = $(this).val().toString()||'0'
                 summ += parseFloat(str.replace(/[^0-9.]/gi,''));
             })
-            $(this).find('.amount').text(formatCurrency(summ));
+            if(!$(this).find('.amount input').length){
+                $(this).find('.amount').text(formatCurrency(summ));
+            }
         })
     }
 
@@ -340,6 +342,17 @@ $('#master input')
                 if (!$(this).closest('.line').find('tr').html()){
                     $(this).closest('.amount').html('<input type="text" value="'+txt+'"/>')
                 }
+            })
+            $('#master tr input').blur(function(){
+                    var summ = 0;
+                    $(this).closest('table').find('input').each(function(){
+                        var str = $(this).val().toString()||'0'
+                        summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+                    })
+                    $(this).closest('.line').find('.amount').text(formatCurrency(summ));
+
+                    /** @todo: генерить не через модель! */
+                    //$('#master .f_field3').html(model.print_info().group);
             })
             $('#master .w3').hide();
             load(ret['1'])
