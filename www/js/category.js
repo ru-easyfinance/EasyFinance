@@ -50,7 +50,7 @@ $(document).ready(function() {
 //    });
     $('li.edit').live('click',function(){
         clearForm();
-        fillForm($(this).closest('tr,.line').attr('id'));
+        fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
         $('#add_form').show();
         $(document).scrollTop(500);
         $('form').attr('action','/category/edit/');
@@ -58,12 +58,12 @@ $(document).ready(function() {
     });
     $('li.del').live('click',function(){
         if (confirm('Удалить категорию?')) {
-            delCategory($(this).closest('tr,.line').attr('id'));
+            delCategory($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
         }
     });
     $('li.add').live('click',function(){
         clearForm();
-        fillForm($(this).closest('tr,.line').attr('id'));
+        fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
         $('#cat_id').val('');
         $('#add_form').show();
         $(document).scrollTop(300);
@@ -147,7 +147,7 @@ $(document).ready(function() {
     }
 
     function listInsertParentCategory(cat){
-        $('<div class="line open" id="'+cat.id+'" style="width:496px"><div class="l_n_cont"><a class="name">'
+        $('<div class="line open" id="category_'+cat.id+'" style="width:496px"><div class="l_n_cont"><a class="name">'
             +cat.name+'</a>'
                 +'<div class="cont">'
                     +'<ul class="ul_head" style="z-index:100; right:0px">'
@@ -162,6 +162,8 @@ $(document).ready(function() {
         var system = easyFinance.models.category.getSystemCategories()[cat.system];
 
         var pr = cat['parent'];
+        
+        if (cat['id']=="95") debugger;
 
         if (cat['type'] > 0) { // Доходная
             ct ='<div class="t3" title="Доходная">Доходная</div>';
@@ -171,12 +173,12 @@ $(document).ready(function() {
             ct ='<div class="t2" title="Универсальная">Универсальная</div>';
         }
 
-        if ($('#'+pr+' table').length == 0) {
-            $('<table/>').appendTo($('#'+pr));
+        if ($('#category_'+pr+' table').length == 0) {
+            $('<table>').appendTo($('#category_'+pr));
         }
 
-        $('.categories #'+pr+' table').append(
-            '<tr id="'+cat.id+'">'
+        $('.categories #category_'+pr+' table').append(
+            '<tr id="category_'+cat.id+'">'
             +'<td class="w1">'
                 +'<a>'+cat['name']+'</a>'
             +'</td>'
@@ -195,7 +197,8 @@ $(document).ready(function() {
 //                                +'</div>'
                     +'<ul style="z-index:100; right: -10px;"><li class="edit"><a title="Редактировать">Редактировать</a></li>'
                         +'<li class="del"><a title="Удалить">Удалить</a></li>'
-                        +'<li class="add"><a title="Добавить">Добавить</a></li></ul></div>'
+                        +'<li class="add"><a title="Добавить">Добавить</a></li></ul>'
+                +'</div>'
             +'</td></tr>'
         );
     }
@@ -266,7 +269,7 @@ $(document).ready(function() {
                         //drawUserCategoriesList();
                         // @ticket 156
                         // Удаляем старую версию категории из списка
-                        $('#'+id).remove();
+                        $('#category_'+id).remove();
                         // Вставляем обновлённую версию категории
                         listInsertCategory(cat);
                     }
@@ -297,7 +300,7 @@ $(document).ready(function() {
         easyFinance.models.category.deleteById(id, function() {
             // Удаляем категорию из списка
             // @todo: optimize! use _$node.find
-            $('#'+id).remove();
+            $('#category_'+id).remove();
 
             // Обновляем список родительских категорий
             if (isParent == true)

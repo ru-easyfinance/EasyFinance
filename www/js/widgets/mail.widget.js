@@ -122,7 +122,7 @@ easyFinance.widgets.mail = function(){
 
         var _$rows = _$table.find('input:gt(0):checked').closest('tr').get();
         for (var i =0; i < _$rows.length; i++) {
-            var id = $(_$rows[i]).attr('id');
+            var id = $(_$rows[i]).attr('id').split("_", 2)[1];
             ids.push (id);
         }
 
@@ -160,7 +160,7 @@ easyFinance.widgets.mail = function(){
             if (mails[key]){
                 var addr = (_folder == _model.FOLDER_OUTBOX || _folder == _model.FOLDER_DRAFTS) ? mails[key]['to'] : mails[key]['from'];
 
-                str = '<tr class="item ' + (mails[key]['unread']==true?'unread':'') + '" id='+key+'>'
+                str = '<tr class="item ' + (mails[key]['unread']==true?'unread':'') + '" id="mail_'+key+'">'
                     +'<td><input class="checkMail" type="checkbox" value=""/></td>'
                     +'<td><img width="16" height="16" src="/img/i/mail_'+mails[key]['folder']+'.png"/></td>'
                     +'<td class="mail-title"><a href="#">'+mails[key]['subject']+'</a></td>'
@@ -177,7 +177,7 @@ easyFinance.widgets.mail = function(){
         // read mail by default
         var $row = $(this).closest('tr');
         $row.removeClass('unread');
-        var id = $row.attr('id');
+        var id = $row.attr('id').split("_", 2)[1];
 
         _model.loadMail(id, _showMail);
 
