@@ -138,7 +138,7 @@ table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .ramka1 .cb { margin: 0 -1px -1px -1px; background-position: 0 -40px; }
 .ramka1 .cb div { background-position: 100% -60px; }
 
-.ramka2 { position: relative; z-index:0; background: #ffffff url('/img/i/bg05.gif') repeat-y 0 0; }
+.ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg05.gif') repeat-y 0 0; }
 .ramka2 .cct, .ramka2 .ccb { position: relative; height: 14px; overflow: hidden; background: url('/img/i/bg05_coners.gif') no-repeat 0 0; }
 .ramka2 .ccb { background-position: 0 -20px; }
 
@@ -291,41 +291,6 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .info_block dl dd ul li { margin-bottom: 5px; padding-left: 17px; background: url('/img/i/li.gif') no-repeat 0 9px; }
 .info_block dl dd ul li a { color: #474747; }
 .info_block .addmessage, #footer .addmessage { display: block; position: fixed; top: 35%; right: -10px; width: 28px; height: 161px; text-indent: -999px; overflow: hidden; background: url('/img/i/button_addmsg.jpg') no-repeat 0 0; }
-
-.menu3 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
-
-.menu3 ul { position: absolute; top: 3px; left: 0; height: 37px; //zoom: 1; }
-.menu3 ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-.menu3 ul li { float: left; margin-right: 4px; width: 120px; height: 37px;position: relative;z-index:100 }
-.menu3 ul li a, .menu3 ul li span { display: block; width: 120px; height: 37px; text-indent: -999px; overflow: hidden; background: url('/img/i/menu3.png') no-repeat 0 0; }
-
-.menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
-.menu3 ul li#m1 a { background-position: 0 1px;left:0px;position:absolute }
-.menu3 ul li#m1 span{ background-position: 0 -39px; }
-.menu3 ul li#m1.act a { background-position: 0 -80px; }
-
-.menu3 ul li#m2 a { background-position: -135px 1px;left:0px;position:absolute;}
-.menu3 ul li#m2 span{ background-position: -135px -39px; }
-.menu3 ul li#m2.act a  { background-position: -135px -80px; }
-
-.menu3 ul li#m3 a { background-position: -259px 1px; left:0px ; position:absolute}
-.menu3 ul li#m3 span { background-position: -259px -39px; }
-.menu3 ul li#m3.act a  { background-position: -259px -80px; }
-
-.menu3 ul li#m4 a { background-position: -383px 1px; left:0px;position:absolute}
-.menu3 ul li#m4 span { background-position: -383px -39px; }
-.menu3 ul li#m4.act a  { background-position: -383px -80px; }
-
-.menu3 ul li#m5 a { background-position: -507px 1px; left:0px;position:absolute}
-.menu3 ul li#m5 span{ background-position: -507px -39px; }
-.menu3 ul li#m5.act a  { background-position: -507px -80px; }
-
-.menu3 ul li#m6 a { background-position: -631px 1px; left:0px;position:absolute}
-.menu3 ul li#m6 span { background-position: -631px -39px; }
-.menu3 ul li#m6.act a  { background-position: -631px -80px; }
-
-.menu3 .popup_info { display: none; position: absolute; top: -20px; left: 627px; width: 182px; padding: 10px 11px 11px 14px; font-size: 11px; line-height: 14px; color: #737373;  z-index: 10; background: #ffffff; border: 1px solid #c4c4c4; }
-.menu3 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url('/img/i/icons.gif') no-repeat 0 -420px;  }
 
 .menu31 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
 

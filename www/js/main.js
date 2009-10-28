@@ -154,6 +154,89 @@ $(document).ready(function() {
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
+        // vvv Jet. Тикет 266. Новое выпадающее меню vvv
+        var topmenu = '<div class="menu3"> \
+            <ul class="dropdown"> \
+                <li id="m1"> \
+                        <a href="/info/"></a> \
+                </li> \
+                <li id="m2"> \
+                        <a href="/accounts/"></a> \
+                        <ul> \
+                                <li><a href="/accounts/">Счета</a></li> \
+                                <li><a href="/operation/">Операции</a></li> \
+                                <li><a href="/category/">Категории</a></li> \
+                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
+                        </ul> \
+                </li> \
+                <li id="m3"> \
+                        <a href="targets/"></a> \
+                        <ul> \
+                                <!--<li><a href="/budget/">Бюджет</a></li>--> \
+                                <li><a href="/targets/">Фин. цели</a></li> \
+                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
+                        </ul> \
+                </li> \
+                <li id="m4"> \
+                        <a href="/report/"></a> \
+                </li> \
+                <li id="m5"> \
+                        <a href="/calendar/"></a> \
+                        <ul> \
+                                <li><a href="/calendar/">Календарь</a></li> \
+                                <li><a href="/periodic/">Регулярные транзакции</a></li> \
+                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
+                        </ul> \
+                </li> \
+            </ul> \
+        </div>';
+
+        $('#mainwrap').prepend(topmenu);
+
+        pathtoid = {
+            '/accounts/' :'m2',
+            '/budget/':'m3',
+            '/calendar/':'m5',
+            '/category/':'m2',
+            '/experts/':'m6',
+            '/info/':'m1',
+            '/mail/':'m0',
+            '/operation/':'m2',
+            '/periodic/':'m5',
+            '/profile/':'m0',
+            '/report/':'m4'};
+
+        var page_mid = pathtoid[pathName];
+        $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
+
+        // код для переключения внешнего вида вкладок
+        $('.dropdown').children('li')
+            .mouseover(
+                function(){
+                    // act - делает вкладку активной
+                    // over - показывает подменю
+                    $(this).addClass('act over');
+
+                    // если мышь на закладке раздела, отличного от текущего
+                    // подсвечиваем вкладку текущего раздела зелёным
+                    if (!$(this).hasClass('cur'))
+                        $(this).siblings('.cur').removeClass('act');
+                })
+            .mouseout(
+                function(){
+                    // скрываем подменю
+                    $(this).removeClass('over');
+
+                    // если мышь на закладке раздела, отличного от текущего
+                    // делаем вкладку текущего раздела активной
+                    if (!$(this).hasClass('cur')){
+                        $(this).removeClass('act');
+                        $(this).siblings('.cur').addClass('act');
+                    }
+                }
+        );
+        // ^^^ Jet. Тикет 266. Новое выпадающее меню ^^^
+        
         // init main finance gauge
         var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gauge107.gif"};
         var params = {wmode: "transparent"};
@@ -338,7 +421,7 @@ $(document).ready(function() {
             $(this).closest('li').addClass('act');
             $('.navigation  li ul').hide()
             $('.navigation li.act ul').show()
-    });
+        });
 
 /**
  * Загружаем теги для левой панели
@@ -655,7 +738,7 @@ $('li#c2').click(function(){a_list()})
 //        return false;
 //    })
 
-//flash
+// Старый тахометр flash
             //data = res['flash'];
             //name = (!data['title'])?'':['title'];
             //end = data['value']*3/data[1][i]['color'] ;
@@ -685,8 +768,9 @@ $('li#c2').click(function(){a_list()})
                     '_4_5_6_-M+',
                     '_1_2_3_/M-',
                     '_0_._=_*MS']});
- 
-        // Динамическое меню
+
+        // Старое динамическое меню
+        /*
         pathtoid = {
             '/accounts/' :'m2',
             '/budget/':'m3',
@@ -700,13 +784,17 @@ $('li#c2').click(function(){a_list()})
             '/profile/':'m0',
             '/report/':'m4'}
        var page_mid = pathtoid[pathName];
-            mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
-            if(!$('#menu3').length){
-                $('div#mainwrap').prepend(mmenu);
-            }
-            $('div#mainwrap #'+page_mid).html('<span></span><a class="span" style="display:none;"></a>');
+       $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
+       */
+            //mmenu ='<div class="menu3"><ul><li id="m1"><a href="/info/" title="Инфо-панель">Инфо-панель</a></li><li id="m2"><a href="/accounts/" title="Счета">Счета</a></li><li id="m3"><a href="/targets/" title="Бюджет">Бюджет</a></li><li id="m4"><a href="/report/" title="Отчеты">Отчеты</a></li><li id="m5"><a href="/calendar/" title="Календарь">Календарь</a></li></ul></div>'
+            //if(!$('#menu3').length){
+                //$('div#mainwrap').prepend(mmenu);
+            //}
+
+        //$('div#mainwrap #'+page_mid).html('<span></span><a class="span" style="display:none;"></a>');
         //$('.menu3 span').closest('li').attr('id');
         //$('.mid, .ccb, #footer, #header, #menumain').mouseover();
+        /*
         var act_id = page_mid;
         var submenu = {
             //'m0':[''],
@@ -722,10 +810,11 @@ $('li#c2').click(function(){a_list()})
                     '<a href="/periodic/">Регулярные транзакции</a>'],
             'm6':['<a></a>']
         };
-
+        */
         /*
         //@TODO Цикл по submenu и если находит текущую таблицу, то окружает её SPAN
         */
+       /*
         if ($('.menu4').length == 0) {
             $('div.cct').after('<ul class="menu4" >&nbsp</ul>');
         }
@@ -779,8 +868,8 @@ $('li#c2').click(function(){a_list()})
             }
             return false;
         })
+        */
     }
-
 
     // Кнопка сворачивания / разворачивания
     $('li.over3,li.uparrow').addClass('uparrow').toggleClass('uparrow').click(function() {

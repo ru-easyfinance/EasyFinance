@@ -40,6 +40,7 @@ if ( CSS_MINIFY )
 else
 {
     $tpl->append('css', 'main.css');
+    $tpl->append('css', 'menuUser.css');
 
     $tpl->append('css', 'jquery/south-street/ui.all.css');
     //$tpl->append('css', 'jquery/south-street/ui.base.css');
