@@ -1,5 +1,12 @@
+
 /* menu container */
-.menu3 { position: relative; margin-left: 22px; top: 3px; height: 37px; z-index: 2; }
+.menu3 { 
+    position: relative;
+    margin-left: 22px;
+    top: 3px;
+    height: 37px;
+    z-index: 2;
+}
 
 /* all dropdown menus */
 ul.dropdown {
