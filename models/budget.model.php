@@ -63,6 +63,15 @@ class Budget_Model {
                     'children'     => array()
                 );
             } else {
+
+                if ($var['drain'] === 1) {
+                    $drain = 0;
+                } elseif ($var['drain'] === 0) {
+                    $drain = 1;
+                } else {
+                    $drain = -1;
+                }
+
                 // Добавляем ребёнка к родителю
                 $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
                     'id'         => (int)$var['category'],
@@ -71,7 +80,7 @@ class Budget_Model {
                     'amount'     => (float)$var['amount'],
                     'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
                     'mean_drain' => round((int)$var['avg_3m'],2), //средний расход
-                    'type'       => ($var['drain'] == 1)? 0 : 1   //расходная - 0,доходный-1
+                    'type'       => $drain
                 );
                 // Обновляем суммы
                 if ($var['drain'] == 1) {
@@ -84,6 +93,7 @@ class Budget_Model {
                 }
             }
         }
+
         return array (
             'list' => $list,
             'main' => array (
