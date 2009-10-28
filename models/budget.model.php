@@ -65,9 +65,9 @@ class Budget_Model {
             } else {
                 if (is_null($var['drain'])) {
                     $drain = -1;
-                }elseif ($var['drain'] === 1) {
+                }elseif ((int)$var['drain'] === 1) {
                     $drain = 0;
-                } elseif ($var['drain'] === 0) {
+                } elseif ((int)$var['drain'] === 0) {
                     $drain = 1;
                 }
 
