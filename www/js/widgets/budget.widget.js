@@ -4,7 +4,7 @@ easyFinance.widgets.budget = function(model){
      * @deprecated
      */
     function FloatFormat(obj, in_string )
-{
+    {
     //'.'
     var l = in_string.length;
     var rgx = /[0-9]/;
