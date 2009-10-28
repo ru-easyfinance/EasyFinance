@@ -163,7 +163,6 @@ $(document).ready(function() {
                 <li id="m2"> \
                         <a href="/accounts/"></a> \
                         <ul> \
-                                <li><a href="/accounts/">Счета</a></li> \
                                 <li><a href="/operation/">Операции</a></li> \
                                 <li><a href="/category/">Категории</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
@@ -184,7 +183,7 @@ $(document).ready(function() {
                         <a href="/calendar/"></a> \
                         <ul> \
                                 <li><a href="/calendar/">Календарь</a></li> \
-                                <li><a href="/periodic/">Регулярные транзакции</a></li> \
+                                <li><a href="/periodic/">Рег. транзакции</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                         </ul> \
                 </li> \
