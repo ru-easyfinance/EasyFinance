@@ -239,6 +239,18 @@ $('#master input')
             $('#master .w3').hide();
     })
 
+
+    function summa(){
+        var ret = 0;
+        $('#master div.amount').each(function(){
+            var str = $(this).find('input').val() || $(this).text();
+            if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
+                ret += parseFloat(str.replace(/[^0-9.]/,''));
+            }
+        })
+        return ret
+    }
+
     var isCAmmount;
     $('.next').click(function(){
         $('#master #prev').hide()
@@ -273,14 +285,18 @@ $('#master input')
                 /**
                  *по сути тоже костыль но не очень страшный и даже более мение оптимизированный
                  */
+                
                 $('#master tr input').blur(function(){
                     var summ = 0;
                     $(this).closest('table').find('input').each(function(){
                         var str = $(this).val().toString()||'0'
                         summ += parseFloat(str.replace(/[^0-9.]/gi,''));
                     })
+                    
                     $(this).closest('.line').find('.amount').text(formatCurrency(summ));
-
+                    var tmp = summa();
+                    $('#master .f_field3 .income span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
                     /** @todo: генерить не через модель! */
                     //$('#master .f_field3').html(model.print_info().group);
                 })
@@ -328,7 +344,9 @@ $('#master input')
                     isCAmmount += parseFloat(str.replace(/[^0-9.]/,''));
                 }
             })
-            
+            var tmp = isCAmmount;
+            $('#master .f_field3 .income span b').text(formatCurrency(tmp));
+            $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
             ret['0'] +=']';
         
             
@@ -350,18 +368,17 @@ $('#master input')
                         summ += parseFloat(str.replace(/[^0-9.]/gi,''));
                     })
                     $(this).closest('.line').find('.amount').text(formatCurrency(summ));
+                    var tmp = summa();
+                    $('#master .f_field3 .waste span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency($('#master .f_field3 .income span b').text().toString().replace(/[^0-9.]/gi, '')-tmp));
 
-                    /** @todo: генерить не через модель! */
-                    //$('#master .f_field3').html(model.print_info().group);
             })
             $('#master .w3').hide();
             load(ret['1'])
+            $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
         });
     })
-    $('#master .button').click(function(){
-        $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
-        //$(this).css({background:'#50C319',color:'#FFFFFF',borderBottom:'0'});
-    });
+    
     $('#master #b_save').click(function(){
         $('#master .line').each(function(){
             var summ = 0;
@@ -369,7 +386,7 @@ $('#master input')
                 var str = $(this).val().toString()||'0'
                 summ += parseFloat(str.replace(/[^0-9.]/gi,''));
             })
-            $(this).find('.amount').text(formatCurrency(summ));   
+            if(!$(this).find('.amount input').length)$(this).find('.amount').text(formatCurrency(summ));
         })
         ret['1'] = '['
         $('#master .waste_list form tr').each(function(){
@@ -387,9 +404,14 @@ $('#master input')
                 tmpAmm += parseFloat(str.replace(/[^0-9.]/,''));
             }
         })
+        var tmp = tmpAmm;
+            $('#master .f_field3 .waste span b').text(formatCurrency(tmp));
+            $('#master .f_field3 .rest span b').text(formatCurrency( $('#master .f_field3 .income span b').text().toString().replace(/[^0-9.]/gi, '')-tmp));
         ret['1'] +=']';
         var r_str = '{"d":'+ret[0]+', "r":'+ret[1]+'}';
-    
+        
+//        alert(tmpAmm+';'+isCAmmount)
+
         if((tmpAmm-isCAmmount)>=0)
         {
             if(!confirm('Ваш общий расход превышает общий доход. Продолжить сохранение?'))

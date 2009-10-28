@@ -5,34 +5,6 @@
  */
 easyFinance.models.budget = function()
     {
-        /**
-         * @desc {json} все данные по бюджету сформированные по формату:
-  list : {
-    _key : {                             // {int} Ид родительской категории
-        name : {String},                 // Имя!!!!!!!!!!
-        total_drain : {Int},             // Итого по расходам
-        total_profit : {Int},            // Итого по доходам
-        children :[{array}
-            {
-                id : {Int},              // ид ребёнка (может дублироваться)
-                name : {String},         // имя!!!!!!!!!1
-                amount : {Int},          // сумма
-                cur : {String},          // валюта!!!!!!!!
-//                limit_red : {Int},       // Превышение среднего за 3 мес (0 - 100%)
-//                limit_green : {Int},     // мес. расх.
-                mean_drain : {Float}, //средний расход
-                type : {0|1}//расходная - 0,доходный-1
-            }
-        ]
-    }
-    }, main :  {
-        drain_all :  {Int},
-        profit_all:  {Int},
-        start:       {dd.mm.yyyy},
-        end:         {dd.mm.yyyy}
-    }
-});
-         */
         //var _data = $.extend(bdgt);
         /**
          * @desc устанавливает список
@@ -45,9 +17,35 @@ easyFinance.models.budget = function()
         }
 
         /**
-         * @desc возвращает сформированный список бюджетов
+         * @desc возвращает список бюджетов
          * @param {0|1}type //расходная - 0,доходный-1
-         * @return {String} html for $().append(html)
+         * @return {}
+         */
+        function returnList(type){
+            if (type != '1'){type = '0'}
+
+            var bud_list = _data.list;
+            var children
+            var ret
+
+            for (var key in bud_list) {
+                if ((type=='0' && (res.category[bud_list[key]['category']]['type']<=0))||(type=='1' && (res.category[bud_list[key]['category']]['type']>=0))){
+                    ret[key] = bud_list[key];
+                    children = ret[key]['children'];
+                
+                    for (var k in children) {
+                        //if ((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
+                        if(children[k]['type'] != type){
+                            delete ret[key]['children'][k]
+                        }
+                    }
+                }
+            }
+            return bud_list;
+        }
+
+        /**
+         * @deprecated
          */
          function print_list(type){
             type = parseInt(type);
@@ -64,8 +62,8 @@ easyFinance.models.budget = function()
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
-                    //if ((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
-                    if(children[k]['type'] == type){
+                    if (children[k]['type'] == type ||(type=='-1'&&((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))))){
+                    //if(children[k]['type'] == type){
                     var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
                         if (isNaN(rgb))
                             rgb = '0';
@@ -149,7 +147,13 @@ easyFinance.models.budget = function()
         }
         /**
          * @desc возвращает общее сформированное инфо о бюджете
-         * @return {} {total:html,group:html} for $().append(html)
+         * @return {} 
+         */
+        function returnInfo(){
+            return _data.main;
+        }
+        /**
+         * @deprecated
          */
         function print_info(){
             var ret = {total:'',group:''};
