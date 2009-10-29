@@ -653,10 +653,12 @@ $('li#c2').click(function(){a_list()})
             s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
             for(v in data)
             {
+                if (data[v]['done'] == 0){
                         s += '<li ><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
                         +data[v]['amount_done']+' руб.</b><span>('
                         +data[v]['percent_done']+'%)</span><span class="date">'
                         +data[v]['date_end']+'</span></li>';
+                }
             }
             s = s+'</ul>';
             
