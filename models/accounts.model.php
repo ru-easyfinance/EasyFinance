@@ -362,8 +362,12 @@ class Accounts_Model
             $res[$val]['type']=$type[$key];
             $res[$val]['cur']=$cur[$key];
             $res[$val]['id']=$id[$key];
-            //
-            $reservsqlquery = "SELECT sum(money) AS s FROM target_bill WHERE bill_id = ?";
+            //SELECT sum(money) AS s
+
+            $reservsqlquery = "SELECT sum(money) AS s
+                FROM target_bill tb
+                LEFT JOIN target t ON t.id=tb.target_id
+                WHERE tb.bill_id = ? AND t.done=0";
             $que = $this->db->select($reservsqlquery,$id[$key]);
 
             if ( $que[0]['s'] != null )
