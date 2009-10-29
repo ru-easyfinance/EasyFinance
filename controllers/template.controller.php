@@ -2,7 +2,7 @@
 /**
  * Класс-родитель для классов контроллеров
  * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @category template
  * @version SVN $Id$
  */

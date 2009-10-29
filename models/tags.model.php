@@ -3,7 +3,7 @@
  * Класс модели для управления тегами
  * @category tags
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Tags_Model {

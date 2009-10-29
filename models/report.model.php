@@ -3,7 +3,7 @@
  * Класс модели для управления отчётами
  * @category report
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Report_Model

@@ -3,7 +3,7 @@
  * Класс модели для управления календарём
  * @category calendar
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Calendar_Model {
@@ -103,28 +103,6 @@ class Calendar_Model {
                 $this->errorData['start_date'][] = 'Не верно указана дата начала';
             }
         }
-
-//account	58
-//amount
-//category	240
-//comment	ewrtwer
-//count	1
-//date	01.10.2009
-//date_end
-//fri	0
-//infinity	0
-//key	0
-//mon	0
-//rep_type	1
-//repeat	0
-//sat	0
-//sun	0
-//thu	0
-//time
-//title	1234
-//tue	0
-//type	-1
-//wed	0
 
         if ($valid['type_repeat'] > 0) {
             // Проверяем дату окончания

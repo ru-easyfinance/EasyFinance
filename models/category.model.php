@@ -4,7 +4,7 @@
  * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @category category
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Category_Model {

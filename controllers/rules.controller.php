@@ -1,20 +1,20 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс контроллера для модуля "правила"
- * @copyright http://home-money.ru/
+ * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id: $
  */
 
 class Rules_Controller extends Template_Controller
 {  
 	/**
-     * Ссылка на класс Smarty
+     * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Smarty
      * @var <Smarty>
      */
     private $tpl = null;
 	
     /**
-     * Конструктор класса
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      * @return void
      */
     function __construct()

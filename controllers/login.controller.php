@@ -2,14 +2,14 @@
 /**
  * Класс контроллера для модуля login
  * @category login
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Login_Controller extends Template_Controller
 {
     /**
      * Ссылка на класс модели пользователя
-     * @var <Login_Model>
+     * @var Login_Model
      */
     private $model = null;
 
@@ -26,7 +26,7 @@ class Login_Controller extends Template_Controller
 
     /**
      * Индексная страница
-     * @param <array> $args  mixed
+     * @param array $args  mixed
      * @return void
      */
     function index($args)

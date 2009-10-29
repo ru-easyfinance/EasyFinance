@@ -3,7 +3,7 @@
  * Класс модели для регистрации пользователей
  * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
  * @author korogen
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @category registration
  * @version SVN $Id$
  */
@@ -35,7 +35,7 @@ class Registration_Model
 
     /**
      * Создаём нового пользователя
-     * @return unknown_type
+     * @return void
      */
     function new_user () {
         $db = Core::getInstance()->db;

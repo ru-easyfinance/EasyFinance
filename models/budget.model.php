@@ -3,7 +3,7 @@
  * Класс модели для управления бюджетом
  * @category budget
  * @author Max Kamashev <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id: budget.model.php 119 2009-08-04 15:40:26Z korogen $
  */
 class Budget_Model {

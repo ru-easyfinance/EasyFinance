@@ -3,7 +3,7 @@
  * Ядро проекта, класс-одиночка
  * @category core
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Core

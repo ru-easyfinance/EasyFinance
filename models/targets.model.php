@@ -3,7 +3,7 @@
  * Класс модели для управления календарём
  * @category targets
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 if ( get_magic_quotes_gpc() )

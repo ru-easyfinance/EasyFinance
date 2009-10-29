@@ -1,7 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля Администрирования системой
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * SVN $Id: admin.controller.php 83 2009-07-07 14:33:54Z korogen $
  */
  

@@ -3,7 +3,7 @@
  * Класс для управления валютами, реализует SPL-интерфейс IteratorAggregate
  * @category currency
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Currency implements IteratorAggregate,  ArrayAccess

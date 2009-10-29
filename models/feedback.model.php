@@ -1,7 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс модели для управления фидбэком
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * SVN $Id: $
  */
 class Feedback_Model

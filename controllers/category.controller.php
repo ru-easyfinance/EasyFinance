@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля категорий
  * @category category
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Category_Controller extends Template_Controller

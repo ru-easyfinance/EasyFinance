@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля финансовых целей
  * @category targets
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Targets_Controller extends Template_Controller

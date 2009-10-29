@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля отчётов
  * @category report
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Report_Controller extends Template_Controller

@@ -2,7 +2,7 @@
 /**
  * Класс модели для логина
  * @category login
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Login_Model

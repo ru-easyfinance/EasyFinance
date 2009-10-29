@@ -3,7 +3,7 @@
  * Класс модели для управления операциями
  * @category operation
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Operation_Model {

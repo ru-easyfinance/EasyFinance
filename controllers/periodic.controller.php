@@ -3,7 +3,7 @@
  * Класс контроллера для модуля периодических транзакций
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @category periodic
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Periodic_Controller extends Template_Controller

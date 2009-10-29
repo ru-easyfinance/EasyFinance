@@ -1,7 +1,7 @@
 <?php
 /**
  * Индексный файл проекта
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
  

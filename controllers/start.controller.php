@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля start
  * @category start
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Start_Controller extends Template_Controller

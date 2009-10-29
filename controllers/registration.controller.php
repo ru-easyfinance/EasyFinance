@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля welcome
  * @category registration
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Registration_Controller extends Template_Controller {

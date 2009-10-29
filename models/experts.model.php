@@ -1,7 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс модели для управления экспертами
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * SVN $Id: accounts.model.php 258 2009-08-24 16:40:55Z rewle $
  */
 class Experts_Model

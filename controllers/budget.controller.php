@@ -1,7 +1,7 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для бюджета
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @author Max Kamashev <max.kamashev@gmail.com>
  * SVN $Id:  $
  */

@@ -2,7 +2,7 @@
 /**
 * Сборник полезных функций
 * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
-* @copyright http://home-money.ru/
+* @copyright http://easyfinance.ru/
 * SVN $Id$
 */
 

@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для журанала операций
  * @category operation
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Operation_Controller extends Template_Controller

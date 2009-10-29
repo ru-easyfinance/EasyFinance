@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля logout
  * @category logout
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Logout_Controller extends Template_Controller

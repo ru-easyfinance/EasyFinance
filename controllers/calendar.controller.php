@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля календаря
  * @category calendar
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
 class Calendar_Controller extends Template_Controller
