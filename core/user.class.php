@@ -453,6 +453,12 @@ class User
                     'total_profit' => 0,
                     'children'     => array()
                 );
+                if ($var['drain'] == 1) {
+                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
+                } else {
+                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
+                }
+                $childs = false;
             } else if ( !isset($list['c_'.$category[$var['category']]['cat_parent']]) ) {
                 $list['c_'.$category[$var['category']]['cat_parent']] = array (
                     'name'         => $category[$var['category']]['cat_name'],
@@ -461,6 +467,12 @@ class User
                     'total_profit' => 0,
                     'children'     => array()
                 );
+                if ($var['drain'] == 1) {
+                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
+                } else {
+                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
+                }
+                $childs = false;
             } else {
                 if (is_null($var['drain'])) {
                     $drain = -1;
@@ -479,6 +491,14 @@ class User
                     'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
                     'type'       => $drain //расходная - 0, доходный - 1, -1 - нул
                 );
+
+                // Если у нас первый ребёнок
+                if (!$childs) {
+                    $list['c_'.$category[$var['category']]['cat_parent']]['total_drain']  = 0;
+                    $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] = 0;
+                    $childs = true;
+                }
+
                 // Обновляем суммы
                 if ($var['drain'] == 1) {
                     $drain_all += (float)$var['amount'];
