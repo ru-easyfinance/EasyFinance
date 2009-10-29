@@ -1,5 +1,6 @@
 // {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
+    var showall = 0;// показать все .
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
     $('#tg_amount,#amountf').live('keyup',function(e) {
         FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
@@ -23,6 +24,8 @@ $(document).ready(function(){
         $('#tpopup').dialog('open');
         return false;
     });
+
+
 
     // Редактируем одну из наших целей
     $(".f_f_edit,div.descr a").live('click', function(){
@@ -98,6 +101,7 @@ $(document).ready(function(){
     // Загружаем и показываем ВСЕ цели пользователя
     $('div.show_all span').click(function() {
         $.get('/targets/user_list/', '', function(data){
+            showall = 1;// показать все
             loadTargets(data);
         }, 'json');
     });
@@ -125,7 +129,7 @@ $(document).ready(function(){
      * Очищает форму для добавления финансовой цели
      */
     function clearForm() {
-        $('#id,#type,#targets_category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
+        $('#tid,#type,#targets_category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
     }
 
     /**
@@ -134,8 +138,10 @@ $(document).ready(function(){
     function loadTargets(data) {
         var s = '';
         for(v in data) {
+            if ( (data[v]["done"] == 0) || showall){
             s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
+
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
                     +'</div><div class="indicator_block"><div class="money">'
@@ -145,6 +151,7 @@ $(document).ready(function(){
                     +'%</span></div></div></div><div class="date">Целевая дата: '
                     +data[v]['end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
                     +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
+            }
         }
         $('div.object,div.show_all').remove();
         $('div.financobject_block').append(s);
@@ -155,7 +162,7 @@ $(document).ready(function(){
      * @return void
      */
     function fillForm(data) {
-        $('#key').val(data.id);
+        $('#tkey').val(data.id);
         $('#category').val(data.category);
         $('#targets_category').val(data.category);
         $('#name').val(data.title);
@@ -185,12 +192,12 @@ $(document).ready(function(){
             //$.jGrowl("Неверно введена сумма финцели!!!", {theme: 'red', sticky: true});
             che = 0;
         }
-        a = tofloat($('#amountf').val());
+        /*a = tofloat($('#amountf').val());
         b = tofloat($('#tg_amount').val());
         if ( a-b > 0){
             str += "Неверно введена нач. сумма<br>";
             che = 0;
-        }
+        }*/
         if ($('#name').val() == ''){
             str += "Неверно введено имя<br>"
             //$.jGrowl("Неверно введено имя!!!", {theme: 'red', sticky: true});
@@ -287,11 +294,11 @@ $(document).ready(function(){
                     +data.list[v]['count']+'</span> Последователей<br/>'
                     +'<span class="red">'+data.list[v]['cl']+'</span> Достигло цель</div></div></li>';
             }
-            
+
             $('ul.popularobject').empty().append(s);
         }, 'json');
     }
-    
+
     loadPopular();
     ////////////////////////////////////////////////hash api
     s = location.hash;
@@ -303,11 +310,34 @@ $(document).ready(function(){
         return false;
     }
 
+
+
+    //функция проверяет есть ли у пользователя закрытые цели. !но по которым физической операции
+    //расхода денег на категорию он не совершил. ну и предлагает сделать .
+    MakeOperation();
+    function MakeOperation(){
+        $.get('/targets/get_closed_list',{},function(data){
+            if (data){
+                for (v in data)
+                if (confirm('Финансовая цель '+data[v]['title']+' закрыта. Осуществить перевод денег со счёта ?')){
+                    $.post('/targets/close_op',{
+                        opid : data[v]['id'],
+                        targetcat : data[v]['category_id'],
+                        amount : data[v]['amount_done'],
+                        account : data[v]['target_account_id']
+                    },function(data){
+                        $.jGrowl("Операция совершена", {theme: 'green'});
+                    },'json')
+                };
+            }
+        }, 'json');
+    }
+
     ///////////////////////////////////////////////////////////
     function tofloat(s)
     {
-        s = s.toString();
         if (s != null) {
+            s = s.toString();
             return s.replace(/[ ]/gi, '');
         } else {
             return '';
@@ -315,4 +345,3 @@ $(document).ready(function(){
     }
 });
 
-    

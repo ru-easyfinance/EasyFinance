@@ -38,7 +38,8 @@ class Targets_Controller extends Template_Controller
      */
     function index($args)
     {
-        $this->tpl->assign('user_list_targets', $this->model->getLastList(0,10));
+        $this->tpl->assign('user_list_targets', $this->model->getLastList(0,100));
+        $this->tpl->assign('closed_targets', $this->model->countClose());
         $this->tpl->assign('pop_list_targets', $this->model->getPopList());     
         $this->tpl->assign('category',get_tree_select());
         $this->tpl->assign('accounts',Core::getInstance()->user->getUserAccounts());
@@ -102,5 +103,22 @@ class Targets_Controller extends Template_Controller
     {
         $index = (int)$args[0];
         die(json_encode($this->model->getPopList($index)));
+    }
+
+    /*
+    * Список закрытых целей.
+    */
+    function get_closed_list(){
+        die(json_encode($this->model->getClosedList()));
+    }
+    /*
+        * Совершает операцию по счёту с выбранной категорий
+     */
+    function close_op($args){
+        $opid = (int)$_POST['opid'];
+        $targetcat = (int)$_POST['targetcat'];
+        $amount = (int)$_POST['amount'];
+        $account = (int)$_POST['account'];
+        die(json_encode($this->model->CloseOp($opid,$targetcat,$amount,$account)));
     }
 }

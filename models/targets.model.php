@@ -99,7 +99,7 @@ class Targets_Model {
         }
         $list = $this->db->selectPage($total, "SELECT t.id, t.category_id as category, t.title, t.amount,
             DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
-            t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close
+            t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done as done
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;",
             Core::getInstance()->user->getId(), $start, $limit);
@@ -162,6 +162,49 @@ class Targets_Model {
         );
     }
 
+    public function getClosedList(){
+        $sql = "SELECT id, title, category_id, amount_done, target_account_id
+            FROM target
+            WHERE close=1 AND done=0 AND user_id=?";
+        $result = $this->db->select($sql, Core::getInstance()->user->getId());
+
+        return $result;
+    }
+
+    public function CloseOp($opid=0,$targetcat=0,$amount=0,$account=0){
+        $system = 17;
+        if ($targetcat==2)
+            $system = 1;
+        if ($targetcat==3)
+            $system = 6;
+        $sql = "SELECT cat_id FROM category
+            WHERE user_id=? AND system_category_id=?";
+        $res = $this->db->select($sql, Core::getInstance()->user->getId(), $system);
+
+        if (!$res)
+            return 666;
+        //return $res[0];
+        $date = substr(date('c'),0,10);
+        
+        $sql = "UPDATE target
+            SET done=1 WHERE id=? AND user_id=?";
+        $result = $this->db->select($sql, $opid, Core::getInstance()->user->getId());
+
+        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
+                `drain`, `comment`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+        $result = $this->db->query($sql, $this->user->getId(), -$amount, $date, (integer)$res[0], $account, 1, '');
+
+        //return $result;
+    }
+
+    public function countClose(){
+        $sql = "SELECT count(*) AS co
+            FROM target
+            WHERE close=1 AND done=1 AND user_id=?";
+        $result = $this->db->select($sql, Core::getInstance()->user->getId());
+
+        return $result[0]['co'];
+    }
     /**
      * Возвращает массив с содержимым финансовой цели
      * @param int $id

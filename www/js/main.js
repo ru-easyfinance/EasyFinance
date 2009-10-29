@@ -674,14 +674,15 @@ $('li#c2').click(function(){a_list()})
         })
         $('.financobject ul a').live('click',function(){
             var id = $(this).attr('href');
-            window.location = id;
+            //window.location = id;
             var str = id.substr(15);
             var f = $('.object[tid="'+str+'"]');
             $('input,textarea','#tpopup').val('');
-            $('#key').val(f.attr('tid'));
+            $('#key').val(f.attr('id'));
             $('#type').val(f.attr('type'));
-            $('#title').val(f.attr('title'));
-            $('#amount').val(f.attr('amount'));
+            //$('#title').val(f.attr('title'));
+            $('#name').val(f.attr('name'));
+            $('#tg_amount').val(f.attr('amount'));
             $('#start').val(f.attr('start'));
             $('#end').val(f.attr('end'));
             $('#photo').val(f.attr('photo'));
