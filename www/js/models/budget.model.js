@@ -62,7 +62,7 @@ easyFinance.models.budget = function()
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
-                    if (children[k]['type'] == type ||(type=='-1'&&((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))))){
+                    if (children[k]['type'] == type ||(children[k]['type']=='-1'&&((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))))){
                     //if(children[k]['type'] == type){
                     var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
                         if (isNaN(rgb))
@@ -165,9 +165,9 @@ easyFinance.models.budget = function()
  *               str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b> '+_data.main.cur+'</span></div>';
  *               str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b> '+_data.main.cur+'</span></div>';
  */
-            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b></span></div>';
-                str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b></span></div>';
-                str += '<div class="rest">Баланс: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
+            var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b></span></div>';
+                str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b></span></div>';
+                str += '<div class="rest">Баланс: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
             ret.group=str;
             return ret;
         }

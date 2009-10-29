@@ -151,7 +151,7 @@ $('#master input')
         });
 
         $('.w4').qtip({
-           content: 'Средний расход за предыдущие три месяца по выбранной категории',
+           content: 'Средний расход(доход) за предыдущие три месяца по выбранной категории',
            show: {delay: 1000},
            position: {target: 'mouse'},
            style: 'mystyle'
@@ -253,13 +253,14 @@ $('#master input')
 
     var isCAmmount;
     $('.next').click(function(){
-        $('#master #prev').hide()
+        $('#master #prev').hide();
+        $('#master #b_save').hide();
         date='01.'+$('#sel_date select').val()+'.'+$('#sel_date input').val();//Формирование удобной серверу даты
         $('#master').dialog('open');//а вот и сам мастер
         $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4>Шаг 2 из 3. Доходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')//динамические титлы наспех
-        $('#master .button').show()//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
-        $('#master #b_save').hide()//см на строку выше
-
+        $('#master .button').show();//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
+        $('#master #b_save').hide();//см на строку выше
+        $('#master #b_save.tab').hide();
         /*
          * Оказалось что мастер грузится с сервера .....
          */
@@ -308,7 +309,9 @@ $('#master input')
          */                
         $('#master .button').click(function(){
             //статистика пока хук
+            $('#master .button').hide();
             $('#master #prev').show();
+            $('#master #b_save').show();
             $('#master .line').each(function(){
                 if($(this).find('.amount input').lenght){
                 var summ = 0;
@@ -319,10 +322,6 @@ $('#master input')
                 $(this).find('.amount').text(formatCurrency(summ));
                 }
             })
-            //Чтоб не тыкался
-            $(this).hide();
-            //Чтоб тыкался
-            $('#master #b_save').show();
             $('#master .h .w4').text('Сред.Расход');
             //Опять динамический заголовок
             $('.ui-dialog-titlebar #ui-dialog-title-master').html('<h4> Шаг 3 из 3. Расходы - Планирование бюджета на '+$('#sel_date select option[value="'+$('#sel_date select').val()+'"]').text() +' '+$('#sel_date input').val() + '</h4>')
@@ -483,8 +482,11 @@ $('#master input')
                 var str = '<span>'+$(this).find('input').val()+'</span>'
                 $(this).html(str);
             })
-         }        
-     })
+         }
+
+         $('#list.budget .h .w4').text('Сред.'+$('.budget #r_type option:[selected]').text().toString().replace('ный','')+', руб');
+
+    })
     /**
      * @desc маска для инпута с годом
      */
