@@ -138,10 +138,10 @@ class Login_Model
     function defaultAccounts() {
         // Добавляем счёт по умолчанию
         $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`)
-            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,{$uid})";
+            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".Core::getInstance()->user->getId().")";
         $aid = Core::getInstance()->db->query($sql);
-        $sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`, `string_value`, `accountsaccount_id`) VALUES
-            (NULL,'{$aid}','Кошелёк','67'), (NULL,'{$aid}','Мои наличные деньги','68'), (NULL,'{$aid}','','69');";
+        $sql = "INSERT INTO account_field_values (`account_fieldsaccount_field_id`, `string_value`, `accountsaccount_id`) VALUES
+            ('{$aid}','Кошелёк','67'), ('{$aid}','Мои наличные деньги','68'), ('{$aid}','','69');";
         Core::getInstance()->db->query($sql);
     }
 
