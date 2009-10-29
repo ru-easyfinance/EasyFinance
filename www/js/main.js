@@ -243,7 +243,7 @@ $(document).ready(function() {
         swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
         //
         // инициализируем виджет добавления и редактирования операции
-        easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.operation);
+        easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts);
         
         ////////////////////////////////////add to calendar
         
@@ -518,98 +518,12 @@ $('.tags_list .add').live('click', function(){
     })
 })
 
+    // accounts
+    // modified by Jet 29.10.2009, ticket 337.
+    easyFinance.models.accounts.load(function(model) {
+        easyFinance.widgets.accountsPanel.init('.accounts', model);
+    });
 
-
-//accounts
-$('li#c2').click(function(){a_list()})
-    function a_list(){
-        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];
-        /*
-         *@todo Жуткий масив привязки типов к группам
-         */
-        var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
-        var arr = ['','','','',''];//содержимое каждой группы
-        var summ = [0,0,0,0,0];// сумма средств по каждой группе
-        var val = {};//сумма средств по каждой используемой валюте
-        var data=$.extend({},res['accounts']);
-        if (!data){
-            data = {};
-        }
-        var i = 0;
-        var total = 0;
-        var str = '';
-        var key;
-        var s = '';
-        for (key in data )
-        {
-            i = g_types[data[key]['type']];
-            str = '<li><a>';
-            str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
-            str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-            str = str + '<span>'+data[key]['name']+'</span>';
-            str = str + '<b>'+formatCurrency(data[key]['total_balance']);
-            str = str + data[key]['cur']+ '</b>'+'</a></li>';
-            if ( i!=2 ){
-                summ[i] = summ[i]+data[key]['def_cur'];
-            }else{
-                summ[i] = summ[i]-data[key]['def_cur'];
-            }
-
-            if (!val[data[key]['cur']]) {
-                val[data[key]['cur']]=0;
-            }
-            
-            if ( i!=2 ){
-            val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                + parseFloat(data[key]['total_balance']);
-            }else{
-                 val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                - parseFloat(data[key]['total_balance']);
-            }
-
-            arr[i] = arr[i]+str;
-        }
-        total = 0;
-        for(key in arr)
-        {
-            total = total+(parseInt(summ[key]*100))/100;
-            s='<ul>'+arr[key]+'</ul>';
-            if (key>=0 && key <=6)
-                $('.accounts #'+key).html(s);
-            if (s!='<ul></ul>')
-                $('.accounts #'+key).show().prev().show();
-            else
-                $('.accounts #'+key).hide().prev().hide();
-        }
-        /////////////////////формирование итогового поля//////////////////////
-        str = '<ul>';
-        for(key in res['currency'])
-            break;
-        var c_key = res['currency'][key]['abbr']||'';
-        i = 0
-        for(key in val)
-        {
-            if(!i)
-                c_key = key;
-            i++;
-            str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
-        }
-        str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';//@todo
-        str = str + '</ul>';
-         $('.accounts #l_amount').html(str);
-    }
-
-       $('.accounts .add').click(function(){
-           document.location='/accounts/#add';
-          $('#addacc').click();//временный хак до полного перехода на аякс
-       })
-
-
-       $('.accounts li a').live('click',function(){
-           document.location='/accounts/#edit'+$(this).find('div.id').attr('value');
-           $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
-           //hash_api('#edit'+$(this).find('div.id').attr('value'));//временный хак до полного перехода на аякс
-       })
       ///////////////////////periodic/////////////////////////////////////////
       var data = res['events'];
       //events:{
@@ -912,6 +826,10 @@ $('li#c2').click(function(){a_list()})
         $('.listing').hide();
         s = '.'+id+'.listing';
         $(s).show();
+
+        if (this.id == "c2")
+            easyFinance.widgets.accountsPanel.redraw();
+
         return false;
     });
     setTimeout(function(){$('ul.control li#c1').click()},500);
