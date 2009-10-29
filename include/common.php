@@ -40,7 +40,6 @@ if ( CSS_MINIFY )
 else
 {
     $tpl->append('css', 'main.css');
-    $tpl->append('css', 'menuUser.css');
 
     $tpl->append('css', 'jquery/south-street/ui.all.css');
     //$tpl->append('css', 'jquery/south-street/ui.base.css');
@@ -54,6 +53,8 @@ else
     $tpl->append('css', 'jquery/jquery.calculator.css');
     $tpl->append('css', 'jquery/fullcalendar.css');
 }
+
+$tpl->append('css', 'menuUser.css');
 
 $tpl->append('css', 'jquery/jHtmlArea.css');
 $tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
@@ -74,7 +75,8 @@ else
 	}
 }
 
-$tpl->append('js', 'models/operation.model.js');
+$tpl->append('js', 'models/accounts.model.js');
+$tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');
 $tpl->append('js', 'widgets/operations/operationEdit.widget.js');
 
 if(IS_DEMO){
@@ -107,7 +109,7 @@ Core::getInstance()->js = array(
     'category' => array('models/category.model', 'category'),
     'calendar' => array('calendar'),
     'admin' => array( 'admin'),
-    'accounts' => array('accounts'),
+    'accounts' => array('widgets/accounts/accountEdit.widget', 'accounts'),
     'review' => array('jquery/jquery.fancybox-1.0.0', 'review'),
     'budget' => array('budget', 'models/budget.model', 'widgets/budget.widget')
 );
