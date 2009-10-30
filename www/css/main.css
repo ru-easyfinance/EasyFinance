@@ -1,6 +1,9 @@
 html, body, form, ul, li, dl, dd, dt, fieldset, form, blockquote { margin:0; padding:0; border:0 none; }
 ul, dl, dd, dt { list-style:none; }
 
+#menumain UL.menu2 li#show_login a {padding-right: 16px; background: url('/img/i/login.gif') right center no-repeat;}
+#menumain a#show_logout {text-decoration: none; display: inline-block; width: 12px; background: url('/img/i/unlogin.gif') right center no-repeat;}
+
 ul.about {list-style-position: inside; list-style-type: disc;}
 
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
