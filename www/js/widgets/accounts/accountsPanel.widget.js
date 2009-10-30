@@ -99,11 +99,11 @@ easyFinance.widgets.accountsPanel = function(){
             total = total+(parseInt(summ[key]*100))/100;
             s='<ul>'+arr[key]+'</ul>';
             if (key>=0 && key <=6)
-                _$node.find('#'+key).html(s);
+                _$node.find('#accountsPanelAcc'+key).html(s);
             if (s!='<ul></ul>')
-                _$node.find('#'+key).show().prev().show();
+                _$node.find('#accountsPanelAcc'+key).show().prev().show();
             else
-                _$node.find('#'+key).hide().prev().hide();
+                _$node.find('#accountsPanelAcc'+key).hide().prev().hide();
         }
 
         // формирование итогов
@@ -122,7 +122,7 @@ easyFinance.widgets.accountsPanel = function(){
         
         str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';//@todo
         str = str + '</ul>';
-        _$node.find('#l_amount').html(str);
+        _$node.find('#accountsPanel_amount').html(str);
         $('div.listing dl.bill_list dd').hide();
         $('div.listing dl.bill_list dt').live('click', function(){
             $(this).toggleClass('open').next().toggle();
