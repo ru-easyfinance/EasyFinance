@@ -274,7 +274,7 @@ $(document).ready(function() {
             var sys = $('#catsys').val();
 
             var oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[id]);
-debugger;
+
             if (subcat =="") {
                 // родительская категория
                 var children = easyFinance.models.category.getChildrenByParentId(id);
