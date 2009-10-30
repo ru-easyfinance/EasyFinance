@@ -1,22 +1,9 @@
 // {* $Id: accounts.js 113 2009-07-29 11:54:49Z ukko $ *}
-$(document).ready(function()
-{
-    var accisvis = false; // характеризует активна ли панелька счетов
-    var isaccountediting = false; //характеризует редактируется ли акк или создаётся новый. true - редактируется.
+$(document).ready(function() {
+    easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts);
 
-    $('ul:last li.active').qtip({
-        content: 'This is an active list element',
-        show: 'mouseover',
-        hide: 'mouseout'
-    })
+    // @todo isEditing заменить на пуск события
 
-    $('#op_btn_Save').click(function(){
-        update_list();
-        })
-
-    $('#starter_balance').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        });
     /**
      * Переводит произвольную строку в вещественное число
      * Пример: фы1в31ф3в1в.ф3ю.132вы переведёт в 13131.3132
@@ -113,7 +100,8 @@ $(document).ready(function()
                 $('#operation_list').append(s);
             }
         }
-/////////////////////формирование итогового поля//////////////////////
+
+        // формирование итогового поля
         str='<strong class="title"> Итог </strong><table class="noborder">\n\
             <tr><th>Сумма</th><th>Валюта</th></tr>';
         for(key in val)
@@ -124,7 +112,8 @@ $(document).ready(function()
         str = str + '</table>';
         $('#total_amount').html(str);
         //$('#total_amount').append(str);
-////////////////////////////////////////////////////////////////@todo перенести в цсс
+
+        // @todo перенести в цсс
         $('.item td.cur').css('width','50px');
         $('.item td.total_balance').css('text-align','right').css('padding-right','0');
     }
@@ -140,14 +129,14 @@ $(document).ready(function()
         var s = str.toString();
         if (s=='#add')
         {
-            new_acc = 1;
-            accountAddVisible();
-            //$('#type_account').removeAttr('disabled');
+            easyFinance.widgets.accountEdit._isEditing = false;
+            showForm();
+            $('#type_account').removeAttr('disabled');
         }
         if(s.substr(0,5)=='#edit')
         {
             $('#blockCreateAccounts').show();
-            new_acc=0;
+            easyFinance.widgets.accountEdit._isEditing = true;
             var account = account_list[s.substr(5)];
             if (!account)
                 return false;
@@ -177,6 +166,8 @@ $(document).ready(function()
                     $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+account.id+'" />');
                     if (flag)
                     {
+                        easyFinance.widgets.accountEdit._isEditing = false;
+                        $('#type_account').removeAttr('disabled');
                         $('#account_form_fields table').attr('id','0');
                         $('#account_form_fields table input.id').val('0');
                         var bk_val = $('#blockCreateAccounts input#name').val();
@@ -193,6 +184,7 @@ $(document).ready(function()
      * @param {}//.id - accoun id; .cur_id - currency id
      * @return void
      */
+    /*
     function hack4operation(param)
     {
         var id = param.id;
@@ -204,22 +196,7 @@ $(document).ready(function()
                     ')</option>';
         $('#op_account').append(opt);
     }
-    /**
-     * скрывает поле с добавлением счёта
-     * @return void
-     */
-    function accountAddUnvisible() {
-        $('#blockCreateAccounts').hide();
-    }
-    /**
-     * раскрывает поле с добавлением счёта
-     * @return void
-     */
-    function accountAddVisible() {
-        changeTypeAccount($('#type_account').val());
-        $('#blockCreateAccounts').show();
-        $('#blockCreateAccounts').val('');  
-    }
+    */
     /**
      * функция - пережиток прошлого;
      * перезагружает account_list и выполняет последующие инструкции;
@@ -248,84 +225,7 @@ $(document).ready(function()
             'json'
         );
     }
-    /**
-     * функция - пережиток прошлого;
-     * перезагружает форму ввода счёта;
-     * @return void
-     * @deprecated rewrite without Ajax//where rewrite account model, controller, admin
-     */
-    function changeTypeAccount(id)
-    {
-        $.post(
-            "/accounts/changeType/",
-            {
-                id: id
-            },
-             function(data) {
-                $('#account_form_fields').html(data);
-                /*$('#starter_balance').calculator({
-            layout: [$.calculator.CLOSE+$.calculator.ERASE+$.calculator.USE,
-                    'MR_7_8_9_-' + $.calculator.UNDO,
-                    'MS_4_5_6_*' + $.calculator.PERCENT ,
-                    'M+_1_2_3_/' + $.calculator.HALF_SPACE,
-                    'MC_0_.' + $.calculator.PLUS_MINUS +'_+'+ $.calculator.EQUALS],
-            showOn: 'button',
-            buttonImageOnly: true,
-            buttonImage: '/img/i/unordered.gif' //opbutton
-        });*/
-            },
-            'text'
-        );
-    }
-    /**
-     * функция добавляет новый счёт
-     * @return void
-     * @deprecated rewrite without update_list//on freetime
-     */
-    function createNewAccount()
-    {
-        
-        var cur_id = $("#formAccount select:[name='currency_id']").val();
-        //var type = $("#formAccount id='type_account']").val();
-        $.ajax({
-            type: "POST",
-            url: "/accounts/add/",
-            data: $("#formAccount input,select,textarea"),
-            success: function(data) {
-                var id = data;
-                if (!isaccountediting){
-                    $.jGrowl("Добавлен счёт", {theme: 'green'});
-                    update_list({id: id,cur_id: cur_id});
-                }else{
-                    $.jGrowl("Cчёт изменён", {theme: 'green'});
-                    isaccountediting = false;
-                }
-                    
-                 
-                $('li#c2').click()
-            }
-        });
-    }
-    /**
-     * функция редактирует счёт
-     * @return void
-     * @deprecated rewrite all//on freetime where rewrite account model, controller, admin
-     */
-    function correctaccount()
-    {//del
-        $.post('/accounts/del/',
-            {
-                id :$('#blockCreateAccounts').find('table').attr('id')
-            },
-            function(data){
-                //$.jGrowl("Счёт Изменён", {theme: 'green'});
-                isaccountediting = true;
-                createNewAccount();
-            },
-            'text'
-        );
-        
-    }
+    
     /**
      * Красивый тултип для таблицы счетов
      * @param line JQuery link to elem
@@ -358,66 +258,12 @@ $(document).ready(function()
     }
 
 ///////////////////////////////////////////////////////////views
-    var new_acc = 1;
     var tid;
     var account_list;
-    accountAddUnvisible();
+    
     // upload account
     update_list();
-
-    $('#addacc').click(function(){
-    //$('#addacc').live('click',function(){////button add account click
-        new_acc = 1;
-        if (!accisvis) {
-            //$('#blockCreateAccounts').toggle();
-            accountAddVisible();
-        }else{
-            accountAddUnvisible();
-        }
-        accisvis = !accisvis;
-        $('#type_account').removeAttr('disabled');
-    });
-    $('#btnCancelAdd').click(function(){ ////button cancel in form click
-        accountAddUnvisible();
-        accisvis = false;
-        //$('#blockCreateAccounts').hide();
-    });
-    /**
-     * select type in form selected change
-     * @deprecated delete //where rewrite account model, controller, admin
-     */
-    $('#type_account').change(function(){
-        changeTypeAccount($(this).attr('value'));
-    });
     
-    $('#btnAddAccount').click(function(){////button save in form click
-        
-        var str = $('#blockCreateAccounts #name').val();
-        var id =$('#blockCreateAccounts').find('table').attr('id');
-        var l = 1;
-        $('.item .name').each(function(){
-            if (id != $(this).closest('tr').attr('id')){
-                if($(this).text()==str)
-                    l=0;
-            }
-        });
-        if (l){
-            if (new_acc)
-            {
-                accountAddUnvisible();
-                createNewAccount();
-            }
-            else
-            {
-                accountAddUnvisible();
-                correctaccount();
-            }
-        }
-        else
-        {
-            $.jGrowl("Такой счёт уже существует!", {theme: 'red'});
-        }
-    });
     $('tr.item').live('mouseover',
         function(){
             var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];/*/@todo Жуткий масив привязки типов к группам*/
@@ -477,7 +323,7 @@ $(document).ready(function()
                 $('tr.item').removeClass('act');
             }
     });
-    //del accoun click
+    //del account click
     $('li.del').live('click',
         function(){
             if (confirm("Вы уверены что хотите удалить счёт?")) {
@@ -501,9 +347,10 @@ $(document).ready(function()
             }
         }
     );
-    //edit account lick
+    //edit account click
     $('li.edit').live('click',
         function(){
+            easyFinance.widgets.accountEdit._isEditing=true;
             $('#blockCreateAccounts').show();
             var id = $(this).closest('.item').attr('id');
             hash_api('#edit'+id);
@@ -516,9 +363,7 @@ $(document).ready(function()
             $('#blockCreateAccounts').show();
             var id = $(this).closest('.item').attr('id');
             hash_api('#edit'+id,flag);
-            new_acc=1;
-
-
+            easyFinance.widgets.accountEdit._isEditing=false;
         }
     );
 });

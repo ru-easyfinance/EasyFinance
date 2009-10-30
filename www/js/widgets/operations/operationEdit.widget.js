@@ -79,7 +79,7 @@ easyFinance.widgets.operationEdit = function(){
         $('.calculator-trigger').click(function(){
             $(this).closest('div').find('#op_amount,#amount').val(tofloat($('#op_amount').val()));
         })
-        $("#op_date").datepicker();
+        $("#op_date").datepicker().datepicker('setDate', new Date());
 
         $('#op_amount,#op_currency').change(function(){
             if ($('#op_type').val() == 2) {
@@ -161,7 +161,7 @@ easyFinance.widgets.operationEdit = function(){
         }
         $.jGrowl("Операция сохраняется", {theme: 'green'});
 
-        easyFinance.models.operation.editOperationById(
+        easyFinance.models.accounts.editOperationById(
             $('#op_id').val(),
             $('#op_type').val(),
             $('#op_account').val(),

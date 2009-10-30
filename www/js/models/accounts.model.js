@@ -3,18 +3,34 @@
  * @author Andrey [Jet] Zharikov
  */
 
-easyFinance.models.operation = function(){
+easyFinance.models.accounts = function(){
     // constants
+    var ACCOUNTS_LIST_URL = '/accounts/accountslist/';
+
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/';
     var DELETE_OPERATIONS_URL = '/operation/del_all/';
     var ADD_OPERATION_URL = '/operation/add/';
     var EDIT_OPERATION_URL = '/operation/edit/';
 
     // private variables
+    var _this = null;
+
+    var _accounts;
     var _journal;
 
-    // private functions
 
+    // private functions
+    function _loadAccounts(callback) {
+        $.post(ACCOUNTS_LIST_URL, '', function(data) {
+            _accounts = data;
+
+            $(document).trigger('accountsLoaded');
+
+            if (typeof callback == 'function')
+                callback(_accounts);
+        }, "json");
+    }
+    
     // public variables
 
     // public functions
@@ -23,9 +39,24 @@ easyFinance.models.operation = function(){
      * @desc initialize
      * @usage load(callback)
      */
-    function load(param1){
-        if (typeof param1 == 'function')
-            param1(this);
+    function load(param1, param2){
+        _this = this;
+
+        if (typeof param1 == 'string'){
+            _accounts = eval(param1);
+
+            if (typeof param2 == 'function')
+                param2(_this);
+        } else {
+            if (typeof param1 == 'function')
+                _loadAccounts(function(){param1(_this)});
+            else
+                _loadAccounts();
+        }
+    }
+
+    function getAccounts(){
+        return _accounts;
     }
 
     /**
@@ -63,6 +94,9 @@ easyFinance.models.operation = function(){
         var _ids = ids;
 
         $.post(DELETE_OPERATIONS_URL, {id : ids.toString()}, function(data) {
+                // update accounts
+                _loadAccounts();
+
                 for (var i=0; i<_ids.length; i++) {
                     delete _journal[_ids[i]];
                 }
@@ -104,12 +138,16 @@ easyFinance.models.operation = function(){
                 target    : target,
                 close     : close,
                 tags      : tags
-            }, callback, "json");
+            }, function(data){
+                _loadAccounts();
+                callback(data);
+            }, "json");
     }
 
     // reveal some private things by assigning public pointers
     return {
         load: load,
+        getAccounts: getAccounts,
         loadJournal: loadJournal,
         addOperation: addOperation,
         editOperationById: editOperationById,

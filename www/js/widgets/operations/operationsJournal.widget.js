@@ -24,6 +24,10 @@ easyFinance.widgets.operationsJournal = function(){
     var _$dialogFilterAccount = null;
 
     // private functions
+    //
+    // форматирует и выводит таблицу с данными
+    // данные получаются из модели методом loadJournal
+    // и передаются в эту функцию
     function _showInfo(data) {        
         if (data == null)
             return;
@@ -116,6 +120,9 @@ easyFinance.widgets.operationsJournal = function(){
                 $(".op_addoperation").show();
         var operation = $(this).parent().attr('class');
         if (operation == 'edit') {
+            $("#op_addoperation_but").addClass('act');
+            $(".op_addoperation").show();
+
             fillForm(_journal[$(this).closest('tr').attr('value')]);
             if ($('#op_comment').val() == "Начальный остаток"){
                 $('#op_amount').attr('disabled', 'disabled');
@@ -128,13 +135,11 @@ easyFinance.widgets.operationsJournal = function(){
             $('form').attr('action','/operation/edit/');
         } else if(operation == 'del') {
             _deleteOperation($(this).closest('tr').attr('value'));
-            //if (_journal[$(this).closest('tr').attr('value')].virt == "1"){
-            //    deleteTarget($(this).closest('tr').attr('value'), $(this).closest('tr'));
-            //} else {
-            //    deleteOperation($(this).closest('tr').attr('value'), $(this).closest('tr'));
-            //}
         } else if(operation == 'add') {
             // @todo: kick this out!
+            $("#op_addoperation_but").addClass('act');
+            $(".op_addoperation").show();
+            
             fillForm(_journal[$(this).closest('tr').attr('value')]);
             $(this).closest('form').attr('action','/operation/add/');
             $('#date').datepicker('setDate', new Date() );
@@ -251,5 +256,5 @@ easyFinance.widgets.operationsJournal = function(){
 }(); // execute anonymous function to immediatly return object
 
 $(document).ready(function() {
-    easyFinance.widgets.operationsJournal.init('.operation_list', easyFinance.models.operation);
+    easyFinance.widgets.operationsJournal.init('.operation_list', easyFinance.models.accounts);
 });
