@@ -8,7 +8,7 @@ CREATE TABLE `account_field_descriptions` (
   `field_permissions` enum('view','select','input','add','hidden') NOT NULL,
   `field_default_value` text NOT NULL,
   PRIMARY KEY (`field_description_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `account_field_values`;
 CREATE TABLE `account_field_values` (
@@ -165,25 +165,25 @@ CREATE TABLE `feedback_message` (
 
 DROP TABLE IF EXISTS `info_calc`;
 CREATE TABLE `info_calc` (
-  `m_r` int(11) NOT NULL COMMENT 'мин грань . красная',
-  `m_y` int(11) NOT NULL COMMENT 'мин грань.жёлтая',
-  `m_b` int(11) NOT NULL COMMENT 'мин грань. зелёная',
-  `c_r` int(11) NOT NULL COMMENT 'грубый расчёт.красный',
-  `c_y` int(11) NOT NULL COMMENT 'грубый расчёт.жёлтый',
-  `c_g` int(11) NOT NULL COMMENT 'грубый расчт.зелёный',
-  `u_r` int(11) NOT NULL COMMENT 'повышение.красный',
-  `u_y` int(11) NOT NULL COMMENT 'повышение.жёлый',
-  `u_g` int(11) NOT NULL COMMENT 'повышение. зелёный',
-  `weight` int(11) NOT NULL COMMENT 'вес'
+  `m_r` int(11) DEFAULT NULL,
+  `m_y` int(11) DEFAULT NULL,
+  `m_b` int(11) DEFAULT NULL,
+  `c_r` int(11) DEFAULT '1',
+  `c_y` int(11) DEFAULT '2',
+  `c_g` int(11) DEFAULT '3',
+  `u_r` int(11) DEFAULT '0',
+  `u_y` int(11) DEFAULT '1',
+  `u_g` int(11) DEFAULT '2',
+  `weight` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `info_desc`;
 CREATE TABLE `info_desc` (
-  `type` varchar(11) NOT NULL,
-  `title` varchar(11) NOT NULL,
-  `min` int(11) NOT NULL,
-  `color` int(11) NOT NULL,
-  `description` text NOT NULL
+  `type` varchar(11) DEFAULT NULL,
+  `title` varchar(11) DEFAULT NULL,
+  `min` int(11) DEFAULT NULL,
+  `color` int(11) DEFAULT NULL,
+  `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `infopanel_desc`;
@@ -313,10 +313,11 @@ CREATE TABLE `target` (
   `target_account_id` int(255) unsigned NOT NULL COMMENT 'Счёт, где будут накапливаться деньги на фин.цель',
   `amount_done` decimal(20,2) NOT NULL COMMENT 'Уже накопленная сумма',
   `close` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `done` tinyint(3) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_index` (`user_id`),
   KEY `date_end_index` (`date_end`),
-  KEY `title_index` (`title`,`visible`)
+  KEY `title_index` (`title`,`visible`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Финансовые цели';
 
 DROP TABLE IF EXISTS `target_bill`;
@@ -351,7 +352,7 @@ CREATE TABLE `users` (
   `user_currency_default` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Валюта пользователя по умолчанию',
   `user_currency_list` text NOT NULL COMMENT 'Сериализованный массив валют пользователя',
   `user_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'тип пользователя 0-юзер 1-админ 2-эксперт',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`) USING BTREE,
   KEY `user_login` (`user_login`,`user_pass`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
