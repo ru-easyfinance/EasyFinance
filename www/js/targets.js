@@ -141,7 +141,12 @@ $(document).ready(function(){
             if ( (data[v]["done"] == 0) || showall){
             s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
-
+                //alert(data[v]['category']);
+                if (data[v]['category']==2)
+                    s += '<img src="/img/i/avto.bmp" alt="" />'
+                else if (data[v]['category']==3)
+                    s += '<img src="/img/i/rest.bmp" alt="" />'
+                else
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
                     +'</div><div class="indicator_block"><div class="money">'
