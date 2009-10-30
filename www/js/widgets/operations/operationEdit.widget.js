@@ -160,6 +160,7 @@ easyFinance.widgets.operationEdit = function(){
             return false;
         }
         $.jGrowl("Операция сохраняется", {theme: 'green'});
+        var suum = tofloat($('#op_amount').val());
 
         easyFinance.models.accounts.editOperationById(
             $('#op_id').val(),
@@ -180,6 +181,22 @@ easyFinance.widgets.operationEdit = function(){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     _clearForm();
+                    /// переписать
+                    var o = '';
+                    var t;
+                    for (var v in res['user_targets']) {
+                        t = res['user_targets'][v];
+                        if (v != $('#op_target').val())
+                        o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
+                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+                        else{
+                            t['amount_done']=(parseFloat(t['amount_done'])+parseFloat(suum)).toString();
+                            o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+/*(parseFloat(t['amount_done'])+parseFloat(suum)).toString()*/t['amount_done']+
+                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+                    }
+                    }
+                    /// переписать
+                    $('#op_target').html(o);
                     $.jGrowl("Операция успешно сохранена", {theme: 'green'});
                 } else {
                     var e = '';
@@ -231,7 +248,7 @@ easyFinance.widgets.operationEdit = function(){
 
             var amount = parseFloat($("#op_target option:selected").attr("amount"));
             var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
-            $("#op_amount_done").text(amount_done);
+            $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
                     $("#op_close").attr("checked","checked");
@@ -254,7 +271,7 @@ easyFinance.widgets.operationEdit = function(){
 
         $('form').attr('action','/operation/add/');
 
-        $('#op_type').change();
+        //$('#op_type').change();
     }
 
     function _changeAccountForTransfer() {
