@@ -30,9 +30,9 @@ $.post(
             if (isNaN(data[1][i]['color']))
                 data[1][i]['color'] = 1;
             //alert(data[1][i]['title'])
-            name = (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
-            value = parseInt(data[0][i]) ;
-            pointer = data[1][i]['color']*33 - 20;
+            //name = (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
+            //value = parseInt(data[0][i]) ;
+            //pointer = data[1][i]['color']*33 - 20;
             /*
             xml = '<anychart><gauges><gauge><chart_settings><title>'+
                 '<text>'+value+'</text>'+

@@ -293,7 +293,7 @@ class Info_Model
         $sql = "SELECT `min`,color,description,title FROM info_desc WHERE (`min`<=? and `type`=?) ORDER BY `min` DESC;";
         $desc = array();
         //die (print_r($this->calc));
-        foreach ($this->calc as $key=>$val)
+        foreach ($this->calc as $key=>$val)/* @deprecated  */
         {
             $desc[] = $this->db->selectRow($sql,$val,$key);
         }
