@@ -39,7 +39,6 @@ easyFinance.widgets.accountEdit = function(){
 
         $('#btnCancelAdd').click(function(){ ////button cancel in form click
             hideForm();
-            //$('#blockCreateAccounts').hide();
         });
 
         /**
@@ -158,6 +157,7 @@ easyFinance.widgets.accountEdit = function(){
                     easyFinance.widgets.accountEdit._isEditing = false;
                 }
 
+                // @todo $(document).trigger('accountsChanged');
 
                 $('li#c2').click()
             }
