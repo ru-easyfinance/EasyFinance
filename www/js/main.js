@@ -62,7 +62,7 @@ function FloatFormat(obj, in_string )
     var p =1;
     var newstr ='';
     var i = 0;
-
+    
     for(var a=1;a<=l;a++)
     {
         i=l-a+1;
@@ -86,6 +86,7 @@ function FloatFormat(obj, in_string )
             p = 0;
         }
     }
+    if (in_string.substr(1,1) == '-')newstr ='-'+newstr;
     $(obj).val(newstr)
 }
 
