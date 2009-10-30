@@ -154,89 +154,7 @@ $(document).ready(function() {
     }
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
-    if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////
-        // vvv Jet. Тикет 266. Новое выпадающее меню vvv
-        var topmenu = '<div class="menu3"> \
-            <ul class="dropdown"> \
-                <li id="m1"> \
-                        <a href="/info/"></a> \
-                </li> \
-                <li id="m2"> \
-                        <a href="/accounts/"></a> \
-                        <ul> \
-                                <li><a href="/operation/">Операции</a></li> \
-                                <li><a href="/category/">Категории</a></li> \
-                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
-                        </ul> \
-                </li> \
-                <li id="m3"> \
-                        <a href="/targets/"></a> \
-                        <ul> \
-                                <!--<li><a href="/budget/">Бюджет</a></li>--> \
-                                <li><a href="/targets/">Фин. цели</a></li> \
-                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
-                        </ul> \
-                </li> \
-                <li id="m4"> \
-                        <a href="/report/"></a> \
-                </li> \
-                <li id="m5"> \
-                        <a href="/calendar/"></a> \
-                        <ul> \
-                                <li><a href="/calendar/">Календарь</a></li> \
-                                <li><a href="/periodic/">Рег. транзакции</a></li> \
-                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
-                        </ul> \
-                </li> \
-            </ul> \
-        </div>';
-
-        $('#mainwrap').prepend(topmenu);
-
-        var pathtoid = {
-            '/accounts/' :'m2',
-            '/budget/':'m3',
-            '/calendar/':'m5',
-            '/category/':'m2',
-            '/experts/':'m6',
-            '/info/':'m1',
-            '/mail/':'m0',
-            '/operation/':'m2',
-            '/periodic/':'m5',
-            '/profile/':'m0',
-            '/report/':'m4'};
-
-        var page_mid = pathtoid[pathName];
-        $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
-
-        // код для переключения внешнего вида вкладок
-        $('.dropdown').children('li')
-            .mouseover(
-                function(){
-                    // act - делает вкладку активной
-                    // over - показывает подменю
-                    $(this).addClass('act over');
-
-                    // если мышь на закладке раздела, отличного от текущего
-                    // подсвечиваем вкладку текущего раздела зелёным
-                    if (!$(this).hasClass('cur'))
-                        $(this).siblings('.cur').removeClass('act');
-                })
-            .mouseout(
-                function(){
-                    // скрываем подменю
-                    $(this).removeClass('over');
-
-                    // если мышь на закладке раздела, отличного от текущего
-                    // делаем вкладку текущего раздела активной
-                    if (!$(this).hasClass('cur')){
-                        $(this).removeClass('act');
-                        $(this).siblings('.cur').addClass('act');
-                    }
-                }
-        );
-        // ^^^ Jet. Тикет 266. Новое выпадающее меню ^^^
-        
+    if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
         // init main finance gauge
         var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gauge107.gif"};
         var params = {wmode: "transparent"};
@@ -685,6 +603,88 @@ $('.tags_list .add').live('click', function(){
                     '_4_5_6_-M+',
                     '_1_2_3_/M-',
                     '_0_._=_*MS']});
+
+        // vvv Jet. Тикет 266. Новое выпадающее меню vvv
+        var topmenu = '<div class="menu3"> \
+            <ul class="dropdown"> \
+                <li id="m1"> \
+                        <a href="/info/"></a> \
+                </li> \
+                <li id="m2"> \
+                        <a href="/accounts/"></a> \
+                        <ul> \
+                                <li><a href="/operation/">Операции</a></li> \
+                                <li><a href="/category/">Категории</a></li> \
+                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
+                        </ul> \
+                </li> \
+                <li id="m3"> \
+                        <a href="/targets/"></a> \
+                        <ul> \
+                                <!--<li><a href="/budget/">Бюджет</a></li>--> \
+                                <li><a href="/targets/">Фин. цели</a></li> \
+                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
+                        </ul> \
+                </li> \
+                <li id="m4"> \
+                        <a href="/report/"></a> \
+                </li> \
+                <li id="m5"> \
+                        <a href="/calendar/"></a> \
+                        <ul> \
+                                <li><a href="/calendar/">Календарь</a></li> \
+                                <li><a href="/periodic/">Рег. транзакции</a></li> \
+                                <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
+                        </ul> \
+                </li> \
+            </ul> \
+        </div>';
+
+        $('#mainwrap').prepend(topmenu);
+
+        var pathtoid = {
+            '/accounts/' :'m2',
+            '/budget/':'m3',
+            '/calendar/':'m5',
+            '/category/':'m2',
+            '/experts/':'m6',
+            '/info/':'m1',
+            '/mail/':'m0',
+            '/operation/':'m2',
+            '/periodic/':'m5',
+            '/profile/':'m0',
+            '/report/':'m4'};
+
+        var page_mid = pathtoid[pathName];
+        $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
+
+        // код для переключения внешнего вида вкладок
+        $('.dropdown').children('li')
+            .mouseover(
+                function(){
+                    // act - делает вкладку активной
+                    // over - показывает подменю
+                    $(this).addClass('act over');
+
+                    // если мышь на закладке раздела, отличного от текущего
+                    // подсвечиваем вкладку текущего раздела зелёным
+                    if (!$(this).hasClass('cur'))
+                        $(this).siblings('.cur').removeClass('act');
+                })
+            .mouseout(
+                function(){
+                    // скрываем подменю
+                    $(this).removeClass('over');
+
+                    // если мышь на закладке раздела, отличного от текущего
+                    // делаем вкладку текущего раздела активной
+                    if (!$(this).hasClass('cur')){
+                        $(this).removeClass('act');
+                        $(this).siblings('.cur').addClass('act');
+                    }
+                }
+        );
+        // ^^^ Jet. Тикет 266. Новое выпадающее меню ^^^
 
         // Старое динамическое меню
         /*
