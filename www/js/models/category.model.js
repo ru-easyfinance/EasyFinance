@@ -79,11 +79,24 @@ easyFinance.models.category = function(){
     }
 
     function editById(id, name, parent, type, system, callback){
+        var oldCat = $.extend({}, _categories.user[id]);
+
         _update(EDIT_URL, id, name, parent, type, system, function(){            
             _categories.user[id].name = name;
             _categories.user[id].parent = parent;
             _categories.user[id].type = type;
             _categories.user[id].system = system;
+debugger;
+            if (parent !="" && (parent != oldCat.parent || type!=oldCat.type)) {
+                // при перемещении подкатегории в другую категорию
+                // или при изменении типа подкатегории
+                var newParent = _categories.user[parent];
+                if (newParent.type != 0 && newParent.type != type) {
+                    // если тип подкатегории конфликтует с родительской категорией,
+                    // надо сделать родительскую категорию универсальной
+                    newParent.type = 0;
+                }
+            }
 
             callback(_categories.user[id]);
         });
@@ -115,6 +128,21 @@ easyFinance.models.category = function(){
         // @TODO implement getUserCategoriesByType
     }
 
+    function getChildrenByParentId(id) {
+        var arr = [];
+        var parent = _categories.user[id];
+        if (!parent)
+            return arr;
+
+        var parentId = parent.id;
+        for (var key in _categories.user) {
+            if (_categories.user[key].parent == parentId)
+                arr.push(_categories.user[key]);
+        }
+
+        return arr;
+    }
+
     function isParentCategory(id){
         return (_categories.user[id].parent == '0') ? true : false;
     }
@@ -129,6 +157,7 @@ easyFinance.models.category = function(){
         getSystemCategories:getSystemCategories,
         getUserCategories:getUserCategories,
         getUserCategoriesByType:getUserCategoriesByType,
-        isParentCategory: isParentCategory
+        isParentCategory: isParentCategory,
+        getChildrenByParentId: getChildrenByParentId
     };
 }(); // execute anonymous function to immediatly return object

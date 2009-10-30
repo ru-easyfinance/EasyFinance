@@ -21,7 +21,6 @@ $(document).ready(function() {
 
     //BIND
     $('#btnSave').click(function(){
-        $(this).attr('disabled', true);
         saveCategory()
     });
 
@@ -96,6 +95,7 @@ $(document).ready(function() {
     function clearForm() {
         $('#namecat,#cat_id').val('');
         $('#subcat,#cattype,#catsys').removeAttr('selected');
+        $('#add_form').find('#btnSave').attr('disabled', false);
     }
 
     /**
@@ -158,7 +158,7 @@ $(document).ready(function() {
                 +'</div></div>').appendTo('div.categories');
     }
 
-    function listInsertChildCategory(cat){
+    function listInsertChildCategory(cat, afterNode){
         var system = easyFinance.models.category.getSystemCategories()[cat.system];
 
         var pr = cat['parent'];
@@ -175,8 +175,7 @@ $(document).ready(function() {
             $('<table>').appendTo($('#category_'+pr));
         }
 
-        $('.categories #category_'+pr+' table').append(
-            '<tr id="category_'+cat.id+'">'
+        var strAppend = '<tr id="category_'+cat.id+'">'
             +'<td class="w1">'
                 +'<a>'+cat['name']+'</a>'
             +'</td>'
@@ -197,10 +196,30 @@ $(document).ready(function() {
                         +'<li class="del"><a title="Удалить">Удалить</a></li>'
                         +'<li class="add"><a title="Добавить">Добавить</a></li></ul>'
                 +'</div>'
-            +'</td></tr>'
-        );
+            +'</td></tr>';
+
+        if (afterNode)
+            $(afterNode).after(strAppend);
+        else
+            $('.categories #category_'+pr+' table').append(strAppend);
     }
 
+    function updateCategory(oldCat, newCat) {
+        if (oldCat.parent == "0" || oldCat.parent == "") {
+            // родительская категория
+            // обновляем название "по месту"
+            // остальные изменения внешне не отображаются
+            $('#category_' + oldCat.id + ' a:first').text(newCat.name);
+        } else {
+            // дочерняя категория
+            
+            // Удаляем старую версию категории из списка
+            $('#category_'+oldCat.id).remove();
+
+            // Вставляем обновлённую версию категории в конец списка
+            listInsertCategory(newCat);
+        }
+    }
 
      /**
      * Выводит таблицу пользовательских категорий
@@ -254,6 +273,67 @@ $(document).ready(function() {
             var type = $('#cattype').val();
             var sys = $('#catsys').val();
 
+            var oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[id]);
+debugger;
+            if (subcat =="") {
+                // родительская категория
+                var children = easyFinance.models.category.getChildrenByParentId(id);
+                
+                if (type!=oldCat.type && type!=0 && children.length > 0) {
+                    // делаем проверки, если тип категории меняется на
+                    // доходный или расходный и у неё есть подкатегории
+
+                    // запрещаем делать категорию доходной или расходной,
+                    // если у неё есть подкатегории другого типа
+                    var stop = false;
+                    for (var key in children) {
+                        if (children[key]['type'] != type)
+                            stop = true;
+                    }
+
+                    if (stop) {
+                        var strAlert = 'Вы не можете сделать эту категорию '
+                            + (type==1 ? 'доходной' : 'расходной')
+                            + ',\nпотому что она содержит '
+                            + (type==1 ? 'расходные' : 'доходные') + ' подкатегории';
+                        
+                        alert(strAlert);
+                        return;
+                    }
+                }
+            } else {
+                // подкатегория
+                var newParent = easyFinance.models.category.getUserCategories()[subcat];
+                if (type != oldCat.type && newParent.type != 0) {
+                    // меняем тип подкатегории
+                    var strPrompt = 'Вы пытаетесь изменить тип подкатегории. '
+                        + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
+
+                    if (!confirm(strPrompt))
+                        return;
+                } else if (subcat != oldCat.subcat) {
+                    // перемещаем подкатегорию в другую категорию
+                    if (newParent.type != 0 && newParent.type != type) {
+                        // пользователь пытается поместить
+                        // доходную подкатегорию в расходную
+                        // или расходную подкатегорию в доходную
+                        var strType = "универсальную";
+                        if (type == 1)
+                            strType = "доходную"
+                        else if (type == 0)
+                            strType = "расходную";
+
+                        var strPrompt = 'Вы пытаетесь переместить '
+                            + strType + ' подкатегорию в '
+                            + (type==1 ? "расходную" : "доходную") + ' категорию. \n'
+                            + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
+
+                        if (!confirm(strPrompt))
+                            return;
+                    }
+                }
+            }
+
             var done = function(cat) {
                     $('#add_form').find('#btnSave').attr('disabled', false);
                     $('#add_form').hide();
@@ -264,12 +344,7 @@ $(document).ready(function() {
                         listInsertCategory(cat);
                     } else {
                         // категория была отредактирована
-                        //drawUserCategoriesList();
-                        // @ticket 156
-                        // Удаляем старую версию категории из списка
-                        $('#category_'+id).remove();
-                        // Вставляем обновлённую версию категории
-                        listInsertCategory(cat);
+                        updateCategory(oldCat, cat);
                     }
 
                     // Обновляем список родительских категорий
@@ -280,6 +355,7 @@ $(document).ready(function() {
                     $('#op_type').change();
             }
 
+            $('#btnSave').attr('disabled', true);
             var act = $('form').attr('action');
             if (act == '/category/add/')
                 easyFinance.models.category.add(name, subcat, type, sys, done);
