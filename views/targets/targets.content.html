@@ -21,9 +21,15 @@
                                     <!-- <a href="#"><img src="/img/images/pic7.gif" alt="" /></a> -->
                                 </div>
 								<div class="descr">
+                                                                    {if $i.category==2}
+                                    <img src="/img/i/avto.bmp" alt="" />
+                                    {elseif $i.category==3}
+                                    <img src="/img/i/rest.bmp" alt="" />
+                                    {else}
                                     <img src="/img/i/fintarget1.jpg" alt="" />
+                                    {/if}
 									<a href="#">{$i.title}</a>
-									{$i.comment}
+									{$i.comment}{$i.category}
 								</div>
 								<div class="indicator_block">
 									<div class="money">
