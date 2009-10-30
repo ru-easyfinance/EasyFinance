@@ -124,10 +124,10 @@ easyFinance.widgets.accountsPanel = function(){
         str = str + '</ul>';
         _$node.find('#l_amount').html(str);
         $('div.listing dl.bill_list dd').hide();
-        $('div.listing dl.bill_list dt').live('click',function(){
+        $('div.listing dl.bill_list dt').click(function(){
             $(this).toggleClass('open').next().toggle();
-            return false
-        })
+            return false;
+        });
         $('div.listing dl.bill_list dt:last').click().addClass('open');
     }
 
