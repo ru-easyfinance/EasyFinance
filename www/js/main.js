@@ -186,8 +186,7 @@ $(document).ready(function() {
             }
 
             var infinity;
-
-            if ( $('.rep_type[checked]').val() == 2 ) {
+            if ( $('.rep_type:checked').attr('rep') == 2 ) {
                 infinity = 1;
             } else {
                 infinity = 0;
@@ -206,7 +205,7 @@ $(document).ready(function() {
                 category:   $('#op_dialog_event #cal_category').val(),
                 type:       $('#op_dialog_event #cal_type').val(),
                 account:    $('#op_dialog_event #cal_account').val(),
-                rep_type:   $('#op_dialog_event .rep_type[checked]').val(),
+                rep_type:   $('#op_dialog_event .rep_type:checked').attr('rep'),
                 mon:        $('.week #mon').attr('checked') ? 1 : 0,
                 tue:        $('.week #tue').attr('checked') ? 1 : 0,
                 wed:        $('.week #wed').attr('checked') ? 1 : 0,

@@ -56,27 +56,30 @@ class Budget_Model {
                     'children'     => array()
                 );
                 if ($var['drain'] == 1) {
-                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
+                    $list['c_'.$var['category']]['total_drain']  = (float)$var['amount'];
                 } else {
                     $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
                 }
                 $childs = false;
+
             } else if ( !isset($list['c_'.$category[$var['category']]['cat_parent']]) ) {
-                $list['c_'.$category[$var['category']]['cat_parent']] = array (
-                    'name'         => $category[$var['category']]['cat_name'],
-                    'category'     => $var['category'],
-                    'total_drain'  => 0,
-                    'total_profit' => 0,
-                    'children'     => array()
-                );
-                if ($var['drain'] == 1) {
-                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
-                } else {
-                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
-                }
-                $childs = false;
+//                $list['c_'.$category[$var['category']]['cat_parent']] = array (
+//                    'name'         => $category[$var['category']]['cat_name'],
+//                    'category'     => $var['category'],
+//                    'total_drain'  => 0,
+//                    'total_profit' => 0,
+//                    'children'     => array()
+//                );
+//                if ($var['drain'] == 1) {
+//                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
+//                } else {
+//                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
+//                }
+//                $childs = false;
+                trigger_error('Не должно',E_USER_NOTICE);
+            // Создаём ребёнка
             } else {
-                
+
                 if (is_null($var['drain'])) {
                     $drain = -1;
                 }elseif ((int)$var['drain'] === 1) {
@@ -97,7 +100,7 @@ class Budget_Model {
                 );
                 
                 // Если у нас первый ребёнок
-                if (!$childs) {
+                if ($childs === false) {
                     $list['c_'.$category[$var['category']]['cat_parent']]['total_drain']  = 0;
                     $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] = 0;
                     $childs = true;

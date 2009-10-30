@@ -168,8 +168,8 @@ class Calendar_Model {
             $sql = $this->_repeatWeekDay($array, $last_id);
         } elseif ($array['type_repeat'] == 30) {
             $sql = $this->_repeatMonth($array, $last_id);
-        //} elseif ($array['type_repeat'] == 90) {
-        //$type = ' QUARTER ';
+        } elseif ($array['type_repeat'] == 90) {
+            $type = ' QUARTER ';
         } elseif ($array['type_repeat'] == 365) {
             $sql = $this->_repeatYear($array, $last_id);
         } else {
@@ -178,7 +178,7 @@ class Calendar_Model {
         if ($array['type_repeat'] > 0 && !empty($sql)) {
             $this->db->query("INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,".
                 "`type_repeat`,`count_repeat`, `comment`, `dt_create`, `near_date`) VALUES " . $sql);
-        //                print "INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`, `comment`, `dt_create`, `near_date`) VALUES " . $sql;
+//            print "INSERT INTO calendar (`user_id`,`chain`,`title`,`start_date`,`last_date`,`type_repeat`,`count_repeat`, `comment`, `dt_create`, `near_date`) VALUES " . $sql;
         }
         return '[]';
     }
