@@ -15,7 +15,12 @@ class Logout_Controller extends Template_Controller
     function index($args)
     {
         Core::getInstance()->user->destroy();
-        header("Location: /");
-        exit;
+	if (IS_DEMO) {
+        	header("Location: https://" . URL_ROOT_MAIN);
+	        exit;
+	} else {
+        	header("Location: /");
+	        exit;
+	}
     }
 }
