@@ -314,4 +314,4 @@ VALUES
 INSERT INTO `users` 
 (`id`, `user_name`, `user_login`, `user_pass`, `user_mail`, `user_created`, `user_active`, `user_new`, `user_currency_default`, `user_currency_list`, `user_type`) 
 VALUES 
-(${userId},'Демо','${login}','${pass}','demo@demo.easyfinance.ru','${date}-29',1,0,1,'a:5:{i:0;s:1:\"1\";i:1;s:1:\"2\";i:2;s:1:\"4\";i:3;s:2:\"18\";i:4;s:1:\"3\";}',0);
+(${userId},'Демо','${login}','${pass}','demo@demo.easyfinance.ru','${date}-29',1,0,1,'a:5:{i:0;s:1:\"1\";i:1;s:1:\"2\";i:2;s:1:\"4\";i:3;s:2:\"18\";i:4;s:1:\"3\";}',0
