@@ -28,7 +28,7 @@ easyFinance.widgets.operationsJournal = function(){
     // форматирует и выводит таблицу с данными
     // данные получаются из модели методом loadJournal
     // и передаются в эту функцию
-    function _showInfo(data) {        
+    function _showInfo(data) {
         if (data == null)
             return;
 
@@ -64,9 +64,9 @@ easyFinance.widgets.operationsJournal = function(){
                     // если перевод осуществляется между счетами с разными валютами,
                     // то в переменной imp_id хранится сумма в валюте целевого счёта
                     if (data[v].imp_id == null)
-                        tr += '<td class="summ"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
+                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
                     else
-                        tr += '<td class="summ"><span><b>'+formatCurrency(data[v].imp_id)+'</b></span></td>'
+                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].imp_id)+'</b></span></td>'
                 }
 
                 tr += '<td class="light"><span>'+data[v].date+'</span></td>'
@@ -80,10 +80,10 @@ easyFinance.widgets.operationsJournal = function(){
                 +'</td></tr>';
         }
         // Очищаем таблицу
-        $('#operations_list').find('tr:gt(0)').remove();
+        $('#operations_list').find('tr').remove();
         
         // Заполняем таблицу
-        $('#operations_list').append(tr);
+        $('#operations_list tbody').append(tr);
     }
 
     function _deleteChecked(){

@@ -62,6 +62,7 @@ $tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
 $tpl->append('css', 'jquery/fancy.css');
 
 $tpl->append('css', 'expertsList.css');
+$tpl->append('css', 'operationsJournal.css');
 
 if( JS_MINIFY )
 {

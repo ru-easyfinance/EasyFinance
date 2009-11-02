@@ -38,9 +38,9 @@
                 </ul>
                 <ul class="menu2">              
                     {if $user_info.user_id > 0}
-                        <li><a href="/info/">Личный кабинет</a></li>
+                        <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                         <li><a href="/profile/">Настройки профиля</a></li>
-                        <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a id="show_logout" href="/logout/" title="Выход">&nbsp;</a></li>
+                        <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                     {else}
                         <!-- Jet. ticket #273 hack -->
                         <li></li><li></li><li></li><li></li><li></li>
