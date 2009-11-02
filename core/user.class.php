@@ -291,7 +291,7 @@ class User
         $this->user_category = array();
         $category = $this->db->select($sql, $this->getId());
         foreach ($category as $val) {
-            $this->user_category[$val['cat_id']] = $val;
+            $this->user_category[$val['cat_id']] = stripslashes($val);
         }
     }
 
