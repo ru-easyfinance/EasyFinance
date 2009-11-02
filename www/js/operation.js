@@ -70,7 +70,8 @@ $(document).ready(function() {
     $('#op_account').change(journalReload);
 
     // загружаем журнал транзакций
-    easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
+    // по умолчанию показываются операции по всем счетам
+    // easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
     easyFinance.widgets.operationsJournal.loadJournal();
 });
 
