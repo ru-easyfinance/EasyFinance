@@ -217,24 +217,34 @@ easyFinance.widgets.operationEdit = function(){
             $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;
         }
+
         //Запрос подтверждения на выполнение операции в случае ухода в минус.
         var am = tofloat($('#op_amount').val()+'.0');
-        var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
+
+        // см. тикет #306
+        //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
+        var tb = tofloat(_model.getAccountBalanceTotal($("#op_account option:selected").val()));
+        var ab = tofloat(_model.getAccountBalanceAvailable($("#op_account option:selected").val()));
+        
         //* && $("#op_type option:selected").val() != 1*/)
         if ( (am-tb)>0 && $("#op_type option:selected").val()!=1){
-            if (!confirm('Данная транзакция превышает остаток средств на вашем счёте. Продолжить ?'))
+            if (!confirm('Данная транзакция превышает остаток средств на вашем счёте! Продолжить ?'))
+                return false;
             //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
-            return false;
         }//*/
 
+        // @TODO: вернуть эту проверку, когда можно будет делать перевод из резерва обратно в доступные деньги
         //alert(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
         //alert(res['accounts'][$("#op_account option:selected").val()]['reserve']);
         //если сумма совершаемой операции превышает сумму доступного остатка(Общий - резерв на финцели)
         // тогда предупреждаем пользователя и в случае согласия снимаем нехватающую часть денег с фин цели.
-        if ((am - ( tb- res['accounts'][$("#op_account option:selected").val()]['reserve']))>0) {
-            alert ("Введённая сумма операции превышает доступный остаток счёта.\n\
+        /*
+        if ((am - ab)>0) {
+            alert ("Введённая сумма операции превышает доступный остаток счёта с учётом резерва.\n\
 Переведите деньги с финансовой цели и повторите операцию ещё раз!");
+            return false;
         }
+        */
 
         if ($('#op_type').val() == '4') {
             /**
