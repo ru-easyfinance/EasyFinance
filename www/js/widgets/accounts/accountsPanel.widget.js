@@ -26,6 +26,7 @@ easyFinance.widgets.accountsPanel = function(){
 
         _model = model;
         $(document).bind('accountsLoaded', redraw);
+        $(document).bind('accountDeleted', redraw);
 
         redraw();
 
