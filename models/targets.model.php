@@ -101,7 +101,7 @@ class Targets_Model {
             DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
             t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done as done
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
-            FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;",
+            FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC ;",//ASC LIMIT ?d,?d
             Core::getInstance()->user->getId(), $start, $limit);
 		if (!is_array($list)) $list = array();//*/
 
@@ -114,9 +114,9 @@ class Targets_Model {
 		if (!is_array($list)) $list = array();//*/
         
         $category = Core::getInstance()->user->getUserCategory();
-        /*foreach ($list as $key => $var) {
+        foreach ($list as $key => $var) {
             $list[$key]['category'] = $category[$key]['cat_name'];
-        }*/
+        }
         $this->tpl->assign('total', $total);
         $this->tpl->assign('index', $index);
         $this->tpl->assign('index_limit', $limit);

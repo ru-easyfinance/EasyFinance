@@ -330,7 +330,7 @@ $(document).ready(function(){
                     //alert($('.object[name="ещё"] .descr a').text());
 
                     //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
-                    var o = $('.object[name="ещё"]');
+                    var o = $('.object[name='+data[v]['title']+']');
                     //if (confirm('ewrf'))
                     $.post('/targets/close_op',{
                         opid : data[v]['id'],

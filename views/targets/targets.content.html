@@ -13,7 +13,7 @@
 						<div class="inside financobject_block">
 							<div class="add"><span>Добавить цель</span></div>
                             {foreach from=$user_list_targets item=i key=k}
-                            <!--{if $k < 5}-->
+                            
                             {if $i.done == 0}
 							<div class="object" tid="{$i.id}" type="{$i.type}" category="{$i.category}" amount="{$i.amount}" start="{$i.start}" end="{$i.end}"
                                  photo="{$i.photo}" url="{$i.url}" account="{$i.account}" visible="{$i.visible}" name="{$i.title}" comment="{$i.comment}" money="{$i.money}">
@@ -50,7 +50,7 @@
 								</ul>
 							</div>
                             {/if}
-                            <!--{/if}-->
+                            
                             {/foreach}
                             <!--{if $user_list_targets|@count > 5}{/if}-->
                             {if $closed_targets > 0}
