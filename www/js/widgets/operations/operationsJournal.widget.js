@@ -39,6 +39,10 @@ easyFinance.widgets.operationsJournal = function(){
         
         // Собираем данные для заполнения в таблицу
         for(var v in data) {
+            // см. тикет #357
+            if (data[v].account_name == null)
+                continue;
+
             if (data[v].tr_id > 0) {
                 tp = 'Перевод';
             }else if (data[v].virt == 1) {

@@ -6,6 +6,7 @@
 easyFinance.models.accounts = function(){
     // constants
     var ACCOUNTS_LIST_URL = '/accounts/accountslist/';
+    var DELETE_ACCOUNT_URL = '/accounts/del/';
 
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/';
     var DELETE_OPERATIONS_URL = '/operation/del_all/';
@@ -57,6 +58,30 @@ easyFinance.models.accounts = function(){
 
     function getAccounts(){
         return _accounts;
+    }
+
+    function getAccountBalanceTotal(id){
+        return _accounts[id]["total_balance"];
+    }
+
+    function getAccountBalanceAvailable(id){
+        return _accounts[id]["total_balance"] - _accounts[id]["reserve"];
+    }
+
+    //@ TODO: addAccount(...)
+    //@ TODO: editAccountById(id)
+    
+    function deleteAccountById(id, callback) {
+        $.post(DELETE_ACCOUNT_URL, {id:id}, function(data){
+                delete _accounts[id];
+
+                $(document).trigger('accountDeleted');
+
+                if (callback)
+                    callback(data);
+            }
+            , 'json'
+        );
     }
 
     /**
@@ -148,6 +173,9 @@ easyFinance.models.accounts = function(){
     return {
         load: load,
         getAccounts: getAccounts,
+        getAccountBalanceTotal: getAccountBalanceTotal,
+        getAccountBalanceAvailable: getAccountBalanceAvailable,
+        deleteAccountById: deleteAccountById,
         loadJournal: loadJournal,
         addOperation: addOperation,
         editOperationById: editOperationById,

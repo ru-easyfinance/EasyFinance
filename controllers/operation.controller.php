@@ -41,8 +41,8 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('targetList',     $targets->getLastList(0, 100));
         $this->tpl->assign('accounts',       $this->user->getUserAccounts());
         $this->tpl->assign('currentAccount', $currentAccount);
-        $this->tpl->assign('dateFrom',       date('01.m.Y'));
-        $this->tpl->assign('dateTo',         date(date('t').'.m.Y'));
+        $this->tpl->assign('dateFrom',       date('d.m.Y', time() - 60*60*24*7));
+        $this->tpl->assign('dateTo',         date('d.m.Y')); //date(date('t').'.m.Y'));
         $this->tpl->assign('category',       get_tree_select());
         $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
 
