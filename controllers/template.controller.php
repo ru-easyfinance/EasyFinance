@@ -87,6 +87,7 @@ class Template_Controller {
                         'money'        => $v['amount'],
                         'account'      => $v['account'],
                         'amount_done'  => $v['amount_done'],
+                        'category'     => $v['tcategory'],
                         'done'         => $v['done']
                     );
                 }

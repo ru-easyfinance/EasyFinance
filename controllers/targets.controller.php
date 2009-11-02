@@ -38,7 +38,7 @@ class Targets_Controller extends Template_Controller
      */
     function index($args)
     {
-        $this->tpl->assign('user_list_targets', $this->model->getLastList(0,100));
+        $this->tpl->assign('user_list_targets', $this->model->getLastList());
         $this->tpl->assign('closed_targets', $this->model->countClose());
         $this->tpl->assign('pop_list_targets', $this->model->getPopList());     
         $this->tpl->assign('category',get_tree_select());

@@ -143,9 +143,11 @@ $(document).ready(function(){
                 +'<div class="descr">';
                 //alert(data[v]['category']);
                 if (data[v]['category']==2)
-                    s += '<img src="/img/i/avto.PNG" alt="" />'
+                    s += '<img src="/img/i/avto.png" alt="" />'
                 else if (data[v]['category']==3)
-                    s += '<img src="/img/i/rest.PNG" alt="" />'
+                    s += '<img src="/img/i/rest.png" alt="" />'
+                else if (data[v]['category']==1)
+                    s += '<img src="/img/i/home.png" alt="" />'
                 else
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
@@ -326,7 +328,7 @@ $(document).ready(function(){
         $.get('/targets/get_closed_list',{},function(data){
             if (data){
                 for (v in data)
-                if (confirm('Финансовая цель '+data[v]['title']+' закрыта. Осуществить перевод денег со счёта ?')){
+                if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
                     //alert($('.object[name="ещё"] .descr a').text());
 
                     //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));

@@ -38,7 +38,7 @@
                 <td><input type="text" value="" id="amountf" /></td>
             </tr>-->
             <tr>
-                <td><label for="account">Счет расхода</label></td>
+                <td><label for="account">Счет накопления</label></td>
                 <td><select id="account">
                     {foreach from=$accounts item=acc_data}
                     <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
