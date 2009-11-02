@@ -222,7 +222,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #advertisement { position: absolute; top: 7px; left: 208px; width: 729px; }
 #header #advertisement .ct { margin-bottom: -4px; }
 #header #advertisement .cb { margin-top: -4px; }
-#header #advertisement .inside { position: relative; margin: 0 auto 0 auto; width: 400px; height: 80px; overflow: hidden; }
+#header #advertisement .inside { position: relative; margin: 0 auto 0 auto; height: 80px; overflow: hidden; }
 #header #advertisement dt { margin-right: 5px; font-size: 10px; line-height: 11px; color: #cdd8cb; text-align: right; }
 
 #presentation { position: relative; height: 270px; background: url('/img/i/bg_presentation.png') no-repeat 0 0;}

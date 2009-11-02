@@ -30,9 +30,9 @@ class Feedback_Controller extends Template_Controller
 
 	function index()
     {
-		$this->tpl   = Core::getInstance()->tpl;
-		$this->tpl->assign('no_menu', '1');
-		$this->tpl->assign('head_val', '/feedback/');
+        $this->tpl   = Core::getInstance()->tpl;
+        $this->tpl->assign('no_menu', '1');
+        $this->tpl->assign('head_val', '/feedback/');
         $this->tpl->assign('name_page', 'feedback');
         $this->model = new Feedback_Model();
     }
