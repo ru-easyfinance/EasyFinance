@@ -438,9 +438,9 @@ $('.tags_list .add').live('click', function(){
 
     // accounts
     // modified by Jet 29.10.2009, ticket 337.
-    /*easyFinance.models.accounts.load(function(model) {
+    easyFinance.models.accounts.load(function(model) {
         easyFinance.widgets.accountsPanel.init('.accounts', model);
-    });*/
+    });
 
       ///////////////////////periodic/////////////////////////////////////////
       var data = res['events'];
