@@ -327,13 +327,19 @@ $(document).ready(function(){
             if (data){
                 for (v in data)
                 if (confirm('Финансовая цель '+data[v]['title']+' закрыта. Осуществить перевод денег со счёта ?')){
+                    //alert($('.object[name="ещё"] .descr a').text());
+
+                    //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
+                    var o = $('.object[name="ещё"]');
+                    //if (confirm('ewrf'))
                     $.post('/targets/close_op',{
                         opid : data[v]['id'],
                         targetcat : data[v]['category_id'],
                         amount : data[v]['amount_done'],
                         account : data[v]['target_account_id']
                     },function(data){
-                        $.jGrowl("Операция совершена", {theme: 'green'});
+                        o.remove();
+                        $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
                     },'json')
                 };
             }
