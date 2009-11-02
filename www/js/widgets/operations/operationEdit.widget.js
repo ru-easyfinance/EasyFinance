@@ -14,7 +14,7 @@ easyFinance.widgets.operationEdit = function(){
     // private functions
 
     function _initTags() {
-        /*$('a#infoicon1').click(function(){
+        $('a#infoicon1').click(function(){
             $('#op_infobut1').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
@@ -28,7 +28,7 @@ easyFinance.widgets.operationEdit = function(){
         })
         //$('#op_infobut1').html('<ul><li>fwfer</li></ul>');
         $('#op_infobut1').hide();
-        $('#op_infobut2').hide();*/
+        $('#op_infobut2').hide();
 
         $('a#op_tags').click(function(){
             $('.op_tags_could').dialog({
@@ -145,6 +145,7 @@ easyFinance.widgets.operationEdit = function(){
             var t;
             for (var v in res['user_targets']) {
                 t = res['user_targets'][v];
+                if (t['done']=='0')
                 o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
                     '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
             }
