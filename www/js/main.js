@@ -438,9 +438,9 @@ $('.tags_list .add').live('click', function(){
 
     // accounts
     // modified by Jet 29.10.2009, ticket 337.
-    easyFinance.models.accounts.load(function(model) {
+    /*easyFinance.models.accounts.load(function(model) {
         easyFinance.widgets.accountsPanel.init('.accounts', model);
-    });
+    });*/
 
       ///////////////////////periodic/////////////////////////////////////////
       var data = res['events'];
@@ -497,7 +497,10 @@ $('.tags_list .add').live('click', function(){
 
             data = res['popup_targets'];
             s = s + '<h2>5 самых популярных</h2><ul class="popular">';
+            var popular=0;
             for(v in data) {
+                popular++;
+                if (popular<=5)
                 s += '<li><a href="#">'
                     +data[v]['title']+'</a></li>';
             }
@@ -508,14 +511,15 @@ $('.tags_list .add').live('click', function(){
         })
         $('.financobject ul a').live('click',function(){
             var id = $(this).attr('href');
-            //window.location = id;
+            window.location = id;
             var str = id.substr(15);
             var f = $('.object[tid="'+str+'"]');
             $('input,textarea','#tpopup').val('');
             $('#key').val(f.attr('id'));
             $('#type').val(f.attr('type'));
-            //$('#title').val(f.attr('title'));
+            $('#title').val(f.attr('title'));
             $('#name').val(f.attr('name'));
+            $('#targets_category').val(f.attr('category'));
             $('#tg_amount').val(f.attr('amount'));
             $('#start').val(f.attr('start'));
             $('#end').val(f.attr('end'));
