@@ -618,9 +618,9 @@ $('.tags_list .add').live('click', function(){
                         </ul> \
                 </li> \
                 <li id="m3"> \
-                        <a href="/targets/"></a> \
+                        <a href="/budget/"></a> \
                         <ul> \
-                                <!--<li><a href="/budget/">Бюджет</a></li>--> \
+                                <!-- li><a href="/budget/">Бюджет</a></li> --> \
                                 <li><a href="/targets/">Фин. цели</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                         </ul> \
