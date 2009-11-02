@@ -143,9 +143,9 @@ $(document).ready(function(){
                 +'<div class="descr">';
                 //alert(data[v]['category']);
                 if (data[v]['category']==2)
-                    s += '<img src="/img/i/avto.bmp" alt="" />'
+                    s += '<img src="/img/i/avto.PNG" alt="" />'
                 else if (data[v]['category']==3)
-                    s += '<img src="/img/i/rest.bmp" alt="" />'
+                    s += '<img src="/img/i/rest.PNG" alt="" />'
                 else
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
