@@ -109,7 +109,7 @@ Core::getInstance()->js = array(
     'category' => array('models/category.model', 'category'),
     'calendar' => array('calendar'),
     'admin' => array( 'admin'),
-    'accounts' => array('widgets/accounts/accountEdit.widget', 'accounts'),
+    'accounts' => array('widgets/accounts/accountEdit.widget', 'widgets/accounts/accountsJournal.widget', 'accounts'),
     'review' => array('jquery/jquery.fancybox-1.0.0', 'review'),
     'budget' => array('budget', 'models/budget.model', 'widgets/budget.widget')
 );
