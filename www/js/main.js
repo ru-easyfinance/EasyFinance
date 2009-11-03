@@ -121,6 +121,30 @@ function tofloat(s)
     return (((sign)?'':'-') + '' + num + '.' + cents);
 }
 
+function MakeOperation(){
+        $.get('/targets/get_closed_list',{},function(data){
+            if (data){
+                for (v in data)
+                if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
+                    //alert($('.object[name="ещё"] .descr a').text());
+
+                    //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
+                    var o = $('.object[name='+data[v]['title']+']');
+                    //if (confirm('ewrf'))
+                    $.post('/targets/close_op',{
+                        opid : data[v]['id'],
+                        targetcat : data[v]['category_id'],
+                        amount : data[v]['amount_done'],
+                        account : data[v]['target_account_id']
+                    },function(data){
+                        o.remove();
+                        $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
+                    },'json')
+                };
+            }
+        }, 'json');
+    }
+
 //запланировано 
 
 $(document).ready(function() {

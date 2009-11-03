@@ -77,7 +77,7 @@ class Operation_Controller extends Template_Controller
      */
     function add($args)
     {
-        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert');
+        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close');
         $array = $this->model->checkData($array);
         if (count($this->model->errorData) > 0) {
             // Если есть ошибки, то возвращаем их пользователю в виде массива
@@ -107,8 +107,9 @@ class Operation_Controller extends Template_Controller
                 break;
             case 4: // Перевод на финансовую цель
                 $target = new Targets_Model();
+                // addTargetOperation($account_id, $target_id, $money, $comment, $date, $close) {
                 $target->addTargetOperation($array['account'], $array['target'], $array['amount'], 
-                    $array['comment'], $array['date'], $array['close']);
+                    $array['comment'], $array['date'],$array['close']);//$array['close']
                 //@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
                 //die(json_encode($target->getLastList(0, 100)));
                 die('[]');

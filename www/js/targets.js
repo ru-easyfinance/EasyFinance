@@ -56,6 +56,7 @@ $(document).ready(function(){
     //$('#targets_category').empty();
     for (var v in res['targets_category']) {
         $('#targets_category').append('<option value="'+v+'">'+res['targets_category'][v]+'</option>');
+        //$('#targets_category').val(3);
     }
 
     // Удаляем цель
@@ -315,6 +316,7 @@ $(document).ready(function(){
         $("div.financobject_block .add span").click()
     }
     if(s.substr(0,6)=='#edit/') {
+        //alert (s.substr(6));
         $('.object[tid="'+ s.substr(6) +'"] .f_f_edit').click();
         return false;
     }
@@ -324,29 +326,7 @@ $(document).ready(function(){
     //функция проверяет есть ли у пользователя закрытые цели. !но по которым физической операции
     //расхода денег на категорию он не совершил. ну и предлагает сделать .
     MakeOperation();
-    function MakeOperation(){
-        $.get('/targets/get_closed_list',{},function(data){
-            if (data){
-                for (v in data)
-                if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
-                    //alert($('.object[name="ещё"] .descr a').text());
-
-                    //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
-                    var o = $('.object[name='+data[v]['title']+']');
-                    //if (confirm('ewrf'))
-                    $.post('/targets/close_op',{
-                        opid : data[v]['id'],
-                        targetcat : data[v]['category_id'],
-                        amount : data[v]['amount_done'],
-                        account : data[v]['target_account_id']
-                    },function(data){
-                        o.remove();
-                        $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
-                    },'json')
-                };
-            }
-        }, 'json');
-    }
+    
 
     ///////////////////////////////////////////////////////////
     function tofloat(s)
