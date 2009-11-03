@@ -175,7 +175,8 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_currency').val(),
             TransferSum,
             $('#op_target').val(),
-            $('#op_close:checked').length,
+            //$('#op_close:checked').length,
+            $('#op_close2').val(),
             $('#op_tags').val(),
 
             function(data){
@@ -260,11 +261,14 @@ easyFinance.widgets.operationEdit = function(){
             var amount = parseFloat($("#op_target option:selected").attr("amount"));
             var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
             $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
+            //alert('1');
             if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
                 if (confirm('Закрыть финансовую цель?')) {
                     $("#op_close").attr("checked","checked");
+                    $("#op_close2").attr("value","1");
                 }
             }
+            MakeOperation();// @todo: заменить на отправку event'a!
         }
         return true;
     }
