@@ -68,14 +68,12 @@ class Info_Controller extends Template_Controller
      // Список ближайших целей пользователя
         die(json_encode($this->targets_model->getLastList(1,$count)));
     }
+
 /////////////chronometr //////////////////////////////////////
     function get_data()
     {
-
         //$date_start = formatRussianDate2MysqlDate($_POST['start']);
         //$date_end = formatRussianDate2MysqlDate($_POST['end']);
         die(json_encode($this->info_model->tohometrs()));
     }
-
 }
-?>

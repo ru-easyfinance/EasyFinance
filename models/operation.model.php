@@ -429,12 +429,12 @@ class Operation_Model {
         }
         // imp_id по слухам собрались убирать. тогда понадобится другое поле под конвертацию
         // это операции со счёта
-        $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
+        $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
         "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
         "FROM operation o ".
         "WHERE o.account_id = ? ".
             "AND o.user_id = ? ".
-            "AND (o.`date` BETWEEN ? AND ?) ";
+            "AND (`date` BETWEEN ? AND ?) ";
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
                     $sql .= " AND (o.cat_id IN ({$cat_in})) ";
@@ -444,12 +444,12 @@ class Operation_Model {
             }
         //это переводы на фин цель
         $sql .= " UNION ".
-        " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), ".
+        " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, ".
         " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL ".
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
         " WHERE t.user_id = ? ".
-            " AND (t.`date` >= ? AND t.`date` <= ?) ".
+            " AND (`date` >= ? AND `date` <= ?) ".
             " AND t.bill_id = ? ";
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
@@ -459,12 +459,12 @@ class Operation_Model {
                 }
             }
         $sql .= " UNION ".//это переводы на счёт
-        "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, ".
+        "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
         "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
         "FROM operation o ".
         "WHERE o.transfer = ? ".
             "AND o.user_id = ? ".
-            "AND (o.`date` BETWEEN ? AND ?) ";
+            "AND (`date` BETWEEN ? AND ?) ";
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
                     $sql .= " AND (o.cat_id IN ({$cat_in})) ";
@@ -472,7 +472,7 @@ class Operation_Model {
                     $sql .= " AND (o.cat_id = '{$currentCategory}') ";
                 }
             }
-        $sql .= " ORDER BY `date` DESC, id ";
+        $sql .= " ORDER BY dnat DESC, id ";
 
         $accounts = Core::getInstance()->user->getUserAccounts();
         $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom,

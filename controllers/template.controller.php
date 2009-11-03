@@ -49,7 +49,7 @@ class Template_Controller {
         $this->loadJS();
 
         $user = Core::getInstance()->user;
-        if (is_null($user->getId())) { 
+        if (is_null($user->getId())) {
             Core::getInstance()->tpl->assign('res', json_encode(
                 array(
                     'errors' => Core::getInstance()->errors,
@@ -107,23 +107,25 @@ class Template_Controller {
                 'progress' => ''
             );
         }
+
+        try {
+            $info = new Info_Model();
+            $infoa = $info->generate_value();
+        } catch ( Exception $e) {
+            $infoa = 0;
+        }
+        
         Core::getInstance()->tpl->assign('res', json_encode(array(
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'accounts' => $accounts,
-//            'periodic' => array(
-//                'id' => array(
-//                    'title' => '',
-//                    'date' => '',
-//                    'amount'=>'')
-//                ),
             'events' => Core::getInstance()->user->getUserEvents(),
             'user_targets' => $targets['user_targets'],
             'popup_targets' => $targets['pop_targets'],
             'currency' => $currency,
             'flash' => array(
                 'title' => '',
-                'value' => 0,
+                'value' => $infoa[0],
             ),
             'targets_category'=>array(
                 '1' => 'Квартира',

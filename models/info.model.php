@@ -47,14 +47,14 @@ class Info_Model
         $this->db = Core::getInstance()->db;
         $this->user_id = Core::getInstance()->user->getId();
         $this->operation_model = new Operation_Model();
-        //$this->account_model = new Accounts_Model();
+
         $sql = "SELECT
                     account_type_id, account_currency_id, account_id
                 FROM
                     accounts
                 WHERE 
                     user_id=?";
-        $this->accounts = $this->db->select($sql,$this->user_id);
+        $this->accounts = $this->db->select($sql, $this->user_id);
     }
 
     //расчётные функции//////////////////////////////////////////////////////
@@ -116,6 +116,7 @@ class Info_Model
         $sql = "SELECT * FROM info_calc";
         $this->table = $this->db->select($sql);
     }
+    
     //расчёт даннх////////////////////////////////////////////////////////////////////
     private function money($def)//1
     {
@@ -144,7 +145,7 @@ class Info_Model
             $z= ($x)/($this->table[$i]['m_y']);
             $t = $z;
         }
-        $ret = $t*($this->table[$i]['weight']);
+        $ret = (int)$t*($this->table[$i]['weight']);
         if ($ret > 0)
             return $ret;
         return 0;
@@ -174,7 +175,7 @@ class Info_Model
             $z= ($x)/($this->table[$i]['m_y']);
             $t = $z;
         }
-        $ret = $t*($this->table[$i]['weight']);
+        (int)$ret = $t*($this->table[$i]['weight']);
         if ($ret > 0)
             return $ret;
         return 0;
@@ -208,7 +209,7 @@ class Info_Model
             $z= (100-$x)/(100-$y);
             $t = $z;
         }
-        $ret = $t*($this->table[$i]['weight']);
+        (int)$ret = $t*($this->table[$i]['weight']);
         if ($ret > 0)
             return $ret;
         return 0;
@@ -247,7 +248,7 @@ class Info_Model
         return 0;
     }
 
-    private function generate_value()
+    public function generate_value()
     {
         $this->a = $this->get_profit();
         $this->b = $this->get_expense();
