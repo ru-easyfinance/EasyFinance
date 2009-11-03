@@ -237,8 +237,10 @@ easyFinance.widgets.accountsJournal = function(){
         for(key in arr)//выводит конечный массив
         {
             if (arr[key]){
-                // долги уже учтены
-                if (key != 2)
+                // учесть долги
+                if (key == 2)
+                    total = total-summ[key];
+                else
                     total = total+summ[key];
 
                 s='<div><strong class="title">'+ g_name[key]
