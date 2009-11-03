@@ -4,6 +4,7 @@
 #operations_list_header {
     position: relative;
     margin-top: 10px;
+    margin-bottom: 0px;
     width:518px;
     border-collapse:inherit!important;
     border: 2px solid #dfdede;
@@ -21,6 +22,8 @@ div#operations_list_container {
 table#operations_list {
     width: 480px;
     border-top: none;
+    margin: 0px;
+    border: none;
 }
 
 /* define height and width of scrollable area. Add 16px to width for scrollbar          */
