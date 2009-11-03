@@ -5,7 +5,9 @@
         <div class="ramka1">
             <div class="ct"><div></div></div>
             <div class="inside" title="Здесь могла бы быть ваша реклама.">
-                <img src="/img/i/banner.gif" alt="Здесь могла бы быть ваша реклама." title="Здесь могла бы быть ваша реклама." />
+                {if $smarty.server.REQUEST_URI == "/"}
+                    <img src="/img/i/banner.gif" alt="Здесь могла бы быть ваша реклама." title="Здесь могла бы быть ваша реклама." />
+                {/if}
             </div>
             <div class="cb"><div></div></div>
         </div>
