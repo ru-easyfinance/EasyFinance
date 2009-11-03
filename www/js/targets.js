@@ -297,8 +297,14 @@ $(document).ready(function(){
             var s = '',c;
             for(v in data.list) {
                 c = 1+parseInt(v);
-                s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/fintarget.jpg"  alt="" /><span class="num">'
-                    +c+'.</span><a href="#" class="name">'
+                if (data.list[v]['cat_id']==1)
+                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/home.png"  alt="" /><span class="num">'
+                if (data.list[v]['cat_id']==2)
+                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/avto.png"  alt="" /><span class="num">'
+                if (data.list[v]['cat_id']==3)
+                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/rest.png"  alt="" /><span class="num">'
+                //s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/fintarget.jpg"  alt="" /><span class="num">'
+                    s += c+'.</span><a href="#" class="name">'
                     +data.list[v]['title']+'</a><a href="#" class="join">Присоединиться</a>'
                     +'<div class="statistics"><div><span class="green">'
                     +data.list[v]['count']+'</span> Последователей<br/>'
