@@ -80,12 +80,13 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
-
+                        su = (data[0][c].money*oldcur/nowcur);
                     tr += "<tr>"
                                 + '<td>&nbsp;</td>'
                                 + '<td class="summ"><span>'+data[0][c].date+'</span></td>'
+                                //+ '<td class="summ ' + (data[0][c].date>=0 ? 'sumGreen' : 'sumRed')+'">'+data[0][c].date+'</td>'
                                 + '<td class="light"><span>'+data[0][c].account_name+'</span></td>'
-                                + '<td class="big"><span>'+formatCurrency(data[0][c].money*oldcur/nowcur)+'</span></td>'
+                                + '<td class="summ ' + (su>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(su)+'</span></td>'
                                 + '</tr>';
                 }
             }
@@ -149,11 +150,12 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
+                        su = (data[0][c].money*oldcur/nowcur);
                 tr += "<tr>"
                             + '<td>&nbsp;</td>'
                             + '<td class="repdate"><span>'+data[0][c].date+'</span></td>'
                             + '<td class="repname"><span>'+data[0][c].account_name+'</span></td>'
-                            + '<td class="repsumm"><span>'+formatCurrency(data[0][c].money*oldcur/nowcur)+'</span></td>'
+                            + '<td class="summ ' + (su>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(su)+'</span></td>'
                             + '</tr>';
                 }
             }
@@ -236,9 +238,9 @@ $(document).ready(function() {
                         }
                 tr +=        '<tr><td ><span><b>'+data[0][c].cat_name+
                             '<span><b></td>'+
-                            '<td class="repdate"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
-                            + '<td class="repname"><span>'+formatCurrency(sum2*oldcur/nowcur)+'</span></td>'
-                            + '<td class="repsumm"><span>'+formatCurrency(delta*oldcur/nowcur)+'</span></td>'
+                            '<td class="summ ' + (sum1*oldcur/nowcur>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
+                            + '<td class="summ ' + (sum2*oldcur/nowcur>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(sum2*oldcur/nowcur)+'</span></td>'
+                            + '<td class="summ ' + (delta*oldcur/nowcur>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(delta*oldcur/nowcur)+'</span></td>'
                             + '</tr>';
                 ssum1 = parseFloat(ssum1) + parseFloat(sum1*oldcur/nowcur);
                 ssum2 = parseFloat(ssum2) + parseFloat(sum2*oldcur/nowcur);
@@ -247,9 +249,9 @@ $(document).ready(function() {
              }
             }
             tr +=        '<tr><td ><span><b>Итого:</span><b></td>'+
-                            '<td class="repdate"><span>'+formatCurrency(ssum1)+'</span></td>'
-                            + '<td class="repname"><span>'+formatCurrency(ssum2)+'</span></td>'
-                            + '<td class="repsumm"><span>'+formatCurrency(sdelta)+'</span></td>'
+                            '<td class="summ ' + (ssum1>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(ssum1)+'</span></td>'
+                            + '<td class="summ ' + (ssum2>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(ssum2)+'</span></td>'
+                            + '<td class="summ ' + (sdelta>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(sdelta)+'</span></td>'
                             + '</tr>';
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
@@ -517,9 +519,9 @@ $(document).ready(function() {
                         }
                 tr +=        '<tr><td ><span><b>'+data[2][c].cat_name+
                             '<span><b></td>'+
-                            '<td class="repdate"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
-                            + '<td class="repname"><span>'+formatCurrency(sum2*oldcur/nowcur)+'</span></td>'
-                            + '<td class="repsumm"><span>'+formatCurrency(delta*oldcur/nowcur)+'</span></td>'
+                            '<td class="summ ' + (sum1*oldcur/nowcur>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(sum1*oldcur/nowcur)+'</span></td>'
+                            + '<td class="summ ' + (sum2*oldcur/nowcur>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(sum2*oldcur/nowcur)+'</span></td>'
+                            + '<td class="summ ' + (delta*oldcur/nowcur>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(delta*oldcur/nowcur)+'</span></td>'
                             + '</tr>';
                 ssum1 = Math.round(parseFloat(ssum1)) + Math.round(parseFloat(sum1));
                 ssum2 = Math.round(parseFloat(ssum2)) + Math.round(parseFloat(sum2));
@@ -528,9 +530,9 @@ $(document).ready(function() {
             }
             }
             tr +=        '<tr><td ><span><b>Итого:<span><b></td>'+
-                            '<td class="repdate"><span>'+formatCurrency(ssum1)+'</span></td>'
-                            + '<td class="repname"><span>'+formatCurrency(ssum2)+'</span></td>'
-                            + '<td class="repsumm"><span>'+formatCurrency(sdelta)+'</span></td>'
+                            '<td class="summ ' + (ssum1>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(ssum1)+'</span></td>'
+                            + '<td class="summ ' + (ssum2>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(ssum2)+'</span></td>'
+                            + '<td class="summ ' + (sdelta>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(sdelta)+'</span></td>'
                             + '</tr>';
             $('tr:not(:first)','#reports_list').each(function(){
                         $(this).remove();
