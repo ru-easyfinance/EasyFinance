@@ -152,7 +152,7 @@ class Operation_Model {
         }
 
 
-        // Проверяем тип операции
+        // Проверяем тип операцииe
         // - Перевод со счёта на счёт
         if ($valid['type'] == 2) {
             $valid['convert'] = round($valid['amount'] /  (float)$_POST['currency'], 2);
@@ -160,7 +160,8 @@ class Operation_Model {
         // - Финансовая цель
         } elseif($valid['type'] == 4) {
             $valid['target'] = (int)@$_POST['target'];
-            if (isset ($_POST['close'])) {
+            //if (isset ($_POST['close'])) {
+            if (($_POST['close'])==1) {
                 $valid['close'] = 1;
             } else {
                 $valid['close'] = 0;
