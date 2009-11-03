@@ -63,6 +63,7 @@ $(document).ready(function() {
     $('li.add').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
+        $('#subcat').removeAttr('disabled');
         $('#cat_id').val('');
         $('#add_form').show();
         $(document).scrollTop(300);
@@ -78,11 +79,11 @@ $(document).ready(function() {
      */
     function fillForm(id) {
 //        см. тикет 299
-//        if (cat.user[id]['parent'] == "0") {
-//            $('#subcat').attr('disabled', 'disabled');
-//        } else {
-//            $('#subcat').removeAttr('disabled');
-//        }
+        if (cat.user[id]['parent'] == "0") {
+            $('#subcat').attr('disabled', 'disabled');
+        } else {
+            $('#subcat').removeAttr('disabled');
+        }
         $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);

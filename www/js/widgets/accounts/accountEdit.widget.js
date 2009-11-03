@@ -60,7 +60,6 @@ easyFinance.widgets.accountEdit = function(){
                         l=0;
                 }
             });
-            debugger;
             if (l){
                 hideForm();
                 if (easyFinance.widgets.accountEdit._isEditing)
