@@ -158,19 +158,19 @@ $("#op_date").qtip({
    show: {delay: 1000},
    position: {target: 'mouse'},
    style: 'mystyle'
-})
+});
 $("#op_tags").qtip({
-   content: 'Пометки для быстрого поиска, например, аванс',
+   content: 'Пометки для быстрого поиска. Например: аванс',
    show: {delay: 1000},
    position: {target: 'mouse'},
    style: 'mystyle'
-})
+});
 $("#op_comment").qtip({
    content: 'Описание совершенной операции, например, аванс за сентябрь',
    show: {delay: 1000},
    position: {target: 'mouse'},
    style: 'mystyle'
-})
+});
 $("#op_btn_Save").qtip({
    content: 'Внести новые данные',
    show: {delay: 1000},
