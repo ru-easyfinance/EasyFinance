@@ -216,6 +216,8 @@ class Targets_Model {
             DATE_FORMAT(date_begin, '%d.%m.%Y') as start, DATE_FORMAT(date_end, '%d.%m.%Y') as end,
             visible, photo, url, comment, target_account_id as account
             FROM target WHERE id = ?";
+        $a = $this->db->selectRow($sql, $id);
+            $this->staticTargetUpdate($a['id']);
         return $this->db->selectRow($sql, $id);
     }
 
@@ -322,7 +324,7 @@ class Targets_Model {
                     $data['amount'], $data['start'] , $data['end'], $data['account'], $data['visible'],
                     $data['photo'], $data['url'], $data['comment']);
                 $tid = mysql_insert_id();
-                $this->addTargetOperation($data['account'], $tid, $data['money'], 'Начальный баланс', date('Y-m-d'), 0);
+                //$this->addTargetOperation($data['account'], $tid, $data['money'], 'Начальный баланс', date('Y-m-d'), 0);
                 $this->staticTargetUpdate($tid);
                 Core::getInstance()->user->initUserTargets();
                 Core::getInstance()->user->save();
@@ -412,7 +414,7 @@ class Targets_Model {
         {
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
                 VALUES(?,?,?,?,NOW(),?,?);",$account_id, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
-            if (!empty($close)) {
+            if ($close==1) {
                 $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
             }
             $this->staticTargetUpdate($target_id);
