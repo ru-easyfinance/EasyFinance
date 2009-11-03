@@ -430,11 +430,13 @@ class Operation_Model {
         // imp_id по слухам собрались убирать. тогда понадобится другое поле под конвертацию
         // это операции со счёта
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
-        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
-        "FROM operation o ".
-        "WHERE o.account_id = ? ".
-            "AND o.user_id = ? ".
-            "AND (`date` BETWEEN ? AND ?) ";
+        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
+        " FROM operation o ".
+        " WHERE o.user_id = " . Core::getInstance()->user->getId();
+            if((int)$currentAccount > 0) {
+                $sql .= " AND o.account_id = '" . (int)$currentAccount . "' ";
+            }
+            $sql .= " AND (`date` BETWEEN '{$dateFrom}' AND '{$dateTo}') ";
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
                     $sql .= " AND (o.cat_id IN ({$cat_in})) ";
@@ -448,9 +450,11 @@ class Operation_Model {
         " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL ".
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
-        " WHERE t.user_id = ? ".
-            " AND (`date` >= ? AND `date` <= ?) ".
-            " AND t.bill_id = ? ";
+        " WHERE t.user_id = " . Core::getInstance()->user->getId() . 
+            " AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
+            if((int)$currentAccount > 0) {
+                $sql .= " AND t.bill_id = '{$currentAccount}' ";
+            }
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
                     $sql .= " AND (tt.category_id IN ({$cat_in})) ";
@@ -459,12 +463,14 @@ class Operation_Model {
                 }
             }
         $sql .= " UNION ".//это переводы на счёт
-        "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
-        "o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
-        "FROM operation o ".
-        "WHERE o.transfer = ? ".
-            "AND o.user_id = ? ".
-            "AND (`date` BETWEEN ? AND ?) ";
+        " SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
+        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
+        " FROM operation o ".
+        " WHERE o.user_id = " . Core::getInstance()->user->getId();
+            if((int)$currentAccount > 0) {
+                $sql .= " AND o.transfer = " . (int)$currentAccount;
+            }
+            $sql .= " AND (`date` BETWEEN '{$dateFrom}' AND '{$dateTo}') ";
             if (!empty($currentCategory)) {
                 if ($cat[$currentCategory]['cat_parent'] == 0) {
                     $sql .= " AND (o.cat_id IN ({$cat_in})) ";
