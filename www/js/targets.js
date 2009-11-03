@@ -303,7 +303,8 @@ $(document).ready(function(){
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/avto.png"  alt="" /><span class="num">'
                 if (data.list[v]['cat_id']==3)
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/rest.png"  alt="" /><span class="num">'
-                //s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/fintarget.jpg"  alt="" /><span class="num">'
+                else
+                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/fintarget.jpg"  alt="" /><span class="num">'
                     s += c+'.</span><a href="#" class="name">'
                     +data.list[v]['title']+'</a><a href="#" class="join">Присоединиться</a>'
                     +'<div class="statistics"><div><span class="green">'
