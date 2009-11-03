@@ -281,6 +281,8 @@ $('#master input')
                 $('#master .w3').hide();
                 $('#master .cont').css('width','180px');
                 $('#sel_date').dialog('close');
+                $('#master .f_field3 .rest').css({left:'193px',top: '20px'})
+                $('#master .f_field3 .waste').css({right:'0px',left:'350px'})
                 /////////////////////////////////////////////////////////////
 
                 /**
@@ -298,8 +300,14 @@ $('#master input')
                     var tmp = summa();
                     $('#master .f_field3 .income span b').text(formatCurrency(tmp));
                     $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
-                    /** @todo: генерить не через модель! */
-                    //$('#master .f_field3').html(model.print_info().group);
+                    if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
                 })
         } , 'json');
 
@@ -347,7 +355,14 @@ $('#master input')
             $('#master .f_field3 .income span b').text(formatCurrency(tmp));
             $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
             ret['0'] +=']';
-        
+            if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+            {
+                $('#master .f_field3 .rest span b').css('color','#EB3C34')
+            }
+            else
+            {
+                $('#master .f_field3 .rest span b').css('color','#309500')
+            }
             
             //////////////////////////////////////////////////////////////////////////////////
             $('#master .waste_list form').html(model.print_list('0'))
@@ -370,7 +385,14 @@ $('#master input')
                     var tmp = summa();
                     $('#master .f_field3 .waste span b').text(formatCurrency(tmp));
                     $('#master .f_field3 .rest span b').text(formatCurrency($('#master .f_field3 .income span b').text().toString().replace(/[^0-9.]/gi, '')-tmp));
-
+                    if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
             })
             $('#master .w3').hide();
             load(ret['1'])
@@ -408,7 +430,14 @@ $('#master input')
             $('#master .f_field3 .rest span b').text(formatCurrency( $('#master .f_field3 .income span b').text().toString().replace(/[^0-9.]/gi, '')-tmp));
         ret['1'] +=']';
         var r_str = '{"d":'+ret[0]+', "r":'+ret[1]+'}';
-        
+        if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
 //        alert(tmpAmm+';'+isCAmmount)
 
         if((tmpAmm-isCAmmount)>=0)

@@ -167,7 +167,7 @@ easyFinance.models.budget = function()
  */
             var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b></span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b></span></div>';
-                str += '<div class="rest">Баланс: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
+                str += '<div class="rest">Остаток: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
             ret.group=str;
             return ret;
         }
