@@ -226,9 +226,12 @@ easyFinance.widgets.accountsJournal = function(){
                 if (!val[account_list[key]['cur']]) {
                     val[account_list[key]['cur']]=0;
                 }
-                
-                val[account_list[key]['cur']] = val[account_list[key]['cur']]
+                if (type != 2)
+                    val[account_list[key]['cur']] = val[account_list[key]['cur']]
                     + parseInt(account_list[key]['total_balance']);
+                else
+                    val[account_list[key]['cur']] = val[account_list[key]['cur']]
+                    - parseInt(account_list[key]['total_balance']);
                 str = str + '<td class="mark no_over">' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
             }
@@ -238,10 +241,10 @@ easyFinance.widgets.accountsJournal = function(){
         {
             if (arr[key]){
                 // учесть долги
-                if (key == 2)
-                    total = total-summ[key];
-                else
+                if (key != 2)
                     total = total+summ[key];
+                else
+                    total = total-summ[key];
 
                 s='<div><strong class="title">'+ g_name[key]
                     + '</strong> : ' + formatCurrency(tofloat(summ[key]))
