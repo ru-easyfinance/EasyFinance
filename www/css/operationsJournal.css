@@ -37,7 +37,7 @@ table#operations_list_header th + th {
 }
 
 table#operations_list_header th + th + th{
-    width: 40px;
+    width: 50px;
 }
 
 table#operations_list_header th + th + th + th{
@@ -49,7 +49,7 @@ table#operations_list_header th + th + th + th + th{
 }
 
 table#operations_list_header th + th + th + th + th + th{
-    width: 100px;
+    width: 90px;
 }
 
 /* last empty header for scrollbar */
@@ -68,7 +68,7 @@ table#operations_list td + td {
 }
 
 table#operations_list td + td + td{
-    width: 40px;
+    width: 50px;
 }
 
 table#operations_list td + td + td + td{
@@ -80,6 +80,6 @@ table#operations_list td + td + td + td + td{
 }
 
 table#operations_list td + td + td + td + td + td{
-    width: 120px;
+    width: 110px;
 }
 
