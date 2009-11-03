@@ -42,9 +42,7 @@
                         <li><a href="/profile/">Настройки профиля</a></li>
                         <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                     {else}
-                        <!-- Jet. ticket #273 hack -->
-                        <li></li><li></li><li></li><li></li><li></li>
-                        <li></li><li></li><li></li><li></li><li></li>
+                        <!-- Jet. ticket #273 -->
                         {if $smarty.const.IS_DEMO == false}
                             <li id="show_login"><a href="https://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
                         {else}

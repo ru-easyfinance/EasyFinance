@@ -124,12 +124,15 @@ easyFinance.widgets.accountsPanel = function(){
         str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';//@todo
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
-        $('div.listing dl.bill_list dd').hide();
+        //$('div.listing dl.bill_list dd').hide();
+        $('div.listing dl.bill_list dt').addClass('open');
         $('div.listing dl.bill_list dt').live('click', function(){
             $(this).toggleClass('open').next().toggle();
             return false;
         });
-        $('div.listing dl.bill_list dt:last').click().addClass('open');
+        //$('div.listing dl.bill_list dt').click();
+        //$('div.listing dl.bill_list dt:last').click().addClass('open');
+        //$('div.listing dl.bill_list dt').click().addClass('open');
     }
 
     // reveal some private things by assigning public pointers

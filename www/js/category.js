@@ -77,11 +77,12 @@ $(document).ready(function() {
      * @param id
      */
     function fillForm(id) {
-        if (cat.user[id]['parent'] == "0") {
-            $('#subcat').attr('disabled', 'disabled');
-        } else {
-            $('#subcat').removeAttr('disabled');
-        }
+//        см. тикет 299
+//        if (cat.user[id]['parent'] == "0") {
+//            $('#subcat').attr('disabled', 'disabled');
+//        } else {
+//            $('#subcat').removeAttr('disabled');
+//        }
         $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);

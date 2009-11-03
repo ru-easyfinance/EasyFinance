@@ -60,6 +60,7 @@ easyFinance.widgets.accountEdit = function(){
                         l=0;
                 }
             });
+            debugger;
             if (l){
                 hideForm();
                 if (easyFinance.widgets.accountEdit._isEditing)
@@ -151,13 +152,15 @@ easyFinance.widgets.accountEdit = function(){
                 var id = data;
                 if (!_isEditing){
                     $.jGrowl("Добавлен счёт", {theme: 'green'});
-                    update_list({id: id,cur_id: cur_id});
+                    //update_list({id: id,cur_id: cur_id});
                 }else{
                     $.jGrowl("Cчёт изменён", {theme: 'green'});
                     easyFinance.widgets.accountEdit._isEditing = false;
                 }
 
-                // @todo $(document).trigger('accountsChanged');
+                easyFinance.models.accounts.load();
+                // @todo use model, which will fire
+                // $(document).trigger('accountsChanged');
 
                 $('li#c2').click()
             }
