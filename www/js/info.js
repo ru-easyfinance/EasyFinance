@@ -71,10 +71,17 @@ $.post(
         var data = res['user_targets'];
         var str ='';
         for (var key in data) {
-            if(!data[key]['image']) {
+            /*if(!data[key]['image']) {
                 data[key]['image']='/img/i/fintarget.jpg';
 
-            }
+            }*/
+            data[key]['image']='/img/i/fintarget.jpg';
+            if (data[key]['category']==1)
+                data[key]['image']='/img/i/home.png';
+            if (data[key]['category']==2)
+                data[key]['image']='/img/i/avto.png';
+            if (data[key]['category']==3)
+                data[key]['image']='/img/i/rest.png';
             str += "<div class='object2' id='"
                 + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
                 data[key]['image']+"' alt='' /><a>" +
