@@ -52,7 +52,7 @@ $.post(
             */
 
             // init gauges
-            var title = (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
+            var title = titles[i]; // (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
             $('#flashTitle_'+i).text(title);
             var size = (i==0) ? "107" : "70";
             var flashvars = {title: "", value: data[0][i], bgimage: "/img/i/gauge" + size + ".gif"};
