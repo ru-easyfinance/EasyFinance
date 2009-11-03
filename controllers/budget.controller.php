@@ -31,6 +31,12 @@ class Budget_Controller extends Template_Controller
     function index($args)
     {
         Core::getInstance()->tpl->assign('name_page', 'budget/budget');
+
+        // Операция
+        Core::getInstance()->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+        Core::getInstance()->tpl->assign('category', get_tree_select());
+        $targets = new Targets_Model();
+        Core::getInstance()->tpl->assign('targetList', $targets->getLastList(0, 100));
     }
 
     /**
