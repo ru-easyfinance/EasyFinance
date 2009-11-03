@@ -58,8 +58,10 @@ easyFinance.widgets.operationsJournal = function(){
             tr += "<tr id='op" + data[v].id + "' value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                 + '<td class="light"><a href="#">' + tp + '</a></td>'
 
-                if (data[v].transfer != $('#op_account :selected').val() && data[v].transfer != 0){
-                    tr += '<td class="summ"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
+
+                // отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
+                if (data[v].transfer != _account && data[v].transfer != 0){
+                    tr += '<td class="summ '+ (-data[v].money>=0 ? 'sumGreen' : 'sumRed') +'"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
                 } else {
                     // если перевод осуществляется между счетами с разными валютами,
                     // то в переменной imp_id хранится сумма в валюте целевого счёта
