@@ -200,6 +200,7 @@ easyFinance.widgets.operationEdit = function(){
                     /// переписать
                     $('#op_target').html(o);
                     $.jGrowl("Операция успешно сохранена", {theme: 'green'});
+                    MakeOperation();// @todo: заменить на отправку event'a!
                 } else {
                     var e = '';
                     for (var v in data) {
@@ -268,7 +269,6 @@ easyFinance.widgets.operationEdit = function(){
                     $("#op_close2").attr("value","1");
                 }
             }
-            MakeOperation();// @todo: заменить на отправку event'a!
         }
         return true;
     }
