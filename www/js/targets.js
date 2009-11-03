@@ -299,9 +299,9 @@ $(document).ready(function(){
                 c = 1+parseInt(v);
                 if (data.list[v]['cat_id']==1)
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/home.png"  alt="" /><span class="num">'
-                if (data.list[v]['cat_id']==2)
+                else if (data.list[v]['cat_id']==2)
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/avto.png"  alt="" /><span class="num">'
-                if (data.list[v]['cat_id']==3)
+                else if (data.list[v]['cat_id']==3)
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/rest.png"  alt="" /><span class="num">'
                 else
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/fintarget.jpg"  alt="" /><span class="num">'
