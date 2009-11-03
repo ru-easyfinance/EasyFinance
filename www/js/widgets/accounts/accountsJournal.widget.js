@@ -219,15 +219,16 @@ easyFinance.widgets.accountsJournal = function(){
             if (!isNaN(type)){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
                 str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
-                str = str + '<td class="total_balance">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
+                str = str + '<td class="total_balance ' + (account_list[key]["total_balance"]>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
                 str = str + '<td class="cur">' + account_list[key]["cur"] + '</td>';
-                str = str + '<td class="def_cur">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
+                str = str + '<td class="def_cur ' + (account_list[key]["def_cur"]>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
                 summ[type] = summ[type]+account_list[key]['def_cur'];
                 if (!val[account_list[key]['cur']]) {
                     val[account_list[key]['cur']]=0;
                 }
-                val[account_list[key]['cur']] = tofloat( val[account_list[key]['cur']] )
-                    + tofloat(account_list[key]['total_balance']);
+                
+                val[account_list[key]['cur']] = val[account_list[key]['cur']]
+                    + parseInt(account_list[key]['total_balance']);
                 str = str + '<td class="mark no_over">' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
             }
@@ -236,7 +237,10 @@ easyFinance.widgets.accountsJournal = function(){
         for(key in arr)//выводит конечный массив
         {
             if (arr[key]){
-                total = total+tofloat(summ[key]);
+                // долги уже учтены
+                if (key != 2)
+                    total = total+summ[key];
+
                 s='<div><strong class="title">'+ g_name[key]
                     + '</strong> : ' + formatCurrency(tofloat(summ[key]))
                     +d_cur+ '<table  class="noborder">' + head_tr+arr[key]
@@ -250,9 +254,9 @@ easyFinance.widgets.accountsJournal = function(){
             <tr><th>Сумма</th><th>Валюта</th></tr>';
         for(key in val)
         {
-            str = str+'<tr><td>'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
+            str = str+'<tr><td class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+'</td><td>'+key+'</td></tr>';
         }
-        str = str+'<tr><td><b>Итого : </b>&nbsp;' + formatCurrency(total) + '</td><td>'+d_cur+'</td></tr>';
+        str = str+'<tr><td><b>Итого : </b>&nbsp;<span span class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(total) + '</span></td><td>'+d_cur+'</td></tr>';
         str = str + '</table>';
         $('#total_amount').html(str);
         //$('#total_amount').append(str);

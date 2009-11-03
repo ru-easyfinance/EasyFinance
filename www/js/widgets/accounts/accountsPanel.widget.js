@@ -71,9 +71,9 @@ easyFinance.widgets.accountsPanel = function(){
             str = '<li><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-            str = str + '<span>'+data[key]['name']+'</span>';
-            str = str + '<b>'+formatCurrency(data[key]['total_balance']);
-            str = str + data[key]['cur']+ '</b>'+'</a></li>';
+            str = str + '<span>'+data[key]['name']+'</span><br>';
+            str = str + '<span class="noTextDecoration ' + (data[key]['total_balance']>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(data[key]['total_balance']) + '</span>&nbsp;';
+            str = str + data[key]['cur']+ '</span></a></li>';
             if ( i!=2 ){
                 summ[i] = summ[i]+data[key]['def_cur'];
             }else{

@@ -4,6 +4,8 @@ ul, dl, dd, dt { list-style:none; }
 #menumain UL.menu2 li#show_login a {color: yellow; padding-right: 16px; background: url('/img/i/login.gif') right bottom no-repeat; //margin-top: 4px;}
 #menumain a#show_logout {color: yellow; padding-left: 10px; display: inline-block; width: 52px; background: url('/img/i/unlogin.gif') right center no-repeat; //margin-top: 4px;}
 
+.noTextDecoration {text-decoration: none;}
+
 .sumGreen {color: green; font-weight: bold;}
 .sumRed {color: red; font-weight: bold;}
 
