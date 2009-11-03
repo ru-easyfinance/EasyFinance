@@ -302,8 +302,8 @@ VALUES
 INSERT INTO `target`
  (`id`, `user_id`, `category_id`, `title`, `type`, `amount`, `date_begin`, `date_end`, `percent_done`, `forecast_done`, `visible`, `photo`, `url`, `comment`, `target_account_id`, `amount_done`, `close`) 
 VALUES 
-((${userId} + 1),${userId},(${userId} + 1),'Мазда 6','r','980000.00','${date}-01','2010-04-30',0,0,1,'undefined','undefined','',(${userId} + 3),'0.00',0),
-((${userId} + 3),${userId},(${userId} + 1),'Поездка в Испанию','r','90000.00','${date}-15','${date}-24',0,0,0,'undefined','undefined','',(${userId} + 3),'0.00',0);
+((${userId} + 1),${userId},2,'Мазда 6','r','980000.00','${date}-01','2010-04-30',0,0,1,'undefined','undefined','',(${userId} + 3),'0.00',0),
+((${userId} + 3),${userId},3,'Поездка в Испанию','r','90000.00','${date}-15','${date}-24',0,0,0,'undefined','undefined','',(${userId} + 3),'0.00',0);
 
 INSERT INTO `target_bill` 
 (`id`, `bill_id`, `target_id`, `user_id`, `money`, `dt`, `date`, `comment`, `tags`, `dt_create`, `dt_update`) 

@@ -6,12 +6,12 @@ foreach ( $argv as $k=>$a )
 {
 	if( $a == '--debug' )
 	{
-		define('DEBUG', true );
+            define('DEBUG', true );
 	}
 	
 	if( $a == '-c' && isset($argv[$k+1]) && is_numeric($argv[$k+1]) )
 	{
-		$usersCount = $argv[$k+1];
+            $usersCount = $argv[$k+1];
 	}
 }
 
