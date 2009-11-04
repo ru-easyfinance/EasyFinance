@@ -213,7 +213,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>date</name>
                                 <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                    <dateTime.iso8601></dateTime.iso8601>
                                 </value>
                             </member>
                             <member>
@@ -249,7 +249,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>date</name>
                                 <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                    <dateTime.iso8601></dateTime.iso8601>
                                 </value>
                             </member>
                             <member>
@@ -285,7 +285,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>date</name>
                                 <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                    <dateTime.iso8601></dateTime.iso8601>
                                 </value>
                             </member>
                             <member>
@@ -339,7 +339,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>date</name>
                                 <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                    <dateTime.iso8601></dateTime.iso8601>
                                 </value>
                             </member>
                             <member>
@@ -524,7 +524,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>date</name>
                                 <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                    <dateTime.iso8601></dateTime.iso8601>
                                 </value>
                             </member>
                             <member>

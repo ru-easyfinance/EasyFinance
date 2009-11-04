@@ -1,83 +1,112 @@
-<?php
-//include('kd_xmlrpc.php');
-define('INDEX',1);
-require_once "../../include/config.php";
-require_once SYS_DIR_INC.'/functions.php';
-
-
-if (DEBUG) {
-    // В режиме DEBUG выводим отладочные сообщения в консоль firebug < http://getfirebug.com/ > через плагин firephp < http://www.firephp.org/ >
-    require_once SYS_DIR_LIBS . 'external/FirePHPCore/FirePHP.class.php';
-}
-
-// Подгружаем внешние библиотеки
-require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
-
-// Устанавливаем обработчик ошибок
-set_error_handler("UserErrorHandler");
-
-define ('HOWMUCH',12);
-
-//$xmlrpc_methods['method_not_found'] = XMLRPC_method_not_found;
-//$synchhh = new Sync();
-
+<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 class Sync{
+    
     private $db = null;
+
     private $user = null;
+
     private $digitalsign = array("n2jdy303yeer7j2v");
+
     //$dataarray = array();
-    public $dataarray = null;// массив содержащий данные из хмл-ки
-    public $recordsMap = null;// рекордс мэп. содержит имя таблицы и айдишник. + присвоенный айдишник в изифинанс.ру
-    public $changedRec = null;// чейнжед рекордс. содержит айдишник изменённой записи и имя таблицы
-    public $deletedRec = null;// делетед рекордс. содержит айдишник удалённой записи и номер таблицы.
-    public $AccountsList = null;//массив счетов.
-    public $TransfersList = null;//массив переводов со счёта на счёт
-    public $CategoriesList = null;//массив категорий
-    public $CurrensiesList = null;//массив валют
-    public $DebetsList = null;//массив долгов
-    public $IncomesList = null;//массив доходов
-    public $OutcomesList = null;//массив расходов
+    
+//ERROR - ошибка на стороне сервера, пользователю данные о ошибке не разглашаются
+//WARNING  - ошибка пользователя. Пользователю говорится что у него не правильно (запрос, ключ, пароль)
+//NOTICE - Предупреждение, сообщение для пользователя (НЕ ОШИБКА)
+
+    private $dataarray = null;// массив содержащий данные из хмл-ки
+
+    private $recordsMap = null;// рекордс мэп. содержит имя таблицы и айдишник. + присвоенный айдишник в изифинанс.ру
+
+    private $changedRec = null;// чейнжед рекордс. содержит айдишник изменённой записи и имя таблицы
+
+    private $deletedRec = null;// делетед рекордс. содержит айдишник удалённой записи и номер таблицы.
+
+    private $AccountsList = null;//массив счетов.
+
+    private $TransfersList = null;//массив переводов со счёта на счёт
+
+    private $CategoriesList = null;//массив категорий
+
+    private $CurrensiesList = null;//массив валют
+
+    private $DebetsList = null;//массив долгов
+
+    private $IncomesList = null;//массив доходов
+
+    /**
+     * Массив расходов
+     * @example array (
+     *     'remotekey' => '1',
+     *     'amount'    => '100.00',
+     *     'currency'  => '1',
+     *     'date'      => '2009-11-04 07:35Z',
+     *     'name'      => 'Расход',
+     *     'done'      => '1'
+     * )
+     * @var array
+     */
+    public $OutcomesList = null;
+
     public $PlansList = null;//массив планирования
+    //
     //const $recordsMap = null;
 
+    /**
+     * Конструктор
+     */
     function __construct(){
        // Инициализируем одно *единственное* подключение к базе данных
-        $this->db=DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+        $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
+
         // И обработчик ошибок для бд
         $this->db->setErrorHandler('databaseErrorHandler');
-
 
         //Логгируем все запросы. Только во включенном режиме DEBUG
         /*if (DEBUG) {
            $this->db->setLogger('databaseLogger');
         }*/
-        $this->ReadXmlData();
-        /*if (!$this->ReadXmlData()){
-                $this->SendError();
-                return;
-            };
-        $this->parsing();*/
+
+        if (!$this->ReadXmlData()){
+            trigger_error('Не верный ключ', E_USER_WARNING);
+            $this->SendError();
+        }
+        trigger_error('Получилось авторизироваться', E_USER_NOTICE);
+        $this->parsing();
     }
 
-    function sync_getAuth($qw){
+    /**
+     * Проверяет авторизацию
+     * @param <type> 
+     * @return bool
+     */
+    function sync_getAuth($login, $pass, $key, $date)
+    {
         $sql = "SELECT user_pass FROM users WHERE user_login=?";
         $a = $this->db->query($sql, $qw['login']);
         //echo ('1'.$qw[0]['login']);
         //echo ($a[0]['user_pass'].'<br>');
         //echo ($a[0]['user_pass'].'<br>');
-        if ($a[0]['user_pass']!=$qw['pass'])
+        if ($a[0]['user_pass']!=$qw['pass']) {
             //trigger_error('Ключ не найден, или он устарел!', E_USER_WARNING);
             return false;
+        }
+
     //echo ($qw['digsignature'].'<br>');
             //echo ($this->digitalsign[0]);
     //echo ($os[0]);
-        if (!in_array($qw['digsignature'],$this->digitalsign))
+        if (!in_array($qw['digsignature'],$this->digitalsign)) {
             return false;
+        }
+
         return true;
     }
 
+    /**
+     * Возвращает ошибку
+     */
     function SendError(){
-        echo ("Не совпадают пароли");
+        //header();
+        die("Не совпадают пароли");
         //trigger_error();
     }
 
@@ -235,40 +264,52 @@ class Sync{
         }
     }
 
-function ReadXmlData(){
-    include ('zaglushka.php');
-    
-    $srv=xmlrpc_server_create();
-    xmlrpc_server_register_method($srv, "Rec", "getRecordsMap");
-    //$xmlRequest = $HTTP_RAW_POST_DATA;
-    $this->dataarray = xmlrpc_decode($xmlRequest);
-    //echo ($this->dataarray[1][1]['tablename']);
-    //$this->parsing();
-    if (!$this->sync_getAuth($this->dataarray[0])){
-        $this->SendError();
-        return;
-    }
-    $this->parsing();
-    $a = new Account_Model($this->AccountsList,$this->recordsMap,$this->changedRec,$this->deletedRec);
-    
+    /**
+     * Считывает данные из XML
+     * @return bool
+     */
+    function ReadXmlData(){
+        include ('zaglushka.php');
 
-    
-    //$this->WriteTest();//выводит распарсенные значения
-    //echo($this->recordsMap[0]['tablename']);
-    $response = xmlrpc_server_call_method($srv, $xmlRequest, Null);
-    //print $response;
-    xmlrpc_server_destroy($srv);
-    //XMLRPC_response(XMLRPC_prepare($response), WEBLOG_XMLRPC_USERAGENT);
-      //$c = new Zend_XmlRpc_Client('http://framework.zend.com/xmlrpc');
-//echo $c->call('test.sayHello');
-    //XMLRPC_response(XMLRPC_prepare($array), WEBLOG_XMLRPC_USERAGENT);
-        //XMLRPC_response(XMLRPC_prepare($array[1]), WEBLOG_XMLRPC_USERAGENT);
-    //echo "123";
-    /*$clients = simplexml_load_file('clients.xml');
-    foreach ($clients->client as $client) {
-         print "$client->name has account number $client->account_number ";
-    }*/
-}
+        $srv = xmlrpc_server_create();
+
+        xmlrpc_server_register_method($srv, "Rec", "getRecordsMap");
+
+        //$xmlRequest = $HTTP_RAW_POST_DATA;
+
+        $this->dataarray = xmlrpc_decode($xmlRequest);
+
+        //echo ($this->dataarray[1][1]['tablename']);
+        //$this->parsing();
+        
+        if (!$this->sync_getAuth($this->dataarray[0])){
+            $this->SendError();
+            return false;
+        } else {
+            return true;
+        }
+
+        $this->parsing();
+        $a = new Account_Model($this->AccountsList,$this->recordsMap,$this->changedRec,$this->deletedRec);
+
+
+
+        //$this->WriteTest();//выводит распарсенные значения
+        //echo($this->recordsMap[0]['tablename']);
+        $response = xmlrpc_server_call_method($srv, $xmlRequest, Null);
+        //print $response;
+        xmlrpc_server_destroy($srv);
+        //XMLRPC_response(XMLRPC_prepare($response), WEBLOG_XMLRPC_USERAGENT);
+          //$c = new Zend_XmlRpc_Client('http://framework.zend.com/xmlrpc');
+    //echo $c->call('test.sayHello');
+        //XMLRPC_response(XMLRPC_prepare($array), WEBLOG_XMLRPC_USERAGENT);
+            //XMLRPC_response(XMLRPC_prepare($array[1]), WEBLOG_XMLRPC_USERAGENT);
+        //echo "123";
+        /*$clients = simplexml_load_file('clients.xml');
+        foreach ($clients->client as $client) {
+             print "$client->name has account number $client->account_number ";
+        }*/
+    }
 
 //SendRemoteAnswer();
     function WriteTest(){
