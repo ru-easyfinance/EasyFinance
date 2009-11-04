@@ -12,12 +12,12 @@ class Account_Model {
         echo ('работаем с категориями<br>');
         //echo ($acc[0]['name'].'<br>');
         foreach ($rec as $k=>$v){
-            addAccount($v['remotekey'],$v['name'],$v['cur'],$v['date'],$v['startbalance'],$v['descr']);
+            $this->addAccount($v['remotekey'],$v['name'],$v['cur'],$v['date'],$v['startbalance'],$v['descr']);
         }
         
     }//*/
     function addAccount($id=0, $name='', $curid=0, $date='', $amount=0, $descr='', $user_id){
-        //echo ('123');
+        echo ('123');
         /* $cur=1;
         if ($curid == 1) $cur=1;
         $sql = "INSERT INTO accounts (`account_name`, `account_type_id`, `account_description`,
