@@ -290,7 +290,7 @@ class Sync{
         }
 
         $this->parsing();
-        $a = new Account_Model($this->AccountsList,$this->recordsMap,$this->changedRec,$this->deletedRec);
+        $account = new Account_Model($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
 
 
 
