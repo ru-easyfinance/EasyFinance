@@ -76,7 +76,7 @@ easyFinance.models.budget = function()
                     //var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
                     //  //if (isNaN(rgb))
                         //    rgb = '0';
-                        var drainprc = Math.round(children[k]['money']*100/children[k]['amount'])
+                        var drainprc = Math.abs(Math.round(children[k]['money']*100/children[k]['amount']))
                         var date = new Date()
                         var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
                         var b_color =(dateprc < drainprc)?'red':'green';
@@ -85,7 +85,7 @@ easyFinance.models.budget = function()
                         str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
                         //str += '<div class="green" style="width: '+rgb+'%;"></div>';
-                        str += '<div class="'+b_color+'" style="width: '+Math.abs(drainprc)+'%;"></div>';
+                        str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
                         str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
                         str += '</div></td>';
                         str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
