@@ -1,0 +1,1 @@
+ALTER TABLE `users` MODIFY COLUMN `user_currency_list` VARCHAR(255)  CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'a:3:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"3";}' COMMENT 'Сериализованный массив валют пользователя';
