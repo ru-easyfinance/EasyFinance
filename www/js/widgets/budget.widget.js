@@ -87,8 +87,15 @@ $('#master input')
     //********************************************************************
 
     $('.budget .f_field3').html(_$_group);
-    
-    
+
+if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
     /**********************************************************************
      * Появилась дата в мастере.Самое простое решение
      */
@@ -496,6 +503,14 @@ $('#master input')
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
                 })
+                if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
             },
             'json')
          }
