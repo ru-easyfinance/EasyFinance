@@ -98,7 +98,11 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
         $('#op_type').change(function(){
             //createDynamicDropdown('op_type', 'op_category');
-            //_changeTypeOperation('add');
+            //var qw = ($("#op_category").val());
+            _changeTypeOperation('add');
+            //alert(qw);
+            
+            
         });
 
         $('#op_target').change(function(){
@@ -120,17 +124,20 @@ easyFinance.widgets.operationEdit = function(){
         if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();
+            var qw = ($("#op_category").val());
             if ($('#op_type').val() == 1)
                     $.post('/category/cattypechange/',{
                         type : 1
                     },function(data){
                         $("#op_category").html(data);
+                        $("#op_category").val(qw);
                     },'json');
             if ($('#op_type').val() == 0)
                 $.post('/category/cattypechange/',{
                         type : -1
                     },function(data){
                         $("#op_category").html(data);
+                        $("#op_category").val(qw);
                     },'json');
                 //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
         //Перевод со счёта
