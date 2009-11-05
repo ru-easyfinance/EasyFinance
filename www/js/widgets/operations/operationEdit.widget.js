@@ -162,6 +162,7 @@ easyFinance.widgets.operationEdit = function(){
         }
         $.jGrowl("Операция сохраняется", {theme: 'green'});
         var suum = tofloat($('#op_amount').val());
+        var tip = $('#op_type').val();
 
         easyFinance.models.accounts.editOperationById(
             $('#op_id').val(),
@@ -200,6 +201,7 @@ easyFinance.widgets.operationEdit = function(){
                     /// переписать
                     $('#op_target').html(o);
                     $.jGrowl("Операция успешно сохранена", {theme: 'green'});
+                    if (tip == 4)
                     MakeOperation();// @todo: заменить на отправку event'a!
                 } else {
                     var e = '';
