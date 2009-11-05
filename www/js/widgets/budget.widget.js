@@ -72,7 +72,7 @@ $('#master input')
 
 
     $('#list.budget .waste_list form').html(_$_list);
-
+$('.w2,.w4').css('text-align', 'right')
     /*********************************************************************
      * Заплатка на вёрстку требует последующий модификации модели и т.п.
      */
@@ -503,6 +503,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
                 })
+                $('.w2,.w4').css('text-align', 'right')
                 if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                     {
                         $('.budget .f_field3 .rest span').css('color','#EB3C34')
@@ -523,6 +524,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             $('#list.budget .waste_list form').html(_$_list);
             $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').hide()})
             $('.cont input[value="0.00"]').closest('tr').remove();
+            $('.w2,.w4').css('text-align', 'right')
             $('.cont').each(function(){
                 var str = '<span>'+$(this).find('input').val()+'</span>'
                 $(this).html(str);
