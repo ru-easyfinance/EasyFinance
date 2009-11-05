@@ -1,4 +1,13 @@
 
+function _getMonthDays(d){
+    var m = d.getMonth()
+    for (var i = 29;i<32;i++)
+    {
+        d.setDate(i)
+        if (m != d.getMonth()){return (i-1)}
+    }
+    return (i)
+}
 /**
  * @desc Модель бюджета
  * @author rewle
@@ -64,15 +73,20 @@ easyFinance.models.budget = function()
                 for (var k in children) {
                     if (children[k]['type'] == type ||(children[k]['type']=='-1'&&((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))))){
                     //if(children[k]['type'] == type){
-                    var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
-                        if (isNaN(rgb))
-                            rgb = '0';
+                    //var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
+                    //  //if (isNaN(rgb))
+                        //    rgb = '0';
+                        var drainprc = Math.round(children[k]['drain']*100/children[k]['amount'])
+                        var date = new Date()
+                        var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
+                        var b_color =(dateprc < drainprc)?'red':'green';
                         str += '<tr id="'+children[k]['category']+'"><td class="w1"><a style="text-decoration:underline;cursor:pointer">';
                         str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
                         str += '<td class="w3"><div class="indicator">';
-                        str += '<div class="green" style="width: '+rgb+'%;"></div>';
-                        str += '<div class="red" style="width: 100%;"></div>';
+                        //str += '<div class="green" style="width: '+rgb+'%;"></div>';
+                        str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
+                        str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
                         str += '</div></td>';
                         str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
                         str += '</tr>';
