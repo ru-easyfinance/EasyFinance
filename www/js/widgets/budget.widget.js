@@ -268,6 +268,8 @@ $('#master input')
                 model.load(data);             
                 _$_list = model.print_list('1');
                 $('#master .waste_list form').html(_$_list);
+                _$_group = model.print_info().group;
+                $('#master .f_field3').html(_$_group);
                 $('#master .h .w4').text('Сред.Доход');
                 //дальше костыли, причём часть из них не актуальна в свете изменяющихся, в то время постоянно, требований к отображению
                 $('#master input').removeAttr('readonly');
@@ -431,15 +433,13 @@ $('#master input')
         ret['1'] +=']';
         var r_str = '{"d":'+ret[0]+', "r":'+ret[1]+'}';
         if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
-                    {
-                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
-                    }
-                    else
-                    {
-                        $('#master .f_field3 .rest span b').css('color','#309500')
-                    }
-//        alert(tmpAmm+';'+isCAmmount)
-
+        {
+            $('#master .f_field3 .rest span b').css('color','#EB3C34')
+        }
+        else
+        {
+            $('#master .f_field3 .rest span b').css('color','#309500')
+        }
         if((tmpAmm-isCAmmount)>=0)
         {
             if(!confirm('Ваш общий расход превышает общий доход. Продолжить сохранение?'))

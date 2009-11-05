@@ -1,3 +1,7 @@
+/**
+ * @desc Welcome
+ * @author Alexandr [Rewle] Ilichov
+ */
 $(document).ready(function() {
     /**
      * Переменные необходимые для текстовых преобразований
@@ -11,6 +15,7 @@ $(document).ready(function() {
     var timeoutid;
     /**
      * Производит обновление текста в центральной
+     * @return void
      */
     function updateText(id)
     {
@@ -21,6 +26,7 @@ $(document).ready(function() {
     }
     /**
      * Переключает картинку на следующий шаг
+     * @return void
      */
     function toggleMain()
     {
@@ -28,7 +34,9 @@ $(document).ready(function() {
         var id = $('ul.steps li.act').attr('id');
         updateText(nextStep[id]);
     }
-
+    /**
+     * Нажатие на кнопку "шаг"
+     */
     $('ul.steps li').click(function()
     {
         var id = $(this).attr('id');
@@ -44,15 +52,18 @@ $(document).ready(function() {
         },
         7000)
     });
-    
+    /**
+     * Задача регулярных действий
+     */
     timeoutid = setInterval(function()
     {
         toggleMain();
     },
     3000);
-
-
 ////////////////////////////////////////////////////////////контролируй управляй...
+    /**
+     * настройки для всплывающего окошка
+     */
     var c_settings = {
         monitors : {
             left:'100px',
@@ -64,8 +75,14 @@ $(document).ready(function() {
             left:'650px',
             text:'Существует  много различных способов экономить, и первый из них - больше зарабатывать, например,  используя ПИФы или инвестиции в недвижимость, и наш сайт поможет Вам в выборе наиболее доступных и удобных методов инвестирования. Кроме того, на нашем сайте Вы сможете воспользоваться вторым, но не менее эффективным способом экономить - правильно учитывать и планировать расходы. <br><br>'}
     }
+    /**
+     * Позиционирование по умолчанию
+     * @deprecated перенести в css
+     */
     $('#dialog').css({top:'20px',position:'absolute'}).hide()
-
+    /**
+     * скрытие подсказки при необходимости
+     */
     $('body').mousemove(function()
     {
         if (!$('#aboutproject div:hover').length)
@@ -73,7 +90,9 @@ $(document).ready(function() {
             $('#dialog').hide();
         }
     })
-
+    /**
+     * открытие и позиционирование подсказки
+     */
     $('#aboutproject .inside div').mouseover(function()
     {
         var c = $(this).attr('class');
@@ -87,17 +106,10 @@ $(document).ready(function() {
         }
         return false;
     });
-
-    $('.close').click(function(){
-        $('#dialog').hide();
-    });
-
+    /**
+     * Закрытие подсказки
+     */
     $('.link.close').click(function(){
         $('#dialog').hide();
     });
-/////////////////////////////////////////////////////hash API
-    if (window.location.hash == '#activate')
-    {
-        $.jGrowl('Ваш аккаунт успешно активирован.', {theme: 'green'});
-    }
 });
