@@ -89,7 +89,7 @@ easyFinance.models.budget = function()
                             str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
                             str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
                             str += '</div></td>';
-                            var f = parseFloat(children[k]['amount'])-parseFloat(children[k]['drain']);
+                            var f = parseFloat(children[k]['amount'])-parseFloat(children[k]['money']);
                             str += '<td class="w4"><span>'+formatCurrency(f)+' </span></td>';
                             str += '</tr>';
                         }
