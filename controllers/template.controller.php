@@ -132,7 +132,7 @@ class Template_Controller {
                 '2' => 'Автомобиль',
                 '3' => 'Отпуск',
                 '4' => 'Финансовая подушка',
-                '0' => 'Прочее'
+                '5' => 'Прочее'
             ),
             'errors'=>Core::getInstance()->errors,
             'budget'=>Core::getInstance()->user->getUserBudget(),
