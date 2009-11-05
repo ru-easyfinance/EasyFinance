@@ -13,6 +13,7 @@ $(document).ready(function(){
         clearForm();
         $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
+        $('#visible').attr('checked','checked');
     });
 
     // Присоединиться к популярной финансовой цели
@@ -22,6 +23,7 @@ $(document).ready(function(){
         $('#name').val($(this).closest('li').find('a:first').html());
         $('#tpopup form').attr('action','/targets/add/');
         $('#tpopup').dialog('open');
+        $('#visible').attr('checked','checked');
         return false;
     });
 
