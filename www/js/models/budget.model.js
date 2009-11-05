@@ -114,6 +114,7 @@ easyFinance.models.budget = function()
                 
                 str+='</table></div>';
                 }
+                $('.w2,.w4').css('text-align', 'right')
             }
             return str;
         }
