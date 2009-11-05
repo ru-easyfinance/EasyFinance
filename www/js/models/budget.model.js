@@ -90,7 +90,7 @@ easyFinance.models.budget = function()
                             str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
                             str += '</div></td>';
                             var f = Math.abs(parseFloat(children[k]['amount']))-Math.abs(parseFloat(children[k]['money']));
-                            str += '<td class="w4"><span>'+formatCurrency(f)+' </span></td>';
+                            str += '<td class="w4">'+formatCurrency(f)+'</td>';
                             str += '</tr>';
                         }
                         else//KYYGFBVFDVBHVSVBSKVB
@@ -106,7 +106,7 @@ easyFinance.models.budget = function()
                             str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
                             str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
                             str += '</div></td>';
-                            str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
+                            str += '<td class="w4">'+formatCurrency(children[k]['mean_drain'])+'</td>';
                             str += '</tr>';
                         }
                     }
@@ -114,7 +114,6 @@ easyFinance.models.budget = function()
                 
                 str+='</table></div>';
                 }
-                $('.w2,.w4').css('text-align', 'right')
             }
             return str;
         }
