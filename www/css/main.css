@@ -1150,11 +1150,11 @@ position:relative;}
 .categoriesSH table { position: relative; width: 517px; }
 .categoriesSH table td { position: relative; padding: 7px 0 5px 0; }
 .categoriesSH table td.w1 { width: 207px; padding-right: 5px; }
-.categoriesSH table td.w2 { width: 48px; }
+.categoriesSH table td.w2 { width: 30px; }
 .categoriesSH table td.w2 div { display: block; margin: 6px auto 0 auto; width: 8px; height: 8px; text-indent: -999px; overflow: hidden; background: url('/img/i/types.gif') no-repeat 0 0; }
 .categoriesSH table td.w2 div.t2 { background-position: 0 -10px; }
 .categoriesSH table td.w2 div.t3 { background-position: 0 -20px; }
-.categoriesSH table td.w3 { width: 122px; padding-left: 10px; padding-right: 15px; }
+.categoriesSH table td.w3 { width: 140px; padding-left: 10px; padding-right: 15px; }
 .categoriesSH table td.w4 { width: 110px; font-size: 11px; padding-top: 0; }
 .categoriesSH .indicator { position: relative; width: 94px; height: 13px; background: url('/img/i/bg11.png') no-repeat 0 -100px; }
 .categoriesSH .indicator div { position: relative; height: 13px; border-left: 1px solid #ced791; border-right: 1px solid #ced791; background: url('/img/i/bg16.gif') repeat-x 0 0; }
@@ -1164,12 +1164,12 @@ position:relative;}
 .categories table { position: relative; width: 485px; }
 .categories table td { position: relative; padding: 7px 0 5px 0; }
 .categories table td.w1 { width: 207px; padding-right: 5px; }
-.categories table td.w2 { width: 48px; }
-.categories table td.w2 div { display: block; margin: 6px auto 0 auto; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/catTypes.gif') no-repeat 0 0; }
+.categories table td.w2 { width: 32px; }
+.categories table td.w2 div { display: block; margin: 8px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/catTypes.gif') no-repeat 0 0; }
 .categories table td.w2 div.t2 { background-position: 0 -10px; }
 .categories table td.w2 div.t3 { background-position: 0 -19px; }
-.categories table td.w3 { width: 122px; padding-left: 10px; padding-right: 15px; }
-.categories table td.w4 { width: 110px; font-size: 11px; padding-top: 0; }
+.categories table td.w3 { width: 160px; padding-left: 10px; padding-right: 15px; }
+.categories table td.w4 { width: 60px; font-size: 11px; padding-top: 0; }
 
 .categories .indicator { position: relative; width: 94px; height: 13px; background: url('/img/i/bg11.png') no-repeat 0 -100px; }
 .categories .indicator div { position: relative; height: 13px; border-left: 1px solid #ced791; border-right: 1px solid #ced791; background: url('/img/i/bg16.gif') repeat-x 0 0; }
@@ -1816,8 +1816,8 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 /*------------------------------------------- crack jQuery End --------------------------------------*/
 .hided{display:none;}
 .l_n_cont{width:100%;}
-.l_n_cont div.icon {position: absolute; left: 218px; top: 6px;}
-.l_n_cont div.system {position: absolute; left: 245px; top: 6px; padding-left:10px;}
+.l_n_cont div.icon {position: absolute; left: 217px; top: 6px;}
+.l_n_cont div.system {position: absolute; left: 242px; top: 6px; padding-left:10px;}
 .line div.cont ul { display: none; position: absolute; top: -4px; right: -60px; width: 59px; height: 31px; padding-left: 16px;}
 .line div.cont ul li:after{ display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .line div.cont ul li{ float: left; margin: 9px 8px 0 0; height: 12px; }
