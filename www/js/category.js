@@ -5,6 +5,7 @@
 
 $(document).ready(function() {
     var cat;
+    var oldCatId;
 
     $('.block2 .inside').css({width: '679px'});
     $('.block2 .inside .form_block').css({width: '353px'});
@@ -32,8 +33,20 @@ $(document).ready(function() {
 
     $('#add_category').click(function(){
         $('#add_form').toggle();
+        $('#categoryEditSystem').show();
+        $('#subcat').removeAttr('disabled');
         $('form').attr('action','/category/add/');
     });
+
+    $('#subcat').change(function(){
+        // если создаём подкатегорию, то скрываем выбор системной категории
+        // она будет наследоваться от родительской
+        if ($(this).val() == "")
+            $('#categoryEditSystem').show();
+        else
+            $('#categoryEditSystem').hide();
+    });
+
     // При наведении мыши
 //    $('div.line tr').live('mouseover', function() {
 //        $(this).addClass('act').find('ul').show();
@@ -62,8 +75,20 @@ $(document).ready(function() {
     });
     $('li.add').live('click',function(){
         clearForm();
-        fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
+        var catId = $(this).closest('tr,.line').attr('id').split("_", 2)[1];
+        oldCatId = catId;
+        fillForm(catId);
+
         $('#subcat').removeAttr('disabled');
+        if (cat.user[catId]['parent'] != "0") {
+            $('#categoryEditSystem').hide();
+            $('#catsys').attr('disabled', 'disabled');    
+        } else {
+            $('#categoryEditSystem').show();
+            $('#catsys').removeAttr('disabled');
+            //$('#subcat').attr('disabled', 'disabled');
+        }
+
         $('#cat_id').val('');
         $('#add_form').show();
         $(document).scrollTop(300);
@@ -78,17 +103,21 @@ $(document).ready(function() {
      * @param id
      */
     function fillForm(id) {
-//        см. тикет 299
+//        см. тикеты 299, 389
         if (cat.user[id]['parent'] == "0") {
+            $('#categoryEditSystem').show();
             $('#subcat').attr('disabled', 'disabled');
         } else {
+            $('#categoryEditSystem').hide();
             $('#subcat').removeAttr('disabled');
         }
+
         $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);
         $('#cattype').val(cat.user[id]['type']);
-        $('#catsys').val(cat.user[id]['system']);
+        $('#catsys').val(cat.user[id]['system'])
+            .attr('disabled', 'disabled');
     }
 
     /**
@@ -149,8 +178,11 @@ $(document).ready(function() {
     }
 
     function listInsertParentCategory(cat){
-        $('<div class="line open" id="category_'+cat.id+'" style="width:496px"><div class="l_n_cont"><a class="name">'
-            +cat.name+'</a>'
+        var system = easyFinance.models.category.getSystemCategories()[cat.system];
+
+        $('<div class="line open" id="category_'+cat.id+'" style="width:496px"><div class="l_n_cont">'
+            +'<a class="name">'+cat.name+'</a>'
+            +'<div class="icon"><img src="/img/i/icoCatType'+cat.type+'.gif" title="'+["Расходная", "Универсальная", "Доходная"][parseInt(cat.type)+1]+'"/></div><div class="system">'+system.name+'</div>'
                 +'<div class="cont">'
                     +'<ul class="ul_head" style="z-index:100; right:0px">'
                         +'<li class="edit"><a class="cat" title="Редактировать">Редактировать</a></li>'
@@ -275,7 +307,7 @@ $(document).ready(function() {
             var type = $('#cattype').val();
             var sys = $('#catsys').val();
 
-            var oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[id]);
+            var oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[oldCatId]);
 
             if (subcat =="") {
                 // родительская категория
@@ -307,6 +339,7 @@ $(document).ready(function() {
                 // подкатегория
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
                 if (type != oldCat.type && newParent.type != 0) {
+                    debugger;
                     // меняем тип подкатегории
                     var strPrompt = 'Вы пытаетесь изменить тип подкатегории. '
                         + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
@@ -337,6 +370,7 @@ $(document).ready(function() {
             }
 
             var done = function(cat) {
+                    $('#add_form').find('#namecat').val('');
                     $('#add_form').find('#btnSave').attr('disabled', false);
                     $('#add_form').hide();
                     $.jGrowl("Категория успешно сохранена", {theme: 'green'});

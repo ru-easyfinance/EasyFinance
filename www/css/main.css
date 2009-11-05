@@ -1165,9 +1165,9 @@ position:relative;}
 .categories table td { position: relative; padding: 7px 0 5px 0; }
 .categories table td.w1 { width: 207px; padding-right: 5px; }
 .categories table td.w2 { width: 48px; }
-.categories table td.w2 div { display: block; margin: 6px auto 0 auto; width: 8px; height: 8px; text-indent: -999px; overflow: hidden; background: url('/img/i/types.gif') no-repeat 0 0; }
+.categories table td.w2 div { display: block; margin: 6px auto 0 auto; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/catTypes.gif') no-repeat 0 0; }
 .categories table td.w2 div.t2 { background-position: 0 -10px; }
-.categories table td.w2 div.t3 { background-position: 0 -20px; }
+.categories table td.w2 div.t3 { background-position: 0 -19px; }
 .categories table td.w3 { width: 122px; padding-left: 10px; padding-right: 15px; }
 .categories table td.w4 { width: 110px; font-size: 11px; padding-top: 0; }
 
@@ -1816,6 +1816,8 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 /*------------------------------------------- crack jQuery End --------------------------------------*/
 .hided{display:none;}
 .l_n_cont{width:100%;}
+.l_n_cont div.icon {position: absolute; left: 218px; top: 6px;}
+.l_n_cont div.system {position: absolute; left: 245px; top: 6px; padding-left:10px;}
 .line div.cont ul { display: none; position: absolute; top: -4px; right: -60px; width: 59px; height: 31px; padding-left: 16px;}
 .line div.cont ul li:after{ display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .line div.cont ul li{ float: left; margin: 9px 8px 0 0; height: 12px; }
