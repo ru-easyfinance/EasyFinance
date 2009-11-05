@@ -27,25 +27,42 @@ class Budget_Model {
      * @param date $start
      * @param date $end
      */
-    function loadBudget($start, $end = null, $user_id = 0)
+    function loadBudget($start = null, $end = null, $user_id = 0, $category = null)
     {
-        $sql = "SELECT c.cat_id as category, b.drain, b.currency, b.amount,
-            DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
-            DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
-            , (SELECT AVG(amount)
-                    FROM budget t WHERE
-                    (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-                            AND t.date_start <= LAST_DAY(b.date_start)) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
+        if ($user_id == 0) {
+            $user_id = Core::getInstance()->user->getId();
+        }
+        if (!$start) {
+            $start = date('Y-m-01');
+        }
+        if (!$category) {
+            $category = Core::getInstance()->user->getUserCategory();
+        }
+        $sql = "SELECT c.cat_id as category
+            , b.drain, b.currency, b.amount,
+                    DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
+                    DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
+            , (SELECT AVG(amount) FROM budget t
+                WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
+                    AND t.date_start <= LAST_DAY(b.date_start))
+                AND b.category = t.category AND b.user_id=t.user_id
+            ) AS avg_3m
+            , (SELECT SUM(o.money) FROM operation o
+                WHERE (o.transfer = NULL OR o.transfer = 0) AND
+            c.cat_id = o.cat_id
+            AND o.date >= ? AND o.date <= LAST_DAY(o.date)
+            ) AS money
             FROM category c
-            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
-            WHERE c.user_id= ?";
-        $array = $this->db->select($sql, $start, Core::getInstance()->user->getId());
+            LEFT JOIN budget b
+            ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
+            WHERE c.user_id= ? ORDER BY cat_parent";
 
-        $list = array(); $drain_all = 0; $profit_all = 0;
+        $array = Core::getInstance()->db->select($sql, $start, $start, $user_id);
 
-        $category = Core::getInstance()->user->getUserCategory();
+        $list = array();
+        
+        $drain_all = 0; $profit_all = 0;
         foreach ($array as $var) {
-
             // Создаём родительскую категорию
             if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
                 $list['c_'.$var['category']] = array (
@@ -56,30 +73,26 @@ class Budget_Model {
                     'children'     => array()
                 );
                 if ($var['drain'] == 1) {
-                    $list['c_'.$var['category']]['total_drain']  = (float)$var['amount'];
+                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
                 } else {
                     $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
                 }
                 $childs = false;
-
             } else if ( !isset($list['c_'.$category[$var['category']]['cat_parent']]) ) {
-//                $list['c_'.$category[$var['category']]['cat_parent']] = array (
-//                    'name'         => $category[$var['category']]['cat_name'],
-//                    'category'     => $var['category'],
-//                    'total_drain'  => 0,
-//                    'total_profit' => 0,
-//                    'children'     => array()
-//                );
-//                if ($var['drain'] == 1) {
-//                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
-//                } else {
-//                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
-//                }
-//                $childs = false;
-                trigger_error('Не должно',E_USER_NOTICE);
-            // Создаём ребёнка
+                $list['c_'.$category[$var['category']]['cat_parent']] = array (
+                    'name'         => $category[$var['category']]['cat_name'],
+                    'category'     => $var['category'],
+                    'total_drain'  => 0,
+                    'total_profit' => 0,
+                    'children'     => array()
+                );
+                if ($var['drain'] == 1) {
+                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
+                } else {
+                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
+                }
+                $childs = false;
             } else {
-
                 if (is_null($var['drain'])) {
                     $drain = -1;
                 }elseif ((int)$var['drain'] === 1) {
@@ -87,7 +100,6 @@ class Budget_Model {
                 } elseif ((int)$var['drain'] === 0) {
                     $drain = 1;
                 }
-
                 // Добавляем ребёнка к родителю
                 $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
                     'id'         => (int)$var['category'],
@@ -95,12 +107,13 @@ class Budget_Model {
                     'name'       => (string)$category[$var['category']]['cat_name'],
                     'amount'     => (float)$var['amount'],
                     'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
-                    'mean_drain' => round((int)$var['avg_3m'],2), //средний расход
-                    'type'       => $drain
+                    'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
+                    'type'       => $drain, //расходная - 0, доходный - 1, -1 - нул
+                    'money'      => (float)$var['money']
                 );
-                
+
                 // Если у нас первый ребёнок
-                if ($childs === false) {
+                if (!$childs) {
                     $list['c_'.$category[$var['category']]['cat_parent']]['total_drain']  = 0;
                     $list['c_'.$category[$var['category']]['cat_parent']]['total_profit'] = 0;
                     $childs = true;
