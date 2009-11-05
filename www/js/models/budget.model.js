@@ -76,7 +76,7 @@ easyFinance.models.budget = function()
                     //var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
                     //  //if (isNaN(rgb))
                         //    rgb = '0';
-                        var drainprc = Math.round(children[k]['drain']*100/children[k]['amount'])
+                        var drainprc = Math.round(children[k]['money']*100/children[k]['amount'])
                         var date = new Date()
                         var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
                         var b_color =(dateprc < drainprc)?'red':'green';
