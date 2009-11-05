@@ -88,13 +88,13 @@ $('#master input')
 
     $('.budget .f_field3').html(_$_group);
 
-if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                     {
-                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                        $('.budget .f_field3 .rest span').css('color','#EB3C34')
                     }
                     else
                     {
-                        $('#master .f_field3 .rest span b').css('color','#309500')
+                        $('.budget .f_field3 .rest span').css('color','#309500')
                     }
     /**********************************************************************
      * Появилась дата в мастере.Самое простое решение
@@ -503,13 +503,13 @@ if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
                 })
-                if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                     {
-                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                        $('.budget .f_field3 .rest span').css('color','#EB3C34')
                     }
                     else
                     {
-                        $('#master .f_field3 .rest span b').css('color','#309500')
+                        $('.budget .f_field3 .rest span').css('color','#309500')
                     }
             },
             'json')

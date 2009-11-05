@@ -89,7 +89,7 @@ easyFinance.models.budget = function()
                             str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
                             str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
                             str += '</div></td>';
-                            var f = parseFloat(children[k]['amount'])-parseFloat(children[k]['money']);
+                            var f = Math.abs(parseFloat(children[k]['amount']))-Math.abs(parseFloat(children[k]['money']));
                             str += '<td class="w4"><span>'+formatCurrency(f)+' </span></td>';
                             str += '</tr>';
                         }
@@ -198,9 +198,9 @@ easyFinance.models.budget = function()
  *               str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b> '+_data.main.cur+'</span></div>';
  *               str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b> '+_data.main.cur+'</span></div>';
  */
-            var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b></span></div>';
-                str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b></span></div>';
-                str += '<div class="rest">Остаток: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b></span></div>';
+            var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b> руб.</span></div>';
+                str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b> руб.</span></div>';
+                str += '<div class="rest">Остаток: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b> руб.</span></div>';
             ret.group=str;
             return ret;
         }
