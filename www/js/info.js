@@ -70,11 +70,13 @@ $.post(
     function print_targets(count) {
         var data = res['user_targets'];
         var str ='';
-        for (var key in data) {
+
+        for (var key in data) if (data[key]['done']==0) {
             /*if(!data[key]['image']) {
                 data[key]['image']='/img/i/fintarget.jpg';
 
             }*/
+            //alert(data[key]['category']);
             data[key]['image']='/img/i/fintarget.jpg';
             if (data[key]['category']==1)
                 data[key]['image']='/img/i/home.png';
