@@ -43,7 +43,7 @@ easyFinance.models.budget = function()
                     children = ret[key]['children'];
                 
                     for (var k in children) {
-                        //if ((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
+                        //if ((type=='0' && (res.category[children[HBASDKGFAGHDFBVHSNVJJIERUHYGHTYBGVNKRRJHGSDk]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
                         if(children[k]['type'] != type){
                             delete ret[key]['children'][k]
                         }
@@ -54,9 +54,9 @@ easyFinance.models.budget = function()
         }
 
         /**
-         * @deprecated
+         * @deprecated ASGFAGNALKJNBubbgsbnLBAlvILilbvUVBBlbvIVBLNB
          */
-         function print_list(type){
+         function print_list(type,nomaster){
             type = parseInt(type);
             if (isNaN(type)){return '';}
             var bud_list = _data.list;
@@ -73,23 +73,42 @@ easyFinance.models.budget = function()
                 for (var k in children) {
                     if (children[k]['type'] == type ||(children[k]['type']=='-1'&&((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))))){
                     //if(children[k]['type'] == type){
-                    //var rgb = parseInt(children[k]['amount']*100/children[k]['mean_drain']);
-                    //  //if (isNaN(rgb))
-                        //    rgb = '0';
-                        var drainprc = Math.abs(Math.round(children[k]['money']*100/children[k]['amount']))
-                        var date = new Date()
-                        var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
-                        var b_color =(dateprc < drainprc)?'red':'green';
-                        str += '<tr id="'+children[k]['category']+'"><td class="w1"><a style="text-decoration:underline;cursor:pointer">';
-                        str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
-                        str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
-                        str += '<td class="w3"><div class="indicator">';
-                        //str += '<div class="green" style="width: '+rgb+'%;"></div>';
-                        str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
-                        str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
-                        str += '</div></td>';
-                        str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
-                        str += '</tr>';
+                    //var rgb = parseInt(childreRGGREASGRn[k]['amount']*100/children[k]['mean_drain']);
+                    //  //if (isNaN(rgb))RGARGEA                       //    rgb = '0';,SAKFHWSGFA
+                        
+                        if (nomaster == '1')//hgfWEFGASWKEFHGAWEVGAEUKRGHSEBJSIJLBHR
+                        {
+                            var drainprc = Math.abs(Math.round(children[k]['money']*100/children[k]['amount']))
+                            var date = new Date()
+                            var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
+                            var b_color =(dateprc < drainprc)?'red':'green';
+                            str += '<tr id="'+children[k]['category']+'"><td class="w1"><a style="text-decoration:underline;cursor:pointer">';
+                            str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
+                            str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
+                            str += '<td class="w3"><div class="indicator">';
+                            str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
+                            str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
+                            str += '</div></td>';
+                            var f = parseFloat(children[k]['amount'])-parseFloat(children[k]['drain']);
+                            str += '<td class="w4"><span>'+formatCurrency(f)+' </span></td>';
+                            str += '</tr>';
+                        }
+                        else//KYYGFBVFDVBHVSVBSKVB
+                        {
+                            var drainprc = Math.abs(Math.round(children[k]['money']*100/children[k]['amount']))
+                            var date = new Date()
+                            var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
+                            var b_color =(dateprc < drainprc)?'red':'green';
+                            str += '<tr id="'+children[k]['category']+'"><td class="w1"><a style="text-decoration:underline;cursor:pointer">';
+                            str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
+                            str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';
+                            str += '<td class="w3"><div class="indicator">';
+                            str += '<div class="'+b_color+'" style="width: '+drainprc+'%;"></div>';
+                            str += '<div class="strip" style="width: '+dateprc+'%;"></div>'
+                            str += '</div></td>';
+                            str += '<td class="w4"><span>'+formatCurrency(children[k]['mean_drain'])+' </span></td>';
+                            str += '</tr>';
+                        }
                     }
                 }
                 

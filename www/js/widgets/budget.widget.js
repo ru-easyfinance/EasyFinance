@@ -56,7 +56,7 @@ $('#master input')
     /**
      * @desc {html} список бюджетов сформированный в хтмл
      */
-    var _$_list = model.print_list('0');
+    var _$_list = model.print_list('0','1');
     /**
      * @desc {} системный объект хранящий общую информацию о бюджете
      */
@@ -144,7 +144,8 @@ $('#master input')
         });
 
         $('.w3').qtip({
-           content: 'Лимит годовых расходов по этой категории',
+           content: 'Риска в линии времени отображает позицию текущей даты в выбранном периоде. \n\
+Зелёная полоска сигнализирует, что вы укладывайтесь в бюджет, а красная - что с текущим темпом трат, вы можете не уложиться в планируемую сумму.',
            show: {delay: 1000},
            position: {target: 'mouse'},
            style: 'mystyle'
@@ -482,7 +483,7 @@ $('#master input')
             function(data)
             {
                 model.load(data);
-                _$_list = model.print_list($('.budget #r_type').val());
+                _$_list = model.print_list($('.budget #r_type').val(),'1');
                 _$_group = model.print_info().group;
                 $('#list.budget #r_month').val($('.budget #month').val())
                 $('#list.budget #r_year').val($('.budget #year').val())
@@ -500,7 +501,7 @@ $('#master input')
          }
          else
          {
-            _$_list = model.print_list($('.budget #r_type').val());
+            _$_list = model.print_list($('.budget #r_type').val(),'1');
             $('#list.budget #r_month').val($('.budget #month').val())
             $('#list.budget #r_year').val($('.budget #year').val())
 
