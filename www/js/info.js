@@ -71,7 +71,7 @@ $.post(
         var data = res['user_targets'];
         var str ='';
 
-        for (var key in data) if (data[key]['done']==0) {
+        for (var key in data) if (data[key]['close']==0) {
             /*if(!data[key]['image']) {
                 data[key]['image']='/img/i/fintarget.jpg';
 
