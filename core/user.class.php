@@ -428,17 +428,26 @@ class User
      */
     public function initUserBudget()
     {
-        $sql = "SELECT c.cat_id as category, b.drain, b.currency, b.amount,
-            DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
-            DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
-            , (SELECT AVG(amount)
-                    FROM budget t WHERE
-                    (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-                            AND t.date_start <= LAST_DAY(b.date_start)) AND b.category = t.category AND b.user_id=t.user_id) AS avg_3m
+        $sql = "SELECT c.cat_id as category
+            , b.drain, b.currency, b.amount,
+                    DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
+                    DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
+            , (SELECT AVG(amount) FROM budget t
+                WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
+                    AND t.date_start <= LAST_DAY(b.date_start))
+                AND b.category = t.category AND b.user_id=t.user_id
+            ) AS avg_3m
+            , (SELECT SUM(o.money) FROM operation o
+                WHERE (o.transfer = NULL OR o.transfer = 0) AND
+            c.cat_id = o.cat_id
+            AND o.date >= ? AND o.date <= LAST_DAY(o.date)
+            ) AS money
             FROM category c
-            LEFT JOIN budget b ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
-            WHERE c.user_id= ?";
-        $array = $this->db->select($sql, date('Y-m-01'), $this->getId());
+            LEFT JOIN budget b
+            ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
+            WHERE c.user_id= ? ORDER BY cat_parent";
+
+        $array = $this->db->select($sql, date('Y-m-01'), date('Y-m-01'), $this->getId());
 
         
         $list = array();
@@ -490,7 +499,8 @@ class User
                     'amount'     => (float)$var['amount'],
                     'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
                     'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
-                    'type'       => $drain //расходная - 0, доходный - 1, -1 - нул
+                    'type'       => $drain, //расходная - 0, доходный - 1, -1 - нул
+                    'money'      => (float)$var['money']
                 );
 
                 // Если у нас первый ребёнок
