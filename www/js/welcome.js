@@ -12,6 +12,7 @@ $(document).ready(function() {
                 step3: "<h2></h2>Возьмите под контроль свои финансы с помощью EasyFinance.ru. Вносите информацию о доходах и расходах из любой точки мира, 24 часа в сутки.",
                 step4: "<h2></h2>Получайте удовольствие и пользу вместе с EasyFinance.ru – деньги работают, а вы избавляетесь от финансового стресса.",
                 step5: "<h2></h2>Воспользуйтесь возможностями системы EasyFinance.ru для планирования семейного бюджета. Умело распределяйте ваши финансы."}
+    var head = {step1: 'txt1',step2: 'txt4',step3:  'txt3',step4: 'txt2',step5: 'txt5'}
     var timeoutid;
     /**
      * Производит обновление текста в центральной
@@ -21,7 +22,7 @@ $(document).ready(function() {
     {
         $('ul.steps li').removeClass('act');
         $('ul.steps li#'+id).addClass('act');
-        $('div.descr').html('<div class="txt1" style="display: block;">'+text[id]+'</div>');
+        $('div.descr').html('<div class="'+head[id]+'" style="display: block;">'+text[id]+'</div>');
         $('#bgpics').attr('class',bgpix[id]);
     }
     /**
