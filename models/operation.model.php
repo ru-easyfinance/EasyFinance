@@ -535,7 +535,7 @@ class Operation_Model {
         $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND transfer = ? AND imp_id is null";
         $a = $this->db->selectCell($sql, $this->user->getId(), $account_id);
         $this->total_sum+=$a;//*/
-        $sql = "SELECT SUM(-imp_id) as sum FROM operation WHERE user_id = ? AND transfer = ? AND imp_id is not null";
+        $sql = "SELECT SUM(imp_id) as sum FROM operation WHERE user_id = ? AND transfer = ? AND imp_id is not null";
         $a = $this->db->selectCell($sql, $this->user->getId(), $account_id);
         $this->total_sum+=$a;
         return $this->total_sum;
