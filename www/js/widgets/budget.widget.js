@@ -115,7 +115,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
     //********************************************************************
 
 
-    $('#master').dialog({bgiframe: true,autoOpen: false,width: 520});
+    $('#master').dialog({bgiframe: true,autoOpen: false,width: 520,modal:true});
     $('#sel_date').dialog({bgiframe: true,autoOpen: false,width: 520});
 
 
@@ -183,7 +183,8 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             arr = arr.replace(aggl,'');
             var val = aggl.substring(aggl.indexOf(':')).replace(/[^0-9\.]/gi, '')
             if (val){
-                $('#master #'+key+',#master .amount#c_'+key).find('input').val(formatCurrency(val));//рекомендуется сразу убиться об стенку
+                //alert('#master #c_'+key+' .amount')
+                $('#master #'+key+',#master #c_'+key+' .amount').find('input').val(formatCurrency(val));//рекомендуется сразу убиться об стенку
             }
         }
         $('#master .line').each(function(){
@@ -205,7 +206,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
         $('#master #prev').hide()
         $('#master .button').show()//тк не работает чётко и хорошо по понятным причинам хак дл тех кому хочется кнопки тыкать
         $('#master #b_save').hide()//см на строку выше
-        $('#master .line').each(function(){
+        $('#master .line tr').closest('.line').each(function(){
                 var summ = 0;
                 $(this).find('table input').each(function(){
                     var str = $(this).val().toString()||'0'
