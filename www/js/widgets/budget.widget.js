@@ -475,7 +475,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
         {
             $('#master .f_field3 .rest span b').css('color','#309500')
         }
-        if((tmpAmm-isCAmmount)>=0)
+        if(parseFloat($('#master .f_field3 .rest span b').text())<0)
         {
             if(!confirm('Ваш общий расход превышает общий доход. Продолжить сохранение?'))
                 return false;
