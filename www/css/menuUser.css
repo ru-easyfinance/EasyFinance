@@ -22,11 +22,11 @@ ul.dropdown li {
 	width: 118px;
 }
 
-.menu3 ul li#m1.cur a { background-position:0 -39px; }
-.menu3 ul li#m2.cur a { background-position: -135px -39px; }
-.menu3 ul li#m3.cur a { background-position: -259px -39px; }
-.menu3 ul li#m4.cur a { background-position: -383px -39px; }
-.menu3 ul li#m5.cur a { background-position: -507px -39px; }
+.menu3 ul li#m1.cur > a { background-position:0 -39px; }
+.menu3 ul li#m2.cur > a { background-position: -135px -39px; }
+.menu3 ul li#m3.cur > a { background-position: -259px -39px; }
+.menu3 ul li#m4.cur > a { background-position: -383px -39px; }
+.menu3 ul li#m5.cur > a { background-position: -507px -39px; }
 
 /* second-level lists */
 ul.dropdown li ul {
@@ -40,7 +40,7 @@ ul.dropdown li ul {
 /* submenu items */
 ul.dropdown li ul li {
     margin-right: 10px;
-    height: 20px;
+    height: 22px;
     padding-bottom: 2px;
     background: white;
     border-left: 1px solid #E1E7E0;
@@ -50,6 +50,7 @@ ul.dropdown li ul li {
 /* fancy menu bottom */
 ul.dropdown li ul li.last {
     margin-right: 10px;
+    margin-bottom: 0px;
     height: 10px;
     width: 120px;
     border: none;
@@ -72,33 +73,34 @@ ul.dropdown li:hover ul, ul li.over ul {
 
 .menu3 ul:after { clear:both; display: block; content: ' '; height: 0; overflow: hidden; }
 .menu3 ul li { float: left; margin-right: 4px; width: 118px; height: 37px;position: relative;z-index:100 }
-.menu3 ul li a, .menu3 ul li span { display: block; width: 120px; height: 37px; text-indent: 10px; overflow: hidden; background: url('/img/i/menu3.png') no-repeat 0 0; }
-.menu3 ul li ul li a, .menu3 ul li ul li span { display: block; width: 118px; height: 20px; text-indent: 10px; overflow: hidden; background: white; }
+.menu3 ul li a, .menu3 ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu3.png') no-repeat 0 0; }
 
 .menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
-.menu3 ul li#m1 a { background-position: 0 1px; left:0px;position:absolute }
-.menu3 ul li#m1 span{ background-position: 0 -39px; }
-.menu3 ul li#m1.act a { background-position: 0 -80px; }
+.menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
+.menu3 ul li#m1.act > a { background-position: 0 -80px; }
 
-.menu3 ul li#m2 a { background-position: -135px 1px; left:0px; position:absolute;}
-.menu3 ul li#m2 span{ background-position: -135px -39px; }
-.menu3 ul li#m2.act a  { background-position: -135px -80px; }
+.menu3 ul li#m2 > a { background-position: -135px 1px; left:0px; position:absolute;}
+.menu3 ul li#m2.act > a  { background-position: -135px -80px; }
 
-.menu3 ul li#m3 a { background-position: -259px 1px; left:0px ; position:absolute}
-.menu3 ul li#m3 span { background-position: -259px -39px; }
-.menu3 ul li#m3.act a  { background-position: -259px -80px; }
+.menu3 ul li#m3 > a { background-position: -259px 1px; left:0px ; position:absolute}
+.menu3 ul li#m3.act > a  { background-position: -259px -80px; }
 
-.menu3 ul li#m4 a { background-position: -383px 1px; left:0px;position:absolute}
-.menu3 ul li#m4 span { background-position: -383px -39px; }
-.menu3 ul li#m4.act a  { background-position: -383px -80px; }
+.menu3 ul li#m4 > a { background-position: -383px 1px; left:0px;position:absolute}
+.menu3 ul li#m4.act > a  { background-position: -383px -80px; }
 
-.menu3 ul li#m5 a { background-position: -507px 1px; left:0px;position:absolute}
-.menu3 ul li#m5 span{ background-position: -507px -39px; }
-.menu3 ul li#m5.act a  { background-position: -507px -80px; }
+.menu3 ul li#m5 > a { background-position: -507px 1px; left:0px;position:absolute}
+.menu3 ul li#m5.act > a  { background-position: -507px -80px; }
 
-.menu3 ul li#m6 a { background-position: -631px 1px; left:0px;position:absolute}
-.menu3 ul li#m6 span { background-position: -631px -39px; }
-.menu3 ul li#m6.act a  { background-position: -631px -80px; }
+.menu3 ul li#m6 > a { background-position: -631px 1px; left:0px;position:absolute}
+.menu3 ul li#m6.act > a  { background-position: -631px -80px; }
 
 .menu3 .popup_info { display: none; position: absolute; top: -20px; left: 627px; width: 182px; padding: 10px 11px 11px 14px; font-size: 11px; line-height: 14px; color: #737373;  z-index: 10; background: #ffffff; border: 1px solid #c4c4c4; }
 .menu3 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url('/img/i/icons.gif') no-repeat 0 -420px;  }
+
+/* links in submenu */
+.menu3 ul li ul li a { display: block; margin-left: 14px; width: 100px; height: 26px; margin-left: 0px; overflow: hidden; background: white; padding-top: 2px;}
+.menu3 ul li ul li span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: none; }
+
+/* highlite current link */
+.menu3 ul li ul li.selected a{ color: #3d9814; background: url('/img/i/plashka_green.png') no-repeat right top; }
+.menu3 ul li ul li.selected span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: url('/img/i/plashka_green.png') no-repeat left top;}

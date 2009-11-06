@@ -640,16 +640,16 @@ $('.tags_list .add').live('click', function(){
                 <li id="m2"> \
                         <a href="/accounts/"></a> \
                         <ul> \
-                                <li><a href="/operation/">Операции</a></li> \
-                                <li><a href="/category/">Категории</a></li> \
+                                <li><span/><a href="/operation/">Операции</a></li> \
+                                <li><span/><a href="/category/">Категории</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                         </ul> \
                 </li> \
                 <li id="m3"> \
                         <a href="#"></a> \
                         <ul> \
-                                <!-- li><a href="/budget/">Бюджет</a></li> --> \
-                                <li><a href="/targets/">Фин. цели</a></li> \
+                                <!-- <li><span/><a href="/budget/">Бюджет</a></li> --> \
+                                <li><span/><a href="/targets/">Фин. цели</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                         </ul> \
                 </li> \
@@ -659,8 +659,8 @@ $('.tags_list .add').live('click', function(){
                 <li id="m5"> \
                         <a href="/calendar/"></a> \
                         <ul> \
-                                <li><a href="/calendar/">Календарь</a></li> \
-                                <li><a href="/periodic/">Рег. транзакции</a></li> \
+                                <li><span/><a href="/calendar/">Календарь</a></li> \
+                                <li><span/><a href="/periodic/">Рег. транзакции</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                         </ul> \
                 </li> \
@@ -680,10 +680,12 @@ $('.tags_list .add').live('click', function(){
             '/operation/':'m2',
             '/periodic/':'m5',
             '/profile/':'m0',
+            '/targets/':'m3',
             '/report/':'m4'};
 
         var page_mid = pathtoid[pathName];
         $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
+        $('.menu3 ul li ul li a[href*=' + pathName +']').parent().addClass('selected');
 
         // код для переключения внешнего вида вкладок
         $('.dropdown').children('li')

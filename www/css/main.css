@@ -115,7 +115,7 @@ a img, fieldset { border:0 none; }
 
 .mail_list table td a { color: #666666; }
 .mail_list table td, table.tab1 td { padding: 4px; background: url("../i/point_x.gif"/*tpa=https://home-money.ru/preview/i/point_x.gif*/) repeat-x top left; }
-.mail_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; }
+.mail_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .mail_list table tr.act td div.cont ul { display: block; }
 .mail_list table tr.first td { background: none; }
 ul.menu6 { margin-bottom: 19px; padding-top: 7px; //zoom: 1; width:100%; }
@@ -887,7 +887,7 @@ a.infoicon {width: 16px; display: block; /*top: 20px; right: -18px;*/ height: 16
 .operation_listSH table td a { color: #666666; }
 .operation_listSH table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
 .operation_listSH table td.no_over{padding:0;overflow: visible;}
-.operation_listSH table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; }
+.operation_listSH table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; cursor: pointer;}
 .operation_listSH table tr.act td div.cont ul { display: block; }
 .operation_listSH table tr.first td { background: none; }
 .operation_listSH table div.cont { position: relative; }
@@ -933,7 +933,7 @@ a.infoicon {width: 16px; display: block; /*top: 20px; right: -18px;*/ height: 16
 .operation_list table td.big{max-width: 100px}
 .operation_list table td.light{max-width: 60px}
 
-
+#operations_list tr { cursor: pointer !important; }
 .operation_list table td a { color: #666666; }
 .operation_list table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
 .operation_list table td.no_over{padding:0;overflow: visible;}
