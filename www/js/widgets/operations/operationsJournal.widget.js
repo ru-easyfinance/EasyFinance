@@ -55,7 +55,7 @@ easyFinance.widgets.operationsJournal = function(){
                 }
             }
             
-            tr += "<tr id='op" + data[v].id + "' value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
+            tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id + "' value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
                 + '<td class="light"><a href="#">' + tp + '</a></td>'
 
 
@@ -125,7 +125,7 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _editOperation(){
-                $(".op_addoperation").show();
+        $(".op_addoperation").show();
         var operation = $(this).parent().attr('class');
         if (operation == 'edit') {
             $("#op_addoperation_but").addClass('act');
@@ -152,6 +152,8 @@ easyFinance.widgets.operationsJournal = function(){
             $(this).closest('form').attr('action','/operation/add/');
             $('#date').datepicker('setDate', new Date() );
         }
+
+        return false;
     }
 
     // public variables
@@ -195,8 +197,9 @@ easyFinance.widgets.operationsJournal = function(){
             return false;
         });
 
-        $('#operations_list tr').live('dblclick',function(){
+        $('#operations_list tr').live('click',function(){
             $(this).find('li.edit a').click();
+            return false;
         })
 
         $('#operations_list a').live('click', _editOperation);
