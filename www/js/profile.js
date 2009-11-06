@@ -186,7 +186,7 @@ $(document).ready(function(){
 });
 $(document).ready(function() {
     strokuk = document.cookie.toString();
-    if (strokuk.indexOf('help=124') != -1){
+    if (strokuk.indexOf('help=uyjsdhf') != -1){
         $('#help').removeAttr('checked');
     }
     if (strokuk.indexOf('guide=uyjsdhf') == -1){
