@@ -1731,7 +1731,11 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .ui-resizable-ne { cursor: ne-resize; width: 32px; height: 21px; right: -32px; top: -21px; background:transparent url(/img/i/dialog/wel.msg.head_r.png) repeat-x scroll right top;}
 
 
-.ui-widget-overlay{background-color:#666666; opacity:0.5;}
+.ui-widget-overlay{
+    background-color:#666666;
+    opacity:0.5;
+    filter:alpha(opacity=50);
+}
 
 
 .ui-dialog .ui-dialog-titlebar {
