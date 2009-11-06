@@ -253,7 +253,7 @@ class Accounts_Model
     {
         //alert( date('d.m.Y'));
        $model = new Operation_Model();
-       $model->add(str_replace(' ', '', $data['starter_balance']), date('Y.m.d'), 0,0,
+       $model->add(str_replace(' ', '', $data['starter_balance']), /*date('Y.m.d')*/'0000-00-00', 0,0,
            'Начальный остаток', $data['id']);
     }
 
