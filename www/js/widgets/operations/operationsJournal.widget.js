@@ -114,10 +114,11 @@ easyFinance.widgets.operationsJournal = function(){
     function _deleteOperation(id){
         if (!confirm("Вы действительно хотите удалить эту операцию?"))
             return false;
+        var _opVirt = _journal[id].virt ? 'v' : 'r';
 
         _model.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
             // remove row from table
-            $('#operations_list tr[id="op' + id + '"]').remove();
+            $('#operations_list tr[id="op' + _opVirt + id + '"]').remove();
             $.jGrowl("Операция удалена", {theme: 'green'});
         });
 
