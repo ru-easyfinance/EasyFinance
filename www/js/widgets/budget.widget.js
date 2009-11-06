@@ -371,9 +371,11 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
         } , 'json');
 
         
-        /*
+        
+    })
+    /*
          * 2 ая страница бюджета
-         */                
+         */
         $('#master .button').click(function(){
             //статистика пока хук
             $('#master .button').hide();
@@ -399,7 +401,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                     var tmp = '{"'+$(this).attr('id')+'": "'+parseFloat($(this).find('input').val().toString().replace(/[^0-9.]/,''))+'"},'
                     ret['0'] += tmp
                 }
-                    
+
             })
             isCAmmount = 0;
             $('#master .amount').each(function(){
@@ -422,7 +424,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             {
                 $('#master .f_field3 .rest span b').css('color','#309500')
             }
-            
+
             //////////////////////////////////////////////////////////////////////////////////
             $('#master .waste_list form').html(model.print_list('0'))
 
@@ -470,8 +472,6 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             load(ret['1'])
             $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
         });
-    })
-    
     $('#master #b_save').click(function(){
         $('#master .line').each(function(){
             var summ = 0;
