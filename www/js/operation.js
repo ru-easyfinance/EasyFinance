@@ -31,6 +31,8 @@ function fillForm(data) {
 
     $('#op_id').val(data.id);
     $('#op_account').val(data.account_id);
+    
+    easyFinance.widgets.operationEdit.setCategory(data.cat_id);
 
     if (data.tr_id=='1') {
         // transfer
@@ -49,14 +51,16 @@ function fillForm(data) {
 
     //////////////////////////
     $('#op_amount').val(Math.abs(data.money));
-    $('#op_category').val(data.cat_id);
     //$('#target').val(data.);
     //$('#close').val(data.);
     $('#op_AccountForTransfer').val(data.transfer);
     $('#op_date').val(data.date);
-    $('#op_tags').val(data.tags);
+    if (data.tags)
+        $('#op_tags').val(data.tags);
+    else
+        $('#op_tags').val('');
     $('#op_comment').val(data.comment);
-    $('#op_type').change();
+    //$('#op_type').change();
     $(document).scrollTop(300);
 }
 

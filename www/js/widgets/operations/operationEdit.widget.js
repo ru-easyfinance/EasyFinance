@@ -11,6 +11,8 @@ easyFinance.widgets.operationEdit = function(){
 
     var _$node = null;
 
+    var _cat = 0; // current category
+
     // private functions
 
     function _initTags() {
@@ -118,6 +120,11 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _changeTypeOperation() {
+        // запоминаем выбранную ранее категорию,
+        // чтобы при переключении типа операции
+        // заново её выбрать, по возможности
+        var _newcat = _cat;
+        
         // Расход или Доход
         if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
             $("#op_category_fields,#op_tags_fields").show();
@@ -126,13 +133,19 @@ easyFinance.widgets.operationEdit = function(){
                     $.post('/category/cattypechange/',{
                         type : 1
                     },function(data){
+                        alert(newcat);
                         $("#op_category").html(data);
+                        if (_newcat)
+                            $('#op_category').val(_newcat);
                     },'json');
             if ($('#op_type').val() == 0)
                 $.post('/category/cattypechange/',{
                         type : -1
                     },function(data){
+                        alert(newcat);
                         $("#op_category").html(data);
+                        if (_newcat)
+                            $('#op_category').val(_newcat);
                     },'json');
                 //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
         //Перевод со счёта
@@ -335,8 +348,14 @@ easyFinance.widgets.operationEdit = function(){
         return this;
     }
 
+    function setCategory(cat){
+        _cat = cat;
+        $('#op_category').val(_cat);
+    }
+
     // reveal some private things by assigning public pointers
     return {
-        init: init
+        init: init,
+        setCategory: setCategory
     };
 }(); // execute anonymous function to immediatly return object
