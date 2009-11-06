@@ -593,8 +593,10 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             })
          }
 
-         $('#list.budget .h .w4').text('Сред.'+$('.budget #r_type option:[selected]').text().toString().replace('ный','')+', руб');
-
+         //$('#list.budget .h .w4').text('Сред.'+$('.budget #r_type option:[selected]').text().toString().replace('ный','')+', руб');
+        var txt;
+        txt = ($('.budget #r_type option:[selected]').text()=='расходный')?'Остаток. руб':'Отложено. руб';
+        $('#list.budget .h #balance.w2').text(txt)
     })
     /**
      * @desc маска для инпута с годом

@@ -82,6 +82,9 @@ easyFinance.models.budget = function()
                             var date = new Date()
                             var dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
                             var b_color =(dateprc < drainprc)?'red':'green';
+                            if (type == '1'){
+                                b_color =(dateprc > drainprc)?'red':'green';
+                            }
                             str += '<tr id="'+children[k]['category']+'"><td class="w1"><a style="text-decoration:underline;cursor:pointer">';
                             str += children[k]['name']+'</a></td><td class="w2"><div class="cont">';
                             str += '<input type="text" value="'+formatCurrency(children[k]['amount'])+'" readonly="readonly" /></div></td>';

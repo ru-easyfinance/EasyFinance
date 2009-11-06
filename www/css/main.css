@@ -1065,7 +1065,7 @@ div.cont ul li.add a { width: 12px; }
 .budget .f_field3 .rest { right: 0; }
 .budget .f_field3 .rest span { color: #868686; }
 
-.budget .waste_list { position: relative;max-height:300px;overflow-y:auto;overflow-x:hidden;clear:both; /*background: url('/img/i/bg08.gif') repeat-y 100% 0;*/ border: 1px solid #e8e8e8; //zoom: 1;}
+.budget .waste_list { position: relative;clear:both; /*background: url('/img/i/bg08.gif') repeat-y 100% 0;*/ border: 1px solid #e8e8e8; //zoom: 1;}
 .budget .waste_list .scroll_cont { position: relative; width: 517px; height: 346px; overflow: hidden; }
 .budget .waste_list .scroll { position: absolute; top: 0; left: 503px; width: 14px; cursor: pointer; //cursor: hand; background: #dbdcdb; }
 
@@ -1091,7 +1091,7 @@ div.cont ul li.add a { width: 12px; }
 .budget .waste_list table td .cont, .categoriesSH table td .cont { position: relative; z-index: 10; }
 .budget .waste_list table tr.act td, .categoriesSH table tr.act td { background-color: #daffd4; }
 .budget .waste_list table td.w1 a, .categoriesSH table td.w1 a { display: block; padding-left: 25px; }
-
+.budget .waste_list form{overflow-y:auto;overflow-x:hidden;max-height:300px;}
 .budget .waste_list table td.w3 { width: 81px; }
 .budget .waste_list table td.w4 { width: 97px; font-size: 11px; }
 .budget .waste_list table td.w4 span { display: block; float: left; margin-right: 5px; }
