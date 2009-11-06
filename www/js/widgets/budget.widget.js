@@ -252,7 +252,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
         var ret = 0;
         $('#master div.amount').each(function(){
             var str = $(this).find('input').val() || $(this).text();
-            if(parseFloat(str.replace(/[^0-9.]/,''))!='0'){
+            if(!isNaN(parseFloat(str.replace(/[^0-9.]/,'')))){
                 ret += parseFloat(str.replace(/[^0-9.]/,''));
             }
         })
@@ -420,8 +420,8 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             })
             $('#master input').blur(function(){
                     var tmp = summa();
-                    $('#master .f_field3 .income span b').text(formatCurrency(tmp));
-                    $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
+                    $('#master .f_field3 .waste span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency($('#master .f_field3 .income span b').text().toString().replace(/[^0-9.]/gi, '')-tmp));
                     if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
                     {
                         $('#master .f_field3 .rest span b').css('color','#EB3C34')
