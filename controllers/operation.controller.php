@@ -184,8 +184,12 @@ class Operation_Controller extends Template_Controller
     function del_all($args)
     {
         $id = explode(',', $_POST['id']);
+        $virt = explode(',', $_POST['virt']);
         foreach ($id as $k=>$v)
-            $this->model->deleteOperation($v);
+            if ($virt[$k] != 1)
+                $this->model->deleteOperation($v);
+            else
+                $this->model->deleteTargetOperation($v);
         die('[]');
     }
 
