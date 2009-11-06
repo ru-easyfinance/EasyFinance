@@ -133,7 +133,6 @@ easyFinance.widgets.operationEdit = function(){
                     $.post('/category/cattypechange/',{
                         type : 1
                     },function(data){
-                        alert(newcat);
                         $("#op_category").html(data);
                         if (_newcat)
                             $('#op_category').val(_newcat);
@@ -142,7 +141,6 @@ easyFinance.widgets.operationEdit = function(){
                 $.post('/category/cattypechange/',{
                         type : -1
                     },function(data){
-                        alert(newcat);
                         $("#op_category").html(data);
                         if (_newcat)
                             $('#op_category').val(_newcat);
