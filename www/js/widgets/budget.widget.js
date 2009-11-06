@@ -72,7 +72,7 @@ $('#master input')
 
 
     $('#list.budget .waste_list form').html(_$_list);
-$('.w2,.w4').css('text-align', 'right')
+    $('.w2,.w4').css('text-align', 'right')
     /*********************************************************************
      * Заплатка на вёрстку требует последующий модификации модели и т.п.
      */
@@ -319,6 +319,20 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                         $('#master .f_field3 .rest span b').css('color','#309500')
                     }
                 })
+
+                $('#master input').blur(function(){
+                    var tmp = summa();
+                    $('#master .f_field3 .income span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
+                    if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
+                })
         } , 'json');
 
         
@@ -404,6 +418,19 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                         $('#master .f_field3 .rest span b').css('color','#309500')
                     }
             })
+            $('#master input').blur(function(){
+                    var tmp = summa();
+                    $('#master .f_field3 .income span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
+                    if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
+                })
             $('#master .w3').hide();
             load(ret['1'])
             $('#master .button').css({background:'#FFFFFF',color:'#50C319',borderBottom:'1px dotted #50C319'});
