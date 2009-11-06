@@ -246,6 +246,40 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             })
             load(ret['0'])
             $('#master .w3').hide();
+            $('#master tr input').blur(function(){
+                    var summ = 0;
+                    $(this).closest('table').find('input').each(function(){
+                        var str = $(this).val().toString()||'0'
+                        summ += parseFloat(str.replace(/[^0-9.]/gi,''));
+                    })
+
+                    $(this).closest('.line').find('.amount').text(formatCurrency(summ));
+                    var tmp = summa();
+                    $('#master .f_field3 .income span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
+                    if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
+                })
+
+                $('#master input').blur(function(){
+                    var tmp = summa();
+                    $('#master .f_field3 .income span b').text(formatCurrency(tmp));
+                    $('#master .f_field3 .rest span b').text(formatCurrency( tmp - $('#master .f_field3 .waste span b').text().toString().replace(/[^0-9.]/gi, '')));
+                    if (parseFloat($('#master .f_field3 .rest span b').text()) < 0)
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#EB3C34')
+                    }
+                    else
+                    {
+                        $('#master .f_field3 .rest span b').css('color','#309500')
+                    }
+                })
     })
 
 
