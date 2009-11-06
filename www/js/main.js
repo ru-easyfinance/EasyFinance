@@ -640,6 +640,7 @@ $('.tags_list .add').live('click', function(){
                 <li id="m2"> \
                         <a href="/accounts/"></a> \
                         <ul> \
+                                <li><span/><a href="/accounts/">Счета</a></li> \
                                 <li><span/><a href="/operation/">Операции</a></li> \
                                 <li><span/><a href="/category/">Категории</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
