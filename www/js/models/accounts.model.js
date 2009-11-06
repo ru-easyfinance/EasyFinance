@@ -115,10 +115,10 @@ easyFinance.models.accounts = function(){
      * @param ids: array of operation ids
      * @param callback: callback function
      */
-    function deleteOperationsByIds(ids, callback) {
+    function deleteOperationsByIds(ids, isVirts, callback) {
         var _ids = ids;
 
-        $.post(DELETE_OPERATIONS_URL, {id : ids.toString()}, function(data) {
+        $.post(DELETE_OPERATIONS_URL, {id : ids.toString(), virt: isVirts.toString()}, function(data) {
                 // update accounts
                 _loadAccounts();
 
