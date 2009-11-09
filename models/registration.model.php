@@ -38,6 +38,8 @@ class Registration_Model
      * @return void
      */
     function new_user () {
+        require_once SYS_DIR_LIBS . "external/Swift/swift_required.php";
+
         $db = Core::getInstance()->db;
         $tpl = Core::getInstance()->tpl;
         
@@ -88,6 +90,7 @@ class Registration_Model
 
             //$tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
+
             $reg_href = 'https://' . URL_ROOT . 'registration/activate/' . $reg_id;
             $body = "<html><head><title>
                 Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru
@@ -105,15 +108,44 @@ class Registration_Model
                 </body>
                 </html>";
 
-            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
-            $headers = "Content-type: text/html; charset=utf-8\n";
-            $headers .= "From: info@easyfinance.ru\n";
+//            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
+//            $headers = "Content-type: text/html; charset=utf-8\n";
+//            $headers .= "From: info@easyfinance.ru\n";
+//            mail($register['mail'], $subject, $body, $headers);
+
+
+            //Create the Transport
+            $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+                ->setUsername('info@easyfinance.ru')
+                ->setPassword('j2df32nD3l7sFa2');
+
+            //Create the Mailer using your created Transport
+            $mailer = Swift_Mailer::newInstance($transport);
+
+
+
+
+            // Создаём сообщение
+            $message = Swift_Message::newInstance()
+
+                // Заголовок
+                ->setSubject('Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru')
+
+                // Указываем "От кого"
+                ->setFrom(array('info@easyfinance.ru' => 'EasyFinance.ru'))
+
+                // Говорим "Кому"
+                ->setTo(array($register['mail']=>$register['login']))
+
+                // Устанавливаем "Тело"
+                ->setBody($body, 'text/html');
             
-            mail($register['mail'], $subject, $body, $headers);
-            die(json_encode(array('errors'=>'succes')));
+            $result = $mailer->send($message);
+            die(print_r($result));
+
+            //die(json_encode(array('errors'=>'succes')));
         }
-            die(json_encode(array('errors'=>$error_text)));
-       
+        die(json_encode(array('errors'=>$error_text)));
     }
 
     /**
