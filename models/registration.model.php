@@ -141,9 +141,7 @@ class Registration_Model
                 ->setBody($body, 'text/html');
             
             $result = $mailer->send($message);
-            die(print_r($result));
-
-            //die(json_encode(array('errors'=>'succes')));
+            die(json_encode(array('errors'=>'succes')));
         }
         die(json_encode(array('errors'=>$error_text)));
     }
