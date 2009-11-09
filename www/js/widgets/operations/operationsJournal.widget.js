@@ -22,6 +22,7 @@ easyFinance.widgets.operationsJournal = function(){
     var _$txtDateTo = null;
     
     var _$dialogFilterAccount = null;
+    var _$dialogFilterCategory = null;
 
     // private functions
     //
@@ -104,6 +105,7 @@ easyFinance.widgets.operationsJournal = function(){
         _model.deleteOperationsByIds(ids, virts, function(data) {
             // remove rows from table
             $trs.remove();
+            _onCheckClicked();
             $.jGrowl("Операции удалены", {theme: 'green'});
         });
 
@@ -156,6 +158,45 @@ easyFinance.widgets.operationsJournal = function(){
         return false;
     }
 
+    function _onCheckClicked() {
+        if (_$node.find('table input').is(':checked'))
+            $('#remove_all_op').show();
+        else
+            $('#remove_all_op').hide();
+    }
+
+    function _initFilters() {
+        // фильтр по категории
+        // заполняем диалог ссылками на доступные категории
+        _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px", height: "80px"});
+        $('#selectFilterCategory').change(function(){
+            _category = $(this).attr('value');
+            loadJournal();
+            _$dialogFilterCategory.dialog('close');
+
+            return false;
+        });
+        _$dialogFilterCategory.find('a').click(function(){
+            _category = $(this).attr('value');
+            loadJournal();
+            _$dialogFilterCategory.dialog('close');
+
+            return false;
+        });
+        $('#btnFilterCategory').click(function(){_$dialogFilterCategory.dialog('open')});
+
+        // фильтр по счёту
+        _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
+        _$dialogFilterAccount.find('a').click(function(){
+            _account = $(this).attr('value');
+            loadJournal();
+            _$dialogFilterAccount.dialog('close');
+
+            return false;
+        });
+        $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open')});
+    }
+
     // public variables
 
     // public functions
@@ -184,12 +225,18 @@ easyFinance.widgets.operationsJournal = function(){
         $('#btn_ReloadData').click(loadJournal);
         $('#remove_all_op').click(_deleteChecked);
 
-        $('#operations_list th input').change(function(){
+        // биндим клик на чекбоксе в заголовке
+        $('#operations_list_header th input').change(function(){
             if($(this).attr('checked'))
                 $('#operations_list .check input').attr('checked','checked');
             else
                 $('#operations_list .check input').removeAttr('checked');
+
+            _onCheckClicked();
         })
+
+        // биндим клик на чекбоксы в содержимом
+        $('#operations_list input').live('click', _onCheckClicked);
 
         // Биндим щелчки на строках и кнопках тулбокса (править, удалить, копировать)
         $('.light a').live('click', function(){
@@ -197,9 +244,11 @@ easyFinance.widgets.operationsJournal = function(){
             return false;
         });
 
-        $('#operations_list tr').live('click',function(){
-            $(this).find('li.edit a').click();
-            return false;
+        $('#operations_list tr').live('click',function(event){
+            if (event.target.type !== 'checkbox') {
+                $(this).find('li.edit a').click();
+                return false;
+            }
         })
 
         $('#operations_list a').live('click', _editOperation);
@@ -217,16 +266,8 @@ easyFinance.widgets.operationsJournal = function(){
         });
 
         // настраиваем диалоги фильтров
-        _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
-        _$dialogFilterAccount.find('a').click(function(){
-            _account = $(this).attr('value');
-            loadJournal();
-            _$dialogFilterAccount.dialog('close');
-
-            return false;
-        });
-        $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open')});
-
+        _initFilters();
+        
         return this;
     }
 
