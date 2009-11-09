@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS `account_field_descriptions`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `account_field_descriptions` (
   `field_description_id` int(20) NOT NULL AUTO_INCREMENT,
   `field_visual_name` varchar(150) DEFAULT NULL,
@@ -9,8 +11,10 @@ CREATE TABLE `account_field_descriptions` (
   `field_default_value` text NOT NULL,
   PRIMARY KEY (`field_description_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `account_field_values`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `account_field_values` (
   `field_value_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account_fieldsaccount_field_id` int(11) NOT NULL,
@@ -22,8 +26,10 @@ CREATE TABLE `account_field_values` (
   KEY `FK_01` (`account_fieldsaccount_field_id`),
   KEY `FK_02` (`accountsaccount_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `account_fields`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `account_fields` (
   `account_field_id` int(10) NOT NULL AUTO_INCREMENT,
   `account_typesaccount_type_id` int(11) NOT NULL,
@@ -32,15 +38,19 @@ CREATE TABLE `account_fields` (
   KEY `FKaccount_fi261530` (`field_descriptionsfield_description_id`),
   KEY `FKaccount_fi715328` (`account_typesaccount_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `account_types`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `account_types` (
   `account_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_type_name` varchar(255) NOT NULL,
   PRIMARY KEY (`account_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `accounts`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `accounts` (
   `account_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_name` varchar(255) NOT NULL,
@@ -52,8 +62,10 @@ CREATE TABLE `accounts` (
   KEY `FKaccounts554525` (`account_type_id`),
   KEY `user_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `budget`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `budget` (
   `user_id` bigint(10) unsigned NOT NULL COMMENT 'ИД пользователя',
   `category` bigint(10) unsigned NOT NULL COMMENT 'ИД категории',
@@ -69,8 +81,10 @@ CREATE TABLE `budget` (
   KEY `start_idx` (`date_start`,`date_end`,`user_id`) USING BTREE,
   KEY `subs_idx1` (`date_start`,`category`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Бюджет';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `calendar`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `calendar` (
   `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид события',
   `user_id` int(100) unsigned NOT NULL COMMENT 'Ид пользователя',
@@ -94,8 +108,10 @@ CREATE TABLE `calendar` (
   KEY `cal_idx` (`close`,`near_date`,`user_id`),
   KEY `del_per_idx` (`user_id`,`chain`,`near_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Календарь';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `category`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `category` (
   `cat_id` int(255) NOT NULL AUTO_INCREMENT COMMENT 'Ид категории',
   `cat_parent` int(255) NOT NULL DEFAULT '0' COMMENT 'Ид родительской категории (если 0, то она сам себе родитель)',
@@ -111,8 +127,10 @@ CREATE TABLE `category` (
   PRIMARY KEY (`cat_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `currency`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `currency` (
   `cur_id` int(11) NOT NULL AUTO_INCREMENT,
   `cur_name` varchar(10) NOT NULL,
@@ -123,8 +141,10 @@ CREATE TABLE `currency` (
   `cur_uses` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Обновлять курс',
   PRIMARY KEY (`cur_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `daily_currency`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `daily_currency` (
   `currency_id` int(11) NOT NULL,
   `currency_date` date NOT NULL,
@@ -135,23 +155,29 @@ CREATE TABLE `daily_currency` (
   KEY `idx` (`currency_date`,`currency_id`,`user_id`) USING BTREE,
   KEY `date_idx` (`currency_date`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `experts`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `experts` (
   `id` int(11) NOT NULL,
   `min_desc` text NOT NULL,
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `experts_plugins`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `experts_plugins` (
   `id` int(11) NOT NULL,
   `type` tinyint(4) NOT NULL,
   `title` int(11) NOT NULL,
   `rem` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='коментировать!!';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `feedback_message`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `feedback_message` (
   `uid` int(100) NOT NULL COMMENT 'id пользователя',
   `user_settings` text NOT NULL COMMENT 'сис настройки пользователя',
@@ -162,8 +188,10 @@ CREATE TABLE `feedback_message` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'индекс сообщений для быстрого пользователя',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='таблица сообщений от тестеров';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `info_calc`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `info_calc` (
   `m_r` int(11) DEFAULT NULL,
   `m_y` int(11) DEFAULT NULL,
@@ -176,8 +204,10 @@ CREATE TABLE `info_calc` (
   `u_g` int(11) DEFAULT '2',
   `weight` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `info_desc`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `info_desc` (
   `type` varchar(11) DEFAULT NULL,
   `title` varchar(11) DEFAULT NULL,
@@ -185,16 +215,20 @@ CREATE TABLE `info_desc` (
   `color` int(11) DEFAULT NULL,
   `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `infopanel_desc`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `infopanel_desc` (
   `type` enum('fcon','money','budget','cost','credit','akc','pif','ofbu','oms','estat') CHARACTER SET latin1 NOT NULL,
   `start` int(1) NOT NULL,
   `end` int(1) NOT NULL,
   `desc` text CHARACTER SET latin1 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `infopanel_users`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `infopanel_users` (
   `user_id` int(100) unsigned NOT NULL,
   `type` enum('fcon','money','budget','cost','credit','akc','pif','ofbu','oms','estat') CHARACTER SET latin1 DEFAULT NULL,
@@ -202,16 +236,20 @@ CREATE TABLE `infopanel_users` (
   `state` enum('0','1','2') CHARACTER SET latin1 DEFAULT NULL,
   `order` enum('0','1','2') CHARACTER SET latin1 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `infopanel_value`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `infopanel_value` (
   `uid` int(100) unsigned NOT NULL,
   `type` enum('fcon','money','budget','cost','credit','akc','pif','ofbu','oms','estat','akc_year','pif_year','ofbu_year','oms_year','estat_year') CHARACTER SET latin1 NOT NULL,
   `dete` date NOT NULL,
   `value` int(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `mail`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `mail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `to` int(11) NOT NULL,
@@ -225,8 +263,10 @@ CREATE TABLE `mail` (
   `date` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `operation`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `operation` (
   `id` bigint(255) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид операции',
   `user_id` int(100) unsigned NOT NULL COMMENT 'Ид пользователя',
@@ -248,8 +288,10 @@ CREATE TABLE `operation` (
   KEY `account_id` (`account_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `periodic`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `periodic` (
   `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид события',
   `user_id` int(100) unsigned NOT NULL COMMENT 'Ид пользователя',
@@ -268,23 +310,29 @@ CREATE TABLE `periodic` (
   `last_date` date NOT NULL COMMENT 'Последняя дата события',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Периодическая транзакция';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `registration`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `registration` (
   `user_id` int(100) unsigned NOT NULL,
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `reg_id` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `system_categories`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `system_categories` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `name_idx` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `tags`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `tags` (
   `user_id` int(100) unsigned NOT NULL COMMENT 'ИД пользователя',
   `oper_id` int(100) unsigned NOT NULL COMMENT 'Ид операции',
@@ -293,8 +341,10 @@ CREATE TABLE `tags` (
   KEY `user_name_idx` (`user_id`,`name`),
   KEY `op_idx` (`oper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Теги';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `target`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `target` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ИД ',
   `user_id` int(100) unsigned NOT NULL COMMENT 'ИД пользователя',
@@ -319,8 +369,10 @@ CREATE TABLE `target` (
   KEY `date_end_index` (`date_end`),
   KEY `title_index` (`title`,`visible`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Финансовые цели';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `target_bill`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `target_bill` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ид',
   `bill_id` int(255) unsigned NOT NULL COMMENT 'Ид счёта на котором храним',
@@ -338,8 +390,10 @@ CREATE TABLE `target_bill` (
   KEY `bill_idx` (`bill_id`),
   KEY `target_sidx` (`target_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Виртуальный субсчёт для финансовой цели';
-
+SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `users`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `users` (
   `id` int(100) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Наш новый ИД для пользователей',
   `user_name` varchar(100) DEFAULT NULL COMMENT 'Псевдоним, который будет виден остальным на форуме',
@@ -356,3 +410,4 @@ CREATE TABLE `users` (
   KEY `user_login` (`user_login`,`user_pass`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+SET character_set_client = @saved_cs_client;
