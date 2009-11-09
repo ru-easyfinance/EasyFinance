@@ -563,7 +563,9 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
                 $('#list.budget .waste_list form').html(_$_list);
                 $('.cont input[value="0.00"]').closest('tr').remove();
                 $('.line .amount').each(function(){if ($(this).text()=='0.00') $(this).closest('.line').remove()})
-                
+                var date = new Date;
+                if(date.getFullYear() != $('.budget #year').val() && (date.getMonth()+1) != $('.budget #month').val())
+                    $('#list.budget .strip').hide()
                 $('.cont').each(function(){
                     var str = '<span>'+$(this).find('input').val()+'</span>'
                     $(this).html(str);
