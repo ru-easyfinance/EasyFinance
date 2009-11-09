@@ -16,7 +16,7 @@ easyFinance.widgets.accountsJournal = function(){
     function _initForm(){
         $('tr.item').live('mouseover',
             function(){
-                var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];/*/@todo Жуткий масив привязки типов к группам*/
+                var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];// Жуткий масив привязки типов к группам
                 var spec_th = [ [],
                             ['<th>% годовых</th>',
                                 '<th>Доходность, % годовых</th>'],
@@ -102,7 +102,7 @@ easyFinance.widgets.accountsJournal = function(){
         //edit account click
         $('li.edit').live('click',
             function(){
-                easyFinance.widgets.accountEdit._isEditing=true;
+                easyFinance.widgets.accountEdit.setEditMode(true);
                 $('#blockCreateAccounts').show();
                 var id = $(this).closest('.item').attr('id').split("_", 2)[1];
                 hash_api('#edit'+id);
@@ -115,7 +115,7 @@ easyFinance.widgets.accountsJournal = function(){
                 $('#blockCreateAccounts').show();
                 var id = $(this).closest('.item').attr('id').split("_", 2)[1];
                 hash_api('#edit'+id,flag);
-                easyFinance.widgets.accountEdit._isEditing=false;
+                easyFinance.widgets.accountEdit.setEditMode(false);
             }
         );
     }
@@ -180,7 +180,7 @@ easyFinance.widgets.accountsJournal = function(){
         if (!account_list || account_list.length == 0)
             return;
 
-        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];/*  //@todo Жуткий масив привязки типов к группам */
+        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0]; // Жуткий масив привязки типов к группам
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var spec_th = [ '',
                     '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',

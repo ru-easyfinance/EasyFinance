@@ -27,8 +27,9 @@ easyFinance.widgets.accountEdit = function(){
 
     function _initForm() {
         $('#op_btn_Save').click(function(){
-            update_list();
+            //update_list();
             // @todo: fire accountsLoaded
+            easyFinance.models.accounts.load();
         })
 
         $('#starter_balance').live('keyup',function(e){
@@ -54,12 +55,18 @@ easyFinance.widgets.accountEdit = function(){
             var str = $('#blockCreateAccounts #name').val();
             var id =$('#blockCreateAccounts').find('table').attr('id');
             var l = 1;
-            $('.item .name').each(function(){
-                if (id != $(this).closest('tr').attr('id')){
-                    if($(this).text()==str)
-                        l=0;
-                }
-            });
+
+            if (!_isEditing) {
+                // при добавлении нового счёта
+                // проверяем, чтобы не было счёта с таким же именем
+                $('.item .name').each(function(){
+                    if (id != $(this).closest('tr').attr('id')){
+                        if($(this).text()==str)
+                            l=0;
+                    }
+                });
+            }
+
             if (l){
                 hideForm();
                 if (easyFinance.widgets.accountEdit._isEditing)
@@ -185,12 +192,16 @@ easyFinance.widgets.accountEdit = function(){
         );
     }
 
+    function setEditMode(mode) {
+        _isEditing = mode;
+    }
+
     // reveal some private things by assigning public pointers
     return {
         init: init,
         hideForm: hideForm,
         showForm: showForm,
 
-        _isEditing: _isEditing
+        setEditMode: setEditMode
     };
 }(); // execute anonymous function to immediatly return object

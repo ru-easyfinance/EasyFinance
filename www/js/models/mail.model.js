@@ -205,7 +205,6 @@ easyFinance.models.mail = function(){
      */
     function deleteMails(ids, callback) {
         $.post(DELETE_MAIL_URL, {ids: ids.join(',')}, function(data) {
-            // @todo: update local lists
             for(var id in data) {
                 // delete mail on success
                 if (data[id] && _folders.trash[id])

@@ -12,6 +12,7 @@ easyFinance.widgets.operationEdit = function(){
     var _$node = null;
 
     var _cat = 0; // current category
+    var _oldSum = 0; // нужно для редактирования
 
     // private functions
 
@@ -100,9 +101,7 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
         $('#op_type').change(function(){
             //createDynamicDropdown('op_type', 'op_category');
-            _changeTypeOperation('add');
-            
-            
+            _changeTypeOperation('add'); 
         });
 
         $('#op_target').change(function(){
@@ -134,16 +133,20 @@ easyFinance.widgets.operationEdit = function(){
                         type : 1
                     },function(data){
                         $("#op_category").html(data);
-                        if (_newcat)
+                        if (_newcat) {
                             $('#op_category').val(_newcat);
+                            //_cat = _newcat;
+                        }
                     },'json');
             if ($('#op_type').val() == 0)
                 $.post('/category/cattypechange/',{
                         type : -1
                     },function(data){
                         $("#op_category").html(data);
-                        if (_newcat)
+                        if (_newcat) {
                             $('#op_category').val(_newcat);
+                            //_cat = _newcat;
+                        }
                     },'json');
                 //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
         //Перевод со счёта
@@ -236,6 +239,8 @@ easyFinance.widgets.operationEdit = function(){
             return false;
         }
 
+        var opType = $("#op_type option:selected").val();
+
         //Запрос подтверждения на выполнение операции в случае ухода в минус.
         var am = tofloat($('#op_amount').val()+'.0');
 
@@ -243,9 +248,16 @@ easyFinance.widgets.operationEdit = function(){
         //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
         var tb = tofloat(_model.getAccountBalanceTotal($("#op_account option:selected").val()));
         var ab = tofloat(_model.getAccountBalanceAvailable($("#op_account option:selected").val()));
-        
+
+        // @ticket 401
+        // при редактировании расходных операций
+        // учитываем то, что при увеличении суммы со счёта будет списана
+        // не вся сумма, а только разница между старым и новым значением
+        if (opType != 1 && $('form').attr('action').indexOf('edit') != -1)
+            am = am - _oldSum;
+
         //* && $("#op_type option:selected").val() != 1*/)
-        if ( (am-tb)>0 && $("#op_type option:selected").val()!=1){
+        if ( (am-tb)>0 && opType!=1){
             if (!confirm('Данная транзакция превышает остаток средств на вашем счёте! Продолжить ?'))
                 return false;
             //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
@@ -351,9 +363,15 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_category').val(_cat);
     }
 
+    function setSum(sum){
+        _oldSum = Math.abs(sum);
+        $('#op_amount').val(_oldSum);
+    }
+
     // reveal some private things by assigning public pointers
     return {
         init: init,
-        setCategory: setCategory
+        setCategory: setCategory,
+        setSum: setSum
     };
 }(); // execute anonymous function to immediatly return object

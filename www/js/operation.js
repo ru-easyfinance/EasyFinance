@@ -27,12 +27,13 @@ function clearForm() {
  * @param data данные для заполнения
  */
 function fillForm(data) {
-    clearForm();
+    //clearForm();
 
     $('#op_id').val(data.id);
     $('#op_account').val(data.account_id);
-    
+
     easyFinance.widgets.operationEdit.setCategory(data.cat_id);
+    easyFinance.widgets.operationEdit.setSum(Math.abs(data.money));
 
     if (data.tr_id=='1') {
         // transfer
@@ -50,7 +51,6 @@ function fillForm(data) {
     }
 
     //////////////////////////
-    $('#op_amount').val(Math.abs(data.money));
     //$('#target').val(data.);
     //$('#close').val(data.);
     $('#op_AccountForTransfer').val(data.transfer);
@@ -60,7 +60,7 @@ function fillForm(data) {
     else
         $('#op_tags').val('');
     $('#op_comment').val(data.comment);
-    //$('#op_type').change();
+    $('#op_type').change();
     $(document).scrollTop(300);
 }
 

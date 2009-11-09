@@ -1,8 +1,5 @@
 // {* $Id: category.js 113 2009-07-29 11:54:49Z ukko $ *}
 
-// @todo: оптимизировать редактирование категории
-// @todo: сейчас в этом случае перерисовываются все категории
-
 $(document).ready(function() {
     var cat;
     var oldCatId;
@@ -409,8 +406,7 @@ $(document).ready(function() {
         
         easyFinance.models.category.deleteById(id, function() {
             // Удаляем категорию из списка
-            // @todo: optimize! use _$node.find
-            $('#category_'+id).remove();
+            _$node.find('#category_'+id).remove();
 
             // Обновляем список родительских категорий
             if (isParent == true)

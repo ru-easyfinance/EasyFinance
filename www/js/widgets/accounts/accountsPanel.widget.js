@@ -121,7 +121,7 @@ easyFinance.widgets.accountsPanel = function(){
             str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
         }
         
-        str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';//@todo
+        str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
         //$('div.listing dl.bill_list dd').hide();
