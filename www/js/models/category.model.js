@@ -124,6 +124,43 @@ easyFinance.models.category = function(){
         return _categories.user;
     }
 
+    function _treeAddChildren(arrParent, idParent) {
+        // fill parent categories
+        for (var key in _categories.user) {
+            var cat = _categories.user[key];
+            if (cat.parent == idParent) {
+                arrParent[cat.id] = $.extend("", cat);
+                arrParent[cat.id].children = [];
+                _treeAddChildren(arrParent[cat.id].children, cat.id)
+            }
+        }
+    }
+
+    function getUserCategoriesTree(){
+        /*
+        [
+            id : {
+                id: 101,
+                name: "rootCategory",
+                children: [ "202" : { id, name, children } ]
+            },
+
+            id: {
+                id: 102,
+                name: "emptyRootCategory",
+            }
+        ]
+        */
+
+        var tree = [];
+        var cat = null;
+
+        // recursive function
+        _treeAddChildren(tree, "0");
+
+        return tree;
+    }
+
     function getUserCategoriesByType(){
         // @TODO implement getUserCategoriesByType
     }
@@ -156,6 +193,7 @@ easyFinance.models.category = function(){
         getAllCategories: getAllCategories,
         getSystemCategories:getSystemCategories,
         getUserCategories:getUserCategories,
+        getUserCategoriesTree: getUserCategoriesTree,
         getUserCategoriesByType:getUserCategoriesByType,
         isParentCategory: isParentCategory,
         getChildrenByParentId: getChildrenByParentId
