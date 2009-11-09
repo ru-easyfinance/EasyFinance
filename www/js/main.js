@@ -992,6 +992,7 @@ $('.tags_list .add').live('click', function(){
     // Щелчок по кнопке "Удалить"
     $('#btnDel').click(function(){
         var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+        var v;
         if ($(ch).length > 0 && confirm('Удалить отмеченные?')) {
             var obj = new Array ();
             $(ch).each(function(){
@@ -1031,7 +1032,7 @@ $('.tags_list .add').live('click', function(){
         if (type == null) {type = '';}
         if (page == null) {page = 1 ;}
         if ((res['events']) != null) {
-
+            var drain;
             var ptr = '',ctr = '',p = 0,c = 0,pc = 0,cc = 0;
             var counti = 4;//не работает count
             var start = (page-1) * counti;

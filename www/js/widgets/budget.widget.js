@@ -69,18 +69,21 @@ $('#master input')
      * @desc {Int} Общий бюджет
      */
     
-
+    $('#op_btn_Save').click(function(){
+        $('.budget #r_year').val('0');
+        $('#reload_bdg').click()
+    })
 
     $('#list.budget .waste_list form').html(_$_list);
     $('.w2,.w4').css('text-align', 'right')
     /*********************************************************************
      * Заплатка на вёрстку требует последующий модификации модели и т.п.
      */
-    $('.line .amount').each(function(){
+    $('.budget .line .amount').each(function(){
         if ($(this).text()=='0.00') $(this).closest('.line').remove()
     })
-    $('.cont input[value="0.00"]').closest('tr').remove();
-    $('.cont').each(function(){
+    $('.budget .cont input[value="0.00"]').closest('tr').remove();
+    $('.budget .cont').each(function(){
         var str = '<span>'+$(this).find('input').val()+'</span>'
         $(this).html(str);
     })

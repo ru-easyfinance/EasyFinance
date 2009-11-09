@@ -27,30 +27,10 @@ easyFinance.models.budget = function()
 
         /**
          * @desc возвращает список бюджетов
-         * @param {0|1}type //расходная - 0,доходный-1
          * @return {}
          */
-        function returnList(type){
-            if (type != '1'){type = '0'}
-
-            var bud_list = _data.list;
-            var children
-            var ret
-
-            for (var key in bud_list) {
-                if ((type=='0' && (res.category[bud_list[key]['category']]['type']<=0))||(type=='1' && (res.category[bud_list[key]['category']]['type']>=0))){
-                    ret[key] = bud_list[key];
-                    children = ret[key]['children'];
-                
-                    for (var k in children) {
-                        //if ((type=='0' && (res.category[children[HBASDKGFAGHDFBVHSNVJJIERUHYGHTYBGVNKRRJHGSDk]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))){
-                        if(children[k]['type'] != type){
-                            delete ret[key]['children'][k]
-                        }
-                    }
-                }
-            }
-            return bud_list;
+        function returnList(){
+            return _data.list;
         }
 
         /**
@@ -186,7 +166,7 @@ easyFinance.models.budget = function()
          * @return {} 
          */
         function returnInfo(){
-            return _data.main;
+            return _data.budget_info;
         }
         /**
          * @deprecated
