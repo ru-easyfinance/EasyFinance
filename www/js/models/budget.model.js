@@ -171,7 +171,7 @@ easyFinance.models.budget = function()
         /**
          * @deprecated
          */
-        function print_info(){
+        function print_info(i){
             var ret = {total:'',group:''};
             //ret.total=_data.main.total;
 /**
@@ -184,7 +184,13 @@ easyFinance.models.budget = function()
             var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b> руб.</span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b> руб.</span></div>';
                 str += '<div class="rest">Остаток: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b> руб.</span></div>';
+            if (i){
+                str = '<div class="income">Итого получено: <span><b>'+formatCurrency(_data.main.profit_all)+'</b> руб.</span></div>';
+                str += '<div class="waste">Итого потрачено: <span><b>'+formatCurrency(_data.main.drain_all)+'</b> руб.</span></div>';
+                str += '<div class="rest">Ожидается: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b> руб.</span></div>';
+            }
             ret.group=str;
+
             return ret;
         }
         /**

@@ -64,7 +64,7 @@ $('#master input')
     /**
      * @desc {html} остаток,ср доход и расход по бюджетам.сформирован в хтмл
      */
-    var _$_group = model.print_info().group;
+    var _$_group = model.print_info(1).group;
     /**
      * @desc {Int} Общий бюджет
      */
@@ -556,7 +556,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
             {
                 model.load(data);
                 _$_list = model.print_list($('.budget #r_type').val(),'1');
-                _$_group = model.print_info().group;
+                _$_group = model.print_info(1).group;
                 $('#list.budget #r_month').val($('.budget #month').val())
                 $('#list.budget #r_year').val($('.budget #year').val())
                 $('#list.budget .f_field3').html(_$_group);
@@ -598,7 +598,7 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
 
          //$('#list.budget .h .w4').text('Сред.'+$('.budget #r_type option:[selected]').text().toString().replace('ный','')+', руб');
         var txt;
-        txt = ($('.budget #r_type option:[selected]').text()=='расходный')?'Остаток. руб':'Отложено. руб';
+        txt = ($('.budget #r_type option:[selected]').text()=='расходный')?'Остаток. руб':'Ожидается. руб';
         $('#list.budget .h #balance.w2').text(txt)
     })
     /**
