@@ -5,6 +5,7 @@
 
 easyFinance.models.category = function(){
     // constants
+    var LIST_URL = '/category/getCategory/';
     var ADD_URL = '/category/add/';
     var EDIT_URL = '/category/edit/';
     var DELETE_URL = '/category/del/';
@@ -53,7 +54,7 @@ easyFinance.models.category = function(){
                 param2(_categories);
         } else {
             // load from server
-            $.get('/category/getCategory/', '',function(data) {
+            $.get(LIST_URL, '',function(data) {
                 _categories = data;
                 if (typeof param1 == 'function')
                     param1(_categories);
@@ -103,7 +104,7 @@ easyFinance.models.category = function(){
     }
 
     function deleteById(id, callback){
-        $.post('/category/del/', {id:id}, function(){              
+        $.post(DELETE_URL, {id:id}, function(){
                 delete _categories.user[id];
                 
                 callback();
