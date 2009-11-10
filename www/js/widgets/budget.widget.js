@@ -600,8 +600,8 @@ if (parseFloat($('.budget .f_field3 .rest span b').text()) < 0)
 
          //$('#list.budget .h .w4').text('Сред.'+$('.budget #r_type option:[selected]').text().toString().replace('ный','')+', руб');
         var txt;
-        txt = ($('.budget #r_type option:[selected]').text()=='расходный')?'Остаток. руб':'Ожидается. руб';
-        $('#list.budget .h #balance.w2').text(txt)
+        txt = ($('.budget #r_type option:[selected]').text()=='расходный')?'Потрачено':'Получено';
+        $('#list.budget .h .w3').text(txt)
     })
     /**
      * @desc маска для инпута с годом

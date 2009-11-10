@@ -190,21 +190,13 @@ easyFinance.models.budget = function()
          */
         function print_info(i){
             var ret = {total:'',group:''};
-            //ret.total=_data.main.total;
-/**
- * @FIXME Откуда тут берётся валюта? Её негде указывать, разве что её нужно брать из валюты по умолчанию
- *
- *            var str = '<div class="income">Итого доходов: <span><b>'+_data.main.profit_all+'</b> '+_data.main.cur+'</span></div>';
- *               str += '<div class="waste">Итого расходов: <span><b>'+_data.main.drain_all+'</b> '+_data.main.cur+'</span></div>';
- *               str += '<div class="rest">Остаток: <span><b>'+(_data.main.profit_all-_data.main.drain_all)+'</b> '+_data.main.cur+'</span></div>';
- */
             var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b> руб.</span></div>';
                 str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b> руб.</span></div>';
                 str += '<div class="rest">Остаток: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b> руб.</span></div>';
             if (i){
-                str = '<div class="income">Итого получено: <span><b>'+formatCurrency(_data.main.profit_all)+'</b> руб.</span></div>';
-                str += '<div class="waste">Итого потрачено: <span><b>'+formatCurrency(_data.main.drain_all)+'</b> руб.</span></div>';
-                str += '<div class="rest">Ожидается: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b> руб.</span></div>';
+                str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(_data.main.profit_all)+'</b> руб.</span></div>';
+                str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(_data.main.drain_all)+'</b> руб.</span></div>';
+                str += '<div class="rest">Остаток: <span><b>'+formatCurrency(_data.main.profit_all-_data.main.drain_all)+'</b> руб.</span></div>';
             }
             ret.group=str;
 

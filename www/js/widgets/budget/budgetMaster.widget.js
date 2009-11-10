@@ -172,8 +172,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             floatFormat($(this),String.fromCharCode(e.which) + $(this).val())
         })
         .live('click',function(){
-            if (this.value == '0.00'){
-                this.value = '0';
+            if ($(this).val() == '0.00'){
+                $(this).val('');
             }
         }
     );
