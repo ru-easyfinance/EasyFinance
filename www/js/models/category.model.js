@@ -151,6 +151,8 @@ easyFinance.models.category = function(){
             }
         ]
         */
+        if (_categories == undefined)
+            return undefined;
 
         var tree = [];
         var cat = null;
