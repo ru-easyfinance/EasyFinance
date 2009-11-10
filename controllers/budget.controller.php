@@ -54,6 +54,14 @@ class Budget_Controller extends Template_Controller
         }
     }
 
+    function _json_decode($string) 
+    { 
+        if (get_magic_quotes_gpc()) {
+            $string = stripslashes($string);
+        }
+	return json_decode($string);
+    }
+
     /**
      * Добавляет данные из мастера
      */
@@ -61,9 +69,9 @@ class Budget_Controller extends Template_Controller
     {
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
         $end   = null;
-        $json = json_decode(@$_POST['data']);
-
-        $budget = array();
+        $json = json_decode(stripslashes(@$_POST['data']));
+        
+	$budget = array();
         foreach ($json->d as $val) {
             foreach ($val as $k => $v) {
                 $v = str_replace(' ', '', $v);
@@ -80,6 +88,6 @@ class Budget_Controller extends Template_Controller
                 }
             }
         }
-        die(json_encode($this->model->add($budget, $start)));
+       die(json_encode($this->model->add($budget, $start)));
     }
 }
