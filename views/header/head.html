@@ -54,47 +54,48 @@
             </div>
 <!-- верхнее меню -->
 <!--шапка-->
+<!--авторизация-->
+            {if !isset($user_info)}
+                <div id="popupadd_login">
+                    <div id="login" class="w_dialog" style="overflow: hidden; display: none; position: absolute; z-index: 1010; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: 180px; width: 342px; top: 45px; left: 460px;">
+                        <div class="w_d_head"><div></div></div>
+                        <div class="w_d_body">
+                            <div class="link close"></div>
+                            <div class="inside">
+                                {if $smarty.const.IS_DEMO == false}
+                                <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
+                                {else}
+                                <form action="http://{$smarty.const.URL_ROOT}login/" method="post">
+                                {/if}
+                                    <div class="f_field">
+                                        <label for="flogin">логин:</label>
+                                        <input type="text" value="" name="login" id="flogin"/>
+                                    </div>
+                                    <div class="f_field">
+                                        <label for="password">пароль:</label>
+                                        <input type="password" value="" name="pass" id="pass"/>
+                                    </div>
+                                    <div class="f_field">
+                                        <label for="autoLogin">запомнить меня</label>
+                                        <input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" />
+                                    </div>
+                                    <div class="inlinebottom">
+                                        <ul>
+                                            <li><a href="/registration/">Регистрация</a> </li>
+                                        </ul>
+                                    </div>
+                                    <input type="submit" value="Войти" class="but"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="w_d_foot"><div></div></div>
+                    </div>
+                </div>
+            {/if}
             <div id="header">
                 <a href="https://{$smarty.const.URL_ROOT}" class="logo">EasyFinance.ru</a>
                 <div class="slogan">Система управления личными финансами</div>
-<!--авторизация-->
-                {if !isset($user_info)}
-                    <div id="popupadd_login">
-                        <div id="login" class="w_dialog" style="overflow: hidden; display: none; position: absolute; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 342px; top: 5px; left: 460px;">
-                            <div class="w_d_head"><div></div></div>
-                            <div class="w_d_body">
-                                <div class="link close"><div></div></div>
-                                <div class="inside">
-                                    {if $smarty.const.IS_DEMO == false}
-                                    <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
-                                    {else}
-                                    <form action="http://{$smarty.const.URL_ROOT}login/" method="post">
-                                    {/if}
-                                        <div class="f_field">
-                                            <label for="flogin">логин:</label>
-                                            <input type="text" value="" name="login" id="flogin"/>
-                                        </div>
-                                        <div class="f_field">
-                                            <label for="password">пароль:</label>
-                                            <input type="password" value="" name="pass" id="pass"/>
-                                        </div>
-                                        <div class="f_field">
-                                            <label for="autoLogin">запомнить меня</label>
-                                            <input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" />
-                                        </div>
-                                        <div class="inlinebottom">
-                                            <ul>
-                                                <li><a href="/registration/">Регистрация</a> </li>
-                                            </ul>
-                                        </div>
-                                        <input type="submit" value="Войти" class="but"/>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="w_d_foot"><div></div></div>
-                        </div>
-                    </div>
-                {/if}
+
                 {include file="head_adv.html"}
             </div>
         
