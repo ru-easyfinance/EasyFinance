@@ -15,6 +15,19 @@ function _getMonthDays(d){
 easyFinance.models.budget = function()
     {
         //var _data = $.extend(bdgt);
+        function reload (date,callback) {
+            $.post('/budget/load/',
+            {
+                start: '01.'+date.getMonth()+'.'+date.getFullYear()
+            },
+            function(data)
+            {
+                load(data);
+                callback(_data.main.real_drain,_data.main.real_profit)//@todo main ->budget_info
+                
+            },
+            'json')
+        }
         /**
          * @desc устанавливает список
          * @param data {}
@@ -103,25 +116,29 @@ easyFinance.models.budget = function()
         
         /**
          * @desc добавляет бюджет
-         * @param month {int} 1 - 12
-         * @param year {int} ~ ****
-         * @param jQuery - jQuery selector on form
-         * @return {String} html for $().append(html)
+         * @param budget {str} JSON
+         * @param date {date}
+         * @return void
          */
-        function add (month, year, jQuery){
-            $.post('/budget/add',
-                    {
-                        month : month,
-                        year : year,
-                        data : $(jQuery).serialize()
-                    },
-                    function(data)
-                    {
-                        _data = data;
-                        return print_list();
-                    },
-                    'json'
-                ); //add
+        function save (budget,date){
+            $.post('/budget/add/',
+                {
+                    data: budget,
+                    start: '01.'+(date.getMonth()+1)+'.'+date.getFullYear()
+                },
+                function(data){
+                    if (!data['errors'] || data.errors == []){
+                        $.jGrowl("Бюджет сохранён", {theme: 'green'});
+                    }else{
+                        var err = '<ul>';
+                        for(var key in data.errors)
+                        {
+                            err += '<li>' + data.errors[key] + '</li>';
+                        }
+                        $.jGrowl(err+'</ul>', {theme: 'red'});
+                    }
+                }
+            )
         }
         /**
          * @desc удаляет бюджет
@@ -209,12 +226,15 @@ easyFinance.models.budget = function()
         }
         
         return {
-            load:load,
-            print_info:print_info,
-            print_list:print_list,
-            add:add,
-            del:del,
-            edit:edit,
-            get_data:get_data
+            reload : reload,
+            load : load,
+            print_info : print_info,
+            print_list : print_list,
+            save : save,
+            del : del,
+            edit : edit,
+            get_data : get_data,
+            returnList : returnList,
+            returnInfo : returnInfo
         }
     }
