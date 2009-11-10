@@ -147,7 +147,7 @@ table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .ramka1 .cb div { background-position: 100% -60px; }
 
 .ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg05.gif') repeat-y 0 0; }
-.ramka2 .cct, .ramka2 .ccb { position: relative; height: 14px; overflow: hidden; background: url('/img/i/bg05_coners.gif') no-repeat 0 0; }
+.ramka2 .cct, .ramka2 .ccb { clear: both; height: 14px; background: url('/img/i/bg05_coners.gif') no-repeat 0 0; }
 .ramka2 .ccb { background-position: 0 -20px; }
 
 .ramka3 { border: 1px solid #ebebeb; //zoom: 1; }
@@ -953,15 +953,15 @@ div.cont ul li.add { margin-right: 0; }
 div.cont ul li.add a { width: 12px; }
 
 #popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
-#popupadd_login .f_field { display:block;height:20px;margin:0 0 8px -95px;position:relative; }
+#popupadd_login .f_field { display:block;height:24px;margin:0 0 8px -95px;position:relative; }
 #popupadd_login .inlinebottom {  left:-158px;position:relative;width:100px; }
 #popupadd_login .inlinebottom  a { color:#6CBD45;float:left;font-size:11px; }
-#popupadd_login  .but { position:absolute;right:23px;top:83px; }
+#popupadd_login  .but { position:absolute;right:24px;top:68px; left: auto; width: 50px; // right: 20px;}
 #popupadd_login .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("/img/i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png*/) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
 #popupadd_login .cb { height:25px;overflow:hidden;position:relative;width:383px; }
 #popupadd_login .f_field label { color:#8B8C8B;display:block;font-family:Arial;font-size:12px;left:30px;position:absolute;text-align:right;top:3px; }
 #popupadd_login .f_field input { color: #b2b2b2; font-family:Arial;Font-size:12px;color:#8B8C8B;border:1px solid #8B8C8B; }
-#popupadd_login  .f_field input { height:20px;width:153px; }
+#popupadd_login  .f_field input { height:18px;width:153px; }
 #popupadd_login  .f_field input.forget  { height:auto;width:auto;position:relative;left : 40px; border:0; }
 #popupadd_login .inside { display:block;height:110px;margin-left:-70px;z-index:1005;overflow:visible; }
 #popupadd_login div.w_dialog div.w_d_body { background:transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;height:130px;position:relative;text-align:justify;width:342px;margin-left:1px; }
