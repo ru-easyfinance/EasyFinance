@@ -41,13 +41,13 @@
 								<li><span>Неделя</span></li>
 								<li><span>Сегодня</span></li>
 							</ul>
-                                                        <span id="remove_all_op" style="text-decoration:underline;cursor:pointer">Удалить выделенные</span>
+                                                        <span id="remove_all_op" class="hidden" style="text-decoration:underline;cursor:pointer">Удалить выделенные</span>
 
                                                         <table id="operations_list_header" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                 <tr>
                                                                     <th><input type='checkbox' /></th>
                                                                         <th>
-                                                                                <span>Тип</span>
+                                                                                <span id="btnFilterType">Тип</span>
                                                                         </th>
                                                                         <th>
                                                                                 <span>Сумма</span>
@@ -56,7 +56,7 @@
                                                                                 <span>Дата</span>
                                                                         </th>
                                                                         <th>
-                                                                                <span>Категория</span>
+                                                                                <span id="btnFilterCategory" class="sort">Категория</span>
                                                                         </th>
                                                                         <th>
                                                                                 <span id="btnFilterAccount" class="sort">Счет</span>
@@ -71,6 +71,26 @@
                                                             <table id="operations_list" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                 <tbody></tbody>
                                                             </table>
+                                                        </div>
+
+                                                        <div id="dialogFilterType" class="hidden">
+                                                            <div class="padding10">
+                                                                <a href="#" value="">Все типы</a><br><hr>
+
+                                                                <a href="#" value="0">Доход</a><br>
+                                                                <a href="#" value="1">Расход</a><br>
+                                                                <a href="#" value="2">Перевод</a><br>
+                                                                <a href="#" value="4">Фин. цель</a><br>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="dialogFilterCategory" class="hidden">
+                                                            <div class="padding10">
+                                                                <a href="#" value="">Все категории</a><hr>
+                                                                <select id="selectFilterCategory">
+                                                                    {$category}
+                                                                </select>
+                                                            </div>
                                                         </div>
 
                                                         <div id="dialogFilterAccount" class="hidden">

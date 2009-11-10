@@ -104,6 +104,8 @@ easyFinance.widgets.operationEdit = function(){
             _changeTypeOperation('add'); 
         });
 
+        $('#op_type').change();
+
         $('#op_target').change(function(){
             t = parseInt($("#op_target :selected").attr("target_account_id"));
             $("span.op_currency").each(function(){

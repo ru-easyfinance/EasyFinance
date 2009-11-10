@@ -226,7 +226,7 @@ easyFinance.widgets.operationsJournal = function(){
         $('#remove_all_op').click(_deleteChecked);
 
         // биндим клик на чекбоксе в заголовке
-        $('#operations_list_header th input').change(function(){
+        $('#operations_list_header th input').click(function(){
             if($(this).attr('checked'))
                 $('#operations_list .check input').attr('checked','checked');
             else

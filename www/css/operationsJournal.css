@@ -6,24 +6,35 @@
     margin-top: 10px;
     margin-bottom: 0px;
     width:518px;
+    height: 20px;
     border-collapse:inherit!important;
     border: 2px solid #dfdede;
     border-bottom: none;
 }
 
 div#operations_list_container {
+    position: relative;
     border: 2px solid #dfdede;
     width: 514px;
     height: 154px;
-    overflow-x: none;
+    max-height: 154px;
+    overflow-x: hidden;
     overflow-y: scroll;
 }
 
 table#operations_list {
+    position: relative;
     width: 496px;
+    height: 154px;
+    overflow: scroll;
     border-top: none;
     margin: 0px;
     border: none;
+    table-layout: fixed;
+}
+
+table#operations_list tr {
+    height: 20px;
 }
 
 /* header widths */

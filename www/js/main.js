@@ -354,6 +354,7 @@ $(document).ready(function() {
     }
 
     if(inarray(Current_module, Connected_functional.menu)){
+        $('.navigation a[href*=' + pathName +']').wrapInner('<b></b>');
         $('.listing').hide();
         $('.navigation  li ul').hide()
         $('.navigation li.act ul').show()
