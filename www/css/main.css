@@ -806,7 +806,7 @@ div.op_addoperation .op_line  .op_amount {float: left; margin-right: 170px; }
 div.op_addoperation .op_line .op_f_field input.op_inp, div.op_addoperation .op_line textarea { color: #20201E; width:350px}
 div.op_addoperation .op_line .op_f_field #op_date {width:auto;}
 div.op_addoperation .op_line label { display: block; margin-bottom: 2px;}
-div.op_addoperation .op_line textarea { width: 350px; //width: 489px; height: 96px; //height: 90px; }
+div.op_addoperation .op_line textarea { width: 350px; //width: 350px; height: 96px; //height: 90px; }
 div.op_addoperation .op_but input { margin-right: 21px; margin-top:14px;}
 
 div.op_addoperation .op_line .op_category { margin-right: 0; }
