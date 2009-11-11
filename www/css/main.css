@@ -1122,7 +1122,7 @@ div.cont ul li.add a { width: 12px; }
 
 .budget .waste_list .line, .categories .line { position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
 .budget .waste_list .line a.name, .categories .line a.name { display: block; margin-bottom: 4px; width: 179px; padding-left: 25px; color: #313131; font-weight: bold; }
-.budget .waste_list .line .amount { position: absolute; top: 7px; left: 200px; font-weight: bold; }
+.budget .waste_list .line .amount { position: absolute; top: 7px; right: 195px; font-weight: bold; }
 
 .budget .waste_list .open a.name, .categories .open a.name { background: url('/img/i/minus.gif') no-repeat 6px 4px; }
 .budget .waste_list .open table, .categories .open table { display: block; }
@@ -1143,8 +1143,8 @@ position:relative;}
 .categories table.h td span { color: #8d8d8d; }
 .categories table.h td.w1 { width: 187px; padding-left: 25px; }
 .categories table.h td.w4 { padding: 7px 0 5px 0; }
-.categoriesSH table.h {border-top: 1px solid #E8E8E8};
-.categoriesSH table.h tr {width: 482px};
+.categoriesSH table.h {border-top: 1px solid #E8E8E8}
+.categoriesSH table.h tr {width: 482px}
 .categoriesSH table.h td span { color: #8d8d8d; }
 .categoriesSH table.h td.w1 { width: 187px; padding-left: 25px; }
 .categoriesSH table.h td.w4 { padding: 7px 0 5px 0; }

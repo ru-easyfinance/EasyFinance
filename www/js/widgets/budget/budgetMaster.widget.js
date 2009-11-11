@@ -181,7 +181,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * Скрытие-раскрытие ветки дерева
      */
-    $('div.line a.name').live('click',function(){
+    $('#master div.line a.name').live('click',function(){
         $(this).closest('.line').toggleClass('open').toggleClass('close');
         return false;
     })
@@ -189,7 +189,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * маска для инпута с годом
      */
-    $('#step1 input#year').keyup(function(){
+    $('#master #step1 input#year').keyup(function(){
         var str = $('#step1 input#year').val();
         $('#step1 input#year').val(str.match(/[0-9]{0,4}/)[0]);
     });
@@ -215,8 +215,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 if (($(this).hasClass('next')) && (tempDate !== _currentDate))
                 {
                     _currentDate.setDate(1)
-                    _currentDate.setYear($('#step1 #year').val());
-                    _currentDate.setMonth($('#step1 #month').val()-1);
+                    _currentDate.setYear($('#master #step1 #year').val());
+                    _currentDate.setMonth($('#master #step1 #month').val()-1);
                     $('#master #step2 .master.head h4').text('Шаг 2 из 3. Доходы - Планирование бюджета на '+$('#master #step1 #month option[value="'+$('#master #step1 #month').val()+'"]').text() +' '+$('#master #step1 #year').val())
                     $('#master #step3 .master.head h4').text('Шаг 3 из 3. Расходы - Планирование бюджета на '+$('#master #step1 #month option[value="'+$('#master #step1 #month').val()+'"]').text() +' '+$('#master #step1 #year').val())
                     model.reload(_currentDate,function(drain,profit){
