@@ -158,6 +158,7 @@ table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .ramka3 .cb { margin: 0 -1px -1px -1px; background-position: 0 -170px; }
 .ramka3 .cb div { background-position: 100% -200px; }
 
+table.tab1.header { margin: 0px; }
 table.tab1 { position: relative; width:100%; margin-bottom: 32px; }
 table.tab1 th { padding: 6px 5px 4px 5px; text-align: left; background: #ebebeb; }
 table.tab1 td { padding: 8px 5px 7px 5px !important; background-position: bottom left !important; }
@@ -1423,9 +1424,10 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
 #footer ul.contacts { position: absolute; top: 12px; left: 217px; }
 #footer ul.contacts li { margin-bottom: 1px; }
-#footer ul.contacts li.icq, #footer ul.contacts li.skype { position: absolute; left: 283px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
+#footer ul.contacts li.icq, #footer ul.contacts li.skype, #footer ul.contacts li.twitter { position: absolute; left: 538px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
 #footer ul.contacts li.icq { top: -1px; background-position: 0 -30px; }
 #footer ul.contacts li.skype { top: 16px; background-position: 0 -60px; }
+#footer ul.contacts li.twitter { top: 32px; background-position: 0px -240px; }
 #footer .search { position: absolute; top: 16px; right: 0; width: 215px; }
 #footer .search input.inp{ display: block; width: 191px; //width: 173px; padding: 0 0 0 12px; margin-bottom: 1px; font-size: 11px; color: #a7a7a7; }
 #footer .search input.but{ display: block; position: absolute; top: 0; right: 5px; width: 17px; height: 19px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url('/img/i/icons.gif') no-repeat 5px 3px; }

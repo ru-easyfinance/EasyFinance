@@ -2,7 +2,7 @@
 
 $(document).ready(function() {
     var cat;
-    var oldCatId;
+    var oldCatId = -1;
 
     $('.block2 .inside').css({width: '679px'});
     $('.block2 .inside .form_block').css({width: '353px'});
@@ -29,6 +29,7 @@ $(document).ready(function() {
     });
 
     $('#add_category').click(function(){
+        oldCatId = -1;
         $('#add_form').toggle();
         $('#categoryEditSystem').show();
         $('#subcat').removeAttr('disabled');
@@ -73,7 +74,6 @@ $(document).ready(function() {
     $('li.add').live('click',function(){
         clearForm();
         var catId = $(this).closest('tr,.line').attr('id').split("_", 2)[1];
-        oldCatId = catId;
         fillForm(catId);
 
         $('#subcat').removeAttr('disabled');
@@ -100,7 +100,9 @@ $(document).ready(function() {
      * @param id
      */
     function fillForm(id) {
-//        см. тикеты 299, 389
+        // тикет 425
+        oldCatId = id;
+        // тикеты 299, 389
         if (cat.user[id]['parent'] == "0") {
             $('#categoryEditSystem').show();
             $('#subcat').attr('disabled', 'disabled');
@@ -296,74 +298,115 @@ $(document).ready(function() {
      */
     function saveCategory() {
         if (cat_checkForm()) {
-            $.jGrowl("Категория сохраняется", {theme: 'green'});
-
             var id = $('#cat_id').val();
             var name = $('#namecat').val();
             var subcat = $('#subcat').val();
             var type = $('#cattype').val();
             var sys = $('#catsys').val();
 
-            var oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[oldCatId]);
+            var oldCat;
+
+            if (oldCatId != -1)
+                oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[oldCatId]);
 
             if (subcat =="") {
                 // родительская категория
-                var children = easyFinance.models.category.getChildrenByParentId(id);
                 
-                if (type!=oldCat.type && type!=0 && children.length > 0) {
-                    // делаем проверки, если тип категории меняется на
-                    // доходный или расходный и у неё есть подкатегории
+                if (oldCatId != -1) {
+                    // делаем проверки при редактировании
+                    var children = easyFinance.models.category.getChildrenByParentId(id);
 
-                    // запрещаем делать категорию доходной или расходной,
-                    // если у неё есть подкатегории другого типа
-                    var stop = false;
-                    for (var key in children) {
-                        if (children[key]['type'] != type)
-                            stop = true;
-                    }
+                    if (type!=oldCat.type && type!=0 && children.length > 0) {
+                        // делаем проверки, если тип категории меняется на
+                        // доходный или расходный и у неё есть подкатегории
 
-                    if (stop) {
-                        var strAlert = 'Вы не можете сделать эту категорию '
-                            + (type==1 ? 'доходной' : 'расходной')
-                            + ',\nпотому что она содержит '
-                            + (type==1 ? 'расходные' : 'доходные') + ' подкатегории';
-                        
-                        alert(strAlert);
-                        return;
+                        // запрещаем делать категорию доходной или расходной,
+                        // если у неё есть подкатегории другого типа
+                        var stop = false;
+                        for (var key in children) {
+                            if (children[key]['type'] != type)
+                                stop = true;
+                        }
+
+                        if (stop) {
+                            var strAlert = 'Вы не можете сделать эту категорию '
+                                + (type==1 ? 'доходной' : 'расходной')
+                                + ',\nпотому что она содержит '
+                                + (type==1 ? 'расходные' : 'доходные') + ' подкатегории';
+
+                            alert(strAlert);
+                            return;
+                        }
                     }
                 }
             } else {
                 // подкатегория
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
-                if (type != oldCat.type && newParent.type != 0) {
-                    debugger;
-                    // меняем тип подкатегории
-                    var strPrompt = 'Вы пытаетесь изменить тип подкатегории. '
+
+                if (oldCatId != -1 && type != oldCat.type && newParent.type != 0) {
+                    // при изменении типа подкатегории
+                    // ЗАПРЕТИТЬ. тикет 389
+                    //
+                    //var strPrompt = 'Вы пытаетесь изменить тип подкатегории. '
+                    //    + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
+
+                    //if (!confirm(strPrompt))
+                    //    return;
+
+                    var strType = "расходную";
+                    if (type == 1)
+                        strType = "доходную"
+                    else if (type == 0)
+                        strType = "универсальную";
+
+                    var strPrompt = 'Невозможно поместить '
+                        + strType + ' подкатегорию в '
+                        + (type==1 ? "расходную" : "доходную") + ' категорию.';
+                    
+                    alert(strPrompt);
+
+                    return;
+                }
+                
+                //if (oldCatId != -1 && subcat != oldCat.subcat) {
+                // проверяем совпадение типов новой категории и подкатегории
+                if (newParent.type != 0 && newParent.type != type) {
+                    // пользователь пытается поместить
+                    // доходную подкатегорию в расходную
+                    // или расходную подкатегорию в доходную
+                    // ЗАПРЕТИТЬ. тикет 389
+
+                    var strType = "расходную";
+                    if (type == 1)
+                        strType = "доходную"
+                    else if (type == 0)
+                        strType = "универсальную";
+
+                    var strPrompt = 'Невозможно поместить '
+                        + strType + ' подкатегорию в '
+                        + (type==1 ? "расходную" : "доходную") + ' категорию.';
+
+                    alert(strPrompt);
+
+                    return;
+
+                    /*
+                    var strType = "универсальную";
+                    if (type == 1)
+                        strType = "доходную"
+                    else if (type == 0)
+                        strType = "расходную";
+
+                    var strPrompt = 'Вы пытаетесь поместить '
+                        + strType + ' подкатегорию в '
+                        + (type==1 ? "расходную" : "доходную") + ' категорию. \n'
                         + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
 
                     if (!confirm(strPrompt))
                         return;
-                } else if (subcat != oldCat.subcat) {
-                    // перемещаем подкатегорию в другую категорию
-                    if (newParent.type != 0 && newParent.type != type) {
-                        // пользователь пытается поместить
-                        // доходную подкатегорию в расходную
-                        // или расходную подкатегорию в доходную
-                        var strType = "универсальную";
-                        if (type == 1)
-                            strType = "доходную"
-                        else if (type == 0)
-                            strType = "расходную";
-
-                        var strPrompt = 'Вы пытаетесь переместить '
-                            + strType + ' подкатегорию в '
-                            + (type==1 ? "расходную" : "доходную") + ' категорию. \n'
-                            + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
-
-                        if (!confirm(strPrompt))
-                            return;
-                    }
+                    */
                 }
+                //}
             }
 
             var done = function(cat) {
@@ -388,6 +431,8 @@ $(document).ready(function() {
                     $('#op_type').change();
             }
 
+            $.jGrowl("Категория сохраняется", {theme: 'green'});
+
             $('#btnSave').attr('disabled', true);
             var act = $('form').attr('action');
             if (act == '/category/add/')
@@ -406,7 +451,7 @@ $(document).ready(function() {
         
         easyFinance.models.category.deleteById(id, function() {
             // Удаляем категорию из списка
-            _$node.find('#category_'+id).remove();
+            $('#category_'+id).remove();
 
             // Обновляем список родительских категорий
             if (isParent == true)
