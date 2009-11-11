@@ -254,7 +254,7 @@ easyFinance.widgets.operationsJournal = function(){
         $('#operations_list a').live('click', _editOperation);
 
         // show selection
-        $('tr:not(:first)','#operations_list').live('mouseover',function(){
+        $('tr','#operations_list').live('mouseover',function(){
             $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             $(this).closest('tr').addClass('act').find('.cont ul').show();
         });
