@@ -277,9 +277,9 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #aboutproject { margin-bottom: 33px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
 #aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.jpg') no-repeat 0 0; }
-#aboutproject .inside div#dialog{padding-left: 27px;background:0 }
-#aboutproject .inside h2 { cursor: pointer; margin: 0; height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
-#aboutproject .inside h2 a { display: block; height: 23px; text-indent: -999px; overflow: hidden; }
+
+#aboutproject .inside h2,div#dialog h2{ cursor: pointer; margin: 0; height: 30px; background: url('/img/i/title.png') no-repeat 0 0; }
+#aboutproject .inside h2 a,div#dialog h2 a{ display: block; height: 23px; text-indent: -999px; overflow: hidden; }
 
 #aboutproject .inside .monitors { left: 13px; background-position: 0 15px;}
 #aboutproject .inside .monitors h2 a { width: 168px; }
@@ -1456,19 +1456,19 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
 #footer .creator { cursor: pointer; -moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:transparent url(../img/i/nota.gif) no-repeat scroll 100% 100%;color:#7F7F7F;font-size:10px;line-height:11px;padding-bottom:19px;position:absolute;right:5px;text-align:right;top:32px;width:210px; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
+div#dialog{ padding-left: 27px;background:0 ;}
+div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:absolute}
 
-#aboutproject .inside div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:absolute}
-
-#aboutproject .inside div.w_dialog div.w_d_head{width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
-#aboutproject .inside div.w_dialog div.w_d_body{width:300px; height:auto;position:relative;  background: transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;}
-#aboutproject .inside div.w_dialog div.w_d_foot{width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
+div.w_dialog div.w_d_head{width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
+div#dialog.w_dialog div.w_d_body{width:400px; height:auto;position:relative; padding-left: 27px; background: transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;}
+div.w_dialog div.w_d_foot{width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
 #popupreport div.w_d_head{width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
 #popupreport div.w_d_body{width:auto; height:auto;position:relative;left:1px;padding-left:20px;  background: transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;}
 #popupreport div.w_d_foot{width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
 
-#aboutproject .inside .close{ cursor: pointer; top:5px; right:-130px; position: relative; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
+div.w_dialog .close{ cursor: pointer; top:5px; right:-260px; position: relative; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
 
-#aboutproject .inside .text{top:5px;width:250px; position: relative; right: 80px; font-size: 14px; line-height:17px;}
+div.w_dialog .text{top:5px;width:250px; padding-right: 107px; font-size: 14px; line-height:17px;}
 
 
 #p_index #header { height: 130px; }

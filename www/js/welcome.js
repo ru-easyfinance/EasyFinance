@@ -80,13 +80,13 @@ $(document).ready(function() {
      * Позиционирование по умолчанию
      * @deprecated перенести в css
      */
-    $('#dialog').css({top:'20px',position:'absolute'}).hide()
+    $('#dialog').css({top:'320px',position:'absolute'}).hide()
     /**
      * скрытие подсказки при необходимости
      */
     $('body').mousemove(function()
     {
-        if (!$('#aboutproject div:hover').length)
+        if (!$('#aboutproject div:hover,#dialog:hover').length)
         {
             $('#dialog').hide();
         }
