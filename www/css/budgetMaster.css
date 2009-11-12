@@ -1,3 +1,4 @@
+.budget#master {margin : 5px}
 .budget#master .master.head{display: none}
 .budget#master .waste_list .body .list input {width: 100px;text-align: right; }
 .budget#master .waste_list .list.body{overflow-y: auto; overflow-x: hidden; max-height: 300px;}
