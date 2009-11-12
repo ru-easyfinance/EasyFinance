@@ -112,5 +112,5 @@ Core::getInstance()->js = array(
     'admin' => array( 'admin'),
     'accounts' => array('widgets/accounts/accountEdit.widget', 'widgets/accounts/accountsJournal.widget', 'accounts'),
     'review' => array('jquery/jquery.fancybox-1.0.0', 'review'),
-    'budget' => array('budget', 'models/budget.model', 'widgets/budget.widget')
+    'budget' => array('budget','models/category.model', 'models/budget.model','widgets/budget/budget.widget','widgets/budget/budgetMaster.widget')
 );

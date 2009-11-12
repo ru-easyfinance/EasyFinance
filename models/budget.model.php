@@ -27,31 +27,19 @@ class Budget_Model {
      * @param date $start
      * @param date $end
      */
-    function loadBudget($start = null, $end = null, $user_id = 0, $category = null)
+    function loadBudget($start, $end, $user_id, $category)
     {
         if ($user_id == 0) {
             $user_id = Core::getInstance()->user->getId();
         }
-        if (!$start) {
+        
+        if (empty ($start)) {
             $start = date('Y-m-01');
         }
+
         if (!$category) {
             $category = Core::getInstance()->user->getUserCategory();
         }
-
-//        data.list =
-//            [
-//                d:[
-//                     cat_id : {
-//                         amount : (float) - запланированно
-//                         money : (float) - уже потрачено/получено
-//                     },
-//                     ...
-//                ],
-//                p:[
-//                    ...
-//                ]
-//            ]
 
 //        $sql = "SELECT c.cat_id as category
 //            , b.drain, b.currency, b.amount,
@@ -82,13 +70,14 @@ class Budget_Model {
                 ) AS avg_3m
                 , (SELECT SUM(o.money) FROM operation o
                     WHERE (o.transfer = NULL OR o.transfer = 0) AND b.category = o.cat_id
-                    AND o.date >= '2009-11-01' AND o.date <= LAST_DAY(o.date)
+                    AND o.date >= ? AND o.date <= LAST_DAY(o.date)
                 ) AS money
         FROM budget b
         LEFT JOIN category c ON c.cat_id=b.category
-        WHERE b.user_id= 5 ORDER BY c.cat_parent;";
+        WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
+        ORDER BY c.cat_parent ;";
 
-        $array = Core::getInstance()->db->select($sql, $start, $start, $user_id);
+        $array = Core::getInstance()->db->select($sql, $start, $user_id, $start);
 
         $list = array(
             'd' => array(),
@@ -106,6 +95,7 @@ class Budget_Model {
                     $profit_all += (float)$var['amount'];
                 }
             }
+            
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
@@ -162,14 +152,17 @@ class Budget_Model {
             'main' => array (
                 'drain_all'  => $drain_all,
                 'profit_all' => $profit_all,
-                'start'      => $var['date_start'],
-                'end'        => $var['date_end']
+                'start'      => $start,
+                'end'        => $end
             )
         );
     }
 
     /**
      * Добавляет новые данные в бюдждет
+     * @param array mixed $data
+     * @param date $date
+     * @return array
      */
     function add($data, $date)
     {
@@ -190,9 +183,6 @@ class Budget_Model {
                         if (!empty ($sql)) $sql .= ',';
                         $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
                             $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
-                //} else {
-                    // print $k."\n";
-                    // Косяк при добавлении/правки категории.
                 }
             }
         }

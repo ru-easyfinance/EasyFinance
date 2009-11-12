@@ -46,20 +46,16 @@ class Budget_Controller extends Template_Controller
     function load()
     {
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
-        $end   = null;
-        if ($start) {
-            die(json_encode($this->model->loadBudget($start, $end)));
+        $end   = '';
+        if (!is_null($start)) {
+            die(
+                json_encode(                   
+                    $this->model->loadBudget($start, $end)
+                )
+            );
         } else {
             die('[]');
         }
-    }
-
-    function _json_decode($string) 
-    { 
-        if (get_magic_quotes_gpc()) {
-            $string = stripslashes($string);
-        }
-	return json_decode($string);
     }
 
     /**
