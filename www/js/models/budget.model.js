@@ -121,10 +121,15 @@ easyFinance.models.budget = function()
          * @return void
          */
         function save (budget,date){
+            var month = date.getMonth()+1;
+            if (month.toString().length == 1){
+                month = '0'+month.toString()
+            }
+
             $.post('/budget/add/',
                 {
                     data: budget,
-                    start: '01.'+(date.getMonth()+1)+'.'+date.getFullYear()
+                    start: '01.'+month+'.'+date.getFullYear()
                 },
                 function(data){
                     if (!data['errors'] || data.errors == []){
