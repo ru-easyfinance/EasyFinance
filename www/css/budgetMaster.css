@@ -1,0 +1,41 @@
+.budget#master .master.head{display: none}
+.budget#master .waste_list .body .list input {width: 100px;text-align: right; }
+.budget#master .waste_list .list.body{overflow-y: auto; overflow-x: hidden; max-height: 300px;}
+.budget#master .waste_list .list.head{ background: url('/img/i/bg09.gif') repeat-x 0 0; }
+.budget#master .waste_list .list.head table td{ font-size: 11px; padding: 7px 0 5px 0; }
+.budget#master .waste_list .list.head table td.w1 { padding-left: 11px; width: 178px; }
+.budget#master .waste_list .list.head table td.w2 { width: 103px;}
+.budget#master .waste_list .list.head table td.w4 { width: 97px;}
+.budget#master .waste_list table { position: relative; width: 502px; }
+.budget#master .waste_list table td { position: relative; padding: 7px 0 3px 0; }
+.budget#master .waste_list table td.w1 { width: 199px; padding-right: 5px; }
+.budget#master .waste_list table td.w1 a{ display: block; padding-left: 25px; }
+.budget#master .waste_list table td.w2 { width: 103px; padding-top: 4px; z-index: 10; }
+.budget#master .waste_list .list.body table td.w4 { width: 160px;text-align:right}
+.budget#master .waste_list .line .amount { position: absolute; top: 7px; right: 196px; font-weight: bold; }
+.budget#master .waste_list a{ color: #313131; }
+.budget#master .waste_list .line{ position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
+.budget#master .waste_list .line a.name{ display: block; margin-bottom: 4px; width: 179px; padding-left: 25px; color: #313131; font-weight: bold; }
+.budget#master .waste_list .open a.name{ background: url('/img/i/minus.gif') no-repeat 6px 4px; }
+.budget#master .waste_list .open table{ display: block; }
+.budget#master .waste_list .close a.name{ background: url('/img/i/plus.gif') no-repeat 6px 4px; }
+.budget#master .waste_list .close table{ display: none; }
+
+.budget#master .f_field3 { position: relative; margin-bottom: 15px; height: 32px; }
+.budget#master .f_field3 div { position: absolute; top: 7px; }
+
+.budget#master .f_field3 .income { left: 0; }
+.budget#master .f_field3 .income span { color: #309500; }
+.budget#master .f_field3 .rest { left: 193px;top : 20px; }
+.budget#master .f_field3 .rest span { color: #eb3c34; }
+.budget#master .f_field3 .waste { right: 0; }
+.budget#master .f_field3 .waste span { color: #868686; }
+
+.budget#master .foot div{color: #309500; cursor: pointer;}
+.budget#master .foot {position:relative; clear:both; width: 100%}
+.budget#master .foot .prev{float: left; position: relative}
+.budget#master .foot .next{float: right; position: relative}
+
+
+.addbudget{margin:10px}
+.addbudget a{border-bottom:1px dashed #6BBE4C; cursor:pointer; text-decoration:none; font-size:14px; margin:5px}
