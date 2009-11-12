@@ -16,9 +16,13 @@ easyFinance.models.budget = function()
     {
         //var _data = $.extend(bdgt);
         function reload (date,callback) {
+            var month = date.getMonth()+1;
+            if (month.toString().length == 1){
+                month = '0'+month.toString()
+            }
             $.post('/budget/load/',
             {
-                start: '01.'+(date.getMonth()+1)+'.'+date.getFullYear()
+                start: '01.'+month+'.'+date.getFullYear()
             },
             function(data)
             {
