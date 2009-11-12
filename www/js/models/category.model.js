@@ -43,12 +43,12 @@ easyFinance.models.category = function(){
 
     /**
      * @desc read initial data from json/server
-     * @usage load(json)
-     * @usage load(json, callback)
+     * @usage load(object)
+     * @usage load(object, callback)
      * @usage load(callback)
      */
     function load(param1, param2){
-        if (typeof param == 'string') {
+        if (typeof param1 == 'object') {
             _categories = param1;
             if (typeof param2 == 'function')
                 param2(_categories);
