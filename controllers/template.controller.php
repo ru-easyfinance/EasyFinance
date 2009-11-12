@@ -115,7 +115,12 @@ class Template_Controller {
         } catch ( Exception $e) {
             $infoa = 0;
         }
-        
+        try {
+            $category = new Category_Model();
+            $cats = $category->getCategory();
+        } catch ( Exception $e ) {
+            $cats = null;
+        }
         Core::getInstance()->tpl->assign('res', json_encode(array(
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
@@ -137,7 +142,7 @@ class Template_Controller {
             ),
             'errors'=>Core::getInstance()->errors,
             'budget'=>Core::getInstance()->user->getUserBudget(),
-            'category' => Core::getInstance()->user->getUserCategory()
+            'category' => $cats
         )));
     }
 }

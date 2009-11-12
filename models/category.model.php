@@ -282,10 +282,10 @@ class Category_Model {
      */
     function del($id = 0)
     {
-        $sql = "DELETE FROM category WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
+        $sql = "UPDATE category SET visible=1 WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
         $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);//удаляет категорию, заодно и дочерние
         
-        $sql = "DELETE FROM operation WHERE cat_id=? AND user_id=?";
+        $sql = "UPDATE operation SET visible=1 WHERE cat_id=? AND user_id=?";
         $this->db->query($sql, $id, Core::getInstance()->user->getId());//удаляет все операции по удаляемой категории.
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
@@ -354,4 +354,45 @@ class Category_Model {
         return get_tree_select2(0, $type);
     }
 
+    /**
+     * Возвращает список категорий пользователя и системные
+     * @param date $start
+     * @param date $finish
+     * @return array mixed
+     */
+    function getCategory($start = null, $finish = null)
+    {   
+        if (!$start) {
+            $start = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
+        }
+        if (!$finish) {
+            $finish = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
+        }
+    
+        $sum = $this->loadSumCategories($sys_currency, $start, $finish);
+
+        $users = array();
+        
+        foreach (Core::getInstance()->user->getUserCategory() as $val) {
+            $users[$val['cat_id']] = array(
+                'id'      => $val['cat_id'],
+                'parent'  => $val['cat_parent'],
+                'system'  => $val['system_category_id'],
+                'name'    => $val['cat_name'],
+                'type'    => $val['type'],
+                'visible' => $val['visible'],
+            );
+            if ($val['cat_id'] == $sum['cat_id']) {
+                $users[$val['cat_id']]['summ'] = $sum['sum'];
+            }
+        }
+        $systems = $this->system_categories;
+        $systems[0] = array('id'=>'0','name'=>'Не установлена');
+
+        return array(
+            'user'=>$users,
+            'system'=>$systems
+        );
+        
+    }
 }
