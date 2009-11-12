@@ -18,7 +18,7 @@ easyFinance.models.budget = function()
         function reload (date,callback) {
             $.post('/budget/load/',
             {
-                start: '01.'+date.getMonth()+'.'+date.getFullYear()
+                start: '01.'+(date.getMonth()+1)+'.'+date.getFullYear()
             },
             function(data)
             {
@@ -125,7 +125,7 @@ easyFinance.models.budget = function()
             if (month.toString().length == 1){
                 month = '0'+month.toString()
             }
-
+            
             $.post('/budget/add/',
                 {
                     data: budget,
