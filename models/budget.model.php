@@ -146,14 +146,16 @@ class Budget_Model {
 //                );
 //            }
         }
-
+        //plan_drain plan_profit real_drain real_profit
         return array (
             'list' => $list,
             'main' => array (
-                'drain_all'  => $drain_all,
-                'profit_all' => $profit_all,
-                'start'      => $start,
-                'end'        => $end
+                'plan_drain'  => $drain_all,
+                'plan_profit' => $profit_all,
+                'real_drain'  => 0,
+                'real_profit' => 0,
+                'start'       => $start,
+                'end'         => $end
             )
         );
     }
