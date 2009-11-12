@@ -287,6 +287,7 @@ class Category_Model {
         
 //        $sql = "UPDATE operation SET visible=0 WHERE cat_id=? AND user_id=?";
 //        $this->db->query($sql, $id, Core::getInstance()->user->getId()); //удаляет все операции по удаляемой категории.
+        //@FIXME Починить удаление операций по категории
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
         return true;
