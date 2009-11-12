@@ -282,11 +282,11 @@ class Category_Model {
      */
     function del($id = 0)
     {
-        $sql = "UPDATE category SET visible=1 WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
+        $sql = "UPDATE category SET visible=0 WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
         $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);//удаляет категорию, заодно и дочерние
         
-        $sql = "UPDATE operation SET visible=1 WHERE cat_id=? AND user_id=?";
-        $this->db->query($sql, $id, Core::getInstance()->user->getId());//удаляет все операции по удаляемой категории.
+//        $sql = "UPDATE operation SET visible=0 WHERE cat_id=? AND user_id=?";
+//        $this->db->query($sql, $id, Core::getInstance()->user->getId()); //удаляет все операции по удаляемой категории.
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
         return true;
