@@ -227,6 +227,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                         str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(drain)+'</b> руб.</span></div>';
                         str += '<div class="rest">Остаток: <span><b>'+formatCurrency(profit - drain)+'</b> руб.</span></div>';
                         $('#master .f_field3').html(str);
+                        fullSum(0);
                     })
                 }else{
                     fullSum(0);
