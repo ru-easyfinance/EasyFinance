@@ -112,7 +112,7 @@ easyFinance.widgets.budget = function(data){
     {
         var prefix = (type == '1')? 'p':'d'; 
         var budgets = _data[prefix]
-        var key, temp, catId, catName, catType, amount, money, totalAmount = 0, totalMoney = 0, html ='';
+        var key, temp = {}, catId, catName, catType, amount, money, totalAmount = 0, totalMoney = 0, dhtml ='';
 
 
         for (key in categoryes){
@@ -123,7 +123,10 @@ easyFinance.widgets.budget = function(data){
 
                 if (categoryes[key].children.count){
                     temp = _printList(type, categoryes[key].children, catId)
+                }else{
+                    temp = {};
                 }
+
 
                 totalAmount += parseFloat(temp.totalAmount) + parseFloat((budgets[catId]?Math.abs(budgets[catId].amount):0));
                 totalMoney += parseFloat(temp.totalMoney) + parseFloat((budgets[catId]?Math.abs(budgets[catId].money):0));
@@ -144,7 +147,7 @@ easyFinance.widgets.budget = function(data){
                         b_color =(dateprc < drainprc)?'red':'green';
                     }
 
-                    html += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'">\n\
+                    dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'">\n\
                                 <td class="w1">\n\
                                     <a>' + catName + '</a>\n\
                                 </td>\n\
@@ -162,11 +165,13 @@ easyFinance.widgets.budget = function(data){
                                 <td class="w4">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td>\n\
                             </tr>';
                     //////////////////////
-                    html += temp.html;
+                    dhtml += temp.xhtml;
                 }
             }
         }
-        return {html : html, totalAmount : totalAmount, totalMoney : totalMoney};
+        if (isNaN(totalAmount)){totalAmount = 0}
+        if (isNaN(totalMoney)){totalMoney = 0}
+        return {xhtml : dhtml,totalAmount : totalAmount,totalMoney : totalMoney };
     }
 
 
@@ -204,7 +209,7 @@ easyFinance.widgets.budget = function(data){
                     </td>\n\
                     <td class="w4">'+formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))+'</td>\n\
                 </tr>';
-        str += temp.html;
+        str += temp.xhtml;
 
         temp = _printList(0, _categories, 0);
         if (temp.totalAmount >0){
@@ -234,7 +239,7 @@ easyFinance.widgets.budget = function(data){
                     <td class="w4">'+formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))+'</td>\n\
                 </tr>';
         //////////////////////
-        str += temp.html;
+        str += temp.xhtml;
         return str;
     }
     printBudget()
