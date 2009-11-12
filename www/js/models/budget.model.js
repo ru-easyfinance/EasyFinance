@@ -56,7 +56,7 @@ easyFinance.models.budget = function()
             var children,str = '';
             
             for (var key in bud_list) {
-                if ((type=='0' && (res.category[bud_list[key]['category']]['type']<=0))||(type=='1' && (res.category[bud_list[key]['category']]['type']>=0))){
+                if ((type=='0' && (res.category.user[bud_list[key]['category']]['type']<=0))||(type=='1' && (res.category.user[bud_list[key]['category']]['type']>=0))){
 
                 str += '<div class="line open" id="'+key+'">';
                 str += '<a style="text-decoration:underline;cursor:pointer" class="name">'+bud_list[key]['name']+'</a>';
@@ -64,7 +64,7 @@ easyFinance.models.budget = function()
                 children = bud_list[key]['children'];
                 str += '<table>';
                 for (var k in children) {
-                    if (children[k]['type'] == type ||(children[k]['type']=='-1'&&((type=='0' && (res.category[children[k]['category']]['type']<=0))||(type=='1' && (res.category[children[k]['category']]['type']>=0))))){
+                    if (children[k]['type'] == type ||(children[k]['type']=='-1'&&((type=='0' && (res.category.user[children[k]['category']]['type']<=0))||(type=='1' && (res.category.user[children[k]['category']]['type']>=0))))){
                     //if(children[k]['type'] == type){
                     //var rgb = parseInt(childreRGGREASGRn[k]['amount']*100/children[k]['mean_drain']);
                     //  //if (isNaN(rgb))RGARGEA                       //    rgb = '0';,SAKFHWSGFA
