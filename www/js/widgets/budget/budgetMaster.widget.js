@@ -48,49 +48,47 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var children, str = '', ret ='';
         var k, key;
         var categoryType, parentId, parentName, catId, catName, budget;
-        easyFinance.models.category.load(function(){
         var _categories = easyFinance.models.category.getUserCategoriesTree();
-            for (key in _categories){
-                categoryType = _categories[key].type;
-                if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
-                    parentId = _categories[key].id
-                    parentName=_categories[key].name
-                    children = _categories[key].children
-                    str = '<table>';
-                    for (k in children){
-                        categoryType = _categories[key].children[k].type;
-                        if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
-                            catId = _categories[key].children[k].id;
-                            catName=_categories[key].children[k].name;
-                            budget = _data[catId] ||{amount : 0, money : 0}
-                            str += '<tr id="'+catId+'"><td class="w1"><a>';
-                            str += catName+'</a></td><td class="w2"><div class="cont">';
-                            str += '<input type="text" value="'+formatCurrency(budget['amount'])+'"/></div></td>';
-                            str += '<td class="w4"><span>'+formatCurrency(budget['money'])+' </span></td>';
-                            str += '</tr>';
-                        }
-                    }
-                    str+='</table>';
-                    if (str=='<table></table>')
-                    {
-                        ret += '<div class="line open" id="'+parentId+'">';
-                        ret += '<a class="name">'+parentName+'</a>';
-                        ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div></div>';
-                    }
-                    else
-                    {
-                        ret += '<div class="line open" id="'+parentId+'">';//@todo
-                        ret += '<a class="name">'+parentName+'</a>';
-                        ret += '<div class="amount">'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'</div>'+str+'</div>';
+        for (key in _categories){
+            categoryType = _categories[key].type;
+            if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
+                parentId = _categories[key].id
+                parentName=_categories[key].name
+                children = _categories[key].children
+                str = '<table>';
+                for (k in children){
+                    categoryType = _categories[key].children[k].type;
+                    if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
+                        catId = _categories[key].children[k].id;
+                        catName=_categories[key].children[k].name;
+                        budget = _data[catId] ||{amount : 0, money : 0}
+                        str += '<tr id="'+catId+'"><td class="w1"><a>';
+                        str += catName+'</a></td><td class="w2"><div class="cont">';
+                        str += '<input type="text" value="'+formatCurrency(budget['amount'])+'"/></div></td>';
+                        str += '<td class="w4"><span>'+formatCurrency(budget['money'])+' </span></td>';
+                        str += '</tr>';
                     }
                 }
+                str+='</table>';
+                if (str=='<table></table>')
+                {
+                    ret += '<div class="line open" id="'+parentId+'">';
+                    ret += '<a class="name">'+parentName+'</a>';
+                    ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div></div>';
+                }
+                else
+                {
+                    ret += '<div class="line open" id="'+parentId+'">';//@todo
+                    ret += '<a class="name">'+parentName+'</a>';
+                    ret += '<div class="amount">'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'</div>'+str+'</div>';
+                }
             }
-            if (type){
-                $('#master #step2 .list.body').html(ret)
-            }else{
-                $('#master #step3 .list.body').html(ret)
-            }
-        });
+        }
+        if (type){
+            $('#master #step2 .list.body').html(ret)
+        }else{
+            $('#master #step3 .list.body').html(ret)
+        }
     }
     /**
      * подсчёт итоговой суммы
@@ -253,7 +251,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * кнопочка для вызова мастера.
      */
-    $('#btnBudgetWizard').click(function(){
+    $('#btnBudgetWizard').click(function(){ 
         $('#master .step').hide();
         $('#master #step1').show();
         var tempDate = widget.getDate()
