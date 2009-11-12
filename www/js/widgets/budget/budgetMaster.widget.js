@@ -43,9 +43,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * формирует данные для 2х последних страниц мастера
      */
     function _printMaster(type){
-        var _data = model.returnList()
+        var prefix = (type == '1')? 'p':'d'; 
+        var _data = model.returnList()[prefix]
         var children, str = '', ret ='';
-        var k, key, t;
+        var k, key;
         var categoryType, parentId, parentName, catId, catName, budget;
         easyFinance.models.category.load(function(){
         var _categories = easyFinance.models.category.getUserCategoriesTree();
@@ -61,19 +62,11 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                         if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
                             catId = _categories[key].children[k].id;
                             catName=_categories[key].children[k].name;
-                            for (t in _data['c_'+key]['children']){
-                                if (_data['c_'+key]['children'][t]['category'] == catId){
-                                    budget = _data['c_'+key]['children'][t]
-                                    break;
-                                }
-                            }
-                            var rgb = parseInt(budget['amount']*100/budget['mean_drain']);
-                            if (isNaN(rgb))
-                                rgb = '0';
+                            budget = _data[catId] ||{amount : 0, money : 0}
                             str += '<tr id="'+catId+'"><td class="w1"><a>';
                             str += catName+'</a></td><td class="w2"><div class="cont">';
                             str += '<input type="text" value="'+formatCurrency(budget['amount'])+'"/></div></td>';
-                            str += '<td class="w4"><span>'+formatCurrency(budget['mean_drain'])+' </span></td>';
+                            str += '<td class="w4"><span>'+formatCurrency(budget['money'])+' </span></td>';
                             str += '</tr>';
                         }
                     }
@@ -82,13 +75,13 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                     {
                         ret += '<div class="line open" id="'+parentId+'">';
                         ret += '<a class="name">'+parentName+'</a>';
-                        ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data['c_'+key]['real'+((!type)?'_drain':'_profit')])+'" /></div></div>';
+                        ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div></div>';
                     }
                     else
                     {
                         ret += '<div class="line open" id="'+parentId+'">';//@todo
                         ret += '<a class="name">'+parentName+'</a>';
-                        ret += '<div class="amount">'+formatCurrency(_data['c_'+key]['real'+((!type)?'_drain':'_profit')])+'</div>'+str+'</div>';
+                        ret += '<div class="amount">'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'</div>'+str+'</div>';
                     }
                 }
             }
@@ -153,11 +146,13 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 parent = $(this).closest('.line')
             }
             var id = $(parent).attr('id').toString().replace(/[^0-9]/gi,'');
-            var val = $(this).val();
-            if ($(this).closest('.step').attr('id')=='step2'){
-                tmp.step2+= '{"'+id+'": "'+val.toString().replace(/[^0-9\.]/,'')+'"},';
-            }else{
-                tmp.step3+= '{"'+id+'": "'+val.toString().replace(/[^0-9\.]/,'')+'"},';
+            var val = $(this).val().toString().replace(/[^0-9\.]/,'');
+            if (!isNaN(val) && val > 0){
+                if ($(this).closest('.step').attr('id')=='step2'){
+                    tmp.step2+= '{"'+id+'": "'+val+'"},';
+                }else{
+                    tmp.step3+= '{"'+id+'": "'+val+'"},';
+                }
             }
         })
         var ret = '{"d": ['+tmp.step2+'], "r": ['+tmp.step2+']}';
