@@ -120,7 +120,6 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                     $(this).find('.amount').text(formatCurrency(ret))
                 }
             })
-            return ;
         }else{
             var sel = $('#master #'+step+' div.line#'+id)
             if (!$(sel).find('.amount input').length){
@@ -132,8 +131,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 })
                 $(sel).find('.amount').text(formatCurrency(ret))
             }
-            return ;
         }
+        $('#master .waste b').text(formatCurrency(globalSum('step3')))
+        $('#master .income b').text(formatCurrency(globalSum('step2')))
+        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text()) - parseFloat($('#master .waste b').text())))
     }
 
     function _compilReturnJSON(){
@@ -193,6 +194,12 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     $('#master tr input').live('change',function(){
         fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
     })
+    $('#master .amount input').live('change',function(){
+        $('#master .waste b').text(formatCurrency(globalSum('step3')))
+        $('#master .income b').text(formatCurrency(globalSum('step2')))
+        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text()) - parseFloat($('#master .waste b').text())))
+    })
+
     /**
      * переходы по листам мастера
      */
@@ -207,6 +214,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             case 'tostep2':
                 if (($(this).hasClass('next')) && (tempDate !== _currentDate))
                 {
+                    fullSum(0);
                     _currentDate.setDate(1)
                     _currentDate.setYear($('#master #step1 #year').val());
                     _currentDate.setMonth($('#master #step1 #month').val()-1);
