@@ -157,7 +157,7 @@ class Login_Model
             $this->defaultAccounts();
             Core::getInstance()->user->initUserCategory();
             Core::getInstance()->user->save();
-            $message = "<html><head><title>Успешная регистрация на сайте домашней бухгалтерии EasyFinance.ru</title></head>
+            $body = "<html><head><title>Успешная регистрация на сайте домашней бухгалтерии EasyFinance.ru</title></head>
             <p>Здравствуйте!</p>
             <p>Поздравляем вас с успешным завершением регистрации в системе. Теперь вы можете в любое время войти в систему, введя свой логин и пароль на сайте https://easyfinance.ru.</p>
             <p>Используйте наш сервис для контроля своей домашней бухгалтерии.</p>
