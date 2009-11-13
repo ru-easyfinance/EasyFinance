@@ -108,39 +108,20 @@ class Registration_Model
                 </body>
                 </html>";
 
-//            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
-//            $headers = "Content-type: text/html; charset=utf-8\n";
-//            $headers .= "From: info@easyfinance.ru\n";
-//            mail($register['mail'], $subject, $body, $headers);
-
-
-            //Create the Transport
-            $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-                ->setUsername('info@easyfinance.ru')
-                ->setPassword('j2df32nD3l7sFa2');
-
-            //Create the Mailer using your created Transport
-            $mailer = Swift_Mailer::newInstance($transport);
-
-
-
-
-            // Создаём сообщение
+            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
+            
             $message = Swift_Message::newInstance()
-
                 // Заголовок
                 ->setSubject('Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru')
-
                 // Указываем "От кого"
-                ->setFrom(array('info@easyfinance.ru' => 'EasyFinance.ru'))
-
+                ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
                 // Говорим "Кому"
                 ->setTo(array($register['mail']=>$register['login']))
-
                 // Устанавливаем "Тело"
                 ->setBody($body, 'text/html');
-            
-            $result = $mailer->send($message);
+            // Отсылаем письмо
+            $result = Core::getInstance()->mailer->send($message);
+	
             die(json_encode(array('errors'=>'succes')));
         }
         die(json_encode(array('errors'=>$error_text)));

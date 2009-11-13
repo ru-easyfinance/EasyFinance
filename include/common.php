@@ -84,6 +84,17 @@ if(IS_DEMO){
     $tpl->append('js',  'demo_message.js');
 }
 
+// Почта
+require_once "../core/external/Swift/swift_required.php";
+
+$mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+	//->setUsername('info@easyfinance.ru')
+	//->setPassword('j2df32nD3l7sFa2');
+	->setUsername('support@easyfinance.ru')
+	->setPassword('B6BestMyA6Yo');
+
+Core::getInstance()->mailer = Swift_Mailer::newInstance( $mailTransport );
+
 // Добавляем ссылки на БД, Смарти, Пользователя и Валюты - в наше ядро
 Core::getInstance()->tpl = $tpl;
 Core::getInstance()->currency = new Currency();

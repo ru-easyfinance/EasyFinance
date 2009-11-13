@@ -63,10 +63,19 @@ class Welcome_Model
                 @$_POST['email'], htmlspecialchars(@$_POST['text']), $_SERVER['REMOTE_ADDR'], date('Y.m.d H:i:s'));
             $body = "<html><head><title>From home-money.ru</title></head>
                          <body><p>".htmlspecialchars($_POST['text'])."</p></body></html>";
-            $headers = "Content-type: text/html; charset=utf-8\n";
-            $headers .= "From: ".htmlspecialchars($_POST['email'])."\n";
-
-            mail("support@home-money.ru", "Отзыв на сайте", $body, $headers);
+            
+             $message = Swift_Message::newInstance()
+                // Заголовок
+                ->setSubject('Отзыв на сайте Easyfinance.ru')
+                // Указываем "От кого"
+                ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
+                // Говорим "Кому"
+                ->setTo(array('support@home-money.ru'=>htmlspecialchars($_POST['email']) ))
+                // Устанавливаем "Тело"
+                ->setBody($body, 'text/html');
+            // Отсылаем письмо
+            $result = Core::getInstance()->mailer->send($message);
+            
             //FIXME Убрать разметку
             if (mysql_affected_rows()) {
                 echo "<img src=\"img/success.gif\" align=\"absmiddle\"> Спасибо за Ваш отзыв!\n";

@@ -38,10 +38,24 @@ class Feedback_Model
             $sql = "INSERT INTO feedback_message SET uid=?, user_settings=?, messages=?, user_name=?, `new`='1', rating='0'";
                     $this->db->query($sql, $this->user, serialize($param), $msg, $this->user);
 
-            $to      = 'max.kamashev@gmail.com, bashokov.ae@easyfinance.ru';
             $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
-            $headers = "From: support@easyfinance.ru \r\nReply-To: support@easyfinance.ru \r\n";
-            mail($to, $subject, stripslashes($msg) . "\n\n" . var_export($param, true) , $headers);
+            $body = stripslashes($msg) . "\n\n" . var_export($param, true);
+
+             $message = Swift_Message::newInstance()
+                // Заголовок
+                ->setSubject($subject)
+                // Указываем "От кого"
+                ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
+                // Говорим "Кому"
+                ->setTo(array(
+                	'max.kamashev@gmail.com'	=>'Maxim Kamashev',
+                	'bashokov.ae@easyfinance.ru' 	=> 'Artur Bashokov'
+                ))
+                // Устанавливаем "Тело"
+                ->setBody($body, 'text/html');
+            // Отсылаем письмо
+            $result = Core::getInstance()->mailer->send($message);
+            
         } else {
             exit;
         }

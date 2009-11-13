@@ -175,10 +175,18 @@ class Login_Model
             <p>Email: <a href='mailto:info@easyfinance.ru'>info@easyfinance.ru</a><br/>
             <a href='http://www.easyfinance.ru'>www.easyfinance.ru</a>";
 
-            $headers = "Content-type: text/html; charset=utf-8\n";
-            $headers .= "From: info@easyfinance.ru\n";
-            $subject = "Успешная регистрация на сайте домашней бухгалтерии EasyFinance.ru";
-            mail($_SESSION['user']['user_mail'], $subject, $message, $headers);
+             $message = Swift_Message::newInstance()
+                // Заголовок
+                ->setSubject('Успешная регистрация на сайте домашней бухгалтерии EasyFinance.ru')
+                // Указываем "От кого"
+                ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
+                // Говорим "Кому"
+                ->setTo(array($_SESSION['user']['user_mail']=>$_SESSION['user']['user_name']))
+                // Устанавливаем "Тело"
+                ->setBody($body, 'text/html');
+            // Отсылаем письмо
+            $result = Core::getInstance()->mailer->send($message);
+            
             header("Location: /info/");
             exit;
         } else {
