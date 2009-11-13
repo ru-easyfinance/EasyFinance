@@ -68,6 +68,14 @@ class Core
      */
     public static $url = array();
 
+    
+    /**
+     * Swift_Mailer instance
+     *
+     * @var object
+     */
+    public static $mailer = null;
+    
     /**
      * Возвращает ссылку на себя
      * @example Core::getInstance()->parse_url();

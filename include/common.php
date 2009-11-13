@@ -125,3 +125,14 @@ Core::getInstance()->js = array(
     'review' => array('jquery/jquery.fancybox-1.0.0', 'review'),
     'budget' => array('budget','models/category.model', 'models/budget.model','widgets/budget/budget.widget','widgets/budget/budgetMaster.widget')
 );
+
+// Почта
+include_once "../core/external/Swift/swift_required.php";
+spl_autoload_register('__autoload');
+$mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+	//->setUsername('info@easyfinance.ru')
+	//->setPassword('j2df32nD3l7sFa2');
+	->setUsername('support@easyfinance.ru')
+	->setPassword('B6BestMyA6Yo');
+
+Core::getInstance()->mailer = Swift_Mailer::newInstance( $mailTransport );
