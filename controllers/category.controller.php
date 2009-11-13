@@ -56,8 +56,13 @@ class Category_Controller extends Template_Controller
      */
     function add($args)
     {
-        $newID = $this->model->add();
-        
+        $name   = htmlspecialchars(@$_POST['name']);
+        $parent = (int)@$_POST['parent'];
+        $system = (int)@$_POST['system'];
+        $type   = (int)@$_POST['type'];
+
+        $newID = $this->model->add($name, $parent, $system, $type);
+
         if ($newID){
             die ( json_encode(
                 array(
@@ -77,7 +82,13 @@ class Category_Controller extends Template_Controller
      */
     function edit($args)
     {
-        if ($this->model->edit()) {
+        $id     = (int)@$_POST['id'];
+        $name   = htmlspecialchars(@$_POST['name']);
+        $parent = (int)@$_POST['parent'];
+        $system = (int)@$_POST['system'];
+        $type   = (int)@$_POST['type'];
+
+        if ($this->model->edit($id, $name, $parent, $system, $type)) {
             die('[]');
         } else {
             die(false);

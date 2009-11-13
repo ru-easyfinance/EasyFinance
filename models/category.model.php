@@ -69,9 +69,9 @@ class Category_Model {
      */
     private function loadCache()
     {
-        //FIXME Наверняка тут надо загружать данные из базы, если сессия пуста
-        $this->tree = $_SESSION['categories'];
-        $this->tree_sum_categories = $_SESSION['tree_sum_categories'];
+        //@FIXME Наверняка тут надо загружать данные из базы, если сессия пуста
+        $this->tree = @$_SESSION['categories'];
+        $this->tree_sum_categories = @$_SESSION['tree_sum_categories'];
     }
 
     /**
@@ -80,10 +80,14 @@ class Category_Model {
      */
     private function loadSystemCategories()
     {
+        //@TODO Добавить кэширование
         $this->system_categories = array();
         $array = $this->db->select("SELECT * FROM system_categories ORDER BY name");
         foreach ($array as $val) {
-            $this->system_categories[$val['id']] = array('id' => $val['id'], 'name' => $val['name']);
+            $this->system_categories[$val['id']] = array(
+                'id'   => $val['id'],
+                'name' => $val['name']
+            );
         }
 
     }
@@ -93,7 +97,7 @@ class Category_Model {
      */
     public function loadUserTree()
     {
-        //FIXME сделать проверку переменной $_SESSION['categories_filtr'];
+        //@FIXME сделать проверку переменной $_SESSION['categories_filtr'];
         $where = $_SESSION['categories_filtr'];
 
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
@@ -136,35 +140,9 @@ class Category_Model {
             }
         }
 
-        //die(print_r($rows));
-        //die(print_r($array));
-/*
-        $cnt = count($row);
-        for ($i=0; $i<$cnt; $i++) {
-            $id = $rows[$i]['cat_id'];
-            for ($j=0; $j<$cnt; $j++) {
-                if ($id == $rows[$j]['cat_id']) {
-
-                    if ($rows[$j]['currency'] != 1) {
-                        $sum = $rows[$j]['sum'] * $sys_currency[$rows[$j]['bill_currency']];
-                    }
-
-                    $forest[$id]['sum'] = $forest[$id]['sum'] + $sum;
-                    $drain = 0;
-
-                    if ($forest[$id]['sum'] < 0) {
-                        $drain = 1;
-                        $forest[$id]['sum'] = $forest[$id]['sum'] * -1;
-                    }
-
-                    $forest[$id]['drain'] = $drain;
-                }
-            }
-        }
-*/
         // считаем общую сумму
-        if (!empty($forest)) {
-            foreach($forest as $key=>$value) {
+        if ( !empty($forest) ) {
+            foreach( $forest as $key => $value ) {
                 if ($value['drain'] == 0) {
                     $this->total_sum_categories['income'] = $this->total_sum_categories['income'] + $value['sum'];
                 } else {
@@ -239,17 +217,16 @@ class Category_Model {
 
     /**
      * Добавляет новую категорию
+     * @param string $name
+     * @param int $parent
+     * @param int $system
+     * @param int $type
      * @return bool
      */
-    function add()
+    function add($name, $parent, $system, $type)
     {
-        $name   = htmlspecialchars(@$_POST['name']);
-        $parent = (int)@$_POST['parent'];
-        $system = (int)@$_POST['system'];
-        $type   = (int)@$_POST['type'];
-        
-        $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type,
-            dt_create) VALUES(?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type, custom, 
+            dt_create) VALUES(?, ?, ?, ?, ?, 1, NOW())";
         $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
@@ -257,17 +234,49 @@ class Category_Model {
         return $newID;
     }
 
-    function edit()
+    /**
+     * Редактирует категорию
+     * @param int       $id
+     * @param string    $name
+     * @param int       $parent
+     * @param int       $system
+     * @param int       $type
+     * @return bool
+     */
+    function edit($id, $name, $parent, $system, $type)
     {
-        $id     = (int)@$_POST['id'];
-        $name   = htmlspecialchars(@$_POST['name']);
-        $parent = (int)@$_POST['parent'];
-        $system = (int)@$_POST['system'];
-        $type   = (int)@$_POST['type'];
+        $cat = Core::getInstance()->user->getUserCategory();
+
+        // Проверяем тип родительской и дочерней категории
+        if ($parent > 0) {
+            if ( $cat[$parent]['type'] == -1 && $type == 1 ) {
+                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
+                return false;
+            } elseif ( $cat[$parent]['type'] == -1 && $type == 0 ) {
+                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
+                return false;
+            } elseif ( $cat[$parent]['type'] == 1 && $type == -1 ) {
+                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
+                return false;
+            } elseif ( $cat[$parent]['type'] == 1 && $type == 0 ) {
+                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
+                return false;
+            }
+        }
+
+        // Если это пользовательская категория
+        if ($cat[$id]['custom'] == 1) {
+            $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?
+                WHERE user_id = ? AND cat_id = ?";
+            $result = $this->db->query($sql, $parent, $system, $name, $type,
+                Core::getInstance()->user->getId(), $id);
+        // Системная категория, можно изменить только имя
+        } else {
+            $sql = "UPDATE category SET cat_name = ? WHERE user_id = ? AND cat_id = ?";
+            $result = $this->db->query($sql, $name, Core::getInstance()->user->getId(), $id);
+        }
         
-        $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?
-            WHERE user_id = ? AND cat_id = ?";
-        if ($this->db->query($sql, $parent, $system, $name, $type, Core::getInstance()->user->getId(), $id)) {
+        if ($result) {
             Core::getInstance()->user->initUserCategory();
             Core::getInstance()->user->save();
             return true;
@@ -294,62 +303,8 @@ class Category_Model {
     }
 
     /**
-     * Возвращает выбранную категорию пользователя
-     * @param $id int Ид выбранной категории
-     * @return array mixed
-     */
-    public function selectCategoryId($id)
-    {
-        $sql = "SELECT * FROM category WHERE cat_id = ? and user_id = ?";
-        return $this->db->selectRow($sql, $id, $this->user_id);
-    }
-
-    /**
-     * Устанавливает видимость категории
-     * @param $id int Ид категории
-     * @param $visible int Видимость категории (1 - видна, 0 - скрыта)
-     * @deprecated
-     * @return bool
-     */
-    public function visibleCategory($id, $visible)
-    {
-        $id = (int)$id;
-        $visible = (int)$visible;
-
-        $sql = "UPDATE category SET visible=? WHERE cat_id = ? and user_id = ?";
-        if (!$this->db->query($visible, $id, $this->user_id)) {
-            return false;
-        }
-
-        $parent_info = $this->getParentInfo($id);
-
-        if ($parent_info[0]['cat_id'] == $id) {
-            $sql = "UPDATE category SET visible=? WHERE cat_parent = ? and user_id = ?";
-            $this->db->query($sql, $visible, $id, $this->user_id);
-        }
-
-        return true;
-    }
-
-
-    /**
-     * Получить информацию из родительской категории
-     * @param $id int Ид категории
-     * @deprecated
-     * @return array mixed
-     */
-    private function getParentInfo($id)
-    {
-        //FIXME Переписать, на получение данных с сессии, а не с SQL
-        $row = $this->db->selectRow("SELECT * FROM category WHERE cat_id = ?", $id);
-
-        if ($row['cat_parent'] != 0) {
-            $row = $this->db->select("SELECT * FROM category WHERE cat_id = ?", $row['cat_parent']);
-        }
-        return $row;
-    }
-    /*
      * возвращает html строку для селекта в зависимости от типа категории
+     * @deprecated WTF ???
      */
     function cattype($type){
         return get_tree_select2(0, $type);
@@ -382,6 +337,7 @@ class Category_Model {
                 'name'    => $val['cat_name'],
                 'type'    => $val['type'],
                 'visible' => $val['visible'],
+                'custom'  => $val['custom']
             );
             if ($val['cat_id'] == $sum['cat_id']) {
                 $users[$val['cat_id']]['summ'] = $sum['sum'];
