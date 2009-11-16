@@ -290,6 +290,13 @@ $(document).ready(function() {
            style: 'mystyle'
         });
 
+        $('#budget .w5,#master .w5').qtip({
+           content: 'Остаток - это разница между планом и фактом.',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
        //$('.w4').qtip({
        //    content: 'Средний расход(доход) за предыдущие три месяца по выбранной категории',
        //    show: {delay: 1000},
