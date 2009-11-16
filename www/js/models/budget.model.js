@@ -14,7 +14,18 @@ function _getMonthDays(d){
  */
 easyFinance.models.budget = function()
     {
-        //var _data = $.extend(bdgt);
+        
+
+        /**
+         * @desc устанавливает список
+         * @param data {}
+         * @return void
+         */
+        var _data;
+        function load (data) {
+            _data = data;
+        }
+
         function reload (date,callback) {
             var month = date.getMonth()+1;
             if (month.toString().length == 1){
@@ -28,20 +39,10 @@ easyFinance.models.budget = function()
             {
                 load(data);
                 callback(_data.main.real_drain,_data.main.real_profit)//@todo main ->budget_info
-                
+
             },
             'json')
         }
-        /**
-         * @desc устанавливает список
-         * @param data {}
-         * @return void
-         */
-        var _data;
-        function load (data) {
-            _data = data;
-        }
-
         /**
          * @desc возвращает список бюджетов
          * @return {}
@@ -172,23 +173,40 @@ easyFinance.models.budget = function()
         }
         /**
          * @desc редактирует бюджет
-         * @param id {int}
-         * @param jQuery - jQuery selector on form
+         * @param date {date}
+         * @param type budget type {'p'||'d'}
+         * @param id category id{int}
+         * @param value {float} amount
+         * @param callback {function}
          * @return {String} html for $().append(html)
          */
-        function edit (id, jQuery){
-            $.post('/budget/add',
-                    {
-                        id : id,
-                        data : $(jQuery).serialize()
-                    },
-                    function(data)
-                    {
-                        _data = data;
-                        return print_list();
-                    },
-                    'json'
-                ); //edit
+        function edit (date, type, id, value, callback){
+            var month = date.getMonth()+1;
+            if (month.toString().length == 1){
+                month = '0'+month.toString()
+            }
+
+            $.post('/budget/edit/',
+                {
+                    type: type,
+                    id: id,
+                    value: value,
+                    start: '01.'+month+'.'+date.getFullYear()
+                },
+                function(data){
+                    if (!data['errors'] || data.errors == []){
+                        $.jGrowl("Бюджет изменён", {theme: 'green'});
+                        if(typeof callback == "function"){callback(date);}
+                    }else{
+                        var err = '<ul>';
+                        for(var key in data.errors)
+                        {
+                            err += '<li>' + data.errors[key] + '</li>';
+                        }
+                        $.jGrowl(err+'</ul>', {theme: 'red'});
+                    }
+                }
+            )
         }
         /**
          * @desc возвращает общее сформированное инфо о бюджете

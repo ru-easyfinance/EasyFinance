@@ -160,13 +160,18 @@ easyFinance.widgets.budget = function(data){
                         b_color =(dateprc < drainprc)?'red':'green';
                     }
                     var cls = !parentId?'parent open':'child'
+                    if (cls == 'parent open'){
+                        if (!temp.xhtml){
+                            cls = 'nochild'
+                        }
+                    }
                     dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'">\n\
                                 <td class="w1">\n\
                                     <a>' + catName + '</a>\n\
                                 </td>\n\
                                 <td class="w2">\n\
                                     <div class="cont">\n\
-                                        <span>'+formatCurrency(amount)+'<span> <!-- <input type="text" value="'+formatCurrency(amount)+'" readonly="readonly" /> --> \n\
+                                        <span>'+formatCurrency(amount)+'</span><input type="text" value="'+formatCurrency(amount)+'"/>\n\
                                     </div>\n\
                                 </td>\n\
                                 <td class="w3">\n\
@@ -267,7 +272,7 @@ easyFinance.widgets.budget = function(data){
         $(this).closest('tr').toggleClass('open').toggleClass('close')
     })
 
-    $('#budget .list.budget #profit').live('click',function(){
+    $('#budget .list.budget #profit a').live('click',function(){
         $(this).closest('tr').toggleClass('open').toggleClass('close')
         if($(this).closest('tr').hasClass('open')){
             $('#budget .list.budget [type="p"][parent]').show();
@@ -279,7 +284,7 @@ easyFinance.widgets.budget = function(data){
 
     })
 
-    $('#budget .list.budget #drain').live('click',function(){
+    $('#budget .list.budget #drain a').live('click',function(){
         $(this).closest('tr').toggleClass('open').toggleClass('close')
         if($(this).closest('tr').hasClass('open')){
             $('#budget .list.budget [type="d"][parent]').show();
@@ -294,5 +299,20 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
+    $('#budget .list tr').live('dblclick',function(){
+        var parent = $(this).attr('parent')||'1';
+        var id = $(this).attr('id');
+        id = isNaN(id)?'0':id
+        if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
+            $('#budget .list tr .w2 input').hide();
+            $('#budget .list tr .w2 span').show();
+            $(this).find('.w2 input').show().focus();
+            $(this).find('.w2 span').hide();
+        }
+    })
+
+    $('#budget .list tr input').live('change',function(){
+        date = _currentDate
+    })
     return {getDate : getDate, init : init, reload : reload};
 }

@@ -12,6 +12,7 @@
 .budget#budget .list .list table td{font-size: 11px; padding: 7px 0 5px 0;}
 .budget#budget .list .list table td.w1{padding-left: 11px; width: 178px; }
 .budget#budget .list .list table td.w2{width: 103px; text-align: right;}
+.budget#budget .list .list table td.w2 input{display: none;}
 .budget#budget .list .list table td.w3{width: 97px; text-align:center;}
 .budget#budget .list .list table td.w5{width: 97px; text-align:right;}
 
@@ -24,9 +25,11 @@
 .budget#budget .list #drain.close a {margin-left: 0; background: url('/img/i/plus.gif') no-repeat 6px 4px; background-position: left}
 
 .budget#budget .list a{text-decoration: underline; cursor: pointer}
-.budget#budget .list .parent a{color: #313131;}
 .budget#budget .list .child a{color: #313131; padding-left: 25px}
-.budget#budget .list .parent a{padding-left: 23px; font-weight: bold}
+
+.budget#budget .list .parent a{padding-left: 23px; font-weight: bold; color: #313131;}
+.budget#budget .list .nochild a{padding-left: 23px; font-weight: bold; color: #313131;}
+
 .budget#budget .list .parent.open a{background: url('/img/i/minus.gif') no-repeat 6px 2px;}
 .budget#budget .list .parent.close a{background: url('/img/i/plus.gif') no-repeat 6px 2px;}
 
