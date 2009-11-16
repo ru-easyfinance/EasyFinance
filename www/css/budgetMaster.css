@@ -28,9 +28,9 @@
 .budget#master .f_field3 .income { left: 0; }
 .budget#master .f_field3 .income span { color: #309500; }
 .budget#master .f_field3 .rest { left: 193px;top : 20px; }
-.budget#master .f_field3 .rest span { color: #eb3c34; }
+.budget#master .f_field3 .rest span { color: #868686;}
 .budget#master .f_field3 .waste { right: 0; }
-.budget#master .f_field3 .waste span { color: #868686; }
+.budget#master .f_field3 .waste span { color: #eb3c34;}
 
 .budget#master .foot div{color: #309500; cursor: pointer;}
 .budget#master .foot {position:relative; clear:both; width: 100%}
