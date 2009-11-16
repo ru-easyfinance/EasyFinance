@@ -36,7 +36,8 @@ $(document).ready(function(){
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
         $('#targets_category').val(f.attr('category'));
-        $('#name').val(f.attr('name'));
+        a = f.attr('name').replace("%20"," ");
+        $('#name').val(a);
         $('#tg_amount').val(f.attr('amount'));
         $('#amountf').val(f.attr('money'));
         $('#start').val(f.attr('start'));
@@ -82,7 +83,8 @@ $(document).ready(function(){
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
         $('#targets_category').val(f.attr('category'));
-        $('#name').val(f.attr('name'));
+        a = f.attr('name').replace("%20"," ");
+        $('#name').val(a);
         $('#tg_amount').val(f.attr('amount'));
         $('#amountf').val(f.attr('money'));
         $('#start').val(f.attr('start'));
@@ -142,7 +144,8 @@ $(document).ready(function(){
         var s = '';
         for(v in data) {
             if ( (data[v]["done"] == 0) || showall){
-            s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+data[v]["title"]+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
+            a = data[v]['title'].replace(" ","%20");
+            s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+a+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 //alert(data[v]['category']);
                 if (data[v]['category']==2)
