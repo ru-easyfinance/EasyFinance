@@ -4,7 +4,7 @@
  * @category budget
  * @author Max Kamashev <max.kamashev@gmail.com>
  * @copyright http://easyfinance.ru/
- * @version SVN $Id: budget.model.php 119 2009-08-04 15:40:26Z korogen $
+ * @version SVN $Id: $
  */
 class Budget_Model {
     /**
@@ -41,25 +41,6 @@ class Budget_Model {
             $category = Core::getInstance()->user->getUserCategory();
         }
 
-//        $sql = "SELECT c.cat_id as category
-//            , b.drain, b.currency, b.amount,
-//                    DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
-//                    DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
-//            , (SELECT AVG(amount) FROM budget t
-//                WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-//                    AND t.date_start <= LAST_DAY(b.date_start))
-//                AND b.category = t.category AND b.user_id=t.user_id
-//            ) AS avg_3m
-//            , (SELECT SUM(o.money) FROM operation o
-//                WHERE (o.transfer = NULL OR o.transfer = 0) AND
-//            c.cat_id = o.cat_id
-//            AND o.date >= ? AND o.date <= LAST_DAY(o.date)
-//            ) AS money
-//            FROM category c
-//            LEFT JOIN budget b
-//            ON c.cat_id=b.category AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
-//            WHERE c.user_id= ? ORDER BY cat_parent";
-
         $sql = "SELECT b.category, b.drain, b.currency, b.amount,
                 DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
                 DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
@@ -83,6 +64,7 @@ class Budget_Model {
             'd' => array(),
             'p' => array()
         );
+        
         $drain_all = 0; $profit_all = 0;
         $real_drain = 0; $real_profit = 0;
 
@@ -104,65 +86,28 @@ class Budget_Model {
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
-                    'amount' => (float)$var['amount'],
-                    'money'  => (float)$var['money'],
-                    'mean'   => (float)$var['avg_3m'] //Среднее за три месяца
+                    'amount' => (float)$var['amount'], // Планируемая сумма
+                    'money'  => (float)$var['money'],  // Фактическая сумма
+                    'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
                 );
             } else {
                 $list['p'][$var['category']] = array(
-                    'amount' => (float)$var['amount'],
-                    'money'  => (float)$var['money'],
-                    'mean'   => (float)$var['avg_3m'] //Среднее за три месяца
+                    'amount' => (float)$var['amount'], // Планируемая сумма
+                    'money'  => (float)$var['money'],  // Фактическая сумма
+                    'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
                 );
             }
-
-//            // Создаём родительскую категорию
-//            if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
-//                $list['c_'.$var['category']] = array (
-//                    'name'         => $category[$var['category']]['cat_name'],
-//                    'category'     => $var['category'],
-//                    'total_drain'  => 0,
-//                    'total_profit' => 0,
-//                    'children'     => array()
-//                );
-//                if ($var['drain'] == 1) {
-//                    $list['c_'.$var['category']]['total_drain'] = (float)$var['amount'];
-//                    $drain_all += (float)$var['amount'];
-//                } else {
-//                    $list['c_'.$var['category']]['total_profit'] = (float)$var['amount'];
-//                    $profit_all += (float)$var['amount'];
-//                }
-//            } else {
-//                if (is_null($var['drain'])) {
-//                    $drain = -1;
-//                }elseif ((int)$var['drain'] === 1) {
-//                    $drain = 0;
-//                } elseif ((int)$var['drain'] === 0) {
-//                    $drain = 1;
-//                }
-//                // Добавляем ребёнка к родителю
-//                $list['c_'.$category[$var['category']]['cat_parent']]['children'][] = array(
-//                    'id'         => (int)$var['category'],
-//                    'category'   => (int)$var['category'],
-//                    'name'       => (string)$category[$var['category']]['cat_name'],
-//                    'amount'     => (float)$var['amount'],
-//                    'cur'        => Core::getInstance()->currency[$var['currency']]['abbr'],
-//                    'mean_drain' => round((int)$var['avg_3m'],2),//средний расход
-//                    'type'       => $drain, //расходная - 0, доходный - 1, -1 - нул
-//                    'money'      => (float)$var['money']
-//                );
-//            }
         }
-        //plan_drain plan_profit real_drain real_profit
+        
         return array (
             'list' => $list,
             'main' => array (
-                'plan_drain'  => $drain_all,
-                'plan_profit' => $profit_all,
-                'real_drain'  => $real_drain,
-                'real_profit' => $real_profit,
-                'start'       => $start,
-                'end'         => $end
+                'plan_drain'  => $drain_all,  // Общий планируемый расход
+                'plan_profit' => $profit_all, // Общий планируемый доход
+                'real_drain'  => $real_drain, // Фактический расход
+                'real_profit' => $real_profit,// Фактический доход
+                'start'       => $start,      // Дата начала периода
+                'end'         => $end         // Дата окончания периода
             )
         );
     }
@@ -202,5 +147,24 @@ class Budget_Model {
             return array();
         }
         return false;
+    }
+
+    /**
+     * Редактирует данные в бюджете
+     * @param string $type "p"|"d" Доход или расход
+     * @param int $id Ид категории
+     * @param float $value
+     * @param date $date
+     * @return array mixed Если пустой массив, значит нет ошибок, иначе в массиве возвратятся ошибки
+     */
+    function edit($type, $id, $value, $date)
+    {
+        $sql = "UPDATE budget SET amount = ? WHERE key= ?";
+        $key = '' . Core::getInstance()->user->getId() . '-' . $id . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
+        if (!@$this->db->query($sql, $value, $key)) {
+            return array('Ошибка при редактировании бюджета');
+        } else {
+            return array();
+        }
     }
 }

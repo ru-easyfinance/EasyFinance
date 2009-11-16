@@ -60,6 +60,7 @@ class Budget_Controller extends Template_Controller
 
     /**
      * Добавляет данные из мастера
+     * @return void
      */
     function add()
     {
@@ -85,5 +86,18 @@ class Budget_Controller extends Template_Controller
             }
         }
        die(json_encode($this->model->add($budget, $start)));
+    }
+
+    /**
+     * Редактирует категорию в бюджете
+     * @return void
+     */
+    function edit()
+    {
+        $type  = trim(@$_POST['type']);
+        $id    = abs(@$_POST['id']);
+        $value = (float)@$_POST['value'];
+        $date  = formatRussianDate2MysqlDate(@$_POST['date']);
+        die(json_encode($this->model->edit($type, $id, $value, $date)));
     }
 }
