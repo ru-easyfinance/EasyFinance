@@ -1,6 +1,8 @@
 html, body, form, ul, li, dl, dd, dt, fieldset, form, blockquote { margin:0; padding:0; border:0 none; }
 ul, dl, dd, dt { list-style:none; }
 
+img.preload {display: none;}
+
 #menumain UL.menu2 li#show_login a {color: yellow; padding-right: 16px; background: url('/img/i/login.gif') right bottom no-repeat; //margin-top: 4px;}
 #menumain a#show_logout {color: yellow; padding-left: 10px; display: inline-block; width: 52px; background: url('/img/i/unlogin.gif') right center no-repeat; //margin-top: 4px;}
 

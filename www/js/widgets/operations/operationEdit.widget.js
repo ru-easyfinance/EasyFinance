@@ -68,6 +68,7 @@ easyFinance.widgets.operationEdit = function(){
         $(".op_addoperation").show();
         //$("#op_account").sexyCombo();
         //$("#op_type").sexyCombo();
+        /*
         $("#op_category").sexyCombo({
             filterFn: function(input, text){
                 if (this.wrapper.data("sc:lastEvent") == "click")
@@ -83,7 +84,7 @@ easyFinance.widgets.operationEdit = function(){
                 _selectedCategory = this.getHiddenValue();
             }
         });
-
+        */
         $(".op_addoperation").hide();
 
         $('#op_btn_Save').click(function(){_saveOperation();return false;})
