@@ -724,8 +724,8 @@ div.op_addoperation .op_line .op_f_field select#op_account option {width: 123px;
 div.op_addoperation .op_line .op_f_field select#op_type {width: 150px;  overflow: hidden; }
 div.op_addoperation .op_line .op_f_field select#op_type option {width: 123px;}
 
-/* div.addoperation .line .f_field select#category {width: 350px;  overflow: hidden; } */
-div.op_addoperation .op_line .op_f_field select#op_category option {width: 323px;}
+div.op_addoperation select#op_category {width: 350px;  overflow: hidden; }
+/* div.op_addoperation .op_line .op_f_field select#op_category option {width: 323px;} */
 
 div.op_addoperation .op_line .op_f_field div {margin-top: 5px; margin-right: 50px;  float: left; }
 
