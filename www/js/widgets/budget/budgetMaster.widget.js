@@ -127,7 +127,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                     $(this).find('.amount').text(formatCurrency(ret))
                 }
             })
-//        }else{
+//        }else{ @todo
 //            var sel = $('#master #'+step+' div.line#'+id)
 //            if (!$(sel).find('.amount input').length){
 //                var ret = 0;
