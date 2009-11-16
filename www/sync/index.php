@@ -30,6 +30,24 @@ define ('HOWMUCH',12);
 
 //include ("../Account/Model.php");
 include ("../../classes/Account/Model.php");
+include ("../../classes/Account/Account.php");
+include ("../../classes/Category/Model.php");
+include ("../../classes/Category/Category.php");
+include ("../../classes/Operation/Model.php");
+include ("../../classes/Operation/Operation.php");
+include ("../../classes/Transfer/Model.php");
+include ("../../classes/Transfer/Transfer.php");
+include ("../../classes/Periodic/Model.php");
+include ("../../classes/Periodic/Periodic.php");
+include ("../../classes/RecordsMap/Model.php");
+
+function formatIsoDateToNormal($str){
+    if ( substr($str, 8) == '' )
+        return substr($str, 0, 4).'-'.substr($str, 4, 2).'-'.substr($str, 6, 2);
+    else
+        return substr($str, 0, 4).'-'.substr($str, 4, 2).'-'.substr($str, 6, 2).' '.substr($str, 9,2).':'.substr($str, 12,2).':'.substr($str,15,2);
+}
+
 $xmlrpc_methods = array();
 $xmlrpc_methods['sync.getAuth'] = 'sync_getAuth';
 //$xmlrpc_methods['sync.getRecordsMap'] = sync.getRecordsMap;

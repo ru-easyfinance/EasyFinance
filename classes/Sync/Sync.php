@@ -15,6 +15,10 @@ class Sync{
 
     private $dataarray = null;// массив содержащий данные из хмл-ки
 
+    private $lastsync = '';
+
+    private $dataarrayE = null;// массив сформированный Easyfinance 
+
     private $recordsMap = null;// рекордс мэп. содержит имя таблицы и айдишник. + присвоенный айдишник в изифинанс.ру
 
     private $changedRec = null;// чейнжед рекордс. содержит айдишник изменённой записи и имя таблицы
@@ -70,8 +74,30 @@ class Sync{
             trigger_error('Не верный ключ', E_USER_WARNING);
             $this->SendError();
         }
-        trigger_error('Получилось авторизироваться', E_USER_NOTICE);
+        //trigger_error('Получилось авторизироваться', E_USER_NOTICE);
         $this->parsing();
+        //$this->parsing();
+        $account = new Account($this->user);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $category = new Category($this->user);
+        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation = new Operation($this->user);
+        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $transfer = new Transfer($this->user);
+        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+
+        //$date='', &$data='', $user_id='', $db=''){
+        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
+
+        $category->FormArray($this->lastsync, $this->dataarrayE);
+        $account->FormArray($this->lastsync, $this->dataarrayE);
+        $operation->FormArray($this->lastsync, $this->dataarrayE);
+        $c = xmlrpc_encode($this->dataarrayE);
+        echo ($c);
+        //echo ($this->dataarrayE[9][3]['descr']);
+        //$this->WriteTest();//выводит распарсенные значения
+        //$c = xmlrpc_encode($this->dataarray);
+        //echo ($c);
     }
 
     /**
@@ -79,9 +105,9 @@ class Sync{
      * @param <type> 
      * @return bool
      */
-    function sync_getAuth($login, $pass, $key, $date)
+    function sync_getAuth($qw)
     {
-        $sql = "SELECT user_pass FROM users WHERE user_login=?";
+        $sql = "SELECT user_pass,id FROM users WHERE user_login=?";
         $a = $this->db->query($sql, $qw['login']);
         //echo ('1'.$qw[0]['login']);
         //echo ($a[0]['user_pass'].'<br>');
@@ -94,10 +120,13 @@ class Sync{
     //echo ($qw['digsignature'].'<br>');
             //echo ($this->digitalsign[0]);
     //echo ($os[0]);
-        if (!in_array($qw['digsignature'],$this->digitalsign)) {
+        /*if (!in_array($qw['digsignature'],$this->digitalsign)) {
             return false;
-        }
-
+        }*/
+        $this->user = $a[0]['id'];
+        $this->lastsync = formatIsoDateToNormal($qw['lastsync']);
+        //echo ($this->lastsync);
+        //echo ($a[0]['id']);
         return true;
     }
 
@@ -129,24 +158,24 @@ class Sync{
         foreach ($qw[1]  as $k=>$value ){
             //$recordsMap = 1;
             //echo ('ethetr');
-            $this->recordsMap[$k]['tablename']=$qw[1][$k]['tablename'];
-            $this->recordsMap[$k]['remotekey']=$qw[1][$k]['remotekey'];
+            $this->recordsMap[$k+1]['tablename']=$qw[1][$k]['tablename'];
+            $this->recordsMap[$k+1]['remotekey']=$qw[1][$k]['remotekey'];
             //echo ($recordsMap[$k]['tablename']);
         }
     }
     function getChangedRecords($qw){
         echo ('Получили чейнджед рекордс<br>');
         foreach ($qw[3] as $k=>$value ){
-            $this->changedRec[$k]['tablename']=$qw[2][$k]['tablename'];
-            $this->changedRec[$k]['remotekey']=$qw[2][$k]['remotekey'];
+            $this->changedRec[$k+1]['tablename']=$qw[3][$k]['tablename'];
+            $this->changedRec[$k+1]['remotekey']=$qw[3][$k]['remotekey'];
         }
     }
     function getDeletedRecords($qw){
         echo ('Получили делитед рекордс<br>');
         foreach ($qw[2] as $k=>$value){
             //echo ($qw[3][$k]['tablename']);
-            $this->deletedRec[$k]['tablename']=$qw[3][$k]['tablename'];
-            $this->deletedRec[$k]['remotekey']=$qw[3][$k]['remotekey'];
+            $this->deletedRec[$k+1]['tablename']=$qw[2][$k]['tablename'];
+            $this->deletedRec[$k+1]['remotekey']=$qw[2][$k]['remotekey'];
         }
     }
     function getAccounts($qw){
@@ -155,12 +184,13 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Accounts'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='A'){
-                    $this->AccountsList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->AccountsList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->AccountsList[$k]['cur']=$qw[$i][$k]['cur'];
-                    $this->AccountsList[$k]['date']=$qw[$i][$k]['date'];
-                    $this->AccountsList[$k]['startbalance']=$qw[$i][$k]['startbalance'];
-                    $this->AccountsList[$k]['descr']=$qw[$i][$k]['descr'];
+                    //$k = $qw[$i][$k]['remotekey'];
+                    $this->AccountsList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->AccountsList[$k+1]['name']=$qw[$i][$k]['name'];
+                    $this->AccountsList[$k+1]['cur']=$qw[$i][$k]['cur'];
+                    $this->AccountsList[$k+1]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
+                    $this->AccountsList[$k+1]['startbalance']=$qw[$i][$k]['startbalance'];
+                    $this->AccountsList[$k+1]['descr']=$qw[$i][$k]['descr'];
                 }
             }
         }
@@ -170,12 +200,12 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Transfers'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='T'){
-                    $this->TransfersList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->TransfersList[$k]['date']=$qw[$i][$k]['date'];
-                    $this->TransfersList[$k]['acfrom']=$qw[$i][$k]['acfrom'];
-                    $this->TransfersList[$k]['amount']=$qw[$i][$k]['amount'];
-                    $this->TransfersList[$k]['acto']=$qw[$i][$k]['acto'];
-                    $this->TransfersList[$k]['descr']=$qw[$i][$k]['descr'];
+                    $this->TransfersList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->TransfersList[$k+1]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
+                    $this->TransfersList[$k+1]['acfrom']=$qw[$i][$k]['acfrom'];
+                    $this->TransfersList[$k+1]['amount']=$qw[$i][$k]['amount'];
+                    $this->TransfersList[$k+1]['acto']=$qw[$i][$k]['acto'];
+                    $this->TransfersList[$k+1]['descr']=$qw[$i][$k]['descr'];
                 }
             }
         }
@@ -185,9 +215,9 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Categories'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='C'){
-                    $this->CategoriesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->CategoriesList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->CategoriesList[$k]['parent']=$qw[$i][$k]['parent'];
+                    $this->CategoriesList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->CategoriesList[$k+1]['name']=$qw[$i][$k]['name'];
+                    $this->CategoriesList[$k+1]['parent']=$qw[$i][$k]['parent'];
                 }
             }
         }
@@ -197,8 +227,8 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Currensies'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='C'){
-                    $this->CurrensiesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->CurrensiesList[$k]['name']=$qw[$i][$k]['name'];
+                    $this->CurrensiesList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->CurrensiesList[$k+1]['name']=$qw[$i][$k]['name'];
                 }
             }
         }
@@ -208,12 +238,12 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Debets'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='D'){
-                    $this->DebetsList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->DebetsList[$k]['amount']=$qw[$i][$k]['amount'];
-                    $this->DebetsList[$k]['currency']=$qw[$i][$k]['currency'];
-                    $this->DebetsList[$k]['date']=$qw[$i][$k]['date'];
-                    $this->DebetsList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->DebetsList[$k]['done']=$qw[$i][$k]['done'];
+                    $this->DebetsList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->DebetsList[$k+1]['amount']=$qw[$i][$k]['amount'];
+                    $this->DebetsList[$k+1]['currency']=$qw[$i][$k]['currency'];
+                    $this->DebetsList[$k+1]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
+                    $this->DebetsList[$k+1]['name']=$qw[$i][$k]['name'];
+                    $this->DebetsList[$k+1]['done']=$qw[$i][$k]['done'];
                 }
             }
         }
@@ -223,12 +253,14 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Incomes'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='I'){
-                    $this->IncomesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->IncomesList[$k]['amount']=$qw[$i][$k]['amount'];
-                    $this->IncomesList[$k]['currency']=$qw[$i][$k]['currency'];
-                    $this->IncomesList[$k]['date']=$qw[$i][$k]['date'];
-                    $this->IncomesList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->IncomesList[$k]['done']=$qw[$i][$k]['done'];
+                    $this->IncomesList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->IncomesList[$k+1]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
+                    $this->IncomesList[$k+1]['category']=$qw[$i][$k]['category'];
+                    $this->IncomesList[$k+1]['parent']=$qw[$i][$k]['parent'];
+                    $this->IncomesList[$k+1]['account']=$qw[$i][$k]['account'];
+                    $this->IncomesList[$k+1]['amount']=$qw[$i][$k]['amount'];
+                    $this->IncomesList[$k+1]['descr']=$qw[$i][$k]['descr'];
+                    //echo ('заценим дату'.formatIsoDateToNormal($qw[$i][$k]['date']));
                 }
             }
         }
@@ -238,12 +270,13 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Outcomes'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='O'){
-                    $this->OutcomesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->OutcomesList[$k]['amount']=$qw[$i][$k]['amount'];
-                    $this->OutcomesList[$k]['currency']=$qw[$i][$k]['currency'];
-                    $this->OutcomesList[$k]['date']=$qw[$i][$k]['date'];
-                    $this->OutcomesList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->OutcomesList[$k]['done']=$qw[$i][$k]['done'];
+                    $this->OutcomesList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->OutcomesList[$k+1]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
+                    $this->OutcomesList[$k+1]['category']=$qw[$i][$k]['category'];
+                    $this->OutcomesList[$k+1]['parent']=$qw[$i][$k]['parent'];
+                    $this->OutcomesList[$k+1]['account']=$qw[$i][$k]['account'];
+                    $this->OutcomesList[$k+1]['amount']=$qw[$i][$k]['amount'];
+                    $this->OutcomesList[$k+1]['descr']=$qw[$i][$k]['descr'];
                 }
             }
         }
@@ -253,12 +286,12 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i]['tablename']=='Plans'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='P'){
-                    $this->PlansList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
-                    $this->PlansList[$k]['amount']=$qw[$i][$k]['amount'];
-                    $this->PlansList[$k]['currency']=$qw[$i][$k]['currency'];
-                    $this->PlansList[$k]['date']=$qw[$i][$k]['date'];
-                    $this->PlansList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->PlansList[$k]['done']=$qw[$i][$k]['done'];
+                    $this->PlansList[$k+1]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->PlansList[$k+1]['amount']=$qw[$i][$k]['amount'];
+                    $this->PlansList[$k+1]['currency']=$qw[$i][$k]['currency'];
+                    $this->PlansList[$k+1]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
+                    $this->PlansList[$k+1]['name']=$qw[$i][$k]['name'];
+                    $this->PlansList[$k+1]['done']=$qw[$i][$k]['done'];
                 }
             }
         }
@@ -285,13 +318,9 @@ class Sync{
         if (!$this->sync_getAuth($this->dataarray[0])){
             $this->SendError();
             return false;
-        } else {
-            return true;
-        }
-
-        $this->parsing();
-        $account = new Account_Model($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-
+        } 
+        return true;
+        
 
 
         //$this->WriteTest();//выводит распарсенные значения
@@ -299,6 +328,7 @@ class Sync{
         $response = xmlrpc_server_call_method($srv, $xmlRequest, Null);
         //print $response;
         xmlrpc_server_destroy($srv);
+        //DateTime::ATOM();
         //XMLRPC_response(XMLRPC_prepare($response), WEBLOG_XMLRPC_USERAGENT);
           //$c = new Zend_XmlRpc_Client('http://framework.zend.com/xmlrpc');
     //echo $c->call('test.sayHello');
@@ -313,43 +343,56 @@ class Sync{
 
 //SendRemoteAnswer();
     function WriteTest(){
-            echo($this->recordsMap[0]['tablename']);
+        echo ('<br>');
+        foreach ($this->recordsMap as $k=>$v){
+            echo('<br>'.$k.' '.$v['tablename'].$v['remotekey']);
+        }
+        echo ('<br>');
+        foreach ($this->changedRec as $k=>$v){
+            echo('<br>'.$k.' '.$v['tablename'].$v['remotekey']);
+        }
+        echo ('<br>');
+        foreach ($this->deletedRec as $k=>$v){
+            echo('<br>'.$k.' '.$v['tablename'].$v['remotekey']);
+        }
+
+        /*echo($this->recordsMap[0]['tablename']);
             echo($this->recordsMap[0]['remotekey'].'<br>');
         echo($this->changedRec[0]['tablename']);
             echo($this->changedRec[0]['remotekey'].'<br>');
         echo($this->deletedRec[0]['tablename']);
-            echo($this->deletedRec[0]['remotekey'].'<br>');
+            echo($this->deletedRec[0]['remotekey'].'<br>');//*/
         echo('<br>');
         foreach ($this->AccountsList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['name'].$v['cur'].$v['date'].$v['startbalance'].$v['descr']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['name'].$v['cur'].$v['date'].$v['startbalance'].$v['descr']);
         }
         echo('<br>');
         foreach ($this->TransfersList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['date'].$v['acfrom'].$v['amount'].$v['acto'].$v['descr']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['date'].$v['acfrom'].$v['amount'].$v['acto'].$v['descr']);
         }
         echo('<br>');
         foreach ($this->CategoriesList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['name'].$v['parent']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['name'].$v['parent']);
         }
         echo('<br>');
         foreach ($this->CurrensiesList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['name']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['name']);
         }
         echo('<br>');
         foreach ($this->DebetsList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['amount'].$v['currency'].$v['date'].$v['name'].$v['done']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['amount'].$v['currency'].$v['date'].$v['name'].$v['done']);
         }
-        echo('<br>');
+        echo('<br>доходы');
         foreach ($this->IncomesList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['date'].$v['category'].$v['parent'].$v['account'].$v['amount'].$v['descr']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['date'].$v['category'].$v['parent'].$v['account'].$v['amount'].$v['descr']);
         }
         echo('<br>');
         foreach ($this->OutcomesList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['date'].$v['category'].$v['parent'].$v['account'].$v['amount'].$v['descr']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['date'].$v['category'].$v['parent'].$v['account'].$v['amount'].$v['descr']);
         }
         echo('<br>');
         foreach ($this->PlansList as $k=>$v){
-            echo('<br>'.$k.$v['remotekey'].$v['date'].$v['category'].$v['parent'].$v['account'].$v['amount'].$v['descr']);
+            echo('<br>'.$k.' '.$v['remotekey'].$v['amount'].$v['currency'].$v['date'].$v['name'].$v['done']);
         }
     }
 }

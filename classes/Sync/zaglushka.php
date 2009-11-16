@@ -26,7 +26,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                 </member>
                 <member>
                     <name>login</name>
-                    <value>challenger</value>
+                    <value>challenger3</value>
                 </member>
                 <member>
                     <name>pass</name>
@@ -34,9 +34,8 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                 </member>
                 <member>
                     <name>lastsync</name>
-                    <value>
-                        <dateTime.iso8601></dateTime.iso8601>
-                    </value>
+                    <value>20091029T10:11:12
+                                </value>
                 </member>
                 <member>
                     <name>digsignature</name>
@@ -77,7 +76,21 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <i4>1</i4>
+                                    <i4>4</i4>
+                                </value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Accounts</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>2</i4>
                                 </value>
                             </member>
                         </struct>
@@ -92,6 +105,48 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                                 <name>remotekey</name>
                                 <value>
                                     <i4>2</i4>
+                                </value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Categories</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>1</i4>
+                                </value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Incomes</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>3</i4>
+                                </value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Transfers</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>5</i4>
                                 </value>
                             </member>
                         </struct>
@@ -127,7 +182,35 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <i4>3</i4>
+                                    <i4>4</i4>
+                                </value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Categories</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>2</i4>
+                                </value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Transfers</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>5</i4>
                                 </value>
                             </member>
                         </struct>
@@ -166,6 +249,54 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                         </struct>
                     </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Accounts</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value><i4>2</i4></value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Categories</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value><i4>1</i4></value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Incomes</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value><i4>3</i4></value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>tablename</name>
+                                <value>Transfers</value>
+                            </member>
+                            <member>
+                                <name>remotekey</name>
+                                <value><i4>5</i4></value>
+                            </member>
+                        </struct>
+                    </value>
                 </data>
             </array>
         </param>
@@ -197,12 +328,12 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <i4>1</i4>
+                                    <i4>2</i4>
                                 </value>
                             </member>
                             <member>
                                 <name>name</name>
-                                <value>Наличные</value>
+                                <value>Нали2ч</value>
                             </member>
                             <member>
                                 <name>cur</name>
@@ -212,8 +343,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>date</name>
-                                <value>
-                                    <dateTime.iso8601></dateTime.iso8601>
+                                <value>20091029T10:10:10
                                 </value>
                             </member>
                             <member>
@@ -233,7 +363,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <i4>2</i4>
+                                    <i4>1</i4>
                                 </value>
                             </member>
                             <member>
@@ -248,8 +378,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>date</name>
-                                <value>
-                                    <dateTime.iso8601></dateTime.iso8601>
+                                <value>20091029T10:10:10
                                 </value>
                             </member>
                             <member>
@@ -274,7 +403,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>name</name>
-                                <value>Наличные</value>
+                                <value>Наличник</value>
                             </member>
                             <member>
                                 <name>cur</name>
@@ -284,8 +413,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>date</name>
-                                <value>
-                                    <dateTime.iso8601></dateTime.iso8601>
+                                <value>20091029T10:10:10
                                 </value>
                             </member>
                             <member>
@@ -297,12 +425,10 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>descr</name>
-                                <value>Изменено</value>
+                                <value>Изменено123</value>
                             </member>
                         </struct>
                     </value>
-
-
                 </data>
             </array>
         </param>
@@ -338,14 +464,14 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>date</name>
-                                <value>
-                                    <dateTime.iso8601></dateTime.iso8601>
+                                <value><dateTime.iso8601>20091029T10:10:10
+                                </dateTime.iso8601>
                                 </value>
                             </member>
                             <member>
                                 <name>acfrom</name>
                                 <value>
-                                    <i4>1</i4>
+                                    <i4>2</i4>
                                 </value>
                             </member>
                             <member>
@@ -357,7 +483,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>acto</name>
                                 <value>
-                                    <i4>2</i4>
+                                    <i4>4</i4>
                                 </value>
                             </member>
                             <member>
@@ -398,7 +524,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>name</name>
-                                <value>Образование</value>
+                                <value>Образование2</value>
                             </member>
                             <member>
                                 <name>parent</name>
@@ -565,13 +691,12 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <i4>1</i4>
+                                    <i4>3</i4>
                                 </value>
                             </member>
                             <member>
                                 <name>date</name>
-                                <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                <value>20091029T10:10:10
                                 </value>
                             </member>
                             <member>
@@ -589,13 +714,56 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>account</name>
                                 <value>
-                                    <i4>2</i4>
+                                    <i4>4</i4>
                                 </value>
                             </member>
                             <member>
                                 <name>amount</name>
                                 <value>
                                     <double>800</double>
+                                </value>
+                            </member>
+                            <member>
+                                <name>descr</name>
+                                <value>Стипа</value>
+                            </member>
+                        </struct>
+                    </value>
+                    <value>
+                        <struct>
+                            <member>
+                                <name>remotekey</name>
+                                <value>
+                                    <i4>3</i4>
+                                </value>
+                            </member>
+                            <member>
+                                <name>date</name>
+                                <value>20091029T10:10:10
+                                </value>
+                            </member>
+                            <member>
+                                <name>category</name>
+                                <value>
+                                    <i4>2</i4>
+                                </value>
+                            </member>
+                            <member>
+                                <name>parent</name>
+                                <value>
+                                    <i4>1</i4>
+                                </value>
+                            </member>
+                            <member>
+                                <name>account</name>
+                                <value>
+                                    <i4>4</i4>
+                                </value>
+                            </member>
+                            <member>
+                                <name>amount</name>
+                                <value>
+                                    <double>1800</double>
                                 </value>
                             </member>
                             <member>
@@ -713,8 +881,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             </member>
                             <member>
                                 <name>date</name>
-                                <value>
-                                    <dateTime.iso8601>19.10.2009</dateTime.iso8601>
+                                <value>20091030T10:10:10
                                 </value>
                             </member>
                             <member>
