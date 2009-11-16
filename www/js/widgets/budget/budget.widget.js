@@ -14,6 +14,16 @@ easyFinance.widgets.budget = function(data){
     var _currentDate = new Date()
 
     /**
+     * Перегружает виджет на заданной дате
+     * @param date {date}
+     */
+    function reload(date){
+        _currentDate = date
+        _printDate();
+        _printInfo();
+        $('#budget .list.budget .body').html(printBudget());
+    }
+    /**
      * Возвращает используюмую дату в сторонние виджеты
      */
     function getDate(){
@@ -284,5 +294,5 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-    return {getDate : getDate, init : init};
+    return {getDate : getDate, init : init, reload : reload};
 }

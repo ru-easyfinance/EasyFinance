@@ -14,6 +14,7 @@
 .budget#master .waste_list table td.w2 { width: 103px; padding-top: 4px; z-index: 10; }
 .budget#master .waste_list .list.body table td.w4 { width: 160px;text-align:right}
 .budget#master .waste_list .line .amount { position: absolute; top: 7px; right: 196px; font-weight: bold; }
+.budget#master .waste_list .line .mean{position: absolute; float: right; right:35px; top: 7px}
 .budget#master .waste_list a{ color: #313131; }
 .budget#master .waste_list .line{ position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
 .budget#master .waste_list .line a.name{ display: block; margin-bottom: 4px; width: 179px; overflow: hidden; padding-left: 25px; color: #313131; font-weight: bold; }

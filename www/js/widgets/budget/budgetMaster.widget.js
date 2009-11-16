@@ -67,7 +67,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                         str += '<tr id="'+catId+'"><td class="w1"><a>';
                         str += catName+'</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="'+formatCurrency(budget['amount'])+'"/></div></td>';
-                        str += '<td class="w4"><span>'+formatCurrency(budget['money'])+' </span></td>';
+                        str += '<td class="w4"><span>'+formatCurrency(budget['mean']||'0')+' </span></td>';
                         str += '</tr>';
                     }
                 }
@@ -76,7 +76,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 {
                     ret += '<div class="line open" id="'+parentId+'">';
                     ret += '<a class="name">'+parentName+'</a>';
-                    ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div></div>';
+                    ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div>\n\
+                            <span class="mean">'+formatCurrency(_data[parentId]?_data[parentId]['mean']:'0')+' </span></div>';
                 }
                 else
                 {
@@ -272,7 +273,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 break;
             case 'tosave':
                 fullSum(0);
-                model.save(_compilReturnJSON(),_currentDate);
+                model.save(_compilReturnJSON(),_currentDate,function(date){widget.reload(date)});
                 $('#master').dialog('close');
                 break;
         }

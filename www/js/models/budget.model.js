@@ -122,9 +122,10 @@ easyFinance.models.budget = function()
          * @desc добавляет бюджет
          * @param budget {str} JSON
          * @param date {date}
+         * @param callback {function}
          * @return void
          */
-        function save (budget,date){
+        function save (budget,date,callback){
             var month = date.getMonth()+1;
             if (month.toString().length == 1){
                 month = '0'+month.toString()
@@ -138,8 +139,8 @@ easyFinance.models.budget = function()
                 function(data){
                     if (!data['errors'] || data.errors == []){
                         $.jGrowl("Бюджет сохранён", {theme: 'green'});
+                        if(typeof callback == "function"){callback(date);}
                         
-                        $('#budget li.cur').click();
                     }else{
                         var err = '<ul>';
                         for(var key in data.errors)
