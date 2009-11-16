@@ -489,6 +489,9 @@ class Operation_Model {
             $val['cat_name']            = $category[$val['cat_id']]['cat_name'];
             $val['cat_parent']          = $category[$val['cat_id']]['cat_parent'];
             $val['account_name']        = $accounts[$val['account_id']]['account_name'];
+            $sql = "SELECT account_name FROM accounts WHERE account_id = ? AND user_id = ?";
+            $tr = $this->db->select($sql, $val['transfer'], $this->user->getId());
+            $val['transfer_name']       = $tr[0]['account_name'];//имя счёта куда осуществляем перевод.
             $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
             $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
             //$val['cur_name'] = $accounts[$val['cur_id']]['cur_name'];
