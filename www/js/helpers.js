@@ -259,6 +259,45 @@ $(document).ready(function() {
             position: {target: 'mouse'},
             style: styleTheme
         })
+
+        /*-----------------------Бюджет-----------------------------*/
+        $('#btnBudgetWizard').qtip({
+           content: 'Создать новый или отредактировать уже существующий бюджет.',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('#budget .w1,#master .w1').qtip({
+           content: 'Категория, по которой будет учитываться бюджет.',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('#budget .w2,#master .w2').qtip({
+           content: 'Сумма, выделенная в бюджете на эту категорию.',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+        $('#budget .w3,#master .w3').qtip({
+           content: 'Риска в линии времени отображает позицию текущей даты в выбранном периоде. \n\
+Зелёная полоска сигнализирует, что вы укладывайтесь в бюджет, а красная - что с текущим темпом трат, вы можете не уложиться в планируемую сумму.',
+           show: {delay: 1000},
+           position: {target: 'mouse'},
+           style: 'mystyle'
+        });
+
+       //$('.w4').qtip({
+       //    content: 'Средний расход(доход) за предыдущие три месяца по выбранной категории',
+       //    show: {delay: 1000},
+       //    position: {target: 'mouse'},
+       //    style: 'mystyle'
+       // });
+
+        /*----------------------------------------------------------*/
     }
 
     /**
@@ -301,6 +340,14 @@ $(document).ready(function() {
         $("strong:contains('Деньги')").qtip('destroy')
         $("strong:contains('Долги мне')").qtip('destroy')
         $("strong:contains('Имущество')").qtip('destroy')
+
+        /*-----------------------Бюджет-----------------------------*/
+        $('#btnBudgetWizard').qtip('destroy');
+        $('.w1').qtip('destroy');
+        $('.w2').qtip('destroy');
+        $('.w3').qtip('destroy');
+       //$('.w4').qtip('destroy');
+        /*----------------------------------------------------------*/
     }
 
     if($.cookie('tooltip')){
