@@ -91,24 +91,28 @@ class Budget_Model {
             // Если это родительская категория, то подсчитываем общую сумму
             if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
                 if ($var['drain'] == 1) {
-                    $drain_all += (float)$var['amount'];
+                    $drain_all  += (float)$var['amount'];
                     $real_drain += ABS((float)$var['money']);
                 } else {
                     $profit_all += (float)$var['amount'];
                     $real_profit += ABS((float)$var['money']);
                 }
             }
+
+            
             
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
                     'amount' => (float)$var['amount'],
-                    'money'  => (float)$var['money']
+                    'money'  => (float)$var['money'],
+                    'mean'   => (float)$var['avg_3m'] //Среднее за три месяца
                 );
             } else {
                 $list['p'][$var['category']] = array(
                     'amount' => (float)$var['amount'],
-                    'money'  => (float)$var['money']
+                    'money'  => (float)$var['money'],
+                    'mean'   => (float)$var['avg_3m'] //Среднее за три месяца
                 );
             }
 
