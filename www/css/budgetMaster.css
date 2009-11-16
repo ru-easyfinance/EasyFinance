@@ -9,14 +9,14 @@
 .budget#master .waste_list .list.head table td.w4 { width: 97px;}
 .budget#master .waste_list table { position: relative; width: 502px; }
 .budget#master .waste_list table td { position: relative; padding: 7px 0 3px 0; }
-.budget#master .waste_list table td.w1 { width: 199px; padding-right: 5px; }
+.budget#master .waste_list table td.w1 { width: 199px; padding-right: 5px;overflow: hidden; }
 .budget#master .waste_list table td.w1 a{ display: block; padding-left: 25px; }
 .budget#master .waste_list table td.w2 { width: 103px; padding-top: 4px; z-index: 10; }
 .budget#master .waste_list .list.body table td.w4 { width: 160px;text-align:right}
 .budget#master .waste_list .line .amount { position: absolute; top: 7px; right: 196px; font-weight: bold; }
 .budget#master .waste_list a{ color: #313131; }
 .budget#master .waste_list .line{ position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
-.budget#master .waste_list .line a.name{ display: block; margin-bottom: 4px; width: 179px; padding-left: 25px; color: #313131; font-weight: bold; }
+.budget#master .waste_list .line a.name{ display: block; margin-bottom: 4px; width: 179px; overflow: hidden; padding-left: 25px; color: #313131; font-weight: bold; }
 .budget#master .waste_list .open a.name{ background: url('/img/i/minus.gif') no-repeat 6px 4px; }
 .budget#master .waste_list .open table{ display: block; }
 .budget#master .waste_list .close a.name{ background: url('/img/i/plus.gif') no-repeat 6px 4px; }

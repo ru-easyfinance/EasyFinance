@@ -30,7 +30,7 @@ function floatFormat(obj, in_string ){
     $(obj).val(newstr)
 }
 /**
- * Автор я
+ * @author Alexander *rewle* Ilichov
  */
 easyFinance.widgets.budgetMaster = function(model,widget){
 
@@ -41,6 +41,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
 
     /**
      * формирует данные для 2х последних страниц мастера
+     * @param type {int} тип (доход == 1(р)/расход == 0(d))
+     * @return void
      */
     function _printMaster(type){
         var prefix = (type == '1')? 'p':'d'; 
@@ -92,6 +94,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     }
     /**
      * подсчёт итоговой суммы
+     * @param step {str} 'step2'||'step3'
+     * @return float
      */
     function globalSum(step){
         var ret = 0;
@@ -105,6 +109,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     }
     /**
      * расчет сумм по категориям
+     * @param id {int} ид категории
+     * @param step {str} 'step2'||'step3'
+     * @return void
      */
     function fullSum(id,step){
         var tmp;
@@ -112,7 +119,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             $('#master div.line').each(function(){
                 if (!$(this).find('.amount input').length){
                     var ret = 0;
-                    $(this).find('.input').each(function(){
+                    $(this).find('input').each(function(){
                         tmp = parseFloat($(this).val().toString().replace(/[^0-9\.]/gi,''))
                         if (isNaN(tmp)){tmp = 0;}
                         ret += tmp
@@ -137,6 +144,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text()) - parseFloat($('#master .waste b').text())))
     }
 
+    /**
+     * Компилирует джейсон для сообщения на сервер
+     */
     function _compilReturnJSON(){
         var tmp = {step3 : '', step2 : ''}
         $('#master .waste_list input').each(function(){
@@ -246,7 +256,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 break;
             case 'tosave':
                 fullSum(0);
-                model.save(_compilReturnJSON(),_currentDate)
+                model.save(_compilReturnJSON(),_currentDate);
                 $('#master').dialog('close');
                 break;
         }
@@ -254,7 +264,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     })
 
 
-    
+    /**
+     * инициализация мастера
+     */
     $('#master').dialog({bgiframe: true,autoOpen: false,width: 520, modal: true, resizable: false});
 
     /**

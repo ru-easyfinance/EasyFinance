@@ -138,6 +138,8 @@ easyFinance.models.budget = function()
                 function(data){
                     if (!data['errors'] || data.errors == []){
                         $.jGrowl("Бюджет сохранён", {theme: 'green'});
+                        
+                        $('#budget li.cur').click();
                     }else{
                         var err = '<ul>';
                         for(var key in data.errors)
@@ -192,7 +194,7 @@ easyFinance.models.budget = function()
          * @return {} 
          */
         function returnInfo(){
-            return _data.budget_info;
+            return _data.main;//.budget_info;
         }
         /**
          * @deprecated

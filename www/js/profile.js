@@ -22,11 +22,16 @@ function user_info_save()
         return false;
     }
 
-    if((($('input#newpass').val) != ($('input#newpass2').val))&($('input#newpass').val)) {
+    if((($('input#newpass').val()) != ($('input#newpass2').val()))&($('input#newpass').val())) {
         return false;
-    } else if (($('input#newpass').val) == ($('input#newpass2').val)) {
+    } else if (($('input#newpass').val()) == ($('input#newpass2').val())) {
+        if ($('#help:checked').length == 1){
+            $.cookie('tooltip', '1', {expire: 100, path : '/', domein: false, secure : '1'});
+        }else{
+            $.cookie('tooltip', null);
+        }
         $.post('/profile/save_main_settings/', {
-            help: ($('#help:checked').length == 1)? 1 : 0,
+            //help: ($('#help:checked').length == 1)? 1 : 0,
             guide:($('#guide:checked').length == 1)? 1 : 0,
             login: $('#login').val(),
             pass: $('#pass').val(),
@@ -186,7 +191,7 @@ $(document).ready(function(){
 });
 $(document).ready(function() {
     strokuk = document.cookie.toString();
-    if (strokuk.indexOf('help=uyjsdhf') != -1){
+    if (!$.cookie('tooltip')){
         $('#help').removeAttr('checked');
     }
     if (strokuk.indexOf('guide=uyjsdhf') == -1){

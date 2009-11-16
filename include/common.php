@@ -64,6 +64,8 @@ $tpl->append('css', 'jquery/fancy.css');
 $tpl->append('css', 'expertsList.css');
 $tpl->append('css', 'operationsJournal.css');
 $tpl->append('css', 'budgetMaster.css');
+$tpl->append('css', 'budget.css');
+
 if( JS_MINIFY )
 {
     $tpl->append('js',  'global-min.js');

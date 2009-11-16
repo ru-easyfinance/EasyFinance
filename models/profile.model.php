@@ -63,11 +63,11 @@ class Profile_Model
                 unset($prop['newpass']);
                 $ret['profile'] = $this->save('users', $prop, $ident);
 
-                if ( $prop['help'] == 1 ){
-                     setCookie("help","",0,COOKIE_PATH, COOKIE_DOMEN, false);
-                }else{
-                    setCookie("help", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
-                }
+//                if ( $prop['help'] == 1 ){
+//                     setCookie("help","",0,COOKIE_PATH, COOKIE_DOMEN, false);
+//                }else{
+//                    setCookie("help", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
+//                }
 
                 if ( $prop['guide'] != 1 ){
                      setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);

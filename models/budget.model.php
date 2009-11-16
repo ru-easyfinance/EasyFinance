@@ -84,6 +84,7 @@ class Budget_Model {
             'p' => array()
         );
         $drain_all = 0; $profit_all = 0;
+        $real_drain = 0; $real_profit = 0;
 
         foreach ($array as $var) {
 
@@ -91,8 +92,10 @@ class Budget_Model {
             if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
                 if ($var['drain'] == 1) {
                     $drain_all += (float)$var['amount'];
+                    $real_drain += ABS((float)$var['money']);
                 } else {
                     $profit_all += (float)$var['amount'];
+                    $real_profit += ABS((float)$var['money']);
                 }
             }
             
@@ -152,8 +155,8 @@ class Budget_Model {
             'main' => array (
                 'plan_drain'  => $drain_all,
                 'plan_profit' => $profit_all,
-                'real_drain'  => 0,
-                'real_profit' => 0,
+                'real_drain'  => $real_drain,
+                'real_profit' => $real_profit,
                 'start'       => $start,
                 'end'         => $end
             )
