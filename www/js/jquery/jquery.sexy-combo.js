@@ -1,3 +1,4 @@
+/* modified by Jet */
 /***************************************************************************
 
 	sexy-combo 2.1.3	: A jQuery date time picker.
@@ -1089,6 +1090,7 @@
                     $wrapper.data("sc:optionsChanged", "yes");
                     var $selectbox = $this;
 
+                    /* modified by Jet */
                     if (val) {
                         $selectbox.val(val);
 
