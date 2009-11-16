@@ -164,9 +164,9 @@ easyFinance.widgets.operationEdit = function(){
                         $("#op_category").html(data);
                         if (_newcat) {
                             $('#op_category').val(_newcat);
-                            $.sexyCombo.changeOptions("#op_category", _newcat);
+                            //$.sexyCombo.changeOptions("#op_category", _newcat);
                         } else {
-                            $.sexyCombo.changeOptions("#op_category");
+                            //$.sexyCombo.changeOptions("#op_category");
                         }
                     },'json');
             if ($('#op_type').val() == 0)
@@ -176,9 +176,9 @@ easyFinance.widgets.operationEdit = function(){
                         $("#op_category").html(data);
                         if (_newcat) {
                             $('#op_category').val(_newcat);
-                            $.sexyCombo.changeOptions("#op_category", _newcat);
+                            //$.sexyCombo.changeOptions("#op_category", _newcat);
                         } else {
-                            $.sexyCombo.changeOptions("#op_category");
+                            //$.sexyCombo.changeOptions("#op_category");
                         }
                     },'json');
                 //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
