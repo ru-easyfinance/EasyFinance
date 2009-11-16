@@ -418,6 +418,7 @@ $(document).ready(function() {
                     if (act == '/category/add/') {
                         // категория была добавлена
                         listInsertCategory(cat);
+                        $('#subcat').val('');
                     } else {
                         // категория была отредактирована
                         updateCategory(oldCat, cat);

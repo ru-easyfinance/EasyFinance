@@ -1,6 +1,12 @@
 /* http://www.imaputz.com/cssStuff/bigFourVersion.html */
 /* begin some basic styling here                     */
 
+#lblOperationsJournalFilters {
+    margin: 0px;
+    margin-top: 7px;
+    color: gray;
+}
+
 #operations_list_header {
     position: relative;
     margin-top: 10px;

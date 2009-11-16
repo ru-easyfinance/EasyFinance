@@ -14,6 +14,16 @@ easyFinance.models.category = function(){
     var _categories;
 
     // private functions
+    function _htmlDecodeAll() {
+        for (var key in _categories.user) {
+            _categories.user[key].name = _categories.user[key].name.replace(/&quot;/g, '"');
+        }
+
+        for (var key in _categories.system) {
+            _categories.system[key].name = _categories.system[key].name.replace(/&quot;/g, '"');
+        }
+    }
+
     function _update(actionUrl, id, name, parent, type, system, callback){
         $.post(actionUrl, {
                 id: id,
@@ -50,12 +60,14 @@ easyFinance.models.category = function(){
     function load(param1, param2){
         if (typeof param1 == 'object') {
             _categories = param1;
+            _htmlDecodeAll();
             if (typeof param2 == 'function')
                 param2(_categories);
         } else {
             // load from server
             $.get(LIST_URL, '',function(data) {
                 _categories = data;
+                _htmlDecodeAll();
                 if (typeof param1 == 'function')
                     param1(_categories);
             }, 'json');

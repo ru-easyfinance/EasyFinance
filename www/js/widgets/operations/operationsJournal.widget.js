@@ -10,7 +10,12 @@ easyFinance.widgets.operationsJournal = function(){
     var _model = null;
 
     var _account = '';
+    var _accountName = '';
     var _category = '';
+    var _categoryName = '';
+    var _type = '';
+    var _sumFrom = '';
+    var _sumTo = '';
     var _dateFrom = '';
     var _dateTo = '';
 
@@ -20,7 +25,9 @@ easyFinance.widgets.operationsJournal = function(){
 
     var _$txtDateFrom = null;
     var _$txtDateTo = null;
-    
+
+    var _$dialogFilterType = null;
+    var _$dialogFilterSum = null;
     var _$dialogFilterAccount = null;
     var _$dialogFilterCategory = null;
 
@@ -166,11 +173,51 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _initFilters() {
+        // фильтр по типу операции
+        _$dialogFilterType = $('#dialogFilterType').dialog({title: "Выберите тип операции", autoOpen: false, width: "420px", height: "80px"});
+        _$dialogFilterType.find('a').click(function(){
+            _type = $(this).attr('value');
+            loadJournal();
+            _$dialogFilterType.dialog('close');
+
+            return false;
+        });
+        $('#btnFilterType').click(function(){_$dialogFilterType.dialog('open')});
+
+        // фильтр по сумме
+        _$dialogFilterSum = $('#dialogFilterSum').dialog({title: "Выберите тип операции", autoOpen: false, width: "460px", height: "80px"});
+        _$dialogFilterSum.find('input[type=text]').live('keyup',function(e){
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        });
+        _$dialogFilterSum.find('a').click(function(){
+            // убираем фильтр
+            _$dialogFilterSum.find('#txtFilterSumFrom').val('');
+            _$dialogFilterSum.find('#txtFilterSumTo').val('');
+            _sumFrom = '';
+            _sumTo = '';
+            loadJournal();
+            _$dialogFilterSum.dialog('close');
+
+            return false;
+        });
+        _$dialogFilterSum.find('#btnFilterSumSave').click(function(e){
+            // ставим фильтр
+            _sumFrom = Math.abs(tofloat(_$dialogFilterSum.find('#txtFilterSumFrom').val()));
+            _sumTo = Math.abs(tofloat(_$dialogFilterSum.find('#txtFilterSumTo').val()));
+            loadJournal();
+            _$dialogFilterSum.dialog('close');
+
+            return false;
+        });
+        $('#btnFilterSum').click(function(){_$dialogFilterSum.dialog('open')});
+
         // фильтр по категории
         // заполняем диалог ссылками на доступные категории
         _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px", height: "80px"});
-        $('#selectFilterCategory').change(function(){
-            _category = $(this).attr('value');
+        _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
+            var $combo = $('#selectFilterCategory');
+            _category = $combo.attr('value');
+            _categoryName = $combo.find('option:selected').text()
             loadJournal();
             _$dialogFilterCategory.dialog('close');
 
@@ -189,12 +236,57 @@ easyFinance.widgets.operationsJournal = function(){
         _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
         _$dialogFilterAccount.find('a').click(function(){
             _account = $(this).attr('value');
+            _accountName = $(this).text();
             loadJournal();
             _$dialogFilterAccount.dialog('close');
 
             return false;
         });
         $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open')});
+    }
+
+    function _printFilters(){
+        var txt = '';
+        var strCat = '';
+
+        if (_type != '')
+            txt = txt + 'операции: ' + ['доход', 'расход', 'перевод', '', 'фин. цель'][_type];
+
+        if (_type != '' && _category != '')
+            txt = txt + ', ';
+
+        if (_category != '')
+            txt = txt + 'категория: ' + _categoryName;
+
+        if ((_type != '' || _category != '') && (_sumFrom != '' || _sumTo != ''))
+            txt = txt + ', ';
+
+        if (_sumFrom != '' || _sumTo != '')
+            txt = txt + 'сумма: ';
+
+        if (_sumFrom != '')
+            txt = txt + 'от ' + _sumFrom;
+
+        if (_sumFrom != '' && _sumTo != '')
+            txt = txt + ' ';
+
+        if (_sumTo != '')
+            txt = txt + 'до ' + _sumTo;
+
+        if (_sumFrom != '' || _sumTo != '')
+            txt = txt + ' руб';
+
+        if (txt != '' && _account != '')
+            txt = txt + ', ';
+
+        if (_account != '')
+            txt = txt + 'счёт: ' + _accountName;
+
+        if (txt == '') {
+            _$node.find('#lblOperationsJournalFilters').hide();
+        } else {
+            _$node.find('#lblOperationsJournalFilters').text(txt).show();
+        }
     }
 
     // public variables
@@ -290,10 +382,12 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function loadJournal() {
+        _printFilters();
+
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
 
-        _model.loadJournal(_account, _category, _dateFrom, _dateTo, _showInfo);
+        _model.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _showInfo);
     }
 
     // reveal some private things by assigning public pointers

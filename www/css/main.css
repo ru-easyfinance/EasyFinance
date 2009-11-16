@@ -730,6 +730,11 @@ div.op_addoperation .op_line .op_f_field div {margin-top: 5px; margin-right: 50p
 div.op_addoperation .op_line .op_tags_could{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
 div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100px;float: top;}
 
+#op_category_fields {margin-bottom: 4px;}
+#op_category_fields .sexy input {width: 328px;}
+#op_category_fields .sexy div.icon {left: 324px;}
+#op_category_fields .sexy div.list-wrapper {width: 339px;}
+
 /* Tag cloud */
 
 	#op_tags li{

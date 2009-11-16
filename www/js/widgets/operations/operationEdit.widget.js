@@ -14,6 +14,8 @@ easyFinance.widgets.operationEdit = function(){
     var _cat = 0; // current category
     var _oldSum = 0; // нужно для редактирования
 
+    var _selectedCategory = '';
+
     // private functions
 
     function _initTags() {
@@ -62,10 +64,34 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _initForm(){
+        // for correct sexyCombo initialization
+        $(".op_addoperation").show();
+        //$("#op_account").sexyCombo();
+        //$("#op_type").sexyCombo();
+        $("#op_category").sexyCombo({
+            filterFn: function(input, text){
+                if (this.wrapper.data("sc:lastEvent") == "click")
+                    return true;
+                
+                if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
+                    return true;
+                else
+                    return false;
+            },
+            changeCallback: function() {
+                //this.getTextValue() + ". Hidden input value is " + this.getHiddenValue());
+                _selectedCategory = this.getHiddenValue();
+            }
+        });
+
+        $(".op_addoperation").hide();
+
         $('#op_btn_Save').click(function(){_saveOperation();return false;})
-        $('#op_btn_Cancel').click(function(){_clearForm();
+        $('#op_btn_Cancel').click(function(){
+            _clearForm();
             $(".op_addoperation").hide();
-            return false;});
+            return false;
+        });
 
         $("#op_addoperation_but").click(function(){
             $(this).toggleClass("act");
@@ -137,7 +163,9 @@ easyFinance.widgets.operationEdit = function(){
                         $("#op_category").html(data);
                         if (_newcat) {
                             $('#op_category').val(_newcat);
-                            //_cat = _newcat;
+                            $.sexyCombo.changeOptions("#op_category", _newcat);
+                        } else {
+                            $.sexyCombo.changeOptions("#op_category");
                         }
                     },'json');
             if ($('#op_type').val() == 0)
@@ -147,7 +175,9 @@ easyFinance.widgets.operationEdit = function(){
                         $("#op_category").html(data);
                         if (_newcat) {
                             $('#op_category').val(_newcat);
-                            //_cat = _newcat;
+                            $.sexyCombo.changeOptions("#op_category", _newcat);
+                        } else {
+                            $.sexyCombo.changeOptions("#op_category");
                         }
                     },'json');
                 //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
@@ -361,8 +391,17 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setCategory(cat){
+        var $combo, strOption;
+        
         _cat = cat;
-        $('#op_category').val(_cat);
+        
+        $combo = $('#op_category');
+        $combo.val(_cat);
+        
+        strOption = $combo.find(":selected").text();
+
+        $.sexyCombo.changeOptions("#op_category", _cat);
+        //$.sexyCombo.selectOption("#op_category", strOption);
     }
 
     function setSum(sum){

@@ -29,8 +29,8 @@
                                                 {$cat_filtr}
                                             </select>
                                         </div>
-										<input type="button" value="Показать" id="btn_ReloadData"/>
-									
+										<input type="button" value="Показать" id="btn_ReloadData"/><br/>
+                                                                                <div id="lblOperationsJournalFilters"></div>
                                                                         </div>
 								</div>
                                                            
@@ -47,10 +47,10 @@
                                                                 <tr>
                                                                     <th><input type='checkbox' /></th>
                                                                         <th>
-                                                                                <span id="btnFilterType">Тип</span>
+                                                                                <span id="btnFilterType" class="sort">Тип</span>
                                                                         </th>
                                                                         <th>
-                                                                                <span>Сумма</span>
+                                                                                <span id="btnFilterSum" class="sort">Сумма</span>
                                                                         </th>
                                                                         <th>
                                                                                 <span>Дата</span>
@@ -84,12 +84,26 @@
                                                             </div>
                                                         </div>
 
+                                                        <div id="dialogFilterSum" class="hidden">
+                                                            <div class="padding10">
+                                                                <a href="#" value="">Любая сумма</a><br><hr>
+
+                                                                <label for="txtFilterSumFrom">От: </label>
+                                                                <input type="text" id="txtFilterSumFrom" />
+                                                                <label for="txtFilterSumTo">До: </label>
+                                                                <input type="text" id="txtFilterSumTo" />
+                                                                руб.
+                                                                <input type="button" id="btnFilterSumSave" value="Сохранить"/>
+                                                            </div>
+                                                        </div>
+
                                                         <div id="dialogFilterCategory" class="hidden">
                                                             <div class="padding10">
                                                                 <a href="#" value="">Все категории</a><hr>
                                                                 <select id="selectFilterCategory">
                                                                     {$category}
                                                                 </select>
+                                                                <input type="button" id="btnFilterCategorySave" value="Сохранить"/>
                                                             </div>
                                                         </div>
 

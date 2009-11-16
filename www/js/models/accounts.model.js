@@ -88,9 +88,9 @@ easyFinance.models.accounts = function(){
      * @desc read initial data from json/server
      * @usage ---loadJournal(json)
      * @usage ---loadJournal(json, callback)
-     * @usage loadJournal(account, category, dateFrom, dateTo, callback)
+     * @usage loadJournal(account, category, dateFrom, dateTo, sumFrom, sumTo, type, callback)
      */
-    function loadJournal(param1, param2, param3, param4, param5){
+    function loadJournal(param1, param2, param3, param4, param5, param6, param7, param8){
         //if (typeof param1 == 'string') {
         //    _journal = param1;
         //    if (typeof param2 == 'function')
@@ -101,11 +101,14 @@ easyFinance.models.accounts = function(){
                     account: param1,
                     category: param2,
                     dateFrom: param3,
-                    dateTo: param4
+                    dateTo: param4,
+                    sumFrom: param5,
+                    sumTo: param6,
+                    type: param7
                 }, function(data) {
                     _journal = data;
-                    if (typeof param5 == 'function')
-                        param5(_journal);
+                    if (typeof param8 == 'function')
+                        param8(_journal);
             }, 'json');
         //}
     }
