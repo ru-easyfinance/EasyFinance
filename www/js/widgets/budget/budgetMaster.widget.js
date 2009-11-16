@@ -139,9 +139,17 @@ easyFinance.widgets.budgetMaster = function(model,widget){
 //                $(sel).find('.amount').text(formatCurrency(ret))
 //            }
 //        }
-        $('#master .waste b').text(formatCurrency(globalSum('step3')))
-        $('#master .income b').text(formatCurrency(globalSum('step2')))
-        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text().toString().replace(/[^0-9\.]/gi,'')) - parseFloat($('#master .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
+        var profit = globalSum('step2')
+        var drain = globalSum('step3')
+        $('#master .waste b').text(formatCurrency(drain))
+        $('#master .income b').text(formatCurrency(profit))
+        if (drain - profit > 0){
+            $('#master .rest b').css('color','#EB3C34')
+        }else{
+            $('#master .rest b').css('color','#309500')
+        }
+        $('#master .rest b').text(formatCurrency(profit - drain))
+        
     }
 
     /**
@@ -205,9 +213,17 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
     })
     $('#master .amount input').live('change',function(){
-        $('#master .waste b').text(formatCurrency(globalSum('step3')))
-        $('#master .income b').text(formatCurrency(globalSum('step2')))
-        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text().toString().replace(/[^0-9\.]/gi,'')) - parseFloat($('#master .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
+        var profit = globalSum('step2')
+        var drain = globalSum('step3')
+        $('#master .waste b').text(formatCurrency(drain))
+        $('#master .income b').text(formatCurrency(profit))
+        if (drain - profit > 0){
+            $('#master .rest b').css('color','#EB3C34')
+        }else{
+            $('#master .rest b').css('color','#309500')
+        }
+        $('#master .rest b').text(formatCurrency(profit - drain))
+
     })
 
     /**
@@ -280,7 +296,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#step1 #month').val(tempDate.getMonth()+1);
         $('#step1 #year').val(tempDate.getFullYear());
         $('#master').dialog('open');
-        $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());//$('#master .step:visible .master.head h4').text()  });
+        $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
     })
     return {};
 }
