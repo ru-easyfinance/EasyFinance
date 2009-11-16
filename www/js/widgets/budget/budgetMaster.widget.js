@@ -101,8 +101,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var ret = 0;
         $('#master #'+step+' div.amount').each(function(){
             var str = $(this).find('input').val() || $(this).text();
-            if(!isNaN(parseFloat(str.replace(/[^0-9.]/gi,'')))){
-                ret += parseFloat(str.replace(/[^0-9.]/gi,''));
+            if(!isNaN(parseFloat(str.replace(/[^0-9\.]/gi,'')))){
+                ret += parseFloat(str.replace(/[^0-9\.]/gi,''));
             }
         })
         return ret;
@@ -141,7 +141,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
 //        }
         $('#master .waste b').text(formatCurrency(globalSum('step3')))
         $('#master .income b').text(formatCurrency(globalSum('step2')))
-        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text()) - parseFloat($('#master .waste b').text())))
+        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text().toString().replace(/[^0-9\.]/gi,'')) - parseFloat($('#master .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
     }
 
     /**
@@ -207,7 +207,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     $('#master .amount input').live('change',function(){
         $('#master .waste b').text(formatCurrency(globalSum('step3')))
         $('#master .income b').text(formatCurrency(globalSum('step2')))
-        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text()) - parseFloat($('#master .waste b').text())))
+        $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text().toString().replace(/[^0-9\.]/gi,'')) - parseFloat($('#master .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
     })
 
     /**
@@ -242,7 +242,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 }else{
                     fullSum(0);
                     $('#master .waste b').text(formatCurrency(globalSum('step3')))
-                    $('#master .rest b').text(formatCurrency(parseFloat($('#master .income b').text()) - globalSum('step3')))
+                    $('#master .rest b').text(formatCurrency(parseFloat($('#master  #step2 .income b').text().toString().replace(/[^0-9\.]/gi,'')) - globalSum('step3')))
                 }
                 $('#master .step').hide();
                 $('#master #step2').show();
@@ -250,7 +250,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             case 'tostep3':
                 fullSum(0);
                 $('#master .income b').text(formatCurrency(globalSum('step2')))
-                $('#master .rest b').text(formatCurrency(globalSum('step2')-parseFloat($('#master .waste b').text())))
+                $('#master .rest b').text(formatCurrency(globalSum('step2')-parseFloat($('#master #step2 .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
                 $('#master .step').hide();
                 $('#master #step3').show();
                 break;
