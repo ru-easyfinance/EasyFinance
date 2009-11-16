@@ -30,8 +30,8 @@ easyFinance.widgets.budget = function(data){
         var bar = $('#budget.budget .month_cal');
         $(bar).find('li.y_prev a').text(year-1);
         $(bar).find('li.y_next a').text(year+1);
-        $(bar).find('li.m_prev a').text(monthName[month-1]);
-        $(bar).find('li.m_next a').text(monthName[month+1]);
+        $(bar).find('li.m_prev a').text(monthName[(month-1 == -1)?11:(month-1)]);
+        $(bar).find('li.m_next a').text(monthName[(month+1 == 12)? 0:(month+1)]);
         $(bar).find('li.cur').text(monthName[month]+' '+year);
     }
 
@@ -45,21 +45,21 @@ easyFinance.widgets.budget = function(data){
         var month = _currentDate.getMonth();
         if ($(this).hasClass('y_prev')){
             _currentDate.setYear(year-1);
-        }
-        else if($(this).hasClass('m_prev')){
+        }else if($(this).hasClass('m_prev')){
             _currentDate.setMonth(month-1);
         }else if($(this).hasClass('m_next')){
             _currentDate.setMonth(month+1);
-        }
-        else if($(this).hasClass('y_next')){
+        }else if($(this).hasClass('y_next')){
             _currentDate.setYear(year+1);
+        }else if($(this).hasClass('cur')){
+            _currentDate = new Date();
+
         }
         _printDate();
         _model.reload(_currentDate, function(){
             _printInfo();
             $('#budget .list.budget .body').html(printBudget());
         })
-
     })
     ///////////////////////////////////////////////////////////////////////////
     //                          infobar                                      //
@@ -258,22 +258,24 @@ easyFinance.widgets.budget = function(data){
     })
 
     $('#budget .list.budget #profit').live('click',function(){
-        $('#budget .list.budget [type="p"][parent]').toggle()
         $(this).closest('tr').toggleClass('open').toggleClass('close')
         if($(this).closest('tr').hasClass('open')){
-            $('#budget .list.budget .parent[type="p"]').addClass('open').removeClass('close')
+            $('#budget .list.budget [type="p"][parent]').show();
+            $('#budget .list.budget .parent[type="p"]').addClass('open').removeClass('close');
         }else{
+            $('#budget .list.budget [type="p"][parent]').hide();
             $('#budget .list.budget .parent[type="p"]').addClass('close').removeClass('open')
         }
 
     })
 
     $('#budget .list.budget #drain').live('click',function(){
-        $('#budget .list.budget [type="d"][parent]').toggle()
         $(this).closest('tr').toggleClass('open').toggleClass('close')
         if($(this).closest('tr').hasClass('open')){
+            $('#budget .list.budget [type="d"][parent]').show();
             $('#budget .list.budget .parent[type="d"]').addClass('open').removeClass('close')
         }else{
+            $('#budget .list.budget [type="d"][parent]').hide();
             $('#budget .list.budget .parent[type="d"]').addClass('close').removeClass('open')
         }
     })
