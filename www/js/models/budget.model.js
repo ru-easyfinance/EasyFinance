@@ -23,7 +23,23 @@ easyFinance.models.budget = function()
          */
         var _data;
         function load (data) {
-            _data = data;
+            var key, real={p:0,d:0}, plan ={p:0,d:0};
+            for(key in data.list.p){
+                plan.p += data.list.p[key].amount
+                real.p += data.list.p[key].money
+            }
+            for(key in data.list.d){
+                plan.d += data.list.d[key].amount
+                real.d += data.list.d[key].money
+            }
+            _data = {list : data.list,
+                    main: {
+                        plan_profit : plan.p,
+                        real_profit : real.p,
+                        plan_drain : plan.d,
+                        real_drain : real.d
+                    }
+                    }
         }
 
         function reload (date,callback) {
@@ -141,7 +157,6 @@ easyFinance.models.budget = function()
                     if (!data['errors'] || data.errors == []){
                         $.jGrowl("Бюджет сохранён", {theme: 'green'});
                         if(typeof callback == "function"){callback(date);}
-                        
                     }else{
                         var err = '<ul>';
                         for(var key in data.errors)
@@ -196,7 +211,15 @@ easyFinance.models.budget = function()
                 function(data){
                     if (!data['errors'] || data.errors == []){
                         $.jGrowl("Бюджет изменён", {theme: 'green'});
-                        if(typeof callback == "function"){callback(date);}
+
+                        if (type =='p'){
+                            _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount'] + value
+                            _data.list[type][id]['amount'] = value;
+                        }else{
+                            _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount'] + value
+                            _data.list[type][id]['amount'] = value;
+                        }
+                        if(typeof callback == "function"){callback();}
                     }else{
                         var err = '<ul>';
                         for(var key in data.errors)
