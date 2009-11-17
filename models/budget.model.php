@@ -101,14 +101,7 @@ class Budget_Model {
         
         return array (
             'list' => $list,
-            'main' => array (
-                'plan_drain'  => $drain_all,  // Общий планируемый расход
-                'plan_profit' => $profit_all, // Общий планируемый доход
-                'real_drain'  => $real_drain, // Фактический расход
-                'real_profit' => $real_profit,// Фактический доход
-                'start'       => $start,      // Дата начала периода
-                'end'         => $end         // Дата окончания периода
-            )
+            'main' => array () /** @deprecated */
         );
     }
 
