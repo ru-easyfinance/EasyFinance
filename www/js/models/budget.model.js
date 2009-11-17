@@ -25,12 +25,12 @@ easyFinance.models.budget = function()
         function load (data) {
             var key, real={p:0,d:0}, plan ={p:0,d:0};
             for(key in data.list.p){
-                plan.p += parseFloat(data.list.p[key].amount)
-                real.p += parseFloat(data.list.p[key].money)
+                plan.p += Math.abs(parseFloat(data.list.p[key].amount))
+                real.p += Math.abs(parseFloat(data.list.p[key].money))
             }
             for(key in data.list.d){
-                plan.d += parseFloat(data.list.d[key].amount)
-                real.d += parseFloat(data.list.d[key].money)
+                plan.d += Math.abs(parseFloat(data.list.d[key].amount))
+                real.d += Math.abs(parseFloat(data.list.d[key].money))
             }
             _data = {list : data.list,
                     main: {
@@ -147,7 +147,6 @@ easyFinance.models.budget = function()
             if (month.toString().length == 1){
                 month = '0'+month.toString()
             }
-            
             $.post('/budget/add/',
                 {
                     data: budget,
