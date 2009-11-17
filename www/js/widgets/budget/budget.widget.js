@@ -299,7 +299,7 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-    $('#budget .list tr').live('dblclick',function(){
+    /*$('#budget .list tr').live('dblclick',function(){
         var parent = $(this).attr('parent')||'1';
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id
@@ -309,10 +309,18 @@ easyFinance.widgets.budget = function(data){
             $(this).find('.w2 input').show().focus();
             $(this).find('.w2 span').hide();
         }
-    })
+    })*/
 
     $('#budget .list tr input').live('change',function(){
-        date = _currentDate
+        var id = $(this).closest('tr').attr('id');
+        var type = $(this).closest('tr').attr('type');
+        var value = $(this).val();
+        $('#budget .list tr .w2 input').hide();
+        $('#budget .list tr .w2 span').show();
+        _model.edit(_currentDate, type, id, value, function(){
+            _printInfo();
+            $('#budget .list.budget .body').html(printBudget());
+        })
     })
     return {getDate : getDate, init : init, reload : reload};
 }
