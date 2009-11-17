@@ -301,7 +301,7 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-    /*$('#budget .list tr').live('dblclick',function(){
+    $('#budget .list tr').live('dblclick',function(){
         var parent = $(this).attr('parent')||'1';
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id
@@ -311,7 +311,7 @@ easyFinance.widgets.budget = function(data){
             $(this).find('.w2 input').show().focus();
             $(this).find('.w2 span').hide();
         }
-    })*/
+    })
 
     $('#budget .list tr input').live('change',function(){
         var id = $(this).closest('tr').attr('id');
