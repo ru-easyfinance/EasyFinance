@@ -77,11 +77,11 @@ class Budget_Controller extends Template_Controller
                 }
             }
         }
-        foreach ($json->r as $val) {
+        foreach ($json->p as $val) {
             foreach ($val as $k => $v) {
                 $v = str_replace(' ', '', $v);
                 if ((float)$v <> 0) {
-                    $budget['r'][$k] = (float)$v;
+                    $budget['p'][$k] = (float)$v;
                 }
             }
         }
