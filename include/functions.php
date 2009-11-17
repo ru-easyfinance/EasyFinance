@@ -229,10 +229,10 @@ function get_tree_select ($selected = 0 )
         if ($val['howoften'] >= $barier) {
             if ($val['cat_parent'] == 0) {
                 //if (($type == $val['type']) || ($val['type'] == 0))
-                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
             } else {
                 //if (($type == $val['type']) || ($val['type'] == 0))
-                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
             }
         }
     }
@@ -269,7 +269,7 @@ function get_tree_select ($selected = 0 )
                 $array[$val['cat_id']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
         } else {
             //if (($type == $val['type']) || ($val['type'] == 0))
-                $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+                $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
         }
     }
     foreach ($array as $v) {
@@ -293,10 +293,10 @@ function get_tree_select2 ($selected = 0, $type = 0)
         if ($val['howoften'] >= $barier) {
             if ($val['cat_parent'] == 0) {
                 if ( ($val['type'] == 0) || ($val['type'] == $type) )
-                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
             } else {
                 if ( ($type == $val['type']) || ($val['type'] == 0) )
-                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;{$val['cat_name']}</option>";
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
             }
         }
     }
@@ -333,7 +333,7 @@ function get_tree_select2 ($selected = 0, $type = 0)
                 $array[$val['cat_id']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>{$val['cat_name']}</option>";
         } else {
             if (($val['type'] == 0) || ($val['type'] == $type))
-                $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{$val['cat_name']}</option>";
+                $array[$val['cat_parent']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
         }
     }
     foreach ($array as $v) {
