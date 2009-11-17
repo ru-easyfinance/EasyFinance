@@ -38,7 +38,7 @@ easyFinance.models.budget = function()
             function(data)
             {
                 load(data);
-                callback(_data.main.real_drain,_data.main.real_profit)//@todo main ->budget_info
+                if(typeof callback == "function"){callback(_data.main.real_drain,_data.main.real_profit)}//@todo main ->budget_info
 
             },
             'json')

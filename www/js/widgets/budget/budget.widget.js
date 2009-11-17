@@ -18,10 +18,12 @@ easyFinance.widgets.budget = function(data){
      * @param date {date}
      */
     function reload(date){
-        _currentDate = date
-        _printDate();
-        _printInfo();
-        $('#budget .list.budget .body').html(printBudget());
+        _model.reload(date,function(){
+            _currentDate = date
+            _printDate();
+            _printInfo();
+            $('#budget .list.budget .body').html(printBudget());
+        })
     }
     /**
      * Возвращает используюмую дату в сторонние виджеты
