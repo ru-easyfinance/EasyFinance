@@ -123,15 +123,14 @@ class Budget_Model {
         $sql = '';
         $cat = Core::getInstance()->user->getUserCategory();
         foreach ($data as $key => $value) {
-            if ((string)$key == 'r') {
+            if ((string)$key == 'd') {
                 $drain = 1;
-            } elseif ((string)$key == 'd') {
+            } elseif ((string)$key == 'p') {
                 $drain = 0;
             }
 
             foreach ($value as $k => $v) {
-                if ($cat[$k]['type'] == 0 ||
-                    ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
+                if ($cat[$k]['type'] == 0 || ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
 
                         $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
                         if (!empty ($sql)) $sql .= ',';

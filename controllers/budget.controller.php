@@ -85,7 +85,7 @@ class Budget_Controller extends Template_Controller
                 }
             }
         }
-       die(json_encode($this->model->add($budget, $start)));
+        die(json_encode($this->model->add($budget, $start)));
     }
 
     /**
