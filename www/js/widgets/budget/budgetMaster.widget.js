@@ -173,7 +173,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 }
             }
         })
-        var ret = '{"d": ['+tmp.step3+'], "r": ['+tmp.step2+']}';
+        var ret = '{"d": ['+tmp.step3+'], "p": ['+tmp.step2+']}';
         ret = ret.replace('},]', '}]', 'gi');
         return ret;
     }
