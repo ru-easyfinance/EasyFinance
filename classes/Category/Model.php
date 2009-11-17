@@ -53,14 +53,18 @@ class Category_Model {
         //echo ('время синхронизации'.$date);
         //echo ($date);
 
-        $sql = "SELECT * FROM category WHERE user_id = ? AND `dt_create` BETWEEN '$date' AND NOW();";
+        $sql = "SELECT * FROM category WHERE user_id = ? AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $db->query($sql, $user_id);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
             $data[6][0]['tablename'] = 'Categories';
-            $data[6][$key+1]['easykey'] = $a[$key]['cat_id'];
-            $data[6][$key+1]['parent'] = $a[$key]['cat_parent'];
+            $data[6][$key+1]['easykey'] = (int)$a[$key]['cat_id'];
+            $data[6][$key+1]['parent'] = (int)$a[$key]['cat_parent'];
             $data[6][$key+1]['name'] = $a[$key]['cat_name'];
+
+            $data[1][]= array('tablename' => 'Categories',
+                'ekey' => (int)$a[$key]['cat_id']);
+
         }
     }
 }

@@ -19,40 +19,50 @@ class Operation_Model {
     function formOperation($date='', &$data='', $user_id='', $db=''){
         //echo ('время синхронизации'.$date);
         //echo ($date);
-        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 0 AND `dt_create` BETWEEN '$date' AND NOW();";
+        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $db->query($sql, $user_id);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
             $data[9][0]['tablename'] = 'Incomes';
-            $data[9][$key+1]['easykey'] = $a[$key]['cat_id'];
+            $data[9][$key+1]['easykey'] = (int)$a[$key]['id'];
             $data[9][$key+1]['date'] = $a[$key]['date'];
-            $data[9][$key+1]['category'] = $a[$key]['cat_id'];
+            $data[9][$key+1]['category'] = (int)$a[$key]['cat_id'];
 
             $sql2 = "SELECT cat_parent FROM category WHERE user_id=? AND cat_id=?";
             $b = $db->query($sql2, $user_id, $a[$key]['cat_id']);
-            $data[9][$key+1]['parent'] = $b[0]['cat_parent'];
+            $data[9][$key+1]['parent'] = (int)$b[0]['cat_parent'];
             
-            $data[9][$key+1]['account'] = $a[$key]['account_id'];
-            $data[9][$key+1]['amount'] = $a[$key]['money'];
+            $data[9][$key+1]['account'] = (int)$a[$key]['account_id'];
+            $data[9][$key+1]['amount'] = (int)$a[$key]['money'];
             $data[9][$key+1]['descr'] = $a[$key]['comment'];
+
+            //добавление в рекордс меп.
+            $data[1][] = array(
+                'tablename' => 'Incomes',
+                'ekey' => (int)$a[$key]['id']);
         }
         //теперь расходы
-        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 1 AND `dt_create` BETWEEN '$date' AND NOW();";
+        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 1 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $db->query($sql, $user_id);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
             $data[10][0]['tablename'] = 'Outcomes';
-            $data[10][$key+1]['easykey'] = $a[$key]['cat_id'];
+            $data[10][$key+1]['easykey'] = (int)$a[$key]['id'];
             $data[10][$key+1]['date'] = $a[$key]['date'];
             $data[10][$key+1]['category'] = $a[$key]['cat_id'];
 
             $sql2 = "SELECT cat_parent FROM category WHERE user_id=? AND cat_id=?";
             $b = $db->query($sql2, $user_id, $a[$key]['cat_id']);
-            $data[10][$key+1]['parent'] = $b[0]['cat_parent'];
+            $data[10][$key+1]['parent'] = (int)$b[0]['cat_parent'];
 
-            $data[10][$key+1]['account'] = $a[$key]['account_id'];
-            $data[10][$key+1]['amount'] = $a[$key]['money'];
+            $data[10][$key+1]['account'] = (int)$a[$key]['account_id'];
+            $data[10][$key+1]['amount'] = (int)$a[$key]['money'];
             $data[10][$key+1]['descr'] = $a[$key]['comment'];
+
+            //добавление в рекордс меп.
+            $data[1][] = array(
+                'tablename' => 'Outcomes',
+                'ekey' => (int)$a[$key]['id']);
         }
 
         return $data;

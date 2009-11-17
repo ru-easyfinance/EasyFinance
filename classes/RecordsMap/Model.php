@@ -13,9 +13,9 @@ class RecordsMap_Model {
             return mysql_insert_id();
     }
     function DelRecordsMapString($us, $tablename, $remkey, $system, $db){
-        //echo ($tablename.$remkey.$system.$us);
+        echo ($tablename.$remkey.$system.$us);
         $sql = "DELETE FROM records_map WHERE user_id=? AND tablename=? AND remotekey=? AND system=?";
-        return $db->query($sql, $us, $tablename, $remkey, $system);
+        //return $db->query($sql, $us, $tablename, $remkey, $system);
     }
 
     function formRecordsMap($date='', $data1='', &$data='', $user_id='', $db=''){
@@ -25,10 +25,12 @@ class RecordsMap_Model {
         foreach ($a as $k=>$v){
             foreach ($data1[1] as $key=>$value){
                 if ( $v['remotekey'] == $value['remotekey'] && ($v['tablename'] == $value['tablename']) ){
+                    $data[1][0]['type'] = 'service';
+                    $data[1][0]['name'] = 'RecordsMap';
                     //echo (' = ');
-                    $data[1][$k]['remotekey'] = $v['remotekey'];
-                    $data[1][$k]['tablename'] = $v['tablename'];
-                    $data[1][$k]['ekey'] = $v['ekey'];
+                    $data[1][$k+1]['tablename'] = $v['tablename'];
+                    $data[1][$k+1]['remotekey'] = (int)$v['remotekey'];
+                    $data[1][$k+1]['ekey'] = (int)$v['ekey'];
                     continue;
                 }//else echo(' != ');
                 //echo ($value['remotekey']);
@@ -49,7 +51,21 @@ class RecordsMap_Model {
             //echo ($tabid);
             $cou = "SELECT count(*) AS cou FROM ".$tab." WHERE ".$tabid." = ? AND user_id=?";
                 $a = $db->query($cou, $v['ekey'],$user_id);
-            echo ($a[0]['cou']);
+            //если запись удалена, т.е. не нашли в бд записи с айдишником указанным в recordsmap
+            if ($a[0]['cou'] == 0){
+                RecordsMap_Model::DelRecordsMapString($user_id, $v['tablename'], $v['remotekey'], 1, $db);
+
+                $data[2][0]['type'] = 'service';
+                $data[2][0]['name'] = 'DeletedRecords';
+
+                $data[2][]['tablename'] = $v['tablename'];
+                $data[2][]['remotekey'] = (int)$v['remotekey'];
+                // удаляем из рекордс меп и записываем в делетедрекордс,
+                //чтобы удалённый юзер тоже удалил соответствующие данные
+            }else{
+                //добавляем запись в changedrecords,
+                //данные для апдейта тоже отсылаем.
+            }
             
         }
         //echo ($a[$k]['id']);

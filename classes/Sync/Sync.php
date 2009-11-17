@@ -92,8 +92,11 @@ class Sync{
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
         $operation->FormArray($this->lastsync, $this->dataarrayE);
+        $transfer->FormArray($this->lastsync, $this->dataarrayE);
         $c = xmlrpc_encode($this->dataarrayE);
         echo ($c);
+        $fp = fopen("counter.xml", "w");
+        fwrite($fp, $c);
         //echo ($this->dataarrayE[9][3]['descr']);
         //$this->WriteTest();//выводит распарсенные значения
         //$c = xmlrpc_encode($this->dataarray);

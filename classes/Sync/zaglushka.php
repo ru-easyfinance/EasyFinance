@@ -34,7 +34,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                 </member>
                 <member>
                     <name>lastsync</name>
-                    <value>20091029T10:11:12
+                    <value>20091003T10:11:12
                                 </value>
                 </member>
                 <member>
@@ -76,7 +76,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <i4>4</i4>
+                                    <int>4</int>
                                 </value>
                             </member>
                         </struct>

@@ -10,5 +10,8 @@ class DeletedRec_Model {
     function DelDeletedRecString(){
 
     }
-    
+
+    function formDelString(){
+        
+    }
 }

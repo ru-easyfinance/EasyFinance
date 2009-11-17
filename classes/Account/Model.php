@@ -91,13 +91,18 @@ class Account_Model {
             $sql2 = "SELECT money, `date` FROM operation WHERE user_id=? AND account_id=? AND `dt_create` BETWEEN '$date' AND NOW()";
                 $b = $db->query($sql2, $user_id, $a[$key]['account_id']);
             if ($b[0]['money'] != null){         
-                $data[4][$key+1]['easykey'] = $a[$key]['account_id'];
+                $data[4][$key+1]['easykey'] = (int)$a[$key]['account_id'];
                 $data[4][$key+1]['name'] = $a[$key]['account_name'];
-                $data[4][$key+1]['cur'] = $a[$key]['account_currency_id'];
+                $data[4][$key+1]['cur'] = (int)$a[$key]['account_currency_id'];
 
                 $data[4][$key+1]['date'] = $b[0]['date'];
-                $data[4][$key+1]['startbalance'] = $b[0]['money'];
+                $data[4][$key+1]['startbalance'] = (int)$b[0]['money'];
                 $data[4][$key+1]['descr'] = $a[$key]['account_description'];
+
+                //добавляем в recordsmap
+                $data[1][] = array (
+                    'tablename' => 'Accounts',
+                    'ekey' => (int)$a[$key]['account_id']);
             }
         }
     }

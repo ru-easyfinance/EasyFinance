@@ -265,8 +265,8 @@ class Operation_Model {
             $drain_money = $money * -1;
                 // tr_id. было drain
 		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, imp_id)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, imp_id, dt_create)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
             $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
             $comment, $to_account, $convert);
         }else{
@@ -274,8 +274,8 @@ class Operation_Model {
         $drain_money = $money * -1;
                 // tr_id. было drain
 		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
             $comment, $to_account);
 
