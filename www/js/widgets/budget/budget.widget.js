@@ -301,8 +301,8 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-    $('#budget .list tr').live('dblclick',function(){
-        var parent = $(this).attr('parent')||'1';
+    $('#budget .list tr[parent]').live('dblclick',function(){
+        var parent = $(this).attr('parent');
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
