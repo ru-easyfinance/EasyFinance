@@ -18,16 +18,9 @@
     <form action="/operation/add/" style="display:none;" class="op_addoperation">
         <input type="hidden" id="op_id" />
 	<div class="op_addoperation" style="display: block;">
-            <div class="op_line">
-                <div class="op_f_field" id="op_account_fields">
-                    <div><label for="op_account">Счет</label>
-                        <select id="op_account">
-                            {foreach from=$accounts item=acc_data}
-                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
-                            {/foreach}
-			</select>
-                    </div>
-                    <div>
+            <div>
+                <div class="op_f_field" id="div_op_first_line">
+                    <div id="div_op_type_select">
                         <label for="op_type">Тип операции</label>
                         <select id="op_type">
                             <option value="0">Расход</option>
@@ -37,6 +30,15 @@
                             <option value="4">Перевод на фин. цель</option>
                         </select>
                     </div>
+                    <div id="div_op_account_select">
+                        <label for="op_account">Счет</label>
+                        <select id="op_account">
+                            {foreach from=$accounts item=acc_data}
+                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                            {/foreach}
+			</select>
+                    </div>
+
 		</div>
             </div>
             <div>

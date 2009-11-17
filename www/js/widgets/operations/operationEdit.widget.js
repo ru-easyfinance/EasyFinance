@@ -14,6 +14,8 @@ easyFinance.widgets.operationEdit = function(){
     var _cat = 0; // current category
     var _oldSum = 0; // нужно для редактирования
 
+    var _selectedAccount = '';
+    var _selectedType = '';
     var _selectedCategory = '';
 
     // private functions
@@ -63,31 +65,55 @@ easyFinance.widgets.operationEdit = function(){
         $('.op_tags_could li').hide();
     }
 
+    function _sexyFilter (input, text){
+        if (this.wrapper.data("sc:lastEvent") == "click")
+            return true;
+
+        if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
+            return true;
+        else
+            return false;
+    }
+
     function _initForm(){
         // for correct sexyCombo initialization
         $(".op_addoperation").show();
-        //$("#op_account").sexyCombo();
-        //$("#op_type").sexyCombo();
-        /*
-        $("#op_category").sexyCombo({
-            filterFn: function(input, text){
-                if (this.wrapper.data("sc:lastEvent") == "click")
-                    return true;
-                
-                if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
-                    return true;
-                else
-                    return false;
-            },
+
+        $("#op_account").sexyCombo({
+            filterFn: _sexyFilter,
             changeCallback: function() {
-                //this.getTextValue() + ". Hidden input value is " + this.getHiddenValue());
-                _selectedCategory = this.getHiddenValue();
+                _selectedAccount = this.getCurrentHiddenValue();
+
+                _changeAccountForTransfer();
+                // reload operation journal
+                // operationsJournalReload();
+                easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
+                $('#btn_ReloadData').click();
             }
         });
-        */
+
+        $("#op_type").sexyCombo({
+            filterFn: _sexyFilter,
+            changeCallback: function() {
+                _selectedType = this.getCurrentHiddenValue();
+                _changeTypeOperation('add'); 
+            }
+        });
+        
+        $("#op_category").sexyCombo({
+            filterFn: _sexyFilter,
+            changeCallback: function() {
+                _selectedCategory = this.getCurrentHiddenValue();
+            }
+        });
         $(".op_addoperation").hide();
 
-        $('#op_btn_Save').click(function(){_saveOperation();return false;})
+        $('#op_btn_Save').click(function(){
+            _saveOperation();
+
+            return false;
+        });
+
         $('#op_btn_Cancel').click(function(){
             _clearForm();
             $(".op_addoperation").hide();
@@ -124,14 +150,13 @@ easyFinance.widgets.operationEdit = function(){
             }
         });
 
-        $('#op_account').change(function(){_changeAccountForTransfer();});
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
-        $('#op_type').change(function(){
+//        $('#op_type').change(function(){
             //createDynamicDropdown('op_type', 'op_category');
-            _changeTypeOperation('add'); 
-        });
+//            _changeTypeOperation('add');
+//        });
 
-        $('#op_type').change();
+//        $('#op_type').change();
 
         $('#op_target').change(function(){
             t = parseInt($("#op_target :selected").attr("target_account_id"));
@@ -205,6 +230,11 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
+    function _operationsJournalReload(){
+        easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
+        $('#btn_ReloadData').click();
+    }
+
     function _saveOperation() {
         if (!_validateForm()){
             return false;
@@ -230,6 +260,8 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_tags').val(),
 
             function(data){
+                _operationsJournalReload();
+
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     _clearForm();
@@ -267,6 +299,22 @@ easyFinance.widgets.operationEdit = function(){
 
     function _validateForm() {
         $error = '';
+
+        if (_selectedAccount == ''){
+            $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
+            return false;
+        }
+
+        if (_selectedType == ''){
+            $.jGrowl('Вы ввели неверное значение в поле "тип операции"!', {theme: 'red', stick: true});
+            return false;
+        }
+
+        if (_selectedCategory == ''){
+            $.jGrowl('Вы ввели неверное значение в поле "категория"!', {theme: 'red', stick: true});
+            return false;
+        }
+        
         if (isNaN(parseFloat($('#op_amount').val()))){
             $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;

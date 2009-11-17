@@ -279,7 +279,7 @@ easyFinance.widgets.operationsJournal = function(){
         if (txt != '' && _account != '')
             txt = txt + ', ';
 
-        if (_account != '')
+        if (_accountName != '')
             txt = txt + 'счёт: ' + _accountName;
 
         if (txt == '') {
@@ -309,8 +309,6 @@ easyFinance.widgets.operationsJournal = function(){
 
         _dateFrom = _$txtDateFrom.val();
         _dateTo = _$txtDateTo.val();
-
-        //loadJournal();
 
         $("#dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
 

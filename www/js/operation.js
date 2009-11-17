@@ -31,25 +31,28 @@ function fillForm(data) {
 
     $('#op_id').val(data.id);
     $('#op_account').val(data.account_id);
+    $.sexyCombo.changeOptions("#op_account", data.account_id);
 
     easyFinance.widgets.operationEdit.setCategory(data.cat_id);
     easyFinance.widgets.operationEdit.setSum(Math.abs(data.money));
 
+    var typ = 0;
     if (data.tr_id=='1') {
         // transfer
-        $('#op_type').val(2);
+        typ = 2;
     } else {
         if (data.virt=='1') {
-            $('#op_type').val(4);
+            typ = 4;
         } else {
             if (data.drain=='1') {
-                $('#op_type').val(0);
+                typ = 0;
             } else {
-                $('#op_type').val(1);//@todo
+                typ = 1; //@todo
             }
         }
     }
-
+    $('#op_type').val(typ);
+    $.sexyCombo.changeOptions("#op_type", typ);
     //////////////////////////
     //$('#target').val(data.);
     //$('#close').val(data.);
@@ -64,17 +67,10 @@ function fillForm(data) {
     $(document).scrollTop(300);
 }
 
+
 $(document).ready(function() {
-    var journalReload = function(){
-        easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
-        $('#btn_ReloadData').click();
-    }
-
-    $('#op_btn_Save').click(journalReload);
-    $('#op_account').change(journalReload);
-
     // загружаем журнал транзакций
     // по умолчанию показываются операции по всем счетам
-    // easyFinance.widgets.operationsJournal.setAccount($('#op_account :selected').val());
+    easyFinance.widgets.operationsJournal.setAccount('');
     easyFinance.widgets.operationsJournal.loadJournal();
 });

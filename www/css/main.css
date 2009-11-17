@@ -715,6 +715,9 @@ ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px;
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
 
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 70px }
+#div_op_first_line { width: 345px; margin-bottom: 2px; }
+#div_op_account_select { width: 150px; }
+#div_op_type_select { float: right; width: 150px; }
 div.op_addoperation .op_line { position: relative;  color: #4c4c4c; //zoom: 1; }
 div.op_addoperation .op_line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.op_addoperation .op_line .op_f_field { position: relative; float: left; margin-right: 80px; margin-bottom: 7px; }
