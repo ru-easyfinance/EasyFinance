@@ -230,11 +230,6 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
-    function _operationsJournalReload(){
-        easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
-        $('#btn_ReloadData').click();
-    }
-
     function _saveOperation() {
         if (!_validateForm()){
             return false;
@@ -260,8 +255,6 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_tags').val(),
 
             function(data){
-                _operationsJournalReload();
-
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 if (data.length == 0) {
                     _clearForm();

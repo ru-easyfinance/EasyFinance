@@ -313,6 +313,8 @@ easyFinance.widgets.operationsJournal = function(){
         $("#dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
 
         $('#btn_ReloadData').click(loadJournal);
+        $(document).bind('operationAdded', loadJournal);
+        $(document).bind('operationEdited', loadJournal);
         $('#remove_all_op').click(_deleteChecked);
 
         // биндим клик на чекбоксе в заголовке

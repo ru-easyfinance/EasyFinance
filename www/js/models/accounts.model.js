@@ -167,6 +167,12 @@ easyFinance.models.accounts = function(){
                 close     : close,
                 tags      : tags
             }, function(data){
+                if (url == ADD_OPERATION_URL) {
+                    $(document).trigger('operationAdded');
+                } else if (url == EDIT_OPERATION_URL) {
+                    $(document).trigger('operationEdited');
+                }
+
                 _loadAccounts();
                 callback(data);
             }, "json");
