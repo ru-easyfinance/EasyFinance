@@ -138,7 +138,7 @@ easyFinance.widgets.operationEdit = function(){
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
         $('#op_amount,#op_currency').change(function(){
-            if ($('#op_type').val() == 2) {
+            if (_selectedType == "2") {
                 /*
                  *@TODO Дописать округление
                  */
@@ -151,12 +151,6 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
-//        $('#op_type').change(function(){
-            //createDynamicDropdown('op_type', 'op_category');
-//            _changeTypeOperation('add');
-//        });
-
-//        $('#op_type').change();
 
         $('#op_target').change(function(){
             t = parseInt($("#op_target :selected").attr("target_account_id"));
@@ -177,12 +171,12 @@ easyFinance.widgets.operationEdit = function(){
         // чтобы при переключении типа операции
         // заново её выбрать, по возможности
         var _newcat = _cat;
-        
+
         // Расход или Доход
-        if ($('#op_type').val() == 0 || $('#op_type').val() == 1) {
+        if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();
-            if ($('#op_type').val() == 1)
+            if (_selectedType == "1")
                     $.post('/category/cattypechange/',{
                         type : 1
                     },function(data){
@@ -194,7 +188,7 @@ easyFinance.widgets.operationEdit = function(){
                             $.sexyCombo.changeOptions("#op_category");
                         }
                     },'json');
-            if ($('#op_type').val() == 0)
+            if (_selectedType == "0")
                 $.post('/category/cattypechange/',{
                         type : -1
                     },function(data){
@@ -208,12 +202,12 @@ easyFinance.widgets.operationEdit = function(){
                     },'json');
                 //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
         //Перевод со счёта
-        } else if ($('#op_type').val() == 2) {
+        } else if (_selectedType == "2") {
             $("#op_category_fields,#op_target_fields").hide();
             $("#op_tags_fields,#op_transfer_fields").show();
             _changeAccountForTransfer();
         //Перевод на финансовую цель
-        } else if ($('#op_type').val() == 4) {
+        } else if (_selectedType == "4") {
             $('#op_target').remove('option :not(:first)');
             var o = '';
             var t;
@@ -276,7 +270,7 @@ easyFinance.widgets.operationEdit = function(){
                     $('#op_target').html(o);
                     $.jGrowl("Операция успешно сохранена", {theme: 'green'});
                     if (tip == 4)
-                    MakeOperation();// @todo: заменить на отправку event'a!
+                        MakeOperation();// @todo: заменить на отправку event'a!
                 } else {
                     var e = '';
                     for (var v in data) {
@@ -350,7 +344,7 @@ easyFinance.widgets.operationEdit = function(){
         }
         */
 
-        if ($('#op_type').val() == '4') {
+        if (_selectedType == '4') {
             /**
              *@FIXME Написать обновление финцелей
              */
@@ -386,12 +380,10 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_close').removeAttr('checked');
 
         $('form').attr('action','/operation/add/');
-
-        //$('#op_type').change();
     }
 
     function _changeAccountForTransfer() {
-        if ($('#op_type :selected').val() == 2 &&
+        if (_selectedType == "2" &&
             $('#op_account :selected').attr('currency') != $('#op_AccountForTransfer :selected').attr('currency')) {
                 $('#op_operationTransferCurrency').show();
                 $.post('/operation/get_currency/', {
