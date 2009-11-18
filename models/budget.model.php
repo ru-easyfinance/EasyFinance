@@ -156,7 +156,24 @@ class Budget_Model {
         if (!@$this->db->query($sql, $value, $key)) {
             return array('Ошибка при редактировании бюджета');
         } else {
-            return array();
+            return array('response' => array());
+        }
+    }
+
+    /**
+     * Удаляет категорию в бюджете
+     * @param int $category
+     * @param DATETIME $date MYSQL
+     * @param string $type "p"|"d" Доход или расход
+     */
+    function del($category, $date, $type)
+    {
+        $sql = "DELETE FROM budget WHERE key = ?";
+        $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
+        if (!@$this->db->query($sql, $value, $key)) {
+            return array('error' => array('Ошибка при удалении бюджета'));
+        } else {
+            return array('response' => array());
         }
     }
 }

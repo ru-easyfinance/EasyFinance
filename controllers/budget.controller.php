@@ -100,4 +100,16 @@ class Budget_Controller extends Template_Controller
         $date  = formatRussianDate2MysqlDate(@$_POST['date']);
         die(json_encode($this->model->edit($type, $id, $value, $date)));
     }
+
+    /**
+     * Удаляет категорию в бюджете
+     */
+    function del()
+    {
+        $category = (int)@$_POST['category'];
+        $date     = formatRussianDate2MysqlDate($_POST['date']);
+        $type     = (string)@$_POST['type'];
+        die(json_encode($this->model->del($category, $date, $type)));
+    }
+
 }
