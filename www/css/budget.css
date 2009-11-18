@@ -15,6 +15,9 @@
 .budget#budget .list .list table td.w2 input{display: none;}
 .budget#budget .list .list table td.w3{width: 97px; text-align:center;}
 .budget#budget .list .list table td.w5{width: 97px; text-align:right;}
+.budget#budget .list .list table .parent td.w6 a{background:0}
+.budget#budget .list .list table .child td.w6, .budget#budget .list .list table .nochild td.w6{width: 15px; text-align: center; vertical-align: middle; padding: 10px}
+.budget#budget .list .list table .child td.w6 a, .budget#budget .list .list table .nochild td.w6 a{background:url('/img/i/icoDelete.gif') no-repeat 0px 0px;}
 
 .budget#budget .list #profit a{padding-left:12px; color: #309500; font-weight: bold; font-size: 13px}
 .budget#budget .list #drain a{padding-left:12px; color: #eb3c34; font-weight: bold; font-size: 13px}

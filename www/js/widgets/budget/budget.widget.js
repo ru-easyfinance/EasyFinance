@@ -182,7 +182,7 @@ easyFinance.widgets.budget = function(data){
                                         <div class="strip" style="width: '+dateprc+'%;"></div>\n\
                                     </div>\n\
                                 </td>\n\
-                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td>\n\
+                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6"><a> </a></td>\n\
                             </tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
@@ -228,7 +228,7 @@ easyFinance.widgets.budget = function(data){
                             <div class="strip" style="width: '+dateprc+'%;"></div>\n\
                         </div>\n\
                     </td>\n\
-                    <td class="w5">'+formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))+'</td>\n\
+                    <td class="w5">'+formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))+'</td><td class="w6"></td>\n\
                 </tr>';
         str += temp.xhtml;
 
@@ -257,7 +257,7 @@ easyFinance.widgets.budget = function(data){
                             <div class="strip" style="width: '+dateprc+'%;"></div>\n\
                         </div>\n\
                     </td>\n\
-                    <td class="w5">'+formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))+'</td>\n\
+                    <td class="w5">'+formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))+'</td><td class="w6"></td>\n\
                 </tr>';
         //////////////////////
         str += temp.xhtml;
@@ -267,12 +267,34 @@ easyFinance.widgets.budget = function(data){
     ///////////////////////////////////////////////////////////////////////////
     //                          general                                      //
     ///////////////////////////////////////////////////////////////////////////
-    $('#budget .list.budget .parent a').live('click',function(){
+    $('#budget .list.budget .parent .w1 a').live('click',function(){
         var id = $(this).closest('tr').attr('id');
         var type = $(this).closest('tr').attr('type');
         $('#budget .list.budget .child[type="'+type+'"][parent="'+id+'"]').toggle()
         $(this).closest('tr').toggleClass('open').toggleClass('close')
     })
+
+    $('#budget .list.budget .child .w6 a').live('click',function(){
+        if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
+            var id = $(this).closest('tr').attr('id')
+            var type = $(this).closest('tr').attr('type')
+            _model.del(_currentDate, id, type, function(){
+                _printInfo();
+                $('#budget .list.budget .body').html(printBudget());
+            })
+        }
+    })
+    $('#budget .list.budget .nochild .w6 a').live('click',function(){
+        if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
+            var id = $(this).closest('tr').attr('id')
+            var type = $(this).closest('tr').attr('type')
+            _model.del(_currentDate, id, type, function(){
+                _printInfo();
+                $('#budget .list.budget .body').html(printBudget());
+            })
+        }
+    })
+
 
     $('#budget .list.budget #profit a').live('click',function(){
         $(this).closest('tr').toggleClass('open').toggleClass('close')

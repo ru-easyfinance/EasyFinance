@@ -169,18 +169,42 @@ easyFinance.models.budget = function()
         }
         /**
          * @desc удаляет бюджет
-         * @param id {int}
+         * 
          * @return {String} html for $().append(html)
          */
-        function del (id){
+        function del (date, id, type, callback){
+            var month = date.getMonth()+1;
+            if (month.toString().length == 1){
+                month = '0'+month.toString()
+            }
             $.post('/budget/del',
                 {
-                    id:id
+                    date : '01.'+month+'.'+date.getFullYear(),
+                    id : id,
+                    type : type
                 },
                 function(data)
                 {
-                    _data = data;
-                    return print_list();
+                    if (!data['errors'] || data.errors == []){
+                        $.jGrowl("Бюджет удалён", {theme: 'green'});
+                        if (type =='p'){
+                            _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount']
+                            _data.main.real_profit = _data.main.real_profit - _data.list[type][id]['money']
+                            delete _data.list[type][id];
+                        }else{
+                            _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount']
+                            _data.main.real_drain = _data.main.real_drain - _data.list[type][id]['money']
+                            delete _data.list[type][id]['amount'];
+                        }
+                        if(typeof callback == "function"){callback();}
+                    }else{
+                        var err = '<ul>';
+                        for(var key in data.errors)
+                        {
+                            err += '<li>' + data.errors[key] + '</li>';
+                        }
+                        $.jGrowl(err+'</ul>', {theme: 'red'});
+                    }
                 },
                 'json'
             );//del
