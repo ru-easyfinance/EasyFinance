@@ -334,16 +334,18 @@ easyFinance.widgets.budget = function(data){
             $(this).find('.w2 span').hide();
         }
     })
-    $('#budget .list tr input').live('blur',function(){
-        var id = $(this).closest('tr').attr('id');
-        var type = $(this).closest('tr').attr('type');
-        var value = $(this).val();
-        $('#budget .list tr .w2 input').hide();
-        $('#budget .list tr .w2 span').show();
-        _model.edit(_currentDate, type, id, value, function(){
-            _printInfo();
-            $('#budget .list.budget .body').html(printBudget());
-        })
+    $('#budget .list tr input').live('keypress',function(e){
+        if (e.keyCode == 13){
+            var id = $(this).closest('tr').attr('id');
+            var type = $(this).closest('tr').attr('type');
+            var value = $(this).val();
+            $('#budget .list tr .w2 input').hide();
+            $('#budget .list tr .w2 span').show();
+            _model.edit(_currentDate, type, id, value, function(){
+                _printInfo();
+                $('#budget .list.budget .body').html(printBudget());
+            })
+        }
     })
     return {getDate : getDate, init : init, reload : reload};
 }
