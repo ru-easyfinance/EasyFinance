@@ -136,9 +136,13 @@ class Budget_Model {
             $sql = "REPLACE INTO budget (`user_id`,`category`,`drain`,
                 `amount`,`date_start`,`date_end`,`dt_create`,`key`) VALUES " . $sql;
             $this->db->query($sql);
-            return array();
+            return array('result' => array('text' => ''));
         }
-        return false;
+        return array(
+            'error' => array(
+                'text' => 'Ничего не добавлено'
+            )
+        );
     }
 
     /**
@@ -154,9 +158,13 @@ class Budget_Model {
         $sql = "UPDATE budget SET amount = ? WHERE key= ?";
         $key = '' . Core::getInstance()->user->getId() . '-' . $id . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
         if (!@$this->db->query($sql, $value, $key)) {
-            return array('Ошибка при редактировании бюджета');
+            return array(
+                'error' => array(
+                    'text' => 'Ошибка при редактировании бюджета'
+                 )
+            );
         } else {
-            return array('response' => array());
+            return array('result' => array('text' => ''));
         }
     }
 
@@ -171,9 +179,13 @@ class Budget_Model {
         $sql = "DELETE FROM budget WHERE key = ?";
         $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
         if (!@$this->db->query($sql, $value, $key)) {
-            return array('error' => array('Ошибка при удалении бюджета'));
+            return array(
+                'error' => array(
+                    'text' => 'Ошибка при удалении бюджета'
+                )
+            );
         } else {
-            return array('response' => array());
+            return array('result' => array('text' =>''));
         }
     }
 }
