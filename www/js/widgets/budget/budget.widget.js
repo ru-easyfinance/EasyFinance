@@ -345,6 +345,12 @@ easyFinance.widgets.budget = function(data){
                 _printInfo();
                 $('#budget .list.budget .body').html(printBudget());
             })
+        } 
+    })
+    $('body').keypress(function(e){
+        if(e.keyCode == 27){
+            $('#budget .list tr .w2 input').hide();
+            $('#budget .list tr .w2 span').show();
         }
     })
     return {getDate : getDate, init : init, reload : reload};
