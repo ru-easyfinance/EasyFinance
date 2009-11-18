@@ -29,7 +29,7 @@ easyFinance.widgets.budget = function(data){
      * Возвращает используюмую дату в сторонние виджеты
      */
     function getDate(){
-        return _currentDate;
+        return new Date(_currentDate);
     }
     /**
      * Печатает текст ссылок для дата-менялки
@@ -69,6 +69,7 @@ easyFinance.widgets.budget = function(data){
         }
         _printDate();
         _model.reload(_currentDate, function(){
+            _printDate();
             _printInfo();
             $('#budget .list.budget .body').html(printBudget());
         })
@@ -330,11 +331,12 @@ easyFinance.widgets.budget = function(data){
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
-            $(this).find('.w2 input').show().focus();
+            $(this).find('.w2 input').val($(this).find('.w2 span').text()).show().focus();
             $(this).find('.w2 span').hide();
         }
     })
-    $('#budget .list tr input').live('keypress',function(e){
+    $('#budget .list tr input').live('keyup',function(e){
+        floatFormat($(this),String.fromCharCode(e.which) + $(this).val())
         if (e.keyCode == 13){
             var id = $(this).closest('tr').attr('id');
             var type = $(this).closest('tr').attr('type');
