@@ -74,8 +74,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 str+='</table>';
                 if (str=='<table></table>')
                 {
-                    ret += '<div class="line open" id="'+parentId+'">';
-                    ret += '<a class="name">'+parentName+'</a>';
+                    ret += '<div class="line open nochild" id="'+parentId+'">';
+                    ret += '<a class="name nochild">'+parentName+'</a>';
                     ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div>\n\
                             <span class="mean">'+formatCurrency(_data[parentId]?_data[parentId]['mean']:'0')+' </span></div>';
                 }

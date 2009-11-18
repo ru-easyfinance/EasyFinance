@@ -17,11 +17,12 @@
 .budget#master .waste_list .line .mean{position: absolute; float: right; right:35px; top: 7px}
 .budget#master .waste_list a{ color: #313131; }
 .budget#master .waste_list .line{ position: relative; width: 502px; padding: 7px 0 5px 0; overflow: hidden; background: url('/img/i/point_x.gif') repeat-x bottom left; }
-.budget#master .waste_list .line a.name{ display: block; margin-bottom: 4px; width: 179px; overflow: hidden; padding-left: 25px; color: #313131; font-weight: bold; }
-.budget#master .waste_list .open a.name{ background: url('/img/i/minus.gif') no-repeat 6px 4px; }
-.budget#master .waste_list .open table{ display: block; }
-.budget#master .waste_list .close a.name{ background: url('/img/i/plus.gif') no-repeat 6px 4px; }
-.budget#master .waste_list .close table{ display: none; }
+.budget#master .waste_list .line a.name{cursor: pointer;display: block; margin-bottom: 4px; width: 179px; overflow: hidden; padding-left: 25px; color: #313131; font-weight: bold; }
+.budget#master .waste_list .nochild a.name.nochild{background: 0;cursor: default}
+.budget#master .waste_list .open a.name{background: url('/img/i/minus.gif') no-repeat 6px 4px; }
+.budget#master .waste_list .open table{display: block;}
+.budget#master .waste_list .close a.name{background: url('/img/i/plus.gif') no-repeat 6px 4px; }
+.budget#master .waste_list .close table{display: none;}
 
 .budget#master .f_field3 { position: relative; margin-bottom: 15px; height: 32px; }
 .budget#master .f_field3 div { position: absolute; top: 7px; }
