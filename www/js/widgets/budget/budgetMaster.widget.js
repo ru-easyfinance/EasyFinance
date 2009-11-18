@@ -212,10 +212,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * Ссумирование подкатегорий
      */
-    $('#master tr input').live('change',function(){
+    $('#master tr input').live('blur',function(){
         fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
     })
-    $('#master .amount input').live('change',function(){
+    $('#master .amount input').live('blur',function(){
         var profit = globalSum('step2')
         var drain = globalSum('step3')
         $('#master .waste b').text(formatCurrency(drain))
