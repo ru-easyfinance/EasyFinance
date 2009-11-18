@@ -430,6 +430,8 @@ class Operation_Model {
                 if ($cat_in) $cat_in .= ',';
                 $cat_in .= $var['cat_id'];
             }
+            if ($cat_in) $cat_in .= ',';
+            $cat_in .= $currentCategory;
         }
         // imp_id по слухам собрались убирать. тогда понадобится другое поле под конвертацию
 
