@@ -108,12 +108,13 @@ easyFinance.widgets.operationEdit = function(){
                 _selectedCategory = this.getCurrentHiddenValue();
             }
         });
-        
+
+        // @todo
         // Tab & Shift+Tab для секси комбо
+        /*
         var next = {op_type : "#op_category", op_account : "#op_type", op_category : '#op_date'}
         var prev = {op_type : "#op_account", op_account : "#op_category", op_category : '#op_type'}
 
-        //действие на нажатие таба (смена фокуса)
         $('div.combo.sexy input').keypress(function(e){
             if (e.keyCode == 9){
                 var id = $(this).closest('div.combo.sexy').find('select').attr('id');
@@ -135,6 +136,7 @@ easyFinance.widgets.operationEdit = function(){
                 }
             }
         })
+        */
         
         $(".op_addoperation").hide();
 
