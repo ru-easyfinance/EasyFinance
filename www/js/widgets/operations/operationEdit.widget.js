@@ -108,38 +108,34 @@ easyFinance.widgets.operationEdit = function(){
                 _selectedCategory = this.getCurrentHiddenValue();
             }
         });
-//////////////////////////////////////////tab & Shift+tab для секси комбо////////////////
-        var shift = 0;
+        
+        // Tab & Shift+Tab для секси комбо
         var next = {op_type : "#op_category", op_account : "#op_type", op_category : '#op_date'}
-        var prev = {op_type : "#op_account", op_account : "body", op_category : '#op_type'}
-        //Проверка зажат ли шифт
-        $('body').keydown(function(e){
-            if (e.keyCode == 16){shift = 1}
-        })
-        $('body').keyup(function(e){
-            if (e.keyCode == 16){shift = 0}
-        })
-        //действие на нажатие таба(смена фокуса)
-        $('div.combo.sexy input').live('keypress',function(e){
+        var prev = {op_type : "#op_account", op_account : "#op_category", op_category : '#op_type'}
+
+        //действие на нажатие таба (смена фокуса)
+        $('div.combo.sexy input').keypress(function(e){
             if (e.keyCode == 9){
-                var id = $(this).closest('div.combo.sexy').find('select').attr('id')
-                $(this).blur().closest('div.combo.sexy').find('ul:visible').closest('div.combo.sexy').find('div.icon').click()
-                if (!shift){                    
-                    if (id != 'op_category'){
-                        $(next[id]).next('input:visible').focus().closest('div.combo.sexy').find('div.icon').click()
+                var id = $(this).closest('div.combo.sexy').find('select').attr('id');
+                (this).blur().closest('div.combo.sexy').find('ul:visible').closest('div.combo.sexy').find('div.icon').click();
+                if (e.shiftKey){
+                    // move backward
+                    if (id != 'account'){
+                        $(prev[id]).next('input:visible').focus().closest('div.combo.sexy').find('div.icon').click();
                     }else{
-                        $(next[id]).focus()
+                        $(prev[id]).focus();
                     }
                 }else{
-                    if (id != 'account'){
-                        $(prev[id]).next('input:visible').focus().closest('div.combo.sexy').find('div.icon').click()
+                    // move forward
+                    if (id != 'op_category'){
+                        $(next[id]).next('input:visible').focus().closest('div.combo.sexy').find('div.icon').click();
                     }else{
-                        $(prev[id]).focus()
+                        $(next[id]).focus();
                     }
                 }
             }
         })
-///////////////////////////////////////////////////////////////////////////////////////////
+        
         $(".op_addoperation").hide();
 
         $('#op_btn_Save').click(function(){

@@ -173,6 +173,16 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _initFilters() {
+        // сброс фильтров
+        $('#linkOperationsJournalClearFilters').click(function(){
+            _type = '';
+            _sumFrom = '';
+            _sumTo = '';
+            _category = '';
+            _account = '';
+            loadJournal();
+        });
+
         // фильтр по типу операции
         _$dialogFilterType = $('#dialogFilterType').dialog({title: "Выберите тип операции", autoOpen: false, width: "420px", height: "80px"});
         _$dialogFilterType.find('a').click(function(){
@@ -217,7 +227,7 @@ easyFinance.widgets.operationsJournal = function(){
         _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
             var $combo = $('#selectFilterCategory');
             _category = $combo.attr('value');
-            _categoryName = $combo.find('option:selected').text()
+            _categoryName = $combo.find('option:selected').text();
             loadJournal();
             _$dialogFilterCategory.dialog('close');
 
@@ -276,16 +286,16 @@ easyFinance.widgets.operationsJournal = function(){
         if (_sumFrom != '' || _sumTo != '')
             txt = txt + ' руб';
 
-        if (txt != '' && _account != '')
+        if (txt != '' && _accountName != '')
             txt = txt + ', ';
 
         if (_accountName != '')
             txt = txt + 'счёт: ' + _accountName;
 
         if (txt == '') {
-            _$node.find('#lblOperationsJournalFilters').hide();
+            _$node.find('#divOperationsJournalFilters').hide();
         } else {
-            _$node.find('#lblOperationsJournalFilters').text(txt).show();
+            _$node.find('#lblOperationsJournalFilters').text(txt).parent().show();
         }
     }
 
