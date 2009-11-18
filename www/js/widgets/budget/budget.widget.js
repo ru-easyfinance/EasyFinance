@@ -334,7 +334,7 @@ easyFinance.widgets.budget = function(data){
             $(this).find('.w2 span').hide();
         }
     })
-    $('#budget .list tr input').live('change',function(){
+    $('#budget .list tr input').live('blur',function(){
         var id = $(this).closest('tr').attr('id');
         var type = $(this).closest('tr').attr('type');
         var value = $(this).val();
