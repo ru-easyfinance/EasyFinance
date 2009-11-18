@@ -184,7 +184,7 @@ easyFinance.widgets.operationsJournal = function(){
         });
 
         // фильтр по типу операции
-        _$dialogFilterType = $('#dialogFilterType').dialog({title: "Выберите тип операции", autoOpen: false, width: "420px", height: "80px"});
+        _$dialogFilterType = $('#dialogFilterType').dialog({title: "Выберите тип операции", autoOpen: false, width: "420px"});
         _$dialogFilterType.find('a').click(function(){
             _type = $(this).attr('value');
             loadJournal();
@@ -195,7 +195,7 @@ easyFinance.widgets.operationsJournal = function(){
         $('#btnFilterType').click(function(){_$dialogFilterType.dialog('open');});
 
         // фильтр по сумме
-        _$dialogFilterSum = $('#dialogFilterSum').dialog({title: "Выберите тип операции", autoOpen: false, width: "460px", height: "80px"});
+        _$dialogFilterSum = $('#dialogFilterSum').dialog({title: "Выберите сумму", autoOpen: false, width: "460px"});
         _$dialogFilterSum.find('input[type=text]').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         });
@@ -223,7 +223,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         // фильтр по категории
         // заполняем диалог ссылками на доступные категории
-        _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px", height: "80px"});
+        _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px"});
         _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
             var $combo = $('#selectFilterCategory');
             _category = $combo.attr('value');
