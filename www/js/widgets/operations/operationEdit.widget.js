@@ -95,8 +95,10 @@ easyFinance.widgets.operationEdit = function(){
         $("#op_type").sexyCombo({
             filterFn: _sexyFilter,
             changeCallback: function() {
+                var old = _selectedType;
                 _selectedType = this.getCurrentHiddenValue();
-                _changeTypeOperation('add'); 
+                if (old != _selectedType)
+                    _changeOperationType();
             }
         });
         
@@ -166,7 +168,7 @@ easyFinance.widgets.operationEdit = function(){
         });
     }
 
-    function _changeTypeOperation() {
+    function _changeOperationType() {
         // запоминаем выбранную ранее категорию,
         // чтобы при переключении типа операции
         // заново её выбрать, по возможности
