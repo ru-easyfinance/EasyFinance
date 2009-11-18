@@ -74,6 +74,7 @@ ul.dropdown li:hover ul, ul li.over ul {
 .menu3 ul:after { clear:both; display: block; content: ' '; height: 0; overflow: hidden; }
 .menu3 ul li { float: left; margin-right: 4px; width: 118px; height: 37px;position: relative;z-index:100 }
 .menu3 ul li a, .menu3 ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu3.png') no-repeat 0 0; }
+.menu3.expert ul li a, .menu3.expert ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu4.png') no-repeat 0 0; }
 
 .menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
 .menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
@@ -98,8 +99,8 @@ ul.dropdown li:hover ul, ul li.over ul {
 .menu3 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url('/img/i/icons.gif') no-repeat 0 -420px;  }
 
 /* links in submenu */
-.menu3 ul li ul li a { display: block; margin-left: 14px; width: 100px; height: 26px; margin-left: 0px; overflow: hidden; background: white; padding-top: 2px;}
-.menu3 ul li ul li span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: none; }
+.menu3 ul li ul li a, .menu3.expert ul li ul li a { display: block; margin-left: 14px; width: 100px; height: 26px; margin-left: 0px; overflow: hidden; background: white; padding-top: 2px;}
+.menu3 ul li ul li span, .menu3.expert ul li ul li span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: none; }
 
 /* highlite current link */
 .menu3 ul li ul li.selected a{ color: #3d9814; background: url('/img/i/plashka_green.png') no-repeat right top; }
