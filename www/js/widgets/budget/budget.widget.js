@@ -323,7 +323,7 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-    $('#budget .list tr[parent]').live('dblclick',function(){
+    $('#budget .list tr[parent]').live('click',function(){
         var parent = $(this).attr('parent');
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id
@@ -347,11 +347,13 @@ easyFinance.widgets.budget = function(data){
             })
         } 
     })
-    $('body').keypress(function(e){
-        if(e.keyCode == 27){
-            $('#budget .list tr .w2 input').hide();
-            $('#budget .list tr .w2 span').show();
-        }
+    
+    $('#budget .list tr input').click(function(){return false})
+
+    $('body').click(function(){
+        $('#budget .list tr .w2 input').hide();
+        $('#budget .list tr .w2 span').show();
     })
+
     return {getDate : getDate, init : init, reload : reload};
 }
