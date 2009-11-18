@@ -192,7 +192,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             return false;
         });
-        $('#btnFilterType').click(function(){_$dialogFilterType.dialog('open')});
+        $('#btnFilterType').click(function(){_$dialogFilterType.dialog('open');});
 
         // фильтр по сумме
         _$dialogFilterSum = $('#dialogFilterSum').dialog({title: "Выберите тип операции", autoOpen: false, width: "460px", height: "80px"});
@@ -219,7 +219,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             return false;
         });
-        $('#btnFilterSum').click(function(){_$dialogFilterSum.dialog('open')});
+        $('#btnFilterSum').click(function(){_$dialogFilterSum.dialog('open');});
 
         // фильтр по категории
         // заполняем диалог ссылками на доступные категории
@@ -240,7 +240,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             return false;
         });
-        $('#btnFilterCategory').click(function(){_$dialogFilterCategory.dialog('open')});
+        $('#btnFilterCategory').click(function(){_$dialogFilterCategory.dialog('open');});
 
         // фильтр по счёту
         _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
@@ -252,7 +252,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             return false;
         });
-        $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open')});
+        $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open');});
     }
 
     function _printFilters(){
