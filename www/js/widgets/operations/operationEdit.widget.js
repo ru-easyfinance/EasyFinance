@@ -210,31 +210,24 @@ easyFinance.widgets.operationEdit = function(){
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields").hide();
-            if (_selectedType == "1")
-                    $.post('/category/cattypechange/',{
-                        type : 1
-                    },function(data){
-                        $("#op_category").html(data);
-                        if (_newcat) {
-                            $('#op_category').val(_newcat);
-                            $.sexyCombo.changeOptions("#op_category", _newcat);
-                        } else {
-                            $.sexyCombo.changeOptions("#op_category");
-                        }
-                    },'json');
-            if (_selectedType == "0")
-                $.post('/category/cattypechange/',{
-                        type : -1
-                    },function(data){
-                        $("#op_category").html(data);
-                        if (_newcat) {
-                            $('#op_category').val(_newcat);
-                            $.sexyCombo.changeOptions("#op_category", _newcat);
-                        } else {
-                            $.sexyCombo.changeOptions("#op_category");
-                        }
-                    },'json');
-                //toggleVisibleCategory($('#op_category'),-1);//отображает в списке категорий для добавления операции доходные
+
+            // скрываем недоступные для выбора категории
+            // для доходных операций скрываем расходные категории,
+            // для расходных операций скрываем доходноые категории
+            var typ = (_selectedType == "0") ? -1 : +1;
+
+            $.post('/category/cattypechange/',{
+                type : typ
+            },function(data){
+                $("#op_category").html(data);
+                if (_newcat) {
+                    $('#op_category').val(_newcat);
+                    $.sexyCombo.changeOptions("#op_category", _newcat);
+                } else {
+                    $.sexyCombo.changeOptions("#op_category");
+                }
+            },'json');
+
         //Перевод со счёта
         } else if (_selectedType == "2") {
             $("#op_category_fields,#op_target_fields").hide();
