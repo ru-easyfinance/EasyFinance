@@ -109,9 +109,7 @@ easyFinance.widgets.operationEdit = function(){
             }
         });
 
-        // @todo
         // Tab & Shift+Tab для секси комбо
-        /*
         var next = {op_type : "#op_category", op_account : "#op_type", op_category : '#op_date'}
         var prev = {op_type : "#op_account", op_account : "#op_category", op_category : '#op_type'}
 
@@ -135,8 +133,7 @@ easyFinance.widgets.operationEdit = function(){
                     }
                 }
             }
-        })
-        */
+        });
         
         $(".op_addoperation").hide();
 
