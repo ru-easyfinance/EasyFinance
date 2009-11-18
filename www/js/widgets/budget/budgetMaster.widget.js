@@ -209,25 +209,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#step1 input#year').val(str.match(/[0-9]{0,4}/)[0]);
     });
 
-    /**
-     * Ссумирование подкатегорий
-     */
-    $('#master tr input').live('blur',function(){
-        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
-    })
-    $('#master .amount input').live('blur',function(){
-        var profit = globalSum('step2')
-        var drain = globalSum('step3')
-        $('#master .waste b').text(formatCurrency(drain))
-        $('#master .income b').text(formatCurrency(profit))
-        if (drain - profit > 0){
-            $('#master .rest b').css('color','#EB3C34')
-        }else{
-            $('#master .rest b').css('color','#309500')
-        }
-        $('#master .rest b').text(formatCurrency(profit - drain))
 
-    })
 
     /**
      * переходы по листам мастера
@@ -301,5 +283,27 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#master').dialog('open');
         $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
     })
+
+    /**
+     * Ссумирование подкатегорий
+     */
+    $('#master').live('click',function(){fullSum(0)})
+//    $('#master tr input').live('blur',function(){
+//        alert('123')
+//        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
+//    })
+//    $('#master .amount input').live('blur',function(){
+//
+//        var profit = globalSum('step2')
+//        var drain = globalSum('step3')
+//        $('#master .waste b').text(formatCurrency(drain))
+//        $('#master .income b').text(formatCurrency(profit))
+//        if (drain - profit > 0){
+//            $('#master .rest b').css('color','#EB3C34')
+//        }else{
+//            $('#master .rest b').css('color','#309500')
+//        }
+//        $('#master .rest b').text(formatCurrency(profit - drain))
+//    })
     return {};
 }

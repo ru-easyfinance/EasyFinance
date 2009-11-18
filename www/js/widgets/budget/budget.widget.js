@@ -323,7 +323,6 @@ easyFinance.widgets.budget = function(data){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-/*
     $('#budget .list tr[parent]').live('dblclick',function(){
         var parent = $(this).attr('parent');
         var id = $(this).attr('id');
@@ -335,7 +334,6 @@ easyFinance.widgets.budget = function(data){
             $(this).find('.w2 span').hide();
         }
     })
-*/
     $('#budget .list tr input').live('change',function(){
         var id = $(this).closest('tr').attr('id');
         var type = $(this).closest('tr').attr('type');
