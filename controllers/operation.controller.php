@@ -198,12 +198,69 @@ class Operation_Controller extends Template_Controller
      */
     function listOperations($args)
     {
-        $dateFrom = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
-        $dateTo = formatRussianDate2MysqlDate(@$_GET['dateTo']);
-        $category = (int)@$_GET['category'];
-        $account     = (int)@$_GET['account'];
-        $array = array();
-        $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account);
+        /**
+         * Дата начала
+         * @var DATETIME Mysql
+         */
+        $dateFrom   = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
+
+        /**
+         * Дата окончания
+         * @var DATETIME Mysql
+         */
+        $dateTo     = formatRussianDate2MysqlDate(@$_GET['dateTo']);
+
+        /**
+         * Категория
+         * @var int
+         */
+        $category   = (int)@$_GET['category'];
+
+        /**
+         * Счёт
+         * @var int
+         */
+        $account    = (int)@$_GET['account'];
+
+        /**
+         * Тип операции
+         * @var int
+         * @example
+         *  0 - Доход
+         *  1 - Расход
+         *  2 - Перевод
+         *  4 - Фин.Цель //именно 4
+         */
+        $type = null;
+        if (@$_GET['type']== '') {
+            $type = -1;
+        } else {
+            $type = @$_GET['type'];
+        }
+
+        /**
+         * Показывать операции на сумму не меньше ..
+         * @var float
+         */
+        $sumFrom = null;
+        if (@$_GET['sumFrom'] != '') {
+            $sumFrom = (float)@$_GET['sumFrom'];
+        }
+        
+        /**
+         * Показывать операции на сумму не больше ..
+         * @var float
+         */
+        $sumTo = null;
+
+        if (@$_GET['sumTo'] != '') {
+            $sumTo = (float)@$_GET['sumTo'];
+        }
+
+        $array      = array();
+
+        $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo);
+
         //@TODO Похоже, что тут надо что-то дописать в массиве
         foreach ($list as $val) {
             $array[$val['id']] = $val;

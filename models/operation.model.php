@@ -415,10 +415,14 @@ class Operation_Model {
      * @param date $dateTo
      * @param int $currentCategory
      * @param int $currentAccount
+     * @param int $type
+     * @param float $sumFrom
+     * @param float $sumTo
      * @return array mixed
      */
-    function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount)
+    function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount, $type, $sumFrom, $sumTo)
     {
+        // Подготавливаем фильтр по родительским категориям
         $category = Core::getInstance()->user->getUserCategory();
         $cat_in = '';
         foreach ($category as $var) {
@@ -428,7 +432,8 @@ class Operation_Model {
             }
         }
         // imp_id по слухам собрались убирать. тогда понадобится другое поле под конвертацию
-        // это операции со счёта
+
+        // это операции со счётами
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
         " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
         " FROM operation o ".
@@ -438,11 +443,28 @@ class Operation_Model {
             }
             $sql .= " AND (`date` BETWEEN '{$dateFrom}' AND '{$dateTo}') ";
             if (!empty($currentCategory)) {
-                if ($cat[$currentCategory]['cat_parent'] == 0) {
-                    $sql .= " AND (o.cat_id IN ({$cat_in})) ";
+                if ($category[$currentCategory]['cat_parent'] == 0) {
+                    $sql .= " AND o.cat_id IN ({$cat_in}) ";
                 } else {
-                    $sql .= " AND (o.cat_id = '{$currentCategory}') ";
+                    $sql .= " AND o.cat_id = '{$currentCategory}' ";
                 }
+            }
+            if ($type >= 0) {
+                if ($type == 0) { //Доход
+                    $sql .= " AND o.drain = 0 AND o.transfer = 0 ";
+                } elseif ($type == 1) { // Расход
+                    $sql .= " AND o.drain = 1 AND o.transfer = 0 ";
+                } elseif ($type == 2) { // Перевод со счёт на счёт
+                    $sql .= " AND o.transfer > 0 ";
+                } elseif ($type == 4) { // Перевод на финансовую цель
+                    $sql .= " AND 0 = 1"; // Не выбираем эти операции
+                }
+            }
+            if (!is_null($sumFrom)) {
+                $sql .= " AND o.money >= " . $sumFrom;
+            }
+            if (!is_null($sumTo)) {
+                $sql .= " AND o.money <= " . $sumTo;
             }
         //это переводы на фин цель
         $sql .= " UNION ".
@@ -456,27 +478,22 @@ class Operation_Model {
                 $sql .= " AND t.bill_id = '{$currentAccount}' ";
             }
             if (!empty($currentCategory)) {
-                if ($cat[$currentCategory]['cat_parent'] == 0) {
-                    $sql .= " AND (tt.category_id IN ({$cat_in})) ";
-                } else {
-                    $sql .= " AND (tt.category_id = '{$currentCategory}') ";
+                $sql .= " AND 0 = 1"; // Не выбираем эти операции
+            }
+            if ($type >= 0) {
+                if ($type == 0) { //Доход
+                    $sql .= " AND 0 = 1"; // Не выбираем эти операции
+                } elseif ($type == 1) { // Расход
+                    $sql .= " AND 0 = 1"; // Не выбираем эти операции
+                } elseif ($type == 2) { // Перевод со счёт на счёт
+                    $sql .= " AND 0 = 1"; // Не выбираем эти операции
                 }
             }
-        $sql .= " UNION ".//это переводы на счёт
-        " SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
-        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
-        " FROM operation o ".
-        " WHERE o.user_id = " . Core::getInstance()->user->getId();
-            if((int)$currentAccount > 0) {
-                $sql .= " AND o.transfer = " . (int)$currentAccount;
+            if (!is_null($sumFrom)) {
+                $sql .= " AND t.money >= " . $sumFrom;
             }
-            $sql .= " AND (`date` BETWEEN '{$dateFrom}' AND '{$dateTo}') ";
-            if (!empty($currentCategory)) {
-                if ($cat[$currentCategory]['cat_parent'] == 0) {
-                    $sql .= " AND (o.cat_id IN ({$cat_in})) ";
-                } else {
-                    $sql .= " AND (o.cat_id = '{$currentCategory}') ";
-                }
+            if (!is_null($sumTo)) {
+                $sql .= " AND t.money <= " . $sumTo;
             }
         $sql .= " ORDER BY dnat DESC, id ";
 
