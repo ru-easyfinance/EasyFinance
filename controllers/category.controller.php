@@ -121,8 +121,9 @@ class Category_Controller extends Template_Controller
         return die(json_encode($this->model->getCategory($start, $finish)));
     }
 
-    /*
+    /**
      * Возвращает html-строку для категорий. хак вместо show/hide
+     * @deprecated
      */
     function cattypechange($args){
         $type=(int)$_POST['type'];

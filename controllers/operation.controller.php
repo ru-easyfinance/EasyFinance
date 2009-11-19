@@ -261,9 +261,13 @@ class Operation_Controller extends Template_Controller
 
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo);
 
+        $accounts = Core::getInstance()->user->getUserAccounts();
+
         //@TODO Похоже, что тут надо что-то дописать в массиве
         foreach ($list as $val) {
-            $array[$val['id']] = $val;
+            if (!is_null($val['account_name'])) {
+               $array[$val['id']] = $val;
+            }
         }
         die(json_encode($array));
     }
