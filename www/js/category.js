@@ -132,10 +132,18 @@ $(document).ready(function() {
      * Проверяет валидность заполненных данных
      */
     function cat_checkForm() {
-        if ($('#namecat').val() == '') {
+        var name = $('#namecat').val();
+        if (name == '') {
             $.jGrowl("Необходимо указать название категории", {theme: 'red', life: 5000});
             return false;
         }
+
+        if (name.indexOf('<') != -1 || name.indexOf('>') != -1) {
+            $.jGrowl("Название категории не должно содержать символов < и >!", {theme: 'red', life: 5000});
+            return false;
+        }
+
+
         return true;
     }
 
