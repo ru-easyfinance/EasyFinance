@@ -154,18 +154,29 @@ class Report_Model
 
         $arr = array();
         $coun = 0 ;
+        $count = 0;
         $mon = array ("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+        $short = array ("Янв", "Февр", "Март", "Апр", "Май", "Июнь", "Июль", "Авг", "Сент", "Окт", "Нояб", "Дек");
         $monc = array ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
         for ($coun=0; $coun<12; $coun++){
             $array[$coun]['lab'] = '';
-            $array[$coun]['was'] = '';
-            $array[$coun]['in'] = '';
+            $array[$coun]['was'] = 0;
+            $array[$coun]['in'] = 0;
         }
+
+        for ($coun=0; $coun<12; $coun++){
+            foreach ($result as $v){
+                if ( substr($v['datef'],5,2) == $monc[$coun] ) {
+                    $count++;
+                }
+            }
+        }
+
         for ($coun=0; $coun<12; $coun++){
             //$array[$coun]['lab'] = $mon[$coun];
             foreach ($result as $v){
                 if ( substr($v['datef'],5,2) == $monc[$coun] ) {
-                    $array[$coun]['lab'] = $mon[$coun];
+                    $array[$coun]['lab'] = ($count<=6) ? $mon[$coun] : $short[$coun];
                     $array[$coun]['was'] = $v['su'];
                     $array[$coun]['curs']= $v['cu'];
                 }
