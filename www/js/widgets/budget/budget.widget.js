@@ -183,7 +183,7 @@ easyFinance.widgets.budget = function(data){
                                         <div class="strip" style="width: '+dateprc+'%;"></div>\n\
                                     </div>\n\
                                 </td>\n\
-                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6"><a> </a></td>\n\
+                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6"><div><a title="Редактировать" class="edit"> </a><a title="Удалить" class="remove"> </a></div></td>\n\
                             </tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
@@ -275,7 +275,7 @@ easyFinance.widgets.budget = function(data){
         $(this).closest('tr').toggleClass('open').toggleClass('close')
     })
 
-    $('#budget .list.budget .child .w6 a').live('click',function(){
+    $('#budget .list.budget .child .w6 a.remove').live('click',function(){
         if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
             var id = $(this).closest('tr').attr('id')
             var type = $(this).closest('tr').attr('type')
@@ -285,7 +285,7 @@ easyFinance.widgets.budget = function(data){
             })
         }
     })
-    $('#budget .list.budget .nochild .w6 a').live('click',function(){
+    $('#budget .list.budget .nochild .w6 a.remove').live('click',function(){
         if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
             var id = $(this).closest('tr').attr('id')
             var type = $(this).closest('tr').attr('type')
@@ -296,6 +296,9 @@ easyFinance.widgets.budget = function(data){
         }
     })
 
+$('#budget .list.budget .w6 a.edit').live('click',function(){
+        $(this).closest('tr').click()
+    })
 
     $('#budget .list.budget #profit a').live('click',function(){
         $(this).closest('tr').toggleClass('open').toggleClass('close')

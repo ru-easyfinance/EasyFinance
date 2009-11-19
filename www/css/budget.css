@@ -9,17 +9,20 @@
 .budget#budget .list.budget{margin-top: 15px;}
 .budget#budget .list .list.head{background: url('/img/i/bg09.gif') repeat-x 0 0;}
 .budget#budget .list .list.body{overflow-y: auto; overflow-x: hidden; max-height: 300px;}
-.budget#budget .list .list table td{font-size: 11px; padding: 7px 0 5px 0;}
-.budget#budget .list .list table td.w1{padding-left: 11px; width: 178px; }
-.budget#budget .list .list table td.w2{width: 103px; text-align: right;}
+.budget#budget .list .list table tr{position: relative}
+.budget#budget .list .list table td{font-size: 11px; padding: 7px 0 5px 0;position: relative}
+.budget#budget .list .list table td.w1{padding-left: 11px; width: 170px; }
+.budget#budget .list .list table td.w2{width: 77px; text-align: right;}
 .budget#budget .list .list table td.w2 span{cursor: pointer}
 .budget#budget .list .list table td.w2 input{display: none;}
-.budget#budget .list .list table td.w3{width: 97px; text-align:center;}
-.budget#budget .list .list table td.w5{width: 97px; text-align:right;}
-.budget#budget .list .list table .parent td.w6 a{background:0}
-.budget#budget .list .list table .child td.w6, .budget#budget .list .list table .nochild td.w6{width: 15px; text-align: center; vertical-align: middle; padding: 10px}
-.budget#budget .list .list table .child td.w6 a, .budget#budget .list .list table .nochild td.w6 a{background:url('/img/i/icoDelete.gif') no-repeat 0px 0px;}
-
+.budget#budget .list .list table td.w3{width: 77px; text-align:center;}
+.budget#budget .list .list table td.w5{width: 77px; text-align:right;}
+.budget#budget .list .list table .parent td.w6 div a{background:0}
+.budget#budget .list .list table .child td.w6, .budget#budget .list .list table .nochild td.w6{ text-align: center;width: 80px;}
+.budget#budget .list .list table tr.child:hover td.w6 div, .budget#budget .list .list table tr.nochild:hover td.w6 div{background:url('/img/i/icons_control4.gif') no-repeat 0px 0px;}
+.budget#budget .list .list table tr.child:hover,.budget#budget .list .list table tr.nochild:hover{background-color: #E3FFDF}
+.budget#budget .list .list table td.w6 div{width: 80px; background: 0; height: 30px;margin-top:-8px}
+.budget#budget .list .list table td.w6 div a{height: 100%;padding-top: 3px;padding-bottom: 15px;}
 .budget#budget .list #profit a{padding-left:12px; color: #309500; font-weight: bold; font-size: 13px}
 .budget#budget .list #drain a{padding-left:12px; color: #eb3c34; font-weight: bold; font-size: 13px}
 
