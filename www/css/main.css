@@ -1377,7 +1377,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .creator { position: absolute; top: 32px; right: 5px; width: 210px; padding-bottom: 19px; font-size: 10px; line-height: 11px; color: #7f7f7f; text-align: right; background: url('/img/i/nota.gif') no-repeat 100% 100%; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
 #footer .addmessage { cursor: pointer; left: 0px;z-index:1000 }
-
+#footer .certificate { position: absolute; left: 700px; top: 10px; }
 
 #footer { position: relative; margin: 0 auto; width: 940px; height: 130px; font-size: 11px;  color: #000000; //zoom: 1; }
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
@@ -1396,7 +1396,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search input.inp{ display: block; width: 191px; //width: 173px; padding: 0 0 0 12px; margin-bottom: 1px; font-size: 11px; color: #a7a7a7; }
 #footer .search input.but{ display: block; position: absolute; top: 0; right: 5px; width: 17px; height: 19px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; background: url("../img/i/icons.gif"/*tpa=https://home-money.ru/preview/i/icons.gif*/) no-repeat 5px 3px; }
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
-#footer .creator { cursor: pointer; -moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:transparent url(../img/i/nota.gif) no-repeat scroll 100% 100%;color:#7F7F7F;font-size:10px;line-height:11px;padding-bottom:19px;position:absolute;right:5px;text-align:right;top:32px;width:210px; }
+#footer .creator { cursor: pointer; -moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:transparent url(../img/i/nota.gif) no-repeat scroll 100% 100%;color:#7F7F7F;font-size:10px;line-height:11px;padding-bottom:19px;position:absolute;right:5px;text-align:right;top:32px;width:140px; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
 div#dialog{ padding-left: 27px;background:0 ;}
 div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:absolute}
@@ -1415,7 +1415,7 @@ div.w_dialog .text{top:5px;width:250px; padding-right: 107px; font-size: 14px; l
 
 #p_index #header { height: 130px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
-#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 33px; width: 184px; //zoom: 1; }
+#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 13px; width: 134px; //zoom: 1; }
 
 span.tagMatches {
     margin-left: 10px;
