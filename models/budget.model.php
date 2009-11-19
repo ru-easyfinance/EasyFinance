@@ -136,6 +136,8 @@ class Budget_Model {
             $sql = "REPLACE INTO budget (`user_id`,`category`,`drain`,
                 `amount`,`date_start`,`date_end`,`dt_create`,`key`) VALUES " . $sql;
             $this->db->query($sql);
+            Core::getInstance()->user->initUserBudget();
+            Core::getInstance()->user->save();
             return array('result' => array('text' => ''));
         }
         return array(
@@ -158,6 +160,8 @@ class Budget_Model {
         $sql = "UPDATE budget SET amount = ? WHERE key= ?";
         $key = '' . Core::getInstance()->user->getId() . '-' . $id . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
         if (!@$this->db->query($sql, $value, $key)) {
+            Core::getInstance()->user->initUserBudget();
+            Core::getInstance()->user->save();
             return array(
                 'error' => array(
                     'text' => 'Ошибка при редактировании бюджета'
@@ -179,6 +183,8 @@ class Budget_Model {
         $sql = "DELETE FROM budget WHERE key = ?";
         $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
         if (!@$this->db->query($sql, $value, $key)) {
+            Core::getInstance()->user->initUserBudget();
+            Core::getInstance()->user->save();
             return array(
                 'error' => array(
                     'text' => 'Ошибка при удалении бюджета'
