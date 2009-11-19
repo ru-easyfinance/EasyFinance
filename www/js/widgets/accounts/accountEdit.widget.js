@@ -53,9 +53,14 @@ easyFinance.widgets.accountEdit = function(){
         // save button
         $('#btnAddAccount').click(function(){
             var str = $('#blockCreateAccounts #name').val();
-            var descr = $('#blockCreateAccounts #description').val();
+            var description = $('#blockCreateAccounts #description').val();
             var id =$('#blockCreateAccounts').find('table').attr('id');
             var l = 1;
+
+            if (str == ''){
+                $.jGrowl("Введите название счёта!", {theme: 'red', life: 5000});
+                return false;
+            }
 
             if (str.indexOf('<') != -1 || str.indexOf('>') != -1) {
                 $.jGrowl("Название счёта не должно содержать символов < и >!", {theme: 'red', life: 5000});
