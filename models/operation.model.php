@@ -187,16 +187,16 @@ class Operation_Model {
         return $this->db->query($sql, $this->user->getId());
     }*/
     /**
-	 * Регистрирует новую транзакцию
-	 * @param float  $money      Сумма транзакции
-	 * @param string $date       Дата транзакции в формате Y.m.d
-	 * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
-	 * @param string $comment    Комментарий транзакции
-	 * @param int    $account_id Ид счета
-     * 
-	 * @return int $id Если
-	 */
-	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
+     * Регистрирует новую транзакцию
+     * @param float  $money      Сумма транзакции
+     * @param string $date       Дата транзакции в формате Y.m.d
+     * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
+     * @param string $comment    Комментарий транзакции
+     * @param int    $account_id Ид счета
+     *
+     * @return int $id Если
+     */
+    function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
     {
         // Если есть теги, то добавляем и их тоже
         if ($tags) {
@@ -217,12 +217,13 @@ class Operation_Model {
             $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $comment);
             $last_id = mysql_insert_id();
         }
+        
         // Обновляем данные о счетах пользователя
         Core::getInstance()->user->initUserAccounts();
         //$this->selectMoney($user_id);
         $this->save();
         return $last_id;
-	}
+    }
 
     /**
      * Добавляет трансфер с одного на другой счёт
@@ -235,8 +236,7 @@ class Operation_Model {
      * @param $tags         array     Тег
      * @return bool
      */
-
-        function editTransfer($id=0, $money = 0, $date = '', /*$category = 0, $drain = 0,*/ $account = 0, $toAccount=0, $comment = '', $tags = null){
+    function editTransfer($id=0, $money = 0, $date = '', /*$category = 0, $drain = 0,*/ $account = 0, $toAccount=0, $comment = '', $tags = null){
         if ($tags) {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
 
@@ -255,10 +255,21 @@ class Operation_Model {
                 WHERE user_id = ? AND id = ?";
             $this->db->query($sql, $money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);
         }
-        }
+    }
 
-	function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
-	{
+    /**
+     *
+     * @param <type> $money
+     * @param <type> $convert
+     * @param <type> $date
+     * @param <type> $from_account
+     * @param <type> $to_account
+     * @param <type> $comment
+     * @param <type> $tags
+     * @return <type>
+     */
+    function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
+    {
 
         if ($convert != 0)
         {
@@ -303,21 +314,21 @@ class Operation_Model {
         $this->user->initUserAccounts();
         $this->user->save();
         return $last_id;
-	}
+    }
 
     /**
-	 * Редактирует транзакцию
+     * Редактирует транзакцию
      * @param int    $id         Ид транзакции
-	 * @param float  $money      Сумма транзакции
-	 * @param string $date       Дата транзакции в формате Y.m.d
-	 * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
-	 * @param string $comment    Комментарий транзакции
-	 * @param int    $account_id Ид счета
+     * @param float  $money      Сумма транзакции
+     * @param string $date       Дата транзакции в формате Y.m.d
+     * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
+     * @param string $comment    Комментарий транзакции
+     * @param int    $account_id Ид счета
      *
-	 * @return bool true - Регистрация прошла успешно
-	 */
-	function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
-	{
+     * @return bool true - Регистрация прошла успешно
+     */
+    function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
+    {
         // Если есть теги, то добавляем и их тоже
         if ($tags) {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
@@ -342,7 +353,7 @@ class Operation_Model {
         //$this->selectMoney($user_id);
         $this->save();
         return '[]';
-	}
+    }
 
     /**
      * Удаляет указанную операцию
@@ -357,6 +368,12 @@ class Operation_Model {
             return false;
         }
     }
+
+    /**
+     *
+     * @param <type> $id
+     * @return <type>
+     */
     function deleteTargetOperation($id=0) {
         //$que = $this->db->query("SELECT target_id FRON target_bill WHERE id=?", $id);
         $this->db->query("DELETE FROM target_bill WHERE id=? AND user_id=?", $id, Core::getInstance()->user->getId());
@@ -373,41 +390,41 @@ class Operation_Model {
      * @param string $period Период
      * @return 
      */
-	function selectMoney($id, $period = '')
-	{
-		if (!empty($period)) {
-			if ($period == "today") {
-				$order = "AND `date` = '".date("Y.m.d")."'";
-			}
-			if (html($_GET['order']) == "month") {
-				$order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
-			}
-			if (html($_GET['order']) == "week") {
-				$begin_week = (date('d')+1) - date('w');
-				$order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
-			}
-		}else{
-			$limit = "LIMIT 0,30";
-		}
+    function selectMoney($id, $period = '')
+    {
+        if (!empty($period)) {
+            if ($period == "today") {
+                    $order = "AND `date` = '".date("Y.m.d")."'";
+            }
+            if (html($_GET['order']) == "month") {
+                    $order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
+            }
+            if (html($_GET['order']) == "week") {
+                    $begin_week = (date('d')+1) - date('w');
+                    $order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
+            }
+        }else{
+            $limit = "LIMIT 0,30";
+        }
         $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
-                       m.`cat_id`, m.`bill_id`, c.`cat_name`, b.`bill_name`, m.`drain`, m.`comment`,
-                       b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
-                       bt.`bill_name` as `cat_transfer`
-                    FROM `money` m
-                    LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
-                    LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
-                    LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer`
-                    LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
-                        WHERE m.`bill_id` = '".$id."'
-                               AND m.`user_id` = '".$this->user_id."'
-                               ".$order."
-                        ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
+           m.`cat_id`, m.`bill_id`, c.`cat_name`, b.`bill_name`, m.`drain`, m.`comment`,
+           b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
+           bt.`bill_name` as `cat_transfer`
+        FROM `money` m
+        LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
+        LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
+        LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer`
+        LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
+            WHERE m.`bill_id` = '".$id."'
+                   AND m.`user_id` = '".$this->user_id."'
+                   ".$order."
+            ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
 
         $this->user_money = $row;
         $this->account_money = $id;
         $this->getTotalSum($id);
         $this->save();
-	}
+    }
 
     /**
      * Получение списка транзакций
@@ -463,10 +480,10 @@ class Operation_Model {
                 }
             }
             if (!is_null($sumFrom)) {
-                $sql .= " AND o.money >= " . $sumFrom;
+                $sql .= " AND ABS(o.money) >= " . $sumFrom;
             }
             if (!is_null($sumTo)) {
-                $sql .= " AND o.money <= " . $sumTo;
+                $sql .= " AND ABS(o.money) <= " . $sumTo;
             }
         //это переводы на фин цель
         $sql .= " UNION ".
@@ -480,7 +497,7 @@ class Operation_Model {
                 $sql .= " AND t.bill_id = '{$currentAccount}' ";
             }
             if (!empty($currentCategory)) {
-                $sql .= " AND 0 = 1"; // Не выбираем эти операции
+                $sql .= " AND 0 = 1"; // Не выбираем эти операции, т.к. у финцелей свои категории
             }
             if ($type >= 0) {
                 if ($type == 0) { //Доход
@@ -492,10 +509,10 @@ class Operation_Model {
                 }
             }
             if (!is_null($sumFrom)) {
-                $sql .= " AND t.money >= " . $sumFrom;
+                $sql .= " AND ABS(t.money) >= " . $sumFrom;
             }
             if (!is_null($sumTo)) {
-                $sql .= " AND t.money <= " . $sumTo;
+                $sql .= " AND ABS(t.money) <= " . $sumTo;
             }
         $sql .= " ORDER BY dnat DESC, id ";
 
@@ -536,6 +553,7 @@ class Operation_Model {
         } else {
             $dr = '';
         }
+
         // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
         $tr = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND transfer = 0 AND tr_id is NULL";
         if (is_array($account_id) && count($account_id) > 0) {
@@ -551,7 +569,7 @@ class Operation_Model {
             trigger_error(E_USER_NOTICE, 'Ошибка получения всей суммы пользователя');
             return 0;
         };
-        $sql = "SELECT SUM(-money) as sum FROM operation WHERE user_id = ? AND transfer != 0 AND account_id=? ";
+        $sql = "SELECT SUM(-money) as sum FROM operation WHERE user_id = ? AND transfer != 0 AND account_id=?";
         $a = $this->db->selectCell($sql, $this->user->getId(), $account_id);
         $this->total_sum+=$a;
         $sql = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND transfer = ? AND imp_id is null";
