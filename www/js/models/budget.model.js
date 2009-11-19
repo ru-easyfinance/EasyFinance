@@ -153,14 +153,14 @@ easyFinance.models.budget = function()
                     start: '01.'+month+'.'+date.getFullYear()
                 },
                 function(data){
-                    if (!data['errors'] || data.errors == []){
+                    if (!data['error'] || data.error == []){
                         $.jGrowl("Бюджет сохранён", {theme: 'green'});
                         if(typeof callback == "function"){callback(date);}
                     }else{
                         var err = '<ul>';
-                        for(var key in data.errors)
+                        for(var key in data.error)
                         {
-                            err += '<li>' + data.errors[key] + '</li>';
+                            err += '<li>' + data.error[key] + '</li>';
                         }
                         $.jGrowl(err+'</ul>', {theme: 'red'});
                     }
@@ -185,7 +185,7 @@ easyFinance.models.budget = function()
                 },
                 function(data)
                 {
-                    if (!data['errors'] || data.errors == []){
+                    if (!data['error'] || data.error == []){
                         $.jGrowl("Бюджет удалён", {theme: 'green'});
                         if (type =='p'){
                             _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount']
@@ -199,9 +199,9 @@ easyFinance.models.budget = function()
                         if(typeof callback == "function"){callback();}
                     }else{
                         var err = '<ul>';
-                        for(var key in data.errors)
+                        for(var key in data.error)
                         {
-                            err += '<li>' + data.errors[key] + '</li>';
+                            err += '<li>' + data.error[key] + '</li>';
                         }
                         $.jGrowl(err+'</ul>', {theme: 'red'});
                     }
@@ -232,7 +232,7 @@ easyFinance.models.budget = function()
                     start: '01.'+month+'.'+date.getFullYear()
                 },
                 function(data){
-                    if (!data['errors'] || data.errors == []){
+                    if (!data['error'] || data.error == []){
                         $.jGrowl("Бюджет изменён", {theme: 'green'});
 
                         if (type =='p'){
@@ -245,9 +245,9 @@ easyFinance.models.budget = function()
                         if(typeof callback == "function"){callback();}
                     }else{
                         var err = '<ul>';
-                        for(var key in data.errors)
+                        for(var key in data.error)
                         {
-                            err += '<li>' + data.errors[key] + '</li>';
+                            err += '<li>' + data.error[key] + '</li>';
                         }
                         $.jGrowl(err+'</ul>', {theme: 'red'});
                     }
