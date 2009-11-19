@@ -1410,7 +1410,7 @@ div.w_dialog div.w_d_foot{width:400px; height:30px;position:relative;  backgroun
 
 div.w_dialog .close{ cursor: pointer; top:5px; right:-260px; position: relative; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
 
-div.w_dialog .text{top:5px;width:250px; padding-right: 107px; font-size: 14px; line-height:17px;}
+div.w_dialog .text{top:5px; width:250px; max-width: 250px; padding-right: 107px; font-size: 14px; line-height:17px;}
 
 
 #p_index #header { height: 130px; }
