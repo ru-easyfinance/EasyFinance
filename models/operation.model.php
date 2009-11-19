@@ -439,6 +439,9 @@ class Operation_Model {
      */
     function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount, $type, $sumFrom, $sumTo)
     {
+        if ($sumTo == 0) {
+            $sumTo = null;
+        }
         // Подготавливаем фильтр по родительским категориям
         $category = Core::getInstance()->user->getUserCategory();
         $cat_in = '';
