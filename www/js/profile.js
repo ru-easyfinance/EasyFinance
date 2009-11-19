@@ -28,7 +28,7 @@ function user_info_save()
         if ($('#help:checked').length == 1){
             $.cookie('tooltip', '1', {expire: 100, path : '/', domein: false, secure : '1'});
         }else{
-            $.cookie('tooltip', null);
+            $.cookie('tooltip', '0', {expire: 100, path : '/', domein: false, secure : '1'});
         }
         $.post('/profile/save_main_settings/', {
             //help: ($('#help:checked').length == 1)? 1 : 0,
@@ -191,7 +191,7 @@ $(document).ready(function(){
 });
 $(document).ready(function() {
     strokuk = document.cookie.toString();
-    if (!$.cookie('tooltip')){
+    if ($.cookie('tooltip') == '0'){
         $('#help').removeAttr('checked');
     }
     if (strokuk.indexOf('guide=uyjsdhf') == -1){

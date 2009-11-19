@@ -357,7 +357,7 @@ $(document).ready(function() {
         /*----------------------------------------------------------*/
     }
 
-    if($.cookie('tooltip')){
+    if($.cookie('tooltip') != '0'){
         initToltips('mystyle')
     }
 });
