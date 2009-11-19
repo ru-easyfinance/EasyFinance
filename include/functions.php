@@ -214,6 +214,44 @@ function make_float($var)
     return (float)str_replace(',','.',$var);
 }
 
+/**
+ * Возвращает частоиспользуемые категории
+ * @param int $count Максимальный размер возвращаемого списка
+ * @param int $barier количество совершённых операций по отдельной категории, необходимое для попадания в Частые Категории
+ */
+function get_recent_category ($count, $barier)
+{
+    $array  = array();
+    $retval = array();
+
+    if ((int)$barier == 0) {
+        $barier = 3; 
+    }
+
+    if ((int)$count == 0) {
+        $count = 10;
+    }
+
+    foreach (Core::getInstance()->user->getUserCategory() as $val) {
+        if ($val['howoften'] >= $barier) {
+            $array[$val['howoften']][] = $val['cat_id'];
+        }
+    }
+    
+    krsort($array);
+    
+    foreach ($array as $val) {
+        foreach ($val as $v) {
+            if ((int)count($retval) <= $count) {
+                $retval[] = $v;
+            } else {
+                //return $retval;
+            }
+        }
+    }
+    return $retval;
+}
+
 function get_tree_select ($selected = 0 )
 {
     $cat = Core::getInstance()->user->getUserCategory();

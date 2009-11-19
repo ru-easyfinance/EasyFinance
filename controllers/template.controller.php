@@ -59,6 +59,7 @@ class Template_Controller {
             Core::getInstance()->tpl->assign('url_root', URL_ROOT);
             return false;
         }
+
         Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
         // Подготавливаем счета
         $accounts = array();
@@ -118,6 +119,7 @@ class Template_Controller {
         try {
             $category = new Category_Model();
             $cats = $category->getCategory();
+            $cats['recent'] = get_recent_category(10);
         } catch ( Exception $e ) {
             $cats = null;
         }
