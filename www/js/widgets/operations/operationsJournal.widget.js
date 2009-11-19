@@ -180,6 +180,7 @@ easyFinance.widgets.operationsJournal = function(){
             _sumTo = '';
             _category = '';
             _account = '';
+            _accountName = '';
             loadJournal();
         });
 
