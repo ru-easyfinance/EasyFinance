@@ -309,6 +309,18 @@ easyFinance.widgets.operationEdit = function(){
     function _validateForm() {
         $error = '';
 
+        var comment = $('#op_comment').val();
+        if (comment.indexOf('<') != -1 || comment.indexOf('>') != -1) {
+            $.jGrowl("Комментарий не должен содержать символов < и >!", {theme: 'red', life: 5000});
+            return false;
+        }
+
+        var tags = $('#op_tags').val();
+        if (tags.indexOf('<') != -1 || tags.indexOf('>') != -1) {
+            $.jGrowl("Тэги не должны содержать символов < и >!", {theme: 'red', life: 5000});
+            return false;
+        }
+
         if (_selectedAccount == ''){
             $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
             return false;
