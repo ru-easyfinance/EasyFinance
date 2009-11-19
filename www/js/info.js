@@ -23,10 +23,12 @@ $.post(
     '/info/get_data/',
     {},
     function(data){
-        var titles,name,value,pointer,xml,chartSample_1;
+        var titles,gauges,name,value,pointer,xml,chartSample_1;
         for (var i=0;i<5;i++)
         {
             titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
+            gauges = ['gaugeMain.gif','gaugeMoney.gif','gaugeBudget.gif','gaugeCredits.gif','gaugeExpenses.gif'];
+
             if (isNaN(data[1][i]['color']))
                 data[1][i]['color'] = 1;
             //alert(data[1][i]['title'])
@@ -55,7 +57,7 @@ $.post(
             var title = titles[i]; // (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
             $('#flashTitle_'+i).text(title);
             var size = (i==0) ? "107" : "70";
-            var flashvars = {title: "", value: data[0][i], bgimage: "/img/i/gauge" + size + ".gif"};
+            var flashvars = {title: "", value: data[0][i], bgimage: "/img/i/" + gauges[i]};
             var params = {wmode: "transparent"};
             var attributes = {id: "gauge"+i};
             swfobject.embedSWF("/swf/efGauge.swf", "flash_"+i, size, size, "9.0.0", false, flashvars, params, attributes);

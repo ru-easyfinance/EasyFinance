@@ -180,7 +180,7 @@ $(document).ready(function() {
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
         // init main finance gauge
-        var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gauge107.gif"};
+        var flashvars = {title: "", value: res['flash']['value'], bgimage: "/img/i/gaugeMain.gif"};
         var params = {wmode: "transparent"};
         var attributes = {id: "gaugeMain"};
         swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
