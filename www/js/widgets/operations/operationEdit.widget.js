@@ -7,11 +7,11 @@ easyFinance.widgets.operationEdit = function(){
     // private constants
 
     // private variables
-    var _model = null;
+    var _modelAccounts = null;
+    var _modelCategory = null;
 
     var _$node = null;
 
-    var _cat = 0; // current category
     var _oldSum = 0; // нужно для редактирования
 
     var _selectedAccount = '';
@@ -199,8 +199,8 @@ easyFinance.widgets.operationEdit = function(){
         // запоминаем выбранную ранее категорию,
         // чтобы при переключении типа операции
         // заново её выбрать, по возможности
-        var _newcat = _cat;
-
+        var _newcat = _selectedCategory;
+debugger;
         // Расход или Доход
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
@@ -211,6 +211,7 @@ easyFinance.widgets.operationEdit = function(){
             // для расходных операций скрываем доходноые категории
             var typ = (_selectedType == "0") ? -1 : +1;
 
+            // генерируем список категорий
             $.post('/category/cattypechange/',{
                 type : typ
             },function(data){
@@ -331,6 +332,11 @@ easyFinance.widgets.operationEdit = function(){
             return false;
         }
 
+        if (_modelCategory.isParentCategory(_selectedCategory)){
+            $.jGrowl('Вы выбрали родительскую категорию. Пожалуйста, выберите подкатегорию.', {theme: 'red', stick: true});
+            return false;
+        }
+
         if (_selectedCategory == ''){
             $.jGrowl('Вы ввели неверное значение в поле "категория"!', {theme: 'red', stick: true});
             return false;
@@ -348,8 +354,8 @@ easyFinance.widgets.operationEdit = function(){
 
         // см. тикет #306
         //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-        var tb = tofloat(_model.getAccountBalanceTotal($("#op_account option:selected").val()));
-        var ab = tofloat(_model.getAccountBalanceAvailable($("#op_account option:selected").val()));
+        var tb = tofloat(_modelAccounts.getAccountBalanceTotal($("#op_account option:selected").val()));
+        var ab = tofloat(_modelAccounts.getAccountBalanceAvailable($("#op_account option:selected").val()));
 
         // @ticket 401
         // при редактировании расходных операций
@@ -439,15 +445,16 @@ easyFinance.widgets.operationEdit = function(){
     // public functions
     /**
      * @desc init widget
-     * @usage init(nodeSelector, model)
+     * @usage init(nodeSelector, accountsModel, categoryModel)
      */
-    function init(nodeSelector, model) {
-        if (!model)
+    function init(nodeSelector, modelAccounts, modelCategory) {
+        if (!modelAccounts || !modelCategory)
             return null;
 
         _$node = $(nodeSelector);
 
-        _model = model;
+        _modelAccounts = modelAccounts;
+        _modelCategory = modelCategory;
 
         // load tags cloud and setup tags dialog
         _initTags();
@@ -461,14 +468,15 @@ easyFinance.widgets.operationEdit = function(){
     function setCategory(cat){
         var $combo, strOption;
         
-        _cat = cat;
-        
+        _selectedCategory = cat;
+
         $combo = $('#op_category');
-        $combo.val(_cat);
+        $combo.val(_selectedCategory);
+        $combo.change();
         
         strOption = $combo.find(":selected").text();
 
-        $.sexyCombo.changeOptions("#op_category", _cat);
+        $.sexyCombo.changeOptions("#op_category", _selectedCategory);
         //$.sexyCombo.selectOption("#op_category", strOption);
     }
 
@@ -477,10 +485,62 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_amount').val(_oldSum);
     }
 
+    /**
+     * Функция заполняет форму данными
+     * @param data данные для заполнения
+     */
+    function fillForm(data) {
+        //clearForm();
+
+        $('#op_id').val(data.id);
+        $('#op_account').val(data.account_id);
+        $.sexyCombo.changeOptions("#op_account", data.account_id);
+
+        setCategory(data.cat_id);
+        setSum(Math.abs(data.money));
+
+        var typ = '0';
+        if (data.tr_id=='1') {
+            // transfer
+            typ = '2';
+        } else {
+            if (data.virt=='1') {
+                typ = '4';
+            } else {
+                if (data.drain=='1') {
+                    typ = '0';
+                } else {
+                    typ = '1';
+                }
+            }
+        }
+        
+        _selectedType = typ;
+        $('#op_type').val(typ);
+        $('#op_type').change();
+        $.sexyCombo.changeOptions("#op_type", typ);
+        debugger;
+        _changeOperationType();
+
+        //////////////////////////
+        //$('#target').val(data.);
+        //$('#close').val(data.);
+        $('#op_AccountForTransfer').val(data.transfer);
+        $('#op_date').val(data.date);
+        if (data.tags)
+            $('#op_tags').val(data.tags);
+        else
+            $('#op_tags').val('');
+        $('#op_comment').val(data.comment);
+
+        $(document).scrollTop(300);
+    }
+
     // reveal some private things by assigning public pointers
     return {
         init: init,
         setCategory: setCategory,
-        setSum: setSum
+        setSum: setSum,
+        fillForm: fillForm
     };
 }(); // execute anonymous function to immediatly return object

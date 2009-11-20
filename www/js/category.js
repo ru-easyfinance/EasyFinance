@@ -7,7 +7,7 @@ $(document).ready(function() {
     $('.block2 .inside').css({width: '679px'});
     $('.block2 .inside .form_block').css({width: '353px'});
 
-    easyFinance.models.category.load(res.category, function(data) {
+    easyFinance.models.category.load(res.category, function(model) {
         // Обновляем список системных категорий
         drawSystemCategoriesCombo();
 

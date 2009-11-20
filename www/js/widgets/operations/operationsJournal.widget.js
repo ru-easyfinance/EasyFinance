@@ -140,7 +140,7 @@ easyFinance.widgets.operationsJournal = function(){
             $("#op_addoperation_but").addClass('act');
             $(".op_addoperation").show();
 
-            fillForm(_journal[$(this).closest('tr').attr('value')]);
+            easyFinance.widgets.operationEdit.fillForm(_journal[$(this).closest('tr').attr('value')]);
             if ($('#op_comment').val() == "Начальный остаток"){
                 $('#op_amount').attr('disabled', 'disabled');
                 $('#op_comment').attr('disabled', 'disabled');
@@ -157,7 +157,7 @@ easyFinance.widgets.operationsJournal = function(){
             $("#op_addoperation_but").addClass('act');
             $(".op_addoperation").show();
             
-            fillForm(_journal[$(this).closest('tr').attr('value')]);
+            easyFinance.widgets.operationEdit.fillForm(_journal[$(this).closest('tr').attr('value')]);
             $(this).closest('form').attr('action','/operation/add/');
             $('#date').datepicker('setDate', new Date() );
         }

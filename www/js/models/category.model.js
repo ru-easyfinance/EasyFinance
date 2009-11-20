@@ -58,6 +58,8 @@ easyFinance.models.category = function(){
      * @usage load(callback)
      */
     function load(param1, param2){
+        var _this = this;
+        
         if (typeof param1 == 'object') {
             _categories = param1;
             _htmlDecodeAll();
@@ -69,7 +71,7 @@ easyFinance.models.category = function(){
                 _categories = data;
                 _htmlDecodeAll();
                 if (typeof param1 == 'function')
-                    param1(_categories);
+                    param1(_this);
             }, 'json');
         }
     }

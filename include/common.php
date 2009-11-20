@@ -81,6 +81,7 @@ else
 }
 
 $tpl->append('js', 'models/accounts.model.js');
+$tpl->append('js', 'models/category.model.js');
 $tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');
 $tpl->append('js', 'widgets/operations/operationEdit.widget.js');
 

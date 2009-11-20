@@ -186,7 +186,10 @@ $(document).ready(function() {
         swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
         //
         // инициализируем виджет добавления и редактирования операции
-        easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts);
+
+        easyFinance.models.category.load(function(model) {
+            easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
+        });
         
         ////////////////////////////////////add to calendar
         
