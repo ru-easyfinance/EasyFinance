@@ -254,17 +254,21 @@ class Category_Model {
         // Проверяем тип родительской и дочерней категории
         if ($parent > 0) {
             if ( $cat[$parent]['type'] == -1 && $type == 1 ) {
-                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
-                return false;
+                return array('error' => array(
+                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+                ));
             } elseif ( $cat[$parent]['type'] == -1 && $type == 0 ) {
-                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
-                return false;
+                return array('error' => array(
+                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+                ));
             } elseif ( $cat[$parent]['type'] == 1 && $type == -1 ) {
-                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
-                return false;
+                return array('error' => array(
+                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+                ));
             } elseif ( $cat[$parent]['type'] == 1 && $type == 0 ) {
-                trigger_error('Категории::Ошибка смена типа дочерней категории', E_USER_NOTICE);
-                return false;
+                return array('error' => array(
+                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+                ));
             }
         }
 
@@ -279,17 +283,15 @@ class Category_Model {
             $sql = "UPDATE category SET cat_name = ? WHERE user_id = ? AND cat_id = ?";
             $result = $this->db->query($sql, $name, Core::getInstance()->user->getId(), $id);
         }
-        
+
         if ($result) {
             Core::getInstance()->user->initUserCategory();
             Core::getInstance()->user->save();
             return array('result' => array('text' => ''));
         } else {
-            return array(
-                'error' => array(
-                    'text' => 'Ошибка редактирования категории'
-                )
-            );
+            return array('error' => array(
+                'text' => ''.mysql_error() . ' ' . $sql
+            ));
         }
     }
 
