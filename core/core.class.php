@@ -193,8 +193,8 @@ class Core
      * @return bool
      */
     public static function authUser() {
-        if (!self::$user) {
-            self::$user = new User();
-        }
+//        if (!self::$user) {
+//            self::$user = new User();
+//        }
     }
 }

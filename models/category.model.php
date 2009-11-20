@@ -230,8 +230,12 @@ class Category_Model {
         $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        
-        return $newID;
+        return array(
+            'result' => array(
+                'text' => '',
+                'id'   => $newID
+             )
+        );
     }
 
     /**
@@ -241,7 +245,7 @@ class Category_Model {
      * @param int       $parent
      * @param int       $system
      * @param int       $type
-     * @return bool
+     * @return array mixed
      */
     function edit($id, $name, $parent, $system, $type)
     {
@@ -279,9 +283,13 @@ class Category_Model {
         if ($result) {
             Core::getInstance()->user->initUserCategory();
             Core::getInstance()->user->save();
-            return true;
+            return array('result' => array('text' => ''));
         } else {
-            return false;
+            return array(
+                'error' => array(
+                    'text' => 'Ошибка редактирования категории'
+                )
+            );
         }
     }
 
@@ -299,7 +307,7 @@ class Category_Model {
         //@FIXME Починить удаление операций по категории
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        return true;
+        return array('result' => array('text' => ''));
     }
 
     /**

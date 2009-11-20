@@ -61,18 +61,7 @@ class Category_Controller extends Template_Controller
         $system = (int)@$_POST['system'];
         $type   = (int)@$_POST['type'];
 
-        $newID = $this->model->add($name, $parent, $system, $type);
-
-        if ($newID){
-            die ( json_encode(
-                array(
-                    'id' => $newID,
-                )
-            ));
-
-        } else {
-            die(false);
-        }
+        die(json_encode($this->model->add($name, $parent, $system, $type)));
     }
 
     /**
@@ -88,11 +77,7 @@ class Category_Controller extends Template_Controller
         $system = (int)@$_POST['system'];
         $type   = (int)@$_POST['type'];
 
-        if ($this->model->edit($id, $name, $parent, $system, $type)) {
-            die('[]');
-        } else {
-            die(false);
-        }
+        die(json_encode($this->model->edit($id, $name, $parent, $system, $type)));
     }
 
     /**
@@ -103,11 +88,7 @@ class Category_Controller extends Template_Controller
     function del ($args)
     {
         $id = (int)$_POST['id'];
-        if ($this->model->del($id)) {
-            die('[]');
-        } else {
-            die(false);
-        }
+        die(json_encode($this->model->del($id)));
     }
 
      /**
