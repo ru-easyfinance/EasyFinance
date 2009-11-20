@@ -268,12 +268,23 @@ easyFinance.widgets.budget = function(data){
     ///////////////////////////////////////////////////////////////////////////
     //                          general                                      //
     ///////////////////////////////////////////////////////////////////////////
-    $('#budget .list.budget .parent .w1 a').live('click',function(){
+    
+
+    $('#budget .list.budget .parent.open .w1 a').live('click',function(){
         var id = $(this).closest('tr').attr('id');
         var type = $(this).closest('tr').attr('type');
-        $('#budget .list.budget .child[type="'+type+'"][parent="'+id+'"]').toggle()
-        $(this).closest('tr').toggleClass('open').toggleClass('close')
+        $('#budget .list.budget .child[type="'+type+'"][parent="'+id+'"]').hide()
+        $(this).closest('tr').removeClass('open').addClass('close')
     })
+
+    $('#budget .list.budget .parent.close .w1 a').live('click',function(){
+        var id = $(this).closest('tr').attr('id');
+        var type = $(this).closest('tr').attr('type');
+        $('#budget .list.budget .child[type="'+type+'"][parent="'+id+'"]').show()
+        $(this).closest('tr').addClass('open').removeClass('close')
+    })
+
+
 
     $('#budget .list.budget .child .w6 a.remove').live('click',function(){
         if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
@@ -343,7 +354,7 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
         if (e.keyCode == 13){
             var id = $(this).closest('tr').attr('id');
             var type = $(this).closest('tr').attr('type');
-            var value = $(this).val();
+            var value = $(this).val().toString().replace(/[^0-9\.]/);
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
             _model.edit(_currentDate, type, id, value, function(){
