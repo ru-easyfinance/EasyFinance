@@ -366,7 +366,11 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
                 _printInfo();
                 $('#budget .list.budget .body').html(printBudget());
             })
-        } 
+        }else if (e.keyCode == 27){
+            $('#budget .list tr .w2 input').hide();
+            $('#budget .list tr .w2 span').show();
+        }
+        
     })
     
     $('#budget .list tr input').click(function(){return false})
