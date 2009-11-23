@@ -148,7 +148,6 @@ easyFinance.widgets.operationsJournal = function(){
                 $('#op_amount').removeAttr('disabled');
                 $('#op_comment').removeAttr('disabled');
             }
-
             $('form').attr('action','/operation/edit/');
         } else if(operation == 'del') {
             _deleteOperation($(this).closest('tr').attr('value'));

@@ -152,6 +152,7 @@ easyFinance.widgets.operationEdit = function(){
         $("#op_addoperation_but").click(function(){
             $(this).toggleClass("act");
             if($(this).hasClass("act")){
+                _clearForm();
                 $(".op_addoperation").show();
             } else {
                 $(".op_addoperation").hide();
@@ -448,6 +449,7 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _clearForm() {
+        $('#op_id').val('');
         $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');//#op_date убрал
 
         $('span#op_amount_target').text();
@@ -558,7 +560,6 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_type').val(typ);
         $('#op_type').change();
         $.sexyCombo.changeOptions("#op_type", typ);
-        debugger;
         _changeOperationType();
 
         //////////////////////////
