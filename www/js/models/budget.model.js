@@ -164,7 +164,8 @@ easyFinance.models.budget = function()
                         }
                         $.jGrowl(err+'</ul>', {theme: 'red'});
                     }
-                }
+                },
+                'json'
             )
         }
         /**
@@ -252,6 +253,7 @@ easyFinance.models.budget = function()
                         $.jGrowl(err+'</ul>', {theme: 'red'});
                     }
                 }
+                ,'json'
             )
         }
         /**
