@@ -805,7 +805,10 @@ $('.tags_list .add').live('click', function(){
                     colors : screen.colorDepth,
                     plugins: str
                 },
-                function(data){$('#footer #ffmes').val('')}
+                function(data){
+                    $('#footer #ffmes').val('');
+                    $.jGrowl('Спасибо!<br/>Ваше сообщение отправлено!', {theme: 'green'});
+                }
             );
             $('#footer #ffmes').val('')
             $('#footer .f_field lable').show();
@@ -1051,7 +1054,7 @@ function getCookie(name) {
         $('#guide').show();
         $('#dial').show();
         $('#dial').dialog(
-        {  width: 600}
+        {width: 600}
         );
         $('.dial').bind('dialogclose', function(event, ui) {
             //setCookie2('guide','',0,COOKIE_DOMEN);

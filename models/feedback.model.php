@@ -13,59 +13,68 @@ class Feedback_Model
     private $db = NULL;
 
     /**
-     * Информация о пользователе
-     * @var Array
-     */
-    private $user = NULL;
-
-
-    //private $last_msg = NULL;
-    /**
      * Конструктор
      * @return void
      */
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        $this->user = (int)Core::getInstance()->user->getId();
-        //$uid = Core::getInstance()->user->getId();
-        //$this->user = Core::getInstance()->user->getProfile($uid);
     }
 
-    public function add_message($msg,$param)
+    /**
+     * Отправляет сообщение об ошибке или замечание и предложение администрации сервиса
+     * @param string $msg
+     * @param array $param
+     * @return bool
+     */
+    public function add_message($msg, $param)
     {
+        $user_id = (int)Core::getInstance()->user->getId();
         if (!empty($msg)) {
             $sql = "INSERT INTO feedback_message SET uid=?, user_settings=?, messages=?, user_name=?, `new`='1', rating='0'";
-                    $this->db->query($sql, $this->user, serialize($param), $msg, $this->user);
+                    $this->db->query($sql, $user_id, serialize($param), $msg, $user_id);
 
             $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
-            $body = stripslashes($msg) . "\n\n" . var_export($param, true);
+            $body = htmlspecialchars($msg) . "\n\n<pre>" . var_export($param, true) . '</pre>';
 
-             $message = Swift_Message::newInstance()
+            // Кому высылать почту
+            $mailBoxTo = array(
+                'max.kamashev@easyfinance.ru'        =>'Maxim Kamashev',
+                'bashokov.ae@easyfinance.ru'    => 'Artur Bashokov'
+            );
+                        // Добавляем ссылку на отправку, если пользователь определён
+            if (isset($_SESSION['user']['user_mail'])) {
+                $body .=  '<br/>Письмо от пользователя ' . @$_SESSION['user']['user_name']
+                    . ' <a href="mailto:' . $_SESSION['user']['user_mail']
+                    . '">' . $_SESSION['user']['user_mail'] . '</a>';
+            }
+
+            $message = Swift_Message::newInstance()
                 // Заголовок
                 ->setSubject($subject)
                 // Указываем "От кого"
                 ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
                 // Говорим "Кому"
-                ->setTo(array(
-                	'max.kamashev@gmail.com'	=>'Maxim Kamashev',
-                	'bashokov.ae@easyfinance.ru' 	=> 'Artur Bashokov'
-                ))
+                ->setTo($mailBoxTo)
                 // Устанавливаем "Тело"
                 ->setBody($body, 'text/html');
             // Отсылаем письмо
-            $result = Core::getInstance()->mailer->send($message);
-            
+            return Core::getInstance()->mailer->send($message);
         } else {
-            exit;
+            return false;
         }
     }
 
+    /**
+     * Возвращала раньше рейтинг тестировщиков. Ныне не треба
+     * @deprecated
+     * @return <type>
+     */
     public function get_rlist()
     {
         $sql = "SELECT user_name, SUM(rating) FROM feedback_message GROUP BY uid ORDER BY SUM(rating) DESC";
         $ret = $this->db->select($sql);
-        $ret[0]['uid']=$this->user;
+        $ret[0]['uid'] = (int)Core::getInstance()->user->getId();
         return $ret;
     }
 }

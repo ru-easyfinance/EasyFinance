@@ -1,21 +1,21 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Класс контроллера для модуля "фидбека"
- * @copyright http://home-money.ru/
+ * @copyright http://easyfinance.ru/
  * @version SVN $Id: $
  */
 
 class Feedback_Controller extends Template_Controller
 {
     /**
-     * Ссылка на класс модель
-     * @var <Accounts_Model>
+     * Ссылка на класс модель обратной связи
+     * @var Feedback_Model
      */
     private $model = null;
-    
-	/**
+
+    /**
      * Ссылка на класс Smarty
-     * @var <Smarty>
+     * @var Smarty
      */
     private $tpl = null;
 	
@@ -28,7 +28,11 @@ class Feedback_Controller extends Template_Controller
         $this->model = new Feedback_Model();
     }
 
-	function index()
+    /**
+     * Главная страница обратной связи
+     * @return void
+     */
+    function index()
     {
         $this->tpl   = Core::getInstance()->tpl;
         $this->tpl->assign('no_menu', '1');
@@ -38,31 +42,30 @@ class Feedback_Controller extends Template_Controller
     }
 	
     /**
-     * Функция принятия сообщения
+     * Функция добавления сообщения от пользователей
      */
      function add_message()
      {
-         $param['c_height']=$_POST['cheight'];
-         $param['c_width']=$_POST['cwidth'];
-         $param['colors']=$_POST['colors'];
-         $param['height']=$_POST['height'];
-         $param['width']=$_POST['width'];
-         $param['plugins']=$_POST['plugins'];
+         // Параметры браузера
+         $param['c_height'] = $_POST['cheight'];
+         $param['c_width']  = $_POST['cwidth'];
+         $param['colors']   = $_POST['colors'];
+         $param['height']   = $_POST['height'];
+         $param['width']    = $_POST['width'];
+         $param['plugins']  = $_POST['plugins'];
 
-         $msg = $_POST['msg'];
+         // Сообщение
+         $msg               = $_POST['msg'];
 
-         $param['request'] = $_SERVER['REQUEST_URI'];
-         $param['browser'] = $_SERVER['HTTP_USER_AGENT'];
-         $param['referer'] = $_SERVER['HTTP_REFERER'];
+         // Параметры страницы
+         $param['request']  = $_SERVER['REQUEST_URI'];
+         $param['browser']  = $_SERVER['HTTP_USER_AGENT'];
+         $param['referer']  = $_SERVER['HTTP_REFERER'];
 
-         $this->model->add_message($msg,$param);
-
-         die();
+         if ($this->model->add_message($msg,$param)) {
+            die(json_encode(array('success'=>array('text'=>''))));
+         } else {
+            die(json_encode(array('error'=>array('text'=>'Ошибка при отправке сообщения'))));
+         }
      }
-
-//     function r_list()
-//     {
-//        die(json_encode($this->model->get_rlist()));
-//     }
 }
-?>
