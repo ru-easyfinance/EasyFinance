@@ -155,16 +155,21 @@ class Info_Model
     private function upper()//4
     {
         $i=3;
-         $x=($this->a)/($this->b);
-         $this->calc['upper']=$x;
+
+        //@FIXME Деление на 0
+        if ($this->b != 0) {
+            $x = $this->a / $this->b;
+        } else {
+            $x = 0;
+        }
+
+        $this->calc['upper']=$x;
         if ($x < $this->table[$i]['m_y'])
         {
             $y = $this->table[$i]['c_r'];
             $z = ($x-$y)/(20-$y);
             $t = $z+$this->table[$i]['u_r'];
-        }
-        else if($x < $this->table[$i]['m_g'])
-        {
+        } else if($x < $this->table[$i]['m_g']) {
             $y = $this->table[$i]['c_y'];
             $z= ($x-$y)/($this->table[$i]['m_y']-$y);
             $t = $z+$this->table[$i]['u_y'];
@@ -218,11 +223,19 @@ class Info_Model
     private function expens ($def)//2
     {
         $i=2;
-        $x= (int) $def;
-        if (!$def)
-            $x=(($this->b)/($this->d))*100;
 
-            $this->calc['expens']=$x;
+        $x= (int) $def;
+
+        if (!$def) {
+            //@FIXME Деление на 0
+            if ((int)$this->d != 0) {
+                $x = ($this->b / $this->d) * 100;
+            } else {
+                $x = 0;
+            }
+        }
+        
+        $this->calc['expens']=$x;
 
         if ($x < $this->table[$i]['m_y'])
         {

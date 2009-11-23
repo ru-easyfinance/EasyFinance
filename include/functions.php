@@ -219,7 +219,7 @@ function make_float($var)
  * @param int $count Максимальный размер возвращаемого списка
  * @param int $barier количество совершённых операций по отдельной категории, необходимое для попадания в Частые Категории
  */
-function get_recent_category ($count, $barier)
+function get_recent_category ($count, $barier = 3)
 {
     $array  = array();
     $retval = array();

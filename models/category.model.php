@@ -290,7 +290,7 @@ class Category_Model {
             return array('result' => array('text' => ''));
         } else {
             return array('error' => array(
-                'text' => ''.mysql_error() . ' ' . $sql
+                'text' => 'Ошибка при редактировании категории'
             ));
         }
     }
