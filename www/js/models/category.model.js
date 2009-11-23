@@ -78,7 +78,12 @@ easyFinance.models.category = function(){
 
     function add(name, parent, type, system, callback){
         _update(ADD_URL, -1, name, parent, type, system, function(data){
-            var id = data.id;
+            if (data.error && data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+                return false;
+            }
+
+            var id = data.result.id;
 
             _categories.user[id] = {};
             _categories.user[id].id = id.toString();
@@ -96,7 +101,12 @@ easyFinance.models.category = function(){
     function editById(id, name, parent, type, system, callback){
         var oldCat = $.extend({}, _categories.user[id]);
 
-        _update(EDIT_URL, id, name, parent, type, system, function(){            
+        _update(EDIT_URL, id, name, parent, type, system, function(data){
+            if (data.error && data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+                return false;
+            }                
+
             _categories.user[id].name = name;
             _categories.user[id].parent = parent;
             _categories.user[id].type = type;
@@ -137,6 +147,17 @@ easyFinance.models.category = function(){
 
     function getUserCategories(){
         return _categories.user;
+    }
+
+    function getRecentCategories(){
+        var list = {};
+
+        for (var key in _categories.recent) {
+            var cat = _categories.user[_categories.recent[key]];
+            list[cat.id] = cat;
+        }
+
+        return list;
     }
 
     function _treeAddChildren(arrParent, idParent) {
@@ -198,7 +219,10 @@ easyFinance.models.category = function(){
     }
 
     function isParentCategory(id){
-        return (_categories.user[id].parent == '0') ? true : false;
+        if (_categories.user[id])
+            return (_categories.user[id].parent == '0') ? true : false;
+        else
+            return false;
     }
 
     // reveal some private things by assigning public pointers
@@ -208,6 +232,7 @@ easyFinance.models.category = function(){
         editById: editById,
         deleteById: deleteById,
         getAllCategories: getAllCategories,
+        getRecentCategories: getRecentCategories,
         getSystemCategories:getSystemCategories,
         getUserCategories:getUserCategories,
         getUserCategoriesTree: getUserCategoriesTree,

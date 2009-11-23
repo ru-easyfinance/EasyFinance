@@ -199,8 +199,7 @@ easyFinance.widgets.operationEdit = function(){
         // запоминаем выбранную ранее категорию,
         // чтобы при переключении типа операции
         // заново её выбрать, по возможности
-        var _newcat = _selectedCategory;
-debugger;
+
         // Расход или Доход
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
@@ -212,6 +211,45 @@ debugger;
             var typ = (_selectedType == "0") ? -1 : +1;
 
             // генерируем список категорий
+            var htmlOptions = '';
+
+            var catPrint = function (list, type) {
+                var str = '';
+
+                // пробегаем по родительским категориям
+                for (var keyParent in list) {
+                    // если категория выбранного типа или универсальная
+                    if (list[keyParent].type == type || list[keyParent].type == '0') {
+                        // выводим название категории
+                        str = str + '<option value="' + keyParent + '">' + list[keyParent].name + '</option>';
+
+                        // выводим дочерние категории
+                        for (var keyChild in list[keyParent].children) {
+                            str = str + '<option value="' + keyChild + '">&mdash; ' + list[keyParent].children[keyChild].name + '</option>';
+                        }
+                    }
+                }
+
+                return str;
+            }
+
+            var list = {
+                "-1": {
+                    id: "-1",
+                    type: "0",
+                    name: "Часто используемые",
+                    children: _modelCategory.getRecentCategories()
+                }
+            };
+
+            htmlOptions = htmlOptions + catPrint(list, typ);
+            htmlOptions = htmlOptions + catPrint(_modelCategory.getUserCategoriesTree(), typ);
+
+            $("#op_category").html(htmlOptions);
+            $('#op_category').val(_selectedCategory);
+            $.sexyCombo.changeOptions("#op_category", _selectedCategory);
+            
+            /*
             $.post('/category/cattypechange/',{
                 type : typ
             },function(data){
@@ -223,6 +261,7 @@ debugger;
                     $.sexyCombo.changeOptions("#op_category");
                 }
             },'json');
+            */
 
         //Перевод со счёта
         } else if (_selectedType == "2") {
