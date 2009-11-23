@@ -13,17 +13,9 @@ $(document).ready(function(){
             <li id="m2"> \
                     <a href="/expert/"></a> \
                     <ul> \
-                            <li><span/><a href="/accounts/">Счета</a></li> \
-                            <li><span/><a href="/operation/">Операции</a></li> \
-                            <li><span/><a href="/category/">Категории</a></li> \
-                            <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
-                    </ul> \
-            </li> \
-            <li id="m3"> \
-                    <a href="/budget/"></a> \
-                    <ul> \
-                            <li><span/><a href="/budget/">Бюджет</a></li> \
-                            <li><span/><a href="/targets/">Фин. цели</a></li> \
+                            <li><span/><a href="/expert/about/">О себе</a></li> \
+                            <li><span/><a href="/expert/sertificates/">Сертификаты</a></li> \
+                            <li><span/><a href="/expert/services/">Услуги</a></li> \
                             <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                     </ul> \
             </li> \
@@ -33,22 +25,16 @@ $(document).ready(function(){
     $('#mainwrap').prepend(topmenu);
 
     var pathtoid = {
-        '/accounts/' :'m2',
-        '/budget/':'m3',
-        '/calendar/':'m5',
-        '/category/':'m2',
-        '/experts/':'m6',
-        '/info/':'m1',
-        '/mail/':'m0',
-        '/operation/':'m2',
-        '/periodic/':'m5',
-        '/profile/':'m0',
-        '/targets/':'m3',
-        '/report/':'m4'};
+        '/mail/' :'m1',
+        '/expert/' :'m2',
+        '/expert/about' :'m2',
+        '/expert/sertificates' :'m2',
+        '/expert/services' :'m2'
+    };
 
     var page_mid = pathtoid[pathName];
     $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
-    $('.menu3 ul li ul li a[href*=' + pathName +']').parent().addClass('selected');
+    $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
 
     // код для переключения внешнего вида вкладок
     $('.dropdown').children('li')
