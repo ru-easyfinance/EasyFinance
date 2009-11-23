@@ -180,7 +180,7 @@ easyFinance.models.budget = function()
             }
             $.post('/budget/del',
                 {
-                    date : '01.'+month+'.'+date.getFullYear(),
+                    start : '01.'+month+'.'+date.getFullYear(),
                     id : id,
                     type : type
                 },
