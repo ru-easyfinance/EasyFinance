@@ -223,7 +223,7 @@ easyFinance.models.budget = function()
             if (month.toString().length == 1){
                 month = '0'+month.toString()
             }
-
+            value = value.toString().replace(/[^0-9\.]/gi,'');
             $.post('/budget/edit/',
                 {
                     type: type,
@@ -236,10 +236,10 @@ easyFinance.models.budget = function()
                         $.jGrowl("Бюджет изменён", {theme: 'green'});
 
                         if (type =='p'){
-                            _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount'] + value
+                            _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount'] + parseFloat(value)
                             _data.list[type][id]['amount'] = value;
                         }else{
-                            _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount'] + value
+                            _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount'] + parseFloat(value)
                             _data.list[type][id]['amount'] = value;
                         }
                         if(typeof callback == "function"){callback();}

@@ -203,8 +203,13 @@ easyFinance.widgets.budget = function(data){
             dateprc = Math.round(date.getDate()*100/_getMonthDays(date))
         }
         else{
-            dateprc = 0
+            if(_currentDate > date){
+                dateprc = 100
+            }else{
+                dateprc = 0
+            }
         }
+        
         var drainprc;
         var str='';
         var temp = _printList(1, _categories, 0);
@@ -354,7 +359,7 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
         if (e.keyCode == 13){
             var id = $(this).closest('tr').attr('id');
             var type = $(this).closest('tr').attr('type');
-            var value = $(this).val().toString().replace(/[^0-9\.]/);
+            var value = $(this).val();
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
             _model.edit(_currentDate, type, id, value, function(){
