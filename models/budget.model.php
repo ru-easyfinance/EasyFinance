@@ -157,18 +157,19 @@ class Budget_Model {
      */
     function edit($type, $id, $value, $date)
     {
-        $sql = "UPDATE budget SET amount = ? WHERE key= ?";
-        $key = '' . Core::getInstance()->user->getId() . '-' . $id . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
-        if (!@$this->db->query($sql, $value, $key)) {
+        $sql = "UPDATE budget SET amount = ? WHERE `key`= ?";
+        $key = '' . Core::getInstance()->user->getId() . '-' . $id . '-'
+            . ((trim($type) == 'd')? 1 : 0) . '-' . $date;
+        if (@$this->db->query($sql, $value, $key)) {
             Core::getInstance()->user->initUserBudget();
             Core::getInstance()->user->save();
+            return array('result' => array('text' => ''));
+        } else {
             return array(
                 'error' => array(
                     'text' => 'Ошибка при редактировании бюджета'
                  )
             );
-        } else {
-            return array('result' => array('text' => ''));
         }
     }
 
@@ -180,7 +181,7 @@ class Budget_Model {
      */
     function del($category, $date, $type)
     {
-        $sql = "DELETE FROM budget WHERE key = ?";
+        $sql = "DELETE FROM budget WHERE `key` = ?";
         $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
         if (!@$this->db->query($sql, $value, $key)) {
             Core::getInstance()->user->initUserBudget();

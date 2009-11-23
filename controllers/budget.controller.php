@@ -97,7 +97,7 @@ class Budget_Controller extends Template_Controller
         $type  = trim(@$_POST['type']);
         $id    = abs(@$_POST['id']);
         $value = (float)@$_POST['value'];
-        $date  = formatRussianDate2MysqlDate(@$_POST['date']);
+        $date  = formatRussianDate2MysqlDate(@$_POST['start']);
         die(json_encode($this->model->edit($type, $id, $value, $date)));
     }
 
@@ -107,7 +107,7 @@ class Budget_Controller extends Template_Controller
     function del()
     {
         $category = (int)@$_POST['category'];
-        $date     = formatRussianDate2MysqlDate($_POST['date']);
+        $date     = formatRussianDate2MysqlDate($_POST['start']);
         $type     = (string)@$_POST['type'];
         die(json_encode($this->model->del($category, $date, $type)));
     }
