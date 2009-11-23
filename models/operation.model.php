@@ -139,10 +139,12 @@ class Operation_Model {
 
         // Проверяем теги
         if (!empty ($_POST['tags'])) {
+            $valid['tags'] = array();
             $tags = explode(',', trim(@$_POST['tags']));
             foreach ($tags as $tag) {
+                $tag = trim($tag);
                 if (!empty ($tag)) {
-                    if (!in_array(trim($tag), $valid['tags'])) {
+                    if (!in_array($tag, $valid['tags'])) {
                         $valid['tags'][] = trim($tag);
                     }
                 }

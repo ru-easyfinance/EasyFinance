@@ -63,8 +63,9 @@ class Profile_Controller extends Template_Controller
         $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));//arr
         $prop['user_currency_default'] = (int)$_POST['currency_default'];
         
-        die($this->model->currency('save',$prop));
+        die($this->model->currency('save', $prop));
     }
+    
     function cook(){
         die($this->model->cook());
     }

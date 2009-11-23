@@ -47,7 +47,7 @@ class Profile_Model
         return $this->db->query($sql,$this->user_id);
     }
 
-    public function mainsettings($mod,$prop){
+    public function mainsettings($mod, $prop = ''){
         $ret = array();
         /*if ( $prop['help'] == 1 ){
             setCookie("help","",0,"/");      
@@ -88,7 +88,7 @@ class Profile_Model
         setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
     }
 
-    public function currency($mod,$prop)
+    public function currency($mod, $prop = '')
     {
         $ret = array();
         switch($mod) {
