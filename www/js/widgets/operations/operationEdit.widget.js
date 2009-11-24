@@ -372,10 +372,12 @@ easyFinance.widgets.operationEdit = function(){
             return false;
         }
 
+        /*
         if (_modelCategory.isParentCategory(_selectedCategory)){
             $.jGrowl('Вы выбрали родительскую категорию. Пожалуйста, выберите подкатегорию.', {theme: 'red', stick: true});
             return false;
         }
+        */
 
         if (_selectedCategory == ''){
             $.jGrowl('Вы ввели неверное значение в поле "категория"!', {theme: 'red', stick: true});
