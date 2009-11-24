@@ -318,7 +318,8 @@ $(document).ready(function() {
 
         var  a=0;//половина возвращаемых данных. индекс.
             for (c in data[0]){
-              a = a + 1;
+                if ( data[0][c]['was'] != 0 || data[0][c]['in'] != 0)
+                    a = a + 1;
           }
           //a = a/2;
 
@@ -326,8 +327,11 @@ $(document).ready(function() {
 
          var stri = "<div id='chart1div'>FusionCharts</div>";
           $('#chart').html(stri);
-
-          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
+          noshow = 'showValues="1"';
+          if (a>4) {
+              noshow = 'showValues="0"'
+          }
+          stri = "<chart "+noshow+"numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
           stri += "<categories>";
           for (c in data[0]){
              if ( data[0][c]['was'] != 0 || data[0][c]['in'] != 0)
