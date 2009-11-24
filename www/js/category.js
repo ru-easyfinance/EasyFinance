@@ -111,6 +111,11 @@ $(document).ready(function() {
             $('#subcat').removeAttr('disabled');
         }
 
+        if (cat.user[id]['custom'] == "0")
+            $('#divCategoryEditType').hide();
+        else
+            $('#divCategoryEditType').show();
+
         $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);
