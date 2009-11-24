@@ -27,10 +27,10 @@ easyFinance.widgets.expertEditCertificates = function(){
 
             // status
             $col = $('<td>').html('<b>Статус:</b><br>');
-            var $div = $('<div>').text(certificates[key].status);
-            if (certificates[key].processed == false) {
+            var $div = $('<div>').text(certificates[key].statusText);
+            if (certificates[key].status == 0) {
                 $div.addClass('processing');
-            } else if (certificates[key].accepted == false) {
+            } else if (certificates[key].status == 2) {
                 $div.addClass('denied');
             } else {
                 $div.addClass('accepted');
