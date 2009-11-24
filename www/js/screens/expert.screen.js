@@ -75,14 +75,14 @@ $(document).ready(function(){
 
     initExpertMenu();
 
-    // init widgets
+    // init mail widget first
+    $('div#mainwrap #m1').addClass('cur act');
+    widgetMail = easyFinance.widgets.mail;
+    widgetMail.init('#widgetMail', easyFinance.models.mail);
+
+    // preload expert model for future usage
     easyFinance.models.expert.load(function(model){
         expertModel = model;
-
-        // init mail widget first
-        $('div#mainwrap #m1').addClass('cur act');
-        widgetMail = easyFinance.widgets.mail;
-        widgetMail.init('#widgetMail', easyFinance.models.mail);
     });
 })
 
