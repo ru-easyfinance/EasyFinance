@@ -1830,5 +1830,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .popup_map2  div.w_d_foot { background:transparent url(/img/i/jQuery/review/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:400px; }
 .popup_map2 .close { background:transparent url(/img/i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;right:5px;top:12px;width:25px;z-index:9999999; }
 
+#divAccountEdit #name { width: 348px; }
+
 @import izmeneniya.css
 
