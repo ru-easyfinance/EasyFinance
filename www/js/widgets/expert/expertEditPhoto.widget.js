@@ -45,9 +45,13 @@ easyFinance.widgets.expertEditPhoto = function(){
         $('#btnDeleteExpertPhoto').click(function(){
             $.jGrowl("Фото удаляется", {theme: 'green'});
 
-            $.post(DELETE_PHOTO_URL, '', function(profile){
-                $.jGrowl("Фото удалено", {theme: 'green'});
-                _showInfo(profile);
+            $.post(DELETE_PHOTO_URL, '', function(data){
+                if (data.error) {
+                    $.jGrowl(data.error.text, {theme: 'red'});
+                } else if (data.result) {
+                    $.jGrowl(data.result.text, {theme: 'green'});
+                    _showInfo(data.result);
+                }
             },
             "json");
 
@@ -63,9 +67,9 @@ easyFinance.widgets.expertEditPhoto = function(){
             // post-submit callback
             success: function(data){
                 if (data.error) {
-                    $.jGrowl(data.error.text, {theme: 'green'});
+                    $.jGrowl(data.error.text, {theme: 'red'});
                 } else if (data.result) {
-                    $.jGrowl("Фото загружено", {theme: 'green'});
+                    $.jGrowl(data.result.text, {theme: 'green'});
                     _showInfo(data.result);
                 }
             },
