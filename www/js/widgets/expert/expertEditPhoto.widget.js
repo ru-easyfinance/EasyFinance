@@ -61,9 +61,13 @@ easyFinance.widgets.expertEditPhoto = function(){
                 $.jGrowl("Фото загружается", {theme: 'green'});
             },
             // post-submit callback
-            success: function(profile){
-                $.jGrowl("Фото загружено", {theme: 'green'});
-                _showInfo(profile);
+            success: function(data){
+                if (data.error) {
+                    $.jGrowl(data.error.text, {theme: 'green'});
+                } else if (data.result) {
+                    $.jGrowl("Фото загружено", {theme: 'green'});
+                    _showInfo(data.result);
+                }
             },
             error: function(){
                 $.jGrowl("Ошибка на сервере!", {theme: 'red'});
