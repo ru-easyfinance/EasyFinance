@@ -14,7 +14,7 @@ easyFinance.widgets.expertEditPhoto = function(){
 
     // private functions
     function _showInfo(profile) {
-        if (profile.photo == ""){
+        if (!profile.photo){
             $('#divExpertPhoto').empty().text('нет фото');
         } else {
             $('#divExpertPhoto').empty().append(
