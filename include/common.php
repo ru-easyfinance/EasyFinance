@@ -63,6 +63,7 @@ $tpl->append('css', 'jquery/fancy.css');
 
 $tpl->append('css', 'jquery/sexyCombo.css');
 
+$tpl->append('css', 'expert.css');
 $tpl->append('css', 'expertsList.css');
 $tpl->append('css', 'operationsJournal.css');
 $tpl->append('css', 'budgetMaster.css');
