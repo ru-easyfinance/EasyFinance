@@ -34,19 +34,28 @@ class Feedback_Model
             $sql = "INSERT INTO feedback_message SET uid=?, user_settings=?, messages=?, user_name=?, `new`='1', rating='0'";
                     $this->db->query($sql, $user_id, serialize($param), $msg, $user_id);
 
-            $subject = 'Сообщение об ошибке на сайте easyfinance.ru #'.mysql_insert_id();
-            $body = htmlspecialchars($msg) . "\n\n<pre>" . var_export($param, true) . '</pre>';
+            $numberError = mysql_insert_id();
 
-            // Кому высылать почту
-            $mailBoxTo = array(
-                'max.kamashev@easyfinance.ru'        =>'Maxim Kamashev',
-                'bashokov.ae@easyfinance.ru'    => 'Artur Bashokov'
-            );
-                        // Добавляем ссылку на отправку, если пользователь определён
+            $subject = 'Отзыв на сайте easyfinance.ru #' . $numberError;
+            $body = htmlspecialchars($msg) . "\n\n<pre>" . var_export($param, true) . '</pre>';
+            $responseBody = "<p>Добрый день, уважаемый пользователь!</p>"
+                . "<p>Ваша заявка под номером #{$numberError} передана службе поддержки, очень скоро мы свяжемся с вами.</p>"
+                . "<p>Спасибо за отзыв, с вами мы сможем сделать лучше, проще и надёжнее!</p>";
+            
+            // Добавляем ссылку на отправку, если пользователь определён и отсылаем ему автоматическое письмо
             if (isset($_SESSION['user']['user_mail'])) {
                 $body .=  '<br/>Письмо от пользователя ' . @$_SESSION['user']['user_name']
                     . ' <a href="mailto:' . $_SESSION['user']['user_mail']
                     . '">' . $_SESSION['user']['user_mail'] . '</a>';
+
+                $response = Swift_Message::newInstance()
+                    ->setSubject($subject)
+                    ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
+                    ->setTo($_SESSION['user']['user_mail'])
+                    ->setBody($responseBody, 'text/html');
+                Core::getInstance()->mailer->send($response);
+            } else {
+                $body .=  '<br/>Письмо от Анонимного пользователя';
             }
 
             $message = Swift_Message::newInstance()
@@ -55,9 +64,12 @@ class Feedback_Model
                 // Указываем "От кого"
                 ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
                 // Говорим "Кому"
-                ->setTo($mailBoxTo)
+                ->setTo(array(
+                    'max.kamashev@easyfinance.ru'   =>'Maxim Kamashev',
+                    'bashokov.ae@easyfinance.ru'    => 'Artur Bashokov'))
                 // Устанавливаем "Тело"
                 ->setBody($body, 'text/html');
+
             // Отсылаем письмо
             return Core::getInstance()->mailer->send($message);
         } else {
