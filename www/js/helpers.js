@@ -358,6 +358,6 @@ $(document).ready(function() {
     }
 
     if($.cookie('tooltip') != '0'){
-        initToltips('mystyle')
+        initToltips('modern')
     }
 });

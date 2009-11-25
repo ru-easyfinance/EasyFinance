@@ -288,22 +288,22 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * Ссумирование подкатегорий
      */
     $('#master').live('click',function(){fullSum(0)})
-//    $('#master tr input').live('blur',function(){
-//        alert('123')
-//        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
-//    })
-//    $('#master .amount input').live('blur',function(){
-//
-//        var profit = globalSum('step2')
-//        var drain = globalSum('step3')
-//        $('#master .waste b').text(formatCurrency(drain))
-//        $('#master .income b').text(formatCurrency(profit))
-//        if (drain - profit > 0){
-//            $('#master .rest b').css('color','#EB3C34')
-//        }else{
-//            $('#master .rest b').css('color','#309500')
-//        }
-//        $('#master .rest b').text(formatCurrency(profit - drain))
-//    })
+    $('#master tr input').live('blur',function(){
+        alert('123')
+        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
+    })
+    $('#master .amount input').live('blur',function(){
+
+        var profit = globalSum('step2')
+        var drain = globalSum('step3')
+        $('#master .waste b').text(formatCurrency(drain))
+        $('#master .income b').text(formatCurrency(profit))
+        if (drain - profit > 0){
+            $('#master .rest b').css('color','#EB3C34')
+        }else{
+            $('#master .rest b').css('color','#309500')
+        }
+        $('#master .rest b').text(formatCurrency(profit - drain))
+    })
     return {};
 }
