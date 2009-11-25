@@ -14,53 +14,56 @@ easyFinance.widgets.expertEditCertificates = function(){
     var _$table = null;
 
     // private functions
-    function _showInfo(certificates) {
+    function _showInfo(certificates, noClear) {
         _$table.hide();
         _$table.find('tr:gt(0)').remove();
 
         for (var key in certificates) {
-            var $row = $('<tr>');
-
-            // image
-            var $col = $('<td>').append($('<img>').attr('src', certificates[key].smallImage));
-            $row.append($col);
-
-            // status
-            $col = $('<td>').html('<b>Статус:</b><br>');
-            var $div = $('<div>').text(certificates[key].statusText);
-            if (certificates[key].status == 0) {
-                $div.addClass('processing');
-            } else if (certificates[key].status == 2) {
-                $div.addClass('denied');
-            } else {
-                $div.addClass('accepted');
-            }
-            $col.append($div).append($('<br>'));
-
-            // comment
-            $col.append($('<div>').html('<b>Комментарий:</b><br>' + certificates[key].comment));
-            $col.append($('<br>'));
-
-            // button
-            $col.append(
-                $('<button>').attr('id', 'cert_' + key).text('удалить').click(function(){
-                    if (confirm("Удалить сертификат?")) {
-                        $.jGrowl("Операция выполняется", {theme: 'green'});
-
-                        $.post(DELETE_CERTIFICATE_URL, {id: this.id.split("_", 2)[1]}, function(data) {
-                                _showInfo(data);
-
-                                $.jGrowl("Сертификат удалён", {theme: 'green'});
-                        }, 'json');
-                    }
-                })
-            );
-
-            $row.append($col);
-            
-            _$table.append($row);
+            _showCertificate(certificates[key]);
         }
         _$table.show();
+    }
+
+    function _showCertificate(certificate) {
+        var $row = $('<tr>').attr('id', 'cert_'+certificate.id);
+
+        // image
+        var $col = $('<td>').append($('<img>').attr('src', certificate.smallImage));
+        $row.append($col);
+
+        // status
+        $col = $('<td>').html('<b>Статус:</b><br>');
+        var $div = $('<div>').text(certificate.statusText);
+        if (certificate.status == 0) {
+            $div.addClass('processing');
+        } else if (certificate.status == 2) {
+            $div.addClass('denied');
+        } else {
+            $div.addClass('accepted');
+        }
+        $col.append($div).append($('<br>'));
+
+        // comment
+        $col.append($('<div>').html('<b>Комментарий:</b><br>' + certificate.comment));
+        $col.append($('<br>'));
+
+        // button
+        $col.append(
+            $('<button>').attr('id', 'cert_' + certificate.id).text('удалить').click(function(){
+                if (confirm("Удалить сертификат?")) {
+                    $.jGrowl("Операция выполняется", {theme: 'green'});
+
+                    $.post(DELETE_CERTIFICATE_URL, {id: this.id.split("_", 2)[1]}, function(data) {
+                            $('#cert_' + data.result.id).remove();
+                            $.jGrowl(data.result.message, {theme: 'green'});
+                    }, 'json');
+                }
+            })
+        );
+
+        $row.append($col);
+
+        _$table.append($row);
     }
 
     // public variables
@@ -104,7 +107,8 @@ easyFinance.widgets.expertEditCertificates = function(){
                         // post-submit callback
                         success: function(data){
                             $.jGrowl("Сертификат загружен", {theme: 'green'});
-                            _showInfo(data);
+                            for (var key in data)
+                                _showCertificate(data[key]);
                         },
                         error: function(){
                             $.jGrowl("Ошибка на сервере!", {theme: 'red'});
