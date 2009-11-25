@@ -3,12 +3,13 @@
 .budget#budget .info td{padding: 5px;}
 .budget#budget .info .profit span{color: #309500;}
 .budget#budget .info .drain span{color: #eb3c34;}
-.budget#budget .info span{float: right; position: relative;}
+.budget#budget .info div{position:relative;float:left}
+.budget#budget .info div.right{position:relative;float:right}
 .budget#budget .info .balance.red span{color: #eb3c34;}
 .budget#budget .info .balance.green span{color: #309500;}
 .budget#budget .list.budget{margin-top: 15px;}
 .budget#budget .list .list.head{background: url('/img/i/bg09.gif') repeat-x 0 0;}
-.budget#budget .list .list.body{overflow-y: auto; overflow-x: hidden; max-height: 300px;}
+.budget#budget .list .list.body{overflow-y: auto; max-height: 300px;position:relative; width:auto}
 .budget#budget .list .list table tr{position: relative}
 .budget#budget .list .list table td{font-size: 11px; padding: 7px 0 5px 0;position: relative}
 .budget#budget .list .list table td.w1{padding-left: 11px; width: 190px; }
