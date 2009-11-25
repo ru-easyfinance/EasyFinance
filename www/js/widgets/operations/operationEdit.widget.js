@@ -374,29 +374,33 @@ easyFinance.widgets.operationEdit = function(){
             $.jGrowl('Вы ввели неверное значение в поле "тип операции"!', {theme: 'red', stick: true});
             return false;
         }
+        
+        var opType = $("#op_type option:selected").val();
+        
+        if (opType == "0" || opType == "1") {
+            // для доходов и расходов
+            if (_selectedCategory == '-1'){
+                $.jGrowl('Выберите подкатегорию.', {theme: 'red', stick: true});
+                return false;
+            }
 
-        if (_selectedCategory == '-1'){
-            $.jGrowl('Выберите подкатегорию.', {theme: 'red', stick: true});
-            return false;
+            if (_selectedCategory == ''){
+                $.jGrowl('Вы ввели неверное значение в поле "категория"!', {theme: 'red', stick: true});
+                return false;
+            }   
         }
+
         /*
         if (_modelCategory.isParentCategory(_selectedCategory)){
             $.jGrowl('Вы выбрали родительскую категорию. Пожалуйста, выберите подкатегорию.', {theme: 'red', stick: true});
             return false;
         }
         */
-
-        if (_selectedCategory == ''){
-            $.jGrowl('Вы ввели неверное значение в поле "категория"!', {theme: 'red', stick: true});
-            return false;
-        }
         
         if (isNaN(parseFloat($('#op_amount').val()))){
             $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;
         }
-
-        var opType = $("#op_type option:selected").val();
 
         //Запрос подтверждения на выполнение операции в случае ухода в минус.
         var am = tofloat($('#op_amount').val()+'.0');

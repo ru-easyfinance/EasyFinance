@@ -50,7 +50,8 @@ easyFinance.widgets.expertEditServices = function(){
                 .val(services[key].price)
                 .keyup (function(e){
                     FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
-                    $(this).parent().parent().find('input[type=checkbox]').attr('checked', true);
+                    if ($(this).val())
+                        $(this).parent().parent().find('input[type=checkbox]').attr('checked', true);
                 })
             );
             _$row.append(_$col);
@@ -63,7 +64,8 @@ easyFinance.widgets.expertEditServices = function(){
                 .val(services[key].days)
                 .keyup (function(e){
                     FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
-                    $(this).parent().parent().find('input[type=checkbox]').attr('checked', true);
+                    if ($(this).val())
+                        $(this).parent().parent().find('input[type=checkbox]').attr('checked', true);
                 })
             );
             _$row.append(_$col);
