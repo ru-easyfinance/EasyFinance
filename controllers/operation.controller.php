@@ -34,8 +34,6 @@ class Operation_Controller extends Template_Controller
     {
         $this->model = new Operation_Model();
         $this->user = Core::getInstance()->user;
-        $this->tpl = Core::getInstance()->tpl;
-        $this->tpl->assign('name_page', 'operations/operation');
 
         $targets = new Targets_Model();
         $this->tpl->assign('targetList',     $targets->getLastList(0, 100));
@@ -45,10 +43,6 @@ class Operation_Controller extends Template_Controller
         $this->tpl->assign('dateTo',         date('d.m.Y')); //date(date('t').'.m.Y'));
         $this->tpl->assign('category',       get_tree_select());
         $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
-
-        // Добавляем js и css файлы в начало
-
-
     }
 
     /**
@@ -58,18 +52,10 @@ class Operation_Controller extends Template_Controller
      */
     function index($args)
     {
-
+        $this->tpl = Core::getInstance()->tpl;
+        $this->tpl->assign('name_page', 'operations/operation');
     }
 
-  /*  function catincome(){
-        //die(json_encode($this->model->catincome()));
-        die(get_tree_select());
-    }
-    function catwaste(){
-        //die(json_encode($this->model->catwaste()));
-        die(get_tree_select());
-    }
-*/
     /**
      * Добавляет новое событие
      * @param $args array mixed Какие-нибудь аргументы

@@ -175,19 +175,6 @@ class Operation_Model {
         return $valid;
     }
 
-    //Возвращает доходные и универсальные категории.
-    /*function catincome(){
-        $sql = "SELECT * FROM category
-            WHERE user_id = ? AND cat_active = '1' AND (type= '-1' OR type= '0')
-            ORDER BY cat_parent, cat_name;";
-        return $this->db->query($sql, $this->user->getId());
-    }
-    function catwaste(){
-        $sql = "SELECT * FROM category
-            WHERE user_id = ? AND cat_active = '1' AND (type= '1' OR type= '0')
-            ORDER BY cat_parent, cat_name;";
-        return $this->db->query($sql, $this->user->getId());
-    }*/
     /**
      * Регистрирует новую транзакцию
      * @param float  $money      Сумма транзакции
@@ -222,6 +209,8 @@ class Operation_Model {
         
         // Обновляем данные о счетах пользователя
         Core::getInstance()->user->initUserAccounts();
+        Core::getInstance()->user->save();
+
         //$this->selectMoney($user_id);
         $this->save();
         return $last_id;

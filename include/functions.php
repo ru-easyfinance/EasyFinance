@@ -107,7 +107,7 @@ function formatRussianDate2MysqlDate($date, $time='')
 {
     /**
     * Собирает в себе отформатированную дату
-    * @var <string>
+    * @var string
     */
     $retval = '';
     if (empty ($date)) {
@@ -148,8 +148,8 @@ function formatRussianDate2MysqlDate($date, $time='')
 
 /**
 * Форматирует дату в формате mysql <code>1983-05-22</code> или датетайм <code>1983-05-22 12:43:03</code> в unix_timestamp
-* @param <string> $date
-* @return <int> Unix Timestamp или false в случае ошибки
+* @param string $date
+* @return int Unix Timestamp или false в случае ошибки
 */
 function formatMysqlDate2UnixTimestamp($date)
 {
@@ -167,9 +167,9 @@ function formatMysqlDate2UnixTimestamp($date)
 
  /**
  * Шифрует данные с помощью расширения mcrypt
- * @param <string> $text Текст, который требуется зашифровать
- * @param <string> $key // 24 битный ключ
- * @return <string> Возвращает зашифрованный ключ в обёртке base64
+ * @param string $text Текст, который требуется зашифровать
+ * @param string $key // 24 битный ключ
+ * @return string Возвращает зашифрованный ключ в обёртке base64
  */
 function encrypt($text, $key = CRYPT_KEY) {
     $text = trim(serialize($text));
@@ -180,9 +180,9 @@ function encrypt($text, $key = CRYPT_KEY) {
 
  /**
  * Расшифровывает данные с помощью расширения mcrypt
- * @param <string> $text Текст, который требуется разшифровать
- * @param <string> $key // 24 битный ключ
- * @return <string> Расшифрованную строку
+ * @param string $text Текст, который требуется разшифровать
+ * @param string $key // 24 битный ключ
+ * @return string Расшифрованную строку
  */
 function decrypt($text, $key = CRYPT_KEY) {
     $text = base64_decode($text);
