@@ -291,6 +291,8 @@ easyFinance.widgets.operationEdit = function(){
         if (!_validateForm()){
             return false;
         }
+
+        $('#op_btn_Save').attr('disabled', 'disabled');
         $.jGrowl("Операция сохраняется", {theme: 'green'});
         var suum = tofloat($('#op_amount').val());
         var tip = $('#op_type').val();
@@ -313,6 +315,7 @@ easyFinance.widgets.operationEdit = function(){
 
             function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
+                $('#op_btn_Save').removeAttr('disabled');
                 if (data.length == 0) {
                     _clearForm();
                     /// переписать
@@ -372,6 +375,10 @@ easyFinance.widgets.operationEdit = function(){
             return false;
         }
 
+        if (_selectedCategory == '-1'){
+            $.jGrowl('Выберите подкатегорию.', {theme: 'red', stick: true});
+            return false;
+        }
         /*
         if (_modelCategory.isParentCategory(_selectedCategory)){
             $.jGrowl('Вы выбрали родительскую категорию. Пожалуйста, выберите подкатегорию.', {theme: 'red', stick: true});

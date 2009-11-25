@@ -26,7 +26,12 @@ easyFinance.widgets.expertEditServices = function(){
             _$col.append($('<input>')
                 .attr('name', 'checkService_' + key)
                 .attr('type', 'checkbox')
-                .attr('checked', services[key].checked));
+                .attr('checked', services[key].checked)
+                .click(function(){
+                    if (!$(this).attr('checked'))
+                        $(this).parent().parent().find('input[type!=checkbox]').val('');
+                })
+            );
             _$row.append(_$col);
 
             // title
@@ -40,16 +45,26 @@ easyFinance.widgets.expertEditServices = function(){
             // price
             _$col = $('<td>');
             _$col.append($('<input>')
+                .addClass('price')
                 .attr('name', 'txtPrice_' + key)
                 .val(services[key].price)
+                .keyup (function(e){
+                    FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
+                    $(this).parent().parent().find('input[type=checkbox]').attr('checked', true);
+                })
             );
             _$row.append(_$col);
 
             // days
             _$col = $('<td>');
             _$col.append($('<input>')
+                .addClass('days')
                 .attr('name', 'txtDays_' + key)
                 .val(services[key].days)
+                .keyup (function(e){
+                    FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
+                    $(this).parent().parent().find('input[type=checkbox]').attr('checked', true);
+                })
             );
             _$row.append(_$col);
 

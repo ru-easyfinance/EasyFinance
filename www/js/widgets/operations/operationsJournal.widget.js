@@ -224,6 +224,29 @@ easyFinance.widgets.operationsJournal = function(){
         // фильтр по категории
         // заполняем диалог ссылками на доступные категории
         _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px"});
+/*
+        $("#op_account").sexyCombo({
+            filterFn: _sexyFilter,
+            changeCallback: function() {
+                _selectedAccount = this.getCurrentHiddenValue();
+
+                _changeAccountForTransfer();
+                // reload operation journal
+                // operationsJournalReload();
+                easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
+                $('#btn_ReloadData').click();
+            }
+        });
+
+        if (this.wrapper.data("sc:lastEvent") == "click")
+            return true;
+
+        if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
+            return true;
+        else
+            return false;
+        */
+
         _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
             var $combo = $('#selectFilterCategory');
             _category = $combo.attr('value');
