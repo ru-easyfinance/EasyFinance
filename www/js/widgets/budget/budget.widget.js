@@ -90,14 +90,14 @@ easyFinance.widgets.budget = function(data){
         var table = 
             "<table>"+
                 "<tr class='plan'>"+
-                    "<td class='profit'><b>План</b> доходов: <span>"+formatCurrency(_totalInfo.plan_profit)+" руб.</span></td>"+
-                    "<td class='drain'><b>План</b> расходов: <span>"+formatCurrency(_totalInfo.plan_drain)+" руб.</span></td>"+
-                    "<td class='balance "+planCls+"'>Остаток:<span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.plan_drain)+" руб.</span></td>"+
+                    "<td class='profit'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit)+" руб.</span><div></td>"+
+                    "<td class='drain'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain)+" руб.</span><div></td>"+
+                    "<td class='balance "+planCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.plan_drain)+" руб.</span><div></td>"+
                 "</tr>"+
                 "<tr class='real'>"+
-                    "<td class='profit'><b>Факт</b> доходов: <span>"+formatCurrency(_totalInfo.real_profit)+" руб.</span></td>"+
-                    "<td class='drain'><b>Факт</b> расходов: <span>"+formatCurrency(_totalInfo.real_drain)+" руб.</span></td>"+
-                    "<td class='balance "+realCls+"'>Остаток:<span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.real_drain)+" руб.</span></td>"+
+                    "<td class='profit'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit)+" руб.</span><div></td>"+
+                    "<td class='drain'><div><b>Факт</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_drain)+" руб.</span><div></td>"+
+                    "<td class='balance "+realCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.real_drain)+" руб.</span><div></td>"+
                 "</tr>"+
             "</table>";
         $('#budget .budget.info').html(table);
