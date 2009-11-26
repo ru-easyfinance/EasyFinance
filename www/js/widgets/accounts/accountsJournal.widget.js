@@ -196,7 +196,7 @@ easyFinance.widgets.accountsJournal = function(){
                         <li class='add' title='Копировать'><a></a></li>\n\
                     </ul></div>";
         $('#operation_list').empty();
-        var type, str='';
+        var type, str='', colorClass;
         var total = 0,
             head_tr='   <tr>\n\
                             <th> \n\
@@ -216,12 +216,17 @@ easyFinance.widgets.accountsJournal = function(){
         for (var key in account_list )
         {
             type = g_types[account_list[key]['type']];
+            if (type == 2)
+                colorClass = 'sumRed';
+            else
+                colorClass = account_list[key]["total_balance"] >=0 ? 'sumGreen' : 'sumRed';
+
             if (!isNaN(type)){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
                 str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
-                str = str + '<td class="total_balance ' + (account_list[key]["total_balance"]>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
+                str = str + '<td class="total_balance ' + colorClass + '">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
                 str = str + '<td class="cur">' + account_list[key]["cur"] + '</td>';
-                str = str + '<td class="def_cur ' + (account_list[key]["def_cur"]>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
+                str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
                 summ[type] = summ[type]+account_list[key]['def_cur'];
                 if (!val[account_list[key]['cur']]) {
                     val[account_list[key]['cur']]=0;
