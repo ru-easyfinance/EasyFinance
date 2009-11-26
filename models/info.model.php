@@ -46,25 +46,6 @@ class Info_Model
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        $this->user_id = Core::getInstance()->user->getId();
-        $this->operation_model = new Operation_Model();
-
-        $sql = "SELECT
-                    account_type_id, account_currency_id, account_id
-                FROM
-                    accounts
-                WHERE
-                    user_id=?";
-        $this->accounts = $this->db->select($sql, $this->user_id);
-    }
-
-    /**
-     * Конструктор
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->db = Core::getInstance()->db;
         //$this->user_id = Core::getInstance()->user->getId();
         $this->operation_model = new Operation_Model();
 
