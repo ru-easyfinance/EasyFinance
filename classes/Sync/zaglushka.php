@@ -16,7 +16,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                 </member>
                 <member>
                     <name>login</name>
-                    <value>qwerty</value>
+                    <value>PrinceOfPersia</value>
                 </member>
                 <member>
                     <name>pass</name>
