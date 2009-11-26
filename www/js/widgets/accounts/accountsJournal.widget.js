@@ -180,7 +180,7 @@ easyFinance.widgets.accountsJournal = function(){
         if (!account_list || account_list.length == 0)
             return;
 
-        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0]; // Жуткий масив привязки типов к группам
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0]; // Жуткий масив привязки типов к группам
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var spec_th = [ '',
                     '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
@@ -211,7 +211,7 @@ easyFinance.widgets.accountsJournal = function(){
                             <th></th>\n\
                         <tr>',
             s='';
-            
+
         // формирует массив с таблицей счетов по группам
         for (var key in account_list )
         {

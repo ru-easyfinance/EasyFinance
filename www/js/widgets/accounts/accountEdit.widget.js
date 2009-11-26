@@ -169,7 +169,7 @@ easyFinance.widgets.accountEdit = function(){
         $.ajax({
             type: "POST",
             url: "/accounts/add/",
-            data: $("#formAccount input,select,textarea"),
+            data: $("#blockCreateAccounts input,select,textarea"),
             success: function(data) {
                 var id = data;
                 if (!_isEditing){
