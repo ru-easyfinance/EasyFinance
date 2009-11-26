@@ -43,7 +43,7 @@ function __autoload($class_name){
 }
 
 
-include ("../../classes/Sync/RecordsMap/RecordsMapModel.php");
+include (SYS_DIR_ROOT . "/classes/Sync/RecordsMap/RecordsMapModel.php");
 
 /**
  * Форматирование даты

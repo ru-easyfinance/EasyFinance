@@ -4,6 +4,14 @@
 	include(SYS_DIR_LIBS."external/php_xmlrpc/lib/xmlrpc.inc");
         $url = 'hm/sync/';
         $ch = curl_init('hm/sync/');
+
+        /*$ch = curl_init('https://test.easyfinance.ru/sync/');
+        curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, 'hwsejfhewhfew');
+        $result = curl_exec($ch);*/
+        //return false;
+
         //curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, false);
         //curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
         //$result = curl_exec($ch);
@@ -34,11 +42,12 @@
 		print "<pre>Sending the following request:\n\n" . htmlentities($f->serialize()) . "\n\nDebug info of server data follows...\n\n";
 		//$c=new xmlrpc_client("/server.php", "phpxmlrpc.sourceforge.net", 80);
 		//$c = new xmlrpc_client("/server.php", "localhost", 80);
-                $c = new xmlrpc_client("sync/", "test.easyfinance.ru/", 443, 'https');
+                $c = new xmlrpc_client("/sync/index.php", "test.easyfinance.ru", 443, 'https');
+                //$c = new xmlrpc_client("https://test.easyfinance.ru:443/sync");
                 $c->verifypeer = false;
                 $c->verifyhost = false;
 		$c->setDebug(1);
-		$r = &$c->send($f);
+		$r = &$c->send($f,1000,'https');
 
 		if(!$r->faultCode())
 		{
