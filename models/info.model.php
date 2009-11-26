@@ -37,26 +37,26 @@ class Info_Model
      * Ссылка на модель со счетами
      * @var Operation_Model
      */
-    //private $account_model = NULL;
+    private $account_model = NULL;
 
     /**
      * Конструктор
      * @return void
      */
-//    public function __construct()
-//    {
-//        $this->db = Core::getInstance()->db;
-//        $this->user_id = Core::getInstance()->user->getId();
-//        $this->operation_model = new Operation_Model();
-//
-//        $sql = "SELECT
-//                    account_type_id, account_currency_id, account_id
-//                FROM
-//                    accounts
-//                WHERE
-//                    user_id=?";
-//        $this->accounts = $this->db->select($sql, $this->user_id);
-//    }
+    public function __construct()
+    {
+        $this->db = Core::getInstance()->db;
+        $this->user_id = Core::getInstance()->user->getId();
+        $this->operation_model = new Operation_Model();
+
+        $sql = "SELECT
+                    account_type_id, account_currency_id, account_id
+                FROM
+                    accounts
+                WHERE
+                    user_id=?";
+        $this->accounts = $this->db->select($sql, $this->user_id);
+    }
 
     /**
      * Конструктор
@@ -68,13 +68,13 @@ class Info_Model
         //$this->user_id = Core::getInstance()->user->getId();
         $this->operation_model = new Operation_Model();
 
-//        $sql = "SELECT
-//                    account_type_id, account_currency_id, account_id
-//                FROM
-//                    accounts
-//                WHERE
-//                    user_id=?";
-//        $this->accounts = $this->db->select($sql, $this->user_id);
+        $sql = "SELECT
+                    account_type_id, account_currency_id, account_id
+                FROM
+                    accounts
+                WHERE
+                    user_id=?";
+        $this->accounts = $this->db->select($sql, $this->user_id);
     }
 
     /**
@@ -83,6 +83,8 @@ class Info_Model
      */
     public function get_data()
     {
+
+
 /*
         [
             [20,0,0,0,20],

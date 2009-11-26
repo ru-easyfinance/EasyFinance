@@ -48,7 +48,7 @@ class Info_Controller extends Template_Controller
     {
         //$date_start = formatRussianDate2MysqlDate($_POST['start']);
         //$date_end = formatRussianDate2MysqlDate($_POST['end']);
-        //die(json_encode($this->info_model->tohometrs()));
-        die(json_encode($this->info_model->get_data()));
+        die(json_encode($this->info_model->tohometrs()));
+        //die(json_encode($this->info_model->get_data()));
     }
 }
