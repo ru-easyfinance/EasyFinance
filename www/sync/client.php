@@ -34,7 +34,9 @@
 		print "<pre>Sending the following request:\n\n" . htmlentities($f->serialize()) . "\n\nDebug info of server data follows...\n\n";
 		//$c=new xmlrpc_client("/server.php", "phpxmlrpc.sourceforge.net", 80);
 		//$c = new xmlrpc_client("/server.php", "localhost", 80);
-                $c = new xmlrpc_client("sync/", "hm/", 443, 'https');
+                $c = new xmlrpc_client("sync/", "test.easyfinance.ru/", 443, 'https');
+                $c->verifypeer = false;
+                $c->verifyhost = false;
 		$c->setDebug(1);
 		$r = &$c->send($f);
 
