@@ -836,8 +836,8 @@ div.op_addoperation .op_line .op_amount a { width: 17px; }
 div.op_addoperation .op_line .op_category a { width: 17px; top: 22px; background-position: 0 -370px; }
 
 
-/* иконка информации.*/
-a.infoicon {width: 16px; display: block; /*top: 20px; right: -18px;*/ height: 16px;  background: url('/img/i/info.png') }
+/* иконка информации.*/ /*top: 20px; right: -18px;*/
+a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/info.png') }
 
  .op_infobut{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
  .op_infobut div{position : relative; width: 100px;float: top;}

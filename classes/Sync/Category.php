@@ -1,37 +1,41 @@
 <?php
-/**
- *
- */
+
 class Category {
     private $db = null;
     private $user = null;
-    
-    function __construct($id){
-        $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
+
+    /**
+     * Конструктор класса, инициализирует юзера и дб.
+     * @param int $id
+     * @param int $db
+     */
+    function __construct($id, $db){
+        $this->db = $db;
         $this->user = $id;
-        //echo ('12342345423543 kjfke');
     }
 
-    /*
-    *функция по удалённому ид remotekey возвращает айдишник записи в системе easyfinance
+    /**
+     * По удалённому айди возвращает айди записи в системе easyfinance
+     * @param integer $rem
+     * @param integer $sys
+     * @return integer
      */
     function findEkey($rem, $sys=1){
-        $sql = "SELECT ekey FROM records_map WHERE remotekey=? AND tablename='Categories' AND system=?";
-        $a = $this->db->query($sql, $rem, $sys);
+        $sql = "SELECT ekey FROM records_map WHERE remotekey=? AND tablename='Categories' AND system=? AND user_id=?";
+        $a = $this->db->query($sql, $rem, $sys, $this->user);
         return $a[0]['ekey'];
     }
 
+    /**
+     * Синхронизация категорий. на основе системных таблиц производит изменения в бд.
+     * @param array $cat
+     * @param array $rec
+     * @param array $ch
+     * @param array $del
+     */
     function CategorySync($cat, $rec, $ch, $del){
-        //echo ('2');
-        //($id=0, $name='', $curid=0, $date='', $amount=0, $descr='', $user_id){
-        /*if ($cat[$k]['parent'] == 0){
-                    $categ = Category_Model::addCategory(0,$cat[$k]['parent'],$cat[$k]['name'],$this->user,$this->db);
-                }/*else{
-                    //а если дочерняя, то ищем id шник в remotekey
-                    $id = $this->findEkey($cat[$k]['parent']);
-                    $categ = Category_Model::addCategory(0,$id,$cat[$k]['name'],$this->user,$this->db);
-                }*/
-        /*foreach ($rec as $key=>$v){
+        $cate = New SyncCategory_Model($this->db, $this->user);
+        foreach ($rec as $key=>$v){
             if ($v['tablename']=="Categories"){
                 $ke = $v['remotekey'];
                 $k;
@@ -39,13 +43,11 @@ class Category {
                 foreach ($cat as $key=>$v){
                     if ($v['remotekey']==$ke AND $v['parent']==0){
                         $rem=$v['remotekey'];
-                        //$k = $key;
-                
+
                 $k=$rem;
                 //если категория родительская то добавляем её.
-                
 
-                $categ = Category_Model::addCategory(0,$cat[$k]['parent'],$cat[$k]['name'],$this->user,$this->db);
+                $categ = $cate->addCategory(0,$cat[$k]['parent'],$cat[$k]['name']);
                 if ($categ>0)
                 $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $rem, $categ, 1, $this->db);
                 }
@@ -60,65 +62,59 @@ class Category {
                 foreach ($cat as $key=>$v){
                     if ($v['remotekey']==$ke AND $v['parent']!=0){
                         $rem=$v['remotekey'];
-                        //$k = $key;
-                
+
                 $k=$rem;
-                //если категория родительская то добавляем её.
-                
+
                     //а если дочерняя, то ищем id шник в remotekey
                     $id = $this->findEkey($cat[$k]['parent']);
-                    $categ = Category_Model::addCategory(0,$id,$cat[$k]['name'],$this->user,$this->db);
-                
+                    $categ = $cate->addCategory(0,$id,$cat[$k]['name']);
+
 
                 if ($categ > 0)
                 $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $rem, $categ, 1, $this->db);
                 }
             }
         }
-        }*/
+        }
 
-        /*foreach ($ch as $key=>$v){
+        foreach ($ch as $key=>$v){
             if ($v['tablename']=="Categories"){
                 $ke = $v['remotekey'];
                 $k;
                 $rem;
                 foreach ($cat as $key=>$v){
-                    //echo ($key);
                     if ($v['remotekey']==$ke)
-                        //echo ($key);
-                        //$rem=$v['remotekey'];
                         $k = $key;
                 }
-                //echo ($k.' '.$acc[$k]['descr']);
                 $numEkey = $this->findEkey($ke);
-                Category_Model::editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name'],$this->user,$this->db);
+                $cate->editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name']);
             }
-        }*/
-        /*foreach ($del as $key=>$v){
+        }
+        foreach ($del as $key=>$v){
             if ($v['tablename']=="Categories"){
                 $ke = $v['remotekey'];
                 $k;
                 $rem;
                 foreach ($cat as $key=>$v){
-                    //echo ($key);
                     if ($v['remotekey']==$ke)
-                        //echo ($key);
                         $rem=$v['remotekey'];
-                        //$k = $key;
                 }
                 $numEkey = $this->findEkey($ke);
-                //echo ('num '.$numEkey);
                 if ($numEkey>0){
-                    //$us, $tablename, $remkey, $system, $db
-                    Category_Model::deleteCategory($numEkey, $this->db);
+                    $cate->deleteCategory($numEkey, $this->db);
                     RecordsMap_Model::DelRecordsMapString($this->user, 'Categories', $rem, 1, $this->db);
                 }
             }
-        }*/
-        
+        }
     }
+    /**
+     * Фромирует массив категорий и системных таблиц, изменений с момента последней синхронизации
+     * @param string $date
+     * @param string $data
+     * @return bool
+     */
     function FormArray($date='', &$data=''){
-        return Category_Model::formCategory($date, $data, $this->user,$this->db);
-        //echo ($data[9]);
+        $cat = New SyncCategory_Model($this->db, $this->user);
+        return $cat->formCategory($date, $data);
     }
 }

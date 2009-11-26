@@ -1,40 +1,58 @@
 <?php
 class RecordsMap_Model {
-    /*function addOperation($id=0, $name='', $curid=0, $date='', $amount=0, $descr='' ){
-        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
-    }*/
-    function AddRecordsMapString($us, $tablename, $remkey, $ekey, $system, $db){//$us, $tablename, $remkey, $ekey, $system, $db
-        //echo ('12gd');
+    /**
+     * Функция возвращает айдишник вставленной в базу записи
+     * @param int $us
+     * @param string $tablename
+     * @param int $remkey
+     * @param int $ekey
+     * @param int $system
+     * @param int $db
+     * @return int
+     */
+    function AddRecordsMapString($us, $tablename, $remkey, $ekey, $system, $db){
         //echo ($tablename.$remkey.$ekey.$system.$us);
         $sql = "INSERT INTO records_map (`user_id`, `tablename`, `remotekey`, `ekey`, `system`) VALUES
             (?, ?, ?, ?, ?);";
         $db->query($sql, $us, $tablename, $remkey, $ekey, $system);
-            return mysql_insert_id();
+           return mysql_insert_id();
     }
+    /**
+     * Функция удаляет запись в таблице RecordsMap
+     * @param int $us
+     * @param string $tablename
+     * @param int $remkey
+     * @param int $system
+     * @param int $db
+     * @return bool
+     */
     function DelRecordsMapString($us, $tablename, $remkey, $system, $db){
         echo ($tablename.$remkey.$system.$us);
         $sql = "DELETE FROM records_map WHERE user_id=? AND tablename=? AND remotekey=? AND system=?";
-        //return $db->query($sql, $us, $tablename, $remkey, $system);
+        return $db->query($sql, $us, $tablename, $remkey, $system);
     }
 
+    /**
+     * Формирует массив данных RecordsMap
+     * @param string $date
+     * @param array $data1
+     * @param array $data
+     * @param int $user_id
+     * @param int $db
+     */
     function formRecordsMap($date='', $data1='', &$data='', $user_id='', $db=''){
         $sql = "SELECT * FROM records_map WHERE system=1 AND user_id=?";
         $a = $db->query($sql, $user_id);
-        //echo ($data1[1][1]['remotekey']);
         foreach ($a as $k=>$v){
             foreach ($data1[1] as $key=>$value){
                 if ( $v['remotekey'] == $value['remotekey'] && ($v['tablename'] == $value['tablename']) ){
                     $data[1][0]['type'] = 'service';
                     $data[1][0]['name'] = 'RecordsMap';
-                    //echo (' = ');
                     $data[1][$k+1]['tablename'] = $v['tablename'];
                     $data[1][$k+1]['remotekey'] = (int)$v['remotekey'];
                     $data[1][$k+1]['ekey'] = (int)$v['ekey'];
                     continue;
-                }//else echo(' != ');
-                //echo ($value['remotekey']);
-                //echo ($v['id']);
+                }
             }
             //если запись удалена
             switch ($v['tablename']){
@@ -48,7 +66,6 @@ class RecordsMap_Model {
                 case ('Plans') :{$tab='periodic';$tabid='id';};break;
                 default : {$tab='accounts';$tabid='account_id';};break;
             }
-            //echo ($tabid);
             $cou = "SELECT count(*) AS cou FROM ".$tab." WHERE ".$tabid." = ? AND user_id=?";
                 $a = $db->query($cou, $v['ekey'],$user_id);
             //если запись удалена, т.е. не нашли в бд записи с айдишником указанным в recordsmap
@@ -68,8 +85,6 @@ class RecordsMap_Model {
             }
             
         }
-        //echo ($a[$k]['id']);
-    //echo ($a[0]['id']);
     }
     
 }

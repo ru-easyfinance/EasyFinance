@@ -1,10 +1,19 @@
-<?php
-$xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <methodCall>
+    <!--
+        Схема данных для синхронизации между easyfinance.ru и keepsoft.ru
+
+        Данные отсылаемые **из программы keepsoft.ru**
+    -->
     <methodName>sync.getAuth</methodName>
     <params>
+        <!-- Блок авторизации
+            login        - (только буквы и цифры, без пробелов. Максимум 50 символов) логин пользователя в системе easyfinance.ru
+            pass         - хэш пароля в SHA-1
+            lastsync     - дата последней синхронизации (dateTime.iso8601)
+            digsignature - цифровая подпись клиента
+        -->
         <param>
-        <value>
             <struct>
                 <member>
                     <name>type</name>
@@ -16,7 +25,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                 </member>
                 <member>
                     <name>login</name>
-                    <value>qwerty</value>
+                    <value>sync</value>
                 </member>
                 <member>
                     <name>pass</name>
@@ -25,32 +34,38 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                 <member>
                     <name>lastsync</name>
                     <value>20091003T10:11:12
-                    </value>
+                                </value>
                 </member>
                 <member>
                     <name>digsignature</name>
                     <value>n2jdy303yeer7j2v</value>
                 </member>
             </struct>
-        </value>
         </param>
 
+    <!-- Блок с системными данными
+
+        RecordsMap
+        Выводит все присвоенные в этой сессии номера ключей
+
+        tablename - Имя таблицы на английском языке, без пробелов
+        remotekey - ключ keepsoft.ru
+        ekey - ключ easyfinance.ru
+    -->
+
         <param>
-        <value>
+            <struct>
+                <member>
+                    <name>type</name>
+                    <value>service</value>
+                </member>
+                <member>
+                    <name>name</name>
+                    <value>RecordsMap</value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>type</name>
-                               <value>service</value>
-                            </member>
-                            <member>
-                                <name>name</name>
-                                <value>RecordsMap</value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -165,71 +180,82 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
+
+    <!-- Удалённые записи
+         tablename - Имя таблицы на английском языке, без пробелов.
+         remotekey - ключ keepsoft.ru
+    -->
         <param>
-        <value>
+            <struct>
+                <member>
+                    <name>type</name>
+                    <value>service</value>
+                </member>
+                <member>
+                    <name>name</name>
+                    <value>DeletedRecords</value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>type</name>
-                                <value>service</value>
-                            </member>
-                            <member>
-                                <name>name</name>
-                                <value>DeletedRecords</value>
-                            </member>
-                        </struct>
-                    </value>
+                    
                 </data>
             </array>
-        </value>
         </param>
 
+
+    <!-- Изменённые записи
+         tablename - Имя таблицы на английском языке, без пробелов.
+         remotekey - ключ keepsoft.ru
+    -->
         <param>
-        <value>
+            <struct>
+                <member>
+                    <name>type</name>
+                    <value>service</value>
+                </member>
+                <member>
+                    <name>name</name>
+                    <value>ChangedRecords</value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>type</name>
-                                <value>service</value>
-                            </member>
-                            <member>
-                                <name>name</name>
-                                <value>ChangedRecords</value>
-                            </member>
-                        </struct>
-                    </value>
+                    
                 </data>
             </array>
-        </value>
         </param>
 
+
+
+	<!-- Модули -->
+        <!-- Счета
+            remotekey - идентификатор
+            name - имя счёта
+            cur - идентификатор валюты
+            date - дата изменения начального баланса
+            startbalance - начальный баланс
+            descr - комментарий
+        -->
         <param>
-        <value>
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Accounts</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Accounts</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <int>2</int>
+                                    <i4>2</i4>
                                 </value>
                             </member>
                             <member>
@@ -239,7 +265,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>cur</name>
                                 <value>
-                                    <int>1</int>
+                                    <i4>1</i4>
                                 </value>
                             </member>
                             <member>
@@ -264,7 +290,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <int>1</int>
+                                    <i4>1</i4>
                                 </value>
                             </member>
                             <member>
@@ -274,7 +300,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>cur</name>
                                 <value>
-                                    <int>1</int>
+                                    <i4>1</i4>
                                 </value>
                             </member>
                             <member>
@@ -299,7 +325,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>remotekey</name>
                                 <value>
-                                    <int>4</int>
+                                    <i4>4</i4>
                                 </value>
                             </member>
                             <member>
@@ -309,7 +335,7 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>cur</name>
                                 <value>
-                                    <int>1</int>
+                                    <i4>1</i4>
                                 </value>
                             </member>
                             <member>
@@ -320,7 +346,8 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                             <member>
                                 <name>startbalance</name>
                                 <value>
-                                    <double>4200</double>
+                                    <double>4200
+                                    </double>
                                 </value>
                             </member>
                             <member>
@@ -331,26 +358,29 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
 
 
+        <!-- Перевод со счёта на счёт
+            remotekey - идентификатор
+            date - дата перевода
+            acfrom - идентификатор счёта, с которого осуществляем перевод
+            amount - сумма денег
+            acto - идентификатор счёта, на который переводим
+            descr - комментарий
+        -->
         <param>
-        <value>
-            
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Transfers</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Transfers</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -390,25 +420,26 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
 
+
+        <!-- Категории
+            remotekey - идентификатор
+            name - имя категории
+            parent - идентификатор родительской категории
+		-->
         <param>
-        <value>
-            
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Categories</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Categories</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -451,35 +482,25 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
 
+
+        <!-- Валюты
+            remotekey - идентификатор
+            name - название валюты
+        -->
         <param>
-        <value>
-            
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Currensies</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Currensies</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Currensies</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -506,26 +527,28 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
-
         </param>
 
 
+        <!-- Долги
+            remotekey - идентификатор
+            amount - сумма долга
+            currency - валюта долга
+            name - название долга
+            date - дата долга
+            done - сумма погашённая
+		-->
         <param>
-        <value>
-            
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Debets</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Debets</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -565,25 +588,29 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
 
+        <!-- Доходы
+            remotekey - идентификатор
+            date - дата
+            category - идентификатор категории
+            parent  - идентификатор родительской категории
+            account - идентификатор счёта
+            amount - сумма дохода
+            descr - комментарий
+        -->
         <param>
-        <value>
-
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Incomes</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Incomes</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -672,25 +699,29 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
 
+        <!-- Расходы
+            remotekey - идентификатор
+            date - дата
+            category - идентификатор категории
+            parent  - идентификаторо родительской категории
+            account - идентификатор счёта
+            amount - сумма расхода
+            descr - комментарий
+        -->
         <param>
-        <value>
-            
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Outcomes</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Outcomes</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -736,25 +767,30 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
 
 
+        <!-- Планирование
+            remotekey - идентификатор
+            date - дата
+            period - период в сутках
+            category - идентификатор категории
+            parent  - идентификаторо родительской категории
+            account - идентификатор счёта
+            amount - сумма
+            descr - комментарий
+		-->
         <param>
-        <value>
-            
+            <struct>
+                <member>
+                    <name>tablename</name>
+                    <value>
+                        <string>Plans</string>
+                    </value>
+                </member>
+            </struct>
             <array>
                 <data>
-                    <value>
-                        <struct>
-                            <member>
-                                <name>tablename</name>
-                                <value>
-                                    <string>Plans</string>
-                                </value>
-                            </member>
-                        </struct>
-                    </value>
                     <value>
                         <struct>
                             <member>
@@ -816,9 +852,8 @@ $xmlRequest='<?xml version="1.0" encoding="UTF-8"?>
                     </value>
                 </data>
             </array>
-        </value>
         </param>
-
+	<!--Модули -->
 
     </params>
-</methodCall>';
+</methodCall>
