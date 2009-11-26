@@ -20,7 +20,7 @@ require_once SYS_DIR_LIBS . 'external/smarty/Smarty_Compiler.class.php';
 require_once SYS_DIR_LIBS . 'external/smarty/Config_File.class.php';
 
 // Устанавливаем обработчик ошибок
-set_error_handler("UserErrorHandler");
+//set_error_handler("UserErrorHandler");
 
 // Настраиваем смарти
 $tpl = new Smarty();

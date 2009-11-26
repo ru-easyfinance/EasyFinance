@@ -38,6 +38,26 @@ class Info_Model
      * @var Operation_Model
      */
     //private $account_model = NULL;
+
+    /**
+     * Конструктор
+     * @return void
+     */
+//    public function __construct()
+//    {
+//        $this->db = Core::getInstance()->db;
+//        $this->user_id = Core::getInstance()->user->getId();
+//        $this->operation_model = new Operation_Model();
+//
+//        $sql = "SELECT
+//                    account_type_id, account_currency_id, account_id
+//                FROM
+//                    accounts
+//                WHERE
+//                    user_id=?";
+//        $this->accounts = $this->db->select($sql, $this->user_id);
+//    }
+
     /**
      * Конструктор
      * @return void
@@ -45,17 +65,70 @@ class Info_Model
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        $this->user_id = Core::getInstance()->user->getId();
+        //$this->user_id = Core::getInstance()->user->getId();
         $this->operation_model = new Operation_Model();
 
-        $sql = "SELECT
-                    account_type_id, account_currency_id, account_id
-                FROM
-                    accounts
-                WHERE 
-                    user_id=?";
-        $this->accounts = $this->db->select($sql, $this->user_id);
+//        $sql = "SELECT
+//                    account_type_id, account_currency_id, account_id
+//                FROM
+//                    accounts
+//                WHERE
+//                    user_id=?";
+//        $this->accounts = $this->db->select($sql, $this->user_id);
     }
+
+    /**
+     * Возвращает информацию для тахометров
+     * @return array mixed
+     */
+    public function get_data()
+    {
+/*
+        [
+            [20,0,0,0,20],
+            [
+                {
+                  "min":"0",
+                  "color":"0",
+                  "description":"0",
+                  "title":"\u0414\u0435\u043d\u044c\u0433\u0438"
+                },{
+                  "min":"0",
+                  "color":null,
+                  "description":null,
+                  "title":"\u0411\u044e\u0434\u0436\u0435\u0442"
+                },{
+                  "min":"97",
+                  "color":null,
+                  "description":null,
+                  "title":"\u041a\u0440\u0435\u0434\u0438\u0442\u044b"
+                },{
+                  "min":"0",
+                  "color":null,
+                  "description":null,
+                  "title":"\u0420\u0430\u0441\u0445\u043e\u0434\u044b"
+                },{
+                    "min":"0",
+                    "color":null,
+                    "description":null,
+                    "title":"\u0424\u0438\u043d.\u0441\u043e\u0441\u0442\u043e\u044f\u043d"
+                }
+            ]
+        ]
+*/
+
+//        SELECT AVG(money) FROM operation WHERE user_id = 5 AND drain = 0 AND transfer = 0 AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
+//        SELECT ABS(AVG(money)) FROM operation WHERE user_id = 5 AND drain = 1 AND transfer = 0 AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
+
+        return array(
+              10    //ИТОГО
+            , 23    //Деньги
+            , 21    //$upper
+            , 21    //$credit
+            , 23    //$expens
+            );
+    }
+
 
     //расчётные функции//////////////////////////////////////////////////////
     //получение данныхы//////////////////////////////////////////////////////
@@ -149,7 +222,6 @@ class Info_Model
         if ($ret > 0)
             return $ret;
         return 0;
-
     }
 
     private function upper()//4

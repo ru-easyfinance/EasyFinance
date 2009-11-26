@@ -13,23 +13,10 @@ class Info_Controller extends Template_Controller
     private $info_model = null;
     
     /**
-     * Модель класса фин целей
-     * @var Targets_Model
-     */
-    private $targets_model = null;
-
-    /**
      * Ссылка на класс Смарти
      * @var Smarty
      */
     private $tpl = null;
-
-
-    /**
-     * Количество отображаемых фин целей по умолчанию
-     * @var int
-     */
-    private $count = 5;
 
     /**
      * Конструктор класса
@@ -37,9 +24,6 @@ class Info_Controller extends Template_Controller
      */
     function __construct()
     {
-        $this->tpl = Core::getInstance()->tpl;
-        $this->tpl->assign('name_page', 'info_panel/info_panel');
-        $this->targets_model = new Targets_Model();
         $this->info_model = new Info_Model();
     }
 
@@ -49,31 +33,22 @@ class Info_Controller extends Template_Controller
      */
     function index()
     {
-        // Операция
+        $this->tpl = Core::getInstance()->tpl;
+        $this->tpl->assign('name_page', 'info_panel/info_panel');
+
+        //@FIXME Удалить позже
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
-        $this->tpl->assign('category', get_tree_select());
-        $targets = new Targets_Model();
-        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
-
-        
-        //$this->tpl->append('js','info/view.js');
     }
 
-////////////targets/////////////////////////////////////////
-    function targets_list()
-    {
-        $count = (int)$_POST['count'];
-        if(!$count)
-            $count = $this->count;
-     // Список ближайших целей пользователя
-        die(json_encode($this->targets_model->getLastList(1,$count)));
-    }
-
-/////////////chronometr //////////////////////////////////////
+    /**
+     * Получает данные для тахометров
+     * @result void
+     */
     function get_data()
     {
         //$date_start = formatRussianDate2MysqlDate($_POST['start']);
         //$date_end = formatRussianDate2MysqlDate($_POST['end']);
-        die(json_encode($this->info_model->tohometrs()));
+        //die(json_encode($this->info_model->tohometrs()));
+        die(json_encode($this->info_model->get_data()));
     }
 }

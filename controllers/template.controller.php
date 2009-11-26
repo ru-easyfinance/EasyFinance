@@ -112,7 +112,8 @@ class Template_Controller {
 
         try {
             $info = new Info_Model();
-            $infoa = $info->generate_value();
+            //$infoa = $info->generate_value();
+            $infoa = $info->get_data();
         } catch ( Exception $e) {
             $infoa = 0;
         }
