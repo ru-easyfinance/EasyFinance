@@ -1,5 +1,7 @@
  <?php
-	include(SYS_DIR_LIBS."external/php_xmlrpc/xmlrpc.inc");
+ DEFINE(INDEX, 1);
+ include ('../../include/config.php');
+	include(SYS_DIR_LIBS."external/php_xmlrpc/lib/xmlrpc.inc");
         $url = 'hm/sync/';
         $ch = curl_init('hm/sync/');
         //curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, false);

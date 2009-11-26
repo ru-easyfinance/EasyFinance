@@ -62,9 +62,11 @@ function formatIsoDateToNormal($str)
 
 
 //sync_getAuth($xmlRequest);
-include(SYS_DIR_LIBS."external/php_xmlrpc/xmlrpc.inc");
-include(SYS_DIR_LIBS."external/php_xmlrpc/xmlrpcs.inc");
-include(SYS_DIR_LIBS."external/php_xmlrpc/xmlrpc_wrappers.inc");
+ DEFINE(INDEX, 1);
+ include ('../../include/config.php');
+include(SYS_DIR_LIBS."external/php_xmlrpc/lib/xmlrpc.inc");
+include(SYS_DIR_LIBS."external/php_xmlrpc/lib/xmlrpcs.inc");
+include(SYS_DIR_LIBS."external/php_xmlrpc/lib/xmlrpc_wrappers.inc");
 $GLOBALS['xmlrpc_internalencoding']='UTF-8';
 
 function sync_getAuth($xmlRequest){
