@@ -86,8 +86,8 @@ easyFinance.widgets.operationEdit = function(){
 
                 _changeAccountForTransfer();
                 // reload operation journal
-                // operationsJournalReload();
-                easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
+                if (easyFinance.widgets.operationsJournal)
+                    easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
                 $('#btn_ReloadData').click();
             }
         });
