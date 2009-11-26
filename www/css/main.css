@@ -1833,5 +1833,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 #divAccountEdit #name { width: 348px; }
 #divAccountEdit #description { width: 348px; }
 
+#divAccountsJournal { padding-top: 0px !important; overflow-x: hidden; overflow-y: scroll; }
+
 @import izmeneniya.css
 
