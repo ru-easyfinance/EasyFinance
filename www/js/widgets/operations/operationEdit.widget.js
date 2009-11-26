@@ -144,8 +144,8 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $('#op_btn_Cancel').click(function(){
-            _clearForm();
-            $(".op_addoperation").hide();
+            $("#op_addoperation_but").click();
+
             return false;
         });
 
