@@ -515,7 +515,7 @@ $('.tags_list .add').live('click', function(){
                 c = '<h2>События календаря</h2><ul>' + c + '</ul>';
             }
             if (p != '') {
-                p = '<h2>Регулярные транзакции</h2><ul>' + p + '</ul>';
+                p = '<h2>Регулярные операции</h2><ul>' + p + '</ul>';
             }
             if ((c+p) != '') {
                 $('.transaction').html(c+p+'&nbsp;<a href="#" id="AshowEvents">Показать события</a>');
@@ -677,7 +677,7 @@ $('.tags_list .add').live('click', function(){
                         <a href="/calendar/"></a> \
                         <ul> \
                                 <li><span/><a href="/calendar/">Календарь</a></li> \
-                                <li><span/><a href="/periodic/">Рег. транзакции</a></li> \
+                                <li><span/><a href="/periodic/">Рег. операции</a></li> \
                                 <li class="last"><img src="/img/i/menu3_submenu_bottom.png"/></li> \
                         </ul> \
                 </li> \
