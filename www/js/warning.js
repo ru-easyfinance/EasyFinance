@@ -15,7 +15,7 @@ var url2 = "http://www.mozilla-europe.org/ru/firefox/";
 var url3 = "http://www.apple.com/ru/safari/download/";
 var url4 = "http://www.opera.com/download/";
 var url5 = "http://www.google.com/chrome?hl=ru";
-var imgPath = 'img/ie6/';
+var imgPath = '/img/ie6/';
 var _body = document.getElementsByTagName('body')[0];
 var _d = document.createElement('div');
 var _l = document.createElement('div');
