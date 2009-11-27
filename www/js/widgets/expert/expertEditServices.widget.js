@@ -24,7 +24,7 @@ easyFinance.widgets.expertEditServices = function(){
             // hidden field instead of unchecked checkbox
             var _$col = $('<td>');
             _$col.append($('<input>')
-                .attr('name', 'service[' + key + '][checked]')
+                .attr('name', 'service[' + services[key].id + '][checked]')
                 .attr('type', 'hidden')
                 .val('0')
             );
@@ -33,7 +33,7 @@ easyFinance.widgets.expertEditServices = function(){
             // checkbox
             _$col = $('<td>');
             _$col.append($('<input>')
-                .attr('name', 'service[' + key + '][checked]')
+                .attr('name', 'service[' + services[key].id + '][checked]')
                 .attr('type', 'checkbox')
                 .val('1')
                 .attr('checked', services[key].checked)
@@ -56,7 +56,7 @@ easyFinance.widgets.expertEditServices = function(){
             _$col = $('<td>');
             _$col.append($('<input>')
                 .addClass('price')
-                .attr('name', 'service[' + key + '][price]')
+                .attr('name', 'service[' + services[key].id + '][price]')
                 .val(services[key].price)
                 .keyup (function(e){
                     FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
