@@ -35,7 +35,8 @@ class SeoText{
         foreach ($this->array as $k=>$v){
             if ($v[0]!=''){
                 $button = '<form name="del" method="post" action="/seo.php"><input name="delname" type="hidden" value="'.$v[0].'"><input type="submit" value="Удалить"></form>';
-                $button .= '<form name="edit" method="post" action="/seo.php"><input name="editname" type="hidden" value="'.$v[0].'"><input type="submit" value="Редактировать"></form>';
+                $button .= '<form name="edit" method="post" action="/seo.php"><input name="editname" type="hidden" value="'.$v[0].'"><input name="edittext1" type="hidden" value="'.$v[1].'">
+                    <input name="edittext2" type="hidden" value="'.$v[2].'"><input type="submit" value="Редактировать"></form>';
                 echo($v[0].'     '.$button);
                 echo('<xmp>'.$v[1].'</xmp>');
                 echo('<xmp>'.$v[2].'</xmp>'.'<br>');
@@ -107,8 +108,8 @@ if (!(isset($_SERVER['PHP_AUTH_USER']) &&
 
     if (isset($_POST['edname']) && isset($_POST['edmaintext']) && isset($_POST['edrelatedtext'])){
         $seo = new SeoText();
-        $seo->GetArray();
         $seo->EditString($_POST['edname'],$_POST['edmaintext'],$_POST['edrelatedtext']);
+        $seo->GetArray();
         $seo->ShowAll();
     }
 
@@ -124,7 +125,7 @@ if (isset($_POST['delname'])){
             $seo->GetArray();
             $seo->PlusToFile();
             $seo->ShowAll();
-        }else{
+        }else if (!isset($_POST['edname'])) if (!isset($_POST['delname'])){
             $seo = new SeoText();
             $seo->GetArray();
             $seo->ShowAll();
@@ -156,11 +157,11 @@ if (isset($_POST['delname'])){
         <td>
     <form name="test" method="post" action="/seo.php">
     <p>Заголовок<Br>
-    <textarea name="edname" cols="40" rows="3"><?$_POST['editname']?></textarea></p>
+    <textarea name="edname" cols="40" rows="3"><?echo($_POST['editname'])?></textarea></p>
     <p>Основной текст<Br>
-    <textarea name="edmaintext" cols="40" rows="6"></textarea></p>
+    <textarea name="edmaintext" cols="40" rows="6"><?echo($_POST['edittext1'])?></textarea></p>
     <p>Расширенный текст<Br>
-    <textarea name="edrelatedtext" cols="40" rows="6"></textarea></p>
+    <textarea name="edrelatedtext" cols="40" rows="6"><?echo($_POST['edittext2'])?></textarea></p>
 
     <p><input name="add"type="submit" value="Редактировать">
     </form>
