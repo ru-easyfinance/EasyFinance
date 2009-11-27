@@ -26,9 +26,15 @@ function user_info_save()
         return false;
     } else if (($('input#newpass').val()) == ($('input#newpass2').val())) {
         if ($('#help:checked').length == 1){
-            $.cookie('tooltip', '1', {expire: 100, path : '/', domein: false, secure : '1'});
+            if($.cookie('tooltip') != '1'){
+                $.cookie('tooltip', '1', {expire: 100, path : '/', domein: false, secure : '1'});
+                initToltips('modern')
+            }
         }else{
-            $.cookie('tooltip', '0', {expire: 100, path : '/', domein: false, secure : '1'});
+            if($.cookie('tooltip') != '0'){
+                $.cookie('tooltip', '0', {expire: 100, path : '/', domein: false, secure : '1'});
+                destroyToltips();
+            }
         }
         $.post('/profile/save_main_settings/', {
             //help: ($('#help:checked').length == 1)? 1 : 0,
