@@ -216,6 +216,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      */
     $('#master .next,#master .prev').click(function(){
         var id = $(this).attr('id');
+        var loadDate;
         switch(id){
             case 'tostep1':
                 $('#master .step').hide();
@@ -229,9 +230,17 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                     _currentDate.setDate(1)
                     _currentDate.setYear($('#master #step1 #year').val());
                     _currentDate.setMonth($('#master #step1 #month').val()-1);
+                    if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new'){
+                        loadDate = new Date(_currentDate);
+                    }else{
+                        loadDate = new Date();
+                        loadDate.setDate(1)
+                        loadDate.setYear($('#master #step1 #copy_year').val());
+                        loadDate.setMonth($('#master #step1 #copy_month').val()-1);
+                    }
                     $('#master #step2 .master.head h4').text('Шаг 2 из 3. Доходы - Планирование бюджета на '+$('#master #step1 #month option[value="'+$('#master #step1 #month').val()+'"]').text() +' '+$('#master #step1 #year').val())
                     $('#master #step3 .master.head h4').text('Шаг 3 из 3. Расходы - Планирование бюджета на '+$('#master #step1 #month option[value="'+$('#master #step1 #month').val()+'"]').text() +' '+$('#master #step1 #year').val())
-                    model.reload(_currentDate,function(drain,profit){
+                    model.reload(loadDate,function(drain,profit){
                         _printMaster(1);
                         _printMaster(0);
                         var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(profit)+'</b> руб.</span></div>';
@@ -277,11 +286,23 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#master .step').hide();
         $('#master #step1').show();
         var tempDate = widget.getDate()
+        $('#step1 #copy_month').val(tempDate.getMonth()+1);
+        $('#step1 #copy_year').val(tempDate.getFullYear());
         tempDate.setMonth(tempDate.getMonth()+1);
         $('#step1 #month').val(tempDate.getMonth()+1);
         $('#step1 #year').val(tempDate.getFullYear());
         $('#master').dialog('open');
         $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
+    })
+    /**
+     * копировать - создать новый
+     */
+    $('#master #step1 input:[type="radio"]').click(function(){
+        if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new'){
+            $('#master #step1 .copy').hide();
+        }else{
+            $('#master #step1 .copy').show();
+        }
     })
 
     /**
@@ -289,7 +310,6 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      */
     $('#master').live('click',function(){fullSum(0)})
     $('#master tr input').live('blur',function(){
-        alert('123')
         fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
     })
     $('#master .amount input').live('blur',function(){
