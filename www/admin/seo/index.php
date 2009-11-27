@@ -1,23 +1,4 @@
-<html>
-<style type="text/css">
-#col1 {
- width: 75%;
-}
-
-#col2 {
- width: 25%;
-}
-
-#col1, #col2 {
- vertical-align: top; /* Выравнивание по верхнему краю */
- padding: 5px; /* Поля вокруг содержимого ячеек */
-}
-</style>
-<table width="100%" border="1">
-<tr>
-    <td id="col1">
 <?php
-
 class SeoText{
     private $name;
     private $text1;
@@ -151,8 +132,13 @@ if (isset($_POST['delname'])){
 }
     if (!isset($_POST['editname'])){
 ?>
+<html>
+
+<table width="100%" border="1">
+<tr>
+<td>
         </td>
-        <td id="col2">
+        <td id="col2" width="25%">
     <form name="test" method="post" action="/seo.php">
     <p>Заголовок<Br>
     <textarea name="name" cols="40" rows="3"></textarea></p>
@@ -168,8 +154,13 @@ if (isset($_POST['delname'])){
     }
     else{
         ?>
+            <html>
+
+<table width="100%" border="1">
+<tr>
+<td>
             </td>
-        <td id="col2">
+        <td id="col2" width="25%">
     <form name="test" method="post" action="/seo.php">
     <p>Заголовок<Br>
     <textarea name="edname" cols="40" rows="3"><?echo($_POST['editname'])?></textarea></p>
