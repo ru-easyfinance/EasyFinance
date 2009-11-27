@@ -70,7 +70,7 @@ easyFinance.widgets.expertEditServices = function(){
             _$col = $('<td>');
             _$col.append($('<input>')
                 .addClass('days')
-                .attr('name', 'service[' + key + '][days]')
+                .attr('name', 'service[' + services[key].id + '][days]')
                 .val(services[key].days)
                 .keyup (function(e){
                     FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
