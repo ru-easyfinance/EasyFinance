@@ -17,6 +17,11 @@ easyFinance.widgets.operationEdit = function(){
     var _selectedAccount = '';
     var _selectedType = '';
     var _selectedCategory = '';
+    var _selectedTransfer = '';
+    var _selectedTarget = '';
+
+    var _sexyTransfer = false;
+    var _sexyTarget = false;
 
     // private functions
 
@@ -249,25 +254,22 @@ easyFinance.widgets.operationEdit = function(){
             $("#op_category").html(htmlOptions);
             $('#op_category').val(_selectedCategory);
             $.sexyCombo.changeOptions("#op_category", _selectedCategory);
-            
-            /*
-            $.post('/category/cattypechange/',{
-                type : typ
-            },function(data){
-                $("#op_category").html(data);
-                if (_newcat) {
-                    $('#op_category').val(_newcat);
-                    $.sexyCombo.changeOptions("#op_category", _newcat);
-                } else {
-                    $.sexyCombo.changeOptions("#op_category");
-                }
-            },'json');
-            */
 
         //Перевод со счёта
         } else if (_selectedType == "2") {
             $("#op_category_fields,#op_target_fields").hide();
             $("#op_tags_fields,#op_transfer_fields").show();
+
+            if (!_sexyTransfer) {
+                _sexyTransfer = true;
+                $("#op_AccountForTransfer").sexyCombo({
+                    filterFn: _sexyFilter,
+                    changeCallback: function() {
+                        _selectedTransfer = this.getCurrentHiddenValue();
+                    }
+                });
+            }
+            
             _changeAccountForTransfer();
         //Перевод на финансовую цель
         } else if (_selectedType == "4") {
@@ -280,10 +282,21 @@ easyFinance.widgets.operationEdit = function(){
                 o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
                     '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
             }
-            $("#op_target_fields").show();
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
             $('#op_target').html(o);
             $('#op_target').change();
+
+            $("#op_target_fields").show();
+
+            if (!_sexyTarget) {
+                _sexyTarget = true;
+                $("#op_target").sexyCombo({
+                    filterFn: _sexyFilter,
+                    changeCallback: function() {
+                        _selectedTarget = this.getCurrentHiddenValue();
+                    }
+                });
+            }
         }
     }
 
@@ -388,6 +401,16 @@ easyFinance.widgets.operationEdit = function(){
                 $.jGrowl('Вы ввели неверное значение в поле "категория"!', {theme: 'red', stick: true});
                 return false;
             }   
+        } else if (opType == "2") {
+            if (_selectedTransfer == '') {
+                $.jGrowl('Укажите счёт для перевода!', {theme: 'red', stick: true});
+                return false;
+            }
+        } else if (opType == "4") {
+            if (_selectedTarget == '') {
+                $.jGrowl('Укажите финансовую цель!', {theme: 'red', stick: true});
+                return false;
+            }
         }
 
         /*

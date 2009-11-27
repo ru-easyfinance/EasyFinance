@@ -31,6 +31,8 @@ easyFinance.widgets.operationsJournal = function(){
     var _$dialogFilterAccount = null;
     var _$dialogFilterCategory = null;
 
+    var _sexyCategoryInitialized = false;
+
     // private functions
     //
     // форматирует и выводит таблицу с данными
@@ -80,7 +82,7 @@ easyFinance.widgets.operationsJournal = function(){
 
                 tr += '<td class="light"><span>'+data[v].date+'</span></td>'
                 + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
-                + '<td class="big">'+data[v].account_name
+                + '<td class="big">'+ (data[v].account_name ? data[v].account_name : '&nbsp;')
                     +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
@@ -171,6 +173,16 @@ easyFinance.widgets.operationsJournal = function(){
             $('#remove_all_op').hide();
     }
 
+    function _sexyFilter (input, text){
+        if (this.wrapper.data("sc:lastEvent") == "click")
+            return true;
+
+        if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
+            return true;
+        else
+            return false;
+    }
+
     function _initFilters() {
         // сброс фильтров
         $('#linkOperationsJournalClearFilters').click(function(){
@@ -224,29 +236,6 @@ easyFinance.widgets.operationsJournal = function(){
         // фильтр по категории
         // заполняем диалог ссылками на доступные категории
         _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px"});
-/*
-        $("#op_account").sexyCombo({
-            filterFn: _sexyFilter,
-            changeCallback: function() {
-                _selectedAccount = this.getCurrentHiddenValue();
-
-                _changeAccountForTransfer();
-                // reload operation journal
-                // operationsJournalReload();
-                easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
-                $('#btn_ReloadData').click();
-            }
-        });
-
-        if (this.wrapper.data("sc:lastEvent") == "click")
-            return true;
-
-        if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
-            return true;
-        else
-            return false;
-        */
-
         _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
             var $combo = $('#selectFilterCategory');
             _category = $combo.attr('value');
@@ -263,7 +252,15 @@ easyFinance.widgets.operationsJournal = function(){
 
             return false;
         });
-        $('#btnFilterCategory').click(function(){_$dialogFilterCategory.dialog('open');});
+        $('#btnFilterCategory').click(function(){
+            _$dialogFilterCategory.dialog('open');
+            if (!_sexyCategoryInitialized) {
+                _sexyCategoryInitialized = true;
+                $("#selectFilterCategory").sexyCombo({
+                    filterFn: _sexyFilter
+                });
+            }
+        });
 
         // фильтр по счёту
         _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});

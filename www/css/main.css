@@ -1835,5 +1835,12 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 #divAccountsJournal { padding-top: 0px !important; overflow-x: hidden; overflow-y: scroll; }
 
+#dialogFilterCategory .padding10 { padding-bottom: 200px; }
+#dialogFilterCategory #btnFilterCategorySave { margin-top: 8px; }
+#dialogFilterCategory .sexy input { width: 388px; }
+#dialogFilterCategory .sexy div.icon { left: 384px; }
+#dialogFilterCategory .sexy div.list-wrapper { width: 399px; }
+
+
 @import izmeneniya.css
 
