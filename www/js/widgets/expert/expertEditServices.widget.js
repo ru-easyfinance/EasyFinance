@@ -100,8 +100,11 @@ easyFinance.widgets.expertEditServices = function(){
             },
             // post-submit callback
             success: function(data){
-                $.jGrowl("Изменения сохранены", {theme: 'green'});
-                _showInfo(data);
+                if (data.error) {
+                    $.jGrowl(data.error.text, {theme: 'red'});
+                } else if (data.result) {
+                    $.jGrowl(data.result.text, {theme: 'green'});
+                }
             },
             error: function(){
                 $.jGrowl("Ошибка на сервере!", {theme: 'red'});
