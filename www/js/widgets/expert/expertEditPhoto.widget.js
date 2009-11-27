@@ -70,7 +70,7 @@ easyFinance.widgets.expertEditPhoto = function(){
                     $.jGrowl(data.error.text, {theme: 'red'});
                 } else if (data.result) {
                     $.jGrowl(data.result.text, {theme: 'green'});
-                    _showInfo(data.result);
+                    _showInfo(data.result.profile);
                 }
             },
             error: function(){
