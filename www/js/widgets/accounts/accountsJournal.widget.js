@@ -44,7 +44,7 @@ easyFinance.widgets.accountsJournal = function(){
                 }
 
                 str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
-                    formatCurrency(account.def_cur) + ' '+account.cur+'</td>';
+                    formatCurrency(account.def_cur) + ' '+d_cur+'</td>';
 
                 for(var key in spec)
                 {
