@@ -1092,3 +1092,20 @@ function getCookie(name) {
         //$("#guide").resizable();
     }
 });
+
+/**
+ * Переключает видимость категорий
+ * @param field Gj
+ * @param type 1 - доход, -1 - расход
+ */
+
+function toggleVisibleCategory(field, type) {
+    $('option',field).each(function(){
+        var opt = this;
+        if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
+            $(opt).css('display','block');
+        } else {
+            $(opt).css('display','none');
+        }
+    });
+}
