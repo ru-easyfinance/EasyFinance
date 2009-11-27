@@ -31,9 +31,9 @@ class SeoText{
     }
     
     function GetArray() {
-        $f = fopen('admin/seo.txt','r');
-        if (filesize('admin/seo.txt')){
-            $content = fread($f,filesize('admin/seo.txt'));
+        $f = fopen('/admin/seo.txt','r');
+        if (filesize('/admin/seo.txt')){
+            $content = fread($f,filesize('/admin/seo.txt'));
             //$content = stripslashes($content);
             fclose($f);
             $ArrString = explode('\n',$content);
@@ -64,18 +64,18 @@ class SeoText{
         //print_r($this->array);
         $this->array[] = $arr;
         $dump = ($this->name.'\t'.$this->text1.'\t'.$this->text2.'\n');
-        $f = fopen('admin/seo.txt', 'a');
+        $f = fopen('/admin/seo.txt', 'a');
         fwrite($f, $dump);
         fclose($f);
     }
 
     function DeleteRecord($name){
-        $f = fopen('admin/seo.txt','r');
-        if (filesize('admin/seo.txt')){
-            $content = fread($f,filesize('admin/seo.txt'));
+        $f = fopen('/admin/seo.txt','r');
+        if (filesize('/admin/seo.txt')){
+            $content = fread($f,filesize('/admin/seo.txt'));
             fclose($f);
             $ArrString = explode('\n',$content);
-            $f = fopen('admin/seo.txt', 'w');
+            $f = fopen('/admin/seo.txt', 'w');
             $dump='';
             foreach ($ArrString as $key=>$v){
                 $str = explode('\t',$v);
@@ -89,12 +89,12 @@ class SeoText{
     }
 
     function EditString($name, $text1, $text2){
-        $f = fopen('admin/seo.txt','r');
-        if (filesize('admin/seo.txt')){
-            $content = fread($f,filesize('admin/seo.txt'));
+        $f = fopen('/admin/seo.txt','r');
+        if (filesize('/admin/seo.txt')){
+            $content = fread($f,filesize('/admin/seo.txt'));
             fclose($f);
             $ArrString = explode('\n',$content);
-            $f = fopen('admin/seo.txt', 'w');
+            $f = fopen('/admin/seo.txt', 'w');
             $dump='';
             foreach ($ArrString as $key=>$v){
                 $str = explode('\t',$v);
