@@ -101,7 +101,7 @@ class Operation_Controller extends Template_Controller
                 //die(json_encode($target->getLastList(0, 100)));
                 die('[]');
         }
-
+        die('[]');
     }
 
     /**
@@ -157,6 +157,7 @@ class Operation_Controller extends Template_Controller
         $id = abs((int)$_POST['id']);
         die($this->model->deleteOperation($id));
     }
+
     function deleteTargetOp($args)
     {
         $id = abs((int)$_POST['id']);
@@ -244,7 +245,7 @@ class Operation_Controller extends Template_Controller
             $sumTo = (float)@$_GET['sumTo'];
         }
 
-        $array      = array();
+        $array = array();
 
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo);
 
@@ -254,6 +255,9 @@ class Operation_Controller extends Template_Controller
         foreach ($list as $val) {
             if (!is_null($val['account_name'])) {
                $array[$val['id']] = $val;
+            } else {
+                $array[$val['id']] = $val;
+                $array[$val['id']]['account_name'] = '';
             }
         }
         die(json_encode($array));

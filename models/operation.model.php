@@ -153,11 +153,14 @@ class Operation_Model {
             $valid['tags'] = null;
         }
 
-
         // Проверяем тип операцииe
         // - Перевод со счёта на счёт
         if ($valid['type'] == 2) {
-            $valid['convert'] = round($valid['amount'] /  (float)$_POST['currency'], 2);
+            if ((float)$_POST['currency'] != 0) {
+                $valid['convert'] = round($valid['amount'] /  (float)$_POST['currency'], 2);
+            } else {
+                $valid['convert'] = 0;
+            }
             $valid['toAccount'] = (int)@$_POST['toAccount'];
         // - Финансовая цель
         } elseif($valid['type'] == 4) {
@@ -249,8 +252,8 @@ class Operation_Model {
     }
 
     /**
-     *
-     * @param <type> $money
+     * Добавляем перевод со счёта на счёт
+     * @param type> $money
      * @param <type> $convert
      * @param <type> $date
      * @param <type> $from_account
@@ -274,17 +277,22 @@ class Operation_Model {
         }else{
 
         $drain_money = $money * -1;
-                // tr_id. было drain
-		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-        $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
+
+        // tr_id. было drain
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        
+        $last_id = $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
             $comment, $to_account);
 
+        // @FIXME Поправить переводы между счетами
+        // Закомментированные запросы ещё пригодятся
+            
         /*$last_id = mysql_insert_id();
-            $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO operation
+                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, 1,
             $comment, $from_account);//*/
 
