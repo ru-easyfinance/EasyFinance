@@ -1,7 +1,21 @@
 <html>
+<style type="text/css">
+#col1 {
+ width: 75%;
+}
+
+#col2 {
+ width: 25%;
+}
+
+#col1, #col2 {
+ vertical-align: top; /* Выравнивание по верхнему краю */
+ padding: 5px; /* Поля вокруг содержимого ячеек */
+}
+</style>
 <table width="100%" border="1">
 <tr>
-    <th width="50%">
+    <td id="col1">
 <?php
 
 class SeoText{
@@ -38,8 +52,8 @@ class SeoText{
                 $button .= '<form name="edit" method="post" action="/seo.php"><input name="editname" type="hidden" value="'.$v[0].'"><input name="edittext1" type="hidden" value="'.$v[1].'">
                     <input name="edittext2" type="hidden" value="'.$v[2].'"><input type="submit" value="Редактировать"></form>';
                 echo($v[0].'     '.$button);
-                echo('<xmp>'.$v[1].'</xmp>');
-                echo('<xmp>'.$v[2].'</xmp>'.'<br>');
+                echo(''.$v[1].'');
+                echo(''.$v[2].''.'<br>');
             }
         }
     }
@@ -136,8 +150,8 @@ if (isset($_POST['delname'])){
 }
     if (!isset($_POST['editname'])){
 ?>
-        </th>
-        <td>
+        </td>
+        <td id="col2">
     <form name="test" method="post" action="/seo.php">
     <p>Заголовок<Br>
     <textarea name="name" cols="40" rows="3"></textarea></p>
@@ -146,15 +160,15 @@ if (isset($_POST['delname'])){
     <p>Расширенный текст<Br>
     <textarea name="relatedtext" cols="40" rows="6"></textarea></p>
 
-    <p><input name="add"type="submit" value="Добавить">
+    <p><input name="add" type="submit" value="Добавить">
     </form>
 
 <?php
     }
     else{
         ?>
-            </th>
-        <td>
+            </td>
+        <td id="col2">
     <form name="test" method="post" action="/seo.php">
     <p>Заголовок<Br>
     <textarea name="edname" cols="40" rows="3"><?echo($_POST['editname'])?></textarea></p>
@@ -163,7 +177,7 @@ if (isset($_POST['delname'])){
     <p>Расширенный текст<Br>
     <textarea name="edrelatedtext" cols="40" rows="6"><?echo($_POST['edittext2'])?></textarea></p>
 
-    <p><input name="add"type="submit" value="Редактировать">
+    <p><input name="edit" type="submit" value="Редактировать">
     </form>
 
         <?
