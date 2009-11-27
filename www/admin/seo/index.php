@@ -30,8 +30,8 @@ class SeoText{
     function ShowAll(){
         foreach ($this->array as $k=>$v){
             if ($v[0]!=''){
-                $button = '<form name="del" method="post" action="/seo.php"><input name="delname" type="hidden" value="'.$v[0].'"><input type="submit" value="Удалить"></form>';
-                $button .= '<form name="edit" method="post" action="/seo.php"><input name="editname" type="hidden" value="'.$v[0].'"><input name="edittext1" type="hidden" value="'.$v[1].'">
+                $button = '<form name="del" method="post" action="/admin/seo/"><input name="delname" type="hidden" value="'.$v[0].'"><input type="submit" value="Удалить"></form>';
+                $button .= '<form name="edit" method="post" action="/admin/seo/"><input name="editname" type="hidden" value="'.$v[0].'"><input name="edittext1" type="hidden" value="'.$v[1].'">
                     <input name="edittext2" type="hidden" value="'.$v[2].'"><input type="submit" value="Редактировать"></form>';
                 echo($v[0].'     '.$button);
                 echo(''.$v[1].''.'<br>');
@@ -101,6 +101,13 @@ if (!(isset($_SERVER['PHP_AUTH_USER']) &&
     area"');
   header('Status: 401 Unauthorized');
 } else {
+    ?>
+                <html>
+
+<table width="100%" border="1">
+<tr>
+<td valign="top">
+    <?
 
     if (isset($_POST['edname']) && isset($_POST['edmaintext']) && isset($_POST['edrelatedtext'])){
         $seo = new SeoText();
@@ -132,11 +139,6 @@ if (isset($_POST['delname'])){
 }
     if (!isset($_POST['editname'])){
 ?>
-<html>
-
-<table width="100%" border="1">
-<tr>
-<td>
         </td>
         <td id="col2" width="25%">
     <form name="test" method="post" action="/admin/seo/">
@@ -154,11 +156,6 @@ if (isset($_POST['delname'])){
     }
     else{
         ?>
-            <html>
-
-<table width="100%" border="1">
-<tr>
-<td>
             </td>
         <td id="col2" width="25%">
     <form name="test" method="post" action="/admin/seo/">
