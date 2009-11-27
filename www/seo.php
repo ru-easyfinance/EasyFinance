@@ -34,6 +34,7 @@ class SeoText{
         $f = fopen('admin/seo.txt','r');
         if (filesize('admin/seo.txt')){
             $content = fread($f,filesize('admin/seo.txt'));
+            //$content = stripslashes($content);
             fclose($f);
             $ArrString = explode('\n',$content);
             foreach ($ArrString as $key=>$v){
@@ -52,7 +53,7 @@ class SeoText{
                 $button .= '<form name="edit" method="post" action="/seo.php"><input name="editname" type="hidden" value="'.$v[0].'"><input name="edittext1" type="hidden" value="'.$v[1].'">
                     <input name="edittext2" type="hidden" value="'.$v[2].'"><input type="submit" value="Редактировать"></form>';
                 echo($v[0].'     '.$button);
-                echo(''.$v[1].'');
+                echo(''.$v[1].''.'<br>');
                 echo(''.$v[2].''.'<br>');
             }
         }
@@ -62,7 +63,7 @@ class SeoText{
         $arr = array($this->name, $this->text1, $this->text2);
         //print_r($this->array);
         $this->array[] = $arr;
-        $dump = $this->name.'\t'.$this->text1.'\t'.$this->text2.'\n';
+        $dump = ($this->name.'\t'.$this->text1.'\t'.$this->text2.'\n');
         $f = fopen('admin/seo.txt', 'a');
         fwrite($f, $dump);
         fclose($f);
@@ -79,7 +80,7 @@ class SeoText{
             foreach ($ArrString as $key=>$v){
                 $str = explode('\t',$v);
                 if ($str[0]!=$name) {
-                    $dump .= $str[0].'\t'.$str[1].'\t'.$str[2].'\n';
+                    $dump .= ($str[0].'\t'.$str[1].'\t'.$str[2].'\n');
                 }
             };
             fwrite($f, $dump);
@@ -98,9 +99,9 @@ class SeoText{
             foreach ($ArrString as $key=>$v){
                 $str = explode('\t',$v);
                 if ($str[0]!=$name) {
-                    $dump .= $str[0].'\t'.$str[1].'\t'.$str[2].'\n';
+                    $dump .= ($str[0].'\t'.$str[1].'\t'.$str[2].'\n');
                 }else{
-                    $dump .= $name.'\t'.$text1.'\t'.$text2.'\n';
+                    $dump .= ($name.'\t'.$text1.'\t'.$text2.'\n');
                 }
 
             };
