@@ -21,11 +21,21 @@ easyFinance.widgets.expertEditServices = function(){
         for (var key in services) {
             var _$row = $('<tr>');
 
-            // checkbox
+            // hidden field instead of unchecked checkbox
             var _$col = $('<td>');
             _$col.append($('<input>')
-                .attr('name', 'checkService_' + key)
+                .attr('name', 'service[' + key + '][checked]')
+                .attr('type', 'hidden')
+                .val('0')
+            );
+            _$row.append(_$col);
+
+            // checkbox
+            _$col = $('<td>');
+            _$col.append($('<input>')
+                .attr('name', 'service[' + key + '][checked]')
                 .attr('type', 'checkbox')
+                .val('1')
                 .attr('checked', services[key].checked)
                 .click(function(){
                     if (!$(this).attr('checked'))
@@ -46,7 +56,7 @@ easyFinance.widgets.expertEditServices = function(){
             _$col = $('<td>');
             _$col.append($('<input>')
                 .addClass('price')
-                .attr('name', 'txtPrice_' + key)
+                .attr('name', 'service[' + key + '][price]')
                 .val(services[key].price)
                 .keyup (function(e){
                     FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
@@ -60,7 +70,7 @@ easyFinance.widgets.expertEditServices = function(){
             _$col = $('<td>');
             _$col.append($('<input>')
                 .addClass('days')
-                .attr('name', 'txtDays_' + key)
+                .attr('name', 'service[' + key + '][days]')
                 .val(services[key].days)
                 .keyup (function(e){
                     FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
