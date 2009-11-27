@@ -275,13 +275,13 @@ $(document).ready(function() {
         $('#op_pinfinity').select(function(){
             $('#op_pcounts').Attr('disable','disable')
         })
-
+        $('#cal_time').timePicker().mask('99:99');
         function add2call() {
             $('#cal_amount').keyup(function(e){
                 FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
             });
             $('input#cal_date,input#cal_date_end').datepicker();
-            $('#cal_time').timePicker().mask('99:99');
+            
             $('#cal_repeat').change(function(){
                 if ($('#cal_repeat').val()=="7"){ // Неделя
                     $('#week.week').closest('.line').show();

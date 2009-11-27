@@ -149,10 +149,10 @@
                 <input id="cal_key" type="hidden" value ="0" />
                 <input id="cal_chain" type="hidden" value ="0" />
                 <input id="cal_href" type="hidden" value ="0" />
-                    <ul id="cal_mainselect">
-                        <li id="event" class="act"><span>Событие</span></li>
-                        <li id="periodic"><span>Регулярные операции</span></li>
-                    </ul>
+                <ul id="cal_mainselect">
+                    <li id="event" class="act"><span>Событие</span></li>
+                    <li id="periodic"><span>Регулярные операции</span></li>
+                </ul>
             </div>
             <div class="line periodic event">
                     <label for="cal_title">Название</label>
@@ -231,13 +231,13 @@
                             <span>раз</span>
                     </div>
                     <div class="infinity repeat">
-                            <input name="rep_type" class="rep_type" rep="2" type="radio">
+                        <input name="rep_type" class="rep_type" rep="2" type="radio">
                             <label>Бесконечно</label>
                     </div>
                     <div class="todate repeat">
                         <label for="cal_date_end">До даты</label>
                             <input name="rep_type" class="rep_type" rep="3" type="radio">
-                            <input name="date_end" id="cal_date_end" value="" type="text">
+                            <input name="date_end" id="cal_date_end" value="" type="text" disabled="disabled">
                     </div>
             </div>
 
