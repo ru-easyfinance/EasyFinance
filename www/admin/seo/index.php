@@ -139,7 +139,7 @@ if (isset($_POST['delname'])){
 <td>
         </td>
         <td id="col2" width="25%">
-    <form name="test" method="post" action="/seo.php">
+    <form name="test" method="post" action="/admin/seo/">
     <p>Заголовок<Br>
     <textarea name="name" cols="40" rows="3"></textarea></p>
     <p>Основной текст<Br>
@@ -161,7 +161,7 @@ if (isset($_POST['delname'])){
 <td>
             </td>
         <td id="col2" width="25%">
-    <form name="test" method="post" action="/seo.php">
+    <form name="test" method="post" action="/admin/seo/">
     <p>Заголовок<Br>
     <textarea name="edname" cols="40" rows="3"><?echo($_POST['editname'])?></textarea></p>
     <p>Основной текст<Br>
