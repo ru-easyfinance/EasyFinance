@@ -5,7 +5,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Login_Controller extends Template_Controller
+class Login_Controller extends _Core_Controller
 {
     /**
      * Ссылка на класс модели пользователя
@@ -17,7 +17,7 @@ class Login_Controller extends Template_Controller
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    function __init()
     {
         $this->model = new Login_Model();
         Core::getInstance()->tpl->assign('name_page', 'welcome');

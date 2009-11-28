@@ -5,13 +5,8 @@
  * @version SVN $Id: accounts.controller.php 232 2009-08-21 14:34:45Z rewle $
  */
 
-class ExpertsList_Controller extends Template_Controller
+class ExpertsList_Controller extends _Core_Controller_UserCommon
 {
-    /**
-     * Ссылка на класс Smarty
-     * @var <Smarty>
-     */
-    private $tpl = null;
 
     /**
      * Ссылка на класс модель
@@ -23,9 +18,8 @@ class ExpertsList_Controller extends Template_Controller
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
-        $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Experts_Model();
     }
 

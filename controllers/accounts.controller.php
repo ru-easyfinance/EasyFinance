@@ -5,7 +5,7 @@
  * @version SVN $Id$
  */
 
-class Accounts_Controller extends Template_Controller
+class Accounts_Controller extends _Core_Controller_UserCommon
 {
 
     /**
@@ -13,12 +13,6 @@ class Accounts_Controller extends Template_Controller
      * @var User
      */
     private $user = null;
-
-    /**
-     * Ссылка на класс Smarty
-     * @var Smarty
-     */
-    private $tpl = null;
 
     /**
      * Ссылка на класс модель
@@ -30,10 +24,9 @@ class Accounts_Controller extends Template_Controller
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    function __init()
     {
         $this->user  = Core::getInstance()->user;
-        $this->tpl   = Core::getInstance()->tpl;
         $this->model = new Accounts_Model();
         $this->tpl->assign('name_page', 'accounts/accounts');
     }

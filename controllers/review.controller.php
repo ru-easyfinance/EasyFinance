@@ -5,28 +5,23 @@
  * @version SVN $Id: $
  */
 
-class Review_Controller extends Template_Controller
-{  
+class Review_Controller extends _Core_Controller
+{
 	/**
-     * ������ �� ����� Smarty
-     * @var <Smarty>
-     */
-    private $tpl = null;
+	 * Блюдём интерфейс
+	 *
+	 */
+	function __init(){}
 	
-    /**
-     * ����������� ������
-     * @return void
-     */
-    function __construct()
-    {
-
-    }
-
+	/**
+	 * Страница по умолчанию без параметров
+	 * @return void
+	 */
 	function index()
-    {
+	{
 		$this->tpl   = Core::getInstance()->tpl;
 		$this->tpl->assign('no_menu', '1');
 		$this->tpl->assign('head_val', '/review/');
-        $this->tpl->assign('name_page', 'review');
-    }
+		$this->tpl->assign('name_page', 'review');
+	}
 }

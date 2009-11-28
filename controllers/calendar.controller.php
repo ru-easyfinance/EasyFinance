@@ -5,27 +5,20 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Calendar_Controller extends Template_Controller
+class Calendar_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель класса календарь
      * @var Calendar_Model
      */
     private $model = null;
-
-    /**
-     * Ссылка на класс Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
     
     /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
-        $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'calendar/calendar');
         $this->model = new Calendar_Model();
 
@@ -34,9 +27,6 @@ class Calendar_Controller extends Template_Controller
         $this->tpl->assign('category', get_tree_select());
         $targets = new Targets_Model();
         $this->tpl->assign('targetList', $targets->getLastList(0, 100));
-
-
-        
     }
 
     /**

@@ -5,18 +5,23 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Welcome_Controller extends Template_Controller {
+class Welcome_Controller extends _Core_Controller
+{
 
-    /**
-     * Страница по умолчанию без параметров
-     * @return void
-     */
-
-    function index() {
-        $tpl = Core::getInstance()->tpl;
-        $welcome = new Welcome_Model();
-
-        $tpl->assign('name_page', 'welcome');
-        
-    }
+	/**
+	 * Блюдём интерфейс
+	 *
+	 */
+	function __init(){}
+	
+	/**
+	 * Страница по умолчанию без параметров
+	 * @return void
+	 */
+	function index()
+	{
+		$welcome = new Welcome_Model();
+		
+		$this->tpl->assign('name_page', 'welcome');
+	}
 }

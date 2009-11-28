@@ -4,36 +4,30 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id:  $
  */
-class Info_Controller extends Template_Controller
+class Info_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель класса инфо панелей
      * @var Info_Model
      */
     private $info_model = null;
-    
-    /**
-     * Ссылка на класс Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
 
     /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    function __init()
     {
         $this->info_model = new Info_Model();
     }
 
+    
     /**
      * Индексная страница
      * @return void
      */
     function index()
     {
-        $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'info_panel/info_panel');
 
         //@FIXME Удалить позже

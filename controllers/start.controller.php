@@ -5,19 +5,13 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Start_Controller extends Template_Controller
+class Start_Controller extends _Core_Controller
 {
-    /**
-     * Ссылка на класс Смарти
-     * @var <Smarty>
-     */
-    private $tpl = null;
-
     /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'start');

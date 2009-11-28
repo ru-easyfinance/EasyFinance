@@ -5,8 +5,10 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Logout_Controller extends Template_Controller
+class Logout_Controller extends _Core_Controller
 {
+	
+	protected function __init(){}
     /**
      * Индексная страница
      * @param <array> $args  mixed

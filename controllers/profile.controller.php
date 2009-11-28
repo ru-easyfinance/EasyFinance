@@ -5,7 +5,7 @@
  * @version SVN $Id: $
  */
 
-class Profile_Controller extends Template_Controller
+class Profile_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Ссылка на класс модель
@@ -14,16 +14,10 @@ class Profile_Controller extends Template_Controller
     private $model = null;
 
     /**
-     * Ссылка на класс Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
-
-    /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->tpl = Core::getInstance()->tpl;
         $this->model = new Profile_Model();

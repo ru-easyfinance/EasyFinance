@@ -5,20 +5,14 @@
  * @version SVN $Id: $
  */
 
-class Feedback_Controller extends Template_Controller
+class Feedback_Controller extends _Core_Controller
 {
     /**
      * Ссылка на класс модель обратной связи
      * @var Feedback_Model
      */
     private $model = null;
-
-    /**
-     * Ссылка на класс Smarty
-     * @var Smarty
-     */
-    private $tpl = null;
-	
+    
     /**
      * Конструктор класса
      * @return void
@@ -34,7 +28,6 @@ class Feedback_Controller extends Template_Controller
      */
     function index()
     {
-        $this->tpl   = Core::getInstance()->tpl;
         $this->tpl->assign('no_menu', '1');
         $this->tpl->assign('head_val', '/feedback/');
         $this->tpl->assign('name_page', 'feedback');

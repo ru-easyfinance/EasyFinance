@@ -1,13 +1,35 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php
 /**
- * Класс-родитель для классов контроллеров
- * @author Max Kamashev "ukko" <max.kamashev@gmail.com>
- * @copyright http://easyfinance.ru/
- * @category template
- * @version SVN $Id$
+ * Абстрактный контроллер. Должен наследоватся 
+ * напрямую контроллерами не требующими авторизации
+ *
+ * @copyright easyfinance.ru
+ * @author Andrew Tereshko aka mamonth
+ * @package _Core
  */
-class Template_Controller {
-
+abstract class _Core_Controller
+{
+	/**
+	 * Ссылка на класс Смарти
+	 * @var Smarty
+	 * @todo Оторвать смарти, заменить на Native
+	 */
+	protected $tpl = null;
+	
+	/**
+	 * Конструктор. Содержит инициализацию общих для 
+	 * всех контроллеров свойств и обьектов.
+	 *
+	 */
+	public function __construct()
+	{
+		// Шаблонизатор
+		$this->tpl   = Core::getInstance()->tpl;
+		
+		$this->__init();
+	}
+	
+	abstract protected function __init();
 
     /**
      * Если нам были переданы ошибочные данные, генерируем 404 страницу
@@ -19,7 +41,7 @@ class Template_Controller {
     {
         //@XXX Делаем хак для XDEBUG
         if (substr($method, 0, 7) != '?XDEBUG') {
-            error_404();
+           // error_404();
         }
     }
     
@@ -113,14 +135,13 @@ class Template_Controller {
         try {
             $info = new Info_Model();
             $infoa = $info->generate_value();
-            //$infoa = $info->get_data();
         } catch ( Exception $e) {
             $infoa = 0;
         }
         try {
             $category = new Category_Model();
             $cats = $category->getCategory();
-            $cats['recent'] = get_recent_category(10);
+            $cats['recent'] = get_recent_category(10, 0);
         } catch ( Exception $e ) {
             $cats = null;
         }

@@ -5,26 +5,13 @@
  * @version SVN $Id: $
  */
 
-class Rules_Controller extends Template_Controller
+class Rules_Controller extends _Core_Controller
 {  
-	/**
-     * ������ �� ����� Smarty
-     * @var <Smarty>
-     */
-    private $tpl = null;
-	
-    /**
-     * ����������� ������
-     * @return void
-     */
-    function __construct()
-    {
 
-    }
+	function __init(){}
 
 	function index()
     {
-		$this->tpl   = Core::getInstance()->tpl;
 		$this->tpl->assign('no_menu', '1');
 		$this->tpl->assign('head_val', '/rules/');
         $this->tpl->assign('name_page', 'rules');

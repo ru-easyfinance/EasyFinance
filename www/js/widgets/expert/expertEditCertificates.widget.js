@@ -55,7 +55,7 @@ easyFinance.widgets.expertEditCertificates = function(){
 
                     $.post(DELETE_CERTIFICATE_URL, {id: this.id.split("_", 2)[1]}, function(data) {
                             $('#cert_' + data.result.id).remove();
-                            $.jGrowl(data.result.message, {theme: 'green'});
+                            $.jGrowl(data.result.text, {theme: 'green'});
                     }, 'json');
                 }
             })

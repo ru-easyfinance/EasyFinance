@@ -79,7 +79,9 @@ class User
         // Если соединение пользователя защищено, то пробуем авторизироваться
         //if ($_SERVER['SERVER_PORT'] == 443) {
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
-            if (isset($_COOKIE[COOKIE_NAME])) {
+            if (isset($_COOKIE[COOKIE_NAME]))
+            {
+            	
                 if (isset($_COOKIE['PHPSESSID'])) {
                     if (!isset($_SESSION)) {
                         session_start();
@@ -118,6 +120,17 @@ class User
         }
     }
 
+    public function getType()
+    {
+    	$userType = null;
+    	
+    	if( sizeof($this->props) && array_key_exists('user_type', $this->props) )
+    	{
+    		$userType = (int)$this->props['user_type'];
+    	}
+    	
+    	return $userType;
+    }
     /**
      * Иниализирует пользователя, достаёт из базы некоторые его свойства
      * @param string $login
@@ -125,54 +138,70 @@ class User
      * @return bool
      */
     public function initUser($login, $pass)
-    {
-        session_start();
-        if (is_null(Core::getInstance()->db)) {
-            Core::getInstance()->initDB();
-        }
-        $this->db = Core::getInstance()->db;
-        if (isset($_SESSION['REMOTE_ADDR']) || isset($_SESSION['HTTP_USER_AGENT'])) {
-             if ($_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT']) {
-                 $this->destroy();
-             }
-        }
-        //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
-        $sql = "SELECT id, user_name, user_login, user_pass, user_mail,
-                    DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
-                    user_currency_default, user_currency_list, user_type
-                FROM users
-                WHERE user_login  = ?
-                    AND user_pass = ?
-                    AND user_new  = 0";
+    {    
+	if (is_null(Core::getInstance()->db))
+	{
+		Core::getInstance()->initDB();
+	}
+	
+	$this->db = Core::getInstance()->db;
+	
+	// Если сохранённые в сессии данные о пользователе не совпадают с текущими
+	if ( 
+		( isset($_SESSION['REMOTE_ADDR']) && isset($_SESSION['HTTP_USER_AGENT']) )
+		&& ( $_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR'] 
+		|| $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT'] ) 
+	)
+	{
+		// Уничтожаем пользователя
+		$this->destroy();
+	}
+	
+	//@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
+	$sql = "SELECT id, user_name, user_login, user_pass, user_mail,
+		DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
+		user_currency_default, user_currency_list, user_type
+		FROM users
+		WHERE user_login  = ? AND user_pass = ? AND user_new  = 0";
 
-        $this->props = $this->db->selectRow($sql, $login, $pass);
-        if (count($this->props) == 0) {
-            trigger_error('Не верный логин или пароль!', E_USER_WARNING);
-            $this->destroy();
-            return false;
-        } elseif ($this->props['user_active'] == 0) {
-            trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
-            $this->destroy();
-            return false;
-        }
-
-        // Если у нас подключен профиль пользователя
-        if ($this->props['user_type'] == 0) {
-            if (!$this->init($this->getId())) {
-               //@TODO Вызывать мастера настройки счетов, категорий и валют
-            }
-            $_SESSION['user']            = $this->props;
-            $_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
-            $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-            return $this->save();
-        // Если у нас подключен профиль эксперта
-        } else if ($this->props['user_type'] == 1) {
-            $_SESSION['user']            = $this->props;
-            $_SESSION['REMOTE_ADDR']     = '/experts/';
-            $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-            return $this->save();
-        }
+	$this->props = $this->db->selectRow($sql, $login, $pass);
+	
+	if (count($this->props) == 0)
+	{
+		trigger_error('Не верный логин или пароль!', E_USER_WARNING);
+		$this->destroy();
+		return false;
+	}
+	elseif ($this->props['user_active'] == 0)
+	{
+		trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
+		$this->destroy();
+		return false;
+	}
+	
+	// Если пользователь - эксперт: подгружаем дополнительные поля
+	if($this->getType() === 1)
+	{
+		$sql = 'SELECT `user_info_short`, `user_info_full`, `user_img`, `user_img_thumb` FROM `user_fields_expert` WHERE `user_id` = ?';
+		$this->props += $this->db->selectRow( $sql, $this->getId() );
+	}
         
+	$_SESSION['user']            = $this->props;
+	$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+	$_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
+	
+	// Если профиль пользователя
+	if ($this->getType() === 0)
+	{
+		$this->init();
+	}
+	// Если профиль эксперта
+	elseif ($this->getType() === 1)
+	{
+		$_SESSION['REQUEST_URI']	= '/expert/';
+	}
+	
+	return $this->save();
     }
 
     /**
@@ -225,7 +254,6 @@ class User
      */
     public function load()
     {
-
         if (isset($_SESSION['user']) && is_array($_SESSION['user'])) {
             $this->props = $_SESSION['user'];
         } else {
@@ -462,14 +490,23 @@ class User
      */
     function getUserTags($cloud = false)
     {
-        if ($cloud) {
-            return $this->user_tags;
-        } else {
-            foreach ($this->user_tags as $v) {
-                $user_tags[$v['name']] = $v['cnt'];
-            }
-            return array_keys($user_tags);
-        }
+    	$user_tags = array();
+    	
+	if ($cloud)
+	{
+		$user_tags = $this->user_tags;
+	}
+	else
+	{
+            	foreach ($this->user_tags as $v)
+            	{
+			$user_tags[$v['name']] = $v['cnt'];
+		}
+		
+		$user_tags = array_keys($user_tags);
+	}
+	
+	return $user_tags;
     }
 
     /**
@@ -513,8 +550,8 @@ class User
      */
     function getUserProps($prop)
     {
-        if (isset($this->props['$prop'])) {
-            return $this->props['$prop'];
+        if (isset($this->props[ $prop ])) {
+            return $this->props[ $prop ];
         }
     }
 

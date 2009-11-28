@@ -5,7 +5,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Category_Controller extends Template_Controller
+class Category_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Ссылка на класс модели категории
@@ -14,16 +14,10 @@ class Category_Controller extends Template_Controller
     private $model = null;
 
     /**
-     * Ссылка на Шаблон Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
-
-    /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->tpl = Core::getInstance()->tpl;
 

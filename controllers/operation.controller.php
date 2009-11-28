@@ -5,20 +5,14 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Operation_Controller extends Template_Controller
+class Operation_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель класса журнала операций
      * @var Money
      */
     private $model = null;
-
-    /**
-     * Ссылка на класс Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
-
+    
     /**
      * Ссылка на экземпляр класса User
      * @var User
@@ -30,7 +24,7 @@ class Operation_Controller extends Template_Controller
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->model = new Operation_Model();
         $this->user = Core::getInstance()->user;

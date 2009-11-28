@@ -230,7 +230,7 @@ class Login_Model
                 			}
                 			
 				// У пользователя нет категорий, т.е. надо помочь ему их создать
-				if (count($user->getUserCategory()) == 0)
+				if ( count($user->getUserCategory()) == 0 && $user->getType() == 0)
 				{
 					$model = new Login_Model();
 					$model->activate_user();

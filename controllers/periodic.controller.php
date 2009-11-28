@@ -6,7 +6,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Periodic_Controller extends Template_Controller
+class Periodic_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель класса календарь
@@ -15,19 +15,12 @@ class Periodic_Controller extends Template_Controller
     private $model = null;
 
     /**
-     * Ссылка на класс Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
-
-    /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->model = new Periodic_Model();
-        $this->tpl = Core::getInstance()->tpl;
 
         // Операция
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
@@ -37,11 +30,6 @@ class Periodic_Controller extends Template_Controller
 
 
         $this->tpl->assign('name_page', 'periodic/periodic');
-        
-        
-
-
-
     }
     
     /**

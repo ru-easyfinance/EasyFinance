@@ -5,7 +5,8 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Registration_Controller extends Template_Controller {
+class Registration_Controller extends _Core_Controller
+{
 
     /**
      * Модель регистрации
@@ -17,15 +18,15 @@ class Registration_Controller extends Template_Controller {
      * Конструктор класса
      * @return void
      */
-    function __construct() {
-        //header('Location: /'); exit;
+    function __init()
+    {
         $this->model = new Registration_Model();
-        $tpl = Core::getInstance()->tpl;
+        
         //if (substr($_SERVER['REQUEST_URI'], 0, 23) != '/registration/activate/')
-            $tpl->assign('name_page', 'registration');
+            $this->tpl->assign('name_page', 'registration');
         //else
         //   $tpl->assign('name_page', 'registractive');
-        $tpl->assign('no_menu', '1');
+        $this->tpl->assign('no_menu', '1');
 
         //$tpl->assign('register', array());
     }

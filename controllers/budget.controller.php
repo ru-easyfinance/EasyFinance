@@ -6,7 +6,7 @@
  * SVN $Id:  $
  */
 
-class Budget_Controller extends Template_Controller
+class Budget_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель бюджета
@@ -18,7 +18,7 @@ class Budget_Controller extends Template_Controller
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->model = new Budget_Model();
     }

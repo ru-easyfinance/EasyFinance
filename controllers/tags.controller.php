@@ -6,25 +6,19 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Tags_Controller extends Template_Controller
+class Tags_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель класса для управления тегами
      * @var Tags_Model
      */
     private $model = null;
-
-    /**
-     * Ссылка на класс Смарти
-     * @var Smarty
-     */
-    private $tpl = null;
     
     /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    protected function __init()
     {
         $this->tpl = Core::getInstance()->tpl;
 //        $this->tpl->assign('name_page', 'calendar/calendar');
