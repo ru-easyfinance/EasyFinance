@@ -131,7 +131,7 @@ class Expert_Controller extends _Core_Controller_UserExpert
     function editInfo()
     {
    	$sql = 'update `user_fields_expert` 
-		set `user_info_short` = ?, `user_img_thumb` = ?
+		set `user_info_short` = ?, `user_info_full` = ?
 		where `user_id` = ?';
 	
 	Core::getInstance()->db->query($sql, $_POST['profile-short'], $_POST['profile-long'], Core::getInstance()->user->getId() );
