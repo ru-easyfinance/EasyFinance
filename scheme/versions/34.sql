@@ -9,7 +9,7 @@ CREATE TABLE  `certificates` (
   `cert_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Статус сертификата: 0 - в обработке, 1 - одобрен, 2 - не допущен',
   PRIMARY KEY (`cert_id`),
   KEY `cert_user_id` (`cert_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Сертификаты экспертов'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Сертификаты экспертов';
 
 CREATE TABLE  `user_fields_expert` (
   `user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя (эксперта)\nuser.id',
@@ -18,7 +18,7 @@ CREATE TABLE  `user_fields_expert` (
   `user_img` varchar(128) DEFAULT NULL COMMENT 'Фотография эксперта',
   `user_img_thumb` varchar(128) DEFAULT NULL COMMENT 'Превью фотографии эксперта',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Дополнительные поля для экспертов'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Дополнительные поля для экспертов';
 
 CREATE TABLE  `services_expert` (
   `service_id` int(16) NOT NULL COMMENT 'Идентификатор услуги',
@@ -27,6 +27,6 @@ CREATE TABLE  `services_expert` (
   `service_cur_id` int(11) NOT NULL COMMENT 'Идентификатор валюты',
   `service_term` int(8) NOT NULL COMMENT 'Срок исполнения услуги',
   PRIMARY KEY (`service_id`,`user_id`),
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Услуги эксперта'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Услуги эксперта';
 
 
