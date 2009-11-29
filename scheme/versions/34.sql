@@ -26,7 +26,7 @@ CREATE TABLE  `services_expert` (
   `service_price` int(64) NOT NULL COMMENT 'Цена услуги',
   `service_cur_id` int(11) NOT NULL COMMENT 'Идентификатор валюты',
   `service_term` int(8) NOT NULL COMMENT 'Срок исполнения услуги',
-  PRIMARY KEY (`service_id`,`user_id`),
+  PRIMARY KEY (`service_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Услуги эксперта';
 
 
