@@ -1,6 +1,6 @@
 DROP TABLE `experts`, `experts_plugins`, `mail`;
 
-CREATE TABLE  `easyfinance`.`certificates` (
+CREATE TABLE  `certificates` (
   `cert_id` int(16) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор сертификата',
   `cert_user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя, users',
   `cert_img` varchar(128) NOT NULL COMMENT 'Изображение сертификата',
@@ -11,8 +11,8 @@ CREATE TABLE  `easyfinance`.`certificates` (
   KEY `cert_user_id` (`cert_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Сертификаты экспертов'
 
-CREATE TABLE  `easyfinance`.`user_fields_expert` (
-  `user_id` int(100) unsigned NOT NULL COMMENT 'Идентификатор пользователя (эксперта)\nuser.id',
+CREATE TABLE  `user_fields_expert` (
+  `user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя (эксперта)\nuser.id',
   `user_info_short` text COMMENT 'Краткая информация ',
   `user_info_full` text COMMENT 'Полная информация',
   `user_img` varchar(128) DEFAULT NULL COMMENT 'Фотография эксперта',
@@ -20,7 +20,7 @@ CREATE TABLE  `easyfinance`.`user_fields_expert` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Дополнительные поля для экспертов'
 
-CREATE TABLE  `easyfinance`.`services_expert` (
+CREATE TABLE  `services_expert` (
   `service_id` int(16) NOT NULL COMMENT 'Идентификатор услуги',
   `user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя',
   `service_price` int(64) NOT NULL COMMENT 'Цена услуги',
