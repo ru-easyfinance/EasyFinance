@@ -98,7 +98,13 @@
                 </div>
             {/if}
             <div id="header">
-                <a href="https://{$smarty.const.URL_ROOT}" class="logo">EasyFinance.ru</a>
+            {if  $smarty.session.user.id > 0}
+            	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`info"}
+            {elseif $smarty.server.REQUEST_URI != "/"}
+            	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`"}
+            {/if}
+		            	
+                <a {if $logoUrl !=""}href="{$logoUrl}"{/if} class="logo">EasyFinance.ru</a>
                 <div class="slogan">Система управления личными финансами</div>
 
                 {include file="head_adv.html"}
