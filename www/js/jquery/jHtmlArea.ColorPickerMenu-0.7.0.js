@@ -1,5 +1,5 @@
 ﻿/*
-* jHtmlAreaColorPickerMenu 0.6.0 - A Color Picker Extension to jHtmlArea
+* jHtmlAreaColorPickerMenu 0.7.0 - A Color Picker Extension to jHtmlArea
 * Part of the jHtmlArea Project
 * Copyright (c) 2009 Chris Pietschmann
 * http://jhtmlarea.codeplex.com
@@ -33,7 +33,7 @@
         return new jHtmlAreaColorPickerMenu.fn.init(ownerElement, options);
     };
     menu.fn = menu.prototype = {
-        jhtmlareacolorpickermenu: "0.6.0",
+        jhtmlareacolorpickermenu: "0.7.0",
 
         init: function(ownerElement, options) {
             var opts = $.extend({}, menu.defaultOptions, options);
@@ -67,7 +67,30 @@
                 );
             }
 
-            picker.appendTo(document.body).show();
+            $("<div/>").html("<div></div>Automatic").addClass("automatic").appendTo(picker).click(
+                function() {
+                    if (opts.colorChosen) {
+                        opts.colorChosen.call(this, null);
+                    }
+                    that.hide();
+                }
+            );
+
+
+            var autoHide = false;
+            picker.appendTo(owner.parent()).
+                show().
+                mouseout(function() {
+                    autoHide = true;
+                    that.currentTimeout = window.setTimeout(function() { if (autoHide === true) { that.hide(); } }, 1000);
+                }).
+                mouseover(function() {
+                    if (that.currentTimeout) {
+                        window.clearTimeout(that.currentTimeout);
+                        that.currentTimeout = null;
+                    }
+                    autoHide = false;
+                });
         },
         hide: function() {
             this.picker.hide();

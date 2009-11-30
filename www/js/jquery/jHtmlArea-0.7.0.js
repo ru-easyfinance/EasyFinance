@@ -1,5 +1,5 @@
 ﻿/*
-* jHtmlArea 0.6.0 - WYSIWYG Html Editor jQuery Plugin
+* jHtmlArea 0.7.0 - WYSIWYG Html Editor jQuery Plugin
 * Copyright (c) 2009 Chris Pietschmann
 * http://jhtmlarea.codeplex.com
 * Licensed under the Microsoft Reciprocal License (Ms-RL)
@@ -29,7 +29,7 @@
     jHtmlArea.fn = jHtmlArea.prototype = {
 
         // The current version of jHtmlArea being used
-        jhtmlarea: "0.6.0",
+        jhtmlarea: "0.7.0",
 
         init: function(elem, options) {
             if (elem.nodeName.toLowerCase() === "textarea") {
@@ -68,14 +68,14 @@
             this.editor.execCommand(a, b || false, c || null);
             this.updateTextArea();
         },
-        ec: function(a,b,c){
-            this.execCommand(a,b,c);
+        ec: function(a, b, c) {
+            this.execCommand(a, b, c);
         },
-        queryCommandValue: function(a){
+        queryCommandValue: function(a) {
             this.iframe[0].contentWindow.focus();
             return this.editor.queryCommandValue(a);
         },
-        qc: function(a){
+        qc: function(a) {
             return this.queryCommandValue(a);
         },
         getSelectedHTML: function() {
@@ -99,6 +99,13 @@
             if (!s) { return null; }
             //return (s.rangeCount > 0) ? s.getRangeAt(0) : s.createRange();
             return (s.getRangeAt) ? s.getRangeAt(0) : s.createRange();
+        },
+        html: function(v) {
+            if (v) {
+                this.pastHTML(v);
+            } else {
+                return toHtmlString();
+            }
         },
         pasteHTML: function(html) {
             this.iframe[0].contentWindow.focus();
@@ -152,6 +159,9 @@
         superscript: function() { this.ec("superscript"); },
         subscript: function() { this.ec("subscript"); },
 
+        p: function() {
+            this.formatBlock("<p>");
+        },
         h1: function() {
             this.heading(1);
         },
@@ -173,30 +183,30 @@
         heading: function(h) {
             this.formatBlock($.browser.msie ? "Heading " + h : "h" + h);
         },
-        
+
         indent: function() {
             this.ec("indent");
         },
         outdent: function() {
             this.ec("outdent");
         },
-        
-        insertHorizontalRule: function(){
+
+        insertHorizontalRule: function() {
             this.ec("insertHorizontalRule", false, "ht");
         },
-        
-        justifyLeft: function(){
+
+        justifyLeft: function() {
             this.ec("justifyLeft");
         },
-        justifyCenter: function(){
+        justifyCenter: function() {
             this.ec("justifyCenter");
         },
-        justifyRight: function(){
+        justifyRight: function() {
             this.ec("justifyRight");
         },
 
-        increaseFontSize: function(){
-            if ($.browser.msie){
+        increaseFontSize: function() {
+            if ($.browser.msie) {
                 this.ec("fontSize", false, this.qc("fontSize") + 1);
             } else if ($.browser.safari) {
                 this.getRange().surroundContents($(this.iframe[0].contentWindow.document.createElement("span")).css("font-size", "larger")[0]);
@@ -204,17 +214,17 @@
                 this.ec("increaseFontSize", false, "big");
             }
         },
-        decreaseFontSize: function(){
-            if ($.browser.msie){
+        decreaseFontSize: function() {
+            if ($.browser.msie) {
                 this.ec("fontSize", false, this.qc("fontSize") - 1);
-            } else if ($.browser.safari){
+            } else if ($.browser.safari) {
                 this.getRange().surroundContents($(this.iframe[0].contentWindow.document.createElement("span")).css("font-size", "smaller")[0]);
             } else {
                 this.ec("decreaseFontSize", false, "small");
             }
         },
 
-        forecolor: function(c){
+        forecolor: function(c) {
             this.ec("foreColor", false, c || prompt("Enter HTML Color:", "#"));
         },
 
@@ -241,106 +251,153 @@
             (this.textarea.is(":hidden")) ? this.showHTMLView() : this.hideHTMLView();
         },
 
-        toHtmlString: function() { return this.editor.body.innerHTML; },
-        toString: function() { return this.editor.body.innerText; },
+        toHtmlString: function() {
+            return this.editor.body.innerHTML;
+        },
+        toString: function() {
+            return this.editor.body.innerText;
+        },
 
-        updateTextArea: function() { this.textarea.val(this.toHtmlString()); },
-        updateHtmlArea: function() { this.editor.body.innerHTML = this.textarea.val(); }
-};
-jHtmlArea.fn.init.prototype = jHtmlArea.fn;
+        updateTextArea: function() {
+            this.textarea.val(this.toHtmlString());
+        },
+        updateHtmlArea: function() {
+            this.editor.body.innerHTML = this.textarea.val();
+        }
+    };
+    jHtmlArea.fn.init.prototype = jHtmlArea.fn;
 
-jHtmlArea.defaultOptions = {
-    toolbar: [
-        ["html"],["bold","italic","underline","strikethrough","|","subscript","superscript"],
-        ["increasefontsize","decreasefontsize"],
-        ["orderedlist","unorderedlist"],
-        ["indent","outdent"],
-        ["justifyleft","justifycenter","justifyright"],
-        ["link","unlink","image","horizontalrule"],
-        ["h1","h2","h3","h4","h5","h6"],
-        ["cut","copy","paste"]
+    jHtmlArea.defaultOptions = {
+        toolbar: [
+        ["html"], ["bold", "italic", "underline", "strikethrough", "|", "subscript", "superscript"],
+        ["increasefontsize", "decreasefontsize"],
+        ["orderedlist", "unorderedlist"],
+        ["indent", "outdent"],
+        ["justifyleft", "justifycenter", "justifyright"],
+        ["link", "unlink", "image", "horizontalrule"],
+        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
+        ["cut", "copy", "paste"]
     ],
-    css: null,
-    toolbarText: {
-        bold: "Bold", italic: "Italic", underline: "Underline", strikethrough: "Strike-Through",
-        cut: "Cut", copy: "Copy", paste: "Paste",
-        h1: "Heading 1", h2: "Heading 2", h3: "Heading 3", h4: "Heading 4", h5: "Heading 5", h6: "Heading 6",
-        indent: "Indent", outdent: "Outdent", horizontalrule: "Insert Horizontal Rule",
-        justifyleft: "Left Justify", justifycenter: "Center Justify", justifyright: "Right Justify",
-        increasefontsize: "Increase Font Size", decreasefontsize: "Decrease Font Size", forecolor: "Text Color",
-        link: "Insert Link", unlink: "Remove Link", image: "Insert Image",
-        orderedlist: "Insert Ordered List", unorderedlist: "Insert Unordered List",
-        subscript: "Subscript", superscript: "Superscript",
-        html: "Show/Hide HTML Source View"
-    }
-};
-var priv = {
-    toolbarButtons: {
-        strikethrough: "strikeThrough", orderedlist: "orderedList", unorderedlist: "unorderedList",
-        horizontalrule: "insertHorizontalRule",
-        justifyleft: "justifyLeft",justifycenter: "justifyCenter",justifyright: "justifyRight",
-        increasefontsize: "increaseFontSize", decreasefontsize: "decreaseFontSize",
-        html: function(btn) {
-            this.toggleHTMLView();
+        css: null,
+        toolbarText: {
+            bold: "Bold", italic: "Italic", underline: "Underline", strikethrough: "Strike-Through",
+            cut: "Cut", copy: "Copy", paste: "Paste",
+            h1: "Heading 1", h2: "Heading 2", h3: "Heading 3", h4: "Heading 4", h5: "Heading 5", h6: "Heading 6", p: "Paragraph",
+            indent: "Indent", outdent: "Outdent", horizontalrule: "Insert Horizontal Rule",
+            justifyleft: "Left Justify", justifycenter: "Center Justify", justifyright: "Right Justify",
+            increasefontsize: "Increase Font Size", decreasefontsize: "Decrease Font Size", forecolor: "Text Color",
+            link: "Insert Link", unlink: "Remove Link", image: "Insert Image",
+            orderedlist: "Insert Ordered List", unorderedlist: "Insert Unordered List",
+            subscript: "Subscript", superscript: "Superscript",
+            html: "Show/Hide HTML Source View"
         }
-    },
-    initEditor: function(options) {
-        var edit = this.editor = this.iframe[0].contentWindow.document;
-        edit.designMode = 'on';
-        edit.open();
-        edit.write(this.textarea.val());
-        edit.close();
-        if (options.css) {
-            var e = edit.createElement('link'); e.rel = 'stylesheet'; e.type = 'text/css'; e.href = options.css; edit.getElementsByTagName('head')[0].appendChild(e);
-        }
-    },
-    initToolBar: function(options) {
-        var that = this;
+    };
+    var priv = {
+        toolbarButtons: {
+            strikethrough: "strikeThrough", orderedlist: "orderedList", unorderedlist: "unorderedList",
+            horizontalrule: "insertHorizontalRule",
+            justifyleft: "justifyLeft", justifycenter: "justifyCenter", justifyright: "justifyRight",
+            increasefontsize: "increaseFontSize", decreasefontsize: "decreaseFontSize",
+            html: function(btn) {
+                this.toggleHTMLView();
+            }
+        },
+        initEditor: function(options) {
+            var edit = this.editor = this.iframe[0].contentWindow.document;
+            edit.designMode = 'on';
+            edit.open();
+            edit.write(this.textarea.val());
+            edit.close();
+            if (options.css) {
+                var e = edit.createElement('link'); e.rel = 'stylesheet'; e.type = 'text/css'; e.href = options.css; edit.getElementsByTagName('head')[0].appendChild(e);
+            }
+        },
+        initToolBar: function(options) {
+            var that = this;
 
-        var menuItem = function(className, altText, action) {
-            return $("<li/>").append($("<a href='javascript:void(0);'/>").addClass(className).attr("title", altText).click(function() { action.call(that, $(this)); }));
-        };
+            var menuItem = function(className, altText, action) {
+                return $("<li/>").append($("<a href='javascript:void(0);'/>").addClass(className).attr("title", altText).click(function() { action.call(that, $(this)); }));
+            };
 
-        function addButtons(arr){
-            var ul = $("<ul/>").appendTo(that.toolbar);
-            for (var i = 0; i < arr.length; i++) {
-                var e = arr[i];
-                if ((typeof (e)).toLowerCase() === "string") {
-                    if (e === "|") {
-                        ul.append($('<li class="separator"/>'));
+            function addButtons(arr) {
+                var ul = $("<ul/>").appendTo(that.toolbar);
+                for (var i = 0; i < arr.length; i++) {
+                    var e = arr[i];
+                    if ((typeof (e)).toLowerCase() === "string") {
+                        if (e === "|") {
+                            ul.append($('<li class="separator"/>'));
+                        } else {
+                            var f = (function(e) {
+                                // If button name exists in priv.toolbarButtons then call the "method" defined there, otherwise call the method with the same name
+                                var m = priv.toolbarButtons[e] || e;
+                                if ((typeof (m)).toLowerCase() === "function") {
+                                    return function(btn) { m.call(this, btn); };
+                                } else {
+                                    return function() { this[m](); this.editor.body.focus(); };
+                                }
+                            })(e.toLowerCase());
+                            var t = options.toolbarText[e.toLowerCase()];
+                            ul.append(menuItem(e.toLowerCase(), t || e, f));
+                        }
                     } else {
-                        var f = (function(e) {
-                            // If button name exists in priv.toolbarButtons then call the "method" defined there, otherwise call the method with the same name
-                            var m = priv.toolbarButtons[e] || e;
-                            if ((typeof (m)).toLowerCase() === "function") {
-                                return function(btn) { m.call(this, btn); };
-                            } else {
-                                return function() { this[m](); this.editor.body.focus(); };
-                            }
-                        })(e.toLowerCase());
-                        var t = options.toolbarText[e.toLowerCase()];
-                        ul.append(menuItem(e.toLowerCase(), t || e, f));
+                        ul.append(menuItem(e.css, e.text, e.action));
                     }
-                } else {
-                    ul.append(menuItem(e.css, e.text, e.action));
                 }
+            };
+            if (options.toolbar.length !== 0 && priv.isArray(options.toolbar[0])) {
+                for (var i = 0; i < options.toolbar.length; i++) {
+                    addButtons(options.toolbar[i]);
+                }
+            } else {
+                addButtons(options.toolbar);
             }
-        };
-        if (options.toolbar.length !== 0 && priv.isArray(options.toolbar[0])){
-            for(var i = 0; i < options.toolbar.length; i++){
-                addButtons(options.toolbar[i]);
+        },
+        attachEditorEvents: function() {
+            var t = this;
+
+            var fnHA = function() {
+                t.updateHtmlArea();
+            };
+
+            this.textarea.click(fnHA).
+                keyup(fnHA).
+                keydown(fnHA).
+                mousedown(fnHA).
+                blur(fnHA);
+
+
+
+            var fnTA = function() {
+                t.updateTextArea();
+            };
+
+            $(this.editor.body).click(fnTA).
+                keyup(fnTA).
+                keydown(fnTA).
+                mousedown(fnTA).
+                blur(fnTA);
+
+            $('form').submit(function() { t.toggleHTMLView(); t.toggleHTMLView(); });
+            //$(this.textarea[0].form).submit(function() { //this.textarea.closest("form").submit(function() {
+
+
+            // Fix for ASP.NET Postback Model
+            if (window.__doPostBack) {
+                var old__doPostBack = __doPostBack;
+                window.__doPostBack = function() {
+                    if (t) {
+                        if (t.toggleHTMLView) {
+                            t.toggleHTMLView();
+                            t.toggleHTMLView();
+                        }
+                    }
+                    return old__doPostBack.apply(window, arguments);
+                };
             }
-        } else {
-            addButtons(options.toolbar);
+            
+        },
+        isArray: function(v) {
+            return v && typeof v === 'object' && typeof v.length === 'number' && typeof v.splice === 'function' && !(v.propertyIsEnumerable('length'));
         }
-    },
-    attachEditorEvents: function() {
-        var t = this;
-        $(this.editor.body).click(function() { t.updateTextArea(); }).keyup(function() { t.updateTextArea(); });
-        this.textarea.change(function() { t.updateHtmlArea(); });
-    },
-    isArray: function(v){
-        return v && typeof v === 'object' && typeof v.length === 'number' && typeof v.splice === 'function' && !(v.propertyIsEnumerable('length'));
-    }
-};
+    };
 })(jQuery);
