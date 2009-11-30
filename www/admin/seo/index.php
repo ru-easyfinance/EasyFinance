@@ -48,9 +48,9 @@ class SeoText{
      * @return void
      */
     function SeoText(){
-        $this->name  = addslashes($_POST['name']);
-        $this->text1 = addslashes($_POST['maintext']);
-        $this->text2 = addslashes($_POST['relatedtext']);
+        $this->name  = $_POST['name'];
+        $this->text1 = $_POST['maintext'];
+        $this->text2 = $_POST['relatedtext'];
     }
 
     /**
@@ -74,14 +74,14 @@ class SeoText{
             $button = '<form name="del" method="post" action="/admin/seo/">
                 <input name="delname" type="hidden" value="' . $v[0] . '" />
                 <input type="submit" value="Удалить" /></form>';
-            $button .= '<form name="edit" method="post" action="/admin/seo/">
-                <input name="editname" type="hidden" value="' . $v[0]  . '" />
-                <input name="edittext1" type="hidden" value="' . $v[1] . '" />
-                <input name="edittext2" type="hidden" value="' . $v[2] . '" />
-                <input type="submit" value="Редактировать" /></form>';
+            $button .= "<form name='edit' method='post' action='/admin/seo/'>
+                <input name='editname' type='hidden' value='" . htmlspecialchars($v[0], ENT_QUOTES)  . "' />
+                <input name='edittext1' type='hidden' value='" . htmlspecialchars($v[1], ENT_QUOTES) . "' />
+                <input name='edittext2' type='hidden' value='" . htmlspecialchars($v[2], ENT_QUOTES) . "' />
+                <input type='submit' value='Редактировать' /></form>";
 
-            $lists .= '<table border="1" width="100%"><tr><th>' . $v[0] . $button . '</th></tr>';
-            $lists .=  '<tr><td>' . $v[1] . '</td></tr><tr><td>' . $v[2] . '</td></tr></table>';
+            $lists .= '<table border="1" width="100%"><tr>' . $v[0] . '    ' .$button . '</tr>';
+            $lists .=  '<tr><td>' . $v[1] . '</td></tr><tr><td>' . $v[2] . '</td></tr></table><br>';
         }
         return $lists;
     }
@@ -127,6 +127,7 @@ class SeoText{
      * @param string $text1
      * @param string $text2
      */
+
     function EditString($name, $text1, $text2){
         $f = fopen(SEO_FILENAME,'r');
         if (file_exists(SEO_FILENAME)){
@@ -170,12 +171,6 @@ if (!(isset($_SERVER['PHP_AUTH_USER']) &&
     exit;
 }
 
-// Редактирование
-/*if (isset($_POST['edname']) && isset($_POST['edmaintext']) && isset($_POST['edrelatedtext'])) {
-    $seo = new SeoText();
-    $seo->EditString($_POST['edname'],$_POST['edmaintext'],$_POST['edrelatedtext']);
-}*/
-
 // Удаление
 if (isset($_POST['delname'])) {
     $seo = new SeoText();
@@ -187,17 +182,7 @@ if (isset($_POST['name']) && isset($_POST['maintext']) && isset($_POST['relatedt
     $seo = new SeoText();
     $seo->GetArray();
     $seo->AddEdit();
-    /*$isnew = 0;
-    foreach ( $this->array as $k => $v ){
-        if ($v[0] == $_POST['name']) {
-            $isnew = $k;
-        }
-    }
-    if (!$isnew){
-        $seo->AppendToFile();
-    }else{
-        $seo->EditString($_POST['name'],$_POST['maintext'],$_POST['relatedtext']);
-    }*/
+
 // Вывод информации при первом запуске
 } else if (!isset($_POST['edname'])) if (!isset($_POST['delname'])) {
     $seo = new SeoText();
@@ -220,9 +205,12 @@ if (isset($_POST['editname'])) {
     $edittext1 = '';
     $edittext2 = '';
 }
+
 $contents = str_replace('__LISTS__', $lists, $contents);
 $contents = str_replace('__NAME__', $editname, $contents);
 $contents = str_replace('__EDITOR__', $edittext1, $contents);
 $contents = str_replace('__RELATEDTEXT__', $edittext2, $contents);
+
+//die(print_r($_POST));
 
 die($contents);
