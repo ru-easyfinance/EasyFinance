@@ -6,9 +6,9 @@ class SeoText{
     private $array = array();
 
     function SeoText(){
-        $this->name = $_POST['name'];
-        $this->text1 = $_POST['maintext'];
-        $this->text2 = $_POST['relatedtext'];
+        $this->name = addslashes($_POST['name']);
+        $this->text1 = addslashes($_POST['maintext']);
+        $this->text2 = addslashes($_POST['relatedtext']);
     }
     
     function GetArray() {
@@ -24,9 +24,9 @@ class SeoText{
                 $button = '<form name="del" method="post" action="/admin/seo/"><input name="delname" type="hidden" value="'.$v[0].'"><input type="submit" value="Удалить"></form>';
                 $button .= '<form name="edit" method="post" action="/admin/seo/"><input name="editname" type="hidden" value="'.$v[0].'"><input name="edittext1" type="hidden" value="'.$v[1].'">
                     <input name="edittext2" type="hidden" value="'.$v[2].'"><input type="submit" value="Редактировать"></form>';
-                echo($v[0].'     '.$button);
-                echo(''.$v[1].''.'<br>');
-                echo(''.$v[2].''.'<br><br>');
+                echo('<table border="1" bordercolor="#333333">'.$v[0].'     '.$button);
+                echo('<br>'.$v[1].''.'<br>');
+                echo(''.$v[2].''.'<br></table>');
             }
         }
     }
@@ -88,7 +88,15 @@ if (!(isset($_SERVER['PHP_AUTH_USER']) &&
 } else {
     ?>
                 <html>
+                    <head>
+                        <script type="text/javascript" src="/js/jquery/jquery-1.3.2.js"></script>
+                        <script type="text/javascript" src="/js/jquery/jHtmlArea-0.6.0.js"></script>
+                        <script type="text/css" src="/css/jquery/jHtmlArea.css"></script>
+                        <link rel="Stylesheet" type="text/css" href="/css/jquery/jHtmlArea.css" />
 
+
+                    </head>
+                    <body>
 <table width="100%" border="1">
 <tr>
 <td valign="top">
@@ -130,13 +138,12 @@ if (isset($_POST['delname'])){
     <p>Заголовок<Br>
     <textarea name="name" cols="40" rows="3"></textarea></p>
     <p>Основной текст<Br>
-    <textarea name="maintext" cols="40" rows="6"></textarea></p>
+    <textarea class="editor" name="maintext" cols="40" rows="6"></textarea></p>
     <p>Расширенный текст<Br>
-    <textarea name="relatedtext" cols="40" rows="6"></textarea></p>
+    <textarea class="editor" name="relatedtext" cols="40" rows="6"></textarea></p>
 
     <p><input name="add" type="submit" value="Добавить">
     </form>
-
 <?php
     }
     else{
@@ -147,9 +154,9 @@ if (isset($_POST['delname'])){
     <p>Заголовок<Br>
     <textarea name="edname" cols="40" rows="3"><?echo($_POST['editname'])?></textarea></p>
     <p>Основной текст<Br>
-    <textarea name="edmaintext" cols="40" rows="6"><?echo($_POST['edittext1'])?></textarea></p>
+    <textarea class="editor" name="edmaintext" cols="40" rows="6"><?echo($_POST['edittext1'])?></textarea></p>
     <p>Расширенный текст<Br>
-    <textarea name="edrelatedtext" cols="40" rows="6"><?echo($_POST['edittext2'])?></textarea></p>
+    <textarea class="editor" name="edrelatedtext" cols="40" rows="6"><?echo($_POST['edittext2'])?></textarea></p>
 
     <p><input name="edit" type="submit" value="Редактировать">
     </form>
@@ -161,4 +168,22 @@ if (isset($_POST['delname'])){
         </td>
 </tr>
 </table>
+    <script type="text/javascript">
+        //alert('1');
+        $(".editor").htmlarea({
+            toolbar: [
+                    ["bold", "italic", "underline", "|", "forecolor"],
+                    ["h1", "h2", "h3", "h4", "h5", "h6"]
+                ],
+
+            css: "/css/jquery/jHtmlArea.css",
+            loaded: function() {
+
+                    //// 'this' is equal to the jHtmlArea object
+                    //alert("jHtmlArea has loaded!");
+                    //this.showHTMLView(); // show the HTML view once the editor has finished loading
+                }
+        });
+    </script>
+</body>
 </html>
