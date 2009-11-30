@@ -12,18 +12,9 @@ class SeoText{
     }
     
     function GetArray() {
-        $f = fopen('../seo.txt','r');
-        if (filesize('../seo.txt')){
-            $content = fread($f,filesize('../seo.txt'));
-            //$content = stripslashes($content);
-            fclose($f);
-            $ArrString = explode('\n',$content);
-            foreach ($ArrString as $key=>$v){
-                $str = explode('\t',$v);
-                $this->array[$key][0] = $str[0];
-                $this->array[$key][1] = $str[1];
-                $this->array[$key][2] = $str[2];             
-            };
+        if (filesize('../seo.php')){
+            include '../seo.php';
+            $this->array = $texts;
         }
     }
     
@@ -40,52 +31,46 @@ class SeoText{
         }
     }
 
-    function PlusToFile() {
+    function AppendToFile() {
         $arr = array($this->name, $this->text1, $this->text2);
-        //print_r($this->array);
         $this->array[] = $arr;
-        $dump = ($this->name.'\t'.$this->text1.'\t'.$this->text2.'\n');
-        $f = fopen('../seo.txt', 'a');
+        $f = fopen('../seo.php', 'w');
+        $dump = '<?php $texts = ' . var_export( $this->array , true ) . ' ?>';//*/
         fwrite($f, $dump);
         fclose($f);
     }
 
     function DeleteRecord($name){
-        $f = fopen('../seo.txt','r');
-        if (filesize('../seo.txt')){
-            $content = fread($f,filesize('../seo.txt'));
-            fclose($f);
-            $ArrString = explode('\n',$content);
-            $f = fopen('../seo.txt', 'w');
-            $dump='';
-            foreach ($ArrString as $key=>$v){
-                $str = explode('\t',$v);
-                if ($str[0]!=$name) {
-                    $dump .= ($str[0].'\t'.$str[1].'\t'.$str[2].'\n');
-                }
-            };
+        $f = fopen('../seo.php','r');
+        if (filesize('../seo.php')){
+            include '../seo.php';
+            $this->array = $texts;
+
+            $f = fopen('../seo.php', 'w');
+            foreach ($this->array as $k=>$value){
+                if ($this->array[$k][0] == $name)
+                    $this->array[$k] = '';
+            }
+            $dump = '<?php $texts = ' . var_export( $this->array , true ) . ' ?>';//*/
             fwrite($f, $dump);
             fclose($f);
         } 
     }
 
     function EditString($name, $text1, $text2){
-        $f = fopen('../seo.txt','r');
-        if (filesize('../seo.txt')){
-            $content = fread($f,filesize('../seo.txt'));
-            fclose($f);
-            $ArrString = explode('\n',$content);
-            $f = fopen('../seo.txt', 'w');
-            $dump='';
-            foreach ($ArrString as $key=>$v){
-                $str = explode('\t',$v);
-                if ($str[0]!=$name) {
-                    $dump .= ($str[0].'\t'.$str[1].'\t'.$str[2].'\n');
-                }else{
-                    $dump .= ($name.'\t'.$text1.'\t'.$text2.'\n');
-                }
+        $f = fopen('../seo.php','r');
+        if (filesize('../seo.php')){
+            include '../seo.php';
+            $this->array = $texts;
 
-            };
+            $f = fopen('../seo.php', 'w');
+            foreach ($this->array as $k=>$value){
+                if ($this->array[$k][0] == $name){
+                    $arr = array($name, $text1, $text2);
+                    $this->array[$k] = $arr;
+                }
+            }
+            $dump = '<?php $texts = ' . var_export( $this->array , true ) . ' ?>';//*/
             fwrite($f, $dump);
             fclose($f);
         }
@@ -126,7 +111,7 @@ if (isset($_POST['delname'])){
         if (isset($_POST['name']) && isset($_POST['maintext']) && isset($_POST['relatedtext'])){
             $seo = new SeoText();
             $seo->GetArray();
-            $seo->PlusToFile();
+            $seo->AppendToFile();
             $seo->ShowAll();
         }else if (!isset($_POST['edname'])) if (!isset($_POST['delname'])){
             $seo = new SeoText();
