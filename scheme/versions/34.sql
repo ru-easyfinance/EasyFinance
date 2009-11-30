@@ -1,6 +1,6 @@
-DROP TABLE `experts`, `experts_plugins`, `mail`;
+DROP TABLE IF EXIST`experts`, `experts_plugins`, `mail`;
 
-CREATE TABLE  `certificates` (
+CREATE TABLE  IF NOT EXIST `certificates` (
   `cert_id` int(16) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор сертификата',
   `cert_user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя, users',
   `cert_img` varchar(128) NOT NULL COMMENT 'Изображение сертификата',
@@ -11,7 +11,7 @@ CREATE TABLE  `certificates` (
   KEY `cert_user_id` (`cert_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Сертификаты экспертов';
 
-CREATE TABLE  `user_fields_expert` (
+CREATE TABLE  IF NOT EXIST `user_fields_expert` (
   `user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя (эксперта)\nuser.id',
   `user_info_short` text COMMENT 'Краткая информация ',
   `user_info_full` text COMMENT 'Полная информация',
@@ -20,7 +20,15 @@ CREATE TABLE  `user_fields_expert` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Дополнительные поля для экспертов';
 
-CREATE TABLE  `services_expert` (
+CREATE TABLE IF NOT EXIST `services` (
+  `service_id` int(16) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор услуги',
+  `service_name` varchar(32) NOT NULL COMMENT 'Название услуги',
+  `service_desc` varchar(255) NOT NULL COMMENT 'Описание услуги',
+  `service_active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Индикатор доступности услуги (включена 1, выключена 0)',
+  PRIMARY KEY (`service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='Услуги экспертов';
+
+CREATE TABLE  IF NOT EXIST`services_expert` (
   `service_id` int(16) NOT NULL COMMENT 'Идентификатор услуги',
   `user_id` int(100) NOT NULL COMMENT 'Идентификатор пользователя',
   `service_price` int(64) NOT NULL COMMENT 'Цена услуги',
