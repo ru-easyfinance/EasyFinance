@@ -13,7 +13,7 @@
 .budget#master .waste_list table td.w1 { width: 199px; padding-right: 5px;overflow: hidden; }
 .budget#master .waste_list table td.w1 a{ display: block; padding-left: 25px; }
 .budget#master .waste_list table td.w2 { width: 103px; padding-top: 4px; z-index: 10; }
-.budget#master .waste_list .list.body table td.w4 { width: 160px;text-align:right}
+.budget#master .waste_list .list.body table td.w4 { width: 160px;text-align:right;padding-right:10px;}
 .budget#master .waste_list .line .amount { position: absolute; top: 7px; right: 196px; font-weight: bold; }
 .budget#master .waste_list .line .mean{position: absolute; float: right; right:35px; top: 7px}
 .budget#master .waste_list a{ color: #313131; }

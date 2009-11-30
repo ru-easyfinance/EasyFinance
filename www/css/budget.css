@@ -23,7 +23,7 @@
 .budget#budget .list .list table tr.child:hover td.w6 div, .budget#budget .list .list table tr.nochild:hover td.w6 div{background:url('/img/i/icons_control4.gif') no-repeat 0px 0px;}
 .budget#budget .list .list table tr.child:hover,.budget#budget .list .list table tr.nochild:hover{background-color: #E3FFDF}
 .budget#budget .list .list table td.w6 div{width: 60px; background: 0; height: 30px;margin-top:-8px}
-.budget#budget .list .list table td.w6 div a{height: 100%;padding-top: 3px;padding-bottom: 15px;}
+.budget#budget .list .list table td.w6 div a{height: 100%;padding-top: 3px;padding-bottom: 15px;width:30px;text-decoration:none}
 .budget#budget .list #profit a{padding-left:12px; color: #309500; font-weight: bold; font-size: 13px}
 .budget#budget .list #drain a{padding-left:12px; color: #eb3c34; font-weight: bold; font-size: 13px}
 

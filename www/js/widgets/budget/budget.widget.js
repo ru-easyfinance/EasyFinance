@@ -183,7 +183,7 @@ easyFinance.widgets.budget = function(data){
                                         <div class="strip" style="width: '+dateprc+'%;"></div>\n\
                                     </div>\n\
                                 </td>\n\
-                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6"><div><a title="Редактировать" class="edit"> </a><a title="Удалить" class="remove"> </a></div></td>\n\
+                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6"><div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></td>\n\
                             </tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
@@ -204,9 +204,9 @@ easyFinance.widgets.budget = function(data){
         }
         else{
             if(_currentDate > date){
-                dateprc = 100
-            }else{
                 dateprc = 0
+            }else{
+                dateprc = 100
             }
         }
         
