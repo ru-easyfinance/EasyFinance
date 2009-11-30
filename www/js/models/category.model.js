@@ -149,6 +149,10 @@ easyFinance.models.category = function(){
         return _categories.user;
     }
 
+    function getUserCategoryNameById(id){
+        return _categories.user[id]["name"];
+    }
+
     function getRecentCategories(){
         var list = {};
 
@@ -235,6 +239,7 @@ easyFinance.models.category = function(){
         getRecentCategories: getRecentCategories,
         getSystemCategories:getSystemCategories,
         getUserCategories:getUserCategories,
+        getUserCategoryNameById: getUserCategoryNameById,
         getUserCategoriesTree: getUserCategoriesTree,
         getUserCategoriesByType:getUserCategoriesByType,
         isParentCategory: isParentCategory,
