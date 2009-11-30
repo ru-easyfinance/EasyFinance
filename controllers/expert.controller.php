@@ -151,13 +151,15 @@ class Expert_Controller extends _Core_Controller_UserExpert
      */
     function uploadPhoto()
     {
+    	$json = array( 'error' => array() );
+    	
     	try
     	{
     		$image = File_Image::upload( 'profile-photo' );
     	}
     	catch ( File_UploadException $e )
     	{
-    		$json = array( 'error' => array() );
+    		
     		
     		switch ( $e->getCode() )
     		{
@@ -190,11 +192,19 @@ class Expert_Controller extends _Core_Controller_UserExpert
 		mkdir( $imgDir . dirname($imgSrc), null, true );
 	}
 	
-	$image->save( $imgDir . $imgSrc );
+	try
+	{
+		$image->save( $imgDir . $imgSrc );
+			
+		$image->resize( 200, null );
 		
-	$image->resize( 200, null );
-	
-	$image->save( $imgDir . $imgThumbSrc );
+		$image->save( $imgDir . $imgThumbSrc );
+	}
+	catch ( File_ImageException $e)
+	{
+		$json['error']['text'] = 'Не удалось загрузить изображение!';
+		exit( json_encode($json) );
+	}
 	
 	$sql = 'update `user_fields_expert` 
 		set `user_img` = "' . $imgSrc . '", `user_img_thumb` = "' . $imgThumbSrc . '"

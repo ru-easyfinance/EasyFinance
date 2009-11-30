@@ -5,7 +5,7 @@
  * @copyright http://easyfinance.ru/
  * @author Andrew Tereshko aka mamonth
  */
-class File_Image extends FIle 
+class File_Image extends File 
 {
 	/**
 	 * Изображение
@@ -48,15 +48,15 @@ class File_Image extends FIle
 	 */
 	public function resize( $width = null, $height=null )
 	{
-		if( is_null($width) )
-		{
-			$ratio = $width / $this->getWidth();
-			$width = $this->getWidth() * $ratio;
-		}
-		elseif ( is_null($height) )
+		if( !$width )
 		{
 			$ratio = $height / $this->getHeight();
-			$height = $this->getheight() * $ratio;
+			$width = $this->getWidth() * $ratio;
+		}
+		elseif ( !$height )
+		{
+			$ratio = $width / $this->getWidth();
+			$height = $this->getHeight() * $ratio;
 		}
 		
 		$imageResized = imagecreatetruecolor($width, $height);
