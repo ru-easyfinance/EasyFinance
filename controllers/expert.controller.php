@@ -151,48 +151,48 @@ class Expert_Controller extends _Core_Controller_UserExpert
      */
     function uploadPhoto()
     {
-	if( !array_key_exists( 'profile-photo', $_FILES ) || !is_array( $_FILES['profile-photo'] ) )
+    	try
     	{
-    		exit('{error: {text: "Не указано изображение."}}');
+    		$image = File_Image::upload( 'profile-photo' );
+    	}
+    	catch ( File_UploadException $e )
+    	{
+    		$json = array( 'error' => array() );
+    		
+    		switch ( $e->getCode() )
+    		{
+    			case UPLOAD_ERR_NO_FILE:
+    				$json['error']['text'] = 'Не указано изображение!';
+    				break;
+    			case UPLOAD_ERR_FORM_SIZE:
+    				$json['error']['text'] = 'Размер изображения превышает допустимый!';
+    				break;
+    			default:
+    				$json['error']['text'] = 'Не удалось загрузить изображение !';
+    		}
+    		
+    		exit( json_encode($json) );
+    	}
+    	catch ( File_ImageException $e )
+    	{
+    		$json = array( 'error' => array( 'text' => 'Некорректный тип изображения!' ) );
     	}
     	
-    	if( $_FILES['profile-photo']['error'] !== UPLOAD_ERR_OK )
-    	{
-    		exit('{error: {text: "Не удалось загрузить изображение!"}}');
-    	}
-    	
-    	$image = new External_SimpleImage();
-		
-	if ( !$image->load( $_FILES['profile-photo']['tmp_name'] ) )
-	{
-		exit('{error: {text: "Некорректное изображение!"}}');
-	}
-	
 	$imgDir	= SYS_DIR_ROOT . '/www';
 
 	$imgExt 	= '.jpg';
 	$imgSrc 	= '/upload/experts/' . Core::getInstance()->user->getId();
 	$imgThumbSrc = $imgSrc . '_thumb' . $imgExt;
 	$imgSrc	.= $imgExt;
-	
-	if( !file_exists( SYS_DIR_ROOT . '/www/upload/experts' ) )
+    	
+	if( !file_exists( $imgDir . dirname($imgSrc) ) )
 	{
-		mkdir( SYS_DIR_ROOT . '/www/upload/experts'  );
-	}
-	
-	if( file_exists($imgDir . $imgSrc) )
-	{
-		unlink( $imgDir . $imgSrc );
-	}
-	
-	if( file_exists($imgDir . $imgThumbSrc) )
-	{
-		unlink( $imgDir . $imgThumbSrc );
+		mkdir( $imgDir . dirname($imgSrc), null, true );
 	}
 	
 	$image->save( $imgDir . $imgSrc );
 		
-	$image->resizeToWidth(200);
+	$image->resize( 200, null );
 	
 	$image->save( $imgDir . $imgThumbSrc );
 	
