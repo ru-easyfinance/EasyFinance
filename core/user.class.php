@@ -183,7 +183,20 @@ class User
 	if($this->getType() === 1)
 	{
 		$sql = 'SELECT `user_info_short`, `user_info_full`, `user_img`, `user_img_thumb` FROM `user_fields_expert` WHERE `user_id` = ?';
-		$this->props += $this->db->selectRow( $sql, $this->getId() );
+		
+		$expertProps = $this->db->selectRow( $sql, $this->getId() );
+		
+		// Если нет записи в таблице дополнительных свойств
+		if( !sizeof( $expertProps) )
+		{
+			// Создаём её
+			$this->db->query( 'INSERT into `user_fields_expert` (`user_id`) VALUES (?)', $this->getId() );
+			
+			// И делаем выборку заново
+			$expertProps = $this->db->selectRow( $sql, $this->getId() );
+		}
+		
+		$this->props += $expertProps;
 	}
         
 	$_SESSION['user']            = $this->props;
