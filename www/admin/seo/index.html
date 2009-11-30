@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script type="text/javascript" src="/js/jquery/jquery-1.3.2.js"></script>
+        <script type="text/javascript" src="/js/jquery/jHtmlArea-0.7.0.js"></script>
+        <script type="text/css" src="/css/jquery/jHtmlArea.css"></script>
+        <link rel="Stylesheet" type="text/css" href="/css/jquery/jHtmlArea.css" />
+    </head>
+    <body>
+        <table width="100%" border="1">
+            <tr>
+                <td valign="top">
+                __LISTS__
+                </td>
+                <td id="col2" width="25%">
+                    <form name="test" method="post" action="/admin/seo/">
+                    <p>Заголовок<Br>
+                    <textarea name="name" cols="40" rows="3">__NAME__</textarea></p>
+                    <p>Основной текст<Br>
+                    <textarea class="editor" name="maintext" cols="40" rows="6">__EDITOR__</textarea></p>
+                    <p>Расширенный текст<Br>
+                    <textarea class="editor" name="relatedtext" cols="40" rows="6">__RELATEDTEXT__</textarea></p>
+                    <p><input name="add" type="submit" value="Отправить"></p>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    <script type="text/javascript">
+            //alert('1');
+            $(".editor").htmlarea({
+                toolbar: [
+                    ["bold", "italic", "underline", "|", "forecolor"],
+                    ["h1", "h2", "h3", "h4", "h5", "h6"]
+                ],
+
+                css: "/css/jquery/jHtmlArea.css",
+                loaded: function() {
+
+                    //// 'this' is equal to the jHtmlArea object
+                    //alert("jHtmlArea has loaded!");
+                    //this.showHTMLView(); // show the HTML view once the editor has finished loading
+                }
+            });
+        </script>
+    </body>
+</html>
