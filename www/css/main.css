@@ -373,7 +373,7 @@ ul.menu4 li#m_last a { background: none; }
 .block1 .accounts .title { margin: 0 0 7px 21px; }
 .block1 .financobject .title { margin: 0 0 7px 0; }
 .block1 .title h2, .block1 .experts h2, .block1 .budget2 h2, .block1 .transaction h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
-.block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; }
+.block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; cursor: pointer; }
 
 .block1 ul.control { position: relative; margin: 0 0 12px 0; width: 163px; overflow: hidden; height: 32px;}
 .block1 ul.control li { position: absolute; top: 0; width: 32px; height: 32px; }
@@ -395,9 +395,9 @@ ul.menu4 li#m_last a { background: none; }
 
 dl.bill_list { margin: 0 10px; }
 dl.bill_list dt, dl.bill_list dd{padding-left:20px;}
-dl.bill_list dt { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 3px 5px }
-dl.bill_list dt.open { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:#F6F6F6 url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px }
-dl.bill_list dd { margin-bottom: 5px; display:none;}
+dl.bill_list dt { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 3px 5px; cursor: pointer; }
+dl.bill_list dt.open { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:#F6F6F6 url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
+dl.bill_list dd { margin-bottom: 5px; display:none; cursor: pointer; }
 dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
 dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
 dl.bill_list dd ul li a { display: block; padding: 1px 3px 1px 21px; line-height: 15px; color: #363535; text-decoration: none; }

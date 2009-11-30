@@ -54,7 +54,7 @@ easyFinance.widgets.accountsPanel = function(){
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
 
-        var data=$.extend({},_model.getAccounts());
+        var data = $.extend({},_model.getAccounts());
 
         if (!data){
             data = {};
@@ -130,6 +130,11 @@ easyFinance.widgets.accountsPanel = function(){
             $(this).toggleClass('open').next().toggle();
             return false;
         });
+        $('div.listing dd.amount').live('click', function(){
+            $(this).prev().click();
+            return false;
+        });
+        
         //$('div.listing dl.bill_list dt').click();
         //$('div.listing dl.bill_list dt:last').click().addClass('open');
         //$('div.listing dl.bill_list dt').click().addClass('open');
