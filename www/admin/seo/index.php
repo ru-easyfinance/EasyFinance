@@ -3,12 +3,12 @@
 /**
  * Логин сео-оптимизатора
  */
-define ('SEO_LOGIN', 'seo');
+define ('SEO_LOGIN', 'userseo');
 
 /**
  * Пароль сео-оптимизатора
  */
-define ('SEO_PASS', 'qwerty');
+define ('SEO_PASS', 'onuevpwe52ky');
 
 /**
  * Путь до файла с массивом сео
