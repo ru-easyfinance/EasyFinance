@@ -26,7 +26,7 @@ class SeoText{
                     <input name="edittext2" type="hidden" value="'.$v[2].'"><input type="submit" value="Редактировать"></form>';
                 echo($v[0].'     '.$button);
                 echo(''.$v[1].''.'<br>');
-                echo(''.$v[2].''.'<br>');
+                echo(''.$v[2].''.'<br><br>');
             }
         }
     }
@@ -80,7 +80,7 @@ class SeoText{
 
 if (!(isset($_SERVER['PHP_AUTH_USER']) &&
     isset($_SERVER['PHP_AUTH_PW']) &&
-    $_SERVER['PHP_AUTH_USER'] == 'megaseo' &&
+    $_SERVER['PHP_AUTH_USER'] == 'seo' &&
     $_SERVER['PHP_AUTH_PW'] == 'qwerty')) {
   header('WWW-Authenticate: Basic realm="Secured
     area"');
