@@ -183,7 +183,9 @@ easyFinance.widgets.budget = function(data){
                                         <div class="strip" style="width: '+dateprc+'%;"></div>\n\
                                     </div>\n\
                                 </td>\n\
-                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6"><div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></td>\n\
+                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td>\n\
+                                <td class="w6">'+(cls == 'nochild'||cls == 'child')?'<div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div>':''+'\n\
+                                </td>\n\
                             </tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
