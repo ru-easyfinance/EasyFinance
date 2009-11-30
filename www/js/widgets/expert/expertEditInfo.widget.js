@@ -45,13 +45,18 @@ easyFinance.widgets.expertEditInfo = function(){
         });
 
         $('#formExpertInfo').ajaxForm({
+            dataType: "json",
             // pre-submit callback
             beforeSubmit:  function(formData){
                 $.jGrowl("Изменения сохраняются", {theme: 'green'});
             },
             // post-submit callback
-            success: function(){
-                $.jGrowl("Изменения сохранены", {theme: 'green'});
+            success: function(data){
+                if (data.error) {
+                    $.jGrowl(data.error.text, {theme: 'red'});
+                } else if (data.result) {
+                    $.jGrowl(data.result.text, {theme: 'green'});
+                }
             },
             error: function(){
                 $.jGrowl("Ошибка на сервере!", {theme: 'red'});
