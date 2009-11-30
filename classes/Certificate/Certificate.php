@@ -63,9 +63,9 @@ class Certificate
 		$imgSrc	= self::getImagePath($user->getId());
 		$imgThumbSrc = self::getImagePath($user->getId(), true);
 		
-		if( !file_exists( SYS_DIR_ROOT . '/www' . $uploadDir) )
+		if( !file_exists( SYS_DIR_ROOT . '/www' . dirname($imgSrc) ) )
 		{
-			mkdir( SYS_DIR_ROOT . '/www' . $uploadDir );
+			mkdir( SYS_DIR_ROOT . '/www' . dirname($imgSrc) );
 		}
 			
 		$image = new External_SimpleImage();
