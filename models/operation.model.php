@@ -531,19 +531,19 @@ class Operation_Model {
             $tr = $this->db->select($sql, $val['transfer'], $this->user->getId());
             $val['transfer_name']       = $tr[0]['account_name'];//имя счёта куда осуществляем перевод.
             $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
-
+            //$val['account_currency_id'] = $val['target_account_id'];
             //если фин цель то перезаписываем тот null что записан.
-            if (($val['target_account_id']) != null){
+            if (($val['virt']) == 1){
                 $val['account_currency_id'] = $accounts[$val['target_account_id']]['account_currency_id'];
-                if (($operations['category_id']) == 1)
+                if (($val['cat_id']) == 1)
                     $val['cat_name'] = "Квартира";
-                if (($operations['category_id']) == 2)
+                if (($val['cat_id']) == 2)
                     $val['cat_name'] = "Автомобиль";
-                if (($operations['category_id']) == 3)
+                if (($val['cat_id']) == 3)
                     $val['cat_name'] = "Отпуск";
-                if (($operations['category_id']) == 4)
+                if (($val['cat_id']) == 4)
                     $val['cat_name'] = "Фин.подушка";
-                if (($operations['category_id']) == 5)
+                if (($val['cat_id']) == 5)//*/
                     $val['cat_name'] = "Прочее";
             }
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
