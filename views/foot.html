@@ -66,5 +66,16 @@
             {literal}
         <!--[if lte IE 6]><script src="/js/warning.js"></script><![endif]-->
     {/literal}
+
+        {foreach from=$seotext item=i key=k}
+        <div class="aspects">
+            <div class="aspect">
+                <div id="seoname" class="seofirst" >{$i[0]}</div>
+                <div id="seotext1" class="seotext" >{$i[1]}</div>
+                <div id="seotext2" class="seotext2" style="display:none" >{$i[2]}</div>
+            </div>
+        </div>
+        {/foreach}
+    
     </body>
 </html>

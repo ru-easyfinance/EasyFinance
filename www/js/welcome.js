@@ -113,4 +113,11 @@ $(document).ready(function() {
     $('.link.close').click(function(){
         $('#dialog').hide();
     });
+
+    /**
+     * Показ/скрытие расширенного текста.
+     */
+    $('div .aspect .seotext').click(function(){
+        $(this).closest('.aspect').find('.seotext2').toggle();
+    });
 });

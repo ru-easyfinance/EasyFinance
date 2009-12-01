@@ -1841,6 +1841,8 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 #dialogFilterCategory .sexy div.icon { left: 384px; }
 #dialogFilterCategory .sexy div.list-wrapper { width: 399px; }
 
+#seotext {background:transparent url(/img/i/jQuery/12.bmp)}
+#seotext2 {background:transparent url(/img/i/jQuery/12.bmp)}
 
 @import izmeneniya.css
 
