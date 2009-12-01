@@ -531,6 +531,12 @@ class Operation_Model {
             $tr = $this->db->select($sql, $val['transfer'], $this->user->getId());
             $val['transfer_name']       = $tr[0]['account_name'];//имя счёта куда осуществляем перевод.
             $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
+
+            //если фин цель то перезаписываем тот null что записан.
+            if (($val['target_account_id']) != null)
+                 $val['account_currency_id'] = $accounts[$val['target_account_id']]['account_currency_id'];
+            //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
+
             $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
             //$val['cur_name'] = $accounts[$val['cur_id']]['cur_name'];
             $operations[$key] = $val;
