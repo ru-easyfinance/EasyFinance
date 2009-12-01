@@ -286,6 +286,7 @@ class Operation_Model {
         $last_id = $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
             $comment, $to_account);
 
+            $last_id = mysql_insert_id();
         // @FIXME Поправить переводы между счетами
         // Закомментированные запросы ещё пригодятся
             
@@ -553,7 +554,12 @@ class Operation_Model {
             $operations[$key] = $val;
         }
         //bt.account_name as cat_transfer, //@TODO
-        return $operations;
+        $retoper = '';//возвращаемые операции. не возвращаем мусор связанный с удалением счетов
+        foreach ($operations as $k => $v){
+            if (!($v[account_name] == ''))
+                $retoper[$k] = $v;
+        }
+        return $retoper;
     }
 
     /**
