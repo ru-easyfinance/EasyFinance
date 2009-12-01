@@ -8,18 +8,11 @@
 class Expert_Controller extends _Core_Controller_UserExpert
 {
 	/**
-	 * Ссылка на класс модель
-	 * @var <Accounts_Model>
-	 */
-	private $model = null;
-
-	/**
 	 * Конструктор класса
 	 * @return void
 	 */
 	protected function __init()
 	{
-		$this->model = new Experts_Model();
 	}
 
 	/**
@@ -28,122 +21,93 @@ class Expert_Controller extends _Core_Controller_UserExpert
 	 */
 	function index()
 	{
-		$this->model->index();
-
 		$this->tpl->assign('name_page', 'expert/expert');
-
-		$this->tpl->assign('desktop',($this->model->get_desktop()));//main div class
-		$js_list = $this->model->js_list();//array js with indeficators;
 	}
 	
-
-
-
-    /** обновляет значения для панельки эксперта
-     *
-     */
-    function get_desktop_field()
-    {
-        $field_id = $_POST['field_id'];
-        if (!$field_id)
-            die();
-        die(json_encode($this->model->get_desktop_field($field_id)));
-    }
-    
-    /*
-     * список всех экспертов с возможностью сортировки
-     * @todo возможно стоит хранить этот список в куки?будующее
-     */
-    function get_experts_list()//expert light info//only user
-    {
-        $order = $_POST['order'];
-        if (!$order)
-            $order = 'id';
-        die(json_encode($this->model->get_experts_list($order)));
-    }
-
-    
-    /**
-     * Получение полной информации 
-     * 
-     * @todo Вынести получение сертификатов и услуг эксперта в эксперта =)
-     *
-     */
-    function getProfile()
-    {
-    	$user	= Core::getInstance()->user;	
-    	
-   	$json 	= array (
-		'fio'		=> $user->getUserProps('user_name'),
-            	'shortInfo'	=> $user->getUserProps('user_info_short'),
-            	'fullInfo'	=> $user->getUserProps('user_info_full'),
-            	'rating'		=> 4,
-            	'votes'		=> 12,
-            	'photo'		=> $user->getUserProps('user_img'),
-	            'smallPhoto'	=> $user->getUserProps('user_img_thumb'),
-
-    		'certificates' 	=> array(),
-    		'services'	=> array(),
-    	);
-    	
-    	// Загрузка списка сертификатов
-    	foreach ( Certificate_Container::loadByUser($user)->getIterator() as $cert )
-    	{
-    		$json['certificates'][] = array (
-    			'id'		=> $cert->getId(),
-    			'image'		=> $cert->getImage(),
-    			'smallImage'	=> $cert->getThumb(),
-    			'comment'	=> $cert->getDetails(),
-    			'status'		=> $cert->getStatusCode(),
-    			'statusText'	=> $cert->getStatusMessage(),
-    		);
-    	}
-    	
-    	// Загрузка услуг эксперта
-    	foreach ( Service_Expert_Container::load( $user )->getIterator() as $service )
-    	{
-	    	$json['services'][] = array (
-	    		'id'		=> $service->getId(),
-	    		'title' 		=> $service->getName(),
-	    		'comment'	=> $service->getDesc(),
-	    		'price'		=> $service->getPrice(),
-	    		'days'		=> $service->getTerm(),
-	    		'checked'	=> true,
-	    	);
-	}
-    	
-	// Загрузка общего списка услуг
-	foreach ( Service_Container::load()->getIterator() as $service )
+	/**
+	 * Получение полной информации 
+	 * 
+	 * @todo Вынести получение сертификатов и услуг эксперта в эксперта =)
+	 *
+	 */
+	function getProfile()
 	{
-		$json['services'][] = array (
-			'id' 		=> $service->getId(),
-			'title'		=> $service->getName(),
-			'comment' 	=> $service->getDesc(),
-			'price'		=> null,
-			'days'		=> null,
-			'checked'	=> false,
+		$user	= Core::getInstance()->user;	
+		
+		$json 	= array (
+			'fio'		=> $user->getUserProps('user_name'),
+			'shortInfo'	=> $user->getUserProps('user_info_short'),
+			'fullInfo'	=> $user->getUserProps('user_info_full'),
+			'rating'		=> 4,
+			'votes'		=> 12,
+			'photo'		=> $user->getUserProps('user_img'),
+			'smallPhoto'	=> $user->getUserProps('user_img_thumb'),
+			
+			'certificates' 	=> array(),
+			'services'	=> array(),
 		);
+		
+		// Загрузка списка сертификатов
+		foreach ( Certificate_Container::loadByUser($user)->getIterator() as $cert )
+		{
+			$json['certificates'][] = array (
+				'id'		=> $cert->getId(),
+				'image'		=> $cert->getImage(),
+				'smallImage'	=> $cert->getThumb(),
+				'comment'	=> $cert->getDetails(),
+				'status'		=> $cert->getStatusCode(),
+				'statusText'	=> $cert->getStatusMessage(),
+			);
+		}
+    	
+		// Загрузка услуг эксперта
+		foreach ( Service_Expert_Container::load( $user )->getIterator() as $service )
+		{
+			$json['services'][] = array (
+				'id'		=> $service->getId(),
+				'title' 		=> $service->getName(),
+				'comment'	=> $service->getDesc(),
+				'price'		=> $service->getPrice(),
+				'days'		=> $service->getTerm(),
+				'checked'	=> true,
+			);
+		}
+    	
+		// Загрузка общего списка услуг
+		foreach ( Service_Container::load()->getIterator() as $service )
+		{
+			$json['services'][] = array (
+				'id' 		=> $service->getId(),
+				'title'		=> $service->getName(),
+				'comment' 	=> $service->getDesc(),
+				'price'		=> null,
+				'days'		=> null,
+				'checked'	=> false,
+			);
+		}
+		
+		exit( json_encode($json) );
 	}
-    	
-    	exit( json_encode($json) );
-    }
     
-    function editInfo()
-    {
-   	$sql = 'update `user_fields_expert` 
-		set `user_info_short` = ?, `user_info_full` = ?
-		where `user_id` = ?';
+	/**
+	 * Редактирование информации о эксперте
+	 */
+	function editInfo()
+	{
+		$sql = 'update `user_fields_expert` 
+			set `user_info_short` = ?, `user_info_full` = ?
+			where `user_id` = ?';
 	
-	Core::getInstance()->db->query($sql, $_POST['profile-short'], $_POST['profile-long'], Core::getInstance()->user->getId() );
+		Core::getInstance()->db->query($sql, $_POST['profile-short'], $_POST['profile-long'], Core::getInstance()->user->getId() );
     	
-	$json = array(
-		'result' => array (
-			'text' 		=> 'Информация успешно обновлена.',
-		)
-	);
+		$json = array(
+			'result' => array (
+				'text' 		=> 'Информация успешно обновлена.',
+			)
+		);
 	
-	exit( json_encode($json) );
-    }
+		exit( json_encode($json) );
+	}
     
     /**
      * Загрузка фотографии
