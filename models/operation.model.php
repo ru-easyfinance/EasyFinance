@@ -270,10 +270,19 @@ class Operation_Model {
             $drain_money = $money * -1;
                 // tr_id. было drain
 		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, imp_id, dt_create)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-            $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
-            $comment, $to_account, $convert);
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer,  dt_create)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 1,
+            $comment, $to_account);
+            
+            $last_id = mysql_insert_id();
+
+            $sql = "INSERT INTO operation
+                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
+                $comment, $from_account);
+            
         }else{
 
         $drain_money = $money * -1;
@@ -283,10 +292,16 @@ class Operation_Model {
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         
-        $last_id = $this->db->query($sql, $this->user->getId(), $money, $date, -1, $from_account, 1,
+        $last_id = $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 1,
             $comment, $to_account);
 
             $last_id = mysql_insert_id();
+            
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, $last_id,
+            $comment, $from_account);
         // @FIXME Поправить переводы между счетами
         // Закомментированные запросы ещё пригодятся
             
@@ -580,7 +595,7 @@ class Operation_Model {
         }
 
         // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
-        $tr = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND transfer = 0 AND tr_id is NULL";
+        $tr = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? ";//AND transfer = 0 AND tr_id is NULL
         if (is_array($account_id) && count($account_id) > 0) {
             $sql = $tr." AND account_id IN (?a) {$dr}";
             $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
