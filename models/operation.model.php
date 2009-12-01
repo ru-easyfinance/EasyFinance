@@ -535,7 +535,7 @@ class Operation_Model {
             //$val['account_currency_id'] = $val['target_account_id'];
             //если фин цель то перезаписываем тот null что записан.
             if (($val['virt']) == 1){
-                $val['account_currency_id'] = $accounts[$val['target_account_id']]['account_currency_id'];
+                $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
                 if (($val['cat_id']) == 1)
                     $val['cat_name'] = "Квартира";
                 if (($val['cat_id']) == 2)
@@ -559,7 +559,7 @@ class Operation_Model {
             if (!($v[account_name] == ''))
                 $retoper[$k] = $v;
         }
-        return $retoper;
+        return $operations;
     }
 
     /**
