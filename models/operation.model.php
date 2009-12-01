@@ -533,8 +533,19 @@ class Operation_Model {
             $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
 
             //если фин цель то перезаписываем тот null что записан.
-            if (($val['target_account_id']) != null)
-                 $val['account_currency_id'] = $accounts[$val['target_account_id']]['account_currency_id'];
+            if (($val['target_account_id']) != null){
+                $val['account_currency_id'] = $accounts[$val['target_account_id']]['account_currency_id'];
+                if (($operations['category_id']) == 1)
+                    $val['cat_name'] = "Квартира";
+                if (($operations['category_id']) == 2)
+                    $val['cat_name'] = "Автомобиль";
+                if (($operations['category_id']) == 3)
+                    $val['cat_name'] = "Отпуск";
+                if (($operations['category_id']) == 4)
+                    $val['cat_name'] = "Фин.подушка";
+                if (($operations['category_id']) == 5)
+                    $val['cat_name'] = "Прочее";
+            }
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
             $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];

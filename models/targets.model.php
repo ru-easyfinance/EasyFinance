@@ -439,7 +439,7 @@ class Targets_Model {
             //
             //а теперь добавим перевод на фин цель со счёта фин цели!
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
-                VALUES(?,?,?,?,NOW(),?,?);",$a[0]['target_account_id'], $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
+                VALUES(?,?,?,?,NOW(),?,?);",$a[0]['target_account_id']/*$account_id*/, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
             if (!empty($close)) {
                 $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
             }
