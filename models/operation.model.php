@@ -285,9 +285,6 @@ class Operation_Model {
             
         }else{
 
-        $drain_money = $money * -1;
-
-        // tr_id. было drain
         $sql = "INSERT INTO operation
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
@@ -377,11 +374,27 @@ class Operation_Model {
      */
     function deleteOperation($id = 0)
     {
-        if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$id, Core::getInstance()->user->getId())) {
-            return true;
-        } else {
-            return false;
+        //получаем айди дочерней смежной записи
+        $tr_id = $this->db->query('SELECT * FROM operation WHERE tr_id = ? AND user_id = ?', $id, Core::getInstance()->user->getId());
+        //родительской
+        $idsh = $this->db->query('SELECT * FROM operation WHERE id = ? AND user_id = ?', $id, Core::getInstance()->user->getId());
+        
+            if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$id, Core::getInstance()->user->getId())) {
+                //return true;
+            } else {
+                return false;
+            }
+        if ( $tr_id[0]['id'] ){
+            if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$tr_id[0]['id'], Core::getInstance()->user->getId())) {
+                //return true;
+            } 
         }
+        if ( $idsh[0]['tr_id'] ){
+            if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$idsh[0]['tr_id'], Core::getInstance()->user->getId())) {
+                //return true;
+            } 
+        }
+        return true;
     }
 
     /**
