@@ -912,6 +912,7 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 
 .operation_list .cont { position: relative; right: 70px;}
 .operation_list { padding-top: 21px !important; height:255px; width: 505px; margin-top: 5px}
+.operationsJournal { height:280px; }
 .operation_list .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px;//zoom: 1; }
 .operation_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list .sorting div{margin-bottom: 7px;}
