@@ -1,5 +1,5 @@
 {* $Id: index_old.html -1   $ *}
-<!--подвал-->
+        <!--подвал-->
             <div id="footer">
                 <div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
                 <a  class="addmessage">оставить отзыв</a>
@@ -16,7 +16,7 @@
                     <li class="twitter">Twitter:  <a href="http://twitter.com/easyfinanceru">easyfinanceru</a></li>
                 </ul>
                 <a href="http://notamedia.ru/" target="_blank"><div class="creator" tooltip="linkalert-tip">дизайн сайта<br/>Нотамедиа 2009</div></a>
-            <!--popup оставить отзыв-->
+                <!--popup оставить отзыв-->
                 <div id="popupreport">
                     <div class="inside">
                         <div class="w_d_head">&nbsp;</div>
@@ -47,9 +47,60 @@
 
                 <div id='dialog_rating'></div>
                 <!--/popup оставить отзыв-->
+
+{php}
+$seotext = $this->get_template_vars('seotext'); ;
+$str = '';
+$columns = 3;
+$cnt = count($seotext);
+$parsed = 0;
+
+//we are going to set a new variables called $rows
+$rows = ceil($cnt / $columns);
+
+for($i = 0; $i < $columns; $i++) {
+    $str = $str . '<li class="footerTextsColumn">';
+
+    $row = 0;
+    while ($cnt > (($columns-$i-1)*$row)) {
+        if (isset($seotext[$parsed+1])) {
+            $str = $str . '<h4>' . $seotext[$parsed+1][0] . '</h4>';
+            $str = $str . '<p>' . $seotext[$parsed+1][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></p>';
+            $str = $str . '<p class="hidden">' . $seotext[$parsed+1][2] . '</p>';
+
+            $parsed++;
+            $row++;
+        }
+
+        $cnt--;
+    }
+
+    $str = $str . '</li>';
+}
+
+$this->assign('seoHTML', $str);
+
+{/php}
+
+                {if count($seotext)}
+                    <ul class="footerTextsArea">{$seoHTML}</ul>
+
+                    {literal}
+                        <script type="text/javascript">
+                            $(document).ready(function() {
+                                //toggle long footer text
+                                $("#footer a.footerTextToggler").click(function() {
+                                    $(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
+                                    $(this).parent().next('p').slideToggle("fast");
+                                    return false;
+                                });
+                            });
+                        </script>
+                    {/literal}
+                {/if}
             </div>
         </div>
-    <!--/подвал-->
+        <!--/подвал-->
         {literal}
             <script type="text/javascript">
                 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -63,19 +114,8 @@
             }
             </script>
         {/literal}
-            {literal}
-        <!--[if lte IE 6]><script src="/js/warning.js"></script><![endif]-->
-    {/literal}
-
-        {foreach from=$seotext item=i key=k}
-        <div class="aspects">
-            <div class="aspect">
-                <div id="seoname" class="seofirst" >{$i[0]}</div>
-                <div id="seotext1" class="seotext" >{$i[1]}</div>
-                <div id="seotext2" class="seotext2" style="display:none" >{$i[2]}</div>
-            </div>
-        </div>
-        {/foreach}
-    
+        {literal}
+            <!--[if lte IE 6]><script src="/js/warning.js"></script><![endif]-->
+        {/literal}
     </body>
 </html>
