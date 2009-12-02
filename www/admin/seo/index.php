@@ -75,6 +75,7 @@ class SeoText{
                 <input name="delname" type="hidden" value="' . $v[0] . '" />
                 <input type="submit" value="Удалить" /></form>';
             $button .= "<form name='edit' method='post' action='/admin/seo/'>
+                <input name='key' type='hidden' value='" . htmlspecialchars($k, ENT_QUOTES) . "' />
                 <input name='editname' type='hidden' value='" . htmlspecialchars($v[0], ENT_QUOTES)  . "' />
                 <input name='edittext1' type='hidden' value='" . htmlspecialchars($v[1], ENT_QUOTES) . "' />
                 <input name='edittext2' type='hidden' value='" . htmlspecialchars($v[2], ENT_QUOTES) . "' />
@@ -128,7 +129,7 @@ class SeoText{
      * @param string $text2
      */
 
-    function EditString($name, $text1, $text2){
+    function EditString($key, $name, $text1, $text2){
         $f = fopen(SEO_FILENAME,'r');
         if (file_exists(SEO_FILENAME)){
             include SEO_FILENAME;
@@ -136,7 +137,8 @@ class SeoText{
 
             $f = fopen(SEO_FILENAME, 'w');
             foreach ($this->array as $k=>$value){
-                if ($this->array[$k][0] == $name){
+                //if ($this->array[$k][0] == $name){
+                if ($k == $key){
                     $arr = array($name, $text1, $text2);
                     $this->array[$k] = $arr;
                 }
@@ -148,15 +150,18 @@ class SeoText{
     }
     function AddEdit(){
         $isnew = 0;
-        foreach ( $this->array as $k => $v ){
+        /*foreach ( $this->array as $k => $v ){
             if ($v[0] == $_POST['name']) {
                 $isnew = $k;
             }
+        }*/
+        if (isset($_POST['keyf'])){
+            $isnew = $_POST['keyf'];
         }
         if (!$isnew){
             $this->AppendToFile();
         }else{
-            $this->EditString($_POST['name'],$_POST['maintext'],$_POST['relatedtext']);
+            $this->EditString($isnew, $_POST['name'],$_POST['maintext'],$_POST['relatedtext']);
         }
     }
 }
@@ -197,6 +202,7 @@ $contents = fread($handle, filesize($filename));
 fclose($handle);
 
 if (isset($_POST['editname'])) {
+    $hidd = $_POST['key'];
     $editname = $_POST['editname'];
     $edittext1 = $_POST['edittext1'];
     $edittext2 = $_POST['edittext2'];
@@ -207,6 +213,7 @@ if (isset($_POST['editname'])) {
 }
 
 $contents = str_replace('__LISTS__', $lists, $contents);
+$contents = str_replace('__HIDD__', $hidd, $contents);
 $contents = str_replace('__NAME__', $editname, $contents);
 $contents = str_replace('__EDITOR__', $edittext1, $contents);
 $contents = str_replace('__RELATEDTEXT__', $edittext2, $contents);
