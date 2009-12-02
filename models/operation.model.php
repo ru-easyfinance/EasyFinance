@@ -520,7 +520,7 @@ class Operation_Model {
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
         " WHERE t.user_id = " . Core::getInstance()->user->getId() . 
-            " AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
+            " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
             if((int)$currentAccount > 0) {
                 $sql .= " AND t.bill_id = '{$currentAccount}' ";
             }
