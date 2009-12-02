@@ -12,12 +12,12 @@ class Feedback_Controller extends _Core_Controller
      * @var Feedback_Model
      */
     private $model = null;
-    
+
     /**
      * Конструктор класса
      * @return void
      */
-    function __construct()
+    function __init()
     {
         $this->model = new Feedback_Model();
     }
