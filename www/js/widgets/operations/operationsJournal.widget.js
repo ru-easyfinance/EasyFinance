@@ -7,7 +7,7 @@ easyFinance.widgets.operationsJournal = function(){
     // private constants
 
     // private variables
-    var _model = null;
+    var _modelAccounts = null;
 
     var _account = '';
     var _accountName = '';
@@ -44,8 +44,9 @@ easyFinance.widgets.operationsJournal = function(){
 
         _journal = data;
 
-        var tr, tp;
+        var tr, tp, pageTotal;
         tr = '';
+        pageTotal = 0;
         
         // Собираем данные для заполнения в таблицу
         for(var v in data) {
@@ -69,16 +70,16 @@ easyFinance.widgets.operationsJournal = function(){
                 + '<td class="light"><a href="#">' + tp + '</a></td>'
 
                 // @fixme: отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
-                if (data[v].transfer != _account && data[v].transfer != 0){
-                    tr += '<td class="summ '+ (-data[v].money>=0 ? 'sumGreen' : 'sumRed') +'"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
-                } else {
+                //if (data[v].transfer != _account && data[v].transfer != 0){
+                //    tr += '<td class="summ '+ (-data[v].money>=0 ? 'sumGreen' : 'sumRed') +'"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
+                //} else {
                     // если перевод осуществляется между счетами с разными валютами,
                     // то в переменной imp_id хранится сумма в валюте целевого счёта
                     if (data[v].imp_id == null)
                         tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
                     else
                         tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].imp_id)+'</b></span></td>'
-                }
+                //}
 
                 tr += '<td class="light"><span>'+data[v].date+'</span></td>'
                 + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
@@ -89,12 +90,24 @@ easyFinance.widgets.operationsJournal = function(){
                     +'<li class="add"><a title="Копировать">Копировать</a></li>'
                     +'</ul></div>'
                 +'</td></tr>';
+//debugger;
+            pageTotal = pageTotal + parseFloat(data[v].money * res.currency[data[v].account_currency_id].cost);
         }
+        
         // Очищаем таблицу
         $('#operations_list').find('tr').remove();
         
         // Заполняем таблицу
         $('#operations_list tbody').append(tr);
+
+        // Выводим итоги по счёту/странице
+        if (_account != '') {            
+            $('#lblOperationsJournalAccountBalance')
+                .html('<b>Остаток по счёту: </b>' + _modelAccounts.getAccountBalanceTotal(_account) +' руб.')
+                .show();
+        }
+
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' руб.<br>').show();
     }
 
     function _deleteChecked(){
@@ -111,7 +124,7 @@ easyFinance.widgets.operationsJournal = function(){
             key++;
         });
 
-        _model.deleteOperationsByIds(ids, virts, function(data) {
+        _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
             // remove rows from table
             $trs.remove();
             _onCheckClicked();
@@ -126,7 +139,7 @@ easyFinance.widgets.operationsJournal = function(){
             return false;
         var _opVirt = _journal[id].virt ? 'v' : 'r';
 
-        _model.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
+        _modelAccounts.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
             // remove row from table
             $('#operations_list tr[id="op' + _opVirt + id + '"]').remove();
             $.jGrowl("Операция удалена", {theme: 'green'});
@@ -265,6 +278,9 @@ easyFinance.widgets.operationsJournal = function(){
         // фильтр по счёту
         _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
         _$dialogFilterAccount.find('a').click(function(){
+            $('#lblOperationsJournalAccountBalance').hide();
+            $('#lblOperationsJournalSum').hide();
+
             _account = $(this).attr('value');
             _accountName = $(this).text();
             loadJournal();
@@ -309,7 +325,7 @@ easyFinance.widgets.operationsJournal = function(){
         if (txt != '' && _accountName != '')
             txt = txt + ', ';
 
-        if (_accountName != '')
+        if (_account != '')
             txt = txt + 'счёт: ' + _accountName;
 
         if (txt == '') {
@@ -332,7 +348,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         _$node = $(nodeSelector);
 
-        _model = model;
+        _modelAccounts = model;
 
         _$txtDateFrom = $('#dateFrom');
         _$txtDateTo = $('#dateTo');
@@ -395,6 +411,7 @@ easyFinance.widgets.operationsJournal = function(){
 
     function setAccount(account) {
         _account = account;
+//        _accountName = _modelAccounts.getAccountNameById(account);
     }
 
     function setCategory(cat) {
@@ -417,7 +434,7 @@ easyFinance.widgets.operationsJournal = function(){
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
 
-        _model.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _showInfo);
+        _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _showInfo);
     }
 
     // reveal some private things by assigning public pointers
