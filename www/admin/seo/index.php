@@ -109,13 +109,21 @@ class SeoText{
         if ( file_exists(SEO_FILENAME) ) {
             include SEO_FILENAME;
             $this->array = $texts;
-
+            $delkey ="";
+            $all ="";
             $f = fopen(SEO_FILENAME, 'w');
             foreach ($this->array as $k=>$value){
                 if ($this->array[$k][0] == $name) {
-                    unset ($this->array[$k]);
+                    $delkey = $key;
+                    foreach ($this->array as $k=>$v){
+                        if ($k>=$delkey)
+                            $this->array[$k] = $this->array[$k+1];
+                    }
+                    //unset ($this->array[$k]);
                 }
+                $allkey = $k;
             }
+            unset ($this->array[$allkey]);
             $dump = '<?php $texts = ' . var_export( $this->array , true ) . ' ?>';//*/
             fwrite($f, $dump);
             fclose($f);
