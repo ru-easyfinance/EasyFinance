@@ -185,6 +185,7 @@ easyFinance.widgets.operationEdit = function(){
             }
         });
 
+        $('#op_account').change( function(){_changeAccountForTransfer();});
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
 
         $('#op_target').change(function(){
@@ -503,17 +504,25 @@ easyFinance.widgets.operationEdit = function(){
         if (_selectedType == "2" &&
             $('#op_account :selected').attr('currency') != $('#op_AccountForTransfer :selected').attr('currency')) {
                 $('#op_operationTransferCurrency').show();
-                $.post('/operation/get_currency/', {
+                //$("##op_account :selected").attr('currency')
+                //alert(res.currency[$("#op_account :selected").attr('currency')]['cost']);
+                /*$.post('/operation/get_currency/', {
                         SourceId : $("#op_account").val(),
                         TargetId : $("#op_AccountForTransfer").val()
-                    }, function(data){
+                    }, function(data){*/
                         $('#op_operationTransferCurrency :first-child').html('Курс <b>'+
                             $('#op_account :selected').attr('abbr')+'</b> к <b>'+$('#op_AccountForTransfer :selected').attr('abbr')+'</b>');
+                        data = res.currency[$("#op_account :selected").attr('currency')]['cost'];
+                        data /= res.currency[$("#op_AccountForTransfer :selected").attr('currency')]['cost'];
+                        data = data.toString();
+                        i = data.indexOf('.');
+                        data = data.substr(0, i+5);
                         $('#op_currency').val(data);
-                    }, 'json'
-                );
+                    /*}, 'json'
+                );*/
         } else {
             $('#op_operationTransferCurrency').hide();
+            $('#op_operationTransferCurrency').val('');
         }
     }
 
