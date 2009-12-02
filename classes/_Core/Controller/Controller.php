@@ -145,7 +145,7 @@ abstract class _Core_Controller
 
         try {
             $info = new Info_Model();
-            $infoa = $info->generate_value();
+            $info->get_data();
         } catch ( Exception $e) {
             $infoa = 0;
         }

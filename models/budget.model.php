@@ -27,9 +27,9 @@ class Budget_Model {
      * @param date $start
      * @param date $end
      */
-    function loadBudget($start, $end, $user_id, $category)
+    function loadBudget($start, $end, $user_id = null, $category = null)
     {
-        if ($user_id == 0) {
+        if (!$user_id) {
             $user_id = Core::getInstance()->user->getId();
         }
         
