@@ -54,9 +54,9 @@ easyFinance.widgets.operationsJournal = function(){
             if (data[v].account_name == null)
                 continue;
 
-            if (data[v].tr_id > 0) {
+            if (data[v].tr_id != null && data[v].tr_id != '') {
                 tp = 'Перевод';
-            }else if (data[v].virt == 1) {
+            } else if (data[v].virt == 1) {
                 tp = 'Фин.цель';
             } else {
                 if (data[v].drain == 1) {

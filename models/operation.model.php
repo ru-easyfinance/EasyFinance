@@ -247,7 +247,8 @@ class Operation_Model {
         } else {
             $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?
                 WHERE user_id = ? AND id = ?";
-            $this->db->query($sql, $money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);
+            $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);//перевод с
+            //$this->db->query($sql, $money, $date, $toAccount, $account, $comment, implode(', ', $tags), $this->user->getId(), $id);//перевод на
         }
     }
 
@@ -272,7 +273,7 @@ class Operation_Model {
 		$sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer,  dt_create)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-            $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 1,
+            $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
             $comment, $to_account);
             
             $last_id = mysql_insert_id();
@@ -289,7 +290,7 @@ class Operation_Model {
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         
-        $last_id = $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 1,
+        $last_id = $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
             $comment, $to_account);
 
             $last_id = mysql_insert_id();
@@ -385,14 +386,10 @@ class Operation_Model {
                 return false;
             }
         if ( $tr_id[0]['id'] ){
-            if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$tr_id[0]['id'], Core::getInstance()->user->getId())) {
-                //return true;
-            } 
+            $this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$tr_id[0]['id'], Core::getInstance()->user->getId());
         }
         if ( $idsh[0]['tr_id'] ){
-            if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$idsh[0]['tr_id'], Core::getInstance()->user->getId())) {
-                //return true;
-            } 
+            $this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$idsh[0]['tr_id'], Core::getInstance()->user->getId());
         }
         return true;
     }
