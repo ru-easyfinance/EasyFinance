@@ -252,6 +252,15 @@ class Accounts_Model
     function new_operation($data)
     {
         //alert( date('d.m.Y'));
+        //если счёт долговой , то добавляем первую операцию со знаком минус.
+        //7 - займ полученный
+        //8 - кредитная карта
+        //9 - кредит
+        $tip = "SELECT account_type_id FROM accounts WHERE account_id=? AND user_id=?";
+        $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
+        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9))
+            $data['starter_balance'] = '-'.$data['starter_balance'];
+        
        $model = new Operation_Model();
        $model->add(str_replace(' ', '', $data['starter_balance']), /*date('Y.m.d')*/'0000-00-00', 0,0,
            'Начальный остаток', $data['id']);

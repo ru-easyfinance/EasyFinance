@@ -224,19 +224,25 @@ easyFinance.widgets.accountsJournal = function(){
             if (!isNaN(type)){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
                 str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
-                str = str + '<td class="total_balance ' + colorClass + '">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
+                if (type == 2) //для долга печатаем с противоположным знаком
+                    str = str + '<td class="total_balance ' + colorClass + '">' + formatCurrency(-account_list[key]["total_balance"]) + '</td>';
+                else
+                    str = str + '<td class="total_balance ' + colorClass + '">' + formatCurrency(account_list[key]["total_balance"]) + '</td>';
                 str = str + '<td class="cur">' + account_list[key]["cur"] + '</td>';
-                str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
+                if (type == 2)//для долга выводим с противоположным знаком
+                    str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(-account_list[key]["def_cur"]) + '</td>';
+                else
+                    str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["def_cur"]) + '</td>';
                 summ[type] = summ[type]+account_list[key]['def_cur'];
                 if (!val[account_list[key]['cur']]) {
                     val[account_list[key]['cur']]=0;
                 }
-                if (type != 2)
+                //if (type != 2)
                     val[account_list[key]['cur']] = val[account_list[key]['cur']]
                     + parseInt(account_list[key]['total_balance']);
-                else
+                /*else
                     val[account_list[key]['cur']] = val[account_list[key]['cur']]
-                    - parseInt(account_list[key]['total_balance']);
+                    - parseInt(account_list[key]['total_balance']);*/
                 str = str + '<td class="mark no_over">' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
             }
@@ -246,10 +252,10 @@ easyFinance.widgets.accountsJournal = function(){
         {
             if (arr[key]){
                 // учесть долги
-                if (key != 2)
+                //if (key != 2)
                     total = total+summ[key];
-                else
-                    total = total-summ[key];
+                //else
+                    //total = total-summ[key];
 
                 s='<div><strong class="title">'+ g_name[key]
                     + '</strong> : ' + formatCurrency(tofloat(summ[key]))
