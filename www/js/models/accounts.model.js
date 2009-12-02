@@ -61,7 +61,10 @@ easyFinance.models.accounts = function(){
     }
 
     function getAccountNameById(id){
-        return _accounts[id]["name"];
+        if (_accounts)
+            return _accounts[id]["name"];
+        else
+            return '';
     }
 
     function getAccountBalanceTotal(id){

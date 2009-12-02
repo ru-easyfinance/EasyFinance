@@ -76,16 +76,6 @@ $(document).ready(function() {
         var catId = $(this).closest('tr,.line').attr('id').split("_", 2)[1];
         fillForm(catId);
 
-        $('#subcat').removeAttr('disabled');
-        if (cat.user[catId]['parent'] != "0") {
-            $('#categoryEditSystem').hide();
-            $('#catsys').attr('disabled', 'disabled');    
-        } else {
-            $('#categoryEditSystem').show();
-            $('#catsys').removeAttr('disabled');
-            //$('#subcat').attr('disabled', 'disabled');
-        }
-
         $('#cat_id').val('');
         $('#add_form').show();
         $(document).scrollTop(300);
@@ -120,8 +110,15 @@ $(document).ready(function() {
         $('#namecat').val(cat.user[id]['name']);
         $('#subcat').val(cat.user[id]['parent']);
         $('#cattype').val(cat.user[id]['type']);
-        $('#catsys').val(cat.user[id]['system'])
-            .attr('disabled', 'disabled');
+        $('#catsys').val(cat.user[id]['system']);
+        
+        if (cat.user[catId]['parent'] != "0") {
+            $('#categoryEditSystem').hide();
+            $('#catsys').attr('disabled', 'disabled');
+        } else {
+            $('#categoryEditSystem').show();
+            $('#catsys').removeAttr('disabled');
+        }
     }
 
     /**
