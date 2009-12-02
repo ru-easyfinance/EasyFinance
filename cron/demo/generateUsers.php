@@ -164,10 +164,12 @@ $userTemplate = '';
 
 $users = array();
 
-if( DEBUG ) echo "\nProcessing " . $usersCount . " users:\n";
-// формируем sql с заменой значений указанных полей
+// Шаг перехода
+$idInterval = 500;
 
-for( $user = 1; $user < $usersCount*200; $user = $user + 200)
+// формируем запросы с заменой значений указанных полей
+if( DEBUG ) echo "\nProcessing " . $usersCount . " users:\n";
+for( $user = 1; $user < $usersCount*$idInterval; $user = $user + $idInterval)
 {
 	$users[ 'demo_' . $user ] = sha1( microtime() );
 	
@@ -181,6 +183,10 @@ for( $user = 1; $user < $usersCount*200; $user = $user + 200)
 			
 			// Если в селекте из таблицы не было данных - игнорим
 			if( !$rowCount ) continue;
+			
+			// Если строк > периода ($idInterval) - обрезаем
+			// дабы не получить конфликт идентификаторов
+			array_splice( $rows, $idInterval );
 			
 			$sql = 'insert into `' . $table . '` (' . implode( ', ', array_map( 'quoteKey', array_keys( $rows[0] ) ) ) . ') values ';
 			
