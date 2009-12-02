@@ -63,10 +63,10 @@ for($i = 0; $i < $columns; $i++) {
 
     $row = 0;
     while ($cnt > (($columns-$i-1)*$row)) {
-        if (isset($seotext[$parsed+1])) {
-            $str = $str . '<h4>' . $seotext[$parsed+1][0] . '</h4>';
-            $str = $str . '<p>' . $seotext[$parsed+1][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></p>';
-            $str = $str . '<p class="hidden">' . $seotext[$parsed+1][2] . '</p>';
+        if (isset($seotext[$parsed])) {
+            $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
+            $str = $str . '<p>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></p>';
+            $str = $str . '<p class="hidden">' . $seotext[$parsed][2] . '</p>';
 
             $parsed++;
             $row++;
