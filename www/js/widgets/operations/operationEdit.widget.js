@@ -577,7 +577,7 @@ easyFinance.widgets.operationEdit = function(){
         setSum(Math.abs(data.money));
 
         var typ = '0';
-        if (data.tr_id=='1') {
+        if (data.tr_id != null && data.tr_id != '') {
             // transfer
             typ = '2';
         } else {

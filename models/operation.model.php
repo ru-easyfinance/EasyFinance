@@ -574,6 +574,11 @@ class Operation_Model {
             }
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
+            if ( $val['transfer_name'] != null){
+                $val['cat_name'] = "Перевод со счёта";
+                if ($val['tr_id']) $val['cat_name'] = "Перевод на счёт";
+            }
+
             $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
             //$val['cur_name'] = $accounts[$val['cur_id']]['cur_name'];
             $operations[$key] = $val;
