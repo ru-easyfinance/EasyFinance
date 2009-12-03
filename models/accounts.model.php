@@ -319,7 +319,6 @@ class Accounts_Model
                 WHERE
                     user_id=?';
         $ret = $this->db->select($sql,$this->user_id);
-
         $id = array();
         $type = array();
         $cur = array();
@@ -388,9 +387,16 @@ class Accounts_Model
             {
                 if ($values[$k]['account_fieldsaccount_field_id'] == $val)
                 {
-                    $res[$val][$values[$k]['field_name']]=$values[$k]['int_value'] .
-                    $values[$k]['date_value'] .
-                    $values[$k]['string_value'];
+			if ($values[$k]['int_value'] != 0) {
+                    		$res[$val][$values[$k]['field_name']]=$values[$k]['int_value']; 
+			} elseif ($values[$k]['date_value'] != '0000-00-00') {
+                    		$res[$val][$values[$k]['field_name']]=$values[$k]['date_value']; 
+			} else {
+                    		$res[$val][$values[$k]['field_name']]=$values[$k]['string_value']; 
+			}
+//                    $res[$val][$values[$k]['field_name']]=$values[$k]['int_value'] .
+//                    $values[$k]['date_value'] .
+//                    $values[$k]['string_value'];
                 }//value
             }
             $res[$val]['cat'] = $type_name[$key];
