@@ -487,7 +487,7 @@ easyFinance.widgets.operationEdit = function(){
 
     function _clearForm() {
         $('#op_id').val('');
-        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');//#op_date убрал
+        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_currency').val('');
 
         $('span#op_amount_target').text();
 
