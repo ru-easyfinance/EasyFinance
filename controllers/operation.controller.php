@@ -58,7 +58,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
      */
     function add($args)
     {
-        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close');
+        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close', 'currency');
         $array = $this->model->checkData($array);
         if (count($this->model->errorData) > 0) {
             // Если есть ошибки, то возвращаем их пользователю в виде массива
@@ -80,7 +80,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                     }
             case 2: // Перевод со счёта
                 $array['category'] = -1;
-                if ($this->model->addTransfer($array['amount'], $array['convert'], $array['date'],
+                if ($this->model->addTransfer($array['amount'], $array['convert'], $array['currency'], $array['date'],
                     $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
                         die('[]');
                     }
