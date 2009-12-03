@@ -188,7 +188,7 @@ for( $user = 1; $user < $usersCount*$idInterval; $user = $user + $idInterval)
 			// дабы не получить конфликт идентификаторов
 			array_splice( $rows, $idInterval );
 			
-			$sql = 'insert into `' . $table . '` (' . implode( ', ', array_map( 'quoteKey', array_keys( $rows[0] ) ) ) . ') values ';
+			$sql = 'insert ignore into `' . $table . '` (' . implode( ', ', array_map( 'quoteKey', array_keys( $rows[0] ) ) ) . ') values ';
 			
 			foreach ( $rows as $id => $row )
 			{
