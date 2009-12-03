@@ -1390,10 +1390,10 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .certificate { position: absolute; left: 700px; top: 10px; }
 
 #footer .footerTextsArea { margin: 80px 0px 0px 8px; border-top: 1px solid #E0E3DE; padding-top: 12px; }
-#footer .footerTextsArea h4 { margin-top: 2px; }
+#footer .footerTextsArea h4 { margin-top: 2px; color: grey; }
 #footer .footerTextsArea li:first-child { margin:0; }
 #footer .footerTextsArea li { float:left; margin: 0 0 0 34px; width: 286px; }
-#footer .footerTextsArea div { padding: 4px 0 4px 0; text-align: justify; }
+#footer .footerTextsArea div { padding: 4px 0 4px 0; text-align: justify; color: #999999; }
 #footer .footerTextsArea p { padding: 0px; margin: 2px 0 0 0; }
 
 #footer { position: relative; margin: 0 auto; width: 940px; height: 130px; font-size: 11px;  color: #000000; //zoom: 1; }
