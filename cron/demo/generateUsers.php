@@ -220,7 +220,7 @@ for( $user = 1; $user < $usersCount*$idInterval; $user = $user + $idInterval)
 				}
 				
 				//Хак для таблицы бюджета
-				if( $table == 'budjet' )
+				if( $table == 'budget' )
 				{
 					$row['key'] = implode( '-', array($user, $row['category'], $row['drain'], $row['date_start']) );
 				}
