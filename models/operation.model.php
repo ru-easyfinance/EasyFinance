@@ -493,7 +493,7 @@ class Operation_Model {
         // это операции со счётами
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
         " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-            o.imp_id AS moneydef, o.exchange_rate AS curs, o.type AS acctocur".
+            o.imp_id AS moneydef, o.exchange_rate AS curs, o.type AS accountto_currency_id".
         " FROM operation o ".
         " WHERE o.user_id = " . Core::getInstance()->user->getId();
             if((int)$currentAccount > 0) {
