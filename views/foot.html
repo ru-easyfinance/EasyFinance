@@ -48,41 +48,40 @@
                 <div id='dialog_rating'></div>
                 <!--/popup оставить отзыв-->
 
-{php}
-$seotext = $this->get_template_vars('seotext'); ;
-$str = '';
-$columns = 3;
-$cnt = count($seotext);
-$parsed = 0;
-
-//we are going to set a new variables called $rows
-$rows = ceil($cnt / $columns);
-
-for($i = 0; $i < $columns; $i++) {
-    $str = $str . '<li class="footerTextsColumn">';
-
-    $row = 0;
-    while ($cnt > (($columns-$i-1)*$row)) {
-        if (isset($seotext[$parsed])) {
-            $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
-            $str = $str . '<p>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></p>';
-            $str = $str . '<p class="hidden">' . $seotext[$parsed][2] . '</p>';
-
-            $parsed++;
-            $row++;
-        }
-
-        $cnt--;
-    }
-
-    $str = $str . '</li>';
-}
-
-$this->assign('seoHTML', $str);
-
-{/php}
-
                 {if count($seotext)}
+                    {php}
+                        $seotext = $this->get_template_vars('seotext'); ;
+                        $str = '';
+                        $columns = 3;
+                        $cnt = count($seotext);
+                        $parsed = 0;
+
+                        //we are going to set a new variables called $rows
+                        $rows = ceil($cnt / $columns);
+
+                        for($i = 0; $i < $columns; $i++) {
+                            $str = $str . '<li class="footerTextsColumn">';
+
+                            $row = 0;
+                            while ($cnt > (($columns-$i-1)*$row)) {
+                                if (isset($seotext[$parsed])) {
+                                    $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
+                                    $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
+                                    $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
+
+                                    $parsed++;
+                                    $row++;
+                                }
+
+                                $cnt--;
+                            }
+
+                            $str = $str . '</li>';
+                        }
+
+                        $this->assign('seoHTML', $str);
+                    {/php}
+
                     <ul class="footerTextsArea">{$seoHTML}</ul>
 
                     {literal}
@@ -91,7 +90,7 @@ $this->assign('seoHTML', $str);
                                 //toggle long footer text
                                 $("#footer a.footerTextToggler").click(function() {
                                     $(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
-                                    $(this).parent().next('p').slideToggle("fast");
+                                    $(this).parent().next('div').slideToggle("fast");
                                     return false;
                                 });
                             });
