@@ -157,7 +157,7 @@ class Operation_Model {
         // - Перевод со счёта на счёт
         if ($valid['type'] == 2) {
             if ((float)$_POST['currency'] != 0) {
-                $valid['convert'] = round($valid['amount'] /  (float)$_POST['currency'], 2);
+                $valid['convert'] = round($valid['amount'] *  (float)$_POST['currency'], 2);
             } else {
                 $valid['convert'] = 0;
             }
@@ -277,7 +277,6 @@ class Operation_Model {
             $comment, $to_account);
             
             $last_id = mysql_insert_id();
-
             $sql = "INSERT INTO operation
                 (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
