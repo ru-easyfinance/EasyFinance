@@ -14,30 +14,133 @@ class Info_Model
     private $db = NULL;
 
     /**
-     * Ид текущего пользователя
-     * @var int
+     * Уровень денежных остатков (в кратности к 1 ср. месяцу расходов за пред 3 мес)
+     * @var float
      */
-    private $user_id = NULL;
-
-    private $a=0;
-    private $b=0;
-    private $c=0;
-    private $d=0;
-    private $f=0;
-    private $calc=array();//for color and desc
-    private $accounts = null;
-    private $table = null;
-    /**
-     * Ссылка на модель с операциями
-     * @var Operation_Model
-     */
-    private $operation_model = NULL;
+    private $money = 0;
 
     /**
-     * Ссылка на модель со счетами
-     * @var Operation_Model
+     * Массив с входными данными пользователя для рассчёта
+     * @var array mixed
+     * @example
+     * profit - Доход за последний месяц<br/>
+     * drain - Расход за последний месяц<br/>
+     * loans - Выплаты по кредитам за прошедший месяц<br/>
+     * budget - Бюджет расходов за прошедший месяц<br/>
+     * balance - Положительный баланс всех денег на счетах<br/>
      */
-    private $account_model = NULL;
+    private $input = array();
+
+    /**
+     * Массив с рассчитанными данными
+     * @var array mixed
+     * @example
+     * result - Финансовое состояние<br/>
+     * profit - Доход (Деньги)<br/>
+     * budget - Бюджет <br/>
+     * loans  - Кредиты<br/>
+     * drain  - Расход<br/>
+     */
+    private $output = array();
+
+    /**
+     * Сохраняет рассчёты по шагам, структура аналогична $output
+     * @var array
+     */
+    private $steps = array(1=>array(),2=>array(),3=>array());
+
+    /**
+     *
+     * @var array mixed
+     * @example
+     * 'profit' => array(
+     *      'red' => array(
+                1 => 0,
+                2 => 1,
+                3 => 0
+            ),
+            'yellow' => array(
+                1 => 2,
+                2 => 2,
+                3 => 1
+            ),
+            'green' => array(
+                1 => 5,
+                2 => 3,
+                3 => 2
+            )
+        ),
+     */
+    private $values = array(
+        'profit' => array(
+            'red' => array(
+                1 => 0,
+                2 => 1,
+                3 => 0
+            ),
+            'yellow' => array(
+                1 => 2,
+                2 => 2,
+                3 => 1
+            ),
+            'green' => array(
+                1 => 5,
+                2 => 3,
+                3 => 2
+            )
+        ),
+        'budget' => array(
+            'red' => array(
+                1 => 0,
+                2 => 1,
+                3 => 0
+            ),
+            'yellow' => array(
+                1 => 5,
+                2 => 2,
+                3 => 1
+            ),
+            'green' => array(
+                1 => 10,
+                2 => 3,
+                3 => 2
+            )
+        ),
+        'loans'  => array(
+            'red' => array(
+                1 => 70,
+                2 => 1,
+                3 => 0
+            ),
+            'yellow' => array(
+                1 => 40,
+                2 => 2,
+                3 => 1
+            ),
+            'green' => array(
+                1 => 0,
+                2 => 3,
+                3 => 2
+            )
+        ),
+        'drain'  => array(
+            'red' => array(
+                1 => 97,
+                2 => 1,
+                3 => 0
+            ),
+            'yellow' => array(
+                1 => 85,
+                2 => 2,
+                3 => 1
+            ),
+            'green' => array(
+                1 => 0,
+                2 => 3,
+                3 => 2
+            )
+        )
+    );
 
     /**
      * Конструктор
@@ -46,16 +149,6 @@ class Info_Model
     public function __construct()
     {
         $this->db = Core::getInstance()->db;
-        //$this->user_id = Core::getInstance()->user->getId();
-        $this->operation_model = new Operation_Model();
-
-        $sql = "SELECT
-                    account_type_id, account_currency_id, account_id
-                FROM
-                    accounts
-                WHERE
-                    user_id=?";
-        $this->accounts = $this->db->select($sql, $this->user_id);
     }
 
     /**
@@ -64,8 +157,8 @@ class Info_Model
      */
     public function get_data()
     {
-
-
+        //$this->load();
+        
 /*
         [
             [20,0,0,0,20],
@@ -99,20 +192,264 @@ class Info_Model
             ]
         ]
 */
-
-//        SELECT AVG(money) FROM operation WHERE user_id = 5 AND drain = 0 AND transfer = 0 AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
-//        SELECT ABS(AVG(money)) FROM operation WHERE user_id = 5 AND drain = 1 AND transfer = 0 AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
-
         return array(
-              10    //ИТОГО
-            , 23    //Деньги
-            , 21    //$upper
-            , 21    //$credit
-            , 23    //$expens
-            );
+            array(
+                  83    //Финансовое состояние
+                , 11    //Деньги
+                , 7    //Бюджет
+                , 0    //Кредиты
+                , 23    //Управление расходами
+            ),
+            array(
+                array(
+                    'min'=>0, 'color'=>'', 'description'=>'','title'=>''
+                ),
+                array(
+                    'min'=>0, 'color'=>'', 'description'=>'','title'=>''
+                ),
+                array(
+                    'min'=>0, 'color'=>'', 'description'=>'','title'=>''
+                ),
+                array(
+                    'min'=>0, 'color'=>'', 'description'=>'','title'=>''
+                ),
+                array(
+                    'min'=>0, 'color'=>'', 'description'=>'','title'=>''
+                ),
+            )
+        );
     }
 
+    /**
+     * Загружает данные
+     * @return void
+     */
+    public function load()
+    {
+        if (isset($_SESSION['info'])) {
+            $this->input['balance']  = (float)$_SESSION['info']['balance'];
+            $this->input['budget']   = (float)$_SESSION['info']['budget'];
+            $this->input['drain']    = (float)$_SESSION['info']['drain'];
+            $this->input['loans']    = (float)$_SESSION['info']['loans'];
+            $this->input['money']    = (float)$_SESSION['info']['money'];
+            $this->input['profit']   = (float)$_SESSION['info']['profit'];
+        } else {
+            $this->init();
+            $this->save();
+        }
+        $this->init();
+        
+        $this->correct1();
+        $this->step1();
+        $this->step2();
+        $this->step3();
+        print '<pre>';
+        print_r($this->input);
+        die(print_r($this->output));
+    }
 
+    /**
+     * Инициализирует данные
+     * @return void
+     */
+    public function init() {
+        // Доходы за прошедший месяц
+        $sql = "SELECT SUM(money) FROM operation WHERE user_id = ? AND drain = 0 AND transfer = 0
+            AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
+        $this->input['profit']   = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
+
+        // Расходы за прошедший месяц
+        $sql = "SELECT ABS(SUM(money)) FROM operation WHERE user_id = ? AND drain = 1 AND transfer = 0
+            AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
+        $this->input['drain']    = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
+
+        // Бюджет за прошедший месяц
+        $sql = "SELECT SUM(amount) FROM budget WHERE user_id = ? AND drain=1
+            AND date_start = CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')";
+        $this->input['budget']   = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
+
+//        // Выплаты по кредитам за прошедший месяц
+//        $accounts = '';
+//        foreach (Core::getInstance()->user->getUserAccounts() as $key => $value) {
+//            if ($value['account_type_id'] == 8 || $value['account_type_id'] == 9) {
+//                if (!empty($accounts)) { $accounts .= ','; }
+//                $accounts .= $key;
+//            }
+//        }
+//        $sql = "SELECT SUM(ABS(money)) FROM operation o WHERE account_id IN ({$accounts})";
+//        $this->input['loans']    = (float)$this->db->selectCell($sql);
+        $this->input['loans'] = 0;
+
+        // Остатки денег на конец прошедшего месяца
+        $this->input['balance']  = 0;
+        foreach (Core::getInstance()->user->getUserAccounts() as $key => $value) {
+            // @TODO Дополнить фильтры
+            if ($value['account_type_id'] != 8 || $value['account_type_id'] != 9) {
+                $this->input['balance']  += (float)$value['total_sum'];
+            }
+        }
+
+        // DUMP TEST
+        $this->input['profit']  = 240000.00;
+        $this->input['drain']   = 200000.00;
+        $this->input['loans']   = 21000.00;
+        $this->input['budget']  = 210000.00;
+        $this->input['balance'] = 130000.00;
+    }
+    
+    /**
+     * Сохраняет рассчитанные данные в кеше
+     * @return void
+     */
+    public function save() {
+        // Входные данные для расчёта
+        $_SESSION['info']['input']['balance'] = (float)$this->balance;
+        $_SESSION['info']['input']['budget']  = (float)$this->budget;
+        $_SESSION['info']['input']['drain']   = (float)$this->drain;
+        $_SESSION['info']['input']['loans']   = (float)$this->loans;
+        $_SESSION['info']['input']['profit']  = (float)$this->profit;
+    }
+
+    /**
+     * Корректируем расчёты, шаг 1
+     */
+    private function correct1() {
+        // если значение 0 и при этом показатель "С" больше 0, то расчет 1 для тахометра "Кредиты" = 100
+        if ($this->input['profit'] == 0 && $this->input['loans'] > 0) {
+            $this->output[1]['loans'] = 100;
+        }
+        
+        //если значение 0 и при этом показатель "F" больше 0, то расчет 1 для тахометра "Деньги" = 5,
+        //если и там 0, то "Деньги" = 0; 
+        //Также если значение 0 и при этом показатель "A" больше 0,
+        //то расчет 1 для тахометра "Доходы vs Расходы" = 10, если и там 0, то "Доходы vs Расходы" = 0
+        if ($this->input['drain'] == 0 && $this->input['balance'] > 0) {
+            $this->output[1]['profit'] = 5;
+        }
+        if ($this->input['balance'] == 0) {
+            $this->output[1]['profit'] = 0;
+        }
+        //@FIXME
+        if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
+            $this->output[1]['budget'] = 10;
+        } else if ($this->input['profit'] == 0) {
+            $this->output[1]['budget'] = 0;
+        }
+
+        //если 0 то расчет 1 для тахометра "Кредиты" 0
+        if ($this->input['loans'] == 0) {
+            $this->output[1]['loans'] = 0;
+        }
+
+        //если значение 0  тогда расчет 1 для тахометра "Бюджет" = 100
+        if ($this->input['drain'] == 0) {
+            $this->output[1]['budget'] = 100;
+        }
+
+        //если 0 то расчет 1 для тахометра "Деньги" = 0
+        if ($this->input['balance'] == 0) {
+            $this->output[1]['profit'] = 0;
+        }
+    }
+
+    /**
+     * Расчёт тахометров, первый шаг
+     */
+    private function step1 ()
+    {
+        // Деньги
+        if (!isset ($this->output[1]['profit'])) {
+            $this->output[1]['profit'] = $this->input['balance'] / $this->input['drain'];
+        }
+
+        // Кредиты
+        if (!isset ($this->output[1]['loans'])) {
+            $this->output[1]['loans'] = $this->input['loans'] / $this->input['profit'] * 100;
+        }
+
+        // Расходы
+        if (!isset ($this->output[1]['drain'])) {
+            $this->output[1]['drain'] = $this->input['drain'] / $this->input['budget'] * 100;
+        }
+
+        // Бюджет / Доходы vs Расходы
+        if (!isset ($this->output[1]['budget'])) {
+            $this->output[1]['budget'] = $this->input['profit'] / $this->input['drain'];
+        }
+    }
+
+    /**
+     * Расчёт тахометров, второй шаг
+     */
+    private function step2 ()
+    {
+        // Деньги
+        // Если Расчет 1 меньше желтой границы, то 1
+        // Если меньше зеленой границы то 2
+        // Если больше зеленой то 3
+        if ($this->output[1]['profit'] < $this->values['profit']['yellow'][1]) {
+            $this->output[2]['profit'] = 1;
+        } elseif ($this->output[1]['profit'] < $this->values['profit']['green'][1]) {
+              $this->output[2]['profit'] = 2;
+        } elseif ($this->output[1]['profit'] > $this->values['profit']['green'][1]) {
+              $this->output[2]['profit'] = 3;
+        }
+
+        // Кредиты
+        // Если Расчет 1 меньше желтой границы, то 3
+        // Если между желтой и красной то 2
+        // Если больше красной то 1
+        if ($this->output[1]['loans'] < $this->values['loans']['yellow'][1]) {
+            $this->output[2]['loans'] = 3;
+        } elseif ($this->output[1]['loans'] > $this->values['loans']['yellow'][1]
+            && $this->output[1]['loans'] < $this->values['loans']['red'][1]) {
+               $this->output[2]['loans'] = 2;
+        } elseif ($this->output[1]['loans'] > $this->values['loans']['red'][1]) {
+            $this->output[2]['loans'] = 1;
+        }
+
+        // Расходы
+        // Если Расчет 1 меньше желтой границы, то 3
+        // Если между желтой и красной то 2
+        // Если больше красной то 1
+        if ($this->output[1]['drain'] < $this->values['drian']['yellow'][1]) {
+            $this->output[2]['drain'] = 3;
+        } elseif ($this->output[1]['drain'] > $this->values['drain']['yellow'][1]
+            && $this->output[1]['drain'] < $this->values['drain']['red'][1]) {
+                $this->output[2]['drain'] = 2;
+        } elseif ($this->output[1]['drain'] > $this->values['drain']['red'][1]) {
+            $this->output[2]['drain'] = 1;
+        }
+
+        // Бюджет
+        // Если Расчет 1 меньше желтой границы, то 1
+        // Если меньше зеленой границы то 2
+        // Если больше зеленой то 3
+        if ($this->output[1]['budget'] < $this->values['budget']['yellow'][1]) {
+            $this->output[2]['budget'] = 1;
+        } elseif ($this->output[1]['budget'] < $this->values['budget']['green'][1]) {
+              $this->output[2]['budget'] = 2;
+        } elseif ($this->output[1]['budget'] > $this->values['budget']['green'][1]) {
+              $this->output[2]['budget'] = 3;
+        }
+    }
+
+    /**
+     * Расчёт тахометров, третий шаг
+     */
+    private function step3 ()
+    {
+//        =IF((N10=3);
+//            (((C10-F10)/(6-F10)));
+//            IF((N10=2);
+//                (((C10-E10)/(F10-E10)));
+//                    (C10/E10)
+//            )
+//
+//        )
+    }
+
+/*
     //расчётные функции//////////////////////////////////////////////////////
     //получение данныхы//////////////////////////////////////////////////////
     private function get_profit()//a
@@ -362,7 +699,7 @@ class Info_Model
         $sql = "SELECT `min`,color,description,title FROM info_desc WHERE (`min`<=? and `type`=?) ORDER BY `min` DESC;";
         $desc = array();
         //die (print_r($this->calc));
-        foreach ($this->calc as $key=>$val)/* @deprecated  */
+        foreach ($this->calc as $key=>$val)
         {
             $desc[] = $this->db->selectRow($sql,$val,$key);
         }
@@ -370,4 +707,5 @@ class Info_Model
         $ret = array($values,$desc);
         return $ret;
     }
+*/
 }
