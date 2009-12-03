@@ -87,12 +87,17 @@ class SeoText{
         return $lists;
     }
 
+    function notag($text){
+        $allowable_tags = '<span><b><i><u><h1><h2><h3><h4><h5><h6>';
+        return strip_tags($text, $allowable_tags);
+    }
+
     /**
      * Запись массива в файл
      * @return void
      */
     function AppendToFile() {
-        $arr = array($this->name, $this->text1, $this->text2);
+        $arr = array(notag($this->name), $this->text1, $this->text2);
         $this->array[] = $arr;
         $f = fopen(SEO_FILENAME, 'w');
         $dump = '<?php $texts = ' . var_export( $this->array , true ) . ' ?>';
