@@ -24,4 +24,13 @@ if (Core::getInstance()->user->getId()) {
 }
 
 //Выводим страницу в браузер
-Core::getInstance()->tpl->display("index.html");
+switch ( $_SERVER['SERVER_NAME'].'/' ) {
+    case URL_ROOT_IFRAME:
+        Core::getInstance()->tpl->assign('template_view', 'iframe');
+        Core::getInstance()->tpl->display("index.iframe.html");
+        break;
+    default:
+        Core::getInstance()->tpl->assign('template_view', 'index');
+        Core::getInstance()->tpl->display("index.html");
+        break;
+}
