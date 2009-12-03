@@ -177,7 +177,7 @@ easyFinance.widgets.operationEdit = function(){
                 /*
                  *@TODO Дописать округление
                  */
-                var result = Math.round($('#op_amount').val() / $('#op_currency').val());
+                var result = ( $('#op_currency').val() * Math.round($('#op_amount').val())) ;
                 if (!isNaN(result) && result != 'Infinity') {
                     $("#op_convertSumCurrency").html("конвертация: "+result);
                     TransferSum = result;

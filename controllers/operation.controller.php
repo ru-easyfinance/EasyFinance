@@ -127,7 +127,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                     }
             case 2: // Перевод со счёта
                 $array['category'] = -1;
-                if($this->model->editTransfer($array['id'], $array['amount']/*, $array['convert']*/, $array['date'],
+                if($this->model->editTransfer($array['id'], $array['amount'], $array['convert'], $array['date'],
                     $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
                         die('[]');
                     }

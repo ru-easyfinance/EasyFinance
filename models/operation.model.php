@@ -515,7 +515,7 @@ class Operation_Model {
             }
         //это переводы на фин цель
         $sql .= " UNION ".
-        " SELECT t.id, t.user_id, t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, ".
+        " SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, ".
         " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL ".
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
