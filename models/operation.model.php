@@ -230,7 +230,7 @@ class Operation_Model {
      * @param $tags         array     Тег
      * @return bool
      */
-    function editTransfer($id=0, $money = 0, $date = '', /*$category = 0, $drain = 0,*/ $account = 0, $toAccount=0, $comment = '', $tags = null){
+    function editTransfer($id=0, $money = 0, $convert = 0, $date = '', /*$category = 0, $drain = 0,*/ $account = 0, $toAccount=0, $comment = '', $tags = null){
         if ($tags) {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
 
@@ -245,10 +245,14 @@ class Operation_Model {
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
-            $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?
+            $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?
                 WHERE user_id = ? AND id = ?";
-            $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);//перевод с
-            //$this->db->query($sql, $money, $date, $toAccount, $account, $comment, implode(', ', $tags), $this->user->getId(), $id);//перевод на
+            $next = $this->db->query("SELECT id FROM operation WHERE tr_id=?", $id);
+            $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), NULL, $this->user->getId(), $id);//перевод с
+            if ($convert)
+                $this->db->query($sql, $convert, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
+            else
+                $this->db->query($sql, $money, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
         }
     }
 
