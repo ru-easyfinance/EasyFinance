@@ -278,10 +278,10 @@ class Operation_Model {
             
             $last_id = mysql_insert_id();
             $sql = "INSERT INTO operation
-                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
             $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
-                $comment, $from_account);
+                $comment, $from_account, $money);
             
         }else{
 
@@ -295,10 +295,10 @@ class Operation_Model {
             $last_id = mysql_insert_id();
             
         $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, $last_id,
-            $comment, $from_account);
+            $comment, $from_account, $money);
         // @FIXME Поправить переводы между счетами
         // Закомментированные запросы ещё пригодятся
             
@@ -481,7 +481,7 @@ class Operation_Model {
 
         // это операции со счётами
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
-        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id ".
+        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id AS suum".
         " FROM operation o ".
         " WHERE o.user_id = " . Core::getInstance()->user->getId();
             if((int)$currentAccount > 0) {
