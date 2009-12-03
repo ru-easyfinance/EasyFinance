@@ -156,7 +156,7 @@ $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 if( DEBUG ) echo "\nCleanup tables ...\n";
 foreach ( array_keys($tablesTemplate) as $table )
 {
-	$query = 'delete quick from ' . $table;
+	$query = 'truncate table ' . $table;
 	$db->exec( $query );
 }
 
