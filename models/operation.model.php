@@ -156,6 +156,7 @@ class Operation_Model {
         // Проверяем тип операцииe
         // - Перевод со счёта на счёт
         if ($valid['type'] == 2) {
+            $valid['currency'] = (float)$_POST['currency'];
             if ((float)$_POST['currency'] != 0) {
                 $valid['convert'] = round($valid['amount'] *  (float)$_POST['currency'], 2);
             } else {
@@ -267,25 +268,29 @@ class Operation_Model {
      * @param <type> $tags
      * @return <type>
      */
-    function addTransfer($money, $convert, $date, $from_account, $to_account, $comment, $tags)
+    function addTransfer($money, $convert, $curr, $date, $from_account, $to_account, $comment, $tags)
     {
 
         if ($convert != 0)
         {
+            $res = $this->db->query("SELECT account_currency_id FROM accounts WHERE account_id=?",$to_account);
+            $acctoCurrency = $res[0]['account_currency_id'];
             $drain_money = $money * -1;
                 // tr_id. было drain
 		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer,  dt_create)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer,  dt_create,
+                    exchange_rate)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
             $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
-            $comment, $to_account);
-            
+            $comment, $to_account, $curr);
             $last_id = mysql_insert_id();
             $sql = "INSERT INTO operation
-                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id, exchange_rate, type)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)";
             $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
-                $comment, $from_account, $money);
+                $comment, $from_account, $money, $curr, $acctoCurrency);
+
+            //$this->db->query("UPDATE operation SET tr_id=? WHERE id = ?", mysql_insert_id(), $last_id);
             
         }else{
 
@@ -303,6 +308,8 @@ class Operation_Model {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, $last_id,
             $comment, $from_account, $money);
+            $last_id2 = mysql_insert_id();
+        $this->db->query("UPDATE operation SET tr_id=? WHERE id = ?", $last_id2, $last_id);
         // @FIXME Поправить переводы между счетами
         // Закомментированные запросы ещё пригодятся
             
@@ -485,7 +492,8 @@ class Operation_Model {
 
         // это операции со счётами
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
-        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags, o.imp_id AS suum".
+        " o.cat_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
+            o.imp_id AS moneydef, o.exchange_rate AS curs, o.type AS acctocur".
         " FROM operation o ".
         " WHERE o.user_id = " . Core::getInstance()->user->getId();
             if((int)$currentAccount > 0) {
@@ -519,7 +527,7 @@ class Operation_Model {
         //это переводы на фин цель
         $sql .= " UNION ".
         " SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, ".
-        " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL ".
+        " tt.category_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, NULL ".
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
         " WHERE t.user_id = " . Core::getInstance()->user->getId() . 
@@ -578,8 +586,8 @@ class Operation_Model {
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
             if ( $val['transfer_name'] != null){
-                $val['cat_name'] = "Перевод со счёта";
-                if ($val['tr_id']) $val['cat_name'] = "Перевод на счёт";
+                $val['cat_name'] = "Отправлено со счёта";
+                if ($val['tr_id']) $val['cat_name'] = "Пришло на счёт";
             }
 
             $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];
