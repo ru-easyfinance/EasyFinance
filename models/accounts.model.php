@@ -353,64 +353,51 @@ class Accounts_Model
                 WHERE
                     account_fieldsaccount_field_id
                 IN ($id_str)";
-        if(!$id_str)
+
+        if(!$id_str) {
             return 'n';
+        }
+        
         $values = $this->db->select($sql);
         $mod = new Operation_Model();
 
-
-
-
-
-
-
-
-        foreach ($id as $key=>$val)
-        {
+        //
+        foreach ($id as $key=>$val) {
             $res[$val]['type']=$type[$key];
             $res[$val]['cur']=$cur[$key];
             $res[$val]['id']=$id[$key];
-            //SELECT sum(money) AS s
 
             $reservsqlquery = "SELECT sum(money) AS s
                 FROM target_bill tb
                 LEFT JOIN target t ON t.id=tb.target_id
                 WHERE tb.bill_id = ? AND t.done=0";
-            $que = $this->db->select($reservsqlquery,$id[$key]);
+            $result = $this->db->select($reservsqlquery,$id[$key]);
 
-            if ( $que[0]['s'] != null )
-                $res[$val]['reserve']=$que[0]['s'];
-            else
+            if ( $result[0]['s'] != null ) {
+                $res[$val]['reserve']=$result[0]['s'];
+            } else {
                 $res[$val]['reserve']=0;
-            //
+            }
+
             foreach ($values as $k=>$v)
             {
-                if ($values[$k]['account_fieldsaccount_field_id'] == $val)
-                {
-			if ($values[$k]['int_value'] != 0) {
-                    		$res[$val][$values[$k]['field_name']]=$values[$k]['int_value']; 
-			} elseif ($values[$k]['date_value'] != '0000-00-00') {
-                    		$res[$val][$values[$k]['field_name']]=$values[$k]['date_value']; 
-			} else {
-                    		$res[$val][$values[$k]['field_name']]=$values[$k]['string_value']; 
-			}
-//                    $res[$val][$values[$k]['field_name']]=$values[$k]['int_value'] .
-//                    $values[$k]['date_value'] .
-//                    $values[$k]['string_value'];
-                }//value
+                if ($values[$k]['account_fieldsaccount_field_id'] == $val) {
+                    $res[$val][$values[$k]['field_name']] .= ($values[$k]['int_value'] != 0)? $values[$k]['int_value'] : '';
+                    $res[$val][$values[$k]['field_name']] .= ($values[$k]['date_value'] != '0000-00-00')? $values[$k]['date_value'] : '';
+                    $res[$val][$values[$k]['field_name']] .= $values[$k]['string_value'];
+                }
             }
+
             $res[$val]['cat'] = $type_name[$key];
             $total=(float)($mod->getTotalSum($val));
             $res[$val]['total_balance'] = $total;
-           //die(print_r( Core::getInstance()->user->getUserCurrency()));
-            $ucur =Core::getInstance()->user->getUserCurrency();
-            $cur_k=array_keys($ucur);
-            $res[$val]['def_cur'] =round(
+            $ucur  = Core::getInstance()->user->getUserCurrency();
+            $cur_k = array_keys($ucur);
+            
+            $res[$val]['def_cur'] = round(
                 $res[$val]['total_balance']* $ucur[$cur_id[$key]]['value']/$ucur[$cur_k[0]]['value'],
                 2
                 );
-//die(print_r( Core::getInstance()->user->user_currency));
-
 
             $res[$val]['special'] = array(0,0,0);//todo tz
 
