@@ -205,6 +205,8 @@ $(document).ready(function() {
                 position: {target: 'mouse'},
                 style: styleTheme
             });
+
+            /*
             $("#op_btn_Save").qtip({
                 content: 'Внести новые данные',
                 show: {delay: 1000},
@@ -217,6 +219,8 @@ $(document).ready(function() {
                 position: {target: 'mouse'},
                 style: styleTheme
             })
+            */
+
             $("#dateFrom").qtip({
                 content: 'Дата начала периода, дд.мм.гггг',
                 show: {delay: 1000},
@@ -321,41 +325,41 @@ $(document).ready(function() {
      */
     function destroyToltips(){
         $(document).ready(function() {
-            $("#review").qtip('destroy')
-            $("#feed").qtip('destroy')
-            $("#blog").qtip('destroy')
-            $("#forum").qtip('destroy')
-            $("#rules").qtip('destroy')
-            $("#secur").qtip('destroy')
-            $("#about").qtip('destroy')
-            $("#fnlogin").qtip('destroy')
-            $("#pass").qtip('destroy')
-            $("#autoLogin").qtip('destroy')
-            $("#addacc").qtip('destroy')
-            $("#add_category").qtip('destroy')
-            $("#namecat").qtip('destroy')
-            $("#subcat").qtip('destroy')
-            $("#cattype").qtip('destroy')
-            $("#catsys").qtip('destroy')
-            $("h3:contains('Регулярные операции')").qtip('destroy')
-            $(".hasDatepicker").qtip('destroy')
-            $("#op_account").qtip('destroy')
-            $("#op_type").qtip('destroy')
-            $("#op_category").qtip('destroy')
-            $("#op_amount").qtip('destroy')
+            $("#review").qtip('destroy');
+            $("#feed").qtip('destroy');
+            $("#blog").qtip('destroy');
+            $("#forum").qtip('destroy');
+            $("#rules").qtip('destroy');
+            $("#secur").qtip('destroy');
+            $("#about").qtip('destroy');
+            $("#fnlogin").qtip('destroy');
+            $("#pass").qtip('destroy');
+            $("#autoLogin").qtip('destroy');
+            $("#addacc").qtip('destroy');
+            $("#add_category").qtip('destroy');
+            $("#namecat").qtip('destroy');
+            $("#subcat").qtip('destroy');
+            $("#cattype").qtip('destroy');
+            $("#catsys").qtip('destroy');
+            $("h3:contains('Регулярные операции')").qtip('destroy');
+            $(".hasDatepicker").qtip('destroy');
+            $("#op_account").qtip('destroy');
+            $("#op_type").qtip('destroy');
+            $("#op_category").qtip('destroy');
+            $("#op_amount").qtip('destroy');
             $("#op_date").qtip('destroy');
             $("#op_tags").qtip('destroy');
             $("#op_comment").qtip('destroy');
-            $("#op_btn_Save").qtip('destroy')
-            $("#op_btn_Cancel").qtip('destroy')
-            $("#dateFrom").qtip('destroy')
-            $("#dateTo").qtip('destroy')
-            $("strong:contains('Мои долги')").qtip('destroy')
-            $(".addmessage").qtip('destroy')
-            $("strong:contains('Инвестиции')").qtip('destroy')
-            $("strong:contains('Деньги')").qtip('destroy')
-            $("strong:contains('Долги мне')").qtip('destroy')
-            $("strong:contains('Имущество')").qtip('destroy')
+            //$("#op_btn_Save").qtip('destroy');
+            //$("#op_btn_Cancel").qtip('destroy');
+            $("#dateFrom").qtip('destroy');
+            $("#dateTo").qtip('destroy');
+            $("strong:contains('Мои долги')").qtip('destroy');
+            $(".addmessage").qtip('destroy');
+            $("strong:contains('Инвестиции')").qtip('destroy');
+            $("strong:contains('Деньги')").qtip('destroy');
+            $("strong:contains('Долги мне')").qtip('destroy');
+            $("strong:contains('Имущество')").qtip('destroy');
 
             /*-----------------------Бюджет-----------------------------*/
             $('#btnBudgetWizard').qtip('destroy');
