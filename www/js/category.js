@@ -112,7 +112,7 @@ $(document).ready(function() {
         $('#cattype').val(cat.user[id]['type']);
         $('#catsys').val(cat.user[id]['system']);
         
-        if (cat.user[catId]['parent'] != "0") {
+        if (cat.user[id]['parent'] != "0") {
             $('#categoryEditSystem').hide();
             $('#catsys').attr('disabled', 'disabled');
         } else {
