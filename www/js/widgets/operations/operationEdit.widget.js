@@ -149,6 +149,7 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $('#op_btn_Cancel').click(function(){
+            $("#op_btn_Save").removeAttr('disabled');
             $("#op_addoperation_but").click();
 
             return false;
@@ -579,11 +580,40 @@ easyFinance.widgets.operationEdit = function(){
         //clearForm();
 
         $('#op_id').val(data.id);
-        $('#op_account').val(data.account_id);
-        $.sexyCombo.changeOptions("#op_account", data.account_id);
+
+        debugger;
+
+        if (data.transfer != "" && data.tr_id != null) {
+            if (data.tr_id == "0") {
+                // from this account
+                $('#op_account').val(data.account_id);
+                $.sexyCombo.changeOptions("#op_account", data.account_id);
+                
+                // to this account
+                $('#op_AccountForTransfer').val(data.transfer);
+            } else {
+                // original operation id
+                $('#op_id').val(data.tr_id);
+                
+                // to this account
+                $('#op_AccountForTransfer').val(data.account_id);
+
+                // from this account
+                $('#op_account').val(data.transfer);
+                $.sexyCombo.changeOptions("#op_account", data.transfer);
+            }
+        } else {
+            $('#op_account').val(data.account_id);
+            $.sexyCombo.changeOptions("#op_account", data.account_id);
+            $('#op_AccountForTransfer').val(data.transfer);
+        }
 
         setCategory(data.cat_id);
-        setSum(Math.abs(data.money));
+
+        if (data.moneydef)
+            setSum(Math.abs(data.moneydef))
+        else
+            setSum(Math.abs(data.money));
 
         var typ = '0';
         if (data.tr_id != null && data.tr_id != '') {
@@ -610,7 +640,10 @@ easyFinance.widgets.operationEdit = function(){
         //////////////////////////
         //$('#target').val(data.);
         //$('#close').val(data.);
-        $('#op_AccountForTransfer').val(data.transfer);
+
+        if (data.curs)
+            $('#op_currency').val(data.curs);
+
         $('#op_date').val(data.date);
         if (data.tags)
             $('#op_tags').val(data.tags);

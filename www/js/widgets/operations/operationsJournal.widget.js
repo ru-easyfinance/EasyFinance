@@ -44,7 +44,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         _journal = data;
 
-        var tr, tp, pageTotal;
+        var tr, tp, pageTotal, curMoney;
         tr = '';
         pageTotal = 0;
         
@@ -65,9 +65,18 @@ easyFinance.widgets.operationsJournal = function(){
                     tp = 'Доход';
                 }
             }
-            
-            tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id + "' value='"+data[v].id+"'><td class='check'><input type='checkbox' /></td>"
-                + '<td class="light"><a href="#">' + tp + '</a></td>'
+
+            curMoney = parseFloat(data[v].money * res.currency[data[v].account_currency_id].cost);
+            pageTotal = pageTotal + curMoney;
+
+            tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id 
+                + "' value='" + data[v].id
+                + "' moneyCur='" + curMoney.toString()
+                + "' trId='" + data[v].tr_id 
+                + "'>"
+                    + "<td class='check'>"
+                    + "<input type='checkbox' /></td>"
+                    + '<td class="light"><a href="#">' + tp + '</a></td>';
 
                 // @fixme: отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
                 //if (data[v].transfer != _account && data[v].transfer != 0){
@@ -90,8 +99,6 @@ easyFinance.widgets.operationsJournal = function(){
                     +'<li class="add"><a title="Копировать">Копировать</a></li>'
                     +'</ul></div>'
                 +'</td></tr>';
-//debugger;
-            pageTotal = pageTotal + parseFloat(data[v].money * res.currency[data[v].account_currency_id].cost);
         }
         
         // Очищаем таблицу
@@ -101,6 +108,7 @@ easyFinance.widgets.operationsJournal = function(){
         $('#operations_list tbody').append(tr);
 
         // Выводим итоги по счёту/странице
+        pageTotal = Math.round(pageTotal*100)/100;
         if (_account != '') {            
             $('#lblOperationsJournalAccountBalance')
                 .html('<b>Остаток по счёту: </b>' + _modelAccounts.getAccountBalanceTotal(_account) +' руб.')
@@ -138,11 +146,31 @@ easyFinance.widgets.operationsJournal = function(){
         if (!confirm("Вы действительно хотите удалить эту операцию?"))
             return false;
         var _opVirt = _journal[id].virt ? 'v' : 'r';
+        var _opTransferId = _journal[id].tr_id;
+        var _opId = id;
 
         _modelAccounts.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
             // remove row from table
             $('#operations_list tr[id="op' + _opVirt + id + '"]').remove();
+            
+            // remove paired operation if it's a transfer
+            if (_opTransferId != null) {
+                if (_opTransferId == "0")
+                    $('#operations_list tr[trid="' + _opId + '"]').remove();
+                else
+                    $('#operations_list tr[id="op' + _opVirt + _opTransferId + '"]').remove();
+            }
+
             $.jGrowl("Операция удалена", {theme: 'green'});
+
+            // recalc total
+            var pageTotal = 0;
+            var rows = $('#operations_list tr');
+            for (var i=0; i<rows.length; i++) {
+                pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
+            }
+            pageTotal = Math.round(pageTotal*100)/100;
+            $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' руб.<br>').show();
         });
 
         return true;
