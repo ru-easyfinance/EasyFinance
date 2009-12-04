@@ -272,8 +272,9 @@ class Operation_Model {
      */
     function addTransfer($money, $convert, $curr, $date, $from_account, $to_account, $comment, $tags)
     {
-
-        if ($convert != 0)
+        $cur1 = $this->db->query("SELECT account_currency_id AS cur FROM accounts WHERE account_id=?",$from_account);
+        $cur2 = $this->db->query("SELECT account_currency_id AS cur FROM accounts WHERE account_id=?",$to_account);
+        if ($convert != 0 && ($cur1[0]['cur'] != $cur2[0]['cur']))
         {
             $res = $this->db->query("SELECT account_currency_id FROM accounts WHERE account_id=?",$to_account);
             $acctoCurrency = $res[0]['account_currency_id'];
