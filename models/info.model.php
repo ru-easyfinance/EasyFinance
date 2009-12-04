@@ -300,7 +300,7 @@ class Info_Model
         if ($this->input['balance'] == 0) {
             $this->output[1]['profit'] = 0;
         }
-        //@FIXME
+        //@FIXME Кажется, тут может быть ошибка
         if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
             $this->output[1]['budget'] = 10;
         } else if ($this->input['profit'] == 0) {
@@ -585,8 +585,6 @@ class Info_Model
 //        ((M10*P10))
 //    )
         // Деньги
-        //если расчет 3 отрицательный то равно 0,
-        //если нет то умножить Расчет 3 на Вес и поделить результат на 100
         if (($this->output[4]['profit'] * $this->values['profit']['weight']) < 0) {
             $this->output[5]['profit'] = 0;
         } else {
@@ -599,9 +597,7 @@ class Info_Model
 //        ((M11*P11))
 //    )
         // Кредиты
-        //@FIXME Хрень какая-то получается
-        // если расчет 3 отрицательный то равно 0,
-        // если нет то умножить Расчет 3 на Вес и поделить результат на 100
+        //@FIXME Хрень какая-то получается с кредитами
         if (($this->output[4]['loans'] * $this->values['loans']['weight']) < 0) {
             $this->output[5]['loans'] = 0;
         } else {
