@@ -97,7 +97,7 @@ class SeoText{
      * @return void
      */
     function AppendToFile() {
-        $arr = array(notag($this->name), $this->text1, $this->text2);
+        $arr = array($this->notag($this->name), $this->text1, $this->text2);
         $this->array[] = $arr;
         $f = fopen(SEO_FILENAME, 'w');
         $dump = '<?php $texts = ' . var_export( $this->array , true ) . ' ?>';
