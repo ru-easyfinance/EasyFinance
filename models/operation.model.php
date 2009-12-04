@@ -255,6 +255,8 @@ class Operation_Model {
             else
                 $this->db->query($sql, $money, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
         }
+        $this->save();
+        return '[]';
     }
 
     /**
