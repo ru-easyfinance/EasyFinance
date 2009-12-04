@@ -161,11 +161,11 @@ class Info_Model
     {
         return array(
             array(
-                  @$this->output[5]['result']    //Финансовое состояние
-                , @$this->output[5]['profit']    //Деньги
-                , @$this->output[5]['budget']    //Бюджет
-                , @$this->output[5]['loans']     //Кредиты
-                , @$this->output[5]['drain']     //Управление расходами
+                  round(@$this->output[5]['result'])    //Финансовое состояние
+                , round(@$this->output[5]['profit'])    //Деньги
+                , round(@$this->output[5]['budget'])    //Бюджет
+                , round(@$this->output[5]['loans'])     //Кредиты
+                , round(@$this->output[5]['drain'])     //Управление расходами
             ),
             array(
                 array(
