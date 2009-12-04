@@ -309,7 +309,7 @@ class Operation_Model {
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, $last_id,
             $comment, $from_account, $money);
             $last_id2 = mysql_insert_id();
-        $this->db->query("UPDATE operation SET tr_id=? WHERE id = ?", $last_id2, $last_id);
+        //$this->db->query("UPDATE operation SET tr_id=? WHERE id = ?", $last_id2, $last_id);
         // @FIXME Поправить переводы между счетами
         // Закомментированные запросы ещё пригодятся
             
