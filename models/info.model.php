@@ -14,12 +14,6 @@ class Info_Model
     private $db = NULL;
 
     /**
-     * Уровень денежных остатков (в кратности к 1 ср. месяцу расходов за пред 3 мес)
-     * @var float
-     */
-    private $money = 0;
-
-    /**
      * Массив с входными данными пользователя для рассчёта
      * @var array mixed
      * @example
@@ -44,32 +38,27 @@ class Info_Model
     private $output = array();
 
     /**
-     * Сохраняет рассчёты по шагам, структура аналогична $output
-     * @var array
-     */
-    private $steps = array(1=>array(),2=>array(),3=>array());
-
-    /**
-     *
+     * Массив, содержащий список значений (полей) для расчёта (красный, зелёный, жёлтые)
      * @var array mixed
      * @example
-     * 'profit' => array(
-     *      'red' => array(
-                1 => 0,
-                2 => 1,
-                3 => 0
-            ),
-            'yellow' => array(
-                1 => 2,
-                2 => 2,
-                3 => 1
-            ),
-            'green' => array(
-                1 => 5,
-                2 => 3,
-                3 => 2
-            )
-        ),
+     * 'profit' => array(<br/>
+     *      'red' => array(<br/>
+     *          1 => 0,<br/>
+     *          2 => 1,<br/>
+     *          3 => 0<br/>
+     *      ),<br/>
+     *      'yellow' => array(<br/>
+     *          1 => 2,<br/>
+     *          2 => 2,<br/>
+     *          3 => 1<br/>
+     *      ),<br/>
+     *      'green' => array(<br/>
+     *          1 => 5,<br/>
+     *          2 => 3,<br/>
+     *          3 => 2<br/>
+     *      ),<br/>
+     *      'weight' => 35
+     *  ),
      */
     private $values = array(
         'profit' => array(
@@ -87,7 +76,8 @@ class Info_Model
                 1 => 5,
                 2 => 3,
                 3 => 2
-            )
+            ),
+            'weight' => 35
         ),
         'budget' => array(
             'red' => array(
@@ -104,7 +94,8 @@ class Info_Model
                 1 => 10,
                 2 => 3,
                 3 => 2
-            )
+            ),
+            'weight' => 30
         ),
         'loans'  => array(
             'red' => array(
@@ -121,7 +112,8 @@ class Info_Model
                 1 => 0,
                 2 => 3,
                 3 => 2
-            )
+            ),
+            'weight' => 15
         ),
         'drain'  => array(
             'red' => array(
@@ -138,7 +130,8 @@ class Info_Model
                 1 => 0,
                 2 => 3,
                 3 => 2
-            )
+            ),
+            'weight' => 20
         )
     );
 
@@ -157,48 +150,22 @@ class Info_Model
      */
     public function get_data()
     {
-        //$this->load();
-        
-/*
-        [
-            [20,0,0,0,20],
-            [
-                {
-                  "min":"0",
-                  "color":"0",
-                  "description":"0",
-                  "title":"\u0414\u0435\u043d\u044c\u0433\u0438"
-                },{
-                  "min":"0",
-                  "color":null,
-                  "description":null,
-                  "title":"\u0411\u044e\u0434\u0436\u0435\u0442"
-                },{
-                  "min":"97",
-                  "color":null,
-                  "description":null,
-                  "title":"\u041a\u0440\u0435\u0434\u0438\u0442\u044b"
-                },{
-                  "min":"0",
-                  "color":null,
-                  "description":null,
-                  "title":"\u0420\u0430\u0441\u0445\u043e\u0434\u044b"
-                },{
-                    "min":"0",
-                    "color":null,
-                    "description":null,
-                    "title":"\u0424\u0438\u043d.\u0441\u043e\u0441\u0442\u043e\u044f\u043d"
-                }
-            ]
-        ]
-*/
+        $this->load();
+        return $this->result();
+    }
+
+    /**
+     * Выводит результат расчёта в виде массива с пояснениями
+     */
+    private function result()
+    {
         return array(
             array(
-                  83    //Финансовое состояние
-                , 11    //Деньги
-                , 7    //Бюджет
-                , 0    //Кредиты
-                , 23    //Управление расходами
+                  @$this->output[5]['result']    //Финансовое состояние
+                , @$this->output[5]['profit']    //Деньги
+                , @$this->output[5]['budget']    //Бюджет
+                , @$this->output[5]['loans']     //Кредиты
+                , @$this->output[5]['drain']     //Управление расходами
             ),
             array(
                 array(
@@ -239,13 +206,17 @@ class Info_Model
         }
         $this->init();
         
-        $this->correct1();
+        $this->step0();
         $this->step1();
         $this->step2();
         $this->step3();
-        print '<pre>';
-        print_r($this->input);
-        die(print_r($this->output));
+        $this->step4();
+        $this->step5();
+
+//        print '<pre>';
+//        print_r($this->input);
+//        print_r($this->output);
+//        die(print_r($this->values));
     }
 
     /**
@@ -290,11 +261,11 @@ class Info_Model
         }
 
         // DUMP TEST
-        $this->input['profit']  = 240000.00;
-        $this->input['drain']   = 200000.00;
-        $this->input['loans']   = 21000.00;
-        $this->input['budget']  = 210000.00;
-        $this->input['balance'] = 130000.00;
+//        $this->input['profit']  = 240000.00;
+//        $this->input['drain']   = 200000.00;
+//        $this->input['loans']   = 0;
+//        $this->input['budget']  = 210000.00;
+//        $this->input['balance'] = 130000.00;
     }
     
     /**
@@ -311,9 +282,9 @@ class Info_Model
     }
 
     /**
-     * Корректируем расчёты, шаг 1
+     * Корректируем расчёты
      */
-    private function correct1() {
+    private function step0() {
         // если значение 0 и при этом показатель "С" больше 0, то расчет 1 для тахометра "Кредиты" = 100
         if ($this->input['profit'] == 0 && $this->input['loans'] > 0) {
             $this->output[1]['loans'] = 100;
@@ -353,7 +324,7 @@ class Info_Model
     }
 
     /**
-     * Расчёт тахометров, первый шаг
+     * Расчёт тахометров, Факт значение (Расчет 1)
      */
     private function step1 ()
     {
@@ -379,7 +350,7 @@ class Info_Model
     }
 
     /**
-     * Расчёт тахометров, второй шаг
+     * Расчёт тахометров, Значение грубое (Расчет 2)
      */
     private function step2 ()
     {
@@ -435,277 +406,234 @@ class Info_Model
     }
 
     /**
-     * Расчёт тахометров, третий шаг
+     * Расчёт тахометров, Точное значение без повышений (Расчет 3)
      */
     private function step3 ()
     {
-//        =IF((N10=3);
-//            (((C10-F10)/(6-F10)));
-//            IF((N10=2);
-//                (((C10-E10)/(F10-E10)));
-//                    (C10/E10)
-//            )
+
+//    =IF((N10=3);
+//        (((C10-F10)/(6-F10)))
+//    ;
+//        IF((N10=2);
+//            (((C10-E10)/(F10-E10)))
+//        ;
+//            (C10/E10)
+//        )
+//    )
+        // Деньги
+        if ($this->output[2]['profit'] == 3) {
+            $this->output[3]['profit'] = ($this->output[1]['profit'] - $this->values['profit']['green'][1])
+                /  (6 - $this->values['profit']['green'][1]);
+        } elseif ($this->output[2]['profit'] == 2) {
+            $this->output[3]['profit'] = ($this->output[1]['profit'] - $this->values['profit']['yellow'][1])
+                /  ($this->values['profit']['green'][1] - $this->values['profit']['yellow'][1]);
+        } else {
+            $this->output[3]['profit'] = $this->output[1]['profit']
+                / $this->values['profit']['yellow'][1];
+        }
+        
+//    =IF((N11=1);
+//        ((100-C11)/(100-D11))
+//    ;
+//        IF((N11=2);
+//            (((D11-C11)/(D11-E11)))
+//        ;
+//            (((E11-C11)/E11))
+//        )
+//    )
+
+        // Кредиты
+        if ($this->output[2]['loans'] == 1) {
+            $this->output[3]['loans'] = (100 - $this->output[1]['loans'])
+                / (100 - $this->values['loans']['red'][1]);
+        } elseif ($this->output[2]['loans'] == 2) {
+            $this->output[3]['loans'] = ($this->values['loans']['red'][1] - $this->output[1]['loans'])
+                / ($this->values['loans']['red'][1] - $this->values['loans']['yellow'][1]);
+        } else {
+            $this->output[3]['loans'] = ($this->values['loans']['yellow'][1] - $this->output[1]['loans'])
+                / $this->values['loans']['yellow'][1];
+        }
+//    =IF((N12=1);
+//        ((100-C12)/(100-D12))
+//    ;
+//        IF((N12=2);
+//            (((D12-C12)/(D12-E12)))
+//        ;
+//            (((E12-C12)/E12))
+//        )
+//    )
+        // Расходы
+        if ($this->output[2]['drain'] == 1) {
+            $this->output[3]['drain'] = (100 - $this->output[1]['drain'])
+                / (100 - $this->values['drain']['red'][1]);
+        } elseif ($this->output[2]['drain'] == 2) {
+            $this->output[3]['drain'] = ($this->values['drain']['red'][1] - $this->output[1]['drain'])
+                / ($this->values['drain']['red'][1] - $this->values['drain']['yellow'][1]);
+        } else {
+            $this->output[3]['drain'] = ($this->values['drain']['yellow'][1] - $this->output[1]['drain'])
+                / $this->values['drain']['yellow'][1];
+        }
+
+//    =IF((N13=3);
+//        (((C13-F13)/(20-F13)))
+//    ;
+//        IF((N13=2);
+//            (((C13-E13)/(F13-E13)))
+//        ;
+//            (C13/E13)
+//        )
+//    )
+        // Бюджет
+        if ($this->output[2]['budget'] == 3) {
+            $this->output[3]['budget'] = ($this->output[1]['budget'] - $this->values['budget']['green'][1])
+                / (20 - $this->values['budget']['green'][1]);
+        } elseif ($this->output[2]['budget'] == 2) {
+            $this->output[3]['budget'] = ($this->output[1]['budget'] - $this->values['budget']['yellow'][1])
+                / ($this->values['budget']['green'][1] - $this->values['budget']['yellow'][1]);
+        } else {
+            $this->output[3]['budget'] = $this->output[1]['budget'] / $this->values['budget']['yellow'][1];
+        }
+    }
+
+    /**
+     * Расчёт тахометров, Точное значение (Расчет 4)
+     */
+    private function step4 ()
+    {
+//    =IF((N10=3);
+//        (O10+L10)
+//    ;
+//        IF((N10=2);
+//            (O10+K10)
+//        ;
+//            O10
+//        )
+//    )
+        // Деньги
+        if ($this->output[2]['profit'] == 3) {
+            $this->output[4]['profit'] = $this->output[3]['profit'] + $this->values['budget']['green'][3];
+        } elseif ($this->output[2]['profit'] == 2) {
+            $this->output[4]['profit'] = $this->output[3]['profit'] + $this->values['budget']['yellow'][3];
+        } else {
+            $this->output[4]['profit'] = $this->output[3]['profit'];
+        }
+
+//    =IF((N11=1);
+//        O11
+//    ;
+//        IF((N11=2);
+//            O11+K11
+//        ;
+//            (O11+L11)
 //
 //        )
-    }
-
-/*
-    //расчётные функции//////////////////////////////////////////////////////
-    //получение данныхы//////////////////////////////////////////////////////
-    private function get_profit()//a
-    {
-        $money = array(1,2,5);//@todo включить агрегат в счета
-        $total = 0;
-        foreach($this->accounts as $key=>$val)
-        {
-            $summ = $this->operation_model->getTotalSum($val['account_id'],0);
-            $ru_summ = $suum * Core::getInstance()->currency[$val['account_currency_id']]['value'];
-            $total = $total + $ru_summ;
-        }
-        return (int)$total;
-    }
-    
-    private function get_expense()//b
-    {
-        $total = 0;
-        foreach($this->accounts as $key=>$val)
-        {
-            $summ = $this->operation_model->getTotalSum($val['account_id'],1);
-            $ru_summ = $suum * Core::getInstance()->currency[$val['account_currency_id']]['value'];
-            $total = $total + $ru_summ;
-        }
-        return (int)$total;
-    }
-
-    private function credit_expense()//c
-    {
-    return 10;///todo
-    }
-
-    private function expense_plan()//d
-    {
-        return ($this->b)*0.849;
-    }
-
-    //first supper function))
-    private function get_money()//f
-    {
-        $money = array(1,2,5);//@todo включить агрегат в счета
-        $total = 0;
-        foreach($this->accounts as $key=>$val)
-        {
-            if (in_array($val['account_type_id'], $money))
-            {
-                $summ = $this->operation_model->getTotalSum($val['account_id']);
-                $ru_summ = $suum * Core::getInstance()->currency[$val['account_currency_id']]['value'];
-                $total = $total + $ru_summ;
-            }
-        }
-        return (int)$total;
-    }
-    
-    private function get_setting_table()
-    {
-        $sql = "SELECT * FROM info_calc";
-        $this->table = $this->db->select($sql);
-    }
-    
-    //расчёт даннх////////////////////////////////////////////////////////////////////
-    private function money($def)//1
-    {
-        $i = 0;
-        $x= (int) $def;
-        if (!strval($def))
-            $x=($this->f)/($this->b);
-
-        $this->calc['money']=$x;
-
-        if ($x < $this->table[$i]['m_y'])
-        {
-            $y = $this->table[$i]['c_r'];
-            $z = ($x-$y)/(6-$y);
-            $t = $z+$this->table[$i]['u_r'];
-        }
-        else if($x < $this->table[$i]['m_g'])
-        {
-            $y = $this->table[$i]['c_y'];
-            $z= ($x-$y)/($this->table[$i]['m_y']-$y);
-            $t = $z+$this->table[$i]['u_y'];
-        }
-        else
-        {
-            $y = $this->table[$i]['c_g'];
-            $z= ($x)/($this->table[$i]['m_y']);
-            $t = $z;
-        }
-        $ret = (int)$t*($this->table[$i]['weight']);
-        if ($ret > 0)
-            return $ret;
-        return 0;
-    }
-
-    private function upper()//4
-    {
-        $i=3;
-
-        //@FIXME Деление на 0
-        if ($this->b != 0) {
-            $x = $this->a / $this->b;
+//    )
+        // Кредиты
+        if ($this->output[2]['loans'] == 1) {
+            $this->output[4]['loans'] = $this->output[3]['loans'];
+        } elseif ($this->output[2]['profit'] == 2) {
+            $this->output[4]['loans'] = $this->output[3]['loans'] + $this->values['loans']['yellow'][3];
         } else {
-            $x = 0;
+            $this->output[4]['loans'] = $this->output[3]['loans'] + $this->values['loans']['green'][3];
         }
 
-        $this->calc['upper']=$x;
-        if ($x < $this->table[$i]['m_y'])
-        {
-            $y = $this->table[$i]['c_r'];
-            $z = ($x-$y)/(20-$y);
-            $t = $z+$this->table[$i]['u_r'];
-        } else if($x < $this->table[$i]['m_g']) {
-            $y = $this->table[$i]['c_y'];
-            $z= ($x-$y)/($this->table[$i]['m_y']-$y);
-            $t = $z+$this->table[$i]['u_y'];
+//    =IF((N12=1);
+//        O12
+//    ;
+//        IF((N12=2);
+//            O12+K12
+//        ;
+//            O12+L12
+//        )
+//    )
+        // Расходы
+        if ($this->output[2]['drain'] == 1) {
+            $this->output[4]['drain'] = $this->output[3]['drain'];
+        } elseif ($this->output[2]['drain'] == 2) {
+            $this->output[4]['drain'] = $this->output[3]['drain'] + $this->values['drain']['yellow'][3];
+        } else {
+            $this->output[4]['drain'] = $this->output[3]['drain'] + $this->values['drain']['green'][3];
         }
-        else
-        {
-            $y = $this->table[$i]['c_g'];
-            $z= ($x)/($this->table[$i]['m_y']);
-            $t = $z;
+
+//    =IF((N13=3);
+//        O13+L13
+//    ;
+//        IF((N13=2);
+//            O13+K13
+//        ;
+//            O13
+//        )
+//    )
+        // Бюджет
+        if ($this->output[2]['budget'] == 3) {
+            $this->output[4]['budget'] = $this->output[3]['budget'] + $this->values['drain']['green'][3];
+        } elseif ($this->output[2]['budget'] == 2) {
+            $this->output[4]['budget'] = $this->output[3]['budget'] + $this->values['drain']['yellow'][3];
+        } else {
+            $this->output[4]['budget'] = $this->output[3]['budget'];
         }
-        (int)$ret = $t*($this->table[$i]['weight']);
-        if ($ret > 0)
-            return $ret;
-        return 0;
     }
 
-    private function credit ($def)//1
+    /**
+     * Расчёт тахометров, Взвешенное значение (Расчет 5)
+     */
+    private function step5 ()
     {
-
-        $i=1;
-        $x= (int) $def;
-        if (!$def)
-            $x=(($this->c)/($this->a))*100;
-
-            $this->calc['credit']=$x;
-
-        if ($x < $this->table[$i]['m_y'])
-        {
-            $y = $this->table[$i]['c_g'];
-            $z = ($this->table[$i]['c_y']-$x)/($this->table[$i]['c_y']);
-            $t = $z+$this->table[$i]['u_r'];
+//    =IF(((M10*P10))<0;
+//        0
+//    ;
+//        ((M10*P10))
+//    )
+        // Деньги
+        //если расчет 3 отрицательный то равно 0,
+        //если нет то умножить Расчет 3 на Вес и поделить результат на 100
+        if (($this->output[4]['profit'] * $this->values['profit']['weight']) < 0) {
+            $this->output[5]['profit'] = 0;
+        } else {
+            $this->output[5]['profit'] = ($this->output[3]['profit'] * $this->values['profit']['weight']);// / 100;
         }
-        else if($x < $this->table[$i]['m_y'])
-        {
-            $y = $this->table[$i]['c_y'];
-            $z= ($this->table[$i]['c_r']-$x)/($this->table[$i]['c_r']-y);
-            $t = $z+$this->table[$i]['u_y'];
+
+//    =IF(((M11*P11))<0;
+//        0
+//    ;
+//        ((M11*P11))
+//    )
+        // Кредиты
+        //@FIXME Хрень какая-то получается
+        // если расчет 3 отрицательный то равно 0,
+        // если нет то умножить Расчет 3 на Вес и поделить результат на 100
+        if (($this->output[4]['loans'] * $this->values['loans']['weight']) < 0) {
+            $this->output[5]['loans'] = 0;
+        } else {
+            $this->output[5]['loans'] = ($this->output[3]['loans'] * $this->values['loans']['weight']);// / 100;
         }
-        else
-        {
-            $y = $this->table[$i]['c_r'];
-            $z= (100-$x)/(100-$y);
-            $t = $z;
+
+//    =IF(((M12*P12))<0;
+//        0
+//    ;
+//        ((M12*P12))
+//
+//    )
+        // Расходы
+        if (($this->output[4]['drain'] * $this->values['drain']['weight']) < 0) {
+            $this->output[5]['drain'] = 0;
+        } else {
+            $this->output[5]['drain'] = $this->output[4]['drain'] * $this->values['drain']['weight'];
         }
-        (int)$ret = $t*($this->table[$i]['weight']);
-        if ($ret > 0)
-            return $ret;
-        return 0;
+
+//    =IF(((M13*P13))<0;
+//        0
+//    ;
+//        ((M13*P13))
+//    )
+        // Бюджет
+        if (($this->output[4]['budget'] * $this->values['budget']['weight']) < 0) {
+            $this->output[5]['budget'] = 0;
+        } else {
+            $this->output[5]['budget'] = $this->output[4]['budget'] * $this->values['budget']['weight'];
+        }
+
+        $this->output[5]['result'] = $this->output[5]['profit'] + $this->output[5]['drain'] +
+            $this->output[5]['loans'] + $this->output[5]['budget'];
     }
-
-    private function expens ($def)//2
-    {
-        $i=2;
-
-        $x= (int) $def;
-
-        if (!$def) {
-            //@FIXME Деление на 0
-            if ((int)$this->d != 0) {
-                $x = ($this->b / $this->d) * 100;
-            } else {
-                $x = 0;
-            }
-        }
-        
-        $this->calc['expens']=$x;
-
-        if ($x < $this->table[$i]['m_y'])
-        {
-            $y = $this->table[$i]['c_g'];
-            $z = ($this->table[$i]['c_y']-$x)/($this->table[$i]['c_y']);
-            $t = $z+$this->table[$i]['u_r'];
-        }
-        else if($x < $this->table[$i]['m_y'])
-        {
-            $y = $this->table[$i]['c_y'];
-            $z= ($this->table[$i]['c_r']-$x)/($this->table[$i]['c_r']-y);
-            $t = $z+$this->table[$i]['u_y'];
-        }
-        else
-        {
-            $y = $this->table[$i]['c_r'];
-            $z= (100-$x)/(100-$y);
-            $t = $z;
-        }
-        $ret = $t*($this->table[$i]['weight']);
-        if ($ret > 0)
-            return $ret;
-        return 0;
-    }
-
-    public function generate_value()
-    {
-        $this->a = $this->get_profit();
-        $this->b = $this->get_expense();
-        $this->c = $this->credit_expense();
-        $this->d = $this->expense_plan();
-        $this->f = $this->get_money();
-        $this->get_setting_table();
-        
-        ////////////////////////////////////////////////////////////////////
-        if (($this->a == 0) and ($this->c > 0))
-            $d_credit = 100;
-        if (($this->b == 0) and ($this->f > 0))
-            $d_money = 5;
-        ////////////////////////////////////!!!!
-        if (($this->b == 0) and ($this->a > 0))
-            $d_expens = 10;
-        if (($this->a == 0) and ($this->b == 0))
-            $expense = 0;
-        if ($this->d == 0)
-            $d_money = 0;
-        if (($this->b == 0) and ($this->f == 0)){
-            $money = 0;
-            $this->calc['money']=0;
-        }else
-             $money = $this->money($d_money);
-        //////////////////////////////////////////////////////////////////////
-       
-        $upper = $this->upper();
-        $credit = $this->credit($d_credit);
-        $expens = $this->expens($d_expens);
-        $this->calc['fin_cond']=$money+$upper+$credit+$expens;
-        $ret = array($money+$upper+$credit+$expens,$money,$upper,$credit,$expens);
-        return $ret;
-
-    }
-
-    //собирательные функции/////////////////////////////////////////////////////////////
-    public function tohometrs()
-    {
-                
-        $values = $this->generate_value();
-       
-        $sql = "SELECT `min`,color,description,title FROM info_desc WHERE (`min`<=? and `type`=?) ORDER BY `min` DESC;";
-        $desc = array();
-        //die (print_r($this->calc));
-        foreach ($this->calc as $key=>$val)
-        {
-            $desc[] = $this->db->selectRow($sql,$val,$key);
-        }
-
-        $ret = array($values,$desc);
-        return $ret;
-    }
-*/
 }
