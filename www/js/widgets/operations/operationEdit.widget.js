@@ -178,9 +178,10 @@ easyFinance.widgets.operationEdit = function(){
                 /*
                  *@TODO Дописать округление
                  */
-                var result = ( $('#op_currency').val() * Math.round($('#op_amount').val())) ;
+                var result = $('#op_currency').val() * Math.round(parseFloat(tofloat($('#op_amount').val())));
+                result = Math.round(result*100)/100;
                 if (!isNaN(result) && result != 'Infinity') {
-                    $("#op_convertSumCurrency").html("конвертация: "+result);
+                    $("#op_convertSumCurrency").html("&nbsp; конвертация: "+result);
                     TransferSum = result;
                 }
             }
@@ -488,7 +489,7 @@ easyFinance.widgets.operationEdit = function(){
 
     function _clearForm() {
         $('#op_id').val('');
-        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_currency').val('');
+        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');
 
         $('span#op_amount_target').text();
 
@@ -581,8 +582,6 @@ easyFinance.widgets.operationEdit = function(){
 
         $('#op_id').val(data.id);
 
-        debugger;
-
         if (data.transfer != "" && data.tr_id != null) {
             if (data.tr_id == "0") {
                 // from this account
@@ -591,12 +590,14 @@ easyFinance.widgets.operationEdit = function(){
                 
                 // to this account
                 $('#op_AccountForTransfer').val(data.transfer);
+                $.sexyCombo.changeOptions("#op_AccountForTransfer", data.transfer);
             } else {
                 // original operation id
                 $('#op_id').val(data.tr_id);
                 
                 // to this account
                 $('#op_AccountForTransfer').val(data.account_id);
+                $.sexyCombo.changeOptions("#op_AccountForTransfer", data.account_id);
 
                 // from this account
                 $('#op_account').val(data.transfer);
