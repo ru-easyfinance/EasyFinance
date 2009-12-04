@@ -150,7 +150,10 @@ easyFinance.models.category = function(){
     }
 
     function getUserCategoryNameById(id){
-        return _categories.user[id]["name"];
+        if (_categories.user[id])
+            return _categories.user[id]["name"];
+        else
+            return '';
     }
 
     function getRecentCategories(){

@@ -61,7 +61,7 @@ easyFinance.models.accounts = function(){
     }
 
     function getAccountNameById(id){
-        if (_accounts)
+        if (_accounts[id])
             return _accounts[id]["name"];
         else
             return '';
