@@ -23,7 +23,7 @@ abstract class _Core_Controller
 	 */
 	protected function includeSeoText()
 	{
-		if(file_exist('admin/seo.php'))
+		if(file_exists('admin/seo.php'))
 		{
 			include ('admin/seo.php');
 		}
