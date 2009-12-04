@@ -33,6 +33,7 @@ $(document).ready(function() {
         $('#add_form').toggle();
         $('#categoryEditSystem').show();
         $('#subcat').removeAttr('disabled');
+        $('#catsys').removeAttr('disabled');
         $('form').attr('action','/category/add/');
     });
 
@@ -95,7 +96,7 @@ $(document).ready(function() {
         // тикеты 299, 389
         if (cat.user[id]['parent'] == "0") {
             $('#categoryEditSystem').show();
-            $('#subcat').attr('disabled', 'disabled');
+            $('#subcat').attr('disabled', true);
         } else {
             $('#categoryEditSystem').hide();
             $('#subcat').removeAttr('disabled');
@@ -114,7 +115,7 @@ $(document).ready(function() {
         
         if (cat.user[id]['parent'] != "0") {
             $('#categoryEditSystem').hide();
-            $('#catsys').attr('disabled', 'disabled');
+            $('#catsys').attr('disabled', true);
         } else {
             $('#categoryEditSystem').show();
             $('#catsys').removeAttr('disabled');
@@ -127,7 +128,7 @@ $(document).ready(function() {
     function clearForm() {
         $('#namecat,#cat_id').val('');
         $('#subcat,#cattype,#catsys').removeAttr('selected');
-        $('#add_form').find('#btnSave').attr('disabled', false);
+        $('#add_form').find('#btnSave').removeAttr('disabled');
     }
 
     /**
@@ -421,7 +422,7 @@ $(document).ready(function() {
 
             var done = function(cat) {
                     $('#add_form').find('#namecat').val('');
-                    $('#add_form').find('#btnSave').attr('disabled', false);
+                    $('#add_form').find('#btnSave').removeAttr('disabled');
                     $('#add_form').hide();
                     $.jGrowl("Категория успешно сохранена", {theme: 'green'});
                     
