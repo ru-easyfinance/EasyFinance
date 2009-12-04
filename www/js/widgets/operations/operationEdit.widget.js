@@ -312,12 +312,17 @@ easyFinance.widgets.operationEdit = function(){
         $.jGrowl("Операция сохраняется", {theme: 'green'});
         var suum = tofloat($('#op_amount').val());
         var tip = $('#op_type').val();
-
+//alert($('#op_id').val());
+//alert($('#op_type').val());
+//alert($('#op_account').val());
+//alert(_selectedType);
+//alert(_selectedCategory);
+//alert($('#op_AccountForTransfer').val());
         easyFinance.models.accounts.editOperationById(
             $('#op_id').val(),
-            $('#op_type').val(),
+            _selectedType,
             $('#op_account').val(),
-            $('#op_category').val(),
+            _selectedCategory,
             $('#op_date').val(),
             $('#op_comment').val(),
             tofloat($('#op_amount').val()),
@@ -555,8 +560,11 @@ easyFinance.widgets.operationEdit = function(){
 
     function setCategory(cat){
         var $combo, strOption;
-        
-        _selectedCategory = cat;
+
+        if (cat != "0")
+            _selectedCategory = cat;
+        else
+            _selectedCategory = "-1";
 
         $combo = $('#op_category');
         $combo.val(_selectedCategory);
