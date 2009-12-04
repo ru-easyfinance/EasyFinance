@@ -607,6 +607,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_account').val(data.account_id);
             $.sexyCombo.changeOptions("#op_account", data.account_id);
             $('#op_AccountForTransfer').val(data.transfer);
+            $.sexyCombo.changeOptions('#op_AccountForTransfer', data.transfer);
         }
 
         setCategory(data.cat_id);
