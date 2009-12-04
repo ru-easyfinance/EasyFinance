@@ -21,11 +21,14 @@ abstract class _Core_Controller
 	 * всех контроллеров свойств и обьектов.
 	 *
 	 */
-
-        protected function includeSeoText(){
-            include ('admin/seo.php');
-            $this->tpl->assign('seotext', $texts);
-        }
+	protected function includeSeoText()
+	{
+		if(file_exist('admin/seo.php'))
+		{
+			include ('admin/seo.php');
+		}
+		$this->tpl->assign('seotext', $texts);
+	}
         
 	public function __construct()
 	{
@@ -181,3 +184,4 @@ abstract class _Core_Controller
         )));
     }
 }
+
