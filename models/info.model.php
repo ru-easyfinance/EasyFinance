@@ -77,7 +77,9 @@ class Info_Model
                 2 => 3,
                 3 => 2
             ),
-            'weight' => 35
+            'weight' => 35,
+            'min' => 0,
+            'max' => 6
         ),
         'budget' => array(
             'red' => array(
@@ -95,7 +97,9 @@ class Info_Model
                 2 => 3,
                 3 => 2
             ),
-            'weight' => 30
+            'weight' => 30,
+            'min' => 0,
+            'max' => 20            
         ),
         'loans'  => array(
             'red' => array(
@@ -113,7 +117,10 @@ class Info_Model
                 2 => 3,
                 3 => 2
             ),
-            'weight' => 15
+            'weight' => 15,
+            'min' => 0,  //@TODO Узнать минимальную границу кредита
+            'max' => 100 //@TODO Узнать максимальную границу кредита
+
         ),
         'drain'  => array(
             'red' => array(
@@ -131,7 +138,13 @@ class Info_Model
                 2 => 3,
                 3 => 2
             ),
-            'weight' => 20
+            'weight' => 20,
+            'min' =>0,
+            'max' =>100
+        ),
+        'result' => array(
+            'min' => 0,
+            'max' => 300
         )
     );
 
@@ -159,13 +172,17 @@ class Info_Model
      */
     private function result()
     {
+//        print '<pre>';
+//        print_r($this->input);
+//        print_r($this->output);
+//        die(print_r($this->values));
         return array(
             array(
-                  round(@$this->output[5]['result'])    //Финансовое состояние
-                , round(@$this->output[5]['profit'])    //Деньги
-                , round(@$this->output[5]['budget'])    //Бюджет
-                , round(@$this->output[5]['loans'])     //Кредиты
-                , round(@$this->output[5]['drain'])     //Управление расходами
+                  round(@$this->output[6]['result'])    //Финансовое состояние
+                , round(@$this->output[6]['profit'])    //Деньги
+                , round(@$this->output[6]['budget'])    //Бюджет
+                , round(@$this->output[6]['loans'])     //Кредиты
+                , round(@$this->output[6]['drain'])     //Управление расходами
             ),
             array(
                 array(
@@ -212,11 +229,7 @@ class Info_Model
         $this->step3();
         $this->step4();
         $this->step5();
-
-//        print '<pre>';
-//        print_r($this->input);
-//        print_r($this->output);
-//        die(print_r($this->values));
+        $this->step6();
     }
 
     /**
@@ -631,5 +644,57 @@ class Info_Model
 
         $this->output[5]['result'] = $this->output[5]['profit'] + $this->output[5]['drain'] +
             $this->output[5]['loans'] + $this->output[5]['budget'];
+    }
+
+
+    /**
+     * Корректируем данные, если они выходят за границы
+     */
+    private function step6 ()
+    {
+        // Деньги (Доходы)
+        if ($this->output[5]['profit'] > $this->values['profit']['max']) {
+            $this->output[6]['profit'] = $this->values['profit']['max'];
+        } elseif ($this->output[5]['profit'] < $this->values['profit']['min']) {
+            $this->output[6]['profit'] = $this->values['profit']['min'];
+        } else {
+            $this->output[6]['profit'] = $this->output[5]['profit'];
+        }
+
+        // Расходы
+        if ($this->output[5]['drain'] > $this->values['drain']['max']) {
+            $this->output[6]['drain'] = $this->values['drain']['max'];
+        } elseif ($this->output[5]['drain'] < $this->values['drain']['min']) {
+            $this->output[6]['drain'] = $this->values['drain']['min'];
+        } else {
+            $this->output[6]['drain'] = $this->output[5]['drain'];
+        }
+
+        // Кредиты
+        if ($this->output[5]['loans'] > $this->values['loans']['max']) {
+            $this->output[6]['loans'] = $this->values['loans']['max'];
+        } elseif ($this->output[5]['loans'] < $this->values['loans']['min']) {
+            $this->output[6]['loans'] = $this->values['loans']['min'];
+        } else {
+            $this->output[6]['loans'] = $this->output[5]['loans'];
+        }
+
+        // Бюджет
+        if ($this->output[5]['budget'] > $this->values['budget']['max']) {
+            $this->output[6]['budget'] = $this->values['budget']['max'];
+        } elseif ($this->output[5]['budget'] < $this->values['budget']['min']) {
+            $this->output[6]['budget'] = $this->values['budget']['min'];
+        } else {
+            $this->output[6]['budget'] = $this->output[5]['budget'];
+        }
+
+        // Фин. Состояние
+        if ($this->output[5]['result'] > $this->values['result']['max']) {
+            $this->output[6]['result'] = $this->values['result']['max'];
+        } elseif ($this->output[5]['result'] < $this->values['result']['min']) {
+            $this->output[6]['result'] = $this->values['result']['min'];
+        } else {
+            $this->output[6]['result'] = $this->output[5]['result'];
+        }
     }
 }
