@@ -343,6 +343,8 @@ class Accounts_Model
         $type_name = array();
         $acc_name = array();
         $acc_descr = array();
+        $acc_first_balance = array();
+        $mod = new Operation_Model();
         foreach ($ret as $key=>$val)
         {
             $id[]=$val['account_id'];
@@ -352,6 +354,7 @@ class Accounts_Model
             $type_name[]=$val['account_type_name'];
             $acc_name[]=$val['account_name'];
             $acc_descr[]=$val['account_description'];
+            $acc_first_balance[]=$mod->getFirstOperation($val['account_id']);
         }
         /*$id_str = implode(',', $id);
         $type_str = implode(',', $type);
@@ -377,10 +380,10 @@ class Accounts_Model
 
         if(!$id_str) {
             return 'n';
-        }*/
+        }
 
-        //$values = $this->db->select($sql);
-        $mod = new Operation_Model();
+        $values = $this->db->select($sql);*/
+        
 
         //
         foreach ($id as $key=>$val) {
@@ -389,6 +392,7 @@ class Accounts_Model
             $res[$val]['id']=$id[$key];
             $res[$val]['name']=$acc_name[$key];
             $res[$val]['description']=$acc_descr[$key];
+            $res[$val]['starter_balance']=$acc_first_balance[$key];
 
             $reservsqlquery = "SELECT sum(money) AS s
                 FROM target_bill tb

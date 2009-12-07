@@ -649,6 +649,15 @@ class Operation_Model {
         $this->total_sum+=$a;*/
         return $this->total_sum;
     }
+    /*
+    * Функция возвращает первую операцию по счёту - начальный баланс
+     */
+    function getFirstOperation($account_id=0)
+    {
+        $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
+        $first = $this->db->query($sql, $this->user->getId(), $account_id);
+        return $first[0]['money'];
+    }
 
     /**
      *
