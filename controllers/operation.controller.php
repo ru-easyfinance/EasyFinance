@@ -105,7 +105,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
      */
     function edit($args)
     {
-        $array = array('id','account', 'toAccount','amount', 'category', 'date', 'comment', 'tags', 'type', 'convert');
+        $array = array('id','account', 'toAccount','amount', 'category', 'date', 'comment', 'tags', 'type', 'convert','target');
         $array = $this->model->checkData($array);
         if (count($this->model->errorData) > 0) {
             // Если есть ошибки, то возвращаем их пользователю в виде массива
@@ -135,8 +135,11 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 break;
             case 4: // Перевод на финансовую цель см. в модуле фин.цели
                 $target = new Targets_Model();
-                $target->model->editTargetOperation($array['id'],$array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags']);
+                 if ($target->editTargetOperation($array['id'], $array['amount'], $array['date'], $array['target'],$array['account'], /*$array['id'],*/  $array['comment'], $array['close']))
+                 {
+                     die('[]');
+                 }
+                $target->staticTargetUpdate($array['target']);
                 break;
         }
     }

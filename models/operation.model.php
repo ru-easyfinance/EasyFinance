@@ -165,7 +165,7 @@ class Operation_Model {
             $valid['toAccount'] = (int)@$_POST['toAccount'];
         // - Финансовая цель
         } elseif($valid['type'] == 4) {
-            $valid['target'] = (int)@$_POST['target'];
+            $valid['target'] = $_POST['target'];
             //if (isset ($_POST['close'])) {
             if (($_POST['close'])==1) {
                 $valid['close'] = 1;
@@ -174,7 +174,7 @@ class Operation_Model {
             }
         }
 
-
+        
         //currency  toAccount
         return $valid;
     }

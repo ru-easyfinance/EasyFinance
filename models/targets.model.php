@@ -459,7 +459,7 @@ class Targets_Model {
      * @param $comment string Комментарий
      * @return bool
      */
-    public function editTargetOperation($target_bill_id, $bill_id, $target_id, $money, $comment, $date, $close) {
+    public function editTargetOperation($target_bill_id, $money, $date, $target_id, $bill_id, $comment,  $close) {
         if ((int)$target_bill_id == 0) {
             $sql = "SELECT b.id FROM target_bill b WHERE b.target_id =? ORDER BY b.dt_create ASC LIMIT 1";
             $target_bill_id = $this->db->selectCell($sql, $target_id);
@@ -478,7 +478,7 @@ class Targets_Model {
             return false;
         }
         $comment = strip_tags($comment);
-        $date = formatRussianDate2MysqlDate($date);
+        //$date = formatRussianDate2MysqlDate($date);
         $this->db->query("UPDATE target_bill SET bill_id=?, money=?, date=?, comment=? 
             WHERE id=? AND user_id=? LIMIT 1;", $bill_id, $money, $date, $comment, $target_bill_id, Core::getInstance()->user->getId());
         if (!empty($close)) {
