@@ -661,7 +661,7 @@ class Info_Model
             $this->output[6]['profit'] = $this->output[5]['profit'];
         }
         // Высчитываем проценты
-        $this->output[6]['profit'] = ($this->values['profit']['max'] / 100) * $this->output[6]['profit'];
+        $this->output[6]['profit'] = ($this->output[6]['profit'] / $this->values['profit']['max']) * 100;
 
         // Расходы
         if ($this->output[5]['drain'] > $this->values['drain']['max']) {
@@ -671,7 +671,7 @@ class Info_Model
         } else {
             $this->output[6]['drain'] = $this->output[5]['drain'];
         }
-        $this->output[6]['drain'] = ($this->values['drain']['max'] / 100) * $this->output[6]['drain'];
+        $this->output[6]['drain'] = ($this->output[6]['drain'] / $this->values['drain']['max']) * 100;
 
         // Кредиты
         if ($this->output[5]['loans'] > $this->values['loans']['max']) {
@@ -681,7 +681,7 @@ class Info_Model
         } else {
             $this->output[6]['loans'] = $this->output[5]['loans'];
         }
-        $this->output[6]['loans'] = ($this->values['loans']['max'] / 100) * $this->output[6]['loans'];
+        $this->output[6]['loans'] = ($this->output[6]['loans'] / $this->values['loans']['max']) * 100;
 
         // Бюджет
         if ($this->output[5]['budget'] > $this->values['budget']['max']) {
@@ -691,7 +691,7 @@ class Info_Model
         } else {
             $this->output[6]['budget'] = $this->output[5]['budget'];
         }
-        $this->output[6]['budget'] = ($this->values['budget']['max'] / 100) * $this->output[6]['budget'];
+        $this->output[6]['budget'] = ($this->output[6]['budget'] / $this->values['budget']['max']) * 100;
 
         // Фин. Состояние
         if ($this->output[5]['result'] > $this->values['result']['max']) {
@@ -701,6 +701,6 @@ class Info_Model
         } else {
             $this->output[6]['result'] = $this->output[5]['result'];
         }
-        $this->output[6]['result'] = ($this->values['result']['max'] / 100) * $this->output[6]['result'];
+        $this->output[6]['result'] = ($this->output[6]['result'] / $this->values['result']['max']) * 100;
     }
 }
