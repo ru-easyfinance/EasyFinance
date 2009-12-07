@@ -422,13 +422,15 @@ class Targets_Model {
         }
         else {
             ///operation->model->addTransfer
-            $drain_money = $money * -1;
+            /*$drain_money = $money * -1;
                 // tr_id. было drain
 		$sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $this->db->query($sql, $this->user->getId(), $money, $date, -1, $account_id, 1,
-                $comment, $a[0]['target_account_id']);
+                $comment, $a[0]['target_account_id']);*/
+            $mod = New Operation_model;
+            $mod->addTransfer($money, 0, 0, $date, $account_id, $a[0]['target_account_id'], 'Перевод на счёт финцели', null);
 
             /*$last_id = mysql_insert_id();
                 $sql = "INSERT INTO operation
