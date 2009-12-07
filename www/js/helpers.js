@@ -6,7 +6,7 @@ $(document).ready(function() {
      */
     $.fn.qtip.styles.modern = { // Last part is the name of the style
         width: 200,
-        background: '#F6F6F6',
+        background: '#FFFFFF',
         color: '#303030',
         textAlign: 'center',
         show: 'mouseover',
@@ -14,7 +14,7 @@ $(document).ready(function() {
         border: {
             width: 1,
             radius: 2,
-            color: '#20201E'
+            color: '#666666'
         },
         tip: 'bottomRight',
         style: {
