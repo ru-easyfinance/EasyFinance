@@ -67,7 +67,15 @@ class Accounts_Model
 
     }
 
-
+    /*
+    * Функция возвращает айди валюты по айди счёта 
+     */
+    public function GetAccountCurrencyById($account)
+    {
+        $sql = "SELECT account_currency_id FROM accounts WHERE user_id=? AND account_id=?";
+        $curr = $this->db->query($sql, $this->user_id, $account);
+        return $curr[0]['account_currency_id'];
+    }
     /*function newaccmlogic(){
         return $this->db->select("SELECT user id
                                     FROM operation

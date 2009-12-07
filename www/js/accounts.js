@@ -26,7 +26,8 @@ function hash_api(str,flag)
         $.post(
             "/accounts/changeType/",
             {
-                id: account.type
+                id: account.type,
+                accid: account.id
             },
             function(data) {
                 $('#account_form_fields').html(data);

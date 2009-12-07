@@ -3,7 +3,7 @@
         <label>Валюта счета:</label>
         <select name="currency_id">
             {foreach from=$currency item=data}
-                <option value="{$data.key}">{$data.name}</option>
+            <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
             {/foreach}
         </select>
     </div>

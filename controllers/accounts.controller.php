@@ -68,6 +68,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     {
         $this->tpl->assign("page_title","account add");
         $id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
+        $accid = (int)$_POST['accid'];
         $this->model->newEmptyBill($id);
         $this->tpl->assign("fields", $this->model->formatFields());
         $this->tpl->assign("type_id", $id);
@@ -83,6 +84,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         }
          //die(print_r($arr));
         $this->tpl->assign("currency", $arr);
+        $this->tpl->assign("accountcurrency", $this->model->GetAccountCurrencyById($accid));
 
         die($this->tpl->fetch("accounts/accounts.fields.html"));
     }
