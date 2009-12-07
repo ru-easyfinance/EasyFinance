@@ -171,14 +171,8 @@ easyFinance.widgets.accountEdit = function(){
             url: "/accounts/add/",
             data: $("#blockCreateAccounts input,select,textarea"),
             success: function(data) {
-                var id = data;
-                if (!_isEditing){
-                    $.jGrowl("Добавлен счёт", {theme: 'green'});
-                    //update_list({id: id,cur_id: cur_id});
-                }else{
-                    $.jGrowl("Cчёт изменён", {theme: 'green'});
-                    easyFinance.widgets.accountEdit._isEditing = false;
-                }
+                $.jGrowl("Добавлен счёт", {theme: 'green'});
+
 
                 easyFinance.models.accounts.load();
                 // @todo use model, which will fire
@@ -195,17 +189,17 @@ easyFinance.widgets.accountEdit = function(){
      */
     function correctaccount()
     {//del
-            $.post('/accounts/del/',
-            {
-                id :$('#blockCreateAccounts').find('table').attr('id')
-            },
-            function(data){
-                //$.jGrowl("Счёт Изменён", {theme: 'green'});
-                easyFinance.widgets.accountEdit._isEditing = true;
-                _createNewAccount();
-            },
-            'text'
-        );
+        $.ajax({
+            type: "POST",
+            url: "/accounts/edit/",
+            data: $("#blockCreateAccounts input,select,textarea"),
+            success: function(data) {
+                $.jGrowl("Cчёт изменён", {theme: 'green'});
+                easyFinance.models.accounts.load();
+
+                $('li#c2').click()
+            }
+        });
     }
 
     function setEditMode(mode) {

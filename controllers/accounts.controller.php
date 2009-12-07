@@ -134,15 +134,24 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         //die('a'.strval($id).'a');
         $this->model->get_fields($id, $aid);
     }
-    
+
+    function edit()
+    {
+        //die ('123');
+        $id = $_POST['id'];
+        $this->model->deleteAccount($id);
+        $this->model->add($_POST);
+        die ($id);
+    }
+
     function correct()
     {
-        $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
+        $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());//
         $qString = urldecode($_POST['qString']);
         $aid=$_POST['aid'];
-        $tid=$_POST['tid'];
+        //$tid=$_POST['tid'];
         $qString = explode("&", $qString);
-        $this->model->correct($qString,$aid,$tid);
+        $this->model->correct($qString,$aid/*,$tid*/);
     }
     //количество счётов пользователя. 0 - счетов нету.
     function countacc(){
