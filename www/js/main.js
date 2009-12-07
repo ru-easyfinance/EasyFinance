@@ -574,24 +574,33 @@ $('.tags_list .add').live('click', function(){
         //$('.financobject ')
 //////////////////////////////////////////////////////////////////////
 //right
+//курсы валют в правой панели
 //currency
     data = res['currency'];
     str = '';
     var cost,name,progres;
     var fir = 0;//первая валюта в правом списке
-    for(key in data) 
-    {
-        if (fir != 0) // валюта по умолчанию первая в списке ! не показываем её в правой панели
-        {
-        cost = data[key]['cost'];
-        name = data[key]['name'];
-        progres = data[key]['progress'];
-        if (!cost){continue;}
-        str += '<div class="line"><span class="valuta">'+name+'</span><span class="'+progres+'">'+cost+'</span></div>'
+    for(key in data) {
+        // валюта по умолчанию первая в списке ! не показываем её в правой панели
+        if (fir != 0) {
+            cost = data[key]['cost'];
+            name = data[key]['name'];
+            progres = data[key]['progress'];
+
+            if (!cost)
+                continue;
+
+            str += '<div class="line"><span class="valuta">'
+                + name + '</span><span class="'
+                + progres +'">' + cost + '</span></div>';
         }
+
         fir++;
     }
-    $('dl.info dd').html(str);
+    
+    if (fir > 1)
+        $('dl.info dd').html(str).parent().show();
+    
 //calendar
     $('.calendar_block .calendar').datepicker();
     $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
