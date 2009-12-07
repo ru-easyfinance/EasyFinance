@@ -343,22 +343,38 @@ class Info_Model
     {
         // Деньги
         if (!isset ($this->output[1]['profit'])) {
-            $this->output[1]['profit'] = $this->input['balance'] / $this->input['drain'];
+            if ($this->input['drain'] != 0) {
+                $this->output[1]['profit'] = $this->input['balance'] / $this->input['drain'];
+            } else {
+                $this->output[1]['profit'] = 0;
+            }
         }
 
         // Кредиты
         if (!isset ($this->output[1]['loans'])) {
-            $this->output[1]['loans'] = $this->input['loans'] / $this->input['profit'] * 100;
+            if ($this->input['profit'] != 0) {
+                $this->output[1]['loans'] = $this->input['loans'] / $this->input['profit'] * 100;
+            } else {
+                $this->output[1]['loans'] = 0;
+            }
         }
 
         // Расходы
         if (!isset ($this->output[1]['drain'])) {
-            $this->output[1]['drain'] = $this->input['drain'] / $this->input['budget'] * 100;
+            if ($this->input['budget'] != 0) {
+                $this->output[1]['drain'] = $this->input['drain'] / $this->input['budget'] * 100;
+            } else {
+                $this->output[1]['drain'] = 0;
+            }
         }
 
         // Бюджет / Доходы vs Расходы
         if (!isset ($this->output[1]['budget'])) {
-            $this->output[1]['budget'] = $this->input['profit'] / $this->input['drain'];
+            if ($this->input['drain'] != 0) {
+                $this->output[1]['budget'] = $this->input['profit'] / $this->input['drain'];
+            } else {
+                $this->output[1]['budget'] = 0;
+            }
         }
     }
 
@@ -435,14 +451,26 @@ class Info_Model
 //    )
         // Деньги
         if ($this->output[2]['profit'] == 3) {
-            $this->output[3]['profit'] = ($this->output[1]['profit'] - $this->values['profit']['green'][1])
-                /  (6 - $this->values['profit']['green'][1]);
+            if ((6 - $this->values['profit']['green'][1]) != 0) {
+                $this->output[3]['profit'] = ($this->output[1]['profit']
+                    - $this->values['profit']['green'][1]) / (6 - $this->values['profit']['green'][1]);
+            } else {
+                $this->output[3]['profit'] = 0;
+            }
         } elseif ($this->output[2]['profit'] == 2) {
-            $this->output[3]['profit'] = ($this->output[1]['profit'] - $this->values['profit']['yellow'][1])
-                /  ($this->values['profit']['green'][1] - $this->values['profit']['yellow'][1]);
+            if (($this->values['profit']['green'][1] - $this->values['profit']['yellow'][1]) != 0) {
+                $this->output[3]['profit'] = ($this->output[1]['profit'] - $this->values['profit']['yellow'][1])
+                    /  ($this->values['profit']['green'][1] - $this->values['profit']['yellow'][1]);
+            } else {
+                $this->output[3]['profit'] = 0;
+            }
         } else {
-            $this->output[3]['profit'] = $this->output[1]['profit']
-                / $this->values['profit']['yellow'][1];
+            if ($this->values['profit']['yellow'][1] != 0) {
+                $this->output[3]['profit'] = $this->output[1]['profit']
+                    / $this->values['profit']['yellow'][1];
+            } else {
+                $this->output[3]['profit'] = 0;
+            }
         }
         
 //    =IF((N11=1);
@@ -457,15 +485,28 @@ class Info_Model
 
         // Кредиты
         if ($this->output[2]['loans'] == 1) {
-            $this->output[3]['loans'] = (100 - $this->output[1]['loans'])
-                / (100 - $this->values['loans']['red'][1]);
+            if ((100 - $this->values['loans']['red'][1]) != 0) {
+                $this->output[3]['loans'] = (100 - $this->output[1]['loans'])
+                    / (100 - $this->values['loans']['red'][1]);
+            } else {
+                $this->output[3]['loans'] = 0;
+            }
         } elseif ($this->output[2]['loans'] == 2) {
-            $this->output[3]['loans'] = ($this->values['loans']['red'][1] - $this->output[1]['loans'])
-                / ($this->values['loans']['red'][1] - $this->values['loans']['yellow'][1]);
+            if (($this->values['loans']['red'][1] - $this->values['loans']['yellow'][1]) != 0) {
+                $this->output[3]['loans'] = ($this->values['loans']['red'][1] - $this->output[1]['loans'])
+                    / ($this->values['loans']['red'][1] - $this->values['loans']['yellow'][1]);
+            } else {
+                $this->output[3]['loans'] = 0;
+            }
         } else {
-            $this->output[3]['loans'] = ($this->values['loans']['yellow'][1] - $this->output[1]['loans'])
-                / $this->values['loans']['yellow'][1];
+            if ($this->values['loans']['yellow'][1] != 0) {
+                $this->output[3]['loans'] = ($this->values['loans']['yellow'][1]
+                    - $this->output[1]['loans']) / $this->values['loans']['yellow'][1];
+            } else {
+                $this->output[3]['loans'] = 0;
+            }
         }
+        
 //    =IF((N12=1);
 //        ((100-C12)/(100-D12))
 //    ;
@@ -477,14 +518,30 @@ class Info_Model
 //    )
         // Расходы
         if ($this->output[2]['drain'] == 1) {
-            $this->output[3]['drain'] = (100 - $this->output[1]['drain'])
-                / (100 - $this->values['drain']['red'][1]);
+            if ((100 - $this->values['drain']['red'][1]) != 0) {
+                $this->output[3]['drain'] = (100 - $this->output[1]['drain'])
+                    / (100 - $this->values['drain']['red'][1]);
+            } else {
+                $this->output[3]['drain'] = 0;
+            }
         } elseif ($this->output[2]['drain'] == 2) {
-            $this->output[3]['drain'] = ($this->values['drain']['red'][1] - $this->output[1]['drain'])
-                / ($this->values['drain']['red'][1] - $this->values['drain']['yellow'][1]);
+            if (($this->values['drain']['red'][1] - $this->values['drain']['yellow'][1]) != 0) {
+                if (($this->values['drain']['red'][1] - $this->values['drain']['yellow'][1]) != 0) {
+                    $this->output[3]['drain'] = ($this->values['drain']['red'][1] - $this->output[1]['drain'])
+                        / ($this->values['drain']['red'][1] - $this->values['drain']['yellow'][1]);
+                } else {
+                    $this->output[3]['drain'] = 0;
+                }
+            } else {
+                $this->output[3]['drain'] = 0;
+            }
         } else {
-            $this->output[3]['drain'] = ($this->values['drain']['yellow'][1] - $this->output[1]['drain'])
-                / $this->values['drain']['yellow'][1];
+            if ($this->values['drain']['yellow'][1] != 0) {
+                $this->output[3]['drain'] = ($this->values['drain']['yellow'][1] - $this->output[1]['drain'])
+                    / $this->values['drain']['yellow'][1];
+            } else {
+                $this->output[3]['drain'] = 0;
+            }
         }
 
 //    =IF((N13=3);
@@ -498,13 +555,25 @@ class Info_Model
 //    )
         // Бюджет
         if ($this->output[2]['budget'] == 3) {
-            $this->output[3]['budget'] = ($this->output[1]['budget'] - $this->values['budget']['green'][1])
-                / (20 - $this->values['budget']['green'][1]);
+            if ((20 - $this->values['budget']['green'][1]) != 0) {
+                $this->output[3]['budget'] = ($this->output[1]['budget'] - $this->values['budget']['green'][1])
+                    / (20 - $this->values['budget']['green'][1]);
+            } else {
+                $this->output[3]['budget'] = 0;
+            }
         } elseif ($this->output[2]['budget'] == 2) {
-            $this->output[3]['budget'] = ($this->output[1]['budget'] - $this->values['budget']['yellow'][1])
-                / ($this->values['budget']['green'][1] - $this->values['budget']['yellow'][1]);
+            if (($this->values['budget']['green'][1] - $this->values['budget']['yellow'][1]) != 0) {
+                $this->output[3]['budget'] = ($this->output[1]['budget'] - $this->values['budget']['yellow'][1])
+                    / ($this->values['budget']['green'][1] - $this->values['budget']['yellow'][1]);
+            } else {
+                $this->output[3]['budget'] = 0;
+            }
         } else {
-            $this->output[3]['budget'] = $this->output[1]['budget'] / $this->values['budget']['yellow'][1];
+            if ($this->values['budget']['yellow'][1] != 0) {
+                $this->output[3]['budget'] = $this->output[1]['budget'] / $this->values['budget']['yellow'][1];
+            } else {
+                $this->output[3]['budget'] = 0;
+            }
         }
     }
 
