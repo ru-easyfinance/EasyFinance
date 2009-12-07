@@ -2,10 +2,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
     <head>
-        <title>Домашняя бухгалтерия, личный бюджет и финансы от Easyfinance.</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="Keywords" content="" />
+    {if $user_info.user_id > 0}
+        <title>Easyfinance.ru - домашняя бухгалтерия, личный бюджет и финансы</title>
         <meta name="Description" content="C нашей помощью Вы сможете структурировать свои доходы и расходы, вести домашнюю бухгалтерию и семейный бюджет." />
+    {else}
+        {if $smarty.server.REQUEST_URI|strstr:"/review/"}
+        <title>EasyFinance.ru | Домашняя бухгалтерия, семейный бюджет, оптимизация расходов, повышение доходов - путь к финансовому благополучию</title>
+        <meta name="Description" content="EasyFinance.ru: онлайн система управления личными финансами, создание семейного бюджета, календарь погашения кредитов" />
+        {elseif $smarty.server.REQUEST_URI|strstr:"/feedback/"}
+        <title>EasyFinance.ru | Лучшая домашняя бухгалтерия: управление личными финансами, финансовые цели, семейный бюджет</title>
+        <meta name="Description" content="EasyFinance.ru: бесплатная система управления домашними финансами, для построения личного бюджета, повышения доходов и финансовые советы" />      
+        {elseif $smarty.server.REQUEST_URI|strstr:"/rules/"}
+        <title>EasyFinance.ru | Ваш надежный инструмент для достижения финансовых целей: домашняя бухгалтерия, семейный бюджет, финансовые консультации</title>
+        <meta name="Description" content="EasyFinance.ru: безопасная домашняя бухгалтерия, для создания личного бюджета, сокращения затрат и повышения доходов" />
+        {elseif $smarty.server.REQUEST_URI|strstr:"/security/"}
+        <title>EasyFinance.ru | Ваш личный онлайн банкинг: личные финансы и семейный бюджет под надежной защитой</title>
+        <meta name="Description" content="EasyFinance.ru: безопасная домашняя бухгалтерия, для создания личного бюджета, сокращения затрат и повышения доходов" />
+        {elseif $smarty.server.REQUEST_URI|strstr:"/about/"}
+        <title>EasyFinance.ru | Ваш личный финансовый директор: сокращение расходов, повышение доходов, путь к финансовому благополучию</title>
+        <meta name="Description" content="EasyFinance.ru: онлайн система управления домашними финансами, для создания личного бюджета, финансового планирования, финансовых консультаций" />
+        {else}
+        <title>EasyFinance?.ru | Бесплатный онлайн сервис: домашняя бухгалтерия, семейный бюджет, личные финансы</title>
+        <meta name="Description" content="EasyFinance.ru: бесплатная система управления личными финансами, для построения домашнего бюджета, оптимизации расходов и создания личного финансового плана" />
+        {/if}
+    {/if}
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="Keywords" content="домашняя бухгалтерия, семейный бюджет, личные финансы, личный бюджет, финансовые цели, домашний бюджет, сокращение расходов, финансовые консультанты" />      
 	<meta name='yandex-verification' content='6821dc0eb83d0c55' />
         <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <link href="/favicon.ico" rel="icon" type="image/x-icon" />

@@ -172,10 +172,6 @@ class Info_Model
      */
     private function result()
     {
-//        print '<pre>';
-//        print_r($this->input);
-//        print_r($this->output);
-//        die(print_r($this->values));
         return array(
             array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
@@ -272,13 +268,6 @@ class Info_Model
                 $this->input['balance']  += (float)$value['total_sum'];
             }
         }
-
-        // DUMP TEST
-//        $this->input['profit']  = 240000.00;
-//        $this->input['drain']   = 200000.00;
-//        $this->input['loans']   = 0;
-//        $this->input['budget']  = 210000.00;
-//        $this->input['balance'] = 130000.00;
     }
     
     /**
