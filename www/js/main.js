@@ -191,12 +191,6 @@ $(document).ready(function() {
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
-        // init main finance gauge
-        var flashvars = {title: "", value: res['flash']['value'], bgimage: ""};
-        var params = {wmode: "transparent"};
-        var attributes = {id: "gaugeMain"};
-        swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
-        //
         // инициализируем виджет добавления и редактирования операции
 
         easyFinance.models.category.load(res.category, function(model) {
@@ -572,10 +566,17 @@ $('.tags_list .add').live('click', function(){
             //return false;
         })
         //$('.financobject ')
-//////////////////////////////////////////////////////////////////////
-//right
-//курсы валют в правой панели
-//currency
+    //////////////////////////////////////////////////////////////////////
+    // правая панель
+
+    // главный тахометр - финансовое состояние
+    var flashvars = {title: "", value: res['flash']['value'], bgimage: ""};
+    var params = {wmode: "transparent"};
+    var attributes = {id: "gaugeMain"};
+    swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
+
+    //курсы валют в правой панели
+    //currency
     data = res['currency'];
     str = '';
     var cost,name,progres;
