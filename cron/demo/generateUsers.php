@@ -224,7 +224,15 @@ for( $user = 1; $user < $usersCount*$idInterval; $user = $user + $idInterval)
 				{
 					$row['key'] = implode( '-', array($user, $row['category'], $row['drain'], $row['date_start']) );
 				}
-				
+
+                                // Хак для таблицы операции (для корректного отображения переводов)
+                                if ( $table == 'operation' ) 
+                                {
+                                    if ( $row['transfer'] > 0 && $row['tr_id'] > 0 ) {
+                                        $row['account_id'] = $row['account_id'] - 1;
+                                    }
+                                }
+
 				$sql .= "\n(" . implode( ',', array_map( 'quoteSql', $row ) ) . ')' . (( $id < $rowCount-1 )?',':'');
 			}
 			
