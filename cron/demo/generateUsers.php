@@ -230,6 +230,7 @@ for( $user = 1; $user < $usersCount*$idInterval; $user = $user + $idInterval)
                                 {
                                     if ( $row['transfer'] > 0 && $row['tr_id'] > 0 ) {
                                         $row['account_id'] = $row['account_id'] - 1;
+                                        $row['transfer'] = $row['transfer'] + 1;
                                     }
                                 }
 
