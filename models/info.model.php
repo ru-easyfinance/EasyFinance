@@ -177,7 +177,7 @@ class Info_Model
                   round(@$this->output[6]['result'])    //Финансовое состояние
                 , round(@$this->output[6]['profit'])    //Деньги
                 , round(@$this->output[6]['budget'])    //Бюджет
-                , round(@$this->output[6]['loans'])     //Кредиты
+                , 0 //round(@$this->output[6]['loans'])     //Кредиты
                 , round(@$this->output[6]['drain'])     //Управление расходами
             ),
             array(
