@@ -10,14 +10,11 @@
     </tr>
     {else}
     <tr>
-        <td>{$data.display}:
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Валюта счета:</td>
+        <td><div style="float: left;">{$data.display}:</div>
+            <div style="float: right;">Валюта счета:</div></td>
     </tr><tr>
-        <td>{$data.value}
-            <div align="right" style="position: relative;top:-20px; right:-10px; padding-right:10px;"><select name="currency_id">
+        <td><div style="float: left;">{$data.value}</div>
+            <div style="float: right;"><select name="currency_id">
                     {foreach from=$currency item=data}
                     <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
                     {/foreach}
