@@ -17,14 +17,11 @@
             Валюта счета:</td>
     </tr><tr>
         <td>{$data.value}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <select name="currency_id">
+            <div><select name="currency_id">
                     {foreach from=$currency item=data}
                     <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
                     {/foreach}
-        </select></td>
+            </select></div></td>
     </tr>
     {/if}
     {/foreach}
