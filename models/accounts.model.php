@@ -266,11 +266,14 @@ class Accounts_Model
         //9 - кредит
         $tip = "SELECT account_type_id FROM accounts WHERE account_id=? AND user_id=?";
         $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
-        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9))
+        $drain = 0;
+        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9)){
             $data['starter_balance'] = '-'.$data['starter_balance'];
+            $drain=1;
+        }
         
        $model = new Operation_Model();
-       $model->add(str_replace(' ', '', $data['starter_balance']), /*date('Y.m.d')*/'0000-00-00', 0,0,
+       $model->add(str_replace(' ', '', $data['starter_balance']), /*date('Y.m.d')*/'0000-00-00', 0,$drain,
            'Начальный остаток', $data['id']);
     }
 
