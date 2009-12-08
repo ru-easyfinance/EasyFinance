@@ -1,21 +1,45 @@
 <div id="divAccountEdit">
-    <div class="f_field">
-        <label>Валюта счета:</label>
-        <select name="currency_id">
-            {foreach from=$currency item=data}
-            <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
-            {/foreach}
-        </select>
-    </div>
     <br class="clr"/>
     <table class="tableForm" cellspacing="0" cellpadding="0">
     {foreach from=$fields item=data}
+    {if $data.display != 'Начальный баланс'}
     <tr>
         <td><label>{$data.display}:</label></td>
     </tr><tr>
         <td>{$data.value}</td>
     </tr>
+    {else}
+    <tr>
+        <td>{$data.display}:
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Валюта счета:</td>
+    </tr><tr>
+        <td>{$data.value}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <select name="currency_id">
+                    {foreach from=$currency item=data}
+                    <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
+                    {/foreach}
+        </select></td>
+    </tr>
+    {/if}
     {/foreach}
     </table>
+
+    <!--<td>
+            <div class="f_field" >
+                <label>Валюта счета:</label>
+                <select name="currency_id">
+                    {foreach from=$currency item=data}
+                    <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </td>-->
+
     <input type="hidden" name="type_id" value="{$type_id}" />
 </div>
