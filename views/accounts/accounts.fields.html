@@ -17,11 +17,11 @@
             Валюта счета:</td>
     </tr><tr>
         <td>{$data.value}
-            <div><select name="currency_id">
+            <div align="right" style="position: relative;top:-20px; right:-10px; padding-right:10px;"><select name="currency_id">
                     {foreach from=$currency item=data}
                     <option value="{$data.key}" {if $data.key==$accountcurrency}selected{/if}>{$data.name}</option>
                     {/foreach}
-            </select></div></td>
+                    </select></div></td>
     </tr>
     {/if}
     {/foreach}
