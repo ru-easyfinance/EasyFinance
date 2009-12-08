@@ -183,7 +183,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 #container1 { position: relative; width: 940px;  margin: 0 auto -130px auto; min-height: 100%; }
-#container1.iframe { width: 550px; }
+#container1.iframe { width: 570px; }
 
 * html #container1 { height: 100%;  }
 
@@ -363,6 +363,7 @@ ul.menu4 li#m_last a { background: none; }
 
 
 .mid { margin-left: 3px; padding-bottom: 5px; }
+.iframe .mid { padding-left: 8px; }
 
 .block1 { float: left; margin-right: 22px; padding-top: 1px; width: 163px; border: 1px solid #ebebeb; }
 .block2 { float: left; margin-right: 22px; width: 547px; z-index: 1; }
