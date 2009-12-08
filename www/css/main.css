@@ -151,8 +151,11 @@ table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
 .ramka1 .cb div { background-position: 100% -60px; }
 
 .ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg05.gif') repeat-y 0 0; }
+.iframe .ramka2 { background: #ffffff url('/img/i/bg05_iframe.gif') repeat-y 0 0; }
 .ramka2 .cct, .ramka2 .ccb { clear: both; height: 14px; background: url('/img/i/bg05_coners.gif') no-repeat 0 0; }
+.iframe .ramka2 .cct, .iframe .ramka2 .ccb { background: url('/img/i/bg05_coners_iframe.gif') no-repeat 0 0; }
 .ramka2 .ccb { background-position: 0 -20px; }
+.iframe .ramka2 .ccb { background-position: 0 -20px; }
 
 .ramka3 { border: 1px solid #ebebeb; //zoom: 1; }
 .ramka3 .ct, .ramka3 .ct div { position: relative; background: url('/img/i/coners.gif') no-repeat 0 0; //zoom: 1; }
@@ -180,6 +183,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 #container1 { position: relative; width: 940px;  margin: 0 auto -130px auto; min-height: 100%; }
+#container1.iframe { width: 550px; }
 
 * html #container1 { height: 100%;  }
 
