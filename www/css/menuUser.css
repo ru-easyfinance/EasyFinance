@@ -8,6 +8,11 @@
     z-index: 2;
 }
 
+.iframe .menu3 {
+    top: 11px;
+    height: 32px;
+}
+
 .menu3 a {
     outline-style: none;
 }
@@ -61,10 +66,16 @@ ul.dropdown li ul li.last {
     background: url('/img/i/menu3_submenu_bottom.png') no-repeat 0 0;
 }
 
+.iframe ul.dropdown li ul li.last { background: url('/img/i/menu3_submenu_bottom_iframe.png') no-repeat 0 0; }
 
 /* to override top and left in browsers other than IE, which will position to the top right of the containing li, rather than bottom left */
-ul.dropdown li>ul {
+ul.dropdown li > ul {
 	top: 37px;
+	left: auto;
+}
+
+.iframe ul.dropdown li > ul {
+	top: 29px;
 	left: auto;
 }
 
@@ -77,10 +88,14 @@ ul.dropdown li:hover ul, ul li.over ul {
 
 .menu3 ul:after { clear:both; display: block; content: ' '; height: 0; overflow: hidden; }
 .menu3 ul li { float: left; margin-right: 4px; width: 118px; height: 37px;position: relative;z-index:100 }
+.iframe .menu3 ul li { width: 91px; }
 .menu3 ul li a, .menu3 ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu3.png') no-repeat 0 0; }
+.iframe .menu3 ul > li > a, .iframe .menu3 ul > li > span { background: url('/img/i/menu3_iframe.png') no-repeat 0 0; }
 .menu3.expert ul li a, .menu3.expert ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu4.png') no-repeat 0 0; }
 
+.iframe .menu3 ul li#m1, .iframe .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 93px; }
 .menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
+
 .menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
 .menu3 ul li#m1.act > a { background-position: 0 -80px; }
 
@@ -104,8 +119,12 @@ ul.dropdown li:hover ul, ul li.over ul {
 
 /* links in submenu */
 .menu3 ul li ul li a, .menu3.expert ul li ul li a { display: block; margin-left: 14px; width: 100px; height: 26px; margin-left: 0px; overflow: hidden; background: white; padding-top: 2px; }
+.iframe .menu3 ul li ul li a, .iframe .menu3.expert ul li ul li a { width: 84px; background: white; }
 .menu3 ul li ul li span, .menu3.expert ul li ul li span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: none; }
+.iframe .menu3 ul li ul li span, .iframe .menu3.expert ul li ul li span { margin-left: 2px; width: 2px; background: none; }
 
 /* highlite current link */
 .menu3 ul li ul li.selected a{ color: #3d9814; background: url('/img/i/plashka_green.png') no-repeat right top; }
+.iframe .menu3 ul li ul li.selected a { background: none; font-weight: bold; }
 .menu3 ul li ul li.selected span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: url('/img/i/plashka_green.png') no-repeat left top;}
+.iframe .menu3 ul li ul li.selected span { background: none; margin-left: 2px; width: 2px; }

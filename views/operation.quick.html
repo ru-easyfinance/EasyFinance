@@ -14,6 +14,9 @@
     <ul class="buttons_block">
         <li id="op_addoperation_but"><a title="Добавить операцию">Добавить операцию</a></li>
 	<li id="op_addtocalendar_but"><a title="Добавить в календарь">Добавить в календарь</a></li>
+        {if $template_view == 'iframe'}
+            <li id="op_addoperation_logo"><a href="http://easyfinance.ru"><img src="/img/i/logo_iframe.png" ></a></li>
+        {/if}
     </ul>
     <form action="/operation/add/" style="display:none;" class="op_addoperation">
         <input type="hidden" id="op_id" />

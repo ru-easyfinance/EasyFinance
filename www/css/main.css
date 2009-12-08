@@ -705,6 +705,7 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 .event_form .repeat input,.event_form .repeat select {width:175px}
 .event_form .repeat input.rep_type{width:auto;left : 90px;}
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
+.iframe ul.buttons_block { left: 18px; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.buttons_block li { float: left; margin-right: 13px; height: 40px; background: url('/img/i/buttons.png') no-repeat 0 0; }
 ul.buttons_block li a { display: block; height: 25px; text-indent: -999px; overflow: hidden; }
@@ -712,6 +713,9 @@ ul.buttons_block li#op_addoperation_but { width: 183px; background-position: 0 -
 ul.buttons_block li#op_addoperation_but a { width: 170px; }
 ul.buttons_block li#op_addtocalendar_but { width: 198px; background-position: 0 -100px; }
 ul.buttons_block li#op_addtocalendar_but a { width: 185px; }
+
+ul.buttons_block li#op_addoperation_logo { width: 70px; background: none; }
+ul.buttons_block li#op_addoperation_logo a { height: 50px; text-indent: 0px; }
 
 ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
