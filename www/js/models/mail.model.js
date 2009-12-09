@@ -10,8 +10,6 @@ easyFinance.models.mail = function(){
     var FOLDER_DRAFTS = "drafts";
     var FOLDER_TRASH = "trash";
 
-    var MAIL_URL = '/mail/mail/';
-    var MAIL_LIST_URL = '/mail/mail_list/';
     /*
     var INBOX_URL = '/mail/inbox/';
     var OUTBOX_URL = '/mail/outbox/';
@@ -19,13 +17,13 @@ easyFinance.models.mail = function(){
     var TRASH_URL = '/mail/trash/';
     */
 
+    var MAIL_LIST_URL = '/mail/listall/';
+    var MAIL_URL = '/mail/get/';
     var SEND_MAIL_URL = '/mail/send_mail/';
-    var CREATE_DRAFT_URL = '/mail/create_draft/';
-    var EDIT_DRAFT_URL = '/mail/edit_draft/';
-    var SEND_DRAFT_URL = '/mail/send_draft/';
-    var TRASH_MAIL_URL = '/mail/trash_mail/';
-    var RESTORE_MAIL_URL = '/mail/restore_mail/';
-    var DELETE_MAIL_URL = '/mail/del_mail/';
+    var SAVE_DRAFT_URL = '/mail/save_draft/';
+    var TRASH_MAIL_URL = '/mail/trash/';
+    var RESTORE_MAIL_URL = '/mail/restore/';
+    var DELETE_MAIL_URL = '/mail/destroy/';
 
     // private variables
     var _folders = {};

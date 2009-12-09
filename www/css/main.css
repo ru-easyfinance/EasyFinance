@@ -307,7 +307,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .info_block dl dt.twitter span { padding-right: 63px; background-position: 100% -155px; }
 .info_block dl dd ul li { margin-bottom: 5px; padding-left: 17px; background: url('/img/i/li.gif') no-repeat 0 9px; }
 .info_block dl dd ul li a { color: #474747; }
-.info_block .addmessage, #footer .addmessage { display: block; position: fixed; top: 35%; right: -10px; width: 28px; height: 161px; text-indent: -999px; overflow: hidden; background: url('/img/i/button_addmsg.jpg') no-repeat 0 0; }
+.info_block .addmessage, #footer .addmessage { display: block; position: fixed; top: 35%; right: -10px; width: 28px; height: 161px; text-indent: -999px; overflow: hidden; background: url('/img/i/button_addmsg.png') no-repeat 0 0; }
 
 .menu31 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
 
