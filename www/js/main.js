@@ -774,21 +774,29 @@ $('.tags_list .add').live('click', function(){
         $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
     }).find('a').removeAttr('href');
 
-    //$('.listing.c1').css('display', 'block');
-    $('ul.control li').click(function(){
+    /**
+     * Функция которая меняет содержимое левой панели в зависимости от требуемой вкладки
+     * @param newActive c1|c2|c3|c4|c5
+     * @return void
+     */
+    function clickOnMenuInLeftPanel(newActive){
         $('ul.control li').removeClass('act');
-        $(this).addClass('act');
-        id = $(this).attr('id');
         $('.listing').hide();
-        s = '.'+id+'.listing';
-        $(s).show();
-
-        if (this.id == "c2")
+        $('ul.control li#'+newActive).addClass('act');
+        $('.listing.'+newActive).show()
+        if (newActive == "c2"){
             easyFinance.widgets.accountsPanel.redraw();
-
+        }
+    }
+    //смена пункта в левой панели
+    $('ul.control li').click(function(){
+        clickOnMenuInLeftPanel($(this).attr('id'));
+        $.cookie('activelisting', $(this).attr('id'), {expire: 100, path : '/', domein: false, secure : '1'});
         return false;
     });
-    setTimeout(function(){$('ul.control li#c1').click()},500);
+    //открытие запомнившийся вкладки
+    var activeListing = $.cookie('activelisting')||'c1';
+    clickOnMenuInLeftPanel(activeListing);
     /*
     @todo account hack
     */
