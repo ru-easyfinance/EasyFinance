@@ -119,10 +119,10 @@ easyFinance.widgets.accountsPanel = function(){
             if(!i)
                 c_key = key;
             i++;
-            str = str+'<li><div>'+formatCurrency(val[key])+' '+key+'</div></li>';
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+key+'</div></li>';
         }
         
-        str = str+'<li><div><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
         //$('div.listing dl.bill_list dd').hide();
