@@ -122,19 +122,23 @@ easyFinance.widgets.operationsJournal = function(){
         if (!confirm("Вы действительно хотите удалить выбранные операции?"))
             return false;
 
-        var ids = [];
+        var _ops = [];
+        var ids = []
         var virts = [];
         var key = 0;
         var $trs = $('#operations_list tr .check input:checked').closest('tr');
         $trs.each(function(){
-            ids[key] =$(this).attr('value');
-            virts[key] = _journal[ids[key]].virt;
+            ids[key] = $(this).attr('value')
+            _ops[key] = $.extend(true, {}, _journal[ids[key]]);
             key++;
         });
 
         _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
             // remove rows from table
-            $trs.remove();
+            for (var key in _ops) {
+                _deleteOperationFromTable(_ops[key]);
+            }
+            
             _onCheckClicked();
             $.jGrowl("Операции удалены", {theme: 'green'});
         });
@@ -145,35 +149,35 @@ easyFinance.widgets.operationsJournal = function(){
     function _deleteOperation(id){
         if (!confirm("Вы действительно хотите удалить эту операцию?"))
             return false;
-        var _opVirt = _journal[id].virt ? 'v' : 'r';
-        var _opTransferId = _journal[id].tr_id;
-        var _opId = id;
+
+        var _op = $.extend(true, {}, _journal[id]);
 
         _modelAccounts.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
-            // remove row from table
-            $('#operations_list tr[id="op' + _opVirt + id + '"]').remove();
-            
-            // remove paired operation if it's a transfer
-            if (_opTransferId != null) {
-                if (_opTransferId == "0")
-                    $('#operations_list tr[trid="' + _opId + '"]').remove();
-                else
-                    $('#operations_list tr[id="op' + _opVirt + _opTransferId + '"]').remove();
-            }
+            _deleteOperationFromTable(_op);
 
             $.jGrowl("Операция удалена", {theme: 'green'});
 
-            // recalc total
-            var pageTotal = 0;
-            var rows = $('#operations_list tr');
-            for (var i=0; i<rows.length; i++) {
-                pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
-            }
-            pageTotal = Math.round(pageTotal*100)/100;
-            $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' руб.<br>').show();
+            _recalcTotal();
         });
 
         return true;
+    }
+
+    function _deleteOperationFromTable(op) {
+        var opVirt = op.virt ? 'v' : 'r';
+        var opTransferId = op.tr_id;
+        var opId = op.id;
+
+        // remove row from table
+        $('#operations_list tr[id="op' + opVirt + opId + '"]').remove();
+
+        // remove paired operation if it's a transfer
+        if (opTransferId != null) {
+            if (opTransferId == "0")
+                $('#operations_list tr[trid="' + opId + '"]').remove();
+            else
+                $('#operations_list tr[id="op' + opVirt + opTransferId + '"]').remove();
+        }
     }
 
     function _editOperation(){
@@ -208,6 +212,27 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _onCheckClicked() {
+        var $row = $(this).parent().parent();
+        var id = $row.attr('value');
+        var trid = $row.attr('trid');
+
+        // auto-check paired transfer operations
+        var $pair = null;
+        if (trid != "null") {
+            if (trid == "0")
+                $pair = $('#operations_list tr[trid="' + id + '"] input');
+            else
+                $pair = $('#operations_list tr[id="opv' + trid + '"] input');
+
+            if ($pair) {
+                if ($(this).attr('checked'))
+                    $pair.attr('checked', 'checked');
+                else
+                    $pair.removeAttr('checked');
+            }
+        }
+
+        // show/hide 'remove checked' link
         if (_$node.find('table input').is(':checked'))
             $('#remove_all_op').show();
         else
@@ -361,6 +386,17 @@ easyFinance.widgets.operationsJournal = function(){
         } else {
             _$node.find('#lblOperationsJournalFilters').text(txt).parent().show();
         }
+    }
+
+    function _recalcTotal() {
+        // recalc total
+        var pageTotal = 0;
+        var rows = $('#operations_list tr');
+        for (var i=0; i<rows.length; i++) {
+            pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
+        }
+        pageTotal = Math.round(pageTotal*100)/100;
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' руб.<br>').show();
     }
 
     // public variables
