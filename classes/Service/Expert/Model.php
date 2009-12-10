@@ -58,7 +58,7 @@ class Service_Expert_Model extends Service_Model
 		return new Service_Expert_Model( $serviceModel, $price, $term );
 	}
 	
-	public static function insertAll( $userId, Service_Expert_Container $container )
+	public static function insertAll( $userId, Service_Expert_Collection $container )
 	{
 		$inserts = array();
 		

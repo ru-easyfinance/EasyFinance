@@ -5,7 +5,7 @@
  * @author Andrew Tereshko aka mamonth
  */
 
-class Service_Expert_Container extends Service_Container 
+class Service_Expert_Collection extends Service_Collection
 {
 	/**
 	 * Экземпляр обьекта пользователя
