@@ -791,7 +791,7 @@ $('.tags_list .add').live('click', function(){
     //смена пункта в левой панели
     $('ul.control li').click(function(){
         clickOnMenuInLeftPanel($(this).attr('id'));
-        $.cookie('activelisting', $(this).attr('id'), {expire: 100, path : '/', domein: false, secure : '1'});
+        $.cookie('activelisting', $(this).attr('id'), {expire: 100, path : '/', domain: false, secure : '1'});
         return false;
     });
     //открытие запомнившийся вкладки

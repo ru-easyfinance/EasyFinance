@@ -27,12 +27,12 @@ function user_info_save()
     } else if (($('input#newpass').val()) == ($('input#newpass2').val())) {
         if ($('#help:checked').length == 1){
             if($.cookie('tooltip') != '1'){
-                $.cookie('tooltip', '1', {expire: 100, path : '/', domein: false, secure : '1'});
+                $.cookie('tooltip', '1', {expire: 100, path : '/', domain: false, secure : '1'});
                 initToltips('modern')
             }
         }else{
             if($.cookie('tooltip') != '0'){
-                $.cookie('tooltip', '0', {expire: 100, path : '/', domein: false, secure : '1'});
+                $.cookie('tooltip', '0', {expire: 100, path : '/', domain: false, secure : '1'});
                 destroyToltips();
             }
         }
