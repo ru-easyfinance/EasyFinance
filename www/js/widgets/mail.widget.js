@@ -253,10 +253,10 @@ easyFinance.widgets.mail = function(){
 
         if (_folder == _model.FOLDER_DRAFTS) {
             $('#mail-popup-read').find('#lblMailFromTo').text('Кому:');
-            $('#mail-popup-read #mail-from').text(mail.to);
+            $('#mail-popup-read #mail-from').text(mail.senderName);
         } else {
             $('#mail-popup-read').find('#lblMailFromTo').text('От кого:');
-            $('#mail-popup-read #mail-from').text(mail.from);
+            $('#mail-popup-read #mail-from').text(mail.receiverName);
         }
 
         $('#mail-popup-read').dialog('option', 'buttons', buttons).dialog('open');
