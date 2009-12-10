@@ -263,7 +263,7 @@ easyFinance.widgets.mail = function(){
         
         $('#mail-popup-read #mail-date').text(mail.date);
         $("#mail-popup-read #mail-subject-read").text(mail.subject);
-        $("#mail-popup-read #mail-text-read").text(mail.text);//@todo html text
+        $("#mail-popup-read #mail-text-read").text(mail.body);//@todo html text
     }
 
     function _reply(){
