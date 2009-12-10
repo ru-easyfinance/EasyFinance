@@ -131,21 +131,25 @@ easyFinance.models.mail = function(){
     function loadMail(id, callback) {
         // load full info from server
         $.post(MAIL_URL, {id: id}, function(data) {
+            var mail = null;
+
             // mark as read
-            if(_folders.inbox[id])
+            if(_folders.inbox[id]) {
                 _folders.inbox[id].unread = false;
-
-            if(_folders.outbox[id])
+                mail = _folders.inbox[id];
+            } else if(_folders.outbox[id]) {
                 _folders.outbox[id].unread = false;
-
-            if(_folders.drafts[id])
+                mail = _folders.outbox[id];
+            } else if(_folders.drafts[id]) {
                 _folders.drafts[id].unread = false;
-
-            if(_folders.trash[id])
+                mail = _folders.drafts[id];
+            } else if(_folders.trash[id]) {
                 _folders.trash[id].unread = false;
+                mail = _folders.trash[id];
+            }
 
             if (typeof callback == 'function')
-                callback(data);
+                callback(mail);
         }, 'json');
     }
 
