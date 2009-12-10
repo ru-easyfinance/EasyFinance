@@ -92,7 +92,7 @@ easyFinance.models.mail = function(){
     }
 
     function createDraft(to, subject, text, callback){
-        $.post(CREATE_DRAFT_URL, {to: to, subject: subject, text: text}, function(data) {
+        $.post(SAVE_DRAFT_URL, {to: to, subject: subject, text: text}, function(data) {
             if (data.id)
                 _folders.drafts[data.id] = data;
 
@@ -102,7 +102,7 @@ easyFinance.models.mail = function(){
     }
 
     function editDraft(id, text, callback){
-        $.post(EDIT_DRAFT_URL, {id: id, text: text}, function(data) {
+        $.post(SAVE_DRAFT_URL, {id: id, text: text}, function(data) {
             if (data.id)
                 _folders.drafts[data.id] = data;
 
