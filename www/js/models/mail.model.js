@@ -23,7 +23,8 @@ easyFinance.models.mail = function(){
     var SAVE_DRAFT_URL = '/mail/save_draft/';
     var TRASH_MAIL_URL = '/mail/trash/';
     var RESTORE_MAIL_URL = '/mail/restore/';
-    var DELETE_MAIL_URL = '/mail/destroy/';
+    
+    //var DELETE_MAIL_URL = '/mail/destroy/';
 
     // private variables
     var _folders = {};
@@ -112,7 +113,7 @@ easyFinance.models.mail = function(){
     }
 
     function sendDraft(id, text, callback){
-        $.post(SEND_DRAFT_URL, {id: id, text: text}, function(data) {
+        $.post(SEND_MAIL_URL, {id: id, text: text}, function(data) {
             if (data.id){
                 delete _folders.drafts[data.id];
                 _folders.outbox[data.id] = data;
