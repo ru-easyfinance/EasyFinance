@@ -61,7 +61,7 @@ class Expert_Controller extends _Core_Controller_UserExpert
 		}
     	
 		// Загрузка услуг эксперта
-		foreach ( Service_Expert_Container::load( $user )->getIterator() as $service )
+		foreach ( Service_Expert_Collection::load( $user ) as $service )
 		{
 			$json['services'][] = array (
 				'id'		=> $service->getId(),
@@ -74,7 +74,7 @@ class Expert_Controller extends _Core_Controller_UserExpert
 		}
     	
 		// Загрузка общего списка услуг
-		foreach ( Service_Container::load()->getIterator() as $service )
+		foreach ( Service_Collection::load() as $service )
 		{
 			$json['services'][] = array (
 				'id' 		=> $service->getId(),
@@ -288,11 +288,11 @@ class Expert_Controller extends _Core_Controller_UserExpert
     		/**
     		 * Вообще конечно это неверный путь. В идеале услуги эксперта должны 
     		 * хранится у него в сессии, и при этой операции мы должны пользоватся методами 
-    		 * User->getService( $id )->delete(); и User->addService( Service, $cost, $term );
+    		 * User->services->get( $id )->delete(); и User->services->add( Service, $cost, $term );
     		 * А затем с помощью Unit Of Work в деструкторе либо в спец методе автоматически сохранять
     		 */
     		   		
-    		$expertServices = new Service_Expert_Container( Core::getInstance()->user );
+    		$expertServices = new Service_Expert_Collection( Core::getInstance()->user );
     		
     		foreach ( $_POST['service'] as $serviceId => $serviceInfo )
     		{
