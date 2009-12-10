@@ -43,8 +43,10 @@ easyFinance.models.accounts = function(){
     function load(param1, param2){
         _this = this;
 
-        if (typeof param1 == 'string'){
-            _accounts = eval(param1);
+        if (typeof param1 == 'object'){
+            _accounts = param1;
+
+            $(document).trigger('accountsLoaded');
 
             if (typeof param2 == 'function')
                 param2(_this);

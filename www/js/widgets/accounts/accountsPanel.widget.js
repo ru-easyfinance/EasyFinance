@@ -28,8 +28,6 @@ easyFinance.widgets.accountsPanel = function(){
         $(document).bind('accountsLoaded', redraw);
         $(document).bind('accountDeleted', redraw);
 
-        redraw();
-
        $('.accounts .add').click(function(){
            document.location='/accounts/#add';
            // временный хак до полного перехода на аякс
