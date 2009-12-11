@@ -6,7 +6,11 @@
             <div class="ct"><div></div></div>
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
                 {if $user_info.user_id > 0}
+                    {if $smarty.const.IS_DEMO == false}
                     <a href="/redirect/book"><img src="/img/i/bannerBook.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
+                    {else}
+                    <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
+                    {/if}
                 {else}
                     {if $smarty.server.REQUEST_URI == "/"}
                         <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/banner.gif" alt="Здесь могла бы быть ваша реклама." title="Здесь могла бы быть ваша реклама." /></a>
