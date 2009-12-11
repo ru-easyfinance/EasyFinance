@@ -166,6 +166,7 @@ easyFinance.widgets.accountsJournal = function(){
 
         _model = model;
         $(document).bind('accountsLoaded', redraw);
+        $(document).bind('accountDeleted', redraw);
 
         _initForm();
 
@@ -175,6 +176,7 @@ easyFinance.widgets.accountsJournal = function(){
     }
 
     function redraw(){
+        debugger;
         _accounts = _model.getAccounts();
         var account_list = _accounts;
         if (!account_list || account_list.length == 0)
