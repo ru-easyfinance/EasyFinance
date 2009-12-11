@@ -148,7 +148,7 @@ easyFinance.widgets.accountsPanel = function(){
         //загружает состояние из
         var accountsPanel = $.cookie('accountsPanel_stated') || '';
         $('div.listing dl.bill_list dt:visible').each(function(){
-            if (accountsLeft.indexOf($(this).next().attr('id')) == -1)
+            if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
                 $(this).click()
         })
 
