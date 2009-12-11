@@ -68,6 +68,9 @@ easyFinance.widgets.operationEdit = function(){
         }
         $('.op_tags_could').html(str+'</ul>');
         $('.op_tags_could li').hide();
+
+        $(document).bind('accountsLoaded', _refreshAccounts);
+        $(document).bind('accountDeleted', _refreshAccounts);
     }
 
     function _sexyFilter (input, text){
@@ -531,6 +534,28 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_operationTransferCurrency').hide();
             $('#op_operationTransferCurrency').val('');
         }
+    }
+
+    function _refreshAccounts() {
+        var data = $.extend({}, easyFinance.models.accounts.getAccounts());
+
+        if (!data){
+            data = {};
+        }
+
+        var htmlAccounts = '';
+        for (key in data )
+        {
+            //
+            alert(key);
+            alert(data[key].name);
+
+            htmlAccounts = htmlAccounts + '<option value="' + key + '">' + data[key].name + '</option>';
+        }
+        
+        $("#op_account").html(htmlAccounts);
+        $('#op_account').val(_selectedAccount);
+        $.sexyCombo.changeOptions("#op_account", _selectedAccount);
     }
 
     // public variables
