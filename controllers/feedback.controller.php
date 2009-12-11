@@ -49,6 +49,7 @@ class Feedback_Controller extends _Core_Controller
 
          // Сообщение
          $msg               = $_POST['msg'];
+         $param['email']    = $_POST['email'];
 
          // Параметры страницы
          $param['request']  = $_SERVER['REQUEST_URI'];
