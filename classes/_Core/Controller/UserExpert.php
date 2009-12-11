@@ -1,6 +1,6 @@
 <?php
 
-abstract class _Core_Controller_UserExpert extends _Core_Controller
+abstract class _Core_Controller_UserExpert extends _Core_Controller_User
 {
 	/**
 	 * Конструктор
@@ -8,21 +8,13 @@ abstract class _Core_Controller_UserExpert extends _Core_Controller
 	 */
 	final public function __construct()
 	{
+		parent::__construct();
+		
 		// Проверка на тип пользователя
 		if( Core::getInstance()->user->getType() !== 1 )
 		{
-			// Если авторизован - редирект на дефолтную для пользователя
-			if( Core::getInstance()->user->getType() === 0 )
-			{
-				header( 'Location: /info/' );
-			}
-			else // если не авторизован - на логин
-			{
-				header( 'Location: /login/' );
-			}
+			header( 'Location: /info/' );
 			exit;
 		}
-		
-		parent::__construct();
 	}
 }
