@@ -10,7 +10,7 @@ abstract class _Core_Abstract_Model
 	protected $fields = array();
 	
 	/**
-	 * Приватный конструктор, дабы не вызывали откуда не попадя
+	 * Приватный конструктор, В модель не должно попадать то чего она не ожидает.
 	 *
 	 * @param array $row
 	 */
@@ -33,7 +33,13 @@ abstract class _Core_Abstract_Model
 		{
 			$this->durty = true;
 			
+			_Core_ObjectWatcher::addDirty( $self );
+			
 			$this->fields[ $variable ] = $value;
 		}
 	}
+	
+	abstract public function save();
+	
+	abstract public function delete();
 }
