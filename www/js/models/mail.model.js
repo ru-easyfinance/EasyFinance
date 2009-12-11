@@ -135,24 +135,35 @@ easyFinance.models.mail = function(){
      * @usage loadMail(id, callback)
      */
     function loadMail(id, callback) {
-        // load full info from server
-        $.post(MAIL_URL, {id: id}, function(data) {
-            var mail = null;
+        var mail = null;
+        var unread = false;
 
+        // mark as read
+        if(_folders.inbox[id]) {
+            unread = _folders.inbox[id].unread;
+            mail = _folders.inbox[id];
+        } else if(_folders.outbox[id]) {
+            unread = _folders.outbox[id].unread;
+            mail = _folders.outbox[id];
+        } else if(_folders.drafts[id]) {
+            unread = _folders.drafts[id].unread;
+            mail = _folders.drafts[id];
+        } else if(_folders.trash[id]) {
+            unread = _folders.trash[id].unread;
+            mail = _folders.trash[id];
+        }
+
+        if (unread == false) {
+            if (typeof callback == 'function')
+                callback(mail);
+
+            return;
+        }
+
+        // mark as read on server
+        $.post(MAIL_URL, {id: id}, function(data) {
             // mark as read
-            if(_folders.inbox[id]) {
-                _folders.inbox[id].unread = false;
-                mail = _folders.inbox[id];
-            } else if(_folders.outbox[id]) {
-                _folders.outbox[id].unread = false;
-                mail = _folders.outbox[id];
-            } else if(_folders.drafts[id]) {
-                _folders.drafts[id].unread = false;
-                mail = _folders.drafts[id];
-            } else if(_folders.trash[id]) {
-                _folders.trash[id].unread = false;
-                mail = _folders.trash[id];
-            }
+            mail.unread = false;
 
             if (typeof callback == 'function')
                 callback(mail);
