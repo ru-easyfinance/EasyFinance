@@ -181,7 +181,6 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 /*----------------------------------------------------------*/
 
-#cal_events table.tab1 tbody{overflow-x:hidden;owerflow-y:scrooll; height:300px}
 #container1 { position: relative; width: 940px;  margin: 0 auto -130px auto; min-height: 100%; }
 #container1.iframe { width: 570px; }
 
@@ -952,7 +951,7 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table th div.cont div:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list table th ul.select_list {  display: none; position: absolute; top: 16px; left: -5px; width: 100px; padding-bottom: 5px; z-index: 10; background: #ffffff; border: 1px solid #e5e5e5; }
 .operation_list table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }
-
+ table.tab1 th{text-align: center}
 .operation_list table td.check{max-width: 20px}
 .operation_list table td.summ{max-width: 60px}
 .operation_list table td.big{max-width: 100px}
@@ -965,8 +964,10 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
+ table.t_body{height: 300px; overflow-x: hidden; overflow-y: scroll; display: block}
+ table.tab1 tr{height: 20px}
 .operation_list table div.cont { position: relative; }
- table.tab1 td{width: 75px}
+ table.tab1 td{width: 24%}
 .act div.cont ul { display: block; }
 div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
