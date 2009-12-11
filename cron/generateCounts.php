@@ -32,7 +32,7 @@ $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
 //Инициилизируем массив с начальными значениями
 $counters = array(
-	'users' 		=> 1234, // Пиз**ж
+	'users' 		=> 234, // Пиз**ж
 	'operations' 	=> 0,
 );
 
