@@ -190,7 +190,7 @@ easyFinance.widgets.budget = function(data){
                             </tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
-                //}
+                
             }
         }
         if (isNaN(totalAmount)){totalAmount = 0}
