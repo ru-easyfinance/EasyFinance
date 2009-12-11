@@ -19,7 +19,7 @@ easyFinance.models.mail = function(){
 
     var MAIL_LIST_URL = '/mail/listall/';
     var MAIL_URL = '/mail/get/';
-    var SEND_MAIL_URL = '/mail/send_mail/';
+    var SEND_MAIL_URL = '/mail/send/';
     var SAVE_DRAFT_URL = '/mail/save_draft/';
     var TRASH_MAIL_URL = '/mail/trash/';
     var RESTORE_MAIL_URL = '/mail/restore/';

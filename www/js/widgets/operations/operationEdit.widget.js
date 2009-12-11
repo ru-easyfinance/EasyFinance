@@ -546,10 +546,6 @@ easyFinance.widgets.operationEdit = function(){
         var htmlAccounts = '';
         for (key in data )
         {
-            //
-            alert(key);
-            alert(data[key].name);
-
             htmlAccounts = htmlAccounts + '<option value="' + key + '">' + data[key].name + '</option>';
         }
         

@@ -36,10 +36,10 @@ easyFinance.widgets.accountsPanel = function(){
        })
 
        $('.accounts li a').live('click',function(){
-           document.location='/accounts/#edit'+$(this).find('div.id').attr('value');
+           document.location='/operation/#account='+$(this).find('div.id').attr('value').replace("edit", "");
            $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
            //временный хак до полного перехода на события
-           hash_api('#edit'+$(this).find('div.id').attr('value'));
+           //hash_api('#edit'+$(this).find('div.id').attr('value'));
        })
 
         return this;
@@ -51,6 +51,9 @@ easyFinance.widgets.accountsPanel = function(){
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
+
+        if (!_model)
+            return;
 
         var data = $.extend({},_model.getAccounts());
 
