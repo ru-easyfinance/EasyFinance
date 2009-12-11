@@ -88,6 +88,7 @@ $(document).ready(function() {
             pobj = data;
             var c = '';
             for(var id in data) {
+                var acc =res['accounts'][data[id]['account']]?res['accounts'][data[id]['account']]['name']:''
                 cat = $('#ca_'+data[id]['category']).attr('title');
                 cat = (!cat)?'нет':cat;
                 c += '<tr id="'+id+'" class="item">'
@@ -95,7 +96,7 @@ $(document).ready(function() {
                 +'<td>'+data[id]['date']+'</td>'
                 +'<td>'+data[id]['title']+'</td>'
                 +'<td>'+cat+'</td>'
-                +'<td>'+res['accounts'][data[id]['account']]['name'] +'</td>'
+                +'<td>'+ acc +'</td>'
                 +'<td class="mark no_over" style="display: table-cell;">'+formatCurrency(data[id]['amount'])+'<div class="cont" style="position:relative; top:-20px">'
                 +'<ul style="z-index: 100;">'
                 +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'

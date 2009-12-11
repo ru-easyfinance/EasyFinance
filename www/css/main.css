@@ -181,7 +181,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 /*----------------------------------------------------------*/
 
-
+#cal_events table.tab1 tbody{overflow-x:hidden;owerflow-y:scrooll; height:300px}
 #container1 { position: relative; width: 940px;  margin: 0 auto -130px auto; min-height: 100%; }
 #container1.iframe { width: 570px; }
 
@@ -699,9 +699,9 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 .event_form #cal_mainselect{width : 100%}
 .event_form #cal_mainselect li {cursor:pointer;position:relative;float:left;line-height:15px;min-width:100px;font-size:14px;color:#6CBD45;}
 .event_form #cal_mainselect li.act span{border-bottom:1px dashed #6BBE4C;}
-.event_form select,.event_form input,.event_form textarea {left:125px; position: absolute;width:300px}
-
-.event_form .week input{position : relative; width:20px ;left : -15px ; margin-right : 1px }
+.event_form select,.event_form input,.event_form textarea {left:125px; position: absolute;width:300px;}
+.event_form .rep_type{border: 0}
+.event_form .week input{position : relative; width:20px ;left : -15px ; margin-right : 1px; border: 0 }
 .event_form .line div.week {margin-top:20px;}
 .event_form .week label{position : relative; width:20px ;margin-left : 11px;left:-25px}
 .event_form .line {position : relative;margin-top :10px;min-height:20px}
@@ -966,7 +966,7 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
 .operation_list table div.cont { position: relative; }
-
+ table.tab1 td{width: 75px}
 .act div.cont ul { display: block; }
 div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
