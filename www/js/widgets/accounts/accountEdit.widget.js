@@ -173,7 +173,6 @@ easyFinance.widgets.accountEdit = function(){
             success: function(data) {
                 $.jGrowl("Добавлен счёт", {theme: 'green'});
 
-
                 easyFinance.models.accounts.load();
                 // @todo use model, which will fire
                 // $(document).trigger('accountsChanged');
