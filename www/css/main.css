@@ -823,6 +823,8 @@ div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100p
 div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px; //width: 100px; }
 div.op_addoperation .op_line  .op_amount {float: left; }
+div.op_addoperation div#op_amount_fields {position: absolute; left: 210px; width: 140px;}
+div.op_addoperation #op_amount { width: 130px; }
 
 div.op_addoperation .op_line .op_f_field input.op_inp, div.op_addoperation .op_line textarea { color: #20201E; width:350px}
 div.op_addoperation .op_line .op_f_field #op_date {width:auto;}
