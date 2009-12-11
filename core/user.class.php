@@ -131,6 +131,12 @@ class User
     	
     	return $userType;
     }
+    
+    public function getName()
+    {
+    	return $this->getUserProps( 'user_name' );
+    }
+    
     /**
      * Иниализирует пользователя, достаёт из базы некоторые его свойства
      * @param string $login
@@ -561,7 +567,7 @@ class User
      *      int user_active  0 - аккаунт неактивен
      * @return mixed
      */
-    function getUserProps($prop)
+    public function getUserProps($prop)
     {
         if (isset($this->props[ $prop ])) {
             return $this->props[ $prop ];
