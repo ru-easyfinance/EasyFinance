@@ -69,8 +69,8 @@ easyFinance.widgets.operationEdit = function(){
         $('.op_tags_could').html(str+'</ul>');
         $('.op_tags_could li').hide();
 
-        $(document).bind('accountsLoaded', _refreshAccounts);
-        $(document).bind('accountDeleted', _refreshAccounts);
+        //$(document).bind('accountsLoaded', _refreshAccounts);
+        //$(document).bind('accountDeleted', _refreshAccounts);
     }
 
     function _sexyFilter (input, text){
@@ -542,11 +542,13 @@ easyFinance.widgets.operationEdit = function(){
         if (!data){
             data = {};
         }
-
+//debugger
         var htmlAccounts = '';
         for (key in data )
         {
-            htmlAccounts = htmlAccounts + '<option value="' + key + '">' + data[key].name + '</option>';
+            htmlAccounts = htmlAccounts + '<option value="' + key + '" '
+                + 'currency="' + data[key].currency + '" ' +
+                + '">' + data[key].name + '</option>';
         }
         
         $("#op_account").html(htmlAccounts);
