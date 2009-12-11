@@ -134,12 +134,24 @@ easyFinance.widgets.accountsPanel = function(){
         str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
-        //$('div.listing dl.bill_list dd').hide();
         $('div.listing dl.bill_list dt').addClass('open');
         $('div.listing dl.bill_list dt').live('click', function(){
             $(this).toggleClass('open').next().toggle();
+            //запоминание состояние в куку
+            var accountsPanel = '';
+            $('div.listing dl.bill_list dd:visible').each(function(){
+                accountsPanel += $(this).attr('id');
+            })
+            $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : '1'});
             return false;
         });
+        //загружает состояние из
+        var accountsPanel = $.cookie('accountsPanel_stated');
+        $('div.listing dl.bill_list dt:visible').each(function(){
+            if (accountsLeft.indexOf($(this).next().attr('id')) == -1)
+                $(this).click()
+        })
+
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
