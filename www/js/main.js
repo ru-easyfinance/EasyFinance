@@ -180,14 +180,19 @@ $(document).ready(function() {
         return false;
     }
 
-    //получение клиентских настроек
-    function getClientWidth() {
-      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
-    }
-
-    function getClientHeight() {
-      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
-    }
+//    //получение клиентских настроек
+//    /**
+//     *@deprecated
+//     */
+//    function getClientWidth() {
+//      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
+//    }
+//    /**
+//     *@deprecated
+//     */
+//    function getClientHeight() {
+//      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
+//    }
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
@@ -802,56 +807,58 @@ $('.tags_list .add').live('click', function(){
     */
     // Footer
     var r_list;
-
-    //скрытие сообщений
-    $('#footer #popupreport').hide();
-    $('#popupreport .close').click(
-        function(){
-            $('#popupreport').hide();
-        });
-
-
-    $('#footer .addmessage').click(
-        function(){
-            $('#footer #popupreport').css({top : '30%',position:'fixed',left:'0px'}).toggle();
-        });
-
-    //отправление сообщения
-    $('#footer .but').click(
-        function (){
-            var num_of_plugins = navigator.plugins.length;
-            var str='';
-            for (var i=0; i < num_of_plugins; i++) {
-                str = str+"[" + navigator.plugins[i].name + ";" + navigator.plugins[i].filename + "]";
-            }
-            $.post(
-                '/feedback/add_message/',
-                {
-                    msg: $('#footer #ffmes').val(),
-                    width : screen.width,
-                    height : screen.height,
-                    cwidth : getClientWidth(),
-                    cheight : getClientHeight(),
-                    colors : screen.colorDepth,
-                    plugins: str
-                },
-                function(data){
-                    $('#footer #ffmes').val('');
-                    $.jGrowl('Спасибо!<br/>Ваше сообщение отправлено!', {theme: 'green'});
-                }
-            );
-            $('#footer #ffmes').val('')
-            $('#footer .f_field lable').show();
-            $('#footer .f_field textarea').text('');
-            $('#footer #popupreport').hide();
-        }
-    );
-    //скрытие лишнего текста на поле ввода
-    $('#footer .f_field').click(
-        function (){
-            $(this).find('label').hide();
-        }
-    );
+//    /**
+//     *@deprecated
+//     */
+//    //скрытие сообщений
+//    $('#footer #popupreport').hide();
+//    $('#popupreport .close').click(
+//        function(){
+//            $('#popupreport').hide();
+//        });
+//
+//
+//    $('#footer .addmessage').click(
+//        function(){
+//            $('#footer #popupreport').css({top : '30%',position:'fixed',left:'0px'}).toggle();
+//        });
+//
+//    //отправление сообщения
+//    $('#footer .but').click(
+//        function (){
+//            var num_of_plugins = navigator.plugins.length;
+//            var str='';
+//            for (var i=0; i < num_of_plugins; i++) {
+//                str = str+"[" + navigator.plugins[i].name + ";" + navigator.plugins[i].filename + "]";
+//            }
+//            $.post(
+//                '/feedback/add_message/',
+//                {
+//                    msg: $('#footer #ffmes').val(),
+//                    width : screen.width,
+//                    height : screen.height,
+//                    cwidth : getClientWidth(),
+//                    cheight : getClientHeight(),
+//                    colors : screen.colorDepth,
+//                    plugins: str
+//                },
+//                function(data){
+//                    $('#footer #ffmes').val('');
+//                    $.jGrowl('Спасибо!<br/>Ваше сообщение отправлено!', {theme: 'green'});
+//                }
+//            );
+//            $('#footer #ffmes').val('')
+//            $('#footer .f_field lable').show();
+//            $('#footer .f_field textarea').text('');
+//            $('#footer #popupreport').hide();
+//        }
+//    );
+//    //скрытие лишнего текста на поле ввода
+//    $('#footer .f_field').click(
+//        function (){
+//            $(this).find('label').hide();
+//        }
+//    );
     
 	/*
 	*Открытие окна для авторизации. 

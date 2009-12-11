@@ -80,7 +80,7 @@ else
 		$tpl->append('js', $js);
 	}
 }
-
+$tpl->append('js', 'feedback.js');
 $tpl->append('js', 'models/accounts.model.js');
 $tpl->append('js', 'models/category.model.js');
 $tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');

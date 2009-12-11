@@ -32,10 +32,16 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div class="f_field">
+                            <div class="f_field ffmes">
                                 <label for="ffmes">Ваш отзыв</label>
                                 <textarea cols="1" rows="1" id="ffmes"></textarea>
                             </div>
+                            {if !isset($user_info)}
+                            <div class="f_field">
+                                <label for="fmail">E-mail</label>
+                                <input type="text" value="" id="fmail" />
+                            </div>
+                            {/if}
                             <center>
                                 <img src="/img/i/pix.gif" class="but" />
                             </center>
