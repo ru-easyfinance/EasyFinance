@@ -71,6 +71,11 @@ class Report_Model
             WHERE cur_id = ?";
         $arr[1] = $this->db->query($sql, $currency);
 
+            //текстовые отчёты отправлю вторым индексом массива
+            if ($drain==0)
+                $arr[2] = $this->SelectDetailedIncome($start, $end, $account, $currency, $acclist);
+            if ($drain==1)
+                $arr[2] = $this->SelectDetailedWaste($start, $end, $account, $currency, $acclist);
 
         return $arr;
 

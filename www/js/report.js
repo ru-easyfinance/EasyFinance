@@ -448,6 +448,67 @@ $(document).ready(function() {
             chart1.setDataXML(stri);
             chart1.render("chart1div");//*/
 
+
+
+            //показываем тексты снизу
+            cur = res['currency'];
+             nowcur = 0;//курс в знаменателе. в чём отображаем
+             oldcur = 0;//курс в числителе. курс валюты счёта
+             for(key in cur)
+            {
+                cost = cur[key]['cost'];
+                name = cur[key]['name'];
+                if (name == data[2][1][0].cur_char_code){
+                    nowcur = cur[key]['cost'];
+                }
+            }
+            var tr = '';
+            tr += '<tr><th>&nbsp;</th>\n\
+                        <th><span class="sort" title="отсортировать">Дата</span></th>\n\
+                        <th><span class="sort" title="отсортировать">Счёт</span></th>\n\
+                        <th><span class="sort" title="отсортировать">Сумма</span></th>\n\
+                   </tr>';//*/
+            for (c in data[2][0]){
+                if (c>0){
+                    if (data[2][0][c].cat_name != data[2][0][c-1].cat_name && data[2][0][c].cat_name!=null ) {
+                      if (data[2][0][c].account_name!=null)
+                      tr += "<tr>" + '<td class="summ"><span><b>'+data[2][0][c].cat_name+
+                        '<span><b></td></tr>';
+                     }
+                }
+                else {
+                    tr += "<tr>" + '<td class="summ"><span><b>'+data[2][0][0].cat_name+
+                        '<span><b></td></tr>';
+                }
+                if (data[2][0][c].account_name != null) {
+                    cur = res['currency'];
+                    for(key in cur)
+                        {
+                            cost = cur[key]['cost'];
+                            name = cur[key]['name'];
+                            if (name == data[2][0][c].cur_char_code)
+                            {
+                                oldcur = cur[key]['cost'];
+                            }
+                        }
+                        su = (data[2][0][c].money*oldcur/nowcur);
+                    tr += "<tr>"
+                                + '<td>&nbsp;</td>'
+                                + '<td class="summ"><span>'+data[2][0][c].date+'</span></td>'
+                                //+ '<td class="summ ' + (data[0][c].date>=0 ? 'sumGreen' : 'sumRed')+'">'+data[0][c].date+'</td>'
+                                + '<td class="light"><span>'+data[2][0][c].account_name+'</span></td>'
+                                + '<td class="summ ' + (su>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(su)+'</span></td>'
+                                + '</tr>';
+                }
+            }
+
+            $('tr:not(:first)','#reports_list').each(function(){
+                        $(this).remove();
+                    });
+             $('#reports_list').html(tr);
+
+             
+
             //$('.operation_list').jScrollPane();
         },'json');
     }
@@ -590,12 +651,12 @@ $(document).ready(function() {
         case "graph_profit": //Доходы":
             $('#chart').show();
             $('#Period21,#Period22').hide();
-            $('.operation_list').hide();
+            $('.operation_list').show();
             break;
         case "graph_loss": //"Расходы":
             $('#chart').show();
             $('#Period21,#Period22').hide();
-            $('.operation_list').hide();
+            $('.operation_list').show();
             break;
         case "graph_profit_loss": //"Сравнение расходов и доходов":
             $('#chart').show();
