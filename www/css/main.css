@@ -58,7 +58,7 @@ a img, fieldset { border:0 none; }
 #mail-html-read {margin: 7px 0 0 0; text-align: start; }
 #mail-date{position:absolute; right:15px; top:41px;}
 
-.m-d-label{position:absolute; right:72px; top:40px;}
+.m-d-label{position:absolute; right:100px; top:40px;}
 .e-l-p{height:65px; overflow:hidden;}
 
 #tableExpertCertificates {width: 100%; border: 2px solid #DFDEDE; overflow: none !important;}
