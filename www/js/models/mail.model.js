@@ -82,8 +82,8 @@ easyFinance.models.mail = function(){
         return _folders.trash;
     }
 
-    function sendMail(to, subject, text, callback){
-        $.post(SEND_MAIL_URL, {to: to, subject: subject, text: text}, function(data) {
+    function sendMail(receiverId, subject, body, callback){
+        $.post(SEND_MAIL_URL, {receiverId: receiverId, subject: subject, body: body}, function(data) {
             if (data.id)
                 _folders.outbox[data.id] = data;
 
@@ -92,8 +92,8 @@ easyFinance.models.mail = function(){
         }, 'json');
     }
 
-    function createDraft(to, subject, text, callback){
-        $.post(SAVE_DRAFT_URL, {to: to, subject: subject, text: text}, function(data) {
+    function createDraft(receiverId, subject, body, callback){
+        $.post(SAVE_DRAFT_URL, {receiverId: receiverId, subject: subject, body: body}, function(data) {
             if (data.id)
                 _folders.drafts[data.id] = data;
 
@@ -102,8 +102,8 @@ easyFinance.models.mail = function(){
         }, 'json');
     }
 
-    function editDraft(id, text, callback){
-        $.post(SAVE_DRAFT_URL, {id: id, text: text}, function(data) {
+    function editDraft(id, receiverId, body, callback){
+        $.post(SAVE_DRAFT_URL, {id: id, receiverId: receiverId, body: body}, function(data) {
             if (data.id)
                 _folders.drafts[data.id] = data;
 
@@ -112,8 +112,8 @@ easyFinance.models.mail = function(){
         }, 'json');
     }
 
-    function sendDraft(id, text, callback){
-        $.post(SEND_MAIL_URL, {id: id, text: text}, function(data) {
+    function sendDraft(id, receiverId, body, callback){
+        $.post(SEND_MAIL_URL, {draftSource: id, receiverId: receiverId, body: body}, function(data) {
             if (data.id){
                 delete _folders.drafts[data.id];
                 _folders.outbox[data.id] = data;

@@ -11,6 +11,8 @@ easyFinance.widgets.mail = function(){
     var _folder = null;
     var _model = null;
 
+    var _curMail = null;
+
     // private functions
     function _initDialogs() {
         /* Write New Message Popup Window */
@@ -195,6 +197,8 @@ easyFinance.widgets.mail = function(){
     }
 
     function _showMail(mail) {
+        _curMail = mail;
+
         var buttons = {};
 
         buttons["Закрыть"] = function() {
@@ -225,6 +229,7 @@ easyFinance.widgets.mail = function(){
             buttons["Сохранить изменения"] = function() {
                 _model.editDraft(
                     mail.id,
+                    mail.receiverId,
                     $("#mail-popup-read #mail-text-read").val(),
                     function(){
                         _showMails(_model.getFolderMails(_folder));
@@ -237,6 +242,7 @@ easyFinance.widgets.mail = function(){
             buttons["Отправить"] = function() {
                 _model.sendDraft(
                     mail.id,
+                    mail.receiverId,
                     $("#mail-popup-read #mail-text-read").val(),
                     function(){
                         _showMails(_model.getFolderMails(_folder));
@@ -263,10 +269,18 @@ easyFinance.widgets.mail = function(){
         
         $('#mail-popup-read #mail-date').text(mail.date);
         $("#mail-popup-read #mail-subject-read").text(mail.subject);
-        $("#mail-popup-read #mail-text-read").text(mail.body);//@todo html text
+        $("#mail-popup-read #mail-text-read").text(mail.body);
     }
 
     function _reply(){
+        _curMail = $.extend(true, {}, _curMail);
+
+        // swap receiver & sender
+        var s = _curMail.senderId;
+        var r = _curMail.receiverId;
+        _curMail.senderId = r;
+        _curMail.receiverId = s;
+
         $('#mail-popup').dialog('open');
         $('#mail-popup #mail-subject').val('Re: ' + $('#mail-subject-read').text()); //to == login???
         $('#mail-popup #mail-to').val($('#mail-from').text()); //to == login???
@@ -276,7 +290,7 @@ easyFinance.widgets.mail = function(){
 
     function _createDraft(){
         _model.createDraft(
-            $('#mail-popup #mail-to').val(),
+            _curMail.receiverId,
             $('#mail-popup #mail-subject').val(),
             $("#mail-popup #mail-text").val(),
             function () {
@@ -290,7 +304,7 @@ easyFinance.widgets.mail = function(){
 
     function _editDraft(){
         _model.editDraft(
-            $('#mail-popup #mail-to').val(),
+            _curMail.senderId,
             $('#mail-popup #mail-subject').val(),
             $("#mail-popup #mail-text").val(),
             function () {
@@ -303,8 +317,12 @@ easyFinance.widgets.mail = function(){
     }
 
     function _sendMail(){
+        var draftSource = null;
+        if (_curMail.folder == _model.FOLDER_DRAFTS)
+            draftSource = _curMail.id;
+
         _model.sendMail(
-            $('#mail-popup #mail-to').val(),
+            _curMail.receiverId,
             $('#mail-popup #mail-subject').val(),
             $("#mail-popup #mail-text").val(),
             function () {
