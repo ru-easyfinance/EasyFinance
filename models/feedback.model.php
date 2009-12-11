@@ -55,7 +55,7 @@ class Feedback_Model
                     ->setBody($responseBody, 'text/html');
                 Core::getInstance()->mailer->send($response);
             } else {
-                $body .=  '<br/>Письмо от Анонимного пользователя';
+                $body .= '<br/>' . $param['email'] . '<br/>Письмо от Анонимного пользователя';
             }
 
             $message = Swift_Message::newInstance()
