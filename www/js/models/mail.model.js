@@ -82,10 +82,16 @@ easyFinance.models.mail = function(){
         return _folders.trash;
     }
 
-    function sendMail(receiverId, subject, body, callback){
+    function sendMail(id, receiverId, subject, body, callback){
         $.post(SEND_MAIL_URL, {receiverId: receiverId, subject: subject, body: body}, function(data) {
-            if (data.id)
-                _folders.outbox[data.id] = data;
+            if (data.result) {
+                if (data.result.outbox) {
+                    _folders.outbox[data.result.outbox[0].id] = $.extend(true, {}, data.result.outbox[0]);
+                } else {
+                    delete _folders.drafts[id];
+                    _folders.outbox[data.result.outbox[0].id] = $.extend(true, {}, data.result.outbox[0]);
+                }
+            }
 
             if (typeof callback == 'function')
                 callback(data);

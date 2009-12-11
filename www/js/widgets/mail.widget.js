@@ -322,14 +322,22 @@ easyFinance.widgets.mail = function(){
             draftSource = _curMail.id;
 
         _model.sendMail(
+            _curMail.id,
             _curMail.receiverId,
             $('#mail-popup #mail-subject').val(),
             $("#mail-popup #mail-text").val(),
-            function () {
-                if (_folder == _model.FOLDER_OUTBOX)
-                    _showMails(_model.getFolderMails(_folder));
-                else
-                    $.jGrowl("Письмо отправлено", {theme: 'green'});
+            function (data) {
+                if (data.result) {
+                    _curMail.folder = _model.FOLDER_OUTBOX;
+
+                    if (_folder == _model.FOLDER_OUTBOX)
+                        _showMails(_model.getFolderMails(_folder));
+                    else
+                        $.jGrowl(data.result.text, {theme: 'green'});
+                } else {
+                    $.jGrowl(data.error.text, {theme: 'red'});
+                }
+
             }
         );
     }
