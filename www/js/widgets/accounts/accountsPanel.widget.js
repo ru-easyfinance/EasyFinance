@@ -36,10 +36,18 @@ easyFinance.widgets.accountsPanel = function(){
        })
 
        $('.accounts li a').live('click',function(){
-           document.location='/operation/#account='+$(this).find('div.id').attr('value').replace("edit", "");
+           var id = $(this).find('div.id').attr('value').replace("edit", "");
+           document.location='/operation/#account='+id;
            $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
            //временный хак до полного перехода на события
-           //hash_api('#edit'+$(this).find('div.id').attr('value'));
+
+            if (easyFinance.widgets.operationEdit)
+                easyFinance.widgets.operationEdit.setAccount(id);
+
+            if (easyFinance.widgets.operationsJournal){
+                easyFinance.widgets.operationsJournal.setAccount(id);
+                easyFinance.widgets.operationsJournal.loadJournal();
+            }
        })
 
         return this;

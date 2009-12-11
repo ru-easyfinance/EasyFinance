@@ -26,6 +26,15 @@ function clearForm() {
 $(document).ready(function() {
     // загружаем журнал транзакций
     // по умолчанию показываются операции по всем счетам
-    easyFinance.widgets.operationsJournal.setAccount('');
+
+    // обрабатываем хэш - по какому счёту выводить операции
+    var account = window.location.hash;
+    if (account.indexOf("#account") != -1) {
+        account = account.replace("#account=", "");
+    } else {
+        account = '';
+    }
+    
+    easyFinance.widgets.operationsJournal.setAccount(account);
     easyFinance.widgets.operationsJournal.loadJournal();
 });

@@ -469,13 +469,18 @@ easyFinance.widgets.operationsJournal = function(){
 
         // настраиваем диалоги фильтров
         _initFilters();
-        
+
         return this;
     }
 
     function setAccount(account) {
         _account = account;
-//        _accountName = _modelAccounts.getAccountNameById(account);
+
+        if (_modelAccounts)
+            _accountName = _modelAccounts.getAccountNameById(account);
+
+        if (easyFinance.widgets.operationEdit)
+            easyFinance.widgets.operationEdit.setAccount(account);
     }
 
     function setCategory(cat) {

@@ -602,6 +602,11 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_amount').val(_oldSum);
     }
 
+    function setAccount(id){
+        $('#op_account').val(id);
+        $.sexyCombo.changeOptions("#op_account", id);
+    }
+
     /**
      * Функция заполняет форму данными
      * @param data данные для заполнения
@@ -690,6 +695,7 @@ easyFinance.widgets.operationEdit = function(){
         init: init,
         setCategory: setCategory,
         setSum: setSum,
+        setAccount: setAccount,
         fillForm: fillForm
     };
 }(); // execute anonymous function to immediatly return object
