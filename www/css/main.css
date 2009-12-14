@@ -978,6 +978,9 @@ div.cont ul li.del a { width: 11px; }
 div.cont ul li.add { margin-right: 0; }
 div.cont ul li.add a { width: 12px; }
 
+#auth .loginError { margin-left: 125px; margin-bottom: 10px; font-weight: bold; color: red; }
+
+/*
 #popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
 #popupadd_login .f_field { display:block;height:24px;margin:0 0 8px -95px;position:relative; }
 #popupadd_login .inlinebottom {  left:-158px;position:relative;width:100px; }
@@ -998,7 +1001,7 @@ div.cont ul li.add a { width: 12px; }
 #popupadd_login div.w_dialog div.w_d_head { background:transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;height:20px;position:relative;width:342px; }
 #popupadd_login  div.w_d_foot { background:transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:342px; }
 #popupadd_login .close { background:transparent url(/img/i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;left:246px;top:-7px;width:25px; }
-
+*/
 
 .operation_list table td div.cont ul,
 .categories table td div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
