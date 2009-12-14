@@ -34,7 +34,7 @@ easyFinance.widgets.accountsJournal = function(){
                 str +=  '<tr style="line-height:19px;"><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
                             account.name + '</td>';
                 str +=  '<tr style="line-height:19px;"><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
-                            account.description + '</td>';
+                            account.descr + '</td>';
                 str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
                     formatCurrency(account.total_balance) + ' ' +account.cur + '</td>';
                 if (_accounts[id]["reserve"] != 0){
