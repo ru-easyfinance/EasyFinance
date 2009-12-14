@@ -174,13 +174,13 @@ class User
 	
 	if (count($this->props) == 0)
 	{
-		trigger_error('Не верный логин или пароль!', E_USER_WARNING);
+		Core::getInstance()->tpl->assign( 'loginErrorText', 'Не верный логин или пароль!' );
 		$this->destroy();
 		return false;
 	}
 	elseif ($this->props['user_active'] == 0)
 	{
-		trigger_error('Ваш профиль был заблокирован!', E_USER_WARNING);
+        Core::getInstance()->tpl->assign( 'loginErrorText', 'Ваш профиль был заблокирован!' );
 		$this->destroy();
 		return false;
 	}
