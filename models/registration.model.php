@@ -73,7 +73,12 @@ class Registration_Model
         if (!empty($cell)) {
             $error_text['login'] = "Пользователь с таким логином уже существует!";
         }
-
+        $cell = $db->selectCell("SELECT id FROM users WHERE user_mail=?", $register['mail']);
+        if (!empty($cell))
+        {
+            $error_text['login'] = "Пользователь с данным адресом электронной почты уже зарегистрирован!";
+        }
+	
         // Если нет ошибок, создаём пользователя
         if (empty($error_text)) {
             
