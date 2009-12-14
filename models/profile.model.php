@@ -29,7 +29,7 @@ class Profile_Model
     }
 
     private function ident($pass){
-        $sql = (int)(sha1($pass) == $_SESSION['user']['user_pass']) ;
+        $sql = /*(int)*/(sha1($pass) == $_SESSION['user']['user_pass']) ;
         return $sql;
     }
 
@@ -56,11 +56,19 @@ class Profile_Model
         }*/
         switch($mod){
             case 'save':
-                $ident = $this->ident($prop['newpass']);
+                $ident = $this->ident($prop['user_pass']);
                 $prop['user_pass'] = $prop['newpass'] ?
                                     sha1($prop['newpass']) :
                                     sha1($prop['user_pass']);
                 unset($prop['newpass']);
+
+                if ( $prop['guide'] != 1 ){
+                    setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
+                }else{
+                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
+                }
+                unset($prop['guide']);
+
                 $ret['profile'] = $this->save('users', $prop, $ident);
 
 //                if ( $prop['help'] == 1 ){
@@ -69,11 +77,7 @@ class Profile_Model
 //                    setCookie("help", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
 //                }
 
-                if ( $prop['guide'] != 1 ){
-                     setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
-                }else{
-                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
-                }
+                
                 break;
             case 'load':
                 $ret['profile']['login']=$_SESSION['user']['user_login'];
