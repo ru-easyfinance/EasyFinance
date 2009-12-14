@@ -206,7 +206,6 @@ easyFinance.widgets.mail = function(){
     function _openMail() {
         // read mail by default
         var $row = $(this).closest('tr');
-        $row.removeClass('unread');
         var id = $row.attr('id').split("_", 2)[1];
 
         _model.loadMail(id, _showMail);
@@ -288,6 +287,12 @@ easyFinance.widgets.mail = function(){
         $('#mail-popup-read #mail-date').text(mail.date);
         $("#mail-popup-read #mail-subject-read").text(mail.subject);
         $("#mail-popup-read #mail-text-read").text(mail.body);
+
+        if (_folder == _model.FOLDER_INBOX) {
+            // mark as read
+            var $row = _$table.find('#mail_' + _curMail.id);
+            $row.removeClass('unread');
+        }
     }
 
     function _reply(){
