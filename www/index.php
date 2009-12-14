@@ -34,3 +34,6 @@ switch ( $_SERVER['SERVER_NAME'].'/' ) {
         Core::getInstance()->tpl->display("index.html");
         break;
 }
+
+// Применение модификаций\удалений моделей
+_Core_ObjectWatcher::getInstance()->performOperations();
