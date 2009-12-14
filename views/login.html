@@ -5,9 +5,9 @@
     <h2>Вход в систему</h2>
 
 {if $smarty.const.IS_DEMO == false}
-    <form id="formRegister" action="https://{$smarty.const.URL_ROOT}login/" onsubmit="return false;">
+    <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
 {else}
-    <form action="http://{$smarty.const.URL_ROOT}login/" onsubmit="return false;">
+    <form action="http://{$smarty.const.URL_ROOT}login/" method="post">
 {/if}
         <table cellpadding="0" cellspacing="0">
         <tr>
