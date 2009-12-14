@@ -181,7 +181,7 @@ class Accounts_Model
      * Возвращаем сформированый список полей
      * @return array
      */
-    public function formatFields()
+    public function formatFields($accid)
     {
     	$i=0;
         $data = array();
@@ -189,6 +189,14 @@ class Accounts_Model
 	{
             if ($key['field_visual_name']!="Общий баланс") {
                 $data[$i]['display'] = $key['field_visual_name'];
+                //хак чтобы был виден начальный баланс
+                if ($key['field_visual_name']=="Начальный баланс")
+                    {
+                        $model = New Operation_Model();
+                        $key['field_default_value'] = $model->getFirstOperation($accid);
+                    }
+                //else
+                //
                 $data[$i]['value'] = $this->formField($key, "", "");
                 $i++;
             }

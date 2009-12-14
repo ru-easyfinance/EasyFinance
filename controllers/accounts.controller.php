@@ -70,7 +70,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         $id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
         $accid = (int)$_POST['accid'];
         $this->model->newEmptyBill($id);
-        $this->tpl->assign("fields", $this->model->formatFields());
+        $this->tpl->assign("fields", $this->model->formatFields($accid));
         $this->tpl->assign("type_id", $id);
         $c_arr=Core::getInstance()->user->getUserCurrency();
         $arr = array();
