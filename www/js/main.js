@@ -863,13 +863,13 @@ $('.tags_list .add').live('click', function(){
 	/*
 	*Открытие окна для авторизации. 
 	*
-	*@todo Заменить на адекватную авторизацию в отдельной странице.
 	*/
-	
+	/*
         if (pathName=='/login/' && window.location.protocol=='https:') {
             $('#login').show();
         }
-
+        */
+        /*
         $('#show_login').click(function() {
             if (window.location.host.toString().substr(0, 5) == "demo.") {
                 window.location.href='http://' + window.location.host + '/login/';
@@ -886,6 +886,7 @@ $('.tags_list .add').live('click', function(){
         $('#login .close').click(function(){
             $('#login').hide();
         });
+        */
     //}
     //});
 
