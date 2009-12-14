@@ -178,7 +178,6 @@ easyFinance.widgets.mail = function(){
             _$table.find('#divAddressHeader').text('Автор');
             strIcon = 'inbox';
         }
-            
 
         _$table.find('#checkAllMails').attr('checked', false);
         _$table.find('tr:gt(0)').remove();
@@ -189,6 +188,9 @@ easyFinance.widgets.mail = function(){
         {
             if (mails[key]){
                 var addr = (_folder == _model.FOLDER_OUTBOX || _folder == _model.FOLDER_DRAFTS) ? mails[key]['receiverName'] : mails[key]['senderName'];
+
+                if (_folder == _model.FOLDER_TRASH)
+                    strIcon = mails[key].folder;
 
                 str = '<tr class="item ' + ((mails[key]['readed']==true || _folder ==_model.FOLDER_DRAFTS) ? '': 'unread') + '" id="mail_'+key+'">'
                     +'<td><input class="checkMail" type="checkbox" value=""/></td>'
