@@ -88,6 +88,8 @@ easyFinance.widgets.mail = function(){
             $('#mail-popup #mail-text').val('');
 
             $('#mail-popup').dialog('open');
+
+            return false;
         });
 
         $('#mails-delete').click(function(){
@@ -105,6 +107,8 @@ easyFinance.widgets.mail = function(){
                     }
                 });
             }
+
+            return false;
         })
 
         $('#mails-restore').click(function(){
@@ -122,6 +126,8 @@ easyFinance.widgets.mail = function(){
                     }
                 });
             }
+
+            return false;
         })
 
         $('#mails-reload').click(_reloadInbox);
@@ -149,6 +155,8 @@ easyFinance.widgets.mail = function(){
     function _reloadInbox() {
         // @todo: reload only inbox, not all mails
         _model.load(_showMails);
+
+        return false;
     }
 
     function _showMails(mails){

@@ -142,12 +142,12 @@ easyFinance.models.mail = function(){
         if(_folders.inbox[id]) {
             readed = _folders.inbox[id].readed;
             mail = _folders.inbox[id];
-        //} else if(_folders.outbox[id]) {
+        } else if(_folders.outbox[id]) {
         //    readed = _folders.outbox[id].readed;
-        //    mail = _folders.outbox[id];
-        //} else if(_folders.drafts[id]) {
+            mail = _folders.outbox[id];
+        } else if(_folders.drafts[id]) {
         //    readed = _folders.drafts[id].readed;
-        //    mail = _folders.drafts[id];
+            mail = _folders.drafts[id];
         } else if(_folders.trash[id]) {
             readed = _folders.trash[id].readed;
             mail = _folders.trash[id];
