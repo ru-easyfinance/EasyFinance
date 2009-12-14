@@ -96,8 +96,13 @@ easyFinance.widgets.mail = function(){
             if (ids.length == 0) {
                 alert('Отметьте галочками письма для удаления!');
             } else {
-                _model.trashMailsById(ids, function(){
-                    _showMails(_model.getFolderMails(_folder));
+                _model.trashMailsById(ids, function(data){
+                    if (data.result) {
+                        $.jGrowl(data.result.text, {theme: 'green'});
+                        _showMails(_model.getFolderMails(_folder));
+                    } else {
+                        $.jGrowl(data.error.text, {theme: 'red'});
+                    }
                 });
             }
         })
@@ -108,8 +113,13 @@ easyFinance.widgets.mail = function(){
             if (ids.length == 0) {
                 alert('Отметьте галочками письма для восстановления!');
             } else {
-                _model.restoreMailsById(ids, function(){
-                    _showMails(_model.getFolderMails(_folder));
+                _model.restoreMailsById(ids, function(data){
+                    if (data.result) {
+                        $.jGrowl(data.result.text, {theme: 'green'});
+                        _showMails(_model.getFolderMails(_folder));
+                    } else {
+                        $.jGrowl(data.error.text, {theme: 'red'});
+                    }
                 });
             }
         })

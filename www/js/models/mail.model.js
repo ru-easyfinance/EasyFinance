@@ -171,10 +171,14 @@ easyFinance.models.mail = function(){
     }
 
     function trashMailsById(ids, callback) {
+        var _ids = $.extend(true, {}, ids);
+
         $.post(TRASH_MAIL_URL, {ids: ids.join(',')}, function(data) {
-            for(var id in data) {
+            if (data.result) {
                 // move to trash on success
-                if (data[id]) {
+                for(var key in _ids) {
+                    var id = _ids[key];
+                    
                     if(_folders.inbox[id]) {
                         _folders[FOLDER_TRASH][id] = _folders.inbox[id];
                         delete _folders.inbox[id];
@@ -194,10 +198,14 @@ easyFinance.models.mail = function(){
     }
 
     function restoreMailsById(ids, callback) {
+        var _ids = $.extend(true, {}, ids);
+
         $.post(RESTORE_MAIL_URL, {ids: ids.join(',')}, function(data) {
-            for(var id in data) {
+            if (data.result) {
                 // move from trash on success
-                if (data[id]) {
+                for(var key in _ids) {
+                    var id = _ids[key];
+
                     if(_folders.trash[id]) {
                         if (_folders.trash[id].folder == FOLDER_INBOX) {
                             _folders[FOLDER_INBOX][id] = _folders.trash[id];
