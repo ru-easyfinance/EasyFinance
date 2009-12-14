@@ -3,6 +3,8 @@
 <div class="cct"></div>
 <div  id="auth" class="formRegister" >
     <h2>Вход в систему</h2>
+    
+    <div style="margin-left: 125px; margin-bottom: 10px;">{$loginErrorText}</div>
 
 {if $smarty.const.IS_DEMO == false}
     <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
