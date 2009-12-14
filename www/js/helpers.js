@@ -16,7 +16,6 @@ $(document).ready(function() {
             radius: 2,
             color: '#666666'
         },
-        tip: 'bottomRight',
         style: {
             name: 'grey' // Inherit from preset style
         }
