@@ -136,24 +136,24 @@ easyFinance.models.mail = function(){
      */
     function loadMail(id, callback) {
         var mail = null;
-        var unread = false;
+        var readed = true;
 
         // mark as read
         if(_folders.inbox[id]) {
-            unread = _folders.inbox[id].unread;
+            readed = _folders.inbox[id].readed;
             mail = _folders.inbox[id];
-        } else if(_folders.outbox[id]) {
-            unread = _folders.outbox[id].unread;
-            mail = _folders.outbox[id];
-        } else if(_folders.drafts[id]) {
-            unread = _folders.drafts[id].unread;
-            mail = _folders.drafts[id];
+        //} else if(_folders.outbox[id]) {
+        //    readed = _folders.outbox[id].readed;
+        //    mail = _folders.outbox[id];
+        //} else if(_folders.drafts[id]) {
+        //    readed = _folders.drafts[id].readed;
+        //    mail = _folders.drafts[id];
         } else if(_folders.trash[id]) {
-            unread = _folders.trash[id].unread;
+            readed = _folders.trash[id].readed;
             mail = _folders.trash[id];
         }
 
-        if (unread == false) {
+        if (readed == true) {
             if (typeof callback == 'function')
                 callback(mail);
 
@@ -163,7 +163,8 @@ easyFinance.models.mail = function(){
         // mark as read on server
         $.post(MAIL_URL, {id: id}, function(data) {
             // mark as read
-            mail.unread = false;
+            if (_folders.inbox[mail.id])
+                mail.readed = true;
 
             if (typeof callback == 'function')
                 callback(mail);

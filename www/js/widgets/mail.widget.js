@@ -182,7 +182,7 @@ easyFinance.widgets.mail = function(){
             if (mails[key]){
                 var addr = (_folder == _model.FOLDER_OUTBOX || _folder == _model.FOLDER_DRAFTS) ? mails[key]['receiverName'] : mails[key]['senderName'];
 
-                str = '<tr class="item ' + (mails[key]['unread']==true?'unread':'') + '" id="mail_'+key+'">'
+                str = '<tr class="item ' + (mails[key]['readed']==true?'':'unread') + '" id="mail_'+key+'">'
                     +'<td><input class="checkMail" type="checkbox" value=""/></td>'
                     +'<td><img width="16" height="16" src="/img/i/mail_'+strIcon+'.png"/></td>'
                     +'<td class="mail-title"><a href="#">'+mails[key]['subject']+'</a></td>'
