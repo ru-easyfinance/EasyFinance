@@ -149,7 +149,7 @@ easyFinance.widgets.budget = function(data){
 
                 amount =  parseFloat(isNaN(temp.totalAmount)?0:temp.totalAmount) + parseFloat((budgets[catId]?Math.abs(budgets[catId].amount):0));
                 money = parseFloat(isNaN(temp.totalMoney)?0:temp.totalMoney) + parseFloat((budgets[catId]?Math.abs(budgets[catId].money):0));
-                //if (amount > 0){
+                if (amount > 0 || money !=0){
                     ////////// coompil html
                     var drainprc = Math.abs(Math.round(money*100/amount))
                     
@@ -190,7 +190,7 @@ easyFinance.widgets.budget = function(data){
                             </tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
-                
+                }
             }
         }
         if (isNaN(totalAmount)){totalAmount = 0}
