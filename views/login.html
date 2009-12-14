@@ -1,10 +1,10 @@
 {* $Id: registration.html 1578 2009-12-03 09:25:28Z ukko $ *}
 <div class="ramka2">
 <div class="cct"></div>
-<div  id="auth" class="formRegister" >
+<div id="auth" class="formRegister" >
     <h2>Вход в систему</h2>
     
-    <div style="margin-left: 125px; margin-bottom: 10px;">{$loginErrorText}</div>
+    <div class="loginError">{$loginErrorText}</div>
 
 {if $smarty.const.IS_DEMO == false}
     <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
