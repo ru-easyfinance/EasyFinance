@@ -66,7 +66,12 @@ easyFinance.widgets.operationsJournal = function(){
                 }
             }
 
-            curMoney = parseFloat(data[v].money * res.currency[data[v].account_currency_id].cost);
+            // не учитываем в балансе и итогах операции перевода
+            if (data[v].transfer > 0)
+                curMoney = 0;
+            else
+                curMoney = parseFloat(data[v].money * res.currency[data[v].account_currency_id].cost);
+
             pageTotal = pageTotal + curMoney;
 
             tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id 
