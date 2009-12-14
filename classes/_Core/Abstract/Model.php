@@ -33,7 +33,7 @@ abstract class _Core_Abstract_Model
 		{
 			$this->durty = true;
 			
-			_Core_ObjectWatcher::addDirty( $self );
+			_Core_ObjectWatcher::addDirty( $this );
 			
 			$this->fields[ $variable ] = $value;
 		}
