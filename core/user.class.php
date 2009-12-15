@@ -414,6 +414,8 @@ class User
             foreach ($accounts as $key=>$val) {
                 //$val['total_sum'] += $accounts2[$key]['total_sum']+$accounts3[$key]['total_sum'];
                 $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+                if ( $val['total_sum'] == null )
+                    $val['total_sum']=0;
                 $this->user_account[$val['account_id']] = $val;
             }
 	}
