@@ -53,7 +53,7 @@ class User
     private $user_targets = array();
 
     /**
-     * Массив с событиями 
+     * Массив с событиями
      * @var array mixed
      */
     private $user_events = array();
@@ -81,7 +81,7 @@ class User
              //Если есть кук с авторизационными данными, то пробуем авторизироваться
             if (isset($_COOKIE[COOKIE_NAME]))
             {
-            	
+
                 if (isset($_COOKIE['PHPSESSID'])) {
                     if (!isset($_SESSION)) {
                         session_start();
@@ -123,20 +123,20 @@ class User
     public function getType()
     {
     	$userType = null;
-    	
+
     	if( sizeof($this->props) && array_key_exists('user_type', $this->props) )
     	{
     		$userType = (int)$this->props['user_type'];
     	}
-    	
+
     	return $userType;
     }
-    
+
     public function getName()
     {
     	return $this->getUserProps( 'user_name' );
     }
-    
+
     /**
      * Иниализирует пользователя, достаёт из базы некоторые его свойства
      * @param string $login
@@ -144,25 +144,25 @@ class User
      * @return bool
      */
     public function initUser($login, $pass)
-    {    
+    {
 	if (is_null(Core::getInstance()->db))
 	{
 		Core::getInstance()->initDB();
 	}
-	
+
 	$this->db = Core::getInstance()->db;
-	
+
 	// Если сохранённые в сессии данные о пользователе не совпадают с текущими
-	if ( 
+	if (
 		( isset($_SESSION['REMOTE_ADDR']) && isset($_SESSION['HTTP_USER_AGENT']) )
-		&& ( $_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR'] 
-		|| $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT'] ) 
+		&& ( $_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR']
+		|| $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT'] )
 	)
 	{
 		// Уничтожаем пользователя
 		$this->destroy();
 	}
-	
+
 	//@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
 	$sql = "SELECT id, user_name, user_login, user_pass, user_mail,
 		DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
@@ -171,7 +171,7 @@ class User
 		WHERE user_login  = ? AND user_pass = ? AND user_new  = 0";
 
 	$this->props = $this->db->selectRow($sql, $login, $pass);
-	
+
 	if (count($this->props) == 0)
 	{
 		Core::getInstance()->tpl->assign( 'loginErrorText', 'Не верный логин или пароль!' );
@@ -184,31 +184,31 @@ class User
 		$this->destroy();
 		return false;
 	}
-	
+
 	// Если пользователь - эксперт: подгружаем дополнительные поля
 	if($this->getType() === 1)
 	{
 		$sql = 'SELECT `user_info_short`, `user_info_full`, `user_img`, `user_img_thumb` FROM `user_fields_expert` WHERE `user_id` = ?';
-		
+
 		$expertProps = $this->db->selectRow( $sql, $this->getId() );
-		
+
 		// Если нет записи в таблице дополнительных свойств
 		if( !sizeof( $expertProps) )
 		{
 			// Создаём её
 			$this->db->query( 'INSERT into `user_fields_expert` (`user_id`) VALUES (?)', $this->getId() );
-			
+
 			// И делаем выборку заново
 			$expertProps = $this->db->selectRow( $sql, $this->getId() );
 		}
-		
+
 		$this->props += $expertProps;
 	}
-        
+
 	$_SESSION['user']            = $this->props;
 	$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 	$_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
-	
+
 	// Если профиль пользователя
 	if ($this->getType() === 0)
 	{
@@ -219,7 +219,7 @@ class User
 	{
 		$_SESSION['REQUEST_URI']	= '/expert/';
 	}
-	
+
 	return $this->save();
     }
 
@@ -229,7 +229,7 @@ class User
      */
     public function save ()
     {
-        
+
         $_SESSION['user']          = $this->props;
         $_SESSION['user_category'] = $this->user_category;
         $_SESSION['user_account']  = $this->user_account;
@@ -242,7 +242,7 @@ class User
 
     /**
      * Вызывает инициализацию пользовательских категорий, счетов, денег
-     * @return bool 
+     * @return bool
      */
     public function init()
     {
@@ -384,78 +384,39 @@ class User
      */
 	public function initUserAccounts()
 	{
+            /*$sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+                FROM accounts a
+                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+                WHERE a.user_id=? ORDER BY o_count DESC";*/
+            $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+                FROM accounts a
+                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+                WHERE a.user_id=? ORDER BY o_count DESC";
+            $accounts = $this->db->select($sql, $this->getId());
 
-            $sql='SELECT
-                       account_id, accounts.account_type_id, cur_name, cur_id,
-                       account_name, account_description
-                    FROM
-                        accounts
-                    LEFT JOIN
-                        currency
-                    ON
-                        (account_currency_id=cur_id)
-                    WHERE
-                        user_id=?';
-            $ret = $this->db->select($sql,$this->user_id);
-            $id = array();
-            $type = array();
-            $cur = array();
-            $cur_id = array();
-            $type_name = array();
-            $acc_name = array();
-            $acc_descr = array();
-            $acc_first_balance = array();
-            $mod = new Operation_Model();
-            foreach ($ret as $key=>$val)
-            {
-                $id[]=$val['account_id'];
-                $type[]=$val['account_type_id'];
-                $cur[]=$val['cur_name'];
-                $cur_id[]=$val['cur_id'];
-                $type_name[]=$val['account_type_name'];
-                $acc_name[]=$val['account_name'];
-                $acc_descr[]=$val['account_description'];
-                $acc_first_balance[]=$mod->getFirstOperation($val['account_id']);
+            /*$sql = "SELECT (SELECT SUM(-o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer != 0 AND o.account_id=a.account_id) AS total_sum
+            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=? ORDER BY o_count DESC";
+            $accounts2 = $this->db->select($sql, $this->getId());
+
+            $sql = "SELECT (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer = a.account_id) AS total_sum
+            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=? ORDER BY o_count DESC";
+            $accounts3 = $this->db->select($sql, $this->getId());*/
+
+            $this->user_account= array();
+            foreach ($accounts as $key=>$val) {
+                //$val['total_sum'] += $accounts2[$key]['total_sum']+$accounts3[$key]['total_sum'];
+                $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+                $this->user_account[$val['account_id']] = $val;
             }
-
-            foreach ($id as $key=>$val) {
-                $res[$val]['type']=$type[$key];
-                $res[$val]['cur']=$cur[$key];
-                $res[$val]['id']=$id[$key];
-                $res[$val]['name']=$acc_name[$key];
-                $res[$val]['description']=$acc_descr[$key];
-                $res[$val]['starter_balance']=$acc_first_balance[$key];
-
-                $reservsqlquery = "SELECT sum(money) AS s
-                    FROM target_bill tb
-                    LEFT JOIN target t ON t.id=tb.target_id
-                    WHERE tb.bill_id = ? AND t.done=0";
-                $result = $this->db->select($reservsqlquery,$id[$key]);
-
-                if ( $result[0]['s'] != null ) {
-                    $res[$val]['reserve']=$result[0]['s'];
-                } else {
-                    $res[$val]['reserve']=0;
-                }
-
-
-                $res[$val]['cat'] = $type_name[$key];
-                $total=(float)($mod->getTotalSum($val));
-                $res[$val]['total_balance'] = $total;
-                $ucur  = Core::getInstance()->user->getUserCurrency();
-                $cur_k = array_keys($ucur);
-
-                $res[$val]['def_cur'] = round(
-                    $res[$val]['total_balance']* $ucur[$cur_id[$key]]['value']/$ucur[$cur_k[0]]['value'],
-                    2
-                    );
-
-                $res[$val]['special'] = array(0,0,0);//todo tz
-
-            }
-
-            return $res;
-        }
+	}
 
     /**
      * Возвращает все теги пользователя
@@ -483,7 +444,7 @@ class User
             t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;", $this->getId(), 0, 20);
-        
+
         $this->user_targets['pop_targets'] = $this->db->select("SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS
             cl FROM target t WHERE t.visible=1 GROUP BY t.title,
             t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", 0, 10);
@@ -495,7 +456,7 @@ class User
     public function initUserEvents()
     {
         $array = $this->db->select("SELECT c.id, c.chain, c.title, DATE_FORMAT(c.near_date,'%d.%m.%Y') as date,
-            c.comment, c.event, c.amount, c.category, DATEDIFF(NOW(),c.near_date) AS diff, IFNULL(p.account,0) AS account, 
+            c.comment, c.event, c.amount, c.category, DATEDIFF(NOW(),c.near_date) AS diff, IFNULL(p.account,0) AS account,
             IFNULL(p.drain,0) AS drain
             FROM calendar c
             LEFT JOIN periodic p ON c.chain = p.id
@@ -505,7 +466,7 @@ class User
             $this->user_events[$var['id']] = $var;
         }
     }
-    
+
     /**
      * Возвращает бюджет пользователя на текущий месяц
      */
@@ -550,7 +511,7 @@ class User
     function getUserTags($cloud = false)
     {
     	$user_tags = array();
-    	
+
 	if ($cloud)
 	{
 		$user_tags = $this->user_tags;
@@ -561,10 +522,10 @@ class User
             	{
 			$user_tags[$v['name']] = $v['cnt'];
 		}
-		
+
 		$user_tags = array_keys($user_tags);
 	}
-	
+
 	return $user_tags;
     }
 
