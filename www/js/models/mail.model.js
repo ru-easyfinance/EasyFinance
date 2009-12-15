@@ -85,12 +85,8 @@ easyFinance.models.mail = function(){
     function sendMail(id, receiverId, subject, body, callback){
         $.post(SEND_MAIL_URL, {receiverId: receiverId, subject: subject, body: body}, function(data) {
             if (data.result) {
-                if (data.result.outbox) {
-                    _folders.outbox[data.result.outbox[0].id] = $.extend(true, {}, data.result.outbox[0]);
-                } else {
-                    delete _folders.drafts[id];
-                    _folders.outbox[data.result.outbox[0].id] = $.extend(true, {}, data.result.outbox[0]);
-                }
+                _folders.outbox[data.result.outbox.id] = $.extend(true, {}, data.result.outbox);
+                delete _folders.drafts[id];
             }
 
             if (typeof callback == 'function')
@@ -100,9 +96,10 @@ easyFinance.models.mail = function(){
 
     function createDraft(receiverId, subject, body, callback){
         $.post(SAVE_DRAFT_URL, {receiverId: receiverId, subject: subject, body: body}, function(data) {
-            if (data.id)
-                _folders.drafts[data.id] = data;
-
+            if (data.result) {
+                _folders.drafts[data.result.drafts.id] = $.extend(true, {}, data.result.drafts);
+            }
+            
             if (typeof callback == 'function')
                 callback(data);
         }, 'json');
@@ -118,11 +115,13 @@ easyFinance.models.mail = function(){
         }, 'json');
     }
 
-    function sendDraft(id, receiverId, body, callback){
-        $.post(SEND_MAIL_URL, {draftSource: id, receiverId: receiverId, body: body}, function(data) {
-            if (data.id){
-                delete _folders.drafts[data.id];
-                _folders.outbox[data.id] = data;
+    function sendDraft(id, receiverId, subject, body, callback){
+        var _id = id;
+
+        $.post(SEND_MAIL_URL, {draftSource: id, receiverId: receiverId, subject: subject, body: body}, function(data) {
+            if (data.result){
+                delete _folders.drafts[_id];
+                _folders.outbox[data.result.outbox.id] = $.extend(true, {}, data.result.outbox);
             }
 
             if (typeof callback == 'function')

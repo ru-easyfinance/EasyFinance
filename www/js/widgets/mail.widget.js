@@ -262,6 +262,7 @@ easyFinance.widgets.mail = function(){
                 _model.sendDraft(
                     mail.id,
                     mail.receiverId,
+                    mail.subject,
                     $("#mail-popup-read #mail-text-read").val(),
                     function(){
                         _showMails(_model.getFolderMails(_folder));
@@ -318,11 +319,15 @@ easyFinance.widgets.mail = function(){
             _curMail.receiverId,
             $('#mail-popup #mail-subject').val(),
             $("#mail-popup #mail-text").val(),
-            function () {
-                if (_folder == _model.FOLDER_DRAFTS)
-                    _showMails(_model.getFolderMails(_folder));
-                else
-                    $.jGrowl("Черновик сохранён", {theme: 'green'});
+            function (data) {
+                if (data.result) {
+                    $.jGrowl(data.result.text, {theme: 'green'});
+
+                    if (_folder == _model.FOLDER_DRAFTS)
+                        _showMails(_model.getFolderMails(_folder));
+                } else {
+                    $.jGrowl(data.error.text, {theme: 'red'});
+                }
             }
         );
     }
