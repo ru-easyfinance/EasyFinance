@@ -124,7 +124,9 @@
             {/if}
 -->
             <div id="header">
-            {if  $smarty.session.user.id > 0}
+            {if $smarty.const.IS_DEMO == true }
+            	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT_MAIN`"}
+            {elseif $smarty.session.user.id > 0}
             	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`info"}
             {elseif $smarty.server.REQUEST_URI != "/"}
             	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`"}
