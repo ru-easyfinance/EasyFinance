@@ -46,10 +46,13 @@ easyFinance.widgets.accountsJournal = function(){
                 str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
                     formatCurrency(account.def_cur) + ' '+d_cur+'</td>';
 
+                // @todo: показывать % годовых и т.п.
+                /*
                 for(var key in spec)
                 {
                     str +='<tr style="line-height:19px;">'+spec[key]+'<td /><td>'+account.special[key]+'</td></tr>'
                 }
+                */
 
                 str += '<table>';
                 _bigTip($(this).find('.total_balance'), str);
