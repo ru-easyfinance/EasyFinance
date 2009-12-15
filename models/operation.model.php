@@ -659,6 +659,13 @@ class Operation_Model {
         return $first[0]['money'];
     }
 
+    function getComment($account_id=0)
+    {
+        $sql = "SELECT account_description FROM accounts WHERE user_id=? AND account_id=?";
+        $com = $this->db->query($sql, $this->user->getId(), $account_id);
+        return $com[0]['account_description'];
+    }
+
     /**
      *
      */
