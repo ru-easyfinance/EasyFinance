@@ -146,12 +146,19 @@ easyFinance.widgets.accountsPanel = function(){
             return false;
         });
         //загружает состояние из
-        var accountsPanel = $.cookie('accountsPanel_stated') || '';
-        $('div.listing dl.bill_list dt:visible').each(function(){
-            if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
-                $(this).click()
-        })
-
+         //загружает состояние из
+        var accountsPanel = $.cookie('accountsPanel_stated');
+        if (accountsPanel && accountsPanel != ''){
+            $('div.listing dl.bill_list dt:visible').each(function(){
+                if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
+                    $(this).click()
+            })
+        }else{
+            $('div.listing dl.bill_list dt:visible').each(function(){
+                $(this).click();
+            })
+        }
+        
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
