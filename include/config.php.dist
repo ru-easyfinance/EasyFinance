@@ -28,7 +28,7 @@ define('URL_ROOT',		IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 
 define('DEBUG',			${project.debug} );
 define('DEFAULT_MODULE',	'welcome');
-define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback');
+define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore');
 
 //COOKIE
 define('COOKIE_NAME',           "${project.cookie.name}" );
