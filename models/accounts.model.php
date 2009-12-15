@@ -280,7 +280,7 @@ class Accounts_Model
         $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
         $drain = 0;
         if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9)){
-            $data['starter_balance'] = '-'.$data['starter_balance'];
+            $data['starter_balance'] = '-'.abs($data['starter_balance']);
             $drain=1;
         }
         
