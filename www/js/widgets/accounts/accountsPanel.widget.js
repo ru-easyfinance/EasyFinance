@@ -142,7 +142,8 @@ easyFinance.widgets.accountsPanel = function(){
             $('div.listing dl.bill_list dd:visible').each(function(){
                 accountsPanel += $(this).attr('id');
             })
-            $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : '1'});
+            var isSecure = window.location.protocol == 'https'? 1:0
+            $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : isSecure});
             return false;
         });
         //загружает состояние из
