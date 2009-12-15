@@ -67,7 +67,7 @@ $(document).ready(function() {
                             mail: $('#mail').val()
                         },
                         function (data){
-                            if (!data || (!data.errors)){
+                            if (!data || (!data.errors)||(data.errors == 'succes')){
                                 $('#formConfirm').show();
                             }else{
                                 $('.formRegister').show();
