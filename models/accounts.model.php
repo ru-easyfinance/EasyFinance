@@ -195,6 +195,10 @@ class Accounts_Model
                         $model = New Operation_Model();
                         $key['field_default_value'] = $model->getFirstOperation($accid);
                     }
+                if ($key['field_visual_name']=="Примечание") {
+                    $model = New Operation_Model();
+                    $key['field_default_value'] = $model->getComment($accid);
+                }
                 //else
                 //
                 $data[$i]['value'] = $this->formField($key, "", "");
