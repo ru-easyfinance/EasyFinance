@@ -146,7 +146,6 @@ easyFinance.widgets.accountsPanel = function(){
             return false;
         });
         //загружает состояние из
-         //загружает состояние из
         var accountsPanel = $.cookie('accountsPanel_stated');
         if (accountsPanel && accountsPanel != ''){
             $('div.listing dl.bill_list dt:visible').each(function(){
