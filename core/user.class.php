@@ -384,39 +384,78 @@ class User
      */
 	public function initUserAccounts()
 	{
-            /*$sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
-                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-                FROM accounts a
-                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-                WHERE a.user_id=? ORDER BY o_count DESC";*/
-            $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
-                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-                FROM accounts a
-                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-                WHERE a.user_id=? ORDER BY o_count DESC";
-            $accounts = $this->db->select($sql, $this->getId());
 
-            /*$sql = "SELECT (SELECT SUM(-o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer != 0 AND o.account_id=a.account_id) AS total_sum
-            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-            FROM accounts a
-            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-            WHERE a.user_id=? ORDER BY o_count DESC";
-            $accounts2 = $this->db->select($sql, $this->getId());
-
-            $sql = "SELECT (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer = a.account_id) AS total_sum
-            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-            FROM accounts a
-            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-            WHERE a.user_id=? ORDER BY o_count DESC";
-            $accounts3 = $this->db->select($sql, $this->getId());*/
-
-            $this->user_account= array();
-            foreach ($accounts as $key=>$val) {
-                //$val['total_sum'] += $accounts2[$key]['total_sum']+$accounts3[$key]['total_sum'];
-                $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
-                $this->user_account[$val['account_id']] = $val;
+            $sql='SELECT
+                       account_id, accounts.account_type_id, cur_name, cur_id,
+                       account_name, account_description
+                    FROM
+                        accounts
+                    LEFT JOIN
+                        currency
+                    ON
+                        (account_currency_id=cur_id)
+                    WHERE
+                        user_id=?';
+            $ret = $this->db->select($sql,$this->user_id);
+            $id = array();
+            $type = array();
+            $cur = array();
+            $cur_id = array();
+            $type_name = array();
+            $acc_name = array();
+            $acc_descr = array();
+            $acc_first_balance = array();
+            $mod = new Operation_Model();
+            foreach ($ret as $key=>$val)
+            {
+                $id[]=$val['account_id'];
+                $type[]=$val['account_type_id'];
+                $cur[]=$val['cur_name'];
+                $cur_id[]=$val['cur_id'];
+                $type_name[]=$val['account_type_name'];
+                $acc_name[]=$val['account_name'];
+                $acc_descr[]=$val['account_description'];
+                $acc_first_balance[]=$mod->getFirstOperation($val['account_id']);
             }
-	}
+
+            foreach ($id as $key=>$val) {
+                $res[$val]['type']=$type[$key];
+                $res[$val]['cur']=$cur[$key];
+                $res[$val]['id']=$id[$key];
+                $res[$val]['name']=$acc_name[$key];
+                $res[$val]['description']=$acc_descr[$key];
+                $res[$val]['starter_balance']=$acc_first_balance[$key];
+
+                $reservsqlquery = "SELECT sum(money) AS s
+                    FROM target_bill tb
+                    LEFT JOIN target t ON t.id=tb.target_id
+                    WHERE tb.bill_id = ? AND t.done=0";
+                $result = $this->db->select($reservsqlquery,$id[$key]);
+
+                if ( $result[0]['s'] != null ) {
+                    $res[$val]['reserve']=$result[0]['s'];
+                } else {
+                    $res[$val]['reserve']=0;
+                }
+
+
+                $res[$val]['cat'] = $type_name[$key];
+                $total=(float)($mod->getTotalSum($val));
+                $res[$val]['total_balance'] = $total;
+                $ucur  = Core::getInstance()->user->getUserCurrency();
+                $cur_k = array_keys($ucur);
+
+                $res[$val]['def_cur'] = round(
+                    $res[$val]['total_balance']* $ucur[$cur_id[$key]]['value']/$ucur[$cur_k[0]]['value'],
+                    2
+                    );
+
+                $res[$val]['special'] = array(0,0,0);//todo tz
+
+            }
+
+            return $res;
+        }
 
     /**
      * Возвращает все теги пользователя
