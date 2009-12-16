@@ -69,6 +69,12 @@ $('li.edit').live('click', function(){
                 data[key]['image']='/img/i/avto.png';
             if (data[key]['category']==3)
                 data[key]['image']='/img/i/rest.png';
+            if (data[key]['category']==6)
+                data[key]['image']='/img/i/wedding.png';
+            if (data[key]['category']==7)
+                data[key]['image']='/img/i/bit.png';
+            if (data[key]['category']==8)
+                data[key]['image']='/img/i/comp.png';
             str += "<div class='object2' id='"
                 + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
                 data[key]['image']+"' alt='' /><a>" +
