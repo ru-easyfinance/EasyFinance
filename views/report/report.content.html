@@ -80,14 +80,21 @@
                 </div>
             </div>
         </form>
-        <div id="chart" style="height:400px;"></div>
-        <div id="rep" class="inside operation_list">
-        <div id="tmp">
-        </div>
-        <table id="reports_list">
-           
-           <tr></tr>
-        </table>
+        <div id="chart" style="height:400px;" class="hidden"></div>
+        <div id="rep" class="inside operation_list hidden">
+            <div id="tmp">
+            </div>
+
+            <div id="divDetailedReport">
+                <table width="100%" cellspacing="0" cellpadding="0" border="0" id="reports_list_header" class="periods">
+                </table>
+
+                <div id="reports_list_container">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" id="reports_list" class="periods">
+                        <tr></tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
