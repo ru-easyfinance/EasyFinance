@@ -193,6 +193,20 @@ class Info_Model
      */
     private function result()
     {
+        //print '<pre>';
+        //die(print_r($this->output));
+        $des1 = $this->values['result']['red']['text'];
+        if ( $this->output[1]['result'] > 100) $des1 = $this->values['result']['yellow']['text'];
+        if ( $this->output[1]['result'] > 150) $des1 = $this->values['result']['green']['text'];
+        $des2 = $this->values['profit']['red']['text'];
+        if ( $this->output[1]['profit'] > 2) $des2 = $this->values['profit']['yellow']['text'];
+        if ( $this->output[1]['profit'] > 5) $des2 = $this->values['profit']['green']['text'];
+        $des3 = $this->values['budget']['red']['text'];
+        if ( $this->output[1]['budget'] > 5) $des3 = $this->values['budget']['yellow']['text'];
+        if ( $this->output[1]['budget'] > 10) $des3 = $this->values['budget']['green']['text'];
+        $des5 = $this->values['drain']['red']['text'];
+        if ( $this->output[1]['drain'] < 97) $des5 = $this->values['drain']['yellow']['text'];
+        if ( $this->output[1]['drain'] < 85) $des5 = $this->values['drain']['green']['text'];
         return array(
             array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
@@ -203,33 +217,33 @@ class Info_Model
             ),
             array(
                 array(
-                    'min'=>0, 
-                    'color'=>'',
-                    'description'=>'',
+                    //'min'=>0,
+                    //'color'=>'',
+                    'description'=>$des1,
                     'title'=>'Итоговая оценка финансового состояния'
                 ),
                 array(
-                    'min'=>0,
-                    'color'=>'',
-                    'description'=>'',
+                    //'min'=>0,
+                    //'color'=>'',
+                    'description'=>$des2,
                     'title'=>'Уровень денежных остатков (в кратности к 1 среднему месяцу расходов за предыдущие 3 месяца) за минусом долгов'
                 ),
                 array(
-                    'min'=>0,
-                    'color'=>'',
-                    'description'=>'',
+                    //'min'=>0,
+                    //'color'=>'',
+                    'description'=>$des3,
                     'title'=>'Использование бюджета расходов (% использованного бюджета)'
                 ),
                 array(
-                    'min'=>0,
-                    'color'=>'',
+                    //'min'=>0,
+                    //'color'=>'',
                     'description'=>'',
                     'title'=>'Уровень выплат по кредитам (% от доходов)'
                 ),
                 array(
-                    'min'=>0,
-                    'color'=>'',
-                    'description'=>'',
+                    //'min'=>0,
+                    //'color'=>'',
+                    'description'=>$des5,
                     'title'=>'Показатель превышения доходов над расходами (средний показ за 3 месяца)'
                 ),
             )
