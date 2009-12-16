@@ -1,0 +1,113 @@
+#reports_list_header {
+    margin: 0px;
+    height: 20px;
+    border-bottom: none;
+}
+
+div#reports_list_container {
+    position: relative;
+    border: 2px solid #dfdede;
+    width: 496px;
+    height: 154px;
+    max-height: 154px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+table#reports_list {
+    position: relative;
+    width: 480px;
+    overflow: scroll;
+    border-top: none;
+    margin: 0px;
+    border: none;
+    table-layout: fixed;
+}
+
+table#reports_list tr {
+    height: 20px;
+}
+
+table#reports_list tr {
+    height: 20px;
+}
+
+/* header widths */
+table#reports_list_header th {
+    margin: 0px;
+    width: 160px;
+}
+
+table#reports_list_header th + th {
+    width: 70px;
+}
+
+table#reports_list_header th + th + th{
+    width: 130px;
+}
+
+table#reports_list_header th + th + th + th{
+    width: 80px;
+}
+
+/* last empty header for scrollbar */
+table#reports_list_header th + th + th + th + th{
+    width: 6px;
+}
+
+/* column widths */
+table#reports_list td {
+    width: 160px;
+    height: 20px;
+}
+
+table#reports_list td + td {
+    width: 70px;
+}
+
+table#reports_list td + td + td {
+    width: 130px;
+}
+
+table#reports_list td + td + td + td {
+    width: 80px;
+}
+
+/* report with periods */
+
+table#reports_list_header.periods th {
+    width: 140px;
+}
+
+table#reports_list_header.periods th + th {
+    width: 100px;
+}
+
+table#reports_list_header.periods th + th + th{
+    width: 100px;
+}
+
+table#reports_list_header.periods th + th + th + th{
+    width: 100px;
+}
+
+/* last empty header for scrollbar */
+table#reports_list_header.periods th + th + th + th + th{
+    width: 6px;
+}
+
+table#reports_list.periods td {
+    width: 140px;
+}
+
+table#reports_list.periods td + td {
+    width: 100px;
+}
+
+table#reports_list.periods td + td + td{
+    width: 100px;
+}
+
+table#reports_list.periods td + td + td + td{
+    width: 100px;
+}
