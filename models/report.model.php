@@ -289,7 +289,7 @@ class Report_Model
 
     function SelectDetailedWaste($date1='', $date2='', $account='', $cursshow='', $acclist=''){
         $arr = array();
-        if ($account != 0) {
+        if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
                                     a.account_name, op.money, cur.cur_char_code
             FROM operation op
@@ -297,27 +297,27 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money<0 AND cur_char_code is not null
+            AND a.account_id=? AND op.money>0 AND c.cat_name <> ''
             AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
-        } else {
-            $sql = "SELECT op.id, c.cat_name, op.`date`,
+        } else{
+        $sql = "SELECT op.id, c.cat_name, op.`date`,
                                     a.account_name, op.money, cur.cur_char_code
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money<0 AND cur_char_code is not null AND a.account_id IN({$acclist})
+            AND op.money>0 AND c.cat_name <> '' AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
+        }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
         $arr[1] = $this->db->query($sql, $cursshow);
         return $arr;
-        }
     }
 
     function CompareWaste($date1='', $date2='', $date3='', $date4='', $account='', $cursshow='', $acclist=''){
