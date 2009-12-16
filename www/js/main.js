@@ -631,27 +631,6 @@ $('.tags_list .add').live('click', function(){
 //        return false;
 //    })
 
-// Старый тахометр flash
-            //data = res['flash'];
-            //name = (!data['title'])?'':['title'];
-            //end = data['value']*3/data[1][i]['color'] ;
-            //value = data['value'] ;
-            /*
-            xml = '<anychart><gauges><gauge><chart_settings><title>'+
-                '<text>'+name+'</text>'+
-		"</title></chart_settings><circular><axis radius='50' start_angle='85' sweep_angle='190' size='3'><labels enabled='false'></labels><scale_bar enabled='false'></scale_bar> <major_tickmark enabled='false'/><minor_tickmark enabled='false'/><color_ranges>"+
-                "<color_range start='0' end='100' align='Inside' start_size='15' end_size='15' padding='6'>"+
-                "<fill type='Gradient'><gradient><key color='Red'/><key color='Yellow'/><key color='Green'/></gradient></fill><border enabled='true' color='#FFFFFF' opacity='0.4'/></color_range></color_ranges></axis><frame enabled='false'></frame><pointers>"+
-                "<pointer value='"+value+"'>"+
-                "<label enabled='true' under_pointers='true'><position placement_mode='ByPoint' x='50' y='100'/><format>{%Value}</format><background enabled='false'/></label><needle_pointer_style thickness='7' point_thickness='5' point_radius='3'><fill color='Rgb(230,230,230)'/><border color='Black' opacity='0.7'/><effects enabled='false'></effects><cap enabled='false'></cap></needle_pointer_style><animation enabled='false'/></pointer></pointers></circular></gauge></gauges></anychart>";
-            chartSample_1 = new AnyChart('/swf/anychart/gauge.swf');
-                    chartSample_1.width = '170px';
-                    chartSample_1.height = '170px';
-                    chartSample_1.setData(xml);
-                    chartSample_1.wMode="opaque";
-                    chartSample_1.write('flash');
-                    chartSample_1 = null;//
-         */
         $('.calculator_block .calculator').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         })
