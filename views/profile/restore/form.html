@@ -27,6 +27,8 @@
     // by Jet. ticket #540
     $(document).ready(function() {
         $('#btnLogin').click(function() {
+            $(this).attr('disabled', 'disabled');
+            
             $.post('/restore/submit_request',
                 {login: $('#flogin').val(), verifyCode: $.cookie('sessIds')},
                 function(data) {
@@ -42,6 +44,17 @@
                 },
                 "json"
             );
+        });
+        
+        $('#auth').keypress(function(e){
+            //if generated character code is equal to ascii 13 (if enter key)
+            if(e.keyCode == 13){
+                //submit the form
+                $('#btnLogin').click().attr('disabled', 'disabled');
+                return false;
+            } else {
+                return true;
+            }
         });
     });
 </script>
