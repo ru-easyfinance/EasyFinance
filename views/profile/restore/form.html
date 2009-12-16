@@ -8,31 +8,41 @@
     <div class="loginMessage">{$loginMessageText}</div>
     <div class="loginError">{$loginErrorText}</div>
 
-    <form action="https://{$smarty.const.URL_ROOT}restore/submit_request" method="post">
-        <table cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="name">Логин:</td>
-            <td>
-                <input id="flogin" type="text" name="login"/>
-                <input id="verifyCode" type="hidden" name="verifyCode"/>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input id="btnLogin" type="submit" value="Восстановить пароль" class="but"/></td>
-        </tr>
-        </table>
-    </form>
+    <table cellpadding="0" cellspacing="0">
+    <tr>
+        <td class="name">Логин:</td>
+        <td>
+            <input id="flogin" type="text" name="login"/>
+            <input id="verifyCode" type="hidden" name="verifyCode"/>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input id="btnLogin" type="button" value="Восстановить пароль" class="but"/></td>
+    </tr>
+    </table>
 </div>
 {literal}
 <script type="text/javascript">
     // by Jet. ticket #540
     $(document).ready(function() {
-        var verFunc = function() {
-            $('#verifyCode').val($.cookie('sessIds'));
-        };
-
-        $('#flogin').focus(verFunc).change(verFunc);
+        $('#btnLogin').click(function() {
+            $.post('/restore/submit_request',
+                {login: $('#flogin').val(), verifyCode: $.cookie('sessIds')},
+                function(data) {
+                    if (data) {
+                        if (data.result) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        } else {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        }
+                    } else {
+                        $.jGrowl('Ошибка на сервере!', {theme: 'red'});
+                    }
+                },
+                "json"
+            );
+        });
     });
 </script>
 {/literal}
