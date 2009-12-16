@@ -31,8 +31,15 @@ class Restore_Controller extends _Core_Controller
 		setcookie('sessIds', $restoreHash, time() + 60);
 	}
 	
-	public function confirm()
+	public function confirm( array $args)
 	{
+		$code = trim( str_ireplace('/','',$args[0]) );
+		
+		if( $code == '' )
+		{
+			header('Location: /restore');
+		}
+		
 		$this->tpl->assign('name_page', 'profile/restore/confirm');
 	}
 	
@@ -72,7 +79,7 @@ class Restore_Controller extends _Core_Controller
 				<body><p>Здравствуйте, ' . $moron->getName() . '!</p>
 				<p>Был произведён запрос на восстановление пароля от вашей учётной записи.<br/>
 				Чтобы завершить процедуру и изменить пароль, перейдите по ссылке:</p>
-				<p><a href={$href}>{$href}</a></p>
+				<p><a href="' . $href . '">' . $href . '</a></p>
 				<p>C уважением,
 				<br/>Администрация системы <a href="https:// ' . URL_ROOT . '" />EasyFinance.ru</a>
 				</body>
