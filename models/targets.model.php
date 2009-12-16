@@ -177,6 +177,10 @@ class Targets_Model {
             $system = 1;
         if ($targetcat==3)
             $system = 6;
+        if ($targetcat==7)
+            $system = 4;
+        if ($targetcat==8)
+            $system = 4;
         $sql = "SELECT cat_id FROM category
             WHERE user_id=? AND system_category_id=?";
         $res = $this->db->select($sql, Core::getInstance()->user->getId(), $system);
