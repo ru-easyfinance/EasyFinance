@@ -20,6 +20,13 @@ class _User
 		return new _User( $model );
 	}
 	
+	public static function loadByLogin( $login )
+	{
+		$model = _User_Model::loadByLogin( $login );
+		
+		return new _User( $model );
+	}
+	
 	public function getId()
 	{
 		return (int)$this->model->id;
@@ -28,6 +35,11 @@ class _User
 	public function getName()
 	{
 		return $this->model->name;
+	}
+	
+	public function getMail()
+	{
+		return $this->model->mail;
 	}
 	
 	public function getType()

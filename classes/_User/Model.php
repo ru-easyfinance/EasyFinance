@@ -16,6 +16,20 @@ class _User_Model extends _Core_Abstract_Model
 		return new _User_Model( $row );
 	}
 	
+	public static function loadByLogin( $userLogin )
+	{
+		$sql = 'select * from users where `user_login`=?';
+		
+		$row = Core::getInstance()->db->selectRow( $sql, $userLogin );
+		
+		if( !is_array( $row ) || !sizeof($row) )
+		{
+			throw new _User_Exception('User with login "' . $userLogin . '" do not exist!');
+		}
+		
+		return new _User_Model( $row );
+	}
+	
 	public function __get( $variable )
 	{
 		// Небольшой хак для удобного доступа
