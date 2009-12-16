@@ -32,9 +32,50 @@
 <script type="text/javascript">
     // by Jet. ticket #540
     $(document).ready(function() {
+        /**
+         * Условия валидации формы
+         */
+        /*
+        $("#auth").validate({
+            rules: {
+                pass: {
+                    required: true,
+                    minlength: 5
+                },
+                pass2: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: $("#pass2")
+                }
+            },
+            messages: {
+                pass: {
+                    required: "Вы не ввели пароль!",
+                    minlength: "Ваш пароль должен состоять как минимум из 5 символов"
+                },
+                pass2: {
+                    required: "Вы не ввели пароль!",
+                    minlength: "Ваш пароль должен состоять как минимум из 5 символов",
+                    equalTo: "Пожалуйста, введите тот же пароль, что и выше"
+                }
+            }
+        });
+        */
+        /*
+         * Евенты, вызывающие валидацию
+         */
+        /*
+        $('#butt').click($("#formRegister").validate);
+        $("#password").blur(function() {
+            $("#confirm_password").valid();
+        });
+        */
+
         $('#btnLogin').click(function() {
+            $(this).attr('disabled', 'disabled');
+            
             $.post('/restore/submit_confirm',
-                {pass: $('#pass').val(), pass2: $('#pass2').val()},
+                {pass: $('#pass').val()},
                 function(data) {
                     if (data) {
                         if (data.result) {
@@ -48,6 +89,17 @@
                 },
                 "json"
             );
+        });
+
+        $('#auth').keypress(function(e){
+            //if generated character code is equal to ascii 13 (if enter key)
+            if(e.keyCode == 13){
+                //submit the form
+                $('#btnLogin').click().attr('disabled', 'disabled');
+                return false;
+            } else {
+                return true;
+            }
         });
     });
 </script>
