@@ -22,8 +22,8 @@ div#operations_list_container {
     position: relative;
     border: 2px solid #dfdede;
     width: 514px;
-    height: 154px;
-    max-height: 154px;
+    height: 354px;
+    max-height: 354px;
     overflow-x: hidden;
     overflow-y: scroll;
 }
