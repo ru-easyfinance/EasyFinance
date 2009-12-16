@@ -127,13 +127,15 @@ class Restore_Controller extends _Core_Controller
 	{
 		$code = $this->generateCode();
 		
-		Core::getInstance()->db->query( 'insert into registration values (?, null, ?)', $moron->getId(), $code );
+		Core::getInstance()->db->query( 'insert into registration values (?, now(), ?)', $moron->getId(), $code );
 		
 		return $code;
 	}
 	
 	private function loadRequest( $code )
 	{
+		$row = Core::getInstance()->db->selectRow( 'select * from registration where reg_id=?', $code );
+		
 		
 	}
 }
