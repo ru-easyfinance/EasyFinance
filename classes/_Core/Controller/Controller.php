@@ -159,6 +159,8 @@ abstract class _Core_Controller
         } catch ( Exception $e ) {
             $cats = null;
         }
+        $infmod = new Info_Model();
+        $inf = $infmod->get_data();
         Core::getInstance()->tpl->assign('res', json_encode(array(
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
@@ -180,7 +182,8 @@ abstract class _Core_Controller
             ),
             'errors'=>Core::getInstance()->errors,
             'budget'=>Core::getInstance()->user->getUserBudget(),
-            'category' => $cats
+            'category' => $cats,
+            'informers' => $inf
         )));
     }
 }

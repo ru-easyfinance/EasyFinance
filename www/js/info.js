@@ -19,10 +19,12 @@ $('li.del').live('click', function(){
 $('li.edit').live('click', function(){
     document.location = '/targets/#edit/'+$(this).closest('div.object2').attr('id');
 });
-$.post(
+/*$.post(
     '/info/get_data/',
     {},
-    function(data){
+    function(data){*/
+    function InitInformers(){
+        var data = res['informers'];
         var titles,gauges,name,value,pointer,xml,chartSample_1;
         for (var i=0;i<5;i++)
         {
@@ -43,8 +45,9 @@ $.post(
             swfobject.embedSWF("/swf/efGauge.swf", "flash_"+i, size, size, "9.0.0", false, flashvars, params, attributes);
         }
         print_targets(0);
-    },
-    'json');
+    }
+    InitInformers();/*,
+    'json');*/
 
     /**
      * Выводит список финансовых целей пользователя
