@@ -47,11 +47,6 @@ class Restore_Controller extends _Core_Controller
 	{
 		$json = array();
 		
-		if( !isset($_POST['login']) )
-		{
-			$json['error']['text'] = 'Необходимо указать логин!';
-		}
-		
 		// Валидация homo-sapiens
 		$restoreHash = $_SESSION['restoreHash'];
 		list( ,$restoreTime ) = explode('RfacztT', base64_decode($restoreHash));
@@ -64,11 +59,15 @@ class Restore_Controller extends _Core_Controller
 			|| time() > $restoreTime
 		)
 		{
-			$json['error']['text'] = 'Произошла ошибка! Пожалуйста, повторите запрос.';
+			$json['error']['text'] = 'Произошла ошибка! Пожалуйста, обновите страницу и повторите запрос.';
+			exit(json_encode($json));
 		}
 		
 		try//Пробуем загрузить пользователя с указанным логином. И, если вышло - сохраняем запрос в базу.
 		{
+			// Уничтожаем хранимый код валидации
+			unset($_COOKIE['sessIds'], $_SESSION['restoreHash']);
+			
 			$moron = _User::loadByLogin( $_POST['login'] );
 			
 			$code = $this->storeRequest( $moron );
@@ -107,7 +106,7 @@ class Restore_Controller extends _Core_Controller
 		}
 		catch( Exception $i )
 		{
-			$json['error']['text'] = 'Произошла ошибка! Пожалуйста, повторите запрос.';
+			$json['error']['text'] = 'Произошла ошибка! Пожалуйста, обновите страницу и повторите запрос.';
 		}
 		
 		exit( json_encode($json));
