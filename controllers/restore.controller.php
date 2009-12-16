@@ -98,6 +98,8 @@ class Restore_Controller extends _Core_Controller
 			{
 				throw new Exception('');
 			}
+			
+			$json['result']['text'] = 'Запрос успешно обработан. На ваш электронный адрес было выслано письмо с дальнейшими инструкциями.';
 		}
 		catch( _User_Exception $e )
 		{
@@ -107,8 +109,6 @@ class Restore_Controller extends _Core_Controller
 		{
 			$json['error']['text'] = 'Произошла ошибка! Пожалуйста, повторите запрос.';
 		}
-		
-		$json['result']['text'] = 'Запрос успешно обработан. На ваш электронный адрес было выслано письмо с дальнейшими инструкциями.';
 		
 		exit( json_encode($json));
 	}
@@ -136,6 +136,13 @@ class Restore_Controller extends _Core_Controller
 	{
 		$row = Core::getInstance()->db->selectRow( 'select * from registration where reg_id=?', $code );
 		
+		if( !$row || !is_array($row) || !sizeof($row) )
+		{
+			throw Exception('Row with given code do not exist!');
+		}
 		
+		if( $row['date'] )
+		
+		return _User::load( $row['user_id'] );
 	}
 }
