@@ -3,7 +3,7 @@
 <div id="auth" class="formRegister" >
     <!-- <div class="logo"><a href="http://easyfinance.ru"><img src="/img/i/logo_iframe.png"></a></div> -->
 
-    <h2>Восстановление пароля</h2>
+    <h2>Создание нового пароля</h2>
 
     <div class="loginMessage">{$loginMessageText}</div>
     <div class="loginError">{$loginErrorText}</div>
@@ -11,10 +11,16 @@
     <form action="https://{$smarty.const.URL_ROOT}restore/submit_request" method="post">
         <table cellpadding="0" cellspacing="0">
         <tr>
-            <td class="name">Логин:</td>
+            <td class="name">Пароль:</td>
             <td>
-                <input id="flogin" type="text" name="login"/>
+                <input type="password" id="pass" name="pass" />
                 <input id="verifyCode" type="hidden" name="verifyCode"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">Подтвердите пароль:</td>
+            <td>
+                <input type="password" id="pass2" name="pass2" />
             </td>
         </tr>
         <tr>
