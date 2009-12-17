@@ -260,12 +260,12 @@ class Targets_Model {
 
         $data['category'] = (int)@$_POST['category'];
         if ($data['category'] == 0) {
-            $this->errors['category'] = "Категория цели";
+            $this->errorData['category'] = "Категория цели";
         }
 
         $data['title'] = htmlspecialchars(@$_POST['title']);
         if (empty($data['title'])) {
-            $this->errors['title'] = "Наименование цели";
+            $this->errorData['title'] = "Наименование цели";
         }
 
         if (is_numeric((float)$_POST['amount'])) {
@@ -282,13 +282,21 @@ class Targets_Model {
 
         $data['start'] = formatRussianDate2MysqlDate(@$_POST['start']);
         if (!$data['start']) {
-            $this->errors['start'] = "Дата начала";
+            $this->errorData['start'] = "Дата начала";
         }
         
         $data['end'] = formatRussianDate2MysqlDate(@$_POST['end']);
         if (!$data['end']) {
-            $this->errors['end'] = "Дата окончания";
+            $this->errorData['end'] = "Дата окончания";
         }
+        
+        $d1 = explode('-', $data['start']);
+        $d2 = explode('-', $data['end']);
+        $timestamp2 = (mktime(0, 0, 0, $d1[1],  $d1[0],  $d1[2]));
+        $timestamp1 = (mktime(0, 0, 0, $d2[1],  $d2[0],  $d2[2]));
+        $difference = floor(($timestamp2 - $timestamp1)/86400);
+        if ( $difference > 0 )
+            $this->errorData['end'] = "Неверно указана дата окончания";
 
         $data['photo']   = htmlspecialchars(@$_POST['photo']);
         $data['url']     = htmlspecialchars(@$_POST['url']);
@@ -318,7 +326,7 @@ class Targets_Model {
             $this->tpl->assign("data", $data);
             // Если есть ошибки, или не все обязательные поля заполнены
             if (count($this->errorData) > 0) {
-                return json_encode($this->errors);
+                return json_encode($this->errorData);
             // Добавляем цель в БД
             } else {
                 $this->db->query("INSERT INTO target(`user_id`, `category_id`, `title`, `type`,
