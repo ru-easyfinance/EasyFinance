@@ -309,9 +309,9 @@ $(document).ready(function(){
                 else if (data.list[v]['cat_id']==3)
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/rest.png"  alt="" /><span class="num">'
                 else if (data.list[v]['cat_id']==6)
-                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/wedding.png"  alt="" /><span class="num">'
+                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/wedd.png"  alt="" /><span class="num">'
                 else if (data.list[v]['cat_id']==7)
-                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/bit.png"  alt="" /><span class="num">'
+                    s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/bitv.png"  alt="" /><span class="num">'
                 else if (data.list[v]['cat_id']==8)
                     s += '<li category='+data.list[v]['cat_id']+'><img src="/img/i/comp.png"  alt="" /><span class="num">'
                 else
