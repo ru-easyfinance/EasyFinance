@@ -297,7 +297,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND a.account_id=? AND op.money>0 AND c.cat_name <> ''
+            AND a.account_id=? AND c.cat_name <> ''
             AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
@@ -309,7 +309,7 @@ class Report_Model
             LEFT JOIN category c ON c.cat_id=op.cat_id
             LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
             WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ?
-            AND op.money>0 AND c.cat_name <> '' AND a.account_id IN({$acclist})
+            AND c.cat_name <> '' AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND op.tr_id is null AND op.comment <>'Начальный остаток'
             ORDER BY c.cat_name";
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
