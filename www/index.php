@@ -24,10 +24,10 @@ if (Core::getInstance()->user->getId()) {
 }
 
 //Выводим страницу в браузер
-switch ( $_SERVER['SERVER_NAME'].'/' ) {
+switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         Core::getInstance()->tpl->assign('template_view', 'iframe');
-        Core::getInstance()->tpl->display("index.iframe.html");
+        Core::getInstance()->tpl->display("iframe/index.iframe.html");
         break;
     default:
         Core::getInstance()->tpl->assign('template_view', 'index');
