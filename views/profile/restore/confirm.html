@@ -45,7 +45,7 @@
                 pass2: {
                     required: true,
                     minlength: 5,
-                    equalTo: $("#pass2")
+                    equalTo: $("#pass")
                 }
             },
             messages: {
@@ -77,6 +77,8 @@
             $.post('/restore/submit_confirm',
                 {pass: $('#pass').val()},
                 function(data) {
+                    $('#btnLogin').removeAttr('disabled');
+
                     if (data) {
                         if (data.result) {
                             $.jGrowl(data.result.text, {theme: 'green'});
