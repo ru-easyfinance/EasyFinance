@@ -33,10 +33,11 @@ class Login_Controller extends _Core_Controller
     {
         $user = Core::getInstance()->user;
         if ($user->getId()) {
-            if ($_SERVER['HTTP_HOST'].'/' == 'iframe.' . URL_ROOT_MAIN)
-                header("Location: http://iframe." . URL_ROOT_MAIN . "info/");
+            //if ($_SERVER['HTTP_HOST'].'/' == 'iframe.' . URL_ROOT_MAIN){
+                header("Location: http://iframe." . URL_ROOT_MAIN . "/info/");
+            /*}
             else
-                header("Location: /info/");
+                header("Location: /info/");*/
             exit;
         } else {
             $this->model->auth_user();
