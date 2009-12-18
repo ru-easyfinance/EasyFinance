@@ -55,43 +55,43 @@ var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
 var TransferSum = 0; //глобальная переменная которая передаст. сумму при переводе на другую валюту.
 function FloatFormat(obj, in_string )
 {
-//    //'.'
-//    var l = in_string.length;
-//    var rgx = /[0-9]/;
-//    var c=0;
-//    var p =1;
-//    var newstr ='';
-//    var i = 0;
-//
-//    for(var a=1;a<=l;a++)
-//    {
-//        i=l-a+1;
-//        if (rgx.test(in_string.substr(i,1)))
-//        {
-//            if (c == 3)
-//            {
-//                newstr = ' ' + newstr;
-//                c = 0;
-//            }
-//            newstr =in_string.substr(i,1)+newstr;
-//            c++;
-//        }
-//        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==',')
-//        {
-//            if (p){
-//                newstr = newstr.substr(0,2)
-//                newstr ='.'+newstr;
-//            }
-//            c=0;
-//            p = 0;
-//        }
-//    }
+    //'.'
+    var l = in_string.length;
+    var rgx = /[0-9]/;
+    var c=0;
+    var p =1;
+    var newstr ='';
+    var i = 0;
+
+    for(var a=1;a<=l;a++)
+    {
+        i=l-a+1;
+        if (rgx.test(in_string.substr(i,1)))
+        {
+            if (c == 3)
+            {
+                newstr = ' ' + newstr;
+                c = 0;
+            }
+            newstr =in_string.substr(i,1)+newstr;
+            c++;
+        }
+        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==',')
+        {
+            if (p){
+                newstr = newstr.substr(0,2)
+                newstr ='.'+newstr;
+            }
+            c=0;
+            p = 0;
+        }
+    }
 //    if (in_string.substr(1,1) == '-')newstr ='-'+newstr;
-    var newStr = formatCurrency(tofloat(in_string))
-    if (newStr == in_string) return false;
+//    var newStr = formatCurrency(tofloat(in_string))
+//    if (newStr == in_string) return false;
     //ловим положение каретки,
     //ловим символы перед ней,
-    $(obj).val(newStr);
+    $(obj).val(newstr);
     //если они изменились сдвигаем каретку на один вправо
     
 }
