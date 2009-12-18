@@ -1040,7 +1040,7 @@ div.cont ul li.add a { width: 12px; }
 .categoriesSH table td div.cont ul li.add { margin-right: 0; }
 .categoriesSH table td div.cont ul li.add a { width: 12px; }
 
-.calendar_block .flash {background: url('/img/i/gaugeMain.gif') 0px 0px no-repeat;}
+.calendar_block .flash {background: url('/img/i/gaugeMain.gif?') 0px 0px no-repeat;}
 
 .calendar_block, .calculator_block { margin-bottom: 14px; }
 .calendar_block {border-bottom:#E5E5E5 solid 1px;}
@@ -1208,11 +1208,11 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .flash_block_in { padding: 14px 0 0 0 !important; }
 .flash_block_in .flash { width: 100%; overflow: hidden; }
 
-.flash_block_in .flash table td { vertical-align:middle; background: url('/img/i/gaugeMain.gif') 2px 14px no-repeat; }
-.flash_block_in .flash table td + td { vertical-align:middle; background: url('/img/i/gaugeMoney.gif') 10px 35px no-repeat; }
-.flash_block_in .flash table td + td + td { vertical-align:middle; background: url('/img/i/gaugeBudget.gif') 10px 35px no-repeat; }
-.flash_block_in .flash table td + td + td + td { vertical-align:middle; background: url('/img/i/gaugeCredits.gif') 10px 35px no-repeat; }
-.flash_block_in .flash table td + td + td + td + td { vertical-align:middle; background: url('/img/i/gaugeExpenses.gif') 10px 35px no-repeat; }
+.flash_block_in .flash table td { vertical-align:middle; background: url('/img/i/gaugeMain.gif?') 2px 14px no-repeat; }
+.flash_block_in .flash table td + td { vertical-align:middle; background: url('/img/i/gaugeMoney.gif?') 10px 35px no-repeat; }
+.flash_block_in .flash table td + td + td { vertical-align:middle; background: url('/img/i/gaugeBudget.gif?') 10px 35px no-repeat; }
+.flash_block_in .flash table td + td + td + td { vertical-align:middle; background: url('/img/i/gaugeCredits.gif?') 10px 35px no-repeat; }
+.flash_block_in .flash table td + td + td + td + td { vertical-align:middle; background: url('/img/i/gaugeExpenses.gif?') 10px 35px no-repeat; }
 
 .addquestion, .addcategories { position: relative; margin-bottom: 5px; min-height: 25px; //-height: 25px; }
 .addquestion a, .addcategories a { display: block; position: absolute; top: 12px; left: 27px; padding-left: 27px; font-size: 14px; line-height: 18px; text-decoration: none; background: url('/img/i/icons.gif') no-repeat -20px -368px; }
