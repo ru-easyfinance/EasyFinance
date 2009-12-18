@@ -1246,7 +1246,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupreport .inside h2 { margin-bottom: 5px; font-size: 16px; color: #2bb4d6; font-weight: bold; background: url('/img/i/icons.gif') no-repeat 132px -545px; }
 #popupreport .inside .f_field { position: relative; margin-bottom: 11px; }
 #popupreport .inside .f_field textarea { height: 165px; //height: 104px; }
-#popupreport .inside .f_field input {float:right; position:relative; right:115px;}
+#popupreport .inside .f_field input {width: 281px}
 #popupreport .inside .f_field textarea { padding-left: 9px; width: 282px; //width: 253px; font-size: 11px; color: #9e9e9e; }
 #popupreport .inside .f_field.ffmes label { display: block; position: absolute; top: 3px; left: 11px; font-size: 11px; color: #9e9e9e;  }
 #popupreport .inside .f_field img { display: block; position: absolute; top: 0; left: 161px; }
