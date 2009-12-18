@@ -55,6 +55,27 @@
                     minlength: "Ваш пароль должен состоять как минимум из 5 символов",
                     equalTo: "Пожалуйста, введите тот же пароль, что и выше"
                 }
+            },
+            submitHandler: function(form) {
+                $('#btnLogin').attr('disabled', 'disabled');
+                
+                $.post('/restore/submit_confirm',
+                    {pass: $('#pass').val()},
+                    function(data) {
+                        $('#btnLogin').removeAttr('disabled');
+
+                        if (data) {
+                            if (data.result) {
+                                $.jGrowl(data.result.text, {theme: 'green'});
+                            } else {
+                                $.jGrowl(data.error.text, {theme: 'red'});
+                            }
+                        } else {
+                            $.jGrowl('Ошибка на сервере!', {theme: 'red'});
+                        }
+                    },
+                    "json"
+                );
             }
         });
         
@@ -68,27 +89,11 @@
         });
         */
 
-        $('#btnLogin').click(function() {
-            $(this).attr('disabled', 'disabled');
+        //$('#btnLogin').click(function() {
+            //$(this).attr('disabled', 'disabled');
             
-            $.post('/restore/submit_confirm',
-                {pass: $('#pass').val()},
-                function(data) {
-                    $('#btnLogin').removeAttr('disabled');
 
-                    if (data) {
-                        if (data.result) {
-                            $.jGrowl(data.result.text, {theme: 'green'});
-                        } else {
-                            $.jGrowl(data.error.text, {theme: 'red'});
-                        }
-                    } else {
-                        $.jGrowl('Ошибка на сервере!', {theme: 'red'});
-                    }
-                },
-                "json"
-            );
-        });
+        //});
 
         $('#auth').keypress(function(e){
             //if generated character code is equal to ascii 13 (if enter key)
