@@ -27,7 +27,7 @@ if (Core::getInstance()->user->getId()) {
 switch ( $_SERVER['SERVER_NAME'].'/' ) {
     case URL_ROOT_IFRAME:
         Core::getInstance()->tpl->assign('template_view', 'iframe');
-        Core::getInstance()->tpl->display("index.iframe.html");
+        Core::getInstance()->tpl->display("index/index.iframe.html");
         break;
     default:
         Core::getInstance()->tpl->assign('template_view', 'index');
