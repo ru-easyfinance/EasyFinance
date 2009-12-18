@@ -49,19 +49,10 @@ $(document).ready(function() {
         }
     });
 
-    // При наведении мыши
-//    $('div.line tr').live('mouseover', function() {
-//        $(this).addClass('act').find('ul').show();
-//
-//    });
     // При двойном клике
     $('div.line tr').live('dblclick', function() {
         $(this).find('li.edit').click();
     });
-//    $('div.line tr').live('mouseout', function() {
-//        $('div.line ul').hide();
-//        $('div.line tr').removeClass('act');
-//    });
     $('li.edit').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
