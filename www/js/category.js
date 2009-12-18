@@ -398,6 +398,8 @@ $(document).ready(function() {
             }
 
             var done = function(cat) {
+                    $('#btnSave').removeAttr('disabled');
+
                     $('#add_form').find('#namecat').val('');
                     $('#add_form').find('#btnSave').removeAttr('disabled');
                     $('#add_form').hide();
