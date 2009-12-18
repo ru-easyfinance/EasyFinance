@@ -178,7 +178,8 @@ table.tab1 span.t2 { background-position: 0 -10px; }
 table.tab1 span.t3 { background-position: 0 -20px; }
 
 
-
+.operation_list table.periodic{margin: 0;}
+.operation_list table.periodic.body{height: 300px; width: auto; owerflow-y: scroll; overflow-x: hidden;}
 /*----------------------------------------------------------*/
 
 #container1 { position: relative; width: 940px;  margin: 0 auto -130px auto; min-height: 100%; }
