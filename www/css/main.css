@@ -411,7 +411,7 @@ dl.bill_list dd ul li a span { text-decoration: underline; }
 dl.bill_list dd ul li a:hover { background: #f6f6f6 url('/img/i/icons.gif') no-repeat 5px -214px; }
 dl.bill_list dd ul li a:hover span { color: #e46717; }
 dl.bill_list dd.amount { display: block; position: relative; margin-left: 11px; padding-top: 3px; font-size: 14px; color: #36a500; line-height: 18px; font-weight: bold; }
-dl.bill_list dd.amount div { padding-left:10px; position: relative; width: 130px; text-align: left; }
+dl.bill_list dd.amount div { padding-left:10px; position: relative; width: 110px; text-align: left; }
 dl.bill_list dd.amount div strong{position:relative; left: -5px;}
 dl.bill_list dd.amount div span { display: block; position: absolute; top: 0; left: 73px; }
 
