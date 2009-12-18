@@ -9,7 +9,7 @@
     <div class="loginError">{$loginErrorText}</div>
 
 {if $smarty.const.IS_DEMO == false}
-    <form action="https://{$smarty.const.URL_ROOT}login/" method="post">
+    <form action="/login/" method="post">
 {else}
     <form action="http://{$smarty.const.URL_ROOT}login/" method="post">
 {/if}

@@ -26,8 +26,9 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
-        if ( (! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/") )
-		header("Location: http://iframe." . URL_ROOT_MAIN . "login/");
+        if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
+            header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
+        }
         Core::getInstance()->tpl->assign('template_view', 'iframe');
         Core::getInstance()->tpl->display("iframe/index.iframe.html");
         break;
