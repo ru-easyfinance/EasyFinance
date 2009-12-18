@@ -245,10 +245,7 @@ class Login_Model
 					}
 					else
 					{
-                                                if ($_SERVER['HTTP_HOST'].'/' == 'iframe.' . URL_ROOT_MAIN)
-                                                    header("Location: http://iframe." . URL_ROOT_MAIN . "info/");
-                                                else
-                                                    header("Location: /info/");
+                                                header("Location: /info/");
 						exit;
 					}
 				}
