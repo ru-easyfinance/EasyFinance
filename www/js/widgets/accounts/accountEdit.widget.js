@@ -54,6 +54,7 @@ easyFinance.widgets.accountEdit = function(){
         $('#btnAddAccount').click(function(){
             var str = $('#blockCreateAccounts #name').val();
             var description = $('#blockCreateAccounts #description').val();
+            var sum = $('#starter_balance').val();
             var id =$('#blockCreateAccounts').find('table').attr('id');
             var l = 1;
 
@@ -69,6 +70,11 @@ easyFinance.widgets.accountEdit = function(){
 
             if (description.indexOf('<') != -1 || description.indexOf('>') != -1) {
                 $.jGrowl("Примечание не должно содержать символов < и >!", {theme: 'red', life: 5000});
+                return false;
+            }
+
+            if (isNaN(sum)) {
+                $.jGrowl("Введите сумму в виде числа!", {theme: 'red', life: 5000});
                 return false;
             }
 

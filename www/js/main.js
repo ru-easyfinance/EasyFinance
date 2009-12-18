@@ -580,6 +580,27 @@ $('.tags_list .add').live('click', function(){
     var attributes = {id: "gaugeMain"};
     swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 
+/*
+$(".flash")
+    .mouseover(function(){
+        $(".flash").qtip({
+                   content: 'test-test-test',
+                   position: {
+                      type: 'fixed',
+                      target: false,
+                      corner: {
+                         tooltip: 'rightMiddle', // Use the corner...
+                         target: 'leftMiddle' // ...and opposite corner
+                      }
+                   }
+        });
+    })
+    .mouseout(function(){
+        //$('.qtip').remove();
+        alert('out');
+    }
+);
+*/
     //курсы валют в правой панели
     //currency
     data = res['currency'];

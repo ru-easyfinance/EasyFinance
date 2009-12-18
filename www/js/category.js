@@ -97,9 +97,9 @@ $(document).ready(function() {
         }
 
         if (cat.user[id]['custom'] == "0")
-            $('#divCategoryEditType').hide();
+            $('#divCategoryEditCustom').hide();
         else
-            $('#divCategoryEditType').show();
+            $('#divCategoryEditCustom').show();
 
         $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
