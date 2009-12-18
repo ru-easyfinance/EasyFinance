@@ -1540,6 +1540,7 @@ ul.currency.all li a {
 }
 .formRegister table td {
     padding: .2em;
+    width: 15.4em;
 }
 .formRegister table td.name {
     width: 10em;
