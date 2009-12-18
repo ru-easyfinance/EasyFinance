@@ -32,6 +32,8 @@
             $.post('/restore/submit_request',
                 {login: $('#flogin').val(), verifyCode: $.cookie('sessIds')},
                 function(data) {
+                    $('#btnLogin').removeAttr('disabled');
+                    
                     if (data) {
                         if (data.result) {
                             $.jGrowl(data.result.text, {theme: 'green'});
