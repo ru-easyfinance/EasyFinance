@@ -40,10 +40,13 @@ $(document).ready(function() {
     $('#subcat').change(function(){
         // если создаём подкатегорию, то скрываем выбор системной категории
         // она будет наследоваться от родительской
-        if ($(this).val() == "")
+        if ($(this).val() == "") {
             $('#categoryEditSystem').show();
-        else
+            $('#catsys').removeAttr('disabled');
+        } else {
             $('#categoryEditSystem').hide();
+            $('#catsys').attr('disabled', 'disabled');
+        }
     });
 
     // При наведении мыши
