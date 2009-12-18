@@ -115,7 +115,7 @@ $(document).ready(function() {
         
         if (cat.user[id]['parent'] != "0") {
             $('#categoryEditSystem').hide();
-            $('#catsys').attr('disabled', true);
+            $('#catsys').attr('disabled', true).val("");
         } else {
             $('#categoryEditSystem').show();
             $('#catsys').removeAttr('disabled');
@@ -354,15 +354,9 @@ $(document).ready(function() {
                 // подкатегория
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
 
-                if (oldCatId != -1 && type != oldCat.type && newParent.type != 0) {
+                if (oldCatId != -1 && type != oldCat.type && newParent.type != 0 && newParent.type != type) {
                     // при изменении типа подкатегории
                     // ЗАПРЕТИТЬ. тикет 389
-                    //
-                    //var strPrompt = 'Вы пытаетесь изменить тип подкатегории. '
-                    //    + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
-
-                    //if (!confirm(strPrompt))
-                    //    return;
 
                     var strType = "расходную";
                     if (type == 1)
@@ -400,24 +394,7 @@ $(document).ready(function() {
                     alert(strPrompt);
 
                     return;
-
-                    /*
-                    var strType = "универсальную";
-                    if (type == 1)
-                        strType = "доходную"
-                    else if (type == 0)
-                        strType = "расходную";
-
-                    var strPrompt = 'Вы пытаетесь поместить '
-                        + strType + ' подкатегорию в '
-                        + (type==1 ? "расходную" : "доходную") + ' категорию. \n'
-                        + '\nПри этом категория "' + newParent.name + '" станет универсальной. Продолжить?';
-
-                    if (!confirm(strPrompt))
-                        return;
-                    */
                 }
-                //}
             }
 
             var done = function(cat) {
