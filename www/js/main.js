@@ -55,46 +55,52 @@ var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
 var TransferSum = 0; //глобальная переменная которая передаст. сумму при переводе на другую валюту.
 function FloatFormat(obj, in_string )
 {
-    //'.'
-    var l = in_string.length;
-    var rgx = /[0-9]/;
-    var c=0;
-    var p =1;
-    var newstr ='';
-    var i = 0;
+//    //'.'
+//    var l = in_string.length;
+//    var rgx = /[0-9]/;
+//    var c=0;
+//    var p =1;
+//    var newstr ='';
+//    var i = 0;
+//
+//    for(var a=1;a<=l;a++)
+//    {
+//        i=l-a+1;
+//        if (rgx.test(in_string.substr(i,1)))
+//        {
+//            if (c == 3)
+//            {
+//                newstr = ' ' + newstr;
+//                c = 0;
+//            }
+//            newstr =in_string.substr(i,1)+newstr;
+//            c++;
+//        }
+//        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==',')
+//        {
+//            if (p){
+//                newstr = newstr.substr(0,2)
+//                newstr ='.'+newstr;
+//            }
+//            c=0;
+//            p = 0;
+//        }
+//    }
+//    if (in_string.substr(1,1) == '-')newstr ='-'+newstr;
+    var newStr = formatCurrency(tofloat(in_string))
+    if (newStr == in_string) return false;
+    //ловим положение каретки,
+    //ловим символы перед ней,
+    $(obj).val(newStr);
+    //если они изменились сдвигаем каретку на один вправо
     
-    for(var a=1;a<=l;a++)
-    {
-        i=l-a+1;
-        if (rgx.test(in_string.substr(i,1)))
-        {
-            if (c == 3)
-            {
-                newstr = ' ' + newstr;
-                c = 0
-            }
-            newstr =in_string.substr(i,1)+newstr
-            c++;
-        }
-        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==',')
-        {
-            if (p){
-                newstr = newstr.substr(0,2)
-                newstr ='.'+newstr;
-            }
-            c=0;
-            p = 0;
-        }
-    }
-    if (in_string.substr(1,1) == '-')newstr ='-'+newstr;
-    $(obj).val(newstr)
 }
 
 function tofloat(s)
 {
     if (s != null) {
         s = s.toString();
-        return s.replace(/[ ]/gi, '');
+        return s.replace(/[^0-9\.\-]/gi, '');
     } else {
         return '';
     }
@@ -105,20 +111,23 @@ function tofloat(s)
  * @param num float Сумма, число
  * @return string
  */
- function formatCurrency(num) {
-    if (num=='undefined') num = 0;
-    //num = num.toString().replace(/\$|\,/g,'');
-    if(isNaN(num)) num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num*100+0.50000000001);
-    cents = num%100;
-    num = Math.floor(num/100).toString();
-    if(cents<10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-        num = num.substring(0,num.length-(4*i+3))+' '+
-        num.substring(num.length-(4*i+3));
-    return (((sign)?'':'-') + '' + num + '.' + cents);
+function formatCurrency(num) {
+    if(isNaN(num)) return "0.00";
+    var sign = new Number(num)
+    return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+//    if (num=='undefined') num = 0;
+//    //num = num.toString().replace(/\$|\,/g,'');
+//    if(isNaN(num)) num = "0";
+//    sign = (num == (num = Math.abs(num)));
+//    num = Math.floor(num*100+0.50000000001);
+//    cents = num%100;
+//    num = Math.floor(num/100).toString();
+//    if(cents<10)
+//        cents = "0" + cents;
+//    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+//        num = num.substring(0,num.length-(4*i+3))+' '+
+//        num.substring(num.length-(4*i+3));
+//    return (((sign)?'':'-') + '' + num + '.' + cents);
 }
 
 function MakeOperation(){
