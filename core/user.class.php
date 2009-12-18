@@ -174,7 +174,7 @@ class User
 
 	if (count($this->props) == 0)
 	{
-		Core::getInstance()->tpl->assign( 'loginErrorText', 'Не верный логин или пароль!' );
+		Core::getInstance()->tpl->assign( 'loginErrorText', 'Неверный логин или пароль!' );
 		$this->destroy();
 		return false;
 	}
