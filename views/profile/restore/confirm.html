@@ -70,6 +70,9 @@
                             } else {
                                 $.jGrowl(data.error.text, {theme: 'red'});
                             }
+
+                            if (data.redirect)
+                                window.location = data.redirect;
                         } else {
                             $.jGrowl('Ошибка на сервере!', {theme: 'red'});
                         }
