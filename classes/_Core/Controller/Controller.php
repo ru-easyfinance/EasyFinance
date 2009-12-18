@@ -177,10 +177,10 @@ abstract class _Core_Controller
                 '2' => 'Автомобиль',
                 '3' => 'Отпуск',
                 '4' => 'Финансовая подушка',
-                '5' => 'Прочее',
                 '6' => 'Свадьба',
                 '7' => 'Бытовая техника',
-                '8' => 'Компьютер'
+                '8' => 'Компьютер',
+                '5' => 'Прочее'
             ),
             'errors'=>Core::getInstance()->errors,
             'budget'=>Core::getInstance()->user->getUserBudget(),
