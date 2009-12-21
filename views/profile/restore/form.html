@@ -40,6 +40,11 @@
                         } else {
                             $.jGrowl(data.error.text, {theme: 'red'});
                         }
+
+                        if (data.result.redirect)
+                            window.location = data.result.redirect;
+                        else (data.error.redirect)
+                            window.location = data.error.redirect;
                     } else {
                         $.jGrowl('Ошибка на сервере!', {theme: 'red'});
                     }
