@@ -3,8 +3,9 @@
 class Mail_MessageModel extends _Core_Abstract_Model
 {
 	/**
-	 * Храним ид овнера для всяческих операций.
-	 *
+	 * Храним ид овнера для всяческих операций. Специфика двухвариативности базы данных.
+	 * Вообще нежелательный момент.
+	 * 
 	 * @var integer
 	 */
 	private $ownerId = null;
@@ -31,12 +32,12 @@ class Mail_MessageModel extends _Core_Abstract_Model
 		$cacheId = 'mailUser' . $user->getId();
 		
 		// Проверка наличия в кеше идентификаторов сообщений пользователя
-		//$messageIds = $cache->get( $cacheId );
+		// $messageIds = $cache->get( $cacheId );
 		// Если есть - запрашиваем их все из кеша
-		//if ( $messageIds && is_array($messageIds) )
-		//{
-		//	$modelsArray = $cache->getMulti( $messageIds );
-		//}
+		// if ( $messageIds && is_array($messageIds) )
+		// {
+		// 	$modelsArray = $cache->getMulti( $messageIds );
+		// }
 		
 		$sql = 'select m.*, trash
 			from messages_state ms
