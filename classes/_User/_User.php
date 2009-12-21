@@ -46,4 +46,9 @@ class _User
 	{
 		return $this->model->type;
 	}
+	
+	public function setPass( $value, $encoded = false )
+	{
+		$this->model->user_pass = $encoded?$value:sha1($value);
+	}
 }
