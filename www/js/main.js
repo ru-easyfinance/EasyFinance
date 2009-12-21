@@ -179,6 +179,12 @@ $(document).ready(function() {
         }
     }
 
+    if (res.result && res.result.text)
+        $.jGrowl(res.result.text, {theme: 'green'});
+
+    if (res.error && res.error.text)
+        $.jGrowl(error.text, {theme: 'red'});
+
     //открытие сообщений
     function inarray(key,arr) {
         for(k in arr) {
