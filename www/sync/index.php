@@ -76,7 +76,6 @@ function sync_getAuth($xmlRequest){
 
 }
 function sync_getAuthWithTestData($xmlRequest){
-    return "dgdgr";
     include ("../../classes/Sync/zaglushka.php");
     $a = New Sync($xmlRequest, $xmlAnswer);
     $answer = $a->qwe($xmlRequest, $xmlAnswer, 1);
