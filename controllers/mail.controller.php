@@ -61,9 +61,6 @@ class Mail_Controller extends _Core_Controller_User
 			$json['error'] = array('message'=>'Запрошенного сообщения не существует !');
 		}
 		
-		// Применение модификаций\удалений моделей
-		_Core_ObjectWatcher::getInstance()->performOperations();
-		
 		exit( json_encode($json) );
 	}
 	
@@ -84,10 +81,6 @@ class Mail_Controller extends _Core_Controller_User
 				'outbox' => $message->getJsonArray() 
 			)
 		);
-		
-		
-		// Применение модификаций\удалений моделей
-		_Core_ObjectWatcher::getInstance()->performOperations();
 		
 		exit( json_encode($json) );
 	}
@@ -125,9 +118,6 @@ class Mail_Controller extends _Core_Controller_User
 			) 
 		);
 		
-		// Применение модификаций\удалений моделей
-		_Core_ObjectWatcher::getInstance()->performOperations();
-		
 		exit( json_encode($json));
 	}
 	
@@ -143,9 +133,6 @@ class Mail_Controller extends _Core_Controller_User
 		{
 			$mail->getMessage( $messageId )->setTrash( true );
 		}
-		
-		// Применение модификаций\удалений моделей
-		_Core_ObjectWatcher::getInstance()->performOperations();
 		
 		$json['result'] = array( 'text' => 'Сообщение перемещено в корзину.' );
 		
@@ -164,9 +151,6 @@ class Mail_Controller extends _Core_Controller_User
 		{
 			$mail->getMessage( $messageId )->setTrash( false );
 		}
-		
-		// Применение модификаций\удалений моделей
-		_Core_ObjectWatcher::getInstance()->performOperations();
 		
 		$json['result'] = array( 'text' => 'Сообщение успешно восстановлено.' );
 		
