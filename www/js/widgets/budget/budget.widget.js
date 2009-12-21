@@ -295,7 +295,7 @@ easyFinance.widgets.budget = function(data){
 
 
     $('#budget .list.budget .child .w6 a.remove').live('click',function(){
-        if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
+        if (confirm('Вы действительно хотите удалить бюджет по данной категории?')){
             var id = $(this).closest('tr').attr('id')
             var type = $(this).closest('tr').attr('type')
             _model.del(_currentDate, id, type, function(){
@@ -305,7 +305,7 @@ easyFinance.widgets.budget = function(data){
         }
     })
     $('#budget .list.budget .nochild .w6 a.remove').live('click',function(){
-        if (confirm('Вы действительно хатите удалить бюджет по данной категории?')){
+        if (confirm('Вы действительно хотите удалить бюджет по данной категории?')){
             var id = $(this).closest('tr').attr('id')
             var type = $(this).closest('tr').attr('type')
             _model.del(_currentDate, id, type, function(){
