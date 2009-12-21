@@ -966,7 +966,7 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
- table.t_body{height: 300px; overflow-x: hidden; overflow-y: scroll; display: block}
+ table.t_body{max-height: 300px; overflow-x: hidden; overflow-y: scroll; display: block}
  table.tab1 tr{height: 20px}
 .operation_list table div.cont { position: relative; }
  table.tab1 td{width: 24%}
