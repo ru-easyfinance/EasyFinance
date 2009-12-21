@@ -975,12 +975,25 @@ $(".flash")
         });
     });
 
-    if (window.location.host.toString().substr(0, 5) != "demo.") 
+    $('#popupcalendar').dialog({
+        bgiframe: true,
+        autoOpen: false,
+        resizable: false,
+        width: 420,
+        close:function(){
+            $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
+            $.cookie('events_hide', 1, {path: '/'});
+        }
+    })
+
+    if (window.location.host.toString().substr(0, 5) != "demo."){
         ShowEvents();
+    }
     
     /**
      * Выводит окошко пользователя для управления событиями
      */
+    
     function ShowEvents(type,page) {
         if (type == null) {type = '';}
         if (page == null) {page = 1 ;}
@@ -1043,10 +1056,11 @@ $(".flash")
                 $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
                 if ($.cookie('events_hide') != 1) {
                     $('#popupcalendar').show();
+                    $('#popupcalendar').dialog('open');
                 }
                 //$('#popupcalendar .inside').css('width', 'auto');
             } else {
-                $('#popupcalendar').hide();
+                $('#popupcalendar').dialog('close');
             }
 //            <th>Пр. дней</th>
 //            <th>Категория</th>

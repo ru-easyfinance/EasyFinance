@@ -1328,7 +1328,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupadd_calendar .but { margin: 10px 0 0 168px; }
 
 
-#popupaddobject, #popupcalendar { display: none; position: absolute; width: 687px; z-index: 1000; }
+#popupaddobject { display: none; position: absolute; width: 687px; z-index: 1000; }
 #popupaddobject .cont, #popupcalendar .cont { position: relative; width: 687px; overflow: hidden; }
 #popupaddobject .cont .ct, #popupaddobject .cb div,
 #popupcalendar .cont .ct, #popupcalendar .cb div{ position: absolute; top: 0; left: 0; width: 687px; height: 800px; z-index: 0; background: url('/img/i/ramka6.png') no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka6.png", sizingMethod="crop"); }
