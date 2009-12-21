@@ -31,18 +31,6 @@ class Restore_Controller extends _Core_Controller
 		setcookie('sessIds', $restoreHash, time() + 60);
 	}
 	
-	public function confirm( array $args)
-	{
-		$code = trim( str_ireplace('/','',$args[0]) );
-		
-		if( $code == '' )
-		{
-			header('Location: /restore');
-		}
-		
-		$this->tpl->assign('name_page', 'profile/restore/confirm');
-	}
-	
 	public function submit_request()
 	{
 		$json = array();
@@ -64,11 +52,11 @@ class Restore_Controller extends _Core_Controller
 		}
 		
 		try//Пробуем загрузить пользователя с указанным логином. И, если вышло - сохраняем запрос в базу.
-		{
+		{		
+			$moron = _User::loadByLogin( $_POST['login'] );
+			
 			// Уничтожаем хранимый код валидации
 			unset($_COOKIE['sessIds'], $_SESSION['restoreHash']);
-			
-			$moron = _User::loadByLogin( $_POST['login'] );
 			
 			$code = $this->storeRequest( $moron );
 			
@@ -112,9 +100,86 @@ class Restore_Controller extends _Core_Controller
 		exit( json_encode($json));
 	}
 	
+	public function confirm( array $args )
+	{
+		$this->tpl->assign('name_page', 'profile/restore/confirm');
+		
+		$code = trim( str_ireplace('/','',$args[0]) );
+		
+		if( $code == '' )
+		{
+			header('Location: /restore');
+		}
+		
+		try
+		{
+			$row 		= $this->loadRequest( $code );
+			
+			$userId 	= $row['user_id'];
+			$date		= $row['date'];
+		}
+		catch( Exception $e )
+		{
+			header('Location: /restore');
+		}
+		
+		if( (strtotime($date) + 60 * 30) < time() )
+		{
+			$_SESSION['errorMessage'] = 'Время действия ссылки восстановления пароля истекло! Пожалуйста, повторите запрос.';
+			header('Location: /restore');
+		}
+		
+		$_SESSION['restoreCode'] = $code;
+	}
+	
 	public function submit_confirm()
 	{
+		$json = array();
 		
+		if( !isset($_SESSION['restoreCode']) || !$_SESSION['restoreCode'])
+		{
+			$json['error'] = array( 'text' => '', 'redirect' => '/restore' );
+			exit( json_encode($json) );
+		}
+		
+		try
+		{
+			$row 		= $this->loadRequest( $_SESSION['restoreCode'] );
+			
+			$userId	= $row['user_id'];
+			$date 		= $row['date'];
+		}
+		catch( Exception $e )
+		{
+			$json['error'] = array('redirect' => '/restore' );
+			exit( json_encode($json) );
+		}
+		
+		if( (strtotime($date) + 60 * 30) < time() )
+		{
+			$json['result'] = array(
+				'redirect' => '/restore'
+			);
+			
+			$_SESSION['errorMessage'] = 'Время действия ссылки восстановления пароля истекло! Пожалуйста, повторите запрос.';
+			
+			exit( json_encode($json) );
+		}
+		
+		$moron = _User::load( $userId );
+		$moron->setPass( $_POST['pass'] );
+		
+		$this->unsetRequest( $_SESSION['restoreCode'] );
+		unset($_SESSION['restoreCode'] );
+		
+		$json['result'] = array(
+			'text'=>'',
+			'redirect' => 'https://' . URL_ROOT_MAIN . 'login'
+		);
+		
+		$_SESSION['resultMessage'] = 'Изменение пароля успешно выполнено. Теперь вы можете войти в систему используя новый пароль.';
+		
+		exit( json_encode($json) );
 	}
 	
 	private function generateCode()
@@ -133,15 +198,19 @@ class Restore_Controller extends _Core_Controller
 	
 	private function loadRequest( $code )
 	{
-		$row = Core::getInstance()->db->selectRow( 'select * from registration where reg_id=?', $code );
+		$row = Core::getInstance()->db->selectRow( 'select user_id, date from registration where reg_id=?', $code );
 		
 		if( !$row || !is_array($row) || !sizeof($row) )
 		{
-			throw Exception('Row with given code do not exist!');
+			throw new Exception('Row with given code do not exist!');
 		}
 		
-		if( $row['date'] )
-		
-		return _User::load( $row['user_id'] );
+		return $row;
+	}
+	
+	private function unsetRequest( $code )
+	{
+		// Удаляем запись с кодом подтверждения из бд
+		Core::getInstance()->db->query('delete from registration where reg_id=?', $code);
 	}
 }

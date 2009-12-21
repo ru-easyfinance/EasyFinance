@@ -77,24 +77,60 @@ abstract class _Core_Controller
         }
     }
 
-    /**
-     * При завершении работы, контроллера
-     */
-    function __destruct()
-    {
-        $this->loadJS();
-
-        $user = Core::getInstance()->user;
-        if (is_null($user->getId())) {
-            Core::getInstance()->tpl->assign('res', json_encode(
-                array(
-                    'errors' => Core::getInstance()->errors,
-                    'flash'  => 0
-                )
-            ));
-            Core::getInstance()->tpl->assign('url_root', URL_ROOT);
-            return false;
-        }
+	/**
+	 * При завершении работы, контроллера
+	 */
+	function __destruct()
+	{
+		if( !session_id() )
+		{
+			session_start();
+		}
+		
+		// Применение модификаций\удалений моделей (после внедрения TemplateEngine_Json - удалить)
+		_Core_ObjectWatcher::getInstance()->performOperations();
+		
+		// Подгрузка js файлов
+		$this->loadJS();
+		
+		$user = Core::getInstance()->user;
+		
+		$res = array(
+			'errors' => Core::getInstance()->errors,
+			'flash' => 0,
+		);
+		
+		if( isset($_SESSION['resultMessage']) )
+		{
+			if( isset($_SESSION['messageSend']) )
+			{
+				$res['result'] = array( 'text' => $_SESSION['resultMessage'] );
+				unset( $_SESSION['resultMessage'], $_SESSION['messageSend']);
+			}
+			else
+			{
+				$_SESSION['messageSend'] = true;
+			}
+		}
+		
+		if( isset($_SESSION['errorMessage']) )
+		{
+			if( isset($_SESSION['errorMessage']) )
+			{
+				$res['result'] = array( 'text' => $_SESSION['errorMessage'] );
+				unset( $_SESSION['errorMessage'], $_SESSION['messageSend']);
+			}
+			else
+			{
+				$_SESSION['messageSend'] = true;
+			}
+		}
+		
+		if ( is_null($user->getId()) )
+		{
+			Core::getInstance()->tpl->assign('res', json_encode($res));
+			return false;
+		}
 
         Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
         // Подготавливаем счета
@@ -159,8 +195,8 @@ abstract class _Core_Controller
         } catch ( Exception $e ) {
             $cats = null;
         }
-
-        Core::getInstance()->tpl->assign('res', json_encode(array(
+	
+	$res += array(
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'accounts' => $accounts,
@@ -186,7 +222,9 @@ abstract class _Core_Controller
             'budget'=>Core::getInstance()->user->getUserBudget(),
             'category' => $cats,
             'informers' => $infoa
-        )));
+            );
+        
+        Core::getInstance()->tpl->assign('res', json_encode($res));
     }
 }
 
