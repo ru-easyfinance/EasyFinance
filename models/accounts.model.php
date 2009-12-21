@@ -416,7 +416,7 @@ class Accounts_Model
             $res[$val]['cur']=$cur[$key];
             $res[$val]['id']=$id[$key];
             $res[$val]['name']=$acc_name[$key];
-            $res[$val]['description']=$acc_descr[$key];
+            $res[$val]['descr']=$acc_descr[$key];
             $res[$val]['starter_balance']=$acc_first_balance[$key];
 
             $reservsqlquery = "SELECT sum(money) AS s
