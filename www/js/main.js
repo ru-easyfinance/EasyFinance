@@ -987,7 +987,7 @@ $(".flash")
         resizable: false,
         width: 420,
         close:function(){
-            $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
+            //$.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
             $.cookie('events_hide', 1, {path: '/'});
         }
     })
