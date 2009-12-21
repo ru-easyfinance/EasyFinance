@@ -73,7 +73,7 @@ easyFinance.widgets.accountEdit = function(){
                 return false;
             }
 
-            if (isNaN(parseFloat(sum))) {
+            if (sum != '' && isNaN(parseFloat(sum))) {
                 $.jGrowl("Введите сумму в виде числа!", {theme: 'red', life: 5000});
                 return false;
             }
