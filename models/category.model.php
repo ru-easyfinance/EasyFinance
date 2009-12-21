@@ -280,6 +280,12 @@ class Category_Model {
                 Core::getInstance()->user->getId(), $id);
         // Системная категория, можно изменить только имя
         } else {
+            $catname = $this->db->query('SELECT cat_name FROM category WHERE user_id=? AND
+                cat_id=?', Core::getInstance()->user->getId(), $id);
+            if ( $catname[0]['cat_name'] == $name)
+                return array('error' => array(
+                    'text' => 'Категория не была изменена'
+                ));
             $sql = "UPDATE category SET cat_name = ? WHERE user_id = ? AND cat_id = ?";
             $result = $this->db->query($sql, $name, Core::getInstance()->user->getId(), $id);
         }
