@@ -58,9 +58,31 @@ class Sync{
     //const $recordsMap = null;
 
 
+    function clearAll($user_id = 0){
+        $sql = "DELETE FROM accounts WHERE user_id=?";
+        $a = $this->db->query($sql, $user_id);
+        $sql = "DELETE FROM category WHERE user_id=?";
+        $a = $this->db->query($sql, $user_id);
+        $sql = "DELETE FROM operation WHERE user_id=?";
+        $a = $this->db->query($sql, $user_id);
+        $sql = "DELETE FROM periodic WHERE user_id=?";
+        $a = $this->db->query($sql, $user_id);
+        $sql = "DELETE FROM records_map WHERE user_id=?";
+        $a = $this->db->query($sql, $user_id);
+    }
+
+    function deleteAllByUser($xmlReq=''){
+        $sn = php_xmlrpc_decode($xmlReq);
+        $this->dataarray = $sn;
+        if (!$this->sync_getAuth($this->dataarray[0])){
+            // в случае неудачи
+            return false;
+        }
+        clearAll($this->user);
+    }
+
     function qwe($xmlReq, &$xmlAnswer, $needdec='0'){
         //echo ('<br>parametrov '.$xmlReq->getNumParams());
-        //include ('zaglushka.php');
         $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
         $GLOBALS['xmlrpc_defencoding'] = "UTF-8";
 

@@ -76,9 +76,15 @@ function sync_getAuth($xmlRequest){
 
 }
 function sync_getAuthWithTestData($xmlRequest){
+    return "dgdgr";
     include ("../../classes/Sync/zaglushka.php");
     $a = New Sync($xmlRequest, $xmlAnswer);
     $answer = $a->qwe($xmlRequest, $xmlAnswer, 1);
+    return $answer;
+}
+function sync_clearAcc($xmlRequest){
+    $a = New Sync($xmlRequest, $xmlAnswer);
+    $answer = $a->deleteAllByUser($xmlRequest);
     return $answer;
 }
 
@@ -88,7 +94,10 @@ $a=array(
     ),
     "sync.getAuthWithTestData" => array(
             "function" => "sync_getAuthWithTestData",
-    )
+    ),
+    "sync.clearAcc" => array(
+            "function" => "sync_clearAcc",
+    ),
 );
 
 $s=new xmlrpc_server($a, false);
