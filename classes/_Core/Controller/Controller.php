@@ -159,8 +159,8 @@ abstract class _Core_Controller
         } catch ( Exception $e ) {
             $cats = null;
         }
-
-        Core::getInstance()->tpl->assign('res', json_encode(array(
+        
+        $res = array(
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'accounts' => $accounts,
@@ -186,7 +186,20 @@ abstract class _Core_Controller
             'budget'=>Core::getInstance()->user->getUserBudget(),
             'category' => $cats,
             'informers' => $infoa
-        )));
+        );
+        
+	if(isset( $_SESSION['errorMessage'] ))
+	{
+        		$res['error'] = array( 'text' => $_SESSION['errorMessage'] );
+        		unset($_SESSION['errorMessage']);
+	}
+
+	if(isset( $_SESSION['resultMessage'] ))
+	{
+        		$res['result'] = array( 'text' => $_SESSION['resultMessage'] );
+        		unset($_SESSION['resultMessage']);
+	}
+	
+	Core::getInstance()->tpl->assign('res', json_encode($res));
     }
 }
-
