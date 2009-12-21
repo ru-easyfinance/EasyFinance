@@ -987,7 +987,7 @@ $(".flash")
         resizable: false,
         width: 420,
         close:function(){
-            //$.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
+            $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
             $.cookie('events_hide', 1, {path: '/'});
         }
     })
@@ -1066,7 +1066,9 @@ $(".flash")
                 }
                 //$('#popupcalendar .inside').css('width', 'auto');
             } else {
-                $('#popupcalendar').dialog('close');
+                if ($('#popupcalendar').dialog('isOpen')){
+                    $('#popupcalendar').dialog('close');
+                }
             }
 //            <th>Пр. дней</th>
 //            <th>Категория</th>
