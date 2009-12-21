@@ -154,6 +154,12 @@ $(document).ready(function(){
                     s += '<img src="/img/i/rest.png" alt="" />'
                 else if (data[v]['category']==1)
                     s += '<img src="/img/i/home.png" alt="" />'
+                else if (data[v]['category']==6)
+                    s += '<img src="/img/i/wedd.png" alt="" />'
+                else if (data[v]['category']==7)
+                    s += '<img src="/img/i/bitv.png" alt="" />'
+                else if (data[v]['category']==8)
+                    s += '<img src="/img/i/comp.png" alt="" />'
                 else
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
