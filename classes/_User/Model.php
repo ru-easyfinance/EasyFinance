@@ -46,9 +46,9 @@ class _User_Model extends _Core_Abstract_Model
 	
 	public function save()
 	{
-		$sql = 'update users set user_name=?, user_pass=?, user_mail=?';
+		$sql = 'update users set user_name=?, user_pass=?, user_mail=? where id=?';
 		
-		Core::getInstance()->db->query( $sql, $this->name, $this->pass, $this->mail );
+		Core::getInstance()->db->query( $sql, $this->name, $this->pass, $this->mail, $this->id );
 	}
 	
 	public function delete()
