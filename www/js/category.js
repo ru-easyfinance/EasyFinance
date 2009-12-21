@@ -34,7 +34,6 @@ $(document).ready(function() {
         $('#categoryEditSystem').show();
         $('#divCategoryEditCustom').show();
         $('#subcat').removeAttr('disabled');
-        $('#catsys').removeAttr('disabled');
         $('form').attr('action','/category/add/');
     });
 
@@ -42,11 +41,9 @@ $(document).ready(function() {
         // если создаём подкатегорию, то скрываем выбор системной категории
         // она будет наследоваться от родительской
         if ($(this).val() == "") {
-            $('#categoryEditSystem').show();
-            $('#catsys').removeAttr('disabled');
+            $('#divCategoryEditSystem').show();
         } else {
-            $('#categoryEditSystem').hide();
-            $('#catsys').attr('disabled', 'disabled');
+            $('#divCategoryEditSystem').hide();
         }
     });
 
@@ -109,11 +106,9 @@ $(document).ready(function() {
         $('#catsys').val(cat.user[id]['system']);
         
         if (cat.user[id]['parent'] != "0") {
-            $('#categoryEditSystem').hide();
-            $('#catsys').attr('disabled', true).val("");
+            $('#divCategoryEditSystem').hide();
         } else {
-            $('#categoryEditSystem').show();
-            $('#catsys').removeAttr('disabled');
+            $('#divCategoryEditSystem').show();
         }
     }
 
@@ -198,7 +193,8 @@ $(document).ready(function() {
     }
 
     function listInsertChildCategory(cat, afterNode){
-        var system = easyFinance.models.category.getSystemCategories()[cat.system];
+        var parent = easyFinance.models.category.getUserCategories()[cat.parent];
+        var system = easyFinance.models.category.getSystemCategories()[parent.system];
 
         var pr = cat['parent'];
 
