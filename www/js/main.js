@@ -1066,7 +1066,7 @@ $(".flash")
                 }
                 //$('#popupcalendar .inside').css('width', 'auto');
             } else {
-                if ($('#popupcalendar').dialog('isOpen')){
+                if ($('#popupcalendar:visible').length > 0){
                     $('#popupcalendar').dialog('close');
                 }
             }
