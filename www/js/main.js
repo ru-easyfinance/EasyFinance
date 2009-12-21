@@ -183,7 +183,7 @@ $(document).ready(function() {
         $.jGrowl(res.result.text, {theme: 'green'});
 
     if (res.error && res.error.text)
-        $.jGrowl(error.text, {theme: 'red'});
+        $.jGrowl(res.error.text, {theme: 'red'});
 
     //открытие сообщений
     function inarray(key,arr) {
