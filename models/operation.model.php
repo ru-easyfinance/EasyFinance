@@ -249,11 +249,22 @@ class Operation_Model {
             $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?
                 WHERE user_id = ? AND id = ?";
             $next = $this->db->query("SELECT id FROM operation WHERE tr_id=?", $id);
-            $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), NULL, $this->user->getId(), $id);//перевод с
-            if ($convert)
-                $this->db->query($sql, $convert, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
-            else
-                $this->db->query($sql, $money, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
+            if ($next){//если есть смежная запись, т.е. редактируем перевод
+                $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), NULL, $this->user->getId(), $id);//перевод с
+                if ($convert)
+                    $this->db->query($sql, $convert, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
+                else
+                    $this->db->query($sql, $money, $date, $toAccount, $account, $comment, implode(', ', $tags), $money, $this->user->getId(), $next[0]['id']);//перевод на
+            } else {// иначе делаем перевод из доходной/расходной операции
+                $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?, cat_id=0, tr_id=0
+                WHERE user_id = ? AND id = ?";
+                $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), NULL, $this->user->getId(), $id);//перевод с
+                $sql = "INSERT INTO operation
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+                $this->db->query($sql, $this->user->getId(), $money, $date, -1, $toAccount, $id,
+                    $comment, $account, NULL);
+            }
         }
         $this->save();
         return '[]';
