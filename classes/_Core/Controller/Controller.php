@@ -96,8 +96,7 @@ abstract class _Core_Controller
 		$user = Core::getInstance()->user;
 		
 		$res = array(
-			'errors' => Core::getInstance()->errors,
-			'flash' => 0,
+			'errors' => Core::getInstance()->errors //@TODO Удалить потом
 		);
 		
 		if( isset($_SESSION['resultMessage']) )
