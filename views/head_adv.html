@@ -6,7 +6,7 @@
             <div class="ct"><div></div></div>
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
                 {if $user_info.user_id > 0}
-                    {*<!--{if $smarty.server.REQUEST_URI == "/accounts/"}
+                    {if $smarty.server.REQUEST_URI == "/accounts/"}
                     <img src="/img/i/banaccount.jpg" alt="Здесь могла бы быть ваша реклама."  />
                     {elseif $smarty.server.REQUEST_URI == "/operation/"}
                     <img src="/img/i/banoperation.jpg" alt="Здесь могла бы быть ваша реклама."  />
@@ -21,8 +21,8 @@
                     {elseif $smarty.server.REQUEST_URI == "/calendar/"}
                     <img src="/img/i/bancalendar.jpg" alt="Здесь могла бы быть ваша реклама."  />
                     {elseif $smarty.server.REQUEST_URI == "/periodic/"}
-                    <img src="/img/i/banregtranzaction.jpg" alt="Здесь могла бы быть ваша реклама."  />-->*}
-                    {if $smarty.const.IS_DEMO == false}
+                    <img src="/img/i/banregtranzaction.jpg" alt="Здесь могла бы быть ваша реклама."  />
+                    {elseif $smarty.const.IS_DEMO == false}
                     <a href="/redirect/book"><img src="/img/i/bannerBook.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
                     {elseif $smarty.const.IS_DEMO == true}
                     <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
