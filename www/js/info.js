@@ -25,20 +25,19 @@ $('li.edit').live('click', function(){
     function(data){*/
     function InitInformers(){
         var data = res.informers;
-        var titles,gauges,name,value,pointer,xml,chartSample_1;
+        var name,value,pointer,xml,chartSample_1;
+        var titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
+        var gauges = ['gaugeMain.gif','gaugeMoney.gif','gaugeBudget.gif','gaugeCredits.gif','gaugeExpenses.gif'];
+        
         for (var i=0;i<5;i++)
         {
-            titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
-            gauges = ['gaugeMain.gif','gaugeMoney.gif','gaugeBudget.gif','gaugeCredits.gif','gaugeExpenses.gif'];
-
             if (isNaN(data[i]['color']))
                 data[i]['color'] = 1;
 
             // init gauges
-            var title = titles[i]; // (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
+            var title = titles[i];
             $('#flashTitle_'+i).text(title);
             var size = (i==0) ? "107" : "70";
-            //var flashvars = {title: "", value: data[0][i], bgimage: "/img/i/" + gauges[i]};
             var flashvars = {title: data[i]['title'], value: data[i]['value'], bgimage: ""};
             var params = {wmode: "transparent"};
             var attributes = {id: "gauge"+i};
@@ -46,8 +45,8 @@ $('li.edit').live('click', function(){
         }
         print_targets(0);
     }
-    InitInformers();/*,
-    'json');*/
+    
+    InitInformers();
 
     /**
      * Выводит список финансовых целей пользователя
