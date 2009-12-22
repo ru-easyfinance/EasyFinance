@@ -86,6 +86,7 @@ $(document).ready(function() {
         // тикет 425
         oldCatId = id;
         // тикеты 299, 389
+        debugger;
         if (cat.user[id]['parent'] == "0") {
             $('#categoryEditSystem').show();
             $('#subcat').attr('disabled', true);
@@ -240,11 +241,19 @@ $(document).ready(function() {
     }
 
     function updateCategory(oldCat, newCat) {
+        debugger;
         if (oldCat.parent == "0" || oldCat.parent == "") {
             // родительская категория
-            // обновляем название "по месту"
-            // остальные изменения внешне не отображаются
-            $('#category_' + oldCat.id + ' a:first').text(newCat.name);
+            // обновляем название, иконку и сис. категорию "по месту"
+            var $cat = $('#category_' + oldCat.id);
+            // обновляем название
+            $cat.find('a:first').text(newCat.name);
+            // обновляем иконку
+            $cat.find('img').attr('src', '/img/i/icoCatType'+newCat.type+'.gif');
+            // обновляем системную категорию для родителей и детей
+            var sysName = easyFinance.models.category.getSystemCategories()[newCat.system].name;
+            $cat.find('.system').text(sysName);
+            $cat.find('td.w3').text(sysName);
         } else {
             // дочерняя категория
             
