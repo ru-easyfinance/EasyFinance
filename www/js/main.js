@@ -731,7 +731,7 @@ $(".flash")
             '/report/':'m4'};
 
         var page_mid = pathtoid[pathName];
-        $('div#mainwrap #'+page_mid).addClass('cur act');//.children('a').addClass('cur');
+        $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
         $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
 
         // код для переключения внешнего вида вкладок
