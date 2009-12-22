@@ -86,7 +86,6 @@ $(document).ready(function() {
         // тикет 425
         oldCatId = id;
         // тикеты 299, 389
-        debugger;
         if (cat.user[id]['parent'] == "0") {
             $('#categoryEditSystem').show();
             $('#subcat').attr('disabled', true);
@@ -241,7 +240,6 @@ $(document).ready(function() {
     }
 
     function updateCategory(oldCat, newCat) {
-        debugger;
         if (oldCat.parent == "0" || oldCat.parent == "") {
             // родительская категория
             // обновляем название, иконку и сис. категорию "по месту"
@@ -316,6 +314,8 @@ $(document).ready(function() {
             var sys = $('#catsys').val();
 
             var oldCat;
+            var strType = '';
+            var strPrompt = '';
 
             if (oldCatId != -1)
                 oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[oldCatId]);
@@ -358,13 +358,13 @@ $(document).ready(function() {
                     // при изменении типа подкатегории
                     // ЗАПРЕТИТЬ. тикет 389
 
-                    var strType = "расходную";
+                    strType = "расходную";
                     if (type == 1)
                         strType = "доходную"
                     else if (type == 0)
                         strType = "универсальную";
 
-                    var strPrompt = 'Невозможно поместить '
+                    strPrompt = 'Невозможно поместить '
                         + strType + ' подкатегорию в '
                         + (type==1 ? "расходную" : "доходную") + ' категорию.';
                     
@@ -381,13 +381,13 @@ $(document).ready(function() {
                     // или расходную подкатегорию в доходную
                     // ЗАПРЕТИТЬ. тикет 389
 
-                    var strType = "расходную";
+                    strType = "расходную";
                     if (type == 1)
                         strType = "доходную"
                     else if (type == 0)
                         strType = "универсальную";
 
-                    var strPrompt = 'Невозможно поместить '
+                    strPrompt = 'Невозможно поместить '
                         + strType + ' подкатегорию в '
                         + (type==1 ? "расходную" : "доходную") + ' категорию.';
 

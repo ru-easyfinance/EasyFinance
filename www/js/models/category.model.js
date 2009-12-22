@@ -15,11 +15,13 @@ easyFinance.models.category = function(){
 
     // private functions
     function _htmlDecodeAll() {
-        for (var key in _categories.user) {
+        var key;
+
+        for (key in _categories.user) {
             _categories.user[key].name = _categories.user[key].name.replace(/&quot;/g, '"');
         }
 
-        for (var key in _categories.system) {
+        for (key in _categories.system) {
             _categories.system[key].name = _categories.system[key].name.replace(/&quot;/g, '"');
         }
     }
@@ -99,6 +101,9 @@ easyFinance.models.category = function(){
     }
 
     function editById(id, name, parent, type, system, callback){
+        if (parent == "")
+            parent = "0";
+        
         var oldCat = $.extend({}, _categories.user[id]);
 
         _update(EDIT_URL, id, name, parent, type, system, function(data){
