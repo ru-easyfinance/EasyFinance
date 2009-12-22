@@ -456,6 +456,7 @@ $(document).ready(function() {
                     }
                 },
                 legend:{show:true}*/
+         var itogoDengi = 0;
          var stri = "<div id='chart1div'>FusionCharts</div>";
           $('#chart').html(stri);
           stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
@@ -471,6 +472,7 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
+                        itogoDengi += data[0][c]['money']*oldcur/nowcur;
                   stri += "<set label='"+data[0][c]['cat']+"' value='"+formatCurrencyFusion(data[0][c]['money']*oldcur/nowcur)+"' />";
               }
           }
@@ -483,10 +485,14 @@ $(document).ready(function() {
             chart1.setDataXML(stri);
             chart1.render("chart1div");//*/
 
+            var itogoString='<br><table id="itogostroka" width="200px" align="right"><tr><td width="50px">Итого</td><td width="150px">';
+            itogoString += formatCurrencyFusion(itogoDengi) + ' ' + $('#currency :selected').attr('abbr');
+            itogoString += '</td></tr></table><br>';
+            $('#itogo').html(itogoString);
 
 
             //показываем тексты снизу
-            cur = res['currency'];
+            /*cur = res['currency'];
              nowcur = 0;//курс в знаменателе. в чём отображаем
              oldcur = 0;//курс в числителе. курс валюты счёта
              for(key in cur)
@@ -533,15 +539,15 @@ $(document).ready(function() {
                                 + '</tr>';
                 }
             }
-
+            
             $('tr:not(:first)','#reports_list').each(function(){
                 $(this).remove();
             });
             $('#reports_list').html(tr);
-
+            */
             $('#chart').show();
             $('#Period21,#Period22').hide();
-            $('.operation_list').show();
+            //$('.operation_list').show();
         },'json');
     }
 
