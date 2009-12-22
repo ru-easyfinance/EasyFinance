@@ -590,7 +590,7 @@ $('.tags_list .add').live('click', function(){
     // правая панель
 
     // главный тахометр - финансовое состояние
-    var flashvars = {title: "", value: res.informers[0][0], bgimage: ""};
+    var flashvars = {title: "", value: res.informers[0].value, bgimage: ""};
     var params = {wmode: "transparent"};
     var attributes = {id: "gaugeMain"};
     swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
