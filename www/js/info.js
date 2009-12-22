@@ -24,22 +24,22 @@ $('li.edit').live('click', function(){
     {},
     function(data){*/
     function InitInformers(){
-        var data = res['informers'];
+        var data = res.informers;
         var titles,gauges,name,value,pointer,xml,chartSample_1;
         for (var i=0;i<5;i++)
         {
             titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
             gauges = ['gaugeMain.gif','gaugeMoney.gif','gaugeBudget.gif','gaugeCredits.gif','gaugeExpenses.gif'];
 
-            if (isNaN(data[1][i]['color']))
-                data[1][i]['color'] = 1;
+            if (isNaN(data[i]['color']))
+                data[i]['color'] = 1;
 
             // init gauges
             var title = titles[i]; // (!data[1][i]['title'])?titles[i]:data[1][i]['title'];
             $('#flashTitle_'+i).text(title);
             var size = (i==0) ? "107" : "70";
             //var flashvars = {title: "", value: data[0][i], bgimage: "/img/i/" + gauges[i]};
-            var flashvars = {title: data[1][i]['title'], value: data[0][i], bgimage: ""};
+            var flashvars = {title: data[i]['title'], value: data[i]['value'], bgimage: ""};
             var params = {wmode: "transparent"};
             var attributes = {id: "gauge"+i};
             swfobject.embedSWF("/swf/efGauge.swf", "flash_"+i, size, size, "9.0.0", false, flashvars, params, attributes);
