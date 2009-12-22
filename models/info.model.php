@@ -208,45 +208,50 @@ class Info_Model
         if ( $this->output[1]['drain'] < 97) $des5 = $this->values['drain']['yellow']['text'];
         if ( $this->output[1]['drain'] < 85) $des5 = $this->values['drain']['green']['text'];
         return array(
-            'values' => array(
+            /*'values' => array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
                 , round(@$this->output[6]['profit'])    //Деньги
                 , round(@$this->output[6]['budget'])    //Бюджет
                 , 0 //round(@$this->output[6]['loans'])     //Кредиты
                 , round(@$this->output[6]['drain'])     //Управление расходами
             ),
-            'info' => array(
+            'info' => array(*/
                 array(
                     //'min'=>0,
                     //'color'=>'',
+                    'value'=>round(@$this->output[6]['result']),
                     'description'=>$des1,
                     'title'=>'Итоговая оценка финансового состояния'
                 ),
                 array(
                     //'min'=>0,
                     //'color'=>'',
+                    'value'=>round(@$this->output[6]['profit']),
                     'description'=>$des2,
                     'title'=>'Уровень денежных остатков (в кратности к 1 среднему месяцу расходов за предыдущие 3 месяца) за минусом долгов'
                 ),
                 array(
                     //'min'=>0,
                     //'color'=>'',
+                    'value'=>round(@$this->output[6]['budget']),
                     'description'=>$des3,
                     'title'=>'Использование бюджета расходов (% использованного бюджета)'
                 ),
                 array(
                     //'min'=>0,
                     //'color'=>'',
+                    'value'=>0,
                     'description'=>'',
                     'title'=>'Уровень выплат по кредитам (% от доходов)'
                 ),
                 array(
                     //'min'=>0,
                     //'color'=>'',
+                    'value'=>round(@$this->output[6]['drain']),
                     'description'=>$des5,
                     'title'=>'Показатель превышения доходов над расходами (средний показ за 3 месяца)'
                 ),
-            )
+            //)
         );
     }
 
