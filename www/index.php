@@ -26,6 +26,18 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
+        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['QUERY_STRING'],0,5) == 'id_ef')){
+            $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 6) );
+            $uar = array(
+                'user_id'=>substr($_SERVER[argv][0], 6),
+                'user_name'=>$select[0]['user_login'],
+                'user_type'=>0);
+            Core::getInstance()->tpl->assign('user_info', $uar);
+            Core::getInstance()->tpl->assign('template_view', 'iframe');
+            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe'.COOKIE_DOMEN, COOKIE_HTTPS);
+            header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
+            break;
+        }
         if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
             header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
         }
