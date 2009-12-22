@@ -395,11 +395,11 @@ $(document).ready(function() {
         });
 
 /**
- * Загружаем теги для левой панели
+ * Загружаем метки для левой панели
  */
 function loadLPTags(){
     var data = res['tags'];
-    var str = '<div class="title"><h2>Теги</h2><a title="Добавить" class="add">Добавить</a></div><ul>';
+    var str = '<div class="title"><h2>Метки</h2><a title="Добавить" class="add">Добавить</a></div><ul>';
     for (var key in data)
     {
         str = str + '<li><a>'+data[key]+'</a></li>';
@@ -422,7 +422,7 @@ $('.tags_list li a').live('click', function(){
                         old_tag: $('.edit_tag #old_tag').val()
                     },function(data){
                         if (data) {
-                            $.jGrowl('Тег успешно сохранён', {theme: 'green'});
+                            $.jGrowl('Метка успешно сохранена', {theme: 'green'});
                             res.tags = null;
                             var tags = {tags: data}
                             res = $.extend(res, tags);
@@ -430,12 +430,12 @@ $('.tags_list li a').live('click', function(){
                             $('.edit_tag').dialog('close');
                             $('.edit_tag #tag,.edit_tag #old_tag').val('');
                         } else {
-                            $.jGrowl('Ошибка при сохранении тега', {theme: 'red'});
+                            $.jGrowl('Ошибка при сохранении метки', {theme: 'red'});
                         }
                     },'json');
             },
             'Удалить': function() {
-                if (confirm('Тег "'+$('.edit_tag #old_tag').val()+'" будет удалён. Удалить?')) {
+                if (confirm('Метка "'+$('.edit_tag #old_tag').val()+'" будет удалён. Удалить?')) {
                     var tag = $('.edit_tag #old_tag').val();
                     $.post('/tags/del/', {
                         tag: tag
@@ -443,7 +443,7 @@ $('.tags_list li a').live('click', function(){
                             if (!data) {
                                 data={};
                             }
-                                $.jGrowl('Тег удалён', {theme: 'green'});
+                                $.jGrowl('Метка удалена', {theme: 'green'});
 
                                 $('.edit_tag #tag,.edit_tag #old_tag').val(0);
                                 delete res.tags;
@@ -477,9 +477,9 @@ $('.tags_list .add').live('click', function(){
                             loadLPTags();
                             $('.add_tag').dialog('close');
                             $('.add_tag input').val('');
-                            $.jGrowl('Новый тег успешно добавлен', {theme: 'green'});
+                            $.jGrowl('Новая метка успешно добавлена', {theme: 'green'});
                         } else {
-                            $.jGrowl('Ошибка при добавлении тега', {theme: 'red'});
+                            $.jGrowl('Ошибка при добавлении метки', {theme: 'red'});
                         }
                         $('.add_tag').dialog('close');
                     },'json');
@@ -731,7 +731,7 @@ $(".flash")
             '/report/':'m4'};
 
         var page_mid = pathtoid[pathName];
-        $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
+        $('div#mainwrap #'+page_mid).addClass('cur act');//.children('a').addClass('cur');
         $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
 
         // код для переключения внешнего вида вкладок
