@@ -208,14 +208,14 @@ class Info_Model
         if ( $this->output[1]['drain'] < 97) $des5 = $this->values['drain']['yellow']['text'];
         if ( $this->output[1]['drain'] < 85) $des5 = $this->values['drain']['green']['text'];
         return array(
-            array(
+            'values' => array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
                 , round(@$this->output[6]['profit'])    //Деньги
                 , round(@$this->output[6]['budget'])    //Бюджет
                 , 0 //round(@$this->output[6]['loans'])     //Кредиты
                 , round(@$this->output[6]['drain'])     //Управление расходами
             ),
-            array(
+            'info' => array(
                 array(
                     //'min'=>0,
                     //'color'=>'',
