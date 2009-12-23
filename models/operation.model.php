@@ -706,4 +706,31 @@ class Operation_Model {
             return $course;
         }
     }
+    /**
+     * Возвращает тип операции по айди
+     * @param integer $id
+     * @return integer
+     */
+    function getTypeOfOperation($id=0){
+        $type = 0;//возвращаемый тип операции
+        $sql = "SELECT drain, transfer, count(*) as c FROM operation WHERE id=? AND user_id=? GROUP BY id";
+        $res1 = $this->db->query($sql, $id, $this->user->getId());
+        $sql = "SELECT count(*) AS c FROM target_bill WHERE id=? AND user_id=?";
+        $res2 = $this->db->query($sql, $id, $this->user->getId());
+        if ( $res1[0]['c'] != $res2[0]['c'] ){
+            if ( $res1[0]['c'] == 1 ){
+                if ( $res1[0]['drain'] == 1 )
+                    $type = 0;
+                if ( $res1[0]['drain'] == 0 )
+                    $type = 1;
+                if ( $res1[0]['transfer'] != 0 )
+                    $type = 2;
+            }
+            else
+                $type = 4;
+        }//определили тип, иначе
+        else
+            return null;//один случай на миллиард. а на деле врят ли произойдёт. случай если есть и операция и перевод на фин целт с одним айди
+        return $type;
+    }
 }

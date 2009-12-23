@@ -111,6 +111,57 @@ class Operation_Controller extends _Core_Controller_UserCommon
             // Если есть ошибки, то возвращаем их пользователю в виде массива
             die(json_encode($this->model->errorData));
         }
+        $oldtype = $this->model->getTypeOfOperation($array['id']);//тип редактируемой операции
+        //die('a'.$array['type'].'b'.$oldtype);
+        if ( is_null($oldtype) ){
+            $this->errorData['id'][] = 'Не удалось изменить операцию';
+            die(json_encode($this->model->errorData));
+        }
+        if ( $array['type'] != $oldtype ){//если изменили тип операции
+            if ( $oldtype == 4 )
+                {
+                    $id = abs((int)$_POST['id']);
+                    $this->model->deleteTargetOperation($id);
+                }
+                //$this->deleteTargetOp($args);
+            else{
+                $id = abs((int)$_POST['id']);
+                $this->model->deleteOperation($id);
+            }
+                //$this->del($args);
+            //удалили операцию. вот теперь создадим новую
+            $array['drain'] = 1;
+            switch ($array['type']) {
+                case 0: //Расход
+                    $array['amount'] = abs($array['amount']) * -1;
+                    if($this->model->add($array['amount'], $array['date'], $array['category'],
+                        $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
+                            die ('[]');
+                        }
+                case 1: // Доход
+                    $array['drain'] = 0;
+                    if($this->model->add($array['amount'], $array['date'], $array['category'],
+                        $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
+                            die('[]');
+                        }
+                case 2: // Перевод со счёта
+                    $array['category'] = -1;
+                    if ($this->model->addTransfer($array['amount'], $array['convert'], $array['currency'], $array['date'],
+                        $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
+                            die('[]');
+                        }
+                case 3: //
+                    break;
+                case 4: // Перевод на финансовую цель
+                    $target = new Targets_Model();
+                    // addTargetOperation($account_id, $target_id, $money, $comment, $date, $close) {
+                    $target->addTargetOperation($array['account'], $array['target'], $array['amount'],
+                        $array['comment'], $array['date'],$array['close']);//$array['close']
+                    die('[]');
+            }
+        }
+
+        // а иначе редактируем по старому, конкретную операцию
         $array['drain'] = 1;
         switch ($array['type']) {
             case 0: //Расход
