@@ -20,10 +20,16 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 	 * больше определённого значения) Обычно хватает значения по
 	 * умолчанию (2)
 	 *
-	 * @var int
+	 * @var integer
 	 */
 	protected $dirChunks;
 	
+	/**
+	 * Конструктор
+	 *
+	 * @param string $cachePath путь к директории - хранилищу
+	 * @param integer $dirChunks кол-во директорий в пути к файлу
+	 */
 	function __construct( $cachePath, $dirChunks = 2 )
 	{
 		if( !file_exists($cachePath) || !is_dir($cachePath) || !is_writable($cachePath) )
@@ -33,8 +39,17 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 		
 		$this->cachePath = $cachePath;
 		$this->dirChunks = (int)$dirChunks;
+		
+		clearstatcache();
 	}
 	
+	/**
+	 * @todo При переходе на 5.3 добавить clearstatcache 
+	 * для конкретного файла. 
+	 *
+	 * @param unknown_type $id
+	 * @return unknown
+	 */
 	public function get( $id )
 	{
 		$data = null;
@@ -43,6 +58,7 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 		
 		if( file_exists($path) )
 		{
+				
 			$stored = unserialize( file_get_contents($path) );
 			
 			// Если время хранения данных не истекло...
@@ -105,6 +121,42 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Очистка устаревших данных
+	 * Из за тяжеловесности метода (необходимо открыть все файлы для проверки
+	 * их актуальности) желательно запускать по cron раз в сутки\неделю.
+	 * Если возникает необходимость в более частой очистке есть повод задуматся
+	 * об эффективности кеширования.
+	 * 
+	 * @param string $path путь относительно директории - хранилища
+	 */
+	public function cleanExpired( $path = null )
+	{
+		$dir = new DirectoryIterator( $this->cachePath . $path );
+		
+		foreach ( $dir as $file )
+		{
+			if( $file->isDot() )
+			{
+				continue;
+			}
+			elseif( $file->isDir() )
+			{
+				$this->cleanExpired( $path . DIRECTORY_SEPARATOR . $file->getFilename() );
+			}
+			else
+			{
+				$filePath = $this->cachePath . DIRECTORY_SEPARATOR . $dir->getFilename();
+				$stored = unserialize( file_get_contents($filePath) );
+				
+				if( !is_null($stored['expired']) && $stored['expired'] >= filemtime( $filePath ) )
+				{
+					unlink( $filePath );
+				}
+			}
+		}
 	}
 	
 	protected function getPath( $id )
