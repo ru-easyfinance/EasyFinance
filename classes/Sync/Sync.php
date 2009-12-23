@@ -119,7 +119,6 @@ class Sync{
         }
         // парсим полученную строку и загоняем её в массив
         $this->parsing();
-
         //$this->WriteTest();//вывод распарсенных значений
         
         //разбор распарсенных значений и формирование результирующей xml.
@@ -145,8 +144,21 @@ class Sync{
         $transfer->FormArray($this->lastsync, $this->dataarrayE);
         $debet->FormArray($this->lastsync, $this->dataarrayE);
         $plans->FormArray($this->lastsync, $this->dataarrayE);
-        
-        $a = php_xmlrpc_encode($this->dataarrayE);
+        $ret = array(
+            'RecordsMap' => $this->dataarrayE[1]
+            ,'ChangedRecords' => $this->dataarrayE[2]
+            ,'DeletedRecords' => $this->dataarrayE[3]
+            ,'Accounts' => $this->dataarrayE[4]
+            ,'Transfers' => $this->dataarrayE[5]
+            ,'Categories' => $this->dataarrayE[6]
+            ,'Debets' => $this->dataarrayE[8]
+            ,'Incomes' => $this->dataarrayE[9]
+            ,'Outcomes' => $this->dataarrayE[10]
+            ,'Plans' => $this->dataarrayE[11]
+            );
+        /*echo ('<pre>');
+        die(print_r($ret));*/
+        $a = php_xmlrpc_encode($ret);
         return $a;
     }
 
