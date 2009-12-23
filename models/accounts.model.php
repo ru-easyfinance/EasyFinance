@@ -377,8 +377,8 @@ class Accounts_Model
             $cur[]=$val['cur_name'];
             $cur_id[]=$val['cur_id'];
             $type_name[]=$val['account_type_name'];
-            $acc_name[]=$val['account_name'];
-            $acc_descr[]=$val['account_description'];
+            $acc_name[]=stripslashes($val['account_name']);
+            $acc_descr[]=stripslashes($val['account_description']);
             $acc_first_balance[]=$mod->getFirstOperation($val['account_id']);
         }
         /*$id_str = implode(',', $id);
