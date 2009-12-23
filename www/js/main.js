@@ -520,7 +520,7 @@ $('.tags_list .add').live('click', function(){
                 } else {
                     p += '<li id="'+id+'">'
                         +'<a href="/periodic/">'+data[id]['title']+'</a>'
-                        +'<b>'+ data[id]['amount']+'</b>'
+                        +'<b>'+ formatCurrency(data[id]['amount'])+'</b>'
                         +'<span class="date">'+data[id]['date']+'</span></li>';
                 }
 
