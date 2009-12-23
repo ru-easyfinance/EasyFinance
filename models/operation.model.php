@@ -583,7 +583,7 @@ class Operation_Model {
             $val['transfer_name']       = $tr[0]['account_name'];//имя счёта куда осуществляем перевод.
             $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
             //$val['account_currency_id'] = $val['target_account_id'];
-            if (($val['tr_id'] == 0) && ($val['transfer'] == 0) )
+            if ( ((int)$val['tr_id'] == 0) && ((int)$val['transfer'] == 0) )
                 $val['tr_id'] == null;//хак для журнала операций. присылаю tr_id = null для не переводов
             //если фин цель то перезаписываем тот null что записан.
             if (($val['virt']) == 1){
