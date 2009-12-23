@@ -38,6 +38,11 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
             break;
         }
+        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['QUERY_STRING'],0,5) == 'login')){
+            $newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 6) );
+            return $newId;
+            //break;
+        }
         if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
             header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
         }

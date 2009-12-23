@@ -308,4 +308,22 @@ class Login_Model
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
             return $db->query("SELECT user_login, user_pass FROM users WHERE id = ?", $id);
         }
+
+        /**
+         * По присланному логину в азбуке финансов генерируем нового пользователя состоящего из
+         * логина и префикса azbuka_
+         * возвращаем айди сгенерированного пользователя.
+         * @param string $login
+         * @return integer
+         */
+        public function generateUserByAzbukaLogin($login){
+            $id = 0;//айди сгенерированного пользователя
+            //die($login);
+            $pass = sha1($login);
+            $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+            $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
+                (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
+            $id = mysql_insert_id();
+            return $id;
+        }
 }
