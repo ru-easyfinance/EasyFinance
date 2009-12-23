@@ -117,7 +117,7 @@ easyFinance.models.category = function(){
             _categories.user[id].type = type;
             _categories.user[id].system = system;
 
-            if (parent !="" && (parent != oldCat.parent || type!=oldCat.type)) {
+            if (parent !="0" && (parent != oldCat.parent || type!=oldCat.type)) {
                 // при перемещении подкатегории в другую категорию
                 // или при изменении типа подкатегории
                 var newParent = _categories.user[parent];
