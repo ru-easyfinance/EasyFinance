@@ -47,8 +47,8 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 	 * @todo При переходе на 5.3 добавить clearstatcache 
 	 * для конкретного файла. 
 	 *
-	 * @param unknown_type $id
-	 * @return unknown
+	 * @param string $id
+	 * @return mixed
 	 */
 	public function get( $id )
 	{
@@ -170,7 +170,7 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 		
 		$path = $this->cachePath . DIRECTORY_SEPARATOR;
 		
-		for( $i = 0; $i <= $this->dirChunks; $i++ )
+		for( $i = 0; $i < $this->dirChunks; $i++ )
 		{
 			$path .= substr( $id, $i*$lettersCount, $lettersCount ) . DIRECTORY_SEPARATOR;
 		}
