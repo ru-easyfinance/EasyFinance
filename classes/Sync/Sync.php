@@ -72,13 +72,14 @@ class Sync{
     }
 
     function deleteAllByUser($xmlReq=''){
+        $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
         $sn = php_xmlrpc_decode($xmlReq);
         $this->dataarray = $sn;
         if (!$this->sync_getAuth($this->dataarray[0])){
             // в случае неудачи
             return false;
         }
-        clearAll($this->user);
+        $this->clearAll($this->user);
     }
 
     function qwe($xmlReq, &$xmlAnswer, $needdec='0'){
@@ -156,9 +157,10 @@ class Sync{
             ,'Outcomes' => $this->dataarrayE[10]
             ,'Plans' => $this->dataarrayE[11]
             );
-        /*echo ('<pre>');
-        die(print_r($ret));*/
+        echo ('<pre>');
+        die(print_r($ret));
         $a = php_xmlrpc_encode($ret);
+            die(print_r($a));
         return $a;
     }
 
