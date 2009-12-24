@@ -142,6 +142,7 @@ abstract class _Core_Controller
                 'name'          => stripslashes($v['account_name']),
                 'descr'         => stripslashes($v['account_description']),
                 'def_cur'       => Core::getInstance()->currency[$v['account_currency_id']]['value'] * $v['total_sum'],
+                'cur_id'        => $v['account_currency_id'],
                 'total_balance' => $v['total_sum']
             );
         }
@@ -177,6 +178,7 @@ abstract class _Core_Controller
             $currency[$k] = array(
                 'cost' => $v['value'],
                 'name' => $v['charCode'],
+                'text' => $v['abbr'],
                 'progress' => ''
             );
         }
