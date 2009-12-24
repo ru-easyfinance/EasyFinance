@@ -1204,9 +1204,10 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .investments_block div .down { background: #ffe9e7 url('/img/i/arrow_up_down.gif') no-repeat 6px -44px; }
 .investments_block div .day .pct { top: 11px; font-size: 16px; line-height: 16px; }
 
-
 .flash_block_in { padding: 14px 0 0 0 !important; }
 .flash_block_in .flash { width: 100%; overflow: hidden; }
+
+.flash object, .informerGauge { cursor: pointer; }
 
 .flash_block_in .flash table td { vertical-align:middle; background: url('/img/i/gaugeMain.gif?') 2px 14px no-repeat; }
 .flash_block_in .flash table td + td { vertical-align:middle; background: url('/img/i/gaugeMoney.gif?') 10px 35px no-repeat; }

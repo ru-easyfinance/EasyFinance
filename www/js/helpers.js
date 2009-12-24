@@ -341,9 +341,11 @@ $(document).ready(function() {
             if (res.informers) {
                 $('#divInformer0').qtip({
                     content: '<b>' + res.informers[0].title + '</b><br><br>' + res.informers[0].description,
-                    show: {delay: 1000},
+                    show: {delay: 10000},
                     position: {target: 'mouse'},
                     style: styleTheme
+                }).click(function(){
+                    $(this).qtip("show");
                 });
 
                 for (var i=0;i<5;i++) {
@@ -352,6 +354,8 @@ $(document).ready(function() {
                         show: {delay: 1000},
                         position: {target: 'mouse'},
                         style: styleTheme
+                    }).click(function(){
+                        $(this).qtip("show");
                     });
                 }
             }
