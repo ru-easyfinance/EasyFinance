@@ -673,7 +673,7 @@ div.addoperation .line  .amount {float: left; margin-right: 170px; }
 div.addoperation .line .f_field input.inp, div.addoperation .line textarea { color: #20201E; width:350px}
 div.addoperation .line label { display: block; margin-bottom: 2px;}
 div.addoperation .line textarea { width: 350px; //width: 489px; height: 96px; //height: 90px; }
-div.addoperation .but input { margin-right: 21px; margin-top:14px;}
+div.addoperation .but input { margin-right: 6px; margin-top:14px;}
 
 div.addoperation .line .category { margin-right: 0; }
 div.addoperation .line .amount a, 
