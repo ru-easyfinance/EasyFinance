@@ -41,7 +41,27 @@ class Budget_Model {
             $category = Core::getInstance()->user->getUserCategory();
         }
 
-        $sql = "SELECT b.category, b.drain, b.currency, b.amount,
+        $sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
+            WHERE c.cat_id=b.category AND b.user_id=? AND b.date_start=? ) AS amount,
+
+            (SELECT SUM(o.money) FROM operation o
+                WHERE (o.transfer = NULL OR o.transfer = 0) AND c.cat_id = o.cat_id
+                AND o.date >= ? AND o.date <= LAST_DAY(o.date) ) AS money,
+
+            (SELECT AVG(amount) FROM budget t
+                        WHERE (t.date_start >= ADDDATE(?, INTERVAL -3 MONTH)
+                            AND t.date_start <= LAST_DAY(t.date_start))
+                        AND t.category = c.cat_id AND t.user_id=c.user_id
+             ) AS avg_1m
+
+            FROM category c
+            WHERE (SELECT SUM(o.money) FROM operation o
+                WHERE (o.transfer = NULL OR o.transfer = 0) AND c.cat_id = o.cat_id
+                AND o.date >= ? AND o.date <= LAST_DAY(o.date) ) <> 0 
+            AND c.user_id=? ORDER BY c.cat_parent";
+
+
+        $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
                 DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
                 DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
                 , (SELECT AVG(amount) FROM budget t
@@ -56,10 +76,15 @@ class Budget_Model {
         FROM budget b
         LEFT JOIN category c ON c.cat_id=b.category
         WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
-        ORDER BY c.cat_parent ;";
+        ORDER BY c.cat_parent ;";//*/
 
-        $array = Core::getInstance()->db->select($sql, $start, $user_id, $start);
 
+        $arraybudg = Core::getInstance()->db->select($sqlbudg, $start, $user_id, $start);
+        
+        $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start , $start, $start, $start, $user_id);
+        //echo('<pre>');
+            //die(print_r($arrayoper));
+        
         $list = array(
             'd' => array(),
             'p' => array()
@@ -68,10 +93,10 @@ class Budget_Model {
         $drain_all = 0; $profit_all = 0;
         $real_drain = 0; $real_profit = 0;
 
-        foreach ($array as $var) {
+        foreach ($arraybudg as $var) {
 
             // Если это родительская категория, то подсчитываем общую сумму
-            if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
+            /*if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
                 if ($var['drain'] == 1) {
                     $drain_all  += (float)$var['amount'];
                     $real_drain += ABS((float)$var['money']);
@@ -79,9 +104,7 @@ class Budget_Model {
                     $profit_all += (float)$var['amount'];
                     $real_profit += ABS((float)$var['money']);
                 }
-            }
-
-            
+            }*/
             
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
@@ -98,6 +121,27 @@ class Budget_Model {
                 );
             }
         }
+
+        foreach ($arrayoper as $var){
+            if ( !(isset($list['p'][$var['cat_id']]) || (isset($list['d'][$var['cat_id']] ) ) ) )
+            if ($var['money'] <= 0 )
+            {
+                $list['d'][$var['cat_id']] = array(
+                    'amount' => (float)$var['amount'], // Планируемая сумма
+                    'money'  => (float)$var['money'],  // Фактическая сумма
+                    'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
+                );
+            } else {
+                $list['p'][$var['cat_id']] = array(
+                    'amount' => (float)$var['amount'], // Планируемая сумма
+                    'money'  => (float)abs($var['money']),  // Фактическая сумма
+                    'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
+                );
+            }
+        }
+
+        //echo('<pre>');
+        //die(print_r($list));
         
         return array (
             'list' => $list,
