@@ -696,54 +696,63 @@ $(document).ready(function() {
     switch ( $('#report :selected').attr('id') ) {
         case "graph_profit": //Доходы":
             $('#Period21,#Period22').hide();
+            $('#itogo').show();
             //$('#chart').show();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "graph_loss": //"Расходы":
             $('#Period21,#Period22').hide();
+            $('#itogo').show();
             //$('#chart').show();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "graph_profit_loss": //"Сравнение расходов и доходов":
             $('#Period21,#Period22').hide();
+            $('#itogo').hide();
             //$('#chart').show();
             //$('.operation_list').hide();
             //$('#divDetailedReport').hide();
             break;
         case "txt_profit"://"Детальные доходы":
             $('#Period21,#Period22').hide();
+            $('#itogo').hide();
             //$('#chart').hide();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "txt_loss"://"Детальные расходы":
             $('#Period21,#Period22').hide();
+            $('#itogo').hide();
             //$('#chart').hide();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "txt_loss_difference"://"Сравнение расходов за периоды":
             $('#Period21,#Period22').show();
+            $('#itogo').hide();
             //$('#chart').hide();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "txt_profit_difference"://"Сравнение доходов за периоды":
             $('#Period21,#Period22').show();
+            $('#itogo').hide();
             //$('#chart').hide();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "txt_profit_avg_difference": //"Сравнение доходов со средним за периоды":
             $('#Period21,#Period22').show();
+            $('#itogo').hide();
             //$('#chart').hide();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
             break;
         case "txt_loss_avg_difference"://"Сравнение расходов со средним за периоды":
             $('#Period21,#Period22').show();
+            $('#itogo').hide();
             //$('#chart').hide();
             //$('.operation_list').show();
             //$('#divDetailedReport').show();
