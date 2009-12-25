@@ -15,7 +15,7 @@ easyFinance.widgets.accountsJournal = function(){
     // private functions
     function _initForm(){
         // show selection
-        $('tr','#operation_list').live('mouseover',
+        $('#operation_list tr.item').live('mouseover',
             function(){
                 var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];// Жуткий масив привязки типов к группам
                 var spec_th = [ [],
@@ -79,10 +79,12 @@ easyFinance.widgets.accountsJournal = function(){
 
         $('#operation_list tr.item').live('dblclick',
             function(){
-                 //$(this).find('li.edit').click();
                  // создание новой операции для выбранного счёта
-                 $(".op_addoperation").show();
-                 $('#op_account').val($(this).closest('tr').attr('id').split("_", 2)[1]);
+                var acc = $(this).closest('tr').attr('id').split("_", 2)[1];
+                if (easyFinance.widgets.operationEdit) {
+                    easyFinance.widgets.operationEdit.setAccount(acc);
+                    easyFinance.widgets.operationEdit.showForm();
+                }
         });
 
         //del account click

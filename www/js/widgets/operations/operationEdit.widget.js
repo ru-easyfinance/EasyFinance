@@ -167,6 +167,7 @@ easyFinance.widgets.operationEdit = function(){
                 $(".op_addoperation").hide();
             }
         });
+        
         $('#op_amount').live('keyup',function(e){
             FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
         });
@@ -609,6 +610,12 @@ easyFinance.widgets.operationEdit = function(){
         $.sexyCombo.changeOptions("#op_account", id);
     }
 
+    function showForm() {
+        $('#op_addoperation_but').addClass("act");
+        _clearForm();
+        $(".op_addoperation").show();
+    }
+
     /**
      * Функция заполняет форму данными
      * @param data данные для заполнения
@@ -698,6 +705,7 @@ easyFinance.widgets.operationEdit = function(){
         setCategory: setCategory,
         setSum: setSum,
         setAccount: setAccount,
+        showForm: showForm,
         fillForm: fillForm
     };
 }(); // execute anonymous function to immediatly return object
