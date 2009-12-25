@@ -656,12 +656,6 @@ $(document).ready(function() {
 
     $('#Period21,#Period22').hide();
     $('#dateFrom,#dateTo,#dateFrom2,#dateTo2').datepicker({dateFormat: 'dd.mm.yy'});
-    var myDate = new Date();
-    var dateFrom = myDate.setMonth(myDate.getMonth()-1, 1);
-    var dateTo = myDate.setMonth(myDate.getMonth()-1, 1);
-    // #595
-//    $("#dateFrom2").val(dateFrom);
-//    $("#dateTo2").val(dateTo);
 
     $('#report').change();
     $('#btnShow').click(function(){
