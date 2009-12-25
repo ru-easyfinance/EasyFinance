@@ -541,13 +541,12 @@ $('.tags_list .add').live('click', function(){
             {
                 if (data[v]['done'] == 0){
                         s += '<li ><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
-                        +data[v]['amount_done']+' руб.</b><span>('
+                        +formatCurrency(data[v]['amount_done'])+' руб.</b> <span>('
                         +data[v]['percent_done']+'%)</span><span class="date">'
                         +data[v]['date_end']+'</span></li>';
                 }
             }
             s = s+'</ul>';
-            
 
             data = res['popup_targets'];
             s = s + '<h2>5 самых популярных</h2><ul class="popular">';
