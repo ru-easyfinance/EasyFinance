@@ -168,13 +168,18 @@ easyFinance.widgets.budget = function(data){
                             cls = 'nochild'
                         }
                     }
+
+                    var amountStr = amount > 0 ?
+                            formatCurrency(amount) :
+                            '<FONT COLOR="#FF0000"> запланировать </FONT>'
+
                     dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'">\n\
                                 <td class="w1">\n\
                                     <a>' + catName + '</a>\n\
                                 </td>\n\
                                 <td class="w2">\n\
                                     <div class="cont">\n\
-                                        <span>'+formatCurrency(amount)+'</span><input type="text" value="'+formatCurrency(amount)+'"/>\n\
+                                        <span>'+amountStr+'</span><input type="text" value="'+formatCurrency(amount)+'"/>\n\
                                     </div>\n\
                                 </td>\n\
                                 <td class="w3">\n\
@@ -353,7 +358,7 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
-            $(this).find('.w2 input').val($(this).find('.w2 span').text()).show().focus();
+            $(this).find('.w2 input').val(formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\/]/g,''))).show().focus();
             $(this).find('.w2 span').hide();
         }
     })
