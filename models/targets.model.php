@@ -370,7 +370,7 @@ class Targets_Model {
                 $data['category'], $data['title'], $data['type'], $data['amount'], $data['start'],
                 $data['end'], $data['visible'], $data['photo'], $data['url'], $data['comment'],
                 Core::getInstance()->user->getId(), $data['id']);
-            $this->editTargetOperation(0, $data['account'], $data['id'], $data['money'], $data['comment'], date('Y-m-d'), $data['close']);
+            //$this->editTargetOperation(0, $data['account'], $data['id'], $data['money'], $data['comment'], date('Y-m-d'), $data['close']);
             $this->staticTargetUpdate($data['id']);
             Core::getInstance()->user->initUserTargets();
             Core::getInstance()->user->save();
