@@ -315,8 +315,10 @@ class Accounts_Model
     {
         $fin = new Targets_Model();
         $noFinTarget = $fin->countTargetsOnAccount($id);// если ноль значит удаляем
+        if ($noFinTarget > 0)
+            return 'cel';
         if (!$noFinTarget){
-
+            //return 'del';
             $sql = "DELETE FROM
                         account_field_values
                     WHERE
@@ -331,8 +333,6 @@ class Accounts_Model
             Core::getInstance()->user->save();
             return true;
         }
-        else if ($noFinTarget)
-            return 'cel';
     }
     /**
      * Функция которая отсылает список счетов
