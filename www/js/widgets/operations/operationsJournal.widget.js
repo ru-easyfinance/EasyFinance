@@ -116,11 +116,11 @@ easyFinance.widgets.operationsJournal = function(){
         pageTotal = Math.round(pageTotal*100)/100;
         if (_account != '') {            
             $('#lblOperationsJournalAccountBalance')
-                .html('<b>Остаток по счёту: </b>' + _modelAccounts.getAccountBalanceTotal(_account) +' руб.')
+                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account)) +' руб.')
                 .show();
         }
 
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' руб.<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal) + ' руб.<br>').show();
     }
 
     function _deleteChecked(){
