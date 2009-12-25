@@ -263,6 +263,9 @@ easyFinance.widgets.operationsJournal = function(){
             _category = '';
             _account = '';
             _accountName = '';
+
+            $('#lblOperationsJournalAccountBalance').hide();
+
             loadJournal();
         });
 
