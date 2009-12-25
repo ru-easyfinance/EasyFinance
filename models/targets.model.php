@@ -201,6 +201,14 @@ class Targets_Model {
         //return $result;
     }
 
+
+    public function countTargetsOnAccount($acc_id){
+        $sql = "SELECT count(*) AS co
+            FROM target
+            WHERE target_account_id=? AND user_id=?";
+        $result = $this->db->select($sql, $acc_id, Core::getInstance()->user->getId());
+        return $result[0]['co'];
+    }
     public function countClose(){
         $sql = "SELECT count(*) AS co
             FROM target

@@ -85,6 +85,11 @@ easyFinance.widgets.accountsJournal = function(){
                     _model.deleteAccountById(id, function(data){
                         // @todo : kick this to operationEdit.widget on event accountDeleted
                         var val;
+                        if (data == 'cel')// выводим ошибку если на счету зарегистрированы фин.цели.
+                            {
+                                $.jGrowl("Невозможно удалить накопительный счёт!", {theme: 'red'});
+                                return;
+                            }
                         $('#op_account option').each(function(){
                             val = $(this).val();
                             if (val == id) {

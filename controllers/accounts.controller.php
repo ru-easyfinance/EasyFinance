@@ -115,7 +115,12 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     function del ($args)
     {
         $id = $_POST['id'];
-        if (!$this->model->deleteAccount($id)) {
+        $del = $this->model->deleteAccount($id);
+        if ($del=='cel'){
+            $this->tpl->assign("error", "Невозможно удалить накопительный счёт!");
+            die (json_encode('cel'));
+        }
+        if (!$del) {
             $this->tpl->assign("error", "Счет не удален");
         }
         die (json_encode(1));
