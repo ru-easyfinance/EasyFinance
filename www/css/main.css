@@ -406,7 +406,7 @@ dl.bill_list dt.open { margin: 0 0 2px 11px; color: #383838; font-weight: bold;b
 dl.bill_list dd { margin-bottom: 5px; display:none; cursor: pointer; }
 dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
 dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
-dl.bill_list dd ul li a { display: block; padding: 1px 3px 1px 21px; line-height: 15px; color: #363535; text-decoration: none; }
+dl.bill_list dd ul li a { width: 100px; overflow: hidden; display: block; padding: 1px 3px 1px 21px; line-height: 15px; color: #363535; text-decoration: none; }
 dl.bill_list dd ul li a b { display: block; }
 dl.bill_list dd ul li a span { text-decoration: underline; }
 dl.bill_list dd ul li a:hover { background: #f6f6f6 url('/img/i/icons.gif') no-repeat 5px -214px; }
