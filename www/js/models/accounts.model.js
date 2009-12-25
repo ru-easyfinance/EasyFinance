@@ -90,8 +90,7 @@ easyFinance.models.accounts = function(){
 
                 if (callback)
                     callback(data);
-            }
-            , 'json'
+            }, 'json'
         );
     }
 
