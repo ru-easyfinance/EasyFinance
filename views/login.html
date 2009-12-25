@@ -9,9 +9,9 @@
     <div class="loginError">{$loginErrorText}</div>
 
 {if $smarty.const.IS_DEMO == false}
-    <form action="/login/" method="post">
+    <form action="/login/" method="post" onSubmit="return checkLogin()">
 {else}
-    <form action="http://{$smarty.const.URL_ROOT}login/" method="post">
+    <form action="http://{$smarty.const.URL_ROOT}login/" method="post" onSubmit="return checkLogin()">
 {/if}
         <table cellpadding="0" cellspacing="0">
         <tr>
@@ -40,6 +40,23 @@
         </table>
     </form>
 </div>
+{literal}
+<SCRIPT TYPE="text/javascript">
+    function checkLogin() {
+        if ($('#flogin').val() == '') {
+            $.jGrowl("Введите логин!", {theme: 'red'});
+            return false;
+        }
+
+        if ($('#pass').val() == '') {
+            $.jGrowl("Введите пароль!", {theme: 'red'});
+            return false;
+        }
+
+        return true;
+    }
+</SCRIPT>
+{/literal}
 <div  id="formConfirm" class="formConfirm" style="height:250px;padding: 10px;display:none;">
     <div class="block2" style="margin-left:200px">
         <div class="ramka3">
