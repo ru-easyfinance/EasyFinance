@@ -14,7 +14,8 @@ easyFinance.widgets.accountsJournal = function(){
 
     // private functions
     function _initForm(){
-        $('tr.item').live('mouseover',
+        // show selection
+        $('tr','#operation_list').live('mouseover',
             function(){
                 var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];// Жуткий масив привязки типов к группам
                 var spec_th = [ [],
@@ -47,33 +48,41 @@ easyFinance.widgets.accountsJournal = function(){
                     formatCurrency(account.def_cur) + ' '+d_cur+'</td>';
 
                 // @todo: показывать % годовых и т.п.
-                /*
-                for(var key in spec)
-                {
-                    str +='<tr style="line-height:19px;">'+spec[key]+'<td /><td>'+account.special[key]+'</td></tr>'
-                }
-                */
+                //
+                //for(var key in spec)
+                //{
+                //    str +='<tr style="line-height:19px;">'+spec[key]+'<td /><td>'+account.special[key]+'</td></tr>'
+                //}
+                //
 
                 str += '<table>';
                 _bigTip($(this).find('.total_balance'), str);
-                $('tr.item').removeClass('act');
+                $('#operation_list tr.item').removeClass('act');
                 $(this).addClass('act');
-
         });
 
-        $('tr.item').live('dblclick',
+        // hide selection
+        /*
+        $('.mid').mousemove(function(){
+            if (!$('ul:hover').length && !$('.act:hover').length)
+                $('#operation_list tr').removeClass('act').find('.cont ul').hide();
+        });
+        */
+
+/* --------- вызывает баг #499 ----------- */
+        $('#operation_list tr.item').live('mouseout',
+            function(){
+                $('.qtip').remove();
+                $(this).removeClass('act');
+        });
+/* --------- конец бага #499 ----------- */
+
+        $('#operation_list tr.item').live('dblclick',
             function(){
                  //$(this).find('li.edit').click();
                  // создание новой операции для выбранного счёта
                  $(".op_addoperation").show();
                  $('#op_account').val($(this).closest('tr').attr('id').split("_", 2)[1]);
-        });
-
-        $('body').mousemove(function(){
-            if (!$('ul:hover').length && !$('.act:hover').length) {
-                $('.qtip').remove();
-                $('tr.item').removeClass('act');
-            }
         });
 
         //del account click
@@ -102,7 +111,6 @@ easyFinance.widgets.accountsJournal = function(){
 
                         $.jGrowl("Счёт удалён", {theme: 'green'});
                     });
-
                 }
             }
         );
@@ -136,8 +144,8 @@ easyFinance.widgets.accountsJournal = function(){
      */
     function _bigTip(line,text)
     {
-         $('.qtip').remove();
-         $(line).qtip({
+        $('.qtip').remove();
+        $(line).qtip({
                    content: text.toString(), // Set the tooltip content to the current corner
                    position: {
                       corner: {
@@ -149,8 +157,9 @@ easyFinance.widgets.accountsJournal = function(){
                       when: false, // Don't specify a show event
                       ready: true // Show the tooltip when ready
                    },
-
-                   hide: false, // Don't specify a hide event
+                   hide: {
+                      when: 'mouseout'
+                   }, // Don't specify a hide event
                    style: {
                       width: {max: 300},
                       name: 'light',
