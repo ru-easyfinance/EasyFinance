@@ -358,7 +358,7 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
-            $(this).find('.w2 input').val(formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\/]/g,''))).show().focus();
+            $(this).find('.w2 input').val(formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\.]/g,''))).show().focus();
             $(this).find('.w2 span').hide();
         }
     })
