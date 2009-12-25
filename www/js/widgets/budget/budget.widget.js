@@ -127,7 +127,7 @@ easyFinance.widgets.budget = function(data){
     function _printList(type, categoryes, parentId)//0 drain
     {
         var prefix = (type == '1')? 'p':'d'; 
-        var budgets = _data[prefix]
+        var budgets = _model.returnList()[prefix]
         var key, temp = {}, catId, catName, catType, amount, money, totalAmount = 0, totalMoney = 0, dhtml ='';
 
 
