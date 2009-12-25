@@ -331,7 +331,7 @@ class Accounts_Model
             Core::getInstance()->user->save();
             return true;
         }
-        else
+        else if ($noFinTarget)
             return 'cel';
     }
     /**
