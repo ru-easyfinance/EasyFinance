@@ -96,22 +96,25 @@ easyFinance.widgets.accountsJournal = function(){
                     _model.deleteAccountById(id, function(data){
                         // @todo : kick this to operationEdit.widget on event accountDeleted
                         var val;
-                        if (data == 'cel')// выводим ошибку если на счету зарегистрированы фин.цели.
-                            {
-                                $.jGrowl("Невозможно удалить накопительный счёт!", {theme: 'red'});
-                                return;
-                            }
-                        $('#op_account option').each(function(){
-                            val = $(this).val();
-                            if (val == id) {
-                                $(this).remove();
-                            }
-                        })
-                        
-                        // update table
-                        $('#accountsJournalAcc_'+id).remove();
 
-                        $.jGrowl("Счёт удалён", {theme: 'green'});
+                        // выводим ошибку, если на счету зарегистрированы фин.цели.
+                        if (data.error) {
+                            if (data.error.text)
+                                $.jGrowl(data.error.text, {theme: 'red'});
+                        } else if (data.result) {
+                            $('#op_account option').each(function(){
+                                val = $(this).val();
+                                if (val == id) {
+                                    $(this).remove();
+                                }
+                            });
+
+                            // update table
+                            $('#accountsJournalAcc_'+id).remove();
+
+                            if (data.result.text)
+                                $.jGrowl(data.result.text, {theme: 'green'});
+                        }
                     });
                 }
             }
