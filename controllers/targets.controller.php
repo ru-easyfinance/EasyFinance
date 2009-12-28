@@ -31,6 +31,9 @@ class Targets_Controller extends _Core_Controller_UserCommon
      */
     function index($args)
     {
+        //echo('<pre>');
+        //die(print_r(User::getUserTargets()));
+        //$this->model->staticTargetUpdate(1);
         $this->tpl->assign('user_list_targets', $this->model->getLastList());
         $this->tpl->assign('closed_targets', $this->model->countClose());
         $this->tpl->assign('pop_list_targets', $this->model->getPopList());     

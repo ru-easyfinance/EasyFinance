@@ -133,7 +133,22 @@ abstract class _Core_Controller
 
         Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
         // Подготавливаем счета
+        try {
+            $acc = new Accounts_Model;
+            $accou = $acc->accounts_list();
+        } catch ( Exception $e) {
+            $accou = 0;
+        }
+
         $accounts = array();
+        
+        //$account = $accou['result'];
+        foreach ($accou as $k=>$v){
+            foreach ($v as $k1=>$v1){
+                $accounts[$k][$k1] = $v1;
+            }
+        }
+        /*
         foreach ($user->getUserAccounts() as $v) {
             $accounts[$v['account_id']] =array(
                 'id'            => $v['account_id'],
@@ -145,7 +160,7 @@ abstract class _Core_Controller
                 'cur_id'        => $v['account_currency_id'],
                 'total_balance' => $v['total_sum']
             );
-        }
+        }*/
         
         // Подготавливаем фин.цели
         $targets = array();
