@@ -220,7 +220,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header #auth input.but{ display: block; position: absolute; top: 16px; right: 19px; width: 23px; height: 23px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; }
 #auth a.forget { display: block; margin: 0px; font-size: 11px; text-align: center; }
 #auth input.forget{position: relative; width : 13px}
-#auth .logo { position:absolute; top: 30px; left: 70px; }
+#auth .logo { position:absolute; top: 10px; left: 40px; }
 
 #header #auth .txt { margin: 0 24px 6px 24px; padding-bottom: 7px; line-height: 23px; text-align:center; font-size:14px; background: url('/img/i/point_x.gif') repeat-x bottom left; }
 #header #auth ul { margin-left: 24px; }
@@ -1528,7 +1528,6 @@ ul.currency.all li a {
 
 /*------------------------------------------- form Start --------------------------------------*/
 
-#auth { margin: -30px; }
 #auth .smallLogo { position: relative; right: -40px; top: 40px; display: inline; }
 #registration { margin: -30px; }
 #registration .smallLogo { position: relative; right: 50px; top: 40px; display: inline; }
