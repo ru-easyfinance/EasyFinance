@@ -209,11 +209,29 @@ class Budget_Model {
             Core::getInstance()->user->save();
             return array('result' => array('text' => ''));
         } else {
-            return array(
+            $key = '' . Core::getInstance()->user->getId() . '-' . $id . '-'
+            . ((trim($type) == 'd')? 1 : 0) . '-' . $date;
+            $sql = '("' . Core::getInstance()->user->getId() . '","' . $id . '","' .
+                            ((trim($type) == 'd')? 1 : 0) . '","' . $value . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+            $sql = "INSERT INTO budget (`user_id`,`category`,`drain`,
+                `amount`,`date_start`,`date_end`,`dt_create`,`key`) VALUES
+                " . $sql;
+            if (!@$this->db->query($sql)){
+                if ( substr(mysql_error(),0,16) == "Duplicate entry " )
+                    return array(
+                        'error' => array(
+                        'text' => 'Ошибка при редактировании бюджета'
+                     )
+            );
+
+            }
+                return array('result' => array('text' => ''));
+            /*} else
+             return array(
                 'error' => array(
                     'text' => 'Ошибка при редактировании бюджета'
                  )
-            );
+            );//*/
         }
     }
 
