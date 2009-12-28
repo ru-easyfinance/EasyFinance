@@ -1527,8 +1527,12 @@ ul.currency.all li a {
 }
 
 /*------------------------------------------- form Start --------------------------------------*/
+
+#auth .smallLogo { position: relative; right: -40px; top: 40px; display: inline; }
+#registration .smallLogo { position: relative; right: 50px; top: 40px; display: inline; }
+
 .formRegister {
-    margin: 2em 4em;
+    margin: 0;
 }
 .formRegister h2 {
     margin-left: 5.7em;

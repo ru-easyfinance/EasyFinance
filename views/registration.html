@@ -2,9 +2,11 @@
 <div class="ramka2">
     <div class="cct"></div>
     <center>
-        <div class="block2" style="float: none">
-
-        <div  id="registration" class="formRegister" >
+        <div class="block2" style="float: none">        
+        <div id="registration" class="formRegister" >
+            {if $template_view == 'iframe'}
+                <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
+            {/if}
             <h2>Регистрация</h2>
             <form id="formRegister" onsubmit="return false;">
                 <table cellpadding="0" cellspacing="0">

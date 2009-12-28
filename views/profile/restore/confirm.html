@@ -2,9 +2,10 @@
 <div class="cct"></div>
 <form id="auth" class="formRegister" >
     <!-- <div class="logo"><a href="http://easyfinance.ru"><img src="/img/i/logo_iframe.png"></a></div> -->
-
+    {if $template_view == 'iframe'}
+        <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
+    {/if}
     <h2>Создание нового пароля</h2>
-
     <div class="loginMessage">{$loginMessageText}</div>
     <div class="loginError">{$loginErrorText}</div>
 
@@ -67,14 +68,15 @@
                         if (data) {
                             if (data.result) {
                                 $.jGrowl(data.result.text, {theme: 'green'});
+
+                                if (data.result.redirect)
+                                    window.location = data.result.redirect;
                             } else {
                                 $.jGrowl(data.error.text, {theme: 'red'});
-                            }
 
-                            if (data.result.redirect)
-                                window.location = data.result.redirect;
-                            else (data.error.redirect)
-                                window.location = data.error.redirect;
+                                if (data.error.redirect)
+                                    window.location = data.error.redirect;
+                            }
                         } else {
                             $.jGrowl('Ошибка на сервере!', {theme: 'red'});
                         }
