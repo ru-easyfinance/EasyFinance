@@ -85,11 +85,11 @@ class SyncAccount_Model {
         $a = $this->db->query($sql, $this->user);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
-            
+            $data[4][0]['tablename'] = 'Accounts';
             $sql2 = "SELECT money, `date` FROM operation WHERE user_id=? AND account_id=? AND `dt_create` BETWEEN '$date' AND NOW()-100";
                 $b = $this->db->query($sql2, $this->user, $a[$key]['account_id']);
             if ($b[0]['money'] != null){
-                $data[4][0]['tablename'] = 'Accounts';
+                //$data[4][0]['tablename'] = 'Accounts';
                 $data[4][$key+1]['easykey'] = (int)$a[$key]['account_id'];
                 $data[4][$key+1]['name'] = $a[$key]['account_name'];
                 $data[4][$key+1]['cur'] = (int)$a[$key]['account_currency_id'];
