@@ -190,7 +190,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                  {
                      die('[]');
                  }
-                $target->staticTargetUpdate($array['target']);
+                //$target->staticTargetUpdate($array['target']);
                 break;
         }
     }
