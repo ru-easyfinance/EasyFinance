@@ -10,6 +10,12 @@ define('INDEX', true);
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
+// Выводим заголовки политики безопастности в IE для поддержки cookies в iframe
+if( $_SERVER['HTTP_HOST'].'/' == URL_ROOT_IFRAME)
+{
+	header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+}
+
 Core::getInstance()->authUser(); 
 Core::getInstance()->parseUrl();
 
