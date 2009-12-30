@@ -32,8 +32,8 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
+        die(print_r($_SERVER));
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['QUERY_STRING'],0,5) == 'id_ef')){
-            die('jgkfejge');
             $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 6) );
             $uar = array(
                 'user_id'=>substr($_SERVER[argv][0], 6),
