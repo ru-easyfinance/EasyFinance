@@ -33,9 +33,10 @@ if (Core::getInstance()->user->getId()) {
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         echo('<pre>');
+        echo(substr($_SERVER[argv][0], 21));
         die(print_r($_SERVER));
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['QUERY_STRING'],0,5) == 'id_ef')){
-            $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 6) );
+        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],16,2) == 'id_ef')){
+            $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 21) );
             $uar = array(
                 'user_id'=>substr($_SERVER[argv][0], 6),
                 'user_name'=>$select[0]['user_login'],
