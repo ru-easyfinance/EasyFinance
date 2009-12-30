@@ -130,6 +130,8 @@ class Operation_Model {
         // Проверяем дату
         if (in_array('date', $params) or count($params) == 0) {
             $valid['date'] = trim(formatRussianDate2MysqlDate(@$_POST['date']));
+            if ( $valid['date'] == '0000-00-00' )
+                $this->errorData['date'][] = 'Не верно указана дата';
             if (empty ($valid['date'])) {
                 $this->errorData['date'][] = 'Не верно указана дата';
             }
