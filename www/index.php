@@ -37,14 +37,13 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
             $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
             echo('<pre>');
-            die(print_r($select));
             $uar = array(
                 'user_id'=>substr($_SERVER[argv][0], 20),
                 'user_name'=>$select[0]['user_login'],
                 'user_type'=>0);
             Core::getInstance()->tpl->assign('user_info', $uar);
             Core::getInstance()->tpl->assign('template_view', 'iframe');
-            die(COOKIE_NAME.' '.encrypt(array($select[0]['user_login'],$select[0]['user_pass'])).' '.time() + COOKIE_EXPIRE.' '.COOKIE_PATH.' '.'iframe'.COOKIE_DOMEN.' '.COOKIE_HTTPS);
+            die(COOKIE_NAME.' пасс '.encrypt(array($select[0]['user_login'],$select[0]['user_pass'])).' время '.time() + COOKIE_EXPIRE.' путь '.COOKIE_PATH.' домен '.'iframe'.COOKIE_DOMEN.' хттп '.COOKIE_HTTPS.' всё');
             setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe'.COOKIE_DOMEN, COOKIE_HTTPS);
             header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
             break;
