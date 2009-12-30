@@ -34,7 +34,8 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         //echo('<pre>');
         //die(print_r($_SERVER));
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],16,2) == 'id_ef')){
+        die(substr($_SERVER['REQUEST_URI'],16,6));
+        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],16,5) == 'id_ef')){
             $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
             $uar = array(
                 'user_id'=>substr($_SERVER[argv][0], 6),
