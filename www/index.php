@@ -34,11 +34,11 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         //echo('<pre>');
         //die(print_r($_SERVER));
-        die(substr($_SERVER['REQUEST_URI'],16,6));
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],16,5) == 'id_ef')){
+        //die(substr($_SERVER['REQUEST_URI'],15,5));
+        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
             $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
             $uar = array(
-                'user_id'=>substr($_SERVER[argv][0], 6),
+                'user_id'=>substr($_SERVER[argv][0], 20),
                 'user_name'=>$select[0]['user_login'],
                 'user_type'=>0);
             Core::getInstance()->tpl->assign('user_info', $uar);
