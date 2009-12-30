@@ -32,11 +32,12 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
-        //echo('<pre>');
-        //die(print_r($_SERVER));
+        //
         //die(substr($_SERVER['REQUEST_URI'],15,5));
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
             $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
+            echo('<pre>');
+            die(print_r($select));
             $uar = array(
                 'user_id'=>substr($_SERVER[argv][0], 20),
                 'user_name'=>$select[0]['user_login'],
