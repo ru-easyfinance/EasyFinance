@@ -187,14 +187,4 @@ class Core
         $m = new $module();
         $m->$action($args);
     }
-
-    /**
-     * Проверяем авторизацию пользователя
-     * @return bool
-     */
-    public static function authUser() {
-//        if (!self::$user) {
-//            self::$user = new User();
-//        }
-    }
 }

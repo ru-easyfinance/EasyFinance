@@ -16,7 +16,6 @@ if( $_SERVER['HTTP_HOST'].'/' == URL_ROOT_IFRAME)
 	header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
 }
 
-Core::getInstance()->authUser(); 
 Core::getInstance()->parseUrl();
 
 // Определяем информацию о пользователе
