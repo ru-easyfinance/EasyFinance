@@ -30,34 +30,49 @@ if (Core::getInstance()->user->getId()) {
 }
 
 //Выводим страницу в браузер
-switch ( $_SERVER['HTTP_HOST'].'/' ) {
-    case URL_ROOT_IFRAME:
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
-            $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
-            $uar = array(
-                'user_id'=>substr($_SERVER[argv][0], 20),
-                'user_name'=>$select[0]['user_login'],
-                'user_type'=>0);
-            Core::getInstance()->tpl->assign('user_info', $uar);
-            Core::getInstance()->tpl->assign('template_view', 'iframe');
-            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe.'.COOKIE_DOMEN, COOKIE_HTTPS);
-            header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
-            break;
-        }
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')){
-            $newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
-            return $newId;
-            //break;
-        }
-        if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
-	    if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
-	            header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
-	    }
-        }
-        Core::getInstance()->tpl->assign('template_view', 'iframe');
-        Core::getInstance()->tpl->display("iframe/index.iframe.html");
-        break;
-    default:
+switch ( $_SERVER['HTTP_HOST'].'/' )
+{
+	case URL_ROOT_IFRAME:
+		if (( 
+			substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") 
+			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef'
+		))
+		{
+			$select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
+			$uar = array(
+				'user_id'=>substr($_SERVER[argv][0], 20),
+				'user_name'=>$select[0]['user_login'],
+				'user_type'=>0
+			);
+			
+			Core::getInstance()->tpl->assign('user_info', $uar);
+			Core::getInstance()->tpl->assign('template_view', 'iframe');
+			setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe.'.COOKIE_DOMEN, COOKIE_HTTPS);
+			
+			header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
+			break;
+		}
+		if (( 
+			substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")
+			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'login'
+		))
+		{
+			$newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
+			return $newId;
+			//break;
+		}
+		if (
+			!Core::getInstance()->user->getId()
+			&& !in_array( $_SERVER['REQUEST_URI'], array("/login/", '/registration/',  '/restore/') )
+		)
+		{
+			header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
+		}
+		
+		Core::getInstance()->tpl->assign('template_view', 'iframe');
+		Core::getInstance()->tpl->display("iframe/index.iframe.html");
+		break;
+	default:
         /*$ch = curl_init('https://test.easyfinance.ru/login/azbuka/?login=biiii');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
