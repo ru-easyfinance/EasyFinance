@@ -31,11 +31,13 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' )
 {
+        // Загрузка страницы в IFRAME
 	case URL_ROOT_IFRAME:
-		if (( 
-			substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") 
-			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef'
-		))
+                // Если это партнёр Азбука-Финансов и у нас есть ИД пользователя
+		if (
+                        (substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")
+			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')
+                )
 		{
 			$select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
 			$uar = array(
@@ -51,14 +53,14 @@ switch ( $_SERVER['HTTP_HOST'].'/' )
 			header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
 			break;
 		}
-		if (( 
-			substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")
-			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'login'
-		))
+                // Если это партнёр Азбука-Финансов, но у нас нет ИД пользователя
+		if (
+                        (substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")
+			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')
+                )
 		{
 			$newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
 			return $newId;
-			//break;
 		}
 		if (
 			!Core::getInstance()->user->getId()
@@ -71,23 +73,11 @@ switch ( $_SERVER['HTTP_HOST'].'/' )
 		Core::getInstance()->tpl->assign('template_view', 'iframe');
 		Core::getInstance()->tpl->display("iframe/index.iframe.html");
 		break;
+        // Загрузка обычной страницы
 	default:
-        /*$ch = curl_init('https://test.easyfinance.ru/login/azbuka/?login=biiii');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $resp = curl_exec($ch);
-        //$resp = 2;
-        $a = curl_multi_getcontent($ch);
-        //$e = curl_error($ch);
-        //die ($e);
-        //die ('parampampam'.print_r($resp));
-        curl_close($ch);*/
-        //header("Location: https://iframe." . URL_ROOT_MAIN . "login/" . (string)$a);
-        //die($a);
-        Core::getInstance()->tpl->assign('template_view', 'index');
-        Core::getInstance()->tpl->display("index.html");
-        break;
+            Core::getInstance()->tpl->assign('template_view', 'index');
+            Core::getInstance()->tpl->display("index.html");
+            break;
 }
 
 // Применение модификаций\удалений моделей
