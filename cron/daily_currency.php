@@ -90,7 +90,7 @@
 
         //Готовим движение курса
         (float)$sum = str_replace(',', '.', $elem->getElementsByTagName('Value')->item(0)->nodeValue);
-        (float)$nom = $elem->getElementsByTagName('Nominal')->item(0)->nodeValue;
+        (float)$nom = str_replace(',', '.', $elem->getElementsByTagName('Nominal')->item(0)->nodeValue);
         (float)$sum = $sum / $nom;
         if ($sum > $ar[$id]) {
             $dir = '+';
