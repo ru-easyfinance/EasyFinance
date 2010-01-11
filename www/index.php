@@ -10,21 +10,15 @@ define('INDEX', true);
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
-// Выводим заголовки политики безопастности в IE для поддержки cookies в iframe
-if( $_SERVER['HTTP_HOST'].'/' == URL_ROOT_IFRAME)
-{
-	header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
-}
-
 Core::getInstance()->parseUrl();
 
 // Определяем информацию о пользователе
-//@TODO Переместить это в другой блок ()
 if (Core::getInstance()->user->getId()) {
     $uar = array(
-        'user_id'=>Core::getInstance()->user->getId(),
-        'user_name'=>$_SESSION['user']['user_name'],
-        'user_type'=>$_SESSION['user']['user_type']);
+        'user_id'   => Core::getInstance()->user->getId(),
+        'user_name' => $_SESSION['user']['user_name'],
+        'user_type' => $_SESSION['user']['user_type']
+    );
     Core::getInstance()->tpl->assign('user_info', $uar);
 }
 
@@ -33,26 +27,43 @@ switch ( $_SERVER['HTTP_HOST'].'/' )
 {
         // Загрузка страницы в IFRAME
 	case URL_ROOT_IFRAME:
+                // Выводим заголовки политики безопастности в IE для поддержки cookies в iframe
+                if( $_SERVER['HTTP_HOST'].'/' == URL_ROOT_IFRAME)
+                {
+                        header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+                }
+
                 // Если это партнёр Азбука-Финансов и у нас есть ИД пользователя
 		if (
                         (substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")
 			&& ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')
                 )
 		{
-			$select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
-			$uar = array(
-				'user_id'=>substr($_SERVER[argv][0], 20),
-				'user_name'=>$select[0]['user_login'],
-				'user_type'=>0
-			);
-			
-			Core::getInstance()->tpl->assign('user_info', $uar);
-			Core::getInstance()->tpl->assign('template_view', 'iframe');
-			setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe.'.COOKIE_DOMEN, COOKIE_HTTPS);
-			
-			header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
-			break;
+                    // @TODO Нет проверки подлинности пользователя. Не проверяется, сайт откуда пришли
+                    // нет проверки почты пользователя (которая может измениться)
+                    $select = Login_Model::getUserDataByID( substr($_SERVER['argv'][0], 20) );
+                    $uar = array(
+                            'user_id'   => substr($_SERVER[argv][0], 20),
+                            'user_name' => $select[0]['user_login'],
+                            'user_type' => $select[0]['user_type']
+                    );
+
+                    Core::getInstance()->tpl->assign('user_info', $uar);
+                    Core::getInstance()->tpl->assign('template_view', 'iframe');
+
+                    setcookie(
+                        COOKIE_NAME,
+                        encrypt(array($select[0]['user_login'], $select[0]['user_pass'])),
+                        time() + COOKIE_EXPIRE,
+                        COOKIE_PATH,
+                        'iframe.'.COOKIE_DOMEN,
+                        COOKIE_HTTPS
+                    );
+
+                    header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
+                    break;
 		}
+                
                 // Если это партнёр Азбука-Финансов, но у нас нет ИД пользователя
 		if (
                         (substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")

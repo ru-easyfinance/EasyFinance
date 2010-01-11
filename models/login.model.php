@@ -306,7 +306,7 @@ class Login_Model
          */
         public function getUserDataByID($id){
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
-            return $db->query("SELECT user_login, user_pass FROM users WHERE id = ?", $id);
+            return $db->query("SELECT user_login, user_pass, user_type FROM users WHERE id = ?", $id);
         }
 
         /**
