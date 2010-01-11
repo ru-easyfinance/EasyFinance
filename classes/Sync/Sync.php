@@ -157,7 +157,10 @@ class Sync{
             ,'Outcomes' => $this->dataarrayE[10]
             ,'Plans' => $this->dataarrayE[11]
             );
+        //echo('<pre>');
+        //die(print_r($ret));
         $a = php_xmlrpc_encode($ret);
+        //die(print_r($a));
         return $a;
     }
 
