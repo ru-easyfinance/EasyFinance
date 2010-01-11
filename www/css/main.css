@@ -1875,3 +1875,28 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 #seotext {background:transparent url(/img/i/jQuery/12.bmp)}
 #seotext2 {background:transparent url(/img/i/jQuery/12.bmp)}
+
+
+.feedback{
+    height: auto;
+    clear: both;
+    padding-top: 20px;
+}
+.feedback .banner{
+    position: relative;
+    float : left;
+    width : 300px;
+    overflow: hidden;
+    text-align: center;
+}
+.feedback .text{
+    position: relative;
+    margin-left: 300px;
+}
+.feedback .text a{
+    position: relative;
+    float : right;
+}
+.userfeedback{
+    text-align: right;
+}
