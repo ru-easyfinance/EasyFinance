@@ -99,7 +99,7 @@ a img, fieldset { border:0 none; }
 .mail_list ul.period { margin: 0 0 21px 71px;}
 .mail_list ul.period:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .mail_list ul.period li { float: left; padding: 1px 10px 2px 10px; font-size: 11px;  }
-.mail_list ul.period li span { display: block; color: #666666; cursor: pointer; //cursor: hand; }
+.mail_list ul.period li span { display: block; color: #666666; cursor: pointer;}
 .mail_list ul.period li.act { padding: 0 10px 0 0; font-weight: bold; cursor: default; background: url("../i/plashka_pink.png"/*tpa=https://home-money.ru/preview/i/plashka_pink.png*/) no-repeat 100% 0; }
 .mail_list ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url("../i/plashka_pink.png"/*tpa=https://home-money.ru/preview/i/plashka_pink.png*/) no-repeat 0 0; }
 
@@ -107,10 +107,10 @@ a img, fieldset { border:0 none; }
 .mail_list table th, .mail_list table td, table.tab1 th { padding: 4px; font-size: 11px; }
 .mail_list table th { padding: 4px; color: #222222; text-align: left; border-bottom: 1px solid #e5e5e5; }
 .mail_list table th span.sort, .mail_list table th span.select { display: block; float: left; }
-.mail_list table th span.sort { position: relative; margin-right: 6px; cursor: pointer; //cursor: hand; z-index: 0; }
+.mail_list table th span.sort { position: relative; margin-right: 6px; cursor: pointer; z-index: 0; }
 .mail_list table th span.sort span { display: block; position: absolute; top: 4px; left: -9px; width: 5px; height: 9px; text-indent: -999px; overflow: hidden; }
 .mail_list table th span.sort span.up { background-position: -50px 0; }
-.mail_list table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; //cursor: hand; }
+.mail_list table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; }
 .mail_list table th div.cont {  z-index: 2; }
 .mail_list table th div.cont div { //zoom: 1; }
 .mail_list table th div.cont div:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -127,7 +127,7 @@ ul.menu6:after { display: block; content: ' '; height: 0; overflow: hidden; clea
 ul.menu6 li { float: left; margin-right: 15px; padding: 5px 13px 6px 13px; font-size: 11px; color: #6ebe41; }
 ul.menu6 li.act { padding: 0 13px 0 0; background: url("../i/bg15.png"/*tpa=https://home-money.ru/preview/i/bg15.png*/) no-repeat 100% 0; }
 ul.menu6 li.act div { padding: 5px 0 6px 13px !important; background: url("../i/bg15.png"/*tpa=https://home-money.ru/preview/i/bg15.png*/) no-repeat 0 0 !important; }
-ul.menu6 li div span { cursor: pointer; //cursor: hand; border-bottom: 1px dashed #6ebe41; }
+ul.menu6 li div span { cursor: pointer; border-bottom: 1px dashed #6ebe41; }
 ul.menu6 li.act div span { cursor: default; border-bottom: 0 none; }
 /* //////////////////////////////////////////////////////////////////////////////////////////  */
 .op_pf_field{height:25px}
