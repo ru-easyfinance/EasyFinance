@@ -78,13 +78,13 @@ class SyncOperation_Model {
             $data[9][$key+1]['descr'] = $a[$key]['comment'];
 
             //добавление в рекордс меп.
-            $data[1][] = array(
+            /*$data[1][] = array(
                 'tablename' => 'Incomes',
-                'ekey' => (int)$a[$key]['id']);
+                'ekey' => (int)$a[$key]['id']);*/
         }
         //теперь расходы
-        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND money < 0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
-        $a = $this->db->query($sql, $user_id);
+        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 1 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
+        $a = $this->db->query($sql, $this->user);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
             $data[10][0]['tablename'] = 'Outcomes';
