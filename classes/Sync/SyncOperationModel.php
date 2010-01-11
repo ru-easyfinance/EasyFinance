@@ -63,7 +63,7 @@ class SyncOperation_Model {
         $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $this->db->query($sql, $this->user);
         //echo($a[0]['cat_name']);
-        foreach ($a as $key=>$v){
+        foreach ($a as $key=>$v) if ($v['comment']<>'Начальный остаток'){
             $data[9][0]['tablename'] = 'Incomes';
             $data[9][$key+1]['easykey'] = (int)$a[$key]['id'];
             $data[9][$key+1]['date'] = $a[$key]['date'];
@@ -97,7 +97,7 @@ class SyncOperation_Model {
             $data[10][$key+1]['parent'] = (int)$b[0]['cat_parent'];
 
             $data[10][$key+1]['account'] = (int)$a[$key]['account_id'];
-            $data[10][$key+1]['amount'] = (int)$a[$key]['money'];
+            $data[10][$key+1]['amount'] = (int)abs($a[$key]['money']);
             $data[10][$key+1]['descr'] = $a[$key]['comment'];
 
             //добавление в рекордс меп.
