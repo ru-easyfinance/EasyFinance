@@ -190,6 +190,8 @@ abstract class _Core_Controller
         }
         $currency = array();
         foreach ($user->getUserCurrency() as $k => $v) {
+            if ($k == 11) $v['value']/=10; //курс для юаней в 10 раз меньше.
+            if ($k == 19) $v['value']/=100;//курс для иены в 100 раз меньше.
             $currency[$k] = array(
                 'cost' => $v['value'],
                 'name' => $v['charCode'],
