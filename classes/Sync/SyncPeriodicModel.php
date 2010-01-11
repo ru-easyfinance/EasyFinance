@@ -102,9 +102,9 @@ class SyncPeriodic_Model {
                 $data[11][$key+1]['descr'] = $a[$key]['comment'];
 
                 //добавляем в recordsmap
-                $data[1][] = array (
+                /*$data[1][] = array (
                     'tablename' => 'Plans',
-                    'ekey' => (int)$a[$key]['id']);
+                    'ekey' => (int)$a[$key]['id']);*/
 
         }
     }

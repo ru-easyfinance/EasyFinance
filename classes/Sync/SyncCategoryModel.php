@@ -70,8 +70,8 @@ class SyncCategory_Model {
             $data[6][$key+1]['parent'] = (int)$a[$key]['cat_parent'];
             $data[6][$key+1]['name'] = $a[$key]['cat_name'];
 
-            $data[1][]= array('tablename' => 'Categories',
-                'ekey' => (int)$a[$key]['cat_id']);
+            /*$data[1][]= array('tablename' => 'Categories',
+                'ekey' => (int)$a[$key]['cat_id']);*/
 
         }
     }

@@ -101,9 +101,9 @@ class SyncOperation_Model {
             $data[10][$key+1]['descr'] = $a[$key]['comment'];
 
             //добавление в рекордс меп.
-            $data[1][] = array(
+            /*$data[1][] = array(
                 'tablename' => 'Outcomes',
-                'ekey' => (int)$a[$key]['id']);
+                'ekey' => (int)$a[$key]['id']);*/
         }
 
         //return $data;
