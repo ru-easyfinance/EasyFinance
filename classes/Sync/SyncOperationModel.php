@@ -83,7 +83,7 @@ class SyncOperation_Model {
                 'ekey' => (int)$a[$key]['id']);
         }
         //теперь расходы
-        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 1 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
+        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND money < 0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $this->db->query($sql, $user_id);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
