@@ -9,9 +9,9 @@ function calculate(funcStr){
     }
     var sign = 0;
     if (funcStr.match(/[0-9]+(\.{1}[0-9]+)?/)[0] == funcStr){
-        sign = new Number(funcStr)
+        sign = new Number(funcStr);
     }else{
-        sign = new Number(eval(funcStr))
+        sign = new Number(eval(funcStr));
     }
     return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 }
@@ -64,15 +64,15 @@ $(document).ready(function(){
         calculator.find('input').blur(function(){
             var val = calculator.find('input').val();
             calculator.find('input').val(calculate(val));
-            flag = 0
+            flag = 0;
         })
         calculator.find('input').keypress(function(e){
             if (calculator.find('input').val()=='0'){
-                flag = 1
+                flag = 1;
             }
-            var chars = '1234567890.'
+            var chars = '1234567890.';
             if (flag){
-                chars += '+-*/'
+                chars += '+-*/';
             }
             if (chars.indexOf(String.fromCharCode(e.which)) == -1){
                 var keyCode = e.keyCode;
@@ -81,7 +81,7 @@ $(document).ready(function(){
             }
             flag = 1;
             if (calculator.find('input').val()=='0'){
-                calculator.find('input').val('')
+                calculator.find('input').val('');
             }
         })
     }
