@@ -44,9 +44,9 @@
     //print_r($result);
 
     //Если на эту дату уже существует, то прекращать выполнение скрипта
-    /*if (trim($result[0]['currency_date']) === trim($date)) {
+    if (trim($result[0]['currency_date']) === trim($date)) {
         exit;
-    }*/
+    }
 
     $sql = '';
     foreach ( $dom->getElementsByTagName('Valute') as $elem ) {
