@@ -158,7 +158,7 @@ function MakeOperation(){
 
 $(document).ready(function() {
     //#538
-    if (!res.accounts && document.referrer && (document.referrer+'//').replace(/https?\:\/\//,'').replace(/\/[^\/]{0,}\//g, '').replace('/','') != location.hostname.replace('demo.','')){
+    if (!$.cookie('referer_url')&&!res.accounts && document.referrer){
         
         $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : '0'});
     }
