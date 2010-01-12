@@ -12,7 +12,8 @@ class Login_Model
      * Создаёт категории по умолчанию
      * @return void
      */
-    function defaultCategory() {
+    function defaultCategory( $uid = 0 ) {
+        if ( $uid == 0 )
         $uid = Core::getInstance()->user->getId();
         $sql = "INSERT INTO category (`cat_parent`, `user_id`, `system_category_id`, `cat_name`, `type`, `dt_create`) VALUES
         (0, {$uid}, 1,  'Автомобиль', -1, NOW()),
@@ -326,6 +327,8 @@ class Login_Model
             $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
                 (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
             $id = mysql_insert_id();
+            $this->defaultCategory($id);
+            //$this->defaultAccounts();
              //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
             $ch = curl_init();
             //die("http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
