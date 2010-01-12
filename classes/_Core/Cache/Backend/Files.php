@@ -93,10 +93,17 @@ class _Core_Cache_Backend_Files implements _Core_Cache_Interface
 		return $answer;
 	}
 	
-	public function set( $id, $value, $expired = null)
+	/**
+	 * Сохранение данных в кеш
+	 *
+	 * @param string $id Идентификатор 
+	 * @param mixed $value Данные
+	 * @param integer $expire Кол-во секунд до протухания данных (по умолчанию - никогда)
+	 */
+	public function set( $id, $value, $expire = null)
 	{
 		$data = array(
-			'expired' 	=> $expired,
+			'expired' 	=> time() + $expire,
 			'data'		=> $value,
 		);
 		

@@ -62,11 +62,11 @@ class _Core_Cache implements _Core_Cache_Interface
 	{
 		$value = null;
 		
-		reset($this->backends);
-		
 		// Перебор бекендов в поисках значения
 		// while экономит несколько мс времени и мб памяти 
 		// т.к. не создаёт клона массива
+		reset($this->backends);
+		
 		while (list(,$backend) = each($this->backends))
 		{
 			$value = $backend->get( $this->keyPrefix . $id );
@@ -106,14 +106,21 @@ class _Core_Cache implements _Core_Cache_Interface
 		
 		return $value;
 	}
-	
-	public function set( $id, $value, $expired = null, array $tags = null )
+
+	/**
+	 * Сохранение данных в кеш
+	 *
+	 * @param string $id Идентификатор 
+	 * @param mixed $value Данные
+	 * @param integer $expire Кол-во секунд до протухания данных (по умолчанию - никогда)
+	 */
+	public function set( $id, $value, $expire = null, array $tags = null )
 	{
 		reset($this->backends);
 		
 		while (list(,$backend) = each($this->backends))
 		{
-			$value = $backend->set( $this->keyPrefix . $id, $value, $expires );
+			$value = $backend->set( $this->keyPrefix . $id, $value, $expire );
 		}
 	}
 	
