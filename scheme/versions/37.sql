@@ -1,0 +1,1 @@
+UPDATE `currency` SET cur_char_code='AZN' WHERE cur_char_code='AZM'
