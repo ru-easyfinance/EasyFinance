@@ -322,7 +322,7 @@ class Login_Model
             $pass = sha1($login);
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
             $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
-            if ( $islog[0]['cou'] == 0 )
+            //if ( $islog[0]['cou'] == 0 )
             $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
                 (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
             $id = mysql_insert_id();
