@@ -80,12 +80,34 @@ class Registration_Model
         }
 	
         // Если нет ошибок, создаём пользователя
-        if (empty($error_text)) {
-            
+        if (empty($error_text))
+        {
+        		//Если определился реферер
+        		if( isset($_SESSION['referrer_url']) && $_SESSION['referrer_url'] )
+        		{
+        			preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referrer_url'], $matches);
+        			$referrer = strtolower( $matches[0] );
+        			
+        			//Проверяем нет ли уже такого реферера
+        			$sql = 'select id from `referrers` where host = ?';
+        			$referrerId = $db->selectCell( $sql, $referrer );
+        			
+        			// Если нет - добавляем его в табличку 
+        			if( empty($referrerId) )
+        			{
+        				$sql = 'insert into `referrers` (`id`, `host`,`title`) values (null, ?,?)';
+        				$referrerId = $db->query( $sql, $referrer, $referrer);
+        			}
+        		}
+        		else
+        		{
+        			$referrerId = null;
+        		}
+        	
             //Добавляем в таблицу пользователей
             $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
-                user_created, user_active, user_new) VALUES (?, ?, ?, ?, CURDATE(), 0, 1)";
-            $db->query($sql, $register['name'], $register['login'], $pass, $register['mail']);
+                user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 0, 1, ?)";
+            $db->query($sql, $register['name'], $register['login'], $pass, $register['mail'], $referrerId);
 
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = mysql_insert_id();

@@ -21,6 +21,38 @@ abstract class _Core_Controller
 	 * всех контроллеров свойств и обьектов.
 	 *
 	 */
+	public function __construct()
+	{
+		// Шаблонизатор
+		$this->tpl   = Core::getInstance()->tpl;
+		
+		$this->__init();
+		
+		//Ежели неавторизован пользователь ...
+		if (!Core::getInstance()->user->getId())
+		{
+			//..показываем ему сео говнотексты
+			$this->includeSeoText();
+			
+			//.. записываем реферера, если он конечно уже не был записан
+			if( !isset($_SESSION['referrer_url']) )
+			{
+				$_SESSION['referrer_url'] = $_SERVER['HTTP_REFERER'];
+			}
+		}
+	}
+	
+	/**
+	 * Метод для инициализации контроллера.
+	 * (во избежание переписывания конструктора)
+	 *
+	 */
+	abstract protected function __init();
+	
+	/**
+	 * Подключение сео говнотекстов.
+	 *
+	 */
 	protected function includeSeoText()
 	{
 		if(file_exists('admin/seo.php'))
@@ -29,22 +61,7 @@ abstract class _Core_Controller
 		}
 		$this->tpl->assign('seotext', $texts);
 	}
-        
-	public function __construct()
-	{
-		// Шаблонизатор
-		$this->tpl   = Core::getInstance()->tpl;
-
-                $this->__init();
-                if (!Core::getInstance()->user->getId())
-                    {
-                        $this->includeSeoText();
-                    }
-		
-	}
 	
-	abstract protected function __init();
-
     /**
      * Если нам были переданы ошибочные данные, генерируем 404 страницу
      * @param $method
