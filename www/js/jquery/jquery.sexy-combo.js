@@ -1,4 +1,3 @@
-/* modified by Jet */
 /***************************************************************************
 
 	sexy-combo 2.1.3	: A jQuery date time picker.
@@ -1069,7 +1068,7 @@
 		});		
 	},
 	
-	changeOptions: function($select, val) {
+	changeOptions: function($select) {
 		$select = $($select);
                 $select.each(function() {
 		    if ("SELECT" != this.tagName.toUpperCase()) {
@@ -1089,18 +1088,6 @@
                     $input.val("");
                     $wrapper.data("sc:optionsChanged", "yes");
                     var $selectbox = $this;
-
-                    /* modified by Jet */
-                    if (val) {
-                        $selectbox.val(val);
-
-                        $selectbox.parent().find("input[type='text']").val($selectbox.find("option:selected").text());
-                        $selectbox.parent().data("sc:lastEvent", "click");
-                    } else {
-                        $selectbox.parent().find("input[type='text']").val($selectbox.find("option:eq(0)").text());
-                        $selectbox.parent().data("sc:lastEvent", "click");
-                        $selectbox.find("option:eq(0)").attr('selected','selected');
-                    }
 		});
 	},
 	

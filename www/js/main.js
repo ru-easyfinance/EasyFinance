@@ -214,6 +214,12 @@ $(document).ready(function() {
 //      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
 //    }
 
+    // LOAD MODELS
+    // modified by Jet 29.10.2009, ticket 337.
+    easyFinance.models.accounts.load(res.accounts, function(model) {
+        easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
+    });
+
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
         // инициализируем виджет добавления и редактирования операции
@@ -494,12 +500,7 @@ $('.tags_list .add').live('click', function(){
         }
     })
 })
-
-    // accounts
-    // modified by Jet 29.10.2009, ticket 337.
-    easyFinance.models.accounts.load(res.accounts, function(model) {
-        easyFinance.widgets.accountsPanel.init('.accounts', model);
-    });
+    
 
       ///////////////////////periodic/////////////////////////////////////////
       var data = res['events'];

@@ -25,56 +25,25 @@
                 <div class="op_f_field" id="div_op_first_line">
                     <div id="div_op_type_select">
                         <label for="op_type">Тип операции</label>
-                        <select id="op_type">
-                            <option value="0">Расход</option>
-                            <option value="1">Доход</option>
-                            <option value="2">Перевод со счета</option>
-                            {*<!-- <option value="3">Покупка валюты</option> -->*}
-                            <option value="4">Перевод на фин. цель</option>
-                        </select>
+                        <div id="div_op_type"></div>
                     </div>
                     <div id="div_op_account_select">
                         <label for="op_account">Счет</label>
-                        <select id="op_account">
-                            {foreach from=$accounts item=acc_data}
-                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
-                            {/foreach}
-			</select>
+                        <div id="div_op_account"></div>
                     </div>
 
 		</div>
             </div>
             <div>
                 <div id="op_category_fields">Категория<br>
-                    {if !empty($list)}
-                    <select id="op_category">
-                        {if !empty($often)}
-                        <optgroup id="op_often" label="&nbsp;Часто используемые">
-                            {foreach from=$often item=data}
-                            <option value="{$data.cat_id}">{$data.cat_name}</option>
-                                {/foreach}
-                        </optgroup>
-                        {/if}
-                        <optgroup id="op_all" label="&nbsp;Все категории">
-                            {$category}
-                        </optgroup>
-                    </select>
-                    {else}
-                    <select id="op_category">
-                    {$category}
-                    </select>
-                    {/if}
+                    <div id="div_op_category"></div>
                 </div>
             </div>
                                     {* <!-- Финансовая цель --> *}
                                     <div class="op_line" >
                                         <div class="op_field" id="op_target_fields" style="display:none;">
                                            <label for="op_target">Финансовая цель:</label>
-                                            <select id="op_target">
-                                                <option bill="0" value="0" target_account_id='0' amount_done='0' percent_done='0'
-                                                        forecast_done='0' amount="0"> -- Все -- </option>
-
-                                            </select>
+                                            <div id="div_op_target"></div>
                                             <div>
                                                 <div>Стоимость цели: <span id='op_amount_target'></span><span class='op_currency'></span></div>
                                                 <div>Сумма накопленная: <span id='op_amount_done'></span><span class='op_currency' ></span></div>
@@ -90,11 +59,7 @@
                                     <div class="op_line" >
                                         <div class="op_field" id="op_transfer_fields" style="display:none;">
                                             <label for="op_AccountForTransfer">На счет:</label>
-                                            <select id="op_AccountForTransfer">
-                                                {foreach from=$accounts item=acc_data}
-                                                <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
-                                                {/foreach}
-                                            </select>
+                                            <div id="div_op_transfer"></div>
                                             <span id="op_operationTransferCurrency" style="display:none;">
                                                 <span></span>
                                                 <input type='text' id='op_currency'><span id="op_convertSumCurrency"></span>

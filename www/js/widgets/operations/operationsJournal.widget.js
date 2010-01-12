@@ -487,7 +487,7 @@ easyFinance.widgets.operationsJournal = function(){
         if (_modelAccounts)
             _accountName = _modelAccounts.getAccountNameById(account);
 
-        if (easyFinance.widgets.operationEdit)
+        if (easyFinance.widgets.operationEdit && account != '')
             easyFinance.widgets.operationEdit.setAccount(account);
     }
 
