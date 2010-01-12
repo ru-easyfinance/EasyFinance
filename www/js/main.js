@@ -158,7 +158,8 @@ function MakeOperation(){
 
 $(document).ready(function() {
     //#538
-    if (!res.accounts && document.referrer && document.referrer && (document.referrer+'//').replace(/https?\:\/\//,'').replace(/\/[^\/]{0,}\//g, '') != location.hostname.replace('demo.','')){
+    if (!res.accounts && document.referrer && (document.referrer+'//').replace(/https?\:\/\//,'').replace(/\/[^\/]{0,}\//g, '').replace('/','') != location.hostname.replace('demo.','')){
+        
         $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : '0'});
     }
     // fix for ticket #463
