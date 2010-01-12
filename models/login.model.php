@@ -324,6 +324,15 @@ class Login_Model
             $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
                 (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
             $id = mysql_insert_id();
-            return $id;
+             //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
+
+            curl_exec($ch);
+
+            curl_close($ch);
+
+                return $id;
         }
 }
