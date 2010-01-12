@@ -2,7 +2,7 @@
 /**
  * Класс контроллера для модуля инвестиционных активов пользователя
  * @copyright http://easyfinance.ru/
- * @version SVN $Id: invest.controller.php 2050 2009-12-25 16:10:20Z kiselev $
+ * @version SVN $Id: $
  */
 
 class Invest_Controller extends _Core_Controller_UserCommon
