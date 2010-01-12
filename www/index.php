@@ -6,7 +6,7 @@
  */
  
 define('INDEX', true);
-
+//require_once dirname(dirname(__FILE__)). "/cron/daily_currency.php";
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
@@ -49,28 +49,15 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             return $newId;
             //break;
         }
-        if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
+        /*if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
 	    if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
 	            header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
 	    }
-        }
+        }*/
         Core::getInstance()->tpl->assign('template_view', 'iframe');
         Core::getInstance()->tpl->display("iframe/index.iframe.html");
         break;
     default:
-        /*$ch = curl_init('https://test.easyfinance.ru/login/azbuka/?login=biiii');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $resp = curl_exec($ch);
-        //$resp = 2;
-        $a = curl_multi_getcontent($ch);
-        //$e = curl_error($ch);
-        //die ($e);
-        //die ('parampampam'.print_r($resp));
-        curl_close($ch);*/
-        //header("Location: https://iframe." . URL_ROOT_MAIN . "login/" . (string)$a);
-        //die($a);
         Core::getInstance()->tpl->assign('template_view', 'index');
         Core::getInstance()->tpl->display("index.html");
         break;
