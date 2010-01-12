@@ -83,6 +83,6 @@ $(document).ready(function(){
             if (calculator.find('input').val()=='0'){
                 calculator.find('input').val('');
             }
-        })
+        });
     }
-})
+});
