@@ -50,8 +50,8 @@ else
     $tpl->append('css', 'jquery/south-street/ui.datepicker.css');
 
     $tpl->append('css', 'jquery/jquery.jgrowl.css');
-    $tpl->append('css', 'jquery/jquery.calculator.css');
     $tpl->append('css', 'jquery/fullcalendar.css');
+
 }
 
 $tpl->append('css', 'menuUser.css');

@@ -9,8 +9,7 @@ jquery/ui.datepicker.js
 jquery/ui.tabs.js
 jquery/jquery.qtip.js
 jquery/jquery.jgrowl.min.js
-jquery/jquery.calculator.js
-jquery/jquery.calculator-ru.js
+calculator.js
 jquery/jquery.mousewheel.js
 jquery/jquery.em.js
 jquery/jquery.maskedinput-1.2.2.min.js

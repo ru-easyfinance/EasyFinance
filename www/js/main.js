@@ -666,15 +666,15 @@ $(".flash")
 //        return false;
 //    })
 
-        $('.calculator_block .calculator').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        })
-       $('.calculator_block .calculator').calculator({
-            layout: [
-                    '_7_8_9_+CA',
-                    '_4_5_6_-M+',
-                    '_1_2_3_/M-',
-                    '_0_._=_*MS']});
+//        $('.calculator_block .calculator').live('keyup',function(e){
+//            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+//        })
+//       $('.calculator_block .calculator').calculator({
+//            layout: [
+//                    '_7_8_9_+CA',
+//                    '_4_5_6_-M+',
+//                    '_1_2_3_/M-',
+//                    '_0_._=_*MS']});
 
         // vvv Jet. Тикет 266. Новое выпадающее меню vvv
         var topmenu = '<div class="menu3"> \

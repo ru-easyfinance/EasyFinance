@@ -1876,7 +1876,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 #seotext {background:transparent url(/img/i/jQuery/12.bmp)}
 #seotext2 {background:transparent url(/img/i/jQuery/12.bmp)}
 
-
+/* страница отзывов */
 .feedback{
     height: auto;
     clear: both;
@@ -1899,4 +1899,53 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 }
 .userfeedback{
     text-align: right;
+}
+
+/* Калькулятор */
+.calculatorRW{
+    background-color:#F4F4F4;
+    border:1px solid #888888;
+    position:relative;
+    padding : 4px;
+    margin: 2px;
+}
+.calculatorRW input{
+    text-align: right;
+    width: 97%;
+    margin : 1px;
+    padding-bottom: 2px;
+}
+.calculatorRW td{
+    padding: 2px;
+    height : 22px;
+    width : 31px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.calculatorRW td.double{
+    height : 47px;
+}
+.calculatorRW td.double div{
+    height : 44px;
+}
+.calculatorRW td div{
+    
+    cursor: pointer;
+    height : 18px;
+    width : 27px;
+    text-align: center;
+    vertical-align: middle;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    -o-border-radius:5px;
+    border-radius:5px;
+    border:#CCCCCC solid 1px;
+}
+.calculatorRW td.special div{
+    background-color:#E8E8E8;
 }
