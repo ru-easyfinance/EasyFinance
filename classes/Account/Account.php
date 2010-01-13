@@ -143,6 +143,10 @@ abstract class Account
     public function delete( $user, $param)
     {
         $this->model = new Account_Model();
+        $fin = new Targets_Model();
+        $noFinTarget = $fin->countTargetsOnAccount($param['id']);// если ноль значит удаляем
+        if ($noFinTarget > 0)
+            return 'cel';
 
             $this->model->delete($param);
             unset($this->model);
