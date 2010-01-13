@@ -4,7 +4,6 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
- die('jkfsl');
 define('INDEX', true);
 //require_once dirname(dirname(__FILE__)). "/cron/daily_currency.php";
 // Загружаем общие данные
