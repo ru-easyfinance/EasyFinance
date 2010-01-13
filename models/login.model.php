@@ -322,7 +322,6 @@ class Login_Model
             //die($login);
             //$pass = sha1($login);
             $pass = $login;
-            die($pass);
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
             $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
             //if ( $islog[0]['cou'] == 0 )
@@ -333,13 +332,13 @@ class Login_Model
             $this->defaultCategory($id);
             //$this->defaultAccounts($id);
              //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
-            /*$ch = curl_init();
+            $ch = curl_init();
             //die("http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
             curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
 
             curl_exec($ch);
 
-            curl_close($ch);*/
+            curl_close($ch)//;*/
 
                 return $id;
         }
