@@ -6,6 +6,7 @@
  */
  
 define('INDEX', true);
+//require_once dirname(dirname(__FILE__)). "/cron/daily_currency.php";
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
@@ -48,11 +49,11 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             //return $newId;
             break;
         }
-        /*if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
+        if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
 	    if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
 	            header("Location: https://iframe." . URL_ROOT_MAIN . "login/");
 	    }
-        }*/
+        }
         Core::getInstance()->tpl->assign('template_view', 'iframe');
         Core::getInstance()->tpl->display("iframe/index.iframe.html");
         break;
