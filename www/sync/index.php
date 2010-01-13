@@ -86,7 +86,12 @@ function sync_clearAcc($xmlRequest){
     $answer = $a->deleteAllByUser($xmlRequest);
     return $answer;
 }
-
+function sync_clearRecMap($xmlRequest){
+    $a = New Sync($xmlRequest, $xmlAnswer);
+    $answer = $a->deleteRecMapByUser($xmlRequest);
+    return $answer;
+}
+//sync_getAuthWithTestData('xml');
 $a=array(
     "sync.getAuth" => array(
             "function" => "sync_getAuth",
@@ -97,6 +102,9 @@ $a=array(
     "sync.clearAcc" => array(
             "function" => "sync_clearAcc",
     ),
+    "sync.clearRecMap" => array(
+            "function" => "sync_clearRecMap",
+    )
 );
 
 $s=new xmlrpc_server($a, false);
