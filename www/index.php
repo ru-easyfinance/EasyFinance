@@ -28,6 +28,7 @@ if (Core::getInstance()->user->getId()) {
     Core::getInstance()->tpl->assign('user_info', $uar);
 }
 
+die(print_r($_SERVER));
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
