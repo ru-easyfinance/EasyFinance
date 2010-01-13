@@ -28,7 +28,6 @@ if (Core::getInstance()->user->getId()) {
     Core::getInstance()->tpl->assign('user_info', $uar);
 }
 
-die(print_r($_SERVER));
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
@@ -44,12 +43,10 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
             break;
         }
-        die(print_r($_SERVER));
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')){
-
-            //$newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
-            //return $newId;
-            //break;
+            $newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
+            return $newId;
+            break;
         }
         if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
 	    if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
