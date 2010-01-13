@@ -43,7 +43,9 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
             break;
         }
+        die(print_r($_SERVER));
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')){
+
             //$newId = Login_Model::generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
             //return $newId;
             //break;
