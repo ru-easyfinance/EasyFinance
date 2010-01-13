@@ -322,6 +322,7 @@ class Login_Model
             //die($login);
             //$pass = sha1($login);
             $pass = $login;
+            die($pass);
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
             $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
             //if ( $islog[0]['cou'] == 0 )
