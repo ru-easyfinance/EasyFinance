@@ -338,7 +338,7 @@ class Login_Model
 
             curl_exec($ch);
 
-            curl_close($ch)//;*/
+            curl_close($ch);//*/
 
                 return $id;
         }
