@@ -23,10 +23,10 @@ easyFinance.widgets.accountsJournal = function(){
                                 '<th>Доходность, % годовых</th>'],
                             ['<th>% годовых</th>',
                                 '<th>Доходность, % годовых</th>',
-                                '<th>�?зменение с даты открытия</th>'],
+                                '<th>Изменение с даты открытия</th>'],
                             ['<th>% годовых</th>'],
                             ['<th>Доходность, % годовых</th>',
-                                '<th>�?зменение с даты открытия</th>']];//доп графы для групп
+                                '<th>Изменение с даты открытия</th>']];//доп графы для групп
                 var id =$(this).attr('id').split("_", 2)[1];
                 var account = _model.getAccounts()[id];
                 var spec = spec_th[g_types[account.type]];
@@ -204,12 +204,12 @@ easyFinance.widgets.accountsJournal = function(){
             return;
 
         var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0]; // Жуткий масив привязки типов к группам
-        var g_name = ['Деньги','Долги мне','Мои долги','�?нвестиции','�?мущество'];//названия групп
+        var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var spec_th = [ '',
                     '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
-                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th><th Style="display:none">�?зменение с даты открытия</th>',
+                    '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>',
                     '<th Style="display:none">% годовых</th>',
-                    '<th Style="display:none">Доходность, % годовых</th><th Style="display:none">�?зменение с даты открытия</th>'];//доп графы для групп
+                    '<th Style="display:none">Доходность, % годовых</th><th Style="display:none">Изменение с даты открытия</th>'];//доп графы для групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте

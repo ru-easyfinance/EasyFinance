@@ -314,7 +314,7 @@ $(document).ready(function() {
                 }else if($('#cal_repeat').val()=="0"){ // Не повторять
                     $('#week.week').closest('.line').hide();
                     $('.repeat').closest('.line').hide()
-                }else{ // �?наче
+                }else{ // Иначе
                     $('#week.week').closest('.line').hide();
                     $('.repeat').closest('.line').show()
                 }
@@ -349,7 +349,7 @@ $(document).ready(function() {
             $('.repeat').closest('.line').hide()
 
             /**
-             * �?зменение типа операции. показываем расходные и доходные категории.+универсальные
+             * Изменение типа операции. показываем расходные и доходные категории.+универсальные
              */
             $('#cal_type').change(function(){
                 if ($('#cal_type').val() == 1)
