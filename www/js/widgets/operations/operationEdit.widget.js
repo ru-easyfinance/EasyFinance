@@ -314,6 +314,9 @@ easyFinance.widgets.operationEdit = function(){
                         _selectedTransfer = this.getHiddenValue();
                     }
                 });
+
+                // выбираем первую опцию по умолчанию
+                _sexyTransfer.setComboValue(_sexyTransfer.options[0].text);
             }
             
             _changeAccountForTransfer();
@@ -362,7 +365,8 @@ easyFinance.widgets.operationEdit = function(){
             // обновляем опции
             $('#op_target').html(o);
             $.sexyCombo.changeOptions('#op_target');
-            _sexyTarget.setComboValue(_sexyTarget.options[0].text); // to fix bug in fillForm // @todo
+            // выбираем первую опцию по умолчанию
+            _sexyTarget.setComboValue(_sexyTarget.options[0].text); 
         }
     }
 
@@ -680,8 +684,26 @@ easyFinance.widgets.operationEdit = function(){
      */
     function fillForm(data) {
         //clearForm();
-
+debugger;
         $('#op_id').val(data.id);
+
+        var typ = '0';
+        if (data.tr_id != null && data.tr_id != '') {
+            // transfer
+            typ = '2';
+        } else {
+            if (data.virt=='1') {
+                typ = '4';
+            } else {
+                if (data.drain=='1') {
+                    typ = '0';
+                } else {
+                    typ = '1';
+                }
+            }
+        }
+
+        setType(typ);
 
         if (data.transfer != "" && data.tr_id != null) {
             if (data.tr_id == "0") {
@@ -712,24 +734,6 @@ easyFinance.widgets.operationEdit = function(){
             setSum(Math.abs(data.moneydef))
         else
             setSum(Math.abs(data.money));
-
-        var typ = '0';
-        if (data.tr_id != null && data.tr_id != '') {
-            // transfer
-            typ = '2';
-        } else {
-            if (data.virt=='1') {
-                typ = '4';
-            } else {
-                if (data.drain=='1') {
-                    typ = '0';
-                } else {
-                    typ = '1';
-                }
-            }
-        }
-
-        setType(typ);
 
         setCategory(data.cat_id);
 
