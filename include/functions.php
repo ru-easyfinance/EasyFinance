@@ -23,6 +23,8 @@ function __autoload($class_name) {
     // Загружаем дополнительные классы /core
     } elseif (file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php')) {
         require_once SYS_DIR_LIBS . strtolower($array[0]) . '.class.php';
+    } elseif (file_exists(SYS_DIR_ROOT . '/classes/' . ($array[0]) . '/'. $class_name .'.php')) {
+        require_once SYS_DIR_ROOT . '/classes/' . ($array[0]) . '/'. $class_name .'.php';
     } else {
         //trigger_error("Не удалось найти файл с классом {$class_name} ".var_dump($array), E_USER_ERROR);
         error_404();
