@@ -75,7 +75,7 @@ class Account_Collection extends _Core_Abstract_Collection
         //$this->container=array();
         //$ret = array();
         foreach ($res as $k=>$v){
-            $v['totalBalance'] = $model->countTotalBalance($v['id']);
+            $v['totalBalance'] = (float)$model->countTotalBalance($v['id']);
             if ( !( 10 <= $v['type'] ) and ( $v['type'] <=15 ) )
                 $v['reserve'] = (float)$model->countReserve($v['id']);
                 $v['defCur'] = $model->countSumInDefaultCurrency($v['totalBalance'], $v['currency']);
