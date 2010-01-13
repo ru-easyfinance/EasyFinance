@@ -13,7 +13,8 @@ class Redirect_Controller
      * Редирект на бесплатную книгу по учёту финансов
      */
     function book () {
-        header('Location: http://fir.nes.ru/ru/calendar/PublishingImages/Fingramota%20Web%20Version%20.pdf');
+        //header('Location: http://fir.nes.ru/ru/calendar/PublishingImages/Fingramota%20Web%20Version%20.pdf');
+	header('Location: https://easyfinance.ru/upload/files/FingramotaWebVersion.pdf');
         exit();
     }
 }
