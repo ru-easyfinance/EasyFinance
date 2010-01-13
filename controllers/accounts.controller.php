@@ -140,8 +140,11 @@ class Accounts_Controller extends _Core_Controller_UserCommon
 
         $account = Account::getTypeByID($params);
         //$account = Account::load($params);
-        if (!$account->delete($user, $params))
+        $er = $account->delete($user, $params);
+        if (!$er)
             $this->tpl->assign("error", "Счет не удалён");
+        if ($er == 'cel')
+            die (json_encode(array('error'=>array('text'=>'Невозможно удалить накопительный счёт'))));
         die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
     }
 
