@@ -160,7 +160,7 @@ $(document).ready(function() {
     //#538
     if (!$.cookie('referer_url')&&!res.accounts && document.referrer){
         
-        $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : '0'});
+        $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : false});
     }
     // fix for ticket #463
     $('#login form').keypress(function(e){
