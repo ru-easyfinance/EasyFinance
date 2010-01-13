@@ -93,7 +93,7 @@ easyFinance.widgets.operationEdit = function(){
         var accOptionsData = [];
         var accounts = _modelAccounts.getAccounts();
         for (var key in accounts) {
-            accOptionsData.push({ value: accounts[key].id, text: accounts[key].name + ' (' + accounts[key].cur + ')'});
+            accOptionsData.push({ value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
         }
 
         _sexyAccount = $.sexyCombo.create({
@@ -310,7 +310,7 @@ easyFinance.widgets.operationEdit = function(){
                 var accOptionsData = [];
                 var accounts = _modelAccounts.getAccounts();
                 for (var key in accounts) {
-                    accOptionsData.push({ value: accounts[key].id, text: accounts[key].name + ' (' + accounts[key].cur + ')'});
+                    accOptionsData.push({ value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
                 }
 
                 _sexyTransfer = $.sexyCombo.create({
@@ -611,7 +611,7 @@ easyFinance.widgets.operationEdit = function(){
         for (key in data )
         {
             htmlAccounts = htmlAccounts + '<option value="' + key + '" '
-                + 'currency="' + data[key].currency + '" ' +
+                + 'currency="' + res.currency[data[key].currency].text + '" ' +
                 + '">' + data[key].name + '</option>';
         }
 

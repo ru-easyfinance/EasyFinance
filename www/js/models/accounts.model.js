@@ -6,7 +6,9 @@
 easyFinance.models.accounts = function(){
     // constants
     var ACCOUNTS_LIST_URL = '/accounts/accountslist/';
-    var DELETE_ACCOUNT_URL = '/accounts/del/';
+    var ADD_ACCOUNT_URL = '/accounts/add/';
+    var EDIT_ACCOUNT_URL = '/accounts/edit/';
+    var DELETE_ACCOUNT_URL = '/accounts/delete/';
 
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/';
     var DELETE_OPERATIONS_URL = '/operation/del_all/';
@@ -19,14 +21,15 @@ easyFinance.models.accounts = function(){
     var _accounts;
     var _journal;
 
-
     // private functions
     function _loadAccounts(callback) {
         $.post(ACCOUNTS_LIST_URL, '', function(data) {
-            _accounts = data;
+            if (data.result) {
+                _accounts = $.extend(true, {}, data.result.data);
 
-            $(document).trigger('accountsLoaded');
-
+                $(document).trigger('accountsLoaded');
+            }
+            
             if (typeof callback == 'function')
                 callback(_accounts);
         }, "json");
@@ -42,9 +45,11 @@ easyFinance.models.accounts = function(){
      */
     function load(param1, param2){
         _this = this;
-
+        
         if (typeof param1 == 'object'){
             _accounts = param1;
+
+            $(document).trigger('accountsLoaded');
 
             $(document).trigger('accountsLoaded');
 
@@ -63,35 +68,104 @@ easyFinance.models.accounts = function(){
     }
 
     function getAccountNameById(id){
+        if (!_accounts)
+            return null;
+
         if (_accounts[id])
             return _accounts[id]["name"];
         else
             return '';
     }
 
+    function getAccountIdByName(name){
+        if (!_accounts)
+            return null;
+
+        for (var key in _accounts) {
+            if (_accounts[key]["name"] == name) {
+                return key;
+            }
+        }
+
+        return null;
+    }
+
     function getAccountBalanceTotal(id){
-        return _accounts[id]["total_balance"];
+        if (_accounts && _accounts[id])
+            return _accounts[id]["total_balance"];
+        else
+            return null;
     }
 
     function getAccountBalanceAvailable(id){
-        return _accounts[id]["total_balance"] - _accounts[id]["reserve"];
+        if (_accounts && _accounts[id])
+            return _accounts[id]["total_balance"] - _accounts[id]["reserve"];
+        else
+            return null;
     }
 
-    //@ TODO: addAccount(...)
-    //@ TODO: editAccountById(id)
-    
-    function deleteAccountById(id, callback) {
-        $.post(DELETE_ACCOUNT_URL, {id:id}, function(data){
-                if (data.result) {
-                    delete _accounts[id];
+    function addAccount(params, callback){
+        if (typeof params != "object")
+            return false;
 
-                    $(document).trigger('accountDeleted');
+        // тип счёта, имя, валюта -
+        // обязательные параметры для всех счетов
+        if (!params.type || !params.name || !params.currency)
+            return false;
+
+        $.post(ADD_ACCOUNT_URL, params, function(data){
+            _loadAccounts();
+//                debugger;
+//                if (data.result)
+//                    _accounts[data.result.id] = $.extend(true, {}, params);
+
+//                $(document).trigger('accountAdded');
+
+            if (callback)
+                callback(data);
+        }, 'json');
+    }
+
+    function editAccountById(id, params, callback){
+        if (typeof params != "object")
+            return false;
+
+        // ID, тип счёта, имя, валюта -
+        // обязательные параметры для всех счетов
+        params.id = id;
+        $.post(EDIT_ACCOUNT_URL, params, function(data){
+                _loadAccounts();
+
+/*
+                if (data.result) {
+                    var balanceDiff = parseFloat(params.initPayment) - parseFloat(_accounts[id].initPayment);
+
+                    _accounts[id].name = params.name;
+                    _accounts[id].comment = params.comment;
+                    _accounts[id].currency = params.currency;
+                    _accounts[id].totalBalance = parseFloat(_accounts[id].totalBalance) + balanceDiff;
+                    _accounts[id].initPayment = params.initPayment;
                 }
 
+                @todo: calc defCur
+
+                $(document).trigger('accountEdited');
+*/
                 if (callback)
                     callback(data);
             }, 'json'
         );
+    }
+
+    function deleteAccountById(id, callback) {
+        $.post(DELETE_ACCOUNT_URL, {id:id}, function(data){
+            delete _accounts[id];
+
+            $(document).trigger('accountDeleted');
+
+            if (callback)
+                callback(data);
+        }, 'json');
     }
 
     /**
@@ -200,8 +274,11 @@ easyFinance.models.accounts = function(){
         load: load,
         getAccounts: getAccounts,
         getAccountNameById: getAccountNameById,
+        getAccountIdByName: getAccountIdByName,
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,
+        addAccount: addAccount,
+        editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,
         loadJournal: loadJournal,
         addOperation: addOperation,

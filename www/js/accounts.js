@@ -6,68 +6,28 @@
  * #edit[num] редактировать счёт
  * @return void
  */
-function hash_api(str,flag)
+function accounts_hash_api(str, clone)
 {
     var s = str.toString();
-    if (s=='#add')
-    {
-        easyFinance.widgets.accountEdit._isEditing = false;
-        showForm();
-        $('#type_account').removeAttr('disabled');
+
+    if (s=='#add') {
+        easyFinance.widgets.accountEdit.showFrom();
+        easyFinance.widgets.accountEdit.addAccount();
     }
-    if(s.substr(0,5)=='#edit')
-    {
-        $('#blockCreateAccounts').show();
-        easyFinance.widgets.accountEdit._isEditing = true;
-        var account = easyFinance.models.accounts.getAccounts()[s.substr(5)];
-        if (!account)
-            return false;
-        tid = account.type;
-        $.post(
-            "/accounts/changeType/",
-            {
-                id: account.type,
-                accid: account.id
-            },
-            function(data) {
-                $('#account_form_fields').html(data);
-                var key,val;
-                $('select,input,textarea','#blockCreateAccounts tr td').each(function(){
-                    key = $(this).attr('id');
-                    val = account[key];
-                    if (val){
-                        $(this).val(val);
-                    }
 
-                });
-                $(document).scrollTop(300);
-                $('#type_account').val(account.type);
+    if(s.substr(0,5)=='#edit') {
+        easyFinance.widgets.accountEdit.showForm();
 
-                $('#type_account').attr('disabled', 'disabled');
-
-                $('#account_form_fields table').attr('id',account.id);
-                $('#account_form_fields table').append('<input type="hidden" name="id" class="id" value="'+account.id+'" />');
-                if (flag)
-                {
-                    easyFinance.widgets.accountEdit._isEditing = false;
-                    $('#type_account').removeAttr('disabled');
-                    $('#account_form_fields table').attr('id','0');
-                    $('#account_form_fields table input.id').val('0');
-                    var bk_val = $('#blockCreateAccounts input#name').val();
-                    $('#blockCreateAccounts input#name').val('Копия_' + bk_val);
-                }
-
-            },
-            'text'/* /@todo заменить на ясон; требует изменения модели и контроллера*/
-        );
+        if (clone)
+            easyFinance.widgets.accountEdit.copyAccountById(s.substr(5));
+        else
+            easyFinance.widgets.accountEdit.editAccountById(s.substr(5));
     }
 }
 
 $(document).ready(function() {
     easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts);
     easyFinance.widgets.accountsJournal.init('#widgetAccountEdit', easyFinance.models.accounts);
-
-    // @todo isEditing заменить на пуск события
 
     /**
      * Переводит произвольную строку в вещественное число
