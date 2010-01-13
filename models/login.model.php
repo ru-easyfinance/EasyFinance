@@ -329,7 +329,7 @@ class Login_Model
             $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
                 (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
             $id = mysql_insert_id();
-            $this->defaultCategory($id);
+            //$this->defaultCategory($id);
             //$this->defaultAccounts($id);
              //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
             $ch = curl_init();
