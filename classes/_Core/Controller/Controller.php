@@ -157,13 +157,22 @@ abstract class _Core_Controller
             $accou = 0;
         }
 
-        $accounts = array();
+        /*$accounts = array();
         
         //$account = $accou['result'];
         foreach ($accou as $k=>$v){
             foreach ($v as $k1=>$v1){
                 $accounts[$k][$k1] = $v1;
             }
+        }*/
+        $accounts = array();
+        $acc = new Account_Collection();
+        $accou = $acc->load($user->getId());
+
+        $account = $accou['result']['data'];
+        //die(print_r($account));
+        foreach ($account as $k=>$v){
+            $accounts[$k] = $v;
         }
         /*
         foreach ($user->getUserAccounts() as $v) {
