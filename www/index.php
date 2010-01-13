@@ -30,6 +30,7 @@ if (Core::getInstance()->user->getId()) {
 }
 
 //Выводим страницу в браузер
+die($_SERVER['HTTP_HOST'].'/');
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
