@@ -18,7 +18,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      * Ссылка на класс модель
      * @var Accounts_Model
      */
-    private $model = null;	
+    private $model = null;
 
     /**
      * Конструктор класса
@@ -58,7 +58,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
 
 
     }
-	
+
     /**
      * Выбирает параметры счета при его создании
      * @param $args
@@ -100,56 +100,109 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function add()
     {
-        $this->tpl->assign("page_title","account add");
-        $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-        
+        //$this->tpl->assign("page_title","account add");
+        //$this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
+
         //$this->accountslist();
-        die (json_encode($this->model->add($_POST)));
+        $user = Core::getInstance()->user->getId();
+        $accountCollection = new Account_Collection();
+        $params = $_POST;
+        $account = Account::load($params);
+        $accs = $account->create($user, $params);
+        if (!$accs)
+            $this->tpl->assign("error", "Счет не добавлен");
+        die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
+            ,'id'=>$accs
+            ))));
     }
-	
+
+    function edit()
+    {
+        $user = Core::getInstance()->user->getId();
+        $accountCollection = new Account_Collection();
+        $params = $_POST;
+        $account = Account::load($params);
+        if (!$account->update($user, $params))
+            $this->tpl->assign("error", "Счет не изменён");
+        die (json_encode(array('result'=>array('text'=>'Счёт успешно изменён'))));
+    }
+
 	/**
      * Удаляет указанный счет
      * @param $args array mixed
      * @return void
      */
-    function del ($args)
+    function delete ($args)
     {
-        $id = $_POST['id'];
-        $del = $this->model->deleteAccount($id);
-        if ((string)$del=='cel'){
-            $this->tpl->assign("error", "Невозможно удалить накопительный счёт!");
-            die (json_encode( array ('error' => array('text'=>"Невозможно удалить накопительный счёт!"))));
-        }
-        if (!$del) {
-            $this->tpl->assign("error", "Счет не удален");
-        }
-        die (json_encode( array ('result' => array('text'=>"Счёт удален"))));
+        $user = Core::getInstance()->user->getId();
+        $accountCollection = new Account_Collection();
+        $params = $_POST;
+
+        $account = Account::getTypeByID($params);
+        //$account = Account::load($params);
+        if (!$account->delete($user, $params))
+            $this->tpl->assign("error", "Счет не удалён");
+        die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
     }
 
     /**
-     * Функция которая отсылает список счетов 
+     * Функция которая отсылает список счетов
      */
     public function accountslist()
     {
-        die(json_encode($this->model->accounts_list()));
+        $user = Core::getInstance()->user->getId();
+        $accountCollection = new Account_Collection();
+        //$accountCollection->load( Core::getInstance()->user );
+
+        /*$params = array (
+            'id'         => '12',
+            'name'       => 'Метааллл',
+            'comment'    => 'не в деревянных же держать',
+            'yearPercent'=> '13',
+            'bank'       => 'Raffaisen',
+            'currency'   => '1',
+            'type'       => '10',
+            'typeMetal'  => 'Золото',
+            'dateGet'    => '17.12.2009',
+            'dateOff'    => '21.12.2009',
+            'dateOpen'   => '16.12.2009',
+            'typePayment'=> '2',
+            'support'    => 'юзайте сапорт'
+        );*/
+
+
+        //$params = $_POST;
+        //$account = Account::load($params);
+        //$account->delete($user, $params);
+        //$account->create($user, $params);
+        //$account->update($user, $params);
+        //$accountCollection->add($account);//*/
+        $acc = $accountCollection->load($user);
+        //$acc_id = $params['id'];
+        //$accountCollection->loadOneAcc($acc_id);
+
+        die ( json_encode (  ( $acc ) ) );
     }
 
-    public function get_fields()
+
+    public function Account_Collection()
     {
+
         $id = (int)$_POST['id'];
         $aid = (int)$_POST['aid'];
         //die('a'.strval($id).'a');
+
         $this->model->get_fields($id, $aid);
     }
 
-    function edit()
+    /*function edit()
     {
         //die ('123');
         $id = $_POST['id'];
         $this->model->deleteAccount($id);
         $this->model->add($_POST);
         die ($id);
-    }
+    }*/
 
     function correct()
     {
