@@ -16,7 +16,7 @@ if( $_SERVER['HTTP_HOST'].'/' == URL_ROOT_IFRAME)
 }
 
 Core::getInstance()->authUser(); 
-//Core::getInstance()->parseUrl();
+Core::getInstance()->parseUrl();
 
 // Определяем информацию о пользователе
 //@TODO Переместить это в другой блок ()
