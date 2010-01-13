@@ -362,6 +362,7 @@ easyFinance.widgets.operationEdit = function(){
             // обновляем опции
             $('#op_target').html(o);
             $.sexyCombo.changeOptions('#op_target');
+            _sexyTarget.setComboValue(_sexyTarget.options[0].text); // to fix bug in fillForm // @todo
         }
     }
 
