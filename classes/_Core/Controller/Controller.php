@@ -150,11 +150,22 @@ abstract class _Core_Controller
 
         Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
         // Подготавливаем счета
+        $accounts = array();
         try {
-            $acc = new Accounts_Model;
-            $accou = $acc->accounts_list();
+                /*$acc = new Accounts_Model;
+                $accou = $acc->accounts_list();*/
+
+                $acc = new Account_Collection();
+                $accou = $acc->load($user->getId());
+
+                $account = $accou['result']['data'];
+                //die(print_r($account));
+            
         } catch ( Exception $e) {
             $accou = 0;
+        }
+        foreach ($account as $k=>$v){
+                $accounts[$k] = $v;
         }
 
         /*$accounts = array();
@@ -165,15 +176,7 @@ abstract class _Core_Controller
                 $accounts[$k][$k1] = $v1;
             }
         }*/
-        $accounts = array();
-        $acc = new Account_Collection();
-        $accou = $acc->load($user->getId());
-
-        $account = $accou['result']['data'];
-        //die(print_r($account));
-        foreach ($account as $k=>$v){
-            $accounts[$k] = $v;
-        }
+        
         /*
         foreach ($user->getUserAccounts() as $v) {
             $accounts[$v['account_id']] =array(
