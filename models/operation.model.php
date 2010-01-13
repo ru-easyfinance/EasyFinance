@@ -123,7 +123,11 @@ class Operation_Model {
         if (in_array('category', $params) or count($params) == 0) {
             $valid['category'] = (int)@$_POST['category'];
             if (empty ($valid['category'])) {
-                $this->errorData['category'][] = 'Нужно указать категорию';
+                $valid['target'] = (int)@$_POST['target'];
+                $valid['toAccount'] = (int)@$_POST['toAccount'];
+                if (empty ($valid['target']))
+                    if (empty ($valid['toAccount']))
+                        $this->errorData['category'][] = 'Нужно указать категорию';
             }
         }
 
