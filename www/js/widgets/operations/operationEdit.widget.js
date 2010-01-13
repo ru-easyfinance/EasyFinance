@@ -504,9 +504,9 @@ easyFinance.widgets.operationEdit = function(){
 
         // см. тикет #306
         //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-        var tb = tofloat(_modelAccounts.getAccountBalanceTotal($("#op_account option:selected").val()));
-        var ab = tofloat(_modelAccounts.getAccountBalanceAvailable($("#op_account option:selected").val()));
-
+        var tb = tofloat(_modelAccounts.getAccountBalanceTotal(_selectedAccount));
+        var ab = tofloat(_modelAccounts.getAccountBalanceAvailable(_selectedAccount));
+        
         // @ticket 401
         // при редактировании расходных операций
         // учитываем то, что при увеличении суммы со счёта будет списана

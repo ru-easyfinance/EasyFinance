@@ -92,14 +92,14 @@ easyFinance.models.accounts = function(){
 
     function getAccountBalanceTotal(id){
         if (_accounts && _accounts[id])
-            return _accounts[id]["total_balance"];
+            return _accounts[id]["totalBalance"];
         else
             return null;
     }
 
     function getAccountBalanceAvailable(id){
         if (_accounts && _accounts[id])
-            return _accounts[id]["total_balance"] - _accounts[id]["reserve"];
+            return _accounts[id]["totalBalance"] - _accounts[id]["reserve"];
         else
             return null;
     }
