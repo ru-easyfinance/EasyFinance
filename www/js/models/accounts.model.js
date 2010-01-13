@@ -166,14 +166,14 @@ easyFinance.models.accounts = function(){
         target, close, tags,
         callback){
             var url = (id == '') ? ADD_OPERATION_URL : EDIT_OPERATION_URL;
-            
-            $.post(url, {
+
+            var params = {
                 id        : id,
                 type      : type,
                 account   : account,
-                category  : category,
                 date      : date,
                 comment   : comment,
+                category  : category,
                 amount    : amount,
                 toAccount : toAccount,
                 currency  : currency,
@@ -181,7 +181,9 @@ easyFinance.models.accounts = function(){
                 target    : target,
                 close     : close,
                 tags      : tags
-            }, function(data){
+            };
+
+            $.post(url, params, function(data){
                 if (url == ADD_OPERATION_URL) {
                     $(document).trigger('operationAdded');
                 } else if (url == EDIT_OPERATION_URL) {
