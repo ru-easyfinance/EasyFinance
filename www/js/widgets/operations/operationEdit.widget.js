@@ -274,12 +274,22 @@ easyFinance.widgets.operationEdit = function(){
                 return str;
             }
 
+
+
+            var recent = _modelCategory.getRecentCategories();
+            var recentFiltered = {};
+
+            for (var key in recent) {
+                if (parseInt(recent[key].type) == typ || recent[key].type == '0')
+                    recentFiltered[key] = recent[key];
+            }
+
             var list = {
                 "-1": {
                     id: "-1",
                     type: "0",
                     name: "Часто используемые",
-                    children: _modelCategory.getRecentCategories()
+                    children: recentFiltered
                 }
             };
 
@@ -684,7 +694,7 @@ easyFinance.widgets.operationEdit = function(){
      */
     function fillForm(data) {
         //clearForm();
-debugger;
+
         $('#op_id').val(data.id);
 
         var typ = '0';
