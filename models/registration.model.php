@@ -83,9 +83,9 @@ class Registration_Model
         if (empty($error_text))
         {
         		//Если определился реферер
-        		if( isset($_SESSION['referrer_url']) && $_SESSION['referrer_url'] )
+        		if( isset($_COOKIE['referer_url']) && $_SESSION['referer_url'] )
         		{
-        			preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referrer_url'], $matches);
+        			preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referer_url'], $matches);
         			$referrer = strtolower( $matches[0] );
         			
         			//Проверяем нет ли уже такого реферера
