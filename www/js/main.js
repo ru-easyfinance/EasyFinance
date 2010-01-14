@@ -52,6 +52,22 @@ var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
 
+var pathtoid = {
+    '/accounts/' :'m2',
+    '/budget/':'m3',
+    '/calendar/':'m5',
+    '/category/':'m2',
+    '/experts/':'m6',
+    '/info/':'m1',
+    '/mail/':'m0',
+    '/operation/':'m2',
+    '/periodic/':'m5',
+    '/profile/':'m0',
+    '/targets/':'m3',
+    '/report/':'m4'};
+
+var page_mid = pathtoid[pathName];
+
 var TransferSum = 0; //глобальная переменная которая передаст. сумму при переводе на другую валюту.
 function FloatFormat(obj, in_string )
 {
@@ -220,8 +236,8 @@ $(document).ready(function() {
         easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
     });
 
-    // Выводим окно с операциями, если у нас пользователь авторизирован
-    if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
+    // Если пользователь авторизирован
+    if (inarray(Current_module, Connected_functional.operation)){
         // инициализируем виджет добавления и редактирования операции
 
         easyFinance.models.category.load(res.category, function(model) {
@@ -391,7 +407,28 @@ $(document).ready(function() {
             $('.ui-dialog-buttonpane').css('margin-top','30px');
             //$('#op_adate,#op_pdate').val(dateText);   
         }
-    }
+    
+        // инициализируем виджет видео-гида
+        easyFinance.widgets.help.init('#popupHelp');
+
+        // по умолчанию устанавливаем видео,
+        // которое соответствует содержнию страницы
+        var tabVideo = {
+            "m0" : "newOperation",
+            "m1" : "newOperation",
+            "m2" : "newAccount",
+            "m3" : "newBudget",
+            "m4" : "newTarget",
+            "m5" : "newOperation",
+            "m6" : "newOperation"
+        };
+
+        easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+
+        $('#footer .btnHelp').click(function(){
+            $('#popupHelp').dialog('open');
+        });
+}
 
     if(inarray(Current_module, Connected_functional.menu)){
         $('.navigation a[href*=' + pathName +']').wrapInner('<b></b>');
@@ -721,21 +758,6 @@ $(".flash")
 
         $('#mainwrap').prepend(topmenu);
 
-        var pathtoid = {
-            '/accounts/' :'m2',
-            '/budget/':'m3',
-            '/calendar/':'m5',
-            '/category/':'m2',
-            '/experts/':'m6',
-            '/info/':'m1',
-            '/mail/':'m0',
-            '/operation/':'m2',
-            '/periodic/':'m5',
-            '/profile/':'m0',
-            '/targets/':'m3',
-            '/report/':'m4'};
-
-        var page_mid = pathtoid[pathName];
         $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
         $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
 
@@ -827,88 +849,6 @@ $(".flash")
     */
     // Footer
     var r_list;
-//    /**
-//     *@deprecated
-//     */
-//    //скрытие сообщений
-//    $('#footer #popupreport').hide();
-//    $('#popupreport .close').click(
-//        function(){
-//            $('#popupreport').hide();
-//        });
-//
-//
-//    $('#footer .addmessage').click(
-//        function(){
-//            $('#footer #popupreport').css({top : '30%',position:'fixed',left:'0px'}).toggle();
-//        });
-//
-//    //отправление сообщения
-//    $('#footer .but').click(
-//        function (){
-//            var num_of_plugins = navigator.plugins.length;
-//            var str='';
-//            for (var i=0; i < num_of_plugins; i++) {
-//                str = str+"[" + navigator.plugins[i].name + ";" + navigator.plugins[i].filename + "]";
-//            }
-//            $.post(
-//                '/feedback/add_message/',
-//                {
-//                    msg: $('#footer #ffmes').val(),
-//                    width : screen.width,
-//                    height : screen.height,
-//                    cwidth : getClientWidth(),
-//                    cheight : getClientHeight(),
-//                    colors : screen.colorDepth,
-//                    plugins: str
-//                },
-//                function(data){
-//                    $('#footer #ffmes').val('');
-//                    $.jGrowl('Спасибо!<br/>Ваше сообщение отправлено!', {theme: 'green'});
-//                }
-//            );
-//            $('#footer #ffmes').val('')
-//            $('#footer .f_field lable').show();
-//            $('#footer .f_field textarea').text('');
-//            $('#footer #popupreport').hide();
-//        }
-//    );
-//    //скрытие лишнего текста на поле ввода
-//    $('#footer .f_field').click(
-//        function (){
-//            $(this).find('label').hide();
-//        }
-//    );
-    
-	/*
-	*Открытие окна для авторизации. 
-	*
-	*/
-	/*
-        if (pathName=='/login/' && window.location.protocol=='https:') {
-            $('#login').show();
-        }
-        */
-        /*
-        $('#show_login').click(function() {
-            if (window.location.host.toString().substr(0, 5) == "demo.") {
-                window.location.href='http://' + window.location.host + '/login/';
-            } else {
-                if (window.location.protocol!='https:') {
-                    window.location.href='https://' + window.location.host + '/login/';
-                } else {
-                    $('#login').show();
-                }
-            }
-            return false;
-        });
-        
-        $('#login .close').click(function(){
-            $('#login').hide();
-        });
-        */
-    //}
-    //});
 
     /**
      * Вслывающее окно с регулярными транзакциями и событиями календаря

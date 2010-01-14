@@ -81,7 +81,10 @@ else
 		$tpl->append('js', $js);
 	}
 }
+
+$tpl->append('js', 'flowplayer-3.1.4.min.js');
 $tpl->append('js', 'feedback.js');
+$tpl->append('js', 'widgets/help.widget.js');
 $tpl->append('js', 'models/accounts.model.js');
 $tpl->append('js', 'models/category.model.js');
 $tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');

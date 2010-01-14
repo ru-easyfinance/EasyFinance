@@ -62,7 +62,7 @@
     (function(){
         //var f_captcha;
 
-        $('#footer #popupreport').css({top : '20%',position:'fixed',left:'0px'}).hide();
+        $('#footer #popupreport').hide();
 
         $('#footer .addmessage').click(function(){
             $('#footer #popupreport').toggle();
