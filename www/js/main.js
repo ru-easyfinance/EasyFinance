@@ -174,8 +174,12 @@ function MakeOperation(){
 
 $(document).ready(function() {
     //#538
-    if (!$.cookie('referer_url')&&!res.accounts && document.referrer){
-        
+    if (
+    	!$.cookie('referer_url')
+    	&& !res.accounts
+    	&& !/(http(s)?:\/\/[A-z0-9\.]*)?easyfinance\.ru.*/i.test( document.referrer )
+    )
+    {    
         $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : false});
     }
     // fix for ticket #463
