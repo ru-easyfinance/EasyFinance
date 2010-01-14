@@ -117,21 +117,6 @@ INSERT INTO `Acc_Fields` VALUES (28, 'typeProperty', 'Тип имущества'
 
 -- --------------------------------------------------------
 
---
--- Структура таблицы `Acc_Object`
---
-
-CREATE TABLE `Acc_Object` (
-  `account_id` int(10) unsigned NOT NULL auto_increment COMMENT 'ИД счёта',
-  `account_name` varchar(50) default NULL COMMENT 'Название счёта',
-  `account_type_id` tinyint(1) unsigned default NULL COMMENT 'Ид типа счёта',
-  `account_description` varchar(255) default NULL COMMENT 'Описание - комментарий к счёту',
-  `account_currency_id` int(1) unsigned default NULL COMMENT 'Ид валюты счёта',
-  `user_id` int(100) unsigned default NULL COMMENT 'Ид пользователя',
-  PRIMARY KEY  (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='Таблица счетов с базовыми полями' AUTO_INCREMENT=16 ;
-
-
 
 -- --------------------------------------------------------
 
