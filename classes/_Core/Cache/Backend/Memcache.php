@@ -21,20 +21,25 @@ class _Core_Cache_Backend_Memcache implements _Core_Cache_Interface
 	 */
 	public function __construct( $host, $port, $persistent = false )
 	{
-		$this->memcache = new Memcache;
+		if( !extension_loaded('memcache') || !class_exists( 'Memcache' ) )
+		{
+			throw new _Core_Cache_Exception('Extension "memcache" is not loaded or not up to date !');
+		}
+		
+		$this->server = new Memcache;
 		
 		if( $persistent )
 		{
-			$connected = $memcache->pconnect( $host, $port );
+			$connected = $this->server->pconnect( $host, $port );
 		}
 		else
 		{
-			$connected = $memcache->connect( $host, $port );
+			$connected = $this->server->connect( $host, $port );
 		}
 		
 		if( !$connected )
 		{
-			throw new Exception( 'Could not connect to memcached server on ' . $host . ':' . $port . ' !' );
+			throw new _Core_Cache_Exception( 'Could not connect to memcached server on ' . $host . ':' . $port . ' !' );
 		}
 	}
 	
@@ -46,7 +51,7 @@ class _Core_Cache_Backend_Memcache implements _Core_Cache_Interface
 	 */
 	public function get( $id )
 	{
-		$value = $memcache->get( $this->formId($id) );
+		$value = $this->server->get( $this->formId($id) );
 		return unserialize( $value );
 	}
 	
