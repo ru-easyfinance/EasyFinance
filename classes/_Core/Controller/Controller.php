@@ -21,6 +21,38 @@ abstract class _Core_Controller
 	 * всех контроллеров свойств и обьектов.
 	 *
 	 */
+	public function __construct()
+	{
+		// Шаблонизатор
+		$this->tpl   = Core::getInstance()->tpl;
+		
+		$this->__init();
+		
+		//Ежели неавторизован пользователь ...
+		if (!Core::getInstance()->user->getId())
+		{
+			//..показываем ему сео говнотексты
+			$this->includeSeoText();
+			
+			//.. записываем реферера, если он конечно уже не был записан
+			if( !isset($_SESSION['referrer_url']) )
+			{
+				$_SESSION['referrer_url'] = $_SERVER['HTTP_REFERER'];
+			}
+		}
+	}
+	
+	/**
+	 * Метод для инициализации контроллера.
+	 * (во избежание переписывания конструктора)
+	 *
+	 */
+	abstract protected function __init();
+	
+	/**
+	 * Подключение сео говнотекстов.
+	 *
+	 */
 	protected function includeSeoText()
 	{
 		if(file_exists('admin/seo.php'))
@@ -29,22 +61,7 @@ abstract class _Core_Controller
 		}
 		$this->tpl->assign('seotext', $texts);
 	}
-        
-	public function __construct()
-	{
-		// Шаблонизатор
-		$this->tpl   = Core::getInstance()->tpl;
-
-                $this->__init();
-                if (!Core::getInstance()->user->getId())
-                    {
-                        $this->includeSeoText();
-                    }
-		
-	}
 	
-	abstract protected function __init();
-
     /**
      * Если нам были переданы ошибочные данные, генерируем 404 страницу
      * @param $method
@@ -133,21 +150,33 @@ abstract class _Core_Controller
 
         Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
         // Подготавливаем счета
+        $accounts = array();
         try {
-            $acc = new Accounts_Model;
-            $accou = $acc->accounts_list();
+                /*$acc = new Accounts_Model;
+                $accou = $acc->accounts_list();*/
+
+                $acc = new Account_Collection();
+                $accou = $acc->load($user->getId());
+
+                $account = $accou['result']['data'];
+                //die(print_r($account));
+            
         } catch ( Exception $e) {
             $accou = 0;
         }
+        foreach ($account as $k=>$v){
+                $accounts[$k] = $v;
+        }
 
-        $accounts = array();
+        /*$accounts = array();
         
         //$account = $accou['result'];
         foreach ($accou as $k=>$v){
             foreach ($v as $k1=>$v1){
                 $accounts[$k][$k1] = $v1;
             }
-        }
+        }*/
+        
         /*
         foreach ($user->getUserAccounts() as $v) {
             $accounts[$v['account_id']] =array(
@@ -190,6 +219,9 @@ abstract class _Core_Controller
         }
         $currency = array();
         foreach ($user->getUserCurrency() as $k => $v) {
+            //if ($k == 4 ) $v['value']/=10; //курс для гривен в 10 раз меньше
+            //if ($k == 11) $v['value']/=10; //курс для юаней в 10 раз меньше.
+            //if ($k == 19) $v['value']/=100;//курс для иены в 100 раз меньше.
             $currency[$k] = array(
                 'cost' => $v['value'],
                 'name' => $v['charCode'],

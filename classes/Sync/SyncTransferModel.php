@@ -74,9 +74,9 @@ class SyncTransfer_Model {
 
 
             //добавление в рекордс меп.
-            $data[1][] = array(
+            /*$data[1][] = array(
                 'tablename' => 'Transfers',
-                'ekey' => (int)$a[$key]['id']);
+                'ekey' => (int)$a[$key]['id']);*/
         }
     }
 }

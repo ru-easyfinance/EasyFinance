@@ -25,9 +25,9 @@ interface _Core_Cache_Interface
 	 *
 	 * @param string $id Идентификатор 
 	 * @param mixed $value Данные
-	 * @param int $expired Дата устаревания в формате timestamp (по умолчанию - никогда)
+	 * @param integer $expire Кол-во секунд до протухания данных (по умолчанию - никогда)
 	 */
-	public function set( $id, $value, $expired = null);
+	public function set( $id, $value, $expire = null);
 	
 	/**
 	 * Очистка (удаление) данных

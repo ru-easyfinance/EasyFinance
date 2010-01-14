@@ -17,7 +17,7 @@
     $db->query("SET character_set_client = 'utf8', character_set_connection = 'utf8',character_set_results = 'utf8'");
 
     //Получаем список последних системных валют, и как валюту РУБЛЬ
-    $result = $db->select("SELECT 1, (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0) AS currency_date, 1, 0, 0, 0 UNION
+    $result = $db->select("SELECT 1, (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0) AS currency_date, 1, 0, 0, 0, 0 UNION
         SELECT * FROM daily_currency WHERE
         currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)");
 
@@ -28,14 +28,15 @@
 
     // Формируем сегодняшнюю дату и ссылку
     $date = date("d/m/Y");
-    $link = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=".$date;
+    $linkCBR = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=".$date;//центральный банк России
+    $linkBEL = "http://www.nbrb.by/Services/XmlExRates.aspx?ondate=".$date;//национальный банк республики Беларусь
 
-    print "\n".$date;
+
+    //print "\n".$date;
 
     //Создаём ДОМ объект
     $dom = new DOMDocument('1.0', 'windows-1251');
-    $dom->load($link);
-    
+    $dom->load($linkCBR);
     // Иногда, ЦБР подло меняет разделители знаков в дате на слеш, поэтому перестраховываемся
     $date = str_replace('/', '.', $dom->getElementsByTagName('ValCurs')->item(0)->getAttribute('Date'));
     $date = formatRussianDate2MysqlDate($date);
@@ -50,7 +51,7 @@
     $sql = '';
     foreach ( $dom->getElementsByTagName('Valute') as $elem ) {
         if (!empty ($sql)) $sql .= ',';
-        if ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'AUD') {
+        /*if ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'AUD') {
             $id = 5;
         } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'GBP') {
             $id = 16;
@@ -86,10 +87,16 @@
             $id = 18;
         } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'JPY') {
             $id = 19;
-        }
+        } */
+        $kod3 = $elem->getElementsByTagName('CharCode')->item(0)->nodeValue;
+        $getId = "SELECT cur_id FROM currency WHERE cur_char_code=?";
+        $re = $db->query($getId, $kod3);
+        $id = $re[0]['cur_id'];
 
         //Готовим движение курса
         (float)$sum = str_replace(',', '.', $elem->getElementsByTagName('Value')->item(0)->nodeValue);
+        (float)$nom = str_replace(',', '.', $elem->getElementsByTagName('Nominal')->item(0)->nodeValue);
+        (float)$sum = $sum / $nom;
         if ($sum > $ar[$id]) {
             $dir = '+';
         } elseif ($sum < $ar[$id]) {
@@ -97,9 +104,8 @@
         } else {
             $dir = '0';
         }
-        $sql .= "('{$id}','{$date}','{$sum}', '{$dir}', '0.0000', '0')";
+        $sql .= "('{$id}', 1 ,'{$date}','{$sum}', '{$dir}', '0.0000', '0')";
     }
-    //print_r($ar);
     if (!empty ($sql)) {
         $sql = "INSERT INTO daily_currency VALUES ". $sql;
         $db->query($sql);

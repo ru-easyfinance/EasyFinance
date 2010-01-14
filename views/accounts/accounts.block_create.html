@@ -4,22 +4,61 @@
         <a id="addacc">Добавить счёт</a>
     </div>
 
-    <!--<div class='addacc'>
-            <div class="but">
-                    <input type="button" id="addacc" class="act" value="Добавление счёта"/>
-            </div>
-    </div>-->
     <div id="blockCreateAccounts" class="addoperation" style="display:none;">
         <div class="line">
             <div class="f_field">
                 <label>Тип счета:</label>
-                <select name="type" id="type_account" style="width:200px;">
-                  {foreach from=$type_accounts item=data}
-                    <option value="{$data.account_type_id}">{$data.account_type_name}</option>
-                  {/foreach}
+                <select name="type" id="acc_type" style="width:200px;">
+                    <option value="1">Наличные</option>
+                    <option value="9">Кредит</option>
+                    <option value="5">Депозит</option>
+                    <option value="6">Займ выданный</option>
+                    <option value="7">Займ полученый</option>
+                    <option value="8">Кредитная карта</option>
+                    <option value="15">Электронный кошелек</option>
                 </select>
             </div>
-            <div id="account_form_fields">&nbsp;</div>
+            <div id="account_form_fields">
+                <div id="divAccountEdit">
+                    <br class="clr"/>
+                    <table class="tableForm" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <div style="float: left;"><label>Название:</label></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" name="name" id="acc_name" class="" style="" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Примечание:</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea name="description" id="acc_comment" class="" style=""></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="float: left;">Начальный баланс:</div>
+                                <div style="float: right;">Валюта счета:</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="float: left;"><input type="text" name="starter_balance" id="acc_balance" class="" style="" value=""></div>
+                                <div style="float: right;">
+                                    <select name="currency_id" id="acc_currency"></select>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div class="but">

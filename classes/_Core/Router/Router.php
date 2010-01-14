@@ -2,8 +2,13 @@
 
 class _Core_Router
 {
-	private $request;
-	private $hooks;
+	protected $request;
+	protected $hooks;
+	
+	protected $className;
+	protected $methodName;
+	
+	protected $view;
 	
 	public function __construct( _Core_Request $request )
 	{
@@ -21,6 +26,13 @@ class _Core_Router
 	public function performRequest()
 	{
 		//some kind of internal logic
+		
+		// Разбираем запрос, отделяем его от переменных и адреса
+		// Ищем класс убирая по куску с конца ( если пусто - Index )
+		// Ищем метод (если пусто - index)
+		// Вызываем метод.
+		// В случае неудачи - исключение
+		
 		$class = '';
 		$method = '';
 		$chunks = array();
@@ -37,6 +49,8 @@ class _Core_Router
 			$controller = new $class( $view );
 			
 			call_user_func( array( $controller, $method ), $chunks );
+			
+			//$view->display();
 		}
 		catch ( Exception $e )
 		{
@@ -44,8 +58,36 @@ class _Core_Router
 		}
 	}
 	
-	public function redirect( $url, $isExternal = false, $statusCode = 200 )
+	public static function redirect( $url, $isExternal = false, $statusCode = 200 )
 	{
+		// Если внешний - редирект заголовком.
+		// Если нет -
+		// Формируем соотв. запрос
+		// Отдаём заголовок
 		
+		$router = new _Core_Router( $request );
+		
+		try
+		{
+			$router->performRequest();
+		}
+		catch ( Exception $e )
+		{
+			// Вывод отладочной информации
+			if(  DEBUG )
+			{
+				
+				exit();
+			}
+			// Не позволяем бесконечных циклов
+			elseif( '/404' == $url )
+			{
+				exit();
+			}
+			else
+			{
+				_Core_Router::redirect('/404', false, 404);
+			}
+		}
 	}
 }

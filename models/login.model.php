@@ -12,7 +12,8 @@ class Login_Model
      * Создаёт категории по умолчанию
      * @return void
      */
-    function defaultCategory() {
+    function defaultCategory( $uid = 0 ) {
+        if ( $uid == 0 )
         $uid = Core::getInstance()->user->getId();
         $sql = "INSERT INTO category (`cat_parent`, `user_id`, `system_category_id`, `cat_name`, `type`, `dt_create`) VALUES
         (0, {$uid}, 1,  'Автомобиль', -1, NOW()),
@@ -320,10 +321,25 @@ class Login_Model
             $id = 0;//айди сгенерированного пользователя
             //die($login);
             $pass = sha1($login);
+            //$pass = $login;
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
+            $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
+            //if ( $islog[0]['cou'] == 0 )
+
             $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
                 (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
             $id = mysql_insert_id();
-            return $id;
+            //$this->defaultCategory($id);
+            //$this->defaultAccounts($id);
+             //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
+            $ch = curl_init();
+            //die("http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
+            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
+
+            curl_exec($ch);
+
+            curl_close($ch);//*/
+
+                return $id;
         }
 }

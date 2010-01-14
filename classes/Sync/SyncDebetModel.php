@@ -96,9 +96,9 @@ class SyncDebet_Model {
                 //$data[8][$key+1]['descr'] = $a[$key]['account_description'];
 
                 //добавляем в recordsmap
-                $data[1][] = array (
+                /*$data[1][] = array (
                     'tablename' => 'Debets',
-                    'ekey' => (int)$a[$key]['account_id']);
+                    'ekey' => (int)$a[$key]['account_id']);*/
             }
         }
     }

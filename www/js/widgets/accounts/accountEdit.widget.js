@@ -13,23 +13,28 @@ easyFinance.widgets.accountEdit = function(){
 
     var _isEditing = false;
     var _isVisible = false; // виден ли виджет
+    
+    var _id = null;
 
     // private functions
     function _toggleVisibility(){ 
-        easyFinance.widgets.accountEdit._isEditing = false;
+        _isEditing = false;
+        $('#acc_type').removeAttr('disabled');
+        $('#acc_name').val('');
+        $('#acc_comment').val('');
+        $('#acc_balance').val('');
+
         if (_isVisible)
             hideForm();
         else
             showForm();
-        
-        $('#type_account').removeAttr('disabled');
     }
 
     function _initForm() {
         $('#op_btn_Save').click(function(){
             //update_list();
             // @todo: fire accountsLoaded
-            easyFinance.models.accounts.load();
+            _model.load();
         })
 
         $('#starter_balance').live('keyup',function(e){
@@ -42,86 +47,67 @@ easyFinance.widgets.accountEdit = function(){
             hideForm();
         });
 
-        /**
-         * select type in form selected change
-         * @deprecated delete //where rewrite account model, controller, admin
-         */
-        $('#type_account').change(function(){
-            _changeTypeAccount($(this).attr('value'));
-        });
+        // @todo
+        // fill currency combo with options
+        var strCurrency = '';
+        for (var key in res.currency) {
+            strCurrency = strCurrency + '<option value="' + key + '">' + res.currency[key].text + '</option>';
+        }
+        $('#acc_currency').html(strCurrency);
 
         // save button
-        $('#btnAddAccount').click(function(){
-            var str = $('#blockCreateAccounts #name').val();
-            var description = $('#blockCreateAccounts #description').val();
-            var sum = $('#starter_balance').val();
-            var id =$('#blockCreateAccounts').find('table').attr('id');
-            var l = 1;
+        $('#btnAddAccount').click(_saveAccount);
+    }
 
-            if (str == ''){
-                $.jGrowl("Введите название счёта!", {theme: 'red', life: 5000});
-                return false;
-            }
+    function _saveAccount(){
+        var params = {};
+        params.type = _$node.find("#acc_type").val();
+        params.name = _$node.find('#acc_name').val();
+        params.comment = _$node.find('#acc_comment').val();
+        params.currency = _$node.find('#acc_currency').val();
+        params.initPayment = _$node.find('#acc_balance').val();
 
-            if (str.indexOf('<') != -1 || str.indexOf('>') != -1) {
-                $.jGrowl("Название счёта не должно содержать символов < и >!", {theme: 'red', life: 5000});
-                return false;
-            }
+        if (params.name == ''){
+            $.jGrowl("Введите название счёта!", {theme: 'red', life: 5000});
+            return false;
+        }
 
-            if (description.indexOf('<') != -1 || description.indexOf('>') != -1) {
-                $.jGrowl("Примечание не должно содержать символов < и >!", {theme: 'red', life: 5000});
-                return false;
-            }
+        if (params.name.indexOf('<') != -1 || params.name.indexOf('>') != -1) {
+            $.jGrowl("Название счёта не должно содержать символов < и >!", {theme: 'red', life: 5000});
+            return false;
+        }
 
-            if (sum != '' && isNaN(parseFloat(sum))) {
-                $.jGrowl("Введите сумму в виде числа!", {theme: 'red', life: 5000});
-                return false;
-            }
+        if (params.comment.indexOf('<') != -1 || params.comment.indexOf('>') != -1) {
+            $.jGrowl("Примечание не должно содержать символов < и >!", {theme: 'red', life: 5000});
+            return false;
+        }
 
-            if (!_isEditing) {
-                // при добавлении нового счёта
-                // проверяем, чтобы не было счёта с таким же именем
-                $('.item .name').each(function(){
-                    if (id != $(this).closest('tr').attr('id')){
-                        if($(this).text()==str)
-                            l=0;
-                    }
-                });
-            }
-
-            if (l){
-                hideForm();
-                if (easyFinance.widgets.accountEdit._isEditing)
-                    correctaccount();
-                else
-                    _createNewAccount();
-            }
-            else
-            {
+        var accId = null;
+        if (!_isEditing) {
+            // при добавлении нового счёта проверяем,
+            // есть ли уже счёт с таким же именем
+            accId = _model.getAccountIdByName(params.name);
+            if (accId) {
                 $.jGrowl("Такой счёт уже существует!", {theme: 'red'});
+                return false;
             }
-        });
-    }
+        }
 
-    /**
-     * функция - пережиток прошлого;
-     * перезагружает форму ввода счёта;
-     * @return void
-     * @todo rewrite without Ajax//where rewrite account model, controller, admin
-     */
-    function _changeTypeAccount(id)
-    {
-        $.post(
-            "/accounts/changeType/",
-            {
-                id: id
-            },
-            function(data) {
-                $('#account_form_fields').html(data);
-            },
-            'text'
-        );
-    }
+        hideForm();
+
+        var handler = function(data) {
+            if (data.result && data.result.text)
+                $.jGrowl(data.result.text, {theme: 'green'});
+            else if (data.error && data.error.text)
+                $.jGrowl(data.error.text, {theme: 'red'});
+        };
+
+        if (_isEditing) {
+            _model.editAccountById(_id, params, handler);
+        } else {
+            _model.addAccount(params, handler);
+        }
+    };
 
     // public variables
 
@@ -157,54 +143,42 @@ easyFinance.widgets.accountEdit = function(){
      */
     function showForm() {
         _isVisible = true;
-        _changeTypeAccount($('#type_account').val());
         $('#blockCreateAccounts').show();
-        $('#blockCreateAccounts').val('');
     }
 
-    /**
-     * функция добавляет новый счёт
-     * @return void
-     * @deprecated rewrite without update_list//on freetime
-     */
-    function _createNewAccount()
-    {
-        var cur_id = $("#formAccount select:[name='currency_id']").val();
-        //var type = $("#formAccount id='type_account']").val();
+    function addAccount() {
+        _isEditing = false;
 
-        $.ajax({
-            type: "POST",
-            url: "/accounts/add/",
-            data: $("#blockCreateAccounts input,select,textarea"),
-            success: function(data) {
-                $.jGrowl("Добавлен счёт", {theme: 'green'});
+        // clear form
+        $('#acc_type').removeAttr('disabled');
+        $('#acc_name').val('');
+        $('#acc_currency').val(0);
 
-                easyFinance.models.accounts.load();
-                // @todo use model, which will fire
-                // $(document).trigger('accountsChanged');
-
-                $('li#c2').click()
-            }
-        });
+        showForm();
     }
-    /**
-     * функция УДАЛЯЕТ счёт, а затем СОЗДАЁТ с новыми параметрами
-     * @return void
-     * @deprecated rewrite all//on freetime where rewrite account model, controller, admin
-     */
-    function correctaccount()
-    {//del
-        $.ajax({
-            type: "POST",
-            url: "/accounts/edit/",
-            data: $("#blockCreateAccounts input,select,textarea"),
-            success: function(data) {
-                $.jGrowl("Cчёт изменён", {theme: 'green'});
-                easyFinance.models.accounts.load();
 
-                $('li#c2').click()
-            }
-        });
+    function copyAccountById(id) {
+        addAccount();
+
+        // @todo: fill form
+    }
+
+    function editAccountById(id) {
+        _isEditing = true;
+        _id = id;
+
+        var account = _model.getAccounts()[id];
+        if (!account)
+            return false;      
+
+        $(document).scrollTop(300);
+        $('#acc_type')
+            .val(account.type)
+            .attr('disabled', 'disabled');
+
+        $('#acc_name').val(account.name);
+        $('#acc_comment').val(account.comment);
+        $('#acc_balance').val(Math.abs(parseFloat(account.initPayment)));
     }
 
     function setEditMode(mode) {
@@ -217,6 +191,7 @@ easyFinance.widgets.accountEdit = function(){
         hideForm: hideForm,
         showForm: showForm,
 
-        setEditMode: setEditMode
+        setEditMode: setEditMode,
+        editAccountById: editAccountById
     };
 }(); // execute anonymous function to immediatly return object

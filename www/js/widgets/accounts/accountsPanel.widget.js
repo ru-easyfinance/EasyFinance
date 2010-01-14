@@ -26,6 +26,7 @@ easyFinance.widgets.accountsPanel = function(){
 
         _model = model;
         $(document).bind('accountsLoaded', redraw);
+        $(document).bind('accountAdded', redraw);
         $(document).bind('accountDeleted', redraw);
 
        $('.accounts .add').click(function(){
@@ -36,10 +37,10 @@ easyFinance.widgets.accountsPanel = function(){
        })
 
        $('.accounts li a').live('click',function(){
-           var id = $(this).find('div.id').attr('value').replace("edit", "");
-           document.location='/operation/#account='+id;
-           $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
-           //временный хак до полного перехода на события
+            var id = $(this).find('div.id').attr('value').replace("edit", "");
+            document.location='/operation/#account='+id;
+            $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
+            //временный хак до полного перехода на события
 
             if (easyFinance.widgets.operationEdit)
                 easyFinance.widgets.operationEdit.setAccount(id);
@@ -81,25 +82,25 @@ easyFinance.widgets.accountsPanel = function(){
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
             str = str + '<span>'+data[key]['name']+'</span><br>';
-            str = str + '<span class="noTextDecoration ' + (data[key]['total_balance']>=0 ? 'sumGreen' : 'sumRed') + '">'
-                + ((data[key]['type']!=7) ? formatCurrency(data[key]['total_balance']) : formatCurrency(-data[key]['total_balance'])) + '</span>&nbsp;';
-            str = str + data[key]['cur']+ '</span></a></li>';
+            str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
+                + ((data[key]['type']!=7) ? formatCurrency(data[key]['totalBalance']) : formatCurrency(-data[key]['totalBalance'])) + '</span>&nbsp;';
+            str = str + res.currency[data[key]['currency']]['text'] + '</span></a></li>';
             //if ( i!=2 ){
-                summ[i] = summ[i]+data[key]['def_cur'];
+                summ[i] = summ[i]+data[key]['defCur'];
             /*}else{
-                summ[i] = summ[i]-data[key]['def_cur'];
+                summ[i] = summ[i]-data[key]['defCur'];
             }*/
 
-            if (!val[data[key]['cur']]) {
-                val[data[key]['cur']]=0;
+            if (!val[data[key]['currency']]) {
+                val[data[key]['currency']]=0;
             }
 
             //if ( i!=2 ){
-            val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                + parseFloat(data[key]['total_balance']);
+            val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
+                + parseFloat(data[key]['totalBalance']);
             /*}else{
-                 val[data[key]['cur']] = parseFloat( val[data[key]['cur']] )
-                - parseFloat(data[key]['total_balance']);
+                 val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
+                - parseFloat(data[key]['totalBalance']);
             }*/
 
             arr[i] = arr[i]+str;
@@ -119,19 +120,17 @@ easyFinance.widgets.accountsPanel = function(){
 
         // формирование итогов
         str = '<ul>';
-        for(key in res['currency'])
-            break;
-        var c_key = res['currency'][key]['abbr']||'';
-        i = 0
-        for(key in val)
-        {
-            if(!i)
-                c_key = key;
-            i++;
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+key+'</div></li>';
-        }
+
+        //for(key in res['currency'])
+        //    break;
+        //var c_key = res['currency'][key]['text'] || '';
         
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+c_key+'</div></li>';
+        i = 0;
+        for(key in val) {
+            i++;
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+res.currency[key].text+'</div></li>';
+        }
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+res.currency[key].text+'</div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
         $('div.listing dl.bill_list dt').addClass('open');

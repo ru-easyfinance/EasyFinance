@@ -58,6 +58,11 @@ class Sync{
     //const $recordsMap = null;
 
 
+    function cleanRec( $user_id = 0 ){
+        $sql = "DELETE FROM records_map WHERE user_id=?";
+        $a = $this->db->query($sql, $user_id);
+    }
+
     function clearAll($user_id = 0){
         $sql = "DELETE FROM accounts WHERE user_id=?";
         $a = $this->db->query($sql, $user_id);
@@ -82,11 +87,21 @@ class Sync{
         $this->clearAll($this->user);
     }
 
+    function deleteRecMapByUser($xmlReq=''){
+        $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
+        $sn = php_xmlrpc_decode($xmlReq);
+        $this->dataarray = $sn;
+        if (!$this->sync_getAuth($this->dataarray[0])){
+            // в случае неудачи
+            return false;
+        }
+        $this->cleanRec($this->user);
+    }
+
     function qwe($xmlReq, &$xmlAnswer, $needdec='0'){
         //echo ('<br>parametrov '.$xmlReq->getNumParams());
         $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
         $GLOBALS['xmlrpc_defencoding'] = "UTF-8";
-
         $ser = $xmlReq;
         
                 if ($needdec)
@@ -124,9 +139,9 @@ class Sync{
         
         //разбор распарсенных значений и формирование результирующей xml.
         $account = new Account($this->user, $this->db);
-        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         $debet = new Debet($this->user, $this->db);
-        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
 
         $category = new Category($this->user, $this->db);
         $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
@@ -145,7 +160,7 @@ class Sync{
         $transfer->FormArray($this->lastsync, $this->dataarrayE);
         $debet->FormArray($this->lastsync, $this->dataarrayE);
         $plans->FormArray($this->lastsync, $this->dataarrayE);
-        $ret = array(
+        /*$ret = array(
             'RecordsMap' => $this->dataarrayE[1]
             ,'ChangedRecords' => $this->dataarrayE[2]
             ,'DeletedRecords' => $this->dataarrayE[3]
@@ -156,7 +171,10 @@ class Sync{
             ,'Incomes' => $this->dataarrayE[9]
             ,'Outcomes' => $this->dataarrayE[10]
             ,'Plans' => $this->dataarrayE[11]
-            );
+            );*/
+        $ret = $this->dataarrayE;
+        //die(print_r('jewkfjwk'));
+        //die(print_r($this->dataarrayE[4]));
         $a = php_xmlrpc_encode($ret);
         return $a;
     }

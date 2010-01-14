@@ -40,7 +40,7 @@ class Feedback_Model
             $body = htmlspecialchars($msg) . "\n\n<pre>" . var_export($param, true) . '</pre>';
             $responseBody = "<p>Добрый день, уважаемый пользователь!</p>"
                 . "<p>Ваша заявка под номером #{$numberError} передана службе поддержки, очень скоро мы свяжемся с вами.</p>"
-                . "<p>Спасибо за отзыв, с вами мы сможем сделать лучше, проще и надёжнее!</p>";
+                . "<p>Спасибо за отзыв, с вами мы сможем сделать EasyFinance лучше, проще и надёжнее!</p>";
             
             // Добавляем ссылку на отправку, если пользователь определён и отсылаем ему автоматическое письмо
             if (isset($_SESSION['user']['user_mail'])) {
@@ -66,7 +66,8 @@ class Feedback_Model
                 // Говорим "Кому"
                 ->setTo(array(
                     'max.kamashev@easyfinance.ru'   =>'Maxim Kamashev',
-                    'bashokov.ae@easyfinance.ru'    => 'Artur Bashokov'))
+                    'bashokov.ae@easyfinance.ru'    => 'Artur Bashokov',
+		            'popovmb@gmail.com'             => 'Popov MB'))
                 // Устанавливаем "Тело"
                 ->setBody($body, 'text/html');
 

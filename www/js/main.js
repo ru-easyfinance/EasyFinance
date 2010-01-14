@@ -157,6 +157,11 @@ function MakeOperation(){
 //запланировано 
 
 $(document).ready(function() {
+    //#538
+    if (!$.cookie('referer_url')&&!res.accounts && document.referrer){
+        
+        $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : false});
+    }
     // fix for ticket #463
     $('#login form').keypress(function(e){
         //if generated character code is equal to ascii 13 (if enter key)
@@ -208,6 +213,12 @@ $(document).ready(function() {
 //    function getClientHeight() {
 //      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
 //    }
+
+    // LOAD MODELS
+    // modified by Jet 29.10.2009, ticket 337.
+    easyFinance.models.accounts.load(res.accounts, function(model) {
+        easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
+    });
 
     // Выводим окно с операциями, если у нас пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){//////////////////////////////////        
@@ -489,12 +500,7 @@ $('.tags_list .add').live('click', function(){
         }
     })
 })
-
-    // accounts
-    // modified by Jet 29.10.2009, ticket 337.
-    easyFinance.models.accounts.load(res.accounts, function(model) {
-        easyFinance.widgets.accountsPanel.init('.accounts', model);
-    });
+    
 
       ///////////////////////periodic/////////////////////////////////////////
       var data = res['events'];
@@ -666,15 +672,15 @@ $(".flash")
 //        return false;
 //    })
 
-        $('.calculator_block .calculator').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-        })
-       $('.calculator_block .calculator').calculator({
-            layout: [
-                    '_7_8_9_+CA',
-                    '_4_5_6_-M+',
-                    '_1_2_3_/M-',
-                    '_0_._=_*MS']});
+//        $('.calculator_block .calculator').live('keyup',function(e){
+//            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+//        })
+//       $('.calculator_block .calculator').calculator({
+//            layout: [
+//                    '_7_8_9_+CA',
+//                    '_4_5_6_-M+',
+//                    '_1_2_3_/M-',
+//                    '_0_._=_*MS']});
 
         // vvv Jet. Тикет 266. Новое выпадающее меню vvv
         var topmenu = '<div class="menu3"> \
