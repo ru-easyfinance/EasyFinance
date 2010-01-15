@@ -667,10 +667,12 @@ $(".flash")
     data = res['currency'];
     str = '';
     var cost,name,progres;
-    var fir = 0;//первая валюта в правом списке
+    var fir = res['currency']['defa'];//первая валюта в правом списке
     for(key in data) {
+        if (key=='defa')
+            continue;
         // валюта по умолчанию первая в списке ! не показываем её в правой панели
-        if (fir != 0) {
+        if (fir != key) {
             cost = data[key]['cost'];
             name = data[key]['name'];
             progres = data[key]['progress'];
@@ -683,11 +685,11 @@ $(".flash")
                 + progres +'">' + cost + '</span></div>';
         }
 
-        fir++;
+        //fir++;
     }
-    
+    fir = 5;
     if (fir > 1)
-        $('dl.info dd').html(str).parent().show();
+        $('dl.info dd').html(str).parent().show();//*/
     
 //calendar
     $('.calendar_block .calendar').datepicker();
