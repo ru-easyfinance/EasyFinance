@@ -604,7 +604,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function refreshCategories() {
-
+        _changeOperationType();
+        // выбираем первую опцию по умолчанию
+        _sexyCategory.setComboValue(_sexyCategory.options[0].text);
     }
 
     function refreshTargets() {
@@ -655,6 +657,11 @@ easyFinance.widgets.operationEdit = function(){
         $(document).bind('accountsLoaded', refreshAccounts);
         $(document).bind('accountAdded', refreshAccounts);
         $(document).bind('accountDeleted', refreshAccounts);
+
+        $(document).bind('categoriesLoaded', refreshCategories);
+        $(document).bind('categoryAdded', refreshCategories);
+        $(document).bind('categoryEdited', refreshCategories);
+        $(document).bind('categoryDeleted', refreshCategories);
 
         return this;
     }
