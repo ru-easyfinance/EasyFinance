@@ -1884,6 +1884,9 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     clear: both;
     padding-top: 20px;
 }
+.feedback td{
+    vertical-align: middle
+}
 .feedback .banner{
     position: relative;
     float : left;
@@ -1893,8 +1896,11 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 }
 .feedback .text{
     position: relative;
-    margin-left: 300px;
 }
+.feedback .text p{
+    margin: 0;
+}
+
 .feedback .text a{
     position: relative;
     float : right;
