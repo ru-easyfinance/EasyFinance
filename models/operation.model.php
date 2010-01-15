@@ -603,7 +603,13 @@ class Operation_Model {
                     $val['cat_name'] = "Отпуск";
                 if (($val['cat_id']) == 4)
                     $val['cat_name'] = "Фин.подушка";
-                if (($val['cat_id']) == 5)//*/
+                if (($val['cat_id']) == 5)
+                    $val['cat_name'] = "Свадьба";
+                if (($val['cat_id']) == 6)
+                    $val['cat_name'] = "Быт. техника";
+                if (($val['cat_id']) == 7)
+                    $val['cat_name'] = "Компьютер";
+                if (($val['cat_id']) == 8)//*/
                     $val['cat_name'] = "Прочее";
             }
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
