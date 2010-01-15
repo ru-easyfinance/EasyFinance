@@ -84,8 +84,13 @@ class Account_Model
     {
         $tip = "SELECT account_type_id FROM accounts WHERE account_id=? AND user_id=?";
         $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
-        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9))
-            $data['starter_balance'] = '-'.$data['starter_balance'];
+        $drain = 0;
+        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9)){
+            if ( $data['initPayment'][0] == '-')
+                $data['initPayment'] = substr($data['initPayment'],1);
+            $data['initPayment'] = '-'.$data['initPayment'];
+            $drain=1;
+        }
 
         $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `dt_create`";
         $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
