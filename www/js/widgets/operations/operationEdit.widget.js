@@ -71,9 +71,6 @@ easyFinance.widgets.operationEdit = function(){
         }
         $('.op_tags_could').html(str+'</ul>');
         $('.op_tags_could li').hide();
-
-        //$(document).bind('accountsLoaded', _refreshAccounts);
-        //$(document).bind('accountDeleted', _refreshAccounts);
     }
 
     function _sexyFilter (input, text){
@@ -610,18 +607,21 @@ easyFinance.widgets.operationEdit = function(){
         var htmlAccounts = '';
         for (key in data )
         {
-            htmlAccounts = htmlAccounts + '<option value="' + key + '" '
-                + 'currency="' + res.currency[data[key].currency].text + '" ' +
-                + '">' + data[key].name + '</option>';
+            htmlAccounts = htmlAccounts + '<option value="' + key + '">'
+                + data[key].name + '</option>';
         }
 
         $("#op_account").html(htmlAccounts);
         $.sexyCombo.changeOptions("#op_account");
-        setAccount(_selectedAccount);
+        // выбираем первую опцию по умолчанию
+        _sexyAccount.setComboValue(_sexyAccount.options[0].text);
 
-        $("#op_AccountForTransfer").html(htmlAccounts);
-        $.sexyCombo.changeOptions("#op_AccountForTransfer");
-        setTransfer(_selectedTransfer);
+        if (_sexyTransfer) {
+            $("#op_AccountForTransfer").html(htmlAccounts);
+            $.sexyCombo.changeOptions("#op_AccountForTransfer");
+            // выбираем первую опцию по умолчанию
+            _sexyTransfer.setComboValue(_sexyTransfer.options[0].text);
+        }
     }
 
     // public variables
@@ -645,6 +645,10 @@ easyFinance.widgets.operationEdit = function(){
 
         // setup form
         _initForm();
+
+        $(document).bind('accountsLoaded', _refreshAccounts);
+        $(document).bind('accountAdded', _refreshAccounts);
+        $(document).bind('accountDeleted', _refreshAccounts);
 
         return this;
     }
