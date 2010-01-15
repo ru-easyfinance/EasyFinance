@@ -280,6 +280,9 @@ $(document).ready(function(){
             }, function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
 //                if (data.length == 0) {
+                    if (data.user_targets)
+                        res.user_targets = data['user_targets'];
+
                     $('#tpopup').dialog('close');
                     $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
                     loadTargets(data['user_targets']);

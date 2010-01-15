@@ -234,10 +234,6 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _changeOperationType() {
-        // запоминаем выбранную ранее категорию,
-        // чтобы при переключении типа операции
-        // заново её выбрать, по возможности
-
         // Расход или Доход
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
@@ -270,8 +266,6 @@ easyFinance.widgets.operationEdit = function(){
 
                 return str;
             }
-
-
 
             var recent = _modelCategory.getRecentCategories();
             var recentFiltered = {};
@@ -330,16 +324,6 @@ easyFinance.widgets.operationEdit = function(){
         //Перевод на финансовую цель
         } else if (_selectedType == "4") {
             $("#op_target_fields").show();
-
-            $('#op_target').remove('option');
-            var o = '';
-            var t;
-            for (var v in res['user_targets']) {
-                t = res['user_targets'][v];
-                if (t['done']=='0')
-                o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
-                    '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
-            }
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
 
             if (!_sexyTarget) {
@@ -370,10 +354,7 @@ easyFinance.widgets.operationEdit = function(){
             }
 
             // обновляем опции
-            $('#op_target').html(o);
-            $.sexyCombo.changeOptions('#op_target');
-            // выбираем первую опцию по умолчанию
-            _sexyTarget.setComboValue(_sexyTarget.options[0].text); 
+            refreshTargets();
         }
     }
 
@@ -597,12 +578,10 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
-    function _refreshAccounts() {
+    function refreshAccounts() {
         var data = $.extend({}, easyFinance.models.accounts.getAccounts());
-
-        if (!data){
+        if (!data)
             data = {};
-        }
 
         var htmlAccounts = '';
         for (key in data )
@@ -622,6 +601,33 @@ easyFinance.widgets.operationEdit = function(){
             // выбираем первую опцию по умолчанию
             _sexyTransfer.setComboValue(_sexyTransfer.options[0].text);
         }
+    }
+
+    function refreshCategories() {
+
+    }
+
+    function refreshTargets() {
+        if (!_sexyTarget)
+            return;
+
+        var data = res.user_targets;
+        if (!data)
+            data = {};
+
+        var t;
+        var o = '';
+        for (var v in res['user_targets']) {
+            t = res['user_targets'][v];
+            if (t['done']=='0')
+            o += '<option value="'+t['id']+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
+                '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+        }
+
+        $("#op_target").html(o);
+        $.sexyCombo.changeOptions("#op_target");
+        // выбираем первую опцию по умолчанию
+        _sexyTarget.setComboValue(_sexyTarget.options[0].text);
     }
 
     // public variables
@@ -646,9 +652,9 @@ easyFinance.widgets.operationEdit = function(){
         // setup form
         _initForm();
 
-        $(document).bind('accountsLoaded', _refreshAccounts);
-        $(document).bind('accountAdded', _refreshAccounts);
-        $(document).bind('accountDeleted', _refreshAccounts);
+        $(document).bind('accountsLoaded', refreshAccounts);
+        $(document).bind('accountAdded', refreshAccounts);
+        $(document).bind('accountDeleted', refreshAccounts);
 
         return this;
     }
@@ -777,6 +783,9 @@ easyFinance.widgets.operationEdit = function(){
         setAccount: setAccount,
         setTransfer: setTransfer,
         showForm: showForm,
-        fillForm: fillForm
+        fillForm: fillForm,
+        refreshAccounts: refreshAccounts,
+        refreshCategories: refreshCategories,
+        refreshTargets: refreshTargets
     };
 }(); // execute anonymous function to immediatly return object
