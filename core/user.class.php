@@ -495,6 +495,45 @@ class User
     }
 
     /**
+     * возвращает массив. 1ый элемент - сериализуемая строка. 2ой айди валюты по умолчанию
+     * @return array mixed
+     */
+    function getCur()
+    {
+        $sql = "SELECT user_currency_list AS li, user_currency_default AS def FROM users WHERE id = ?";
+        $li = $this->db->query($sql, $this->getId());
+        $a = $li[0];
+
+        return $a;
+    }
+
+    function getCurrencyByDefault($mas, $def)
+    {
+        //die ( print_r( $mas ) );
+        $mas = "'".implode("','", $mas)."'";
+        $sql = "SELECT c.cur_id as id, dai.currency_sum as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
+            FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
+            AND dai.currency_from = ?
+            AND c.cur_id IN ($mas)";
+        $li = $this->db->query($sql, $def);
+        $sql = "SELECT $def as id, 1 as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
+            FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
+            AND c.cur_id = ?
+            ";
+        $li2 = $this->db->query($sql, $def);
+
+        $res = array_merge($li, $li2);
+
+
+        return $res;
+            //echo('<pre>');
+            //die(print_r($li));
+        //$a = $li[0];
+
+        
+    }
+
+    /**
      * Возвращает пользовательские счета
      * @return array mixed
      */
