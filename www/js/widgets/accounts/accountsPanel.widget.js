@@ -55,7 +55,7 @@ easyFinance.widgets.accountsPanel = function(){
     }
 
     function redraw(){
-        var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0];
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
@@ -82,7 +82,7 @@ easyFinance.widgets.accountsPanel = function(){
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
             str = str + '<span>'+data[key]['name']+'</span><br>';
-            str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
+            str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 && data[key]['type']!='8' ? 'sumGreen' : 'sumRed') + '">'
                 + ((data[key]['type']!=7) ? formatCurrency(data[key]['totalBalance']) : formatCurrency(-data[key]['totalBalance'])) + '</span>&nbsp;';
             str = str + res.currency[data[key]['currency']]['text'] + '</span></a></li>';
             //if ( i!=2 ){
