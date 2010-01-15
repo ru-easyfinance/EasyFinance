@@ -110,6 +110,9 @@ class Operation_Model {
                 $this->errorData['account'][] = 'Не выбран счёт';
             }
         }
+        $acc = $this->db->query("SELECT count(*) as co FROM accounts WHERE account_id=?",$_POST['account']);
+        if ( $acc[0]['co'] != 1 )
+            $this->errorData['account'][] = 'Счёта не существует';
 
         // Проверяем сумму
         if (in_array('amount', $params) or count($params) == 0) {
@@ -130,6 +133,9 @@ class Operation_Model {
                         $this->errorData['category'][] = 'Нужно указать категорию';
             }
         }
+        $cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND visible=1", $_POST['category']);
+        if ( $cat[0]['co'] != 1 )
+            $this->errorData['category'][] = 'Категории не существует!!!';
 
         // Проверяем дату
         if (in_array('date', $params) or count($params) == 0) {
