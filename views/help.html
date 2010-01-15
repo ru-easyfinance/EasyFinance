@@ -1,0 +1,33 @@
+		<div class="ramka2">
+			<div class="cct"></div>
+			<div class="mid general_cont">
+				&nbsp;
+                                <p align="justify">
+                                <div style='margin:20px' align="justify">
+                                    <h2>Видео-гид</h2>
+                                    <div id="widgetHelp">
+                                        <div class="links"></div><br>
+                                        <div class="title"></div><br>
+                                        <a
+                                            id = "playerHelp"
+                                            class = "video"
+                                            href="/flv/test.mp4"
+                                            style="display:block;width:640px;height:480px"
+                                        ></a><br>
+                                    </div>
+
+                                </div>
+			</div>
+			<div class="ccb"></div>
+		</div>
+
+{literal}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            easyFinance.widgets.help.init('#widgetHelp', false);
+            easyFinance.widgets.help.showVideo("newOperation");
+        });
+    </script>
+{/literal}
+
+<!--/середина-->

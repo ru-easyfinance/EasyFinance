@@ -7,31 +7,31 @@ easyFinance.widgets.help = function(){
     // private variables
     var _$node = null;
     var _$divTitle = null;
-    var _$divVideo = null;
+    var _$hrefVideo = null;
     var _$divLinks = null;
-
-    var _strPlayer = '<object width="580" height="360"><param name="movie" value="http://www.youtube.com/v/{videoId}&hl=ru_RU&fs=1&rel=0&color1=0x234900&color2=0x4e9e00&border=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{videoId}&hl=ru_RU&fs=1&rel=0&color1=0x234900&color2=0x4e9e00&border=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="580" height="360"></embed></object>';
+    var _player = null;
+    var _strVideoPrefix = "/upload/video/help/";
 
     var _videos = {
         "newOperation" : {
             title: "Добавление операции",
-            videoId: "Hy0jxnbCPDc"
+            file: "newOperation.mp4"
         },
         "newCategory" : {
             title: "Добавление категории",
-            videoId: "KyM0XHZCsS8"
+            file: "newCategory.mp4"
         },
         "newAccount" : {
             title: "Добавление счёта",
-            videoId: "PvpkgfL4Wo4"
+            file: "newAccount.mp4"
         },
         "newTarget" : {
             title: "Создание финансовой цели",
-            videoId: "PvpkgfL4Wo4"
+            file: "newTarget.mp4"
         },
         "newBudget" : {
             title: "Планирование бюджета",
-            videoId: "PvpkgfL4Wo4"
+            file: "newBudget.mp4"
         }
     }
 
@@ -39,14 +39,16 @@ easyFinance.widgets.help = function(){
 
 
     // public functions
-    function init(nodeSelector) {
+    function init(nodeSelector, isDialog) {
         _$node = $(nodeSelector);
         
         _$divTitle = _$node.find(".title");
-        _$divVideo = _$node.find(".video");
+        _$hrefVideo = _$node.find(".video");
 
         var videoLinkClicked = function() {
             showVideo($(this).val());
+
+            return false;
         }
 
         _$divLinks = _$node.find(".links");
@@ -61,7 +63,8 @@ easyFinance.widgets.help = function(){
             $("<br>").appendTo(_$divLinks);
         }
 
-        _$node.dialog({title: "Видео-гид", bgiframe: true, autoOpen: false, width: 600, modal:true});
+        if (isDialog)
+            _$node.dialog({title: "Видео-гид", bgiframe: true, autoOpen: false, width: 662, modal:true});
     }
 
     function showVideo(strVideo) {
@@ -69,7 +72,18 @@ easyFinance.widgets.help = function(){
             return;
 
         _$divTitle.html('<b>'+_videos[strVideo].title+'</b>');
-        _$divVideo.html(_strPlayer.replace("{videoId}", _videos[strVideo].videoId, "g"));
+
+        if (!_player) {
+            _$hrefVideo.attr("href", _strVideoPrefix + _videos[strVideo].file)
+            _player = flowplayer("playerHelp", "/swf/flowplayer-3.1.5.swf", {
+                clip: {
+                    autoPlay: false,
+                    autoBuffering: false
+                }
+            });
+        } else {
+            _player.play(_strVideoPrefix + _videos[strVideo].file);
+        }
     }
 
     return {

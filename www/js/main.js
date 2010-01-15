@@ -413,7 +413,7 @@ $(document).ready(function() {
         }
     
         // инициализируем виджет видео-гида
-        easyFinance.widgets.help.init('#popupHelp');
+        easyFinance.widgets.help.init('#popupHelp', true);
 
         // по умолчанию устанавливаем видео,
         // которое соответствует содержнию страницы
