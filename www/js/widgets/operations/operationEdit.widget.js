@@ -692,10 +692,13 @@ easyFinance.widgets.operationEdit = function(){
      * Функция заполняет форму данными
      * @param data данные для заполнения
      */
-    function fillForm(data) {
+    function fillForm(data, isCopy) {
         //clearForm();
 
-        $('#op_id').val(data.id);
+        if (isCopy)
+            $('#op_id').val('');
+        else
+            $('#op_id').val(data.id);
 
         var typ = '0';
         if (data.tr_id != null && data.tr_id != '') {
