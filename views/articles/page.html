@@ -1,0 +1,81 @@
+{literal}
+<style type="text/css">
+.article
+{
+	overflow:hidden;
+	margin-bottom:20px;
+	#border-bottom: 1px dotted #6CBD45;
+}
+
+.article .readMore
+{
+	float: right;
+	text-align:left;
+}
+
+.article .announce img
+{
+	border:0;
+	float:left;
+	padding:0 21px 5px 0;
+}
+
+.article .announce p
+{
+	margin: 0;
+}
+
+.article .date
+{
+	float: right;
+	height: 22px;
+	line-height: 31px;
+	margin-left: 22px;
+}
+
+.article .additional
+{
+	margin: 10px 0 10px 0;
+	clear:both;
+}
+
+</style>
+{/literal}
+<div class="ramka2">
+	<div class="cct"></div>
+	<div class="mid general_cont">
+		<div style='margin:6px 23px 0 20px' align="justify">
+			{assign var=url value=/articles/`$article.id`}
+			<div class="article">
+				<div class="date">
+					{if !empty($article.authorUrl)}
+					<a href="{$article.authorUrl}">{$article.authorName}</a>
+					{else}
+					{$article.authorName}
+					{/if}
+				</div>
+				<a href="{$url}">
+					<h2>{$article.title}</h2>
+				</a>
+				<div class="announce">
+					<a target="_blank" href="{$url}">
+						<img src="/img/feedback/f5.png" alt="{$article.id}" title="Журнал" />
+					</a>
+        					<p>{$article.announce}</p>
+        					<p>{$article.body}</p>
+				</div>
+				<div class="additional">
+					<span>
+						<a href="/articles/tag/asdas">уроды</a>, 
+						<a href="/articles/tag/asda">кризис</a>, 
+						<a href="/articles/tag/sdas">доллар</a>
+					</span>
+					<div class="readMore">
+						<a target="_blank" href="{$url}"> Читать статью полностью </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ccb"></div>
+</div>
