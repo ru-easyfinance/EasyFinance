@@ -32,9 +32,9 @@ if (Core::getInstance()->user->getId()) {
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
-            $select = Login_Model::getUserDataByID( substr($_SERVER[argv][0], 20) );
+            $select = Login_Model::getUserDataByID( $_GET['id_ef'] );
             $uar = array(
-                'user_id'=>substr($_SERVER[argv][0], 20),
+                'user_id'=>$_GET['id_ef'],
                 'user_name'=>$select[0]['user_login'],
                 'user_type'=>0);
             Core::getInstance()->tpl->assign('user_info', $uar);
@@ -45,10 +45,10 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
         }
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')){
             $log = new Login_Model();
-            $requeststring = substr($_SERVER[argv][0], 20);
-            $array = explode("&", $requeststring);
-            $login = $array[0];
-            $mail = substr ( $array[1] , 5);
+            //$requeststring = substr($_SERVER[argv][0], 20);
+            //$array = explode("&", $requeststring);
+            $login = $_GET['login'];
+            $mail = $_GET['mail'];
             $newId = $log->generateUserByAzbukaLogin( $login , $mail );
             return $newId;
             break;
