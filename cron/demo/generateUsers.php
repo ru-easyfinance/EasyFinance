@@ -51,7 +51,7 @@ include( dirname(dirname(dirname(__FILE__))) . '/include/config.php' );
 if( !IS_DEMO ) die("Must be runned only for demo !\n");
 
 // Файл для хранения массива сгенерённых пользователей
-$usersFile = SYS_DIR_INC . 'generatedUsers.php';
+$usersFile = DIR_SHARED . 'generatedUsers.php';
 
 // Конфиг таблиц для выборки
 $tablesTemplate = array(

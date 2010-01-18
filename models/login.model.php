@@ -281,7 +281,7 @@ class Login_Model
 	
 	private function getGenerated()
 	{
-		$usersFile = SYS_DIR_INC . 'generatedUsers.php';
+		$usersFile = DIR_SHARED . 'generatedUsers.php';
 		
 		if( file_exists($usersFile) )
 		{
