@@ -328,8 +328,8 @@ class Login_Model
             $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
             if ( $islog[0]['cou'] == 0 )
 
-            $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
-                (?, ?, ?, ?, 1, 0)", $login, 'azbuka_'.$login, $pass, $mail);
+            $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new, user_created) VALUES
+                (?, ?, ?, ?, 1, 0, NOW)", $login, 'azbuka_'.$login, $pass, $mail);
             $id = mysql_insert_id();
             $this->defaultCategory($id);
             $this->defaultAccounts($id);
