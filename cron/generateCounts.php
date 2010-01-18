@@ -64,6 +64,10 @@ $stmt = $db->query( $sql );
 
 $counters['users'] += $stmt->fetchColumn();
 
+
+// Подключаем конфиг
+require_once dirname(dirname(__FILE__)) . '/include/config.php';
+
 // Сохраняем всю эту порнографию
 
-file_put_contents( dirname(dirname(__FILE__)) . '/include/counters.json', json_encode($counters) );
+file_put_contents( DIR_SHARED . 'counters.json', json_encode($counters) );
