@@ -45,7 +45,11 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
         }
         if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')){
             $log = new Login_Model();
-            $newId = $log->generateUserByAzbukaLogin( substr($_SERVER[argv][0], 20) );
+            $requeststring = substr($_SERVER[argv][0], 20);
+            $array = explode("&", $requeststring);
+            $login = $array[0];
+            $mail = substr ( $array[1] , 5);
+            $newId = $log->generateUserByAzbukaLogin( $login , $mail );
             return $newId;
             break;
         }
