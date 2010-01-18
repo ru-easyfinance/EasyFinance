@@ -94,10 +94,15 @@ $(document).ready(function() {
             $('#subcat').removeAttr('disabled');
         }
 
-        if (cat.user[id]['custom'] == "0")
+        if (cat.user[id]['custom'] == "0") {
             $('#divCategoryEditCustom').hide();
-        else
+            $('#cattype').attr("disabled", true);
+            $('#txtCategoryComment').text ('Это системная категория, вы не можете изменить её тип');
+        } else {
             $('#divCategoryEditCustom').show();
+            $('#cattype').removeAttr("disabled");
+            $('#txtCategoryComment').text ('Универсальная категория может быть как расходной, так и доходной');
+        }
 
         $('#cat_id').val(cat.user[id]['id']);
         $('#namecat').val(cat.user[id]['name']);
