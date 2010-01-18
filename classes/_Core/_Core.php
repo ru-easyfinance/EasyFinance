@@ -11,6 +11,8 @@ class _Core
 	public function __construct()
 	{
 		spl_autoload_register( array('_Core','__autoload') );
+		
+		$this->initCache();
 	}
 	
 	public static function __autoload( $className )
@@ -45,6 +47,27 @@ class _Core
 		}
 		
 		return true;
+	}
+	
+	private function initCache()
+	{
+		// Кеширование. Инициализация.
+		$cache = new _Core_Cache(false, CACHE_ENABLED);
+		
+		// Файловый кеш
+		if( CACHE_ENABLED )
+		{
+			$cache->addBackend(
+				new _Core_Cache_Backend_Files( CACHE_FILES_DIR )
+			);
+		}
+		// Memcached кеш
+		if( CACHE_ENABLED && MEMCACHE_ENABLED )
+		{
+			$cache->addBackend(
+				new _Core_Cache_Backend_Memcache( MEMCACHE_HOST, MEMCACHE_PORT )
+			);
+		}
 	}
 }
 

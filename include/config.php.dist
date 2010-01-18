@@ -10,8 +10,8 @@ define('SYS_DIR_ROOT',          dirname(dirname(__FILE__)) );
 define('SYS_DIR_LIBS',		SYS_DIR_ROOT."/core/");
 define('SYS_DIR_INC',		SYS_DIR_ROOT."/include/");
 define('SYS_DIR_MOD',		SYS_DIR_ROOT."/modules/");
-define('SYS_DIR_HTML',	        SYS_DIR_ROOT."/templates/");
-define('SYS_DIR_CACHE', 	"${project.basedir}/tmp");
+define('SYS_DIR_HTML', 		SYS_DIR_ROOT."/templates/");
+define('SYS_DIR_CACHE', 		"${project.basedir}/tmp");
 define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
 define('UPLOAD_DIR',		SYS_DIR_ROOT."/upload/");
 
@@ -31,11 +31,11 @@ define('DEFAULT_MODULE',	'welcome');
 define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore,notfound');
 
 //COOKIE
-define('COOKIE_NAME',           "${project.cookie.name}" );
-define('COOKIE_DOMEN',          ${project.cookie.domain} );
-define('COOKIE_PATH',           "${project.cookie.path}" );
-define('COOKIE_HTTPS',          ${project.cookie.https} );
-define('COOKIE_EXPIRE', 	${project.cookie.expire} ); // две недели
+define('COOKIE_NAME', 		"${project.cookie.name}" );
+define('COOKIE_DOMEN', 		${project.cookie.domain} );
+define('COOKIE_PATH', 		"${project.cookie.path}" );
+define('COOKIE_HTTPS',		${project.cookie.https} );
+define('COOKIE_EXPIRE', 		${project.cookie.expire} ); // две недели
 
 //CRYPT
 define('CRYPT_KEY',		"${project.crypt.key}"); // 24 битный ключ
@@ -46,7 +46,22 @@ define('SYS_DB_USER',		"${project.db.user}");
 define('SYS_DB_PASS',		"${project.db.pass}");
 define('SYS_DB_BASE',		"${project.db.base}");
 
-define('JS_MINIFY',		${project.jsmin.enabled} );
+// Js & css minifyin
+define('JS_MINIFY',			${project.jsmin.enabled} );
 define('CSS_MINIFY',		${project.cssmin.enabled} );
 
-define('REVISION', 		"${project.svn.revision}");
+// Cache settings
+define('CACHE_ENABLED', 		${project.cache.enabled});
+define('CACHE_KEY_PREFIX', 	${project.cache.keyPrefix});
+define('CACHE_FILES_DIR', 	"${project.cache.dir}");
+
+define('MEMCACHE_ENABLED', 	${project.memcache.enabled});
+define('MEMCACHE_HOST', 	"${project.memcache.host}");
+define('MEMCACHE_PORT', 	${project.memcache.port});
+
+// Mail settings (including method)
+define('MAIL_ENABLED' , 1);
+//define();
+
+// Current project revision (using for flush client cache after each build)
+define('REVISION', 			"${project.svn.revision}");
