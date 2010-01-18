@@ -173,6 +173,28 @@ function MakeOperation(){
 //запланировано 
 
 $(document).ready(function() {
+    // # тикет 625
+    // инициализируем виджет видео-гида
+    easyFinance.widgets.help.init('#popupHelp', true);
+
+    // по умолчанию устанавливаем видео,
+    // которое соответствует содержанию страницы
+    var tabVideo = {
+        "m0" : "newOperation",
+        "m1" : "newOperation",
+        "m2" : "newAccount",
+        "m3" : "newBudget",
+        "m4" : "newTarget",
+        "m5" : "newOperation",
+        "m6" : "newOperation"
+    };
+
+    easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+
+    $('#footer .btnHelp').click(function(){
+        $('#popupHelp').dialog('open');
+    });
+
     //#538
     if (
     	!$.cookie('referer_url')
@@ -411,27 +433,6 @@ $(document).ready(function() {
             $('.ui-dialog-buttonpane').css('margin-top','30px');
             //$('#op_adate,#op_pdate').val(dateText);   
         }
-    
-        // инициализируем виджет видео-гида
-        easyFinance.widgets.help.init('#popupHelp', true);
-
-        // по умолчанию устанавливаем видео,
-        // которое соответствует содержнию страницы
-        var tabVideo = {
-            "m0" : "newOperation",
-            "m1" : "newOperation",
-            "m2" : "newAccount",
-            "m3" : "newBudget",
-            "m4" : "newTarget",
-            "m5" : "newOperation",
-            "m6" : "newOperation"
-        };
-
-        easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
-
-        $('#footer .btnHelp').click(function(){
-            $('#popupHelp').dialog('open');
-        });
 }
 
     if(inarray(Current_module, Connected_functional.menu)){
