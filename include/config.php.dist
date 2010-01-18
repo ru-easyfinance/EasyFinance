@@ -11,24 +11,27 @@ define('SYS_DIR_LIBS',		SYS_DIR_ROOT."/core/");
 define('SYS_DIR_INC',		SYS_DIR_ROOT."/include/");
 define('SYS_DIR_MOD',		SYS_DIR_ROOT."/modules/");
 define('SYS_DIR_HTML', 		SYS_DIR_ROOT."/templates/");
-define('SYS_DIR_CACHE', 		"${project.basedir}/tmp");
 define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
-define('UPLOAD_DIR',		SYS_DIR_ROOT."/upload/");
+define('SYS_DIR_CACHE', 		"${project.basedir}/tmp");
+
+
+define('DIR_SHARED', 		"${project.shared.dir}");
+define('DIR_UPLOAD',		DIR_SHARED . "/uploaded/");
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
 // Other
-define('IS_DEMO',		${project.demo} );
+define('IS_DEMO', 			${project.demo} );
 
 define('URL_ROOT_MAIN',         "${project.url.root}/");
 define('URL_ROOT_DEMO',         "${demo.url.root}/");
 define('URL_ROOT_IFRAME',       "iframe." . URL_ROOT_MAIN);
 
-define('URL_ROOT',		IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
+define('URL_ROOT',			IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 
 define('DEBUG',			${project.debug} );
 define('DEFAULT_MODULE',	'welcome');
-define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore,notfound');
+define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore,notfound,articles');
 
 //COOKIE
 define('COOKIE_NAME', 		"${project.cookie.name}" );
