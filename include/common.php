@@ -13,6 +13,13 @@ if (DEBUG) {
     require_once SYS_DIR_LIBS . 'external/FirePHPCore/FirePHP.class.php';
 }
 
+
+// Подключение нового ядра
+include_once('../classes/_Core/_Core.php');
+new _Core();
+
+spl_autoload_register('__autoload');
+
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 require_once SYS_DIR_LIBS . 'external/smarty/Smarty.class.php';
@@ -127,12 +134,6 @@ Core::getInstance()->js = array(
 
 // Почта
 include_once "../core/external/Swift/swift_required.php";
-
-// Подключение нового ядра
-include_once('../classes/_Core/_Core.php');
-new _Core();
-
-spl_autoload_register('__autoload');
 
 $mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
 	//->setUsername('info@easyfinance.ru')
