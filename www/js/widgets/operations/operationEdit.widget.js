@@ -585,6 +585,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function refreshAccounts() {
+        if (!_sexyAccount)
+            return;
+
         var data = $.extend({}, easyFinance.models.accounts.getAccounts());
         if (!data)
             data = {};
