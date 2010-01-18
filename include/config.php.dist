@@ -15,8 +15,8 @@ define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
 define('SYS_DIR_CACHE', 		"${project.basedir}/tmp");
 
 
-define('DIR_SHARED', 		"${project.shared.dir}");
-define('DIR_UPLOAD',		DIR_SHARED . "/uploaded/");
+define('DIR_SHARED', 		"${project.shared.dir}" . DIRECTORY_SEPARATOR);
+define('DIR_UPLOAD',		DIR_SHARED . "uploaded/");
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
