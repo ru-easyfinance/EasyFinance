@@ -287,7 +287,7 @@ easyFinance.widgets.accountsJournal = function(){
                     //total = total-summ[key];
 
                 s='<div><strong class="title">'+ g_name[key]
-                    + ':</strong> ' + formatCurrency(tofloat( summ[key] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']))
+                    + ':</strong> ' + formatCurrency(tofloat( summ[key] ))
                     + ' ' + d_cur+ '<table  class="noborder">' + head_tr+arr[key]
                     + '</table></div>';
                 $('#operation_list').append(s);
