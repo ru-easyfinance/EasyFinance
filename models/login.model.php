@@ -321,13 +321,10 @@ class Login_Model
          */
         public function generateUserByAzbukaLogin($login , $mail){
             $id = 0;//айди сгенерированного пользователя
-            //die($login);
             $pass = sha1($login);
-            //$pass = $login;
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
             $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
             if ( $islog[0]['cou'] == 0 ){
-
                 $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new, user_created) VALUES
                     (?, ?, ?, ?, 1, 0, NOW)", $login, 'azbuka_'.$login, $pass, $mail);
                 $id = mysql_insert_id();
@@ -335,7 +332,6 @@ class Login_Model
                 $this->defaultAccounts($id);
                  //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
                 $ch = curl_init();
-                //die("http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
                 curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
 
                 curl_exec($ch);
