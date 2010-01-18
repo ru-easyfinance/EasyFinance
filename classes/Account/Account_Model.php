@@ -84,8 +84,13 @@ class Account_Model
     {
         $tip = "SELECT account_type_id FROM accounts WHERE account_id=? AND user_id=?";
         $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
-        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9))
-            $data['starter_balance'] = '-'.$data['starter_balance'];
+        $drain = 0;
+        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9)){
+            if ( $data['initPayment'][0] == '-')
+                $data['initPayment'] = substr($data['initPayment'],1);
+            $data['initPayment'] = '-'.$data['initPayment'];
+            $drain=1;
+        }
 
         $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `dt_create`";
         $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
@@ -165,24 +170,24 @@ class Account_Model
     {
         $sql = "SELECT account_name as name, account_type_id as type, account_description as comment, account_currency_id as currency, account_id FROM
             accounts WHERE user_id=?";
-        $exec = $this->db->query($sql, $user);
+        $accounts = $this->db->query($sql, $user);// список основных параметров по счетам
         
         $return = array();//возвращаемые данные
         //загрузка дополнительных параметров по каждому из счетов
-        foreach ($exec as $k=>$v){
+        foreach ($accounts as $k=>$v){
             //$sql = "SELECT field_id, field_value FROM Acc_Values WHERE account_id=?";
             $sql = "SELECT f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
                 WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
                 AND v.account_id=?";
-            $dop = $this->db->query($sql, $v['account_id']);
-            $ret;
-            foreach ($v as $k1=>$v1){
+            $dop = $this->db->query($sql, $v['account_id']);// получаем дополнительные поля
+            $ret;//возвращаемые данные
+            foreach ($v as $k1=>$v1){//цикл пихает в возвращаемый массив общие параметры.
                 if ($k1 != 'account_id')
                     $ret[$k][$k1] = $v1;
                 else
                     $ret[$k]['id'] = $v1;
             }
-            foreach ($dop as $k2=>$v2)
+            foreach ($dop as $k2=>$v2)//дополнительные поля
                 $ret[$k][$v2['name']] = $v2['field_value'];
 
             

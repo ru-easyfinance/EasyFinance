@@ -290,13 +290,17 @@ class Info_Model
      */
     public function init() {
         // Доходы за прошедший месяц
-        $sql = "SELECT SUM(money) FROM operation WHERE user_id = ? AND drain = 0 AND transfer = 0
-            AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
+        $sql = "SELECT SUM(o.money) FROM accounts a
+            LEFT JOIN operation o ON a.account_id = o.account_id
+            WHERE o.user_id = ? AND o.drain = 0 AND o.transfer = 0
+            AND o.`date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
         $this->input['profit']   = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
 
         // Расходы за прошедший месяц
-        $sql = "SELECT ABS(SUM(money)) FROM operation WHERE user_id = ? AND drain = 1 AND transfer = 0
-            AND `date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
+        $sql = "SELECT ABS(SUM(o.money)) FROM accounts a
+            LEFT JOIN operation o ON a.account_id = o.account_id
+            WHERE o.user_id = ? AND o.drain = 1 AND o.transfer = 0
+            AND o.`date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
         $this->input['drain']    = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
 
         // Бюджет за прошедший месяц

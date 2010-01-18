@@ -72,6 +72,9 @@ easyFinance.models.category = function(){
             $.get(LIST_URL, '',function(data) {
                 _categories = data;
                 _htmlDecodeAll();
+
+                $(document).trigger('categoriesLoaded');
+
                 if (typeof param1 == 'function')
                     param1(_this);
             }, 'json');
@@ -93,6 +96,8 @@ easyFinance.models.category = function(){
             _categories.user[id].parent = parent == "" ? 0 : parent;
             _categories.user[id].type = type;
             _categories.user[id].system = system;
+
+            $(document).trigger('categoryAdded');
 
 //            _sortUserCategories();
 
@@ -128,6 +133,8 @@ easyFinance.models.category = function(){
                 }
             }
 
+            $(document).trigger('categoryEdited');
+
             callback(_categories.user[id]);
         });
     }
@@ -135,7 +142,9 @@ easyFinance.models.category = function(){
     function deleteById(id, callback){
         $.post(DELETE_URL, {id:id}, function(){
                 delete _categories.user[id];
-                
+
+                $(document).trigger('categoryDeleted');
+
                 callback();
             }
             , 'json'

@@ -110,6 +110,9 @@ class Operation_Model {
                 $this->errorData['account'][] = 'Не выбран счёт';
             }
         }
+        $acc = $this->db->query("SELECT count(*) as co FROM accounts WHERE account_id=?",$_POST['account']);
+        if ( $acc[0]['co'] != 1 )
+            $this->errorData['account'][] = 'Счёта не существует';
 
         // Проверяем сумму
         if (in_array('amount', $params) or count($params) == 0) {
@@ -127,10 +130,14 @@ class Operation_Model {
                 $valid['toAccount'] = (int)@$_POST['toAccount'];
                 if (empty ($valid['target']))
                     if (empty ($valid['toAccount']))
-                        $this->errorData['category'][] = 'Нужно указать категорию';
+                        $this->errorData['category'][] = 'Нужно указать категорию';               
             }
         }
-
+        if ( ($valid['type'] == 0) or ($valid['type'] == 1) ){
+                $cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND visible=1", $_POST['category']);
+                    if ( $cat[0]['co'] != 1 )
+                        $this->errorData['category'][] = 'Категории не существует!!!';
+        }
         // Проверяем дату
         if (in_array('date', $params) or count($params) == 0) {
             $valid['date'] = trim(formatRussianDate2MysqlDate(@$_POST['date']));
@@ -513,7 +520,7 @@ class Operation_Model {
         // это операции со счётами
         $sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, ".
         " o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-            o.imp_id AS moneydef, o.exchange_rate AS curs, o.type AS accountto_currency_id".
+            o.imp_id AS moneydef, o.exchange_rate AS curs, o.type AS accountto_currency_id, dt_create".
         " FROM operation o ".
         " WHERE o.user_id = " . Core::getInstance()->user->getId();
             if((int)$currentAccount > 0) {
@@ -547,7 +554,7 @@ class Operation_Model {
         //это переводы на фин цель
         $sql .= " UNION ".
         " SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, ".
-        " tt.category_id, t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, NULL ".
+        " tt.category_id, t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, NULL, dt_create ".
         " FROM target_bill t ".
         " LEFT JOIN target tt ON t.target_id=tt.id ".
         " WHERE t.user_id = " . Core::getInstance()->user->getId() . 
@@ -573,7 +580,7 @@ class Operation_Model {
             if (!is_null($sumTo)) {
                 $sql .= " AND ABS(t.money) <= " . $sumTo;
             }
-        $sql .= " ORDER BY dnat DESC, id ";
+        $sql .= " ORDER BY dnat DESC, dt_create DESC ";
 
         $accounts = Core::getInstance()->user->getUserAccounts();
         $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom,
@@ -603,7 +610,13 @@ class Operation_Model {
                     $val['cat_name'] = "Отпуск";
                 if (($val['cat_id']) == 4)
                     $val['cat_name'] = "Фин.подушка";
-                if (($val['cat_id']) == 5)//*/
+                if (($val['cat_id']) == 5)
+                    $val['cat_name'] = "Свадьба";
+                if (($val['cat_id']) == 6)
+                    $val['cat_name'] = "Быт. техника";
+                if (($val['cat_id']) == 7)
+                    $val['cat_name'] = "Компьютер";
+                if (($val['cat_id']) == 8)//*/
                     $val['cat_name'] = "Прочее";
             }
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться

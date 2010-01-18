@@ -235,6 +235,10 @@ easyFinance.widgets.accountsJournal = function(){
                         <tr>',
             s='';
 
+            var curr = res['currency'];
+            var num = curr['defa'];
+            //debugger;
+
         // формирует массив с таблицей счетов по группам
         for (var key in account_list )
         {
@@ -243,6 +247,7 @@ easyFinance.widgets.accountsJournal = function(){
                 colorClass = 'sumRed';
             else
                 colorClass = account_list[key]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
+            
 
             if (!isNaN(type)){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
@@ -254,9 +259,9 @@ easyFinance.widgets.accountsJournal = function(){
 
                 str = str + '<td class="cur">' + res.currency[account_list[key]["currency"]]['text'] + '</td>';
                 if (type == 2)//для долга выводим с противоположным знаком
-                    str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(-account_list[key]["defCur"]) + '</td>';
+                    str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(-account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
                 else
-                    str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["defCur"]) + '</td>';
+                    str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
                 summ[type] = summ[type]+account_list[key]['defCur'];
                 if (!val[account_list[key]['currency']]) {
                     val[account_list[key]['currency']]=0;

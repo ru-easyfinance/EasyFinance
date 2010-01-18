@@ -68,7 +68,19 @@ $(document).ready(function(){
         if (confirm("Вы уверены, что хотите удалить финансовую цель '"+$(this).closest('.object .descr a').text()+"'?")) {
             $.post('/targets/del/', {
                 id: o.attr('tid')
-            }, function(){
+            }, function(data){
+                /*
+                debugger;
+                for (var k in res.user_targets) {
+                    if (res.user_targets[k].id)
+                        if (res.user_targets[k].id == o.attr('tid'))
+                            delete res.user_targets[k];
+                }
+
+                delete res.user_targets[o.attr('tid')];
+                easyFinance.widgets.operationEdit.refreshTargets();
+                */
+               
                 o.remove();
                 $.jGrowl("Финансовая цель удалена", {theme: 'green'});
             }, 'json');
@@ -280,6 +292,11 @@ $(document).ready(function(){
             }, function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
 //                if (data.length == 0) {
+                    //if (data.user_targets)
+                    //    res.user_targets = data['user_targets'];
+                    //debugger;
+                    //easyFinance.widgets.operationEdit.refreshTargets();
+
                     $('#tpopup').dialog('close');
                     $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
                     loadTargets(data['user_targets']);

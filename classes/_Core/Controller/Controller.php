@@ -217,18 +217,53 @@ abstract class _Core_Controller
                 }
             }
         }
+        //валюты
         $currency = array();
-        foreach ($user->getUserCurrency() as $k => $v) {
-            //if ($k == 4 ) $v['value']/=10; //курс для гривен в 10 раз меньше
-            //if ($k == 11) $v['value']/=10; //курс для юаней в 10 раз меньше.
-            //if ($k == 19) $v['value']/=100;//курс для иены в 100 раз меньше.
-            $currency[$k] = array(
-                'cost' => $v['value'],
+        try {
+            $get = $user->getCur();
+        } catch ( Exception $e) {
+            $get = 0;
+        }
+        $cur_user_string = $get['li'];
+        $cur_user_array = unserialize($cur_user_string);
+        $curdef = $get['def'];
+        $curfrom = $curdef;//валюта которую подтягиваем из базы
+        //die ( print_r ($curdef) );
+        //die ( $curfrom );
+        if ($curdef != 4)
+            if ($curdef != 6)
+                if ($curdef !=9)
+                    $curfrom = 1;
+        /*$currency[1] = array(
+            'cost'=>1,
+            'name'=>'RUB',
+            'text'=>'руб.'
+            );*/
+        try {
+            $curr = $user->getCurrencyByDefault($cur_user_array, $curfrom);
+        } catch ( Exception $e) {
+            $curr = 0;
+        }
+        $delimeter = 1; //делитель в курсе
+        if ($curdef != 4)
+            if ($curdef != 6)
+                if ($curdef !=9){
+                    foreach ($curr as $k => $v){
+                        if ( $v['id'] == $curdef )
+                            $delimeter = $v['value'];
+                    }
+                }
+        foreach ($curr as $k => $v) {
+
+            $currency[$v['id']] = array(
+                'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
                 'name' => $v['charCode'],
                 'text' => $v['abbr'],
                 'progress' => ''
             );
-        }
+        }//*/
+        $currency['defa'] = (int)$get['def'];//валюта по умолчанию
+
 
         try {
             $info = new Info_Model();

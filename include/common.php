@@ -13,6 +13,13 @@ if (DEBUG) {
     require_once SYS_DIR_LIBS . 'external/FirePHPCore/FirePHP.class.php';
 }
 
+
+// Подключение нового ядра
+include_once('../classes/_Core/_Core.php');
+new _Core();
+
+spl_autoload_register('__autoload');
+
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 require_once SYS_DIR_LIBS . 'external/smarty/Smarty.class.php';
@@ -81,7 +88,10 @@ else
 		$tpl->append('js', $js);
 	}
 }
+
+$tpl->append('js', 'flowplayer-3.1.4.min.js');
 $tpl->append('js', 'feedback.js');
+$tpl->append('js', 'widgets/help.widget.js');
 $tpl->append('js', 'models/accounts.model.js');
 $tpl->append('js', 'models/category.model.js');
 $tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');
@@ -124,12 +134,6 @@ Core::getInstance()->js = array(
 
 // Почта
 include_once "../core/external/Swift/swift_required.php";
-
-// Подключение нового ядра
-include_once('../classes/_Core/_Core.php');
-new _Core();
-
-spl_autoload_register('__autoload');
 
 $mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
 	//->setUsername('info@easyfinance.ru')

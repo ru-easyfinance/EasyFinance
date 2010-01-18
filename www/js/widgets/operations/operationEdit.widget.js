@@ -71,9 +71,6 @@ easyFinance.widgets.operationEdit = function(){
         }
         $('.op_tags_could').html(str+'</ul>');
         $('.op_tags_could li').hide();
-
-        //$(document).bind('accountsLoaded', _refreshAccounts);
-        //$(document).bind('accountDeleted', _refreshAccounts);
     }
 
     function _sexyFilter (input, text){
@@ -237,10 +234,6 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _changeOperationType() {
-        // запоминаем выбранную ранее категорию,
-        // чтобы при переключении типа операции
-        // заново её выбрать, по возможности
-
         // Расход или Доход
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
@@ -273,8 +266,6 @@ easyFinance.widgets.operationEdit = function(){
 
                 return str;
             }
-
-
 
             var recent = _modelCategory.getRecentCategories();
             var recentFiltered = {};
@@ -333,16 +324,6 @@ easyFinance.widgets.operationEdit = function(){
         //Перевод на финансовую цель
         } else if (_selectedType == "4") {
             $("#op_target_fields").show();
-
-            $('#op_target').remove('option');
-            var o = '';
-            var t;
-            for (var v in res['user_targets']) {
-                t = res['user_targets'][v];
-                if (t['done']=='0')
-                o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
-                    '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
-            }
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
 
             if (!_sexyTarget) {
@@ -373,10 +354,7 @@ easyFinance.widgets.operationEdit = function(){
             }
 
             // обновляем опции
-            $('#op_target').html(o);
-            $.sexyCombo.changeOptions('#op_target');
-            // выбираем первую опцию по умолчанию
-            _sexyTarget.setComboValue(_sexyTarget.options[0].text); 
+            refreshTargets();
         }
     }
 
@@ -600,28 +578,58 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
-    function _refreshAccounts() {
+    function refreshAccounts() {
         var data = $.extend({}, easyFinance.models.accounts.getAccounts());
-
-        if (!data){
+        if (!data)
             data = {};
-        }
 
         var htmlAccounts = '';
         for (key in data )
         {
-            htmlAccounts = htmlAccounts + '<option value="' + key + '" '
-                + 'currency="' + res.currency[data[key].currency].text + '" ' +
-                + '">' + data[key].name + '</option>';
+            htmlAccounts = htmlAccounts + '<option value="' + key + '">'
+                + data[key].name + '</option>';
         }
 
         $("#op_account").html(htmlAccounts);
         $.sexyCombo.changeOptions("#op_account");
-        setAccount(_selectedAccount);
+        // выбираем первую опцию по умолчанию
+        _sexyAccount.setComboValue(_sexyAccount.options[0].text);
 
-        $("#op_AccountForTransfer").html(htmlAccounts);
-        $.sexyCombo.changeOptions("#op_AccountForTransfer");
-        setTransfer(_selectedTransfer);
+        if (_sexyTransfer) {
+            $("#op_AccountForTransfer").html(htmlAccounts);
+            $.sexyCombo.changeOptions("#op_AccountForTransfer");
+            // выбираем первую опцию по умолчанию
+            _sexyTransfer.setComboValue(_sexyTransfer.options[0].text);
+        }
+    }
+
+    function refreshCategories() {
+        _changeOperationType();
+        // выбираем первую опцию по умолчанию
+        _sexyCategory.setComboValue(_sexyCategory.options[0].text);
+    }
+
+    function refreshTargets() {
+        if (!_sexyTarget)
+            return;
+
+        var data = res.user_targets;
+        if (!data)
+            data = {};
+
+        var t;
+        var o = '';
+        for (var v in res['user_targets']) {
+            t = res['user_targets'][v];
+            if (t['done']=='0')
+            o += '<option value="'+t['id']+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
+                '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+        }
+
+        $("#op_target").html(o);
+        $.sexyCombo.changeOptions("#op_target");
+        // выбираем первую опцию по умолчанию
+        _sexyTarget.setComboValue(_sexyTarget.options[0].text);
     }
 
     // public variables
@@ -645,6 +653,15 @@ easyFinance.widgets.operationEdit = function(){
 
         // setup form
         _initForm();
+
+        $(document).bind('accountsLoaded', refreshAccounts);
+        $(document).bind('accountAdded', refreshAccounts);
+        $(document).bind('accountDeleted', refreshAccounts);
+
+        $(document).bind('categoriesLoaded', refreshCategories);
+        $(document).bind('categoryAdded', refreshCategories);
+        $(document).bind('categoryEdited', refreshCategories);
+        $(document).bind('categoryDeleted', refreshCategories);
 
         return this;
     }
@@ -692,10 +709,13 @@ easyFinance.widgets.operationEdit = function(){
      * Функция заполняет форму данными
      * @param data данные для заполнения
      */
-    function fillForm(data) {
+    function fillForm(data, isCopy) {
         //clearForm();
 
-        $('#op_id').val(data.id);
+        if (isCopy)
+            $('#op_id').val('');
+        else
+            $('#op_id').val(data.id);
 
         var typ = '0';
         if (data.tr_id != null && data.tr_id != '') {
@@ -770,6 +790,9 @@ easyFinance.widgets.operationEdit = function(){
         setAccount: setAccount,
         setTransfer: setTransfer,
         showForm: showForm,
-        fillForm: fillForm
+        fillForm: fillForm,
+        refreshAccounts: refreshAccounts,
+        refreshCategories: refreshCategories,
+        refreshTargets: refreshTargets
     };
 }(); // execute anonymous function to immediatly return object

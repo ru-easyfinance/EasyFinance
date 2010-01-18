@@ -308,7 +308,8 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .info_block dl dt.twitter span { padding-right: 63px; background-position: 100% -155px; }
 .info_block dl dd ul li { margin-bottom: 5px; padding-left: 17px; background: url('/img/i/li.gif') no-repeat 0 9px; }
 .info_block dl dd ul li a { color: #474747; }
-.info_block .addmessage, #footer .addmessage { display: block; position: fixed; top: 35%; right: -10px; width: 28px; height: 161px; text-indent: -999px; overflow: hidden; background: url('/img/i/button_addmsg.png') no-repeat 0 0; }
+#footer .addmessage { display: block; position: fixed; top: 35%; left: 0px; width: 28px; height: 161px; text-indent: -999px; overflow: hidden; cursor: pointer; z-index:1000; background: url('/img/i/button_addmsg.png') no-repeat 0 0; }
+#footer .btnHelp { display: block; position: fixed; top: 35%; right: 0px; width: 28px; height: 161px; text-indent: 100px; overflow: hidden; cursor: pointer; z-index:1000; background: url('/img/i/btnHelp.png') no-repeat 0 0; }
 
 .menu31 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
 
@@ -1242,7 +1243,7 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 
 ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/icons.gif') no-repeat -20px -370px; }
 
-#popupreport { display: none; position: absolute; bottom: 0; left: 12px; width: 450px; height: 450px; z-index: 1000; }
+#popupreport { display: none; position: fixed; top: 20%; left: 0px; width: 450px; height: 450px; z-index: 1000; }
 #popupreport .bg { position: absolute; top: 0; left: 0; width: 450px; height: 450px; z-index: 0; background: url('/img/i/ramka4.png') no-repeat 0 0; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/i/ramka4.png", sizingMethod="crop"); }
 #popupreport .inside { position: relative; padding: 18px 0 0 35px; z-index: 2; }
 #popupreport .inside h2 { margin-bottom: 5px; font-size: 16px; color: #2bb4d6; font-weight: bold; background: url('/img/i/icons.gif') no-repeat 132px -545px; }
@@ -1405,7 +1406,6 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .search label { display: block; position: absolute; top: 2px; left: 14px; color: #a7a7a7; }
 #footer .creator { position: absolute; top: 32px; right: 5px; width: 210px; padding-bottom: 19px; font-size: 10px; line-height: 11px; color: #7f7f7f; text-align: right; background: url('/img/i/nota.gif') no-repeat 100% 100%; }
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
-#footer .addmessage { cursor: pointer; left: 0px;z-index:1000 }
 #footer .certificate { position: absolute; left: 700px; top: 10px; }
 
 #footer .footerTextsArea { margin: 80px 0px 0px 8px; border-top: 1px solid #E0E3DE; padding-top: 12px; }
@@ -1440,9 +1440,11 @@ div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:abso
 div.w_dialog div.w_d_head{width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
 div#dialog.w_dialog div.w_d_body{width:400px; height:auto;position:relative; padding-left: 27px; background: transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;}
 div.w_dialog div.w_d_foot{width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
-#popupreport div.w_d_head{width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
-#popupreport div.w_d_body{width:auto; height:auto;position:relative;left:1px;padding-left:20px;  background: transparent url(/img/i/wel.msg.body.png) repeat-y scroll 0 0;}
-#popupreport div.w_d_foot{width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
+#popupreport div.w_d_head {width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
+#popupreport div.w_d_body {width:auto; height:auto;position:relative;left:1px;padding-left:20px;  background: transparent url(/img/i/wel.msg.body.png) repeat-y scroll 0 0;}
+#popupreport div.w_d_foot {width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
+
+#popupHelp { margin: 10px; }
 
 div.w_dialog .close{ cursor: pointer; top:5px; right:-260px; position: relative; background:transparent url(/img/i/jQuery/ico_close.gif) no-repeat scroll 50% 50%;width:25px;height:25px }
 
@@ -1882,6 +1884,9 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     clear: both;
     padding-top: 20px;
 }
+.feedback td{
+    vertical-align: middle
+}
 .feedback .banner{
     position: relative;
     float : left;
@@ -1891,8 +1896,11 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 }
 .feedback .text{
     position: relative;
-    margin-left: 300px;
 }
+.feedback .text p{
+    margin: 0;
+}
+
 .feedback .text a{
     position: relative;
     float : right;
