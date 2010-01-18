@@ -52,6 +52,8 @@ var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
 
+var isIframe = false;
+
 var pathtoid = {
     '/accounts/' :'m2',
     '/budget/':'m3',
@@ -173,9 +175,13 @@ function MakeOperation(){
 //запланировано 
 
 $(document).ready(function() {
+    if (location.hostname.indexOf("iframe.") != -1)
+        isIframe = true;
+
     // # тикет 625
     // инициализируем виджет видео-гида
-    easyFinance.widgets.help.init('#popupHelp', true);
+    if (!isIframe)
+        easyFinance.widgets.help.init('#popupHelp', true);
 
     // по умолчанию устанавливаем видео,
     // которое соответствует содержанию страницы
