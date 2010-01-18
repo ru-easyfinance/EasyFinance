@@ -176,7 +176,7 @@ class Account_Model
         //загрузка дополнительных параметров по каждому из счетов
         foreach ($accounts as $k=>$v){
             //$sql = "SELECT field_id, field_value FROM Acc_Values WHERE account_id=?";
-            $sql = "SELECT f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
+            $sql = "SELECT DISTINCT f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
                 WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
                 AND v.account_id=?";
             $dop = $this->db->query($sql, $v['account_id']);// получаем дополнительные поля
