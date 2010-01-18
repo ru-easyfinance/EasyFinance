@@ -262,7 +262,7 @@ easyFinance.widgets.accountsJournal = function(){
                     str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(-account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
                 else
                     str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
-                summ[type] = summ[type]+account_list[key]['defCur'];
+                summ[type] = summ[type] + (account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']);
                 if (!val[account_list[key]['currency']]) {
                     val[account_list[key]['currency']]=0;
                 }
