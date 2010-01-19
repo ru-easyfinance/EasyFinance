@@ -66,6 +66,7 @@ $counters['users'] += $stmt->fetchColumn();
 
 
 // Подключаем конфиг
+define ('INDEX', true);
 require_once dirname(dirname(__FILE__)) . '/include/config.php';
 
 // Сохраняем всю эту порнографию

@@ -10,6 +10,10 @@ define ('SEO_LOGIN', 'userseo');
  */
 define ('SEO_PASS', 'onuevpwe52ky');
 
+// Подключение конфигурации
+define ('INDEX', true);
+include(dirname(dirname(dirname(__FILE__))) . '/include/config.php');
+
 /**
  * Путь до файла с массивом сео
  */
