@@ -13,7 +13,7 @@ define ('SEO_PASS', 'onuevpwe52ky');
 /**
  * Путь до файла с массивом сео
  */
-define ('SEO_FILENAME', '../seo.php');
+define ('SEO_FILENAME', DIR_SHARED . 'seo.php');
 
 class SeoText{
 

@@ -55,9 +55,9 @@ abstract class _Core_Controller
 	 */
 	protected function includeSeoText()
 	{
-		if(file_exists('admin/seo.php'))
+		if(file_exists( DIR_SHARED . 'seo.php'))
 		{
-			include ('admin/seo.php');
+			include ( DIR_SHARED . 'seo.php');
 		}
 		$this->tpl->assign('seotext', $texts);
 	}
