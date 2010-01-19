@@ -513,7 +513,7 @@ class User
         $mas = "'".implode("','", $mas)."'";
         $sql = "SELECT c.cur_id as id, dai.currency_sum as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
             FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
-            AND dai.currency_from = ?
+            AND dai.currency_from = ? AND currency_date = NOW()
             AND c.cur_id IN ($mas)";
         $li = $this->db->query($sql, $def);
         $sql = "SELECT $def as id, 1 as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
