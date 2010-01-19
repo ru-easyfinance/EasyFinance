@@ -48,7 +48,7 @@ $(document).ready(function(){
                     break;
                 case 'back':
                     val = calculator.find('input').val();
-                    calculator.find('input').val(val.substr(0,val.length-2));
+                    calculator.find('input').val(val.substr(0,val.length-1));
                     break;
                 case 'calc':
                     val = calculator.find('input').val();
