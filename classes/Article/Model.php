@@ -49,7 +49,7 @@ class Article_Model extends _Core_Abstract_Model
 		return $num;
 	}
 	
-	public static function loadRange( $start, $count, $orderBy = 'date', $asc = true )
+	public static function loadRange( $start, $count, $orderBy = 'date', $asc = false )
 	{
 		if( !is_int( $start ) )
 		{
