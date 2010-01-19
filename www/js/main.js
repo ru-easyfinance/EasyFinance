@@ -209,7 +209,7 @@ $(document).ready(function() {
         if (page_mid)
             easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
         else
-            easyFinance.widgets.help.showVideo("newOperation");
+            easyFinance.widgets.help.showVideo("newAccount");
     });
 
     //#538

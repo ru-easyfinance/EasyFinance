@@ -13,6 +13,10 @@ easyFinance.widgets.help = function(){
     var _strVideoPrefix = "/upload/video/help/";
 
     var _videos = {
+        "newAccount" : {
+            title: "Добавление счёта",
+            file: "newAccount.mp4"
+        },
         "newOperation" : {
             title: "Добавление операции",
             file: "newOperation.mp4"
@@ -20,10 +24,6 @@ easyFinance.widgets.help = function(){
         "newCategory" : {
             title: "Добавление категории",
             file: "newCategory.mp4"
-        },
-        "newAccount" : {
-            title: "Добавление счёта",
-            file: "newAccount.mp4"
         },
         "newTarget" : {
             title: "Создание финансовой цели",
