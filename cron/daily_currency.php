@@ -157,6 +157,8 @@
     foreach ( $dom->getElementsByTagName('item') as $elem ) {
         if (!empty ($sql)) $sql .= ',';
         $kod3 = $elem->getElementsByTagName('char3')->item(0)->nodeValue;
+        if ($kod3 == 'AZM')
+            $kod3 = 'AZN';// хак для хохдяндского банка. у них манат не правильно. в базу пишу в соответсвии с вики и ЦБР, кстати
         $getId = "SELECT cur_id FROM currency WHERE cur_char_code=?";
         $re = $db->query($getId, $kod3);
         $id = $re[0]['cur_id'];
