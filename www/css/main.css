@@ -1885,11 +1885,12 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     padding-top: 20px;
 }
 .feedback td{
-    vertical-align: middle
+    vertical-align: middle;
+    width: 100%
 }
 .feedback .banner{
     position: relative;
-    width : 300px;
+    width : 320px;
     overflow: hidden;
     text-align: center;
 }
