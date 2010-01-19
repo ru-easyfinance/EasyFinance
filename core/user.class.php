@@ -511,11 +511,13 @@ class User
     {
         //die ( print_r( $mas ) );
         $mas = "'".implode("','", $mas)."'";
+        $sql = "SELECT MAX(currency_date) as last FROM daily_currency";
+        $lastdate = $this->db->query($sql);
         $sql = "SELECT c.cur_id as id, dai.currency_sum as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
             FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
-            AND dai.currency_from = ? AND currency_date = NOW()
+            AND dai.currency_from = ? AND currency_date = ?
             AND c.cur_id IN ($mas)";
-        $li = $this->db->query($sql, $def);
+        $li = $this->db->query($sql, $def, $lastdate[0]['last']);
         $sql = "SELECT $def as id, 1 as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
             FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
             AND c.cur_id = ?
