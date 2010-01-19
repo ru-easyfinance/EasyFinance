@@ -49,7 +49,7 @@
 			<div class="article">
 				<div class="date">
 					{if !empty($article.authorUrl)}
-					<a href="{$article.authorUrl}">{$article.authorName}</a>
+					<noindex><a href="{$article.authorUrl}" target="_blank" rel="nofollow">{$article.authorName}</a></noindex>
 					{else}
 					{$article.authorName}
 					{/if}
