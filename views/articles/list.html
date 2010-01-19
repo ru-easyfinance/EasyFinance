@@ -44,9 +44,7 @@
 <div class="ramka2">
 	<div class="cct"></div>
 	<div class="mid general_cont">
-		<div style='margin:6px 23px 0 20px' align="justify">
-			{section name=foo start=10 loop=20 step=2}
-			
+		<div style='margin:6px 23px 0 20px' align="justify">			
 			{foreach from=$articles item=article}
 			{assign var=url value=/articles/`$article.id`}
 			<div class="article">
@@ -61,26 +59,29 @@
 					<h2>{$article.title}</h2>
 				</a>
 				<div class="announce">
+					{if !empty($article.imageMain)}
 					<a target="_blank" href="{$url}">
 						<img src="/img/feedback/f5.png" alt="{$article.id}" title="Журнал" />
 					</a>
+					{/if}
         					<p>{$article.announce}</p>
 				</div>
 				<div class="additional">
+					{if !empty($article.tags.0)}
 					<span>
 						<a href="/articles/tag/asdas">уроды</a>, 
 						<a href="/articles/tag/asda">кризис</a>, 
 						<a href="/articles/tag/sdas">доллар</a>
 					</span>
+					{/if}
 					<div class="readMore">
-						<a target="_blank" href="{$url}"> Читать статью полностью </a>
+						<a href="{$url}"> Читать статью полностью </a>
 					</div>
 				</div>
 			</div>
-			
 			{/foreach}
-			{/section}
 			
+			{*
 			<ul class="pager">
 				<li><i>< пред.</i></li>
 				<li class="active">
@@ -95,6 +96,7 @@
 				<li><a href="/catalog/page/45/">45</a></li>
 				<li class="last"><a href="/catalog/page/2/">след. ></a></li>
 			</ul>
+			*}
 		</div>
 	</div>
 	<div class="ccb"></div>

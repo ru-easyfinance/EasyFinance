@@ -58,18 +58,22 @@
 					<h2>{$article.title}</h2>
 				</a>
 				<div class="announce">
+					{if !empty($article.imageMain)}
 					<a target="_blank" href="{$url}">
 						<img src="/img/feedback/f5.png" alt="{$article.id}" title="Журнал" />
 					</a>
+					{/if}
         					<p>{$article.announce}</p>
         					<p>{$article.body}</p>
 				</div>
 				<div class="additional">
+					{if !empty($article.tags.0)}
 					<span>
 						<a href="/articles/tag/asdas">уроды</a>, 
 						<a href="/articles/tag/asda">кризис</a>, 
 						<a href="/articles/tag/sdas">доллар</a>
 					</span>
+					{/if}
 					<div class="readMore">
 						<a target="_blank" href="{$url}"> Читать статью полностью </a>
 					</div>
