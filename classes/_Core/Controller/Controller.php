@@ -306,6 +306,13 @@ abstract class _Core_Controller
             'category' => $cats,
             'informers' => $infoa
             );
+            
+            if( Core::getInstance()->user->getId() > 0 )
+            {
+            	$res['user'] = array(
+            		'name' => Core::getInstance()->user->getName(),
+            	);
+            }
         
         Core::getInstance()->tpl->assign('res', json_encode($res));
     }
