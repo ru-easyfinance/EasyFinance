@@ -72,6 +72,7 @@
 			{assign var=url value=/articles/`$article.id`}
 			<div class="article">
 				<div class="date">
+					{$article.date}
 					{if !empty($article.authorUrl)}
 					<noindex><a href="{$article.authorUrl}" target="_blank" rel="nofollow">{$article.authorName}</a></noindex>
 					{else}
