@@ -69,7 +69,7 @@ class Articles_Controller extends _Core_Controller
 		$this->tpl->assign( 'articles', $container->getArray() );
 		
 		// Постраничная навигация
-		$pager = Helper_Pager::generateSimple( $pagesTotal*20, $pageNum, '/articles/page/' );
+		$pager = Helper_Pager::generateSimple( $pagesTotal, $pageNum, '/articles/page/' );
 		
 		$this->tpl->assign( 'pager', $pager );
 		
