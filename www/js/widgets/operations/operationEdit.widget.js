@@ -633,7 +633,7 @@ easyFinance.widgets.operationEdit = function(){
         for (var v in res['user_targets']) {
             t = res['user_targets'][v];
             if (t['done']=='0')
-            o += '<option value="'+t['id']+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
+            o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
                 '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
         }
 
