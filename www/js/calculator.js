@@ -3,7 +3,7 @@ function calculate(funcStr){
         return '0.00';
     }
     funcStr = funcStr.toString().replace(/[^0-9\.\-\+\/\*]/gi,'') || '0';
-    funcStr = funcStr.replace(/[\,]/gi, '.').replace(/[\.\.]/gi, '.').replace(/[\+\+]/gi, '+').replace(/[\*\*]/gi, '*').replace(/[\/\/]/gi, '/').replace(/[\-\-]/gi, '-');
+    funcStr = funcStr.replace(/[\,]/gi, '.').replace(/[\.\.]/gi, '.').replace(/[\+\+]/gi, '+').replace(/[\*\*]/gi, '*').replace(/[\/\/]/gi, '/').replace(/[\-\-]/gi, '-').replace(/^\-/, '0-');
     if (funcStr.match(/([0-9]+(\.{1}[0-9]+)?[\+\-\*\/]{1}){0,}[0-9]+(\.{1}[0-9]+)?/)[0] != funcStr){
         return funcStr;
     }
