@@ -194,6 +194,7 @@ $(document).ready(function() {
     // по умолчанию устанавливаем видео,
     // которое соответствует содержанию страницы
     var tabVideo = {
+
         "m0" : "newOperation",
         "m1" : "newOperation",
         "m2" : "newAccount",
@@ -203,7 +204,10 @@ $(document).ready(function() {
         "m6" : "newOperation"
     };
 
-    easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+    if (page_mid)
+        easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+    else
+        easyFinance.widgets.help.showVideo("newOperation");
 
     $('#footer .btnHelp').click(function(){
         $('#popupHelp').dialog('open');
