@@ -42,6 +42,11 @@ class Article
 		
 	}
 	
+	public function getDate()
+	{
+		return $this->model->date;
+	}
+	
 	public function getAnnounce()
 	{
 		return $this->model->announce;
@@ -71,7 +76,7 @@ class Article
 	{
 		return array(
 			'id' 		=> $this->getId(),
-			'date'		=> '',
+			'date'		=> Helper_Date::getFromString( $this->getDate() ),
 			'authorName'	=> $this->getAuthorName(),
 			'authorUrl'	=> $this->getAuthorUrl(),
 			'title' 		=> $this->getTitle(),
