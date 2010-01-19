@@ -174,6 +174,14 @@ function MakeOperation(){
 
 //запланировано 
 
+function isLogged(){
+    if (res)
+        if (res.user)
+            return true;
+
+    return false;
+}
+
 $(document).ready(function() {
     if (location.hostname.indexOf("iframe.") != -1)
         isIframe = true;
@@ -264,9 +272,12 @@ $(document).ready(function() {
 
     // LOAD MODELS
     // modified by Jet 29.10.2009, ticket 337.
-    easyFinance.models.accounts.load(res.accounts, function(model) {
-        easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
-    });
+
+    if (isLogged()) {
+        easyFinance.models.accounts.load(res.accounts, function(model) {
+            easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
+        });
+    }
 
     // Если пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){
