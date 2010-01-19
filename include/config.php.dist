@@ -11,8 +11,9 @@ define('SYS_DIR_LIBS',		SYS_DIR_ROOT."/core/");
 define('SYS_DIR_INC',		SYS_DIR_ROOT."/include/");
 define('SYS_DIR_MOD',		SYS_DIR_ROOT."/modules/");
 define('SYS_DIR_HTML', 		SYS_DIR_ROOT."/templates/");
-define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
+
 define('SYS_DIR_CACHE', 		"${project.basedir}/tmp");
+define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
 
 
 define('DIR_SHARED', 		"${project.shared.dir}" . DIRECTORY_SEPARATOR);
