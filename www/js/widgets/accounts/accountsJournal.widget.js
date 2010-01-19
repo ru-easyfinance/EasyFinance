@@ -253,16 +253,16 @@ easyFinance.widgets.accountsJournal = function(){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
                 str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
                 if (type == 2) //для долга печатаем с противоположным знаком
-                    str = str + '<td class="totalBalance ' + colorClass + '">' + formatCurrency(-account_list[key]["totalBalance"]) + '</td>';
+                    str = str + '<td class="totalBalance ' + colorClass + '">' + formatCurrency(-account_list[key]["totalBalance"] ) + '</td>';
                 else
-                    str = str + '<td class="totalBalance ' + colorClass + '">' + formatCurrency(account_list[key]["totalBalance"]) + '</td>';
+                    str = str + '<td class="totalBalance ' + colorClass + '">' + formatCurrency(account_list[key]["totalBalance"] ) + '</td>';
 
                 str = str + '<td class="cur">' + res.currency[account_list[key]["currency"]]['text'] + '</td>';
                 if (type == 2)//для долга выводим с противоположным знаком
                     str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(-account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
                 else
                     str = str + '<td class="def_cur ' + colorClass + '">' + formatCurrency(account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
-                summ[type] = summ[type]+account_list[key]['defCur'];
+                summ[type] = summ[type] + (account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']);
                 if (!val[account_list[key]['currency']]) {
                     val[account_list[key]['currency']]=0;
                 }
@@ -287,7 +287,7 @@ easyFinance.widgets.accountsJournal = function(){
                     //total = total-summ[key];
 
                 s='<div><strong class="title">'+ g_name[key]
-                    + ':</strong> ' + formatCurrency(tofloat(summ[key]))
+                    + ':</strong> ' + formatCurrency(tofloat( summ[key] ))
                     + ' ' + d_cur+ '<table  class="noborder">' + head_tr+arr[key]
                     + '</table></div>';
                 $('#operation_list').append(s);

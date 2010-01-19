@@ -83,10 +83,7 @@ easyFinance.widgets.operationEdit = function(){
             return false;
     }
 
-    function _initForm(){
-        // for correct sexyCombo initialization
-        $(".op_addoperation").show();
-
+    function _initSexyCombos() {
         var accOptionsData = [];
         var accounts = _modelAccounts.getAccounts();
         for (var key in accounts) {
@@ -104,7 +101,7 @@ easyFinance.widgets.operationEdit = function(){
                 _selectedAccount = this.getHiddenValue();
 
                 _changeAccountForTransfer();
-                
+
                 // reload operation journal
                 if (easyFinance.widgets.operationsJournal)
                     easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
@@ -134,7 +131,7 @@ easyFinance.widgets.operationEdit = function(){
             {value: "2", text: "Перевод со счёта"},
             {value: "4", text: "Перевод на фин. цель"}
         ];
-        
+
         // если есть фин. цели
         //if (res.user_targets)
         //    typeOptionsData.push ( {value: "4", text: "Перевод на фин. цель"} );
@@ -158,6 +155,11 @@ easyFinance.widgets.operationEdit = function(){
         // Tab & Shift+Tab для секси комбо
         var next = {op_type : "#op_category", op_account : "#op_type", op_category : '#op_date'}
         var prev = {op_type : "#op_account", op_account : "#op_category", op_category : '#op_type'}
+    }
+
+    function _initForm(){
+        // for correct sexyCombo initialization
+        //$(".op_addoperation").show();
 
         $('div.combo.sexy input').keypress(function(e){
             if (e.keyCode == 9){
@@ -201,6 +203,10 @@ easyFinance.widgets.operationEdit = function(){
             if($(this).hasClass("act")){
                 _clearForm();
                 $(".op_addoperation").show();
+
+                // если открываем в первый раз, инициализируем комбобоксы
+                if (!_sexyAccount)
+                    _initSexyCombos();
             } else {
                 $(".op_addoperation").hide();
             }
@@ -579,6 +585,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function refreshAccounts() {
+        if (!_sexyAccount)
+            return;
+
         var data = $.extend({}, easyFinance.models.accounts.getAccounts());
         if (!data)
             data = {};
@@ -604,9 +613,11 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function refreshCategories() {
-        _changeOperationType();
-        // выбираем первую опцию по умолчанию
-        _sexyCategory.setComboValue(_sexyCategory.options[0].text);
+        if (_sexyCategory) {
+            _changeOperationType();
+            // выбираем первую опцию по умолчанию
+            _sexyCategory.setComboValue(_sexyCategory.options[0].text);
+        }
     }
 
     function refreshTargets() {
@@ -711,6 +722,9 @@ easyFinance.widgets.operationEdit = function(){
      */
     function fillForm(data, isCopy) {
         //clearForm();
+
+        if (!_sexyAccount)
+            _initSexyCombos();
 
         if (isCopy)
             $('#op_id').val('');

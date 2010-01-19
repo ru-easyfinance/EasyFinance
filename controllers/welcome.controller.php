@@ -25,9 +25,11 @@ class Welcome_Controller extends _Core_Controller
 			'operations'	=> 943132
 		);
 		
-		if( file_exists( SYS_DIR_ROOT . '/include/counters.json' ) )
+		$countersFile = DIR_SHARED . 'counters.json';
+		
+		if( file_exists( $countersFile ) )
 		{
-			$countersJson = (array)json_decode( file_get_contents( SYS_DIR_ROOT . '/include/counters.json' ) );
+			$countersJson = (array)json_decode( file_get_contents( $countersFile ) );
 			
 			if( is_array($countersJson) )
 			{

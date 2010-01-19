@@ -136,10 +136,12 @@ class Login_Model
      * Создаёт дефолтные счета
      * @return void
      */
-    function defaultAccounts() {
+    function defaultAccounts( $uid = 0) {
+        if ( $uid == 0 )
+            $uid = Core::getInstance()->user->getId();
         // Добавляем счёт по умолчанию
         $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`)
-            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".Core::getInstance()->user->getId().")";
+            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.")";
         $aid = Core::getInstance()->db->query($sql);
         $sql = "INSERT INTO account_field_values (`account_fieldsaccount_field_id`, `string_value`, `accountsaccount_id`) VALUES
             ('{$aid}','Кошелёк','67'), ('{$aid}','Мои наличные деньги','68'), ('{$aid}','','69');";
@@ -279,7 +281,7 @@ class Login_Model
 	
 	private function getGenerated()
 	{
-		$usersFile = SYS_DIR_INC . 'generatedUsers.php';
+		$usersFile = DIR_SHARED . 'generatedUsers.php';
 		
 		if( file_exists($usersFile) )
 		{
@@ -317,29 +319,25 @@ class Login_Model
          * @param string $login
          * @return integer
          */
-        public function generateUserByAzbukaLogin($login){
+        public function generateUserByAzbukaLogin($login , $mail){
             $id = 0;//айди сгенерированного пользователя
-            //die($login);
             $pass = sha1($login);
-            //$pass = $login;
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
             $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
-            //if ( $islog[0]['cou'] == 0 )
+            if ( $islog[0]['cou'] == 0 ){
+                $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new, user_created) VALUES
+                    (?, ?, ?, ?, 1, 0, NOW)", $login, 'azbuka_'.$login, $pass, $mail);
+                $id = mysql_insert_id();
+                $this->defaultCategory($id);
+                $this->defaultAccounts($id);
+                 //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
 
-            $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new) VALUES
-                (?, ?, ?, 'easyfinance@easyfinance.ru', 1, 0)", $login, 'azbuka_'.$login, $pass);
-            $id = mysql_insert_id();
-            //$this->defaultCategory($id);
-            //$this->defaultAccounts($id);
-             //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
-            $ch = curl_init();
-            //die("http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
-            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
+                curl_exec($ch);
 
-            curl_exec($ch);
-
-            curl_close($ch);//*/
-
+                curl_close($ch);//*/
+            }
                 return $id;
         }
 }

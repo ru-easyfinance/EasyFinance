@@ -47,7 +47,7 @@ class _Core_Cache implements _Core_Cache_Interface
 	
 	public function __construct( $keyPrefix = false, $enabled = true )
 	{
-		self::$instance = $self;
+		self::$instance = $this;
 		
 		$this->enabled 	= (bool)$enabled;
 		$this->keyPrefix 	= $keyPrefix;

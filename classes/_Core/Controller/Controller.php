@@ -55,9 +55,9 @@ abstract class _Core_Controller
 	 */
 	protected function includeSeoText()
 	{
-		if(file_exists('admin/seo.php'))
+		if(file_exists( DIR_SHARED . 'seo.php'))
 		{
-			include ('admin/seo.php');
+			include ( DIR_SHARED . 'seo.php');
 		}
 		$this->tpl->assign('seotext', $texts);
 	}
@@ -193,7 +193,12 @@ abstract class _Core_Controller
         
         // Подготавливаем фин.цели
         $targets = array();
-        foreach ($user->getUserTargets() as $key => $var) {
+        try {
+            $targ = $user->getUserTargets();
+        } catch ( Exception $e) {
+            $targ = 0;
+        }
+        /*foreach ($user->getUserTargets() as $key => $var) {
             if ($key == 'user_targets') {
                 foreach ($var as $v) {
                     $targets['user_targets'][$v['id']] = array(
@@ -216,7 +221,7 @@ abstract class _Core_Controller
                     );
                 }
             }
-        }
+        }*/
         //валюты
         $currency = array();
         try {
@@ -284,8 +289,9 @@ abstract class _Core_Controller
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'accounts' => $accounts,
             'events' => Core::getInstance()->user->getUserEvents(),
-            'user_targets' => $targets['user_targets'],
-            'popup_targets' => $targets['pop_targets'],
+            //'targets' => $targ,
+            'user_targets' => $targ['user_targets'],
+            'popup_targets' => $targ['pop_targets'],
             'currency' => $currency,
             'flash' => array(
                 'title' => '',
@@ -306,6 +312,13 @@ abstract class _Core_Controller
             'category' => $cats,
             'informers' => $infoa
             );
+            
+            if( Core::getInstance()->user->getId() > 0 )
+            {
+            	$res['user'] = array(
+            		'name' => Core::getInstance()->user->getName(),
+            	);
+            }
         
         Core::getInstance()->tpl->assign('res', json_encode($res));
     }

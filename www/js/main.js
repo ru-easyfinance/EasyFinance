@@ -52,6 +52,8 @@ var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {operation:[2,5,6,7,8,11,15,16,19,25],
                             menu:[2,5,6,7,8,11,15,16,17,19,25]};
 
+var isIframe = false;
+
 var pathtoid = {
     '/accounts/' :'m2',
     '/budget/':'m3',
@@ -172,7 +174,44 @@ function MakeOperation(){
 
 //запланировано 
 
+function isLogged(){
+    if (res)
+        if (res.user)
+            return true;
+
+    return false;
+}
+
 $(document).ready(function() {
+    if (location.hostname.indexOf("iframe.") != -1)
+        isIframe = true;
+
+    // # тикет 625
+    // инициализируем виджет видео-гида
+    if (!isIframe)
+        easyFinance.widgets.help.init('#popupHelp', true);
+
+    // по умолчанию устанавливаем видео,
+    // которое соответствует содержанию страницы
+    var tabVideo = {
+        "m0" : "newOperation",
+        "m1" : "newOperation",
+        "m2" : "newAccount",
+        "m3" : "newBudget",
+        "m4" : "newTarget",
+        "m5" : "newOperation",
+        "m6" : "newOperation"
+    };
+
+    $('#footer .btnHelp').click(function(){
+        $('#popupHelp').dialog('open');
+
+        if (page_mid)
+            easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+        else
+            easyFinance.widgets.help.showVideo("newAccount");
+    });
+
     //#538
     if (
     	!$.cookie('referer_url')
@@ -236,9 +275,12 @@ $(document).ready(function() {
 
     // LOAD MODELS
     // modified by Jet 29.10.2009, ticket 337.
-    easyFinance.models.accounts.load(res.accounts, function(model) {
-        easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
-    });
+
+    if (isLogged()) {
+        easyFinance.models.accounts.load(res.accounts, function(model) {
+            easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
+        });
+    }
 
     // Если пользователь авторизирован
     if (inarray(Current_module, Connected_functional.operation)){
@@ -411,27 +453,6 @@ $(document).ready(function() {
             $('.ui-dialog-buttonpane').css('margin-top','30px');
             //$('#op_adate,#op_pdate').val(dateText);   
         }
-    
-        // инициализируем виджет видео-гида
-        easyFinance.widgets.help.init('#popupHelp', true);
-
-        // по умолчанию устанавливаем видео,
-        // которое соответствует содержнию страницы
-        var tabVideo = {
-            "m0" : "newOperation",
-            "m1" : "newOperation",
-            "m2" : "newAccount",
-            "m3" : "newBudget",
-            "m4" : "newTarget",
-            "m5" : "newOperation",
-            "m6" : "newOperation"
-        };
-
-        easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
-
-        $('#footer .btnHelp').click(function(){
-            $('#popupHelp').dialog('open');
-        });
 }
 
     if(inarray(Current_module, Connected_functional.menu)){

@@ -13,6 +13,10 @@ easyFinance.widgets.help = function(){
     var _strVideoPrefix = "/upload/video/help/";
 
     var _videos = {
+        "newAccount" : {
+            title: "Добавление счёта",
+            file: "newAccount.mp4"
+        },
         "newOperation" : {
             title: "Добавление операции",
             file: "newOperation.mp4"
@@ -20,10 +24,6 @@ easyFinance.widgets.help = function(){
         "newCategory" : {
             title: "Добавление категории",
             file: "newCategory.mp4"
-        },
-        "newAccount" : {
-            title: "Добавление счёта",
-            file: "newAccount.mp4"
         },
         "newTarget" : {
             title: "Создание финансовой цели",
@@ -41,6 +41,9 @@ easyFinance.widgets.help = function(){
     // public functions
     function init(nodeSelector, isDialog) {
         _$node = $(nodeSelector);
+
+        if (_$node.length == 0)
+            return;
         
         _$divTitle = _$node.find(".title");
         _$hrefVideo = _$node.find(".video");
@@ -62,6 +65,14 @@ easyFinance.widgets.help = function(){
 
             $("<br>").appendTo(_$divLinks);
         }
+
+        $("<br>").appendTo(_$divLinks);
+        $("<a>")
+            .text("Все видео")
+            .attr("href", "/help")
+            .appendTo(_$divLinks)
+            .wrap("<b></b>");
+        $("<br>").appendTo(_$divLinks);
 
         if (isDialog)
             _$node.dialog({title: "Видео-гид", bgiframe: true, autoOpen: false, width: 662, modal:true});

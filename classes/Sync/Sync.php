@@ -139,9 +139,9 @@ class Sync{
         
         //разбор распарсенных значений и формирование результирующей xml.
         $account = new Account($this->user, $this->db);
-        //$account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         $debet = new Debet($this->user, $this->db);
-        //$debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
 
         $category = new Category($this->user, $this->db);
         $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
@@ -160,21 +160,23 @@ class Sync{
         $transfer->FormArray($this->lastsync, $this->dataarrayE);
         $debet->FormArray($this->lastsync, $this->dataarrayE);
         $plans->FormArray($this->lastsync, $this->dataarrayE);
-        /*$ret = array(
+        $currency = new Currency($this->user, $this->db);
+        $currency->FormArray($this->dataarrayE);
+        $ret = array(
             'RecordsMap' => $this->dataarrayE[1]
             ,'ChangedRecords' => $this->dataarrayE[2]
             ,'DeletedRecords' => $this->dataarrayE[3]
             ,'Accounts' => $this->dataarrayE[4]
             ,'Transfers' => $this->dataarrayE[5]
             ,'Categories' => $this->dataarrayE[6]
+            ,'Currencies' => $this->dataarrayE[7]
             ,'Debets' => $this->dataarrayE[8]
             ,'Incomes' => $this->dataarrayE[9]
             ,'Outcomes' => $this->dataarrayE[10]
             ,'Plans' => $this->dataarrayE[11]
-            );*/
+            );
         $ret = $this->dataarrayE;
         //die(print_r('jewkfjwk'));
-        //die(print_r($this->dataarrayE[4]));
         $a = php_xmlrpc_encode($ret);
         return $a;
     }

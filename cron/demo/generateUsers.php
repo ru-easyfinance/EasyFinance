@@ -51,7 +51,7 @@ include( dirname(dirname(dirname(__FILE__))) . '/include/config.php' );
 if( !IS_DEMO ) die("Must be runned only for demo !\n");
 
 // Файл для хранения массива сгенерённых пользователей
-$usersFile = SYS_DIR_INC . 'generatedUsers.php';
+$usersFile = DIR_SHARED . 'generatedUsers.php';
 
 // Конфиг таблиц для выборки
 $tablesTemplate = array(
@@ -79,7 +79,7 @@ $tablesTemplate = array(
 	),
 	'operation' => array(
 		'userId'		=> 'user_id',
-		'addUserId'	=> array('id', 'cat_id', 'account_id')
+		'addUserId'	=> array('id', 'cat_id', 'account_id','transfer','tr_id')
 	),
 	'periodic' => array(
 		'userId'		=> 'user_id',
@@ -225,15 +225,6 @@ for( $user = 1; $user < $usersCount*$idInterval; $user = $user + $idInterval)
 					$row['key'] = implode( '-', array($user, $row['category'], $row['drain'], $row['date_start']) );
 				}
 
-                                // Хак для таблицы операции (для корректного отображения переводов)
-                                if ( $table == 'operation' ) 
-                                {
-                                    if ( $row['transfer'] > 0 && $row['tr_id'] > 0 ) {
-                                        $row['account_id'] = $row['account_id'] - $id;
-                                        $row['transfer'] = $row['transfer'] + $id;
-                                    }
-                                }
-
 				$sql .= "\n(" . implode( ',', array_map( 'quoteSql', $row ) ) . ')' . (( $id < $rowCount-1 )?',':'');
 			}
 			
@@ -265,9 +256,13 @@ function quoteSql( $value )
 	{
 		return $value;
 	}
-	else
+	elseif( $value !== '')
 	{
 		return '\'' . $value . '\'';
+	}
+	else
+	{
+		return 'null';
 	}
 }
 
@@ -275,3 +270,4 @@ function quoteKey( $key )
 {
 	return '`' . $key . '`';
 }
+

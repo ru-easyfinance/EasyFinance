@@ -37,6 +37,8 @@ $(document).ready(function(){
         $('#type').val(f.attr('type'));
         $('#targets_category').val(f.attr('category'));
         a = f.attr('name').replace("%20"," ");
+        for (i=5; i>0; i--)
+        a = a.replace("%20"," ");
         $('#name').val(a);
         $('#tg_amount').val(f.attr('amount'));
         $('#amountf').val(f.attr('money'));
@@ -96,6 +98,8 @@ $(document).ready(function(){
         $('#type').val(f.attr('type'));
         $('#targets_category').val(f.attr('category'));
         a = f.attr('name').replace("%20"," ");
+        for (i=5; i>0; i--)
+        a = a.replace("%20"," ");
         $('#name').val(a);
         $('#tg_amount').val(f.attr('amount'));
         $('#amountf').val(f.attr('money'));
@@ -157,6 +161,8 @@ $(document).ready(function(){
         for(v in data) {
             if ( (data[v]["done"] == 0) || showall){
             a = data[v]['title'].replace(" ","%20");
+            for (i=5; i>0; i--)
+            a = a.replace(" ","%20");
             s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+a+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 //alert(data[v]['category']);

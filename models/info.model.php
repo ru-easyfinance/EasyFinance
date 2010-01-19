@@ -196,6 +196,14 @@ class Info_Model
         //print '<pre>';
         //die(print_r($this->input));
         //die(print_r($this->output));
+        if ( $this->input['profit'] == 0 )
+            if ( $this->input['drain'] == 0 ){
+                $this->output[6]['result'] = 0;
+                $this->output[6]['profit'] = 0;
+                $this->output[6]['budget'] = 0;
+                $this->output[6]['drain'] = 0;
+
+            }
         $des1 = $this->values['result']['red']['text'];
         if ( $this->output[6]['result'] >= 33) $des1 = $this->values['result']['yellow']['text'];
         if ( $this->output[6]['result'] >= 50) $des1 = $this->values['result']['green']['text'];
