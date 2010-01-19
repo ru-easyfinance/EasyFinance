@@ -124,6 +124,7 @@ $(document).ready(function() {
         $('#namecat,#cat_id').val('');
         $('#subcat,#cattype,#catsys').removeAttr('selected');
         $('#add_form').find('#btnSave').removeAttr('disabled');
+        $('#cattype').removeAttr("disabled");
     }
 
     /**
