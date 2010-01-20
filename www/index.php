@@ -31,7 +31,7 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'id_ef')){
+        if (( ($_SERVER['REQUEST_URI']) == "/login/") && ( $_GET['referer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
             $select = Login_Model::getUserDataByID( $_GET['id_ef'] );
             $uar = array(
                 'user_id'=>$_GET['id_ef'],
@@ -43,7 +43,7 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
             break;
         }
-        if (( substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/") && ( substr($_SERVER['REQUEST_URI'],15,5) == 'login')){
+        if (( ($_SERVER['REQUEST_URI']) == "/login/") && ( $_GET['referer'] == 'azbuka' ) && ( isset($_GET['login'] ) && ( isset($_GET['mail']) )) ){
             $log = new Login_Model();
             //$requeststring = substr($_SERVER[argv][0], 20);
             //$array = explode("&", $requeststring);
