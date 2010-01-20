@@ -27,4 +27,11 @@ class Article_Collection extends _Core_Abstract_Collection
 		
 		return $articlesArray;
 	}
+
+        public static function loadAll()
+	{
+            $sql = "SELECT * FROM articles ";
+            $articleList = Core::getInstance()->db->query($sql);
+            return array('result'=>$articleList);
+	}
 }
