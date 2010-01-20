@@ -1,0 +1,46 @@
+div.list div.body{
+    width: 800px;
+    overflow-y: scroll;
+    height: 400px;
+}
+div.list .date{
+    width: 100px;
+    max-width: 100px;
+    overflow: hidden;
+}
+div.list .title{
+    width : 150px;
+    max-width: 150px;
+    overflow: hidden;
+}
+div.list .status{
+    width : 120px;
+    max-width: 120px;
+    overflow: hidden;
+}
+div.list .remove{
+    width : 100px;
+    max-width: 100px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+}
+div.list .edit{
+    width : 150px;
+    max-width: 150px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+}
+div.list .public{
+    width : 150px;
+    max-width: 150px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+}
+div.list .events{
+    width : 400px;
+    max-width: 400px;
+    overflow: hidden;
+}
