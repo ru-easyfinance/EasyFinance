@@ -407,11 +407,11 @@ easyFinance.widgets.operationEdit = function(){
                         t = res['user_targets'][v];
                         if (v != $('#op_target').val())
                         o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
-                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['amount']+'">'+t['title']+'</option>';
                         else{
                             t['amount_done']=(parseFloat(t['amount_done'])+parseFloat(suum)).toString();
                             o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+/*(parseFloat(t['amount_done'])+parseFloat(suum)).toString()*/t['amount_done']+
-                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['amount']+'">'+t['title']+'</option>';
                     }
                     }
                     /// переписать
@@ -634,7 +634,7 @@ easyFinance.widgets.operationEdit = function(){
             t = res['user_targets'][v];
             if (t['done']=='0')
             o += '<option value="'+t['id']+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
-                '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['money']+'">'+t['title']+'</option>';
+                '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['amount']+'">'+t['title']+'</option>';
         }
 
         $("#op_target").html(o);
