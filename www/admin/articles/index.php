@@ -32,31 +32,27 @@ class Articles{
         $announce = (string)$args('preview');
         $body = (string)$args('text');
         $status = (int)$status('status');
-        //$article->create($title, $announce, $body);
         $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
         return array('result' => 'ok');
     }
 
     function editor($args){
-        //$article = new Article();
         $id = $args('id');
-        //$article->edit($id);
         $sql = "SELECT * FROM articles WHERE id=?";
         $article = $this->db->query($sql, $id);
         return  ($article);
     }
 
     function ArticleDel($args)
-    {
-        $article = new Article();
-        $id = $_POST('id');
-        $article->delete($id);
+    {;
+        $id = $args('id');
+        $sql = "DELETE FROM articles WHERE id=?";
+        $article = $this->db->query($sql, $id);
         return array ('result' => 'ok');
     }
     
 }
-//die('fjhwkf');
 
 switch ($_GET['page'])
     {
@@ -79,7 +75,9 @@ switch ($_GET['page'])
             break;
         case "ArticleDel":
             $art = new Articles();
-            $art->ArticleDel($args);
+            $art->ArticleDel($_GET);
+            include 'articles.list.html';
+            $articleList = $art->listAll();
             break;
     }
 //$art = new Articles();
