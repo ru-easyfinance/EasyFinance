@@ -1,10 +1,10 @@
 $(document).ready(function(){
-    if(typeof res != 'object'){
+    if(typeof(res) != 'object'){
         return false;
     }
     var htmlArticle = '<table>'
     for(var key in res){
-        if (typeof res.key == 'object'){
+        if (typeof(res[key]) == 'object'){
             htmlArticle += '<tr>'
                 + '<td class="date">' + (res[key].date||'! Нет !') + '</td>'
                 + '<td class="title">' + (res[key].title||'') + '</td>'
@@ -19,7 +19,7 @@ $(document).ready(function(){
             htmlArticle += '</tr>';
         }
     }
-    htmlArticle = '</table>'
+    htmlArticle += '</table>'
     $('div.list div.body').html(htmlArticle);
 });
 
