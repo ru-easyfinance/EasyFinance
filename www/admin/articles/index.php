@@ -144,7 +144,7 @@ switch ($_REQUEST['page'])
             $ext = strtolower ($name) ;
             $name = md5( time(), $ext );
 
-            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) . '.' . $ext);
+            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) );
             $path = DIR_UPLOAD . 'articles/' . $name;
             $url = DIR_UPLOAD . 'articles/' . $name;
             $parent = $art->saveImageInfo( 0, $path , $url );
@@ -154,7 +154,7 @@ switch ($_REQUEST['page'])
 
             $name = md5( time()+1, $ext );//навсякий. а вдруг время поменяется
 
-            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) . '.' . $ext);
+            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) );
             $path2 = DIR_UPLOAD . 'articles/' . $name;
             $url2 = DIR_UPLOAD . 'articles/' . $name;
             $little = $art->saveImageInfo( $parent, $path2 , $url2 );
