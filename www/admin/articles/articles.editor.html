@@ -7,37 +7,62 @@ and open the template in the editor.
   <head>
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="/css/articles.list.css"/>
+    <link rel="stylesheet" type="text/css" href="css/articles.list.css"/>
     <script type="text/javascript">
         res = <? echo(json_encode($res));?>
     </script>
+    <script type="text/javascript" src="js/jHtmlArea-0.7.0.js"></script>
+
+    <script type="text/javascript" src="js/editor.js"></script>
   </head>
   <body>
+    <div>
+        <a href="index.php?page=listAll">
+            <button>Список статей</button>
+        </a>
+        <p></p>
+    </div>
       <div class="editor">
+          <input type="hidden" id="id" name="id"/>
           <div class="line">
-              <input type="text" id="date" name="date">
+              <label for="date">Дата</label>
+              <div><input type="text" id="date" name="date"/></div>
           </div>
           <div class="line">
-              <input type="text" id="author" name="author">
+              <label for="author">Автор</label>
+              <div><input type="text" id="author" name="author"/></div>
           </div>
           <div class="line">
-              <input type="text" id="url" name="url">
+              <label for="url">Ссылка на автора</label>
+              <div><input type="text" id="url" name="url"/></div>
           </div>
           <div class="line">
-              <input type="text" id="title" name="title">
+              <label for="title">Название статьи</label>
+              <div><input type="text" id="title" name="title"/></div>
           </div>
           <div class="line">
-              <input type="text" id="meta_desc" name="meta_desc">
+              <label for="meta_desc">Описание</label>
+              <div><input type="text" id="meta_desc" name="meta_desc"/></div>
           </div>
           <div class="line">
-              <input type="text" id="meta_key" name="meta_key">
+              <label for="meta_key">Ключевые слова</label>
+              <div><input type="text" id="meta_key" name="meta_key"/></div>
           </div>
           <div class="line">
-
+              <label for="preview">Анонс</label>
+              <div><textarea name="preview" id="preview"></textarea></div>
           </div>
           <div class="line">
-
+              <label for="text">Текст</label>
+              <div><textarea id="text" name="text"></textarea></div>
           </div>
+          <button id="save_article">Сохранить</button>
+      </div>
+      <div class="images">
+          <form action="index.php?page=AddImage" method="post" enctype="multipart/form-data">
+              <input type="file" id="image" name="image" />
+              <input type="submit" value="Добавить"/>
+          </form>
       </div>
   </body>
 </html>

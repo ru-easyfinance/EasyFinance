@@ -44,7 +44,22 @@ div.list .events{
     max-width: 400px;
     overflow: hidden;
 }
+div.editor{
+    position: relative;
+    float: left;
+    width: 60%;
+    padding: 15px;
+    border: 1px dashed black;
+}
 
 div.editor input,div.editor textarea{
-    left: 200px
+    width : 100%;
+}
+
+div.images{
+    position: relative;
+    float: right;
+    width: 30%;
+    padding: 15px;
+    border: 1px dashed black;
 }
