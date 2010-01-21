@@ -4,39 +4,14 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
- 
 define('INDEX', true);
+
+error_reporting( E_ALL );
 
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
-Core::getInstance()->parseUrl();
-
-// Новая схема 
-/*
-try
-{
-	_Core::getInstance()->router->performRequest();
-}
-catch ( Exception $e )
-{
-	// Вывод отладочной информации
-	if(  DEBUG )
-	{
-		$e->getTraceAsString();
-	}
-	// Не позволяем бесконечных циклов
-	elseif( '/404' == $url )
-	{
-		exit();
-	}
-	else
-	{
-		_Core_Router::redirect('/404', false, 404);
-	}
-}
-
-*/
+//Core::getInstance()->parseUrl();
 
 // Определяем информацию о пользователе
 //@TODO Переместить это в конструктор базового контроллера.
@@ -50,6 +25,33 @@ if (Core::getInstance()->user->getId())
 	
 	Core::getInstance()->tpl->assign('user_info', $uar);
 }
+
+// Новая схема 
+$request = _Core_Request::getCurrent();
+$router = new _Core_Router( $request );
+
+try
+{
+	$router->performRequest();
+}
+catch ( Exception $e )
+{
+	// Вывод отладочной информации
+	if(  DEBUG )
+	{
+		$e->getTraceAsString();
+	}
+	// Не позволяем бесконечных циклов
+	elseif( '/404' == $request->uri )
+	{
+		exit();
+	}
+	else
+	{
+		_Core_Router::redirect('/404', false, 404);
+	}
+}
+exit();
 
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' )
