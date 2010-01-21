@@ -251,7 +251,7 @@ easyFinance.widgets.accountsJournal = function(){
 
             if (!isNaN(type)){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
-                str = str + '<td class="name">' + account_list[key]["name"] + '</td>';
+                str = str + '<td class="name"><span style="white-space:nowrap;">' + account_list[key]["name"] + '</span></td>';
                 if (type == 2) //для долга печатаем с противоположным знаком
                     str = str + '<td class="totalBalance ' + colorClass + '">' + formatCurrency(-account_list[key]["totalBalance"] ) + '</td>';
                 else
