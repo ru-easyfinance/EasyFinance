@@ -1,22 +1,10 @@
 $(document).ready(function(){
-//    <table>
-//                  <tbody>
-//                      <tr>
-//                          <td class="date">19-03-2007</td>
-//                          <td class="title">Тестовая статья</td>
-//                          <td class="status">Опубликована</td>
-//                          <td class="remove"> Удалить </td>
-//                          <td class="edit"> Редактировать </td>
-//                          <td class="public event"> Опубликовать </td>
-//                      </tr>
-//                  </tbody>
-//              </table>
-//    if(typeof res != 'Array' || typeof res != 'Object'){
-//        return false;
-//    }
+    if(typeof res != 'object'){
+        return false;
+    }
     var htmlArticle = '<table>'
     for(var key in res){
-        if (typeof res.key == 'Object'){
+        if (typeof res.key == 'object'){
             htmlArticle += '<tr>'
                 + '<td class="date">' + (res[key].date||'! Нет !') + '</td>'
                 + '<td class="title">' + (res[key].title||'') + '</td>'
