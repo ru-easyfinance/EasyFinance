@@ -25,20 +25,20 @@ class Articles{
 
     function save($args){
         
-        $date = (string)$args('date');
-        $title = (string)$args('title');
-        $description = (string)$args('meta_desc');
-        $keywords = (string)$args('meta_key');
-        $announce = (string)$args('preview');
-        $body = (string)$args('text');
-        $status = (int)$status('status');
+        $date = (string)$args['date'];
+        $title = (string)$args['title'];
+        $description = (string)$args['meta_desc'];
+        $keywords = (string)$args['meta_key'];
+        $announce = (string)$args['preview'];
+        $body = (string)$args['text'];
+        $status = (int)$status['status'];
         $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
         return array('result' => 'ok');
     }
 
-    function editor($args){
-        $id = $args('id');
+    function editor( $args ){
+        $id = $args['id'];
         $sql = "SELECT * FROM articles WHERE id=?";
         $article = $this->db->query($sql, $id);
         return  ($article);
