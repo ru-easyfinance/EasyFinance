@@ -41,8 +41,10 @@ class Articles{
     function editor($args){
         //$article = new Article();
         $id = $args('id');
-        $article->edit($id, $title, $announce, $body);
-        return array ('result' => 'ok');
+        //$article->edit($id);
+        $sql = "SELECT * FROM articles WHERE id=?";
+        $article = $this->db->query($sql, $id);
+        return  ($article);
     }
 
     function ArticleDel($args)
