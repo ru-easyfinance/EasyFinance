@@ -8,12 +8,19 @@ and open the template in the editor.
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="css/articles.list.css?r=4"/>
+    <script type="text/javascript">
+        res = <? echo(json_encode()); ?>
+    </script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+   <!-- <script type="text/javascript" src="js/jHtmlArea-0.7.0.js"></script>
+    <script type="text/javascript" src="js/jHtmlArea.ColorPickerMenu-0.7.0.js"></script>-->
+    <script type="text/javascript" src="js/list.js"></script>
   </head>
 <body>
     <h1>Список статей</h1>
     <div class="list">
             <div>
-                <a href="/admin/articles/editor">
+                <a href="index.php?page=editor">
                     <button>Добавить статью</button>
                 </a>
             </div>

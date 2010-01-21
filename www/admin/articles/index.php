@@ -52,12 +52,15 @@ class Articles{
     
 }
 //die('fjhwkf');
+
 switch ($_GET['page'])
     {
         case "listAll":
+            include 'articles.list.html';
             $art = new Articles();
-            return $art->listAll();
-            //break;
+            $articleList = $art->listAll();
+            
+            break;
         case "save":
             $acc = new Articles_Controller();
             $acc->save($args);
