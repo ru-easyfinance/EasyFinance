@@ -24,6 +24,7 @@ class Articles{
     }
 
     function save($args){
+        $id = (int)$args['id'];
         
         $date = (string)$args['date'];
         $title = (string)$args['title'];
@@ -32,9 +33,21 @@ class Articles{
         $announce = (string)$args['preview'];
         $body = (string)$args['text'];
         $status = (int)$status['status'];
-        $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
+        if ($id){
+            $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
+        }
+        else{
+            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=? WHERE id=?";
+            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $id);
+        }
         return array('result' => 'ok');
+    }
+
+    function publicArt($args){
+        $id = (int)$args['id'];
+        $sql = "UPDATE articles SET status = 1 WHERE id=?";
+        $article = $this->db->query($sql, $id);
     }
 
     function editor( $args ){
@@ -79,6 +92,12 @@ switch ($_REQUEST['page'])
             $art->ArticleDel($_GET);
             $articleList = $art->listAll();
             require 'articles.list.html';            
+            break;
+        case "public":
+            $art = new Articles();
+            $art->publicArt($_GET);
+            $articleList = $art->listAll();
+            require 'articles.list.html';     
             break;
     }
 //$art = new Articles();
