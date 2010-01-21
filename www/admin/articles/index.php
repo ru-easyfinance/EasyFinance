@@ -18,7 +18,7 @@ class Articles{
     }
     
     function listAll (){
-        $sql = "SELECT * FROM articles ";
+        $sql = "SELECT id, date, title, status FROM articles ORDER BY date";
         $articleList = $this->db->query($sql);
         return ($articleList);
     }
@@ -45,7 +45,7 @@ class Articles{
     }
 
     function ArticleDel($args)
-    {;
+    {
         $id = $args['id'];
         $sql = "DELETE FROM articles WHERE id=?";
         $article = $this->db->query($sql, $id);
@@ -53,35 +53,37 @@ class Articles{
     }
     
 }
-
-switch ($_GET['page'])
+switch ($_REQUEST['page'])
     {
-        case "listAll":
-            include 'articles.list.html';
+        case "listAll":            
             $art = new Articles();
             $articleList = $art->listAll();
+            require 'articles.list.html';
+            //die(print_r($articleList));
             break;
         case "save":
             $art = new Articles();
-            $save = $art->save($_GET);
-            include 'articles.list.html';
+            $save = $art->save($_POST);
             //$art = new Articles();
             $articleList = $art->listAll();
+            require 'articles.list.html';
             break;
         case "editor":
             $art = new Articles();
-            include 'articles.editor.html';
             $res = $art->editor($_GET);
+            require 'articles.editor.html';
             break;
-        case "ArticleDel":
+        case "articleDel":
             $art = new Articles();
+           // die('jfk');
             $art->ArticleDel($_GET);
-            include 'articles.list.html';
             $articleList = $art->listAll();
+            require 'articles.list.html';            
             break;
     }
 //$art = new Articles();
 //$art->listAll();
+//echo('<pre>');
 //die(print_r($art));
 
 ?>
