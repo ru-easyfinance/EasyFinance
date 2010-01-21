@@ -3,9 +3,10 @@
 define ('INDEX', true);
 include (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/config.php');
 //include (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/common.php');
-
-require_once (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/functions.php');
-spl_autoload_register('__autoload');
+include_once('../../../classes/_Core/_Core.php');
+new _Core();
+//require_once (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/functions.php');
+//spl_autoload_register('__autoload');
 
 
 // Подгружаем внешние библиотеки
@@ -64,6 +65,20 @@ class Articles{
         $article = $this->db->query($sql, $id);
         return array ('result' => 'ok');
     }
+
+    function saveImageInfo( $parent , $path , $url )
+    {
+        $sql = "INSERT INTo images ( parent_id, path , url) VALUES ( ?, ?, ?)";
+        $image = $this->db->query($sql, $parent, $path, $url);
+        return $image;
+    }
+
+    function imageArticleConnection( $image_id , $article_id )
+    {
+        $sql = "INSERT INTO images_articles ( image_id, article_id) VALUES ( ?, ?)";
+        $image = $this->db->query($sql, $image_id, $article_id);
+        return $image;
+    }
     
 }
 switch ($_REQUEST['page'])
@@ -98,6 +113,40 @@ switch ($_REQUEST['page'])
             $art->publicArt($_GET);
             $articleList = $art->listAll();
             require 'articles.list.html';     
+            break;
+        case "addImage":
+            $art = new Articles();
+            $image = new File_Image( $_FILES['image']['tmp_name'] );
+            //$image->upload( 'image' );
+            $image->resize(160);
+
+            $ext = substr($_FILES['image']['name'],-3);
+            $ext = strtolower ($name) ;
+            $name = md5( time(), $ext );
+
+            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) . '.' . $ext);
+            $path = DIR_UPLOAD . 'articles/' . $name;
+            $url = DIR_UPLOAD . 'articles/' . $name;
+            $parent = $art->saveImageInfo( 0, $path , $url );
+            $image->resize(50);
+
+
+            
+            $name = md5( time()+1, $ext );//навсякий. а вдруг время поменяется
+
+            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) . '.' . $ext);
+            $path2 = DIR_UPLOAD . 'articles/' . $name;
+            $url2 = DIR_UPLOAD . 'articles/' . $name;
+            $little = $art->saveImageInfo( $parent, $path2 , $url2 );
+
+            die ( array (
+                'parent_id' => $parent,
+                'original_url' => $url,
+                'child_id' => $little,
+                'little_url' => $url2,
+            ) );
+
+            //die('fjsdfk');
             break;
     }
 //$art = new Articles();
