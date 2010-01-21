@@ -22,7 +22,7 @@ $(document).ready(function(){
     //init
     $('div.editor #preview').htmlarea({
         // Override/Specify the Toolbar buttons to show
-        toolbar: [["html"]]
+        toolbar: []
     });
     $("div.editor #text").htmlarea({
         // Override/Specify the Toolbar buttons to show
