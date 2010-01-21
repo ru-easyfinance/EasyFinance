@@ -8,10 +8,21 @@ and open the template in the editor.
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="css/articles.list.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jHtmlArea.css"/>
+
+    <link rel="stylesheet" type="text/css" href="css/ui.core.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ui.resizable.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ui.dialog.css"/>
+
+
     <script type="text/javascript">
         res = <? echo(json_encode($res));?>
     </script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.js"></script>
+    <script type="text/javascript" src="js/ui.draggable.js"></script>
+    <script type="text/javascript" src="js/ui.resizable.js"></script>
+    <script type="text/javascript" src="js/ui.dialog.js"></script>
     <script type="text/javascript" src="js/jquery.form.js"></script>
     <script type="text/javascript" src="js/jHtmlArea-0.7.0.js"></script>
 
@@ -67,5 +78,6 @@ and open the template in the editor.
               <input type="button" id="submitImg" value="Добавить"/>
           </form>
       </div>
+      <div style="display: none" id="imgSelector" title="Выберите вставляемую картинку">asfdsadfas</div>
   </body>
 </html>
