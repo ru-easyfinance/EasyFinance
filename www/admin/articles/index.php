@@ -11,17 +11,16 @@ spl_autoload_register('__autoload');
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 
-class SeoText{
+class Articles{
     function __construct()
-    {
+    {  
         $this->db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
-        
     }
     
     function listAll (){
         $sql = "SELECT * FROM articles ";
-        $articleList = Core::getInstance()->db->query($sql);
-        return array('result'=>$articleList);
+        $articleList = $this->db->query($sql);
+        return ($articleList);
     }
 
     function save($args){
@@ -53,9 +52,27 @@ class SeoText{
     
 }
 //die('fjhwkf');
-
-$art = new SeoText();
-$art->listAll();
-die($art);
+switch ($args[0])
+	{
+            case "listAll":
+                $art = new Articles();
+                return $art->listAll();
+                //break;
+            case "save":
+                $acc = new Articles_Controller();
+                $acc->save($args);
+                break;
+            case "editor":
+                $acc = new Articles_Controller();
+                $acc->editor($args);
+                break;
+            case "ArticleDel":
+                $acc = new Articles_Controller();
+                $acc->ArticleDel($args);
+                break;
+	}
+//$art = new Articles();
+//$art->listAll();
+//die(print_r($art));
 
 ?>
