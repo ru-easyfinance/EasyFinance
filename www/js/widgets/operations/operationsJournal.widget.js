@@ -25,6 +25,7 @@ easyFinance.widgets.operationsJournal = function(){
 
     var _$txtDateFrom = null;
     var _$txtDateTo = null;
+    var _$checkAll = null;
 
     var _$dialogFilterType = null;
     var _$dialogFilterSum = null;
@@ -143,7 +144,9 @@ easyFinance.widgets.operationsJournal = function(){
             for (var key in _ops) {
                 _deleteOperationFromTable(_ops[key]);
             }
-            
+
+            _$checkAll.removeAttr('checked');
+
             _onCheckClicked();
             $.jGrowl("Операции удалены", {theme: 'green'});
         });
@@ -435,7 +438,8 @@ easyFinance.widgets.operationsJournal = function(){
         $('#remove_all_op').click(_deleteChecked);
 
         // биндим клик на чекбоксе в заголовке
-        $('#operations_list_header th input').click(function(){
+        _$checkAll = $('#operations_list_header th input');
+        _$checkAll.click(function(){
             if($(this).attr('checked'))
                 $('#operations_list .check input').attr('checked','checked');
             else

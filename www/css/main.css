@@ -134,7 +134,8 @@ ul.menu6 li.act div span { cursor: default; border-bottom: 0 none; }
 .op_pf_field input,.op_pf_field select{position :absolute;left:200px}
 .operation_list table.noborder{border:0}
 table.noborder td{width:40px}
-table.noborder td.name{width:50px;max-width:50px;overflow:hidden}
+table.noborder td.name{width:120px;max-width:120px;overflow:hidden;white-space: nowrap;}
+table.noborder td.mark{width:20px;}
 .PEND,.CLOSED {color: #FF0000; }
 #header #auth ul li.user_link{position:relative; float: top;display:block;}
 .mid span.mid_text{position: relative; padding-right : 30px; left : 15px; }
