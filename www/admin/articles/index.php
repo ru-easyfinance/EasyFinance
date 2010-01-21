@@ -46,7 +46,7 @@ class Articles{
 
     function ArticleDel($args)
     {;
-        $id = $args('id');
+        $id = $args['id'];
         $sql = "DELETE FROM articles WHERE id=?";
         $article = $this->db->query($sql, $id);
         return array ('result' => 'ok');
