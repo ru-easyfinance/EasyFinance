@@ -1,15 +1,22 @@
 $(document).ready(function(){
     //loader
     var tmpImgUrl = null;
+    $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'});
+    $("div.editor #date").datepicker();
+    var nowDate = new Date();
+    $("div.editor #date").val(nowDate.toLocaleFormat('%Y-%m-%d'));
     if (res.article){
-        $("div.editor #autor").val(res.article.author || '')
-        $("div.editor #date").val(res.article.date || '')
-        $("div.editor #url").val(res.article.url || '')
-        $("div.editor #title").val(res.article.title || '')
-        $("div.editor #meta_desc").val(res.article.meta_desc || '')
-        $("div.editor #meta_key").val(res.article.meta_key || '')
-        $("div.editor #preview").val(res.article.preview || '')
-        $("div.editor #text").val(res.article.text || '')
+        $("div.editor #id").val(res.article.id || '0')
+        $("div.editor #autor").val(res.article.author || '0')
+        if(res.article.date){
+            $("div.editor #date").val(res.article.date)
+        }
+        $("div.editor #url").val(res.article.url || '0')
+        $("div.editor #title").val(res.article.title || '0')
+        $("div.editor #meta_desc").val(res.article.meta_desc || '0')
+        $("div.editor #meta_key").val(res.article.meta_key || '0')
+        $("div.editor #preview").val(res.article.preview || '0')
+        $("div.editor #text").val(res.article.text || '0')
     }
     //init
     $('div.editor #preview').htmlarea({

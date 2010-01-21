@@ -56,6 +56,10 @@ div.editor input,div.editor textarea{
     width : 100%;
 }
 
+div.editor textarea{
+    height : 400px;
+}
+
 div.images{
     position: relative;
     float: right;

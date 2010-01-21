@@ -13,7 +13,7 @@ and open the template in the editor.
     <link rel="stylesheet" type="text/css" href="css/ui.core.css"/>
     <link rel="stylesheet" type="text/css" href="css/ui.resizable.css"/>
     <link rel="stylesheet" type="text/css" href="css/ui.dialog.css"/>
-
+    <link rel="stylesheet" type="text/css" href="css/ui.datepicker.css"/>
 
     <script type="text/javascript">
         res = <? echo(json_encode($res));?>
@@ -23,6 +23,7 @@ and open the template in the editor.
     <script type="text/javascript" src="js/ui.draggable.js"></script>
     <script type="text/javascript" src="js/ui.resizable.js"></script>
     <script type="text/javascript" src="js/ui.dialog.js"></script>
+    <script type="text/javascript" src="js/ui.datepicker.js"></script>
     <script type="text/javascript" src="js/jquery.form.js"></script>
     <script type="text/javascript" src="js/jHtmlArea-0.7.0.js"></script>
 
@@ -36,40 +37,43 @@ and open the template in the editor.
         <p></p>
     </div>
       <div class="editor">
-          <input type="hidden" id="id" name="id"/>
-          <div class="line">
-              <label for="date">Дата</label>
-              <div><input type="text" id="date" name="date"/></div>
-          </div>
-          <div class="line">
-              <label for="author">Автор</label>
-              <div><input type="text" id="author" name="author"/></div>
-          </div>
-          <div class="line">
-              <label for="url">Ссылка на автора</label>
-              <div><input type="text" id="url" name="url"/></div>
-          </div>
-          <div class="line">
-              <label for="title">Название статьи</label>
-              <div><input type="text" id="title" name="title"/></div>
-          </div>
-          <div class="line">
-              <label for="meta_desc">Описание</label>
-              <div><input type="text" id="meta_desc" name="meta_desc"/></div>
-          </div>
-          <div class="line">
-              <label for="meta_key">Ключевые слова</label>
-              <div><input type="text" id="meta_key" name="meta_key"/></div>
-          </div>
-          <div class="line">
-              <label for="preview">Анонс</label>
-              <div><textarea name="preview" id="preview"></textarea></div>
-          </div>
-          <div class="line">
-              <label for="text">Текст</label>
-              <div><textarea id="text" name="text"></textarea></div>
-          </div>
-          <button id="save_article">Сохранить</button>
+          <form action="index.php" method="post">
+              <input type="hidden" name="page" id="page" value="addImage"/>
+              <input type="hidden" id="id" name="id" value="0"/>
+              <div class="line">
+                  <label for="date">Дата</label>
+                  <div><input type="text" id="date" name="date"/></div>
+              </div>
+              <div class="line">
+                  <label for="author">Автор</label>
+                  <div><input type="text" id="author" name="author"/></div>
+              </div>
+              <div class="line">
+                  <label for="url">Ссылка на автора</label>
+                  <div><input type="text" id="url" name="url"/></div>
+              </div>
+              <div class="line">
+                  <label for="title">Название статьи</label>
+                  <div><input type="text" id="title" name="title"/></div>
+              </div>
+              <div class="line">
+                  <label for="meta_desc">Описание</label>
+                  <div><input type="text" id="meta_desc" name="meta_desc"/></div>
+              </div>
+              <div class="line">
+                  <label for="meta_key">Ключевые слова</label>
+                  <div><input type="text" id="meta_key" name="meta_key"/></div>
+              </div>
+              <div class="line">
+                  <label for="preview">Анонс</label>
+                  <div><textarea name="preview" id="preview"></textarea></div>
+              </div>
+              <div class="line">
+                  <label for="text">Текст</label>
+                  <div><textarea id="text" name="text"></textarea></div>
+              </div>
+              <input type="submit" value="Сохранить"/>
+          </form>
       </div>
       <div class="images">
           <form id="imagesFormAdd" action="index.php" method="post">
