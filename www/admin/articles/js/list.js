@@ -8,7 +8,7 @@ $(document).ready(function(){
             htmlArticle += '<tr>'
                 + '<td class="date">' + (res[key].date||'! Нет !') + '</td>'
                 + '<td class="title">' + (res[key].title||'') + '</td>'
-                + '<td class="status">' + (res[key].status ? 'Опубликована' : 'Не опубликована') + '</td>'
+                + '<td class="status">' + (res[key].status == '1' ? 'Опубликована' : 'Не опубликована') + '</td>'
                 + '<td class="remove"><a href="index.php?page=articleDel&id=' + (res[key].id||'0') + '"> Удалить </a></td>'
                 + '<td class="edit"><a href="index.php?page=editor&id=' + (res[key].id||'0') + '"> Редактировать </a></td>'
             if (res[key].status){
