@@ -77,6 +77,13 @@ easyFinance.models.accounts = function(){
             return '';
     }
 
+    function getAccountType(id){
+        if (_accounts && _accounts[id])
+            return _accounts[id]["type"];
+        else
+            return null;
+    }
+
     function getAccountIdByName(name){
         if (!_accounts)
             return null;
@@ -276,6 +283,7 @@ easyFinance.models.accounts = function(){
         getAccounts: getAccounts,
         getAccountNameById: getAccountNameById,
         getAccountIdByName: getAccountIdByName,
+        getAccountType: getAccountType,
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,
         addAccount: addAccount,

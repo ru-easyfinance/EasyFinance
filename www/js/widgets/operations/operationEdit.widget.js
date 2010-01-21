@@ -484,39 +484,42 @@ easyFinance.widgets.operationEdit = function(){
         }
 
         //Запрос подтверждения на выполнение операции в случае ухода в минус.
-        var am = tofloat($('#op_amount').val()+'.0');
+        // не выполняем проверку для кредитных карт! см. тикет 669
+        if (_modelAccounts.getAccountType(_selectedAccount) != "8") {
+            var am = tofloat($('#op_amount').val()+'.0');
 
-        // см. тикет #306
-        //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-        var tb = tofloat(_modelAccounts.getAccountBalanceTotal(_selectedAccount));
-        var ab = tofloat(_modelAccounts.getAccountBalanceAvailable(_selectedAccount));
-        
-        // @ticket 401
-        // при редактировании расходных операций
-        // учитываем то, что при увеличении суммы со счёта будет списана
-        // не вся сумма, а только разница между старым и новым значением
-        if (opType != 1 && $('form').attr('action').indexOf('edit') != -1)
-            am = am - _oldSum;
+            // см. тикет #306
+            //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
+            var tb = tofloat(_modelAccounts.getAccountBalanceTotal(_selectedAccount));
+            var ab = tofloat(_modelAccounts.getAccountBalanceAvailable(_selectedAccount));
 
-        //* && $("#op_type option:selected").val() != 1*/)
-        if ( (am-tb)>0 && opType!=1){
-            if (!confirm('Данная транзакция превышает остаток средств на вашем счёте! Продолжить ?'))
+            // @ticket 401
+            // при редактировании расходных операций
+            // учитываем то, что при увеличении суммы со счёта будет списана
+            // не вся сумма, а только разница между старым и новым значением
+            if (opType != 1 && $('form').attr('action').indexOf('edit') != -1)
+                am = am - _oldSum;
+
+            //* && $("#op_type option:selected").val() != 1*/)
+            if ( (am-tb)>0 && opType!=1){
+                if (!confirm('Данная транзакция превышает остаток средств на вашем счёте! Продолжить ?'))
+                    return false;
+                //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
+            }//*/
+
+            // @TODO: вернуть эту проверку, когда можно будет делать перевод из резерва обратно в доступные деньги
+            //alert(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
+            //alert(res['accounts'][$("#op_account option:selected").val()]['reserve']);
+            //если сумма совершаемой операции превышает сумму доступного остатка(Общий - резерв на финцели)
+            // тогда предупреждаем пользователя и в случае согласия снимаем нехватающую часть денег с фин цели.
+            /*
+            if ((am - ab)>0) {
+                alert ("Введённая сумма операции превышает доступный остаток счёта с учётом резерва.\n\
+    Переведите деньги с финансовой цели и повторите операцию ещё раз!");
                 return false;
-            //$.jGrowl('Введённое значение суммы превышает общий остаток средств на данном счёте!!!', {theme: 'red', stick: true});
-        }//*/
-
-        // @TODO: вернуть эту проверку, когда можно будет делать перевод из резерва обратно в доступные деньги
-        //alert(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-        //alert(res['accounts'][$("#op_account option:selected").val()]['reserve']);
-        //если сумма совершаемой операции превышает сумму доступного остатка(Общий - резерв на финцели)
-        // тогда предупреждаем пользователя и в случае согласия снимаем нехватающую часть денег с фин цели.
-        /*
-        if ((am - ab)>0) {
-            alert ("Введённая сумма операции превышает доступный остаток счёта с учётом резерва.\n\
-Переведите деньги с финансовой цели и повторите операцию ещё раз!");
-            return false;
+            }
+            */
         }
-        */
 
         if (_selectedType == '4') {
             /**
