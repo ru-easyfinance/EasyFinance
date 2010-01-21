@@ -11,7 +11,7 @@ $(document).ready(function(){
                 + '<td class="status">' + (res[key].status == '1' ? 'Опубликована' : 'Не опубликована') + '</td>'
                 + '<td class="remove"><a href="index.php?page=articleDel&id=' + (res[key].id||'0') + '"> Удалить </a></td>'
                 + '<td class="edit"><a href="index.php?page=editor&id=' + (res[key].id||'0') + '"> Редактировать </a></td>'
-            if (res[key].status){
+            if (res[key].status == '1'){
                 htmlArticle += '<td class="public event"> &nbsp; </td>';
             }else{
                 htmlArticle += '<td class="public"><a href="index.php?page=public&id=' + (res[key].id||'0') + '"> Публиковать </a></td>';
