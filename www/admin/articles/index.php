@@ -24,20 +24,23 @@ class Articles{
     }
 
     function save($args){
-        $article = new Article();
-        $title = (string)$_POST('title');
-        $announce = (string)$_POST('preview');
-        $body = (string)$_POST('text');
-        $article->create($title, $announce, $body);
+        
+        $date = (string)$args('date');
+        $title = (string)$args('title');
+        $description = (string)$args('meta_desc');
+        $keywords = (string)$args('meta_key');
+        $announce = (string)$args('preview');
+        $body = (string)$args('text');
+        $status = (int)$status('status');
+        //$article->create($title, $announce, $body);
+        $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
         return array('result' => 'ok');
     }
 
     function editor($args){
-        $article = new Article();
-        $id = $_POST('id');
-        $title = (string)$_POST('title');
-        $announce = (string)$_POST('preview');
-        $body = (string)$_POST('text');
+        //$article = new Article();
+        $id = $args('id');
         $article->edit($id, $title, $announce, $body);
         return array ('result' => 'ok');
     }
@@ -59,15 +62,18 @@ switch ($_GET['page'])
             include 'articles.list.html';
             $art = new Articles();
             $articleList = $art->listAll();
-            
             break;
         case "save":
-            $acc = new Articles_Controller();
-            $acc->save($args);
+            $art = new Articles();
+            $save = $art->save($_GET);
+            include 'articles.list.html';
+            //$art = new Articles();
+            $articleList = $art->listAll();
             break;
         case "editor":
-            $acc = new Articles_Controller();
-            $acc->editor($args);
+            $acc = new Articles();
+            include 'articles.editor.html';
+            $res = $acc->editor($_GET);
             break;
         case "ArticleDel":
             $acc = new Articles_Controller();
