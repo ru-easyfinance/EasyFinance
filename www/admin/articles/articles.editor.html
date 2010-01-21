@@ -12,6 +12,7 @@ and open the template in the editor.
         res = <? echo(json_encode($res));?>
     </script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
     <script type="text/javascript" src="js/jHtmlArea-0.7.0.js"></script>
 
     <script type="text/javascript" src="js/editor.js"></script>
@@ -60,9 +61,10 @@ and open the template in the editor.
           <button id="save_article">Сохранить</button>
       </div>
       <div class="images">
-          <form action="index.php?page=AddImage" method="post" enctype="multipart/form-data">
+          <form id="imagesFormAdd" action="index.php" method="post">
+              <input type="hidden" name="page" id="page" value="addImage"/>
               <input type="file" id="image" name="image" />
-              <input type="submit" value="Добавить"/>
+              <input type="button" id="submitImg" value="Добавить"/>
           </form>
       </div>
   </body>
