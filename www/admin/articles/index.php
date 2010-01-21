@@ -14,10 +14,10 @@ require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 
 class Articles{
     function __construct()
-    {  
+    {
         $this->db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
     }
-    
+
     function listAll (){
         $sql = "SELECT id, date, title, status FROM articles ORDER BY date";
         $articleList = $this->db->query($sql);
@@ -26,7 +26,10 @@ class Articles{
 
     function save($args){
         $id = (int)$args['id'];
-        
+        $ids = (string)$args['ides'];
+
+        $arrayId = explode( ';' , $ids );
+
         $date = (string)$args['date'];
         $title = (string)$args['title'];
         $description = (string)$args['meta_desc'];
@@ -34,7 +37,7 @@ class Articles{
         $announce = (string)$args['preview'];
         $body = (string)$args['text'];
         $status = (int)$status['status'];
-        if ($id){
+        if (!$id){
             $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
         }
@@ -42,6 +45,9 @@ class Articles{
             $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=? WHERE id=?";
             $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $id);
         }
+        foreach ($arrayId as $k=>$v)
+            if ($v != 0)
+                $this->imageArticleConnection($v, $article);
         return array('result' => 'ok');
     }
 
@@ -55,7 +61,21 @@ class Articles{
         $id = $args['id'];
         $sql = "SELECT * FROM articles WHERE id=?";
         $article = $this->db->query($sql, $id);
-        return  ($article);
+        //$sql = "SELECT "
+        $ret = array(
+            article => array(
+                'id'=>$article[0]['id']
+                ,'title'=>$article[0]['title']
+                ,'date'=>$article[0]['date']
+                ,'author'=>$article[0]['authorName']
+                ,'url'=>$article[0]['authorUrl']
+                ,'meta_desc'=>$article[0]['description']
+                ,'meta_key'=>$article[0]['keywords']
+                ,'preview'=>$article[0]['announce']
+                ,'text'=>$article[0]['body']
+            )
+        );
+        return  ($ret);
     }
 
     function ArticleDel($args)
@@ -79,11 +99,11 @@ class Articles{
         $image = $this->db->query($sql, $image_id, $article_id);
         return $image;
     }
-    
+
 }
 switch ($_REQUEST['page'])
     {
-        case "listAll":            
+        case "listAll":
             $art = new Articles();
             $articleList = $art->listAll();
             require 'articles.list.html';
@@ -106,13 +126,13 @@ switch ($_REQUEST['page'])
            // die('jfk');
             $art->ArticleDel($_GET);
             $articleList = $art->listAll();
-            require 'articles.list.html';            
+            require 'articles.list.html';
             break;
         case "public":
             $art = new Articles();
             $art->publicArt($_GET);
             $articleList = $art->listAll();
-            require 'articles.list.html';     
+            require 'articles.list.html';
             break;
         case "addImage":
             $art = new Articles();
@@ -131,7 +151,7 @@ switch ($_REQUEST['page'])
             $image->resize(50);
 
 
-            
+
             $name = md5( time()+1, $ext );//навсякий. а вдруг время поменяется
 
             $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) . '.' . $ext);
@@ -139,18 +159,18 @@ switch ($_REQUEST['page'])
             $url2 = DIR_UPLOAD . 'articles/' . $name;
             $little = $art->saveImageInfo( $parent, $path2 , $url2 );
 
-            die ( array (
-                'parent_id' => $parent,
-                'original_url' => $url,
-                'child_id' => $little,
-                'little_url' => $url2,
-            ) );
+            die (json_encode( array (
+                'id' => $parent,
+                'link' => $url,
+                //'child_id' => $little,
+                'preview_link' => $url2,
+            ) )) ;
 
             //die('fjsdfk');
             break;
     }
 //$art = new Articles();
-//$art->listAll();
+//$art->save($_POST);
 //echo('<pre>');
 //die(print_r($art));
 
