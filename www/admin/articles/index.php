@@ -71,13 +71,13 @@ switch ($_GET['page'])
             $articleList = $art->listAll();
             break;
         case "editor":
-            $acc = new Articles();
+            $art = new Articles();
             include 'articles.editor.html';
-            $res = $acc->editor($_GET);
+            $res = $art->editor($_GET);
             break;
         case "ArticleDel":
-            $acc = new Articles_Controller();
-            $acc->ArticleDel($args);
+            $art = new Articles();
+            $art->ArticleDel($args);
             break;
     }
 //$art = new Articles();
