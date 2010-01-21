@@ -7,7 +7,7 @@ $(document).ready(function(){
     $("div.editor #date").val(nowDate.toLocaleFormat('%Y-%m-%d'));
     if (res.article){
         $("div.editor #id").val(res.article.id || '0')
-        $("div.editor #autor").val(res.article.author || '0')
+        $("div.editor #author").val(res.article.author || '0')
         if(res.article.date){
             $("div.editor #date").val(res.article.date)
         }
@@ -18,6 +18,7 @@ $(document).ready(function(){
         $("div.editor #preview").val(res.article.preview || '0')
         $("div.editor #text").val(res.article.text || '0')
     }
+
     //init
     $('div.editor #preview').htmlarea({
         // Override/Specify the Toolbar buttons to show
@@ -59,7 +60,24 @@ $(document).ready(function(){
         ]
     });
     function printPreview(){
-
+        var html_previewer = '', html_viewer = '', img_ids = '';
+        for(var key in res.images){
+            if (res.images[key]){
+                html_previewer += '<tr id="'+key+'"><td><img src="'+res.images[key].previewLink+'"></td><td>'+res.images[key].link+'</td><td class="del"> Удалить </td></tr>';
+                html_viewer += '<div id="'+key+'"><img src="'+res.images[key].previewLink+'"></div>';
+                img_ids += key + ';'
+            }
+        }
+        $("div.editor #ides").val(img_ids);
+        $('div.imgSelector').html(html_viewer);
+        $('div.images table').html(html_previewer)
+        $('div.images table td.del').click(function(){
+            var id = $(this).closest('tr').attr('id');
+            $.post('index.php', {id : id}, function(data){
+                delete res.images[id];
+                printPreview();
+            },'json')
+        })
     }
     printPreview();
     $('div.images form').ajaxForm();
@@ -72,11 +90,11 @@ $(document).ready(function(){
                 if(!res.images){
                     res.images = []
                 }
-                res.images.push({link: data.link || '',
-                                 previewLink: data.previewLink || ''})
-                printPreviews()
+                res.images[data.id] = {link: data.link || '',
+                                 previewLink: data.previewLink || ''};
+                printPreviews();
             }
         });
-    })
-})
+    });
+});
 

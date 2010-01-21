@@ -38,8 +38,9 @@ and open the template in the editor.
     </div>
       <div class="editor">
           <form action="index.php" method="post">
-              <input type="hidden" name="page" id="page" value="addImage"/>
+              <input type="hidden" name="page" id="page" value="save"/>
               <input type="hidden" id="id" name="id" value="0"/>
+              <input type="hidden" id="ides" name="ides" value=""/>
               <div class="line">
                   <label for="date">Дата</label>
                   <div><input type="text" id="date" name="date"/></div>
@@ -81,6 +82,9 @@ and open the template in the editor.
               <input type="file" id="image" name="image" />
               <input type="button" id="submitImg" value="Добавить"/>
           </form>
+          <table>
+              
+          </table>
       </div>
       <div style="display: none" id="imgSelector" title="Выберите вставляемую картинку">asfdsadfas</div>
   </body>
