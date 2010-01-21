@@ -70,6 +70,10 @@ $(document).ready(function(){
         }
         $("div.editor #ides").val(img_ids);
         $('div.imgSelector').html(html_viewer);
+        $('div.imgSelector div').click(function(){
+            tmpImgUrl = res.images[$(this).attr('id')].link;
+            $('#imgSelector').dialog('close');
+        })
         $('div.images table').html(html_previewer)
         $('div.images table td.del').click(function(){
             var id = $(this).closest('tr').attr('id');
@@ -80,6 +84,23 @@ $(document).ready(function(){
         })
     }
     printPreview();
+
+    $('div.editor form input#submitImg').click(function(){
+        //alert($('div.images form').length);
+        $('#imagesFormAdd').ajaxSubmit({
+
+            dataType: "json",
+            success: function(data){
+                if(!res.images){
+                    res.images = []
+                }
+                res.images[data.id] = {link: data.link || '',
+                                 previewLink: data.previewLink || ''};
+                printPreviews();
+            }
+        });
+    });
+
     $('div.images form').ajaxForm();
     $('div.images form input#submitImg').click(function(){
         //alert($('div.images form').length);
