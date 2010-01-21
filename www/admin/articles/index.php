@@ -52,25 +52,25 @@ class Articles{
     
 }
 //die('fjhwkf');
-switch ($args[0])
-	{
-            case "listAll":
-                $art = new Articles();
-                return $art->listAll();
-                //break;
-            case "save":
-                $acc = new Articles_Controller();
-                $acc->save($args);
-                break;
-            case "editor":
-                $acc = new Articles_Controller();
-                $acc->editor($args);
-                break;
-            case "ArticleDel":
-                $acc = new Articles_Controller();
-                $acc->ArticleDel($args);
-                break;
-	}
+switch ($_GET['page'])
+    {
+        case "listAll":
+            $art = new Articles();
+            return $art->listAll();
+            //break;
+        case "save":
+            $acc = new Articles_Controller();
+            $acc->save($args);
+            break;
+        case "editor":
+            $acc = new Articles_Controller();
+            $acc->editor($args);
+            break;
+        case "ArticleDel":
+            $acc = new Articles_Controller();
+            $acc->ArticleDel($args);
+            break;
+    }
 //$art = new Articles();
 //$art->listAll();
 //die(print_r($art));
