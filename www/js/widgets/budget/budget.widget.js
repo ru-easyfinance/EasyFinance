@@ -174,9 +174,9 @@ easyFinance.widgets.budget = function(data){
                         }
                     }
 
-                    var amountStr = amount > 0 ?
+                    var amountStr = (amount > 0) ?
                             formatCurrency(amount) :
-                            '<FONT COLOR="#FF0000"> запланировать </FONT>'
+                            (cls == 'nochild' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : 0);
 
                     dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'">\n\
                                 <td class="w1">\n\
