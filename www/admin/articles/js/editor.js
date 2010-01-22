@@ -73,8 +73,8 @@ $(document).ready(function(){
             }
         }
         $("div.editor #ides").val(img_ids);
-        $('div.imgSelector').html(html_viewer);
-        $('div.imgSelector div').click(function(){
+        $('div#imgSelector').html(html_viewer);
+        $('div#imgSelector div').click(function(){
             tmpImgUrl = res.images[$(this).attr('id')].link;
             $('#imgSelector').dialog('close');
         })
