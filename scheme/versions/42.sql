@@ -9,5 +9,5 @@ CREATE TABLE `images_articles` (
 `image_id` INT NOT NULL ,
 `article_id` INT NOT NULL
 ) COMMENT = 'связь статей и изображений';
-ALTER TABLE `images` CHANGE `id` `id` INT( 11 ) AUTO_INCREMENT
+ALTER TABLE `images` CHANGE `id` `id` INT( 11 ) AUTO_INCREMENT;
 ALTER TABLE `articles` ADD `image_id` INT NOT NULL ;
