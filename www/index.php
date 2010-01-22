@@ -5,7 +5,6 @@
  * @version SVN $Id$
  */
 define('INDEX', true);
-//require_once dirname(dirname(__FILE__)). "/cron/daily_currency.php";
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
