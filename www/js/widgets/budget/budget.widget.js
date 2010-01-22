@@ -5,11 +5,11 @@ easyFinance.widgets.budget = function(data){
 
     function init(data){
         _model = data
-        $('div.budget.list div.head tr').html('<td class="w1 ">Категория</td>\
-            <td class="w2 ">План, '+(res.currency[1].text || '')+'</td>\
-            <td class="w3 ">Факт, '+(res.currency[1].text || '')+'</td>\
-            <td class="w5 ">Остаток, '+(res.currency[1].text || '')+'</td>\
-            <td class="w6"></td>');
+        $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td>\
+            <td class='w2 '>План, "+(res.currency[1].text || '')+"</td>\
+            <td class='w3 '>Факт, "+(res.currency[1].text || '')+"</td>\
+            <td class='w5 '>Остаток, "+(res.currency[1].text || '')+"</td>\
+            <td class='w6'></td>");
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ easyFinance.widgets.budget = function(data){
 
                     var amountStr = (amount > 0) ?
                             formatCurrency(amount) :
-                            (cls == 'nochild' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : 0);
+                            (cls != 'parent open' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0.00');
 
                     dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'">\n\
                                 <td class="w1">\n\
