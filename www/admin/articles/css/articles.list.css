@@ -1,18 +1,18 @@
-div.list div.body{
-    width: 800px;
+/*div.list div.body{
+    width: auto;
     overflow-y: scroll;
     height: 400px;
-}
+}*/
 div.list .date{
     width: 100px;
     max-width: 100px;
     overflow: hidden;
 }
-div.list .title{
-    width : 150px;
-    max-width: 150px;
+/*div.list .title{
+    width : 550px;
+    max-width: 550px;
     overflow: hidden;
-}
+}*/
 div.list .status{
     width : 120px;
     max-width: 120px;
@@ -66,4 +66,8 @@ div.images{
     width: 30%;
     padding: 15px;
     border: 1px dashed black;
+}
+div.images table td.del{
+    background-color: red;
+    cursor: pointer;
 }
