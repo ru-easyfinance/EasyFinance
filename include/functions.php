@@ -14,18 +14,24 @@
 */
 function __autoload($class_name) {
     $array = explode("_",$class_name);
+    
     // Грузим контроллеры
-    if ( $array[1] == 'Controller' && file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.controller.php' ) ) {
+    if ( isset($array[1]) && $array[1] == 'Controller' && file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.controller.php' ) ) 
+    {
             require_once SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]). '.controller.php';
-    // Загружаем модули /modules
-    } elseif ( $array[1] == 'Model' && file_exists(SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.model.php') ) {
+    }
+    // Загружаем модели /models
+    elseif ( isset($array[1]) && $array[1] == 'Model' && file_exists(SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.model.php') )
+    {
             require_once SYS_DIR_ROOT . '/models/' . strtolower($array[0]) . '.model.php';
+    }
     // Загружаем дополнительные классы /core
-    } elseif (file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php')) {
+    elseif (file_exists(SYS_DIR_LIBS . strtolower($array[0]) . '.class.php'))
+    {
         require_once SYS_DIR_LIBS . strtolower($array[0]) . '.class.php';
-    } elseif (file_exists(SYS_DIR_ROOT . '/classes/' . ($array[0]) . '/'. $class_name .'.php')) {
-        require_once SYS_DIR_ROOT . '/classes/' . ($array[0]) . '/'. $class_name .'.php';
-    } else {
+    }
+    else
+    {
         //trigger_error("Не удалось найти файл с классом {$class_name} ".var_dump($array), E_USER_ERROR);
         return false;
     }
