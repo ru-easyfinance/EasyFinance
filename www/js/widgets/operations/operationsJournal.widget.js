@@ -275,6 +275,8 @@ easyFinance.widgets.operationsJournal = function(){
             $('#lblOperationsJournalAccountBalance').hide();
 
             loadJournal();
+
+            return false;
         });
 
         // фильтр по типу операции
