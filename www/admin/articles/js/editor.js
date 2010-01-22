@@ -67,7 +67,7 @@ $(document).ready(function(){
         var html_previewer = '', html_viewer = '', img_ids = '';
         for(var key in res.images){
             if (res.images[key]){
-                html_previewer += '<tr id="'+key+'"><td><img src="'+res.images[key].previewLink+'"></td><td>'+res.images[key].link+'</td><td class="del"> Удалить </td></tr>';
+                html_previewer += '<tr id="'+key+'"><td><img src="'+res.images[key].previewLink+'"></td><td><a href="'+res.images[key].link+'" target=_blank>Просмотреть</a></td><td class="del"> Удалить </td></tr>';
                 html_viewer += '<div id="'+key+'"><img src="'+res.images[key].previewLink+'"></div>';
                 img_ids += key + ';';
             }
