@@ -81,7 +81,7 @@ $(document).ready(function(){
         $('div.images table').html(html_previewer)
         $('div.images table td.del').click(function(){
             var id = $(this).closest('tr').attr('id');
-            $.post('index.php', {id : id}, function(data){
+            $.post('index.php', {id : id, page : 'ImageDel'}, function(data){
                 delete res.images[id];
                 printPreview();
             },'json')
