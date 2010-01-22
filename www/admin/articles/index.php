@@ -202,9 +202,9 @@ switch ($_REQUEST['page'])
             $put = substr( $name , 0 , 2);
 
             @mkdir(DIR_UPLOAD . 'articles/' . $put . '/');
-            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg' );
-            $path = DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
-            $url = 'http://' .URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
+            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg' );
+            $path = DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
+            $url = 'http://' .URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . $name .'.jpg';
             $parent = $art->saveImageInfo( 0, $path , $url );
             $image->resize(50);
 
@@ -212,9 +212,9 @@ switch ($_REQUEST['page'])
 
             $name = md5( time()+1, $ext );//навсякий. а вдруг время поменяется
 
-            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg');
-            $path2 = DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
-            $url2 = 'http://' . URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
+            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg');
+            $path2 = DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
+            $url2 = 'http://' . URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . $name .'.jpg';
             $little = $art->saveImageInfo( $parent, $path2 , $url2 );
 
             die (json_encode( array (
@@ -229,6 +229,7 @@ switch ($_REQUEST['page'])
         case "ImageDel":
             $art = new Articles();
             $art->deleteImage($_POST);
+            die( array('result' => 'ok'));
             break;
     }
 //$art = new Articles();
