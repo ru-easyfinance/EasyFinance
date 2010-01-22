@@ -54,7 +54,7 @@ easyFinance.widgets.operationsJournal = function(){
             // см. тикет #357
             if (data[v].account_name == null)
                 continue;
-
+/*
             if (  data[v].transfer > 0 ) {
                 tp = 'Перевод';
             } else if (data[v].virt == 1) {
@@ -64,6 +64,19 @@ easyFinance.widgets.operationsJournal = function(){
                     tp = 'Расход';
                 } else {
                     tp = 'Доход';
+                }
+            }
+*/
+
+            if (  data[v].transfer > 0 ) {
+                tp = 'transfer';
+            } else if (data[v].virt == 1) {
+                tp = 'target';
+            } else {
+                if (data[v].drain == 1) {
+                    tp = 'outcome';
+                } else {
+                    tp = 'income';
                 }
             }
 
@@ -82,7 +95,7 @@ easyFinance.widgets.operationsJournal = function(){
                 + "'>"
                     + "<td class='check'>"
                     + "<input type='checkbox' /></td>"
-                    + '<td class="light"><a href="#">' + tp + '</a></td>';
+                    + '<td class="light"><div class="operation ' + tp + '"></div></td>';
 
                 // @fixme: отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
                 //if (data[v].transfer != _account && data[v].transfer != 0){
