@@ -200,10 +200,16 @@ switch ($_REQUEST['page'])
             $name = md5( time(), $ext );
 
             $put = substr( $name , 0 , 2);
-
-            @mkdir(DIR_UPLOAD . 'articles/' . $put . '/');
-            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg' );
-            $path = DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
+            
+            $uploadPath = DIR_UPLOAD . 'articles/' . $put . '/';
+            
+            if( !file_exists( $uploadPath ) )
+            {
+            	mkdir( $uploadPath, null, true );
+            }            
+            
+            $image->save( $uploadPath . $name .'.jpg' );
+            $path = $uploadPath . $name .'.jpg';
             $url = 'http://' .DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
             $parent = $art->saveImageInfo( 0, $path , $url );
             $image->resize(50);
