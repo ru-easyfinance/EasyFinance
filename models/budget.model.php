@@ -41,24 +41,25 @@ class Budget_Model {
             $category = Core::getInstance()->user->getUserCategory();
         }
 
-        $sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
-            WHERE c.cat_id=b.category AND b.user_id=? AND b.date_start=? ) AS amount,
+         $sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
+            WHERE c.cat_id=b.category AND b.user_id=c.user_id AND b.date_start=? ) AS amount,
 
-            (SELECT SUM(o.money) FROM operation o
-                WHERE (o.transfer = NULL OR o.transfer = 0) AND c.cat_id = o.cat_id
-                AND o.date >= ? AND o.date <= LAST_DAY(o.date) ) AS money,
+            (SELECT SUM(o1.money) FROM operation o1
+                WHERE o1.user_id=c.user_id AND (o1.transfer = NULL OR o1.transfer = 0) AND c.cat_id = o1.cat_id
+                AND o1.date >= ? AND o1.date <= LAST_DAY(o1.date)) AS money,
 
             (SELECT AVG(amount) FROM budget t
-                        WHERE (t.date_start >= ADDDATE(?, INTERVAL -1 MONTH)
+                        WHERE t.user_id = c.user_id AND (t.date_start >= ADDDATE(?, INTERVAL -1 MONTH)
                             AND t.date_start <= LAST_DAY(t.date_start))
-                        AND t.category = c.cat_id AND t.user_id=c.user_id
+                        AND t.category = c.cat_id
              ) AS avg_3m
 
             FROM category c
-            WHERE (SELECT SUM(o.money) FROM operation o
-                WHERE (o.transfer = NULL OR o.transfer = 0) AND c.cat_id = o.cat_id
-                AND o.date >= ? AND o.date <= LAST_DAY(o.date) ) <> 0 
+            WHERE (SELECT SUM(o2.money) FROM operation o2
+                WHERE user_id=c.user_id AND (o2.transfer = NULL OR o2.transfer = 0) AND c.cat_id = o2.cat_id
+                AND o2.date >= ? AND o2.date <= LAST_DAY(o2.date) ) <> 0
             AND c.user_id=? ORDER BY c.cat_parent";
+        
 
 
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
@@ -81,7 +82,7 @@ class Budget_Model {
 
         $arraybudg = Core::getInstance()->db->select($sqlbudg, $start, $user_id, $start);
         
-        $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start , $start, $start, $start, $user_id);
+        $arrayoper = Core::getInstance()->db->select($sqloper, $start , $start, $start, $start, $user_id);
         //echo('<pre>');
             //die(print_r($arrayoper));
         
