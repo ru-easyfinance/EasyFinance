@@ -47,7 +47,7 @@ class Articles{
             $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id);
         }
         else{
-            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=? image_id=? WHERE id=?";
+            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=?, image_id=? WHERE id=?";
             $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id, $id);
         }
 
