@@ -65,9 +65,13 @@ table#operations_list_header th + th + th + th + th{
     width: 110px;
 }
 
-/* last empty header for scrollbar */
 table#operations_list_header th + th + th + th + th + th{
-    width: 52px;
+    width: 60px;
+}
+
+/* last empty header for scrollbar */
+table#operations_list_header th + th + th + th + th + th + th{
+    width: 32px;
 }
 
 /* column widths */

@@ -27,6 +27,9 @@ easyFinance.widgets.operationsJournal = function(){
     var _$txtDateTo = null;
     var _$checkAll = null;
 
+    var _$comboAccount = null;
+    var _$comboCategory = null;
+
     var _$dialogFilterType = null;
     var _$dialogFilterSum = null;
     var _$dialogFilterAccount = null;
@@ -54,19 +57,6 @@ easyFinance.widgets.operationsJournal = function(){
             // см. тикет #357
             if (data[v].account_name == null)
                 continue;
-/*
-            if (  data[v].transfer > 0 ) {
-                tp = 'Перевод';
-            } else if (data[v].virt == 1) {
-                tp = 'Фин.цель';
-            } else {
-                if (data[v].drain == 1) {
-                    tp = 'Расход';
-                } else {
-                    tp = 'Доход';
-                }
-            }
-*/
 
             if (  data[v].transfer > 0 ) {
                 tp = 'transfer';
@@ -111,7 +101,7 @@ easyFinance.widgets.operationsJournal = function(){
 
                 tr += '<td class="light"><span>'+data[v].date+'</span></td>'
                 + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
-                + '<td class="big">'+ (data[v].account_name ? data[v].account_name : '&nbsp;')
+                + '<td class="big">'+ (data[v].comment ? data[v].comment : '&nbsp;')
                     +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
@@ -276,8 +266,11 @@ easyFinance.widgets.operationsJournal = function(){
             _sumFrom = '';
             _sumTo = '';
             _category = '';
+            $('#cat_filtr').get(0).options[0].selected = true;
+            
             _account = '';
             _accountName = '';
+            $('#account_filtr').get(0).options[0].selected = true;
 
             $('#lblOperationsJournalAccountBalance').hide();
 
@@ -323,6 +316,18 @@ easyFinance.widgets.operationsJournal = function(){
         $('#btnFilterSum').click(function(){_$dialogFilterSum.dialog('open');});
 
         // фильтр по категории
+        _$comboCategory = _$node.find('#cat_filtr');
+        _$comboCategory.change(function(){
+            _category = $(this).val();
+
+            loadJournal();
+
+            return false;
+        });
+
+        /*
+         * СТАРЫЙ КОД, ФИЛЬТР БЫЛ В ДИАЛОГЕ
+        // фильтр по категории
         // заполняем диалог ссылками на доступные категории
         _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px"});
         _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
@@ -350,8 +355,23 @@ easyFinance.widgets.operationsJournal = function(){
                 });
             }
         });
+        */
 
         // фильтр по счёту
+        _$comboAccount = _$node.find('#account_filtr');
+        _$comboAccount.change(function(){
+            $('#lblOperationsJournalAccountBalance').hide();
+            $('#lblOperationsJournalSum').hide();
+
+            _account = $(this).val();
+            _accountName = this.options[this.selectedIndex].text;
+            loadJournal();
+
+            return false;
+        });
+
+        /*
+         * СТАРЫЙ КОД, ФИЛЬТР БЫЛ В ДИАЛОГЕ
         _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
         _$dialogFilterAccount.find('a').click(function(){
             $('#lblOperationsJournalAccountBalance').hide();
@@ -365,6 +385,7 @@ easyFinance.widgets.operationsJournal = function(){
             return false;
         });
         $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open');});
+        */
     }
 
     function _printFilters(){
@@ -377,8 +398,8 @@ easyFinance.widgets.operationsJournal = function(){
         if (_type != '' && _category != '')
             txt = txt + ', ';
 
-        if (_category != '')
-            txt = txt + 'категория: ' + _categoryName;
+        //if (_category != '')
+        //    txt = txt + 'категория: ' + _categoryName;
 
         if ((_type != '' || _category != '') && (_sumFrom != '' || _sumTo != ''))
             txt = txt + ', ';
@@ -401,8 +422,8 @@ easyFinance.widgets.operationsJournal = function(){
         if (txt != '' && _accountName != '')
             txt = txt + ', ';
 
-        if (_account != '')
-            txt = txt + 'счёт: ' + _accountName;
+        //if (_account != '')
+        //    txt = txt + 'счёт: ' + _accountName;
 
         if (txt == '') {
             _$node.find('#divOperationsJournalFilters').hide();
@@ -499,6 +520,7 @@ easyFinance.widgets.operationsJournal = function(){
 
     function setAccount(account) {
         _account = account;
+        _$comboAccount.val(_account);
 
         if (_modelAccounts)
             _accountName = _modelAccounts.getAccountNameById(account);
@@ -509,6 +531,7 @@ easyFinance.widgets.operationsJournal = function(){
 
     function setCategory(cat) {
         _category = cat;
+        _$comboCategory.val(_category);
     }
 
     function setDateFrom(dateStr) {
