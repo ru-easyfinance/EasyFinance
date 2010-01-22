@@ -204,7 +204,7 @@ switch ($_REQUEST['page'])
             @mkdir(DIR_UPLOAD . 'articles/' . $put . '/');
             $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg' );
             $path = DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
-            $url = 'http://' .URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . $name .'.jpg';
+            $url = 'http://' .DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
             $parent = $art->saveImageInfo( 0, $path , $url );
             $image->resize(50);
 
@@ -214,7 +214,7 @@ switch ($_REQUEST['page'])
 
             $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg');
             $path2 = DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
-            $url2 = 'http://' . URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . $name .'.jpg';
+            $url2 = 'http://' . DIR_UPLOAD . 'articles/' . $put . '/' . $name .'.jpg';
             $little = $art->saveImageInfo( $parent, $path2 , $url2 );
 
             die (json_encode( array (
