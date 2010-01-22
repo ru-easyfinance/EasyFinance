@@ -28,6 +28,8 @@ class Articles{
         $id = $args['id'];
         $ids = (string)$args['ides'];
 
+        $image_id = $args['general_img'];
+
         $arrayId = explode( ';' , $ids );
 
         $date = (string)$args['date'];
@@ -41,16 +43,25 @@ class Articles{
         if ( $args['public'] )
             $status = 1;
         if (!$id){
-            $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
+            $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id);
         }
         else{
-            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=? WHERE id=?";
-            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $id);
+            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=? image_id=? WHERE id=?";
+            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id, $id);
         }
+
         foreach ($arrayId as $k=>$v)
-            if ($v != 0)
-                $this->imageArticleConnection($v, $article);
+            if ($v != 0){
+                if (!$id){
+                    //$this->clearConnection($article);
+                    $this->imageArticleConnection($v, $article);
+                }
+                else{
+                    //$this->clearConnection($id);
+                    $this->imageArticleConnection($v, $id);
+                }
+            }
         return array('result' => 'ok');
     }
 
@@ -64,11 +75,30 @@ class Articles{
         $id = $args['id'];
         $sql = "SELECT * FROM articles WHERE id=?";
         $article = $this->db->query($sql, $id);
-        //$sql = "SELECT "
+        
+        $sql = "SELECT id, url FROM images WHERE id IN (SELECT image_id FROM images_articles WHERE article_id=?)
+            OR parent_id IN (SELECT image_id FROM images_articles WHERE article_id=?)";
+        $imageArray = $this->db->query($sql, $id, $id);
+        $imageRes = array();
+        foreach ( $imageArray as $k=>$v ){
+            if ( fmod($k, 2) == 0 ){
+                $imageRes[ $v['id'] ]['link'] = $imageArray[$k]['url'];
+                $imageRes[ $v['id'] ]['previewLink'] = $imageArray[$k+1]['url'];
+                $number++;
+            }
+        }
+        $sql = "SELECT a.image_id as id, i.url as link FROM articles a, images i WHERE a.id=? AND a.image_id=i.id";
+        $imageMain = $this->db->query($sql, $id);
+        $img = array(
+            'id'=>$imageMain[0]['id'],
+            'link'=>$imageMain[0]['link']
+        );
         $ret = array(
+            images => $imageRes,
             article => array(
                 'id'=>$article[0]['id']
                 ,'title'=>$article[0]['title']
+                ,'img'=>$img
                 ,'date'=>$article[0]['date']
                 ,'author'=>$article[0]['authorName']
                 ,'url'=>$article[0]['authorUrl']
@@ -78,6 +108,7 @@ class Articles{
                 ,'text'=>$article[0]['body']
             )
         );
+           // die(print_r($ret));
         return  ($ret);
     }
 
@@ -112,6 +143,16 @@ class Articles{
             if ( !unlink($v['path']) )
                 die('Не получилось удалить картинку');
         }
+        $sql = "DELETE FROM images WHERE id=? OR parent_id=?";
+        $images = $this->db->query($sql, $id, $id);
+        $sql = "DELETE FROM images_articles WHERE image_id=? ";
+        $images = $this->db->query($sql, $id);
+    }
+
+    function clearConnection( $id )
+    {
+        $sql = "DELETE FROM images_articles WHERE article_id=?";
+        $this->db->query($sql, $id);
     }
 
 }
@@ -185,9 +226,9 @@ switch ($_REQUEST['page'])
 
             //die('fjsdfk');
             break;
-        case "imageDel":
+        case "ImageDel":
             $art = new Articles();
-            $art->deleteImage($_GET);
+            $art->deleteImage($_POST);
             break;
     }
 //$art = new Articles();
