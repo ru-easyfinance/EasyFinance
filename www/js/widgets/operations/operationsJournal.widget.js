@@ -81,7 +81,8 @@ easyFinance.widgets.operationsJournal = function(){
             tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id 
                 + "' value='" + data[v].id
                 + "' moneyCur='" + curMoney.toString()
-                + "' trId='" + data[v].tr_id 
+                + "' trId='" + data[v].tr_id
+                + "' account='" + data[v].account_name
                 + "'>"
                     + "<td class='check'>"
                     + "<input type='checkbox' /></td>"

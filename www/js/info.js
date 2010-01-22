@@ -74,6 +74,7 @@ $('li.edit').live('click', function(){
                 data[key]['image']='/img/i/bitv.png';
             if (data[key]['category']==8)
                 data[key]['image']='/img/i/comp.png';
+            
             str += "<div class='object2' id='"
                 + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
                 data[key]['image']+"' alt='' /><a>" +
@@ -82,7 +83,7 @@ $('li.edit').live('click', function(){
                 data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
                 data[key]['percent_done'] + '%;"><span>' +
                 data[key]['percent_done'] + '%</span></div></div><div class="date"><span>Целевая дата:' +
-                data[key]['date_end'] + '</span>' +
+                data[key]['end'] + '</span>' +
                 "</div><ul><li class='edit'>редактировать</li><li class='del'>удалить</li></ul></div></div></div>";
         }
         str += '<div class="add2"><span>Добавить финансовую цель</span></div>';
