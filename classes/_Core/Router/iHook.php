@@ -17,6 +17,7 @@ interface _Core_Router_iHook
 	 * @param string $class Вызываемый класс контроллера (комманды)
 	 * @param string $method Вызываемый метод контроллера
 	 * @param array $chunks Массив остатков от разбора uri роутером
+	 * @param _Core_TemplateEngine $templateEngine обьект шаблонизатора
 	 */
-	public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks );
+	public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks, _Core_TemplateEngine $templateEngine );
 }
