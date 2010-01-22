@@ -135,10 +135,20 @@ Core::getInstance()->js = array(
 // Почта
 include_once "../core/external/Swift/swift_required.php";
 
+/*
+// sendmail
+$mailTransport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+*/
+/*
+// mail
+$transport = Swift_MailTransport::newInstance();
+*/
+
+// smtp
 $mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
 	//->setUsername('info@easyfinance.ru')
 	//->setPassword('j2df32nD3l7sFa2');
 	->setUsername('support@easyfinance.ru')
-	->setPassword('B6BestMyA6Yo');
+	->setPassword('7uN3BN6t');
 
 Core::getInstance()->mailer = Swift_Mailer::newInstance( $mailTransport );
