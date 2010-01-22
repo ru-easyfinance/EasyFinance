@@ -6,17 +6,17 @@ $(document).ready(function(){
     var nowDate = new Date();
     $("div.editor #date").val(nowDate.toLocaleFormat('%Y-%m-%d'));
     if (res.article){
-        $("div.editor #id").val(res.article.id || '0')
-        $("div.editor #author").val(res.article.author || '0')
+        $("div.editor #id").val(res.article.id || '')
+        $("div.editor #author").val(res.article.author || '')
         if(res.article.date){
             $("div.editor #date").val(res.article.date)
         }
-        $("div.editor #url").val(res.article.url || '0')
-        $("div.editor #title").val(res.article.title || '0')
-        $("div.editor #meta_desc").val(res.article.meta_desc || '0')
-        $("div.editor #meta_key").val(res.article.meta_key || '0')
-        $("div.editor #preview").val(res.article.preview || '0')
-        $("div.editor #text").val(res.article.text || '0')
+        $("div.editor #url").val(res.article.url || '')
+        $("div.editor #title").val(res.article.title || '')
+        $("div.editor #meta_desc").val(res.article.meta_desc || '')
+        $("div.editor #meta_key").val(res.article.meta_key || '')
+        $("div.editor #preview").val(res.article.preview || '')
+        $("div.editor #text").val(res.article.text || '')
     }
 
     //init
@@ -85,7 +85,7 @@ $(document).ready(function(){
     }
     printPreview();
 
-    $('div.editor form#general_img #image').click(function(){
+    $('div.editor form#general_img #image').change(function(){
         //alert($('div.images form').length);
         $('div.editor form#general_img').ajaxSubmit({
 
