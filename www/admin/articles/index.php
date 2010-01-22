@@ -25,7 +25,7 @@ class Articles{
     }
 
     function save($args){
-        $id = (int)$args['id'];
+        $id = $args['id'];
         $ids = (string)$args['ides'];
 
         $arrayId = explode( ';' , $ids );
@@ -34,9 +34,12 @@ class Articles{
         $title = (string)$args['title'];
         $description = (string)$args['meta_desc'];
         $keywords = (string)$args['meta_key'];
-        $announce = (string)$args['preview'];
-        $body = (string)$args['text'];
-        $status = (int)$status['status'];
+        $announce = strip_tags((string)$args['preview'], '<p>');
+        $body = strip_tags((string)$args['text'], '<p><b><i><u><h3><h4><h5><h6><a><img><ul><li><span>');
+
+        $status = 0;
+        if ( $args['public'] )
+            $status = 1;
         if (!$id){
             $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status);
@@ -100,6 +103,17 @@ class Articles{
         return $image;
     }
 
+    function deleteImage( $args )
+    {
+        $id = $args['id'];
+        $sql = "SELECT path FROM images WHERE id=? OR parent_id=?";
+        $images = $this->db->query($sql, $id, $id);
+        foreach ($images as $k=>$v){
+            if ( !unlink($v['path']) )
+                die('Не получилось удалить картинку');
+        }
+    }
+
 }
 switch ($_REQUEST['page'])
     {
@@ -144,9 +158,12 @@ switch ($_REQUEST['page'])
             $ext = strtolower ($name) ;
             $name = md5( time(), $ext );
 
-            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) );
-            $path = DIR_UPLOAD . 'articles/' . $name;
-            $url = DIR_UPLOAD . 'articles/' . $name;
+            $put = substr( $name , 0 , 2);
+
+            @mkdir(DIR_UPLOAD . 'articles/' . $put . '/');
+            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg' );
+            $path = DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
+            $url = 'http://' .URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
             $parent = $art->saveImageInfo( 0, $path , $url );
             $image->resize(50);
 
@@ -154,19 +171,23 @@ switch ($_REQUEST['page'])
 
             $name = md5( time()+1, $ext );//навсякий. а вдруг время поменяется
 
-            $image->save( DIR_UPLOAD . 'articles/' . substr($name , 0, 3) );
-            $path2 = DIR_UPLOAD . 'articles/' . $name;
-            $url2 = DIR_UPLOAD . 'articles/' . $name;
+            $image->save( DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg');
+            $path2 = DIR_UPLOAD . 'articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
+            $url2 = 'http://' . URL_ROOT_MAIN . 'upload/uploaded' . '/articles/' . $put . '/' . substr($name , 0, 2) .'.jpg';
             $little = $art->saveImageInfo( $parent, $path2 , $url2 );
 
             die (json_encode( array (
                 'id' => $parent,
                 'link' => $url,
                 //'child_id' => $little,
-                'preview_link' => $url2,
+                'previewLink' => $url2,
             ) )) ;
 
             //die('fjsdfk');
+            break;
+        case "imageDel":
+            $art = new Articles();
+            $art->deleteImage($_GET);
             break;
     }
 //$art = new Articles();

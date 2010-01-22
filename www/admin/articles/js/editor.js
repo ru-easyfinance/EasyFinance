@@ -108,7 +108,7 @@ $(document).ready(function(){
                 }
                 res.images[data.id] = {link: data.link || '',
                                  previewLink: data.previewLink || ''};
-                printPreviews();
+                printPreview();
             }
         });
     });
