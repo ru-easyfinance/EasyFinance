@@ -185,7 +185,7 @@ class Account_Model
         $sql = "SELECT DISTINCT v.account_id, f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
                 WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
                 AND v.account_id IN ($string)";
-            $dop = $this->db->query($sql);// получаем дополнительные поля
+            //$dop = $this->db->query($sql);// получаем дополнительные поля
 //die(print_r($dop));
         $return = array();//возвращаемые данные
         //загрузка дополнительных параметров по каждому из счетов
@@ -202,11 +202,11 @@ class Account_Model
                 else
                     $ret[$k]['id'] = $v1;
             }
-            foreach ($dop as $k2=>$v2)//дополнительные поля
+            /*foreach ($dop as $k2=>$v2)//дополнительные поля
             {
                 if ( $v2['account_id'] == $v['account_id'])
                 $ret[$k][$v2['name']] = $v2['field_value'];
-            }
+            }*/
             
         }
         //$ret = array('result'=>$ret);
