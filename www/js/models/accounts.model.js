@@ -57,7 +57,7 @@ easyFinance.models.accounts = function(){
                 param2(_this);
         } else {
             if (typeof param1 == 'function')
-                _loadAccounts(function(){param1(_this)});
+                _loadAccounts(function(){param1(_this);});
             else
                 _loadAccounts();
         }
