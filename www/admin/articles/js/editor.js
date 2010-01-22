@@ -19,7 +19,7 @@ $(document).ready(function(){
         $("div.editor #text").val(res.article.text || '')
         if (res.article.img){
             $('div.editor input#general_img').val(res.article.img.id||'0')
-            $('div.editor form#general_img image').attr('src',res.article.img.link||'').show();
+            $('div.editor form#general_img img').attr('src',res.article.img.link||'').show();
         }
     }
 
@@ -96,7 +96,7 @@ $(document).ready(function(){
             dataType: "json",
             success: function(data){
                 $('div.editor input#general_img').val(data.id||'0')
-                $('div.editor form#general_img image').attr('src',data.prewiewLink||'').show();
+                $('div.editor form#general_img img').attr('src',data.prewiewLink||'').show();
             }
         });
     });
