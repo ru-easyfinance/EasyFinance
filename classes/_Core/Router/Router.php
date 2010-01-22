@@ -3,10 +3,11 @@
 class _Core_Router
 {
 	protected $request;
-	protected $hooks;
+	protected $hooks = array();
 	
-	protected $className;
-	protected $methodName;
+	protected $className 		= null;
+	protected $methodName 		= null;
+	protected $requestRemains 	= array();
 	
 	protected $view;
 	
@@ -25,32 +26,75 @@ class _Core_Router
 	
 	public function performRequest()
 	{
-		//some kind of internal logic
+		// Формируем массив для разбора (substr отрезает "/" в начале)
+		$uri 		= substr( $this->request->uri, 1 );
+		$uriArr		= explode( '/', $uri );
 		
-		// Разбираем запрос, отделяем его от переменных и адреса
-		// Ищем класс убирая по куску с конца ( если пусто - Index )
-		// Ищем метод (если пусто - index)
-		// Вызываем метод.
-		// В случае неудачи - исключение
-		
-		$class = '';
-		$method = '';
-		$chunks = array();
-		
-		foreach ( $this->hooks as $className )
-		{
-			call_user_func( array($className,'execRouterHook'), $this->request, $class, $method, $chunks );
+		// Цикл по реверсивному поиску класса\метода оО (ниже понятнее) =)		
+		$iterations = sizeof($uriArr);
+		for( $i = $iterations; $i >= 1; $i-- )
+		{			
+			// Пытаемся сформировать название класса из запроса
+			$className = $this->formClassName( $uriArr );
+			
+			// если таковой существует ...
+			if( class_exists( $className ) )
+			{
+				$this->className = $className;
+				
+				// Проверяем нет ли метода с имененем = последнему элементу запроса
+				if( method_exists( $this->className, $lastPart ) )
+				{
+					$this->methodName	= $lastPart;
+				}
+				// ... ежели нету - устанавливаем метод по умолчанию
+				else
+				{
+					$this->methodName	= 'index';
+				}
+				
+				break;
+			}
+			
+			// Перед переходом на последующую итерацию обрезаем последний элемент запроса 
+			$this->requestRemains[] = $lastPart = array_pop( $uriArr );
+			
+			// Если итерация = 1 а класс ещё не определён
+			if( $i == 1 && empty($this->className) )
+			{
+				//Подкидываем ещё один элемент в запрос
+				array_unshift( $uriArr, 'index' );
+				
+				// Увеличиваем счётчик... 
+				$i++;
+			}
 		}
 		
-		$view = $this->getTemplateEngine();
+		// Создаём обьект заглушку шаблонизатора
+		// сделанно временно из за необходимости поддержки smarty
+		$templateEngine = new _Core_TemplateEngine();
+		
+		// Вызов подключённых хуков
+		foreach ( $this->hooks as $className )
+		{
+			call_user_func( array($className,'execRouterHook'), 
+				$this->request,
+				$this->className,
+				$this->methodName,
+				$this->requestRemains,
+				$templateEngine
+			);
+		}
 		
 		try
 		{
-			$controller = new $class( $view );
+			$controller = new $this->className( $templateEngine );
 			
-			call_user_func( array( $controller, $method ), $chunks );
+			call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
 			
-			//$view->display();
+			unset($controller);
+			
+			$templateEngine->display( 'index.html' );
 		}
 		catch ( Exception $e )
 		{
@@ -86,8 +130,17 @@ class _Core_Router
 			}
 			else
 			{
-				_Core_Router::redirect('/404', false, 404);
+				self::redirect('/404', false, 404);
 			}
 		}
+	}
+	
+	protected function formClassName( array $array )
+	{
+		$array = array_map( 'ucfirst', $array );
+		
+		$className = implode( '_', $array ) . '_Controller';
+		
+		return $className;
 	}
 }
