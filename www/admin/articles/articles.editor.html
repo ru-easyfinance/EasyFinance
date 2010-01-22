@@ -38,7 +38,11 @@ and open the template in the editor.
     </div>
       <div class="editor">
           <form id="general_img" action="index.php" method="post">
-              <input type="hidden" name="page" id="page" value="save"/>
+              <label for="image">Главная картинка</label>
+              <input type="hidden" name="page" id="page" value="addImage"/>
+              <input type="file" id="image" name="image" />
+              <image src="">
+              <input type="button" id="submitImg" value="Добавить"/>
           </form>
           <form action="index.php" method="post">
               <input type="hidden" name="page" id="page" value="save"/>
@@ -76,6 +80,10 @@ and open the template in the editor.
               <div class="line">
                   <label for="text">Текст</label>
                   <div><textarea id="text" name="text"></textarea></div>
+              </div>
+              <div class="line">
+                  <label for="chk">Публиковать</label>
+                  <input type="checkbox" id="public" name="public"/>
               </div>
               <input type="submit" value="Сохранить"/>
           </form>

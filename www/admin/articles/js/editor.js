@@ -85,18 +85,13 @@ $(document).ready(function(){
     }
     printPreview();
 
-    $('div.editor form input#submitImg').click(function(){
+    $('div.editor form#general_img #image').click(function(){
         //alert($('div.images form').length);
-        $('#imagesFormAdd').ajaxSubmit({
+        $('div.editor form#general_img').ajaxSubmit({
 
             dataType: "json",
             success: function(data){
-                if(!res.images){
-                    res.images = []
-                }
-                res.images[data.id] = {link: data.link || '',
-                                 previewLink: data.previewLink || ''};
-                printPreviews();
+                
             }
         });
     });
