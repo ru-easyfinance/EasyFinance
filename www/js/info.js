@@ -88,4 +88,4 @@ $('li.edit').live('click', function(){
         str += '<div class="add2"><span>Добавить финансовую цель</span></div>';
         $('.financobject_block').html(str);
     }
-})
+});
