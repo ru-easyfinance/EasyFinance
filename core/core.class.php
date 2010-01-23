@@ -18,7 +18,7 @@ class Core
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
      */
-    public static $db = null;
+    public $db = null;
 
     /**
      * Массив зависимостей от загружаемых скриптов от подключаемых модулей
