@@ -116,7 +116,7 @@ class Category_Model {
      */
     public function loadSumCategories($sys_currency, $start, $finish)
     {
-        return '';
+        return array('cat_id' =>null, 'sum'=>null);
         //TODO Переписать математические расчёты в функции, на использование BCMATH
         if (!empty ($start)) {
             $param = "AND o.date BETWEEN '{$start}' AND '{$finish}'";
@@ -342,20 +342,23 @@ class Category_Model {
         }
     
         $sum = $this->loadSumCategories($sys_currency, $start, $finish);
-
+        
         $users = array();
         
-        foreach (Core::getInstance()->user->getUserCategory() as $val) {
-            $users[$val['cat_id']] = array(
-                'id'      => $val['cat_id'],
-                'parent'  => $val['cat_parent'],
-                'system'  => $val['system_category_id'],
-                'name'    => $val['cat_name'],
-                'type'    => $val['type'],
-                'visible' => $val['visible'],
-                'custom'  => $val['custom']
+        foreach (Core::getInstance()->user->getUserCategory() as $category)
+        {
+            $users[$category['cat_id']] = array(
+                'id'      => $category['cat_id'],
+                'parent'  => $category['cat_parent'],
+                'system'  => $category['system_category_id'],
+                'name'    => $category['cat_name'],
+                'type'    => $category['type'],
+                'visible' => $category['visible'],
+                'custom'  => $category['custom']
             );
-            if ($val['cat_id'] == $sum['cat_id']) {
+            
+            if ($category['cat_id'] == $sum['cat_id'])
+            {
                 $users[$val['cat_id']]['summ'] = $sum['sum'];
             }
         }
