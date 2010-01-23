@@ -15,6 +15,13 @@ class _Core_Request
 	
 	private $uri;
 	
+	/**
+	 * Ссылка на текущий запрос
+	 *
+	 * @var _Core_Request
+	 */
+	private static $currentInstance = null;
+	
 	private function __construct()
 	{
 		
@@ -22,23 +29,30 @@ class _Core_Request
 	
 	public static function getCurrent()
 	{
-		$request = new self();
+		if( !(self::$currentInstance instanceof self) )
+		{
+			self::$currentInstance = new self();
+			
+			self::$currentInstance->scheme = self::$currentInstance->getScheme();
+			self::$currentInstance->method = $_SERVER['REQUEST_METHOD'];
+			self::$currentInstance->host 	= $_SERVER["HTTP_HOST"];
+			
+			self::$currentInstance->post	= self::$currentInstance->escapeVarsArray( $_POST );
+			self::$currentInstance->get	= self::$currentInstance->escapeVarsArray( $_GET );
+			
+			self::$currentInstance->uri	= self::$currentInstance->cleanUri( $_SERVER["REQUEST_URI"] );
+		}
 		
-		$request->scheme 	= $request->getScheme();
-		$request->method 	= $_SERVER['REQUEST_METHOD'];
-		$request->host 	= $_SERVER["HTTP_HOST"];
-		
-		$request->post	= $request->escapeVarsArray( $_POST );
-		$request->get	= $request->escapeVarsArray( $_GET );
-		
-		$request->uri	= $request->cleanUri( $_SERVER["REQUEST_URI"] );
-		
-		return $request;
+		return self::$currentInstance;
 	}
 	
 	public function getFake( $uri, $domain = false, $get=false, $post=false, $method = false )
 	{
+		$request = new self();
 		
+		$request->uri = $request->cleanUri( $uri );
+		
+		return $request;
 	}
 	
 	protected function getScheme()
