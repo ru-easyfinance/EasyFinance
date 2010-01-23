@@ -333,7 +333,8 @@ class Category_Model {
      * @return array mixed
      */
     function getCategory($start = null, $finish = null)
-    {   
+    { 
+    	
         if (!$start) {
             $start = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
         }
@@ -341,6 +342,8 @@ class Category_Model {
             $finish = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
         }
     
+        // Инициализация вызываемой но неиспользуемой переменной оО
+        $sys_currency = 1;
         $sum = $this->loadSumCategories($sys_currency, $start, $finish);
         
         $users = array();
