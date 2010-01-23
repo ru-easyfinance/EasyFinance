@@ -11,16 +11,13 @@ class _Core_Router
 	
 	protected $view;
 	
-	public function __construct( _Core_Request $request )
+	public function __construct( _Core_Request $request, $hooksConfig = false )
 	{
 		$this->request = $request;
-	}
-	
-	public function addHook( $className )
-	{
-		if( class_exists( $className ) && in_array( '_Core_Router_iHook', class_implements($className) ) )
+		
+		if( $hooksConfig !== false )
 		{
-			$this->hooks[] = $className;
+			$this->configureHooks( $hooksConfig );
 		}
 	}
 	
@@ -29,6 +26,9 @@ class _Core_Router
 		// Формируем массив для разбора (substr отрезает "/" в начале)
 		$uri 		= substr( $this->request->uri, 1 );
 		$uriArr		= explode( '/', $uri );
+		
+		// Предопределяем переменную для хранения последней части запроса
+		$lastPart = null;
 		
 		// Цикл по реверсивному поиску класса\метода оО (ниже понятнее) =)		
 		$iterations = sizeof($uriArr);
@@ -77,13 +77,16 @@ class _Core_Router
 		// Вызов подключённых хуков
 		foreach ( $this->hooks as $className )
 		{
-			call_user_func( array($className,'execRouterHook'), 
-				$this->request,
-				$this->className,
-				$this->methodName,
-				$this->requestRemains,
-				$templateEngine
-			);
+			
+			//$className::${'::execRouterHook'}();
+			
+			call_user_func_array( array($className,'execRouterHook'), array(
+				&$this->request,
+				&$this->className,
+				&$this->methodName,
+				&$this->requestRemains,
+				&$templateEngine
+			));
 		}
 		
 		try
@@ -102,12 +105,43 @@ class _Core_Router
 		}
 	}
 	
+	public function addHook( $className )
+	{
+		if( !class_exists( $className ) )
+		{
+			throw new _Core_Exception('Class with name "' . $className . '" does not exist!');
+		}
+		
+		if( !in_array( '_Core_Router_iHook', class_implements($className) ) )
+		{
+			throw new _CoreException('Class "' . $className . '" don\'t implements "_Core_Router_iHook"! ');
+		}
+		
+		$this->hooks[] = $className;
+	}
+	
+	public function configureHooks( $configPath )
+	{
+		if( !file_exists($configPath) )
+		{
+			throw new _Core_Exception('The file specified for hooks configure is not exist!');
+		}
+		
+		foreach ( file( $configPath ) as $className )
+		{
+			$this->addHook( trim($className) );
+		}
+	}
+	
 	public static function redirect( $url, $isExternal = false, $statusCode = 200 )
 	{
-		// Если внешний - редирект заголовком.
-		// Если нет -
-		// Формируем соотв. запрос
-		// Отдаём заголовок
+		if( $isExternal )
+		{
+			header('Location: ' . $url, null, $statusCode );
+			exit();
+		}
+		
+		$request = _Core_Request::getFake( $url );
 		
 		$router = new _Core_Router( $request );
 		
