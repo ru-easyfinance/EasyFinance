@@ -21,11 +21,12 @@ abstract class _Core_Controller
 	 * всех контроллеров свойств и обьектов.
 	 *
 	 */
-	public function __construct()
+	public function __construct( $template )
 	{
 		// Шаблонизатор
-		$this->tpl   = Core::getInstance()->tpl;
+		$this->tpl   = $template;
 		
+		// Вызов псевдоконструктора.
 		$this->__init();
 		
 		//Ежели неавторизован пользователь ...
@@ -33,13 +34,22 @@ abstract class _Core_Controller
 		{
 			//..показываем ему сео говнотексты
 			$this->includeSeoText();
-			
-			//.. записываем реферера, если он конечно уже не был записан
-			if( !isset($_SESSION['referrer_url']) )
-			{
-				$_SESSION['referrer_url'] = $_SERVER['HTTP_REFERER'];
-			}
 		}
+		
+		
+		// Определяем информацию о пользователе
+		if (Core::getInstance()->user->getId())
+		{
+			$uar = array(
+				'user_id'   => Core::getInstance()->user->getId(),
+				'user_name' => $_SESSION['user']['user_name'],
+				'user_type' => $_SESSION['user']['user_type']
+			);
+			
+			$this->tpl->assign('user_info', $uar);
+		}
+		
+		$this->loadJS();
 	}
 	
 	/**
@@ -55,44 +65,41 @@ abstract class _Core_Controller
 	 */
 	protected function includeSeoText()
 	{
+		$texts = array();
+		
 		if(file_exists( DIR_SHARED . 'seo.php'))
 		{
 			include ( DIR_SHARED . 'seo.php');
 		}
+		
 		$this->tpl->assign('seotext', $texts);
 	}
 	
-    /**
-     * Если нам были переданы ошибочные данные, генерируем 404 страницу
-     * @param $method
-     * @param $args
-     * @return void
-     */
-    public function __call($method, $args)
-    {
-        //@XXX Делаем хак для XDEBUG
-        if (substr($method, 0, 7) != '?XDEBUG') {
-           // error_404();
-        }
-    }
-    
-    /**
-     * 
-     */
-    private function loadJS ()
-    {
-        $mdl = strtolower(Core::getInstance()->url[0]);
-//        if (DEBUG) {
-            $sfx='.js';
-//        } else {
-//            $sfx='.min.js';
-//        }
-        $js = Core::getInstance()->js[$mdl];
-        if(!is_array($js)){$js = array();}
-        foreach ($js as $v) {
-            Core::getInstance()->tpl->append('js', $v.$sfx);
-        }
-    }
+	/**
+	 * Динамическое подключение js файлов
+	 * в зависимости от модуля
+	 *
+	 */
+	private function loadJS ()
+	{
+		$module = '';
+		$jsArr = array();
+		
+		if( sizeof(Core::getInstance()->url) )
+		{
+			$module = strtolower( Core::getInstance()->url[0] );
+		}
+		
+		if( array_key_exists( $module, Core::getInstance()->js ) )
+		{
+			$jsArr = Core::getInstance()->js[$module];
+		}
+		
+		foreach ($jsArr as $jsFile)
+		{
+			$this->tpl->append('js', $jsFile.'.js');
+		}
+	}
 
 	/**
 	 * При завершении работы, контроллера
@@ -144,120 +151,93 @@ abstract class _Core_Controller
 		
 		if ( is_null($user->getId()) )
 		{
-			Core::getInstance()->tpl->assign('res', json_encode($res));
+			$this->tpl->assign('res', json_encode($res));
 			return false;
 		}
 
-        Core::getInstance()->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
+		$this->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
+		
         // Подготавливаем счета
         $accounts = array();
-        try {
-                /*$acc = new Accounts_Model;
-                $accou = $acc->accounts_list();*/
-
+        try
+        {
                 $acc = new Account_Collection();
                 $accou = $acc->load($user->getId());
 
                 $account = $accou['result']['data'];
-                //die(print_r($account));
             
-        } catch ( Exception $e) {
+        } 
+        catch ( Exception $e)
+        {
             $accou = 0;
         }
-        foreach ($account as $k=>$v){
+        
+        
+        foreach ($account as $k=>$v)
+       	{
                 $accounts[$k] = $v;
         }
-
-        /*$accounts = array();
-        
-        //$account = $accou['result'];
-        foreach ($accou as $k=>$v){
-            foreach ($v as $k1=>$v1){
-                $accounts[$k][$k1] = $v1;
-            }
-        }*/
-        
-        /*
-        foreach ($user->getUserAccounts() as $v) {
-            $accounts[$v['account_id']] =array(
-                'id'            => $v['account_id'],
-                'type'          => $v['account_type_id'],
-                'cur'           => $v['account_currency_name'],
-                'name'          => stripslashes($v['account_name']),
-                'descr'         => stripslashes($v['account_description']),
-                'def_cur'       => Core::getInstance()->currency[$v['account_currency_id']]['value'] * $v['total_sum'],
-                'cur_id'        => $v['account_currency_id'],
-                'total_balance' => $v['total_sum']
-            );
-        }*/
         
         // Подготавливаем фин.цели
         $targets = array();
-        try {
+        try 
+        {
             $targ = $user->getUserTargets();
-        } catch ( Exception $e) {
+        }
+        catch ( Exception $e)
+        {
             $targ = 0;
         }
-        /*foreach ($user->getUserTargets() as $key => $var) {
-            if ($key == 'user_targets') {
-                foreach ($var as $v) {
-                    $targets['user_targets'][$v['id']] = array(
-                        'title'        => $v['title'],
-                        'date_end'     => $v['end'],
-                        'amount_done'  => $v['amount_done'],
-                        'percent_done' => $v['percent_done'],
-                        'money'        => $v['amount'],
-                        'account'      => $v['account'],
-                        'amount_done'  => $v['amount_done'],
-                        'category'     => $v['category'],
-                        'close'        => $v['close'],
-                        'done'         => $v['done']
-                    );
-                }
-            } elseif ($key == 'pop_targets') {
-                foreach ($var as $v) {
-                    $targets['pop_targets'][] = array(
-                        'title'        => $v['title']
-                    );
-                }
-            }
-        }*/
+        
         //валюты
         $currency = array();
-        try {
+        
+        try
+        {
             $get = $user->getCur();
-        } catch ( Exception $e) {
+        }
+        catch ( Exception $e)
+        {
             $get = 0;
         }
+        
         $cur_user_string = $get['li'];
         $cur_user_array = unserialize($cur_user_string);
         $curdef = $get['def'];
-        $curfrom = $curdef;//валюта которую подтягиваем из базы
-        //die ( print_r ($curdef) );
-        //die ( $curfrom );
-        if ($curdef != 4)
-            if ($curdef != 6)
-                if ($curdef !=9)
-                    $curfrom = 1;
-        /*$currency[1] = array(
-            'cost'=>1,
-            'name'=>'RUB',
-            'text'=>'руб.'
-            );*/
-        try {
+        
+        //валюта которую подтягиваем из базы
+        $curfrom = $curdef;
+        
+        // Если валюта не бел.р., гривна, тенге
+        if ( !in_array( $curdef, array(4,6,9) ) )
+        {
+        		// 
+		$curfrom = 1;
+        }
+        
+        try
+        {
             $curr = $user->getCurrencyByDefault($cur_user_array, $curfrom);
-        } catch ( Exception $e) {
+        }
+        catch ( Exception $e)
+        {
             $curr = 0;
         }
-        $delimeter = 1; //делитель в курсе
-        if ($curdef != 4)
-            if ($curdef != 6)
-                if ($curdef !=9){
-                    foreach ($curr as $k => $v){
-                        if ( $v['id'] == $curdef )
-                            $delimeter = $v['value'];
-                    }
-                }
+        
+        //делитель в курсе
+        $delimeter = 1;
+        
+        if ( !in_array( $curdef, array(4,6,9) ) )
+        {
+		foreach ($curr as $k => $v)
+		{
+			if ( $v['id'] == $curdef )
+			{
+				$delimeter = $v['value'];
+			}
+		}
+	}
+	
         foreach ($curr as $k => $v) {
 
             $currency[$v['id']] = array(
@@ -320,7 +300,7 @@ abstract class _Core_Controller
             	);
             }
         
-        Core::getInstance()->tpl->assign('res', json_encode($res));
+        $this->tpl->assign('res', json_encode($res));
     }
 }
 

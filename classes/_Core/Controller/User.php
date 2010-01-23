@@ -2,7 +2,7 @@
 
 abstract class _Core_Controller_User extends _Core_Controller
 {
-	public function __construct()
+	public function __construct( $templateEngine )
 	{
 		//Проверяем авторизован ли пользователь. Если нет - редиректим на логин
 		if( !Core::getInstance()->user->getId() )
@@ -10,6 +10,6 @@ abstract class _Core_Controller_User extends _Core_Controller
 			header( 'Location: /login/' );
 		}
 		
-		parent::__construct();
+		parent::__construct( $templateEngine );
 	}
 }
