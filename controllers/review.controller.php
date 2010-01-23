@@ -19,7 +19,6 @@ class Review_Controller extends _Core_Controller
 	 */
 	function index()
 	{
-		$this->tpl   = Core::getInstance()->tpl;
 		$this->tpl->assign('no_menu', '1');
 		$this->tpl->assign('head_val', '/review/');
 		$this->tpl->assign('name_page', 'review');

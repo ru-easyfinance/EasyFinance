@@ -28,7 +28,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
     {
         $this->model = new Operation_Model();
         $this->user = Core::getInstance()->user;
-        $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'operations/operation');
 
         $targets = new Targets_Model();

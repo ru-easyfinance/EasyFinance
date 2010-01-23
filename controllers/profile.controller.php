@@ -19,7 +19,6 @@ class Profile_Controller extends _Core_Controller_UserCommon
      */
     protected function __init()
     {
-        $this->tpl = Core::getInstance()->tpl;
         $this->model = new Profile_Model();
         $this->tpl->assign('name_page', 'profile/profile');
 

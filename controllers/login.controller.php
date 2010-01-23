@@ -20,8 +20,7 @@ class Login_Controller extends _Core_Controller
     function __init()
     {
         $this->model = new Login_Model();
-        Core::getInstance()->tpl->assign('name_page', 'login');
-        
+        $this->tpl->assign('name_page', 'login');
     }
 
     /**

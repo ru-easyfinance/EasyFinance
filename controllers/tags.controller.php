@@ -20,7 +20,6 @@ class Tags_Controller extends _Core_Controller_UserCommon
      */
     protected function __init()
     {
-        $this->tpl = Core::getInstance()->tpl;
 //        $this->tpl->assign('name_page', 'calendar/calendar');
         $this->model = new Tags_Model();
     }

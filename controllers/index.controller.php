@@ -3,22 +3,22 @@
  * Класс контроллера для модуля welcome
  * @category welcome
  * @copyright http://easyfinance.ru/
- * @version SVN $Id$
+ * @version SVN $Id: welcome.controller.php 2433 2010-01-19 20:07:00Z mamonth $
  */
-class Welcome_Controller extends _Core_Controller
+class Index_Controller extends _Core_Controller
 {
 
 	/**
 	 * Блюдём интерфейс
 	 *
 	 */
-	function __init(){}
+	protected function __init(){}
 	
 	/**
 	 * Страница по умолчанию без параметров
 	 * @return void
 	 */
-	function index()
+	public function index()
 	{
 		$counters = array(
 			'users'		=> 8443,
@@ -43,5 +43,11 @@ class Welcome_Controller extends _Core_Controller
 		$welcome = new Welcome_Model();
 		
 		$this->tpl->assign('name_page', 'welcome');
+	}
+	
+	public function notfound()
+	{
+		$this->tpl->assign('no_menu', '1');
+		$this->tpl->assign('name_page', '404');
 	}
 }

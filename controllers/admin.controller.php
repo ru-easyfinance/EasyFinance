@@ -29,7 +29,6 @@ class Admin_Controller extends Template_Controller
             error_404();
         }
         $this->user = Core::getInstance()->user;
-        $this->tpl = Core::getInstance()->tpl;
         $this->model = new Admin_Model();
 
         $this->tpl->assign('name_page', 'admin/admin');
