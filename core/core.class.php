@@ -59,14 +59,14 @@ class Core
      * Массив с ошибками, которые будут сообщаться пользователю в виде всплывающего облачка
      * @var array mixed
      */
-    public static $errors = array();
+    public $errors = array();
 
     /**
      * Хранит массив с текущим путём
      * @var array
      * @example array('accounts','edit','14')
      */
-    public static $url = array();
+    public $url = array();
 
     
     /**
