@@ -64,6 +64,9 @@ class User
      */
     private $user_budget = array();
 
+    
+    private $pop_targets = array();
+    
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
