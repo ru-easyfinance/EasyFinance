@@ -19,5 +19,5 @@ interface _Core_Router_iHook
 	 * @param array $chunks Массив остатков от разбора uri роутером
 	 * @param _Core_TemplateEngine $templateEngine обьект шаблонизатора
 	 */
-	public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks, _Core_TemplateEngine $templateEngine );
+	public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks, &$templateEngine );
 }
