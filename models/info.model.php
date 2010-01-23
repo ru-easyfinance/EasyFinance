@@ -270,13 +270,13 @@ class Info_Model
      */
     public function load()
     {
-        if (isset($_SESSION['info'])) {
-            $this->input['balance']  = (float)$_SESSION['info']['balance'];
-            $this->input['budget']   = (float)$_SESSION['info']['budget'];
-            $this->input['drain']    = (float)$_SESSION['info']['drain'];
-            $this->input['loans']    = (float)$_SESSION['info']['loans'];
-            $this->input['money']    = (float)$_SESSION['info']['money'];
-            $this->input['profit']   = (float)$_SESSION['info']['profit'];
+        if (isset($_SESSION['info']['input'])) {
+            $this->input['balance']  = (float)$_SESSION['info']['input']['balance'];
+            $this->input['budget']   = (float)$_SESSION['info']['input']['budget'];
+            $this->input['drain']    = (float)$_SESSION['info']['input']['drain'];
+            $this->input['loans']    = (float)$_SESSION['info']['input']['loans'];
+            $this->input['money']    = (float)$_SESSION['info']['input']['money'];
+            $this->input['profit']   = (float)$_SESSION['info']['input']['profit'];
         } else {
             $this->init();
             $this->save();
@@ -355,6 +355,7 @@ class Info_Model
         $_SESSION['info']['input']['drain']   = (float)$this->drain;
         $_SESSION['info']['input']['loans']   = (float)$this->loans;
         $_SESSION['info']['input']['profit']  = (float)$this->profit;
+        $_SESSION['info']['input']['money'] = 0;
     }
 
     /**
