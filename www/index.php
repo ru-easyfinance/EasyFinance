@@ -11,28 +11,17 @@ error_reporting( E_ALL );
 // Загружаем общие данные
 require_once dirname(dirname(__FILE__)). "/include/common.php";
 
-//Core::getInstance()->parseUrl();
-
-// Определяем информацию о пользователе
-//@TODO Переместить это в конструктор базового контроллера.
-if (Core::getInstance()->user->getId())
-{
-	$uar = array(
-		'user_id'   => Core::getInstance()->user->getId(),
-		'user_name' => $_SESSION['user']['user_name'],
-		'user_type' => $_SESSION['user']['user_type']
-	);
-	
-	Core::getInstance()->tpl->assign('user_info', $uar);
-}
-
 // Новая схема 
 $request = _Core_Request::getCurrent();
-$router = new _Core_Router( $request );
+$router = new _Core_Router( $request, DIR_CONFIG . 'router_hooks.conf' );
 
 try
 {
+	// Выполнение запроса (разбор ->вызов контроллера)
 	$router->performRequest();
+	
+	// Применение модификаций\удалений моделей
+	_Core_ObjectWatcher::getInstance()->performOperations();
 }
 catch ( Exception $e )
 {
@@ -51,6 +40,7 @@ catch ( Exception $e )
 		_Core_Router::redirect('/404', false, 404);
 	}
 }
+
 exit();
 
 //Выводим страницу в браузер
@@ -118,5 +108,3 @@ switch ( $_SERVER['HTTP_HOST'].'/' )
 		break;
 }
 
-// Применение модификаций\удалений моделей
-_Core_ObjectWatcher::getInstance()->performOperations();
