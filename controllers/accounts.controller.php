@@ -38,7 +38,8 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function index()
     {
-        if ($_SESSION['account'] == "reload") { //@FIXME Переписать эту конструкцию
+        if ( isset($_SESSION['account']) && $_SESSION['account'] == "reload")
+        { //@FIXME Переписать эту конструкцию
             $this->user->initUserAccount($this->user->getId());
             $this->user->save();
             unset($_SESSION['account']);
