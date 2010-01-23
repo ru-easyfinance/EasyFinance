@@ -262,6 +262,9 @@ function get_recent_category ($count, $barier)
 
 function get_tree_select ($selected = 0 )
 {
+	//используется дальше в коде, но что то и где инициализируется так и не понял
+	$s = '';
+	
     $cat = Core::getInstance()->user->getUserCategory();
     $array = array();
     $result = '';
