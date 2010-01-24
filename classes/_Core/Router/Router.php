@@ -11,14 +11,16 @@ class _Core_Router
 	
 	protected $view;
 	
-	public function __construct( _Core_Request $request, $hooksConfig = false )
+	protected static $headerByCode = array(
+		403 => 'HTTP/1.1 403 Forbidden',
+		404 => 'HTTP/1.1 404 Not Found',
+	);
+	
+	public function __construct( _Core_Request $request )
 	{
 		$this->request = $request;
 		
-		if( $hooksConfig !== false )
-		{
-			$this->configureHooks( $hooksConfig );
-		}
+		$this->configureHooks( DIR_CONFIG . 'router_hooks.conf'  );
 	}
 	
 	public function performRequest()
@@ -135,9 +137,14 @@ class _Core_Router
 	
 	public static function redirect( $url, $isExternal = false, $statusCode = 200 )
 	{
+		if( array_key_exists($statusCode, self::$headerByCode ) )
+		{
+			header( self::$headerByCode[$statusCode] );
+		}
+		
 		if( $isExternal )
 		{
-			header('Location: ' . $url, null, $statusCode );
+			header('Location: ' . $url );
 			exit();
 		}
 		
@@ -154,17 +161,17 @@ class _Core_Router
 			// Вывод отладочной информации
 			if(  DEBUG )
 			{
-				
+				echo highlight_string( "<?php\n" . $e->getTraceAsString() );
 				exit();
 			}
 			// Не позволяем бесконечных циклов
-			elseif( '/404' == $url )
+			elseif( '/notfound' == $url )
 			{
 				exit();
 			}
 			else
 			{
-				self::redirect('/404', false, 404);
+				self::redirect('/notfound', false, 404);
 			}
 		}
 	}
