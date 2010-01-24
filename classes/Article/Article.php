@@ -17,6 +17,15 @@ class Article
 		
 		return $article;
 	}
+
+        public function edit($title, $announce, $body, $id){
+                Article_Model::edit( $title, $announce, $body, $id);
+        }
+
+        public function delete($id)
+        {
+            Article_Model::delete($id);
+        }
 	
 	public static function create( $title, $announce, $body, $mainImage = null, array $bodyImages = null )
 	{

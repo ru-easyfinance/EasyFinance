@@ -14,6 +14,21 @@
 							<form action="">
 								<div class="sorting">
 									<div class="line">
+                                        <div class="f_field" style="width:160px;">
+                                            <select id="account_filtr" style="width:165px">
+                                                <option label="Все счета" value="">Все счета</option>
+                                                {foreach from=$accounts item=acc_data}
+                                                    <option value="{$acc_data.account_id}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+
+                                        <div class="f_field" style="display:block; width:200px;">
+                                            <select id="cat_filtr" style="width:300px">
+                                                <option label="Все" value="">Все категории</option>
+                                                {$category}
+                                            </select>
+                                        </div><br><br>
 										<div class="f_field">
 											Операции с
 											<input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
@@ -22,15 +37,9 @@
 											по
 											<input type="text" id="dateTo" value="{$dateTo}" size="9"/>
 										</div>
-                                        <div class="f_field" style="display:none">
-                                            Категории
-                                            <select id="cat_filtr" >
-                                                <option label="Все" value=""> --- Все ---</option>
-                                                {$cat_filtr}
-                                            </select>
-                                        </div>
+
 										<input type="button" value="Показать" id="btn_ReloadData"/><br/>
-                                                                                <div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить)</a></div>
+                                                                                <div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
                                                                         </div>
 								</div>
                                                            
@@ -61,10 +70,10 @@
                                                                                 <span>Дата</span>
                                                                         </th>
                                                                         <th>
-                                                                                <span id="btnFilterCategory" class="sort">Категория</span>
+                                                                                <span>Категория</span>
                                                                         </th>
                                                                         <th>
-                                                                                <span id="btnFilterAccount" class="sort">Счет</span>
+                                                                                <span>Комментарий</span>
                                                                         </th>
                                                                         <th>
                                                                                 &nbsp;

@@ -48,8 +48,9 @@ table#operations_list_header th {
     width: 20px;
 }
 
+#operations_list_header span#btnFilterType { margin: 0px; }
 table#operations_list_header th + th {
-    width: 40px;
+    width: 30px;
 }
 
 table#operations_list_header th + th + th{
@@ -61,16 +62,16 @@ table#operations_list_header th + th + th + th{
 }
 
 table#operations_list_header th + th + th + th + th{
-    width: 100px;
+    width: 110px;
 }
 
 table#operations_list_header th + th + th + th + th + th{
-    width: 90px;
+    width: 60px;
 }
 
 /* last empty header for scrollbar */
-table#operations_list_header th + th + th + th + th + th{
-    width: 52px;
+table#operations_list_header th + th + th + th + th + th + th{
+    width: 32px;
 }
 
 /* column widths */
@@ -81,7 +82,7 @@ table#operations_list td {
 }
 
 table#operations_list td + td {
-    width: 40px;
+    width: 30px;
 }
 
 table#operations_list td + td + td{
@@ -97,6 +98,11 @@ table#operations_list td + td + td + td + td{
 }
 
 table#operations_list td + td + td + td + td + td{
-    width: 110px;
+    width: 120px;
 }
 
+#operations_list div.operation { display: block; height: 16px; width: 16px; background: url('/img/i/iconsOperation.gif') no-repeat 0 0; margin-left: 3px; }
+#operations_list div.income { background-position: 0px 0px; }
+#operations_list div.outcome { background-position: -16px 0px; }
+#operations_list div.transfer { background-position: -32px 0px; }
+#operations_list div.target { background-position: -48px 0px; }

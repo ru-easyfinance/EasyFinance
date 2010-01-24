@@ -60,7 +60,10 @@ class Restore_Controller extends _Core_Controller
 			
 			$code = $this->storeRequest( $moron );
 			
-			$href = 'https://' . URL_ROOT . 'restore/confirm/' . $code;
+			// Хачок для mail.ru (шоб не банило)
+			$domain = (URL_ROOT == 'easyfinance.ru')?'easyfin.ru':URL_ROOT;
+			
+			$href = 'https://' . $domain . 'restore/confirm/' . $code;
 			
 			$body = '<html><head><title>Запрос на восстановление пароля :: EasyFinance.ru</title></head>
 				<body><p>Здравствуйте, ' . $moron->getName() . '!</p>
@@ -68,15 +71,15 @@ class Restore_Controller extends _Core_Controller
 				Чтобы завершить процедуру и изменить пароль, перейдите по ссылке:</p>
 				<p><a href="' . $href . '">' . $href . '</a></p>
 				<p>C уважением,
-				<br/>Администрация системы <a href="https:// ' . URL_ROOT . '" />EasyFinance.ru</a>
+				<br/>Администрация системы <a href="https:// ' . $domain . '" />Easy Finance</a>
 				</body>
 				</html>';
 			
 			$subject = "";
             
 			$message = Swift_Message::newInstance()
-			->setSubject( 'Запрос на восстановление пароля :: EasyFinance.ru' )// Заголовок
-			->setFrom( array('support@easyfinance.ru' => 'EasyFinance.ru') )// Указываем "От кого"
+			->setSubject( 'Запрос на восстановление пароля :: Easy Finance' )// Заголовок
+			->setFrom( array('support@easyfinance.ru' => 'Easy Finance') )// Указываем "От кого"
 			->setTo( array( $moron->getMail()=>$moron->getName() ) )// Говорим "Кому"
 			->setBody($body, 'text/html');// Устанавливаем "Тело"
 			

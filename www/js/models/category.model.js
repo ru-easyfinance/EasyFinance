@@ -43,7 +43,7 @@ easyFinance.models.category = function(){
         for(var cat in _categories.user)
             arr.push(_categories.user[cat]);
 
-        arr.sort(function(a,b){return a.name.localeCompare(b.name)});
+        arr.sort(function(a,b){return a.name.localeCompare(b.name);});
 
         _categories.user = [];
         _categories.user = arr;
@@ -126,7 +126,7 @@ easyFinance.models.category = function(){
                 // при перемещении подкатегории в другую категорию
                 // или при изменении типа подкатегории
                 var newParent = _categories.user[parent];
-                if (newParent.type != 0 && newParent.type != type) {
+                if (newParent.type !== 0 && newParent.type != type) {
                     // если тип подкатегории конфликтует с родительской категорией,
                     // надо сделать родительскую категорию универсальной
                     newParent.type = 0;
@@ -146,9 +146,7 @@ easyFinance.models.category = function(){
                 $(document).trigger('categoryDeleted');
 
                 callback();
-            }
-            , 'json'
-        );
+        }, 'json');
     }
 
     function getAllCategories(){
@@ -188,7 +186,7 @@ easyFinance.models.category = function(){
             if (cat.parent == idParent) {
                 arrParent[cat.id] = $.extend("", cat);
                 arrParent[cat.id].children = [];
-                _treeAddChildren(arrParent[cat.id].children, cat.id)
+                _treeAddChildren(arrParent[cat.id].children, cat.id);
             }
         }
     }

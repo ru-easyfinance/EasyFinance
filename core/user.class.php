@@ -526,9 +526,8 @@ class User
             AND dai.currency_from = ? AND currency_date = ?
             AND c.cur_id IN ($mas)";
         $li = $this->db->query($sql, $def, $lastdate[0]['last']);
-        $sql = "SELECT $def as id, 1 as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
-            FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
-            AND c.cur_id = ?
+        $sql = "SELECT $def as id, 1 as value, c.cur_char_code as charCode, c.cur_name as abbr
+            FROM currency c WHERE c.cur_id = ?
             ";
         $li2 = $this->db->query($sql, $def);
 

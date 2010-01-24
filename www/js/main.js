@@ -611,7 +611,7 @@ $('.tags_list .add').live('click', function(){
                         s += '<li ><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
                         +formatCurrency(data[v]['amount_done'])+' руб.</b> <span>('
                         +data[v]['percent_done']+'%)</span><span class="date">'
-                        +data[v]['date_end']+'</span></li>';
+                        +data[v]['end']+'</span></li>';
                 }
             }
             s = s+'</ul>';

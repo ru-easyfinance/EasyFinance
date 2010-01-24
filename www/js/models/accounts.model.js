@@ -57,7 +57,7 @@ easyFinance.models.accounts = function(){
                 param2(_this);
         } else {
             if (typeof param1 == 'function')
-                _loadAccounts(function(){param1(_this)});
+                _loadAccounts(function(){param1(_this);});
             else
                 _loadAccounts();
         }
@@ -75,6 +75,13 @@ easyFinance.models.accounts = function(){
             return _accounts[id]["name"];
         else
             return '';
+    }
+
+    function getAccountType(id){
+        if (_accounts && _accounts[id])
+            return _accounts[id]["type"];
+        else
+            return null;
     }
 
     function getAccountIdByName(name){
@@ -276,6 +283,7 @@ easyFinance.models.accounts = function(){
         getAccounts: getAccounts,
         getAccountNameById: getAccountNameById,
         getAccountIdByName: getAccountIdByName,
+        getAccountType: getAccountType,
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,
         addAccount: addAccount,

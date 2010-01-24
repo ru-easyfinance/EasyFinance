@@ -1,4 +1,4 @@
-CREATE TABLE  `easyfinance`.`articles` (
+CREATE TABLE  `articles` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `userId` int(100) NOT NULL,
