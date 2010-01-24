@@ -13,7 +13,7 @@ require_once dirname(dirname(__FILE__)). "/include/common.php";
 
 // Новая схема 
 $request = _Core_Request::getCurrent();
-$router = new _Core_Router( $request, DIR_CONFIG . 'router_hooks.conf' );
+$router = new _Core_Router( $request );
 
 try
 {
@@ -28,16 +28,18 @@ catch ( Exception $e )
 	// Вывод отладочной информации
 	if(  DEBUG )
 	{
-		$e->getTraceAsString();
+		highlight_string( "<?php\n #" . $e->getMessage() . "\n\n in " 
+			. $e->getFile() . ':' 
+			. $e->getLine() . "\n\n" . $e->getTraceAsString() );
 	}
 	// Не позволяем бесконечных циклов
-	elseif( '/404' == $request->uri )
+	elseif( '/notfound' == $request->uri )
 	{
-		exit();
+		//exit();
 	}
 	else
 	{
-		_Core_Router::redirect('/404', false, 404);
+		_Core_Router::redirect('/notfound', false, 404);
 	}
 }
 
