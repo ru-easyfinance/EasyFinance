@@ -2,9 +2,11 @@
 
 class _User
 {
-	const TYPE_COMMON=0;
-	const TYPE_PRO=2;
-	const TYPE_EXPERT=1;
+	const TYPE_COMMON 	=0;
+	const TYPE_PRO 		=2;
+	const TYPE_EXPERT 	=1;
+	# Для поддержки прав доступа
+	const TYPE_GUEST 	= -1;
 	
 	private $model;
 	
@@ -25,6 +27,19 @@ class _User
 		$model = _User_Model::loadByLogin( $login );
 		
 		return new _User( $model );
+	}
+	
+	public static function getCurrent()
+	{
+		$user = null;
+		
+		//Временный хак под старый класс
+		if( Core::getInstance()->user->getId() )
+		{
+			$user = Core::getInstance()->user;
+		}
+		
+		return $user;
 	}
 	
 	public function getId()
@@ -50,5 +65,10 @@ class _User
 	public function setPass( $value, $encoded = false )
 	{
 		$this->model->user_pass = $encoded?$value:sha1($value);
+	}
+	
+	public function getDefaultPage()
+	{
+		return '/';
 	}
 }
