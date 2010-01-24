@@ -7,20 +7,20 @@
  * @copyright http://easyfinance.ru/
  * @author Andrew Tereshko aka mamonth
  */
-class _Core_Access implements _Core_Router_Hook
-{
+class _Core_Access implements _Core_Router_iHook
+{	
 	/**
 	 * Конфигурация доступа
 	 *
 	 * @var array
 	 */
 	private $config = array();
-	/**
-	 * Обьект пользователя
-	 *
-	 * @var _User
-	 */
-	private $user;
+	
+	private  $userType;
+	private $defaultPage;
+	
+	const ALLOW_ALL = -101;
+	const ALLOW_AUTHORIZED = -102; 
 	
 	/**
 	 * Конструктор
@@ -29,22 +29,29 @@ class _Core_Access implements _Core_Router_Hook
 	 */
 	public function __construct( $user )
 	{
-		$this->user = $user;
+		// Если пользователь не авторизован
+		if( is_null( $user ) )
+		{
+			$this->userType 	= _User::TYPE_GUEST;
+			$this->defaultPage 	= '/';
+		}
+		else
+		{
+			$this->userType 	= $user->getType();
+			$this->defaultPage 	= $user->getDefaultPage();
+		}
 		
-		$this->config = $this->loadConfig(  );
+		$this->config = $this->loadConfig( DIR_CONFIG . 'access.php' );
 	}
 	
-	public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks )
+	public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks, &$templateEngine )
 	{
 		$access = new _Core_Access( _User::getCurrent() );
 		
-		$requestString = strtolower( $class . '/' . $method );
-		$requestString = str_replace( '_', '/' , $requestString );
-		
-		if( !$access->isAllowed( $requestString ) )
+		if( !$access->isAllowed( $request->uri ) )
 		{
-			$class = 'Controller_Index';
-			$method = '404';
+			// Редирект через заголовок. Дабы явно сменился урл в браузере оО
+			_Core_Router::redirect( $access->defaultPage, true, 403 );
 		}
 	}
 	
@@ -58,31 +65,68 @@ class _Core_Access implements _Core_Router_Hook
 	{
 		$allowed = false;
 		
-		$requestArr = explode( '/', $requestUri );
-		
 		// Если запрос начинался с "/" - отрезаем начало (пустой элемент)
-		if( !$requestArr[0] )
+		if( substr($requestUri,0,1) == '/' )
 		{
-			array_shift( $requestArr );
+			$requestUri = substr( $requestUri, 1 );
 		}
 		
+		$requestArr = explode( '/', $requestUri );
+		
+		// Выясняем кол-во элементов в запросе
 		$chunksCount = sizeof( $requestArr );
 		
+		// Если запрос пуст (т.е. запрос главной страницы) - разрешаем доступ
+		if( $chunksCount == 1 && $requestArr[0] == '' )
+		{
+			// Не самый лучший вариант - выходить из метода в нескольких местах,
+			// но лишний раз выполнять проверку на главной - ещё хуже.
+			return true;
+		}
+		
+		// Реверсный (с последнего элемента) поиск правила для запроса
 		for ( $i = 1; $i <= $chunksCount; $i++ )
 		{
 			$requestString = implode( '/', $requestArr );
 			
-			if( 
-				isset( $this->config[ $request->uri ] )
-				&& in_array( $this->user->getType(), $requestArr )
-			)
-			{
-				$allowed = true;
-				break;
+			// Если нашли правило ...
+			if( isset( $this->config[ $requestString ] ) )
+			{			
+				// ... выясняем тип правила (одиночное || массивом) и можно ли дать доступ
+				if( 
+					is_array($this->config[ $requestString ]) 
+					&& ( 
+						in_array( $this->userType, $this->config[ $requestString ] )
+						// проверка на общий доступ
+						|| in_array( self::ALLOW_ALL, $this->config[ $requestString ])
+						// проверка - только зарегистрированным
+						|| (
+							in_array( self::ALLOW_AUTHORIZED , $this->config[ $requestString ])
+							&& $this->userType != _User::TYPE_GUEST
+						)
+					)
+				)
+				{
+					$allowed = true;break;
+				}
+				elseif (
+					$this->userType == $this->config[ $requestString ]
+					// проверка на общий доступ
+					|| self::ALLOW_ALL == $this->config[ $requestString ]
+					// проверка - только зарегистрированным
+					|| (
+						$this->config[ $requestString ] == self::ALLOW_AUTHORIZED
+						&& $this->userType != _User::TYPE_GUEST
+					)
+				)
+				{
+					$allowed = true;break;
+				}
+				
 			}
+			// Если правило для uri не найдено
 			else
 			{
-				// Если правило для uri не найдено
 				// отрезаем последний элемент запроса и повторяем 
 				array_pop( $requestArr );
 			}
@@ -91,8 +135,20 @@ class _Core_Access implements _Core_Router_Hook
 		return $allowed;
 	}
 	
-	private function loadConfig()
+	private function loadConfig( $configPath )
 	{
-		//include();
+		if( !file_exists( $configPath ) )
+		{
+			throw new _Core_Exception('Configuration file don\'t exist!');
+		}
+		
+		include( $configPath );
+		
+		if( !isset($accessConfig) || !is_array($accessConfig) )
+		{
+			throw new _Core_Exception('Configuration file broken!');
+		}
+		
+		return $accessConfig;
 	}
 }
