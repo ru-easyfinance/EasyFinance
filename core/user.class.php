@@ -134,6 +134,11 @@ class User
 
     	return $userType;
     }
+    
+    public function getDefaultPage()
+    {
+    	return '/';
+    }
 
     public function getName()
     {
