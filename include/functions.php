@@ -55,8 +55,8 @@ function databaseErrorHandler($message, $info)
 
 function databaseLogger($db, $sql)
 {
-    $caller = $db->findLibraryCaller();
-    trigger_error(end(end(@$caller['object']->_placeholderCache)), E_USER_NOTICE);
+    //$caller = $db->findLibraryCaller();
+    //trigger_error(end(end(@$caller['object']->_placeholderCache)), E_USER_NOTICE);
     return false;
 }
 
