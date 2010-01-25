@@ -144,7 +144,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         if (!$er)
             $this->tpl->assign("error", "Счет не удалён");
         if ($er == 'cel')
-            die (json_encode(array('error'=>array('text'=>'Невозможно удалить накопительный счёт'))));
+            die (json_encode(array('error'=>array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'))));
         die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
     }
 
