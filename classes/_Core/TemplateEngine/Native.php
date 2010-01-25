@@ -37,9 +37,13 @@ class _Core_TemplateEngine_Native
 			return false;
 		}
 		
-		if( !is_array($this->assignedVars[$value]) )
+		if( !isset($this->assignedVars[$value]) )
 		{
-			$this->assignedVars[$value] = isset($this->assignedVars[$value])?array($this->assignedVars[$value]):array();
+			$this->assignedVars[$value] = array();
+		}
+		elseif ( !is_array($this->assignedVars[$value]) )
+		{
+			$this->assignedVars[$value] = array($this->assignedVars[$value]);
 		}
 		
 		$this->assignedVars[$value][] = $value;
@@ -54,7 +58,7 @@ class _Core_TemplateEngine_Native
 			throw new _Core_TemplateEngine_Exception('Template "' . $templateFileName . '" not found !');
 		}
 		
-		export( $this->assignedVars );
+		extract( $this->assignedVars );
 		
 		include( $templateFileName );
 	}
