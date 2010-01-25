@@ -98,6 +98,53 @@ class Sync{
         $this->cleanRec($this->user);
     }
 
+    function getDate(){
+        //возвращает время последней синхронизации
+        return date("Y:m:d H:i:s");
+    }
+
+    function writeDataAndAnswerRec($xmlReq=''){
+        $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
+        $GLOBALS['xmlrpc_defencoding'] = "UTF-8";
+        $ser = $xmlReq;
+        $sn = php_xmlrpc_decode($ser);
+        $this->dataarray = $sn;
+        $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
+        $this->db->query("SET NAMES utf8");
+        if (!$this->sync_getAuth($this->dataarray[0])){
+            //$this->SendError();
+            return false;
+        }
+        if (DEBUG) {
+           $this->db->setLogger('databaseLogger');
+        }
+        // парсим полученную строку и загоняем её в массив
+        $this->parsing();
+
+        $account = new Account($this->user, $this->db);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $debet = new Debet($this->user, $this->db);
+        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+
+        $category = new Category($this->user, $this->db);
+        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation = new Operation($this->user, $this->db);
+        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$transfer = new Transfer($this->user, $this->db);
+        //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$plans = new Periodic($this->user, $this->db);
+        //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$date='', &$data='', $user_id='', $db=''){
+        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
+
+        $this->dataarrayE[4] = array( 'ServerData' => $this->getDate() );
+
+        $ret = $this->dataarrayE;
+        //die(print_r('jewkfjwk'));
+        $a = php_xmlrpc_encode($ret);
+        return $a;
+    }
+
     function qwe($xmlReq, &$xmlAnswer, $needdec='0'){
         //echo ('<br>parametrov '.$xmlReq->getNumParams());
         $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
@@ -148,8 +195,8 @@ class Sync{
         $operation = new Operation($this->user, $this->db);
         $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$transfer = new Transfer($this->user, $this->db);
-        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        $plans = new Periodic($this->user, $this->db);
+        //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$plans = new Periodic($this->user, $this->db);
         //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
         RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
