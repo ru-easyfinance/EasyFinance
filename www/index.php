@@ -42,7 +42,7 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             Core::getInstance()->tpl->assign('user_info', $uar);
             Core::getInstance()->tpl->assign('template_view', 'iframe');
             setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, URL_ROOT_IFRAME, COOKIE_HTTPS);
-            header("Location: https://" . URL_ROOT_IFRAME . "info/");
+            header("Location: https://" . 'iframe.'.COOKIE_DOMEN . "info/");
             break;
         }
         if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['login'] ) && ( isset($_GET['mail']) )) ){
@@ -64,14 +64,14 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             Core::getInstance()->tpl->assign('user_info', $uar);
             Core::getInstance()->tpl->assign('template_view', 'iframe');
             setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, URL_ROOT_IFRAME, COOKIE_HTTPS);
-            header("Location: https://" . URL_ROOT_IFRAME . "info/");
+            header("Location: https://" . 'iframe.'.COOKIE_DOMEN . "info/");
 
             return $newId;
             break;
         }
         if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
             if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
-                header("Location: https://" . URL_ROOT_IFRAME . "login/");
+                header("Location: https://" . 'iframe.'.COOKIE_DOMEN . "login/");
             }
         }
         Core::getInstance()->tpl->assign('template_view', 'iframe');
