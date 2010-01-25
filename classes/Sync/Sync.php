@@ -147,19 +147,19 @@ class Sync{
         $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         $operation = new Operation($this->user, $this->db);
         $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        $transfer = new Transfer($this->user, $this->db);
+        //$transfer = new Transfer($this->user, $this->db);
         $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         $plans = new Periodic($this->user, $this->db);
-        $plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
         RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
 
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
         $operation->FormArray($this->lastsync, $this->dataarrayE);
-        $transfer->FormArray($this->lastsync, $this->dataarrayE);
+        //$transfer->FormArray($this->lastsync, $this->dataarrayE);
         $debet->FormArray($this->lastsync, $this->dataarrayE);
-        $plans->FormArray($this->lastsync, $this->dataarrayE);
+        //$plans->FormArray($this->lastsync, $this->dataarrayE);
         $currency = new Currency($this->user, $this->db);
         $currency->FormArray($this->dataarrayE);
         $ret = array(

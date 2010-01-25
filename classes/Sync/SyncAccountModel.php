@@ -35,13 +35,13 @@ class SyncAccount_Model {
             //echo ($name.' '.$descr.' ');
         $a = mysql_insert_id();//*/
 
-        $type = "string_value";
+        /*$type = "string_value";
             $sql = "INSERT INTO account_field_values (`field_value_id`, `account_fieldsaccount_field_id`,
                                                         `".$type."`, `accountsaccount_id`)
                     VALUES (?,?,?,?);";
             $this->db->query($sql, '0', $a, $name,67);
             $this->db->query($sql, '0', $a, $descr,68);
-            $this->db->query($sql, '0', $a, $amount,69);
+            $this->db->query($sql, '0', $a, $amount,69);*/
         return $a;
     }
 
@@ -86,17 +86,18 @@ class SyncAccount_Model {
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
             $data[4][0]['tablename'] = 'Accounts';
-            $sql2 = "SELECT money, `date` FROM operation WHERE user_id=? AND account_id=? AND `dt_create` BETWEEN '$date' AND NOW()-100";
-                $b = $this->db->query($sql2, $this->user, $a[$key]['account_id']);
-            if ($b[0]['money'] != null){
+            //$sql2 = "SELECT money, `date` FROM operation WHERE user_id=? AND account_id=? AND `dt_create` BETWEEN '$date' AND NOW()-100";
+            $sql2 = "SELECT money, `date` FROM operation WHERE user_id=? AND account_id=?";
+            $b = $this->db->query($sql2, $this->user, $a[$key]['account_id']);
+            if ( $b[0]['money'] != null ){
                 //$data[4][0]['tablename'] = 'Accounts';
-                $data[4][$key+1]['easykey'] = (int)$a[$key]['account_id'];
+                $data[4][$key+1]['ekey'] = (int)$a[$key]['account_id'];
                 $data[4][$key+1]['name'] = $a[$key]['account_name'];
                 $data[4][$key+1]['cur'] = (int)$a[$key]['account_currency_id'];
 
                 $data[4][$key+1]['date'] = $b[0]['date'];
-                $data[4][$key+1]['startbalance'] = (int)$b[0]['money'];
-                $data[4][$key+1]['descr'] = $a[$key]['account_description'];
+                $data[4][$key+1]['startbalance'] = (float)$b[0]['money'];
+                $data[4][$key+1]['descr'] = ( $a[$key]['account_description'] ) ? ( $a[$key]['account_description'] ) : '';
 
                 //добавляем в recordsmap
                 /*$data[1][] = array (
