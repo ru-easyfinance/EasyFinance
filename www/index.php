@@ -41,7 +41,7 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
                 'user_type'=>0);
             Core::getInstance()->tpl->assign('user_info', $uar);
             Core::getInstance()->tpl->assign('template_view', 'iframe');
-            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe.'.COOKIE_DOMEN, COOKIE_HTTPS);
+            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, URL_ROOT_IFRAME, COOKIE_HTTPS);
             header("Location: https://" . URL_ROOT_IFRAME . "info/");
             break;
         }
@@ -63,7 +63,7 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
                 'user_type'=>0);
             Core::getInstance()->tpl->assign('user_info', $uar);
             Core::getInstance()->tpl->assign('template_view', 'iframe');
-            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe.'.COOKIE_DOMEN, COOKIE_HTTPS);
+            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, URL_ROOT_IFRAME, COOKIE_HTTPS);
             header("Location: https://" . URL_ROOT_IFRAME . "info/");
 
             return $newId;
