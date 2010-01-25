@@ -18,7 +18,7 @@ class _Core_TemplateEngine
 		{
 			case URL_ROOT_PDA:
 				
-				$templateEngine = new _Core_TemplateEngine_Native( DIR_TEMPLATES . 'pda/', $templateEngine->assignedVars );
+				$templateEngine = new _Core_TemplateEngine_Native( DIR_TEMPLATES . 'pda/' );
 				
 				break;
 			default:
