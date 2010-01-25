@@ -37,6 +37,8 @@ easyFinance.widgets.operationsJournal = function(){
 
     var _sexyCategoryInitialized = false;
 
+    var OPERATION_TYPES = ['доход', 'расход', 'перевод', '', 'фин. цель'];
+
     // private functions
     //
     // форматирует и выводит таблицу с данными
@@ -396,7 +398,7 @@ easyFinance.widgets.operationsJournal = function(){
         var strCat = '';
 
         if (_type != '')
-            txt = txt + 'операции: ' + ['доход', 'расход', 'перевод', '', 'фин. цель'][_type];
+            txt = txt + 'операции: ' + OPERATION_TYPES[_type];
 
         if (_type != '' && _category != '')
             txt = txt + ', ';
@@ -507,6 +509,54 @@ easyFinance.widgets.operationsJournal = function(){
         $('tr','#operations_list').live('mouseover',function(){
             $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             $(this).closest('tr').addClass('act').find('.cont ul').show();
+
+            // всплывающая подсказка для тикета #640
+            var operation = _journal[$(this).closest('tr').attr('value')];
+
+            var tp = '';
+            if ( operation.transfer > 0 ) {
+                tp = 'перевод';
+            } else if (operation.virt == 1) {
+                tp = 'перевод на финансовую цель';
+            } else {
+                if (operation.drain == 1) {
+                    tp = 'расход';
+                } else {
+                    tp = 'доход';
+                }
+            }
+
+            var tooltipHtml = '<b>Тип:</b> ' + tp + '<br>';
+            tooltipHtml += '<b>Счёт:</b> ' + res.accounts[operation.account_id].name + '<br>';
+
+            $('.qtip').remove();
+            $(this).qtip({
+                content: tooltipHtml,
+                position: {
+                  corner: {
+                     tooltip: 'topMiddle', // Use the corner...
+                     target: 'bottomMiddle' // ...and opposite corner
+                  }
+                },
+                show: {
+                  when: false, // Don't specify a show event
+                  ready: true // Show the tooltip when ready
+                },
+                hide: {
+                  when: 'mouseout'
+                }, // Don't specify a hide event
+                style: {
+                  width: {max: 300},
+                  name: 'light',
+                  tip: true // Give them tips with auto corner detection
+                }
+            });
+        });
+
+        $('#operation_list tr.item').live('mouseout',
+            function(){
+                $('.qtip').remove();
+                $(this).removeClass('act');
         });
 
         // hide selection
