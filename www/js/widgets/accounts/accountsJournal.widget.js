@@ -20,7 +20,8 @@ easyFinance.widgets.accountsJournal = function(){
                 _accounts = _model.getAccounts();
                 var account_list = _accounts;
                 var curr = res['currency'];
-                var num = curr['defa'];
+                var num = curr['default'];
+                var defaultCurrency = curr[num];
                 var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];// Жуткий масив привязки типов к группам
                 var spec_th = [ [],
                             ['<th>% годовых</th>',
@@ -49,7 +50,7 @@ easyFinance.widgets.accountsJournal = function(){
                 }
 
                 str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
-                    formatCurrency(account.totalBalance * curr[account_list[id]["currency"]]['cost'] / curr[num]['cost']) + ' '+d_cur+'</td>';
+                    formatCurrency(account.totalBalance * res.currency[account_list[id]["currency"]]['cost'] / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td>';
 
                 // @todo: показывать % годовых и т.п.
                 /*
