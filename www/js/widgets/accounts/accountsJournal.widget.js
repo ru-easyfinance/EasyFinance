@@ -61,7 +61,7 @@ easyFinance.widgets.accountsJournal = function(){
                 */
 
                 str += '<table>';
-                _bigTip($(this).find('.totalBalance'), str);
+                _bigTip($(this).find('.name'), str);
                 $('#operation_list tr.item').removeClass('act');
                 $(this).addClass('act');
         });
@@ -157,8 +157,8 @@ easyFinance.widgets.accountsJournal = function(){
                    content: text.toString(), // Set the tooltip content to the current corner
                    position: {
                       corner: {
-                         tooltip: 'rightMiddle', // Use the corner...
-                         target: 'leftMiddle' // ...and opposite corner
+                         tooltip: 'topMiddle', // Use the corner...
+                         target: 'bottomMiddle' // ...and opposite corner
                       }
                    },
                    show: {
