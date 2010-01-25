@@ -86,7 +86,8 @@ easyFinance.widgets.accountsPanel = function(){
                 + ((data[key]['type']!=7 && data[key]['type']!=8) ? formatCurrency(data[key]['totalBalance']) : formatCurrency(-data[key]['totalBalance'])) + '</span>&nbsp;';
             str = str + res.currency[data[key]['currency']]['text'] + '</span></a></li>';
             //if ( i!=2 ){
-                summ[i] = summ[i]+data[key]['defCur'];
+            // перевод в валюту по умолчанию
+                summ[i] = summ[i]+data[key]["totalBalance"] * res.currency[data[key]["currency"]]['cost'] / res.currency[res.currency['default']]['cost'];
             /*}else{
                 summ[i] = summ[i]-data[key]['defCur'];
             }*/
@@ -108,7 +109,7 @@ easyFinance.widgets.accountsPanel = function(){
         total = 0;
         for(key in arr)
         {
-            total = total+(parseInt(summ[key]*100))/100;
+            total = total+parseFloat(summ[key]);
             s='<ul>'+arr[key]+'</ul>';
             if (key>=0 && key <=6)
                 _$node.find('#accountsPanelAcc'+key).html(s);
@@ -130,7 +131,7 @@ easyFinance.widgets.accountsPanel = function(){
             i++;
             str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+res.currency[key].text+'</div></li>';
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+res.currency[key].text+'</div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+d_cur+'</div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
         $('div.listing dl.bill_list dt').addClass('open');
