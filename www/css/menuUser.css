@@ -91,11 +91,11 @@ ul.dropdown li:hover ul, ul li.over ul {
 .menu3 ul li { float: left; margin-right: 4px; width: 118px; height: 37px;position: relative;z-index:100 }
 .iframe .menu3 ul li { width: 91px; }
 .menu3 ul li a, .menu3 ul li span, .menu3 ul li a, .menu3 ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu3.png') no-repeat 0 0; }
-.iframe .menu3 ul li a, .iframe .menu3 ul li span, .iframe .menu3 ul li a, .iframe .menu3 ul li span { width: 95px; }
+.menu3 ul li a, .menu3 ul li span, .menu3 ul li a, .menu3 ul li span { width: 95px; }
 .iframe .menu3 ul > li > a, .iframe .menu3 ul > li > span { background: url('/img/i/menu3_iframe.png') no-repeat 0 0; }
 .menu3.expert ul li a, .menu3.expert ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu4.png') no-repeat 0 0; }
 
-.iframe .menu3 ul li#m1, .iframe .menu3 ul li#m1 a { width: 84px; }
+.iframe .menu3 ul li#m1, .iframe .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 93px; }
 .menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
 
 .menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
