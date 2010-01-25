@@ -32,6 +32,9 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
         if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
             $select = Login_Model::getUserDataByID( $_GET['id_ef'] );
+            if ( substr( $select[0]['user_login'] , 0, 6 ) != 'azbuka' )
+                die('Аллес!!! Доступ запрещён');
+
             $uar = array(
                 'user_id'=>$_GET['id_ef'],
                 'user_name'=>$select[0]['user_login'],
