@@ -52,6 +52,20 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             $login = $_GET['login'];
             $mail = $_GET['mail'];
             $newId = $log->generateUserByAzbukaLogin( $login , $mail );
+
+            $select = Login_Model::getUserDataByID( $newId );
+            if ( substr( $select[0]['user_login'] , 0, 6 ) != 'azbuka' )
+                die('Аллес!!! Доступ запрещён');
+
+            $uar = array(
+                'user_id'=>$newId,
+                'user_name'=>$select[0]['user_login'],
+                'user_type'=>0);
+            Core::getInstance()->tpl->assign('user_info', $uar);
+            Core::getInstance()->tpl->assign('template_view', 'iframe');
+            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, 'iframe.'.COOKIE_DOMEN, COOKIE_HTTPS);
+            header("Location: https://iframe." . URL_ROOT_MAIN . "info/");
+
             return $newId;
             break;
         }
