@@ -688,9 +688,9 @@ $(".flash")
     data = res['currency'];
     str = '';
     var cost,name,progres;
-    var fir = res['currency']['defa'];//первая валюта в правом списке
+    var fir = res['currency']['default'];//первая валюта в правом списке
     for(key in data) {
-        if (key=='defa')
+        if (key=='default')
             continue;
         // валюта по умолчанию первая в списке ! не показываем её в правой панели
         if (fir != key) {

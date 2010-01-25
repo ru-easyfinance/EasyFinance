@@ -51,7 +51,7 @@ easyFinance.widgets.accountEdit = function(){
         // fill currency combo with options
         var strCurrency = '';
         for (var key in res.currency) {
-            if ( key != 'defa')
+            if ( key != 'default')
             strCurrency = strCurrency + '<option value="' + key + '">' + res.currency[key].text + '</option>';
         }
         $('#acc_currency').html(strCurrency);
