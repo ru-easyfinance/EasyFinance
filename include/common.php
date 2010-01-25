@@ -4,9 +4,7 @@
  * @copyright https://easyfinance.ru/
  * SVN $Id$
  */
-error_reporting( E_ERROR );
 
-require_once dirname(__FILE__)."/config.php";
 require_once SYS_DIR_INC.'/functions.php';
 
 if (DEBUG) {

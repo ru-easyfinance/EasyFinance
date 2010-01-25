@@ -4,48 +4,21 @@
  * Базовый класс шаблонизатора
  *
  */
-class _Core_TemplateEngine implements _Core_Router_iHook
-{
-	protected $assignedVars = array();
-	
-	public function assign( $variable, $value )
-	{
-		// Совместимость с smarty
-		if( is_array($variable) )
-		{
-			throw new _Core_Exception('Multiple variables assign not supported anymore!');
-		}
-		else
-		{
-			$this->assignedVars[ $variable ] = $value;
-		}
-	}
-	
-	public function append( $variable, $value, $merge=false )
-	{
-		if( $variable == '' || !isset($value) )
-		{
-			return false;
-		}
-		
-		if( !is_array($this->assignedVars[$value]) )
-		{
-			$this->assignedVars[$value] = isset($this->assignedVars[$value])?array($this->assignedVars[$value]):array();
-		}
-		
-		$this->assignedVars[$value][] = $value;
-	}
-	
+class _Core_TemplateEngine
+{	
 	/**
-	 * Хук в роутер для выбора шаблонизатора 
+	 * Выбор шаблонизатора 
 	 * в зависимости от политической ситуации =)
 	 *
+	 * @return _Core_TemplateEngine_Abstract
 	 */
-	public static function execRouterHook(  _Core_Request $request, &$class, &$method, array &$chunks, &$templateEngine )
+	public static function getPrepared(  _Core_Request $request )
 	{
-		switch ( $request->host )
+		switch ( $request->host . '/' )
 		{
-			case 'pda':
+			case URL_ROOT_PDA:
+				
+				$templateEngine = new _Core_TemplateEngine_Native( DIR_TEMPLATES . 'pda/', $templateEngine->assignedVars );
 				
 				break;
 			default:
@@ -54,32 +27,16 @@ class _Core_TemplateEngine implements _Core_Router_iHook
 				require_once SYS_DIR_LIBS . 'external/smarty/Smarty_Compiler.class.php';
 				require_once SYS_DIR_LIBS . 'external/smarty/Config_File.class.php';
 				
-				$tpl = new Smarty();
+				$templateEngine = new Smarty();
 
-				$tpl->template_dir    =  SYS_DIR_ROOT.'/views';
-				$tpl->compile_dir     =  TMP_DIR_SMARTY.'/cache';
+				$templateEngine->template_dir 		=  SYS_DIR_ROOT.'/views';
+				$templateEngine->compile_dir 		=  TMP_DIR_SMARTY.'/cache';
 
-				$tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
-				$tpl->compile_check   =  true;
-				$tpl->force_compile   =  false;
-				
-				$tpl->_tpl_vars 	= $templateEngine->assignedVars;
-				
-				$templateEngine = $tpl;
-				
-				unset( $tpl );
+				$templateEngine->plugins_dir 		=  array(SYS_DIR_LIBS.'external/smarty/plugins');
+				$templateEngine->compile_check 	=  true;
+				$templateEngine->force_compile 	=  false;
 		}
 		
-		
-	}
-	
-	public function __get( $variable )
-	{
-		if( key_exists( $variable, $this->assignedVars ) )
-		{
-			return $this->assignedVars[ $variable ];
-		}
-		
-		return null;
+		return $templateEngine;
 	}
 }

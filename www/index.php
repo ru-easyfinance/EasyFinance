@@ -8,17 +8,28 @@ define('INDEX', true);
 
 error_reporting( E_ALL );
 
-// Загружаем общие данные
-require_once dirname(dirname(__FILE__)). "/include/common.php";
+// Подключаем файл с общей конфигурацией проекта
+require_once dirname(dirname(__FILE__)) . '/include/config.php';
 
-// Новая схема 
+// Загружаем общие данные
+// @todo оторвать! 
+require_once SYS_DIR_INC . 'common.php';
+
+// Получаем обьект с параметрами запроса.
 $request = _Core_Request::getCurrent();
-$router = new _Core_Router( $request );
+
+// Получаем текущий шаблонизатор на основании запроса
+$templateEngine = _Core_TemplateEngine::getPrepared( $request );
+
+// Инициализация роутера
+$router = new _Core_Router( $request, $templateEngine );
 
 try
 {
 	// Выполнение запроса (разбор ->вызов контроллера)
 	$router->performRequest();
+	
+	$templateEngine->display( 'index.html' );
 	
 	// Применение модификаций\удалений моделей
 	_Core_ObjectWatcher::getInstance()->performOperations();

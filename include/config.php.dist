@@ -18,6 +18,8 @@ define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
 
 define('DIR_SHARED', 		"${project.shared.dir}" . DIRECTORY_SEPARATOR);
 define('DIR_UPLOAD',		DIR_SHARED . "uploaded/");
+define('DIR_CONFIG',		dirname(dirname(__FILE__)) . '/configs/' );
+define('DIR_TEMPLATES',		dirname(dirname(__FILE__)) . '/template/' );
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
@@ -27,6 +29,7 @@ define('IS_DEMO', 			${project.demo} );
 define('URL_ROOT_MAIN',         "${project.url.root}/");
 define('URL_ROOT_DEMO',         "${demo.url.root}/");
 define('URL_ROOT_IFRAME',       "iframe." . URL_ROOT_MAIN);
+define('URL_ROOT_PDA',		"pda." . URL_ROOT_MAIN);
 
 define('URL_ROOT',			IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 

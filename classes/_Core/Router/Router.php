@@ -9,16 +9,18 @@ class _Core_Router
 	protected $methodName 		= null;
 	protected $requestRemains 	= array();
 	
-	protected $view;
+	protected $templateEngine;
 	
 	protected static $headerByCode = array(
 		403 => 'HTTP/1.1 403 Forbidden',
 		404 => 'HTTP/1.1 404 Not Found',
 	);
 	
-	public function __construct( _Core_Request $request )
+	public function __construct( _Core_Request $request, $templateEngine )
 	{
 		$this->request = $request;
+		
+		$this->templateEngine = $templateEngine;
 		
 		$this->configureHooks( DIR_CONFIG . 'router_hooks.conf'  );
 	}
@@ -72,34 +74,25 @@ class _Core_Router
 			}
 		}
 		
-		// Создаём обьект заглушку шаблонизатора
-		// сделанно временно из за необходимости поддержки smarty
-		$templateEngine = new _Core_TemplateEngine();
-		
 		// Вызов подключённых хуков
 		foreach ( $this->hooks as $className )
 		{
-			
-			//$className::${'::execRouterHook'}();
-			
 			call_user_func_array( array($className,'execRouterHook'), array(
-				&$this->request,
+				$this->request,
 				&$this->className,
 				&$this->methodName,
 				&$this->requestRemains,
-				&$templateEngine
+				&$this->templateEngine
 			));
 		}
 		
 		try
 		{
-			$controller = new $this->className( $templateEngine );
+			$controller = new $this->className( $this->templateEngine );
 			
 			call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
 			
 			unset($controller);
-			
-			$templateEngine->display( 'index.html' );
 		}
 		catch ( Exception $e )
 		{
@@ -116,7 +109,7 @@ class _Core_Router
 		
 		if( !in_array( '_Core_Router_iHook', class_implements($className) ) )
 		{
-			throw new _CoreException('Class "' . $className . '" don\'t implements "_Core_Router_iHook"! ');
+			throw new _Core_Exception('Class "' . $className . '" don\'t implements "_Core_Router_iHook"! ');
 		}
 		
 		$this->hooks[] = $className;
