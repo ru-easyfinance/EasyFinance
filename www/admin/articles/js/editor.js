@@ -13,8 +13,8 @@ $(document).ready(function(){
         }
         $("div.editor #url").val(res.article.url || '');
         if (res.article['public'] == '1')
-        $("div.editor #public").attr('checked', 'checked');
-        $("div.editor #title").val(recs.article.title || '');
+            $("div.editor #public").attr('checked', 'checked');
+        $("div.editor #title").val(res.article.title || '');
         $("div.editor #meta_desc").val(res.article.meta_desc || '');
         $("div.editor #meta_key").val(res.article.meta_key || '');
         $("div.editor #preview").val(res.article.preview || '');
