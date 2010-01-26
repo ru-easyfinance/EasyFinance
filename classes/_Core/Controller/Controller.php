@@ -300,7 +300,7 @@ abstract class _Core_Controller
             	);
             }
         
-        $this->tpl->assign('res', json_encode($res));
+        $this->tpl->assign('res', $res );
     }
 }
 

@@ -41,7 +41,7 @@
             <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
         {/foreach}
         <script type="text/javascript">
-            var res = {$res};
+            var res = {$res|json_encode};
         </script>
 
     <!-- /Подключениее стилей и скриптов -->
