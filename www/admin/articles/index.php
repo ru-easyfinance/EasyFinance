@@ -1,6 +1,10 @@
 <?php
 
 define ('INDEX', true);
+
+define ('ADMIN_ARTICLE_LOGIN', 'antrax');
+define ('ADMIN_ARTICLE_PASS', '5499ca61447e38a97dfdc348045ec68df7d1acc3');
+
 include (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/config.php');
 //include (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/common.php');
 include_once('../../../classes/_Core/_Core.php');
@@ -159,6 +163,18 @@ class Articles{
     }
 
 }
+
+// Авторизация пользователя, если пользователь ввёл не верный логин или пароль!
+if (!(isset($_SERVER['PHP_AUTH_USER']) &&
+    isset($_SERVER['PHP_AUTH_PW']) &&
+    $_SERVER['PHP_AUTH_USER'] == ADMIN_ARTICLE_LOGIN &&
+    $_SERVER['PHP_AUTH_PW'] == ADMIN_ARTICLE_PASS)) {
+    header('WWW-Authenticate: Basic realm="Secured area"');
+    header('Status: 401 Unauthorized');
+    exit;
+}
+
+
 switch ($_REQUEST['page'])
     {
         case "listAll":
