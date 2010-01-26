@@ -38,17 +38,19 @@ class Articles{
         $keywords = (string)$args['meta_key'];
         $announce = strip_tags((string)$args['preview'], '<p>');
         $body = strip_tags((string)$args['text'], '<p><b><i><u><h3><h4><h5><h6><a><img><ul><li><span>');
+        $author = (string)$args['author'];
+        $url = (string)$args['url'];
 
         $status = 0;
         if ( $args['public'] )
             $status = 1;
         if (!$id){
-            $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id);
+            $sql = "INSERT INTO articles (date, authorName, authorUrl, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $article = $this->db->query($sql, $date, $author, $url, $title, $description, $keywords, $announce, $body, $status, $image_id);
         }
         else{
-            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=?, image_id=? WHERE id=?";
-            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id, $id);
+            $sql = "UPDATE articles SET date=?, authorName, authorUrl, title=?, description=?, keywords=?, announce=?, body=?, status=?, image_id=? WHERE id=?";
+            $article = $this->db->query($sql, $date, $author, $url, $title, $description, $keywords, $announce, $body, $status, $image_id, $id);
         }
 
         foreach ($arrayId as $k=>$v)
