@@ -62,7 +62,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             if (  data[v].transfer > 0 ) {
                 tp = 'transfer';
-            } else if (data[v].virt == 1) {
+            } else if (data[v].virt == "1") {
                 tp = 'target';
             } else {
                 if (data[v].drain == 1) {
@@ -80,7 +80,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             pageTotal = pageTotal + curMoney;
 
-            tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id 
+            tr += "<tr id='op" + (data[v].virt == "1" ? 'v' : 'r') + data[v].id
                 + "' value='" + data[v].id
                 + "' moneyCur='" + curMoney.toString()
                 + "' trId='" + data[v].tr_id
@@ -140,8 +140,16 @@ easyFinance.widgets.operationsJournal = function(){
         var key = 0;
         var $trs = $('#operations_list tr .check input:checked').closest('tr');
         $trs.each(function(){
-            ids[key] = $(this).attr('value')
-            _ops[key] = $.extend(true, {}, _journal[ids[key]]);
+            var id = $(this).attr('id');
+            var value = $(this).attr('value');
+
+            if (id.indexOf("opv") != -1)
+                virts[key] = value;    
+            else
+                ids[key] = value;
+
+            _ops[key] = $.extend(true, {}, _journal[value]);
+            
             key++;
         });
 
@@ -178,7 +186,7 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _deleteOperationFromTable(op) {
-        var opVirt = op.virt ? 'v' : 'r';
+        var opVirt = (op.virt == "1") ? 'v' : 'r';
         var opTransferId = op.tr_id;
         var opId = op.id;
 
@@ -516,7 +524,7 @@ easyFinance.widgets.operationsJournal = function(){
             var tp = '';
             if ( operation.transfer > 0 ) {
                 tp = 'перевод';
-            } else if (operation.virt == 1) {
+            } else if (operation.virt == "1") {
                 tp = 'перевод на финансовую цель';
             } else {
                 if (operation.drain == 1) {
