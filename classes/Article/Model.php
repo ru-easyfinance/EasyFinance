@@ -95,31 +95,18 @@ class Article_Model extends _Core_Abstract_Model
 		$user->getId();
 	}
 	
-	public static function create($title, $announce, $body)
+	public static function create()
 	{
-		$sql = "INSERT INTO articles (date, title, description, body) VALUES (NOW(), ?, ?, ?)";
-                $article = Core::getInstance()->db->query($sql, $title, $announce, $body);
+		
 	}
-
-        public function edit($title, $announce, $body, $id)
-        {
-                $sql = "UPDATE articles  SET  date=NOW(), title=?, description=?, body=? WHERE id=?";
-                $article = Core::getInstance()->db->query($sql, $title, $announce, $body, $id);
-        }
-
-        public function delete($id)
-        {
-                $sql = "DELETE FROM articles WHERE id=?";
-                $article = Core::getInstance()->db->query($sql, $id);
-        }
 	
 	public function save()
 	{
 		
 	}
 	
-	/*public function delete()
+	public function delete()
 	{
 		
-	}*/
+	}
 }
