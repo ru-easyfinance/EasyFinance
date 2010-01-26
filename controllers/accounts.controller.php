@@ -187,18 +187,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         die ( json_encode (  ( $acc ) ) );
     }
 
-
-    public function Account_Collection()
-    {
-
-        $id = (int)$_POST['id'];
-        $aid = (int)$_POST['aid'];
-        //die('a'.strval($id).'a');
-
-        $this->model->get_fields($id, $aid);
-    }
-
-    /*function edit()
+   /*function edit()
     {
         //die ('123');
         $id = $_POST['id'];
