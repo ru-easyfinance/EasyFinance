@@ -42,7 +42,7 @@ class Article_Model extends _Core_Abstract_Model
 	
 	public static function loadTotalNum()
 	{
-		$sql = 'select count(id) from articles';
+		$sql = 'select count(id) from articles WHERE status=1';
 		
 		$num = Core::getInstance()->db->selectCell( $sql );
 		
@@ -67,7 +67,7 @@ class Article_Model extends _Core_Abstract_Model
 		}
 		
 		$sql = 'select ' . implode(', ', array_keys( self::$fieldsDeclare ) ) .
-			' from articles
+			' from articles WHERE status=1
 			order by `' . $orderBy . '` ' . ($asc?'asc':'desc')
 			. ' limit ' . $start . ', ' . $count ;
 		
