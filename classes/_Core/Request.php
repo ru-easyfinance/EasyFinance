@@ -35,7 +35,8 @@ class _Core_Request
 			
 			self::$currentInstance->scheme = self::$currentInstance->getScheme();
 			self::$currentInstance->method = $_SERVER['REQUEST_METHOD'];
-			self::$currentInstance->host 	= $_SERVER["HTTP_HOST"];
+			self::$currentInstance->host 	= 'pda.ef.localhost';//$_SERVER["HTTP_HOST"];
+			//self::$currentInstance->host 	= $_SERVER["HTTP_HOST"];
 			
 			self::$currentInstance->post	= self::$currentInstance->escapeVarsArray( $_POST );
 			self::$currentInstance->get	= self::$currentInstance->escapeVarsArray( $_GET );

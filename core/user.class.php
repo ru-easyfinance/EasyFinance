@@ -182,13 +182,6 @@ class User
 
 	if (count($this->props) == 0)
 	{
-		Core::getInstance()->tpl->assign( 'loginErrorText', 'Неверный логин или пароль!' );
-		$this->destroy();
-		return false;
-	}
-	elseif ($this->props['user_active'] == 0)
-	{
-        Core::getInstance()->tpl->assign( 'loginErrorText', 'Ваш профиль был заблокирован!' );
 		$this->destroy();
 		return false;
 	}
