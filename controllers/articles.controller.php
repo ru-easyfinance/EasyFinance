@@ -16,39 +16,6 @@ class Articles_Controller extends _Core_Controller
 	{	
 		$this->tpl->assign('no_menu', '1');
 	}
-
-        function listAll (){
-                $artic = new Article_Collection();
-                $art = $artic->loadAll();
-                return $art;
-        }
-
-        function save($args){
-            $article = new Article();
-            $title = (string)$_POST('title');
-            $announce = (string)$_POST('preview');
-            $body = (string)$_POST('text');
-            $article->create($title, $announce, $body);
-            return array('result' => 'ok');
-        }
-
-        function editor($args){
-            $article = new Article();
-            $id = $_POST('id');
-            $title = (string)$_POST('title');
-            $announce = (string)$_POST('preview');
-            $body = (string)$_POST('text');
-            $article->edit($id, $title, $announce, $body);
-            return array ('result' => 'ok');
-        }
-
-        function ArticleDel($args)
-        {
-            $article = new Article();
-            $id = $_POST('id');
-            $article->delete($id);
-            return array ('result' => 'ok');
-        }
 	
 	function index( $args = array() )
 	{
