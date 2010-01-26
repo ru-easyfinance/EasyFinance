@@ -90,7 +90,8 @@ abstract class Account
             Account_Collection::ACCOUNT_TYPE_PIF                => 'Account_PIF',//
             Account_Collection::ACCOUNT_TYPE_OFBU               => 'Account_OFBU',//
             Account_Collection::ACCOUNT_TYPE_PROPERTY           => 'Account_Property',//
-            Account_Collection::ACCOUNT_TYPE_ELECTPURSE         => 'Account_ElectPurse'//
+            Account_Collection::ACCOUNT_TYPE_ELECTPURSE         => 'Account_ElectPurse',//
+            Account_Collection::ACCOUNT_TYPE_BANKACC            => 'Account_BankAcc'
         );
         $acc = new $typearray[$tip];
         return $acc;
@@ -115,7 +116,8 @@ abstract class Account
             Account_Collection::ACCOUNT_TYPE_PIF                => 'Account_PIF',//
             Account_Collection::ACCOUNT_TYPE_OFBU               => 'Account_OFBU',//
             Account_Collection::ACCOUNT_TYPE_PROPERTY           => 'Account_Property',//
-            Account_Collection::ACCOUNT_TYPE_ELECTPURSE         => 'Account_ElectPurse'//
+            Account_Collection::ACCOUNT_TYPE_ELECTPURSE         => 'Account_ElectPurse',//
+            Account_Collection::ACCOUNT_TYPE_BANKACC            => 'Account_BankAcc'
         );
         $us = Core::getInstance()->user;
         $acc = new $typearray[$params['type']];
