@@ -12,6 +12,7 @@ $(document).ready(function(){
             $("div.editor #date").val(res.article.date);
         }
         $("div.editor #url").val(res.article.url || '');
+        $("div.editor #public").val(res.article['public'] || 0);
         $("div.editor #title").val(res.article.title || '');
         $("div.editor #meta_desc").val(res.article.meta_desc || '');
         $("div.editor #meta_key").val(res.article.meta_key || '');
