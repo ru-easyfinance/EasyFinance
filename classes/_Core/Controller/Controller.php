@@ -151,7 +151,7 @@ abstract class _Core_Controller
 		
 		if ( is_null($user->getId()) )
 		{
-			$this->tpl->assign('res', json_encode($res));
+			$this->tpl->assign('res', $res);
 			return false;
 		}
 
