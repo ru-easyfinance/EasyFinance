@@ -145,6 +145,16 @@ function user_cur_save()
         $.jGrowl("Валюты сохранены", {theme: 'green'});
     });
 }
+
+function isCurrencyInUse(id) {
+    for (var key in res.accounts) {
+        if (res.accounts[key].currency == id)
+            return true;
+    }
+
+    return false;
+}
+
 $(document).ready(function(){
     $('.menu5 #i3').addClass('act');
     $('.menu5 #i3').live('click',function(){
@@ -171,9 +181,20 @@ $(document).ready(function(){
         user_cur_back();
     });
     $('.user li').live('click',function(){
-        if (($('.user li').length>1)&&($(this).attr('id')!='1'))
-        {
+        if (($('.user li').length>1)) {
             var id = $(this).attr('id');
+
+            // тикет #687
+            if (isCurrencyInUse(id)) {
+                alert ("Невозможно удалить валюту, поскольку у Вас есть счета в этой валюте!");
+                return;
+            }
+
+            if (id == res.currency['default']) {
+                alert ("Невозможно удалить валюту, которая используется по умолчанию!");
+                return;
+            }
+
             //alert(u_cur_list[id]['charCode'])
             cur_ids[id]=0;
             $('ul.all').append($(this));
