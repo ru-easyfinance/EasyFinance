@@ -106,6 +106,7 @@ class Articles{
                 ,'meta_key'=>$article[0]['keywords']
                 ,'preview'=>$article[0]['announce']
                 ,'text'=>$article[0]['body']
+                ,'public'=>$article[0]['status']
             )
         );
            // die(print_r($ret));
