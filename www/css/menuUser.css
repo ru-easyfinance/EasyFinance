@@ -97,6 +97,9 @@ ul.dropdown li:hover ul, ul li.over ul {
 
 .iframe .menu3 ul li#m1, .iframe .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 93px; }
 .menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
+.iframe .menu3 ul li#m1 span { width: 2px; }
+.iframe .menu3 ul li#m1 a { width: 93px; }
+.iframe .menu3 ul li#m1 ul li a { width: 84px; }
 
 .menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
 .menu3 ul li#m1.act > a { background-position: 0 -80px; }

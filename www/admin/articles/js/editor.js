@@ -12,6 +12,8 @@ $(document).ready(function(){
             $("div.editor #date").val(res.article.date);
         }
         $("div.editor #url").val(res.article.url || '');
+        if (res.article['public'] == '1')
+            $("div.editor #public").attr('checked', 'checked');
         $("div.editor #title").val(res.article.title || '');
         $("div.editor #meta_desc").val(res.article.meta_desc || '');
         $("div.editor #meta_key").val(res.article.meta_key || '');
@@ -96,7 +98,7 @@ $(document).ready(function(){
             dataType: "json",
             success: function(data){
                 $('div.editor input#general_img').val(data.id||'0');
-                $('div.editor form#general_img img').attr('src',data.prewiewLink||'').show();
+                $('div.editor form#general_img img').attr('src',data.previewLink||'').show();
             }
         });
     });

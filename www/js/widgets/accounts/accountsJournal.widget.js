@@ -20,8 +20,9 @@ easyFinance.widgets.accountsJournal = function(){
                 _accounts = _model.getAccounts();
                 var account_list = _accounts;
                 var curr = res['currency'];
-                var num = curr['defa'];
-                var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0];// Жуткий масив привязки типов к группам
+                var num = curr['default'];
+                var defaultCurrency = curr[num];
+                var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0,0];// Жуткий масив привязки типов к группам
                 var spec_th = [ [],
                             ['<th>% годовых</th>',
                                 '<th>Доходность, % годовых</th>'],
@@ -35,21 +36,21 @@ easyFinance.widgets.accountsJournal = function(){
                 var account = _model.getAccounts()[id];
                 var spec = spec_th[g_types[account.type]];
 
-                var str = '<table Stile="padding:3px">';
+                var str = '<table style="padding:3px">';
                 str +=  '<tr style="line-height:19px;"><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
-                            account.name + '</td>';
+                            account.name + '</td></tr>';
                 str +=  '<tr style="line-height:19px;"><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
-                            account.comment + '</td>';
+                            account.comment + '</td></tr>';
                 str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
-                    formatCurrency(account.totalBalance) + ' ' + res.currency[account.currency]['text'] + '</td>';
+                    formatCurrency(account.totalBalance) + ' ' + res.currency[account.currency]['text'] + '</td></tr>';
                 if (_accounts[id]["reserve"] != 0){
                     delta = (formatCurrency(account.totalBalance-_accounts[id]["reserve"]));
-                    str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+res.currency[account.currency]['text']+'</td>'
-                    str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(_accounts[id]["reserve"])+' '+res.currency[account.currency]['text']+'</td>'
+                    str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+res.currency[account.currency]['text']+'</td></tr>'
+                    str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(_accounts[id]["reserve"])+' '+res.currency[account.currency]['text']+'</td></tr>'
                 }
 
                 str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
-                    formatCurrency(account.totalBalance * curr[account_list[id]["currency"]]['cost'] / curr[num]['cost']) + ' '+d_cur+'</td>';
+                    formatCurrency(account.totalBalance * res.currency[account_list[id]["currency"]]['cost'] / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
 
                 // @todo: показывать % годовых и т.п.
                 /*
@@ -59,8 +60,8 @@ easyFinance.widgets.accountsJournal = function(){
                 }
                 */
 
-                str += '<table>';
-                _bigTip($(this).find('.totalBalance'), str);
+                str += '</table>';
+                _bigTip($(this).find('.name'), str);
                 $('#operation_list tr.item').removeClass('act');
                 $(this).addClass('act');
         });
@@ -156,8 +157,8 @@ easyFinance.widgets.accountsJournal = function(){
                    content: text.toString(), // Set the tooltip content to the current corner
                    position: {
                       corner: {
-                         tooltip: 'rightMiddle', // Use the corner...
-                         target: 'leftMiddle' // ...and opposite corner
+                         tooltip: 'topMiddle', // Use the corner...
+                         target: 'bottomMiddle' // ...and opposite corner
                       }
                    },
                    show: {
@@ -207,7 +208,7 @@ easyFinance.widgets.accountsJournal = function(){
         if (!account_list || account_list.length == 0)
             return;
 
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0]; // Жуткий масив привязки типов к группам
+        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0]; // Жуткий масив привязки типов к группам
         var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
         var spec_th = [ '',
                     '<th Style="display:none">% годовых</th><th Style="display:none">Доходность, % годовых</th>',
@@ -239,8 +240,7 @@ easyFinance.widgets.accountsJournal = function(){
                         <tr>',
             s='';
 
-            var curr = res['currency'];
-            var num = curr['defa'];
+            var defaultCurrency = res.currency[res.currency['default']];
             //debugger;
 
         // формирует массив с таблицей счетов по группам
@@ -263,19 +263,19 @@ easyFinance.widgets.accountsJournal = function(){
 
                 str = str + '<td class="cur">' + res.currency[account_list[key]["currency"]]['text'] + '</td>';
                 if (type == 2)//для долга выводим с противоположным знаком
-                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 60px">' + formatCurrency(-account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
+                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 60px">' + formatCurrency(-account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']) + '</td>';
                 else
-                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 60px">' + formatCurrency(account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']) + '</td>';
-                summ[type] = summ[type] + (account_list[key]["totalBalance"] * curr[account_list[key]["currency"]]['cost'] / curr[num]['cost']);
+                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 60px">' + formatCurrency( account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']) + '</td>';
+                summ[type] = summ[type] + (account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']);
                 if (!val[account_list[key]['currency']]) {
                     val[account_list[key]['currency']]=0;
                 }
                 //if (type != 2)
                 val[account_list[key]['currency']] = val[account_list[key]['currency']]
-                    + parseInt(account_list[key]['totalBalance']);
+                    + parseFloat(account_list[key]['totalBalance']);
                 /*else
                     val[account_list[key]['currency']] = val[account_list[key]['currency']]
-                    - parseInt(account_list[key]['totalBalance']);*/
+                    - parseFloat(account_list[key]['totalBalance']);*/
                 str = str + '<td class="mark no_over">' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
             }

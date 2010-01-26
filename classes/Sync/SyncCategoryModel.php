@@ -66,7 +66,7 @@ class SyncCategory_Model {
         $a = $this->db->query($sql, $this->user);
         foreach ($a as $key=>$v){
             $data[6][0]['tablename'] = 'Categories';
-            $data[6][$key+1]['easykey'] = (int)$a[$key]['cat_id'];
+            $data[6][$key+1]['ekey'] = (int)$a[$key]['cat_id'];
             $data[6][$key+1]['parent'] = (int)$a[$key]['cat_parent'];
             $data[6][$key+1]['name'] = $a[$key]['cat_name'];
             $data[6][$key+1]['type'] = $a[$key]['type'];

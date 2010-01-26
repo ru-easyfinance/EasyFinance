@@ -688,9 +688,9 @@ $(".flash")
     data = res['currency'];
     str = '';
     var cost,name,progres;
-    var fir = res['currency']['defa'];//первая валюта в правом списке
+    var fir = res['currency']['default'];//первая валюта в правом списке
     for(key in data) {
-        if (key=='defa')
+        if (key=='default')
             continue;
         // валюта по умолчанию первая в списке ! не показываем её в правой панели
         if (fir != key) {
@@ -750,8 +750,16 @@ $(".flash")
         var topmenu = '<div class="menu3"> \
             <ul class="dropdown"> \
                 <li id="m1"> \
-                        <a href="/info/"></a> \
-                </li> \
+                        <a href="/info/"></a> ';
+
+        if (isIframe) {
+            topmenu += '<ul> \
+                                <li><span/><a href="/profile/">Профиль</a></li> \
+                                <li class="last"></li> \
+                        </ul>';
+        }
+
+        topmenu += '</li> \
                 <li id="m2"> \
                         <a href="/accounts/"></a> \
                         <ul> \

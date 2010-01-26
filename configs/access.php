@@ -31,6 +31,8 @@ $accessConfig = array(
 	'info' 		=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'report' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'accounts' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+	'operation' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+	'category' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	
 	'experts'	=> _User::TYPE_PRO,
 	

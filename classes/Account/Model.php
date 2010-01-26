@@ -198,7 +198,7 @@ class Account_Model
             $ret;//возвращаемые данные
             foreach ($v as $k1=>$v1){//цикл пихает в возвращаемый массив общие параметры.
                 if ($k1 != 'account_id')
-                    $ret[$k][$k1] = $v1;
+                    $ret[$k][$k1] = ($v1) ? ($v1) : '';
                 else
                     $ret[$k]['id'] = $v1;
             }
@@ -255,4 +255,3 @@ class Account_Model
 
     }
 }
-

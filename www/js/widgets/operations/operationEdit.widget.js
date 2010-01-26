@@ -319,6 +319,8 @@ easyFinance.widgets.operationEdit = function(){
                     data: accOptionsData,
                     changeCallback: function() {
                         _selectedTransfer = this.getHiddenValue();
+
+                        _changeAccountForTransfer();
                     }
                 });
 
@@ -562,8 +564,16 @@ easyFinance.widgets.operationEdit = function(){
 
     function _changeAccountForTransfer() {
         // @todo: учесть currency счетов с разными валютами
-        if (_selectedType == "2" &&
-            $('#op_account :selected').attr('currency') != $('#op_AccountForTransfer :selected').attr('currency')) {
+        /*
+        alert(_selectedAccount);
+        alert(_selectedTransfer);
+        alert(res.accounts[_selectedAccount].currency);
+        alert(res.accounts[_selectedTransfer].currency);
+        */
+
+        if (_selectedType == "2" && _selectedAccount != "" && _selectedTransfer != "" &&
+            res.accounts[_selectedAccount].currency != res.accounts[_selectedTransfer].currency) {
+                //alert('ok!');
                 $('#op_operationTransferCurrency').show();
                 //$("##op_account :selected").attr('currency')
                 //alert(res.currency[$("#op_account :selected").attr('currency')]['cost']);
@@ -572,9 +582,9 @@ easyFinance.widgets.operationEdit = function(){
                         TargetId : $("#op_AccountForTransfer").val()
                     }, function(data){*/
                         $('#op_operationTransferCurrency :first-child').html('Курс <b>'+
-                            $('#op_account :selected').attr('abbr')+'</b> к <b>'+$('#op_AccountForTransfer :selected').attr('abbr')+'</b>');
-                        data = res.currency[$("#op_account :selected").attr('currency')]['cost'];
-                        data /= res.currency[$("#op_AccountForTransfer :selected").attr('currency')]['cost'];
+                            res.currency[res.accounts[_selectedAccount].currency].text+'</b> к <b>'+res.currency[res.accounts[_selectedTransfer].currency].text+'</b>');
+                        data = res.currency[res.accounts[_selectedAccount].currency]['cost'];
+                        data /= res.currency[res.accounts[_selectedTransfer].currency]['cost'];
                         data = data.toString();
                         i = data.indexOf('.');
                         data = data.substr(0, i+5);

@@ -65,7 +65,7 @@ class SyncOperation_Model {
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v) if ($v['comment']<>'Начальный остаток'){
             $data[9][0]['tablename'] = 'Incomes';
-            $data[9][$key+1]['easykey'] = (int)$a[$key]['id'];
+            $data[9][$key+1]['ekey'] = (int)$a[$key]['id'];
             $data[9][$key+1]['date'] = $a[$key]['date'];
             $data[9][$key+1]['category'] = (int)$a[$key]['cat_id'];
 
@@ -74,7 +74,7 @@ class SyncOperation_Model {
             $data[9][$key+1]['parent'] = (int)$b[0]['cat_parent'];
 
             $data[9][$key+1]['account'] = (int)$a[$key]['account_id'];
-            $data[9][$key+1]['amount'] = (int)$a[$key]['money'];
+            $data[9][$key+1]['amount'] = (float)$a[$key]['money'];
             $data[9][$key+1]['descr'] = $a[$key]['comment'];
 
             //добавление в рекордс меп.
@@ -88,7 +88,7 @@ class SyncOperation_Model {
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v){
             $data[10][0]['tablename'] = 'Outcomes';
-            $data[10][$key+1]['easykey'] = (int)$a[$key]['id'];
+            $data[10][$key+1]['ekey'] = (int)$a[$key]['id'];
             $data[10][$key+1]['date'] = $a[$key]['date'];
             $data[10][$key+1]['category'] = $a[$key]['cat_id'];
 
@@ -97,7 +97,7 @@ class SyncOperation_Model {
             $data[10][$key+1]['parent'] = (int)$b[0]['cat_parent'];
 
             $data[10][$key+1]['account'] = (int)$a[$key]['account_id'];
-            $data[10][$key+1]['amount'] = (int)abs($a[$key]['money']);
+            $data[10][$key+1]['amount'] = (float)abs($a[$key]['money']);
             $data[10][$key+1]['descr'] = $a[$key]['comment'];
 
             //добавление в рекордс меп.

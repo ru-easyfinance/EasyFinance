@@ -37,6 +37,8 @@ easyFinance.widgets.operationsJournal = function(){
 
     var _sexyCategoryInitialized = false;
 
+    var OPERATION_TYPES = ['доход', 'расход', 'перевод', '', 'фин. цель'];
+
     // private functions
     //
     // форматирует и выводит таблицу с данными
@@ -60,7 +62,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             if (  data[v].transfer > 0 ) {
                 tp = 'transfer';
-            } else if (data[v].virt == 1) {
+            } else if (data[v].virt == "1") {
                 tp = 'target';
             } else {
                 if (data[v].drain == 1) {
@@ -78,7 +80,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             pageTotal = pageTotal + curMoney;
 
-            tr += "<tr id='op" + (data[v].virt ? 'v' : 'r') + data[v].id 
+            tr += "<tr id='op" + (data[v].virt == "1" ? 'v' : 'r') + data[v].id
                 + "' value='" + data[v].id
                 + "' moneyCur='" + curMoney.toString()
                 + "' trId='" + data[v].tr_id
@@ -138,8 +140,16 @@ easyFinance.widgets.operationsJournal = function(){
         var key = 0;
         var $trs = $('#operations_list tr .check input:checked').closest('tr');
         $trs.each(function(){
-            ids[key] = $(this).attr('value')
-            _ops[key] = $.extend(true, {}, _journal[ids[key]]);
+            var id = $(this).attr('id');
+            var value = $(this).attr('value');
+
+            if (id.indexOf("opv") != -1)
+                virts[key] = value;    
+            else
+                ids[key] = value;
+
+            _ops[key] = $.extend(true, {}, _journal[value]);
+            
             key++;
         });
 
@@ -176,7 +186,7 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _deleteOperationFromTable(op) {
-        var opVirt = op.virt ? 'v' : 'r';
+        var opVirt = (op.virt == "1") ? 'v' : 'r';
         var opTransferId = op.tr_id;
         var opId = op.id;
 
@@ -396,7 +406,7 @@ easyFinance.widgets.operationsJournal = function(){
         var strCat = '';
 
         if (_type != '')
-            txt = txt + 'операции: ' + ['доход', 'расход', 'перевод', '', 'фин. цель'][_type];
+            txt = txt + 'операции: ' + OPERATION_TYPES[_type];
 
         if (_type != '' && _category != '')
             txt = txt + ', ';
@@ -507,6 +517,54 @@ easyFinance.widgets.operationsJournal = function(){
         $('tr','#operations_list').live('mouseover',function(){
             $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             $(this).closest('tr').addClass('act').find('.cont ul').show();
+
+            // всплывающая подсказка для тикета #640
+            var operation = _journal[$(this).closest('tr').attr('value')];
+
+            var tp = '';
+            if ( operation.transfer > 0 ) {
+                tp = 'перевод';
+            } else if (operation.virt == "1") {
+                tp = 'перевод на финансовую цель';
+            } else {
+                if (operation.drain == 1) {
+                    tp = 'расход';
+                } else {
+                    tp = 'доход';
+                }
+            }
+
+            var tooltipHtml = '<b>Тип:</b> ' + tp + '<br>';
+            tooltipHtml += '<b>Счёт:</b> ' + res.accounts[operation.account_id].name + '<br>';
+
+            $('.qtip').remove();
+            $(this).qtip({
+                content: tooltipHtml,
+                position: {
+                  corner: {
+                     tooltip: 'topMiddle', // Use the corner...
+                     target: 'bottomMiddle' // ...and opposite corner
+                  }
+                },
+                show: {
+                  when: false, // Don't specify a show event
+                  ready: true // Show the tooltip when ready
+                },
+                hide: {
+                  when: 'mouseout'
+                }, // Don't specify a hide event
+                style: {
+                  width: {max: 300},
+                  name: 'light',
+                  tip: true // Give them tips with auto corner detection
+                }
+            });
+        });
+
+        $('#operation_list tr.item').live('mouseout',
+            function(){
+                $('.qtip').remove();
+                $(this).removeClass('act');
         });
 
         // hide selection

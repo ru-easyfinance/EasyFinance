@@ -91,7 +91,11 @@ function sync_clearRecMap($xmlRequest){
     $answer = $a->deleteRecMapByUser($xmlRequest);
     return $answer;
 }
-//sync_getAuthWithTestData('xml');
+function sync_writeData($xmlRequest){
+    $a = New Sync($xmlRequest, $xmlAnswer);
+    $answer = $a->writeDataAndAnswerRec($xmlRequest);
+    return $answer;
+}
 $a=array(
     "sync.getAuth" => array(
             "function" => "sync_getAuth",
@@ -104,6 +108,9 @@ $a=array(
     ),
     "sync.clearRecMap" => array(
             "function" => "sync_clearRecMap",
+    ),
+    "sync.writeData" => array(
+            "function" => "sync_writeData",
     )
 );
 

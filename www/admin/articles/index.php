@@ -1,6 +1,10 @@
 <?php
 
 define ('INDEX', true);
+
+define ('ADMIN_ARTICLE_LOGIN', 'antrax');
+define ('ADMIN_ARTICLE_PASS', '5499ca61447e38a97dfdc348045ec68df7d1acc3');
+
 include (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/config.php');
 //include (dirname(dirname(dirname(dirname(__FILE__)))) . '/include/common.php');
 include_once('../../../classes/_Core/_Core.php');
@@ -36,19 +40,21 @@ class Articles{
         $title = (string)$args['title'];
         $description = (string)$args['meta_desc'];
         $keywords = (string)$args['meta_key'];
-        $announce = strip_tags((string)$args['preview'], '<p>');
-        $body = strip_tags((string)$args['text'], '<p><b><i><u><h3><h4><h5><h6><a><img><ul><li><span>');
+        $announce = strip_tags((string)$args['preview'], '<p><br>');
+        $body = strip_tags((string)$args['text'], '<p><br><b><i><u><h3><h4><h5><h6><a><img><ul><li><span>');
+        $author = (string)$args['author'];
+        $url = (string)$args['url'];
 
         $status = 0;
         if ( $args['public'] )
             $status = 1;
         if (!$id){
-            $sql = "INSERT INTO articles (date, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id);
+            $sql = "INSERT INTO articles (date, authorName, authorUrl, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $article = $this->db->query($sql, $date, $author, $url, $title, $description, $keywords, $announce, $body, $status, $image_id);
         }
         else{
-            $sql = "UPDATE articles SET date=?, title=?, description=?, keywords=?, announce=?, body=?, status=?, image_id=? WHERE id=?";
-            $article = $this->db->query($sql, $date, $title, $description, $keywords, $announce, $body, $status, $image_id, $id);
+            $sql = "UPDATE articles SET date=?, authorName=?, authorUrl=?, title=?, description=?, keywords=?, announce=?, body=?, status=?, image_id=? WHERE id=?";
+            $article = $this->db->query($sql, $date, $author, $url, $title, $description, $keywords, $announce, $body, $status, $image_id, $id);
         }
 
         foreach ($arrayId as $k=>$v)
@@ -106,6 +112,7 @@ class Articles{
                 ,'meta_key'=>$article[0]['keywords']
                 ,'preview'=>$article[0]['announce']
                 ,'text'=>$article[0]['body']
+                ,'public'=>$article[0]['status']
             )
         );
            // die(print_r($ret));
@@ -156,6 +163,18 @@ class Articles{
     }
 
 }
+
+// Авторизация пользователя, если пользователь ввёл не верный логин или пароль!
+if (!(isset($_SERVER['PHP_AUTH_USER']) &&
+    isset($_SERVER['PHP_AUTH_PW']) &&
+    $_SERVER['PHP_AUTH_USER'] == ADMIN_ARTICLE_LOGIN &&
+    $_SERVER['PHP_AUTH_PW'] == ADMIN_ARTICLE_PASS)) {
+    header('WWW-Authenticate: Basic realm="Secured area"');
+    header('Status: 401 Unauthorized');
+    exit;
+}
+
+
 switch ($_REQUEST['page'])
     {
         case "listAll":

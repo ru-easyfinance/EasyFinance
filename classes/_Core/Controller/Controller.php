@@ -247,7 +247,7 @@ abstract class _Core_Controller
                 'progress' => ''
             );
         }//*/
-        $currency['defa'] = (int)$get['def'];//валюта по умолчанию
+        $currency['default'] = (int)$get['def'];//валюта по умолчанию
 
 
         try {
@@ -263,7 +263,7 @@ abstract class _Core_Controller
         } catch ( Exception $e ) {
             $cats = null;
         }
-	
+
 	$res += array(
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
