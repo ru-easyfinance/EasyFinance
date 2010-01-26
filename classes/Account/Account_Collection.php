@@ -52,6 +52,7 @@ class Account_Collection extends _Core_Abstract_Collection
     CONST ACCOUNT_TYPE_OFBU = 13;
     CONST ACCOUNT_TYPE_PROPERTY = 14;
     CONST ACCOUNT_TYPE_ELECTPURSE = 15;
+    CONST ACCOUNT_TYPE_BANKACC = 16;
 
     /**
      *
@@ -78,7 +79,7 @@ class Account_Collection extends _Core_Abstract_Collection
             $v['totalBalance'] = (float)$model->countTotalBalance($v['id']);
             if ( !( 10 <= $v['type'] ) and ( $v['type'] <=15 ) )
                 $v['reserve'] = (float)$model->countReserve($v['id']);
-                $v['defCur'] = $model->countSumInDefaultCurrency($v['totalBalance'], $v['currency']);
+                //$v['defCur'] = $model->countSumInDefaultCurrency($v['totalBalance'], $v['currency']);
                 $v['initPayment'] = (float)$model->getFirstOperation($v['id']);
                 
                 $ret[$v['id']]=$v;
