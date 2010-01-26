@@ -40,8 +40,8 @@ class Articles{
         $title = (string)$args['title'];
         $description = (string)$args['meta_desc'];
         $keywords = (string)$args['meta_key'];
-        $announce = strip_tags((string)$args['preview'], '<p>');
-        $body = strip_tags((string)$args['text'], '<p><b><i><u><h3><h4><h5><h6><a><img><ul><li><span>');
+        $announce = strip_tags((string)$args['preview'], '<p><br>');
+        $body = strip_tags((string)$args['text'], '<p><br><b><i><u><h3><h4><h5><h6><a><img><ul><li><span>');
         $author = (string)$args['author'];
         $url = (string)$args['url'];
 
