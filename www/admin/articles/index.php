@@ -45,7 +45,7 @@ class Articles{
         if ( $args['public'] )
             $status = 1;
         if (!$id){
-            $sql = "INSERT INTO articles (date, authorName, authorUrl, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO articles (date, authorName, authorUrl, title, description, keywords, announce, body, status, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $article = $this->db->query($sql, $date, $author, $url, $title, $description, $keywords, $announce, $body, $status, $image_id);
         }
         else{
