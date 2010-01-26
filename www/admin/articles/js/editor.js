@@ -96,7 +96,7 @@ $(document).ready(function(){
             dataType: "json",
             success: function(data){
                 $('div.editor input#general_img').val(data.id||'0');
-                $('div.editor form#general_img img').attr('src',data.prewiewLink||'').show();
+                $('div.editor form#general_img img').attr('src',data.previewLink||'').show();
             }
         });
     });
