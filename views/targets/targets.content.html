@@ -12,6 +12,7 @@
 						</div>
 						<div class="inside financobject_block">
 							<div class="add"><span>Добавить цель</span></div>
+                                                        <div class="content">
                             {foreach from=$user_list_targets item=i key=k}
                             
                             {if $i.done == 0}
@@ -61,6 +62,7 @@
                             
                             {/foreach}
                             <!--{if $user_list_targets|@count > 5}{/if}-->
+                                                        </div>
                             {if $closed_targets > 0}
 							<div class="show_all"><span>Смотреть все цели</span></div>
                             {/if}
