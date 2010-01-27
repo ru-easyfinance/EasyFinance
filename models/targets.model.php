@@ -44,13 +44,7 @@ class Targets_Model {
      * @var User
      */
     private $user = null;
-
-    /**
-     * Ссылка на класс Смарти
-     * @var Smarty $tpl
-     */
-    private $tpl = null;
-
+    
     /**
      * Массив со ссылками на ошибки. Ключ - имя поля, значение массив текста ошибки
      * @example array('date'=>array('Не указана дата'), 'time'=> array('Не указано время'));
@@ -78,7 +72,6 @@ class Targets_Model {
     function  __construct() {
         $this->db = Core::getInstance()->db;
         $this->user = Core::getInstance()->user;
-        $this->tpl = Core::getInstance()->tpl;
     }
 
     /**
@@ -304,8 +297,7 @@ class Targets_Model {
         $data = array();
         if (isset($_POST['title'])) {
             $data = $this->checkData();
-
-            $this->tpl->assign("data", $data);
+            
             // Если есть ошибки, или не все обязательные поля заполнены
             if (count($this->errorData) > 0) {
                 return json_encode($this->errorData);
