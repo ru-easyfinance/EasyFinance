@@ -254,7 +254,7 @@ abstract class _Core_Controller
             $info = new Info_Model();
             $infoa = $info->get_data();
         } catch ( Exception $e) {
-            $infoa = 0;
+            $infoa = array();
         }
         try {
             $category = new Category_Model();
@@ -275,7 +275,7 @@ abstract class _Core_Controller
             'currency' => $currency,
             'flash' => array(
                 'title' => '',
-                'value' => $infoa[0][0],
+                'value' => isset($infoa[0][0])?$infoa[0][0]:0,
             ),
             'targets_category'=>array(
                 '1' => 'Квартира',
