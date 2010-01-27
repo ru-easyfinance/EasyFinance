@@ -198,9 +198,9 @@ $(document).ready(function(){
         }
         MakeOperation();
         //$('div.object').remove();
-        $('div.object,div.show_all').remove();
-        $('div.financobject_block').append(s);
-        $('div.show_all').show();
+        $('div.object').remove();
+        $('div.financobject_block').prepend(s);
+       // $('div.show_all').show();
     }
     /**
      * Заполняет поля формы результатами из массива data
