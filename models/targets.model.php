@@ -113,13 +113,6 @@ class Targets_Model {
             Core::getInstance()->user->getId() );
 		if (!is_array($list)) $list = array();//*/
         
-        $category = Core::getInstance()->user->getUserCategory();
-        /*foreach ($list as $key => $var) {
-            $list[$key]['category'] = $category[$key]['cat_name'];
-        }*/
-        $this->tpl->assign('total', $total);
-        $this->tpl->assign('index', $index);
-        $this->tpl->assign('index_limit', $limit);
         return $list;
     }
 
