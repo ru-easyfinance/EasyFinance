@@ -322,4 +322,14 @@ class Operation_Controller extends _Core_Controller_UserCommon
     function get_currency($args) {
         die(json_encode($this->model->getCurrency()));
     }
+    
+	/**
+	 * Список операций для счёта
+	 * 
+	 * @param array $args
+	 */
+	function account( $args = array() )
+	{
+		$this->tpl->assign('name_page', 'account/operations');
+	}
 }
