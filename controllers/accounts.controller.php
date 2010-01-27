@@ -101,30 +101,39 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function add()
     {
-        //$this->tpl->assign("page_title","account add");
-        //$this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-
-        //$this->accountslist();
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
-        $account = Account::load($params);
-        $accs = $account->create($user, $params);
-        if (!$accs)
-            $this->tpl->assign("error", "Счет не добавлен");
-        die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
-            ,'id'=>$accs
-            ))));
+        if( _Core_Request::getCurrent()->method == 'POST' )
+        {
+	        $user = Core::getInstance()->user->getId();
+	        
+	        $params = $_POST;
+	        $account = Account::load($params);
+	        $accs = $account->create($user, $params);
+	        
+	        if (!$accs)
+	        {
+			//json error answer
+	        }
+	        
+	        die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен','id'=>$accs))));
+        }
+        else
+        {
+        		
+        		
+        		$this->tpl->assign( 'name_page', 'account/edit' );
+        }
     }
 
     function edit()
     {
         $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
+        
         $params = $_POST;
         $account = Account::load($params);
         if (!$account->update($user, $params))
-            $this->tpl->assign("error", "Счет не изменён");
+        {
+           //json error answer
+        }
         die (json_encode(array('result'=>array('text'=>'Счёт успешно изменён'))));
     }
 
@@ -136,16 +145,22 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     function delete ($args)
     {
         $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
+    
         $params = $_POST;
 
         $account = Account::getTypeByID($params);
-        //$account = Account::load($params);
+        
         $er = $account->delete($user, $params);
+        
         if (!$er)
-            $this->tpl->assign("error", "Счет не удалён");
+        {
+        		//answer json "Счет не удалён"
+        }
         if ($er == 'cel')
+        {
             die (json_encode(array('error'=>array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'))));
+        }
+        
         die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
     }
 
