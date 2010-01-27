@@ -1,5 +1,9 @@
 // {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
+    $.get('/targets/user_list/', '', function(data){
+            //showall = 1;// показать все
+            loadTargets(data);
+        }, 'json');
     var showall = 0;// показать все .
 // <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
     $('#tg_amount,#amountf').live('keyup',function(e) {
@@ -166,6 +170,8 @@ $(document).ready(function(){
             s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+a+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 //alert(data[v]['category']);
+                targetcurrency = res.currency[ res.accounts [ data[ v ]["account"] ] ["currency"] ]["text"];
+                //targetcurrency = res.currency[ res.accounts [ res.target[data[v]["id"]]['account'] ]["currency"]['text']];
                 if (data[v]['category']==2)
                     s += '<img src="/img/i/avto.png" alt="" />'
                 else if (data[v]['category']==3)
@@ -182,8 +188,8 @@ $(document).ready(function(){
                 s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
                     s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
                     +'</div><div class="indicator_block"><div class="money">'
-                    +data[v]['amount']+' руб.<br /><span>'
-                    +data[v]['amount_done']+' руб.</span></div><div class="indicator">'
+                    +data[v]['amount'] + ' '+ targetcurrency +' <br /><span>'
+                    +data[v]['amount_done'] + ' ' + targetcurrency +' </span></div><div class="indicator">'
                     +'<div style="width:'+data[v]['percent_done']+'%;"><span>'+data[v]['percent_done']
                     +'%</span></div></div></div><div class="date">Целевая дата: '
                     +data[v]['end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
@@ -369,7 +375,7 @@ $(document).ready(function(){
     }
 
 
-
+   
     //функция проверяет есть ли у пользователя закрытые цели. !но по которым физической операции
     //расхода денег на категорию он не совершил. ну и предлагает сделать .
     MakeOperation();
