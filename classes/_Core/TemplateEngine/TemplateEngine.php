@@ -16,6 +16,11 @@ class _Core_TemplateEngine
 	{
 		switch ( $request->host . '/' )
 		{
+			case array_key_exists('responseMode', $request->get):
+				
+				
+				
+				break;
 			case URL_ROOT_PDA:
 				
 				$templateEngine = new _Core_TemplateEngine_Native( DIR_TEMPLATES . 'pda/' );
