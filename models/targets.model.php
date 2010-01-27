@@ -227,25 +227,6 @@ class Targets_Model {
     }
 
     /**
-     * Форматирует и устанавливает селектбоксы формы
-     * @return void
-     */
-    function _setFormSelectBoxs() {
-        $this->tpl->assign('type_options', array(
-            "r"=>"Расход",
-            "d"=>"Доход"));
-        $cat_sel = $this->tpl->get_template_vars('data');
-        $this->tpl->assign('category_options',get_tree_select($cat_sel['category_sel']));
-
-        $accounts = array();
-        foreach (Core::getInstance()->user->getUserAccounts() as $key => $var) {
-            $accounts[$var['account_id']] = $var['account_name'];
-        }
-
-        $this->tpl->assign('target_account_id_options', $accounts);
-    }
-
-    /**
      * Проверяет данные и возвращает ассоциативный массив, если успешно. False - при ошибке
      * @return array mixed
      */
