@@ -1,0 +1,33 @@
+<?php
+if($name_page == 'welcome')
+{
+	$name_page = isset($res['user'])?'info_panel/info_panel':'login';
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+	<head>
+		<title>EasyFinance - система управления личными финансами</title>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="Мобильная версия EasyFinance.Ru" />
+		<meta name="viewport" content="width=240" />
+		<meta name="MobileOptimized" content="176" />
+		<meta name="PalmComputingPlatform" content="true" />
+
+		<link rel="stylesheet" type="text/css" href="/css/pda.css" />
+	</head>
+	<body>
+		<?php
+		if( isset($res['user']) )
+		{
+			$this->display('blocks/user_menu.tpl');
+		}?>
+		
+		<?php $this->display( $name_page . '.tpl'); ?>
+		
+		<?php $this->display('blocks/bottom.tpl', true)?>
+		
+		<?php $this->display('blocks/debug.tpl')?>
+	</body>
+</html>
