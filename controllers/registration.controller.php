@@ -14,22 +14,18 @@ class Registration_Controller extends _Core_Controller
      */
     private $model = null;
 
-    /**
-     * Конструктор класса
-     * @return void
-     */
-    function __init()
-    {
-        $this->model = new Registration_Model();
+	/**
+	 * Конструктор класса
+	 * @return void
+	 */
+	function __init()
+	{
+		$this->model = new Registration_Model();
         
-        //if (substr($_SERVER['REQUEST_URI'], 0, 23) != '/registration/activate/')
-            $this->tpl->assign('name_page', 'registration');
-        //else
-        //   $tpl->assign('name_page', 'registractive');
-        $this->tpl->assign('no_menu', '1');
+		$this->tpl->assign('name_page', 'registration');
 
-        //$tpl->assign('register', array());
-    }
+		//$tpl->assign('register', array());
+	}
 
     /**
      * Страница регистрации без параметров
@@ -44,13 +40,16 @@ class Registration_Controller extends _Core_Controller
      * @param $args array mixed
      * @return void
      */
-    function activate ($args) {
-        if (is_array($args)) {
+    function activate ($args)
+    {
+        if (is_array($args))
+        {
             $reg_id = $args[0];
             $this->model->activate($reg_id);
-        } else {
-            //tpl assign
-            return false;
+        }
+        else
+        {
+		return false;
         }
 
     }
@@ -60,7 +59,8 @@ class Registration_Controller extends _Core_Controller
      * @param $args array mixed
      * @return void
      */
-    function new_user () {
+    function new_user ()
+    {
         $this->model->new_user();
     }
 }
