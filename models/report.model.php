@@ -94,6 +94,7 @@ class Report_Model
      */
     function getBars($start = '', $end = '', $account=0, $currency=0, $acclist='')
     {
+        $diffYear = (bool)( ( substr($start,0,4) == substr($end,0,4) ) );
         /*if ($account > 0) {
             $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
                 FROM operation o
@@ -163,10 +164,11 @@ class Report_Model
         $mon = array ("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
         $short = array ("Янв", "Февр", "Март", "Апр", "Май", "Июнь", "Июль", "Авг", "Сент", "Окт", "Нояб", "Дек");
         $monc = array ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-        for ($coun=0; $coun<12; $coun++){
-            $array[$coun]['lab'] = '';
-            $array[$coun]['was'] = 0;
-            $array[$coun]['in'] = 0;
+        $year = array ("09","10");
+        for ($coun=0; $coun<12; $coun++){//начальная инициализация
+            $array[$coun]['lab'] = '';//лейбл. название месяца
+            $array[$coun]['was'] = 0;//расходы
+            $array[$coun]['in'] = 0;//доходы
         }
 
         for ($coun=0; $coun<12; $coun++){
@@ -181,7 +183,15 @@ class Report_Model
             //$array[$coun]['lab'] = $mon[$coun];
             foreach ($result as $v){
                 if ( substr($v['datef'],5,2) == $monc[$coun] ) {
-                    $array[$coun]['lab'] = ($count<=6) ? $mon[$coun] : $short[$coun];
+                    if ($diffYear)
+                        $array[$coun]['lab'] = ($count<=6) ? $mon[$coun] : $short[$coun];
+                    else{
+                        if ( substr ($v['datef'],2,2) == '09')
+                            $numYear = 0;
+                        if ( substr ($v['datef'],2,2) == '10')
+                            $numYear = 1;    
+                        $array[$coun]['lab'] = ( ($count<=6) ? $mon[$coun] : $short[$coun] ) . $year[$numYear];
+                    }
                     $array[$coun]['was'] = $v['su'];
                     $array[$coun]['curs']= $v['cu'];
                 }
@@ -194,6 +204,16 @@ class Report_Model
                 }
             }
         }
+        //тут заголовки идут в виде январь10 февраль10 декабрь09
+        //алгоритм прост . берём первый с текущим годом - и в конец. и т.д.
+        //т.о. сначала перенесём январь, а за ним февраль.
+        $year = substr($end,2,2);//последние две цифры конечного года
+        if ( ! $diffYear ){
+            while ( ( substr($array[0]['lab'],-2) == (string)$year) ){
+                $array = array_merge ( array_slice( $array, 1 ) , array($array[0]) );
+            }
+        }
+
         /*foreach ($result as $v) {
             switch (substr($v['datef'],5,2)){
                 case '01' : $array[]=array('Доходы за январь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
