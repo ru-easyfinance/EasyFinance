@@ -128,6 +128,7 @@ $(document).ready(function(){
         $.get('/targets/user_list/', '', function(data){
             showall = 1;// показать все
             loadTargets(data);
+            $('div.show_all').hide();
         }, 'json');
     });
 
@@ -199,7 +200,7 @@ $(document).ready(function(){
         MakeOperation();
         //$('div.object').remove();
         $('div.object').remove();
-        $('div.financobject_block').prepend(s);
+        $(s).prependTo('div.financobject_block div.content');
        // $('div.show_all').show();
     }
     /**
