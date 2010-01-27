@@ -109,8 +109,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         $params = $_POST;
         $account = Account::load($params);
         $accs = $account->create($user, $params);
-        if (!$accs)
-            $this->tpl->assign("error", "Счет не добавлен");
+        if (!$accs){
+            die (json_encode(array('error'=>array('text'=>'Счёт не добавлен'))));
+        }
         die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
             ,'id'=>$accs
             ))));
@@ -122,8 +123,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         $accountCollection = new Account_Collection();
         $params = $_POST;
         $account = Account::load($params);
-        if (!$account->update($user, $params))
-            $this->tpl->assign("error", "Счет не изменён");
+        if (!$account->update($user, $params)){
+            die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+        }
         die (json_encode(array('result'=>array('text'=>'Счёт успешно изменён'))));
     }
 
@@ -141,8 +143,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         $account = Account::getTypeByID($params);
         //$account = Account::load($params);
         $er = $account->delete($user, $params);
-        if (!$er)
-            $this->tpl->assign("error", "Счет не удалён");
+        if (!$er){
+            die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+        }
         if ($er == 'cel')
             die (json_encode(array('error'=>array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'))));
         die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
