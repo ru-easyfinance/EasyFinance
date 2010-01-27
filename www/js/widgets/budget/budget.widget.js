@@ -4,19 +4,18 @@ easyFinance.widgets.budget = function(data){
     var _model = data;
 
     function init(data){
-        _model = data
-        $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td>\
-            <td class='w2 '>План, "+(res.currency[1].text || '')+"</td>\
-            <td class='w3 '>Факт, "+(res.currency[1].text || '')+"</td>\
-            <td class='w5 '>Остаток, "+(res.currency[1].text || '')+"</td>\
-            <td class='w6'></td>");
+        _model = data;
+        $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td><td class='w2 '>План, "+
+            (res.currency[res.currency['default']].text || '')+"</td><td class='w3 '>Факт, "+
+            (res.currency[res.currency['default']].text || '')+"</td><td class='w5 '>Остаток, "+
+            (res.currency[res.currency['default']].text || '')+"</td><td class='w6'></td>");
     }
 
     ///////////////////////////////////////////////////////////////////////////
     //                      datebar && reload                                //
     ///////////////////////////////////////////////////////////////////////////
 
-    var _currentDate = new Date()
+    var _currentDate = new Date();
 
     /**
      * Перегружает виджет на заданной дате
@@ -24,11 +23,11 @@ easyFinance.widgets.budget = function(data){
      */
     function reload(date){
         _model.reload(date,function(){
-            _currentDate = date
+            _currentDate = date;
             _printDate();
             _printInfo();
             $('#budget .list.budget .body').html(printBudget());
-        })
+        });
     }
     /**
      * Возвращает используюмую дату в сторонние виджеты
@@ -41,7 +40,7 @@ easyFinance.widgets.budget = function(data){
      */
     function _printDate()
     {
-        var monthName = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь']
+        var monthName = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
         var year = _currentDate.getFullYear();
         var month = _currentDate.getMonth();
         var bar = $('#budget.budget .month_cal');
@@ -77,8 +76,8 @@ easyFinance.widgets.budget = function(data){
             _printDate();
             _printInfo();
             $('#budget .list.budget .body').html(printBudget());
-        })
-    })
+        });
+    });
     ///////////////////////////////////////////////////////////////////////////
     //                          infobar                                      //
     ///////////////////////////////////////////////////////////////////////////
@@ -95,14 +94,14 @@ easyFinance.widgets.budget = function(data){
         var table = 
             "<table>"+
                 "<tr class='plan'>"+
-                    "<td class='profit'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit)+" "+(res.currency[1].text || '')+"</span><div></td>"+
-                    "<td class='drain'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain)+" "+(res.currency[1].text || '')+"</span><div></td>"+
-                    "<td class='balance "+planCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.plan_drain)+" "+(res.currency[1].text || '')+"</span><div></td>"+
+                    "<td class='profit'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
+                    "<td class='drain'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
+                    "<td class='balance "+planCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.plan_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
                 "</tr>"+
                 "<tr class='real'>"+
-                    "<td class='profit'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit)+" "+(res.currency[1].text || '')+"</span><div></td>"+
-                    "<td class='drain'><div><b>Факт</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_drain)+" "+(res.currency[1].text || '')+"</span><div></td>"+
-                    "<td class='balance "+realCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.real_drain)+" "+(res.currency[1].text || '')+"</span><div></td>"+
+                    "<td class='profit'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
+                    "<td class='drain'><div><b>Факт</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
+                    "<td class='balance "+realCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.real_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
                 "</tr>"+
             "</table>";
         $('#budget .budget.info').html(table);
@@ -119,31 +118,31 @@ easyFinance.widgets.budget = function(data){
     var dateprc;
 
     function _getMonthDays(d){
-        var m = d.getMonth()
+        var m = d.getMonth();
         var t = new Date(d);
         for (var i = 29;i<32;i++)
         {
-            t.setDate(i)
-            if (m != t.getMonth()){return (i-1)}
+            t.setDate(i);
+            if (m != t.getMonth()){return (i-1);}
         }
-        return (i)
+        return (i);
     }
 
     function _printList(type, categoryes, parentId)//0 drain
     {
         var prefix = (type == '1')? 'p':'d'; 
-        var budgets = _model.returnList()[prefix]
+        var budgets = _model.returnList()[prefix];
         var key, temp = {}, catId, catName, catType, amount, money, totalAmount = 0, totalMoney = 0, dhtml ='';
 
 
         for (key in categoryes){
             catType = categoryes[key].type;
-            if ((type == 0 && catType < 1)||(type == 1 && catType > -1)){
+            if ((type === 0 && catType < 1)||(type == 1 && catType > -1)){
                 catId = categoryes[key].id;
                 catName = categoryes[key].name;
 
                 if (categoryes[key].children.length){
-                    temp = _printList(type, categoryes[key].children, catId)
+                    temp = _printList(type, categoryes[key].children, catId);
                 }else{
                     temp = {};
                 }
@@ -154,9 +153,9 @@ easyFinance.widgets.budget = function(data){
 
                 amount =  parseFloat(isNaN(temp.totalAmount)?0:temp.totalAmount) + parseFloat((budgets[catId]?Math.abs(budgets[catId].amount):0));
                 money = parseFloat(isNaN(temp.totalMoney)?0:temp.totalMoney) + parseFloat((budgets[catId]?Math.abs(budgets[catId].money):0));
-                if (amount > 0 || money !=0){
+                if (amount > 0 || money !==0){
                     ////////// coompil html
-                    var drainprc = Math.abs(Math.round(money*100/amount))
+                    var drainprc = Math.abs(Math.round(money*100/amount));
                     
                     
                     var b_color;
@@ -167,10 +166,10 @@ easyFinance.widgets.budget = function(data){
                     }else{
                         b_color =(dateprc < drainprc)?'red':'green';
                     }
-                    var cls = !parentId?'parent open':'child'
+                    var cls = !parentId?'parent open':'child';
                     if (cls == 'parent open'){
                         if (!temp.xhtml){
-                            cls = 'nochild'
+                            cls = 'nochild';
                         }
                     }
 
@@ -178,33 +177,22 @@ easyFinance.widgets.budget = function(data){
                             formatCurrency(amount) :
                             (cls != 'parent open' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0.00');
 
-                    dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'">\n\
-                                <td class="w1">\n\
-                                    <a>' + catName + '</a>\n\
-                                </td>\n\
-                                <td class="w2">\n\
-                                    <div class="cont">\n\
-                                        <span>'+amountStr+'</span><input type="text" value="'+formatCurrency(amount)+'"/>\n\
-                                    </div>\n\
-                                </td>\n\
-                                <td class="w3">\n\
-                                    <div class="indicator">\n\
-                                        <div class="'+b_color+'" style="width: '+drainprc+'%;"></div>\n\
-                                        <div class="strip" style="width: '+dateprc+'%;"></div>\n\
-                                    </div>\n\
-                                </td>\n\
-                                <td class="w5">'+formatCurrency(Math.abs(amount)-Math.abs(money))+'</td>\n\
-                                <td class="w6">'+
-                                        ((cls == 'nochild'||cls == 'child') ? '<div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div>':'')
-                                        +'</td>\n\
-                            </tr>';
+                    dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'"><td class="w1"><a>' + 
+                        catName + '</a></td><td class="w2"><div class="cont"><span>' +
+                        amountStr+'</span><input type="text" value="'+
+                        formatCurrency(amount)+'"/></div></td><td class="w3"><div class="indicator"><div class="' +
+                        b_color+'" style="width: '+drainprc+'%;"></div><div class="strip" style="width: '+
+                        dateprc+'%;"></div></div></td><td class="w5">'+
+                        formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6">'+
+                        ((cls == 'nochild'||cls == 'child') ? '<div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div>':'') +
+                        '</td></tr>';
                     //////////////////////
                     dhtml += temp.xhtml || '';
                 }
             }
         }
-        if (isNaN(totalAmount)){totalAmount = 0}
-        if (isNaN(totalMoney)){totalMoney = 0}
+        if (isNaN(totalAmount)){totalAmount = 0;}
+        if (isNaN(totalMoney)){totalMoney = 0;}
         return {xhtml : dhtml,totalAmount : totalAmount,totalMoney : totalMoney};
     }
 
