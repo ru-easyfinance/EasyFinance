@@ -128,6 +128,7 @@ $(document).ready(function(){
         $.get('/targets/user_list/', '', function(data){
             showall = 1;// показать все
             loadTargets(data);
+            $('div.show_all').hide();
         }, 'json');
     });
 
@@ -197,9 +198,10 @@ $(document).ready(function(){
             }
         }
         MakeOperation();
-        $('div.object,div.show_all').remove();
-        $('div.financobject_block').append(s);
-        
+        //$('div.object').remove();
+        $('div.object').remove();
+        $(s).prependTo('div.financobject_block div.content');
+       // $('div.show_all').show();
     }
     /**
      * Заполняет поля формы результатами из массива data
