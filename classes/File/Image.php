@@ -22,7 +22,7 @@ class File_Image extends File
 	public function __construct( $fileName )
 	{
 		list(,,$imageType) = getimagesize( $fileName );
-		
+
 		switch( $imageType )
 		{
 			case IMAGETYPE_JPEG:
@@ -34,6 +34,8 @@ class File_Image extends File
 			case IMAGETYPE_PNG:
 				$this->image = imagecreatefrompng( $fileName );
 				break;
+                        case IMAGETYPE_BMP:
+                                $this->image = imagecreatefromwbmp( $filename );
 			default:
 				throw new File_ImageException( 'Unknown type of image !' );
 		}
