@@ -21,6 +21,7 @@ $accessConfig = array(
 	// индекс.
 	'review' 	=> _Core_Access::ALLOW_ALL,
 	'feedback' 	=> _Core_Access::ALLOW_ALL,
+	'articles' 	=> _Core_Access::ALLOW_ALL,
 	'login' 		=> _Core_Access::ALLOW_ALL,
 	'logout' 	=> _Core_Access::ALLOW_ALL,
 	'registration' 	=> _Core_Access::ALLOW_ALL,
@@ -33,6 +34,9 @@ $accessConfig = array(
 	'accounts' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'operation' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'category' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+	'targets' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+	'calendar' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+	'periodic' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	
 	'experts'	=> _User::TYPE_PRO,
 	
