@@ -457,12 +457,9 @@ $(document).ready(function() {
                 },
                 legend:{show:true}*/
          var itogoDengi = 0;
-         var stri = "<div id='chart1div'>FusionCharts</div>";
-          $('#chart').html(stri);
-          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
-          for (c in data[0]){
-              if (data[0][c]['cat'] != ''){
-                  cur = res['currency'];
+         var prochee = 0;
+         for (c in data[0]){
+             cur = res['currency'];
                     for(key in cur)
                         {
                             cost = cur[key]['cost'];
@@ -472,12 +469,33 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
-                        itogoDengi += data[0][c]['money']*oldcur/nowcur;
-                  stri += "<set label='"+data[0][c]['cat']+"' value='"+formatCurrencyFusion(data[0][c]['money']*oldcur/nowcur)+"' />";
+             itogoDengi += data[0][c]['money']*oldcur/nowcur;
+         }
+         var stri = "<div id='chart1div'>FusionCharts</div>";
+          $('#chart').html(stri);
+          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
+          for (c in data[0]){
+              cur = res['currency'];
+                for(key in cur)
+                    {
+                        cost = cur[key]['cost'];
+                        name = cur[key]['name'];
+                        if (name == data[0][c].cur_char_code)
+                        {
+                            oldcur = cur[key]['cost'];
+                        }
+                    }
+                    //itogoDengi += data[0][c]['money']*oldcur/nowcur;
+              if ( (data[0][c]['money']*oldcur/nowcur) / itogoDengi > 0.02){
+                    stri += "<set label='"+data[0][c]['cat']+"' value='"+formatCurrencyFusion(data[0][c]['money']*oldcur/nowcur)+"' />";
+              } else {
+                    prochee += data[0][c]['money']*oldcur/nowcur;
               }
           }
+          if (prochee){
+              stri += "<set label='Прочее' value='"+formatCurrencyFusion(prochee)+"' />";
+          }
           stri += "</chart>";
-          //alert(stri);
           //stri = "<chart><set label='Домашнее хозяйство' value='500.06' /><set label='Аренда автомобиля' value='55' /><set label='Бонусы' value='1100' /><set label='Доход предпринимателя' value='1.03' /><set label='test' value='1050.07' /><set label='тетс chromeа' value='16' /><set label='rwefesr' value='4' /><set label='fewfew5345' value='1002' /></chart>"
           //stri = "<chart><set label='A' value='10' /><set label='B' value='11' /></chart>";
             var chart1 = new FusionCharts("/swf/fusioncharts/Pie3D.swf", "chart1Id", "500", "400", "0", "1");
