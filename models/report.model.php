@@ -66,6 +66,14 @@ class Report_Model
             $result['cat'] = addslashes($v['cat']);
         }*/
         $arr = array();
+        foreach ($result as $k=>$v){
+            if ($v['cat']){ //отметаем всякий мусор по удалённым категориям
+                $summmoney += $v['money'];
+            } else {
+                unset($result[$k]);
+            }
+        }
+
         $arr[0] = $result;
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
