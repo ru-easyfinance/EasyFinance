@@ -30,32 +30,29 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
-        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['mail']) ) && ( isset($_SESSION['easyid']) )  ){
-            $select = Login_Model::getUserDataByID( $_SESSION('easyid') );
+        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
+            $ch = curl_init();
+            $id = $_GET['id_ef'];
+            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/confirmmail.php?ef_id=".$id);
+
+            $azbukaMail = curl_exec($ch);//запрашиваем почту юзера если он залогинен
+
+            curl_close($ch);
+
+            $select = Login_Model::getUserDataByID( $id );
             if ( substr( $select[0]['user_login'] , 0, 6 ) != 'azbuka' )
                 die('Аллес!!! Доступ запрещён');
-            if ( $_GET['mail'] != $select[0]['user_mail'] )
+            if ( $azbukaMail != $select[0]['user_mail'] )
                 die('Неверная почта');
 
             $uar = array(
-                'user_id'=>$_SESSION('easyid'),
+                'user_id'=>$id,
                 'user_name'=>$select[0]['user_login'],
                 'user_type'=>0);
             Core::getInstance()->tpl->assign('user_info', $uar);
             Core::getInstance()->tpl->assign('template_view', 'iframe');
             setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
             header("Location: https://" . URL_ROOT_IFRAME .  "info/");
-            break;
-        }
-        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
-            $_SESSION['easyid'] = $_GET['id_ef'];//записываем айди в сессию
-            $ch = curl_init();
-            $id = $_GET['id_ef'];
-            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/confirmmail.php?ef_id=".$id);
-
-            curl_exec($ch);//запрашиваем почту юзера если он залогинен
-
-            curl_close($ch);
             break;
         }
         if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['login'] ) && ( isset($_GET['mail']) )) ){
