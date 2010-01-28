@@ -161,14 +161,7 @@ abstract class _Core_Controller
         //валюты
         $currency = array();
         
-        try
-        {
-            $get = $user->getCur();
-        }
-        catch ( Exception $e)
-        {
-            $get = 0;
-        }
+        $get = $user->getCur();
         
         $cur_user_string = $get['li'];
         $cur_user_array = unserialize($cur_user_string);

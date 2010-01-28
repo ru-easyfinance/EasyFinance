@@ -361,8 +361,8 @@ class User
             $this->props['user_currency_default'] = (int)$currency_default;
         }
 
-        if (!is_array($currency)) {
-            trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
+        if (!is_array($currency))
+        {
             $currency = array(1);
         }
 
@@ -511,6 +511,11 @@ class User
     function getCurrencyByDefault($mas, $def)
     {
         //die ( print_r( $mas ) );
+        if( !is_array($mas) )
+        {
+        	$mas = array();
+        }
+        
         $mas = "'".implode("','", $mas)."'";
         $sql = "SELECT MAX(currency_date) as last FROM daily_currency";
         $lastdate = $this->db->query($sql);
