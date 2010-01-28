@@ -86,18 +86,11 @@ class _Core_Router
 			));
 		}
 		
-		try
-		{
-			$controller = new $this->className( $this->templateEngine );
+		$controller = new $this->className( $this->templateEngine );
 			
-			call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
+		call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
 			
-			unset($controller);
-		}
-		catch ( Exception $e )
-		{
-			$this->redirect( '/404', false, 404 );
-		}
+		unset($controller);
 	}
 	
 	public function addHook( $className )
@@ -143,7 +136,7 @@ class _Core_Router
 		
 		$request = _Core_Request::getFake( $url );
 		
-		$router = new _Core_Router( $request );
+		$router = new _Core_Router( $request, _Core_TemplateEngine::getPrepared($request) );
 		
 		try
 		{
@@ -164,6 +157,7 @@ class _Core_Router
 			}
 			else
 			{
+				echo $url;
 				self::redirect('/notfound', false, 404);
 			}
 		}
