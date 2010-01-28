@@ -30,7 +30,7 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
-        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['mail']) ) && ( isset($_SESSION('easyid')) ) ){
+        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['mail']) ) && ( isset($_SESSION['easyid']) )  ){
             $select = Login_Model::getUserDataByID( $_SESSION('easyid') );
             if ( substr( $select[0]['user_login'] , 0, 6 ) != 'azbuka' )
                 die('Аллес!!! Доступ запрещён');
@@ -45,6 +45,7 @@ switch ( $_SERVER['HTTP_HOST'].'/' ) {
             Core::getInstance()->tpl->assign('template_view', 'iframe');
             setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
             header("Location: https://" . URL_ROOT_IFRAME .  "info/");
+            break;
         }
         if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
             $_SESSION['easyid'] = $_GET['id_ef'];//записываем айди в сессию
