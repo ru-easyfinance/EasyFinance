@@ -392,7 +392,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_AccountForTransfer').val(),
             $('#op_currency').val(),
             TransferSum,
-            $('#op_target').val(),
+            _selectedTarget,
             //$('#op_close:checked').length,
             $('#op_close2').val(),
             $('#op_tags').val(),
@@ -480,7 +480,7 @@ easyFinance.widgets.operationEdit = function(){
                 return false;
             }
         } else if (opType = "4") {
-            if (_selectedTarget == '') {
+            if (_selectedTarget == '' || _selectedTarget == '0') {
                 $.jGrowl('Укажите финансовую цель!', {theme: 'red', stick: true});
                 return false;
             }
