@@ -48,8 +48,6 @@ abstract class _Core_Controller
 			
 			$this->tpl->assign('user_info', $uar);
 		}
-		
-		$this->loadJS();
 	}
 	
 	/**
@@ -74,32 +72,6 @@ abstract class _Core_Controller
 		
 		$this->tpl->assign('seotext', $texts);
 	}
-	
-	/**
-	 * Динамическое подключение js файлов
-	 * в зависимости от модуля
-	 *
-	 */
-	private function loadJS ()
-	{
-		$module = '';
-		$jsArr = array();
-		
-		if( sizeof(Core::getInstance()->url) )
-		{
-			$module = strtolower( Core::getInstance()->url[0] );
-		}
-		
-		if( array_key_exists( $module, Core::getInstance()->js ) )
-		{
-			$jsArr = Core::getInstance()->js[$module];
-		}
-		
-		foreach ($jsArr as $jsFile)
-		{
-			$this->tpl->append('js', $jsFile.'.js');
-		}
-	}
 
 	/**
 	 * При завершении работы, контроллера
@@ -113,9 +85,6 @@ abstract class _Core_Controller
 		
 		// Применение модификаций\удалений моделей (после внедрения TemplateEngine_Json - удалить)
 		_Core_ObjectWatcher::getInstance()->performOperations();
-		
-		// Подгрузка js файлов
-		$this->loadJS();
 		
 		$user = Core::getInstance()->user;
 		
