@@ -194,11 +194,11 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     );
 
     $('#step2 div.master.body div.list.head tr').html('<td class="w1">Категория</td>\n\
-        <td class="w2">Сумма, '+(res.currency[1].text || '')+'</td>\n\
-        <td class="w4">Сред. доход, '+(res.currency[1].text || '')+'</td>');
+        <td class="w2">Сумма, '+(res.currency[res.currency['default']].text || '')+'</td>\n\
+        <td class="w4">Сред. доход, '+(res.currency[res.currency['default']].text || '')+'</td>');
     $('#step3 div.master.body div.list.head tr').html('<td class="w1">Категория</td>\n\
-        <td class="w2">Сумма, '+(res.currency[1].text || '')+'</td>\n\
-        <td class="w4">Сред. расход, '+(res.currency[1].text || '')+'</td>');
+        <td class="w2">Сумма, '+(res.currency[res.currency['default']].text || '')+'</td>\n\
+        <td class="w4">Сред. расход, '+(res.currency[res.currency['default']].text || '')+'</td>');
 
     /**
      * Скрытие-раскрытие ветки дерева
@@ -250,9 +250,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                     model.reload(loadDate,function(drain,profit){
                         _printMaster(1);
                         _printMaster(0);
-                        var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(profit)+'</b> '+(res.currency[1].text || '')+'</span></div>';
-                        str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(drain)+'</b> '+(res.currency[1].text || '')+'</span></div>';
-                        str += '<div class="rest">Остаток: <span><b>'+formatCurrency(profit - drain)+'</b> '+(res.currency[1].text || '')+'</span></div>';
+                        var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(profit)+'</b> '+(res.currency[res.currency['default']].text || '')+'</span></div>';
+                        str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(drain)+'</b> '+(res.currency[res.currency['default']].text || '')+'</span></div>';
+                        str += '<div class="rest">Остаток: <span><b>'+formatCurrency(profit - drain)+'</b> '+(res.currency[res.currency['default']].text || '')+'</span></div>';
                         $('#master .f_field3').html(str);
                         fullSum(0);
                     })

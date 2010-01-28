@@ -57,6 +57,7 @@ catch ( Exception $e )
 exit();
 
 //Выводим страницу в браузер
+<<<<<<< .working
 switch ( $_SERVER['HTTP_HOST'].'/' )
 {
 	// Загрузка страницы в IFRAME
@@ -66,7 +67,18 @@ switch ( $_SERVER['HTTP_HOST'].'/' )
                 {
                         header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
                 }
+=======
+switch ( $_SERVER['HTTP_HOST'].'/' ) {
+    case URL_ROOT_IFRAME:
+        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['mail']) ) && ( isset($_SESSION['easyid']) )  ){
+            $select = Login_Model::getUserDataByID( $_SESSION('easyid') );
+            if ( substr( $select[0]['user_login'] , 0, 6 ) != 'azbuka' )
+                die('Аллес!!! Доступ запрещён');
+>>>>>>> .merge-right.r2667
+            if ( $_GET['mail'] != $select[0]['user_mail'] )
+                die('Неверная почта');
 
+<<<<<<< .working
                 // Если это партнёр Азбука-Финансов и у нас есть ИД пользователя
 		if (
 			(substr($_SERVER['REQUEST_URI'], 0, 14) == "/login/azbuka/")
@@ -119,5 +131,64 @@ switch ( $_SERVER['HTTP_HOST'].'/' )
 		Core::getInstance()->tpl->assign('template_view', 'index');
 		Core::getInstance()->tpl->display("index.html");
 		break;
+=======
+            $uar = array(
+                'user_id'=>$_SESSION('easyid'),
+                'user_name'=>$select[0]['user_login'],
+                'user_type'=>0);
+            Core::getInstance()->tpl->assign('user_info', $uar);
+            Core::getInstance()->tpl->assign('template_view', 'iframe');
+            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+            header("Location: https://" . URL_ROOT_IFRAME .  "info/");
+            break;
+        }
+        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
+            $_SESSION['easyid'] = $_GET['id_ef'];//записываем айди в сессию
+            $ch = curl_init();
+            $id = $_GET['id_ef'];
+            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/confirmmail.php?ef_id=".$id);
+
+            curl_exec($ch);//запрашиваем почту юзера если он залогинен
+
+            curl_close($ch);
+            break;
+        }
+        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['login'] ) && ( isset($_GET['mail']) )) ){
+            $log = new Login_Model();
+            //$requeststring = substr($_SERVER[argv][0], 20);
+            //$array = explode("&", $requeststring);
+            $login = $_GET['login'];
+            $mail = $_GET['mail'];
+            $newId = $log->generateUserByAzbukaLogin( $login , $mail );
+
+            $select = Login_Model::getUserDataByID( $newId );
+            if ( substr( $select[0]['user_login'] , 0, 6 ) != 'azbuka' )
+                die('Аллес!!! Доступ запрещён');
+
+            $uar = array(
+                'user_id'=>$newId,
+                'user_name'=>$select[0]['user_login'],
+                'user_type'=>0);
+            Core::getInstance()->tpl->assign('user_info', $uar);
+            Core::getInstance()->tpl->assign('template_view', 'iframe');
+            setcookie(COOKIE_NAME, encrypt(array($select[0]['user_login'],$select[0]['user_pass'])), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+            header("Location: https://" . URL_ROOT_IFRAME . "info/");
+
+            return $newId;
+            break;
+        }
+        if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
+            if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
+                header("Location: https://" . URL_ROOT_IFRAME . "login/");
+            }
+        }
+        Core::getInstance()->tpl->assign('template_view', 'iframe');
+        Core::getInstance()->tpl->display("iframe/index.iframe.html");
+        break;
+    default:
+        Core::getInstance()->tpl->assign('template_view', 'index');
+        Core::getInstance()->tpl->display("index.html");
+        break;
+>>>>>>> .merge-right.r2667
 }
 
