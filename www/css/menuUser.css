@@ -95,12 +95,6 @@ ul.dropdown li:hover ul, ul li.over ul {
 .iframe .menu3 ul > li > a, .iframe .menu3 ul > li > span { background: url('/img/i/menu3_iframe.png') no-repeat 0 0; }
 .menu3.expert ul li a, .menu3.expert ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu4.png') no-repeat 0 0; }
 
-.iframe .menu3 ul li#m1, .iframe .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 93px; }
-.menu3 ul li#m1, .menu3 ul li#m1 a, .menu3 ul li#m1 span { width: 131px; }
-.iframe .menu3 ul li#m1 span { width: 2px; }
-.iframe .menu3 ul li#m1 a { width: 93px; }
-.iframe .menu3 ul li#m1 ul li a { width: 84px; }
-
 .menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
 .menu3 ul li#m1.act > a { background-position: 0 -80px; }
 

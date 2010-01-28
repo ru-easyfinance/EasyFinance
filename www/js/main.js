@@ -750,16 +750,12 @@ $(".flash")
         var topmenu = '<div class="menu3"> \
             <ul class="dropdown"> \
                 <li id="m1"> \
-                        <a href="/info/"></a> ';
-
-        if (isIframe) {
-            topmenu += '<ul> \
+                        <a href="/info/"></a> \
+                        <ul> \
                                 <li><span/><a href="/profile/">Профиль</a></li> \
                                 <li class="last"></li> \
-                        </ul>';
-        }
-
-        topmenu += '</li> \
+                        </ul> \
+                </li> \
                 <li id="m2"> \
                         <a href="/accounts/"></a> \
                         <ul> \
