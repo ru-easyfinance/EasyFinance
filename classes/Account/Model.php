@@ -52,7 +52,7 @@ class Account_Model
     {
         $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
         $first = $this->db->query($sql, $this->user_id, $account_id);
-        return ( ($first[0]['money'])?($first[0]['money']):0 );
+        return ( (isset($first[0]))?($first[0]['money']):0 );
     }
 
     /**
