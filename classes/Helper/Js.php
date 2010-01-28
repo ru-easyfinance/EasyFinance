@@ -16,17 +16,32 @@ class Helper_Js implements _Core_Router_iHook
 			}
 		}
 		
-		$templateEngine->append('js', 'flowplayer-3.1.4.min.js');
-		$templateEngine->append('js', 'feedback.js');
-		$templateEngine->append('js', 'widgets/help.widget.js');
-		$templateEngine->append('js', 'models/accounts.model.js');
-		$templateEngine->append('js', 'models/category.model.js');
-		$templateEngine->append('js', 'widgets/accounts/accountsPanel.widget.js');
-		$templateEngine->append('js', 'widgets/operations/operationEdit.widget.js');
-		
 		if(IS_DEMO)
 		{
 			$templateEngine->append('js',  'demo_message.js');
+		}
+		
+		/**
+		 * Динамическое подключение js файлов
+		 * в зависимости от модуля
+		 *
+		 */
+		$jsArr = array();
+		
+		$urlArr = explode( '/', $request->uri, 3 );
+		// первый элемент
+		array_shift($urlArr);
+		
+		$module = strtolower( array_shift($urlArr) );
+		
+		if( array_key_exists( $module, Core::getInstance()->js ) )
+		{
+			$jsArr = Core::getInstance()->js[$module];
+		}
+		
+		foreach ($jsArr as $jsFile)
+		{
+			$templateEngine->append('js', $jsFile.'.js');
 		}
 	}
 }
