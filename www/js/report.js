@@ -507,7 +507,12 @@ $(document).ready(function() {
             itogoString += formatCurrencyFusion(itogoDengi) + ' ' + $('#currency :selected').attr('abbr');
             itogoString += '</td></tr></table><br>';
             $('#itogo').html(itogoString);
+            
 
+            if (prochee){
+                $('#commentRest').show();
+                $('#commentRest').html('<h5> * Категория прочее включает в себя Ваши категории, операции по которым за выбранный период не превысили 2%. Отчёты по этим категориям вы можете посмотреть в детальных отчётах</h5>');
+            }
 
             //показываем тексты снизу
             /*cur = res['currency'];
@@ -677,6 +682,7 @@ $(document).ready(function() {
 
     $('#report').change();
     $('#btnShow').click(function(){
+        $('#commentRest').hide();
         switch ( $('#report :selected').val() ) {
             case "Доходы":
                 ShowIncome();
