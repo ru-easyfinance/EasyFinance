@@ -66,9 +66,11 @@ class Report_Controller extends _Core_Controller_UserCommon
 
         
         $lastmonth = date('m') - 1;
+        if ($lastmonth == 0)
+            $lastmonth = 12;
         $days = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-        $this->tpl->assign('dateFrom2', '01'.'.'.$lastmonth.'.'.date('Y'));
-        $this->tpl->assign('dateTo2',   $days[$lastmonth-1].'.'.$lastmonth.'.'.date('Y'));
+        $this->tpl->assign('dateFrom2', '01'.'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ) );
+        $this->tpl->assign('dateTo2',   $days[$lastmonth-1].'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ));
     }
 
     /**
