@@ -16,7 +16,7 @@
 									<div class="line">
                                         <div class="f_field" style="width:160px;">
                                             <select id="account_filtr" style="width:165px">
-                                                <option label="Все счета" value="">Все счета</option>
+                                                <option value="">Все счета</option>
                                                 {foreach from=$accounts item=acc_data}
                                                     <option value="{$acc_data.account_id}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
                                                 {/foreach}
@@ -25,7 +25,7 @@
 
                                         <div class="f_field" style="display:block; width:200px;">
                                             <select id="cat_filtr" style="width:300px">
-                                                <option label="Все" value="">Все категории</option>
+                                                <option value="">Все категории</option>
                                                 {$category}
                                             </select>
                                         </div><br><br>
