@@ -33,7 +33,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
         $targets = new Targets_Model();
         $this->tpl->assign('targetList',     $targets->getLastList(0, 100));
         $this->tpl->assign('accounts',       $this->user->getUserAccounts());
-        $this->tpl->assign('currentAccount', $currentAccount);
         $this->tpl->assign('dateFrom',       date('d.m.Y', time() - 60*60*24*7));
         $this->tpl->assign('dateTo',         date('d.m.Y')); //date(date('t').'.m.Y'));
         $this->tpl->assign('category',       get_tree_select());

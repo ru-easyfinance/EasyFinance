@@ -38,7 +38,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function index()
     {
-        if ($_SESSION['account'] == "reload") { //@FIXME Переписать эту конструкцию
+    	//@FIXME Переписать эту конструкцию
+        if ( array_key_exists('account', $_SESSION) && $_SESSION['account'] == "reload")
+        { 
             $this->user->initUserAccount($this->user->getId());
             $this->user->save();
             unset($_SESSION['account']);
