@@ -27,12 +27,6 @@ class Core
     public static $js = array();
 
     /**
-     * Ссылка на экземпляр Smarty
-     * @var Smarty
-     */
-    public static $tpl = null;
-
-    /**
      * Ссылка на экземпляр класса User
      * @var User
      */
@@ -126,65 +120,5 @@ class Core
         if (DEBUG) {
             $db->setLogger('databaseLogger');
         }
-    }
-
-    /**
-     * Проверяет, разрешён ли доступ пользователю к ресурсу, если это гость
-     * @param string $module
-     * @return bool
-     */
-    private function isAllowedModule($module)
-    {
-        if (Core::getInstance()->user->getId() == '') {
-            $modules = explode(',', GUEST_MODULES);
-            if (!in_array($module, $modules)) {
-                if (isset ($_SESSION)) {
-                    session_start();
-                }
-                // Добавляем запрошенный адрес, если юзер не прошёл валидацию
-                $_SESSION['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Разбираем URL и вызываем нужные модули
-     * @return void
-     */
-    public function parseUrl()
-    {
-        $args   = explode('/',$_SERVER['REQUEST_URI']);
-        
-        $module = array_shift($args);
-        if (empty($module)) {
-            $module = array_shift($args);
-        }
-        if(!$module) {
-            $module = DEFAULT_MODULE;
-        } elseif (substr($module,0, 7) == '?XDEBUG') { //@XXX Грязный хак, потом можно убрать
-            $module = DEFAULT_MODULE;
-        }
-        
-
-        // Смотрим разрешения на использование модуля
-        if (!$this->isAllowedModule($module)) {
-            header("Location: /login/");
-            exit;
-        }
-        
-        $action = array_shift($args);
-        if(!$action) {
-            $action = 'index';
-        }
-
-        Core::getInstance()->url[] = $module;
-        Core::getInstance()->url[] = $action;
-        //array_push(Core::getInstance()->$url, $args); //@FIXME
-
-        $module .= '_Controller';
-        $m = new $module();
-        $m->$action($args);
     }
 }
