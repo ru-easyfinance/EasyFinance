@@ -458,6 +458,12 @@ easyFinance.widgets.operationEdit = function(){
             $.jGrowl('Вы ввели неверное значение в поле "тип операции"!', {theme: 'red', stick: true});
             return false;
         }
+
+        var date = $('#op_date').val();
+        if (! date.match(/^\d\d?\.\d\d?\.\d\d\d\d$/)) {
+            $.jGrowl('Вы ввели неверное значение в поле "дата"!', {theme: 'red', stick: true});
+            return false;
+        }
         
         var opType = $("#op_type option:selected").val();
         
