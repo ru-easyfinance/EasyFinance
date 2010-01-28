@@ -752,6 +752,7 @@ $(".flash")
                 <li id="m1"> \
                         <a href="/info/"></a> \
                         <ul> \
+                                <li><span/><a href="/info/">Инфо-панель</a></li> \
                                 <li><span/><a href="/profile/">Профиль</a></li> \
                                 <li class="last"></li> \
                         </ul> \
