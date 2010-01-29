@@ -2,6 +2,11 @@
 
 class Helper_Date
 {
+	/**
+	 * Русские названия месяцев в **забыл** падеже
+	 *
+	 * @var array
+	 */
 	private static $rusMonthsGenitive = array(
 		1 => 'января',
 		'февраля',
@@ -17,6 +22,11 @@ class Helper_Date
 		'декабря'
 	);
 	
+	/**
+	 * Русские названия месяцев в именительном падеже
+	 *
+	 * @var array
+	 */
 	private static $rusMonths = array(
 		1 => 'январь',
 		'февраль',
@@ -51,6 +61,13 @@ class Helper_Date
 		}
 	}
 	
+	/**
+	 * Возвращает дату, переформатированную в строку типа "21 января 2012"
+	 *
+	 * @param string $dateString исходная строка с датой
+	 * @param boolean $rusMonth Указатель - аодставлять русское название месяца или оставить числовое
+	 * @return string Дата
+	 */
 	public static function getFromString( $dateString, $rusMonth = true )
 	{
 		$timestamp = strtotime( $dateString );
@@ -63,5 +80,32 @@ class Helper_Date
 		{
 			return date( "d.m.Y", $timestamp );
 		}
+	}
+	
+	/**
+	 * Форматирует Unix timestamp в mysql date
+	 *
+	 * @param integer $timestamp - Unix timestamp
+	 * @return string Дата в формате mysql ("1983-05-22 12:43:03")
+	 */
+	public static function getMysql( $timestamp )
+	{
+		if( !is_numeric( $timestamp ) || !(int)$timestamp )
+		{
+			throw new Exception( 'Given timestamp do not look as real Unix timestamp!' );
+		}
+		
+		return date( "Y-m-d G:i:s", $timestamp );
+	}
+	
+	/**
+	 * Форматирует строку с датой в mysql date
+	 *
+	 * @param string $dateString
+	 * @return string Дата в формате mysql ("1983-05-22 12:43:03")
+	 */
+	public static function getMysqlFromString( $dateString )
+	{
+		return self::getMysqlDate( strtotime($dateString) );
 	}
 }
