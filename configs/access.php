@@ -34,6 +34,7 @@ $accessConfig = array(
 	'accounts' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'operation' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'category' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+	'budget' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'targets' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'calendar' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'periodic' 	=> array( _User::TYPE_COMMON, _User::TYPE_PRO ),
