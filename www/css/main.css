@@ -518,7 +518,7 @@ dl.info dd ul.list2 li { margin-bottom: 11px;}
 dl.info dd ul.list2 li span { margin-right: 7px; }
 dl.info dd ul.list2 li a { display: block; margin-top: -3px; }
 
-dl.info dd .line { margin-bottom: 4px; }
+dl.info dd .line { margin-bottom: 4px; clear:both;}
 dl.info dd .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 dl.info dd .line span { display: block; float: left; padding-left: 13px; width: 36px; color: #666666; }
 dl.info dd .line span.valuta { padding-left: 0; width: 41px; color: #908f8f; }
@@ -568,10 +568,10 @@ ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
 
 div.report { position: relative; display: none; padding-top: 22px;left: 70px }
-div.report .line { position: relative; float: top; margin-top:10px;  color: #4c4c4c;  }
+div.report .line { position: relative; clear: both; margin-top:10px;  color: #4c4c4c;  }
 div.report .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.report .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
-div.report .line .f_field .hasDatepicker{ position: absolute; left: 198px;top: 0px}
+div.report .line .f_field .hasDatepicker{ position: static; clear: both; left: 198px;top: 0px}
 div.report .line .f_field select { display: block; color: #20201E; }
 div.report .line .f_field select#account {width: 150px;  overflow: hidden; }
 div.report .line .f_field select#account option {width: 123px;}
