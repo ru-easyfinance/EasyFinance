@@ -285,6 +285,7 @@ abstract class _Core_Controller
         }
 
 	$res += array(
+            'getNotify' => $_SESSION['user']['getNotify'],
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'accounts' => $accounts,
