@@ -61,7 +61,7 @@ class Budget_Model {
             AND c.user_id=? ORDER BY c.cat_parent";*/
         
         $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o WHERE o.user_id = " . $user_id ." AND o.transfer=0 AND o.date >= ? AND o.date <= LAST_DAY(o.date)
-            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." ) AND o.account_id=1 GROUP BY o.cat_id";
+            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." ) GROUP BY o.cat_id";
 
 
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
@@ -87,7 +87,7 @@ class Budget_Model {
         
         //$arrayoper = Core::getInstance()->db->select($sqloper, $start , $start, $start, $start, $user_id);
         $arrayoper = Core::getInstance()->db->select($sqloper, $start);
-        
+
         $list = array(
             'd' => array(),
             'p' => array()
