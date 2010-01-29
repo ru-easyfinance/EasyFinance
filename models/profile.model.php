@@ -40,9 +40,9 @@ class Profile_Model
         }
         $set_str .=' ';
         $set_str = substr($set_str, 1);
-        if (!$ident) {
-            return 'nopass';
-        }
+//        if (!$ident) {
+//            return 'nopass';
+//        }
         $sql = "UPDATE $table SET $set_str WHERE id=? AND $ident;";
         return $this->db->query($sql,$this->user_id);
     }
@@ -62,7 +62,7 @@ class Profile_Model
                                     sha1($prop['user_pass']);
                 unset($prop['newpass']);
 
-                if ( $prop['guide'] != 1 ){
+                if ( $prop['guide'] != 1 ) {
                     setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
                 }else{
                     setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
