@@ -635,9 +635,12 @@ class Operation_Model {
         }
         //bt.account_name as cat_transfer, //@TODO
         $retoper = '';//возвращаемые операции. не возвращаем мусор связанный с удалением счетов
-        foreach ($operations as $k => $v){
-            if (!($v[account_name] == ''))
-                $retoper[$k] = $v;
+        foreach ($operations as $k => $v)
+        {
+	            if (!($v['account_name'] == ''))
+	            {
+	                $retoper[$k] = $v;
+	            }
         }
         return $retoper;
     }
