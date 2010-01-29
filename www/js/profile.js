@@ -225,4 +225,7 @@ $(document).ready(function() {
     if (strokuk.indexOf('guide=uyjsdhf') == -1){
         $('#guide').removeAttr('checked');
     }
+    spamer = res.getNotify;
+    if (spamer == 0)
+        $('#getNotify').removeAttr('checked');
 })
