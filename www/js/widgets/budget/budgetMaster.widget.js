@@ -164,7 +164,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 parent = $(this).closest('.line')
             }
             var id = $(parent).attr('id').toString().replace(/[^0-9]/gi,'');
-            var val = $(this).val().toString().replace(/[^0-9\.]/,'');
+            var val = calculate($(this).val());
             if (!isNaN(val) && val > 0){
                 if ($(this).closest('.step').attr('id')=='step2'){
                     tmp.step2+= '{"'+id+'": "'+val+'"},';
@@ -183,8 +183,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * Форматирование на лету
      */
     $('#master .waste_list input')
-        .live('keyup',function(e){
-            floatFormat($(this),String.fromCharCode(e.which) + $(this).val())
+        .live('keypress',function(e){
+            if (e.keyCode == 13){
+                $(this).val(calculate($(this).val()));
+            }
         })
         .live('click',function(){
             if ($(this).val() == '0.00'){

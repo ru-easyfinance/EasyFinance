@@ -346,23 +346,24 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
         setTimeout(function(){$('#budget li.cur').click();},1000);
     })
 
-    $('#budget .list tr[parent]').live('click',function(){
+    $('#budget .list tr[parent]').live('dblclick',function(){
         var parent = $(this).attr('parent');
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
-            $('#budget .list tr .w2 input').hide();
-            $('#budget .list tr .w2 span').show();
-            $(this).find('.w2 input').val(formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\.]/g,''))).show().focus();
-            $(this).find('.w2 span').hide();
+           
+                $('#budget .list tr .w2 input').hide();
+                $('#budget .list tr .w2 span').show();
+                $(this).find('.w2 input').val(formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\.]/g,''))).show().focus();
+                $(this).find('.w2 span').hide();
+            
         }
     })
-    $('#budget .list tr input').live('keyup',function(e){
-        floatFormat($(this),String.fromCharCode(e.which) + $(this).val())
+    $('#budget .list tr input').live('keypress',function(e){
         if (e.keyCode == 13){
             var id = $(this).closest('tr').attr('id');
             var type = $(this).closest('tr').attr('type');
-            var value = $(this).val();
+            var value = calculate($(this).val());
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
             _model.edit(_currentDate, type, id, value, function(){
@@ -375,13 +376,12 @@ $('#budget .list.budget .w6 a.edit').live('click',function(){
         }
         
     })
-    
-    $('#budget .list tr input').click(function(){return false})
 
     $('body').click(function(){
         $('#budget .list tr .w2 input').hide();
         $('#budget .list tr .w2 span').show();
     })
+    $('#budget .list').click(function(){return false;})
 
     return {getDate : getDate, init : init, reload : reload};
 }
