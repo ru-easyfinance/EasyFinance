@@ -47,6 +47,11 @@ class Profile_Model
         return $this->db->query($sql,$this->user_id);
     }
 
+    public function subscribe($spamer){
+        $sql = "UPDATE users SET getNotify=? WHERE id=? ;";
+        return $this->db->query($sql, $spamer, $this->user_id);
+    }
+
     public function mainsettings($mod, $prop = ''){
         $ret = array();
         /*if ( $prop['help'] == 1 ){
@@ -56,6 +61,7 @@ class Profile_Model
         }*/
         switch($mod){
             case 'save':
+                $mail = $this->subscribe($prop['getNotify']);
                 $ident = $this->ident($prop['user_pass']);
                 $prop['user_pass'] = $prop['newpass'] ?
                                     sha1($prop['newpass']) :
@@ -68,7 +74,7 @@ class Profile_Model
                     setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
                 }
                 unset($prop['guide']);
-
+                
                 $ret['profile'] = $this->save('users', $prop, $ident);
 
 //                if ( $prop['help'] == 1 ){
