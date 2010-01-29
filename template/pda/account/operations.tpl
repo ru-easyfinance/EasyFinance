@@ -1,17 +1,25 @@
 <br/>
-<strong>Кошелёк: 123121312 руб.</strong>
+<strong>
+	<?=$res['accounts'][$accountId]['name']?>:
+	<?=$res['accounts'][$accountId]['totalBalance']?>
+	<?=$res['currency'][ $res['accounts'][ $accountId]['currency'] ]['text']?>
+</strong>
 <p>
-<a href="account/1/edit">редактировать</a> | <a href="account/1/add">добавить операцию</a></p>
+<a href="account/1/edit">редактировать счёт</a> | <a href="account/1/add">добавить операцию</a></p>
+<br/>
 <table border="1" width="100%"><tbody>
-	<tr>
-	<td width="50%">
-		<p><a href="account/1">Отдых и развлечения</a>
-		<br />
-		<span class="style7">-700 руб.</span>, 15.02.2010 </p>
-	</td>
-          </tr>
-          <tr>
-            <td width="50%"><a href="account/1">Доход</a><br>
-              <span class="style1">1200 руб.</span>, 15.02.2010 </td>
-          </tr>
-        </tbody></table>
+	<?php
+	while( list(,$operation) = each($operations) )
+	{
+		?>
+		<tr><td width="50%">
+			<p><a href="/account/1"><?=$res['category']['user'][ $operation['cat_id'] ]['name']?></a>
+			<br />
+			<span class="waste" <?// прибыль = profit ?> ><?=$operation['money']?>
+			<?=$res['currency'][ $res['accounts'][ $accountId ]['currency'] ]['text']?></span>,
+			<?=$operation['date']?>
+			 </p>
+		</td></tr><?php
+	}
+	?>
+</tbody></table>

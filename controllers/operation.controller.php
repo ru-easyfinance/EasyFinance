@@ -39,62 +39,107 @@ class Operation_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
     }
 
-    /**
-     * Индексная страница
-     * @param $args array mixed
-     * @return void
-     */
-    function index($args)
-    {
+	/**
+	 * Индексная страница
+	 * @param $args array mixed
+	 * @return void
+	 */ 
+	function index( $args = array() )
+	{
 
-    }
-
-    /**
-     * Добавляет новое событие
-     * @param $args array mixed Какие-нибудь аргументы
-     * @return void
-     */
-    function add($args)
-    {
-        $array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close', 'currency');
-        $array = $this->model->checkData($array);
-        if (count($this->model->errorData) > 0) {
-            // Если есть ошибки, то возвращаем их пользователю в виде массива
-            die(json_encode($this->model->errorData));
-        }
-        $array['drain'] = 1;
-        switch ($array['type']) {
-            case 0: //Расход
-                $array['amount'] = abs($array['amount']) * -1;
-                if($this->model->add($array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
-                        die ('[]');
-                    }
-            case 1: // Доход
-                $array['drain'] = 0;
-                if($this->model->add($array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
-                        die('[]');
-                    }
-            case 2: // Перевод со счёта
-                $array['category'] = -1;
-                if ($this->model->addTransfer($array['amount'], $array['convert'], $array['currency'], $array['date'],
-                    $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
-                        die('[]');
-                    }
-            case 3: //
-                break;
-            case 4: // Перевод на финансовую цель
-                $target = new Targets_Model();
-                // addTargetOperation($account_id, $target_id, $money, $comment, $date, $close) {
-                $target->addTargetOperation($array['account'], $array['target'], $array['amount'], 
-                    $array['comment'], $array['date'],$array['close']);//$array['close']
-                //@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
-                //die(json_encode($target->getLastList(0, 100)));
-                die('[]');
-        }
-        die('[]');
-    }
+	}
+	
+	/**
+	 * Добавляет новое событие
+	 * @param $args array mixed Какие-нибудь аргументы
+	 * @return void
+	 */
+ 	function add( $args = array() )
+	{
+		$operationTypes = array(
+			'profit' 	=> 1,
+			'waste' 	=> 0,
+			'transfer'	=> 2,
+			'target'	=> 4,
+		);
+		
+		$operation = array('type');
+		$array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close', 'currency');
+		
+		if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $operationTypes ) )
+		{
+			$operation['type'] = $operationTypes[ $args[0] ];
+		}
+		
+		// Если запрос не post - выдаём страничку
+		if( _Core_Request::getCurrent()->method == 'GET' )
+		{
+			$templateName = 'operations/edit_';
+			
+			switch ( $operation['type'] )
+			{
+				// доход
+				case 0:
+					$templateName .= 'waste'; break;
+				// расход
+				case 1:
+					$templateName .= 'profit'; break;
+				// перевод
+				case 2:
+					$templateName .= 'transfer'; break;
+				// финцель
+				case 4:
+					$templateName .= 'target'; break;
+			}
+			
+			$this->tpl->assign( 'name_page', $templateName );
+		}
+		elseif( _Core_Request::getCurrent()->method == 'POST' )
+		{
+			$array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close', 'currency');
+			$array = $this->model->checkData($array);
+			
+			// Если есть ошибки, то возвращаем их пользователю в виде массива
+			if (count($this->model->errorData) > 0)
+			{
+				exit( json_encode($this->model->errorData) );
+			}
+	        
+			// Добавление в зависимости от типа (расход\доход) и тд
+			$array['drain'] = 1;
+			switch ($array['type'])
+			{
+				//Расход
+				case 0: 
+					$array['amount'] = abs($array['amount']) * -1;
+					
+					$this->model->add($array['amount'], $array['date'], $array['category'], $array['drain'], $array['comment'], $array['account'], $array['tags']);
+					break;
+				// Доход
+				case 1: 
+					$array['drain'] = 0;
+					$this->model->add($array['amount'], $array['date'], $array['category'], $array['drain'], $array['comment'], $array['account'], $array['tags']);
+					break;
+				// Перевод со счёта
+				case 2: 
+					$array['category'] = -1;
+					$this->model->addTransfer($array['amount'], $array['convert'], $array['currency'], $array['date'], $array['account'],$array['toAccount'],$array['comment'],$array['tags']);
+					break;
+				// Что это ?!!!!!
+				case 3:
+					break;
+				// Перевод на финансовую цель
+				case 4: 
+					$target = new Targets_Model();
+					$target->addTargetOperation($array['account'], $array['target'], $array['amount'], $array['comment'], $array['date'],$array['close']);//$array['close']
+					//@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
+					//exit(json_encode($target->getLastList(0, 100)));
+				break;
+			}
+			
+			die('[]');
+		}
+	}
 
     /**
      * Редактирует событие
@@ -240,25 +285,25 @@ class Operation_Controller extends _Core_Controller_UserCommon
          * Дата начала
          * @var DATETIME Mysql
          */
-        $dateFrom   = formatRussianDate2MysqlDate(@$_GET['dateFrom']);
+        $dateFrom   = Helper_Date::getMysqlFromString(@$_GET['dateFrom']);
 
         /**
          * Дата окончания
          * @var DATETIME Mysql
          */
-        $dateTo     = formatRussianDate2MysqlDate(@$_GET['dateTo']);
-
+        $dateTo     = Helper_Date::getMysqlFromString(@$_GET['dateTo']);
+        
         /**
          * Категория
          * @var int
          */
-        $category   = (int)@$_GET['category'];
+        $category   = isset($_GET['category'])?(int)$_GET['category']:0;
 
         /**
          * Счёт
          * @var int
          */
-        $account    = (int)@$_GET['account'];
+        $account    = isset($_GET['account'])?(int)$_GET['account']:0;
 
         /**
          * Тип операции
@@ -323,12 +368,41 @@ class Operation_Controller extends _Core_Controller_UserCommon
     }
     
 	/**
-	 * Список операций для счёта
+	 * Список операций для счёта (PDA)
 	 * 
 	 * @param array $args
 	 */
 	function account( $args = array() )
 	{
+		// Если указан id счёта
+		if( isset($args[0]) && (int)$args[0] )
+		{
+			$accountId = (int)$args[0];
+			
+			// Получаем последние 10 операций по нему 
+			// На самом деле это пока невозможно, получаем все операции
+			$operations = $this->model->getOperationList( 
+				Helper_Date::getMysql( 3 ),
+				Helper_Date::getMysql( time() ),
+				null,
+				$accountId,
+				-1,
+				null,
+				null
+			);
+		}
+		else
+		{
+			//_Core_Router::redirect('/info' , true);
+		}
+		
+		if( !is_array($operations) )
+		{
+			$operations = array();
+		}
+		
+		$this->tpl->assign('accountId', $accountId);
+		$this->tpl->assign('operations', $operations);
 		$this->tpl->assign('name_page', 'account/operations');
 	}
 }
