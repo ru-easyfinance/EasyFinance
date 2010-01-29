@@ -200,7 +200,8 @@ $(document).ready(function(){
         MakeOperation();
         //$('div.object').remove();
         $('div.object').remove();
-        $(s).prependTo('div.financobject_block div.content');
+        if( s != '')
+            $(s).prependTo('div.financobject_block div.content');
        // $('div.show_all').show();
     }
     /**
@@ -227,8 +228,8 @@ $(document).ready(function(){
     }
 
     function ValidateForm(){
-        che = 1;
-        str = '';
+        var che = 1;
+        var str = '';
         if ($('#category').val() == ''){
             str += "Неверно введена категория<br>"
             //$.jGrowl("Неверно введена категория!!!", {theme: 'red', sticky: true});
@@ -380,7 +381,7 @@ $(document).ready(function(){
    
     //функция проверяет есть ли у пользователя закрытые цели. !но по которым физической операции
     //расхода денег на категорию он не совершил. ну и предлагает сделать .
-    MakeOperation();
+//    MakeOperation();
     
 
     ///////////////////////////////////////////////////////////

@@ -151,7 +151,7 @@ function formatCurrency(num) {
 function MakeOperation(){
         $.get('/targets/get_closed_list',{},function(data){
             if (data){
-                for (v in data)
+                for (var v in data)
                 if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
                     //alert($('.object[name="ещё"] .descr a').text());
 
@@ -167,7 +167,7 @@ function MakeOperation(){
                         o.remove();
                         $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
                     },'json')
-                };
+                }
             }
         }, 'json');
     }
