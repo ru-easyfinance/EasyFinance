@@ -1100,7 +1100,7 @@ function getCookie(name) {
         $('#guide').show();
         $('#dial').show();
         $('#dial').dialog(
-        {width: 600}
+        {width: 540}
         );
         $('.dial').bind('dialogclose', function(event, ui) {
             //setCookie2('guide','',0,COOKIE_DOMEN);
