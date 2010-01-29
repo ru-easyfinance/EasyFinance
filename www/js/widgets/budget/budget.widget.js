@@ -3,12 +3,14 @@ easyFinance.widgets.budget = function(data){
     
     var _model = data;
 
-    function init(data){
-        _model = data;
-        $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td><td class='w2 '>План, "+
+    $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td><td class='w2 '>План, "+
             (res.currency[res.currency['default']].text || '')+"</td><td class='w3 '>Факт, "+
             (res.currency[res.currency['default']].text || '')+"</td><td class='w5 '>Остаток, "+
             (res.currency[res.currency['default']].text || '')+"</td><td class='w6'></td>");
+
+    function init(data){
+        _model = data;
+        
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -591,9 +591,12 @@ class Operation_Model {
             $val['cat_name']            = $category[$val['cat_id']]['cat_name'];
             $val['cat_parent']          = $category[$val['cat_id']]['cat_parent'];
             $val['account_name']        = $accounts[$val['account_id']]['account_name'];
-            $sql = "SELECT account_name FROM accounts WHERE account_id = ? AND user_id = ?";
-            $tr = $this->db->select($sql, $val['transfer'], $this->user->getId());
-            $val['transfer_name']       = $tr[0]['account_name'];//имя счёта куда осуществляем перевод.
+
+            /*if ( $val['transfer'] ){
+                $sql = "SELECT account_name FROM accounts WHERE account_id = ? AND user_id = ?";
+                $tr = $this->db->select($sql, $val['transfer'], $this->user->getId());
+                $val['transfer_name']       = $tr[0]['account_name'];//имя счёта куда осуществляем перевод.
+            }*/
             $val['account_currency_id'] = $accounts[$val['account_id']]['account_currency_id'];
             //$val['account_currency_id'] = $val['target_account_id'];
             if ( ((int)$val['tr_id'] == 0) && ((int)$val['transfer'] == 0) ) {
@@ -621,9 +624,9 @@ class Operation_Model {
             }
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
-            if ( $val['transfer_name'] != null){
-                $val['cat_name'] = "Отправлено со счёта";
-                if ($val['tr_id']) $val['cat_name'] = "Пришло на счёт";
+            if ( $val['transfer'] ){
+                $val['cat_name'] = "Отправлено со счёта ";
+                if ($val['tr_id']) $val['cat_name'] = "Пришло на счёт ";
             }
 
             $val['cat_transfer']        = $accounts[$val['account_id']]['account_currency_id'];

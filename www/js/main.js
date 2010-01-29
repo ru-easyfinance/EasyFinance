@@ -151,7 +151,7 @@ function formatCurrency(num) {
 function MakeOperation(){
         $.get('/targets/get_closed_list',{},function(data){
             if (data){
-                for (v in data)
+                for (var v in data)
                 if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
                     //alert($('.object[name="ещё"] .descr a').text());
 
@@ -167,7 +167,7 @@ function MakeOperation(){
                         o.remove();
                         $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
                     },'json')
-                };
+                }
             }
         }, 'json');
     }
@@ -752,6 +752,7 @@ $(".flash")
                 <li id="m1"> \
                         <a href="/info/"></a> \
                         <ul> \
+                                <li><span/><a href="/info/">Инфо-панель</a></li> \
                                 <li><span/><a href="/profile/">Профиль</a></li> \
                                 <li class="last"></li> \
                         </ul> \
@@ -1099,7 +1100,7 @@ function getCookie(name) {
         $('#guide').show();
         $('#dial').show();
         $('#dial').dialog(
-        {width: 600}
+        {width: 540}
         );
         $('.dial').bind('dialogclose', function(event, ui) {
             //setCookie2('guide','',0,COOKIE_DOMEN);

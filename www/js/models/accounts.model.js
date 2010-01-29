@@ -219,8 +219,8 @@ easyFinance.models.accounts = function(){
                 
                 for (var i=0; i<_ids.length; i++) {
                     // delete paired transfer if exists
-                    if (_journal[_ids[i]].tr_id != null && _journal[_ids[i]].tr_id != "0")
-                        delete _journal[_ids[i]].tr_id
+                    if (_journal[_ids[i]] && _journal[_ids[i]].tr_id != null && _journal[_ids[i]].tr_id != "0")
+                        delete _journal[_journal[_ids[i]].tr_id];
 
                     // delete operation
                     delete _journal[_ids[i]];

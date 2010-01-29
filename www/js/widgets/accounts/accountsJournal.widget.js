@@ -61,7 +61,9 @@ easyFinance.widgets.accountsJournal = function(){
                 */
 
                 str += '</table>';
+                $('.qtip').remove();
                 _bigTip($(this).find('.name'), str);
+                
                 $('#operation_list tr.item').removeClass('act');
                 $(this).addClass('act');
         });
@@ -75,10 +77,11 @@ easyFinance.widgets.accountsJournal = function(){
         */
 
 /* --------- вызывает баг #499 ----------- */
-        $('#operation_list tr.item').live('mouseout',
+        $('#operation_list').mouseout(
             function(){
                 $('.qtip').remove();
-                $(this).removeClass('act');
+                $('#operation_list tr.item.act').removeClass('act');
+                return false;
         });
 /* --------- конец бага #499 ----------- */
 

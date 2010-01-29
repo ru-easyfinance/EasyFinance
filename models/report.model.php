@@ -62,30 +62,28 @@ class Report_Model
             $result = $this->db->select($sql, Core::getInstance()->user->getId(),
                 $drain, $start, $end/*, $currency*/);
         }
-        /*foreach ($result as $v){
-            $result['cat'] = addslashes($v['cat']);
-        }*/
         $arr = array();
+        foreach ($result as $k=>$v){
+            if ($v['cat']){ //отметаем всякий мусор по удалённым категориям
+                $summmoney += $v['money'];
+            } else {
+                unset($result[$k]);
+            }
+        }
+
         $arr[0] = $result;
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
         $arr[1] = $this->db->query($sql, $currency);
 
-            //текстовые отчёты отправлю вторым индексом массива
+  /*          //текстовые отчёты отправлю вторым индексом массива
             if ($drain==0)
                 $arr[2] = $this->SelectDetailedIncome($start, $end, $account, $currency, $acclist);
             if ($drain==1)
                 $arr[2] = $this->SelectDetailedWaste($start, $end, $account, $currency, $acclist);
-
+*/
         return $arr;
 
-        //return $result;
-        /*$array = array();
-        foreach ($result as $v) {
-            if ($v['cat'] != '')
-             $array[] = array($v['cat'].' &nbsp;&nbsp;&nbsp; '.(float)$v['money'].'&nbsp;'.$v['cur_char_code'], (float)$v['money']);
-        }
-        return $array;//*/
     }
 
     /**
@@ -214,23 +212,6 @@ class Report_Model
             }
         }
 
-        /*foreach ($result as $v) {
-            switch (substr($v['datef'],5,2)){
-                case '01' : $array[]=array('Доходы за январь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '02' : $array[]=array('Доходы за февраль'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '03' : $array[]=array('Доходы за март'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '04' : $array[]=array('Доходы за апрель'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '05' : $array[]=array('Доходы за май'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '06' : $array[]=array('Доходы за июнь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '07' : $array[]=array('Доходы за июль'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '08' : $array[]=array('Доходы за август'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '09' : $array[]=array('Доходы за сентябрь'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '10' : $array[]=array('Доходы за октябрь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '11' : $array[]=array('Доходы за ноябрь'.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                case '12' : $array[]=array('Доходы за декабрь'.' &nbsp;&nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));break;
-                default : $array[]=array('Доходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));}//*/
-            //$array[]=array('Доходы'.' &nbsp;&nbsp;&nbsp; '.abs($v['su']),abs($v['su']));
-        //}//*/
         $result = array();
         $result[0] = $array;
         $sql = "SELECT cur_char_code FROM currency
@@ -239,38 +220,6 @@ class Report_Model
 
 
         return $result;
-        /*$array = array();
-        foreach ($result as $v) {
-            if ($v['drain'] == 0) { //Доход
-                $array[$v['datef']]['p'] = $v['money'];
-            } else {
-                $array[$v['datef']]['d'] = abs($v['money']);
-            }
-        }
-        $startf = formatMysqlDate2UnixTimestamp($start);
-        $endf = formatMysqlDate2UnixTimestamp($endf);
-        if (date('Y', $startf) < date('Y', $endf)) {
-            return '';
-        } else { //2004 - 2009
-            for ($i = date('Y', $startf); $i <= date('Y', $endf); $i++) {
-                for ($j = 1; $j > 12; $j++) {
-                    $c = mktime(0, 0, 0, $j, 1, $i);
-                    if ($startf <= $c && $endf >= $c) {
-                        $array[$i.'.'.$j]['p'] = (int)@$array[$i.'.'.$j]['p'];
-                        $array[$i.'.'.$j]['d'] = (int)@$array[$i.'.'.$j]['d'];
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        $data1 = $data2 = $labels = array();
-        foreach ($array as $key => $val) {
-            $data1[] = (float)$val['p'];
-            $data2[] = (float)$val['d'];
-            $labels[] = substr($key, 0, 7);
-        }
-        return array('p'=>$data1,'d'=>$data2,'l'=>$labels);//*/
     }
 
     function SelectDetailedIncome($date1='', $date2='', $account='', $cursshow='', $acclist=''){

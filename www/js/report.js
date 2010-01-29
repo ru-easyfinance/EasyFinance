@@ -63,7 +63,7 @@ $(document).ready(function() {
             var tr = '';
             for (c in data[0]){
                 if (c>0){
-                    if (data[0][c].cat_name != data[0][c-1].cat_name && data[0][c].cat_name!=null ) {
+                    if (data[0][c].cat_name != data[0][c-1].cat_name ) {
                       if (data[0][c].account_name!=null)
                       tr += "<tr>" + '<td><span><b>'+data[0][c].cat_name+
                         '<span><b></td><td></td><td></td><td></td></tr>';
@@ -88,7 +88,6 @@ $(document).ready(function() {
                     tr += "<tr>"
                                 + '<td>&nbsp;</td>'
                                 + '<td><span>'+data[0][c].date+'</span></td>'
-                                //+ '<td class="' + (data[0][c].date>=0 ? 'sumGreen' : 'sumRed')+'">'+data[0][c].date+'</td>'
                                 + '<td class="light"><span>'+data[0][c].account_name+'</span></td>'
                                 + '<td class="' + (su>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(su)+'</span></td>'
                                 + '</tr>';
@@ -302,39 +301,6 @@ $(document).ready(function() {
             currency:$('#currency :selected').val(),
             acclist: acc.toString()
          }, function(data) {
-            //var plot2 = $.jqplot('chart', [data['p'], data['d']], {
-            /*var plot2 = $.jqplot('chart', [data], {
-                //legend:{show:true, location:'ne', xoffset:55},
-                //title:'Сравнение расходов и доходов',
-                seriesDefaults:{
-                    //renderer:$.jqplot.BarRenderer,
-                    renderer:$.jqplot.PieRenderer,
-                    //rendererOptions:{barPadding: 8, barMargin: 20}
-                    rendererOptions:{
-                        sliceMargin:8
-                    }
-                },*/
-                /*series:[
-                    {label:'Расходы'},
-                    {label:'Доходы'},
-                ],
-                axes:{
-                    xaxis:{
-                        renderer:$.jqplot.CategoryAxisRenderer,
-                        ticks: data['labels']
-                    },
-                    yaxis:{min:0}
-                }*/
-             /*legend:{show:true}
-            });*/
-            //возвращаемые данные имеют следующий формат . лейбл и сумма. например:
-            //data[c]['lab'] = "Расходы за октябрь"
-            //data[c]['sum'] = "4200"
-            /*
-             * @todo дописать формирование отчётов.
-             * работает если есть доходы и расходы в одном и том же месяце.
-             * а если например в марте доходы , а в мае расходы то не корректно.
-             */
             var cur = res['currency'];
              nowcur = 0;//курс в знаменателе. в чём отображаем
              oldcur = 0;//курс в числителе. курс валюты счёта
@@ -406,15 +372,7 @@ $(document).ready(function() {
              }
           }
           stri += "</dataset>";
-
-          /*for (c in data){
-              if (data[c]['cat'] != '')
-                stri += "<set label='"+data[c]['lab']+"' value='"+data[c]['sum']+"' />";
-                    //stri += "<set label='Пам' value='']+"' />";
-          }*/
-
           stri += "</chart>";
-          //alert(stri);
             var chart1 = new FusionCharts("/swf/fusioncharts/MSColumn3D.swf", "chart1Id", "500", "400", "0", "1");
             chart1.addParam("WMode", "Transparent");
             chart1.setDataXML(stri);
@@ -457,12 +415,9 @@ $(document).ready(function() {
                 },
                 legend:{show:true}*/
          var itogoDengi = 0;
-         var stri = "<div id='chart1div'>FusionCharts</div>";
-          $('#chart').html(stri);
-          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
-          for (c in data[0]){
-              if (data[0][c]['cat'] != ''){
-                  cur = res['currency'];
+         var prochee = 0;
+         for (c in data[0]){
+             cur = res['currency'];
                     for(key in cur)
                         {
                             cost = cur[key]['cost'];
@@ -472,12 +427,33 @@ $(document).ready(function() {
                                 oldcur = cur[key]['cost'];
                             }
                         }
-                        itogoDengi += data[0][c]['money']*oldcur/nowcur;
-                  stri += "<set label='"+data[0][c]['cat']+"' value='"+formatCurrencyFusion(data[0][c]['money']*oldcur/nowcur)+"' />";
+             itogoDengi += data[0][c]['money']*oldcur/nowcur;
+         }
+         var stri = "<div id='chart1div'>FusionCharts</div>";
+          $('#chart').html(stri);
+          stri = "<chart numberPrefix='"+$('#currency :selected').attr('abbr')+" '>";
+          for (c in data[0]){
+              cur = res['currency'];
+                for(key in cur)
+                    {
+                        cost = cur[key]['cost'];
+                        name = cur[key]['name'];
+                        if (name == data[0][c].cur_char_code)
+                        {
+                            oldcur = cur[key]['cost'];
+                        }
+                    }
+                    //itogoDengi += data[0][c]['money']*oldcur/nowcur;
+              if ( (data[0][c]['money']*oldcur/nowcur) / itogoDengi > 0.02){
+                    stri += "<set label='"+data[0][c]['cat']+"' value='"+formatCurrencyFusion(data[0][c]['money']*oldcur/nowcur)+"' />";
+              } else {
+                    prochee += data[0][c]['money']*oldcur/nowcur;
               }
           }
+          if (prochee){
+              stri += "<set label='Прочее' value='"+formatCurrencyFusion(prochee)+"' />";
+          }
           stri += "</chart>";
-          //alert(stri);
           //stri = "<chart><set label='Домашнее хозяйство' value='500.06' /><set label='Аренда автомобиля' value='55' /><set label='Бонусы' value='1100' /><set label='Доход предпринимателя' value='1.03' /><set label='test' value='1050.07' /><set label='тетс chromeа' value='16' /><set label='rwefesr' value='4' /><set label='fewfew5345' value='1002' /></chart>"
           //stri = "<chart><set label='A' value='10' /><set label='B' value='11' /></chart>";
             var chart1 = new FusionCharts("/swf/fusioncharts/Pie3D.swf", "chart1Id", "500", "400", "0", "1");
@@ -489,62 +465,12 @@ $(document).ready(function() {
             itogoString += formatCurrencyFusion(itogoDengi) + ' ' + $('#currency :selected').attr('abbr');
             itogoString += '</td></tr></table><br>';
             $('#itogo').html(itogoString);
-
-
-            //показываем тексты снизу
-            /*cur = res['currency'];
-             nowcur = 0;//курс в знаменателе. в чём отображаем
-             oldcur = 0;//курс в числителе. курс валюты счёта
-             for(key in cur)
-            {
-                cost = cur[key]['cost'];
-                name = cur[key]['name'];
-                if (name == data[2][1][0].cur_char_code){
-                    nowcur = cur[key]['cost'];
-                }
-            }
             
-            var tr = '';
 
-            for (c in data[2][0]){
-                if (c>0){
-                    if (data[2][0][c].cat_name != data[2][0][c-1].cat_name && data[2][0][c].cat_name!=null ) {
-                      if (data[2][0][c].account_name!=null)
-                      tr += "<tr>" + '<td><span><b>'+data[2][0][c].cat_name+
-                        '<span><b></td></tr>';
-                     }
-                }
-                else {
-                    tr += "<tr>" + '<td><span><b>'+data[2][0][0].cat_name+
-                        '<span><b></td></tr>';
-                }
-                if (data[2][0][c].account_name != null) {
-                    cur = res['currency'];
-                    for(key in cur)
-                        {
-                            cost = cur[key]['cost'];
-                            name = cur[key]['name'];
-                            if (name == data[2][0][c].cur_char_code)
-                            {
-                                oldcur = cur[key]['cost'];
-                            }
-                        }
-                        su = (data[2][0][c].money*oldcur/nowcur);
-                    tr += "<tr>"
-                                + '<td>&nbsp;</td>'
-                                + '<td><span>'+data[2][0][c].date+'</span></td>'
-                                //+ '<td class="' + (data[0][c].date>=0 ? 'sumGreen' : 'sumRed')+'">'+data[0][c].date+'</td>'
-                                + '<td class="light"><span>'+data[2][0][c].account_name+'</span></td>'
-                                + '<td class="' + (su>=0 ? 'sumGreen' : 'sumRed')+'"><span>'+formatCurrency(su)+'</span></td>'
-                                + '</tr>';
-                }
+            if (prochee){
+                $('#commentRest').show();
+                $('#commentRest').html('<h5> * Категория прочее включает в себя Ваши категории, операции по которым за выбранный период не превысили 2% от общега объёма операций за этот период. Отчёты по этим категориям вы можете посмотреть в детальных отчётах</h5>');
             }
-            
-            $('tr:not(:first)','#reports_list').each(function(){
-                $(this).remove();
-            });
-            $('#reports_list').html(tr);
-            */
             $('#chart').show();
             $('#Period21,#Period22').hide();
             //$('.operation_list').show();
@@ -659,6 +585,7 @@ $(document).ready(function() {
 
     $('#report').change();
     $('#btnShow').click(function(){
+        $('#commentRest').hide();
         switch ( $('#report :selected').val() ) {
             case "Доходы":
                 ShowIncome();
@@ -698,65 +625,38 @@ $(document).ready(function() {
         case "graph_profit": //Доходы":
             $('#Period21,#Period22').hide();
             $('#itogo').show();
-            //$('#chart').show();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "graph_loss": //"Расходы":
             $('#Period21,#Period22').hide();
             $('#itogo').show();
-            //$('#chart').show();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "graph_profit_loss": //"Сравнение расходов и доходов":
             $('#Period21,#Period22').hide();
             $('#itogo').hide();
-            //$('#chart').show();
-            //$('.operation_list').hide();
-            //$('#divDetailedReport').hide();
             break;
         case "txt_profit"://"Детальные доходы":
             $('#Period21,#Period22').hide();
             $('#itogo').hide();
-            //$('#chart').hide();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "txt_loss"://"Детальные расходы":
             $('#Period21,#Period22').hide();
             $('#itogo').hide();
-            //$('#chart').hide();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "txt_loss_difference"://"Сравнение расходов за периоды":
             $('#Period21,#Period22').show();
             $('#itogo').hide();
-            //$('#chart').hide();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "txt_profit_difference"://"Сравнение доходов за периоды":
             $('#Period21,#Period22').show();
             $('#itogo').hide();
-            //$('#chart').hide();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "txt_profit_avg_difference": //"Сравнение доходов со средним за периоды":
             $('#Period21,#Period22').show();
             $('#itogo').hide();
-            //$('#chart').hide();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
         case "txt_loss_avg_difference"://"Сравнение расходов со средним за периоды":
             $('#Period21,#Period22').show();
             $('#itogo').hide();
-            //$('#chart').hide();
-            //$('.operation_list').show();
-            //$('#divDetailedReport').show();
             break;
     }
 

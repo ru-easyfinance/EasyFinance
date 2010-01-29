@@ -381,10 +381,11 @@ easyFinance.widgets.operationEdit = function(){
 //alert(_selectedType);
 //alert(_selectedCategory);
 //alert($('#op_AccountForTransfer').val());
+        var account = $('#op_account').val();
         easyFinance.models.accounts.editOperationById(
             $('#op_id').val(),
             _selectedType,
-            $('#op_account').val(),
+            account,
             _selectedCategory,
             $('#op_date').val(),
             $('#op_comment').val(),
@@ -392,7 +393,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_AccountForTransfer').val(),
             $('#op_currency').val(),
             TransferSum,
-            $('#op_target').val(),
+            _selectedTarget,
             //$('#op_close:checked').length,
             $('#op_close2').val(),
             $('#op_tags').val(),
@@ -418,7 +419,7 @@ easyFinance.widgets.operationEdit = function(){
                     }
                     /// переписать
                     $('#op_target').html(o);
-                    $.jGrowl("Операция успешно сохранена", {theme: 'green'});
+                    $.jGrowl("Операция сохранена <br/><a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000 });
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!
                 } else {
@@ -458,6 +459,12 @@ easyFinance.widgets.operationEdit = function(){
             $.jGrowl('Вы ввели неверное значение в поле "тип операции"!', {theme: 'red', stick: true});
             return false;
         }
+
+        var date = $('#op_date').val();
+        if (! date.match(/^\d\d?\.\d\d?\.\d\d\d\d$/)) {
+            $.jGrowl('Вы ввели неверное значение в поле "дата"!', {theme: 'red', stick: true});
+            return false;
+        }
         
         var opType = $("#op_type option:selected").val();
         
@@ -474,7 +481,7 @@ easyFinance.widgets.operationEdit = function(){
                 return false;
             }
         } else if (opType = "4") {
-            if (_selectedTarget == '') {
+            if (_selectedTarget == '' || _selectedTarget == '0') {
                 $.jGrowl('Укажите финансовую цель!', {theme: 'red', stick: true});
                 return false;
             }

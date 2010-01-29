@@ -41,7 +41,7 @@ class Budget_Model {
             $category = Core::getInstance()->user->getUserCategory();
         }
 
-         $sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
+         /*$sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
             WHERE c.cat_id=b.category AND b.user_id=c.user_id AND b.date_start=? ) AS amount,
 
             (SELECT SUM(o1.money) FROM operation o1
@@ -49,7 +49,7 @@ class Budget_Model {
                 AND o1.date >= ? AND o1.date <= LAST_DAY(o1.date)) AS money,
 
             (SELECT AVG(amount) FROM budget t
-                        WHERE t.user_id = c.user_id AND (t.date_start >= ADDDATE(?, INTERVAL -1 MONTH)
+                        WHERE t.user_id = c.user_id AND (t.date_start >= ADDDATE(?, INTERVAL -3 MONTH)
                             AND t.date_start <= LAST_DAY(t.date_start))
                         AND t.category = c.cat_id
              ) AS avg_3m
@@ -58,21 +58,24 @@ class Budget_Model {
             WHERE (SELECT SUM(o2.money) FROM operation o2
                 WHERE user_id=c.user_id AND (o2.transfer = NULL OR o2.transfer = 0) AND c.cat_id = o2.cat_id
                 AND o2.date >= ? AND o2.date <= LAST_DAY(o2.date) ) <> 0
-            AND c.user_id=? ORDER BY c.cat_parent";
+            AND c.user_id=? ORDER BY c.cat_parent";*/
         
+        $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o WHERE o.user_id = " . $user_id ." AND o.transfer=0 AND o.date >= ? AND o.date <= LAST_DAY(o.date)
+            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." ) AND o.account_id=1 GROUP BY o.cat_id";
 
 
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
                 DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
                 DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
                 , (SELECT AVG(amount) FROM budget t
-                        WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -1 MONTH)
+                        WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
                             AND t.date_start <= LAST_DAY(b.date_start))
                         AND b.category = t.category AND b.user_id=t.user_id
                 ) AS avg_3m
                 , (SELECT SUM(o.money) FROM operation o
                     WHERE (o.transfer = NULL OR o.transfer = 0) AND b.category = o.cat_id
                     AND o.date >= ? AND o.date <= LAST_DAY(o.date)
+                    AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." )
                 ) AS money
         FROM budget b
         LEFT JOIN category c ON c.cat_id=b.category
@@ -82,9 +85,8 @@ class Budget_Model {
 
         $arraybudg = Core::getInstance()->db->select($sqlbudg, $start, $user_id, $start);
         
-        $arrayoper = Core::getInstance()->db->select($sqloper, $start , $start, $start, $start, $user_id);
-        //echo('<pre>');
-            //die(print_r($arrayoper));
+        //$arrayoper = Core::getInstance()->db->select($sqloper, $start , $start, $start, $start, $user_id);
+        $arrayoper = Core::getInstance()->db->select($sqloper, $start);
         
         $list = array(
             'd' => array(),
@@ -124,25 +126,24 @@ class Budget_Model {
         }
 
         foreach ($arrayoper as $var){
-            if ( !(isset($list['p'][$var['cat_id']]) || (isset($list['d'][$var['cat_id']] ) ) ) )
-            if ($var['money'] <= 0 )
-            {
-                $list['d'][$var['cat_id']] = array(
-                    'amount' => (float)$var['amount'], // Планируемая сумма
-                    'money'  => (float)$var['money'],  // Фактическая сумма
-                    'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
-                );
-            } else {
-                $list['p'][$var['cat_id']] = array(
-                    'amount' => (float)$var['amount'], // Планируемая сумма
-                    'money'  => (float)abs($var['money']),  // Фактическая сумма
-                    'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
-                );
+            if ( !(isset($list['p'][$var['cat_id']]) || (isset($list['d'][$var['cat_id']] ) ) ) ){
+
+                if (($var['money'] <= 0))
+                {
+                    $list['d'][$var['cat_id']] = array(
+                        'amount' => 0, // Планируемая сумма
+                        'money'  => (float)$var['money'],  // Фактическая сумма
+                        'mean'   => 0  // Среднее за три месяца
+                    );
+                } else {
+                    $list['p'][$var['cat_id']] = array(
+                        'amount' => 0, // Планируемая сумма
+                        'money'  => (float)abs($var['money']),  // Фактическая сумма
+                        'mean'   => 0  // Среднее за три месяца
+                    );
+                }
             }
         }
-
-        //echo('<pre>');
-        //die(print_r($list));
         
         return array (
             'list' => $list,
