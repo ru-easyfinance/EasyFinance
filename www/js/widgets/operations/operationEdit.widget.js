@@ -153,8 +153,8 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         // Tab & Shift+Tab для секси комбо
-        var next = {op_type : "#op_category", op_account : "#op_type", op_category : '#op_date'}
-        var prev = {op_type : "#op_account", op_account : "#op_category", op_category : '#op_type'}
+        var next = {op_type : "#op_category", op_account : "#op_type", op_category : '#op_date'};
+        var prev = {op_type : "#op_account", op_account : "#op_category", op_category : '#op_type'};
     }
 
     function _initForm(){
@@ -385,12 +385,12 @@ easyFinance.widgets.operationEdit = function(){
         easyFinance.models.accounts.editOperationById(
             $('#op_id').val(),
             _selectedType,
-            account,
+            _selectedAccount,
             _selectedCategory,
             $('#op_date').val(),
             $('#op_comment').val(),
             tofloat($('#op_amount').val()),
-            $('#op_AccountForTransfer').val(),
+            _selectedTransfer,
             $('#op_currency').val(),
             TransferSum,
             _selectedTarget,
@@ -401,24 +401,12 @@ easyFinance.widgets.operationEdit = function(){
             function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 $('#op_btn_Save').removeAttr('disabled');
+
                 if (data.length == 0) {
                     _clearForm();
-                    /// переписать
-                    var o = '';
-                    var t;
-                    for (var v in res['user_targets']) {
-                        t = res['user_targets'][v];
-                        if (v != $('#op_target').val())
-                        o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+t['amount_done']+
-                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['amount']+'">'+t['title']+'</option>';
-                        else{
-                            t['amount_done']=(parseFloat(t['amount_done'])+parseFloat(suum)).toString();
-                            o += '<option value="'+v+'" target_account_id="'+t['account']+'" amount_done="'+/*(parseFloat(t['amount_done'])+parseFloat(suum)).toString()*/t['amount_done']+
-                            '"percent_done="'+t['percent_done']+'" forecast_done="'+t['forecast_done']+'" amount="'+t['amount']+'">'+t['title']+'</option>';
-                    }
-                    }
-                    /// переписать
-                    $('#op_target').html(o);
+
+                    refreshTargets();
+
                     $.jGrowl("Операция сохранена <br/><a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000 });
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!
@@ -613,22 +601,32 @@ easyFinance.widgets.operationEdit = function(){
             data = {};
 
         var htmlAccounts = '';
-        for (key in data )
-        {
+        for (key in data ) {
             htmlAccounts = htmlAccounts + '<option value="' + key + '">'
-                + data[key].name + '</option>';
+                + data[key].name + ' (' + res.currency[data[key].currency].text + ')' + '</option>';
         }
 
+        var curAccount = _selectedAccount;
         $("#op_account").html(htmlAccounts);
         $.sexyCombo.changeOptions("#op_account");
-        // выбираем первую опцию по умолчанию
-        _sexyAccount.setComboValue(_sexyAccount.options[0].text);
+        if (_selectedAccount == '') {
+            // выбираем первую опцию по умолчанию
+            _sexyAccount.setComboValue(_sexyAccount.options[0].text);
+        } else {
+            setAccount(curAccount);
+        }
 
         if (_sexyTransfer) {
+            curAccount = _selectedTransfer;
             $("#op_AccountForTransfer").html(htmlAccounts);
             $.sexyCombo.changeOptions("#op_AccountForTransfer");
-            // выбираем первую опцию по умолчанию
-            _sexyTransfer.setComboValue(_sexyTransfer.options[0].text);
+
+            if (_selectedTransfer == '') {
+                // выбираем первую опцию по умолчанию
+                _sexyTransfer.setComboValue(_sexyTransfer.options[0].text);
+            } else {
+                setTransfer(curAccount);
+            }
         }
     }
 
