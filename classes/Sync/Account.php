@@ -35,7 +35,22 @@ class Account {
     function AccountSync($acc, $rec, $ch, $del){
         $acco = New SyncAccount_Model($this->db,$this->user);
         $op = New SyncOperation_Model($this->db, $this->user);
-        foreach ($rec as $key=>$v){
+        foreach($acc as $k=>$v){
+            $sql = "SELECT ekey FROM records_map WHERE tablename='Accounts' AND remotekey=? AND user_id=?";
+            $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
+            if ( $toChangeRec[0]['ekey'] ){//редактирование
+                $numEkey = $toChangeRec[0]['ekey'];
+                $acco->editAccount($numEkey,$acc[$k]['name'],$acc[$k]['cur'],$acc[$k]['date'],$acc[$k]['startbalance'],$acc[$k]['descr']);
+            } else{//добавление
+                $accou = $acco->addAccount(0,$acc[$k]['name'],$acc[$k]['cur'],$acc[$k]['date'],$acc[$k]['startbalance'],$acc[$k]['descr'],$this->user,$this->db);
+                if ($accou > 0){
+                    $oper = $op->addOperation(0, $accou, 0, $acc[$k]['date'], 0, $acc[$k]['startbalance'], 'Начальный остаток');
+                    $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Accounts', $v['remotekey'], $accou, 1, $this->db);
+                }
+            }
+        }
+
+        /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Accounts"){
                 $ke = $v['remotekey'];
                 $k;
@@ -67,7 +82,7 @@ class Account {
                 //echo($numEkey);
                 $acco->editAccount($numEkey,$acc[$k]['name'],$acc[$k]['cur'],$acc[$k]['date'],$acc[$k]['startbalance'],$acc[$k]['descr']);
             }
-        }
+        }*/
         foreach ($del as $key=>$v){
             if ($v['tablename']=="Accounts"){
                 $ke = $v['remotekey'];
