@@ -1,34 +1,34 @@
-/**
- * @deprecated
- */
-function floatFormat(obj, in_string ){
-    var l = in_string.length;
-    var rgx = /[0-9]/;
-    var c=0;
-    var p =1;
-    var newstr ='';
-    var i = 0;
-    for(var a=1;a<=l;a++){
-        i=l-a+1;
-        if (rgx.test(in_string.substr(i,1))){
-            if (c == 3){
-                newstr = ' ' + newstr;
-                c = 0
-            }
-            newstr =in_string.substr(i,1)+newstr
-            c++;
-        }
-        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==','){
-            if (p){
-                newstr = newstr.substr(0,2)
-                newstr ='.'+newstr;
-            }
-            c=0;
-            p = 0;
-        }
-    }
-    $(obj).val(newstr)
-}
+///**
+// * @deprecated
+// */
+//function floatFormat(obj, in_string ){
+//    var l = in_string.length;
+//    var rgx = /[0-9]/;
+//    var c=0;
+//    var p =1;
+//    var newstr ='';
+//    var i = 0;
+//    for(var a=1;a<=l;a++){
+//        i=l-a+1;
+//        if (rgx.test(in_string.substr(i,1))){
+//            if (c == 3){
+//                newstr = ' ' + newstr;
+//                c = 0
+//            }
+//            newstr =in_string.substr(i,1)+newstr
+//            c++;
+//        }
+//        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==','){
+//            if (p){
+//                newstr = newstr.substr(0,2)
+//                newstr ='.'+newstr;
+//            }
+//            c=0;
+//            p = 0;
+//        }
+//    }
+//    $(obj).val(newstr)
+//}
 /**
  * @author Alexander *rewle* Ilichov
  */
@@ -160,23 +160,23 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var tmp = {step3 : '', step2 : ''}
         $('#master .waste_list input').each(function(){
             var parent = $(this).closest('tr')
-            if (!$(parent).length){
-                parent = $(this).closest('.line')
+            if ($(parent).length === 0){
+                parent = $(this).closest('.line');
             }
             var id = $(parent).attr('id').toString().replace(/[^0-9]/gi,'');
-            var val = calculate($(this).val());
+            var val = $(this).val().toString().replace(/[^0-9\.]/,'','gi');
             if (!isNaN(val) && val > 0){
-                if ($(this).closest('.step').attr('id')=='step2'){
+                if ($(parent).closest('.step').attr('id') == 'step2'){
                     tmp.step2+= '{"'+id+'": "'+val+'"},';
                 }else{
                     tmp.step3+= '{"'+id+'": "'+val+'"},';
                 }
             }
-        })
+        });
         var ret = '{"d": ['+tmp.step3+'], "p": ['+tmp.step2+']}';
-        while(ret.indexOf('},]') != -1){
+//        while(ret.indexOf('},]') != -1){
             ret = ret.replace('},]', '}]', 'gi');
-        }
+//        }
         return ret;
     }
     /**
@@ -207,7 +207,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      */
     $('#master div.line a.name').live('click',function(){
         $(this).closest('.line').toggleClass('open').toggleClass('close');
-        return false;
+//        return false;
     })
 
     /**
