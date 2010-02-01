@@ -140,6 +140,12 @@ class Sync{
         $this->dataarrayE[4] = array( 'ServerData' => $this->getDate() );
 
         $ret = $this->dataarrayE;
+        $ret = array(
+            'RecordsMap' => $this->dataarrayE[1]
+            ,'ChangedRecords' => $this->dataarrayE[2]
+            ,'DeletedRecords' => $this->dataarrayE[3]
+            ,'ServerData' => $this->dataarrayE[4]
+            );
         //die(print_r('jewkfjwk'));
         $a = php_xmlrpc_encode($ret);
         return $a;
