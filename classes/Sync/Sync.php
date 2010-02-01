@@ -163,7 +163,7 @@ class Sync{
 		$sn = php_xmlrpc_decode($ser);
 
         $this->dataarray = $sn;
-
+                
 
         $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
         $this->db->query("SET NAMES utf8");
@@ -305,7 +305,7 @@ class Sync{
             if ($qw[$i][0]['name']=='RecordsMap'){
                 foreach ($qw[$i]  as $k=>$value ) if ($k>0){
                     $this->recordsMap[$k]['tablename']=$qw[$i][$k]['tablename'];
-                    $this->recordsMap[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->recordsMap[$k]['remotekey']=$qw[$i][$k]['kkey'];
                 }
             }
         }
@@ -320,7 +320,7 @@ class Sync{
             if ($qw[$i][0]['name']=='ChangedRecords'){
                 foreach ($qw[$i] as $k=>$value ) if ($k>0){
                     $this->changedRec[$k]['tablename']=$qw[$i][$k]['tablename'];
-                    $this->changedRec[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->changedRec[$k]['remotekey']=$qw[$i][$k]['kkey'];
                 }
             }
         }
@@ -336,7 +336,7 @@ class Sync{
                 foreach ($qw[$i][0] as $k=>$value) if ($k>0){
                     //echo ($qw[3][$k]['tablename']);
                     $this->deletedRec[$k]['tablename']=$qw[$i][$k]['tablename'];
-                    $this->deletedRec[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->deletedRec[$k]['remotekey']=$qw[$i][$k]['kkey'];
                 }
             }
         }
@@ -351,7 +351,7 @@ class Sync{
             if ($qw[$i][0]['tablename']=='Accounts'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='A') if ($k>0){
                     //$k = $qw[$i][$k]['remotekey'];
-                    $this->AccountsList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->AccountsList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->AccountsList[$k]['name']=$qw[$i][$k]['name'];
                     $this->AccountsList[$k]['cur']=$qw[$i][$k]['cur'];
                     $this->AccountsList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
@@ -370,7 +370,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Transfers'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='T') if ($k>0){
-                    $this->TransfersList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->TransfersList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->TransfersList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->TransfersList[$k]['acfrom']=$qw[$i][$k]['acfrom'];
                     $this->TransfersList[$k]['amount']=$qw[$i][$k]['amount'];
@@ -389,7 +389,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Categories'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='C') if ($k>0){
-                    $this->CategoriesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->CategoriesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->CategoriesList[$k]['name']=$qw[$i][$k]['name'];
                     $this->CategoriesList[$k]['parent']=$qw[$i][$k]['parent'];
                 }
@@ -405,7 +405,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Currensies'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='C') if ($k>0){
-                    $this->CurrensiesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->CurrensiesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->CurrensiesList[$k]['name']=$qw[$i][$k]['name'];
                 }
             }
@@ -420,7 +420,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Debets'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='D') if ($k>0){
-                    $this->DebetsList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->DebetsList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->DebetsList[$k]['amount']=$qw[$i][$k]['amount'];
                     $this->DebetsList[$k]['currency']=$qw[$i][$k]['currency'];
                     $this->DebetsList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
@@ -439,7 +439,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Incomes'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='I') if ($k>0){
-                    $this->IncomesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->IncomesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->IncomesList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->IncomesList[$k]['category']=$qw[$i][$k]['category'];
                     $this->IncomesList[$k]['parent']=$qw[$i][$k]['parent'];
@@ -460,7 +460,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Outcomes'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='O') if ($k>0){
-                    $this->OutcomesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->OutcomesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->OutcomesList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->OutcomesList[$k]['category']=$qw[$i][$k]['category'];
                     $this->OutcomesList[$k]['parent']=$qw[$i][$k]['parent'];
@@ -481,7 +481,7 @@ class Sync{
             if ($qw[$i][0]['tablename']=='Plans'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='P') if ($k>0){
                     $this->PlansList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->PlansList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->PlansList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->PlansList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->PlansList[$k]['period']=$qw[$i][$k]['period'];
                     $this->PlansList[$k]['count']=$qw[$i][$k]['count'];
