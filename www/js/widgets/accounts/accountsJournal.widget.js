@@ -76,14 +76,12 @@ easyFinance.widgets.accountsJournal = function(){
         });
         */
 
-/* --------- вызывает баг #499 ----------- */
         $('#operation_list').mouseout(
             function(){
                 $('.qtip').remove();
                 $('#operation_list tr.item.act').removeClass('act');
                 return false;
         });
-/* --------- конец бага #499 ----------- */
 
         $('#operation_list tr.item').live('dblclick',
             function(){
