@@ -401,7 +401,8 @@ easyFinance.widgets.operationEdit = function(){
             function(data){
                 // В случае успешного добавления, закрываем диалог и обновляем календарь
                 $('#op_btn_Save').removeAttr('disabled');
-                if (data.length == 0) {
+							
+                if (data.result) {
                     _clearForm();
                     /// переписать
                     var o = '';
@@ -419,15 +420,12 @@ easyFinance.widgets.operationEdit = function(){
                     }
                     /// переписать
                     $('#op_target').html(o);
-                    $.jGrowl("Операция сохранена <br/><a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000 });
+					$.jGrowl(data.result.text, {theme: 'green'};
+                    $.jGrowl("<a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000 });
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!
-                } else {
-                    var e = '';
-                    for (var v in data) {
-                        e += data[v]+"\n";
-                    }
-                    $.jGrowl("Ошибки при сохранении : " + e, {theme: 'red', stick: true});
+                } else if (data.error) {
+                    $.jGrowl(data.error.text, {theme: 'red', stick: true});
                 }
             }
         );
