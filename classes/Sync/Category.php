@@ -36,6 +36,7 @@ class Category {
     function CategorySync($cat, $rec, $ch, $del){
         $cate = New SyncCategory_Model($this->db, $this->user);
 
+        foreach ($cat as $k=>$v){
         $sql = "SELECT ekey FROM records_map WHERE tablename='Categories' AND remotekey=? AND user_id=?";
             $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
             if ( $toChangeRec[0]['ekey'] ){//редактирование
@@ -59,6 +60,7 @@ class Category {
                     }
                 }
             }
+        }
 
         /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Categories"){
