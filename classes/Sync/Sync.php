@@ -247,7 +247,7 @@ class Sync{
      * @return <bool>
      */
     function __construct($xmlReq, &$xmlAnswer){
-       
+        
     }
 
     /**
