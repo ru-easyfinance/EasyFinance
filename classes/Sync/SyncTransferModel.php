@@ -85,7 +85,7 @@ class SyncTransfer_Model {
             $data[5][$key+1]['ekey'] = (int)$a[$key]['id'];
             $data[5][$key+1]['date'] = $a[$key]['date'];
             $data[5][$key+1]['acfrom'] = (int)$a[$key]['transfer'];
-            $data[5][$key+1]['amount'] = (int)$a[$key]['money'];
+            $data[5][$key+1]['amount'] = (double)$a[$key]['money'];
             $data[5][$key+1]['acto'] = (int)$a[$key]['account_id'];
             $data[5][$key+1]['descr'] = $a[$key]['comment'];
 
