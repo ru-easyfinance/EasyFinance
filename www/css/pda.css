@@ -6,7 +6,8 @@ body {
 	margin: 5px;
 	padding: 0;
 	
-	font: 100% Arial, sans-serif;
+	font-family: Arial, sans-serif;
+	font-size: small;
 	
 	color: #000;
 	background: #fff;
@@ -17,7 +18,7 @@ table {
 	margin-bottom: 0;
 	margin-top:0;
 	text-indent:0;
-	border-collapse: separate;
+	border-collapse: collapse;
 	border-spacing: 2px;
 }
 
@@ -32,4 +33,9 @@ table {
 img {
 	vertical-align: middle;
 	border: 0;
+}
+
+p.menu {
+	margin-top: 4px;
+	margin-bottom: 4px;
 }

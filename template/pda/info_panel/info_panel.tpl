@@ -1,6 +1,11 @@
-<div style="width: 100%;"><a style="float: right;" href="/accounts/add">добавить</a><strong>Счета</strong></div>
-<br />
-<table border="1" width="100%">
+		<table cellspacing="0" cellpadding="0" class="wide"><tbody>
+			<tr>
+				<td class="wide"><strong>Счета</strong></td>
+				<td><a href="/accounts/add">добавить</a></td>
+			</tr>
+		</tbody></table>
+		<br />
+<table border="0" width="100%">
           <tbody>
 	<?php 
 	$totalBalance = 0;

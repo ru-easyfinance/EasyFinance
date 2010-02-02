@@ -1,7 +1,7 @@
 <table cellspacing="0" cellpadding="0"><tbody>
 	<tr>
 		<td></td>
-		<td class="wide"><h2>Регистрация</h2></td>
+		<td class="wide"><h2>Регистрация</h2><br></td>
 	</tr>
 	<tr>
 		<td>Имя:</td>
