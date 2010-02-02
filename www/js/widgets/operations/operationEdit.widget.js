@@ -420,7 +420,7 @@ easyFinance.widgets.operationEdit = function(){
                     }
                     /// переписать
                     $('#op_target').html(o);
-					$.jGrowl(data.result.text, {theme: 'green'};
+					$.jGrowl(data.result.text, {theme: 'green'});
                     $.jGrowl("<a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000 });
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!

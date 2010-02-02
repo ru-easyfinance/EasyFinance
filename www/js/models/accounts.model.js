@@ -198,7 +198,7 @@ easyFinance.models.accounts = function(){
                     sumTo: param6,
                     type: param7
                 }, function(data) {
-                    _journal = data;
+                    _journal = data.operations;
                     if (typeof param8 == 'function')
                         param8(_journal);
             }, 'json');
