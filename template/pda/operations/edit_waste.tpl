@@ -21,7 +21,8 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 <form method="POST">
 <div style="width:100%">
 	<input type="hidden" name="type" value="<?=$res['accounts']?>"></input>
-	Счёт: <select name="account" >
+	Сумма: <br><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /><br />
+	Счёт:<br><select name="account" class="wide">
 		<?php
 		if( !$accountId || !isset($operation['account']) || !$operation['account'] )
 		{
@@ -37,8 +38,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 		}
 		?>
 	</select><br/>
-	Сумма: <input name="amount" size="15" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /><br />
-	Категория: <select name="category" style="width: 8em" >
+	Категория: <br><select name="category" class="wide" >
 		<?php
 		while( list(,$category) = each($res['category']['user']) )
 		{
@@ -74,7 +74,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	}
 	?></select>
 	<br/>
-	Комментарий: <textarea name="comment" cols="15" rows="3" style="width:100%" inputmode="user" ></textarea><br/>
+	Комментарий: <textarea name="comment" cols="15" rows="3" class="wide" inputmode="user" ></textarea><br/>
 	
 	<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
 </div>
