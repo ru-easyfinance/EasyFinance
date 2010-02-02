@@ -106,6 +106,6 @@ class Helper_Date
 	 */
 	public static function getMysqlFromString( $dateString )
 	{
-		return self::getMysqlDate( strtotime($dateString) );
+		return self::getMysql( strtotime($dateString) );
 	}
 }
