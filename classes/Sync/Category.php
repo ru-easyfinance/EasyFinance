@@ -35,7 +35,32 @@ class Category {
      */
     function CategorySync($cat, $rec, $ch, $del){
         $cate = New SyncCategory_Model($this->db, $this->user);
-        foreach ($rec as $key=>$v){
+
+        $sql = "SELECT ekey FROM records_map WHERE tablename='Accounts' AND remotekey=? AND user_id=?";
+            $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
+            if ( $toChangeRec[0]['ekey'] ){//редактирование
+                $numEkey = $this->findEkey($v['remotekey']);
+                $cate->editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name']);
+            } else {
+                foreach ($cat as $k=>$v){
+                    if ( $v['parent']==0 ){
+                        $categ = $cate->addCategory(0,$cat[$k]['parent'],$cat[$k]['name']);
+                        if ($categ>0)
+                        $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $v['remotekey'], $categ, 1, $this->db);
+                    }
+                }
+                foreach ($cat as $k=>$v){
+                    if ( $v['parent']!=0 ){
+                        $id = $this->findEkey($cat[$k]['parent']);
+                        $categ = $cate->addCategory(0,$id,$cat[$k]['name']);
+                        if ($categ > 0)
+                        $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $v['remotekey'], $categ, 1, $this->db);
+
+                    }
+                }
+            }
+
+        /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Categories"){
                 $ke = $v['remotekey'];
                 $k;
@@ -75,9 +100,9 @@ class Category {
                 }
             }
         }
-        }
+        }*/
 
-        foreach ($ch as $key=>$v){
+        /*foreach ($ch as $key=>$v){
             if ($v['tablename']=="Categories"){
                 $ke = $v['remotekey'];
                 $k;
@@ -89,7 +114,7 @@ class Category {
                 $numEkey = $this->findEkey($ke);
                 $cate->editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name']);
             }
-        }
+        }*/
         foreach ($del as $key=>$v){
             if ($v['tablename']=="Categories"){
                 $ke = $v['remotekey'];
