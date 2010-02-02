@@ -152,11 +152,11 @@ class Info_Model
             ),
             'weight' => 30,
             'min' =>0,
-            'max' =>200//100
+            'max' =>20//100
         ),
         'result' => array(
             'min' => 0,
-            'max' => 100,//300,
+            'max' => 300,//300,
             'red' => array(
                 'text' => 'Вам грозит банкротство. Срочно измените свой подход к финансовым вопросам!'
             ),
@@ -374,18 +374,18 @@ class Info_Model
             $this->output[1]['profit'] = 0;
         }
         //@FIXME Кажется, тут может быть ошибка
-        if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
+        /*if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
             $this->output[1]['budget'] = 10;
         } else if ($this->input['profit'] == 0) {
             $this->output[1]['budget'] = 0;
-        }
-        /*if ($this->input['drain'] != 0 && $this->input['budget'] == 0){
+        }*/
+        if ($this->input['drain'] != 0 && $this->input['budget'] == 0){
             $this->output[1]['budget'] = 100;
         } else if ($this->input['budget'] != 0){
             $this->output[1]['budget'] = $this->input['budget'];
         } else {
             $this->output[1]['budget'] = 0;
-        }*/
+        }
 
         //если 0 то расчет 1 для тахометра "Кредиты" 0
         if ($this->input['loans'] == 0) {
