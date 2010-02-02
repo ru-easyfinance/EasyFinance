@@ -123,8 +123,6 @@ abstract class _Core_Controller
 			$this->tpl->assign('res', $res);
 			return false;
 		}
-
-		$this->tpl->assign('account', Core::getInstance()->user->getUserAccounts());
 		
         // Подготавливаем счета
         $accounts = array();
