@@ -193,9 +193,6 @@ class Info_Model
      */
     private function result()
     {
-        //print '<pre>';
-        //die(print_r($this->input));
-        //die(print_r($this->output));
         if ( $this->input['profit'] == 0 )
             if ( $this->input['drain'] == 0 ){
                 $this->output[6]['result'] = 0;
@@ -216,8 +213,6 @@ class Info_Model
         $des5 = $this->values['drain']['red']['text'];
         if ( $this->output[6]['drain'] >= 5*5) $des5 = $this->values['drain']['yellow']['text'];
         if ( $this->output[6]['drain'] >= 10*5) $des5 = $this->values['drain']['green']['text'];
-    //echo('<pre>');
-    //die(print_r($this->output));
     return array(
             /*'values' => array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
