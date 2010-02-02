@@ -10,8 +10,8 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 <form method="POST">
 <div style="width:100%">
 	<input type="hidden" name="type" value="<?=$res['accounts']?>"></input>
-	<div class="line">Сумма: <br><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /></div>
-	<div class="line">Счёт:<br><select name="account" class="wide">
+	Сумма: <input name="amount" size="15" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /><br />
+	Со счёта: <select name="account" >
 		<?php
 		if( !$accountId || !isset($operation['account']) || !$operation['account'] )
 		{
@@ -26,23 +26,24 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 			value="<?=$account['id']?>"><?=$account['name']?></option><?php
 		}
 		?>
-	</select></div>
-	<div class="line">
-	Категория: <br><select name="category" class="wide" >
+	</select><br/>
+	
+	На цель: <select name="target" >
 		<?php
-		while( list(,$category) = each($res['category']['user']) )
+		if( !isset($operation['target']) || !$operation['target'] )
 		{
-			if( $category['type'] != 1 )// Выводим только универсальные
-			{
-				?><option value="<?=$category['id']?>"
-				<?=(isset($operation['category']) && $operation['category'] == $category['id'])?"selected='selected'":''?>
-				><?=$category['name']?></option>
-				<?php
-			}
+			?><option value="0">-</option><?php
+		}
+		
+		while ( list(,$target) = each($res['user_targets']))
+		{
+			?><option 
+			<?=( isset($operation['target']) && $target['id'] == $operation['target'] )?'selected="selected"':''?>
+			value="<?=$target['id']?>"><?=$target['title']?></option><?php
 		}
 		?>
-	</select></div>
-	<div class="line">
+	</select><br/>
+	
 	Дата: <select name="date[day]"><?php
 	for( $day = 1; $day <= 31; $day++ )
 	{
@@ -63,10 +64,9 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 		?><option <?=($year==date('Y'))?'selected="selected"':''?>
 		><?=$year?></option><?php
 	}
-	?></select></div>
-	<div class="line">
-	Комментарий: <textarea name="comment" cols="15" rows="3" class="wide" inputmode="user" ></textarea><br/>
-	</div>
+	?></select>
+	<br/>
+	Комментарий: <textarea name="comment" cols="15" rows="3" style="width:100%" inputmode="user" ></textarea><br/>
 	
 	<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
 </div>
