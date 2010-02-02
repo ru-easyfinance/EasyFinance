@@ -1,20 +1,13 @@
 <?php
 
-class _Core_TemplateEngine_Native
+class _Core_TemplateEngine_Json
 {
-	protected $baseDir = '';
 	protected $assignedVars = array();
 	
-	public function __construct( $templatesBaseDir, array $assignedVars = array() )
+	protected $excludedVars = array();
+	
+	public function __construct()
 	{
-		if( !file_exists( $templatesBaseDir ) )
-		{
-			throw new _Core_TemplateEngine_Exception( 'Directory "' . $templatesBaseDir . '" specified as base for templates not exist!' );
-		}
-		
-		$this->baseDir = $templatesBaseDir;
-		
-		$this->assignedVars = $assignedVars;
 	}
 	
 	public function assign( $variable, $value )
@@ -25,9 +18,14 @@ class _Core_TemplateEngine_Native
 			throw new _Core_Exception('Multiple variables assign not supported anymore!');
 		}
 		else
-		{
+		{			
 			$this->assignedVars[ $variable ] = $value;
 		}
+	}
+	
+	public function excludeFromOutput( array $varsArray )
+	{
+		$this->excludedVars += array_flip($varsArray);
 	}
 	
 	public function append( $variable, $value, $merge=false )
@@ -49,17 +47,12 @@ class _Core_TemplateEngine_Native
 		$this->assignedVars[$variable][] = $value;
 	}
 	
-	public function display( $template )
+	public function display()
 	{
-		$templateFileName = $this->baseDir . $template;
+		//echo '<pre>' . print_r($this->excludedVars,true);
 		
-		if( !file_exists( $templateFileName ) )
-		{
-			throw new _Core_TemplateEngine_Exception('Template "' . $templateFileName . '" not found !');
-		}
+		//echo '<pre>' . print_r(array_diff_key($this->assignedVars, $this->excludedVars),true);
 		
-		extract( $this->assignedVars );
-		
-		include( $templateFileName );
+		echo json_encode( array_diff_key($this->assignedVars, $this->excludedVars) );
 	}
 }
