@@ -82,7 +82,7 @@ class Info_Model
             ),
             'weight' => 35,
             'min' => 0,
-            'max' => 6
+            'max' => 100//6
         ),
         'budget' => array(
             'red' => array(
@@ -152,11 +152,11 @@ class Info_Model
             ),
             'weight' => 30,
             'min' =>0,
-            'max' =>20//100
+            'max' =>200//100
         ),
         'result' => array(
             'min' => 0,
-            'max' => 300,
+            'max' => 100,//300,
             'red' => array(
                 'text' => 'Вам грозит банкротство. Срочно измените свой подход к финансовым вопросам!'
             ),
@@ -216,7 +216,9 @@ class Info_Model
         $des5 = $this->values['drain']['red']['text'];
         if ( $this->output[6]['drain'] >= 5*5) $des5 = $this->values['drain']['yellow']['text'];
         if ( $this->output[6]['drain'] >= 10*5) $des5 = $this->values['drain']['green']['text'];
-        return array(
+    //echo('<pre>');
+    //die(print_r($this->output));
+    return array(
             /*'values' => array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
                 , round(@$this->output[6]['profit'])    //Деньги
@@ -382,6 +384,13 @@ class Info_Model
         } else if ($this->input['profit'] == 0) {
             $this->output[1]['budget'] = 0;
         }
+        /*if ($this->input['drain'] != 0 && $this->input['budget'] == 0){
+            $this->output[1]['budget'] = 100;
+        } else if ($this->input['budget'] != 0){
+            $this->output[1]['budget'] = $this->input['budget'];
+        } else {
+            $this->output[1]['budget'] = 0;
+        }*/
 
         //если 0 то расчет 1 для тахометра "Кредиты" 0
         if ($this->input['loans'] == 0) {
@@ -762,7 +771,7 @@ class Info_Model
         if (($this->output[4]['profit'] * $this->values['profit']['weight']) < 0) {
             $this->output[5]['profit'] = 0;
         } else {
-            $this->output[5]['profit'] = ($this->output[3]['profit'] * $this->values['profit']['weight']);
+            $this->output[5]['profit'] = ($this->output[4]['profit'] * $this->values['profit']['weight']);
         }
 
 //    =IF(((M11*P11))<0;
