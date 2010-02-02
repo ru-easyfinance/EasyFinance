@@ -40,11 +40,29 @@ easyFinance.models.currency = function(){
         return _data[id] ? _data[_defaultCurrencyId].text : '';
     }
 
+    /**
+     * Сохраняет валюты пользователя
+     * @param saveData {obj}
+     * @param calback {fn}
+     * @return void
+     */
+    function setCurrency(saveData, calback){
+        $.post('/profile/save_currency/', 
+            saveData,
+            function(data){
+                init(saveData);
+                if (typeof(calback) == 'function'){
+                    calback(data);
+                }
+        },
+        'json');
+    }
+
     return {
         init : init,
         getDefaultCurrency : getDefaultCurrency,
         getCurrencyById : getCurrencyById,
         getCurrencyNameById : getCurrencyNameById,
         getCurrencyTextById :getCurrencyTextById
-    }
-}
+    };
+};

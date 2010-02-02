@@ -1,10 +1,10 @@
 easyFinance.models.user = function(){
-    var _data = data
+    var _data;
     /**
      * Инициирует модель из реса - пока не реализовано со стороны сервера
      */
     function init(data){
-        data = _data;
+        _data = data;
     }
     /**
      * Перезагружает данные пользователя
@@ -107,4 +107,4 @@ easyFinance.models.user = function(){
     function isUsedTooltip(){
         return _data.tooltip ? true : false;
     }
-}
+};
