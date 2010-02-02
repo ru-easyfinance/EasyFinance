@@ -63,24 +63,27 @@ easyFinance.models.user = function(){
     /**
      * Сохраняет пользовательскую информацию
      * @param data {obj}
+     * @param calback {function}
      * @return void
      */
-    function setUserInfo(data){
-        $.post('/profile/save_main_settings/',
-            {
-                getNotify: data.getNotify || '',
-                login: data.login || '',
-                pass: data.password || '',
-                newpass: data.newPassword || '',
-                confirmpass: data.confirmPassword || '', //@todo server will be add confirm pasword
-                mail: data.mail || ''},
-            function() {
-                $.cookie('tooltip', data.tooltip, {expire: 100, path : '/', domain: false, secure : '1'});
-                $.cookie('guide', data.guide, {expire: 100, path : '/', domain: false, secure : '1'});//@todo server will not write cookie
-                $.cookie('activelisting', data.activeInsertInLeftPanel, {expire: 100, path : '/', domain: false, secure : '1'});
-                $.jGrowl("Личные данные сохранены", {theme: 'green'});
-            },
-            'json');
+    function setUserInfo(data, calback){
+        if(typeof(data) == 'object'){
+            $.cookie('tooltip', (data.tooltip || null), {expire: 100, path : '/', domain: false, secure : '1'});
+            $.cookie('guide', (data.guide || null), {expire: 100, path : '/', domain: false, secure : '1'});//@todo server will not write cookie
+            $.cookie('activelisting', (data.activeInsertInLeftPanel || null), {expire: 100, path : '/', domain: false, secure : '1'});
+            $.post('/profile/save_main_settings/',
+                {
+                    getNotify: data.getNotify || '',
+                    login: data.login || '',
+                    pass: data.password || '',
+                    newpass: data.newPassword || '',
+                    confirmpass: data.confirmPassword || '', //@todo server will be add confirm pasword
+                    mail: data.mail || ''},
+                function(data) {
+                    calback(data);
+                },
+                'json');
+        }
     }
     /**
      * Устанавливает значение активной вкладки на левой панели
@@ -88,7 +91,7 @@ easyFinance.models.user = function(){
      * @return void
      */
     function setActiveInsertInLeftPanel(data){
-        $.cookie('activelisting', data, {expire: 100, path : '/', domain: false, secure : '1'});
+        $.cookie('activelisting', (data || null), {expire: 100, path : '/', domain: false, secure : '1'});
     }
     /**
      * Возвращает факт показывания гида
