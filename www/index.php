@@ -30,10 +30,11 @@ if (Core::getInstance()->user->getId()) {
 //Выводим страницу в браузер
 switch ( $_SERVER['HTTP_HOST'].'/' ) {
     case URL_ROOT_IFRAME:
-        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) )){
+        if (( substr($_SERVER['REQUEST_URI'],0,7) == "/login/") && ( $_GET['refer'] == 'azbuka' ) && ( isset($_GET['id_ef']) && ( isset($_GET['session_key'])) )){
             $ch = curl_init();
             $id = $_GET['id_ef'];
-            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/confirmmail.php?ef_id=".$id);
+            $sessKey = $_GET['session_key'];
+            curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/confirmmail.php?session_key=".$sessKey);
 
             $azbukaMail = curl_exec($ch);//запрашиваем почту юзера если он залогинен
 
