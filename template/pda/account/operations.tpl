@@ -5,7 +5,8 @@
 	<?=$res['currency'][ $res['accounts'][ $accountId]['currency'] ]['text']?>
 </strong>
 <p>
-<a href="account/1/edit">редактировать счёт</a> | <a href="account/1/add">добавить операцию</a></p>
+<a href="account/1/edit">редактировать счёт</a> |
+<a href="/operation/add/waste?accountId=<?=$accountId?>">добавить операцию</a></p>
 <br/>
 <table border="1" width="100%"><tbody>
 	<?php
