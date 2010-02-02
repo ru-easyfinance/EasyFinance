@@ -21,8 +21,8 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 <form method="POST">
 <div style="width:100%">
 	<input type="hidden" name="type" value="<?=$res['accounts']?>"></input>
-	Сумма: <br><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /><br />
-	Счёт:<br><select name="account" class="wide">
+	<div class="line">Сумма: <br><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /></div>
+	<div class="line">Счёт:<br><select name="account" class="wide">
 		<?php
 		if( !$accountId || !isset($operation['account']) || !$operation['account'] )
 		{
@@ -37,7 +37,8 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 			value="<?=$account['id']?>"><?=$account['name']?></option><?php
 		}
 		?>
-	</select><br/>
+	</select></div>
+	<div class="line">
 	Категория: <br><select name="category" class="wide" >
 		<?php
 		while( list(,$category) = each($res['category']['user']) )
@@ -51,7 +52,8 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 			}
 		}
 		?>
-	</select><br />
+	</select></div>
+	<div class="line">
 	Дата: <select name="date[day]"><?php
 	for( $day = 1; $day <= date("t"); $day++ )
 	{
@@ -72,9 +74,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 		?><option <?=($year==date('Y'))?'selected="selected"':''?>
 		><?=$year?></option><?php
 	}
-	?></select>
-	<br/>
+	?></select></div>
+	<div class="line">
 	Комментарий: <textarea name="comment" cols="15" rows="3" class="wide" inputmode="user" ></textarea><br/>
+	</div>
 	
 	<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
 </div>
