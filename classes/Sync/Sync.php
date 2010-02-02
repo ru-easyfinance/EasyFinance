@@ -130,6 +130,8 @@ class Sync{
         $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         $operation = new Operation($this->user, $this->db);
         $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation2 = new Operation($this->user, $this->db);
+        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$transfer = new Transfer($this->user, $this->db);
         //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$plans = new Periodic($this->user, $this->db);
@@ -188,6 +190,8 @@ class Sync{
         }
         // парсим полученную строку и загоняем её в массив
         $this->parsing();
+        //echo('<pre>');
+        //die(print_r($this->CategoriesList));
         //$this->WriteTest();//вывод распарсенных значений
         
         //разбор распарсенных значений и формирование результирующей xml.
@@ -200,6 +204,8 @@ class Sync{
         $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         $operation = new Operation($this->user, $this->db);
         $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation2 = new Operation($this->user, $this->db);
+        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$transfer = new Transfer($this->user, $this->db);
         //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$plans = new Periodic($this->user, $this->db);
