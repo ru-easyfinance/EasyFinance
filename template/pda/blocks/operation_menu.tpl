@@ -9,7 +9,7 @@ a.current{
 	<a href="/operation/add/waste" class="<?=($operationType == 0)?'current':''?>">расход</a> |
 	<a href="/operation/add/profit" class="<?=($operationType == 1)?'current':''?>">доход</a> |
 	<a href="/operation/add/transfer" class="<?=($operationType == 2)?'current':''?>">перевод</a> |
-	<a href="/operation/add/target" class="<?=($operationType == 4)?'current':''?>">фин. цель</a>
+	<a href="/operation/add/target" class="<?=($operationType == 4)?'current':''?>">цель</a>
 </p>
 <?php
 if( isset($error) && is_array($error) && array_key_exists( 'text', $error ) )
