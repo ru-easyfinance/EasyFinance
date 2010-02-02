@@ -34,7 +34,7 @@ class Operation2 {
      * @param array $ch
      * @param array $del
      */
-    function OperationSync($op, $rec, $ch, $del){
+    function OperationSync($op, $rec, $ch, $del, &$data){
         $opw = New SyncOperation_Model($this->db, $this->user);
         foreach($op as $k=>$v) {
             $sql = "SELECT ekey FROM records_map WHERE tablename='Outcomes' AND remotekey=? AND user_id=?";
@@ -53,6 +53,13 @@ class Operation2 {
                 $oper = $opw->addOperation(0, $eacc, 0, $op[$k]['date'], $ecat, '-'.$op[$k]['amount'], $op[$k]['descr']);
                 if ($oper>0)
                     $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Outcomes', $v['remotekey'], $oper, 1, $this->db);
+                $data[1][0]['type'] = 'service';
+                $data[1][0]['name'] = 'RecordsMap';
+                $data[1][] = array(
+                    'tablename' => 'Outcomes',
+                    'kkey' => (int)$v['remotekey'],
+                    'ekey' => (int)$oper,
+                );
         }
         /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Incomes"){

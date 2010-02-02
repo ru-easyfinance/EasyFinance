@@ -29,6 +29,23 @@ class SyncTransfer_Model {
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user, $amount, $date, 0, $acc_from, 1,
             $descr, $acc_to);
+
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+        $this->db->query($sql, $this->user, -$amount, $date, 0, $acc_from, 1,
+            $descr, $acc_to);
+
+            $last_id = mysql_insert_id();
+
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $this->db->query($sql, $this->user, $amount, $date, 0, $acc_to, $last_id,
+            $descr, $acc_from, $amount);
+            $last_id2 = mysql_insert_id();
+
         return mysql_insert_id();
     }
     /**

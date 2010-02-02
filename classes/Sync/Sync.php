@@ -122,18 +122,18 @@ class Sync{
         $this->parsing();
 
         $account = new Account($this->user, $this->db);
-        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $debet = new Debet($this->user, $this->db);
-        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
 
         $category = new Category($this->user, $this->db);
-        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $operation = new Operation($this->user, $this->db);
-        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $operation2 = new Operation($this->user, $this->db);
-        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        //$transfer = new Transfer($this->user, $this->db);
-        //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
+        $transfer = new Transfer($this->user, $this->db);
+        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         //$plans = new Periodic($this->user, $this->db);
         //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
@@ -196,18 +196,18 @@ class Sync{
         
         //разбор распарсенных значений и формирование результирующей xml.
         $account = new Account($this->user, $this->db);
-        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $debet = new Debet($this->user, $this->db);
-        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
 
         $category = new Category($this->user, $this->db);
-        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $operation = new Operation($this->user, $this->db);
-        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $operation2 = new Operation($this->user, $this->db);
-        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        //$transfer = new Transfer($this->user, $this->db);
-        //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
+        $transfer = new Transfer($this->user, $this->db);
+        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         //$plans = new Periodic($this->user, $this->db);
         //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
@@ -216,7 +216,7 @@ class Sync{
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
         $operation->FormArray($this->lastsync, $this->dataarrayE);
-        //$transfer->FormArray($this->lastsync, $this->dataarrayE);
+        $transfer->FormArray($this->lastsync, $this->dataarrayE);
         $debet->FormArray($this->lastsync, $this->dataarrayE);
         //$plans->FormArray($this->lastsync, $this->dataarrayE);
         $currency = new Currency($this->user, $this->db);
@@ -235,7 +235,6 @@ class Sync{
             ,'Plans' => $this->dataarrayE[11]
             );
         $ret = $this->dataarrayE;
-        //die(print_r('jewkfjwk'));
         $a = php_xmlrpc_encode($ret);
         return $a;
     }

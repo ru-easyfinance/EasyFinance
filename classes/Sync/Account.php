@@ -32,7 +32,7 @@ class Account {
      * @param <array> $ch
      * @param <array> $del
      */
-    function AccountSync($acc, $rec, $ch, $del){
+    function AccountSync($acc, $rec, $ch, $del, &$data){
         $acco = New SyncAccount_Model($this->db,$this->user);
         $op = New SyncOperation_Model($this->db, $this->user);
         foreach($acc as $k=>$v){
@@ -46,6 +46,13 @@ class Account {
                 if ($accou > 0){
                     $oper = $op->addOperation(0, $accou, 0, $acc[$k]['date'], 0, $acc[$k]['startbalance'], 'Начальный остаток');
                     $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Accounts', $v['remotekey'], $accou, 1, $this->db);
+                    $data[1][0]['type'] = 'service';
+                    $data[1][0]['name'] = 'RecordsMap';
+                    $data[1][] = array(
+                        'tablename' => 'Accounts',
+                        'kkey' => (int)$v['remotekey'],
+                        'ekey' => (int)$accou,
+                    );
                 }
             }
         }

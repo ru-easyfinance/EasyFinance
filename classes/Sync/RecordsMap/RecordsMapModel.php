@@ -27,7 +27,7 @@ class RecordsMap_Model {
      * @return bool
      */
     function DelRecordsMapString($us, $tablename, $remkey, $system, $db){
-        echo ($tablename.$remkey.$system.$us);
+        //echo ($tablename.$remkey.$system.$us);
         $sql = "DELETE FROM records_map WHERE user_id=? AND tablename=? AND remotekey=? AND system=?";
         return $db->query($sql, $us, $tablename, $remkey, $system);
     }
@@ -49,7 +49,7 @@ class RecordsMap_Model {
                     $data[1][0]['type'] = 'service';
                     $data[1][0]['name'] = 'RecordsMap';
                     $data[1][$k+1]['tablename'] = $v['tablename'];
-                    $data[1][$k+1]['remotekey'] = (int)$v['remotekey'];
+                    $data[1][$k+1]['kkey'] = (int)$v['remotekey'];
                     $data[1][$k+1]['ekey'] = (int)$v['ekey'];
                     continue;
                 }
@@ -76,7 +76,7 @@ class RecordsMap_Model {
                 $data[2][0]['name'] = 'DeletedRecords';
 
                 $data[2][]['tablename'] = $v['tablename'];
-                $data[2][]['remotekey'] = (int)$v['remotekey'];
+                $data[2][]['kkey'] = (int)$v['remotekey'];
                 // удаляем из рекордс меп и записываем в делетедрекордс,
                 //чтобы удалённый юзер тоже удалил соответствующие данные
             }else{

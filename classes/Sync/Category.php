@@ -33,7 +33,7 @@ class Category {
      * @param array $ch
      * @param array $del
      */
-    function CategorySync($cat, $rec, $ch, $del){
+    function CategorySync($cat, $rec, $ch, $del, &$data){
         $cate = New SyncCategory_Model($this->db, $this->user);
 
         foreach ($cat as $k=>$v){
@@ -48,6 +48,13 @@ class Category {
                         $categ = $cate->addCategory(0,$cat[$k]['parent'],$cat[$k]['name']);
                         if ($categ>0)
                         $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $v['remotekey'], $categ, 1, $this->db);
+                        $data[1][0]['type'] = 'service';
+                        $data[1][0]['name'] = 'RecordsMap';
+                        $data[1][] = array(
+                            'tablename' => 'Categories',
+                            'kkey' => (int)$v['remotekey'],
+                            'ekey' => (int)$categ,
+                        );
                     }
                 }
                 foreach ($cat as $k=>$v){
@@ -56,7 +63,13 @@ class Category {
                         $categ = $cate->addCategory(0,$id,$cat[$k]['name']);
                         if ($categ > 0)
                         $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $v['remotekey'], $categ, 1, $this->db);
-
+                        $data[1][0]['type'] = 'service';
+                        $data[1][0]['name'] = 'RecordsMap';
+                        $data[1][] = array(
+                            'tablename' => 'Categories',
+                            'kkey' => (int)$v['remotekey'],
+                            'ekey' => (int)$categ,
+                        );
                     }
                 }
             }

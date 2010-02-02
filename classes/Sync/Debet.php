@@ -30,7 +30,7 @@ class Debet {
      * @param array $ch
      * @param array $del
      */
-    function DebetSync($acc, $rec, $ch, $del){
+    function DebetSync($acc, $rec, $ch, $del, &$data){
         $acco = New SyncDebet_Model($this->db, $this->user);
         $op = New SyncOperation_Model($this->db, $this->user);
 
@@ -46,6 +46,13 @@ class Debet {
                 if ($accou > 0){
                     $oper = $op->addOperation(0, $accou, 0, $acc[$k]['date'], 0, '-'.$acc[$k]['amount'], 'Начальный остаток');
                     $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Debets', $v['remotekey'], $accou, 1, $this->db);
+                    $data[1][0]['type'] = 'service';
+                    $data[1][0]['name'] = 'RecordsMap';
+                    $data[1][] = array(
+                        'tablename' => 'Debets',
+                        'kkey' => (int)$v['remotekey'],
+                        'ekey' => (int)$accou,
+                    );
                 }
             }
         }
