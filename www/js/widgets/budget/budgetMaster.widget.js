@@ -165,7 +165,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             }
             var id = $(parent).attr('id').toString().replace(/[^0-9]/gi,'');
             var val = $(this).val().toString().replace(/[^0-9\.]/,'','gi');
-            if (!isNaN(val) && val > 0){
+            if (!isNaN(val)){
                 if ($(parent).closest('.step').attr('id') == 'step2'){
                     tmp.step2+= '{"'+id+'": "'+val+'"},';
                 }else{
