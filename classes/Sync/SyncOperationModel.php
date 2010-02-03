@@ -60,7 +60,7 @@ class SyncOperation_Model {
      * @param array $data
      */
     function formOperation($date='', &$data=''){
-        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
+        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id is null AND drain = 0 AND date!='0000-00-00' AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $this->db->query($sql, $this->user);
         //echo($a[0]['cat_name']);
         foreach ($a as $key=>$v) /*if ($v['comment']<>'Начальный остаток')*/{
