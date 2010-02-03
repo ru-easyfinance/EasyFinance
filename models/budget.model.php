@@ -160,6 +160,7 @@ class Budget_Model {
     function add($data, $date)
     {
         $sql = '';
+        $delsql = '';
         $cat = Core::getInstance()->user->getUserCategory();
         foreach ($data as $key => $value) {
             if ((string)$key == 'd') {
@@ -172,12 +173,24 @@ class Budget_Model {
                 if ($cat[$k]['type'] == 0 || ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
 
                         $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
-                        if (!empty ($sql)) $sql .= ',';
-                        $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
-                            $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+                        
+                        if ( $v ) {
+                            if (!empty ($sql)) $sql .= ',';
+                            $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
+                                $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+                        } elseif ( $v == 0 ) {
+                            if (!empty($delsql)) $delsql .= ',';
+                            $delsql .= "'$key'";
+                        }
                 }
             }
         }
+
+        if ( !( empty ($delsql) ) ) {
+            $delsql = "DELETE FROM `budget` WHERE `key` IN (" . $delsql . ")";
+            $this->db->query($delsql);
+        }
+
         if (!empty ($sql)) {
             $sql = "REPLACE INTO budget (`user_id`,`category`,`drain`,
                 `amount`,`date_start`,`date_end`,`dt_create`,`key`) VALUES " . $sql;
@@ -186,6 +199,7 @@ class Budget_Model {
             Core::getInstance()->user->save();
             return array('result' => array('text' => ''));
         }
+
         return array(
             'error' => array(
                 'text' => 'Ничего не добавлено'
@@ -246,8 +260,8 @@ class Budget_Model {
     function del($category, $date, $type)
     {
         $sql = "DELETE FROM budget WHERE `key` = ?";
-        $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
-        if (!@$this->db->query($sql, $value, $key)) {
+        $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . '-' . $date;
+        if (!@$this->db->query($sql, $key)) {
             Core::getInstance()->user->initUserBudget();
             Core::getInstance()->user->save();
             return array(
