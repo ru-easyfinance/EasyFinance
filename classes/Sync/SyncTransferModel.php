@@ -88,6 +88,7 @@ class SyncTransfer_Model {
             $data[5][$key+1]['amount'] = (double)$a[$key]['money'];
             $data[5][$key+1]['acto'] = (int)$a[$key]['account_id'];
             $data[5][$key+1]['descr'] = $a[$key]['comment'];
+            $data[5][$key+1]['amountfrom'] = ( $a[$key]['exchange_rate']!=0 ? (double)( $a[$key]['money'] / $a[$key]['exchange_rate']) : (double)$a[$key]['money']);
 
 
             //добавление в рекордс меп.
