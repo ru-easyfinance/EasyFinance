@@ -3,7 +3,7 @@ easyFinance.models.user = function(){
     /**
      * Инициирует модель из реса - пока не реализовано со стороны сервера
      */
-    function init(data){
+    function load(data){
         _data = data;
     }
     /**

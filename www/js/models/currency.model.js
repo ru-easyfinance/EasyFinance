@@ -4,7 +4,7 @@ easyFinance.models.currency = function(){
      * Инициирует модель валют
      * @param data == res.currency
      */
-    function init(data){
+    function load(data){
         _data = data;
         _defaultCurrencyId = data['default'];
     }
@@ -59,7 +59,7 @@ easyFinance.models.currency = function(){
     }
 
     return {
-        init : init,
+        load : load,
         getDefaultCurrency : getDefaultCurrency,
         getCurrencyById : getCurrencyById,
         getCurrencyNameById : getCurrencyNameById,

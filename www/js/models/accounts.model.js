@@ -84,6 +84,13 @@ easyFinance.models.accounts = function(){
             return null;
     }
 
+    function getAccountCurrency(id){
+        if (_accounts && _accounts[id])
+            return res.currency[_accounts[id]["currency"]];
+        else
+            return null;
+    }
+
     function getAccountIdByName(name){
         if (!_accounts)
             return null;
@@ -284,6 +291,7 @@ easyFinance.models.accounts = function(){
         getAccountNameById: getAccountNameById,
         getAccountIdByName: getAccountIdByName,
         getAccountType: getAccountType,
+        getAccountCurrency: getAccountCurrency,
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,
         addAccount: addAccount,
