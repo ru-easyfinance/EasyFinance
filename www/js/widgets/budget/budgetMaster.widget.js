@@ -174,9 +174,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             }
         });
         var ret = '{"d": ['+tmp.step3+'], "p": ['+tmp.step2+']}';
-//        while(ret.indexOf('},]') != -1){
-            ret = ret.replace('},]', '}]', 'gi');
-//        }
+        while(ret.indexOf('},]') != -1){
+            ret = ret.replace('},]', '}]');
+        }
         return ret;
     }
     /**
