@@ -29,7 +29,7 @@ class Currency {
 
         foreach ($li as $key=>$v){
             $data[7][0]['tablename'] = 'Currencies';
-                $data[7][$key+1]['ekey'] = $v['cur_id'];
+                $data[7][$key+1]['ekey'] = $v['id'];
                 $data[7][$key+1]['charCode'] = $v['charCode'];
         }
     }
