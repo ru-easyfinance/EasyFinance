@@ -100,7 +100,8 @@ class Sync{
 
     function getDate(){
         //возвращает время последней синхронизации
-        return date("Y:m:d H:i:s");
+        $a = (date("Ymd His"));
+        return ( substr($a,0,8) . 'T' . substr($a,9,6) );
     }
 
     function writeDataAndAnswerRec($xmlReq=''){
@@ -234,7 +235,7 @@ class Sync{
             ,'Outcomes' => $this->dataarrayE[10]
             ,'Plans' => $this->dataarrayE[11]
             );
-        $ret = $this->dataarrayE;
+        //$ret = $this->dataarrayE;
         $a = php_xmlrpc_encode($ret);
         return $a;
     }
