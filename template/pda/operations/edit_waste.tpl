@@ -8,8 +8,8 @@ if( isset(_Core_Request::getCurrent()->get['accountId']) )
 
 $this->display( 'blocks/operation_menu.tpl' ) ?>
 <form method="POST">
-<div style="width:100%">
-	<input type="hidden" name="type" value="<?=$res['accounts']?>"></input>
+<div class="wide">
+	<input type="hidden" name="id" value=""></input>
 	<div class="line">Сумма: <br><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /></div>
 	<div class="line">Счёт:<br><select name="account" class="wide">
 		<?php
@@ -32,7 +32,7 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 		<?php
 		while( list(,$category) = each($res['category']['user']) )
 		{
-			if( $category['type'] != 1 )// Выводим только универсальные
+			if( $category['type'] != 1 )// Выводим только расходные и универсальные
 			{
 				?><option value="<?=$category['id']?>"
 				<?=(isset($operation['category']) && $operation['category'] == $category['id'])?"selected='selected'":''?>

@@ -1,9 +1,3 @@
-<style type="text/css">
-a.current{
-	font-weight: bold;
-	text-decoration: none;
-}
-</style>
 <p><strong>Добавление операции</strong></p>
 <p class="menu">
 	<a href="/operation/add/waste" class="<?=($operationType == 0)?'current':''?>">расход</a> |
