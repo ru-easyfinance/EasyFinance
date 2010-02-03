@@ -675,7 +675,7 @@ class Operation_Model {
 			$currentAccount, $this->user->getId(), $dateFrom, $dateTo);
 		
 		// Добавляем данные, которых не хватает
-		foreach ($operations as $operationId => $operation)
+		foreach ($operations as $key => $operation)
 		{
 			if ( $operation['type'] <= 1 )
 			{
@@ -684,9 +684,18 @@ class Operation_Model {
 				$operation['cat_parent']		= @$categorys[ $operation['cat_id'] ]['cat_parent'];
 			}
 			
-			$operation['account_name'] 	= $accounts[ $operation['account_id'] ]['account_name'];
-                        
-			$operation['account_currency_id'] = $accounts[ $operation['account_id'] ]['account_currency_id'];
+			//Если счёт операции существует
+			if( array_key_exists( $operation['account_id'], $accounts ) )
+			{
+				$operation['account_name'] 	= $accounts[ $operation['account_id'] ]['account_name'];
+				$operation['account_currency_id'] = $accounts[ $operation['account_id'] ]['account_currency_id'];
+			}
+			// Если нет - удаляем из вывода
+			else
+			{
+				unset( $operations[ $key ] );
+				continue;
+			}
 			
 			//хак для журнала операций. присылаю tr_id = null для не переводов
 			if ( (int)$operation['tr_id'] == 0 && (int)$operation['transfer'] == 0 )
@@ -694,26 +703,28 @@ class Operation_Model {
 				$operation['tr_id'] = null;
 			}
 			
-	            //если фин цель то перезаписываем тот null что записан.
-	            if (($operation['virt']) == 1){
-	                $operation['account_currency_id'] = $accounts[$operation['account_id']]['account_currency_id'];
-	                if (($operation['cat_id']) == 1)
-	                    $operation['cat_name'] = "Квартира";
-	                if (($operation['cat_id']) == 2)
-	                    $operation['cat_name'] = "Автомобиль";
-	                if (($operation['cat_id']) == 3)
-	                    $operation['cat_name'] = "Отпуск";
-	                if (($operation['cat_id']) == 4)
-	                    $operation['cat_name'] = "Фин.подушка";
-	                if (($operation['cat_id']) == 5)
-	                    $operation['cat_name'] = "Свадьба";
-	                if (($operation['cat_id']) == 6)
-	                    $operation['cat_name'] = "Быт. техника";
-	                if (($operation['cat_id']) == 7)
-	                    $operation['cat_name'] = "Компьютер";
-	                if (($operation['cat_id']) == 8)//*/
-	                    $operation['cat_name'] = "Прочее";
-	            }
+			//если фин цель то перезаписываем тот null что записан.
+			if (($operation['virt']) == 1)
+			{
+				$operation['account_currency_id'] = $accounts[$operation['account_id']]['account_currency_id'];
+				
+				if ($operation['cat_id'] == 1)
+					$operation['cat_name'] = "Квартира";
+				if ($operation['cat_id'] == 2)
+					$operation['cat_name'] = "Автомобиль";
+				if ($operation['cat_id'] == 3)
+					$operation['cat_name'] = "Отпуск";
+				if ($operation['cat_id'] == 4)
+					$operation['cat_name'] = "Фин.подушка";
+				if ($operation['cat_id'] == 5)
+					$operation['cat_name'] = "Свадьба";
+				if ($operation['cat_id'] == 6)
+					$operation['cat_name'] = "Быт. техника";
+				if ($operation['cat_id'] == 7)
+					$operation['cat_name'] = "Компьютер";
+				if (($operation['cat_id']) == 8)
+					$operation['cat_name'] = "Прочее";
+			}
 			//@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
 			if ( $operation['transfer'] )
@@ -725,7 +736,7 @@ class Operation_Model {
 				}
 			}
 			
-			$operations[$operationId] 	= $operation;
+			$operations[$key] 	= $operation;
 		}
 		
 		$retoper = array();
