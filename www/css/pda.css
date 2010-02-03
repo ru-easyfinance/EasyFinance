@@ -46,9 +46,18 @@ img {
 	border: 0;
 }
 
-p.menu {
+.menu {
 	margin-top: 4px;
 	margin-bottom: 4px;
+}
+
+.topmenu {
+	font-size: smaller;
+	margin-bottom:10px;
+}
+
+.topmenu td {
+	text-align: center;
 }
 
 div.line {
