@@ -347,16 +347,17 @@ easyFinance.widgets.operationEdit = function(){
 
                         t = parseInt($("#op_target :selected").attr("target_account_id"));
 
-                        $("span.op_currency").each(function(){
-                            if (t != 0){
+                        //$("span.op_currency").each(function(){
+                        //    if (t != 0){
                                 //$(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
-                            }
-                        });
+                        //    }
+                        //});
 
-                        $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
-                        $("#op_amount_target").text(formatCurrency($("#op_target :selected").attr("amount")));
-                        $("#op_percent_done").text(formatCurrency($("#op_target :selected").attr("percent_done")));
-                        $("#op_forecast_done").text(formatCurrency($("#op_target :selected").attr("forecast_done")));
+                        var option = _sexyTarget.options.filter('[value="' + _selectedTarget + '"]').eq(0);
+                        $("#op_amount_done").text(formatCurrency(option.attr("amount_done")));
+                        $("#op_amount_target").text(formatCurrency(option.attr("amount")));
+                        $("#op_percent_done").text(formatCurrency(option.attr("percent_done")));
+                        $("#op_forecast_done").text(formatCurrency(option.attr("forecast_done")));
                     }
                 });
             }
