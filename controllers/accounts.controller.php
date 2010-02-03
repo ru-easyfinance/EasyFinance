@@ -162,32 +162,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         $accountCollection = new Account_Collection();
         //$accountCollection->load( Core::getInstance()->user );
 
-        /*$params = array (
-            'id'         => '12',
-            'name'       => 'Метааллл',
-            'comment'    => 'не в деревянных же держать',
-            'yearPercent'=> '13',
-            'bank'       => 'Raffaisen',
-            'currency'   => '1',
-            'type'       => '10',
-            'typeMetal'  => 'Золото',
-            'dateGet'    => '17.12.2009',
-            'dateOff'    => '21.12.2009',
-            'dateOpen'   => '16.12.2009',
-            'typePayment'=> '2',
-            'support'    => 'юзайте сапорт'
-        );*/
-
-
-        //$params = $_POST;
-        //$account = Account::load($params);
-        //$account->delete($user, $params);
-        //$account->create($user, $params);
-        //$account->update($user, $params);
-        //$accountCollection->add($account);//*/
         $acc = $accountCollection->load($user);
-        //$acc_id = $params['id'];
-        //$accountCollection->loadOneAcc($acc_id);
 
         die ( json_encode (  ( $acc ) ) );
     }
