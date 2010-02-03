@@ -77,7 +77,7 @@ class SyncTransfer_Model {
      * @param string $date
      * @param array $data
      */
-    function formTransfer($date='', &$data=''){
+    function formTransfer($date='', &$data=''){ 
         $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id>0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $this->db->query($sql, $this->user);
         foreach ($a as $key=>$v){
