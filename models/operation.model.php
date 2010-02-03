@@ -517,7 +517,6 @@ class Operation_Model {
         $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
            m.`cat_id`, m.`bill_id`, c.`cat_name`, b.`bill_name`, m.`drain`, m.`comment`,
            b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
-           bt.`bill_name` as `cat_transfer`
         FROM `money` m
         LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
         LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
@@ -641,12 +640,15 @@ class Operation_Model {
 			WHERE t.user_id = " . Core::getInstance()->user->getId() 
 			. " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
 			
-            if((int)$currentAccount > 0) {
-                $sql .= " AND t.bill_id = '{$currentAccount}' ";
-            }
-            if (!empty($currentCategory)) {
-                $sql .= " AND 0 = 1 "; // Не выбираем эти операции, т.к. у финцелей свои категории
-            }
+		if((int)$currentAccount > 0)
+		{
+			$sql .= " AND t.bill_id = '{$currentAccount}' ";
+		}
+		if (!empty($currentCategory))
+		{
+			$sql .= " AND 0 = 1 "; // Не выбираем эти операции, т.к. у финцелей свои категории
+		}
+		
 		// Если фильтр по типу - и он не фин.цель
 		if ($type != -1 && $type != 4)
 		{
@@ -677,6 +679,7 @@ class Operation_Model {
 		{
 			if ( $operation['type'] <= 1 )
 			{
+				// До использования типов - игнорим ошибки
 				$operation['cat_name']		= @$categorys[ $operation['cat_id'] ]['cat_name'];
 				$operation['cat_parent']		= @$categorys[ $operation['cat_id'] ]['cat_parent'];
 			}
@@ -686,7 +689,7 @@ class Operation_Model {
 			$operation['account_currency_id'] = $accounts[ $operation['account_id'] ]['account_currency_id'];
 			
 			//хак для журнала операций. присылаю tr_id = null для не переводов
-			if ( ((int)$operation['tr_id'] == 0) && ((int)$operation['transfer'] == 0) )
+			if ( (int)$operation['tr_id'] == 0 && (int)$operation['transfer'] == 0 )
 			{
 				$operation['tr_id'] = null;
 			}
@@ -721,10 +724,8 @@ class Operation_Model {
 					$operation['cat_name'] = "Пришло на счёт ";
 				}
 			}
-
-			$operation['cat_transfer']        = $accounts[ $operation['account_id'] ]['account_currency_id'];
-            
-			$operations[$operationId] = $operation;
+			
+			$operations[$operationId] 	= $operation;
 		}
 		
 		$retoper = array();
