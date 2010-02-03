@@ -35,8 +35,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('accounts',       $this->user->getUserAccounts());
         $this->tpl->assign('dateFrom',       date('d.m.Y', time() - 60*60*24*7));
         $this->tpl->assign('dateTo',         date('d.m.Y')); //date(date('t').'.m.Y'));
-        $this->tpl->assign('category',       get_tree_select());
-        $this->tpl->assign('cat_filtr',      get_tree_select(@$_GET['cat_filtr']));
     }
 
 	/**
@@ -56,6 +54,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 	 */
  	function add( $args = array() )
 	{
+		$operation = array();
+		
+		// Типы операций для кастомизации логики
 		$operationTypes = array(
 			'profit' 	=> 1,
 			'waste' 	=> 0,
@@ -63,82 +64,154 @@ class Operation_Controller extends _Core_Controller_UserCommon
 			'target'	=> 4,
 		);
 		
-		$operation = array('type');
-		$array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close', 'currency');
-		
 		if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $operationTypes ) )
 		{
-			$operation['type'] = $operationTypes[ $args[0] ];
+			$operationType = $operationTypes[ $args[0] ];
+			//$operation['type'] = $operationTypes[ $args[0] ];
+		}
+		else
+		{
+			$operationType = 0;
 		}
 		
-		// Если запрос не post - выдаём страничку
-		if( _Core_Request::getCurrent()->method == 'GET' )
+		if( _Core_Request::getCurrent()->method == 'POST' )
 		{
-			$templateName = 'operations/edit_';
+			// Определяем массив данных для обработки
+			$request = _Core_Request::getCurrent();
+			$operation = array(
+				//тип операции (расход и тд)
+				'type' 		=> isset($request->post['type'])?$request->post['type']:$operationType,
+				'account' 	=> $request->post['account'],
+				'amount' 	=> $request->post['amount'],
+				'category' 	=> isset($request->post['category'])?$request->post['category']:null,
+				// дата определяется ниже
+				'date' 		=> null,
+				'comment' 	=> $request->post['comment'],
+				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:array(),
+				'convert' 	=> isset($request->post['convert'])?$request->post['convert']:array(),
+				'close' 	=> isset($request->post['close'])?$request->post['close']:array(),
+				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
+				'toAccount' 	=> isset($request->post['toAccount'])?$request->post['toAccount']:null,
+				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
+			);
 			
-			switch ( $operation['type'] )
+			// Если дата передана массивом (PDA) ...
+			if( is_array($request->post['date']) )
 			{
-				// доход
-				case 0:
-					$templateName .= 'waste'; break;
-				// расход
-				case 1:
-					$templateName .= 'profit'; break;
-				// перевод
-				case 2:
-					$templateName .= 'transfer'; break;
-				// финцель
-				case 4:
-					$templateName .= 'target'; break;
+				$operation['date'] = $request->post['date']['day'] 
+					. '.' . $request->post['date']['month']
+					. '.' . $request->post['date']['year'];
 			}
 			
-			$this->tpl->assign( 'name_page', $templateName );
-		}
-		elseif( _Core_Request::getCurrent()->method == 'POST' )
-		{
-			$array = array('account', 'amount', 'category', 'date', 'comment', 'tags', 'type', 'convert', 'close', 'currency');
-			$array = $this->model->checkData($array);
+			// если пустая дата - подставляем сегодняшний день
+			elseif( empty($request->post['date']) )
+			{
+				$operation['date'] = date("d.m.Y");
+			}
+			else
+			{
+				$operation['date'] = $request->post['date'];
+			}
+			
+			$operation = $this->model->checkData($operation);
 			
 			// Если есть ошибки, то возвращаем их пользователю в виде массива
-			if (count($this->model->errorData) > 0)
+			if (sizeof($this->model->errorData) == 0)
 			{
-				exit( json_encode($this->model->errorData) );
+				// Добавление в зависимости от типа (расход\доход) и тд
+				$operation['drain'] = 1;
+				switch ($operation['type'])
+				{
+					//Расход
+					case 0: 
+						$operation['amount'] = abs($operation['amount']) * -1;
+						
+						$this->model->add(
+							$operation['amount'],
+							$operation['date'],
+							$operation['category'],
+							$operation['drain'],
+							$operation['comment'],
+							$operation['account'],
+							$operation['tags']
+						);
+						break;
+					// Доход
+					case 1: 
+						$operation['drain'] = 0;
+						$this->model->add(
+							$operation['amount'],
+							$operation['date'],
+							$operation['category'],
+							$operation['drain'],
+							$operation['comment'],
+							$operation['account'],
+							$operation['tags']
+						);
+						break;
+					// Перевод со счёта
+					case 2: 
+						$operation['category'] = -1;
+						$this->model->addTransfer(
+							$operation['amount'],
+							$operation['convert'],
+							$operation['currency'],
+							$operation['date'],
+							$operation['account'],
+							$operation['toAccount'],
+							$operation['comment'],
+							$operation['tags']
+							);
+						break;
+					// Что это ?!!!!!
+					case 3:
+						break;
+					// Перевод на финансовую цель
+					case 4: 
+						$target = new Targets_Model();
+						$target->addTargetOperation(
+							$operation['account'],
+							$operation['target'],
+							$operation['amount'],
+							$operation['comment'],
+							$operation['date'],
+							$operation['close']
+						);
+						//@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
+						//exit(json_encode($target->getLastList(0, 100)));
+					break;
+				}
+				
+				$this->tpl->assign( 'result', array('text'=>"Операция успешно добавлена.") );
 			}
-	        
-			// Добавление в зависимости от типа (расход\доход) и тд
-			$array['drain'] = 1;
-			switch ($array['type'])
+			else
 			{
-				//Расход
-				case 0: 
-					$array['amount'] = abs($array['amount']) * -1;
-					
-					$this->model->add($array['amount'], $array['date'], $array['category'], $array['drain'], $array['comment'], $array['account'], $array['tags']);
-					break;
-				// Доход
-				case 1: 
-					$array['drain'] = 0;
-					$this->model->add($array['amount'], $array['date'], $array['category'], $array['drain'], $array['comment'], $array['account'], $array['tags']);
-					break;
-				// Перевод со счёта
-				case 2: 
-					$array['category'] = -1;
-					$this->model->addTransfer($array['amount'], $array['convert'], $array['currency'], $array['date'], $array['account'],$array['toAccount'],$array['comment'],$array['tags']);
-					break;
-				// Что это ?!!!!!
-				case 3:
-					break;
-				// Перевод на финансовую цель
-				case 4: 
-					$target = new Targets_Model();
-					$target->addTargetOperation($array['account'], $array['target'], $array['amount'], $array['comment'], $array['date'],$array['close']);//$array['close']
-					//@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
-					//exit(json_encode($target->getLastList(0, 100)));
-				break;
+				$this->tpl->assign( 'error', array('text'=> implode(" \n", $this->model->errorData) ) );
 			}
-			
-			die('[]');
 		}
+		
+		$this->tpl->assign( 'operation', $operation );
+		
+		$templateName = 'operations/edit_';
+		
+		switch ( $operationType )
+		{
+			// доход
+			case 0:
+				$templateName .= 'waste'; break;
+			// расход
+			case 1:
+				$templateName .= 'profit'; break;
+			// перевод
+			case 2:
+				$templateName .= 'transfer'; break;
+			// финцель
+			case 4:
+				$templateName .= 'target'; break;
+		}
+		
+		$this->tpl->assign( 'name_page', $templateName );
+		$this->tpl->assign( 'operationType', $operationType );
 	}
 
     /**
@@ -336,14 +409,18 @@ class Operation_Controller extends _Core_Controller_UserCommon
          */
         $sumTo = null;
 
-        if (@$_GET['sumTo'] != '') {
+        if (@$_GET['sumTo'] != '')
+        {
             $sumTo = (float)@$_GET['sumTo'];
         }
 
-        $array = array();
-
         $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo);
-
+        
+        if( !$list )
+        {
+		$list = array();
+        }
+        
         $accounts = Core::getInstance()->user->getUserAccounts();
 
         //@TODO Похоже, что тут надо что-то дописать в массиве
@@ -355,7 +432,8 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 $array[$val['id']]['account_name'] = '';
             }
         }
-        die(json_encode($array));
+        
+        $this->tpl->assign( 'operations', $array );
     }
 
     /**

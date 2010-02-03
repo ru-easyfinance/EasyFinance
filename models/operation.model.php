@@ -80,117 +80,157 @@ class Operation_Model {
         $_SESSION['account_money'] = $this->account_money;
         $_SESSION['total_sum']     = $this->total_sum;
     }
-    /**
-     * Проверяет валидность введённых данных
-     * @param <mixed> $params
-     * @return <bool>
-     */
-    function checkData($params = '')
-    {
-        $valid = array();
-        $this->errorData = array();
+    
+	/**
+	 * Проверяет валидность введённых данных
+	 * @param array $params
+	 * @return array
+	 */
+	public function checkData( array $operation = array() )
+	{
+		$validated = array();
+		$this->errorData = array();
 
-        // Проверяем ID
-        if (in_array('id', $params) or count($params) == 0) {
-            $valid['id'] = (int)@$_POST['id'];
-            if ($valid['id'] === 0) {
-                $this->errorData['id'][] = 'Не указан id события';
-            }
-        }
+		// Проверяем ID
+		if ( array_key_exists('id', $operation) )
+		{
+			$validated['id'] = (int)$params['id'];
+			if ($validated['id'] === 0)
+			{
+				$this->errorData['id'] = 'Не указан id события';
+			}
+		}
 
-        // Проверяем тип операции
-        if (in_array('type', $params) or count($params) == 0) {
-            $valid['type'] = (int)@$_POST['type'];
-        }
+		// Проверяем тип операции
+		if ( array_key_exists('type', $operation) )
+		{
+			$validated['type'] = (int)$operation['type'];
+		}
 
-        // Проверяем счёт
-        if (in_array('account', $params) or count($params) == 0) {
-            $valid['account'] = (int)@$_POST['account'];
-            if ($valid['account'] === 0) {
-                $this->errorData['account'][] = 'Не выбран счёт';
-            }
-        }
-        $acc = $this->db->query("SELECT count(*) as co FROM accounts WHERE account_id=?",$_POST['account']);
-        if ( $acc[0]['co'] != 1 )
-            $this->errorData['account'][] = 'Счёта не существует';
+		// Проверяем счёт
+		if ( array_key_exists('account', $operation) )
+		{
+			$validated['account'] = (int)$operation['account'];
+			if ( $validated['account'] === 0 )
+			{
+				$this->errorData['account'] = 'Не выбран счёт';
+			}
+			
+			// Лишний
+			$acc = $this->db->query("SELECT count(*) as co FROM accounts WHERE account_id=?",$validated['account']);
+			if ( $acc[0]['co'] != 1 )
+			{
+				$this->errorData['account'] = 'Указанного счёта не существует';
+			}
+		}
+		
+		// Проверяем сумму
+		if ( array_key_exists('amount', $operation) )
+		{
+			if ( empty($operation['amount']) )
+			{
+				$this->errorData['amount'] = 'Сумма не должна быть равной нулю.';
+			}
+			
+			$validated['amount'] = $operation['amount'];
+		}
 
-        // Проверяем сумму
-        if (in_array('amount', $params) or count($params) == 0) {
-            $valid['amount'] = (float)@$_POST['amount'];
-            if (empty ($valid['amount'])) {
-                $this->errorData['amount'][] = 'Сумма не должна быть равной нулю.';
-            }
-        }
+		// Проверяем категорию
+		if ( array_key_exists('category', $operation) )
+		{
+			$validated['category'] = (int)$operation['category'];
+			if (empty ($validated['category']))
+			{
+				$validated['target'] = (int)$operation['target'];
+				$validated['toAccount'] = (int)$operation['toAccount'];
+				
+				if ( empty($validated['target']) && empty ($validated['toAccount']))
+				{
+					$this->errorData['category'] = 'Нужно указать категорию';
+				}
+			}
+			elseif ( ($validated['type'] == 0) || ($validated['type'] == 1) )
+			{
+				$cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND visible=1", $validated['category']);
+				
+				if ( $cat[0]['co'] != 1 )
+				{
+					$this->errorData['category'] = 'Выбранной категории не существует!';
+				}
+			}
+		}
+		
+		// Проверяем дату
+		if ( array_key_exists('date', $operation) )
+		{
+			$validated['date'] = Helper_Date::getMysqlFromString( $operation['date'] );
+			
+			if ( $validated['date'] == '0000-00-00' || empty ($validated['date']) )
+			{
+				$this->errorData['date'] = 'Не верно указана дата.';
+			}
+		}
 
-        // Проверяем категорию
-        if (in_array('category', $params) or count($params) == 0) {
-            $valid['category'] = (int)@$_POST['category'];
-            if (empty ($valid['category'])) {
-                $valid['target'] = (int)@$_POST['target'];
-                $valid['toAccount'] = (int)@$_POST['toAccount'];
-                if (empty ($valid['target']))
-                    if (empty ($valid['toAccount']))
-                        $this->errorData['category'][] = 'Нужно указать категорию';               
-            }
-        }
-        if ( ($valid['type'] == 0) or ($valid['type'] == 1) ){
-                $cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND visible=1", $_POST['category']);
-                    if ( $cat[0]['co'] != 1 )
-                        $this->errorData['category'][] = 'Категории не существует!!!';
-        }
-        // Проверяем дату
-        if (in_array('date', $params) or count($params) == 0) {
-            $valid['date'] = trim(formatRussianDate2MysqlDate(@$_POST['date']));
-            if ( $valid['date'] == '0000-00-00' )
-                $this->errorData['date'][] = 'Не верно указана дата';
-            if (empty ($valid['date'])) {
-                $this->errorData['date'][] = 'Не верно указана дата';
-            }
-        }
+		$validated['comment'] = trim(htmlspecialchars($operation['comment']));
 
-        $valid['comment'] = trim(htmlspecialchars(@$_POST['comment']));
+		// Проверяем теги
+		if ( !empty ($operation['tags']) )
+		{
+			$validated['tags'] = array();
+			$tags = explode(',', trim($operation['tags']));
+			foreach ($tags as $tag)
+			{
+				$tag = trim($tag);
+				
+				if (!empty ($tag))
+				{
+					if (!in_array($tag, $validated['tags']))
+					{
+						$valid['tags'][] = trim($tag);
+					}
+				}
+			}
+		}
+		else
+		{
+			$validated['tags'] = null;
+		}
 
-        // Проверяем теги
-        if (!empty ($_POST['tags'])) {
-            $valid['tags'] = array();
-            $tags = explode(',', trim(@$_POST['tags']));
-            foreach ($tags as $tag) {
-                $tag = trim($tag);
-                if (!empty ($tag)) {
-                    if (!in_array($tag, $valid['tags'])) {
-                        $valid['tags'][] = trim($tag);
-                    }
-                }
-            }
-        } else {
-            $valid['tags'] = null;
-        }
-
-        // Проверяем тип операцииe
-        // - Перевод со счёта на счёт
-        if ($valid['type'] == 2) {
-            $valid['currency'] = (float)$_POST['currency'];
-            if ((float)$_POST['currency'] != 0) {
-                $valid['convert'] = round($valid['amount'] *  (float)$_POST['currency'], 2);
-            } else {
-                $valid['convert'] = 0;
-            }
-            $valid['toAccount'] = (int)@$_POST['toAccount'];
-        // - Финансовая цель
-        } elseif($valid['type'] == 4) {
-            $valid['target'] = $_POST['target'];
-            //if (isset ($_POST['close'])) {
-            if (($_POST['close'])==1) {
-                $valid['close'] = 1;
-            } else {
-                $valid['close'] = 0;
-            }
-        }
-
-        
-        //currency  toAccount
-        return $valid;
-    }
+		// Проверяем тип операцииe
+		// - Перевод со счёта на счёт
+		if ($validated['type'] == 2)
+		{
+			$validated['currency'] = (float)$operation['currency'];
+			
+			if ((float)$operation['currency'] != 0)
+			{
+				$validated['convert'] = round($validated['amount'] *  (float)$operation['currency'], 2);
+			}
+			else
+			{
+				$validated['convert'] = 0;
+			}
+			
+			$validated['toAccount'] = (int)$operation['toAccount'];
+			
+		}
+		// - Финансовая цель
+		elseif($validated['type'] == 4)
+		{
+			$validated['target'] = $operation['target'];
+			
+			if (($operation['close'])==1)
+			{
+				$validated['close'] = 1;
+			}
+			else
+			{
+				$validated['close'] = 0;
+			}
+		}
+		
+		return $validated;
+	}
 
     /**
      * Регистрирует новую транзакцию
@@ -587,10 +627,11 @@ class Operation_Model {
             $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount, $currentAccount, $this->user->getId(), $dateFrom,
             $dateTo);
         // Добавляем данные, которых не хватает
-        foreach ($operations as $key => $val) {
-            $val['cat_name']            = $category[$val['cat_id']]['cat_name'];
-            $val['cat_parent']          = $category[$val['cat_id']]['cat_parent'];
-            $val['account_name']        = $accounts[$val['account_id']]['account_name'];
+        foreach ($operations as $key => $val)
+        {
+                        $val['cat_name']        = $category[$val['cat_id']]['cat_name'];
+                        $val['cat_parent']       = $category[$val['cat_id']]['cat_parent'];
+                        $val['account_name']  = $accounts[$val['account_id']]['account_name'];
 
             /*if ( $val['transfer'] ){
                 $sql = "SELECT account_name FROM accounts WHERE account_id = ? AND user_id = ?";
