@@ -580,7 +580,7 @@ class Operation_Model {
             if (!is_null($sumTo)) {
                 $sql .= " AND ABS(t.money) <= " . $sumTo;
             }
-        $sql .= " ORDER BY dnat DESC, dt_create DESC ";
+        $sql .= " ORDER BY dnat DESC, dnat DESC, dt_create DESC ";
 
         $accounts = Core::getInstance()->user->getUserAccounts();
         $operations = $this->db->select($sql, $currentAccount, $this->user->getId(), $dateFrom,
