@@ -20,7 +20,7 @@ easyFinance.widgets.calendar = function(){
                     break;
                 }
             }
-            _editor.load();
+//            _editor.load();
 //            $('#cal_date').val(day + '.' + (Number(month) + 1) + '.' + year);
             var i = 1;
             var dayDate = new Date(year, month, day, 1, 1, 1, 1);

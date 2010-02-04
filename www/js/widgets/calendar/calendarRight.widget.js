@@ -40,7 +40,7 @@ easyFinance.widgets.calendarRight = function(result){
         },
         style: 'modern'
     });
-
+    $('.calendar_block .hasDatepicker td').removeAttr('onclick').find('a').removeAttr('href');
     $('.calendar_block .hasDatepicker td a').live('mouseover',function(){
         var content =  $(this).attr('used') ?
             (   '<div><b>' +($(this).attr('date')||'') +
@@ -64,6 +64,34 @@ $(document).ready(function(){
             easyFinance.widgets.calendarRight(result);
         },
         'json');
+        $('.hasDatepicker td').live('click',function(){
+            var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+            var month = $(this).closest('.calendar, .ui-datepicker-group').find('span.ui-datepicker-month').text();
+            var year = $(this).closest('.calendar, .ui-datepicker-group').find('span.ui-datepicker-year').text();
+            var day = $(this).find('a').text();
+            for(var tmpKey in ddt2month){
+                if (ddt2month[tmpKey] == month){
+                    month = tmpKey;
+                    break;
+                }
+            }
+//            _editor.load();
+//            $('#cal_date').val(day + '.' + (Number(month) + 1) + '.' + year);
+            var i = 1;
+            var dayDate = new Date(year, month, day, 1, 1, 1, 1);
+            var weekDay = dayDate.getDay();
+            if (weekDay == 0){
+                weekDay = 7;
+            }
+            calendarEditor.load();
+            $('#cal_date').val($.datepicker.formatDate('dd.mm.yy',dayDate ));
+            $('#week.week input').each(function(){
+                if (i == weekDay){
+                    $(this).attr('checked', 'checked');
+                }
+                i++;
+            });
+        });
 
 //easyFinance.widgets.calendarRight(res.calendar.calendar);
 });
