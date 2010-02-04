@@ -411,7 +411,7 @@ dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
 dl.bill_list dd ul li a { width: 100px; overflow: hidden; display: block; padding: 1px 3px 1px 21px; line-height: 15px; color: #363535; text-decoration: none; }
 dl.bill_list dd ul li a b { display: block; }
 dl.bill_list dd ul li a span { text-decoration: underline; }
-dl.bill_list dd ul li a:hover { background: #f6f6f6 url('/img/i/icons.gif') no-repeat 5px -214px; }
+dl.bill_list dd ul li a:hover { background-color: #f6f6f6;}/*url('/img/i/icons.gif') no-repeat 5px -214px;*/
 dl.bill_list dd ul li a:hover span { color: #e46717; }
 dl.bill_list dd.amount { display: block; position: relative; margin-left: 11px; padding-top: 3px; font-size: 14px; color: #36a500; line-height: 18px; font-weight: bold; }
 dl.bill_list dd.amount div { padding-left:10px; position: relative; width: 110px; text-align: left; }

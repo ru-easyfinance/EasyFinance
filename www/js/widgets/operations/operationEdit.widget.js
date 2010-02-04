@@ -733,6 +733,8 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_addoperation_but').addClass("act");
         _clearForm();
         $(".op_addoperation").show();
+        if (!_sexyAccount)
+            _initSexyCombos();
     }
 
     /**

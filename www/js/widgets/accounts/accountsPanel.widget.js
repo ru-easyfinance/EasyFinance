@@ -42,8 +42,10 @@ easyFinance.widgets.accountsPanel = function(){
             $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
             //временный хак до полного перехода на события
 
-            if (easyFinance.widgets.operationEdit)
+            if (easyFinance.widgets.operationEdit && pathName == '/operation/'){
+                easyFinance.widgets.operationEdit.showForm();
                 easyFinance.widgets.operationEdit.setAccount(id);
+            }
 
             if (easyFinance.widgets.operationsJournal){
                 easyFinance.widgets.operationsJournal.setAccount(id);

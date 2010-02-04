@@ -322,7 +322,7 @@ $('#calendar').fullCalendar({
                                 draggable : true
                             });
                         }
-                        var fFilter, sFilter, tFilter , priority;
+
                         //get calendar month
                         ddt_month = ddt2month[ddt.getMonth()];
                         $('.hasDatepicker .ui-datepicker-title').each(function(){
@@ -332,35 +332,20 @@ $('#calendar').fullCalendar({
                                 ddt_day = ddt.getDate();
                                 $(this).closest('.ui-datepicker-group,.calendar').find('td a').each(function(){
                                     if ($(this).text() == ddt_day){
-                                        fFilter = _data[v].type;
-                                        sFilter = ((now < ddt) ?
-                                            'unsworn' :
-                                            (
-                                                _data[v].accept != '0' ?
-                                                'accept' :
-                                                'expired'
-                                            )
-                                        );
-                                        tFilter = _data[v].every;
-
-                                        priority = eventToPriorityAndColor[fFilter][sFilter][tFilter].priority;
-
-                                        if (!$(this).attr('priority') || $(this).attr('priority') < priority ){
-                                            $(this).
-                                                attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
-                                                attr('priority', priority).
-                                                css('color', eventToPriorityAndColor[fFilter][sFilter][tFilter].color);
+                                        if ($(this).css('priority') != 'red' ){
+                                            if (_data[v].accept == '0' && now >= ddt){
+                                                $(this).css('color', 'red');
+                                            }else{
+                                                $(this).css('color', '#000000');
+                                            }
                                         }
-                                        $(this).
+                                        $(this).attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
                                             attr('used',($(this).attr('used')||'') +
                                                 '<tr><td>' +
                                                 _data[v].title + '<td></td>' +
-                                                (fFilter == 'e' ?
-                                                    ddt.toLocaleTimeString().substr(0, 5) :
-                                                    _data[v].amount) +
-                                                '</td></tr>').
-                                            closest('td');//.
-                                            //addClass('hasEvents');
+                                                (_data[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : _data[v].amount) + '</td></tr>').
+                                            closest('td').
+                                            addClass('hasEvents');
                                     }
                                 });
                             }
