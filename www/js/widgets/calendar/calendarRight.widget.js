@@ -55,14 +55,14 @@ $(document).ready(function(){
     var s = new Date();
     s.setDate(1);
     var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
-    $.getJSON('/calendar/events/', {
-            start: s.getTime(),
-            end:   e.getTime()
-        },
-        function(result) {
-            easyFinance.widgets.calendarRight(result);
-        },
-        'json');
+//    $.getJSON('/calendar/events/', {
+//            start: s.getTime(),
+//            end:   e.getTime()
+//        },
+//        function(result) {
+//            easyFinance.widgets.calendarRight(result);
+//        },
+//        'json');
         $('.hasDatepicker td').live('click',function(){
             var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
             var month = $(this).closest('.calendar, .ui-datepicker-group').find('span.ui-datepicker-month').text();
@@ -92,5 +92,5 @@ $(document).ready(function(){
             });
         });
 
-//easyFinance.widgets.calendarRight(res.calendar.calendar);
+easyFinance.widgets.calendarRight(res.calendar.calendar);
 });
