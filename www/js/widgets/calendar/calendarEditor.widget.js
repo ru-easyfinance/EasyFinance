@@ -91,7 +91,8 @@ easyFinance.widgets.calendarEditor = function(){
     function _clear(){
         $('input[type="text"],select,textarea','#op_dialog_event').val('');
         $('#op_dialog_event #cal_repeat').val(0);
-        $('#op_dialog_event .special #cal_use_mode_1').attr('checked','checked')
+        $('#op_dialog_event .special #cal_use_mode_1').attr('checked','checked');
+        $('#week.week input').removeAttr('checked');
     }
     /**
      *

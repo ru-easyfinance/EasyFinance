@@ -1,56 +1,6 @@
 easyFinance.widgets.calendar = function(){
     var _data, _editor;
     var _d = new Date();
-
-    var eventToPriorityAndColor = {//if acept
-        e : {
-            accept : {// podtverzdenniy
-                '1' : {priority :'12', color :'#575757'},
-                '7' : {priority :'14', color :'#575757'},
-                '30' : {priority :'16', color :'#575757'},
-                '365' : {priority :'18', color :'#575757'},
-                '0' : {priority :'20', color :'#575757'}
-            },
-            unsworn : {// ne podtwerzdenniy 
-                '1' : {priority :'12', color :'#6fee55'},
-                '7' : {priority :'14', color :'#2ab601'},
-                '30' : {priority :'16', color :'#217e03'},
-                '365' : {priority :'18', color :'#0a15ea'},
-                '0' : {priority :'20', color :'#0a15ea'}
-            },
-            expired : {// prosrocheniy
-                '1' : {priority :'4', color :'#1a1a1a'},
-                '7' : {priority :'5', color :'#1a1a1a'},
-                '30' : {priority :'6', color :'#1a1a1a'},
-                '365' : {priority :'8', color :'#1a1a1a'},
-                '0' : {priority :'10', color :'#1a1a1a'}
-            }
-        },
-        p : {
-            accept : {
-                '1' : {priority :'11', color :'#575757'},
-                '7' : {priority :'13', color :'#575757'},
-                '30' : {priority :'15', color :'#575757'},
-                '365' : {priority :'17', color :'#575757'},
-                '0' : {priority :'19', color :'#575757'}
-            },
-            unsworn : {
-                '1' : {priority :'11', color :'#6fee55'},
-                '7' : {priority :'13', color :'#2ab601'},
-                '30' : {priority :'15', color :'#217e03'},
-                '365' : {priority :'17', color :'#0a15ea'},
-                '0' : {priority :'19', color :'#0a15ea'}
-            },
-            expired : {
-                '1' : {priority :'1', color :'#fe1a09'},
-                '7' : {priority :'2', color :'#fe1a09'},
-                '30' : {priority :'3', color :'#fe1a09'},
-                '365' : {priority :'7', color :'#fe1a09'},
-                '0' : {priority :'9', color :'#fe1a09'}
-            }
-        }
-    }
-
     function init(){
         var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
         _editor = calendarEditor;
@@ -71,7 +21,22 @@ easyFinance.widgets.calendar = function(){
                 }
             }
             _editor.load();
-            $('#cal_date').val(day + '.' + (Number(month) + 1) + '.' + year);
+//            $('#cal_date').val(day + '.' + (Number(month) + 1) + '.' + year);
+            var i = 1;
+            var dayDate = new Date(year, month, day, 1, 1, 1, 1);
+            var weekDay = dayDate.getDay();
+            if (weekDay == 0){
+                weekDay = 7;
+            }
+            _editor.load();
+            $('#cal_date').val($.datepicker.formatDate('dd.mm.yy',dayDate ));
+            $('#week.week input').each(function(){
+                if (i == weekDay){
+                    $(this).attr('checked', 'checked');
+                }
+                i++;
+            });
+
 
         });
         $('#datepicker.hasDatepicker').qtip({
@@ -125,8 +90,19 @@ $('#calendar').fullCalendar({
             _$cal.find('li.cur').text(monthTitle);
         },
         dayClick: function(dayDate) {
+            var i = 1;
+            var weekDay = dayDate.getDay();
+            if (weekDay == 0){
+                weekDay = 7;
+            }
             _editor.load();
             $('#cal_date').val($.datepicker.formatDate('dd.mm.yy',dayDate ));
+            $('#week.week input').each(function(){
+                if (i == weekDay){
+                    $(this).attr('checked', 'checked');
+                }
+                i++;
+            });
         },
         eventDragOpacity: 0.5,
         eventRevertDuration: 900,
@@ -211,7 +187,7 @@ $('#calendar').fullCalendar({
                                 draggable : true
                             });
                         }
-                        var fFilter, sFilter, tFilter , priority;
+
                         //get calendar month
                         ddt_month = ddt2month[ddt.getMonth()];
                         $('.hasDatepicker .ui-datepicker-title').each(function(){
@@ -221,35 +197,20 @@ $('#calendar').fullCalendar({
                                 ddt_day = ddt.getDate();
                                 $(this).closest('.ui-datepicker-group,.calendar').find('td a').each(function(){
                                     if ($(this).text() == ddt_day){
-                                        fFilter = result[v].type;
-                                        sFilter = ((now < ddt) ?
-                                            'unsworn' :
-                                            (
-                                                result[v].accept != '0' ?
-                                                'accept' :
-                                                'expired'
-                                            )
-                                        );
-                                        tFilter = result[v].every;
-
-                                        priority = eventToPriorityAndColor[fFilter][sFilter][tFilter].priority;
-
-                                        if (!$(this).attr('priority') || $(this).attr('priority') < priority ){
-                                            $(this).
-                                                attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
-                                                attr('priority', priority).
-                                                css('color', eventToPriorityAndColor[fFilter][sFilter][tFilter].color);
+                                        if ($(this).css('priority') != 'red' ){
+                                            if (result[v].accept == '0' && now >= ddt){
+                                                $(this).css('color', 'red');
+                                            }else{
+                                                $(this).css('color', '#000000');
+                                            }
                                         }
-                                        $(this).
+                                        $(this).attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
                                             attr('used',($(this).attr('used')||'') +
                                                 '<tr><td>' +
                                                 result[v].title + '<td></td>' +
-                                                (fFilter == 'e' ?
-                                                    ddt.toLocaleTimeString().substr(0, 5) :
-                                                    result[v].amount) +
-                                                '</td></tr>').
-                                            closest('td');//.
-                                            //addClass('hasEvents');
+                                                (result[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : result[v].amount) + '</td></tr>').
+                                            closest('td').
+                                            addClass('hasEvents');
                                     }
                                 });
                             }
