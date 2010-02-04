@@ -94,7 +94,7 @@ class Operation_Model {
 		// Проверяем ID
 		if ( array_key_exists('id', $operation) )
 		{
-			$validated['id'] = (int)$params['id'];
+			$validated['id'] = (int)$operation['id'];
 			if ($validated['id'] === 0)
 			{
 				$this->errorData['id'] = 'Не указан id события';
@@ -252,7 +252,7 @@ class Operation_Model {
 		$sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, 
 			`drain`, `type`, `comment`, `tags`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
 		
-		$this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $drain, 
+		$this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, !$drain, 
 			$comment, implode(', ', $tags));
 		
 		$operationId = mysql_insert_id();
@@ -269,28 +269,28 @@ class Operation_Model {
 			
 			$this->db->query('INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES ' . $sql);
 		}
-        
-        // Обновляем данные о счетах пользователя
-        Core::getInstance()->user->initUserAccounts();
-        Core::getInstance()->user->save();
-
-        //$this->selectMoney($user_id);
-        $this->save();
-        return $operationId;
-    }
-
-    /**
-     * Добавляет трансфер с одного на другой счёт
-     * @param $money        float     Деньги
-     * @param $convert      float     Конвертированные в нужную валюту деньги
-     * @param $date         string    Дата, когда совершаем трансфер
-     * @param $from_account int       Со счёта
-     * @param $to_account   int       На счёт
-     * @param $comment      string    Комментарий
-     * @param $tags         array     Тег
-     * @return bool
-     */
-    function editTransfer($id=0, $money = 0, $convert = 0, $date = '', /*$category = 0, $drain = 0,*/ $account = 0, $toAccount=0, $comment = '', $tags = null){
+		
+		// Обновляем данные о счетах пользователя
+		Core::getInstance()->user->initUserAccounts();
+		Core::getInstance()->user->save();
+		
+		//$this->selectMoney($user_id);
+		$this->save();
+		return $operationId;
+	}
+	
+	/**
+	 * Добавляет трансфер с одного на другой счёт
+	 * @param $money        float     Деньги
+	 * @param $convert      float     Конвертированные в нужную валюту деньги
+	 * @param $date         string    Дата, когда совершаем трансфер
+	 * @param $from_account int       Со счёта
+	 * @param $to_account   int       На счёт
+	 * @param $comment      string    Комментарий
+	 * @param $tags         array     Тег
+	 * @return bool
+	 */
+	function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = null){
         if ($tags) {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
 
@@ -319,8 +319,8 @@ class Operation_Model {
                 WHERE user_id = ? AND id = ?";
                 $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, implode(', ', $tags), NULL, $this->user->getId(), $id);//перевод с
                 $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
                 $this->db->query($sql, $this->user->getId(), $money, $date, -1, $toAccount, $id,
                     $comment, $account, NULL);
             }
@@ -426,7 +426,8 @@ class Operation_Model {
     function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
     {
         // Если есть теги, то добавляем и их тоже
-        if ($tags) {
+        if ($tags)
+        {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
 
             $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?
@@ -468,10 +469,12 @@ class Operation_Model {
             } else {
                 return false;
             }
-        if ( $tr_id[0]['id'] ){
+        if ( isset($tr_id[0]) && $tr_id[0]['id'] )
+        {
             $this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$tr_id[0]['id'], Core::getInstance()->user->getId());
         }
-        if ( $idsh[0]['tr_id'] ){
+        if ( isset($idsh[0]) && $idsh[0]['tr_id'] )
+        {
             $this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$idsh[0]['tr_id'], Core::getInstance()->user->getId());
         }
         return true;
@@ -853,7 +856,8 @@ class Operation_Model {
         $res1 = $this->db->query($sql, $id, $this->user->getId());
         $sql = "SELECT count(*) AS c FROM target_bill WHERE id=? AND user_id=?";
         $res2 = $this->db->query($sql, $id, $this->user->getId());
-        if ( $res1[0]['c'] != $res2[0]['c'] ){
+        if ( $res1[0]['c'] != $res2[0]['c'] )
+        {
             if ( $res1[0]['c'] == 1 ){
                 if ( $res1[0]['drain'] == 1 )
                     $type = 0;
@@ -869,4 +873,31 @@ class Operation_Model {
             return null;//один случай на миллиард. а на деле врят ли произойдёт. случай если есть и операция и перевод на фин целт с одним айди
         return $type;
     }
+    
+	public function getOperation( $userId, $operationId )
+	{
+		// Запрос выбирает из операций и переводов на финцели
+		$sql = "SELECT o.id, o.user_id, o.money as amount, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
+			o.cat_id as category, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.account_id as account, o.tags, 
+			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create 
+			FROM operation o WHERE o.user_id = ? AND o.id = ?
+			UNION SELECT t.id, t.user_id, t.money as amount, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, 
+			tt.category_id as category, t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.bill_id as account, t.tags, NULL, NULL, 4 as type, 
+			dt_create FROM target_bill t LEFT JOIN target tt ON t.target_id=tt.id
+			WHERE t.user_id = ? and t.id = ?";
+		
+		$operation = $this->db->selectRow( $sql, (int)$userId, (int)$operationId, (int)$userId, (int)$operationId );
+		
+		if( $operation['type'] == 2 && $operation['tr_id'] == 0 )
+		{
+			$operation['toAccount'] = $operation['transfer'];
+		}
+		elseif ( $operation['type'] == 2 && $operation['tr_id'] > 0 )
+		{
+			$operation['toAccount'] = $operation['account'];
+			$operation['account'] = $operation['transfer'];
+		}
+		
+		return $operation;
+	}
 }

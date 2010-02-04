@@ -57,12 +57,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		$operation = array();
 		
 		// Типы операций для кастомизации логики
-		$operationTypes = array(
-			'profit' 	=> 1,
-			'waste' 	=> 0,
-			'transfer'	=> 2,
-			'target'	=> 4,
-		);
+		$operationTypes = array_flip( Operation::getTypesArray() );
 		
 		if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $operationTypes ) )
 		{
@@ -123,7 +118,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				switch ($operation['type'])
 				{
 					//Расход
-					case 0: 
+					case Operation::TYPE_WASTE: 
 						$operation['amount'] = abs($operation['amount']) * -1;
 						
 						$this->model->add(
@@ -137,7 +132,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 						);
 						break;
 					// Доход
-					case 1: 
+					case Operation::TYPE_PROFIT: 
 						$operation['drain'] = 0;
 						$this->model->add(
 							$operation['amount'],
@@ -150,7 +145,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 						);
 						break;
 					// Перевод со счёта
-					case 2: 
+					case Operation::TYPE_TRANSFER: 
 						$operation['category'] = -1;
 						$this->model->addTransfer(
 							$operation['amount'],
@@ -163,11 +158,8 @@ class Operation_Controller extends _Core_Controller_UserCommon
 							$operation['tags']
 							);
 						break;
-					// Что это ?!!!!!
-					case 3:
-						break;
 					// Перевод на финансовую цель
-					case 4: 
+					case Operation::TYPE_TARGET: 
 						$target = new Targets_Model();
 						$target->addTargetOperation(
 							$operation['account'],
@@ -214,102 +206,228 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		$this->tpl->assign( 'operationType', $operationType );
 	}
 
-    /**
-     * Редактирует событие
-     * @param $args array mixed Какие-нибудь аргументы
-     * @return void
-     */
-    function edit($args)
-    {
-        $array = array('id','account', 'toAccount','amount', 'category', 'date', 'comment', 'tags', 'type', 'convert','target');
-        $array = $this->model->checkData($array);
-        if (count($this->model->errorData) > 0) {
-            // Если есть ошибки, то возвращаем их пользователю в виде массива
-            die(json_encode($this->model->errorData));
-        }
-        $oldtype = $this->model->getTypeOfOperation($array['id']);//тип редактируемой операции
-        //die('a'.$array['type'].'b'.$oldtype);
-        if ( is_null($oldtype) ){
-            $this->errorData['id'][] = 'Не удалось изменить операцию';
-            die(json_encode($this->model->errorData));
-        }
-        if ( $array['type'] != $oldtype ){//если изменили тип операции
-            if ( $oldtype == 4 )
-                {
-                    $id = abs((int)$_POST['id']);
-                    $this->model->deleteTargetOperation($id);
-                }
-                //$this->deleteTargetOp($args);
-            else{
-                $id = abs((int)$_POST['id']);
-                $this->model->deleteOperation($id);
-            }
-                //$this->del($args);
-            //удалили операцию. вот теперь создадим новую
-            $array['drain'] = 1;
-            switch ($array['type']) {
-                case 0: //Расход
-                    $array['amount'] = abs($array['amount']) * -1;
-                    if($this->model->add($array['amount'], $array['date'], $array['category'],
-                        $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
-                            die ('[]');
-                        }
-                case 1: // Доход
-                    $array['drain'] = 0;
-                    if($this->model->add($array['amount'], $array['date'], $array['category'],
-                        $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
-                            die('[]');
-                        }
-                case 2: // Перевод со счёта
-                    $array['category'] = -1;
-                    if ($this->model->addTransfer($array['amount'], $array['convert'], $array['currency'], $array['date'],
-                        $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
-                            die('[]');
-                        }
-                case 3: //
-                    break;
-                case 4: // Перевод на финансовую цель
-                    $target = new Targets_Model();
-                    // addTargetOperation($account_id, $target_id, $money, $comment, $date, $close) {
-                    $target->addTargetOperation($array['account'], $array['target'], $array['amount'],
-                        $array['comment'], $array['date'],$array['close']);//$array['close']
-                    die('[]');
-            }
-        }
+	/**
+	 * Редактирует событие
+	 * @param $args array mixed Какие-нибудь аргументы
+	 * @return void
+	 */
+	function edit( array $args = array() )
+	{
+		//тип редактируемой операции
+		//$operationType 	= $this->model->getTypeOfOperation($array['id']);
+		$operationId		= 0;
+		$operation 		= array();
+		
+		if( array_key_exists(0 ,$args) && is_numeric($args[0]) && $args[0] )
+		{
+			$operationId = (int)$args[0];
+		}
+		elseif( isset($request->post['id']) && $request->post['id'] )
+		{
+			$operationId = $request->post['id'];
+		}
+		
+		// Получаем данные по редактируемой операции (а если нет ид, то и даных фиг..)
+		if( $operationId )
+		{
+			$operation = $this->model->getOperation( Core::getInstance()->user->getId(), $operationId );
+			$initType = $operation['type'];
+		}
+		else
+		{
+			$operation = array();
+		}
+		
+		echo '<pre>' . print_r($operation,1);
+		
+		if( _Core_Request::getCurrent()->method == 'POST' )
+		{
+			// Определяем массив данных для обработки
+			$request = _Core_Request::getCurrent();
+			$operation = array(
+				'id' 		=> $operationId,
+				//тип операции (расход и тд)
+				'type' 		=> isset($request->post['type'])?$request->post['type']:$operation['type'],
+				'account' 	=> $request->post['account'],
+				'amount' 	=> $request->post['amount'],
+				'category' 	=> isset($request->post['category'])?$request->post['category']:null,
+				// дата определяется ниже
+				'date' 		=> null,
+				'comment' 	=> isset($request->post['comment'])?$request->post['comment']:'',
+				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:array(),
+				'convert' 	=> isset($request->post['convert'])?$request->post['convert']:array(),
+				'close' 	=> isset($request->post['close'])?$request->post['close']:array(),
+				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
+				'toAccount' 	=> isset($request->post['toAccount'])?$request->post['toAccount']:null,
+				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
+				'tr_id'		=> $operation['tr_id']
+			);			
 
-        // а иначе редактируем по старому, конкретную операцию
-        $array['drain'] = 1;
-        switch ($array['type']) {
-            case 0: //Расход
-                $array['amount'] = abs($array['amount']) * -1;
-                if ($this->model->edit($array['id'],$array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
-                        die('[]');
-                    }
-            case 1: // Доход
-                $array['drain'] = 0;
-                if($this->model->edit($array['id'],$array['amount'], $array['date'], $array['category'],
-                    $array['drain'], $array['comment'], $array['account'], $array['tags'])) {
-                        die('[]');
-                    }
-            case 2: // Перевод со счёта
-                $array['category'] = -1;
-                if($this->model->editTransfer($array['id'], $array['amount'], $array['convert'], $array['date'],
-                    $array['account'],$array['toAccount'],$array['comment'],$array['tags'])) {
-                        die('[]');
-                    }
-            case 3: // ПРОПУСК
-                break;
-            case 4: // Перевод на финансовую цель см. в модуле фин.цели
-                $target = new Targets_Model();
-                 if ($target->editTargetOperation($array['id'], $array['amount'], $array['date'], $array['target'],$array['account'], /*$array['id'],*/  $array['comment'], $array['close']))
-                 {
-                     die('[]');
-                 }
-                //$target->staticTargetUpdate($array['target']);
-                break;
-        }
-    }
+			// Если дата передана массивом (PDA) ...
+			if( is_array($request->post['date']) )
+			{
+				$operation['date'] = $request->post['date']['day'] 
+					. '.' . $request->post['date']['month']
+					. '.' . $request->post['date']['year'];
+			}
+			
+			// если пустая дата - подставляем сегодняшний день
+			elseif( empty($request->post['date']) )
+			{
+				$operation['date'] = date("d.m.Y");
+			}
+			else
+			{
+				$operation['date'] = $request->post['date'];
+			}
+			
+			$operation = $this->model->checkData($operation);
+			
+			if ( is_null($operation['type']) )
+			{
+				$this->model->errorData['id'] = 'Не удалось изменить операцию';
+			}
+			
+			// Если нет ошибок - проводим операцию
+			if (count($this->model->errorData) == 0)
+			{
+				// Видимо какая то часть дальнейшей логики
+				$operation['drain'] = 1;
+				
+				//если изменили тип операции
+				if ( $operation['type'] != $initType )
+				{				
+					if ( $initType == 4 )
+					{
+						$this->model->deleteTargetOperation( $operation['id'] );
+					}
+					else
+					{
+						$this->model->deleteOperation( $operation['id'] );
+					}
+					
+					//удалили операцию. вот теперь создадим новую
+					
+					switch ($operation['type'])
+					{
+						//Расход
+						case Operation::TYPE_WASTE: 
+							$operation['amount'] = abs($operation['amount']) * -1;
+							
+							$this->model->add(
+								$operation['amount'],
+								$operation['date'],
+								$operation['category'],
+								$operation['drain'],
+								$operation['comment'],
+								$operation['account'],
+								$operation['tags']
+							);
+							break;
+						// Доход
+						case Operation::TYPE_PROFIT: 
+							$operation['drain'] = 0;
+							$this->model->add(
+								$operation['amount'],
+								$operation['date'],
+								$operation['category'],
+								$operation['drain'],
+								$operation['comment'],
+								$operation['account'],
+								$operation['tags']
+							);
+							break;
+						// Перевод со счёта
+						case Operation::TYPE_TRANSFER: 
+							$operation['category'] = -1;
+							$this->model->addTransfer(
+								$operation['amount'],
+								$operation['convert'],
+								$operation['currency'],
+								$operation['date'],
+								$operation['account'],
+								$operation['toAccount'],
+								$operation['comment'],
+								$operation['tags']
+								);
+							break;
+						// Перевод на финансовую цель
+						case Operation::TYPE_TARGET: 
+							$target = new Targets_Model();
+							$target->addTargetOperation(
+								$operation['account'],
+								$operation['target'],
+								$operation['amount'],
+								$operation['comment'],
+								$operation['date'],
+								$operation['close']
+							);
+							//@FIXME Сделать автоматическое получение нового списка операций, при удачном добавлении
+							//exit(json_encode($target->getLastList(0, 100)));
+						break;
+					}
+				}
+				
+				// а иначе редактируем по старому, конкретную операцию
+				switch ($operation['type'])
+				{
+					case Operation::TYPE_WASTE:  //Расход
+						$operation['amount'] = abs($operation['amount']) * -1;
+						$this->model->edit($operation['id'],$operation['amount'], 
+							$operation['date'], $operation['category'], $operation['drain'], 
+							$operation['comment'], $operation['account'], $operation['tags']);
+						break;
+					case Operation::TYPE_PROFIT: //Доход
+						$operation['drain'] = 0;
+						$this->model->edit($operation['id'],$operation['amount'], $operation['date'], 
+							$operation['category'], $operation['drain'], $operation['comment'], 
+							$operation['account'], $operation['tags']);
+						break;
+					case Operation::TYPE_TRANSFER: // Перевод со счёта
+						$operation['category'] = -1;
+						$this->model->editTransfer( $operation['tr_id']?$operation['tr_id']:$operation['id'],
+							$operation['amount'], $operation['convert'], $operation['date'], $operation['account'],
+							$operation['toAccount'],$operation['comment'],$operation['tags']);
+						break;
+					case Operation::TYPE_TARGET: // Перевод на финансовую цель см. в модуле фин.цели
+						$target = new Targets_Model();
+						$target->editTargetOperation($operation['id'], $operation['amount'],
+							$operation['date'], $operation['target'],$operation['account'],
+							$operation['comment'], $operation['close']);
+					break;
+				}
+				
+				$this->tpl->assign( 'result', array('text'=>"Операция успешно изменена.") );
+			}
+			else 
+			{
+				$this->tpl->assign( 'error', array('text'=> implode(" \n", $this->model->errorData) ) );
+			}
+		}
+		
+		$this->tpl->assign( 'operation', $operation );
+		
+		$templateName = 'operations/edit_';
+		
+		switch ( $operation['type'] )
+		{
+			// доход
+			case 0:
+				$templateName .= 'waste'; break;
+			// расход
+			case 1:
+				$templateName .= 'profit'; break;
+			// перевод
+			case 2:
+				$templateName .= 'transfer'; break;
+			// финцель
+			case 4:
+				$templateName .= 'target'; break;
+		}
+		
+		$this->tpl->assign( 'name_page', $templateName );
+		$this->tpl->assign( 'operationType', $operation['type'] );
+	}
 
     /**
      * Удаляет выбранное событие
