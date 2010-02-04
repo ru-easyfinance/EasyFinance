@@ -17,7 +17,7 @@ easyFinance.widgets.calendarLeft = function(data){
                             $(ch).each(function(){
                                 obj.push($(this).closest('tr').attr('value'));
                             });
-                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents()},'json')
+                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
                         }
                     },
                     'Удалить': function() {
@@ -27,7 +27,7 @@ easyFinance.widgets.calendarLeft = function(data){
                             $(ch).each(function(){
                                 obj.push($(this).closest('tr').attr('value'));
                             });
-                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents()},'json')
+                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
                         }
                         //$(this).dialog('close');
                     }
@@ -69,7 +69,7 @@ easyFinance.widgets.calendarLeft = function(data){
             window.location.hash = null;
             showEvents();
             return false;
-        })
+        });
     }
     /**
      * Выводит окошко пользователя для управления событиями
@@ -83,7 +83,7 @@ easyFinance.widgets.calendarLeft = function(data){
         var accounts = easyFinance.models.accounts;
             accounts.load(res.accounts);
         for (var key in _data) {
-            var event = _data[key]
+            var event = _data[key];
             var date = new Date(event.date*1000);
             var diff = Math.floor(((new Date()).getTime() - event.date*1000)/(24*60*60*1000));
             date = $.datepicker.formatDate('dd.mm.yy',date);
@@ -92,31 +92,31 @@ easyFinance.widgets.calendarLeft = function(data){
                        // var cat_name = category.getUserCategoryNameById(event.cat)||''
                         var account_name = accounts.getAccountNameById(event.account)||' ';
                         
-                        periodicList += '<tr value="'+event.id+'"><td class="chk col c1"><input type="checkbox" /></td>'
-                                    +'<td class="col">'+date+'</td>'
-                                    +'<td class="money col">'+formatCurrency(event.amount)+'</td>'
-                                    +'<td class="col">'+account_name+'</td>'
-                                    +'<td class="col">'+event.comment+'</td>'
+                        periodicList += '<tr value="'+event.id+'"><td class="chk col c1"><input type="checkbox" /></td>'+
+                                    '<td class="col">'+date+'</td>'+
+                                    '<td class="money col">'+formatCurrency(event.amount)+'</td>'+
+                                    '<td class="col">'+account_name+'</td>'+
+                                    '<td class="col">'+event.comment+'</td>'+
                                     //+'<td>'+diff+'</td>'
                                     //+'<td>'+cat_name+'</td>'
-                                    +'</tr>';
+                                    '</tr>';
 
-                        periodicLeft += '<li id="'+event.id+'">'
-                                    +'<a href="/periodic/">'+event.comment+'</a>'
-                                    +'<b>'+ event.amount+'</b>'
-                                    +'<span class="date">'+date+'</span></li>';
+                        periodicLeft += '<li id="'+event.id+'">'+
+                                    '<a href="/periodic/">'+event.comment+'</a>'+
+                                    '<b>'+ event.amount+'</b>'+
+                                    '<span class="date">'+date+'</span></li>';
                 }else {
                         
-                        eventList += '<tr value="'+event['id']+'"><td class="chk col c1"><input type="checkbox" /></td>'
-                                    +'<td class="col">'+event['title']+'</td>'
-                                    +'<td class="col">'+diff+' дней</td>'
-                                    +'<td class="col">'+date+'</td>'
-                                    +'<td class="col">'+event['comment']+'</td>'
-                                    + '</tr>';
+                        eventList += '<tr value="'+event['id']+'"><td class="chk col c1"><input type="checkbox" /></td>'+
+                                    '<td class="col">'+event['title']+'</td>'+
+                                    '<td class="col">'+diff+' дней</td>'+
+                                    '<td class="col">'+date+'</td>'+
+                                    '<td class="col">'+event['comment']+'</td>'+
+                                     '</tr>';
 
-                        eventLeft += '<li id="'+event['id']+'">'
-                                    +'<a href="/calendar/">'+event['title']+'</a>'
-                                    +'<span class="date">'+date+'</span></li>';
+                        eventLeft += '<li id="'+event['id']+'">'+
+                                    '<a href="/calendar/">'+event['title']+'</a>'+
+                                    '<span class="date">'+date+'</span></li>';
                     
                 }
             }
@@ -146,7 +146,7 @@ easyFinance.widgets.calendarLeft = function(data){
             if (periodicLeft != '') {
                 periodicLeft = '<h2>Регулярные операции</h2><ul>' + periodicLeft + '</ul>';
             }
-            var left = eventLeft + periodicLeft
+            var left = eventLeft + periodicLeft;
             if (left != '') {
                 $('.transaction').html(left+'&nbsp;<a href="#p_index" id="AshowEvents">Показать события</a>');
             }else{
@@ -166,4 +166,4 @@ easyFinance.widgets.calendarLeft = function(data){
 
     return {init: init};
 
-}
+};
