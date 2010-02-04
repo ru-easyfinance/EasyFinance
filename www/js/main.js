@@ -133,19 +133,6 @@ function formatCurrency(num) {
     if(isNaN(num)) return "0.00";
     var sign = new Number(num)
     return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
-//    if (num=='undefined') num = 0;
-//    //num = num.toString().replace(/\$|\,/g,'');
-//    if(isNaN(num)) num = "0";
-//    sign = (num == (num = Math.abs(num)));
-//    num = Math.floor(num*100+0.50000000001);
-//    cents = num%100;
-//    num = Math.floor(num/100).toString();
-//    if(cents<10)
-//        cents = "0" + cents;
-//    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
-//        num = num.substring(0,num.length-(4*i+3))+' '+
-//        num.substring(num.length-(4*i+3));
-//    return (((sign)?'':'-') + '' + num + '.' + cents);
 }
 
 function MakeOperation(){
@@ -174,6 +161,8 @@ function MakeOperation(){
 
 //запланировано 
 
+        var calendarEditor;
+        var calendarLeft;
 function isLogged(){
     if (res)
         if (res.user)
@@ -251,6 +240,7 @@ $(document).ready(function() {
 
     //открытие сообщений
     function inarray(key,arr) {
+        var k;
         for(k in arr) {
             if (key == arr[k]) {
                 return true;
@@ -290,71 +280,19 @@ $(document).ready(function() {
             easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
         });
         
+        //инициация виджета добавления в календарь
+
+        calendarEditor = easyFinance.widgets.calendarEditor()
+        calendarEditor.init();
+        calendarLeft = easyFinance.widgets.calendarLeft();
+        calendarLeft.init(easyFinance.models.calendar())
         ////////////////////////////////////add to calendar
         
         $('#op_addtocalendar_but').click(function(){
-            $('button#remove_event').remove();//@deprecate IE7 opera8 @todo delete when no use;
-            add2call();
+            calendarEditor.load();
         });
 
-        function ac_save() {
-            /*
-             *@TODO Проверить вводимые значения ui-tabs-selected
-             */
-            if ($('#cal_href').val() == '' || $('#cal_href').val() == 0) {
-                if ($('#cal_mainselect .act').attr('id')=='periodic') {
-                    href = '/periodic/add/';
-                } else {
-                    href = '/calendar/add/';
-                }
-            } else {
-                href = $('#cal_href').val();
-            }
 
-            var infinity;
-            if ( $('.rep_type:checked').attr('rep') == 2 ) {
-                infinity = 1;
-            } else {
-                infinity = 0;
-            }
-            var d = {
-                id:         $('#op_dialog_event #cal_key').attr('value'),
-                title:      $('#op_dialog_event #cal_title').attr('value'),
-                date_end:   $('#op_dialog_event #cal_date_end').attr('value'),
-                date:       $('#op_dialog_event #cal_date').attr('value'),
-                time:       $('#op_dialog_event #cal_time').attr('value'),
-                repeat:     $('#op_dialog_event #cal_repeat option:selected').attr('value'),
-                count:      $('#op_dialog_event #cal_count').attr('value'),
-                comment:    $('#op_dialog_event #cal_comment').attr('value'),
-                infinity:   infinity,
-                amount:     $('#op_dialog_event #cal_amount').val(),
-                category:   $('#op_dialog_event #cal_category').val(),
-                type:       $('#op_dialog_event #cal_type').val(),
-                account:    $('#op_dialog_event #cal_account').val(),
-                rep_type:   $('#op_dialog_event .rep_type:checked').attr('rep'),
-                mon:        $('.week #mon').attr('checked') ? 1 : 0,
-                tue:        $('.week #tue').attr('checked') ? 1 : 0,
-                wed:        $('.week #wed').attr('checked') ? 1 : 0,
-                thu:        $('.week #thu').attr('checked') ? 1 : 0,
-                fri:        $('.week #fri').attr('checked') ? 1 : 0,
-                sat:        $('.week #sat').attr('checked') ? 1 : 0,
-                sun:        $('.week #sun').attr('checked') ? 1 : 0
-            };
-            $.post( href, d, function(data){
-                // В случае успешного добавления, закрываем диалог и обновляем календарь
-                if (data.length == 0) {
-                    $('#op_dialog_event').dialog('close');
-                    $.jGrowl("Данные сохранены", {theme: 'green'});
-                     $(window).trigger("saveSuccess", [d]);
-                } else {
-                    var e = '';
-                    for (var v in data) {
-                        e += data[v]+"\n";
-                    }
-                    $.jGrowl("Ошибки при сохранении : \n" + e, {theme: 'red', stick: true});
-                }
-            }, 'json');
-        }
 
         $('#op_pcount').select(function(){
             $('#op_pcounts').removeAttr('disable');
@@ -362,97 +300,6 @@ $(document).ready(function() {
         $('#op_pinfinity').select(function(){
             $('#op_pcounts').Attr('disable','disable')
         })
-        $('#cal_time').timePicker().mask('99:99');
-        function add2call() {
-            $('#cal_amount').keyup(function(e){
-                FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-            });
-            $('input#cal_date,input#cal_date_end').datepicker();
-            
-            $('#cal_repeat').change(function(){
-                if ($('#cal_repeat').val()=="7"){ // Неделя
-                    $('#week.week').closest('.line').show();
-                    $('.repeat').closest('.line').show()
-                }else if($('#cal_repeat').val()=="0"){ // Не повторять
-                    $('#week.week').closest('.line').hide();
-                    $('.repeat').closest('.line').hide()
-                }else{ // Иначе
-                    $('#week.week').closest('.line').hide();
-                    $('.repeat').closest('.line').show()
-                }
-            });
-            $('.repeat .rep_type').change(function(){
-                $('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
-                $('.repeat .rep_type:checked').closest('div').find('input,select').removeAttr('disabled');
-            })
-            $('#cal_type').change(function(){
-               toggleVisibleCategory('cal_category', $('option[selected]',this).val());
-            });
-            $('#op_dialog_event div.line').hide();
-            $('#op_dialog_event div.line').hide();
-            $('#op_dialog_event .event').show();
-            var k;
-            $('#cal_mainselect li').click(function(){
-                $('#op_dialog_event div.line').hide();
-                $('#cal_mainselect li').removeClass('act');
-                $('#op_dialog_event .'+$(this).addClass('act').attr('id')).show();
-                if ($('#cal_repeat').val()=="7"){
-                    $('#week.week').closest('.line').show();
-                    $('.repeat').closest('.line').show()
-                }else if($('#cal_repeat').val()=="0"){
-                    $('#week.week').closest('.line').hide();
-                    $('.repeat').closest('.line').hide()
-                }else{
-                    $('#week.week').closest('.line').hide();
-                    $('.repeat').closest('.line').show()
-                }
-            });
-            $('#week.week').closest('.line').hide();
-            $('.repeat').closest('.line').hide()
-
-            /**
-             * Изменение типа операции. показываем расходные и доходные категории.+универсальные
-             */
-            $('#cal_type').change(function(){
-                if ($('#cal_type').val() == 1)
-                    toggleVisibleCategory($('#cal_category'),1);
-                if ($('#cal_type').val() == 0)
-                    toggleVisibleCategory($('#cal_category'),-1);//отображает в списке категорий для добавления операции доходные
-
-            });
-
-
-            $('#op_dialog_event').css({width:'500px',height:'auto',overflow:'visible'});
-            //$('.repeat input:not[.rep_type],.repeat select').attr('disabled','disabled');
-            $('#op_dialog_event').dialog({
-                bgiframe: true,
-                autoOpen: false,
-                width: 447,
-                //height: 350,
-                buttons: {
-                    'Сохранить': function() {
-                        ac_save();
-                    },
-                    'Отмена': function() {
-                        $(this).dialog('close');
-                    }
-                },
-                close : function(){
-                    $('#cal_mainselect').removeAttr('disabled')
-                    $('input[type="text"],select,textarea','#op_dialog_event').val('');
-                    $('#op_dialog_event #cal_repeat').val(0);
-                }
-            });
-            
-            $('#op_dialog_event').dialog();
-//            for(i = 1; i < 31; i++){
-//                $('#op_dialog_event #op_acount').append('<option>'+i+'</option>').val(i);
-//                $('#op_dialog_event #op_pcounts').append('<option>'+i+'</option>').val(i);
-//            }
-            $('#op_dialog_event').dialog('open');
-            $('.ui-dialog-buttonpane').css('margin-top','30px');
-            //$('#op_adate,#op_pdate').val(dateText);   
-        }
 }
 
     if(inarray(Current_module, Connected_functional.menu)){
@@ -564,44 +411,44 @@ $('.tags_list .add').live('click', function(){
 })
     
 
-      ///////////////////////periodic/////////////////////////////////////////
-      var data = res['events'];
-      //events:{
-      //"5694":{
-      //    "id":"5694",
-      //    "chain":"0",
-      //    "title":"1234",
-      //    "date":"10.10.2009",
-      //    "comment":"",
-      //    "event":"cal",
-      //    "amount":"0.00",
-      //    "category":"0",
-      //    "diff":"0",
-      //    "account":"0",
-      //    "drain":"0"}
-            var p = '';var c = '';
-            for(var id in data) {
-                if (data[id]['event']=='cal') {
-                    c += '<li id="'+id+'">'
-                        +'<a href="/calendar/">'+data[id]['title']+'</a>'
-                        +'<span class="date">'+data[id]['date']+'</span></li>';
-                } else {
-                    p += '<li id="'+id+'">'
-                        +'<a href="/periodic/">'+data[id]['title']+'</a>'
-                        +'<b>'+ formatCurrency(data[id]['amount'])+'</b>'
-                        +'<span class="date">'+data[id]['date']+'</span></li>';
-                }
-
-            }
-            if (c != '') {
-                c = '<h2>События календаря</h2><ul>' + c + '</ul>';
-            }
-            if (p != '') {
-                p = '<h2>Регулярные операции</h2><ul>' + p + '</ul>';
-            }
-            if ((c+p) != '') {
-                $('.transaction').html(c+p+'&nbsp;<a href="#" id="AshowEvents">Показать события</a>');
-            }
+//      ///////////////////////periodic/////////////////////////////////////////
+//      var data = res['events'];
+//      //events:{
+//      //"5694":{
+//      //    "id":"5694",
+//      //    "chain":"0",
+//      //    "title":"1234",
+//      //    "date":"10.10.2009",
+//      //    "comment":"",
+//      //    "event":"cal",
+//      //    "amount":"0.00",
+//      //    "category":"0",
+//      //    "diff":"0",
+//      //    "account":"0",
+//      //    "drain":"0"}
+//            var p = '';var c = '';
+//            for(var id in data) {
+//                if (data[id]['event']=='cal') {
+//                    c += '<li id="'+id+'">'
+//                        +'<a href="/calendar/">'+data[id]['title']+'</a>'
+//                        +'<span class="date">'+data[id]['date']+'</span></li>';
+//                } else {
+//                    p += '<li id="'+id+'">'
+//                        +'<a href="/periodic/">'+data[id]['title']+'</a>'
+//                        +'<b>'+ data[id]['amount']+'</b>'
+//                        +'<span class="date">'+data[id]['date']+'</span></li>';
+//                }
+//
+//            }
+//            if (c != '') {
+//                c = '<h2>События календаря</h2><ul>' + c + '</ul>';
+//            }
+//            if (p != '') {
+//                p = '<h2>Регулярные операции</h2><ul>' + p + '</ul>';
+//            }
+//            if ((c+p) != '') {
+//                $('.transaction').html(c+p+'&nbsp;<a href="#" id="AshowEvents">Показать события</a>');
+//            }
       /////////////////////////targets///////////////////////////////////
       data = res['user_targets'];
             s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
@@ -714,16 +561,16 @@ $(".flash")
     
 //calendar
     $('.calendar_block .calendar').datepicker();
-    $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
-    $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
-    $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
+//    $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
+//    $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
+//    $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
 
     //$('.calendar_block .calendar a span').click(function(){
-        setInterval(function(){//@todo !избавиться как только будет время от этой конструкции!
-            $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
-            $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
-            $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
-        },100);
+//        setInterval(function(){//@todo !избавиться как только будет время от этой конструкции!
+//            $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
+//            $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
+//            $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
+//        },100);
     //})
 
 //    $('.calendar_block .ui-datepicker-prev').live('click',function(){
@@ -780,8 +627,8 @@ $(".flash")
                 <li id="m5"> \
                         <a href="/calendar/"></a> \
                         <ul> \
-                                <li><span/><a href="/calendar/">Календарь</a></li> \
-                                <li><span/><a href="/periodic/">Рег. операции</a></li> \
+                                <li><span/><a href="/calendar/#calend">Календарь</a></li> \
+                                <li><span/><a href="/calendar/#list">Список событий</a></li> \
                                 <li class="last"></li> \
                         </ul> \
                 </li> \
@@ -886,66 +733,66 @@ $(".flash")
      * Вслывающее окно с регулярными транзакциями и событиями календаря
      */
     // Щелчок по кнопке закрытия окна
-    $('#popupcalendar .inside .close').click(function(){
-        $('#popupcalendar').hide();
-        $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
-        $.cookie('events_hide', 1, {path: '/'});
-    });
-    $('#AshowEvents').live('click',function(){
-         $.cookie('events_hide', null, {path: '/'});
-         ShowEvents();
-         return false;
-    });
+//    $('#popupcalendar .inside .close').click(function(){
+//        $('#popupcalendar').hide();
+//        $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
+//        $.cookie('events_hide', 1, {path: '/'});
+//    });
+//    $('#AshowEvents').live('click',function(){
+//         $.cookie('events_hide', null, {path: '/'});
+//         ShowEvents();
+//         return false;
+//    });
     // Щелчок по кнопке "Подтвердить"
-    $('#btnAccept').click(function(){
-        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
-            var obj = new Array ();
-            $(ch).each(function(){
-                obj.push($(this).closest('tr').attr('value'));
-            });
-            $.post('/calendar/events_accept/', {
-                ids: obj.toString()
-            }, function(data){
-                for(v in obj) {
-                    delete res.events[obj[v]];
-                }
-                $.jGrowl('Отмеченные события подтверждены', {theme: 'green'});
-                ShowEvents();
-
-            }, 'json');
-        }
-    });
-
-    // Щелчок по кнопке "Пропустить"
-    $('#btnContinue').click(function(){
-
-    });
-    // Щелчок по кнопке "Редактировать"
-    $('#btnEdit').click(function(){
-
-    });
-    // Щелчок по кнопке "Удалить"
-    $('#btnDel').click(function(){
-        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-        var v;
-        if ($(ch).length > 0 && confirm('Удалить отмеченные?')) {
-            var obj = new Array ();
-            $(ch).each(function(){
-                obj.push($(this).closest('tr').attr('value'));
-            });
-            $.post('/calendar/events_del/', {
-                ids: obj.toString()
-            }, function(data){
-                for(v in obj) {
-                    delete res.events[obj[v]];
-                }
-                $.jGrowl('Отмеченные события удалены', {theme: 'green'});
-                ShowEvents();
-
-            }, 'json');
-        }
-    });
+//    $('#btnAccept').click(function(){
+//        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+//        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
+//            var obj = new Array ();
+//            $(ch).each(function(){
+//                obj.push($(this).closest('tr').attr('value'));
+//            });
+//            $.post('/calendar/events_accept/', {
+//                ids: obj.toString()
+//            }, function(data){
+//                for(v in obj) {
+//                    delete res.events[obj[v]];
+//                }
+//                $.jGrowl('Отмеченные события подтверждены', {theme: 'green'});
+//                ShowEvents();
+//
+//            }, 'json');
+//        }
+//    });
+//
+//    // Щелчок по кнопке "Пропустить"
+//    $('#btnContinue').click(function(){
+//
+//    });
+//    // Щелчок по кнопке "Редактировать"
+//    $('#btnEdit').click(function(){
+//
+//    });
+//    // Щелчок по кнопке "Удалить"
+//    $('#btnDel').click(function(){
+//        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+//        var v;
+//        if ($(ch).length > 0 && confirm('Удалить отмеченные?')) {
+//            var obj = new Array ();
+//            $(ch).each(function(){
+//                obj.push($(this).closest('tr').attr('value'));
+//            });
+//            $.post('/calendar/events_del/', {
+//                ids: obj.toString()
+//            }, function(data){
+//                for(v in obj) {
+//                    delete res.events[obj[v]];
+//                }
+//                $.jGrowl('Отмеченные события удалены', {theme: 'green'});
+//                ShowEvents();
+//
+//            }, 'json');
+//        }
+//    });
     // При щелчке по родительскому чекбоксу
     $('#events_periodic thead .chk input,#events_calendar thead .chk input').click(function(){
         var parentCheckbox = this;
@@ -958,101 +805,83 @@ $(".flash")
         });
     });
 
-    $('#popupcalendar').dialog({
-        bgiframe: true,
-        autoOpen: false,
-        resizable: false,
-        width: 420,
-        close:function(){
-            $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
-            $.cookie('events_hide', 1, {path: '/'});
-        }
-    })
-
-    if (window.location.host.toString().substr(0, 5) != "demo."){
-        ShowEvents();
-    }
-    
-    /**
-     * Выводит окошко пользователя для управления событиями
-     */
-    
-    function ShowEvents(type,page) {
-        if (type == null) {type = '';}
-        if (page == null) {page = 1 ;}
-        if ((res['events']) != null) {
-            var drain;
-            var ptr = '',ctr = '',p = 0,c = 0,pc = 0,cc = 0;
-            var counti = 4;//не работает count
-            var start = (page-1) * counti;
-            var end   = counti * page;
-            for (var v in res['events']) {
-
-                if (res['events'][v]['event'] == 'per') {
-                    if (p >= start && p <= end) {
-                        var cat_name = $('#ca_'+parseInt(res['events'][v]['category'])).attr('title');
-                        if (cat_name === undefined) { 
-                            cat_name = ' ';
-                        }
-
-                        var account_name = '';
-                        if (res.accounts[res.events[v]['account']] !== undefined) {
-                            account_name = res.accounts[res.events[v]['account']]['name'];
-                        }
-                        
-                        ptr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
-                                    +'<td>'+res['events'][v]['date']+'</td>'
-                                    +'<td>'+res['events'][v]['title']+'</td>'
-                                    +'<td>'+res['events'][v]['diff']+'</td>'
-                                    +'<td>'+cat_name+'</td>'
-                                    +'<td>'+account_name+'</td>'
-                                    +'<td class="money">'+res['events'][v]['amount']+'</td></tr>';
-                        p++;
-                    }
-                    pc++;
-                } else if (res['events'][v]['event'] == 'cal') {
-                    if (c >= start && c <= end) {
-                        if (res['events'][v]['drain'] == 1) {
-                            drain = 'Расход';
-                        } else {
-                            drain = 'Доход';
-                        }
-                        ctr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
-                                    +'<td>'+res['events'][v]['date']+'</td>'
-                                    +'<td>'+res['events'][v]['comment']+'</td>'
-                                    +'<td>'+res['events'][v]['diff']+'</td>'
-                                    +'<td>'+drain+'</td></tr>';
-                        c++;
-                    }
-                    cc++;
-                }
-            }
-            $('#events_periodic tbody').html(ptr);
-            $('#events_calendar tbody').html(ctr);
-//            ppages = parseInt(pc / p);
-//            cpages = parseInt(cc / c);
-//            for (i = 0; i < ppages; i++) {
+//    if (window.location.host.toString().substr(0, 5) != "demo.")
+//        ShowEvents();
 //
+//    function ShowEvents(type,page) {
+//        if (type == null) {type = '';}
+//        if (page == null) {page = 1 ;}
+//        if ((res['events']) != null) {
+//            var drain;
+//            var ptr = '',ctr = '',p = 0,c = 0,pc = 0,cc = 0;
+//            var counti = 4;//не работает count
+//            var start = (page-1) * counti;
+//            var end   = counti * page;
+//            for (var v in res['events']) {
+//
+//                if (res['events'][v]['event'] == 'per') {
+//                    if (p >= start && p <= end) {
+//                        var cat_name = $('#ca_'+parseInt(res['events'][v]['category'])).attr('title');
+//                        if (cat_name === undefined) {
+//                            cat_name = ' ';
 //            }
-//            $('#pages_periodic').html();
-            if (pc > 0 || cc > 0) {
-                $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
-                if ($.cookie('events_hide') != 1) {
-                    $('#popupcalendar').show();
-                    $('#popupcalendar').dialog('open');
-                }
-                //$('#popupcalendar .inside').css('width', 'auto');
-            } else {
-                if ($('#popupcalendar:visible').length > 0){
-                    $('#popupcalendar').dialog('close');
-                }
-            }
-//            <th>Пр. дней</th>
-//            <th>Категория</th>
-//            <th>Счет</th>
-//            <th class="money">Сумма</th>
-        }
-    }
+//
+//                        var account_name = '';
+//                        if (res.accounts[res.events[v]['account']] !== undefined) {
+//                            account_name = res.accounts[res.events[v]['account']]['name'];
+//                        }
+//
+//                        ptr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
+//                                    +'<td>'+res['events'][v]['date']+'</td>'
+//                                    +'<td>'+res['events'][v]['title']+'</td>'
+//                                    +'<td>'+res['events'][v]['diff']+'</td>'
+//                                    +'<td>'+cat_name+'</td>'
+//                                    +'<td>'+account_name+'</td>'
+//                                    +'<td class="money">'+res['events'][v]['amount']+'</td></tr>';
+//                        p++;
+//                    }
+//                    pc++;
+//                } else if (res['events'][v]['event'] == 'cal') {
+//                    if (c >= start && c <= end) {
+//                        if (res['events'][v]['drain'] == 1) {
+//                            drain = 'Расход';
+//                        } else {
+//                            drain = 'Доход';
+//                        }
+//                        ctr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
+//                                    +'<td>'+res['events'][v]['date']+'</td>'
+//                                    +'<td>'+res['events'][v]['comment']+'</td>'
+//                                    +'<td>'+res['events'][v]['diff']+'</td>'
+//                                    +'<td>'+drain+'</td></tr>';
+//                        c++;
+//                    }
+//                    cc++;
+//                }
+//            }
+
+//            $('#events_periodic tbody').html(ptr);
+//            $('#events_calendar tbody').html(ctr);
+////            ppages = parseInt(pc / p);
+////            cpages = parseInt(cc / c);
+////            for (i = 0; i < ppages; i++) {
+////
+////            }
+////            $('#pages_periodic').html();
+//            if (pc > 0 || cc > 0) {
+//                $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
+//                if ($.cookie('events_hide') != 1) {
+//                    $('#popupcalendar').show();
+//                }
+//                //$('#popupcalendar .inside').css('width', 'auto');
+//            } else {
+//                $('#popupcalendar').hide();
+//            }
+////            <th>Пр. дней</th>
+////            <th>Категория</th>
+////            <th>Счет</th>
+////            <th class="money">Сумма</th>
+//        }
+//    }
 
 
 

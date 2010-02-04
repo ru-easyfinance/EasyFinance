@@ -111,7 +111,7 @@
 
 
 
-    <div id="op_dialog_event" title="Событие" style="display: none;">
+    <div id="op_dialog_event" style="display: none;" class="addcal">
         <div class="event_form">
             <div class="line periodic event">
                 <input id="cal_key" type="hidden" value ="0" />
@@ -127,15 +127,15 @@
                     <input type="text" name="title" id="cal_title" />
             </div>
             <div class="line periodic">
-                    <label for="cal_category">Категория</label>
-                    <select name="category" id="cal_category">{$category}</select>
-            </div>
-            <div class="line periodic">
                 <label for="cal_type">Тип</label>
                 <select name="type" id="cal_type">
                     <option value="-1">Расход</option>
                     <option value="1">Доход</option>
                 </select>
+            </div>
+            <div class="line periodic">
+                    <label for="cal_category">Категория</label>
+                    <select name="category" id="cal_category">{$category}</select>
             </div>
             <div class="line periodic">
                     <label for="cal_account">Счёт</label>
@@ -197,18 +197,17 @@
             </div>
             <div class="line periodic event" style="display:none">
                 <div class="count repeat">
-                            <span>Повторить</span>
-                            <input name="rep_type" class="rep_type" rep="1" type="radio" checked="checked">
-                            <input name="count" type="text" id="cal_count" class="ui-widget-content" value="1"/>
-                            <span>раз</span>
+                            <input name="rep_type" id="cal_rep_every" class="rep_type" rep="1" type="radio" checked="checked">
+                    <label for="cal_rep_every">Повторить раз</label>
+                    <input name="count" type="text" id="cal_count" class="ui-widget-content" value="1" maxlength="3"/>
                     </div>
                     <div class="infinity repeat">
-                        <input name="rep_type" class="rep_type" rep="2" type="radio">
-                            <label>Бесконечно</label>
+                        <input name="rep_type" id="cal_rep_inf" class="rep_type" rep="2" type="radio">
+                        <label for="cal_rep_inf">Бесконечно</label>
                     </div>
                     <div class="todate repeat">
-                        <label for="cal_date_end">До даты</label>
-                            <input name="rep_type" class="rep_type" rep="3" type="radio">
+                        <input name="rep_type" id="cal_rep_to" class="rep_type" rep="3" type="radio">
+                        <label for="cal_rep_to">До даты</label>
                             <input name="date_end" id="cal_date_end" value="" type="text" disabled="disabled">
                     </div>
             </div>
@@ -217,49 +216,67 @@
                 <label for="cal_comment">Комментарий</label>
                 <textarea id="cal_comment" name="comment" class="text ui-widget-content"></textarea>
             </div>
+            <div class="line special">
+                <div>
+                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_1" value="single"/>
+                    <label for="cal_use_mode_1">Применить только для этого события</label>
+                </div>
+                <div>
+                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_2" value="follow"/>
+                    <label for="cal_use_mode_2">Применить для всех последующих событий</label>
+                </div>
+                <div>
+                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_3" value="all"/>
+                    <label for="cal_use_mode_3">Применить для всей цепочки</label>
+                </div>
+            </div>
         </div>
     </div>
                                 
     <!--popup события-->
-	<div id="popupcalendar">
-            <h3>Список транзакций</h3>
-            <table class="tab1" id="events_periodic">
+    <div id="popupcalendar"  style="display: none" title="<h3>У Вас были запланированы</h3>">
+        <div class="periodiccontent">
+            <h3> - Транзакции :</h3>
+            <table class="event" id="events_periodic_head">
                 <thead>
                     <tr>
-                        <th class="chk"><input type="checkbox" /></th>
-                        <th>Дата</th>
-                        <th>Комментарий</th>
-                        <th>Пр. дней</th>
-                        <th>Категория</th>
-                        <th>Счет</th>
-                        <th class="money">Сумма</th>
+                        <th class="chk c1 col"><input type="checkbox"/></th>
+                        <th class="c2 col">Дата</th>
+                        <th class="money c3 col">Сумма</th>
+                        <th class="c4 col">Счет</th>
+                        <th class="c5 col">Комментарий</th>
                     </tr>
                 </thead>
+            </table>
+            <div style="height:200px; overflow-y: scroll;overflow-x: hidden;">
+                <table class="event" id="events_periodic">
                 <tbody>
                 </tbody>
             </table>
-            <div id="pages_periodic"></div>
-            <h3>Список событий</h3>
-            <table class="tab1" id="events_calendar">
+            </div>
+        </div>
+        <div class="eventcontent">
+            <h3> - События :</h3>
+            <table class="periodic" id="events_calendar_head">
                 <thead>
                     <tr>
-                        <th class="chk"><input type="checkbox" /></th>
-                        <th>Дата</th>
-                        <th>Комментарий</th>
-                        <th>Пр. дней</th>
-                        <th>Вид события</th>
+                        <th class="chk c1 col"><input type="checkbox" /></th>
+                        <th class="c2 col">Название</th>
+                        <th class="c3 col">Просроченно</th>
+                        <th class="c4 col">Дата</th>
+                        <th class="c5 col">Комментарий</th>
                     </tr>
                 </thead>
+            </table>
+            <div style="height:200px; overflow-y: scroll;overflow-x: hidden;">
+                <table class="periodic" id="events_calendar">
                 <tbody>
                 </tbody>
             </table>
-            <div id="pages_calendar"></div>
-            <div class="but_cal">
-                <input type="button" value="Подтвердить" id="btnAccept" />
-                <input type="button" value="Удалить" id="btnDel" />
             </div>
         </div>
 
+    </div>
 <!--/popup события-->
 
 <!--гид-->

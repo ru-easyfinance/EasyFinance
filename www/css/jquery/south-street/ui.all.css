@@ -186,7 +186,7 @@
 
 #views.ui-widget-content .hasDatepicker .ui-widget-content, .calendar_block .calendar .ui-widget-content {
     padding: 0;
-    margin-top: 1em;
+    /*margin-top: 1em;*/
     font-size: 80%;
     width: auto!important;
 }
@@ -209,7 +209,7 @@
     margin-left: 8px;
 }
 #views.ui-widget-content .hasDatepicker .ui-widget-content .ui-widget-header, .calendar_block .calendar .ui-widget-content .ui-widget-header{
-    margin: -1px -8px 0 -8px;
+    /*margin: -1px -8px 0 -8px;*/
     -moz-border-radius: 0;
     border: 0;
     background: #dadada url('/img/i/jQuery/calendar/bg_table_calendar_th.gif') repeat-x 0 0!important;
@@ -220,7 +220,7 @@
 }
 
 #views.ui-widget-content .hasDatepicker .ui-widget-content table.ui-datepicker-calendar th, .calendar_block .calendar {
-    padding: .3em;
+    /*padding: .3em;*/
     color: #b4b4b4;
     border-bottom: solid 1px #d9d9d9;
 }

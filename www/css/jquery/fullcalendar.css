@@ -186,12 +186,12 @@
     color: blue;
 }
 .full-calendar-month .green td { 
-    background: green;
+    background: #539f2f;
     color: white;
     cursor:default;
 }
 .full-calendar-month .red td { 
-    background: red;
+    background: #ff0505;
     color: white;
     cursor:default;
 }
@@ -201,7 +201,7 @@
     cursor:default;
 }
 .full-calendar-month .yellow td { 
-    background: yellow;
+    background: #E4E4E4;
 }
 div.time-holder {
     position: relative;

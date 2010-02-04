@@ -13,10 +13,6 @@
                         <h2>Календарь</h2>
                     </div>
                 </div>
-                <ul class="menu5">
-                    <li id="ic3"><div><a href="#calend">Календарь</a></div></li>
-                    <li id="ic4"><div><a href="#events">Список событий</a></div></li>
-                </ul>
                 <ul class="month_cal">
                     <li class="y_prev" title="Переход на предыдущий год"><a></a></li>
                     <li class="m_prev" title="Переход на предыдущий месяц"><a></a></li>
@@ -32,7 +28,7 @@
                 </div>
                 <!--/Вкладка календаря -->
                 <!-- Вкладка списка событий -->
-                <div id="events">
+                <div id="events" style="display: none">
                     <div id="cal_events">
                         <form action="">
                             <h3>Регулярные операции</h3>
@@ -42,8 +38,8 @@
                                         <th class="chk"><input type="checkbox" value="" /></th>
                                         <th>Дата</th>
                                         <th>Название</th>
-                                        <th>Комментарий</th>
-                                        <th colspan="2">Сумма</th>
+                                        <th>Сумма</th>
+                                        <th colspan="2"></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -59,9 +55,8 @@
                                     <tr>
                                         <th class="chk"><input type="checkbox" value="" /></th>
                                         <th>Дата</th>
-                                        <th>Время</th>
                                         <th>Название</th>
-                                        <th>Комментарий</th>
+                                        <th colspan="2"></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -74,139 +69,7 @@
                         </form>
                     </div>
                 </div>
-                <!--/Вкладка списка событий -->
-                <div id="dialog_event" title="Событие" style="display: none;">
-                    <div id="tabs">
-                        <ul>
-                            <li><a href="#tabs-1">Событие</a></li>
-                            <li><a href="#tabs-2">Регулярная транзакция</a></li>
-                        </ul>
-                        <div id="tabs-1">
-                            <!-- Форма события календаря -->
-                            <form>
-                                <input type="hidden" name="key" id="key" />
-                                <input type="hidden" name="chain" id="chain" />
-                                <table>
-                                    <tr>
-                                        <td><label for="title">Заголовок</label></td>
-                                        <td><input type="text" name="title" id="title" class="text ui-widget-content" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="date">Дата</label></td>
-                                        <td><input type="text" name="date" id="date" value="" class="text ui-widget-content" /></td>
-                                    </tr>
-                                    <tr id="tr_date_start">
-                                        <td><label for="date_start">Дата начала</label></td>
-                                        <td><input type="text" name="date_start" id="date_start" value="" class="text ui-widget-content" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="time">Время</label></td>
-                                        <td><input type="text" name="time" id="time" value="" class="text ui-widget-content time" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="repeat">Повторять</label></td>
-                                        <td><select name="repeat" id="repeat" class="ui-widget-content">
-                                                <option value="0">Без повторения</option>
-                                                <option value="1">Каждый день</option>
-                                                <option value="3">Каждый Пн., Ср. и Пт.</option>
-                                                <option value="4">Каждый Вт. и Чт.</option>
-                                                <option value="5">По будням</option>
-                                                <option value="6">По выходным</option>
-                                                <option value="7">Каждую неделю</option>
-                                                <option value="30">Каждый месяц</option>
-                                                <!-- <option value="90">Ежеквартально</option> -->
-                                                <option value="365">Каждый год</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr id="tr_week">
-                                        <td>Дни недели</td>
-                                        <td>
-                                            <input type="checkbox" name="mon" id="mon" value="1"><label for="mon">Пн</label>
-                                            <input type="checkbox" name="tue" id="tue" value="1"><label for="tue">Вт</label>
-                                            <input type="checkbox" name="wed" id="wed" value="1"><label for="wed">Ср</label>
-                                            <input type="checkbox" name="thu" id="thu" value="1"><label for="thu">Чт</label>
-                                            <input type="checkbox" name="fri" id="fri" value="1"><label for="fri">Пт</label>
-                                            <input type="checkbox" name="sat" id="sat" value="1"><label for="sat">Сб</label>
-                                            <input type="checkbox" name="sun" id="sun" value="1"><label for="sun">Вс</label>
-                                        </td>
-                                    </tr>
-                                    <tr id="tr_count">
-                                        <td><label for="count">Повторить</label></td>
-                                        <td>
-                                            <div>
-                                                <input type="radio" name="rep_type" class="rep_type" value="1">
-                                                <select name="count" id="count" class="ui-widget-content"></select>
-                                                <label for="count">&nbsp;раз&nbsp;</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" name="rep_type" class="rep_type" value="2">
-                                                <input type="checkbox" name="infinity" id="infinity" value="1"><label for="infinity">Бесконечно</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" name="rep_type" class="rep_type" value="3">
-                                                <input type="text" name="date_end" id="date_end" value="" class="text ui-widget-content" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="comment">Комментарий</label></td>
-                                        <td><textarea id="comment" name="comment" class="text ui-widget-content"></textarea></td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </div>
-                        <div id="tabs-2">
-                            <!-- Форма для Регулярной транзакции -->
-                            <form id="perform">
-                                <input type="hidden" name="key" id="pkey" />
-                                <input type="hidden" name="chain" id="pchain" />
-                                <table>
-                                    <tr>
-                                        <td><label for="ptitle">Заголовок</label></td>
-                                        <td><input type="text" name="title" id="ptitle" class="text ui-widget-content" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="pdate">Дата</label></td>
-                                        <td><input type="text" name="date" id="pdate" value="" class="text ui-widget-content" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="pamount">Сумма</label></td>
-                                        <td><input type="text" name="amount" id="pamount" value="" class="text ui-widget-content" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="prepeat">Повторять</label></td>
-                                        <td><select name="repeat" id="prepeat" class="ui-widget-content">
-                                                <option value="0">Без повторения</option>
-                                                <option value="1">Каждый день</option>
-                                                <option value="7">Каждую неделю</option>
-                                                <option value="30">Каждый месяц</option>
-                                                <option value="90">Ежеквартально</option>
-                                                <option value="365">Каждый год</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="pcount">Повторить</label></td>
-                                        <td>
-                                            <div>
-                                                <select name="count" id="pcount" class="ui-widget-content"></select>
-                                                <label for="pcount">&nbsp;раз&nbsp;</label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" name="infinity" id="pinfinity" value="1"><label for="pinfinity">Бесконечно</label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="pcomment">Комментарий</label></td>
-                                        <td><textarea id="pcomment" name="comment" class="text ui-widget-content"></textarea></td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cb"><div></div></div></div>
+            </div>
         </div>
         <!--правая колонка-->
         {include file="right.quick.html"}

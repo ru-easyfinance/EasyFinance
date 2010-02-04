@@ -698,21 +698,43 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 
 
 
-.event_form{margin:11px;width: 447px}
+.event_form{margin:11px;width: 447px; position:relative; overflow:hidden}
 .event_form #cal_mainselect{width : 100%}
-.event_form #cal_mainselect li {cursor:pointer;position:relative;float:left;line-height:15px;min-width:100px;font-size:14px;color:#6CBD45;}
-.event_form #cal_mainselect li.act span{border-bottom:1px dashed #6BBE4C;}
-.event_form select,.event_form input,.event_form textarea {left:125px; position: absolute;width:300px;}
-.event_form .rep_type{border: 0}
-.event_form .week input{position : relative; width:20px ;left : -15px ; margin-right : 1px; border: 0 }
+.event_form select,.event_form input,.event_form textarea {float: right; position: relative;width:300px}
+
+.event_form .week .cell{position:relative;float: left}
+.event_form .week .cell{left:0}
+.event_form .week .cell div{position:static;clear:both}
+
+
+
+.event_form #cal_mainselect li {position:relative;float:left;line-height:15px;min-width:100px;font-size:14px;}
+.event_form #cal_mainselect li span{
+    background-color: #FFFFFF;
+    cursor:pointer;
+    border-bottom:1px dotted #50C319;
+    color: #50C319;
+    margin: 0 0.5em;
+    padding: 0;
+}
+.event_form #cal_mainselect li.act span{
+    cursor:default;
+    border-bottom:0;
+    color: #FFFFFF;
+    padding: 0.2em 0.5em;
+    background-color: #50C319;
+}
 .event_form .line div.week {margin-top:20px;}
-.event_form .week label{position : relative; width:20px ;margin-left : 11px;left:-25px}
-.event_form .line {position : relative;margin-top :10px;min-height:20px}
-.event_form .line div{position : relative;margin-top :10px ;left :125px}
+.event_form .week label{position : relative;margin-left : 7px;float:right}
+.event_form .week .cell input{width: auto;margin: 7px}
+.event_form .line {position : relative;margin-top :10px;min-height:20px; clear: both;}
+.event_form .line div{position : relative; left :145px; clear: both}
 .event_form .rep_type{left:10px; position: absolute;width:auto}
-.event_form .repeat input,.event_form .repeat select {width:175px}
-.event_form .repeat input.rep_type{width:auto;left : 90px;}
-ul.buttons_block { left: 50px;position: relative; }
+.event_form .repeat input,.event_form .repeat select {width: 175px; left: -130px}
+.event_form .repeat input.rep_type{width:20px;left : 90px;}
+.event_form .repeat label{left:0}
+
+ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 .iframe ul.buttons_block { left: 18px; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 ul.buttons_block li { float: left; margin-right: 13px; height: 40px; background: url('/img/i/buttons.png') no-repeat 0 0; }
@@ -968,10 +990,12 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
- table.t_body{max-height: 300px; overflow-x: hidden; overflow-y:scroll; display: block}
+ table.t_body{max-height: 300px; display: block}
  table.tab1 tr{height: 20px}
 .operation_list table div.cont { position: relative; }
  table.tab1 td{width: 24%}
+ table.tab1#ev_tabl td{width: 32%}
+ table.tab1#ev_tabl .chk {width:20px;}
 .act div.cont ul { display: block; }
 div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0;}
 div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -1044,10 +1068,10 @@ div.cont ul li.add a { width: 12px; }
 
 .calendar_block .flash {background: url('/img/i/gaugeMain.gif?') 0px 0px no-repeat;}
 
-.calendar_block, .calculator_block { margin-bottom: 14px; }
-.calendar_block {border-bottom:#E5E5E5 solid 1px;}
+.calendar_block/*, .calculator_block */{ margin-bottom: 14px; }
+/*.calendar_block {border-bottom:#E5E5E5 solid 1px;}*/
 .calendar_block h2, .calculator_block h2 { margin: 0 0 11px 16px; font: 14px/16px Helvetica, Arial, Tahoma; color: #ec7b3d; }
-.calendar_block h2 {margin-bottom:0;}
+.calendar_block h2 {margin-bottom:10px;margin-top: 13px;}
 .calendar_block .calendar { margin: 0 auto; width: 168px;  overflow: hidden; border: 1px solid #e5e5e5; }
 .calendar_block .calendar .days { width: 140px; margin: 0 auto; overflow: hidden; }
 .calendar_block .calendar .days div { width: 143px; padding: 2px 0 7px 0; font-size: 11px; }
@@ -1332,7 +1356,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 
 
 #popupaddobject { display: none; position: absolute; width: 687px; z-index: 1000; }
-#popupaddobject .cont, #popupcalendar .cont { position: relative; width: 687px; overflow: hidden; }
+#popupaddobject .cont{ position: relative; width: 687px; overflow: hidden; }
 #popupaddobject .cont .ct, #popupaddobject .cb div,
 #popupcalendar .cont .ct, #popupcalendar .cb div{ position: absolute; top: 0; left: 0; width: 687px; height: 800px; z-index: 0; background: url('/img/i/ramka6.png') no-repeat 0 0; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka6.png", sizingMethod="crop"); }
 #popupaddobject .cb, #popupcalendar .cb { position: relative; width: 687px; height: 25px; overflow: hidden; }
@@ -1375,7 +1399,7 @@ ul.pager li.act { color: #ffffff; background: #38ad00; }
 .print { display: block; padding-left: 20px; background: url('/img/i/icons.gif') no-repeat -40px -266px; }
 
 
-ul.month_cal { position: relative; margin-bottom: 17px; padding-bottom: 6px; border-bottom: 1px solid #e5e5e5; }
+ul.month_cal { position: relative; margin-bottom: 17px; padding-bottom: 6px;margin-top:7px; border-bottom: 1px solid #e5e5e5; }
 ul.month_cal li{cursor :pointer; }
 ul.month_cal li a, #ui-datepicker-div  .ui-datepicker-prev , #ui-datepicker-div  .ui-datepicker-next{ color: #949494; background: url('/img/i/arrow.gif') no-repeat 0 0; }
 ul.month_cal li.cur { font-size: 18px; line-height: 20px; color: #4b4b4b; text-align: center; }
@@ -1682,7 +1706,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     text-align: left;
 }
 #views.ui-widget-content #calendar table td.today {
-    background-color: #e4ffe0;
+    background-color: #ffe0a0;
 }
 
 .ui-dialog.ui-widget-content {
@@ -1957,4 +1981,70 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 }
 .calculatorRW td.special div{
     background-color:#E8E8E8;
+}
+
+#ev_tabl tbody tr td,#ev_tabl tr th{
+    width: 32%;
+    overflow: visible;
+    position : static;
+}
+#per_tabl tbody tr td,#per_tabl_header tr th{
+    width: 26%;
+    overflow: visible;
+    position : static;
+}
+#per_tabl_header tr th,#ev_tabl tr th{text-align: left;}
+#ev_tabl tbody tr td.chk,#per_tabl tbody tr td.chk,#ev_tabl tr th.chk,#per_tabl_header tr th.chk{
+    width: 20px;
+    overflow: visible;
+}
+#ev_tabl tbody tr td.accept,#per_tabl tbody tr td.accept{
+    background-image:url(/img/i/green_tick.png);
+    background-repeat:no-repeat;
+    background-position:top right;
+}
+#ev_tabl tbody tr td.reject,#per_tabl tbody tr td.reject div{
+    background:transparent url(/img/i/grey_tick.png) no-repeat scroll 100% 50%;
+}
+#ev_tabl tbody tr .cont ul,#per_tabl tbody tr .cont ul{
+    background:transparent url(/img/i/icons_control4.gif) no-repeat scroll 0 0;
+}
+#ev_tabl tbody tr:hover .cont ul,#per_tabl tbody tr:hover .cont ul{
+    display:block;
+
+}
+
+#ev_tabl tbody tr:hover .cont,#per_tabl tbody tr:hover .cont{
+    position:relative;
+    margin-top:15px;
+}
+/* Поправки для МБ в каллендаре */
+#calend .full-calendar-month table, #calend .full-calendar-month div{
+    cursor: pointer;
+}
+.full-calendar-month .event td.c{
+    max-width: 64px;
+    overflow: hidden;
+    width: 64px;
+}
+.full-calendar-month .event td.c span{
+    position: static;
+    display: block;
+    max-width: 64px;
+    overflow: hidden;
+    width: 64px;
+}
+.full-calendar-month table tr td.n,
+.full-calendar-month table tr td.w,
+.full-calendar-month table tr td.e,
+.full-calendar-month table tr td.s{
+    background-color: black
+}
+table.calendar_tip{
+    width: 100%;
+}
+table.calendar_tip td{
+    position: relative;
+    overflow: hidden;
+    width: 50%
 }

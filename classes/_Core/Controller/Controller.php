@@ -288,6 +288,9 @@ abstract class _Core_Controller
             'getNotify' => $_SESSION['user']['getNotify'],
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
+            'calendar' => array(
+                'reminder' => Core::getInstance()->user->getUserEvents(),
+            ),
             'accounts' => $accounts,
             'events' => Core::getInstance()->user->getUserEvents(),
             //'targets' => $targ,

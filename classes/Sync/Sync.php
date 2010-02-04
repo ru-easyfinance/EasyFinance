@@ -217,7 +217,7 @@ class Sync{
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
         $operation->FormArray($this->lastsync, $this->dataarrayE);
-        $transfer->FormArray($this->lastsync, $this->dataarrayE);
+        //$transfer->FormArray($this->lastsync, $this->dataarrayE);
         $debet->FormArray($this->lastsync, $this->dataarrayE);
         //$plans->FormArray($this->lastsync, $this->dataarrayE);
         $currency = new Currency($this->user, $this->db);

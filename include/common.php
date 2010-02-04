@@ -48,7 +48,7 @@ else
 {
     $tpl->append('css', 'main.css');
 
-    $tpl->append('css', 'jquery/south-street/ui.all.css');
+//    $tpl->append('css', 'jquery/south-street/ui.all.css');
     //$tpl->append('css', 'jquery/south-street/ui.base.css');
     $tpl->append('css', 'jquery/south-street/ui.core.css');
     $tpl->append('css', 'jquery/south-street/ui.resizable.css');
@@ -77,6 +77,7 @@ $tpl->append('css', 'operationsJournal.css');
 $tpl->append('css', 'budgetMaster.css');
 $tpl->append('css', 'budget.css');
 
+$tpl->append('css', 'calendar.css');
 if( JS_MINIFY )
 {
     $tpl->append('js',  'global-min.js');
@@ -95,6 +96,10 @@ else
 //$tpl->append('js', 'models/accounts.model.js');
 //$tpl->append('js', 'models/category.model.js');
 
+//$tpl->append('js', 'widgets/calendar/calendarLeft.widget.js');
+//$tpl->append('js', 'widgets/calendar/calendarEditor.widget.js');
+//$tpl->append('js', 'widgets/calendar/calendar.widget.js');
+//$tpl->append('js', 'widgets/calendar/calendarList.widget.js');
 //$tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');
 //$tpl->append('js', 'widgets/operations/operationEdit.widget.js');
 
@@ -109,28 +114,61 @@ Core::getInstance()->user = new User();
 Core::getInstance()->js = array(
     'welcome' => array('welcome'),
     'targets' => array('targets'),
-    'report' => array(
-        'report',
-        'jquery/jquery.jqplot.min',
-        'jquery/jqplot.categoryAxisRenderer.min',
-        'jquery/jqplot.barRenderer.min',
-        'jquery/jqplot.pieRenderer.min',
-        'jquery/excanvas.min'),
+    'report' => array('report'),
     'registration' => array('registration'),
     'profile' => array('profile'),
     'periodic' => array('periodic'),
-    'operation' => array('widgets/operations/operationsJournal.widget', 'operation'),
-    'mail' => array('mail', 'models/mail.model', 'widgets/mail.widget'),
-    'expert' => array('models/mail.model', 'widgets/mail.widget', 'jquery/jquery.form', 'jquery/jHtmlArea-0.7.0', 'jquery/jHtmlArea.ColorPickerMenu-0.7.0', 'models/expert.model', 'widgets/expert/expertEditInfo.widget', 'widgets/expert/expertEditPhoto.widget', 'widgets/expert/expertEditCertificates.widget', 'widgets/expert/expertEditServices.widget', 'screens/expert.screen', 'jquery/jquery.fancybox-1.0.0'),
-    'expertslist' => array('widgets/services/expertsList.widget', 'screens/services.screen', 'jquery/jquery.fancybox-1.0.0'),
+    'operation' => array(
+        'widgets/operations/operationsJournal.widget',
+        'operation'),
+
+    'mail' => array('mail',
+        'models/mail.model',
+        'widgets/mail.widget'),
+
+    'expert' => array(
+        'models/mail.model',
+        'widgets/mail.widget',
+        'jquery/jquery.form',
+        'jquery/jHtmlArea-0.7.0',
+        'jquery/jHtmlArea.ColorPickerMenu-0.7.0',
+        'models/expert.model',
+        'widgets/expert/expertEditInfo.widget',
+        'widgets/expert/expertEditPhoto.widget',
+        'widgets/expert/expertEditCertificates.widget',
+        'widgets/expert/expertEditServices.widget',
+        'screens/expert.screen',
+        'jquery/jquery.fancybox-1.0.0'),
+
+    'expertslist' => array(
+        'widgets/services/expertsList.widget',
+        'screens/services.screen',
+        'jquery/jquery.fancybox-1.0.0'),
     'login' => array('welcome'),
     'info' => array('info'),
-    'category' => array('models/category.model', 'category'),
-    'calendar' => array('calendar'),
+    'category' => array(
+        'models/category.model',
+        'category'),
+
+    'calendar' => array(
+        'jquery/fullcalendar',
+        'calendar',
+        'widgets/calendar/calendar.widget'),
     'admin' => array( 'admin'),
-    'accounts' => array('widgets/accounts/accountEdit.widget', 'widgets/accounts/accountsJournal.widget', 'accounts'),
-    'review' => array('jquery/jquery.fancybox-1.0.0', 'review'),
-    'budget' => array('budget','models/category.model', 'models/budget.model','widgets/budget/budget.widget','widgets/budget/budgetMaster.widget')
+    'accounts' => array(
+        'widgets/accounts/accountEdit.widget',
+        'widgets/accounts/accountsJournal.widget',
+        'accounts'),
+    'review' => array(
+        'jquery/jquery.fancybox-1.0.0',
+        'review'),
+
+    'budget' => array(
+        'budget',
+        'models/category.model',
+        'models/budget.model',
+        'widgets/budget/budget.widget',
+        'widgets/budget/budgetMaster.widget')
 );
 
 // Почта

@@ -1,0 +1,38 @@
+/*                                   Popup calendaR                                 */
+#popupcalendar{
+    position : relative;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden
+}
+#popupcalendar h3{
+    font-size : 1.3em;
+    font-weight : bold;
+    margin-bottom : 10px;
+
+}
+#popupcalendar table{
+    width : 98%;
+    left : 9px;
+    position: relative;
+}
+#popupcalendar table tr{
+    border : 1px solid #E8E8E8;
+}
+#popupcalendar table thead{
+    text-align : left;
+    background : transparent url(/img/i/bg09.gif) repeat-x scroll 0 0;
+
+}
+
+#popupcalendar table .col{
+    width : 100px;
+}
+#popupcalendar table .col.c1{
+    width : 20px;
+}
+
+
+#popupcalendar table .money{
+    text-align: right;
+}
