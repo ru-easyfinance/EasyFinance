@@ -52,7 +52,6 @@ easyFinance.widgets.calendarRight = function(result){
 
 }
 $(document).ready(function(){
-
     var s = new Date();
     s.setDate(1);
     var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
@@ -80,7 +79,7 @@ $(document).ready(function(){
             var i = 1;
             var dayDate = new Date(year, month, day, 1, 1, 1, 1);
             var weekDay = dayDate.getDay();
-            if (weekDay == 0){
+            if (weekDay === 0){
                 weekDay = 7;
             }
             calendarEditor.load();

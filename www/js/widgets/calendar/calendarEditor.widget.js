@@ -25,7 +25,7 @@ easyFinance.widgets.calendarEditor = function(){
         if (_useFilter){
             $('#op_dialog_event div.line').hide();
             $('#op_dialog_event div.line.'+$('#cal_mainselect li.act').attr('id')).show();
-            $('#cal_repeat').change()
+            $('#cal_repeat').change();
         }
     }
 
@@ -35,12 +35,12 @@ easyFinance.widgets.calendarEditor = function(){
      * @param type тип события
      */
     function _setupValues(el,type){
-        _clear()
+        _clear();
         var dt = new Date();
         dt.setTime(el.date*1000);
 
         $('#cal_mainselect li').removeClass('act');
-        $('#cal_mainselect #'+type).addClass('act')
+        $('#cal_mainselect #'+type).addClass('act');
 
         $('#cal_key').val(el.id);
         $('#cal_chain').val(el.chain);
@@ -49,8 +49,8 @@ easyFinance.widgets.calendarEditor = function(){
         
         if (el.type == 'p'){
             $('#cal_amount').val(el.amount.toString());
-            $('#cal_category').val(el.cat)
-            $('#cal_type').val(el.op_type)
+            $('#cal_category').val(el.cat);
+            $('#cal_type').val(el.op_type);
             $('#cal_account').val(el.account.toString());
         }else{
             $('#cal_title').val(el.title.toString());
@@ -72,12 +72,12 @@ easyFinance.widgets.calendarEditor = function(){
             $('.repeat').closest('.line').show();
             $('#cal_repeat').change();
             if ($('#cal_repeat').val()=="7"){
-                var i = 0
+                var i = 0;
                 $('#week.week input').each(function(){
                     if (el.week.toString().substr(i, 1) == '1'){
-                        $(this).attr('checked', 'checked')
+                        $(this).attr('checked', 'checked');
                     }
-                    i++
+                    i++;
                 });
                 $('#week.week').closest('.line').show();
             }
@@ -123,25 +123,25 @@ easyFinance.widgets.calendarEditor = function(){
 
         $('#cal_mainselect li').click(function(){
             $('#cal_mainselect li').removeClass('act');
-            $(this).addClass('act')
-            _filter()
+            $(this).addClass('act');
+            _filter();
         });
 
         $('#cal_type option').click(function(){
             
-            _toggleCategory( $('#cal_type').val())
+            _toggleCategory( $('#cal_type').val());
         });
 
         $('#cal_repeat').change(function(){
             if ($('#cal_repeat').val()=="7"){ // Неделя
                 $('#week.week').closest('.line').show();
-                $('.repeat').closest('.line').show()
+                $('.repeat').closest('.line').show();
             }else if($('#cal_repeat').val()=="0"){ // Не повторять
                 $('#week.week').closest('.line').hide();
-                $('.repeat').closest('.line').hide()
+                $('.repeat').closest('.line').hide();
             }else{ // Иначе
                 $('#week.week').closest('.line').hide();
-                $('.repeat').closest('.line').show()
+                $('.repeat').closest('.line').show();
             }
         });
 
@@ -149,10 +149,10 @@ easyFinance.widgets.calendarEditor = function(){
             $('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
             $('.repeat .rep_type:checked').closest('div').find('input,select').removeAttr('disabled');
             $('#cal_date_end').datepicker();
-        })
+        });
 
         $('#cal_amount').keyup(function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+            FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
         });
     }
     
@@ -161,23 +161,23 @@ easyFinance.widgets.calendarEditor = function(){
      * @param data obj
      */
     function load(data){
-        _categories = easyFinance.models.category.getUserCategoriesTree()
+        _categories = easyFinance.models.category.getUserCategoriesTree();
         _printCategories();
 
         var accounts = easyFinance.models.accounts.getAccounts();
-        var accStr = ''
+        var accStr = '';
         for (var key in accounts){
-            accStr+= '<option value="'+accounts[key].id+'">'+accounts[key].name+'</option>'
+            accStr+= '<option value="'+accounts[key].id+'">'+accounts[key].name+'</option>';
         }
         $('#cal_account').html(accStr);
         if(typeof data == 'object'){
-            func = 'edit/'
-            _setupValues(data.el, data.type)
+            func = 'edit/';
+            _setupValues(data.el, data.type);
             _useFilter = 1;
-            _filter()
+            _filter();
             _useFilter = 0;
-            $('#op_dialog_event div.line.special').show()
-            $('#cal_mainselect').closest('.line').hide()
+            $('#op_dialog_event div.line.special').show();
+            $('#cal_mainselect').closest('.line').hide();
             $('#op_dialog_event').dialog({
                 bgiframe: true,
                 autoOpen: false,
@@ -203,8 +203,8 @@ easyFinance.widgets.calendarEditor = function(){
                 }
             });
         }else{
-            func = 'add/'
-            $('#cal_mainselect').closest('.line').show()
+            func = 'add/';
+            $('#cal_mainselect').closest('.line').show();
             _useFilter = 1;
             _filter();
             $('#op_dialog_event').dialog({
@@ -236,7 +236,7 @@ easyFinance.widgets.calendarEditor = function(){
      */
     function save(){
         var type = '';
-        var every = $('#op_dialog_event #cal_repeat option:selected').attr('value')
+        var every = $('#op_dialog_event #cal_repeat option:selected').attr('value');
         var repeat = '',week = '';
 
         if ($('#cal_mainselect .act').attr('id')=='periodic') {
@@ -292,7 +292,7 @@ easyFinance.widgets.calendarEditor = function(){
             
         };
         $.post('/calendar/'+func,ret,function(data){
-            calendarLeft.init(easyFinance.models.calendar())
+            calendarLeft.init(easyFinance.models.calendar());
             if(window.location.pathname.indexOf('calendar') != -1){
                 $('#calendar').fullCalendar('refresh');
             }else{
@@ -318,12 +318,12 @@ easyFinance.widgets.calendarEditor = function(){
         ret.use_mode= $('#op_dialog_event .special input:checked').attr('value');
         $.post('/calendar/del/',ret,
         function(data){
-            $.get('/calendar/reminder/',{},function(data){calendarLeft.init(data)},'json')
+            $.get('/calendar/reminder/',{},function(data){calendarLeft.init(data);},'json');
             if(window.location.pathname.indexOf('calendar') != -1){
                 $('#calendar').fullCalendar('refresh');
             }
         },'json');
     }
 
-    return {init: init, load: load, save: save, del: del}
-}
+    return {init: init, load: load, save: save, del: del};
+};
