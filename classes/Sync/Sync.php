@@ -85,6 +85,7 @@ class Sync{
             return false;
         }
         $this->clearAll($this->user);
+        return php_xmlrpc_encode(array('1'=>'1'));
     }
 
     function deleteRecMapByUser($xmlReq=''){
@@ -96,6 +97,7 @@ class Sync{
             return false;
         }
         $this->cleanRec($this->user);
+        return php_xmlrpc_encode(array('1'=>'1'));
     }
 
     function getDate(){
