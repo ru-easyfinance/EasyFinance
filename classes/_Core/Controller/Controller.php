@@ -284,12 +284,19 @@ abstract class _Core_Controller
             $cats = null;
         }
 
-	$res += array(
+        // Получаем события календаря за весь текущий месяц
+        $calendar = new Calendar( Core::getInstance()->user->getId() );
+        // Из-за глюка компонента календарь - умножаем таймштамп на тысячу
+        $events = $calendar->loadAll($user, mktime(0, 0, 0, date('n'), 1, date('Y')) * 1000,
+                mktime(0, 0, 0, date('n') + 1, 0, date('Y')) * 1000);
+
+        $res += array(
             'getNotify' => $_SESSION['user']['getNotify'],
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'calendar' => array(
                 'reminder' => Core::getInstance()->user->getUserEvents(),
+                'calendar' => $events->getArray()
             ),
             'accounts' => $accounts,
             'events' => Core::getInstance()->user->getUserEvents(),
