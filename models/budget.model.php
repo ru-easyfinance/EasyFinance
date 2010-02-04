@@ -37,9 +37,9 @@ class Budget_Model {
             $start = date('Y-m-01');
         }
 
-        if (!$category) {
+        /*if (!$category) {
             $category = Core::getInstance()->user->getUserCategory();
-        }
+        }*/
 
          /*$sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
             WHERE c.cat_id=b.category AND b.user_id=c.user_id AND b.date_start=? ) AS amount,
