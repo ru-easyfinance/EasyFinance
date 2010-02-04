@@ -83,7 +83,7 @@ easyFinance.widgets.accountsJournal = function(){
                 return false;
         });
 
-        $('#operation_list tr.item').live('dblclick',
+        $('#operation_list tr').live('click',
             function(){
                  // создание новой операции для выбранного счёта
                 var acc = $(this).closest('tr').attr('id').split("_", 2)[1];
@@ -91,6 +91,7 @@ easyFinance.widgets.accountsJournal = function(){
                     easyFinance.widgets.operationEdit.setAccount(acc);
                     easyFinance.widgets.operationEdit.showForm();
                 }
+                $(document).scrollTop(200);
         });
 
         //del account click
