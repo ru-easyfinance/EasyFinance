@@ -41,37 +41,38 @@ class Category {
             $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
             if ( $toChangeRec[0]['ekey'] ){//редактирование
                 $numEkey = $this->findEkey($v['remotekey']);
-                $cate->editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name']);
+                $cate->editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name'],$cat[$k]['type']);
             } else {
-                foreach ($cat as $k=>$v){
-                    if ( $v['parent']==0 ){
-                        $categ = $cate->addCategory(0,$cat[$k]['parent'],$cat[$k]['name']);
+
+               // foreach ($cat as $k=>$v){
+                    if ( $v['parent'] == '0' ){
+                        $categ = $cate->addCategory(0,$cat[$k]['parent'],$cat[$k]['name'], $cat[$k]['type']);
                         if ($categ>0)
                         $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $v['remotekey'], $categ, 1, $this->db);
                         $data[1][0]['type'] = 'service';
                         $data[1][0]['name'] = 'RecordsMap';
                         $data[1][] = array(
                             'tablename' => 'Categories',
-                            'kkey' => (int)$v['remotekey'],
+                            'kkey' => $v['remotekey'],
                             'ekey' => (int)$categ,
                         );
                     }
-                }
-                foreach ($cat as $k=>$v){
-                    if ( $v['parent']!=0 ){
+                //}
+                //foreach ($cat as $k=>$v){
+                    if ( $v['parent'] != '0' ){
                         $id = $this->findEkey($cat[$k]['parent']);
-                        $categ = $cate->addCategory(0,$id,$cat[$k]['name']);
+                        $categ = $cate->addCategory(0,$id,$cat[$k]['name'],$cat[$k]['type']);
                         if ($categ > 0)
                         $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Categories', $v['remotekey'], $categ, 1, $this->db);
                         $data[1][0]['type'] = 'service';
                         $data[1][0]['name'] = 'RecordsMap';
                         $data[1][] = array(
                             'tablename' => 'Categories',
-                            'kkey' => (int)$v['remotekey'],
+                            'kkey' => $v['remotekey'],
                             'ekey' => (int)$categ,
                         );
                     }
-                }
+                //}
             }
         }
 

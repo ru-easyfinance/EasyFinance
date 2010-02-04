@@ -212,7 +212,7 @@ class Sync{
         //$plans = new Periodic($this->user, $this->db);
         //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
-        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
+        
 
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
@@ -222,6 +222,7 @@ class Sync{
         //$plans->FormArray($this->lastsync, $this->dataarrayE);
         $currency = new Currency($this->user, $this->db);
         $currency->FormArray($this->dataarrayE);
+        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
         $ret = array(
             'RecordsMap' => $this->dataarrayE[1]
             ,'ChangedRecords' => $this->dataarrayE[2]
@@ -398,6 +399,7 @@ class Sync{
                     $this->CategoriesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->CategoriesList[$k]['name']=$qw[$i][$k]['name'];
                     $this->CategoriesList[$k]['parent']=$qw[$i][$k]['parent'];
+                    $this->CategoriesList[$k]['type']=$qw[$i][$k]['type'];
                 }
             }
         }

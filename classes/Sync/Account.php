@@ -38,7 +38,7 @@ class Account {
         foreach($acc as $k=>$v){
             $sql = "SELECT ekey FROM records_map WHERE tablename='Accounts' AND remotekey=? AND user_id=?";
             $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
-            if ( $toChangeRec[0]['ekey'] ){//редактирование
+            if ( $toChangeRec[0]['ekey'] != null ){//редактирование
                 $numEkey = $toChangeRec[0]['ekey'];
                 $acco->editAccount($numEkey,$acc[$k]['name'],$acc[$k]['cur'],$acc[$k]['date'],$acc[$k]['startbalance'],$acc[$k]['descr']);
             } else{//добавление
@@ -50,7 +50,7 @@ class Account {
                     $data[1][0]['name'] = 'RecordsMap';
                     $data[1][] = array(
                         'tablename' => 'Accounts',
-                        'kkey' => (int)$v['remotekey'],
+                        'kkey' => $v['remotekey'],
                         'ekey' => (int)$accou,
                     );
                 }

@@ -39,7 +39,7 @@ class Operation {
         foreach($op as $k=>$v) {
             $sql = "SELECT ekey FROM records_map WHERE tablename='Incomes' AND remotekey=? AND user_id=?";
             $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
-            if ( $toChangeRec[0]['ekey'] ){//редактирование
+            if ( $toChangeRec[0]['ekey'] != null ){//редактирование
                 
                 $eacc = $this->findEkey($op[$k]['account'], 'Accounts');
                 $ecat = $this->findEkey($op[$k]['category'], 'Categories');
@@ -57,7 +57,7 @@ class Operation {
                 $data[1][0]['name'] = 'RecordsMap';
                 $data[1][] = array(
                     'tablename' => 'Incomes',
-                    'kkey' => (int)$v['remotekey'],
+                    'kkey' => $v['remotekey'],
                     'ekey' => (int)$oper,
                 );
         }

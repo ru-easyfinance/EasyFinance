@@ -22,11 +22,11 @@ class SyncCategory_Model {
      * @param string $name
      * @return int
      */
-    function addCategory($id=0, $parent_id=0, $name=''){
+    function addCategory($id=0, $parent_id=0, $name='', $type=0){
         $sys = 0;// системная категория не установлена
         $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type,
             dt_create) VALUES(?, ?, ?, ?, ?, NOW())";
-        $query = $this->db->query($sql, $this->user, $parent_id, $sys, $name, 0);
+        $query = $this->db->query($sql, $this->user, $parent_id, $sys, $name, $type);
         return mysql_insert_id();//*/
     }
 
@@ -38,12 +38,12 @@ class SyncCategory_Model {
      * @param string $name
      * @return bool
      */
-    function editCategory($id=0, $cat_id=0, $parent_id=0, $name=''){
+    function editCategory($id=0, $cat_id=0, $parent_id=0, $name='', $type=0){
         $sys = 0;// системная категория не установлена
         $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?
             WHERE user_id = ? AND cat_id = ?";
         //echo ($name.' '.$cur.' '.$id.' '.$descr.' '.$user_id.' '.$id);
-        return $this->db->query($sql, $parent_id, $sys, $name, 0, $this->user, $id);
+        return $this->db->query($sql, $parent_id, $sys, $name, $type, $this->user, $id);
     }
 
     /**
@@ -62,7 +62,7 @@ class SyncCategory_Model {
      * @param array $data
      */
     function formCategory($date='', &$data=''){
-        $sql = "SELECT * FROM category WHERE user_id = ? AND `dt_create` BETWEEN '$date' AND NOW()-100;";
+        $sql = "SELECT * FROM category WHERE user_id = ? AND visible=1 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $this->db->query($sql, $this->user);
         foreach ($a as $key=>$v){
             $data[6][0]['tablename'] = 'Categories';

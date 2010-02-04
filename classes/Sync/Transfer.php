@@ -39,7 +39,7 @@ class Transfer {
         foreach ($tr as $k=>$v){
         $sql = "SELECT ekey FROM records_map WHERE tablename='Transfers' AND remotekey=? AND user_id=?";
             $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
-            if ( $toChangeRec[0]['ekey'] ){//редактирование
+            if ( $toChangeRec[0]['ekey'] != null){//редактирование
                 $efrom = $this->findEkey($tr[$k]['acfrom'], 'Accounts');
                 $eto = $this->findEkey($tr[$k]['acto'], 'Accounts');
                 $eop = $this->findEkey($tr[$k]['remotekey'], 'Transfers');
@@ -55,7 +55,7 @@ class Transfer {
                 $data[1][0]['name'] = 'RecordsMap';
                 $data[1][] = array(
                     'tablename' => 'Transfers',
-                    'kkey' => (int)$v['remotekey'],
+                    'kkey' => $v['remotekey'],
                     'ekey' => (int)$tran,
                 );
             }
