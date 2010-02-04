@@ -44,7 +44,7 @@ class RecordsMap_Model {
         $sql = "SELECT * FROM records_map WHERE system=1 AND user_id=?";
         $a = $db->query($sql, $user_id);
         foreach ($a as $k=>$v){
-            foreach ($data1[1] as $key=>$value){
+            /*foreach ($data1[1] as $key=>$value){
                 if ( $v['remotekey'] == $value['remotekey'] && ($v['tablename'] == $value['tablename']) ){
                     $data[1][0]['type'] = 'service';
                     $data[1][0]['name'] = 'RecordsMap';
@@ -53,7 +53,7 @@ class RecordsMap_Model {
                     $data[1][$k+1]['ekey'] = (int)$v['ekey'];
                     continue;
                 }
-            }
+            }*/
             //если запись удалена
             switch ($v['tablename']){
                 case ('Accounts') :{$tab='accounts';$tabid='account_id';};break;
@@ -66,24 +66,26 @@ class RecordsMap_Model {
                 case ('Plans') :{$tab='periodic';$tabid='id';};break;
                 default : {$tab='accounts';$tabid='account_id';};break;
             }
-            $visCat = "";//дополнительная строка для 'удалённых' категорий
+            $visCat = " ";//дополнительная строка для 'удалённых' категорий
             if ( $v['tablename'] == 'Categories')
-                $visCat = " , visible ";
-            $cou = "SELECT count(*) AS cou".$visCat." FROM ".$tab." WHERE ".$tabid." = ? AND user_id=?";
+                $visCat = " visible=0 AND ";
+            //die($v['ekey']);
+            $cou = "SELECT count(*) AS cou FROM ".$tab." WHERE ".$visCat.$tabid." = ? AND user_id=?";
                 $a = $db->query($cou, $v['ekey'],$user_id);
             //если запись удалена, т.е. не нашли в бд записи с айдишником указанным в recordsmap
-            $cat = false;//категория
-                if ( isset($a[0]['visible']) )
+            /*$cat = false;//категория
+                if ( $v['tablename'] == 'Categories' )
                     if ($a[0]['visible'] == 0)
-                        $cat = true;
-            if ($a[0]['cou'] == 0 || $cat){
+                        $cat = true;*/
+            //die(print_r($a));
+            if ($a[0]['cou'] == 0 ){
                 //RecordsMap_Model::DelRecordsMapString($user_id, $v['tablename'], $v['remotekey'], 1, $db);
 
                 $data[3][0]['type'] = 'service';
                 $data[3][0]['name'] = 'DeletedRecords';
 
                 $data[3][] = array( 'tablename' => $v['tablename'],
-                'kkey' => (int)$v['remotekey']);
+                'kkey' => $v['remotekey']);
                 // удаляем из рекордс меп и записываем в делетедрекордс,
                 //чтобы удалённый юзер тоже удалил соответствующие данные
             }else{
