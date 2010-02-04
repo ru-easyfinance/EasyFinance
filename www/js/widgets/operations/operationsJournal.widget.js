@@ -124,11 +124,11 @@ easyFinance.widgets.operationsJournal = function(){
         pageTotal = Math.round(pageTotal*100)/100;
         if (_account != '') {            
             $('#lblOperationsJournalAccountBalance')
-                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account)) +' руб.')
+                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account)) + ' ' + _modelAccounts.getAccountCurrency(_account).text)
                 .show();
         }
 
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal) + ' руб.<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal) + ' ' + res.currency[res.currency['default']].text + '<br>').show();
     }
 
     function _deleteChecked(){
@@ -454,7 +454,7 @@ easyFinance.widgets.operationsJournal = function(){
             pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
         }
         pageTotal = Math.round(pageTotal*100)/100;
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' руб.<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + _modelAccounts.getAccountCurrency(_account).text + '<br>').show();
     }
 
     // public variables

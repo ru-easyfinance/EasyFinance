@@ -39,6 +39,7 @@ function user_info_save()
         $.post('/profile/save_main_settings/', {
             //help: ($('#help:checked').length == 1)? 1 : 0,
             guide:($('#guide:checked').length == 1)? 1 : 0,
+            getNotify:($('#getNotify:checked').length == 1)? 1 : 0,
             login: $('#login').val(),
             pass: $('#pass').val(),
             newpass: $('#newpass').val(),
@@ -224,4 +225,7 @@ $(document).ready(function() {
     if (strokuk.indexOf('guide=uyjsdhf') == -1){
         $('#guide').removeAttr('checked');
     }
+    spamer = res.getNotify;
+    if (spamer == 0)
+        $('#getNotify').removeAttr('checked');
 })

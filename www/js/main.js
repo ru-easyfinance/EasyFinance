@@ -874,7 +874,7 @@ $(".flash")
         return false;
     });
     //открытие запомнившийся вкладки
-    var activeListing = $.cookie('activelisting')||'c1';
+    var activeListing = $.cookie('activelisting')||'c2';
     clickOnMenuInLeftPanel(activeListing);
     /*
     @todo account hack
