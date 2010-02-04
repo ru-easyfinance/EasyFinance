@@ -25,6 +25,12 @@ if($name_page == 'welcome')
 		}?>
 		
 		<?php $this->display( $name_page . '.tpl'); ?>
+		<br/>
+		<?php
+		if( isset($res['user']) )
+		{
+			$this->display('blocks/user_menu.tpl');
+		}?>
 		
 		<?php $this->display('blocks/bottom.tpl', true)?>
 		
