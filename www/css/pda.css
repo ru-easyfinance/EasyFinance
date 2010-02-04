@@ -13,37 +13,10 @@ body {
 	background: #fff;
 }
 
-a.current {
-	font-weight: bold;
-	text-decoration: none;
-}
-
-table {
-	display: table;
-	margin-bottom: 0;
-	margin-top:0;
-	text-indent:0;
-	border-collapse: collapse;
-	border-spacing: 0px;
-}
-
-div.operation {
-    border-bottom: 1px solid;
-	padding-bottom: 5px;
-	padding-top: 5px;
-}
-
-.wide {
-	width: 99%;
-}
+/* HEADER */
 
 .logo {
 	width: 70px;
-}
-
-img {
-	vertical-align: middle;
-	border: 0;
 }
 
 .menu {
@@ -60,16 +33,66 @@ img {
 	text-align: center;
 }
 
+img {
+	vertical-align: middle;
+	border: 0;
+}
+
+
+.wide {
+	width: 99%;
+}
+
+table {
+	display: table;
+	margin-bottom: 0;
+	margin-top:0;
+	text-indent:0;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+/* SUBMENU */
+
+a.current {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+/* INFO */
+
+table.accounts {
+	border-collapse: collapse;
+}
+
+table.accounts td {
+    border-top: none;
+	border-bottom: 1px solid gray;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+/* ACCOUNT */
+
+div.operation {
+    border-bottom: 1px solid gray;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
 div.line {
 	margin-top: 4px;
 	margin-bottom: 4px;
 }
 
-ul.category {
-	list-style-type: none;
+/* CATEGORY */
+
+a.childCategory {
+	margin-left: 6px;
 }
 
-#copywrite {
+/* FOOTER */
+
+#copyright {
 	font-size: smaller;
-	
 }

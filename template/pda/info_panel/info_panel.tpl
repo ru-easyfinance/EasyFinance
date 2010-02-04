@@ -5,7 +5,7 @@
 			</tr>
 		</tbody></table>
 		<br />
-<table border="0" width="100%">
+<table border="0" width="100%" class="accounts" cellpadding="0" cellspacing="0">
           <tbody>
 	<?php 
 	$totalBalance = 0;

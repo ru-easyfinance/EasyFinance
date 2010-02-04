@@ -1,1 +1,1 @@
-<div align="center" id="copywrite">&copy; EasyFinance.ru, 2010</div>
+<div align="center" id="copyright">&copy; EasyFinance.ru, 2010</div>

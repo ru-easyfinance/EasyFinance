@@ -27,14 +27,14 @@
 					<label for="checkRemember">Запомнить&nbsp;меня</label>
 				</td>
 				<td>
-					<input id="btnLogin" type="submit" value="Вход" />
+					<input type="submit" value="Войти" />
 				</td>
 			</tr>
 		</tbody></table>
 		</form><br/>
 		<table cellspacing="0" cellpadding="2" class="wide"><tbody>
 			<tr>
-				<td width="100%"><a href="/registration">Регистрация</a></td>
-				<td><a href="/registration">Забыли&nbsp;пароль?</a></td>
+				<td width="100%"><!-- <a href="/registration">Регистрация</a> --></td>
+				<td><!-- <a href="/registration">Забыли&nbsp;пароль?</a> --></td>
 			</tr>
 		</tbody></table>
