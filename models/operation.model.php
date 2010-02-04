@@ -250,7 +250,7 @@ class Operation_Model {
 		}
 		
 		$sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, 
-			`drain`, `type`, `comment`, `tags`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, 2, ?, ?, NOW())';
+			`drain`, `type`, `comment`, `tags`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
 		
 		$this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, $drain, 
 			$comment, implode(', ', $tags));
