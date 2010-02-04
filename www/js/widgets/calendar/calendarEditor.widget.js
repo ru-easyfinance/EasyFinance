@@ -295,6 +295,18 @@ easyFinance.widgets.calendarEditor = function(){
             calendarLeft.init(easyFinance.models.calendar())
             if(window.location.pathname.indexOf('calendar') != -1){
                 $('#calendar').fullCalendar('refresh');
+            }else{
+                var s = new Date();
+                s.setDate(1);
+                var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
+                $.getJSON('/calendar/events/', {
+                        start: s.getTime(),
+                        end:   e.getTime()
+                    },
+                    function(result) {
+                        easyFinance.widgets.calendarRight(result);
+                    },
+                    'json');
             }
         },'json');
     }

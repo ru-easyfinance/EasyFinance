@@ -33,4 +33,5 @@ widgets/operations/operationEdit.widget.js
 flowplayer-3.1.4.min.js
 models/calendar.model.js
 widgets/calendar/calendarLeft.widget.js
+widgets/calendar/calendarRight.widget.js
 widgets/calendar/calendarEditor.widget.js

@@ -50,7 +50,7 @@ easyFinance.widgets.calendar = function(){
                 style: 'modern'
             });
 
-        $('.hasDatepicker td a').live('mouseover',function(){
+        $('#datepicker.hasDatepicker td a').live('mouseover',function(){
                 var content =  $(this).attr('used') ?
                     (   '<div><b>' +($(this).attr('date')||'') +
                         '</b></div><table class="calendar_tip">' +
