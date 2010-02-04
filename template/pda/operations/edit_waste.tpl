@@ -15,7 +15,7 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 		<?php
 		if( !$accountId || !isset($operation['account']) || !$operation['account'] )
 		{
-			?><option value="0">-</option><?php
+			?><option value="0">не выбран</option><?php
 		}
 		
 		while ( list(,$account) = each($res['accounts']))
@@ -23,16 +23,17 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 			?><option <?=($account['id'] == $accountId 
 					|| ( isset($operation['account']) && $account['id'] == $operation['account'] )
 					)?'selected="selected"':''?>
-			value="<?=$account['id']?>"><?=$account['name']?></option><?php
+			value="<?=$account['id']?>"><?=$account['name']?> (<?=$res['currency'][ $account['currency'] ]['text']?>)</option><?php
 		}
 		?>
 	</select></div>
 	<div class="line">
 	Категория: <br><select name="category" class="wide" >
+		<option>не выбрана</option>
 		<?php
 		while( list(,$category) = each($res['category']['user']) )
 		{
-			if( $category['type'] != 1 )// Выводим только расходные и универсальные
+			if( $category['type'] != 1 && $category['name'])// Выводим только расходные и универсальные и с именем =)
 			{
 				?><option value="<?=$category['id']?>"
 				<?=(isset($operation['category']) && $operation['category'] == $category['id'])?"selected='selected'":''?>
