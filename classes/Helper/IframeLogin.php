@@ -17,7 +17,7 @@ class Helper_IframeLogin
     {
 
         self::$templateEngine = $templateEngine;
-        
+
         // Выводим заголовки политики безопастности в IE для поддержки cookies в iframe
         if( _Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME)
         {
@@ -40,22 +40,21 @@ class Helper_IframeLogin
                 } elseif ( isset( _Core_Request::getCurrent()->get['login'] )
                         &&  isset( _Core_Request::getCurrent()->get['mail'] ) ) {
 
-                    self::_azbuka_registration();
+                    return self::_azbuka_registration();
 
                 }
             }
-        }
-
-        if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
-            if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
-                header("Location: https://" . URL_ROOT_IFRAME . "login/");
+        
+            if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
+                if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
+                    header("Location: https://" . URL_ROOT_IFRAME . "login/");
+                }
             }
+            self::$templateEngine->assign('template_view', 'iframe');
+            self::$templateEngine->display("iframe/index.iframe.html");
         }
-        self::$templateEngine->assign('template_view', 'iframe');
-        self::$templateEngine->display("iframe/index.iframe.html");
-
     }
-    
+
     /**
      * Функция устанавливает на пользователя куку
      */
@@ -104,15 +103,19 @@ class Helper_IframeLogin
                 die('Unknown mail format');
             }
 
-//            $uar = array(
-//                'user_id'=>$id,
-//                'user_name'=>$$row_user['user_login'],
-//                'user_type'=>0);
+            $uar = array(
+                'user_id'=>$id,
+                'user_name'=>$row_user['user_login'],
+                'user_type'=>0);
 
-//            Core::getInstance()->tpl->assign('user_info', $uar);
-//            Core::getInstance()->tpl->assign('template_view', 'iframe');
+            self::$templateEngine->assign('user_info', $uar);
+            self::$templateEngine->assign('template_view', 'iframe');
+            setcookie( COOKIE_NAME, encrypt( array( $row_user['user_login'], $row_user['user_pass'] ) ),
+                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
 
-            self::_goToInfo( $row_user );
+            header("Location: https://" . URL_ROOT_IFRAME . "info/");
+
+            //self::_goToInfo( $row_user );
 
     }
 
@@ -135,20 +138,20 @@ class Helper_IframeLogin
                 _Core_Router::redirect('/notfound', false, 404);
             }
 
-            self::_goToInfo( $row_user );
+            //self::_goToInfo( $row_user );
 
-//            $uar = array(
-//                'user_id'=>$newId,
-//                'user_name'=>$select[0]['user_login'],
-//                'user_type'=>0);
-//            Core::getInstance()->tpl->assign('user_info', $uar);
-//            Core::getInstance()->tpl->assign('template_view', 'iframe');
-//            setcookie( COOKIE_NAME, encrypt( array( $row_user['user_login'], $row_user['user_pass'] ) ),
-//                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
-//
-//            header("Location: https://" . URL_ROOT_IFRAME . "info/");
-//
-//            return $newId;
+            $uar = array(
+                'user_id'=>$newId,
+                'user_name'=>$row_user['user_login'],
+                'user_type'=>0);
+            self::$templateEngine->assign('user_info', $uar);
+            self::$templateEngine->assign('template_view', 'iframe');
+            setcookie( COOKIE_NAME, encrypt( array( $row_user['user_login'], $row_user['user_pass'] ) ),
+                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
+
+            header("Location: https://" . URL_ROOT_IFRAME . "info/");
+
+            return $newId;
 //            break;
     }
 
