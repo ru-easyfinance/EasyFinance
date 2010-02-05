@@ -155,15 +155,19 @@ easyFinance.widgets.operationsJournal = function(){
         });
 
         _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
-            // remove rows from table
-            for (var key in _ops) {
-                _deleteOperationFromTable(_ops[key]);
+            if (data.result) {
+                // remove rows from table
+                for (var key in _ops) {
+                    _deleteOperationFromTable(_ops[key]);
+                }
+
+                _$checkAll.removeAttr('checked');
+
+                _onCheckClicked();
+                $.jGrowl(data.result.text, {theme: 'green'});
+            } else if (data.error & data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
             }
-
-            _$checkAll.removeAttr('checked');
-
-            _onCheckClicked();
-            $.jGrowl("Операции удалены", {theme: 'green'});
         });
 
         return true;
@@ -176,11 +180,15 @@ easyFinance.widgets.operationsJournal = function(){
         var _op = $.extend(true, {}, _journal[id]);
 
         _modelAccounts.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
-            _deleteOperationFromTable(_op);
+            if (data.result) {
+                _deleteOperationFromTable(_op);
 
-            $.jGrowl("Операция удалена", {theme: 'green'});
+                $.jGrowl(data.result.text, {theme: 'green'});
 
-            _recalcTotal();
+                _recalcTotal();
+            } else if (data.error & data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+            }
         });
 
         return true;

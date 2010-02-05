@@ -8,10 +8,10 @@ easyFinance.models.accounts = function(){
     var ACCOUNTS_LIST_URL = '/accounts/accountslist/?responseMode=json';
     var ADD_ACCOUNT_URL = '/accounts/add/?responseMode=json';
     var EDIT_ACCOUNT_URL = '/accounts/edit/?responseMode=json';
-    var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json';
+    var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json&confirmed=1';
 
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/?responseMode=json';
-    var DELETE_OPERATIONS_URL = '/operation/del_all/?responseMode=json';
+    var DELETE_OPERATIONS_URL = '/operation/del_all/?responseMode=json&confirmed=1';
     var ADD_OPERATION_URL = '/operation/add/?responseMode=json';
     var EDIT_OPERATION_URL = '/operation/edit/?responseMode=json';
 
@@ -233,7 +233,7 @@ easyFinance.models.accounts = function(){
                     delete _journal[_ids[i]];
                 }
 
-                callback(_journal);
+                callback(data);
         }, 'json');
     }
 
