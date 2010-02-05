@@ -37,8 +37,8 @@
 				?>
 			</a>
 			<br />
-			<span class="<?$operation['drain']?'red':'green'?>" ><?=$operation['money']?>
-			<?=$res['currency'][ $res['accounts'][ $accountId ]['currency'] ]['text']?></span>,
+			<span class="<?=$operation['drain']?'red':'green'?>" ><?=$operation['money']?></span>
+			<?=$res['currency'][ $res['accounts'][ $accountId ]['currency'] ]['text']?>,
 			<?=$operation['date']?>
 			 </p>
 		</div><?php

@@ -82,7 +82,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				// дата определяется ниже
 				'date' 		=> null,
 				'comment' 	=> $request->post['comment'],
-				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:array(),
+				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:null,
 				'convert' 	=> isset($request->post['convert'])?$request->post['convert']:array(),
 				'close' 	=> isset($request->post['close'])?$request->post['close']:array(),
 				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
@@ -214,7 +214,8 @@ class Operation_Controller extends _Core_Controller_UserCommon
 	function edit( array $args = array() )
 	{
 		//тип редактируемой операции
-		//$operationType 	= $this->model->getTypeOfOperation($array['id']);
+		$request = _Core_Request::getCurrent();
+		
 		$operationId		= 0;
 		$operation 		= array();
 		
@@ -238,12 +239,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 			$operation = array();
 		}
 		
-		echo '<pre>' . print_r($operation,1);
-		
 		if( _Core_Request::getCurrent()->method == 'POST' )
 		{
 			// Определяем массив данных для обработки
-			$request = _Core_Request::getCurrent();
 			$operation = array(
 				'id' 		=> $operationId,
 				//тип операции (расход и тд)
@@ -254,13 +252,13 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				// дата определяется ниже
 				'date' 		=> null,
 				'comment' 	=> isset($request->post['comment'])?$request->post['comment']:'',
-				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:array(),
+				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:$operation['tags'],
 				'convert' 	=> isset($request->post['convert'])?$request->post['convert']:array(),
 				'close' 	=> isset($request->post['close'])?$request->post['close']:array(),
 				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
 				'toAccount' 	=> isset($request->post['toAccount'])?$request->post['toAccount']:null,
 				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
-				'tr_id'		=> $operation['tr_id']
+				'tr_id'		=> isset($operation['tr_id'])?$operation['tr_id']:0,
 			);			
 
 			// Если дата передана массивом (PDA) ...

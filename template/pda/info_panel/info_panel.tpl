@@ -13,7 +13,9 @@
 	{
           	?><tr>
 		<td width="50%"><a href="/operation/account/<?=$account['id']?>"><?=$account['name']?></a></td>
-		<td align="right" width="50%"><?=$account['totalBalance']?> <?=$res['currency'][ $account['currency'] ]['text']?> </td>
+		<td align="right" width="50%">
+			<span class="<?=($account['totalBalance']>0)?'green':'red'?>"><?=$account['totalBalance']?></span>
+          		<?=$res['currency'][ $account['currency'] ]['text']?> </td>
 		</tr>
 		<?php
 		// Расчёт итоговой суммы
@@ -23,6 +25,7 @@
 	?>
           <tr>
             <td width="50%"><strong>ИТОГО:</strong></td>
-            <td align="right" width="50%"><strong><?=$totalBalance?> <?=$res['currency'][ $res['currency']['default'] ]['text']?> </strong></td>
+            <td align="right" width="50%"><strong><span class="<?=($totalBalance>0)?'green':'red'?>"><?=$totalBalance?></span> 
+            <?=$res['currency'][ $res['currency']['default'] ]['text']?> </strong></td>
           </tr>
         </tbody></table>

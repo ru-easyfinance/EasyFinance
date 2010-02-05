@@ -9,7 +9,6 @@ if( isset(_Core_Request::getCurrent()->get['accountId']) )
 $this->display( 'blocks/operation_menu.tpl' ) ?>
 <form method="POST">
 <div class="wide">
-	<input type="hidden" name="id" value=""></input>
 	<div class="line">Сумма: <br><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /></div>
 	<div class="line">Счёт:<br><select name="account" class="wide">
 		<?php
