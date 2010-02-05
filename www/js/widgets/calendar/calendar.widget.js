@@ -190,7 +190,7 @@ $('#calendar').fullCalendar({
 
                         //get calendar month
                         ddt_month = ddt2month[ddt.getMonth()];
-                        $('.hasDatepicker .ui-datepicker-title').each(function(){
+                        $('#datepicker.hasDatepicker .ui-datepicker-title').each(function(){
                             var month = $(this).find('span.ui-datepicker-month').text();
                             var year = $(this).find('span.ui-datepicker-year').text();
                             if (month == ddt_month && year == ddt.getFullYear()){
@@ -325,7 +325,7 @@ $('#calendar').fullCalendar({
 
                         //get calendar month
                         ddt_month = ddt2month[ddt.getMonth()];
-                        $('.hasDatepicker .ui-datepicker-title').each(function(){
+                        $('#datepicker.hasDatepicker .ui-datepicker-title').each(function(){
                             var month = $(this).find('span.ui-datepicker-month').text();
                             var year = $(this).find('span.ui-datepicker-year').text();
                             if (month == ddt_month && year == ddt.getFullYear()){

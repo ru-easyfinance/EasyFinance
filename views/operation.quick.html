@@ -122,6 +122,20 @@
                     <li id="periodic"><span>Регулярные операции</span></li>
                 </ul>
             </div>
+            <div class="line special">
+                <div>
+                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_1" value="single"/>
+                    <label for="cal_use_mode_1">Применить только для этого события</label>
+                </div>
+                <div>
+                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_2" value="follow"/>
+                    <label for="cal_use_mode_2">Применить для всех последующих событий</label>
+                </div>
+                <div>
+                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_3" value="all" checked="checked"/>
+                    <label for="cal_use_mode_3">Применить для всей цепочки</label>
+                </div>
+            </div>
             <div class="line periodic event">
                     <label for="cal_title">Название</label>
                     <input type="text" name="title" id="cal_title" />
@@ -215,20 +229,6 @@
             <div class="line event periodic">
                 <label for="cal_comment">Комментарий</label>
                 <textarea id="cal_comment" name="comment" class="text ui-widget-content"></textarea>
-            </div>
-            <div class="line special">
-                <div>
-                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_1" value="single"/>
-                    <label for="cal_use_mode_1">Применить только для этого события</label>
-                </div>
-                <div>
-                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_2" value="follow"/>
-                    <label for="cal_use_mode_2">Применить для всех последующих событий</label>
-                </div>
-                <div>
-                    <input type="radio" style="float: left;" name="use_mode" id="cal_use_mode_3" value="all"/>
-                    <label for="cal_use_mode_3">Применить для всей цепочки</label>
-                </div>
             </div>
         </div>
     </div>

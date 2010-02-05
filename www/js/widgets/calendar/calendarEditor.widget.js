@@ -91,7 +91,8 @@ easyFinance.widgets.calendarEditor = function(){
     function _clear(){
         $('input[type="text"],select,textarea','#op_dialog_event').val('');
         $('#op_dialog_event #cal_repeat').val(0);
-        $('#op_dialog_event .special #cal_use_mode_1').attr('checked','checked');
+        $('#op_dialog_event .special #cal_use_mode_3').attr('checked','checked');
+        
         $('#week.week input').removeAttr('checked');
     }
     /**
@@ -213,8 +214,9 @@ easyFinance.widgets.calendarEditor = function(){
                 width: 470,
                 buttons: {
                     'Сохранить': function() {
-                        save();
-                        $(this).dialog('close');
+                        if (save()){
+                            $(this).dialog('close');
+                        }
                     },
                     'Отмена': function() {
                         $(this).dialog('close');
@@ -228,6 +230,7 @@ easyFinance.widgets.calendarEditor = function(){
         }
         $('#cal_repeat').change();
         $('#op_dialog_event').dialog('open');
+        $('#cal_title').focus();
         $('#cal_date_end').datepicker();
     }
     
@@ -268,10 +271,18 @@ easyFinance.widgets.calendarEditor = function(){
                 $('.week #cal_sat:checked').length.toString() +
                 $('.week #cal_sun:checked').length.toString();
         }
+        if (typeof($('#op_dialog_event #cal_title').attr('value')) != 'string' || $('#op_dialog_event #cal_title').attr('value').toString() == ''){
+            $.jGrowl('Не заполнено название операции!',{theme : 'red'});
+            return false;
+        }
+        if (!$('#op_dialog_event #cal_date').attr('value') || !/[0-3][0-9]\.[0-1][0-9]\.[0-9]{4}/.test($('#op_dialog_event #cal_date').attr('value'))){
+            $.jGrowl('Не заполнена дата!',{theme : 'red'});
+            return false;
+        }
         var ret = {
             
             id:         $('#op_dialog_event #cal_key').attr('value')||0,
-            chain:      $('#cal_chain').val(),
+            chain:      $('#cal_chain').val()||0,
             type:       type,
             title:      $('#op_dialog_event #cal_title').attr('value'),
             date:       $('#op_dialog_event #cal_date').attr('value'),
@@ -291,7 +302,9 @@ easyFinance.widgets.calendarEditor = function(){
             use_mode: $('#op_dialog_event .special input:checked').attr('value')
             
         };
+        
         $.post('/calendar/'+func,ret,function(data){
+            $.jGrowl('Событие успешно сохранено!',{theme : 'green'});
             calendarLeft.init(easyFinance.models.calendar());
             if(window.location.pathname.indexOf('calendar') != -1){
                 $('#calendar').fullCalendar('refresh');
@@ -309,6 +322,7 @@ easyFinance.widgets.calendarEditor = function(){
                     'json');
             }
         },'json');
+        return true;
     }
 
     /**

@@ -698,7 +698,7 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 
 
 
-.event_form{margin:11px;width: 447px; position:relative; overflow:hidden}
+.event_form{margin:0 11px;width: 447px; position:relative; overflow:hidden}
 .event_form #cal_mainselect{width : 100%}
 .event_form select,.event_form input,.event_form textarea {float: right; position: relative;width:300px}
 
@@ -733,6 +733,8 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 .event_form .repeat input,.event_form .repeat select {width: 175px; left: -130px}
 .event_form .repeat input.rep_type{width:20px;left : 90px;}
 .event_form .repeat label{left:0}
+.event_form .line.special{background-color: #FFFFCC; padding : 5px; border : 1px #1F1F1F solid}
+.event_form .line.special div{left : 0}
 
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 .iframe ul.buttons_block { left: 18px; }
