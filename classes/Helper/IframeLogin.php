@@ -17,7 +17,7 @@ class Helper_IframeLogin
     {
 
         self::$templateEngine = $templateEngine;
-
+        
         // Выводим заголовки политики безопастности в IE для поддержки cookies в iframe
         if( _Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME)
         {
@@ -28,6 +28,7 @@ class Helper_IframeLogin
             if ( ( _Core_Request::getCurrent()->uri == "/login/")
                     && ( _Core_Request::getCurrent()->get['refer'] == 'azbuka' ) )
             {
+        
                 // Пользователь только пытается авторизироваться, мы забираем у него id у нас
                 // и его ключ сессии, затем по этому ключу мы делаем курлом гет запрос
                 if ( isset(_Core_Request::getCurrent()->get['id_ef'])

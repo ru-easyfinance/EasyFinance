@@ -320,21 +320,36 @@ class Login_Model
          * @return integer
          */
         public static function generateUserByAzbukaLogin($login , $mail){
-            $id = 0;//айди сгенерированного пользователя
-            if ($login == '')
+
+            $id = 0; //айди сгенерированного пользователя
+
+            if ( empty( $login ) ) {
                 die('Ошибка!!! Пустой логин');
-            if ($mail == '' )
+            }
+
+            if ( empty( $mail) ) {
                 die('Ошибка!!! Нет почты');
+            }
+
             $pass = sha1($login);
+
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
-            $islog = $db->query("SELECT count(*) as cou FROM users WHERE user_login=?", 'azbuka_'.$login);
-            if ( $islog[0]['cou'] == 0 ){
-                $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, user_active, user_new, user_created) VALUES
-                    (?, ?, ?, ?, 1, 0, NOW())", $login, 'azbuka_'.$login, $pass, $mail);
+
+            $islog = $db->selectRow("SELECT count(*) as `count` FROM users WHERE user_login=?", 'azbuka_'.$login);
+
+            if ( $islog['count'] == 0 ) {
+
+                $db->query("INSERT into users (user_name , user_login, user_pass, user_mail, 
+                    user_active, user_new, user_created) VALUES (?, ?, ?, ?, 1, 0, NOW())",
+                        $login, 'azbuka_'.$login, $pass, $mail);
+
                 $id = mysql_insert_id();
-                if ($id){
-                    $this->defaultCategory($id);
-                    $this->defaultAccounts($id);
+
+                if ( $id ){
+
+                    self::defaultCategory($id);
+                    self::defaultAccounts($id);
+
                      //   http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=IDвВашейСистеме&af_login=ЛогинКоторыйЯПередал
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, "http://www.azbukafinansov.ru/ef/set_ef_id.php?ef_id=".$id."&af_login=".$login);
@@ -346,6 +361,7 @@ class Login_Model
                     die("Пользователь не добавлен");
                 }
             }
-                return $id;
+            
+            return $id;
         }
 }
