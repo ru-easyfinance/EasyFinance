@@ -186,7 +186,7 @@ class Operation_Model {
 				{
 					if (!in_array($tag, $validated['tags']))
 					{
-						$valid['tags'][] = trim($tag);
+						$validated['tags'][] = trim($tag);
 					}
 				}
 			}
