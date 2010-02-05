@@ -91,6 +91,7 @@ $(document).ready(function(){
                 i++;
             });
         });
-
-easyFinance.widgets.calendarRight(res.calendar.calendar);
+    if (res.calendar && res.calendar.calendar){
+        easyFinance.widgets.calendarRight(res.calendar.calendar);
+    }
 });
