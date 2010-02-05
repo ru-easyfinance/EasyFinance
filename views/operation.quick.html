@@ -142,22 +142,20 @@
             </div>
             <div class="line periodic">
                 <label for="cal_type">Тип</label>
-                <select name="type" id="cal_type">
-                    <option value="-1">Расход</option>
-                    <option value="1">Доход</option>
-                </select>
+                <div name="type" id="cal_type">
+                    <!--<option value="-1">Расход</option>
+                    <option value="1">Доход</option>-->
+                </div>
             </div>
             <div class="line periodic">
                     <label for="cal_category">Категория</label>
-                    <select name="category" id="cal_category">{$category}</select>
+                    <div name="category" id="cal_category"></div>
             </div>
             <div class="line periodic">
                     <label for="cal_account">Счёт</label>
-                    <select name="account" id="cal_account">
-                        {foreach from=$accounts item=acc_data}
-                        <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
-                        {/foreach}
-                    </select>
+                    <div name="account" id="cal_account">
+                        
+                    </div>
             </div>
             <div class="line periodic">
                     <label>Сумма</label>

@@ -4,7 +4,7 @@
 easyFinance.widgets.calendarEditor = function(){
 
     var _useFilter;
-    var _categories;
+    var _categories, _sexy = false;
     var func;
 
     /**
@@ -12,10 +12,20 @@ easyFinance.widgets.calendarEditor = function(){
      * @param type 1 - доход, -1 - расход
      */
     function _toggleCategory(type) {
-        $('#cal_category option').hide();
-        $('#cal_category option[iswaste="0"]').show();
-        $('#cal_category option[iswaste="'+type+'"]').show();
-        $('#cal_category option:visible').filter(':first').attr('selected','selected');
+//        $('#cal_category option').hide();
+//        $('#cal_category option[iswaste="0"]').show();
+//        $('#cal_category option[iswaste="'+type+'"]').show();
+//        $('#cal_category option:visible').filter(':first').attr('selected','selected');
+        if (_sexy){
+            var txt = '';
+            for (var key in catArr){
+                if (catArr[key].iswaste == '0' || catArr[key].iswaste == type){
+                    txt += '<option value="'+catArr[key].value+'">'+catArr[key].text+'</option>';
+                }
+            }
+            $('select#cal_category').html(txt);
+            $.sexyCombo.changeOptions("select#cal_category");
+        }
     }
 
     /**
@@ -49,9 +59,11 @@ easyFinance.widgets.calendarEditor = function(){
         
         if (el.type == 'p'){
             $('#cal_amount').val(el.amount.toString());
-            $('#cal_category').val(el.cat);
-            $('#cal_type').val(el.op_type);
-            $('#cal_account').val(el.account.toString());
+            if (_sexy){
+                _category.setComboValue(res.category.user[el.cat].name, false, false);
+                _type.setComboValue((el.op_type == 1 ? 'Доход':'Расход'), false, false);
+                _account.setComboValue(res.accounts[el.account.toString()].name, false, false);
+            }
         }else{
             $('#cal_title').val(el.title.toString());
         }
@@ -99,24 +111,25 @@ easyFinance.widgets.calendarEditor = function(){
      *
      */
     function _printCategories(){
-        var text = '';
+        var text = [];
         // пробегаем по родительским категориям
         for (var keyParent in _categories) {
             // выводим название категории
-            text = text + '<option value="' + keyParent + '" iswaste="' + _categories[keyParent].type + '" >' + _categories[keyParent].name + '</option>';
+            text.push({value : keyParent, text : _categories[keyParent].name, iswaste : _categories[keyParent].type});
 
             // выводим дочерние категории
             for (var keyChild in _categories[keyParent].children) {
-                text = text + '<option value="' + keyChild + '" iswaste="' + _categories[keyParent].children[keyChild].type + '">&mdash; ' + _categories[keyParent].children[keyChild].name + '</option>';
+                text.push({value : keyChild, text : '&mdash; ' + _categories[keyParent].children[keyChild].name, iswaste : _categories[keyParent].children[keyChild].type});
             }
         }
-        $('#cal_category').html(text);
+        return text;
     }
 
     /**
      * Инициация модели
      * @param model ссылка на модель
      */
+
     function init(){
         
         $('input#cal_date, input#cal_date_end').datepicker();
@@ -152,25 +165,26 @@ easyFinance.widgets.calendarEditor = function(){
             $('#cal_date_end').datepicker();
         });
 
-        $('#cal_amount').keyup(function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
-        });
+//        $('#cal_amount').keyup(function(e){
+//            FloatFormat(this,String.fromCharCode(e.which) + $(this).val());
+//        });
     }
     
     /**
      * Загружает форму
      * @param data obj
      */
+    var catArr, _type, _account, _category;
+    var accArr;
     function load(data){
         _categories = easyFinance.models.category.getUserCategoriesTree();
-        _printCategories();
+        catArr = _printCategories();
 
         var accounts = easyFinance.models.accounts.getAccounts();
-        var accStr = '';
+        accArr = [];
         for (var key in accounts){
-            accStr+= '<option value="'+accounts[key].id+'">'+accounts[key].name+'</option>';
+            accArr.push({value : accounts[key].id, text : accounts[key].name});
         }
-        $('#cal_account').html(accStr);
         if(typeof data == 'object'){
             func = 'edit/';
             _setupValues(data.el, data.type);
@@ -231,6 +245,54 @@ easyFinance.widgets.calendarEditor = function(){
         $('#cal_repeat').change();
         $('#op_dialog_event').dialog('open');
         $('#cal_title').focus();
+        if(!_sexy){
+            $('#op_dialog_event div.line').show();
+            _sexy = true;
+            _type = $.sexyCombo.create({
+                id : "cal_type",
+                name: "type",
+                container: "#cal_type",
+                dropUp: false,
+    //            filterFn: _sexyFilter,
+                data: [{value: "-1", text: "Расход"},{value: "1", text: "Доход"}],
+                changeCallback: function() {
+                    _toggleCategory(this.getHiddenValue());
+                }
+            });
+            _account = $.sexyCombo.create({
+                id : "cal_account",
+                name: "account",
+                container: "#cal_account",
+                dropUp: false,
+    //            filterFn: _sexyFilter,
+                data: accArr,
+                changeCallback: function() {}
+            });
+            _category = $.sexyCombo.create({
+                id : "cal_category",
+                name: "category",
+                container: "#cal_category",
+                dropUp: false,
+    //            filterFn: _sexyFilter,
+                data: catArr,
+                changeCallback: function() {
+
+                }
+            });
+           
+            _filter();
+            
+        }
+        if(typeof(data) == 'object'){
+            _setupValues(data.el, data.type);
+            _useFilter = 1;
+            _filter();
+            _useFilter = 0;
+            $('#op_dialog_event div.line.special').show();
+            
+            $('#cal_mainselect').closest('.line').hide();
+            $('#cal_repeat').change();
+        }
         $('#cal_date_end').datepicker();
     }
     
@@ -295,9 +357,9 @@ easyFinance.widgets.calendarEditor = function(){
             //for periodic
             comment:    $('#op_dialog_event #cal_comment').attr('value'),
             amount:     $('#op_dialog_event #cal_amount').val().replace(/[^0-9\.\-]/,''),
-            cat:   $('#op_dialog_event #cal_category').val(),
-            op_type:       $('#op_dialog_event #cal_type').val(),
-            account:    $('#op_dialog_event #cal_account').val(),
+            cat:   $('#op_dialog_event select#cal_category').val(),
+            op_type:       $('#op_dialog_event select#cal_type').val(),
+            account:    $('#op_dialog_event select#cal_account').val(),
 
             use_mode: $('#op_dialog_event .special input:checked').attr('value')
             
