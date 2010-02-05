@@ -142,7 +142,11 @@ class Calendar
         $time    = (empty($time))? '00:00' : (string)$time;
         $date    = formatRussianDate2MysqlDate($date);
         $every   = (int)$every;
-        $repeat  = (int)$repeat;
+        if ( strlen($repeat) == 10 ){
+            $last_date = $repeat;
+        } else {
+            $repeat  = (int)$repeat;
+        }
         $week    = (empty($week))? '0000000': (string)$week;
         $amount  = (float)str_replace(' ', '', $amount);
         $cat     = (int)$cat;
