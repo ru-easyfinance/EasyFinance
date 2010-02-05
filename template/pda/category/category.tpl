@@ -55,7 +55,7 @@ switch($categorysType)
 			}
 			?>
 			<tr>
-				<td class="wide">&nbsp;&nbsp;&nbsp;<a href="/category/edit/<?=$categoryChild['id']?>" class="<?=$linkStyle?>">
+				<td class="wide childCategory"><a href="/category/edit/<?=$categoryChild['id']?>" class="<?=$linkStyle?>">
 				<?=$categoryChild['name']?></span></a></td>
 				<td><a href="/category/del/<?=$categoryChild['id']?>">(X)</a></td>
 			</tr>

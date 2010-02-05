@@ -94,8 +94,8 @@ div.line {
 
 /* CATEGORY */
 
-a.childCategory {
-	margin-left: 6px;
+td.childCategory {
+	padding-left: 8px;
 }
 
 /* FOOTER */
