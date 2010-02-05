@@ -1,27 +1,66 @@
-		<table cellspacing="0" cellpadding="0" class="wide"><tbody>
+<?php
+// Определяем класс для подсветки цветом
+switch($categorysType)
+{
+	case Category::TYPE_PROFIT:
+		$linkStyle = 'green';break;
+	case Category::TYPE_WASTE:
+		$linkStyle = 'red';break;
+	case Category::TYPE_UNIVERSAL:
+	default:
+		$linkStyle = '';break;
+}
+?>
+<table cellspacing="0" cellpadding="0" class="wide"><tbody>
+	<tr>
+		<td><strong>Категории</strong></td>
+		<td class="wide">&nbsp;</td>
+		<td align="right"><a href="/category/add/<?=$categorysType?>">добавить</a></td>
+	</tr>
+</tbody></table>
+<div class="menu">
+	<a href="/category/waste">расход</a> | 
+	<a href="/category/profit">доход</a> | 
+	<a href="/category/universal">универсальные</a>
+</div>
+<br />
+<table cellspacing="0" cellpadding="0" class="wide"><tbody>
+	<?php
+	foreach( $res['category']['user'] as $category )
+	{
+		//Фильтруем по типу
+		if( $category['type'] != $categorysType && $category['visible'] )
+		{
+			continue;
+		}
+		
+		//Дочерние пропускаем, для построения дерева
+		if( $category['parent'] )
+		{
+			continue;
+		}
+		?>
+		<tr>
+			<td class="wide"><a href="/category/edit/<?=$category['id']?>" class="<?=$linkStyle?>">
+			<?=$category['name']?></span></a></td>
+			<td><a href="/category/del/<?=$category['id']?>">(X)</a></td>
+		</tr>
+		<?php
+		// foreach по причине правильного переключения укаателей массива
+		foreach ( $res['category']['user'] as $categoryChild )
+		{
+			if( $categoryChild['parent'] != $category['id'] )
+			{
+				continue;
+			}
+			?>
 			<tr>
-				<td><strong>Категории</strong></td>
-				<td class="wide">&nbsp;</td>
-				<td align="right"><a href="/category/add">добавить</a></td>
+				<td class="wide">&nbsp;&nbsp;&nbsp;<a href="/category/edit/<?=$categoryChild['id']?>" class="<?=$linkStyle?>">
+				<?=$categoryChild['name']?></span></a></td>
+				<td><a href="/category/del/<?=$categoryChild['id']?>">(X)</a></td>
 			</tr>
-		</tbody></table>
-		<div class="menu">
-			<a href="/category/waste">расход</a> | 
-			<a href="/category/profit">доход</a> | 
-			<a href="/category/universal">универсальные</a>
-		</div>
-		<br /><br />
-		<table cellspacing="0" cellpadding="0" class="wide"><tbody>
-			<tr>
-				<td class="wide"><a href="1" class="green">Работа</span></a></td>
-				<td><a href="/">(X)</a></td>
-			</tr>
-			<tr>
-				<td class="wide"><a href="2" class="childCategory green">понедельник</a></td>
-				<td><a href="/">(X)</a></td>
-			</tr>
-			<tr>
-				<td class="wide"><a href="3" class="childCategory green">вторник</a></td>
-				<td><a href="/">(X)</a></td>
-			</tr>
-		</tbody></table>
+			<?php
+		}
+	}
+	?>
+</tbody></table>

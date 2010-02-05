@@ -24,22 +24,34 @@ class Category_Controller extends _Core_Controller_UserCommon
         
     }
 
-    /**
-     * Индексная страница
-     * @param $args array mixed
-     * @return void
-     */
-    function index($args)
-    {
-        //$this->tpl->assign("category", Core::getInstance()->user->getUserCategory());
-        $this->tpl->assign("sys_categories", $this->model->system_categories);
-
-        // Операция
-        $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
-        $this->tpl->assign('category', get_tree_select());
-        $targets = new Targets_Model();
-        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
-    }
+	/**
+	 * Индексная страница (список категорий)
+	 * @param $args array mixed
+	 * @return void
+	 */
+	function index($args)
+	{
+		$types = array_flip( Category::getTypesArray() );
+		
+		if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $types ) )
+		{
+			$categorysType = $types[ $args[0] ];
+		}
+		else
+		{
+			$categorysType = -1;
+		}
+		
+		$this->tpl->assign( 'categorysType', $categorysType );
+		
+		$this->tpl->assign("sys_categories", $this->model->system_categories);
+		
+		// Операция
+		$this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+		$this->tpl->assign('category', get_tree_select());
+		$targets = new Targets_Model();
+		$this->tpl->assign('targetList', $targets->getLastList(0, 100));
+	}
 
     /**
      * Создаёт новую категорию
