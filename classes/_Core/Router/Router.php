@@ -157,7 +157,6 @@ class _Core_Router
 			}
 			else
 			{
-				echo $url;
 				self::redirect('/notfound', false, 404);
 			}
 		}
