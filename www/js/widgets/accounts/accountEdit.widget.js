@@ -159,9 +159,10 @@ easyFinance.widgets.accountEdit = function(){
     }
 
     function copyAccountById(id) {
-        addAccount();
+        editAccountById(id);
 
-        // @todo: fill form
+        _isEditing = false;
+        $('#acc_type').removeAttr('disabled');
     }
 
     function editAccountById(id) {
@@ -194,6 +195,7 @@ easyFinance.widgets.accountEdit = function(){
         showForm: showForm,
 
         setEditMode: setEditMode,
-        editAccountById: editAccountById
+        editAccountById: editAccountById,
+        copyAccountById: copyAccountById
     };
 }(); // execute anonymous function to immediatly return object
