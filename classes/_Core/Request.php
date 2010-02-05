@@ -50,7 +50,10 @@ class _Core_Request
 	{
 		$request = new self();
 		
-		$request->uri = $request->cleanUri( $uri );
+		$request->uri 	= $request->cleanUri( $uri );
+		$request->host 	= ($domain)?$domain:$_SERVER["HTTP_HOST"];
+		$request->post 	= ($post)?$post:self::$currentInstance->escapeVarsArray( $_POST );
+		$request->get	= ($get)?$get:self::$currentInstance->escapeVarsArray( $_GET );
 		
 		return $request;
 	}
