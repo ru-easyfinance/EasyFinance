@@ -1,4 +1,4 @@
-<p><strong>Добавление операции</strong></p>
+<p><strong><?=(isset($operation['id']))?'Редактирование':'Добавление'?> операции</strong></p>
 <p class="menu">
 	<a href="/operation/add/waste" class="<?=($operationType == 0)?'current':''?>">расход</a> |
 	<a href="/operation/add/profit" class="<?=($operationType == 1)?'current':''?>">доход</a> |
