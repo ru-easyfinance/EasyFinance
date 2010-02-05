@@ -44,7 +44,7 @@
 					<?=$operation['date']?>
 				</td>
 				<td>
-					<a href="/operation/delete/<?=$operation['id']?>">(Х)</a>
+					<a href="/operation/del/<?=$operation['id']?>">(Х)</a>
 				</td>
 			</tr></tbody></table>
 		</div><?php

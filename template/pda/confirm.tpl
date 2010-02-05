@@ -1,6 +1,8 @@
-﻿<span class="style1">Удаление счёта</span>
-<p>Вы действительно хотите удалить счёт <strong>Счёт</strong>? </p>
+<div class="line"><strong><?=$confirm['title']?></strong></div>
+<br />
+<div class="line"><?=$confirm['message']?></div>
+<br />
 <table class="wide"><tbody><tr>
-	<td width="50%" align="center"><a href="acc">Да</a></td>
-	<td width="50%" align="center"><a href="acc">Нет</a></td>
+	<td width="50%" align="center"><a href="<?=$confirm['yesLink']?>">Да</a></td>
+	<td width="50%" align="center"><a href="<?=$confirm['noLink']?>">Нет</a></td>
 </tr></tbody></table>

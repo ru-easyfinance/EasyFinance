@@ -427,16 +427,68 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		$this->tpl->assign( 'operationType', $operation['type'] );
 	}
 
-    /**
-     * Удаляет выбранное событие
-     * @param $args array mixed Какие-нибудь аргументы
-     * @return void
-     */
-    function del($args)
-    {
-        $id = abs((int)$_POST['id']);
-        die($this->model->deleteOperation($id));
-    }
+	/**
+	 * Удаляет выбранное событие
+	 * @param $args array mixed Какие-нибудь аргументы
+	 * @return void
+	 */
+	function del($args)
+	{
+		$request = _Core_Request::getCurrent();
+		
+		$operationId		= 0;
+		
+		if( array_key_exists(0 ,$args) && is_numeric($args[0]) && $args[0] )
+		{
+			$operationId = (int)$args[0];
+		}
+		elseif( isset($request->post['id']) && $request->post['id'] )
+		{
+			$operationId = $request->post['id'];
+		}
+		
+		// Если удаление подтверждено....
+		if( isset($request->get['confirmed']) && $request->get['confirmed'] )
+		{
+			if( $this->model->deleteOperation($operationId) )
+			{
+				$this->tpl->assign( 'result', array('text'=>"Операция успешно удалена.") );
+			}
+			// Исключительная ситуация.
+			else
+			{
+				$this->tpl->assign( 'error', array('text'=> "Не удалось удалить операцию." ) );
+			}
+			
+			//возвращаемся
+			if( array_key_exists('redirect', $_SESSION) )
+			{
+				_Core_Router::redirect( $_SESSION['redirect'],true );
+				unset( $_SESSION['redirect'] );
+			}
+		}
+		// Если нет  - показываем форму для подтверждения
+		elseif( !isset($request->get['confirmed']) )
+		{
+			$confirm= array (
+				'title' 		=> 'Удаление операции',
+				'message' 	=> 'Вы действительно хотите удалить операцию?',
+				'yesLink'	=> '/operation/del/' . $operationId . '?confirmed=1',
+				'noLink' 	=> $_SERVER['HTTP_REFERER'],
+			);
+			
+			// Сохраняем в сессии адрес куда идти если согласится
+			$_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
+			
+			$this->tpl->assign('confirm', $confirm);
+			$this->tpl->assign('name_page', 'confirm');
+		}
+		// Видимо передумали удалять и наша логика не сработала - редиректим на инфо
+		else
+		{
+			_Core_Router::redirect( '/info' );
+		}
+	}
 
     function deleteTargetOp($args)
     {
