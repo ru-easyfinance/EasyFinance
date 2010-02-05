@@ -5,8 +5,8 @@
 				<td align="right"><a href="/category/add">добавить</a></td>
 			</tr>
 			<tr>
-				<td><a href="/category/waste">расходные</a></td>
-				<td class="wide" align="center"><a href="/category/profit">доходные</a></td>
+				<td><a href="/category/waste">расход</a></td>
+				<td class="wide" align="center"><a href="/category/profit">доход</a></td>
 				<td><a href="/category/universal">универсальные</a></td>
 			</tr>
 		</tbody></table>
