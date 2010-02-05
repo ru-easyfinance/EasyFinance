@@ -5,9 +5,11 @@
 				<td align="right"><a href="/category/add">добавить</a></td>
 			</tr>
 		</tbody></table>
-		<a href="/category/waste">расход</a> | 
-		<a href="/category/profit">доход</a> | 
-		<a href="/category/universal">универсальные</a>
+		<div class="menu">
+			<a href="/category/waste">расход</a> | 
+			<a href="/category/profit">доход</a> | 
+			<a href="/category/universal">универсальные</a>
+		</div>
 		<br /><br />
 		<table cellspacing="0" cellpadding="0" class="wide"><tbody>
 			<tr>
