@@ -7,13 +7,13 @@
 	<a href="/operation/add/waste?accountId=<?=$accountId?>">добавить операцию</a>
 </div>
 <div class="line">
-	<a href="account/1/edit">редактировать счёт</a>
+	<a href="/account/edit/<?=$accountId?>">редактировать счёт</a>
 </div>
 	<?php
 	while( list(,$operation) = each($operations) )
 	{
 		?><div class="operation">
-			<p><a href="/account/1">
+			<p><a href="/operation/edit/<?=$operation['id']?>">
 				<?php
 				// Перевод с текущего счёта
 				if( $operation['type'] == 2 && !$operation['tr_id'])
@@ -37,7 +37,7 @@
 				?>
 			</a>
 			<br />
-			<span class="waste" <?// прибыль = profit ?> ><?=$operation['money']?>
+			<span class="<?$operation['drain']?'red':'green'?>" ><?=$operation['money']?>
 			<?=$res['currency'][ $res['accounts'][ $accountId ]['currency'] ]['text']?></span>,
 			<?=$operation['date']?>
 			 </p>
