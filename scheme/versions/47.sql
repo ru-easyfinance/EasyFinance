@@ -9,7 +9,7 @@ CREATE TABLE  `calend` (
   `last` date NOT NULL,
   `time` time NOT NULL,
   `every` int(1) unsigned DEFAULT NULL,
-  `repeat` int(1) unsigned DEFAULT NULL,
+  `repeat` varchar(10) unsigned DEFAULT NULL,
   `week` char(7) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '0000000' COMMENT 'Двоичная маска (0000011 - выходные, 1111100 - будни)\n',
   `comment` varchar(255) NOT NULL,
   `amount` decimal(20,2) NOT NULL,
