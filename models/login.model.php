@@ -307,9 +307,9 @@ class Login_Model
          * @param integer $id
          * @return array 
          */
-        public function getUserDataByID($id){
+        public static function getUserDataByID($id) {
             $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
-            return $db->query("SELECT user_login, user_pass, user_mail FROM users WHERE id = ?", $id);
+            return $db->selectRow("SELECT user_login, user_pass, user_mail FROM users WHERE id = ?", $id);
         }
 
         /**
@@ -319,7 +319,7 @@ class Login_Model
          * @param string $login
          * @return integer
          */
-        public function generateUserByAzbukaLogin($login , $mail){
+        public static function generateUserByAzbukaLogin($login , $mail){
             $id = 0;//айди сгенерированного пользователя
             if ($login == '')
                 die('Ошибка!!! Пустой логин');
