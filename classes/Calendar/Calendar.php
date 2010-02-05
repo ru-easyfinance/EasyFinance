@@ -43,8 +43,8 @@ class Calendar
      * Возвращает обьект Calendar с загруженными событиями для пользователя $user
      *
      * @param User $user
-     * @param $start
-     * @param $end
+     * @param $start mysql date
+     * @param $end mysql date
      * @return Calendar
      * 
      * @example $calendar = Calendar::loadAll( $user );
@@ -255,12 +255,8 @@ class Calendar
             } elseif ($use_mode == 'all') {
                 
             }
-            
-            
         }
-
     }
-
 
     /**
      * Возвращает сформированный массив дат

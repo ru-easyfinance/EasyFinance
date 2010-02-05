@@ -25,7 +25,7 @@ class Calendar_Model extends _Core_Abstract_Model {
      * @param integer $userId
      * @param mysqldate $start
      * @param mysqldate $end
-     * @param bool $delay
+     * @param bool $delay Если - тру, то отдаёт напоминалки
      *
      * @return array Массив моделей событий
      */
@@ -44,7 +44,7 @@ class Calendar_Model extends _Core_Abstract_Model {
         //	$modelsArray = $cache->getMulti( $messageIds );
         //}
 
-        // Запрос данных календаря
+        // Запрос данных для полного календаря
         if ( ! $delay ) {
             $sql = 'SELECT c.id AS chain, c.title, c.type, c.start, c.last, c.time, c.every,
                 c.repeat, c.comment, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, c.week,
@@ -97,11 +97,11 @@ class Calendar_Model extends _Core_Abstract_Model {
     {
         // Создаём само событие
         $sql = 'INSERT INTO calend (`user_id`, `type`, `title`,
-            `start`, `date`, `last`, `time`, `every`, `repeat`, `week`, `comment`,
+            `start`, `last`, `time`, `every`, `repeat`, `week`, `comment`,
             `amount`, `cat_id`, `account_id`, `op_type`, `tags`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         Core::getInstance()->db->query($sql, $user->getId(), $type, $title,
-            $date, $date, $date, $time, $every, $repeat, $week, $comment,
+            $date, $date, $time, $every, $repeat, $week, $comment,
             $amount, $cat, $account, $op_type, $tags);
         return mysql_insert_id();
     }
