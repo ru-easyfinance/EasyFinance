@@ -150,9 +150,19 @@ class Calendar
         $op_type = (int)$op_type;
         $tags    = (string)$tags;
 
+
+        if (empty ($title)) $this->errors['title'] = 'Необходимо заполнить заголовок';
+        if (empty ($date))  $this->errors['date']  = 'Необходимо указать дату';
+
         // Проверяем на ошибки
         if ( count($this->errors) != 0 ) {
-            return false;
+
+            return array(
+                'error' => array(
+                    'text' => $this->errors
+                )
+            );
+            
         }
 
         // Если повторять более одного раза

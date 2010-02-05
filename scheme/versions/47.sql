@@ -29,4 +29,4 @@ CREATE TABLE  `calendar_events` (
   PRIMARY KEY (`id`),
   KEY `cal_idx` (`cal_id`),
   KEY `date_idx` (`date`,`cal_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='События календаря'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='События календаря';
