@@ -1,6 +1,6 @@
 <table class="topmenu wide" cellpadding="0" cellspacing="0"><tbody><tr>
 	<td style="background:#ffffff url(/img/pda/menuLine.gif) no-repeat right">
-		<a href="/operation/add/waste"><img src="/img/pda/menuOperations.gif" alt="" /><br>добавить</a>
+		<a href="/operation/add/waste"><img src="/img/pda/menuAddOperation.gif" alt="" /><br>добавить</a>
 	</td>
 	<td style="background:#ffffff url(/img/pda/menuLine.gif) no-repeat right">
 		<a href="/operation/listOperations"><img src="/img/pda/menuOperations.gif" alt="" /><br>журнал</a>

@@ -4,7 +4,7 @@ if( isset($res['user']) )
 	?>
 	<table class="topmenu wide" cellpadding="0" cellspacing="0"><tbody><tr>
 		<td>
-			<a href="/operation/add/waste"><img src="/img/pda/menuOperations.gif" alt="" /><br>добавить</a>
+			<a href="/operation/add/waste"><img src="/img/pda/menuAddOperation.gif" alt="" /><br>добавить</a>
 		</td>
 		<td>
 			<a href="/operation/listOperations"><img src="/img/pda/menuOperations.gif" alt="" /><br>журнал</a>
