@@ -86,7 +86,7 @@ class _Core_Router
 			));
 		}
 		
-		$controller = new $this->className( $this->templateEngine );
+		$controller = new $this->className( $this->templateEngine, $this->request );
 			
 		call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
 			

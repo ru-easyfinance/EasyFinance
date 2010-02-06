@@ -17,14 +17,24 @@ abstract class _Core_Controller
 	protected $tpl = null;
 	
 	/**
+	 * Ссылка на текущий запрос
+	 *
+	 * @var _Core_Request
+	 */
+	protected $request = null;
+	
+	/**
 	 * Конструктор. Содержит инициализацию общих для 
 	 * всех контроллеров свойств и обьектов.
 	 *
 	 */
-	public function __construct( $template )
+	public function __construct( $template, _Core_Request $request )
 	{
 		// Шаблонизатор
 		$this->tpl   = $template;
+		
+		// ОБьект запроса
+		$this->request = $request;
 		
 		// Вызов псевдоконструктора.
 		$this->__init();
