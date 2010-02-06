@@ -18,20 +18,29 @@ if($name_page == 'welcome')
 		<link rel="stylesheet" type="text/css" href="/css/pda.css" />
 	</head>
 	<body>
+		<table style="width:100%;height:26px; background-color:#93ca57;border-bottom: solid 1px #266823;"><tr>
+			<td style="padding-left: 5px; padding-top:1px;">
+				<a href="<?=isset($res['user'])?'/info':'/login'?>" style="color:white; font-size: 1.3em; font-weight: bold; text-decoration:none;">EasyFinance</a>
+			</td>
+			<td width="24">
+			<?php
+			if( isset($res['user']) )
+			{
+				?>
+				<a href="/logout"><img src="/img/pda/menuLogout.gif" alt="выход" style="padding-right: 5px;"></a>
+				<?php
+			}
+			?>
+			</td>
+		</tr></table>
 		<?php
 		if( isset($res['user']) )
 		{
 			$this->display('blocks/user_menu.tpl');
 		}?>
-		
+		<div style="padding: 0px 5px 10px 5px;">
 		<?php $this->display( $name_page . '.tpl'); ?>
-		<br/>
-		<?php
-		if( isset($res['user']) )
-		{
-			$this->display('blocks/user_menu.tpl');
-		}?>
-		
+		</div>
 		<?php $this->display('blocks/bottom.tpl', true)?>
 		
 		<?php $this->display('blocks/debug.tpl')?>
