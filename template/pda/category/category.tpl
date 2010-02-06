@@ -19,12 +19,12 @@ switch($categorysType)
 	</tr>
 </tbody></table>
 <div class="menu">
-	<a href="/category/waste">расход</a> | 
-	<a href="/category/profit">доход</a> | 
-	<a href="/category/universal">универсальные</a>
+	<a href="/category/waste" class="<?=($categorysType == Category::TYPE_WASTE)?'current':''?>">расход</a> | 
+	<a href="/category/profit" class="<?=($categorysType == Category::TYPE_PROFIT)?'current':''?>">доход</a> | 
+	<a href="/category/universal" class="<?=($categorysType == Category::TYPE_UNIVERSAL)?'current':''?>">универсальные</a>
 </div>
 <br />
-<table cellspacing="0" cellpadding="0" class="wide"><tbody>
+<table cellspacing="0" cellpadding="0" class="wide categorys"><tbody>
 	<?php
 	foreach( $res['category']['user'] as $category )
 	{
