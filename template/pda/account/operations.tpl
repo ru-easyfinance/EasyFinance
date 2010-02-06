@@ -39,7 +39,7 @@
 						?>
 					</a>
 					<br />
-					<span class="<?=$operation['drain']?'red':'green'?>" ><?=$operation['money']?></span>
+					<span class="<?=$operation['drain']?'red':'green'?>" ><?=Helper_Money::format($operation['money'])?></span>
 					<?=$res['currency'][ $res['accounts'][ $accountId ]['currency'] ]['text']?>,
 					<?=$operation['date']?>
 				</td>

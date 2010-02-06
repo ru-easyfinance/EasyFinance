@@ -14,7 +14,7 @@
           	?><tr>
 		<td width="50%"><a href="/operation/account/<?=$account['id']?>"><?=$account['name']?></a></td>
 		<td align="right" width="50%">
-			<span class="<?=($account['totalBalance']>0)?'green':'red'?>"><?=$account['totalBalance']?></span>
+			<span class="<?=($account['totalBalance']>0)?'green':'red'?>"><?=Helper_Money::format($account['totalBalance'])?></span>
           		<?=$res['currency'][ $account['currency'] ]['text']?> </td>
 		</tr>
 		<?php
@@ -25,7 +25,7 @@
 	?>
           <tr>
             <td width="50%"><strong>ИТОГО:</strong></td>
-            <td align="right" width="50%"><strong><span class="<?=($totalBalance>0)?'green':'red'?>"><?=$totalBalance?></span> 
+            <td align="right" width="50%"><strong><span class="<?=($totalBalance>0)?'green':'red'?>"><?=Helper_Money::format($totalBalance)?></span> 
             <?=$res['currency'][ $res['currency']['default'] ]['text']?> </strong></td>
           </tr>
         </tbody></table>
