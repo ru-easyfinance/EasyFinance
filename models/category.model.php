@@ -97,8 +97,7 @@ class Category_Model {
      */
     public function loadUserTree()
     {
-        //@FIXME сделать проверку переменной $_SESSION['categories_filtr'];
-        $where = $_SESSION['categories_filtr'];
+        $where = array_key_exists('categories_filtr', $_SESSION)?$_SESSION['categories_filtr']:null;
 
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
             sc.name FROM category c
