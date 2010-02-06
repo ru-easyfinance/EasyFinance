@@ -84,16 +84,66 @@ class Category_Controller extends _Core_Controller_UserCommon
         die(json_encode($this->model->edit($id, $name, $parent, $system, $type)));
     }
 
-    /**
-     * Удаляет указанную категорию
-     * @param $args array mixed
-     * @return void
-     */
-    function del ($args)
-    {
-        $id = (int)$_POST['id'];
-        die(json_encode($this->model->del($id)));
-    }
+	/**
+	 * Удаляет указанную категорию
+	 * @param $args array mixed
+	 * @return void
+	 */
+	function del ($args)
+	{
+		$catId	 = 0;
+		
+		if( array_key_exists(0 ,$args) && is_numeric($args[0]) && $args[0] )
+		{
+			$catId = (int)$args[0];
+		}
+		elseif( isset($this->request->post['id']) && $this->request->post['id'] )
+		{
+			$catId = (int)$this->request->post['id'];
+		}
+		
+		// Если удаление подтверждено....
+		if( isset($this->request->get['confirmed']) && $this->request->get['confirmed'] )
+		{
+			if( $this->model->del( $catId ) )
+			{
+				$this->tpl->assign( 'result', array('text'=>"Категория успешно удалена.") );
+			}
+			// Исключительная ситуация.
+			else
+			{
+				$this->tpl->assign( 'error', array('text'=> "Не удалось удалить категорию." ) );
+			}
+			
+			//возвращаемся
+			if( array_key_exists('redirect', $_SESSION) )
+			{
+				_Core_Router::redirect( $_SESSION['redirect'],true );
+				unset( $_SESSION['redirect'] );
+			}
+		}
+		// Если нет  - показываем форму для подтверждения
+		elseif( !isset($request->get['confirmed']) )
+		{
+			$confirm= array (
+				'title' 		=> 'Удаление категории',
+				'message' 	=> 'Вы действительно хотите удалить категорию?',
+				'yesLink'	=> '/category/del/' . $catId . '?confirmed=1',
+				'noLink' 	=> $_SERVER['HTTP_REFERER'],
+			);
+			
+			// Сохраняем в сессии адрес куда идти если согласится
+			$_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
+			
+			$this->tpl->assign('confirm', $confirm);
+			$this->tpl->assign('name_page', 'confirm');
+		}
+		// Видимо передумали удалять и наша логика не сработала - редиректим на инфо
+		else
+		{
+			_Core_Router::redirect( '/info' );
+		}
+	}
 
      /**
      * Возвращает список пользовательских и системных категорий в формате JSON
