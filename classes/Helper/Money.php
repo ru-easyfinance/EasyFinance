@@ -6,7 +6,7 @@ class Helper_Money
 	{
 		$waste = ($sum < 0)?true:false;
 		
-		$sum = number_format( $sum, 2, ',', ' ' );
+		$sum = number_format( $sum, 2, '.', ' ' );
 		
 		return $waste?$sum:$sum;
 	}
