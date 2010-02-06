@@ -37,6 +37,12 @@ class Info_Model
      */
     private $output = array();
 
+    protected $balance = null;
+    protected $budget = null;
+    protected $drain = null;
+    protected $loans = null;
+    protected $profit = null;
+    
     /**
      * Массив, содержащий список значений (полей) для расчёта (красный, зелёный, жёлтые)
      * @var array mixed
