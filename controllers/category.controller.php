@@ -39,7 +39,7 @@ class Category_Controller extends _Core_Controller_UserCommon
 		}
 		else
 		{
-			$categorysType = -1;
+			$categorysType = Category::TYPE_WASTE;
 		}
 		
 		$this->tpl->assign( 'categorysType', $categorysType );
@@ -53,20 +53,67 @@ class Category_Controller extends _Core_Controller_UserCommon
 		$this->tpl->assign('targetList', $targets->getLastList(0, 100));
 	}
 
-    /**
-     * Создаёт новую категорию
-     * @param $args array mixed
-     * @return void
-     */
-    function add($args)
-    {
-        $name   = htmlspecialchars(@$_POST['name']);
-        $parent = (int)@$_POST['parent'];
-        $system = (int)@$_POST['system'];
-        $type   = (int)@$_POST['type'];
-
-        die(json_encode($this->model->add($name, $parent, $system, $type)));
-    }
+	/**
+	 * Создаёт новую категорию
+	 * @param $args array mixed
+	 * @return void
+	 */
+	function add( array $args=array())
+	{
+		$category = array();
+		
+		$types = array_flip( Category::getTypesArray() );
+		
+		if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $types ) )
+		{
+			$category['type'] = $types[ $args[0] ];
+		}
+		else
+		{
+			$category['type'] = Category::TYPE_WASTE;
+		}
+		
+		if( $this->request->method == 'POST' )
+		{
+			$errors = array();
+			
+			$category = array(
+				'name' 	=> htmlspecialchars( trim($this->request->post['name']) ),
+				'parent' 	=> (int)$this->request->post['parent'],
+				'system' 	=> (int)$this->request->post['system'],
+				'type'		=> (int)$this->request->post['type'],
+			);
+			
+			if( !$category['name'] )
+			{
+				$errors[] = 'Не указано название!';
+			}
+			
+			if( !$category['system'] )
+			{
+				$errors[] = 'Не указана системная категория!';
+			}
+			
+			if( !array_key_exists( $category['type'], $types ) )
+			{
+				$errors[] = 'Некорректный тип категории!';
+			}
+			
+			if( !sizeof($errors) )
+			{
+				$this->model->add($category['name'], $category['parent'], $category['system'], $category['type']);
+			}
+			else
+			{
+				$this->tpl->assign( 'error', array( 'text' => implode(" \n", $errors) ) );
+			}
+		}
+		
+		$this->tpl->assign( 'category', $category );
+		$this->tpl->assign( 'name_page', 'category/edit' );
+		
+		//die(json_encode());
+	}
 
     /**
      * Редактирует категорию
