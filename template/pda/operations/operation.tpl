@@ -1,4 +1,4 @@
-<div class="line"><strong>Журнал операций</strong></div>
+<div class="line"><strong>Журнал</strong></div>
 <div class="menu">
 	<a href="/operation/listOperations/?period=day" 
 		class="<?=($period == 'day')?'current':''?>">за сутки</a> | 
