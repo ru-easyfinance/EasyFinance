@@ -1,13 +1,21 @@
-<strong>
-	<?=$res['accounts'][$accountId]['name']?>:
-	<?=$res['accounts'][$accountId]['totalBalance']?>
-	<?=$res['currency'][ $res['accounts'][ $accountId]['currency'] ]['text']?>
-</strong>
+
+	<table width="100%"><tbody>
+	<tr>
+		<td>
+		<strong><?=$res['accounts'][$accountId]['name']?></strong>
+		<a href="/account/edit/<?=$accountId?>">ред.</a>
+		</td>
+		<td align="right">
+			<span class="<?=($res['accounts'][$accountId]['totalBalance']<0)?'red':'green'?>">
+				<?=Helper_Money::format($res['accounts'][$accountId]['totalBalance'])?>
+			</span>
+			<?=$res['currency'][ $res['accounts'][ $accountId]['currency'] ]['text']?>
+		</td>
+	</tr>
+	</tbody></table>
+
 <div class="line">
-	<a href="/operation/add/waste?accountId=<?=$accountId?>">добавить операцию</a>
-</div>
-<div class="line">
-	<a href="/account/edit/<?=$accountId?>">редактировать счёт</a>
+	<a href="/operation/add/waste?accountId=<?=$accountId?>">добавить</a>
 </div>
 	<?php
 	while( list(,$operation) = each($operations) )
