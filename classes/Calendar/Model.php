@@ -93,15 +93,15 @@ class Calendar_Model extends _Core_Abstract_Model {
      * @param <type> $tags
      */
     private static function createCalendarEvent ( User $user, $type, $title, $comment, $time,
-            $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags)
+            $start, $date, $last, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags)
     {
         // Создаём само событие
         $sql = 'INSERT INTO calend (`user_id`, `type`, `title`,
-            `start`, `last`, `time`, `every`, `repeat`, `week`, `comment`,
+            `start`, `date`, `last`, `time`, `every`, `repeat`, `week`, `comment`,
             `amount`, `cat_id`, `account_id`, `op_type`, `tags`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         Core::getInstance()->db->query($sql, $user->getId(), $type, $title,
-            $date, $date, $time, $every, $repeat, $week, $comment,
+            $start, $date, $last, $time, $every, $repeat, $week, $comment,
             $amount, $cat, $account, $op_type, $tags);
         return mysql_insert_id();
     }
@@ -128,8 +128,8 @@ class Calendar_Model extends _Core_Abstract_Model {
     public static function create ( User $user, $type, $title, $comment, $time,
             $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
     {
-        $cal_id = self::createCalendarEvent($user, $type, $title, $comment, $time,
-                $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags);
+        $cal_id = self::createCalendarEvent($user, $type, $title, $comment, $time, $start,
+                $date[count($date)], $last, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags);
 
         // Создаём повторы события
         $sql = '';
@@ -156,36 +156,38 @@ class Calendar_Model extends _Core_Abstract_Model {
     }
 
     /**
-     *
+     * Обновить событие
      * @param User $user
-     * @param <type> $id
-     * @param <type> $chain
-     * @param <type> $type
-     * @param <type> $title
-     * @param <type> $comment
-     * @param <type> $time
-     * @param <type> $date
-     * @param <type> $every
-     * @param <type> $repeat
-     * @param <type> $week
-     * @param <type> $amount
-     * @param <type> $cat
-     * @param <type> $account
-     * @param <type> $op_type
-     * @param <type> $tags
-     * @param <type> $array
+     * @param int $id
+     * @param int $chain
+     * @param string $type
+     * @param string $title
+     * @param string $comment
+     * @param string $time
+     * @param int $every
+     * @param int | mysql date date $repeat
+     * @param string $week
+     * @param float $amount
+     * @param int $cat
+     * @param int $account
+     * @param int $op_type
+     * @param string $tags
+     * @param array $array
+     * @return int Количество изменённых событий
      */
-    public static function update ( User $user, $id, $chain, $type, $title, $comment, $time,
-            $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
+    public static function update ( User $user, $id, $chain, $type, $title, $comment, 
+            $time, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
     {
-        $sql = 'UPDATE calend SET `title`=?, `comment`=?, `time`=?, `amount`=?,
+        $sql = 'UPDATE calend SET `title`=?, `comment`=?, `time`=?,
+            `every`=?, `repeat`=?, `week`=?, `amount`=?,
             cat_id=?, account_id=?, op_type=?, tags=? WHERE id=? AND user_id=?';
         return Core::getInstance()->db->query($sql, $title, $comment, $time,
-            $amount, $cat, $account, $op_type, $tags, $chain, $user->getId());
+            $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags,
+            $chain, $user->getId());
     }
 
     /**
-     * Загрузить по ID и по цепочке
+     * Загрузить событие по ID и по цепочке
      * @param int $id
      * @param int $chain
      * @return Calendar_Model
@@ -248,24 +250,29 @@ class Calendar_Model extends _Core_Abstract_Model {
     }
 
     /**
-     * Удаляет события
+     * Отмечает события как выполненные
      * @param User $user
-     * @param int  $id
+     * @param int  $ids | array(int, int, int, ..)
+     * @return array Возвращаем массив для создания операций по пер. транзакциям
      */
-    public static function acceptEvents ( User $user, $id )
+    public static function acceptEvents ( User $user, $ids )
     {
-        if ( is_array($id) ) {
+
+        // Если получили массив, преобразуем его для выборки в мускуле
+        if ( is_array($ids) ) {
             $ids = '';
             foreach ($id as $v) {
                 if ( !empty ($ids) ) $ids .= ',';
                 $ids .= $v;
             }
-            $sql = 'UPDATE calendar_events c SET accept = 1 WHERE id IN (' . $ids . ')';
-        } else {
-            $sql = 'UPDATE calendar_events c SET accept = 1 WHERE id = ' . $ids;
         }
 
+        $sql = 'UPDATE calendar_events c SET accept = 1 WHERE id IN (' . $ids . ')';
+
         Core::getInstance()->db->query($sql);
+
+        // Если у нас есть периодические транзакции, в прибывших событиях,
+        // то возвращаем их список для создания по ним операций
         $sql = 'SELECT e.id, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, 
             c.comment, e.`date`
             FROM calendar_events e

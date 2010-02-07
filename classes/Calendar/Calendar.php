@@ -142,6 +142,7 @@ class Calendar
         $time    = (empty($time))? '00:00' : (string)$time;
         $date    = formatRussianDate2MysqlDate($date);
         $every   = (int)$every;
+        // Опционально, по-умолчанию 1, от 1 до 365 (год) **или дата окончания**, или 0 - бесконечно
         if ( strlen($repeat) == 10 ){
             $last_date = $repeat;
         } else {
@@ -249,6 +250,7 @@ class Calendar
         }
 
         $model = Calendar_Model::loadById( $this->user, $id, $chain);
+
         $diff = array();
         if ( $date   != $model->date )   $diff[] = 'date';
         if ( $week   != $model->week )   $diff[] = 'week';
@@ -264,8 +266,10 @@ class Calendar
             return $update;
         // Обновляем даты события
         } else {
+            // Если мы перетащили событие мышкой, или установили у него другую дату
             if ( $use_mode == 'single' ) {
                 return Calendar_Model::updateEventSingleDate($id, $chain, $date);
+            // Если нам нужно обновить все события в цепочке
             } elseif ($use_mode == 'all') {
                 
             }
@@ -405,8 +409,10 @@ class Calendar
      */
     public function acceptEvents ($id)
     {
+        // Получаем список событий, отмечаем что они выполненные
         $events = Calendar_Model::acceptEvents( $this->user, $id, $chain );
         if ( $events ) {
+            // создаём операции по периодическим транзакциям
             if ( count($events) ) {
                 $oper = new Operation_Model();
                 foreach ( $events as $k => $v ) {
