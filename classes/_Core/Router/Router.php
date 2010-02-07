@@ -50,6 +50,10 @@ class _Core_Router
 				if( method_exists( $this->className, $lastPart ) )
 				{
 					$this->methodName	= $lastPart;
+					
+					// Не забываем подчистить остатки
+					array_shift($this->requestRemains);
+					
 				}
 				// ... ежели нету - устанавливаем метод по умолчанию
 				else
