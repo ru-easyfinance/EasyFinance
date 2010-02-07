@@ -5,7 +5,7 @@
 		<strong><?=$res['accounts'][$accountId]['name']?></strong>
 		<a href="/account/edit/<?=$accountId?>">ред.</a>
 		</td>
-		<td align="right">
+		<td align="right" nowrap="nowrap">
 			<span class="<?=($res['accounts'][$accountId]['totalBalance']<0)?'red':'green'?>">
 				<?=Helper_Money::format($res['accounts'][$accountId]['totalBalance'])?>
 			</span>
