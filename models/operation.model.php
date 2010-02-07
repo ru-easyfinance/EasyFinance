@@ -344,9 +344,12 @@ class Operation_Model {
     {
         $cur1 = $this->db->query("SELECT account_currency_id AS cur FROM accounts WHERE account_id=?",$from_account);
         $cur2 = $this->db->query("SELECT account_currency_id AS cur FROM accounts WHERE account_id=?",$to_account);
+        
+        // Если перевод мультивалютный
         if ($convert != 0 && ($cur1[0]['cur'] != $cur2[0]['cur']))
         {
             $res = $this->db->query("SELECT account_currency_id FROM accounts WHERE account_id=?",$to_account);
+            
             $acctoCurrency = $res[0]['account_currency_id'];
             $drain_money = $money * -1;
                 // tr_id. было drain
@@ -358,8 +361,8 @@ class Operation_Model {
             $comment, $to_account, $curr);
             $last_id = mysql_insert_id();
             $sql = "INSERT INTO operation
-                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id, exchange_rate, type)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?, ?, ?)";
+                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id, exchange_rate)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?, ?)";
             $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
                 $comment, $from_account, $money, $curr, $acctoCurrency);
 
