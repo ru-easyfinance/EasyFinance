@@ -102,10 +102,6 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function add()
     {
-        //$this->tpl->assign("page_title","account add");
-        //$this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-
-        //$this->accountslist();
         $user = Core::getInstance()->user->getId();
         $accountCollection = new Account_Collection();
         $params = $_POST;
