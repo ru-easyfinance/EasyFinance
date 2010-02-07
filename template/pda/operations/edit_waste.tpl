@@ -1,11 +1,4 @@
 <?php
-$accountId = 0;
-
-if( isset(_Core_Request::getCurrent()->get['accountId']) )
-{
-	$accountId = (int)_Core_Request::getCurrent()->get['accountId'];
-}
-
 $this->display( 'blocks/operation_menu.tpl' ) ?>
 <form method="POST">
 <div class="wide">
@@ -14,16 +7,14 @@ $this->display( 'blocks/operation_menu.tpl' ) ?>
 	<div class="line">Счёт:<br />
 	<select name="account" class="wide">
 		<?php
-		if( $accountId != 0 || !isset($operation['account']) || !$operation['account'] )
+		if( !isset($operation['account']) || !$operation['account'] )
 		{
 			?><option value="0">не выбран</option><?php
 		}
 		
 		while ( list(,$account) = each($res['accounts']))
 		{
-			?><option <?=($account['id'] == $accountId 
-					|| ( isset($operation['account']) && $account['id'] == $operation['account'] )
-					)?'selected="selected"':''?>
+			?><option <?=(isset($operation['account']) && $account['id'] == $operation['account'])?'selected="selected"':''?>
 			value="<?=$account['id']?>"><?=$account['name']?> (<?=$res['currency'][ $account['currency'] ]['text']?>)</option><?php
 		}
 		?>

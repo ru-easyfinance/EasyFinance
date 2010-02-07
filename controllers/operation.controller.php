@@ -61,12 +61,16 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		
 		if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $operationTypes ) )
 		{
-			$operationType = $operationTypes[ $args[0] ];
-			//$operation['type'] = $operationTypes[ $args[0] ];
+			$operation['type'] = $operationTypes[ $args[0] ];
 		}
 		else
 		{
-			$operationType = 0;
+			$operation['type'] = 0;
+		}
+		
+		if( isset( $this->request->get['accountId'] ) && $this->request->get['accountId'])
+		{
+			$operation['account'] = $this->request->get['accountId'];
 		}
 		
 		if( _Core_Request::getCurrent()->method == 'POST' )
@@ -75,7 +79,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 			$request = _Core_Request::getCurrent();
 			$operation = array(
 				//тип операции (расход и тд)
-				'type' 		=> isset($request->post['type'])?$request->post['type']:$operationType,
+				'type' 		=> isset($request->post['type'])?$request->post['type']:$operation['type'],
 				'account' 	=> $request->post['account'],
 				'amount' 	=> $request->post['amount'],
 				'category' 	=> isset($request->post['category'])?$request->post['category']:null,
@@ -186,7 +190,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		
 		$templateName = 'operations/edit_';
 		
-		switch ( $operationType )
+		switch ( $operation['type'] )
 		{
 			// доход
 			case 0:
@@ -203,7 +207,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		}
 		
 		$this->tpl->assign( 'name_page', $templateName );
-		$this->tpl->assign( 'operationType', $operationType );
 	}
 
 	/**
