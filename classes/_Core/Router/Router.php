@@ -61,7 +61,9 @@ class _Core_Router
 			}
 			
 			// Перед переходом на последующую итерацию обрезаем последний элемент запроса 
-			$this->requestRemains[] = $lastPart = array_pop( $uriArr );
+			$lastPart = array_pop( $uriArr );
+			// И пропихиваем его в массив остатков
+			array_unshift( $this->requestRemains, $lastPart );
 			
 			// Если итерация = 1 а класс ещё не определён
 			if( $i == 1 && empty($this->className) )
