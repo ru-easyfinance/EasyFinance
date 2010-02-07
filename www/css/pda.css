@@ -95,6 +95,11 @@ div.line {
 
 /* CATEGORY */
 
+.categorys td
+{
+	padding-bottom: 5px;
+}
+
 td.childCategory {
 	padding-left: 8px;
 }
