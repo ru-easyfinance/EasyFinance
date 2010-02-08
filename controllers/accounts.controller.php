@@ -102,17 +102,23 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function add()
     {
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
-        $account = Account::load($params);
-        $accs = $account->create($user, $params);
-        if (!$accs){
-            die (json_encode(array('error'=>array('text'=>'Счёт не добавлен'))));
+        if( _Core_Request::getCurrent()->method == 'POST' )
+        {
+            $user = Core::getInstance()->user->getId();
+            $accountCollection = new Account_Collection();
+            $params = $_POST;
+            $account = Account::load($params);
+            $accs = $account->create($user, $params);
+            if (!$accs){
+                die (json_encode(array('error'=>array('text'=>'Счёт не добавлен'))));
+            }
+            die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
+                ,'id'=>$accs
+                ))));
+        } else {
+            $this->tpl->assign( 'name_page', 'account/edit' );
+            //die(json_encode(array('error'=>array('text'=>'42342342'))));
         }
-        die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
-            ,'id'=>$accs
-            ))));
     }
 
     function edit()
