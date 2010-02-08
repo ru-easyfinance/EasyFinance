@@ -125,11 +125,11 @@ class Calendar_Model extends _Core_Abstract_Model {
      * @param array $array mixed
      * @return bool
      */
-    public static function create ( User $user, $type, $title, $comment, $time,
-            $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
+    public static function create ( User $user, $type, $title, $comment, $time, $date, $last, 
+            $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
     {
         $cal_id = self::createCalendarEvent($user, $type, $title, $comment, $time, $date,
-                $array[count($array)], $last, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags);
+                $array[count($array)-1], $last, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags);
 
         // Создаём повторы события
         $sql = '';
