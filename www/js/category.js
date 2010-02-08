@@ -200,6 +200,9 @@ $(document).ready(function() {
 
     function listInsertChildCategory(cat, afterNode){
         var parent = easyFinance.models.category.getUserCategories()[cat.parent];
+        if (!parent){
+            return ;
+        }
         var system = easyFinance.models.category.getSystemCategories()[parent.system];
 
         var pr = cat['parent'];
