@@ -13,9 +13,9 @@ switch($categorysType)
 ?>
 <table cellspacing="0" cellpadding="0" class="wide"><tbody>
 	<tr>
-		<td><strong>Категории</strong></td>
-		<td class="wide">&nbsp;</td>
-		<td align="right"><a href="/category/add/<?=$categorysType?>">добавить</a></td>
+		<td class="wide"><strong>Категории</strong> <a href="/category/add/<?=$categorysType?>">добавить</a></td>
+		<td>&nbsp;</td>
+		<td align="right">&nbsp;</td>
 	</tr>
 </tbody></table>
 <div class="menu">
@@ -24,7 +24,7 @@ switch($categorysType)
 	<a href="/category/universal" class="<?=($categorysType == Category::TYPE_UNIVERSAL)?'current':''?>">универсальные</a>
 </div>
 <br />
-<table cellspacing="0" cellpadding="0" class="wide categorys"><tbody>
+<table cellspacing="0" cellpadding="0" class="wide categories"><tbody>
 	<?php
 	foreach( $res['category']['user'] as $category )
 	{
@@ -43,7 +43,7 @@ switch($categorysType)
 		<tr>
 			<td class="wide"><a href="/category/edit/<?=$category['id']?>" class="<?=$linkStyle?>">
 			<?=$category['name']?></span></a></td>
-			<td><a href="/category/del/<?=$category['id']?>">(X)</a></td>
+			<td><a href="/category/del/<?=$category['id']?>">X</a></td>
 		</tr>
 		<?php
 		// foreach по причине правильного переключения укаателей массива
@@ -57,7 +57,7 @@ switch($categorysType)
 			<tr>
 				<td class="wide childCategory"><a href="/category/edit/<?=$categoryChild['id']?>" class="<?=$linkStyle?>">
 				<?=$categoryChild['name']?></span></a></td>
-				<td><a href="/category/del/<?=$categoryChild['id']?>">(X)</a></td>
+				<td><a href="/category/del/<?=$categoryChild['id']?>">X</a></td>
 			</tr>
 			<?php
 		}

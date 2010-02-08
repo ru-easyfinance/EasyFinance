@@ -1,7 +1,7 @@
 		<table cellspacing="0" cellpadding="0" class="wide"><tbody>
 			<tr>
-				<td class="wide"><strong>Счета</strong></td>
-				<td><a href="/accounts/add">добавить</a></td>
+				<td class="wide"><strong>Счета</strong> <a href="/accounts/add">добавить счёт</a></td>
+				<td>&nbsp;</td>
 			</tr>
 		</tbody></table>
 		<br />

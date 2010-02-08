@@ -3,7 +3,7 @@
 	<tr>
 		<td>
 		<strong><?=$res['accounts'][$accountId]['name']?></strong>
-		<a href="/account/edit/<?=$accountId?>">ред.</a>
+		<a href="/account/edit/<?=$accountId?>">редактировать</a>
 		</td>
 		<td align="right" nowrap="nowrap">
 			<span class="<?=($res['accounts'][$accountId]['totalBalance']<0)?'red':'green'?>">
@@ -15,7 +15,7 @@
 	</tbody></table>
 
 <div class="line">
-	<a href="/operation/add/waste?accountId=<?=$accountId?>">добавить</a>
+	<a href="/operation/add/waste?accountId=<?=$accountId?>">добавить операцию</a>
 </div>
 
 <?=$this->display('blocks/operationsList.tpl')?>

@@ -21,7 +21,9 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 ?><form method="POST">
 <div class="wide">
 	<input type="hidden" name="id" value=""></input>
-	<div class="line">Сумма: <br /><input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" /></div>
+	<div class="line">Сумма: <br />
+            <?=($operation['type'] == Operation::TYPE_PROFIT ? '+' : '-')?>&nbsp;<input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" />
+        </div>
 	<div class="line"><?=in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT))?'Счёт':'Со счёта'?>:<br />
 	<select name="account" class="wide">
 		<?php

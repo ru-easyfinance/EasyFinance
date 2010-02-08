@@ -2,7 +2,7 @@
 if( isset($res['user']) )
 {
 	?>
-<table class="topmenu wide" cellpadding="0" cellspacing="0"><tbody><tr>
+<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;"><tbody><tr>
 	<td>
 		<a href="/operation/add/waste"><img src="/img/pda/menuAddOperation.gif" alt="" width="24" height="24" /></a>
                 <br><a href="/operation/add/waste">добавить</a>
@@ -15,7 +15,7 @@ if( isset($res['user']) )
 		<a href="/info"><img src="/img/pda/menuAccounts.gif" alt="" width="24" height="24" /></a>
                 <br><a href="/info">счета</a>
 	</td>
-	<td>
+        <td>
 		<a href="/category"><img src="/img/pda/menuCategories.gif" alt="" width="24" height="24" /></a>
                 <br><a href="/category">категории</a>
 	</td>
@@ -23,4 +23,4 @@ if( isset($res['user']) )
 	<?php
 }
 ?>
-<div align="center" id="copyright">&copy; EasyFinance.ru, 2010</div>
+<div align="center" id="copyright" class="line">&copy; EasyFinance.ru, 2010</div>
