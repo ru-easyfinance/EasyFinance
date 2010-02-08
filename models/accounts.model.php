@@ -45,6 +45,24 @@ class Accounts_Model
             ");
     }
     /**
+     *
+     * @param <type> $id 
+     */
+    public function getAccountPdaInformation($id){
+        $select = "SELECT * FROM accounts WHERE account_id=?";
+        $sql = $this->db->query($select, $id);
+        $op = "SELECT money FROM operation WHERE account_id=?";
+        $sqlop = $this->db->query($op, $id);
+        return array (
+            'name'=>$sql[0]['account_name'],
+            'type'=>$sql[0]['account_type_id'],
+            'description'=>$sql[0]['account_description'],
+            'currency'=>$sql[0]['account_currency_id'],
+            'money'=>$sqlop[0]['money']
+            );
+    }
+
+    /**
      * Получаем поля для счета
      * @return array
      */
