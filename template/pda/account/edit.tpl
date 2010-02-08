@@ -6,14 +6,14 @@
 	<td><span class="asterisk">*</span> Тип:</td>
 	<td>
 		<select id="acc_type" name="type">
-			<option value="1">Наличные</option>
-			<option value="2">Дебетовая карта</option>
-			<option value="9">Кредит</option>
-			<option value="5">Депозит</option>
-			<option value="6">Займ выданный</option>
-			<option value="7">Займ полученый</option>
-			<option value="8">Кредитная карта</option>
-			<option value="15">Электронный кошелек</option>
+			<option value="1" <? if (1 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Наличные</option>
+			<option value="2" <? if (2 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Дебетовая карта</option>
+			<option value="9" <? if (9 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Кредит</option>
+			<option value="5" <? if (5 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Депозит</option>
+			<option value="6" <? if (6 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Займ выданный</option>
+			<option value="7" <? if (7 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Займ полученый</option>
+			<option value="8" <? if (8 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Кредитная карта</option>
+			<option value="15" <? if (15 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Электронный кошелек</option>
 		</select>
 	</td>
 </tr>
@@ -39,8 +39,8 @@
 			?><option value="<?=$currency?>"><?=$currency['text']?></option>
 			<?php
 		}*/
-                foreach ($res['currency'] as $k=>$v){
-                    ?><option value="<?=$k?>"><?=$v['text']?></option>
+                foreach ($res['currency'] as $k=>$v){ if ($k !='default' ) if ($k!='errors') 
+                    ?><option value="<?=$k?> <? if ($k == isset($acc['currency'])?$acc['currency']:0) { ?> selected <? } ?>"><?=$v['text']?></option>
                     <?php
                 }
 		?>
@@ -52,7 +52,8 @@
 	<td><textarea style="width: 100%;" rows="3" cols="20" name="comment"><?php echo(isset($acc['description'])?$acc['description']:'') ?></textarea></td>
 </tr>
 <tr>
-	<td><input type="submit" value="Сохранить" id="btnSave"></td>
+	<td><input type="submit" value="Сохранить" id="btnSave">
+        <? if (isset($acc['description'])) { ?><a href="/accounts/delete/<? echo($acc['id']) ?>">удалить</a></td><? } ?>
 	<td></td>
 </tr>
 </tbody></table>
