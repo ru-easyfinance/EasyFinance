@@ -229,12 +229,8 @@ class Category_Model {
         $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        return array(
-            'result' => array(
-                'text' => '',
-                'id'   => $newID
-             )
-        );
+        
+        return $newID;
     }
 
     /**
@@ -349,7 +345,8 @@ class Category_Model {
         
         foreach (Core::getInstance()->user->getUserCategory() as $category)
         {
-            $users[$category['cat_id']] = array(
+            $users[ $category['cat_id'] ] = array
+            (
                 'id'      => $category['cat_id'],
                 'parent'  => $category['cat_parent'],
                 'system'  => $category['system_category_id'],

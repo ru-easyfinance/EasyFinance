@@ -23,6 +23,7 @@ if( isset($error) && is_array($error) && array_key_exists( 'text', $error ) )
 if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 {
 	?><p style="color:green; font-weight:bold; font-size: 12px;"><?=$result['text']?></p><?php
+	$category['name'] = null;
 }
 ?>
 <form method="POST">
@@ -30,30 +31,31 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	<input type="hidden" name="type" value="<?=$category['type']?>"></input>
 	
 	<div class="line"><span class="asterisk">*</span> Название: <br />
-		<input class="wide" name="name" value="<?=isset($category['name'])?$category['name']:''?>" />
+		<input class="wide" name="name" value="<?=isset($category['name'])?htmlspecialchars($category['name']):''?>" />
 	</div>	
 	<div class="line"><span class="asterisk">*</span> Родительская категория:<br><select name="parent" class="wide">
 		<option value="0">Без родительской</option>
 	<?php
 	while( list(,$userCategory) = each($res['category']['user']) )
 	{
-		?><option id="<?=$userCategory['id']?>"><?=$userCategory['name']?></option>
+		if( $category[''] )
+		?><option id="<?=$userCategory['id']?>"
+		><?=$userCategory['name']?></option>
 		<?php
 	}
 	?>
 	</select></div>
 	<div class="line"><span class="asterisk">*</span> Системная категория:<br><select name="system" class="wide">
-		<option value="0">Не выбрана</option>
 	<?php
 	while( list(,$sysCategory) = each($res['category']['system']) )
 	{
-		?><option id="<?=$sysCategory['id']?>"
+		?><option value="<?=$sysCategory['id']?>"
 		<?=(isset($category['system']) && $category['system'] == $sysCategory['id'])?'selected="selected"':''?>
 		><?=$sysCategory['name']?></option>
 		<?php
 	}
 	?>
-	</select></div>	
+	</select></div>
 
 	<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
 </div>
