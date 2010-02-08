@@ -155,7 +155,7 @@ class Category_Controller extends _Core_Controller_UserCommon
 				$errors[] = 'Название не может быть пустым!';
 			}
 			
-			if( !$category['parent'] || !$category['system'] )
+			if( !$category['parent'] && !$category['system'] )
 			{
 				$errors[] = 'Вы должны указать системную или родительскую категорию.';
 			}
