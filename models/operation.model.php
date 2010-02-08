@@ -366,11 +366,12 @@ class Operation_Model {
 			// Если пришла сконвертированная сумма
 			if( $convert != 0 )
 			{
-			}
+			} 
+            else
 			// Если нет - производим вычисления через рубль
 			{
 				$currensys = Core::getInstance()->user->getUserCurrency();
-				
+                
 				// приводим сумму к пром. валюте
 				$convert = $money / $currensys[ $curTargetId ]['value'];
 				// .. и к валюте целевого счёта

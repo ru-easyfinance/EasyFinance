@@ -462,7 +462,7 @@ easyFinance.widgets.operationsJournal = function(){
             pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
         }
         pageTotal = Math.round(pageTotal*100)/100;
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + _modelAccounts.getAccountCurrency(_account).text + '<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + (_modelAccounts.getAccountCurrency(_account)?_modelAccounts.getAccountCurrency(_account).text : ((res.currency[res.currency['default']].text || ''))) + '<br>').show();
     }
 
     // public variables
