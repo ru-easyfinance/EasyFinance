@@ -97,8 +97,11 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 			while ( list(,$account) = each($res['accounts']))
 			{
 				?><option 
-				<?=( isset($operation['toAccount']) && $account['id'] == $operation['toAccount'] )?'selected="selected"':''?>
-				value="<?=$account['id']?>"><?=$account['name']?></option><?php
+				<?=( isset($operation['toAccount']) && $account['id'] == $operation['toAccount'] )
+					?'selected="selected"':''?> 
+					value="<?=$account['id']?>">
+					<?=$account['name']?> (<?=$res['currency'][ $account['currency'] ]['text']?>)
+				</option><?php
 			}
 			?>
 		</select></div>
