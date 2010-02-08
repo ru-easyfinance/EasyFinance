@@ -1,5 +1,6 @@
 <strong><?=(false)?'Редактирование счёта' . $accountName : 'Добавление счёта';?></strong>
 <br /><br />
+<form method="POST">
 <table width="220px"><tbody>
 <tr>
 	<td>Тип:</td>
@@ -22,22 +23,26 @@
 </tr>
 <tr>
 	<td>Начальный баланс :</td>
-	<td><input name="balance"></td>
+	<td><input name="initPayment"></td>
 </tr>
 <tr>
 	<td>Валюта:</td>
 	<td>
-	<select name="select">
+	<select name="currency">
 		<?php
-		while( list(,$currency) = each($res['currency']) )
+		/*while( list(,$currency) = each($res['currency']) )
 		{
 			if( !is_array($currency) )
 			{
 				continue;
 			}
-			?><option value="<?=$currency['id']?>"><?=$currency['text']?></option>
+			?><option value="<?=$currency?>"><?=$currency['text']?></option>
 			<?php
-		}
+		}*/
+                foreach ($res['currency'] as $k=>$v){
+                    ?><option value="<?=$k?>"><?=$v['text']?></option>
+                    <?php
+                }
 		?>
 	</select>
 	</td>
@@ -51,3 +56,4 @@
 	<td></td>
 </tr>
 </tbody></table>
+</form>
