@@ -6,14 +6,14 @@
 	<td><span class="asterisk">*</span> Тип:</td>
 	<td>
 		<select id="acc_type" name="type">
-			<option value="1" <? if (1 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Наличные</option>
-			<option value="2" <? if (2 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Дебетовая карта</option>
-			<option value="9" <? if (9 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Кредит</option>
-			<option value="5" <? if (5 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Депозит</option>
-			<option value="6" <? if (6 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Займ выданный</option>
-			<option value="7" <? if (7 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Займ полученый</option>
-			<option value="8" <? if (8 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Кредитная карта</option>
-			<option value="15" <? if (15 == isset($acc['type'])?$acc['type']:0) { ?> selected="selected" <? } ?>>Электронный кошелек</option>
+			<option value="1" <?php if (1 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Наличные</option>
+			<option value="2" <?php if (2 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Дебетовая карта</option>
+			<option value="9" <?php if (9 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Кредит</option>
+			<option value="5" <?php if (5 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Депозит</option>
+			<option value="6" <?php if (6 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Займ выданный</option>
+			<option value="7" <?php if (7 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Займ полученый</option>
+			<option value="8" <?php if (8 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Кредитная карта</option>
+			<option value="15" <?php if (15 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Электронный кошелек</option>
 		</select>
 	</td>
 </tr>
@@ -39,8 +39,8 @@
 			?><option value="<?=$currency?>"><?=$currency['text']?></option>
 			<?php
 		}*/
-                foreach ($res['currency'] as $k=>$v){ if ($k !='default' ) if ($k!='errors') 
-                    ?><option value="<?=$k?> <? if ($k == isset($acc['currency'])?$acc['currency']:0) { ?> selected <? } ?>"><?=$v['text']?></option>
+                foreach ($res['currency'] as $k=>$v){ if ($k !='default' ) if ($k!='errors')
+                    ?><option value="<?=$k?>" <? if ( $k == (isset($acc['currency'])?$acc['currency']:0) ) { ?> selected <? } ?> ><?=$v['text']?></option>
                     <?php
                 }
 		?>
