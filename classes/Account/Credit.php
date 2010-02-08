@@ -69,14 +69,14 @@ class Account_Credit extends Account
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];
-        $this->bank = $valid[8];
+        //$this->bank = $valid[8];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->yearPercent = $valid[11];
-        $this->dateGet = $valid[17];
-        $this->dateOff = $valid[18];
-        $this->typePayment = $valid[24];
-        $this->support = $valid[25];
+        //$this->yearPercent = $valid[11];
+        //$this->dateGet = $valid[17];
+        //$this->dateOff = $valid[18];
+        //$this->typePayment = $valid[24];
+        //$this->support = $valid[25];
         return ($valid);
     }
 

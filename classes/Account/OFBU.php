@@ -57,11 +57,11 @@ class Account_OFBU extends Account
         $this->type = $valid[2];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->bank = $valid[8];
-        $this->UK = $valid[27];
-        $this->currentMarketCost = $valid[6];
-        $this->incomeYearPercent = $valid[12];
-        $this->dateOpen = $valid[15];
+        //$this->bank = $valid[8];
+        //$this->UK = $valid[27];
+        //$this->currentMarketCost = $valid[6];
+        //$this->incomeYearPercent = $valid[12];
+        //$this->dateOpen = $valid[15];
 
 
         /*if ( in_array('amount', $params) ) {

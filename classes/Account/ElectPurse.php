@@ -30,7 +30,7 @@ class Account_ElectPurse extends Account
         $this->type = $valid[2];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->paySystem = $valid[22];
+        //$this->paySystem = $valid[22];
 
         return ($valid);
     }

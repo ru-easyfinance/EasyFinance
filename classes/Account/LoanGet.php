@@ -58,11 +58,11 @@ class Account_LoanGet extends Account
         $this->type = $valid[2];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->bank = $valid[8];
-        $this->yearPercent = $valid[11];
-        $this->dateGet = $valid[17];
-        $this->dateOff = $valid[18];
-        $this->loanGiver = $valid[10];
+        //$this->bank = $valid[8];
+        //$this->yearPercent = $valid[11];
+        //$this->dateGet = $valid[17];
+        //$this->dateOff = $valid[18];
+        //$this->loanGiver = $valid[10];
 
         return ($valid);
     }
