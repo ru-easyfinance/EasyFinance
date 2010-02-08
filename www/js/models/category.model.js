@@ -5,9 +5,9 @@
 
 easyFinance.models.category = function(){
     // constants
-    var LIST_URL = '/category/getCategory/?responseMode=json&confirmed=1';
-    var ADD_URL = '/category/add/?responseMode=json&confirmed=1';
-    var EDIT_URL = '/category/edit/?responseMode=json&confirmed=1';
+    var LIST_URL = '/category/getCategory/?responseMode=json';
+    var ADD_URL = '/category/add/?responseMode=json';
+    var EDIT_URL = '/category/edit/?responseMode=json';
     var DELETE_URL = '/category/del/?responseMode=json&confirmed=1';
 
     // private variables
