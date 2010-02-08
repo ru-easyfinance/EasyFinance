@@ -188,25 +188,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		
 		$this->tpl->assign( 'operation', $operation );
 		
-		$templateName = 'operations/edit_';
-		
-		switch ( $operation['type'] )
-		{
-			// доход
-			case 0:
-				$templateName .= 'waste'; break;
-			// расход
-			case 1:
-				$templateName .= 'profit'; break;
-			// перевод
-			case 2:
-				$templateName .= 'transfer'; break;
-			// финцель
-			case 4:
-				$templateName .= 'target'; break;
-		}
-		
-		$this->tpl->assign( 'name_page', $templateName );
+		$this->tpl->assign( 'name_page', 'operations/edit' );
 	}
 
 	/**
@@ -408,26 +390,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		
 		$this->tpl->assign( 'operation', $operation );
 		
-		$templateName = 'operations/edit_';
-		
-		switch ( $operation['type'] )
-		{
-			// доход
-			case 0:
-				$templateName .= 'waste'; break;
-			// расход
-			case 1:
-				$templateName .= 'profit'; break;
-			// перевод
-			case 2:
-				$templateName .= 'transfer'; break;
-			// финцель
-			case 4:
-				$templateName .= 'target'; break;
-		}
-		
-		$this->tpl->assign( 'name_page', $templateName );
-		$this->tpl->assign( 'operationType', $operation['type'] );
+		$this->tpl->assign( 'name_page', 'operations/edit' );
 	}
 
 	/**
