@@ -1,0 +1,18 @@
+<table class="topmenu" cellpadding="0" cellspacing="0"><tbody><tr>
+	<td>
+		<a href="/operation/add/waste"><img src="/img/pda/menuAddOperation.gif" alt="" width="24" height="24" /></a>
+                <br><a href="/operation/add/waste">добавить</a>
+	</td>
+	<td>
+		<a href="/operation/listOperations"><img src="/img/pda/menuOperations.gif" alt="" width="24" height="24" /></a>
+                <br><a href="/operation/listOperations">журнал</a>
+	</td>
+	<td>
+		<a href="/info"><img src="/img/pda/menuAccounts.gif" alt="" width="24" height="24" /></a>
+                <br><a href="/info">счета</a>
+	</td>
+	<td class="last">
+		<a href="/category"><img src="/img/pda/menuCategories.gif" alt="" width="24" height="24" /></a>
+                <br><a href="/category">категории</a>
+	</td>
+</tbody></tr></table>

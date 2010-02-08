@@ -155,15 +155,19 @@ easyFinance.widgets.operationsJournal = function(){
         });
 
         _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
-            // remove rows from table
-            for (var key in _ops) {
-                _deleteOperationFromTable(_ops[key]);
+            if (data.result) {
+                // remove rows from table
+                for (var key in _ops) {
+                    _deleteOperationFromTable(_ops[key]);
+                }
+
+                _$checkAll.removeAttr('checked');
+
+                _onCheckClicked();
+                $.jGrowl(data.result.text, {theme: 'green'});
+            } else if (data.error & data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
             }
-
-            _$checkAll.removeAttr('checked');
-
-            _onCheckClicked();
-            $.jGrowl("Операции удалены", {theme: 'green'});
         });
 
         return true;
@@ -176,11 +180,15 @@ easyFinance.widgets.operationsJournal = function(){
         var _op = $.extend(true, {}, _journal[id]);
 
         _modelAccounts.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
-            _deleteOperationFromTable(_op);
+            if (data.result) {
+                _deleteOperationFromTable(_op);
 
-            $.jGrowl("Операция удалена", {theme: 'green'});
+                $.jGrowl(data.result.text, {theme: 'green'});
 
-            _recalcTotal();
+                _recalcTotal();
+            } else if (data.error && data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+            }
         });
 
         return true;
@@ -218,7 +226,7 @@ easyFinance.widgets.operationsJournal = function(){
                 $('#op_amount').removeAttr('disabled');
                 $('#op_comment').removeAttr('disabled');
             }
-            $('form').attr('action','/operation/edit/');
+            $('form').attr('action','/operation/edit/?responseMode=json');
         } else if(operation == 'del') {
             _deleteOperation($(this).closest('tr').attr('value'));
         } else if(operation == 'add') {
@@ -454,7 +462,7 @@ easyFinance.widgets.operationsJournal = function(){
             pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
         }
         pageTotal = Math.round(pageTotal*100)/100;
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + _modelAccounts.getAccountCurrency(_account).text + '<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + (_modelAccounts.getAccountCurrency(_account)?_modelAccounts.getAccountCurrency(_account).text : ((res.currency[res.currency['default']].text || ''))) + '<br>').show();
     }
 
     // public variables
@@ -521,7 +529,9 @@ easyFinance.widgets.operationsJournal = function(){
 
             // всплывающая подсказка для тикета #640
             var operation = _journal[$(this).closest('tr').attr('value')];
-
+            if (!operation){
+                return ;
+            }
             var tp = '';
             if ( operation.transfer > 0 ) {
                 tp = 'перевод';

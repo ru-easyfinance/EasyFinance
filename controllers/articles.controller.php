@@ -58,7 +58,7 @@ class Articles_Controller extends _Core_Controller
 		
 		$pagesTotal = ceil( $itemsTotal / $itemsPerPage );
 		
-		if( $pageNum > $pagesTotal || $pageNum < 1)
+		if( $pagesTotal > 0 && ($pageNum > $pagesTotal || $pageNum < 1) )
 		{
 			//throw 404
 			header('Location: /articles');

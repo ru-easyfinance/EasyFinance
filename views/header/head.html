@@ -39,10 +39,9 @@
         {/foreach}
 
         {foreach from=$js item=i}
-            <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>
-        {/foreach}
+        <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>{/foreach}
         <script type="text/javascript">
-            var res = {$res};
+            var res = {php} echo json_encode($this->get_template_vars('res')); {/php};
         </script>
 
     <!-- /Подключениее стилей и скриптов -->

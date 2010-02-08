@@ -6,43 +6,51 @@
  */
 
 // Path settings
-define('SYS_DIR_ROOT',          dirname(dirname(__FILE__)) );
+define('SYS_DIR_ROOT',      dirname(dirname(__FILE__)) );
+
+// @deprecated +
 define('SYS_DIR_LIBS',		SYS_DIR_ROOT."/core/");
 define('SYS_DIR_INC',		SYS_DIR_ROOT."/include/");
 define('SYS_DIR_MOD',		SYS_DIR_ROOT."/modules/");
-define('SYS_DIR_HTML', 		SYS_DIR_ROOT."/templates/");
+define('SYS_DIR_HTML',      SYS_DIR_ROOT."/templates/");
+// @deprecated -
 
-define('SYS_DIR_CACHE', 		"${project.basedir}/tmp");
-define('TMP_DIR_SMARTY', 	SYS_DIR_CACHE . "/smarty");
+//Общая папка для кэша файлов
+define('SYS_DIR_CACHE',		"${project.basedir}/tmp");
+define('TMP_DIR_SMARTY',    SYS_DIR_CACHE . "/smarty");
 
-
-define('DIR_SHARED', 		"${project.shared.dir}" . DIRECTORY_SEPARATOR);
+// Каталог с загружаемыми файлами
+define('DIR_SHARED',		"${project.shared.dir}" . DIRECTORY_SEPARATOR);
 define('DIR_UPLOAD',		DIR_SHARED . "uploaded/");
+define('DIR_CONFIG',		dirname(dirname(__FILE__)) . '/configs/' );
+define('DIR_TEMPLATES',		dirname(dirname(__FILE__)) . '/template/' );
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
 // Other
-define('IS_DEMO', 			${project.demo} );
+define('IS_DEMO',           ${project.demo} );
 
-define('URL_ROOT_MAIN',         "${project.url.root}/");
-define('URL_ROOT_DEMO',         "${demo.url.root}/");
-define('URL_ROOT_IFRAME',       "iframe." . URL_ROOT_MAIN);
+// Ссылка на главную страницу сайта
+define('URL_ROOT_MAIN',     "${project.url.root}/");
+define('URL_ROOT_DEMO',     "${demo.url.root}/");
+define('URL_ROOT_IFRAME',   "iframe." . URL_ROOT_MAIN);
+define('URL_ROOT_PDA',		"pda." . URL_ROOT_MAIN);
 
 define('URL_ROOT',			IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 
-define('DEBUG',			${project.debug} );
+define('DEBUG',             ${project.debug} );
 define('DEFAULT_MODULE',	'welcome');
-define('GUEST_MODULES', 	'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore,notfound,articles');
+define('GUEST_MODULES',     'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore,notfound,articles');
 
 //COOKIE
-define('COOKIE_NAME', 		"${project.cookie.name}" );
-define('COOKIE_DOMEN', 		${project.cookie.domain} );
-define('COOKIE_PATH', 		"${project.cookie.path}" );
-define('COOKIE_HTTPS',		${project.cookie.https} );
-define('COOKIE_EXPIRE', 		${project.cookie.expire} ); // две недели
+define('COOKIE_NAME',       "${project.cookie.name}" ); // "a"
+define('COOKIE_DOMEN',		${project.cookie.domain} ); // ".easyfinance.ru" 
+define('COOKIE_PATH',       "${project.cookie.path}" ); // по-умолчанию "/"
+define('COOKIE_HTTPS',		${project.cookie.https} );  // На продуктиве всегда true
+define('COOKIE_EXPIRE',     ${project.cookie.expire} ); // две недели = 60 * 60 * 24 * 2
 
 //CRYPT
-define('CRYPT_KEY',		"${project.crypt.key}"); // 24 битный ключ
+define('CRYPT_KEY',         "${project.crypt.key}"); // 24 битный ключ
 
 // DB settings
 define('SYS_DB_HOST',		"${project.db.host}");
@@ -55,17 +63,16 @@ define('JS_MINIFY',			${project.jsmin.enabled} );
 define('CSS_MINIFY',		${project.cssmin.enabled} );
 
 // Cache settings
-define('CACHE_ENABLED', 		${project.cache.enabled});
-define('CACHE_KEY_PREFIX', 	${project.cache.keyPrefix});
-define('CACHE_FILES_DIR', 	"${project.cache.dir}");
+define('CACHE_ENABLED',    ${project.cache.enabled});
+define('CACHE_KEY_PREFIX', ${project.cache.keyPrefix});
+define('CACHE_FILES_DIR',  "${project.cache.dir}");
 
-define('MEMCACHE_ENABLED', 	${project.memcache.enabled});
-define('MEMCACHE_HOST', 	"${project.memcache.host}");
-define('MEMCACHE_PORT', 	${project.memcache.port});
+define('MEMCACHE_ENABLED',	${project.memcache.enabled});
+define('MEMCACHE_HOST',     "${project.memcache.host}");
+define('MEMCACHE_PORT',     ${project.memcache.port});
 
 // Mail settings (including method)
-define('MAIL_ENABLED' , 1);
-//define();
+define('MAIL_ENABLED' ,     1);
 
 // Current project revision (using for flush client cache after each build)
-define('REVISION', 			"${project.svn.revision}");
+define('REVISION',          "${project.svn.revision}");

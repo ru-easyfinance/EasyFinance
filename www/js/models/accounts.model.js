@@ -5,15 +5,15 @@
 
 easyFinance.models.accounts = function(){
     // constants
-    var ACCOUNTS_LIST_URL = '/accounts/accountslist/';
-    var ADD_ACCOUNT_URL = '/accounts/add/';
-    var EDIT_ACCOUNT_URL = '/accounts/edit/';
-    var DELETE_ACCOUNT_URL = '/accounts/delete/';
+    var ACCOUNTS_LIST_URL = '/accounts/accountslist/?responseMode=json';
+    var ADD_ACCOUNT_URL = '/accounts/add/?responseMode=json';
+    var EDIT_ACCOUNT_URL = '/accounts/edit/?responseMode=json';
+    var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json&confirmed=1';
 
-    var OPERATIONS_JOURNAL_URL = '/operation/listOperations/';
-    var DELETE_OPERATIONS_URL = '/operation/del_all/';
-    var ADD_OPERATION_URL = '/operation/add/';
-    var EDIT_OPERATION_URL = '/operation/edit/';
+    var OPERATIONS_JOURNAL_URL = '/operation/listOperations/?responseMode=json';
+    var DELETE_OPERATIONS_URL = '/operation/del_all/?responseMode=json&confirmed=1';
+    var ADD_OPERATION_URL = '/operation/add/?responseMode=json';
+    var EDIT_OPERATION_URL = '/operation/edit/?responseMode=json';
 
     // private variables
     var _this = null;
@@ -172,7 +172,7 @@ easyFinance.models.accounts = function(){
     }
 
     function deleteAccountById(id, callback) {
-        $.post(DELETE_ACCOUNT_URL, {id:id}, function(data){
+        $.post(DELETE_ACCOUNT_URL, {id:id, confirmed:1}, function(data){
             if (data.result) {
                 delete _accounts[id];
                 $(document).trigger('accountDeleted');
@@ -205,7 +205,7 @@ easyFinance.models.accounts = function(){
                     sumTo: param6,
                     type: param7
                 }, function(data) {
-                    _journal = data;
+                    _journal = data.operations;
                     if (typeof param8 == 'function')
                         param8(_journal);
             }, 'json');
@@ -233,7 +233,7 @@ easyFinance.models.accounts = function(){
                     delete _journal[_ids[i]];
                 }
 
-                callback(_journal);
+                callback(data);
         }, 'json');
     }
 

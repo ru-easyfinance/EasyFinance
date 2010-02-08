@@ -64,6 +64,9 @@ class User
      */
     private $user_budget = array();
 
+    
+    private $pop_targets = array();
+    
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
@@ -131,6 +134,11 @@ class User
 
     	return $userType;
     }
+    
+    public function getDefaultPage()
+    {
+    	return '/';
+    }
 
     public function getName()
     {
@@ -174,13 +182,6 @@ class User
 
 	if (count($this->props) == 0)
 	{
-		Core::getInstance()->tpl->assign( 'loginErrorText', 'Неверный логин или пароль!' );
-		$this->destroy();
-		return false;
-	}
-	elseif ($this->props['user_active'] == 0)
-	{
-        Core::getInstance()->tpl->assign( 'loginErrorText', 'Ваш профиль был заблокирован!' );
 		$this->destroy();
 		return false;
 	}
@@ -360,8 +361,8 @@ class User
             $this->props['user_currency_default'] = (int)$currency_default;
         }
 
-        if (!is_array($currency)) {
-            trigger_error('Ошибка десериализации валют пользователя', E_USER_NOTICE);
+        if (!is_array($currency))
+        {
             $currency = array(1);
         }
 
@@ -421,13 +422,27 @@ class User
      */
     public function initUserTargets()
     {
+    	// Ежели нет пользователя - всё это не нужно.
+    	if(!$this->getId())
+    	{
+    		return;
+    	}
+    	
         $this->user_targets = array();
-        $this->user_targets['user_targets'] = $this->db->select("SELECT t.id, t.category_id as category, t.title, t.amount,
+        $this->user_targets['user_targets'] = array();
+
+        $userTargets = $this->db->select("SELECT t.id, t.category_id as category, t.title, t.amount,
             DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
             t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;", $this->getId(), 0, 20);
-
+        
+        while ( list(,$target) = each($userTargets) )
+        {
+        		$this->user_targets['user_targets'][ $target['id'] ] = $target;
+        }
+        unset($userTargets);
+        
         $this->user_targets['pop_targets'] = $this->db->select("SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS
             cl FROM target t WHERE t.visible=1 GROUP BY t.title,
             t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", 0, 10);
@@ -493,7 +508,12 @@ class User
 
     function getCurrencyByDefault($mas, $def)
     {
-        //die ( print_r( $mas ) );
+        
+        if( !is_array($mas) )
+        {
+        	$mas = array();
+        }
+        
         $mas = "'".implode("','", $mas)."'";
         $sql = "SELECT MAX(currency_date) as last FROM daily_currency";
         $lastdate = $this->db->query($sql);
@@ -509,13 +529,8 @@ class User
 
         $res = array_merge($li, $li2);
 
-
         return $res;
-            //echo('<pre>');
-            //die(print_r($li));
-        //$a = $li[0];
 
-        
     }
 
     /**

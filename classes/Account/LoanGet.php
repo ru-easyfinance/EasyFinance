@@ -50,19 +50,19 @@ class Account_LoanGet extends Account
         $valid[29] = (int)@$params['currency'];
         $valid[8] = (int)@$params['bank'];
         $valid[11] = (int)@$params['yearPercent'];
-        $valid[17] = formatRussianDate2MysqlDate($params['dateGet']);
-        $valid[18] = formatRussianDate2MysqlDate($params['dateOff']);
+        $valid[17] = @formatRussianDate2MysqlDate($params['dateGet']);
+        $valid[18] = @formatRussianDate2MysqlDate($params['dateOff']);
         $valid[10] = (int)@$params['loanGiver'];
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->bank = $valid[8];
-        $this->yearPercent = $valid[11];
-        $this->dateGet = $valid[17];
-        $this->dateOff = $valid[18];
-        $this->loanGiver = $valid[10];
+        //$this->bank = $valid[8];
+        //$this->yearPercent = $valid[11];
+        //$this->dateGet = $valid[17];
+        //$this->dateOff = $valid[18];
+        //$this->loanGiver = $valid[10];
 
         return ($valid);
     }

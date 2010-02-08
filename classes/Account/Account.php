@@ -102,7 +102,7 @@ abstract class Account
      * @return Account
      */
     public function load($params)
-    {   
+    {
         $typearray = array(
             Account_Collection::ACCOUNT_TYPE_CASH               => 'Account_Cash',//
             Account_Collection::ACCOUNT_TYPE_DEBETCARD          => 'Account_DebetCard',//

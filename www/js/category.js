@@ -150,7 +150,7 @@ $(document).ready(function() {
     function drawSystemCategoriesCombo() {
         var system = easyFinance.models.category.getSystemCategories();
 
-        var sys = '';
+        var sys = '', id;
         for(id in system) {
             sys += '<option value="'+system[id]['id']+'">'+system[id]['name']+'</option>';
         }$('#catsys').empty().append(sys);
@@ -200,6 +200,9 @@ $(document).ready(function() {
 
     function listInsertChildCategory(cat, afterNode){
         var parent = easyFinance.models.category.getUserCategories()[cat.parent];
+        if (!parent){
+            return ;
+        }
         var system = easyFinance.models.category.getSystemCategories()[parent.system];
 
         var pr = cat['parent'];
@@ -280,13 +283,15 @@ $(document).ready(function() {
             $('div.categories').empty();
 
             // Обновляем список родительских категорий
-            drawParentCategoriesCombo(data.user);
+            if (data.user){
+                drawParentCategoriesCombo(data.user);
 
-            var id,pr,ct;
-            //var p=[];
-            //$('.categories #table').append('<table>');
-            for(id in data.user) {
-                listInsertCategory(data.user[id]);
+                var id,pr,ct;
+                //var p=[];
+                //$('.categories #table').append('<table>');
+                for(id in data.user) {
+                    listInsertCategory(data.user[id]);
+                }
             }
     }
     /**

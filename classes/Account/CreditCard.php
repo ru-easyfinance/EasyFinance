@@ -62,20 +62,20 @@ class Account_CreditCard extends Account
         $valid[8] = (string)@$params['bank'];
         $valid[11] = (int)@$params['yearPercent'];
         $valid[22] = (int)@$params['paySystem'];
-        $valid[23] = formatRussianDate2MysqlDate($params['validityPeriod']);
+        $valid[23] = @formatRussianDate2MysqlDate($params['validityPeriod']);
         $valid[19] = (int)@$params['creditLimit'];
         $valid[21] = (int)@$params['graisePeriod'];
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];
-        $this->bank = $valid[8];
+        //$this->bank = $valid[8];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->yearPercent = $valid[11];
-        $this->paySystem = $valid[22];
-        $this->validityPeriod = $valid[23];
-        $this->creditLimit = $valid[19];
-        $this->graisePeriod = $valid[21];
+        //$this->yearPercent = $valid[11];
+        //$this->paySystem = $valid[22];
+        //$this->validityPeriod = $valid[23];
+        //$this->creditLimit = $valid[19];
+        //$this->graisePeriod = $valid[21];
 
         return ($valid);
     }

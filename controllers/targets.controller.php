@@ -21,7 +21,6 @@ class Targets_Controller extends _Core_Controller_UserCommon
     {
         $this->tpl->assign('name_page', 'targets/targets');
         $this->model = new Targets_Model();
-        $this->model->_setFormSelectBoxs();
     }
 
     /**

@@ -123,4 +123,3 @@ class Account_Collection extends _Core_Abstract_Collection
 //$account->setName('имя 2');
 //$accountCollection->add($account);
 //
-

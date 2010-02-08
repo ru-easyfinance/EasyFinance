@@ -44,17 +44,17 @@ class Account_BankAcc extends Account
         $valid[29] = (int)@$params['currency'];
         $valid[8] = (int)@$params['bank'];
         //$valid[11] = (int)@$params['yearPercent'];
-        $valid[15] = formatRussianDate2MysqlDate($params['dateOpen']);
-        $valid[16] = formatRussianDate2MysqlDate($params['dateClose']);
+        $valid[15] = @formatRussianDate2MysqlDate($params['dateOpen']);
+        $valid[16] = @formatRussianDate2MysqlDate($params['dateClose']);
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->bank = $valid[8];
+        //$this->bank = $valid[8];
         //$this->yearPercent = $valid[11];
-        $this->dateOpen = $valid[15];
-        $this->dateClose = $valid[16];
+        //$this->dateOpen = $valid[15];
+        //$this->dateClose = $valid[16];
 
         return ($valid);
     }

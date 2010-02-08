@@ -44,19 +44,19 @@ class Targets_Model {
      * @var User
      */
     private $user = null;
-
-    /**
-     * Ссылка на класс Смарти
-     * @var Smarty $tpl
-     */
-    private $tpl = null;
-
+    
     /**
      * Массив со ссылками на ошибки. Ключ - имя поля, значение массив текста ошибки
      * @example array('date'=>array('Не указана дата'), 'time'=> array('Не указано время'));
      * @var array
      */
     private $errorData = array();
+
+    /**
+     * Правка ошибок
+     * @var array
+     */
+    private $errors = array();
     
     /**
      * Количество целей, показываемых на отдельной странице
@@ -78,7 +78,6 @@ class Targets_Model {
     function  __construct() {
         $this->db = Core::getInstance()->db;
         $this->user = Core::getInstance()->user;
-        $this->tpl = Core::getInstance()->tpl;
     }
 
     /**
@@ -97,13 +96,6 @@ class Targets_Model {
         } else {
             $start = (((int)$index - 1) * $limit);
         }
-        /*$list = $this->db->selectPage($total, "SELECT t.id, t.category_id as category, t.title, t.amount,
-            DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
-            t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done as done
-            ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
-            FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d ;",//ASC LIMIT ?d,?d
-            Core::getInstance()->user->getId(), $start, $limit);
-		if (!is_array($list)) $list = array();//*/
 
         $list = $this->db->selectPage( $total, "SELECT t.id, t.category_id as category, t.title, t.amount,
             DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
@@ -227,25 +219,6 @@ class Targets_Model {
     }
 
     /**
-     * Форматирует и устанавливает селектбоксы формы
-     * @return void
-     */
-    function _setFormSelectBoxs() {
-        $this->tpl->assign('type_options', array(
-            "r"=>"Расход",
-            "d"=>"Доход"));
-        $cat_sel = $this->tpl->get_template_vars('data');
-        $this->tpl->assign('category_options',get_tree_select($cat_sel['category_sel']));
-
-        $accounts = array();
-        foreach (Core::getInstance()->user->getUserAccounts() as $key => $var) {
-            $accounts[$var['account_id']] = $var['account_name'];
-        }
-
-        $this->tpl->assign('target_account_id_options', $accounts);
-    }
-
-    /**
      * Проверяет данные и возвращает ассоциативный массив, если успешно. False - при ошибке
      * @return array mixed
      */
@@ -323,8 +296,7 @@ class Targets_Model {
         $data = array();
         if (isset($_POST['title'])) {
             $data = $this->checkData();
-
-            $this->tpl->assign("data", $data);
+            
             // Если есть ошибки, или не все обязательные поля заполнены
             if (count($this->errorData) > 0) {
                 return json_encode($this->errorData);

@@ -45,16 +45,16 @@ class Account_DebetCard extends Account
         $valid[8] = (string)@$params['bank'];
         $valid[11] = (int)@$params['yearPercent'];
         $valid[22] = (int)@$params['paySystem'];
-        $valid[23] = formatRussianDate2MysqlDate($params['validityPeriod']);
+        $valid[23] = @formatRussianDate2MysqlDate($params['validityPeriod']);
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];
-        $this->bank = $valid[8];
+        //$this->bank = $valid[8];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->yearPercent = $valid[11];
-        $this->paySystem = $valid[22];
-        $this->validityPeriod = $valid[23];
+        //$this->yearPercent = $valid[11];
+        //$this->paySystem = $valid[22];
+        //$this->validityPeriod = $valid[23];
  
         return ($valid);
     }

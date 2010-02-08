@@ -5,10 +5,10 @@
 
 easyFinance.models.category = function(){
     // constants
-    var LIST_URL = '/category/getCategory/';
-    var ADD_URL = '/category/add/';
-    var EDIT_URL = '/category/edit/';
-    var DELETE_URL = '/category/del/';
+    var LIST_URL = '/category/getCategory/?responseMode=json';
+    var ADD_URL = '/category/add/?responseMode=json';
+    var EDIT_URL = '/category/edit/?responseMode=json';
+    var DELETE_URL = '/category/del/?responseMode=json&confirmed=1';
 
     // private variables
     var _categories;
@@ -17,12 +17,15 @@ easyFinance.models.category = function(){
     function _htmlDecodeAll() {
         var key;
 
-        for (key in _categories.user) {
-            _categories.user[key].name = _categories.user[key].name.replace(/&quot;/g, '"');
+        if(_categories.user){
+            for (key in _categories.user) {
+                _categories.user[key].name = _categories.user[key].name.replace(/&quot;/g, '"');
+            }
         }
-
-        for (key in _categories.system) {
-            _categories.system[key].name = _categories.system[key].name.replace(/&quot;/g, '"');
+        if(_categories.system){
+            for (key in _categories.system) {
+                _categories.system[key].name = _categories.system[key].name.replace(/&quot;/g, '"');
+            }
         }
     }
 
@@ -69,7 +72,7 @@ easyFinance.models.category = function(){
                 param2(_categories);
         } else {
             // load from server
-            $.get(LIST_URL, '',function(data) {
+            $.get(LIST_URL, 'responseMode=json',function(data) {
                 _categories = data;
                 _htmlDecodeAll();
 

@@ -3,8 +3,8 @@
  * Скрипт для конвертирования событий календаря из старого формата в новый
  */
 define('INDEX', true);
-require_once dirname (__FILE__) . '/include/config.php';
-require_once '../core/external/DBSimple/Generic.php';
+require_once dirname(dirname ( __FILE__ ) ) . '/include/config.php';
+require_once dirname(dirname ( __FILE__ ) ) . '/core/external/DBSimple/Generic.php';
 
 $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
 

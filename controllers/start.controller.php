@@ -13,7 +13,6 @@ class Start_Controller extends _Core_Controller
      */
     protected function __init()
     {
-        $this->tpl = Core::getInstance()->tpl;
         $this->tpl->assign('name_page', 'start');
     }
 

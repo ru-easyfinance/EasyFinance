@@ -38,7 +38,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function index()
     {
-        if ($_SESSION['account'] == "reload") { //@FIXME Переписать эту конструкцию
+    	//@FIXME Переписать эту конструкцию
+        if ( array_key_exists('account', $_SESSION) && $_SESSION['account'] == "reload")
+        { 
             $this->user->initUserAccount($this->user->getId());
             $this->user->save();
             unset($_SESSION['account']);
@@ -100,33 +102,49 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function add()
     {
-        //$this->tpl->assign("page_title","account add");
-        //$this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
-
-        //$this->accountslist();
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
-        $account = Account::load($params);
-        $accs = $account->create($user, $params);
-        if (!$accs){
-            die (json_encode(array('error'=>array('text'=>'Счёт не добавлен'))));
+        if( _Core_Request::getCurrent()->method == 'POST' )
+        {
+            $user = Core::getInstance()->user->getId();
+            $accountCollection = new Account_Collection();
+            $params = $_POST;
+            $account = Account::load($params);
+            $accs = $account->create($user, $params);
+            if (!$accs){
+               $this->tpl->assign('error', array('text'=>'Счёт не добавлен'));
+            }
+            $this->tpl->assign('result' , array('text'=>'Счёт успешно добавлен'
+                ,'id'=>$accs
+                ));
+            $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
+        } else {
+            $this->tpl->assign( 'name_page', 'account/edit' );
+            //die(json_encode(array('error'=>array('text'=>'42342342'))));
         }
-        die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
-            ,'id'=>$accs
-            ))));
     }
 
-    function edit()
+    function edit($args)
     {
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
-        $account = Account::load($params);
-        if (!$account->update($user, $params)){
-            die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+        if( _Core_Request::getCurrent()->method == 'POST' )
+        {
+            $user = Core::getInstance()->user->getId();
+            $accountCollection = new Account_Collection();
+            $params = $_POST;
+            (isset($params['id']))?(1):($pda=1);
+            (isset($params['id']))?(1):($params['id'] = $args[0]);
+            $account = Account::load($params);
+            if (!$account->update($user, $params)){
+                $this->tpl->assign('error', array('text'=>'Счёт не удалён'));
+            }
+            $this->tpl->assign('result' , array('text'=>'Счёт успешно изменён'));
+            $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
+        } else {
+            //echo('<pre>');
+            //die(print_r($args));
+            $acm = new Accounts_Model();
+            $acc = $acm->getAccountPdaInformation($args[0]);
+            $this->tpl->assign( 'acc', $acc);
+            $this->tpl->assign( 'name_page', 'account/edit' );
         }
-        die (json_encode(array('result'=>array('text'=>'Счёт успешно изменён'))));
     }
 
 	/**
@@ -136,19 +154,44 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function delete ($args)
     {
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
 
-        $account = Account::getTypeByID($params);
-        //$account = Account::load($params);
-        $er = $account->delete($user, $params);
-        if (!$er){
-            die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+        if( (isset($_REQUEST['confirmed']) && $_REQUEST['confirmed']) )
+        {
+            $user = Core::getInstance()->user->getId();
+            $accountCollection = new Account_Collection();
+            $params = $_REQUEST;
+
+            $account = Account::getTypeByID($params);
+            //$account = Account::load($params);
+            $er = $account->delete($user, $params);
+            if (!$er){
+                die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+            }
+            if ($er == 'cel')
+                $this->tpl->assign('error',array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'));
+            $this->tpl->assign('result',array('text'=>'Счёт удален'));
+                $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         }
-        if ($er == 'cel')
-            die (json_encode(array('error'=>array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'))));
-        die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
+        elseif( !isset($_POST['confirmed']) )
+		{
+			$confirm= array (
+				'title' 		=> 'Удаление счёта',
+				'message' 	=> 'Вы действительно хотите удалить выбранный счёт?',
+				'yesLink'	=> '/accounts/delete/?id=' . $args[0] . '&confirmed=1',
+				'noLink' 	=> $_SERVER['HTTP_REFERER'],
+			);
+
+			// Сохраняем в сессии адрес куда идти если согласится
+			$_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
+
+			$this->tpl->assign('confirm', $confirm);
+			$this->tpl->assign('name_page', 'confirm');
+		}
+		// Видимо передумали удалять и наша логика не сработала - редиректим на инфо
+		else
+		{
+			_Core_Router::redirect( '/info' );
+		}
     }
 
     /**
@@ -160,32 +203,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         $accountCollection = new Account_Collection();
         //$accountCollection->load( Core::getInstance()->user );
 
-        /*$params = array (
-            'id'         => '12',
-            'name'       => 'Метааллл',
-            'comment'    => 'не в деревянных же держать',
-            'yearPercent'=> '13',
-            'bank'       => 'Raffaisen',
-            'currency'   => '1',
-            'type'       => '10',
-            'typeMetal'  => 'Золото',
-            'dateGet'    => '17.12.2009',
-            'dateOff'    => '21.12.2009',
-            'dateOpen'   => '16.12.2009',
-            'typePayment'=> '2',
-            'support'    => 'юзайте сапорт'
-        );*/
-
-
-        //$params = $_POST;
-        //$account = Account::load($params);
-        //$account->delete($user, $params);
-        //$account->create($user, $params);
-        //$account->update($user, $params);
-        //$accountCollection->add($account);//*/
         $acc = $accountCollection->load($user);
-        //$acc_id = $params['id'];
-        //$accountCollection->loadOneAcc($acc_id);
 
         die ( json_encode (  ( $acc ) ) );
     }

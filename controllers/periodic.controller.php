@@ -39,9 +39,7 @@ class Periodic_Controller extends _Core_Controller_UserCommon
      */
     function index($args)
     {
-        $this->tpl->assign('category',get_tree_select());
-        $this->tpl->assign('account',Core::getInstance()->user->getUserAccounts());
-        
+        $this->tpl->assign('category',get_tree_select());        
     }
     
     /**

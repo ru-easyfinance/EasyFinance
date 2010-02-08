@@ -8,7 +8,7 @@
 
     <h2>Вход в систему</h2>
 
-    <div class="loginError">{$loginErrorText}</div>
+    <div class="loginError">{$errorMessage}</div>
 
 {if $smarty.const.IS_DEMO == false}
     <form action="/login/" method="post" onSubmit="return checkLogin()">

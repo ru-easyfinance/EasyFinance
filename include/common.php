@@ -5,7 +5,6 @@
  * SVN $Id$
  */
 
-require_once dirname(__FILE__)."/config.php";
 require_once SYS_DIR_INC.'/functions.php';
 
 if (DEBUG) {
@@ -22,93 +21,8 @@ spl_autoload_register('__autoload');
 
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
-require_once SYS_DIR_LIBS . 'external/smarty/Smarty.class.php';
-require_once SYS_DIR_LIBS . 'external/smarty/Smarty_Compiler.class.php';
-require_once SYS_DIR_LIBS . 'external/smarty/Config_File.class.php';
 
-// Устанавливаем обработчик ошибок
-set_error_handler("UserErrorHandler");
-
-// Настраиваем смарти
-$tpl = new Smarty();
-
-$tpl->template_dir    =  SYS_DIR_ROOT.'/views';
-$tpl->compile_dir     =  TMP_DIR_SMARTY.'/cache';
-
-$tpl->plugins_dir     =  array(SYS_DIR_LIBS.'external/smarty/plugins');
-$tpl->compile_check   =  true;
-$tpl->force_compile   =  false;
-$tpl->assign('revision', REVISION);
-
-if ( CSS_MINIFY )
-{
-    $tpl->append('css', 'global-min.css');
-}
-else
-{
-    $tpl->append('css', 'main.css');
-
-//    $tpl->append('css', 'jquery/south-street/ui.all.css');
-    //$tpl->append('css', 'jquery/south-street/ui.base.css');
-    $tpl->append('css', 'jquery/south-street/ui.core.css');
-    $tpl->append('css', 'jquery/south-street/ui.resizable.css');
-    $tpl->append('css', 'jquery/south-street/ui.dialog.css');
-    $tpl->append('css', 'jquery/south-street/ui.tabs.css');
-    $tpl->append('css', 'jquery/south-street/ui.datepicker.css');
-
-    $tpl->append('css', 'jquery/jquery.jgrowl.css');
-    $tpl->append('css', 'jquery/fullcalendar.css');
-
-}
-
-$tpl->append('css', 'menuUser.css');
-
-$tpl->append('css', 'jquery/jHtmlArea.css');
-$tpl->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
-
-$tpl->append('css', 'jquery/fancy.css');
-
-$tpl->append('css', 'jquery/sexyCombo.css');
-
-$tpl->append('css', 'report.css');
-$tpl->append('css', 'expert.css');
-$tpl->append('css', 'expertsList.css');
-$tpl->append('css', 'operationsJournal.css');
-$tpl->append('css', 'budgetMaster.css');
-$tpl->append('css', 'budget.css');
-
-$tpl->append('css', 'calendar.css');
-if( JS_MINIFY )
-{
-    $tpl->append('js',  'global-min.js');
-}
-else
-{
-	foreach ( file( SYS_DIR_INC . 'js/global.list') as $js )
-	{
-		$tpl->append('js', $js);
-	}
-}
-
-//$tpl->append('js', 'flowplayer-3.1.4.min.js');
-//$tpl->append('js', 'feedback.js');
-//$tpl->append('js', 'widgets/help.widget.js');
-//$tpl->append('js', 'models/accounts.model.js');
-//$tpl->append('js', 'models/category.model.js');
-
-//$tpl->append('js', 'widgets/calendar/calendarLeft.widget.js');
-//$tpl->append('js', 'widgets/calendar/calendarEditor.widget.js');
-//$tpl->append('js', 'widgets/calendar/calendar.widget.js');
-//$tpl->append('js', 'widgets/calendar/calendarList.widget.js');
-//$tpl->append('js', 'widgets/accounts/accountsPanel.widget.js');
-//$tpl->append('js', 'widgets/operations/operationEdit.widget.js');
-
-if(IS_DEMO){
-    $tpl->append('js',  'demo_message.js');
-}
-
-// Добавляем ссылки на БД, Смарти, Пользователя и Валюты - в наше ядро
-Core::getInstance()->tpl = $tpl;
+// Добавлем очерёдность загрузки для JS файлов
 Core::getInstance()->currency = new Currency();
 Core::getInstance()->user = new User();
 Core::getInstance()->js = array(
@@ -119,56 +33,52 @@ Core::getInstance()->js = array(
     'profile' => array('profile'),
     'periodic' => array('periodic'),
     'operation' => array(
-        'widgets/operations/operationsJournal.widget',
-        'operation'),
-
+		'widgets/operations/operationsJournal.widget', 
+		'operation'),
     'mail' => array('mail',
-        'models/mail.model',
-        'widgets/mail.widget'),
+		'models/mail.model',
+		'widgets/mail.widget'),
 
     'expert' => array(
-        'models/mail.model',
-        'widgets/mail.widget',
-        'jquery/jquery.form',
-        'jquery/jHtmlArea-0.7.0',
-        'jquery/jHtmlArea.ColorPickerMenu-0.7.0',
-        'models/expert.model',
-        'widgets/expert/expertEditInfo.widget',
-        'widgets/expert/expertEditPhoto.widget',
-        'widgets/expert/expertEditCertificates.widget',
-        'widgets/expert/expertEditServices.widget',
-        'screens/expert.screen',
-        'jquery/jquery.fancybox-1.0.0'),
-
+		'models/mail.model', 
+		'widgets/mail.widget', 
+		'jquery/jquery.form', 
+		'jquery/jHtmlArea-0.7.0', 
+		'jquery/jHtmlArea.ColorPickerMenu-0.7.0', 
+		'models/expert.model', 
+		'widgets/expert/expertEditInfo.widget', 
+		'widgets/expert/expertEditPhoto.widget', 
+		'widgets/expert/expertEditCertificates.widget', 
+		'widgets/expert/expertEditServices.widget', 
+		'screens/expert.screen', 
+		'jquery/jquery.fancybox-1.0.0'),
     'expertslist' => array(
-        'widgets/services/expertsList.widget',
-        'screens/services.screen',
-        'jquery/jquery.fancybox-1.0.0'),
+		'widgets/services/expertsList.widget', 
+		'screens/services.screen', 
+		'jquery/jquery.fancybox-1.0.0'),
     'login' => array('welcome'),
     'info' => array('info'),
     'category' => array(
-        'models/category.model',
-        'category'),
-
+		'models/category.model', 
+		'category'),
     'calendar' => array(
-        'jquery/fullcalendar',
+		'jquery/fullcalendar',
         'calendar',
         'widgets/calendar/calendar.widget'),
     'admin' => array( 'admin'),
     'accounts' => array(
-        'widgets/accounts/accountEdit.widget',
-        'widgets/accounts/accountsJournal.widget',
-        'accounts'),
-    'review' => array(
-        'jquery/jquery.fancybox-1.0.0',
-        'review'),
-
+		'widgets/accounts/accountEdit.widget', 
+		'widgets/accounts/accountsJournal.widget', 
+		'accounts'),
+    'review' => array(	
+		'jquery/jquery.fancybox-1.0.0', 
+		'review'),
     'budget' => array(
-        'budget',
-        'models/category.model',
-        'models/budget.model',
-        'widgets/budget/budget.widget',
-        'widgets/budget/budgetMaster.widget')
+		'budget',
+		'models/category.model', 
+		'models/budget.model',
+		'widgets/budget/budget.widget',
+		'widgets/budget/budgetMaster.widget')
 );
 
 // Почта

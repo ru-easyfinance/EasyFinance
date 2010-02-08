@@ -97,8 +97,7 @@ class Category_Model {
      */
     public function loadUserTree()
     {
-        //@FIXME сделать проверку переменной $_SESSION['categories_filtr'];
-        $where = $_SESSION['categories_filtr'];
+        $where = array_key_exists('categories_filtr', $_SESSION)?$_SESSION['categories_filtr']:null;
 
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
             sc.name FROM category c
@@ -116,7 +115,7 @@ class Category_Model {
      */
     public function loadSumCategories($sys_currency, $start, $finish)
     {
-        return '';
+        return array('cat_id' =>null, 'sum'=>null);
         //TODO Переписать математические расчёты в функции, на использование BCMATH
         if (!empty ($start)) {
             $param = "AND o.date BETWEEN '{$start}' AND '{$finish}'";
@@ -230,12 +229,8 @@ class Category_Model {
         $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        return array(
-            'result' => array(
-                'text' => '',
-                'id'   => $newID
-             )
-        );
+        
+        return $newID;
     }
 
     /**
@@ -333,7 +328,8 @@ class Category_Model {
      * @return array mixed
      */
     function getCategory($start = null, $finish = null)
-    {   
+    { 
+    	
         if (!$start) {
             $start = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
         }
@@ -341,21 +337,27 @@ class Category_Model {
             $finish = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
         }
     
+        // Инициализация вызываемой но неиспользуемой переменной оО
+        $sys_currency = 1;
         $sum = $this->loadSumCategories($sys_currency, $start, $finish);
-
+        
         $users = array();
         
-        foreach (Core::getInstance()->user->getUserCategory() as $val) {
-            $users[$val['cat_id']] = array(
-                'id'      => $val['cat_id'],
-                'parent'  => $val['cat_parent'],
-                'system'  => $val['system_category_id'],
-                'name'    => $val['cat_name'],
-                'type'    => $val['type'],
-                'visible' => $val['visible'],
-                'custom'  => $val['custom']
+        foreach (Core::getInstance()->user->getUserCategory() as $category)
+        {
+            $users[ $category['cat_id'] ] = array
+            (
+                'id'      => $category['cat_id'],
+                'parent'  => $category['cat_parent'],
+                'system'  => $category['system_category_id'],
+                'name'    => $category['cat_name'],
+                'type'    => $category['type'],
+                'visible' => $category['visible'],
+                'custom'  => $category['custom']
             );
-            if ($val['cat_id'] == $sum['cat_id']) {
+            
+            if ($category['cat_id'] == $sum['cat_id'])
+            {
                 $users[$val['cat_id']]['summ'] = $sum['sum'];
             }
         }
