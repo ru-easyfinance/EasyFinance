@@ -999,7 +999,7 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table td a { color: #666666; }
 .operation_list table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
 .operation_list table td.no_over{padding:0;overflow: visible;}
-.operation_list table tr.act td, table.tab1 tr.act td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
+.operation_list table tr:hover td, table.tab1 tr:hover td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
  table.t_body{max-height: 300px; display: block}
