@@ -355,33 +355,46 @@ class Operation_Model {
      */
     function addTransfer($money, $convert, $curr, $date, $from_account, $to_account, $comment, $tags)
     {
-        $cur1 = $this->db->query("SELECT account_currency_id AS cur FROM accounts WHERE account_id=?",$from_account);
-        $cur2 = $this->db->query("SELECT account_currency_id AS cur FROM accounts WHERE account_id=?",$to_account);
+		$curFromId = $this->db->selectCell(
+			"SELECT account_currency_id FROM accounts WHERE account_id=?",$from_account);
+		$curTargetId = $this->db->selectCell(
+			"SELECT account_currency_id FROM accounts WHERE account_id=?",$to_account);
         
-        // Если перевод мультивалютный
-        if ($convert != 0 && ($cur1[0]['cur'] != $cur2[0]['cur']))
-        {
-            $res = $this->db->query("SELECT account_currency_id FROM accounts WHERE account_id=?",$to_account);
-            
-            $acctoCurrency = $res[0]['account_currency_id'];
-            $drain_money = $money * -1;
-                // tr_id. было drain
-		$sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create,
-                    exchange_rate)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
-            $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
-            $comment, $to_account, $curr);
-            $last_id = mysql_insert_id();
-            $sql = "INSERT INTO operation
-                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id, exchange_rate)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
-                $comment, $from_account, $money, $curr, $acctoCurrency);
-
-            //$this->db->query("UPDATE operation SET tr_id=? WHERE id = ?", mysql_insert_id(), $last_id);
-            
-        }else{
+		// Если перевод мультивалютный
+		if ( $curFromId != $curTargetId )
+		{
+			// Если пришла сконвертированная сумма
+			if( $convert != 0 )
+			{
+			}
+			// Если нет - производим вычисления через рубль
+			{
+				$currensys = Core::getInstance()->user->getUserCurrency();
+				
+				// приводим сумму к пром. валюте
+				$convert = $money / $currensys[ $curTargetId ]['value'];
+				// .. и к валюте целевого счёта
+				$convert = $convert * $currensys[ $curFromId ]['value'];
+			}
+			
+			$drain_money = $money * -1;
+			
+			$sql = "INSERT INTO operation
+				(user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type, dt_create, exchange_rate)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, NOW(), ?)";
+			$this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
+				$comment, $to_account, $curr);
+				
+			$last_id = mysql_insert_id();
+			
+			$sql = "INSERT INTO operation 
+			(user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type, dt_create, imp_id, exchange_rate)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, NOW(), ?, ?)";
+			$this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
+				$comment, $from_account, $money, $curr, $curTargetId);
+		}
+		else
+		{
 
         $sql = "INSERT INTO operation
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create)
