@@ -172,7 +172,7 @@ easyFinance.models.accounts = function(){
     }
 
     function deleteAccountById(id, callback) {
-        $.post(DELETE_ACCOUNT_URL, {id:id}, function(data){
+        $.post(DELETE_ACCOUNT_URL, {id:id, confirmed:1}, function(data){
             if (data.result) {
                 delete _accounts[id];
                 $(document).trigger('accountDeleted');
