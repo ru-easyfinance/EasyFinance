@@ -2,7 +2,7 @@
 if( isset($res['user']) )
 {
 	?>
-<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;"><tbody><tr>
+<table cellpadding="0" cellspacing="0" width="100%" style="text-align: center; font-size: smaller;"><tbody><tr>
 	<td>
 		<a href="/operation/add/waste"><img src="/img/pda/menuAddOperation.gif" alt="" width="24" height="24" /></a>
                 <br><a href="/operation/add/waste">добавить</a>
