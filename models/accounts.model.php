@@ -58,7 +58,8 @@ class Accounts_Model
             'type'=>$sql[0]['account_type_id'],
             'description'=>$sql[0]['account_description'],
             'currency'=>$sql[0]['account_currency_id'],
-            'money'=>$sqlop[0]['money']
+            'money'=>$sqlop[0]['money'],
+            'id'=>$id
             );
     }
 
