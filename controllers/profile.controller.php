@@ -42,6 +42,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
         //$prop['user_name'] = htmlspecialchars($_POST['name']);
         $prop['user_mail'] = htmlspecialchars($_POST['mail']);
         $prop['newpass'] = htmlspecialchars($_POST['newpass']);
+        $prop['getNotify'] = ((bool)$_POST['getNotify'])? 1: 0;
 //        $prop['help'] = $_POST['help'];
         $prop['guide'] = $_POST['guide'];
         die($this->model->mainsettings('save',$prop));

@@ -34,9 +34,34 @@ class Operation {
      * @param array $ch
      * @param array $del
      */
-    function OperationSync($op, $rec, $ch, $del){
+    function OperationSync($op, $rec, $ch, $del, &$data){
         $opw = New SyncOperation_Model($this->db, $this->user);
-        foreach ($rec as $key=>$v){
+        foreach($op as $k=>$v) {
+            $sql = "SELECT ekey FROM records_map WHERE tablename='Incomes' AND remotekey=? AND user_id=?";
+            $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
+            if ( $toChangeRec[0]['ekey'] != null ){//редактирование
+                
+                $eacc = $this->findEkey($op[$k]['account'], 'Accounts');
+                $ecat = $this->findEkey($op[$k]['category'], 'Categories');
+                $eop = $this->findEkey($op[$k]['remotekey'], 'Incomes');
+
+                $oper = $opw->EditOperation($eop, $eacc, 0, $op[$k]['date'], $ecat, $op[$k]['amount'], $op[$k]['descr']);
+            } else {//добавление
+                $eacc = $this->findEkey($op[$k]['account'], 'Accounts');
+                $ecat = $this->findEkey($op[$k]['category'], 'Categories');
+
+                $oper = $opw->addOperation(0, $eacc, 0, $op[$k]['date'], $ecat, $op[$k]['amount'], $op[$k]['descr']);
+                if ($oper>0)
+                    $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Incomes', $v['remotekey'], $oper, 1, $this->db);
+                $data[1][0]['type'] = 'service';
+                $data[1][0]['name'] = 'RecordsMap';
+                $data[1][] = array(
+                    'tablename' => 'Incomes',
+                    'kkey' => $v['remotekey'],
+                    'ekey' => (int)$oper,
+                );
+        }
+        /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Incomes"){
                 $ke = $v['remotekey'];
                 $k;
@@ -74,7 +99,7 @@ class Operation {
 
                 }
             }
-        }
+        }*/
         foreach ($del as $key=>$v){
             if ($v['tablename']=="Incomes"){
                 $ke = $v['remotekey'];
@@ -93,7 +118,7 @@ class Operation {
             }
         }
 
-        foreach ($rec as $key=>$v){
+        /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Outcomes"){
                 $ke = $v['remotekey'];
                 $k;
@@ -129,8 +154,8 @@ class Operation {
                     $oper = $opw->EditOperation($eop, $eacc, 1, $op[$k]['date'], $ecat, -$op[$k]['amount'], $op[$k]['descr']);
                 }
             }
-        }
-        foreach ($del as $key=>$v){
+        }*/
+        /*foreach ($del as $key=>$v){
             if ($v['tablename']=="Outcomes"){
                 $ke = $v['remotekey'];
                 $k;
@@ -144,7 +169,7 @@ class Operation {
                     $oper = $opw->deleteOperation($eop, $this->user, $this->db);
                     RecordsMap_Model::DelRecordsMapString($this->user, 'Outcomes', $rem, 1, $this->db);
                 }
-            }
+            }*/
         }
     }
     /**

@@ -6,7 +6,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Calendar_Model {
+class Calendar_Model_ {
 /**
  * Ссылка на экземпляр DBSimple
  * @var DbSimple_Mysql
@@ -468,22 +468,24 @@ class Calendar_Model {
      * @return JSON
      */
     function getEvents($start, $end) {
-    // Делаем проверку чисел, и если это не число, то устанавливаем 0. Внимание, там ОЧЕНЬ большие числа!!!
-        $start = (float)$start;
-        $end   = (float)$end;
+        // Делаем проверку чисел, и если это не число, то устанавливаем 0. Внимание, там ОЧЕНЬ большие числа!!!
+        $start = (int)$start;
+        $end   = (int)$end;
 
         $array = $this->getEventsArray($start, $end);
         foreach ($array as $key => $val) {
+            if ((float)$val['amount']) {
+                $array[$key]['type'] = 'p'; //'green','red',''
+            } else {
+                $array[$key]['type'] = 'e'; //'green','red','blue'
+            }
+
             $array[$key]['draggable'] = true;
             $array[$key]['date'] = (int)$val['date'];
             $array[$key]['start_date'] = (int)$val['start_date'];
             $array[$key]['last_date'] = (int)$val['last_date'];
             $array[$key]['amount'] = (float)$val['amount'];
-            if ((float)$val['amount']) {
-                $array[$key]['className'] = 'blue'; //'green','red',''
-            } else {
-                $array[$key]['className'] = 'yellow'; //'green','red','blue'
-            }
+
         }
         return json_encode($array);
     }

@@ -72,17 +72,13 @@ class Budget_Controller extends _Core_Controller_UserCommon
         foreach ($json->d as $val) {
             foreach ($val as $k => $v) {
                 $v = str_replace(' ', '', $v);
-                if ((float)$v <> 0) {
-                    $budget['d'][$k] = (float)$v;
-                }
+                $budget['d'][$k] = (float)$v;
             }
         }
         foreach ($json->p as $val) {
             foreach ($val as $k => $v) {
                 $v = str_replace(' ', '', $v);
-                if ((float)$v <> 0) {
-                    $budget['p'][$k] = (float)$v;
-                }
+                $budget['p'][$k] = (float)$v;
             }
         }
         die(json_encode($this->model->add($budget, $start)));
@@ -106,7 +102,7 @@ class Budget_Controller extends _Core_Controller_UserCommon
      */
     function del()
     {
-        $category = (int)@$_POST['category'];
+        $category = (int)@$_POST['id'];
         $date     = formatRussianDate2MysqlDate($_POST['start']);
         $type     = (string)@$_POST['type'];
         die(json_encode($this->model->del($category, $date, $type)));

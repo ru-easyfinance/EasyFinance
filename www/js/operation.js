@@ -34,7 +34,10 @@ $(document).ready(function() {
     } else {
         account = '';
     }
-    
+    if (account != ''){
+        easyFinance.widgets.operationEdit.showForm();
+        easyFinance.widgets.operationEdit.setAccount(account);
+    }
     easyFinance.widgets.operationsJournal.setAccount(account);
     easyFinance.widgets.operationsJournal.loadJournal();
 });

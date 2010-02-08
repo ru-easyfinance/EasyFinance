@@ -49,6 +49,12 @@ function getClientPlugins(){
             $('#popupreport').hide();
         });
 
+        $('#popupreport button, #popupreport input#fmail').keypress(function(e){
+            if (e.keyCode == 13){
+                $('#footer .but').click();
+            }
+        });
+
         //скрытие лишнего текста на поле ввода
         $('#footer .f_field.ffmes').click(function (){
             $(this).find('label').hide();

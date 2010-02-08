@@ -37,9 +37,9 @@ class Budget_Model {
             $start = date('Y-m-01');
         }
 
-        if (!$category) {
+        /*if (!$category) {
             $category = Core::getInstance()->user->getUserCategory();
-        }
+        }*/
 
          /*$sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
             WHERE c.cat_id=b.category AND b.user_id=c.user_id AND b.date_start=? ) AS amount,
@@ -61,7 +61,7 @@ class Budget_Model {
             AND c.user_id=? ORDER BY c.cat_parent";*/
         
         $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o WHERE o.user_id = " . $user_id ." AND o.transfer=0 AND o.date >= ? AND o.date <= LAST_DAY(o.date)
-            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." ) AND o.account_id=1 GROUP BY o.cat_id";
+            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." ) GROUP BY o.cat_id";
 
 
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
@@ -87,7 +87,7 @@ class Budget_Model {
         
         //$arrayoper = Core::getInstance()->db->select($sqloper, $start , $start, $start, $start, $user_id);
         $arrayoper = Core::getInstance()->db->select($sqloper, $start);
-        
+
         $list = array(
             'd' => array(),
             'p' => array()
@@ -160,6 +160,7 @@ class Budget_Model {
     function add($data, $date)
     {
         $sql = '';
+        $delsql = '';
         $cat = Core::getInstance()->user->getUserCategory();
         foreach ($data as $key => $value) {
             if ((string)$key == 'd') {
@@ -172,12 +173,24 @@ class Budget_Model {
                 if ($cat[$k]['type'] == 0 || ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
 
                         $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
-                        if (!empty ($sql)) $sql .= ',';
-                        $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
-                            $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+                        
+                        if ( $v ) {
+                            if (!empty ($sql)) $sql .= ',';
+                            $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
+                                $drain . '","' . $v . '","' . $date . '", LAST_DAY("'.$date.'"), NOW(),"'.$key.'")';
+                        } elseif ( $v == 0 ) {
+                            if (!empty($delsql)) $delsql .= ',';
+                            $delsql .= "'$key'";
+                        }
                 }
             }
         }
+
+        if ( !( empty ($delsql) ) ) {
+            $delsql = "DELETE FROM `budget` WHERE `key` IN (" . $delsql . ")";
+            $this->db->query($delsql);
+        }
+
         if (!empty ($sql)) {
             $sql = "REPLACE INTO budget (`user_id`,`category`,`drain`,
                 `amount`,`date_start`,`date_end`,`dt_create`,`key`) VALUES " . $sql;
@@ -186,6 +199,7 @@ class Budget_Model {
             Core::getInstance()->user->save();
             return array('result' => array('text' => ''));
         }
+
         return array(
             'error' => array(
                 'text' => 'Ничего не добавлено'
@@ -246,8 +260,8 @@ class Budget_Model {
     function del($category, $date, $type)
     {
         $sql = "DELETE FROM budget WHERE `key` = ?";
-        $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . $date;
-        if (!@$this->db->query($sql, $value, $key)) {
+        $key = '' . Core::getInstance()->user->getId() . '-' . $category . '-' . ((trim($type) == 'd')? 1 : 0) . '-' . $date;
+        if (!@$this->db->query($sql, $key)) {
             Core::getInstance()->user->initUserBudget();
             Core::getInstance()->user->save();
             return array(

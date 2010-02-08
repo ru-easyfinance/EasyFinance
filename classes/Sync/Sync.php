@@ -85,6 +85,7 @@ class Sync{
             return false;
         }
         $this->clearAll($this->user);
+        return php_xmlrpc_encode(array('1'=>'1'));
     }
 
     function deleteRecMapByUser($xmlReq=''){
@@ -96,11 +97,13 @@ class Sync{
             return false;
         }
         $this->cleanRec($this->user);
+        return php_xmlrpc_encode(array('1'=>'1'));
     }
 
     function getDate(){
         //возвращает время последней синхронизации
-        return date("Y:m:d H:i:s");
+        $a = (date("Ymd His"));
+        return ( substr($a,0,8) . 'T' . substr($a,9,6) );
     }
 
     function writeDataAndAnswerRec($xmlReq=''){
@@ -122,16 +125,18 @@ class Sync{
         $this->parsing();
 
         $account = new Account($this->user, $this->db);
-        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $debet = new Debet($this->user, $this->db);
-        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
 
         $category = new Category($this->user, $this->db);
-        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $operation = new Operation($this->user, $this->db);
-        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        //$transfer = new Transfer($this->user, $this->db);
-        //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
+        $operation2 = new Operation($this->user, $this->db);
+        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
+        $transfer = new Transfer($this->user, $this->db);
+        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         //$plans = new Periodic($this->user, $this->db);
         //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
@@ -140,6 +145,12 @@ class Sync{
         $this->dataarrayE[4] = array( 'ServerData' => $this->getDate() );
 
         $ret = $this->dataarrayE;
+        $ret = array(
+            'RecordsMap' => $this->dataarrayE[1]
+            ,'ChangedRecords' => $this->dataarrayE[2]
+            ,'DeletedRecords' => $this->dataarrayE[3]
+            ,'ServerData' => $this->dataarrayE[4]
+            );
         //die(print_r('jewkfjwk'));
         $a = php_xmlrpc_encode($ret);
         return $a;
@@ -157,7 +168,7 @@ class Sync{
 		$sn = php_xmlrpc_decode($ser);
 
         $this->dataarray = $sn;
-
+                
 
         $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
         $this->db->query("SET NAMES utf8");
@@ -182,24 +193,28 @@ class Sync{
         }
         // парсим полученную строку и загоняем её в массив
         $this->parsing();
+        //echo('<pre>');
+        //die(print_r($this->CategoriesList));
         //$this->WriteTest();//вывод распарсенных значений
         
         //разбор распарсенных значений и формирование результирующей xml.
         $account = new Account($this->user, $this->db);
-        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $debet = new Debet($this->user, $this->db);
-        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $debet->DebetSync($this->DebetsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
 
         $category = new Category($this->user, $this->db);
-        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $category->CategorySync($this->CategoriesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $operation = new Operation($this->user, $this->db);
-        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        //$transfer = new Transfer($this->user, $this->db);
-        //$transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec);
+        $operation->OperationSync($this->IncomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
+        $operation2 = new Operation($this->user, $this->db);
+        $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
+        $transfer = new Transfer($this->user, $this->db);
+        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         //$plans = new Periodic($this->user, $this->db);
         //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
         //$date='', &$data='', $user_id='', $db=''){
-        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
+        
 
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
@@ -209,6 +224,7 @@ class Sync{
         //$plans->FormArray($this->lastsync, $this->dataarrayE);
         $currency = new Currency($this->user, $this->db);
         $currency->FormArray($this->dataarrayE);
+        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
         $ret = array(
             'RecordsMap' => $this->dataarrayE[1]
             ,'ChangedRecords' => $this->dataarrayE[2]
@@ -222,8 +238,7 @@ class Sync{
             ,'Outcomes' => $this->dataarrayE[10]
             ,'Plans' => $this->dataarrayE[11]
             );
-        $ret = $this->dataarrayE;
-        //die(print_r('jewkfjwk'));
+        //$ret = $this->dataarrayE;
         $a = php_xmlrpc_encode($ret);
         return $a;
     }
@@ -235,7 +250,7 @@ class Sync{
      * @return <bool>
      */
     function __construct($xmlReq, &$xmlAnswer){
-       
+        
     }
 
     /**
@@ -299,7 +314,7 @@ class Sync{
             if ($qw[$i][0]['name']=='RecordsMap'){
                 foreach ($qw[$i]  as $k=>$value ) if ($k>0){
                     $this->recordsMap[$k]['tablename']=$qw[$i][$k]['tablename'];
-                    $this->recordsMap[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->recordsMap[$k]['remotekey']=$qw[$i][$k]['kkey'];
                 }
             }
         }
@@ -314,7 +329,7 @@ class Sync{
             if ($qw[$i][0]['name']=='ChangedRecords'){
                 foreach ($qw[$i] as $k=>$value ) if ($k>0){
                     $this->changedRec[$k]['tablename']=$qw[$i][$k]['tablename'];
-                    $this->changedRec[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->changedRec[$k]['remotekey']=$qw[$i][$k]['kkey'];
                 }
             }
         }
@@ -330,7 +345,7 @@ class Sync{
                 foreach ($qw[$i][0] as $k=>$value) if ($k>0){
                     //echo ($qw[3][$k]['tablename']);
                     $this->deletedRec[$k]['tablename']=$qw[$i][$k]['tablename'];
-                    $this->deletedRec[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->deletedRec[$k]['remotekey']=$qw[$i][$k]['kkey'];
                 }
             }
         }
@@ -345,7 +360,7 @@ class Sync{
             if ($qw[$i][0]['tablename']=='Accounts'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='A') if ($k>0){
                     //$k = $qw[$i][$k]['remotekey'];
-                    $this->AccountsList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->AccountsList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->AccountsList[$k]['name']=$qw[$i][$k]['name'];
                     $this->AccountsList[$k]['cur']=$qw[$i][$k]['cur'];
                     $this->AccountsList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
@@ -364,7 +379,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Transfers'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='T') if ($k>0){
-                    $this->TransfersList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->TransfersList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->TransfersList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->TransfersList[$k]['acfrom']=$qw[$i][$k]['acfrom'];
                     $this->TransfersList[$k]['amount']=$qw[$i][$k]['amount'];
@@ -383,9 +398,10 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Categories'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='C') if ($k>0){
-                    $this->CategoriesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->CategoriesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->CategoriesList[$k]['name']=$qw[$i][$k]['name'];
                     $this->CategoriesList[$k]['parent']=$qw[$i][$k]['parent'];
+                    $this->CategoriesList[$k]['type']=$qw[$i][$k]['type'];
                 }
             }
         }
@@ -399,7 +415,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Currensies'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='C') if ($k>0){
-                    $this->CurrensiesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->CurrensiesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->CurrensiesList[$k]['name']=$qw[$i][$k]['name'];
                 }
             }
@@ -414,7 +430,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Debets'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='D') if ($k>0){
-                    $this->DebetsList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->DebetsList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->DebetsList[$k]['amount']=$qw[$i][$k]['amount'];
                     $this->DebetsList[$k]['currency']=$qw[$i][$k]['currency'];
                     $this->DebetsList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
@@ -433,7 +449,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Incomes'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='I') if ($k>0){
-                    $this->IncomesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->IncomesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->IncomesList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->IncomesList[$k]['category']=$qw[$i][$k]['category'];
                     $this->IncomesList[$k]['parent']=$qw[$i][$k]['parent'];
@@ -454,7 +470,7 @@ class Sync{
         for ($i=0;$i<HOWMUCH;$i++){
             if ($qw[$i][0]['tablename']=='Outcomes'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='O') if ($k>0){
-                    $this->OutcomesList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->OutcomesList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->OutcomesList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->OutcomesList[$k]['category']=$qw[$i][$k]['category'];
                     $this->OutcomesList[$k]['parent']=$qw[$i][$k]['parent'];
@@ -475,7 +491,7 @@ class Sync{
             if ($qw[$i][0]['tablename']=='Plans'){
                 foreach ($qw[$i] as $k=>$v) if ($qw[$i][$k]['name']!='P') if ($k>0){
                     $this->PlansList[$k]['name']=$qw[$i][$k]['name'];
-                    $this->PlansList[$k]['remotekey']=$qw[$i][$k]['remotekey'];
+                    $this->PlansList[$k]['remotekey']=$qw[$i][$k]['kkey'];
                     $this->PlansList[$k]['date']=formatIsoDateToNormal($qw[$i][$k]['date']);
                     $this->PlansList[$k]['period']=$qw[$i][$k]['period'];
                     $this->PlansList[$k]['count']=$qw[$i][$k]['count'];

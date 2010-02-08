@@ -64,7 +64,8 @@ class Currency implements IteratorAggregate,  ArrayAccess
 //         MAX(currency_date) AS `date` FROM daily_currency GROUP BY currency_id, user_id");
             
             $daily = $this->db->select("SELECT currency_id, user_id, direction, currency_sum AS value, currency_date AS `date` FROM daily_currency WHERE
-                                                            currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)");
+currency_from = 1 AND
+currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)");
             foreach ($currency as $v) {
                 $this->sys_list_currency[$v['cur_id']] = array(
                    'id'        => $v['cur_id'],

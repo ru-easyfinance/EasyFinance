@@ -30,10 +30,35 @@ class Debet {
      * @param array $ch
      * @param array $del
      */
-    function DebetSync($acc, $rec, $ch, $del){
+    function DebetSync($acc, $rec, $ch, $del, &$data){
         $acco = New SyncDebet_Model($this->db, $this->user);
         $op = New SyncOperation_Model($this->db, $this->user);
-        foreach ($rec as $key=>$v){
+
+        foreach($acc as $k=>$v){
+            $sql = "SELECT ekey FROM records_map WHERE tablename='Debets' AND remotekey=? AND user_id=?";
+            $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
+            if ( $toChangeRec[0]['ekey'] != null){//редактирование
+                $numEkey = $toChangeRec[0]['ekey'];
+                $acco->editDebet($numEkey,$acc[$k]['name'],$acc[$k]['currency'],$acc[$k]['date'],'-'.$acc[$k]['amount'],'Начальный остаток');
+                //$acco->editDebet($numEkey,$acc[$k]['name'],$acc[$k]['cur'],$acc[$k]['date'],-$acc[$k]['startbalance'],$acc[$k]['descr']);
+            } else{//добавление
+                $accou = $acco->addDebet(0,$acc[$k]['name'],$acc[$k]['currency'],$acc[$k]['date'],$acc[$k]['amount'],'');
+                if ($accou > 0){
+                    $oper = $op->addOperation(0, $accou, 0, $acc[$k]['date'], 0, '-'.$acc[$k]['amount'], 'Начальный остаток');
+                    $a = RecordsMap_Model::AddRecordsMapString($this->user, 'Debets', $v['remotekey'], $accou, 1, $this->db);
+                    $data[1][0]['type'] = 'service';
+                    $data[1][0]['name'] = 'RecordsMap';
+                    $data[1][] = array(
+                        'tablename' => 'Debets',
+                        'kkey' => $v['remotekey'],
+                        'ekey' => (int)$accou,
+                    );
+                }
+            }
+        }
+
+
+        /*foreach ($rec as $key=>$v){
             if ($v['tablename']=="Debets"){
                 $ke = $v['remotekey'];
                 $k;
@@ -62,7 +87,7 @@ class Debet {
                 $numEkey = $this->findEkey($ke);
                 $acco->editDebet($numEkey,$acc[$k]['name'],$acc[$k]['currency'],$acc[$k]['date'],$acc[$k]['amount'],'');
             }
-        }
+        }*/
         foreach ($del as $key=>$v){
             if ($v['tablename']=="Debets"){
                 $ke = $v['remotekey'];

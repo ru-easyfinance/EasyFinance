@@ -143,9 +143,10 @@ class Login_Model
         $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`)
             VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.")";
         $aid = Core::getInstance()->db->query($sql);
-        $sql = "INSERT INTO account_field_values (`account_fieldsaccount_field_id`, `string_value`, `accountsaccount_id`) VALUES
-            ('{$aid}','Кошелёк','67'), ('{$aid}','Мои наличные деньги','68'), ('{$aid}','','69');";
-        Core::getInstance()->db->query($sql);
+        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
+                `drain`, `comment`, `dt_create`) VALUES (?, ?, '1970-01-01', ?, ?, ?, ?, NOW())";
+            Core::getInstance()->db->query($sql, $uid, 0, 0, $aid, 0, 'Начальный остаток');
+
     }
 
     /**

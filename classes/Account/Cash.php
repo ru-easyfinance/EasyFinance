@@ -29,7 +29,7 @@ class Account_Cash extends Account
         $this->type = $valid[2];
         $this->comment = $valid[7];
         $this->currency = $valid[29];
-        $this->initPament = $valid[4];
+        $this->initPament = $valid[3];
         
         /*if ( in_array('amount', $params) ) {
             $valid['4'] = (int)@$params['amount'];

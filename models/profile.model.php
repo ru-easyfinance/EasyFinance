@@ -40,11 +40,16 @@ class Profile_Model
         }
         $set_str .=' ';
         $set_str = substr($set_str, 1);
-        if (!$ident) {
-            return 'nopass';
-        }
+//        if (!$ident) {
+//            return 'nopass';
+//        }
         $sql = "UPDATE $table SET $set_str WHERE id=? AND $ident;";
         return $this->db->query($sql,$this->user_id);
+    }
+
+    public function subscribe($spamer){
+        $sql = "UPDATE users SET getNotify=? WHERE id=? ;";
+        return $this->db->query($sql, $spamer, $this->user_id);
     }
 
     public function mainsettings($mod, $prop = ''){
@@ -56,19 +61,20 @@ class Profile_Model
         }*/
         switch($mod){
             case 'save':
+                $mail = $this->subscribe($prop['getNotify']);
                 $ident = $this->ident($prop['user_pass']);
                 $prop['user_pass'] = $prop['newpass'] ?
                                     sha1($prop['newpass']) :
                                     sha1($prop['user_pass']);
                 unset($prop['newpass']);
 
-                if ( $prop['guide'] != 1 ){
+                if ( $prop['guide'] != 1 ) {
                     setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
                 }else{
                     setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
                 }
                 unset($prop['guide']);
-
+                
                 $ret['profile'] = $this->save('users', $prop, $ident);
 
 //                if ( $prop['help'] == 1 ){

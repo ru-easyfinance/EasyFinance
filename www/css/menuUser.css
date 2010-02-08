@@ -57,6 +57,9 @@ ul.dropdown li ul li {
     border-left: 1px solid #E1E7E0;
     border-right: 1px solid #E1E7E0;
 }
+.iframe ul.dropdown li ul li{
+    padding-right: 0;
+}
 
 /* fancy menu bottom */
 ul.dropdown li ul li.last {

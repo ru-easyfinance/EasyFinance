@@ -4,6 +4,8 @@
 <div id="auth" class="formRegister" >
     <div class="logo"><a href="http://easyfinance.ru"><img src="/img/i/logo_iframe.png"></a></div>
 
+    <h2><span style="color:green">Контролируй, управляй, экономь!</span></h2>
+
     <h2>Вход в систему</h2>
 
     <div class="loginError">{$errorMessage}</div>
@@ -14,29 +16,29 @@
     <form action="http://{$smarty.const.URL_ROOT}login/" method="post" onSubmit="return checkLogin()">
 {/if}
         <table cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="name">Логин:</td>
-            <td><input id="flogin" type="text" name="login"/></td>
-        </tr>
-        <tr>
-            <td class="name">Пароль:</td>
-            <td><input type="password" id="pass" name="pass" /></td>
-        </tr>
-        <tr>
-            <td class="name">Запомнить меня:</td>
-            <td><input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" /></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input id="btnLogin" type="submit" value="Войти" class="but"/></td>
-        </tr>
-        <tr>
-            <td class="name"></td>
-            <td>
-                <a href="/registration/">Регистрация</a><br>
-                <a href="/restore/">Восстановление пароля</a>
-            </td>
-        </tr>
+            <tr>
+                <td class="name"><label for="flogin">Логин:</label></td>
+                <td><input id="flogin" type="text" name="login"/></td>
+            </tr>
+            <tr>
+                <td class="name"><label for="pass">Пароль:</label></td>
+                <td><input type="password" id="pass" name="pass" /></td>
+            </tr>
+            <tr>
+                <td class="name"><label for="autoLogin">Запомнить меня:</label></td>
+                <td><input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" checked="checked"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input id="btnLogin" type="submit" value="Войти" class="but"/></td>
+            </tr>
+            <tr>
+                <td class="name"></td>
+                <td>
+                    <a href="/registration/">Регистрация</a><br>
+                    <a href="/restore/">Восстановление пароля</a>
+                </td>
+            </tr>
         </table>
     </form>
 </div>

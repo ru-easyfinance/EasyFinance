@@ -29,6 +29,23 @@ class SyncTransfer_Model {
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db->query($sql, $this->user, $amount, $date, 0, $acc_from, 1,
             $descr, $acc_to);
+
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+        $this->db->query($sql, $this->user, -$amount, $date, 0, $acc_from, 1,
+            $descr, $acc_to);
+
+            $last_id = mysql_insert_id();
+
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, dt_create, imp_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $this->db->query($sql, $this->user, $amount, $date, 0, $acc_to, $last_id,
+            $descr, $acc_from, $amount);
+            $last_id2 = mysql_insert_id();
+
         return mysql_insert_id();
     }
     /**
@@ -60,17 +77,18 @@ class SyncTransfer_Model {
      * @param string $date
      * @param array $data
      */
-    function formTransfer($date='', &$data=''){
-        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id=1 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
+    function formTransfer($date='', &$data=''){ 
+        $sql = "SELECT * FROM operation WHERE user_id = ? AND tr_id>0 AND `dt_create` BETWEEN '$date' AND NOW()-100;";
         $a = $this->db->query($sql, $this->user);
         foreach ($a as $key=>$v){
             $data[5][0]['tablename'] = 'Transfers';
-            $data[5][$key+1]['easykey'] = (int)$a[$key]['id'];
+            $data[5][$key+1]['ekey'] = (int)$a[$key]['id'];
             $data[5][$key+1]['date'] = $a[$key]['date'];
-            $data[5][$key+1]['acfrom'] = (int)$a[$key]['account_id'];
-            $data[5][$key+1]['amount'] = (int)$a[$key]['money'];
-            $data[5][$key+1]['acto'] = (int)$a[$key]['transfer'];
+            $data[5][$key+1]['acfrom'] = (int)$a[$key]['transfer'];
+            $data[5][$key+1]['amount'] = (double)$a[$key]['money'];
+            $data[5][$key+1]['acto'] = (int)$a[$key]['account_id'];
             $data[5][$key+1]['descr'] = $a[$key]['comment'];
+            $data[5][$key+1]['amountfrom'] = ( $a[$key]['exchange_rate']!=0 ? (double)( $a[$key]['money'] / $a[$key]['exchange_rate']) : (double)$a[$key]['money']);
 
 
             //добавление в рекордс меп.

@@ -172,7 +172,7 @@ class User
 	}
 
 	//@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
-	$sql = "SELECT id, user_name, user_login, user_pass, user_mail,
+	$sql = "SELECT id, user_name, user_login, user_pass, user_mail, getNotify,
 		DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
 		user_currency_default, user_currency_list, user_type
 		FROM users
@@ -385,11 +385,6 @@ class User
      */
 	public function initUserAccounts()
 	{
-            /*$sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
-                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-                FROM accounts a
-                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-                WHERE a.user_id=? ORDER BY o_count DESC";*/
             $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
                 , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
                 FROM accounts a
@@ -397,23 +392,9 @@ class User
                 WHERE a.user_id=? ORDER BY o_count DESC";
             $accounts = $this->db->select($sql, $this->getId());
 
-            /*$sql = "SELECT (SELECT SUM(-o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer != 0 AND o.account_id=a.account_id) AS total_sum
-            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-            FROM accounts a
-            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-            WHERE a.user_id=? ORDER BY o_count DESC";
-            $accounts2 = $this->db->select($sql, $this->getId());
-
-            $sql = "SELECT (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND transfer = a.account_id) AS total_sum
-            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-            FROM accounts a
-            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-            WHERE a.user_id=? ORDER BY o_count DESC";
-            $accounts3 = $this->db->select($sql, $this->getId());*/
 
             $this->user_account= array();
             foreach ($accounts as $key=>$val) {
-                //$val['total_sum'] += $accounts2[$key]['total_sum']+$accounts3[$key]['total_sum'];
                 $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
                 if ( $val['total_sum'] == null )
                     $val['total_sum']=0;
@@ -472,15 +453,18 @@ class User
      */
     public function initUserEvents()
     {
-        $array = $this->db->select("SELECT c.id, c.chain, c.title, DATE_FORMAT(c.near_date,'%d.%m.%Y') as date,
-            c.comment, c.event, c.amount, c.category, DATEDIFF(NOW(),c.near_date) AS diff, IFNULL(p.account,0) AS account,
-            IFNULL(p.drain,0) AS drain
-            FROM calendar c
-            LEFT JOIN periodic p ON c.chain = p.id
-            WHERE c.close=0 AND c.near_date < NOW() AND c.user_id=?  ORDER BY date DESC", $this->getId());
+        $sql = 'SELECT c.id AS chain, c.title, c.type, c.start, c.last, c.time, c.every,
+            c.repeat, c.comment, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, c.week,
+            e.id, e.`date`, e.accept
+            FROM calend c
+            RIGHT JOIN calendar_events e ON c.id = e.cal_id
+            WHERE c.user_id = ? AND e.`date` <= ? AND e.accept = 0';
+
+        $array = $this->db->select($sql, $this->getId(), date('Y-m-d'));
         $this->user_events = array();
         foreach ($array as $var) {
             $this->user_events[$var['id']] = $var;
+            $this->user_events[$var['id']]['date'] = formatMysqlDate2UnixTimestamp( $var['date'] );
         }
     }
 

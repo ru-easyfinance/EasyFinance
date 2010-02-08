@@ -44,9 +44,9 @@ easyFinance.widgets.accountsJournal = function(){
                 str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
                     formatCurrency(account.totalBalance) + ' ' + res.currency[account.currency]['text'] + '</td></tr>';
                 if (_accounts[id]["reserve"] != 0){
-                    delta = (formatCurrency(account.totalBalance-_accounts[id]["reserve"]));
-                    str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+res.currency[account.currency]['text']+'</td></tr>'
-                    str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(_accounts[id]["reserve"])+' '+res.currency[account.currency]['text']+'</td></tr>'
+                    var delta = (formatCurrency(account.totalBalance-_accounts[id]["reserve"]));
+                    str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+res.currency[account.currency]['text']+'</td></tr>';
+                    str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(_accounts[id]["reserve"])+' '+res.currency[account.currency]['text']+'</td></tr>';
                 }
 
                 str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
@@ -83,7 +83,7 @@ easyFinance.widgets.accountsJournal = function(){
                 return false;
         });
 
-        $('#operation_list tr.item').live('dblclick',
+        $('#operation_list tr').live('click',
             function(){
                  // создание новой операции для выбранного счёта
                 var acc = $(this).closest('tr').attr('id').split("_", 2)[1];
@@ -91,6 +91,7 @@ easyFinance.widgets.accountsJournal = function(){
                     easyFinance.widgets.operationEdit.setAccount(acc);
                     easyFinance.widgets.operationEdit.showForm();
                 }
+                $(document).scrollTop(200);
         });
 
         //del account click

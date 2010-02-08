@@ -88,7 +88,7 @@ class Info_Model
             ),
             'weight' => 35,
             'min' => 0,
-            'max' => 6
+            'max' => 100//6
         ),
         'budget' => array(
             'red' => array(
@@ -162,7 +162,7 @@ class Info_Model
         ),
         'result' => array(
             'min' => 0,
-            'max' => 300,
+            'max' => 300,//300,
             'red' => array(
                 'text' => 'Вам грозит банкротство. Срочно измените свой подход к финансовым вопросам!'
             ),
@@ -199,9 +199,6 @@ class Info_Model
      */
     private function result()
     {
-        //print '<pre>';
-        //die(print_r($this->input));
-        //die(print_r($this->output));
         if ( $this->input['profit'] == 0 )
             if ( $this->input['drain'] == 0 ){
                 $this->output[6]['result'] = 0;
@@ -222,7 +219,7 @@ class Info_Model
         $des5 = $this->values['drain']['red']['text'];
         if ( $this->output[6]['drain'] >= 5*5) $des5 = $this->values['drain']['yellow']['text'];
         if ( $this->output[6]['drain'] >= 10*5) $des5 = $this->values['drain']['green']['text'];
-        return array(
+    return array(
             /*'values' => array(
                   round(@$this->output[6]['result'])    //Финансовое состояние
                 , round(@$this->output[6]['profit'])    //Деньги
@@ -303,20 +300,33 @@ class Info_Model
      * @return void
      */
     public function init() {
+        //BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
+        //BETWEEN 
         // Доходы за прошедший месяц
-        $sql = "SELECT SUM(o.money) FROM accounts a
+        //SELECT (LAST_DAY(NOW() - INTERVAL 1 MONTH)) as dateend, (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) as datebegin";
+
+        $sql = "SELECT SUM(o.money) as sum, a.account_currency_id as cur FROM accounts a
             LEFT JOIN operation o ON a.account_id = o.account_id
             WHERE o.user_id = ? AND o.drain = 0 AND o.transfer = 0
-            AND o.`date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
-        $this->input['profit']   = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
+            AND o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
+            GROUP BY a.account_currency_id";
+        $profits = $this->db->query($sql, Core::getInstance()->user->getId());
+        $this->input['profit'] = 0;
+        foreach ($profits as $k=>$v){
+            $this->input['profit'] += $v['sum'] * Core::getInstance()->currency[$v['cur']]['value'];
+        }
 
         // Расходы за прошедший месяц
-        $sql = "SELECT ABS(SUM(o.money)) FROM accounts a
+        $sql = "SELECT ABS(SUM(o.money)) as sum, a.account_currency_id as cur FROM accounts a
             LEFT JOIN operation o ON a.account_id = o.account_id
             WHERE o.user_id = ? AND o.drain = 1 AND o.transfer = 0
-            AND o.`date` BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()";
-        $this->input['drain']    = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
-
+            AND o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
+            GROUP BY a.account_currency_id";
+        $drains = $this->db->query($sql, Core::getInstance()->user->getId());
+        $this->input['drain'] = 0;
+        foreach ($drains as $k=>$v){
+            $this->input['drain'] += $v['sum'] * Core::getInstance()->currency[$v['cur']]['value'];
+        }
         // Бюджет за прошедший месяц
         $sql = "SELECT SUM(amount) FROM budget WHERE user_id = ? AND drain=1
             AND date_start = CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')";
@@ -384,9 +394,16 @@ class Info_Model
             $this->output[1]['profit'] = 0;
         }
         //@FIXME Кажется, тут может быть ошибка
-        if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
+        /*if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
             $this->output[1]['budget'] = 10;
         } else if ($this->input['profit'] == 0) {
+            $this->output[1]['budget'] = 0;
+        }*/
+        if ($this->input['drain'] != 0 && $this->input['budget'] == 0){
+            $this->output[1]['budget'] = 100;
+        } else if ($this->input['budget'] != 0){
+            $this->output[1]['budget'] = $this->input['budget'];
+        } else {
             $this->output[1]['budget'] = 0;
         }
 
@@ -769,7 +786,7 @@ class Info_Model
         if (($this->output[4]['profit'] * $this->values['profit']['weight']) < 0) {
             $this->output[5]['profit'] = 0;
         } else {
-            $this->output[5]['profit'] = ($this->output[3]['profit'] * $this->values['profit']['weight']);
+            $this->output[5]['profit'] = ($this->output[4]['profit'] * $this->values['profit']['weight']);
         }
 
 //    =IF(((M11*P11))<0;
