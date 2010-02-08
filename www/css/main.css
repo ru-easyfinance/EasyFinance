@@ -1992,7 +1992,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background-repeat:no-repeat;
     background-position:top right;
 }
-#ev_tabl tbody tr td.reject,#per_tabl tbody tr td.reject div{
+#ev_tabl tbody tr td.reject,#per_tabl tbody tr td.reject{
     background:transparent url(/img/i/grey_tick.png) no-repeat scroll 100% 50%;
 }
 #ev_tabl tbody tr .cont ul,#per_tabl tbody tr .cont ul{

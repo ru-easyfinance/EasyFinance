@@ -17,7 +17,8 @@ easyFinance.widgets.calendarLeft = function(data){
                             $(ch).each(function(){
                                 obj.push($(this).closest('tr').attr('value'));
                             });
-                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
+                            $.jGrowl('События подтверждаются!',{theme : 'green'});
+                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents();$.jGrowl('События подтверждены!',{theme : 'green'});},'json');
                         }
                     },
                     'Удалить': function() {

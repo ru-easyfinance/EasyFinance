@@ -8,26 +8,43 @@ easyFinance.widgets.calendar = function(){
         $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
         $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
         $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-
-//'Подтвердить': function() {
-//                        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-//                        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
-//                            var obj = new Array ();
-//                            $(ch).each(function(){
-//                                obj.push($(this).closest('tr').attr('value'));
-//                            });
-//                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
-//                        }
-//                    },
-//                    'Удалить': function() {
-//                        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-//                        if ($(ch).length > 0 && confirm('Удалить выбранные события')) {
-//                            var obj = new Array ();
-//                            $(ch).each(function(){
-//                                obj.push($(this).closest('tr').attr('value'));
-//                            });
-//                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
-//                        }
+        $('#per_tabl_header th.chk input, #ev_tabl th input[type="checkbox"]').change(function(){
+            if ($(this).attr('checked')){
+                $(this).closest('div').find('input[type=checkbox]').attr('checked', 'checked');
+            }else{
+                $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
+            }
+        });
+        $('#event_with_select_events span#remove_all_cal').click(function() {
+            var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
+            if ($(ch).length > 0 && confirm('Удалить выбранные события?')) {
+                var obj = new Array ();
+                $(ch).closest('tr').each(function(){
+                    obj.push($(this).attr('id').replace('ev_', ''));
+                });
+                $.jGrowl('События удаляются!',{theme : 'green'});
+                $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){
+                    $.jGrowl('События удалены!',{theme : 'green'});
+                    calendarLeft.init();
+                    $('#calendar').fullCalendar('refresh');
+                },'json');
+            }
+        });
+        $('#event_with_select_events span#accept_all_cal').click(function() {
+            var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
+            if ($(ch).length > 0 && confirm('Подтвердить выбранные события?')) {
+                var obj = new Array ();
+                $(ch).closest('tr').each(function(){
+                    obj.push($(this).attr('id').replace('ev_', ''));
+                });
+                $.jGrowl('События подтверждаются!',{theme : 'green'});
+                $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){
+                    $.jGrowl('События подтверждены!',{theme : 'green'});
+                    calendarLeft.init();
+                    $('#calendar').fullCalendar('refresh');
+                },'json');
+            }
+        });
 
         $('#datepicker').datepicker({numberOfMonths: 3}).datepicker();
         $('.hasDatepicker td').live('click',function(){
@@ -59,6 +76,9 @@ easyFinance.widgets.calendar = function(){
 
 
         });
+
+        
+
         $('#datepicker.hasDatepicker').qtip({
                 content: (''),
                 position: {
