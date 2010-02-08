@@ -110,11 +110,12 @@ class Accounts_Controller extends _Core_Controller_UserCommon
             $account = Account::load($params);
             $accs = $account->create($user, $params);
             if (!$accs){
-                die (json_encode(array('error'=>array('text'=>'Счёт не добавлен'))));
+               $this->tpl->assign('error', array('text'=>'Счёт не добавлен'));
             }
-            die (json_encode(array('result'=>array('text'=>'Счёт успешно добавлен'
+            $this->tpl->assign('result' , array('text'=>'Счёт успешно добавлен'
                 ,'id'=>$accs
-                ))));
+                ));
+            $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         } else {
             $this->tpl->assign( 'name_page', 'account/edit' );
             //die(json_encode(array('error'=>array('text'=>'42342342'))));
