@@ -809,7 +809,7 @@ class Info_Model
 //    )
         // Бюджет
         if (($this->output[4]['budget'] * $this->values['budget']['weight']) < 0) {
-            //$this->output[5]['budget'] = 0;
+            $this->output[5]['budget'] = 0;
         } else {
             $this->output[5]['budget'] = $this->output[4]['budget'] * $this->values['budget']['weight'];
         }
