@@ -19,11 +19,11 @@
 </tr>
 <tr>
 	<td><span class="asterisk">*</span> Название:</td>
-	<td><input name="name"></td>
+	<td><input name="name" value="<?php echo(isset($acc['name'])?$acc['name']:'') ?>"></td>
 </tr>
 <tr>
 	<td>Начальный баланс :</td>
-	<td><input name="initPayment"></td>
+	<td><input name="initPayment" value="<?php echo(isset($acc['money'])?$acc['money']:'') ?>"></td>
 </tr>
 <tr>
 	<td><span class="asterisk">*</span> Валюта:</td>
@@ -49,7 +49,7 @@
 </tr>
 <tr>
 	<td>Комментарий:</td>
-	<td><textarea style="width: 100%;" rows="3" cols="20" name="comment"></textarea></td>
+	<td><textarea style="width: 100%;" rows="3" cols="20" name="comment"><?php echo(isset($acc['description'])?$acc['description']:'') ?></textarea></td>
 </tr>
 <tr>
 	<td><input type="submit" value="Сохранить" id="btnSave"></td>
