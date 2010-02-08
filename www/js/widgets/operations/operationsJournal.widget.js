@@ -529,7 +529,9 @@ easyFinance.widgets.operationsJournal = function(){
 
             // всплывающая подсказка для тикета #640
             var operation = _journal[$(this).closest('tr').attr('value')];
-
+            if (!operation){
+                return ;
+            }
             var tp = '';
             if ( operation.transfer > 0 ) {
                 tp = 'перевод';
