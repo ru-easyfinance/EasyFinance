@@ -1020,29 +1020,6 @@ div.cont ul li.add a { width: 12px; }
 
 #auth .loginError { margin-left: 125px; margin-bottom: 10px; font-weight: bold; color: red; }
 
-/*
-#popupadd_login .cont{ overflow:hidden;position:relative;width:383px; }
-#popupadd_login .f_field { display:block;height:24px;margin:0 0 8px -95px;position:relative; }
-#popupadd_login .inlinebottom {  left:-158px;position:relative;width:100px; }
-#popupadd_login .inlinebottom  a { color:#6CBD45;float:left;font-size:11px; }
-#popupadd_login  .but { position:absolute;right:24px;top:68px; left: auto; width: 50px; // right: 20px;}
-#popupadd_login .cont .ct, #popupadd_login .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url("/img/i/ramka5.png"/*tpa=https://home-money.ru/preview/i/ramka5.png ) no-repeat 0 0; //-background:none; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
-#popupadd_login .cb { height:25px;overflow:hidden;position:relative;width:383px; }
-#popupadd_login .f_field label { color:#8B8C8B;display:block;font-family:Arial;font-size:12px;left:30px;position:absolute;text-align:right;top:3px; }
-#popupadd_login .f_field input { color: #b2b2b2; font-family:Arial;Font-size:12px;color:#8B8C8B;border:1px solid #8B8C8B; }
-#popupadd_login  .f_field input { height:18px;width:153px; }
-#popupadd_login  .f_field input.forget  { height:auto;width:auto;position:relative;left : 40px; border:0; }
-#popupadd_login .inside { display:block;height:110px;margin-left:-70px;z-index:1005;overflow:visible; }
-#popupadd_login div.w_dialog div.w_d_body { background:transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;height:130px;position:relative;text-align:justify;width:342px;margin-left:1px; }
-#popupadd_login .text { display:block;font-size:13px;line-height:17px;margin-left:15px;position:relative;right:80px;top:0;width:270px; }
-#popupadd_login div#dialog { background:transparent none repeat scroll 0 50%;padding-left:27px; }
-#popupadd_login div.w_dialog { height:auto; min-height:50px;position:absolute;width:342px;z-index:100; }
-#popupadd_login div {height:132px;overflow:hidden;padding-left:94px;position:absolute;top:4px;width:176px; }
-#popupadd_login div.w_dialog div.w_d_head { background:transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;height:20px;position:relative;width:342px; }
-#popupadd_login  div.w_d_foot { background:transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;height:30px;position:relative;width:342px; }
-#popupadd_login .close { background:transparent url(/img/i/ico_close.gif) no-repeat scroll 50% 50%;cursor:pointer;height:25px;position:absolute;left:246px;top:-7px;width:25px; }
-*/
-
 .operation_list table td div.cont ul,
 .categories table td div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 .operation_list table td div.cont ul:after,
@@ -2045,6 +2022,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     max-width: 64px;
     overflow: hidden;
     width: 64px;
+    height: 16px;
 }
 .full-calendar-month table tr td.n,
 .full-calendar-month table tr td.w,

@@ -227,8 +227,8 @@ $('#calendar').fullCalendar({
                                         }
                                         $(this).attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
                                             attr('used',($(this).attr('used')||'') +
-                                                '<tr><td>' +
-                                                result[v].title + '</td><td style="text-align: right;">' +
+                                                '<tr><td style="width:50%;overflow:hidden">' +
+                                                result[v].title + '</td><td style="text-align: right;width:50%;overflow:hidden">' +
                                                 (result[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : ((result[v].op_type == '1'?'<span style="color:green">':'<span style="color:red">')+result[v].amount+'</span>')) + '</td></tr>').
                                             closest('td').
                                             addClass('hasEvents');

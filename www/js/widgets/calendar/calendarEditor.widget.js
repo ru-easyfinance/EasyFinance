@@ -208,7 +208,7 @@ easyFinance.widgets.calendarEditor = function(){
                         $(this).dialog('close');
                     },
                     'Удалить': function() {
-                        del({id: $('#op_dialog_event #cal_key').attr('value'),chain: $('#cal_chain').val()});
+                        del({id: $('#op_dialog_event #cal_key').attr('value'),chain: $('#cal_chain').val(),use_mode: $('#op_dialog_event .special input:checked').attr('value')});
                         $(this).dialog('close');
                     }
                 },
@@ -396,7 +396,7 @@ easyFinance.widgets.calendarEditor = function(){
      * удаляет событие
      */
     function del(ret){
-        ret.use_mode= $('#op_dialog_event .special input:checked').attr('value');
+        ret.use_mode = ret.use_mode || 'single';
         $.post('/calendar/del/',ret,
         function(data){
             $.get('/calendar/reminder/',{},function(data){calendarLeft.init(data);},'json');
