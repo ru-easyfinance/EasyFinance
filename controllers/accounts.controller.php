@@ -122,16 +122,29 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         }
     }
 
-    function edit()
+    function edit($args)
     {
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
-        $account = Account::load($params);
-        if (!$account->update($user, $params)){
-            die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+        if( _Core_Request::getCurrent()->method == 'POST' )
+        {
+            $user = Core::getInstance()->user->getId();
+            $accountCollection = new Account_Collection();
+            $params = $_POST;
+            (isset($params['id']))?(1):($pda=1);
+            (isset($params['id']))?(1):($params['id'] = $args[0]);
+            $account = Account::load($params);
+            if (!$account->update($user, $params)){
+                $this->tpl->assign('error', array('text'=>'Счёт не удалён'));
+            }
+            $this->tpl->assign('result' , array('text'=>'Счёт успешно изменён'));
+            $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
+        } else {
+            //echo('<pre>');
+            //die(print_r($args));
+            $acm = new Accounts_Model();
+            $acc = $acm->getAccountPdaInformation($args[0]);
+            $this->tpl->assign( 'acc', $acc);
+            $this->tpl->assign( 'name_page', 'account/edit' );
         }
-        die (json_encode(array('result'=>array('text'=>'Счёт успешно изменён'))));
     }
 
 	/**
