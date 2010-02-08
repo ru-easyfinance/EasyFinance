@@ -154,19 +154,44 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function delete ($args)
     {
-        $user = Core::getInstance()->user->getId();
-        $accountCollection = new Account_Collection();
-        $params = $_POST;
 
-        $account = Account::getTypeByID($params);
-        //$account = Account::load($params);
-        $er = $account->delete($user, $params);
-        if (!$er){
-            die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+        if( (isset($_REQUEST['confirmed']) && $_REQUEST['confirmed']) )
+        {
+            $user = Core::getInstance()->user->getId();
+            $accountCollection = new Account_Collection();
+            $params = $_REQUEST;
+
+            $account = Account::getTypeByID($params);
+            //$account = Account::load($params);
+            $er = $account->delete($user, $params);
+            if (!$er){
+                die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+            }
+            if ($er == 'cel')
+                $this->tpl->assign('error',array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'));
+            $this->tpl->assign('result',array('text'=>'Счёт удален'));
+                $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         }
-        if ($er == 'cel')
-            die (json_encode(array('error'=>array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'))));
-        die (json_encode(array('result'=>array('text'=>'Счёт удален'))));
+        elseif( !isset($_POST['confirmed']) )
+		{
+			$confirm= array (
+				'title' 		=> 'Удаление счёта',
+				'message' 	=> 'Вы действительно хотите удалить выбранный счёт?',
+				'yesLink'	=> '/accounts/delete/?id=' . $args[0] . '&confirmed=1',
+				'noLink' 	=> $_SERVER['HTTP_REFERER'],
+			);
+
+			// Сохраняем в сессии адрес куда идти если согласится
+			$_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
+
+			$this->tpl->assign('confirm', $confirm);
+			$this->tpl->assign('name_page', 'confirm');
+		}
+		// Видимо передумали удалять и наша логика не сработала - редиректим на инфо
+		else
+		{
+			_Core_Router::redirect( '/info' );
+		}
     }
 
     /**
