@@ -186,7 +186,7 @@ easyFinance.widgets.operationsJournal = function(){
                 $.jGrowl(data.result.text, {theme: 'green'});
 
                 _recalcTotal();
-            } else if (data.error & data.error.text) {
+            } else if (data.error && data.error.text) {
                 $.jGrowl(data.error.text, {theme: 'red'});
             }
         });
