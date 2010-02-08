@@ -120,25 +120,29 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	}
 	?>
 	
+	<?php
+	// Преобразуем дату в массив для корректного отображения и сравнения
+	$operation['date'] = explode( '.', $operation['date'] );
+	?>
 	<div class="line">
 	Дата: <select name="date[day]"><?php
 	for( $day = 1; $day <= 31; $day++ )
 	{
-		?><option <?=($day==date('j'))?'selected="selected"':''?>
+		?><option <?=($day == $operation['date'][0])?'selected="selected"':''?>
 		><?=str_pad($day,2,'0',STR_PAD_LEFT)?></option><?php
 	}
 	?>
 	</select>.<select name="date[month]"><?php
 	for( $month = 1; $month <= 12; $month ++ )
 	{
-		?><option <?=($month==date('n'))?'selected="selected"':''?>
+		?><option <?=($month==$operation['date'][1])?'selected="selected"':''?>
 		><?=str_pad($month,2,'0',STR_PAD_LEFT)?></option><?php
 	}
 	?>
 	</select>.<select name="date[year]"><?php
 	for( $year = 2000; $year <= (date('Y') + 5); $year++ )
 	{
-		?><option <?=($year==date('Y'))?'selected="selected"':''?>
+		?><option <?=($year==$operation['date'][2])?'selected="selected"':''?>
 		><?=$year?></option><?php
 	}
 	?></select></div>

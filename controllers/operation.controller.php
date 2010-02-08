@@ -73,6 +73,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 			$operation['account'] = $this->request->get['accountId'];
 		}
 		
+		// Определяем дефолтную дату
+		$operation['date'] = date('j.n.Y');
+		
 		if( _Core_Request::getCurrent()->method == 'POST' )
 		{
 			// Определяем массив данных для обработки
@@ -185,6 +188,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				$this->tpl->assign( 'error', array('text'=> implode(" \n", $this->model->errorData) ) );
 			}
 		}
+		
+		// Переделываем дату изменённую в checkData для вставки в mysql обратно в человеческий вид
+		$operation['date'] = date('d.m.Y', strtotime( $operation['date'] ) );
 		
 		$this->tpl->assign( 'operation', $operation );
 		
@@ -387,6 +393,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				$this->tpl->assign( 'error', array('text'=> implode(" \n", $this->model->errorData) ) );
 			}
 		}
+		
+		// Переделываем дату изменённую в checkData для вставки в mysql обратно в человеческий вид
+		$operation['date'] = date('d.m.Y', strtotime( $operation['date'] ) );
 		
 		$this->tpl->assign( 'operation', $operation );
 		
