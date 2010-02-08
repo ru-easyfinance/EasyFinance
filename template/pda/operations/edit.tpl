@@ -17,6 +17,8 @@ if( isset($error) && is_array($error) && array_key_exists( 'text', $error ) )
 if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 {
 	?><p style="color:green; font-weight:bold; font-size: 12px;"><?=$result['text']?></p><?php
+	// раз есть результат - скидываем сумму
+	$operation['amount'] = null;
 }
 ?><form method="POST">
 <div class="wide">
