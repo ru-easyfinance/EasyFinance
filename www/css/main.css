@@ -2024,12 +2024,12 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     width: 64px;
     height: 16px;
 }
-.full-calendar-month table tr td.n,
+/*.full-calendar-month table tr td.n,
 .full-calendar-month table tr td.w,
 .full-calendar-month table tr td.e,
 .full-calendar-month table tr td.s{
     background-color: black
-}
+}*/
 table.calendar_tip{
     width: 100%;
 }

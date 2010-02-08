@@ -186,13 +186,13 @@
     color: blue;
 }
 .full-calendar-month .green td { 
-    background: #539f2f;
-    color: white;
+    background: #78de78;
+    /*color: white;*/
     /*cursor:default;*/
 }
 .full-calendar-month .red td { 
-    background: #ff0505;
-    color: white;
+    background: #FeA8A8;
+    /*color: white;*/
     /*cursor:default;*/
 }
 .full-calendar-month .blue td { 

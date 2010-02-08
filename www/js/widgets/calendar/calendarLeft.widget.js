@@ -48,10 +48,11 @@ easyFinance.widgets.calendarLeft = function(data){
             showEvents();
             
         $('#popupcalendar th.chk input').change(function(){
-            var check = this.checked;
-            $(this).closest('div').find('.chk input').each(function(){
-                this.checked = check;
-            });
+            if ($(this).attr('checked')){
+                $(this).closest('div').find('input[type=checkbox]').attr('checked', 'checked');
+            }else{
+                $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
+            }
         });
 
         $('#btnAccept').click(function(){
