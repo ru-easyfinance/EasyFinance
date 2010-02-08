@@ -266,8 +266,12 @@ $('#calendar').fullCalendar({
             var type = element.type == 'e'?'event':'periodic';
             _editor.load({el:element, type:type});
         },
+        eventDragStart: function(calEvent, jsEvent, ui){
+            $('#calend .full-calendar-month table tr td').css('cursor','crosshair');
+        },
         eventDragStop: function(calEvent, jsEvent, ui){
             $('.qtip:visible').remove();
+            $('#calend .full-calendar-month table tr td').css('cursor','pointer')
             _data[calEvent.key].date = Math.floor(calEvent.start / 1000);
             var ret = {};
                 ret = $.extend(ret, _data[calEvent.key]);
@@ -460,7 +464,7 @@ $('#calendar').fullCalendar({
                         (event.op_type > 0 ?
                             'green">' :
                             'red"> -') + (event.amount ? formatCurrency(Math.abs(event.amount)) : '0.00') +
-                        ' ' + res.currency[res.accounts[event.account].currency].text)) + '</div>' + //@todo FIX
+                        ' ' + (res.currency[(res.accounts[event.account] ? res.accounts[event.account].currency : '1')] ? res.currency[(res.accounts[event.account] ? res.accounts[event.account].currency : '1')].text : ''))) + '</div>' + //@todo FIX
                 '<div>'+(event.accept == '1' ? 'Подтверждено' : (_d > ddt ? 'Просрочено' : 'Не подтверждено')) + '</div>' +
                 '<div style="border-bottom: 1px dotted #e4e4e4; border-top: 1px dotted #e4e4e4;"><i>'+template+'</i></div>' +
                 '<div>' + (event.comment || '') + '</div></div>';
