@@ -712,7 +712,7 @@ class Operation_Model {
 			if ( $operation['type'] <= 1 )
 			{
 				// До использования типов - игнорим ошибки
-				$operation['cat_name']		= @$categorys[ $operation['cat_id'] ]['cat_name'];
+				$operation['cat_name']          = @$categorys[ $operation['cat_id'] ]['cat_name'];
 				$operation['cat_parent']		= @$categorys[ $operation['cat_id'] ]['cat_parent'];
 			}
 			

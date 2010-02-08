@@ -249,7 +249,7 @@ class User
     {
         $this->initUserCurrency();
         $this->initUserCategory();
-        //$this->initUserAccounts();
+        $this->initUserAccounts();
         $this->initUserTags();
         $this->initUserTargets();
         $this->initUserEvents();
@@ -508,7 +508,7 @@ class User
 
     function getCurrencyByDefault($mas, $def)
     {
-        //die ( print_r( $mas ) );
+        
         if( !is_array($mas) )
         {
         	$mas = array();
@@ -529,13 +529,8 @@ class User
 
         $res = array_merge($li, $li2);
 
-
         return $res;
-            //echo('<pre>');
-            //die(print_r($li));
-        //$a = $li[0];
 
-        
     }
 
     /**
