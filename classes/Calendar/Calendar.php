@@ -58,6 +58,8 @@ class Calendar
             $end = date('Y-m-d', $end / 1000);
         }
 
+        if ( !$user ) { $user = $this->user; }
+
         $calendar = new Calendar( $user );
         $eventsModels = Calendar_Model::loadAll( $user, $start, $end );
 

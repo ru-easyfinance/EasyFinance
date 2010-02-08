@@ -70,8 +70,6 @@ class Calendar_Controller extends _Core_Controller_UserCommon
         )));
     }
 
-
-
     /**
      * Возвращает список событий, в формате JSON
      * @return void
@@ -79,6 +77,20 @@ class Calendar_Controller extends _Core_Controller_UserCommon
     function events($args) {
         $calendar = Calendar::loadAll( Core::getInstance()->user , $_GET['start'], $_GET['end'] );
         return die ( json_encode( $calendar->getArray() ) );
+    }
+
+    /**
+     * Получить список напоминалок
+     */
+    function reminder ()
+    {
+        // Получаем события календаря за весь текущий месяц
+        $calendar = new Calendar( Core::getInstance()->user );
+
+        // Из-за глюка компонента календарь - умножаем таймштамп на тысячу
+        $events = $calendar->loadAll($user, mktime(0, 0, 0, date('n'), 1, date('Y')) * 1000,
+                mktime(0, 0, 0, date('n') + 1, 0, date('Y')) * 1000);
+        die( json_encode( $events->getArray() ) );
     }
 
     /**

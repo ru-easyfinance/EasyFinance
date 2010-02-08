@@ -286,7 +286,7 @@ abstract class _Core_Controller
 
         try {
             // Получаем события календаря за весь текущий месяц
-            $calendar = new Calendar( Core::getInstance()->user->getId() );
+            $calendar = new Calendar( Core::getInstance()->user );
             // Из-за глюка компонента календарь - умножаем таймштамп на тысячу
             $events = $calendar->loadAll($user, mktime(0, 0, 0, date('n'), 1, date('Y')) * 1000,
                     mktime(0, 0, 0, date('n') + 1, 0, date('Y')) * 1000);
