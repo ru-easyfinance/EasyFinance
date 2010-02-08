@@ -249,7 +249,7 @@ class User
     {
         $this->initUserCurrency();
         $this->initUserCategory();
-        $this->initUserAccounts();
+        //$this->initUserAccounts();
         $this->initUserTags();
         $this->initUserTargets();
         $this->initUserEvents();
