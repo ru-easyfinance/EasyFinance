@@ -8,6 +8,43 @@ easyFinance.widgets.calendar = function(){
         $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
         $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
         $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+        $('#per_tabl_header th.chk input, #ev_tabl th input[type="checkbox"]').change(function(){
+            if ($(this).attr('checked')){
+                $(this).closest('div').find('input[type=checkbox]').attr('checked', 'checked');
+            }else{
+                $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
+            }
+        });
+        $('#event_with_select_events span#remove_all_cal').click(function() {
+            var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
+            if ($(ch).length > 0 && confirm('Удалить выбранные события?')) {
+                var obj = new Array ();
+                $(ch).closest('tr').each(function(){
+                    obj.push($(this).attr('id').replace('ev_', ''));
+                });
+                $.jGrowl('События удаляются!',{theme : 'green'});
+                $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){
+                    $.jGrowl('События удалены!',{theme : 'green'});
+                    calendarLeft.init();
+                    $('#calendar').fullCalendar('refresh');
+                },'json');
+            }
+        });
+        $('#event_with_select_events span#accept_all_cal').click(function() {
+            var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
+            if ($(ch).length > 0 && confirm('Подтвердить выбранные события?')) {
+                var obj = new Array ();
+                $(ch).closest('tr').each(function(){
+                    obj.push($(this).attr('id').replace('ev_', ''));
+                });
+                $.jGrowl('События подтверждаются!',{theme : 'green'});
+                $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){
+                    $.jGrowl('События подтверждены!',{theme : 'green'});
+                    calendarLeft.init();
+                    $('#calendar').fullCalendar('refresh');
+                },'json');
+            }
+        });
 
         $('#datepicker').datepicker({numberOfMonths: 3}).datepicker();
         $('.hasDatepicker td').live('click',function(){
@@ -39,6 +76,9 @@ easyFinance.widgets.calendar = function(){
 
 
         });
+
+        
+
         $('#datepicker.hasDatepicker').qtip({
                 content: (''),
                 position: {
@@ -126,6 +166,7 @@ $('#calendar').fullCalendar({
                     if (typeof result != 'object'){
                         return null;
                     }
+                    easyFinance.widgets.calendarRight(result);
                     for(var v in result){
                         var accept  = result[v].accept == '1' ? 'accept':'reject';
                         ddt.setTime(result[v].date*1000);
@@ -206,9 +247,9 @@ $('#calendar').fullCalendar({
                                         }
                                         $(this).attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
                                             attr('used',($(this).attr('used')||'') +
-                                                '<tr><td>' +
-                                                result[v].title + '<td></td>' +
-                                                (result[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : result[v].amount) + '</td></tr>').
+                                                '<tr><td style="width:50%;overflow:hidden">' +
+                                                result[v].title + '</td><td style="text-align: right;width:50%;overflow:hidden">' +
+                                                (result[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : ((result[v].op_type == '1'?'<span style="color:green">':'<span style="color:red">')+result[v].amount+'</span>')) + '</td></tr>').
                                             closest('td').
                                             addClass('hasEvents');
                                     }
@@ -245,8 +286,12 @@ $('#calendar').fullCalendar({
             var type = element.type == 'e'?'event':'periodic';
             _editor.load({el:element, type:type});
         },
+        eventDragStart: function(calEvent, jsEvent, ui){
+            $('#calend .full-calendar-month table tr td').css('cursor','crosshair');
+        },
         eventDragStop: function(calEvent, jsEvent, ui){
             $('.qtip:visible').remove();
+            $('#calend .full-calendar-month table tr td').css('cursor','pointer')
             _data[calEvent.key].date = Math.floor(calEvent.start / 1000);
             var ret = {};
                 ret = $.extend(ret, _data[calEvent.key]);
@@ -439,7 +484,8 @@ $('#calendar').fullCalendar({
                         (event.op_type > 0 ?
                             'green">' :
                             'red"> -') + (event.amount ? formatCurrency(Math.abs(event.amount)) : '0.00') +
-                        ' ' + res.currency[res.accounts[event.account].currency].text)) + '</div>' + //@todo FIX
+                        ' ' + (res.currency[(res.accounts[event.account] ? res.accounts[event.account].currency : '1')] ? res.currency[(res.accounts[event.account] ? res.accounts[event.account].currency : '1')].text : ''))) + '</div>' + //@todo FIX
+                '<div>'+(event.accept == '1' ? 'Подтверждено' : (_d > ddt ? 'Просрочено' : 'Не подтверждено')) + '</div>' +
                 '<div style="border-bottom: 1px dotted #e4e4e4; border-top: 1px dotted #e4e4e4;"><i>'+template+'</i></div>' +
                 '<div>' + (event.comment || '') + '</div></div>';
             $(element).qtip({

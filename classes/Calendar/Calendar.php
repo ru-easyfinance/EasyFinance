@@ -1,9 +1,4 @@
 <?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Класс для работы с календарём. Цепочками событий и регулярных операций
  *
@@ -62,6 +57,8 @@ class Calendar
         } else {
             $end = date('Y-m-d', $end / 1000);
         }
+
+        if ( !$user ) { $user = $this->user; }
 
         $calendar = new Calendar( $user );
         $eventsModels = Calendar_Model::loadAll( $user, $start, $end );
@@ -143,8 +140,9 @@ class Calendar
         $date    = formatRussianDate2MysqlDate($date);
         $every   = (int)$every;
         // Опционально, по-умолчанию 1, от 1 до 365 (год) **или дата окончания**, или 0 - бесконечно
+        $last_date = '0000-00-00';
         if ( strlen($repeat) == 10 ){
-            $last_date = $repeat;
+            $last_date = formatRussianDate2MysqlDate($repeat);
         } else {
             $repeat  = (int)$repeat;
         }
@@ -186,7 +184,7 @@ class Calendar
         }
 
         $model = Calendar_Model::create($this->user, $type, $title, $comment, 
-            $time, $date, $every,
+            $time, $date, $last_date, $every,
             $repeat, $week,$amount, $cat, $account, $op_type, $tags, $array);
         return true;
     }
