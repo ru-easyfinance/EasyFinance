@@ -3,7 +3,7 @@
 	<tr>
 		<td>
 		<strong><?=$res['accounts'][$accountId]['name']?></strong>
-		<a href="/accounts/edit/<?=$accountId?>">редактировать</a>
+		<a href="/accounts/edit/<?=$accountId?>">ред.</a>
 		</td>
 		<td align="right" nowrap="nowrap">
 			<span class="<?=($res['accounts'][$accountId]['totalBalance']<0)?'red':'green'?>">
