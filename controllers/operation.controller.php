@@ -599,19 +599,18 @@ class Operation_Controller extends _Core_Controller_UserCommon
 			$list = array();
 		}
 		
-		//$accounts = Core::getInstance()->user->getUserAccounts();
-
 		//@TODO Похоже, что тут надо что-то дописать в массиве
-		foreach ($list as $val)
+		foreach ($list as $operation)
 		{
-			if (!is_null($val['account_name']))
+			
+			if (!is_null($operation['account_name']))
 			{
-				$array[$val['id']] = $val;
+				$array[$operation['id']] = $operation;
 			}
 			else
 			{
-				$array[$val['id']] = $val;
-				$array[$val['id']]['account_name'] = '';
+				$array[$operation['id']] = $operation;
+				$array[$operation['id']]['account_name'] = '';
 			}
 		}
 		
