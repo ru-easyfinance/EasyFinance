@@ -39,9 +39,12 @@
 			?><option value="<?=$currency?>"><?=$currency['text']?></option>
 			<?php
 		}*/
-                foreach ($res['currency'] as $k=>$v){ if ($k !='default' ) if ($k!='errors')
-                    ?><option value="<?=$k?>" <? if ( $k == (isset($acc['currency'])?$acc['currency']:0) ) { ?> selected <? } ?> ><?=$v['text']?></option>
+                foreach ($res['currency'] as $k=>$v){
+                    if ($k !='default' ) {
+                    $currN = (isset($acc['currency'])?$acc['currency']:0);
+                    ?><option  <? if ( $k == ($currN) ) { ?> selected <? } ?> value="<?=$k ?>"><?=$v['text']?></option>
                     <?php
+                    }
                 }
 		?>
 	</select>
