@@ -21,14 +21,16 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 ?><form method="POST">
 <div class="wide">
 	<input type="hidden" name="id" value=""></input>
-	<div class="line"><span class="asterisk">*</span> Сумма: <br />
-            <table cellspacing="0" cellpadding="0" class="wide"><tbody>
-                    <tr>
-                            <td valign="middle"><?=($operation['type'] == Operation::TYPE_PROFIT ? '+' : '-')?></td>
-                            <td class="wide">&nbsp;<input class="wide" name="amount" value="<?=(isset($operation['amount']))?abs($operation['amount']):''?>" inputmode="user digits" /></td>
-                    </tr>
-            </tbody></table>
-        </div>
+        <table cellspacing="0" cellpadding="0" class="wide"><tbody>
+                <tr>
+                        <td><span class="asterisk">*</span></td>
+                        <td class="wide">Сумма:</td>
+                </tr>
+                <tr>
+                        <td valign="middle"><?=($operation['type'] == Operation::TYPE_PROFIT ? '+' : '-')?></td>
+                        <td class="wide"><input class="wide" name="amount" value="<?=(isset($operation['amount']))?abs($operation['amount']):''?>" inputmode="user digits" /></td>
+                </tr>
+        </tbody></table>
 	<div class="line"><span class="asterisk">*</span> <?=in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT))?'Счёт':'Со счёта'?>:<br />
 	<select name="account" class="wide">
 		<?php
