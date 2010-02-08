@@ -3,7 +3,7 @@
 <form method="POST">
 <table width="220px"><tbody>
 <tr>
-	<td>Тип:</td>
+	<td><span class="asterisk">*</span> Тип:</td>
 	<td>
 		<select id="acc_type" name="type">
 			<option value="1">Наличные</option>
@@ -18,7 +18,7 @@
 	</td>
 </tr>
 <tr>
-	<td>Название:</td>
+	<td><span class="asterisk">*</span> Название:</td>
 	<td><input name="name"></td>
 </tr>
 <tr>
@@ -26,7 +26,7 @@
 	<td><input name="initPayment"></td>
 </tr>
 <tr>
-	<td>Валюта:</td>
+	<td><span class="asterisk">*</span> Валюта:</td>
 	<td>
 	<select name="currency">
 		<?php

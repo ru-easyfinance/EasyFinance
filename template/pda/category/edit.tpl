@@ -29,10 +29,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 <div class="wide">
 	<input type="hidden" name="type" value="<?=$category['type']?>"></input>
 	
-	<div class="line">Название: <br />
+	<div class="line"><span class="asterisk">*</span> Название: <br />
 		<input class="wide" name="name" value="<?=isset($category['name'])?$category['name']:''?>" />
 	</div>	
-	<div class="line">Родительская категория:<br><select name="parent" class="wide">
+	<div class="line"><span class="asterisk">*</span> Родительская категория:<br><select name="parent" class="wide">
 		<option value="0">Без родительской</option>
 	<?php
 	while( list(,$userCategory) = each($res['category']['user']) )
@@ -42,7 +42,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	}
 	?>
 	</select></div>
-	<div class="line">Системная категория:<br><select name="system" class="wide">
+	<div class="line"><span class="asterisk">*</span> Системная категория:<br><select name="system" class="wide">
 		<option value="0">Не выбрана</option>
 	<?php
 	while( list(,$sysCategory) = each($res['category']['system']) )

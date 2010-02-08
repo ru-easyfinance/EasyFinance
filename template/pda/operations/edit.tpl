@@ -21,10 +21,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 ?><form method="POST">
 <div class="wide">
 	<input type="hidden" name="id" value=""></input>
-	<div class="line">Сумма: <br />
+	<div class="line"><span class="asterisk">*</span> Сумма: <br />
             <?=($operation['type'] == Operation::TYPE_PROFIT ? '+' : '-')?>&nbsp;<input class="wide" name="amount" value="<?=(isset($operation['amount']))?$operation['amount']:''?>" inputmode="user digits" />
         </div>
-	<div class="line"><?=in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT))?'Счёт':'Со счёта'?>:<br />
+	<div class="line"><span class="asterisk">*</span> <?=in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT))?'Счёт':'Со счёта'?>:<br />
 	<select name="account" class="wide">
 		<?php
 		if( !isset($operation['account']) || !$operation['account'] )
@@ -44,7 +44,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	{
 		?>
 		<div class="line">
-		Категория: <br><select name="category" class="wide" >
+		<span class="asterisk">*</span> Категория: <br><select name="category" class="wide" >
 			<option>не выбрана</option>
 			<?php
 			// Выводим список категорий
@@ -80,7 +80,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	if( $operation['type'] == Operation::TYPE_TRANSFER )
 	{
 		?>
-		<div class="line">На счёт: <br><select name="toAccount" class="wide" >
+		<div class="line"><span class="asterisk">*</span> На счёт: <br><select name="toAccount" class="wide" >
 			<?php
 			if( !isset($operation['toAccount']) || !$operation['toAccount'] )
 			{
@@ -103,7 +103,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	{
 		?>
 		<div class="line">
-		На цель: <br><select name="target" class="wide" >
+		<span class="asterisk">*</span> На цель: <br><select name="target" class="wide" >
 			<?php
 			if( !isset($operation['target']) || !$operation['target'] )
 			{
@@ -127,7 +127,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	$operation['date'] = explode( '.', $operation['date'] );
 	?>
 	<div class="line">
-	Дата: <select name="date[day]"><?php
+	<span class="asterisk">*</span> Дата: <select name="date[day]"><?php
 	for( $day = 1; $day <= 31; $day++ )
 	{
 		?><option <?=($day == $operation['date'][0])?'selected="selected"':''?>
