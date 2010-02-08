@@ -173,12 +173,12 @@ $(document).ready(function() {
                 style: styleTheme
             });
 
-            $(".hasDatepicker").qtip({
-                content: 'Выбрать месяц для просмотра календаря',
-                show: {delay: 1000},
-                position: {target: 'mouse'},
-                style: styleTheme
-            });
+//            $(".hasDatepicker").qtip({
+//                content: 'Выбрать месяц для просмотра календаря',
+//                show: {delay: 1000},
+//                position: {target: 'mouse'},
+//                style: styleTheme
+//            });
 
             $("#op_account").qtip({
                 content: 'Счет с которого Вы переводите деньги',
@@ -395,7 +395,7 @@ $(document).ready(function() {
             $("#cattype").qtip('destroy');
             $("#catsys").qtip('destroy');
             $("h3:contains('Регулярные операции')").qtip('destroy');
-            $(".hasDatepicker").qtip('destroy');
+//            $(".hasDatepicker").qtip('destroy');
             $("#op_account").qtip('destroy');
             $("#op_type").qtip('destroy');
             $("#op_category").qtip('destroy');

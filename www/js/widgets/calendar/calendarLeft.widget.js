@@ -3,7 +3,7 @@
 easyFinance.widgets.calendarLeft = function(data){
     var _model;
     var _data = data || res.calendar.reminder;//@todo
-    function init(model){
+    function init(){
         $('#popupcalendar').dialog({
                 bgiframe: true,
                 autoOpen: false,
@@ -27,7 +27,8 @@ easyFinance.widgets.calendarLeft = function(data){
                             $(ch).each(function(){
                                 obj.push($(this).closest('tr').attr('value'));
                             });
-                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
+                            $.jGrowl('События удаляются!',{theme : 'green'});
+                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents();$.jGrowl('События удалены!',{theme : 'green'});},'json');
                         }
                         //$(this).dialog('close');
                     }
@@ -59,7 +60,8 @@ easyFinance.widgets.calendarLeft = function(data){
                 $(ch).each(function(){
                     obj.push($(this).closest('tr').attr('value'));
                 });
-                $.post('calendar/reminderAccept',{ids : obj.toString()},function(){},'json')
+                $.jGrowl('События подтверждаются!',{theme : 'green'});
+                $.post('calendar/reminderAccept',{ids : obj.toString()},function(data){$.jGrowl('События подтверждены!',{theme : 'green'});},'json')
 
             }
         });

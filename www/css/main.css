@@ -2060,3 +2060,7 @@ table.calendar_tip td{
     overflow: hidden;
     width: 50%
 }
+/* хук для дате пикер - так безопаснее обновлять библиотеки */
+.hasDatepicker td a{cursor : pointer}
+/* */
+table.times{position: relative; left: 145px}

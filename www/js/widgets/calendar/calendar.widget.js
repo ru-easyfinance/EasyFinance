@@ -9,6 +9,26 @@ easyFinance.widgets.calendar = function(){
         $.fullCalendar.dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
         $.fullCalendar.dayAbbrevs = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 
+//'Подтвердить': function() {
+//                        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+//                        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
+//                            var obj = new Array ();
+//                            $(ch).each(function(){
+//                                obj.push($(this).closest('tr').attr('value'));
+//                            });
+//                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
+//                        }
+//                    },
+//                    'Удалить': function() {
+//                        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
+//                        if ($(ch).length > 0 && confirm('Удалить выбранные события')) {
+//                            var obj = new Array ();
+//                            $(ch).each(function(){
+//                                obj.push($(this).closest('tr').attr('value'));
+//                            });
+//                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents();},'json');
+//                        }
+
         $('#datepicker').datepicker({numberOfMonths: 3}).datepicker();
         $('.hasDatepicker td').live('click',function(){
             var month = $(this).closest('.calendar, .ui-datepicker-group').find('span.ui-datepicker-month').text();
@@ -126,6 +146,7 @@ $('#calendar').fullCalendar({
                     if (typeof result != 'object'){
                         return null;
                     }
+                    easyFinance.widgets.calendarRight(result);
                     for(var v in result){
                         var accept  = result[v].accept == '1' ? 'accept':'reject';
                         ddt.setTime(result[v].date*1000);
@@ -440,6 +461,7 @@ $('#calendar').fullCalendar({
                             'green">' :
                             'red"> -') + (event.amount ? formatCurrency(Math.abs(event.amount)) : '0.00') +
                         ' ' + res.currency[res.accounts[event.account].currency].text)) + '</div>' + //@todo FIX
+                '<div>'+(event.accept == '1' ? 'Подтверждено' : (_d > ddt ? 'Просрочено' : 'Не подтверждено')) + '</div>' +
                 '<div style="border-bottom: 1px dotted #e4e4e4; border-top: 1px dotted #e4e4e4;"><i>'+template+'</i></div>' +
                 '<div>' + (event.comment || '') + '</div></div>';
             $(element).qtip({
