@@ -146,7 +146,20 @@ class Operation_Model {
 				
 				if ( empty($validated['target']) && empty ($validated['toAccount']))
 				{
-					$this->errorData['category'] = 'Нужно указать категорию';
+					$this->errorData['category'] = 'Нужно указать ';
+					
+					switch( $operation['type'] )
+					{
+						case Operation::TYPE_TRANSFER:
+							$this->errorData['category'] .= 'целевой счёт.';
+							break;
+						case Operation::TYPE_TARGET:
+							$this->errorData['category'] .= 'цель.';
+							break;
+						case Operation::TYPE_PROFIT || Operation::TYPE_WASTE:
+						default:
+							$this->errorData['category'] .= 'категорию.';
+					}
 				}
 			}
 			elseif ( ($validated['type'] == 0) || ($validated['type'] == 1) )
