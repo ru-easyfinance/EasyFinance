@@ -13,6 +13,11 @@ body {
 	background: #fff;
 }
 
+.asterisk {
+    color: red;
+    font-weight: bold;
+}
+
 /* HEADER */
 
 .logo {
@@ -25,13 +30,24 @@ body {
 }
 
 .topmenu {
+        width: 100%;
 	font-size: smaller;
 	margin-bottom:10px;
 }
 
 .topmenu td {
-	text-align: center;
 	width: 25%;
+        text-align: center;
+        background: url(/img/pda/menuLine.gif) no-repeat right
+}
+
+.topmenu td.last {
+        background-image: none;
+}
+
+.topmenu td.current {
+        /* background-color: #93CA57; */
+        font-weight: bold;
 }
 
 img {
@@ -95,9 +111,9 @@ div.line {
 
 /* CATEGORY */
 
-.categorys td
+.categories td
 {
-	padding-bottom: 5px;
+	padding-bottom: 8px;
 }
 
 td.childCategory {
