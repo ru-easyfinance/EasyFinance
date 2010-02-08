@@ -51,7 +51,7 @@ class Account_OFBU extends Account
         $valid[8] = (string)@$params['bank'];
         $valid[12] = (float)@$params['incomeYearPercent'];
         $valid[6] = (float)@$params['currentmarketCost'];
-        $valid[15] = formatRussianDate2MysqlDate($params['dateOpen']);
+        $valid[15] = @formatRussianDate2MysqlDate($params['dateOpen']);
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];

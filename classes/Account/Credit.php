@@ -62,8 +62,8 @@ class Account_Credit extends Account
         $valid[29] = (int)@$params['currency'];
         $valid[8] = (string)@$params['bank'];
         $valid[11] = (int)@$params['yearPercent'];
-        $valid[17] = formatRussianDate2MysqlDate($params['dateGet']);
-        $valid[18] = formatRussianDate2MysqlDate($params['dateOff']);
+        $valid[17] = @formatRussianDate2MysqlDate($params['dateGet']);
+        $valid[18] = @formatRussianDate2MysqlDate($params['dateOff']);
         $valid[24] = (int)@$params['typePayment'];
         $valid[25] = (string)@$params['support'];
         //подготовим объект
