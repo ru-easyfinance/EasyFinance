@@ -260,6 +260,7 @@ class Calendar_Model extends _Core_Abstract_Model {
 
         // Если получили массив, преобразуем его для выборки в мускуле
         if ( is_array($ids) ) {
+            $id = $ids;
             $ids = '';
             foreach ($id as $v) {
                 if ( !empty ($ids) ) $ids .= ',';

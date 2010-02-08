@@ -80,7 +80,7 @@ class Calendar
      * @param User $user
      * @param date $date 
      */
-    public function loadReminder (User $user, $date)
+    public function loadReminder (User $user, $date = null)
     {
         if ( is_null( $date ) ) {
             $date = date('Y-m-d');
@@ -408,7 +408,7 @@ class Calendar
     public function acceptEvents ($id)
     {
         // Получаем список событий, отмечаем что они выполненные
-        $events = Calendar_Model::acceptEvents( $this->user, $id, $chain );
+        $events = Calendar_Model::acceptEvents( $this->user, $id);
         if ( $events ) {
             // создаём операции по периодическим транзакциям
             if ( count($events) ) {
