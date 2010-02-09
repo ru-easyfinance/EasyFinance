@@ -51,7 +51,7 @@ class Helper_IframeLogin
                 }
             }
             self::$templateEngine->assign('template_view', 'iframe');
-            self::$templateEngine->display("iframe/index.iframe.html");
+            //self::$templateEngine->display("iframe/index.iframe.html");
         }
     }
 
