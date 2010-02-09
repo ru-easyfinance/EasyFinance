@@ -628,7 +628,7 @@ $(".flash")
                         <a href="/calendar/"></a> \
                         <ul> \
                                 <li><span/><a href="/calendar/#calend">Календарь</a></li> \
-                                <li><span/><a href="/calendar/#list">Список событий</a></li> \
+                                <li><span/><a href="/calendar/#list">События</a></li> \
                                 <li class="last"></li> \
                         </ul> \
                 </li> \
