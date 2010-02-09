@@ -20,6 +20,8 @@
 
 /* all dropdown menus */
 ul.dropdown {
+        position: relative;
+        float: left;
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -32,11 +34,11 @@ ul.dropdown li {
 	width: 118px;
 }
 
-.menu3 ul li#m1.cur > a { background-position:0 -39px; }
+/*.menu3 ul li#m1.cur > a { background-position:0 -39px; }
 .menu3 ul li#m2.cur > a { background-position: -135px -39px; }
 .menu3 ul li#m3.cur > a { background-position: -259px -39px; }
 .menu3 ul li#m4.cur > a { background-position: -383px -39px; }
-.menu3 ul li#m5.cur > a { background-position: -507px -39px; }
+.menu3 ul li#m5.cur > a { background-position: -507px -39px; }*/
 
 /* second-level lists */
 ul.dropdown li ul {
@@ -99,7 +101,7 @@ ul.dropdown li:hover ul, ul li.over ul {
 .iframe .menu3 ul > li > a, .iframe .menu3 ul > li > span { background: url('/img/i/menu3_iframe.png') no-repeat 0 0; }
 .menu3.expert ul li a, .menu3.expert ul li span { display: block; width: 120px; height: 37px; text-indent: 0px; overflow: hidden; background: url('/img/i/menu4.png') no-repeat 0 0; }
 
-.menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
+/*.menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
 .menu3 ul li#m1.act > a { background-position: 0 -80px; }
 
 .menu3 ul li#m2 > a { background-position: -135px 1px; left:0px; position:absolute;}
@@ -115,7 +117,7 @@ ul.dropdown li:hover ul, ul li.over ul {
 .menu3 ul li#m5.act > a  { background-position: -507px -80px; }
 
 .menu3 ul li#m6 > a { background-position: -631px 1px; left:0px;position:absolute}
-.menu3 ul li#m6.act > a  { background-position: -631px -80px; }
+.menu3 ul li#m6.act > a  { background-position: -631px -80px; }*/
 
 .menu3 .popup_info { display: none; position: absolute; top: -20px; left: 627px; width: 182px; padding: 10px 11px 11px 14px; font-size: 11px; line-height: 14px; color: #737373;  z-index: 10; background: #ffffff; border: 1px solid #c4c4c4; }
 .menu3 .popup_info .mark { position: absolute; top: 38px; left: -15px; width: 15px; height: 15px; background: url('/img/i/icons.gif') no-repeat 0 -420px;  }
@@ -131,3 +133,63 @@ ul.dropdown li:hover ul, ul li.over ul {
 .iframe .menu3 ul li ul li.selected a { background: none; font-weight: bold; }
 .menu3 ul li ul li.selected span { display: inline-block; float: left; margin-left: 4px; width: 10px; height: 26px; background: url('/img/i/plashka_green.png') no-repeat left top;}
 .iframe .menu3 ul li ul li.selected span { background: none; margin-left: 2px; width: 2px; }
+
+
+/* уход от JS  */
+
+ul.dropdown li:hover ul{display: block}
+
+
+/* m1 */
+.menu3 ul li#m1 > a { background-position: 0 1px; left:0px;position:absolute }
+ul.dropdown:hover li#m1.cur > a{background-position: 0 -39px;}
+
+ul.dropdown li#m1:hover > a,
+ul.dropdown li#m1.cur:hover > a,
+ul.dropdown li#m1.cur > a{background-position: 0 -80px;}
+/* m1 */
+
+/* m2 */
+.menu3 ul li#m2 > a { background-position: -135px 1px; left:0px;position:absolute }
+ul.dropdown:hover li#m2.cur > a{background-position: -135px -39px;}
+
+ul.dropdown li#m2:hover > a,
+ul.dropdown li#m2.cur:hover > a,
+ul.dropdown li#m2.cur > a{background-position: -135px -80px;}
+/* m2 */
+
+/* m3 */
+.menu3 ul li#m3 > a { background-position: -259px 1px; left:0px;position:absolute }
+ul.dropdown:hover li#m3.cur > a{background-position: -259px -39px;}
+
+ul.dropdown li#m3:hover > a,
+ul.dropdown li#m3.cur:hover > a,
+ul.dropdown li#m3.cur > a{background-position: -259px -80px;}
+/* m3 */
+
+/* m4 */
+.menu3 ul li#m4 > a { background-position: -383px 1px; left:0px;position:absolute }
+ul.dropdown:hover li#m4.cur > a{background-position: -383px -39px;}
+
+ul.dropdown li#m4:hover > a,
+ul.dropdown li#m4.cur:hover > a,
+ul.dropdown li#m4.cur > a{background-position: -383px -80px;}
+/* m4 */
+
+/* m5 */
+.menu3 ul li#m5 > a { background-position: -507px 1px; left:0px;position:absolute }
+ul.dropdown:hover li#m5.cur > a{background-position: -507px -39px;}
+
+ul.dropdown li#m5:hover > a,
+ul.dropdown:hover li#m5.cur:hover > a,
+ul.dropdown li#m5.cur > a{background-position: -507px -80px;}
+/* m5 */
+
+/* m6 */
+.menu3 ul li#m6 > a { background-position: -631px 1px; left:0px;position:absolute }
+ul.dropdown li#m6.cur > a{background-position: -631px -39px;}
+
+ul.dropdown li#m6:hover > a,
+ul.dropdown li#m6.cur:hover > a,
+ul.dropdown li#m6.cur > a{background-position: -631px -80px;}
+/* m6 */

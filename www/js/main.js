@@ -64,7 +64,7 @@ var pathtoid = {
     '/mail/':'m0',
     '/operation/':'m2',
     '/periodic/':'m5',
-    '/profile/':'m0',
+    '/profile/':'m1',
     '/targets/':'m3',
     '/report/':'m4'};
 
@@ -177,29 +177,29 @@ $(document).ready(function() {
 
     // # тикет 625
     // инициализируем виджет видео-гида
-    if (!isIframe)
+    if (!isIframe){
         easyFinance.widgets.help.init('#popupHelp', true);
 
-    // по умолчанию устанавливаем видео,
-    // которое соответствует содержанию страницы
-    var tabVideo = {
-        "m0" : "newOperation",
-        "m1" : "newOperation",
-        "m2" : "newAccount",
-        "m3" : "newBudget",
-        "m4" : "newTarget",
-        "m5" : "newOperation",
-        "m6" : "newOperation"
-    };
+        // по умолчанию устанавливаем видео,
+        // которое соответствует содержанию страницы
+        var tabVideo = {
+            "m0" : "newOperation",
+            "m1" : "newOperation",
+            "m2" : "newAccount",
+            "m3" : "newBudget",
+            "m4" : "newTarget",
+            "m5" : "newOperation",
+            "m6" : "newOperation"
+        };
 
-    $('#footer .btnHelp').click(function(){
-        $('#popupHelp').dialog('open');
-
-        if (page_mid)
-            easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
-        else
-            easyFinance.widgets.help.showVideo("newAccount");
-    });
+        $('#footer .btnHelp').click(function(){
+            $('#popupHelp').dialog('open');
+            if (page_mid)
+                easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+            else
+                easyFinance.widgets.help.showVideo("newAccount");
+        });
+    }
 
     //#538
     if (
@@ -248,20 +248,6 @@ $(document).ready(function() {
         }
         return false;
     }
-
-//    //получение клиентских настроек
-//    /**
-//     *@deprecated
-//     */
-//    function getClientWidth() {
-//      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
-//    }
-//    /**
-//     *@deprecated
-//     */
-//    function getClientHeight() {
-//      return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientHeight:document.body.clientHeight;
-//    }
 
     // LOAD MODELS
     // modified by Jet 29.10.2009, ticket 337.
@@ -641,31 +627,31 @@ $(".flash")
         $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
 
         // код для переключения внешнего вида вкладок
-        $('.dropdown').children('li')
-            .mouseover(
-                function(){
-                    // act - делает вкладку активной
-                    // over - показывает подменю
-                    $(this).addClass('act over');
-
-                    // если мышь на закладке раздела, отличного от текущего
-                    // подсвечиваем вкладку текущего раздела зелёным
-                    if (!$(this).hasClass('cur'))
-                        $(this).siblings('.cur').removeClass('act');
-                })
-            .mouseout(
-                function(){
-                    // скрываем подменю
-                    $(this).removeClass('over');
-
-                    // если мышь на закладке раздела, отличного от текущего
-                    // делаем вкладку текущего раздела активной
-                    if (!$(this).hasClass('cur')){
-                        $(this).removeClass('act');
-                        $(this).siblings('.cur').addClass('act');
-                    }
-                }
-        );
+//        $('.dropdown').children('li')
+//            .mouseover(
+//                function(){
+////                    // act - делает вкладку активной
+////                    // over - показывает подменю
+////                    $(this).addClass('act over');
+////
+////                    // если мышь на закладке раздела, отличного от текущего
+////                    // подсвечиваем вкладку текущего раздела зелёным
+////                    if (!$(this).hasClass('cur'))
+////                        $(this).siblings('.cur').removeClass('act');
+//                })
+//            .mouseout(
+//                function(){
+//                    // скрываем подменю
+////                    $(this).removeClass('over');
+////
+////                    // если мышь на закладке раздела, отличного от текущего
+////                    // делаем вкладку текущего раздела активной
+////                    if (!$(this).hasClass('cur')){
+////                        $(this).removeClass('act');
+////                        $(this).siblings('.cur').addClass('act');
+////                    }
+//                }
+//        );
         // ^^^ Jet. Тикет 266. Новое выпадающее меню ^^^
     }
 
