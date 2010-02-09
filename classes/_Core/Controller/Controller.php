@@ -209,14 +209,27 @@ abstract class _Core_Controller
 	}
 	
         foreach ($curr as $k => $v) {
-
-            $currency[$v['id']] = array(
-                'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
-                'name' => $v['charCode'],
-                'text' => $v['abbr'],
-                'progress' => ''
-            );
+            if ($v['id'] == $get['def']){
+                $currency[$v['id']] = array(
+                    'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
+                    'name' => $v['charCode'],
+                    'text' => $v['abbr'],
+                    'progress' => ''
+                );
+            }
         }//*/
+        
+        foreach ($curr as $k => $v) {
+            if ($v['id'] != $get['def']){
+                $currency[$v['id']] = array(
+                    'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
+                    'name' => $v['charCode'],
+                    'text' => $v['abbr'],
+                    'progress' => ''
+                );
+            }
+        }
+
         $currency['default'] = (int)$get['def'];//валюта по умолчанию
 
 
