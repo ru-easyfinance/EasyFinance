@@ -34,6 +34,12 @@ class Helper_Js implements _Core_Router_iHook
 		
 		$module = strtolower( array_shift($urlArr) );
 		
+                /* Jet: чтобы на главной использовался welcome.js */
+                if ($module === '') {
+                    $templateEngine->append('js', 'welcome.js');
+                }
+                /* ^^^ Jet ^^^ */
+
 		if( array_key_exists( $module, Core::getInstance()->js ) )
 		{
 			$jsArr = Core::getInstance()->js[$module];
