@@ -265,7 +265,7 @@ class Login_Model
 		}
 	}
 	
-	private function authDemoUser()
+	function authDemoUser()
 	{
 		$user = Core::getInstance()->user;
 		
@@ -280,7 +280,7 @@ class Login_Model
 		}
 	}
 	
-	private function getGenerated()
+	function getGenerated()
 	{
 		$usersFile = DIR_SHARED . 'generatedUsers.php';
 		
