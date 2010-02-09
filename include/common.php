@@ -26,7 +26,7 @@ require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 Core::getInstance()->currency = new Currency();
 Core::getInstance()->user = new User();
 Core::getInstance()->js = array(
-    'welcome' => array('welcome'),
+    '' => array('welcome'), // слайды на главной
     'targets' => array('targets'),
     'report' => array('report'),
     'registration' => array('registration'),

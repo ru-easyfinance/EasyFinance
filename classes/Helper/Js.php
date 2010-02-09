@@ -33,12 +33,6 @@ class Helper_Js implements _Core_Router_iHook
 		array_shift($urlArr);
 		
 		$module = strtolower( array_shift($urlArr) );
-		
-                /* Jet: чтобы на главной использовался welcome.js */
-                if ($module === '') {
-                    $templateEngine->append('js', 'welcome.js');
-                }
-                /* ^^^ Jet ^^^ */
 
 		if( array_key_exists( $module, Core::getInstance()->js ) )
 		{
