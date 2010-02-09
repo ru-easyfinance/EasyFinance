@@ -26,7 +26,7 @@ class Helper_IframeLogin
 
             // Пользователь авторизироваться от азбуки финансов
             if ( ( _Core_Request::getCurrent()->uri == "/login/")
-                    && ( _Core_Request::getCurrent()->get['refer'] == 'azbuka' ) )
+                    && ( isset(_Core_Request::getCurrent()->get['refer'])) && ( _Core_Request::getCurrent()->get['refer'] == 'azbuka' ) )
             {
         
                 // Пользователь только пытается авторизироваться, мы забираем у него id у нас
@@ -40,7 +40,7 @@ class Helper_IframeLogin
                 } elseif ( isset( _Core_Request::getCurrent()->get['login'] )
                         &&  isset( _Core_Request::getCurrent()->get['mail'] ) ) {
 
-                    return self::_azbuka_registration();
+                    self::_azbuka_registration();
 
                 }
             }
