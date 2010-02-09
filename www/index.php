@@ -23,7 +23,7 @@ $templateEngine = _Core_TemplateEngine::getPrepared( $request );
 
 // Запускаем хелпер для IFRAME авторизации
 // @XXX мб есть смысл его перенести в контроллер login??? правда всё равно нужно хидеры для осла ставить
-// Helper_IframeLogin::login( $templateEngine );
+Helper_IframeLogin::login( $templateEngine );
 
 // Инициализация роутера
 $router = new _Core_Router( $request, $templateEngine );
