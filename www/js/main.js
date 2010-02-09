@@ -518,6 +518,7 @@ $(".flash")
 */
     //курсы валют в правой панели
     //currency
+    //@todo fixme щас сразу всё есть - не использовать рес есть модели
     data = res['currency'];
     str = '';
     var cost,name,progres;
@@ -541,8 +542,8 @@ $(".flash")
 
         //fir++;
     }
-    fir = 5;
-    if (fir > 1)
+//    fir = 5;
+//    if (fir > 1)
         $('dl.info dd').html(str).parent().show();//*/
     
 //calendar
@@ -580,48 +581,48 @@ $(".flash")
 //                    '_0_._=_*MS']});
 
         // vvv Jet. Тикет 266. Новое выпадающее меню vvv
-        var topmenu = '<div class="menu3"> \
-            <ul class="dropdown"> \
-                <li id="m1"> \
-                        <a href="/info/"></a> \
-                        <ul> \
-                                <li><span/><a href="/info/">Инфо-панель</a></li> \
-                                <li><span/><a href="/profile/">Профиль</a></li> \
-                                <li class="last"></li> \
-                        </ul> \
-                </li> \
-                <li id="m2"> \
-                        <a href="/accounts/"></a> \
-                        <ul> \
-                                <li><span/><a href="/accounts/">Счета</a></li> \
-                                <li><span/><a href="/operation/">Операции</a></li> \
-                                <li><span/><a href="/category/">Категории</a></li> \
-                                <li class="last"></li> \
-                        </ul> \
-                </li> \
-                <li id="m3"> \
-                        <a href="/budget/"></a> \
-                        <ul> \
-                                <li><span/><a href="/budget/">Бюджет</a></li> \
-                                <li><span/><a href="/targets/">Фин. цели</a></li> \
-                                <li class="last"></li> \
-                        </ul> \
-                </li> \
-                <li id="m4"> \
-                        <a href="/report/"></a> \
-                </li> \
-                <li id="m5"> \
-                        <a href="/calendar/"></a> \
-                        <ul> \
-                                <li><span/><a href="/calendar/#calend">Календарь</a></li> \
-                                <li><span/><a href="/calendar/#list">События</a></li> \
-                                <li class="last"></li> \
-                        </ul> \
-                </li> \
-            </ul> \
-        </div>';
-
-        $('#mainwrap').prepend(topmenu);
+//        var topmenu = '<div class="menu3"> \
+//            <ul class="dropdown"> \
+//                <li id="m1"> \
+//                        <a href="/info/"></a> \
+//                        <ul> \
+//                                <li><span/><a href="/info/">Инфо-панель</a></li> \
+//                                <li><span/><a href="/profile/">Профиль</a></li> \
+//                                <li class="last"></li> \
+//                        </ul> \
+//                </li> \
+//                <li id="m2"> \
+//                        <a href="/accounts/"></a> \
+//                        <ul> \
+//                                <li><span/><a href="/accounts/">Счета</a></li> \
+//                                <li><span/><a href="/operation/">Операции</a></li> \
+//                                <li><span/><a href="/category/">Категории</a></li> \
+//                                <li class="last"></li> \
+//                        </ul> \
+//                </li> \
+//                <li id="m3"> \
+//                        <a href="/budget/"></a> \
+//                        <ul> \
+//                                <li><span/><a href="/budget/">Бюджет</a></li> \
+//                                <li><span/><a href="/targets/">Фин. цели</a></li> \
+//                                <li class="last"></li> \
+//                        </ul> \
+//                </li> \
+//                <li id="m4"> \
+//                        <a href="/report/"></a> \
+//                </li> \
+//                <li id="m5"> \
+//                        <a href="/calendar/"></a> \
+//                        <ul> \
+//                                <li><span/><a href="/calendar/#calend">Календарь</a></li> \
+//                                <li><span/><a href="/calendar/#list">События</a></li> \
+//                                <li class="last"></li> \
+//                        </ul> \
+//                </li> \
+//            </ul> \
+//        </div>';
+//
+//        $('#mainwrap').prepend(topmenu);
 
         $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
         $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
@@ -668,23 +669,23 @@ $(".flash")
     }).find('a').removeAttr('href');
 
     // Кнопка закрыть
-    $('li.over2').hide();
-    $('li.over1').hide();
-    $('li.over2').click(function() {
-        /*
-        //@TODO Сохранять значение в куках и потом читать их из куков
-        */
-        $(this).closest('div.ramka3').hide();
-    }).find('a').removeAttr('href');
-
-    // Кнопка настроек виджета
-    $('li.over1').click(function() {
-        /*
-        //@TODO Сохранять значение в куках и потом читать их из куков
-        //@TODO Сделать нормальную
-        */
-        $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
-    }).find('a').removeAttr('href');
+    $('li.over2').remove();
+    $('li.over1').remove();
+//    $('li.over2').click(function() {
+//        /*
+//        //@TODO Сохранять значение в куках и потом читать их из куков
+//        */
+//        $(this).closest('div.ramka3').hide();
+//    }).find('a').removeAttr('href');
+//
+//    // Кнопка настроек виджета
+//    $('li.over1').click(function() {
+//        /*
+//        //@TODO Сохранять значение в куках и потом читать их из куков
+//        //@TODO Сделать нормальную
+//        */
+//        $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
+//    }).find('a').removeAttr('href');
 
     /**
      * Функция которая меняет содержимое левой панели в зависимости от требуемой вкладки
@@ -713,7 +714,7 @@ $(".flash")
     @todo account hack
     */
     // Footer
-    var r_list;
+//    var r_list;
 
     /**
      * Вслывающее окно с регулярными транзакциями и событиями календаря
@@ -780,16 +781,16 @@ $(".flash")
 //        }
 //    });
     // При щелчке по родительскому чекбоксу
-    $('#events_periodic thead .chk input,#events_calendar thead .chk input').click(function(){
-        var parentCheckbox = this;
-        $('tbody .chk input', $(parentCheckbox).closest('table')).each(function(){
-            if ($(parentCheckbox).attr('checked')) {
-                $(this).attr('checked','checked');
-            } else {
-                $(this).removeAttr('checked');
-            }
-        });
-    });
+//    $('#events_periodic thead .chk input,#events_calendar thead .chk input').click(function(){
+//        var parentCheckbox = this;
+//        $('tbody .chk input', $(parentCheckbox).closest('table')).each(function(){
+//            if ($(parentCheckbox).attr('checked')) {
+//                $(this).attr('checked','checked');
+//            } else {
+//                $(this).removeAttr('checked');
+//            }
+//        });
+//    });
 
 //    if (window.location.host.toString().substr(0, 5) != "demo.")
 //        ShowEvents();
@@ -942,19 +943,19 @@ function getCookie(name) {
     }
 });
 
-/**
- * Переключает видимость категорий
- * @param field Gj
- * @param type 1 - доход, -1 - расход
- */
-
-function toggleVisibleCategory(field, type) {
-    $('option',field).each(function(){
-        var opt = this;
-        if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
-            $(opt).css('display','block');
-        } else {
-            $(opt).css('display','none');
-        }
-    });
-}
+///**
+// * Переключает видимость категорий
+// * @param field Gj
+// * @param type 1 - доход, -1 - расход
+// */
+//
+//function toggleVisibleCategory(field, type) {
+//    $('option',field).each(function(){
+//        var opt = this;
+//        if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
+//            $(opt).css('display','block');
+//        } else {
+//            $(opt).css('display','none');
+//        }
+//    });
+//}
