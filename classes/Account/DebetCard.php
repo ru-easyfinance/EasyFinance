@@ -94,6 +94,8 @@ class Account_DebetCard extends Account
 
         } else {
             $this->model->update($valid);
+            $params['id'] = $valid['id'];
+            $this->model->edit_operation($params);
             unset($this->model);
         }
         return $this;
