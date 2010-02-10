@@ -168,8 +168,8 @@ class Sync{
 		$sn = php_xmlrpc_decode($ser);
 
         $this->dataarray = $sn;
+                    
                 
-
         $this->db = DbSimple_Generic::connect( "mysql://" . SYS_DB_USER . ":" . SYS_DB_PASS . "@" . SYS_DB_HOST . "/" . SYS_DB_BASE );
         $this->db->query("SET NAMES utf8");
         
@@ -196,7 +196,8 @@ class Sync{
         //echo('<pre>');
         //die(print_r($this->CategoriesList));
         //$this->WriteTest();//вывод распарсенных значений
-        
+        RecordsMap_Model::writeRecMap($this->dataarray[1], $this->user, $this->db);
+        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
         //разбор распарсенных значений и формирование результирующей xml.
         $account = new Account($this->user, $this->db);
         $account->AccountSync($this->AccountsList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
@@ -224,7 +225,7 @@ class Sync{
         //$plans->FormArray($this->lastsync, $this->dataarrayE);
         $currency = new Currency($this->user, $this->db);
         $currency->FormArray($this->dataarrayE);
-        RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
+        
         $ret = array(
             'RecordsMap' => $this->dataarrayE[1]
             ,'ChangedRecords' => $this->dataarrayE[2]
@@ -239,6 +240,8 @@ class Sync{
             ,'Plans' => $this->dataarrayE[11]
             );
         //$ret = $this->dataarrayE;
+        echo('<pre>');
+            die(print_r($ret));
         $a = php_xmlrpc_encode($ret);
         return $a;
     }
