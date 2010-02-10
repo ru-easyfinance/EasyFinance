@@ -61,6 +61,10 @@ class Sync{
     function cleanRec( $user_id = 0 ){
         $sql = "DELETE FROM records_map WHERE user_id=?";
         $a = $this->db->query($sql, $user_id);
+        if ($a)
+            return 1;
+        else
+            return 2;
     }
 
     function clearAll($user_id = 0){
@@ -74,6 +78,10 @@ class Sync{
         $a = $this->db->query($sql, $user_id);
         $sql = "DELETE FROM records_map WHERE user_id=?";
         $a = $this->db->query($sql, $user_id);
+        if ($a) 
+            return 1;
+        else
+            return 2;
     }
 
     function deleteAllByUser($xmlReq=''){
