@@ -169,7 +169,7 @@ class Account_Model
     public function loadAll($user)
     {
         $sql = "SELECT account_name as name, account_type_id as type, account_description as comment, account_currency_id as currency, account_id FROM
-            accounts WHERE user_id=?";
+            accounts WHERE user_id=? ORDER BY account_name";
         $accounts = $this->db->query($sql, $user);// список основных параметров по счетам
             //die(print_r($accounts));
             //составляем строчку для селекта ин
