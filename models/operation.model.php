@@ -930,4 +930,13 @@ class Operation_Model {
 		
 		return $operation;
 	}
+        /**
+         * возвращает количество операций по выбранному счёту
+         * @param int $acc_id
+         */
+        public function getNumOfOperetionOnAccount($acc_id){
+            $sql = "SELECT count(*) as cou FROM operation WHERE account_id=? AND dt_update BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW() ";
+            $count = $this->db->query($sql, $acc_id);
+            return $count[0]['cou'];
+        }
 }
