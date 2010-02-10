@@ -39,9 +39,10 @@ class Category {
         foreach ($cat as $k=>$v){
         $sql = "SELECT ekey FROM records_map WHERE tablename='Categories' AND remotekey=? AND user_id=?";
             $toChangeRec = $this->db->query($sql, $v['remotekey'], $this->user);
-            if ( $toChangeRec[0]['ekey'] ){//редактирование
+            if ( $toChangeRec[0]['ekey'] != null){//редактирование
                 $numEkey = $this->findEkey($v['remotekey']);
-                $cate->editCategory($numEkey,$cat[$k]['remotekey'],$cat[$k]['parent'],$cat[$k]['name'],$cat[$k]['type']);
+                $parent = $this->findEkey($cat[$k]['parent']);
+                $cate->editCategory($numEkey,$cat[$k]['remotekey'],$parent,$cat[$k]['name'],$cat[$k]['type']);
             } else {
 
                // foreach ($cat as $k=>$v){
