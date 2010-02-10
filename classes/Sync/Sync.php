@@ -240,8 +240,6 @@ class Sync{
             ,'Plans' => $this->dataarrayE[11]
             );
         //$ret = $this->dataarrayE;
-        echo('<pre>');
-            die(print_r($ret));
         $a = php_xmlrpc_encode($ret);
         return $a;
     }
