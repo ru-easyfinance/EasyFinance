@@ -161,8 +161,9 @@ function MakeOperation(){
 
 //запланировано 
 
-        var calendarEditor;
-        var calendarLeft;
+var calendarEditor;
+var calendarLeft;
+
 function isLogged(){
     if (res)
         if (res.user)
@@ -210,17 +211,7 @@ $(document).ready(function() {
     {    
         $.cookie('referer_url', document.referrer, {expire: 100, path : '/', domain: false, secure : false});
     }
-    // fix for ticket #463
-    $('#login form').keypress(function(e){
-        //if generated character code is equal to ascii 13 (if enter key)
-        if(e.keyCode == 13){
-            //submit the form
-            $(e.target).closest('form').submit();
-            return false;
-        } else {
-            return true;
-        }
-    });
+
 
     $.datepicker.setDefaults($.extend({dateFormat: 'dd.mm.yy'}, $.datepicker.regional['ru']));
 
@@ -548,27 +539,7 @@ $(".flash")
     
 //calendar
     $('.calendar_block .calendar').datepicker();
-//    $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
-//    $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
-//    $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
 
-    //$('.calendar_block .calendar a span').click(function(){
-//        setInterval(function(){//@todo !избавиться как только будет время от этой конструкции!
-//            $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
-//            $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
-//            $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
-//        },100);
-    //})
-
-//    $('.calendar_block .ui-datepicker-prev').live('click',function(){
-//        alert('a');
-//        $('.calendar_block .calendar').datepicker('option', 'defaultDate', '-1M');
-//
-//        $('.calendar_block .calendar a span').css('left',0).css('text-indent','0');
-//        $('.calendar_block .calendar a.ui-datepicker-prev ').css('display','block').css('left','15px');
-//        $('.calendar_block .calendar a.ui-datepicker-next ').css('display','block').css('right','15px');
-//        return false;
-//    })
 
 //        $('.calculator_block .calculator').live('keyup',function(e){
 //            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())

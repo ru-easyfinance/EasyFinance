@@ -60,9 +60,9 @@ function getClientPlugins(){
             $(this).find('label').hide();
         });
         //отправление сообщения
-        $('#footer .but').click(function (){
+        $('#footer #sendFeedback').click(function (){
             if (noClick){
-                return false;
+                return;
             }
             noClick = true;
             $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
@@ -75,6 +75,7 @@ function getClientPlugins(){
                 //feedback.answer = $('#footer #fcaptha').val();
                 if (!$('#footer #fmail').val()){
                     $.jGrowl('Введите адрес вашей почты', {theme: 'red'})
+                    noClick = false;
                     return;
                 }
             }
