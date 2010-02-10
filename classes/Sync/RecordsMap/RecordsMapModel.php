@@ -32,6 +32,13 @@ class RecordsMap_Model {
         return $db->query($sql, $us, $tablename, $remkey, $system);
     }
 
+
+    function writeRecMap($data='', $user_id='', $db=''){
+        foreach ($data as $k=>$v){ 
+            if ( $k )
+                self::AddRecordsMapString($user_id, $v['tablename'], $v['kkey'], $v['ekey'], 1, $db);
+        }
+    }
     /**
      * Формирует массив данных RecordsMap
      * @param string $date
@@ -41,6 +48,7 @@ class RecordsMap_Model {
      * @param int $db
      */
     function formRecordsMap($date='', $data1='', &$data='', $user_id='', $db=''){
+        //self::writeRecMap($data1[1], $user_id, $db);
         $sql = "SELECT * FROM records_map WHERE system=1 AND user_id=?";
         $a = $db->query($sql, $user_id);
         foreach ($a as $k=>$v){
@@ -78,6 +86,7 @@ class RecordsMap_Model {
                     if ($a[0]['visible'] == 0)
                         $cat = true;*/
             //die(print_r($a));
+            //die($a[0]['cou']);
             if ($a[0]['cou'] == 0 ){
                 //RecordsMap_Model::DelRecordsMapString($user_id, $v['tablename'], $v['remotekey'], 1, $db);
 
