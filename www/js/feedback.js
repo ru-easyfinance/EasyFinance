@@ -64,21 +64,29 @@ function getClientPlugins(){
             if (noClick){
                 return;
             }
+            
+
+            if (!$('#footer #ftheme').val() || $('#footer #ftheme').val() == ''){
+                $.jGrowl('Введите тему отзыва!', {theme: 'red'})
+//                noClick = false;
+                return;
+            }
             noClick = true;
             $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
             var feedback = getClientDisplayMods();
             feedback.plugins = getClientPlugins();
             feedback.msg = $('#footer #ffmes').val();
+            feedback.title = $('#footer #ftheme').val();
             if ($('#footer #fmail').length){
                 feedback.email = $('#footer #fmail').val();
-                //feedback.captcha = f_captcha.cph;
-                //feedback.answer = $('#footer #fcaptha').val();
                 if (!$('#footer #fmail').val()){
-                    $.jGrowl('Введите адрес вашей почты', {theme: 'red'})
+                    $.jGrowl('Введите адрес вашей почты!', {theme: 'red'})
                     noClick = false;
                     return;
                 }
             }
+            
+
             $.post(
                 '/feedback/add_message/',
                 feedback,

@@ -26,7 +26,8 @@
 }
 
 #popupcalendar table .col{
-    width : 100px;
+    width : 90px;
+    padding-right: 10px;
 }
 #popupcalendar table .col.c1{
     width : 20px;
