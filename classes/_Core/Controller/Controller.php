@@ -154,7 +154,24 @@ abstract class _Core_Controller
        	{
                 $accounts[$k] = $v;
         }
-        
+
+        //die(print_r($accounts));
+        //Подготавливаем Часто используемые счета
+        $oftenAccounts = array();
+        $oftenAccount = array();
+        foreach ($accounts as $k=>$v){
+            $op = new Operation_Model();
+            $oftenAccounts[$k] = $op->getNumOfOperetionOnAccount($k);
+        }
+        arsort($oftenAccounts);
+        $num = 0;
+        foreach ($oftenAccounts as $k=>$v){
+            if ( $num < 3){
+                $oftenAccount[$k] = $oftenAccounts[$k];
+                $num++;
+            }
+        }
+        //
         // Подготавливаем фин.цели
         $targets = array();
         try 
@@ -266,6 +283,7 @@ abstract class _Core_Controller
                 'calendar' => $events
             ),
             'accounts' => $accounts,
+            'oftenAccounts' => $oftenAccount,
             //'events' => Core::getInstance()->user->getUserEvents(),
             //'targets' => $targ,
             'user_targets' => $targ['user_targets'],
