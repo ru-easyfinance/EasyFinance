@@ -52,13 +52,12 @@ include (SYS_DIR_ROOT . "/classes/Sync/RecordsMap/RecordsMapModel.php");
  */
 function formatIsoDateToNormal($str)
 {
-    /*if ( substr($str, 8) !== 'T' ) {
-        return substr($str, 0, 4).'-'.substr($str, 4, 2).'-'.substr($str, 6, 2);
+    if ( substr($str, 8) !== 'T' ) {
+        return substr($str, 6, 4).'-'.substr($str, 3, 2).'-'.substr($str, 0, 2);
     } else {
         return substr($str, 0, 4) . '-' . substr($str, 4, 2) . '-' . substr($str, 6, 2) . ' '
             . substr($str, 9,2) . ':' . substr($str, 12,2).':' . substr($str,15,2);
-    }*/
-    return substr($str, 6, 4).'-'.substr($str, 3, 2).'-'.substr($str, 0, 2);
+    }
 }
 
 
