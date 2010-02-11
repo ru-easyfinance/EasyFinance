@@ -50,29 +50,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 			<option>не выбрана</option>
 			<?php
 			// Выводим список категорий
-			while( list(,$category) = each($res['category']['user']) )
-			{
-				// Для выбранного типа операции показываем соотв. тип категорий + универсальные
-				if ( $operation['type']  == Operation::TYPE_WASTE && $category['type'] == Category::TYPE_PROFIT)
-				{
-					continue;
-				}
-				elseif ( $operation['type']  == Operation::TYPE_PROFIT && $category['type'] == Category::TYPE_WASTE )
-				{
-					continue;
-				}
-				
-				// Пропускаем невидимые категории
-				if( !$category['visible'] )
-				{
-					continue;
-				}
-				
-				?><option value="<?=$category['id']?>"
-				<?=(isset($operation['category']) && $operation['category'] == $category['id'])?"selected='selected'":''?>
-				><?=$category['name']?></option>
-				<?php
-			}
+			echo get_tree_select2(
+				isset($operation['category'])?$operation['category']:0
+				, $operation['type'] == Operation::TYPE_WASTE?-1:1
+			);
 			?>
 		</select></div>
 		<?php

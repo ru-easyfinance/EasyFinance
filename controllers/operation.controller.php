@@ -28,13 +28,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
     {
         $this->model = new Operation_Model();
         $this->user = Core::getInstance()->user;
-        $this->tpl->assign('name_page', 'operations/operation');
-        
-        
-        $this->tpl->assign('category', 	get_tree_select());
-        $this->tpl->assign('accounts',       $this->user->getUserAccounts());
-        $this->tpl->assign('dateFrom',       date('d.m.Y', time() - 60*60*24*7));
-        $this->tpl->assign('dateTo',         date('d.m.Y')); //date(date('t').'.m.Y'));
     }
 
 	/**
@@ -44,7 +37,13 @@ class Operation_Controller extends _Core_Controller_UserCommon
 	 */ 
 	function index( $args = array() )
 	{
-		
+ 		$this->tpl->assign('category', 	get_tree_select());
+ 		$this->tpl->assign('accounts', 	$this->user->getUserAccounts());
+ 		
+	        $this->tpl->assign('dateFrom', 	date('d.m.Y', time() - 60*60*24*7));
+	        $this->tpl->assign('dateTo', 	date('d.m.Y')); //date(date('t').'.m.Y'));
+ 		
+ 		$this->tpl->assign('name_page', 'operations/operation');
 	}
 	
 	/**
@@ -591,6 +590,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				$array[$operation['id']]['account_name'] = '';
 			}
 		}
+		$this->tpl->assign('name_page', 'operations/operation');
 		
 		$this->tpl->assign( 'operations', $array );
 	}
