@@ -31,10 +31,10 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 define('IS_DEMO',           ${project.demo} );
 
 // Ссылка на главную страницу сайта
-define('URL_ROOT_MAIN',     "${project.url.root}/");
-define('URL_ROOT_DEMO',     "${demo.url.root}/");
-define('URL_ROOT_IFRAME',   "iframe." . URL_ROOT_MAIN);
-define('URL_ROOT_PDA',		"pda." . URL_ROOT_MAIN);
+define('URL_ROOT_MAIN', 		"${project.url.root}/");
+define('URL_ROOT_DEMO', 	"${demo.url.root}/");
+define('URL_ROOT_IFRAME', 	"iframe." . URL_ROOT_MAIN);
+define('URL_ROOT_PDA', 		"${pda.url.root}");
 
 define('URL_ROOT',			IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 
