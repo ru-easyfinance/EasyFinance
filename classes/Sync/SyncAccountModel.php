@@ -28,6 +28,8 @@ class SyncAccount_Model {
     function addAccount($id=0, $name='', $curid=0, $date='', $amount=0, $descr=''){
         $cur=1;
         if ($curid == 1) $cur=1;
+        if ($curid == 2) $cur=2;
+        if ($curid == 3) $cur=3;
         $sql = "INSERT INTO accounts (`account_name`, `account_type_id`, `account_description`,
             `account_currency_id`, `user_id`) VALUES (?,?,?,?,?);";
 
