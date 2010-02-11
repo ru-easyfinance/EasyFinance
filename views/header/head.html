@@ -35,11 +35,11 @@
         <link href="/favicon.ico" rel="icon" type="image/x-icon" />
         <!-- Подключениее стилей и скриптов -->
         {foreach from=$css item=i}
-            <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$revision}"  link="/css/{$i}?r={$revision}"/>
+            <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$smarty.const.REVISION}"  link="/css/{$i}?r={$smarty.const.REVISION}"/>
         {/foreach}
 
         {foreach from=$js item=i}
-        <script type="text/javascript" src="/js/{$i}?r={$revision}"></script>{/foreach}
+        <script type="text/javascript" src="/js/{$i}?r={$smarty.const.REVISION}"></script>{/foreach}
         <script type="text/javascript">
             var res = {php} echo json_encode($this->get_template_vars('res')); {/php};
         </script>
