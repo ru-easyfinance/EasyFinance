@@ -96,7 +96,6 @@ function sync_writeData($xmlRequest){
     $answer = $a->writeDataAndAnswerRec($xmlRequest);
     return $answer;
 }
-sync_getAuthWithTestData('<xml>');
 $a=array(
     "sync.getAuth" => array(
             "function" => "sync_getAuth",
