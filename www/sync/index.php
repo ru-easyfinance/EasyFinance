@@ -52,7 +52,7 @@ include (SYS_DIR_ROOT . "/classes/Sync/RecordsMap/RecordsMapModel.php");
  */
 function formatIsoDateToNormal($str)
 {
-    if ( substr($str, 8) !== 'T' ) {
+    if ( substr($str, 8) != 'T' ) {
         return substr($str, 0, 4).'-'.substr($str, 5, 2).'-'.substr($str, 8, 2);
     } else {
         return substr($str, 0, 4) . '-' . substr($str, 4, 2) . '-' . substr($str, 6, 2) . ' '
@@ -96,6 +96,7 @@ function sync_writeData($xmlRequest){
     $answer = $a->writeDataAndAnswerRec($xmlRequest);
     return $answer;
 }
+sync_getAuthWithTestData('<xml>');
 $a=array(
     "sync.getAuth" => array(
             "function" => "sync_getAuth",
