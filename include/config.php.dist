@@ -34,7 +34,7 @@ define('IS_DEMO',           ${project.demo} );
 define('URL_ROOT_MAIN', 		"${project.url.root}/");
 define('URL_ROOT_DEMO', 	"${demo.url.root}/");
 define('URL_ROOT_IFRAME', 	"iframe." . URL_ROOT_MAIN);
-define('URL_ROOT_PDA', 		"${pda.url.root}");
+define('URL_ROOT_PDA', 		"${pda.url.root}/");
 
 define('URL_ROOT',			IS_DEMO?URL_ROOT_DEMO:URL_ROOT_MAIN);
 
