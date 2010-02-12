@@ -2,7 +2,7 @@
 <div class="ramka2">
     <div class="cct"></div>
     <center>
-        <div class="block2" style="float: none">        
+        <div class="block2" style="float: none">
         <div id="registration" class="formRegister" >
             {if $template_view == 'iframe'}
                 <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
@@ -10,6 +10,11 @@
             <h2>Регистрация</h2>
             <form id="formRegister" onsubmit="return false;">
                 <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td colspan="2">
+                        Все поля обязательны для заполнения
+                    </td>
+                </tr>
                 <tr>
                     <td class="name">Имя:</td>
                     <td><input id="name" type="text" name="name"/></td>
@@ -27,8 +32,19 @@
                     <td><input id="confirm_password" type="password" name="confirm_password" /></td>
                 </tr>
                 <tr>
-                    <td class="name">e-mail:</td>
+                    <td colspan="2" style="color:#5e5e5e;padding-top: 5px">
+                        <i><span style="color: red">Внимание! </span>
+                        Очень важно указать правильный, работающий email - он используется для восстановления пароля и обратной связи с Вами. Поэтому мы просим Вас ввести email дважды и проверить его правильность
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="name">E-mail:</td>
                     <td><input id="mail" type="text" name="mail" /></td>
+                </tr>
+                <tr>
+                    <td class="name">Повтор e-mail`a:</td>
+                    <td><input id="mail_confirm" type="text" name="mail" /></td>
                 </tr>
                 <tr>
                     <td></td>
