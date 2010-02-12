@@ -120,7 +120,7 @@ class Registration_Model
 
             //$reg_href = 'https://' . URL_ROOT . 'registration/activate/' . $reg_id;
             $body = "<html><head><title>
-                Вы зарегистрированы на сайте домашней бухгалтерии EasyFinance.ru
+                Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
                 </title></head>
                 <body><p>Здравствуйте, {$register['name']}!</p>
                 <p>Ваш e-mail был указан при регистрации в системе.<br/>
@@ -133,11 +133,11 @@ class Registration_Model
                 </body>
                 </html>";
 
-            $subject = "Вы зарегистрированы на сайте домашней бухгалтерии EasyFinance.ru";
+            $subject = "Вы зарегистрированы в системе управления личными финансами EasyFinance.ru";
             
             $message = Swift_Message::newInstance()
                 // Заголовок
-                ->setSubject('Вы зарегистрированы на сайте домашней бухгалтерии EasyFinance.ru')
+                ->setSubject('Вы зарегистрированы в системе управления личными финансами EasyFinance.ru')
                 // Указываем "От кого"
                 ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
                 // Говорим "Кому"
