@@ -61,7 +61,7 @@ $(document).ready(function() {
             $("#password").blur(function() {
                 $("#confirm_password").valid();
             });
-            $("#mail").blur(function() {
+            $("#mail_confirm").blur(function() {
                 $("#mail_confirm").valid();
             });
             /**
@@ -81,7 +81,7 @@ $(document).ready(function() {
                         },
                         function (data){
                             if (!data || (!data.errors)||(data.errors == 'succes')){
-                                $('#formConfirm').show();
+                                window.location = data.result.redirect;
                             }else{
                                 $('.formRegister').show();
                                 var str = '<ul>'
