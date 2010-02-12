@@ -27,21 +27,31 @@ $(document).ready(function() {
                     mail: {
                         required: true,
                         email: true
+                    },
+                    mail_confirm: {
+                        required: true,
+                        email: true,
+                        equalTo: $("#mail")
                     }
                 },
                 messages: {
-                    name: "Вы не ввели имя!",
-                    login: "Вы не ввели логин!",
+                    name: "Вы не ввели имя",
+                    login: "Вы не ввели логин",
                     passw: {
-                        required: "Вы не ввели пароль!",
+                        required: "Вы не ввели пароль",
                         minlength: "Ваш пароль должен состоять как минимум из 5 символов"
                     },
                     confirm_password: {
-                        required: "Вы не ввели пароль!",
+                        required: "Вы не ввели пароль",
                         minlength: "Ваш пароль должен состоять как минимум из 5 символов",
                         equalTo: "Пожалуйста, введите тот же пароль, что и выше"
                     },
-                    mail: "Пожалуйста, введите правильный адрес электронной почты!"
+                    mail: "Пожалуйста, введите правильный адрес электронной почты",
+                    mail_confirm: {
+                        required: "Вы не ввели e-mail",
+                        equalTo: "Пожалуйста, введите тот же e-mail, что и выше"
+                    }
+
                 }
             });
             /*
@@ -50,6 +60,9 @@ $(document).ready(function() {
             $('#butt').click($("#formRegister").validate);
             $("#password").blur(function() {
                 $("#confirm_password").valid();
+            });
+            $("#mail").blur(function() {
+                $("#mailconfirm").valid();
             });
             /**
              * пересылка данных из формы на сервер
