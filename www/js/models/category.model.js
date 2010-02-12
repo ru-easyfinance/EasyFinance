@@ -86,25 +86,22 @@ easyFinance.models.category = function(){
 
     function add(name, parent, type, system, callback){
         _update(ADD_URL, -1, name, parent, type, system, function(data){
-            if (data.error && data.error.text) {
-                $.jGrowl(data.error.text, {theme: 'red'});
-                return false;
-            }
+            if (data.result) {
+				var id = data.result.id;
 
-            var id = data.result.id;
+				_categories.user[id] = {};
+				_categories.user[id].id = id.toString();
+				_categories.user[id].name = name;
+				_categories.user[id].parent = parent == "" ? 0 : parent;
+				_categories.user[id].type = type;
+				_categories.user[id].system = system;
 
-            _categories.user[id] = {};
-            _categories.user[id].id = id.toString();
-            _categories.user[id].name = name;
-            _categories.user[id].parent = parent == "" ? 0 : parent;
-            _categories.user[id].type = type;
-            _categories.user[id].system = system;
+				$(document).trigger('categoryAdded');
 
-            $(document).trigger('categoryAdded');
+	//            _sortUserCategories();			
+			}
 
-//            _sortUserCategories();
-
-           callback(_categories.user[id]);
+			callback(data);
         });
     }
 

@@ -364,7 +364,8 @@ $(document).ready(function() {
             } else {
                 // подкатегория
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
-
+				sys = newParent.system;
+				
                 if (oldCatId != -1 && type != oldCat.type && newParent.type != 0 && newParent.type != type) {
                     // при изменении типа подкатегории
                     // ЗАПРЕТИТЬ. тикет 389
@@ -408,9 +409,13 @@ $(document).ready(function() {
                 }
             }
 
-            var done = function(cat) {
-                    $('#btnSave').removeAttr('disabled');
-
+            var done = function(data) {
+				$('#btnSave').removeAttr('disabled');
+			
+				if (data.error && data.error.text) {
+					$.jGrowl(data.error.text, {theme: 'red'});
+					return false;
+				} else {
                     $('#add_form').find('#namecat').val('');
                     $('#add_form').find('#btnSave').removeAttr('disabled');
                     $('#add_form').hide();
@@ -418,19 +423,20 @@ $(document).ready(function() {
                     
                     if (act == '/category/add/') {
                         // категория была добавлена
-                        listInsertCategory(cat);
+                        listInsertCategory(data.result.id);
                         $('#subcat').val('');
                     } else {
                         // категория была отредактирована
-                        updateCategory(oldCat, cat);
+                        updateCategory(oldCat, data.result.id);
                     }
 
                     // Обновляем список родительских категорий
-                    if (cat.parent == "")
+                    if (data.result.id.parent == "")
                         drawParentCategoriesCombo();
 
                     // Обновляем список категорий в диалоге "Добавление операции"
                     $('#op_type').change();
+				}
             }
 
             $.jGrowl("Категория сохраняется", {theme: 'green'});
