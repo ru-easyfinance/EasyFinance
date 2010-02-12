@@ -149,10 +149,20 @@ class Registration_Model
             //die(json_encode(array('errors'=>'succes')));
             $login = $register['login'];
             $pass = $_POST['password'];
-            setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-            die(json_encode(array(
-                'result'=>array(
-                'redirect'=>"https://".URL_ROOT_MAIN."info"))));
+            setcookie(
+	    	COOKIE_NAME, 
+		encrypt(
+			array( $login, sha1($pass) )
+		), 
+		time() + COOKIE_EXPIRE, 
+		COOKIE_PATH, 
+		COOKIE_DOMEN, 
+		COOKIE_HTTPS);
+            die(json_encode(
+	    	array(
+	                'result'   => array(
+        	        'redirect' => "https://".URL_ROOT_MAIN."info")
+		)));
         }
         die(json_encode(array('errors'=>$error_text)));
     }
