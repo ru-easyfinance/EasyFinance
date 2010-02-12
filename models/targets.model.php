@@ -264,13 +264,9 @@ class Targets_Model {
             $this->errorData['end'] = "Дата окончания";
         }
         
-        $d1 = explode('-', $data['start']);
-        $d2 = explode('-', $data['end']);
-        $timestamp2 = (mktime(0, 0, 0, $d1[1],  $d1[0],  $d1[2]));
-        $timestamp1 = (mktime(0, 0, 0, $d2[1],  $d2[0],  $d2[2]));
-        $difference = floor(($timestamp2 - $timestamp1)/86400);
-        if ( $difference > 0 )
+        if ( strtotime( $data['start'] . ' 00:00:00') > strtotime( $data['end'] . ' 00:00:00') ) {
             $this->errorData['end'] = "Неверно указана дата окончания";
+        }
 
         $data['photo']   = htmlspecialchars(@$_POST['photo']);
         $data['url']     = htmlspecialchars(@$_POST['url']);
