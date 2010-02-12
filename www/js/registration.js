@@ -81,7 +81,9 @@ $(document).ready(function() {
                         },
                         function (data){
                             if (!data || (!data.errors)||(data.errors == 'succes')){
-                                window.location = data.result.redirect;
+				var redir = data.result.redirect
+				$.jGrowl(data.result.text,{theme:'green'})
+                                setTimeout(function(){window.location = redir;},3000);
                             }else{
                                 $('.formRegister').show();
                                 var str = '<ul>'
