@@ -282,7 +282,7 @@ easyFinance.widgets.operationsJournal = function(){
     function _initFilters() {
         // сброс фильтров
         $('#linkOperationsJournalClearFilters').click(function(){
-            _type = '';
+            _type = '-1';
             _sumFrom = '';
             _sumTo = '';
             _category = '';
@@ -414,16 +414,16 @@ easyFinance.widgets.operationsJournal = function(){
         var txt = '';
         var strCat = '';
 
-        if (_type != '')
+        if (_type != '-1')
             txt = txt + 'операции: ' + OPERATION_TYPES[_type];
 
-        if (_type != '' && _category != '')
+        if (_type != '-1' && _category != '')
             txt = txt + ', ';
 
         //if (_category != '')
         //    txt = txt + 'категория: ' + _categoryName;
 
-        if ((_type != '' || _category != '') && (_sumFrom != '' || _sumTo != ''))
+        if ((_type != '-1' || _category != '') && (_sumFrom != '' || _sumTo != ''))
             txt = txt + ', ';
 
         if (_sumFrom != '' || _sumTo != '')
