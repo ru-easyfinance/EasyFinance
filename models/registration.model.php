@@ -151,7 +151,8 @@ class Registration_Model
                 json_encode(
                     array(
                         'result' => array (
-                            'text' => 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться'
+                            'text' => 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться',
+                            'redirect' => "https://".URL_ROOT_MAIN."login"
                         )
                     )
                 )
