@@ -62,7 +62,7 @@ $(document).ready(function() {
                 $("#confirm_password").valid();
             });
             $("#mail").blur(function() {
-                $("#mailconfirm").valid();
+                $("#mail_confirm").valid();
             });
             /**
              * пересылка данных из формы на сервер
