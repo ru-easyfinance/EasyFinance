@@ -109,15 +109,16 @@ class Registration_Model
             $db->query($sql, $register['name'], $register['login'], $pass, $register['mail'], $referrerId);
 
             //Добавляем его в таблицу не подтверждённых пользователей
-            /*$user_id = mysql_insert_id();
+            $user_id = mysql_insert_id();
+/*
             $reg_id  = SHA1($register['mail'].";".date("Y-m-d h-i-s").";");
             $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, NOW(), ?);";
-            $db->query($sql, $user_id, $reg_id);*/
+            $db->query($sql, $user_id, $reg_id);
 
-            //$tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
-
+            $tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
             //$reg_href = 'https://' . URL_ROOT . 'registration/activate/' . $reg_id;
+  */
             $body = "<html><head><title>
                 Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
                 </title></head>
@@ -149,15 +150,20 @@ class Registration_Model
             //die(json_encode(array('errors'=>'succes')));
             $login = $register['login'];
             $pass = $_POST['password'];
+
+            $login = new Login_Model();
+            $login->defaultCategory($user_id);
+            $login->defaultAccounts($user_id);
+
             setcookie(
-	    	COOKIE_NAME, 
-		encrypt(
-			array( $login, sha1($pass) )
-		), 
-		time() + COOKIE_EXPIRE, 
-		COOKIE_PATH, 
-		COOKIE_DOMEN, 
-		COOKIE_HTTPS);
+    	    	COOKIE_NAME,
+                encrypt(
+                    array( $login, sha1($pass) )
+                ),
+                time() + COOKIE_EXPIRE,
+                COOKIE_PATH,
+                COOKIE_DOMEN,
+                COOKIE_HTTPS);
             die(json_encode(
 	    	array(
 	                'result'   => array(
