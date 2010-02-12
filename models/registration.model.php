@@ -147,10 +147,10 @@ class Registration_Model
             $result = Core::getInstance()->mailer->send($message);
 	
             //die(json_encode(array('errors'=>'succes')));
-            $log = new Login_Model();
-            $_POST['login'] = $register['login'];
-            $_POST['pass'] = $_POST['password'];
-            $log->auth_user();
+            $login = $register['login'];
+            $pass = $_POST['password'];
+            setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+            die(json_encode(array('redirect'=>"/info")));
         }
         die(json_encode(array('errors'=>$error_text)));
     }
