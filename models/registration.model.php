@@ -41,7 +41,6 @@ class Registration_Model
         require_once SYS_DIR_LIBS . "external/Swift/swift_required.php";
 
         $db = Core::getInstance()->db;
-        $tpl = Core::getInstance()->tpl;
         
         // Проверяем валидность заполненных данных
         $error_text = array();
@@ -83,7 +82,7 @@ class Registration_Model
         if (empty($error_text))
         {
         		//Если определился реферер
-        		if( isset($_COOKIE['referer_url']) && $_SESSION['referer_url'] )
+        		if( isset($_COOKIE['referer_url']) && isset($_SESSION['referer_url']) )
         		{
         			preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referer_url'], $matches);
         			$referrer = strtolower( $matches[0] );

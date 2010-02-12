@@ -24,6 +24,10 @@ class Registration_Controller extends _Core_Controller
         
 		$this->tpl->assign('name_page', 'registration');
 
+		if( !session_id() )
+		{
+			session_start();
+		}
 		//$tpl->assign('register', array());
 	}
 
