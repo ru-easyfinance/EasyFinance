@@ -189,7 +189,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 * html #container1 { height: 100%;  }
 
 #menumain { position: relative; height: 39px; background: url('/img/i/bg_menu.png') no-repeat 0 0; }
-#menumain ul.menu1 { margin-left: 21px; width: 510px; overflow: hidden; //zoom: 1; }
+#menumain ul.menu1 { margin-left: 21px; width: 520px; overflow: hidden; //zoom: 1; }
 #menumain ul.menu1:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 #menumain ul.menu1 li { float: left; margin-right: 17px; padding: 7px 0 2px 15px; font-size: 15px; line-height: 17px; color: #f2f172; background: url('/img/i/bg01.gif') no-repeat 0 8px; }
 #menumain ul li a { color: #ffffff; text-decoration: none; }
