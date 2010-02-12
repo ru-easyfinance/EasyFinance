@@ -66,13 +66,15 @@ easyFinance.widgets.help = function(){
             $("<br>").appendTo(_$divLinks);
         }
 
-        $("<br>").appendTo(_$divLinks);
+		/*
+		$("<br>").appendTo(_$divLinks);
         $("<a>")
             .text("Все видео")
             .attr("href", "/help")
             .appendTo(_$divLinks)
             .wrap("<b></b>");
         $("<br>").appendTo(_$divLinks);
+		*/
 
         if (isDialog)
             _$node.dialog({title: "Видео-гид", bgiframe: true, autoOpen: false, width: 662, modal:true});
