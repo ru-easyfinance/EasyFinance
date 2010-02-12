@@ -146,29 +146,35 @@ class Registration_Model
                 ->setBody($body, 'text/html');
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
+
+            die(json_encode(array(
+                'result'=>array(
+                    'text'=> 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться'
+                );
+            )));
 	
-            //die(json_encode(array('errors'=>'succes')));
-            $login = $register['login'];
-            $pass = $_POST['password'];
+//            //die(json_encode(array('errors'=>'succes')));
+//            $login = $register['login'];
+//            $pass = $_POST['password'];
+//
+//            $login = new Login_Model();
+//            $login->defaultCategory($user_id);
+//            $login->defaultAccounts($user_id);
 
-            $login = new Login_Model();
-            $login->defaultCategory($user_id);
-            $login->defaultAccounts($user_id);
-
-            setcookie(
-    	    	COOKIE_NAME,
-                encrypt(
-                    array( $login, sha1($pass) )
-                ),
-                time() + COOKIE_EXPIRE,
-                COOKIE_PATH,
-                COOKIE_DOMEN,
-                COOKIE_HTTPS);
-            die(json_encode(
-	    	array(
-	                'result'   => array(
-        	        'redirect' => "https://".URL_ROOT_MAIN."info")
-		)));
+//            setcookie(
+//    	    	COOKIE_NAME,
+//                encrypt(
+//                    array( $login, sha1($pass) )
+//                ),
+//                time() + COOKIE_EXPIRE,
+//                COOKIE_PATH,
+//                COOKIE_DOMEN,
+//                COOKIE_HTTPS);
+//            die(json_encode(
+//	    	array(
+//	                'result'   => array(
+//        	        'redirect' => "https://".URL_ROOT_MAIN."info")
+//		)));
         }
         die(json_encode(array('errors'=>$error_text)));
     }
