@@ -150,7 +150,9 @@ class Registration_Model
             $login = $register['login'];
             $pass = $_POST['password'];
             setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-            die(json_encode(array('redirect'=>"/info")));
+            die(json_encode(array(
+                'result'=>array(
+                'redirect'=>"/info"))));
         }
         die(json_encode(array('errors'=>$error_text)));
     }
