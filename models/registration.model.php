@@ -106,26 +106,24 @@ class Registration_Model
         	
             //Добавляем в таблицу пользователей
             $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
-                user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 0, 1, ?)";
+                user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?)";
             $db->query($sql, $register['name'], $register['login'], $pass, $register['mail'], $referrerId);
 
             //Добавляем его в таблицу не подтверждённых пользователей
-            $user_id = mysql_insert_id();
+            /*$user_id = mysql_insert_id();
             $reg_id  = SHA1($register['mail'].";".date("Y-m-d h-i-s").";");
             $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, NOW(), ?);";
-            $db->query($sql, $user_id, $reg_id);
+            $db->query($sql, $user_id, $reg_id);*/
 
             //$tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
 
 
-            $reg_href = 'https://' . URL_ROOT . 'registration/activate/' . $reg_id;
+            //$reg_href = 'https://' . URL_ROOT . 'registration/activate/' . $reg_id;
             $body = "<html><head><title>
-                Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru
+                Вы зарегистрированы на сайте домашней бухгалтерии EasyFinance.ru
                 </title></head>
                 <body><p>Здравствуйте, {$register['name']}!</p>
                 <p>Ваш e-mail был указан при регистрации в системе.<br/>
-                Чтобы завершить регистрацию и активировать свою учетную запись, перейдите по ссылке:</p>
-                <p><a href={$reg_href}>{$reg_href}</a></p>
 
                 <p>Для входа в систему используйте:<br>
                 Логин: {$register['login']}<br/>
@@ -135,11 +133,11 @@ class Registration_Model
                 </body>
                 </html>";
 
-            $subject = "Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru";
+            $subject = "Вы зарегистрированы на сайте домашней бухгалтерии EasyFinance.ru";
             
             $message = Swift_Message::newInstance()
                 // Заголовок
-                ->setSubject('Подтверждение регистрации на сайте домашней бухгалтерии EasyFinance.ru')
+                ->setSubject('Вы зарегистрированы на сайте домашней бухгалтерии EasyFinance.ru')
                 // Указываем "От кого"
                 ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
                 // Говорим "Кому"
