@@ -636,19 +636,19 @@ class Operation_Model {
 		// Если указан тип (фильтр по типу)
 		if ($type >= 0)
 		{
-			if ($type == 0)//Доход
+			if ($type == Operation::TYPE_PROFIT )//Доход
 			{ 
 				$sql .= " AND o.drain = 0 AND o.transfer = 0 ";
 			}
-			elseif ($type == 1)// Расход
+			elseif ($type == Operation::TYPE_WASTE )// Расход
 			{ 
 				$sql .= " AND o.drain = 1 AND o.transfer = 0 ";
 			}
-			elseif ($type == 2)// Перевод со счёт на счёт
+			elseif ($type == Operation::TYPE_TRANSFER  )// Перевод со счёт на счёт
 			{ 
 				$sql .= " AND o.transfer > 0 ";
 			}
-			elseif ($type == 4)// Перевод на финансовую цель
+			elseif ($type == Operation::TYPE_TARGET )// Перевод на финансовую цель
 			{ 
 				$sql .= " AND 0 = 1"; // Не выбираем эти операции
 			}

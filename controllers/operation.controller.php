@@ -542,7 +542,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
 		//Тип операции
 		$type = null;
-		if ( !isset($this->request->get['type']) || !$this->request->get['type'] )
+		if ( !isset($this->request->get['type']) )
 		{
 			// WTF ?!!
 			$type = -1;
