@@ -147,7 +147,11 @@ class Registration_Model
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
 	
-            die(json_encode(array('errors'=>'succes')));
+            //die(json_encode(array('errors'=>'succes')));
+            $log = new Login_Model();
+            $_POST['login'] = $register['login'];
+            $_POST['pass'] = $_POST['password'];
+            $log->auth_user();
         }
         die(json_encode(array('errors'=>$error_text)));
     }
