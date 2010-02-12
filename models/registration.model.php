@@ -147,11 +147,15 @@ class Registration_Model
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
 
-            die(json_encode(array(
-                'result'=>array(
-                    'text'=> 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться'
-                );
-            )));
+            die(
+                json_encode(
+                    array(
+                        'result' => array (
+                            'text' => 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться'
+                        )
+                    )
+                )
+            );
 	
 //            //die(json_encode(array('errors'=>'succes')));
 //            $login = $register['login'];
@@ -176,7 +180,6 @@ class Registration_Model
 //        	        'redirect' => "https://".URL_ROOT_MAIN."info")
 //		)));
         }
-        die(json_encode(array('errors'=>$error_text)));
     }
 
     /**
