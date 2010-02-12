@@ -35,7 +35,7 @@ class RecordsMap_Model {
 
     function writeRecMap($data='', $user_id='', $db=''){
         foreach ($data as $k=>$v){ 
-            if ( $k )
+            if ( $k && ( $v['tablename'] != 'Currencies' ) )
                 self::AddRecordsMapString($user_id, $v['tablename'], $v['kkey'], $v['ekey'], 1, $db);
         }
     }
@@ -87,7 +87,7 @@ class RecordsMap_Model {
                         $cat = true;*/
             //die(print_r($a));
             //die($a[0]['cou']);
-            if ($a[0]['cou'] == 0 ){
+            if ( (int)$a[0]['cou'] == 1 ){
                 //RecordsMap_Model::DelRecordsMapString($user_id, $v['tablename'], $v['remotekey'], 1, $db);
 
                 $data[3][0]['type'] = 'service';
