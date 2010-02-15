@@ -179,7 +179,18 @@ easyFinance.widgets.operationsJournal = function(){
 
         var _op = $.extend(true, {}, _journal[id]);
 
-        _modelAccounts.deleteOperationsByIds([id], [_journal[id].virt], function(data) {
+        debugger;
+
+        var ids = [];
+        var virts = [];
+
+        if (_op.virt) {
+            virts.push(id);
+        } else {
+            ids.push(id);
+        }
+
+        _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
             if (data.result) {
                 _deleteOperationFromTable(_op);
 
@@ -546,7 +557,7 @@ easyFinance.widgets.operationsJournal = function(){
             }
 
             var tooltipHtml = '<b>Тип:</b> ' + tp + '<br>';
-            tooltipHtml += '<b>Счёт:</b> ' + res.accounts[operation.account_id].name + '<br>';
+            tooltipHtml += '<b>Счёт:</b> ' + res.accounts[operation.accountId].name + '<br>';
 
             $('.qtip').remove();
             $(this).qtip({
