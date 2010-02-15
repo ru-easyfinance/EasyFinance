@@ -482,14 +482,14 @@ class Operation_Controller extends _Core_Controller_UserCommon
         foreach ( $id as $k => $v ) {
             $this->model->deleteOperation( $v );
         }
-//        foreach ($virt as $k=>$v) {
-//            $this->model->deleteTargetOperation($v);
-//        }
-        if ($virt) {
+        foreach ($virt as $k=>$v) {
+            $this->model->deleteTargetOperation($v);
+        }
+        /*if ($virt) {
             foreach ( $id as $k => $v ) {
                 $this->model->deleteTargetOperation($v);
             }
-        }
+        }*/
 
         die(json_encode(array('result'=>array('text'=>'Операция успешно удалена'))));
     }
