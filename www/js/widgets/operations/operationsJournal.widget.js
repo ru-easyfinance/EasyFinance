@@ -557,7 +557,7 @@ easyFinance.widgets.operationsJournal = function(){
             }
 
             var tooltipHtml = '<b>Тип:</b> ' + tp + '<br>';
-            tooltipHtml += '<b>Счёт:</b> ' + res.accounts[operation.accountId].name + '<br>';
+            tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[operation.account_id] ? res.accounts[operation.account_id].name : '' ) + '<br>';
 
             $('.qtip').remove();
             $(this).qtip({
