@@ -444,12 +444,14 @@
 		
 		    var bottomPos = parseInt(this.wrapper.data("sc:positionY")) + inputHeight + listHeight;
 		    var maxShown = $(window).height() + $(document).scrollTop();
-		    if (bottomPos > maxShown) {
+		    /* commented by Jet. no one can override my settings! ]:->
+                    if (bottomPos > maxShown) {
 		        this.setDropUp(true); 
 		    }
 		    else {
 		        this.setDropUp(false);	
 		    }
+                    */
 		
 		    if ("" == $.trim(this.input.val())) {
 	            this.highlightFirst();
