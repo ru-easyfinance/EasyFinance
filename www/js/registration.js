@@ -70,6 +70,7 @@ $(document).ready(function() {
             $('#butt').click(function(){
                 if ($("#formRegister").valid()) {
                     $('.formRegister').hide();
+					$.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
                     $.post(
                         "/registration/new_user/",
                         {
