@@ -1,7 +1,7 @@
 <table class="topmenu" cellpadding="0" cellspacing="0"><tbody><tr>
 	<td>
-		<a href="/operation/add/waste"><img src="/img/pda/menuAddOperation.gif" alt="" width="24" height="24" /></a>
-                <br><a href="/operation/add/waste">добавить</a>
+		<a href="/operation/add/waste/<?=isset($accountId)?'?accountId=' . $accountId:''?>"><img src="/img/pda/menuAddOperation.gif" alt="" width="24" height="24" /></a>
+                <br><a href="/operation/add/waste/<?=isset($accountId)?'?accountId=' . $accountId:''?>">добавить</a>
 	</td>
 	<td>
 		<a href="/operation/listOperations"><img src="/img/pda/menuOperations.gif" alt="" width="24" height="24" /></a>
