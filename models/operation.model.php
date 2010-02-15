@@ -517,7 +517,11 @@ class Operation_Model {
      */
     function deleteTargetOperation($id=0) {
         //$que = $this->db->query("SELECT target_id FRON target_bill WHERE id=?", $id);
+        //die('sdfjsd');
+        $tr_id = $this->db->select("SELECT target_id FROM target_bill WHERE id=?", $id);
         $this->db->query("DELETE FROM target_bill WHERE id=? AND user_id=?", $id, Core::getInstance()->user->getId());
+        $targ = new Targets_Model();
+        $targ->staticTargetUpdate($tr_id[0]['target_id']);
         Core::getInstance()->user->initUserTargets();
         Core::getInstance()->user->save();
         return true;
