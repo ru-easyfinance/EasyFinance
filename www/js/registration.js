@@ -72,7 +72,7 @@ $(document).ready(function() {
                     $('.formRegister').hide();
 					$.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
                     $.post(
-                        "/registration/new_user/",
+                        "/registration/new_user/?responseMode=json",
                         {
                             password: $('#passw').val(),
                             confirm_password: $('#confirm_password').val(),
