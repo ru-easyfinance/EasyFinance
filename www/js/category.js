@@ -420,18 +420,18 @@ $(document).ready(function() {
                     $('#add_form').find('#btnSave').removeAttr('disabled');
                     $('#add_form').hide();
                     $.jGrowl("Категория успешно сохранена", {theme: 'green'});
-                    
+
                     if (act == '/category/add/') {
                         // категория была добавлена
-                        listInsertCategory(data.result.id);
+                        listInsertCategory(data.category);
                         $('#subcat').val('');
                     } else {
                         // категория была отредактирована
-                        updateCategory(oldCat, data.result.id);
+                        updateCategory(oldCat, data.category);
                     }
 
                     // Обновляем список родительских категорий
-                    if (data.result.id.parent == "")
+                    if (data.category.parent == "")
                         drawParentCategoriesCombo();
 
                     // Обновляем список категорий в диалоге "Добавление операции"
