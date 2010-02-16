@@ -117,6 +117,15 @@ easyFinance.models.accounts = function(){
         else
             return null;
     }
+	
+	function getAccountTypeString(id){
+		var types = {1: "Наличные", 2: "Дебетовая карта", 9: "Кредит", 5: "Депозит", 6: "Займ выданный", 7: "Займ полученый", 8: "Кредитная карта", 15: "Электронный кошелек", 16: "Банковский счёт"};                
+		
+        if (_accounts && _accounts[id])
+            return types[_accounts[id].type];
+        else
+            return '';
+	}
 
     function addAccount(params, callback){
         if (typeof params != "object")
@@ -291,6 +300,7 @@ easyFinance.models.accounts = function(){
         getAccountNameById: getAccountNameById,
         getAccountIdByName: getAccountIdByName,
         getAccountType: getAccountType,
+		getAccountTypeString: getAccountTypeString,
         getAccountCurrency: getAccountCurrency,
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,

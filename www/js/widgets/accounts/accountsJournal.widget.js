@@ -39,6 +39,8 @@ easyFinance.widgets.accountsJournal = function(){
                 var str = '<table style="padding:3px">';
                 str +=  '<tr style="line-height:19px;"><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
                             account.name + '</td></tr>';
+                str +=  '<tr style="line-height:19px;"><th> Тип </th><td style="width:5px">&nbsp;</td><td>'+
+                            _model.getAccountTypeString(account.id) + '</td></tr>';							
                 str +=  '<tr style="line-height:19px;"><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
                             account.comment + '</td></tr>';
                 str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
@@ -292,7 +294,7 @@ easyFinance.widgets.accountsJournal = function(){
                     //total = total-summ[key];
 
                 s='<div><strong class="title">'+ g_name[key]
-                    + ':</strong> ' + formatCurrency(tofloat( summ[key] ))
+                    + ':</strong> ' + formatCurrency( summ[key] )
                     + ' ' + d_cur+ '<table  class="noborder">' + head_tr+arr[key]
                     + '</table></div>';
                 $('#operation_list').append(s);

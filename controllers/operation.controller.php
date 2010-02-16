@@ -580,7 +580,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		
 		// Привет кэп !
 		$array = array();
-		
+
 		//@TODO Похоже, что тут надо что-то дописать в массиве
 		foreach ($list as $operation)
 		{

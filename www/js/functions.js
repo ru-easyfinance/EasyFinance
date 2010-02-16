@@ -83,11 +83,11 @@ function formatCurrency(num) {
  * @return String
  */
 function toFloat(str){
-    if (!str) {
+if (!str) {
         str = new Number(str.toString().replace(/[^0-9\.\-]/gi, ''));
         return str;
     } else {
-        return '';
+        return 0;
     }
 }
 /**
@@ -95,7 +95,12 @@ function toFloat(str){
  * @see func toFloat
  */
 function tofloat(str){
-    return toFloat(str);
+    if (!str) {
+        str = new Number(str.toString().replace(/[^0-9\.\-]/gi, ''));
+        return str;
+    } else {
+        return '';
+    }
 }
 
 ;

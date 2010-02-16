@@ -68,11 +68,16 @@ easyFinance.widgets.accountEdit = function(){
         params.currency = _$node.find('#acc_currency').val();
         params.initPayment = _$node.find('#acc_balance').val();
 
-        if (params.name == ''){
+        if (params.name == '') {
             $.jGrowl("Введите название счёта!", {theme: 'red', life: 5000});
             return false;
         }
 
+        if (params.name.length > 20) {
+            $.jGrowl("Название счёта должно быть не больше 20 символов!", {theme: 'red', life: 5000});
+            return false;
+        }
+		
         if (params.name.indexOf('<') != -1 || params.name.indexOf('>') != -1) {
             $.jGrowl("Название счёта не должно содержать символов < и >!", {theme: 'red', life: 5000});
             return false;
