@@ -243,7 +243,7 @@ easyFinance.widgets.operationEdit = function(){
             }
         });
         //поле суммы
-        $(' div.amount img').click(function(){
+        _$node.find('#btnCalcSum').click(function(){
             var calculator = $('#op_amount');
             $(calculator).val(calculate($(calculator).val()));
         });
