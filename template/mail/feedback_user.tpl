@@ -4,6 +4,6 @@
     
     $responseFrom      = array('support@easyfinance.ru' => 'EasyFinance.ru');
 
-    $responseBody = "Спасибо за отзыв, мы ответим Вам в течение 24-х часов\n\n"
+    $responseBody = "Спасибо за отзыв, мы ответим Вам в течение 12-х часов\n\n"
         . "Тема отзыва: " . $this->title . "\n\n"
         . $this->message;
