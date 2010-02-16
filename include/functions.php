@@ -371,11 +371,11 @@ function get_tree_select2 ($selected = 0, $type = 0)
     //
 
     foreach ($cat as $val) {
-        /*if ($selected == $val['cat_id']) {
+        if ($selected == $val['cat_id']) {
             $s = "selected='selected'";
         } else {
             $s = ' ';
-        }*/
+        }
 
         if ($val['cat_parent'] == 0) {
             if (($val['type'] == 0) || ($val['type'] == $type))
