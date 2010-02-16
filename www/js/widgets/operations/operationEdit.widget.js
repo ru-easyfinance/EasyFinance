@@ -837,7 +837,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_tags').val(data.tags);
         else
             $('#op_tags').val('');
-        $('#op_comment').val(data.comment);
+        $('#op_comment').val(data.comment.replace(/&quot;/g, '"'));
 
         $(document).scrollTop(300);
     }
