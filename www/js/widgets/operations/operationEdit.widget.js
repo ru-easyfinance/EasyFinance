@@ -244,12 +244,12 @@ easyFinance.widgets.operationEdit = function(){
         });
         //поле суммы
         $(' div.amount img').click(function(){
-            //var calculator = $('#op_amount');
-            //$(calculator).val(calculate($(calculator).val()));
+            var calculator = $('#op_amount');
+            $(calculator).val(calculate($(calculator).val()));
         });
         $('#op_amount').live('keypress',function(e){
             if (e.keyCode == 13){
-                //$(this).val(calculate($(this).val()));
+                $(this).val(calculate($(this).val()));
             }
             if (!e.altKey && !e.shiftKey && !e.ctrlKey){
 
