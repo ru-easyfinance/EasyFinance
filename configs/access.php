@@ -30,6 +30,7 @@ $accessConfig = array(
 	'logout' 	=> _Core_Access::ALLOW_ALL,
 	'registration' 	=> _Core_Access::ALLOW_ALL,
 	'restore' 	=> _Core_Access::ALLOW_ALL,
+	'redirect'      => _Core_Access::ALLOW_ALL,
 	
 	'profile' 	=> _Core_Access::ALLOW_AUTHORIZED,
 	

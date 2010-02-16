@@ -43,6 +43,11 @@ class Feedback
     private $numberFeedback = null;
 
     /**
+    *
+    */
+    private $mailer = null;
+
+    /**
      * Конструктор
      * @param string $message
      * @param string $title
@@ -63,6 +68,12 @@ class Feedback
             // @TODO Переписать когда класс пользователей будет предоставлять инфу о почте пользователя
             $this->email = $_SESSION['user']['user_mail'];
         }
+
+	$mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+		->setUsername('feedback@easyfinance.ru')
+		->setPassword('MTApJxa4');
+	
+	$this->mailer = Swift_Mailer::newInstance( $mailTransport ); 
     }
 
     /**
@@ -81,7 +92,6 @@ class Feedback
             
             // Получаем номер сообщения
             $this->numberFeedback = mysql_insert_id();
-
 
             // Отправляем письмо в саппорт c полным содержанием
             if ( ! $this->sendSupport() ) {
@@ -128,7 +138,7 @@ class Feedback
             ->setTo( $this->email )
             ->setBody( $responseBody, 'text/plain');
 
-        return Core::getInstance()->mailer->send($response);
+        return $this->mailer->send($response);
     }
 
     /**
@@ -144,7 +154,7 @@ class Feedback
 
         $subscribers = Swift_Message::newInstance()
             ->setSubject( $subscribersSubject )
-            ->setFrom( $subscribersFrom )
+//            ->setFrom( $subscribersFrom )
             ->setTo( $subscribersEmails )
             ->setBody( $subscribersBody, 'text/plain' );
 
@@ -152,7 +162,7 @@ class Feedback
             $subscribers->setReplyTo( $this->email )->setSender( $this->email );
         }
 
-        return Core::getInstance()->mailer->send( $subscribers );
+        return $this->mailer->send( $subscribers );
     }
 
 
@@ -175,7 +185,7 @@ class Feedback
             ->setBody( $supportBody , 'text/plain' );
 
         // Отсылаем письмо
-        return Core::getInstance()->mailer->send( $support );
+        return $this->mailer->send( $support );
     }
 }
 ?>
