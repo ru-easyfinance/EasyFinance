@@ -245,7 +245,7 @@ easyFinance.widgets.operationEdit = function(){
         //поле суммы
         $(' div.amount img').click(function(){
             var calculator = $('#op_amount');
-            $(calculator).val(calculate('0' + $(calculator).val()));
+            $(calculator).val(calculate($(calculator).val()));
         });
         $('#op_amount').live('keypress',function(e){
             if (e.keyCode == 13){

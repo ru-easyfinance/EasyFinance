@@ -95,7 +95,7 @@ if (!str) {
  * @see func toFloat
  */
 function tofloat(str){
-    if (!str) {
+    if (str !== null) {
         str = new Number(str.toString().replace(/[^0-9\.\-]/gi, ''));
         return str;
     } else {
