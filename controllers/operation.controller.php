@@ -181,7 +181,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				}
 				
 				$this->tpl->assign( 'result', 
-					array('text'=>"Операция успешно добавлена. <a href='/operation/last'>журнал</a>")
+					array('text'=>"Операция успешно добавлена. <a href='/operation/last'>последние операции</a>")
 				);
 			}
 			else
@@ -388,7 +388,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				}
 				
 				$this->tpl->assign( 'result', 
-					array('text'=>"Операция успешно изменена. <a href='/operation/last'>журнал</a>")
+					array('text'=>"Операция успешно изменена. <a href='/operation/last'>последние операции</a>")
 				);
 			}
 			else 
