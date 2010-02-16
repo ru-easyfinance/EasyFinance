@@ -3,7 +3,8 @@
     $supportSubject = "Полный отзыв #{$this->numberFeedback}: {$this->title}";
 
     // От кого письмо
-    $supportFrom = $this->email;
+    //$supportFrom = $this->email;
+    $supportFrom = array('support@easyfinance.ru' => 'EasyFinance.ru');
 
     // Кому письмо
     $supportTo   = array('support@easyfinance.ru' => 'EasyFinance.ru');

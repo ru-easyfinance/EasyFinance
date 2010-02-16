@@ -144,7 +144,7 @@ class Feedback
 
         $subscribers = Swift_Message::newInstance()
             ->setSubject( $subscribersSubject )
-            ->setFrom( $this->email )
+            ->setFrom( $subscribersFrom )
             ->setTo( $subscribersEmails )
             ->setBody( $subscribersBody, 'text/plain' );
 
