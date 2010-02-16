@@ -22,7 +22,7 @@
 	<td><input name="name" value="<?php echo(isset($acc['name'])?$acc['name']:'') ?>"></td>
 </tr>
 <tr>
-	<td>Начальный баланс :</td>
+	<td>Начальный баланс&nbsp;:</td>
 	<td><input name="initPayment" value="<?php echo(isset($acc['money'])?$acc['money']:'') ?>"></td>
 </tr>
 <tr>

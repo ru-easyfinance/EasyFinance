@@ -245,6 +245,15 @@ class Operation_Model {
 		return $validated;
 	}
 
+
+        function checkExistance($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0)
+        {
+            $last = $this->db->select("SELECT id FROM operation WHERE user_id=? AND money=? AND date=?
+                AND cat_id=? AND drain=? AND comment=? AND account_id=? 
+                AND dt_create BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
+                $this->user->getId(), $money, $date, $category, $drain, $comment, $account);
+            return $last;
+        }
 	/**
 	 * Регистрирует новую транзакцию
 	 * @param float  $money      Сумма транзакции
@@ -257,6 +266,8 @@ class Operation_Model {
 	 */
 	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
 	{
+                if ($this->checkExistance($money, $date, $category, $drain, $comment, $account))
+                    return $this->checkExistance($money, $date, $category, $drain, $comment, $account);
 		if( is_null($tags) )
 		{
 			$tags = array();
@@ -788,6 +799,31 @@ class Operation_Model {
 		}
         
 		return $retoper;
+	}
+	
+	function getLastOperations( $count = 10 )
+	{
+		$operations = array();
+		
+		$sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
+			o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
+			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create , dt_update
+			FROM operation o 
+			WHERE o.user_id = " . Core::getInstance()->user->getId() . " AND o.date > 0
+			UNION 
+			SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id, 
+			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, 
+			dt_create , dt_update
+			FROM target_bill t 
+			LEFT JOIN target tt ON t.target_id=tt.id 
+			WHERE t.user_id = " . Core::getInstance()->user->getId() . "
+			AND tt.done=0 
+			ORDER BY dt_update DESC
+			LIMIT " . (int)$count;
+		
+		$operations = $this->db->select( $sql );
+		
+		return $operations;
 	}
 
     /**

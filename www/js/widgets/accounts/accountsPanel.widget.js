@@ -83,7 +83,7 @@ easyFinance.widgets.accountsPanel = function(){
             str = '<li><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-            str = str + '<span>'+data[key]['name']+'</span><br>';
+            str = str + '<span>'+shorter(data[key]['name'], 20)+'</span><br>';
             str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 && data[key]['type']!='8' ? 'sumGreen' : 'sumRed') + '">'
                 + ((data[key]['type']!=7 && data[key]['type']!=8) ? formatCurrency(data[key]['totalBalance']) : formatCurrency(-data[key]['totalBalance'])) + '</span>&nbsp;';
             str = str + res.currency[data[key]['currency']]['text'] + '</span></a></li>';

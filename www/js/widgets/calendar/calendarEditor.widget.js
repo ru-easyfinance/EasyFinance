@@ -60,7 +60,7 @@ easyFinance.widgets.calendarEditor = function(){
         if (el.type == 'p'){
             $('#cal_amount').val(el.amount.toString());
             if (_sexy){
-                _category.setComboValue((res.category.user[el.cat] ? res.category.user[el.cat].name : ''), false, false);
+                _categories.setComboValue((res.category.user[el.cat] ? res.category.user[el.cat].name : ''), false, false);
                 _type.setComboValue((el.op_type == 1 ? 'Доход':'Расход'), false, false);
                 _account.setComboValue((res.accounts[el.account.toString()] ? res.accounts[el.account.toString()].name : ''), false, false);
             }
@@ -174,7 +174,8 @@ easyFinance.widgets.calendarEditor = function(){
      * Загружает форму
      * @param data obj
      */
-    var catArr, _type, _account, _category;
+    var catArr, _type, _account;
+    var _selType, _selAcc, _selCat;
     var accArr;
     function load(data){
         _categories = easyFinance.models.category.getUserCategoriesTree();
@@ -201,8 +202,9 @@ easyFinance.widgets.calendarEditor = function(){
                 buttons: {
                     
                     'Сохранить': function() {
-                        save();
-                        $(this).dialog('close');
+                        if (save()){
+                            $(this).dialog('close');
+                        }
                     },
                     'Отмена': function() {
                         $(this).dialog('close');
@@ -260,7 +262,9 @@ easyFinance.widgets.calendarEditor = function(){
     //            filterFn: _sexyFilter,
                 data: [{value: "-1", text: "Расход"},{value: "1", text: "Доход"}],
                 changeCallback: function() {
+                    _selType = this.getHiddenValue();
                     _toggleCategory(this.getHiddenValue());
+
                 }
             });
             _account = $.sexyCombo.create({
@@ -270,9 +274,11 @@ easyFinance.widgets.calendarEditor = function(){
                 dropUp: false,
     //            filterFn: _sexyFilter,
                 data: accArr,
-                changeCallback: function() {}
+                changeCallback: function() {
+                    _selAcc = this.getHiddenValue();
+                }
             });
-            _category = $.sexyCombo.create({
+            _categories = $.sexyCombo.create({
                 id : "cal_category",
                 name: "category",
                 container: "#cal_category",
@@ -280,7 +286,7 @@ easyFinance.widgets.calendarEditor = function(){
     //            filterFn: _sexyFilter,
                 data: catArr,
                 changeCallback: function() {
-
+                    _selCat = this.getHiddenValue();
                 }
             });
            
@@ -346,6 +352,21 @@ easyFinance.widgets.calendarEditor = function(){
             $.jGrowl('Не заполнена дата!',{theme : 'red'});
             return false;
         }
+
+        if(type == 'p'){
+            if(!_selType){
+                $.jGrowl('Не выбран тип!',{theme : 'red'});
+                return false;
+            }
+            if(!_selCat){
+                $.jGrowl('Не выбрана категория!',{theme : 'red'});
+                return false;
+            }
+            if(!_selAcc){
+                $.jGrowl('Не выбран счёт!',{theme : 'red'});
+                return false;
+            }
+        }
         var ret = {
             
             id:         $('#op_dialog_event #cal_key').attr('value')||0,
@@ -362,9 +383,9 @@ easyFinance.widgets.calendarEditor = function(){
             //for periodic
             comment:    $('#op_dialog_event #cal_comment').attr('value'),
             amount:     $('#op_dialog_event #cal_amount').val().replace(/[^0-9\.\-]/,''),
-            cat:   $('#op_dialog_event select#cal_category').val(),
-            op_type:       $('#op_dialog_event select#cal_type').val(),
-            account:    $('#op_dialog_event select#cal_account').val(),
+            cat:        _selCat,
+            op_type:    _selType,
+            account:    _selAcc,
 
             use_mode: $('#op_dialog_event .special input:checked').attr('value')
             

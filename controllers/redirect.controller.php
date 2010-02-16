@@ -7,7 +7,9 @@
 
 class Redirect_Controller
 {
-	function index() {}
+    function index() {}
+    
+    function __init(){}
 
     /**
      * Редирект на бесплатную книгу по учёту финансов

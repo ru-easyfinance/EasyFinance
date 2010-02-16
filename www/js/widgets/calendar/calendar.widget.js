@@ -177,7 +177,7 @@ $('#calendar').fullCalendar({
                                         '<td>' + $.datepicker.formatDate('dd.mm.yy',ddt) + '</td>' +
                                         '<td>' + result[v].title + '</td>' +
                                         '<td>' + result[v].amount + '</td>' +
-                                        '<td><div class="cont" style="top: -17px"><ul style="right:-20px">' +
+                                        '<td><div class="cont" style="top: -17px"><ul style="right:0">' +
                                             '<li class="edit"><a title="Редактировать">Редактировать</a></li>' +
                                             '<li class="del"><a title="Удалить">Удалить</a></li>' +
                                             '</ul></div></td><td class="'+accept+'" style="width:16px">&nbsp;&nbsp;&nbsp;</td>' +

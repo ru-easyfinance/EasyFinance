@@ -20,9 +20,13 @@
 $accessConfig = array(
 	// индекс.
 	'review' 	=> _Core_Access::ALLOW_ALL,
+	'rules'         => _Core_Access::ALLOW_ALL,
+	'about'         => _Core_Access::ALLOW_ALL,
+	'security'      => _Core_Access::ALLOW_ALL,
+	'rules'         => _Core_Access::ALLOW_ALL,
 	'feedback' 	=> _Core_Access::ALLOW_ALL,
 	'articles' 	=> _Core_Access::ALLOW_ALL,
-	'login' 		=> _Core_Access::ALLOW_ALL,
+	'login' 	=> _Core_Access::ALLOW_ALL,
 	'logout' 	=> _Core_Access::ALLOW_ALL,
 	'registration' 	=> _Core_Access::ALLOW_ALL,
 	'restore' 	=> _Core_Access::ALLOW_ALL,

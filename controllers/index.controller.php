@@ -50,11 +50,57 @@ class Index_Controller extends _Core_Controller
 		$this->tpl->assign('no_menu', '1');
 		$this->tpl->assign('name_page', '404');
 	}
-	
+
+        /**
+         * Обзор сервиса
+         */
 	public function review()
 	{
 		$this->tpl->assign('no_menu', '1');
 		$this->tpl->assign('head_val', '/review/');
 		$this->tpl->assign('name_page', 'review');
 	}
+
+        /**
+         * Правила использования
+         */
+        public function rules()
+        {
+            $this->tpl->assign('no_menu', '1');
+            $this->tpl->assign('head_val', '/rules/');
+            $this->tpl->assign('name_page', 'rules');
+        }
+
+        /**
+         * Безопасность
+         */
+        public function security()
+        {
+            $this->tpl->assign('no_menu', '1');
+            $this->tpl->assign('head_val', '/security/');
+            $this->tpl->assign('name_page', 'security');
+        }
+
+        /**
+         * О сайте
+         */
+        public function about()
+        {
+            $this->tpl->assign('no_menu', '1');
+            $this->tpl->assign('head_val', '/about/');
+            $this->tpl->assign('name_page', 'about');           
+
+        }
+
+        /**
+         * Помощь
+         */
+        public function help()
+        {
+            $this->tpl->assign('no_menu', '1');
+            $this->tpl->assign('head_val', '/help/');
+            $this->tpl->assign('name_page', 'help');
+        }
+
+        
 }

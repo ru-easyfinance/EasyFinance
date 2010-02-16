@@ -1,25 +1,18 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс контроллера для модуля "фидбека"
+ * Класс контроллера для модуля "обратной связи"
  * @copyright http://easyfinance.ru/
  * @version SVN $Id: $
  */
-
 class Feedback_Controller extends _Core_Controller
 {
-    /**
-     * Ссылка на класс модель обратной связи
-     * @var Feedback_Model
-     */
-    private $model = null;
-
     /**
      * Конструктор класса
      * @return void
      */
     function __init()
     {
-        $this->model = new Feedback_Model();
+
     }
 
     /**
@@ -31,7 +24,6 @@ class Feedback_Controller extends _Core_Controller
         $this->tpl->assign('no_menu', '1');
         $this->tpl->assign('head_val', '/feedback/');
         $this->tpl->assign('name_page', 'feedback');
-        $this->model = new Feedback_Model();
     }
 	
     /**
@@ -40,6 +32,7 @@ class Feedback_Controller extends _Core_Controller
      function add_message()
      {
          // Параметры браузера
+         $param = array();
          $param['c_height'] = $_POST['cheight'];
          $param['c_width']  = $_POST['cwidth'];
          $param['colors']   = $_POST['colors'];
@@ -48,18 +41,22 @@ class Feedback_Controller extends _Core_Controller
          $param['plugins']  = $_POST['plugins'];
 
          // Сообщение
-         $msg               = $_POST['msg'];
-         $param['email']    = $_POST['email'];
+         $title             = $_POST['title'];
+         $message           = $_POST['msg'];
+         $param['email']    = @$_POST['email'];
+
 
          // Параметры страницы
          $param['request']  = $_SERVER['REQUEST_URI'];
          $param['browser']  = $_SERVER['HTTP_USER_AGENT'];
          $param['referer']  = $_SERVER['HTTP_REFERER'];
 
-         if ($this->model->add_message($msg,$param)) {
-            die(json_encode(array('success'=>array('text'=>''))));
+         $feedback = new Feedback($message, $title, $param);
+
+         if ( $feedback->add_message() ) {
+            $this->tpl->assign( 'result', array('text'=>"Отзы успешно добавлен.") );
          } else {
-            die(json_encode(array('error'=>array('text'=>'Ошибка при отправке сообщения'))));
+            $this->tpl->assign( 'error', array('text'=> implode(" \n", $feedback->errorData) ) );
          }
      }
 }

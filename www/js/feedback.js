@@ -56,11 +56,11 @@ function getClientPlugins(){
         });
 
         //скрытие лишнего текста на поле ввода
-        $('#footer .f_field.ffmes').click(function (){
-            $(this).find('label').hide();
+        $('#footer .f_field #ffmes').focus(function (){
+            $(this).closest('div').find('label').hide();
         });
         //отправление сообщения
-        $('#footer #sendFeedback').click(function (){
+        $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){
             if (noClick){
                 return;
             }
@@ -71,6 +71,7 @@ function getClientPlugins(){
 //                noClick = false;
                 return;
             }
+
             noClick = true;
             $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
             var feedback = getClientDisplayMods();
@@ -86,14 +87,13 @@ function getClientPlugins(){
                 }
             }
             
-
             $.post(
-                '/feedback/add_message/',
+                '/feedback/add_message/?responseMode=json',
                 feedback,
                 function(data){
                     if (!data.error){
                         $('#footer input').val('');
-                        $('#footer .f_field lable').show();
+                        $('#footer .f_field label').show();
                         $('#footer .f_field textarea').val('');
                         $('#footer #popupreport').hide();
                         $.jGrowl('Спасибо!<br/>Ваше сообщение отправлено!', {theme: 'green'});
@@ -103,6 +103,7 @@ function getClientPlugins(){
                     noClick = false;
                 }
             );
+
         });
       })();
 });

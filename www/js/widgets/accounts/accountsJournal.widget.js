@@ -45,7 +45,7 @@ easyFinance.widgets.accountsJournal = function(){
                     formatCurrency(account.totalBalance) + ' ' + res.currency[account.currency]['text'] + '</td></tr>';
                 if (_accounts[id]["reserve"] != 0){
                     var delta = (formatCurrency(account.totalBalance-_accounts[id]["reserve"]));
-                    str +=  '<tr style="line-height:19px;"><th> Доступный остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+res.currency[account.currency]['text']+'</td></tr>';
+                    str +=  '<tr style="line-height:19px;"><th> Доступный&nbsp;остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+res.currency[account.currency]['text']+'</td></tr>';
                     str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(_accounts[id]["reserve"])+' '+res.currency[account.currency]['text']+'</td></tr>';
                 }
 
@@ -88,8 +88,8 @@ easyFinance.widgets.accountsJournal = function(){
                  // создание новой операции для выбранного счёта
                 var acc = $(this).closest('tr').attr('id').split("_", 2)[1];
                 if (easyFinance.widgets.operationEdit) {
-                    easyFinance.widgets.operationEdit.setAccount(acc);
                     easyFinance.widgets.operationEdit.showForm();
+                    easyFinance.widgets.operationEdit.setAccount(acc);
                 }
                 $(document).scrollTop(200);
         });
@@ -232,13 +232,12 @@ easyFinance.widgets.accountsJournal = function(){
                             <th> \n\
                                 Имя \n\
                             </th>\n\
-                            <th COLSPAN=2 Style="padding-left:40px"> \n\
+                            <th COLSPAN=2 Style="padding-left:90px"> \n\
                                 Остаток \n\
                             </th>\n\
-                            <th> \n\
-                                Эквивалент в '+d_cur+' \n\
+                            <th COLSPAN=2 Style="padding-left:40px">\n\
+                                Эквивалент&nbsp;в&nbsp;'+d_cur+' \n\
                             </th>\n\
-                            <th></th>\n\
                         <tr>',
             s='';
 
@@ -257,17 +256,17 @@ easyFinance.widgets.accountsJournal = function(){
 
             if (!isNaN(type)){
                 str = '<tr class="item" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
-                str = str + '<td class="name"><span style="white-space:nowrap;">' + account_list[key]["name"] + '</span></td>';
+                str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list[key]["name"], 25) + '</span></td>';
                 if (type == 2) //для долга печатаем с противоположным знаком
-                    str = str + '<td class="totalBalance ' + colorClass + '" style="width: 60px">' + formatCurrency(-account_list[key]["totalBalance"] ) + '</td>';
+                    str = str + '<td class="totalBalance ' + colorClass + '" style="width: 115px; max-width: 115px;">' + formatCurrency(-account_list[key]["totalBalance"] ) + '</td>';
                 else
-                    str = str + '<td class="totalBalance ' + colorClass + '" style="width: 60px">' + formatCurrency(account_list[key]["totalBalance"] ) + '</td>';
+                    str = str + '<td class="totalBalance ' + colorClass + '" style="width: 115px; max-width: 115px;">' + formatCurrency(account_list[key]["totalBalance"] ) + '</td>';
 
                 str = str + '<td class="cur">' + res.currency[account_list[key]["currency"]]['text'] + '</td>';
                 if (type == 2)//для долга выводим с противоположным знаком
-                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 60px">' + formatCurrency(-account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']) + '</td>';
+                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 115px; max-width: 115px;">' + formatCurrency(-account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']) + '</td>';
                 else
-                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 60px">' + formatCurrency( account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']) + '</td>';
+                    str = str + '<td class="def_cur ' + colorClass + '" style="width: 115px; max-width: 115px;">' + formatCurrency( account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']) + '</td>';
                 summ[type] = summ[type] + (account_list[key]["totalBalance"] * res.currency[account_list[key]["currency"]]['cost'] / defaultCurrency['cost']);
                 if (!val[account_list[key]['currency']]) {
                     val[account_list[key]['currency']]=0;
@@ -301,19 +300,19 @@ easyFinance.widgets.accountsJournal = function(){
         }
 
         // формирование итогового поля
-        str='<strong class="title">Итог</strong><table class="noborder">\n\
-            <tr><th>Сумма</th><th>Валюта</th></tr>';
-        for(key in val)
-        {
-            str = str+'<tr><td class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+'</td><td>'+res.currency[key].text+'</td></tr>';
-        }
-        str = str+'<tr><td><b>Итого : </b>&nbsp;<span span class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(total) + '</span></td><td> '+d_cur+'</td></tr>';
-        str = str + '</table>';
-        $('#total_amount').html(str);
+//        str='<strong class="title">Итог</strong><table class="noborder">\n\
+//            <tr><th>Сумма</th><th>Валюта</th></tr>';
+//        for(key in val)
+//        {
+//            str = str+'<tr><td class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+'</td><td>'+res.currency[key].text+'</td></tr>';
+//        }
+//        str = str+'<tr><td><b>Итого : </b>&nbsp;<span span class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '">' + formatCurrency(total) + '</span></td><td> '+d_cur+'</td></tr>';
+//        str = str + '</table>';
+//        $('#total_amount').html(str);
         //$('#total_amount').append(str);
 
         // @todo перенести в цсс
-        $('.item td.cur').css('width','50px');
+        $('.item td.cur').css('width','10px');
         $('.item td.totalBalance').css('text-align','right').css('padding-right','0');
     }
 

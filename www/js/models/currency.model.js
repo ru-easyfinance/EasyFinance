@@ -1,12 +1,13 @@
 easyFinance.models.currency = function(){
-    var _data, _defaultCurrencyId;
+    var _data = {}, _defaultCurrencyId;
     /**
      * Инициирует модель валют
      * @param data == res.currency
      */
     function load(data){
-        _data = data;
         _defaultCurrencyId = data['default'];
+        $.extend(_data, data);
+        delete _data['default'];
     }
     /**
      * Возвращает валюту по умолчанию
@@ -14,6 +15,13 @@ easyFinance.models.currency = function(){
      */
     function getDefaultCurrency(){
         return _data[_defaultCurrencyId] || {cost : 0, name : '', progress : '', text : '', notFound : true};
+    }
+    /**
+     * Возвращает id валюту по умолчанию
+     * @return {int}
+     */
+    function getDefaultCurrencyId(){
+        return _defaultCurrencyId;
     }
     /**
      * Возвращает валюту в зависимости от Id
@@ -26,7 +34,7 @@ easyFinance.models.currency = function(){
     /**
      * Возвращает название валюты в зависимости от Id
      * @param id {int}
-     * @return {cost : int, name : str, progress : str, text : str, ?notFound : true}
+     * @return {str}
      */
     function getCurrencyNameById(id){
         return _data[id] ? _data[_defaultCurrencyId].name : '';
@@ -34,10 +42,17 @@ easyFinance.models.currency = function(){
     /**
      * Возвращает описание валюты в зависимости от Id
      * @param id {int}
-     * @return {cost : int, name : str, progress : str, text : str, ?notFound : true}
+     * @return {str}
      */
     function getCurrencyTextById(id){
         return _data[id] ? _data[_defaultCurrencyId].text : '';
+    }
+    /**
+     * Возвращает список валют
+     * @return {obj}
+     */
+    function getCurrencyList(){
+        return _data;
     }
 
     /**
@@ -61,8 +76,10 @@ easyFinance.models.currency = function(){
     return {
         load : load,
         getDefaultCurrency : getDefaultCurrency,
+        getDefaultCurrencyId : getDefaultCurrencyId,
+        getCurrencyList : getCurrencyList,
         getCurrencyById : getCurrencyById,
         getCurrencyNameById : getCurrencyNameById,
         getCurrencyTextById :getCurrencyTextById
     };
-};
+}();

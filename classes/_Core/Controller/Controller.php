@@ -185,7 +185,7 @@ abstract class _Core_Controller
         
         //валюты
         $currency = array();
-        
+
         $get = $user->getCur();
         
         $cur_user_string = $get['li'];
@@ -283,7 +283,7 @@ abstract class _Core_Controller
                 'calendar' => $events
             ),
             'accounts' => $accounts,
-            'oftenAccounts' => $oftenAccount,
+            'accountsRecent' => $oftenAccount,
             //'events' => Core::getInstance()->user->getUserEvents(),
             //'targets' => $targ,
             'user_targets' => $targ['user_targets'],

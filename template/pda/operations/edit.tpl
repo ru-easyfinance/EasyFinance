@@ -29,18 +29,41 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	<div class="line"><span class="asterisk">*</span> <?=in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT))?'Счёт':'Со счёта'?>:<br />
 	<select name="account" class="wide">
 		<?php
-		if( !isset($operation['account']) || !$operation['account'] )
+		if( 
+			// Если какой то вариант уже выбран, зачем вводить в заблуждение
+			(!isset($operation['toAccount']) || !$operation['toAccount']) &&
+			// Если есть часто используемые счета - по умолчанию самый используемый
+			( sizeof( $res['accounts'] ) < sizeof($res['accountsRecent']) )
+		)
+		
+		$useOften = false;
+		// Если счетов больше чем часто используемых - выводим сверху частоиспользуемые
+		if( sizeof( $res['accounts'] ) > sizeof($res['accountsRecent']) )
 		{
-			?><option value="0">не выбран</option><?php
+			while( list($accountId) = each($res['accountsRecent']) )
+			{
+				$account = $res['accounts'][ $accountId ];
+			?>
+			<option <?=(isset($operation['account']) && $account['id'] == $operation['account'])?'selected="selected"':''?>
+			value="<?=$account['id']?>"><?=$account['name']?> (<?=$res['currency'][ $account['currency'] ]['text']?>)
+			</option>
+			<?php
+			}
+			?><option>-</option><?php
+			$useOften = true;
 		}
 		
 		while ( list(,$account) = each($res['accounts']))
 		{
+			//Пропускаем частоиспользуемые
+			if( $useOften && array_key_exists( $account['id'], $res['accountsRecent'] ) ){ continue; }
+			
 			?><option <?=(isset($operation['account']) && $account['id'] == $operation['account'])?'selected="selected"':''?>
 			value="<?=$account['id']?>"><?=$account['name']?> (<?=$res['currency'][ $account['currency'] ]['text']?>)</option><?php
 		}
 		?>
 	</select></div>
+	
 	<?php
 	if( in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT)) )
 	{
@@ -65,13 +88,39 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 		?>
 		<div class="line"><span class="asterisk">*</span> На счёт: <br><select name="toAccount" class="wide" >
 			<?php
-			if( !isset($operation['toAccount']) || !$operation['toAccount'] )
+			if( 
+				// Если какой то вариант уже выбран, зачем вводить в заблуждение
+				!isset($operation['toAccount']) || !$operation['toAccount']
+			)
 			{
 				?><option value="0">не выбран</option><?php
 			}
+			
+			// Если счетов больше чем часто используемых - выводим сверху частоиспользуемые
+			reset($res['accountsRecent']);
+			if( sizeof( $res['accounts'] ) > sizeof($res['accountsRecent']) )
+			{
+				while( list($accountId) = each($res['accountsRecent']) )
+				{
+					$account = $res['accounts'][ $accountId ];
+				?>
+				<option 
+				<?=(isset($operation['account']) && $account['id'] == $operation['account'])?'selected="selected"':''?>
+				value="<?=$account['id']?>"><?=$account['name']?> 
+				(<?=$res['currency'][ $account['currency'] ]['text']?>)
+				</option>
+				<?php
+				}
+				?><option>-</option><?php
+				$useOften = true;
+			}
+			
 			reset( $res['accounts'] );
 			while ( list(,$account) = each($res['accounts']))
 			{
+				//Пропускаем частоиспользуемые
+				if( $useOften && array_key_exists( $account['id'], $res['accountsRecent'] ) ){ continue; }
+				
 				?><option 
 				<?=( isset($operation['toAccount']) && $account['id'] == $operation['toAccount'] )
 					?'selected="selected"':''?> 
@@ -137,7 +186,19 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	<div class="line">
 	Комментарий: <textarea name="comment" cols="15" rows="3" class="wide" inputmode="user" ><?=isset($operation['comment'])?$operation['comment']:''?></textarea><br/>
 	</div>
-	
-	<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
+	<?
+	if (isset($operation['id'])) {
+	?>
+		<table class="wide" cellspacing="2" cellpadding="0"><tbody><tr>
+			<td class="wide"><input id="btnSave" type="submit" style="width:100%" value="Изменить"></td>
+			<td>&nbsp;&nbsp;&nbsp;<a href="/operation/del/<?=$operation['id']?>" class="red">удалить</a></td>
+		</tbody></table>
+	<?
+	} else {
+	?>
+		<input id="btnSave" type="submit" style="width:100%" value="Добавить">
+	<?
+	}
+	?>
 </div>
 </form>

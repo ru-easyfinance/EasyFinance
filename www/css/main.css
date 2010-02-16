@@ -402,18 +402,19 @@ ul.menu4 li#m_last a { background: none; }
 
 
 dl.bill_list { margin: 0 10px; }
-dl.bill_list dt, dl.bill_list dd{padding-left:20px;}
+dl.bill_list dt{padding-left:20px;}
+dl.bill_list dd{padding-left:0px;}
 dl.bill_list dt { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 3px 5px; cursor: pointer; }
-dl.bill_list dt.open { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:#F6F6F6 url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
+dl.bill_list dt.open { margin: 0 0 2px 0px; color: #383838; font-weight: bold;background:#F6F6F6 url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
 dl.bill_list dd { margin-bottom: 5px; display:none; cursor: pointer; }
 dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
 dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
-dl.bill_list dd ul li a { width: 100px; overflow: hidden; display: block; padding: 1px 3px 1px 21px; line-height: 15px; color: #363535; text-decoration: none; }
+dl.bill_list dd ul li a { width: 135px; overflow: hidden; display: block; padding: 1px 3px 1px 5px; line-height: 15px; color: #363535; text-decoration: none; }
 dl.bill_list dd ul li a b { display: block; }
 dl.bill_list dd ul li a span { text-decoration: underline; }
 dl.bill_list dd ul li a:hover { background-color: #f6f6f6;}/*url('/img/i/icons.gif') no-repeat 5px -214px;*/
 dl.bill_list dd ul li a:hover span { color: #e46717; }
-dl.bill_list dd.amount { display: block; position: relative; margin-left: 11px; padding-top: 3px; font-size: 14px; color: #36a500; line-height: 18px; font-weight: bold; }
+dl.bill_list dd.amount { display: block; position: relative; margin-left: 0; padding-top: 3px; font-size: 14px; color: #36a500; line-height: 18px; font-weight: bold; }
 dl.bill_list dd.amount div { padding-left:10px; position: relative; width: 110px; text-align: left; }
 dl.bill_list dd.amount div strong{position:relative; left: -5px;}
 dl.bill_list dd.amount div span { display: block; position: absolute; top: 0; left: 73px; }
@@ -997,7 +998,9 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 
 #operations_list tr { cursor: pointer !important; }
 .operation_list table td a { color: #666666; }
-.operation_list table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
+.operation_list table td, table.tab1 td { padding: 2px 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
+.operation_list table td.def_cur{text-align: right}
+.operation_list table .item td.name{width: 150px;max-width: 150px;}
 .operation_list table td.no_over{padding:0;overflow: visible;}
 .operation_list table tr:hover td, table.tab1 tr:hover td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .operation_list table tr.act td div.cont ul { display: block; }
@@ -2042,12 +2045,49 @@ table.calendar_tip td{
 }
 /* хук для дате пикер - так безопаснее обновлять библиотеки */
 .hasDatepicker td a{cursor : pointer}
-/* */
+/* таймы */
 table.times{position: relative; left: 145px}
 /* хук для секси комбо в всплывающем календаре */
 .event_form .combo div.list-wrapper {
 	height:100px;
 	max-height:100px;
+}
+/* поле суммы */
+div.op_addoperation div.op_line div.amount{
+    position : relative;
+    float: none;
+    margin-right: 0;
+    margin-top: 0;
+
+    padding: 0;
+}
+div.op_addoperation div.op_line div.amount div.amount_help{
+    position : relative;
+    float: left;
+    margin-right: 0;
+    margin-top: 0;
+    padding: 0;
+    color: #a1a1a1;
+}
+div.op_addoperation div.op_line div.amount div.amount_general{
+    position : relative;
+    float: left;
+    clear:both;
+    margin-right: 0;
+    margin-top: 0;
+    padding: 0;
+}
+div.op_addoperation div.op_line div.amount input#op_amount{
+    position : relative;
+    float: left;
+    width: 114px;
+}
+div.op_addoperation div.op_line div.amount img{
+    position : relative;
+    float: right;
+    width: 16px;
+    height : 16px;
+    cursor : pointer;
 }
 
 /* верхняя шняжка */

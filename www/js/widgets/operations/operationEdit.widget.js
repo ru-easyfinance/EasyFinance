@@ -84,12 +84,43 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _initSexyCombos() {
-        var accOptionsData = [];
+		// составляем список счетов
         var accounts = _modelAccounts.getAccounts();
+		var accountsCount = 0;
+		// считаем количество всех счетов
         for (var key in accounts) {
-            accOptionsData.push({ value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+			accountsCount++;
         }
+		
+		var recentCount = 0;
+		var recent = res.accountsRecent;
+		// считаем количество часто используемых счетов
+		for (var key in recent) {
+			recentCount++;
+		}
 
+		var accOptionsData = [];
+		if (recentCount >= accountsCount || recentCount == 0) {
+			// если счетов мало (не больше частых счетов), 
+			// выводим все счета по алфавиту
+			for (var key in accounts) {
+				accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+			}
+		} else {
+			// если счетов много, сначала выводим часто используемые счета
+			for (var key in recent) {
+				accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+				delete accounts[key];
+			}
+			
+			accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
+			
+			// затем выводим все остальные счета в алфавитном порядке
+			for (var key in accounts) {
+				accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+			}			
+		}
+		
         _sexyAccount = $.sexyCombo.create({
             id : "op_account",
             name: "op_account",
@@ -211,11 +242,28 @@ easyFinance.widgets.operationEdit = function(){
                 $(".op_addoperation").hide();
             }
         });
-        
-        $('#op_amount').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        //поле суммы
+        $(' div.amount img').click(function(){
+            var calculator = $('#op_amount');
+            $(calculator).val(calculate('0' + $(calculator).val()));
         });
+        $('#op_amount').live('keypress',function(e){
+            if (e.keyCode == 13){
+                $(this).val(calculate('0' + $(this).val()));
+            }
+            if (!e.altKey && !e.shiftKey && !e.ctrlKey){
 
+                var chars = '1234567890. +-*/';
+                if (chars.indexOf(String.fromCharCode(e.which)) == -1){
+                    var keyCode = e.keyCode;
+                    if (keyCode != 13 && keyCode != 46 && keyCode !=8 && keyCode !=37 && keyCode != 39 && e.which != 32)
+                        return false;
+                }
+                return true;
+            }
+            
+        });
+        //\/поле суммы
         $('.calculator-trigger').click(function(){
             $(this).closest('div').find('#op_amount,#amount').val(tofloat($('#op_amount').val()));
         })
@@ -307,7 +355,7 @@ easyFinance.widgets.operationEdit = function(){
                 var accOptionsData = [];
                 var accounts = _modelAccounts.getAccounts();
                 for (var key in accounts) {
-                    accOptionsData.push({ value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+                    accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
                 }
 
                 _sexyTransfer = $.sexyCombo.create({
@@ -390,7 +438,7 @@ easyFinance.widgets.operationEdit = function(){
             _selectedCategory,
             $('#op_date').val(),
             $('#op_comment').val(),
-            tofloat($('#op_amount').val()),
+            tofloat(calculate($('#op_amount').val())),
             _selectedTransfer,
             $('#op_currency').val(),
             TransferSum,
@@ -409,7 +457,7 @@ easyFinance.widgets.operationEdit = function(){
                     refreshTargets();
 
 					$.jGrowl(data.result.text, {theme: 'green'});
-                    $.jGrowl("<a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000 });
+                    $.jGrowl("<a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000});
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!
                 } else if (data.error) {
@@ -473,7 +521,7 @@ easyFinance.widgets.operationEdit = function(){
             }
         }
         
-        if (isNaN(parseFloat($('#op_amount').val()))){
+        if (!/[\-]?[0-9]+([\.][0-9]+)?/.test(calculate($('#op_amount').val()))){
             $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
             return false;
         }

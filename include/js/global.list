@@ -19,6 +19,7 @@ jquery/jquery.form.js
 jquery/jquery.cookie.js
 jquery/jquery.sexy-combo.js
 swfobject.js
+functions.js
 easyfinance.js
 main.js
 helpers.js
@@ -32,6 +33,7 @@ widgets/accounts/accountsPanel.widget.js
 widgets/operations/operationEdit.widget.js
 flowplayer-3.1.4.min.js
 models/calendar.model.js
+widgets/currency/currencyRight.widget.js
 widgets/calendar/calendarLeft.widget.js
 widgets/calendar/calendarRight.widget.js
 widgets/calendar/calendarEditor.widget.js

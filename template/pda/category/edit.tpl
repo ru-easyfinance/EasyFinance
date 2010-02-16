@@ -7,7 +7,7 @@ $typesArray = array(
 );
 
 ?>
-<strong><?=(false)?'Редактирование категории' . $catName : 'Добавление категории';?></strong>
+<strong><?=(isset($category['id']))?'Редактирование категории "' . $category['name'] . '"' : 'Добавление категории';?></strong>
 <br />
 <div class="menu">
 	<a href="/category/add/waste" class="<?=($category['type'] == Category::TYPE_WASTE)?'current':''?>">расход</a> | 
@@ -56,7 +56,23 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
 	}
 	?>
 	</select></div>
+	
+	
+	
 
-	<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
+	<?
+	if (isset($category['id'])) {
+	?>
+		<table class="wide" cellspacing="2" cellpadding="0"><tbody><tr>
+			<td class="wide"><input id="btnSave" type="submit" style="width:100%" value="Изменить"></td>
+			<td>&nbsp;&nbsp;&nbsp;<a href="/category/del/<?=$category['id']?>" class="red">удалить</a></td>
+		</tbody></table>
+	<?
+	} else {
+	?>
+		<input id="btnSave" type="submit" style="width:100%" value="Сохранить">
+	<?
+	}
+	?>
 </div>
 </form>

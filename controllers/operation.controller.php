@@ -180,7 +180,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 					break;
 				}
 				
-				$this->tpl->assign( 'result', array('text'=>"Операция успешно добавлена.") );
+				$this->tpl->assign( 'result', 
+					array('text'=>"Операция успешно добавлена. <a href='/operation/last'>журнал</a>")
+				);
 			}
 			else
 			{
@@ -385,7 +387,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
 					break;
 				}
 				
-				$this->tpl->assign( 'result', array('text'=>"Операция успешно изменена.") );
+				$this->tpl->assign( 'result', 
+					array('text'=>"Операция успешно изменена. <a href='/operation/last'>журнал</a>")
+				);
 			}
 			else 
 			{
@@ -539,7 +543,8 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		
 		// Счёт
 		$account    = isset($this->request->get['account'])?(int)$this->request->get['account']:0;
-
+		$this->tpl->assign( 'accountId' , $account);
+		
 		//Тип операции
 		$type = null;
 		if ( !isset($this->request->get['type']) )
@@ -641,5 +646,14 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		$this->tpl->assign('accountId', $accountId);
 		$this->tpl->assign('operations', $operations);
 		$this->tpl->assign('name_page', 'account/operations');
+	}
+	
+	public function last( array $args = array() )
+	{
+		$operations = $this->model->getLastOperations( 10 );
+		
+		$this->tpl->assign('operations', $operations);
+		
+		$this->tpl->assign('name_page', 'operations/last');
 	}
 }

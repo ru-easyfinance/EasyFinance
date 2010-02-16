@@ -1,8 +1,9 @@
 <?php
+	$row = 1;
 	while( list(,$operation) = each($operations) )
 	{
-		?><div class="operation">
-			<table class="wide" cellspacing="2" cellpadding="0"><tbody><tr>
+		?><div class="operation <?=($row % 2 == 1) ? 'odd' : 'even'?>"><table class="wide" cellspacing="2" cellpadding="0"><tbody>
+			<tr>
 				<td valign="top"><?=substr($operation['date'],0,-5)?>&nbsp;</td>
 				<td class="wide">
 					<a href="/operation/edit/<?=$operation['id']?>">
@@ -10,16 +11,16 @@
 						// Перевод с текущего счёта
 						if( $operation['type'] == 2 && !$operation['tr_id'])
 						{
-							echo 'Перевод на счёт "' . $res['accounts'][ $operation['transfer'] ]['name'] . '".';
+							echo 'перевод "' . $res['accounts'][ $operation['transfer'] ]['name'] . '"';
 						}
 						// Перевод на текущий счёт
 						elseif( $operation['type'] == 2 )
 						{
-							echo 'Перевод со счёта "' . $res['accounts'][ $operation['transfer'] ]['name'] . '".';
+							echo 'перевод "' . $res['accounts'][ $operation['transfer'] ]['name'] . '"';
 						}
 						elseif( $operation['type'] == 4 )
 						{
-							echo 'Перевод на фин. цель "' . $res['user_targets'][ $operation['target_id'] ]['title'] . '"';
+							echo 'цель "' . $res['user_targets'][ $operation['target_id'] ]['title'] . '"';
 						}
 						else
 						{
@@ -33,9 +34,10 @@
 					<td align="left"><?=$res['currency'][ $res['accounts'][ $operation['account_id'] ]['currency'] ]['text']?>
 				</td>
 				<td>
-					&nbsp;<a href="/operation/del/<?=$operation['id']?>">Х</a>
+					&nbsp;<a href="/operation/del/<?=$operation['id']?>" class="red">Х</a>
 				</td>
-			</tr></tbody></table>
-		</div><?php
+			</tr>
+		</tbody></table></div><?php
+		$row++;
 	}
 	?>

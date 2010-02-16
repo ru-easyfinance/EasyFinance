@@ -117,6 +117,14 @@ currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)"
     }
 
     /**
+     * Возвращает массив с пользовательскими валютами
+     * @return array
+     */
+     function getCurrenciesList()
+    {
+        return $this->sys_list_currency;
+    }
+    /**
      * Функция, часть реализации интерфейса IteratorAggregate
      * @return ArrayIterator
      */

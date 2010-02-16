@@ -71,6 +71,9 @@ var pathtoid = {
 var page_mid = pathtoid[pathName];
 
 var TransferSum = 0; //глобальная переменная которая передаст. сумму при переводе на другую валюту.
+/**
+ * @deprecated
+ */
 function FloatFormat(obj, in_string )
 {
     //'.'
@@ -113,28 +116,6 @@ function FloatFormat(obj, in_string )
     //если они изменились сдвигаем каретку на один вправо
     
 }
-
-function tofloat(s)
-{
-    if (s != null) {
-        s = s.toString();
-        return s.replace(/[^0-9\.\-]/gi, '');
-    } else {
-        return '';
-    }
-}
-
-/**
- * Форматирует валюту
- * @param num float Сумма, число
- * @return string
- */
-function formatCurrency(num) {
-    if(isNaN(num)) return "0.00";
-    var sign = new Number(num)
-    return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
-}
-
 function MakeOperation(){
         $.get('/targets/get_closed_list',{},function(data){
             if (data){
@@ -259,10 +240,10 @@ $(document).ready(function() {
         
         //инициация виджета добавления в календарь
 
-        calendarEditor = easyFinance.widgets.calendarEditor()
+        calendarEditor = easyFinance.widgets.calendarEditor();
         calendarEditor.init();
         calendarLeft = easyFinance.widgets.calendarLeft();
-        calendarLeft.init(easyFinance.models.calendar())
+        calendarLeft.init(easyFinance.models.calendar());
         ////////////////////////////////////add to calendar
         
         $('#op_addtocalendar_but').click(function(){
@@ -385,51 +366,10 @@ $('.tags_list .add').live('click', function(){
             }
         }
     })
-})
-    
-
-//      ///////////////////////periodic/////////////////////////////////////////
-//      var data = res['events'];
-//      //events:{
-//      //"5694":{
-//      //    "id":"5694",
-//      //    "chain":"0",
-//      //    "title":"1234",
-//      //    "date":"10.10.2009",
-//      //    "comment":"",
-//      //    "event":"cal",
-//      //    "amount":"0.00",
-//      //    "category":"0",
-//      //    "diff":"0",
-//      //    "account":"0",
-//      //    "drain":"0"}
-//            var p = '';var c = '';
-//            for(var id in data) {
-//                if (data[id]['event']=='cal') {
-//                    c += '<li id="'+id+'">'
-//                        +'<a href="/calendar/">'+data[id]['title']+'</a>'
-//                        +'<span class="date">'+data[id]['date']+'</span></li>';
-//                } else {
-//                    p += '<li id="'+id+'">'
-//                        +'<a href="/periodic/">'+data[id]['title']+'</a>'
-//                        +'<b>'+ data[id]['amount']+'</b>'
-//                        +'<span class="date">'+data[id]['date']+'</span></li>';
-//                }
-//
-//            }
-//            if (c != '') {
-//                c = '<h2>События календаря</h2><ul>' + c + '</ul>';
-//            }
-//            if (p != '') {
-//                p = '<h2>Регулярные операции</h2><ul>' + p + '</ul>';
-//            }
-//            if ((c+p) != '') {
-//                $('.transaction').html(c+p+'&nbsp;<a href="#" id="AshowEvents">Показать события</a>');
-//            }
-      /////////////////////////targets///////////////////////////////////
+});
       data = res['user_targets'];
-            s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
-            for(v in data)
+            var s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
+            for(var v in data)
             {
                 if (data[v]['done'] == 0){
                         s += '<li ><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
@@ -474,9 +414,9 @@ $('.tags_list .add').live('click', function(){
             $('#account').val(f.attr('account'));
             $('#visible').val(f.attr('visible'));
             $('#tpopup').dialog('open');
-            //return false;
+            
         })
-        //$('.financobject ')
+     
     //////////////////////////////////////////////////////////////////////
     // правая панель
 
@@ -486,149 +426,20 @@ $('.tags_list .add').live('click', function(){
     var attributes = {id: "gaugeMain"};
     swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 
-/*
-$(".flash")
-    .mouseover(function(){
-        $(".flash").qtip({
-                   content: 'test-test-test',
-                   position: {
-                      type: 'fixed',
-                      target: false,
-                      corner: {
-                         tooltip: 'rightMiddle', // Use the corner...
-                         target: 'leftMiddle' // ...and opposite corner
-                      }
-                   }
-        });
-    })
-    .mouseout(function(){
-        //$('.qtip').remove();
-        alert('out');
-    }
-);
-*/
     //курсы валют в правой панели
-    //currency
-    //@todo fixme щас сразу всё есть - не использовать рес есть модели
-    data = res['currency'];
-    str = '';
-    var cost,name,progres;
-    var fir = res['currency']['default'];//первая валюта в правом списке
-    for(key in data) {
-        if (key=='default')
-            continue;
-        // валюта по умолчанию первая в списке ! не показываем её в правой панели
-        if (fir != key) {
-            cost = data[key]['cost'];
-            name = data[key]['name'];
-            progres = data[key]['progress'];
-
-            if (!cost)
-                continue;
-
-            str += '<div class="line"><span class="valuta">'
-                + name + '</span><span class="'
-                + progres +'">' + cost + '</span></div>';
-        }
-
-        //fir++;
-    }
-//    fir = 5;
-//    if (fir > 1)
-        $('dl.info dd').html(str).parent().show();//*/
-    
+//currency
+    easyFinance.models.currency.load(res.currency);
+    var currencyRight = easyFinance.widgets.currencyRight();
+    currencyRight.load(easyFinance.models.currency);
 //calendar
     $('.calendar_block .calendar').datepicker();
-
-
-//        $('.calculator_block .calculator').live('keyup',function(e){
-//            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
-//        })
-//       $('.calculator_block .calculator').calculator({
-//            layout: [
-//                    '_7_8_9_+CA',
-//                    '_4_5_6_-M+',
-//                    '_1_2_3_/M-',
-//                    '_0_._=_*MS']});
-
-        // vvv Jet. Тикет 266. Новое выпадающее меню vvv
-//        var topmenu = '<div class="menu3"> \
-//            <ul class="dropdown"> \
-//                <li id="m1"> \
-//                        <a href="/info/"></a> \
-//                        <ul> \
-//                                <li><span/><a href="/info/">Инфо-панель</a></li> \
-//                                <li><span/><a href="/profile/">Профиль</a></li> \
-//                                <li class="last"></li> \
-//                        </ul> \
-//                </li> \
-//                <li id="m2"> \
-//                        <a href="/accounts/"></a> \
-//                        <ul> \
-//                                <li><span/><a href="/accounts/">Счета</a></li> \
-//                                <li><span/><a href="/operation/">Операции</a></li> \
-//                                <li><span/><a href="/category/">Категории</a></li> \
-//                                <li class="last"></li> \
-//                        </ul> \
-//                </li> \
-//                <li id="m3"> \
-//                        <a href="/budget/"></a> \
-//                        <ul> \
-//                                <li><span/><a href="/budget/">Бюджет</a></li> \
-//                                <li><span/><a href="/targets/">Фин. цели</a></li> \
-//                                <li class="last"></li> \
-//                        </ul> \
-//                </li> \
-//                <li id="m4"> \
-//                        <a href="/report/"></a> \
-//                </li> \
-//                <li id="m5"> \
-//                        <a href="/calendar/"></a> \
-//                        <ul> \
-//                                <li><span/><a href="/calendar/#calend">Календарь</a></li> \
-//                                <li><span/><a href="/calendar/#list">События</a></li> \
-//                                <li class="last"></li> \
-//                        </ul> \
-//                </li> \
-//            </ul> \
-//        </div>';
-//
-//        $('#mainwrap').prepend(topmenu);
-
+//mainmenu
         $('div#mainwrap #'+page_mid).addClass('cur act').children('a').addClass('cur');
         $('.menu3 ul li ul li a[href$=' + pathName +']').parent().addClass('selected');
-
-        // код для переключения внешнего вида вкладок
-//        $('.dropdown').children('li')
-//            .mouseover(
-//                function(){
-////                    // act - делает вкладку активной
-////                    // over - показывает подменю
-////                    $(this).addClass('act over');
-////
-////                    // если мышь на закладке раздела, отличного от текущего
-////                    // подсвечиваем вкладку текущего раздела зелёным
-////                    if (!$(this).hasClass('cur'))
-////                        $(this).siblings('.cur').removeClass('act');
-//                })
-//            .mouseout(
-//                function(){
-//                    // скрываем подменю
-////                    $(this).removeClass('over');
-////
-////                    // если мышь на закладке раздела, отличного от текущего
-////                    // делаем вкладку текущего раздела активной
-////                    if (!$(this).hasClass('cur')){
-////                        $(this).removeClass('act');
-////                        $(this).siblings('.cur').addClass('act');
-////                    }
-//                }
-//        );
-        // ^^^ Jet. Тикет 266. Новое выпадающее меню ^^^
     }
 
     // Кнопка сворачивания / разворачивания
-    $('li.over3,li.uparrow').addClass('uparrow').toggleClass('uparrow').click(function() {
+    $('li.over3, li.uparrow').addClass('uparrow').toggleClass('uparrow').click(function() {
         /*
         //@TODO Сохранять значение в куках и потом читать их из куков
         */
@@ -642,21 +453,7 @@ $(".flash")
     // Кнопка закрыть
     $('li.over2').remove();
     $('li.over1').remove();
-//    $('li.over2').click(function() {
-//        /*
-//        //@TODO Сохранять значение в куках и потом читать их из куков
-//        */
-//        $(this).closest('div.ramka3').hide();
-//    }).find('a').removeAttr('href');
-//
-//    // Кнопка настроек виджета
-//    $('li.over1').click(function() {
-//        /*
-//        //@TODO Сохранять значение в куках и потом читать их из куков
-//        //@TODO Сделать нормальную
-//        */
-//        $(this).closest('div.ramka3').slideDown('slow').slideUp('slow');
-//    }).find('a').removeAttr('href');
+
 
     /**
      * Функция которая меняет содержимое левой панели в зависимости от требуемой вкладки
@@ -679,204 +476,10 @@ $(".flash")
         return false;
     });
     //открытие запомнившийся вкладки
-    var activeListing = $.cookie('activelisting')||'c2';
+    var activeListing = $.cookie('activelisting') || 'c2';
     clickOnMenuInLeftPanel(activeListing);
-    /*
-    @todo account hack
-    */
-    // Footer
-//    var r_list;
-
-    /**
-     * Вслывающее окно с регулярными транзакциями и событиями календаря
-     */
-    // Щелчок по кнопке закрытия окна
-//    $('#popupcalendar .inside .close').click(function(){
-//        $('#popupcalendar').hide();
-//        $.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
-//        $.cookie('events_hide', 1, {path: '/'});
-//    });
-//    $('#AshowEvents').live('click',function(){
-//         $.cookie('events_hide', null, {path: '/'});
-//         ShowEvents();
-//         return false;
-//    });
-    // Щелчок по кнопке "Подтвердить"
-//    $('#btnAccept').click(function(){
-//        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-//        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
-//            var obj = new Array ();
-//            $(ch).each(function(){
-//                obj.push($(this).closest('tr').attr('value'));
-//            });
-//            $.post('/calendar/events_accept/', {
-//                ids: obj.toString()
-//            }, function(data){
-//                for(v in obj) {
-//                    delete res.events[obj[v]];
-//                }
-//                $.jGrowl('Отмеченные события подтверждены', {theme: 'green'});
-//                ShowEvents();
-//
-//            }, 'json');
-//        }
-//    });
-//
-//    // Щелчок по кнопке "Пропустить"
-//    $('#btnContinue').click(function(){
-//
-//    });
-//    // Щелчок по кнопке "Редактировать"
-//    $('#btnEdit').click(function(){
-//
-//    });
-//    // Щелчок по кнопке "Удалить"
-//    $('#btnDel').click(function(){
-//        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-//        var v;
-//        if ($(ch).length > 0 && confirm('Удалить отмеченные?')) {
-//            var obj = new Array ();
-//            $(ch).each(function(){
-//                obj.push($(this).closest('tr').attr('value'));
-//            });
-//            $.post('/calendar/events_del/', {
-//                ids: obj.toString()
-//            }, function(data){
-//                for(v in obj) {
-//                    delete res.events[obj[v]];
-//                }
-//                $.jGrowl('Отмеченные события удалены', {theme: 'green'});
-//                ShowEvents();
-//
-//            }, 'json');
-//        }
-//    });
-    // При щелчке по родительскому чекбоксу
-//    $('#events_periodic thead .chk input,#events_calendar thead .chk input').click(function(){
-//        var parentCheckbox = this;
-//        $('tbody .chk input', $(parentCheckbox).closest('table')).each(function(){
-//            if ($(parentCheckbox).attr('checked')) {
-//                $(this).attr('checked','checked');
-//            } else {
-//                $(this).removeAttr('checked');
-//            }
-//        });
-//    });
-
-//    if (window.location.host.toString().substr(0, 5) != "demo.")
-//        ShowEvents();
-//
-//    function ShowEvents(type,page) {
-//        if (type == null) {type = '';}
-//        if (page == null) {page = 1 ;}
-//        if ((res['events']) != null) {
-//            var drain;
-//            var ptr = '',ctr = '',p = 0,c = 0,pc = 0,cc = 0;
-//            var counti = 4;//не работает count
-//            var start = (page-1) * counti;
-//            var end   = counti * page;
-//            for (var v in res['events']) {
-//
-//                if (res['events'][v]['event'] == 'per') {
-//                    if (p >= start && p <= end) {
-//                        var cat_name = $('#ca_'+parseInt(res['events'][v]['category'])).attr('title');
-//                        if (cat_name === undefined) {
-//                            cat_name = ' ';
-//            }
-//
-//                        var account_name = '';
-//                        if (res.accounts[res.events[v]['account']] !== undefined) {
-//                            account_name = res.accounts[res.events[v]['account']]['name'];
-//                        }
-//
-//                        ptr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
-//                                    +'<td>'+res['events'][v]['date']+'</td>'
-//                                    +'<td>'+res['events'][v]['title']+'</td>'
-//                                    +'<td>'+res['events'][v]['diff']+'</td>'
-//                                    +'<td>'+cat_name+'</td>'
-//                                    +'<td>'+account_name+'</td>'
-//                                    +'<td class="money">'+res['events'][v]['amount']+'</td></tr>';
-//                        p++;
-//                    }
-//                    pc++;
-//                } else if (res['events'][v]['event'] == 'cal') {
-//                    if (c >= start && c <= end) {
-//                        if (res['events'][v]['drain'] == 1) {
-//                            drain = 'Расход';
-//                        } else {
-//                            drain = 'Доход';
-//                        }
-//                        ctr += '<tr value="'+res['events'][v]['id']+'"><td class="chk"><input type="checkbox" /></td>'
-//                                    +'<td>'+res['events'][v]['date']+'</td>'
-//                                    +'<td>'+res['events'][v]['comment']+'</td>'
-//                                    +'<td>'+res['events'][v]['diff']+'</td>'
-//                                    +'<td>'+drain+'</td></tr>';
-//                        c++;
-//                    }
-//                    cc++;
-//                }
-//            }
-
-//            $('#events_periodic tbody').html(ptr);
-//            $('#events_calendar tbody').html(ctr);
-////            ppages = parseInt(pc / p);
-////            cpages = parseInt(cc / c);
-////            for (i = 0; i < ppages; i++) {
-////
-////            }
-////            $('#pages_periodic').html();
-//            if (pc > 0 || cc > 0) {
-//                $('#events_periodic thead .chk input,#events_calendar thead .chk input').removeAttr('checked');
-//                if ($.cookie('events_hide') != 1) {
-//                    $('#popupcalendar').show();
-//                }
-//                //$('#popupcalendar .inside').css('width', 'auto');
-//            } else {
-//                $('#popupcalendar').hide();
-//            }
-////            <th>Пр. дней</th>
-////            <th>Категория</th>
-////            <th>Счет</th>
-////            <th class="money">Сумма</th>
-//        }
-//    }
-
-
-
-    // Установить куки
-    // del если 1 то удаляем
-function setCookie(name, value, del) {
-      var valueEscaped = escape(value);
-      var expiresDate = new Date();
-      expiresDate.setTime(expiresDate.getTime() + 30 * 24 * 60 * 60 * 1000); // срок - 1 год, но его можно изменить
-      var expires = expiresDate.toGMTString();
-      if (del == 1){
-          var newCookie = name + "=" + valueEscaped + "; path=/; expires=Thu, 01-Jan-70 00:00:01 GMT; ";
-      }else{
-        var newCookie = name + "=" + valueEscaped + "; path=/; expires=" + expires;
-      }
-      if (valueEscaped.length <= 4000) document.cookie = newCookie + ";";
-}
-
-// Получить куки
-function getCookie(name) {
-      var prefix = name + "=";
-      var cookieStartIndex = document.cookie.indexOf(prefix);
-      if (cookieStartIndex == -1) return null;
-      var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length);
-      if (cookieEndIndex == -1) cookieEndIndex = document.cookie.length;
-      return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
-}
-
-
     //Функция показывает гид.
-    /*$.post('/accounts/countacc/', {},
-    function(data){
-        if (data[0]['cou'] == 0){
-            setCookie('guide','uyjsdhf');
-        }
-    }, 'json');*/
-    if ( getCookie('guide') == "uyjsdhf")
+    if ($.cookie('guide') == "uyjsdhf")
         ShowGuide();
 
 
@@ -893,40 +496,6 @@ function getCookie(name) {
             //setCookie2('guide','',0,COOKIE_DOMEN);
             $.post('/profile/cook/');
             $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {theme: 'green', stick: true});
-            /*$('#conf').bind('dialogclose', function(event, ui) {
-                setCookie('guide','',1);
-                /*if ($('#ch').attr('checked')){
-                    //не показываем очень-очень долго
-                    setCookie('guide','uyjsdhf');
-                }else{
-                    //не показываем в эту сессию
-                    setCookie('guide','');
-                }*/
-            //});*/
-            /*$('#conf').show();
-            $('#conf').dialog({
-                //modal: true
-            })*/
         });
-        
-        //$("#guide").draggable();
-        //$("#guide").resizable();
     }
 });
-
-///**
-// * Переключает видимость категорий
-// * @param field Gj
-// * @param type 1 - доход, -1 - расход
-// */
-//
-//function toggleVisibleCategory(field, type) {
-//    $('option',field).each(function(){
-//        var opt = this;
-//        if ( ($(this).attr('iswaste') == type) || ($(opt).attr('iswaste') == '0') ) {
-//            $(opt).css('display','block');
-//        } else {
-//            $(opt).css('display','none');
-//        }
-//    });
-//}
