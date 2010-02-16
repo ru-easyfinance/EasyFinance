@@ -11,10 +11,19 @@ $(document).ready(function() {
             /**
              * Условия валидации формы
              */
+			 
+			jQuery.validator.addMethod("latinAndDigits", function(value, element) {
+				return this.optional(element) || !/[^a-zA-Z0-9]/.test(value); 
+			}, "Данное поле должно содержать только латинские буквы и символы!");
+
+			 
             $("#formRegister").validate({
                 rules: {
                     name: "required",
-                    login: "required",
+                    login: {
+						required: true,
+						latinAndDigits: true
+					},
                     passw: {
                         required: true,
                         minlength: 5
@@ -36,7 +45,10 @@ $(document).ready(function() {
                 },
                 messages: {
                     name: "Вы не ввели имя",
-                    login: "Вы не ввели логин",
+                    login: {
+						require: "Вы не ввели логин",
+						latin: "Логин должен состоять из латинских букв и цифр"
+					},
                     passw: {
                         required: "Вы не ввели пароль",
                         minlength: "Ваш пароль должен состоять как минимум из 5 символов"
