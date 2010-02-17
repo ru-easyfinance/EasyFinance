@@ -581,18 +581,18 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		// Привет кэп !
 		$array = array();
 
-		//@TODO Похоже, что тут надо что-то дописать в массиве
-		foreach ($list as $operation)
+                // Составляем список операций
+		foreach ($list as $key => $operation)
 		{
 			
 			if (!is_null($operation['account_name']))
 			{
-				$array[$operation['id']] = $operation;
+				$array[$key] = $operation;
 			}
 			else
 			{
-				$array[$operation['id']] = $operation;
-				$array[$operation['id']]['account_name'] = '';
+				$array[$key] = $operation;
+				$array[$key]['account_name'] = '';
 			}
 		}
 		$this->tpl->assign('name_page', 'operations/operation');
