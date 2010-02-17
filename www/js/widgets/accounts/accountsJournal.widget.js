@@ -89,6 +89,7 @@ easyFinance.widgets.accountsJournal = function(){
             function(){
                  // создание новой операции для выбранного счёта
                 var acc = $(this).closest('tr').attr('id').split("_", 2)[1];
+		document.location='/operation/#account=' + acc;
                 if (easyFinance.widgets.operationEdit) {
                     easyFinance.widgets.operationEdit.showForm();
                     easyFinance.widgets.operationEdit.setAccount(acc);
