@@ -26,6 +26,8 @@ easyFinance.widgets.operationEdit = function(){
     var _sexyTransfer = null;
     var _sexyTarget = null;
 
+    var accOptionsData = null;
+
     // private functions
 
     function _initTags() {
@@ -84,10 +86,10 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _initSexyCombos() {
-		// составляем список счетов
+        // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
-		var accountsCount = 0;
-		// считаем количество всех счетов
+        var accountsCount = 0;
+        // считаем количество всех счетов
         for (var key in accounts) {
 			accountsCount++;
         }
@@ -99,25 +101,25 @@ easyFinance.widgets.operationEdit = function(){
 			recentCount++;
 		}
 
-		var accOptionsData = [];
+		_accOptionsData = [];
 		if (recentCount >= accountsCount || recentCount == 0) {
 			// если счетов мало (не больше частых счетов), 
 			// выводим все счета по алфавиту
 			for (var key in accounts) {
-				accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+				_accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
 			}
 		} else {
 			// если счетов много, сначала выводим часто используемые счета
 			for (var key in recent) {
-				accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+				_accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
 				delete accounts[key];
 			}
 			
-			accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
+			_accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
 			
 			// затем выводим все остальные счета в алфавитном порядке
 			for (var key in accounts) {
-				accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+				_accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
 			}			
 		}
 		
@@ -127,7 +129,7 @@ easyFinance.widgets.operationEdit = function(){
             container: "#div_op_account",
             dropUp: false,
             filterFn: _sexyFilter,
-            data: accOptionsData,
+            data: _accOptionsData,
             changeCallback: function() {
                 _selectedAccount = this.getHiddenValue();
 
@@ -352,19 +354,13 @@ easyFinance.widgets.operationEdit = function(){
             $("#op_tags_fields,#op_transfer_fields").show();
 
             if (!_sexyTransfer) {
-                var accOptionsData = [];
-                var accounts = _modelAccounts.getAccounts();
-                for (var key in accounts) {
-                    accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
-                }
-
                 _sexyTransfer = $.sexyCombo.create({
                     id : "op_AccountForTransfer",
                     name: "op_AccountForTransfer",
                     container: "#div_op_transfer",
                     dropUp: false,
                     filterFn: _sexyFilter,
-                    data: accOptionsData,
+                    data: _accOptionsData,
                     changeCallback: function() {
                         _selectedTransfer = this.getHiddenValue();
 
