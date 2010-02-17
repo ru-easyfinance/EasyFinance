@@ -64,7 +64,7 @@ easyFinance.models.accounts = function(){
     }
 
     function getAccounts(){
-        return _accounts;
+        return $.extend(true, {}, _accounts);
     }
 
     function getAccountNameById(id){

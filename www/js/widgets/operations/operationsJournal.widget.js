@@ -82,7 +82,7 @@ easyFinance.widgets.operationsJournal = function(){
             pageTotal = pageTotal + curMoney;
 
             tr += "<tr id='op" + (data[v].virt == "1" ? 'v' : 'r') + data[v].id
-                + "' value='" + data[v].id
+                + "' value='" + v
                 + "' moneyCur='" + curMoney.toString()
                 + "' trId='" + data[v].tr_id
                 + "' account='" + data[v].account_name
@@ -178,8 +178,6 @@ easyFinance.widgets.operationsJournal = function(){
             return false;
 
         var _op = $.extend(true, {}, _journal[id]);
-
-        debugger;
 
         var ids = [];
         var virts = [];

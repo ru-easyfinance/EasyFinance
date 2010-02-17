@@ -94,34 +94,34 @@ easyFinance.widgets.operationEdit = function(){
 			accountsCount++;
         }
 		
-		var recentCount = 0;
-		var recent = res.accountsRecent;
-		// считаем количество часто используемых счетов
-		for (var key in recent) {
-			recentCount++;
-		}
+        var recentCount = 0;
+        var recent = res.accountsRecent;
+        // считаем количество часто используемых счетов
+        for (var key in recent) {
+            recentCount++;
+        }
 
-		_accOptionsData = [];
-		if (recentCount >= accountsCount || recentCount == 0) {
-			// если счетов мало (не больше частых счетов), 
-			// выводим все счета по алфавиту
-			for (var key in accounts) {
-				_accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
-			}
-		} else {
-			// если счетов много, сначала выводим часто используемые счета
-			for (var key in recent) {
-				_accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
-				delete accounts[key];
-			}
-			
-			_accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
-			
-			// затем выводим все остальные счета в алфавитном порядке
-			for (var key in accounts) {
-				_accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
-			}			
-		}
+        _accOptionsData = [];
+        if (recentCount >= accountsCount || recentCount == 0) {
+            // если счетов мало (не больше частых счетов),
+            // выводим все счета по алфавиту
+            for (var key in accounts) {
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+            }
+        } else {
+            // если счетов много, сначала выводим часто используемые счета
+            for (var key in recent) {
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+                delete accounts[key];
+            }
+
+            _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
+
+            // затем выводим все остальные счета в алфавитном порядке
+            for (var key in accounts) {
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + res.currency[accounts[key].currency].text + ')'});
+            }
+        }
 		
         _sexyAccount = $.sexyCombo.create({
             id : "op_account",
