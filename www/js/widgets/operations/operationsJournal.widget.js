@@ -145,9 +145,9 @@ easyFinance.widgets.operationsJournal = function(){
             var value = $(this).attr('value');
 
             if (id.indexOf("opv") != -1)
-                virts[key] = value;    
+                virts[key] = _journal[value].id;
             else
-                ids[key] = value;
+                ids[key] = _journal[value].id;
 
             _ops[key] = $.extend(true, {}, _journal[value]);
             
@@ -182,10 +182,10 @@ easyFinance.widgets.operationsJournal = function(){
         var ids = [];
         var virts = [];
 
-        if (_op.virt) {
-            virts.push(id);
+        if (_op.virt == "1") {
+            virts.push(_op.id);
         } else {
-            ids.push(id);
+            ids.push(_op.id);
         }
 
         _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
