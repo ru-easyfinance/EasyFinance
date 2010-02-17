@@ -49,7 +49,7 @@ class Operation_Model {
      */
     function __construct()
     {
-        $this->db = Core::getInstance()->db;
+        $this->db   = Core::getInstance()->db;
         $this->user = Core::getInstance()->user;
         $this->load();
         return true;

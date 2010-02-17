@@ -58,5 +58,6 @@ class Feedback_Controller extends _Core_Controller
          } else {
             $this->tpl->assign( 'error', array('text'=> implode(" \n", $feedback->errorData) ) );
          }
+
      }
 }

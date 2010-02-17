@@ -256,6 +256,7 @@ abstract class _Core_Controller
         } catch ( Exception $e) {
             $infoa = array();
         }
+
         try {
             $category = new Category_Model();
             $cats = $category->getCategory();

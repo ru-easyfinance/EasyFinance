@@ -12,4 +12,3 @@
     // Текст письма
     $supportBody    = $this->message . "\n\n"
         . var_export($this->params, true);
-?>

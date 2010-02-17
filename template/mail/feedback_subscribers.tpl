@@ -21,4 +21,4 @@
     } else {
         $subscribersEmails = 'support@easyfinance.ru';
     }
-?>
+    

@@ -113,7 +113,7 @@ class Feedback
             if ( ! $this->sendSubscribers( false ) ) {
                 //$this->errorData[] = 'Не удалось отправить письмо службе поддержки';
             }
-
+            
             return true;
             
         } else {
@@ -128,9 +128,7 @@ class Feedback
      */
     private function sendResponse ()
     {
-        require_once DIR_TEMPLATES . '/mail/feedback_user.tpl';
-
-        $response = Swift_Message::newInstance();
+        require DIR_TEMPLATES . '/mail/feedback_user.tpl';
 
         $response = Swift_Message::newInstance()
             ->setSubject( $responseSubject )
@@ -148,13 +146,11 @@ class Feedback
      */
     private function sendSubscribers( $fromUser = false )
     {
-
-        // Да, Да.. Тут именно рекуе, а не рекуе_онсе. Ибо глюки бывают
         require DIR_TEMPLATES . '/mail/feedback_subscribers.tpl';
 
         $subscribers = Swift_Message::newInstance()
             ->setSubject( $subscribersSubject )
-//            ->setFrom( $subscribersFrom )
+            ->setFrom( $subscribersFrom )
             ->setTo( $subscribersEmails )
             ->setBody( $subscribersBody, 'text/plain' );
 
@@ -172,7 +168,7 @@ class Feedback
      */
     private function sendSupport()
     {
-        require_once DIR_TEMPLATES . '/mail/feedback_support.tpl';
+        require DIR_TEMPLATES . '/mail/feedback_support.tpl';
 
         $support = Swift_Message::newInstance()
             // Заголовок
