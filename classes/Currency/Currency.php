@@ -1,6 +1,6 @@
 <?php
 
-class Currency
+class Currency_
 {
     private $id;
 
