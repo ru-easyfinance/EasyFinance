@@ -25,6 +25,8 @@ easyFinance.widgets.calendarEditor = function(){
             }
             $('select#cal_category').html(txt);
             $.sexyCombo.changeOptions("select#cal_category");
+            // выбираем первую опцию по умолчанию, чтобы не было глюков
+            _sexy.setComboValue(_sexy.options[0].text);
         }
     }
 
@@ -119,7 +121,10 @@ easyFinance.widgets.calendarEditor = function(){
 
             // выводим дочерние категории
             for (var keyChild in cat[keyParent].children) {
-                text.push({value : keyChild, text : '&mdash; ' + cat[keyParent].children[keyChild].name, iswaste : cat[keyParent].children[keyChild].type});
+                // #838. Jet: если будем использовать &mdash,
+                // то амперсанд почему-то экранируется и
+                // выбор из комбо не работает!
+                text.push({value : keyChild, text : "- " + cat[keyParent].children[keyChild].name, iswaste : cat[keyParent].children[keyChild].type});
             }
         }
         return text;
@@ -256,7 +261,7 @@ easyFinance.widgets.calendarEditor = function(){
                 data: [{value: "-1", text: "Расход"},{value: "1", text: "Доход"}],
                 changeCallback: function() {
                     _selType = this.getHiddenValue();
-                    _toggleCategory(this.getHiddenValue());
+                    _toggleCategory(_selType);
 
                 }
             });
