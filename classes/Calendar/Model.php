@@ -176,8 +176,13 @@ class Calendar_Model extends _Core_Abstract_Model {
      * @return int Количество изменённых событий
      */
     public static function update ( User $user, $id, $chain, $type, $title, $comment, 
-            $time, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
+            $time, $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
     {
+
+//$this->user, $id, $chain, $type, $title,
+//$comment, $time, $date, $every, $repeat, $week, $amount, $cat,
+//$account, $op_type, $tags, $diff
+
         $sql = 'UPDATE calend SET `title`=?, `comment`=?, `time`=?,
             `every`=?, `repeat`=?, `week`=?, `amount`=?,
             cat_id=?, account_id=?, op_type=?, tags=? WHERE id=? AND user_id=?';

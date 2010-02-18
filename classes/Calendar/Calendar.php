@@ -244,7 +244,7 @@ class Calendar
 
         // Проверяем на ошибки
         if ( count($this->errors) != 0 ) {
-            return false;
+            return array('error'=>array('text' => implode("\n", $this->errors)));
         }
 
         $model = Calendar_Model::loadById( $this->user, $id, $chain);
@@ -261,12 +261,13 @@ class Calendar
 
         // Обновляем событие
         if ( count($diff) == 0 ) {
-            return $update;
+            return array('result' => array('text'=>''));
         // Обновляем даты события
         } else {
             // Если мы перетащили событие мышкой, или установили у него другую дату
             if ( $use_mode == 'single' ) {
-                return Calendar_Model::updateEventSingleDate($id, $chain, $date);
+                Calendar_Model::updateEventSingleDate($id, $chain, $date);
+                return array('result' => array('text'=>''));
             // Если нам нужно обновить все события в цепочке
             } elseif ($use_mode == 'all') {
                 
