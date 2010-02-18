@@ -15,7 +15,7 @@ easyFinance.widgets.calendar = function(){
                 $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
             }
         });
-        $('#event_with_select_events span#remove_all_cal').click(function() {
+        /* $('#event_with_select_events span#remove_all_cal').click(function() {
             var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
             if ($(ch).length > 0 && confirm('Удалить выбранные события?')) {
                 var obj = new Array ();
@@ -29,7 +29,7 @@ easyFinance.widgets.calendar = function(){
                     $('#calendar').fullCalendar('refresh');
                 },'json');
             }
-        });
+        }); */
         $('#event_with_select_events span#accept_all_cal').click(function() {
             var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
             if ($(ch).length > 0 && confirm('Подтвердить выбранные события?')) {
