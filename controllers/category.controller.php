@@ -144,7 +144,7 @@ class Category_Controller extends _Core_Controller_UserCommon
 		{
 			$category = array(
 				'id' 		=> isset($this->request->post['id'])?$this->request->post['id']:$category['id'],
-				'name' 	=> (int)$this->request->post['name'],
+				'name'          => htmlspecialchars($this->request->post['name']),
 				'parent' 	=> (int)$this->request->post['parent'],
 				'system' 	=> (int)$this->request->post['system'],
 				'type' 		=> (int)$this->request->post['type'],

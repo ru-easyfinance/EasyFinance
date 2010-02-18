@@ -14,8 +14,8 @@ class Operation
 	const TYPE_TARGET 	= 4;
 	
 	private static $types = array(
-		self::TYPE_WASTE 		=> 'waste',
-		self::TYPE_PROFIT 		=> 'profit',
+		self::TYPE_WASTE 	=> 'waste',
+		self::TYPE_PROFIT 	=> 'profit',
 		self::TYPE_TRANSFER 	=> 'transfer',
 		self::TYPE_TARGET 	=> 'target',
 	);
