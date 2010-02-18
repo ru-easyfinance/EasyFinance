@@ -37,6 +37,10 @@ $(document).ready(function(){
     $(".f_f_edit,div.descr a").live('click', function(){
        var f = $(this).closest('.object');
         clearForm();
+
+        // #797. disable account changing
+        $('#account').attr("disabled", "disabled");
+
         $('#key').val(f.attr('tid'));
         $('#type').val(f.attr('type'));
         $('#targets_category').val(f.attr('category'));
@@ -156,6 +160,7 @@ $(document).ready(function(){
      */
     function clearForm() {
         $('#tid,#type,#targets_category,#name,#tg_amount,#amountf,#start,#end,#photo,#url,#comment,#account,#visible').val('');
+        $('#account').removeAttr("disabled");
     }
 
     /**
