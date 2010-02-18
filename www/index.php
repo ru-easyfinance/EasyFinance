@@ -47,9 +47,15 @@ catch ( Exception $e )
 	// Вывод отладочной информации
 	if(  DEBUG )
 	{
-		highlight_string( "<?php\n #" . $e->getMessage() . "\n\n in " 
-			. $e->getFile() . ':' 
+            if ( strtolower(ini_get('html_errors')) == 'on' ) {
+		highlight_string( "<?php\n #" . $e->getMessage() . "\n\n in "
+			. $e->getFile() . ':'
 			. $e->getLine() . "\n\n" . $e->getTraceAsString() );
+            } else {
+		 print ($e->getMessage() . "\n\n in "
+			. $e->getFile() . ':'
+			. $e->getLine() . "\n\n" . $e->getTraceAsString());
+            }
 	}
 	// Не позволяем бесконечных циклов
 	elseif( '/notfound' == $request->uri )
