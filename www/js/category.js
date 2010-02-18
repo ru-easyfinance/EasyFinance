@@ -410,12 +410,12 @@ $(document).ready(function() {
             }
 
             var done = function(data) {
-				$('#btnSave').removeAttr('disabled');
-			
-				if (data.error && data.error.text) {
-					$.jGrowl(data.error.text, {theme: 'red'});
-					return false;
-				} else {
+                $('#btnSave').removeAttr('disabled');
+
+                if (data.error && data.error.text) {
+                        $.jGrowl(data.error.text, {theme: 'red'});
+                        return false;
+                } else {
                     $('#add_form').find('#namecat').val('');
                     $('#add_form').find('#btnSave').removeAttr('disabled');
                     $('#add_form').hide();
@@ -427,16 +427,16 @@ $(document).ready(function() {
                         $('#subcat').val('');
                     } else {
                         // категория была отредактирована
-                        updateCategory(oldCat, data.category);
+                        updateCategory(oldCat, data);
                     }
 
                     // Обновляем список родительских категорий
-                    if (data.category.parent == "")
+                    if (data.parent == "")
                         drawParentCategoriesCombo();
 
                     // Обновляем список категорий в диалоге "Добавление операции"
                     $('#op_type').change();
-				}
+                }
             }
 
             $.jGrowl("Категория сохраняется", {theme: 'green'});
