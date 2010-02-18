@@ -276,7 +276,7 @@ abstract class _Core_Controller
             $events = array();
         }
         $res += array(
-            'getNotify' => $_SESSION['user']['getNotify'],
+            'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'calendar' => array(
