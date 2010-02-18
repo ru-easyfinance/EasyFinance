@@ -154,6 +154,9 @@ function isLogged(){
 }
 
 $(document).ready(function() {
+    $('ul.menu2 a').click(function(){
+        $.cookie('events_hide', 0, {path: '/'});
+    });
     if (location.hostname.indexOf("iframe.") != -1)
         isIframe = true;
 
