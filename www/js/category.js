@@ -323,9 +323,6 @@ $(document).ready(function() {
             var subcat = $('#subcat').val();
             var type = $('#cattype').val();
             var sys = $('#catsys').val();
-            // to fix bug #848. Jet
-            if (sys == "0" || sys=="")
-                sys = "1";
 
             var oldCat;
             var strType = '';
@@ -368,7 +365,7 @@ $(document).ready(function() {
                 // подкатегория
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
                 sys = newParent.system;
-				
+
                 if (oldCatId != -1 && type != oldCat.type && newParent.type != 0 && newParent.type != type) {
                     // при изменении типа подкатегории
                     // ЗАПРЕТИТЬ. тикет 389
@@ -411,6 +408,12 @@ $(document).ready(function() {
                     return;
                 }
             }
+
+            // Jet: для исправления бага #848.
+            // для некоторых категорий может быть не указана
+            // системная категория (из-за глюков или просто так сделано в базе)
+            if (sys == "0" || sys=="")
+                sys = "1";
 
             var done = function(data) {
                 $('#btnSave').removeAttr('disabled');
