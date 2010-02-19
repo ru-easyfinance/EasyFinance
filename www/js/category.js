@@ -323,6 +323,9 @@ $(document).ready(function() {
             var subcat = $('#subcat').val();
             var type = $('#cattype').val();
             var sys = $('#catsys').val();
+            // to fix bug #848. Jet
+            if (sys == "0" || sys=="")
+                sys = "1";
 
             var oldCat;
             var strType = '';
@@ -364,7 +367,7 @@ $(document).ready(function() {
             } else {
                 // подкатегория
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
-				sys = newParent.system;
+                sys = newParent.system;
 				
                 if (oldCatId != -1 && type != oldCat.type && newParent.type != 0 && newParent.type != type) {
                     // при изменении типа подкатегории
