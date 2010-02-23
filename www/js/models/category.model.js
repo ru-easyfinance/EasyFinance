@@ -150,15 +150,15 @@ easyFinance.models.category = function(){
     }
 
     function getAllCategories(){
-        return _categories;
+        return $.extend({}, _categories, true);
     }
 
     function getSystemCategories(){
-        return _categories.system;
+        return $.extend({}, _categories.system, true);
     }
 
     function getUserCategories(){
-        return _categories.user;
+        return $.extend({}, _categories.user, true);
     }
 
     function getUserCategoryNameById(id){

@@ -169,8 +169,10 @@ class Accounts_Controller extends _Core_Controller_UserCommon
             }
             if ($er == 'cel')
                 $this->tpl->assign('error',array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'));
-            $this->tpl->assign('result',array('text'=>'Счёт удален'));
-                $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
+            else
+                $this->tpl->assign('result',array('text'=>'Счёт удален'));
+
+            $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         }
         elseif( !isset($_POST['confirmed']) )
 		{

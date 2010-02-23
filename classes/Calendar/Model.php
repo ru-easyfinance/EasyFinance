@@ -179,16 +179,29 @@ class Calendar_Model extends _Core_Abstract_Model {
             $time, $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
     {
 
-//$this->user, $id, $chain, $type, $title,
-//$comment, $time, $date, $every, $repeat, $week, $amount, $cat,
-//$account, $op_type, $tags, $diff
-
         $sql = 'UPDATE calend SET `title`=?, `comment`=?, `time`=?,
             `every`=?, `repeat`=?, `week`=?, `amount`=?,
             cat_id=?, account_id=?, op_type=?, tags=? WHERE id=? AND user_id=?';
-        return Core::getInstance()->db->query($sql, $title, $comment, $time,
+
+        Core::getInstance()->db->query($sql, $title, $comment, $time,
             $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags,
             $chain, $user->getId());
+        if ( count($array) > 0 ) {
+            // Возвращает
+            $accepted = self::loadAcceptedByChain($chain);
+
+            // Создаём повторы события
+            $sql = '';
+            foreach ($array as $value) {
+                if ( in_array($value, $accepted)) continue;
+                if ( !empty ($sql) ) $sql .= ',';
+                $sql .= "('{$chain}','{$value}')";
+            }
+            $sql = 'INSERT INTO calendar_events (`cal_id`,`date`) VALUES '.$sql;
+            Core::getInstance()->db->query($sql);
+        }
+
+        return true;
     }
 
     /**
@@ -207,6 +220,32 @@ class Calendar_Model extends _Core_Abstract_Model {
             WHERE c.user_id = ? AND c.id = ? AND e.id= ?';
        $row = Core::getInstance()->db->selectRow($sql, $user->getId(), $chain, $id );
        return new Calendar_Model( $row, $user );
+    }
+
+    /**
+     * Загружает подтверждённые даты событий
+     * @param int $chain
+     * @return Calendar_Model
+     */
+    public static function loadAcceptedByChain ( $chain )
+    {
+        $sql = 'SELECT `date` FROM calendar_events c WHERE cal_id=? AND accept=1';
+       return Core::getInstance()->db->selectCol( $sql, $chain );
+    }
+
+    /**
+     * Удаляет подтверждённые события
+     * @param User $user
+     * @param int  $chain
+     * @return void
+     */
+    public static function deleteAcceptedEvents( $user, $chain )
+    {
+        $sql = 'DELETE calendar_events FROM calendar_events
+            RIGHT JOIN calend ON user_id =?
+            AND calend.id = calendar_events.cal_id
+            WHERE calendar_events.cal_id =? AND accept=0';
+        return Core::getInstance()->db->query($sql, $user->getId(), $chain);
     }
 
     /**
@@ -235,7 +274,7 @@ class Calendar_Model extends _Core_Abstract_Model {
                     ' AND calend.id = calendar_events.cal_id
                     WHERE calendar_events.id = ' . $id;
             }
-        } elseif ( $id > 0 || is_array( $id ) ) {
+        } elseif ( ($id > 0 && ! is_null( $chain ))  || is_array( $id ) ) {
             $sql = 'DELETE calendar_events FROM calendar_events
                 LEFT JOIN calend ON user_id = ' . $user->getId() .
                 ' WHERE cal_id = ' . $chain;
@@ -246,7 +285,7 @@ class Calendar_Model extends _Core_Abstract_Model {
 
         Core::getInstance()->db->query($sql);
 
-        if ( $use_mode == 'all' ) {
+        if ( $use_mode == 'all' && ! is_null( $chain )) {
             $sql = 'DELETE FROM calend WHERE user_id = ? AND id = ?';
             Core::getInstance()->db->query($sql, $user->getId(), $chain);
         }

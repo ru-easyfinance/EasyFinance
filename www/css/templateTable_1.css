@@ -1,0 +1,165 @@
+/* MAIN */
+div.table_template{
+    border: 2px solid #DFDEDE;
+}
+
+ul, dl, dd, dt { 
+    list-style:none;
+}
+.table{
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0;
+    line-height:20px;
+    font-family:Arial,Tahoma,sans-serif;
+    font-size:14px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    /*border:2px solid #DFDEDE*/
+}
+
+.table td,.table th{
+    line-height:20px;
+    font-family:Arial,Tahoma,sans-serif;
+    font-size:14px;
+    font-weight:normal;
+    width: 25%;
+
+}
+.table table, .table tr, .table td, .table th{
+    border-collapse:collapse;
+    border-spacing:0;
+    text-align: left;
+    border:0 none;
+}
+
+.table .name{
+    padding-left: 20px;
+}
+/* HEAD */
+.table th.money{
+    text-align: right;
+        width: 125px;
+    max-width: 125px;
+    min-width: 125px;
+}
+
+.table.head{
+    background-color: #E8E8E8;
+    border-bottom:2px solid #DFDEDE;
+}
+.table.head th.scroll, .table.head th.scroll div{
+    width: 15px;
+    max-width: 15px;
+    overflow: hidden;
+}
+/* CONTENT */
+.table.content{
+    height: 300px;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.table.content tr{
+    padding-top: -1px;
+    /*border-bottom: 1px dotted #f8f8f8;*/
+    background: transparent url(/img/i/point_x.gif) repeat-x scroll left bottom;
+}
+.table.content tr:hover{
+    background-color: #e3ffdf;
+}
+.table .parent .name{
+    font-weight:bold;
+}
+
+.table .parent.open .name{
+    background:transparent url(/img/i/minus.gif) no-repeat scroll 6px 4px;
+}
+
+.table .parent.close .name{
+    background:transparent url(/img/i/plus.gif) no-repeat scroll 6px 4px;
+}
+
+.table .child .name{
+    padding-left: 25px;
+}
+
+.table td.money{
+    text-align: right;
+    width: 125px;
+    max-width: 125px;
+    min-width: 125px;
+    overflow: hidden;
+    padding-right: 7px;
+}
+.table td.money div{
+    position: relative;
+    float: left;
+    width: 95px;
+    font-weight: bold;
+}
+.table td.money div.abbr{
+    position: relative;
+    float: right;
+    width: 25px;
+    font-weight: normal;
+    text-align: left;
+}
+/* Menu */
+.table div.cont{
+    display: none;
+    position: relative;
+    left: -70px;
+    top: -25px;
+}
+.table tr:hover div.cont{
+    display: block;
+}
+.table div.cont ul {
+    display: block;
+    position: absolute;
+    top: -4px;
+    right: -69px;
+    width: 59px;
+    height: 31px;
+    padding-left: 16px;
+    background: url('/img/i/icons_control3.gif') no-repeat 0 0;
+}
+.table div.cont ul:after { 
+    display: block;
+    content: ' ';
+    height: 0;
+    overflow: hidden;
+    clear: both;
+}
+.table div.cont ul li { 
+    float: left;
+    margin: 9px 8px 0 0;
+    height: 12px;
+}
+.table div.cont ul li a {
+    display: block;
+    width: 13px;
+    height: 12px;
+    text-indent: -999px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.table div.cont ul li.edit a { 
+    width: 13px;
+}
+.table div.cont ul li.del a { 
+    width: 11px;
+}
+.table div.cont ul li.add { 
+    margin-right: 0;
+}
+.table div.cont ul li.add a { 
+    width: 12px;
+}
+
+.sumGreen {color: green;}
+.sumRed {color: red;}

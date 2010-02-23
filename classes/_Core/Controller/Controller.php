@@ -138,8 +138,8 @@ abstract class _Core_Controller
         $accounts = array();
         try
         {
-                $acc = new Account_Collection();
-                $accou = $acc->load($user->getId());
+                $accountCollection = new Account_Collection();
+                $accou = $accountCollection->load($user->getId());
 
                 $account = $accou['result']['data'];
             
@@ -155,7 +155,6 @@ abstract class _Core_Controller
                 $accounts[$k] = $v;
         }
 
-        //die(print_r($accounts));
         //Подготавливаем Часто используемые счета
         $oftenAccounts = array();
         $oftenAccount = array();
@@ -171,7 +170,7 @@ abstract class _Core_Controller
                 $num++;
             }
         }
-        //
+
         // Подготавливаем фин.цели
         $targets = array();
         try 

@@ -66,7 +66,8 @@ class Feedback
             $this->email = $this->params['email'];
         } else {
             // @TODO Переписать когда класс пользователей будет предоставлять инфу о почте пользователя
-            $this->email = $_SESSION['user']['user_mail'];
+            $this->params['email'] = $_SESSION['user']['user_mail'];
+            $this->email = $this->params['email'];
         }
 
 	$mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')

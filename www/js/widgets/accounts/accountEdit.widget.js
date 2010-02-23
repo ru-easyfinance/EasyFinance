@@ -50,9 +50,10 @@ easyFinance.widgets.accountEdit = function(){
         // @todo
         // fill currency combo with options
         var strCurrency = '';
-        for (var key in res.currency) {
+        var currency = _modelCurrency.getCurrencyList();
+        for (var key in currency) {
             if ( key != 'default')
-            strCurrency = strCurrency + '<option value="' + key + '">' + res.currency[key].text + '</option>';
+                strCurrency = strCurrency + '<option value="' + key + '">' + currency[key].text + '</option>';
         }
         $('#acc_currency').html(strCurrency);
 
@@ -120,15 +121,16 @@ easyFinance.widgets.accountEdit = function(){
     // public functions
     /**
      * @desc init widget
-     * @usage init(nodeSelector, model)
+     * @usage init(nodeSelector, modelAccount, modelCurrency)
      */
-    function init(nodeSelector, model) {
-        if (!model)
+    function init(nodeSelector, model, modelCurrency) {
+        if (!model || !modelCurrency)
             return null;
 
         _$node = $(nodeSelector);
 
         _model = model;
+        _modelCurrency = modelCurrency;
 
         _initForm();
 

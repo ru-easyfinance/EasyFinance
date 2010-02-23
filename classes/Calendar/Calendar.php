@@ -106,6 +106,7 @@ class Calendar
     public function add ( Calendar_Event $event )
     {
         $this->events[ $event->getId() ] = $event;
+        return true;
     }
 
     /**
@@ -139,7 +140,7 @@ class Calendar
         $time    = (empty($time))? '00:00' : (string)$time;
         $date    = formatRussianDate2MysqlDate($date);
         $every   = (int)$every;
-        // Опционально, по-умолчанию 1, от 1 до 365 (год) **или дата окончания**, или 0 - бесконечно
+        // Опционально, по-умолчанию 1, от 1 до 365 (год) **или дата окончания**
         $last_date = '0000-00-00';
         if ( strlen($repeat) == 10 ){
             $last_date = formatRussianDate2MysqlDate($repeat);
@@ -170,15 +171,15 @@ class Calendar
 
         // Если повторять более одного раза
         if ( $every == 1 ) {
-            $array = $this->_repeat( $repeat, $date, 'day' );
+            $array = $this->_repeat( $repeat, $date, 'day',  null, $last_date );
         } elseif ($every == 7) {
-            $array = $this->_repeat( $repeat, $date, 'week', $week );
+            $array = $this->_repeat( $repeat, $date, 'week', $week, $last_date );
         } elseif ($every == 30) {
-            $array = $this->_repeat( $repeat, $date, 'month' );
+            $array = $this->_repeat( $repeat, $date, 'month', null, $last_date );
         } elseif ($every == 90) {
-            $array = $this->_repeat( $repeat, $date, 'quartal' );
+            $array = $this->_repeat( $repeat, $date, 'quartal', null, $last_date );
         } elseif ($every == 365) {
-            $array = $this->_repeat( $repeat, $date, 'year' );
+            $array = $this->_repeat( $repeat, $date, 'year', null, $last_date );
         } else {
             $array = array($date);
         }
@@ -218,7 +219,14 @@ class Calendar
         $time    = (empty($time))? '00:00' : (string)$time;
         $date    = formatRussianDate2MysqlDate($date);
         $every   = (int)$every;
-        $repeat  = (int)$repeat;
+        
+        $last_date = '0000-00-00';
+        if ( strlen($repeat) == 10 ){
+            $last_date = formatRussianDate2MysqlDate($repeat);
+        } else {
+            $repeat  = (int)$repeat;
+        }
+
         $week    = (empty($week))? '0000000': (string)$week;
         $amount  = (float)str_replace(' ', '', $amount);
         $cat     = (int)$cat;
@@ -241,6 +249,9 @@ class Calendar
         if (($type !== 'e') && ($type !== 'p')) {
             throw new Calendar_Exception('Unknown event type');
         }
+        if ( $repeat > 500 ) {
+            $this->errors['repeat'] = "Максимальное количество повторений = 500 раз, у вас " . $repeat;
+        }
 
         // Проверяем на ошибки
         if ( count($this->errors) != 0 ) {
@@ -255,12 +266,11 @@ class Calendar
         if ( $every  != $model->every )  $diff[] = 'every';
         if ( $repeat != $model->repeat ) $diff[] = 'repeat';
 
-        $update = Calendar_Model::update($this->user, $id, $chain, $type, $title,
-                    $comment, $time, $date, $every, $repeat, $week, $amount, $cat,
-                    $account, $op_type, $tags, $diff);
-
         // Обновляем событие
         if ( count($diff) == 0 ) {
+            Calendar_Model::update($this->user, $id, $chain, $type, $title,
+                $comment, $time, $date, $every, $repeat, $week, $amount, $cat,
+                $account, $op_type, $tags, $diff);
             return array('result' => array('text'=>''));
         // Обновляем даты события
         } else {
@@ -270,7 +280,24 @@ class Calendar
                 return array('result' => array('text'=>''));
             // Если нам нужно обновить все события в цепочке
             } elseif ($use_mode == 'all') {
-                
+                Calendar_Model::deleteAcceptedEvents( $this->user, $chain );
+
+                // Если повторять более одного раза
+                if ( $every == 1 ) {
+                    $array = $this->_repeat( $repeat, $model->start, 'day',  null, $last_date );
+                } elseif ($every == 7) {
+                    $array = $this->_repeat( $repeat, $model->start, 'week', $week, $last_date );
+                } elseif ($every == 30) {
+                    $array = $this->_repeat( $repeat, $model->start, 'month', null, $last_date );
+                } elseif ($every == 90) {
+                    $array = $this->_repeat( $repeat, $model->start, 'quartal', null, $last_date );
+                } elseif ($every == 365) {
+                    $array = $this->_repeat( $repeat, $model->start, 'year', null, $last_date );
+                } else {
+                    $array = array($date);
+                }
+                Calendar_Model::update( $this->user, $id, $chain, $type, $title, $comment, $time, $date,
+                    $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array);
             }
         }
     }
@@ -283,72 +310,59 @@ class Calendar
      * @param string $week
      * @return array
      */
-    private function _repeat( $repeat, $date, $period, $week = '0000000' ) {
+    private function _repeat( $repeat, $date, $period, $week = '0000000', $last_date = null ) {
         
         $datetime = new DateTime( $date . ' 00:00:00' );
         // Массив с датами события
         $date_events = array();
 
         // Определённое количество раз
-        if ( $repeat > 0 && $repeat < 365 ) {
-
+        if ( $repeat > 0 ) {
+            // Идём в цикле по указанному количеству раз повторений
             for ( $i = 1 ; $i <= $repeat ; $i++ ) {
-                // Если установлено повторять по вторникам и четвергам, но дата
-                // начала выбрана в среду, будем повторять по вторникам, средам и четвергам
-                $date_events[] = $datetime->format('Y-m-d');
-                
+
+                // Если указано что повторять каждую неделю
                 if ( $period == 'week' ) {
+                    if ($week[$datetime->format('N')-1] == 1) {
+                        $date_events[] = $datetime->format('Y-m-d');
+                    }
+
                     // День недели для выбранной даты, от 1 (пнд) до 7 (вск)
                     $dwr =  $datetime->format('N');
 
-                    // Перебираем по циклу неделю, на один день меньше
+                    // Перебираем по циклу неделю
                     for ( $j = 0; $j < 6; $j++ ) {
                         $dw = $dwr + $j ;
-                        if ( $dw > 6 )  { $dw = $dw - 5; }
+
+                        // Если вышли за рамки недели, то возвращаем
+                        if ( $dw > 6 )  { $dw = $dw - 7; }
 
                         if ( $week[$dw] == 1 ) {
                             $date_events[] = date('Y-m-d', $datetime->format('U') + (($j + 1) * 86400));
                         }
                     }
-                }
-
-                $datetime->modify( "+1 " . $period );
-            }
-        // Бесконечно
-        } elseif( $repeat === 0 ) {
-            for ($i = 1 ; $i <= 90 ; $i++) {
-                
-                $date_events[] = $datetime->format('Y-m-d');
-
-                if ( $period == 'week' ) {
-                    // День недели для выбранной даты, от 1 (пнд) до 7 (вск)
-                    $dwr =  $datetime->format('N');
-
-                    // Перебираем по циклу неделю, на один день меньше
-                    for ( $j = 0; $j < 6; $j++ ) {
-                        $dw = $dwr + $j ;
-                        if ( $dw > 6 )  { $dw = $dw - 5; }
-
-                        if ( $week[$dw] == 1 ) {
-                            $date_events[] = date('Y-m-d', $datetime->format('U') + (($j + 1) * 86400));
-                        }
-                    }
-
+                // Если нужно повторять обычным способом
+                } else {
+                    $date_events[] = $datetime->format('Y-m-d');
                 }
 
                 $datetime->modify( "+1 " . $period );
             }
 
         // Повторять до даты
-        } elseif( $repeat > 365 ) {
-            if ( $datetime->format('U') > $repeat ) {
+        } elseif( $last_date ) {
+            $last_date = new DateTime( $last_date . ' 00:00:00' );
+            if ( $datetime->format('U') > $last_date ) {
                 throw new Calendar_Exception('Start date more end date');
             }
-            for ($i = 1 ; $i <= 90 ; $i++) {
-                if ( $datetime->format('U') > $repeat ) {
+            for ($i = 1 ; $i <= 501 ; $i++) {
+                if ( $datetime->format('U') > $last_date ) {
                     return $date_events;
                 }
-
+                if ( count($date_events) > 500 ) {
+                    $this->errors['repeat'] = "Максимальное количество повторений = 500 раз, у вас "
+                        . count($date_events);
+                }
                 $date_events[] = $datetime->format('Y-m-d');
 
                  if ( $period == 'week' ) {
@@ -358,7 +372,7 @@ class Calendar
                     // Перебираем по циклу неделю, на один день меньше
                     for ( $j = 0; $j < 6; $j++ ) {
                         $dw = $dwr + $j ;
-                        if ( $dw > 6 )  { $dw = $dw - 5; }
+                        if ( $dw > 6 )  { $dw = $dw - 7; }
 
                         if ( $week[$dw] == 1 ) {
                             $date_events[] = date('Y-m-d', $datetime->format('U') + (($j + 1) * 86400));
@@ -380,7 +394,7 @@ class Calendar
      * @param string $use_mode 'single' | 'all' | 'follow'
      * @return bool
      */
-    public function deleteEvents($id, $chain, $use_mode)
+    public function deleteEvents($id, $chain = null, $use_mode = 'single')
     {
         $use_mode = (string)$use_mode;
 

@@ -43,8 +43,10 @@ easyFinance.models.accounts = function(){
      * @desc initialize
      * @usage load(callback)
      */
-    function load(param1, param2){
+    function load(modelCurrency, param1, param2){
         _this = this;
+
+        _modelCurrency = modelCurrency;
         
         if (typeof param1 == 'object'){
             _accounts = param1;
@@ -67,6 +69,13 @@ easyFinance.models.accounts = function(){
         return $.extend(true, {}, _accounts);
     }
 
+    function getAccountById(id){
+        if (!_accounts || !_accounts[id])
+            return null;
+
+        return $.extend(true, {}, _accounts[id]);
+    }
+
     function getAccountNameById(id){
         if (!_accounts)
             return null;
@@ -86,7 +95,21 @@ easyFinance.models.accounts = function(){
 
     function getAccountCurrency(id){
         if (_accounts && _accounts[id])
-            return res.currency[_accounts[id]["currency"]];
+            return easyFinance.models.currency.getCurrencyById(_accounts[id].currency);
+        else
+            return null;
+    }
+
+    function getAccountCurrencyCost(id){
+        if (_accounts && _accounts[id])
+            return easyFinance.models.currency.getCurrencyById(_accounts[id].currency).cost;
+        else
+            return null;
+    }
+
+    function getAccountCurrencyText(id){
+        if (_accounts && _accounts[id])
+            return easyFinance.models.currency.getCurrencyById(_accounts[id].currency).text;
         else
             return null;
     }
@@ -282,11 +305,17 @@ easyFinance.models.accounts = function(){
             };
 
             $.post(url, params, function(data){
+                // @todo: update totalBalance!
+                //if (data.operation)
+                //    _accounts[data.operation.account]["totalBalance"] = _accounts[data.operation.account]["totalBalance"] - toFloat(data.operation.amount);
+
                 if (url == ADD_OPERATION_URL) {
                     $(document).trigger('operationAdded');
                 } else if (url == EDIT_OPERATION_URL) {
                     $(document).trigger('operationEdited');
                 }
+
+
 
                 _loadAccounts();
                 callback(data);
@@ -297,13 +326,20 @@ easyFinance.models.accounts = function(){
     return {
         load: load,
         getAccounts: getAccounts,
+        getAccountById: getAccountById,
+
         getAccountNameById: getAccountNameById,
         getAccountIdByName: getAccountIdByName,
         getAccountType: getAccountType,
-		getAccountTypeString: getAccountTypeString,
+        getAccountTypeString: getAccountTypeString,
+        
         getAccountCurrency: getAccountCurrency,
+        getAccountCurrencyCost: getAccountCurrencyCost,
+        getAccountCurrencyText: getAccountCurrencyText,
+
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,
+
         addAccount: addAccount,
         editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,

@@ -16,6 +16,8 @@ ul.about {list-style-position: inside; list-style-type: disc;}
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
 
 input, select, textarea, button { font: 12px Arial, Tahoma, sans-serif; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; -moz-border-radius:5px; border:#CCCCCC solid 1px;}
+input[type="button"] { cursor: pointer; }
+button { cursor: pointer; }
 
 input.check{width : 14px;height:14px}
 
@@ -405,15 +407,13 @@ dl.bill_list { margin: 0 10px; }
 dl.bill_list dt{padding-left:20px;}
 dl.bill_list dd{padding-left:0px;}
 dl.bill_list dt { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 3px 5px; cursor: pointer; }
-dl.bill_list dt.open { margin: 0 0 2px 0px; color: #383838; font-weight: bold;background:#F6F6F6 url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
+dl.bill_list dt.open { margin: 0 0 2px 0px; color: #383838; font-weight: bold;background:#EEEEEE url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
 dl.bill_list dd { margin-bottom: 5px; display:none; cursor: pointer; }
 dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
 dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
 dl.bill_list dd ul li a { width: 135px; overflow: hidden; display: block; padding: 1px 3px 1px 5px; line-height: 15px; color: #363535; text-decoration: none; }
 dl.bill_list dd ul li a b { display: block; }
 dl.bill_list dd ul li a span { text-decoration: underline; }
-dl.bill_list dd ul li a:hover { background-color: #f6f6f6;}/*url('/img/i/icons.gif') no-repeat 5px -214px;*/
-dl.bill_list dd ul li a:hover span { color: #e46717; }
 dl.bill_list dd.amount { display: block; position: relative; margin-left: 0; padding-top: 3px; font-size: 14px; color: #36a500; line-height: 18px; font-weight: bold; }
 dl.bill_list dd.amount div { padding-left:10px; position: relative; width: 110px; text-align: left; }
 dl.bill_list dd.amount div strong{position:relative; left: -5px;}
@@ -730,7 +730,7 @@ div.addoperation .line .category a { width: 17px; top: 22px; background-position
 .event_form .week .cell input{width: auto;margin: 7px}
 .event_form .line {position : relative;margin-top :10px;min-height:20px; clear: both;}
 .event_form .line div {clear: both;}
-.event_form .line div.repeat {left:145px; position: relative;}
+.event_form .line div.repeat {left:145px; position: relative;line-height:21px;}
 .event_form .line div#cal_category,.event_form .line div#cal_type,.event_form .line div#cal_account{left : -1px; width: 300px; float : right;position : relative;}
 
 .event_form .sexy input { width: 288px; }
@@ -1024,7 +1024,8 @@ div.cont ul li.add a { width: 12px; }
 #auth .loginError { margin-left: 125px; margin-bottom: 10px; font-weight: bold; color: red; }
 
 .operation_list table td div.cont ul,
-.categories table td div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
+.categories table td div.cont ul { display: none; position: absolute; top: -4px; right: -39px; width: 79px; height: 31px; padding-left: 16px; background: url('/img/i/icons_menu_accounts.gif') no-repeat 0 0; //zoom: 1; }
+.operationsJournal table td div.cont ul { display: none; position: absolute; top: -4px; right: -39px; width: 79px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0; //zoom: 1; }
 .operation_list table td div.cont ul:after,
 .categories table td div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list table td div.cont ul li,

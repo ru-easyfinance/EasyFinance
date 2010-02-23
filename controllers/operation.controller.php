@@ -179,10 +179,19 @@ class Operation_Controller extends _Core_Controller_UserCommon
 						//exit(json_encode($target->getLastList(0, 100)));
 					break;
 				}
-				
-				$this->tpl->assign( 'result', 
-					array('text'=>"Операция успешно добавлена. <a href='/operation/last'>последние операции</a>")
-				);
+
+                                // #856. fixed by Jet. выводим разные сообщения для обычной и PDA версии
+                                global $request;
+                                $text = '';
+                                if (_Core_TemplateEngine::getResponseMode($request) == "json") {
+                                    $text = "Операция успешно добавлена.";
+                                } else {
+                                    $text = "Операция успешно добавлена. <a href='/operation/last'>последние операции</a>";
+                                }
+
+                                $this->tpl->assign( 'result',
+                                    array('text' => $text)
+                                );
 			}
 			else
 			{
@@ -386,10 +395,19 @@ class Operation_Controller extends _Core_Controller_UserCommon
 							$operation['comment'], $operation['close']);
 					break;
 				}
-				
-				$this->tpl->assign( 'result', 
-					array('text'=>"Операция успешно изменена. <a href='/operation/last'>последние операции</a>")
-				);
+
+                                // #856. fixed by Jet. выводим разные сообщения для обычной и PDA версии
+                                global $request;
+                                $text = '';
+                                if (_Core_TemplateEngine::getResponseMode($request) == "json") {
+                                    $text = "Операция успешно изменена.";
+                                } else {
+                                    $text = "Операция успешно изменена. <a href='/operation/last'>последние операции</a>";
+                                }
+
+                                $this->tpl->assign( 'result',
+                                    array('text' => $text)
+                                );
 			}
 			else 
 			{

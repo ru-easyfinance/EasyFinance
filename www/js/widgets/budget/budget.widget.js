@@ -4,9 +4,9 @@ easyFinance.widgets.budget = function(data){
     var _model = data;
 
     $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td><td class='w2 '>План, "+
-            (res.currency[res.currency['default']].text || '')+"</td><td class='w3 '>Факт, "+
-            (res.currency[res.currency['default']].text || '')+"</td><td class='w5 '>Остаток, "+
-            (res.currency[res.currency['default']].text || '')+"</td><td class='w6'></td>");
+            easyFinance.models.currency.getDefaultCurrencyText()+"</td><td class='w3 '>Факт, "+
+            easyFinance.models.currency.getDefaultCurrencyText()+"</td><td class='w5 '>Остаток, "+
+            easyFinance.models.currency.getDefaultCurrencyText()+"</td><td class='w6'></td>");
 
     function init(data){
         _model = data;
@@ -96,14 +96,14 @@ easyFinance.widgets.budget = function(data){
         var table = 
             "<table>"+
                 "<tr class='plan'>"+
-                    "<td class='profit'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
-                    "<td class='drain'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
-                    "<td class='balance "+planCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.plan_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
+                    "<td class='profit'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
+                    "<td class='drain'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
+                    "<td class='balance "+planCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.plan_drain)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
                 "</tr>"+
                 "<tr class='real'>"+
-                    "<td class='profit'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
-                    "<td class='drain'><div><b>Факт</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
-                    "<td class='balance "+realCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.real_drain)+" "+(res.currency[res.currency['default']].text || '')+"</span><div></td>"+
+                    "<td class='profit'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
+                    "<td class='drain'><div><b>Факт</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_drain)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
+                    "<td class='balance "+realCls+"'><div>Остаток:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.real_drain)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
                 "</tr>"+
             "</table>";
         $('#budget .budget.info').html(table);

@@ -30,8 +30,12 @@ Core::getInstance()->js = array(
     'targets' => array('targets'),
     'report' => array('report'),
     'registration' => array('registration'),
-    'profile' => array('profile'),
-    'periodic' => array('periodic'),
+    'profile' => array(
+        'models/user.model',
+        'widgets/profile/profile.widget',
+        'widgets/profile/userCurrency.widget'
+        ),
+//    'periodic' => array('periodic'),
     'operation' => array(
 		'widgets/operations/operationsJournal.widget', 
 		'operation'),

@@ -12,15 +12,17 @@ easyFinance.models.user = function(){
      * @return void
      */
     function reload(calback){
-        $.get("/profile/load_main_settings/",
+        $.get("/profile/load_main_settings/?responseMode=json",
             {},
             function(data){
+                
                 _data = data.profile;//@todo server will be sent 'spamer'
+                _data.getNotify = res.getNotify; //@todo
                 _data.tooltip = $.cookie('tooltip');
-                _data.guide = $.cookie('guide');
-                _data.activeInsertInLeftPanel = $.cookie('activelisting');
+                _data.guide = $.cookie('guide') == 'uyjsdhf';//@todo guide
+//                _data.activeInsertInLeftPanel = $.cookie('activelisting');
                 if (typeof(calback) == 'function'){
-                    calback();
+                    calback($.extend({}, _data));
                 }
             },
             'json');
@@ -53,13 +55,13 @@ easyFinance.models.user = function(){
     function getName(){
         return _data.name;
     }
-    /**
-     * Возвращает активную вкладку в левой панели
-     * @return {str}
-     */
-    function getActiveInsertInLeftPanel(){
-        return _data.activeInsertInLeftPanel;
-    }
+//    /**
+//     * Возвращает активную вкладку в левой панели
+//     * @return {str}
+//     */
+//    function getActiveInsertInLeftPanel(){
+//        return _data.activeInsertInLeftPanel;
+//    }
     /**
      * Сохраняет пользовательскую информацию
      * @param data {obj}
@@ -70,29 +72,37 @@ easyFinance.models.user = function(){
         if(typeof(data) == 'object'){
             $.cookie('tooltip', (data.tooltip || null), {expire: 100, path : '/', domain: false, secure : '1'});
             $.cookie('guide', (data.guide || null), {expire: 100, path : '/', domain: false, secure : '1'});//@todo server will not write cookie
-            $.cookie('activelisting', (data.activeInsertInLeftPanel || null), {expire: 100, path : '/', domain: false, secure : '1'});
-            $.post('/profile/save_main_settings/',
+//            $.cookie('activelisting', (data.activeInsertInLeftPanel || null), {expire: 100, path : '/', domain: false, secure : '1'});
+//            +guide:($('#guide:checked').length == 1)? 1 : 0,
+//            +getNotify:($('#getNotify:checked').length == 1)? 1 : 0,
+//            +login: $('#login').val(),
+//            +pass: $('#pass').val(),
+//            +newpass: $('#newpass').val(),
+//            +mail: $('#mail').val()
+            $.post('/profile/save_main_settings/?responseMode=json',
                 {
-                    getNotify: data.getNotify || '',
+                    getNotify: data.getNotify || 0,
                     login: data.login || '',
-                    pass: data.password || '',
-                    newpass: data.newPassword || '',
-                    confirmpass: data.confirmPassword || '', //@todo server will be add confirm pasword
-                    mail: data.mail || ''},
+                    pass: data.password,
+                    newpass: data.newPassword,
+//                    confirmpass: data.confirmPassword || '', //@todo server will be add confirm pasword
+                    mail: data.mail || '',
+                    guide: data.guide || 0 //@todo server
+                },
                 function(data) {
                     calback(data);
                 },
                 'json');
         }
     }
-    /**
-     * Устанавливает значение активной вкладки на левой панели
-     * @param data {str}
-     * @return void
-     */
-    function setActiveInsertInLeftPanel(data){
-        $.cookie('activelisting', (data || null), {expire: 100, path : '/', domain: false, secure : '1'});
-    }
+//    /**
+//     * Устанавливает значение активной вкладки на левой панели
+//     * @param data {str}
+//     * @return void
+//     */
+//    function setActiveInsertInLeftPanel(data){
+//        $.cookie('activelisting', (data || null), {expire: 100, path : '/', domain: false, secure : '1'});
+//    }
     /**
      * Возвращает факт показывания гида
      * @return bool
@@ -107,4 +117,10 @@ easyFinance.models.user = function(){
     function isUsedTooltip(){
         return _data.tooltip ? true : false;
     }
-};
+
+    return {
+        reload : reload,
+        getUserInfo : getUserInfo,
+        setUserInfo : setUserInfo
+    }
+}();

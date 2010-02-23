@@ -37,21 +37,59 @@ easyFinance.widgets.accountsPanel = function(){
        })
 
        $('.accounts li a').live('click',function(){
-            var id = $(this).find('div.id').attr('value').replace("edit", "");
-            document.location='/operation/#account='+id;
-            $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
-            //временный хак до полного перехода на события
+            var id;
+            var parentClass = $(this).parent().attr("class");
+            if (parentClass == "account") {
+                // add operation
+                if (parentClass == "account")
+                    id = $(this).find('div.id').attr('value').replace("edit", "");
+                else
+                    id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
 
-            if (easyFinance.widgets.operationEdit && pathName == '/operation/'){
-                easyFinance.widgets.operationEdit.showForm();
-                easyFinance.widgets.operationEdit.setAccount(id);
-            }
+                document.location='/operation/#account='+id;
+                $('tr.item#'+$(this).find('div.id').attr('value')).dblclick();
+                //временный хак до полного перехода на события
 
-            if (easyFinance.widgets.operationsJournal){
-                easyFinance.widgets.operationsJournal.setAccount(id);
-                easyFinance.widgets.operationsJournal.loadJournal();
+                if (easyFinance.widgets.operationEdit && pathName == '/operation/'){
+                    easyFinance.widgets.operationEdit.setAccount(id);
+                }
+
+                if (easyFinance.widgets.operationsJournal){
+                    easyFinance.widgets.operationsJournal.setAccount(id);
+                    easyFinance.widgets.operationsJournal.loadJournal();
+                }
+            } else {
+                // menu action
+                id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+
+                if (parentClass == "operation") {
+                    if (easyFinance.widgets.operationEdit) {
+                        easyFinance.widgets.operationEdit.showForm();
+                        easyFinance.widgets.operationEdit.setAccount(id);
+                    } else {
+                        document.location='/operation/#account='+id;
+                    }
+                } else if (parentClass == "edit") {
+                    document.location='/accounts/#edit'+id;
+                } else if (parentClass == "add") {
+                    document.location='/accounts/#copy'+id;
+                } else if (parentClass == "del") {
+                    if (confirm("Вы уверены что хотите удалить счёт?")) {
+                        var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+
+                        _model.deleteAccountById(id, function(data){
+                            // выводим ошибку, если на счету зарегистрированы фин.цели.
+                            if (data.error && data.error.text) {
+                                $.jGrowl(data.error.text, {theme: 'red'});
+                            } else if (data.result && data.result.text) {
+                                $.jGrowl(data.result.text, {theme: 'green'});
+                            }
+                        });
+                    }
+                }
+                    
             }
-       })
+        })
 
         return this;
     }
@@ -80,16 +118,27 @@ easyFinance.widgets.accountsPanel = function(){
         for (key in data )
         {
             i = g_types[data[key]['type']];
-            str = '<li><a>';
+            str = '<li class="account"><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
             str = str + '<span>'+shorter(data[key]['name'], 20)+'</span><br>';
-            str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 && data[key]['type']!='8' ? 'sumGreen' : 'sumRed') + '">'
-                + ((data[key]['type']!=7 && data[key]['type']!=8) ? formatCurrency(data[key]['totalBalance']) : formatCurrency(-data[key]['totalBalance'])) + '</span>&nbsp;';
-            str = str + res.currency[data[key]['currency']]['text'] + '</span></a></li>';
+            str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
+                + formatCurrency(data[key]['totalBalance']) + '</span>&nbsp;';
+            str = str + _model.getAccountCurrencyText(data[key]['id']) + '</span></a>';
+
+            str = str + '<div class="cont">'
+                       + '<ul style="z-index: 1006;">'
+                            + '<li title="Добавить операцию" class="operation"><a></a></li>'
+                            + '<li title="Редактировать" class="edit"><a></a></li>'
+                            + '<li title="Удалить" class="del"><a></a></li>'
+                            + '<li title="Копировать" class="add"><a></a></li>'
+                       + '</ul></div>';
+
+            str = str + '</li>';
+
             //if ( i!=2 ){
             // перевод в валюту по умолчанию
-                summ[i] = summ[i]+data[key]["totalBalance"] * res.currency[data[key]["currency"]]['cost'] / res.currency[res.currency['default']]['cost'];
+                summ[i] = summ[i]+data[key]["totalBalance"] * _model.getAccountCurrencyCost(data[key]["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
             /*}else{
                 summ[i] = summ[i]-data[key]['defCur'];
             }*/
@@ -123,17 +172,13 @@ easyFinance.widgets.accountsPanel = function(){
 
         // формирование итогов
         str = '<ul>';
-
-        //for(key in res['currency'])
-        //    break;
-        //var c_key = res['currency'][key]['text'] || '';
         
         i = 0;
         for(key in val) {
             i++;
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+res.currency[key].text+'</div></li>';
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+ easyFinance.models.currency.getCurrencyTextById(key) +'</div></li>';
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+res.currency[res.currency['default']].text+'</div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+easyFinance.models.currency.getDefaultCurrencyText()+'</div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
         $('div.listing dl.bill_list dt').addClass('open');

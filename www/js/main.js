@@ -228,8 +228,9 @@ $(document).ready(function() {
     // modified by Jet 29.10.2009, ticket 337.
 
     if (isLogged()) {
-        easyFinance.models.accounts.load(res.accounts, function(model) {
-            easyFinance.widgets.accountsPanel.init('.accounts', easyFinance.models.accounts);
+        easyFinance.models.currency.load(res.currency);
+        easyFinance.models.accounts.load(easyFinance.models.currency, res.accounts, function(model) {
+            easyFinance.widgets.accountsPanel.init('.accounts', model);
         });
     }
 
@@ -430,10 +431,8 @@ $('.tags_list .add').live('click', function(){
     swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 
     //курсы валют в правой панели
-//currency
-    easyFinance.models.currency.load(res.currency);
-    var currencyRight = easyFinance.widgets.currencyRight();
-    currencyRight.load(easyFinance.models.currency);
+    easyFinance.widgets.currencyRight.load(easyFinance.models.currency);
+
 //calendar
     $('.calendar_block .calendar').datepicker();
 //mainmenu

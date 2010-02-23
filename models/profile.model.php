@@ -29,7 +29,7 @@ class Profile_Model
     }
 
     private function ident($pass){
-        $sql = /*(int)*/(sha1($pass) == $_SESSION['user']['user_pass']) ;
+        $sql = /*(int)*/(sha1($pass) == $_SESSION['user']['user_pass']) && ($pass) && (strlen($pass) > 3) ;
         return $sql;
     }
 
@@ -43,7 +43,7 @@ class Profile_Model
 //        if (!$ident) {
 //            return 'nopass';
 //        }
-        $sql = "UPDATE $table SET $set_str WHERE id=? AND $ident;";
+        $sql = "UPDATE $table SET $set_str WHERE id=?";
         return $this->db->query($sql,$this->user_id);
     }
 
@@ -54,18 +54,19 @@ class Profile_Model
 
     public function mainsettings($mod, $prop = ''){
         $ret = array();
-        /*if ( $prop['help'] == 1 ){
-            setCookie("help","",0,"/");      
-        }else{
-            setCookie("help", "124",0,"/"); //записываем в кук нужно ли выводить всплывающие подсказки
-        }*/
         switch($mod){
             case 'save':
                 $mail = $this->subscribe($prop['getNotify']);
                 $ident = $this->ident($prop['user_pass']);
-                $prop['user_pass'] = $prop['newpass'] ?
+
+                if ($ident){
+                    $prop['user_pass'] = $prop['newpass'] ?
                                     sha1($prop['newpass']) :
                                     sha1($prop['user_pass']);
+                }else{
+                    unset ($prop['user_pass']);
+                }
+                unset($prop['getNotify']);
                 unset($prop['newpass']);
 
                 if ( $prop['guide'] != 1 ) {

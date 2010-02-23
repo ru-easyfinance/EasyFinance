@@ -51,7 +51,7 @@ class Login_Controller extends _Core_Controller
 			|| empty($request->post['pass']) || empty($request->post['pass'])
 		)
 		{
-			$errorMessage = 'Заполните, пожалуйста все поля формы!';
+			$errorMessage = 'Заполните, пожалуйста, все поля формы!';
 		}
 		else
 		{
@@ -61,7 +61,7 @@ class Login_Controller extends _Core_Controller
 			
 			if( !$user->initUser($login,$pass) )
 			{
-				$errorMessage = 'Некоректный логин или пароль!';
+				$errorMessage = 'Некорректный логин или пароль!';
 			}
 		}
 		

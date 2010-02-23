@@ -41,6 +41,14 @@ easyFinance.widgets.calendarEditor = function(){
         }
     }
 
+    function _setSexyComboValue(combo, value) {
+        if (!combo)
+            return;
+
+        var str = combo.options.filter('[value="' + value + '"]').eq(0).text();
+        combo.setComboValue(str, false, false)
+    }
+
     /**
      * Устанавливает поля формы
      * @param el obj объект с полями)
@@ -62,7 +70,8 @@ easyFinance.widgets.calendarEditor = function(){
         if (el.type == 'p'){
             $('#cal_amount').val(el.amount.toString());
             if (_sexy){
-                _categories.setComboValue((res.category.user[el.cat] ? res.category.user[el.cat].name : ''), false, false);
+                _setSexyComboValue(_categories,el.cat);
+//                _categories.setComboValue((res.category.user[el.cat]?(res.category.user[el.cat].parent == '0' ? res.category.user[el.cat].name : ('- '+res.category.user[el.cat].name)) : ''), false, false);
                 _type.setComboValue((el.op_type == 1 ? 'Доход':'Расход'), false, false);
                 _account.setComboValue((res.accounts[el.account.toString()] ? res.accounts[el.account.toString()].name : ''), false, false);
             }
@@ -73,9 +82,10 @@ easyFinance.widgets.calendarEditor = function(){
         $('#cal_time').val(dt.toLocaleTimeString().substr(0, 5));
         //Повторения
         $('#cal_repeat').val(el.every);
-        if (el.repeat == 0){//infinity
+/*        if (el.repeat == 0){//infinity
             $('.rep_type[rep="2"]').attr('checked','checked');
-        }else if(el.repeat <= 365){//разы
+        }else*/
+        if(el.repeat <= 365){//разы
             $('.rep_type[rep="1"]').attr('checked','checked');
             $('#cal_count').val(el.repeat);
         }else if(el.repeat > 365){//дата
@@ -105,7 +115,7 @@ easyFinance.widgets.calendarEditor = function(){
     function _clear(){
         $('input[type="text"],select,textarea','#op_dialog_event').val('');
         $('#op_dialog_event #cal_repeat').val(0);
-        $('#op_dialog_event .special #cal_use_mode_3').attr('checked','checked');
+//        $('#op_dialog_event .special #cal_use_mode_3').attr('checked','checked');
         $('input#cal_count').val('1');
         $('#week.week input').removeAttr('checked');
     }
@@ -184,14 +194,14 @@ easyFinance.widgets.calendarEditor = function(){
     var accArr;
     function load(data){
         catArr = _printCategories(easyFinance.models.category.getUserCategoriesTree());
-
+        _useFilter = 1;
         var accounts = easyFinance.models.accounts.getAccounts();
         accArr = [];
         for (var key in accounts){
             accArr.push({value : accounts[key].id, text : accounts[key].name});
         }
         if(typeof data == 'object'){
-            
+            func = 'edit/?responseMode=json';
             $('#op_dialog_event').dialog({
                 bgiframe: true,
                 autoOpen: false,
@@ -208,7 +218,7 @@ easyFinance.widgets.calendarEditor = function(){
                         $(this).dialog('close');
                     },
                     'Удалить': function() {
-                        del({id: $('#op_dialog_event #cal_key').attr('value'),chain: $('#cal_chain').val(),use_mode: $('#op_dialog_event .special input:checked').attr('value')});
+                        del({id: $('#op_dialog_event #cal_key').attr('value'),chain: $('#cal_chain').val(),use_mode: 'all'});
                         $(this).dialog('close');
                     }
                 },
@@ -218,11 +228,11 @@ easyFinance.widgets.calendarEditor = function(){
                 }
             });
             
-            $('span#ui-dialog-title-op_dialog_event').html('<h3>Редактирование события</h3>');
+            $('span#ui-dialog-title-op_dialog_event').html('<h3>Редактирование цепочки событий</h3>');
         }else{
-            func = 'add/';
+            func = 'add/?responseMode=json';
             $('#cal_mainselect').closest('.line').show();
-            _useFilter = 1;
+            
             _filter();
             $('#op_dialog_event').dialog({
                 bgiframe: true,
@@ -243,14 +253,14 @@ easyFinance.widgets.calendarEditor = function(){
                     $('#op_dialog_event').dialog('destroy');
                 }
             });
-            $('select#cal_repeat').removeAttr('disabled');
-            $('span#ui-dialog-title-op_dialog_event').html('<h3>Добавление события</h3>');
+            //$('select#cal_repeat').removeAttr('disabled');
+            $('span#ui-dialog-title-op_dialog_event').html('<h3>Добавление цепочки события</h3>');
         }
         $('#cal_repeat').change();
         $('#op_dialog_event').dialog('open');
         $('#cal_title').focus();
         if(!_sexy){
-            $('#op_dialog_event div.line').show();
+            $('#op_dialog_event #cal_type,#op_dialog_event #cal_account,#op_dialog_event #cal_category').closest('.line').show();
             _sexy = true;
             _type = $.sexyCombo.create({
                 id : "cal_type",
@@ -261,7 +271,7 @@ easyFinance.widgets.calendarEditor = function(){
                 data: [{value: "-1", text: "Расход"},{value: "1", text: "Доход"}],
                 changeCallback: function() {
                     _selType = this.getHiddenValue();
-                    _toggleCategory(_selType);
+                    _toggleCategory(this.getHiddenValue());
 
                 }
             });
@@ -292,7 +302,7 @@ easyFinance.widgets.calendarEditor = function(){
             
         }
         if(typeof(data) == 'object'){
-            func = 'edit/';
+            func = 'edit/?responseMode=json';
 //            _setupValues(data.el, data.type);
 //            _useFilter = 1;
 //            _filter();
@@ -307,7 +317,7 @@ easyFinance.widgets.calendarEditor = function(){
             
             $('#cal_mainselect').closest('.line').hide();
             $('#cal_repeat').change();
-            $('select#cal_repeat').attr('disabled', 'disabled');
+            //$('select#cal_repeat').attr('disabled', 'disabled');
         }
         $('#cal_date_end').datepicker();
     }
@@ -392,28 +402,41 @@ easyFinance.widgets.calendarEditor = function(){
             op_type:    _selType,
             account:    _selAcc,
 
-            use_mode: $('#op_dialog_event .special input:checked').attr('value')
+            use_mode: 'all'
             
         };
         $.jGrowl('Событие сохраняется!',{theme : 'green'});
         $.post('/calendar/'+func,ret,function(data){
             $.jGrowl('Событие успешно сохранено!',{theme : 'green'});
-            calendarLeft.init();
-            if(window.location.pathname.indexOf('calendar') != -1){
+//            calendarLeft.init();
+//            if(window.location.pathname.indexOf('calendar') != -1){
+//                easyFinance.models.calendarOld.init();
+//                $('#calendar').fullCalendar('refresh');
+//            }else{
+//                var s = new Date();
+//                s.setDate(1);
+//                var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
+//               
+//            }
+            
+            
+             
+            if($('#calendar').length != 0){
+                easyFinance.models.calendarOld.init();
                 $('#calendar').fullCalendar('refresh');
             }else{
-                var s = new Date();
-                s.setDate(1);
-                var e = new Date(s.getFullYear(), s.getMonth()+1, 1);
-                $.getJSON('/calendar/events/', {
+                $.getJSON(
+                    '/calendar/events/?responseMode=json',
+                    {
                         start: s.getTime(),
                         end:   e.getTime()
                     },
                     function(result) {
-                        easyFinance.widgets.calendarRight(result);
+                        easyFinance.widgets.calendarPreview.load(result.calendar);
                     },
                     'json');
             }
+            $.get('/calendar/reminder/?responseMode=json',{},function(data){easyFinance.widgets.calendarLeft(data.calendar).init();},'json');
         },'json');
         return true;
     }
@@ -422,13 +445,25 @@ easyFinance.widgets.calendarEditor = function(){
      * удаляет событие
      */
     function del(ret){
-        ret.use_mode = ret.use_mode || 'single';
-        $.post('/calendar/del/',ret,
+        ret.use_mode = 'all';
+        $.post('/calendar/del/?responseMode=json',ret,
         function(data){
-            $.get('/calendar/reminder/',{},function(data){calendarLeft.init(data);},'json');
-            if(window.location.pathname.indexOf('calendar') != -1){
+            if($('#calendar').length != 0){
+                easyFinance.models.calendarOld.init();
                 $('#calendar').fullCalendar('refresh');
+            }else{
+                $.getJSON(
+                    '/calendar/events/?responseMode=json',
+                    {
+                        start: s.getTime(),
+                        end:   e.getTime()
+                    },
+                    function(result) {
+                        easyFinance.widgets.calendarPreview.load(result.calendar);
+                    },
+                    'json');
             }
+            $.get('/calendar/reminder/?responseMode=json',{},function(data){easyFinance.widgets.calendarLeft(data.calendar).init();},'json');
         },'json');
     }
 

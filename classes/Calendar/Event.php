@@ -94,6 +94,7 @@ class Calendar_Event {
      * 30  - месяц
      * 90  - квартал
      * 365 -год
+     *
      */
     public function getEvery ()
     {
@@ -109,7 +110,12 @@ class Calendar_Event {
      */
     public function getRepeat ()
     {
-        return $this->model->repeat;
+
+        if ($this->model->last == '0000-00-00') {
+            return $this->model->repeat;
+        } else {
+            return strtotime($this->model->last . ' 00:00:00');
+        }
     }
 
     /**

@@ -2,7 +2,7 @@ easyFinance.widgets.calendar = function(){
     var _data, _editor;
     var _d = new Date();
     function init(){
-        var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+//        var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
         _editor = calendarEditor;
         $.fullCalendar.monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
         $.fullCalendar.monthAbbrevs = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
@@ -23,81 +23,15 @@ easyFinance.widgets.calendar = function(){
                     obj.push($(this).attr('id').replace('ev_', ''));
                 });
                 $.jGrowl('События удаляются!',{theme : 'green'});
-                $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){
+                $.post('/calendar/reminderDel?responseMode=json',{ids : obj.toString()},function(data){
                     $.jGrowl('События удалены!',{theme : 'green'});
                     calendarLeft.init();
                     $('#calendar').fullCalendar('refresh');
                 },'json');
             }
         }); */
-        $('#event_with_select_events span#accept_all_cal').click(function() {
-            var ch = $(' #ev_tabl tr td input:checked, #per_tabl tr td input:checked');
-            if ($(ch).length > 0 && confirm('Подтвердить выбранные события?')) {
-                var obj = new Array ();
-                $(ch).closest('tr').each(function(){
-                    obj.push($(this).attr('id').replace('ev_', ''));
-                });
-                $.jGrowl('События подтверждаются!',{theme : 'green'});
-                $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){
-                    $.jGrowl('События подтверждены!',{theme : 'green'});
-                    calendarLeft.init();
-                    $('#calendar').fullCalendar('refresh');
-                },'json');
-            }
-        });
 
         $('#datepicker').datepicker({numberOfMonths: 3}).datepicker();
-        $('.hasDatepicker td').live('click',function(){
-            var month = $(this).closest('.calendar, .ui-datepicker-group').find('span.ui-datepicker-month').text();
-            var year = $(this).closest('.calendar, .ui-datepicker-group').find('span.ui-datepicker-year').text();
-            var day = $(this).find('a').text();
-            for(var tmpKey in ddt2month){
-                if (ddt2month[tmpKey] == month){
-                    month = tmpKey;
-                    break;
-                }
-            }
-//            _editor.load();
-//            $('#cal_date').val(day + '.' + (Number(month) + 1) + '.' + year);
-            var i = 1;
-            var dayDate = new Date(year, month, day, 1, 1, 1, 1);
-            var weekDay = dayDate.getDay();
-            if (weekDay === 0){
-                weekDay = 7;
-            }
-            _editor.load();
-            $('#cal_date').val($.datepicker.formatDate('dd.mm.yy',dayDate ));
-            $('#week.week input').each(function(){
-                if (i == weekDay){
-                    $(this).attr('checked', 'checked');
-                }
-                i++;
-            });
-
-
-        });
-
-        
-
-        $('#datepicker.hasDatepicker').qtip({
-                content: (''),
-                position: {
-                    corner: {
-                        target: 'topMiddle',
-                        tooltip: 'bottomMiddle'
-                    }
-                },
-                style: 'modern'
-            });
-
-        $('#datepicker.hasDatepicker td a').live('mouseover',function(){
-                var content =  $(this).attr('used') ?
-                    (   '<div><b>' +($(this).attr('date')||'') +
-                        '</b></div><table class="calendar_tip">' +
-                        $(this).attr('used') + '</table>') :
-                    '<div style="color:#B4B4B4">На выбранный день ничего не запланировано</div>';
-                $('#datepicker.hasDatepicker').qtip('api').updateContent(content);
-        });
 var s;
 $('#calendar').fullCalendar({
         weekStart: 1,
@@ -149,24 +83,38 @@ $('#calendar').fullCalendar({
         events: function(start, end, calback) {
             s = new Date(start.getFullYear(), start.getMonth()-2, start.getDate()+10);//+10??там разбег всего на пять, но лучше перестраховаться @todo 0_о Разобраться с автором...
             var e = new Date(s.getFullYear(), s.getMonth()+4, s.getDate());
-            $.getJSON('/calendar/events/', {
-                    start: s.getTime(),
-                    end:   e.getTime()
-                },   function(result) {
+            easyFinance.models.calendarOld.getOperationsByInterval(s.getTime(), e.getTime(), function(result){
                     _data = result;
-                    $('.hasDatepicker td').removeAttr('onclick').find('a').removeAttr('href');
+                    easyFinance.widgets.calendarPreview.load(result);
+                    $('#calend .hasDatepicker').qtip({
+                        content: (''),
+                        position: {
+                            corner: {
+                                target: 'topMiddle',
+                                tooltip: 'bottomMiddle'
+                            }
+                        },
+                        style: 'modern'
+                    });
+
+                    $('#calend .hasDatepicker td a').live('mouseover',function(){
+                            var content =  $(this).attr('used') ?
+                                (   '<div><b>' +($(this).attr('date')||'') +
+                                    '</b></div><table class="calendar_tip">' +
+                                    $(this).attr('used') + '</table>') :
+                                '<div style="color:#B4B4B4">На выбранный день ничего не запланировано</div>';
+                            $('#datepicker.hasDatepicker').qtip('api').updateContent(content);
+                    });
                     var ddt = new Date();
-                    var now = new Date();
-                    var ddt_day , ddt_month, eventsList='', periodicList='';
+//                    var now = new Date();
+                    var eventsList='', periodicList='';
                     var calendarArray = [];
                     var monthForList = s.getMonth() + 2;
                     if (monthForList >11){
                         monthForList += -12;
                     }
-                    if (typeof result != 'object'){
-                        return null;
-                    }
-                    easyFinance.widgets.calendarRight(result);
+
+//                    easyFinance.widgets.calendarRight(result);
                     for(var v in result){
                         var accept  = result[v].accept == '1' ? 'accept':'reject';
                         ddt.setTime(result[v].date*1000);
@@ -228,34 +176,6 @@ $('#calendar').fullCalendar({
                                 draggable : true
                             });
                         }
-
-                        //get calendar month
-                        ddt_month = ddt2month[ddt.getMonth()];
-                        $('#datepicker.hasDatepicker .ui-datepicker-title').each(function(){
-                            var month = $(this).find('span.ui-datepicker-month').text();
-                            var year = $(this).find('span.ui-datepicker-year').text();
-                            if (month == ddt_month && year == ddt.getFullYear()){
-                                ddt_day = ddt.getDate();
-                                $(this).closest('.ui-datepicker-group,.calendar').find('td a').each(function(){
-                                    if ($(this).text() == ddt_day){
-                                        if ($(this).css('priority') != 'red' ){
-                                            if (result[v].accept == '0' && now >= ddt){
-                                                $(this).css('color', 'red');
-                                            }else{
-                                                $(this).css('color', '#000000');
-                                            }
-                                        }
-                                        $(this).attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
-                                            attr('used',($(this).attr('used')||'') +
-                                                '<tr><td style="width:50%;overflow:hidden">' +
-                                                result[v].title + '</td><td style="text-align: right;width:50%;overflow:hidden">' +
-                                                (result[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : ((result[v].op_type == '1'?'<span style="color:green">':'<span style="color:red">')+result[v].amount+'</span>')) + '</td></tr>').
-                                            closest('td').
-                                            addClass('hasEvents');
-                                    }
-                                });
-                            }
-                        });
                     }
                     $('#ev_tabl tbody').html(eventsList);
                     $('#per_tabl tbody').html(periodicList);
@@ -263,7 +183,7 @@ $('#calendar').fullCalendar({
                         $(this).find('li.edit a').click();
                     });
                     $('#per_tabl tr td.reject, #ev_tabl tr td.reject').click(function(){
-                        $.post('/calendar/reminderAccept',
+                        $.post('/calendar/reminderAccept?responseMode=json',
                             {ids : $(this).closest('tr').attr('id').replace('ev_', '')},
                             function(){$('#calendar').fullCalendar('refresh');},
                             'json');
@@ -278,8 +198,9 @@ $('#calendar').fullCalendar({
                         _editor.del({id:$(this).closest('tr').attr('id').replace('ev_', '')});
                     });
                     calback(calendarArray);
-                },'json'
-            );
+            });
+                
+            
         },
         eventClick: function(calEvent, jsEvent) {
             var element = _data[calEvent.key];
@@ -300,122 +221,8 @@ $('#calendar').fullCalendar({
             var startDate = new Date(ret.start*1000);
             ret.start = $.datepicker.formatDate('dd.mm.yy', startDate);
             ret.use_mode = 'single';
-            $.post('/calendar/edit',ret,function(data){
-                var ddt = new Date();
-                var now = new Date();
-                var ddt_day , ddt_month, eventsList='', periodicList='';
-                var calendarArray = [];
-                var monthForList = s.getMonth() + 2;
-                for(var v in _data){
-                        var accept  = _data[v].accept == '1' ? 'accept':'reject';
-                        ddt.setTime(_data[v].date*1000);
-
-                        if (_data[v].type == 'p'){
-                            if (ddt.getMonth() == monthForList){
-                                periodicList += '<tr id="ev_' + v + '"><td class="chk"><input type="checkbox" value="" /></td>' +
-                                        '<td>' + $.datepicker.formatDate('dd.mm.yy',ddt) + '</td>' +
-                                        '<td>' + _data[v].title + '</td>' +
-                                        '<td>' + _data[v].amount + '</td>' +
-                                        '<td><div class="cont" style="top: -17px"><ul style="right:-20px">' +
-                                            '<li class="edit"><a title="Редактировать">Редактировать</a></li>' +
-                                            '<li class="del"><a title="Удалить">Удалить</a></li>' +
-                                            '</ul></div></td><td class="'+accept+'" style="width:16px">&nbsp;&nbsp;&nbsp;</td>' +
-                                        '</tr>';
-                            }
-                            if (_data[v].op_type == '1'){
-                                calendarArray.push({
-                                    key: v,
-                                    id: _data[v].id,
-                                    title: _data[v].title,
-                                    date: _data[v].date,
-                                    end : _data[v].date,
-                                    showTime: 0,
-                                    className: 'green',
-                                    draggable : true
-                                });
-                            }else{
-                                calendarArray.push({
-                                    key: v,
-                                    id: _data[v].id,
-                                    title: _data[v].title,
-                                    date: _data[v].date,
-                                    end : _data[v].date,
-                                    showTime: 0,
-                                    className: 'red',
-                                    draggable : true
-                                });
-                            }
-                        }else if (_data[v].type == 'e'){
-                            if (ddt.getMonth() == monthForList){
-                                eventsList += '<tr id="ev_' + v + '"><td class="chk"><input type="checkbox" value="" /></td>' +
-                                            '<td>' + $.datepicker.formatDate('dd.mm.yy', ddt) + ' ' + ddt.toLocaleTimeString().substr(0, 5) + '</td>' +
-                                            '<td>'+_data[v].title+'</td>' +
-                                            '<td><div class="cont" style="top: -17px"><ul style="right:-0px;">' +
-                                            '<li class="edit"><a title="Редактировать">Редактировать</a></li>' +
-                                            '<li class="del"><a title="Удалить">Удалить</a></li>' +
-                                            '</ul></div></td><td class="'+accept+'" style="width:16px">&nbsp;&nbsp;&nbsp;</td>' +
-                                            '</tr>';
-                            }
-
-                            calendarArray.push({
-                                key: v,
-                                id: _data[v].id,
-                                title: _data[v].title,
-                                date: _data[v].date,
-                                end : _data[v].date,
-                                className: 'yellow',
-                                draggable : true
-                            });
-                        }
-
-                        //get calendar month
-                        ddt_month = ddt2month[ddt.getMonth()];
-                        $('#datepicker.hasDatepicker .ui-datepicker-title').each(function(){
-                            var month = $(this).find('span.ui-datepicker-month').text();
-                            var year = $(this).find('span.ui-datepicker-year').text();
-                            if (month == ddt_month && year == ddt.getFullYear()){
-                                ddt_day = ddt.getDate();
-                                $(this).closest('.ui-datepicker-group,.calendar').find('td a').each(function(){
-                                    if ($(this).text() == ddt_day){
-                                        if ($(this).css('priority') != 'red' ){
-                                            if (_data[v].accept == '0' && now >= ddt){
-                                                $(this).css('color', 'red');
-                                            }else{
-                                                $(this).css('color', '#000000');
-                                            }
-                                        }
-                                        $(this).attr('date',$.datepicker.formatDate('dd.mm.yy', ddt)).
-                                            attr('used',($(this).attr('used')||'') +
-                                                '<tr><td>' +
-                                                _data[v].title + '<td></td>' +
-                                                (_data[v].type == 'e' ? ddt.toLocaleTimeString().substr(0, 5) : _data[v].amount) + '</td></tr>').
-                                            closest('td').
-                                            addClass('hasEvents');
-                                    }
-                                });
-                            }
-                        });
-                    }
-                    $('#ev_tabl tbody').html(eventsList);
-                    $('#per_tabl tbody').html(periodicList);
-                    $('#per_tabl tr, #ev_tabl tr').dblclick(function(){
-                        $(this).find('li.edit a').click();
-                    });
-                    $('#per_tabl tr td.reject, #ev_tabl tr td.reject').click(function(){
-                        $.post('/calendar/reminderAccept',
-                            {ids : $(this).closest('tr').attr('id').replace('ev_', '')},
-                            function(){$('#calendar').fullCalendar('refresh');},
-                            'json');
-                    });
-//                    $.post('calendar/reminderAccept',{ids : obj.toString()},function(){},'json')
-                    $('tr .cont ul li.edit a').click(function(){
-                        var element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
-                        var type = element.type == 'e'?'event':'periodic';
-                        _editor.load({el:element, type:type});
-                    });
-                    $('tr .cont ul li.del a').click(function(){
-                        _editor.del({id:$(this).closest('tr').attr('id').replace('ev_', '')});
-                    });
+            $.post('/calendar/edit?responseMode=json',ret,function(data){
+                $('#calendar').fullCalendar('refresh');
             },'json');
         },
         eventRender: function(calEvent, element){
@@ -425,8 +232,8 @@ $('#calendar').fullCalendar({
             if (event.repeat > 365){
                 var dt = new Date((event.repeat)*1000);
                 template += 'до ' + $.datepicker.formatDate('dd.mm.yy', dt);
-            }else if (event.repeat == '0'){
-                template += 'бесконечно';
+//            }else if (event.repeat == '0'){
+//                template += 'бесконечно';
             }else{
                 var lastChar = event.repeat.toString().substr(event.repeat.toString().length-1, 1);
                 if((event.repeat > 20 || event.repeat < 10) && (lastChar == '4' || lastChar == '3' || lastChar == '2')){
@@ -476,6 +283,14 @@ $('#calendar').fullCalendar({
                     break;
             }
             var ddt = new Date(event.date*1000);
+
+            var modelAccounts = easyFinance.models.accounts;
+            var modelCurrency = easyFinance.models.currency;
+
+            var account = modelAccounts.getAccountById(event.account);
+            var currencyId = account ? account.currency : '1'; // should use default instead of "1"?
+            var strCurrency = modelCurrency.getCurrencyTextById(currencyId);
+
             var tipContent = '<div style="text-align:left"><div><b>'+ (event.title || 'Без названия') +'</b></div>' +
                 '<div>'+$.datepicker.formatDate('dd.mm.yy',ddt)+' ' +
                 (event.type == 'e' ?
@@ -484,7 +299,7 @@ $('#calendar').fullCalendar({
                         (event.op_type > 0 ?
                             'green">' :
                             'red"> -') + (event.amount ? formatCurrency(Math.abs(event.amount)) : '0.00') +
-                        ' ' + (res.currency[(res.accounts[event.account] ? res.accounts[event.account].currency : '1')] ? res.currency[(res.accounts[event.account] ? res.accounts[event.account].currency : '1')].text : ''))) + '</div>' + //@todo FIX
+                        ' ' + strCurrency)) + '</div>' + //@todo FIX
                 '<div>'+(event.accept == '1' ? 'Подтверждено' : (_d > ddt ? 'Просрочено' : 'Не подтверждено')) + '</div>' +
                 '<div style="border-bottom: 1px dotted #e4e4e4; border-top: 1px dotted #e4e4e4;"><i>'+template+'</i></div>' +
                 '<div>' + (event.comment || '') + '</div></div>';

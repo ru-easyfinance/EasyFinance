@@ -1,12 +1,12 @@
 easyFinance.widgets.currencyRight = function(){
     var _model;
 
-    function load(model){
-        _model = model;
-        print();
+    function load(modelCurrency){
+        _model = modelCurrency;
+        redraw();
     }
 
-    function print(){
+    function redraw(){
         var data = _model.getCurrencyList();
         var currencyList = '', key;
         var defaultCurrency = _model.getDefaultCurrencyId();
@@ -18,17 +18,16 @@ easyFinance.widgets.currencyRight = function(){
                     (data[key]['cost'] || '') + '</span></div>';
             }
         }
+
         if (currencyList != ''){
             $('dl.info dd').html(currencyList).parent().show();
-        }else{
+        } else {
             $('dl.info').hide();
         }
-
     }
-
 
     return{
         load : load,
-        print : print
+        redraw : redraw
     }
-};
+}();

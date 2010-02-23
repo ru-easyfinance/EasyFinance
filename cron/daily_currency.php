@@ -34,16 +34,12 @@
     $linkUKR = "http://bank-ua.com/export/currrate.xml";//национальный хохляндский банк.
     $linkKAZ = "http://www.nationalbank.kz/rss/rates_all.xml";//национальный казахстанский банк
 
-    //print "\n".$date;
-
     //Создаём ДОМ объект
     $dom = new DOMDocument('1.0', 'windows-1251');
     $dom->load($linkCBR);
     // Иногда, ЦБР подло меняет разделители знаков в дате на слеш, поэтому перестраховываемся
     $date = str_replace('/', '.', $dom->getElementsByTagName('ValCurs')->item(0)->getAttribute('Date'));
     $date = formatRussianDate2MysqlDate($date);
-
-    //print_r($result);
 
     //Если на эту дату уже существует, то прекращать выполнение скрипта
     if (trim($result[0]['currency_date']) === trim($date)) {
@@ -53,43 +49,7 @@
     $sql = '';
     foreach ( $dom->getElementsByTagName('Valute') as $elem ) {
         if (!empty ($sql)) $sql .= ',';
-        /*if ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'AUD') {
-            $id = 5;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'GBP') {
-            $id = 16;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'BYR') {
-            $id = 6;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'DKK') {
-            $id = 7;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'USD') {
-            $id = 2;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'EUR') {
-            $id = 3;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'ISK') {
-            $id = 8;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'KZT') {
-            $id = 9;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'CAD') {
-            $id = 10;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'CNY') {
-            $id = 11;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'NOK') {
-            $id = 12;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'XDR') {
-            $id = 13;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'SGD') {
-            $id = 14;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'TRY') {
-            $id = 15;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'UAH') {
-            $id = 4;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'SEK') {
-            $id = 17;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'CHF') {
-            $id = 18;
-        } elseif ($elem->getElementsByTagName('CharCode')->item(0)->nodeValue == 'JPY') {
-            $id = 19;
-        } */
+
         $kod3 = $elem->getElementsByTagName('CharCode')->item(0)->nodeValue;
         $getId = "SELECT cur_id FROM currency WHERE cur_char_code=?";
         $re = $db->query($getId, $kod3);
@@ -111,7 +71,7 @@
     if (!empty ($sql)) {
         $sql = "INSERT INTO daily_currency VALUES ". $sql;
         $db->query($sql);
-	print " OK";
+        print " OK";
         //@TODO Записать файл
     }
 

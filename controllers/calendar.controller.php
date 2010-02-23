@@ -12,8 +12,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      * @return void
      */
     protected function __init()
-    {
-        $this->tpl->assign('name_page', 'calendar/calendar');
+    {        
     }
 
     /**
@@ -23,6 +22,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      */
     function index($args)
     {
+        $this->tpl->assign('name_page', 'calendar/calendar');
     }
 
     /**
@@ -33,12 +33,13 @@ class Calendar_Controller extends _Core_Controller_UserCommon
     function add( $args )
     {
         $calendar = new Calendar( Core::getInstance()->user );
-        die ( json_encode ( $calendar->createEvent(
-            @$_POST['type'], @$_POST['title'], @$_POST['comment'],
-            @$_POST['time'] , @$_POST['date'], @$_POST['every'], @$_POST['repeat'], 
-            @$_POST['week'],@$_POST['amount'], @$_POST['cat'], @$_POST['account'],
+
+        $this->tpl->assign( 'calendar', $calendar->createEvent(
+            @$_POST['type'],  @$_POST['title'],  @$_POST['comment'],
+            @$_POST['time'],  @$_POST['date'],   @$_POST['every'], @$_POST['repeat'],
+            @$_POST['week'],  @$_POST['amount'], @$_POST['cat'],   @$_POST['account'],
             @$_POST['op_type'], @$_POST['tags']
-        ) ) );
+        ) );
     }
 
     /**
@@ -49,12 +50,12 @@ class Calendar_Controller extends _Core_Controller_UserCommon
     function edit( $args )
     {
         $calendar = new Calendar( Core::getInstance()->user );
-        die ( json_encode ( $calendar->editEvents(
-            @$_POST['id'], @$_POST['chain'], @$_POST['type'], @$_POST['title'],
-            @$_POST['comment'], @$_POST['time'] , @$_POST['date'], @$_POST['every'],
-            @$_POST['repeat'], @$_POST['week'],@$_POST['amount'], @$_POST['cat'],
-            @$_POST['account'], @$_POST['op_type'], @$_POST['tags'], @$_POST['use_mode']
-        ) ) );
+        $this->tpl->assign( 'calendar', $calendar->editEvents(
+            @$_POST['id'],      @$_POST['chain'],   @$_POST['type'],   @$_POST['title'],
+            @$_POST['comment'], @$_POST['time'] ,   @$_POST['date'],   @$_POST['every'],
+            @$_POST['repeat'],  @$_POST['week'],    @$_POST['amount'], @$_POST['cat'],
+            @$_POST['account'], @$_POST['op_type'], @$_POST['tags'],   @$_POST['use_mode']
+        ) );
     }
     
     /**
@@ -64,10 +65,11 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      */
     function del( $args )
     {
+        $id       = (int)@$_POST['id'];
+        $chain    = (int)@$_POST['chain'];
+        $use_mode = @$_POST['use_mode'];
         $calendar = new Calendar( Core::getInstance()->user );
-        die( json_encode(
-            $calendar->deleteEvents((int)@$_POST['id'], (int)@$_POST['chain'], @$_POST['use_mode']
-        )));
+        $this->tpl->assign('calendar', $calendar->deleteEvents( $id, $chain, $use_mode ) );
     }
 
     /**
@@ -76,11 +78,12 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      */
     function events($args) {
         $calendar = Calendar::loadAll( Core::getInstance()->user , $_GET['start'], $_GET['end'] );
-        return die ( json_encode( $calendar->getArray() ) );
+        $this->tpl->assign( 'calendar', $calendar->getArray() );
     }
 
     /**
      * Получить список напоминалок
+     * @return void
      */
     function reminder ()
     {
@@ -88,22 +91,24 @@ class Calendar_Controller extends _Core_Controller_UserCommon
         $calendar = new Calendar( Core::getInstance()->user );
 
         // Из-за глюка компонента календарь - умножаем таймштамп на тысячу
-        $events = $calendar->loadAll($user, mktime(0, 0, 0, date('n'), 1, date('Y')) * 1000,
+        $events = $calendar->loadAll(Core::getInstance()->user,
+                mktime(0, 0, 0, date('n'), 1, date('Y')) * 1000,
                 mktime(0, 0, 0, date('n') + 1, 0, date('Y')) * 1000);
-        die( json_encode( $events->getArray() ) );
+        $this->tpl->assign( 'calendar', $events->getArray() );
     }
 
     /**
      * Подтверждение событий
+     * @return void
      */
     function reminderAccept()
     {
-        $ids = explode(',', $_POST['ids']);
+        $ids = explode(',', @$_POST['ids']);
         $calendar = new Calendar ( Core::getInstance()->user );
         $calendar->acceptEvents($ids);
 
         $calendar = Calendar::loadReminder( Core::getInstance()->user );
-        die ( json_encode( $calendar->getArray() ) );
+        $this->tpl->assign( 'calendar', $calendar->getArray() );
     }
 
     /**
@@ -116,6 +121,6 @@ class Calendar_Controller extends _Core_Controller_UserCommon
         $calendar->deleteEvents($ids);
         
         $calendar = Calendar::loadReminder( Core::getInstance()->user );
-        die ( json_encode( $calendar->getArray() ) );
+        $this->tpl->assign( 'calendar', $calendar->getArray() );
     }
 }

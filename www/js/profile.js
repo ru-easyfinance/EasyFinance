@@ -191,7 +191,7 @@ $(document).ready(function(){
                 return;
             }
 
-            if (id == res.currency['default']) {
+            if (id == easyFinance.models.currency.getDefaultCurrencyId()) {
                 alert ("Невозможно удалить валюту, которая используется по умолчанию!");
                 return;
             }

@@ -176,8 +176,7 @@ $(document).ready(function(){
             s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+a+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 //alert(data[v]['category']);
-                targetcurrency = res.currency[ res.accounts [ data[ v ]["account"] ] ["currency"] ]["text"];
-                //targetcurrency = res.currency[ res.accounts [ res.target[data[v]["id"]]['account'] ]["currency"]['text']];
+                targetcurrency = easyFinance.models.accounts.getAccountCurrency( data[ v ]["account"]).text;
                 if (data[v]['category']==2)
                     s += '<img src="/img/i/avto.png" alt="" />'
                 else if (data[v]['category']==3)

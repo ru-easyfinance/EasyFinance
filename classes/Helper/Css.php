@@ -39,5 +39,6 @@ class Helper_Css implements _Core_Router_iHook
 		$templateEngine->append('css', 'operationsJournal.css');
 		$templateEngine->append('css', 'budgetMaster.css');
 		$templateEngine->append('css', 'budget.css');
+                $templateEngine->append('css', 'accountsPanel.css');
 	}
 }

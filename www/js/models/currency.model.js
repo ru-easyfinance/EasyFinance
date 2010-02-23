@@ -2,7 +2,7 @@ easyFinance.models.currency = function(){
     var _data = {}, _defaultCurrencyId;
     /**
      * Инициирует модель валют
-     * @param data == res.currency
+     * @param data - например, из res.currency
      */
     function load(data){
         _defaultCurrencyId = data['default'];
@@ -17,12 +17,27 @@ easyFinance.models.currency = function(){
         return _data[_defaultCurrencyId] || {cost : 0, name : '', progress : '', text : '', notFound : true};
     }
     /**
-     * Возвращает id валюту по умолчанию
+     * Возвращает id валюты по умолчанию
      * @return {int}
      */
     function getDefaultCurrencyId(){
         return _defaultCurrencyId;
     }
+    /**
+     * Возвращает курс валюты по умолчанию
+     * @return {float}
+     */
+    function getDefaultCurrencyCost(){
+        return _data[_defaultCurrencyId].cost;
+    }
+    /**
+     * Возвращает описание валюты по умолчанию
+     * @return {string}
+     */
+    function getDefaultCurrencyText(){
+        return _data[_defaultCurrencyId].text;
+    }
+
     /**
      * Возвращает валюту в зависимости от Id
      * @param id {int}
@@ -37,7 +52,7 @@ easyFinance.models.currency = function(){
      * @return {str}
      */
     function getCurrencyNameById(id){
-        return _data[id] ? _data[_defaultCurrencyId].name : '';
+        return _data[id] ? _data[id].name : '';
     }
     /**
      * Возвращает описание валюты в зависимости от Id
@@ -45,14 +60,22 @@ easyFinance.models.currency = function(){
      * @return {str}
      */
     function getCurrencyTextById(id){
-        return _data[id] ? _data[_defaultCurrencyId].text : '';
+        return _data[id] ? _data[id].text : '';
+    }
+    /**
+     * Возвращает стоимость валюты в зависимости от Id
+     * @param id {int}
+     * @return {str}
+     */
+    function getCurrencyCostById(id){
+        return _data[id] ? _data[id].cost : '';
     }
     /**
      * Возвращает список валют
      * @return {obj}
      */
     function getCurrencyList(){
-        return _data;
+        return $.extend({}, _data, true);
     }
 
     /**
@@ -62,10 +85,10 @@ easyFinance.models.currency = function(){
      * @return void
      */
     function setCurrency(saveData, calback){
-        $.post('/profile/save_currency/', 
+        $.post('/profile/save_currency/?responseMode=json',
             saveData,
             function(data){
-                init(saveData);
+                load(saveData);
                 if (typeof(calback) == 'function'){
                     calback(data);
                 }
@@ -77,9 +100,13 @@ easyFinance.models.currency = function(){
         load : load,
         getDefaultCurrency : getDefaultCurrency,
         getDefaultCurrencyId : getDefaultCurrencyId,
+        getDefaultCurrencyText: getDefaultCurrencyText,
+        getDefaultCurrencyCost: getDefaultCurrencyCost,
         getCurrencyList : getCurrencyList,
         getCurrencyById : getCurrencyById,
         getCurrencyNameById : getCurrencyNameById,
-        getCurrencyTextById :getCurrencyTextById
+        getCurrencyTextById :getCurrencyTextById,
+        getCurrencyCostById: getCurrencyCostById,
+        setCurrency : setCurrency
     };
 }();

@@ -77,7 +77,7 @@ easyFinance.widgets.operationsJournal = function(){
             if (data[v].transfer > 0)
                 curMoney = 0;
             else
-                curMoney = parseFloat(data[v].money * res.currency[data[v].account_currency_id].cost);
+                curMoney = parseFloat(data[v].money * easyFinance.models.currency.getCurrencyCostById(data[v].account_currency_id));
 
             pageTotal = pageTotal + curMoney;
 
@@ -128,7 +128,7 @@ easyFinance.widgets.operationsJournal = function(){
                 .show();
         }
 
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal) + ' ' + res.currency[res.currency['default']].text + '<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal) + ' ' + easyFinance.models.currency.getDefaultCurrencyText() + '<br>').show();
     }
 
     function _deleteChecked(){
@@ -471,7 +471,7 @@ easyFinance.widgets.operationsJournal = function(){
             pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
         }
         pageTotal = Math.round(pageTotal*100)/100;
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + (_modelAccounts.getAccountCurrency(_account)?_modelAccounts.getAccountCurrency(_account).text : ((res.currency[res.currency['default']].text || ''))) + '<br>').show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + pageTotal + ' ' + (_modelAccounts.getAccountCurrency(_account) ? _modelAccounts.getAccountCurrency(_account).text : easyFinance.models.currency.getDefaultCurrencyText()) + '<br>').show();
     }
 
     // public variables
@@ -499,6 +499,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         $('#btn_ReloadData').click(loadJournal);
         $(document).bind('operationAdded', loadJournal);
+        $(document).bind('accountsLoaded', loadJournal);
         $(document).bind('operationEdited', loadJournal);
         $('#remove_all_op').click(_deleteChecked);
 

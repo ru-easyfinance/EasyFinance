@@ -17,6 +17,7 @@ class _Core_TemplateEngine
 		switch( self::getResponseMode( $request ) )
 		{
 			case 'json':
+                header('Content-Type: text/plain');
 				$templateEngine = new _Core_TemplateEngine_Json();
 				$templateEngine->excludeFromOutput(
 					array('res','name_page','js','css')

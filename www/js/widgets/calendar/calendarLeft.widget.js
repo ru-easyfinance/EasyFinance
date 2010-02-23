@@ -18,7 +18,13 @@ easyFinance.widgets.calendarLeft = function(data){
                                 obj.push($(this).closest('tr').attr('value'));
                             });
                             $.jGrowl('События подтверждаются!',{theme : 'green'});
-                            $.post('/calendar/reminderAccept',{ids : obj.toString()},function(data){_data = data;showEvents();$.jGrowl('События подтверждены!',{theme : 'green'});},'json');
+                            $.post('/calendar/reminderAccept?responseMode=json',{ids : obj.toString()},function(data){
+                                _data = data.calendar;showEvents();$.jGrowl('События подтверждены!',{theme : 'green'});
+                                if($('#calendar').length != 0){
+                                    easyFinance.models.calendarOld.init();
+                                    $('#calendar').fullCalendar('refresh');
+                                }
+                            },'json');
                         }
                     },
                     'Удалить': function() {
@@ -29,7 +35,14 @@ easyFinance.widgets.calendarLeft = function(data){
                                 obj.push($(this).closest('tr').attr('value'));
                             });
                             $.jGrowl('События удаляются!',{theme : 'green'});
-                            $.post('/calendar/reminderDel',{ids : obj.toString()},function(data){_data = data;showEvents();$.jGrowl('События удалены!',{theme : 'green'});},'json');
+                            $.post('/calendar/reminderDel?responseMode=json',{
+                                ids : obj.toString()},
+                                function(data){_data = data.calendar;showEvents();$.jGrowl('События удалены!',{theme : 'green'});
+                                    if($('#calendar').length != 0){
+                                        easyFinance.models.calendarOld.init();
+                                        $('#calendar').fullCalendar('refresh');
+                                    }
+                                },'json');
                         }
                         //$(this).dialog('close');
                     }
@@ -63,16 +76,16 @@ easyFinance.widgets.calendarLeft = function(data){
                     obj.push($(this).closest('tr').attr('value'));
                 });
                 $.jGrowl('События подтверждаются!',{theme : 'green'});
-                $.post('calendar/reminderAccept',{ids : obj.toString()},function(data){$.jGrowl('События подтверждены!',{theme : 'green'});},'json')
+                $.post('calendar/reminderAccept?responseMode=json',{ids : obj.toString()},function(data){$.jGrowl('События подтверждены!',{theme : 'green'});},'json')
 
             }
         });
 
         $('#AshowEvents').live('click',function(){
             $.cookie('events_hide', 0, {path: '/'});
-            window.location.hash = null;
+//            window.location.hash = null;
             showEvents();
-            return false;
+//            return false;
         });
     }
     /**
