@@ -498,7 +498,9 @@ easyFinance.widgets.operationsJournal = function(){
         $("#dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
 
         $('#btn_ReloadData').click(loadJournal);
-        $(document).bind('operationAdded', loadJournal);
+        // #874. Обновляем данные об остатках на счетах
+        // после добавления операции
+        //$(document).bind('operationAdded', loadJournal);
         $(document).bind('accountsLoaded', loadJournal);
         $(document).bind('operationEdited', loadJournal);
         $('#remove_all_op').click(_deleteChecked);
