@@ -1,6 +1,6 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
     // Тема
-    $subscribersSubject = "Копия отзыва #{$this->numberFeedback}: {$this->title}";
+    $subscribersSubject = "Отзыв #{$this->numberFeedback}: {$this->title}";
     
 
     // От кого
