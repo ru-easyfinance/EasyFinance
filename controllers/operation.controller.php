@@ -186,7 +186,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                                 if (_Core_TemplateEngine::getResponseMode($request) == "json") {
                                     $text = "Операция успешно добавлена.";
                                 } else {
-                                    $text = "Операция успешно добавлена. <a href='/operation/last'>последние операции</a>";
+                                    $text = "Операция успешно добавлена. <a href='/operation/last'>последние изменённые</a>";
                                 }
 
                                 $this->tpl->assign( 'result',
@@ -402,7 +402,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                                 if (_Core_TemplateEngine::getResponseMode($request) == "json") {
                                     $text = "Операция успешно изменена.";
                                 } else {
-                                    $text = "Операция успешно изменена. <a href='/operation/last'>последние операции</a>";
+                                    $text = "Операция успешно изменена. <a href='/operation/last'>последние изменённые</a>";
                                 }
 
                                 $this->tpl->assign( 'result',

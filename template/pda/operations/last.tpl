@@ -1,2 +1,2 @@
-<div class="line"><strong>Последние операции</strong></div>
+<div class="line"><strong>Последние изменённые</strong></div>
 <?=$this->display('blocks/operationsList.tpl')?>

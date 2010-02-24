@@ -45,7 +45,9 @@
 	<a href="/operation/listOperations/?period=week" 
 		class="<?=($period == 'week')?'current':''?>">неделя</a> | 
 	<a href="/operation/listOperations/?period=month" 
-		class="<?=($period == 'month')?'current':''?>">месяц</a>
+		class="<?=($period == 'month')?'current':''?>">месяц</a> |
+	<a href="/operation/last/"
+		class="">изменения</a>
 </div>
 
 <?=$this->display('blocks/operationsList.tpl')?>
