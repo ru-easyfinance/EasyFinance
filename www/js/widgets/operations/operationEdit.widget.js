@@ -425,6 +425,7 @@ easyFinance.widgets.operationEdit = function(){
         $.jGrowl("Операция сохраняется", {theme: 'green'});
         var suum = tofloat($('#op_amount').val());
         var tip = $('#op_type').val();
+        var id = $('#op_id').val();
 //alert($('#op_id').val());
 //alert($('#op_type').val());
 //alert($('#op_account').val());
@@ -433,7 +434,7 @@ easyFinance.widgets.operationEdit = function(){
 //alert($('#op_AccountForTransfer').val());
         var account = $('#op_account').val();
         easyFinance.models.accounts.editOperationById(
-            $('#op_id').val(),
+            id,
             _selectedType,
             _selectedAccount,
             _selectedCategory,
@@ -457,10 +458,14 @@ easyFinance.widgets.operationEdit = function(){
 
                     refreshTargets();
 
-					$.jGrowl(data.result.text, {theme: 'green'});
+                    $.jGrowl(data.result.text, {theme: 'green'});
                     $.jGrowl("<a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000});
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!
+
+                    // #754. закрываем форму после редактирования операции
+                    if (id != '')
+                        $("#op_addoperation_but").click();
                 } else if (data.error) {
                     $.jGrowl(data.error.text, {theme: 'red', stick: true});
                 }
