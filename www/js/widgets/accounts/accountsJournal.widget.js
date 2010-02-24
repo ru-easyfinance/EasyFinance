@@ -188,26 +188,26 @@ easyFinance.widgets.accountsJournal = function(){
     {
         $('.qtip').remove();
         $(line).qtip({
-                   content: text.toString(), // Set the tooltip content to the current corner
-                   position: {
-                      corner: {
-                         tooltip: 'topMiddle', // Use the corner...
-                         target: 'bottomMiddle' // ...and opposite corner
-                      }
-                   },
-                   show: {
-                      when: false, // Don't specify a show event
-                      ready: true // Show the tooltip when ready
-                   },
-                   hide: {
-                      when: 'mouseout'
-                   }, // Don't specify a hide event
-                   style: {
-                      width: {max: 300},
-                      name: 'light',
-                      tip: true // Give them tips with auto corner detection
-                   }
-                });
+            content: text.toString(), // Set the tooltip content to the current corner
+            position: {
+              corner: {
+                 tooltip: 'topMiddle', // Use the corner...
+                 target: 'bottomMiddle' // ...and opposite corner
+              }
+            },
+            show: {
+              when: false, // Don't specify a show event
+              ready: true // Show the tooltip when ready
+            },
+            hide: {
+              when: 'mouseout'
+            }, // Don't specify a hide event
+            style: {
+              width: {max: 300},
+              name: 'light',
+              tip: true // Give them tips with auto corner detection
+            }
+        });
     }
 
     // public variables
