@@ -85,6 +85,17 @@ easyFinance.models.category = function(){
     }
 
     function add(name, parent, type, system, callback){
+        for(var key in _categories.user){
+            if (_categories.user[key].name == name && (_categories.user[key].parent == parent || (_categories.user[key].parent == '0' && parent == ''))){
+                callback({
+                    error: {
+                        text: "Категория с данным именем уже существует."
+                    }
+                });
+                return;
+            }
+        }
+
         _update(ADD_URL, -1, name, parent, type, system, function(data){
             if (data.result) {
 				var id = data.result.id;
