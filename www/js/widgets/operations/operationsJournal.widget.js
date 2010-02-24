@@ -37,7 +37,7 @@ easyFinance.widgets.operationsJournal = function(){
 
     var _sexyCategoryInitialized = false;
 
-    var OPERATION_TYPES = ['доход', 'расход', 'перевод', '', 'фин. цель'];
+    var OPERATION_TYPES = ['расход', 'доход', 'перевод', '', 'фин. цель'];
 
     // private functions
     //
@@ -356,38 +356,6 @@ easyFinance.widgets.operationsJournal = function(){
             return false;
         });
 
-        /*
-         * СТАРЫЙ КОД, ФИЛЬТР БЫЛ В ДИАЛОГЕ
-        // фильтр по категории
-        // заполняем диалог ссылками на доступные категории
-        _$dialogFilterCategory = $('#dialogFilterCategory').dialog({title: "Выберите категорию", autoOpen: false, width: "420px"});
-        _$dialogFilterCategory.find('#btnFilterCategorySave').click(function(){
-            var $combo = $('#selectFilterCategory');
-            _category = $combo.attr('value');
-            _categoryName = $combo.find('option:selected').text();
-            loadJournal();
-            _$dialogFilterCategory.dialog('close');
-
-            return false;
-        });
-        _$dialogFilterCategory.find('a').click(function(){
-            _category = $(this).attr('value');
-            loadJournal();
-            _$dialogFilterCategory.dialog('close');
-
-            return false;
-        });
-        $('#btnFilterCategory').click(function(){
-            _$dialogFilterCategory.dialog('open');
-            if (!_sexyCategoryInitialized) {
-                _sexyCategoryInitialized = true;
-                $("#selectFilterCategory").sexyCombo({
-                    filterFn: _sexyFilter
-                });
-            }
-        });
-        */
-
         // фильтр по счёту
         _$comboAccount = _$node.find('#account_filtr');
         _$comboAccount.change(function(){
@@ -421,7 +389,6 @@ easyFinance.widgets.operationsJournal = function(){
 
     function _printFilters(){
         var txt = '';
-        var strCat = '';
 
         if (_type != '-1')
             txt = txt + 'операции: ' + OPERATION_TYPES[_type];
@@ -429,8 +396,8 @@ easyFinance.widgets.operationsJournal = function(){
         if (_type != '-1' && _category != '')
             txt = txt + ', ';
 
-        //if (_category != '')
-        //    txt = txt + 'категория: ' + _categoryName;
+        if (_category != '')
+            txt = txt + 'категория: ' + easyFinance.models.category.getUserCategoryNameById(_category);
 
         if ((_type != '-1' || _category != '') && (_sumFrom != '' || _sumTo != ''))
             txt = txt + ', ';
