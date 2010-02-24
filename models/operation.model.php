@@ -763,15 +763,15 @@ class Operation_Model {
 				if ($operation['cat_id'] == 3)
 					$operation['cat_name'] = "Отпуск";
 				if ($operation['cat_id'] == 4)
-					$operation['cat_name'] = "Фин.подушка";
+					$operation['cat_name'] = "Фин. подушка";
 				if ($operation['cat_id'] == 5)
-					$operation['cat_name'] = "Свадьба";
-				if ($operation['cat_id'] == 6)
-					$operation['cat_name'] = "Быт. техника";
-				if ($operation['cat_id'] == 7)
-					$operation['cat_name'] = "Компьютер";
-				if (($operation['cat_id']) == 8)
 					$operation['cat_name'] = "Прочее";
+				if ($operation['cat_id'] == 6)
+					$operation['cat_name'] = "Свадьба";
+				if ($operation['cat_id'] == 7)
+					$operation['cat_name'] = "Бытовая техника";
+				if (($operation['cat_id']) == 8)
+					$operation['cat_name'] = "Компьютер";
 			}
 			//@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
