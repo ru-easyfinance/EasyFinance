@@ -25,7 +25,8 @@ $(document).ready(function() {
     $('form').submit(function(){return false;});
 
     $('#btnCancel').click(function(){
-        clearForm();$('#add_form').hide();
+        clearForm();
+        $('#add_form').hide();
     });
 
     $('#add_category').click(function(){
@@ -125,6 +126,7 @@ $(document).ready(function() {
         $('#subcat,#cattype,#catsys').removeAttr('selected');
         $('#add_form').find('#btnSave').removeAttr('disabled');
         $('#cattype').removeAttr("disabled");
+        $('#txtCategoryComment').text ('Универсальная категория может быть как расходной, так и доходной');
     }
 
     /**
