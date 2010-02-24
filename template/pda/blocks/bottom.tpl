@@ -25,7 +25,8 @@ if( isset($res['user']) )
 ?>	
 		<table style="width:100%;height:20px; background-color:#93ca57; margin-top: 4px; border-top: solid 1px #266823;"><tr>
 			<td style="padding-left: 5px; padding-top:1px;">
-				<a href="<?=isset($res['user'])?'/info':'/login'?>" style="color:white; font-size: small; font-weight: bold; text-decoration:none;">&copy; EasyFinance, 2010</a>
+				<a href="<?=isset($res['user'])?'/info':'/login'?>" style="color:white; font-size: small; font-weight: bold; text-decoration:none;">&copy; EasyFinance, 2010</a><br>
+                                <a href="https://easyfinance.ru" style="font-size: small; font-weight: bold; text-decoration:none;">Основная версия</a>
 			</td>
                         <td width="80" style="text-align: right;">
 			<?php
