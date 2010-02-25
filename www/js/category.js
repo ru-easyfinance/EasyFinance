@@ -13,6 +13,8 @@ $(document).ready(function() {
 
         // Выводим список пользовательских и родительских категорий
         drawUserCategoriesList();
+
+        $(document).bind('categoriesLoaded', drawUserCategoriesList);
     });
 
     $('#add_form').hide();
