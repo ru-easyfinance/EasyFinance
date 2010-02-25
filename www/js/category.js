@@ -322,9 +322,13 @@ $(document).ready(function() {
         if (cat_checkForm()) {
             var id = $('#cat_id').val();
             var name = $('#namecat').val();
-            var subcat = $('#subcat').val();
             var type = $('#cattype').val();
             var sys = $('#catsys').val();
+
+            // #881. Google Chrome возвращает null, если поле скрыто
+            var subcat = $('#subcat').val();
+            if (subcat == null)
+                subcat = '';
 
             var oldCat;
             var strType = '';
@@ -365,6 +369,7 @@ $(document).ready(function() {
                 }
             } else {
                 // подкатегория
+                debugger;
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
                 sys = newParent.system;
 
