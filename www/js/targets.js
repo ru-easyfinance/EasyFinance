@@ -142,12 +142,12 @@ $(document).ready(function(){
         autoOpen: false,
         width: 450,
         buttons: {
-            'Сохранить': function() {
-                saveTarget();
-            },
             'Отмена': function() {
                 clearForm();
                 $('#tpopup').dialog('close');
+            },
+            'Сохранить': function() {
+                saveTarget();
             }
         }
     });

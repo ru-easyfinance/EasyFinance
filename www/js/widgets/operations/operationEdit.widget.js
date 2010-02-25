@@ -704,7 +704,7 @@ easyFinance.widgets.operationEdit = function(){
         $(document).bind('accountDeleted', refreshAccounts);
 
         $(document).bind('categoriesLoaded', refreshCategories);
-        $(document).bind('categoryAdded', refreshCategories);
+        //$(document).bind('categoryAdded', refreshCategories);
         $(document).bind('categoryEdited', refreshCategories);
         $(document).bind('categoryDeleted', refreshCategories);
 

@@ -98,21 +98,22 @@ easyFinance.models.category = function(){
 
         _update(ADD_URL, -1, name, parent, type, system, function(data){
             if (data.result) {
-				var id = data.result.id;
+                var id = data.result.id;
 
-				_categories.user[id] = {};
-				_categories.user[id].id = id.toString();
-				_categories.user[id].name = name;
-				_categories.user[id].parent = parent == "" ? 0 : parent;
-				_categories.user[id].type = type;
-				_categories.user[id].system = system;
+                _categories.user[id] = {};
+                _categories.user[id].id = id.toString();
+                _categories.user[id].name = name;
+                _categories.user[id].parent = parent == "" ? 0 : parent;
+                _categories.user[id].type = type;
+                _categories.user[id].system = system;
 
-				$(document).trigger('categoryAdded');
+                $(document).trigger('categoryAdded');
 
-	//            _sortUserCategories();			
-			}
+                // получаем новый список заново - отсортированный и т.п.
+                load();
+            }
 
-			callback(data);
+            callback(data);
         });
     }
 
