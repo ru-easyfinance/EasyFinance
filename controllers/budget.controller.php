@@ -45,9 +45,15 @@ class Budget_Controller extends _Core_Controller_UserCommon
      */
     function load()
     {
+        // Получаем дату начала бюджета
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
-        $end   = '';
-        if (!is_null($start)) {
+
+        // Вычисляем дату конца бюджета (сейчас ровно до конца месяца начала)
+        $end   = date( 'Y-m-d', 
+            mktime(0, 0, 0, date('m', strtotime($start . ' 00:00:00')) +1, 0)
+        );
+
+        if ( ! is_null($start) ) {
             die(
                 json_encode(                   
                     $this->model->loadBudget($start, $end)

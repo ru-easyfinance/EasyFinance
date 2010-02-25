@@ -23,47 +23,29 @@ class Budget_Model {
     }
 
     /**
-     * Загружает весь список бюджета
+     * Загружает весь список бюджета за указанный срок
      * @param date $start
      * @param date $end
+     * @param int $user_id
+     * @param int $category
+     * @return
      */
-    function loadBudget($start, $end, $user_id = null, $category = null)
+    function loadBudget($start = null, $end = null, $user_id = null, $category = null)
     {
-        if (!$user_id) {
+        if ( ! $user_id ) {
             $user_id = Core::getInstance()->user->getId();
         }
-        
-        if (empty ($start)) {
-            $start = date('Y-m-01');
-        }
 
-        /*if (!$category) {
-            $category = Core::getInstance()->user->getUserCategory();
-        }*/
+        // Считаем факт доходов и факт расходов
+        $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o
+            WHERE o.user_id = ? AND o.transfer=0
+                AND o.date >= ? AND o.date <= ?
+            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = ? )
+                GROUP BY o.cat_id";
 
-         /*$sqloper = "SELECT c.cat_id, c.type as drain, 1 as currency, (SELECT b.amount FROM budget b
-            WHERE c.cat_id=b.category AND b.user_id=c.user_id AND b.date_start=? ) AS amount,
+        $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
 
-            (SELECT SUM(o1.money) FROM operation o1
-                WHERE o1.user_id=c.user_id AND (o1.transfer = NULL OR o1.transfer = 0) AND c.cat_id = o1.cat_id
-                AND o1.date >= ? AND o1.date <= LAST_DAY(o1.date)) AS money,
-
-            (SELECT AVG(amount) FROM budget t
-                        WHERE t.user_id = c.user_id AND (t.date_start >= ADDDATE(?, INTERVAL -3 MONTH)
-                            AND t.date_start <= LAST_DAY(t.date_start))
-                        AND t.category = c.cat_id
-             ) AS avg_3m
-
-            FROM category c
-            WHERE (SELECT SUM(o2.money) FROM operation o2
-                WHERE user_id=c.user_id AND (o2.transfer = NULL OR o2.transfer = 0) AND c.cat_id = o2.cat_id
-                AND o2.date >= ? AND o2.date <= LAST_DAY(o2.date) ) <> 0
-            AND c.user_id=? ORDER BY c.cat_parent";*/
-        
-        $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o WHERE o.user_id = " . $user_id ." AND o.transfer=0 AND o.date >= ? AND o.date <= LAST_DAY(o.date)
-            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." ) GROUP BY o.cat_id";
-
-
+        // Делаем выборку по всем запланированным доходам и расходам
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
                 DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
                 DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
@@ -79,14 +61,13 @@ class Budget_Model {
                 ) AS money
         FROM budget b
         LEFT JOIN category c ON c.cat_id=b.category
-        WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start)
-        ORDER BY c.cat_parent ;";//*/
+        WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start) AND c.visible=1
+        ORDER BY c.cat_parent ;";
 
 
         $arraybudg = Core::getInstance()->db->select($sqlbudg, $start, $user_id, $start);
         
-        //$arrayoper = Core::getInstance()->db->select($sqloper, $start , $start, $start, $start, $user_id);
-        $arrayoper = Core::getInstance()->db->select($sqloper, $start);
+
 
         $list = array(
             'd' => array(),
@@ -97,18 +78,7 @@ class Budget_Model {
         $real_drain = 0; $real_profit = 0;
 
         foreach ($arraybudg as $var) {
-
-            // Если это родительская категория, то подсчитываем общую сумму
-            /*if ( (int)$category[$var['category']]['cat_parent'] == 0 ) {
-                if ($var['drain'] == 1) {
-                    $drain_all  += (float)$var['amount'];
-                    $real_drain += ABS((float)$var['money']);
-                } else {
-                    $profit_all += (float)$var['amount'];
-                    $real_profit += ABS((float)$var['money']);
-                }
-            }*/
-            
+           
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
