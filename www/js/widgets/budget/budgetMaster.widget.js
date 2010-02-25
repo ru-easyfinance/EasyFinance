@@ -291,14 +291,20 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * кнопочка для вызова мастера.
      */
+    function month(num){
+        var str = num.toString();
+        if (str.length == 1)
+            str = '0'+str;
+        return str;
+    }
     $('#btnBudgetWizard').click(function(){ 
         $('#master .step').hide();
         $('#master #step1').show();
         var tempDate = widget.getDate()
-        $('#step1 #copy_month').val(tempDate.getMonth()+1);
+        $('#step1 select#copy_month').val(month(tempDate.getMonth()+1));
         $('#step1 #copy_year').val(tempDate.getFullYear());
         tempDate.setMonth(tempDate.getMonth()+1);
-        $('#step1 #month').val(tempDate.getMonth()+1);
+        $('#step1 select#month').val(month(tempDate.getMonth()+1));
         $('#step1 #year').val(tempDate.getFullYear());
         $('#master').dialog('open');
         $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
