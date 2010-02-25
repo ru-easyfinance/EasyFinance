@@ -36,6 +36,16 @@ class Budget_Model {
             $user_id = Core::getInstance()->user->getId();
         }
 
+        if ( ! $start ) {
+            $start = date( 'Y-m-01');
+        }
+
+        if ( ! $end ) {
+            $end   = date( 'Y-m-d',
+                mktime(0, 0, 0, date('m', strtotime($start . ' 00:00:00')) +1, 0)
+            );
+        }
+
         // Считаем факт доходов и факт расходов
         $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o
             WHERE o.user_id = ? AND o.transfer=0
