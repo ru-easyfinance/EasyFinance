@@ -2,7 +2,6 @@
 
 /**
  * Класс-модель для управления категориями пользователя
- * @author korogen
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @category category
  * @copyright http://easyfinance.ru/
@@ -35,13 +34,6 @@ class Category_Model {
     public $tree = array();
 
     /**
-     *
-     * @var array mixed
-     */
-    public $tree_sum_categories = array();
-
-
-    /**
      * Конструктор
      * @return void
      */
@@ -63,7 +55,6 @@ class Category_Model {
     private function saveCache()
     {
         $_SESSION['categories'] = $this->tree;
-        $_SESSION['tree_sum_categories'] = $this->tree_sum_categories;
     }
 
     /**
@@ -74,7 +65,6 @@ class Category_Model {
     {
         //@FIXME Наверняка тут надо загружать данные из базы, если сессия пуста
         $this->tree = @$_SESSION['categories'];
-        $this->tree_sum_categories = @$_SESSION['tree_sum_categories'];
     }
 
     /**
@@ -318,24 +308,10 @@ class Category_Model {
 
     /**
      * Возвращает список категорий пользователя и системные
-     * @param date $start
-     * @param date $finish
-     * @return array mixed
+     * @return array
      */
-    function getCategory($start = null, $finish = null)
+    function getCategory()
     {
-
-        if (!$start) {
-            $start = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
-        }
-        if (!$finish) {
-            $finish = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
-        }
-
-        // Инициализация вызываемой но неиспользуемой переменной оО
-        $sys_currency = 1;
-        $sum = $this->loadSumCategories($sys_currency, $start, $finish);
-
         $users = array();
 
         // Сортировка для хрома #886
@@ -355,17 +331,13 @@ class Category_Model {
                 'visible' => $category['visible'],
                 'custom'  => $category['custom']
             );
-
-            if ($category['cat_id'] == $sum['cat_id']) {
-                $users[ $key ]['summ'] = $sum['sum'];
-            }
         }
         $systems = $this->system_categories;
         $systems[0] = array('id'=>'0', 'name'=>'Не установлена');
 
         return array(
-            'user'=>$users,
-            'system'=>$systems
+            'user'   => $users,
+            'system' => $systems
         );
     }
 }

@@ -245,10 +245,7 @@ class Category_Controller extends _Core_Controller_UserCommon
      * @param array $args
      */
     function getCategory ($args) {
-        $start = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
-        $finish = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
-
-        return die(json_encode($this->model->getCategory($start, $finish)));
+        return die(json_encode($this->model->getCategory()));
     }
 
     /**
