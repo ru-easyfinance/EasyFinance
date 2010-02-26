@@ -283,45 +283,44 @@ class Category_Model {
     /**
      * Удаляет выбранную категорию (и все подкатегории, если это родительская категория)
      * @param int $id
+     * @return array
      */
     function del($id = 0)
     {
+        //Удаляет (скрывает) категорию, заодно и дочерние (если есть)
         $sql = "UPDATE category SET visible=0 WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
-        $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);//удаляет категорию, заодно и дочерние
+        $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);
 
 //        $sql = "UPDATE operation SET visible=0 WHERE cat_id=? AND user_id=?";
 //        $this->db->query($sql, $id, Core::getInstance()->user->getId()); //удаляет все операции по удаляемой категории.
         //@FIXME Починить удаление операций по категории
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        return array('result' => array('text' => ''));
+        return array('result' => array('text' => 'Категория успешно удалена'));
     }
 
     /**
-     * возвращает html строку для селекта в зависимости от типа категории
-     * @deprecated WTF ???
-     */
-    function cattype($type)
-    {
-        return get_tree_select2(0, $type);
-    }
-
-    /**
-     * Возвращает список категорий пользователя и системные
+     * Возвращает список категорий пользователя и системные в виде массива
      * @return array
      */
     function getCategory()
     {
+        // Массив для пользовательских категорий
         $users = array();
 
+        // Массив для систменых категорий
+        $systems = $this->system_categories;
+        $systems[0] = array('id'=>'0', 'name'=>'Не установлена');
+
         // Сортировка для хрома #886
-        $key = 0;
+        //$key = 0;
 
         foreach (Core::getInstance()->user->getUserCategory() as $category) {
 
-            $key++;
+            //$key++;
+            //$users[ $key ] = array
 
-            $users[ $key ] = array
+            $users[ $category['cat_id'] ] = array
                     (
                 'id'      => $category['cat_id'],
                 'parent'  => $category['cat_parent'],
@@ -332,8 +331,6 @@ class Category_Model {
                 'custom'  => $category['custom']
             );
         }
-        $systems = $this->system_categories;
-        $systems[0] = array('id'=>'0', 'name'=>'Не установлена');
 
         return array(
             'user'   => $users,

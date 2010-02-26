@@ -245,15 +245,8 @@ class Category_Controller extends _Core_Controller_UserCommon
      * @param array $args
      */
     function getCategory ($args) {
+        //@TODO Переключить на новый шаблонизатор, когда клиент будет готов
+        //$this->tpl->assign('category', $this->model->getCategory());
         return die(json_encode($this->model->getCategory()));
-    }
-
-    /**
-     * Возвращает html-строку для категорий. хак вместо show/hide
-     * @deprecated
-     */
-    function cattypechange($args){
-        $type=(int)$_POST['type'];
-        die(json_encode($this->model->cattype($type))  );
     }
 }
