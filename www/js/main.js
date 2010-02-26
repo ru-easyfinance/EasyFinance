@@ -281,7 +281,7 @@ $(document).ready(function() {
  */
 function loadLPTags(){
     var data = res['tags'];
-    var str = '<div class="title"><h2>Метки</h2><a title="Добавить" class="add">Добавить</a></div><ul>';
+    var str = '<div class="title"><h2><a href="#" class="addtaglink">Добавить метку</a></h2><a title="Добавить" class="add">Добавить</a></div><ul>';
     for (var key in data)
     {
         str = str + '<li><a>'+data[key]+'</a></li>';
@@ -341,7 +341,7 @@ $('.tags_list li a').live('click', function(){
     }})
 })
 
-$('.tags_list .add').live('click', function(){
+$('.tags_list .add,.tags_list .addtaglink').live('click', function(){
     var add = $('.add_tag');
     $(add).show().dialog('open').dialog({
         width: 260,
@@ -372,7 +372,7 @@ $('.tags_list .add').live('click', function(){
     })
 });
       data = res['user_targets'];
-            var s = '<div class="title"><h2>Финансовые цели</h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
+            var s = '<div class="title"><h2><a href="/targets/#add" class="addtargetlink">Добавить цель</a></h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
             for(var v in data)
             {
                 if (data[v]['done'] == 0){

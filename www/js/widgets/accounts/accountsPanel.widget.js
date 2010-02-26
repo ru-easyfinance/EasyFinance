@@ -29,7 +29,7 @@ easyFinance.widgets.accountsPanel = function(){
         $(document).bind('accountAdded', redraw);
         $(document).bind('accountDeleted', redraw);
 
-       $('.accounts .add').click(function(){
+       $('.accounts .add,.accounts .addaccountlink').click(function(){
            document.location='/accounts/#add';
            // временный хак до полного перехода на аякс
            // отображает форму создания счёта
