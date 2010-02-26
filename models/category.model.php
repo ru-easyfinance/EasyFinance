@@ -1,4 +1,5 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php if (!defined('INDEX')) trigger_error("Index required!", E_USER_WARNING);
+
 /**
  * Класс-модель для управления категориями пользователя
  * @author korogen
@@ -8,6 +9,7 @@
  * @version SVN $Id$
  */
 class Category_Model {
+
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
@@ -37,6 +39,7 @@ class Category_Model {
      * @var array mixed
      */
     public $tree_sum_categories = array();
+
 
     /**
      * Конструктор
@@ -89,7 +92,6 @@ class Category_Model {
                 'name' => $val['name']
             );
         }
-
     }
 
     /**
@@ -102,7 +104,7 @@ class Category_Model {
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
             sc.name FROM category c
                 LEFT JOIN system_categories sc ON sc.id = c.system_category_id
-                WHERE c.user_id = ? ".$where." AND c.cat_active=1 ORDER BY cat_name", Core::getInstance()->user->getId());
+                WHERE c.user_id = ? " . $where . " AND c.cat_active=1 ORDER BY cat_name", Core::getInstance()->user->getId());
         $this->tree = $forest;
         $this->saveCache();
     }
@@ -116,8 +118,9 @@ class Category_Model {
     public function loadSumCategories($sys_currency, $start, $finish)
     {
         return array('cat_id' =>null, 'sum'=>null);
+
         //TODO Переписать математические расчёты в функции, на использование BCMATH
-        if (!empty ($start)) {
+        if ( ! empty($start) ) {
             $param = "AND o.date BETWEEN '{$start}' AND '{$finish}'";
         }
 
@@ -125,23 +128,23 @@ class Category_Model {
             FROM operation o
             LEFT JOIN accounts a ON a.account_id = o.account_id AND a.user_id = o.user_id
             WHERE o.user_id = ? {$param} GROUP BY o.cat_id, a.account_currency_id";
-        
+
         $accounts = Core::getInstance()->user->getUserAccounts();
         $rows = $this->db->select($sql, $this->user_id);
-        
+
         $array = array();
         foreach ($rows as $val) {
             // Общая сумма
             if ($val['cur'] != 1) { // Конвертируем валюту в рубли
-                $array[$val['cat_id']]['sum'] = (int)@$val[$val['cat_id']]['sum'] + ($val['sum'] * Core::getInstance()->currency[$val['cur']]['value']);
+                $array[$val['cat_id']]['sum'] = (int) @$val[$val['cat_id']]['sum'] + ($val['sum'] * Core::getInstance()->currency[$val['cur']]['value']);
             } else { // Конкретно сумма по валюте
-                $array[$val['cat_id']]['sum'] = (int)@$val[$val['cat_id']]['sum'] + $val['sum'];
+                $array[$val['cat_id']]['sum'] = (int) @$val[$val['cat_id']]['sum'] + $val['sum'];
             }
         }
 
         // считаем общую сумму
-        if ( !empty($forest) ) {
-            foreach( $forest as $key => $value ) {
+        if (!empty($forest)) {
+            foreach ($forest as $key => $value) {
                 if ($value['drain'] == 0) {
                     $this->total_sum_categories['income'] = $this->total_sum_categories['income'] + $value['sum'];
                 } else {
@@ -152,16 +155,16 @@ class Category_Model {
 
         // высчитываем процентное отношение и форматируем сумму
         if (!empty($forest)) {
-            foreach($forest as $key=>$value) {
+            foreach ($forest as $key=>$value) {
                 if ($value['sum'] > 0) {
                     if ($value['drain'] == 0) {
                         $forest[$key]['percent'] = $value['sum'] * 100 / $this->total_sum_categories['income'];
                         $forest[$key]['drain'] = 0;
-                    }else{
+                    } else {
                         $forest[$key]['percent'] = $value['sum'] * 100 / $this->total_sum_categories['outcome'];
                         $forest[$key]['drain'] = 1;
                     }
-                }else{
+                } else {
                     $forest[$key]['percent'] = 0;
                 }
                 $forest[$key]['sum'] = number_format($value['sum'], 2, '.', ' ');
@@ -170,38 +173,29 @@ class Category_Model {
         }
 
         // вставляем дополнительные параметры в основной массив категорий
-        foreach ($this->tree as $key=>$value)
-        {
+        foreach ($this->tree as $key=>$value) {
             $this->tree[$key]['sum'] = 0;
             $this->tree[$key]['percent'] = 0;
             $this->tree[$key]['drain'] = 1;
 
-            if (!empty($forest))
-            {
-                foreach ($forest as $f_key => $f_value)
-                {
-                    if ($key == $f_key)
-                    {
+            if (!empty($forest)) {
+                foreach ($forest as $f_key => $f_value) {
+                    if ($key == $f_key) {
                         $this->tree[$key]['sum'] = $f_value['sum'];
                         $this->tree[$key]['percent'] = $f_value['percent'];
                         $this->tree[$key]['drain'] = $f_value['drain'];
                     }
                 }
             }
-            if (!empty($value['childNodes']))
-            {
-                foreach ($value['childNodes'] as $c_key=>$c_value)
-                {
+            if (!empty($value['childNodes'])) {
+                foreach ($value['childNodes'] as $c_key=>$c_value) {
                     $this->tree[$key]['childNodes'][$c_key]['sum'] = 0;
                     $this->tree[$key]['childNodes'][$c_key]['percent'] = 0;
                     $this->tree[$key]['childNodes'][$c_key]['drain'] = 1;
 
-                    if (!empty($forest))
-                    {
-                        foreach ($forest as $f_key => $f_value)
-                        {
-                            if ($c_key == $f_key)
-                            {
+                    if (!empty($forest)) {
+                        foreach ($forest as $f_key => $f_value) {
+                            if ($c_key == $f_key) {
                                 $this->tree[$key]['childNodes'][$c_key]['sum'] = $f_value['sum'];
                                 $this->tree[$key]['childNodes'][$c_key]['percent'] = $f_value['percent'];
                                 $this->tree[$key]['childNodes'][$c_key]['drain'] = $f_value['drain'];
@@ -224,12 +218,12 @@ class Category_Model {
      */
     function add($name, $parent, $system, $type)
     {
-        $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type, custom, 
+        $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type, custom,
             dt_create) VALUES(?, ?, ?, ?, ?, 1, NOW())";
         $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
-        
+
         return $newID;
     }
 
@@ -248,22 +242,22 @@ class Category_Model {
 
         // Проверяем тип родительской и дочерней категории
         if ($parent > 0) {
-            if ( $cat[$parent]['type'] == -1 && $type == 1 ) {
+            if ($cat[$parent]['type'] == - 1 && $type == 1) {
                 return array('error' => array(
-                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
-                ));
-            } elseif ( $cat[$parent]['type'] == -1 && $type == 0 ) {
+                        'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+            ));
+            } elseif ($cat[$parent]['type'] == - 1 && $type == 0) {
                 return array('error' => array(
-                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
-                ));
-            } elseif ( $cat[$parent]['type'] == 1 && $type == -1 ) {
+                        'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+            ));
+            } elseif ($cat[$parent]['type'] == 1 && $type == - 1) {
                 return array('error' => array(
-                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
-                ));
-            } elseif ( $cat[$parent]['type'] == 1 && $type == 0 ) {
+                        'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+            ));
+            } elseif ($cat[$parent]['type'] == 1 && $type == 0) {
                 return array('error' => array(
-                    'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
-                ));
+                        'text' => 'Ошибка! Нельзя кардинально менять типы дочерних категорий'
+            ));
             }
         }
 
@@ -272,15 +266,15 @@ class Category_Model {
             $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?
                 WHERE user_id = ? AND cat_id = ?";
             $result = $this->db->query($sql, $parent, $system, $name, $type,
-                Core::getInstance()->user->getId(), $id);
-        // Системная категория, можно изменить только имя
+                            Core::getInstance()->user->getId(), $id);
+            // Системная категория, можно изменить только имя
         } else {
             $catname = $this->db->query('SELECT cat_name FROM category WHERE user_id=? AND
                 cat_id=?', Core::getInstance()->user->getId(), $id);
-            if ( $catname[0]['cat_name'] == $name)
+            if ($catname[0]['cat_name'] == $name)
                 return array('error' => array(
-                    'text' => 'Категория не была изменена'
-                ));
+                        'text' => 'Категория не была изменена'
+            ));
             $sql = "UPDATE category SET cat_name = ? WHERE user_id = ? AND cat_id = ?";
             $result = $this->db->query($sql, $name, Core::getInstance()->user->getId(), $id);
         }
@@ -291,20 +285,20 @@ class Category_Model {
             return array('result' => array('text' => ''));
         } else {
             return array('error' => array(
-                'text' => 'Ошибка при редактировании категории'
-            ));
+                    'text' => 'Ошибка при редактировании категории'
+        ));
         }
     }
 
     /**
      * Удаляет выбранную категорию (и все подкатегории, если это родительская категория)
-     * @param int $id 
+     * @param int $id
      */
     function del($id = 0)
     {
         $sql = "UPDATE category SET visible=0 WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
         $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);//удаляет категорию, заодно и дочерние
-        
+
 //        $sql = "UPDATE operation SET visible=0 WHERE cat_id=? AND user_id=?";
 //        $this->db->query($sql, $id, Core::getInstance()->user->getId()); //удаляет все операции по удаляемой категории.
         //@FIXME Починить удаление операций по категории
@@ -317,7 +311,8 @@ class Category_Model {
      * возвращает html строку для селекта в зависимости от типа категории
      * @deprecated WTF ???
      */
-    function cattype($type){
+    function cattype($type)
+    {
         return get_tree_select2(0, $type);
     }
 
@@ -328,25 +323,30 @@ class Category_Model {
      * @return array mixed
      */
     function getCategory($start = null, $finish = null)
-    { 
-    	
+    {
+
         if (!$start) {
             $start = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
         }
         if (!$finish) {
-            $finish = date("Y-m-d", mktime(0, 0, 0, date("m")+1, "01", date("Y")));
+            $finish = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
         }
-    
+
         // Инициализация вызываемой но неиспользуемой переменной оО
         $sys_currency = 1;
         $sum = $this->loadSumCategories($sys_currency, $start, $finish);
-        
+
         $users = array();
-        
-        foreach (Core::getInstance()->user->getUserCategory() as $category)
-        {
-            $users[ $category['cat_id'] ] = array
-            (
+
+        // Сортировка для хрома #886
+        $key = 0;
+
+        foreach (Core::getInstance()->user->getUserCategory() as $category) {
+
+            $key++;
+
+            $users[ $key ] = array
+                    (
                 'id'      => $category['cat_id'],
                 'parent'  => $category['cat_parent'],
                 'system'  => $category['system_category_id'],
@@ -355,19 +355,17 @@ class Category_Model {
                 'visible' => $category['visible'],
                 'custom'  => $category['custom']
             );
-            
-            if ($category['cat_id'] == $sum['cat_id'])
-            {
-                $users[$val['cat_id']]['summ'] = $sum['sum'];
+
+            if ($category['cat_id'] == $sum['cat_id']) {
+                $users[ $key ]['summ'] = $sum['sum'];
             }
         }
         $systems = $this->system_categories;
-        $systems[0] = array('id'=>'0','name'=>'Не установлена');
+        $systems[0] = array('id'=>'0', 'name'=>'Не установлена');
 
         return array(
             'user'=>$users,
             'system'=>$systems
         );
-        
     }
 }
