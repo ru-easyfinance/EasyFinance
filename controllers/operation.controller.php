@@ -502,10 +502,14 @@ class Operation_Controller extends _Core_Controller_UserCommon
         $id = explode(',', $_POST['id']);
         $virt = explode(',', $_POST['virt']);
         foreach ( $id as $k => $v ) {
-            $this->model->deleteOperation( $v );
+            if ( (int)$v > 0 ) {
+                $this->model->deleteOperation( (int)$v );
+            }
         }
         foreach ($virt as $k=>$v) {
-            $this->model->deleteTargetOperation($v);
+            if ( (int)$v > 0 ) {
+                $this->model->deleteTargetOperation( (int)$v );
+            }
         }
         /*if ($virt) {
             foreach ( $id as $k => $v ) {
