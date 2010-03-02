@@ -1,70 +1,67 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
-/**
- * Класс контроллера для модуля welcome
- * @category registration
- * @copyright http://easyfinance.ru/
- * @version SVN $Id$
- */
-class Registration_Controller extends _Core_Controller
-{
+<?php if ( !defined ( 'INDEX' ) ) trigger_error ( "Index required!", E_USER_WARNING );
 
     /**
-     * Модель регистрации
-     * @var Registration_Model
+     * Класс контроллера для модуля welcome
+     * @category registration
+     * @copyright http://easyfinance.ru/
+     * @version SVN $Id$
      */
-    private $model = null;
-
-	/**
-	 * Конструктор класса
-	 * @return void
-	 */
-	function __init()
-	{
-		$this->model = new Registration_Model();
-        
-		$this->tpl->assign('name_page', 'registration');
-
-		if( !session_id() )
-		{
-			session_start();
-		}
-		//$tpl->assign('register', array());
-	}
-
-    /**
-     * Страница регистрации без параметров
-     * @return void
-     */
-    function index() {
-
-    }
-
-    /**
-     * Активизируем пользователя
-     * @param $args array mixed
-     * @return void
-     */
-    function activate ($args)
+    class Registration_Controller extends _Core_Controller
     {
-        if (is_array($args))
+
+        /**
+         * Модель регистрации
+         * @var Registration_Model
+         */
+        private $model = null;
+
+        /**
+         * Конструктор класса
+         * @return void
+         */
+        function __init ()
         {
-            $reg_id = $args[0];
-            $this->model->activate($reg_id);
-        }
-        else
-        {
-		return false;
+            $this->model = new Registration_Model();
+
+            $this->tpl->assign ( 'name_page', 'registration' );
+
+            if ( !session_id () ) {
+                session_start ();
+            }
         }
 
-    }
+        /**
+         * Страница регистрации без параметров
+         * @return void
+         */
+        function index ()
+        {
+            
+        }
 
-    /**
-     * Создаём нового пользователя
-     * @param $args array mixed
-     * @return void
-     */
-    function new_user ()
-    {
-        $this->model->new_user();
+        /**
+         * Активизируем пользователя
+         * @param $args array mixed
+         * @return void
+         */
+        function activate ( $args )
+        {
+            if ( is_array ( $args ) ) {
+                $reg_id = $args[0];
+                $this->model->activate ( $reg_id );
+            }
+            else {
+                return false;
+            }
+        }
+
+        /**
+         * Создаём нового пользователя
+         * @param $args array mixed
+         * @return void
+         */
+        function new_user ()
+        {
+            die( json_encode( $this->model->new_user () ) );
+        }
     }
-}

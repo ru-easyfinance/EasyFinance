@@ -68,10 +68,12 @@ class Registration_Model
             $error_text['mail'] = "Неверно введен e-mail!";
             $register['mail'] = htmlspecialchars(@$_POST['mail']);
         }
+
         $cell = $db->selectCell("SELECT id FROM users WHERE user_login=?", $register['login']);
         if (!empty($cell)) {
             $error_text['login'] = "Пользователь с таким логином уже существует!";
         }
+
         $cell = $db->selectCell("SELECT id FROM users WHERE user_mail=?", $register['mail']);
         if (!empty($cell))
         {
@@ -110,15 +112,7 @@ class Registration_Model
 
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = mysql_insert_id();
-/*
-            $reg_id  = SHA1($register['mail'].";".date("Y-m-d h-i-s").";");
-            $sql     = "INSERT INTO registration (user_id, `date`, reg_id) VALUES (?, NOW(), ?);";
-            $db->query($sql, $user_id, $reg_id);
 
-            $tpl->assign('good_text', 'На указанную вами почту было отправлено письмо с кодом для подтверждения регистрации!');
-
-            //$reg_href = 'https://' . URL_ROOT . 'registration/activate/' . $reg_id;
-  */
             $body = "<html><head><title>
                 Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
                 </title></head>
@@ -146,40 +140,18 @@ class Registration_Model
                 ->setBody($body, 'text/html');
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
-
-            die(
-                json_encode(
-                    array(
+            return array (
                         'result' => array (
                             'text' => 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться',
                             'redirect' => "https://".URL_ROOT_MAIN."login"
                         )
-                    )
+                    );
+        } else {
+            return array (
+                'error' => array (
+                    'text' => "Обнаружены следующие ошибки:\n" . implode ( ',\n ', $error_text )
                 )
             );
-	
-//            //die(json_encode(array('errors'=>'succes')));
-//            $login = $register['login'];
-//            $pass = $_POST['password'];
-//
-//            $login = new Login_Model();
-//            $login->defaultCategory($user_id);
-//            $login->defaultAccounts($user_id);
-
-//            setcookie(
-//    	    	COOKIE_NAME,
-//                encrypt(
-//                    array( $login, sha1($pass) )
-//                ),
-//                time() + COOKIE_EXPIRE,
-//                COOKIE_PATH,
-//                COOKIE_DOMEN,
-//                COOKIE_HTTPS);
-//            die(json_encode(
-//	    	array(
-//	                'result'   => array(
-//        	        'redirect' => "https://".URL_ROOT_MAIN."info")
-//		)));
         }
     }
 
