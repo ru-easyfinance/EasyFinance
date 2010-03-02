@@ -4,7 +4,6 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-
 class Accounts_Controller extends _Core_Controller_UserCommon
 {
 
@@ -55,7 +54,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
 
         // Операция
         $this->tpl->assign('category', get_tree_select());
-        $targets = new Targets_Model();
+        //$targets = new Targets_Model();
         //$this->tpl->assign('targetList', $targets->getLastList(0, 100));
 
 

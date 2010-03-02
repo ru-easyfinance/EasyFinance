@@ -420,18 +420,24 @@ class Calendar
      * Подтверждает события
      * @param int | array $id
      */
-    public function acceptEvents ($id)
+    public function acceptEvents ( $id )
     {
         // Получаем список событий, отмечаем что они выполненные
-        $events = Calendar_Model::acceptEvents( $this->user, $id);
+        $events = Calendar_Model::acceptEvents ( $this->user, $id );
         if ( $events ) {
             // создаём операции по периодическим транзакциям
-            if ( count($events) ) {
+            if ( count ( $events ) ) {
                 $oper = new Operation_Model();
                 foreach ( $events as $k => $v ) {
-                    $drain = ( $v['op_type'] > 0 )? 0 : 1;
-                    $oper->add($v['amount'], $v['date'], $v['cat_id'], $drain,
-                        $v['comment'],$v['account_id'], array('регулярная операция'));
+                    if ( $v['op_type'] == 0 ) {
+                        $drain = 1;
+                        $amount = ABS ( $v['amount'] ) * - 1;
+                    } else {
+                        $drain = 0;
+                        $amount = ABS ( $v['amount'] );
+                    }
+                    $oper->add ( $amount, $v['date'], $v['cat_id'], $drain,
+                            $v['comment'], $v['account_id'], array('регулярная операция') );
                 }
             }
             return array('result' => array('text'=>''));

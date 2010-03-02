@@ -266,10 +266,11 @@ class Operation_Model {
 	 */
 	function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
 	{
-                if ($this->checkExistance($money, $date, $category, $drain, $comment, $account))
-                    return $this->checkExistance($money, $date, $category, $drain, $comment, $account);
-		if( is_null($tags) )
-		{
+        if ($this->checkExistance($money, $date, $category, $drain, $comment, $account)) {
+            return $this->checkExistance($money, $date, $category, $drain, $comment, $account);
+        }
+
+		if( is_null($tags) ) {
 			$tags = array();
 		}
 		
