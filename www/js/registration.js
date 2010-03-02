@@ -81,8 +81,8 @@ $(document).ready(function() {
              */
             $('#butt').click(function(){
                 if ($("#formRegister").valid()) {
-                    $('.formRegister').hide();
-					$.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
+                    $.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
+                    
                     $.post(
                         "/registration/new_user/?responseMode=json",
                         {
@@ -93,17 +93,22 @@ $(document).ready(function() {
                             mail: $('#mail').val()
                         },
                         function (data){
-                            if (!data || (!data.errors)||(data.errors == 'succes')){
-				var redir = data.result.redirect
-				$.jGrowl(data.result.text,{theme:'green'})
-                                setTimeout(function(){window.location = redir;},3000);
-                            }else{
-                                $('.formRegister').show();
-                                var str = '<ul>'
-                                for (var key in data.errors){
-                                    str += '<li>' + data.errors[key] + '</li>'
+                            if (data) {
+                                if (data.error) {
+                                    if (data.error.text)
+                                        $.jGrowl(data.error.text, {theme: 'red'});
+
+                                    if (data.error.redirect)
+                                        setTimeout(function(){window.location = data.error.redirect;},3000);
+                                } else if (data.result) {
+                                    if (data.result.text)
+                                        $.jGrowl(data.result.text, {theme: 'green'});
+
+                                    if (data.result.redirect)
+                                        setTimeout(function(){window.location = data.result.redirect;},3000);
                                 }
-                                $.jGrowl('<div><b>При регистации возникли ошибки :</b></div>' + str + '</ul>' , {theme: 'red'})
+                            } else {
+                                $.jGrowl('Ошибка на сервере!', {theme: 'red'});
                             }
                         },
                         'json')
