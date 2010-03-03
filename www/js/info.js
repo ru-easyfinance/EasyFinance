@@ -79,7 +79,7 @@ $('li.edit').live('click', function(){
                 + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
                 data[key]['image']+"' alt='' /><a>" +
                 data[key]['title']+'</a><div class="indicator_block"><div class="money">' +
-                formatCurrency(data[key]['amount']) + ' руб<br /><span> ' +
+                formatCurrency(data[key]['amount']) + ' ' + easyFinance.models.accounts.getAccountCurrencyText(data[key]['account']) + '<br /><span> ' +
                 data[key]['amount_done'] + '</span></div><div class="indicator"><div style="width:' +
                 data[key]['percent_done'] + '%;"><span>' +
                 data[key]['percent_done'] + '%</span></div></div><div class="date"><span>Целевая дата:' +
