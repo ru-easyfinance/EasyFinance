@@ -137,7 +137,7 @@ class Calendar
 
         $title   = (string)$title;
         $comment = (string)$comment;
-        $time    = (empty($time))? '00:00' : (string)$time;
+        $time    = (empty($time))? '12:00' : (string)$time;
         $date    = formatRussianDate2MysqlDate($date);
         $every   = (int)$every;
         // Опционально, по-умолчанию 1, от 1 до 365 (год) **или дата окончания**
