@@ -377,7 +377,7 @@ $('.tags_list .add,.tags_list .addtaglink').live('click', function(){
             {
                 if (data[v]['done'] == 0){
                         s += '<li ><a href="/targets/#edit/'+v+'">'+data[v]['title']+'</a><b>'
-                        +formatCurrency(data[v]['amount_done'])+' руб.</b> <span>('
+                        +formatCurrency(data[v]['amount_done']) + ' ' + easyFinance.models.accounts.getAccountCurrencyText(data[v]['account']) + ' </b> <span>('
                         +data[v]['percent_done']+'%)</span><span class="date">'
                         +data[v]['end']+'</span></li>';
                 }
