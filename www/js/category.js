@@ -339,9 +339,13 @@ $(document).ready(function() {
             if (oldCatId != -1)
                 oldCat = $.extend({}, easyFinance.models.category.getUserCategories()[oldCatId]);
 
-            if (subcat =="") {
+            if (subcat == "") {
                 // родительская категория
-                
+                if (sys == "" || sys == 0) {
+                    alert("Укажите системную категорию!");
+                    return;
+                }
+
                 if (oldCatId != -1) {
                     // делаем проверки при редактировании
                     var children = easyFinance.models.category.getChildrenByParentId(id);
@@ -371,7 +375,6 @@ $(document).ready(function() {
                 }
             } else {
                 // подкатегория
-                debugger;
                 var newParent = easyFinance.models.category.getUserCategories()[subcat];
                 sys = newParent.system;
 
