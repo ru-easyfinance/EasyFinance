@@ -237,9 +237,9 @@ easyFinance.widgets.accountsPanel = function(){
         i = 0;
         for(key in val) {
             i++;
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' '+ easyFinance.models.currency.getCurrencyTextById(key) +'</div></li>';
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' <span style="color: black;">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong>Итого:</strong> <br>'+formatCurrency(total)+' '+easyFinance.models.currency.getDefaultCurrencyText()+'</div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black;">Итого:</strong> <br>'+formatCurrency(total)+' <span style="color: black;"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
         $('div.listing dl.bill_list dt').addClass('open');
