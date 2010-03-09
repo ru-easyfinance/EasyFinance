@@ -9,7 +9,54 @@ easyFinance.widgets.accountsPanel = function(){
 
     // private variables
     var _model = null;
+    var _modelCurrency = null;
     var _$node = null;
+
+    var _accounts = null;
+
+    // private functions
+    function _initBigTip(){
+        $('.bill_list li.account:not(.add)').each(function(){
+            var defaultCurrency = _modelCurrency.getDefaultCurrency();
+            var id =$(this).find('div.id').attr('value').replace("edit", "");
+            var account = _model.getAccounts()[id];
+
+            var str = '<table>';
+            str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
+                        account.name + '</td></tr>';
+            str +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+
+                        _model.getAccountTypeString(account.id) + '</td></tr>';
+            str +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+
+                        account.comment + '</td></tr>';
+            str +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+
+                formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
+            if (account.reserve != 0){
+                var delta = (formatCurrency(account.totalBalance-account.reserve));
+                str +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
+                str +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
+            }
+
+            str +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
+                formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
+
+
+            str += '</table>';
+            $(this).qtip({
+                content: str, // Set the tooltip content to the current corner
+                position: {
+                  corner: {
+                     tooltip: 'topMiddle', // Use the corner...
+                     target: 'bottomMiddle' // ...and opposite corner
+                  }
+                },
+                style: {
+                  width: {max: 300},
+                  name: 'light',
+                  tip: true // Give them tips with auto corner detection
+                }
+            });
+        });
+    }
 
     // public variables
 
@@ -25,6 +72,9 @@ easyFinance.widgets.accountsPanel = function(){
         _$node = $(nodeSelector);
 
         _model = model;
+        _modelCurrency = easyFinance.models.currency;
+        _accounts = _model.getAccounts();
+
         $(document).bind('accountsLoaded', redraw);
         $(document).bind('accountAdded', redraw);
         $(document).bind('accountDeleted', redraw);
@@ -91,6 +141,7 @@ easyFinance.widgets.accountsPanel = function(){
             }
         });
 
+/*
         $('.bill_list li.account:not(.add) a').live('mouseover',function(){
             var _accounts = _model.getAccounts();
             var defaultCurrency = easyFinance.models.currency.getDefaultCurrency();
@@ -100,10 +151,10 @@ easyFinance.widgets.accountsPanel = function(){
                             '<th>Доходность, % годовых</th>'],
                         ['<th>% годовых</th>',
                             '<th>Доходность, % годовых</th>',
-                            '<th>Изменение с даты открытия</th>'],
+                            '<th>�?зменение с даты открытия</th>'],
                         ['<th>% годовых</th>'],
                         ['<th>Доходность, % годовых</th>',
-                            '<th>Изменение с даты открытия</th>']];//доп графы для групп
+                            '<th>�?зменение с даты открытия</th>']];//доп графы для групп
             var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
             var account = _model.getAccounts()[id];
             var spec = spec_th[g_types[account.type]];
@@ -151,13 +202,14 @@ easyFinance.widgets.accountsPanel = function(){
                 }
             });
         });
+        */
 
         return this;
     }
 
     function redraw(){
         var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
-        var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+//        var g_name = ['Деньги','Долги мне','Мои долги','�?нвестиции','�?мущество'];//названия групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
@@ -237,11 +289,12 @@ easyFinance.widgets.accountsPanel = function(){
         i = 0;
         for(key in val) {
             i++;
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' <span style="color: black;">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black;">Итого:</strong> <br>'+formatCurrency(total)+' <span style="color: black;"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
+        _initBigTip();
         $('div.listing dl.bill_list dt').addClass('open');
         $('div.listing dl.bill_list dt').live('click', function(){
             $(this).toggleClass('open').next().toggle();
@@ -267,6 +320,8 @@ easyFinance.widgets.accountsPanel = function(){
             $(this).prev().click();
             return false;
         });
+
+        
         
         //$('div.listing dl.bill_list dt').click();
         //$('div.listing dl.bill_list dt:last').click().addClass('open');
