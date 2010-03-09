@@ -349,7 +349,7 @@ $('.tags_list .add,.tags_list .addtaglink').live('click', function(){
         buttons: {
             'Сохранить': function() {
                 if($('input#tag',add).val()) {
-                    $.post('/tags/add/', {
+                    $.post('/tags/add/?responseMode=json', {
                         tag:$('.add_tag input').val()
                     }, function(data){
                         if (data) {
