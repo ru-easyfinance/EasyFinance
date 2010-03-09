@@ -907,7 +907,6 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 		color:#cff400;
 		}
 
-
 /*div.op_addoperation .op_line a#infoicon{ width: 16px; top: 2px;  }*/
 
 .operation_listSH { padding-top: 21px !important; height:250px; width: 557px}
@@ -945,7 +944,6 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_listSH table td.big{max-width: 100px}
 .operation_listSH table td.light{max-width: 60px}
 
-
 .operation_listSH table td a { color: #666666; }
 .operation_listSH table td, table.tab1 td { padding: 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
 .operation_listSH table td.no_over{padding:0;overflow: visible;}
@@ -954,12 +952,9 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_listSH table tr.first td { background: none; }
 .operation_listSH table div.cont { position: relative; }
 
+table.tab1 th{text-align: center}
 
-
-
-
-
-.operation_list .cont { position: relative; right: 70px;}
+.operation_list .cont { position: relative; right: 14px;}
 .operation_list { padding-top: 21px !important; height:255px; width: 505px; margin-top: 5px}
 .operationsJournal { height: 480px; }
 .operation_list .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px; }
@@ -986,11 +981,10 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_list table th span.sort span.up { background-position: -50px 0; }
 .operation_list table th span.select { margin-top: 7px; width: 8px; height: 4px; text-indent: -999px; overflow: hidden; cursor: pointer; background: url('/img/i/icons.gif') no-repeat -20px 0; }
 .operation_list table th div.cont {  z-index: 2; }
-/*.operation_list table th div.cont div { //zoom: 1; }*/
 .operation_list table th div.cont div:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list table th ul.select_list {  display: none; position: absolute; top: 16px; left: -5px; width: 100px; padding-bottom: 5px; z-index: 10; background: #ffffff; border: 1px solid #e5e5e5; }
 .operation_list table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }
- table.tab1 th{text-align: center}
+
 .operation_list table td.check{max-width: 20px}
 .operation_list table td.summ{max-width: 60px}
 .operation_list table td.big{max-width: 100px}
@@ -998,16 +992,18 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 
 #operations_list tr { cursor: pointer !important; }
 .operation_list table td a { color: #666666; }
-.operation_list table td, table.tab1 td { padding: 2px 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow:hidden}
+.operation_list table td, table.tab1 td { padding: 2px 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow: visible;}
 .operation_list table td.def_cur{text-align: right}
 .operation_list table .item td.name{width: 150px;max-width: 150px;}
 .operation_list table td.no_over{padding:0;overflow: visible;}
 .operation_list table tr:hover td, table.tab1 tr:hover td { position: relative; background-color: #e3ffdf !important; cursor: pointer; }
 .operation_list table tr.act td div.cont ul { display: block; }
 .operation_list table tr.first td { background: none; }
- table.t_body{max-height: 300px; display: block}
- table.tab1 tr{height: 20px}
 .operation_list table div.cont { position: relative; }
+
+table.t_body{max-height: 300px; display: block}
+table.tab1 tr{height: 20px}
+
  table.tab1 td{width: 24%}
  table.tab1#ev_tabl td{width: 32%}
  table.tab1#ev_tabl .chk {width:20px;}
