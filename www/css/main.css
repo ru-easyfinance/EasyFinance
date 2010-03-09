@@ -986,7 +986,7 @@ table.tab1 th{text-align: center}
 .operation_list table th ul.select_list li { padding: 0 5px; font-weight: normal !important; }
 
 .operation_list table td.check{max-width: 20px}
-.operation_list table td.summ{max-width: 60px}
+.operation_list table td.summ{max-width: 60px; text-align:right;}
 .operation_list table td.big{max-width: 100px}
 .operation_list table td.light{max-width: 60px}
 

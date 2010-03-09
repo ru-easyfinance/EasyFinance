@@ -89,7 +89,9 @@ easyFinance.widgets.operationsJournal = function(){
                 + "'>"
                     + "<td class='check'>"
                     + "<input type='checkbox' /></td>"
-                    + '<td class="light"><div class="operation ' + tp + '"></div></td>';
+                    + '<td class="light">'+data[v].date.substr(0, 5)+'</td>';
+
+            tr += '<td class="light"><span>'+'<div class="operation ' + tp + '"></div>'+'</span></td>'
 
                 // @fixme: отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
                 //if (data[v].transfer != _account && data[v].transfer != 0){
@@ -98,13 +100,12 @@ easyFinance.widgets.operationsJournal = function(){
                     // если перевод осуществляется между счетами с разными валютами,
                     // то в переменной imp_id хранится сумма в валюте целевого счёта
                     if (data[v].imp_id == null)
-                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].money)+'</b></span></td>'
+                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].money)+'&nbsp;</b></span></td>'
                     else
-                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].imp_id)+'</b></span></td>'
+                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].imp_id)+'&nbsp;</b></span></td>'
                 //}
 
-                tr += '<td class="light"><span>'+data[v].date+'</span></td>'
-                + '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
+                tr += '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
                 + '<td class="big">'+ (data[v].comment ? data[v].comment.replace(/&quot;/g, '"') : '&nbsp;')
                     +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'

@@ -50,15 +50,15 @@ table#operations_list_header th {
 
 #operations_list_header span#btnFilterType { margin: 0px; }
 table#operations_list_header th + th {
-    width: 30px;
+    width: 20px;
 }
 
 table#operations_list_header th + th + th{
-    width: 50px;
+    width: 30px;
 }
 
 table#operations_list_header th + th + th + th{
-    width: 60px;
+    width: 50px;
 }
 
 table#operations_list_header th + th + th + th + th{
@@ -66,7 +66,7 @@ table#operations_list_header th + th + th + th + th{
 }
 
 table#operations_list_header th + th + th + th + th + th{
-    width: 60px;
+    width: 100px;
 }
 
 /* last empty header for scrollbar */
@@ -82,15 +82,15 @@ table#operations_list td {
 }
 
 table#operations_list td + td {
-    width: 30px;
+    width: 20px;
 }
 
 table#operations_list td + td + td{
-    width: 50px;
+    width: 30px;
 }
 
 table#operations_list td + td + td + td{
-    width: 60px;
+    width: 50px;
 }
 
 table#operations_list td + td + td + td + td{
@@ -98,7 +98,7 @@ table#operations_list td + td + td + td + td{
 }
 
 table#operations_list td + td + td + td + td + td{
-    width: 120px;
+    width: 160px;
 }
 
 #operations_list div.operation { display: block; height: 16px; width: 16px; background: url('/img/i/iconsOperation.gif') no-repeat 0 0; margin-left: 3px; }
