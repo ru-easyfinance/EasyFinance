@@ -5,7 +5,7 @@ $(document).ready( function(){
 $('.add2 span').live('click', function(){
     document.location = '/targets/#add';
 });
-$('li.del').live('click', function(){
+$('.financobject_block li.del').live('click', function(){
     target = $(this).closest('div.object2');
     if (confirm('Вы уверены что хотите удалить данную Финансовую цель?')) {
         $.post( '/targets/del/', {
@@ -16,7 +16,7 @@ $('li.del').live('click', function(){
          );
     }
 });
-$('li.edit').live('click', function(){
+$('.financobject_block li.edit').live('click', function(){
     document.location = '/targets/#edit/'+$(this).closest('div.object2').attr('id');
 });
 /*$.post(

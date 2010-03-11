@@ -58,8 +58,11 @@ function getCookie(name) {
  * @return String
  */
 function shorter(str, maxLength){
+    if (str == undefined){
+        return null;
+    }
     if(str.length > maxLength){
-        str = str.substring(0, maxLength-4) + '...';
+        str = str.substring(0, maxLength-3) + '...';
     }
     return str;
 }
@@ -83,10 +86,10 @@ function formatCurrency(num) {
  * @return String
  */
 function toFloat(str){
-if (!str) {
+    if (str !== null && str !== undefined){
         str = new Number(str.toString().replace(/[^0-9\.\-]/gi, ''));
         return str;
-    } else {
+    }else{
         return 0;
     }
 }

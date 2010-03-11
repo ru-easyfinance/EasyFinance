@@ -1,3 +1,6 @@
+// Jet: deprecated??? 
+
+/*
 var u_info;
 var did;
 function user_info()
@@ -228,4 +231,8 @@ $(document).ready(function() {
     spamer = res.getNotify;
     if (spamer == 0)
         $('#getNotify').removeAttr('checked');
+
+    if (window.location.hash.indexOf("#currency") != -1)
+        $('.menu5 #i4').click();
 })
+*/

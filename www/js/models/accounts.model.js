@@ -11,9 +11,17 @@ easyFinance.models.accounts = function(){
     var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json&confirmed=1';
 
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/?responseMode=json';
+
+    var ACCEPT_OPERATIONS_URL = '/calendar/accept_all/?responseMode=json&confirmed=1';
     var DELETE_OPERATIONS_URL = '/operation/del_all/?responseMode=json&confirmed=1';
+
     var ADD_OPERATION_URL = '/operation/add/?responseMode=json';
     var EDIT_OPERATION_URL = '/operation/edit/?responseMode=json';
+    var EDIT_OPERATION_DATE_URL = '/calendar/edit_date/?responseMode=json';
+
+    var ADD_CHAIN_URL = '/calendar/add/?responseMode=json';
+    var EDIT_CHAIN_URL = '/calendar/edit/?responseMode=json';
+    var DELETE_CHAIN_URL = '/calendar/del_chain/?responseMode=json';
 
     // private variables
     var _this = null;
@@ -244,28 +252,125 @@ easyFinance.models.accounts = function(){
         //}
     }
 
+    // получаем списки просроченных и будущих событий
+    function loadEvents(callback){
+        
+    }
+
+    // получаем список просроченных событий
+    function loadOverdueEvents(param1, param2){
+
+    }
+
+    function getOverdueOperationById(id){
+        if (!res.calendar || !res.calendar.overdue)
+            return null;
+        
+        for (var row in res.calendar.overdue) {
+            if (res.calendar.overdue[row].id == id)
+                return $.extend({}, res.calendar.overdue[row]);
+        }
+    }
+
+    function getFutureOperationById(id){
+        if (!res.calendar || !res.calendar.future)
+            return null;
+
+        for (var row in res.calendar.future) {
+            if (res.calendar.future[row].id == id)
+                return $.extend({}, res.calendar.future[row]);
+        }
+    }
+
+    function acceptOperationsByIds(ids, callback) {
+        var _ids = ids;
+
+        $.post(ACCEPT_OPERATIONS_URL, {ids : ids.toString() }, function(data) {
+            if (data.result) {
+                for (var key in _ids) {
+                    // удаляем из списка просроченных операций
+                    for (var row in res.calendar.overdue) {
+                        if (res.calendar.overdue[row].id == _ids[key])
+                            delete res.calendar.overdue[row];
+                    }
+
+                    // удаляем из списка напоминаний
+                    for (var row in res.calendar.future) {
+                        if (res.calendar.future[row].id == _ids[key])
+                            delete res.calendar.future[row];
+                    }
+                }
+
+                var event = $.Event("operationsAccepted");
+                event.ids = _ids;
+                $(document).trigger(event);
+            }
+
+            if (typeof callback == "function")
+                callback(data);
+        }, 'json');
+    }
+
     /**
      * @desc delete operations by id
      * @param ids: array of operation ids
+     * @param isVirts: ids of virtual operations
      * @param callback: callback function
      */
     function deleteOperationsByIds(ids, isVirts, callback) {
-        var _ids = ids;
+        var _ids = null;
+        if (typeof ids == "string")
+            _ids = [ids];
+        else
+            _ids = ids;
 
         $.post(DELETE_OPERATIONS_URL, {id : ids.toString(), virt: isVirts.toString()}, function(data) {
                 // update accounts
                 _loadAccounts();
-                
-                for (var i=0; i<_ids.length; i++) {
-                    // delete paired transfer if exists
-                    if (_journal[_ids[i]] && _journal[_ids[i]].tr_id != null && _journal[_ids[i]].tr_id != "0")
-                        delete _journal[_journal[_ids[i]].tr_id];
 
-                    // delete operation
-                    delete _journal[_ids[i]];
+                if (_journal) {
+                    for (var i=0; i<_ids.length; i++) {
+                        // delete paired transfer if exists
+                        if (_journal[_ids[i]] && _journal[_ids[i]].tr_id != null && _journal[_ids[i]].tr_id != "0")
+                            delete _journal[_journal[_ids[i]].tr_id];
+
+                        // delete operation
+                        delete _journal[_ids[i]];
+                    }
                 }
 
-                callback(data);
+                for (var key in _ids) {
+                    // удаляем из списка просроченных операций
+                    for (var row in res.calendar.overdue) {
+                        if (res.calendar.overdue[row].id == _ids[key])
+                            delete res.calendar.overdue[row];
+                    }
+
+                    // удаляем из списка будущих операций
+                    for (var row in res.calendar.future) {
+                        if (res.calendar.future[row].id == _ids[key])
+                            delete res.calendar.future[row];
+                    }
+                }
+
+                var event = $.Event("operationsDeleted");
+                event.ids = _ids;
+                $(document).trigger(event);
+
+                if (typeof callback == "function")
+                    callback(data);
+        }, 'json');
+    }
+
+    function deleteOperationsChain(chainId, callback){
+        var _chainId = chainId;
+        $.post(DELETE_CHAIN_URL, {chain : chainId}, function(data) {
+                var event = $.Event("operationsChainDeleted");
+                event.id = _chainId;
+                $(document).trigger(event);
+
+                if (callback)
+                    callback(data);
         }, 'json');
     }
 
@@ -281,13 +386,43 @@ easyFinance.models.accounts = function(){
             );
     }
 
+    // создание цепочки операций
+    // используется при планировании
+    // ("добавление в календарь")
+    function addOperationsChain(
+        type, account, category, date, comment,
+        amount, toAccount, currency, convert,
+        target, close, tags, time, last, every, repeat, week,
+        callback) {
+            editOperationById(
+                '', type, account, category, date,
+                comment, amount, toAccount, currency,
+                convert, target, close, tags,
+                '', time, last, every, repeat, week
+            );
+    }
+
+    function editOperationDateById(operationId, newDate, callback) {
+        $.post(EDIT_OPERATION_DATE_URL, {id: operationId, date: newDate}, function(data){
+            if (data.result) {
+                var event = $.Event("operationDateEdited");
+                event.id = operationId;
+                event.date = newDate;
+                $(document).trigger(event);
+            }
+
+            if (typeof callback == "function")
+                callback(data);
+        }, "json");
+    }
+
     function editOperationById(
         id, type, account, category, date, comment,
         amount, toAccount, currency, convert,
         target, close, tags,
+        chain, time, last, every, repeat, week, // параметры для цепочек операций
         callback){
-            var url = (id == '') ? ADD_OPERATION_URL : EDIT_OPERATION_URL;
-
+            // параметры для обычной транзакции
             var params = {
                 id        : id,
                 type      : type,
@@ -304,22 +439,57 @@ easyFinance.models.accounts = function(){
                 tags      : tags
             };
 
+            var url = '';
+            if (typeof chain == "string") {
+                // регулярная транзакция
+                url = (id == '') ? ADD_CHAIN_URL : EDIT_CHAIN_URL;
+
+                // расширяем список параметров
+                params.chain = chain;
+                params.time = time;
+                params.last = last;
+                params.every = every;
+                params.repeat = repeat;
+                params.week = week;
+            } else {
+                url = (id == '') ? ADD_OPERATION_URL : EDIT_OPERATION_URL;
+            }
+
             $.post(url, params, function(data){
                 // @todo: update totalBalance!
                 //if (data.operation)
                 //    _accounts[data.operation.account]["totalBalance"] = _accounts[data.operation.account]["totalBalance"] - toFloat(data.operation.amount);
 
+                var event = null;
                 if (url == ADD_OPERATION_URL) {
-                    $(document).trigger('operationAdded');
+                    event = $.Event('operationAdded');
                 } else if (url == EDIT_OPERATION_URL) {
-                    $(document).trigger('operationEdited');
+                    event = $.Event('operationEdited');
+                } else if (url == ADD_CHAIN_URL) {
+                    event = $.Event('operationsChainAdded');
+                } else if (url == EDIT_CHAIN_URL) {
+                    event = $.Event('operationsChainEdited');
                 }
 
+                var props = ["calendar", "overdue", "future"];
+                for (var k in props) {
+                    if (data[props[k]]) {
+                        res.calendar[props[k]] = $.extend({}, data[props[k]]);
+                        event[props[k]] = res[props[k]];
+                        delete data[props[k]];
+                    }
+                }
 
+                $(document).trigger(event);
 
                 _loadAccounts();
+                
                 callback(data);
             }, "json");
+    }
+
+    function editOperationsChain(){
+
     }
 
     // reveal some private things by assigning public pointers
@@ -339,13 +509,26 @@ easyFinance.models.accounts = function(){
 
         getAccountBalanceTotal: getAccountBalanceTotal,
         getAccountBalanceAvailable: getAccountBalanceAvailable,
-
+        acceptOperationsByIds : acceptOperationsByIds,
         addAccount: addAccount,
         editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,
-        loadJournal: loadJournal,
+
         addOperation: addOperation,
+        editOperationDateById: editOperationDateById,
         editOperationById: editOperationById,
-        deleteOperationsByIds: deleteOperationsByIds
+        deleteOperationsByIds: deleteOperationsByIds,
+
+        addOperationsChain: addOperationsChain,
+        editOperationsChain: editOperationsChain,
+        deleteOperationsChain: deleteOperationsChain,
+
+        loadJournal: loadJournal,
+        loadEvents: loadEvents,
+        //loadOverdueEvents: loadOverdueEvents,
+        //loadFutureEvents: loadFutureEvents
+
+        getOverdueOperationById: getOverdueOperationById,
+        getFutureOperationById: getFutureOperationById
     };
 }(); // execute anonymous function to immediatly return object

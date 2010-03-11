@@ -142,12 +142,12 @@ $(document).ready(function() {
     function cat_checkForm() {
         var name = $('#namecat').val();
         if (name == '') {
-            $.jGrowl("Необходимо указать название категории", {theme: 'red', life: 5000});
+            $.jGrowl("Необходимо указать название категории", {theme: 'red', life: 2500});
             return false;
         }
 
         if (name.indexOf('<') != -1 || name.indexOf('>') != -1) {
-            $.jGrowl("Название категории не должно содержать символов < и >!", {theme: 'red', life: 5000});
+            $.jGrowl("Название категории не должно содержать символов < и >!", {theme: 'red', life: 25000});
             return false;
         }
 

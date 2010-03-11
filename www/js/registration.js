@@ -96,7 +96,7 @@ $(document).ready(function() {
                             if (data) {
                                 if (data.error) {
                                     if (data.error.text)
-                                        $.jGrowl(data.error.text, {theme: 'red', life: 5000});
+                                        $.jGrowl(data.error.text, {theme: 'red', life: 2500});
 
                                     if (data.error.redirect)
                                         setTimeout(function(){window.location = data.error.redirect;},3000);

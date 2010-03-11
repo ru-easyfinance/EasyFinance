@@ -88,10 +88,10 @@ easyFinance.widgets.accountsPanel = function(){
 
        $('.accounts li a').live('click',function(evt){
             var id;
-            var parentClass = $(this).parent().attr("class");
-            if (parentClass == "account") {
+
+            if ($(this).parent().hasClass("account")) {
                 // add operation
-                if (parentClass == "account")
+                if ($(this).parent().hasClass("account") == "account")
                     id = $(this).find('div.id').attr('value').replace("edit", "");
                 else
                     id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
@@ -112,7 +112,7 @@ easyFinance.widgets.accountsPanel = function(){
                 // menu action
                 id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
 
-                if (parentClass == "operation") {
+                if ($(this).parent().hasClass("operation")) {
                     if (easyFinance.widgets.operationEdit) {
                         easyFinance.widgets.operationEdit.showForm();
                         easyFinance.widgets.operationEdit.setAccount(id);
@@ -137,7 +137,6 @@ easyFinance.widgets.accountsPanel = function(){
                         });
                     }
                 }
-                    
             }
         });
 

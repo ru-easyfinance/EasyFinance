@@ -6,15 +6,18 @@ easyFinance.models.currency = function(){
      */
     function load(data){
         _defaultCurrencyId = data['default'];
-        $.extend(_data, data);
-        delete _data['default'];
+        _data = {};
+        delete data['default'];
+        for (var key in data){
+            _data[key] = $.extend({id: key},data[key]);
+        }
     }
     /**
      * Возвращает валюту по умолчанию
      * @return {cost : int, name : str, progress : str, text : str, ?notFound : true}
      */
     function getDefaultCurrency(){
-        return _data[_defaultCurrencyId] || {cost : 0, name : '', progress : '', text : '', notFound : true};
+        return _data[_defaultCurrencyId] || {cost : 0, name : '', progress : '', text : '', notFound : true, id: 0};
     }
     /**
      * Возвращает id валюты по умолчанию
@@ -65,10 +68,19 @@ easyFinance.models.currency = function(){
     /**
      * Возвращает стоимость валюты в зависимости от Id
      * @param id {int}
-     * @return {str}
+     * @return {float}
      */
     function getCurrencyCostById(id){
-        return _data[id] ? _data[id].cost : '';
+        return _data[id] ? _data[id].cost : 0;
+    }
+    /**
+     * Возвращает курс валюты Id относительно валюты defaultId
+     * @param id {int}
+     * @param defaultId {int}
+     * @return {float}
+     */
+    function getCurrencyRelativeCost(id, defaultId){
+        return (_data[id] &&  _data[defaultId])? (getCurrencyCostById(id)/getCurrencyCostById(defaultId)) : 0;
     }
     /**
      * Возвращает список валют
@@ -107,6 +119,7 @@ easyFinance.models.currency = function(){
         getCurrencyNameById : getCurrencyNameById,
         getCurrencyTextById :getCurrencyTextById,
         getCurrencyCostById: getCurrencyCostById,
+        getCurrencyRelativeCost: getCurrencyRelativeCost,
         setCurrency : setCurrency
     };
 }();

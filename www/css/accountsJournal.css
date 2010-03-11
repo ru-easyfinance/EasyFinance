@@ -1,0 +1,90 @@
+#accountsJournal{
+    width : 99.5%
+}
+#accountsJournal table tr{
+    cursor: pointer;
+}
+#accountsJournal table tr th.totalBalance div {
+    margin-right: 0px;
+}
+#accountsJournal table tr .name {
+    width: 180px;
+}
+#accountsJournal table tr th.name {
+    padding-left: 7px;
+}
+#accountsJournal .efTable.head th.scroll,#accountsJournal .efTable.head th.scroll div {
+max-width:25px;
+overflow:hidden;
+width:25px;
+}
+#accountsJournal table tr.parent .name {
+    padding-left: 7px;
+    padding-right: 57px;
+}
+#accountsJournal table th.money {
+    padding-right: 50px;
+}
+#accountsJournal table tr .def_cur{
+    width : auto;
+    overflow: visible;
+    padding-right: 57px;
+}
+
+#accountsJournal table tr .def_cur .number {
+    width: 100%;
+    max-width: 100%;
+    float: none;
+}
+
+#accountsJournal table td div.cont{
+    display: none;
+    overflow: visible;
+}
+#accountsJournal table tr:hover td div.cont{
+    display: block;
+}
+#accountsJournal table td div.cont ul{
+    /*display: none;*/
+    position: absolute;
+    top: -4px;
+    right: -75px;
+    width: 79px;
+    height: 31px;
+    padding-left: 16px;
+    background: url('/img/i/icons_menu_accounts.gif') no-repeat 0 0;
+}
+#accountsJournal table td div.cont ul:hover{
+    /*display: block;*/
+}
+#accountsJournal table td div.cont ul:after{ 
+    display: block;
+    content: ' ';
+    height: 0;
+    overflow: hidden;
+    clear: both;
+}
+#accountsJournal table td div.cont ul li{ 
+    float: left;
+    margin: 9px 8px 0 0;
+    height: 12px;
+}
+#accountsJournal table td div.cont ul li a{ 
+    display: block;
+    width: 13px;
+    height: 12px;
+    text-indent: -999px;
+    overflow: hidden;
+}
+#accountsJournal table td div.cont ul li.edit a{ 
+    width: 13px;
+}
+#accountsJournal table td div.cont ul li.del a{ 
+    width: 11px;
+}
+#accountsJournal table td div.cont ul li.add{ 
+    margin-right: 0;
+}
+#accountsJournal table td div.cont ul li.add a{ 
+    width: 12px;
+}

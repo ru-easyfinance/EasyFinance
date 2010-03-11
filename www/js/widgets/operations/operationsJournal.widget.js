@@ -123,7 +123,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         // Выводим итоги по счёту/странице
         pageTotal = Math.round(pageTotal*100)/100;
-        if (_account != '') {            
+        if (_account != '' && _account != "undefined") {
             $('#lblOperationsJournalAccountBalance')
                 .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account)) + ' ' + _modelAccounts.getAccountCurrency(_account).text)
                 .show();
@@ -222,30 +222,17 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _editOperation(){
-        $(".op_addoperation").show();
         var operation = $(this).parent().attr('class');
         if (operation == 'edit') {
-            $("#op_addoperation_but").addClass('act');
-            $(".op_addoperation").show();
-
-            easyFinance.widgets.operationEdit.fillForm(_journal[$(this).closest('tr').attr('value')], false);
-            if ($('#op_comment').val() == "Начальный остаток"){
-                $('#op_amount').attr('disabled', 'disabled');
-                $('#op_comment').attr('disabled', 'disabled');
-            } else {
-                $('#op_amount').removeAttr('disabled');
-                $('#op_comment').removeAttr('disabled');
-            }
-            $('form').attr('action','/operation/edit/?responseMode=json');
+            easyFinance.widgets.operationEdit.fillForm(_journal[$(this).closest('tr').attr('value')], true);
         } else if(operation == 'del') {
             _deleteOperation($(this).closest('tr').attr('value'));
         } else if(operation == 'add') {
-            // @todo: kick this out!
-            $("#op_addoperation_but").addClass('act');
-            $(".op_addoperation").show();
-            
-            easyFinance.widgets.operationEdit.fillForm(_journal[$(this).closest('tr').attr('value')], true);
-            $('#date').datepicker('setDate', new Date() );
+            // при создании копии проставляем текущую дату
+            // остальные атрибуты остаются те же
+            var copy = $.extend(true, {}, _journal[$(this).closest('tr').attr('value')]);
+            copy.date = new Date();
+            easyFinance.widgets.operationEdit.fillForm(copy, false);
         }
 
         return false;
@@ -571,6 +558,9 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function setAccount(account) {
+        if (account == "undefined")
+            return;
+
         _account = account;
         _$comboAccount.val(_account);
 

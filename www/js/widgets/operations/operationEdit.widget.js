@@ -11,6 +11,13 @@ easyFinance.widgets.operationEdit = function(){
     var _modelCategory = null;
 
     var _$node = null;
+    var _$dialog = null;
+
+    var _isEditing = false;
+    var _isCalendar = false;
+    var _isChain = false;
+
+    var _accOptionsData = null;
 
     var _oldSum = 0; // нужно для редактирования
 
@@ -26,7 +33,17 @@ easyFinance.widgets.operationEdit = function(){
     var _sexyTransfer = null;
     var _sexyTarget = null;
 
-    var accOptionsData = null;
+    // для мультивалютных переводов
+    var _defaultCurrency = null;
+    var _accountCurrency = null;
+    var _transferCurrency = null;
+    var _realConversionRate = 0;
+
+    var _$noFocus = null;
+
+    var _$blockCalendar = null;
+    var _$blockWeekdays = null;
+    var _$blockRepeating = null;
 
     // private functions
 
@@ -36,13 +53,14 @@ easyFinance.widgets.operationEdit = function(){
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
             $('#op_infobut1').show();
-        })
+        });
+
         $('a#infoicon2').click(function(){
             $('#op_infobut2').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
             $('#op_infobut2').show();
-        })
+        });
         
         $('#op_infobut1').hide();
         $('#op_infobut2').hide();
@@ -71,6 +89,7 @@ easyFinance.widgets.operationEdit = function(){
             n = Math.floor(k*5);
             str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
         }
+
         $('.op_tags_could').html(str+'</ul>');
         $('.op_tags_could li').hide();
     }
@@ -89,15 +108,17 @@ easyFinance.widgets.operationEdit = function(){
         // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
         var accountsCount = 0;
+        var key;
+
         // считаем количество всех счетов
-        for (var key in accounts) {
+        for (key in accounts) {
 			accountsCount++;
         }
 		
         var recentCount = 0;
         var recent = res.accountsRecent;
         // считаем количество часто используемых счетов
-        for (var key in recent) {
+        for (key in recent) {
             recentCount++;
         }
 
@@ -105,12 +126,12 @@ easyFinance.widgets.operationEdit = function(){
         if (recentCount >= accountsCount || recentCount == 0) {
             // если счетов мало (не больше частых счетов),
             // выводим все счета по алфавиту
-            for (var key in accounts) {
+            for (key in accounts) {
                 _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
             }
         } else {
             // если счетов много, сначала выводим часто используемые счета
-            for (var key in recent) {
+            for (key in recent) {
                 _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
                 delete accounts[key];
             }
@@ -118,7 +139,7 @@ easyFinance.widgets.operationEdit = function(){
             _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
 
             // затем выводим все остальные счета в алфавитном порядке
-            for (var key in accounts) {
+            for (key in accounts) {
                 _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
             }
         }
@@ -196,9 +217,29 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _initForm(){
-        // for correct sexyCombo initialization
-        //$(".op_addoperation").show();
+        _$noFocus = $("#opCatchFocus");
 
+        _$dialog = $('form.op_addoperation').dialog({
+            dialogClass: 'dlgOperationEdit',
+            autoOpen: false,
+            title: 'Новая операция',
+            width: 400,
+            beforeclose: function() {
+                // очищаем форму перед закрытием
+                _clearForm();
+            },
+            buttons: {
+                "Отмена": function() {
+                    // закрываем диалог
+                    $(this).dialog("close");
+                },
+                "Сохранить": function() {
+                    _saveOperation();
+                }
+            }
+        });
+
+        // @todo: реализовать переход между комбо по tab'у
         $('div.combo.sexy input').keypress(function(e){
             if (e.keyCode == 9){
                 var id = $(this).closest('div.combo.sexy').find('select').attr('id');
@@ -220,41 +261,46 @@ easyFinance.widgets.operationEdit = function(){
                 }
             }
         });
-        
-        $(".op_addoperation").hide();
+        // ====
 
-        $('#op_btn_Save').click(function(){
-            _saveOperation();
+        // настраиваем переключение между 
+        // обычным режимом и планированием
+        $("#op_addoperation_but").click(function() {
+            _isEditing = false;
+            _isCalendar = false;
+            _isChain = false;
 
-            return false;
+            _$blockCalendar.hide();
+            _expandNormal();
+        });
+        $("#op_addtocalendar_but").click(function() {
+            _isEditing = false;
+            _isCalendar = true;
+            _isChain = true;
+            _expandCalendar();
+
+            // TEMP: не показываем операции на фин. цель
+            var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+            $("#op_type").html(htmlOptions);
+            $.sexyCombo.changeOptions("#op_type");
+            setType("0");
+            // EOF TEMP
         });
 
-        $('#op_btn_Cancel').click(function(){
-            $("#op_btn_Save").removeAttr('disabled');
-            $("#op_addoperation_but").click();
-
-            return false;
-        });
-
-        $("#op_addoperation_but").click(function(){
-            $(this).toggleClass("act");
-            if($(this).hasClass("act")){
-                _clearForm();
-                $(".op_addoperation").show();
-
-                // если открываем в первый раз, инициализируем комбобоксы
-                if (!_sexyAccount)
-                    _initSexyCombos();
-            } else {
-                $(".op_addoperation").hide();
-            }
-        });
-        //поле суммы
+        // кнопка расчёта суммы
         _$node.find('#btnCalcSum').click(function(){
             var calculator = $('#op_amount');
             $(calculator).val(calculate($(calculator).val()));
         });
-        $('#op_amount').live('keypress',function(e){
+
+        // кнопка расчёта суммы для поля перевода
+        _$node.find('#btnCalcSumTransfer').click(function(){
+            var calculator = $('#op_transfer');
+            $(calculator).val(calculate($(calculator).val()));
+        });
+
+        // поле суммы со встроенным калькулятором
+        $('#op_amount,#op_transfer').live('keypress',function(e){
             if (e.keyCode == 13){
                 $(this).val(calculate($(this).val()));
             }
@@ -268,37 +314,142 @@ easyFinance.widgets.operationEdit = function(){
                 }
                 return true;
             }
-            
         });
-        //\/поле суммы
-        $('.calculator-trigger').click(function(){
-            $(this).closest('div').find('#op_amount,#amount').val(tofloat($('#op_amount').val()));
-        })
+        
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
-        $('#op_amount,#op_currency').change(function(){
+        // обмен валют для мультивалютных переводов
+        $('#op_conversion').change(function(){
+            // рассчитываем реальный множитель конвертации в зависимости от валют счетов
+            if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+                // если перевод с использованием валюты по умолчанию
+                if (_accountCurrency.id == _defaultCurrency.id) {
+                    _realConversionRate = Math.round((1 / parseFloat($(this).val()))*1000)/1000;
+                } else {
+                    _realConversionRate = parseFloat($(this).val());
+                }
+            } else {
+                // если перевод без использования валюты по умолчанию
+                _realConversionRate = Math.round((1 / parseFloat($(this).val()))*1000)/1000;
+            }
+
+            var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
+            result = Math.round(result*100)/100;
+
+            if (!isNaN(result) && result != 'Infinity') {
+                $("#op_transfer").val(result);
+            }
+        });
+
+
+        $('#op_amount').change(function(){
+            var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
+            result = Math.round(result*100)/100;
+
+            if (!isNaN(result) && result != 'Infinity') {
+                $("#op_transfer").val(result);
+            }
+        });
+
+        $('#op_transfer').change(function(){
             if (_selectedType == "2") {
-                /*
-                 *@TODO Дописать округление
-                 */
-                var result = $('#op_currency').val() * Math.round(parseFloat(tofloat($('#op_amount').val())));
-                result = Math.round(result*100)/100;
+                var result = parseFloat(tofloat(calculate($(this).val()))) / _realConversionRate;
+                result = Math.round(result*10000)/10000;
+
                 if (!isNaN(result) && result != 'Infinity') {
-                    $("#op_convertSumCurrency").html("&nbsp; конвертация: "+result);
-                    TransferSum = result;
+                    $("#op_amount").val(result);
                 }
             }
         });
 
         $('#op_account').change( function(){_changeAccountForTransfer();});
         $('#op_AccountForTransfer').change( function(){_changeAccountForTransfer();});
+
+        _initBlockCalendar();
+    }
+
+    function _initBlockCalendar() {
+        _$blockCalendar = _$node.find('#operationEdit_planning');
+        
+        _$blockCalendar.find('#cal_date_end').datepicker();
+        
+        _$blockWeekdays = _$blockCalendar.find('#operationEdit_weekdays');
+        _$blockRepeating = _$blockCalendar.find('#operationEdit_repeating');
+
+        // переключаемся между разными периодами повторений
+        _$blockCalendar.find('#cal_repeat').change(function(){
+            if ($(this).val()=="7") { // неделя
+                _$blockWeekdays.show();
+                _$blockRepeating.show();
+            } else if ($(this).val()=="0") { // Не повторять
+                _$blockRepeating.hide();
+                _$blockRepeating.hide();
+            } else { // день, месяц, год
+                _$blockWeekdays.hide();
+                _$blockRepeating.show();
+            }
+        });
+
+        // переключаемся между режимами повторения
+        // по количеству раз или до определённой даты
+        _$blockCalendar.find('.rep_type').click(function(){
+            _$blockCalendar.find('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
+            _$blockCalendar.find('.rep_type:checked').closest('div').find('input,select').removeAttr('disabled');
+        });
+    }
+
+    function _expandNormal() {
+        if (!_isCalendar) {
+            if (_isEditing)
+                _$dialog.data('title.dialog', 'Редактирование операции').dialog('open');
+            else
+                _$dialog.data('title.dialog', 'Добавление операции').dialog('open');
+        } else {
+            if (_isEditing)
+                if (_isChain)
+                    _$dialog.data('title.dialog', 'Редактирование серии операций').dialog('open');
+                else
+                    _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
+            else
+                if (_isChain)
+                    _$dialog.data('title.dialog', 'Добавление серии операций').dialog('open');
+        }
+
+        // если открываем в первый раз, инициализируем комбобоксы
+        if (!_sexyAccount)
+            _initSexyCombos();
+
+
+        // TEMP: показываем операции перевода на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
+        $("#op_type").html(htmlOptions);
+        $.sexyCombo.changeOptions("#op_type");
+        setType("0");
+        // EOF TEMP
+    }
+
+    function _expandCalendar() {
+        _isCalendar = true;
+
+        if (_isEditing)
+            _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
+        else
+            _$dialog.data('title.dialog', 'Добавление серии операций').dialog('open');
+
+        // если открываем в первый раз, инициализируем комбобоксы
+        if (!_sexyAccount)
+            _initSexyCombos();
+
+        _$blockCalendar.show()
+
+        $('#operationEdit_planning').show();
     }
 
     function _changeOperationType() {
         // Расход или Доход
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
-            $("#op_target_fields,#op_transfer_fields").hide();
+            $("#op_target_fields,#op_transfer_fields,#div_op_transfer_line").hide();
 
             // скрываем недоступные для выбора категории
             // для доходных операций скрываем расходные категории,
@@ -328,6 +479,7 @@ easyFinance.widgets.operationEdit = function(){
                 return str;
             }
 
+            // выводим частоиспользуемые категории
             var recent = _modelCategory.getRecentCategories();
             var recentFiltered = {};
 
@@ -396,12 +548,6 @@ easyFinance.widgets.operationEdit = function(){
 
                         t = parseInt($("#op_target :selected").attr("target_account_id"));
 
-                        //$("span.op_currency").each(function(){
-                        //    if (t != 0){
-                                //$(this).text(" "+res['accounts'][$("#op_target :selected").attr("target_account_id")]['cur']);
-                        //    }
-                        //});
-
                         var option = _sexyTarget.options.filter('[value="' + _selectedTarget + '"]').eq(0);
                         $("#op_amount_done").text(formatCurrency(option.attr("amount_done")));
                         $("#op_amount_target").text(formatCurrency(option.attr("amount")));
@@ -423,7 +569,7 @@ easyFinance.widgets.operationEdit = function(){
 
         $('#op_btn_Save').attr('disabled', 'disabled');
         $.jGrowl("Операция сохраняется", {theme: 'green'});
-        var suum = tofloat($('#op_amount').val());
+
         var tip = $('#op_type').val();
         var id = $('#op_id').val();
 //alert($('#op_id').val());
@@ -433,6 +579,31 @@ easyFinance.widgets.operationEdit = function(){
 //alert(_selectedCategory);
 //alert($('#op_AccountForTransfer').val());
         var account = $('#op_account').val();
+
+        var amount1 = tofloat(calculate($('#op_amount').val())); // сумма операции
+        var amount2 = $('#op_transfer').val(); // сумма к получению при обмене валют
+
+        var chain = null;
+        if (_isCalendar)
+            chain = $('#op_chain_id').val();
+        var time = '12:00';
+        var last = $('#cal_date_end').val();
+        if (last == "00.00.0000")
+            last = "";
+        var every = $('#cal_repeat').val();
+        var repeat = $('#cal_count').val();
+        
+        var week = '0000000';
+        if(every == '7'){
+            week = $('.week #cal_mon:checked').length.toString() +
+                $('.week #cal_tue:checked').length.toString() +
+                $('.week #cal_wed:checked').length.toString() +
+                $('.week #cal_thu:checked').length.toString() +
+                $('.week #cal_fri:checked').length.toString() +
+                $('.week #cal_sat:checked').length.toString() +
+                $('.week #cal_sun:checked').length.toString();
+        }
+
         easyFinance.models.accounts.editOperationById(
             id,
             _selectedType,
@@ -440,37 +611,36 @@ easyFinance.widgets.operationEdit = function(){
             _selectedCategory,
             $('#op_date').val(),
             $('#op_comment').val(),
-            tofloat(calculate($('#op_amount').val())),
+            amount1,
             _selectedTransfer,
-            $('#op_currency').val(),
-            TransferSum,
+            $('#op_conversion').val(),
+            amount2, // сумма к получению при обмене валют
             _selectedTarget,
             //$('#op_close:checked').length,
             $('#op_close2').val(),
             $('#op_tags').val(),
+            chain, time, last, every, repeat, week,
 
             function(data){
-                // В случае успешного добавления, закрываем диалог и обновляем календарь
+                // В случае успешного сохранения, закрываем диалог и обновляем календарь
                 $('#op_btn_Save').removeAttr('disabled');
+                _$dialog.dialog("close");
 							
                 if (data.result) {
-                    _clearForm();
-
                     refreshTargets();
 
                     $.jGrowl(data.result.text, {theme: 'green'});
-                    $.jGrowl("<a href='/operation/#account="+account+"' style='color:black'>Перейти к операциям</a>", {theme: 'green',life: 10000});
+                    if (!_isCalendar)
+                        $.jGrowl("<a class='white' href='/operation/#account="+account+"'>Перейти к операциям</a>", {theme: 'green',life: 2500});
                     if (tip == 4)
-                        MakeOperation();// @todo: заменить на отправку event'a!
-
-                    // #754. закрываем форму после редактирования операции
-                    if (id != '')
-                        $("#op_addoperation_but").click();
+                        MakeOperation();// @todo: заменить на отправку event'a!                        
                 } else if (data.error) {
                     $.jGrowl(data.error.text, {theme: 'red', stick: true});
                 }
             }
         );
+
+        $(this).dialog("close");
 
         return true;
     }
@@ -480,23 +650,13 @@ easyFinance.widgets.operationEdit = function(){
 
         var comment = $('#op_comment').val();
         if (comment.indexOf('<') != -1 || comment.indexOf('>') != -1) {
-            $.jGrowl("Комментарий не должен содержать символов < и >!", {theme: 'red', life: 5000});
+            $.jGrowl("Комментарий не должен содержать символов < и >!", {theme: 'red', life: 2500});
             return false;
         }
 
         var tags = $('#op_tags').val();
         if (tags.indexOf('<') != -1 || tags.indexOf('>') != -1) {
-            $.jGrowl("Тэги не должны содержать символов < и >!", {theme: 'red', life: 5000});
-            return false;
-        }
-
-        if (_selectedAccount == ''){
-            $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
-            return false;
-        }
-
-        if (_selectedType == ''){
-            $.jGrowl('Вы ввели неверное значение в поле "тип операции"!', {theme: 'red', stick: true});
+            $.jGrowl("Тэги не должны содержать символов < и >!", {theme: 'red', life: 2500});
             return false;
         }
 
@@ -505,79 +665,110 @@ easyFinance.widgets.operationEdit = function(){
             $.jGrowl('Вы ввели неверное значение в поле "дата"!', {theme: 'red', stick: true});
             return false;
         }
-        
+
         var opType = $("#op_type option:selected").val();
-        
-        if (opType == "0" || opType == "1") {
-            // для доходов и расходов
-            // || _modelCategory.isParentCategory(_selectedCategory)) {
-            if (_selectedCategory == '' || _selectedCategory == '-1') {
-                    $.jGrowl('Выберите категорию!', {theme: 'red', stick: true});
+
+        // при добавлении обычной операции
+        // проверяем заполнение всех полей
+        if (!_isCalendar) {
+            if (opType == "0" || opType == "1") {
+                // для доходов и расходов
+                if (_selectedCategory == '' || _selectedCategory == '-1') {
+                        $.jGrowl('Выберите категорию!', {theme: 'red', stick: true});
+                        return false;
+                }
+            } else if (opType == "2") {
+                if (_selectedTransfer == '') {
+                    $.jGrowl('Укажите счёт для перевода!', {theme: 'red', stick: true});
                     return false;
+                }
+            } else if (opType == "4") {
+                if (_selectedTarget == '' || _selectedTarget == '0') {
+                    $.jGrowl('Укажите финансовую цель!', {theme: 'red', stick: true});
+                    return false;
+                }
             }
-        } else if (opType == "2") {
-            if (_selectedTransfer == '') {
-                $.jGrowl('Укажите счёт для перевода!', {theme: 'red', stick: true});
+
+            if (_selectedAccount == ''){
+                $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
                 return false;
             }
-        } else if (opType = "4") {
-            if (_selectedTarget == '' || _selectedTarget == '0') {
-                $.jGrowl('Укажите финансовую цель!', {theme: 'red', stick: true});
+
+            if (_selectedType == ''){
+                $.jGrowl('Вы ввели неверное значение в поле "тип операции"!', {theme: 'red', stick: true});
                 return false;
             }
-        }
-        
-        if (!/[\-]?[0-9]+([\.][0-9]+)?/.test(calculate($('#op_amount').val()))){
-            $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
-            return false;
-        }
 
-        //Запрос подтверждения на выполнение операции в случае ухода в минус.
-        // не выполняем проверку для кредитных карт! см. тикет 669
-        if (_modelAccounts.getAccountType(_selectedAccount) != "8") {
-            var am = tofloat($('#op_amount').val()+'.0');
+            var sum = calculate($('#op_amount').val());
 
-            // см. тикет #306
-            //var tb = tofloat(res['accounts'][$("#op_account option:selected").val()]['total_balance']);
-            var tb = tofloat(_modelAccounts.getAccountBalanceTotal(_selectedAccount));
-            var ab = tofloat(_modelAccounts.getAccountBalanceAvailable(_selectedAccount));
+            if (sum < 1) {
+                $.jGrowl('Сумма должна быть больше нуля!', {theme: 'red', stick: true});
+                return false;   
+            }
 
-            // @ticket 401
-            // при редактировании расходных операций
-            // учитываем то, что при увеличении суммы со счёта будет списана
-            // не вся сумма, а только разница между старым и новым значением
-            if (opType != 1 && $('form').attr('action').indexOf('edit') != -1)
-                am = am - _oldSum;
-        }
+            if (!/[\-]?[0-9]+([\.][0-9]+)?/.test(sum)){
+                $.jGrowl('Вы ввели неверное значение в поле "сумма"!', {theme: 'red', stick: true});
+                return false;
+            }
 
-        if (_selectedType == '4') {
-            /**
-             *@FIXME Написать обновление финцелей
-             */
-             //alert("tratata");
+            if (_selectedType == '4') {
+                /**
+                 *@FIXME Написать обновление финцелей
+                 */
+                 //alert("tratata");
 
-            //var amount = parseFloat($("#op_target option:selected").attr("amount"));
-            //alert(amount);
-            //$("#op_amount").val(amount);
-
-            var amount = parseFloat($("#op_target option:selected").attr("amount"));
-            var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
-            $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
-            //alert('1');
-            if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
-                if (confirm('Закрыть финансовую цель?')) {
-                    $("#op_close").attr("checked","checked");
-                    $("#op_close2").attr("value","1");
+                var amount = parseFloat($("#op_target option:selected").attr("amount"));
+                var amount_done = parseFloat($("#op_target option:selected").attr("amount_done"));
+                $("#op_amount_done").text(formatCurrency($("#op_target :selected").attr("amount_done")));
+                //alert('1');
+                if ((amount_done + parseFloat($("#op_amount").val())) >= amount) {
+                    if (confirm('Закрыть финансовую цель?')) {
+                        $("#op_close").attr("checked","checked");
+                        $("#op_close2").attr("value","1");
+                    }
                 }
             }
         }
+
+        // проверки при редактировании операций и цепочек в календаре
+        if (_isCalendar) {
+            if ($('#cal_repeat').val() != "0") {
+                if ($('#cal_rep_every').attr('checked')) {
+                    var count = $('#cal_count').val();
+                    if (isNaN(count) || parseInt(count) < 1) {
+                        $.jGrowl('Укажите число повторений операции!', {theme: 'red', stick: true});
+                        return false;
+                    } else if (parseInt(count) > 499) {
+                        $.jGrowl('Операция может повторяться не более 500 раз!', {theme: 'red', stick: true});
+                        return false;
+                    }
+                } else {
+                    var dateEnd = $('#cal_date_end').val();
+                    if (dateEnd == "") {
+                        $.jGrowl('Укажите дату окончания повторений!', {theme: 'red', stick: true});
+                        return false;
+                    } else {
+                        var dateStart = $('#op_date').val();
+                        var dS = $.datepicker.parseDate('dd.mm.yy', dateStart);
+                        var dE = $.datepicker.parseDate('dd.mm.yy', dateEnd);
+
+                        if (dS >= dE) {
+                            $.jGrowl('Дата начала повторений должна быть меньше даты окончания повторений!', {theme: 'red', stick: true});
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         return true;
     }
 
     function _clearForm() {
-        $('#op_id').val('');
-        $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags').val('');
+        $("#op_btn_Save").removeAttr('disabled');
 
+        $('#op_id').val('');
+        $('#op_amount,#op_conversion,#op_transfer,#op_AccountForTransfer,#op_comment,#op_tags').val('');
         $('span#op_amount_target').text();
 
         $('span#op_amount_done').text();
@@ -586,25 +777,62 @@ easyFinance.widgets.operationEdit = function(){
 
         $('#op_close').removeAttr('checked');
 
-        $('form').attr('action','/operation/add/');
+        $('.week input').removeAttr('checked');
+
+        // сбрасываем параметры повторения операции
+        $('#cal_repeat').val("0");
+        $('#operationEdit_repeating,#operationEdit_weekdays').hide();
+        $('#cal_rep_every').attr('checked', 'checked');
+        $('#cal_count').val("1");
+        $('.week input').removeAttr('checked');
+        $('#cal_date_end').val("");
+
+        _$blockCalendar.hide();
     }
 
     function _changeAccountForTransfer() {
-        if (_selectedType == "2" && _selectedAccount != "" && _selectedTransfer != "" &&
-            res.accounts[_selectedAccount].currency != res.accounts[_selectedTransfer].currency) {
-                $('#op_operationTransferCurrency').show();
+        // prevents datepicker from auto-popup
+        _$noFocus.hide();
 
-                $('#op_operationTransferCurrency :first-child').html('Курс <b>'+
-                        _modelAccounts.getAccountCurrencyText(_selectedAccount)+'</b> к <b>'+ _modelAccounts.getAccountCurrencyText(_selectedTransfer)+'</b>');
-                        data = _modelAccounts.getAccountCurrencyCost(_selectedAccount);
-                        data /= _modelAccounts.getAccountCurrencyCost(_selectedTransfer);
-                data = data.toString();
-                i = data.indexOf('.');
-                data = data.substr(0, i+5);
-                $('#op_currency').val(data);
+        _accountCurrency = _modelAccounts.getAccountCurrency(_selectedAccount);
+        _transferCurrency = _modelAccounts.getAccountCurrency(_selectedTransfer);
+
+        if (_selectedType == "2" && _selectedAccount != "" && _selectedTransfer != "" &&
+            _accountCurrency.id != _transferCurrency.id) {
+                $('#div_op_transfer_line').show();
+
+                if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+                    // обмен с участием валюты по умолчанию
+                    var str = _defaultCurrency.text + ' за ';
+                    str += (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.name : _accountCurrency.name;
+                    $('#op_conversion_text').text (str);
+
+                    // определяем курс                    
+                    data = (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.cost : _accountCurrency.cost;
+                    data /= _defaultCurrency.cost;
+                    data = data.toString();
+                    i = data.indexOf('.');
+                    data = data.substr(0, i+5);
+                    //if (_accountCurrency.id == _defaultCurrency.id)
+
+
+
+                    $('#op_conversion').val(data).change();
+                } else {
+                    // обмен без участия валюты по умолчанию
+                    $('#op_conversion_text').text (_accountCurrency.name + ' за ' + _transferCurrency.name);
+
+                    // определяем курс
+                    data = _transferCurrency.cost;
+                    data /= _accountCurrency.cost;
+                    data = data.toString();
+                    i = data.indexOf('.');
+                    data = data.substr(0, i+5);
+                    $('#op_conversion').val(data).change();
+                }
         } else {
-            $('#op_operationTransferCurrency').hide();
-            $('#op_operationTransferCurrency').val('');
+            $('#div_op_transfer_line').hide();
+            $('#op_conversion').val('');
         }
     }
 
@@ -693,6 +921,8 @@ easyFinance.widgets.operationEdit = function(){
         _modelAccounts = modelAccounts;
         _modelCategory = modelCategory;
 
+        _defaultCurrency = easyFinance.models.currency.getDefaultCurrency();
+
         // load tags cloud and setup tags dialog
         _initTags();
 
@@ -748,50 +978,38 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function showForm() {
-        $('#op_addoperation_but').addClass("act");
-        _clearForm();
-        $(".op_addoperation").show();
+        _$dialog.dialog("open");
+
         if (!_sexyAccount)
             _initSexyCombos();
     }
 
     /**
      * Функция заполняет форму данными
-     * @param data данные для заполнения
+     * @param data: данные для заполнения
+     * @param isEditing: true если редактируем операцию
      */
-    function fillForm(data, isCopy) {
-        //clearForm();
+    function fillForm(data, isEditing) {
+        _isEditing = isEditing;
+
+        _expandNormal();
 
         if (!_sexyAccount)
             _initSexyCombos();
 
-        if (isCopy)
-            $('#op_id').val('');
-        else
+        if (isEditing && data.id) {
             $('#op_id').val(data.id);
-
-        var typ = '0';
-        if (data.tr_id != null && data.tr_id != '') {
-            // transfer
-            typ = '2';
         } else {
-            if (data.virt=='1') {
-                typ = '4';
-            } else {
-                if (data.drain=='1') {
-                    typ = '0';
-                } else {
-                    typ = '1';
-                }
-            }
+            $('#op_id').val('');
         }
 
+        var typ = data.type;
         setType(typ);
 
         if (data.transfer != "" && data.tr_id != null) {
             if (data.tr_id == "0") {
                 // from this account
-                setAccount(data.account_id);
+                setAccount(data.account_id || data.account);
                 
                 // to this account
                 setTransfer(data.transfer);
@@ -800,39 +1018,104 @@ easyFinance.widgets.operationEdit = function(){
                 $('#op_id').val(data.tr_id);
                 
                 // to this account
-                setTransfer(data.account_id);
+                setTransfer(data.account_id || data.account);
 
                 // from this account
                 setAccount(data.transfer);
             }
         } else {
             // to this account
-            setAccount(data.account_id);
+            setAccount(data.account_id || data.account);
 
             // from this account
             setTransfer(data.transfer);
         }
-
-        if (data.moneydef)
-            setSum(Math.abs(data.moneydef))
-        else
-            setSum(Math.abs(data.money));
+        
+        if (typ == "2" && data.curs) {
+            // перевод с обменом валют
+            $('#op_conversion').val(data.curs);
+            $('#op_transfer').val(Math.abs(data.money * data.curs));
+            setSum(Math.round(Math.abs(data.money)*100)/100);
+        } else {
+            if (isNaN(data.money)) {
+                $("#op_amount").val("");
+            } else {
+                if (data.moneydef)
+                    setSum(Math.abs(data.moneydef))
+                else
+                    setSum(Math.abs(data.money));
+            }
+        }
 
         setCategory(data.cat_id);
 
         setTarget(data.target_id);
 
-        if (data.curs)
-            $('#op_currency').val(data.curs);
-
-        $('#op_date').val(data.date);
+        if (typeof data.date == "string") {
+            $('#op_date').val(data.date);
+        } else {
+            var dp = $('#op_date');
+            dp.datepicker('setDate', new Date());
+            data.date = dp.val();
+        }
+        
         if (data.tags)
             $('#op_tags').val(data.tags);
         else
             $('#op_tags').val('');
-        $('#op_comment').val(data.comment.replace(/&quot;/g, '"'));
 
-        $(document).scrollTop(300);
+        // первая операция по счёту показывает начальный баланс счёта
+        // в этом случае нельзя редактировать сумму и комментарий
+        if ($('#op_comment').val() == "Начальный остаток"){
+            $('#op_amount').attr('disabled', 'disabled');
+            $('#op_comment').attr('disabled', 'disabled');
+        } else {
+            $('#op_amount').removeAttr('disabled');
+            $('#op_comment').removeAttr('disabled');
+        }
+    }
+
+    function fillFormCalendar(data, isEditing, isChain) {
+        _isCalendar = true;
+        _isEditing = isEditing;
+        _isChain = isChain;
+
+        _expandCalendar();
+
+        fillForm(data, isEditing);
+
+        // TEMP: не показываем операции на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+        $("#op_type").html(htmlOptions);
+        $.sexyCombo.changeOptions("#op_type");
+        setType("0");
+        // EOF TEMP
+
+        // заполняем атрибуты цепочки / события
+        if (isChain) {
+            $('#op_chain_id').val(data.chain || '');
+        } else {
+            $('#op_chain_id').val('');
+        }
+
+        $('#cal_date_end').val(data.last || '');
+        $('#cal_count').val(data.repeat || "0");
+        $('#cal_repeat').val(data.every || '0').change();
+
+        if (data.every && data.every == "7"){
+            var i = 0;
+            $('.week input').each(function(){
+                if (data.week.toString().substr(i, 1) == '1'){
+                    $(this).attr('checked', 'checked');
+                }
+                i++;
+            });
+        }
+
+        if (_isCalendar && isEditing && !isChain)
+            $('#operationEdit_planning').hide();
+        else
+            $('#operationEdit_planning').show();
     }
 
     // reveal some private things by assigning public pointers
@@ -844,6 +1127,7 @@ easyFinance.widgets.operationEdit = function(){
         setTransfer: setTransfer,
         showForm: showForm,
         fillForm: fillForm,
+        fillFormCalendar: fillFormCalendar,
         refreshAccounts: refreshAccounts,
         refreshCategories: refreshCategories,
         refreshTargets: refreshTargets

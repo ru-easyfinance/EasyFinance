@@ -418,7 +418,7 @@ dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
 dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
 dl.bill_list dd ul li a { width: 135px; overflow: hidden; display: block; padding: 1px 3px 1px 5px; line-height: 15px; color: #363535; text-decoration: none; }
 dl.bill_list dd ul li a b { display: block; }
-dl.bill_list dd ul li a span { text-decoration: underline; }
+/* dl.bill_list dd ul li a span { text-decoration: underline; } */
 dl.bill_list dd.amount { display: block; position: relative; margin-left: 0; padding-top: 3px; font-size: 14px; color: #36a500; line-height: 18px; font-weight: bold; }
 dl.bill_list dd.amount div { padding-left:10px; position: relative; width: 100px; text-align: left; }
 dl.bill_list dd.amount div strong{position:relative; left: -5px;}
@@ -428,10 +428,32 @@ dl.bill_list dd.amount div span.currency { display: block; position: absolute; t
 
 .financobject h2 { margin: 0 0 5px 0; font-size: 12px; color: #e5691b; font-weight: bold; }
 .financobject ul { margin-bottom: 12px; }
-.financobject ul li, .block1 .transaction ul li { margin-bottom: 2px; padding-bottom: 4px; color: #353535; border-bottom: 1px solid #e5e5e5; }
+.financobject ul li, .block1 .transaction ul li {position: relative; margin-bottom: 2px; padding-bottom: 4px; color: #353535; border-bottom: 1px solid #e5e5e5; }
+.block1 .transaction ul li { border-bottom: none; }
+.block1 .transaction .sum { float:right; }
 .financobject ul li span { font-size: 11px; color: #2c9300; }
 .financobject ul li span.date, .block1 .transaction ul li span.date { display: block; margin-top: -2px; color: #909090; }
 .financobject ul li a, .block1 .transaction ul li a { display:block; color: #383838; }
+.block1 .transaction ul li .cont ul li{
+    background: transparent none;
+    border: none;
+}
+.block1 .transaction ul li .cont ul{
+    right : -20px;
+    background:transparent url(/img/i/icons_menu_accept_edit_delete.gif) no-repeat scroll 0 100%;
+    width: 65px;
+    display: none;
+    z-index: 1020;
+}
+.block1 .transaction ul li:hover{
+    background-color: #e3ffdf;
+}
+.block1 .transaction ul li:hover .cont ul{
+    display: block;
+}
+.block1 .transaction ul li:hover .cont ul a{
+    cursor: pointer;
+}
 
 .financobject ul.popular li { margin-bottom: 5px; padding-bottom: 6px; }
 .financobject ul.popular a { font-weight: bold; }
@@ -478,6 +500,7 @@ dl.bill_list dd.amount div span.currency { display: block; position: absolute; t
 
 
 .block1 .transaction h2 { float: none;  margin: 0 0 8px 11px; }
+.block1 .transaction .future h2 { border-top: 1px solid #E5E5E5; }
 .block1 .transaction ul { margin: 0 11px 6px 11px; }
 .block1 .transaction div.amount { margin: 0 11px; padding-bottom: 10px; color: #383838; font-weight: bold; }
 .block1 .transaction div.amount span { margin-left: 11px; font-size: 14px; color: #36a500; line-height: 18px; }
@@ -774,7 +797,7 @@ div.op_addoperation { position: relative; display: none; padding-top: 22px;left:
 #div_op_transfer_line { margin-top:12px; margin-bottom:2px; width:345px; }
 
 #div_op_account_select { width: 150px; }
-#div_op_type_select { float: right; width: 150px; }
+#div_op_type_select { float: right; width: 144px; }
 div.op_addoperation .op_line { position: relative;  color: #4c4c4c; //zoom: 1; }
 div.op_addoperation .op_line_transfer { margin-bottom: 4px; }
 div.op_addoperation .op_line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -794,9 +817,9 @@ div.op_addoperation .op_line .op_tags_could{position: absolute; left:130px; top:
 div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100px;float: top;}
 
 #op_category_fields {margin-bottom: 4px;}
-#op_category_fields .sexy input {width: 328px;}
-#op_category_fields .sexy div.icon {left: 324px;}
-#op_category_fields .sexy div.list-wrapper {width: 339px;}
+#op_category_fields .sexy input {width: 336px;}
+#op_category_fields .sexy div.icon {left: 330px;}
+#op_category_fields .sexy div.list-wrapper {width: 347px;}
 
 /* Tag cloud */
 
@@ -870,8 +893,9 @@ div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100p
 div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
-div.op_addoperation div#op_amount_fields, div.op_addoperation div#op_conversion_fields {position: absolute; left: 200px; width: 150px;}
+div.op_addoperation div#op_amount_fields, div.op_addoperation div#op_conversion_fields {position: absolute; left: 206px; width: 150px;}
 div.op_addoperation #op_amount { width: 130px; }
+div.op_addoperation #op_conversion { width: 64px; }
 
 div.op_addoperation .op_line .op_f_field input.op_inp, div.op_addoperation .op_line textarea { color: #20201E; width:350px}
 div.op_addoperation .op_line label { display: block; margin-bottom: 2px;}
@@ -1238,8 +1262,8 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .flash_block_in .flash table td + td + td + td { vertical-align:middle; background: url('/img/i/gaugeCredits.gif?') 10px 35px no-repeat; }
 .flash_block_in .flash table td + td + td + td + td { vertical-align:middle; background: url('/img/i/gaugeExpenses.gif?') 10px 35px no-repeat; }
 
-.addquestion, .addcategories { position: relative; margin-bottom: 5px; min-height: 25px;}
-.addquestion a, .addcategories a { display: block; position: absolute; top: 12px; left: 27px; padding-left: 27px; font-size: 14px; line-height: 18px; text-decoration: none; background: url('/img/i/icons.gif') no-repeat -20px -368px; }
+.addquestion, .addcategories { position: relative; margin-bottom: 5px; min-height: 25px; margin-left:-13px;}
+.addquestion a, .addcategories a { display: block; position: absolute; top: 12px; left: 7px; padding-left: 27px; font-size: 14px; line-height: 18px; text-decoration: none; background: url('/img/i/icons.gif') no-repeat -20px -368px; }
 .addquestion a span { border-bottom: 1px dashed #6bbe4c; }
 .addquestion .form_block, .addcategories .form_block { display: none; padding: 50px 0 17px 170px; background: #f2f5ee; }
 .addquestion .form_block .f_field, .addcategories .form_block .f_field { position: relative; margin-bottom: 14px; }
@@ -1929,7 +1953,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 /* Калькулятор */
 .calculatorRW{
     background-color:#F4F4F4;
-    border:1px solid #888888;
+    border:1px solid #D9D9D9;
     position:relative;
     padding : 4px;
     margin: 2px;
@@ -2085,7 +2109,7 @@ div.op_addoperation input#op_transfer{
     width: 114px;
 }
 
-div.op_addoperation input#op_conversion, div.op_addoperation input#op_date{
+div.op_addoperation input#op_date{
     width: 140px;
 }
 
@@ -2124,4 +2148,8 @@ div.op_addoperation div.op_line div.amount img{
 
 .dlgOperationEdit .ui-dialog-titlebar {
 
+}
+
+#calendarLeft li {
+    cursor: pointer;
 }

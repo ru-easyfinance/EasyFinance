@@ -1,39 +1,89 @@
-/*                                   Popup calendaR                                 */
-#popupcalendar{
-    position : relative;
-    margin-left: 10px;
-    margin-right: 10px;
-    overflow: hidden
+#calendar div.cont{
+    display: none;
+    overflow: visible;
+    width: 140px;
+    position:absolute;
 }
-#popupcalendar h3{
-    font-size : 1.3em;
-    font-weight : bold;
-    margin-bottom : 10px;
-
-}
-#popupcalendar table{
-    width : 98%;
-    left : 9px;
-    position: relative;
-}
-#popupcalendar table tr{
-    border : 1px solid #E8E8E8;
-}
-#popupcalendar table thead{
-    text-align : left;
-    background : transparent url(/img/i/bg09.gif) repeat-x scroll 0 0;
-
+#calendar.fc .fc-grid td {
+    cursor:pointer;
 }
 
-#popupcalendar table .col{
-    width : 90px;
-    padding-right: 10px;
+#calendar div.cont.act{
+    display: block;
 }
-#popupcalendar table .col.c1{
-    width : 20px;
+#calendar div.cont ul{
+    position: absolute;
+    width: 65px;
+    background: transparent url(/img/i/icons_menu_accept_edit_delete.gif) no-repeat scroll 0 100%;
+    left: 60px;
+    z-index: 999;
+
+}
+#calendar div.cont.accepted ul{
+    width: 65px;
+    background: transparent url(/img/i/icons_control4.gif) no-repeat scroll 0 100%;
+    left: 60px;
+
+}
+#calendar div.cont ul li{
+    cursor: pointer;
 }
 
 
-#popupcalendar table .money{
+#calendar .fc-event,
+#calendar .fc-event a {
     text-align: right;
+    cursor: crosshair;
+    border-color: #c1c7c0;     
+    background: #d9e0ff url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px; /* default BACKGROUND color */
+    color: #111;            /* default TEXT color */
+}
+
+#calendar .fc-event.overdue,
+#calendar .fc-event.overdue a {
+    background: #f9e1e1 url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
+}
+#calendar .fc-event.accepted,
+#calendar .fc-event.accepted a {
+    background: #e8f9e6 url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
+}
+
+#calendar .fc-event.green a{
+    background-position: -97px 3px;
+}
+
+#calendar .fc-event.red a{
+    background-position: 3px 3px;
+}
+
+#calendar .fc-event.yellow a{
+    background-position: -197px 3px;
+}
+
+#calendar .fc-event.blue a{
+    background-position: -297px 3px;
+}
+#calendar .fc-event span{
+    padding-left: 10px;
+}
+
+div.calendar_tooltip div{
+     background: transparent url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
+     width: 40px;
+     max-width: 40px;
+     min-width: 40px;
+     overflow: hidden;
+     display: inline;
+}
+div.calendar_tooltip.minus div{
+    background-position: -100px 3px;
+}
+div.calendar_tooltip.plus div{
+    background-position: 0px 3px;
+}
+div.calendar_tooltip.transfer div{
+    background-position: -200px 3px;
+}
+div.calendar_tooltip.target div{
+    background-position: -300px 3px;
 }

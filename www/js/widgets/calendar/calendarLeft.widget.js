@@ -1,186 +1,148 @@
+easyFinance.widgets.calendarLeft = function(){
+    var _$node = null;
+    var _model = null;
     
+    var _$blockOverdue = null;
+    var _$blockFuture = null;
 
-easyFinance.widgets.calendarLeft = function(data){
-    var _model;
-    var _data = data || res.calendar.reminder;//@todo
-    function init(){
-        $('#popupcalendar').dialog({
-                bgiframe: true,
-                autoOpen: false,
-                width: 470,
-                height: 'auto',
-                buttons: {
-                    'Подтвердить': function() {
-                        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-                        if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
-                            var obj = new Array ();
-                            $(ch).each(function(){
-                                obj.push($(this).closest('tr').attr('value'));
-                            });
-                            $.jGrowl('События подтверждаются!',{theme : 'green'});
-                            $.post('/calendar/reminderAccept?responseMode=json',{ids : obj.toString()},function(data){
-                                _data = data.calendar;showEvents();$.jGrowl('События подтверждены!',{theme : 'green'});
-                                if($('#calendar').length != 0){
-                                    easyFinance.models.calendarOld.init();
-                                    $('#calendar').fullCalendar('refresh');
-                                }
-                            },'json');
-                        }
-                    },
-                    'Удалить': function() {
-                        var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-                        if ($(ch).length > 0 && confirm('Удалить выбранные события')) {
-                            var obj = new Array ();
-                            $(ch).each(function(){
-                                obj.push($(this).closest('tr').attr('value'));
-                            });
-                            $.jGrowl('События удаляются!',{theme : 'green'});
-                            $.post('/calendar/reminderDel?responseMode=json',{
-                                ids : obj.toString()},
-                                function(data){_data = data.calendar;showEvents();$.jGrowl('События удалены!',{theme : 'green'});
-                                    if($('#calendar').length != 0){
-                                        easyFinance.models.calendarOld.init();
-                                        $('#calendar').fullCalendar('refresh');
-                                    }
-                                },'json');
-                        }
-                        //$(this).dialog('close');
-                    }
-                    
-                },
-                close : function(){
-                    //$('#popupcalendar').hide();
-                    //$.jGrowl('В текущей сессии окно с событиями не будет показываться', {theme: ''});
-                    $.cookie('events_hide', 1, {path: '/'});
+    // private functions
+    function _floatingMenuClicked(){
+        var id = $(this).parent().closest("li").attr("id");
+        id = id.replace("calendarLeftOverdue", "");
+        id = id.replace("calendarLeftFuture", "");
 
+        var cl = $(this).attr("class");
+        if (cl == "accept")
+            _menuAccept(id);
+        else if (cl == "edit")
+            _menuEdit(id);
+        else if (cl == "del")
+            _menuDelete(id);
+
+        return false;
+    }
+
+    function _menuAccept(id){
+        $.jGrowl("Регулярная операция подтверждается...", {theme: 'green'});
+        easyFinance.models.accounts.acceptOperationsByIds([id], function(data) {
+            if (data.result) {
+                if (data.result.text)
+                    $.jGrowl(data.result.text, {theme: 'green'});
+            } else if (data.error) {
+                if (data.error.text)
+                    $.jGrowl(data.error.text, {theme: 'red'});
+            }
+        });
+    }
+
+    function _menuEdit(id){
+        var op = easyFinance.models.accounts.getOverdueOperationById(id)
+               || easyFinance.models.accounts.getFutureOperationById(id);
+
+        easyFinance.widgets.operationEdit.fillFormCalendar(op, true, false);
+    }
+
+    function _menuDelete(id){
+        if (confirm("Вы уверены, что хотите удалить событие?")) {
+            $.jGrowl("Событие удаляется...", {theme: 'green'});
+            easyFinance.models.accounts.deleteOperationsByIds([id], [], function(data) {
+                if (data.result) {
+                    if (data.result.text)
+                        $.jGrowl(data.result.text, {theme: 'green'});
+                } else if (data.error) {
+                    if (data.error.text)
+                        $.jGrowl(data.error.text, {theme: 'red'});
                 }
-        });
+            });
+        }
+    }
 
+    function _redrawOverdue(data) {
+        var _data = data.overdue ? data.overdue : res.calendar.overdue;
+
+        var str = '';
+        for (var key in _data) {
+            var event = _data[key];
+            str += '<li id="calendarLeftOverdue'+event.id+'">'+
+                        (event.comment != "" ? event.comment+'<br>' : "")+
+                        '<b class="sum ' + (event.money>=0 ? 'sumGreen' : 'sumRed') + '">'+ event.money+'</b>'+
+                        '<span class="date">'+event.date.substr(0, 5)+'</span>'+
+                        shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
+                        '<div class="cont"><ul>'+
+                        '<li title="Подтвердить" class="accept"><a></a></li>'+
+                        '<li title="Редактировать" class="edit"><a></a></li>'+
+                        '<li title="Удалить" class="del"><a></a></li></ul></div></li>';
+        }
         
-        if (_data)
-            showEvents();
-            
-        $('#popupcalendar th.chk input').change(function(){
-            if ($(this).attr('checked')){
-                $(this).closest('div').find('input[type=checkbox]').attr('checked', 'checked');
-            }else{
-                $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
-            }
+        // меняем иконку в левой панели, если есть просроченные события
+        if (str != "") {
+            $("li#c4").addClass("warning");
+            str = '<h2 style="color: red;">Просроченные операции</h2><ul>' + str + "</ul>";
+        } else {
+            $("li#c4").removeClass("warning");
+        }
+
+        _$blockOverdue.html(str);
+    }
+
+    function _redrawFuture(data) {
+        var _data = data.future ? data.future : res.calendar.future;
+        
+        var periodicLeft = '';
+        for (var key in _data) {
+            var event = _data[key];
+
+            periodicLeft += '<li id="calendarLeftFuture'+event.id+'">'+
+                        (event.comment != "" ? event.comment+'<br>' : "")+
+                        '<b class="sum ' + (event.money>=0 ? 'sumGreen' : 'sumRed') + '">'+ event.money+'</b>'+
+                        '<span class="date">'+event.date.substr(0, 5)+'</span>'+
+                        shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
+                        '<div class="cont"><ul>'+
+                        '<li title="Подтвердить" class="accept"><a></a></li>'+
+                        '<li title="Редактировать" class="edit"><a></a></li>'+
+                        '<li title="Удалить" class="del"><a></a></li></ul></div></li>';
+        }
+
+        if (periodicLeft != '') {
+            periodicLeft = '<h2>Запланированные операции</h2><ul>' + periodicLeft + '</ul>';
+        }
+
+        _$blockFuture.html(periodicLeft);
+    }
+
+    // public functions
+
+    function init(selector, model){ // @todo: change data to MODEL
+        _$node = $(selector);
+        _$blockOverdue = _$node.find(".overdue");
+        _$blockFuture = _$node.find(".future");
+
+        _model = model;
+
+        // init floating menu
+        $(selector + ' .cont li').live('click', _floatingMenuClicked);
+
+        $(selector + ' li:not(>.cont)').live('click', function(){
+            $(this).find('li.edit').click();
+
+            return false;
         });
 
-        $('#btnAccept').click(function(){
-            var ch = $('#events_periodic tbody .chk input:checked, #events_calendar tbody .chk input:checked');
-            if ($(ch).length > 0 && confirm('Подтвердить операции с отмеченными элементами?')) {
-                var obj = new Array ();
-                $(ch).each(function(){
-                    obj.push($(this).closest('tr').attr('value'));
-                });
-                $.jGrowl('События подтверждаются!',{theme : 'green'});
-                $.post('calendar/reminderAccept?responseMode=json',{ids : obj.toString()},function(data){$.jGrowl('События подтверждены!',{theme : 'green'});},'json')
+        $(document).bind("operationsAccepted", redraw);
+        $(document).bind("operationsDeleted", redraw);
+        $(document).bind("operationsChainAdded", redraw);
+        $(document).bind("operationsChainEdited", redraw);
+        $(document).bind("operationsChainDeleted", redraw);
 
-            }
-        });
-
-        $('#AshowEvents').live('click',function(){
-            $.cookie('events_hide', 0, {path: '/'});
-//            window.location.hash = null;
-            showEvents();
-//            return false;
-        });
+        redraw();
     }
     /**
      * Выводит окошко пользователя для управления событиями
      */
-    function showEvents(){
-        //var now = new Date();
-        var eventList = '', periodicList = '';
-        var eventLeft = '', periodicLeft = '';
-        //var category = easyFinance.models.category;
-            //category.load(res.category)
-        var accounts = easyFinance.models.accounts;
-            accounts.load(res.accounts);
-        for (var key in _data) {
-            var event = _data[key];
-            var date = new Date(event.date*1000);
-            var diff = Math.floor(((new Date()).getTime() - event.date*1000)/(24*60*60*1000));
-            date = $.datepicker.formatDate('dd.mm.yy',date);
-            //diff = $.datepicker.formatDate('dd.mm.yy',diff);
-                if (event.type == 'p') {
-                       // var cat_name = category.getUserCategoryNameById(event.cat)||''
-                        var account_name = accounts.getAccountNameById(event.account)||' ';
-                        
-                        periodicList += '<tr value="'+event.id+'"><td class="chk col c1"><input type="checkbox" /></td>'+
-                                    '<td class="col">'+date+'</td>'+
-                                    '<td class="money col">'+formatCurrency(event.amount)+'</td>'+
-                                    '<td class="col">'+account_name+'</td>'+
-                                    '<td class="col">'+event.comment+'</td>'+
-                                    //+'<td>'+diff+'</td>'
-                                    //+'<td>'+cat_name+'</td>'
-                                    '</tr>';
-
-                        periodicLeft += '<li id="'+event.id+'">'+
-                                    '<a href="/periodic/">'+event.comment+'</a>'+
-                                    '<b>'+ event.amount+'</b>'+
-                                    '<span class="date">'+date+'</span></li>';
-                }else {
-                        
-                        eventList += '<tr value="'+event['id']+'"><td class="chk col c1"><input type="checkbox" /></td>'+
-                                    '<td class="col">'+event['title']+'</td>'+
-                                    '<td class="col">'+diff+' дней</td>'+
-                                    '<td class="col">'+date+'</td>'+
-                                    '<td class="col">'+event['comment']+'</td>'+
-                                     '</tr>';
-
-                        eventLeft += '<li id="'+event['id']+'">'+
-                                    '<a href="/calendar/">'+event['title']+'</a>'+
-                                    '<span class="date">'+date+'</span></li>';
-                    
-                }
-            }
-            
-            if (eventList == ''){
-                $('#popupcalendar .eventcontent').hide();
-            }else{
-                $('#popupcalendar .eventcontent').show();
-                $('#events_calendar tbody').html(eventList);
-            }
-
-            if (periodicList == ''){
-                $('#popupcalendar .periodiccontent').hide();
-            }else{
-                $('#popupcalendar .periodiccontent').show();
-                $('#events_periodic tbody').html(periodicList);
-            }
-
-            if (eventList == '' && periodicList == ''){
-                $.cookie('events_hide', 1, {path: '/'});
-                $('#popupcalendar').dialog('close');
-            }
-            
-            if (eventLeft != '') {
-                eventLeft = '<h2>События календаря</h2><ul>' + eventLeft + '</ul>';
-            }
-            if (periodicLeft != '') {
-                periodicLeft = '<h2>Регулярные операции</h2><ul>' + periodicLeft + '</ul>';
-            }
-            var left = eventLeft + periodicLeft;
-            if (left != '') {
-                $('.transaction').html(left+'&nbsp;<a href="#p_index" id="AshowEvents">Показать события</a>');
-            }else{
-                $('.transaction').html('');
-            }
-
-            
-
-
-            
-            if ($.cookie('events_hide') != 1) {
-                $('#popupcalendar').dialog('open');
-                $('#popupcalendar').show();
-            }
-        
+    function redraw(data){
+        _redrawOverdue(data || res.calendar);
+        _redrawFuture(data || res.calendar);
     }
 
     return {init: init};
-
-};
+}();

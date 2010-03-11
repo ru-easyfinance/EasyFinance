@@ -1,3 +1,4 @@
+;
 easyFinance.widgets.profile = function(){
     function init(){
         easyFinance.models.user.reload(setupProfile);
@@ -21,6 +22,8 @@ easyFinance.widgets.profile = function(){
         }
         if (data.getNotify == "0")
             $('#getNotify').removeAttr('checked');
+
+
     }
 
     function sendProfile(){
@@ -55,7 +58,7 @@ easyFinance.widgets.profile = function(){
 }();
 
 //to screen
-$(document).ready(function() {
+$(document).ready(function(){
     $('.menu5 #i3').addClass('act');
     $('.menu5 #i3').live('click',function(){
         $('.menu5 #i4').removeClass('act');
@@ -70,4 +73,6 @@ $(document).ready(function() {
         $('.block2 .ramka3#money').show();
     });
     easyFinance.widgets.profile.init();
+    if (window.location.hash.indexOf("#currency") != -1)
+        $('.menu5 #i4').click();
 });

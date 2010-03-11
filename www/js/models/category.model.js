@@ -11,7 +11,7 @@ easyFinance.models.category = function(){
     var DELETE_URL = '/category/del/?responseMode=json&confirmed=1';
 
     // private variables
-    var _categories;
+    var _categories = null;
 
     // private functions
     function _htmlDecodeAll() {

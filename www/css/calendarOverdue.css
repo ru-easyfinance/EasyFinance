@@ -1,0 +1,86 @@
+/* виджет напоминаний о событиях */
+
+#calendarOverdue .cb div {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 687px;
+    height: 800px;
+    z-index: 0;
+    background: url('/img/i/ramka6.png') no-repeat 0 0;
+    //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka6.png", sizingMethod="crop");
+}
+
+#calendarOverdue .cb div {
+    top: -775px;
+}
+
+#calendarOverdue .inside {
+    padding: 20px 48px 8px 40px;
+}
+
+#calendarOverdue .cont .ct {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 687px;
+    height: 800px;
+    z-index: 0;
+    background: url('/img/i/ramka6.png') no-repeat 0 0;
+    //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka6.png", sizingMethod="crop");
+}
+
+#calendarOverdue .inside .but_cal {
+    margin-bottom: 0;
+}
+
+#calendarOverdue tr {
+    cursor: pointer;
+}
+
+#calendarOverdue .cb {
+    position: relative;
+    width: 687px;
+    height: 25px;
+    overflow: hidden;
+}
+
+#calendarOverdue h3{
+    font-size : 1.3em;
+    font-weight : bold;
+    margin-bottom : 10px;
+}
+
+#calendarOverdue .col1{
+    width : 40px;
+    text-align: right;
+}
+#calendarOverdue .col2{
+    width : 125px;
+}
+#calendarOverdue .col2 div.abbr{
+    margin-right: 11px;
+    margin-left: 2px;
+}
+#calendarOverdue th.col2 span{
+    padding-right: 37px;
+}
+
+
+#calendarOverdue .col3{
+    width : 125px;
+}
+
+#calendarOverdue .col4{
+    width : 234px;
+    padding-right:20px;
+}
+
+#calendarOverdue div.cont ul {
+    background: url('/img/i/icons_menu_accept_edit_delete.gif') no-repeat 0 0;
+}
+
+/* input controls */
+#calendarOverdue input {
+    width: 100%;
+}

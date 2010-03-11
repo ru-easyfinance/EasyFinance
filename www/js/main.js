@@ -1,6 +1,9 @@
 //Тут только общие функции и события для всех страниц сайта
 // $Id$
-//conf href to modul
+
+$.jGrowl.defaults.live = 1500;
+$.jGrowl.defaults.position = "center";
+$.jGrowl.defaults.closerTemplate = "<div>[ закрыть все сообщения ]</div>"
 
 function get_array_key($arr, $val)
 {
@@ -15,6 +18,7 @@ function get_array_key($arr, $val)
     }
     return $ret;
 }
+
 var aPath=['//',
     '/about/',
     '/accounts/',
@@ -43,6 +47,7 @@ var aPath=['//',
     '/targets/',
     '/welcome/',
     '/template/']//данный контроллер можно использовать как системный))
+
 href = location.pathname;
 href = href.toLowerCase() + '/';
 var b=0;
@@ -70,7 +75,6 @@ var pathtoid = {
 
 var page_mid = pathtoid[pathName];
 
-var TransferSum = 0; //глобальная переменная которая передаст. сумму при переводе на другую валюту.
 /**
  * @deprecated
  */
@@ -114,36 +118,33 @@ function FloatFormat(obj, in_string )
     //ловим символы перед ней,
     $(obj).val(newstr);
     //если они изменились сдвигаем каретку на один вправо
-    
 }
-function MakeOperation(){
-        $.get('/targets/get_closed_list',{},function(data){
-            if (data){
-                for (var v in data)
-                if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
-                    //alert($('.object[name="ещё"] .descr a').text());
 
-                    //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
-                    var o = $('.object[name='+data[v]['title']+']');
-                    //if (confirm('ewrf'))
-                    $.post('/targets/close_op',{
-                        opid : data[v]['id'],
-                        targetcat : data[v]['category_id'],
-                        amount : data[v]['amount_done'],
-                        account : data[v]['target_account_id']
-                    },function(data){
-                        o.remove();
-                        $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
-                    },'json')
-                }
+function MakeOperation(){
+    $.get('/targets/get_closed_list', {}, function(data){
+        if (data){
+            for (var v in data)
+            if (confirm('Деньги на финансовую цель '+data[v]['title']+' накоплены. Осуществить перевод денег ?')){
+                //alert($('.object[name="ещё"] .descr a').text());
+
+                //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
+                var o = $('.object[name='+data[v]['title']+']');
+                //if (confirm('ewrf'))
+                $.post('/targets/close_op',{
+                    opid : data[v]['id'],
+                    targetcat : data[v]['category_id'],
+                    amount : data[v]['amount_done'],
+                    account : data[v]['target_account_id']
+                },function(data){
+                    o.remove();
+                    $.jGrowl("Финансовая цель закрыта", {theme: 'green'});
+                },'json')
             }
-        }, 'json');
-    }
+        }
+    }, 'json');
+}
 
 //запланировано 
-
-var calendarEditor;
-var calendarLeft;
 
 function isLogged(){
     if (res)
@@ -157,6 +158,7 @@ $(document).ready(function() {
     $('ul.menu2 a').click(function(){
         $.cookie('events_hide', 0, {path: '/'});
     });
+
     if (location.hostname.indexOf("iframe.") != -1)
         isIframe = true;
 
@@ -232,37 +234,15 @@ $(document).ready(function() {
         easyFinance.models.accounts.load(easyFinance.models.currency, res.accounts, function(model) {
             easyFinance.widgets.accountsPanel.init('.accounts', model);
         });
+        easyFinance.models.category.load(res.category);
     }
 
-    // Если пользователь авторизирован
+    // Если пользователь авторизован
     if (inarray(Current_module, Connected_functional.operation)){
-        // инициализируем виджет добавления и редактирования операции
-
-        easyFinance.models.category.load(res.category, function(model) {
-            easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
-        });
-        
-        //инициация виджета добавления в календарь
-
-        calendarEditor = easyFinance.widgets.calendarEditor();
-        calendarEditor.init();
-        calendarLeft = easyFinance.widgets.calendarLeft();
-        calendarLeft.init(easyFinance.models.calendar());
-        ////////////////////////////////////add to calendar
-        
-        $('#op_addtocalendar_but').click(function(){
-            calendarEditor.load();
-        });
-
-
-
-        $('#op_pcount').select(function(){
-            $('#op_pcounts').removeAttr('disable');
-        })
-        $('#op_pinfinity').select(function(){
-            $('#op_pcounts').Attr('disable','disable')
-        })
-}
+        // инициализируем виджет добавления, редактирования и планирования операций
+        easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
+        easyFinance.widgets.calendarLeft.init("#calendarLeft", easyFinance.models.accounts);
+    }
 
     if(inarray(Current_module, Connected_functional.menu)){
         $('.navigation a[href*=' + pathName +']').wrapInner('<b></b>');
@@ -299,14 +279,14 @@ $('.tags_list li a').live('click', function(){
         minHeight: 50,
         buttons: {
             'Сохранить': function() {
-                    $.post('/tags/edit/', {
+                    $.post('/tags/edit/?responseMode=json', {
                         tag: $('.edit_tag').find('#tag').val(),
                         old_tag: $('.edit_tag #old_tag').val()
                     },function(data){
                         if (data) {
                             $.jGrowl('Метка успешно сохранена', {theme: 'green'});
                             res.tags = null;
-                            var tags = {tags: data}
+                            var tags = {tags: data.tags}
                             res = $.extend(res, tags);
                             loadLPTags();
                             $('.edit_tag').dialog('close');
@@ -319,7 +299,7 @@ $('.tags_list li a').live('click', function(){
             'Удалить': function() {
                 if (confirm('Метка "'+$('.edit_tag #old_tag').val()+'" будет удалён. Удалить?')) {
                     var tag = $('.edit_tag #old_tag').val();
-                    $.post('/tags/del/', {
+                    $.post('/tags/del/?responseMode=json', {
                         tag: tag
                         },function(data){
                             if (!data) {
@@ -329,7 +309,7 @@ $('.tags_list li a').live('click', function(){
 
                                 $('.edit_tag #tag,.edit_tag #old_tag').val(0);
                                 delete res.tags;
-                                var tags = {tags: data}
+                                var tags = {tags: data.tags}
                                 res = $.extend(res, tags);
                                 loadLPTags();
                                 $('.edit_tag').dialog('close');
@@ -353,9 +333,7 @@ $('.tags_list .add,.tags_list .addtaglink').live('click', function(){
                         tag:$('.add_tag input').val()
                     }, function(data){
                         if (data) {
-                            delete res['tags'];
-                            var tags = {tags: data}
-                            res = $.extend(res, tags);
+                            res['tags'].push($('.add_tag input').val());
                             loadLPTags();
                             $('.add_tag').dialog('close');
                             $('.add_tag input').val('');
@@ -400,7 +378,7 @@ $('.tags_list .add,.tags_list .addtaglink').live('click', function(){
         })
         $('.financobject ul a').live('click',function(){
             var id = $(this).attr('href');
-            window.location = id;
+            window.location = id;//WTF??
             var str = id.substr(15);
             var f = $('.object[tid="'+str+'"]');
             $('input,textarea','#tpopup').val('');
