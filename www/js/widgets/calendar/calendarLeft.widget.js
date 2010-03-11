@@ -63,9 +63,10 @@ easyFinance.widgets.calendarLeft = function(){
         var str = '';
         for (var key in _data) {
             var event = _data[key];
-            str += '<li id="calendarLeftOverdue'+event.id+'">'+
+            str += '<li class="line" id="calendarLeftOverdue'+event.id+'">'+
                         (event.comment != "" ? event.comment+'<br>' : "")+
-                        '<b class="sum ' + (event.money>=0 ? 'sumGreen' : 'sumRed') + '">'+ event.money+'</b>'+
+                        '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
+                        + easyFinance.models.accounts.getAccountCurrencyText(event.account_id) + '</span>'+
                         '<span class="date">'+event.date.substr(0, 5)+'</span>'+
                         shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
                         '<div class="cont"><ul>'+
@@ -92,9 +93,10 @@ easyFinance.widgets.calendarLeft = function(){
         for (var key in _data) {
             var event = _data[key];
 
-            periodicLeft += '<li id="calendarLeftFuture'+event.id+'">'+
+            periodicLeft += '<li class="line" id="calendarLeftFuture'+event.id+'">'+
                         (event.comment != "" ? event.comment+'<br>' : "")+
-                        '<b class="sum ' + (event.money>=0 ? 'sumGreen' : 'sumRed') + '">'+ event.money+'</b>'+
+                        '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
+                        + easyFinance.models.accounts.getAccountCurrencyText(event.account_id) + '</span>'+
                         '<span class="date">'+event.date.substr(0, 5)+'</span>'+
                         shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
                         '<div class="cont"><ul>'+
@@ -122,7 +124,7 @@ easyFinance.widgets.calendarLeft = function(){
         // init floating menu
         $(selector + ' .cont li').live('click', _floatingMenuClicked);
 
-        $(selector + ' li:not(>.cont)').live('click', function(){
+        $(selector + ' li.line').live('click', function(){
             $(this).find('li.edit').click();
 
             return false;
