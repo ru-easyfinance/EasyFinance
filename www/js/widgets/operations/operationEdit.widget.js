@@ -584,8 +584,11 @@ easyFinance.widgets.operationEdit = function(){
         var amount2 = $('#op_transfer').val(); // сумма к получению при обмене валют
 
         var chain = null;
-        if (_isCalendar)
-            chain = $('#op_chain_id').val();
+        if (_isCalendar && _isChain)
+            if (_isEditing)
+                chain = $('#op_chain_id').val();
+            else
+                chain = '';
         var time = '12:00';
         var last = $('#cal_date_end').val();
         if (last == "00.00.0000")
@@ -633,7 +636,7 @@ easyFinance.widgets.operationEdit = function(){
                     if (!_isCalendar)
                         $.jGrowl("<a class='white' href='/operation/#account="+account+"'>Перейти к операциям</a>", {theme: 'green',life: 2500});
                     if (tip == 4)
-                        MakeOperation();// @todo: заменить на отправку event'a!                        
+                        MakeOperation();// @todo: заменить на отправку event'a!
                 } else if (data.error) {
                     $.jGrowl(data.error.text, {theme: 'red', stick: true});
                 }
@@ -1088,7 +1091,7 @@ easyFinance.widgets.operationEdit = function(){
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
         $("#op_type").html(htmlOptions);
         $.sexyCombo.changeOptions("#op_type");
-        setType("0");
+        setType(data.type);
         // EOF TEMP
 
         // заполняем атрибуты цепочки / события

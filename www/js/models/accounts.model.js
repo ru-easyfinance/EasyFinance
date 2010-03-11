@@ -401,7 +401,7 @@ easyFinance.models.accounts = function(){
                 '', type, account, category, date,
                 comment, amount, toAccount, currency,
                 convert, target, close, tags,
-                '', time, last, every, repeat, week
+                null, time, last, every, repeat, week
             );
     }
 
@@ -468,6 +468,18 @@ easyFinance.models.accounts = function(){
                     event = $.Event('operationAdded');
                 } else if (url == EDIT_OPERATION_URL) {
                     event = $.Event('operationEdited');
+
+                    if (data.operation) {
+                        // обновляем информацию о событии в наших списках
+                        var props = ["calendar", "overdue", "future"];
+                        for (var k in props) {
+                            for (var j in res.calendar[props[k]]) {
+                                if (res.calendar[props[k]][j].id == data.operation.id) {
+                                    res.calendar[props[k]][j] = $.extend({}, data.operation);
+                                }
+                            }
+                        }
+                    }
                 } else if (url == ADD_CHAIN_URL) {
                     event = $.Event('operationsChainAdded');
                 } else if (url == EDIT_CHAIN_URL) {
