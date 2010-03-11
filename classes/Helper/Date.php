@@ -3,7 +3,7 @@
 class Helper_Date
 {
 	/**
-	 * Русские названия месяцев в **забыл** падеже
+	 * Русские названия месяцев в родительном падеже
 	 *
 	 * @var array
 	 */
@@ -95,7 +95,7 @@ class Helper_Date
 			throw new Exception( 'Given timestamp do not look as real Unix timestamp!' );
 		}
 		
-		return date( "Y-m-d G:i:s", $timestamp );
+		return date( "Y-m-d H:i:s", $timestamp );
 	}
 	
 	/**
@@ -108,4 +108,57 @@ class Helper_Date
 	{
 		return self::getMysql( strtotime($dateString) );
 	}
+
+
+    /**
+    * Форматирует русское представление даты, например: <code>20.02.2009</code> в формат даты mysql <code>2009-02-20</code>
+    * @param string $date Дата, в формате дд.мм.гггг
+    * @param string $time Время в формате чч:мм
+    * @return string в случае ошибки false
+    */
+   public static function RusDate2Mysql ( $date, $time = '00:00' )
+   {
+       /**
+        * Собирает в себе отформатированную дату
+        * @var string
+        */
+       $retval = '';
+       if ( empty ( $date ) ) {
+           return false;
+       }
+
+       $date = explode ( '.', $date );
+
+       if ( count ( $date ) == 3 ) {
+
+           // Добавляем год
+           $retval = ( int ) $date[2] . '-';
+
+           // Добавляем месяц
+           if ( ( int ) $date[1] < 10 ) {
+               $retval .= '0' . ( int ) $date[1] . '-';
+           } else {
+               $retval .= ( int ) $date[1] . '-';
+           }
+
+           // Добавляем день
+           if ( ( int ) $date[0] < 10 ) {
+               $retval .= '0' . ( int ) $date[0];
+           } else {
+               $retval .= ( int ) $date[0];
+           }
+
+           //  Добавляем время (если есть)
+           if ( empty ( $time ) ) {
+               return $retval;
+           } elseif ( preg_match ( "/^([0-9]{2}):([0-9]{2})$/", $time ) ) {
+               return $retval . ' ' . $time . ':00';
+           }
+
+       } else {
+           return false;
+       }
+   }
+
+
 }

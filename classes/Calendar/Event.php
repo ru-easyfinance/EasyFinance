@@ -13,11 +13,17 @@ class Calendar_Event {
     protected $model = null;
 
     /**
+     * Массив с ошибками
+     * @var array
+     */
+    private $errors = array();
+
+    /**
      * Конструктор
      * @param Calendar_Model $model
      * @param User $user
      */
-    function __construct( Calendar_Model $model, User $user ) 
+    public function __construct( Calendar_Model $model, User $user )
     {
         $this->model = $model;
     }
@@ -32,15 +38,6 @@ class Calendar_Event {
     }
 
     /**
-     * Возвращает заголовок события
-     * @return str
-     */
-    public function getTitle ()
-    {
-        return $this->model->title;
-    }
-
-    /**
      * ID цепочки
      * @return int
      */
@@ -50,12 +47,12 @@ class Calendar_Event {
     }
 
     /**
-     * Возвращает дату события + время события
-     * @return unixtimestamp
+     * Возвращает дату события
+     * @return unixtimestamp date
      */
     public function getDate ()
     {
-        return strtotime( $this->model->date . ' ' . $this->model->time );
+        return $this->model->date;
     }
 
     /**
@@ -63,7 +60,7 @@ class Calendar_Event {
      */
     public function getStart ()
     {
-        return formatMysqlDate2UnixTimestamp($this->model->start);
+        return $this->model->start;
     }
 
     /**
@@ -79,14 +76,13 @@ class Calendar_Event {
      * Подтверждено ли событие
      * @return bool
      */
-    public function getAccept ()
+    public function getAccepted ()
     {
-        return $this->model->accept;
+        return $this->model->accepted;
     }
 
     /**
      * Возвращает частоту повторения события
-     * @return int
      * Опционально, по-умолчанию 0
      * 0   - без повторения
      * 1   - каждый день
@@ -94,7 +90,7 @@ class Calendar_Event {
      * 30  - месяц
      * 90  - квартал
      * 365 -год
-     *
+     * @return int
      */
     public function getEvery ()
     {
@@ -103,19 +99,12 @@ class Calendar_Event {
 
     /**
      * Возвращает количество повторений
-     * Опционально, по-умолчанию 0 (т.е. повторять 0 раз) от 0 до 365 (год)
-     * или возможность указать дату окончания,
-     * или 0 - т.е. повторять бесконечно
-     * @return int || date
+     * Опционально, по-умолчанию 1 (т.е. повторять 1 раз) от 1 до 365 (год)
+     * @return int
      */
     public function getRepeat ()
     {
-
-        if ($this->model->last == '0000-00-00') {
-            return $this->model->repeat;
-        } else {
-            return strtotime($this->model->last . ' 00:00:00');
-        }
+        return $this->model->repeat;
     }
 
     /**
@@ -130,25 +119,228 @@ class Calendar_Event {
     }
 
     /**
+     * Возвращает последнюю дату (если есть)
+     * @return int unixtimestamp
+     */
+    public function getLast ()
+    {
+        return $this->model->last;
+    }
+    
+    /**
+     * 
+     */
+    public function getConvert ()
+    {
+       return $this->model->convert;
+    }
+
+    /**
+     *
+     */
+    public function getClose ()
+    {
+       return $this->model->close;
+    }
+
+    /**
+     *
+     * @return <type>
+     */
+    public function getCurrency ()
+    {
+        return $this->model->currency;
+    }
+
+    /**
+     *
+     * @return <type>
+     */
+    public function getToAccount ()
+    {
+        return $this->model->toAccount;
+    }
+
+    /**
+     *
+     * @return <type> 
+     */
+    public function getTarget ()
+    {
+        return $this->model->target;
+    }
+
+    public function getTime ()
+    {
+        return $this->model->time;
+    }
+
+    /**
+     * Возвращает сумму операции
+     * @return float
+     */
+    public function getAmount ()
+    {
+        return $this->model->amount;
+    }
+
+    /**
+     * Возвращает ид категории
+     * @return int
+     */
+    public function getCategory ()
+    {
+        return $this->model->category;
+    }
+
+    /**
+     * Возвращает ид счёта
+     * @return int
+     */
+    public function getAccount ()
+    {
+        return $this->model->account;
+    }
+
+    /**
+     * Возвращает теги
+     *
+     * @return array
+     */
+    public function getTags ()
+    {
+        return $this->model->tags;
+    }
+
+    /**
+     * Возвращает тип рег. операции (расход, доход, перевод со счёта, перевод на финцель)
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->model->type;
+    }
+
+    /**
      * Возвращает объект в виде массива
      */
     public function __getArray()
     {
         return array(
             // Общие данные
-            'type'  => $this->getType(),
-            'id'    => $this->getId(),
-            'chain' => $this->getChain(),
-            'date'  => $this->getDate(),
-            'start' => $this->getStart(),
-            'comment' => $this->getComment(),
-            'accept'=> $this->getAccept(),
-            'title' => $this->getTitle(),
+            'type'       => $this->getType(),
+            'id'         => $this->getId(),
+            'chain'      => $this->getChain(),
+            'comment'    => $this->getComment(),
+            'accepted'   => $this->getAccepted(),
+
+            // Дата и время
+            'date'       => $this->getDate(),
+            'start'      => $this->getStart(),
+            'last'       => $this->getLast(),
+            'time'       => $this->getTime(),
+            'timestamp'  => ( strlen($this->getDate()) == 10 ) ?
+                strtotime( $this->getDate() . $this->getTime() ) :
+                strtotime( $this->getDate() ),
+
             // Повторение
-            'every' => $this->getEvery(),
-            'repeat'=> $this->getRepeat(),
-            'week'  => $this->getWeek(),
+            'every'      => $this->getEvery(),
+            'repeat'     => $this->getRepeat(),
+            'week'       => $this->getWeek(),
+
+            // Операция
+            'money'      => $this->getAmount(),
+            'cat_id'     => $this->getCategory(),
+            'account_id' => $this->getAccount(),
+            'tags'       => $this->getTags(),
+            'tr_id'      => $this->model->tr_id,
+            'transfer'   => $this->model->transfer,
         );
 
+    }
+
+    /**
+     * Возвращает массив с ошибками (если есть)
+     * @return array
+     */
+    public function getErrors ()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Устанавливает начало
+     * @param MYSQL DATE $date
+     */
+    public function setStart ( $date ) {
+        $this->model->start = $date;
+    }
+
+    /**
+     * Проверяем модель на ошибки
+     * Если есть ошибки, то их можно получить так $event->getErrors();
+     * @return bool
+     */
+    public function checkData ()
+    {
+        // Преобразовываем данные к нужному формату
+
+        if ( ! in_array( $this->model->every, array( 0, 1, 7, 30, 90, 365) ) ) {
+            $this->model->every = 0;
+        }
+
+        if ( $this->model->repeat > Calendar::MAX_EVENTS ) {
+            $this->model->repeat = Calendar::MAX_EVENTS;
+        }
+
+
+        if ( $this->getLast() != 0 && 
+           (strtotime( $this->getLast() ) < strtotime( $this->getDate() ) ) )
+        {
+            $this->errors['date']  = 'Конечная дата не может быть меньше даты начала';
+        }
+
+
+        if ( ( int ) $this->model->date === 0 ) {
+            $this->errors['date']  = 'Необходимо указать дату';
+        }
+
+        if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->account === 0 ) {
+            $this->errors['account']  = 'Необходимо указать счёт';
+        }
+
+        // Перевод со счёта на счёт
+        if ( $this->model->type === 2 ) {
+
+            if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->toAccount === 0 ) {
+                $this->errors['toAccount']  = 'Необходимо указать счёт куда нужно перевести';
+            }
+
+        // Перевод на фин.цель
+        } elseif ( $this->model->type === 4) {
+
+            if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->target === 0 ) {
+                $this->errors['target']  = 'Необходимо указать счёт финансовой цели';
+            }
+
+        // Расход или доход
+        } else {
+
+            if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->category === 0 ) {
+                 $this->errors['category']  = 'Необходимо указать категорию';
+            }
+
+        }
+
+        // Проверяем на ошибки
+        if ( count($this->errors) != 0 ) {
+            
+            return false;
+
+        } else {
+
+            return true;
+
+        }
     }
 }

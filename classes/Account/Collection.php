@@ -54,15 +54,7 @@ class Account_Collection extends _Core_Abstract_Collection
     CONST ACCOUNT_TYPE_ELECTPURSE = 15;
     CONST ACCOUNT_TYPE_BANKACC = 16;
 
-    /**
-     *
-     * @param Account $account
-     */
-    /*function add(Account $account)
-    {
-        array_push($this->container, $account);
-    }*/
-
+ 
     /**
      * Загружает список счетов из базы данных
      * @param User $user
@@ -71,10 +63,7 @@ class Account_Collection extends _Core_Abstract_Collection
     {
         $model = new Account_Model();
         $res = $model->loadAll($user);
-        //$res = Account_Model::loadAll($user);
-        //$res = $prepare;
-        //$this->container=array();
-        //$ret = array();
+
         foreach ($res as $k=>$v){
             $v['totalBalance'] = (float)$model->countTotalBalance($v['id']);
             if ( !( 10 <= $v['type'] ) and ( $v['type'] <=15 ) )
@@ -85,7 +74,6 @@ class Account_Collection extends _Core_Abstract_Collection
                 $ret[$v['id']]=$v;
         }
 
-        //die (print_r($ret));
         $ret = array('result'=>array(
             'data'=>$ret
             ));
@@ -100,26 +88,13 @@ class Account_Collection extends _Core_Abstract_Collection
     {
         $model = new Account_Model();
         $res = $model->loadAccountById($acc_id);
-        //$this->container = array();
-        //array_push($this->container, $res);
 
         return $res;
     }
 
     public function countAcc( $user )
     {
-        $howmuch = $this->load($user);
-        
+        $howmuch = $this->load($user);       
     }
 
 }
-
-//// Создаём счёт наличные
-//$account = Account_Cache::create($user, 'Название счёта', 'Комментарий счёта');
-//$account = Account_Cache::create($user, $_POST['name'], 'Комментарий счёта', 1000);
-//$accountCollection->add($account);
-//
-//// Модифицируем код
-//$account->setName('имя 2');
-//$accountCollection->add($account);
-//

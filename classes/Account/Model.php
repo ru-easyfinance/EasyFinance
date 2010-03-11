@@ -170,46 +170,36 @@ class Account_Model
     {
         $sql = "SELECT account_name as name, account_type_id as type, account_description as comment, account_currency_id as currency, account_id FROM
             accounts WHERE user_id=? ORDER BY account_name";
-        $accounts = $this->db->query($sql, $user);// список основных параметров по счетам
-            //die(print_r($accounts));
-            //составляем строчку для селекта ин
-            $string = "";
+
+        // список основных параметров по счетам
+        $accounts = $this->db->query($sql, $user);
+            
+        //составляем строчку для селекта ин
+        $string = "";
         foreach ($accounts as $k=>$v){
             if ($string)
                 $string .= ',';
             $string .=  $v['account_id'] ;
         }
         $string = "'" . $string . "'";
-            //$string = stripslashes($string);
 
         $sql = "SELECT DISTINCT v.account_id, f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
                 WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
                 AND v.account_id IN ($string)";
-            //$dop = $this->db->query($sql);// получаем дополнительные поля
-//die(print_r($dop));
-        $return = array();//возвращаемые данные
+
+        //возвращаемые данные
+        $ret = array();
+
         //загрузка дополнительных параметров по каждому из счетов
-        foreach ($accounts as $k=>$v){
-            /*$sql = "SELECT field_id, field_value FROM Acc_Values WHERE account_id=?";
-            $sql = "SELECT DISTINCT f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
-                WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
-                AND v.account_id=?";
-            $dop = $this->db->query($sql, $v['account_id']);//*/// получаем дополнительные поля
-            $ret;//возвращаемые данные
+        foreach ( $accounts as $k => $v ) {
+
             foreach ($v as $k1=>$v1){//цикл пихает в возвращаемый массив общие параметры.
                 if ($k1 != 'account_id')
                     $ret[$k][$k1] = ($v1) ? ($v1) : '';
                 else
                     $ret[$k]['id'] = $v1;
-            }
-            /*foreach ($dop as $k2=>$v2)//дополнительные поля
-            {
-                if ( $v2['account_id'] == $v['account_id'])
-                $ret[$k][$v2['name']] = $v2['field_value'];
-            }*/
-            
+            }           
         }
-        //$ret = array('result'=>$ret);
         return $ret;
     }
 
@@ -219,7 +209,6 @@ class Account_Model
      */
     public function countReserve($acc_id)
     {
-        //LEFT JOIN target t ON t.id=tb.target_id
         $reservquery = "SELECT sum(money) AS s
                 FROM target_bill tb, target t
                 WHERE t.id=tb.target_id AND
@@ -251,7 +240,7 @@ class Account_Model
         return round(
                 $total * $ucur[$curr]['value']/$ucur[$cur_k[0]]['value'],
                 2
-            );
+        );
 
     }
 }

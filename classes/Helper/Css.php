@@ -25,14 +25,15 @@ class Helper_Css implements _Core_Router_iHook
 		}
 
 		$templateEngine->append('css', 'menuUser.css');
-		
+		$templateEngine->append('css', 'efTable.css');
+                $templateEngine->append('css', 'calendar.css');
 		$templateEngine->append('css', 'jquery/jHtmlArea.css');
 		$templateEngine->append('css', 'jquery/jHtmlArea.ColorPickerMenu.css');
 		
 		$templateEngine->append('css', 'jquery/fancy.css');
 		
 		$templateEngine->append('css', 'jquery/sexyCombo.css');
-		$templateEngine->append('css', 'calendar.css');
+		$templateEngine->append('css', 'calendarOverdue.css');
 		$templateEngine->append('css', 'report.css');
 		$templateEngine->append('css', 'expert.css');
 		$templateEngine->append('css', 'expertsList.css');
@@ -40,5 +41,6 @@ class Helper_Css implements _Core_Router_iHook
 		$templateEngine->append('css', 'budgetMaster.css');
 		$templateEngine->append('css', 'budget.css');
                 $templateEngine->append('css', 'accountsPanel.css');
+                $templateEngine->append('css', 'accountsJournal.css');
 	}
 }

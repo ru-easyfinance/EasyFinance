@@ -11,8 +11,7 @@ class Calendar_Model extends _Core_Abstract_Model {
      *
      * @var integer
      */
-
-    protected function __construct( array $row, User $owner )
+    public function __construct( array $row, User $owner )
     {
             $this->ownerId = $owner->getId();
 
@@ -29,47 +28,61 @@ class Calendar_Model extends _Core_Abstract_Model {
      *
      * @return array Массив моделей событий
      */
-    public static function loadAll( User $user, $start, $end, $delay = false )
+    public static function loadAll( User $user, $start, $end )
     {
         $modelsArray = array();
                
 //        $cache = _Core_Cache::getInstance();
 //        $cacheId = 'calendarUser' . $user->getId();
-
-        // Проверка наличия в кеше идентификаторов сообщений пользователя
-        //$messageIds = $cache->get( $cacheId );
-        // Если есть - запрашиваем их все из кеша
-        //if ( $messageIds && is_array($messageIds) )
-        //{
-        //	$modelsArray = $cache->getMulti( $messageIds );
-        //}
+//
+//        // Проверка наличия в кеше идентификаторов сообщений пользователя
+//        $messageIds = $cache->get( $cacheId );
+//        // Если есть - запрашиваем их все из кеша
+//        if ( $messageIds && is_array($messageIds) )
+//        {
+//        	$modelsArray = $cache->getMulti( $messageIds );
+//        }
 
         // Запрос данных для полного календаря
-        if ( ! $delay ) {
-            $sql = 'SELECT c.id AS chain, c.title, c.type, c.start, c.last, c.time, c.every,
-                c.repeat, c.comment, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, c.week,
-                e.id, e.`date`, e.accept
-                FROM calend c
-                RIGHT JOIN calendar_events e ON c.id = e.cal_id
-                WHERE c.user_id = ? AND e.`date` BETWEEN ? AND ?';
-            $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end );
-            
-        // Запрос напоминалок
-        } else {
-            $sql = 'SELECT c.id AS chain, c.title, c.type, c.start, c.last, c.time, c.every,
-            c.repeat, c.comment, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, c.week,
-            e.id, e.`date`, e.accept
-            FROM calend c
-            RIGHT JOIN calendar_events e ON c.id = e.cal_id
-            WHERE c.user_id = ? AND e.`date` <= ? AND e.accept = 0';
-            $rows = Core::getInstance()->db->select($sql, $user->getId(), $start );
-        }
 
+        $sql = 'SELECT o.id, o.chain_id AS chain, o.type,
+            o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
+            DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date, o.time,
+            DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start, DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
+            c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer
+            FROM operation o
+            LEFT JOIN calendar_chains c ON c.id=o.chain_id
+            WHERE o.user_id = ? AND o.`date` BETWEEN ? AND ? AND o.chain_id > 0';
+
+        //SELECT o.id, o.chain_id AS chain, o.type,
+        //	o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
+        //	DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date, o.time,
+        //	DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start, DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
+        //	c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer
+        //FROM operation o
+        //LEFT JOIN calendar_chains c ON c.id=o.chain_id
+        //WHERE o.user_id = 1 AND o.`date` BETWEEN '2010-02-01' AND '2010-04-01' AND o.chain_id > 0
+        //UNION
+        //SELECT b.id, b.chain_id, '4',
+        //	b.money, b.comment, t.category_id, t.target_account_id, b.tags,
+        //	DATE_FORMAT( b.date, "%d.%m.%Y" ), '12:00:00',
+        //	DATE_FORMAT( cc.start, "%d.%m.%Y" ), DATE_FORMAT(cc.last, "%d.%m.%Y" ),
+        //	cc.every, cc.repeat, cc.week, b.accepted, 0, 0
+        //FROM target_bill b
+        //LEFT JOIN target t ON b.target_id = t.id
+        //LEFT JOIN calendar_chains cc ON cc.id=b.chain_id
+        //WHERE t.user_id = 1 AND o.`date` BETWEEN '2010-02-01' AND '2010-04-01' AND o.chain_id > 0
+
+
+        $rows = Core::getInstance()->db->select( $sql, $user->getId(), $start, $end );
+            
         foreach ( $rows as $row )
         {
+            // Пропускаем повторы переводов
+            if ( ( ( int ) $row['type'] == 2 ) && ( ( int ) $row['tr_id'] == 0 ) ) { continue; }
             $model = new Calendar_Model( $row, $user );
 
-            $modelsArray[] = $model;
+            $modelsArray[$row['id']] = $model;
         }
 
         // Cохранение моделей в кеш
@@ -79,252 +92,233 @@ class Calendar_Model extends _Core_Abstract_Model {
     }
 
     /**
-     * Создаём событие, без списка дат и повторений
-     * @param User $user
-     * @param <type> $type
-     * @param <type> $title
-     * @param <type> $comment
-     * @param <type> $time
-     * @param <type> $date
-     * @param <type> $amount
-     * @param <type> $cat
-     * @param <type> $account
-     * @param <type> $op_type
-     * @param <type> $tags
+     * Создаёт цепочку операций
+     * @param User $user Пользователь
+     * @param Calendar_Event $event Событие
+     * @param array $array_days Массив с днями, повторениями
+     * @return bool
      */
-    private static function createCalendarEvent ( User $user, $type, $title, $comment, $time,
-            $start, $date, $last, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags)
+    public static function create ( User $user, Calendar_Event $event, $array_days )
     {
+        
         // Создаём само событие
-        $sql = 'INSERT INTO calend (`user_id`, `type`, `title`,
-            `start`, `date`, `last`, `time`, `every`, `repeat`, `week`, `comment`,
-            `amount`, `cat_id`, `account_id`, `op_type`, `tags`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        Core::getInstance()->db->query($sql, $user->getId(), $type, $title,
-            $start, $date, $last, $time, $every, $repeat, $week, $comment,
-            $amount, $cat, $account, $op_type, $tags);
-        return mysql_insert_id();
+        $sql = "INSERT INTO calendar_chains (`user_id`,`start`,`last`,`every`, `repeat`, `week`)
+            VALUES (?, ?, ?, ?, ?, ?);";
+
+        // Создаём событие в календаре
+        $cal_id = Core::getInstance()->db->query($sql,
+            $user->getId(),
+            $event->getDate(),
+            $event->getLast(),
+            $event->getEvery(),
+            $event->getRepeat(),
+            $event->getWeek() );
+
+        return self::createOperations($user, $event, $cal_id, $array_days);
     }
 
     /**
-     * Создаёт список событий
+     * Обновляет события
      * @param User $user
-     * @param string $type
-     * @param string $title
-     * @param string $comment
-     * @param string $time
-     * @param string $date
-     * @param int $every
-     * @param int $repeat
-     * @param string $week
-     * @param float $amount
-     * @param int $cat
-     * @param int $account
-     * @param int $op_type
-     * @param string $tags
-     * @param array $array mixed
+     * @param Calendar_Event $event
+     * @param array $array
      * @return bool
      */
-    public static function create ( User $user, $type, $title, $comment, $time, $date, $last, 
-            $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
+    public static function update ( User $user, Calendar_Event $event, $array )
     {
-        $cal_id = self::createCalendarEvent($user, $type, $title, $comment, $time, $date,
-                $array[count($array)-1], $last, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags);
+
+        // Создаём само событие
+        $sql = "UPDATE calendar_chains c 
+            SET `last` = ?, `every` = ?, `repeat` = ?, `week` = ?
+            WHERE `user_id` = ? AND id = ? ;";
+
+        // Создаём событие в календаре
+        Core::getInstance()->db->query($sql,
+            $event->getLast(),
+            $event->getEvery(),
+            $event->getRepeat(),
+            $event->getWeek(),
+            $user->getId(),
+            $event->getChain()
+        );
+
+        // Возвращает даты подтверждённых в этой серии
+        $accepted = self::loadAcceptedByChain( $user, $event->getChain() );
 
         // Создаём повторы события
-        $sql = '';
+        $array_days = array();
         foreach ($array as $value) {
-            if ( !empty ($sql) ) $sql .= ',';
-            $sql .= "('{$cal_id}','{$value}')";
+            if ( in_array($value, $accepted)) continue;
+            $array_days[] = $value;
         }
-        $sql = 'INSERT INTO calendar_events (`cal_id`,`date`) VALUES '.$sql;
-        Core::getInstance()->db->query($sql);
-        return true;
-    }
-    
-    /**
-     * Обновляем дату для определённого одного события
-     * @param int $id
-     * @param int $chain
-     * @param string $date
-     * @return bool
-     */
-    public static function updateEventSingleDate ( $id, $chain, $date )
-    {
-        $sql = "UPDATE calendar_events c SET `date`=? WHERE id=? AND cal_id=?";
-        return Core::getInstance()->db->query( $sql, $date, $id, $chain );
+
+        return self::createOperations($user, $event, $event->getChain(), $array_days);
     }
 
     /**
-     * Обновить событие
+     * Возвращает даты подтверждённых событий в серии
      * @param User $user
-     * @param int $id
      * @param int $chain
-     * @param string $type
-     * @param string $title
-     * @param string $comment
-     * @param string $time
-     * @param int $every
-     * @param int | mysql date date $repeat
-     * @param string $week
-     * @param float $amount
-     * @param int $cat
-     * @param int $account
-     * @param int $op_type
-     * @param string $tags
+     * @return array
+     */
+    public static function loadAcceptedByChain ( User $user, $chain )
+    {
+        $sql = 'SELECT `date` FROM operation c WHERE user_id=? AND chain_id=? AND accepted=1';
+        return Core::getInstance()->db->selectCol( $sql, $user->getId(), $chain );
+    }
+
+    /**
+     * Добавляет рег. операции
+     * @param User $user
+     * @param Calendar_Event $event
+     * @param int $chain
      * @param array $array
-     * @return int Количество изменённых событий
      */
-    public static function update ( User $user, $id, $chain, $type, $title, $comment, 
-            $time, $date, $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags, $array )
+    private function createOperations ( User $user, Calendar_Event $event, $chain, $array_days )
     {
+        // Создаём повторы события в виде неподтверждённых операций
+        $operations_array = array();
 
-        $sql = 'UPDATE calend SET `title`=?, `comment`=?, `time`=?,
-            `every`=?, `repeat`=?, `week`=?, `amount`=?,
-            cat_id=?, account_id=?, op_type=?, tags=? WHERE id=? AND user_id=?';
+        foreach ($array_days as $value) {
 
-        Core::getInstance()->db->query($sql, $title, $comment, $time,
-            $every, $repeat, $week, $amount, $cat, $account, $op_type, $tags,
-            $chain, $user->getId());
-        if ( count($array) > 0 ) {
-            // Возвращает
-            $accepted = self::loadAcceptedByChain($chain);
+            // @TODO Посмотреть, как можно адаптировать $event->__getArray()
+            $operations_array[] = array (
 
-            // Создаём повторы события
-            $sql = '';
-            foreach ($array as $value) {
-                if ( in_array($value, $accepted)) continue;
-                if ( !empty ($sql) ) $sql .= ',';
-                $sql .= "('{$chain}','{$value}')";
-            }
-            $sql = 'INSERT INTO calendar_events (`cal_id`,`date`) VALUES '.$sql;
-            Core::getInstance()->db->query($sql);
+                'type'       => $event->getType(),
+                'account'    => $event->getAccount(),
+                'amount'     => $event->getAmount(),
+                'category'   => $event->getCategory(),
+                'date'       => $value,
+                'comment'    => $event->getComment(),
+                'tags'       => $event->getTags(),
+                'convert'    => $event->getConvert(),
+                'close'      => $event->getClose(),
+                'currency'   => $event->getCurrency(),
+                'toAccount'  => $event->getToAccount(),
+                'target'     => $event->getTarget(),
+                'drain'      => ($event->getType()==1)?0:1,
+
+                // Дополнения для планирования в календарь
+                'last'       => $event->getLast(),
+                'time'       => $event->getTime(),
+                'every'      => $event->getEvery(),
+                'repeat'     => $event->getRepeat(),
+                'week'       => $event->getWeek(),
+                'accepted'   => 0,
+                'chain'      => $chain,
+
+            );
         }
 
-        return true;
+        $operation = new Operation_Model();
+
+        // Расход и доход
+        if ( $event->getType () <= 1 ) {
+            return $operation->addSome( $operations_array );
+        } elseif ( $event->getType () == 2 ) {
+            return $operation->addSomeTransfer ( $operations_array );
+        } elseif ( $event->getType () == 4 ) {
+//            $target = new Targets_Model();
+//            return $target->addSomeTargetOperation( $operations_array );
+        }
     }
 
     /**
-     * Загрузить событие по ID и по цепочке
-     * @param int $id
-     * @param int $chain
-     * @return Calendar_Model
-     */
-    public static function loadById ( User $user, $id, $chain )
-    {
-        $sql = 'SELECT c.id AS chain, c.title, c.type, c.start, c.last, c.time, c.every,
-                c.repeat, c.comment, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, c.week,
-                e.id, e.`date`, e.accept
-            FROM calendar_events e
-            LEFT JOIN calend c ON c.id = e.cal_id 
-            WHERE c.user_id = ? AND c.id = ? AND e.id= ?';
-       $row = Core::getInstance()->db->selectRow($sql, $user->getId(), $chain, $id );
-       return new Calendar_Model( $row, $user );
-    }
-
-    /**
-     * Загружает подтверждённые даты событий
-     * @param int $chain
-     * @return Calendar_Model
-     */
-    public static function loadAcceptedByChain ( $chain )
-    {
-        $sql = 'SELECT `date` FROM calendar_events c WHERE cal_id=? AND accept=1';
-       return Core::getInstance()->db->selectCol( $sql, $chain );
-    }
-
-    /**
-     * Удаляет подтверждённые события
+     * Получает операцию в виде массива
      * @param User $user
-     * @param int  $chain
-     * @return void
+     * @param int $chain
+     * @return array
      */
-    public static function deleteAcceptedEvents( $user, $chain )
+    public static function getByChain ( User $user, $chain )
     {
-        $sql = 'DELETE calendar_events FROM calendar_events
-            RIGHT JOIN calend ON user_id =?
-            AND calend.id = calendar_events.cal_id
-            WHERE calendar_events.cal_id =? AND accept=0';
-        return Core::getInstance()->db->query($sql, $user->getId(), $chain);
+        $sql = 'SELECT * FROM calendar_chains c WHERE user_id=? AND id=?';
+        return Core::getInstance()->db->selectRow( $sql, $user->getId(), $chain );
     }
 
     /**
      * Удаляет события
      * @param User $user
-     * @param int  $id
      * @param int  $chain
-     * @param string $use_mode 'single' | 'all' | 'follow'
+     * @return bool
      */
-    public static function deleteEvents ( User $user, $id, $chain, $use_mode )
+    public static function deleteEvents ( User $user, $chain )
     {
-        if ( $use_mode == 'single' ) {
-            if ( is_array($id) ) {
-                $ids = '';
-                foreach ($id as $v) {
-                    if ( !empty ($ids) ) $ids .= ',';
-                    $ids .= $v;
-                }
-                $sql = 'DELETE calendar_events FROM calendar_events
-                    RIGHT JOIN calend ON user_id = ' . $user->getId() .
-                    ' AND calend.id = calendar_events.cal_id
-                    WHERE calendar_events.id IN (' . $ids . ')';
-            } else {
-                $sql = 'DELETE calendar_events FROM calendar_events
-                    RIGHT JOIN calend ON user_id = ' . $user->getId() .
-                    ' AND calend.id = calendar_events.cal_id
-                    WHERE calendar_events.id = ' . $id;
-            }
-        } elseif ( ($id > 0 && ! is_null( $chain ))  || is_array( $id ) ) {
-            $sql = 'DELETE calendar_events FROM calendar_events
-                LEFT JOIN calend ON user_id = ' . $user->getId() .
-                ' WHERE cal_id = ' . $chain;
-            if ($use_mode == 'follow') {
-                $sql .= ' AND calendar_events.id >= ' .$id;
-            }
+        $sql = "DELETE FROM operation WHERE user_id=? AND chain_id=? AND accepted=0";
+
+        if ( Core::getInstance()->db->query($sql, $user->getId(), $chain) ) {
+
+            return true;
+
+        } else {
+
+            return false;
+            
         }
-
-        Core::getInstance()->db->query($sql);
-
-        if ( $use_mode == 'all' && ! is_null( $chain )) {
-            $sql = 'DELETE FROM calend WHERE user_id = ? AND id = ?';
-            Core::getInstance()->db->query($sql, $user->getId(), $chain);
-        }
-
-        return true;
     }
 
     /**
      * Отмечает события как выполненные
      * @param User $user
-     * @param int  $ids | array(int, int, int, ..)
-     * @return array Возвращаем массив для создания операций по пер. транзакциям
+     * @param array $ids array(int, int, int, ..)
+     * @return bool
      */
     public static function acceptEvents ( User $user, $ids )
     {
 
+         $string_ids = '';
         // Если получили массив, преобразуем его для выборки в мускуле
         if ( is_array($ids) ) {
-            $id = $ids;
-            $ids = '';
-            foreach ($id as $v) {
-                if ( !empty ($ids) ) $ids .= ',';
-                $ids .= $v;
+
+            foreach ($ids as $v) {
+                if ( (int) $v > 0 ) {
+                    if ( !empty ($string_ids) ) $string_ids .= ',';
+                    $string_ids .= $v;
+                }
             }
+
+        } elseif ( ( int ) $ids > 0 ) {
+            $string_ids = ( int ) $ids;
+        } else {
+            return false;
         }
+        
+        $sql = "UPDATE operation SET accepted=1 WHERE id IN ( {$string_ids} ) AND user_id=?;";
 
-        $sql = 'UPDATE calendar_events c SET accept = 1 WHERE id IN (' . $ids . ')';
+        if ( Core::getInstance()->db->query( $sql, $user->getId() ) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        Core::getInstance()->db->query($sql);
+    /**
+     * Получает список операций по ID
+     * @param array $ids
+     * @return array
+     */
+    public static function getByIDS ( $ids ) {
+        $sql = "SELECT * FROM operation WHERE id IN (" . implode( ",", $ids ) . ");";
+        $operations = Core::getInstance()->db->select( $sql );
+        $return = array();
+        foreach ( $ids as $value ) {
+            $return[$value['id']] = $value;
+        }
+        return $return;
+    }
 
-        // Если у нас есть периодические транзакции, в прибывших событиях,
-        // то возвращаем их список для создания по ним операций
-        $sql = 'SELECT e.id, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, 
-            c.comment, e.`date`
-            FROM calendar_events e
-            LEFT JOIN calend c ON c.id = e.cal_id 
-            WHERE c.type = "p" AND c.user_id = ' . $user->getId() .  ' AND e.id IN ( ' . $ids . ' ) ';
+    /**
+     * Редактирует дату операции
+     * @param User $user
+     * @param int $id
+     * @param mysql date $date
+     * @return bool
+     */
+    public static function editDate ( User $user, $id, $date )
+    {
+        $sql = "UPDATE operation SET `date`= ? WHERE id =? AND user_id=?;";
 
-        return Core::getInstance()->db->query($sql);
+        return Core::getInstance()->db->query( $sql, $date, $id, $user->getId() );
+
     }
 
     /**
