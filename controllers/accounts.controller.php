@@ -4,6 +4,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
+
 class Accounts_Controller extends _Core_Controller_UserCommon
 {
 
@@ -14,19 +15,12 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     private $user = null;
 
     /**
-     * Ссылка на класс модель
-     * @var Accounts_Model
-     */
-    private $model = null;
-
-    /**
      * Конструктор класса
      * @return void
      */
     function __init()
     {
         $this->user  = Core::getInstance()->user;
-        $this->model = new Accounts_Model();
         $this->tpl->assign('name_page', 'accounts/accounts');
     }
 
@@ -37,63 +31,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function index()
     {
-    	//@FIXME Переписать эту конструкцию
-        if ( array_key_exists('account', $_SESSION) && $_SESSION['account'] == "reload")
-        { 
-            $this->user->initUserAccount($this->user->getId());
-            $this->user->save();
-            unset($_SESSION['account']);
-        }
-        $cur=Core::getInstance()->user->getUserCurrency();
-        $cur_k=array_shift($cur);
-        $this->tpl->assign("page_title", "account all");
-        $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
-        $this->tpl->assign('type_accounts', $this->model->getTypeAccounts());
         $this->tpl->assign("template", "default");
-        $this->tpl->assign("cur", json_encode($cur_k['abbr']));
-
-        // Операция
-        $this->tpl->assign('category', get_tree_select());
-        //$targets = new Targets_Model();
-        //$this->tpl->assign('targetList', $targets->getLastList(0, 100));
-
-
     }
 
-    /**
-     * Выбирает параметры счета при его создании
-     * @param $args
-     * @return array
-     */
-    function changeType()
-    {
-        $this->tpl->assign("page_title","account add");
-        $id = (int)$_POST['id']; //@TODO переписать на GET, там где нам нужно только получить данные, в соответствии с идеологией REST
-        $accid = (int)$_POST['accid'];
-        $this->model->newEmptyBill($id);
-        $this->tpl->assign("fields", $this->model->formatFields($accid));
-        $this->tpl->assign("type_id", $id);
-        $c_arr=Core::getInstance()->user->getUserCurrency();
-        $arr = array();
-        $i=0;
-        foreach ($c_arr as $key=>$val) {
-            if (is_array($val)) {
-                $arr[$i]['name']=$val['abbr'];
-                $arr[$i]['key']=$key;
-                $i++;
-            }
-        }
-         //die(print_r($arr));
-        $this->tpl->assign("currency", $arr);
-        $this->tpl->assign("accountcurrency", $this->model->GetAccountCurrencyById($accid));
-
-        die($this->tpl->fetch("accounts/accounts.fields.html"));
-    }
-
-   /* function newacclogic(){
-        die ( json_encode($this->model->newaccmlogic()) );
-    }
-*/
     /**
      * Добавляет новый счёт пользователя
      * @param $args
@@ -101,13 +41,11 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     function add()
     {
-        if( _Core_Request::getCurrent()->method == 'POST' )
-        {
-            $user = Core::getInstance()->user->getId();
+        if( _Core_Request::getCurrent()->method == 'POST' ) {
             $accountCollection = new Account_Collection();
             $params = $_POST;
             $account = Account::load($params);
-            $accs = $account->create($user, $params);
+            $accs = $account->create($this->user, $params);
             if (!$accs){
                $this->tpl->assign('error', array('text'=>'Счёт не добавлен'));
             }
@@ -117,7 +55,6 @@ class Accounts_Controller extends _Core_Controller_UserCommon
             $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         } else {
             $this->tpl->assign( 'name_page', 'account/edit' );
-            //die(json_encode(array('error'=>array('text'=>'42342342'))));
         }
     }
 
@@ -125,20 +62,17 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     {
         if( _Core_Request::getCurrent()->method == 'POST' )
         {
-            $user = Core::getInstance()->user->getId();
             $accountCollection = new Account_Collection();
             $params = $_POST;
             (isset($params['id']))?(1):($pda=1);
             (isset($params['id']))?(1):($params['id'] = $args[0]);
             $account = Account::load($params);
-            if (!$account->update($user, $params)){
+            if ( !$account->update($this->user, $params) ){
                 $this->tpl->assign('error', array('text'=>'Счёт не удалён'));
             }
             $this->tpl->assign('result' , array('text'=>'Счёт успешно изменён'));
             $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         } else {
-            //echo('<pre>');
-            //die(print_r($args));
             $acm = new Accounts_Model();
             $acc = $acm->getAccountPdaInformation($args[0]);
             $this->tpl->assign( 'acc', $acc);
@@ -154,29 +88,26 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     function delete ($args)
     {
 
-        if( (isset($_REQUEST['confirmed']) && $_REQUEST['confirmed']) )
-        {
-            $user = Core::getInstance()->user->getId();
+        if( (isset($_REQUEST['confirmed']) && $_REQUEST['confirmed']) ) {
             $accountCollection = new Account_Collection();
             $params = $_REQUEST;
 
             $account = Account::getTypeByID($params);
-            //$account = Account::load($params);
-            $er = $account->delete($user, $params);
+            $er = $account->delete($this->user, $params);
             if (!$er){
                 die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
             }
             if ($er == 'cel')
-                $this->tpl->assign('error',array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель'));
+                $this->tpl->assign('error', 
+                        array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель')
+                );
             else
                 $this->tpl->assign('result',array('text'=>'Счёт удален'));
 
             $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
-        }
-        elseif( !isset($_POST['confirmed']) )
-		{
+        } elseif( !isset($_POST['confirmed']) ) {
 			$confirm= array (
-				'title' 		=> 'Удаление счёта',
+				'title' 	=> 'Удаление счёта',
 				'message' 	=> 'Вы действительно хотите удалить выбранный счёт?',
 				'yesLink'	=> '/accounts/delete/?id=' . $args[0] . '&confirmed=1',
 				'noLink' 	=> $_SERVER['HTTP_REFERER'],
@@ -187,10 +118,9 @@ class Accounts_Controller extends _Core_Controller_UserCommon
 
 			$this->tpl->assign('confirm', $confirm);
 			$this->tpl->assign('name_page', 'confirm');
-		}
-		// Видимо передумали удалять и наша логика не сработала - редиректим на инфо
-		else
-		{
+            
+        // Видимо передумали удалять и наша логика не сработала - редиректим на инфо
+		} else {
 			_Core_Router::redirect( '/info' );
 		}
     }
@@ -200,36 +130,13 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     public function accountslist()
     {
-        $user = Core::getInstance()->user->getId();
         $accountCollection = new Account_Collection();
-        //$accountCollection->load( Core::getInstance()->user );
 
-        $acc = $accountCollection->load($user);
+        $acc = $accountCollection->load($this->user->getId());
 
+        //@TODO Привести к нормальному возврату данных, т.е. через присвоение переменной.
+        //В деструкторе ещё используется, поэтому ой
+        // $this->tpl->assign('accounts', array('result'=>array('data'=> $acc)));
         die ( json_encode (  ( $acc ) ) );
     }
-
-   /*function edit()
-    {
-        //die ('123');
-        $id = $_POST['id'];
-        $this->model->deleteAccount($id);
-        $this->model->add($_POST);
-        die ($id);
-    }*/
-
-    function correct()
-    {
-        $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());//
-        $qString = urldecode($_POST['qString']);
-        $aid=$_POST['aid'];
-        //$tid=$_POST['tid'];
-        $qString = explode("&", $qString);
-        $this->model->correct($qString,$aid/*,$tid*/);
-    }
-    //количество счётов пользователя. 0 - счетов нету.
-    function countacc(){
-        die(json_encode($this->model->countacc()));
-    }
-
 }

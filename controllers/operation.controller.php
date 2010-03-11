@@ -9,7 +9,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 {
     /**
      * Модель класса журнала операций
-     * @var Money
+     * @var Operation_Model
      */
     private $model = null;
     
@@ -45,7 +45,35 @@ class Operation_Controller extends _Core_Controller_UserCommon
  		
  		$this->tpl->assign('name_page', 'operations/operation');
 	}
-	
+
+    /**
+     * Возвращает дату операции
+     * @return string
+     */
+    function getDateOperation ()
+    {
+        // Определяем массив данных для обработки
+        $request = _Core_Request::getCurrent();
+
+        // Если дата передана массивом (PDA) ...
+        if ( is_array ( $request->post['date'] ) ) {
+
+            return $request->post['date']['day']
+                . '.' . $request->post['date']['month']
+                . '.' . $request->post['date']['year'];
+
+            // если пустая дата - подставляем сегодняшний день
+        } elseif( empty( $request->post['date'] ) ) {
+
+            return date ( "d.m.Y" );
+
+        } else {
+
+            return $request->post['date'];
+
+        }
+    }
+
 	/**
 	 * Добавляет новое событие
 	 * @param $args array mixed Какие-нибудь аргументы
@@ -53,6 +81,10 @@ class Operation_Controller extends _Core_Controller_UserCommon
 	 */
  	function add( $args = array() )
 	{
+
+        // Определяем массив данных для обработки
+        $request = _Core_Request::getCurrent();
+
 		$operation = array();
 		
 		// Типы операций для кастомизации логики
@@ -79,43 +111,24 @@ class Operation_Controller extends _Core_Controller_UserCommon
 		{
 			// Определяем массив данных для обработки
 			$request = _Core_Request::getCurrent();
-			$operation = array(
+			$operation = array (
 				//тип операции (расход и тд)
 				'type' 		=> isset($request->post['type'])?$request->post['type']:$operation['type'],
 				'account' 	=> $request->post['account'],
 				'amount' 	=> $request->post['amount'],
 				'category' 	=> isset($request->post['category'])?$request->post['category']:null,
-				// дата определяется ниже
-				'date' 		=> null,
+				'date' 		=> $this->getDateOperation(),
 				'comment' 	=> $request->post['comment'],
 				'tags' 		=> isset($request->post['tags'])?$request->post['tags']:null,
 				'convert' 	=> isset($request->post['convert'])?$request->post['convert']:array(),
 				'close' 	=> isset($request->post['close'])?$request->post['close']:array(),
 				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
-				'toAccount' 	=> isset($request->post['toAccount'])?$request->post['toAccount']:null,
+				'toAccount' => isset($request->post['toAccount'])?$request->post['toAccount']:null,
 				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
 			);
-			
-			// Если дата передана массивом (PDA) ...
-			if( is_array($request->post['date']) )
-			{
-				$operation['date'] = $request->post['date']['day'] 
-					. '.' . $request->post['date']['month']
-					. '.' . $request->post['date']['year'];
-			}
-			
-			// если пустая дата - подставляем сегодняшний день
-			elseif( empty($request->post['date']) )
-			{
-				$operation['date'] = date("d.m.Y");
-			}
-			else
-			{
-				$operation['date'] = $request->post['date'];
-			}
-			
+
 			$operation = $this->model->checkData($operation);
-			
+
 			// Если есть ошибки, то возвращаем их пользователю в виде массива
 			if (sizeof($this->model->errorData) == 0)
 			{
@@ -180,18 +193,18 @@ class Operation_Controller extends _Core_Controller_UserCommon
 					break;
 				}
 
-                                // #856. fixed by Jet. выводим разные сообщения для обычной и PDA версии
-                                global $request;
-                                $text = '';
-                                if (_Core_TemplateEngine::getResponseMode($request) == "json") {
-                                    $text = "Операция успешно добавлена.";
-                                } else {
-                                    $text = "Операция успешно добавлена. <a href='/operation/last'>последние изменённые</a>";
-                                }
+                // #856. fixed by Jet. выводим разные сообщения для обычной и PDA версии
+                global $request;
+                $text = '';
+                if (_Core_TemplateEngine::getResponseMode($request) == "json") {
+                    $text = "Операция успешно добавлена.";
+                } else {
+                    $text = "Операция успешно добавлена. <a href='/operation/last'>последние операции</a>";
+                }
 
-                                $this->tpl->assign( 'result',
-                                    array('text' => $text)
-                                );
+                $this->tpl->assign( 'result',
+                    array('text' => $text)
+                );
 			}
 			else
 			{
@@ -384,7 +397,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 						break;
 					case Operation::TYPE_TRANSFER: // Перевод со счёта
 						$operation['category'] = -1;
-						$this->model->editTransfer( $operation['tr_id']?$operation['tr_id']:$operation['id'],
+						$this->model->editTransfer( @$operation['tr_id']?$operation['tr_id']:$operation['id'],
 							$operation['amount'], $operation['convert'], $operation['date'], $operation['account'],
 							$operation['toAccount'],$operation['comment'],$operation['tags']);
 						break;
@@ -396,18 +409,18 @@ class Operation_Controller extends _Core_Controller_UserCommon
 					break;
 				}
 
-                                // #856. fixed by Jet. выводим разные сообщения для обычной и PDA версии
-                                global $request;
-                                $text = '';
-                                if (_Core_TemplateEngine::getResponseMode($request) == "json") {
-                                    $text = "Операция успешно изменена.";
-                                } else {
-                                    $text = "Операция успешно изменена. <a href='/operation/last'>последние изменённые</a>";
-                                }
+                // #856. fixed by Jet. выводим разные сообщения для обычной и PDA версии
+                global $request;
+                $text = '';
+                if (_Core_TemplateEngine::getResponseMode($request) == "json") {
+                    $text = "Операция успешно изменена.";
+                } else {
+                    $text = "Операция успешно изменена. <a href='/operation/last'>последние операции</a>";
+                }
 
-                                $this->tpl->assign( 'result',
-                                    array('text' => $text)
-                                );
+                $this->tpl->assign( 'result',
+                    array('text' => $text)
+                );
 			}
 			else 
 			{

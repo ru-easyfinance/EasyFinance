@@ -20,7 +20,6 @@ class Tags_Controller extends _Core_Controller_UserCommon
      */
     protected function __init()
     {
-//        $this->tpl->assign('name_page', 'calendar/calendar');
         $this->model = new Tags_Model();
     }
 
@@ -35,34 +34,71 @@ class Tags_Controller extends _Core_Controller_UserCommon
     }
 
     /**
-     * @param $args array mixed Какие-нибудь аргументы
+     * Добавляет новый тег
      * @return void
      */
-    function add($args)
+    function add ()
     {
-        $tag = trim(htmlspecialchars(@$_POST['tag']));
-        die(json_encode($this->model->add($tag)));
+        
+        $tag = trim( htmlspecialchars( @$_POST['tag'] ) );
+
+        $tags = $this->model->add( $tag );
+
+        if ( $tags ) {
+
+            $this->tpl->assign( 'result', "Добавлен новый тег" );
+            $this->tpl->assign('tags', $tags);
+
+        } else {
+
+            $this->tpl->assign( 'error', array( 'text' => implode(",\n", $this->model->getErrors() ) ) );
+
+        }
     }
 
     /**
-     * @param $args array mixed Какие-нибудь аргументы
+     * Редактирует тег
      * @return void
      */
-    function edit($args)
+    function edit ()
     {
-        $tag = trim(htmlspecialchars(@$_POST['tag']));
-        $old_tag = htmlspecialchars(@$_POST['old_tag']);
-        die(json_encode($this->model->edit($tag, $old_tag)));
+        $tag = trim( htmlspecialchars( @$_POST['tag'] ) );
+        $old_tag = htmlspecialchars( @$_POST['old_tag'] );
+
+        $tags = $this->model->edit( $tag, $old_tag );
+
+        if ( $tags ) {
+
+            $this->tpl->assign( 'result', "Добавлен новый тег" );
+            $this->tpl->assign('tags', $tags);
+
+        } else {
+
+            $this->tpl->assign( 'error', array ( 'text' => implode(",\n", $this->model->getErrors() ) ) );
+
+        }
     }
     
     /**
-     * @param $args array mixed Какие-нибудь аргументы
+     * Удаляет тег
      * @return void
      */
-    function del($args)
+    function del ( )
     {
-        $tag = trim(htmlspecialchars(@$_POST['tag']));
-        die(json_encode($this->model->del($tag)));
+        $tag = trim( htmlspecialchars( @$_POST['tag'] ) );
+        $tags = $this->model->del( $tag );
+
+        if ( $tags ) {
+
+            $this->tpl->assign( 'result', "Добавлен новый тег" );
+            $this->tpl->assign('tags', $tags);
+
+        } else {
+
+            $this->tpl->assign( 'error', array ( 'text' => implode(",\n", $this->model->getErrors() ) ) );
+
+        }
+
     }
 
     /**
@@ -70,7 +106,10 @@ class Tags_Controller extends _Core_Controller_UserCommon
      * @return void
      */
     function getTags($args) {
-        die (json_encode($this->model->getTags(false)));
+
+        $tags = $this->model->getTags( false );
+        $this->tpl->assign( 'tags', $tags );
+
     }
 
     /**
@@ -78,6 +117,9 @@ class Tags_Controller extends _Core_Controller_UserCommon
      * @return void
      */
     function getCloudTags($args) {
-        die (json_encode($this->model->getTags(true)));
+
+        $tags = $this->model->getTags( true );
+        $this->tpl->assign( 'tags', $tags );
+        
     }
 }

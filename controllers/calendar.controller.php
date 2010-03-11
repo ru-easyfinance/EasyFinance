@@ -26,101 +26,242 @@ class Calendar_Controller extends _Core_Controller_UserCommon
     }
 
     /**
+     * Возвращает дату операции
+     * @return string
+     */
+    private function getDateOperation ()
+    {
+        // Определяем массив данных для обработки
+        $request = _Core_Request::getCurrent();
+        
+        // Если дата передана массивом (PDA) ...
+        if ( is_array ( $request->post['date'] ) ) {
+
+            return $request->post['date']['day']
+                . '.' . $request->post['date']['month']
+                . '.' . $request->post['date']['year'];
+
+            // если пустая дата - подставляем сегодняшний день
+        } elseif( empty( $request->post['date'] ) ) {
+
+            return date ( "d.m.Y" );
+
+        } else {
+
+            return $request->post['date'];
+
+        }
+    }
+
+    /**
      * Добавляет новое событие
-     * @param $args array mixed Какие-нибудь аргументы
      * @return void
      */
-    function add( $args )
+    function add()
     {
-        $calendar = new Calendar( Core::getInstance()->user );
+        $user = Core::getInstance()->user;
 
-        $this->tpl->assign( 'calendar', $calendar->createEvent(
-            @$_POST['type'],  @$_POST['title'],  @$_POST['comment'],
-            @$_POST['time'],  @$_POST['date'],   @$_POST['every'], @$_POST['repeat'],
-            @$_POST['week'],  @$_POST['amount'], @$_POST['cat'],   @$_POST['account'],
-            @$_POST['op_type'], @$_POST['tags']
-        ) );
+        // Определяем массив данных для обработки
+        $request = _Core_Request::getCurrent();
+
+        $event_array = array (
+            'type'       => ( int ) $request->post['type'],
+            'account'    => ( int ) $request->post['account'],
+            'amount'     => (float) str_replace ( ' ', '', $request->post['amount'] ),
+            'category'   => ( int ) $request->post['category'],
+            'date'       => Helper_Date::RusDate2Mysql( $this->getDateOperation() ),
+            'comment'    => ( string ) $request->post['comment'],
+            'tags'       => isset( $request->post['tags'] ) ? $request->post['tags'] : null,
+            'convert'    => isset( $request->post['convert'] ) ? $request->post['convert'] : 0,
+            'close'      => isset( $request->post['close'] ) ? $request->post['close'] : 0,
+            'currency'   => isset( $request->post['currency'] ) ? $request->post['currency'] : 0,
+            'toAccount'  => isset( $request->post['toAccount'] ) ? $request->post['toAccount'] : null,
+            'target'     => isset( $request->post['target'] ) ? $request->post['target'] : null,
+
+            // Дополнения для планирования в календарь
+            'last'       => isset( $request->post['last'] ) ? Helper_Date::RusDate2Mysql( $request->post['last'] ) : '0000-00-00',
+            'time'       => isset( $request->post['time'] ) ? $request->post['time'] : date ( "H:i:s" ),
+            'every'      => isset( $request->post['every'] ) ? ( int ) $request->post['every'] : 0,
+            'repeat'     => isset( $request->post['repeat'] ) ? ( int ) $request->post['repeat'] : 1,
+            'week'       => isset( $request->post['week'] ) ? $request->post['week'] : '0000000',
+        );
+
+        $event = new Calendar_Event ( new Calendar_Model( $event_array, $user ), $user );
+
+        if ( ! $event->checkData() ) {
+
+            $this->tpl->assign( 'error', array('text' => implode(",\n", $event->getErrors() ) ) );
+            
+        } else {
+
+            $calendar = new Calendar( $user );
+            $calendar->create( $event );
+            $this->tpl->assign( 'result', array('text' => 'Регулярная операция добавлена') );
+
+            // @FIXME Перенести этот блок кода в календарь
+            Core::getInstance()->user->initUserEvents();
+            Core::getInstance()->user->save();
+
+            $this->tpl->assign( 'future', Core::getInstance()->user->getUserEvents( 'reminder' ) );
+            $this->tpl->assign( 'overdue', Core::getInstance()->user->getUserEvents( 'overdue' ) );
+            $this->tpl->assign( 'calendar', Core::getInstance()->user->getUserEvents( 'calendar' ) );
+        }
     }
 
     /**
      * Редактирует событие
-     * @param $args array mixed Какие-нибудь аргументы
      * @return void
      */
-    function edit( $args )
+    function edit()
     {
-        $calendar = new Calendar( Core::getInstance()->user );
-        $this->tpl->assign( 'calendar', $calendar->editEvents(
-            @$_POST['id'],      @$_POST['chain'],   @$_POST['type'],   @$_POST['title'],
-            @$_POST['comment'], @$_POST['time'] ,   @$_POST['date'],   @$_POST['every'],
-            @$_POST['repeat'],  @$_POST['week'],    @$_POST['amount'], @$_POST['cat'],
-            @$_POST['account'], @$_POST['op_type'], @$_POST['tags'],   @$_POST['use_mode']
-        ) );
+        
+        $user = Core::getInstance()->user;
+
+        // Определяем массив данных для обработки
+        $request = _Core_Request::getCurrent();
+
+        $event_array = array (
+            'id'         => ( int ) $request->post['id'],
+            'chain'      => ( int ) $request->post['chain'],
+            'type'       => ( int ) $request->post['type'],
+            'account'    => ( int ) $request->post['account'],
+            'amount'     => (float) str_replace ( ' ', '', $request->post['amount'] ),
+            'category'   => ( int ) $request->post['category'],
+            'date'       => Helper_Date::RusDate2Mysql( $this->getDateOperation() ),
+            'comment'    => ( string ) $request->post['comment'],
+            'tags'       => isset( $request->post['tags'] ) ? $request->post['tags'] : null,
+            'convert'    => isset( $request->post['convert'] ) ? $request->post['convert'] : 0,
+            'close'      => isset( $request->post['close'] ) ? $request->post['close'] : 0,
+            'currency'   => isset( $request->post['currency'] ) ? $request->post['currency'] : 0,
+            'toAccount'  => isset( $request->post['toAccount'] ) ? $request->post['toAccount'] : null,
+            'target'     => isset( $request->post['target'] ) ? $request->post['target'] : null,
+
+            // Дополнения для планирования в календарь
+            'last'       => isset( $request->post['last'] ) ? Helper_Date::RusDate2Mysql( $request->post['last'] ) : '0000-00-00',
+            'time'       => isset( $request->post['time'] ) ? $request->post['time'] : date ( "H:i:s" ),
+            'every'      => isset( $request->post['every'] ) ? ( int ) $request->post['every'] : 0,
+            'repeat'     => isset( $request->post['repeat'] ) ? ( int ) $request->post['repeat'] : 1,
+            'week'       => isset( $request->post['week'] ) ? $request->post['week'] : '0000000',
+        );
+
+        $event = new Calendar_Event ( new Calendar_Model( $event_array, $user ), $user );
+
+        if ( ! $event->checkData() ) {
+
+            $this->tpl->assign( 'error', array( 'text' => implode(",\n", $event->getErrors() ) ) );
+
+        } else {
+
+            $calendar = new Calendar( $user );
+            $calendar->edit( $event );
+            $this->tpl->assign( 'result', array('text' => 'Регулярная операция добавлена') );
+
+            // @FIXME Перенести этот блок кода в календарь
+            Core::getInstance()->user->initUserEvents();
+            Core::getInstance()->user->save();
+
+            $this->tpl->assign( 'future', Core::getInstance()->user->getUserEvents( 'reminder' ) );
+            $this->tpl->assign( 'overdue', Core::getInstance()->user->getUserEvents( 'overdue' ) );
+            $this->tpl->assign( 'calendar', Core::getInstance()->user->getUserEvents( 'calendar' ) );
+
+        }
     }
     
     /**
-     * Удаляет выбранное событие
-     * @param $args array mixed Какие-нибудь аргументы
+     * Удаляет выбранный события
      * @return void
      */
-    function del( $args )
+    function del_chain( )
     {
-        $id       = (int)@$_POST['id'];
-        $chain    = (int)@$_POST['chain'];
-        $use_mode = @$_POST['use_mode'];
+        $chain    = ( int ) _Core_Request::getCurrent()->post['chain'];
         $calendar = new Calendar( Core::getInstance()->user );
-        $this->tpl->assign('calendar', $calendar->deleteEvents( $id, $chain, $use_mode ) );
+
+        if ( $calendar->deleteEvents( $chain ) ) {
+
+            $this->tpl->assign('result', array ( 'text' => 'Цепочка событий успешно удалены' ) );
+
+            // @FIXME Перенести этот блок кода в календарь
+            Core::getInstance()->user->initUserEvents();
+            Core::getInstance()->user->save();
+
+            $this->tpl->assign( 'future', Core::getInstance()->user->getUserEvents( 'reminder' ) );
+            $this->tpl->assign( 'overdue', Core::getInstance()->user->getUserEvents( 'overdue' ) );
+            $this->tpl->assign( 'calendar', Core::getInstance()->user->getUserEvents( 'calendar' ) );
+
+        } else {
+
+            $this->tpl->assign('error', array ( 'text' => implode ( ",\n", $calendar->getErrors () ) ) );
+
+        }
+        
     }
 
     /**
      * Возвращает список событий, в формате JSON
      * @return void
      */
-    function events($args) {
-        $calendar = Calendar::loadAll( Core::getInstance()->user , $_GET['start'], $_GET['end'] );
+    function events() {
+
+        $calendar = new Calendar ( Core::getInstance()->user );
+        $calendar->loadAll( Core::getInstance()->user , @$_GET['start'], @$_GET['end'] );
         $this->tpl->assign( 'calendar', $calendar->getArray() );
     }
 
     /**
-     * Получить список напоминалок
+     * Срабатывает при перетаскивании события
      * @return void
      */
-    function reminder ()
+    function edit_date ()
     {
-        // Получаем события календаря за весь текущий месяц
-        $calendar = new Calendar( Core::getInstance()->user );
 
-        // Из-за глюка компонента календарь - умножаем таймштамп на тысячу
-        $events = $calendar->loadAll(Core::getInstance()->user,
-                mktime(0, 0, 0, date('n'), 1, date('Y')) * 1000,
-                mktime(0, 0, 0, date('n') + 1, 0, date('Y')) * 1000);
-        $this->tpl->assign( 'calendar', $events->getArray() );
+        $id   = ( int ) _Core_Request::getCurrent()->post['id'];
+        $date = Helper_Date::RusDate2Mysql( _Core_Request::getCurrent()->post['date'] );
+
+        $calendar = new Calendar( Core::getInstance()->user ) ;
+
+        if ( $calendar->editDate( $id, $date ) ) {
+            $this->tpl->assign( 'result', array ( 'text' => 'Операция успешно изменена' ) );
+        } else {
+            $this->tpl->assign( 'error', array ( 'text' => implode( ",\n", $calendar->getErrors() ) ) );
+        }
+
+        // @FIXME Перенести этот блок кода в календарь
+        Core::getInstance()->user->initUserEvents();
+        Core::getInstance()->user->save();
     }
 
     /**
-     * Подтверждение событий
-     * @return void
+     * Подтверждает список операций
      */
-    function reminderAccept()
-    {
+    function accept_all ( ) {
         $ids = explode(',', @$_POST['ids']);
-        $calendar = new Calendar ( Core::getInstance()->user );
-        $calendar->acceptEvents($ids);
 
-        $calendar = Calendar::loadReminder( Core::getInstance()->user );
-        $this->tpl->assign( 'calendar', $calendar->getArray() );
-    }
-
-    /**
-     * Удаляем события из календаря
-     */
-    function reminderDel ( )
-    {
-        $ids = explode(',', $_POST['ids']);
-        $calendar = new Calendar ( Core::getInstance()->user );
-        $calendar->deleteEvents($ids);
+        $accepted_array  = array ();
         
-        $calendar = Calendar::loadReminder( Core::getInstance()->user );
-        $this->tpl->assign( 'calendar', $calendar->getArray() );
+        foreach ( $ids as $id ) {
+            if ( ( int ) $id > 0 ) {
+                $accepted_array[] = $id;
+            }
+        }
+
+        if ( count ( $accepted_array ) > 0 ) {
+
+            $calendar = new Calendar ( Core::getInstance()->user );
+
+            if ( $calendar->acceptEvents( $accepted_array ) ) {
+
+                $this->tpl->assign( 'result', array ( 'text' => 'Операции успешно подтверждены' ) );
+
+            } else {
+
+                $this->tpl->assign( 'error', array ( 'text' => 'Ошибка при подтверждении операций' ) );
+                
+            }
+
+        } else {
+
+            $this->tpl->assign( 'error', array ( 'text' => 'Не указаны операции для подтверждения!' ) );
+
+        }
     }
 }

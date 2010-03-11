@@ -21,7 +21,7 @@ class Index_Controller extends _Core_Controller
 	public function index()
 	{
 		$counters = array(
-			'users'		=> 8443,
+			'users'         => 8443,
 			'operations'	=> 943132
 		);
 		
@@ -39,9 +39,7 @@ class Index_Controller extends _Core_Controller
 		
 		$this->tpl->assign('usersCount',  number_format($counters['users'], 0, ',', ' '));
 		$this->tpl->assign('operationsCount', number_format($counters['operations'], 0, ',', ' '));
-		
-		$welcome = new Welcome_Model();
-		
+
 		$this->tpl->assign('name_page', 'welcome');
 	}
 	
