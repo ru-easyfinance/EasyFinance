@@ -1413,7 +1413,7 @@ ul.pager li.act { color: #ffffff; background: #38ad00; }
 .print { display: block; padding-left: 20px; background: url('/img/i/icons.gif') no-repeat -40px -266px; }
 
 
-ul.month_cal { position: relative; margin-bottom: 17px; padding-bottom: 6px;margin-top:7px; border-bottom: 1px solid #e5e5e5; }
+ul.month_cal { position: relative; margin-bottom: 0px; padding-bottom: 6px;margin-top:7px; border-bottom: none }
 ul.month_cal li{cursor :pointer; }
 ul.month_cal li a, #ui-datepicker-div  .ui-datepicker-prev , #ui-datepicker-div  .ui-datepicker-next{ color: #949494; background: url('/img/i/arrow.gif') no-repeat 0 0; }
 ul.month_cal li.cur { font-size: 18px; line-height: 20px; color: #4b4b4b; text-align: center; }
