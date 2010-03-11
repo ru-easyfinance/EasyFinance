@@ -57,6 +57,7 @@ $(document).ready(function() {
     $('li.edit').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
+        
         $('#add_form').show();
         $(document).scrollTop(500);
         $('form').attr('action','/category/edit/');
@@ -69,10 +70,14 @@ $(document).ready(function() {
     });
     $('li.add').live('click',function(){
         clearForm();
-        var catId = $(this).closest('tr,.line').attr('id').split("_", 2)[1];
-        fillForm(catId);
+        fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
 
+        $('#categoryEditSystem').show();
+        $('#divCategoryEditCustom').show();
         $('#cat_id').val('');
+        $('#subcat').removeAttr("disabled");
+        $('#cattype').removeAttr("disabled");
+        
         $('#add_form').show();
         $(document).scrollTop(300);
         $('form').attr('action','/category/add/');
