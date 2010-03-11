@@ -106,4 +106,58 @@ function tofloat(str){
     }
 }
 
+
+var searchMinimum = function(obj, columnName){
+	var minKey = null;
+	var minVal = null;
+	for (var key in obj){
+		if (minKey == null || obj[key][columnName] <= minVal ){
+			minKey = key;
+			minVal = obj[key][columnName];
+		}
+	}
+	return minKey;
+}
+
+function getElementsFromObjectWithOrderByColumnByASC(obj, columnName){
+	var returnArray = []
+	var workingObj = $.extend({}, obj)
+	var key
+	while(workingObj.length > 0 ){
+		key = searchMinimum(obj, columnName);
+		if (key == null){
+			break;
+		}
+		returnArray.push($.extend({},workingObj[key]));
+		delete workingObj[key];
+	}
+	return returnArray;
+
+}
+
+
+function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, callback){
+	var returnArray = [];
+	if (typeof(callback) == 'string'){
+		switch(callback){
+			case 'searchMinimum':
+			default :
+			callback = searchMinimum;
+				break;
+		}
+	}
+	var workingObj = $.extend({}, obj)
+	var key
+	while(workingObj.length > 0 ){
+
+			key = callback(obj, columnName);
+
+		if (key == null){
+			break;
+		}
+		returnArray.push($.extend({},workingObj[key]));
+		delete workingObj[key];
+	}
+	return returnArray;
+}
 ;
