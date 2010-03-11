@@ -111,23 +111,22 @@ class Operation_Model {
 		if ( array_key_exists('account', $operation) )
 		{
 			$validated['account'] = (int)$operation['account'];
-			if ( $validated['account'] === 0 )
+			if ( (int) $operation['accepted'] == 1 && $validated['account'] === 0 )
 			{
 				$this->errorData['account'] = 'Не выбран счёт';
 			}
-			
-			// Лишний
-			$acc = $this->db->query("SELECT count(*) as co FROM accounts WHERE account_id=?",$validated['account']);
-			if ( $acc[0]['co'] != 1 )
-			{
-				$this->errorData['account'] = 'Указанного счёта не существует';
-			}
+
+            $accounts = Core::getInstance()->user->getUserAccounts();
+
+            if ( ! isset ( $accounts[ $validated['account'] ] ) ) {
+                $this->errorData['account'] = 'Указанного счёта не существует';
+            }
 		}
 		
 		// Проверяем сумму
 		if ( array_key_exists('amount', $operation) )
 		{
-			if ( empty($operation['amount']) )
+			if ( (int) $operation['accepted'] == 1 && empty($operation['amount']) )
 			{
 				$this->errorData['amount'] = 'Сумма не должна быть равной нулю.';
 			}
@@ -162,7 +161,7 @@ class Operation_Model {
 					}
 				}
 			}
-			elseif ( ($validated['type'] == 0) || ($validated['type'] == 1) )
+			elseif ( (int) $operation['accepted'] == 1 && ( ($validated['type'] == 0) || ($validated['type'] == 1) ) )
 			{
 				$cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND visible=1", $validated['category']);
 				
