@@ -53,10 +53,22 @@ class User
     private $user_targets = array();
 
     /**
-     * Массив с событиями
+     * Массив с событиями календаря за три месяца (прошлый, текущий, будущий)
      * @var array mixed
      */
     private $user_events = array();
+
+    /**
+     * Массив с событиями на месяц вперёд
+     * @var array
+     */
+    private $user_reminder = array();
+
+    /**
+     * Массив с неподтверждёнными событиями
+     * @var array
+     */
+    private $user_overdue = array();
 
     /**
      * Массив с бюджетом пользователя
@@ -214,6 +226,11 @@ class User
 	if ($this->getType() === 0)
 	{
 		$this->init();
+        
+        // Если у нас есть неподтверждённые операции, то переходим на них
+        if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
+            $_SESSION['REQUEST_URI'] = '/calendar/#list';
+        }
 	}
 	// Если профиль эксперта
 	elseif ($this->getType() === 1)
@@ -231,13 +248,17 @@ class User
     public function save ()
     {
 
-        $_SESSION['user']          = $this->props;
-        $_SESSION['user_category'] = $this->user_category;
-        $_SESSION['user_account']  = $this->user_account;
-        $_SESSION['user_currency'] = $this->user_currency;
-        $_SESSION['user_tags']     = $this->user_tags;
-        $_SESSION['user_targets']  = $this->user_targets;
-        $_SESSION['pop_targets']   = $this->pop_targets;
+        $_SESSION['user']            = $this->props;
+        $_SESSION['user_category']   = $this->user_category;
+        $_SESSION['user_account']    = $this->user_account;
+        $_SESSION['user_currency']   = $this->user_currency;
+        $_SESSION['user_tags']       = $this->user_tags;
+        $_SESSION['user_targets']    = $this->user_targets;
+        $_SESSION['pop_targets']     = $this->pop_targets;
+        $_SESSION['user_events']     = $this->user_events;
+        $_SESSION['user_overdue']    = $this->user_overdue;
+        $_SESSION['user_reminder']   = $this->user_reminder;
+
         return true;
     }
 
@@ -308,9 +329,13 @@ class User
         }
 
         if (isset ($_SESSION['user_events']) && is_array($_SESSION['user_events']) ) {
-            $this->user_events = $_SESSION['user_events'];
+            $this->user_events   = $_SESSION['user_events'];
+            $this->user_overdue  = $_SESSION['user_overdue'];
+            $this->user_reminder = $_SESSION['user_reminder'];
         } else {
-            $this->user_events = array();
+            $this->user_events   = array();
+            $this->user_overdue  = array();
+            $this->user_reminder = array();
         }
 
         if (isset ($_SESSION['user_budget']) && is_array($_SESSION['user_budget']) ) {
@@ -328,6 +353,8 @@ class User
      */
     public function initUserCategory ()
     {
+        $this->user_category = array();
+
         $sql = "SELECT DISTINCT c.*,
             (SELECT count(id) FROM operation o WHERE o.cat_id=c.cat_id AND c.user_id=o.user_id) AS howoften
             FROM category AS c
@@ -349,6 +376,8 @@ class User
      */
     public function initUserCurrency ($user_currency_list = null, $currency_default = null)
     {
+        $this->user_currency = array();
+
         // Если обновляем список валют с нуля
         if (!$user_currency_list) {
             $currency = unserialize($this->props['user_currency_list']);
@@ -385,21 +414,23 @@ class User
      */
 	public function initUserAccounts()
 	{
-            $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
-                , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
-                FROM accounts a
-                LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-                WHERE a.user_id=? ORDER BY o_count DESC";
-            $accounts = $this->db->select($sql, $this->getId());
+        $this->user_account = array();
+
+        $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
+            , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
+            FROM accounts a
+            LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
+            WHERE a.user_id=? ORDER BY o_count DESC";
+        $accounts = $this->db->select($sql, $this->getId());
 
 
-            $this->user_account= array();
-            foreach ($accounts as $key=>$val) {
-                $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
-                if ( $val['total_sum'] == null )
-                    $val['total_sum']=0;
-                $this->user_account[$val['account_id']] = $val;
-            }
+        $this->user_account= array();
+        foreach ($accounts as $key=>$val) {
+            $val['account_currency_name'] = Core::getInstance()->currency[$val['account_currency_id']]['abbr'];
+            if ( $val['total_sum'] == null )
+                $val['total_sum']=0;
+            $this->user_account[$val['account_id']] = $val;
+        }
 	}
 
     /**
@@ -408,12 +439,11 @@ class User
      */
     public function initUserTags()
     {
+        $this->user_tags = array();
+
         $sql = "SELECT name, COUNT(name) as cnt FROM tags WHERE user_id = ? GROUP BY name ORDER BY cnt DESC";
         $array = $this->db->select($sql, $this->getId());
         $this->user_tags = $array;
-//        foreach ($array as $v) {
-//            $this->user_tags[$v['name']] = $v['cnt'];
-//        }
     }
 
     /**
@@ -422,6 +452,7 @@ class User
      */
     public function initUserTargets()
     {
+        $this->user_targets = array();
     	// Ежели нет пользователя - всё это не нужно.
     	if(!$this->getId())
     	{
@@ -453,18 +484,38 @@ class User
      */
     public function initUserEvents()
     {
-        $sql = 'SELECT c.id AS chain, c.title, c.type, c.start, c.last, c.time, c.every,
-            c.repeat, c.comment, c.amount, c.cat_id, c.account_id, c.op_type, c.tags, c.week,
-            e.id, e.`date`, e.accept
-            FROM calend c
-            RIGHT JOIN calendar_events e ON c.id = e.cal_id
-            WHERE c.user_id = ? AND e.`date` <= ? AND e.accept = 0';
+        // @TODO Вынести отсюда эту логику накх
+        $this->user_events   = array();
+        $this->user_overdue  = array();
+        $this->user_reminder = array();
 
-        $array = $this->db->select($sql, $this->getId(), date('Y-m-d'));
-        $this->user_events = array();
-        foreach ($array as $var) {
-            $this->user_events[$var['id']] = $var;
-            $this->user_events[$var['id']]['date'] = formatMysqlDate2UnixTimestamp( $var['date'] );
+        // Получаем данные за три месяца, прошлый, текущий и будущий
+        $start = mktime( null, null, null, date( 'm' ) - 1, 1 );
+        $end   = mktime( null, null, null, date( 'm' ) + 2, 0 );
+        $now   = mktime( 0, 0, 0 ); // Сегодня в полночь
+
+        $calendar = new Calendar( $this );
+        $calendar->loadAll( $this, $start, $end );       
+
+        $this->user_events = $calendar->getArray();
+
+        foreach ( $this->user_events as $value ) {
+            // Фильтруем лишние события в переводах
+            if ( ( ( int ) $value['type'] == 2 ) && ( ( int ) $value['tr_id'] == 0 ) ) { continue; }
+
+            // Напомнить на будущее
+            if ( ( int ) $value['accepted'] === 0 && ( int ) $value['timestamp'] > $now ) {
+
+                if ( count( $this->user_reminder ) > 10 ) { continue; }
+
+                $this->user_reminder[$value['id']] = $value;
+
+            // Подтвердить прошлые неподтверждённые
+            } elseif ( ( int ) $value['accepted'] === 0 && ( int ) $value['timestamp'] <= $now ) {
+
+                $this->user_overdue[$value['id']] = $value;
+
+            }
         }
     }
 
@@ -473,6 +524,7 @@ class User
      */
     public function initUserBudget()
     {
+        $this->user_budget = array();
         $this->user_budget = Budget_Model::loadBudget(null, null, $this->getId(), $this->getUserCategory());
     }
 
@@ -582,10 +634,18 @@ class User
 
     /**
      * Возвращает текущие события пользователя
+     * @param string $type calendar | overdue | reminder
+     * @return array
      */
-    public function getUserEvents()
+    public function getUserEvents( $type = 'calendar' )
     {
-        return $this->user_events;
+        if ( $type == 'calendar' ) {
+            return $this->user_events;
+        } elseif ( $type == 'overdue' ) {
+            return $this->user_overdue;
+        } elseif ( $type == 'reminder' ) {
+            return $this->user_reminder;
+        }
     }
 
     /**
