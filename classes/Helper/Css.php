@@ -34,6 +34,7 @@ class Helper_Css implements _Core_Router_iHook
 		
 		$templateEngine->append('css', 'jquery/sexyCombo.css');
 		$templateEngine->append('css', 'calendarOverdue.css');
+                $templateEngine->append('css', 'calendarLeft.css');
 		$templateEngine->append('css', 'report.css');
 		$templateEngine->append('css', 'expert.css');
 		$templateEngine->append('css', 'expertsList.css');

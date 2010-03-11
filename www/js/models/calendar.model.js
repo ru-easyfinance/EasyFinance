@@ -1,8 +1,8 @@
-/**
- * @desc Calendar Model
- * @author Alexandr [rewle] Ilichov
- */
-easyFinance.models.calendar = function(){
-
-}
-
+///**
+// * @desc Calendar Model
+// * @author Alexandr [rewle] Ilichov
+// */
+//easyFinance.models.calendar = function(){
+//
+//}
+//

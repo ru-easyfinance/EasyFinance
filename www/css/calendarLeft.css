@@ -1,0 +1,100 @@
+/* виджет регулярных транзакций в левой панели */
+
+/* иконка вкладки с виджетом */
+.block1 ul.control li#c4 {
+    left: 99px;
+    background: url('/img/i/icons_control.png') no-repeat 0 0;
+    background-position: -33px 0px;
+}
+
+.block1 ul.control li#c4.act {
+    background-position: -33px -33px;
+}
+
+/* показываем предупреждение, если есть просроченные операции */
+.block1 ul.control li#c4.warning {
+    background-position: -231px 0px;
+}
+
+.block1 ul.control li#c4.act.warning {
+    background-position: -231px -33px;
+}
+
+/* заголовки разделов */
+.block1 .transaction h2 {
+    float: none;
+    margin: 0 0 8px 11px;
+    font-size: 12px;
+    line-height: 12px;
+    color: #3c9915;
+    font-weight: bold;
+}
+
+.block1 .transaction .future h2 {
+    border-top: 1px solid #E5E5E5; padding-top: 6px;
+}
+
+/* события */
+.block1 .transaction ul li {
+    position: relative;
+    margin-bottom: 2px;
+    padding-bottom: 8px;
+    color: #353535;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.block1 .transaction ul li {
+    border-bottom: none;
+}
+
+.block1 .transaction .sum {
+    float:right;
+}
+
+.block1 .transaction ul li a {
+    display:block; color: #383838;
+}
+
+.block1 .transaction ul li .cont ul li{
+    background: transparent none;
+    border: none;
+}
+
+/* всплывающее меню */
+.block1 .transaction ul li .cont ul{
+    background:transparent url(/img/i/icons_menu_accept_edit_delete.gif) no-repeat scroll 0 100%;
+    right : -20px;
+    width: 65px;
+    display: none;
+    z-index: 1020;
+}
+
+.block1 .transaction ul li:hover{
+    background-color: #e3ffdf;
+}
+
+.block1 .transaction ul li:hover .cont ul{
+    display: block;
+}
+
+.block1 .transaction ul li:hover .cont ul a{
+    cursor: pointer;
+}
+
+.block1 .transaction ul { 
+    margin: 0 11px 6px 11px;
+}
+
+.block1 .transaction div.amount {
+    margin: 0 11px;
+    padding-bottom: 10px;
+    color: #383838;
+    font-weight: bold;
+}
+
+.block1 .transaction div.amount span {
+    margin-left: 11px;
+    font-size: 14px;
+    color: #36a500;
+    line-height: 18px;
+}

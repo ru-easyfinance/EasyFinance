@@ -384,7 +384,7 @@ ul.menu4 li#m_last a { background: none; }
 .block1 .title:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .block1 .accounts .title { margin: 0 0 7px 21px; }
 .block1 .financobject .title { margin: 0 0 7px 0; }
-.block1 .title h2, .block1 .experts h2, .block1 .budget2 h2, .block1 .transaction h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
+.block1 .title h2, .block1 .experts h2, .block1 .budget2 h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
 .block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; cursor: pointer; }
 
 .block1 ul.control { position: relative; margin: 0 0 12px 0; width: 163px; overflow: hidden; height: 32px;}
@@ -398,10 +398,6 @@ ul.menu4 li#m_last a { background: none; }
 .block1 ul.control li#c2.act { background-position: -131px -33px; }
 .block1 ul.control li#c3 { left: 66px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -65px 0px; }
 .block1 ul.control li#c3.act { background-position: -65px -33px; }
-.block1 ul.control li#c4 { left: 99px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -33px 0px; }
-.block1 ul.control li#c4.warning { background-position: -231px 0px; }
-.block1 ul.control li#c4.act { background-position: -33px -33px; }
-.block1 ul.control li#c4.act.warning { background-position: -231px -33px; }
 
 .block1 ul.control li#c5 { left: 132px;background: url('/img/i/icons_control.png') no-repeat 0 0; background-position: -165px 0px; }
 .block1 ul.control li#c5.act { background-position: -165px -34px; }
@@ -428,33 +424,10 @@ dl.bill_list dd.amount div span.currency { display: block; position: absolute; t
 
 .financobject h2 { margin: 0 0 5px 0; font-size: 12px; color: #e5691b; font-weight: bold; }
 .financobject ul { margin-bottom: 12px; }
-.financobject ul li, .block1 .transaction ul li {position: relative; margin-bottom: 2px; padding-bottom: 8px; color: #353535; border-bottom: 1px solid #e5e5e5; }
-.block1 .transaction ul li { border-bottom: none; }
-.block1 .transaction .sum { float:right; }
+.financobject ul li {position: relative; margin-bottom: 2px; padding-bottom: 8px; color: #353535; border-bottom: 1px solid #e5e5e5; }
 .financobject ul li span { font-size: 11px; color: #2c9300; }
 .financobject ul li span.date, .block1 .transaction ul li span.date { display: block; margin-top: -2px; color: #909090; }
-.financobject ul li a, .block1 .transaction ul li a { display:block; color: #383838; }
-.block1 .transaction ul li .cont ul li{
-    background: transparent none;
-    border: none;
-}
-.block1 .transaction ul li .cont ul{
-    right : -20px;
-    background:transparent url(/img/i/icons_menu_accept_edit_delete.gif) no-repeat scroll 0 100%;
-    width: 65px;
-    display: none;
-    z-index: 1020;
-}
-.block1 .transaction ul li:hover{
-    background-color: #e3ffdf;
-}
-.block1 .transaction ul li:hover .cont ul{
-    display: block;
-}
-.block1 .transaction ul li:hover .cont ul a{
-    cursor: pointer;
-}
-
+.financobject ul li a { display:block; color: #383838; }
 .financobject ul.popular li { margin-bottom: 5px; padding-bottom: 6px; }
 .financobject ul.popular a { font-weight: bold; }
 
@@ -497,15 +470,6 @@ dl.bill_list dd.amount div span.currency { display: block; position: absolute; t
 .block1 .tags_list ul li { margin-bottom: 1px; margin-bottom: 0; zoom: 1; }
 .block1 .tags_list ul li a { display: block; padding: 2px 3px 4px 21px; line-height: 15px; color: #363535; text-decoration: none; }
 .block1 .tags_list ul li a:hover { color: #e46717; text-decoration: underline; background: #f6f6f6 url('/img/i/icons.gif') no-repeat 5px -214px; }
-
-
-.block1 .transaction h2 { float: none;  margin: 0 0 8px 11px; }
-.block1 .transaction .future h2 { border-top: 1px solid #E5E5E5; padding-top: 6px; }
-.block1 .transaction ul { margin: 0 11px 6px 11px; }
-.block1 .transaction div.amount { margin: 0 11px; padding-bottom: 10px; color: #383838; font-weight: bold; }
-.block1 .transaction div.amount span { margin-left: 11px; font-size: 14px; color: #36a500; line-height: 18px; }
-
-
 
 ul.action { height: 22px; }
 .block3 ul.action { position: absolute; top: 7px; right: 3px; }

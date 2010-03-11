@@ -270,6 +270,7 @@ easyFinance.models.accounts = function(){
             if (res.calendar.overdue[row].id == id)
                 return $.extend({}, res.calendar.overdue[row]);
         }
+	return null;
     }
 
     function getFutureOperationById(id){
@@ -280,6 +281,7 @@ easyFinance.models.accounts = function(){
             if (res.calendar.future[row].id == id)
                 return $.extend({}, res.calendar.future[row]);
         }
+	return null;
     }
 
     function acceptOperationsByIds(ids, callback) {
@@ -340,14 +342,15 @@ easyFinance.models.accounts = function(){
                 }
 
                 for (var key in _ids) {
+		    var row;
                     // удаляем из списка просроченных операций
-                    for (var row in res.calendar.overdue) {
+                    for (row in res.calendar.overdue) {
                         if (res.calendar.overdue[row].id == _ids[key])
                             delete res.calendar.overdue[row];
                     }
 
                     // удаляем из списка будущих операций
-                    for (var row in res.calendar.future) {
+                    for (row in res.calendar.future) {
                         if (res.calendar.future[row].id == _ids[key])
                             delete res.calendar.future[row];
                     }

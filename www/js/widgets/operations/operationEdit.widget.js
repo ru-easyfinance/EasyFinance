@@ -634,10 +634,6 @@ easyFinance.widgets.operationEdit = function(){
                         $.jGrowl("<a class='white' href='/operation/#account="+account+"'>Перейти к операциям</a>", {theme: 'green',life: 2500});
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!                        
-
-                    // #754. закрываем форму после редактирования операции
-                    if (id != '')
-                        $("#op_addoperation_but").click();
                 } else if (data.error) {
                     $.jGrowl(data.error.text, {theme: 'red', stick: true});
                 }

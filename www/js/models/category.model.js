@@ -148,6 +148,7 @@ easyFinance.models.category = function(){
             $(document).trigger('categoryEdited');
 
             callback(_categories.user[id]);
+	    return true;
         });
     }
 
@@ -184,8 +185,7 @@ easyFinance.models.category = function(){
         var list = {};
 
         for (var key in _categories.recent) {
-            var cat = _categories.user[_categories.recent[key]];
-            list[cat.id] = cat;
+            list[_categories.recent[key].id] = _categories.user[_categories.recent[key]];
         }
 
         return list;
@@ -196,8 +196,8 @@ easyFinance.models.category = function(){
         for (var key in _categories.user) {
             var cat = _categories.user[key];
             if (cat.parent == idParent) {
-                arrParent[cat.id] = $.extend("", cat);
-                arrParent[cat.id].children = [];
+                arrParent[cat.id] = $.extend({children: []}, cat);
+//                arrParent[cat.id].children = [];
                 _treeAddChildren(arrParent[cat.id].children, cat.id);
             }
         }
@@ -222,7 +222,7 @@ easyFinance.models.category = function(){
             return null;
 
         var tree = [];
-        var cat = null;
+//        var cat = null;
 
         // recursive function
         _treeAddChildren(tree, "0");
@@ -237,8 +237,10 @@ easyFinance.models.category = function(){
     function getChildrenByParentId(id) {
         var arr = [];
         var parent = _categories.user[id];
-        if (!parent)
+        
+	if (!parent){
             return arr;
+	}
 
         var parentId = parent.id;
         for (var key in _categories.user) {
@@ -249,11 +251,8 @@ easyFinance.models.category = function(){
         return arr;
     }
 
-    function isParentCategory(id){
-        if (_categories.user[id])
-            return (_categories.user[id].parent == '0') ? true : false;
-        else
-            return false;
+    function isParentCategory(id){        
+            return (_categories.user[id] &&  _categories.user[id].parent == '0') ? true : false;
     }
 
     // reveal some private things by assigning public pointers
