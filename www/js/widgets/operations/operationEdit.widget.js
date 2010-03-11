@@ -572,6 +572,13 @@ easyFinance.widgets.operationEdit = function(){
 
         var tip = $('#op_type').val();
         var id = $('#op_id').val();
+
+        if ($('#op_accepted').val() == '')
+            if (_isCalendar)
+                $('#op_accepted').val("0");
+            else
+                $('#op_accepted').val("1");
+
 //alert($('#op_id').val());
 //alert($('#op_type').val());
 //alert($('#op_account').val());
@@ -609,6 +616,7 @@ easyFinance.widgets.operationEdit = function(){
 
         easyFinance.models.accounts.editOperationById(
             id,
+            $('#op_accepted').val(),
             _selectedType,
             _selectedAccount,
             _selectedCategory,
@@ -616,7 +624,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_comment').val(),
             amount1,
             _selectedTransfer,
-            $('#op_conversion').val(),
+            _realConversionRate,
             amount2, // сумма к получению при обмене валют
             _selectedTarget,
             //$('#op_close:checked').length,
@@ -770,7 +778,7 @@ easyFinance.widgets.operationEdit = function(){
     function _clearForm() {
         $("#op_btn_Save").removeAttr('disabled');
 
-        $('#op_id').val('');
+        $('#op_id,#op_accepted,#op_chain_id').val('');
         $('#op_amount,#op_conversion,#op_transfer,#op_AccountForTransfer,#op_comment,#op_tags').val('');
         $('span#op_amount_target').text();
 
@@ -1006,6 +1014,11 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_id').val('');
         }
 
+        if (typeof data.accepted != 'undefined')
+            $('#op_accepted').val(data.accepted);
+        else
+            $('#op_accepted').val("1");
+
         var typ = data.type;
         setType(typ);
 
@@ -1100,6 +1113,11 @@ easyFinance.widgets.operationEdit = function(){
         } else {
             $('#op_chain_id').val('');
         }
+
+        if (typeof data.accepted != 'undefined')
+            $('#op_accepted').val(data.accepted);
+        else
+            $('#op_accepted').val("0");
 
         $('#cal_date_end').val(data.last || '');
         $('#cal_count').val(data.repeat || "0");

@@ -383,7 +383,7 @@ easyFinance.models.accounts = function(){
         target, close, tags,
         callback) {
             editOperationById(
-                '', type, account, category, date,
+                '', "1", type, account, category, date,
                 comment, amount, toAccount, currency,
                 convert, target, close, tags
             );
@@ -398,7 +398,7 @@ easyFinance.models.accounts = function(){
         target, close, tags, time, last, every, repeat, week,
         callback) {
             editOperationById(
-                '', type, account, category, date,
+                '', "0", type, account, category, date,
                 comment, amount, toAccount, currency,
                 convert, target, close, tags,
                 null, time, last, every, repeat, week
@@ -420,7 +420,7 @@ easyFinance.models.accounts = function(){
     }
 
     function editOperationById(
-        id, type, account, category, date, comment,
+        id, accepted, type, account, category, date, comment,
         amount, toAccount, currency, convert,
         target, close, tags,
         chain, time, last, every, repeat, week, // параметры для цепочек операций
@@ -428,6 +428,7 @@ easyFinance.models.accounts = function(){
             // параметры для обычной транзакции
             var params = {
                 id        : id,
+                accepted  : accepted,
                 type      : type,
                 account   : account,
                 date      : date,
