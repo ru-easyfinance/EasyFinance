@@ -28,7 +28,7 @@ Core::getInstance()->user = new User();
 Core::getInstance()->js = array(
     '' => array('welcome'), // слайды на главной
     'targets' => array('targets'),
-    'report' => array('report'),
+    'report' => array('widgets/report.widget', 'models/report.model'),
     'registration' => array('registration'),
     'profile' => array(
         'models/user.model',
@@ -68,7 +68,8 @@ Core::getInstance()->js = array(
     'calendar' => array(
 		'jquery/fullcalendar',
         'calendar',
-        'widgets/calendar/calendar.widget'),
+        'widgets/calendar/calendar.widget',
+        'widgets/calendar/calendarList.widget'),
     'admin' => array( 'admin'),
     'accounts' => array(
 		'widgets/accounts/accountEdit.widget', 

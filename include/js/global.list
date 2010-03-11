@@ -1,4 +1,6 @@
 jquery/jquery.min.js
+easyfinance.js
+models/calendar.cache.js
 jquery/ui.core.js
 jquery/i18n/jquery-ui-i18n.js
 jquery/ui.resizable.js
@@ -20,7 +22,6 @@ jquery/jquery.cookie.js
 jquery/jquery.sexy-combo.js
 swfobject.js
 functions.js
-easyfinance.js
 main.js
 helpers.js
 feedback.js
@@ -29,12 +30,10 @@ models/currency.model.js
 models/user.model.js
 models/accounts.model.js
 models/category.model.js
-models/calendar.old.model.js
 widgets/accounts/accountsPanel.widget.js
 widgets/operations/operationEdit.widget.js
 flowplayer-3.1.4.min.js
-models/calendar.model.js
 widgets/currency/currencyRight.widget.js
 widgets/calendar/calendarLeft.widget.js
 widgets/calendar/calendarPreview.widget.js
-widgets/calendar/calendarEditor.widget.js
+widgets/calendar/calendarOverdue.widget.js
