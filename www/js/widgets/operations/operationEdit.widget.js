@@ -324,17 +324,17 @@ easyFinance.widgets.operationEdit = function(){
             if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
                 // если перевод с использованием валюты по умолчанию
                 if (_accountCurrency.id == _defaultCurrency.id) {
-                    _realConversionRate = Math.round((1 / parseFloat($(this).val()))*1000)/1000;
+                    _realConversionRate = 1 / parseFloat($(this).val());
                 } else {
                     _realConversionRate = parseFloat($(this).val());
                 }
             } else {
                 // если перевод без использования валюты по умолчанию
-                _realConversionRate = Math.round((1 / parseFloat($(this).val()))*1000)/1000;
+                _realConversionRate = 1 / parseFloat($(this).val());
             }
 
             var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-            result = Math.round(result*100)/100;
+            result = result.toFixed(4);
 
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
@@ -352,12 +352,23 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $('#op_transfer').change(function(){
+            var result = 0;
             if (_selectedType == "2") {
-                var result = parseFloat(tofloat(calculate($(this).val()))) / _realConversionRate;
-                result = Math.round(result*10000)/10000;
+                if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+                    // если перевод с использованием валюты по умолчанию
+//                    if (_accountCurrency.id == _defaultCurrency.id) {
+//                        _realConversionRate = 1 / parseFloat($(this).val());
+//                    } else {
+//                        _realConversionRate = parseFloat($(this).val());
+//                    }
+                } else {
+                    // если перевод без использования валюты по умолчанию
+                    result = parseFloat(tofloat(calculate($(this).val()))) * parseFloat(tofloat(calculate($("#op_amount").val())));
+                    result = result.toFixed(4);
+                }
 
                 if (!isNaN(result) && result != 'Infinity') {
-                    $("#op_amount").val(result);
+                    $("#op_conversion").val(result);
                 }
             }
         });
@@ -592,7 +603,7 @@ easyFinance.widgets.operationEdit = function(){
 
         var chain = null;
         if (_isCalendar)
-            if (_isEditing)
+            if (_isEditing && _isChain)
                 chain = $('#op_chain_id').val();
             else
                 chain = '';
