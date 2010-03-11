@@ -112,9 +112,9 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      * Редактирует событие
      * @return void
      */
-    function edit()
+    function edit ()
     {
-        
+
         $user = Core::getInstance()->user;
 
         // Определяем массив данных для обработки
@@ -142,6 +142,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             'every'      => isset( $request->post['every'] ) ? ( int ) $request->post['every'] : 0,
             'repeat'     => isset( $request->post['repeat'] ) ? ( int ) $request->post['repeat'] : 1,
             'week'       => isset( $request->post['week'] ) ? $request->post['week'] : '0000000',
+            'accepted'   => isset( $request->post['accepted'] ) ? ( int ) $request->post['accepted'] : 0,
         );
 
         $event = new Calendar_Event ( new Calendar_Model( $event_array, $user ), $user );
@@ -152,9 +153,48 @@ class Calendar_Controller extends _Core_Controller_UserCommon
 
         } else {
 
-            $calendar = new Calendar( $user );
-            $calendar->edit( $event );
-            $this->tpl->assign( 'result', array('text' => 'Регулярная операция добавлена') );
+            // Если нет цепочки, значит только одна операция
+            if ( $event_array['chain'] === 0 ) {
+                
+                $operation = new Operation_Model();
+                
+                if ( $event_array['type'] <= 1 ) {
+
+                    ($event_array['type'] == 0)?$event_array['drain'] = 1:$event_array['drain'] = 0;
+
+                    $operation->edit(
+                        $event_array['id'],
+                        $event_array['amount'],
+                        $event_array['date'],
+                        $event_array['category'],
+                        $event_array['drain'],
+                        $event_array['comment'],
+                        $event_array['account'],
+                        $event_array['tags']
+                    );
+
+                } elseif ( $event_array['type'] == 2 ) {
+
+                    $operation->editTransfer(
+                        $event_array['id'],
+                        $event_array['amount'],
+                        $event_array['convert'],
+                        $event_array['date'],
+                        $event_array['account'],
+                        $event_array['toAccount'],
+                        $event_array['comment'],
+                        $event_array['tags']
+                    );
+
+                }
+
+                $this->tpl->assign( 'result', array('text' => 'Регулярная операция изменена') );
+                
+            } else {
+                $calendar = new Calendar( $user );
+                $calendar->edit( $event );
+                $this->tpl->assign( 'result', array('text' => 'Регулярные операции изменены') );
+            }
 
             // @FIXME Перенести этот блок кода в календарь
             Core::getInstance()->user->initUserEvents();

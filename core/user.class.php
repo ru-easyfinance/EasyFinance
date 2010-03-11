@@ -508,12 +508,12 @@ class User
 
                 if ( count( $this->user_reminder ) > 10 ) { continue; }
 
-                $this->user_reminder[$value['id']] = $value;
+                $this->user_reminder[] = $value;
 
             // Подтвердить прошлые неподтверждённые
             } elseif ( ( int ) $value['accepted'] === 0 && ( int ) $value['timestamp'] <= $now ) {
 
-                $this->user_overdue[$value['id']] = $value;
+                $this->user_overdue[] = $value;
 
             }
         }

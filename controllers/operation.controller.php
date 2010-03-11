@@ -125,6 +125,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
 				'toAccount' => isset($request->post['toAccount'])?$request->post['toAccount']:null,
 				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
+                'accepted'  => ( int ) $request->post['accepted'],
 			);
 
 			$operation = $this->model->checkData($operation);
