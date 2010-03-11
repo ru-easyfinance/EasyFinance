@@ -1110,11 +1110,7 @@ easyFinance.widgets.operationEdit = function(){
         // EOF TEMP
 
         // заполняем атрибуты цепочки / события
-        if (isChain) {
-            $('#op_chain_id').val(data.chain || '');
-        } else {
-            $('#op_chain_id').val('');
-        }
+        $('#op_chain_id').val(data.chain || '');
 
         if (typeof data.accepted != 'undefined')
             $('#op_accepted').val(data.accepted);
