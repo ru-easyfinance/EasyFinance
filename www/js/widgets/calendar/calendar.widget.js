@@ -8,7 +8,8 @@ easyFinance.widgets.calendar = function(){
             top: top
         }).addClass('act');
     }
-
+                        var chainId;
+                        var operationId;
 
 
     function init(){
@@ -125,8 +126,8 @@ easyFinance.widgets.calendar = function(){
                     $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function(){
 //                        alert('del' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
                         var element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
-                        var chainId = element.chain; // заполнить!
-                        var operationId = element.id; // заполнить!
+                         chainId = element.chain; // заполнить!
+                        operationId = element.id; // заполнить!
 
                         promptSingleOrChain("delete", function(isChain) {
                             if (isChain)
