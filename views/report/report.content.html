@@ -21,7 +21,7 @@
                         Отчёты
                         <select id="report">
                             {foreach from=$reports key=key item=item}
-                            <option id="{$key}" >{$item}</option>
+                            <option value="{$key}" >{$item}</option>
                             {/foreach}
                         </select>
                     </div>
@@ -82,7 +82,7 @@
         </form>
         <div id="chart" class="hidden"></div>
         <div id="itogo" ></div>
-        <div id="commentRest"></div>
+        <!--<div id="commentRest"></div>-->
         <div id="rep" class="inside operation_list hidden">
             <div id="tmp">
             </div>

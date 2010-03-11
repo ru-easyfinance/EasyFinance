@@ -1,5 +1,16 @@
 {* $Id: calendar.html 108 2009-07-23 10:21:50Z ukko $ *}
 {include file="mainmenu.html"}
+
+<div id="dialogSingleOrChainDelete" class="hidden">
+    Это событие является частью серии событий.<br>
+    Вы хотите удалить только данное событие или всю серию?
+</div>
+
+<div id="dialogSingleOrChainEdit" class="hidden">
+    Это событие является частью серии событий.<br>
+    Вы хотите изменить только данное событие или всю серию?
+</div>
+
 <div class="ramka2">
     <div class="cct"></div>
     <div class="mid general_cont">
@@ -8,6 +19,47 @@
         <!--/левая колонка-->
         <div  class="block2">
             {include file="operation.quick.html"}
+
+            <!-- BEGIN overdue events -->
+            <div id="divCalendarOverdue" class="ramka3 hidden" >
+                <div class="ct">
+                    <div class="head">
+                        <h2 style="color: red;">Просроченные операции</h2>
+                    </div>
+                </div>
+                <!-- таблица просроченных событий -->
+                <div id="calendarOverdue" class="efTableWrapper" style="height:160px;">
+                    <table class="efTable head">
+                        <tr>
+                          <th class="col1 date">
+                              Дата
+                          </th>
+                          <th class="col2 money">
+                              <span>Сумма</span>
+                          </th>
+                          <th class="col3">
+                              Счёт
+                          </th>
+                          <th class="col4">
+                            Категория
+                          </th>
+                          <th class="scroll">
+                              <div>&nbsp;</div>
+                          </th>
+                        </tr>
+                    </table>
+                    <div class="efTable content" style="height:139px;">
+                        <table>
+                        </table>
+                    </div>
+                </div>
+                <div align="right" style="margin-top: 10px; margin-right: 10px;">
+                    <input id="btnOverdueAcceptAll" type="button" value="Подтвердить всё">
+                </div>
+                <div class="cb"><div></div></div>
+            </div>
+            <!-- END overdue events -->
+
             <div class="ramka3" id="views">
                 <div class="ct">
                     <div class="head">
@@ -21,8 +73,10 @@
                     <li class="m_next" title="Переход на следующий месяц"><a></a></li>
                     <li class="y_next" title="Переход на следующий год"><a></a></li>
                 </ul>
+                
                 <!-- Вкладка календаря -->
                 <div id="calend">
+                    <!--<span style="font-size: 11px; color: #949494;width: 100%;text-align: center;display: block">Нажмите на любой день, чтобы запланировать операцию</span>-->
                     <div id='calendar'></div>
                     <div id='datepicker'></div>
                     <div id="calendar-buttons"></div>
@@ -37,13 +91,12 @@
                                 <div><span id="accept_all_cal" style="text-decoration:underline;cursor:pointer">Подтвердить выделенные</span></div>
                             </div>
                             <div>
-                                <h3>Регулярные операции</h3>
                                 <table id="per_tabl_header" class="tab1 header">
                                     <thead>
                                         <tr>
                                             <th class="chk"><input type="checkbox" value="" /></th>
                                             <th>Дата</th>
-                                            <th>Название</th>
+                                            <th>Категория</th>
                                             <th>Сумма</th>
                                             <th colspan="2"></th>
                                         </tr>
@@ -51,25 +104,6 @@
                                 </table>
                                 <div style="height: 270px; overflow-y: scroll;overflow-x: hidden">
                                     <table id="per_tabl" class="tab1 t_body">
-                                        <tbody/>
-                                        <tfoot/>
-                                    </table>
-                                </div>
-                            </div>
-                            <div>
-                                <h3>События</h3>
-                                <table id="ev_tabl" class="tab1 header">
-                                    <thead>
-                                        <tr>
-                                            <th class="chk"><input type="checkbox" value="" /></th>
-                                            <th>Дата</th>
-                                            <th>Название</th>
-                                            <th colspan="2"></th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <div style="height: 270px; overflow-y: scroll;overflow-x: hidden">
-                                    <table id="ev_tabl" class="tab1 t_body">
                                         <tbody/>
                                         <tfoot/>
                                     </table>
