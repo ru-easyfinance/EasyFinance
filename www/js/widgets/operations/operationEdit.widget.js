@@ -591,7 +591,7 @@ easyFinance.widgets.operationEdit = function(){
         var amount2 = $('#op_transfer').val(); // сумма к получению при обмене валют
 
         var chain = null;
-        if (_isCalendar && _isChain)
+        if (_isCalendar)
             if (_isEditing)
                 chain = $('#op_chain_id').val();
             else
@@ -824,9 +824,6 @@ easyFinance.widgets.operationEdit = function(){
                     data = data.toString();
                     i = data.indexOf('.');
                     data = data.substr(0, i+5);
-                    //if (_accountCurrency.id == _defaultCurrency.id)
-
-
 
                     $('#op_conversion').val(data).change();
                 } else {
@@ -1049,9 +1046,14 @@ easyFinance.widgets.operationEdit = function(){
         
         if (typ == "2" && data.curs) {
             // перевод с обменом валют
-            $('#op_conversion').val(data.curs);
-            $('#op_transfer').val(Math.abs(data.money * data.curs));
             setSum(Math.round(Math.abs(data.money)*100)/100);
+
+            if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+                // обмен с участием валюты по умолчанию, выводим в особом формате
+                $('#op_conversion').val(Math.round((1 / parseFloat(data.curs))*1000)/1000).change();
+            } else {
+                $('#op_conversion').val(data.curs).change();
+            }
         } else {
             if (isNaN(data.money)) {
                 $("#op_amount").val("");
