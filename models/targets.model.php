@@ -100,7 +100,7 @@ class Targets_Model {
         $list = $this->db->selectPage( $total, "SELECT t.id, t.category_id as category, t.title, t.amount,
             DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
             t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done as done
-            ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
+            ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id AND b.accepted=1 ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC ;",
             Core::getInstance()->user->getId() );
 		if (!is_array($list)) $list = array();//*/
@@ -360,20 +360,104 @@ class Targets_Model {
      * @return bool
      */
     function staticTargetUpdate ($target_id = 0, $user_id = 0) {
-        if ((int)$target_id == 0) {
-            trigger_error("Для обновления статистики указана не существующая цель", E_USER_WARNING);
+        if ( ( int ) $target_id == 0 ) {
+            trigger_error( "Для обновления статистики указана не существующая цель", E_USER_WARNING );
             return false;
         }
 
-        if ((int)$user_id == 0) {
+        if ( ( int ) $user_id == 0 ) {
             $user_id = Core::getInstance()->user->getId();
         }
+
         $this->db->query("UPDATE target SET
-            amount_done   = IFNULL((SELECT SUM(money) FROM target_bill WHERE target_id = target.id LIMIT 1), 0)
+            amount_done   = IFNULL((SELECT SUM(money) FROM target_bill WHERE target_id = target.id AND accepted=1 LIMIT 1), 0)
             , percent_done  = IFNULL(ROUND(amount_done / (amount / 100), 2),0)
             , forecast_done = IFNULL(ROUND((DATEDIFF(ADDDATE(date_begin,(amount / (amount_done / DATEDIFF(CURRENT_DATE(), date_begin)))), date_begin) / DATEDIFF(date_end, date_begin)) * 100, 2),0)
-            WHERE user_id=? AND id=?", $user_id, $target_id);//5 65
+            WHERE user_id=? AND id=? ", $user_id, $target_id);
         return true;
+    }
+    
+    /**
+     * Добавляет массив с финцелями
+     * @param Calendar_Event $event
+     * @return bool
+     */
+    public function addSomeTargetOperation( $operations_array ) {
+
+        $targets = Core::getInstance()->user->getUserTargets();
+        $operations = New Operation_model;
+        
+        foreach ( $operations_array as $value ) {
+
+            // Если счёт финцели = счёту операции
+            if ( $targets['user_targets'][$value['target']]['account'] == $value['account'] ) {
+
+                $sql = "INSERT INTO target_bill ( `bill_id`, `target_id`, `user_id`, `money`, `comment`,
+                    `date`, `chain_id`, `accepted`, `dt_create` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, NOW() )";
+
+                $this->db->query( $sql,
+                    $value['account'],
+                    $value['toAccount'],
+                    Core::getInstance()->user->getId(),
+                    $value['amount'],
+                    strip_tags( $value['comment'] ),
+                    $value['date'],
+                    $value['chain'],
+                    $value['accepted']
+                );
+
+            } else {
+                // Добавляем перевод с указанного счёта на счёт финцели
+                $transfer_array = array( array (
+
+                    'account'    => $value['account'],
+                    'amount'     => $value['amount'],
+                    'category'   => $value['category'],
+                    'date'       => $value['date'],
+                    'comment'    => 'Перевод на счёт финцели',
+                    'tags'       => null,
+                    'convert'    => $value['convert'],
+                    'currency'   => $value['currency'],
+                    'toAccount'  => $value['toAccount'],
+                    'target'     => $value['target'],
+                    'accepted'   => 0,
+                    'chain'      => $value['chain'],
+
+                ) );
+
+                $operations->addSomeTransfer( $transfer_array );
+
+                $sql = "INSERT INTO target_bill
+                    ( `bill_id`, `target_id`, `user_id`, `money`, `comment`, `date`, `chain_id`, `accepted`, `dt_create` )
+                    VALUES ( ?, ?, ?, ?, ?, ? , ?, ?, NOW());";
+
+                //Добавим перевод на фин цель со счёта фин цели
+                $this->db->query (
+                    $sql,
+                    $value['account'],
+                    $value['target'],
+                    Core::getInstance()->user->getId(),
+                    $value['amount'],
+                    $value['comment'],
+                    $value['date'],
+                    $value['chain'],
+                    $value['accepted']
+                );
+
+            }
+
+            // Если было сказано что нужно закрыть, закрываем финцель
+            if ( $value['close'] == 1 ) {
+
+                $this->db->query( "UPDATE target SET close=1 WHERE user_id=? AND id=?",
+                    Core::getInstance()->user->getId(), $value['target'] );
+
+            }
+
+            // Обновляем статистику переводов на финцель
+            $this->staticTargetUpdate( $value['target'] );
+
+        }
     }
 
     /**

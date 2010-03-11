@@ -142,7 +142,7 @@ class Registration_Model
             $result = Core::getInstance()->mailer->send($message);
             return array (
                         'result' => array (
-                            'text' => 'Спасибо, вы зарегистрированы!\nТеперь вы можете авторизироваться',
+                            'text' => 'Спасибо, вы зарегистрированы!<br>Теперь вы можете войти в систему.',
                             'redirect' => "https://".URL_ROOT_MAIN."login"
                         )
                     );

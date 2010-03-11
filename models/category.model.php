@@ -320,8 +320,7 @@ class Category_Model {
             //$key++;
             //$users[ $key ] = array
 
-            $users[ $category['cat_id'] ] = array
-                    (
+            $users[ $category['cat_id'] ] = array (
                 'id'      => $category['cat_id'],
                 'parent'  => $category['cat_parent'],
                 'system'  => $category['system_category_id'],
