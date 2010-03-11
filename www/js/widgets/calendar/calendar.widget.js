@@ -134,7 +134,7 @@ easyFinance.widgets.calendar = function(){
 //                                    alert('удалили цепочку!');
                                 });
                             else
-                                easyFinance.models.accounts.deleteOperationsByIds([operationId], [], function() {
+                                easyFinance.models.accounts.deleteOperationsByIds(operationId, [], function() {
                                 });
                         });
                     });
