@@ -1108,7 +1108,14 @@ easyFinance.widgets.operationEdit = function(){
         else
             $('#op_accepted').val("0");
 
-        $('#cal_date_end').val(data.last || '');
+        if (data.last && data.last != '' && data.last != '00.00.0000') {
+            $('#cal_date_end').val(data.last);
+            $('#cal_rep_to').attr("checked", "checked");
+        } else {
+            $('#cal_date_end').val('');
+            $('#cal_rep_every').attr("checked", "checked");
+        }
+        
         $('#cal_count').val(data.repeat || "0");
         $('#cal_repeat').val(data.every || '0').change();
 
