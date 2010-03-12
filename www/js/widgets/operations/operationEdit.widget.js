@@ -1093,6 +1093,8 @@ easyFinance.widgets.operationEdit = function(){
         else
             $('#op_tags').val('');
 
+
+	 $('#op_comment').val(data.comment || data.description || '');
         // первая операция по счёту показывает начальный баланс счёта
         // в этом случае нельзя редактировать сумму и комментарий
         if ($('#op_comment').val() == "Начальный остаток"){
