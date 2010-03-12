@@ -1054,17 +1054,10 @@ easyFinance.widgets.operationEdit = function(){
 
             _displayConversion();
 
-            setSum(Math.round(Math.abs(data.money)*100)/100);
+            setSum(Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
             $("#op_amount").change();
         } else {
-            if (isNaN(data.money)) {
-                $("#op_amount").val("");
-            } else {
-                if (data.moneydef)
-                    setSum(Math.abs(data.moneydef))
-                else
-                    setSum(Math.abs(data.money));
-            }
+            setSum(Math.abs(data.moneydef || data.money || data.amount || 0));
         }
 
         setCategory(data.cat_id);
