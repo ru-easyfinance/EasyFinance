@@ -200,8 +200,8 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             Core::getInstance()->user->initUserEvents();
             Core::getInstance()->user->save();
 
-            $this->tpl->assign( 'future', Core::getInstance()->user->getUserEvents( 'reminder' ) );
-            $this->tpl->assign( 'overdue', Core::getInstance()->user->getUserEvents( 'overdue' ) );
+            $this->tpl->assign( 'future',   Core::getInstance()->user->getUserEvents( 'reminder' ) );
+            $this->tpl->assign( 'overdue',  Core::getInstance()->user->getUserEvents( 'overdue' ) );
             $this->tpl->assign( 'calendar', Core::getInstance()->user->getUserEvents( 'calendar' ) );
 
         }

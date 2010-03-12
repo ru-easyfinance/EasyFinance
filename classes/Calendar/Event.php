@@ -29,6 +29,20 @@ class Calendar_Event {
     }
 
     /**
+     * Магический метод
+     * @param string $name
+     * @param array $arguments
+     */
+//    public function  __call ( $name, $arguments )
+//    {
+//        if ( substr( $name, 0, 3 ) === 'get' ) {
+//            return $this->substr( $name, 2 );
+//        } elseif ( substr( $name, 0, 3 ) === 'set' ) {
+//            return $this->substr( $name, 2 ) = $arguments[0];
+//        }
+//    }
+
+    /**
      * ID события или регулярной транзакции
      * @return int
      */
@@ -274,6 +288,14 @@ class Calendar_Event {
      */
     public function setStart ( $date ) {
         $this->model->start = $date;
+    }
+
+    /**
+     * Устанавливает начало
+     * @param MYSQL DATETIME $date
+     */
+    public function setDate ( $date ) {
+        $this->model->date = $date;
     }
 
     /**

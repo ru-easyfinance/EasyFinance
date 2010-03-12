@@ -142,7 +142,7 @@ class Calendar
             $this->errors[] = "Событие не найдено";
         }
 
-        $event->setStart( $event_array['start'] );
+        $event->setDate( $event_array['start'] );
 
         // Если повторять каждый день
         if ( $event->getEvery() == 1 ) {
@@ -174,7 +174,7 @@ class Calendar
             if ( $this->deleteEvents( $event->getChain() ) ) {
 
                 $model = Calendar_Model::update( $this->user, $event, $array_days );
-                
+
             }
         } else {
 
@@ -192,7 +192,7 @@ class Calendar
      */
     private function _repeat( Calendar_Event $event, $period ) {
         
-        $datetime = new DateTime( $event->getDate () );
+        $datetime = new DateTime( $event->getDate() );
         $week = $event->getWeek();
         
         // Массив с датами события
