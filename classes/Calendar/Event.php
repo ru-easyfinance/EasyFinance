@@ -331,14 +331,14 @@ class Calendar_Event {
             $this->errors['account']  = 'Необходимо указать счёт';
         }
 
-        if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->money == 0 ) {
+        if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->amount == 0 ) {
             $this->errors['account']  = 'Необходимо указать сумму';
         }
 
         // Перевод со счёта на счёт
-        if ( $this->model->type === 2 ) {
+        if ( ( int ) $this->model->type === 2 ) {
 
-            if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->toAccount === 0 ) {
+            if ( ( int ) $this->model->accepted === 1  && ( int ) $this->model->toAccount === 0 ) {
                 $this->errors['toAccount']  = 'Необходимо указать счёт куда нужно перевести';
             }
 

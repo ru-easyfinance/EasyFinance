@@ -42,6 +42,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
             ( -1 * abs($row['amount']) )
             : $row['amount'] ) . "','"
         . $row['date'] . "','"
+        . ( ( $row['time'] == '00:00:00')? '12:00:00' : $row['time'] ) . "','"
         . $row['cat_id'] . "','"
         . $row['account_id'] . "','"
         . ! $row['type'] . "','"
@@ -52,7 +53,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
         . $row['chain'] . "', NOW())";
 }
 
-$sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
+$sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `time`, `cat_id`, `account_id`,
     `drain`, `type`, `comment`, `tags`, `accepted`, `chain_id`, `dt_create`) VALUES ' . $sql;
 
 $result = mysql_query( "START TRANSACTION;" );

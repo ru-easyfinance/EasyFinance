@@ -325,9 +325,11 @@ class Calendar
                 $this->errors['error'] = "Не найдена операция для подтверждения";
             }
             
-            $operation['accepted'] = 1;
-            $operation['category'] = $operation['cat_id'];
-            $operation['account']  = $operation['account_id'];
+            $operation['accepted']  = 1;
+            $operation['category']  = $operation['cat_id'];
+            $operation['account']   = $operation['account_id'];
+            $operation['toAccount'] = $operation['transfer'];
+            $operation['amount']    = $operation['money'];
 
             $event = new Calendar_Event ( 
                 new Calendar_Model( $operation, Core::getInstance()->user )
