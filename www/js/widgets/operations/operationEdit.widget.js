@@ -305,7 +305,6 @@ easyFinance.widgets.operationEdit = function(){
                 $(this).val(calculate($(this).val()));
             }
             if (!e.altKey && !e.shiftKey && !e.ctrlKey){
-
                 var chars = '1234567890. +-*/';
                 if (chars.indexOf(String.fromCharCode(e.which)) == -1){
                     var keyCode = e.keyCode;
@@ -320,7 +319,35 @@ easyFinance.widgets.operationEdit = function(){
 
         // обмен валют для мультивалютных переводов
         $('#op_conversion').change(function(){
+            // пересчитываем курс перевода
+            if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+                // обмен с участием валюты по умолчанию
+                //$('#op_conversion').val(Math.round((1 / parseFloat(data.curs))*1000)/1000).change();
+
+                // определяем курс
+                //var data = (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.cost : _accountCurrency.cost;
+                //data /= _defaultCurrency.cost;
+                //data = data.toString();
+                //i = data.indexOf('.');
+                //data = data.substr(0, i+5);
+
+                //$('#op_conversion').val(data);
+            } else {
+                // обмен без участия валюты по умолчанию
+                _realConversionRate = 1 / parseFloat($(this).val());
+            }
+
+            alert(_realConversionRate);
+
+            var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
+            result = result.toFixed(2);
+
+            if (!isNaN(result) && result != 'Infinity') {
+                $("#op_transfer").val(result);
+            }
+
             // рассчитываем реальный множитель конвертации в зависимости от валют счетов
+            /*
             if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
                 // если перевод с использованием валюты по умолчанию
                 if (_accountCurrency.id == _defaultCurrency.id) {
@@ -339,12 +366,13 @@ easyFinance.widgets.operationEdit = function(){
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
             }
+            */
         });
 
 
         $('#op_amount').change(function(){
             var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-            result = Math.round(result*100)/100;
+            result = result.toFixed(2);
 
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
@@ -352,9 +380,11 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $('#op_transfer').change(function(){
+            /*
             var result = 0;
             if (_selectedType == "2") {
                 if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+                    alert(1);
                     // если перевод с использованием валюты по умолчанию
 //                    if (_accountCurrency.id == _defaultCurrency.id) {
 //                        _realConversionRate = 1 / parseFloat($(this).val());
@@ -363,7 +393,7 @@ easyFinance.widgets.operationEdit = function(){
 //                    }
                 } else {
                     // если перевод без использования валюты по умолчанию
-                    result = parseFloat(tofloat(calculate($(this).val()))) * parseFloat(tofloat(calculate($("#op_amount").val())));
+                    result = parseFloat(tofloat(calculate($("#op_amount").val()))) / parseFloat(tofloat(calculate($(this).val())));
                     result = result.toFixed(4);
                 }
 
@@ -371,6 +401,7 @@ easyFinance.widgets.operationEdit = function(){
                     $("#op_conversion").val(result);
                 }
             }
+            */
         });
 
         $('#op_account').change( function(){_changeAccountForTransfer();});
@@ -635,7 +666,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_comment').val(),
             amount1,
             _selectedTransfer,
-            _realConversionRate,
+            _realConversionRate.toFixed(4),
             amount2, // сумма к получению при обмене валют
             _selectedTarget,
             //$('#op_close:checked').length,
@@ -812,12 +843,34 @@ easyFinance.widgets.operationEdit = function(){
         _$blockCalendar.hide();
     }
 
+    // обновляем поле "курс" на основе _realConversionRate
+    function _displayConversion() {
+        if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
+            // обмен с участием валюты по умолчанию, выводим в особом формате
+            //$('#op_conversion').val(Math.round((1 / parseFloat(data.curs))*1000)/1000).change();
+
+            // определяем курс
+            //var data = (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.cost : _accountCurrency.cost;
+            //data /= _defaultCurrency.cost;
+            //data = data.toString();
+            //i = data.indexOf('.');
+            //data = data.substr(0, i+5);
+
+            //$('#op_conversion').val(data);
+        } else {
+            // обмен без участия валюты по умолчанию
+            $('#op_conversion').val((1/_realConversionRate).toFixed(4));
+        }
+    }
+
     function _changeAccountForTransfer() {
         // prevents datepicker from auto-popup
         _$noFocus.hide();
 
         _accountCurrency = _modelAccounts.getAccountCurrency(_selectedAccount);
         _transferCurrency = _modelAccounts.getAccountCurrency(_selectedTransfer);
+        _realConversionRate = Math.round(_accountCurrency.cost / _transferCurrency.cost * 10000)/10000;
+alert(_realConversionRate);
 
         if (_selectedType == "2" && _selectedAccount != "" && _selectedTransfer != "" &&
             _accountCurrency.id != _transferCurrency.id) {
@@ -828,27 +881,12 @@ easyFinance.widgets.operationEdit = function(){
                     var str = _defaultCurrency.text + ' за ';
                     str += (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.name : _accountCurrency.name;
                     $('#op_conversion_text').text (str);
-
-                    // определяем курс                    
-                    var data = (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.cost : _accountCurrency.cost;
-                    data /= _defaultCurrency.cost;
-                    data = data.toString();
-                    i = data.indexOf('.');
-                    data = data.substr(0, i+5);
-
-                    $('#op_conversion').val(data).change();
                 } else {
                     // обмен без участия валюты по умолчанию
                     $('#op_conversion_text').text (_accountCurrency.name + ' за ' + _transferCurrency.name);
-
-                    // определяем курс
-                    data = _transferCurrency.cost;
-                    data /= _accountCurrency.cost;
-                    data = data.toString();
-                    var i = data.indexOf('.');
-                    data = data.substr(0, i+5);
-                    $('#op_conversion').val(data).change();
                 }
+
+                _displayConversion();
         } else {
             $('#div_op_transfer_line').hide();
             $('#op_conversion').val('');
@@ -1057,14 +1095,13 @@ easyFinance.widgets.operationEdit = function(){
         
         if (typ == "2" && data.curs) {
             // перевод с обменом валют
-            setSum(Math.round(Math.abs(data.money)*100)/100);
+            _realConversionRate = parseFloat(data.curs);
+            alert(_realConversionRate);
 
-            if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
-                // обмен с участием валюты по умолчанию, выводим в особом формате
-                $('#op_conversion').val(Math.round((1 / parseFloat(data.curs))*1000)/1000).change();
-            } else {
-                $('#op_conversion').val(data.curs).change();
-            }
+            _displayConversion();
+
+            setSum(Math.round(Math.abs(data.money)*100)/100);
+            $("#op_amount").change();
         } else {
             if (isNaN(data.money)) {
                 $("#op_amount").val("");
@@ -1079,7 +1116,6 @@ easyFinance.widgets.operationEdit = function(){
         setCategory(data.cat_id);
 
         setTarget(data.target_id);
-	debugger;
         if (typeof(data.date) == "string") {
             $('#op_date').val(data.date);
         } else {
@@ -1092,7 +1128,6 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_tags').val(data.tags);
         else
             $('#op_tags').val('');
-
 
 	 $('#op_comment').val(data.comment || data.description || '');
         // первая операция по счёту показывает начальный баланс счёта
