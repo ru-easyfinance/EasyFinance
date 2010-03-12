@@ -718,7 +718,7 @@ easyFinance.widgets.operationEdit = function(){
 
             var sum = calculate($('#op_amount').val());
 
-            if (sum < 1) {
+            if (sum <= 0) {
                 $.jGrowl('Сумма должна быть больше нуля!', {theme: 'red', stick: true});
                 return false;   
             }
