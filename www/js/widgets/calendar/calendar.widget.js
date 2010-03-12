@@ -134,17 +134,25 @@ easyFinance.widgets.calendar = function(){
                     operationId = element.id; // заполнить!
                     promptSingleOrChain("delete", function(isChain){
                         if (isChain) {
-                            easyFinance.models.accounts.deleteOperationsChain(chainId, function(){
-                                $.jGrowl('Цепочка удалена', {
-                                    theme: 'green'
-                                });
+                            easyFinance.models.accounts.deleteOperationsChain(chainId, function(data){
+                                if (data.result) {
+                                    id (data.result.text)
+                                        $.jGrowl(data.result.text, {theme: 'green'});
+                                } else if (data.error) {
+                                    if (data.error.text)
+                                        $.jGrowl(data.error.text, {theme: 'red', stick: true});
+                                }
                             });
                         }
                         else {
-                            easyFinance.models.accounts.deleteOperationsByIds(operationId, [], function(){
-                                $.jGrowl('Операция удалена', {
-                                    theme: 'green'
-                                });
+                            easyFinance.models.accounts.deleteOperationsByIds(operationId, [], function(data){
+                                if (data.result) {
+                                    id (data.result.text)
+                                        $.jGrowl(data.result.text, {theme: 'green'});
+                                } else if (data.error) {
+                                    if (data.error.text)
+                                        $.jGrowl(data.error.text, {theme: 'red', stick: true});
+                                }
                             });
                         }
                     });
@@ -152,9 +160,14 @@ easyFinance.widgets.calendar = function(){
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar:not(.accepted) li.accept').click(function(){
                     //                        alert('acc' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
                     var operationId = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')].id;
-                    easyFinance.models.accounts.acceptOperationsByIds([operationId]);
-                    $.jGrowl('Операция подтверждена', {
-                        theme: 'green'
+                    easyFinance.models.accounts.acceptOperationsByIds([operationId], function(data){
+                        if (data.result) {
+                            id (data.result.text)
+                                $.jGrowl(data.result.text, {theme: 'green'});
+                        } else if (data.error) {
+                            if (data.error.text)
+                                $.jGrowl(data.error.text, {theme: 'red', stick: true});
+                        }
                     });
                 });
                 //cont
