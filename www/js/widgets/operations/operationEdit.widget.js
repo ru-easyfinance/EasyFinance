@@ -586,11 +586,17 @@ easyFinance.widgets.operationEdit = function(){
             else
                 chain = '';
         var time = '12:00';
-        var last = $('#cal_date_end').val();
-        if (last == "00.00.0000")
-            last = "";
+		var last = null;
+		var repeat = null;
+		if ($('#cal_rep_every').attr('checked')){
+	        repeat = $('#cal_count').val();
+		}else{
+			last = $('#cal_date_end').val();
+	        if (last == "00.00.0000")
+	            last = "";
+		}
         var every = $('#cal_repeat').val();
-        var repeat = $('#cal_count').val();
+
         
         var week = '0000000';
         if(every == '7'){
