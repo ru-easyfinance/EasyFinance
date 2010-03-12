@@ -586,8 +586,8 @@ easyFinance.widgets.operationEdit = function(){
             else
                 chain = '';
         var time = '12:00';
-		var last = null;
-		var repeat = null;
+		var last = '';
+		var repeat = '';
 		if ($('#cal_rep_every').attr('checked')){
 	        repeat = $('#cal_count').val();
 		}else{
