@@ -125,7 +125,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				'currency' 	=> isset($request->post['currency'])?$request->post['currency']:array(),
 				'toAccount' => isset($request->post['toAccount'])?$request->post['toAccount']:null,
 				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
-                'accepted'  => ( int ) $request->post['accepted'],
+                'accepted'  => isset($request->post['accepted'])?(int)$request->post['accepted']:1,
 			);
 
 			$operation = $this->model->checkData($operation);
@@ -274,7 +274,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 				'toAccount' 	=> isset($request->post['toAccount'])?$request->post['toAccount']:null,
 				'target' 	=> isset($request->post['target'])?$request->post['target']:null,
 				'tr_id'		=> isset($operation['tr_id'])?$operation['tr_id']:0,
-                'accepted'  => ( int ) $request->post['accepted'],
+                'accepted'  => isset($request->post['accepted'])?(int)$request->post['accepted']:1,
 			);			
 
 			// Если дата передана массивом (PDA) ...
