@@ -33,7 +33,7 @@
 #calendar .fc-event,
 #calendar .fc-event a {
     text-align: right;
-    cursor: crosshair;
+    cursor: move;
     border-color: #c1c7c0;     
     background: #d9e0ff url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px; /* default BACKGROUND color */
     color: #111;            /* default TEXT color */
