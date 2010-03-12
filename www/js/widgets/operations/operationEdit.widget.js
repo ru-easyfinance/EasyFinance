@@ -811,10 +811,11 @@ easyFinance.widgets.operationEdit = function(){
         // prevents datepicker from auto-popup
         _$noFocus.hide();
 
-        if (_selectedType == "2" && _selectedAccount != "" && _selectedTransfer != "" &&
-            _accountCurrency.id != _transferCurrency.id) {
-                _accountCurrency = _modelAccounts.getAccountCurrency(_selectedAccount);
-                _transferCurrency = _modelAccounts.getAccountCurrency(_selectedTransfer);
+        _accountCurrency = _modelAccounts.getAccountCurrency(_selectedAccount);
+        _transferCurrency = _modelAccounts.getAccountCurrency(_selectedTransfer);
+
+        if (_selectedType == "2" && _selectedAccount != "" && _transferCurrency && _selectedTransfer != "" &&
+            _accountCurrency && _accountCurrency.id != _transferCurrency.id) {
                 _realConversionRate = Math.round(_accountCurrency.cost / _transferCurrency.cost * 10000)/10000;
 
                 $('#div_op_transfer_line').show();
