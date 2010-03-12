@@ -294,7 +294,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
 
             } else {
 
-                $this->tpl->assign( 'error', array ( 'text' => 'Ошибка при подтверждении операций' ) );
+                $this->tpl->assign( 'error', array ( 'text' => implode( ",\n", $calendar->getErrors() ) ) );
                 
             }
 

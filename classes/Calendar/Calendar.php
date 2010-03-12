@@ -322,8 +322,9 @@ class Calendar
             } elseif ( isset ( $calendar[$id] ) ) {
                 $operation = $calendar[$id];
             } else {
-                $this->errors['accept'] = "Есть неподтверждённые операции";
+                $this->errors['error'] = "Не найдена операция для подтверждения";
             }
+            
             $operation['accepted'] = 1;
             $operation['category'] = $operation['cat_id'];
             $operation['account']  = $operation['account_id'];
@@ -333,7 +334,7 @@ class Calendar
                 , Core::getInstance()->user );
 
             if ( ! $event->checkData() ) {
-                $this->errors['accept'] = "Есть неподтверждённые операции";
+                $this->errors = array_merge( $this->errors, $event->getErrors() );
             } else {
                 $newIds[] = $id;
             }
@@ -343,7 +344,6 @@ class Calendar
             // Получаем список событий, отмечаем что они выполненные
             return Calendar_Model::acceptEvents ( $this->user, $newIds );
         } else {
-            $this->errors['accept'] = "Не удалось подтвердить операции";
             return false;
         }
     }
