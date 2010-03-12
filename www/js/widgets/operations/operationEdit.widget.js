@@ -376,6 +376,18 @@ easyFinance.widgets.operationEdit = function(){
             if ($(this).val()=="7") { // неделя
                 _$blockWeekdays.show();
                 _$blockRepeating.show();
+
+                var today = new Date();
+                var day = today.getDay();
+                // вс - 0, пн - 1, вт - 2 и т.п.
+                day = (day == 0) ? day = 6 : day = day - 1;
+
+                var i = 0;
+                $('.week input').each(function(){
+                    if (i == day)
+                        $(this).attr('checked', 'checked');
+                    i++;
+                });
             } else if ($(this).val()=="0") { // Не повторять
                 _$blockRepeating.hide();
                 _$blockRepeating.hide();
@@ -596,7 +608,6 @@ easyFinance.widgets.operationEdit = function(){
 	            last = "";
 		}
         var every = $('#cal_repeat').val();
-
         
         var week = '0000000';
         if(every == '7'){
