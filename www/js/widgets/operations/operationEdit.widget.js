@@ -830,7 +830,7 @@ easyFinance.widgets.operationEdit = function(){
                     $('#op_conversion_text').text (str);
 
                     // определяем курс                    
-                    data = (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.cost : _accountCurrency.cost;
+                    var data = (_accountCurrency.id == _defaultCurrency.id) ? _transferCurrency.cost : _accountCurrency.cost;
                     data /= _defaultCurrency.cost;
                     data = data.toString();
                     i = data.indexOf('.');
@@ -845,7 +845,7 @@ easyFinance.widgets.operationEdit = function(){
                     data = _transferCurrency.cost;
                     data /= _accountCurrency.cost;
                     data = data.toString();
-                    i = data.indexOf('.');
+                    var i = data.indexOf('.');
                     data = data.substr(0, i+5);
                     $('#op_conversion').val(data).change();
                 }
@@ -864,7 +864,7 @@ easyFinance.widgets.operationEdit = function(){
             data = {};
 
         var htmlAccounts = '';
-        for (key in data ) {
+        for (var key in data ) {
             htmlAccounts = htmlAccounts + '<option value="' + key + '">'
                 + data[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')' + '</option>';
         }
@@ -1079,8 +1079,8 @@ easyFinance.widgets.operationEdit = function(){
         setCategory(data.cat_id);
 
         setTarget(data.target_id);
-
-        if (typeof data.date == "string") {
+	debugger;
+        if (typeof(data.date) == "string") {
             $('#op_date').val(data.date);
         } else {
             var dp = $('#op_date');

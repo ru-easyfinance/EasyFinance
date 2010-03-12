@@ -10,7 +10,7 @@ easyFinance.widgets.calendar = function(){
     }
                         var chainId;
                         var operationId;
-
+var elem;
 
     function init(){
         
@@ -147,7 +147,7 @@ easyFinance.widgets.calendar = function(){
                     //cont
                 },
                 eventClick: function(event, element, view){
-                    var elem = _data[event.key];
+                    elem = $.extend({},_data[event.key]);
                         promptSingleOrChain("edit", function(isChain){
                             easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
                         });
