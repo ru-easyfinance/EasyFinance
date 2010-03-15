@@ -39,7 +39,7 @@ class Report_Model
     {
 
         if ($account > 0) {
-            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, IFNULL(c.cat_name, '') AS cat FROM operation o
+            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, cur.cur_id, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
@@ -51,7 +51,7 @@ class Report_Model
                 $account, $drain, $start, $end/*, $currency*/);
 
         } else {
-            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, IFNULL(c.cat_name, '') AS cat FROM operation o
+            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, cur.cur_id, IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
                 LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
@@ -109,7 +109,7 @@ class Report_Model
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
         }*/
         if ($account > 0) {
-            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
@@ -119,7 +119,7 @@ class Report_Model
                 GROUP BY drain, `datef`";
             $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
         } else {
-            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
@@ -131,7 +131,7 @@ class Report_Model
         }
 
         if ($account > 0) {
-            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
@@ -141,7 +141,7 @@ class Report_Model
                 GROUP BY drain, `datef`";
             $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
         } else {
-            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
+            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 , IFNULL(c.cat_name, '') AS cat FROM operation o
                 LEFT JOIN accounts a ON a.account_id=o.account_id
                 LEFT JOIN category c ON c.cat_id = o.cat_id
@@ -226,7 +226,7 @@ class Report_Model
         $arr = array();
         if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code
+                                    a.account_name, op.money, cur.cur_char_code,cur.cur_id,
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -238,7 +238,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -260,7 +260,7 @@ class Report_Model
         $arr = array();
         if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -272,7 +272,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -293,7 +293,7 @@ class Report_Model
         $arr = array();
         if ($account != 0) {
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -303,7 +303,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -315,7 +315,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -325,7 +325,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -346,7 +346,7 @@ class Report_Model
         $arr = array();
         if ($account != 0) {
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -356,7 +356,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -368,7 +368,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -377,7 +377,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -427,7 +427,7 @@ class Report_Model
         $mas[1] = $dtDiffD;//*/
         if ($account != 0) {
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -437,7 +437,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -449,7 +449,7 @@ class Report_Model
         $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -458,7 +458,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -496,7 +496,7 @@ class Report_Model
         $mas[1] = $dtDiffD;//*/
         if ($account != 0) {
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -506,7 +506,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -518,7 +518,7 @@ class Report_Model
         $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
         }else{
         $sql = "
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 1 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -527,7 +527,7 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name
             UNION
-            SELECT c.cat_name, cur.cur_char_code, sum(op.money) as su, 2 as per
+            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
