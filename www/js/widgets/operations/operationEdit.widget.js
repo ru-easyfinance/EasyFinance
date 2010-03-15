@@ -575,7 +575,6 @@ easyFinance.widgets.operationEdit = function(){
         }
 
         $('#op_btn_Save').attr('disabled', 'disabled');
-        $.jGrowl("Операция сохраняется", {theme: 'green'});
 
         var tip = $('#op_type').val();
         var id = $('#op_id').val();
@@ -646,9 +645,11 @@ easyFinance.widgets.operationEdit = function(){
                 if (data.result) {
                     refreshTargets();
 
-                    $.jGrowl(data.result.text, {theme: 'green'});
                     if (!_isCalendar)
-                        $.jGrowl("<a class='white' href='/operation/#account="+account+"'>Перейти к операциям</a>", {theme: 'green',life: 2500});
+                        $.jGrowl(data.result.text + "<br><a class='white' href='/operation/#account="+account+"'>Перейти к операциям</a>", {theme: 'green',life: 2500});
+                    else
+                        $.jGrowl(data.result.text, {theme: 'green'});
+
                     if (tip == 4)
                         MakeOperation();// @todo: заменить на отправку event'a!
                 } else if (data.error) {
