@@ -15,7 +15,7 @@ $(document).ready(function(){
     // Добавить фин.цель
     $("div.financobject_block .add span").click(function(){
         clearForm();
-        $('#tpopup form').attr('action','/targets/add/');
+        _urlAction = '/targets/add/';
         $('#tpopup').dialog('open');
         $('#visible').attr('checked','checked');
     });
@@ -25,7 +25,7 @@ $(document).ready(function(){
         var f = $(this).closest('li');
         $('#targets_category').val(f.attr('category'));
         $('#name').val($(this).closest('li').find('a:first').html());
-        $('#tpopup form').attr('action','/targets/add/');
+        _urlAction = '/targets/add/';
         $('#tpopup').dialog('open');
         $('#visible').attr('checked','checked');
         return false;
@@ -61,7 +61,7 @@ $(document).ready(function(){
         }else{
             $('#visible').removeAttr('checked');
         }
-        $('#tpopup form').attr('action','/targets/edit/');
+        _urlAction = '/targets/edit/';
         $('#tpopup').dialog('open');
         return false;
     });
@@ -122,7 +122,7 @@ $(document).ready(function(){
         }else{
             $('#visible').removeAttr('checked');
         }
-        $('#tpopup form').attr('action','/targets/add/');
+        _urlAction = '/targets/add/';
         $('#tpopup').dialog('open');
         return false;
     });
@@ -228,7 +228,7 @@ $(document).ready(function(){
         $('#comment').val(data.comment);
         $('#account').val(data.account);
         $('#amountf').val(data.money);
-        $('#tpopup form').attr('action','/targets/edit/');
+        _urlAction = '/targets/edit/';
     }
 
     function ValidateForm(){
@@ -293,7 +293,7 @@ $(document).ready(function(){
         }
         $.jGrowl("Финансовая цель сохраняется", {theme: 'green'});
         $.post(
-            $('#tpopup form').attr('action'),
+            _urlAction,
             {
                 id       : $('#key').attr('value'),
                 type     : $('#type').attr('value'),
