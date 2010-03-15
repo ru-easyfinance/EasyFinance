@@ -16,6 +16,7 @@ easyFinance.widgets.operationEdit = function(){
     var _isEditing = false;
     var _isCalendar = false;
     var _isChain = false;
+    var _isAccepted = true;
 
     var _accOptionsData = null;
 
@@ -44,6 +45,9 @@ easyFinance.widgets.operationEdit = function(){
     var _$blockCalendar = null;
     var _$blockWeekdays = null;
     var _$blockRepeating = null;
+
+    var _buttonsNormal = null;
+    var _buttonsEditAccept = null;
 
     // private functions
 
@@ -219,6 +223,27 @@ easyFinance.widgets.operationEdit = function(){
     function _initForm(){
         _$noFocus = $("#opCatchFocus");
 
+        _buttonsNormal = {
+            "Отмена": function() {
+                // закрываем диалог
+                $(this).dialog("close");
+            },
+            "Сохранить": function() {
+                _saveOperation();
+            }
+        };
+
+        _buttonsEditAccept = {
+            "Отмена": function() {
+                // закрываем диалог
+                $(this).dialog("close");
+            },
+            "Редактировать и подтвердить": function() {
+                $('#op_accepted').val("1");
+                _saveOperation();
+            }
+        };
+
         _$dialog = $('form.op_addoperation').dialog({
             dialogClass: 'dlgOperationEdit',
             autoOpen: false,
@@ -228,15 +253,7 @@ easyFinance.widgets.operationEdit = function(){
                 // очищаем форму перед закрытием
                 _clearForm();
             },
-            buttons: {
-                "Отмена": function() {
-                    // закрываем диалог
-                    $(this).dialog("close");
-                },
-                "Сохранить": function() {
-                    _saveOperation();
-                }
-            }
+            buttons: _buttonsNormal
         });
 
         // @todo: реализовать переход между комбо по tab'у
@@ -406,6 +423,8 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _expandNormal() {
+        _$dialog.dialog('option', 'buttons', _buttonsNormal);
+
         if (!_isCalendar) {
             if (_isEditing)
                 _$dialog.data('title.dialog', 'Редактирование операции').dialog('open');
@@ -437,6 +456,7 @@ easyFinance.widgets.operationEdit = function(){
 
     function _expandCalendar() {
         _isCalendar = true;
+        _$dialog.dialog('option', 'buttons', _buttonsNormal);
 
         if (_isEditing)
             _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
@@ -1023,10 +1043,17 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_id').val('');
         }
 
-        if (typeof data.accepted != 'undefined')
+        if (typeof data.accepted != 'undefined') {
             $('#op_accepted').val(data.accepted);
-        else
+            if (data.accepted == "0" && !_isChain) {
+                _$dialog.dialog('option', 'buttons', _buttonsEditAccept);
+            } else {
+                _$dialog.dialog('option', 'buttons', _buttonsNormal);
+            }
+        } else {
             $('#op_accepted').val("1");
+            _$dialog.dialog('option', 'buttons', _buttonsNormal);
+        }
 
         var typ = data.type;
         setType(typ);
