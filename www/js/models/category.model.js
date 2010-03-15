@@ -185,7 +185,7 @@ easyFinance.models.category = function(){
         var list = {};
 
         for (var key in _categories.recent) {
-            list[_categories.recent[key].id] = _categories.user[_categories.recent[key]];
+            list[_categories.recent[key]] = _categories.user[_categories.recent[key]];
         }
 
         return list;
@@ -193,8 +193,9 @@ easyFinance.models.category = function(){
 
     function _treeAddChildren(arrParent, idParent) {
         // fill parent categories
+        var cat;
         for (var key in _categories.user) {
-            var cat = _categories.user[key];
+            cat = _categories.user[key];
             if (cat.parent == idParent) {
                 arrParent[cat.id] = $.extend({children: []}, cat);
 //                arrParent[cat.id].children = [];
