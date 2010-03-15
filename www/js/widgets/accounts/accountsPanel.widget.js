@@ -111,7 +111,7 @@ easyFinance.widgets.accountsPanel = function(){
             } else {
                 // menu action
                 id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
-
+                var parentClass = $(this).parent().attr("class");
                 if ($(this).parent().hasClass("operation")) {
                     if (easyFinance.widgets.operationEdit) {
                         easyFinance.widgets.operationEdit.showForm();
@@ -121,8 +121,12 @@ easyFinance.widgets.accountsPanel = function(){
                     }
                 } else if (parentClass == "edit") {
                     document.location='/accounts/#edit'+id;
+                    // для события на странице /accounts
+                    accounts_hash_api('#edit'+id);
                 } else if (parentClass == "add") {
                     document.location='/accounts/#copy'+id;
+                    // для события на странице /accounts
+                    accounts_hash_api('#edit'+id, true);
                 } else if (parentClass == "del") {
                     if (confirm("Вы уверены что хотите удалить счёт?")) {
                         var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
