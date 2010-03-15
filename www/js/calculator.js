@@ -53,7 +53,7 @@ var RW_calculator = function(){
      */
     function _print(simbol){
 //            var val = _calculator.find('input').val();
-            if ('1234567890.+-*/'.indexOf(simbol) != -1){
+            if ('1234567890.,+-*/'.indexOf(simbol) != -1){
                 return true;
             }else if('='.indexOf(simbol) != -1){
                 var val = _calculator.find('input').val();
