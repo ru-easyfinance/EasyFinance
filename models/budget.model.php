@@ -48,7 +48,7 @@ class Budget_Model {
 
         // Считаем факт доходов и факт расходов
         $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o
-            WHERE o.user_id = ? AND o.transfer=0
+            WHERE o.user_id = ? AND o.transfer=0 AND o.accepted=1
                 AND o.date >= ? AND o.date <= ?
             AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = ? )
                 GROUP BY o.cat_id";
@@ -66,7 +66,7 @@ class Budget_Model {
                 ) AS avg_3m
                 , (SELECT SUM(o.money) FROM operation o
                     WHERE (o.transfer = NULL OR o.transfer = 0) AND b.category = o.cat_id
-                    AND o.date >= ? AND o.date <= LAST_DAY(o.date)
+                    AND o.date >= ? AND o.date <= LAST_DAY(o.date) AND o.accepted=1 
                     AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." )
                 ) AS money
         FROM budget b

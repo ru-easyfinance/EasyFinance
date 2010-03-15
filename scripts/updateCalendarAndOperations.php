@@ -28,7 +28,7 @@ $result = mysql_query( $sql );
 // Выбираем все запланированные события
 $sql = "SELECT c.id AS chain, c.user_id, c.type AS type_event, c.title, c.time, c.comment, c.amount,
     c.cat_id, c.account_id, c.op_type AS `type`, ce.`date` FROM calend c
-    LEFT JOIN calendar_events ce ON c.id=ce.id
+    LEFT JOIN calendar_events ce ON c.id=ce.cal_id
     WHERE ce.accept=0";
 
 $result = mysql_query( $sql );
