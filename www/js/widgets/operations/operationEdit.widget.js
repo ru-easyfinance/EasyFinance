@@ -640,12 +640,19 @@ easyFinance.widgets.operationEdit = function(){
             function(data){
                 // В случае успешного сохранения, закрываем диалог и обновляем календарь
                 $('#op_btn_Save').removeAttr('disabled');
-                _$dialog.dialog("close");
-							
+                
+                if (_isEditing) {
+                    // закрываем окно после редактирования
+                    _$dialog.dialog("close");
+                } else {
+                    // очищаем поле суммы, тегов и комментария после редактирования
+                    $('#op_amount,#op_conversion,#op_transfer,#op_comment,#op_tags').val('');
+                }
+
                 if (data.result) {
                     refreshTargets();
 
-                    if (!_isCalendar)
+                    if (!_isCalendar && document.location.pathname.indexOf("/operation") == -1)
                         $.jGrowl(data.result.text + "<br><a class='white' href='/operation/#account="+account+"'>Перейти к операциям</a>", {theme: 'green',life: 2500});
                     else
                         $.jGrowl(data.result.text, {theme: 'green'});
