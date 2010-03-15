@@ -238,6 +238,9 @@ easyFinance.widgets.operationEdit = function(){
                 // закрываем диалог
                 $(this).dialog("close");
             },
+            "Сохранить": function() {
+                _saveOperation();
+            },
             "Редактировать и подтвердить": function() {
                 $('#op_accepted').val("1");
                 _saveOperation();
