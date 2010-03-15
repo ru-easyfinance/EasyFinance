@@ -464,7 +464,8 @@ easyFinance.models.accounts = function(){
                 //if (data.operation)
                 //    _accounts[data.operation.account]["totalBalance"] = _accounts[data.operation.account]["totalBalance"] - toFloat(data.operation.amount);
 
-                var event = null;
+                var event, k;
+                var props = ["calendar", "overdue", "future"];
                 if (url == ADD_OPERATION_URL) {
                     event = $.Event('operationAdded');
                 } else if (url == EDIT_OPERATION_URL) {
@@ -472,8 +473,7 @@ easyFinance.models.accounts = function(){
 
                     if (data.operation) {
                         // обновляем информацию о событии в наших списках
-                        var props = ["calendar", "overdue", "future"];
-                        for (var k in props) {
+                        for (k in props) {
                             for (var j in res.calendar[props[k]]) {
                                 if (res.calendar[props[k]][j].id == data.operation.id) {
                                     res.calendar[props[k]][j] = $.extend({}, data.operation);
@@ -486,9 +486,9 @@ easyFinance.models.accounts = function(){
                 } else if (url == EDIT_CHAIN_URL) {
                     event = $.Event('operationsChainEdited');
                 }
+                event["operation"] = data.operation || null;
 
-                var props = ["calendar", "overdue", "future"];
-                for (var k in props) {
+                for (k in props) {
                     if (data[props[k]]) {
                         res.calendar[props[k]] = $.extend({}, data[props[k]]);
                         event[props[k]] = res[props[k]];
