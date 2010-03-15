@@ -4,9 +4,6 @@
 #accountsJournal table tr{
     cursor: pointer;
 }
-#accountsJournal table tr th.totalBalance div {
-    margin-right: 0px;
-}
 #accountsJournal table tr .name {
     width: 180px;
 }
@@ -18,12 +15,21 @@ max-width:25px;
 overflow:hidden;
 width:25px;
 }
+#accountsJournal table tr.parent{
+	background: #F8FCF6 url(/img/i/point_x.gif) repeat-x scroll left bottom;
+}
 #accountsJournal table tr.parent .name {
     padding-left: 7px;
     padding-right: 57px;
 }
 #accountsJournal table th.money {
     padding-right: 50px;
+}
+#accountsJournal table th.money.totalBalance {
+    padding-right: 5px;
+}
+#accountsJournal table th.money.totalBalance div{
+    margin-right: -15px;
 }
 #accountsJournal table tr .def_cur{
     width : auto;
