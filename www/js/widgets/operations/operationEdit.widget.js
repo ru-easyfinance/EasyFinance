@@ -497,11 +497,11 @@ easyFinance.widgets.operationEdit = function(){
                     // если категория выбранного типа или универсальная
                     if (list[keyParent].type == type || list[keyParent].type == '0') {
                         // выводим название категории
-                        str = str + '<option value="' + keyParent + '">' + list[keyParent].name + '</option>';
+                        str = str + '<option value="' + list[keyParent].id + '">' + list[keyParent].name + '</option>';
 
                         // выводим дочерние категории
                         for (var keyChild in list[keyParent].children) {
-                            str = str + '<option value="' + keyChild + '">&mdash; ' + list[keyParent].children[keyChild].name + '</option>';
+                            str = str + '<option value="' + list[keyParent].children[keyChild].id + '">&mdash; ' + list[keyParent].children[keyChild].name + '</option>';
                         }
                     }
                 }

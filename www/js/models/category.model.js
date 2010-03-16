@@ -252,7 +252,7 @@ easyFinance.models.category = function(){
 
         for (var row in _order.user) {
             cat = _categories.user[_order.user[row]];
-            if (cat.parent == idParent) {
+            if (cat && cat.parent == idParent) {
                 arrParent.push($.extend({children: []}, cat));
                 _treeAddChildrenOrdered(arrParent[arrParent.length-1].children, cat.id);
             }
