@@ -40,7 +40,7 @@ class Tags_Controller extends _Core_Controller_UserCommon
     function add ()
     {
         
-        $tag = trim( htmlspecialchars( @$_POST['tag'] ) );
+        $tag = trim( @$_POST['tag'] );
 
         $tags = $this->model->add( $tag );
 
@@ -62,8 +62,8 @@ class Tags_Controller extends _Core_Controller_UserCommon
      */
     function edit ()
     {
-        $tag = trim( htmlspecialchars( @$_POST['tag'] ) );
-        $old_tag = htmlspecialchars( @$_POST['old_tag'] );
+        $tag = trim( @$_POST['tag'] );
+        $old_tag = @$_POST['old_tag'];
 
         $tags = $this->model->edit( $tag, $old_tag );
 
@@ -85,7 +85,7 @@ class Tags_Controller extends _Core_Controller_UserCommon
      */
     function del ( )
     {
-        $tag = trim( htmlspecialchars( @$_POST['tag'] ) );
+        $tag = trim( @$_POST['tag'] );
         $tags = $this->model->del( $tag );
 
         if ( $tags ) {

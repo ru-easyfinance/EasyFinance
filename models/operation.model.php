@@ -80,7 +80,7 @@ class Operation_Model {
         $_SESSION['account_money'] = $this->account_money;
         $_SESSION['total_sum']     = $this->total_sum;
     }
-    
+
 	/**
 	 * Проверяет валидность введённых данных
 	 * @param array $params
@@ -184,7 +184,7 @@ class Operation_Model {
 			}
 		}
 
-		$validated['comment'] = trim(htmlspecialchars($operation['comment']));
+		$validated['comment'] = trim($operation['comment']);
 
 		// Проверяем теги
 		if ( !empty ($operation['tags']) )
@@ -304,7 +304,7 @@ class Operation_Model {
                 foreach ($tags as $tag)
                 {
                     if (!empty($sql)) { $sql .= ','; }
-                    $sql .= "(". $this->user->getId() . "," . (int)$operationId . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+                    $sql .= "(". $this->user->getId() . "," . (int)$operationId . ",'" . addslashes($tag) . "')";
                 }
 
                 $this->db->query('INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES ' . $sql);
@@ -399,7 +399,7 @@ class Operation_Model {
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . $id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+                $sql .= "(". $this->user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
 
@@ -702,7 +702,7 @@ class Operation_Model {
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . $id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+                $sql .= "(". $this->user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
@@ -766,47 +766,6 @@ class Operation_Model {
         Core::getInstance()->user->initUserTargets();
         Core::getInstance()->user->save();
         return true;
-    }
-
-    /**
-     * Получает сумму всех счетов пользователя
-     * @param int $account_id Ид счёта
-     * @param string $period Период
-     * @return 
-     */
-    function selectMoney($id, $period = '')
-    {
-        if (!empty($period)) {
-            if ($period == "today") {
-                    $order = "AND `date` = '".date("Y.m.d")."'";
-            }
-            if (html($_GET['order']) == "month") {
-                    $order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
-            }
-            if (html($_GET['order']) == "week") {
-                    $begin_week = (date('d')+1) - date('w');
-                    $order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
-            }
-        }else{
-            $limit = "LIMIT 0,30";
-        }
-        $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
-           m.`cat_id`, m.`bill_id`, c.`cat_name`, b.`bill_name`, m.`drain`, m.`comment`,
-           b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
-        FROM `money` m
-        LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
-        LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
-        LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer`
-        LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
-            WHERE m.`bill_id` = '".$id."'
-                   AND m.`user_id` = '".$this->user_id."'
-                   ".$order."
-            ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
-
-        $this->user_money = $row;
-        $this->account_money = $id;
-        $this->getTotalSum($id);
-        $this->save();
     }
 
     /**

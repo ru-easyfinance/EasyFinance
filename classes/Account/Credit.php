@@ -58,7 +58,7 @@ class Account_Credit extends Account
         $valid[1] = (string)@$params['name'];
         $valid['id'] = (int)@$params['id'];
         $valid[2] = (int)@$params['type'];
-        $valid[7] = trim(htmlspecialchars(@$params['comment']));
+        $valid[7] = trim(@$params['comment']);
         $valid[29] = (int)@$params['currency'];
         $valid[8] = (string)@$params['bank'];
         $valid[11] = (int)@$params['yearPercent'];

@@ -58,7 +58,7 @@ class Certificate
 	 */
 	public static function create( User $user, $comment, $imageSrc )
 	{
-		$comment	= htmlspecialchars( $comment );
+		$comment	= $comment;
 		
 		$imgSrc	= self::getImagePath($user->getId());
 		$imgThumbSrc = self::getImagePath($user->getId(), true);
