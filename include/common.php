@@ -33,7 +33,8 @@ Core::getInstance()->js = array(
     'profile' => array(
         'models/user.model',
         'widgets/profile/profile.widget',
-        'widgets/profile/userCurrency.widget'
+        'widgets/profile/userCurrency.widget',
+        'widgets/profile/userIntegrations.widget'
         ),
 //    'periodic' => array('periodic'),
     'operation' => array(

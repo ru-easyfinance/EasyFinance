@@ -8,11 +8,12 @@
         {include file="left.quick.html"}
         <div class="block2">
             <!--наполнение-->
-            <ul class="menu5">
-                <li id="i3"><div><a href="#calend">Профиль</a></div></li>
-                <li id="i4"><div><a href="#currency">Настройка валют</a></div></li>
+            <ul class="menuProfile">
+                <li id="i3" class="act" block="#profile"><div><a>Профиль</a></div></li>
+                <li id="i4" block="#currency"><div><a>Настройка валют</a></div></li>
+				<li id="i5" block="#integration"><div><a>Интеграция</a></div></li>
             </ul>
-            <div class="ramka3" id ="profile">
+            <div class="ramka3 profile" id ="profile">
                 <div class="ct">
                     <div class="head">
                         <h2>Личные данные</h2>
@@ -82,7 +83,7 @@
         
 
     
-            <div id="money" class="ramka3" style="display:none">
+            <div id="currency" class="ramka3 profile" style="display:none">
                 <div class="ct">
                     <div class="head">
                         <h2>Валюты</h2>
@@ -125,6 +126,29 @@
                 </div>
                 <div class="cb"><div></div></div>
             </div>
+			
+			<div id="integration" class="ramka3 profile" style="display:none">
+				<div class="ct">
+                    <div class="head">
+                        <h2>Интеграция</h2>
+                        <ul class="action">
+                            <li class="over3"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="content" class="inside form">
+					<div class="email line">
+						<div class='notExist'>
+							<span id='get'>Получить E-mail</span>
+						</div>
+						<div class='exist'> 
+							Ваш e-mail : <span id='email'>default@ef.ru</span><div class='remove' title='Удалить'>&nbsp;</div>
+						</div>
+						<div class="description">Данный e-mail необходим для интеграции с банками.И прочее описание</div>
+					</div>
+                </div>
+                <div class="cb"><div></div></div>
+			</div>
         </div>
             {include file="right.quick.html"}
     </div>

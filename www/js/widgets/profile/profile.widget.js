@@ -59,20 +59,15 @@ easyFinance.widgets.profile = function(){
 
 //to screen
 $(document).ready(function(){
-    $('.menu5 #i3').addClass('act');
-    $('.menu5 #i3').live('click',function(){
-        $('.menu5 #i4').removeClass('act');
-        $('.menu5 #i3').addClass('act');
-        $('.block2 .ramka3#money').hide();
-        $('.block2 .ramka3#profile').show();
-    });
-    $('.menu5 #i4').live('click',function(){
-        $('.menu5 #i3').removeClass('act');
-        $('.menu5 #i4').addClass('act');
-        $('.block2 .ramka3#profile').hide();
-        $('.block2 .ramka3#money').show();
+	$('.menuProfile li').click(function(){
+        $('.menuProfile li').removeClass('act');
+        $(this).addClass('act');
+        $('.block2 .ramka3.profile').hide();
+        $('.block2 .ramka3'+$(this).attr('block')).show();
     });
     easyFinance.widgets.profile.init();
+	
+	
     if (window.location.hash.indexOf("#currency") != -1)
-        $('.menu5 #i4').click();
+        $('.menuProfile #i4').click();
 });
