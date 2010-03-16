@@ -88,6 +88,7 @@ easyFinance.widgets.calendar = function(){
                     '2': 'yellow',
                     '4': 'blue'
                 }
+				$('.qtip').remove();
                 _data = easyFinance.models.calendarCache.loadSetupData(month, year);
                 var nowDate = new Date();
                 var calendarArray = [];
