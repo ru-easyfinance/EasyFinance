@@ -1,4 +1,3 @@
-//Тут только общие функции и события для всех страниц сайта
 // $Id$
 
 function setHeightClass(){	
@@ -134,6 +133,7 @@ function isLogged(){
 }
 
 $(document).ready(function(){
+	setHeightClass();
 	$('ul.menu2 a').click(function(){
 		$.cookie('events_hide', 0, {
 			path: '/'
