@@ -74,8 +74,6 @@ class Sync{
         $a = $this->db->query($sql, $user_id);
         $sql = "DELETE FROM operation WHERE user_id=?";
         $a = $this->db->query($sql, $user_id);
-        $sql = "DELETE FROM periodic WHERE user_id=?";
-        $a = $this->db->query($sql, $user_id);
         $sql = "DELETE FROM records_map WHERE user_id=?";
         $a = $this->db->query($sql, $user_id);
         if ($a) 
@@ -145,9 +143,6 @@ class Sync{
         $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $transfer = new Transfer($this->user, $this->db);
         $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
-        //$plans = new Periodic($this->user, $this->db);
-        //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        //$date='', &$data='', $user_id='', $db=''){
         RecordsMap_Model::formRecordsMap($this->lastsync, $this->dataarray, $this->dataarrayE, $this->user, $this->db);
 
         $this->dataarrayE[4] = array( 'ServerData' => $this->getDate() );
@@ -219,11 +214,7 @@ class Sync{
         $operation2 = new Operation($this->user, $this->db);
         $operation2->OperationSync($this->OutcomesList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
         $transfer = new Transfer($this->user, $this->db);
-        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);
-        //$plans = new Periodic($this->user, $this->db);
-        //$plans->PeriodicSync($this->PlansList, $this->recordsMap, $this->changedRec, $this->deletedRec);
-        //$date='', &$data='', $user_id='', $db=''){
-        
+        $transfer->TransferSync($this->TransfersList, $this->recordsMap, $this->changedRec, $this->deletedRec, $this->dataarrayE);      
 
         $category->FormArray($this->lastsync, $this->dataarrayE);
         $account->FormArray($this->lastsync, $this->dataarrayE);
