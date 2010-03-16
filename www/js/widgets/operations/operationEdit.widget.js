@@ -528,7 +528,7 @@ easyFinance.widgets.operationEdit = function(){
             };
 
             htmlOptions = htmlOptions + catPrint(list, typ);
-            htmlOptions = htmlOptions + catPrint(_modelCategory.getUserCategoriesTree(), typ);
+            htmlOptions = htmlOptions + catPrint(_modelCategory.getUserCategoriesTreeOrdered(), typ);
 
             // обновляем список категорий
             $("#op_category").html(htmlOptions);

@@ -50,7 +50,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var children, str = '', ret ='';
         var k, key;
         var categoryType, parentId, parentName, catId, catName, budget;
-        var _categories = easyFinance.models.category.getUserCategoriesTree();
+        var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
         for (key in _categories){
             categoryType = _categories[key].type;
             if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
