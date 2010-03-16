@@ -81,6 +81,49 @@ function formatCurrency(num) {
 }
 
 /**
+ * оставляет 4 значащих цифры
+ * @param Cost string | Number
+ * @return String 
+ */
+function roundToSignificantFigures(Cost){
+	var workCost = '';
+	if (typeof(Cost) == 'number'){
+		if (Cost >= 1000){
+			return Cost.toFixed(0);
+		}else if(Cost >= 100){
+			return Cost.toFixed(1);
+		}else if(Cost >= 10){
+			return Cost.toFixed(2);
+		}else if (Cost >= 1){
+			return Cost.toFixed(3);
+		}else{
+			workCost = Cost.toString();
+		}
+	}else if(typeof(Cost) == 'string'){
+		if (Cost >= 1000){
+			return Number(Cost).toFixed(0);
+		}else if(Cost >= 100){
+			return Number(Cost).toFixed(1);
+		}else if(Cost >= 10){
+			return Number(Cost).toFixed(2);
+		}else if (Cost >= 1){
+			return Number(Cost).toFixed(3);
+		}else{
+			workCost = Cost;
+		}
+	}
+	var lenght = workCost.length - 2;
+	var end = -1;
+	for (var i = 2; i < lenght ;i++){
+		if (end == -1 && workCost.substr(i, 1) != '0'){
+			end = 1;
+			workCost = Number(workCost).toFixed(i+2).toString();
+			break;
+		}
+	}
+	return workCost || null;
+}
+/**
  * Преобразует любую строку в число методом удаления всех левых символов))
  * @param str {String}
  * @return String
