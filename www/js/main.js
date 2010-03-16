@@ -1,5 +1,25 @@
 //Тут только общие функции и события для всех страниц сайта
 // $Id$
+
+function setHeightClass(){	
+	var cheight = 0;
+	if ('CSS1Compat' && !window.opera){
+        cheight = document.documentElement.clientHeight;
+    }else{
+        cheight = document.body.clientHeight;
+    }
+	var cls = '';
+	if (cheight > 600){
+		cls = 'large';
+	}else if(cheight > 350){
+		cls = 'normal';
+	}else{
+		cls = 'small';
+	}
+	$('div#mainwrap').addClass(cls);
+}
+
+
 $.jGrowl.defaults.live = 1500;
 $.jGrowl.defaults.position = "center";
 $.jGrowl.defaults.closerTemplate = "<div>[ закрыть все сообщения ]</div>"
