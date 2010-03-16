@@ -69,7 +69,7 @@ $tablesTemplate = array(
 		'selectCase'	=> '`account_fieldsaccount_field_id` IN (select `account_id` from `accounts` where `user_id`={$userId})',
 		'addUserId'	=> array('field_value_id', 'account_fieldsaccount_field_id'),
 	),
-	'calendar' => array(
+	'calendar_chains' => array(
 		'userId' 	=> 'user_id',
 		'addUserId'	=> array('id')
 	),
@@ -80,10 +80,6 @@ $tablesTemplate = array(
 	'operation' => array(
 		'userId'		=> 'user_id',
 		'addUserId'	=> array('id', 'cat_id', 'account_id','transfer','tr_id')
-	),
-	'periodic' => array(
-		'userId'		=> 'user_id',
-		'addUserId'	=> array('id', 'category', 'account')
 	),
 	'tags' => array(
 		'userId'		=> 'user_id',
