@@ -102,45 +102,47 @@ easyFinance.widgets.accountsJournal = function(){
 
     function _initBigTip(){
         $('#accountsJournal .content .item').each(function(){
-//            _accounts = _model.getAccounts();
+            _accounts = _model.getAccounts();
             var defaultCurrency = _modelCurrency.getDefaultCurrency();
             var id = $(this).attr('id').split("_", 2)[1];
             var account = _model.getAccounts()[id];
 
-            var str = '<table>';
-            str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
-                        account.name + '</td></tr>';
-            str +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+
-                        _model.getAccountTypeString(account.id) + '</td></tr>';
-            str +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+
-                        account.comment + '</td></tr>';
-            str +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+
-            formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
-            if (account.reserve != 0){
-                var delta = (formatCurrency(account.totalBalance-account.reserve));
-                str +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-                str +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-            }
-
-            str +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
-                formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
-
-
-            str += '</table>';
-            $(this).qtip({
-                content: str, // Set the tooltip content to the current corner
-                position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-                },
-                style: {
-                  width: {max: 300},
-                  name: 'light',
-                  tip: true // Give them tips with auto corner detection
+            if (account) {
+                var str = '<table>';
+                str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
+                            account.name + '</td></tr>';
+                str +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+
+                            _model.getAccountTypeString(account.id) + '</td></tr>';
+                str +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+
+                            account.comment + '</td></tr>';
+                str +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+
+                formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
+                if (account.reserve != 0){
+                    var delta = (formatCurrency(account.totalBalance-account.reserve));
+                    str +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
+                    str +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
                 }
-            });
+
+                str +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
+                    formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
+
+
+                str += '</table>';
+                $(this).qtip({
+                    content: str, // Set the tooltip content to the current corner
+                    position: {
+                      corner: {
+                         tooltip: 'topMiddle', // Use the corner...
+                         target: 'bottomMiddle' // ...and opposite corner
+                      }
+                    },
+                    style: {
+                      width: {max: 300},
+                      name: 'light',
+                      tip: true // Give them tips with auto corner detection
+                    }
+                });
+            }
         });
     }
 
@@ -177,6 +179,7 @@ easyFinance.widgets.accountsJournal = function(){
     }
 
     function redraw(){
+        var account_list_ordered = _model.getAccountsOrdered();
         _accounts = _model.getAccounts();
         var account_list = _accounts;
         if (!account_list || account_list.length == 0){
@@ -198,18 +201,19 @@ easyFinance.widgets.accountsJournal = function(){
             var defaultCurrency = _modelCurrency.getDefaultCurrency();
 
         // формирует массив с таблицей счетов по группам
-        for (var key in account_list )
+        for (var row in account_list_ordered)
+   //for (var key in account_list )
         {
-            type = g_types[account_list[key]['type']];
-            colorClass = account_list[key]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
+            type = g_types[account_list_ordered[row]['type']];
+            colorClass = account_list_ordered[row]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
             
             if (!isNaN(type)){
-                str = '<tr class="item child" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
-                str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list[key]["name"], 25) + '</span></td>';
-                str = str + '<td class="totalBalance money"><div class="abbr">' + _model.getAccountCurrencyText(key) + '</div>'+'<div class="number '+colorClass+'">' + formatCurrency(account_list[key]["totalBalance"] ) + '</div>';
+                str = '<tr class="item child" id="accountsJournalAcc_' + account_list_ordered[row]['id'] + '">';
+                str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list_ordered[row]["name"], 25) + '</span></td>';
+                str = str + '<td class="totalBalance money"><div class="abbr">' + _model.getAccountCurrencyText(account_list_ordered[row]["id"]) + '</div>'+'<div class="number '+colorClass+'">' + formatCurrency(account_list_ordered[row]["totalBalance"] ) + '</div>';
                 str = str + '</td>';
-                str = str + '<td class="def_cur mark money"><div class="number '+colorClass+'">' + formatCurrency( account_list[key]["totalBalance"] * _model.getAccountCurrencyCost(key) / defaultCurrency['cost']) + '';
-                summ[type] += (account_list[key]["totalBalance"] * _model.getAccountCurrencyCost(key) / defaultCurrency['cost']);
+                str = str + '<td class="def_cur mark money"><div class="number '+colorClass+'">' + formatCurrency( account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost']) + '';
+                summ[type] += (account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost']);
                 str = str + '</div>' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
             }

@@ -65,7 +65,7 @@ class Report_Model
         $arr = array();
         foreach ($result as $k=>$v){
             if ($v['cat']){ //отметаем всякий мусор по удалённым категориям
-                $summmoney += $v['money'];
+//                $summmoney += $v['money'];
             } else {
                 unset($result[$k]);
             }
@@ -226,7 +226,7 @@ class Report_Model
         $arr = array();
         if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code,cur.cur_id,
+                                    a.account_name, op.money, cur.cur_char_code,cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -238,7 +238,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
+            a.account_name, op.money, cur.cur_char_code, cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -247,7 +247,7 @@ class Report_Model
             AND op.money>0 AND c.cat_name <> '' AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             ORDER BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
+            $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
         }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
@@ -260,7 +260,7 @@ class Report_Model
         $arr = array();
         if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -272,7 +272,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id

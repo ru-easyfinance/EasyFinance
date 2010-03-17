@@ -67,6 +67,36 @@ function shorter(str, maxLength){
     return str;
 }
 
+function setCursorPositionFromInput (elem, caretPos) {
+    if (document.selection) { // ie
+        $(elem).focus ();
+        var range = document.selection.createRange ();
+        range.moveStart ('character', - $(elem).val().length);
+        range.moveStart ('character', caretPos);
+        range.moveEnd ('character', 0);
+        range.select ();
+    } else if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
+        elem.selectionStart = caretPos;
+        elem.selectionEnd = caretPos;
+        elem.focus ();
+    }
+}
+
+function getCursorPositionFromInput (elem) {
+    var caretPos = 0;
+            
+    if (document.selection) { // ie
+        elem.focus ();
+        var range = document.selection.createRange ();
+        elem.moveStart ('character', -elem.value.length);
+        caretPos = range.text.length;
+    } else if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
+        caretPos = elem.selectionStart;
+    }
+            
+    return caretPos;
+}
+
 ///////////////////////////////////////Работа с числами////////////////////////////////////
 
 /**
@@ -190,7 +220,7 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 		}
 	}
 	var workingObj = $.extend({}, obj)
-	var key
+	var key;
 	while(workingObj.length > 0 ){
 
 			key = callback(obj, columnName);
@@ -203,4 +233,3 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 	}
 	return returnArray;
 }
-;

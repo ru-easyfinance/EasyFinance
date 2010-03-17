@@ -119,6 +119,8 @@ easyFinance.models.category = function(){
                 _categories.user[id].type = type;
                 _categories.user[id].system = system;
 
+                _createOrderLists();
+
                 $(document).trigger('categoryAdded');
 
                 // получаем новый список заново - отсортированный и т.п.
@@ -167,6 +169,7 @@ easyFinance.models.category = function(){
     function deleteById(id, callback){
         $.post(DELETE_URL, {id:id}, function(){
                 delete _categories.user[id];
+                _createOrderLists();
 
                 $(document).trigger('categoryDeleted');
 

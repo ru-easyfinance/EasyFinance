@@ -111,6 +111,7 @@ easyFinance.widgets.operationEdit = function(){
     function _initSexyCombos() {
         // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
+        var accountsOrdered = _modelAccounts.getAccountsOrdered();
         var accountsCount = 0;
         var key;
 
@@ -131,20 +132,20 @@ easyFinance.widgets.operationEdit = function(){
             // если счетов мало (не больше частых счетов),
             // выводим все счета по алфавиту
             for (key in accounts) {
-                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
             }
         } else {
             // если счетов много, сначала выводим часто используемые счета
             for (key in recent) {
-                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
                 delete accounts[key];
             }
 
             _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
 
             // затем выводим все остальные счета в алфавитном порядке
-            for (key in accounts) {
-                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
+            for (var row in accountsOrdered) {
+                _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
             }
         }
         
@@ -597,8 +598,6 @@ easyFinance.widgets.operationEdit = function(){
             return false;
         }
 
-        $('#op_btn_Save').attr('disabled', 'disabled');
-
         var tip = $('#op_type').val();
         var id = $('#op_id').val();
 
@@ -642,27 +641,38 @@ easyFinance.widgets.operationEdit = function(){
                 $('.week #cal_sun:checked').length.toString();
         }
 
+        var accepted = $('#op_accepted').val();
+        var date = $('#op_date').val();
+        var comment = $('#op_comment').val();
+        var close2 = $('#op_close2').val();
+        var tags = $('#op_tags').val();
+        
+        // перед отправкой очищаем форму, 
+        // чтобы нельзя было сохранить
+        // одну и ту же операцию дважды
+
+        _clearForm();
+
+        // отправляем запрос на сервер
         easyFinance.models.accounts.editOperationById(
             id,
-            $('#op_accepted').val(),
+            accepted,
             _selectedType,
             _selectedAccount,
             _selectedCategory,
-            $('#op_date').val(),
-            $('#op_comment').val(),
+            date,
+            comment,
             amount1,
             _selectedTransfer,
             _realConversionRate.toFixed(4),
             amount2, // сумма к получению при обмене валют
             _selectedTarget,
-            //$('#op_close:checked').length,
-            $('#op_close2').val(),
-            $('#op_tags').val(),
+            close2,
+            tags,
             chain, time, last, every, repeat, week,
 
             function(data){
                 // В случае успешного сохранения, закрываем диалог и обновляем календарь
-                $('#op_btn_Save').removeAttr('disabled');
                 
                 if (_isEditing) {
                     // закрываем окно после редактирования
@@ -812,8 +822,6 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function _clearForm() {
-        $("#op_btn_Save").removeAttr('disabled');
-
         $('#op_id,#op_accepted,#op_chain_id').val('');
         $('#op_amount,#op_conversion,#op_transfer,#op_AccountForTransfer,#op_comment,#op_tags').val('');
         $('span#op_amount_target').text();
@@ -883,14 +891,15 @@ easyFinance.widgets.operationEdit = function(){
         if (!_sexyAccount)
             return;
 
-        var data = $.extend({}, _modelAccounts.getAccounts());
+        var data = _modelAccounts.getAccountsOrdered();
+
         if (!data)
             data = {};
 
         var htmlAccounts = '';
         for (var key in data ) {
-            htmlAccounts = htmlAccounts + '<option value="' + key + '">'
-                + data[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')' + '</option>';
+            htmlAccounts = htmlAccounts + '<option value="' + data[key].id + '">'
+                + data[key].name + ' (' + _modelAccounts.getAccountCurrencyText(data[key].id) + ')' + '</option>';
         }
 
         var curAccount = _selectedAccount;
