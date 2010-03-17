@@ -899,7 +899,7 @@ easyFinance.widgets.operationEdit = function(){
         var htmlAccounts = '';
         for (var key in data ) {
             htmlAccounts = htmlAccounts + '<option value="' + data[key].id + '">'
-                + data[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')' + '</option>';
+                + data[key].name + ' (' + _modelAccounts.getAccountCurrencyText(data[key].id) + ')' + '</option>';
         }
 
         var curAccount = _selectedAccount;
