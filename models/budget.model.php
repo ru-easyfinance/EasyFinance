@@ -47,6 +47,7 @@ class Budget_Model {
         }
 
         // Считаем факт доходов и факт расходов
+        // @FIXME Тут сейчас не учитывается валюта счёта
         $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o
             WHERE o.user_id = ? AND o.transfer=0 AND o.accepted=1
                 AND o.date >= ? AND o.date <= ?
@@ -64,20 +65,12 @@ class Budget_Model {
                             AND t.date_start <= LAST_DAY(b.date_start))
                         AND b.category = t.category AND b.user_id=t.user_id
                 ) AS avg_3m
-                , (SELECT SUM(o.money) FROM operation o
-                    WHERE (o.transfer = NULL OR o.transfer = 0) AND b.category = o.cat_id
-                    AND o.date >= ? AND o.date <= LAST_DAY(o.date) AND o.accepted=1 
-                    AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id =".$user_id." )
-                ) AS money
         FROM budget b
         LEFT JOIN category c ON c.cat_id=b.category
         WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start) AND c.visible=1
         ORDER BY c.cat_parent ;";
 
-
-        $arraybudg = Core::getInstance()->db->select($sqlbudg, $start, $user_id, $start);
-        
-
+        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);      
 
         $list = array(
             'd' => array(),
@@ -93,40 +86,37 @@ class Budget_Model {
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
                     'amount' => (float)$var['amount'], // Планируемая сумма
-                    'money'  => (float)$var['money'],  // Фактическая сумма
+                    'money'  => 0,  // Фактическая сумма
                     'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
                 );
             } else {
                 $list['p'][$var['category']] = array(
                     'amount' => (float)$var['amount'], // Планируемая сумма
-                    'money'  => (float)$var['money'],  // Фактическая сумма
+                    'money'  => 0,  // Фактическая сумма
                     'mean'   => (float)$var['avg_3m']  // Среднее за три месяца
                 );
             }
         }
 
         foreach ($arrayoper as $var){
-            if ( !(isset($list['p'][$var['cat_id']]) || (isset($list['d'][$var['cat_id']] ) ) ) ){
+//            if ( !(isset($list['p'][$var['cat_id']]) || (isset($list['d'][$var['cat_id']] ) ) ) ){
 
+                // Фактическая сумма
                 if (($var['money'] <= 0))
                 {
-                    $list['d'][$var['cat_id']] = array(
-                        'amount' => 0, // Планируемая сумма
-                        'money'  => (float)$var['money'],  // Фактическая сумма
-                        'mean'   => 0  // Среднее за три месяца
-                    );
+                    $list['d'][$var['cat_id']]['money']  = (float) $var['money'];
+                    $list['d'][$var['cat_id']]['amount'] = (float)@$list['d'][$var['cat_id']]['amount'];
+                    $list['d'][$var['cat_id']]['mean']   = (float)@$list['d'][$var['cat_id']]['mean'];
                 } else {
-                    $list['p'][$var['cat_id']] = array(
-                        'amount' => 0, // Планируемая сумма
-                        'money'  => (float)abs($var['money']),  // Фактическая сумма
-                        'mean'   => 0  // Среднее за три месяца
-                    );
+                    $list['p'][$var['cat_id']]['money']  = (float) abs($var['money']);
+                    $list['p'][$var['cat_id']]['amount'] = (float)@$list['p'][$var['cat_id']]['amount'];
+                    $list['p'][$var['cat_id']]['mean']   = (float)@$list['p'][$var['cat_id']]['mean'];
                 }
-            }
+//            }
         }
         
         return array (
-            'list' => $list,
+                'list' => $list,
             'main' => array () /** @deprecated */
         );
     }
