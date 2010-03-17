@@ -128,6 +128,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             'amount'     => (float) str_replace ( ' ', '', $request->post['amount'] ),
             'category'   => ( int ) $request->post['category'],
             'date'       => Helper_Date::RusDate2Mysql( $this->getDateOperation() ),
+            'start'      => Helper_Date::RusDate2Mysql( $request->post['start'] ),
             'comment'    => ( string ) $request->post['comment'],
             'tags'       => isset( $request->post['tags'] ) ? $request->post['tags'] : null,
             'convert'    => isset( $request->post['convert'] ) ? $request->post['convert'] : 0,
@@ -160,7 +161,13 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                 
                 if ( $event_array['type'] <= 1 ) {
 
-                    ($event_array['type'] == 0)?$event_array['drain'] = 1:$event_array['drain'] = 0;
+                    if ( $event_array['type'] == 0 ) {
+                        $event_array['drain'] = 1;
+                        $event_array['amount'] = abs($event_array['amount']) * -1;
+                    } else {
+                        $event_array['drain'] = 0;
+                        $event_array['amount'] = abs($event_array['amount']);
+                    }
 
                     $operation->edit(
                         $event_array['id'],
@@ -170,7 +177,8 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                         $event_array['drain'],
                         $event_array['comment'],
                         $event_array['account'],
-                        $event_array['tags']
+                        $event_array['tags'],
+                        $event_array['accepted']
                     );
 
                 } elseif ( $event_array['type'] == 2 ) {

@@ -42,7 +42,6 @@ $accessConfig = array(
 	'budget'        => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'targets'       => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'calendar'      => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
-	'periodic'      => array( _User::TYPE_COMMON, _User::TYPE_PRO ), //@TODO Позже удалить
     'tags'          => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	
 	'experts'       => _User::TYPE_PRO,

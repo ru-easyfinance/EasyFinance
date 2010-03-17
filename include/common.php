@@ -36,7 +36,6 @@ Core::getInstance()->js = array(
         'widgets/profile/userCurrency.widget',
         'widgets/profile/userIntegrations.widget'
         ),
-//    'periodic' => array('periodic'),
     'operation' => array(
 		'widgets/operations/operationsJournal.widget', 
 		'operation'),

@@ -80,7 +80,7 @@ class Operation_Model {
         $_SESSION['account_money'] = $this->account_money;
         $_SESSION['total_sum']     = $this->total_sum;
     }
-    
+
 	/**
 	 * Проверяет валидность введённых данных
 	 * @param array $params
@@ -184,7 +184,7 @@ class Operation_Model {
 			}
 		}
 
-		$validated['comment'] = trim(htmlspecialchars($operation['comment']));
+		$validated['comment'] = trim($operation['comment']);
 
 		// Проверяем теги
 		if ( !empty ($operation['tags']) )
@@ -304,7 +304,7 @@ class Operation_Model {
                 foreach ($tags as $tag)
                 {
                     if (!empty($sql)) { $sql .= ','; }
-                    $sql .= "(". $this->user->getId() . "," . (int)$operationId . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+                    $sql .= "(". $this->user->getId() . "," . (int)$operationId . ",'" . addslashes($tag) . "')";
                 }
 
                 $this->db->query('INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES ' . $sql);
@@ -373,31 +373,50 @@ class Operation_Model {
 	 * @param $to_account   int       На счёт
 	 * @param $comment      string    Комментарий
 	 * @param $tags         array     Тег
+     * @param $accepted     int
 	 * @return bool
 	 */
-	function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = null){
+	function editTransfer( $id=0, $money = 0, $convert = 0, $date = '',
+        $account = 0, $toAccount=0, $comment = '', $tags = null, $accepted = null )
+    {
+
         if ( $tags ) {
+
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
 
-            $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?
-                WHERE user_id = ? AND id = ?";
-            $this->db->query($sql, $money, $date, $account, $toAccount, $comment, implode(', ', $tags), $this->user->getId(), $id);
+            if ( $accepted ) {
+                $sql = "UPDATE operation
+                    SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, accepted=1
+                    WHERE user_id = ? AND id = ?";
+            } else {
+                $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?
+                    WHERE user_id = ? AND id = ?";
+            }
+
+            $this->db->query($sql, $money, $date, $account, $toAccount, $comment,
+                implode(', ', $tags), $this->user->getId(), $id);
 
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . $id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+                $sql .= "(". $this->user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
 
         } else {
+
+            if ( $accepted ) {
+                $sql = "UPDATE operation
+                    SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?, accepted=1
+                    WHERE user_id = ? AND id = ?";
+            } else {
+                $sql = "UPDATE operation
+                    SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?
+                    WHERE user_id = ? AND id = ?";
+            }
             
-            $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?
-                WHERE user_id = ? AND id = ?";
-
-            $next = $this->db->query("SELECT id FROM operation WHERE tr_id=?", $id);
-
             //если есть смежная запись, т.е. редактируем перевод
+            $next = $this->db->query("SELECT id FROM operation WHERE tr_id=?", $id);
             if ( $next ) {
                 if ( !empty( $tags ) ) {
 
@@ -418,12 +437,30 @@ class Operation_Model {
                 }
                 
             } else {// иначе делаем перевод из доходной/расходной операции
-                $sql = "UPDATE operation SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?, cat_id=0, tr_id=0
-                WHERE user_id = ? AND id = ?";
-                $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, '', NULL, $this->user->getId(), $id);//перевод с
-                $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
+                if ( $accepted ) {
+                    $sql = "UPDATE operation
+                        SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?,
+                        cat_id=0, tr_id=0, accepted=1
+                        WHERE user_id = ? AND id = ?";
+                } else {
+                    $sql = "UPDATE operation
+                        SET money=?, date=?, account_id=?, transfer=?, comment=?, tags=?, imp_id=?, cat_id=0, tr_id=0
+                        WHERE user_id = ? AND id = ?";
+                }
+
+
+                //перевод с
+                $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, '', 
+                    NULL, $this->user->getId(), $id);
+                if ( $accepted ) {
+                    $sql = "INSERT INTO operation
+                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id, accepted)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?, 1)";
+                } else {
+                    $sql = "INSERT INTO operation
+                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
+                }
                 $this->db->query($sql, $this->user->getId(), $money, $date, -1, $toAccount, $id,
                     $comment, $account, NULL);
             }
@@ -638,30 +675,48 @@ class Operation_Model {
      * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
      * @param string $comment    Комментарий транзакции
      * @param int    $account_id Ид счета
+     * @param int    $accepted
      *
      * @return bool true - Регистрация прошла успешно
      */
-    function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
+    function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null, $accepted=null)
     {
         // Если есть теги, то добавляем и их тоже
         if ($tags)
         {
             $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
-
-            $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?
-                WHERE user_id = ? AND id = ?";
-            $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, implode(', ', $tags), $this->user->getId(), $id);
+            if ( $accepted ) {
+                $sql = "UPDATE operation SET
+                    money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?, accpeted=?
+                    WHERE user_id = ? AND id = ?";
+                $this->db->query($sql, $money, $date, $category, $account, $drain, $comment,
+                    implode(', ', $tags), $accepted, $this->user->getId(), $id);
+            } else {
+                $sql = "UPDATE operation SET
+                    money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?
+                    WHERE user_id = ? AND id = ?";
+                $this->db->query($sql, $money, $date, $category, $account, $drain, $comment,
+                    implode(', ', $tags), $this->user->getId(), $id);
+            }
 
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . $id . ",'" . htmlspecialchars(addslashes($tag)) . "')";
+                $sql .= "(". $this->user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
-            $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?
-                WHERE user_id = ? AND id = ?";
-            $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, $this->user->getId(), $id);
+            if ( $accepted ) {
+                $sql = "UPDATE operation SET
+                    money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, accepted=?
+                    WHERE user_id = ? AND id = ?";
+                $this->db->query($sql, $money, $date, $category, $account, $drain, $comment,
+                    $accepted, $this->user->getId(), $id);
+            } else {
+                $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?
+                    WHERE user_id = ? AND id = ?";
+                $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, $this->user->getId(), $id);
+            }
         }
         // Обновляем данные о счетах пользователя
         Core::getInstance()->user->initUserAccounts();
@@ -711,47 +766,6 @@ class Operation_Model {
         Core::getInstance()->user->initUserTargets();
         Core::getInstance()->user->save();
         return true;
-    }
-
-    /**
-     * Получает сумму всех счетов пользователя
-     * @param int $account_id Ид счёта
-     * @param string $period Период
-     * @return 
-     */
-    function selectMoney($id, $period = '')
-    {
-        if (!empty($period)) {
-            if ($period == "today") {
-                    $order = "AND `date` = '".date("Y.m.d")."'";
-            }
-            if (html($_GET['order']) == "month") {
-                    $order = "AND (m.`date` BETWEEN '".date("Y.m.01")."' AND '".date("Y.m.31")."' or m.`date` = '0000.00.00')";
-            }
-            if (html($_GET['order']) == "week") {
-                    $begin_week = (date('d')+1) - date('w');
-                    $order = "AND (m.`date` BETWEEN '".date("Y.m.$begin_week")."' AND '".date("Y.m.d")."' or m.`date` = '0000.00.00')";
-            }
-        }else{
-            $limit = "LIMIT 0,30";
-        }
-        $sql = "SELECT m.`id`, m.`user_id`, m.`money`, DATE_FORMAT(m.date,'%d.%m.%Y') as date,
-           m.`cat_id`, m.`bill_id`, c.`cat_name`, b.`bill_name`, m.`drain`, m.`comment`,
-           b.`bill_currency`, cu.`cur_name`, m.`transfer`, m.`tr_id`,
-        FROM `money` m
-        LEFT JOIN `category` c on c.`cat_id` = m.`cat_id`
-        LEFT JOIN `bill` b on b.`bill_id` = m.`bill_id`
-        LEFT JOIN `bill` bt on bt.`bill_id` = m.`transfer`
-        LEFT JOIN `currency` cu on cu.`cur_id` = b.`bill_currency`
-            WHERE m.`bill_id` = '".$id."'
-                   AND m.`user_id` = '".$this->user_id."'
-                   ".$order."
-            ORDER BY m.`date` DESC, m.`id` DESC ".$limit;
-
-        $this->user_money = $row;
-        $this->account_money = $id;
-        $this->getTotalSum($id);
-        $this->save();
     }
 
     /**

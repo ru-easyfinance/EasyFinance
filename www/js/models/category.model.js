@@ -12,6 +12,7 @@ easyFinance.models.category = function(){
 
     // private variables
     var _categories = null;
+    var _order = {};
 
     // private functions
     function _htmlDecodeAll() {
@@ -40,16 +41,25 @@ easyFinance.models.category = function(){
         );
     }
 
-    function _sortUserCategories() {
-        var arr = [];
+    function _compareUserCategoryOrderByName(a, b) {
+        var strA = _categories.user[a].name.toLowerCase();
+        var strB = _categories.user[b].name.toLowerCase();
 
-        for(var cat in _categories.user)
-            arr.push(_categories.user[cat]);
+        return strA.localeCompare(strB);
+    }
 
-        arr.sort(function(a,b){return a.name.localeCompare(b.name);});
+    // создаёт массивы, содержащие ключи 
+    // отсортированных по имени категорий
+    function _createOrderLists() {
+        for (var prop in _categories) {
+            _order[prop] = new Array();
+            for (var key in _categories[prop]) {
+                _order[prop].push (_categories[prop][key].id);
+            }
+        }
 
-        _categories.user = [];
-        _categories.user = arr;
+        _order.user.sort(_compareUserCategoryOrderByName);
+        _order.recent.sort(_compareUserCategoryOrderByName);
     }
 
     // public variables
@@ -67,6 +77,7 @@ easyFinance.models.category = function(){
         
         if (typeof param1 == 'object') {
             _categories = param1;
+            _createOrderLists();
             _htmlDecodeAll();
             if (typeof param2 == 'function')
                 param2(_categories);
@@ -74,6 +85,7 @@ easyFinance.models.category = function(){
             // load from server
             $.get(LIST_URL, 'responseMode=json',function(data) {
                 _categories = data;
+                _createOrderLists();
                 _htmlDecodeAll();
 
                 $(document).trigger('categoriesLoaded');
@@ -174,6 +186,10 @@ easyFinance.models.category = function(){
         return $.extend({}, _categories.user, true);
     }
 
+    function getUserCategoriesKeysOrderedByName(){
+        return $.extend({}, _order.user, true);
+    }
+
     function getUserCategoryNameById(id){
         if (_categories.user[id])
             return _categories.user[id]["name"];
@@ -198,7 +214,6 @@ easyFinance.models.category = function(){
             cat = _categories.user[key];
             if (cat.parent == idParent) {
                 arrParent[cat.id] = $.extend({children: []}, cat);
-//                arrParent[cat.id].children = [];
                 _treeAddChildren(arrParent[cat.id].children, cat.id);
             }
         }
@@ -223,10 +238,35 @@ easyFinance.models.category = function(){
             return null;
 
         var tree = [];
-//        var cat = null;
 
         // recursive function
         _treeAddChildren(tree, "0");
+
+        return tree;
+    }
+
+    // #886. для корректной сортировки по имени
+    function _treeAddChildrenOrdered(arrParent, idParent) {
+        // fill parent categories
+        var cat;
+
+        for (var row in _order.user) {
+            cat = _categories.user[_order.user[row]];
+            if (cat && cat.parent == idParent) {
+                arrParent.push($.extend({children: []}, cat));
+                _treeAddChildrenOrdered(arrParent[arrParent.length-1].children, cat.id);
+            }
+        }
+    }
+
+    function getUserCategoriesTreeOrdered() {
+        if (!_categories)
+            return null;
+
+        var tree = [];
+
+        // recursive function
+        _treeAddChildrenOrdered(tree, "0");
 
         return tree;
     }
@@ -266,8 +306,10 @@ easyFinance.models.category = function(){
         getRecentCategories: getRecentCategories,
         getSystemCategories:getSystemCategories,
         getUserCategories:getUserCategories,
+        getUserCategoriesKeysOrderedByName: getUserCategoriesKeysOrderedByName,
         getUserCategoryNameById: getUserCategoryNameById,
         getUserCategoriesTree: getUserCategoriesTree,
+        getUserCategoriesTreeOrdered: getUserCategoriesTreeOrdered,
         getUserCategoriesByType:getUserCategoriesByType,
         isParentCategory: isParentCategory,
         getChildrenByParentId: getChildrenByParentId

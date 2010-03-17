@@ -114,7 +114,7 @@ easyFinance.widgets.budget = function(data){
     ///////////////////////////////////////////////////////////////////////////
     //                          list                                         //
     ///////////////////////////////////////////////////////////////////////////
-    var _categories = easyFinance.models.category.getUserCategoriesTree();
+    var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
     var _data;
     var date = new Date();
     var dateprc;

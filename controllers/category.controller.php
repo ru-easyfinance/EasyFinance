@@ -82,7 +82,7 @@ class Category_Controller extends _Core_Controller_UserCommon
 			$errors = array();
 			
 			$category = array(
-				'name' 	=> htmlspecialchars( trim($this->request->post['name']) ),
+				'name'      => trim($this->request->post['name']),
 				'parent' 	=> (int)$this->request->post['parent'],
 				'system' 	=> (int)$this->request->post['system'],
 				'type'		=> isset($this->request->post['type'])?$this->request->post['type']:$category['type'],
@@ -145,7 +145,7 @@ class Category_Controller extends _Core_Controller_UserCommon
 		{
 			$category = array(
 				'id' 		=> isset($this->request->post['id'])?$this->request->post['id']:$category['id'],
-				'name'          => htmlspecialchars($this->request->post['name']),
+				'name'      => $this->request->post['name'],
 				'parent' 	=> (int)$this->request->post['parent'],
 				'system' 	=> (int)$this->request->post['system'],
 				'type' 		=> (int)$this->request->post['type'],

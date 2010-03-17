@@ -7,7 +7,7 @@ $(document).ready(function() {
     $('.block2 .inside').css({width: '679px'});
     $('.block2 .inside .form_block').css({width: '353px'});
 
-    easyFinance.models.category.load(res.category, function(model) {
+    easyFinance.models.category.load(res.category, function() {
         // Обновляем список системных категорий
         drawSystemCategoriesCombo();
 
@@ -286,31 +286,20 @@ $(document).ready(function() {
      */
     function drawUserCategoriesList() {
             var data = easyFinance.models.category.getAllCategories();
-
-            cat = data;
-            //$('div.categories div').remove('div');
-            $('div.categories').empty();
-
+            cat = data; // не удалять! нужно для редактирования
+            var order = easyFinance.models.category.getUserCategoriesKeysOrderedByName();
+            
             // Обновляем список родительских категорий
+            $('div.categories').empty();
             if (data.user){
                 drawParentCategoriesCombo(data.user);
 
-                var id,pr,ct;
-                //var p=[];
-                //$('.categories #table').append('<table>');
-                for(id in data.user) {
-                    listInsertCategory(data.user[id]);
+                for(var row in order) {
+                    listInsertCategory(data.user[order[row]]);
                 }
             }
     }
-    /**
-     *slide menu del edit
-     */
-//    $(".l_n_cont").live('mouseover',function(){
-//        $(this).closest('.line').find(".ul_head").show();
-//    });
-    //$(".l_n_cont").live('mouseout',function(){$(this).closest('.line').find("ul").hide()});
-    //('.line').find("ul").show();
+
     $('div.line tr,div.l_n_cont').live('mouseover',function(){
         $('div.line tr,div.l_n_cont').removeClass('act').find('ul').hide();
         $(this).addClass('act').find('ul').show();

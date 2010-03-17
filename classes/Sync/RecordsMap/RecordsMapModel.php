@@ -71,7 +71,6 @@ class RecordsMap_Model {
                 case ('Debets') :{$tab='accounts';$tabid='account_id';};break;
                 case ('Incomes') :{$tab='operation';$tabid='id';};break;
                 case ('Outcomes') :{$tab='operation';$tabid='id';};break;
-                case ('Plans') :{$tab='periodic';$tabid='id';};break;
                 default : {$tab='accounts';$tabid='account_id';};break;
             }
             $visCat = " ";//дополнительная строка для 'удалённых' категорий
