@@ -92,9 +92,7 @@ function FloatFormat(obj, in_string){
 			p = 0;
 		}
 	}
-	//    if (in_string.substr(1,1) == '-')newstr ='-'+newstr;
-	//    var newStr = formatCurrency(tofloat(in_string))
-	//    if (newStr == in_string) return false;
+
 	//ловим положение каретки,
 	//ловим символы перед ней,
 	$(obj).val(newstr);

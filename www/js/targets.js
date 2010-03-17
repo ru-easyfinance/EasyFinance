@@ -244,12 +244,7 @@ $(document).ready(function(){
             //$.jGrowl("Неверно введена сумма финцели!!!", {theme: 'red', sticky: true});
             che = 0;
         }
-        /*a = tofloat($('#amountf').val());
-        b = tofloat($('#tg_amount').val());
-        if ( a-b > 0){
-            str += "Неверно введена нач. сумма<br>";
-            che = 0;
-        }*/
+
         if ($('#name').val() == ''){
             str += "Неверно введено имя<br>"
             //$.jGrowl("Неверно введено имя!!!", {theme: 'red', sticky: true});

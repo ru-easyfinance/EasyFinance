@@ -485,8 +485,6 @@ easyFinance.models.accounts = function(){
 
             $.post(url, params, function(data){
                 // @todo: update totalBalance!
-                //if (data.operation)
-                //    _accounts[data.operation.account]["totalBalance"] = _accounts[data.operation.account]["totalBalance"] - toFloat(data.operation.amount);
 
                 var event, k;
                 var props = ["calendar", "overdue", "future"];
