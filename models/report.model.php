@@ -226,7 +226,7 @@ class Report_Model
         $arr = array();
         if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code,cur.cur_id,
+                                    a.account_name, op.money, cur.cur_char_code,cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -260,7 +260,7 @@ class Report_Model
         $arr = array();
         if ($account != null) {
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
@@ -272,7 +272,7 @@ class Report_Model
         $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id,
+                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id
             FROM operation op
             LEFT JOIN accounts a ON a.account_id=op.account_id
             LEFT JOIN category c ON c.cat_id=op.cat_id
