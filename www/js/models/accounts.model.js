@@ -27,13 +27,31 @@ easyFinance.models.accounts = function(){
     var _this = null;
 
     var _accounts;
+    var _accountsOrdered;
     var _journal;
 
     // private functions
+    function _compareAccountsOrderByName(a, b) {
+        var strA = a.name.toLowerCase();
+        var strB = b.name.toLowerCase();
+
+        return strA.localeCompare(strB);
+    }
+
+    function _orderAccounts() {
+        _accountsOrdered = [];
+
+        for (var key in _accounts)
+            _accountsOrdered.push(_accounts[key]);
+
+        _accountsOrdered.sort(_compareAccountsOrderByName);
+    }
+
     function _loadAccounts(callback) {
         $.post(ACCOUNTS_LIST_URL, '', function(data) {
             if (data.result) {
                 _accounts = $.extend(true, {}, data.result.data);
+                _orderAccounts();
 
                 $(document).trigger('accountsLoaded');
             }
@@ -58,6 +76,7 @@ easyFinance.models.accounts = function(){
         
         if (typeof param1 == 'object'){
             _accounts = param1;
+            _orderAccounts();
 
             $(document).trigger('accountsLoaded');
 
@@ -75,6 +94,10 @@ easyFinance.models.accounts = function(){
 
     function getAccounts(){
         return $.extend(true, {}, _accounts);
+    }
+
+    function getAccountsOrdered(){
+        return $.extend(true, {}, _accountsOrdered);
     }
 
     function getAccountById(id){
@@ -512,6 +535,7 @@ easyFinance.models.accounts = function(){
     return {
         load: load,
         getAccounts: getAccounts,
+        getAccountsOrdered: getAccountsOrdered,
         getAccountById: getAccountById,
 
         getAccountNameById: getAccountNameById,

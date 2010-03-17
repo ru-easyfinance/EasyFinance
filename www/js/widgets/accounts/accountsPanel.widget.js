@@ -19,7 +19,8 @@ easyFinance.widgets.accountsPanel = function(){
         $('.bill_list li.account:not(.add)').each(function(){
             var defaultCurrency = _modelCurrency.getDefaultCurrency();
             var id =$(this).find('div.id').attr('value').replace("edit", "");
-            var account = _model.getAccounts()[id];
+            _accounts = _model.getAccounts();
+            var account = _accounts[id];
 
             var str = '<table>';
             str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
@@ -144,69 +145,6 @@ easyFinance.widgets.accountsPanel = function(){
             }
         });
 
-/*
-        $('.bill_list li.account:not(.add) a').live('mouseover',function(){
-            var _accounts = _model.getAccounts();
-            var defaultCurrency = easyFinance.models.currency.getDefaultCurrency();
-            var g_types = [0,0,0,0,0,0,1,2,0,2,3,3,3,3,4,0,0];// Жуткий масив привязки типов к группам
-            var spec_th = [ [],
-                        ['<th>% годовых</th>',
-                            '<th>Доходность, % годовых</th>'],
-                        ['<th>% годовых</th>',
-                            '<th>Доходность, % годовых</th>',
-                            '<th>�?зменение с даты открытия</th>'],
-                        ['<th>% годовых</th>'],
-                        ['<th>Доходность, % годовых</th>',
-                            '<th>�?зменение с даты открытия</th>']];//доп графы для групп
-            var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
-            var account = _model.getAccounts()[id];
-            var spec = spec_th[g_types[account.type]];
-
-            var str = '<table style="padding:3px">';
-            str +=  '<tr style="line-height:19px;"><th> Название </th><td style="width:5px">&nbsp;</td><td>'+
-                        account.name + '</td></tr>';
-            str +=  '<tr style="line-height:19px;"><th> Тип </th><td style="width:5px">&nbsp;</td><td>'+
-                        _model.getAccountTypeString(account.id) + '</td></tr>';
-            str +=  '<tr style="line-height:19px;"><th> Описание </th><td style="width:5px">&nbsp;</td><td>'+
-                        account.comment + '</td></tr>';
-            str +=  '<tr style="line-height:19px;"><th> Остаток </th><td style="width:5px">&nbsp;</td><td style="width:95px">'+
-                formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
-            if (_accounts[id]["reserve"] != 0){
-                var delta = (formatCurrency(account.totalBalance-_accounts[id]["reserve"]));
-                str +=  '<tr style="line-height:19px;"><th> Доступный&nbsp;остаток </th><td style="width:5px">&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-                str +=  '<tr style="line-height:19px;"><th> Зарезервировано </th><td style="width:5px">&nbsp;</td><td>'+formatCurrency(_accounts[id]["reserve"])+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-            }
-
-            str +=  '<tr style="line-height:19px;"><th style="max-width:150px"> Остаток в валюте по умолчанию</th><td style="width:10px">&nbsp;</td><td>'+
-                formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
-
-            str += '</table>';
-
-            $('.qtip').remove();
-            $(this).qtip({
-                content: str,
-                position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-                },
-                show: {
-                  when: false, // Don't specify a show event
-                  ready: true // Show the tooltip when ready
-                },
-                hide: {
-                  when: 'mouseleave'
-                }, // Don't specify a hide event
-                style: {
-                  width: {max: 300},
-                  name: 'light',
-                  tip: true // Give them tips with auto corner detection
-                }
-            });
-        });
-        */
-
         return this;
     }
 
@@ -220,7 +158,7 @@ easyFinance.widgets.accountsPanel = function(){
         if (!_model)
             return;
 
-        var data = $.extend({},_model.getAccounts());
+        var data = $.extend({},_model.getAccountsOrdered());
 
         if (!data){
             data = {};

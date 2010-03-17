@@ -111,6 +111,7 @@ easyFinance.widgets.operationEdit = function(){
     function _initSexyCombos() {
         // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
+        var accountsOrdered = _modelAccounts.getAccountsOrdered();
         var accountsCount = 0;
         var key;
 
@@ -131,20 +132,20 @@ easyFinance.widgets.operationEdit = function(){
             // если счетов мало (не больше частых счетов),
             // выводим все счета по алфавиту
             for (key in accounts) {
-                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
             }
         } else {
             // если счетов много, сначала выводим часто используемые счета
             for (key in recent) {
-                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
                 delete accounts[key];
             }
 
             _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
 
             // затем выводим все остальные счета в алфавитном порядке
-            for (key in accounts) {
-                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')'});
+            for (var row in accountsOrdered) {
+                _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
             }
         }
         
@@ -883,13 +884,14 @@ easyFinance.widgets.operationEdit = function(){
         if (!_sexyAccount)
             return;
 
-        var data = $.extend({}, _modelAccounts.getAccounts());
+        var data = _modelAccounts.getAccountsOrdered();
+
         if (!data)
             data = {};
 
         var htmlAccounts = '';
         for (var key in data ) {
-            htmlAccounts = htmlAccounts + '<option value="' + key + '">'
+            htmlAccounts = htmlAccounts + '<option value="' + data[key].id + '">'
                 + data[key].name + ' (' + _modelAccounts.getAccountCurrencyText(key) + ')' + '</option>';
         }
 

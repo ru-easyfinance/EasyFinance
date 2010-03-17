@@ -102,7 +102,7 @@ easyFinance.widgets.accountsJournal = function(){
 
     function _initBigTip(){
         $('#accountsJournal .content .item').each(function(){
-//            _accounts = _model.getAccounts();
+            _accounts = _model.getAccounts();
             var defaultCurrency = _modelCurrency.getDefaultCurrency();
             var id = $(this).attr('id').split("_", 2)[1];
             var account = _model.getAccounts()[id];
@@ -177,6 +177,7 @@ easyFinance.widgets.accountsJournal = function(){
     }
 
     function redraw(){
+        var account_list_ordered = _model.getAccountsOrdered();
         _accounts = _model.getAccounts();
         var account_list = _accounts;
         if (!account_list || account_list.length == 0){
@@ -198,18 +199,19 @@ easyFinance.widgets.accountsJournal = function(){
             var defaultCurrency = _modelCurrency.getDefaultCurrency();
 
         // формирует массив с таблицей счетов по группам
-        for (var key in account_list )
+        for (var row in account_list_ordered)
+   //for (var key in account_list )
         {
-            type = g_types[account_list[key]['type']];
-            colorClass = account_list[key]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
+            type = g_types[account_list_ordered[row]['type']];
+            colorClass = account_list_ordered[row]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
             
             if (!isNaN(type)){
-                str = '<tr class="item child" id="accountsJournalAcc_' + account_list[key]['id'] + '">';
-                str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list[key]["name"], 25) + '</span></td>';
-                str = str + '<td class="totalBalance money"><div class="abbr">' + _model.getAccountCurrencyText(key) + '</div>'+'<div class="number '+colorClass+'">' + formatCurrency(account_list[key]["totalBalance"] ) + '</div>';
+                str = '<tr class="item child" id="accountsJournalAcc_' + account_list_ordered[row]['id'] + '">';
+                str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list_ordered[row]["name"], 25) + '</span></td>';
+                str = str + '<td class="totalBalance money"><div class="abbr">' + _model.getAccountCurrencyText(account_list_ordered[row]["id"]) + '</div>'+'<div class="number '+colorClass+'">' + formatCurrency(account_list_ordered[row]["totalBalance"] ) + '</div>';
                 str = str + '</td>';
-                str = str + '<td class="def_cur mark money"><div class="number '+colorClass+'">' + formatCurrency( account_list[key]["totalBalance"] * _model.getAccountCurrencyCost(key) / defaultCurrency['cost']) + '';
-                summ[type] += (account_list[key]["totalBalance"] * _model.getAccountCurrencyCost(key) / defaultCurrency['cost']);
+                str = str + '<td class="def_cur mark money"><div class="number '+colorClass+'">' + formatCurrency( account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost']) + '';
+                summ[type] += (account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost']);
                 str = str + '</div>' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
             }
