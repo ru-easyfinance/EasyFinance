@@ -1,6 +1,18 @@
 #accountsJournal{
     width : 99.5%
 }
+
+/* меняем размеры таблицы в зависимости от размера окна */
+.heightSmall #accountsJournal .content {
+    height: 150px;
+    max-height: 150px;
+}
+
+.heightLarge #accountsJournal .content {
+    height: 460px;
+    max-height: 460px;
+}
+
 #accountsJournal table tr{
     cursor: pointer;
 }

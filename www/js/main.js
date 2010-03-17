@@ -7,14 +7,16 @@ function setHeightClass(){
     }else{
         cheight = document.body.clientHeight;
     }
+
 	var cls = '';
 	if (cheight > 600){
-		cls = 'large';
+		cls = 'heightLarge';
 	}else if(cheight > 350){
-		cls = 'normal';
+		cls = 'heightNormal';
 	}else{
-		cls = 'small';
+		cls = 'heightSmall';
 	}
+    
 	$('div#mainwrap').addClass(cls);
 }
 
