@@ -1,7 +1,20 @@
-easyFinance.models.user = function(){
-	var URL_FOR_GET_INTEGRATION_EMAIL = '/?responseMode=json';
-	var URL_FOR_REMOVE_INTEGRATION_EMAIL = '/?responseMode=json';
-	var _data;
+/**
+ * @author rewle
+ */
+easyFinance.models.user = function(data){
+	var URL_FOR_GET_INTEGRATION_EMAIL = '/profile/generate_service_mail?responseMode=json';
+	var URL_FOR_REMOVE_INTEGRATION_EMAIL = '/profile/delete_service_mail/?responseMode=json';
+	var URL_FOR_LOAD_USER_INFO = "/profile/load_main_settings/?responseMode=json";
+	var URL_FOR_SAVE_USER_INFO = '/profile/save_main_settings/?responseMode=json';
+	var SETTING_FOR_WRITING_COOKIE = {
+		expire: 100,
+		path: '/',
+		domain: false,
+		secure: '1'
+	}
+	
+	
+	var _data = data || {};
 	/**
 	 * Инициирует модель из реса - пока не реализовано со стороны сервера
 	 */
@@ -14,7 +27,7 @@ easyFinance.models.user = function(){
 	 * @return {void}
 	 */
 	function reload(calback){
-		$.get("/profile/load_main_settings/?responseMode=json", {}, function(data){
+		$.get(URL_FOR_LOAD_USER_INFO, {}, function(data){
 			_data = data.profile;//server will be sent 'spamer'&& notify && specialMail
 			_data.getNotify = res.getNotify;
 			_data.tooltip = $.cookie('tooltip');
@@ -32,64 +45,29 @@ easyFinance.models.user = function(){
 		return _data;
 	}
 	/**
-	 * Возвращает почту пользователя
-	 * @return {string}
-	 */
-	function getEmail(){
-		return _data.mail;
-	}
-	/**
-	 * Возвращает логин пользователя
-	 * @return {string}
-	 */
-	function getLogin(){
-		return _data.login;
-	}
-	/**
-	 * Возвращает имя пользователя
-	 * @return {string}
-	 */
-	function getName(){
-		return _data.name;
-	}
-	//    /**
-	//     * Возвращает активную вкладку в левой панели
-	//     * @return {str}
-	//     */
-	//    function getActiveInsertInLeftPanel(){
-	//        return _data.activeInsertInLeftPanel;
-	//    }
-	/**
 	 * Сохраняет пользовательскую информацию
 	 * @param data {object}
 	 * @param calback {function}
 	 * @return void
-	 *
 	 */
 	function setUserInfo(data, calback){
 		if (typeof(data) == 'object') {
-			$.cookie('tooltip', (data.tooltip || null), {
-				expire: 100,
-				path: '/',
-				domain: false,
-				secure: '1'
-			});
-			$.cookie('guide', (data.guide || null), {
-				expire: 100,
-				path: '/',
-				domain: false,
-				secure: '1'
-			});
-			$.post('/profile/save_main_settings/?responseMode=json', {
+			//cookies
+			$.cookie('tooltip', (data.tooltip || null), SETTING_FOR_WRITING_COOKIE);
+			$.cookie('guide', (data.guide || null), SETTING_FOR_WRITING_COOKIE);
+			//Ajax
+			$.post(URL_FOR_SAVE_USER_INFO, {
 				getNotify: data.getNotify || 0,
 				login: data.login || '',
 				pass: data.password,
 				newpass: data.newPassword,
-				//                    confirmpass: data.confirmPassword || '', //server will be add confirm password
+				//              confirmpass: data.confirmPassword || '', //server will be add confirm password
 				mail: data.mail || '',
 				guide: data.guide || 0 // server line75
 			}, function(data){
-				calback(data);
+				if (typeof(calback) == 'function') {
+					calback(data);
+				}
 			}, 'json');
 		}
 	}
@@ -135,6 +113,8 @@ easyFinance.models.user = function(){
 			}
 		}, 'json');
 	}
+	
+	
 	return {
 		reload: reload,
 		getUserInfo: getUserInfo,

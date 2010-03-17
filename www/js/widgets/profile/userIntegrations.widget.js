@@ -4,7 +4,7 @@ easyFinance.widgets.userIntegrations = function(model){
 	var _data = {};
 	
 	function _print(){
-		if (_data.email){
+		if (typeof(_data.email) == 'string'){
 			_node.find('.email .notExist').hide();
 			_node.find('.email .exist').show().find('span').text(_data.email);
 		}else{
@@ -46,10 +46,10 @@ easyFinance.widgets.userIntegrations = function(model){
 	}
 	function load(data){
 		if (typeof(data) != 'object'){
-			return;
+			data = {};
 		}
-		if(data.integrationEmail){
-			_data.email = data.integrationEmail;
+		if(data.service_mail){
+			_data.email = data.service_mail;
 		}
 		_print();
 	}
@@ -62,5 +62,5 @@ easyFinance.widgets.userIntegrations = function(model){
 
 $(document).ready(function(){
 	easyFinance.widgets.userIntegrations.init();
-	easyFinance.widgets.userIntegrations.load();
+	easyFinance.widgets.userIntegrations.load({});
 })

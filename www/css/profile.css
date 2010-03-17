@@ -98,8 +98,15 @@ ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
 }
 
 .profile .email .description{
+	margin-top: 7px;
 	font-size: 12px;
 	font-weight: normal;
 	line-height: 18px;
-	
+	color: #B4B4B4;	
+}
+.profile .email .description h4{
+	margin-top: 7px;
+	font-size: 13px;
+	line-height: 18px;
+	color: #202020;	
 }
