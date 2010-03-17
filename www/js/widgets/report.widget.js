@@ -415,7 +415,7 @@ easyFinance.widgets.report = function(){
             }
         }
         
-        var th = '<tr><th>&nbsp;</th><span>Период 1</span></th><span>Период 2</span></th><span>Разница</span></th></th>';
+        var th = '<tr><th>&nbsp;</th><th><span>Период 1</span></th><th><span>Период 2</span></th><th><span>Разница</span></th></th>';
         
         var tr = '';
         
