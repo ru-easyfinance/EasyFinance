@@ -22,40 +22,42 @@ easyFinance.widgets.accountsPanel = function(){
             _accounts = _model.getAccounts();
             var account = _accounts[id];
 
-            var str = '<table>';
-            str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
-                        account.name + '</td></tr>';
-            str +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+
-                        _model.getAccountTypeString(account.id) + '</td></tr>';
-            str +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+
-                        account.comment + '</td></tr>';
-            str +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+
-                formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
-            if (account.reserve != 0){
-                var delta = (formatCurrency(account.totalBalance-account.reserve));
-                str +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-                str +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-            }
-
-            str +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
-                formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
-
-
-            str += '</table>';
-            $(this).qtip({
-                content: str, // Set the tooltip content to the current corner
-                position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-                },
-                style: {
-                  width: {max: 300},
-                  name: 'light',
-                  tip: true // Give them tips with auto corner detection
+            if (account) {
+                var str = '<table>';
+                str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
+                            account.name + '</td></tr>';
+                str +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+
+                            _model.getAccountTypeString(account.id) + '</td></tr>';
+                str +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+
+                            account.comment + '</td></tr>';
+                str +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+
+                    formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
+                if (account.reserve != 0){
+                    var delta = (formatCurrency(account.totalBalance-account.reserve));
+                    str +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
+                    str +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
                 }
-            });
+
+                str +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
+                    formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
+
+
+                str += '</table>';
+                $(this).qtip({
+                    content: str, // Set the tooltip content to the current corner
+                    position: {
+                      corner: {
+                         tooltip: 'topMiddle', // Use the corner...
+                         target: 'bottomMiddle' // ...and opposite corner
+                      }
+                    },
+                    style: {
+                      width: {max: 300},
+                      name: 'light',
+                      tip: true // Give them tips with auto corner detection
+                    }
+                });
+            }
         });
     }
 
@@ -154,6 +156,7 @@ easyFinance.widgets.accountsPanel = function(){
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
+        _accounts = _model.getAccounts();
 
         if (!_model)
             return;
