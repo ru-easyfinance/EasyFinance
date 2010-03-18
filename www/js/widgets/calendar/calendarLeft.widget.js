@@ -67,7 +67,8 @@ easyFinance.widgets.calendarLeft = function(){
                         (event.comment != "" ? event.comment+'<br>' : "")+
                         '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
                         + easyFinance.models.accounts.getAccountCurrencyText(event.account_id) + '</span>'+
-                        '<span class="date">'+event.date.substr(0, 5)+'</span>'+
+                        '<span class="date">'+event.date.substr(0, 5)+
+                        ((event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "") + '</span>'+
                         shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
                         '<div class="cont"><ul>'+
                         '<li title="Подтвердить" class="accept"><a></a></li>'+
@@ -97,7 +98,8 @@ easyFinance.widgets.calendarLeft = function(){
                         (event.comment != "" ? event.comment+'<br>' : "")+
                         '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
                         + easyFinance.models.accounts.getAccountCurrencyText(event.account_id) + '</span>'+
-                        '<span class="date">'+event.date.substr(0, 5)+'</span>'+
+                        '<span class="date">'+event.date.substr(0, 5)+
+                        ((event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "") + '</span>'+
                         shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
                         '<div class="cont"><ul>'+
                         '<li title="Подтвердить" class="accept"><a></a></li>'+

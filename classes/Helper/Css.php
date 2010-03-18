@@ -24,6 +24,7 @@ class Helper_Css implements _Core_Router_iHook
 			$templateEngine->append('css', 'jquery/fullcalendar.css');
 		}
 
+        $templateEngine->append('css', 'dialogBox.css');
 		$templateEngine->append('css', 'menuUser.css');
 		$templateEngine->append('css', 'efTable.css');
                 $templateEngine->append('css', 'calendar.css');
