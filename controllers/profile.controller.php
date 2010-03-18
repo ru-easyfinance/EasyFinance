@@ -21,13 +21,11 @@ class Profile_Controller extends _Core_Controller_UserCommon
     {
         $this->model = new Profile_Model();
         $this->tpl->assign('name_page', 'profile/profile');
-
     }
 
-    function index()
-    {
+    function index() 
+    { }
 
-    }
     /**
      * отдаёт логин имя мыло
      * return void;
@@ -38,13 +36,12 @@ class Profile_Controller extends _Core_Controller_UserCommon
 
     function save_main_settings(){
         $prop = array();
-        $prop['user_pass'] = htmlspecialchars($_POST['pass']);
+        $prop['user_pass']   = $_POST['pass'];
         //$prop['user_name'] = htmlspecialchars($_POST['name']);
-        $prop['user_mail'] = htmlspecialchars($_POST['mail']);
-        $prop['newpass'] = htmlspecialchars($_POST['newpass']);
-        $prop['getNotify'] = ((bool)$_POST['getNotify'])? 1: 0;
-//        $prop['help'] = $_POST['help'];
-        $prop['guide'] = $_POST['guide'];
+        $prop['user_mail']   = $_POST['mail'];
+        $prop['newpass']     = $_POST['newpass'];
+        $prop['getNotify']   = ((bool)$_POST['getNotify'])? 1: 0;
+        $prop['guide']       = $_POST['guide'];
         die($this->model->mainsettings('save',$prop));
     }
 
@@ -54,7 +51,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
 
     function save_currency(){
         $prop = array();
-        $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));//arr
+        $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));
         $prop['user_currency_default'] = (int)$_POST['currency_default'];
         
         die($this->model->currency('save', $prop));
@@ -63,5 +60,75 @@ class Profile_Controller extends _Core_Controller_UserCommon
     function cook(){
         die($this->model->cook());
     }
+
+    /**
+     * Генерируем служебную почту (если она не была сгенерирована)
+     */
+    function create_service_mail()
+    {
+        $mail = _Core_Request::getCurrent()->post['mail'];
+        
+        $user = Core::getInstance()->user;
+
+        if ( Helper_Mail::validateEmail ( $mail ) ) {
+
+            if ( $this->model->checkServiceEmailIsUnique ( $mail ) ) {
+
+                if ( $this->model->createServiceMail ( $user, $mail ) ) {
+
+                    $this->tpl->assign('result', array('text'=>'Ящик успешно создан'));
+                    
+                }
+
+            } else {
+
+                $this->tpl->assign('error', array('text'=>'Имя ящика не уникально'));
+
+            }
+
+        } else {
+
+            $this->tpl->assign('error', array('text'=>'Некорректное имя ящика'));
+
+        }
+        
+    }
+
+    /**
+     * Удаляет у пользователя служебную почту
+     */
+    function delete_service_mail()
+    {
+
+        $user = Core::getInstance()->user;
+
+        if ( $this->model->deleteServiceMail( $user ) ) {
+
+            $this->tpl->assign('result', array('text'=>'Ящик успешно удалён'));
+
+        } else {
+
+            $this->tpl->assign('error', array('text'=>'Ошибка при удалении ящика'));
+
+        }
+    }
+
+    /**
+     * Проверяет почту на уникальность
+     */
+    function service_mail_is_unique()
+    {
+        $mail = _Core_Request::getCurrent()->post['mail'];
+
+        if ( $this->model->checkServiceEmailIsUnique ( $mail ) ) {
+
+            $this->tpl->assign('result', array('text'=>'Имя ящика уникально'));
+
+        } else {
+
+            $this->tpl->assign('error', array('text'=>'Имя ящика не уникально'));
+
+        }
+    }
 }
-?>
+

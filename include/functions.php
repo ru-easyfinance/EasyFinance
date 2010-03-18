@@ -199,11 +199,6 @@ function decrypt($text, $key = CRYPT_KEY) {
     return unserialize(trim($p_t));
 }
 
-function make_float($var)
-{
-    return (float)str_replace(',','.',$var);
-}
-
 /**
  * Возвращает частоиспользуемые категории
  * @param int $count Максимальный размер возвращаемого списка

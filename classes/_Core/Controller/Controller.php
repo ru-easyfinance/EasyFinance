@@ -266,6 +266,11 @@ abstract class _Core_Controller
 
         $res += array(
             'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
+            'profile'   => array(
+                'integration'=>array(
+                    'email' => Core::getInstance()->user->getUserProps('user_service_mail')
+                )
+            ),
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'calendar' => array(
