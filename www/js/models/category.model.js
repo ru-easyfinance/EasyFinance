@@ -58,8 +58,8 @@ easyFinance.models.category = function(){
             }
         }
 
-        _order.user.sort(_compareUserCategoryOrderByName);
-        _order.recent.sort(_compareUserCategoryOrderByName);
+        //_order.user.sort(_compareUserCategoryOrderByName);
+        //_order.recent.sort(_compareUserCategoryOrderByName);
     }
 
     // public variables
