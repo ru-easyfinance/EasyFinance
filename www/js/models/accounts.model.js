@@ -32,12 +32,8 @@ easyFinance.models.accounts = function(){
 
     // private functions
     function _compareAccountsOrderByName(a, b) {
-        if (a.id == "656" && b.id == "478") {
-            debugger;
-        }
-        
-
-        if (!a || !b) {
+        if (!a || !b || !a.name || !b.name) {
+            alert('sss');
             return 0;
         }
 
