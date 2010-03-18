@@ -3,6 +3,51 @@ easyFinance.widgets.calendarPreview = function(){
     var now = new Date();
     var ddt_day , ddt_month;
     var ddt2month=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+	function init(){
+		if ($('#calend').length > 0) {
+		}
+		else {
+			//            $(document).bind(
+			//                'operationsAccepted operationEdited operationsDeleted operationsChainAdded operationsChainEdited operationsChainDeleted operationDateEdited',
+			//                function(data){
+			//                    easyFinance.models.calendarCache.clean();
+			//                    easyFinance.models.calendarCache.init(data.calendar || {});
+			//                    var date = new Date();
+			//                    date.setFullYear(date.getFullYear(), date.getMonth()+1, 1);
+			//                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth(),date.getFullYear());
+			//                }
+			//
+			//            );
+			$(document).bind('operationEdited operationsChainAdded operationsChainEdited operationDateEdited', function(data){
+				easyFinance.models.calendarCache.clean();
+				easyFinance.models.calendarCache.init(data.calendar || {});
+				var date = new Date();
+				date.setFullYear(date.getFullYear(), date.getMonth() - 1, 1);
+				easyFinance.models.calendarCache.reloadWidgets(date.getMonth() - 1, date.getFullYear());
+			});
+			
+			
+			$(document).bind('operationsAccepted', function(data){
+				easyFinance.models.calendarCache.acceptElements(data.ids || []);
+				var date = new Date();
+				date.setFullYear(date.getFullYear(), date.getMonth() - 1, 1);
+				easyFinance.models.calendarCache.reloadWidgets(date.getMonth() - 1, date.getFullYear());
+			});
+			$(document).bind('operationsDeleted', function(data){
+				easyFinance.models.calendarCache.removeElements(data.ids || []);
+				var date = new Date();
+				date.setFullYear(date.getFullYear(), date.getMonth() - 1, 1);
+				easyFinance.models.calendarCache.reloadWidgets(date.getMonth() - 1, date.getFullYear());
+			});
+			$(document).bind('operationsChainDeleted', function(data){
+				easyFinance.models.calendarCache.removeChain(data.id || 0);
+				var date = new Date();
+				date.setFullYear(date.getFullYear(), date.getMonth() - 1, 1);
+				easyFinance.models.calendarCache.reloadWidgets(date.getMonth() - 1, date.getFullYear());
+			});
+		}
+	}
+
 
     function load(result){
         for(var v in result){
@@ -103,45 +148,45 @@ easyFinance.widgets.calendarPreview = function(){
 //                }
 //
 //            );
-            $(document).bind(
-                'operationEdited operationsChainAdded operationsChainEdited operationDateEdited',
-                function(data){
-                    easyFinance.models.calendarCache.clean();
-                    easyFinance.models.calendarCache.init(data.calendar || {});
-                    var date =  new Date();
-                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
-                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
-                }
-            );
-
-
-            $(document).bind(
-                'operationsAccepted',
-                function(data){
-                    easyFinance.models.calendarCache.acceptElements(data.ids || []);
-                    var date =  new Date();
-                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
-                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
-                }
-            );
-                $(document).bind(
-                'operationsDeleted',
-                function(data){
-                    easyFinance.models.calendarCache.removeElements(data.ids || []);
-                    var date =  new Date();
-                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
-                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
-                }
-            );
-            $(document).bind(
-                'operationsChainDeleted',
-                function(data){
-                    easyFinance.models.calendarCache.removeChain(data.id || 0);
-                    var date =  new Date();
-                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
-                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
-                }
-            );
+//            $(document).bind(
+//                'operationEdited operationsChainAdded operationsChainEdited operationDateEdited',
+//                function(data){
+//                    easyFinance.models.calendarCache.clean();
+//                    easyFinance.models.calendarCache.init(data.calendar || {});
+//                    var date =  new Date();
+//                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
+//                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
+//                }
+//            );
+//
+//
+//            $(document).bind(
+//                'operationsAccepted',
+//                function(data){
+//                    easyFinance.models.calendarCache.acceptElements(data.ids || []);
+//                    var date =  new Date();
+//                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
+//                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
+//                }
+//            );
+//                $(document).bind(
+//                'operationsDeleted',
+//                function(data){
+//                    easyFinance.models.calendarCache.removeElements(data.ids || []);
+//                    var date =  new Date();
+//                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
+//                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
+//                }
+//            );
+//            $(document).bind(
+//                'operationsChainDeleted',
+//                function(data){
+//                    easyFinance.models.calendarCache.removeChain(data.id || 0);
+//                    var date =  new Date();
+//                    date.setFullYear(date.getFullYear(), date.getMonth()-1, 1);
+//                    easyFinance.models.calendarCache.reloadWidgets(date.getMonth()-1,date.getFullYear());
+//                }
+//            );
 
         }
         //Right cal
@@ -176,10 +221,12 @@ easyFinance.widgets.calendarPreview = function(){
     
     
     return {
-        load : load
+        load : load,
+		init: init
     }
 }();
 $(document).ready(function(){
+	easyFinance.widgets.calendarPreview.init();
         if (res.calendar && typeof(easyFinance.widgets.calendar)!='object' && typeof(easyFinance.widgets.calendar)!='function'){
             easyFinance.models.calendarCache.init(res.calendar.calendar);
             if ($('#calend').length == 0){
