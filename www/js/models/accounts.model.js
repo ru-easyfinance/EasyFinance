@@ -37,8 +37,12 @@ easyFinance.models.accounts = function(){
             return 0;
         }
 
-        var strA = a.name.toLowerCase();
-        var strB = b.name.toLowerCase();
+        var strA = a.name.toString().toLowerCase();
+        var strB = b.name.toString().toLowerCase();
+
+        if (!strA.localeCompare || !strB) {
+            alert('bbb');
+        }
 
         return strA.localeCompare(strB);
     }
@@ -49,9 +53,8 @@ easyFinance.models.accounts = function(){
         for (var key in _accounts) {
             _accountsOrdered.push(_accounts[key]);
         }
-var arr = _accountsOrdered;
-debugger;
-        _accountsOrdered.sort(_compareAccountsOrderByName);
+
+        //_accountsOrdered.sort(_compareAccountsOrderByName);
     }
 
     function _loadAccounts(callback) {
