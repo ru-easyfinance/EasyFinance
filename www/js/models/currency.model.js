@@ -3,6 +3,7 @@ easyFinance.models.currency = function(){
 	var _defaultCurrencyId = -1;
 	
 	var URL_FOR_SAVE_USER_CURRENCY = '/profile/save_currency/?responseMode=json';
+	var URL_FOR_LOAD_ALL_CURRENCY = '/profile/load_currency/?responseMode=json';
     /**
      * Инициирует модель валют
      * @param data {object} - например, из res.currency
@@ -115,6 +116,18 @@ easyFinance.models.currency = function(){
         'json');
     }
 
+	function loadAllCurrency(callback){
+		$.get(URL_FOR_LOAD_ALL_CURRENCY,
+            {},
+            function(data){
+				if (typeof(callback)=='function'){
+					callback(data);
+				}
+            },
+            'json'
+        );
+	}
+
     return {
         load : load,
         getDefaultCurrency : getDefaultCurrency,
@@ -127,6 +140,7 @@ easyFinance.models.currency = function(){
         getCurrencyTextById :getCurrencyTextById,
         getCurrencyCostById: getCurrencyCostById,
         getCurrencyRelativeCost: getCurrencyRelativeCost,
-        setCurrency : setCurrency
+        setCurrency : setCurrency,
+		loadAllCurrency : loadAllCurrency
     };
 }();
