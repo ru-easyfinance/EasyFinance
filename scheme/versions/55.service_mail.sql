@@ -5,4 +5,4 @@ ALTER TABLE `users`
     ADD INDEX `service_mail_idx`(`user_service_mail`);
 
 # Версия
-INSERT INTO versions VALUES('54', NOW(), 'ukko');
+INSERT INTO versions VALUES('55', NOW(), 'ukko');
