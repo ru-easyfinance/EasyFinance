@@ -140,6 +140,7 @@ easyFinance.widgets.operationsJournal = function(){
         var ids = []
         var virts = [];
         var key = 0;
+
         var $trs = $('#operations_list tr .check input:checked').closest('tr');
         $trs.each(function(){
             var id = $(this).attr('id');

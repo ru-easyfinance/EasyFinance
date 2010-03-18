@@ -367,34 +367,39 @@ easyFinance.models.accounts = function(){
                 // update accounts
                 _loadAccounts();
 
+                var i, tr_id, row;
+
                 if (_journal) {
-                    for (var i=0; i<_ids.length; i++) {
+                    for (i=0; i<_ids.length; i++) {
                         // delete paired transfer if exists
-                        if (_journal[_ids[i]] && _journal[_ids[i]].tr_id != null && _journal[_ids[i]].tr_id != "0")
-                            delete _journal[_journal[_ids[i]].tr_id];
+                        if (_journal[_ids[i]]) {
+                            tr_id = _journal[_ids[i]].tr_id
+                            if (tr_id !== null && tr_id != "0") {
+                                delete _journal[tr_id];
+                            }
+                        }
 
                         // delete operation
                         delete _journal[_ids[i]];
                     }
                 }
 
-                for (var key in _ids) {
-		    var row;
+                for (i=0; i<_ids.length; i++) {
                     // удаляем из списка просроченных операций
                     for (row in res.calendar.overdue) {
-                        if (res.calendar.overdue[row].id == _ids[key])
+                        if (res.calendar.overdue[row].id == _ids[i])
                             delete res.calendar.overdue[row];
                     }
 
                     // удаляем из списка будущих операций
                     for (row in res.calendar.future) {
-                        if (res.calendar.future[row].id == _ids[key])
+                        if (res.calendar.future[row].id == _ids[i])
                             delete res.calendar.future[row];
                     }
                 }
 
                 var event = $.Event("operationsDeleted");
-                event.ids = _ids;
+                event.ids = $.extend({}, _ids);
                 $(document).trigger(event);
 
                 if (typeof callback == "function")
