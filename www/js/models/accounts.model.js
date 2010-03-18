@@ -45,11 +45,12 @@ easyFinance.models.accounts = function(){
     }
 
     function _orderAccounts() {
-        _accountsOrdered = [];
+        _accountsOrdered = new Array();
 
         for (var key in _accounts) {
             _accountsOrdered.push(_accounts[key]);
         }
+var arr = _accountsOrdered;
 debugger;
         _accountsOrdered.sort(_compareAccountsOrderByName);
     }
