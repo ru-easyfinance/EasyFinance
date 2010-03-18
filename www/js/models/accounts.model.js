@@ -32,8 +32,7 @@ easyFinance.models.accounts = function(){
 
     // private functions
     function _compareAccountsOrderByName(a, b) {
-        alert (typeof a);
-        alert (typeof b);
+        debugger;
 
         if (!a || !b) {
             return 0;
@@ -41,8 +40,6 @@ easyFinance.models.accounts = function(){
 
         var strA = a.name.toLowerCase();
         var strB = b.name.toLowerCase();
-alert(strA);
-alert(strB);
 
         return strA.localeCompare(strB);
     }
@@ -53,7 +50,7 @@ alert(strB);
         for (var key in _accounts) {
             _accountsOrdered.push(_accounts[key]);
         }
-
+debugger;
         _accountsOrdered.sort(_compareAccountsOrderByName);
     }
 
