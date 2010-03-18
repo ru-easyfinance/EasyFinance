@@ -75,14 +75,31 @@ ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
 .profile .line:first-child{
 	border-top : none;
 }
-
-.profile .email .notExist span{
+.profile .email .notExist p{
+	margin : 0;
+}
+/*.profile .email .notExist span#get{
 	border-bottom: 1px dashed #6BBE4C;
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 18px;
 	color: #6CBD45;
 	cursor: pointer;
+}*/
+.profile .email .notExist button{
+	margin-left: 7px;
+}
+.profile .email .notExist label{
+	border: none;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 18px;
+	color: #202020;
+	cursor: auto;	
+}
+.profile .email .notExist label.eventDescription{
+	font-weight: bold;
+	margin-right: 5px;
 }
 
 .profile .email .exist #email{
@@ -98,11 +115,11 @@ ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
 }
 
 .profile .email .description{
-	margin-top: 7px;
+	margin-top: -7px;
 	font-size: 12px;
 	font-weight: normal;
 	line-height: 18px;
-	color: #B4B4B4;	
+	color: #202020;	
 }
 .profile .email .description h4{
 	margin-top: 7px;

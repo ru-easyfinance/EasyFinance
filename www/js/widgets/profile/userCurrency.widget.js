@@ -115,6 +115,4 @@ easyFinance.widgets.userCurrency = function(){
         init : init
     }
 }();
-$(document).ready(function(){
-    easyFinance.widgets.userCurrency.init();
-});
+

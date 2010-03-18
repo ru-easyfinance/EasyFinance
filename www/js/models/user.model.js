@@ -2,7 +2,7 @@
  * @author rewle
  */
 easyFinance.models.user = function(data){
-	var URL_FOR_GET_INTEGRATION_EMAIL = '/profile/generate_service_mail?responseMode=json';
+	var URL_FOR_SET_INTEGRATION_EMAIL = '/profile/create_service_mail?responseMode=json';
 	var URL_FOR_REMOVE_INTEGRATION_EMAIL = '/profile/delete_service_mail/?responseMode=json';
 	var URL_FOR_LOAD_USER_INFO = "/profile/load_main_settings/?responseMode=json";
 	var URL_FOR_SAVE_USER_INFO = '/profile/save_main_settings/?responseMode=json';
@@ -90,8 +90,8 @@ easyFinance.models.user = function(data){
 	 * @param callback {function}
 	 * @return {void}
 	 */
-	function getIntegrationEmail(callback){
-		$.post(URL_FOR_GET_INTEGRATION_EMAIL, {}, function(data){
+	function setIntegrationEmail(email,callback){
+		$.post(URL_FOR_SET_INTEGRATION_EMAIL, {mail: email}, function(data){
 			_data.email = data.integrationEmail;
 			if (typeof(callback) == 'function') {
 				callback(data);
@@ -119,7 +119,7 @@ easyFinance.models.user = function(data){
 		reload: reload,
 		getUserInfo: getUserInfo,
 		setUserInfo: setUserInfo,
-		getIntegrationEmail: getIntegrationEmail,
+		setIntegrationEmail: setIntegrationEmail,
 		removeIntegrationEmail: removeIntegrationEmail
 	}
 }();
