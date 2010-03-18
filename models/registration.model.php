@@ -62,7 +62,7 @@ class Registration_Model
             $register['login'] = htmlspecialchars(@$_POST['login']);
         }
 
-        if (validate_email(@$_POST['mail'])) {
+        if ( Helper_Mail::validateEmail (@$_POST['mail']) ) {
             $register['mail'] = @$_POST['mail'];
         }else{
             $error_text['mail'] = "Неверно введен e-mail!";

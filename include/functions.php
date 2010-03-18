@@ -199,24 +199,6 @@ function decrypt($text, $key = CRYPT_KEY) {
     return unserialize(trim($p_t));
 }
 
-/**
-* Проверяет корректность почтового ящика
-* @param $email string
-* @return bool
-*/
-function validate_email($email)
-{
-    if (!empty($email)) {
-        if (preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
 function make_float($var)
 {
     return (float)str_replace(',','.',$var);
