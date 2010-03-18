@@ -58,8 +58,11 @@ easyFinance.models.category = function(){
             }
         }
 
-        //_order.user.sort(_compareUserCategoryOrderByName);
-        //_order.recent.sort(_compareUserCategoryOrderByName);
+        if (isChrome) {
+            // сортируем по алфавиту специально для Хрома
+            _order.user.sort(_compareUserCategoryOrderByName);
+            _order.recent.sort(_compareUserCategoryOrderByName);
+        }
     }
 
     // public variables

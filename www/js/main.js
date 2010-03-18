@@ -15,6 +15,8 @@ function get_array_key($arr, $val){
 	return $ret;
 }
 
+var isChrome = /chrome/.test( navigator.userAgent.toLowerCase() );
+
 var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/']; //данный контроллер можно использовать как системный))
 
 href = location.pathname;
