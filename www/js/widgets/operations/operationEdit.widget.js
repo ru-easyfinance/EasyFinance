@@ -1087,12 +1087,6 @@ easyFinance.widgets.operationEdit = function(){
                 // from this account
                 setAccount(data.transfer);
             }
-        } else {
-            // to this account
-            setAccount(data.account_id || data.account);
-
-            // from this account
-            setTransfer(data.transfer);
         }
         
         if (typ == "2" && data.curs) {
@@ -1101,7 +1095,7 @@ easyFinance.widgets.operationEdit = function(){
 
             _displayConversion();
 
-            setSum(Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
+            setSum(data.moneydef || Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
             $("#op_amount").change();
         } else {
             setSum(Math.abs(data.money || data.amount || data.moneydef || 0));
