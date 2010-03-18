@@ -326,7 +326,7 @@ easyFinance.widgets.operationEdit = function(){
                 $(this).val(calculate($(this).val()));
             }
             if (!e.altKey && !e.shiftKey && !e.ctrlKey){
-                var chars = '1234567890. +-*/';
+                var chars = '1234567890., +-*/';
                 if (chars.indexOf(String.fromCharCode(e.which)) == -1){
                     var keyCode = e.keyCode;
                     if (keyCode != 13 && keyCode != 46 && keyCode !=8 && keyCode !=37 && keyCode != 39 && e.which != 32)

@@ -2,21 +2,23 @@
  * В данной версии реализовано как плагин jQuery
  */
 function calculate(funcStr){
-	if (!funcStr) {
-		return '0.00';
-	}
-	funcStr = funcStr.toString().replace(/[^0-9\.\-\+\/\*]/gi, '') || '0';
-	funcStr = funcStr.replace(/[\,]/gi, '.').replace(/[\.\.]/gi, '.').replace(/[\+\+]/gi, '+').replace(/[\*\*]/gi, '*').replace(/[\/\/]/gi, '/').replace(/[\-\-]/gi, '-').replace(/^\-/, '0-');
-	if (funcStr.match(/([0-9]+(\.{1}[0-9]+)?[\+\-\*\/]{1}){0,}[0-9]+(\.{1}[0-9]+)?/)[0] != funcStr) {
-		return funcStr;
-	}
-	var sign = 0;
-	if (funcStr.match(/[0-9]+(\.{1}[0-9]+)?/)[0] == funcStr) {
-		sign = new Number(funcStr);
-	} else {
-		sign = new Number(eval(funcStr));
-	}
-	return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+		var sign;
+		funcStr = funcStr.replace(/[,]/gi, '.').replace(/[\.\.]/gi, '.').replace(/[\+\+]/gi, '+').replace(/[\*\*]/gi, '*').replace(/[\/\/]/gi, '/').replace(/[\-\-]/gi, '-').replace(/^\-/, '0-');
+		funcStr = funcStr.toString().replace(/[^0-9\-\*\+\/\.]/gi, '');
+		try {
+			if ((funcStr.indexOf('*') == -1) &&
+			(funcStr.indexOf('+') == -1) &&
+			(funcStr.indexOf('/') == -1) &&
+			(funcStr.indexOf('-') == -1)) {
+				sign = new Number(funcStr);
+			} else {
+				sign = new Number(eval(funcStr));
+			}
+			return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+		} catch (e) {
+			return funcStr;
+			
+		}
 }
 
 var RW_calculator = function(){
@@ -136,6 +138,7 @@ var RW_calculator = function(){
 	}
 	return {
 		init: init
+//		calculate : _calculate
 	}
 }();
 $(document).ready(function(){
