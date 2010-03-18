@@ -24,7 +24,7 @@ easyFinance.widgets.userIntegrations = function(model){
 
 				var email = (_node.find('.email .notExist #email').val() || '') + '@mail.easyfinance.ru';
 				if (_validEmail(email)) {
-					_model.setIntegrationEmail(email, function(){
+					_model.setIntegrationEmail(email, function(data){
 						if (data && data.result) {
 							$.jGrowl(data.result.text, {
 								theme: 'green'
@@ -52,7 +52,6 @@ easyFinance.widgets.userIntegrations = function(model){
 			if (typeof(_data.email) == 'string') {//special for super hackers =)) or not worked load(js-error or other bug)
 
 				_model.removeIntegrationEmail(function(data){// @todo
-
 					if (data && data.result) {
 						delete _data.email;
 						_print();

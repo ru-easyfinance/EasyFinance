@@ -157,6 +157,9 @@ easyFinance.models.calendarCache = function(){
     }
 
     function removeElements(elementsArray){
+		if (typeof(elementsArray)=="number"){
+			elementsArray = [elementsArray];
+		}
         for (var mainKey in elementsArray){
             for(var generalKey in _data){
                 for (var key in _data[generalKey]){
@@ -169,6 +172,9 @@ easyFinance.models.calendarCache = function(){
     }
 
     function acceptElements(elementsArray){
+		if (typeof(elementsArray)=="number"){
+			elementsArray = [elementsArray];
+		}
         for (var mainKey in elementsArray){
             for(var generalKey in _data){
                 for (var key in _data[generalKey]){
