@@ -2,23 +2,23 @@
 
 function promptSingleOrChain(mode, callback){
     if (mode == "edit"){
-        $("#dialogSingleOrChainEdit").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите удалить только одну эту операцию или все неподтверждённые операции в этой серии? </div>').dialog({
+        $("#dialogSingleOrChainEdit").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите изменить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
             autoOpen: false,
             width: 540,
-            title: 'Редатирование календаря',
+            title: 'Редактирование календаря',
             buttons: {
                     "Изменить все неподтверждённые": function() {$(this).dialog('close');callback(true);},
-                    "Изменить операцию": function() {$(this).dialog('close');callback(false);}
+                    "Изменить выбранную": function() {$(this).dialog('close');callback(false);}
             }
         }).dialog('open');
     }else if (mode == "delete"){
-        $("#dialogSingleOrChainDelete").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите удалить только одну эту операцию или все неподтверждённые операции в этой серии? </div>').dialog({
+        $("#dialogSingleOrChainDelete").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите удалить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
             autoOpen: false,
             width: 540,
             title: 'Удаление из календаря',
             buttons: {
                     "Удалить все неподтверждённые": function() {$(this).dialog('close');callback(true);},
-                    "Удалить операцию": function() {$(this).dialog('close');callback(false);}
+                    "Удалить выбранную": function() {$(this).dialog('close');callback(false);}
             }
         }).dialog('open');
     }
