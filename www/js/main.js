@@ -23,7 +23,8 @@ function setHeightClass(){
 
 $.jGrowl.defaults.live = 1500;
 $.jGrowl.defaults.position = "center";
-$.jGrowl.defaults.closerTemplate = "<div>[ закрыть все сообщения ]</div>"
+$.jGrowl.defaults.closerTemplate = "<div>[ закрыть все сообщения ]</div>";
+
 function get_array_key($arr, $val){
 	var $ret = -1;
 	for (var key in $arr) {
@@ -35,7 +36,10 @@ function get_array_key($arr, $val){
 	return $ret;
 }
 
-var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/']//данный контроллер можно использовать как системный))
+var isChrome = /chrome/.test( navigator.userAgent.toLowerCase() );
+
+var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/']; //данный контроллер можно использовать как системный))
+
 href = location.pathname;
 href = href.toLowerCase() + '/';
 var b = 0;
@@ -85,9 +89,10 @@ function FloatFormat(obj, in_string){
 		}
 		if (in_string.substr(i, 1) == '.' || in_string.substr(i, 1) == ',') {
 			if (p) {
-				newstr = newstr.substr(0, 2)
+				newstr = newstr.substr(0, 2);
 				newstr = '.' + newstr;
 			}
+            
 			c = 0;
 			p = 0;
 		}
@@ -102,7 +107,7 @@ function FloatFormat(obj, in_string){
 function MakeOperation(){
 	$.get('/targets/get_closed_list', {}, function(data){
 		if (data) {
-			for (var v in data) 
+			for (var v in data) {
 				if (confirm('Деньги на финансовую цель ' + data[v]['title'] + ' накоплены. Осуществить перевод денег ?')) {
 					//alert($('.object[name="ещё"] .descr a').text());
 					//alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
@@ -118,18 +123,19 @@ function MakeOperation(){
 						$.jGrowl("Финансовая цель закрыта", {
 							theme: 'green'
 						});
-					}, 'json')
+					}, 'json');
 				}
+            }
 		}
 	}, 'json');
 }
 
 //запланировано 
 function isLogged(){
-	if (res) 
-		if (res.user) 
-			return true;
-	return false;
+	if (res && res.user)
+        return true;
+    else
+        return false;
 }
 
 $(document).ready(function(){
@@ -158,10 +164,11 @@ $(document).ready(function(){
 		};
 		$('#footer .btnHelp').click(function(){
 			$('#popupHelp').dialog('open');
-			if (page_mid) 
-				easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
-			else 
-				easyFinance.widgets.help.showVideo("newAccount");
+			if (page_mid) {
+                easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
+            } else {
+                easyFinance.widgets.help.showVideo("newAccount");
+            }
 		});
 	}
 	//#538
@@ -179,7 +186,7 @@ $(document).ready(function(){
 		dateFormat: 'dd.mm.yy'
 	}, $.datepicker.regional['ru']));
 	// *** Функции ***
-	if (res['errors'] != null && res['errors'].length > 0) {
+	if (res['errors'] !== null && res['errors'].length > 0) {
 		for (v in res['errors']) {
 			$.jGrowl(res['errors'][v], {
 				theme: 'red'
@@ -222,13 +229,13 @@ $(document).ready(function(){
 	if (inarray(Current_module, Connected_functional.menu)) {
 		$('.navigation a[href*=' + pathName + ']').wrapInner('<b></b>');
 		$('.listing').hide();
-		$('.navigation  li ul').hide()
-		$('.navigation li.act ul').show()
+		$('.navigation li ul').hide();
+		$('.navigation li.act ul').show();
 		$('.navigation  li span').click(function(){
 			$('.navigation  li span').closest('li').removeClass('act');
 			$(this).closest('li').addClass('act');
-			$('.navigation  li ul').hide()
-			$('.navigation li.act ul').show()
+			$('.navigation  li ul').hide();
+			$('.navigation li.act ul').show();
 		});
 		/**
 		 * Загружаем метки для левой панели
@@ -272,9 +279,7 @@ $(document).ready(function(){
 									theme: 'green'
 								});
 								res.tags = null;
-								var tags = {
-									tags: data.tags
-								}
+								var tags = { tags: data.tags };
 								res = $.extend(res, tags);
 								loadLPTags();
 								$('.edit_tag').dialog('close');
@@ -300,9 +305,7 @@ $(document).ready(function(){
 								});
 								$('.edit_tag #tag,.edit_tag #old_tag').val(0);
 								delete res.tags;
-								var tags = {
-									tags: data.tags
-								}
+								var tags = { tags: data.tags };
 								res = $.extend(res, tags);
 								loadLPTags();
 								$('.edit_tag').dialog('close');
@@ -310,8 +313,9 @@ $(document).ready(function(){
 						}
 					}
 				}
-			})
-		})
+			});
+		});
+        
 		$('.tags_list .add,.tags_list .addtaglink').live('click', function(){
 			var add = $('.add_tag');
 			$(add).show().dialog('open').dialog({
@@ -342,8 +346,9 @@ $(document).ready(function(){
 						}
 					}
 				}
-			})
+			});
 		});
+        
 		data = res['user_targets'];
 		var s = '<div class="title"><h2><a href="/targets/#add" class="addtargetlink">Добавить цель</a></h2><a href="/targets/#add" title="Добавить" class="add">Добавить</a></div><ul>';
 		for (var v in data) {
@@ -373,8 +378,9 @@ $(document).ready(function(){
 		s = s + '<ul>';
 		$('.financobject').append(s);
 		$('.financobject div.title a').live('click', function(){
-			$("div.financobject_block .add span").click()
-		})
+			$("div.financobject_block .add span").click();
+		});
+        
 		$('.financobject ul a').live('click', function(){
 			var id = $(this).attr('href');
 			window.location = id;//WTF??
@@ -395,7 +401,8 @@ $(document).ready(function(){
 			$('#account').val(f.attr('account'));
 			$('#visible').val(f.attr('visible'));
 			$('#tpopup').dialog('open');
-		})
+		});
+        
 		//////////////////////////////////////////////////////////////////////
 		// правая панель
 		// главный тахометр - финансовое состояние
@@ -426,7 +433,7 @@ $(document).ready(function(){
 		 */
 		$(this).closest('div.ramka3').find('div.inside').toggle();
 		$(this).toggleClass('uparrow').toggleClass('over3');
-		var title = $(this).find('a').attr('title') == 'свернуть' ? 'развернуть' : 'свернуть'
+		var title = $(this).find('a').attr('title') == 'свернуть' ? 'развернуть' : 'свернуть';
 		$(this).find('a').attr('title', title);
 		//$(this).closest('div.ramka3').className("over2");
 	}).find('a').removeAttr('href');
@@ -442,11 +449,12 @@ $(document).ready(function(){
 		$('ul.control li').removeClass('act');
 		$('.listing').hide();
 		$('ul.control li#' + newActive).addClass('act');
-		$('.listing.' + newActive).show()
+		$('.listing.' + newActive).show();
 		if (newActive == "c2") {
 			easyFinance.widgets.accountsPanel.redraw();
 		}
 	}
+
 	//смена пункта в левой панели
 	$('ul.control li').click(function(){
 		clickOnMenuInLeftPanel($(this).attr('id'));
@@ -462,8 +470,6 @@ $(document).ready(function(){
 	var activeListing = $.cookie('activelisting') || 'c2';
 	clickOnMenuInLeftPanel(activeListing);
 	//Функция показывает гид.
-	if ($.cookie('guide') == "uyjsdhf") 
-		ShowGuide();
 	function ShowGuide(){
 		//alert('гид!');
 		//$("#tabs").tabs();
@@ -482,4 +488,8 @@ $(document).ready(function(){
 			});
 		});
 	}
+
+	if ($.cookie('guide') == "uyjsdhf") {
+        ShowGuide();
+    }
 });

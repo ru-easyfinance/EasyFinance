@@ -156,10 +156,11 @@ easyFinance.widgets.accountsPanel = function(){
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
-        _accounts = _model.getAccounts();
 
         if (!_model)
             return;
+
+        _accounts = _model.getAccounts();
 
         var data = $.extend({},_model.getAccountsOrdered());
 

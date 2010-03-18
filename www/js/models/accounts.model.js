@@ -32,19 +32,32 @@ easyFinance.models.accounts = function(){
 
     // private functions
     function _compareAccountsOrderByName(a, b) {
-        var strA = a.name.toLowerCase();
-        var strB = b.name.toLowerCase();
+        if (!a || !b || !a.name || !b.name) {
+            alert('sss');
+            return 0;
+        }
+
+        var strA = a.name.toString().toLowerCase();
+        var strB = b.name.toString().toLowerCase();
+
+        if (!strA.localeCompare || !strB) {
+            alert('bbb');
+        }
 
         return strA.localeCompare(strB);
     }
 
     function _orderAccounts() {
-        _accountsOrdered = [];
+        _accountsOrdered = new Array();
 
-        for (var key in _accounts)
+        for (var key in _accounts) {
             _accountsOrdered.push(_accounts[key]);
+        }
 
-        _accountsOrdered.sort(_compareAccountsOrderByName);
+        if (isChrome) {
+            // сортируем по алфавиту специально для Хрома
+            _accountsOrdered.sort(_compareAccountsOrderByName);
+        }
     }
 
     function _loadAccounts(callback) {
@@ -354,34 +367,39 @@ easyFinance.models.accounts = function(){
                 // update accounts
                 _loadAccounts();
 
+                var i, tr_id, row;
+
                 if (_journal) {
-                    for (var i=0; i<_ids.length; i++) {
+                    for (i=0; i<_ids.length; i++) {
                         // delete paired transfer if exists
-                        if (_journal[_ids[i]] && _journal[_ids[i]].tr_id != null && _journal[_ids[i]].tr_id != "0")
-                            delete _journal[_journal[_ids[i]].tr_id];
+                        if (_journal[_ids[i]]) {
+                            tr_id = _journal[_ids[i]].tr_id
+                            if (tr_id !== null && tr_id != "0") {
+                                delete _journal[tr_id];
+                            }
+                        }
 
                         // delete operation
                         delete _journal[_ids[i]];
                     }
                 }
 
-                for (var key in _ids) {
-		    var row;
+                for (i=0; i<_ids.length; i++) {
                     // удаляем из списка просроченных операций
                     for (row in res.calendar.overdue) {
-                        if (res.calendar.overdue[row].id == _ids[key])
+                        if (res.calendar.overdue[row].id == _ids[i])
                             delete res.calendar.overdue[row];
                     }
 
                     // удаляем из списка будущих операций
                     for (row in res.calendar.future) {
-                        if (res.calendar.future[row].id == _ids[key])
+                        if (res.calendar.future[row].id == _ids[i])
                             delete res.calendar.future[row];
                     }
                 }
 
                 var event = $.Event("operationsDeleted");
-                event.ids = _ids;
+                event.ids = $.extend({}, _ids);
                 $(document).trigger(event);
 
                 if (typeof callback == "function")
