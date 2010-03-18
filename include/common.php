@@ -14,7 +14,7 @@ if (DEBUG) {
 
 
 // Подключение нового ядра
-include_once('../classes/_Core/_Core.php');
+require_once( dirname ( dirname ( __FILE__ ) ) . '/classes/_Core/_Core.php' );
 new _Core();
 
 spl_autoload_register('__autoload');
@@ -87,7 +87,7 @@ Core::getInstance()->js = array(
 );
 
 // Почта
-include_once "../core/external/Swift/swift_required.php";
+require_once dirname( dirname ( __FILE__ ) ) . "/core/external/Swift/swift_required.php";
 
 // sendmail
 $mailTransport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
