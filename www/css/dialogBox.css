@@ -1,45 +1,23 @@
-﻿.dialog_box {
-	background:none repeat scroll 0 0 #FFFFFF;
-	border:1px solid #3B5998;
-	margin:0 auto;
-	overflow:hidden;
-	padding-bottom:10px;
-	width:510px;
+body .ui-dialog .ui-dialog-titlebar {
+    margin-left: -2px;
+    margin-top: -2px;
+    margin-right: -6px;
+    padding-right: 9px;
+    background-image: url("/img/i/bg_menu.png");
+    background-position: -10px 0px;
 }
 
-.dialog_box .dialog_title {
-	background:url("../images/bg.png") no-repeat scroll 0 -810px transparent;
-	height:28px;
-	overflow:hidden;
+body .ui-dialog .ui-dialog-title {
+    color: white;
 }
 
-.dialog_title h1 {
-	color:#FFFFFF;
-	float:left;
-	font-weight:700;
-	height:28px;
-	line-height:22px;
-	padding-left:10px;
+body .ui-dialog.ui-widget-content .ui-resizable-nw,
+body .ui-dialog.ui-widget-content .ui-resizable-ne {
+    background: none;
 }
 
-.dialog_title span {
-	display:block;
-	float:right;
-	height:20px;
-	margin-right:10px;
-	overflow:hidden;
-	width:34px;
+body .ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
+    margin-left: -10px;
+    background: url("/img/i/jQuery/ico_close_white.gif") no-repeat scroll 50% 50% transparent;
 }
 
-.dialog_title span a {
-	background:url("../images/bg.png") no-repeat scroll -764px -36px transparent;
-	display:block;
-	height:19px;
-	overflow:hidden;
-	text-indent:-999px;
-	width:34px;
-}
-
-.dialog_title span a:hover {
-	background:url("../images/bg.png") no-repeat scroll -764px -56px transparent;
-}
