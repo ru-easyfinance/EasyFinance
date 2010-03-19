@@ -747,7 +747,7 @@ ul.buttons_block li { float: left; margin-right: 13px; height: 40px; background:
 ul.buttons_block li a { display: block; height: 25px; text-indent: -999px; overflow: hidden; }
 ul.buttons_block li#op_addoperation_but { width: 183px; background-position: 0 -60px; }
 ul.buttons_block li#op_addoperation_but a { width: 170px; }
-ul.buttons_block li#op_addtocalendar_but { width: 213px; background-position: 0 -100px; }
+ul.buttons_block li#op_addtocalendar_but { width: 198px; background-position: 0 -100px; }
 ul.buttons_block li#op_addtocalendar_but a { width: 185px; }
 
 ul.buttons_block li#op_addoperation_logo { width: 70px; background: none; }
