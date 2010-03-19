@@ -1,4 +1,4 @@
-;
+
 easyFinance.widgets.profile = function(model){
 	var _model = model || easyFinance.models.user;
     function init(){
