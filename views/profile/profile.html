@@ -223,31 +223,57 @@
 				<div id="content" class="inside form">
 					<div class="email line">
 						<div class="description">
+							<ul>
+								Вы можете заводить операции по email:
+								<li>
+									1)&nbsp;&nbsp;&nbsp;Автоматически – из банковских сообщений об операциях с  карточкой или счетом
+								</li>
+								<li>
+									2)&nbsp;&nbsp;&nbsp;Вручную, присылая email с информацией об операции
+								</li>
+							</ul><br>
 							<p>
-Вы можете заводить операции по email:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;1)Автоматически – из банковских сообщений об операциях с  карточкой или счетом<br>
-&nbsp;&nbsp;&nbsp;&nbsp;2)Вручную, присылая email с информацией об операции<br>
-Для этого Вам нужно создать в системе специальный секретный email, письма на который будут обрабатываться автоматически.<br>
-Email должен быть:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;1)легко запоминаемым, чтобы Вам было удобно им пользоваться<br>
-&nbsp;&nbsp;&nbsp;&nbsp;2)уникальным – чтобы на него случайно не написал кто-то другой<br>
-&nbsp;&nbsp;&nbsp;&nbsp;3)не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал.<br>
+								Для этого нужно создать в системе специальный секретный email, письма на который будут обрабатываться автоматически.
 							</p>
-						</div>
+							<ul class="numberWithPoint">
+								Email должен быть:
+								<li>
+									легко запоминаемым, чтобы Вам было удобно им пользоваться
+								</li>
+								<li>
+									уникальным – чтобы на него случайно не написал кто-то другой
+								</li>
+								<li>
+									не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал.
+								</li>
+							</ul>
+						</div><br>
 						<div class='notExist'>
 							<p>
-								<label for="email" class="eventDescription">Желаемый email: </label>
-								<input type="text" value='' id='txtIntegrationEmail'><label for="email" class="emailPostfix">@mail.easyfinance.ru</label>
-								<button id='btnGetIntegrationEmail'>Создать</button>
+
+								<label for="txtIntegrationEmail" class="eventDescription">
+									Желаемый email: 
+								</label>
+							</p>
+							</div>
+							<div id='errorMessageInvalidEmail'></div>
+							<div class='notExist'><p>
+									<input type="text" value='' id='txtIntegrationEmail'>
+									<label for="txtIntegrationEmail" class="emailPostfix">
+										@mail.easyfinance.ru
+									</label>
+									<button id='btnGetIntegrationEmail'>
+										Создать
+									</button>
+								
 							</p>
 						</div>
 						<div class='exist'>
 							Ваш e-mail для интеграции: <span id='lblIntegrationEmail'>default@ef.ru</span>
-							<div id="btnIntegrationEmailRemove" class='remove' title='Удалить'>
-								&nbsp;
-							</div>
+							<button id="btnIntegrationEmailRemove" class='remove' title='Удалить'>
+								Удалить
+							</button>
 						</div>
-						
 					</div>
 				</div>
 				<div class="cb">
