@@ -11,7 +11,8 @@ easyFinance.widgets.calendar = function(){
     var chainId;
     var operationId;
     var elem;
-    
+    var _element;
+
     function init(){
     
         $.fullCalendar.monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
@@ -123,9 +124,9 @@ easyFinance.widgets.calendar = function(){
                 '<li title="Удалить" class="del"><a></a></li></ul></div>');
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.edit').click(function(){
                     //                        alert('edit' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
-                    var element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
+                    _element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
                     promptSingleOrChain("edit", function(isChain){
-                        easyFinance.widgets.operationEdit.fillFormCalendar(element, true, isChain);
+                        easyFinance.widgets.operationEdit.fillFormCalendar(_element, true, isChain);
                     });
                 });
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function(){
@@ -180,11 +181,11 @@ easyFinance.widgets.calendar = function(){
                 });
             },
             dayClick: function(date, allDay, jsEvent, view){
-                var data = {
+                elem = {
                     date: $.datepicker.formatDate('dd.mm.yy', date),
                     time: ''//dt.toLocaleTimeString().substr(0, 5)
                 };
-                easyFinance.widgets.operationEdit.fillFormCalendar(data, false, true);
+                easyFinance.widgets.operationEdit.fillFormCalendar(elem, false, true);
             },
             eventDragStart: function(calEvent, jsEvent, ui){
             

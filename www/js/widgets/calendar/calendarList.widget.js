@@ -40,8 +40,9 @@ easyFinance.widgets.calendarList = function(){
         $('#per_tabl tr').live('dblclick',function(){
             $(this).find('li.edit a').click();
         });
+        var element;
         $('#per_tabl tr .cont ul li.edit a').live('click',function(){
-            var element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
+            element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
             promptSingleOrChain("edit", function(isChain){
                 easyFinance.widgets.operationEdit.fillFormCalendar(element, true, isChain);
             });
