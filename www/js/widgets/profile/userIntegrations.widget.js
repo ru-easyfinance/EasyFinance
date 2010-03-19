@@ -22,7 +22,7 @@ easyFinance.widgets.userIntegrations = function(model){
 		_node.find('#btnGetIntegrationEmail').click(function(){
 			if (typeof(_data.email) != 'string') {//special for super hackers =)) or not worked load(js-error or other bug)
 
-				var email = (_node.find('.email .notExist #email').val() || '') + '@mail.easyfinance.ru';
+				var email = (_node.find('#txtIntegrationEmail').val() || '') + '@mail.easyfinance.ru';
 				if (_validEmail(email)) {
 					_model.setIntegrationEmail(email, function(data){
 						if (data && data.result) {
