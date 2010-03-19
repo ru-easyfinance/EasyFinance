@@ -76,19 +76,19 @@ class Profile_Controller extends _Core_Controller_UserCommon
 
                 if ( $this->model->createServiceMail ( $user, $mail ) ) {
 
-                    $this->tpl->assign('result', array('text'=>'Ящик успешно создан'));
+                    $this->tpl->assign('result', array('text'=>'Email успешно создан'));
                     
                 }
 
             } else {
 
-                $this->tpl->assign('error', array('text'=>'Имя ящика не уникально'));
+                $this->tpl->assign('error', array('text'=>"Придумайте другой email.\nЭтот email уже занят"));
 
             }
 
         } else {
 
-            $this->tpl->assign('error', array('text'=>'Некорректное имя ящика'));
+            $this->tpl->assign('error', array('text'=>'Используйте только английские буквы и цифры'));
 
         }
         
