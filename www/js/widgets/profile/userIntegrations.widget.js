@@ -19,7 +19,7 @@ easyFinance.widgets.userIntegrations = function(model){
 	
 	function init(){
 		_node = $('#integration.profile');
-		_node.find('.email .notExist #get').click(function(){
+		_node.find('#btnGetIntegrationEmail').click(function(){
 			if (typeof(_data.email) != 'string') {//special for super hackers =)) or not worked load(js-error or other bug)
 
 				var email = (_node.find('.email .notExist #email').val() || '') + '@mail.easyfinance.ru';
@@ -48,7 +48,7 @@ easyFinance.widgets.userIntegrations = function(model){
 				}
 			}
 		});
-		_node.find('.email .exist .remove').click(function(){
+		_node.find('#btnIntegrationEmailRemove').click(function(){
 			if (typeof(_data.email) == 'string') {//special for super hackers =)) or not worked load(js-error or other bug)
 
 				_model.removeIntegrationEmail(function(data){// @todo
