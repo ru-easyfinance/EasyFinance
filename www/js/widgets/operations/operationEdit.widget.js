@@ -1069,7 +1069,7 @@ easyFinance.widgets.operationEdit = function(){
 
         var typ = data.type;
         setType(typ);
-debugger;
+
         if (data.transfer != "" && data.tr_id != null) {
             // перевод
             if (data.tr_id == "0") {
@@ -1138,7 +1138,7 @@ debugger;
         _isChain = isChain;
 
         _expandCalendar();
-debugger;
+
         fillForm(data, isEditing);
 
         // TEMP: не показываем операции на фин. цель
