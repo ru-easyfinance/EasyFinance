@@ -1156,6 +1156,13 @@ easyFinance.widgets.operationEdit = function(){
         else
             $('#op_accepted').val("0");
 
+        if (isChain) {
+            // выводим дату начала серии операций
+            if (typeof(data.date) == "string") {
+                $('#op_date').val(data.date);
+            }
+        }
+
         if (data.last && data.last != '' && data.last != '00.00.0000') {
             $('#cal_date_end').val(data.last);
             $('#cal_rep_to').attr("checked", "checked");
