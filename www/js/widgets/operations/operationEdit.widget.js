@@ -1071,6 +1071,7 @@ easyFinance.widgets.operationEdit = function(){
         setType(typ);
 
         if (data.transfer != "" && data.tr_id != null) {
+            // перевод
             if (data.tr_id == "0") {
                 // from this account
                 setAccount(data.account_id || data.account);
@@ -1087,17 +1088,19 @@ easyFinance.widgets.operationEdit = function(){
                 // from this account
                 setAccount(data.transfer);
             }
-        }
-        
-        if (typ == "2" && data.curs) {
-            // перевод с обменом валют
-            _realConversionRate = parseFloat(data.curs);
 
-            _displayConversion();
+            if (typ == "2" && data.curs) {
+                // перевод с обменом валют
+                _realConversionRate = parseFloat(data.curs);
 
-            setSum(data.moneydef || Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
-            $("#op_amount").change();
+                _displayConversion();
+
+                setSum(data.moneydef || Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
+                $("#op_amount").change();
+            }
         } else {
+            // обычная операция
+            setAccount(data.account_id || data.account);
             setSum(Math.abs(data.money || data.amount || data.moneydef || 0));
         }
 
@@ -1117,7 +1120,7 @@ easyFinance.widgets.operationEdit = function(){
         else
             $('#op_tags').val('');
 
-	 $('#op_comment').val(data.comment || data.description || '');
+        $('#op_comment').val(data.comment || data.description || '');
         // первая операция по счёту показывает начальный баланс счёта
         // в этом случае нельзя редактировать сумму и комментарий
         if ($('#op_comment').val() == "Начальный остаток"){

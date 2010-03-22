@@ -63,10 +63,13 @@ easyFinance.widgets.calendarLeft = function(){
         var str = '';
         for (var key in _data) {
             var event = _data[key];
+            var cur = easyFinance.models.accounts.getAccountCurrencyText(event.account_id);
+            cur = (cur === null) ? '' : cur;
+            
             str += '<li class="line" id="calendarLeftOverdue'+event.id+'">'+
                         (event.comment != "" ? event.comment+'<br>' : "")+
                         '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
-                        + easyFinance.models.accounts.getAccountCurrencyText(event.account_id) + '</span>'+
+                        + cur + '</span>'+
                         '<span class="date">'+event.date.substr(0, 5)+
                         ((event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "") + '</span>'+
                         shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
@@ -93,11 +96,13 @@ easyFinance.widgets.calendarLeft = function(){
         var periodicLeft = '';
         for (var key in _data) {
             var event = _data[key];
+            var cur = easyFinance.models.accounts.getAccountCurrencyText(event.account_id);
+            cur = (cur === null) ? '' : cur;
 
             periodicLeft += '<li class="line" id="calendarLeftFuture'+event.id+'">'+
                         (event.comment != "" ? event.comment+'<br>' : "")+
                         '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
-                        + easyFinance.models.accounts.getAccountCurrencyText(event.account_id) + '</span>'+
+                        + cur + '</span>'+
                         '<span class="date">'+event.date.substr(0, 5)+
                         ((event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "") + '</span>'+
                         shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
