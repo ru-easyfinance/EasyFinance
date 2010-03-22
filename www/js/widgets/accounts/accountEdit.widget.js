@@ -78,16 +78,6 @@ easyFinance.widgets.accountEdit = function(){
             $.jGrowl("Название счёта должно быть не больше 20 символов!", {theme: 'red', life: 2500});
             return false;
         }
-		
-        if (params.name.indexOf('<') != -1 || params.name.indexOf('>') != -1) {
-            $.jGrowl("Название счёта не должно содержать символов < и >!", {theme: 'red', life: 2500});
-            return false;
-        }
-
-        if (params.comment.indexOf('<') != -1 || params.comment.indexOf('>') != -1) {
-            $.jGrowl("Примечание не должно содержать символов < и >!", {theme: 'red', life: 2500});
-            return false;
-        }
 
         var accId = null;
         if (!_isEditing) {

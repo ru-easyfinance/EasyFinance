@@ -106,7 +106,7 @@ easyFinance.widgets.operationsJournal = function(){
                 //}
 
                 tr += '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
-                + '<td class="big">'+ (data[v].comment ? shorter(data[v].comment.replace(/&quot;/g, '"'), 24) : '&nbsp;')
+                + '<td class="big">'+ (data[v].comment ? shorter(data[v].comment, 24) : '&nbsp;')
                     +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
