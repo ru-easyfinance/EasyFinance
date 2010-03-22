@@ -1,24 +1,16 @@
 <!--Ввод операции-->
-<div class="ramka3">
-    <div class="ct">
-	<div class="head">
-            <h2>Ввод операции</h2>
-            <ul class="action">
-                <li class="over1"><a title="настройки">настройки</a></li>
-		<li class="over2"><a title="закрыть">закрыть</a></li>
-		<li class="over3"><a title="свернуть">свернуть</a></li>
-            </ul>
-	</div>
-    </div>
-    <div class="inside">
-        <ul class="buttons_block">
-            <li id="op_addoperation_but"><a title="Добавить операцию">Добавить операцию</a></li>
-            <li id="op_addtocalendar_but"><a title="Добавить в календарь">Добавить в календарь</a></li>
-            {if $template_view == 'iframe'}
-                <li id="op_addoperation_logo"><a href="http://easyfinance.ru"><img src="/img/i/logo_iframe.png" ></a></li>
-            {/if}
-        </ul>
-        <form style="display:none;" class="op_addoperation" {literal}onsubmit="return false"{/literal}>
+<div class="ramka3" style="margin:7px 0;border: none;">
+    <ul class="buttons_block">
+        <li id="op_addoperation_but"><a title="Добавить операцию">Добавить операцию</a></li>
+        <li id="op_addtocalendar_but"><a title="Добавить в календарь">Добавить в календарь</a></li>
+        {if $template_view == 'iframe'}
+            <li id="op_addoperation_logo"><a href="http://easyfinance.ru"><img src="/img/i/logo_iframe.png" alt='Easyfinance.ru'></a></li>
+        {/if}
+    </ul>
+</div>
+
+
+        <form style="display:none;" class="op_addoperation" onsubmit="return false;">
             <input type="hidden" id="op_id" />
             <input type="hidden" id="op_accepted" />
             <input type="hidden" id="op_chain_id" />
@@ -195,9 +187,7 @@
                 {*<!-- END поля для планирования -->*}
             </div>
         </form>
-    </div>
-    <div class="cb"><div></div></div>
-</div>
+
 <!--/Ввод операции-->
 
 <div id="op_addtocalend"></div>

@@ -106,7 +106,7 @@ easyFinance.widgets.operationsJournal = function(){
                 //}
 
                 tr += '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
-                + '<td class="big">'+ (data[v].comment ? data[v].comment.replace(/&quot;/g, '"') : '&nbsp;')
+                + '<td class="big">'+ (data[v].comment ? shorter(data[v].comment.replace(/&quot;/g, '"'), 24) : '&nbsp;')
                     +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
@@ -357,23 +357,6 @@ easyFinance.widgets.operationsJournal = function(){
 
             return false;
         });
-
-        /*
-         * СТАРЫЙ КОД, ФИЛЬТР БЫЛ В ДИАЛОГЕ
-        _$dialogFilterAccount = $('#dialogFilterAccount').dialog({title: "Выберите счёт", autoOpen: false});
-        _$dialogFilterAccount.find('a').click(function(){
-            $('#lblOperationsJournalAccountBalance').hide();
-            $('#lblOperationsJournalSum').hide();
-
-            _account = $(this).attr('value');
-            _accountName = $(this).text();
-            loadJournal();
-            _$dialogFilterAccount.dialog('close');
-
-            return false;
-        });
-        $('#btnFilterAccount').click(function(){_$dialogFilterAccount.dialog('open');});
-        */
     }
 
     function _printFilters(){
@@ -515,6 +498,7 @@ easyFinance.widgets.operationsJournal = function(){
 
             var tooltipHtml = '<b>Тип:</b> ' + tp + '<br>';
             tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[operation.account_id] ? res.accounts[operation.account_id].name : '' ) + '<br>';
+            tooltipHtml += '<b>Комментарий:</b><br> ' + operation.comment.replace("\n", "<br>", "g") + '<br>';
 
             $('.qtip').remove();
             $(this).qtip({

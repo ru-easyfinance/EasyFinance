@@ -1,5 +1,26 @@
-//Тут только общие функции и события для всех страниц сайта
 // $Id$
+
+function setHeightClass(){	
+	var cheight = 0;
+	if ('CSS1Compat' && !window.opera){
+        cheight = document.documentElement.clientHeight;
+    }else{
+        cheight = document.body.clientHeight;
+    }
+
+	var cls = '';
+	if (cheight > 600){
+		cls = 'heightLarge';
+	}else if(cheight > 350){
+		cls = 'heightNormal';
+	}else{
+		cls = 'heightSmall';
+	}
+    
+	$('div#mainwrap').addClass(cls);
+}
+
+
 $.jGrowl.defaults.live = 1500;
 $.jGrowl.defaults.position = "center";
 $.jGrowl.defaults.closerTemplate = "<div>[ закрыть все сообщения ]</div>";
@@ -76,9 +97,7 @@ function FloatFormat(obj, in_string){
 			p = 0;
 		}
 	}
-	//    if (in_string.substr(1,1) == '-')newstr ='-'+newstr;
-	//    var newStr = formatCurrency(tofloat(in_string))
-	//    if (newStr == in_string) return false;
+
 	//ловим положение каретки,
 	//ловим символы перед ней,
 	$(obj).val(newstr);
@@ -120,6 +139,7 @@ function isLogged(){
 }
 
 $(document).ready(function(){
+	setHeightClass();
 	$('ul.menu2 a').click(function(){
 		$.cookie('events_hide', 0, {
 			path: '/'

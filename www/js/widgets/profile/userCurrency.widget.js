@@ -1,4 +1,5 @@
-easyFinance.widgets.userCurrency = function(){
+easyFinance.widgets.userCurrency = function(model){
+	var currencyModel = model || easyFinance.models.currency;
     var currencyList = {};
     var userCurrencyList = {};
     var defaultCurrency;
@@ -37,18 +38,14 @@ easyFinance.widgets.userCurrency = function(){
     }
 
     function init(){
-        $.get("/profile/load_currency/",
-            {},
-            function(data){
-                currencyList = data['currency'];
-                userCurrencyList = easyFinance.models.currency.getCurrencyList();
-                defaultCurrency = easyFinance.models.currency.getDefaultCurrencyId();
-                _printCurrencyLists();
-                _printOptionForDefaultCurrency();
-
-            },
-            'json'
-        );
+		currencyModel.loadAllCurrency(function(data){
+	        currencyList = data['currency'];
+	        userCurrencyList = easyFinance.models.currency.getCurrencyList();
+	        defaultCurrency = easyFinance.models.currency.getDefaultCurrencyId();
+	        _printCurrencyLists();
+	        _printOptionForDefaultCurrency();
+			
+		});
         $('.user li').live('click',function(){
             if (($('.user li').length > 1)) {
                 var id = $(this).attr('id');
@@ -107,14 +104,12 @@ easyFinance.widgets.userCurrency = function(){
             currency: ids.toString(),
             currency_default: defaultCurrency
         }
-        easyFinance.models.currency.setCurrency(data,function(){
+        currencyModel.setCurrency(data,function(){
             $.jGrowl('Валюты успешно сохранены', {theme : 'green'});//@todo server ajax response
         });
     }
     return {
         init : init
     }
-}();
-$(document).ready(function(){
-    easyFinance.widgets.userCurrency.init();
-});
+}(easyFinance.models.currency);
+

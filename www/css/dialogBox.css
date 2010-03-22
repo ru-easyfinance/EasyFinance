@@ -1,0 +1,23 @@
+body .ui-dialog .ui-dialog-titlebar {
+    margin-left: -2px;
+    margin-top: -2px;
+    margin-right: -6px;
+    padding-right: 9px;
+    background-image: url("/img/i/bg_menu.png");
+    background-position: -10px 0px;
+}
+
+body .ui-dialog .ui-dialog-title {
+    color: white;
+}
+
+body .ui-dialog.ui-widget-content .ui-resizable-nw,
+body .ui-dialog.ui-widget-content .ui-resizable-ne {
+    background: none;
+}
+
+body .ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
+    margin-left: -10px;
+    background: url("/img/i/jQuery/ico_close_white.gif") no-repeat scroll 50% 50% transparent;
+}
+

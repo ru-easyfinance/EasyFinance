@@ -18,6 +18,10 @@
     border-bottom: none;
 }
 
+.operationsJournal {
+    height: 480px;
+}
+
 div#operations_list_container {
     position: relative;
     border: 2px solid #dfdede;
@@ -26,6 +30,25 @@ div#operations_list_container {
     max-height: 354px;
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+/* меняем размеры таблицы в зависимости от размера окна */
+.heightSmall .operationsJournal {
+    height: 276px;
+}
+
+.heightSmall #operations_list_container {
+    height: 150px;
+    max-height: 150px;
+}
+
+.heightLarge .operationsJournal {
+    height: 586px;
+}
+
+.heightLarge #operations_list_container {
+    height: 460px;
+    max-height: 460px;
 }
 
 table#operations_list {

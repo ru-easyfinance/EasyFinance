@@ -14,7 +14,7 @@ if (DEBUG) {
 
 
 // Подключение нового ядра
-include_once('../classes/_Core/_Core.php');
+require_once( dirname ( dirname ( __FILE__ ) ) . '/classes/_Core/_Core.php' );
 new _Core();
 
 spl_autoload_register('__autoload');
@@ -31,9 +31,11 @@ Core::getInstance()->js = array(
     'report' => array('widgets/report.widget', 'models/report.model'),
     'registration' => array('registration'),
     'profile' => array(
+		'profile',
         'models/user.model',
         'widgets/profile/profile.widget',
-        'widgets/profile/userCurrency.widget'
+        'widgets/profile/userCurrency.widget',
+        'widgets/profile/userIntegrations.widget'
         ),
     'operation' => array(
 		'widgets/operations/operationsJournal.widget', 
@@ -86,7 +88,7 @@ Core::getInstance()->js = array(
 );
 
 // Почта
-include_once "../core/external/Swift/swift_required.php";
+require_once dirname( dirname ( __FILE__ ) ) . "/core/external/Swift/swift_required.php";
 
 // sendmail
 $mailTransport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');

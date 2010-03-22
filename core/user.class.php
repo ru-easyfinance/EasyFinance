@@ -89,37 +89,37 @@ class User
      * Конструктор
      * @return void
      */
-    public function __construct()
+    public function __construct( $login = null, $password = null )
     {
-        // Если соединение пользователя защищено, то пробуем авторизироваться
-        //if ($_SERVER['SERVER_PORT'] == 443) {
-             //Если есть кук с авторизационными данными, то пробуем авторизироваться
-            if (isset($_COOKIE[COOKIE_NAME]))
-            {
 
-                if (isset($_COOKIE['PHPSESSID'])) {
-                    if (!isset($_SESSION)) {
-                        session_start();
-                    }
-                    $this->load(); //Пробуем загрузить из сессии данные
-                }
-                if (is_null(Core::getInstance()->db)) {
-                    Core::getInstance()->initDB();
-                }
-                $this->db = Core::getInstance()->db;
+         //Если есть кук с авторизационными данными, то пробуем авторизироваться
+        if (isset($_COOKIE[COOKIE_NAME]))
+        {
 
+            if (isset($_COOKIE['PHPSESSID'])) {
                 if (!isset($_SESSION)) {
                     session_start();
                 }
-
-                $array = decrypt($_COOKIE[COOKIE_NAME]);
-                $this->initUser($array[0], $array[1]);
+                $this->load(); //Пробуем загрузить из сессии данные
             }
-        // иначе, переходим в защищённое соединение, и снова пробуем авторизироваться
-//        } else {
-//            header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-//            exit;
-//        }
+            if (is_null(Core::getInstance()->db)) {
+                Core::getInstance()->initDB();
+            }
+            $this->db = Core::getInstance()->db;
+
+            if (!isset($_SESSION)) {
+                session_start();
+            }
+
+            $array = decrypt($_COOKIE[COOKIE_NAME]);
+            $this->initUser($array[0], $array[1]);
+
+        // Для phpunit тестов, и создания юзера по логину и паролю
+        } elseif ( $login && $password )  {
+
+            $this->initUser( $login, sha1($password) );
+            
+        }
     }
 
     /**
@@ -165,80 +165,81 @@ class User
      */
     public function initUser($login, $pass)
     {
-	if (is_null(Core::getInstance()->db))
-	{
-		Core::getInstance()->initDB();
-	}
 
-	$this->db = Core::getInstance()->db;
-
-	// Если сохранённые в сессии данные о пользователе не совпадают с текущими
-	if (
-		( isset($_SESSION['REMOTE_ADDR']) && isset($_SESSION['HTTP_USER_AGENT']) )
-		&& ( $_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR']
-		|| $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT'] )
-	)
-	{
-		// Уничтожаем пользователя
-		$this->destroy();
-	}
-
-	//@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
-	$sql = "SELECT id, user_name, user_login, user_pass, user_mail, getNotify,
-		DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active,
-		user_currency_default, user_currency_list, user_type
-		FROM users
-		WHERE user_login  = ? AND user_pass = ? AND user_new  = 0";
-
-	$this->props = $this->db->selectRow($sql, $login, $pass);
-
-	if (count($this->props) == 0)
-	{
-		$this->destroy();
-		return false;
-	}
-
-	// Если пользователь - эксперт: подгружаем дополнительные поля
-	if($this->getType() === 1)
-	{
-		$sql = 'SELECT `user_info_short`, `user_info_full`, `user_img`, `user_img_thumb` FROM `user_fields_expert` WHERE `user_id` = ?';
-
-		$expertProps = $this->db->selectRow( $sql, $this->getId() );
-
-		// Если нет записи в таблице дополнительных свойств
-		if( !sizeof( $expertProps) )
-		{
-			// Создаём её
-			$this->db->query( 'INSERT into `user_fields_expert` (`user_id`) VALUES (?)', $this->getId() );
-
-			// И делаем выборку заново
-			$expertProps = $this->db->selectRow( $sql, $this->getId() );
-		}
-
-		$this->props += $expertProps;
-	}
-
-	$_SESSION['user']            = $this->props;
-	$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-	$_SESSION['REMOTE_ADDR']     = $_SERVER['REMOTE_ADDR'];
-
-	// Если профиль пользователя
-	if ($this->getType() === 0)
-	{
-		$this->init();
-        
-        // Если у нас есть неподтверждённые операции, то переходим на них
-        if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
-            $_SESSION['REQUEST_URI'] = '/calendar/#list';
+        if (is_null(Core::getInstance()->db))
+        {
+            Core::getInstance()->initDB();
         }
-	}
-	// Если профиль эксперта
-	elseif ($this->getType() === 1)
-	{
-		$_SESSION['REQUEST_URI']	= '/expert/';
-	}
 
-	return $this->save();
+        $this->db = Core::getInstance()->db;
+
+        // Если сохранённые в сессии данные о пользователе не совпадают с текущими
+        if (
+            ( isset($_SESSION['REMOTE_ADDR']) && isset($_SESSION['HTTP_USER_AGENT']) )
+            && ( $_SESSION['REMOTE_ADDR'] !== $_SERVER['REMOTE_ADDR']
+            || $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT'] )
+        )
+        {
+            // Уничтожаем пользователя
+            $this->destroy();
+        }
+
+        //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
+        $sql = "SELECT id, user_name, user_login, user_pass, user_mail, getNotify, 
+            DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active, user_service_mail,
+            user_currency_default, user_currency_list, user_type
+            FROM users
+            WHERE user_login  = ? AND user_pass = ? AND user_new  = 0";
+
+        $this->props = $this->db->selectRow($sql, $login, $pass);
+
+        if (count($this->props) == 0)
+        {
+            $this->destroy();
+            return false;
+        }
+
+        // Если пользователь - эксперт: подгружаем дополнительные поля
+        if($this->getType() === 1)
+        {
+            $sql = 'SELECT `user_info_short`, `user_info_full`, `user_img`, `user_img_thumb` FROM `user_fields_expert` WHERE `user_id` = ?';
+
+            $expertProps = $this->db->selectRow( $sql, $this->getId() );
+
+            // Если нет записи в таблице дополнительных свойств
+            if( !sizeof( $expertProps) )
+            {
+                // Создаём её
+                $this->db->query( 'INSERT into `user_fields_expert` (`user_id`) VALUES (?)', $this->getId() );
+
+                // И делаем выборку заново
+                $expertProps = $this->db->selectRow( $sql, $this->getId() );
+            }
+
+            $this->props += $expertProps;
+        }
+
+        $_SESSION['user']            = $this->props;
+        $_SESSION['HTTP_USER_AGENT'] = @$_SERVER['HTTP_USER_AGENT'];
+        $_SESSION['REMOTE_ADDR']     = @$_SERVER['REMOTE_ADDR'];
+
+        // Если профиль пользователя
+        if ($this->getType() === 0)
+        {
+            $this->init();
+
+            // Если у нас есть неподтверждённые операции, то переходим на них
+            if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
+                $_SESSION['REQUEST_URI'] = '/calendar/#list';
+            }
+        }
+        // Если профиль эксперта
+        elseif ($this->getType() === 1)
+        {
+            $_SESSION['REQUEST_URI']	= '/expert/';
+        }
+
+        return $this->save();
     }
 
     /**

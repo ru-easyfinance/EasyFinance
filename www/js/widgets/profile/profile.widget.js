@@ -1,7 +1,8 @@
-;
-easyFinance.widgets.profile = function(){
+
+easyFinance.widgets.profile = function(model){
+	var _model = model || easyFinance.models.user;
     function init(){
-        easyFinance.models.user.reload(setupProfile);
+        _model.reload(setupProfile);
 //        $('#back_info').click(function(){
 //            setupProfile();
 //        });
@@ -11,7 +12,7 @@ easyFinance.widgets.profile = function(){
     }
     
     function setupProfile(){
-        var data = easyFinance.models.user.getUserInfo();
+        var data = _model.getUserInfo();
         $('input#login').val(data.login);
         $('input#mail').val(data.mail);
         if (data.tooltip == '0'){
@@ -45,7 +46,7 @@ easyFinance.widgets.profile = function(){
             confirmpass : $('#newpass2').val(),
             mail : $('#mail').val()
         }
-        easyFinance.models.user.setUserInfo(data,function(data){
+        _model.setUserInfo(data,function(data){
             $.jGrowl("Личные данные сохранены", {theme: 'green'});
             //setupProfile();
         });
@@ -55,24 +56,5 @@ easyFinance.widgets.profile = function(){
         setupProfile : setupProfile,
         sendProfile : sendProfile
     }
-}();
+}(easyFinance.models.user);
 
-//to screen
-$(document).ready(function(){
-    $('.menu5 #i3').addClass('act');
-    $('.menu5 #i3').live('click',function(){
-        $('.menu5 #i4').removeClass('act');
-        $('.menu5 #i3').addClass('act');
-        $('.block2 .ramka3#money').hide();
-        $('.block2 .ramka3#profile').show();
-    });
-    $('.menu5 #i4').live('click',function(){
-        $('.menu5 #i3').removeClass('act');
-        $('.menu5 #i4').addClass('act');
-        $('.block2 .ramka3#profile').hide();
-        $('.block2 .ramka3#money').show();
-    });
-    easyFinance.widgets.profile.init();
-    if (window.location.hash.indexOf("#currency") != -1)
-        $('.menu5 #i4').click();
-});

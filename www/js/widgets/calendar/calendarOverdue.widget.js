@@ -104,8 +104,13 @@ easyFinance.widgets.calendarOverdue = function(){
             empty = false;
             
             var $tr = $("<tr>").addClass("child").val(data[key].id);
+            var $td = $("<td>");
 
-            $tr.append($("<td>").addClass("col1 date").text(data[key].date.substr(0, 5)));
+            $tr.append($td.addClass("col1 date").text(data[key].date.substr(0, 5)));
+
+            if (data[key].source && data[key].source != "") {
+                $td.get(0).innerHTML = '<img src="/img/i/mail_drafts.png" style="vertical-align:middle;"> ' + $td.get(0).innerHTML;
+            }
 
             $tr.append($("<td>").addClass("col2 money")
                 .html('<div class="abbr">' + easyFinance.models.accounts.getAccountCurrencyText(data[key].account_id) + '</div><div class="number sumRed">' + formatCurrency(data[key].money) + '</div>'));

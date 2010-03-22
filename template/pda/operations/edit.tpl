@@ -1,13 +1,33 @@
 <p><strong><?=(isset($operation['id']))?'Редактирование':'Добавление'?> операции</strong></p>
 <p class="menu">
-	<a href="/operation/add/waste/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>" 
-		class="<?=($operation['type'] == Operation::TYPE_WASTE )?'current':''?>">расход</a> |
-	<a href="/operation/add/profit/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>" 
-		class="<?=($operation['type'] == Operation::TYPE_PROFIT )?'current':''?>">доход</a> |
-	<a href="/operation/add/transfer/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>" 
-		class="<?=($operation['type'] == Operation::TYPE_TRANSFER )?'current':''?>">перевод</a> |
-	<a href="/operation/add/target/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>" 
-		class="<?=($operation['type'] == Operation::TYPE_TARGET )?'current':''?>">цель</a>
+    <? if (isset($operation['id'])) {
+        // #876. при редактировании операции
+        // менять её тип нельзя, поэтому
+        // просто показываем тип текущей операции
+        switch($operation['type']) {
+            case Operation::TYPE_WASTE:
+                echo ("расход");
+                break;
+            case Operation::TYPE_PROFIT: case 3:
+                echo ("доход");
+                break;
+            case Operation::TYPE_TRANSFER:
+                echo ("перевод");
+                break;
+            case Operation::TYPE_TARGET:
+                echo ("цель");
+                break;
+        }
+    } else { ?>
+        <a href="/operation/add/waste/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>"
+            class="<?=($operation['type'] == Operation::TYPE_WASTE )?'current':''?>">расход</a> |
+        <a href="/operation/add/profit/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>"
+            class="<?=($operation['type'] == Operation::TYPE_PROFIT )?'current':''?>">доход</a> |
+        <a href="/operation/add/transfer/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>"
+            class="<?=($operation['type'] == Operation::TYPE_TRANSFER )?'current':''?>">перевод</a> |
+        <a href="/operation/add/target/<?=isset($operation['account'])?'?accountId=' . $operation['account']:''?>"
+            class="<?=($operation['type'] == Operation::TYPE_TARGET )?'current':''?>">цель</a>
+    <? } ?>
 </p>
 <?php
 if( isset($error) && is_array($error) && array_key_exists( 'text', $error ) )

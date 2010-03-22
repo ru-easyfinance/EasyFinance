@@ -200,29 +200,6 @@ function decrypt($text, $key = CRYPT_KEY) {
 }
 
 /**
-* Проверяет корректность почтового ящика
-* @param $email string
-* @return bool
-*/
-function validate_email($email)
-{
-    if (!empty($email)) {
-        if (preg_match('/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*?[a-z]+$/is', $email)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
-function make_float($var)
-{
-    return (float)str_replace(',','.',$var);
-}
-
-/**
  * Возвращает частоиспользуемые категории
  * @param int $count Максимальный размер возвращаемого списка
  * @param int $barier количество совершённых операций по отдельной категории, необходимое для попадания в Частые Категории

@@ -91,7 +91,7 @@ class Login_Controller extends _Core_Controller
 			if ( sizeof($user->getUserCategory()) == 0 )
 			{
 				setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-                		}
+            }
                 		
 			// У пользователя нет категорий, т.е. надо помочь ему их создать
 			if ( sizeof($user->getUserCategory()) == 0 && $user->getType() == 0)

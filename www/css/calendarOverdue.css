@@ -52,7 +52,9 @@
 }
 
 #calendarOverdue .col1{
-    width : 40px;
+    min-width: 55px;
+    max-width: 55px;
+    width : 55px;
     text-align: right;
 }
 #calendarOverdue .col2{
@@ -72,7 +74,7 @@
 }
 
 #calendarOverdue .col4{
-    width : 234px;
+    width : 219px;
     padding-right:20px;
 }
 

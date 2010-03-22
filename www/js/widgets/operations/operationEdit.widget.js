@@ -1089,7 +1089,7 @@ easyFinance.widgets.operationEdit = function(){
                 setAccount(data.transfer);
             }
 
-            if (typ == "2" && data.curs) {
+			if ( typ == "2" && data.curs) {
                 // перевод с обменом валют
                 _realConversionRate = parseFloat(data.curs);
 
