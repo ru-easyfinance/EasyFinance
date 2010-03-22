@@ -51,10 +51,10 @@ $(document).ready(function() {
     });
 
     // При двойном клике
-    $('div.line tr').live('dblclick', function() {
+    $('.categories div.line tr').live('dblclick', function() {
         $(this).find('li.edit').click();
     });
-    $('li.edit').live('click',function(){
+    $('.categories li.edit').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
         
@@ -63,12 +63,12 @@ $(document).ready(function() {
         $('form').attr('action','/category/edit/');
 
     });
-    $('li.del').live('click',function(){
+    $('.categories li.del').live('click',function(){
         if (confirm('Удалить категорию?')) {
             delCategory($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
         }
     });
-    $('li.add').live('click',function(){
+    $('.categories li.add').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
 
