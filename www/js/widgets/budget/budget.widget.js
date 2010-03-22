@@ -179,13 +179,13 @@ easyFinance.widgets.budget = function(data){
                             formatCurrency(amount) :
                             (cls != 'parent open' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0.00');
 
-                    dhtml += '<tr id="'+catId+'" type="'+prefix+'" parent="'+parentId+'" class="'+cls+'"><td class="w1"><a>' + 
+                    dhtml += '<tr id="' + catId + '" type="' + prefix + '" parent="' + parentId + '" class="' + cls + '"><td class="w1"><a>' + 
                         catName + '</a></td><td class="w2"><div class="cont"><span>' +
                         amountStr+'</span><input type="text" value="'+
                         formatCurrency(amount)+'"/></div></td><td class="w3"><div class="indicator"><div class="' +
-                        b_color+'" style="width: '+drainprc+'%;"></div><div class="strip" style="width: '+
-                        dateprc+'%;"></div></div></td><td class="w5">'+
-                        formatCurrency(Math.abs(amount)-Math.abs(money))+'</td><td class="w6">'+
+                        b_color+'" style="width: '+drainprc+'%;"></div><div class="strip" style="width: ' +
+                        dateprc+'%;"></div></div></td><td class="w5 '+ ((Math.abs(amount) < Math.abs(money))?(type == 1 ? 'sumGreen' : 'sumRed') : '') +'">' + ((type == 1) ? '' : '-') +
+                        formatCurrency(Math.abs(Math.abs(amount)-Math.abs(money))) + '</td><td class="w6">' +
                         ((cls == 'nochild'||cls == 'child') ? '<div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div>':'') +
                         '</td></tr>';
                     //////////////////////
@@ -236,7 +236,8 @@ easyFinance.widgets.budget = function(data){
                             '<div class="strip" style="width: ' + dateprc + '%;"></div>' +
                         '</div>' +
                     '</td>' +
-                    '<td class="w5">' + formatCurrency(Math.abs(temp.totalAmount) - Math.abs(temp.totalMoney)) + '</td>' +
+					'<td class="w5 '+ ((Math.abs(temp.totalAmount) < Math.abs(temp.totalMoney))?'sumGreen' : '') +'">' +
+                        formatCurrency(Math.abs(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))) + '</td>'+
                     '<td class="w6"></td>' +
                 '</tr>';
         str += temp.xhtml;
@@ -266,7 +267,8 @@ easyFinance.widgets.budget = function(data){
                             '<div class="strip" style="width:' + dateprc + '%;"></div>' +
                         '</div>' +
                     '</td>' +
-                    '<td class="w5">' + formatCurrency(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney)) + '</td>' +
+                    '<td class="w5 '+ ((Math.abs(temp.totalAmount) < Math.abs(temp.totalMoney))?'sumRed' : '') +'">-' +
+                        formatCurrency(Math.abs(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))) + '</td>'+
                     '<td class="w6"></td>' +
                 '</tr>';
         //////////////////////
