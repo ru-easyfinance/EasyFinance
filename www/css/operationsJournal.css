@@ -11,21 +11,21 @@
     position: relative;
     margin-top: 10px;
     margin-bottom: 0px;
-    width:518px;
+    width:545px;
     height: 20px;
     border-collapse:inherit!important;
-    border: 2px solid #dfdede;
-    border-bottom: none;
+    border: none;
+    background-color: #EEEEEE;
 }
 
 .operationsJournal {
     height: 480px;
+    width: 545px;
 }
 
 div#operations_list_container {
     position: relative;
-    border: 2px solid #dfdede;
-    width: 514px;
+    width: 545px;
     height: 354px;
     max-height: 354px;
     overflow-x: hidden;
@@ -53,7 +53,7 @@ div#operations_list_container {
 
 table#operations_list {
     position: relative;
-    width: 496px;
+    width: 527px;
     overflow: scroll;
     border-top: none;
     margin: 0px;
@@ -69,6 +69,10 @@ table#operations_list tr {
 table#operations_list_header th {
     margin: 0px;
     width: 20px;
+}
+
+#operations_list_header th {
+    padding: 3px 5px 0;
 }
 
 #operations_list_header span#btnFilterType { margin: 0px; }
@@ -89,7 +93,7 @@ table#operations_list_header th + th + th + th + th{
 }
 
 table#operations_list_header th + th + th + th + th + th{
-    width: 100px;
+    width: 90px;
 }
 
 /* last empty header for scrollbar */
@@ -121,7 +125,7 @@ table#operations_list td + td + td + td + td{
 }
 
 table#operations_list td + td + td + td + td + td{
-    width: 160px;
+    width: 191px;
 }
 
 #operations_list div.operation { display: block; height: 16px; width: 16px; background: url('/img/i/iconsOperation.gif') no-repeat 0 0; margin-left: 3px; }
