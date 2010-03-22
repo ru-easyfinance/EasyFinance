@@ -142,8 +142,6 @@ class Calendar
             $this->errors[] = "Событие не найдено";
         }
 
-        $event->setDate( $event_array['start'] );
-
         // Если повторять каждый день
         if ( $event->getEvery() == 1 ) {
             $array_days = $this->_repeat( $event, 'day' );
