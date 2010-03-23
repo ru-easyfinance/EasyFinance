@@ -294,8 +294,19 @@ $(document).ready(function() {
             if (data.user){
                 drawParentCategoriesCombo(data.user);
 
+                // пробегаемся сначала по родительским категориям,
+                // чтобы потом было куда добавлять подкатегории
                 for(var row in order) {
-                    listInsertCategory(data.user[order[row]]);
+                    if (data.user[order[row]].parent == 0) {
+                        listInsertCategory(data.user[order[row]]);
+                    }
+                }
+
+                // добавляем подкатегории
+                for(var row in order) {
+                    if (data.user[order[row]].parent != 0) {
+                        listInsertCategory(data.user[order[row]]);
+                    }
                 }
             }
     }
