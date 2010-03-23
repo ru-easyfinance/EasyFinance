@@ -7,6 +7,11 @@ body .ui-dialog .ui-dialog-titlebar {
     background-position: -10px 0px;
 }
 
+body .ui-dialog.calendar .ui-dialog-titlebar {
+    background-image: url("/img/i/bg_menu_orange.png");
+    background-position: -10px 0px;
+}
+
 body .ui-dialog .ui-dialog-title {
     color: white;
 }

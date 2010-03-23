@@ -2081,3 +2081,10 @@ div.op_addoperation div.op_line div.amount img{
 #calendarLeft li {
     cursor: pointer;
 }
+
+img.ui-datepicker-trigger {
+    position: relative;
+    top: 2px;
+    left: 2px;
+    cursor: pointer;
+}

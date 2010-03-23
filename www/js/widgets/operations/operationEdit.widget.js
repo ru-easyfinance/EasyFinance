@@ -379,7 +379,7 @@ easyFinance.widgets.operationEdit = function(){
     function _initBlockCalendar() {
         _$blockCalendar = _$node.find('#operationEdit_planning');
         
-        _$blockCalendar.find('#cal_date_end').datepicker();
+        _$blockCalendar.find('#cal_date_end').datepicker( { buttonImageOnly: true } );
         
         _$blockWeekdays = _$blockCalendar.find('#operationEdit_weekdays');
         _$blockRepeating = _$blockCalendar.find('#operationEdit_repeating');
@@ -422,25 +422,28 @@ easyFinance.widgets.operationEdit = function(){
         _$dialog.dialog('option', 'buttons', _buttonsNormal);
 
         if (!_isCalendar) {
+            _$dialog.dialog( "option", "dialogClass", '' );
+
             if (_isEditing)
-                _$dialog.data('title.dialog', 'Редактирование операции').dialog('open');
+                _$dialog.data('title.dialog', '�?зменить операцию').dialog('open');
             else
-                _$dialog.data('title.dialog', 'Добавление операции').dialog('open');
+                _$dialog.data('title.dialog', 'Добавить операцию').dialog('open');
         } else {
+            _$dialog.dialog( "option", "dialogClass", 'calendar' );
+
             if (_isEditing)
                 if (_isChain)
-                    _$dialog.data('title.dialog', 'Редактирование серии операций').dialog('open');
+                    _$dialog.data('title.dialog', 'Редактировать серии операций').dialog('open');
                 else
-                    _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
+                    _$dialog.data('title.dialog', 'Редактировать операции в календаре').dialog('open');
             else
                 if (_isChain)
-                    _$dialog.data('title.dialog', 'Добавление серии операций').dialog('open');
+                    _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
         }
 
         // если открываем в первый раз, инициализируем комбобоксы
         if (!_sexyAccount)
             _initSexyCombos();
-
 
         // TEMP: показываем операции перевода на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
@@ -453,11 +456,13 @@ easyFinance.widgets.operationEdit = function(){
     function _expandCalendar() {
         _isCalendar = true;
         _$dialog.dialog('option', 'buttons', _buttonsNormal);
-
-        if (_isEditing)
-            _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
-        else
-            _$dialog.data('title.dialog', 'Добавление серии операций').dialog('open');
+        
+        _$dialog.dialog( "option", "dialogClass", 'calendar' );
+        if (_isEditing) {
+            _$dialog.data('title.dialog', 'Редактировать операцию в календаре').dialog('open');    
+        } else {
+            _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
+        }
 
         // если открываем в первый раз, инициализируем комбобоксы
         if (!_sexyAccount)
