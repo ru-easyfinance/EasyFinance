@@ -14,9 +14,9 @@
 */
 function __autoload($class_name) {
     $array = explode("_",$class_name);
-    
+
     // Грузим контроллеры
-    if ( isset($array[1]) && $array[1] == 'Controller' && file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.controller.php' ) ) 
+    if ( isset($array[1]) && $array[1] == 'Controller' && file_exists(SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]) . '.controller.php' ) )
     {
             require_once SYS_DIR_ROOT .'/controllers/'. strtolower($array[0]). '.controller.php';
     }
@@ -210,7 +210,7 @@ function get_recent_category ($count, $barier)
     $retval = array();
 
     if ((int)$barier == 0) {
-        $barier = 3; 
+        $barier = 3;
     }
 
     if ((int)$count == 0) {
@@ -222,9 +222,9 @@ function get_recent_category ($count, $barier)
             $array[$val['howoften']][] = $val['cat_id'];
         }
     }
-    
+
     krsort($array);
-    
+
     foreach ($array as $val) {
         foreach ($val as $v) {
             if ((int)count($retval) <= $count) {
@@ -241,14 +241,13 @@ function get_tree_select ($selected = 0 )
 {
 	//используется дальше в коде, но что то и где инициализируется так и не понял
 	$s = '';
-	
+
     $cat = Core::getInstance()->user->getUserCategory();
     $array = array();
     $result = '';
 /////////////
     $arrayoften = array();
     $arr = array();
-    array_pop(&$arr);
     $barier = 3;//количество совершённых операций по отдельной категории, необходимое для попадания в ЧастыеКат
     //challenger/вывод часто используемых категорий//список часто используемых категорий за последние три месяца включая текущий.
     foreach ($cat as $val) {
@@ -279,7 +278,7 @@ function get_tree_select ($selected = 0 )
         foreach ($arrayoften as $v) {
             $result .= implode('', $v);
         }
-    
+
     }
     //
 
@@ -312,7 +311,6 @@ function get_tree_select2 ($selected = 0, $type = 0)
 /////////////
     $arrayoften = array();
     $arr = array();
-    array_pop(&$arr);
     $barier = 3;//количество совершённых операций по отдельной категории, необходимое для попадания в ЧастыеКат
     //challenger/вывод часто используемых категорий//список часто используемых категорий за последние три месяца включая текущий.
     foreach ($cat as $val) {
