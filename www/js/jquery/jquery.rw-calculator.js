@@ -1,5 +1,43 @@
 /**
+ * TODO test multy input init))
  * @author rewle
+ * @version 2.0 a
+ * @classDescription plugin for jQuery.Used jquery, jqueryUI ,jquery.rw-calculator.settings
+ * For use : $(node).rwCalculator(?events) || $.rwCalculator($(node), ?events)
+ * event : @see $.rwCalculator.defaultEvents
+ * 
+ * Description for node
+ *   node is selector to DOM element(tested on <input> and <textarea>)
+ * 
+ * Description for event:
+ *    type of event == 'object'
+ *    event[eventName] == [function || string]
+ *    		function(e){} e is original jQuery event
+ *          string - one of custom event
+ * 
+ * Custom plagin options
+ * 		$.rwCalculator.version - plugin version
+ * 		$.rwCalculator.initialized - initialized plugin;
+ * 		$.rwCalculator.buttonPanel - description button panel
+ * 		$.rwCalculator.calculate - function(str) - calculate str
+ * 		$.rwCalculator.node - last used initialized $(node)
+ * 		$.rwCalculator.inst - plugin))
+ *  	$.rwCalculator.functions - custom functions !this == node!
+ *  		show - show button panel after $(this)
+ *  		calculate - calculate $(this) value
+ *  		clear - clear $(this) value
+ *  		hide - hide button panel
+ *  
+ * Button panel
+ * 		-lineNumber 
+ * 				--ButtonNumber  
+ * 						---class - has 'printed' || 'special'(for use castom event)
+ * 						---? rowspan - rowspan
+ * 						---text - button text
+ * 						---title - tooltip for button
+ * 					
+ * 			
+ * 		 
  */
 (function($){
     function rwCalculator($node, events){
@@ -61,7 +99,7 @@
             else {
                 sign = new Number(eval(funcStr));
             }
-            return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+            return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ').replace('.00','');
         } 
         catch (e) {
             return funcStr;
@@ -71,15 +109,17 @@
     
     $.rwCalculator.functions = {
         'show': function(){//TODO full search
-            var _bodyRect = $('body')[0].getBoundingClientRect()
-            var _elementRect = $(this)[0].getBoundingClientRect()
-            var _left = _elementRect.left
-            var _top = _elementRect.top + _elementRect.height;
+//            var _bodyRect = $('body')[0].getBoundingClientRect()
+//            var _elementRect = $(this)[0].getBoundingClientRect()
+//            var _left = _elementRect.left
+//            var _top = _elementRect.top + _elementRect.height;
+//			$.rwCalculator.inst.filter(':visible').hide();
             $(this).parent().append($.rwCalculator.inst);
-            $.rwCalculator.inst.slideDown().css({
-                left: _left,
-                top: _top
-            });
+            $.rwCalculator.inst.slideDown()//.css({
+//                left: _left,
+//                top: _top
+//            });
+			$.rwCalculator.node = $(this);
             if ($.rwCalculator.node.val() == '0') {
                 $.rwCalculator.node.val('');
             }
@@ -157,9 +197,9 @@
             clearVal = false;
             if (_print(txt)) {
                 $.rwCalculator.node.val((val + txt));
-                
+                $.rwCalculator.node.focus();
                 if (document.selection) { // ie
-                    $.rwCalculator.node.focus();
+                    
                     var range = document.selection.createRange();
                     range.moveStart('character', -$.rwCalculator.node.val().length);
                     range.moveStart('character', $.rwCalculator.node.val().length);

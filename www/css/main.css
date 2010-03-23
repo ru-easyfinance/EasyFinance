@@ -857,6 +857,15 @@ div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100p
 div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
+div.op_addoperation .op_line  .op_amount input[type=button],div.op_addoperation #btnCalcSumTransfer[type=button]{
+	margin-left: 2px;
+	border: none;
+	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
+ }
+div.op_addoperation .op_line  .op_amount div,
+div.op_addoperation .op_line  .op_amount div td,
+div.op_addoperation #div_op_transfer_line #div_op_account div,
+div.op_addoperation #div_op_transfer_line #div_op_account div td{ float: none; margin-right : 0; padding: 1px}
 div.op_addoperation div#op_amount_fields, div.op_addoperation div#op_conversion_fields {position: absolute; left: 206px; width: 150px;}
 div.op_addoperation #op_amount { width: 130px; }
 div.op_addoperation #op_conversion { width: 64px; }

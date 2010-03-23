@@ -19,7 +19,7 @@ class Helper_Css implements _Core_Router_iHook
 			$templateEngine->append('css', 'jquery/south-street/ui.dialog.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.tabs.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.datepicker.css');
-			
+			$templateEngine->append('css', 'jquery/jquery.rw-calculator.css');
 			$templateEngine->append('css', 'jquery/jquery.jgrowl.css');
 			$templateEngine->append('css', 'jquery/fullcalendar.css');
 		}

@@ -308,34 +308,26 @@ easyFinance.widgets.operationEdit = function(){
             // EOF TEMP
         });
 
-        // кнопка расчёта суммы
+        // кнопка расчёта суммы TODO
         _$node.find('#btnCalcSum').click(function(){
-            var calculator = $('#op_amount');
-            $(calculator).val(calculate($(calculator).val()));
+            $('#op_amount').click();
+//			$.rwCalculator.node = calculator;
+//			$.rwCalculator.functions.show();
+//            $(calculator).val(calculate($(calculator).val()));
         });
 
         // кнопка расчёта суммы для поля перевода
         _$node.find('#btnCalcSumTransfer').click(function(){
-            var calculator = $('#op_transfer');
-            $(calculator).val(calculate($(calculator).val()));
+            $('#op_transfer').click();
+            
         });
+		_$node.find('input:not(#op_transfer, #op_amount), button:not(#btnCalcSum, #btnCalcSumTransfer), textarea').bind('focus, click',function(e){
+			$.rwCalculator.inst.filter(':visible').hide();
+		});
 
-        // поле суммы со встроенным калькулятором
-        $('#op_amount,#op_transfer').live('keypress',function(e){
-            if (e.keyCode == 13){
-                $(this).val(calculate($(this).val()));
-            }
-            if (!e.altKey && !e.shiftKey && !e.ctrlKey){
-                var chars = '1234567890., +-*/';
-                if (chars.indexOf(String.fromCharCode(e.which)) == -1){
-                    var keyCode = e.keyCode;
-                    if (keyCode != 13 && keyCode != 46 && keyCode !=8 && keyCode !=37 && keyCode != 39 && e.which != 32)
-                        return false;
-                }
-                return true;
-            }
-        });
-        
+    	$('#op_amount,#op_transfer').rwCalculator();
+		
+		
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
         // обмен валют для мультивалютных переводов

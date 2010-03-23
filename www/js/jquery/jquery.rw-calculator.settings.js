@@ -1,5 +1,6 @@
 /**
  * @author rewle
+ * @see rwCalculator
  */
 $.rwCalculator = {};
 $.rwCalculator.version = "2.0 a";
