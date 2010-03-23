@@ -43,12 +43,12 @@ div#operations_list_container {
 }
 
 .heightLarge .operationsJournal {
-    height: 586px;
+    height: 506px;
 }
 
 .heightLarge #operations_list_container {
-    height: 460px;
-    max-height: 460px;
+    height: 380px;
+    max-height: 380px;
 }
 
 table#operations_list {
