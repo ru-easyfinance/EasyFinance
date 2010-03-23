@@ -20,6 +20,8 @@ jquery/tinysort.js
 jquery/jquery.form.js
 jquery/jquery.cookie.js
 jquery/jquery.sexy-combo.js
+jquery/jquery.rw-calculator.settings.js
+jquery/jquery.rw-calculator.js
 swfobject.js
 functions.js
 main.js
