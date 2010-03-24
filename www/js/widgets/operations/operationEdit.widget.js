@@ -28,11 +28,11 @@ easyFinance.widgets.operationEdit = function(){
     var _selectedTransfer = '';
     var _selectedTarget = '';
 
-    var _sexyAccount = null;
-    var _sexyType = null;
-    var _sexyCategory = null;
-    var _sexyTransfer = null;
-    var _sexyTarget = null;
+    var _$ufdAccount = null;
+    var _$ufdType = null;
+    var _$ufdCategory = null;
+    var _$ufdTransfer = null;
+    var _$ufdTarget = null;
 
     // для мультивалютных переводов
     var _defaultCurrency = null;
@@ -98,17 +98,11 @@ easyFinance.widgets.operationEdit = function(){
         $('.op_tags_could li').hide();
     }
 
-    function _sexyFilter (input, text){
-        if (this.wrapper.data("sc:lastEvent") == "click")
-            return true;
-
-        if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
-            return true;
-        else
-            return false;
-    }
-
     function _initSexyCombos() {
+		//return;
+	
+		_$ufdAccount = $('#op_account');
+	
         // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
         var accountsOrdered = _modelAccounts.getAccountsOrdered();
@@ -126,7 +120,7 @@ easyFinance.widgets.operationEdit = function(){
         for (key in recent) {
             recentCount++;
         }
-
+		
         _accOptionsData = [];
         var recentIds = {};
         if (recentCount >= accountsCount || recentCount == 0) {
@@ -151,6 +145,8 @@ easyFinance.widgets.operationEdit = function(){
                     _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
             }
         }
+		
+		return;
         
         // #870. Запомним заранее выбранный аккаунт, если он был задан
         // (после инициализации это значение сбрасывается)
@@ -441,15 +437,69 @@ easyFinance.widgets.operationEdit = function(){
                     _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
         }
 
+// TEST
+$("#op_type").ufd({manualWidth: 130, zIndexPopup: 1300, unwrapForCSS: true});
+
+        // составляем список счетов
+        var accounts = _modelAccounts.getAccounts();
+        var accountsOrdered = _modelAccounts.getAccountsOrdered();
+        var accountsCount = 0;
+        var key;
+
+        // считаем количество всех счетов
+        for (key in accounts) {
+			accountsCount++;
+        }
+		
+        var recentCount = 0;
+        var recent = res.accountsRecent;
+        // считаем количество часто используемых счетов
+        for (key in recent) {
+            recentCount++;
+        }
+		
+        _accOptionsData = [];
+        if (recentCount >= accountsCount || recentCount == 0) {
+            // если счетов мало (не больше частых счетов),
+            // выводим все счета по алфавиту
+            for (key in accounts) {
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
+            }
+        } else {
+            // если счетов много, сначала выводим часто используемые счета
+            for (key in recent) {
+                _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
+                delete accounts[key];
+            }
+
+            _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
+
+            // затем выводим все остальные счета в алфавитном порядке
+            for (var row in accountsOrdered) {
+                _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
+            }
+        }
+		
+		_$ufdAccount = $("#op_account");
+		_$ufdAccount.removeOption(/./);
+		for (var acc in _accOptionsData) {
+			_$ufdAccount.addOption(_accOptionsData[acc].value, _accOptionsData[acc].text);
+		}
+		
+		_$ufdAccount.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
+
+
+return;
+		
         // если открываем в первый раз, инициализируем комбобоксы
-        if (!_sexyAccount)
-            _initSexyCombos();
+        //if (!_sexyAccount)
+        //    _initSexyCombos();
 
         // TEMP: показываем операции перевода на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
         $("#op_type").html(htmlOptions);
         $.sexyCombo.changeOptions("#op_type");
-        setType("0");
+		setType("0");
         // EOF TEMP
     }
 
@@ -971,7 +1021,7 @@ easyFinance.widgets.operationEdit = function(){
 
         // setup form
         _initForm();
-
+		
         $(document).bind('accountsLoaded', refreshAccounts);
         $(document).bind('accountAdded', refreshAccounts);
         $(document).bind('accountDeleted', refreshAccounts);
