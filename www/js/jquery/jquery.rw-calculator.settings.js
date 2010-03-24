@@ -112,4 +112,4 @@ $.rwCalculator.defaultEvents = {
 	],
     click: ['show']
 	
-}
+};
