@@ -24,7 +24,6 @@ class Report_Model
     {
         $this->db   = Core::getInstance()->db;
         $this->user = Core::getInstance()->user;
-        require_once 'OFC/OFC_Chart.php';
     }
 
     /**
@@ -76,12 +75,6 @@ class Report_Model
             WHERE cur_id = ?";
         $arr[1] = $this->db->query($sql, $currency);
 
-  /*          //текстовые отчёты отправлю вторым индексом массива
-            if ($drain==0)
-                $arr[2] = $this->SelectDetailedIncome($start, $end, $account, $currency, $acclist);
-            if ($drain==1)
-                $arr[2] = $this->SelectDetailedWaste($start, $end, $account, $currency, $acclist);
-*/
         return $arr;
 
     }
@@ -93,21 +86,6 @@ class Report_Model
     function getBars($start = '', $end = '', $account=0, $currency=0, $acclist='')
     {
         $diffYear = (bool)( ( substr($start,0,4) == substr($end,0,4) ) );
-        /*if ($account > 0) {
-            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
-                FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ?
-                GROUP BY drain, `datef`";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
-        } else {
-            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
-                FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
-                GROUP BY drain, `datef`";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
-        }*/
         if ($account > 0) {
             $sql = "SELECT ABS(sum(o.money)) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 , IFNULL(c.cat_name, '') AS cat FROM operation o
