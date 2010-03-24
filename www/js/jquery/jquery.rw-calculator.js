@@ -44,12 +44,13 @@
         try {
             var _defaultEvents = typeof(events) == 'object' ? events : $.rwCalculator.defaultEvents
             var _node = $node || $('body')
-            var _initialised = $.rwCalculator.initialized || false;
+//            var _initialised = $.rwCalculator.initialized || false;
             var _inst = null;
             var _node = $node;
-            if (!_initialised) {
+            if ($.rwCalculator._init) {
                 _inst = $.rwCalculator._init();//insert rw-calculator in body
                 delete $.rwCalculator._init;
+				$.rwCalculator._init = false
             }
             else {
                 _inst = $.rwCalculator.inst;
@@ -68,7 +69,7 @@
                             }
                             else 
                                 if (typeof(_defaultEvents[key][fk]) == 'string') {
-                                    $.rwCalculator['functions'][_defaultEvents[key][fk]].call(this, _node)
+                                    $.rwCalculator['functions'][_defaultEvents[key][fk]].call(this, _node,e)
                                 }
                             
                             
@@ -115,18 +116,21 @@
 //            var _top = _elementRect.top + _elementRect.height;
 //			$.rwCalculator.inst.filter(':visible').hide();
             $(this).parent().append($.rwCalculator.inst);
-            $.rwCalculator.inst.slideDown()//.css({
+          $.rwCalculator.inst.show()//.css({
 //                left: _left,
 //                top: _top
 //            });
+$('.calculatorWrapper').show();
 			$.rwCalculator.node = $(this);
             if ($.rwCalculator.node.val() == '0') {
                 $.rwCalculator.node.val('');
             }
             
         },
-        'hide': function(){
-            $.rwCalculator.inst.slideUp();
+        'hide': function(inst,e){
+			$('.calculatorWrapper').hide();
+				$.rwCalculator.inst.hide();
+
         },
         'calculate': function(){
             $($.rwCalculator.node).val($.rwCalculator.calculate($($.rwCalculator.node).val()));
@@ -167,10 +171,12 @@
         '<div class="panel">' +
         $.rwCalculator._generateHtmlButtonPanel() +
         '</div>' +
-        '</div>';
-        
-        
+        '<div class="calculatorWrapper">   </div></div>';
         $('body').append(_html);
+		$('.calculatorWrapper').click(function(){
+			$('.calculatorWrapper').hide();
+			$.rwCalculator.inst.hide();
+			})
         $.rwCalculator.inst = $('#' + id);
         //binds
         var clearVal = false;
@@ -188,7 +194,8 @@
                     return false;
                 }
         }
-        $.rwCalculator.inst.find('td.printed div').click(function(){
+        
+		$.rwCalculator.inst.find('td.printed div').click(function(){
             var val = $.rwCalculator.node.val();
             var txt = $(this).text();
             if ('123456789'.indexOf(txt) != -1 && (val == '0' || clearVal)) {
@@ -208,10 +215,12 @@
                 }
             }
         });
-        $.rwCalculator.inst.find('td.special').click(function(){
+        
+		$.rwCalculator.inst.find('td.special').click(function(e){
             var event = $(this).attr('event');
             $.rwCalculator.functions[event]();
         });
+
     }
     
     $.fn.rwCalculator = function(options){

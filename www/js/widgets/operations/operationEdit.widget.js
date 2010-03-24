@@ -321,9 +321,6 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_transfer').click();
             
         });
-		_$node.find('input:not(#op_transfer, #op_amount), button:not(#btnCalcSum, #btnCalcSumTransfer), textarea').bind('focus, click',function(e){
-			$.rwCalculator.inst.filter(':visible').hide();
-		});
 
     	$('#op_amount,#op_transfer').rwCalculator();
 		

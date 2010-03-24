@@ -37,10 +37,15 @@ easyFinance.widgets.accountEdit = function(){
             _model.load();
         })
 
-        $('#starter_balance').live('keyup',function(e){
-            FloatFormat(this, String.fromCharCode(e.which) + $(this).val())
-        });
-
+//        $('#starter_balance').live('keyup',function(e){
+//            FloatFormat(this, String.fromCharCode(e.which) + $(this).val())
+//        });
+		//TODO
+		$('.useCalculator #acc_balance').rwCalculator();
+		$('#showCalculatorForFormAccount').click(function(){
+			$('#acc_balance').click();
+		});
+		
         $('#addacc').click(_toggleVisibility);
 
         $('#btnCancelAdd').click(function(){ ////button cancel in form click
