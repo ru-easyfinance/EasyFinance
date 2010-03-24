@@ -125,12 +125,4 @@ class Login_Controller extends _Core_Controller
 			$this->model->authDemoUser();
 		}
 	}
-
-    /**
-     * Авторизация с сайта азбука-финансов
-     */
-    function azbuka ()
-    {
-        
-    }
 }

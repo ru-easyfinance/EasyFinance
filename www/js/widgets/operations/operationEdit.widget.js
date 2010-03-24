@@ -1077,7 +1077,7 @@ easyFinance.widgets.operationEdit = function(){
                 setAccount(data.transfer);
             }
 
-            if (typ == "2" && data.curs) {
+			if ( typ == "2" && data.curs) {
                 // перевод с обменом валют
                 _realConversionRate = parseFloat(data.curs);
 
@@ -1143,6 +1143,13 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_accepted').val(data.accepted);
         else
             $('#op_accepted').val("0");
+
+        if (isChain) {
+            // выводим дату начала серии операций
+            if (typeof(data.date) == "string") {
+                $('#op_date').val(data.date);
+            }
+        }
 
         if (data.last && data.last != '' && data.last != '00.00.0000') {
             $('#cal_date_end').val(data.last);

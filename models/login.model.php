@@ -249,7 +249,7 @@ class Login_Model
 					}
 					else
 					{
-                                                header("Location: /info/");
+                        header("Location: /info/");
 						exit;
 					}
 				}
