@@ -422,7 +422,7 @@ easyFinance.widgets.operationEdit = function(){
             _$dialog.dialog( "option", "dialogClass", '' );
 
             if (_isEditing)
-                _$dialog.data('title.dialog', '�?зменить операцию').dialog('open');
+                _$dialog.data('title.dialog', 'Изменить операцию').dialog('open');
             else
                 _$dialog.data('title.dialog', 'Добавить операцию').dialog('open');
         } else {
