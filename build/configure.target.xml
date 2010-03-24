@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Configuring project" default="configure">
+    <target name="configure">
+        <if>
+            <istrue value="${project.jsmin.enabled}" />
+            <then>
+                
+                <property name="project.js.root" value="${project.basedir}/www/js/"/>
+
+                <mkdir dir="${project.js.root}tmp" />
+
+                <append destFile="${project.js.root}tmp/global.js">
+                    <filelist dir="${project.basedir}/www/js/" listfile="include/js/global.list"/>
+                </append>
+
+                <stubjsmin jsminpath="external/jsmin-1.1.1.php" targetdir="${project.js.root}">
+                    <fileset dir="${project.js.root}tmp/">
+                        <include name="global.js" />
+                    </fileset>
+                </stubjsmin>
+                <delete dir="${project.js.root}tmp/" includeemptydirs="true" />
+            </then>
+            <else>
+                <echo>JavaScript compression disabled. Skipping ...</echo>
+            </else>
+        </if>
+        <if>
+            <istrue value="${project.cssmin.enabled}" />
+            <then>
+                <property name="project.css.root" value="${project.basedir}/www/css/"/>
+                <mkdir dir="${project.css.root}tmp" />
+
+                <append destFile="${project.css.root}tmp/global.css">
+                    <fileset dir="${project.css.root}jquery/">
+                        <include name="jquery.jgrowl.css" />
+                        <include name="jScrollPane.css" />
+                        <include name="jquery.calculator.css" />
+                        <include name="fullcalendar.css" />
+						
+                    </fileset>
+                    <fileset dir="${project.css.root}jquery/south-street/">
+                        <include name="ui.all.css" />
+                        <include name="ui.core.css" />
+                        <include name="ui.resizable.css" />
+                        <include name="ui.dialog.css" />
+                        <include name="ui.tabs.css" />
+                        <include name="ui.datepicker.css" />
+                    </fileset>
+                    <fileset dir="${project.css.root}">
+                        <include name="main.css" />
+                        <include name="menuUser.css" />
+                    </fileset>
+                </append>
+                <stubcssmin cssminpath="external/cssmin-v1.0.0.php" targetdir="${project.css.root}">
+                    <fileset dir="${project.css.root}tmp/">
+                        <include name="global.css" />
+                    </fileset>
+                </stubcssmin>
+                <delete dir="${project.css.root}tmp/" includeemptydirs="true" />
+            </then>
+            <else>
+                <echo>Css compression disabled. Skipping ...</echo>
+            </else>
+        </if>
+
+        <echo>Configure config.php</echo>
+        <copy file="include/config.php.dist"
+			tofile="${project.basedir}/include/config.php" overwrite="true" >
+            <filterchain>
+                <expandproperties />
+            </filterchain>
+        </copy>
+
+		<!--Директория для загрузки файлов -->
+<!--
+        <if>
+            <not>
+                <available file="${project.basedir}/www/upload"/>
+            </not>
+            <then>
+                <exec command="ln -s ${project.basedir}/shared/uploaded releases/${project.git.rev}/www/upload" dir="${project.basedir}" checkreturn="true" />
+            </then>
+        </if>
+-->
+		<!-- Скрипты должны быть исполняемыми -->
+        <echo>Making all scripts executable</echo>
+        <exec command="chmod -R +x *" dir="${project.basedir}/cron/" />
+    </target>
+</project>
