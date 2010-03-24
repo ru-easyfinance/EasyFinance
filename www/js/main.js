@@ -1,5 +1,3 @@
-// $Id$
-
 function setHeightClass(){	
 	var cheight = 0;
 	if ('CSS1Compat' && !window.opera){
@@ -420,8 +418,7 @@ $(document).ready(function(){
 		swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 		//курсы валют в правой панели
 		easyFinance.widgets.currencyRight.load(easyFinance.models.currency);
-		//calendar
-		$('.calendar_block .calendar').datepicker();
+		
 		//mainmenu
 		$('div#mainwrap #' + page_mid).addClass('cur act').children('a').addClass('cur');
 		$('.menu3 ul li ul li a[href$=' + pathName + ']').parent().addClass('selected');

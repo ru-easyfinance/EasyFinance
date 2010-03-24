@@ -2,7 +2,6 @@ easyFinance.widgets.calendar = function(){
     var _data, _editor;
     var _d = new Date();
     function _positioningToolbar(left, top){
-        //        alert(left + top);
         $('#calendar #popupMenuWithEventsForCalendar').css({
             left: left,
             top: top
@@ -12,19 +11,12 @@ easyFinance.widgets.calendar = function(){
     var operationId;
     var elem;
     var _element;
-
     function init(){
     
         $.fullCalendar.monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
         $.fullCalendar.monthNamesShort = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
         $.fullCalendar.dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         $.fullCalendar.dayNamesShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-        $('#datepicker').datepicker({
-            numberOfMonths: 3
-        }).datepicker();
-        //        $('#calend').mouseout(function(){
-        //            $('#calendar #popupMenuWithEventsForCalendar').removeClass('act');
-        //        });
         $('#calendar').fullCalendar({
             year: _d.getFullYear(),
             month: _d.getMonth(),
@@ -191,7 +183,6 @@ easyFinance.widgets.calendar = function(){
             
             },
             eventMouseover: function(event, jsEvent, view){
-                //                    debugger;
                 _positioningToolbar(jsEvent.currentTarget.style.left, jsEvent.currentTarget.style.top);
                 $('#calendar #popupMenuWithEventsForCalendar').attr('key', event.key);
                 if (_data[event.key].accepted == '1') {
@@ -328,37 +319,32 @@ easyFinance.widgets.calendar = function(){
         $('#views').addClass('ui-widget-content');
         var _$cal = $('#views');
         _$cal.find('li.m_prev').click(function(){
-            var date = $('#calendar').fullCalendar('getDate');
-            
-            date.setFullYear(date.getFullYear(), date.getMonth() - 1, 1);
-            easyFinance.models.calendarCache.reloadWidgets(date.getMonth(), date.getFullYear());
+			$('#calendar').fullCalendar('prev');
+            easyFinance.models.calendarCache.reloadWidgets('calendar');
         });
         _$cal.find('li.m_next').click(function(){
-            var date = $('#calendar').fullCalendar('getDate');
-            
-            date.setFullYear(date.getFullYear(), date.getMonth() + 1, 1);
-            easyFinance.models.calendarCache.reloadWidgets(date.getMonth(), date.getFullYear());
-            
+			$('#calendar').fullCalendar('next');
+            easyFinance.models.calendarCache.reloadWidgets('calendar');
         });
         _$cal.find('li.y_prev').click(function(){
-            var date = $('#calendar').fullCalendar('getDate');
-            date.setFullYear(date.getFullYear(), date.getMonth() - 1, 1);
-            easyFinance.models.calendarCache.reloadWidgets(date.getMonth(), date.getFullYear());
-            
+			$('#calendar').fullCalendar('prevYear');
+            easyFinance.models.calendarCache.reloadWidgets('calendar');
         });
         _$cal.find('li.y_next').click(function(){
-            var date = $('#calendar').fullCalendar('getDate');
-            date.setFullYear(date.getFullYear(), date.getMonth() + 1, 1);
-            easyFinance.models.calendarCache.reloadWidgets(date.getMonth(), date.getFullYear());
-            
+			$('#calendar').fullCalendar('nextYear');
+            easyFinance.models.calendarCache.reloadWidgets('calendar');
         });
         
         _$cal.find('li.cur').click(function(){
-            easyFinance.models.calendarCache.reloadWidgets();
-            $('#calendar').fullCalendar('today');
+			$('#calendar').fullCalendar('today');
+            easyFinance.models.calendarCache.reloadWidgets('calendar');
         });
     }
+	function getCurrentDate() {
+		return $('#calendar').fullCalendar('getDate');
+	}
     return {
+		getCurrentDate: getCurrentDate,
         init: init
     };
 }();
