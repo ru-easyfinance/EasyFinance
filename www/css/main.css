@@ -9,7 +9,13 @@ img.preload {display: none;}
 
 #menumain UL.menu2 li#show_login a {color: yellow; padding-right: 16px; background: url('/img/i/login.gif') right bottom no-repeat;}
 #menumain a#show_logout {color: yellow; padding-left: 10px; display: inline-block; width: 52px; background: url('/img/i/unlogin.gif') right center no-repeat; ;}
-
+#showCalculatorForFormAccount{
+	margin-left: 2px;
+	border: none;
+	width:20px;
+	height:20px;
+	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
+ }
 .noTextDecoration {text-decoration: none;}
 
 .white { color: white; }
