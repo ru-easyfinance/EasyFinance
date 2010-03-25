@@ -3,7 +3,7 @@
  * @author rewle
  * @version 2.0 a
  * @classDescription plugin for jQuery.Used jquery, jqueryUI ,jquery.rw-calculator.settings
- * For use : $(node).rwCalculator(?events) || $.rwCalculator($(node), ?events)
+ * For use : $(node).rwCalculator(?events,?options) || $.rwCalculator($(node), ?events, ?options)
  * event : @see $.rwCalculator.defaultEvents
  * 
  * Description for node
@@ -40,21 +40,26 @@
  * 		 
  */
 (function($){
-    function rwCalculator($node, events){
+    function rwCalculator($node, options){
         try {
             var _defaultEvents = typeof(events) == 'object' ? events : $.rwCalculator.defaultEvents
             var _node = $node || $('body')
-//            var _initialised = $.rwCalculator.initialized || false;
             var _inst = null;
             var _node = $node;
-            if ($.rwCalculator._init) {
+			if (typeof(options)!='object'){
+				options = {};
+			}
+			
+            if ($.rwCalculator._init){
                 _inst = $.rwCalculator._init();//insert rw-calculator in body
-                delete $.rwCalculator._init;
-				$.rwCalculator._init = false
+                delete $.rwCalculator._init; //for IE7 mem hook
+				$.rwCalculator._init = false;
             }
+			
             else {
                 _inst = $.rwCalculator.inst;
             }
+			
             $.rwCalculator.node = $node;
             for (var key in _defaultEvents) {
                 if (typeof(_defaultEvents[key]) == 'object') {
@@ -64,15 +69,13 @@
                         var _tmp;
                         
                         for (var fk in _defaultEvents[key]) {
-                            if (typeof(_defaultEvents[key][fk]) == 'function') {
+                            if (typeof(_defaultEvents[key][fk]) == 'function'){
                                 _defaultEvents[key][fk](e);
                             }
                             else 
-                                if (typeof(_defaultEvents[key][fk]) == 'string') {
-                                    $.rwCalculator['functions'][_defaultEvents[key][fk]].call(this, _node,e)
+                                if (typeof(_defaultEvents[key][fk]) == 'string'){
+                                    $.rwCalculator['functions'][_defaultEvents[key][fk]].call(this, e)
                                 }
-                            
-                            
                         }
                     });
                 }
@@ -109,25 +112,25 @@
     
     
     $.rwCalculator.functions = {
-        'show': function(){//TODO full search
-//            var _bodyRect = $('body')[0].getBoundingClientRect()
-//            var _elementRect = $(this)[0].getBoundingClientRect()
-//            var _left = _elementRect.left
-//            var _top = _elementRect.top + _elementRect.height;
-//			$.rwCalculator.inst.filter(':visible').hide();
-            $(this).parent().append($.rwCalculator.inst);
-          $.rwCalculator.inst.show()//.css({
-//                left: _left,
-//                top: _top
-//            });
-$('.calculatorWrapper').show();
+        'show': function(e, option){//TODO full search
+        	$(this).parent().append($.rwCalculator.inst);
+          	$.rwCalculator.inst.show();
+			var top =0;
+			if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
+				top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
+			}
+			else {
+				top = '15px';
+			}
+			$.rwCalculator.inst.css('top',top);
+			$('.calculatorWrapper').show();
 			$.rwCalculator.node = $(this);
             if ($.rwCalculator.node.val() == '0') {
                 $.rwCalculator.node.val('');
             }
             
         },
-        'hide': function(inst,e){
+        'hide': function(){
 			$('.calculatorWrapper').hide();
 				$.rwCalculator.inst.hide();
 
@@ -223,9 +226,13 @@ $('.calculatorWrapper').show();
 
     }
     
-    $.fn.rwCalculator = function(options){
+    $.fn.rwCalculator = function( options){
         var _node = this;
-        rwCalculator(_node);
+        if (typeof(options)!='object'){
+			options = {};
+		}
+		rwCalculator(_node,  options);
+		
     };
     
 })(jQuery);

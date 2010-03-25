@@ -585,7 +585,7 @@ div.report .line .f_field select#currency {width: 156px;  overflow: hidden; }
 div.report .line .f_field select#currency option {width: 129px;}
 
 div.addacc{ position: relative; padding-top: 10px;left: 70px }
-div.addoperation { position: relative; display: none; padding-top: 22px;left: 70px }
+div.addoperation { position: relative; display: none; margin-top: 10px; left: 10px }
 div.addoperation .line { position: relative;  color: #4c4c4c; }
 div.addoperation .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }

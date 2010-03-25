@@ -83,10 +83,8 @@ easyFinance.widgets.accountsPanel = function(){
         $(document).bind('accountDeleted', redraw);
 
        $('.accounts .add,.accounts .addaccountlink').click(function(){
-           document.location='/accounts/#add';
-           // временный хак до полного перехода на аякс
            // отображает форму создания счёта
-          $('#addacc').click();
+           easyFinance.widgets.accountEdit.addAccount();
        })
 
        $('.accounts li a').live('click',function(evt){

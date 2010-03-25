@@ -66,7 +66,7 @@ easyFinance.widgets.accountsJournal = function(){
                     id = $(this).closest('.item').attr('id').split("_", 2)[1];
                 
                 //easyFinance.widgets.accountEdit.setEditMode(true);
-                $('#blockCreateAccounts').show();
+                easyFinance.widgets.accountEdit.showForm();
                 accounts_hash_api('#edit'+id);
             }
         );
@@ -79,7 +79,7 @@ easyFinance.widgets.accountsJournal = function(){
                 else
                     id = $(this).closest('.item').attr('id').split("_", 2)[1];
 
-                $('#blockCreateAccounts').show();
+                easyFinance.widgets.accountEdit.showForm();
                 accounts_hash_api('#edit'+id, true);
             }
         );
