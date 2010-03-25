@@ -11,6 +11,8 @@ easyFinance.widgets.accountEdit = function(){
 
     var _$node = null;
 
+    var _$dialog = null;
+
     var _isEditing = false;
     var _isVisible = false; // виден ли виджет
     
@@ -24,10 +26,12 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_comment').val('');
         $('#acc_balance').val('');
 
+        _$dialog.data('title.dialog', 'Добавить счёт');
+
         if (_isVisible)
-            hideForm();
+            _$dialog.dialog('close');
         else
-            showForm();
+            _$dialog.dialog('open');
     }
 
     function _initForm() {
@@ -41,16 +45,12 @@ easyFinance.widgets.accountEdit = function(){
 //            FloatFormat(this, String.fromCharCode(e.which) + $(this).val())
 //        });
 		//TODO
-		$('.useCalculator #acc_balance').rwCalculator();
+		//$('.useCalculator #acc_balance').rwCalculator();
 		$('#showCalculatorForFormAccount').click(function(){
 			$('#acc_balance').click();
 		});
 		
-        $('#addacc').click(_toggleVisibility);
-
-        $('#btnCancelAdd').click(function(){ ////button cancel in form click
-            hideForm();
-        });
+        $('#addacc').click(addAccount);
 
         // @todo
         // fill currency combo with options
@@ -61,9 +61,6 @@ easyFinance.widgets.accountEdit = function(){
                 strCurrency = strCurrency + '<option value="' + key + '">' + currency[key].text + '</option>';
         }
         $('#acc_currency').html(strCurrency);
-
-        // save button
-        $('#btnAddAccount').click(_saveAccount);
     }
 
     function _saveAccount(){
@@ -109,7 +106,7 @@ easyFinance.widgets.accountEdit = function(){
         } else {
             _model.addAccount(params, handler);
         }
-    };
+    }
 
     // public variables
 
@@ -123,6 +120,22 @@ easyFinance.widgets.accountEdit = function(){
             return null;
 
         _$node = $(nodeSelector);
+
+        _$dialog = _$node.dialog({
+            dialogClass: 'dlgAccountEdit',
+            autoOpen: false,
+            title: 'Счёт',
+            width: 400,
+            buttons: {
+                "Отмена": function() {
+                    // закрываем диалог
+                    $(this).dialog("close");
+                },
+                "Сохранить": function() {
+                    _saveAccount();
+                }
+            }
+        });
 
         _model = model;
         _modelCurrency = modelCurrency;
@@ -138,7 +151,7 @@ easyFinance.widgets.accountEdit = function(){
      */
     function hideForm() {
         _isVisible = false;
-        $('#blockCreateAccounts').hide();
+        _$dialog.dialog('close');
     }
     /**
      * раскрывает поле с добавлением счёта
@@ -146,7 +159,11 @@ easyFinance.widgets.accountEdit = function(){
      */
     function showForm() {
         _isVisible = true;
-        $('#blockCreateAccounts').show();
+
+        if (_isEditing)
+            _$dialog.data('title.dialog', 'Добавить счёт').dialog('open');
+        else
+            _$dialog.data('title.dialog', 'Изменить счёт').dialog('open');
     }
 
     function addAccount() {
@@ -157,11 +174,13 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_name').val('');
         $('#acc_currency').val(0);
 
-        showForm();
+        _$dialog.data('title.dialog', 'Добавить счёт').dialog('open');
     }
 
     function copyAccountById(id) {
         editAccountById(id);
+
+        _$dialog.data('title.dialog', 'Добавить счёт').dialog('open');
 
         _isEditing = false;
         $('#acc_type').removeAttr('disabled');
@@ -175,7 +194,6 @@ easyFinance.widgets.accountEdit = function(){
         if (!account)
             return false;      
 
-        $(document).scrollTop(300);
         $('#acc_type')
             .val(account.type)
             .attr('disabled', 'disabled');
@@ -184,6 +202,8 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_comment').val(account.comment);
         $('#acc_balance').val(Math.abs(parseFloat(account.initPayment)));
         $('#acc_currency').val(account.currency);
+
+        _$dialog.data('title.dialog', 'Изменить счёт').dialog('open');
     }
 
     function setEditMode(mode) {
@@ -197,6 +217,7 @@ easyFinance.widgets.accountEdit = function(){
         showForm: showForm,
 
         setEditMode: setEditMode,
+        addAccount: addAccount,
         editAccountById: editAccountById,
         copyAccountById: copyAccountById
     };

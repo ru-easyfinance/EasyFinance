@@ -11,25 +11,20 @@ function accounts_hash_api(str, clone)
     var s = str.toString();
 
     if (s=='#add') {
-        easyFinance.widgets.accountEdit.showForm();
-        //easyFinance.widgets.accountEdit.addAccount();
+        easyFinance.widgets.accountEdit.addAccount();
     }
 
     if(s.substr(0,5)=='#edit') {
-        easyFinance.widgets.accountEdit.showForm();
-
         if (clone)
             easyFinance.widgets.accountEdit.copyAccountById(s.substr(5));
         else
             easyFinance.widgets.accountEdit.editAccountById(s.substr(5));
     } else if(s.substr(0,5)=='#copy') {
-        easyFinance.widgets.accountEdit.showForm();
         easyFinance.widgets.accountEdit.copyAccountById(s.substr(5));
     }
 }
 
 $(document).ready(function() {
-    easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
     easyFinance.widgets.accountsJournal.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
 
     accounts_hash_api(document.location.hash)

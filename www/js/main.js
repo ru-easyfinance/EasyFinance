@@ -223,6 +223,7 @@ $(document).ready(function(){
 		// инициализируем виджет добавления, редактирования и планирования операций
 		easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
 		easyFinance.widgets.calendarLeft.init("#calendarLeft", easyFinance.models.accounts);
+        easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
 	}
 	if (inarray(Current_module, Connected_functional.menu)) {
 		$('.navigation a[href*=' + pathName + ']').wrapInner('<b></b>');
