@@ -239,6 +239,7 @@ function promptSingleOrChain(mode, callback){
         $("#dialogSingleOrChainEdit").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите изменить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
             autoOpen: false,
             width: 540,
+            dialogClass: 'calendar',
             title: 'Редактирование календаря',
             buttons: {
                 "Изменить все неподтверждённые": function(){
@@ -256,6 +257,7 @@ function promptSingleOrChain(mode, callback){
             $("#dialogSingleOrChainDelete").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите удалить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
                 autoOpen: false,
                 width: 540,
+                dialogClass: 'calendar',
                 title: 'Удаление из календаря',
                 buttons: {
                     "Удалить все неподтверждённые": function(){
