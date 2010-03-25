@@ -128,6 +128,7 @@ easyFinance.widgets.operationEdit = function(){
         }
 
         _accOptionsData = [];
+        var recentIds = {};
         if (recentCount >= accountsCount || recentCount == 0) {
             // если счетов мало (не больше частых счетов),
             // выводим все счета по алфавиту
@@ -138,14 +139,16 @@ easyFinance.widgets.operationEdit = function(){
             // если счетов много, сначала выводим часто используемые счета
             for (key in recent) {
                 _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
-                delete accounts[key];
+                recentIds[accounts[key].id] = true;
             }
 
             _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
 
             // затем выводим все остальные счета в алфавитном порядке
             for (var row in accountsOrdered) {
-                _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
+                // #1082. не выводим повторно частоиспользуемые счета
+                if (!recentIds[accountsOrdered[row].id])
+                    _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
             }
         }
         
