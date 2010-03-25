@@ -5,135 +5,61 @@
 	<taskdef name="stubjsmin" classname="tasks.stubJsMinTask" classpath="${project.basedir}/build/libs" />
 	<taskdef name="stubcssmin" classname="tasks.stubCssMinTask" classpath="${project.basedir}/build/libs"/>
 
-    <!-- Собираем css и js файлы -->
-	<target name="build" depends="Configuration prepare, System paths prepare">
-		<phing phingfile="build/configure.target.xml" inheritAll="true" target="configure" />
-	</target>
-    
-    <!-- Собираем css и js файлы -->
-	<target name="update" depends="Configuration prepare, System paths prepare, fetch">
-		<phing phingfile="build/configure.target.xml" inheritAll="true" target="configure" />
+    <!-- Сборка проекта: подготовка конфигов, создание директорий, сжатие js и css -->
+	<target name="build" depends="Configuration prepare">
+
+	    <phing phingfile="build/paths.target.xml" inheritAll="true" target="System paths prepare" />
+
+        <!-- Получаем текущее время -->
+        <tstamp>
+            <format property="project.svn.revision" pattern="%Y%m%d%H%I" />
+        </tstamp>
+
+        <echo>Configure config.php</echo>
+
+        <copy file="include/config.php.dist"
+			tofile="${project.basedir}/include/config.php" overwrite="true" >
+            <filterchain>
+                <expandproperties />
+            </filterchain>
+        </copy>
+
+		<phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
 	</target>
 
-	<target name="configure" depends="Configuration prepare">
-		<phing phingfile="build/configure.target.xml" inheritAll="true" target="configure" />
+    <!-- Build + Обновляем все файлы: собрать проект для указанной ревизии -->
+	<target name="update" depends="checkout, build">
 	</target>
 
-	<!-- Подготовка конфигурации -->
+    <!-- Собрать копиию проекта из указанной ревизии в отдельной директории -->
+	<target name="install" depends="update, deploy">
+	</target>
+
+	<!-- Загрузка конфигов -->
 	<target name="Configuration prepare">
         <if>
             <available file="${project.basedir}/build/properties/config.conf" />
             <then>
                 <echo>Use file ${project.basedir}/build/properties/config.conf</echo>
-
-                <!-- Подгрузка дефолтных значений just for safe-->
-                <if>
-                    <available file="${project.basedir}/build/properties/defaults.conf" />
-                    <then>
-                        <property file="${project.basedir}/build/properties/defaults.conf" />
-                    </then>
-                </if>
-                <property file="${project.basedir}/build/properties/config.conf" override="true" />
+                <property file="${project.basedir}/build/properties/config.conf" />
+                <property file="${project.basedir}/build/properties/defaults.conf" override="no" />
             </then>
             <else>
                 <fail message="Not found file ${project.basedir}/build/properties/config.conf" />
             </else>
         </if>
-	</target>
 
-	<!-- Подготовка системных директорий-->
-	<target name="System paths prepare">
-        
-		<!--Директории для проекта -->
-		<if>
-			<not><available file="${project.path.deploy}/releases" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/releases"/>
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.path.deploy}/releases/tags" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/releases/tags"/>
-			</then>
-		</if>
-
-		<!--Директории для хранения временных файлов -->
-		<if>
-			<not><available file="${project.path.deploy}/tmp" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/tmp"/>
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.path.deploy}/tmp/smarty" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/tmp/smarty"/>
-			</then>
-			<else>
-				<echo>Cleanup smarty cache ...</echo>
-				<delete>
-					<fileset dir="${project.path.deploy}/tmp/smarty">
-						<include name="*" />
-                    </fileset>
-				</delete>
-			</else>
-		</if>
-		<mkdir dir="${project.path.deploy}/tmp/smarty/cache" />
-		<mkdir dir="${project.path.deploy}/tmp/smarty/views" />
-		<if>
-			<not><available file="${project.path.deploy}/tmp/nginx_cache" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/tmp/nginx_cache"/>
-				<exec command="chown -R ${project.user} ." dir="${project.path.deploy}/tmp/nginx_cache" />
-			</then>
-			<else>
-				<echo>Cleanup nginx cache ...</echo>
-				<delete>
-					<fileset dir="${project.path.deploy}/tmp/nginx_cache">
-						<include name="*" />
-                    </fileset>
-				</delete>
-			</else>
-		</if>
-        
-		<!-- Проектный кеш (хранение файлового кеша)-->
-		<if>
-			<not><available file="${project.cache.dir}" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.cache.dir}"/>
-				<exec command="chown -R ${project.user} ." dir="${project.cache.dir}" />
-			</then>
-			<else>
-				<echo>Cleanup project cache ...</echo>
-				<delete>
-					<fileset dir="${project.cache.dir}">
-						<include name="*" />
-                    </fileset>
-				</delete>
-			</else>
-		</if>
-
-		<!--Директории для хранения файлов между tags (например uploaded файлы)  -->
-		<if>
-			<not><available file="shared" type="dir" /></not>
-			<then>
-				<mkdir dir="shared"/>
-				<exec command="chown -R ${project.user} ." dir="shared" />
-			</then>
-		</if>
-		<if>
-			<not><available file="shared/uploaded" type="dir" /></not>
-			<then>
-				<mkdir dir="shared/uploaded"/>
-				<exec command="chown -R ${project.user} ." dir="shared/uploaded" />
-			</then>
-		</if>
-
+	    <!-- Проверяем, если у нас есть алиас rev для свойства project.git.rev, то ставим алиас -->
+        <if>
+           <isset property="rev" />
+           <then>
+               <property name="project.git.rev" value="${rev}" override="true" />
+           </then>
+        </if>
 	</target>
 
 	<!-- Обновление - создание репозитария проекта -->
-	<target name="fetch" depends="Configuration prepare">
+	<target name="checkout" depends="Configuration prepare">
 		<if>
 			<!--Если текущая ветка доступна - обновляем -->
 			<available file="${project.basedir}/.git" type="dir" />
@@ -141,8 +67,9 @@
                 <!-- cd BASEDIR; git fetch  -->
                 <exec command="/usr/bin/git fetch"
                     dir="${project.basedir}" passthru="true" />
-                <!-- cd BASEDIR; git checkout origin/branch -->
-                <exec command="/usr/bin/git checkout origin/${project.git.rev}"
+                <echo>Use git branch ${project.git.rev}</echo>
+                <!-- cd BASEDIR; git checkout branch -->
+                <exec command="/usr/bin/git checkout ${project.git.rev}"
                     dir="${project.basedir}" passthru="true" />
 			</then>
 			<!--Если нет - создаём и выполняем checkout -->
@@ -150,14 +77,10 @@
                 <fail message="Need run command git clone manually" />
 			</else>
 		</if>
-		<!-- определяем текущую ревизию project.revision-->
-<!--
-		<svnlastrevision svnpath="/usr/local/bin/svn" workingcopy="releases/${project.svn.branch}" propertyname="project.svn.revision"/>
--->
 	</target>
 
     <!-- Переключение -->
-	<target name="switch" depends="Configuration prepare">
+	<target name="deploy" depends="Configuration prepare">
 		<if>
 			<istrue value="${nginx.config.check}"/>
 			<then>
@@ -171,39 +94,28 @@
             <format property="build.time" pattern="%Y%m%d%H%I" />
         </tstamp>
 
-        <copy todir="/tmp/backup" >
+        <!-- Копируем BASEDIR директорию в дирректорию для сборки -->
+        <copy todir="${project.path.deploy}/releases/tags/${project.git.rev}" >
             <fileset dir=".">
-                <include name="**/*.txt" />
-                <include name="**/*.doc" />
-                <include name="**/*.swx" />
+                <exclude name=".git/**" />
             </fileset>
-            <filelist dir="." files="test.html"/>
         </copy>
 
+        <!-- Создаём симлинк на текущую дирректорию-->
+        <echo>Link branch '${project.git.rev}' to current...</echo>
+        <exec command="rm -f current"
+            dir="${project.path.deploy}/releases" />
+        <exec command="ln -s ${project.path.deploy}/releases/tags/${project.git.rev} current"
+            dir="${project.path.deploy}/releases" checkreturn="true" />
 
-
-		<if>
-			<!--Если текущая ветка доступна - линкуем -->
-			<available file="${project.basedir}/.git" type="dir" />
-			<then>
-				<echo>Link branch '${project.git.rev}' to current...</echo>
-				<exec command="rm -f current" dir="releases" />
-				<exec command="ln -s ${project.svn.branch} current" dir="releases" checkreturn="true" />
-
-				<echo>Reloading nginx and php-fpm proceses</echo>
-				<exec command="${nginx.rc.path} reload" checkreturn="true" />
-				<exec command="${fpm.rc.path} reload" checkreturn="true" />
-
-			</then>
-			<else>
-				<exit message="Current branch '${project.svn.branch}' not available. Run install first!"/>
-			</else>
-		</if>
-    </target>
-    <target name="test">
-
-
-        <echo>${build.time}</echo>
+        <!-- Перезапускаем (если нужно nginx и php-fpm) -->
+        <if>
+            <istrue value="${nginx.bin.path}"/>
+            <then>
+                <echo>Reloading nginx and php-fpm proceses</echo>
+                <exec command="${nginx.rc.path} reload" checkreturn="true" />
+                <exec command="${fpm.rc.path} reload" checkreturn="true" />
+            </then>
+        </if>
     </target>
 </project>
-
