@@ -73,7 +73,6 @@ Core::getInstance()->js = array(
         'widgets/calendar/calendarList.widget'),
     'admin' => array( 'admin'),
     'accounts' => array(
-		'widgets/accounts/accountEdit.widget', 
 		'widgets/accounts/accountsJournal.widget', 
 		'accounts'),
     'review' => array(	
