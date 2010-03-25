@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://git" />
+<title>planningFuture3Days.crud</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">planningFuture3Days.crud</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/info/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Добавить в календарь</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_category__sexyCombo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='div_op_category']/div/div[2]/ul/li[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_amount</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>op_amount</td>
+	<td>10</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_comment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>op_comment</td>
+	<td>future3days</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>cal_repeat</td>
+	<td>label=Каждый день</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>cal_count</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_date</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[@onclick=&quot;DP_jQuery.datepicker._adjustDate('#op_date', +1, 'M');&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='ui-datepicker-div']/table/tbody/tr[2]/td[1]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Сохранить']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_comment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Отмена']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>future3days</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//li[@id='c4']/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>future3days</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//li[contains(.,'future3days')]/div/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Изменить выбранную</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Изменить выбранную']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>op_comment</td>
+	<td>future5days</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Сохранить']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_comment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Отмена']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>future5days</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//li[contains(.,'future5days')]/div/ul/li[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Изменить выбранную</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Изменить все неподтверждённые']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>op_comment</td>
+	<td>future6days</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Сохранить']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>op_comment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[.='Отмена']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>future6days</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//li[contains(.,'future6days')]/div/ul/li[3]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Вы уверены, что хотите удалить событие?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
+	<td>6000</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
