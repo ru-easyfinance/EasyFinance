@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Minify js css files" default="minify">
+	<!-- Подготовка системных директорий-->
+	<target name="System paths prepare">
+
+		<!--Директории для проекта -->
+		<if>
+			<not><available file="${project.path.deploy}/releases" type="dir" /></not>
+			<then>
+				<mkdir dir="${project.path.deploy}/releases"/>
+			</then>
+		</if>
+		<if>
+			<not><available file="${project.path.deploy}/releases/tags" type="dir" /></not>
+			<then>
+				<mkdir dir="${project.path.deploy}/releases/tags"/>
+			</then>
+		</if>
+
+		<!--Директории для хранения временных файлов -->
+		<if>
+			<not><available file="${project.basedir}/tmp" type="dir" /></not>
+			<then>
+				<mkdir dir="${project.basedir}/tmp"/>
+			</then>
+		</if>
+		<if>
+			<not><available file="${project.basedir}/tmp/smarty" type="dir" /></not>
+			<then>
+				<mkdir dir="${project.basedir}/tmp/smarty"/>
+			</then>
+			<else>
+				<echo>Cleanup smarty cache ...</echo>
+				<delete>
+					<fileset dir="${project.basedir}/tmp/smarty">
+						<include name="*" />
+                    </fileset>
+				</delete>
+			</else>
+		</if>
+		<mkdir dir="${project.basedir}/tmp/smarty/cache" />
+		<mkdir dir="${project.basedir}/tmp/smarty/views" />
+		<if>
+			<not><available file="${project.basedir}/tmp/nginx_cache" type="dir" /></not>
+			<then>
+				<mkdir dir="${project.basedir}/tmp/nginx_cache"/>
+				<exec command="chown -R ${project.user} ." dir="${project.basedir}/tmp/nginx_cache" />
+			</then>
+			<else>
+				<echo>Cleanup nginx cache ...</echo>
+				<delete>
+					<fileset dir="${project.basedir}/tmp/nginx_cache">
+						<include name="*" />
+                    </fileset>
+				</delete>
+			</else>
+		</if>
+		
+        <!-- Скрипты должны быть исполняемыми -->
+        <echo>Making chmod on tmp dir's</echo>
+        <exec command="chmod 777 ./cache ./views" dir="${project.basedir}/tmp/smarty/" />		
+		
+
+		<!-- Проектный кеш (хранение файлового кеша)-->
+		<if>
+			<not><available file="${project.cache.dir}" type="dir" /></not>
+			<then>
+				<mkdir dir="${project.cache.dir}"/>
+				<exec command="chown -R ${project.user} ." dir="${project.cache.dir}" />
+			</then>
+			<else>
+				<echo>Cleanup project cache ...</echo>
+				<delete>
+					<fileset dir="${project.cache.dir}">
+						<include name="*" />
+                    </fileset>
+				</delete>
+			</else>
+		</if>
+
+		<!--Директории для хранения файлов между tags (например uploaded файлы)  -->
+		<if>
+			<not><available file="shared" type="dir" /></not>
+			<then>
+				<mkdir dir="shared"/>
+				<exec command="chown -R ${project.user} ." dir="shared" />
+			</then>
+		</if>
+		<if>
+			<not><available file="shared/uploaded" type="dir" /></not>
+			<then>
+				<mkdir dir="shared/uploaded"/>
+				<exec command="chown -R ${project.user} ." dir="shared/uploaded" />
+			</then>
+		</if>
+
+	</target>
+</project>
