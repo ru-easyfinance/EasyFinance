@@ -86,9 +86,9 @@ function getCursorPositionFromInput (elem) {
     var caretPos = 0;
             
     if (document.selection) { // ie
-        elem.focus ();
+        $(elem).focus ();
         var range = document.selection.createRange ();
-        elem.moveStart ('character', -elem.value.length);
+        elem.moveStart ('character', -$(elem).val().length);
         caretPos = range.text.length;
     } else if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
         caretPos = elem.selectionStart;
@@ -273,3 +273,36 @@ function promptSingleOrChain(mode, callback){
         }
     }
 }
+
+var efConfirm = function(options, callback){
+	var NODE_FOR_DIALOG = $('#efConfirmDialog');
+	var DEFAULT_BUTTONS = {'Да' : true,
+						   'НЕТ': false}
+	if (typeof(options) != 'object'){
+		options = {};
+	}
+	var _title = options.title || '';
+	var _content = options.content || '';
+	var _dialogClass = options.dialogClass || '';
+	var _buttons = options.buttons || DEFAULT_BUTTONS
+	var _dialogButtons = {};
+	for (var key in _buttons){
+		_dialogButtons[key] = function(){
+			$(NODE_FOR_DIALOG).dialog('close');
+			if (typeof(callback) == 'function') {
+				callback(_buttons[key]);
+			}
+		}
+	}
+	$(NODE_FOR_DIALOG).html(_content).dialog({
+		autoOpen: true,
+        width: 540,
+		modal: true,
+        dialogClass: _dialogClass,
+        title: _title,
+        buttons: _dialogButtons,
+		close: function(){
+			$(NODE_FOR_DIALOG).dialog('destroy');//special for memory save
+		}
+	});
+};
