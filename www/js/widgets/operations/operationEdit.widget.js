@@ -430,9 +430,9 @@ easyFinance.widgets.operationEdit = function(){
 
             if (_isEditing)
                 if (_isChain)
-                    _$dialog.data('title.dialog', 'Редактировать серии операций').dialog('open');
+                    _$dialog.data('title.dialog', 'Редактировать серию операций').dialog('open');
                 else
-                    _$dialog.data('title.dialog', 'Редактировать операции в календаре').dialog('open');
+                    _$dialog.data('title.dialog', 'Редактировать операцию в календаре').dialog('open');
             else
                 if (_isChain)
                     _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');

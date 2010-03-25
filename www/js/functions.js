@@ -233,3 +233,41 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 	}
 	return returnArray;
 }
+
+function promptSingleOrChain(mode, callback){
+    if (mode == "edit") {
+        $("#dialogSingleOrChainEdit").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите изменить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
+            autoOpen: false,
+            width: 540,
+            title: 'Редактирование календаря',
+            buttons: {
+                "Изменить все неподтверждённые": function(){
+                    $(this).dialog('close');
+                    callback(true);
+                },
+                "Изменить выбранную": function(){
+                    $(this).dialog('close');
+                    callback(false);
+                }
+            }
+        }).dialog('open');
+    } else {
+        if (mode == "delete") {
+            $("#dialogSingleOrChainDelete").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите удалить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
+                autoOpen: false,
+                width: 540,
+                title: 'Удаление из календаря',
+                buttons: {
+                    "Удалить все неподтверждённые": function(){
+                        $(this).dialog('close');
+                        callback(true);
+                    },
+                    "Удалить выбранную": function(){
+                        $(this).dialog('close');
+                        callback(false);
+                    }
+                }
+            }).dialog('open');
+        }
+    }
+}
