@@ -1,3 +1,7 @@
+/*
+ * TODO resolve error
+*/
+
 html, body, form, ul, li, dl, dd, dt, fieldset, form, blockquote { margin:0; padding:0; border:0 none; }
 ul, dl, dd, dt { list-style:none; }
 
@@ -1626,7 +1630,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     padding-right: 1.4em;
     padding-left: 1em;
     float: right;
-    background: transparent url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat right 50% 0;
+    background: transparent url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat scroll right 50% 0;
 }
 
 
@@ -1655,7 +1659,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 .ui-dialog.ui-widget-content {
     background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
-	border: 1px solid grey;
+	border: 1px solid gray;
 }
 .ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
