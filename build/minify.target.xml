@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Configuring project" default="configure">
-    <target name="configure">
+<project name="Minify js css files" default="minify">
+    <target name="minify">
+
         <if>
             <istrue value="${project.jsmin.enabled}" />
             <then>
-                
                 <property name="project.js.root" value="${project.basedir}/www/js/"/>
 
                 <mkdir dir="${project.js.root}tmp" />
@@ -36,7 +36,7 @@
                         <include name="jScrollPane.css" />
                         <include name="jquery.calculator.css" />
                         <include name="fullcalendar.css" />
-						
+
                     </fileset>
                     <fileset dir="${project.css.root}jquery/south-street/">
                         <include name="ui.all.css" />
@@ -63,27 +63,5 @@
             </else>
         </if>
 
-        <echo>Configure config.php</echo>
-        <copy file="include/config.php.dist"
-			tofile="${project.basedir}/include/config.php" overwrite="true" >
-            <filterchain>
-                <expandproperties />
-            </filterchain>
-        </copy>
-
-		<!--Директория для загрузки файлов -->
-<!--
-        <if>
-            <not>
-                <available file="${project.basedir}/www/upload"/>
-            </not>
-            <then>
-                <exec command="ln -s ${project.basedir}/shared/uploaded releases/${project.git.rev}/www/upload" dir="${project.basedir}" checkreturn="true" />
-            </then>
-        </if>
--->
-		<!-- Скрипты должны быть исполняемыми -->
-        <echo>Making all scripts executable</echo>
-        <exec command="chmod -R +x *" dir="${project.basedir}/cron/" />
     </target>
 </project>

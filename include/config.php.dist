@@ -31,7 +31,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 define('IS_DEMO',           ${project.demo} );
 
 // Ссылка на главную страницу сайта
-define('URL_ROOT_MAIN', 		"${project.url.root}/");
+define('URL_ROOT_MAIN', 	"${project.url.root}/");
 define('URL_ROOT_DEMO', 	"${demo.url.root}/");
 define('URL_ROOT_IFRAME', 	"iframe." . URL_ROOT_MAIN);
 define('URL_ROOT_PDA', 		"${pda.url.root}/");
@@ -44,7 +44,7 @@ define('GUEST_MODULES',     'welcome,help,articles,login,registration,review,abo
 
 //COOKIE
 define('COOKIE_NAME',       "${project.cookie.name}" ); // "a"
-define('COOKIE_DOMEN',		${project.cookie.domain} ); // ".easyfinance.ru" 
+define('COOKIE_DOMEN',		"${project.cookie.domain}" ); // ".easyfinance.ru"
 define('COOKIE_PATH',       "${project.cookie.path}" ); // по-умолчанию "/"
 define('COOKIE_HTTPS',		${project.cookie.https} );  // На продуктиве всегда true
 define('COOKIE_EXPIRE',     ${project.cookie.expire} ); // две недели = 60 * 60 * 24 * 2
