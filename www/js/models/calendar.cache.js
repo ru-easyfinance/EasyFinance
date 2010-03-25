@@ -79,6 +79,9 @@ easyFinance.models.calendarCache = function(){
     
     var _rightDate,_contentDate;
     function reloadWidgets(widget){
+		if (typeof(easyFinance.widgets.calendar) != 'object'){
+			widget = 'calendarPreview';
+		}
         if (widget == 'calendar') {
         	_rightDate = easyFinance.widgets.calendar.getCurrentDate();
         	load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
