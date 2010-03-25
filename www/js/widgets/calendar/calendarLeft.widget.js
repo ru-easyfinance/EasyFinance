@@ -38,7 +38,7 @@ easyFinance.widgets.calendarLeft = function(){
     }
 
     function _menuEdit(id){
-        var _operation = easyFinance.models.accounts.getOverdueOperationById(id);
+        _operation = easyFinance.models.accounts.getOverdueOperationById(id);
         if (_operation) {
             easyFinance.widgets.operationEdit.fillFormCalendar(_operation, true, false);
             return;
