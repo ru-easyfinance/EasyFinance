@@ -9,10 +9,13 @@ easyFinance.widgets.calendarPreview = function(){
         $('.calendar_block .calendar').datepicker({
             onChangeMonthYear: function(year, month, inst){
                 _currentDate.setFullYear(year, month - 1);
-				easyFinance.models.calendarCache.reloadWidgets('calendarPreview');
+				setTimeout(function(){easyFinance.models.calendarCache.reloadWidgets('calendarPreview');},1000)
+				
             }
         });
-        
+        if($('#calendar').length > 0){
+			$('.calendar_block .calendar .ui-datepicker-next').click();
+		}
         $(document).bind('operationEdited operationsChainAdded operationsChainEdited operationDateEdited', function(data){
             easyFinance.models.calendarCache.clean();
             easyFinance.models.calendarCache.init(data.calendar || {});
