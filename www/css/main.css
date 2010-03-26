@@ -869,6 +869,7 @@ div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  
 div.op_addoperation .op_line  .op_amount {float: left; }
 div.op_addoperation .op_line  .op_amount input[type=button],div.op_addoperation #btnCalcSumTransfer[type=button]{
 	margin-left: 2px;
+	padding-top: 2px;
 	border: none;
 	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
  }
