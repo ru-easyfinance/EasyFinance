@@ -71,7 +71,7 @@ class Budget_Model {
 
         $fact = array();
         foreach ( $arrayoper as $key => $value ) {
-            
+
             if ( isset ( $currency[$value['currency_id']] ) ) {
                 $sum = $value['money'] * $currency[$value['currency_id']];
             } else {
@@ -79,7 +79,7 @@ class Budget_Model {
             }
             $fact[$value['cat_id']] = (float) @$fact[$value['cat_id']] + (float)$sum;
         }
-        
+
         // Делаем выборку по всем запланированным доходам и расходам
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
                 DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
@@ -94,18 +94,15 @@ class Budget_Model {
         WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start) AND c.visible=1
         ORDER BY c.cat_parent ;";
 
-        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);      
+        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);
 
         $list = array(
             'd' => array(),
             'p' => array()
         );
-        
-        $drain_all = 0; $profit_all = 0;
-        $real_drain = 0; $real_profit = 0;
 
         foreach ($arraybudg as $var) {
-           
+
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
@@ -135,12 +132,9 @@ class Budget_Model {
                 $list['p'][$key]['mean']   = (float)@$list['p'][$key]['mean'];
             }
         }
-//        print '<pre>';
-//        die(print_r($list));
 
         return array (
-            'list' => $list,
-            'main' => array () /** @deprecated */
+            'list' => $list
         );
     }
 
@@ -166,7 +160,7 @@ class Budget_Model {
                 if ($cat[$k]['type'] == 0 || ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
 
                         $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
-                        
+
                         if ( $v ) {
                             if (!empty ($sql)) $sql .= ',';
                             $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .
