@@ -10,161 +10,225 @@
 
 ///////////////////////////////////////Работа с Cookie////////////////////////////////////
 
+
 /**
  * Функция, которая устанавливает куку
- * @param name str название
- * @param value str значение
- * @param expires str срок жизни
- * @param path str
- * @param domain str
- * @param secure bool использование защищённых кук
- * @return bool
+ * @param {String} name
+ * @param {String} value
+ * @param {String} expires
+ * @param {String} path
+ * @param {String} domain
+ * @param {String} secure
+ * @return {Boolean}
  */
 function setCookie (name, value, expires, path, domain, secure) {
-	if (!name || name ==''){
+	try {
+		if (!name || name == '') {
+			return false;
+		}
+		document.cookie = name + "=" + escape(value) +
+		((expires) ? "; expires=" + expires : "") +
+		((path) ? "; path=" + path : "") +
+		((domain) ? "; domain=" + domain : "") +
+		((secure) ? "; secure" : "");
+		return true;
+	}catch (e){
 		return false;
 	}
-	document.cookie = name + "=" + escape(value) +
-		((expires) ? "; expires=" + expires : "") +
-                ((path) ? "; path=" + path : "") +
-                ((domain) ? "; domain=" + domain : "") +
-                ((secure) ? "; secure" : "");
-    return true;
 }
 
 /**
- * Функция которая возвращает значение куки
- * @param name str
- * @return str - значение куки
+ * Функция возвращает значение куки по её имени
+ * @param {String} name
+ * @return {String || Null}
  */
-
 function getCookie(name) {
-	var cookie = " " + document.cookie + ';';
-	var search = " " + name + "=";
-	var offset = cookie.indexOf(search);
-	if (offset != -1) {
-		offset += search.length;
-		var end = cookie.indexOf(";", offset);
-		return unescape(cookie.substring(offset, end));
+	try {
+		var cookie = " " + document.cookie + ';';
+		var search = " " + name + "=";
+		var offset = cookie.indexOf(search);
+		if (offset != -1) {
+			offset += search.length;
+			var end = cookie.indexOf(";", offset);
+			return unescape(cookie.substring(offset, end));
+		}
+		return null;
+	}catch (e){
+		return null;
 	}
-	return null;
 }
 
 ///////////////////////////////////////Работа со строками////////////////////////////////////
 /**
  * Функция, которая проверяет длину строки и при необходимости её укорачивает
- * @param str {String}
- * @param maxLength {Int}
- * @return String
+ * @param {String} str
+ * @param {Number} maxLength
+ * @return {String}
  */
 function shorter(str, maxLength){
-    if (str == undefined){
-        return null;
-    }
-    if(str.length > maxLength){
-        str = str.substring(0, maxLength-3) + '...';
-    }
-    return str;
+	try {
+		if (str == undefined) {
+			return null;
+		}
+		if (str.length > maxLength) {
+			str = str.substring(0, maxLength - 3) + '...';
+		}
+		return str;
+	}catch (e){
+		return null;
+	}
 }
-
+/**
+ * Устанавливает позицую каретки в инпуте
+ * TODO test 
+ * @param {jQuery} elem
+ * @param {Number} caretPos
+ * @return {true || false}
+ */
 function setCursorPositionFromInput (elem, caretPos) {
-    if (document.selection) { // ie
-        $(elem).focus ();
-        var range = document.selection.createRange ();
-        range.moveStart ('character', - $(elem).val().length);
-        range.moveStart ('character', caretPos);
-        range.moveEnd ('character', 0);
-        range.select ();
-    } else if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
-        elem.selectionStart = caretPos;
-        elem.selectionEnd = caretPos;
-        elem.focus ();
-    }
+	try {
+		if (document.selection) { // ie
+			$(elem).focus();
+			var range = document.selection.createRange();
+			range.moveStart('character', -$(elem).val().length);
+			range.moveStart('character', caretPos);
+			range.moveEnd('character', 0);
+			range.select();
+		}
+		else 
+			if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
+				elem.selectionStart = caretPos;
+				elem.selectionEnd = caretPos;
+				elem.focus();
+			}
+			return true;
+	} catch(e){
+		return false;
+	}
 }
-
+/**
+ * Возвращает позицию курсора в инпуте
+ * @param {jQuery} elem
+ * @return {Number || null}
+ */
 function getCursorPositionFromInput (elem) {
-    var caretPos = 0;
-            
-    if (document.selection) { // ie
-        $(elem).focus ();
-        var range = document.selection.createRange ();
-        elem.moveStart ('character', -$(elem).val().length);
-        caretPos = range.text.length;
-    } else if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
-        caretPos = elem.selectionStart;
-    }
-            
-    return caretPos;
+	try {
+		var caretPos = 0;
+		if (document.selection) { // ie
+			$(elem).focus();
+			var range = document.selection.createRange();
+			elem.moveStart('character', -$(elem).val().length);
+			caretPos = range.text.length;
+		}
+		else 
+			if (elem.selectionStart || elem.selectionStart == '0') { // Mozilla
+				caretPos = elem.selectionStart;
+			}	
+		return caretPos;
+	}catch(e){
+		return null;
+	}
 }
 
 ///////////////////////////////////////Работа с числами////////////////////////////////////
 
 /**
  * Преобразует число в наш формат
- * @param num float число
- * @return string
+ * @param {Number || String} num
+ * @return {String}
  */
 function formatCurrency(num) {
-    if(isNaN(num)){return "0.00";}
-    var sign = new Number(num);
-    return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+	try {
+		if (isNaN(num)) {
+			return "0.00";
+		}
+		var sign = new Number(num);
+		return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+	}catch(e){
+		return "0.00"
+	}
 }
 
 /**
  * оставляет 4 значащих цифры
- * @param Cost string | Number
- * @return String 
+ * @param {String || Number} Cost 
+ * @return {String} 
  */
 function roundToSignificantFigures(Cost){
-	var workCost = '';
-	if (typeof(Cost) == 'number'){
-		if (Cost >= 1000){
-			return Cost.toFixed(0);
-		}else if(Cost >= 100){
-			return Cost.toFixed(1);
-		}else if(Cost >= 10){
-			return Cost.toFixed(2);
-		}else if (Cost >= 1){
-			return Cost.toFixed(3);
-		}else{
-			workCost = Cost.toString();
+	try {
+		var workCost = '';
+		if (typeof(Cost) == 'number') {
+			if (Cost >= 1000) {
+				return Cost.toFixed(0);
+			}
+			else 
+				if (Cost >= 100) {
+					return Cost.toFixed(1);
+				}
+				else 
+					if (Cost >= 10) {
+						return Cost.toFixed(2);
+					}
+					else 
+						if (Cost >= 1) {
+							return Cost.toFixed(3);
+						}
+						else {
+							workCost = Cost.toString();
+						}
 		}
-	}else if(typeof(Cost) == 'string'){
-		if (Cost >= 1000){
-			return Number(Cost).toFixed(0);
-		}else if(Cost >= 100){
-			return Number(Cost).toFixed(1);
-		}else if(Cost >= 10){
-			return Number(Cost).toFixed(2);
-		}else if (Cost >= 1){
-			return Number(Cost).toFixed(3);
-		}else{
-			workCost = Cost;
+		else 
+			if (typeof(Cost) == 'string') {
+				if (Cost >= 1000) {
+					return Number(Cost).toFixed(0);
+				}
+				else 
+					if (Cost >= 100) {
+						return Number(Cost).toFixed(1);
+					}
+					else 
+						if (Cost >= 10) {
+							return Number(Cost).toFixed(2);
+						}
+						else 
+							if (Cost >= 1) {
+								return Number(Cost).toFixed(3);
+							}
+							else {
+								workCost = Cost;
+							}
+			}
+		var lenght = workCost.length - 2;
+		var end = -1;
+		for (var i = 2; i < lenght; i++) {
+			if (end == -1 && workCost.substr(i, 1) != '0') {
+				end = 1;
+				workCost = Number(workCost).toFixed(i + 2).toString();
+				break;
+			}
 		}
+		return workCost || null;
+	}catch (e){
+		return null;
 	}
-	var lenght = workCost.length - 2;
-	var end = -1;
-	for (var i = 2; i < lenght ;i++){
-		if (end == -1 && workCost.substr(i, 1) != '0'){
-			end = 1;
-			workCost = Number(workCost).toFixed(i+2).toString();
-			break;
-		}
-	}
-	return workCost || null;
 }
 /**
  * Преобразует любую строку в число методом удаления всех левых символов))
- * @param str {String}
+ * @param {String} str
  * @return String
  */
 function toFloat(str){
-    if (str !== null && str !== undefined){
-        str = new Number(str.toString().replace(/[^0-9\.\-]/gi, ''));
-        return str;
-    }else{
-        return 0;
-    }
+	try {
+		if (str !== null && str !== undefined) {
+			str = new Number(str.toString().replace(/[^0-9\.\-]/gi, ''));
+			return str;
+		}
+		else {
+			return 0;
+		}
+	}catch (e){
+		return 0;
+	}
 }
 /**
  * @deprecated надо перехлдить на zend стандарты написания имён
@@ -179,7 +243,11 @@ function tofloat(str){
     }
 }
 
-
+/**
+ * @deprecated
+ * @param {Object} obj
+ * @param {String} columnName
+ */
 var searchMinimum = function(obj, columnName){
 	var minKey = null;
 	var minVal = null;
@@ -192,6 +260,11 @@ var searchMinimum = function(obj, columnName){
 	return minKey;
 }
 
+/**
+ * @deprecated
+ * @param {Object} obj
+ * @param {String} columnName
+ */
 function getElementsFromObjectWithOrderByColumnByASC(obj, columnName){
 	var returnArray = []
 	var workingObj = $.extend({}, obj)
@@ -208,7 +281,12 @@ function getElementsFromObjectWithOrderByColumnByASC(obj, columnName){
 
 }
 
-
+/**
+ * @deprecated
+ * @param {Object} obj
+ * @param {String} columnName
+ * @param {Function} callback
+ */
 function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, callback){
 	var returnArray = [];
 	if (typeof(callback) == 'string'){
@@ -233,7 +311,12 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 	}
 	return returnArray;
 }
-
+/**
+ * TODO rewrite
+ * Рисует диалог выбора для цепочки
+ * @param {String} mode
+ * @param {Function} callback
+ */
 function promptSingleOrChain(mode, callback){
     if (mode == "edit") {
         $("#dialogSingleOrChainEdit").html('<div style="margin: 0 14px">Это операция является частью серии операций.<br> Вы хотите изменить только выбранную операцию или все неподтверждённые операции в этой серии? </div>').dialog({
@@ -273,36 +356,49 @@ function promptSingleOrChain(mode, callback){
         }
     }
 }
-
+/**
+ * TODO mode
+ * make system dialog
+ * @param {Object} options 
+ * @param {Function} callback
+ * @return {boolean}
+ */
 var efConfirm = function(options, callback){
-	var NODE_FOR_DIALOG = $('#efConfirmDialog');
-	var DEFAULT_BUTTONS = {'Да' : true,
-						   'НЕТ': false}
-	if (typeof(options) != 'object'){
-		options = {};
-	}
-	var _title = options.title || '';
-	var _content = options.content || '';
-	var _dialogClass = options.dialogClass || '';
-	var _buttons = options.buttons || DEFAULT_BUTTONS
-	var _dialogButtons = {};
-	for (var key in _buttons){
-		_dialogButtons[key] = function(){
-			$(NODE_FOR_DIALOG).dialog('close');
-			if (typeof(callback) == 'function') {
-				callback(_buttons[key]);
+	try {
+		var NODE_FOR_DIALOG = $('#efConfirmDialog');
+		var DEFAULT_BUTTONS = {
+			'Да': true,
+			'НЕТ': false
+		}
+		if (typeof(options) != 'object') {
+			options = {};
+		}
+		var _title = options.title || '';
+		var _content = options.content || '';
+		var _dialogClass = options.dialogClass || '';
+		var _buttons = options.buttons || DEFAULT_BUTTONS
+		var _dialogButtons = {};
+		for (var key in _buttons) {
+			_dialogButtons[key] = function(){
+				$(NODE_FOR_DIALOG).dialog('close');
+				if (typeof(callback) == 'function') {
+					callback(_buttons[key]);
+				}
 			}
 		}
+		$(NODE_FOR_DIALOG).html(_content).dialog({
+			autoOpen: true,
+			width: 540,
+			modal: true,
+			dialogClass: _dialogClass,
+			title: _title,
+			buttons: _dialogButtons,
+			close: function(){
+				$(NODE_FOR_DIALOG).dialog('destroy');//special for memory save
+			}
+		});
+		return true;
+	}catch(e){
+		return false;
 	}
-	$(NODE_FOR_DIALOG).html(_content).dialog({
-		autoOpen: true,
-        width: 540,
-		modal: true,
-        dialogClass: _dialogClass,
-        title: _title,
-        buttons: _dialogButtons,
-		close: function(){
-			$(NODE_FOR_DIALOG).dialog('destroy');//special for memory save
-		}
-	});
 };
