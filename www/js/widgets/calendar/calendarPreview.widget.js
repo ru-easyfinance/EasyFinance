@@ -108,6 +108,8 @@ easyFinance.widgets.calendarPreview = function(){
                 time: ''//dt.toLocaleTimeString().substr(0, 5)
             };
             easyFinance.widgets.operationEdit.fillFormCalendar(data, false, true);
+
+            return false;
         });
         
     }
