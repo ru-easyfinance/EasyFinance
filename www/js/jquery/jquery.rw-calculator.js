@@ -40,9 +40,9 @@
  * 		 
  */
 (function($){
-    function rwCalculator($node, options){
+    function rwCalculator($node, opyions){
         try {
-            var _defaultEvents = typeof(events) == 'object' ? events : $.rwCalculator.defaultEvents
+            var _defaultEvents = $.rwCalculator.defaultEvents;
             var _node = $node || $('body')
             var _inst = null;
             var _node = $node;
@@ -59,15 +59,12 @@
             else {
                 _inst = $.rwCalculator.inst;
             }
-			
             $.rwCalculator.node = $node;
             for (var key in _defaultEvents) {
                 if (typeof(_defaultEvents[key]) == 'object') {
-                
                     $($node)[key](function(e){
                         var key = e.type;
                         var _tmp;
-                        
                         for (var fk in _defaultEvents[key]) {
                             if (typeof(_defaultEvents[key][fk]) == 'function'){
                                 _defaultEvents[key][fk](e);
@@ -113,8 +110,10 @@
     
     $.rwCalculator.functions = {
         'show': function(e, option){//TODO full search
+        
+        	$.rwCalculator.inst.show();
         	$(this).parent().append($.rwCalculator.inst);
-          	$.rwCalculator.inst.show();
+          	
 			var top =0;
 			if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
 				top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
