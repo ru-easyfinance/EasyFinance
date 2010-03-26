@@ -36,6 +36,7 @@ easyFinance.widgets.calendarPreview = function(){
     }
     
     function load(result){
+		var tmpDate = new Date(_currentDate);
         for (v in result) {
             ddt.setTime(result[v].timestamp * 1000);
             ddt_month = ddt2month[ddt.getMonth()];
@@ -43,7 +44,10 @@ easyFinance.widgets.calendarPreview = function(){
                 var month = $(this).find('span.ui-datepicker-month').text();
                 var year = $(this).find('span.ui-datepicker-year').text();
                 if (month == ddt_month && year == ddt.getFullYear()) {
-                    $(this).closest('.calendar_block').find('td').removeClass('hasEvents').find('a').removeAttr('used').removeAttr('style');
+                    $(this).closest('.calendar_block').find('td').removeClass('hasEvents').find('a').removeAttr('used').removeAttr('style').each(function(){
+						tmpDate.setDate($(this).text());
+						$(this).attr('date', $.datepicker.formatDate('dd.mm.yy', tmpDate));
+					});
                 }
             });
         }
@@ -65,7 +69,7 @@ easyFinance.widgets.calendarPreview = function(){
                                     $(this).css('color', '#000000');
                                 }
                             }
-                            $(this).attr('date', $.datepicker.formatDate('dd.mm.yy', ddt)).attr('used', ($(this).attr('used') || '') +
+                            $(this).attr('used', ($(this).attr('used') || '') +
                             '<tr><td style="text-align:left;width:100%"><nobr><b>' +
                             shorter((easyFinance.models.category.getUserCategoryNameById(result[v].cat_id) || 'Без категории'), 13) +
                             '</b></nobr></td><td style="text-align:right"><nobr>' +
@@ -75,12 +79,13 @@ easyFinance.widgets.calendarPreview = function(){
                             (easyFinance.models.accounts.getAccountCurrencyText(result[v].account) || easyFinance.models.currency.getDefaultCurrencyText()) +
                             '</nobr></td></tr>').closest('td').addClass('hasEvents');
                         }
+						
                     });
                 }
             });
         }
         //Right cal
-        $('.calendar_block .hasDatepicker').qtip({
+        $('.calendar_block .hasDatepicker table.ui-datepicker-calendar').qtip({
             content: (''),
             position: {
                 corner: {
@@ -90,12 +95,12 @@ easyFinance.widgets.calendarPreview = function(){
             },
             style: 'modern'
         });
-        $('.calendar_block .hasDatepicker td, #calend .hasDatepicker td').removeAttr('onclick').find('a').removeAttr('href');
-        $('.calendar_block .hasDatepicker td a').live('mouseover', function(){
+        $('.calendar_block .hasDatepicker td').removeAttr('onclick').find('a').removeAttr('href');
+        $('.calendar_block .hasDatepicker table.ui-datepicker-calendar td a').live('mouseover', function(){
             var content = $(this).attr('used') ? ('<div></div><table class="calendar_tip">' +
             $(this).attr('used') +
             '</table>') : '<div style="color:#B4B4B4">На выбранный день ничего не запланировано</div>';
-            $('.calendar_block .hasDatepicker').qtip('api').updateContent(content);
+            $('.calendar_block .hasDatepicker table.ui-datepicker-calendar').qtip('api').updateContent(content);
         });
         $('.calendar_block .hasDatepicker td a').live('click', function(){
             var data = {
