@@ -4,3 +4,11 @@
 /include/config.php
 /www/css/global-min.css
 /www/js/global-min.js
+
+/sf/config/databases.yml
+/sf/cache/
+/sf/log/
+/sf/data/sql/
+/sf/*/base/
+/sf/*/map/
+/sf/*/om/
