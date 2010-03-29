@@ -87,14 +87,19 @@ class Report_Controller extends _Core_Controller_UserCommon
         $account = (int)@$_GET['account'];
         $currency= (int)@$_GET['currency'];
         $acclist = $_GET['acclist'];
-        //$acclist = explode(',',$accstr);
-        //if ($acclist[0] == 32)break;
+
+        if ( ! empty ($acclist) ) {
+            $accounts = $acclist;
+        } else {
+            $accounts = $account;
+        }
+
         switch ($report) {
             case 'graph_profit': //Доходы
-                die(json_encode($this->model->getPie(0, $start, $end, $account, $currency, $acclist)));
+                die(json_encode($this->model->getPie(0, $start, $end, $accounts, $currency)));
                 break;
             case 'graph_loss':   // Расходы
-                die(json_encode($this->model->getPie(1, $start, $end, $account, $currency, $acclist)));
+                die(json_encode($this->model->getPie(1, $start, $end, $account, $currency)));
                 break;
             case 'graph_profit_loss': //Сравнение расходов и доходов
                 die(json_encode($this->model->getBars($start, $end, $account, $currency, $acclist)));
