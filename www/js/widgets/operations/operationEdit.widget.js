@@ -343,7 +343,7 @@ easyFinance.widgets.operationEdit = function(){
             }
 
             var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-            result = result.toFixed(2);
+            result = roundToSignificantFigures(result, 2).toFixed(2);
 
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
@@ -353,7 +353,7 @@ easyFinance.widgets.operationEdit = function(){
 
         $('#op_amount').change(function(){
             var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-            result = result.toFixed(2);
+            result = roundToSignificantFigures(result, 2).toFixed(2);
 
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
@@ -661,7 +661,7 @@ easyFinance.widgets.operationEdit = function(){
             comment,
             amount1,
             _selectedTransfer,
-            _realConversionRate.toFixed(4),
+            roundToSignificantFigures(_realConversionRate, 4),
             amount2, // сумма к получению при обмене валют
             _selectedTarget,
             close2,
@@ -841,10 +841,10 @@ easyFinance.widgets.operationEdit = function(){
         if (_transferCurrency.id == _defaultCurrency.id) {
             // покупаем валюту по умолчанию
             // отображаемый курс совпадает с реальным коэффициентом
-            $('#op_conversion').val(_realConversionRate.toFixed(4));
+            $('#op_conversion').val(roundToSignificantFigures(_realConversionRate, 4));
         } else {
             // обмен без участия валюты по умолчанию
-            $('#op_conversion').val((1/_realConversionRate).toFixed(4));
+            $('#op_conversion').val(roundToSignificantFigures(1/_realConversionRate, 4));
         }
     }
 

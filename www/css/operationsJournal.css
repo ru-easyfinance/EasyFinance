@@ -1,6 +1,11 @@
 /* http://www.imaputz.com/cssStuff/bigFourVersion.html */
 /* begin some basic styling here                     */
 
+/* чтобы не рушить вёрстку в Google Chrome */
+.operation_list table th, .operation_list table td, table.tab1 th {
+    font-size:90%;
+}
+
 #divOperationsJournalFilters {
     margin: 0px;
     margin-top: 7px;
@@ -125,7 +130,7 @@ table#operations_list td + td + td + td + td{
 }
 
 table#operations_list td + td + td + td + td + td{
-    width: 191px;
+    width: 160px;
 }
 
 #operations_list div.operation { display: block; height: 16px; width: 16px; background: url('/img/i/iconsOperation.gif') no-repeat 0 0; margin-left: 3px; }

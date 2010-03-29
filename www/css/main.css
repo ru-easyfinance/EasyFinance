@@ -2043,7 +2043,7 @@ div.op_addoperation div.op_line div.amount div.amount_general{
 }
 
 div.op_addoperation input#op_transfer{
-    width: 114px;
+    width: 140px;
 }
 
 div.op_addoperation input#op_date{
@@ -2053,7 +2053,7 @@ div.op_addoperation input#op_date{
 div.op_addoperation div.op_line div.amount input#op_amount{
     position : relative;
     float: left;
-    width: 114px;
+    width: 140px;
 }
 div.op_addoperation div.op_line div.amount img{
     position : relative;

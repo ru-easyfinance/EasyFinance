@@ -149,11 +149,20 @@ function formatCurrency(num) {
 	}
 }
 
+
+function roundToSignificantFigures(n, sig) {
+    var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
+
+    return Math.round(n * mult) / mult;
+}
+
+
 /**
  * оставляет 4 значащих цифры
  * @param {String || Number} Cost 
  * @return {String} 
  */
+/*
 function roundToSignificantFigures(Cost){
 	try {
 		var workCost = '';
@@ -212,6 +221,8 @@ function roundToSignificantFigures(Cost){
 		return null;
 	}
 }
+*/
+
 /**
  * Преобразует любую строку в число методом удаления всех левых символов))
  * @param {String} str
