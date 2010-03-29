@@ -28,6 +28,10 @@ class apiConfiguration extends sfApplicationConfiguration
             'sfDoctrinePlugin',
         );
 
+        if ('test' == $this->getEnvironment()) {
+            $plugins[] = 'sfPhpunitPlugin';
+        }
+
         $this->enablePlugins($plugins);
     }
 }
