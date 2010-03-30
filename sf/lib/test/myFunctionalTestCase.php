@@ -17,7 +17,11 @@ abstract class myFunctionalTestCase extends sfPHPUnitFunctionalTestCase
      */
     protected function getFunctionalTesters()
     {
-        return array();
+        return array(
+            'request'  => 'myFunctionalTesterRequest',
+            'response' => 'myFunctionalTesterResponse',
+            'model'    => 'sfTesterDoctrine',
+        );
     }
 
 }
