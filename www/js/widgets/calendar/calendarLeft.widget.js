@@ -5,6 +5,8 @@ easyFinance.widgets.calendarLeft = function(){
     var _$blockOverdue = null;
     var _$blockFuture = null;
 
+    var _operation = null;
+
     // private functions
     function _floatingMenuClicked(){
         var id = $(this).parent().closest("li").attr("id");
@@ -36,10 +38,16 @@ easyFinance.widgets.calendarLeft = function(){
     }
 
     function _menuEdit(id){
-        var op = easyFinance.models.accounts.getOverdueOperationById(id)
-               || easyFinance.models.accounts.getFutureOperationById(id);
+        _operation = easyFinance.models.accounts.getOverdueOperationById(id);
+        if (_operation) {
+            easyFinance.widgets.operationEdit.fillFormCalendar(_operation, true, false);
+            return;
+        }
 
-        easyFinance.widgets.operationEdit.fillFormCalendar(op, true, false);
+        _operation = easyFinance.models.accounts.getFutureOperationById(id);
+        promptSingleOrChain("edit", function(isChain){
+            easyFinance.widgets.operationEdit.fillFormCalendar(_operation, true, isChain);
+        });
     }
 
     function _menuDelete(id){

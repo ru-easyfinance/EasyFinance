@@ -15,21 +15,6 @@ easyFinance.models.category = function(){
     var _order = {};
 
     // private functions
-    function _htmlDecodeAll() {
-        var key;
-
-        if(_categories.user){
-            for (key in _categories.user) {
-                _categories.user[key].name = _categories.user[key].name.replace(/&quot;/g, '"');
-            }
-        }
-        if(_categories.system){
-            for (key in _categories.system) {
-                _categories.system[key].name = _categories.system[key].name.replace(/&quot;/g, '"');
-            }
-        }
-    }
-
     function _update(actionUrl, id, name, parent, type, system, callback){
         $.post(actionUrl, {
                 id: id,
@@ -81,7 +66,7 @@ easyFinance.models.category = function(){
         if (typeof param1 == 'object') {
             _categories = param1;
             _createOrderLists();
-            _htmlDecodeAll();
+            
             if (typeof param2 == 'function')
                 param2(_categories);
         } else {
@@ -89,7 +74,6 @@ easyFinance.models.category = function(){
             $.get(LIST_URL, 'responseMode=json',function(data) {
                 _categories = data;
                 _createOrderLists();
-                _htmlDecodeAll();
 
                 $(document).trigger('categoriesLoaded');
 

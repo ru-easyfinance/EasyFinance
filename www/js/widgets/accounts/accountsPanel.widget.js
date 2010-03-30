@@ -83,10 +83,8 @@ easyFinance.widgets.accountsPanel = function(){
         $(document).bind('accountDeleted', redraw);
 
        $('.accounts .add,.accounts .addaccountlink').click(function(){
-           document.location='/accounts/#add';
-           // временный хак до полного перехода на аякс
            // отображает форму создания счёта
-          $('#addacc').click();
+           easyFinance.widgets.accountEdit.addAccount();
        })
 
        $('.accounts li a').live('click',function(evt){
@@ -152,7 +150,7 @@ easyFinance.widgets.accountsPanel = function(){
 
     function redraw(){
         var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
-//        var g_name = ['Деньги','Долги мне','Мои долги','�?нвестиции','�?мущество'];//названия групп
+//        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте

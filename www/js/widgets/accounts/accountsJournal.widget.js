@@ -66,7 +66,7 @@ easyFinance.widgets.accountsJournal = function(){
                     id = $(this).closest('.item').attr('id').split("_", 2)[1];
                 
                 //easyFinance.widgets.accountEdit.setEditMode(true);
-                $('#blockCreateAccounts').show();
+                easyFinance.widgets.accountEdit.showForm();
                 accounts_hash_api('#edit'+id);
             }
         );
@@ -79,7 +79,7 @@ easyFinance.widgets.accountsJournal = function(){
                 else
                     id = $(this).closest('.item').attr('id').split("_", 2)[1];
 
-                $('#blockCreateAccounts').show();
+                easyFinance.widgets.accountEdit.showForm();
                 accounts_hash_api('#edit'+id, true);
             }
         );
@@ -186,7 +186,7 @@ easyFinance.widgets.accountsJournal = function(){
             return;
         }
         var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0]; // Жуткий масив привязки типов к группам
-        var g_name = ['Деньги','Долги мне','Мои долги','Инвестиции','Имущество'];//названия групп
+        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
         var arr = ['','','','',''];//содержимое каждой группы
         var summ = [0,0,0,0,0];// сумма средств по каждой группе
         var div = "<div class='cont'><ul style='z-index: 1006'>\n\

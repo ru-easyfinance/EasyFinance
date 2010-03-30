@@ -105,11 +105,3 @@ easyFinance.widgets.calendarList = function(){
         load: load
     }
 }();
-
-
-//        $('#per_tabl tr td.reject').live('click',function(){
-//            //@todo
-//            alert("accept");
-//            var operationId = $(this).closest('tr').attr('id').replace('ev_', '');
-//            easyFinance.models.accounts.acceptOperationsByIds([operationId]);
-//        });

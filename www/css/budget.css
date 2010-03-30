@@ -1,52 +1,243 @@
-.budget#budget .info {width: 100%; position: relative;}
-.budget#budget .info table{width: 100%;}
-.budget#budget .info td{padding: 5px;}
-.budget#budget .info .profit span{color: #309500;}
-.budget#budget .info .drain span{color: #eb3c34;}
-.budget#budget .info div{position:relative;float:left}
-.budget#budget .info div.right{position:relative;float:right}
-.budget#budget .info .balance.red span{color: #eb3c34;}
-.budget#budget .info .balance.green span{color: #309500;}
-.budget#budget .list.budget{margin-top: 15px;}
-.budget#budget .list .list.head{background: url('/img/i/bg09.gif') repeat-x 0 0;}
-.budget#budget .list .list.body{overflow-y: auto; overflow-x: hidden;  max-height: 300px;position:relative; width:auto}
-.heightSmall .budget#budget .list .list.body{overflow-y: auto; overflow-x: hidden;  height: 150px; max-height: 150px;position:relative; width:auto}
-.heightLarge .budget#budget .list .list.body{overflow-y: auto; overflow-x: hidden;  height: 460px; max-height: 460px;position:relative; width:auto}
-.budget#budget .list .list table tr{position: relative}
-.budget#budget .list .list table td{font-size: 11px; padding: 7px 0 5px 0;position: relative}
-.budget#budget .list .list table td.w1{padding-left: 11px; width: 190px; }
-.budget#budget .list .list table td.w2{width: 77px; text-align: right;}
-.budget#budget .list .list table td.w2 span{cursor: pointer}
-.budget#budget .list .list table td.w2 input{display: none;text-align:right;width: 70px; }
-.budget#budget .list .list table td.w3{width: 77px; text-align:center;}
-.budget#budget .list .list table td.w5{width: 77px; text-align:right;}
-.budget#budget .list .list table .parent td.w6 div a{background:0}
-.budget#budget .list .list table .child td.w6, .budget#budget .list .list table .nochild td.w6{ text-align: center;width: 80px;}
-.budget#budget .list .list table tr.child:hover td.w6 div, .budget#budget .list .list table tr.nochild:hover td.w6 div{background:url('/img/i/icons_control4.gif') no-repeat 0px 0px;}
-.budget#budget .list .list table tr.child:hover,.budget#budget .list .list table tr.nochild:hover{background-color: #E3FFDF}
-.budget#budget .list .list table td.w6 div{width: 60px; background: 0; height: 30px;margin-top:-8px}
-.budget#budget .list .list table td.w6 div a{height: 100%;padding-top: 3px;padding-bottom: 15px;width:30px;text-decoration:none}
-.budget#budget .list #profit a{padding-left:12px; color: #309500; font-weight: bold; font-size: 13px}
-.budget#budget .list #drain a{padding-left:12px; color: #eb3c34; font-weight: bold; font-size: 13px}
+.budget#budget .info {
+	width: 100%;
+	position: relative;
+}
 
-.budget#budget .list #profit.open a,
-.budget#budget .list #drain.open a{margin-left: 0; background: url('/img/i/minus.gif') no-repeat 6px 4px; background-position: left}
-.budget#budget .list #profit.close a,
-.budget#budget .list #drain.close a {margin-left: 0; background: url('/img/i/plus.gif') no-repeat 6px 4px; background-position: left}
+.budget#budget .info table {
+	width: 100%;
+}
 
-.budget#budget .list a{text-decoration: underline; cursor: pointer}
-.budget#budget .list .child a{color: #313131; padding-left: 25px}
+.budget#budget .info td {
+	padding: 5px;
+}
 
-.budget#budget .list .parent a{padding-left: 23px; font-weight: bold; color: #313131;}
-.budget#budget .list .nochild a{padding-left: 23px; font-weight: bold; color: #313131;}
+.budget#budget .info .profit span {
+	color: #309500;
+}
 
-.budget#budget .list .parent.open a{background: url('/img/i/minus.gif') no-repeat 6px 2px;}
-.budget#budget .list .parent.close a{background: url('/img/i/plus.gif') no-repeat 6px 2px;}
+.budget#budget .info .drain span {
+	color: #eb3c34;
+}
 
-.budget .list table .indicator{position: relative; width: 69px; height: 19px; background-position: 0 -75px;}
-.budget .list table .indicator div{height: 19px; background-position: 0 -100px;}
-.budget .list table .indicator .red{z-index: 0; background-position: 0 -125px;}
-.budget .indicator{width: 118px; height: 22px; background: url("/img/i/indicator.png") no-repeat 0 0;}
-.budget .indicator div{position: absolute; top: 0; left: 0; height: 22px; background: url("/img/i/indicator.png") no-repeat 0 -25px; }
-.budget .list table .indicator .green {z-index: 2;}
-.budget .list table .indicator .strip{top: 0; height: 19px; z-index: 3; border-right: 1px solid #a5a5a5; background: none;}
+.budget#budget .info div {
+	position: relative;
+	float: left
+}
+
+.budget#budget .info div.right {
+	position: relative;
+	float: right
+}
+
+.budget#budget .info .balance.red span {
+	color: #eb3c34;
+}
+
+.budget#budget .info .balance.green span {
+	color: #309500;
+}
+
+.budget#budget .list.budget {
+	margin-top: 15px;
+}
+
+.budget#budget .list .list.head {
+	background: url('/img/i/bg09.gif') repeat-x 0 0;
+}
+
+.budget#budget .list .list.body {
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 300px;
+	position: relative;
+	width: auto
+}
+
+.heightSmall .budget#budget .list .list.body {
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 150px;
+	max-height: 150px;
+	position: relative;
+	width: auto
+}
+
+.heightLarge .budget#budget .list .list.body {
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 460px;
+	max-height: 460px;
+	position: relative;
+	width: auto
+}
+
+.budget#budget .list .list table tr {
+	position: relative
+}
+
+.budget#budget .list .list table td {
+	font-size: 11px;
+	padding: 7px 0 5px 0;
+	position: relative
+}
+
+.budget#budget .list .list table td.w1 {
+	padding-left: 11px;
+	width: 190px;
+}
+
+.budget#budget .list .list table td.w2 {
+	width: 77px;
+	text-align: right;
+}
+
+.budget#budget .list .list table td.w2 span {
+	cursor: pointer
+}
+
+.budget#budget .list .list table td.w2 input {
+	display: none;
+	text-align: right;
+	width: 70px;
+}
+
+.budget#budget .list .list table td.w3 {
+	width: 77px;
+	text-align: center;
+}
+
+.budget#budget .list .list table td.w5 {
+	width: 77px;
+	text-align: right;
+}
+
+.budget#budget .list .list table .parent td.w6 div a {
+	background: 0
+}
+
+.budget#budget .list .list table .child td.w6, .budget#budget .list .list table .nochild td.w6 {
+	text-align: center;
+	width: 80px;
+}
+
+.budget#budget .list .list table tr.child:hover td.w6 div, .budget#budget .list .list table tr.nochild:hover td.w6 div {
+	background: url('/img/i/icons_control4.gif') no-repeat 0px 0px;
+}
+
+.budget#budget .list .list table tr.child:hover, .budget#budget .list .list table tr.nochild:hover {
+	background-color: #E3FFDF
+}
+
+.budget#budget .list .list table td.w6 div {
+	width: 60px;
+	background: 0;
+	height: 30px;
+	margin-top: -8px
+}
+
+.budget#budget .list .list table td.w6 div a {
+	height: 100%;
+	padding-top: 3px;
+	padding-bottom: 15px;
+	width: 30px;
+	text-decoration: none
+}
+
+.budget#budget .list #profit a {
+	padding-left: 12px;
+	color: #309500;
+	font-weight: bold;
+	font-size: 13px
+}
+
+.budget#budget .list #drain a {
+	padding-left: 12px;
+	color: #eb3c34;
+	font-weight: bold;
+	font-size: 13px
+}
+
+.budget#budget .list #profit.open a, .budget#budget .list #drain.open a {
+	margin-left: 0;
+	background: url('/img/i/minus.gif') no-repeat 6px 4px;
+	background-position: left
+}
+
+.budget#budget .list #profit.close a, .budget#budget .list #drain.close a {
+	margin-left: 0;
+	background: url('/img/i/plus.gif') no-repeat 6px 4px;
+	background-position: left
+}
+
+.budget#budget .list a {
+	text-decoration: underline;
+	cursor: pointer
+}
+
+.budget#budget .list .child a {
+	color: #313131;
+	padding-left: 25px
+}
+
+.budget#budget .list .parent a {
+	padding-left: 23px;
+	font-weight: bold;
+	color: #313131;
+}
+
+.budget#budget .list .nochild a {
+	padding-left: 23px;
+	font-weight: bold;
+	color: #313131;
+}
+
+.budget#budget .list .parent.open a {
+	background: url('/img/i/minus.gif') no-repeat 6px 2px;
+}
+
+.budget#budget .list .parent.close a {
+	background: url('/img/i/plus.gif') no-repeat 6px 2px;
+}
+
+.budget .list table .indicator {
+	position: relative;
+	width: 69px;
+	height: 19px;
+	background-position: 0 -75px;
+}
+
+.budget .list table .indicator div {
+	height: 19px;
+	background-position: 0 -100px;
+}
+
+.budget .list table .indicator .red {
+	z-index: 0;
+	background-position: 0 -125px;
+}
+
+.budget .indicator {
+	width: 118px;
+	height: 22px;
+	background: url("/img/i/indicator.png") no-repeat 0 0;
+}
+
+.budget .indicator div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 22px;
+	background: url("/img/i/indicator.png") no-repeat 0 -25px;
+}
+
+.budget .list table .indicator .green {
+	z-index: 2;
+}
+
+.budget .list table .indicator .strip {
+	top: 0;
+	height: 19px;
+	z-index: 3;
+	border-right: 1px solid #a5a5a5;
+	background: none;
+}

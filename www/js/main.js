@@ -1,5 +1,3 @@
-// $Id$
-
 function setHeightClass(){	
 	var cheight = 0;
 	if ('CSS1Compat' && !window.opera){
@@ -225,6 +223,7 @@ $(document).ready(function(){
 		// инициализируем виджет добавления, редактирования и планирования операций
 		easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
 		easyFinance.widgets.calendarLeft.init("#calendarLeft", easyFinance.models.accounts);
+        easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
 	}
 	if (inarray(Current_module, Connected_functional.menu)) {
 		$('.navigation a[href*=' + pathName + ']').wrapInner('<b></b>');
@@ -420,8 +419,7 @@ $(document).ready(function(){
 		swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
 		//курсы валют в правой панели
 		easyFinance.widgets.currencyRight.load(easyFinance.models.currency);
-		//calendar
-		$('.calendar_block .calendar').datepicker();
+		
 		//mainmenu
 		$('div#mainwrap #' + page_mid).addClass('cur act').children('a').addClass('cur');
 		$('.menu3 ul li ul li a[href$=' + pathName + ']').parent().addClass('selected');

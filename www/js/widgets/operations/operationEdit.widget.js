@@ -128,6 +128,7 @@ easyFinance.widgets.operationEdit = function(){
         }
 
         _accOptionsData = [];
+        var recentIds = {};
         if (recentCount >= accountsCount || recentCount == 0) {
             // если счетов мало (не больше частых счетов),
             // выводим все счета по алфавиту
@@ -138,14 +139,16 @@ easyFinance.widgets.operationEdit = function(){
             // если счетов много, сначала выводим часто используемые счета
             for (key in recent) {
                 _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
-                delete accounts[key];
+                recentIds[accounts[key].id] = true;
             }
 
             _accOptionsData.push({value: "", text: "&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;"});
 
             // затем выводим все остальные счета в алфавитном порядке
             for (var row in accountsOrdered) {
-                _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
+                // #1082. не выводим повторно частоиспользуемые счета
+                if (!recentIds[accountsOrdered[row].id])
+                    _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
             }
         }
         
@@ -308,34 +311,23 @@ easyFinance.widgets.operationEdit = function(){
             // EOF TEMP
         });
 
-        // кнопка расчёта суммы
+        // кнопка расчёта суммы TODO
         _$node.find('#btnCalcSum').click(function(){
-            var calculator = $('#op_amount');
-            $(calculator).val(calculate($(calculator).val()));
+            $('#op_amount').click();
+//			$.rwCalculator.node = calculator;
+//			$.rwCalculator.functions.show();
+//            $(calculator).val(calculate($(calculator).val()));
         });
 
         // кнопка расчёта суммы для поля перевода
         _$node.find('#btnCalcSumTransfer').click(function(){
-            var calculator = $('#op_transfer');
-            $(calculator).val(calculate($(calculator).val()));
+            $('#op_transfer').click();
+            
         });
 
-        // поле суммы со встроенным калькулятором
-        $('#op_amount,#op_transfer').live('keypress',function(e){
-            if (e.keyCode == 13){
-                $(this).val(calculate($(this).val()));
-            }
-            if (!e.altKey && !e.shiftKey && !e.ctrlKey){
-                var chars = '1234567890., +-*/';
-                if (chars.indexOf(String.fromCharCode(e.which)) == -1){
-                    var keyCode = e.keyCode;
-                    if (keyCode != 13 && keyCode != 46 && keyCode !=8 && keyCode !=37 && keyCode != 39 && e.which != 32)
-                        return false;
-                }
-                return true;
-            }
-        });
-        
+    	$('#op_amount,#op_transfer').rwCalculator();
+		
+		
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
         // обмен валют для мультивалютных переводов
@@ -351,7 +343,7 @@ easyFinance.widgets.operationEdit = function(){
             }
 
             var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-            result = result.toFixed(2);
+            result = roundToSignificantFigures(result, 2).toFixed(2);
 
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
@@ -361,7 +353,7 @@ easyFinance.widgets.operationEdit = function(){
 
         $('#op_amount').change(function(){
             var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-            result = result.toFixed(2);
+            result = roundToSignificantFigures(result, 2).toFixed(2);
 
             if (!isNaN(result) && result != 'Infinity') {
                 $("#op_transfer").val(result);
@@ -387,7 +379,7 @@ easyFinance.widgets.operationEdit = function(){
     function _initBlockCalendar() {
         _$blockCalendar = _$node.find('#operationEdit_planning');
         
-        _$blockCalendar.find('#cal_date_end').datepicker();
+        _$blockCalendar.find('#cal_date_end').datepicker( { buttonImageOnly: true } );
         
         _$blockWeekdays = _$blockCalendar.find('#operationEdit_weekdays');
         _$blockRepeating = _$blockCalendar.find('#operationEdit_repeating');
@@ -430,25 +422,28 @@ easyFinance.widgets.operationEdit = function(){
         _$dialog.dialog('option', 'buttons', _buttonsNormal);
 
         if (!_isCalendar) {
+            _$dialog.dialog( "option", "dialogClass", '' );
+
             if (_isEditing)
-                _$dialog.data('title.dialog', 'Редактирование операции').dialog('open');
+                _$dialog.data('title.dialog', 'Изменить операцию').dialog('open');
             else
-                _$dialog.data('title.dialog', 'Добавление операции').dialog('open');
+                _$dialog.data('title.dialog', 'Добавить операцию').dialog('open');
         } else {
+            _$dialog.dialog( "option", "dialogClass", 'calendar' );
+
             if (_isEditing)
                 if (_isChain)
-                    _$dialog.data('title.dialog', 'Редактирование серии операций').dialog('open');
+                    _$dialog.data('title.dialog', 'Редактировать серию операций').dialog('open');
                 else
-                    _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
+                    _$dialog.data('title.dialog', 'Редактировать операцию в календаре').dialog('open');
             else
                 if (_isChain)
-                    _$dialog.data('title.dialog', 'Добавление серии операций').dialog('open');
+                    _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
         }
 
         // если открываем в первый раз, инициализируем комбобоксы
         if (!_sexyAccount)
             _initSexyCombos();
-
 
         // TEMP: показываем операции перевода на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
@@ -461,11 +456,13 @@ easyFinance.widgets.operationEdit = function(){
     function _expandCalendar() {
         _isCalendar = true;
         _$dialog.dialog('option', 'buttons', _buttonsNormal);
-
-        if (_isEditing)
-            _$dialog.data('title.dialog', 'Редактирование операции в календаре').dialog('open');
-        else
-            _$dialog.data('title.dialog', 'Добавление серии операций').dialog('open');
+        
+        _$dialog.dialog( "option", "dialogClass", 'calendar' );
+        if (_isEditing) {
+            _$dialog.data('title.dialog', 'Редактировать операцию в календаре').dialog('open');    
+        } else {
+            _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
+        }
 
         // если открываем в первый раз, инициализируем комбобоксы
         if (!_sexyAccount)
@@ -664,7 +661,7 @@ easyFinance.widgets.operationEdit = function(){
             comment,
             amount1,
             _selectedTransfer,
-            _realConversionRate.toFixed(4),
+            roundToSignificantFigures(_realConversionRate, 4),
             amount2, // сумма к получению при обмене валют
             _selectedTarget,
             close2,
@@ -705,12 +702,6 @@ easyFinance.widgets.operationEdit = function(){
 
     function _validateForm() {
         $error = '';
-
-        var comment = $('#op_comment').val();
-        if (comment.indexOf('<') != -1 || comment.indexOf('>') != -1) {
-            $.jGrowl("Комментарий не должен содержать символов < и >!", {theme: 'red', life: 2500});
-            return false;
-        }
 
         var tags = $('#op_tags').val();
         if (tags.indexOf('<') != -1 || tags.indexOf('>') != -1) {
@@ -850,10 +841,10 @@ easyFinance.widgets.operationEdit = function(){
         if (_transferCurrency.id == _defaultCurrency.id) {
             // покупаем валюту по умолчанию
             // отображаемый курс совпадает с реальным коэффициентом
-            $('#op_conversion').val(_realConversionRate.toFixed(4));
+            $('#op_conversion').val(roundToSignificantFigures(_realConversionRate, 4));
         } else {
             // обмен без участия валюты по умолчанию
-            $('#op_conversion').val((1/_realConversionRate).toFixed(4));
+            $('#op_conversion').val(roundToSignificantFigures(1/_realConversionRate, 4));
         }
     }
 

@@ -32,14 +32,16 @@
 
                 <append destFile="${project.css.root}tmp/global.css">
                     <fileset dir="${project.css.root}jquery/">
+                        <include name="jquery.rw-calculator.css" />
                         <include name="jquery.jgrowl.css" />
-                        <include name="jScrollPane.css" />
-                        <include name="jquery.calculator.css" />
+                        <include name="jquery.jHtmlArea.css" />
+                        <include name="jquery.jHtmlArea.ColorPickerMenu.css" />
                         <include name="fullcalendar.css" />
+                        <include name="fancy.css" />
+                        <include name="sexyCombo.css" />
 
                     </fileset>
                     <fileset dir="${project.css.root}jquery/south-street/">
-                        <include name="ui.all.css" />
                         <include name="ui.core.css" />
                         <include name="ui.resizable.css" />
                         <include name="ui.dialog.css" />
@@ -49,6 +51,21 @@
                     <fileset dir="${project.css.root}">
                         <include name="main.css" />
                         <include name="menuUser.css" />
+                        <include name="dialogBox.css" />
+                        <include name="efTable.css" />
+                        <include name="calendar.css" />
+                        <include name="calendarOverdue.css" />
+                        <include name="calendarLeft.css" />
+                        <include name="report.css" />
+                        <include name="expert.css" />
+                        <include name="expertsList.css" />
+                        <include name="profile.css" />
+                        <include name="categoriesJournal.css" />
+                        <include name="operationsJournal.css" />
+                        <include name="budgetMaster.css" />
+                        <include name="budget.css" />
+                        <include name="accountsPanel.css" />
+                        <include name="accountsJournal.css" />
                     </fileset>
                 </append>
                 <stubcssmin cssminpath="external/cssmin-v1.0.0.php" targetdir="${project.css.root}">

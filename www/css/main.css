@@ -1,3 +1,7 @@
+/*
+ * TODO resolve error
+*/
+
 html, body, form, ul, li, dl, dd, dt, fieldset, form, blockquote { margin:0; padding:0; border:0 none; }
 ul, dl, dd, dt { list-style:none; }
 
@@ -5,7 +9,13 @@ img.preload {display: none;}
 
 #menumain UL.menu2 li#show_login a {color: yellow; padding-right: 16px; background: url('/img/i/login.gif') right bottom no-repeat;}
 #menumain a#show_logout {color: yellow; padding-left: 10px; display: inline-block; width: 52px; background: url('/img/i/unlogin.gif') right center no-repeat; ;}
-
+#showCalculatorForFormAccount{
+	margin-left: 2px;
+	border: none;
+	width:20px;
+	height:20px;
+	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
+ }
 .noTextDecoration {text-decoration: none;}
 
 .white { color: white; }
@@ -575,7 +585,7 @@ div.report .line .f_field select#currency {width: 156px;  overflow: hidden; }
 div.report .line .f_field select#currency option {width: 129px;}
 
 div.addacc{ position: relative; padding-top: 10px;left: 70px }
-div.addoperation { position: relative; display: none; padding-top: 22px;left: 70px }
+div.addoperation { position: relative; display: none; margin-top: 10px; left: 10px }
 div.addoperation .line { position: relative;  color: #4c4c4c; }
 div.addoperation .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.addoperation .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
@@ -857,6 +867,16 @@ div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100p
 div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
+div.op_addoperation .op_line  .op_amount input[type=button],div.op_addoperation #btnCalcSumTransfer[type=button]{
+	margin-left: 2px;
+	padding-top: 2px;
+	border: none;
+	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
+ }
+div.op_addoperation .op_line  .op_amount div,
+div.op_addoperation .op_line  .op_amount div td,
+div.op_addoperation #div_op_transfer_line #div_op_account div,
+div.op_addoperation #div_op_transfer_line #div_op_account div td{ float: none; margin-right : 0; padding: 1px}
 div.op_addoperation div#op_amount_fields, div.op_addoperation div#op_conversion_fields {position: absolute; left: 206px; width: 150px;}
 div.op_addoperation #op_amount { width: 130px; }
 div.op_addoperation #op_conversion { width: 64px; }
@@ -922,7 +942,6 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_listSH ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 0 0; }
 
 .operation_listSH table { margin: .3em 0 1.5em 0;position: relative; width:500px; border-collapse:inherit!important; border: 2px solid #dfdede;}
-.operation_listSH table th, .operation_list table td, table.tab1 th { font-size: 90%;}
 .operation_listSH table th { padding: 8px 5px 5px 5px; color: #222222; text-align: left; /*border-bottom: 1px solid #e5e5e5;*/ }
 .operation_listSH table th span.sort, .operation_list table th span.select { display: block; float: left; }
 .operation_listSH table th span.sort { position: relative; margin-right: 6px;   margin-left: 10px; cursor: pointer; z-index: 0; }
@@ -968,7 +987,6 @@ table.tab1 th{text-align: center}
 .operation_list ul.period li.act span { padding: 1px 0 2px 10px; color: #fa6615; cursor: default; background: url('/img/i/plashka_pink.png') no-repeat 0 0; }
 
 .operation_list table { margin: .3em 0 1.5em 0;position: relative; width:500px; border-collapse:inherit!important; border: 2px solid #dfdede;}
-.operation_list table th, .operation_list table td, table.tab1 th { font-size: 90%;}
 .operation_list table th { padding: 8px 5px 5px 5px; color: #222222; text-align: left; /*border-bottom: 1px solid #e5e5e5;*/ }
 .operation_list table th span.sort, .operation_list table th span.select { display: block; float: left; }
 .operation_list table th span.sort { position: relative; padding-right: 12px;   margin-left: 10px; cursor: pointer; background: url('/img/i/arrow_down.gif') no-repeat right center; z-index: 0; }
@@ -1617,7 +1635,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     padding-right: 1.4em;
     padding-left: 1em;
     float: right;
-    background: transparent url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat right 50% 0;
+    background: transparent url('/img/i/jQuery/calendar/arrow_next-month.gif') no-repeat scroll right 50% 0;
 }
 
 
@@ -1646,7 +1664,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 .ui-dialog.ui-widget-content {
     background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
-	border: 1px solid grey;
+	border: 1px solid gray;
 }
 .ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
@@ -2025,7 +2043,7 @@ div.op_addoperation div.op_line div.amount div.amount_general{
 }
 
 div.op_addoperation input#op_transfer{
-    width: 114px;
+    width: 140px;
 }
 
 div.op_addoperation input#op_date{
@@ -2035,7 +2053,7 @@ div.op_addoperation input#op_date{
 div.op_addoperation div.op_line div.amount input#op_amount{
     position : relative;
     float: left;
-    width: 114px;
+    width: 140px;
 }
 div.op_addoperation div.op_line div.amount img{
     position : relative;
@@ -2070,5 +2088,12 @@ div.op_addoperation div.op_line div.amount img{
 }
 
 #calendarLeft li {
+    cursor: pointer;
+}
+
+img.ui-datepicker-trigger {
+    position: relative;
+    top: 2px;
+    left: 2px;
     cursor: pointer;
 }

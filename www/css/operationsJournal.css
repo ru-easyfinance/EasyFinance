@@ -1,6 +1,11 @@
 /* http://www.imaputz.com/cssStuff/bigFourVersion.html */
 /* begin some basic styling here                     */
 
+/* чтобы не рушить вёрстку в Google Chrome */
+.operation_list table th, .operation_list table td, table.tab1 th {
+    font-size:90%;
+}
+
 #divOperationsJournalFilters {
     margin: 0px;
     margin-top: 7px;
@@ -11,21 +16,21 @@
     position: relative;
     margin-top: 10px;
     margin-bottom: 0px;
-    width:518px;
+    width:545px;
     height: 20px;
     border-collapse:inherit!important;
-    border: 2px solid #dfdede;
-    border-bottom: none;
+    border: none;
+    background-color: #EEEEEE;
 }
 
 .operationsJournal {
     height: 480px;
+    width: 545px;
 }
 
 div#operations_list_container {
     position: relative;
-    border: 2px solid #dfdede;
-    width: 514px;
+    width: 545px;
     height: 354px;
     max-height: 354px;
     overflow-x: hidden;
@@ -43,17 +48,17 @@ div#operations_list_container {
 }
 
 .heightLarge .operationsJournal {
-    height: 586px;
+    height: 506px;
 }
 
 .heightLarge #operations_list_container {
-    height: 460px;
-    max-height: 460px;
+    height: 380px;
+    max-height: 380px;
 }
 
 table#operations_list {
     position: relative;
-    width: 496px;
+    width: 527px;
     overflow: scroll;
     border-top: none;
     margin: 0px;
@@ -69,6 +74,10 @@ table#operations_list tr {
 table#operations_list_header th {
     margin: 0px;
     width: 20px;
+}
+
+#operations_list_header th {
+    padding: 3px 5px 0;
 }
 
 #operations_list_header span#btnFilterType { margin: 0px; }
@@ -89,7 +98,7 @@ table#operations_list_header th + th + th + th + th{
 }
 
 table#operations_list_header th + th + th + th + th + th{
-    width: 100px;
+    width: 90px;
 }
 
 /* last empty header for scrollbar */

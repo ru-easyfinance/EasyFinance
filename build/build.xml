@@ -65,11 +65,11 @@
 			<available file="${project.basedir}/.git" type="dir" />
 			<then>
                 <!-- cd BASEDIR; git fetch  -->
-                <exec command="/usr/bin/git fetch"
+                <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}" passthru="true" />
                 <echo>Use git branch ${project.git.rev}</echo>
                 <!-- cd BASEDIR; git checkout branch -->
-                <exec command="/usr/bin/git checkout ${project.git.rev}"
+                <exec command="${git.bin.path} checkout ${project.git.rev}"
                     dir="${project.basedir}" passthru="true" />
 			</then>
 			<!--Если нет - создаём и выполняем checkout -->

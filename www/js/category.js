@@ -146,12 +146,6 @@ $(document).ready(function() {
             return false;
         }
 
-        if (name.indexOf('<') != -1 || name.indexOf('>') != -1) {
-            $.jGrowl("Название категории не должно содержать символов < и >!", {theme: 'red', life: 25000});
-            return false;
-        }
-
-
         return true;
     }
 
