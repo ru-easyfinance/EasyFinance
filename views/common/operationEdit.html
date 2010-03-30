@@ -36,8 +36,7 @@
 				<label for="op_target">
 					Финансовая цель:
 				</label>
-				<div id="div_op_target">
-				</div>
+				<select id="op_target"></select>
 				<div>
 					<div>
 						Стоимость цели: <span id='op_amount_target'></span>
@@ -68,12 +67,11 @@
 				<label for="op_AccountForTransfer">
 					На счет:
 				</label>
-				<div id="div_op_transfer">
-				</div>
+				<select id="op_AccountForTransfer"></select>
 				<span id="op_operationTransferCurrency" style="display:none;"><span></span><input type='text' id='op_currency'/><span id="op_convertSumCurrency"></span></span>
 			</div>
 		</div>
-		<input id="opCatchFocus" type="text" class="" autocomplete="off" value="" />{*<!-- Основные поля -->*}
+		{*<!-- Основные поля -->*}
 		<div class="op_line">
 			<div class="op_f_field op_amount" id="op_amount_fields">
 				<label id="lblOpAmount" for="op_amount">
@@ -137,8 +135,7 @@
 			<label for="op_comment">
 				Комментарии
 			</label>
-			<textarea rows="1" cols="1" id="op_comment">
-			</textarea>
+			<textarea rows="1" cols="1" id="op_comment"></textarea>
 		</div>
 		{*<!-- BEGIN поля для планирования -->*}
 		<div class="op_line hidden" id="operationEdit_planning">
