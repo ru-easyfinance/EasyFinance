@@ -8,15 +8,18 @@
 					<label for="op_type">
 						Тип операции
 					</label>
-					<div id="div_op_type">
-					</div>
+					<select id="op_type">
+                        <option selected="selected" value="0">Расход</option>
+                        <option value="1">Доход</option>
+                        <option value="2">Перевод со счёта</option>
+                        <option value="4">Перевод на фин. цель</option>
+                    </select>
 				</div>
 				<div id="div_op_account_select">
 					<label for="op_account">
 						Счет
 					</label>
-					<div id="div_op_account">
-					</div>
+                    <select id="op_account"></select>
 				</div>
 			</div>
 		</div>
@@ -24,8 +27,7 @@
 			<div id="op_category_fields">
 				Категория
 				<br>
-				<div id="div_op_category">
-				</div>
+				<select id="op_category"></select>
 			</div>
 		</div>
 		{* <!-- Финансовая цель -->*}

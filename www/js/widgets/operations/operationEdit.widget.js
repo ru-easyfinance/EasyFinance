@@ -437,8 +437,11 @@ easyFinance.widgets.operationEdit = function(){
                     _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
         }
 
-// TEST
-$("#op_type").ufd({manualWidth: 130, zIndexPopup: 1300, unwrapForCSS: true});
+        if (!_$ufdType) {
+            // если указатель пустой, инициализируем UFD выбора типа операции
+            _$ufdType = $("#op_type");
+            _$ufdType.ufd({manualWidth: 144, zIndexPopup: 1300, unwrapForCSS: true});
+        }
 
         // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
@@ -479,15 +482,29 @@ $("#op_type").ufd({manualWidth: 130, zIndexPopup: 1300, unwrapForCSS: true});
                 _accOptionsData.push({value: accountsOrdered[row].id, text: accountsOrdered[row].name + ' (' + _modelAccounts.getAccountCurrencyText(accountsOrdered[row].id) + ')'});
             }
         }
-		
-		_$ufdAccount = $("#op_account");
-		_$ufdAccount.removeOption(/./);
-		for (var acc in _accOptionsData) {
-			_$ufdAccount.addOption(_accOptionsData[acc].value, _accOptionsData[acc].text);
-		}
-		
-		_$ufdAccount.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
 
+        if (!_$ufdAccount) {
+            // если указатель пустой, инициализируем UFD выбора счёта
+            _$ufdAccount = $("#op_account");
+            refreshAccounts();
+
+
+            _$ufdAccount.removeOption(/./);
+            for (var acc in _accOptionsData) {
+                _$ufdAccount.addOption(_accOptionsData[acc].value, _accOptionsData[acc].text);
+            }
+
+            _$ufdAccount.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
+        }
+
+        if (!_$ufdCategory) {
+            // если указатель пустой, инициализируем UFD выбора категории
+
+
+            _$ufdCategory = $('#op_category');
+            _$ufdCategory.ufd({manualWidth: 345, zIndexPopup: 1300, unwrapForCSS: true});
+            _changeOperationType();
+        }
 
 return;
 		
@@ -579,12 +596,9 @@ return;
             htmlOptions = htmlOptions + catPrint(_modelCategory.getUserCategoriesTreeOrdered(), typ);
 
             // обновляем список категорий
-            $("#op_category").html(htmlOptions);
-            $.sexyCombo.changeOptions("#op_category");
-            setCategory("-1");
-
-        //Перевод со счёта
+            $("#op_category").html(htmlOptions).ufd("changeOptions");
         } else if (_selectedType == "2") {
+            //Перевод со счёта
             $("#op_category_fields,#op_target_fields").hide();
             $("#op_tags_fields,#op_transfer_fields").show();
 
@@ -929,8 +943,9 @@ return;
     }
 
     function refreshAccounts() {
-        if (!_sexyAccount)
+        if (!_$ufdAccount)
             return;
+
 
         var data = _modelAccounts.getAccountsOrdered();
 
