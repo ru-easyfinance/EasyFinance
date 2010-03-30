@@ -15,7 +15,14 @@ class AllSymfonyAppTests extends PHPUnit_Framework_TestSuite
         // Remove current app cache
         sfToolkit::clearDirectory(sfConfig::get('sf_cache_dir'));
 
-        // TODO: Rebuild DB
+        // Rebuild DB
+        $task = new sfDoctrineBuildTask(new sfEventDispatcher, new sfFormatter);
+        $task->run($args = array(), $options = array(
+            'env' => 'test',
+            'no-confirmation' => true,
+            'db' => true,
+            'and-migrate' => true,
+        ));
     }
 
 
