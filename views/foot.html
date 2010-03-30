@@ -129,6 +129,35 @@
             </div>
         </div>
         <!--/подвал-->
+{if 
+    isset($smarty.session.user.user_name) && ! (isset ($smarty.cookies.guide) )
+    && $smarty.session.user.user_created != '31.03.2010'
+    && ! (isset ($smarty.cookies.dlgBackup))
+}
+            {literal}
+            <div id="dlgBackupAlert" class="hidden">
+<p>Уважаемый пользователь, если вы вводили сегодня данные, то пожалуйста проверьте их корректность.</p>
+
+<p>Если какие-либо данные введённые сегодня, некорректны, просим обратиться в службу поддержки через кнопку "Обратная связь".</p>
+
+<p>Если же вы сегодня не вводили данные, то вам не о чем беспокоиться.</p>
+
+<p>Приносим извинения за возможные неудобства.</p>
+
+<p>С уважением, команда EasyFinance.ru</p>
+            </div>
+            <script type="text/javascript">
+                $("#dlgBackupAlert").dialog( {
+                    title: "Пожалуйста, проверьте данные за сегодня",
+                    width: 450,
+                    close: function(event, ui) {
+                        $.cookie('dlgBackup', 1, {expire: 259200, path : '/', domain: false, secure : 1});
+                    }
+
+                } );
+            </script>
+            {/literal}
+{/if}
         {literal}
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
