@@ -47,14 +47,38 @@ class Budget_Model {
         }
 
         // Считаем факт доходов и факт расходов
-        // @FIXME Тут сейчас не учитывается валюта счёта
-        $sqloper = "SELECT sum(o.money) as money, o.cat_id FROM operation o
+        $sqloper = "SELECT sum(o.money) as money, o.cat_id, a.account_currency_id AS currency_id
+            FROM operation o
+            LEFT JOIN accounts a ON a.account_id=o.account_id
             WHERE o.user_id = ? AND o.transfer=0 AND o.accepted=1
                 AND o.date >= ? AND o.date <= ?
-            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = ? )
+            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = o.user_id)
                 GROUP BY o.cat_id";
 
         $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
+
+        // Получаем список последних валют, и раскладываем их по id
+        $sql = "SELECT currency_id AS id, currency_sum AS currency
+        FROM daily_currency
+        LEFT JOIN users u ON id=?
+            WHERE
+            currency_from = u.user_currency_default AND
+            currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)";
+
+        foreach ( Core::getInstance()->db->select($sql, $user_id) as $value ) {
+            $currency[$value['id']] = $value['currency'];
+        }
+
+        $fact = array();
+        foreach ( $arrayoper as $key => $value ) {
+
+            if ( isset ( $currency[$value['currency_id']] ) ) {
+                $sum = $value['money'] * $currency[$value['currency_id']];
+            } else {
+                $sum = $value['money'] * 1;
+            }
+            $fact[$value['cat_id']] = (float) @$fact[$value['cat_id']] + (float)$sum;
+        }
 
         // Делаем выборку по всем запланированным доходам и расходам
         $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
@@ -70,18 +94,15 @@ class Budget_Model {
         WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start) AND c.visible=1
         ORDER BY c.cat_parent ;";
 
-        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);      
+        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);
 
         $list = array(
             'd' => array(),
             'p' => array()
         );
-        
-        $drain_all = 0; $profit_all = 0;
-        $real_drain = 0; $real_profit = 0;
 
         foreach ($arraybudg as $var) {
-           
+
             // Добавляем категорию в список
             if ($var['drain'] == 1) {
                 $list['d'][$var['category']] = array(
@@ -98,26 +119,22 @@ class Budget_Model {
             }
         }
 
-        foreach ($arrayoper as $var){
-//            if ( !(isset($list['p'][$var['cat_id']]) || (isset($list['d'][$var['cat_id']] ) ) ) ){
-
-                // Фактическая сумма
-                if (($var['money'] <= 0))
-                {
-                    $list['d'][$var['cat_id']]['money']  = (float) $var['money'];
-                    $list['d'][$var['cat_id']]['amount'] = (float)@$list['d'][$var['cat_id']]['amount'];
-                    $list['d'][$var['cat_id']]['mean']   = (float)@$list['d'][$var['cat_id']]['mean'];
-                } else {
-                    $list['p'][$var['cat_id']]['money']  = (float) abs($var['money']);
-                    $list['p'][$var['cat_id']]['amount'] = (float)@$list['p'][$var['cat_id']]['amount'];
-                    $list['p'][$var['cat_id']]['mean']   = (float)@$list['p'][$var['cat_id']]['mean'];
-                }
-//            }
+        foreach ($fact as $key => $var){
+            // Фактическая сумма
+            if ( (float) $var <= 0)
+            {
+                $list['d'][$key]['money']  = (float)$var;
+                $list['d'][$key]['amount'] = (float)@$list['d'][$key]['amount'];
+                $list['d'][$key]['mean']   = (float)@$list['d'][$key]['mean'];
+            } else {
+                $list['p'][$key]['money']  = (float)abs($var);
+                $list['p'][$key]['amount'] = (float)@$list['p'][$key]['amount'];
+                $list['p'][$key]['mean']   = (float)@$list['p'][$key]['mean'];
+            }
         }
-        
+
         return array (
-                'list' => $list,
-            'main' => array () /** @deprecated */
+            'list' => $list
         );
     }
 
@@ -143,7 +160,7 @@ class Budget_Model {
                 if ($cat[$k]['type'] == 0 || ($cat[$k]['type'] == 1 && $drain == 0) || ($cat[$k]['type'] == -1 && $drain == 1)) {
 
                         $key = (string)(''.Core::getInstance()->user->getId().'-'.$k.'-'.$drain.'-'.$date);
-                        
+
                         if ( $v ) {
                             if (!empty ($sql)) $sql .= ',';
                             $sql .= '("' . Core::getInstance()->user->getId() . '","' . (int)$k . '","' .

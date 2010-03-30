@@ -24,66 +24,103 @@ class Report_Model
     {
         $this->db   = Core::getInstance()->db;
         $this->user = Core::getInstance()->user;
-        require_once 'OFC/OFC_Chart.php';
+    }
+
+    /**
+     * Получает список валют валют и их курсы
+     * @return array
+     */
+    private function getCurrency( User $user )
+    {
+        $currency = array();
+        // @XXX: Если ид валюты 4,6,9, то пересчитываем через них, иначе через рубль
+        // Получаем список последних валют, и раскладываем их по id
+        $sql = "SELECT currency_id AS id, currency_sum AS currency, cur_char_code AS char_code
+        FROM daily_currency d
+        LEFT JOIN users u ON id=?
+        LEFT JOIN currency c ON c.cur_id=d.currency_id
+        WHERE
+        currency_from = IF (u.user_currency_default IN (4,6,9), u.user_currency_default, 1) AND
+        currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)";
+
+        foreach ( Core::getInstance()->db->select($sql, $user->getId() ) as $value ) {
+            $currency[$value['id']]['value'] = $value['currency'];
+            $currency[$value['id']]['char_code'] = $value['char_code'];
+        }
+        return $currency;
     }
 
     /**
      * Возвращает сформированный JSON для круговой диаграммы
-     * @see http://teethgrinder.co.uk/open-flash-chart-2/pie-chart.php
      * @param int $drain 0 - доход, 1 - расход
+     * @param string | int $accounts Ид или список ид счетов через запятую. Например: 123,23,1234,324 или 34
+     * @param int $currency - Ид валюты, в какой возвращать значения
      * @param string timestamp $start
      * @param string timestamp $end
      * @return json
      */
-    function getPie($drain = 0, $start = '', $end = '', $account = 0, $currency=0, $acclist='')
+    function getPie ( $drain = 0, $start = '', $end = '', $account = 0, $currency_id = 0 )
     {
-
         if ($account > 0) {
-            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, cur.cur_id, IFNULL(c.cat_name, '') AS cat FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                LEFT JOIN category c ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-                WHERE o.user_id = ? AND o.account_id = ? AND o.drain = ?
-                    AND `date` BETWEEN ? AND ?
-                    AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) ) 
-                GROUP BY o.cat_id";//AND a.account_currency_id = ?
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(),
-                $account, $drain, $start, $end/*, $currency*/);
-
-        } else {
-            $sql = "SELECT sum(o.money) AS money, cur.cur_char_code, cur.cur_id, IFNULL(c.cat_name, '') AS cat FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                LEFT JOIN category c ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-                WHERE o.user_id = ? AND o.drain = ? AND a.account_id IN({$acclist})
-                    AND `date` BETWEEN ? AND ?
-                AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) )
-                GROUP BY o.cat_id";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(),
-                $drain, $start, $end/*, $currency*/);
+            $acclist = $account;
         }
-        $arr = array();
-        foreach ($result as $k=>$v){
-            if ($v['cat']){ //отметаем всякий мусор по удалённым категориям
-//                $summmoney += $v['money'];
+
+        // Получаем список операций сгруппированных по категориям и валютам
+        $sql = "SELECT
+                sum(o.money) AS money,
+                cur.cur_char_code,
+                cur.cur_id,
+                IFNULL(c.cat_name, '') AS cat,
+                c.cat_id
+            FROM operation o
+            LEFT JOIN accounts a ON a.account_id=o.account_id
+            LEFT JOIN category c ON c.cat_id = o.cat_id
+            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+            WHERE o.user_id = ? AND o.drain = ? AND a.account_id IN({$account})
+                AND `date` BETWEEN ? AND ?
+            AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) )
+            GROUP BY o.cat_id, a.account_currency_id";
+
+        $result = $this->db->select($sql, Core::getInstance()->user->getId(),
+                $drain, $start, $end);
+
+        $currencies = $this->getCurrency( $this->user );
+
+        // Создаём чистый массив и наполняем его чистыми данными (конвертируя автоматом курс валюты)
+        $return = array();
+        foreach ( $result as $key => $value ) {
+
+            $return[ $key ]['cat'] = $value['cat'];
+            // @FIXME Поправить с валютами багу
+            if ( $currency_id == 1) {
+                $return[ $key ]['cur_char_code'] = 'RUB';
             } else {
-                unset($result[$k]);
+                $return[ $key ]['cur_char_code'] = $currencies[ $currency_id ]['char_code'];
+            }
+            $return[ $key ]['cur_id'] = $currency_id;
+
+            if ( (int) $value['cur_id'] == $currency_id ) {
+                $money = $value['money'];
+            } else {
+                if ( isset ( $currencies[ $value['cur_id'] ]['value'] ) ) {
+                    $money = $value['money'] * (float) $currencies[ $value['cur_id'] ]['value'];
+                } else {
+                    // А тут вроде как ошибка должна быть.. Ибо у нас обязательно должна быть валюта
+                    $money = $value['money'] * 1;
+                }
+            }
+
+            if ( isset ( $return[ $value['cat_id'] ]['money'] ) ) {
+                $return[ $key ]['money'] +=  $money;
+            } else {
+                $return[ $key ]['money'] =  $money;
             }
         }
-
-        $arr[0] = $result;
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $arr[1] = $this->db->query($sql, $currency);
-
-  /*          //текстовые отчёты отправлю вторым индексом массива
-            if ($drain==0)
-                $arr[2] = $this->SelectDetailedIncome($start, $end, $account, $currency, $acclist);
-            if ($drain==1)
-                $arr[2] = $this->SelectDetailedWaste($start, $end, $account, $currency, $acclist);
-*/
-        return $arr;
-
+        
+        return array(
+            0 => $return,
+            1 => array( array( "cur_char_code" => $return[ $key ]['cur_char_code'] ) )
+        );
     }
 
     /**
@@ -93,21 +130,6 @@ class Report_Model
     function getBars($start = '', $end = '', $account=0, $currency=0, $acclist='')
     {
         $diffYear = (bool)( ( substr($start,0,4) == substr($end,0,4) ) );
-        /*if ($account > 0) {
-            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
-                FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND account_id = ? AND a.account_currency_id = ?
-                GROUP BY drain, `datef`";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account, $currency);
-        } else {
-            $sql = "SELECT money, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`, drain
-                FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND a.account_currency_id = ?
-                GROUP BY drain, `datef`";
-            $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $currency);
-        }*/
         if ($account > 0) {
             $sql = "SELECT ABS(sum(o.money)) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
                 , IFNULL(c.cat_name, '') AS cat FROM operation o
