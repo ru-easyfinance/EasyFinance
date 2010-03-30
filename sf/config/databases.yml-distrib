@@ -1,10 +1,22 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/07-Databases
+dev:
+  doctrine:
+    param:
+      classname: DebugPDO
+
+test:
+  doctrine:
+    param:
+      classname: DebugPDO
+      dsn: 'mysql:host=localhost;dbname=DB_NAME'
 
 all:
   doctrine:
     class: sfDoctrineDatabase
     param:
-      dsn:      mysql:host=localhost;dbname=EasyFinance
-      username: root
-      password:
+      classname: DoctrinePDO
+      dsn: 'mysql:host=DB_HOST;dbname=DB_NAME'
+      username: DB_USER
+      password: DB_PASS
+      encoding: utf8
+      persistent: true
+      pooling: true
