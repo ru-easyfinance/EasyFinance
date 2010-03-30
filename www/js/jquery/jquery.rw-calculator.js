@@ -114,13 +114,13 @@
         	$.rwCalculator.inst.show();
         	$(this).parent().append($.rwCalculator.inst);
           	
-			var top =0;
-			if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
-				top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
-			}
-			else {
-				top = '15px';
-			}
+			var top ='20px';
+//			if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
+//				top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
+//			}
+//			else {
+//				top = '15px';
+//			}
 			$.rwCalculator.inst.css('top',top);
 			$('.calculatorWrapper').show();
 			$.rwCalculator.node = $(this);
@@ -132,7 +132,7 @@
         'hide': function(){
 			$('.calculatorWrapper').hide();
 				$.rwCalculator.inst.hide();
-
+				//$.click();
         },
         'calculate': function(){
             $($.rwCalculator.node).val($.rwCalculator.calculate($($.rwCalculator.node).val()));

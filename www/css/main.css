@@ -772,6 +772,7 @@ div.op_addoperation { position: relative; display: none; padding-top: 22px;left:
 
 #div_op_account_select { width: 150px; }
 #div_op_type_select { float: right; width: 144px; }
+div.op_addoperation #div_op_account{position : relative;}
 div.op_addoperation .op_line { position: relative;  color: #4c4c4c; //zoom: 1; }
 div.op_addoperation .op_line_transfer { margin-bottom: 4px; }
 div.op_addoperation .op_line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
