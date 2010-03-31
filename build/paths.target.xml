@@ -80,19 +80,25 @@
 
 		<!--Директории для хранения файлов между tags (например uploaded файлы)  -->
 		<if>
-			<not><available file="shared" type="dir" /></not>
+			<not><available file="${project.shared.dir}" type="dir" /></not>
 			<then>
-				<mkdir dir="shared"/>
-				<exec command="chown -R ${project.user} ." dir="shared" />
+				<mkdir dir="${project.shared.dir}"/>
+				<exec command="chown -R ${project.user} ." dir="${project.shared.dir}" />
 			</then>
 		</if>
 		<if>
-			<not><available file="shared/uploaded" type="dir" /></not>
+			<not><available file="${project.shared.dir}/uploaded" type="dir" /></not>
 			<then>
-				<mkdir dir="shared/uploaded"/>
-				<exec command="chown -R ${project.user} ." dir="shared/uploaded" />
+				<mkdir dir="${project.shared.dir}/uploaded"/>
+				<exec command="chown -R ${project.user} ." dir="${project.shared.dir}/uploaded" />
 			</then>
 		</if>
-
+		<if>
+			<not><available file="${project.basedir}/www/upload" type="dir" /></not>
+			<then>
+                <exec command="ln -s ${project.shared.dir}/uploaded ${project.basedir}/www/upload"
+                    dir="${project.shared.dir}" checkreturn="true" />
+            </then>
+        </if>
 	</target>
 </project>
