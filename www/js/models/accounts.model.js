@@ -224,7 +224,9 @@ easyFinance.models.accounts = function(){
         // обязательные параметры для всех счетов
         params.id = id;
         $.post(EDIT_ACCOUNT_URL, params, function(data){
-                _loadAccounts();
+                _loadAccounts(function() {
+                    $(document).trigger('accountEdited');
+                });
 
 /*
                 if (data.result) {
@@ -238,8 +240,6 @@ easyFinance.models.accounts = function(){
                 }
 
                 @todo: calc defCur
-
-                $(document).trigger('accountEdited');
 */
                 if (callback)
                     callback(data);
