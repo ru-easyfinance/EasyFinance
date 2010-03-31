@@ -289,7 +289,7 @@ class User
     public function destroy()
     {
         if (!empty ($_SESSION)) {
-            session_destroy();
+            session_unset();
         }
         setcookie(COOKIE_NAME, '', COOKIE_EXPIRE - 60, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
     }
