@@ -2,5 +2,6 @@
 /tmp/
 /build/properties/config.conf
 /include/config.php
+/www/upload
 /www/css/global-min.css
 /www/js/global-min.js
