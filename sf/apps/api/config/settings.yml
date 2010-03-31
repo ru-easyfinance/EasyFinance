@@ -1,0 +1,77 @@
+prod:
+  .settings:
+    logging_enabled:        false
+    cache:                  false
+    etag:                   false
+    no_script_name:         true
+
+dev:
+  .settings:
+    web_debug:              true
+    cache:                  false
+    etag:                   false
+    no_script_name:         false
+
+test:
+  .settings:
+    web_debug:              false
+    cache:                  false
+    etag:                   false
+    no_script_name:         false
+
+all:
+  .settings:
+
+    # Logging and debugging settings
+    web_debug:              false       # Enable the web debug toolbar
+    error_reporting:        <?php echo (E_ALL | E_STRICT), PHP_EOL; ?>
+    logging_enabled:        true
+
+    # Enable the database manager
+    use_database:           true
+
+    # Security
+    csrf_secret:             Jjf8d%whs&hdx$Htf&4hdsr*jr%sjLk34  # Unique secret to enable CSRF protection or false to disable
+    escaping_strategy:       true              # Determines how variables are made available to templates. Accepted values: on, false.
+    escaping_method:         ESC_SPECIALCHARS  # Function or helper used for escaping. Accepted values: ESC_RAW, ESC_ENTITIES, ESC_JS, ESC_JS_NO_ENTITIES, and ESC_SPECIALCHARS.
+
+    # Cache settings
+    cache:                   false     # Enable the template cache
+    etag:                    true      # Enable etag handling
+    lazy_cache_key:          true      # Delays creation of a cache key until after checking whether an action or partial is cacheable
+
+    # Routing settings
+    no_script_name:          true      # Enable the front controller name in generated URLs
+
+    # i18n
+    charset:                 utf-8
+    default_culture:         ru_RU
+    i18n:                    false     # Enable interface translation. Set to false if your application should not be translated.
+
+    # Helpers included in all templates by default
+    standard_helpers:       [Partial]
+
+    # Activated modules from plugins or from the symfony core
+    enabled_modules:        []
+
+#all:
+#  .actions:
+#    error_404_module:       default   # To be called when a 404 error is raised
+#    error_404_action:       error404  # Or when the requested URL doesn't match any route
+#
+#    login_module:           default   # To be called when a non-authenticated user
+#    login_action:           login     # Tries to access a secure page
+#
+#    secure_module:          default   # To be called when a user doesn't have
+#    secure_action:          secure    # The credentials required for an action
+#
+#    module_disabled_module: default   # To be called when a user requests
+#    module_disabled_action: disabled  # A module disabled in the module.yml
+#
+#  .settings:
+#    # Optional features. Deactivating unused features boots performance a bit.
+#    compressed:             false       # Enable PHP response compression. Set to true to compress the outgoing HTML via the PHP handler.
+#    check_lock:             false       # Enable the application lock system triggered by the clear-cache and disable tasks. Set to true to have all requests to disabled applications redirected to the $sf_symfony_lib_dir/exception/data/unavailable.php page.
+#
+#    # Logging and debugging settings
+#    file_link_format:       ~         # Format to use to make file paths clickable (include placeholders %f and %l for file and line number)

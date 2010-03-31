@@ -1,0 +1,9 @@
+rendering: ~
+security:
+  enabled: false
+
+# insert your own filters here
+
+cache:
+  enabled: false
+execution: ~

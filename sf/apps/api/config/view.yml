@@ -1,0 +1,9 @@
+default:
+  http_metas:
+    content-type:  text/xml
+
+  stylesheets:    []
+  javascripts:    []
+
+  has_layout:     true
+  layout:         layout
