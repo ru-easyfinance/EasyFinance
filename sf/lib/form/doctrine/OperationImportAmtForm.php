@@ -86,10 +86,11 @@ class OperationImportAmtForm extends BaseFormDoctrine
         $values['time'] = $date->format('H:i:s');
         unset($values['timestamp']);
 
-
         // Черновик
         $values['accepted'] = Operation::STATUS_DRAFT;
 
+        // Источник
+        $values['source_id'] = Operation::SOURCE_AMT;
 
         // Комментарий
         $values['comment'] = sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s",

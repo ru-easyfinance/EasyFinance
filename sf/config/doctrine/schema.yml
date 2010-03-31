@@ -24,7 +24,7 @@ Operation:
     drain:      { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
     type:       { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:    { type: clob }
-    source_id:  { type: integer(4), unsigned: true, notnull: true, default: 1 }
+    source_id:  { type: string(8), fixed: true }
     accepted:   { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
     dt_create:  { type: timestamp(25), notnull: true }
     dt_update:  { type: timestamp(25), notnull: true }

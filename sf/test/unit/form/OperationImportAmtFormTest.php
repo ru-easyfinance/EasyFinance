@@ -146,7 +146,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'type'      => Operation::TYPE_PROFIT,
             'comment'   => sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s",
                 $input['description'], $input['account'], $input['place'], $input['balance']),
-            'source_id' => 1, // TODO
+            'source_id' => Operation::SOURCE_AMT,
             'accepted'  => Operation::STATUS_DRAFT,
         );
         $this->assertOperation($expected, $op);
