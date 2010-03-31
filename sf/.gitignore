@@ -1,0 +1,8 @@
+
+/config/databases.yml
+/cache/
+/log/
+/data/sql/
+base/
+map/
+om/
