@@ -1,0 +1,42 @@
+
+# Пользователи системы
+User:
+  tableName: users
+  columns:
+    user_service_mail: { type: string(100), notnull: true }
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+# Операции с деньгами
+Operation:
+  tableName: operation
+  actAs:
+    Timestampable:
+      created: { name: dt_create }
+      updated: { name: dt_update }
+  columns:
+    user_id:    { type: integer(4), unsigned: true, notnull: true }
+    money:      { type: 'decimal(20, 2)', notnull: true }                       # Сумма
+    date:       { type: date(25), notnull: true }                               # Фактическа дата операции
+    time:       { type: time(25), notnull: true }                               # Фактическое время операции
+    drain:      { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
+    type:       { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
+    comment:    { type: clob }
+    source_id:  { type: integer(4), unsigned: true, notnull: true, default: 1 }
+    accepted:   { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
+    dt_create:  { type: timestamp(25), notnull: true }
+    dt_update:  { type: timestamp(25), notnull: true }
+  relations:
+    User:
+      local: user_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false    # User ничего не узнает
+      onDelete: CASCADE      # При удалении пользователя удаляются все его операции
+  options:
+    symfony:
+      form:  false
+      filter: false
