@@ -53,10 +53,10 @@ class Report_Model
     /**
      * Возвращает сформированный JSON для круговой диаграммы
      * @param int $drain 0 - доход, 1 - расход
-     * @param string | int $accounts Ид или список ид счетов через запятую. Например: 123,23,1234,324 или 34
-     * @param int $currency - Ид валюты, в какой возвращать значения
      * @param string timestamp $start
      * @param string timestamp $end
+     * @param string | int $accounts Ид или список ид счетов через запятую. Например: 123,23,1234,324 или 34
+     * @param int $currency - Ид валюты, в какой возвращать значения
      * @return json
      */
     function getPie ( $drain = 0, $start = '', $end = '', $account = 0, $currency_id = 0 )
@@ -119,7 +119,12 @@ class Report_Model
         
         return array(
             0 => $return,
-            1 => array( array( "cur_char_code" => $return[ $key ]['cur_char_code'] ) )
+            1 => array( 
+                array(
+                    "cur_char_code" =>
+                        isset( $return[ 0 ]['cur_char_code'] )? $return[ 0 ]['cur_char_code'] : ''
+                    )
+                )
         );
     }
 
