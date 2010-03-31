@@ -44,6 +44,8 @@ $accessConfig = array(
 	'targets'       => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	'calendar'      => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
     'tags'          => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
+
+    'anketa'        => array( _User::TYPE_COMMON, _User::TYPE_PRO ),
 	
 	'experts'       => _User::TYPE_PRO,
 	
