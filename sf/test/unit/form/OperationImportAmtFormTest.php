@@ -61,7 +61,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
      */
     protected function getFields()
     {
-        return array('id', 'email', 'type', 'account', 'timestamp', 'amount', 'description', 'place', 'balance');
+        return array('email', 'type', 'account', 'timestamp', 'amount', 'description', 'place', 'balance');
     }
 
 
@@ -71,7 +71,6 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
     protected function getValidData()
     {
         return array(
-            'id'          => $this->helper->makeText('AMT-ID', false),
             'email'       => $this->_getUser()->getUserServiceMail(),
             'type'        => 0,
             'account'     => $this->helper->makeText('Номер счета', false),
@@ -96,7 +95,6 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'Empty request' => new sfPHPUnitFormValidationItem(
                 array(),
                 array(
-                    'id'          => 'required',
                     'email'       => 'required',
                     'type'        => 'required',
                     'timestamp'   => 'required',

@@ -11,7 +11,6 @@ class OperationImportAmtForm extends BaseFormDoctrine
     public function setup()
     {
         $this->setWidgets(array(
-          'id'          => new sfWidgetFormInputHidden(),
           'email'       => new sfWidgetFormInputHidden(),
           'type'        => new sfWidgetFormInputHidden(),
           'timestamp'   => new sfWidgetFormInputHidden(),
@@ -23,7 +22,6 @@ class OperationImportAmtForm extends BaseFormDoctrine
         ));
 
         $this->setValidators(array(
-            'id'          => new sfValidatorString(),
             'email'       => new sfValidatorDoctrineChoice(array(
                 'model'  => 'User',
                 'column' => array('user_service_mail'),
