@@ -118,4 +118,12 @@
             </then>
         </if>
     </target>
+
+    <!-- Делаем бекап -->
+	<target name="backup" depends="Configuration prepare">
+        <tstamp>
+            <format property="project.time" pattern="%Y%m%d%H%I" />
+        </tstamp>
+        <exec command="mysqldump -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/${project.url.root}_${project.time}.sql" checkreturn="true" />
+    </target>
 </project>
