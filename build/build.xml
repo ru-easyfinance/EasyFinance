@@ -24,6 +24,15 @@
             </filterchain>
         </copy>
 
+        <echo>Configure sf/config/databases.yml</echo>
+
+        <copy file="${project.basedir}/sf/config/databases.yml.conf"
+			tofile="${project.basedir}/sf/config/databases.yml" overwrite="true" >
+            <filterchain>
+                <expandproperties />
+            </filterchain>
+        </copy>
+
 		<phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
 	</target>
 
@@ -67,6 +76,14 @@
                 <!-- cd BASEDIR; git fetch  -->
                 <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}" passthru="true" />
+
+                <!-- cd BASEDIR; git submodule  -->
+                <exec command="${git.bin.path} submodule init"
+                    dir="${project.basedir}" passthru="true" />
+
+                <exec command="${git.bin.path} submodule update"
+                    dir="${project.basedir}" passthru="true" />
+
                 <echo>Use git branch ${project.git.rev}</echo>
                 <!-- cd BASEDIR; git checkout branch -->
                 <exec command="${git.bin.path} checkout ${project.git.rev}"

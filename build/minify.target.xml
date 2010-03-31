@@ -79,6 +79,5 @@
                 <echo>Css compression disabled. Skipping ...</echo>
             </else>
         </if>
-
     </target>
 </project>

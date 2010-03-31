@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Minify js css files" default="minify">
+<project name="System paths" default="minify">
 	<!-- Подготовка системных директорий-->
 	<target name="System paths prepare">
 
@@ -82,6 +82,7 @@
 		<if>
 			<not><available file="shared" type="dir" /></not>
 			<then>
+                <echo>Make shared dir</echo>
 				<mkdir dir="shared"/>
 				<exec command="chown -R ${project.user} ." dir="shared" />
 			</then>
@@ -94,5 +95,22 @@
 			</then>
 		</if>
 
+        <!-- Дирректории для sf modules -->
+		<if>
+			<not><available file="${project.basedir}/sf/cache/" type="dir" /></not>
+			<then>
+                <echo>Make symfony cache dir</echo>
+				<mkdir dir="${project.basedir}/sf/cache/"/>
+                <chmod file="${project.basedir}/sf/cache/" mode="0777" />
+			</then>
+		</if>
+		<if>
+			<not><available file="${project.basedir}/sf/log/" type="dir" /></not>
+			<then>
+                <echo>Make symfony logs dir</echo>
+				<mkdir dir="${project.basedir}/sf/log/"/>
+                <chmod file="${project.basedir}/sf/log/" mode="0777" />
+			</then>
+		</if>
 	</target>
 </project>
