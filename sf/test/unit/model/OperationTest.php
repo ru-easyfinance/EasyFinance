@@ -24,10 +24,23 @@ class model_OperationTest extends myUnitTestCase
      */
     public function testTimestampable()
     {
-        $op = new Operation;
-        $op->save();
+        $op = $this->helper->makeOperation();
 
         $this->assertNotEquals('0000-00-00 00:00:00', $op->getDtCreate(), 'CreatedAt');
         $this->assertNotEquals('0000-00-00 00:00:00', $op->getDtUpdate(), 'UpdateAt');
     }
+
+
+    /**
+     * При удалении пользователя, удаляются все его операции
+     */
+    public function testOnDeleteUserCascade()
+    {
+        $user = $this->helper->makeUser();
+        $op   = $this->helper->makeOperation($user);
+
+        $user->delete();
+        $this->assertEquals(0, $op->getTable()->createQuery()->count());
+    }
+
 }
