@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="https://sprint/" />
+<link rel="selenium.base" href="" />
 <title>operationExpense.crud</title>
 </head>
 <body>
@@ -28,17 +28,12 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>btn_ReloadData</td>
+	<td>//div[@id='op_category_fields']/span/input</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>op_category__sexyCombo</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@id='div_op_category']/div/div[2]/ul/li[2]</td>
+	<td>//div[@id='ufd-container']/div[2]/div/div/ul/li[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -63,7 +58,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//button[.='Сохранить']</td>
+	<td>//span[.='Добавить операцию']/../../*/button[.='Сохранить']</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,7 +68,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//button[.='Отмена']</td>
+	<td>//span[.='Добавить операцию']/../../*/button[.='Отмена']</td>
 	<td></td>
 </tr>
 <tr>
@@ -93,12 +88,12 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//button[.='Сохранить']</td>
+	<td>//span[.='Изменить операцию']/../../*/button[.='Сохранить']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForAjaxRequests</td>
-	<td>6000</td>
+	<td>8000</td>
 	<td></td>
 </tr>
 <tr>

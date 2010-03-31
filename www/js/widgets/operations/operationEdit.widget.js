@@ -101,6 +101,7 @@ easyFinance.widgets.operationEdit = function(){
             // если указатель пустой, инициализируем UFD выбора типа операции
             _$ufdType = $("#op_type");
             _$ufdType.ufd({manualWidth: 144, zIndexPopup: 1300, unwrapForCSS: true});
+            _$ufdType.change();
         }
 
         if (!_$ufdCategory) {
@@ -108,6 +109,7 @@ easyFinance.widgets.operationEdit = function(){
             _$ufdCategory = $('#op_category');
             _$ufdCategory.ufd({manualWidth: 345, zIndexPopup: 1300, unwrapForCSS: true});
             refreshCategories();
+            _$ufdCategory.change();
         }
 
         if (!_$ufdAccount) {
@@ -119,6 +121,7 @@ easyFinance.widgets.operationEdit = function(){
             _$ufdAccount = $("#op_account");
             _$ufdAccount.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
             refreshAccounts();
+            _$ufdAccount.change();
 
             if (preAccount) {
                 setAccount (preAccount);
@@ -237,7 +240,7 @@ easyFinance.widgets.operationEdit = function(){
             $('#op_transfer').click();
         });
 
-    	$('#op_amount,#op_transfer').rwCalculator();
+    	//$('#op_amount,#op_transfer').rwCalculator();
 		
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
@@ -257,11 +260,12 @@ easyFinance.widgets.operationEdit = function(){
             _selectedAccount = $(this).val();
             _changeAccountForTransfer();
 
+            // @todo: глючит, не даёт выбрать счёт
             // открываем журнал операций для этого счёта
-            if (easyFinance.widgets.operationsJournal) {
-                easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
-                $('#btn_ReloadData').click();
-            }
+            //if (easyFinance.widgets.operationsJournal) {
+            //    easyFinance.widgets.operationsJournal.setAccount(_selectedAccount);
+            //    $('#btn_ReloadData').click();
+            //}
         });
 
         // смена счёта для перевода
@@ -346,6 +350,8 @@ easyFinance.widgets.operationEdit = function(){
         // если открываем в первый раз, инициализируем комбобоксы
         if (!_$ufdAccount) {
             _initUFDs();
+        } else {
+            setType("0");
         }
 
         // TEMP: показываем операции перевода на фин. цель
@@ -440,6 +446,7 @@ easyFinance.widgets.operationEdit = function(){
                 _$ufdTransfer = $("#op_AccountForTransfer");
                 _$ufdTransfer.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
                 refreshAccounts();
+                _$ufdTransfer.change();
             }
 
             _changeAccountForTransfer();
@@ -462,7 +469,8 @@ easyFinance.widgets.operationEdit = function(){
                 });
 
                 refreshTargets();
-                _$ufdTarget.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true}).change();
+                _$ufdTarget.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
+                _$ufdTarget.change();
             }
 
             // обновляем опции
@@ -600,6 +608,11 @@ easyFinance.widgets.operationEdit = function(){
         // при добавлении обычной операции
         // проверяем заполнение всех полей
         if (!_isCalendar) {
+            if (_selectedAccount == ''){
+                $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
+                return false;
+            }
+
             if (opType == "0" || opType == "1") {
                 // для доходов и расходов
                 if (_selectedCategory == '' || _selectedCategory == '-1') {
@@ -616,11 +629,6 @@ easyFinance.widgets.operationEdit = function(){
                     $.jGrowl('Укажите финансовую цель!', {theme: 'red', stick: true});
                     return false;
                 }
-            }
-
-            if (_selectedAccount == ''){
-                $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
-                return false;
             }
 
             if (_selectedType == ''){
@@ -880,8 +888,8 @@ easyFinance.widgets.operationEdit = function(){
         // setup form
         _initForm();
 		
-        $(document).bind('accountsLoaded', refreshAccounts);
         $(document).bind('accountAdded', refreshAccounts);
+        $(document).bind('accountEdited', refreshAccounts);
         $(document).bind('accountDeleted', refreshAccounts);
 
         $(document).bind('categoriesLoaded', refreshCategories);
