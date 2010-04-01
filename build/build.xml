@@ -41,7 +41,7 @@
 	</target>
 
     <!-- Собрать копиию проекта из указанной ревизии в отдельной директории -->
-	<target name="install" depends="update, deploy">
+	<target name="install" depends="update, backup, deploy">
 	</target>
 
 	<!-- Загрузка конфигов -->
@@ -77,11 +77,15 @@
                 <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}" passthru="true" />
 
-                <!-- cd BASEDIR; git submodule  -->
-                <exec command="${git.bin.path} submodule init"
-                    dir="${project.basedir}" passthru="true" />
+                <!-- cd BASEDIR/sf/lib/vendor/symfony; git submodule  -->
+                <exec command="${git.bin.path} fetch"
+                    dir="${project.basedir}/sf/lib/vendor/symfony" passthru="true" />
 
-                <exec command="${git.bin.path} submodule update"
+                <!-- cd BASEDIR/sf/plugins/sfPhpunitPlugin; git submodule  -->
+                <exec command="${git.bin.path} fetch"
+                    dir="${project.basedir}/sf/plugins/sfPhpunitPlugin" passthru="true" />
+
+                <exec command="${git.bin.path} submodule update --init"
                     dir="${project.basedir}" passthru="true" />
 
                 <echo>Use git branch ${project.git.rev}</echo>
@@ -115,6 +119,8 @@
         <copy todir="${project.path.deploy}/releases/tags/${project.git.rev}" >
             <fileset dir=".">
                 <exclude name=".git/**" />
+                <exclude name="**/.git/**" />
+                <exclude name="**/web.api/dev.php" />
             </fileset>
         </copy>
 
