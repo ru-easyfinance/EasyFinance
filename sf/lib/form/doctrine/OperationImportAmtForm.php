@@ -10,19 +10,11 @@ class OperationImportAmtForm extends BaseFormDoctrine
      */
     public function setup()
     {
-        $this->setWidgets(array(
-          'email'       => new sfWidgetFormInputHidden(),
-          'type'        => new sfWidgetFormInputHidden(),
-          'timestamp'   => new sfWidgetFormInputHidden(),
-          'amount'      => new sfWidgetFormInputHidden(),
-          'description' => new sfWidgetFormInputHidden(),
-          'account'     => new sfWidgetFormInputHidden(),
-          'place'       => new sfWidgetFormInputHidden(),
-          'balance'     => new sfWidgetFormInputHidden(),
-        ));
+        // No wiggets
 
         $this->setValidators(array(
-            'email'       => new sfValidatorDoctrineChoice(array(
+            'id'        => new sfValidatorString(),
+            'email'     => new sfValidatorDoctrineChoice(array(
                 'model'  => 'User',
                 'column' => array('user_service_mail'),
             )),
@@ -36,6 +28,20 @@ class OperationImportAmtForm extends BaseFormDoctrine
         ));
 
 
+        $this->validatorSchema->setPostValidator(
+           new sfValidatorDoctrineUnique(array(
+                'model'  => 'SourceOperation',
+                'column' => array('source_uid', 'source_operation_uid'),
+            ), array(
+                'invalid' => 'An operation with same UID already exists.',
+            ))
+        );
+
+        // см. doBind()
+        $this->validatorSchema->setOption('allow_extra_fields', true);
+        $this->validatorSchema->setOption('filter_extra_fields', false);
+
+
         $this->widgetSchema->setNameFormat('%s');
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
         $this->disableLocalCSRFProtection();
@@ -45,7 +51,20 @@ class OperationImportAmtForm extends BaseFormDoctrine
 
 
     /**
-     * Маппинг входящих значений с свойствам операции
+     * Подмешать во входящие параметры поля, которые сможет использовать PostValidator
+     * для проверки уникальности ID-операции AMT
+     */
+    protected function doBind(array $values)
+    {
+        $values['source_uid'] = Operation::SOURCE_AMT;
+        $values['source_operation_uid'] = isset($values['id']) ? $values['id'] : '';
+
+        parent::doBind($values);
+    }
+
+
+    /**
+     * Маппинг входящих значений к свойствам объекта операции
      *
      * @param  array $values - исходные значения
      * @return array         - преобразованные значения
@@ -84,11 +103,19 @@ class OperationImportAmtForm extends BaseFormDoctrine
         $values['time'] = $date->format('H:i:s');
         unset($values['timestamp']);
 
+
         // Черновик
         $values['accepted'] = Operation::STATUS_DRAFT;
 
+
         // Источник
         $values['source_id'] = Operation::SOURCE_AMT;
+        $values['SourceOperation'] = array(
+            'source_uid'           => Operation::SOURCE_AMT,
+            'source_operation_uid' => $values['id'],
+        );
+        unset($values['id']);
+
 
         // Комментарий
         $values['comment'] = sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s",

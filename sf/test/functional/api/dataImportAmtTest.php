@@ -20,6 +20,7 @@ class api_dataImportAmtTest extends myFunctionalTestCase
     {
         $user = $this->helper->makeUser();
         return array(
+            'id'          => 'AB12345',
             'email'       => $user->getUserServiceMail(),
             'type'        => 0,
             'account'     => $this->helper->makeText('Номер счета', false),
@@ -53,7 +54,7 @@ class api_dataImportAmtTest extends myFunctionalTestCase
                 ->checkElement(sprintf('result code:contains("%d")', $code))
                 ->checkElement(sprintf('result message:contains("%s")', $message))
             ->end()
-            ->with('model')->check('Operation', array(), (int)(1 == $code));
+            ->with('model')->check('Operation', array(), (int)(1 == $code || 5 == $code));
     }
 
 
@@ -99,6 +100,17 @@ class api_dataImportAmtTest extends myFunctionalTestCase
         $data['email'] = 'some email';
 
         $this->checkController($data, $code = 2, $message = 'User not found');
+    }
+
+
+    /**
+     * Такая операция уже проведена
+     */
+    public function testOperationExists()
+    {
+        $data = $this->_getValidData();
+        $this->checkController($data, $code = 1, $message = 'OK');
+        $this->checkController($data, $code = 5, $message = 'UID already exists');
     }
 
 }

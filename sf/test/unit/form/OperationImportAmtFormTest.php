@@ -61,7 +61,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
      */
     protected function getFields()
     {
-        return array('email', 'type', 'account', 'timestamp', 'amount', 'description', 'place', 'balance');
+        return array();
     }
 
 
@@ -71,6 +71,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
     protected function getValidData()
     {
         return array(
+            'id'          => 'ID12345',
             'email'       => $this->_getUser()->getUserServiceMail(),
             'type'        => 0,
             'account'     => $this->helper->makeText('Номер счета', false),
@@ -90,11 +91,19 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
     {
         $validInput = $this->getValidInput();
 
+        $op = $this->helper->makeOperation();
+        $source = new SourceOperation;
+        $source->setOperationId($op->getId());
+        $source->setSourceUid(Operation::SOURCE_AMT);
+        $source->setSourceOperationUid('12345');
+        $source->save();
+
         return array(
             // Ничего не отправлено
             'Empty request' => new sfPHPUnitFormValidationItem(
                 array(),
                 array(
+                    'id'          => 'required',
                     'email'       => 'required',
                     'type'        => 'required',
                     'timestamp'   => 'required',
@@ -114,6 +123,13 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
                 array_merge($this->getValidInput(), array('type' => 2)),
                 array(
                     'type' => 'invalid',
+                )),
+
+            // Операция с таким id уже существует
+            'Source operation already exists' => new sfPHPUnitFormValidationItem(
+                array_merge($this->getValidInput(), array('id' => $source->getSourceOperationUid())),
+                array(
+                    'source_uid' => 'invalid',
                 )),
         );
     }
@@ -148,7 +164,15 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'accepted'  => Operation::STATUS_DRAFT,
         );
         $this->assertOperation($expected, $op);
-        $this->assertEquals(1, $this->queryFind('Operation', $expected)->count(), 'Expected found 1 object');
+        $this->assertEquals(1, $this->queryFind('Operation', $expected)->count(), 'Expected found 1 object (Operation)');
+
+        // Операция из внешнего источника
+        $expected = array(
+            'operation_id' => $op->getId(),
+            'source_uid'   => Operation::SOURCE_AMT,
+            'source_operation_uid' => $input['id'],
+        );
+        $this->assertEquals(1, $this->queryFind('SourceOperation', $expected)->count(), 'Expected found 1 object (SourceOperation)');
     }
 
 
