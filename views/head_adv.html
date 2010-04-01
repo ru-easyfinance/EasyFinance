@@ -7,10 +7,10 @@
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
             {if $user_info.user_id > 0}
                 {if $smarty.server.REQUEST_URI == "/accounts/"}
-                    <a href="/anketa/amt">
+                    <a href="/anketa/">
                         <img src="/img/i/banks/amt/integration.jpg" alt="Интеграция с АМТ банком"  />
                     </a>
-                {elseif $smarty.server.REQUEST_URI == "/anketa/amt"}
+                {elseif $smarty.server.REQUEST_URI == "/anketa/"}
                     <img src="/img/i/banks/amt/anketa.jpg" alt="" />
                 {elseif $smarty.server.REQUEST_URI == "/operation/"}
                     <img src="/img/i/banoperation.jpg" alt="Здесь могла бы быть ваша реклама." />
