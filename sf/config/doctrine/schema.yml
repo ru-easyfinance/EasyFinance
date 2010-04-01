@@ -3,13 +3,14 @@
 User:
   tableName: users
   columns:
+    id:                { type: integer(4), unsigned: true, notnull: true, primary: true, autoincrement: true }
     user_service_mail: { type: string(100), notnull: true }
   options:
     symfony:
       form:  false
       filter: false
 
-# Операции с деньгами
+# Операция с деньгами
 Operation:
   tableName: operation
   actAs:
@@ -24,7 +25,7 @@ Operation:
     drain:      { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
     type:       { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:    { type: clob }
-    source_id:  { type: string(8), fixed: true }
+    source_id:  { type: string(8), fixed: true }                                # Тип внешнего источника операции
     accepted:   { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
     dt_create:  { type: timestamp(25), notnull: true }
     dt_update:  { type: timestamp(25), notnull: true }
@@ -36,6 +37,31 @@ Operation:
       foreignType: many
       autoComplete: false    # User ничего не узнает
       onDelete: CASCADE      # При удалении пользователя удаляются все его операции
+  indexes:
+    user_id:    { fields: [user_id] }
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+# Операция из внешнего источника
+SourceOperation:
+  tableName: source_operations
+  columns:
+    operation_id:         { type: integer,    notnull: true, primary: true }
+    source_uid:           { type: string(8),  notnull: true, fixed: true }
+    source_operation_uid: { type: string(32), notnull: true }
+  relations:
+    Operation:
+      local: operation_id
+      foreign: id
+      type: one
+      foreignType: one
+      onDelete: CASCADE      # При удалении операции удаляются вся информация об источнике
+  indexes:
+    source_operation:
+      fields: [source_uid, source_operation_uid]
+      type: unique
   options:
     symfony:
       form:  false

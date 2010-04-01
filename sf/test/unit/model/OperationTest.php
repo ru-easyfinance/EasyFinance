@@ -16,6 +16,9 @@ class model_OperationTest extends myUnitTestCase
 
         // Пользователь
         $this->assertType('User', $op->User);
+
+        // Операция из внешнего источника
+        $this->assertType('SourceOperation', $op->SourceOperation);
     }
 
 
