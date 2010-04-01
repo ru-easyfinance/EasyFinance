@@ -38,6 +38,7 @@
 
     <!-- Build + Обновляем все файлы: собрать проект для указанной ревизии -->
 	<target name="update" depends="checkout, build">
+        <exec command="./symfony doctrine:build --all-classes" dir="${project.basedir}/sf/" passthru="true" />
 	</target>
 
     <!-- Собрать копиию проекта из указанной ревизии в отдельной директории -->
