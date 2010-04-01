@@ -115,12 +115,12 @@
         	$(this).parent().append($.rwCalculator.inst);
           	
 			var top =0;
-			if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
-				top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
-			}
-			else {
-				top = '15px';
-			}
+			//if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
+			//	top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
+			//}
+			//else {
+				top = '22px';
+			//}
 			$.rwCalculator.inst.css('top',top);
 			$('.calculatorWrapper').show();
 			$.rwCalculator.node = $(this);

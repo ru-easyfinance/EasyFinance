@@ -770,6 +770,7 @@ div.op_addoperation { position: relative; display: none; padding-top: 22px;left:
 #div_op_first_line { width: 345px; margin-bottom: 2px; }
 #div_op_transfer_line { margin-top:12px; margin-bottom:2px; width:345px; }
 
+#div_op_account { position: relative; }
 #div_op_account_select { width: 150px; }
 #div_op_type_select { float: right; width: 144px; }
 div.op_addoperation .op_line { position: relative;  color: #4c4c4c; //zoom: 1; }
@@ -786,6 +787,7 @@ div.op_addoperation select#op_category {width: 350px;  overflow: hidden; }
 /* div.op_addoperation .op_line .op_f_field select#op_category option {width: 323px;} */
 
 div.op_addoperation .op_line .op_f_field div {margin-top: 5px; margin-right: 50px;  float: left; }
+div.op_addoperation .op_line .op_f_field div.rw-calculator { margin: 0px; }
 
 div.op_addoperation .op_line .op_tags_could{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
 div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100px;float: top;}
@@ -2043,7 +2045,11 @@ div.op_addoperation div.op_line div.amount div.amount_general{
 }
 
 div.op_addoperation input#op_transfer{
-    width: 140px;
+    width: 120px;
+}
+
+div.amount_general {
+    width: 150px;
 }
 
 div.op_addoperation input#op_date{
@@ -2053,7 +2059,7 @@ div.op_addoperation input#op_date{
 div.op_addoperation div.op_line div.amount input#op_amount{
     position : relative;
     float: left;
-    width: 140px;
+    width: 118px;
 }
 div.op_addoperation div.op_line div.amount img{
     position : relative;

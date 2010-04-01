@@ -110,6 +110,5 @@ $.rwCalculator.defaultEvents = {
 	        	}
     	}
 	],
-    click: ['show']
-	
+    click: []
 };

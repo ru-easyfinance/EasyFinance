@@ -11,6 +11,7 @@ div.rw-widget{
     position: static;
     clear: both;
 }
+
 div.rw-widget .line{
     margin-top: 5px;
     display: block;

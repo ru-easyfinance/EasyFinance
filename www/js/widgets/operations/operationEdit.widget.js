@@ -320,20 +320,21 @@ easyFinance.widgets.operationEdit = function(){
 
         // кнопка расчёта суммы TODO
         _$node.find('#btnCalcSum').click(function(){
-//            $('#op_amount').click();
-			//$.rwCalculator.node = calculator;
-			//$.rwCalculator.functions.show();
-            //$(calculator).val(calculate($(calculator).val()));
-            $("#op_amount").val(calculate($("#op_amount").val()));
+            var $field = $("#op_amount");
+            $field.val(calculate($field.val()));
+			$.rwCalculator.node = $field;
+			$.rwCalculator.functions.show.call($field);
         });
 
         // кнопка расчёта суммы для поля перевода
         _$node.find('#btnCalcSumTransfer').click(function(){
-            $('#op_transfer').click();
+            var $field = $("#op_transfer");
+            $field.val(calculate($field.val()));
+			$.rwCalculator.node = $field;
+			$.rwCalculator.functions.show.call($field);
         });
 
-    	//$('#op_amount,#op_transfer').rwCalculator();
-		
+    	$('#op_amount,#op_transfer').rwCalculator();
 		
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
