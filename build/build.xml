@@ -74,14 +74,17 @@
 			<available file="${project.basedir}/.git" type="dir" />
 			<then>
                 <!-- cd BASEDIR; git fetch  -->
+                <echo>git fetch repo ${project.git.rev}</echo>
                 <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}" passthru="true" />
 
                 <!-- cd BASEDIR/sf/lib/vendor/symfony; git submodule  -->
+                <echo>git fetch submodule repo /sf/lib/vendor/symfony</echo>
                 <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}/sf/lib/vendor/symfony" passthru="true" />
 
                 <!-- cd BASEDIR/sf/plugins/sfPhpunitPlugin; git submodule  -->
+                <echo>git fetch submodule repo /sf/plugins/sfPhpunitPlugin</echo>
                 <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}/sf/plugins/sfPhpunitPlugin" passthru="true" />
 
