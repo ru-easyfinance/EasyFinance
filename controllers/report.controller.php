@@ -99,7 +99,7 @@ class Report_Controller extends _Core_Controller_UserCommon
                 die(json_encode($this->model->getPie(0, $start, $end, $accounts, $currency)));
                 break;
             case 'graph_loss':   // Расходы
-                die(json_encode($this->model->getPie(1, $start, $end, $account, $currency)));
+                die(json_encode($this->model->getPie(1, $start, $end, $accounts, $currency)));
                 break;
             case 'graph_profit_loss': //Сравнение расходов и доходов
                 die(json_encode($this->model->getBars($start, $end, $account, $currency, $acclist)));

@@ -53,7 +53,7 @@ class Budget_Model {
             WHERE o.user_id = ? AND o.transfer=0 AND o.accepted=1
                 AND o.date >= ? AND o.date <= ?
             AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = o.user_id)
-                GROUP BY o.cat_id";
+                GROUP BY o.cat_id, a.account_id";
 
         $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
 
