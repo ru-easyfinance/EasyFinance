@@ -34,10 +34,31 @@ try
 	$router->performRequest();
 
 	if( _Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME){
+
             $templateEngine->display( 'iframe/index.iframe.html' );
-        } else {
-            $templateEngine->display( 'index.html' );
+
+    } else {
+        
+        // Если пользователь зашёл с мобильного браузера
+        if ( _Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA
+            && Helper_DetectBrowser::detectMobile() ) {
+
+            header( 'Location: https://' . URL_ROOT_PDA );
+            exit;
+
         }
+
+        // Если пользователь зашёл по незащищённому соединению и он не поисковый бот
+        if ( $_SERVER['SERVER_PORT'] == 80
+            && ( !Helper_DetectBrowser::detectSearchEngine() ) ) {
+
+            header( 'Location: ' . 'https://' . URL_ROOT );
+            exit;
+
+        }
+
+        $templateEngine->display( 'index.html' );
+    }
 
 	// Применение модификаций\удалений моделей
 	_Core_ObjectWatcher::getInstance()->performOperations();
