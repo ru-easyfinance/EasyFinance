@@ -5,33 +5,39 @@
         <div class="ramka1">
             <div class="ct"><div></div></div>
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
-                {if $user_info.user_id > 0}
-                    {if $smarty.server.REQUEST_URI == "/accounts/"}
-                    <img src="/img/i/banaccount.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/operation/"}
-                    <img src="/img/i/banoperation.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/category/"}
-                    <img src="/img/i/bancategory.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/budget/"}
-                    <img src="/img/i/banbudget.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/targets/"}
-                    <img src="/img/i/banfintarget.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/report/"}
-                    <img src="/img/i/banreport.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/calendar/"}
-                    <img src="/img/i/bancalendar.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.server.REQUEST_URI == "/periodic/"}
-                    <img src="/img/i/banregtranzaction.jpg" alt="Здесь могла бы быть ваша реклама."  />
-                    {elseif $smarty.const.IS_DEMO == false}
+            {if $user_info.user_id > 0}
+                {if $smarty.server.REQUEST_URI == "/accounts/"}
+                    <a href="/anketa/">
+                        <img src="/img/i/banks/amt/integration.jpg" alt="Интеграция с АМТ банком"  />
+                    </a>
+                {elseif $smarty.server.REQUEST_URI == "/anketa/"}
+                    <img src="/img/i/banks/amt/anketa.jpg" alt="" />
+                {elseif $smarty.server.REQUEST_URI == "/operation/"}
+                    <img src="/img/i/banoperation.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.server.REQUEST_URI == "/category/"}
+                    <img src="/img/i/bancategory.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.server.REQUEST_URI == "/budget/"}
+                    <img src="/img/i/banbudget.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.server.REQUEST_URI == "/targets/"}
+                    <img src="/img/i/banfintarget.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.server.REQUEST_URI == "/report/"}
+                    <img src="/img/i/banreport.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.server.REQUEST_URI == "/calendar/"}
+                    <img src="/img/i/bancalendar.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.server.REQUEST_URI == "/periodic/"}
+                    <img src="/img/i/banregtranzaction.jpg" alt="Здесь могла бы быть ваша реклама." />
+                {elseif $smarty.const.IS_DEMO == false}
                     <a href="/redirect/book"><img src="/img/i/bannerBook.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
-                    {elseif $smarty.const.IS_DEMO == true}
-                    <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
-                    {/if}
-                {else}
-                    {if $smarty.server.REQUEST_URI == "/"}
-                    {/if}
+                {elseif $smarty.const.IS_DEMO == true}
                     <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
                 {/if}
+            {else}
+                {if $smarty.server.REQUEST_URI == "/"}
+                {/if}
+                <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/">
+                    <img src="/img/i/banks/amt/registration.jpg" alt="Зарегистрируйся и получи &quot;Уникальный тариф&quot; АМТ банка" title="Зарегистрируйся и получи &quot;Уникальный тариф&quot; АМТ банка" />
+                </a>
+            {/if}
             </div>
             <div class="cb"><div></div></div>
         </div>
