@@ -8,7 +8,7 @@
     <!-- Сборка проекта: подготовка конфигов, создание директорий, сжатие js и css -->
 	<target name="build" depends="Configuration prepare">
 
-	    <phing phingfile="build/paths.target.xml" inheritAll="true" target="System paths prepare" />
+        <phing phingfile="build/paths.target.xml" inheritAll="true" target="System paths prepare" />
 
         <!-- Получаем текущее время -->
         <tstamp>
@@ -59,7 +59,7 @@
             </else>
         </if>
 
-	    <!-- Проверяем, если у нас есть алиас rev для свойства project.git.rev, то ставим алиас -->
+        <!-- Проверяем, если у нас есть алиас rev для свойства project.git.rev, то ставим алиас -->
         <if>
            <isset property="rev" />
            <then>
@@ -89,15 +89,16 @@
                 <exec command="${git.bin.path} fetch"
                     dir="${project.basedir}/sf/plugins/sfPhpunitPlugin" passthru="true" />
 
-                <exec command="${git.bin.path} submodule update --init"
-                    dir="${project.basedir}" passthru="true" />
-
                 <echo>Use git branch ${project.git.rev}</echo>
                 <!-- cd BASEDIR; git checkout branch -->
                 <exec command="${git.bin.path} checkout ${project.git.rev}"
                     dir="${project.basedir}" passthru="true" />
+
+                <exec command="${git.bin.path} submodule update --init"
+                    dir="${project.basedir}" passthru="true" />
+
 			</then>
-			<!--Если нет - создаём и выполняем checkout -->
+			<!--Если нет - ругаемся.. Делай клон вручную -->
 			<else>
                 <fail message="Need run command git clone manually" />
 			</else>
