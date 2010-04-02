@@ -38,8 +38,8 @@
                         <include name="jquery.jHtmlArea.ColorPickerMenu.css" />
                         <include name="fullcalendar.css" />
                         <include name="fancy.css" />
-                        <include name="sexyCombo.css" />
-
+                        <include name="ufd-base.css" />
+                        <include name="ufd-plain.css" />
                     </fileset>
                     <fileset dir="${project.css.root}jquery/south-street/">
                         <include name="ui.core.css" />

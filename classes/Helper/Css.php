@@ -13,7 +13,6 @@ class Helper_Css implements _Core_Router_iHook
 		{
 			$templateEngine->append('css', 'main.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.all.css');
-			//$tpl->append('css', 'jquery/south-street/ui.base.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.core.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.resizable.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.dialog.css');
