@@ -29,6 +29,5 @@ class Anketa_Controller extends _Core_Controller_UserCommon
      */
     function amt()
     {
-        $this->tpl->assign('anketa', $anketa);
     }
 }
