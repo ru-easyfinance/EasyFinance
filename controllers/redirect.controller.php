@@ -19,4 +19,15 @@ class Redirect_Controller
 	header('Location: https://easyfinance.ru/upload/files/FingramotaWebVersion.pdf');
         exit();
     }
+
+    /**
+     * Редирект на анкету
+     */
+    function anketa_amt()
+    {
+        header('Location: ' . 
+            'https://'. URL_ROOT . 'upload/files/Anketa%20AMT%20Bank%20-%20EasyFinance.ru.doc'
+        );
+        exit();
+    }
 }
