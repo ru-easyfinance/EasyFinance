@@ -1,0 +1,5 @@
+autoload:
+  Zend:
+    name:      Zend
+    path:      %SF_LIB_DIR%/vendor/Zend
+    recursive: on
