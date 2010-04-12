@@ -58,9 +58,13 @@ $(document).ready(function() {
                         minlength: "Ваш пароль должен состоять как минимум из 5 символов",
                         equalTo: "Пожалуйста, введите тот же пароль, что и выше"
                     },
-                    mail: "Пожалуйста, введите правильный адрес электронной почты",
+                    mail: {
+                        required: " ",
+                        email: "Пожалуйста, введите правильный адрес электронной почты"
+                    },
                     mail_confirm: {
-                        required: "Вы не ввели e-mail",
+                        required: " ",
+                        email: "Пожалуйста, введите правильный адрес электронной почты",
                         equalTo: "Пожалуйста, введите тот же e-mail, что и выше"
                     }
 
@@ -81,7 +85,9 @@ $(document).ready(function() {
              */
             $('#butt').click(function(){
                 if ($("#formRegister").valid()) {
-                    $.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
+                    //$.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
+                    // изменил вывод сообщений, см. тикет #1128
+                    $("#lblRegisrationStatus").removeClass("hidden");
                     
                     $.post(
                         "/registration/new_user/?responseMode=json",
@@ -101,8 +107,10 @@ $(document).ready(function() {
                                     if (data.error.redirect)
                                         setTimeout(function(){window.location = data.error.redirect;},3000);
                                 } else if (data.result) {
-                                    if (data.result.text)
-                                        $.jGrowl(data.result.text, {theme: 'green'});
+                                    $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/login\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу входа через несколько секунд)");
+
+                                    //if (data.result.text)
+                                    //    $.jGrowl(data.result.text, {theme: 'green'});
 
                                     if (data.result.redirect)
                                         setTimeout(function(){window.location = data.result.redirect;},3000);

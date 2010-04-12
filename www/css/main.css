@@ -298,7 +298,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 
 
-#aboutproject { margin-bottom: 33px; }
+#aboutproject { margin-bottom: 0px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
 #aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.jpg') no-repeat 0 0; }
 
@@ -1236,7 +1236,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupreport .inside .f_field { position: relative; margin-bottom: 11px; }
 #popupreport .inside .f_field textarea { height: 165px;}
 #popupreport .inside .f_field input {width: 281px}
-#popupreport .inside .f_field textarea { padding-left: 9px; width: 282px; font-size: 11px; color: #9e9e9e; }
+#popupreport .inside .f_field textarea { width: 282px; font-size: 11px; color: #9e9e9e; }
 #popupreport .inside .f_field.ffmes label { display: block; position: absolute; top: 3px; left: 11px; font-size: 11px; color: #9e9e9e;  }
 #popupreport .inside .f_field img { display: block; position: absolute; top: 0; left: 161px; }
 #popupreport .inside .f_field input#ffnum { width: 136px; }
@@ -1387,7 +1387,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
 #footer .certificate { position: absolute; left: 700px; top: 10px; }
 
-#footer .footerTextsArea { margin: 80px 0px 0px 8px; border-top: 1px solid #E0E3DE; padding-top: 12px; }
+#footer .footerTextsArea { padding: 4px; }
 #footer .footerTextsArea h4 { margin-top: 2px; color: grey; }
 #footer .footerTextsArea li:first-child { margin:0; }
 #footer .footerTextsArea li { float:left; margin: 0 0 0 34px; width: 286px; }
