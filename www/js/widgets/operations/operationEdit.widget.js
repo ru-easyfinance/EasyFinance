@@ -200,6 +200,9 @@ easyFinance.widgets.operationEdit = function(){
             beforeclose: function() {
                 // очищаем форму перед закрытием
                 _clearForm();
+				
+				// #1134. скрываем окно тегов, если оно открыто
+				$('.op_tags_could').dialog("close");
             },
             buttons: _buttonsNormal
         });

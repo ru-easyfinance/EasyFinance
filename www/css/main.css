@@ -1434,7 +1434,7 @@ div.w_dialog .text{top:5px; width:250px; max-width: 250px; padding-right: 107px;
 
 #p_index #header { height: 130px; }
 #p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
-#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 13px; width: 134px;}
+#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 13px; width: 200px;}
 
 span.tagMatches {
     margin-left: 10px;
