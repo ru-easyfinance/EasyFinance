@@ -99,6 +99,7 @@ function getClientPlugins(){
                 '/feedback/add_message/?responseMode=json',
                 feedback,
                 function(data){
+                    $.jGrowl('Ваше сообщение отправлено!', {theme: 'green'});
                     noClick = false;
 
                     if (data.error){
