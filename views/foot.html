@@ -1,123 +1,107 @@
 {* $Id: index_old.html -1   $ *}
         <!--подвал-->
+        <!--
         <div id="footer" style="z-index: 10; height: 0; border: 0;">
-                <div id="popupreport">
-                    <div class="inside">
-                        <div class="w_d_head">&nbsp;</div>
-                        <div class="w_d_body">
-                            <table class="header">
-                                <tr>
-                                    <td class="header">
-                                        <h2>Оставить отзыв</h2>
-                                     </td>
+            <div id="popupreport">
+                <div class="inside">
+                    <div class="w_d_head">&nbsp;</div>
+                    <div class="w_d_body">
+                        <table class="header">
+                            <tr>
+                                <td class="header">
+                                    <h2>Оставить отзыв</h2>
+                                 </td>
 
-                                     <td class="link close">
+                                 <td class="link close">
 
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="f_field">
-                                <p><label for="ftheme">Тема</label></p>
-                                <input type="text" value="" id="ftheme" />
-                            </div>
-                            <div class="f_field ffmes">
-                                <label for="ffmes">Ваш отзыв</label>
-                                <textarea cols="1" rows="1" id="ffmes"></textarea>
-                            </div>
-                            {if !isset($user_info) || $smarty.const.IS_DEMO == true}
-                            <div class="f_field">
-                                <p><label for="fmail">E-mail</label></p>
-                                <input type="text" value="" id="fmail" />
-                            </div>
-                            {/if}
-                            <center>
-                                <button id="sendFeedback" style="background: none;border: 0;width: 160px;margin-left: -70px;">
-                                    <img src="/img/i/pix.gif" class="but" alt="Отправить отзыв"/>
-                                </button>
-                            </center>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="f_field">
+                            <p><label for="ftheme">Тема</label></p>
+                            <input type="text" value="" id="ftheme" />
                         </div>
-                        <div class="w_d_foot">&nbsp;</div>
+                        <div class="f_field ffmes">
+                            <label for="ffmes">Ваш отзыв</label>
+                            <textarea cols="1" rows="1" id="ffmes"></textarea>
+                        </div>
+                        {if !isset($user_info) || $smarty.const.IS_DEMO == true}
+                        <div class="f_field">
+                            <p><label for="fmail">E-mail</label></p>
+                            <input type="text" value="" id="fmail" />
+                        </div>
+                        {/if}
+                        <center>
+                            <button id="sendFeedback" style="background: none;border: 0;width: 160px;margin-left: -70px;">
+                                <img src="/img/i/pix.gif" class="but" alt="Отправить отзыв"/>
+                            </button>
+                        </center>
                     </div>
+                    <div class="w_d_foot">&nbsp;</div>
                 </div>
-                <a  class="addmessage">оставить отзыв</a>
+            </div>
+            <a  class="addmessage">оставить отзыв</a>
 
-                <div id="popupHelp" class="hidden">
-                    <div class="title"></div><br>
-                    <div class="links"></div><br>
-                    <a
-                        id = "playerHelp"
-                        class = "video"
-                        href="/flv/test.mp4"
-                        style="display:block;width:640px;height:480px"
-                    ></a><br>
-                </div>
-                <a class="btnHelp">помощь</a>
+            <div id="popupHelp" class="hidden">
+                <div class="title"></div><br>
+                <div class="links"></div><br>
+                <a
+                    id = "playerHelp"
+                    class = "video"
+                    href="/flv/test.mp4"
+                    style="display:block;width:640px;height:480px"
+                ></a><br>
+            </div>
+            <a class="btnHelp">помощь</a>
         </div>
+        -->
+        <!--/popup оставить отзыв-->
 
-                <!--/popup оставить отзыв-->
-            <div id="footer" style="z-index: 1">
-                <div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
+        <div id="footer" style="z-index: 1">
+            <div id='dialog_rating'></div>
+            <!--/popup оставить отзыв-->
 
-                <dfn>&copy; 2009-2010 «EasyFinance»</dfn>
-                <ul class="contacts">
-                    <li><a href="/rules/">Правила использования</a></li>
-                    <li><a href="/about/">О компании</a></li>
-                    <li><a href="/security/">Безопасность</a></li>
-                    <li class="tel tel1">Телефон:  +7 (495) 971-00-52</li>
-                    <li class="tel tel2">Клиентская служба:  <a href="mailto:service@easyfinance.ru">service@easyfinance.ru</a></li>
-                    <li class="tel tel3">Техническая поддержка:  <a href="mailto:support@easyfinance.ru">support@easyfinance.ru</a></li>
-                    <li class="icq">ICQ: 562-487-015</li>
-                    <li class="skype">Skype:  <a href="skype:easyfinance.ru?chat">easyfinance.ru</a></li>
-                    <li class="twitter">Twitter:  <a href="http://twitter.com/easyfinanceru">easyfinanceru</a></li>
-                </ul>
-                <a href="http://notamedia.ru/" target="_blank"><div class="creator" tooltip="linkalert-tip">дизайн сайта<br/>Нотамедиа 2009</div></a>
-                <!--popup оставить отзыв-->
+            {if count($seotext)}
+                {php}
+                    $seotext = $this->get_template_vars('seotext');
+                    // для отладки $seotext = array(array('1', '2', '3'));
+                    $str = '';
+                    $columns = 3;
+                    $cnt = count($seotext);
+                    $parsed = 0;
 
+                    //we are going to set a new variables called $rows
+                    $rows = ceil($cnt / $columns);
 
-                <div id='dialog_rating'></div>
-                <!--/popup оставить отзыв-->
+                    for($i = 0; $i < $columns; $i++) {
+                        $str = $str . '<li class="footerTextsColumn">';
 
-                {if count($seotext)}
-                    {php}
-                        $seotext = $this->get_template_vars('seotext');
-                        // для отладки $seotext = array(array('1', '2', '3'));
-                        $str = '';
-                        $columns = 3;
-                        $cnt = count($seotext);
-                        $parsed = 0;
+                        $row = 0;
+                        while ($cnt > (($columns-$i-1)*$row)) {
+                            if (isset($seotext[$parsed])) {
+                                $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
+                                $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
+                                $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
 
-                        //we are going to set a new variables called $rows
-                        $rows = ceil($cnt / $columns);
-
-                        for($i = 0; $i < $columns; $i++) {
-                            $str = $str . '<li class="footerTextsColumn">';
-
-                            $row = 0;
-                            while ($cnt > (($columns-$i-1)*$row)) {
-                                if (isset($seotext[$parsed])) {
-                                    $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
-                                    $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
-                                    $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
-
-                                    $parsed++;
-                                    $row++;
-                                }
-
-                                $cnt--;
+                                $parsed++;
+                                $row++;
                             }
 
-                            $str = $str . '</li>';
+                            $cnt--;
                         }
 
-                        $this->assign('seoHTML', $str);
-                    {/php}
-                {/if}
+                        $str = $str . '</li>';
+                    }
+
+                    $this->assign('seoHTML', $str);
+                {/php}
+            {/if}
             <ul class="footerTextsArea">{$seoHTML}</ul>
-            
+
             <div style="position: relative; clear: both; border-top: 1px solid rgb(224, 227, 222);">
                 <div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
 
-                <dfn>© 2009 «EasyFinance»</dfn>
+                <dfn>© 2009 EasyFinance</dfn>
                 <ul class="contacts">
                     <li><a href="/rules/">Правила использования</a></li>
                     <li><a href="/about/">О компании</a></li>
@@ -133,21 +117,21 @@
                 <!--popup оставить отзыв-->
             </div>
 
-                <div id='dialog_rating'></div>
-                <!--/popup оставить отзыв-->
+            <div id='dialog_rating'></div>
+            <!--/popup оставить отзыв-->
 
-                    {literal}
-                        <script type="text/javascript">
-                            $(document).ready(function() {
-                                //toggle long footer text
-                                $("#footer a.footerTextToggler").click(function() {
-                                    $(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
-                                    $(this).parent().next('div').slideToggle("fast");
-                                    return false;
-                                });
-                            });
-                        </script>
-                    {/literal}
+            {literal}
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        //toggle long footer text
+                        $("#footer a.footerTextToggler").click(function() {
+                            $(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
+                            $(this).parent().next('div').slideToggle("fast");
+                            return false;
+                        });
+                    });
+                </script>
+            {/literal}
         </div>
                 
         <!--/подвал-->
