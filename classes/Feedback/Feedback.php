@@ -1,8 +1,7 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php if (!defined('INDEX')) trigger_error("Index required!", E_USER_WARNING);
 /**
  * Класс модели для управления фидбэком
  * @copyright http://easyfinance.ru/
- * SVN $Id: $
  */
 class Feedback
 {
@@ -10,42 +9,31 @@ class Feedback
      * Текст сообщения от пользователя
      * @var string
      */
-    private $message = null;
+    private $_message = null;
 
     /**
      * Заголовок для сообщения
      * @var string
      */
-    private $title = null;
+    private $_title = null;
 
     /**
      * Массив с параметрами
      * @var array
      */
-    private $params = null;
+    private $_params = null;
 
     /**
      * Почта пользователя
      * @var string
      */
-    private $email = null;
+    private $_email = null;
 
     /**
-     * Массив с ошибками
-     * @var array
+     * Ссылка на класс-мейлера
+     * @var Swift_Mailer
      */
-    public $errorData = array();
-
-    /**
-     * Номер отзыва
-     * @var int
-     */
-    private $numberFeedback = null;
-
-    /**
-    *
-    */
-    private $mailer = null;
+    private $_mailer = null;
 
     /**
      * Конструктор
@@ -54,27 +42,27 @@ class Feedback
      * @param array $params
      * @return void
      */
-    function __construct($message, $title, $params) {
+    function __construct($message, $title, $params)
+    {
 
-        $this->message = $message;
+        $this->_message = $message;
 
-        $this->title = $title;
+        $this->_title = $title;
 
-        $this->params = $params;
+        $this->_params = $params;
 
-        if ( isset( $this->params['email'] )  && !empty ( $this->params['email'] ) ) {
-            $this->email = $this->params['email'];
+        if (isset($this->_params['email'])  && !empty ($this->_params['email'])) {
+            $this->_email = $this->_params['email'];
         } else {
-            // @TODO Переписать когда класс пользователей будет предоставлять инфу о почте пользователя
-            $this->params['email'] = $_SESSION['user']['user_mail'];
-            $this->email = $this->params['email'];
+            $this->_params['email'] = $_SESSION['user']['user_mail'];
+            $this->_email = $this->_params['email'];
         }
 
-	$mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-		->setUsername('feedback@easyfinance.ru')
-		->setPassword('MTApJxa4');
-	
-	$this->mailer = Swift_Mailer::newInstance( $mailTransport ); 
+        $mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+            ->setUsername(FEEDBACK_MAIL_MAIL)
+            ->setPassword(FEEDBACK_MAIL_PASS);
+
+        $this->_mailer = Swift_Mailer::newInstance($mailTransport);
     }
 
     /**
@@ -83,106 +71,56 @@ class Feedback
      */
     public function add_message( )
     {
-        $user_id = (int)Core::getInstance()->user->getId();
-
-        if (!empty($this->message)) {
-
-            // Записываем сообщение об ошибке в БД
-            $sql = "INSERT INTO feedback_message SET uid=?, user_settings=?, messages=?, user_name=?, `new`='1', rating='0'";
-            Core::getInstance()->db->query($sql, $user_id, serialize($this->params), $this->message, $user_id);
-            
-            // Получаем номер сообщения
-            $this->numberFeedback = mysql_insert_id();
-
+        if (!empty($this->_message)) {
             // Отправляем письмо в саппорт c полным содержанием
-            if ( ! $this->sendSupport() ) {
-                $this->errorData[] = 'Не удалось отправить письмо службе поддержки';
+            if (! $this->sendFeedback()) {
+                throw new Exception('Cant send feedback email');
             }
-
-            // Отправляем письма в службу поддержки с кратким содержанием и с почтой пользователя
-            // @FIXME Разобраться, почему гугл игнорирует и подставляет при ответе почту саппорта, а не юзера
-            if ( ! $this->sendSubscribers( true ) ) {
-                //$this->errorData[] = 'Не удалось отправить письмо службе поддержки';
-            }
-
-            // Отправляем сообщение об отзыве - пользователю
-            if ( ! $this->sendResponse() ) {
-                //$this->errorData[] = 'Не удалось отправить письмо службе поддержки';
-            }
-
-            // Отправляем письма для заинтересованных лиц
-            if ( ! $this->sendSubscribers( false ) ) {
-                //$this->errorData[] = 'Не удалось отправить письмо службе поддержки';
-            }
-            
             return true;
-            
         } else {
-
             return false;
-            
         }
     }
-
-    /**
-     * Отправляем ответ пользователю
-     */
-    private function sendResponse ()
-    {
-        require DIR_TEMPLATES . '/mail/feedback_user.tpl';
-
-        $response = Swift_Message::newInstance()
-            ->setSubject( $responseSubject )
-            ->setFrom( $responseFrom )
-            ->setTo( $this->email )
-            ->setBody( $responseBody, 'text/plain');
-
-        return $this->mailer->send($response);
-    }
-
-    /**
-     * Отправляем письма подписчикам
-     * @param string $fromUser = false
-     * @return bool
-     */
-    private function sendSubscribers( $fromUser = false )
-    {
-        require DIR_TEMPLATES . '/mail/feedback_subscribers.tpl';
-
-        $subscribers = Swift_Message::newInstance()
-            ->setSubject( $subscribersSubject )
-            ->setFrom( $subscribersFrom )
-            ->setTo( $subscribersEmails )
-            ->setBody( $subscribersBody, 'text/plain' );
-
-        if ( $fromUser ) {
-            $subscribers->setReplyTo( $this->email )->setSender( $this->email );
-        }
-
-        return $this->mailer->send( $subscribers );
-    }
-
 
     /**
      * Письмо в службу поддержки с полным содержанием и дампом данных
      * @return bool
      */
-    private function sendSupport()
+    private function sendFeedback()
     {
-        require DIR_TEMPLATES . '/mail/feedback_support.tpl';
+        // Указываем кому высылать будем письмо
+        if (isset($_SESSION['user']['user_name'])) {
+            if (!empty($_SESSION['user']['user_name'])) {
+                $feedbackReplyTo = $_SESSION['user']['user_name'];
+            } else {
+                $feedbackReplyTo = $_SESSION['user']['user_login'];
+            }
+        } else {
+            //@TODO В идеале можно искать пользователя по этому почтовому ящику в базе
+            $feedbackReplyTo = 'Аноним';
+        }
 
-        $support = Swift_Message::newInstance()
+        $feedbackReplyTo = array($this->_email => $feedbackReplyTo);
+        
+        $feedbackHtmlPart = "<html>".
+            "<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/></head>".
+            "<body><pre>".var_export($this->_params, true)."</pre></body>";
+
+        $feedback = Swift_Message::newInstance()
             // Заголовок
-            ->setSubject( $supportSubject )
+            ->setSubject($this->_title)
             // Указываем "От кого"
-            ->setFrom( $supportFrom )
+            ->setFrom(array(FEEDBACK_FROM_MAIL => FEEDBACK_FROM_NAME))
             // Говорим "Кому"
-            ->setTo( $supportTo )
-            // Устанавливаем "Тело"
-            ->setBody( $supportBody , 'text/plain' );
+            ->setTo(array(FEEDBACK_TO_MAIL => FEEDBACK_TO_NAME))
+            // Указываем от кого пришло письмо
+            ->setReplyTo($feedbackReplyTo)
+            // Тело письма, его будет видеть пользователь в ответе (и оно будет отображено в хелпдеске)
+            ->setBody($this->_message, 'text/plain')
+            // Скрытая часть письма с тех. параметрами (т.к. хелпдеск не высылает пользователю эту часть)
+            ->addPart($feedbackHtmlPart, 'text/html');
 
         // Отсылаем письмо
-        return $this->mailer->send( $support );
+        return $this->_mailer->send($feedback);
     }
 }
-?>
