@@ -31,7 +31,7 @@ class Calendar_Model extends _Core_Abstract_Model {
     public static function loadAll( User $user, $start, $end )
     {
         $modelsArray = array();
-               
+
 //        $cache = _Core_Cache::getInstance();
 //        $cacheId = 'calendarUser' . $user->getId();
 //
@@ -52,7 +52,7 @@ class Calendar_Model extends _Core_Abstract_Model {
             c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer
             FROM operation o
             LEFT JOIN calendar_chains c ON c.id=o.chain_id
-            WHERE o.user_id = ? AND o.`date` BETWEEN ? AND ? AND o.chain_id > 0';
+            WHERE o.user_id = ?';
 
         //SELECT o.id, o.chain_id AS chain, o.type,
         //	o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
@@ -75,7 +75,7 @@ class Calendar_Model extends _Core_Abstract_Model {
 
 
         $rows = Core::getInstance()->db->select( $sql, $user->getId(), $start, $end );
-            
+
         foreach ( $rows as $row )
         {
             // Пропускаем повторы переводов
@@ -100,7 +100,7 @@ class Calendar_Model extends _Core_Abstract_Model {
      */
     public static function create ( User $user, Calendar_Event $event, $array_days )
     {
-        
+
         // Создаём само событие
         $sql = "INSERT INTO calendar_chains (`user_id`,`start`,`last`,`every`, `repeat`, `week`)
             VALUES (?, ?, ?, ?, ?, ?);";
@@ -128,7 +128,7 @@ class Calendar_Model extends _Core_Abstract_Model {
     {
 
         // Создаём само событие
-        $sql = "UPDATE calendar_chains c 
+        $sql = "UPDATE calendar_chains c
             SET `last` = ?, `every` = ?, `repeat` = ?, `week` = ?
             WHERE `user_id` = ? AND id = ? ;";
 
@@ -252,7 +252,7 @@ class Calendar_Model extends _Core_Abstract_Model {
         } else {
 
             return false;
-            
+
         }
     }
 
@@ -281,7 +281,7 @@ class Calendar_Model extends _Core_Abstract_Model {
         } else {
             return false;
         }
-        
+
         $sql = "UPDATE operation SET accepted=1 WHERE id IN ( {$string_ids} ) AND user_id=?;";
 
         if ( Core::getInstance()->db->query( $sql, $user->getId() ) ) {
@@ -331,7 +331,7 @@ class Calendar_Model extends _Core_Abstract_Model {
 
     function save()
     {
-        
+
     }
 
     public function delete ()
@@ -339,4 +339,3 @@ class Calendar_Model extends _Core_Abstract_Model {
 
     }
 }
-
