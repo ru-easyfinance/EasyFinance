@@ -69,7 +69,7 @@ class myParseEmailAmtImport
 
         foreach ($message as $part) {
             // Нам интересен только XML
-            if ( $part->contentType == "text/xml; charset=utf-8") {
+            if (stristr($part->contentType, "text/xml;")) {
                 if ($part->getHeader('Content-Transfer-Encoding') === Zend_Mime::ENCODING_QUOTEDPRINTABLE) {
                     return quoted_printable_decode($part->getContent());
                 } elseif ( $part->getHeader('Content-Transfer-Encoding') === Zend_Mime::ENCODING_BASE64 ) {
