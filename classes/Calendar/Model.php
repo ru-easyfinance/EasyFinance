@@ -49,30 +49,10 @@ class Calendar_Model extends _Core_Abstract_Model {
             o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
             DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date, o.time,
             DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start, DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
-            c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer
+            c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer, o.source_id AS source
             FROM operation o
             LEFT JOIN calendar_chains c ON c.id=o.chain_id
             WHERE o.user_id = ?';
-
-        //SELECT o.id, o.chain_id AS chain, o.type,
-        //	o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
-        //	DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date, o.time,
-        //	DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start, DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
-        //	c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer
-        //FROM operation o
-        //LEFT JOIN calendar_chains c ON c.id=o.chain_id
-        //WHERE o.user_id = 1 AND o.`date` BETWEEN '2010-02-01' AND '2010-04-01' AND o.chain_id > 0
-        //UNION
-        //SELECT b.id, b.chain_id, '4',
-        //	b.money, b.comment, t.category_id, t.target_account_id, b.tags,
-        //	DATE_FORMAT( b.date, "%d.%m.%Y" ), '12:00:00',
-        //	DATE_FORMAT( cc.start, "%d.%m.%Y" ), DATE_FORMAT(cc.last, "%d.%m.%Y" ),
-        //	cc.every, cc.repeat, cc.week, b.accepted, 0, 0
-        //FROM target_bill b
-        //LEFT JOIN target t ON b.target_id = t.id
-        //LEFT JOIN calendar_chains cc ON cc.id=b.chain_id
-        //WHERE t.user_id = 1 AND o.`date` BETWEEN '2010-02-01' AND '2010-04-01' AND o.chain_id > 0
-
 
         $rows = Core::getInstance()->db->select( $sql, $user->getId(), $start, $end );
 

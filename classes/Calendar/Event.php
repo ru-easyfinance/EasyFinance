@@ -269,6 +269,7 @@ class Calendar_Event {
             'tags'       => $this->getTags(),
             'tr_id'      => $this->model->tr_id,
             'transfer'   => $this->model->transfer,
+            'source'     => $this->model->source,
         );
 
     }
