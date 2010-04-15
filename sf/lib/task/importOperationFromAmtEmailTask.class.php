@@ -39,7 +39,7 @@ class importOperationFromAmtEmailTask extends sfBaseTask
         // From file
         if ($arguments['file']) {
             if (!is_readable($arguments['file'])) {
-                $this->logSection('import', "Error: Failed to read file `{$arguments['file']}`", null, 'ERROR');
+                $this->logSection('import', "Failed to read file `{$arguments['file']}`", null, 'ERROR');
                 return 1;
             }
             $input = file_get_contents($arguments['file']);
@@ -47,14 +47,14 @@ class importOperationFromAmtEmailTask extends sfBaseTask
         // STDIN
         } else {
             $input = '';
-            while($row = fgets(STDIN)) {
+            while ($row = fgets(STDIN)) {
                 $input .= $row;
             }
             $input = trim($input);
         }
 
         if (!$input) {
-            $this->logSection('import', 'Error: Expected not empty input', null, 'ERROR');
+            $this->logging("Expected not empty input", $input);
             return 1;
         }
 
@@ -63,7 +63,7 @@ class importOperationFromAmtEmailTask extends sfBaseTask
             $getEmail = new myParseEmailAmtImport($input);
             $operationData = $getEmail->getAmtData();
         } catch (Exception $e) {
-            $this->logSection('import', $e->getMessage(), null, 'ERROR');
+            $this->logging($e->getMessage(), $input);
             return 2;
         }
 
@@ -76,12 +76,29 @@ class importOperationFromAmtEmailTask extends sfBaseTask
         if ($form->isValid()) {
             $form->save();
         } else {
-            $this->logSection('import', 'Error: '.$form->getErrorSchema(), null, 'ERROR');
+            $this->logging($form->getErrorSchema(), $input);
             return 3;
         }
 
         $this->logSection('import', 'Done');
         return 0;
+    }
+
+
+    /**
+     * Записывает лог
+     *
+     * @param string $message
+     * @param string $input raw mail data
+     * @return void
+     */
+    private function logging ($message, $input)
+    {
+        // Путь к файлу с логами
+        $logPath = sfConfig::get('sf_root_dir') . '/log/amt_mail.'.date('Y-m-d-H-i-s-u').'.log';
+
+        file_put_contents($logPath, 'Error: ' . $message . "\n----\n\n" . $input);
+        $this->logSection('import', 'Error: ' . $message, null, 'ERROR');
     }
 
 }
