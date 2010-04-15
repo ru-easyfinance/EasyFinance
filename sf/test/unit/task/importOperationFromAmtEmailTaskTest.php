@@ -1,47 +1,57 @@
 <?php
 require_once dirname(__FILE__).'/../../bootstrap/all.php';
 
-
 /**
  * Операции
  */
-class task_ImportOperationFromAmtEmailTastTest extends myUnitTestCase
+class task_importOperationFromAmtEmailTastTest extends myUnitTestCase
 {
+    private $_tmpFile;
+
+    /**
+     * SetUp
+     */
+    protected function _start()
+    {
+        $this->_tmpFile = tempnam(sys_get_temp_dir(), __CLASS__);
+    }
+
+
+    /**
+     * TearDown
+     */
+    protected function _end()
+    {
+        unlink($this->_tmpFile);
+    }
+
+
     /**
      * Запустить команду и проверить ответ
      *
-     * @param  string $pipeData        - Строка на вход скрипту
-     * @param  string $expectedOputput - Текст на выходе
+     * @param  string $inputData       - Строка на вход скрипту
      * @param  int    $expectedCode    - Код ответа
      * @return void
      */
-    public function checkCmd($pipeData, $expectedOputput, $expectedCode)
+    public function checkCmd($inputData, $expectedCode)
     {
-        $cmd = sfConfig::get('sf_root_dir') . '/symfony api:import-amt-email';
-        exec("echo '{$pipeData}' | {$cmd};", $result, $code);
+        file_put_contents($this->_tmpFile, $inputData);
+        $task = new importOperationFromAmtEmailTask(new sfEventDispatcher, new sfFormatter);
+        $code = $task->run(
+            $args = array('file' => $this->_tmpFile),
+            $options = array('env' => 'test')
+        );
 
-        $this->assertSame($expectedCode, $code, "Expected exit code `{$expectedCode}`");
-        $this->assertContains($expectedOputput, implode(PHP_EOL, $result), 'Output');
+        $this->assertEquals($expectedCode, $code, "Expected exit code `{$expectedCode}`");
     }
 
 
     /**
-     * Инициализация таска
+     * Ошибка: пустой input
      */
-    public function testTaskInitialize()
+    public function testErrorEmptyInput()
     {
-        $task = new apiImportOperationFromAmtEmailTask(new sfEventDispatcher, new sfFormatter);
-        $this->assertEquals('api', $task->getNamespace());
-        $this->assertEquals('import-amt-email', $task->getName());
-    }
-
-
-    /**
-     * Ошибка: пустой STDIN
-     */
-    public function testErrorStdinEmpty()
-    {
-        $this->checkCmd($input = null, $out = 'Expected STDIN data', $code = 1);
+        $this->checkCmd(null, $code = 1);
     }
 
 
@@ -50,7 +60,7 @@ class task_ImportOperationFromAmtEmailTastTest extends myUnitTestCase
      */
     public function testErrorFormValidation()
     {
-        $this->checkCmd($input = 'Some data', $out = 'Required', $code = 2);
+        $this->checkCmd('Some Data', $code = 2);
     }
 
 
@@ -59,11 +69,10 @@ class task_ImportOperationFromAmtEmailTastTest extends myUnitTestCase
      */
     public function testOk()
     {
-        $this->markTestIncomplete();
-
         // Подготовить письмо
         $user = $this->helper->makeUser();
         $input = array(
+            'id'          => $this->helper->makeText('ABC123', false), // уникальный id в пределах источника
             'email'       => $user->getUserServiceMail(),
             'type'        => Operation::TYPE_PROFIT,
             'account'     => $this->helper->makeText('Номер счета', false),
@@ -73,14 +82,16 @@ class task_ImportOperationFromAmtEmailTastTest extends myUnitTestCase
             'place'       => $this->helper->makeText('Место совершения операции', false),
             'balance'     => '23456.04',
         );
+
         $date = new DateTime($input['timestamp']);
         $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        // Письмо
-        $email = 1;
 
+        // Письмо
+        $email = new myCreateEmailAmtImport($input);
+        $email->useAddPart();
 
         // Импорт
-        $this->checkCmd($email, $out = 'Done', $code = 0);
+        $this->checkCmd((string)$email, $code = 0);
 
         // Залезть в БД и проверть операцию
         $expected = array(
