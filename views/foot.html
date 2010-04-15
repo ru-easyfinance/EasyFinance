@@ -53,82 +53,85 @@
             </div>
             <a class="btnHelp">помощь</a>
         </div>
-        <!--/popup оставить отзыв-->
 
-        <div id="footer" style="z-index: 1; height: auto; padding-bottom: 20px;">
-                {if count($seotext)}
-                    {php}
-                        $seotext = $this->get_template_vars('seotext');
-                        // для отладки $seotext = array(array('1 sdhfsd hksdf sdjkhfskd k', '2 sd fjkhs khsdjkf hskdfh kdfsd khskdkf sdkfh', '3 s djfh skjhsd hfkskdf hskdkfhskdf jskhkfhsdk hfks hfhkhf kjhsd kfhskfh skhfdf sjk hfkjhsjksdhf'));
-                        $str = '';
-                        $columns = 3;
-                        $cnt = count($seotext);
-                        $parsed = 0;
+		<div id="footer" style="z-index: 1">
+			<div id='dialog_rating'></div>
+			<!--/popup оставить отзыв-->
 
-                        //we are going to set a new variables called $rows
-                        $rows = ceil($cnt / $columns);
+			{if count($seotext)}                
+				{php}
+					$seotext = $this->get_template_vars('seotext');
+					// для отладки 
+					$seotext = array(array('1 sdhfsd hksdf sdjkhfskd k', '2 sd fjkhs khsdjkf hskdfh kdfsd khskdkf sdkfh', '3 s djfh skjhsd hfkskdf hskdkfhskdf jskhkfhsdk hfks hfhkhf kjhsd kfhskfh skhfdf sjk hfkjhsjksdhf'));
+					$str = '';
+					$columns = 3;
+					$cnt = count($seotext);
+					$parsed = 0;
 
-                        for($i = 0; $i < $columns; $i++) {
-                            $str = $str . '<li class="footerTextsColumn">';
+					//we are going to set a new variables called $rows
+					$rows = ceil($cnt / $columns);
 
-                            $row = 0;
-                            while ($cnt > (($columns-$i-1)*$row)) {
-                                if (isset($seotext[$parsed])) {
-                                    $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
-                                    $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
-                                    $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
+					for($i = 0; $i < $columns; $i++) {
+						$str = $str . '<li class="footerTextsColumn">';
 
-                                    $parsed++;
-                                    $row++;
-                                }
+						$row = 0;
+						while ($cnt > (($columns-$i-1)*$row)) {
+							if (isset($seotext[$parsed])) {
+								$str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
+								$str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
+								$str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
 
-                                $cnt--;
-                            }
+								$parsed++;
+								$row++;
+							}
 
-                            $cnt--;
-                        }
+							$cnt--;
+						}
 
-                        $str = $str . '</li>';
+						$cnt--;
+					}
 
-						$this->assign('seoHTML', $str);
-					{/php}
-				{/if}
-            <ul class="footerTextsArea">{$seoHTML}</ul>
+					$str = $str . '</li>';
 
-            <div style="position: relative; clear: both; border-top: 1px solid rgb(224, 227, 222);">
-                <div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
+					$this->assign('seoHTML', $str);
+				{/php}
+			{/if}
+			
+			<ul class="footerTextsArea">{$seoHTML}</ul>
 
-                <dfn>© 2009-2010 EasyFinance</dfn>
-                <ul class="contacts">
-                    <li><a href="/rules/">Правила использования</a></li>
-                    <li><a href="/about/">О компании</a></li>
-                    <li><a href="/security/">Безопасность</a></li>
-                    <li class="tel tel1">Телефон:  +7 (495) 971-00-52</li>
-                    <li class="tel tel2">Клиентская служба:  <a href="mailto:service@easyfinance.ru">service@easyfinance.ru</a></li>
-                    <li class="tel tel3">Техническая поддержка:  <a href="mailto:support@easyfinance.ru">support@easyfinance.ru</a></li>
-                    <li class="icq">ICQ: 562-487-015</li>
-                    <li class="skype">Skype:  <a href="skype:easyfinance.ru?chat">easyfinance.ru</a></li>
+			<div style="position: relative; clear: both; border-top: 1px solid rgb(224, 227, 222);">
+				<div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
+
+				<dfn>© 2009-2010 EasyFinance</dfn>
+				<ul class="contacts">
+					<li><a href="/rules/">Правила использования</a></li>
+					<li><a href="/about/">О компании</a></li>
+					<li><a href="/security/">Безопасность</a></li>
+					<li class="tel tel1">Телефон:  +7 (495) 971-00-52</li>					
+                    <li class="tel tel2">Поддержка пользователей:  <a id="footerAddMessage" href="#">оставить заявку</a></li>
+                    <li class="tel tel3">или отправить на почту <a href="mailto:helpdesk@easyfinance.ru">helpdesk@easyfinance.ru</a></li>
                     <li class="twitter">Twitter:  <a href="http://twitter.com/easyfinanceru">easyfinanceru</a></li>
-                </ul>
-                <a href="http://notamedia.ru/" target="_blank"><div class="creator" tooltip="linkalert-tip">дизайн сайта<br/>Нотамедиа 2009</div></a>
-                <!--popup оставить отзыв-->
-            </div>
+                    <li class="partners">Работа с партнёрами: <br><a href="mailto:partners@easyfinance.ru">partners@easyfinance.ru</a></li>
+				</ul>
+				<a href="http://notamedia.ru/" target="_blank"><div class="creator" tooltip="linkalert-tip">дизайн сайта<br/>Нотамедиа 2009</div></a>
+				<!--popup оставить отзыв-->
+			</div>
 
-            <div id='dialog_rating'></div>
-            <!--/popup оставить отзыв-->
+			<div id='dialog_rating'></div>
+			<!--/popup оставить отзыв-->
 
-            {literal}
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        //toggle long footer text
-                        $("#footer a.footerTextToggler").click(function() {
-                            $(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
-                            $(this).parent().next('div').slideToggle("fast");
-                            return false;
-                        });
-                    });
-                </script>
-            {/literal}
+			{literal}
+				<script type="text/javascript">
+					$(document).ready(function() {
+						//toggle long footer text
+						$("#footer a.footerTextToggler").click(function() {
+							$(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
+							$(this).parent().next('div').slideToggle("fast");
+							return false;
+						});
+					});
+				</script>
+			{/literal}
         </div>
                 
         <!--/подвал-->

@@ -1375,10 +1375,11 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
 #footer ul.contacts { position: absolute; top: 12px; left: 217px; }
 #footer ul.contacts li { margin-bottom: 1px; }
-#footer ul.contacts li.icq, #footer ul.contacts li.skype, #footer ul.contacts li.twitter { position: absolute; left: 538px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
+#footer ul.contacts li.partners, #footer ul.contacts li.icq, #footer ul.contacts li.skype, #footer ul.contacts li.twitter { position: absolute; left: 538px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
+#footer ul.contacts li.twitter { top: -1px; background-position: 0px -160px; }
+#footer ul.contacts li.partners { top: 16px; background: none; padding: 1px; }
 #footer ul.contacts li.icq { top: -1px; background-position: 0 -30px; }
 #footer ul.contacts li.skype { top: 16px; background-position: 0 -60px; }
-#footer ul.contacts li.twitter { top: 32px; background-position: 0px -160px; }
 #footer .search { position: absolute; top: 16px; right: 0; width: 215px; }
 #footer .search input.inp{ display: block; width: 191px; padding: 0 0 0 12px; margin-bottom: 1px; font-size: 11px; color: #a7a7a7; }
 #footer .search input.but{ display: block; position: absolute; top: 0; right: 5px; width: 17px; height: 19px; text-indent: -999px; overflow: hidden; cursor: pointer; background: url('/img/i/icons.gif') no-repeat 5px 3px; }
