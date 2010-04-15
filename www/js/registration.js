@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var registrationCanClick = true;
+
     var hash = window.location.hash;
     if (!hash) {hash = '';}
     //////////////////////////////////////////////////////////////////////
@@ -84,11 +86,21 @@ $(document).ready(function() {
              * пересылка данных из формы на сервер
              */
             $('#butt').click(function(){
+                if (registrationCanClick == false) {
+                    // запрос уже в процессе выполнения
+                    return false;
+                }
+
+                if ($("#mail").val() != $("#mail_confirm").val()) {
+                    $.jGrowl('Введённые Вами E-Mail адреса должны совпадать!',{theme:'red', stick: true});
+                    return false;
+                }
+
                 if ($("#formRegister").valid()) {
-                    //$.jGrowl('Спасибо, Ваш запрос о регистрации отправлен',{theme:'green'});
                     // изменил вывод сообщений, см. тикет #1128
                     $("#lblRegisrationStatus").removeClass("hidden");
-                    
+                    registrationCanClick = false;
+
                     $.post(
                         "/registration/new_user/?responseMode=json",
                         {
@@ -99,6 +111,8 @@ $(document).ready(function() {
                             mail: $('#mail').val()
                         },
                         function (data){
+                            registrationCanClick = true;
+
                             if (data) {
                                 if (data.error) {
                                     if (data.error.text)
