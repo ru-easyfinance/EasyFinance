@@ -809,7 +809,7 @@ class Operation_Model {
 		// Выборка операций пользователя
 		$sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
 			o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create 
+			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create, o.source_id AS source
 			FROM operation o 
 			WHERE o.user_id = " . Core::getInstance()->user->getId();
 		
@@ -871,7 +871,7 @@ class Operation_Model {
 		//Присоединение переводов на фин цель
 		$sql .= " UNION 
 			SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id, 
-			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create 
+			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create, ''
 			FROM target_bill t 
 			LEFT JOIN target tt ON t.target_id=tt.id 
 			WHERE t.user_id = " . Core::getInstance()->user->getId() 

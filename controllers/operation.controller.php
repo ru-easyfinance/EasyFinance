@@ -530,107 +530,107 @@ class Operation_Controller extends _Core_Controller_UserCommon
         die(json_encode(array('result'=>array('text'=>'Операция успешно удалена'))));
     }
 
-	/**
-	 * Получить список операций
-	 */
-	function listOperations($args)
-	{		
-		// Дата начала
-		$dateFrom   = isset($this->request->get['dateFrom'])?
-					Helper_Date::getMysqlFromString($this->request->get['dateFrom']):
-					// Если дата не установлена - показываем за последнюю неделю
-					Helper_Date::getMysql( time() - (7*24*60*60) );
-		
-		// Костылёк для PDA
-		if( isset($this->request->get['period']))
-		{
-			switch ( $this->request->get['period'] )
-			{
-				case 'month':
-					$dateFrom = Helper_Date::getMysql( time() - (30*24*60*60) );
-					break;
-				case 'day':
-					$dateFrom = Helper_Date::getMysql( time() - (1*24*60*60) );
-					break;
-				case 'week':
-					$dateFrom = Helper_Date::getMysql( time() - (7*24*60*60) );
-			}
-			
-			$this->tpl->assign('period', $this->request->get['period']);
-		}
-		else
-		{
-			$this->tpl->assign('period', 'week');
-		}
-		
-		
-		
-		// Дата окончания
-		$dateTo     = isset($this->request->get['dateTo'])?
-					Helper_Date::getMysqlFromString($this->request->get['dateTo']):
-					Helper_Date::getMysql( time() );
-		
-		// Категория
-		$category   = isset($this->request->get['category'])?(int)$this->request->get['category']:0;
-		
-		// Счёт
-		$account    = isset($this->request->get['account'])?(int)$this->request->get['account']:0;
-		$this->tpl->assign( 'accountId' , $account);
-		
-		//Тип операции
-		$type = null;
-		if ( !isset($this->request->get['type']) )
-		{
-			// WTF ?!!
-			$type = -1;
-		}
-		else
-		{
-			$type = $this->request->get['type'];
-		}
-		
-		// Показывать операции на сумму не меньше ..
-		$sumFrom = null;
-		if ( isset($this->request->get['sumFrom']) && $this->request->get['sumFrom'] )
-		{
-			$sumFrom = (float)$this->request->get['sumFrom'];
-		}
-		
-		// Показывать операции на сумму не больше ..
-		$sumTo = null;
-		if ( isset($this->request->get['sumTo']) && $this->request->get['sumTo'] )
-		{
-			$sumTo = (float)$this->request->get['sumTo'];
-		}
-		
-		$list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo);
-        
-		if( !$list )
-		{
-			$list = array();
-		}
-		
-		// Привет кэп !
-		$array = array();
+    /**
+     * Получить список операций
+     */
+    function listOperations($args)
+    {
+        // Дата начала
+        $dateFrom   = isset($this->request->get['dateFrom'])?
+                    Helper_Date::getMysqlFromString($this->request->get['dateFrom']):
+                    // Если дата не установлена - показываем за последнюю неделю
+                    Helper_Date::getMysql( time() - (7*24*60*60) );
+
+        // Костылёк для PDA
+        if( isset($this->request->get['period']))
+        {
+            switch ( $this->request->get['period'] )
+            {
+                case 'month':
+                    $dateFrom = Helper_Date::getMysql( time() - (30*24*60*60) );
+                    break;
+                case 'day':
+                    $dateFrom = Helper_Date::getMysql( time() - (1*24*60*60) );
+                    break;
+                case 'week':
+                    $dateFrom = Helper_Date::getMysql( time() - (7*24*60*60) );
+            }
+
+            $this->tpl->assign('period', $this->request->get['period']);
+        }
+        else
+        {
+            $this->tpl->assign('period', 'week');
+        }
+
+
+
+        // Дата окончания
+        $dateTo     = isset($this->request->get['dateTo'])?
+                    Helper_Date::getMysqlFromString($this->request->get['dateTo']):
+                    Helper_Date::getMysql( time() );
+
+        // Категория
+        $category   = isset($this->request->get['category'])?(int)$this->request->get['category']:0;
+
+        // Счёт
+        $account    = isset($this->request->get['account'])?(int)$this->request->get['account']:0;
+        $this->tpl->assign( 'accountId' , $account);
+
+        //Тип операции
+        $type = null;
+        if ( !isset($this->request->get['type']) )
+        {
+            // WTF ?!!
+            $type = -1;
+        }
+        else
+        {
+            $type = $this->request->get['type'];
+        }
+
+        // Показывать операции на сумму не меньше ..
+        $sumFrom = null;
+        if ( isset($this->request->get['sumFrom']) && $this->request->get['sumFrom'] )
+        {
+            $sumFrom = (float)$this->request->get['sumFrom'];
+        }
+
+        // Показывать операции на сумму не больше ..
+        $sumTo = null;
+        if ( isset($this->request->get['sumTo']) && $this->request->get['sumTo'] )
+        {
+            $sumTo = (float)$this->request->get['sumTo'];
+        }
+
+        $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo);
+
+        if( !$list )
+        {
+            $list = array();
+        }
+
+        // Привет кэп !
+        $array = array();
 
                 // Составляем список операций
-		foreach ($list as $key => $operation)
-		{
-			
-			if (!is_null($operation['account_name']))
-			{
-				$array[$key] = $operation;
-			}
-			else
-			{
-				$array[$key] = $operation;
-				$array[$key]['account_name'] = '';
-			}
-		}
-		$this->tpl->assign('name_page', 'operations/operation');
-		
-		$this->tpl->assign( 'operations', $array );
-	}
+        foreach ($list as $key => $operation)
+        {
+
+            if (!is_null($operation['account_name']))
+            {
+                $array[$key] = $operation;
+            }
+            else
+            {
+                $array[$key] = $operation;
+                $array[$key]['account_name'] = '';
+            }
+        }
+        $this->tpl->assign('name_page', 'operations/operation');
+
+        $this->tpl->assign( 'operations', $array );
+    }
 
     /**
      * Возвращает валюту пользователя
