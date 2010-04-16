@@ -97,7 +97,7 @@
             </not>
             <then>
                 <mkdir dir="${project.shared.dir}"/>
-                <exec command="chown -R ${project.user} ." dir="${project.shared.dir}" />
+                <exec command="chown -R ${project.user} ${project.shared.dir}" />
             </then>
         </if>
         <if>
@@ -111,11 +111,11 @@
         </if>
         <if>
             <not>
-                <available file="${project.basedir}/www/upload" type="dir" />
+                <available file="${project.basedir}/www/upload" />
             </not>
             <then>
                 <exec command="ln -s ${project.shared.dir}/uploaded ${project.basedir}/www/upload"
-                    dir="${project.shared.dir}" checkreturn="true" />
+                checkreturn="true" />
             </then>
         </if>
 

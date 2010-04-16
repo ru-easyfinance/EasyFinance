@@ -120,8 +120,13 @@
             <format property="build.time" pattern="%Y%m%d%H%I" />
         </tstamp>
 
+        <!-- Приводим имена директорий в нижний регистр -->
+        <php function="strtolower" returnProperty="strlowerpath">
+            <param value="${project.git.rev}"/>
+        </php>
+
         <!-- Копируем BASEDIR директорию в дирректорию для сборки -->
-        <copy todir="${project.path.deploy}/releases/tags/${project.git.rev}" >
+        <copy todir="${project.path.deploy}/releases/tags/${strlowerpath}" >
             <fileset dir=".">
                 <exclude name=".git/**" />
                 <exclude name="**/.git/**" />
@@ -130,10 +135,10 @@
         </copy>
 
         <!-- Создаём симлинк на текущую дирректорию-->
-        <echo>Link branch '${project.git.rev}' to current...</echo>
+        <echo>Link branch '${strlowerpath}' to current...</echo>
         <exec command="rm -f current"
             dir="${project.path.deploy}/releases" />
-        <exec command="ln -s ${project.path.deploy}/releases/tags/${project.git.rev} current"
+        <exec command="ln -s ${project.path.deploy}/releases/tags/${strlowerpath} current"
             dir="${project.path.deploy}/releases" checkreturn="true" />
 
         <!-- Перезапускаем (если нужно nginx и php-fpm) -->
