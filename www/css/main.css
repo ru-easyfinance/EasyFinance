@@ -1396,7 +1396,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 
 #footer { position: relative; margin: 0 auto; width: 940px; height: 130px; font-size: 11px;  color: #000000;}
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
-#footer ul.contacts { position: absolute; top: 12px; left: 8px; }
+#footer ul.contacts { position: absolute; top: 12px; left: 8px; padding-bottom: 30px; }
 #footer ul.contacts li { margin-bottom: 1px; }
 
 #footer p{margin: 0}
@@ -1433,8 +1433,8 @@ div.w_dialog .text{top:5px; width:250px; max-width: 250px; padding-right: 107px;
 
 
 #p_index #header { height: 130px; }
-#p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
-#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 13px; width: 200px;}
+#p_index #footer { height: auto; border-top: 1px solid #e0e3de; }
+#p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 13px; width: 134px;}
 
 span.tagMatches {
     margin-left: 10px;

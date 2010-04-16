@@ -55,45 +55,44 @@
         </div>
         <!--/popup оставить отзыв-->
 
-        <div id="footer" style="z-index: 1">
-            <div id='dialog_rating'></div>
-            <!--/popup оставить отзыв-->
+        <div id="footer" style="z-index: 1; height: auto; padding-bottom: 20px;">
+                {if count($seotext)}
+                    {php}
+                        $seotext = $this->get_template_vars('seotext');
+                        // для отладки $seotext = array(array('1 sdhfsd hksdf sdjkhfskd k', '2 sd fjkhs khsdjkf hskdfh kdfsd khskdkf sdkfh', '3 s djfh skjhsd hfkskdf hskdkfhskdf jskhkfhsdk hfks hfhkhf kjhsd kfhskfh skhfdf sjk hfkjhsjksdhf'));
+                        $str = '';
+                        $columns = 3;
+                        $cnt = count($seotext);
+                        $parsed = 0;
 
-            {if count($seotext)}
-                {php}
-                    $seotext = $this->get_template_vars('seotext');
-                    // для отладки $seotext = array(array('1', '2', '3'));
-                    $str = '';
-                    $columns = 3;
-                    $cnt = count($seotext);
-                    $parsed = 0;
+                        //we are going to set a new variables called $rows
+                        $rows = ceil($cnt / $columns);
 
-                    //we are going to set a new variables called $rows
-                    $rows = ceil($cnt / $columns);
+                        for($i = 0; $i < $columns; $i++) {
+                            $str = $str . '<li class="footerTextsColumn">';
 
-                    for($i = 0; $i < $columns; $i++) {
-                        $str = $str . '<li class="footerTextsColumn">';
+                            $row = 0;
+                            while ($cnt > (($columns-$i-1)*$row)) {
+                                if (isset($seotext[$parsed])) {
+                                    $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
+                                    $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
+                                    $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
 
-                        $row = 0;
-                        while ($cnt > (($columns-$i-1)*$row)) {
-                            if (isset($seotext[$parsed])) {
-                                $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
-                                $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
-                                $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
+                                    $parsed++;
+                                    $row++;
+                                }
 
-                                $parsed++;
-                                $row++;
+                                $cnt--;
                             }
 
                             $cnt--;
                         }
 
                         $str = $str . '</li>';
-                    }
 
-                    $this->assign('seoHTML', $str);
-                {/php}
-            {/if}
+						$this->assign('seoHTML', $str);
+					{/php}
+				{/if}
             <ul class="footerTextsArea">{$seoHTML}</ul>
 
             <div style="position: relative; clear: both; border-top: 1px solid rgb(224, 227, 222);">
