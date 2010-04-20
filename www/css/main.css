@@ -767,7 +767,7 @@ ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px;
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
 
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 20px; width: 380px; }
-#div_op_first_line { width: 345px; margin-bottom: 2px; }
+#div_op_first_line { width: 345px; margin-bottom: 2px; height:40px; }
 #div_op_transfer_line { margin-top:12px; margin-bottom:2px; width:345px; }
 
 #div_op_account { position: relative; width: 200px; }
