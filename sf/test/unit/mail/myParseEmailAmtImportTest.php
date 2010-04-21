@@ -20,6 +20,7 @@ class mail_myParseEmailAmtImportTest extends PHPUnit_Framework_TestCase
             'account'     => '4123',
             'timestamp'   => '2005-08-15T15:52:01+0000',
             'amount'      => '5000.00',
+            'payment'     => '2 500.00 USD',
             'description' => 'описание операции (Снятие наличных/Платеж)',
             'place'       => 'KHAZAKHSTAN OSTANA BGG',
             'balance'     => '100000.20'
@@ -42,13 +43,21 @@ class mail_myParseEmailAmtImportTest extends PHPUnit_Framework_TestCase
     /**
      * Подсовываем почту с вложением, вместо альтернативного текста, выкидывает исключение
      */
-    public function testFail ()
+    public function testAttachment ()
     {
-        $email = new myCreateEmailAmtImport($this->_getData());
+        $email = new myCreateEmailAmtImport($data = $this->_getData());
         $email->useAttachment();
 
-        $this->setExpectedException('Exception', 'not found');
         $getEmail = new myParseEmailAmtImport((string)$email);
+        $this->assertEquals($data, $getEmail->getAmtData());
+    }
+
+    public function testFail ()
+    {
+        $email = new myCreateEmailAmtImport($data = $this->_getData());
+        $getEmail = new myParseEmailAmtImport((string)$email);
+        
+        $this->setExpectedException('Exception');
         $getEmail->getAmtData();
     }
 

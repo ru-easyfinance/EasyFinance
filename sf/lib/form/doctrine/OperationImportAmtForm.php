@@ -21,6 +21,7 @@ class OperationImportAmtForm extends BaseFormDoctrine
             'type'        => new sfValidatorChoice(array('choices' => array(Operation::TYPE_PROFIT, Operation::TYPE_EXPENSE))),
             'timestamp'   => new sfValidatorDateTime(),
             'amount'      => new sfValidatorNumber(),
+            'payment'     => new sfValidatorString(array('required' => false)),
             'description' => new sfValidatorString(),
             'account'     => new sfValidatorString(array('required' => false)),
             'place'       => new sfValidatorString(array('required' => false)),
@@ -103,10 +104,8 @@ class OperationImportAmtForm extends BaseFormDoctrine
         $values['time'] = $date->format('H:i:s');
         unset($values['timestamp']);
 
-
         // Черновик
         $values['accepted'] = Operation::STATUS_DRAFT;
-
 
         // Источник
         $values['source_id'] = Operation::SOURCE_AMT;
@@ -116,12 +115,16 @@ class OperationImportAmtForm extends BaseFormDoctrine
         );
         unset($values['id']);
 
-
         // Комментарий
         $values['comment'] = sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s",
             $values['description'], $values['account'], $values['place'], $values['balance']);
         unset($values['description'], $values['account'], $values['place'], $values['balance']);
 
+        // Если указана сумма платежа
+        if (isset($values['payment']) && ! empty($values['payment'])) {
+            $values['comment'] .= "\nСумма платежа: " . $values['payment'];
+            unset ($values['payment']);
+        }
 
         return $values;
     }

@@ -78,6 +78,7 @@ class task_importOperationFromAmtEmailTastTest extends myUnitTestCase
             'account'     => $this->helper->makeText('Номер счета', false),
             'timestamp'   => '2005-08-15T15:52:01+000',
             'amount'      => '1234.56',
+            'payment'     => '231 234.34 RUR',
             'description' => $this->helper->makeText(' Комментарий', false),
             'place'       => $this->helper->makeText('Место совершения операции', false),
             'balance'     => '23456.04',

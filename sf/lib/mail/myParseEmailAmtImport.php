@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Класс для парсинга почты и возврата её содержимого в массиве
+ * Класс для парсинга почты из строки и возврата её содержимого в виде массива
  */
 class myParseEmailAmtImport
 {
@@ -53,6 +53,13 @@ class myParseEmailAmtImport
             'place'       => (string) $simpleXml->place,
             'balance'     => (string) $simpleXml->balance
         );
+
+        // Если указана сумма платежа, то добавляем её тоже
+        if (isset($simpleXml->payment)) {
+            $operationData['payment'] = (string) $simpleXml->payment;
+        } else {
+            $operationData['payment'] = '';
+        }
 
         return $operationData;
     }

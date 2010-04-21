@@ -61,7 +61,7 @@ class myCreateEmailAmtImport
             'amount'=>'',
             'description'=>'',
             'place'=>'',
-            'balance'=>''
+            'balance'=>'',
         );
 
         $diff = array_diff_key($expected, $args);
@@ -85,6 +85,8 @@ class myCreateEmailAmtImport
                 "<account>{$this->_args['account']}</account>".
                 "<timestamp>{$this->_args['timestamp']}</timestamp>".
                 "<amount>{$this->_args['amount']}</amount>".
+                (isset($this->_args['payment']) ?
+                     "<payment>{$this->_args['payment']}</payment>" : "").
                 "<description>{$this->_args['description']}</description>".
                 "<place>{$this->_args['place']}</place>".
                 "<balance>{$this->_args['balance']}</balance>".
@@ -99,24 +101,24 @@ class myCreateEmailAmtImport
     {
         if ( (int)$this->_args['type'] === 0 ) {
             $subj = 'АМТ банк: списание средств';
-
-            $body = "АМТ банк: Списание средств: {$this->_args['amount']};".
-            " со счёта: {$this->_args['account']};\n".
-                "операция: {$this->_args['place']}; дата: ".
-                    $this->_args['timestamp'] .";\n".
-                "доступный остаток: {$this->_args['balance']};";
+            $body = "АМТ банк: Списание средств: {$this->_args['amount']};";
         } else {
             $subj = 'АМТ банк: внесение средств';
-
-            $body = "АМТ банк: Внесение средств: {$this->_args['amount']};".
-                " со счёта: {$this->_args['account']};\n".
-                "операция: {$this->_args['place']}; дата: ".
-                    $this->_args['timestamp'] .";\n".
-                "доступный остаток: {$this->_args['balance']};";
+            $body = "АМТ банк: Внесение средств: {$this->_args['amount']};";
         }
 
+        $body .= " со счёта: {$this->_args['account']};\n";
+
+        if (isset($this->_args['payment'])) {
+            $body .= "на сумму: {$this->_args['payment']};\n";
+        }
+        
+        $body .= "операция: {$this->_args['place']}; дата: ".
+                    $this->_args['timestamp'] .";\n".
+                "доступный остаток: {$this->_args['balance']};";
+
         $this->_message->setSubject($subj)
-            ->setTo('some.user@example.org')
+            ->setTo('some.user@mail.easyfinance.ru')
             ->setBody($body, 'text/plain');
     }
 
