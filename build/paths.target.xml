@@ -48,6 +48,7 @@
         </if>
         <mkdir dir="${project.basedir}/tmp/smarty/cache" />
         <mkdir dir="${project.basedir}/tmp/smarty/views" />
+        <mkdir dir="${project.basedir}/build/logs" />
         <if>
             <not>
                 <available file="${project.basedir}/tmp/nginx_cache" type="dir" />

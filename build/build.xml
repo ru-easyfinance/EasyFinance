@@ -152,6 +152,14 @@
         </if>
     </target>
 
+
+    <!-- Тесты -->
+    <target name="phpunit" depends="Configuration prepare">
+        <echo msg="PHP Unit..." />
+        <exec command="phpunit --log-junit ${project.basedir}/build/logs/phpunit.xml ${project.basedir}/sf/test/AllTests.php"/>
+    </target>
+
+
     <!-- Делаем бекап -->
     <target name="backup" depends="Configuration prepare">
         <tstamp>
