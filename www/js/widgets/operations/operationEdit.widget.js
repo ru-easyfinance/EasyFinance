@@ -619,8 +619,9 @@ easyFinance.widgets.operationEdit = function(){
         var opType = $("#op_type option:selected").val();
 
         // при добавлении обычной операции
+		// или при подтверждении планируемой
         // проверяем заполнение всех полей
-        if (!_isCalendar) {
+        if (!_isCalendar || $('#op_accepted').val() == "1") {
             if (_selectedAccount == ''){
                 $.jGrowl('Вы ввели неверное значение в поле "счёт"!', {theme: 'red', stick: true});
                 return false;
@@ -628,7 +629,7 @@ easyFinance.widgets.operationEdit = function(){
 
             if (opType == "0" || opType == "1") {
                 // для доходов и расходов
-                if (_selectedCategory == '' || _selectedCategory == '-1') {
+                if (_selectedCategory == '' || _selectedCategory == '-1' || _selectedCategory == "0") {
                         $.jGrowl('Выберите категорию!', {theme: 'red', stick: true});
                         return false;
                 }
@@ -919,6 +920,10 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setType(id){
+		if (id == "0") {
+			return;
+		}
+	
         _selectedType = id;
         _changeOperationType();
         if (_$ufdType) {
@@ -927,6 +932,10 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setAccount(id){
+		if (id == "0") {
+			return;
+		}
+	
         _selectedAccount = id;
         _changeAccountForTransfer();
         if (_$ufdAccount) {
@@ -935,6 +944,10 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setCategory(id){
+		if (id == "0") {
+			return;
+		}
+	
         _selectedCategory = id;
         if (_$ufdCategory) {
             _$ufdCategory.selectOptions(id, true).ufd("changeOptions");
@@ -942,6 +955,10 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setTransfer(id){
+		if (id == "0") {
+			return;
+		}
+	
         _selectedTransfer = id;
         _changeAccountForTransfer();
         if (_$ufdTransfer) {
@@ -950,6 +967,10 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setTarget(id){
+		if (id == "0") {
+			return;
+		}
+	
         _selectedTarget = id;
         if (_$ufdTarget) {
             _$ufdTarget.selectOptions(id, true).ufd("changeOptions");
