@@ -1,6 +1,7 @@
 
 /tmp/
 /build/properties/config.conf
+/build/logs/
 /include/config.php
 /www/upload
 /www/css/global-min.css
