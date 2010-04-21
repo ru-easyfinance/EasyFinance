@@ -62,7 +62,7 @@ function getClientPlugins(){
         //отправление сообщения
         $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){            
             if (noClick){
-                return;
+                return false;
             }
 
             var feedback = getClientDisplayMods();
@@ -89,35 +89,37 @@ function getClientPlugins(){
             // просто закрываем окно в случае успешной отправки
             //
             //noClick = true;
-            //$.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
+            $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
             $('#popupreport').hide();
             
             feedback.msg = $('#footer #ffmes').val();
             feedback.title = $('#footer #ftheme').val();
-            
+			
             $.post(
                 '/feedback/add_message/?responseMode=json',
                 feedback,
                 function(data){
-                    $.jGrowl('Ваше сообщение отправлено!', {theme: 'green'});
                     noClick = false;
-
+					
                     if (data.error){
                         if (data.error.text) {
                             $.jGrowl(data.error.text, {theme: 'red'});
                         }
                     } else if (data.result){
-                        $('#footer input').val('');
+						// #1201 очищаем поля темы и сообщения
+						$('#footer #ffmes').val('');
+						$('#footer #ftheme').val('');
                         $('#footer .f_field label').show();
-                        $('#footer .f_field textarea').val('');
                         $('#footer #popupreport').hide();
 
                         if (data.result.text) {
                             $.jGrowl(data.result.text, {theme: 'green'});
                         }
                     }
-                }
-            );
+                }, "json"
+			);
+			
+			return false;
         });
       })();
 });
