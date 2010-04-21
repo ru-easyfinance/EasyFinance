@@ -966,10 +966,13 @@ class Operation_Model {
 
 			if ( $operation['transfer'] )
 			{
-				$operation['cat_name'] = "Отправлено со счёта ";
+                $operation['cat_name'] = "Отправлено на счёт '" 
+                    . $accounts[$operation['transfer']]['account_name']."'";
+                
 				if ($operation['tr_id'])
 				{
-					$operation['cat_name'] = "Пришло на счёт ";
+                    $operation['cat_name'] = "Отправлено со счёта '"
+                        . $accounts[$operation['transfer']]['account_name']."'";
 				}
 			}
 			
