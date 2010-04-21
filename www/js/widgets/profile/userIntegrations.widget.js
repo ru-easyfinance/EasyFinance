@@ -28,12 +28,16 @@ easyFinance.widgets.userIntegrations = function(model){
 	function init(){
 		_node = $('#integration.profile');
 		_node.find('#btnGetIntegrationEmail').click(function(){
+			$(this).attr("disabled", "disabled");
+		
 			_hideError();
 			if (typeof(_data.email) != 'string') {//special for super hackers =)) or not worked load(js-error or other bug)
 
 				var email = (_node.find('#txtIntegrationEmail').val() || '') + '@mail.easyfinance.ru';
 				if (_validEmail(email)) {
 					_model.setIntegrationEmail(email, function(data){
+						$('#btnGetIntegrationEmail').removeAttr('disabled');
+					
 						if (data && data.result) {
 							$.jGrowl(data.result.text, {
 								theme: 'green'
@@ -53,10 +57,16 @@ easyFinance.widgets.userIntegrations = function(model){
 				}
 			}
 		});
+
 		_node.find('#btnIntegrationEmailRemove').click(function(){
-			if (typeof(_data.email) == 'string' && confirm('Без email интеграция работать не будет.\nВсе равно удалить?')) {//special for super hackers =)) or not worked load(js-error or other bug)
+			if (typeof(_data.email) == 'string' && confirm('Без email интеграция работать не будет.\nВсе равно удалить?')) 
+				$(this).attr("disabled", "disabled");
+			
+				{//special for super hackers =)) or not worked load(js-error or other bug)
 
 				_model.removeIntegrationEmail(function(data){// @todo
+					$('#btnIntegrationEmailRemove').removeAttr('disabled');
+				
 					if (data && data.result) {
 						delete _data.email;
 						_print();

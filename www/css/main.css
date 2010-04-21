@@ -14,7 +14,7 @@ img.preload {display: none;}
 	border: none;
 	width:20px;
 	height:20px;
-	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
+	background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
  }
 .noTextDecoration {text-decoration: none;}
 
@@ -298,7 +298,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 
 
-#aboutproject { margin-bottom: 33px; }
+#aboutproject { margin-bottom: 0px; }
 #aboutproject .inside { position: relative; height: 132px; font-size: 11px; line-height: 17px; color: #404040; background: url('/img/i/bg03.png') no-repeat 317px 5px; }
 #aboutproject .inside div { position: absolute; top: 4px; width: 176px; height: 132px; padding-left: 94px; overflow: hidden; background: url('/img/i/bg02.jpg') no-repeat 0 0; }
 
@@ -767,11 +767,11 @@ ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px;
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
 
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 20px; width: 380px; }
-#div_op_first_line { width: 345px; margin-bottom: 2px; }
+#div_op_first_line { width: 345px; margin-bottom: 2px; height:40px; }
 #div_op_transfer_line { margin-top:12px; margin-bottom:2px; width:345px; }
 
 #div_op_account { position: relative; width: 200px; }
-#div_op_account_select { width: 150px; }
+#div_op_account_select { width: 150px; float: left; }
 #div_op_type_select { float: right; width: 144px; }
 div.op_addoperation #div_op_account{position : relative;}
 div.op_addoperation .op_line { position: relative;  color: #4c4c4c; //zoom: 1; }
@@ -870,12 +870,31 @@ div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100p
 div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
-div.op_addoperation .op_line  .op_amount input[type=button],div.op_addoperation #btnCalcSumTransfer[type=button]{
-	margin-left: 2px;
-	padding-top: 2px;
-	border: none;
-	background:transparent url(/img/i/calculator_scientific.png) no-repeat 0 0;
- }
+
+#btnCalcSum, #btnCalcSumTransfer{
+ 	padding-top: 2px;
+	margin-top: 0px;
+ 	border: none;
+	background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	display: inline-block; 
+	position: relative; 
+	left: 0px;
+	cursor: pointer;
+}
+
+#btnCalcSumTransfer {
+	top: 4px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+ #btnCalcSum, #btnCalcSumTransfer {margin-top:2px;}
+ /* хак для правильного позиционирования иконки калькулятора в Safari и Chrome */
+}
+
+
 div.op_addoperation .op_line  .op_amount div,
 div.op_addoperation .op_line  .op_amount div td,
 div.op_addoperation #div_op_transfer_line #div_op_account div,
@@ -1236,7 +1255,7 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupreport .inside .f_field { position: relative; margin-bottom: 11px; }
 #popupreport .inside .f_field textarea { height: 165px;}
 #popupreport .inside .f_field input {width: 281px}
-#popupreport .inside .f_field textarea { padding-left: 9px; width: 282px; font-size: 11px; color: #9e9e9e; }
+#popupreport .inside .f_field textarea { width: 282px; font-size: 11px; color: #9e9e9e; }
 #popupreport .inside .f_field.ffmes label { display: block; position: absolute; top: 3px; left: 11px; font-size: 11px; color: #9e9e9e;  }
 #popupreport .inside .f_field img { display: block; position: absolute; top: 0; left: 161px; }
 #popupreport .inside .f_field input#ffnum { width: 136px; }
@@ -1375,10 +1394,11 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
 #footer ul.contacts { position: absolute; top: 12px; left: 217px; }
 #footer ul.contacts li { margin-bottom: 1px; }
-#footer ul.contacts li.icq, #footer ul.contacts li.skype, #footer ul.contacts li.twitter { position: absolute; left: 538px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
+#footer ul.contacts li.partners, #footer ul.contacts li.icq, #footer ul.contacts li.skype, #footer ul.contacts li.twitter { position: absolute; left: 538px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
+#footer ul.contacts li.twitter { top: -1px; background-position: 0px -160px; }
+#footer ul.contacts li.partners { top: 16px; background: none; padding: 1px; }
 #footer ul.contacts li.icq { top: -1px; background-position: 0 -30px; }
 #footer ul.contacts li.skype { top: 16px; background-position: 0 -60px; }
-#footer ul.contacts li.twitter { top: 32px; background-position: 0px -160px; }
 #footer .search { position: absolute; top: 16px; right: 0; width: 215px; }
 #footer .search input.inp{ display: block; width: 191px; padding: 0 0 0 12px; margin-bottom: 1px; font-size: 11px; color: #a7a7a7; }
 #footer .search input.but{ display: block; position: absolute; top: 0; right: 5px; width: 17px; height: 19px; text-indent: -999px; overflow: hidden; cursor: pointer; background: url('/img/i/icons.gif') no-repeat 5px 3px; }
@@ -1387,7 +1407,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
 #footer .certificate { position: absolute; left: 700px; top: 10px; }
 
-#footer .footerTextsArea { margin: 80px 0px 0px 8px; border-top: 1px solid #E0E3DE; padding-top: 12px; }
+#footer .footerTextsArea { padding: 4px; }
 #footer .footerTextsArea h4 { margin-top: 2px; color: grey; }
 #footer .footerTextsArea li:first-child { margin:0; }
 #footer .footerTextsArea li { float:left; margin: 0 0 0 34px; width: 286px; }
@@ -1396,7 +1416,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 
 #footer { position: relative; margin: 0 auto; width: 940px; height: 130px; font-size: 11px;  color: #000000;}
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
-#footer ul.contacts { position: absolute; top: 12px; left: 8px; }
+#footer ul.contacts { position: absolute; top: 12px; left: 8px; padding-bottom: 30px; }
 #footer ul.contacts li { margin-bottom: 1px; }
 
 #footer p{margin: 0}
@@ -1433,7 +1453,7 @@ div.w_dialog .text{top:5px; width:250px; max-width: 250px; padding-right: 107px;
 
 
 #p_index #header { height: 130px; }
-#p_index #footer { height: 129px; border-top: 1px solid #e0e3de; }
+#p_index #footer { height: auto; border-top: 1px solid #e0e3de; }
 #p_index #footer dfn { position:absolute; text-align:right; right:3px; top:12px; display: block; margin: -1px 0 0 0; padding: 0 0 0 13px; width: 134px;}
 
 span.tagMatches {
@@ -2046,7 +2066,7 @@ div.op_addoperation div.op_line div.amount div.amount_general{
 }
 
 div.op_addoperation input#op_transfer{
-    width: 120px;
+    width: 124px;
 }
 
 div.amount_general {
@@ -2060,7 +2080,7 @@ div.op_addoperation input#op_date{
 div.op_addoperation div.op_line div.amount input#op_amount{
     position : relative;
     float: left;
-    width: 118px;
+    width: 126px;
 }
 div.op_addoperation div.op_line div.amount img{
     position : relative;

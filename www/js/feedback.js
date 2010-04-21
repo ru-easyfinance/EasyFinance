@@ -42,7 +42,7 @@ function getClientPlugins(){
         $('#footer #popupreport').hide();
 
         $('#footer .addmessage').click(function(){
-            $('#footer #popupreport').toggle();
+            $('#popupreport').show();
         });
 
         $('#popupreport .close').click(function(){
@@ -60,24 +60,21 @@ function getClientPlugins(){
             $(this).closest('div').find('label').hide();
         });
         //отправление сообщения
-        $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){
+        $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){            
             if (noClick){
                 return;
             }
-            
 
+            var feedback = getClientDisplayMods();
+            feedback.plugins = getClientPlugins();
+            
+            // Проверяем данные, см. тикет #1127
             if (!$('#footer #ftheme').val() || $('#footer #ftheme').val() == ''){
                 $.jGrowl('Введите тему отзыва!', {theme: 'red'})
-//                noClick = false;
+                noClick = false;
                 return;
             }
 
-            noClick = true;
-            $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
-            var feedback = getClientDisplayMods();
-            feedback.plugins = getClientPlugins();
-            feedback.msg = $('#footer #ffmes').val();
-            feedback.title = $('#footer #ftheme').val();
             if ($('#footer #fmail').length){
                 feedback.email = $('#footer #fmail').val();
                 if (!$('#footer #fmail').val()){
@@ -86,24 +83,41 @@ function getClientPlugins(){
                     return;
                 }
             }
+
+            // см. тикет #1127
+            // вместо блокировки отправки и сообщения
+            // просто закрываем окно в случае успешной отправки
+            //
+            //noClick = true;
+            //$.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
+            $('#popupreport').hide();
+            
+            feedback.msg = $('#footer #ffmes').val();
+            feedback.title = $('#footer #ftheme').val();
             
             $.post(
                 '/feedback/add_message/?responseMode=json',
                 feedback,
                 function(data){
-                    if (!data.error){
+                    $.jGrowl('Ваше сообщение отправлено!', {theme: 'green'});
+                    noClick = false;
+
+                    if (data.error){
+                        if (data.error.text) {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        }
+                    } else if (data.result){
                         $('#footer input').val('');
                         $('#footer .f_field label').show();
                         $('#footer .f_field textarea').val('');
                         $('#footer #popupreport').hide();
-                        $.jGrowl('Спасибо!<br/>Ваше сообщение отправлено!', {theme: 'green'});
-                    }else{
-                        $.jGrowl(data.error.text, {theme: 'red'});
+
+                        if (data.result.text) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        }
                     }
-                    noClick = false;
                 }
             );
-
         });
       })();
 });

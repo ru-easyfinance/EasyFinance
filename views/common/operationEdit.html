@@ -4,6 +4,12 @@
 	<div class="op_addoperation" style="display: block;">
 		<div>
 			<div class="op_f_field" id="div_op_first_line">
+				<div id="div_op_account_select">
+					<label for="op_account">
+						Счет
+					</label>
+                    <select id="op_account"></select>
+				</div>
 				<div id="div_op_type_select">
 					<label for="op_type">
 						Тип операции
@@ -14,12 +20,6 @@
                         <option value="2">Перевод со счёта</option>
                         <option value="4">Перевод на фин. цель</option>
                     </select>
-				</div>
-				<div id="div_op_account_select">
-					<label for="op_account">
-						Счет
-					</label>
-                    <select id="op_account"></select>
 				</div>
 			</div>
 		</div>
@@ -79,8 +79,8 @@
 				</label>
 				<div class="amount">
 					<div class="amount_general">
-						<input type="text" id="op_amount" tabindex=1>
-                        <input id="btnCalcSum" type="button" value=" " alt="калькулятор">
+						<input type="text" id="op_amount" >
+                        <span id="btnCalcSum" title="калькулятор" border="0" ></span>
 					</div>
 					<div class="amount_help">
 						12 + 33 * 45 &lt;Enter&gt;
@@ -91,7 +91,7 @@
 				<label for="op_date">
 					Дата
 				</label>
-				<input type="text" value="{$date}" id="op_date" autocomplete="off" class="op_inp" tabindex=2/>
+				<input type="text" value="{$date}" id="op_date" class="op_inp" >
 			</div><!--<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>-->
 		</div>
 		<div id="div_op_transfer_line" class="op_f_field">
@@ -112,7 +112,7 @@
 				</label>
 				<div id="div_op_account">
 					<input type="text" value="" id="op_transfer" autocomplete="off" class="op_inp hasDatepicker ">
-                    <input type="button" alt="калькулятор" value=" " id="btnCalcSumTransfer">
+                    <span id="btnCalcSumTransfer" title="калькулятор" border="0" ></span>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;или
 				</div>
 			</div>

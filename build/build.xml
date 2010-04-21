@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Easyfinance build" default="build" basedir="..">
 
-	<!-- Подключение библиотек для сжатия css и js-->
-	<taskdef name="stubjsmin" classname="tasks.stubJsMinTask" classpath="${project.basedir}/build/libs" />
-	<taskdef name="stubcssmin" classname="tasks.stubCssMinTask" classpath="${project.basedir}/build/libs"/>
+    <!-- Подключение библиотек для сжатия css и js-->
+    <taskdef name="stubjsmin" classname="tasks.stubJsMinTask" classpath="${project.basedir}/build/libs" />
+    <taskdef name="stubcssmin" classname="tasks.stubCssMinTask" classpath="${project.basedir}/build/libs"/>
 
     <!-- Сборка проекта: подготовка конфигов, создание директорий, сжатие js и css -->
-	<target name="build" depends="Configuration prepare">
+    <target name="build" depends="Configuration prepare">
 
         <phing phingfile="build/paths.target.xml" inheritAll="true" target="System paths prepare" />
 
@@ -18,7 +18,7 @@
         <echo>Configure config.php</echo>
 
         <copy file="include/config.php.dist"
-			tofile="${project.basedir}/include/config.php" overwrite="true" >
+            tofile="${project.basedir}/include/config.php" overwrite="true" >
             <filterchain>
                 <expandproperties />
             </filterchain>
@@ -27,26 +27,26 @@
         <echo>Configure sf/config/databases.yml</echo>
 
         <copy file="${project.basedir}/sf/config/databases.yml.conf"
-			tofile="${project.basedir}/sf/config/databases.yml" overwrite="true" >
+            tofile="${project.basedir}/sf/config/databases.yml" overwrite="true" >
             <filterchain>
                 <expandproperties />
             </filterchain>
         </copy>
 
-		<phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
-	</target>
+        <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
+    </target>
 
     <!-- Build + Обновляем все файлы: собрать проект для указанной ревизии -->
-	<target name="update" depends="checkout, build">
+    <target name="update" depends="checkout, build">
         <exec command="./symfony doctrine:build --all-classes" dir="${project.basedir}/sf/" passthru="true" />
-	</target>
+    </target>
 
     <!-- Собрать копиию проекта из указанной ревизии в отдельной директории -->
-	<target name="install" depends="update, backup, deploy">
-	</target>
+    <target name="install" depends="update, backup, deploy">
+    </target>
 
-	<!-- Загрузка конфигов -->
-	<target name="Configuration prepare">
+    <!-- Загрузка конфигов -->
+    <target name="Configuration prepare">
         <if>
             <available file="${project.basedir}/build/properties/config.conf" />
             <then>
@@ -61,19 +61,19 @@
 
         <!-- Проверяем, если у нас есть алиас rev для свойства project.git.rev, то ставим алиас -->
         <if>
-           <isset property="rev" />
-           <then>
-               <property name="project.git.rev" value="${rev}" override="true" />
-           </then>
+            <isset property="rev" />
+            <then>
+                <property name="project.git.rev" value="${rev}" override="true" />
+            </then>
         </if>
-	</target>
+    </target>
 
-	<!-- Обновление - создание репозитария проекта -->
-	<target name="checkout" depends="Configuration prepare">
-		<if>
-			<!--Если текущая ветка доступна - обновляем -->
-			<available file="${project.basedir}/.git" type="dir" />
-			<then>
+    <!-- Обновление - создание репозитария проекта -->
+    <target name="checkout" depends="Configuration prepare">
+        <if>
+            <!--Если текущая ветка доступна - обновляем -->
+            <available file="${project.basedir}/.git" type="dir" />
+            <then>
                 <!-- cd BASEDIR; git fetch  -->
                 <echo>git fetch repo ${project.git.rev}</echo>
                 <exec command="${git.bin.path} fetch"
@@ -97,31 +97,36 @@
                 <exec command="${git.bin.path} submodule update --init"
                     dir="${project.basedir}" passthru="true" />
 
-			</then>
-			<!--Если нет - ругаемся.. Делай клон вручную -->
-			<else>
+            </then>
+            <!--Если нет - ругаемся.. Делай клон вручную -->
+            <else>
                 <fail message="Need run command git clone manually" />
-			</else>
-		</if>
-	</target>
+            </else>
+        </if>
+    </target>
 
     <!-- Переключение -->
-	<target name="deploy" depends="Configuration prepare">
-		<if>
-			<istrue value="${nginx.config.check}"/>
-			<then>
-				<echo>Check nginx config syntax...</echo>
-				<exec command="${nginx.bin.path} -t" checkreturn="false" />
-			</then>
-		</if>
+    <target name="deploy" depends="Configuration prepare">
+        <if>
+            <istrue value="${nginx.config.check}"/>
+            <then>
+                <echo>Check nginx config syntax...</echo>
+                <exec command="${nginx.bin.path} -t" checkreturn="false" />
+            </then>
+        </if>
 
         <!-- Получаем текущее время -->
         <tstamp>
             <format property="build.time" pattern="%Y%m%d%H%I" />
         </tstamp>
 
+        <!-- Приводим имена директорий в нижний регистр -->
+        <php function="strtolower" returnProperty="strlowerpath">
+            <param value="${project.git.rev}"/>
+        </php>
+
         <!-- Копируем BASEDIR директорию в дирректорию для сборки -->
-        <copy todir="${project.path.deploy}/releases/tags/${project.git.rev}" >
+        <copy todir="${project.path.deploy}/releases/tags/${strlowerpath}" >
             <fileset dir=".">
                 <exclude name=".git/**" />
                 <exclude name="**/.git/**" />
@@ -130,10 +135,10 @@
         </copy>
 
         <!-- Создаём симлинк на текущую дирректорию-->
-        <echo>Link branch '${project.git.rev}' to current...</echo>
+        <echo>Link branch '${strlowerpath}' to current...</echo>
         <exec command="rm -f current"
             dir="${project.path.deploy}/releases" />
-        <exec command="ln -s ${project.path.deploy}/releases/tags/${project.git.rev} current"
+        <exec command="ln -s ${project.path.deploy}/releases/tags/${strlowerpath} current"
             dir="${project.path.deploy}/releases" checkreturn="true" />
 
         <!-- Перезапускаем (если нужно nginx и php-fpm) -->
@@ -148,7 +153,7 @@
     </target>
 
     <!-- Делаем бекап -->
-	<target name="backup" depends="Configuration prepare">
+    <target name="backup" depends="Configuration prepare">
         <tstamp>
             <format property="project.time" pattern="%Y%m%d%H%I" />
         </tstamp>

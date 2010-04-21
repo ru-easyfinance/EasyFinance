@@ -1,122 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="System paths" default="minify">
-	<!-- Подготовка системных директорий-->
-	<target name="System paths prepare">
+    <!-- Подготовка системных директорий-->
+    <target name="System paths prepare">
 
-		<!--Директории для проекта -->
-		<if>
-			<not><available file="${project.path.deploy}/releases" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/releases"/>
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.path.deploy}/releases/tags" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.path.deploy}/releases/tags"/>
-			</then>
-		</if>
+        <!--Директории для проекта -->
+        <if>
+            <not>
+                <available file="${project.path.deploy}/releases" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.path.deploy}/releases"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${project.path.deploy}/releases/tags" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.path.deploy}/releases/tags"/>
+            </then>
+        </if>
 
-		<!--Директории для хранения временных файлов -->
-		<if>
-			<not><available file="${project.basedir}/tmp" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.basedir}/tmp"/>
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.basedir}/tmp/smarty" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.basedir}/tmp/smarty"/>
-			</then>
-			<else>
-				<echo>Cleanup smarty cache ...</echo>
-				<delete>
-					<fileset dir="${project.basedir}/tmp/smarty">
-						<include name="*" />
+        <!--Директории для хранения временных файлов -->
+        <if>
+            <not>
+                <available file="${project.basedir}/tmp" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.basedir}/tmp"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${project.basedir}/tmp/smarty" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.basedir}/tmp/smarty"/>
+            </then>
+            <else>
+                <echo>Cleanup smarty cache ...</echo>
+                <delete>
+                    <fileset dir="${project.basedir}/tmp/smarty">
+                        <include name="*" />
                     </fileset>
-				</delete>
-			</else>
-		</if>
-		<mkdir dir="${project.basedir}/tmp/smarty/cache" />
-		<mkdir dir="${project.basedir}/tmp/smarty/views" />
-		<if>
-			<not><available file="${project.basedir}/tmp/nginx_cache" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.basedir}/tmp/nginx_cache"/>
-				<exec command="chown -R ${project.user} ." dir="${project.basedir}/tmp/nginx_cache" />
-			</then>
-			<else>
-				<echo>Cleanup nginx cache ...</echo>
-				<delete>
-					<fileset dir="${project.basedir}/tmp/nginx_cache">
-						<include name="*" />
+                </delete>
+            </else>
+        </if>
+        <mkdir dir="${project.basedir}/tmp/smarty/cache" />
+        <mkdir dir="${project.basedir}/tmp/smarty/views" />
+        <if>
+            <not>
+                <available file="${project.basedir}/tmp/nginx_cache" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.basedir}/tmp/nginx_cache"/>
+                <exec command="chown -R ${project.user} ." dir="${project.basedir}/tmp/nginx_cache" />
+            </then>
+            <else>
+                <echo>Cleanup nginx cache ...</echo>
+                <delete>
+                    <fileset dir="${project.basedir}/tmp/nginx_cache">
+                        <include name="*" />
                     </fileset>
-				</delete>
-			</else>
-		</if>
+                </delete>
+            </else>
+        </if>
 
         <!-- Скрипты должны быть исполняемыми -->
         <echo>Making chmod on tmp dir's</echo>
         <exec command="chmod 777 ./cache ./views" dir="${project.basedir}/tmp/smarty/" />
 
 
-		<!-- Проектный кеш (хранение файлового кеша)-->
-		<if>
-			<not><available file="${project.cache.dir}" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.cache.dir}"/>
-				<exec command="chown -R ${project.user} ." dir="${project.cache.dir}" />
-			</then>
-			<else>
-				<echo>Cleanup project cache ...</echo>
-				<delete>
-					<fileset dir="${project.cache.dir}">
-						<include name="*" />
+        <!-- Проектный кеш (хранение файлового кеша)-->
+        <if>
+            <not>
+                <available file="${project.cache.dir}" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.cache.dir}"/>
+                <exec command="chown -R ${project.user} ." dir="${project.cache.dir}" />
+            </then>
+            <else>
+                <echo>Cleanup project cache ...</echo>
+                <delete>
+                    <fileset dir="${project.cache.dir}">
+                        <include name="*" />
                     </fileset>
-				</delete>
-			</else>
-		</if>
+                </delete>
+            </else>
+        </if>
 
-		<!--Директории для хранения файлов между tags (например uploaded файлы)  -->
-		<if>
-			<not><available file="${project.shared.dir}" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.shared.dir}"/>
-				<exec command="chown -R ${project.user} ." dir="${project.shared.dir}" />
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.shared.dir}/uploaded" type="dir" /></not>
-			<then>
-				<mkdir dir="${project.shared.dir}/uploaded"/>
-				<exec command="chown -R ${project.user} ." dir="${project.shared.dir}/uploaded" />
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.basedir}/www/upload" type="dir" /></not>
-			<then>
+        <!--Директории для хранения файлов между tags (например uploaded файлы)  -->
+        <if>
+            <not>
+                <available file="${project.shared.dir}" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.shared.dir}"/>
+                <exec command="chown -R ${project.user} ${project.shared.dir}" />
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${project.shared.dir}/uploaded" type="dir" />
+            </not>
+            <then>
+                <mkdir dir="${project.shared.dir}/uploaded"/>
+                <exec command="chown -R ${project.user} ." dir="${project.shared.dir}/uploaded" />
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${project.basedir}/www/upload" />
+            </not>
+            <then>
                 <exec command="ln -s ${project.shared.dir}/uploaded ${project.basedir}/www/upload"
-                    dir="${project.shared.dir}" checkreturn="true" />
+                checkreturn="true" />
             </then>
         </if>
 
         <!-- Дирректории для sf modules -->
-		<if>
-			<not><available file="${project.basedir}/sf/cache/" type="dir" /></not>
-			<then>
+        <if>
+            <not>
+                <available file="${project.basedir}/sf/cache/" type="dir" />
+            </not>
+            <then>
                 <echo>Make symfony cache dir</echo>
-				<mkdir dir="${project.basedir}/sf/cache/"/>
+                <mkdir dir="${project.basedir}/sf/cache/"/>
                 <chmod file="${project.basedir}/sf/cache/" mode="0777" />
-			</then>
-		</if>
-		<if>
-			<not><available file="${project.basedir}/sf/log/" type="dir" /></not>
-			<then>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${project.basedir}/sf/log/" type="dir" />
+            </not>
+            <then>
                 <echo>Make symfony logs dir</echo>
-				<mkdir dir="${project.basedir}/sf/log/"/>
+                <mkdir dir="${project.basedir}/sf/log/"/>
                 <chmod file="${project.basedir}/sf/log/" mode="0777" />
-			</then>
-		</if>
-	</target>
+            </then>
+        </if>
+    </target>
 </project>

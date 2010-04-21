@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Minify js css files" default="minify">
     <target name="minify">
-
         <if>
             <istrue value="${project.jsmin.enabled}" />
             <then>
