@@ -53,21 +53,17 @@ class Report_Controller extends _Core_Controller_UserCommon
      */
     function index($args)
     {
-        // JS & CSS
-
-
-        
-
         $this->tpl->assign('reports',   $this->reports);
         $this->tpl->assign('accounts',  Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('currency',  Core::getInstance()->user->getUserCurrency());
         $this->tpl->assign('dateFrom',  date('01.m.Y'));
         $this->tpl->assign('dateTo',    date(date('t').'.m.Y'));
 
-        
         $lastmonth = date('m') - 1;
-        if ($lastmonth == 0)
+        if ($lastmonth == 0) {
             $lastmonth = 12;
+        }
+
         $days = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
         $this->tpl->assign('dateFrom2', '01'.'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ) );
         $this->tpl->assign('dateTo2',   $days[$lastmonth-1].'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ));
@@ -88,10 +84,10 @@ class Report_Controller extends _Core_Controller_UserCommon
         $currency= (int)@$_GET['currency'];
         $acclist = $_GET['acclist'];
 
-        if ( ! empty ($acclist) ) {
-            $accounts = $acclist;
-        } else {
+        if (!empty ($account)) {
             $accounts = $account;
+        } else {
+            $accounts = $acclist;
         }
 
         switch ($report) {
@@ -102,7 +98,7 @@ class Report_Controller extends _Core_Controller_UserCommon
                 die(json_encode($this->model->getPie(1, $start, $end, $accounts, $currency)));
                 break;
             case 'graph_profit_loss': //Сравнение расходов и доходов
-                die(json_encode($this->model->getBars($start, $end, $account, $currency, $acclist)));
+                die(json_encode($this->model->getBars($start, $end, $accounts, $currency)));
                 break;
             case 'txt_profit': //Детальные доходы
                 die(json_encode($this->model->SelectDetailedIncome($start, $end, $account, $currency, $acclist))  );
