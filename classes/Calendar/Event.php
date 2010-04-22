@@ -4,28 +4,29 @@
  *
  * @author ukko
  */
-class Calendar_Event {
+class Calendar_Event
+{
 
     /**
      * Модель календаря
      * @var Calendar_Model
      */
-    protected $model = null;
+    protected $_model = null;
 
     /**
      * Массив с ошибками
      * @var array
      */
-    private $errors = array();
+    private $_errors = array();
 
     /**
      * Конструктор
      * @param Calendar_Model $model
      * @param User $user
      */
-    public function __construct( Calendar_Model $model, User $user )
+    public function __construct(Calendar_Model $model, User $user)
     {
-        $this->model = $model;
+        $this->_model = $model;
     }
 
     /**
@@ -48,7 +49,7 @@ class Calendar_Event {
      */
     public function getId ()
     {
-        return $this->model->id;
+        return $this->_model->id;
     }
 
     /**
@@ -57,7 +58,7 @@ class Calendar_Event {
      */
     public function getChain ()
     {
-        return $this->model->chain;
+        return $this->_model->chain;
     }
 
     /**
@@ -66,7 +67,7 @@ class Calendar_Event {
      */
     public function getDate ()
     {
-        return $this->model->date;
+        return $this->_model->date;
     }
 
     /**
@@ -74,7 +75,7 @@ class Calendar_Event {
      */
     public function getStart ()
     {
-        return $this->model->start;
+        return $this->_model->start;
     }
 
     /**
@@ -82,7 +83,7 @@ class Calendar_Event {
      */
     public function getComment ()
     {
-        return $this->model->comment;
+        return $this->_model->comment;
     }
 
 
@@ -92,7 +93,7 @@ class Calendar_Event {
      */
     public function getAccepted ()
     {
-        return $this->model->accepted;
+        return $this->_model->accepted;
     }
 
     /**
@@ -108,7 +109,7 @@ class Calendar_Event {
      */
     public function getEvery ()
     {
-        return $this->model->every;
+        return $this->_model->every;
     }
 
     /**
@@ -118,7 +119,7 @@ class Calendar_Event {
      */
     public function getRepeat ()
     {
-        return $this->model->repeat;
+        return $this->_model->repeat;
     }
 
     /**
@@ -129,7 +130,7 @@ class Calendar_Event {
      */
     public function getWeek ()
     {
-        return $this->model->week;
+        return $this->_model->week;
     }
 
     /**
@@ -138,7 +139,7 @@ class Calendar_Event {
      */
     public function getLast ()
     {
-        return $this->model->last;
+        return $this->_model->last;
     }
     
     /**
@@ -146,7 +147,7 @@ class Calendar_Event {
      */
     public function getConvert ()
     {
-       return $this->model->convert;
+       return $this->_model->convert;
     }
 
     /**
@@ -154,7 +155,7 @@ class Calendar_Event {
      */
     public function getClose ()
     {
-       return $this->model->close;
+       return $this->_model->close;
     }
 
     /**
@@ -163,7 +164,7 @@ class Calendar_Event {
      */
     public function getCurrency ()
     {
-        return $this->model->currency;
+        return $this->_model->currency;
     }
 
     /**
@@ -172,7 +173,7 @@ class Calendar_Event {
      */
     public function getToAccount ()
     {
-        return $this->model->toAccount;
+        return $this->_model->toAccount;
     }
 
     /**
@@ -181,12 +182,12 @@ class Calendar_Event {
      */
     public function getTarget ()
     {
-        return $this->model->target;
+        return $this->_model->target;
     }
 
     public function getTime ()
     {
-        return $this->model->time;
+        return $this->_model->time;
     }
 
     /**
@@ -195,7 +196,7 @@ class Calendar_Event {
      */
     public function getAmount ()
     {
-        return $this->model->amount;
+        return $this->_model->amount;
     }
 
     /**
@@ -204,7 +205,7 @@ class Calendar_Event {
      */
     public function getCategory ()
     {
-        return $this->model->category;
+        return $this->_model->category;
     }
 
     /**
@@ -213,7 +214,7 @@ class Calendar_Event {
      */
     public function getAccount ()
     {
-        return $this->model->account;
+        return $this->_model->account;
     }
 
     /**
@@ -223,7 +224,7 @@ class Calendar_Event {
      */
     public function getTags ()
     {
-        return $this->model->tags;
+        return $this->_model->tags;
     }
 
     /**
@@ -232,7 +233,7 @@ class Calendar_Event {
      */
     public function getType()
     {
-        return $this->model->type;
+        return $this->_model->type;
     }
 
     /**
@@ -254,8 +255,8 @@ class Calendar_Event {
             'last'       => $this->getLast(),
             'time'       => $this->getTime(),
             'timestamp'  => ( strlen($this->getDate()) == 10 ) ?
-                strtotime( $this->getDate() . $this->getTime() ) :
-                strtotime( $this->getDate() ),
+                strtotime($this->getDate() . $this->getTime()) :
+                strtotime($this->getDate()),
 
             // Повторение
             'every'      => $this->getEvery(),
@@ -267,9 +268,9 @@ class Calendar_Event {
             'cat_id'     => $this->getCategory(),
             'account_id' => $this->getAccount(),
             'tags'       => $this->getTags(),
-            'tr_id'      => $this->model->tr_id,
-            'transfer'   => $this->model->transfer,
-            'source'     => $this->model->source,
+            'tr_id'      => $this->_model->tr_id,
+            'transfer'   => $this->_model->transfer,
+            'source'     => $this->_model->source,
         );
 
     }
@@ -280,23 +281,25 @@ class Calendar_Event {
      */
     public function getErrors ()
     {
-        return $this->errors;
+        return $this->_errors;
     }
 
     /**
      * Устанавливает начало
      * @param MYSQL DATE $date
      */
-    public function setStart ( $date ) {
-        $this->model->start = $date;
+    public function setStart($date)
+    {
+        $this->_model->start = $date;
     }
 
     /**
      * Устанавливает начало
      * @param MYSQL DATETIME $date
      */
-    public function setDate ( $date ) {
-        $this->model->date = $date;
+    public function setDate($date)
+    {
+        $this->_model->date = $date;
     }
 
     /**
@@ -304,63 +307,59 @@ class Calendar_Event {
      * Если есть ошибки, то их можно получить так $event->getErrors();
      * @return bool
      */
-    public function checkData ()
+    public function checkData()
     {
         // Преобразовываем данные к нужному формату
 
-        if ( ! in_array( $this->model->every, array( 0, 1, 7, 30, 90, 365) ) ) {
-            $this->model->every = 0;
+        if (!in_array($this->_model->every, array(0, 1, 7, 30, 90, 365))) {
+            $this->_model->every = 0;
         }
 
-        if ( $this->model->repeat > Calendar::MAX_EVENTS ) {
-            $this->model->repeat = Calendar::MAX_EVENTS;
+        if ($this->_model->repeat > Calendar::MAX_EVENTS) {
+            $this->_model->repeat = Calendar::MAX_EVENTS;
         }
 
-
-        if ( $this->getLast() != 0 && 
-           (strtotime( $this->getLast() ) < strtotime( $this->getDate() ) ) )
-        {
-            $this->errors['date']  = 'Конечная дата не может быть меньше даты начала';
+        if ($this->getLast() != 0 && (strtotime($this->getLast()) < strtotime($this->getDate()))) {
+            $this->_errors['date']  = 'Конечная дата не может быть меньше даты начала';
         }
 
-
-        if ( ( int ) $this->model->date === 0 ) {
-            $this->errors['date']  = 'Необходимо указать дату';
+        if ((int)$this->_model->date === 0) {
+            $this->_errors['date']  = 'Необходимо указать дату';
         }
 
-        if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->account === 0 ) {
-            $this->errors['account']  = 'Необходимо указать счёт';
+        if ((int)$this->_model->accepted === 1 && (int)$this->_model->account === 0) {
+            $this->_errors['account']  = 'Необходимо указать счёт';
         }
 
-        if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->amount == 0 ) {
-            $this->errors['account']  = 'Необходимо указать сумму';
+        if ((int)$this->_model->accepted === 1 && (int)$this->_model->amount == 0) {
+            $this->_errors['account']  = 'Необходимо указать сумму';
         }
 
         // Перевод со счёта на счёт
-        if ( ( int ) $this->model->type === 2 ) {
+        if ((int)$this->_model->type === 2) {
 
-            if ( ( int ) $this->model->accepted === 1  && ( int ) $this->model->toAccount === 0 ) {
-                $this->errors['toAccount']  = 'Необходимо указать счёт куда нужно перевести';
+            if ((int)$this->_model->accepted === 1  && (int)$this->_model->toAccount === 0) {
+                $this->_errors['toAccount']  = 'Необходимо указать счёт куда нужно перевести';
             }
 
         // Перевод на фин.цель
-        } elseif ( $this->model->type === 4) {
+        } elseif ($this->_model->type === 4) {
 
-            if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->target === 0 ) {
-                $this->errors['target']  = 'Необходимо указать счёт финансовой цели';
+            if ((int)$this->_model->accepted === 1 && (int)$this->_model->target === 0) {
+                $this->_errors['target']  = 'Необходимо указать счёт финансовой цели';
             }
 
         // Расход или доход
         } else {
 
-            if ( ( int ) $this->model->accepted === 1 && ( int ) $this->model->category === 0 ) {
-                 $this->errors['category']  = 'Необходимо указать категорию';
+            if ((int)$this->_model->accepted === 1 && (int)$this->_model->category === 0) {
+                 $this->_errors['category']  = 'Необходимо указать категорию';
             }
 
         }
 
         // Проверяем на ошибки
-        if ( count($this->errors) != 0 ) {
+        if (count($this->_errors) != 0) {
             
             return false;
 

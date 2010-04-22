@@ -4,7 +4,8 @@
  *
  * @author ukko <max.kamashev@easyfinance.ru>
  */
-class Calendar_Model extends _Core_Abstract_Model {
+class Calendar_Model extends _Core_Abstract_Model
+{
 
     /**
      * Храним ид овнера для всяческих операций.
@@ -54,12 +55,13 @@ class Calendar_Model extends _Core_Abstract_Model {
             LEFT JOIN calendar_chains c ON c.id=o.chain_id
             WHERE o.user_id = ?';
 
-        $rows = Core::getInstance()->db->select( $sql, $user->getId(), $start, $end );
+        $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
 
-        foreach ( $rows as $row )
-        {
+        foreach ($rows as $row) {
             // Пропускаем повторы переводов
-            if ( ( ( int ) $row['type'] == 2 ) && ( ( int ) $row['tr_id'] == 0 ) ) { continue; }
+            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) { 
+                continue;
+            }
             $model = new Calendar_Model( $row, $user );
 
             $modelsArray[$row['id']] = $model;
@@ -75,10 +77,10 @@ class Calendar_Model extends _Core_Abstract_Model {
      * Создаёт цепочку операций
      * @param User $user Пользователь
      * @param Calendar_Event $event Событие
-     * @param array $array_days Массив с днями, повторениями
+     * @param array $arrayDays Массив с днями, повторениями
      * @return bool
      */
-    public static function create ( User $user, Calendar_Event $event, $array_days )
+    public static function create (User $user, Calendar_Event $event, $arrayDays)
     {
 
         // Создаём само событие
@@ -86,15 +88,17 @@ class Calendar_Model extends _Core_Abstract_Model {
             VALUES (?, ?, ?, ?, ?, ?);";
 
         // Создаём событие в календаре
-        $cal_id = Core::getInstance()->db->query($sql,
+        $calId = Core::getInstance()->db->query(
+            $sql,
             $user->getId(),
             $event->getDate(),
             $event->getLast(),
             $event->getEvery(),
             $event->getRepeat(),
-            $event->getWeek() );
+            $event->getWeek()
+        );
 
-        return self::createOperations($user, $event, $cal_id, $array_days);
+        return self::createOperations($user, $event, $calId, $arrayDays);
     }
 
     /**
@@ -113,7 +117,8 @@ class Calendar_Model extends _Core_Abstract_Model {
             WHERE `user_id` = ? AND id = ? ;";
 
         // Создаём событие в календаре
-        Core::getInstance()->db->query($sql,
+        Core::getInstance()->db->query(
+            $sql,
             $event->getLast(),
             $event->getEvery(),
             $event->getRepeat(),
@@ -123,16 +128,18 @@ class Calendar_Model extends _Core_Abstract_Model {
         );
 
         // Возвращает даты подтверждённых в этой серии
-        $accepted = self::loadAcceptedByChain( $user, $event->getChain() );
+        $accepted = self::loadAcceptedByChain($user, $event->getChain());
 
         // Создаём повторы события
-        $array_days = array();
+        $arrayDays = array();
         foreach ($array as $value) {
-            if ( in_array($value, $accepted)) continue;
-            $array_days[] = $value;
+            if (in_array($value, $accepted)) {
+                continue;
+            }
+            $arrayDays[] = $value;
         }
 
-        return self::createOperations($user, $event, $event->getChain(), $array_days);
+        return self::createOperations($user, $event, $event->getChain(), $arrayDays);
     }
 
     /**
@@ -141,10 +148,10 @@ class Calendar_Model extends _Core_Abstract_Model {
      * @param int $chain
      * @return array
      */
-    public static function loadAcceptedByChain ( User $user, $chain )
+    public static function loadAcceptedByChain (User $user, $chain)
     {
         $sql = 'SELECT `date` FROM operation c WHERE user_id=? AND chain_id=? AND accepted=1';
-        return Core::getInstance()->db->selectCol( $sql, $user->getId(), $chain );
+        return Core::getInstance()->db->selectCol($sql, $user->getId(), $chain);
     }
 
     /**
@@ -152,18 +159,17 @@ class Calendar_Model extends _Core_Abstract_Model {
      * @param User $user
      * @param Calendar_Event $event
      * @param int $chain
-     * @param array $array
+     * @param array $arrayDays
      */
-    private function createOperations ( User $user, Calendar_Event $event, $chain, $array_days )
+    private function createOperations (User $user, Calendar_Event $event, $chain, $arrayDays )
     {
         // Создаём повторы события в виде неподтверждённых операций
-        $operations_array = array();
+        $operationsArray = array();
 
-        foreach ($array_days as $value) {
+        foreach ($arrayDays as $value) {
 
             // @TODO Посмотреть, как можно адаптировать $event->__getArray()
-            $operations_array[] = array (
-
+            $operationsArray[] = array (
                 'type'       => $event->getType(),
                 'account'    => $event->getAccount(),
                 'amount'     => $event->getAmount(),
@@ -186,18 +192,18 @@ class Calendar_Model extends _Core_Abstract_Model {
                 'week'       => $event->getWeek(),
                 'accepted'   => 0,
                 'chain'      => $chain,
-
             );
         }
 
         $operation = new Operation_Model();
 
         // Расход и доход
-        if ( $event->getType () <= 1 ) {
-            return $operation->addSome( $operations_array );
-        } elseif ( $event->getType () == 2 ) {
-            return $operation->addSomeTransfer ( $operations_array );
-        } elseif ( $event->getType () == 4 ) {
+        if ($event->getType() <= 1) {
+            return $operation->addSome($operationsArray);
+        } elseif ($event->getType() == 2) {
+            return $operation->addSomeTransfer($operationsArray);
+        } elseif ($event->getType() == 4) {
+//// Переводы на финцель на данный момент заблокированы
 //            $target = new Targets_Model();
 //            return $target->addSomeTargetOperation( $operations_array );
         }
@@ -212,7 +218,7 @@ class Calendar_Model extends _Core_Abstract_Model {
     public static function getByChain ( User $user, $chain )
     {
         $sql = 'SELECT * FROM calendar_chains c WHERE user_id=? AND id=?';
-        return Core::getInstance()->db->selectRow( $sql, $user->getId(), $chain );
+        return Core::getInstance()->db->selectRow($sql, $user->getId(), $chain);
     }
 
     /**
@@ -245,45 +251,32 @@ class Calendar_Model extends _Core_Abstract_Model {
     public static function acceptEvents ( User $user, $ids )
     {
 
-         $string_ids = '';
+         $stringIds = '';
         // Если получили массив, преобразуем его для выборки в мускуле
         if ( is_array($ids) ) {
 
             foreach ($ids as $v) {
                 if ( (int) $v > 0 ) {
-                    if ( !empty ($string_ids) ) $string_ids .= ',';
-                    $string_ids .= $v;
+                    if (!empty($stringIds)) {
+                        $stringIds .= ',';
+                    }
+                    $stringIds .= $v;
                 }
             }
 
-        } elseif ( ( int ) $ids > 0 ) {
-            $string_ids = ( int ) $ids;
+        } elseif ((int) $ids > 0) {
+            $stringIds = (int)$ids;
         } else {
             return false;
         }
 
-        $sql = "UPDATE operation SET accepted=1 WHERE id IN ( {$string_ids} ) AND user_id=?;";
+        $sql = "UPDATE operation SET accepted=1 WHERE id IN ( {$stringIds} ) AND user_id=?;";
 
-        if ( Core::getInstance()->db->query( $sql, $user->getId() ) ) {
+        if (Core::getInstance()->db->query($sql, $user->getId())) {
             return true;
         } else {
             return false;
         }
-    }
-
-    /**
-     * Получает список операций по ID
-     * @param array $ids
-     * @return array
-     */
-    public static function getByIDS ( $ids ) {
-        $sql = "SELECT * FROM operation WHERE id IN (" . implode( ",", $ids ) . ");";
-        $operations = Core::getInstance()->db->select( $sql );
-        $return = array();
-        foreach ( $ids as $value ) {
-            $return[$value['id']] = $value;
-        }
-        return $return;
     }
 
     /**
@@ -297,7 +290,7 @@ class Calendar_Model extends _Core_Abstract_Model {
     {
         $sql = "UPDATE operation SET `date`= ? WHERE id =? AND user_id=?;";
 
-        return Core::getInstance()->db->query( $sql, $date, $id, $user->getId() );
+        return Core::getInstance()->db->query($sql, $date, $id, $user->getId());
 
     }
 

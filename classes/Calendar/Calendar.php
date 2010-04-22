@@ -10,19 +10,19 @@ class Calendar
      * Объект пользователь
      * @var User
      */
-    protected $user;
+    protected $_user;
 
     /**
      * Массив событий
      * @var array mixed
      */
-    protected $events = array();
+    protected $_events = array();
 
     /**
      * Список ошибок
      * @var array
      */
-    private $errors = array();
+    private $_errors = array();
     
     /**
      * Максимально-разрешённое количество событий
@@ -37,7 +37,7 @@ class Calendar
      */
     public function __construct( User $user )
     {
-        $this->user = $user;
+        $this->_user = $user;
     }
 
     /**
@@ -52,30 +52,29 @@ class Calendar
      */
     public function loadAll( User $user, $start = null, $end = null)
     {
-        if ( is_null( $start ) ) {
+        if (is_null($start)) {
             $start = date('Y-m-d'); //@TODO Поставить какую-нибудь вменяемую дату
         } else {
             $start = date('Y-m-d', $start);
         }
 
-        if ( is_null( $end ) ) {
+        if (is_null($end)) {
             $end = date('Y-m-d'); //@TODO Поставить какую-нибудь вменяемую дату
         } else {
             $end = date('Y-m-d', $end);
         }
 
-        if ( !$user ) { $user = $this->user; }
-
-        //$calendar = new Calendar( $user );
-        $eventsModels = Calendar_Model::loadAll( $user, $start, $end );
-
-        foreach ( $eventsModels as $model )
-        {
-            //$calendar->add( new Calendar_Event( $model, $calendar->user ) );
-            $this->add( new Calendar_Event( $model, $this->user ) );
+        if (!$user) {
+            $user = $this->_user;
         }
 
-        //return $calendar;
+        //$calendar = new Calendar( $user );
+        $eventsModels = Calendar_Model::loadAll($user, $start, $end);
+
+        foreach ($eventsModels as $model) {
+            $this->add(new Calendar_Event($model, $this->_user));
+        }
+
         return $this;
     }
 
@@ -85,7 +84,7 @@ class Calendar
      */
     public function add ( Calendar_Event $event )
     {
-        $this->events[ $event->getId() ] = $event;
+        $this->_events[ $event->getId() ] = $event;
         return true;
     }
 
@@ -97,31 +96,31 @@ class Calendar
     {
         // Если повторять каждый день
         if ( $event->getEvery() == 1 ) {
-            $array_days = $this->_repeat( $event, 'day' );
+            $arrayDays = $this->_repeat($event, 'day');
 
         // Неделя
         } elseif ( $event->getEvery() == 7) {
-            $array_days = $this->_repeat( $event, 'week' );
+            $arrayDays = $this->_repeat($event, 'week');
 
         // Месяц
         } elseif ( $event->getEvery() == 30) {
-            $array_days = $this->_repeat( $event, 'month' );
+            $arrayDays = $this->_repeat($event, 'month');
 
         // Квартал (сейчас не работает!)
         } elseif ( $event->getEvery() == 90) {
-            $array_days = $this->_repeat( $event, 'quartal' );
+            $arrayDays = $this->_repeat($event, 'quartal');
 
         // Год
         } elseif ( $event->getEvery() == 365) {
-            $array_days = $this->_repeat( $event, 'year' );
+            $arrayDays = $this->_repeat($event, 'year');
 
         // Без повторения
         } else {
-            $array_days = array( $event->getDate() );
+            $arrayDays = array( $event->getDate() );
         }
 
-        if ( count ( $this->getErrors() ) == 0 ) {
-            $model = Calendar_Model::create($this->user, $event, $array_days);
+        if (count($this->getErrors()) == 0) {
+            $model = Calendar_Model::create($this->_user, $event, $arrayDays);
         } else {
             return false;
         }
@@ -136,42 +135,42 @@ class Calendar
     public function edit ( Calendar_Event $event )
     {
 
-        $event_array = Calendar_Model::getByChain( $this->user, $event->getChain() );
+        $eventArray = Calendar_Model::getByChain($this->_user, $event->getChain());
 
-        if ( count( $event_array ) == 0 ) {
-            $this->errors[] = "Событие не найдено";
+        if (count($eventArray) == 0) {
+            $this->_errors[] = "Событие не найдено";
         }
 
         // Если повторять каждый день
         if ( $event->getEvery() == 1 ) {
-            $array_days = $this->_repeat( $event, 'day' );
+            $arrayDays = $this->_repeat($event, 'day');
 
         // Неделя
         } elseif ( $event->getEvery() == 7) {
-            $array_days = $this->_repeat( $event, 'week' );
+            $arrayDays = $this->_repeat($event, 'week');
 
         // Месяц
         } elseif ( $event->getEvery() == 30) {
-            $array_days = $this->_repeat( $event, 'month' );
+            $arrayDays = $this->_repeat($event, 'month');
 
         // Квартал (сейчас не работает!)
         } elseif ( $event->getEvery() == 90) {
-            $array_days = $this->_repeat( $event, 'quartal' );
+            $arrayDays = $this->_repeat($event, 'quartal');
 
         // Год
         } elseif ( $event->getEvery() == 365) {
-            $array_days = $this->_repeat( $event, 'year' );
+            $arrayDays = $this->_repeat($event, 'year');
 
         // Без повторения
         } else {
-            $array_days = array( $event->getDate() );
+            $arrayDays = array($event->getDate());
         }
 
-        if ( count ( $this->getErrors() ) == 0 ) {
+        if (count($this->getErrors()) == 0) {
             // Сперва удаляем все подтверждённые, затем создаём новые :)
-            if ( $this->deleteEvents( $event->getChain() ) ) {
+            if ($this->deleteEvents($event->getChain())) {
 
-                $model = Calendar_Model::update( $this->user, $event, $array_days );
+                $model = Calendar_Model::update($this->_user, $event, $arrayDays);
 
             }
         } else {
@@ -188,45 +187,46 @@ class Calendar
      * @param string $period
      * @return array
      */
-    private function _repeat( Calendar_Event $event, $period ) {
+    private function _repeat(Calendar_Event $event, $period)
+    {
         
         $datetime = new DateTime( $event->getDate() );
         $week = $event->getWeek();
         
         // Массив с датами события
-        $array_days = array();
+        $arrayDays = array();
 
-        $last_date = strtotime( $event->getLast() );
+        $lastDate = strtotime($event->getLast());
 
         // Если мы идём до даты окончания
-        if ( $last_date > 0 ) {
+        if ( $lastDate > 0 ) {
 
             // Устанавливаем максимальное число повторов
-            $end_repeat = self::MAX_EVENTS;
+            $endRepeat = self::MAX_EVENTS;
             
         } else {
 
-            $end_repeat = $event->getRepeat();
+            $endRepeat = $event->getRepeat();
             
         }
 
-        for ($i = 1 ; $i <= $end_repeat ; $i++) {
+        for ($i = 1 ; $i <= $endRepeat ; $i++) {
 
-            if ( $last_date > 0 &&  ( $datetime->format('U') > $last_date ) ) {
-                return $array_days;
+            if ( $lastDate > 0 &&  ( $datetime->format('U') > $lastDate ) ) {
+                return $arrayDays;
             }
 
-            if ( count($array_days) > self::MAX_EVENTS ) {
-                $this->errors['repeat'] = "Максимальное количество повторений = " . 
-                    self::MAX_EVENTS . " раз, у вас " . count($array_days);
+            if ( count($arrayDays) > self::MAX_EVENTS ) {
+                $this->_errors['repeat'] = "Максимальное количество повторений = " .
+                    self::MAX_EVENTS . " раз, у вас " . count($arrayDays);
                 return false;
             }
 
-             if ( $period == 'week' ) {
+            if ( $period == 'week' ) {
 
                 if ($week[$datetime->format('N')-1] == 1) {
 
-                    $array_days[] = $datetime->format('Y-m-d');
+                    $arrayDays[] = $datetime->format('Y-m-d');
 
                 }
 
@@ -236,20 +236,22 @@ class Calendar
                 // Перебираем по циклу неделю, на один день меньше
                 for ( $j = 0; $j < 6; $j++ ) {
                     $dw = $dwr + $j ;
-                    if ( $dw > 6 )  { $dw = $dw - 7; }
+                    if ($dw > 6) { 
+                        $dw = $dw - 7;
+                    }
 
                     if ( $week[$dw] == 1 ) {
-                        $array_days[] = date('Y-m-d', $datetime->format('U') + (($j + 1) * 86400));
+                        $arrayDays[] = date('Y-m-d', $datetime->format('U') + (($j + 1) * 86400));
                     }
                 }
             } else {
-                $array_days[] = $datetime->format('Y-m-d');
+                $arrayDays[] = $datetime->format('Y-m-d');
             }
 
-            $datetime->modify( "+1 " . $period );
+            $datetime->modify("+1 " . $period);
         }
 
-        return $array_days;
+        return $arrayDays;
     }
 
     /**
@@ -260,13 +262,13 @@ class Calendar
     public function deleteEvents( $chain )
     {
 
-        if ( Calendar_Model::deleteEvents( $this->user, $chain ) ) {
+        if (Calendar_Model::deleteEvents($this->_user, $chain)) {
 
             return true;
 
         } else {
 
-            $this->errors[] = "Не удалено ни одной операции";
+            $this->_errors[] = "Не удалено ни одной операции";
             return false;
 
         }
@@ -282,14 +284,14 @@ class Calendar
     public function editDate ( $id, $date )
     {
         if ( ! $date ) {
-            $this->errors['date'] = 'Неверный формат даты';
+            $this->_errors['date'] = 'Неверный формат даты';
         }
 
         if ( ! $id ) {
-            $this->errors['id']   = 'Не указан id';
+            $this->_errors['id']   = 'Не указан id';
         }
 
-        if ( count( $this->errors ) == 0 && Calendar_Model::editDate( $this->user, $id, $date ) ) {
+        if (count($this->_errors) == 0 && Calendar_Model::editDate($this->_user, $id, $date)) {
 
             return true;
 
@@ -306,9 +308,9 @@ class Calendar
      */
     public function acceptEvents ( $ids )
     {
-        $overdue  = Core::getInstance()->user->getUserEvents( 'overdue' );
-        $future   = Core::getInstance()->user->getUserEvents( 'future' );
-        $calendar = Core::getInstance()->user->getUserEvents( 'calendar' );
+        $overdue  = Core::getInstance()->user->getUserEvents('overdue');
+        $future   = Core::getInstance()->user->getUserEvents('future');
+        $calendar = Core::getInstance()->user->getUserEvents('calendar');
         $newIds   = array();
 
         foreach ( $ids as $id ) {
@@ -320,7 +322,7 @@ class Calendar
             } elseif ( isset ( $calendar[$id] ) ) {
                 $operation = $calendar[$id];
             } else {
-                $this->errors['error'] = "Не найдена операция для подтверждения";
+                $this->_errors['error'] = "Не найдена операция для подтверждения";
             }
             
             $operation['accepted']  = 1;
@@ -329,20 +331,19 @@ class Calendar
             $operation['toAccount'] = $operation['transfer'];
             $operation['amount']    = $operation['money'];
 
-            $event = new Calendar_Event ( 
-                new Calendar_Model( $operation, Core::getInstance()->user )
-                , Core::getInstance()->user );
+            $event = new Calendar_Event (
+                new Calendar_Model($operation, Core::getInstance()->user), Core::getInstance()->user);
 
             if ( ! $event->checkData() ) {
-                $this->errors = array_merge( $this->errors, $event->getErrors() );
+                $this->_errors = array_merge($this->_errors, $event->getErrors());
             } else {
                 $newIds[] = $id;
             }
         }
 
-        if ( count ($newIds) > 0 ) {
+        if (count($newIds) > 0) {
             // Получаем список событий, отмечаем что они выполненные
-            return Calendar_Model::acceptEvents ( $this->user, $newIds );
+            return Calendar_Model::acceptEvents($this->_user, $newIds);
         } else {
             return false;
         }
@@ -354,7 +355,7 @@ class Calendar
      */
     public function getErrors()
     {
-        return $this->errors;
+        return $this->_errors;
     }
 
     /**
@@ -363,7 +364,7 @@ class Calendar
     public function getArray()
     {
         $array = array();
-        foreach ($this->events as $k => $v) {
+        foreach ($this->_events as $k => $v) {
             $array[$k] = $v->__getArray();
         }
         return $array;
