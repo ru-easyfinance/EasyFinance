@@ -77,6 +77,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'account'     => $this->helper->makeText('Номер счета', false),
             'timestamp'   => '2005-08-15T15:52:01+000',
             'amount'      => '1234.56',
+            'payment'     => '1000 USD',
             'description' => $this->helper->makeText(' Комментарий', false),
             'place'       => $this->helper->makeText('Место совершения операции', false),
             'balance'     => '23456.04',
@@ -158,8 +159,8 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'time'      => $date->format('H:i:s'),
             'drain'     => Operation::TYPE_PROFIT,
             'type'      => Operation::TYPE_PROFIT,
-            'comment'   => sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s",
-                $input['description'], $input['account'], $input['place'], $input['balance']),
+            'comment'   => sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s\nСумма платежа: %s",
+                $input['description'], $input['account'], $input['place'], $input['balance'], $input['payment']),
             'source_id' => Operation::SOURCE_AMT,
             'accepted'  => Operation::STATUS_DRAFT,
         );

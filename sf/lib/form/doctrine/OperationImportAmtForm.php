@@ -121,7 +121,7 @@ class OperationImportAmtForm extends BaseFormDoctrine
         unset($values['description'], $values['account'], $values['place'], $values['balance']);
 
         // Если указана сумма платежа
-        if (isset($values['payment']) && ! empty($values['payment'])) {
+        if (!empty($values['payment'])) {
             $values['comment'] .= "\nСумма платежа: " . $values['payment'];
             unset ($values['payment']);
         }

@@ -29,9 +29,9 @@ class mail_myParseEmailAmtImportTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * Проверяем эквивалентность массивов. Созданного вручную и из него же письмо
+     * Получить данные AMT из текста письма
      */
-    public function testParseEmail()
+    public function testGetAmtDataFromMailPart()
     {
         $email = new myCreateEmailAmtImport($data = $this->_getData());
         $email->useAddPart();
@@ -41,9 +41,25 @@ class mail_myParseEmailAmtImportTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * Подсовываем почту с вложением, вместо альтернативного текста, выкидывает исключение
+     * Поле payment отсутствует
      */
-    public function testAttachment ()
+    public function testNoPaymentField()
+    {
+        $data = $this->_getData();
+        unset($data['payment']);
+        $email = new myCreateEmailAmtImport($data);
+
+        $email->useAddPart();
+        $getEmail = new myParseEmailAmtImport((string)$email);
+        $data['payment'] = '';
+        $this->assertEquals($data, $getEmail->getAmtData());
+    }
+
+
+    /**
+     * Получить данные AMT из вложения
+     */
+    public function testGetAmtDataFromAttachment()
     {
         $email = new myCreateEmailAmtImport($data = $this->_getData());
         $email->useAttachment();
@@ -52,12 +68,16 @@ class mail_myParseEmailAmtImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($data, $getEmail->getAmtData());
     }
 
-    public function testFail ()
+
+    /**
+     * Исключение, если данные не найдены
+     */
+    public function testExpcetionIfDataNotFound()
     {
         $email = new myCreateEmailAmtImport($data = $this->_getData());
         $getEmail = new myParseEmailAmtImport((string)$email);
-        
-        $this->setExpectedException('Exception');
+
+        $this->setExpectedException('Exception', 'not found');
         $getEmail->getAmtData();
     }
 
