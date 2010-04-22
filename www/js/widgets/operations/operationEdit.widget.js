@@ -1060,13 +1060,13 @@ easyFinance.widgets.operationEdit = function(){
 
         _expandCalendar();
 
-        fillForm(data, isEditing);
-
         // TEMP: не показываем операции на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
         $("#op_type").html(htmlOptions).ufd("changeOptions");
         setType(data.type);
         // EOF TEMP
+		
+        fillForm(data, isEditing);
 
         // заполняем атрибуты цепочки / события
         $('#op_chain_id').val(data.chain || '');
