@@ -12,9 +12,13 @@ class Report_Model
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
      */
-    private $db = NULL;
+    private $_db = NULL;
 
-    private $user = NULL;
+    private $_user = NULL;
+
+    private $_fullMonth;
+
+    private $_shortMonth;
 
     /**
      * Конструктор
@@ -22,8 +26,39 @@ class Report_Model
      */
     function  __construct()
     {
-        $this->db   = Core::getInstance()->db;
-        $this->user = Core::getInstance()->user;
+
+        $this->_fullMonth = array (
+            1  => "Январь",
+            2  => "Февраль",
+            3  => "Март",
+            4  => "Апрель",
+            5  => "Май",
+            6  => "Июнь",
+            7  => "Июль",
+            8  => "Август",
+            9  => "Сентябрь",
+            10 => "Октябрь",
+            11 => "Ноябрь",
+            12 => "Декабрь"
+        );
+
+        $this->_shortMonth = array (
+            1  => "Янв",
+            2  => "Февр",
+            3  => "Март",
+            4  => "Апр",
+            5  => "Май",
+            6  => "Июнь",
+            7  => "Июль",
+            8  => "Авг",
+            9  => "Сент",
+            10 => "Окт",
+            11 => "Нояб",
+            12 => "Дек"
+        );
+
+        $this->_db   = Core::getInstance()->db;
+        $this->_user = Core::getInstance()->user;
     }
 
     /**
@@ -81,29 +116,26 @@ class Report_Model
             AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) )
             GROUP BY o.cat_id, a.account_currency_id";
 
-        $result = $this->db->select($sql, Core::getInstance()->user->getId(),
+        $result = $this->_db->select($sql, Core::getInstance()->user->getId(),
                 $drain, $start, $end);
 
-        $currencies = $this->getCurrency( $this->user );
+        $currencies = $this->getCurrency( $this->_user );
 
         // Создаём чистый массив и наполняем его чистыми данными (конвертируя автоматом курс валюты)
         $return = array();
         foreach ( $result as $key => $value ) {
 
             $return[ $key ]['cat'] = $value['cat'];
-            // Хак для рубля, которого нет в списке валют
-            if ( $currency_id == 1) {
-                $return[ $key ]['cur_char_code'] = 'RUB';
-            } else {
-                $return[ $key ]['cur_char_code'] = $currencies[ $currency_id ]['char_code'];
-            }
+ 
+            $return[ $key ]['cur_char_code'] = $currencies[ $currency_id ]['char_code'];
+            
             $return[ $key ]['cur_id'] = $currency_id;
 
             if ( (int) $value['cur_id'] == $currency_id ) {
                 $money = $value['money'];
             } else {
                 try {
-                    $money = round($value['money'] / (float) $currencies[ $currency_id ]['value'], 2);
+                    $money = round($value['money'] * (float) $currencies[ $value['cur_id'] ]['value'], 2);
                 } catch (Exception $e) {
                     throw new Exception($e->getMessage());
                 }
@@ -133,129 +165,84 @@ class Report_Model
      * @param string mysqldate $start
      * @param string mysqldate $end
      * @param int|string $accounts
-     * @param int $currency
+     * @param int $currency_id
      * @return array
      */
-    function getBars($start = '', $end = '', $accounts = 0, $currency = 0)
+    function getBars($start = '', $end = '', $accounts = 0, $currency_id = 0)
     {
 
-//SELECT
-//    ABS(sum(o.money)) AS su,
-//    cur.cur_id,
-//    DATE_FORMAT(`date`,'%Y.%m.01') as `datef`,
-//    o.drain
-//FROM operation o
-//LEFT JOIN accounts a ON a.account_id=o.account_id
-//LEFT JOIN category c ON c.cat_id = o.cat_id
-//LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-//WHERE o.user_id = 688 AND `date` BETWEEN '2010-01-01' AND '2010-04-31' AND o.accepted=1
-//    #AND a.account_id IN(17114,12887,20520,584,583,596,592,8751)
-//    AND o.transfer = 0
-//GROUP BY drain, cur_id, `datef`
-
-
-        $sql = "SELECT ABS(sum(o.money)) AS su, cur.cur_char_code AS cu, cur.cur_id,
-                    DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                    , IFNULL(c.cat_name, '') AS cat
+        // Получаем все операции, за выбранный период
+        $sql = "SELECT
+                    ABS(sum(o.money)) AS money,
+                    cur.cur_id,
+                    DATE_FORMAT(`date`,'%Y-%m-01') as `datef`,
+                    o.drain
                 FROM operation o
-                    LEFT JOIN accounts a ON a.account_id=o.account_id
-                    LEFT JOIN category c ON c.cat_id = o.cat_id
-                    LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+                LEFT JOIN accounts a ON a.account_id=o.account_id
+                LEFT JOIN category c ON c.cat_id = o.cat_id
+                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
                 WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND o.accepted=1
-                    AND drain='1' AND a.account_id IN({$accounts})
-                    AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) )
-                GROUP BY drain, `datef`";
-        $result = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end);
+                    AND a.account_id IN({$accounts})
+                    AND o.transfer = 0
+                GROUP BY drain, cur_id, `datef`";
 
-        if ($account > 0) {
-            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                , IFNULL(c.cat_name, '') AS cat FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                LEFT JOIN category c ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND ? AND o.accepted=1 AND a.account_id = ? AND drain='0'
-                AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) ) 
-                GROUP BY drain, `datef`";
-            $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end, $account/*, $currency*/);
-        } else {
-            $sql = "SELECT sum(o.money) AS su, cur.cur_char_code AS cu, cur.cur_id, DATE_FORMAT(`date`,'%Y.%m.01') as `datef`
-                , IFNULL(c.cat_name, '') AS cat FROM operation o
-                LEFT JOIN accounts a ON a.account_id=o.account_id
-                LEFT JOIN category c ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-                WHERE o.user_id = ? AND `date` BETWEEN ? AND o.accepted=1 AND ? AND drain='0' AND a.account_id IN({$acclist})
-                AND o.transfer = 0 AND ( o.tr_id < 1 OR ISNULL(o.tr_id) ) 
-                GROUP BY drain, `datef`";//AND a.account_currency_id = ?
-            $result2 = $this->db->select($sql, Core::getInstance()->user->getId(), $start, $end/*, $currency*/);
-        }
+        $result = $this->_db->select($sql, Core::getInstance()->user->getId(), $start, $end);
 
-        $i = -1;
-        $array=array();
+        $currencies = $this->getCurrency( $this->_user );
 
-        $arr = array();
-        $coun = 0 ;
-        $count = 0;
-        $mon = array ("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-        $short = array ("Янв", "Февр", "Март", "Апр", "Май", "Июнь", "Июль", "Авг", "Сент", "Окт", "Нояб", "Дек");
-        $monc = array ("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-        $year = array ("09","10");
-        for ($coun=0; $coun<12; $coun++){//начальная инициализация
-            $array[$coun]['lab'] = '';//лейбл. название месяца
-            $array[$coun]['was'] = 0;//расходы
-            $array[$coun]['in'] = 0;//доходы
-        }
+        $sort = array();
 
-        for ($coun=0; $coun<12; $coun++){
-            foreach ($result as $v){
-                if ( substr($v['datef'],5,2) == $monc[$coun] ) {
-                    $count++;
+        foreach($result as $value) {
+
+            if ( (int) $value['cur_id'] == $currency_id ) {
+                $money = $value['money'];
+            } else {
+                try {
+                    $money = round($value['money'] * (float) $currencies[ $value['cur_id'] ]['value'], 2);
+                } catch (Exception $e) {
+                    throw new Exception($e->getMessage());
                 }
             }
-        }
 
-        $diffYear = (bool)((substr($start, 0, 4) === substr($end, 0, 4)));
+            // Доходы
+            if ($value['drain'] == 0) {
+                $sort[$value['datef']]['in']  = $money;
 
-        for ($coun=0; $coun<12; $coun++){
-            //$array[$coun]['lab'] = $mon[$coun];
-            foreach ($result as $v){
-                if ( substr($v['datef'],5,2) == $monc[$coun] ) {
-                    if ($diffYear)
-                        $array[$coun]['lab'] = ($count<=6) ? $mon[$coun] : $short[$coun];
-                    else{
-                        if ( substr ($v['datef'],2,2) == '09')
-                            $numYear = 0;
-                        if ( substr ($v['datef'],2,2) == '10')
-                            $numYear = 1;    
-                        $array[$coun]['lab'] = ( ($count<=6) ? $mon[$coun] : $short[$coun] ) . $year[$numYear];
-                    }
-                    $array[$coun]['was'] = $v['su'];
-                    $array[$coun]['curs']= $v['cu'];
-                }
+            // Расходы
+            } else {
+                $sort[$value['datef']]['was'] = $money;
             }
-        }
-        for ($coun=0; $coun<12; $coun++){
-            foreach ($result2 as $v){
-                if ( substr($v['datef'],5,2) == $monc[$coun] ) {
-                     $array[$coun]['in'] = $v['su'];//$v['sum']
-                }
-            }
-        }
-        //тут заголовки идут в виде январь10 февраль10 декабрь09
-        //алгоритм прост . берём первый с текущим годом - и в конец. и т.д.
-        //т.о. сначала перенесём январь, а за ним февраль.
-        $year = substr($end,2,2);//последние две цифры конечного года
-        if ( ! $diffYear ){
-            while ( ( substr($array[0]['lab'],-2) == (string)$year) ){
-                $array = array_merge ( array_slice( $array, 1 ) , array($array[0]) );
+
+            $ts = strtotime($value['datef']);
+            $sort[$value['datef']]['curs'] = $currencies[ $currency_id ]['char_code'];
+
+            // Если у нас период захватывает разные годы
+            if (date("Y", strtotime($start)) == date("Y", strtotime($end))) {
+                $sort[$value['datef']]['lab']  = $this->_fullMonth[date("n", $ts)];
+            // Иначе выводим просто месяц
+            } else {
+                $sort[$value['datef']]['lab']  = $this->_fullMonth[date("n", $ts)] . " " . date("Y", $ts);
             }
         }
 
-        $result = array();
-        $result[0] = $array;
-        $sql = "SELECT cur_char_code FROM currency WHERE cur_id = ?";
-        $result[1] = $this->db->query($sql, $currency);
+        // Рисуем красивые заголовки
+        foreach($sort as $key => $value) {
+            if (count($sort) > 6) {
 
-        return $result;
+            }
+        }
+
+        return array(
+            $sort,
+            array(
+                array(
+                    "cur_char_code" =>
+                        isset( $sort[ 0 ]['curs'] )? $sort[ 0 ]['curs'] : ''
+                    )
+                )
+        );
+
+
     }
 
     function SelectDetailedIncome($date1='', $date2='', $account='', $cursshow='', $acclist=''){
@@ -271,7 +258,7 @@ class Report_Model
             AND a.account_id=? AND op.money>0 AND c.cat_name <> ''
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             ORDER BY c.cat_name";   
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
             a.account_name, op.money, cur.cur_char_code, cur.cur_id
@@ -283,11 +270,11 @@ class Report_Model
             AND op.money>0 AND c.cat_name <> '' AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             ORDER BY c.cat_name";
-            $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
+            $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId());
         }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
-        $arr[1] = $this->db->query($sql, $cursshow);
+        $arr[1] = $this->_db->query($sql, $cursshow);
         return $arr;
         }
     
@@ -305,7 +292,7 @@ class Report_Model
             AND a.account_id=? AND c.cat_name <> ''
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             ORDER BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account);
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account);
         } else{
         $sql = "SELECT op.id, c.cat_name, op.`date`,
                                     a.account_name, op.money, cur.cur_char_code, cur.cur_id
@@ -317,11 +304,11 @@ class Report_Model
             AND c.cat_name <> '' AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             ORDER BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId());
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId());
         }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
-        $arr[1] = $this->db->query($sql, $cursshow);
+        $arr[1] = $this->_db->query($sql, $cursshow);
         return $arr;
     }
 
@@ -348,7 +335,7 @@ class Report_Model
             AND a.account_id=? AND cur_char_code is not null
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
         }else{
         $sql = "
             SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
@@ -370,11 +357,11 @@ class Report_Model
             AND cur_char_code is not null AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
         }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
-        $arr[1] = $this->db->query($sql, $cursshow);
+        $arr[1] = $this->_db->query($sql, $cursshow);
         return $arr;
     }
 
@@ -401,7 +388,7 @@ class Report_Model
             AND a.account_id=?
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
             GROUP BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
         }else{
         $sql = "
             SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
@@ -423,11 +410,11 @@ class Report_Model
             AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $arr[0] = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());        
+        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
         }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
-        $arr[1] = $this->db->query($sql, $cursshow);
+        $arr[1] = $this->_db->query($sql, $cursshow);
         return $arr;
     }
 
@@ -484,7 +471,7 @@ class Report_Model
             AND a.account_id=?
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
         }else{
         $sql = "
             SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
@@ -506,12 +493,12 @@ class Report_Model
             AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
         }
         $mas[2] = $que;
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
-        $mas[3] = $this->db->query($sql, $cursshow);
+        $mas[3] = $this->_db->query($sql, $cursshow);
         return $mas;
     }
 
@@ -555,7 +542,7 @@ class Report_Model
             AND a.account_id=?
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(), $account, $date3, $date4, $this->user->getId(), $account);
+        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
         }else{
         $sql = "
             SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
@@ -577,12 +564,12 @@ class Report_Model
             AND a.account_id IN({$acclist})
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) ) 
             GROUP BY c.cat_name";
-        $que = $this->db->query($sql, $date1, $date2, $this->user->getId(),  $date3, $date4, $this->user->getId());
+        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
         }
         $mas[2] = $que;
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
-        $mas[3] = $this->db->query($sql, $cursshow);
+        $mas[3] = $this->_db->query($sql, $cursshow);
         return $mas;
     }
 

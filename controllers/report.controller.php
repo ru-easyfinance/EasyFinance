@@ -1,4 +1,4 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php if (!defined('INDEX')) trigger_error("Index required!", E_USER_WARNING);
 /**
  * Класс контроллера для модуля отчётов
  * @category report
@@ -11,11 +11,11 @@ class Report_Controller extends _Core_Controller_UserCommon
      * Модель класса календарь
      * @var Report_Model
      */
-    private $model = null;
+    private $_model = null;
 
-    private $user = NULL;
+    private $_user = NULL;
 
-    private $reports = array();
+    private $_reports = array();
     
     /**
      * Конструктор класса
@@ -23,26 +23,21 @@ class Report_Controller extends _Core_Controller_UserCommon
      */
     protected function __init()
     {
-        $this->user = Core::getInstance()->user;
+        $this->_user = Core::getInstance()->user;
         $this->tpl->assign('name_page', 'report/report');
-        $this->model = new Report_Model();
-
-        // Операция
-        $this->tpl->assign('category', get_tree_select());
-        $targets = new Targets_Model();
-        $this->tpl->assign('targetList', $targets->getLastList(0, 100));
+        $this->_model = new Report_Model();
 
         // Виды и названия отчетов
-        $this->reports = array(
-            'graph_profit' => 'Доходы',
-            'graph_loss' => 'Расходы',
-            'graph_profit_loss' => 'Сравнение расходов и доходов',//*/
-            'txt_profit' => 'Детальные доходы',
-            'txt_loss' => 'Детальные расходы',
-            'txt_loss_difference' => 'Сравнение расходов за периоды',
-            'txt_profit_difference' => 'Сравнение доходов за периоды',
+        $this->_reports = array(
+            'graph_profit'              => 'Доходы',
+            'graph_loss'                => 'Расходы',
+            'graph_profit_loss'         => 'Сравнение расходов и доходов',
+            'txt_profit'                => 'Детальные доходы',
+            'txt_loss'                  => 'Детальные расходы',
+            'txt_loss_difference'       => 'Сравнение расходов за периоды',
+            'txt_profit_difference'     => 'Сравнение доходов за периоды',
             'txt_profit_avg_difference' => 'Сравнение доходов со средним за периоды',
-            'txt_loss_avg_difference' => 'Сравнение расходов со средним за периоды',
+            'txt_loss_avg_difference'   => 'Сравнение расходов со средним за периоды',
         );
     }
 
@@ -53,11 +48,11 @@ class Report_Controller extends _Core_Controller_UserCommon
      */
     function index($args)
     {
-        $this->tpl->assign('reports',   $this->reports);
-        $this->tpl->assign('accounts',  Core::getInstance()->user->getUserAccounts());
-        $this->tpl->assign('currency',  Core::getInstance()->user->getUserCurrency());
-        $this->tpl->assign('dateFrom',  date('01.m.Y'));
-        $this->tpl->assign('dateTo',    date(date('t').'.m.Y'));
+        $this->tpl->assign('reports', $this->_reports);
+        $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
+        $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
+        $this->tpl->assign('dateFrom', date('01.m.Y'));
+        $this->tpl->assign('dateTo',   date(date('t').'.m.Y'));
 
         $lastmonth = date('m') - 1;
         if ($lastmonth == 0) {
@@ -87,36 +82,45 @@ class Report_Controller extends _Core_Controller_UserCommon
         if (!empty ($account)) {
             $accounts = $account;
         } else {
-            $accounts = $acclist;
+            $accounts = '';
+            $acc = explode(',', $_GET['acclist']);
+            foreach($acc as $value) {
+                if ((int)$value > 0) {
+                    if (! empty($accounts)) {
+                        $accounts .= ',';
+                    }
+                    $accounts .= (int)$value;
+                }
+            }
         }
 
         switch ($report) {
             case 'graph_profit': //Доходы
-                die(json_encode($this->model->getPie(0, $start, $end, $accounts, $currency)));
+                die(json_encode($this->_model->getPie(0, $start, $end, $accounts, $currency)));
                 break;
             case 'graph_loss':   // Расходы
-                die(json_encode($this->model->getPie(1, $start, $end, $accounts, $currency)));
+                die(json_encode($this->_model->getPie(1, $start, $end, $accounts, $currency)));
                 break;
             case 'graph_profit_loss': //Сравнение расходов и доходов
-                die(json_encode($this->model->getBars($start, $end, $accounts, $currency)));
+                die(json_encode($this->_model->getBars($start, $end, $accounts, $currency)));
                 break;
             case 'txt_profit': //Детальные доходы
-                die(json_encode($this->model->SelectDetailedIncome($start, $end, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->SelectDetailedIncome($start, $end, $account, $currency, $acclist))  );
                 break;
             case 'txt_loss': //Детальные расходы
-                die(json_encode($this->model->SelectDetailedWaste($start, $end, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->SelectDetailedWaste($start, $end, $account, $currency, $acclist))  );
                 break;
             case 'txt_loss_difference': //Сравнение расходов за периоды
-                die(json_encode($this->model->CompareWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->CompareWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
                 break;
             case 'txt_profit_difference': //Сравнение доходов за периоды
-                die(json_encode($this->model->CompareIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->CompareIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
                 break;
             case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
-                die(json_encode($this->model->AverageIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->AverageIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
                 break;
             case 'txt_loss_avg_difference': //Сравнение расходов со средним за периоды
-                die(json_encode($this->model->AverageWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->AverageWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
                 break;
             default:
                 die('
