@@ -165,7 +165,6 @@ easyFinance.widgets.operationsJournal = function(){
 
                 _$checkAll.removeAttr('checked');
 
-                _onCheckClicked();
                 $.jGrowl(data.result.text, {theme: 'green'});
             } else if (data.error & data.error.text) {
                 $.jGrowl(data.error.text, {theme: 'red'});
@@ -241,16 +240,20 @@ easyFinance.widgets.operationsJournal = function(){
 
     function _onCheckClicked() {
         var $row = $(this).parent().parent();
-        var id = $row.attr('value');
+        var id = _journal[$row.attr('value')].id;
         var trid = $row.attr('trid');
 
         // auto-check paired transfer operations
         var $pair = null;
         if (trid != "null") {
-            if (trid == "0")
+            if (trid == "0") {
                 $pair = $('#operations_list tr[trid="' + id + '"] input');
-            else
+            } else {
                 $pair = $('#operations_list tr[id="opv' + trid + '"] input');
+                if ($pair.length == 0) {
+                    $pair = $('#operations_list tr[id="opr' + trid + '"] input');
+                }
+            }
 
             if ($pair) {
                 if ($(this).attr('checked'))
@@ -452,7 +455,11 @@ easyFinance.widgets.operationsJournal = function(){
             else
                 $('#operations_list .check input').removeAttr('checked');
 
-            _onCheckClicked();
+            // show/hide 'remove checked' link
+            if (_$node.find('table input').is(':checked'))
+                $('#remove_all_op').show();
+            else
+                $('#remove_all_op').hide();
         })
 
         // биндим клик на чекбоксы в содержимом
