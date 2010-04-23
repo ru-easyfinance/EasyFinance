@@ -41,7 +41,7 @@ class Calendar_Model extends _Core_Abstract_Model
 //        // Если есть - запрашиваем их все из кеша
 //        if ( $messageIds && is_array($messageIds) )
 //        {
-//        	$modelsArray = $cache->getMulti( $messageIds );
+//            $modelsArray = $cache->getMulti( $messageIds );
 //        }
 
         // Запрос данных для полного календаря
@@ -53,7 +53,7 @@ class Calendar_Model extends _Core_Abstract_Model
             c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer, o.source_id AS source
             FROM operation o
             LEFT JOIN calendar_chains c ON c.id=o.chain_id
-            WHERE o.user_id = ?';
+            WHERE o.user_id = ? AND o.`date` BETWEEN ? AND ?';
 
         $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
 
@@ -69,6 +69,84 @@ class Calendar_Model extends _Core_Abstract_Model
 
         // Cохранение моделей в кеш
         //$cache->set( $cacheId, $modelsArray );
+
+        return $modelsArray;
+    }
+
+    /**
+     * Загрузка всех неподтверждённых событий для указанного пользователя
+     *
+     * @param User $user
+     *
+     * @return array
+     */
+    public static function loadOverdue(User $user)
+    {
+        $modelsArray = array();
+
+        // Запрос данных для полного календаря
+
+        $sql = 'SELECT o.id, o.chain_id AS chain, o.type,
+            o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
+            DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date, o.time,
+            DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start, DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
+            c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer, o.source_id AS source
+            FROM operation o
+            LEFT JOIN calendar_chains c ON c.id=o.chain_id
+            WHERE o.user_id = ?
+                AND o.`date` <= CURRENT_DATE()
+                AND o.accepted=0';
+
+        $rows = Core::getInstance()->db->select($sql, $user->getId());
+
+        foreach ($rows as $row) {
+            // Пропускаем повторы переводов
+            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) {
+                continue;
+            }
+            $model = new Calendar_Model( $row, $user );
+
+            $modelsArray[$row['id']] = $model;
+        }
+
+        return $modelsArray;
+    }
+
+    /**
+     * Выводит список напоминалок на неделю вперёд
+     *
+     * @param User $user
+     */
+    public function loadReminder(User $user)
+    {
+        $modelsArray = array();
+
+        // Запрос данных для полного календаря
+
+        $sql = 'SELECT o.id, o.chain_id AS chain, o.type,
+            o.money AS amount, o.comment, o.cat_id AS category, o.account_id AS account, o.tags,
+            DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date, o.time,
+            DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start, DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
+            c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer, o.source_id AS source
+            FROM operation o
+            LEFT JOIN calendar_chains c ON c.id=o.chain_id
+            WHERE o.user_id = ?
+                AND o.`date` BETWEEN
+                    ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY)
+                    AND ADDDATE(CURRENT_DATE(), INTERVAL 8 DAY)
+                AND o.accepted=0';
+
+        $rows = Core::getInstance()->db->select($sql, $user->getId());
+
+        foreach ($rows as $row) {
+            // Пропускаем повторы переводов
+            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) {
+                continue;
+            }
+            $model = new Calendar_Model( $row, $user );
+
+            $modelsArray[$row['id']] = $model;
+        }
 
         return $modelsArray;
     }

@@ -489,39 +489,24 @@ class User
      */
     public function initUserEvents()
     {
-        // @TODO Вынести отсюда эту логику накх
-        $this->user_events   = array();
-        $this->user_overdue  = array();
-        $this->user_reminder = array();
+        // Получаем данные за текущий месяц
+        $start = mktime( null, null, null, date( 'm' ), 1 );
+        $end   = mktime( null, null, null, date( 'm' ) + 1, 0 );
 
-        // Получаем данные за три месяца, прошлый, текущий и будущий
-        $start = mktime( null, null, null, date( 'm' ) - 1, 1 );
-        $end   = mktime( null, null, null, date( 'm' ) + 2, 0 );
-        $now   = mktime( 0, 0, 0 ); // Сегодня в полночь
-
-        $calendar = new Calendar( $this );
-        $calendar->loadAll( $this, $start, $end );       
-
+        // Загружаем все события по календарю
+        $calendar = new Calendar($this);
+        $calendar->loadAll($this, $start, $end);
         $this->user_events = $calendar->getArray();
 
-        foreach ( $this->user_events as $value ) {
-            // Фильтруем лишние события в переводах
-            if ( ( ( int ) $value['type'] == 2 ) && ( ( int ) $value['tr_id'] == 0 ) ) { continue; }
+        // Загружаем все просроченные неподтверждённые события
+        $calendar = new Calendar($this);
+        $calendar->loadOverdue($this);
+        $this->user_overdue = $calendar->getArray();
 
-            // Напомнить на будущее
-            if ( ( int ) $value['accepted'] === 0 && ( int ) $value['timestamp'] > $now ) {
-
-                if ( count( $this->user_reminder ) > 10 ) { continue; }
-
-                $this->user_reminder[] = $value;
-
-            // Подтвердить прошлые неподтверждённые
-            } elseif ( ( int ) $value['accepted'] === 0 && ( int ) $value['timestamp'] <= $now ) {
-
-                $this->user_overdue[] = $value;
-
-            }
-        }
+        // Загружаем все будущие события на неделю вперёд
+        $calendar = new Calendar($this);
+        $calendar->loadReminder($this);
+        $this->user_reminder = $calendar->getArray();
     }
 
     /**

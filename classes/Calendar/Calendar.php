@@ -79,6 +79,50 @@ class Calendar
     }
 
     /**
+     * Список неподтверждённых операций
+     * 
+     * @param User $user
+     * @return array
+     */
+    public function loadOverdue(User $user)
+    {
+        if (!$user) {
+            $user = $this->_user;
+        }
+
+        //$calendar = new Calendar( $user );
+        $eventsModels = Calendar_Model::loadOverdue($user);
+
+        foreach ($eventsModels as $model) {
+            $this->add(new Calendar_Event($model, $this->_user));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Список напоминалок на ближайшее будущее
+     *
+     * @param User $user
+     * @return array
+     */
+    public function loadReminder(User $user)
+    {
+        if (!$user) {
+            $user = $this->_user;
+        }
+
+        //$calendar = new Calendar( $user );
+        $eventsModels = Calendar_Model::loadReminder($user);
+
+        foreach ($eventsModels as $model) {
+            $this->add(new Calendar_Event($model, $this->_user));
+        }
+
+        return $this;
+    }
+
+    /**
      * Добавляем события в календарь
      * @param Calendar_Event $event
      */
