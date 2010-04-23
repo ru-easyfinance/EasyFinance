@@ -49,15 +49,13 @@ easyFinance.widgets.report = function(){
             currency: currencyId,
             acclist: accountsList.toString()
         }
-        switch (reportType) {
-            case "txt_loss_difference"://"Сравнение расходов за периоды":
-            case "txt_profit_difference"://"Сравнение доходов за периоды":
-            case "txt_profit_avg_difference": //"Сравнение доходов со средним за периоды":
-            case "txt_loss_avg_difference"://"Сравнение расходов со средним за периоды":
-                requestData.dateFrom2 = $('#dateFrom').val();
-                requestData.dateTo2 = $('#dateTo').val();
-                break;
+
+        if (reportType == "txt_loss_difference" || reportType == "txt_profit_difference"
+            || reportType == "txt_loss_avg_difference" || reportType == "txt_profit_avg_difference") {
+                requestData.dateFrom2 = $('#dateFrom2').val();
+                requestData.dateTo2 = $('#dateTo2').val();
         }
+
         easyFinance.models.report.load(requestData, function(data){
             switch (reportType) {
                 case "graph_profit":
