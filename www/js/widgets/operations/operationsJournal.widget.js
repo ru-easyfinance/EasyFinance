@@ -62,7 +62,6 @@ easyFinance.widgets.operationsJournal = function(){
 
             if (  data[v].transfer > 0 ) {
                 tp = 'transfer';
-                data[v].cat_name = data[v].cat_name + ' "' + data[v].account_name + '"';
             } else if (data[v].virt == "1") {
                 tp = 'target';
             } else {
