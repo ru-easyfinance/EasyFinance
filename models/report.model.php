@@ -134,10 +134,10 @@ class Report_Model
             if ( (int) $value['cur_id'] == $currency_id ) {
                 $money = $value['money'];
             } else {
-                try {
-                    $money = round($value['money'] * (float) $currencies[ $value['cur_id'] ]['value'], 2);
-                } catch (Exception $e) {
-                    throw new Exception($e->getMessage());
+                if (isset($currencies[$value['cur_id']])) {
+                    $money = round($value['money'] * (float) $currencies[$value['cur_id']]['value'], 2);
+                } else {
+                    throw new Exception("Currency #{$value['cur_id']} not found");
                 }
             }
 
@@ -197,10 +197,10 @@ class Report_Model
             if ( (int) $value['cur_id'] == $currency_id ) {
                 $money = $value['money'];
             } else {
-                try {
-                    $money = round($value['money'] * (float) $currencies[ $value['cur_id'] ]['value'], 2);
-                } catch (Exception $e) {
-                    throw new Exception($e->getMessage());
+                if (isset($currencies[$value['cur_id']])) {
+                    $money = round($value['money'] * (float) $currencies[$value['cur_id']]['value'], 2);
+                } else {
+                    throw new Exception("Currency #{$value['cur_id']} not found");
                 }
             }
 
