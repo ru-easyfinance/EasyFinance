@@ -210,12 +210,7 @@ easyFinance.widgets.operationEdit = function(){
         // настраиваем переключение между
         // обычным режимом и планированием
         $("#op_addoperation_but").click(function() {
-            _isEditing = false;
-            _isCalendar = false;
-            _isChain = false;
-
-            _$blockCalendar.hide();
-            _expandNormal();
+            showForm();
         });
 
         $("#op_addtocalendar_but").click(function() {
@@ -978,7 +973,12 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function showForm() {
-        _$dialog.dialog("open");
+        _isEditing = false;
+        _isCalendar = false;
+        _isChain = false;
+
+        _$blockCalendar.hide();
+        _expandNormal();
     }
 
     /**
