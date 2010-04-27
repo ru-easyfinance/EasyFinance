@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    /* @TEST
+    if (document.location.pathname.indexOf("integration") != -1) {
+        $("#lblRegistrationStatus").removeClass("hidden").html("Регистрация успешно завершена!");
+    }
+    */
+
     function registrationCallback(data) {
         registrationCanClick = true;
 
