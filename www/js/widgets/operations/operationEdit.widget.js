@@ -706,6 +706,8 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_amount,#op_conversion,#op_transfer,#op_AccountForTransfer,#op_comment,#op_tags').val('');
         $('span#op_amount_target').text();
 
+        $('#op_date').datepicker('setDate', new Date());
+
         $('span#op_amount_done').text();
         $('span#op_forecast_done').text();
         $('span#op_percent_done').text();
@@ -906,11 +908,7 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_amount').val(_oldSum);
     }
 
-    function setType(id){
-		if (id == "0") {
-			return;
-		}
-	
+    function setType(id){	
         _selectedType = id;
         _changeOperationType();
         if (_$ufdType) {
@@ -922,7 +920,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedAccount = id;
         _changeAccountForTransfer();
         if (_$ufdAccount) {
@@ -934,7 +932,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedCategory = id;
         if (_$ufdCategory) {
             _$ufdCategory.selectOptions(id, true).ufd("changeOptions");
@@ -945,7 +943,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedTransfer = id;
         _changeAccountForTransfer();
         if (_$ufdTransfer) {
