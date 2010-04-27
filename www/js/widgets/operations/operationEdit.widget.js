@@ -1039,6 +1039,8 @@ easyFinance.widgets.operationEdit = function(){
 
                 setSum(data.moneydef || Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
                 $("#op_amount").change();
+            } else {
+                setSum(Math.abs(data.money || data.amount || data.moneydef || 0));
             }
         } else {
             // обычная операция
