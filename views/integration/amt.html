@@ -2,9 +2,13 @@
 			<div class="cct"></div>
 			<div class="mid general_cont">
 				{if $user_info.user_id > 0}
-                    Блок для авторизованных пользователей
+                    <div>Блок для авторизованных пользователей</div>
                 {else}
-                    Блок для неавторизованных пользователей
+                    <div>Блок для неавторизованных пользователей</div>
+                    <br><br>
+                    <div align="center">
+                        {include file="common/registration.html"}
+                    </div>
                 {/if}
 			</div>
 			<div class="ccb"></div>
