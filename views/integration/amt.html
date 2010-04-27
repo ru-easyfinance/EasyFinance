@@ -1,7 +1,11 @@
 		<div class="ramka2">
 			<div class="cct"></div>
 			<div class="mid general_cont">
-				
+				{if $user_info.user_id > 0}
+                    Блок для авторизованных пользователей
+                {else}
+                    Блок для неавторизованных пользователей
+                {/if}
 			</div>
 			<div class="ccb"></div>
 		</div>
