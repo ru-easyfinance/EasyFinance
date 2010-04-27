@@ -214,15 +214,7 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $("#op_addtocalendar_but").click(function() {
-            _isEditing = false;
-            _isCalendar = true;
-            _isChain = true;
-            _expandCalendar();
-
-            // TEMP: не показываем операции на фин. цель
-            var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
-            $("#op_type").html(htmlOptions).ufd("changeOptions");
-            // EOF TEMP
+            showFormCalendar();
         });
 
         $('#op_amount').keypress(function(e){
@@ -981,6 +973,18 @@ easyFinance.widgets.operationEdit = function(){
         _expandNormal();
     }
 
+    function showFormCalendar() {
+        _isEditing = false;
+        _isCalendar = true;
+        _isChain = true;
+        _expandCalendar();
+
+        // TEMP: не показываем операции на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+        $("#op_type").html(htmlOptions).ufd("changeOptions");
+        // EOF TEMP
+    }
+
     /**
      * Функция заполняет форму данными
      * @param data: данные для заполнения
@@ -1141,6 +1145,7 @@ easyFinance.widgets.operationEdit = function(){
         setAccount: setAccount,
         setTransfer: setTransfer,
         showForm: showForm,
+        showFormCalendar: showFormCalendar,
         fillForm: fillForm,
         fillFormCalendar: fillFormCalendar,
         refreshAccounts: refreshAccounts,

@@ -173,11 +173,10 @@ easyFinance.widgets.calendar = function(){
                 });
             },
             dayClick: function(date, allDay, jsEvent, view){
-                elem = {
-                    date: $.datepicker.formatDate('dd.mm.yy', date),
-                    time: ''//dt.toLocaleTimeString().substr(0, 5)
-                };
-                easyFinance.widgets.operationEdit.fillFormCalendar(elem, false, true);
+                // открываем окно планирования
+                easyFinance.widgets.operationEdit.showFormCalendar();
+                // подставляем выбранный день
+                $('#op_date').datepicker('setDate', date);
             },
             eventDragStart: function(calEvent, jsEvent, ui){
             
