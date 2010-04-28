@@ -94,17 +94,11 @@ easyFinance.widgets.report = function(){
         $('#Period21,#Period22,.operation_list').hide();
         var key, money;
         //        var cur = easyFinance.models.currency.getCurrencyList();
-        var multiplier = 0;//курс в знаменателе. в чём отображаем
         var totalAmount = 0;
         var other = 0;
-        /*
-         * @deprecated присылать с сервера хотябы id валюты
-         */
-        multiplier = easyFinance.models.currency.getCurrencyCostById(currencyId);
+
         for (var mainKey in data[0]) {
-            multiplier = easyFinance.models.currency.getCurrencyCostById(data[0][mainKey].cur_id) / multiplier;
-            totalAmount += data[0][mainKey]['money'] * multiplier;
-            data[0][mainKey].money *= multiplier;
+            totalAmount += data[0][mainKey]['money'];
         }
         $('#chart').html("<div id='chart1div'>FusionCharts</div>");
         var chart = "<chart numberPrefix='" + (easyFinance.models.currency.getCurrencyTextById(currencyId)) + " '>";
@@ -143,14 +137,7 @@ easyFinance.widgets.report = function(){
     function ShowCompareGraph(data, currencyId){
         $('#chart').empty();
         var key, tempValue;
-        
-        var multiplier = 0;//курс в знаменателе. в чём отображаем
-        multiplier = easyFinance.models.currency.getCurrencyCostById(currencyId);
-        for (var mainKey in data[0]) {
-            multiplier = easyFinance.models.currency.getCurrencyCostById(data[0][mainKey].cur_id) / multiplier;
-            data[0][mainKey].money *= multiplier;
-        }
-        
+                
         $('#chart').html("<div id='chart1div'>FusionCharts</div>");
         
         var categories = '<categories>';
