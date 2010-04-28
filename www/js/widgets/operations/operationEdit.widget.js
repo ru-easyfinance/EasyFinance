@@ -214,15 +214,7 @@ easyFinance.widgets.operationEdit = function(){
         });
 
         $("#op_addtocalendar_but").click(function() {
-            _isEditing = false;
-            _isCalendar = true;
-            _isChain = true;
-            _expandCalendar();
-
-            // TEMP: не показываем операции на фин. цель
-            var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
-            $("#op_type").html(htmlOptions).ufd("changeOptions");
-            // EOF TEMP
+            showFormCalendar();
         });
 
         $('#op_amount').keypress(function(e){
@@ -714,6 +706,8 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_amount,#op_conversion,#op_transfer,#op_AccountForTransfer,#op_comment,#op_tags').val('');
         $('span#op_amount_target').text();
 
+        $('#op_date').datepicker('setDate', new Date());
+
         $('span#op_amount_done').text();
         $('span#op_forecast_done').text();
         $('span#op_percent_done').text();
@@ -914,11 +908,7 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_amount').val(_oldSum);
     }
 
-    function setType(id){
-		if (id == "0") {
-			return;
-		}
-	
+    function setType(id){	
         _selectedType = id;
         _changeOperationType();
         if (_$ufdType) {
@@ -930,7 +920,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedAccount = id;
         _changeAccountForTransfer();
         if (_$ufdAccount) {
@@ -942,7 +932,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedCategory = id;
         if (_$ufdCategory) {
             _$ufdCategory.selectOptions(id, true).ufd("changeOptions");
@@ -953,7 +943,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedTransfer = id;
         _changeAccountForTransfer();
         if (_$ufdTransfer) {
@@ -979,6 +969,18 @@ easyFinance.widgets.operationEdit = function(){
 
         _$blockCalendar.hide();
         _expandNormal();
+    }
+
+    function showFormCalendar() {
+        _isEditing = false;
+        _isCalendar = true;
+        _isChain = true;
+        _expandCalendar();
+
+        // TEMP: не показываем операции на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+        $("#op_type").html(htmlOptions).ufd("changeOptions");
+        // EOF TEMP
     }
 
     /**
@@ -1039,6 +1041,8 @@ easyFinance.widgets.operationEdit = function(){
 
                 setSum(data.moneydef || Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
                 $("#op_amount").change();
+            } else {
+                setSum(Math.abs(data.money || data.amount || data.moneydef || 0));
             }
         } else {
             // обычная операция
@@ -1139,6 +1143,7 @@ easyFinance.widgets.operationEdit = function(){
         setAccount: setAccount,
         setTransfer: setTransfer,
         showForm: showForm,
+        showFormCalendar: showFormCalendar,
         fillForm: fillForm,
         fillFormCalendar: fillFormCalendar,
         refreshAccounts: refreshAccounts,
