@@ -3,3 +3,12 @@
     font-weight: bold;
     font-size: large;
 }
+
+#integrationSteps #registration {
+    display: none;
+}
+
+.ui-dialog #registration h2{
+    display: none;
+}
+
