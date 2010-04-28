@@ -8,70 +8,9 @@
 
     <h2>Вход в систему</h2>
 
-    <div class="loginError">{$errorMessage}</div>
-
-{if $smarty.const.IS_DEMO == false}
-    <form action="/login/" method="post" onSubmit="return checkLogin()">
-{else}
-    <form action="http://{$smarty.const.URL_ROOT}login/" method="post" onSubmit="return checkLogin()">
-{/if}
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <td class="name"><label for="flogin">Логин:</label></td>
-                <td><input id="flogin" type="text" name="login"/></td>
-            </tr>
-            <tr>
-                <td class="name"><label for="pass">Пароль:</label></td>
-                <td><input type="password" id="pass" name="pass" /></td>
-            </tr>
-            <tr>
-                <td class="name"><label for="autoLogin">Запомнить меня:</label></td>
-                <td><input type="checkbox" class="forget" value="" name="autoLogin" id="autoLogin" checked="checked"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input id="btnLogin" type="submit" value="Войти" class="but"/></td>
-            </tr>
-            <tr>
-                <td class="name"></td>
-                <td>
-                    <a href="/registration/">Регистрация</a><br>
-                    <a href="/restore/">Восстановление пароля</a>
-                </td>
-            </tr>
-        </table>
-    </form>
+    {include file="common/authentication.html"}
 </div>
-{literal}
-<SCRIPT TYPE="text/javascript">
-    function checkLogin() {
-        if ($('#flogin').val() == '') {
-            $.jGrowl("Введите логин!", {theme: 'red'});
-            return false;
-        }
 
-        if ($('#pass').val() == '') {
-            $.jGrowl("Введите пароль!", {theme: 'red'});
-            return false;
-        }
-
-        return true;
-    }
-    $(document).ready(function(){
-        // fix for ticket #463
-        $('#login form').keypress(function(e){
-            //if generated character code is equal to ascii 13 (if enter key)
-            if(e.keyCode == 13){
-                //submit the form
-                $(e.target).closest('form').submit();
-                return false;
-            } else {
-                return true;
-            }
-        });
-    });
-</SCRIPT>
-{/literal}
 <div  id="formConfirm" class="formConfirm" style="height:250px;padding: 10px;display:none;">
     <div class="block2" style="margin-left:200px">
         <div class="ramka3">

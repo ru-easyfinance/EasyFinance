@@ -60,9 +60,9 @@ Core::getInstance()->js = array(
 		'widgets/services/expertsList.widget', 
 		'screens/services.screen', 
 		'jquery/jquery.fancybox-1.0.0'),
-    'login' => array('welcome'),
+    'login' => array('welcome', 'login'),
     'info' => array('info'),
-    'integration' => array('registration', 'screens/integration.screen'),
+    'integration' => array('registration', 'login', 'screens/integration.screen'),
     'category' => array(
 		'models/category.model', 
 		'category'),

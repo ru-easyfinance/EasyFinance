@@ -14,6 +14,17 @@ $(function() {
     $("#btnRegister").click(function() {
         _$dlgRegistration.dialog('open');
     });
+    
+    var _$dlgAuthentication = $("#authentication").dialog({
+        title: "Вход в систему",
+        bgiframe: true,
+        autoOpen: false,
+        modal:true
+    });
+
+    $("#btnLogin").click(function() {
+        _$dlgAuthentication.dialog('open');
+    });
 
     /* // @TEST
     if (document.location.pathname.indexOf("integration") != -1) {
