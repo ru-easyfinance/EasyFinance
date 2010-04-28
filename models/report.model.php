@@ -119,29 +119,28 @@ class Report_Model
         $result = $this->_db->select($sql, Core::getInstance()->user->getId(),
                 $drain, $start, $end);
 
-        $currencies = $this->getCurrency( $this->_user );
+        $currencies       = $this->getCurrency( $this->_user );
 
         // Создаём чистый массив и наполняем его чистыми данными (конвертируя автоматом курс валюты)
         $return = array();
         foreach ( $result as $key => $value ) {
 
+            $value['money'] = abs($value['money']);
+
             $return[ $key ]['cat'] = $value['cat'];
- 
+
             $return[ $key ]['cur_char_code'] = $currencies[ $currency_id ]['char_code'];
             
             $return[ $key ]['cur_id'] = $currency_id;
 
-            if ( (int) $value['cur_id'] == $currency_id ) {
-                $money = $value['money'];
+            if (isset($currencies[$currency_id]['value'])) {
+                // Сумма операции * курс валюты операции / итоговый курс
+                $money = $value['money'] * $currencies[$value['cur_id']]['value'] / $currencies[$currency_id]['value'];
             } else {
-                if (isset($currencies[$value['cur_id']])) {
-                    $money = round($value['money'] * (float) $currencies[$value['cur_id']]['value'], 2);
-                } else {
-                    throw new Exception("Currency #{$value['cur_id']} not found");
-                }
+                throw new Exception("Currency #{$currency_id} not found");
             }
 
-            if ( isset ( $return[ $value['cat_id'] ]['money'] ) ) {
+            if ( isset ( $return[ $key ]['money'] ) ) {
                 $return[ $key ]['money'] +=  $money;
             } else {
                 $return[ $key ]['money'] =  $money;
@@ -194,16 +193,13 @@ class Report_Model
 
         foreach($result as $value) {
 
-            if ( (int) $value['cur_id'] == $currency_id ) {
-                $money = $value['money'];
+            if (isset($currencies[$currency_id]['value'])) {
+                // Сумма операции * курс валюты операции / итоговый курс
+                $money = $value['money'] * $currencies[$value['cur_id']]['value'] / $currencies[$currency_id]['value'];
             } else {
-                if (isset($currencies[$value['cur_id']])) {
-                    $money = round($value['money'] * (float) $currencies[$value['cur_id']]['value'], 2);
-                } else {
-                    throw new Exception("Currency #{$value['cur_id']} not found");
-                }
+                throw new Exception("Currency #{$currency_id} not found");
             }
-
+            
             // Доходы
             if ($value['drain'] == 0) {
                 $sort[$value['datef']]['in']  = $money;
