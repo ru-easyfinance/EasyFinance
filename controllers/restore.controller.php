@@ -6,6 +6,8 @@
  */
 class Restore_Controller extends _Core_Controller
 {
+    private $_timelimit = 900; // 15 минут
+
 	/**
 	 * Конструктор класса
 	 * @return void
@@ -25,10 +27,10 @@ class Restore_Controller extends _Core_Controller
 		$this->tpl->assign('name_page', 'profile/restore/form');
 		
 		// Валидация homo-sapiens
-		$restoreHash = base64_encode( $this->generateCode() . 'RfacztT' . (time() + 60) );
+		$restoreHash = base64_encode( $this->generateCode() . 'RfacztT' . (time() + $this->_timelimit) );
 		
 		$_SESSION['restoreHash'] = $restoreHash;
-		setcookie('sessIds', $restoreHash, time() + 60);
+		setcookie('sessIds', $restoreHash, time() + $this->_timelimit);
 	}
 	
 	public function submit_request()

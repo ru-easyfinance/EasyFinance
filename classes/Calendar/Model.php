@@ -348,9 +348,19 @@ class Calendar_Model extends _Core_Abstract_Model
             return false;
         }
 
-        $sql = "UPDATE operation SET accepted=1 WHERE id IN ( {$stringIds} ) AND user_id=?;";
+        // Получаем все id для парных операций (нужно только для переводов)
+        $sql = "SELECT id FROM operation
+                WHERE (id IN ({$stringIds}) OR tr_id IN ({$stringIds}))
+                    AND user_id=? AND id > 0
+                UNION DISTINCT
+                SELECT tr_id FROM operation
+                WHERE (id IN ({$stringIds}) OR tr_id IN ({$stringIds}))
+                    AND user_id=? AND tr_id > 0";
+        $ids = Core::getInstance()->db->selectCol($sql, $user->getId(), $user->getId());
 
-        if (Core::getInstance()->db->query($sql, $user->getId())) {
+        // Обновляем все операции
+        $sql = "UPDATE operation SET accepted=1 WHERE id IN (".implode(",", $ids).")";
+        if (Core::getInstance()->db->query($sql)) {
             return true;
         } else {
             return false;
