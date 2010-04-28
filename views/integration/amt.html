@@ -1,15 +1,48 @@
 		<div class="ramka2">
 			<div class="cct"></div>
 			<div class="mid general_cont">
-				{if $user_info.user_id > 0}
-                    <div>Блок для авторизованных пользователей</div>
-                {else}
-                    <div>Блок для неавторизованных пользователей</div>
-                    <br><br>
-                    <div align="center">
-                        {include file="common/registration.html"}
+                <div>
+                    {if $user_info.user_id > 0}
+                        <div>Блок для авторизованных пользователей</div><br>
+                    {else}
+                        <div>Блок для неавторизованных пользователей</div><br>
+                    {/if}
+                </div>
+                <div id="integrationSteps">
+                    <h3><a href="#">1. {if $user_info.user_id > 0}авторизация{else}регистрация{/if}</a></h3>
+                    <div>
+                        {if $user_info.user_id > 0}
+                            <div>Блок для авторизованных пользователей</div><br>
+                        {else}
+                            <div align="center">
+                                {include file="common/registration.html"}
+                            </div>
+                        {/if}
                     </div>
-                {/if}
+                    <h3><a href="#">2. </a></h3>
+                    <div>
+                        <p>
+                        Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                        purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                        velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                        suscipit faucibus urna.
+                        </p>
+                    </div>
+                    <h3><a href="#">3. </a></h3>
+                    <div>
+                        <p>
+                        Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                        Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                        ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                        lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                        </p>
+                        <ul>
+                            <li>List item one</li>
+                            <li>List item two</li>
+                            <li>List item three</li>
+                        </ul>
+                    </div>
+                </div>
 			</div>
 			<div class="ccb"></div>
 		</div>

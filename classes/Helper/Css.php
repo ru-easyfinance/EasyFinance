@@ -16,7 +16,8 @@ class Helper_Css implements _Core_Router_iHook
 			$templateEngine->append('css', 'jquery/south-street/ui.core.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.resizable.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.dialog.css');
-			$templateEngine->append('css', 'jquery/south-street/ui.tabs.css');
+			$templateEngine->append('css', 'jquery/south-street/ui.accordion.css');
+            $templateEngine->append('css', 'jquery/south-street/ui.tabs.css');
 			$templateEngine->append('css', 'jquery/south-street/ui.datepicker.css');
 			$templateEngine->append('css', 'jquery/jquery.rw-calculator.css');
 			$templateEngine->append('css', 'jquery/jquery.jgrowl.css');
@@ -46,6 +47,8 @@ class Helper_Css implements _Core_Router_iHook
             $templateEngine->append('css', 'budget.css');
             $templateEngine->append('css', 'accountsPanel.css');
             $templateEngine->append('css', 'accountsJournal.css');
+
+            $templateEngine->append('css', 'screens/integration.screen.css');
 		}
 	}
 }

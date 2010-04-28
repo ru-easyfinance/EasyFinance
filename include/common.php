@@ -62,7 +62,7 @@ Core::getInstance()->js = array(
 		'jquery/jquery.fancybox-1.0.0'),
     'login' => array('welcome'),
     'info' => array('info'),
-    'integration' => array('registration'),
+    'integration' => array('registration', 'screens/integration.screen'),
     'category' => array(
 		'models/category.model', 
 		'category'),

@@ -62,6 +62,16 @@
          */
         function new_user ()
         {
+            // @TEST регистрации, #1231
+            /*
+            $json 	= array (
+                'result' => array (
+                    'text' => "Регистрация прошла успешно!"
+                    )
+            );
+            die (json_encode ($json) );
+            */
+
             die( json_encode( $this->model->new_user () ) );
         }
     }

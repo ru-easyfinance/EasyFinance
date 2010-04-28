@@ -1,10 +1,4 @@
-$(document).ready(function() {
-    /* @TEST
-    if (document.location.pathname.indexOf("integration") != -1) {
-        $("#lblRegistrationStatus").removeClass("hidden").html("Регистрация успешно завершена!");
-    }
-    */
-
+$(document).ready(function() {   
     function registrationCallback(data) {
         registrationCanClick = true;
 
@@ -16,16 +10,12 @@ $(document).ready(function() {
                 if (data.error.redirect)
                     setTimeout(function(){window.location = data.error.redirect;},3000);
             } else if (data.result) {
-                // @todo: #1215
-                // #1215 регистрация на странице интеграции
                 if (document.location.pathname.indexOf("integration") != -1) {
-                    alert('TODO: переходим на следующий этап интеграции!');
-                    $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена!");
+                    // #1215 регистрация на странице интеграции
+                    $.jGrowl("Регистрация успешно завершена!", {theme: 'green'});
+                    $("#integrationSteps").accordion("activate" , 1);
                 } else {
                     $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/login\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу входа через несколько секунд)");
-
-                    //if (data.result.text)
-                    //    $.jGrowl(data.result.text, {theme: 'green'});
 
                     if (data.result.redirect)
                         setTimeout(function(){window.location = data.result.redirect;},3000);

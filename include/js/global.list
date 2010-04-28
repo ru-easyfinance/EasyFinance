@@ -8,6 +8,7 @@ jquery/ui.draggable.js
 jquery/ui.dialog.js
 jquery/ui.datepicker.js
 jquery/ui.tabs.js
+jquery/ui.accordion.js
 jquery/jquery.qtip.js
 jquery/jquery.jgrowl.min.js
 calculator.js
