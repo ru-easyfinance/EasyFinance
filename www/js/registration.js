@@ -98,7 +98,7 @@ $(document).ready(function() {
 
                 if ($("#formRegister").valid()) {
                     // изменил вывод сообщений, см. тикет #1128
-                    $("#lblRegisrationStatus").removeClass("hidden");
+                    $("#lblRegistrationStatus").removeClass("hidden");
                     registrationCanClick = false;
 
                     $.post(
