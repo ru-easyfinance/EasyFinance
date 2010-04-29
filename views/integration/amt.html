@@ -9,14 +9,14 @@
                     {/if}
                 </div>
                 <div id="integrationSteps">
-                    <h3><a href="#">1. {if $user_info.user_id > 0}Вход в систему выполнен{else}Регистрация / Вход в систему{/if}</a></h3>
+                    <h3><a href="#">1. {if $user_info.user_id > 0}Вход в систему выполнен{else}Зарегистрироваться или войти{/if}</a></h3>
                     <div>
                         {if $user_info.user_id > 0}
                             <div>Блок для авторизованных пользователей</div><br>
                         {else}
-                            <div align="center">
-                                <input id="btnShowRegister" type="button" value="Зарегистрироваться" />
-                                <input id="btnShowLogin" type="button" value="Войти в систему" /><br>
+                            <div align="left">
+                                <input id="btnShowRegister" type="button" value="Зарегистрироваться" />&nbsp;&nbsp;&nbsp;или&nbsp;&nbsp;
+                                <input id="btnShowLogin" type="button" value="Войти" /><br>
                                 {include file="common/registration.html"}
                                 {include file="common/authentication.html"}
                             </div>
