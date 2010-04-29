@@ -11,7 +11,7 @@ $(function() {
         modal:true
     });
 
-    $("#btnRegister").click(function() {
+    $("#btnShowRegister").click(function() {
         _$dlgRegistration.dialog('open');
     });
     
@@ -22,7 +22,7 @@ $(function() {
         modal:true
     });
 
-    $("#btnLogin").click(function() {
+    $("#btnShowLogin").click(function() {
         _$dlgAuthentication.dialog('open');
     });
 

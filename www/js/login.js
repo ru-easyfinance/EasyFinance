@@ -13,12 +13,55 @@ function checkLogin() {
 }
     
 $(document).ready(function(){
+    var loginCanClick = true;
+    $('#btnLogin').click(function(e){
+        // @TODO: prevent double-click
+        //if (!loginCanClick) {
+        //    return false;
+        //}
+
+        if (document.location.pathname.indexOf("integration") != -1) {
+            // #1241 авторизация без редиректа на странице интеграции
+            //loginCanClick = false;
+            //$("#btnLogin").attr("disabled", "disabled");
+
+            $.post(
+                "/login/",
+                {
+                    responseMode: "json",
+                    login: $('#flogin').val(),
+                    pass: $('#pass').val()
+                }, function(data) {
+                    // @TODO: prevent double-click
+                    //loginCanClick = true;
+                    //$("#btnLogin").removeAttr("disabled");
+                    
+                    if (data) {
+                        if (data.error) {
+                            if (data.error.text)
+                                $.jGrowl(data.error.text, {theme: 'red', life: 2500});
+                        } else if (data.result) {
+                            if (data.result.text)
+                                $.jGrowl(data.result.text, {theme: 'green', life: 2500});
+                        }
+                    } else {
+                        $.jGrowl('Ошибка на сервере!', {theme: 'red'});
+                    }
+                }, 'json'
+            );
+        } else {
+            $(e.target).closest('form').submit();
+        }
+        
+        return false;
+    });
+
     // fix for ticket #463
     $('#login form').keypress(function(e){
         //if generated character code is equal to ascii 13 (if enter key)
         if(e.keyCode == 13){
             //submit the form
-            $(e.target).closest('form').submit();
+            $("#btnLogin").click();
             return false;
         } else {
             return true;
