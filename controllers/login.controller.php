@@ -30,6 +30,9 @@ class Login_Controller extends _Core_Controller
 	 */
 	function index($args)
 	{
+
+        session_start();
+        
 		$user = Core::getInstance()->user;
 		
 		// Обьект запроса
@@ -56,7 +59,7 @@ class Login_Controller extends _Core_Controller
 				$errorMessage = 'Некорректный логин или пароль!';
 			}
 		}
-		
+
 		// Ошибка передаётся в шаблон только при POST запросе
 		if( $request->method != 'POST' )
 		{
@@ -87,25 +90,37 @@ class Login_Controller extends _Core_Controller
             }
 
 			// У пользователя нет категорий, т.е. надо помочь ему их создать
-			if ( sizeof($user->getUserCategory()) == 0 && $user->getType() == 0)
-			{
+			if ( sizeof($user->getUserCategory()) == 0 && $user->getType() == 0) {
+
 				$this->model->activate_user();
+                
 			}
-			else
-			{
-				if (isset($_SESSION['REQUEST_URI']))
-				{
-					header("Location: ".$_SESSION['REQUEST_URI']);
-					unset($_SESSION['REQUEST_URI']);
-					exit;
-				}
-				else
-				{
-					header("Location: /info/");
-					exit;
-				}
-			}
+
+            // Устанавливаем дефолтный путь
+            if (!isset($_SESSION['REQUEST_URI'])) {
+                $_SESSION['REQUEST_URI'] = '/info/';
+            }
 		}
+
+        if ( isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {
+            if (!$errorMessage) {
+                die(json_encode(
+                    array('result' => array(
+                            'text' => 'Login success!'
+                ))));
+            } else {
+                die(json_encode(
+                    array('error' => array(
+                            'text' => $errorMessage
+                ))));
+            }
+        } else {
+            if (!$errorMessage) {
+                header("Location: ".$_SESSION['REQUEST_URI']);
+                unset($_SESSION['REQUEST_URI']);
+                exit;
+            }
+        }
 
 		// Если демо режим - всегда показываем Гид
 		if (IS_DEMO)

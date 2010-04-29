@@ -190,9 +190,6 @@ class Login_Model
                 ->setBody($body, 'text/html');
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
-            
-            header("Location: /info/");
-            exit;
         } else {
 
         }
@@ -200,6 +197,7 @@ class Login_Model
 	
 	/**
 	 * Пользователь авторизируется через диалог ввода логина и пароля
+     * @deprecated Похоже что она больше не используется
 	 */
 	function auth_user()
 	{
@@ -210,8 +208,7 @@ class Login_Model
 			$login = htmlspecialchars($_POST['login']);
 			$pass = sha1($_POST['pass']);
 			
-            		if ($user->initUser($login,$pass))
-            		{
+            if ($user->initUser($login,$pass)) {
 				// Шифруем и сохраняем куки
 				if (isset($_POST['autoLogin']))
 				{
@@ -228,39 +225,45 @@ class Login_Model
 				$this->db = Core::getInstance()->db;
 				$a = $this->db->query($sql , Core::getInstance()->user->getId());
 				
-				if ($a[0]['cou'] == 0)
-				{
+				if ($a[0]['cou'] == 0) {
 					setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-                			}
+                }
                 			
 				// У пользователя нет категорий, т.е. надо помочь ему их создать
-				if ( count($user->getUserCategory()) == 0 && $user->getType() == 0)
-				{
+				if ( count($user->getUserCategory()) == 0 && $user->getType() == 0) {
 					$model = new Login_Model();
 					$model->activate_user();
-				}
-				else
-				{
-					if (isset($_SESSION['REQUEST_URI']))
-					{
-						header("Location: ".$_SESSION['REQUEST_URI']);
-						unset($_SESSION['REQUEST_URI']);
-						exit;
-					}
-					else
-					{
-                        header("Location: /info/");
-						exit;
-					}
+				} else {
+                    if ( isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {
+                        unset($_SESSION['REQUEST_URI']);
+                        die(
+                            json_encode(
+                                array(
+                                    'result' => array(
+                                        'text' => 'Login success!'
+                                    )
+                                )
+                            )
+                        );
+                    } else {
+                        if (isset($_SESSION['REQUEST_URI'])) {
+                            header("Location: ".$_SESSION['REQUEST_URI']);
+                            unset($_SESSION['REQUEST_URI']);
+                            exit;
+                        } else {
+                            header("Location: /info/");
+                            exit;
+                        }
+                    }
 				}
 			}
 		}
 
-                if (IS_DEMO)
-                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
+        if (IS_DEMO) {
+            setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
+        }
 
-		if( IS_DEMO && !Core::getInstance()->user->getId() )
-		{
+		if( IS_DEMO && !Core::getInstance()->user->getId() ) {
                     $this->authDemoUser();
 		}
 	}
