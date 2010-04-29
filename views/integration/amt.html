@@ -1,4 +1,6 @@
-		<div class="ramka2">
+        {include file="common/accountEdit.html"}
+
+        <div class="ramka2">
 			<div class="cct"></div>
 			<div class="mid general_cont">
                 <div>
@@ -56,23 +58,27 @@
                             </div>
                         </div>
                     </div>
-                    <h3><a href="#">3. </a></h3>
+                    <h3><a href="#">3. Создание и привязка счёта</a></h3>
                     <div>
-                        <p>
-                        Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                        Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                        ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                        lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                        </p>
-                        <ul>
-                            <li>List item one</li>
-                            <li>List item two</li>
-                            <li>List item three</li>
-                        </ul>
+                        <div>Здесь инструкция</div><br>
+                        <div>
+                            Выберите счёт из списка:
+                            <select id="optionAccount">
+                                <option value="1">Счёт 1</option>
+                                <option value="2">Счёт 2</option>
+                                <option value="3">Счёт 3</option>
+                            </select><br>
+                            Так же Вы можете <button id='btnCreateAccount'>создать счёт</button><br><br>
+                            <button id='btnBackToEmail'>Предыдущий шаг</button>
+                            <button id='btnLinkAccount'>Следующий шаг</button>
+                        </div>
+                    </div>
+                    <h3><a href="#">4. Заполнение анкеты</a></h3>
+                    <div>
+                        <div>Здесь анкета</div>
                     </div>
                 </div>
 			</div>
 			<div class="ccb"></div>
 		</div>
-
 <!--/середина-->

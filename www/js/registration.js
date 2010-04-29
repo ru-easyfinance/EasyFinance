@@ -12,8 +12,13 @@ $(document).ready(function() {
             } else if (data.result) {
                 if (document.location.pathname.indexOf("integration") != -1) {
                     // #1215 регистрация на странице интеграции
-                    $.jGrowl("Регистрация успешно завершена!", {theme: 'green'});
-                    $("#integrationSteps").accordion("activate" , 1);
+                    // $.jGrowl("Регистрация успешно завершена!", {theme: 'green'});
+                    
+                    //$("#integrationSteps").accordion("activate" , 1);
+                    // перезагружаем страницу.
+                    // поскольку пользователь будет уже залогинен,
+                    // после обновления на странице будут данные в res
+                    window.location.reload();
                 } else {
                     $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/login\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу входа через несколько секунд)");
 

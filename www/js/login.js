@@ -22,7 +22,6 @@ $(document).ready(function(){
 
         if (document.location.pathname.indexOf("integration") != -1) {
             // #1241 авторизация без редиректа на странице интеграции
-            //loginCanClick = false;
             //$("#btnLogin").attr("disabled", "disabled");
 
             $.post(
@@ -33,7 +32,6 @@ $(document).ready(function(){
                     pass: $('#pass').val()
                 }, function(data) {
                     // @TODO: prevent double-click
-                    //loginCanClick = true;
                     //$("#btnLogin").removeAttr("disabled");
                     
                     if (data) {
@@ -41,10 +39,14 @@ $(document).ready(function(){
                             if (data.error.text)
                                 $.jGrowl(data.error.text, {theme: 'red', life: 2500});
                         } else if (data.result) {
-                            if (data.result.text)
-                                $.jGrowl(data.result.text, {theme: 'green', life: 2500});
+                            //if (data.result.text)
+                            //    $.jGrowl(data.result.text, {theme: 'green', life: 2500});
 
-                            $("#integrationSteps").accordion("activate" , 1);
+                            //$("#integrationSteps").accordion("activate" , 1);
+                            // перезагружаем страницу.
+                            // поскольку пользователь будет уже залогинен,
+                            // после обновления на странице будут данные в res
+                            window.location.reload();
                         }
                     } else {
                         $.jGrowl('Ошибка на сервере!', {theme: 'red'});
