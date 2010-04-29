@@ -32,14 +32,6 @@ class Login_Controller extends _Core_Controller
 	{
 		$user = Core::getInstance()->user;
 		
-		// Если пользователь авторизован
-		if ( $user->getId() )
-		{
-			// Редиректим его на первую страницу
-			header("Location: /info/");
-			exit();
-		}
-		
 		// Обьект запроса
 		$request = _Core_Request::getCurrent();
 		
@@ -87,12 +79,13 @@ class Login_Controller extends _Core_Controller
 			{
 				setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
 			}
-			
+
+
 			if ( sizeof($user->getUserCategory()) == 0 )
 			{
 				setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
             }
-                		
+
 			// У пользователя нет категорий, т.е. надо помочь ему их создать
 			if ( sizeof($user->getUserCategory()) == 0 && $user->getType() == 0)
 			{
@@ -113,7 +106,7 @@ class Login_Controller extends _Core_Controller
 				}
 			}
 		}
-		
+
 		// Если демо режим - всегда показываем Гид
 		if (IS_DEMO)
 		{

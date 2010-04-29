@@ -227,14 +227,15 @@ class User
         if ($this->getType() === 0)
         {
             $this->init();
-
-            // Если у нас есть неподтверждённые операции, то переходим на них
-            if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
-                $_SESSION['REQUEST_URI'] = '/calendar/#list';
-            // Иначе переходим на самый первый счёт #1062
-            } else {
-                $keys = array_keys($this->user_account);
-                $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
+            if (_Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA) {
+                // Если у нас есть неподтверждённые операции, то переходим на них
+                if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
+                    $_SESSION['REQUEST_URI'] = '/calendar/#list';
+                // Иначе переходим на самый первый счёт #1062
+                } else {
+                    $keys = array_keys($this->user_account);
+                    $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
+                }
             }
         }
         // Если профиль эксперта

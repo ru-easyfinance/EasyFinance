@@ -275,7 +275,9 @@ class Login_Model
 		{
 			setcookie(COOKIE_NAME, encrypt(array($auth['login'], $auth['pass'])), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
 			session_commit();
-			header("Location: /info");
+
+            $keys = array_keys($user->getUserAccounts());
+			header("Location: " . '/operation/#account=' . $keys[0]);
 			exit;
 		}
 	}
