@@ -26,6 +26,9 @@ $(function() {
         _$dlgAuthentication.dialog('open');
     });
 
+	easyFinance.widgets.userIntegrations.init();
+	easyFinance.widgets.userIntegrations.load(res.profile.integration.email && res.profile.integration.email != '' ? {service_mail : res.profile.integration.email} : {});
+
     /* // @TEST
     if (document.location.pathname.indexOf("integration") != -1) {
         $.jGrowl("Регистрация успешно завершена!", {theme: 'green'});
