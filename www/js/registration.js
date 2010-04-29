@@ -1,4 +1,31 @@
-$(document).ready(function() {
+$(document).ready(function() {   
+    function registrationCallback(data) {
+        registrationCanClick = true;
+
+        if (data) {
+            if (data.error) {
+                if (data.error.text)
+                    $.jGrowl(data.error.text, {theme: 'red', life: 2500});
+
+                if (data.error.redirect)
+                    setTimeout(function(){window.location = data.error.redirect;},3000);
+            } else if (data.result) {
+                if (document.location.pathname.indexOf("integration") != -1) {
+                    // #1215 регистрация на странице интеграции
+                    $.jGrowl("Регистрация успешно завершена!", {theme: 'green'});
+                    $("#integrationSteps").accordion("activate" , 1);
+                } else {
+                    $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/login\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу входа через несколько секунд)");
+
+                    if (data.result.redirect)
+                        setTimeout(function(){window.location = data.result.redirect;},3000);
+                }
+            }
+        } else {
+            $.jGrowl('Ошибка на сервере!', {theme: 'red'});
+        }
+    }
+
     var registrationCanClick = true;
 
     var hash = window.location.hash;
@@ -110,32 +137,11 @@ $(document).ready(function() {
                             name: $('#name').val(),
                             mail: $('#mail').val()
                         },
-                        function (data){
-                            registrationCanClick = true;
-
-                            if (data) {
-                                if (data.error) {
-                                    if (data.error.text)
-                                        $.jGrowl(data.error.text, {theme: 'red', life: 2500});
-
-                                    if (data.error.redirect)
-                                        setTimeout(function(){window.location = data.error.redirect;},3000);
-                                } else if (data.result) {
-                                    $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/login\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу входа через несколько секунд)");
-
-                                    //if (data.result.text)
-                                    //    $.jGrowl(data.result.text, {theme: 'green'});
-
-                                    if (data.result.redirect)
-                                        setTimeout(function(){window.location = data.result.redirect;},3000);
-                                }
-                            } else {
-                                $.jGrowl('Ошибка на сервере!', {theme: 'red'});
-                            }
-                        },
-                        'json')
+                        registrationCallback,
+                        'json');
                     }
-                })
-                break;
+            });
+
+            break;
 	}
 });
