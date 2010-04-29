@@ -71,7 +71,32 @@
             );
             die (json_encode ($json) );
             */
+            $login = htmlspecialchars($_POST['login']);
+            $pass = sha1($_POST['password']);
 
-            die( json_encode( $this->model->new_user () ) );
+            $answer = $this->model->new_user();
+
+            if (count($this->model->getErrors()) == 0) {
+
+
+
+                $user = Core::getInstance()->user;
+
+                if(!$user->initUser($login, $pass))
+                {
+                    die('Некорректный логин или пароль!');
+                }
+
+                $login_Model = new Login_Model();
+
+                $login_Model->login($login, $pass);
+                $answer = array (
+                    'result' => array (
+                        'text' => 'Спасибо, вы зарегистрированы!',
+                        'redirect' => "https://".URL_ROOT_MAIN."info/"
+                    )
+                );
+            }
+            die(json_encode($answer));
         }
     }

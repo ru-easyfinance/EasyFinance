@@ -30,8 +30,9 @@ class Login_Controller extends _Core_Controller
 	 */
 	function index($args)
 	{
-
-        session_start();
+        if (!session_id()) {
+            session_start();
+        }
         
 		$user = Core::getInstance()->user;
 		
@@ -72,34 +73,9 @@ class Login_Controller extends _Core_Controller
 		
 		if( !$errorMessage )
 		{
-			// Шифруем и сохраняем куки
-			if (isset($_POST['autoLogin']))
-			{
-				setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-				// Шифруем, но куки теперь сохраняются лишь до конца сессии
-			}
-			else
-			{
-				setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-			}
 
-
-			if ( sizeof($user->getUserCategory()) == 0 )
-			{
-				setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-            }
-
-			// У пользователя нет категорий, т.е. надо помочь ему их создать
-			if ( sizeof($user->getUserCategory()) == 0 && $user->getType() == 0) {
-
-				$this->model->activate_user();
-                
-			}
-
-            // Устанавливаем дефолтный путь
-            if (!isset($_SESSION['REQUEST_URI'])) {
-                $_SESSION['REQUEST_URI'] = '/info/';
-            }
+            $this->model->login($login, $pass, @$_POST['autoLogin']);
+            
 		}
 
         if ( isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {

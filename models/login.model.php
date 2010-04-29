@@ -195,6 +195,53 @@ class Login_Model
         }
     }
 	
+    /**
+     * Устанавливает куки на авторизацию
+     * @param string $login
+     * @param string $password 
+     * @param bool $remember
+     * @param User $user
+     * @return void
+     */
+    public function login($login, $password, $remember = false, User $user = null)
+    {
+        $encpass = encrypt(array($login, $password));
+
+        if (!$user) {
+            $user = Core::getInstance()->user;
+        }
+
+        // Шифруем и сохраняем куки
+        if($remember) {
+        
+            setcookie(COOKIE_NAME, $encpass, time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+
+        // Шифруем, но куки теперь сохраняются лишь до конца сессии
+        } else {
+
+            setcookie(COOKIE_NAME, $encpass, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+            
+        }
+
+        if(sizeof($user->getUserCategory()) == 0) {
+            setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
+        }
+
+        // У пользователя нет категорий, т.е. надо помочь ему их создать
+        if(sizeof($user->getUserCategory()) == 0 && $user->getType() == 0) {
+
+            $this->activate_user();
+            
+        }
+
+        // Устанавливаем дефолтный путь
+        if(!isset($_SESSION['REQUEST_URI'])) {
+            $_SESSION['REQUEST_URI'] = '/info/';
+        }
+
+    }
+
+
 	/**
 	 * Пользователь авторизируется через диалог ввода логина и пароля
      * @deprecated Похоже что она больше не используется

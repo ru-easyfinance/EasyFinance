@@ -234,7 +234,9 @@ class User
                 // Иначе переходим на самый первый счёт #1062
                 } else {
                     $keys = array_keys($this->user_account);
-                    $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
+                    if (count($keys) > 0) {
+                        $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
+                    }
                 }
             }
         }

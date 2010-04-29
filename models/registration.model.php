@@ -5,10 +5,16 @@
  * @author korogen
  * @copyright http://easyfinance.ru/
  * @category registration
- * @version SVN $Id$
  */
 class Registration_Model
 {
+    private $_error = array();
+
+    public function getErrors()
+    {
+        return $this->_error;
+    }
+
     /**
      * Активирует пользователя на портале
      * @param string $reg_id Временный ключ для регистрации SHA1
@@ -43,45 +49,44 @@ class Registration_Model
         $db = Core::getInstance()->db;
         
         // Проверяем валидность заполненных данных
-        $error_text = array();
         $register['name'] = htmlspecialchars(@$_POST['name']);
         if (!empty($_POST['password']) && !empty($_POST['confirm_password'])) {
             if (@$_POST['password'] == @$_POST['confirm_password']) {
                 $pass = SHA1(@$_POST['password']);
             } else {
-                $error_text['pass'] = "Введённые пароли не совпадают!";
+                $this->_error['pass'] = "Введённые пароли не совпадают!";
             }
         } else {
-            $error_text['pass'] = "Введите пароль!";
+            $this->_error['pass'] = "Введите пароль!";
         }
 
         if ($this->validate_login(@$_POST['login'])) {
             $register['login'] = @$_POST['login'];
         } else {
-            $error_text['login'] = "Неверно введен логин! <i>Логин может содержать только латинские буквы и цифры!</i>";
+            $this->_error['login'] = "Неверно введен логин! <i>Логин может содержать только латинские буквы и цифры!</i>";
             $register['login'] = htmlspecialchars(@$_POST['login']);
         }
 
         if ( Helper_Mail::validateEmail (@$_POST['mail']) ) {
             $register['mail'] = @$_POST['mail'];
         }else{
-            $error_text['mail'] = "Неверно введен e-mail!";
+            $this->_error['mail'] = "Неверно введен e-mail!";
             $register['mail'] = htmlspecialchars(@$_POST['mail']);
         }
 
         $cell = $db->selectCell("SELECT id FROM users WHERE user_login=?", $register['login']);
         if (!empty($cell)) {
-            $error_text['login'] = "Пользователь с таким логином уже существует!";
+            $this->_error['login'] = "Пользователь с таким логином уже существует!";
         }
 
         $cell = $db->selectCell("SELECT id FROM users WHERE user_mail=?", $register['mail']);
         if (!empty($cell))
         {
-            $error_text['login'] = "Пользователь с данным адресом электронной почты уже зарегистрирован!";
+            $this->_error['login'] = "Пользователь с данным адресом электронной почты уже зарегистрирован!";
         }
 	
         // Если нет ошибок, создаём пользователя
-        if (empty($error_text))
+        if (empty($this->_error))
         {
         		//Если определился реферер
         		if( isset($_COOKIE['referer_url']) && isset($_SESSION['referer_url']) )
@@ -140,6 +145,7 @@ class Registration_Model
                 ->setBody($body, 'text/html');
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
+            
             return array (
                         'result' => array (
                             'text' => 'Спасибо, вы зарегистрированы!<br>Теперь вы можете войти в систему.',
@@ -149,7 +155,7 @@ class Registration_Model
         } else {
             return array (
                 'error' => array (
-                    'text' => "Обнаружены следующие ошибки:\n" . implode ( ',\n ', $error_text )
+                    'text' => "Обнаружены следующие ошибки:\n" . implode ( ',\n ', $this->_error )
                 )
             );
         }
