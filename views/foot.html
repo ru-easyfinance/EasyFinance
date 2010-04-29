@@ -73,20 +73,17 @@
 						$str = $str . '<li class="footerTextsColumn">';
 
 						$row = 0;
-						while ($cnt > (($columns-$i-1)*$row)) {
-							if (isset($seotext[$parsed])) {
-								$str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
-								$str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
-								$str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
+                        while ($cnt > (($columns-$i-1)*$row)) {
+                            $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
+                            $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
+                            $str = $str . '<div class="hidden">' . $seotext[$parsed][2] . '</div>';
 
-								$parsed++;
-								$row++;
-							}
-
-							$cnt--;
+                            $parsed++;
+                            $row++;
+                            $cnt--;
 						}
 
-						$cnt--;
+						// $cnt--; #1266 WTF
 					}
 
 					$str = $str . '</li>';
