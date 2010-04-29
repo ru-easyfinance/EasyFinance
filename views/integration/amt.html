@@ -22,14 +22,38 @@
                             </div>
                         {/if}
                     </div>
-                    <h3><a href="#">2. </a></h3>
+                    <h3><a href="#">2. E-Mail интеграция</a></h3>
                     <div>
-                        <p>
-                        Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                        purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                        velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                        suscipit faucibus urna.
-                        </p>
+                        <div id="integration" class="profile" style="display:block">
+                            <div id="content" class="inside form">
+                                <div class="email line">
+                                    <div class="description">
+                                        <p>Вы можете заводить операции по email автоматически. Т.е. из банковских сообщений об операциях с  карточкой или счетом.</p>
+                                        <p>Для этого нужно создать в системе специальный секретный email, письма на который будут обрабатываться автоматически.</p>
+                                        <ul class="numberWithPoint">Email должен быть:
+                                            <li>легко запоминаемым, чтобы Вам было удобно им пользоваться</li>
+                                            <li>уникальным – чтобы на него случайно не написал кто-то другой</li>
+                                            <li>не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал.</li>
+                                        </ul>
+                                    </div><br>
+                                    <div class='notExist'>
+                                        <p>
+                                            <label for="txtIntegrationEmail" class="eventDescription">Желаемый email:</label>
+                                        </p>
+                                    </div>
+                                    <div id='errorMessageInvalidEmail'></div>
+                                    <div class='notExist'><p>
+                                            <input type="text" value='' id='txtIntegrationEmail'>
+                                            <label for="txtIntegrationEmail" class="emailPostfix">@mail.easyfinance.ru</label>
+                                            <button id='btnGetIntegrationEmail'>Создать</button>
+                                        </p>
+                                    </div>
+                                    <div class='exist'>Ваш e-mail для интеграции: <span id='lblIntegrationEmail'>default@ef.ru</span>
+                                        <button id="btnIntegrationEmailRemove" class='remove' title='Удалить'>Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <h3><a href="#">3. </a></h3>
                     <div>

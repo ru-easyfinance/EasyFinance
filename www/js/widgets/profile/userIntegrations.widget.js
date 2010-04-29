@@ -66,7 +66,7 @@ easyFinance.widgets.userIntegrations = function(model){
 
 				_model.removeIntegrationEmail(function(data){// @todo
 					$('#btnIntegrationEmailRemove').removeAttr('disabled');
-				
+
 					if (data && data.result) {
 						delete _data.email;
 						_print();

@@ -43,6 +43,8 @@ $(document).ready(function(){
                         } else if (data.result) {
                             if (data.result.text)
                                 $.jGrowl(data.result.text, {theme: 'green', life: 2500});
+
+                            $("#integrationSteps").accordion("activate" , 1);
                         }
                     } else {
                         $.jGrowl('Ошибка на сервере!', {theme: 'red'});
