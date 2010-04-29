@@ -265,7 +265,7 @@ $(document).ready(function() {
                 style: styleTheme
             });
 
-            $(".addmessage").qtip({
+            $("#btnFeedback").qtip({
                 content: 'Расскажите, что вам нравится на сайте, а чего не хватает. Мы обязательно учтем ваши пожелания и включим их в график работ.',
                 show: {delay: 1000},
                 position: {target: 'mouse'},
@@ -398,7 +398,7 @@ $(document).ready(function() {
             $("#dateFrom").qtip('destroy');
             $("#dateTo").qtip('destroy');
             $("strong:contains('Мои долги')").qtip('destroy');
-            $(".addmessage").qtip('destroy');
+            $("#btnFeedback").qtip('destroy');
             $("strong:contains('Инвестиции')").qtip('destroy');
             $("strong:contains('Деньги')").qtip('destroy');
             $("strong:contains('Долги мне')").qtip('destroy');
