@@ -66,6 +66,9 @@
                         <include name="accountsPanel.css" />
                         <include name="accountsJournal.css" />
                     </fileset>
+                    <fileset dir="${project.css.root}screens/">
+                        <include name="integration.screen.css" />
+                    </fileset>
                 </append>
                 <stubcssmin cssminpath="external/cssmin-v1.0.0.php" targetdir="${project.css.root}">
                     <fileset dir="${project.css.root}tmp/">
