@@ -60,9 +60,9 @@
                     </div>
                     <h3><a href="#">3. Создание и привязка счёта</a></h3>
                     <div>
-                        <div>Здесь инструкция</div><br>
+                        <!-- <div>Здесь инструкция</div><br> -->
                         <div>
-                            Выберите счёт из списка:
+                            Выберите <b>дебетовый счёт</b> из списка:
                             <select id="optionAccount"></select><br><br>
                             Так же Вы можете <button id='btnCreateAccount'>создать счёт</button><br><br>
                             <button id='btnBackToEmail'>Назад</button>
@@ -72,7 +72,7 @@
                     <h3><a href="#">4. Заполнение анкеты</a></h3>
                     <div>
                         <button id='btnBackToAccount'>Назад</button><br><br>
-                        <div>Здесь анкета</div>
+                        {include file="integration/amt-wizard.html"}
                     </div>
                 </div>
 			</div>

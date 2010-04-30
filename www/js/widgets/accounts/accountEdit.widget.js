@@ -104,6 +104,7 @@ easyFinance.widgets.accountEdit = function(){
         if (_isEditing) {
             _model.editAccountById(_id, params, handler);
         } else {
+            $.jGrowl("Счёт создаётся...", {theme: 'green'});
             _model.addAccount(params, handler);
         }
     }
