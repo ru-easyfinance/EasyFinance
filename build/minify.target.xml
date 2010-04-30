@@ -46,6 +46,7 @@
                         <include name="ui.dialog.css" />
                         <include name="ui.tabs.css" />
                         <include name="ui.datepicker.css" />
+                        <include name="ui.accordion.css" />
                     </fileset>
                     <fileset dir="${project.css.root}">
                         <include name="main.css" />
