@@ -154,7 +154,7 @@ abstract class _Core_Controller
        	{
                 $accounts[$k] = $v;
                 if (isset($v['binding'])) {
-                    $binding = $v['binding'];
+                    $binding = $v['id'];
                 }
         }
 
