@@ -44,24 +44,44 @@ class Integration_Controller extends _Core_Controller
      */
     function binding()
     {
-        if (isset($_POST['account_id'])) {
-            $account_id = (int)$_POST['account_id'];
-            if ($account_id === 0) {
-                $errorMessage = 'Неверный идентификатор счёта';
-            }
-        } else {
-            $errorMessage = 'Необходимо указать счёт';
+        if ($this->_user->getId() == 0) {
+            $errorMessage = 'Необходимо авторизироваться';
         }
 
-        $debetCard = new Account_DebetCard();
-        if (!$debetCard->binding($account_id)) {
-            $errorMessage = 'Ошибка при привязывании счёта';
+        if (isset($_POST['account_id'])) {
+
+            $account_id = (int)$_POST['account_id'];
+
+            if ($account_id <= 0) {
+
+                $errorMessage = 'Неверный идентификатор счёта';
+
+            }
+
+        } else {
+
+            $errorMessage = 'Необходимо указать счёт';
+
+        }
+
+        if (!$errorMessage) {
+            $debetCard = new Account_DebetCard();
+
+            if (!$debetCard->binding($account_id)) {
+
+                $errorMessage = 'Ошибка при привязывании счёта';
+
+            }
         }
 
         if (isset($errorMessage)) {
+
             die(json_encode(array('error'=>array('text'=>$errorMessage))));
+
         } else {
+
             die(json_encode(array('result'=>array('text'=>'Счёт успешно привязан'))));
+
         }
     }
 
