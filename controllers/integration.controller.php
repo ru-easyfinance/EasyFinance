@@ -64,7 +64,7 @@ class Integration_Controller extends _Core_Controller
 
         }
 
-        if (!$errorMessage) {
+        if (isset($errorMessage)) {
             $debetCard = new Account_DebetCard();
 
             if (!$debetCard->binding($account_id)) {
