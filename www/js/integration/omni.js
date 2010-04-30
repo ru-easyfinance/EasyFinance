@@ -103,8 +103,8 @@ function wzSaveEverything() {
         wholeData = wzObjToArray(wholeData);
 
 		// JET
-		window.open("/srv_script.php?" + wholeData);
-		
+		window.open("/integration/anketa?" + wholeData);
+
 		// no AJAX
 		/*
         $.ajax({
@@ -174,7 +174,7 @@ function wzObjToArray(obj) {
 
 function wsInitValidator() {
 	dValidator.validatableElems['personal_info'] = new Array();
-								
+
 	dValidator.validatableElems['personal_info']['wz_surname'] = {
 		'validationType' : 'blank',
 		'errMsg' : '',
