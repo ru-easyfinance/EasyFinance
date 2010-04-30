@@ -1,5 +1,5 @@
 <?php
-$g_unicode_glyphs = array(
+$GLOBALS['g_unicode_glyphs'] = array(
 0x0001 => 'controlSTX',
 0x0002 => 'controlSOT',
 0x0003 => 'controlETX',

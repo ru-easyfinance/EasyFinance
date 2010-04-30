@@ -14,14 +14,14 @@
 //   return 0;
 // };
 
-$g_encoding_aliases = array(
+$GLOBALS['g_encoding_aliases'] = array(
                             'us-ascii' => 'iso-8859-1',
                             'cp1250'   => 'windows-1250',
                             'cp1251'   => 'windows-1251',
                             'cp1252'   => 'windows-1252'
                             );
 
-$g_utf8_converters = array(
+$GLOBALS['g_utf8_converters'] = array(
                            'iso-8859-1'   => array($g_iso_8859_1,"ISO-8859-1-Encoding"),
                            'iso-8859-2'   => array($g_iso_8859_2,"ISO-8859-2-Encoding"),
                            'iso-8859-3'   => array($g_iso_8859_3,"ISO-8859-3-Encoding"),
