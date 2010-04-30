@@ -67,7 +67,6 @@ class Account_DebetCard extends Account
      */
     function create( $user, $params )
     {
-        $this->model = new Account_Model();
         $valid = $this->check($params);
         if (!$valid) {
 
@@ -88,7 +87,6 @@ class Account_DebetCard extends Account
      */
     function update( $user, $params)
     {
-        $this->model = new Account_Model();
         $valid = $this->check($params);
         if (!$valid) {
 
@@ -99,6 +97,22 @@ class Account_DebetCard extends Account
             unset($this->model);
         }
         return $this;
+    }
+
+    /**
+     * Связывание указанного счёта с банковским
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function binding ($account_id)
+    {
+        return $this->model->bindingAmt($account_id);
+    }
+
+    function __construct()
+    {
+        $this->model = new Account_Model();
     }
 
 }

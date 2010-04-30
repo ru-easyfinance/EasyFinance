@@ -241,6 +241,29 @@ class Account_Model
                 $total * $ucur[$curr]['value']/$ucur[$cur_k[0]]['value'],
                 2
         );
+    }
 
+    /**
+     * Связывание счёта с АМТ
+     *
+     * @param int $id Ид счёта, к которому нужно привязаться
+     */
+    public function bindingAmt($id)
+    {
+        // Удаляем все существующие привязки
+        $sql = "DELETE FROM Acc_Values 
+            WHERE account_id IN (SELECT account_id FROM accounts WHERE user_id=? AND account_type_id=?) 
+            AND field_id=?";
+        $this->db->query($sql, $this->user_id, Account_Collection::ACCOUNT_TYPE_DEBETCARD, Account::FIELD_BINDING);
+
+        // Привязываем текущий счёт
+        $sql = "INSERT INTO Acc_Values(`field_id`, `field_value`, `account_id`) 
+            VALUES(?, ?, ?)";
+
+        if ($this->db->query($sql, Account::FIELD_BINDING, 'amt', $id)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
