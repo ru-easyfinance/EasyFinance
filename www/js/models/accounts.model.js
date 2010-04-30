@@ -204,8 +204,12 @@ easyFinance.models.accounts = function(){
             return false;
 
         $.post(ADD_ACCOUNT_URL, params, function(data){
+            var _id = (data.result && data.result.id) ? data.result.id : null;
+
             _loadAccounts(function() {
-                $(document).trigger('accountAdded');
+                var event = $.Event("accountAdded");
+                event.id = _id;
+                $(document).trigger(event);
             });
 
             if (callback)

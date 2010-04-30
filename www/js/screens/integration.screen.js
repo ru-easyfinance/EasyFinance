@@ -45,28 +45,81 @@ function initLogged() {
 
     // ======================================================
 
-    // #1232. создание счёта
+    // #1232. создание и привязка счёта
+    // выводим список счетов
+    refreshAccounts();
+
+    // виджет создания счёта
     easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
-    
+
     // переход на предыдущий этап создания email'a
     $('#btnBackToEmail').click(function() {
         $("#integrationSteps").accordion("activate" , 1);
     });
 
-    // переход на следующий этап
+    // открываем диалог создания счёта
     $('#btnCreateAccount').click(function() {
         // отображает форму создания счёта
         easyFinance.widgets.accountEdit.addAccount();
+        // тип счёта жестко задан - дебетовая карта
+        $("#acc_type").find("option:nth-child(2)").attr("selected", "selected").parent().attr("disabled", "disabled");
+        // удаляем все валюты кроме РУБ, USD, EUR
+        $("#acc_currency").find("option").each(function () {
+            var val = $(this).val();
+            if (val != "1" && val != "2" && val != "3") {
+                $(this).remove();
+            }
+        });
+
+
+        // выбираем первую валюту
+        $("#acc_currency").find("option:first").attr("selected", "selected");
+        // имя счёта по умолчанию
+        $("#acc_name").val("EasyFinance AMT").focus();
     });
 
+    // после добавления счёта обновляем список счетов
+    $(document).bind('accountAdded', refreshAccounts);
+
     // переход на следующий этап
-    $('#btnLinkAccount').click(function() {
-        if (!$("#optionAccount").val() ) {
-            $.jGrowl("Создайте и выберите счёт!", {theme: 'red'});
-        } else {
-            $("#integrationSteps").accordion("activate" , 2);
-        }
+    $('#btnLinkAccount').click(linkAccount);
+
+
+    // #1230. заполнение анкеты
+    $('#btnBackToAccount').click(function() {
+        $("#integrationSteps").accordion("activate" , 2);
     });
+}
+
+function refreshAccounts(event) {
+    var $select = $("#optionAccount").empty();
+
+    var account_list_ordered = easyFinance.models.accounts.getAccountsOrdered();
+    if (!account_list_ordered || account_list_ordered.length == 0){
+        return;
+    }
+
+    for (var row in account_list_ordered) {
+         $select.
+              append($("<option></option>").
+              attr("value", account_list_ordered[row]['id']).
+              text(account_list_ordered[row]["name"]));
+    }
+
+    // выбираем счёт после добавления
+    if (event) {
+        $("#optionAccount").find("option[value='" + event.id + "']").attr("selected", "selected");
+    }
+}
+
+function linkAccount() {
+    if (!$("#optionAccount").val() ) {
+        $.jGrowl("Создайте и выберите счёт!", {theme: 'red'});
+    } else {
+        // @TODO: запрос на сервер
+
+        $("#integrationSteps").accordion("activate" , 3);
+    }
 }
 
 $(document).ready(function(){
@@ -88,8 +141,6 @@ $(document).ready(function(){
 
         initLogged();
     }
-
-
 
     /* // @TEST
     if (document.location.pathname.indexOf("integration") != -1) {

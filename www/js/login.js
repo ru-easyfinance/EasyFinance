@@ -13,16 +13,12 @@ function checkLogin() {
 }
     
 $(document).ready(function(){
-    var loginCanClick = true;
     $('#btnLogin').click(function(e){
-        // @TODO: prevent double-click
-        //if (!loginCanClick) {
-        //    return false;
-        //}
+        // prevent double-click
+        $("#btnLogin").attr("disabled", "disabled");
 
         if (document.location.pathname.indexOf("integration") != -1) {
-            // #1241 авторизация без редиректа на странице интеграции
-            //$("#btnLogin").attr("disabled", "disabled");
+            // #1241 авторизация без редиректа на странице интеграции    
 
             $.post(
                 "/login/",
@@ -31,8 +27,7 @@ $(document).ready(function(){
                     login: $('#flogin').val(),
                     pass: $('#pass').val()
                 }, function(data) {
-                    // @TODO: prevent double-click
-                    //$("#btnLogin").removeAttr("disabled");
+                    $("#btnLogin").removeAttr("disabled");
                     
                     if (data) {
                         if (data.error) {
