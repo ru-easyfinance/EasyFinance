@@ -32,6 +32,10 @@ function initLogged() {
         $("#wz_card_account_mail").val($("#lblIntegrationEmail").text());
     });
 
+    // #1232. создание и привязка счёта
+    // выводим список счетов
+    refreshAccounts();
+
     if (!res.profile.integration.email || res.profile.integration.email=='') {
         // email не создан, открываем этап генерации e-mail
         easyFinance.widgets.userIntegrations.load({});
@@ -40,16 +44,25 @@ function initLogged() {
         // email создан, подставляем в виджет и анкету
         $("#wz_card_account_mail").val(res.profile.integration.email);
         easyFinance.widgets.userIntegrations.load({service_mail : res.profile.integration.email});
-        // следующий шаг - привязка счёта
-        $("#btnIntegrationMailNext").show();
-        $("#integrationSteps").accordion("activate" , 2);
+
+        if (res.profile.integration.account && res.profile.integration.account=='') {
+            // следующий шаг - привязка счёта
+            $("#btnIntegrationMailNext").show();
+            $("#integrationSteps").accordion("activate" , 2);
+        } else {
+            // выбираем привязанный аккаунт
+            $("#optionAccount").find("option[value='" + res.profile.integration.account + "']").attr("selected", "selected");
+
+            // открываем анкету
+            $("#integrationSteps").accordion("activate" , 3);
+
+            // подставляем в анкету нужную валюту
+            var cur = easyFinance.models.accounts.getAccountCurrencyId($("#optionAccount").val());
+            $("#wz_card_currency").find("option[value='" + (parseInt(cur) - 1) + "']").attr("selected", "selected");
+        }
     }
 
     // ======================================================
-
-    // #1232. создание и привязка счёта
-    // выводим список счетов
-    refreshAccounts();
 
     // виджет создания счёта
     easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);

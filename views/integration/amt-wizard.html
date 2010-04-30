@@ -138,7 +138,8 @@
                 <!-- Tab 2 -->
                 <div class="wz_tab_content">
                     <h3>Адрес местонахождения (для переписки)</h3>
-
+                    <input id="btnCopyRegistrationToAddress" type="button" value="Скопировать из прописки / регистрации"/><br /><br />
+                    
                     <form id="actual_address" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
                         <fieldset>
                             <input type="hidden" name="step_name" value="actual_address" />
@@ -184,7 +185,7 @@
                             </div>
 
                             <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
-                            <input type="submit" value="Далее &gt;&gt;" />
+                            <input id="btnAddressNext" type="submit" value="Далее &gt;&gt;" />
                         </fieldset>
                     </form>
                 </div>
@@ -262,8 +263,8 @@
                             </div>
 
                             <div class="fld_holder">
-                                <label for="wz_foreign_id_expires">Срок окончания действия документа</label><br />
-                                <input type="text" name="wz_foreign_id_expires" id="wz_foreign_id_expires" value="" maxlength="10" /><br /><br />
+                                <label for="wz_foreign_id_expire">Срок окончания действия документа</label><br />
+                                <input type="text" name="wz_foreign_id_expire" id="wz_foreign_id_expire" value="" maxlength="10" /><br />
                             </div>
 
                             <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />

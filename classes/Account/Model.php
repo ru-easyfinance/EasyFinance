@@ -251,9 +251,9 @@ class Account_Model
     /**
      * Связывание счёта с АМТ
      *
-     * @param int $id Ид счёта, к которому нужно привязаться
+     * @param int $account_id Ид счёта, к которому нужно привязаться
      */
-    public function bindingAmt($id)
+    public function bindingAmt($account_id)
     {
         // Удаляем все существующие привязки
         $sql = "DELETE FROM Acc_Values 
@@ -265,7 +265,7 @@ class Account_Model
         $sql = "INSERT INTO Acc_Values(`field_id`, `field_value`, `account_id`) 
             VALUES(?, ?, ?)";
 
-        if ($this->db->query($sql, Account::FIELD_BINDING, 'amt', $id)) {
+        if ($this->db->query($sql, Account::FIELD_BINDING, 'amt', $account_id)) {
             return true;
         } else {
             return false;

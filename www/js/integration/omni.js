@@ -421,4 +421,17 @@ function wsInitValidator() {
 $(document).ready(function(){
     // инициализируем валидатор
     wsInitValidator();
+
+    $("#btnCopyRegistrationToAddress").click(function() {
+        $("#wz_actual_country").val($("#wz_reg_country").val());
+        $("#wz_actual_index").val($("#wz_reg_index").val());
+        $("#wz_actual_region").val($("#wz_reg_region").val());
+        $("#wz_actual_city").val($("#wz_reg_city").val());
+        $("#wz_actual_street").val($("#wz_reg_street").val());
+        $("#wz_actual_house").val($("#wz_reg_house").val());
+        $("#wz_actual_building").val($("#wz_reg_building").val());
+        $("#wz_actual_appartment").val($("#wz_reg_appartment").val());
+
+        $("#btnAddressNext").click();
+    });
 });
