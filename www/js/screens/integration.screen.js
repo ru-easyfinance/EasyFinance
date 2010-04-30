@@ -120,14 +120,37 @@ function linkAccount() {
     if (!$("#optionAccount").val() ) {
         $.jGrowl("Создайте и выберите счёт!", {theme: 'red'});
     } else {
-        alert('@TODO: запрос на сервер');
+        $(this).attr("disabled", "disabled");
+        $.jGrowl("Выполняется привязка счёта", {theme: 'green', life: 2500});
 
-        // открываем анкету
-        $("#integrationSteps").accordion("activate" , 3);
-       
-        // подставляем в анкету нужную валюту
-        var cur = easyFinance.models.accounts.getAccountCurrencyId($("#optionAccount").val());
-        $("#wz_card_currency").find("option[value='" + (parseInt(cur) - 1) + "']").attr("selected", "selected");
+        $.post(
+            "/integration/binding/",
+            {
+                responseMode: "json",
+                account_id: $("#optionAccount").val()
+            }, function(data) {
+                $("#btnLinkAccount").removeAttr("disabled");
+
+                if (data) {
+                    if (data.error) {
+                        if (data.error.text)
+                            $.jGrowl(data.error.text, {theme: 'red', life: 2500});
+                    } else if (data.result) {
+                        if (data.result.text)
+                            $.jGrowl(data.result.text, {theme: 'green', life: 2500});
+
+                        // открываем анкету
+                        $("#integrationSteps").accordion("activate" , 3);
+
+                        // подставляем в анкету нужную валюту
+                        var cur = easyFinance.models.accounts.getAccountCurrencyId($("#optionAccount").val());
+                        $("#wz_card_currency").find("option[value='" + (parseInt(cur) - 1) + "']").attr("selected", "selected");
+                    }
+                } else {
+                    $.jGrowl('Ошибка на сервере!', {theme: 'red'});
+                }
+            }, 'json'
+        );
     }
 }
 
