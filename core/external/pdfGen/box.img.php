@@ -209,7 +209,7 @@ class ImgBox extends GenericImgBox {
     $url_autofix = new AutofixUrl();
     $src = $url_autofix->apply(trim($root->get_attribute("src")));
 
-    $image_url = $pipeline->guess_url($src);
+    $image_url = $src;
     $src_img = Image::get($image_url, $pipeline);
 
     if (is_null($src_img)) {

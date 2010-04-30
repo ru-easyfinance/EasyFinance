@@ -43,17 +43,16 @@ class Image {
     //
     // @TODO: change to fetcher class call
     //
+#    $data = file_get_contents($url);
 
-    $data = $pipeline->fetch($url);
+#    if (is_null($data)) {
+#      error_log("Cannot fetch image: ".$url);
+#      return null;
+#    };
 
-    if (is_null($data)) {
-      error_log("Cannot fetch image: ".$url);
-      return null;
-    };
-
-    $file = fopen($filename, 'wb');
-    fwrite($file, $data->content);
-    fclose($file);
+#    $file = fopen($filename, 'wb');
+#    fwrite($file, $data->content);
+#    fclose($file);
     $pipeline->pop_base_url();
 
 //     if (!@copy($url, $filename)) {
@@ -65,7 +64,7 @@ class Image {
     //
     // $g_image_cache[$url] = $filename;
     $g_image_cache[$url] = array('filename' => $filename,
-                                 'handle' => do_image_open($filename));
+                                 'handle' => do_image_open($url));
 
     // return image
     //
