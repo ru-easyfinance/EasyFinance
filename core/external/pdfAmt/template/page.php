@@ -3,12 +3,8 @@
 
     function renderLetters($string)
     {
-        //@FIXME Не правильно считает количество символов
-//        for ($i=0, $n=mb_strlen($string)/2; $i<$n; $i++) {
-//            echo '<span style="padding-right:23px;">'.mb_substr($string, $i, 1).'</span>';
-//        }
-        for ($i=0, $n=strlen($string); $i<$n; $i = $i + 2) {
-            echo '<span style="padding-right:23px;">'.substr($string, $i, 2).'</span>';
+        for ($i=0, $n=mb_strlen($string); $i<$n; $i++) {
+            echo '<span style="padding-right:23px;">'.mb_substr($string, $i, 1).'</span>';
         }
     }
 ?>
