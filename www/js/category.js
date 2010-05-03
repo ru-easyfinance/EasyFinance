@@ -60,7 +60,7 @@ $(document).ready(function() {
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
         
         $('#add_form').show();
-        $(document).scrollTop(500);
+        $(document).scrollTop(250);
         $('form').attr('action','/category/edit/');
 
     });
