@@ -22,11 +22,11 @@ class Registration_Model
      */
     function activate ($reg_id) {
         $db = Core::getInstance()->db;
-        
+
         $sql = "SELECT user_id, reg_id FROM registration WHERE reg_id = ?;";
         $row = $db->selectRow($sql, $reg_id);
         if (!empty($row)) {
-            $user_id = $row['user_id']; 
+            $user_id = $row['user_id'];
             $db->query("DELETE FROM registration WHERE reg_id = ?", $reg_id);
 
             $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE id = ?";
@@ -40,142 +40,115 @@ class Registration_Model
     }
 
     /**
+     * Отправляем пользователю письмо что он успешно зарегистрировался
+     * @return bool
+     */
+    function send_mail_success($name, $login, $password, $mail)
+    {
+        require_once SYS_DIR_LIBS . "external/Swift/swift_required.php";
+
+        $body = "<html><head><title>
+            Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
+            </title></head>
+            <body><p>Здравствуйте, {$name}!</p>
+            <p>Ваш e-mail был указан при регистрации в системе.<br/>
+
+            <p>Для входа в систему используйте:<br>
+            Логин: {$login}<br/>
+            Пароль: {$password}</p>
+
+            <p>C уважением,<br/>Администрация системы <a href='https://".URL_ROOT."' />EasyFinance.ru</a>
+            </body>
+            </html>";
+
+        $subject = "Вы зарегистрированы в системе управления личными финансами EasyFinance.ru";
+
+        $message = Swift_Message::newInstance()
+            // Заголовок
+            ->setSubject('Вы зарегистрированы в системе управления личными финансами EasyFinance.ru')
+            // Указываем "От кого"
+            ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
+            // Говорим "Кому"
+            ->setTo(array($mail => $login))
+            // Устанавливаем "Тело"
+            ->setBody($body, 'text/html');
+        // Отсылаем письмо
+        return Core::getInstance()->mailer->send($message);
+    }
+
+    function exist_user($login, $mail)
+    {
+        $sql = "SELECT user_mail AS mail, user_login AS login FROM users WHERE user_login=? OR user_mail=?";
+        $result = Core::getInstance()->db->select($sql, $login, $mail);
+        if (!empty($result)) {
+            foreach($result as $value) {
+                if ($value['mail'] == $mail) {
+                    $this->_error['mail'] = "Пользователь с таким адресом электронной почты уже зарегистрирован!";
+                }
+                if ($value['login'] == $login) {
+                    $this->_error['login'] = "Пользователь с таким логином уже существует!";
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    function get_reffer ()
+    {
+        //Если определился реферер
+        if( isset($_COOKIE['referer_url']) && isset($_SESSION['referer_url']) )
+        {
+            preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referer_url'], $matches);
+            $referrer = strtolower( $matches[0] );
+
+            //Проверяем нет ли уже такого реферера
+            $sql = 'SELECT id FROM `referrers` WHERE host = ?';
+            $referrerId = $db->selectCell( $sql, $referrer );
+
+            // Если нет - добавляем его в табличку
+            if( empty($referrerId) ) {
+                $sql = 'INSERT INTO `referrers` (`id`, `host`,`title`) VALUES (null, ?,?)';
+                return Core::getInstance()->db->query( $sql, $referrer, $referrer);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Создаём нового пользователя
      * @return void
      */
-    function new_user () {
-        require_once SYS_DIR_LIBS . "external/Swift/swift_required.php";
-
-        $db = Core::getInstance()->db;
-        
-        // Проверяем валидность заполненных данных
-        $register['name'] = htmlspecialchars(@$_POST['name']);
-        if (!empty($_POST['password']) && !empty($_POST['confirm_password'])) {
-            if (@$_POST['password'] == @$_POST['confirm_password']) {
-                $pass = SHA1(@$_POST['password']);
-            } else {
-                $this->_error['pass'] = "Введённые пароли не совпадают!";
-            }
-        } else {
-            $this->_error['pass'] = "Введите пароль!";
-        }
-
-        if ($this->validate_login(@$_POST['login'])) {
-            $register['login'] = @$_POST['login'];
-        } else {
-            $this->_error['login'] = "Неверно введен логин! <i>Логин может содержать только латинские буквы и цифры!</i>";
-            $register['login'] = htmlspecialchars(@$_POST['login']);
-        }
-
-        if ( Helper_Mail::validateEmail (@$_POST['mail']) ) {
-            $register['mail'] = @$_POST['mail'];
-        }else{
-            $this->_error['mail'] = "Неверно введен e-mail!";
-            $register['mail'] = htmlspecialchars(@$_POST['mail']);
-        }
-
-        $cell = $db->selectCell("SELECT id FROM users WHERE user_login=?", $register['login']);
-        if (!empty($cell)) {
-            $this->_error['login'] = "Пользователь с таким логином уже существует!";
-        }
-
-        $cell = $db->selectCell("SELECT id FROM users WHERE user_mail=?", $register['mail']);
-        if (!empty($cell))
-        {
-            $this->_error['login'] = "Пользователь с данным адресом электронной почты уже зарегистрирован!";
-        }
-	
+    function new_user($name, $login, $password, $confirm, $mail)
+    {
         // Если нет ошибок, создаём пользователя
         if (empty($this->_error))
         {
-        		//Если определился реферер
-        		if( isset($_COOKIE['referer_url']) && isset($_SESSION['referer_url']) )
-        		{
-        			preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referer_url'], $matches);
-        			$referrer = strtolower( $matches[0] );
-        			
-        			//Проверяем нет ли уже такого реферера
-        			$sql = 'select id from `referrers` where host = ?';
-        			$referrerId = $db->selectCell( $sql, $referrer );
-        			
-        			// Если нет - добавляем его в табличку 
-        			if( empty($referrerId) )
-        			{
-        				$sql = 'insert into `referrers` (`id`, `host`,`title`) values (null, ?,?)';
-        				$referrerId = $db->query( $sql, $referrer, $referrer);
-        			}
-        		}
-        		else
-        		{
-        			$referrerId = null;
-        		}
-        	
+            $referrerId = $this->get_reffer();
+
             //Добавляем в таблицу пользователей
             $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
                 user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?)";
-            $db->query($sql, $register['name'], $register['login'], $pass, $register['mail'], $referrerId);
+            Core::getInstance()->db->query($sql, $name, $login, $password, $mail, $referrerId);
 
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = mysql_insert_id();
 
-            $body = "<html><head><title>
-                Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
-                </title></head>
-                <body><p>Здравствуйте, {$register['name']}!</p>
-                <p>Ваш e-mail был указан при регистрации в системе.<br/>
+            $this->send_mail_success($name, $login, $password, $mail);
 
-                <p>Для входа в систему используйте:<br>
-                Логин: {$register['login']}<br/>
-                Пароль: {$_POST['password']}</p>
-
-                <p>C уважением,<br/>Администрация системы <a href='https://".URL_ROOT."' />EasyFinance.ru</a>
-                </body>
-                </html>";
-
-            $subject = "Вы зарегистрированы в системе управления личными финансами EasyFinance.ru";
-            
-            $message = Swift_Message::newInstance()
-                // Заголовок
-                ->setSubject('Вы зарегистрированы в системе управления личными финансами EasyFinance.ru')
-                // Указываем "От кого"
-                ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
-                // Говорим "Кому"
-                ->setTo(array($register['mail']=>$register['login']))
-                // Устанавливаем "Тело"
-                ->setBody($body, 'text/html');
-            // Отсылаем письмо
-            $result = Core::getInstance()->mailer->send($message);
-            
             return array (
-                        'result' => array (
-                            'text' => 'Спасибо, вы зарегистрированы!<br>Теперь вы можете войти в систему.',
-                            'redirect' => "https://".URL_ROOT_MAIN."login"
-                        )
-                    );
+                'result' => array (
+                    'text' => 'Спасибо, вы зарегистрированы!<br>Теперь вы можете войти в систему.',
+                    'redirect' => "https://".URL_ROOT_MAIN."login"
+                )
+            );
         } else {
             return array (
                 'error' => array (
                     'text' => "Обнаружены следующие ошибки:\n" . implode ( ',\n ', $this->_error )
                 )
             );
-        }
-    }
-
-    /**
-     * Проверяет корректность логина
-     * @param $login string
-     * @return bool
-     */
-    function validate_login($login = '')
-    {
-        if ($login != '') {
-            if(preg_match("/^[a-zA-Z0-9_]+$/", $login)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
         }
     }
 }

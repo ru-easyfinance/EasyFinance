@@ -9,6 +9,8 @@
     class Registration_Controller extends _Core_Controller
     {
 
+        private $_error = array();
+
         /**
          * Модель регистрации
          * @var Registration_Model
@@ -36,7 +38,6 @@
          */
         function index ()
         {
-            
         }
 
         /**
@@ -62,34 +63,51 @@
          */
         function new_user ()
         {
-            // @TEST регистрации, #1231
-            /*
-            $json 	= array (
-                'result' => array (
-                    'text' => "Регистрация прошла успешно!"
-                    )
-            );
-            die (json_encode ($json) );
-            */
-            $login = htmlspecialchars($_POST['login']);
-            $pass = sha1($_POST['password']);
+            $login            = $_POST['login'];
+            $password         = trim($_POST['password']);
+            $confirm_password = trim($_POST['confirm_password']);
+            $name             = $_POST['name'];
+            $mail             = $_POST['mail'];
 
-            $answer = $this->model->new_user();
+            // Проверяем валидность заполненных данных
+            if (!empty($password) && !empty($confirm_password)) {
+                if ($password === $confirm_password) {
+                    $sha1_password = SHA1($password);
+                } else {
+                    $this->_error['pass'] = "Введённые пароли не совпадают!";
+                }
+            } else {
+                $this->_error['pass'] = "Введите пароль!";
+            }
 
-            if (count($this->model->getErrors()) == 0) {
+            if (!$this->validate_login($login)) {
+                $this->_error['login'] = "Неверно введен логин! <i>Логин может содержать только латинские буквы и цифры!</i>";
+            }
+            $login = htmlspecialchars($login);
 
+            if (!Helper_Mail::validateEmail($mail)) {
+                $this->_error['mail'] = "Неверно введен e-mail!";
+            }
+            $mail = htmlspecialchars($mail);
 
+            if (!$this->model->exist_user($login, $mail)) {
+                $answer = $this->model->new_user($name, $login, $password, $confirm_password, $mail);
+            }
+
+            $errors = array_merge($this->model->getErrors(), $this->_error);
+            if (count($errors) == 0) {
 
                 $user = Core::getInstance()->user;
 
-                if(!$user->initUser($login, $pass))
+                if(!$user->initUser($login, $password))
                 {
-                    die('Некорректный логин или пароль!');
+                    die(json_encode(array('error' => array ('text' => 'Некорректный логин или пароль!'))));
                 }
 
                 $login_Model = new Login_Model();
 
-                $login_Model->login($login, $pass);
+                $login_Model->login($login, $password);
+
                 $answer = array (
                     'result' => array (
                         'text' => 'Спасибо, вы зарегистрированы!',
@@ -99,4 +117,23 @@
             }
             die(json_encode($answer));
         }
+
+    /**
+     * Проверяет корректность логина
+     * @param $login string
+     * @return bool
+     */
+    function validate_login($login = '')
+    {
+        if ($login != '') {
+            if(preg_match("/^[a-zA-Z0-9_]+$/", $login)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
+
+}

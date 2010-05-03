@@ -7,3 +7,5 @@
 /www/css/global-min.css
 /www/js/global-min.js
 /shared/
+core/external/pdfGen/temp/*
+core/external/pdfGen/cache/*
