@@ -33,11 +33,11 @@ $(document).ready(function() {
 
     $('#add_category').click(function(){
         oldCatId = -1;
-        $('#subcat').removeAttr('disabled');
-        $('#cattype').removeAttr('disabled');
         $('#add_form').toggle();
         $('#categoryEditSystem').show();
         $('#divCategoryEditCustom').show();
+        $('#subcat').removeAttr('disabled');
+        $('#cattype').removeAttr('disabled');
         $('form').attr('action','/category/add/');
     });
 
@@ -58,7 +58,7 @@ $(document).ready(function() {
     $('.categories li.edit').live('click',function(){
         clearForm();
         fillForm($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
-        
+
         $('#add_form').show();
         $(document).scrollTop(250);
         $('form').attr('action','/category/edit/');
@@ -78,7 +78,7 @@ $(document).ready(function() {
         $('#cat_id').val('');
         $('#subcat').removeAttr("disabled");
         $('#cattype').removeAttr("disabled");
-        
+
         $('#add_form').show();
         $(document).scrollTop(300);
         $('form').attr('action','/category/add/');
@@ -118,7 +118,7 @@ $(document).ready(function() {
         $('#subcat').val(cat.user[id]['parent']);
         $('#cattype').val(cat.user[id]['type']);
         $('#catsys').val(cat.user[id]['system']);
-        
+
         if (cat.user[id]['parent'] != "0") {
             $('#divCategoryEditSystem').hide();
         } else {
@@ -175,10 +175,10 @@ $(document).ready(function() {
         for(key in sorted) {
             m += '<option value="'+sorted[key]['id']+'">'+sorted[key]['name']+'</option>';
         }
-        
+
         $('#subcat').html(m);
     }
-    
+
     function listInsertCategory(cat){
         if (cat.parent == 0) {
             listInsertParentCategory(cat);
@@ -267,7 +267,7 @@ $(document).ready(function() {
             $cat.find('td.w3').text(sysName);
         } else {
             // дочерняя категория
-            
+
             // Удаляем старую версию категории из списка
             $('#category_'+oldCat.id).remove();
 
@@ -283,7 +283,7 @@ $(document).ready(function() {
             var data = easyFinance.models.category.getAllCategories();
             cat = data; // не удалять! нужно для редактирования
             var order = easyFinance.models.category.getUserCategoriesKeysOrderedByName();
-            
+
             // Обновляем список родительских категорий
             $('div.categories').empty();
             if (data.user){
@@ -391,12 +391,12 @@ $(document).ready(function() {
                     strPrompt = 'Невозможно поместить '
                         + strType + ' подкатегорию в '
                         + (type==1 ? "расходную" : "доходную") + ' категорию.';
-                    
+
                     alert(strPrompt);
 
                     return;
                 }
-                
+
                 //if (oldCatId != -1 && subcat != oldCat.subcat) {
                 // проверяем совпадение типов новой категории и подкатегории
                 if (newParent.type != 0 && newParent.type != type) {
@@ -474,7 +474,7 @@ $(document).ready(function() {
      */
     function delCategory(id) {
         var isParent = easyFinance.models.category.isParentCategory(id);
-        
+
         easyFinance.models.category.deleteById(id, function() {
             // Удаляем категорию из списка
             $('#category_'+id).remove();
@@ -485,7 +485,7 @@ $(document).ready(function() {
 
             // Обновляем список категорий в диалоге "Добавление операции"
             $('#op_type').change();
-            
+
             clearForm();
             $('#add_form').hide();
             $.jGrowl("Категория удалена", {theme: 'green'});
