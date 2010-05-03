@@ -201,7 +201,7 @@ easyFinance.widgets.accountEdit = function(){
 
         $('#acc_name').val(account.name);
         $('#acc_comment').val(account.comment);
-        $('#acc_balance').val(Math.abs(parseFloat(account.initPayment)));
+        $('#acc_balance').val(parseFloat(account.initPayment));
         $('#acc_currency').val(account.currency);
 
         _$dialog.data('title.dialog', 'Изменить счёт').dialog('open');
