@@ -1,81 +1,14 @@
 <?php
-$data_array=array();
-$read_string=trim(file_get_contents(dirname(__FILE__).'/data'));
-
-$data_array=explode("$$$", $read_string);
-
-$lname=$data_array[0];
-$fname=$data_array[1];
-$mname=$data_array[2];
-$lname_lat=$data_array[3];
-$fname_lat=$data_array[4];
-$birth_date=$data_array[5]; $birth_date_split=explode(".", $birth_date);
-$birth_place=$data_array[6];
-$gender=$data_array[7];
-$citizenship=$data_array[8];
-$inn=$data_array[9];
-
-$country=$data_array[10];
-$zip=$data_array[11];
-$region=$data_array[12];
-$city=$data_array[13];
-$street=$data_array[14];
-$house=$data_array[15];
-$building=$data_array[16];
-$app=$data_array[17];
-
-$country_reg=$data_array[18];
-$zip_reg=$data_array[19];
-$region_reg=$data_array[20];
-$city_reg=$data_array[21];
-$street_reg=$data_array[22];
-$house_reg=$data_array[23];
-$building_reg=$data_array[24];
-$app_reg=$data_array[25];
-
-$passport_serie=$data_array[26];
-$passport_number=$data_array[27];
-$passport_given=$data_array[28];
-$passport_code=$data_array[29];
-$passport_date=$data_array[30];
-
-$doc_title=$data_array[31];
-$doc_serie=$data_array[32];
-$doc_number=$data_array[33];
-$doc_given=$data_array[34];
-$doc_date=$data_array[35];
-$doc_valid=$data_array[36];
-
-$contact_phone=$data_array[37];
-$contact_email=$data_array[38];
-$contact_mobile=$data_array[39];
-$contact_other=$data_array[40];
-
-$work_company=$data_array[41];
-$work_title=$data_array[42];
-$work_address=$data_array[43];
-$work_phone=$data_array[44];
-
-$card_mode=$data_array[45];
-$card_currency=$data_array[46];
-$card_type=$data_array[47];
-$card_urgency=$data_array[48];
-$card_sms=$data_array[49];
-$card_receipt_office=$data_array[50];
-$card_receipt_email=$data_array[51];
-$card_email=$data_array[52];
-
-$add_name=$data_array[53];
-$add_number=$data_array[54];
-$add_limit=$data_array[55];
-
-$add_14_type=$data_array[56];
-$add_14_given=$data_array[57];
+    $birth_date_split=explode(".", $birth_date);
 
     function renderLetters($string)
     {
-        for ($i=0, $n=mb_strlen($string); $i<$n; $i++) {
-            echo '<span style="padding-right:23px;">'.mb_substr($string, $i, 1).'</span>';
+        //@FIXME Не правильно считает количество символов
+//        for ($i=0, $n=mb_strlen($string)/2; $i<$n; $i++) {
+//            echo '<span style="padding-right:23px;">'.mb_substr($string, $i, 1).'</span>';
+//        }
+        for ($i=0, $n=strlen($string); $i<$n; $i = $i + 2) {
+            echo '<span style="padding-right:23px;">'.substr($string, $i, 2).'</span>';
         }
     }
 ?>
@@ -201,7 +134,7 @@ $i++;
 <?php if (mb_eregi('экстренный', mb_strtolower($card_urgency))) { ?><div style="position:absolute; top: 1035px; left:1210px;"><b>x</b></div><?php }; ?>
 <?php if (trim($card_sms!='')) { ?><div style="position:absolute; top: 1070px; left:830px;"><b>x</b></div><?php }; ?>
 <?php if (trim($card_receipt_office!='')) { ?><div style="position:absolute; top: 1110px; left:590px;"><b>x</b></div><?php }; ?>
-<?php if (trim($card_email!='')) { ?><div style="position:absolute; top: 1102px; left:864px;"><b><?php echo $card_email ?></b></div><?php }; ?>
+<?php if (trim($card_email!='')) { ?><div style="position:absolute; top: 1102px; left:864px;"><b><?php echo str_replace("@mail.easyfinance.ru", "", $card_email); ?></b></div><?php }; ?>
 
 <div style="position:absolute; top: 1198px; left:455px;"><b><?php echo $add_name ?></b></div>
 <div style="position:absolute; top: 1233px; left:320px;"><b>

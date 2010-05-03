@@ -12,9 +12,9 @@ class Converter {
 }
 
 class IconvConverter {
-  function to_utf8($string, $encoding) {
-    return iconv(strtoupper($encoding), "UTF-8", $string);
-  }
+    function to_utf8($string, $encoding) {
+        return iconv(strtoupper($encoding), "UTF-8", $string);
+    }
 }
 
 class PurePHPConverter {
