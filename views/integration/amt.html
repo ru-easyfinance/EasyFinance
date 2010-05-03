@@ -4,10 +4,16 @@
 			<div class="cct"></div>
 			<div class="mid general_cont">
                 <div>
+                    {include file="integration/amt-intro.html"}
+
                     {if $user_info.user_id > 0}
+                        <!--
                         <div>Блок для авторизованных пользователей</div><br>
+                        -->
                     {else}
+                        <!--
                         <div>Блок для неавторизованных пользователей</div><br>
+                        -->
                     {/if}
                 </div>
                 <div id="integrationSteps">
