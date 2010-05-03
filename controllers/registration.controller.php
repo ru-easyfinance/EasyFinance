@@ -64,8 +64,8 @@
         function new_user ()
         {
             $login            = $_POST['login'];
-            $password         = $_POST['password'];
-            $confirm_password = $_POST['confirm_password'];
+            $password         = trim($_POST['password']);
+            $confirm_password = trim($_POST['confirm_password']);
             $name             = $_POST['name'];
             $mail             = $_POST['mail'];
 

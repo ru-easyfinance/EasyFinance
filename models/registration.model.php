@@ -26,7 +26,7 @@ class Registration_Model
         $sql = "SELECT user_id, reg_id FROM registration WHERE reg_id = ?;";
         $row = $db->selectRow($sql, $reg_id);
         if (!empty($row)) {
-            $user_id = $row['user_id']; 
+            $user_id = $row['user_id'];
             $db->query("DELETE FROM registration WHERE reg_id = ?", $reg_id);
 
             $sql = "UPDATE users SET user_active = '1', user_new = '0' WHERE id = ?";
@@ -40,7 +40,7 @@ class Registration_Model
     }
 
     /**
-     * Отправляем пользователю письмо что он успешно зарегистрировался 
+     * Отправляем пользователю письмо что он успешно зарегистрировался
      * @return bool
      */
     function send_mail_success($name, $login, $password, $mail)
@@ -94,40 +94,43 @@ class Registration_Model
         return false;
     }
 
+    function get_reffer ()
+    {
+        //Если определился реферер
+        if( isset($_COOKIE['referer_url']) && isset($_SESSION['referer_url']) )
+        {
+            preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referer_url'], $matches);
+            $referrer = strtolower( $matches[0] );
+
+            //Проверяем нет ли уже такого реферера
+            $sql = 'SELECT id FROM `referrers` WHERE host = ?';
+            $referrerId = $db->selectCell( $sql, $referrer );
+
+            // Если нет - добавляем его в табличку
+            if( empty($referrerId) ) {
+                $sql = 'INSERT INTO `referrers` (`id`, `host`,`title`) VALUES (null, ?,?)';
+                return Core::getInstance()->db->query( $sql, $referrer, $referrer);
+            }
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Создаём нового пользователя
      * @return void
      */
     function new_user($name, $login, $password, $confirm, $mail)
     {
-        $db = Core::getInstance()->db;
-
         // Если нет ошибок, создаём пользователя
         if (empty($this->_error))
         {
-            //Если определился реферер
-            if( isset($_COOKIE['referer_url']) && isset($_SESSION['referer_url']) )
-            {
-                preg_match('/[0-9A-z-\.]+\.[A-z]{2,4}/i', $_SESSION['referer_url'], $matches);
-                $referrer = strtolower( $matches[0] );
-
-                //Проверяем нет ли уже такого реферера
-                $sql = 'select id from `referrers` where host = ?';
-                $referrerId = $db->selectCell( $sql, $referrer );
-
-                // Если нет - добавляем его в табличку
-                if( empty($referrerId) ) {
-                    $sql = 'insert into `referrers` (`id`, `host`,`title`) values (null, ?,?)';
-                    $referrerId = $db->query( $sql, $referrer, $referrer);
-                }
-            } else {
-                $referrerId = null;
-            }
+            $referrerId = $this->get_reffer();
 
             //Добавляем в таблицу пользователей
             $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
                 user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?)";
-            $db->query($sql, $name, $login, $password, $mail, $referrerId);
+            Core::getInstance()->db->query($sql, $name, $login, $password, $mail, $referrerId);
 
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = mysql_insert_id();
