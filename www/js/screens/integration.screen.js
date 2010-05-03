@@ -44,6 +44,7 @@ function initLogged() {
         // email создан, подставляем в виджет и анкету
         $("#wz_card_account_mail").val(res.profile.integration.email);
         easyFinance.widgets.userIntegrations.load({service_mail : res.profile.integration.email});
+        $("#btnIntegrationMailNext").show();
 
         if (res.profile.integration.account && res.profile.integration.account=='') {
             // следующий шаг - привязка счёта
