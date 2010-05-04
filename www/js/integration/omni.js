@@ -82,7 +82,7 @@ function wzSaveEverything() {
     var partData = {};
     var frm;
 
-    if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0) && wzValidateAll()) {
+    if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0) /* && wzValidateAll() */) {
         for (i = 0; i < tabs.tabs.length; i++) {
             frm = $('#' + tabs.tabs[i].id + ' form.wz_frm');
 

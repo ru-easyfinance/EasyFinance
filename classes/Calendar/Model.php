@@ -53,7 +53,7 @@ class Calendar_Model extends _Core_Abstract_Model
             c.every, c.repeat, c.week, o.accepted, o.tr_id, o.transfer, o.source_id AS source
             FROM operation o
             LEFT JOIN calendar_chains c ON c.id=o.chain_id
-            WHERE o.user_id = ? AND o.`date` BETWEEN ? AND ?';
+            WHERE o.user_id = ? AND o.`date` BETWEEN ? AND ? AND (o.accepted=0 OR o.chain_id > 0)';
 
         $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
 
