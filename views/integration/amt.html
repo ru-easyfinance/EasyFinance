@@ -17,7 +17,7 @@
                     {/if}
                 </div>
                 <div id="integrationSteps">
-                    <h3><a href="#">1. {if $user_info.user_id > 0}Вход в систему выполнен{else}Зарегистрироваться или войти{/if}</a></h3>
+                    <h3><a href="#">1. {if $user_info.user_id > 0}Войти в систему - уже вошли{else}Зарегистрироваться или войти{/if}</a></h3>
                     <div>
                         {if $user_info.user_id > 0}
                             <div>Блок для авторизованных пользователей</div><br>
@@ -31,18 +31,22 @@
                             </div>
                         {/if}
                     </div>
-                    <h3><a href="#">2. E-Mail интеграция</a></h3>
+                    <h3><a href="#">2. Создать E-Mail</a></h3>
                     <div>
                         <div id="integration" class="profile" style="display:block">
                             <div id="content" class="inside form">
                                 <div class="email line">
                                     <div class="description">
+                                        <!--
                                         <p>Вы можете заводить операции по email автоматически. Т.е. из банковских сообщений об операциях с  карточкой или счетом.</p>
                                         <p>Для этого нужно создать в системе специальный секретный email, письма на который будут обрабатываться автоматически.</p>
+                                        -->
+                                        <p>Необходимо создать в системе специальный email, который Вы укажете в анкете на получение карты, и на который из банка будет приходить информация о Ваших операциях.</p>
+                                        
                                         <ul class="numberWithPoint">Email должен быть:
-                                            <li>легко запоминаемым, чтобы Вам было удобно им пользоваться</li>
+                                            <li>легко запоминаемым, чтобы безошибочно указать его в анкете</li>
                                             <li>уникальным – чтобы на него случайно не написал кто-то другой</li>
-                                            <li>не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал.</li>
+                                            <li>не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал</li>
                                         </ul>
                                     </div><br>
                                     <div class='notExist'>
@@ -61,24 +65,24 @@
                                         <button id="btnIntegrationEmailRemove" class='remove' title='Удалить'>Удалить</button>
                                     </div>
                                 </div>
-                                <button id='btnIntegrationMailNext' class="hidden">Далее</button>
+                                <button id='btnIntegrationMailNext' class="hidden" style="font-weight: bold">Далее</button>
                             </div>
                         </div>
                     </div>
-                    <h3><a href="#">3. Создание и привязка счёта</a></h3>
+                    <h3><a href="#">3. Задать счет для интеграции</a></h3>
                     <div>
                         <!-- <div>Здесь инструкция</div><br> -->
                         <div>
                             Выберите <b>дебетовый счёт</b> из списка:
                             <select id="optionAccount"></select><br><br>
                             Так же Вы можете <button id='btnCreateAccount'>создать счёт</button><br><br>
-                            <button id='btnBackToEmail'>Назад</button>
-                            <button id='btnLinkAccount'>Далее</button>
+                            <button id='btnBackToEmail' style="font-weight: bold">Назад</button>
+                            <button id='btnLinkAccount' style="font-weight: bold">Далее</button>
                         </div>
                     </div>
-                    <h3><a href="#">4. Заполнение анкеты</a></h3>
+                    <h3><a href="#">4. Заполнить и распечатать анкету</a></h3>
                     <div>
-                        <button id='btnBackToAccount'>Назад</button><br><br>
+                        <button id='btnBackToAccount' style="font-weight: bold">Назад</button><br><br>
                         {include file="integration/amt-wizard.html"}
                     </div>
                 </div>
