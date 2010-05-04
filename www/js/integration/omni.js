@@ -105,6 +105,8 @@ function wzSaveEverything() {
 		// JET
 		window.open("/integration/anketa?" + wholeData);
 
+        /* $.download("/integration/anketa?", wholeData, "post"); */
+
 		// no AJAX
 		/*
         $.ajax({
