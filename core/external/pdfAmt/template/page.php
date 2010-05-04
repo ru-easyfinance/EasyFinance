@@ -116,25 +116,23 @@ $i++;
 <div style="position:absolute; top: 892px; left:200px; width:400px;"><b><?php echo $work_title ?></b></div>
 <div style="position:absolute; top: 892px; left:850px; width:400px;"><b><?php echo $work_phone ?></b></div>
 
-<?php if ((bool)$card_mode === true) { ?><div style="position:absolute; top: 940px; left:310px;"><b>x</b></div><?php }; ?>
-<?php if ((bool)$card_mode === false) { ?><div style="position:absolute; top: 940px; left:590px;"><b>x</b></div><?php }; ?>
-<?php if ((int)$card_currency===0) { ?><div style="position:absolute; top: 940px; left:830px;"><b>x</b></div><?php }; ?>
-<?php if ((int)$card_currency===1) { ?><div style="position:absolute; top: 940px; left:1005px;"><b>x</b></div><?php }; ?>
-<?php if ((int)$card_currency===2) { ?><div style="position:absolute; top: 940px; left:1190px;"><b>x</b></div><?php }; ?>
-<?php if (in_array((int)$card_type, array(0,1,2,3))) { ?><div style="position:absolute; top: 970px; left:357px;"><b>x</b></div><?php }; ?>
-<?php if (in_array((int)$card_type, array(4,5))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>x</b></div><?php }; ?>
-
-<?php if (mb_eregi('mastercard', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('visa gold', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:170px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('visa classic', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:318px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('visa classis unembossed', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:485px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('visa platinum', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:605px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('mastercard gold', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:870px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('mastercard standard', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:1210px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('плановый', mb_strtolower($card_urgency))) { ?><div style="position:absolute; top: 1035px; left:590px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('экстренный', mb_strtolower($card_urgency))) { ?><div style="position:absolute; top: 1035px; left:1210px;"><b>x</b></div><?php }; ?>
-<?php if (trim($card_sms!='')) { ?><div style="position:absolute; top: 1070px; left:830px;"><b>x</b></div><?php }; ?>
-<?php if (trim($card_receipt_office!='')) { ?><div style="position:absolute; top: 1110px; left:590px;"><b>x</b></div><?php }; ?>
+<?php if ((bool)$card_mode === true) { ?><div style="position:absolute; top: 940px; left:310px;"><b>v</b></div><?php }; ?>
+<?php if ((bool)$card_mode === false) { ?><div style="position:absolute; top: 940px; left:590px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_currency===0) { ?><div style="position:absolute; top: 940px; left:830px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_currency===1) { ?><div style="position:absolute; top: 940px; left:1005px;"><b></b></div><?php }; ?>
+<?php if ((int)$card_currency===2) { ?><div style="position:absolute; top: 940px; left:1190px;"><b>v</b></div><?php }; ?>
+<?php if (in_array((int)$card_type, array(0,1,2,3))) { ?><div style="position:absolute; top: 970px; left:357px;"><b>v</b></div><?php }; ?>
+<?php if (in_array((int)$card_type, array(4,5))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_type === 0) { ?><div style="position:absolute; top: 1003px; left:170px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_type === 1) { ?><div style="position:absolute; top: 1003px; left:318px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_type === 2) { ?><div style="position:absolute; top: 1003px; left:485px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_type === 3) { ?><div style="position:absolute; top: 1003px; left:605px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_type === 4) { ?><div style="position:absolute; top: 1003px; left:870px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_type === 5) { ?><div style="position:absolute; top: 1003px; left:1210px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_urgency === 0) { ?><div style="position:absolute; top: 1035px; left:590px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_urgency === 1) { ?><div style="position:absolute; top: 1035px; left:1210px;"><b>v</b></div><?php }; ?>
+<?php if (trim($card_sms!='')) { ?><div style="position:absolute; top: 1070px; left:830px;"><b>v</b></div><?php }; ?>
+<?php if (trim($card_receipt_office!='')) { ?><div style="position:absolute; top: 1110px; left:590px;"><b>v</b></div><?php }; ?>
 <?php if (trim($card_email!='')) { ?><div style="position:absolute; top: 1102px; left:864px;"><b><?php echo str_replace("@mail.easyfinance.ru", "", $card_email); ?></b></div><?php }; ?>
 
 <div style="position:absolute; top: 1198px; left:455px;"><b><?php echo $add_name ?></b></div>
