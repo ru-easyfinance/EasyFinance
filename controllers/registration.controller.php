@@ -91,7 +91,7 @@
             $mail = htmlspecialchars($mail);
 
             if (!$this->model->exist_user($login, $mail)) {
-                $answer = $this->model->new_user($name, $login, $password, $confirm_password, $mail);
+                $answer = $this->model->new_user($name, $login, $sha1_password, $confirm_password, $mail);
             }
 
             $errors = array_merge($this->model->getErrors(), $this->_error);
