@@ -39,42 +39,6 @@ class Registration_Model
         }
     }
 
-    /**
-     * Отправляем пользователю письмо что он успешно зарегистрировался
-     * @return bool
-     */
-    function send_mail_success($name, $login, $password, $mail)
-    {
-        require_once SYS_DIR_LIBS . "external/Swift/swift_required.php";
-
-        $body = "<html><head><title>
-            Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
-            </title></head>
-            <body><p>Здравствуйте, {$name}!</p>
-            <p>Ваш e-mail был указан при регистрации в системе.<br/>
-
-            <p>Для входа в систему используйте:<br>
-            Логин: {$login}<br/>
-            Пароль: {$password}</p>
-
-            <p>C уважением,<br/>Администрация системы <a href='https://".URL_ROOT."' />EasyFinance.ru</a>
-            </body>
-            </html>";
-
-        $subject = "Вы зарегистрированы в системе управления личными финансами EasyFinance.ru";
-
-        $message = Swift_Message::newInstance()
-            // Заголовок
-            ->setSubject('Вы зарегистрированы в системе управления личными финансами EasyFinance.ru')
-            // Указываем "От кого"
-            ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
-            // Говорим "Кому"
-            ->setTo(array($mail => $login))
-            // Устанавливаем "Тело"
-            ->setBody($body, 'text/html');
-        // Отсылаем письмо
-        return Core::getInstance()->mailer->send($message);
-    }
 
     function exist_user($login, $mail)
     {
@@ -116,39 +80,15 @@ class Registration_Model
         }
     }
 
+
     /**
      * Создаём нового пользователя
-     * @return void
      */
     function new_user($name, $login, $password, $confirm, $mail)
     {
-        // Если нет ошибок, создаём пользователя
-        if (empty($this->_error))
-        {
-            $referrerId = $this->get_reffer();
-
-            //Добавляем в таблицу пользователей
-            $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
-                user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?)";
-            Core::getInstance()->db->query($sql, $name, $login, $password, $mail, $referrerId);
-
-            //Добавляем его в таблицу не подтверждённых пользователей
-            $user_id = mysql_insert_id();
-
-            $this->send_mail_success($name, $login, $confirm, $mail);
-
-            return array (
-                'result' => array (
-                    'text' => 'Спасибо, вы зарегистрированы!<br>Теперь вы можете войти в систему.',
-                    'redirect' => "https://".URL_ROOT_MAIN."login"
-                )
-            );
-        } else {
-            return array (
-                'error' => array (
-                    'text' => "Обнаружены следующие ошибки:\n" . implode ( ',\n ', $this->_error )
-                )
-            );
-        }
+        $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
+            user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?)";
+        Core::getInstance()->db->query($sql, $name, $login, sha1($password), $mail, $this->get_reffer());
     }
+
 }
