@@ -19,6 +19,7 @@ Operation:
       updated: { name: dt_update }
   columns:
     user_id:    { type: integer(4), unsigned: true, notnull: true }
+    account_id: { type: integer(4), unsigned: true, notnull: true }             # Ид счёта
     money:      { type: 'decimal(20, 2)', notnull: true }                       # Сумма
     date:       { type: date(25), notnull: true }                               # Фактическа дата операции
     time:       { type: time(25), notnull: true }                               # Фактическое время операции
