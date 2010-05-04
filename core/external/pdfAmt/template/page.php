@@ -116,9 +116,14 @@ $i++;
 <div style="position:absolute; top: 892px; left:200px; width:400px;"><b><?php echo $work_title ?></b></div>
 <div style="position:absolute; top: 892px; left:850px; width:400px;"><b><?php echo $work_phone ?></b></div>
 
-<?php if (mb_eregi('основная', mb_strtolower($card_mode))) { ?><div style="position:absolute; top: 940px; left:310px;"><b>x</b></div><?php }; ?><?php if (eregi('дополнительная', mb_strtolower($card_mode))) { ?><div style="position:absolute; top: 940px; left:590px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('рубли', mb_strtolower($card_currency))) { ?><div style="position:absolute; top: 940px; left:830px;"><b>x</b></div><?php }; ?><?php if (eregi('доллары', mb_strtolower($card_currency))) { ?><div style="position:absolute; top: 940px; left:1005px;"><b>x</b></div><?php }; ?><?php if (eregi('евро', mb_strtolower($card_currency))) { ?><div style="position:absolute; top: 940px; left:1190px;"><b>x</b></div><?php }; ?>
-<?php if (mb_eregi('visa', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 970px; left:357px;"><b>x</b></div><?php }; ?><?php if (eregi('mastercard', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>x</b></div><?php }; ?>
+<?php if ((bool)$card_mode === true) { ?><div style="position:absolute; top: 940px; left:310px;"><b>x</b></div><?php }; ?>
+<?php if ((bool)$card_mode === false) { ?><div style="position:absolute; top: 940px; left:590px;"><b>x</b></div><?php }; ?>
+<?php if ((int)$card_currency===0) { ?><div style="position:absolute; top: 940px; left:830px;"><b>x</b></div><?php }; ?>
+<?php if ((int)$card_currency===1) { ?><div style="position:absolute; top: 940px; left:1005px;"><b>x</b></div><?php }; ?>
+<?php if ((int)$card_currency===2) { ?><div style="position:absolute; top: 940px; left:1190px;"><b>x</b></div><?php }; ?>
+<?php if (in_array((int)$card_type, array(0,1,2,3))) { ?><div style="position:absolute; top: 970px; left:357px;"><b>x</b></div><?php }; ?>
+<?php if (in_array((int)$card_type, array(4,5))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>x</b></div><?php }; ?>
+
 <?php if (mb_eregi('mastercard', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>x</b></div><?php }; ?>
 <?php if (mb_eregi('visa gold', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:170px;"><b>x</b></div><?php }; ?>
 <?php if (mb_eregi('visa classic', mb_strtolower($card_type))) { ?><div style="position:absolute; top: 1003px; left:318px;"><b>x</b></div><?php }; ?>
