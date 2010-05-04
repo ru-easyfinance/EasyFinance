@@ -1,17 +1,21 @@
+<p>Заполните и распечатайте анкету. Для печати анкета выводится в PDF-файле на одной странице в виде, установленном банком. Вы можете в любой момент посмотреть и использовать получающийся результат, даже если что-то недозаполнили - для этого перейдите на последний шаг и нажмите кнопку печати, а затем продолжите заполнение.</p>
+
+<p>Удобно переходить по полям клавишей TAB, переходить на следующий шаг - клавишей Enter.</p>
+
         <div id="wizard">
             <div id="wz_header">
                 <ol>
                     <li class="wz_tab_header">Личные данные</li>
                     <li class="wz_tab_header">Прописка / Регистрация</li>
-                    <li class="wz_tab_header">Место жительства</li>
+                    <li class="wz_tab_header">Местонахождение</li>
                     <li class="wz_tab_header">Паспорт</li>
-                    <li class="wz_tab_header">Для иностранцев: второй док-т</li>
+                    <li class="wz_tab_header">Для иностранцев: второй документ</li>
                     <li class="wz_tab_header">Контакты</li>
                     <li class="wz_tab_header">Работа</li>
-                    <li class="wz_tab_header">Карта</li>
-                    <li class="wz_tab_header">Доп. карта</li>
-                    <li class="wz_tab_header">Доп. карта до 14</li>
-                    <li class="wz_tab_header">Пароль / Финиш</li>
+                    <li class="wz_tab_header">Свойства карты</li>
+                    <li class="wz_tab_header">Дополнительная карта</li>
+                    <li class="wz_tab_header">Дополнительная карта для лиц до 14</li>
+                    <li class="wz_tab_header">Пароль и согласие</li>
                 </ol>
             </div>
 
@@ -50,7 +54,7 @@
                             </div>
 
                             <div class="fld_holder">
-                                <label for="wz_birthdate">Дата рождения (дд.мм.гггг)<span class="wz_req_fld">*</span></label><br />
+                                <label for="wz_birthdate">Дата рождения (в формате дд.мм.гггг, например 20.11.1960)<span class="wz_req_fld">*</span></label><br />
                                 <input type="text" name="wz_birthdate" id="wz_birthdate" value="" maxlength="10" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
@@ -200,12 +204,12 @@
 
                             <div class="fld_holder">
                                 <label for="wz_rf_id_series">Серия <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_rf_id_series" id="wz_rf_id_series" value="" maxlength="4" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <input type="text" name="wz_rf_id_series" id="wz_rf_id_series" value="" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
                             <div class="fld_holder">
                                 <label for="wz_rf_id_number">Номер <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_rf_id_number" id="wz_rf_id_number" value="" maxlength="6" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <input type="text" name="wz_rf_id_number" id="wz_rf_id_number" value="" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
                             <div class="fld_holder">
@@ -219,7 +223,7 @@
                             </div>
 
                             <div class="fld_holder">
-                                <label for="wz_rf_id_date">Дата выдачи (дд.мм.гггг)<span class="wz_req_fld">*</span></label><br />
+                                <label for="wz_rf_id_date">Дата выдачи (в формате дд.мм.гггг, например 20.11.1980)<span class="wz_req_fld">*</span></label><br />
                                 <input type="text" name="wz_rf_id_date" id="wz_rf_id_date" value="" maxlength="10" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
@@ -258,7 +262,7 @@
                             </div>
 
                             <div class="fld_holder">
-                                <label for="wz_foreign_id_date">Дата выдачи</label><br />
+                                <label for="wz_foreign_id_date">Дата выдачи (в формате дд.мм.гггг, например 20.11.1960)</label><br />
                                 <input type="text" name="wz_foreign_id_date" id="wz_foreign_id_date" value="" maxlength="10" /><br /><br />
                             </div>
 
@@ -414,6 +418,8 @@
                 <div class="wz_tab_content">
                     <h3>Дополнительная карта</h3>
 
+                    <p>Если заказывается дополнительная карта, заполните, пожалуйста, нижеследующие графы:</p>
+
                     <form id="addit_card_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
                         <fieldset>
                             <input type="hidden" name="step_name" value="addit_card_info" />
@@ -442,6 +448,8 @@
                 <!-- Tab 9 -->
                 <div class="wz_tab_content">
                     <h3>Дополнительная карта для лица до 14 лет</h3>
+
+                    <p>Если заказывается дополнительная карта для лица в возрасте до 14 лет, дополнительно заполните, пожалуйста, нижеследующие графы:</p>
 
                     <form id="addit_card14_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
                         <fieldset>
@@ -481,18 +489,18 @@
                             <input type="hidden" name="step_name" value="finish" />
 
                             <div class="fld_holder">
-                                <label for="wz_password">Пароль (ТОЛЬКО РУССКИЕ БУКВЫ И ЦИФРЫ) <span class="wz_req_fld">*</span></label><br />
+                                <label for="wz_password">Пароль (слово <b>на русском языке</b>  – для идентификации Вашей личности при телефонных обращениях в Call-центр Банка) <span class="wz_req_fld">*</span></label><br />
                                 <input name="wz_password" id="wz_password" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
                             <div class="fld_holder">
-                                С правилами ознакомлен <span class="wz_req_fld">*</span><br />
+                                <!-- С правилами ознакомлен <span class="wz_req_fld">*</span><br /> -->
                                 <input type="checkbox" name="wz_omni_agreement" id="wz_omni_agreement" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_omni_agreement">С Тарифами и Правилами обслуживания держателей банковских карт международных платежных систем VISA International, MasterCard International, эмитированных ООО «АМТ Банк», ознакомлен(а) и обязуюсь их выполнять.</label><br />
                                 <br />
                             </div>
 
                             <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
-                            <input id="btnPrintForm" type="submit" value="Распечатать" />
+                            <input id="btnPrintForm" type="submit" value="Распечатать" style="font-weight:bold" />
                         </fieldset>
                     </form>
                 </div>
