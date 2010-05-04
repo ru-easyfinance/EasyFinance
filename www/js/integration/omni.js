@@ -103,9 +103,9 @@ function wzSaveEverything() {
         wholeData = wzObjToArray(wholeData);
 
 		// JET
-		//window.open("/integration/anketa?" + wholeData);
+		window.open("/integration/anketa?" + wholeData);
 
-        $.download("/integration/anketa?", wholeData, "post");
+        /* $.download("/integration/anketa?", wholeData, "post"); */
 
 		// no AJAX
 		/*
