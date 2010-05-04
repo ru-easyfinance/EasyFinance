@@ -12,9 +12,13 @@ default:
     #language:     en
     #robots:       index, follow
 
-  stylesheets:    [main.css]
-
+<?php if (sfConfig::get('sf_environment') == 'prod'): ?>
+  stylesheets:    []
   javascripts:    []
+<?php else: ?>
+  stylesheets:    []
+  javascripts:    []
+<?php endif; ?>
 
   has_layout:     true
   layout:         layout
