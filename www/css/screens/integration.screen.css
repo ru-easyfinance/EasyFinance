@@ -5,6 +5,7 @@
 
 #integrationSteps .ui-accordion-header a {
 	color: white;
+    cursor: default;
 }
 
 #integrationSteps .ui-accordion-content {

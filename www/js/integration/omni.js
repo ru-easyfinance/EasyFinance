@@ -105,6 +105,13 @@ function wzSaveEverything() {
 		// JET
 		window.open("/integration/anketa?" + wholeData);
 
+        var IE7 = (document.all && navigator.appVersion.indexOf("MSIE 7.")==-1) ? false : true;
+        if (IE7) {
+            window.location = "/integration/anketa?" + wholeData;
+        } else {
+            window.open("/integration/anketa?" + wholeData);
+        }
+
         /* $.download("/integration/anketa?", wholeData, "post"); */
 
 		// no AJAX

@@ -35,6 +35,8 @@ class Helper_Css implements _Core_Router_iHook
             $templateEngine->append('css', 'jquery/ufd-base.css');
             $templateEngine->append('css', 'jquery/ufd-plain.css');
 
+            $templateEngine->append('css', 'screens/integration.screen.css');
+
             $templateEngine->append('css', 'calendarOverdue.css');
             $templateEngine->append('css', 'calendarLeft.css');
             $templateEngine->append('css', 'report.css');
@@ -47,8 +49,6 @@ class Helper_Css implements _Core_Router_iHook
             $templateEngine->append('css', 'budget.css');
             $templateEngine->append('css', 'accountsPanel.css');
             $templateEngine->append('css', 'accountsJournal.css');
-
-            $templateEngine->append('css', 'screens/integration.screen.css');
 		}
 	}
 }
