@@ -52,7 +52,11 @@ function initLogged() {
             $("#integrationSteps").accordion("activate" , 2);
         } else {
             // выбираем привязанный аккаунт
-            $("#optionAccount").find("option[value='" + res.profile.integration.account + "']").attr("selected", "selected");
+            $("#integrationSteps").accordion("activate" , 2);
+            var $opt = $("#optionAccount").find("option[value='" + res.profile.integration.account + "']");
+            if ($opt) {
+                $opt.attr("selected", "selected");
+            }
 
             // открываем анкету
             $("#integrationSteps").accordion("activate" , 3);
