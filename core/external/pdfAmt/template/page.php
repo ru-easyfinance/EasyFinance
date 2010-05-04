@@ -121,8 +121,8 @@ $i++;
 <?php if ((int)$card_currency===0) { ?><div style="position:absolute; top: 940px; left:830px;"><b>v</b></div><?php }; ?>
 <?php if ((int)$card_currency===1) { ?><div style="position:absolute; top: 940px; left:1005px;"><b></b></div><?php }; ?>
 <?php if ((int)$card_currency===2) { ?><div style="position:absolute; top: 940px; left:1190px;"><b>v</b></div><?php }; ?>
-<?php if (in_array((int)$card_type, array(0,1,2,3))) { ?><div style="position:absolute; top: 970px; left:357px;"><b>v</b></div><?php }; ?>
-<?php if (in_array((int)$card_type, array(4,5))) { ?><div style="position:absolute; top: 970px; left:973px;"><b>v</b></div><?php }; ?>
+<?php if (in_array((int)$card_type, array(0,1,2,3))) { ?><div style="position:absolute; top: 970px; left:355px;"><b>v</b></div><?php }; ?>
+<?php if (in_array((int)$card_type, array(4,5))) { ?><div style="position:absolute; top: 970px; left:978px;"><b>v</b></div><?php }; ?>
 <?php if ((int)$card_type === 0) { ?><div style="position:absolute; top: 1003px; left:170px;"><b>v</b></div><?php }; ?>
 <?php if ((int)$card_type === 1) { ?><div style="position:absolute; top: 1003px; left:318px;"><b>v</b></div><?php }; ?>
 <?php if ((int)$card_type === 2) { ?><div style="position:absolute; top: 1003px; left:485px;"><b>v</b></div><?php }; ?>
@@ -131,7 +131,7 @@ $i++;
 <?php if ((int)$card_type === 5) { ?><div style="position:absolute; top: 1003px; left:1210px;"><b>v</b></div><?php }; ?>
 <?php if ((int)$card_urgency === 0) { ?><div style="position:absolute; top: 1035px; left:590px;"><b>v</b></div><?php }; ?>
 <?php if ((int)$card_urgency === 1) { ?><div style="position:absolute; top: 1035px; left:1210px;"><b>v</b></div><?php }; ?>
-<?php if (trim($card_sms!='')) { ?><div style="position:absolute; top: 1070px; left:830px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$card_sms === 1) { ?><div style="position:absolute; top: 1070px; left:830px;"><b>v</b></div><?php }; ?>
 <?php if (trim($card_receipt_office!='')) { ?><div style="position:absolute; top: 1110px; left:590px;"><b>v</b></div><?php }; ?>
 <?php if (trim($card_email!='')) { ?><div style="position:absolute; top: 1102px; left:864px;"><b><?php echo str_replace("@mail.easyfinance.ru", "", $card_email); ?></b></div><?php }; ?>
 
@@ -140,18 +140,25 @@ $i++;
 <?php
 $i=0;
 while ($i<mb_strlen($add_number)) {
-echo '<span style="padding-right:38px;">'.$add_number{$i}.'</span>';
-$i++;
+    echo '<span style="padding-right:35px;">'.$add_number{$i}.'</span>';
+    $i++;
 };
- ?>
+?>
 </b></div>
 <div style="position:absolute; top: 1270px; left:320px;"><b><?php echo $add_limit ?></b></div>
 
-<?php if (mb_strtolower($add_14_type)=='свидетельство о рождении') { ?><div style="position:absolute; top: 1395px; left:100px;"><b>x</b></div><?php }; ?>
-<?php if (mb_strtolower($add_14_type)=='решение суда') { ?><div style="position:absolute; top: 1395px; left:520px;"><b>x</b></div><?php }; ?>
-<?php if (mb_strtolower($add_14_type)=='документ, подтверждающий полномочия попечителя') { ?><div style="position:absolute; top: 1395px; left:940px;"><b>x</b></div><?php }; ?>
-<div style="position:absolute; top: 1423px; left:280px;"><b><?php echo $add_14_given ?></b></div>
+<div style="position:absolute; top: 1157px; left:100px;"><b>
+<?php
+for ($i=0, $n=mb_strlen($password); $i<$n; $i++) {
+    echo '<span style="padding-right:50px;">'.mb_substr($password, $i, 1).'</span>';
+}
+?>
+</b></div>
 
+<?php if ((int)$add_14_type === 0) { ?><div style="position:absolute; top: 1395px; left:100px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$add_14_type === 1) { ?><div style="position:absolute; top: 1395px; left:520px;"><b>v</b></div><?php }; ?>
+<?php if ((int)$add_14_type === 2) { ?><div style="position:absolute; top: 1395px; left:940px;"><b>v</b></div><?php }; ?>
+<div style="position:absolute; top: 1423px; left:280px;"><b><?php echo $add_14_given ?></b></div>
 
 
 </body>

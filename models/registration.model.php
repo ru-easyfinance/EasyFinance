@@ -135,7 +135,7 @@ class Registration_Model
             //Добавляем его в таблицу не подтверждённых пользователей
             $user_id = mysql_insert_id();
 
-            $this->send_mail_success($name, $login, $password, $mail);
+            $this->send_mail_success($name, $login, $confirm, $mail);
 
             return array (
                 'result' => array (
