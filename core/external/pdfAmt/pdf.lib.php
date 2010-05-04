@@ -4,7 +4,7 @@ if (!file_exists($dir = DIR_LIB_AMTPDF.'/../pdfGen/cache')) mkdir($dir);
 if (!file_exists($dir = DIR_LIB_AMTPDF.'/../pdfGen/temp')) mkdir($dir);
 
 
-function createPDF($lname, $fname, $mname, $lname_lat, $fname_lat, $birth_date, $birth_place, $gender, $citizenship, $inn, $country, $zip, $region, $city, $street, $house, $building, $app, $country_reg, $zip_reg, $region_reg, $city_reg, $street_reg, $house_reg, $building_reg, $app_reg, $passport_serie, $passport_number, $passport_given, $passport_code, $passport_date, $doc_title, $doc_serie, $doc_number, $doc_given, $doc_date, $doc_valid, $contact_phone, $contact_email, $contact_mobile, $contact_other, $work_company, $work_title, $work_address, $work_phone, $card_mode, $card_currency, $card_type, $card_urgency, $card_sms, $card_receipt_office, $card_receipt_email, $card_email, $add_name, $add_number, $add_limit, $add_14_type, $add_14_given) {
+function createPDF($lname, $fname, $mname, $lname_lat, $fname_lat, $birth_date, $birth_place, $gender, $citizenship, $inn, $country, $zip, $region, $city, $street, $house, $building, $app, $country_reg, $zip_reg, $region_reg, $city_reg, $street_reg, $house_reg, $building_reg, $app_reg, $passport_serie, $passport_number, $passport_given, $passport_code, $passport_date, $doc_title, $doc_serie, $doc_number, $doc_given, $doc_date, $doc_valid, $contact_phone, $contact_email, $contact_mobile, $contact_other, $work_company, $work_title, $work_address, $work_phone, $card_mode, $card_currency, $card_type, $card_urgency, $card_sms, $card_receipt_office, $card_receipt_email, $card_email, $add_name, $add_number, $add_limit, $add_14_type, $add_14_given, $password) {
 
 ob_start();
     require(DIR_LIB_AMTPDF.'/template/page.php');
