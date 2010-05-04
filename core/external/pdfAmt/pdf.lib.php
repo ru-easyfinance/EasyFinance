@@ -10,7 +10,6 @@ ob_start();
     require(DIR_LIB_AMTPDF.'/template/page.php');
 $page = ob_get_clean();
 
-
 // -----------------------------------------------------------------------------
 error_reporting(E_ALL);
 require_once(DIR_LIB_AMTPDF.'/../pdfGen/config.inc.php');

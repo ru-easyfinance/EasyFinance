@@ -111,7 +111,7 @@
                 $answer = array (
                     'result' => array (
                         'text' => 'Спасибо, вы зарегистрированы!',
-                        'redirect' => "https://".URL_ROOT_MAIN."info/"
+                        'redirect' => "https://".URL_ROOT_MAIN."login/"
                     )
                 );
             }
