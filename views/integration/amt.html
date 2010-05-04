@@ -24,8 +24,9 @@
                         {else}
                             <div align="left">
                                 <!-- <input id="btnShowRegister" type="button" value="Зарегистрироваться" />&nbsp;&nbsp;&nbsp;или&nbsp;&nbsp; -->
-                                <a href="/registration" target="_blank">Зарегистрироваться</a>&nbsp;&nbsp;&nbsp;или&nbsp;&nbsp;
-                                <input id="btnShowLogin" type="button" value="Войти" /><br>
+                                <input id="btnShowLogin" type="button" value="Войти" />&nbsp;&nbsp;&nbsp;или&nbsp;&nbsp;
+                                <a href="/registration" target="_blank">зарегистрироваться</a>
+                                (форма регистрации откроется в новом окне, после регистрации обновите это окно)<br>
                                 {include file="common/registration.html"}
                                 {include file="common/authentication.html"}
                             </div>
@@ -45,7 +46,6 @@
                                         
                                         <ul class="numberWithPoint">Email должен быть:
                                             <li>легко запоминаемым, чтобы безошибочно указать его в анкете</li>
-                                            <li>уникальным – чтобы на него случайно не написал кто-то другой</li>
                                             <li>не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал</li>
                                         </ul>
                                     </div><br>
@@ -73,11 +73,14 @@
                     <div>
                         <!-- <div>Здесь инструкция</div><br> -->
                         <div>
-                            Выберите <b>дебетовый счёт</b> из списка:
+                            <button id='btnCreateAccount'>Создайте счёт</button> для карты "EASYFINANCE"<br><br>
+
+                            Или выберите счёт из списка (отображаются только дебетовые карты):
                             <select id="optionAccount"></select><br><br>
-                            Так же Вы можете <button id='btnCreateAccount'>создать счёт</button><br><br>
+
                             <button id='btnBackToEmail' style="font-weight: bold">Назад</button>
                             <button id='btnLinkAccount' style="font-weight: bold">Далее</button>
+
                         </div>
                     </div>
                     <h3><a href="#">4. Заполнить и распечатать анкету</a></h3>

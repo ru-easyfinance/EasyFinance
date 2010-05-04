@@ -434,6 +434,6 @@ $(document).ready(function(){
         $("#wz_actual_building").val($("#wz_reg_building").val());
         $("#wz_actual_appartment").val($("#wz_reg_appartment").val());
 
-        $("#btnAddressNext").click();
+        //$("#btnAddressNext").click();
     });
 });
