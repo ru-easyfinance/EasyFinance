@@ -144,14 +144,14 @@ class Integration_Controller extends _Core_Controller
                 $card_type = $data['wz_card_type'],
                 $card_urgency = $data['wz_card_rush'],
                 $card_sms = $data['wz_card_sms_info'],
-                $card_receipt_office = $data['wz_card_account_info_to_office'],
+                $card_receipt_office = @$data['wz_card_account_info_to_office'],
                 $card_receipt_email = '',
                 $card_email = $data['wz_card_account_mail'],
                 $add_name = $data['wz_addit_card_owner'],
                 $add_number = $data['wz_addit_card_sks_number'],
                 $add_limit = $data['wz_addit_card_limit'],
                 $add_14_type = '',
-                $add_14_given = $data['wz_addit_card14_organisation'],
+                $add_14_given = @$data['wz_addit_card14_organisation'],
                 $password = $data['wz_password']
             );
         }
