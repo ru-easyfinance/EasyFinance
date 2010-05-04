@@ -97,16 +97,16 @@
             $errors = array_merge($this->model->getErrors(), $this->_error);
             if (count($errors) == 0) {
 
-                $user = Core::getInstance()->user;
-
-                if(!$user->initUser($login, $password))
-                {
-                    die(json_encode(array('error' => array ('text' => 'Некорректный логин или пароль!'))));
-                }
-
-                $login_Model = new Login_Model();
-
-                $login_Model->login($login, $password);
+//                $user = Core::getInstance()->user;
+//
+//                if(!$user->initUser($login, $password))
+//                {
+//                    die(json_encode(array('error' => array ('text' => 'Некорректный логин или пароль!'))));
+//                }
+//
+//                $login_Model = new Login_Model();
+//
+//                $login_Model->login($login, $password);
 
                 $answer = array (
                     'result' => array (
