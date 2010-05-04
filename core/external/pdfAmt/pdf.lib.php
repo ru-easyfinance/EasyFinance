@@ -11,6 +11,7 @@ ob_start();
 $page = ob_get_clean();
 
 // -----------------------------------------------------------------------------
+ini_set('memory_limit', '128M');
 error_reporting(E_ALL);
 require_once(DIR_LIB_AMTPDF.'/../pdfGen/config.inc.php');
 require_once(HTML2PS_DIR.'pipeline.factory.class.php');
