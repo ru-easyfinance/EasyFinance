@@ -107,9 +107,9 @@ function wzSaveEverything() {
 
         var IE7 = (document.all && navigator.appVersion.indexOf("MSIE 7.")==-1) ? false : true;
         if (IE7) {
-            window.location = "/integration/anketa?" + wholeData;
+            window.location = "/integration/anketa?" + wholeData + "&filename=anketa.pdf";
         } else {
-            window.open("/integration/anketa?" + wholeData);
+            window.open("/integration/anketa?" + wholeData + "&filename=anketa.pdf");
         }
 
         /* $.download("/integration/anketa?", wholeData, "post"); */
