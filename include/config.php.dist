@@ -11,8 +11,6 @@ define('SYS_DIR_LIBS',     SYS_DIR_ROOT . "/core/");
 define('SYS_DIR_INC',      SYS_DIR_ROOT . "/include/");
 // @deprecated -
 
-define('ENVIRONMENT',      "${project.environment}");
-
 //Общая папка для кэша файлов
 define('SYS_DIR_CACHE',    "${project.basedir}/tmp");
 define('TMP_DIR_SMARTY',   SYS_DIR_CACHE . "/smarty");
@@ -27,7 +25,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 
 // Other
 define('IS_DEMO',          ${project.demo});
-define('ENVIRONMENT',      ${project.environment});
+define('ENVIRONMENT',      "${project.environment}");
 
 // Mail settings (including method)
 define('MAIL_ENABLED',     ${project.mail.enabled});
