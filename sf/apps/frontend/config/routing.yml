@@ -4,4 +4,4 @@
 # default rules
 homepage:
   url:   /
-  param: { module: default, action: index }
+  param: { module: info, action: index }

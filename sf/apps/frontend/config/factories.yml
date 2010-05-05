@@ -32,7 +32,7 @@ all:
   request:
     class: sfWebRequest
     param:
-      relative_url_root: /sf
+      relative_url_root: /main
 
   routing:
     class: sfPatternRouting
