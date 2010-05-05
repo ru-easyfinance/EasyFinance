@@ -23,7 +23,7 @@ $(document).ready(function() {
                     $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/login\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу входа через несколько секунд)");
 
                     if (data.result.redirect)
-                        setTimeout(function(){window.location = data.result.redirect;},3000);
+                        setTimeout(function(){window.location.href = data.result.redirect;},3000);
                 }
             }
         } else {
