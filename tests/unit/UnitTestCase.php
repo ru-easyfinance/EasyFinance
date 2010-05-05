@@ -3,7 +3,7 @@
 /**
  * Базовый класс для модульных тестов
  */
-class UnitTestCase extends PHPUnit_Framework_TestCase
+abstract class UnitTestCase extends PHPUnit_Framework_TestCase
 {
     private $db;
 
