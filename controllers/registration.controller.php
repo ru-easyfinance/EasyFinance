@@ -159,8 +159,6 @@
      */
     protected function _send_mail_success($name, $login, $password, $mail)
     {
-        require_once SYS_DIR_LIBS . "external/Swift/swift_required.php";
-
         $body = "<html><head><title>
             Вы зарегистрированы в системе управления личными финансами EasyFinance.ru
             </title></head>
