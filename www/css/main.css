@@ -166,6 +166,7 @@ table.noborder td.mark{width:50px;}
 .ramka1 .cb div { background-position: 100% -60px; }
 
 .ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg05.gif') repeat-y 0 0; }
+.iframe #tabIntegration {display: none;}
 .iframe .ramka2 { background: #ffffff url('/img/i/bg05_iframe.gif') repeat-y 0 0; }
 .ramka2 .cct, .ramka2 .ccb { clear: both; height: 14px; background: url('/img/i/bg05_coners.gif') no-repeat 0 0; }
 .iframe .ramka2 .cct, .iframe .ramka2 .ccb { background: url('/img/i/bg05_coners_iframe.gif') no-repeat 0 0; }
