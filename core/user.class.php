@@ -97,7 +97,7 @@ class User
         {
 
             if (isset($_COOKIE['PHPSESSID'])) {
-                if (!isset($_SESSION)) {
+                if (!session_id()) {
                     session_start();
                 }
                 $this->load(); //Пробуем загрузить из сессии данные

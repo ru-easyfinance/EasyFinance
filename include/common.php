@@ -38,27 +38,27 @@ Core::getInstance()->js = array(
         'widgets/profile/userIntegrations.widget'
         ),
     'operation' => array(
-		'widgets/operations/operationsJournal.widget', 
+		'widgets/operations/operationsJournal.widget',
 		'operation'),
     'mail' => array('mail',
 		'models/mail.model',
 		'widgets/mail.widget'),
     'expert' => array(
-		'models/mail.model', 
-		'widgets/mail.widget', 
-		'jquery/jquery.form', 
-		'jquery/jHtmlArea-0.7.0', 
-		'jquery/jHtmlArea.ColorPickerMenu-0.7.0', 
-		'models/expert.model', 
-		'widgets/expert/expertEditInfo.widget', 
-		'widgets/expert/expertEditPhoto.widget', 
-		'widgets/expert/expertEditCertificates.widget', 
-		'widgets/expert/expertEditServices.widget', 
-		'screens/expert.screen', 
+		'models/mail.model',
+		'widgets/mail.widget',
+		'jquery/jquery.form',
+		'jquery/jHtmlArea-0.7.0',
+		'jquery/jHtmlArea.ColorPickerMenu-0.7.0',
+		'models/expert.model',
+		'widgets/expert/expertEditInfo.widget',
+		'widgets/expert/expertEditPhoto.widget',
+		'widgets/expert/expertEditCertificates.widget',
+		'widgets/expert/expertEditServices.widget',
+		'screens/expert.screen',
 		'jquery/jquery.fancybox-1.0.0'),
     'expertslist' => array(
-		'widgets/services/expertsList.widget', 
-		'screens/services.screen', 
+		'widgets/services/expertsList.widget',
+		'screens/services.screen',
 		'jquery/jquery.fancybox-1.0.0'),
     'login' => array('welcome', 'login'),
     'info' => array('info'),
@@ -71,7 +71,7 @@ Core::getInstance()->js = array(
         'integration/validator',
         'screens/integration.screen'),
     'category' => array(
-		'models/category.model', 
+		'models/category.model',
 		'category'),
     'calendar' => array(
 		'jquery/fullcalendar',
@@ -80,14 +80,14 @@ Core::getInstance()->js = array(
         'widgets/calendar/calendarList.widget'),
     'admin' => array( 'admin'),
     'accounts' => array(
-		'widgets/accounts/accountsJournal.widget', 
+		'widgets/accounts/accountsJournal.widget',
 		'accounts'),
-    'review' => array(	
-		'jquery/jquery.fancybox-1.0.0', 
+    'review' => array(
+		'jquery/jquery.fancybox-1.0.0',
 		'review'),
     'budget' => array(
 		'budget',
-		'models/category.model', 
+		'models/category.model',
 		'models/budget.model',
 		'widgets/budget/budget.widget',
 		'widgets/budget/budgetMaster.widget')
@@ -96,21 +96,38 @@ Core::getInstance()->js = array(
 // Почта
 require_once dirname( dirname ( __FILE__ ) ) . "/core/external/Swift/swift_required.php";
 
-// sendmail
-$mailTransport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+// Если это продуктив, то используем для отправки писем - sendmail
+if (defined(ENVIRONMENT) && ENVIRONMENT == 'prod') {
+    // sendmail
+    $mailTransport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
 
-/*
-// mail
-$transport = Swift_MailTransport::newInstance();
-*/
+//    // mail
+//    $transport = Swift_MailTransport::newInstance();
 
-/*
-// smtp
-$mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-	//->setUsername('info@easyfinance.ru')
-	//->setPassword('j2df32nD3l7sFa2');
-	->setUsername('support@easyfinance.ru')
-	->setPassword('7uN3BN6t');
-*/
+//    // smtp
+//    $mailTransport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+//        //->setUsername('info@easyfinance.ru')
+//        //->setPassword('j2df32nD3l7sFa2');
+//        ->setUsername('support@easyfinance.ru')
+//        ->setPassword('7uN3BN6t');
+} else {
 
-Core::getInstance()->mailer = Swift_Mailer::newInstance( $mailTransport );
+    if (MAIL_ENABLED) {
+        // mail
+        $mailTransport = Swift_MailTransport::newInstance();
+
+    } else {
+        // Заглушка для почты
+        require_once(dirname(__FILE__).'/../tests/unit/TestMailInvokerStub.php');
+
+        $invoker = new TestMailInvokerStub;
+        Swift_DependencyContainer::getInstance()
+            ->register('transport.mailinvoker')
+            ->asValue($invoker);
+        $mailTransport = Swift_MailTransport::newInstance();
+
+    }
+
+}
+
+Core::getInstance()->mailer = Swift_Mailer::newInstance($mailTransport);
