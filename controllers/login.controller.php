@@ -30,15 +30,11 @@ class Login_Controller extends _Core_Controller
 	 */
 	function index($args)
 	{
+        if (!session_id()) {
+            session_start();
+        }
+        
 		$user = Core::getInstance()->user;
-		
-		// Если пользователь авторизован
-		if ( $user->getId() )
-		{
-			// Редиректим его на первую страницу
-			header("Location: /info/");
-			exit();
-		}
 		
 		// Обьект запроса
 		$request = _Core_Request::getCurrent();
@@ -64,7 +60,7 @@ class Login_Controller extends _Core_Controller
 				$errorMessage = 'Некорректный логин или пароль!';
 			}
 		}
-		
+
 		// Ошибка передаётся в шаблон только при POST запросе
 		if( $request->method != 'POST' )
 		{
@@ -77,43 +73,31 @@ class Login_Controller extends _Core_Controller
 		
 		if( !$errorMessage )
 		{
-			// Шифруем и сохраняем куки
-			if (isset($_POST['autoLogin']))
-			{
-				setcookie(COOKIE_NAME, encrypt(array($login,$pass)), time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-				// Шифруем, но куки теперь сохраняются лишь до конца сессии
-			}
-			else
-			{
-				setcookie(COOKIE_NAME, encrypt(array($login,$pass)), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-			}
-			
-			if ( sizeof($user->getUserCategory()) == 0 )
-			{
-				setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-            }
-                		
-			// У пользователя нет категорий, т.е. надо помочь ему их создать
-			if ( sizeof($user->getUserCategory()) == 0 && $user->getType() == 0)
-			{
-				$this->model->activate_user();
-			}
-			else
-			{
-				if (isset($_SESSION['REQUEST_URI']))
-				{
-					header("Location: ".$_SESSION['REQUEST_URI']);
-					unset($_SESSION['REQUEST_URI']);
-					exit;
-				}
-				else
-				{
-					header("Location: /info/");
-					exit;
-				}
-			}
+
+            $this->model->login($login, $pass, @$_POST['autoLogin']);
+            
 		}
-		
+
+        if ( isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {
+            if (!$errorMessage) {
+                die(json_encode(
+                    array('result' => array(
+                            'text' => 'Login success!'
+                ))));
+            } else {
+                die(json_encode(
+                    array('error' => array(
+                            'text' => $errorMessage
+                ))));
+            }
+        } else {
+            if (!$errorMessage) {
+                header("Location: ".$_SESSION['REQUEST_URI']);
+                unset($_SESSION['REQUEST_URI']);
+                exit;
+            }
+        }
+
 		// Если демо режим - всегда показываем Гид
 		if (IS_DEMO)
 		{

@@ -46,6 +46,7 @@
                         <include name="ui.dialog.css" />
                         <include name="ui.tabs.css" />
                         <include name="ui.datepicker.css" />
+                        <include name="ui.accordion.css" />
                     </fileset>
                     <fileset dir="${project.css.root}">
                         <include name="main.css" />
@@ -65,6 +66,9 @@
                         <include name="budget.css" />
                         <include name="accountsPanel.css" />
                         <include name="accountsJournal.css" />
+                    </fileset>
+                    <fileset dir="${project.css.root}screens/">
+                        <include name="integration.screen.css" />
                     </fileset>
                 </append>
                 <stubcssmin cssminpath="external/cssmin-v1.0.0.php" targetdir="${project.css.root}">

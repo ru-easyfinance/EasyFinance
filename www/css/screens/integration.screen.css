@@ -1,0 +1,103 @@
+#integrationSteps .ui-accordion-header {
+    margin-right: 3px;
+	background-color: #4C8F2C;
+}
+
+#integrationSteps .ui-accordion-header a {
+	color: white;
+    cursor: default;
+}
+
+#integrationSteps .ui-accordion-content {
+    padding-left: 40px;
+}
+
+#integrationSteps a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: large;
+}
+
+#integrationSteps #registration {
+    display: none;
+}
+
+.ui-dialog #registration h2{
+    display: none;
+}
+
+/*.ui-dialog #authRegisterRestore {
+    display: none;
+} */
+
+
+/*
+мастер заполнения анкеты АМТ
+автор: Глеб Дейкало 
+*/
+.wz_req_fld {
+    color: #f00;
+}
+
+/* Main Wrapper */
+#wizard {
+    width: 700px;
+    overflow: hidden;
+    margin-left: -10px;
+    /* margin: 10px auto; */
+}
+
+/* Tabs Wrapper */
+#wizard #wz_header {
+    float: left;
+    width: 200px;
+    /* padding-left: 30px; */
+}
+
+/* Form Wrapper */
+#wizard #wz_content {
+    margin-left: 220px;
+}
+
+#wizard #wz_header .wz_tab_header {
+    cursor: pointer;
+}
+
+#wizard #wz_header .wz_tab_header.wz_active {
+    font-weight: bold;
+}
+
+#wizard #wz_header .wz_tab_header.correct {
+    color: #060;
+}
+
+#wizard #wz_header .wz_tab_header.incorrect {
+    color: #f00;
+}
+
+#wizard #wz_content .wz_tab_content {
+    display: none;
+}
+
+#wizard #wz_content .wz_tab_content.wz_active {
+    display: block;
+}
+
+#wizard #wz_content .wz_tab_content .fld_holder.incorrect {
+    background-color: #fcc;
+}
+
+#wizard #wz_content .wz_tab_content .fld_holder.correct {
+    background-color: #cfc;
+}
+
+#wizard #wz_content .wz_tab_content .fld_holder span.wz_err_msg {
+    display: none;
+    color: #f00;
+    font-size: 10px;
+}
+
+#wizard #wz_content .wz_tab_content .fld_holder.incorrect span.wz_err_msg {
+    display: block
+}
+

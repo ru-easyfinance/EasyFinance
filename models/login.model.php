@@ -190,16 +190,61 @@ class Login_Model
                 ->setBody($body, 'text/html');
             // Отсылаем письмо
             $result = Core::getInstance()->mailer->send($message);
-            
-            header("Location: /info/");
-            exit;
         } else {
 
         }
     }
 	
+    /**
+     * Устанавливает куки на авторизацию
+     * @param string $login
+     * @param string $password 
+     * @param bool $remember
+     * @param User $user
+     * @return void
+     */
+    public function login($login, $password, $remember = false, User $user = null)
+    {
+        $encpass = encrypt(array($login, $password));
+
+        if (!$user) {
+            $user = Core::getInstance()->user;
+        }
+
+        // Шифруем и сохраняем куки
+        if($remember) {
+        
+            setcookie(COOKIE_NAME, $encpass, time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+
+        // Шифруем, но куки теперь сохраняются лишь до конца сессии
+        } else {
+
+            setcookie(COOKIE_NAME, $encpass, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+            
+        }
+
+        if(sizeof($user->getUserCategory()) == 0) {
+            setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
+        }
+
+        // У пользователя нет категорий, т.е. надо помочь ему их создать
+        if(sizeof($user->getUserCategory()) == 0 && $user->getType() == 0) {
+
+            $this->activate_user();
+            
+        }
+
+        // Устанавливаем дефолтный путь
+        if(!isset($_SESSION['REQUEST_URI'])) {
+            $_SESSION['REQUEST_URI'] = '/info/';
+        }
+
+    }
+
+
 	/**
 	 * Пользователь авторизируется через диалог ввода логина и пароля
+     * @deprecated Похоже что она больше не используется
 	 */
 	function auth_user()
 	{
@@ -210,8 +255,7 @@ class Login_Model
 			$login = htmlspecialchars($_POST['login']);
 			$pass = sha1($_POST['pass']);
 			
-            		if ($user->initUser($login,$pass))
-            		{
+            if ($user->initUser($login,$pass)) {
 				// Шифруем и сохраняем куки
 				if (isset($_POST['autoLogin']))
 				{
@@ -228,39 +272,45 @@ class Login_Model
 				$this->db = Core::getInstance()->db;
 				$a = $this->db->query($sql , Core::getInstance()->user->getId());
 				
-				if ($a[0]['cou'] == 0)
-				{
+				if ($a[0]['cou'] == 0) {
 					setcookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-                			}
+                }
                 			
 				// У пользователя нет категорий, т.е. надо помочь ему их создать
-				if ( count($user->getUserCategory()) == 0 && $user->getType() == 0)
-				{
+				if ( count($user->getUserCategory()) == 0 && $user->getType() == 0) {
 					$model = new Login_Model();
 					$model->activate_user();
-				}
-				else
-				{
-					if (isset($_SESSION['REQUEST_URI']))
-					{
-						header("Location: ".$_SESSION['REQUEST_URI']);
-						unset($_SESSION['REQUEST_URI']);
-						exit;
-					}
-					else
-					{
-                        header("Location: /info/");
-						exit;
-					}
+				} else {
+                    if ( isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {
+                        unset($_SESSION['REQUEST_URI']);
+                        die(
+                            json_encode(
+                                array(
+                                    'result' => array(
+                                        'text' => 'Login success!'
+                                    )
+                                )
+                            )
+                        );
+                    } else {
+                        if (isset($_SESSION['REQUEST_URI'])) {
+                            header("Location: ".$_SESSION['REQUEST_URI']);
+                            unset($_SESSION['REQUEST_URI']);
+                            exit;
+                        } else {
+                            header("Location: /info/");
+                            exit;
+                        }
+                    }
 				}
 			}
 		}
 
-                if (IS_DEMO)
-                    setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
+        if (IS_DEMO) {
+            setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
+        }
 
-		if( IS_DEMO && !Core::getInstance()->user->getId() )
-		{
+		if( IS_DEMO && !Core::getInstance()->user->getId() ) {
                     $this->authDemoUser();
 		}
 	}
@@ -275,7 +325,9 @@ class Login_Model
 		{
 			setcookie(COOKIE_NAME, encrypt(array($auth['login'], $auth['pass'])), 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
 			session_commit();
-			header("Location: /info");
+
+            $keys = array_keys($user->getUserAccounts());
+			header("Location: " . '/operation/#account=' . $keys[0]);
 			exit;
 		}
 	}

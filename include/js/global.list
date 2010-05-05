@@ -8,6 +8,7 @@ jquery/ui.draggable.js
 jquery/ui.dialog.js
 jquery/ui.datepicker.js
 jquery/ui.tabs.js
+jquery/ui.accordion.js
 jquery/jquery.qtip.js
 jquery/jquery.jgrowl.min.js
 calculator.js
@@ -19,6 +20,7 @@ jquery/jquery.validate.js
 jquery/tinysort.js
 jquery/jquery.form.js
 jquery/jquery.cookie.js
+jquery/jquery.download.js
 jquery/jquery.ui.ufd.js
 jquery/jquery.rw-calculator.settings.js
 jquery/jquery.rw-calculator.js

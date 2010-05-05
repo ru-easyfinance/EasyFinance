@@ -6,32 +6,45 @@
             <div class="ct"><div></div></div>
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
             {if $user_info.user_id > 0}
-                {if $smarty.server.REQUEST_URI == "/accounts/"}
-                <img src="/img/i/banaccount.jpg" alt="Здесь могла бы быть ваша реклама."  />
+                {if $smarty.server.REQUEST_URI == "/info/"}
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:406,format:web,_717x86,_client_id:404,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
+                {elseif $smarty.server.REQUEST_URI == "/accounts/"}
+                    <!-- <img src="/img/i/banaccount.jpg" alt="Здесь могла бы быть ваша реклама."  />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:409,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/operation/"}
-                    <img src="/img/i/banoperation.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/banoperation.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:410,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/category/"}
-                    <img src="/img/i/bancategory.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/bancategory.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:411,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/budget/"}
-                    <img src="/img/i/banbudget.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/banbudget.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:415,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/targets/"}
-                    <img src="/img/i/banfintarget.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/banfintarget.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:414,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/report/"}
-                    <img src="/img/i/banreport.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/banreport.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:412,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/calendar/"}
-                    <img src="/img/i/bancalendar.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/bancalendar.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:416,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.server.REQUEST_URI == "/periodic/"}
-                    <img src="/img/i/banregtranzaction.jpg" alt="Здесь могла бы быть ваша реклама." />
+                    <!-- <img src="/img/i/banregtranzaction.jpg" alt="Здесь могла бы быть ваша реклама." />-->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:417,format:web,_717x86,_client_id:405,&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {elseif $smarty.const.IS_DEMO == false}
-                    <a href="/redirect/book"><img src="/img/i/bannerBook.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
-                    {elseif $smarty.const.IS_DEMO == true}
-                    <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
-                    {/if}
-                {else}
-                    {if $smarty.server.REQUEST_URI == "/"}
-                    {/if}
-                    <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
+                    <!-- <a href="/redirect/book"><img src="/img/i/bannerBook.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a> -->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:406,format:web,_717x86,_client_id:404,&target=_blank&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
+                {elseif $smarty.const.IS_DEMO == true}
+                    <!-- <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a> -->
+                    <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:406,format:web,_717x86,_client_id:404,&target=_blank&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
                 {/if}
+            {else}
+                {if $smarty.server.REQUEST_URI == "/"}
+                {/if}
+                <!-- <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a> -->
+                <iframe src='https://fa.easyfinance.ru/adframe.php?what=format:web,_717x86,_client_id:406,format:web,_717x86,_client_id:404,&target=_blank&refresh=7' framespacing='0' frameborder='no' scrolling='no' width='717' height='86'></iframe>
+            {/if}
             </div>
             <div class="cb"><div></div></div>
         </div>

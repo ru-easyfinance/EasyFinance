@@ -153,6 +153,9 @@ abstract class _Core_Controller
         foreach ($account as $k=>$v)
        	{
                 $accounts[$k] = $v;
+                if (isset($v['binding'])) {
+                    $binding = $v['id'];
+                }
         }
 
         //Подготавливаем Часто используемые счета
@@ -264,11 +267,12 @@ abstract class _Core_Controller
             $cats = null;
         }
 
-        $res += array(
+        $res = array_merge($res, array(
             'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
             'profile'   => array(
                 'integration'=>array(
-                    'email' => Core::getInstance()->user->getUserProps('user_service_mail')
+                    'email' => Core::getInstance()->user->getUserProps('user_service_mail'),
+                    'account' => isset($binding)?$binding:'',
                 )
             ),
             'tags' => $user->getUserTags(),
@@ -303,7 +307,7 @@ abstract class _Core_Controller
             'budget'=>Core::getInstance()->user->getUserBudget(),
             'category' => $cats,
             'informers' => $infoa
-            );
+            ));
             
             if( Core::getInstance()->user->getId() > 0 )
             {

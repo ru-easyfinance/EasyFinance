@@ -37,7 +37,9 @@ easyFinance.widgets.userIntegrations = function(model){
 				if (_validEmail(email)) {
 					_model.setIntegrationEmail(email, function(data){
 						$('#btnGetIntegrationEmail').removeAttr('disabled');
-					
+                        // #1242 теперь можно перейти на след. этап интеграции
+                        $('#btnIntegrationMailNext').show();
+
 						if (data && data.result) {
 							$.jGrowl(data.result.text, {
 								theme: 'green'
@@ -66,7 +68,9 @@ easyFinance.widgets.userIntegrations = function(model){
 
 				_model.removeIntegrationEmail(function(data){// @todo
 					$('#btnIntegrationEmailRemove').removeAttr('disabled');
-				
+                    // #1242 теперь нельзя перейти на след. этап интеграции
+                    $('#btnIntegrationMailNext').hide();
+
 					if (data && data.result) {
 						delete _data.email;
 						_print();

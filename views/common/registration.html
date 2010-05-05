@@ -1,0 +1,51 @@
+        <div id="registration" class="formRegister" >
+            {if $template_view == 'iframe'}
+                <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
+            {/if}
+            <h2>Регистрация</h2>
+            <form id="formRegister" onsubmit="return false;">
+                <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td colspan="2" style="color:#5e5e5e;padding-top: 5px">
+                        <i>Все поля обязательны для заполнения</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="name">Имя:</td>
+                    <td><input id="name" type="text" name="name"/></td>
+                </tr>
+                <tr>
+                    <td class="name">Логин:</td>
+                    <td><input id="log" type="text" name="login"/></td>
+                </tr>
+                <tr>
+                    <td class="name">Пароль:</td>
+                    <td><input type="password" id="passw" name="passw" /></td>
+                </tr>
+                <tr>
+                    <td class="name">Повтор пароля:</td>
+                    <td><input id="confirm_password" type="password" name="confirm_password" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="color:#5e5e5e;padding-top: 5px">
+                        <i><span style="color: red">Внимание! </span>
+                        Очень важно указать правильный, работающий email - он используется для восстановления пароля и обратной связи с Вами. Поэтому мы просим Вас ввести email дважды и проверить его правильность
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="name">E-mail:</td>
+                    <td><input id="mail" type="text" name="mail" /></td>
+                </tr>
+                <tr>
+                    <td class="name">Повтор e-mail`a:</td>
+                    <td><input id="mail_confirm" type="text" name="mail" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input id="butt" class="butt" type="button" value=""/></td>
+                </tr>
+                </table>
+            </form>
+            <div id="lblRegistrationStatus" class="hidden"><b>Ваша учётная запись создаётся - пожалуйста, подождите.</b></div>
+        </div>

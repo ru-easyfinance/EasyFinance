@@ -168,39 +168,44 @@ class Account_Model
      */
     public function loadAll($user)
     {
-        $sql = "SELECT account_name as name, account_type_id as type, account_description as comment, account_currency_id as currency, account_id FROM
-            accounts WHERE user_id=? ORDER BY account_name";
+        $sql = "SELECT
+            account_name as name,
+            account_type_id as type,
+            account_description as comment,
+            account_currency_id as currency,
+            account_id
+            FROM accounts
+            WHERE user_id=?
+            ORDER BY account_name";
+
+        $string = "";
 
         // список основных параметров по счетам
-        $accounts = $this->db->query($sql, $user);
-            
-        //составляем строчку для селекта ин
-        $string = "";
-        foreach ($accounts as $k=>$v){
-            if ($string)
+        foreach($this->db->query($sql, $user) as $value) {
+
+            $accounts[$value['account_id']] = $value;
+            $accounts[$value['account_id']]['id'] = $value['account_id'];
+            if ($string) {
                 $string .= ',';
-            $string .=  $v['account_id'] ;
-        }
-        $string = "'" . $string . "'";
+            }
 
-        $sql = "SELECT DISTINCT v.account_id, f.name as name, f.description AS des, v.field_value FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
+            $string .=  $value['account_id'] ;
+
+        }
+
+        // Подробный список параметров
+        $sql = "SELECT DISTINCT v.account_id, f.name as field, v.field_value
+                FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
                 WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
-                AND v.account_id IN ($string)";
+                AND v.account_id IN ({$string})";
 
-        //возвращаемые данные
-        $ret = array();
+        $fields = $this->db->select($sql);
 
-        //загрузка дополнительных параметров по каждому из счетов
-        foreach ( $accounts as $k => $v ) {
-
-            foreach ($v as $k1=>$v1){//цикл пихает в возвращаемый массив общие параметры.
-                if ($k1 != 'account_id')
-                    $ret[$k][$k1] = ($v1) ? ($v1) : '';
-                else
-                    $ret[$k]['id'] = $v1;
-            }           
+        foreach($fields as $value) {
+            $accounts[$value['account_id']][$value['field']] = $value['field_value'];
         }
-        return $ret;
+
+        return $accounts;
     }
 
     /**
@@ -241,6 +246,29 @@ class Account_Model
                 $total * $ucur[$curr]['value']/$ucur[$cur_k[0]]['value'],
                 2
         );
+    }
 
+    /**
+     * Связывание счёта с АМТ
+     *
+     * @param int $account_id Ид счёта, к которому нужно привязаться
+     */
+    public function bindingAmt($account_id)
+    {
+        // Удаляем все существующие привязки
+        $sql = "DELETE FROM Acc_Values 
+            WHERE account_id IN (SELECT account_id FROM accounts WHERE user_id=? AND account_type_id=?) 
+            AND field_id=?";
+        $this->db->query($sql, $this->user_id, Account_Collection::ACCOUNT_TYPE_DEBETCARD, Account::FIELD_BINDING);
+
+        // Привязываем текущий счёт
+        $sql = "INSERT INTO Acc_Values(`field_id`, `field_value`, `account_id`) 
+            VALUES(?, ?, ?)";
+
+        if ($this->db->query($sql, Account::FIELD_BINDING, 'amt', $account_id)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

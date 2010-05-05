@@ -1,0 +1,508 @@
+<p>Заполните и распечатайте анкету. Для печати анкета выводится в PDF-файле на одной странице в виде, установленном банком. Вы можете в любой момент посмотреть и использовать получающийся результат, даже если что-то недозаполнили - для этого перейдите на последний шаг и нажмите кнопку печати, а затем продолжите заполнение. Если Вы используете Internet Explorer 7, при распечатке анкета откроется в текущем окне.</p>
+
+<p>Удобно переходить по полям клавишей TAB, переходить на следующий шаг - клавишей Enter.</p>
+
+        <div id="wizard">
+            <div id="wz_header">
+                <ol>
+                    <li class="wz_tab_header">Личные данные</li>
+                    <li class="wz_tab_header">Прописка / Регистрация</li>
+                    <li class="wz_tab_header">Местонахождение</li>
+                    <li class="wz_tab_header">Паспорт</li>
+                    <li class="wz_tab_header">Для иностранцев: второй документ</li>
+                    <li class="wz_tab_header">Контакты</li>
+                    <li class="wz_tab_header">Работа</li>
+                    <li class="wz_tab_header">Свойства карты</li>
+                    <li class="wz_tab_header">Дополнительная карта</li>
+                    <li class="wz_tab_header">Дополнительная карта для лиц до 14</li>
+                    <li class="wz_tab_header">Пароль и согласие</li>
+                </ol>
+            </div>
+
+            <div id="wz_content">
+                <!-- Tab 0 -->
+                <div class="wz_tab_content">
+                    <h3>Личные данные</h3>
+
+                    <form id="personal_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="personal_info" />
+
+                            <div class="fld_holder">
+                                <label for="wz_surname">Фамилия <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_surname" id="wz_surname" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_name">Имя <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_name" id="wz_name" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_midname">Отчество <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_midname" id="wz_midname" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_surname_translit">Фамилия - латинская транскрипция <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_surname_translit" id="wz_surname_translit" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_name_translit">Имя - латинская транскрипция <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_name_translit" id="wz_name_translit" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_birthdate">Дата рождения (в формате дд.мм.гггг, например 20.11.1960)<span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_birthdate" id="wz_birthdate" value="" maxlength="10" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_birthplace">Место рождения <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_birthplace" id="wz_birthplace" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                Пол <span class="wz_req_fld">*</span><br />
+                                <input type="radio" name="wz_sex" id="wz_sex_0" value="0" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_sex_0">Мужской</label><br />
+                                <input type="radio" name="wz_sex" id="wz_sex_1" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_sex_1">Женский</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_citizenship">Гражданство <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_citizenship" id="wz_citizenship" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_inn">ИНН</label><br />
+                                <input type="text" name="wz_inn" id="wz_inn" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 1 -->
+                <div class="wz_tab_content">
+                    <h3>Адрес прописки / регистрации</h3>
+
+                    <form id="registration_address" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="registration_address" />
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_country">Страна <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_reg_country" id="wz_reg_country" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_index">Индекс <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_reg_index" id="wz_reg_index" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_region">Регион, район <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_reg_region" id="wz_reg_region" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_city">Название населенного пункта <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_reg_city" id="wz_reg_city" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_street">Улица <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_reg_street" id="wz_reg_street" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_house">Дом <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_reg_house" id="wz_reg_house" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_building">Корпус</label><br />
+                                <input type="text" name="wz_reg_building" id="wz_reg_building" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_reg_appartment">Квартира</label><br />
+                                <input type="text" name="wz_reg_appartment" id="wz_reg_appartment" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 2 -->
+                <div class="wz_tab_content">
+                    <h3>Адрес местонахождения (для переписки)</h3>
+                    <input id="btnCopyRegistrationToAddress" type="button" value="Скопировать из прописки / регистрации"/><br /><br />
+                    
+                    <form id="actual_address" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="actual_address" />
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_country">Страна <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_actual_country" id="wz_actual_country" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_index">Индекс <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_actual_index" id="wz_actual_index" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_region">Регион, район <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_actual_region" id="wz_actual_region" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_city">Название населенного пункта <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_actual_city" id="wz_actual_city" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_street">Улица <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_actual_street" id="wz_actual_street" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_house">Дом <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_actual_house" id="wz_actual_house" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_building">Корпус</label><br />
+                                <input type="text" name="wz_actual_building" id="wz_actual_building" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_actual_appartment">Квартира</label><br />
+                                <input type="text" name="wz_actual_appartment" id="wz_actual_appartment" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input id="btnAddressNext" type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 3 -->
+                <div class="wz_tab_content">
+                    <h3>Общегражданский паспорт</h3>
+
+                    <form id="rf_passport" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="rf_passport" />
+
+                            <div class="fld_holder">
+                                <label for="wz_rf_id_series">Серия <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_rf_id_series" id="wz_rf_id_series" value="" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_rf_id_number">Номер <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_rf_id_number" id="wz_rf_id_number" value="" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_rf_id_organisation">Кем выдан <span class="wz_req_fld">*</span></label><br />
+                                <textarea name="wz_rf_id_organisation" id="wz_rf_id_organisation" cols="50" rows="10" onblur="dValidator.catchOnChange(this, null, 2);"></textarea><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_rf_id_organisation_code">Код подразделения</label><br />
+                                <input type="text" name="wz_rf_id_organisation_code" id="wz_rf_id_organisation_code" value="" maxlength="10" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_rf_id_date">Дата выдачи (в формате дд.мм.гггг, например 20.11.1980)<span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_rf_id_date" id="wz_rf_id_date" value="" maxlength="10" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 4 -->
+                <div class="wz_tab_content">
+                    <h3>Для иностранных граждан: второй документ</h3>
+
+                    <form id="foreign_passport" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="foreign_passport" />
+
+                            <div class="fld_holder">
+                                <label for="wz_foreign_id_name">Наименование документа</label><br />
+                                <input type="text" name="wz_foreign_id_name" id="wz_foreign_id_name" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_foreign_id_series">Серия</label><br />
+                                <input type="text" name="wz_foreign_id_series" id="wz_foreign_id_series" value="" maxlength="50" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_foreign_id_number">Номер</label><br />
+                                <input type="text" name="wz_foreign_id_number" id="wz_foreign_id_number" value="" maxlength="50" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_foreign_id_organisation">Кем выдан</label><br />
+                                <textarea name="wz_foreign_id_organisation" id="wz_foreign_id_organisation" cols="50" rows="10"></textarea><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_foreign_id_date">Дата выдачи (в формате дд.мм.гггг, например 20.11.1960)</label><br />
+                                <input type="text" name="wz_foreign_id_date" id="wz_foreign_id_date" value="" maxlength="10" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_foreign_id_expire">Срок окончания действия документа</label><br />
+                                <input type="text" name="wz_foreign_id_expire" id="wz_foreign_id_expire" value="" maxlength="10" /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 5 -->
+                <div class="wz_tab_content">
+                    <h3>Контактная информация</h3>
+
+                    <form id="contacts" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="contacts" />
+
+                            <div class="fld_holder">
+                                <label for="wz_phone_home">Телефон домашний <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_phone_home" id="wz_phone_home" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_mail">Электронный адрес <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_mail" id="wz_mail" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" />
+                                <span class="wz_err_msg">укажите корректный e-mail</span>
+                                <br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_phone_mob">Телефон мобильный <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_phone_mob" id="wz_phone_mob" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_other_contacts">Иное</label><br />
+                                <input type="text" name="wz_other_contacts" id="wz_other_contacts" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 6 -->
+                <div class="wz_tab_content">
+                    <h3>Место работы</h3>
+
+                    <form id="work_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="work_info" />
+
+                            <div class="fld_holder">
+                                <label for="wz_work_name">Название организации <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_work_name" id="wz_work_name" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_work_position">Должность <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_work_position" id="wz_work_position" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_work_address">Адрес <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_work_address" id="wz_work_address" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_work_phone">Телефон <span class="wz_req_fld">*</span></label><br />
+                                <input type="text" name="wz_work_phone" id="wz_work_phone" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 7 -->
+                <div class="wz_tab_content">
+                    <h3>Международная банковская карта</h3>
+
+                    <form id="card_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="card_info" />
+
+                            <div class="fld_holder">
+                                Основная или дополнительная <span class="wz_req_fld">*</span><br />
+                                <input type="radio" name="wz_card_is_main" id="wz_card_is_main_1" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_is_main_1">Основная карта</label><br />
+                                <input type="radio" name="wz_card_is_main" id="wz_card_is_main_0" value="0" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_is_main_0">Дополнительная карта</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_card_currency">Валюта счета <span class="wz_req_fld">*</span></label><br />
+                                <select name="wz_card_currency" id="wz_card_currency" disabled="disabled">
+                                    <option value="0">Рубли</option>
+                                    <option value="1">Доллары</option>
+                                    <option value="2">Евро</option>
+                                </select>
+                                <br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                Тип карты <span class="wz_req_fld">*</span><br />
+                                <input type="radio" name="wz_card_type" id="wz_card_type_0" value="0" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_0">VISA Gold</label><br />
+                                <input type="radio" name="wz_card_type" id="wz_card_type_1" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_1">VISA Classic</label><br />
+                                <input type="radio" name="wz_card_type" id="wz_card_type_2" value="2" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_2">VISA Classic Unembossed</label><br />
+                                <input type="radio" name="wz_card_type" id="wz_card_type_3" value="3" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_3">VISA Platinum</label><br />
+                                <input type="radio" name="wz_card_type" id="wz_card_type_4" value="4" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_4">MasterCard Gold</label><br />
+                                <input type="radio" name="wz_card_type" id="wz_card_type_5" value="5" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_5">MasterCard Standard</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                Срочность выпуска <span class="wz_req_fld">*</span><br />
+                                <input type="radio" name="wz_card_rush" id="wz_card_rush_0" value="0" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_rush_0">Плановый выпуск карты</label><br />
+                                <input type="radio" name="wz_card_rush" id="wz_card_rush_1" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_rush_1">Экстренный выпуск карты</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                Услуга SMS-информирования<br />
+                                <input type="checkbox" name="wz_card_sms_info" id="wz_card_sms_info" value="1" /> <label for="wz_card_sms_info">Включить SMS-информирование</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                Куда направлять выписку по счету (отметьте необходимое) <br />
+                                <input type="checkbox" name="wz_card_account_info_to_office" id="wz_card_account_info_to_office" value="1" /> <label for="wz_card_account_info_to_office">Оставлять в дополнительном офисе</label><br />
+                                <input type="checkbox" name="wz_card_account_info_to_mail" id="wz_card_account_info_to_mail" value="1" checked="checked" disabled="disabled" /> <label for="wz_card_account_info_to_mail">Направлять на мой e-mail (на mail.easyfinance.ru)</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <!-- <label for="wz_card_account_mail">mail.easyfinance.ru</label><br /> -->
+                                <input type="text" disabled="disabled" name="wz_card_account_mail" id="wz_card_account_mail" value="" maxlength="255" size="30" readonly="readonly" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 8 -->
+                <div class="wz_tab_content">
+                    <h3>Дополнительная карта</h3>
+
+                    <p>Если заказывается дополнительная карта, заполните, пожалуйста, нижеследующие графы:</p>
+
+                    <form id="addit_card_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="addit_card_info" />
+
+                            <div class="fld_holder">
+                                <label for="wz_addit_card_owner">Ф.И.О. владельца карточного счета</label><br />
+                                <input type="text" name="wz_addit_card_owner" id="wz_addit_card_owner" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_addit_card_sks_number">Номер СКС основной карты</label><br />
+                                <input type="text" name="wz_addit_card_sks_number" id="wz_addit_card_sks_number" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_addit_card_limit">Ежемесячный доступный лимит (в валюте счета)</label><br />
+                                <input type="text" name="wz_addit_card_limit" id="wz_addit_card_limit" value="" maxlength="255" /><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 9 -->
+                <div class="wz_tab_content">
+                    <h3>Дополнительная карта для лица до 14 лет</h3>
+
+                    <p>Если заказывается дополнительная карта для лица в возрасте до 14 лет, дополнительно заполните, пожалуйста, нижеследующие графы:</p>
+
+                    <form id="addit_card14_info" action="" method="post" class="wz_frm" onsubmit="return wzStepNextBack('+');">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="addit_card14_info" />
+
+                            <div class="fld_holder">
+                                Согласие владельца карточного счета<br />
+                                <input type="checkbox" name="wz_addit_card14_agreement" id="wz_addit_card14_agreement" value="1" /> <label for="wz_addit_card14_agreement">Денежные средства, размещенные на карточном счете, предоставляются владельцем карточного счета - законным представителем (родителем, усыновителем или попечителем) несовершеннолетнему лицу для свободного распоряжения.</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                Документ, удостоверяющий права законного представителя<br />
+                                <input type="radio" name="wz_addit_card14_document" id="wz_addit_card14_document_0" value="0" /> <label for="wz_addit_card14_document_0">Свидетельство о рождении</label><br />
+                                <input type="radio" name="wz_addit_card14_document" id="wz_addit_card14_document_1" value="1" /> <label for="wz_addit_card14_document_1">Решение суда</label><br />
+                                <input type="radio" name="wz_addit_card14_document" id="wz_addit_card14_document_2" value="2" /> <label for="wz_addit_card14_document_2">Документ, подтверждающий полномочия попечителя</label><br />
+                                <br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <label for="wz_addit_card14_organisation">Выдан кем, когда: </label><br />
+                                <textarea name="wz_addit_card14_organisation" id="wz_addit_card14_organisation" cols="50" rows="10"></textarea><br /><br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input type="submit" value="Далее &gt;&gt;" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <!-- Tab 10 -->
+                <div class="wz_tab_content">
+                    <h3>Пароль и согласие</h3>
+
+                    <form id="finish" action="" method="post" class="wz_frm" onsubmit="return wzSaveEverything();">
+                        <fieldset>
+                            <input type="hidden" name="step_name" value="finish" />
+
+                            <div class="fld_holder">
+                                <label for="wz_password">Пароль (слово <b>на русском языке</b>  – для идентификации Вашей личности при телефонных обращениях в Call-центр Банка) <span class="wz_req_fld">*</span></label><br />
+                                <input name="wz_password" id="wz_password" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                            </div>
+
+                            <div class="fld_holder">
+                                <!-- С правилами ознакомлен <span class="wz_req_fld">*</span><br /> -->
+                                <input type="checkbox" name="wz_omni_agreement" id="wz_omni_agreement" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_omni_agreement">С Тарифами и Правилами обслуживания держателей банковских карт международных платежных систем VISA International, MasterCard International, эмитированных ООО «АМТ Банк», ознакомлен(а) и обязуюсь их выполнять.</label><br />
+                                <br />
+                            </div>
+
+                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                            <input id="btnPrintForm" type="submit" value="Распечатать" style="font-weight:bold" />
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
