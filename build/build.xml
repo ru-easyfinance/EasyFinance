@@ -62,8 +62,8 @@
                 <expandproperties />
             </filterchain>
         </copy>
-        <exec command="symfony cc" dir="${project.basedir}/sf/" checkreturn="true" />
-        <exec command="symfony doctrine:build --all-classes" dir="${project.basedir}/sf/" checkreturn="true" passthru="true" />
+        <exec command="php ${project.basedir}/sf/symfony cc" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes" checkreturn="true" passthru="true" />
 
         <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
     </target>
