@@ -60,7 +60,7 @@ class Budget_Model {
         // Получаем список последних валют, и раскладываем их по id
         $sql = "SELECT currency_id AS id, currency_sum AS currency
         FROM daily_currency
-        LEFT JOIN users u ON id=?
+        LEFT JOIN users u ON u.id=?
             WHERE
             currency_from = u.user_currency_default AND
             currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)";

@@ -25,6 +25,10 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 
 // Other
 define('IS_DEMO',          ${project.demo});
+define('ENVIRONMENT',      "${project.environment}");
+
+// Mail settings (including method)
+define('MAIL_ENABLED',     ${project.mail.enabled});
 
 // Ссылка на главную страницу сайта
 define('URL_ROOT_MAIN',    "${project.url.root}/");
@@ -35,8 +39,6 @@ define('URL_ROOT_PDA',     "${pda.url.root}/");
 define('URL_ROOT', IS_DEMO ? URL_ROOT_DEMO : URL_ROOT_MAIN);
 
 define('DEBUG',            ${project.debug});
-define('DEFAULT_MODULE',   'welcome');
-define('GUEST_MODULES',    'welcome,help,articles,login,registration,review,about,security,blog,forum,rules,feedback,restore,notfound,articles');
 
 //COOKIE
 define('COOKIE_NAME',      "${project.cookie.name}"); // "a"
@@ -44,8 +46,10 @@ define('COOKIE_DOMEN',     "${project.cookie.domain}"); // ".easyfinance.ru"
 define('COOKIE_PATH',      "${project.cookie.path}"); // по-умолчанию "/"
 define('COOKIE_HTTPS',     ${project.cookie.https});  // На продуктиве всегда true
 define('COOKIE_EXPIRE',    ${project.cookie.expire}); // две недели = 60 * 60 * 24 * 2
+
 //CRYPT
 define('CRYPT_KEY',        "${project.crypt.key}"); // 24 битный ключ
+
 // DB settings
 define('SYS_DB_HOST',      "${project.db.host}");
 define('SYS_DB_USER',      "${project.db.user}");
@@ -64,9 +68,6 @@ define('CACHE_FILES_DIR', "${project.cache.dir}");
 define('MEMCACHE_ENABLED', ${project.memcache.enabled});
 define('MEMCACHE_HOST',    "${project.memcache.host}");
 define('MEMCACHE_PORT',    ${project.memcache.port});
-
-// Mail settings (including method)
-define('MAIL_ENABLED',     1);
 
 // Feedback settings
 define('FEEDBACK_MAIL_MAIL', ${feedback.mail.mail});
