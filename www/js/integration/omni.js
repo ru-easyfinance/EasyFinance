@@ -103,9 +103,7 @@ function wzSaveEverything() {
         wholeData = wzObjToArray(wholeData);
 
 		// JET
-		window.open("/integration/anketa?" + wholeData);
-
-        var IE7 = (document.all && navigator.appVersion.indexOf("MSIE 7.")==-1) ? false : true;
+        var IE7 = (document.all && navigator.appVersion.indexOf("MSIE 7.") != -1) ? true : false;
         if (IE7) {
             window.location.href = "https://" + window.location.host + "/integration/anketa?" + wholeData + "&filename=anketa.pdf";
         } else {
