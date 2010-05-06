@@ -18,7 +18,7 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
         $elements = $array["elements"];
         $headers = $array["headers"];
         $filename = $array["filename"];
-
+        
         $delimiter=";";
         $content = ""; 
         $content .= implode($delimiter, $headers);
@@ -39,7 +39,7 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
         } 
 
         header("content-type: text/plain");
-        header("content-disposition: attachment; filename=$filename");
+        header('content-disposition: attachment; filename="'.$filename.'"');
         header("content-Transfer-Encoding: binary");
         header("Pragma: no-cache");
         header("Expires: 0"); 

@@ -652,19 +652,19 @@ class Operation_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('name_page', 'operations/operation');
 
         if (_Core_TemplateEngine::getResponseMode($request) != "csv")
-    {
+        {
             $this->tpl->assign( 'operations', $array );
-        $this->tpl->assign( 'list_before', $listBefore );
-        $this->tpl->assign( 'list_after', $listAfter );
-    }
-    else //CSV
-    {
-        $headers = array('Дата', 'Тип', 'Сумма', 'Счет', 'Категория', 'Метки', 'Комментарий');
-//        $headers = array('1', '2', '3', '4', '5', '6', '7');
+            $this->tpl->assign( 'list_before', $listBefore );
+            $this->tpl->assign( 'list_after', $listAfter );
+        }
+        else //CSV
+        {
+            $headers = array('Дата', 'Тип', 'Сумма', 'Счет', 'Категория', 'Метки', 'Комментарий');
+//          $headers = array('1', '2', '3', '4', '5', '6', '7');
             $this->tpl->assign( 'elements', $array );
             $this->tpl->assign( 'headers', $headers );
-            $this->tpl->assign( 'filename', 'operations.csv' );
-    }
+            $this->tpl->assign( 'filename', 'Operations '.$this->request->get['dateFrom']." - ".$this->request->get['dateTo'].'.csv' );
+        }
     }
 
     /**

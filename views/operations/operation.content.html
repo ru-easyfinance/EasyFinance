@@ -1,16 +1,16 @@
 <!-- Журнал операций -->
-					<div class="ramka3">
-						<div class="ct">
-							<div class="head">
-								<h2>Журнал операций</h2>
-								<ul class="action">
-									<li class="over1"><a title="настройки">настройки</a></li>
-									<li class="over2"><a title="закрыть">закрыть</a></li>
-									<li class="over3"><a title="свернуть">свернуть</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="operation_list operationsJournal">
+                    <div class="ramka3">
+                        <div class="ct">
+                            <div class="head">
+                                <h2>Журнал операций</h2>
+                                <ul class="action">
+                                    <li class="over1"><a title="настройки">настройки</a></li>
+                                    <li class="over2"><a title="закрыть">закрыть</a></li>
+                                    <li class="over3"><a title="свернуть">свернуть</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="operation_list operationsJournal">
                             <div class="inside">
                                 <form action="">
                                     <div class="sorting">
@@ -44,22 +44,11 @@
                                             </div>
 
                                             <input type="button" value="Показать" id="btn_ReloadData"/>
-											<input type="button" value="CSV" id="btn_CSV"/>
-															<br/>
-									<div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
+                                                            <br/>
+                                    <div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
                                                                             </div>
                                     </div>
-                                            <div class="f_field">
-                                                <b>Баланс до:</b>
-                                                <span type="text" id="balance_before" size="30"></span>
-                                            </div>
-                                            <div class="f_field">
-                                                <b>Баланс после:</b>
-                                                <span type="text" id="balance_after" size="30"></span>
-                                            </div>								
-
                                 </form>
-
                                 <ul class="period" style="display:none;">
                                     <li><span>Год</span></li>
                                     <li class="act"><span>Месяц</span></li>
@@ -68,13 +57,22 @@
                                 </ul>
 
                                 <span id="remove_all_op" class="hidden" style="text-decoration:underline;cursor:pointer">Удалить выделенные</span>
-
+							
                                 <div id="divOperationsJournalTotal">
                                     <span id="lblOperationsJournalSum" class="hidden"><b>Итого: </b>&nbsp;руб.</span>
                                     <span id="lblOperationsJournalAccountBalance" class="hidden"><b>Остаток по счёту:</b>&nbsp;руб.</span>
                                 </div>
+								
+								<div class="f_field">
+									<b>Баланс до:</b>
+									<span type="text" id="balance_before" size="30"></span>
+								</div>
+								<div class="f_field">
+									<b>Баланс после:</b>
+									<span type="text" id="balance_after" size="30"></span>
+								</div>								
                             </div>
-
+                                <input type="button" value="Экспорт в CSV" id="btn_CSV"/>
                             <table id="operations_list_header" border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
                                         <th><input type='checkbox' /></th>
@@ -149,7 +147,7 @@
                             </div>
                                                     
                             <!--<div class="operation_list"></div>-->
-						</div>
-						<div class="cb"><div></div></div>
-					</div>
+                        </div>
+                        <div class="cb"><div></div></div>
+                    </div>
 <!--/Журнал операций-->

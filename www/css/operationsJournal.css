@@ -138,3 +138,17 @@ table#operations_list td + td + td + td + td + td{
 #operations_list div.outcome { background-position: -16px 0px; }
 #operations_list div.transfer { background-position: -32px 0px; }
 #operations_list div.target { background-position: -48px 0px; }
+
+#btn_CSV {
+    float:right;
+    margin-right:20px;
+}
+
+.f_field b, #divOperationsJournalTotal b {
+    float: left;
+    width: 200px;
+}
+
+#btn_ReloadData {
+    margin-left:60px;
+}
