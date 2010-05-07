@@ -146,7 +146,7 @@ class Integration_Controller extends _Core_Controller
                 $card_sms = $data['wz_card_sms_info'],
                 $card_receipt_office = @$data['wz_card_account_info_to_office'],
                 $card_receipt_email = '',
-                $card_email = $data['wz_card_account_mail'],
+                $card_email = str_replace("@mail.easyfinance.ru", "", $data['wz_card_account_mail']),
                 $add_name = $data['wz_addit_card_owner'],
                 $add_number = $data['wz_addit_card_sks_number'],
                 $add_limit = $data['wz_addit_card_limit'],

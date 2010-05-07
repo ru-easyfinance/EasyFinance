@@ -154,7 +154,8 @@ function wzObjToArray(obj) {
     if (obj && (typeof(obj) != 'undefined')) {
         for (i in obj) {
             if ((i != 'saveType') && (i != 'length') && (i != 'step_name')) {
-                result += '&anketa[' + i + ']=' + encodeURIComponent(obj[i]);
+                result += '&anketa[' + i + ']=' + obj[i]; // #1297 - не надо кодировать
+                // result += '&anketa[' + i + ']=' + encodeURIComponent(obj[i]);
             }
         }
     }
