@@ -28,6 +28,11 @@
         </then>
     </if>
 
+    <!-- Приводим имена директорий в нижний регистр -->
+    <php function="strtolower" returnProperty="strlowerpath">
+        <param value="${project.git.rev}"/>
+    </php>
+
 
     <!-- Создание директорий -->
     <echo>Prepare paths ...</echo>
@@ -39,7 +44,7 @@
 
         <!-- Получаем текущее время -->
         <tstamp>
-            <format property="project.svn.revision" pattern="%Y%m%d%H%I" />
+            <format property="build.timestamp" pattern="%Y%m%d%H%I" />
         </tstamp>
 
         <echo>Configure config.php</echo>
@@ -82,26 +87,26 @@
             <then>
                 <!-- cd BASEDIR; git fetch  -->
                 <echo>git fetch repo ${project.git.rev}</echo>
-                <exec command="${git.bin.path} fetch"
-                    dir="${project.basedir}" passthru="true" />
+                <exec command="${git.bin.path} fetch" dir="${project.basedir}" passthru="true" checkreturn="true" />
+                <echo>git remote prune origin</echo>
+                <exec command="${git.bin.path} remote prune origin" dir="${project.basedir}" passthru="true" checkreturn="true" />
 
                 <!-- cd BASEDIR/sf/lib/vendor/symfony; git submodule  -->
                 <echo>git fetch submodule repo /sf/lib/vendor/symfony</echo>
-                <exec command="${git.bin.path} fetch"
-                    dir="${project.basedir}/sf/lib/vendor/symfony" passthru="true" />
+                <exec command="${git.bin.path} fetch" dir="${project.basedir}/sf/lib/vendor/symfony" passthru="true" checkreturn="true"/>
 
                 <!-- cd BASEDIR/sf/plugins/sfPhpunitPlugin; git submodule  -->
                 <echo>git fetch submodule repo /sf/plugins/sfPhpunitPlugin</echo>
                 <exec command="${git.bin.path} fetch"
-                    dir="${project.basedir}/sf/plugins/sfPhpunitPlugin" passthru="true" />
+                    dir="${project.basedir}/sf/plugins/sfPhpunitPlugin" passthru="true" checkreturn="true" />
 
                 <echo>Use git branch ${project.git.rev}</echo>
                 <!-- cd BASEDIR; git checkout branch -->
                 <exec command="${git.bin.path} checkout ${project.git.rev}"
-                    dir="${project.basedir}" passthru="true" />
+                    dir="${project.basedir}" passthru="true" checkreturn="true" />
 
                 <exec command="${git.bin.path} submodule update --init"
-                    dir="${project.basedir}" passthru="true" />
+                    dir="${project.basedir}" passthru="true" checkreturn="true" />
             </then>
             <!--Если нет - ругаемся.. Делай клон вручную -->
             <else>
@@ -113,51 +118,48 @@
 
     <!-- DEPLOY: Копируем проект в отдельную директорию и перебрасываем симлинк -->
     <target name="deploy">
-        <if>
-            <istrue value="${nginx.config.check}"/>
-            <then>
-                <echo>Check nginx config syntax...</echo>
-                <exec command="${nginx.bin.path} -t" checkreturn="false" />
-            </then>
-        </if>
-
         <!-- Получаем текущее время -->
         <tstamp>
             <format property="build.time" pattern="%Y%m%d%H%I" />
         </tstamp>
 
-        <!-- Приводим имена директорий в нижний регистр -->
-        <php function="strtolower" returnProperty="strlowerpath">
-            <param value="${project.git.rev}"/>
-        </php>
-
         <!-- Копируем BASEDIR директорию в дирректорию для сборки -->
         <copy todir="${project.path.deploy}/releases/tags/${strlowerpath}" >
             <fileset dir=".">
                 <exclude name=".git/**" />
-                <exclude name="**/.git/**" />
+                <exclude name="**/.git/**" /><!-- игнорирование субмодулей -->
                 <exclude name="**/web.api/dev.php" />
+                <exclude name="**/www/uploaded/**" />
+                <exclude name="**/shared/**" />
+                <exclude name="tmp/smarty/cache/%%**" />
             </fileset>
         </copy>
 
-        <!-- Создаём симлинк на текущую дирректорию-->
-        <echo>Link branch '${strlowerpath}' to current...</echo>
-        <exec command="rm -f current"
-            dir="${project.path.deploy}/releases" />
-        <exec command="ln -s ${project.path.deploy}/releases/tags/${strlowerpath} current"
-            dir="${project.path.deploy}/releases" checkreturn="true" />
+        <exec command="rm shared" dir="${project.path.deploy}/releases/tags/${strlowerpath}" />
+        <exec command="ln -s ${project.basedir}/shared ${project.path.deploy}/releases/tags/${strlowerpath}/shared" checkreturn="true" />
 
-        <!-- Перезапускаем (если нужно nginx и php-fpm) -->
-        <if>
-            <istrue value="${nginx.bin.path}"/>
-            <then>
-                <echo>Reloading nginx and php-fpm proceses</echo>
-                <exec command="${nginx.rc.path} reload" checkreturn="true" />
-                <exec command="${fpm.rc.path} reload" checkreturn="true" />
-            </then>
-        </if>
+        <exec command="rm www/upload" dir="${project.path.deploy}/releases/tags/${strlowerpath}" />
+        <exec command="ln -s ${project.basedir}/shared/uploaded ${project.path.deploy}/releases/tags/${strlowerpath}/www/upload" checkreturn="true" />
     </target>
 
+    <!-- SWITCH: Переключаем ветку -->
+    <target name="switch">
+        <if>
+            <!--Если текущая ветка доступна - обновляем -->
+            <available file="${project.path.deploy}/releases/tags/${strlowerpath}" type="dir" />
+            <then>
+                <!-- Создаём симлинк на текущую дирректорию -->
+                <echo>Link branch '${strlowerpath}' to current...</echo>
+                <exec command="rm current" dir="${project.path.deploy}/releases" />
+
+                <exec command="ln -s ${project.path.deploy}/releases/tags/${strlowerpath} current"
+                    dir="${project.path.deploy}/releases" checkreturn="true" />
+            </then>
+            <else>
+                <fail message="Expected project directory '${project.path.deploy}/releases/tags/${strlowerpath}'. Make before 'phing install -Drev=${strlowerpath}'" />
+            </else>
+       </if>
+    </target>
 
     <!-- PHPUNIT: Тесты -->
     <target name="phpunit" depends="build">
@@ -168,10 +170,20 @@
 
     <!-- BACKUP: Делаем бекап -->
     <target name="backup">
-        <tstamp>
-            <format property="project.time" pattern="%Y%m%d%H%I" />
-        </tstamp>
-        <exec command="mysqldump -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/../${project.url.root}_${project.time}.sql" checkreturn="true" />
+        <!-- Проверяем, Может быть мы и не хотели бекапиться -->
+        <if>
+            <isset property="no-backup" />
+            <then>
+                <echo msg="Dont create backup" />
+            </then>
+            <else>
+                <tstamp>
+                    <format property="project.time" pattern="%Y%m%d%H%I" />
+                </tstamp>
+                <echo msg="Create backup" />
+                <exec command="mysqldump -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/../${project.url.root}_${project.time}.sql" checkreturn="true" />
+            </else>
+        </if>
     </target>
 
 </project>

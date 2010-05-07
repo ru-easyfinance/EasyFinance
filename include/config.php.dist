@@ -80,4 +80,4 @@ define('FEEDBACK_TO_MAIL',   ${feedback.to.mail});
 define('FEEDBACK_TO_NAME',   ${feedback.to.pass});
 
 // Current project revision (using for flush client cache after each build)
-define('REVISION',         "${project.svn.revision}");
+define('REVISION',         "${build.timestamp}");
