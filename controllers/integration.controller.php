@@ -90,8 +90,8 @@ class Integration_Controller extends _Core_Controller
     {
         Downloads::write(Core::getInstance()->user, 'amt');
 
-        if (!empty($_GET['anketa'])) {
-            $data = $_GET['anketa'];
+        if (!empty($_POST['anketa'])) {
+            $data = $_POST['anketa'];
             require_once(SYS_DIR_ROOT.'/core/external/pdfAmt/pdf.lib.php');
             createPDF(
                 $lname = $data['wz_surname'],

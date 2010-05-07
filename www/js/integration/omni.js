@@ -102,25 +102,8 @@ function wzSaveEverything() {
         //Customer wishes crunch
         wholeData = wzObjToArray(wholeData);
 
-		// JET
-        var IE7 = (document.all && navigator.appVersion.indexOf("MSIE 7.") != -1) ? true : false;
-        if (IE7) {
-            window.location.href = "https://" + window.location.host + "/integration/anketa?" + wholeData + "&filename=anketa.pdf";
-        } else {
-            window.open("/integration/anketa?" + wholeData + "&filename=anketa.pdf");
-        }
-
-        /* $.download("/integration/anketa?", wholeData, "post"); */
-
-		// no AJAX
-		/*
-        $.ajax({
-            "url": '/srv_script.php',
-            "type": 'POST',
-            "data": wholeData,
-            success: function() {alert('Here will be last Ajax or hidden form creation and native HTTP sending.\n\nYour choice.')}
-        });
-		*/
+		// JET. #1297 делаем красиво и модно!
+        $.download("https://" + window.location.host + "/integration/anketa?filename=anketa.pdf", wholeData, "post", "_blank");
     } else {
         $.jGrowl("Заполните все обязательные поля!", {theme: 'red', life: 10000});
     }
