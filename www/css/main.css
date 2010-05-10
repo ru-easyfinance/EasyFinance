@@ -1107,6 +1107,7 @@ div.cont ul li.add a { width: 12px; }
 .calendar_block .calendar .days span.w a { color: #484848;  }
 .calendar_block .calendar .days span.h { height: 18px; border-bottom: 1px solid #d9d9d9;  }
 .calendar_block .calendar .month { margin: -1px -1px 0 -1px; padding: 2px 0 1px 0; color: #444444; text-align: center; background: #eeeeee; border-bottom: 1px solid #cbcbcb; }
+.calendar_block .hasEvents { background-color: #DDDDDD; }
 
 .calculator_block .calculator { margin: 0 auto; width: 166px; overflow: hidden;}
 
