@@ -78,7 +78,8 @@ class OperationImportAmtForm extends BaseFormDoctrine
             ->getFirst()->getId();
         unset($values['email']);
 
-        $values['account_id'] = $this->getAccount($values['user_id']);
+        // Счет для привязки операции
+        $values['account_id'] = $this->_getAccount($values['user_id']);
 
         // Тип операции и сумма
         $amount = abs($values['amount']);
@@ -130,29 +131,19 @@ class OperationImportAmtForm extends BaseFormDoctrine
         return $values;
     }
 
-    private function getAccount($user_id)
+
+    /**
+     * Найти счет для привязки операции
+     *
+     * @param  int $userId
+     * @return int          - Возвращает 0 или ID счета, если найден
+     */
+    private function _getAccount($userId)
     {
-        // @FIXME Пофиксить тип аккаунта, сделать константой
-        $sql = "SELECT DISTINCT v.account_id
-                FROM accounts a
-                LEFT JOIN Acc_Values v ON v.account_id IN (a.account_id)
-                WHERE
-                    a.user_id={$user_id}
-                AND
-                    a.account_type_id=2
-                AND
-                    v.field_value='".Operation::SOURCE_AMT."';";
-
-        //@FIXME Вынести в отдельную модель
-        $con = Doctrine_Manager::getInstance()->connection();
-        $st = $con->execute($sql);
-        $result = $st->fetchAll();
-
-        if (isset($result[0]['account_id'])) {
-            return $result[0]['account_id'];
-        } else {
-            return null;
-        }
+        $id = Doctrine::getTable('Account')->queryFindLinkedWithAmt($userId, 'a')
+            ->select('a.id')
+            ->execute(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+        return (int) $id;
     }
 
 

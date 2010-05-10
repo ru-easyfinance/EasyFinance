@@ -74,7 +74,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'id'          => 'ID12345',
             'email'       => $this->_getUser()->getUserServiceMail(),
             'type'        => 0,
-            'account'     => $this->helper->makeText('Номер счета', false),
+            'account'     => $this->helper->makeText('Номер счета, который передал банк', false),
             'timestamp'   => '2005-08-15T15:52:01+000',
             'amount'      => '1234.56',
             'payment'     => '1000 USD',
@@ -141,6 +141,17 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
      */
     public function testSaveProfitOperation()
     {
+        // Создать дебетовый счет (шум для привязки к счету)
+        $acc = $this->helper->makeAccount($this->_getUser(), array(
+            'type_id' => Account::TYPE_DEBIT_CARD,
+            'Properties' => array(
+                array(
+                    'field_id'    => 999,
+                    'field_value' => 'abcd',
+                ),
+            )
+        ));
+
         $input = $this->getValidInput();
         // доход
         $input['type'] = Operation::TYPE_PROFIT;
@@ -154,6 +165,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
         $op = $this->form->save();
         $expected = array(
             'user_id'   => $this->_getUser()->getId(),
+            'account_id' => 0,
             'money'     => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
             'time'      => $date->format('H:i:s'),
@@ -193,9 +205,36 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
         $op = $this->form->save();
         $expected = array(
             'user_id'   => $this->_getUser()->getId(),
+            'account_id' => 0,
             'money'     => -(float) $input['amount'],
             'drain'     => Operation::TYPE_EXPENSE,
             'type'      => Operation::TYPE_EXPENSE,
+        );
+        $this->assertOperation($expected, $op);
+        $this->assertEquals(1, $this->queryFind('Operation', $expected)->count(), 'Expected found 1 object');
+    }
+
+
+    /**
+     * Привязка к счету
+     */
+    public function testBindAccount()
+    {
+        // Создать счет и привязать к AMT
+        $account = $this->helper->makeAccount($this->_getUser(), array(
+            'type_id' => Account::TYPE_DEBIT_CARD,
+            'props' => array(array(AccountProperty::COLUMN_BINDING, Operation::SOURCE_AMT)),
+        ));
+
+
+        $this->form->bind($this->getValidInput(), array());
+        $this->assertFormIsValid($this->form);
+
+        $op = $this->form->save();
+        $expected = array(
+            'user_id'    => $this->_getUser()->getId(),
+            'account_id' => $account->getId(),
+            'source_id'  => Operation::SOURCE_AMT,
         );
         $this->assertOperation($expected, $op);
         $this->assertEquals(1, $this->queryFind('Operation', $expected)->count(), 'Expected found 1 object');
