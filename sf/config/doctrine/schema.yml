@@ -1,3 +1,12 @@
+# (!) Схема не покрывает полностью БД
+# Напротив каждой таблицы указывается % покрытия,
+# например: "100% - OK"
+
+
+options:
+  type: INNODB
+  charset: utf8
+
 
 # Пользователи системы
 User:
@@ -10,7 +19,52 @@ User:
       form:  false
       filter: false
 
-# Операция с деньгами
+
+# Счет (100% - OK)
+Account:
+  tableName: accounts
+  columns:
+    id:          { name: account_id as id,                   type: integer(4),  notnull: true, primary: true, autoincrement: true }
+    user_id:     {                                           type: integer(4),  notnull: true, unsigned: true }
+    type_id:     { name: account_type_id as type_id,         type: integer(4),  notnull: true }
+    currency_id: { name: account_currency_id as currency_id, type: integer(4),  notnull: true }
+    name:        { name: account_name as name,               type: string(255), notnull: true }
+    description: { name: account_description as description, type: string(255), notnull: true }
+  relations:
+    User:
+      local: user_id
+      foreign: id
+      type: one
+      foreignType: many
+      foreignAlias: Accounts      # User->Accounts
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+
+# Свойство счета  (100% - OK)
+AccountProperty:
+  tableName: Acc_Values
+  columns:
+    id:          { type: integer(4), notnull: true, unsigned: true, primary: true, autoincrement: true }
+    account_id:  { type: integer(4), notnull: true, unsigned: true }
+    field_id:    { type: integer(4), notnull: true, unsigned: true }
+    field_value: { type: string(255) }
+  relations:
+    Account:
+      local:   account_id
+      foreign: id
+      type: one
+      foreignType: many
+      foreignAlias: Properties    # Account->Properties
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+
+# Операция с деньгами (12/20 - PART)
 Operation:
   tableName: operation
   actAs:
@@ -19,7 +73,7 @@ Operation:
       updated: { name: dt_update }
   columns:
     user_id:    { type: integer(4), unsigned: true, notnull: true }
-    account_id: { type: integer(4), unsigned: true, notnull: true }             # Ид счёта
+    account_id: { type: integer(4), unsigned: true, notnull: true }             # ID счёта
     money:      { type: 'decimal(20, 2)', notnull: true }                       # Сумма
     date:       { type: date(25), notnull: true }                               # Фактическа дата операции
     time:       { type: time(25), notnull: true }                               # Фактическое время операции
@@ -45,7 +99,8 @@ Operation:
       form:  false
       filter: false
 
-# Операция из внешнего источника
+
+# Операция из внешнего источника (100% - OK)
 SourceOperation:
   tableName: source_operations
   columns:
@@ -67,3 +122,41 @@ SourceOperation:
     symfony:
       form:  false
       filter: false
+
+
+#
+# Оставшиеся таблицы в БД:
+#
+#Acc_ConnectionTypes
+#Acc_Fields
+#Acc_Object
+#account_field_descriptions
+#account_field_values
+#account_fields
+#account_types
+#articles
+#budget
+#calend
+#calendar_chains
+#calendar_events
+#categories_often
+#category
+#certificates
+#currency
+#daily_currency
+#downloads
+#feedback_message
+#images
+#images_articles
+#messages
+#messages_state
+#referrers
+#registration
+#services
+#services_expert
+#system_categories
+#tags
+#target
+#target_bill
+#user_fields_expert
+#versions
