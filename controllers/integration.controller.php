@@ -88,10 +88,73 @@ class Integration_Controller extends _Core_Controller
 
     public function anketa()
     {
-        Downloads::write(Core::getInstance()->user, 'amt');
+        $indexes = array_fill_keys(array(
+            'wz_surname',
+            'wz_name',
+            'wz_midname',
+            'wz_surname_translit',
+            'wz_name_translit',
+            'wz_birthdate',
+            'wz_birthplace',
+            'wz_sex',
+            'wz_citizenship',
+            'wz_inn',
+            'wz_reg_country',
+            'wz_reg_index',
+            'wz_reg_region',
+            'wz_reg_city',
+            'wz_reg_street',
+            'wz_reg_house',
+            'wz_reg_building',
+            'wz_reg_appartment',
+            'wz_actual_country',
+            'wz_actual_index',
+            'wz_actual_region',
+            'wz_actual_city',
+            'wz_actual_street',
+            'wz_actual_house',
+            'wz_actual_building',
+            'wz_rf_id_series',
+            'wz_rf_id_number',
+            'wz_rf_id_organisation',
+            'wz_rf_id_organisation_code',
+            'wz_rf_id_date',
+            'wz_foreign_id_name',
+            'wz_foreign_id_series',
+            'wz_foreign_id_number',
+            'wz_foreign_id_organisation',
+            'wz_foreign_id_date',
+            'wz_foreign_id_expire',
+            'wz_phone_home',
+            'wz_mail',
+            'wz_phone_mob',
+            'wz_other_contacts',
+            'wz_work_name',
+            'wz_work_position',
+            'wz_work_address',
+            'wz_work_phone',
+            'wz_card_is_main',
+            'wz_card_currency',
+            'wz_card_type',
+            'wz_card_rush',
+            'wz_card_sms_info',
+            'wz_card_account_info_to_office',
+            'wz_card_account_mail',
+            'wz_addit_card_owner',
+            'wz_addit_card_sks_number',
+            'wz_addit_card_limit',
+            'wz_addit_card14_organisation',
+            'wz_password',
+        ), null);
 
         if (!empty($_POST['anketa'])) {
-            $data = $_POST['anketa'];
+
+            $data = array_merge($indexes, $_POST['anketa']);
+
+            $info = 'ФИО: ' .$data['wz_surname'] .' '. $data['wz_name'] .' '. $data['wz_midname']. "\n" .
+                'e-mail: ' . $data['wz_mail'] .' моб. тел.: ' . $data['wz_phone_mob'];
+            Downloads::write(Core::getInstance()->user, 'amt', $info);
+
             require_once(SYS_DIR_ROOT.'/core/external/pdfAmt/pdf.lib.php');
             createPDF(
                 $lname = $data['wz_surname'],
