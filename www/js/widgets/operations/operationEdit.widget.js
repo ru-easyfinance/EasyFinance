@@ -354,6 +354,9 @@ easyFinance.widgets.operationEdit = function(){
             setType("0");
         }
 
+        // выставляем текующую дату
+        $('#op_date').datepicker('setDate', new Date());
+
         // TEMP: показываем операции перевода на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
         $("#op_type").html(htmlOptions).ufd("changeOptions");
@@ -705,8 +708,6 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_id,#op_accepted,#op_chain_id').val('');
         $('#op_amount,#op_conversion,#op_transfer,#op_AccountForTransfer,#op_comment,#op_tags').val('');
         $('span#op_amount_target').text();
-
-        $('#op_date').datepicker('setDate', new Date());
 
         $('span#op_amount_done').text();
         $('span#op_forecast_done').text();
