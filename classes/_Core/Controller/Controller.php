@@ -83,6 +83,40 @@ abstract class _Core_Controller
 		$this->tpl->assign('seotext', $texts);
 	}
 
+    /**
+     * Выводит в браузер JSON
+     * @param string $text
+     */
+    public function renderJsonSuccess($text)
+    {
+        die(
+            json_encode(
+                array(
+                    'result'=>array(
+                        'text' => $text
+                        )
+                    )
+                )
+            );
+    }
+
+    /**
+     * Выводит в браузер Json с ошибкой
+     * @param string $error
+     */
+    public function renderJsonError($error)
+    {
+        die(
+            json_encode(
+                array(
+                    'error'=>array(
+                        'text' => $error
+                        )
+                    )
+                )
+            );
+    }
+
 	/**
 	 * При завершении работы, контроллера
 	 */
