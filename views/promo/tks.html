@@ -39,53 +39,25 @@
 			<div class="ccb"></div>
 		</div>
 
-        {literal}
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $("#promoTKS").accordion({
-                        autoHeight: false
-                    });
+        <div id="dlgTKSForm" class="hidden">
+            <form id="frmTKSShort" >
+                <br>Фамилия: <span class="sumRed">*</span><br>
+                <input id="txtSurname" name="surname"><br><br>
 
-                    $("#btnNext").click(function() {
-                        $("#promoTKS").accordion("activate", 1);
-                        return false;
-                    });
+                Имя: <span class="sumRed">*</span><br>
+                <input id="txtName" name="name"><br><br>
 
-                    $("#btnPrev").click(function() {
-                        $("#promoTKS").accordion("activate", 0);
-                        return false;
-                    });
+                Отчество: <span class="sumRed">*</span><br>
+                <input id="txtPatronymic" name="patronymic"><br><br>
 
-                    $("#btnFillForm").click(function() {
-                        window.open("https://" + window.location.host + "/promo/tks/anketa");
-                        return false;
-                    });
+                Email: <span class="sumRed">*</span><br>
+                <input id="txtEmail" name="email"><br><br>
 
-                    // виджет создания счёта
-                    easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
+                Телефон: <span class="sumRed">*</span><br>
+                <input id="txtPhone" name="phone"><br><br>
 
-                    // открываем диалог создания счёта
-                    $('#btnCreateAccount').click(function() {
-                        // отображает форму создания счёта
-                        easyFinance.widgets.accountEdit.addAccount();
-                        // тип счёта жестко задан - дебетовая карта
-                        $("#acc_type").find("option:nth-child(4)").attr("selected", "selected").parent().attr("disabled", "disabled");
-                        // удаляем все валюты кроме РУБ, USD, EUR
-                        $("#acc_currency").find("option").each(function () {
-                            var val = $(this).val();
-                            if (val != "1" && val != "2" && val != "3") {
-                                $(this).remove();
-                            }
-                        });
-
-                        // выбираем первую валюту
-                        $("#acc_currency").find("option:first").attr("selected", "selected");
-                        // имя счёта по умолчанию
-                        $("#acc_name").val("TKS").focus();
-                    });
-
-                    // после добавления счёта обновляем список счетов
-                    $(document).bind('accountAdded', function(){/*alert('Счёт успешно создан!')*/});
-                });
-            </script>
-        {/literal}
+                <input type="button" id="btnSubmitShort" value="Отправить заявку" >
+                &nbsp;<input type="button" id="btnShowFull" value="Продолжить заполнение" >
+                &nbsp;<img id="imgWaiting" src="/img/i/ajax-loader.gif" class="hidden" ><br><br>
+            </form>
+        </div>

@@ -62,6 +62,7 @@ Core::getInstance()->js = array(
 		'jquery/jquery.fancybox-1.0.0'),
     'login' => array('welcome', 'login'),
     'info' => array('info'),
+    'promo' => array('screens/promoTKS.screen'),
     'integration' => array(
         'registration',
         'login',
