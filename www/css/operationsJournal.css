@@ -196,6 +196,6 @@ table#operations_list td + td + td + td + td + td{
     font-weight:bold;
 }
 
-#lblOperationsJournalSum b, lblOperationsJournalAccountBalance b {
+#lblOperationsJournalSum b, #lblOperationsJournalAccountBalance b {
     color: Black;
 }

@@ -18,13 +18,13 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
         $elements = $array["elements"];
         $headers = $array["headers"];
         $filename = $array["filename"];
-        
+
         $delimiter=";";
-        $content = ""; 
+        $content = "";
         $content .= implode($delimiter, $headers);
-        $content .= "\r\n"; 
-        foreach($elements as $ar) 
-        { 
+        $content .= "\r\n";
+        foreach($elements as $ar)
+        {
             //$content .= implode($delimiter, $ar);
             $ar = str_replace(';',',',$ar);
             $list = Array ($ar['date'],
@@ -35,14 +35,14 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
                     $ar['tags'],
                     $ar['comment']);
             $content .=  $this->str_putcsv($list, ';');
-            $content .= "\r\n"; 
-        } 
+            $content .= "\r\n";
+        }
 
         header("content-type: text/plain");
         header('content-disposition: attachment; filename="'.$filename.'"');
         header("content-Transfer-Encoding: binary");
         header("Pragma: no-cache");
-        header("Expires: 0"); 
+        header("Expires: 0");
         echo $content;
     }
 }

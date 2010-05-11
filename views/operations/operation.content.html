@@ -37,9 +37,9 @@
                                                 <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
                                                 по
                                                 <input type="text" id="dateTo" value="{$dateTo}" size="9"/>
-												<input type="button" value="Показать" id="btn_ReloadData"/>
-												<input type="button" value="Экспорт в CSV" id="btn_CSV"/><br/><br/>
-											</div>											
+                                                <input type="button" value="Показать" id="btn_ReloadData"/>
+                                                <input type="button" value="Экспорт в CSV" id="btn_CSV"/><br/><br/>
+                                            </div>
                                     <div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
                                                                             </div>
                                     </div>
@@ -52,16 +52,16 @@
                                 </ul>
 
                                 <span id="remove_all_op" class="hidden" style="text-decoration:underline;cursor:pointer">Удалить выделенные</span>
-                            
+
                                 <div id="divOperationsJournalTotal">
                                     <span id="lblOperationsJournalSum" class="hidden"><b>Итого: </b>&nbsp;руб.</span>
                                     <b class="b_marg">До: </b>
-                                    <p type="text" id="balance_before" size="30" style="white-space: pre-wrap">2341234123412341234123412341234</p>
+                                    <span type="text" id="balance_before" size="30">0.00 руб.</span>
                                     <b class="b_marg">После: </b>
-                                    <span type="text" id="balance_after" size="30"></span><br/><br/>
+                                    <span type="text" id="balance_after" size="30">0.00 руб.</span><br/><br/>
                                     <span id="lblOperationsJournalAccountBalance" class="hidden"><b>Остаток по счёту:</b>&nbsp;руб.</span>
-                                </div>                                
-                            </div>                                
+                                </div>
+                            </div>
                             <table id="operations_list_header" border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
                                         <th><input type='checkbox' /></th>
@@ -134,7 +134,7 @@
                                     {/foreach}
                                 </div>
                             </div>
-                                                    
+
                             <!--<div class="operation_list"></div>-->
                         </div>
                         <div class="cb"><div></div></div>
