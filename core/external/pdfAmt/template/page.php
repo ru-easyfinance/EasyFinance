@@ -164,6 +164,11 @@ for ($i=0, $n=mb_strlen($password); $i<$n; $i++) {
 <?php if ((int)$add_14_type === 2) { ?><div style="position:absolute; top: 1395px; left:940px;"><b>v</b></div><?php }; ?>
 <div style="position:absolute; top: 1423px; left:280px;"><b><?php echo $add_14_given ?></b></div>
 
+<!-- #1313. вторая страница с памяткой -->
+<!--NewPage-->
+<div style="page-break-after: always; position:absolute; top: 1900px; left: 100px;">
+    ВТОРАЯ СТРАНИЦА
+</div>
 
 </body>
 </html>
