@@ -37,14 +37,8 @@
                         <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                         <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
                         <li><a href="/profile/"><?php
-                        session_write_close();
-                        session_name('PHPSESSID');
-                        session_start();
-
+                        //print_r($_SESSION);
                         echo $_SESSION['user']['user_name'];
-                        session_write_close();
-                        session_name('symfony');
-                        session_start();
                         ?>&nbsp;</a></li>
                         <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                 </ul>
@@ -62,7 +56,7 @@
                             <div class="ramka1">
                                 <div class="ct"><div></div></div>
                                 <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
-                                    <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
+                                    <a href="/registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
                                 </div>
                                 <div class="cb"><div></div></div>
                             </div>
@@ -250,10 +244,7 @@
 
             <div class="block2">
             <!--наполнение-->
-            <!--Ввод операции-->
-                {include file="operation.quick.html"}
-            <!--/Ввод операции-->
-                <?php echo $sf_content ?>
+                .<?php echo $sf_content ?>
             <!--/наполнение-->
             </div>
 
