@@ -9,6 +9,7 @@ class AllSymfonyAppTests extends PHPUnit_Framework_TestSuite
      */
     public function setup()
     {
+
         // Clear logs
         sfToolkit::clearDirectory(sfConfig::get('sf_log_dir'));
 
@@ -24,6 +25,14 @@ class AllSymfonyAppTests extends PHPUnit_Framework_TestSuite
             'db' => true,
             'and-migrate' => true,
         ));
+
+        // Базовые фикстуры
+        $fixtureFile = sfConfig::get('sf_data_dir') . '/fixtures/install.sql';
+        $options = Doctrine_Manager::getInstance()->getConnection('doctrine')->getOptions();
+        $dsn = Doctrine_Manager::getInstance()->parsePdoDsn($options['dsn']);
+        $cmd = sprintf('mysql -u %s --password=%s %s < %s',
+            $options['username'], $options['password'], $dsn['dbname'], $fixtureFile);
+        passthru($cmd);
     }
 
 
