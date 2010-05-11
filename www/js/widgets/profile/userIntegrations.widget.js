@@ -32,7 +32,6 @@ easyFinance.widgets.userIntegrations = function(model){
 		
 			_hideError();
 			if (typeof(_data.email) != 'string') {//special for super hackers =)) or not worked load(js-error or other bug)
-
 				var email = (_node.find('#txtIntegrationEmail').val() || '') + '@mail.easyfinance.ru';
 				if (_validEmail(email)) {
 					_model.setIntegrationEmail(email, function(data){
@@ -55,7 +54,8 @@ easyFinance.widgets.userIntegrations = function(model){
 						load(data.profile || {});
 					});//??
 				} else {
-					_printError('Используйте только английские буквы и цифры');
+                    _printError('Используйте только английские буквы и цифры');
+                    $('#btnGetIntegrationEmail').removeAttr('disabled');
 				}
 			}
 		});
