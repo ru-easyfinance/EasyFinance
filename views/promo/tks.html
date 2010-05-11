@@ -1,10 +1,91 @@
-<div class="ramka2">
-    <div class="cct"></div>
-    <div class="mid general_cont">&nbsp;
-        <div style='margin:20px' align="justify">
+        {include file="common/accountEdit.html"}
 
-        </div>
-    </div>
-    <div class="ccb"></div>
-</div>
-<!--/середина-->
+        <div class="ramka2">
+			<div class="cct"></div>
+			<div class="mid general_cont">
+                <div>
+                    {if $user_info.user_id > 0}
+                        <!--
+                        <div>Блок для авторизованных пользователей</div><br>
+                        -->
+                    {else}
+                        <!--
+                        <div>Блок для неавторизованных пользователей</div><br>
+                        -->
+                    {/if}
+                </div>
+                <div id="promoTKS" style="">
+                    <h3><a href="#">Общая информация</a></h3>
+                    <div>
+                        Ля-ля-ля
+
+                        {if not $user_info.user_id > 0}
+                            <br><br><input id="btnFillForm" type="button" value="Заполнить анкету" />
+                        {else}
+                            <br><br><input id="btnNext" type="button" value="Далее" />
+                        {/if}
+                    </div>
+
+                    {if $user_info.user_id > 0}
+                        <h3><a href="#">Создание счёта</a></h3>
+                        <div>
+                                <input id="btnPrev" type="button" value="Вернуться" />
+                                <br><br><button id='btnCreateAccount'>Создать счёт</button> для вклада "TKS"<br><br>
+                                <input id="btnFillForm" type="button" value="Заполнить анкету" />
+                        </div>
+                    {/if}                    
+                </div>
+			</div>
+			<div class="ccb"></div>
+		</div>
+
+        {literal}
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $("#promoTKS").accordion({
+                        autoHeight: false
+                    });
+
+                    $("#btnNext").click(function() {
+                        $("#promoTKS").accordion("activate", 1);
+                        return false;
+                    });
+
+                    $("#btnPrev").click(function() {
+                        $("#promoTKS").accordion("activate", 0);
+                        return false;
+                    });
+
+                    $("#btnFillForm").click(function() {
+                        window.open("https://" + window.location.host + "/promo/tks/anketa");
+                        return false;
+                    });
+
+                    // виджет создания счёта
+                    easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
+
+                    // открываем диалог создания счёта
+                    $('#btnCreateAccount').click(function() {
+                        // отображает форму создания счёта
+                        easyFinance.widgets.accountEdit.addAccount();
+                        // тип счёта жестко задан - дебетовая карта
+                        $("#acc_type").find("option:nth-child(4)").attr("selected", "selected").parent().attr("disabled", "disabled");
+                        // удаляем все валюты кроме РУБ, USD, EUR
+                        $("#acc_currency").find("option").each(function () {
+                            var val = $(this).val();
+                            if (val != "1" && val != "2" && val != "3") {
+                                $(this).remove();
+                            }
+                        });
+
+                        // выбираем первую валюту
+                        $("#acc_currency").find("option:first").attr("selected", "selected");
+                        // имя счёта по умолчанию
+                        $("#acc_name").val("TKS").focus();
+                    });
+
+                    // после добавления счёта обновляем список счетов
+                    $(document).bind('accountAdded', function(){/*alert('Счёт успешно создан!')*/});
+                });
+            </script>
+        {/literal}
