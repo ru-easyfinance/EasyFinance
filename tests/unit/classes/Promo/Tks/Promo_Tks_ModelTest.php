@@ -21,6 +21,7 @@ class Promo_Tks_ModelTest extends UnitTestCase
             'name' => 'Васисуалий',
             'patronymic' => 'Петрович',
             'phone'=> '+79262562132',
+            'user_id'=> null,
             );
 
         $ob = new Promo_Tks_Model($validData);
@@ -34,6 +35,7 @@ class Promo_Tks_ModelTest extends UnitTestCase
             'name' => '',
             'patronymic' => '',
             'phone'=> '',
+            'user_id'=> null,
             );
 
         $ob = new Promo_Tks_Model(null);
@@ -51,6 +53,7 @@ class Promo_Tks_ModelTest extends UnitTestCase
             'name' => 'Васисуалий',
             'patronymic' => 'Петрович',
             'phone'=> '',
+            'user_id'=> null,
             );
         $input = $expected;
         unset($input['phone']);
@@ -72,6 +75,7 @@ class Promo_Tks_ModelTest extends UnitTestCase
             'name' => 'Васисуалий',
             'patronymic' => 'Петрович',
             'phone'=> '+79262562132',
+            'user_id'=> null,
             );
 
         $ob = new Promo_Tks_Model($validData);

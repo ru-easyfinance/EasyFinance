@@ -19,6 +19,7 @@ class Promo_Tks_Model
             'name' => '',
             'patronymic' => '',
             'phone'=> '',
+            'user_id' => '',
         );
 
         $data = array_merge($fields, (array)$data);
@@ -31,13 +32,11 @@ class Promo_Tks_Model
         return $this->_data;
     }
 
-    /**
-     *
-     */
     public function save()
     {
-        $sql = "INSERT INTO anketa_tks (". implode(',', array_keys($this->_data)) .") VALUES (?a)";
-        Core::getInstance()->db->query($sql, array_values($this->_data));
+        $sql = "INSERT INTO anketa_tks(".
+            implode(',',array_keys($this->_data)).", created_at) VALUES (?a, NOW())";
+        return Core::getInstance()->db->query($sql, array_values($this->_data));
     }
 
 }
