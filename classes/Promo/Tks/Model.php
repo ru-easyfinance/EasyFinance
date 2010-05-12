@@ -9,8 +9,9 @@ class Promo_Tks_Model
     private $_data = array();
 
     /**
-     *
+     * Конструктор
      * @param array $data
+     * @return void
      */
     function __construct($data)
     {
@@ -19,7 +20,7 @@ class Promo_Tks_Model
             'name' => '',
             'patronymic' => '',
             'phone'=> '',
-            'user_id' => '',
+            'user_id' => Core::getInstance()->user->getId()
         );
 
         $data = array_merge($fields, (array)$data);
@@ -27,16 +28,24 @@ class Promo_Tks_Model
         $this->_data = array_intersect_key($data, $fields);
     }
 
+    /**
+     * Возвращает данные в виде массива
+     * @return array
+     */
     public function toArray()
     {
         return $this->_data;
     }
 
+    /**
+     * Сохраняет данные в БД
+     * @return bool
+     */
     public function save()
     {
         $sql = "INSERT INTO anketa_tks(".
-            implode(',',array_keys($this->_data)).", created_at) VALUES (?a, NOW())";
-        return Core::getInstance()->db->query($sql, array_values($this->_data));
+            implode(',', array_keys($this->_data)).", created_at) VALUES (?a, NOW())";
+        return (bool)Core::getInstance()->db->query($sql, array_values($this->_data));
     }
 
 }

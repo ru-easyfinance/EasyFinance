@@ -34,17 +34,7 @@ class Promo_Tks_Controller extends _Core_Controller
                 session_start();
             }
 
-            $fields = array(
-                'surname'=> '',
-                'name' => '',
-                'patronymic' => '',
-                'phone'=> '',
-                'user_id' => Core::getInstance()->user->getId()
-            );
-
-            $data = array_intersect_key(array_merge($fields, $_POST), $fields);
-
-            $model = new Promo_Tks_Model($data);
+            $model = new Promo_Tks_Model($_POST);
 
             //@TODO Переписать вывод сообщений в новом формате JSON
             if ($model->save()) {

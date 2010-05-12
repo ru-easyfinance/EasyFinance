@@ -21,7 +21,7 @@ class Promo_Tks_ModelTest extends UnitTestCase
             'name' => 'Васисуалий',
             'patronymic' => 'Петрович',
             'phone'=> '+79262562132',
-            'user_id'=> null,
+            'user_id'=> 155,
             );
 
         $ob = new Promo_Tks_Model($validData);
@@ -75,7 +75,7 @@ class Promo_Tks_ModelTest extends UnitTestCase
             'name' => 'Васисуалий',
             'patronymic' => 'Петрович',
             'phone'=> '+79262562132',
-            'user_id'=> null,
+            'user_id'=> 155,
             );
 
         $ob = new Promo_Tks_Model($validData);
@@ -85,7 +85,8 @@ class Promo_Tks_ModelTest extends UnitTestCase
                 `surname` = ? AND
                 `name` = ? AND
                 `patronymic` = ? AND
-                `phone` = ?";
+                `phone` = ? AND
+                `created_at` <> ''";
 
         $count = $this->getConnection()->selectCell($sql,
             $validData['surname'],
@@ -105,7 +106,8 @@ class Promo_Tks_ModelTest extends UnitTestCase
                 `surname` = '' AND
                 `name` = '' AND
                 `patronymic` = '' AND
-                `phone` = ''";
+                `phone` = '' AND
+                `created_at` <> ''";
 
         $count = $this->getConnection()->selectCell($sql);
         $this->assertEquals(1, $count, "Expected found object");
