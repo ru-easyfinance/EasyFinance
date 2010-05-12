@@ -13,6 +13,7 @@ class Migration004_CreateTable_Anketa_Tks extends Doctrine_Migration_Base
         $fields = array(
             'id' => array(
                 'type' => 'integer',
+                'length' => 4,
                 'unsigned' => 1,
                 'notnull' => 1,
                 'autoincrement' => true,
@@ -30,20 +31,12 @@ class Migration004_CreateTable_Anketa_Tks extends Doctrine_Migration_Base
                 'type' => 'string',
                 'length' => 255,
             ),
-            'email' => array(
-                'type' => 'string',
-                'length' => 100,
-            ),
             'phone' => array(
                 'type' => 'string',
                 'length' => 50,
             ),
-            'info' => array(
-                'type' => 'clob',
-                'length' => 65532,
-            ),
         );
-        
+
         $options = array(
             'type'     => 'INNODB',
             'charset' => 'utf8'
