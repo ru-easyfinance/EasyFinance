@@ -10,11 +10,11 @@ img.preload {display: none;}
 #menumain UL.menu2 li#show_login a {color: yellow; padding-right: 16px; background: url('/img/i/login.gif') right bottom no-repeat;}
 #menumain a#show_logout {color: yellow; padding-left: 10px; display: inline-block; width: 52px; background: url('/img/i/unlogin.gif') right center no-repeat; ;}
 #showCalculatorForFormAccount{
-	margin-left: 2px;
-	border: none;
-	width:20px;
-	height:20px;
-	background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
+    margin-left: 2px;
+    border: none;
+    width:20px;
+    height:20px;
+    background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
  }
 .noTextDecoration {text-decoration: none;}
 
@@ -606,71 +606,71 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
 
 /* Tag cloud */
 
-	#tags li{
-		float:left;
-		margin:0;
-		padding:0;
-		list-style:none;
-		display:inline;
-		}
-	#tags li a{
-		text-decoration:none;
-		color:#4C4C4C;
-		padding:0 2px;	
-		}
-	#tags li a:hover{	
-		color:#cff400;
-		}		
-	
-	.tag1{font-size:100%;}
-	.tag2{font-size:120%;}
-	.tag3{font-size:140%;}
-	.tag4{font-size:160%;}
-	.tag5{font-size:180%;}
-	
-	#container{
-	margin:0 auto;
-	text-align:left;
-	width:700px;
-	background:#fff;
-	}
-	#main{
-	float:left;
-	display:inline;
-	width:380px;
-	margin-left:20px;	
-	}
-	#side{
-	float:left;
-	display:inline;
-	width:260px;
-	margin-left:20px;
-	}	
-	/* alternative layout */
+    #tags li{
+        float:left;
+        margin:0;
+        padding:0;
+        list-style:none;
+        display:inline;
+        }
+    #tags li a{
+        text-decoration:none;
+        color:#4C4C4C;
+        padding:0 2px;  
+        }
+    #tags li a:hover{   
+        color:#cff400;
+        }       
+    
+    .tag1{font-size:100%;}
+    .tag2{font-size:120%;}
+    .tag3{font-size:140%;}
+    .tag4{font-size:160%;}
+    .tag5{font-size:180%;}
+    
+    #container{
+    margin:0 auto;
+    text-align:left;
+    width:700px;
+    background:#fff;
+    }
+    #main{
+    float:left;
+    display:inline;
+    width:380px;
+    margin-left:20px;   
+    }
+    #side{
+    float:left;
+    display:inline;
+    width:260px;
+    margin-left:20px;
+    }   
+    /* alternative layout */
 
-	#tags .alt{
-		text-align:left;
-		padding:0;
-		background:none;
-		}
-	#tags .alt li{
-		padding:2px 10px;
-		background:#efefef;
-		display:block;
-		}
-	#tags .alt .tag1, 
-	#tags .alt .tag2, 
-	#tags .alt .tag3, 
-	#tags .alt .tag4, 
-	#tags .alt .tag5{font-size:100%;}
-	#tags .alt .tag1{background:#7cc0f4;}
-	#tags .alt .tag2{background:#67abe0;}
-	#tags .alt .tag3{background:#4d92c7;}
-	#tags .alt .tag4{background:#3277ad;}
-	#tags .alt .tag5{background:#266ca2;}
-	
-	.btn{display:block;}
-	
+    #tags .alt{
+        text-align:left;
+        padding:0;
+        background:none;
+        }
+    #tags .alt li{
+        padding:2px 10px;
+        background:#efefef;
+        display:block;
+        }
+    #tags .alt .tag1, 
+    #tags .alt .tag2, 
+    #tags .alt .tag3, 
+    #tags .alt .tag4, 
+    #tags .alt .tag5{font-size:100%;}
+    #tags .alt .tag1{background:#7cc0f4;}
+    #tags .alt .tag2{background:#67abe0;}
+    #tags .alt .tag3{background:#4d92c7;}
+    #tags .alt .tag4{background:#3277ad;}
+    #tags .alt .tag5{background:#266ca2;}
+    
+    .btn{display:block;}
+    
 /* // Tag cloud */
 
 div.addoperation .line .date{float: left; }
@@ -801,70 +801,70 @@ div.op_addoperation .op_line .op_tags_could div{position : relative; width: 100p
 
 /* Tag cloud */
 
-	#op_tags li{
-		float:left;
-		margin:0;
-		padding:0;
-		list-style:none;
-		display:inline;
-		}
-	#op_tags li a{
-		text-decoration:none;
-		color:#4C4C4C;
-		padding:0 2px;
-		}
-	#op_tags li a:hover{
-		color:#cff400;
-		}
+    #op_tags li{
+        float:left;
+        margin:0;
+        padding:0;
+        list-style:none;
+        display:inline;
+        }
+    #op_tags li a{
+        text-decoration:none;
+        color:#4C4C4C;
+        padding:0 2px;
+        }
+    #op_tags li a:hover{
+        color:#cff400;
+        }
 
-	.tag1{font-size:100%;}
-	.tag2{font-size:120%;}
-	.tag3{font-size:140%;}
-	.tag4{font-size:160%;}
-	.tag5{font-size:180%;}
+    .tag1{font-size:100%;}
+    .tag2{font-size:120%;}
+    .tag3{font-size:140%;}
+    .tag4{font-size:160%;}
+    .tag5{font-size:180%;}
 
-	#container{
-	margin:0 auto;
-	text-align:left;
-	width:700px;
-	background:#fff;
-	}
-	#main{
-	float:left;
-	display:inline;
-	width:380px;
-	margin-left:20px;
-	}
-	#side{
-	float:left;
-	display:inline;
-	width:260px;
-	margin-left:20px;
-	}
-	/* alternative layout */
+    #container{
+    margin:0 auto;
+    text-align:left;
+    width:700px;
+    background:#fff;
+    }
+    #main{
+    float:left;
+    display:inline;
+    width:380px;
+    margin-left:20px;
+    }
+    #side{
+    float:left;
+    display:inline;
+    width:260px;
+    margin-left:20px;
+    }
+    /* alternative layout */
 
-	#op_tags .alt{
-		text-align:left;
-		padding:0;
-		background:none;
-		}
-	#op_tags .alt li{
-		padding:2px 10px;
-		background:#efefef;
-		display:block;
-		}
-	#op_tags .alt .tag1,
-	#op_tags .alt .tag2,
-	#op_tags .alt .tag3,
-	#op_tags .alt .tag4,
-	#op_tags .alt .tag5{font-size:100%;}
-	#op_tags .alt .tag1{background:#7cc0f4;}
-	#op_tags .alt .tag2{background:#67abe0;}
-	#op_tags .alt .tag3{background:#4d92c7;}
-	#op_tags .alt .tag4{background:#3277ad;}
-	#op_tags .alt .tag5{background:#266ca2;}
+    #op_tags .alt{
+        text-align:left;
+        padding:0;
+        background:none;
+        }
+    #op_tags .alt li{
+        padding:2px 10px;
+        background:#efefef;
+        display:block;
+        }
+    #op_tags .alt .tag1,
+    #op_tags .alt .tag2,
+    #op_tags .alt .tag3,
+    #op_tags .alt .tag4,
+    #op_tags .alt .tag5{font-size:100%;}
+    #op_tags .alt .tag1{background:#7cc0f4;}
+    #op_tags .alt .tag2{background:#67abe0;}
+    #op_tags .alt .tag3{background:#4d92c7;}
+    #op_tags .alt .tag4{background:#3277ad;}
+    #op_tags .alt .tag5{background:#266ca2;}
 
-	.op_btn{display:block;}
+    .op_btn{display:block;}
 
 /* // Tag cloud */
 
@@ -873,20 +873,20 @@ div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  
 div.op_addoperation .op_line  .op_amount {float: left; }
 
 #btnCalcSum, #btnCalcSumTransfer{
- 	padding-top: 2px;
-	margin-top: 0px;
- 	border: none;
-	background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
-	width: 16px;
-	height: 16px;
-	display: inline-block; 
-	position: relative; 
-	left: 0px;
-	cursor: pointer;
+    padding-top: 2px;
+    margin-top: 0px;
+    border: none;
+    background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    display: inline-block; 
+    position: relative; 
+    left: 0px;
+    cursor: pointer;
 }
 
 #btnCalcSumTransfer {
-	top: 4px;
+    top: 4px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0)
@@ -931,20 +931,20 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
  .op_infobut div{position : relative; width: 100px;float: top;}
 
 .op_infobut div li{
-		float:left;
-		margin:0;
-		padding:0;
-		list-style:none;
-		display:inline;
-		}
-	.op_infobut a{
-		text-decoration:none;
-		color:#4C4C4C;
-		padding:0 2px;
-		}
-	.op_infobut a:hover{
-		color:#cff400;
-		}
+        float:left;
+        margin:0;
+        padding:0;
+        list-style:none;
+        display:inline;
+        }
+    .op_infobut a{
+        text-decoration:none;
+        color:#4C4C4C;
+        padding:0 2px;
+        }
+    .op_infobut a:hover{
+        color:#cff400;
+        }
 
 /*div.op_addoperation .op_line a#infoicon{ width: 16px; top: 2px;  }*/
 
@@ -952,7 +952,7 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 .operation_listSH .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px; }
 .operation_listSH .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_listSH .sorting div{margin-bottom: 7px;}
-.operation_listSH .sorting .f_field { position: relative; float: left; margin-right: 51px; }
+.operation_listSH .sorting .f_field { position: relative; float: left; /*margin-right: 51px; */}
 .operation_listSH .sorting .f_field input {width: 90px}
 .operation_listSH .sorting  select { color: #20201E; width : 350px; }
 .operation_listSH .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
@@ -993,11 +993,11 @@ a.infoicon {width: 16px; display: block; height: 16px;  background: url('/img/i/
 table.tab1 th{text-align: center}
 
 .operation_list .cont { position: relative; right: 14px;}
-.operation_list { padding-top: 21px !important; height:255px; width: 505px; margin-top: 5px}
+.operation_list { /*padding-top: 21px !important; */ height:255px; width: 505px; margin-top: 5px}
 .operation_list .line { position: relative;  color: #4c4c4c;  margin-bottom: 7px; }
 .operation_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 .operation_list .sorting div{margin-bottom: 7px;}
-.operation_list .sorting .f_field { position: relative; float: left; margin-right: 51px; }
+.operation_list .sorting .f_field { position: relative; float: left; /*margin-right: 51px;*/ }
 .operation_list .sorting .f_field input {width: 90px; margin-left:3px;}
 .operation_list .sorting  select { color: #20201E; width : 350px; }
 .operation_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
@@ -1690,7 +1690,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 
 .ui-dialog.ui-widget-content {
     background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
-	border: 1px solid gray;
+    border: 1px solid gray;
 }
 .ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
@@ -2039,8 +2039,8 @@ table.calendar_tip td{
 table.times{position: relative; left: 145px}
 /* хук для секси комбо в всплывающем календаре */
 .event_form .combo div.list-wrapper {
-	height:100px;
-	max-height:100px;
+    height:100px;
+    max-height:100px;
 }
 /* поле суммы */
 div.op_addoperation div.op_line div.amount{

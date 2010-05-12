@@ -24,7 +24,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="f_field" style="display:block; width:200px;">
+                                            <div class="f_field" style="float: right;">
                                                 <select id="cat_filtr" style="width:300px">
                                                     <option value="">Все категории</option>
                                                     {$category}
@@ -33,9 +33,9 @@
                                             <div>
                                                 Метки, <br/>комментарии:
                                                 <input type="text" id="search_field"/><br/><br/>
-                                                Операции с
+                                                С:
                                                 <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
-                                                по
+                                                По:
                                                 <input type="text" id="dateTo" value="{$dateTo}" size="9"/>
                                                 <input type="button" value="Показать" id="btn_ReloadData"/>
                                                 <input type="button" value="Экспорт в CSV" id="btn_CSV"/><br/><br/>
@@ -55,10 +55,15 @@
 
                                 <div id="divOperationsJournalTotal">
                                     <span id="lblOperationsJournalSum" class="hidden"><b>Итого: </b>&nbsp;руб.</span>
-                                    <b class="b_marg">До: </b>
-                                    <span type="text" id="balance_before" size="30">0.00 руб.</span>
-                                    <b class="b_marg">После: </b>
-                                    <span type="text" id="balance_after" size="30">0.00 руб.</span><br/><br/>
+                                    <span class="before">
+                                        <b>До: </b>
+                                        <span type="text" id="balance_before" size="30">0.00 руб.</span>
+                                    </span>
+                                    <span class="after">
+                                        <b>После: </b>
+                                        <span type="text" id="balance_after" size="30">0.00 руб.</span>
+                                    </span>
+                                    <br/><br/>
                                     <span id="lblOperationsJournalAccountBalance" class="hidden"><b>Остаток по счёту:</b>&nbsp;руб.</span>
                                 </div>
                             </div>
