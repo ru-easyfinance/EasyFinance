@@ -18,18 +18,25 @@ function initTKSDialogs() {
         _$dlgTKSForm.dialog('close');
     });
 
+    $.validator.addMethod(
+        "phone",
+        function(value,element){
+            return (!isNaN(value) && value.toString().substr(0,1) == "8");
+        },
+        "Введите телефон начиная с 8-ки, в формате <b>8905</b>1234567 (без дефисов и скобок)."
+    );
+
     $("#frmTKSShort").validate({
         rules: {
             name: "required",
             surname: "required",
             patronymic: "required",
-            phone: "required"
+            phone: "required phone"
         },
         messages: {
             name: "Введите имя!",
             surname: "Введите фамилию!",
-            patronymic: "Введите отчество!",
-            phone: "Введите телефон!"
+            patronymic: "Введите отчество!"
         }
     });
 
@@ -83,7 +90,7 @@ function submitTKSShort() {
     if ($("#frmTKSShort").valid()) {
         // отслеживаем событие в Google Analytics
         if (_gaq) {
-            _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'ТКС - Короткая анкета']);
+            _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'ТКС - короткая анкета']);
         }
 
         submitTKSinternal();
