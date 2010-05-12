@@ -11,12 +11,65 @@ function initTKSDialogs() {
         _$dlgTKSForm.dialog('open');
         _$dlgTKSForm.find("#imgWaiting").hide();
     });
+
+    $("#btnCloseDialog").click(function() {
+        $(this).hide();
+        _$dlgTKSForm.dialog('close');
+    });
+
+    $("#frmTKSShort").validate({
+        rules: {
+            name: "required",
+            surname: "required",
+            patronymic: "required",
+            phone: "required",
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            name: "Введите имя!",
+            surname: "Введите фамилию!",
+            patronymic: "Введите отчество!",
+            phone: "Введите телефон!",
+            email: {
+                required: "Введите Email!",
+                email: "Введите правильный Email!"
+            }
+        }
+    });
 }
 
 function submitTKSShort() {
-    $("#dlgTKSForm #imgWaiting").show();
+    if ($("#frmTKSShort").valid()) {
+        $("#dlgTKSForm #imgWaiting").show();
 
-    setTimeout( function() { $("#dlgTKSForm #imgWaiting").hide() }, 2000);
+        $.post('/promo/tks', {
+            surname: $("#txtSurname").val(),
+            name: $("#txtName").val(),
+            patronymic: $("#txtPatronymic").val(),
+            email: $("#txtEmail").val(),
+            phone: $("#txtPhone").val()
+        }, function(data) {
+            $("#dlgTKSForm #imgWaiting").hide();
+
+            if (data) {
+                if (data.error) {
+                    if (data.error.text)
+                        $.jGrowl(data.error.text, {theme: 'red', life: 2500});
+                } else if (data.result) {
+                    if (data.result.text)
+                        $.jGrowl(data.result.text, {theme: 'green', life: 2500});
+                    
+                    $("#dlgTKSForm #btnSubmitShort").val("Отправить обновлённую");
+                    $("#dlgTKSForm #btnCloseDialog").show();
+                }
+            } else {
+                $.jGrowl("Ошибка на сервере!", {theme: 'red', life: 2500});
+            }
+        }, "json");
+    }
 }
 
 $(document).ready(function() {

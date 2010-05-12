@@ -36,6 +36,7 @@ class Helper_Css implements _Core_Router_iHook
             $templateEngine->append('css', 'jquery/ufd-plain.css');
 
             $templateEngine->append('css', 'screens/integration.screen.css');
+            $templateEngine->append('css', 'screens/promoTKS.screen.css');
 
             $templateEngine->append('css', 'calendarOverdue.css');
             $templateEngine->append('css', 'calendarLeft.css');
