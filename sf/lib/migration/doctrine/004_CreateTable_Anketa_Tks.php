@@ -19,6 +19,10 @@ class Migration004_CreateTable_Anketa_Tks extends Doctrine_Migration_Base
                 'autoincrement' => true,
                 'primary' => true,
             ),
+            'user_id' => array(
+                'type' => 'integer',
+                'length' => 4,
+            ),
             'name' => array(
                 'type' => 'string',
                 'length' => 255,
@@ -34,6 +38,9 @@ class Migration004_CreateTable_Anketa_Tks extends Doctrine_Migration_Base
             'phone' => array(
                 'type' => 'string',
                 'length' => 50,
+            ),
+            'created_at' => array(
+                'type' => 'timestamp'
             ),
         );
 
