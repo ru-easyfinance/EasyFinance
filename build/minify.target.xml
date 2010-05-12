@@ -69,6 +69,7 @@
                     </fileset>
                     <fileset dir="${project.css.root}screens/">
                         <include name="integration.screen.css" />
+                        <include name="promoTKS.screen.css" />
                     </fileset>
                 </append>
                 <stubcssmin cssminpath="external/cssmin-v1.0.0.php" targetdir="${project.css.root}">

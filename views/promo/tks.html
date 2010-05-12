@@ -39,53 +39,62 @@
 			<div class="ccb"></div>
 		</div>
 
-        {literal}
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $("#promoTKS").accordion({
-                        autoHeight: false
-                    });
+        <div id="dlgTKSForm" class="hidden">
+            <form id="frmTKSShort" style="margin: 10px;" >
+                КОНТАКТНЫЕ ДАННЫЕ<br>
+                <br>Фамилия: <span class="sumRed">*</span><br>
+                <input id="txtSurname" name="surname"><br><br>
 
-                    $("#btnNext").click(function() {
-                        $("#promoTKS").accordion("activate", 1);
-                        return false;
-                    });
+                Имя: <span class="sumRed">*</span><br>
+                <input id="txtName" name="name"><br><br>
 
-                    $("#btnPrev").click(function() {
-                        $("#promoTKS").accordion("activate", 0);
-                        return false;
-                    });
+                Отчество: <span class="sumRed">*</span><br>
+                <input id="txtPatronymic" name="patronymic"><br><br>
 
-                    $("#btnFillForm").click(function() {
-                        window.open("https://" + window.location.host + "/promo/tks/anketa");
-                        return false;
-                    });
+                <!-- Email: <span class="sumRed">*</span><br>
+                <input id="txtEmail" name="email"><br><br>-->
 
-                    // виджет создания счёта
-                    easyFinance.widgets.accountEdit.init('#widgetAccountEdit', easyFinance.models.accounts, easyFinance.models.currency);
+                Мобильный телефон: <span class="sumRed">*</span><br>
+                <input id="txtPhone" name="phone"><br><br>
 
-                    // открываем диалог создания счёта
-                    $('#btnCreateAccount').click(function() {
-                        // отображает форму создания счёта
-                        easyFinance.widgets.accountEdit.addAccount();
-                        // тип счёта жестко задан - дебетовая карта
-                        $("#acc_type").find("option:nth-child(4)").attr("selected", "selected").parent().attr("disabled", "disabled");
-                        // удаляем все валюты кроме РУБ, USD, EUR
-                        $("#acc_currency").find("option").each(function () {
-                            var val = $(this).val();
-                            if (val != "1" && val != "2" && val != "3") {
-                                $(this).remove();
-                            }
-                        });
+                <input type="button" id="btnSubmitShort" value="Отправить заявку" >
+                &nbsp;<input type="button" id="btnSubmitFull" value="Продолжить заполнение" >
+                &nbsp;<img id="imgWaiting1" src="/img/i/ajax-loader.gif" class="hidden" ><br>
+            </form>
 
-                        // выбираем первую валюту
-                        $("#acc_currency").find("option:first").attr("selected", "selected");
-                        // имя счёта по умолчанию
-                        $("#acc_name").val("TKS").focus();
-                    });
+            <!--
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        SHORT
+                    </td>
+                    <td width="50%">
+                        <form id="frmTKSFull" style="margin: 10px;" >
+                            ПАСПОРТНЫЕ ДАННЫЕ<br>
+                            <br>Серия: <span class="sumRed">*</span><br>
+                            <input id="txtSerial" name="serial"><br><br>
 
-                    // после добавления счёта обновляем список счетов
-                    $(document).bind('accountAdded', function(){/*alert('Счёт успешно создан!')*/});
-                });
-            </script>
-        {/literal}
+                            Номер: <span class="sumRed">*</span><br>
+                            <input id="txtNumber" name="number"><br><br>
+
+                            Кем выдан: <span class="sumRed">*</span><br>
+                            <input id="txtWhere" name="where"><br><br>
+
+                            Код подразделения: <span class="sumRed">*</span><br>
+                            <input id="txtCode" name="code"><br><br>
+
+                            Дата выдачи (дд.мм.гггг, например 20.11.1980): <span class="sumRed">*</span><br>
+                            <input id="txtDate" name="date"><br><br>
+
+                            <input type="button" id="btnSubmitFull" value="Отправить заявку" >
+                            &nbsp;<img id="imgWaiting2" src="/img/i/ajax-loader.gif" class="hidden" ><br>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            -->
+            <div id="divShortSuccess" class="sumGreen hidden" style="margin:8px;">анкета успешно отправлена! <a id="btnCloseDialog" href="#">(закрыть окно)</a></div>
+            <div style="padding:2px;">
+                <img class="ssl" src="/img/i/ssl_certificate.gif" align="left" hspace="6" >Информация передаётся в банк "Тинькофф кредитные системы" по защищённому соединению.<br><br>
+            </div>
+        </div>
