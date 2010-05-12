@@ -3,11 +3,11 @@
 /**
  * Downloads: Добавляем новую колонку `info` text
  */
-class Migration004_004_CreateTable_Anketa_Tks extends Doctrine_Migration_Base
+class Migration004_CreateTable_Anketa_Tks extends Doctrine_Migration_Base
 {
     /**
-     * Migrate
-     */
+       * Migrate
+       */
     public  function migrate($upDown)
     {
         $fields = array(
