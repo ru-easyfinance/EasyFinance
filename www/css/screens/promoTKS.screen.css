@@ -1,5 +1,5 @@
-#frmTKSShort label.error {
-    margin-left: 10px;
+#frmTKSShort label.error, #frmTKSFull label.error {
     color: red;
 }
+
 

@@ -10,6 +10,7 @@ function initTKSDialogs() {
     $("#btnFillForm").click(function() {
         _$dlgTKSForm.dialog('open');
         _$dlgTKSForm.find("#imgWaiting").hide();
+        _$dlgTKSForm.find("#divShortSuccess").hide();
     });
 
     $("#btnCloseDialog").click(function() {
@@ -22,53 +23,86 @@ function initTKSDialogs() {
             name: "required",
             surname: "required",
             patronymic: "required",
-            phone: "required",
-            email: {
-                required: true,
-                email: true
-            }
+            phone: "required"
         },
         messages: {
             name: "Введите имя!",
             surname: "Введите фамилию!",
             patronymic: "Введите отчество!",
-            phone: "Введите телефон!",
-            email: {
-                required: "Введите Email!",
-                email: "Введите правильный Email!"
-            }
+            phone: "Введите телефон!"
+        }
+    });
+
+    $("#frmTKSFull").validate({
+        rules: {
+            serial: "required",
+            number: "required",
+            where: "required",
+            code: "required",
+            date: "required"
+        },
+        messages: {
+            serial: "Введите серию!",
+            number: "Введите номер!",
+            where: "Введите место выдачи!",
+            code: "Введите код!",
+            date: "Введите дату!"
         }
     });
 }
 
+function submitTKSinternal() {
+    $("#dlgTKSForm #imgWaiting1").show();
+    $.post('/promo/tks', {
+        surname: $("#txtSurname").val(),
+        name: $("#txtName").val(),
+        patronymic: $("#txtPatronymic").val(),
+        email: $("#txtEmail").val(),
+        phone: $("#txtPhone").val()
+    }, function(data) {
+        $("#dlgTKSForm #imgWaiting1").hide();
+
+        if (data) {
+            if (data.error) {
+                if (data.error.text)
+                    $.jGrowl(data.error.text, {theme: 'red', life: 2500});
+            } else if (data.result) {
+                //if (data.result.text)
+                //    $.jGrowl(data.result.text, {theme: 'green', life: 2500});
+
+                $("#dlgTKSForm #btnSubmitShort").val("Отправить обновлённую");
+                $("#dlgTKSForm #divShortSuccess").show();
+            }
+        } else {
+            $.jGrowl("Ошибка на сервере!", {theme: 'red', life: 2500});
+        }
+    }, "json");
+}
+
 function submitTKSShort() {
     if ($("#frmTKSShort").valid()) {
-        $("#dlgTKSForm #imgWaiting").show();
+        // отслеживаем событие в Google Analytics
+        if (_gaq) {
+            _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'ТКС - Короткая анкета']);
+        }
 
-        $.post('/promo/tks', {
-            surname: $("#txtSurname").val(),
-            name: $("#txtName").val(),
-            patronymic: $("#txtPatronymic").val(),
-            email: $("#txtEmail").val(),
-            phone: $("#txtPhone").val()
-        }, function(data) {
-            $("#dlgTKSForm #imgWaiting").hide();
+        submitTKSinternal();
+    }
+}
 
-            if (data) {
-                if (data.error) {
-                    if (data.error.text)
-                        $.jGrowl(data.error.text, {theme: 'red', life: 2500});
-                } else if (data.result) {
-                    if (data.result.text)
-                        $.jGrowl(data.result.text, {theme: 'green', life: 2500});
-                    
-                    $("#dlgTKSForm #btnSubmitShort").val("Отправить обновлённую");
-                    $("#dlgTKSForm #btnCloseDialog").show();
-                }
-            } else {
-                $.jGrowl("Ошибка на сервере!", {theme: 'red', life: 2500});
-            }
-        }, "json");
+function submitTKSFull() {
+    if ($("#frmTKSShort").valid()) {
+        // отслеживаем событие в Google Analytics
+        if (_gaq) {
+            _gaq.push(['_trackEvent', 'Анкета', 'Переход', 'ТКС - полная анкета']);
+        }
+
+        submitTKSinternal();
+
+        // @TODO: window.open - направляем на сайт Тинькова
+        window.open("https://www.tcsbank.ru/deposit/form/");
+
+        $("#dlgTKSForm #imgWaiting1").show();
     }
 }
 
@@ -113,6 +147,7 @@ $(document).ready(function() {
     });
 
     $('#dlgTKSForm #btnSubmitShort').click(submitTKSShort);
+    $('#dlgTKSForm #btnSubmitFull').click(submitTKSFull);
 
     // после добавления счёта обновляем список счетов
     $(document).bind('accountAdded', function(){/*alert('Счёт успешно создан!')*/});
