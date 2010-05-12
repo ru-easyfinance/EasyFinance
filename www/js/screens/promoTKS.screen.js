@@ -53,7 +53,7 @@ function initTKSDialogs() {
 
 function submitTKSinternal() {
     $("#dlgTKSForm #imgWaiting1").show();
-    $.post('/promo/tks', {
+    $.post('/promo/tks/anketa', {
         surname: $("#txtSurname").val(),
         name: $("#txtName").val(),
         patronymic: $("#txtPatronymic").val(),
