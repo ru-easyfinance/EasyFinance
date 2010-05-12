@@ -1,5 +1,9 @@
 <?php
-    $birth_date_split=explode(".", $birth_date);
+    if (!$birth_date_split) {
+        $birth_date_split = array('','','');
+    } else {
+        $birth_date_split=explode(".", $birth_date);
+    }
 
     function renderLetters($string)
     {

@@ -1,5 +1,5 @@
-<p>Заполните и "распечатайте" анкету - в результате получите PDF-файл, пригодный для печати и сдачи в банк.
-Вы можете распечатать даже недозаполненную анкету - просто перейдите на последний шаг из списка шагов слева и нажмите "Распечатать".<br><br>
+<p>Заполните и "распечатайте" анкету - в результате получится PDF-файл, пригодный для печати и сдачи в банк.</p>
+<p><b>Заполните только то, что хотите</b> (или распечатайте вообще пустую анкету) - остальное можно заполнить вручную.<br><br>
 
 <b>Ваши личные данные не сохраняются на сайте EasyFinance.ru</b> - они используются только для формирования анкеты<br><br>
 
@@ -7,6 +7,7 @@
 
         <div id="wizard">
             <div id="wz_header">
+                <input id="btnPrintNow" type="button" value="Распечатать сейчас!" style="font-weight:bold; margin-left: 20px; " /><br>
                 <ol>
                     <li class="wz_tab_header">Личные данные</li>
                     <li class="wz_tab_header">Прописка / Регистрация</li>
@@ -18,7 +19,7 @@
                     <li class="wz_tab_header">Свойства карты</li>
                     <li class="wz_tab_header">Дополнительная карта</li>
                     <li class="wz_tab_header">Дополнительная карта для лиц до 14</li>
-                    <li class="wz_tab_header">Пароль и согласие</li>
+                    <li class="wz_tab_header">Пароль</li>
                 </ol>
             </div>
 
@@ -485,7 +486,7 @@
 
                 <!-- Tab 10 -->
                 <div class="wz_tab_content">
-                    <h3>Пароль и согласие</h3>
+                    <h3>Пароль</h3>
 
                     <form id="finish" action="" method="post" class="wz_frm" onsubmit="return wzSaveEverything();">
                         <fieldset>
@@ -494,12 +495,6 @@
                             <div class="fld_holder">
                                 <label for="wz_password">Пароль (слово <b>на русском языке</b>  – для идентификации Вашей личности при телефонных обращениях в Call-центр Банка) <span class="wz_req_fld">*</span></label><br />
                                 <input name="wz_password" id="wz_password" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
-                            </div>
-
-                            <div class="fld_holder">
-                                <!-- С правилами ознакомлен <span class="wz_req_fld">*</span><br /> -->
-                                <input type="checkbox" name="wz_omni_agreement" id="wz_omni_agreement" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_omni_agreement">С Тарифами и Правилами обслуживания держателей банковских карт международных платежных систем VISA International, MasterCard International, эмитированных ООО «АМТ Банк», ознакомлен(а) и обязуюсь их выполнять.</label><br />
-                                <br />
                             </div>
 
                             <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />

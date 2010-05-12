@@ -76,6 +76,9 @@ function wzValidateAll() {
 }
 
 function wzSaveEverything() {
+    // запоминаем событие в Google Analytics
+    try { _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'АМТ - PDF']); } catch(err) {};
+
     var i = 0;
     var j = 0;
     var wholeData = {};
@@ -398,12 +401,6 @@ function wsInitValidator() {
 
 	dValidator.validatableElems['finish']['wz_password'] = {
 		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
-
-	dValidator.validatableElems['finish']['wz_omni_agreement'] = {
-		'validationType' : 'checkbox',
 		'errMsg' : '',
 		'params' : {}
 	};

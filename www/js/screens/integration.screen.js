@@ -1,4 +1,9 @@
 function initGuest() {
+    $("#integrationSteps").accordion({
+        autoHeight: false,
+        event: ""
+    });
+
     var _$dlgRegistration = $("#registration").dialog({
         title: "Регистрация",
         bgiframe: true,
@@ -39,7 +44,11 @@ function initLogged() {
     if (!res.profile.integration.email || res.profile.integration.email=='') {
         // email не создан, открываем этап генерации e-mail
         easyFinance.widgets.userIntegrations.load({});
-        $("#integrationSteps").accordion("activate" , 1);
+        $("#integrationSteps").accordion({
+            autoHeight: false,
+            event: "",
+            active: 1
+        });
     } else {
         // email создан, подставляем в виджет и анкету
         $("#wz_card_account_mail").val(res.profile.integration.email);
@@ -49,17 +58,24 @@ function initLogged() {
         if (res.profile.integration.account && res.profile.integration.account=='') {
             // следующий шаг - привязка счёта
             $("#btnIntegrationMailNext").show();
-            $("#integrationSteps").accordion("activate" , 2);
+            $("#integrationSteps").accordion({
+                autoHeight: false,
+                event: "",
+                active: 2
+            });
         } else {
             // выбираем привязанный аккаунт
-            $("#integrationSteps").accordion("activate" , 2);
             var $opt = $("#optionAccount").find("option[value='" + res.profile.integration.account + "']");
             if ($opt) {
                 $opt.attr("selected", "selected");
             }
 
             // открываем анкету
-            $("#integrationSteps").accordion("activate" , 3);
+            $("#integrationSteps").accordion({
+                autoHeight: false,
+                event: "",
+                active: 3
+            });
 
             // подставляем в анкету нужную валюту
             var cur = easyFinance.models.accounts.getAccountCurrencyId($("#optionAccount").val());
@@ -81,6 +97,8 @@ function initLogged() {
     $('#btnCreateAccount').click(function() {
         // отображает форму создания счёта
         easyFinance.widgets.accountEdit.addAccount();
+        // показываем доп. подсказку
+        $("#accountEditTrLabelBalance,#accountEditTrBalance").hide();
         // тип счёта жестко задан - дебетовая карта
         $("#acc_type").find("option:nth-child(2)").attr("selected", "selected").parent().attr("disabled", "disabled");
         // удаляем все валюты кроме РУБ, USD, EUR
@@ -108,6 +126,11 @@ function initLogged() {
     $('#btnBackToAccount').click(function() {
         $("#integrationSteps").accordion("activate" , 2);
     });
+
+    $('#btnPrintNow').click(function() {
+        wzSaveEverything();
+        return false;
+    });
 }
 
 function refreshAccounts(event) {
@@ -118,9 +141,11 @@ function refreshAccounts(event) {
         return;
     }
 
+    var cnt = 0;
     for (var row in account_list_ordered) {
         // выводим только дебетовые счета
         if (account_list_ordered[row]["type"] == "2") {
+            cnt++;
             $select.
                 append($("<option></option>").
                 attr("value", account_list_ordered[row]['id']).
@@ -128,6 +153,12 @@ function refreshAccounts(event) {
         }
     }
 
+    if (cnt) {
+        $("#divAmtAccounts").show();
+    } else {
+        $("#divAmtAccounts").hide();
+    }
+    
     // выбираем счёт после добавления
     if (event) {
         $("#optionAccount").find("option[value='" + event.id + "']").attr("selected", "selected");
@@ -173,11 +204,6 @@ function linkAccount() {
 }
 
 $(document).ready(function(){
-    $("#integrationSteps").accordion({
-        autoHeight: false,
-        event: ""
-    });
-
     if (!res || !res.profile) {
         // если пользователь не залогинен,
         // инициализируем диалоги регистрации
