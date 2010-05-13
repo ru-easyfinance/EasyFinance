@@ -1,4 +1,5 @@
 function initTKSDialogs() {
+    /*
     var _$dlgTKSForm = $("#dlgTKSForm").dialog({
         title: "Анкета",
         bgiframe: true,
@@ -12,11 +13,14 @@ function initTKSDialogs() {
         _$dlgTKSForm.find("#imgWaiting").hide();
         _$dlgTKSForm.find("#divShortSuccess").hide();
     });
+    */
 
+    /*
     $("#btnCloseDialog").click(function() {
         $(this).hide();
         _$dlgTKSForm.dialog('close');
     });
+    */
 
     $.validator.addMethod(
         "phone",
@@ -36,7 +40,8 @@ function initTKSDialogs() {
         messages: {
             name: "Введите имя!",
             surname: "Введите фамилию!",
-            patronymic: "Введите отчество!"
+            patronymic: "Введите отчество!",
+            phone: "Введите телефон!"
         }
     });
 
@@ -77,8 +82,7 @@ function submitTKSinternal() {
                 //if (data.result.text)
                 //    $.jGrowl(data.result.text, {theme: 'green', life: 2500});
 
-                $("#dlgTKSForm #btnSubmitShort").val("Отправить обновлённую");
-                $("#dlgTKSForm #divShortSuccess").show();
+                //$("#dlgTKSForm #divShortSuccess").show();
             }
         } else {
             $.jGrowl("Ошибка на сервере!", {theme: 'red', life: 2500});
@@ -114,9 +118,11 @@ function submitTKSFull() {
 }
 
 $(document).ready(function() {
+    /*
     $("#promoTKS").accordion({
         autoHeight: false
     });
+    */
 
     initTKSDialogs();
 

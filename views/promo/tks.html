@@ -2,7 +2,7 @@
 
         <div class="ramka2">
 			<div class="cct"></div>
-			<div class="mid general_cont">
+            <div class="mid general_cont" style="margin: 20px;">
                 <div>
                     {if $user_info.user_id > 0}
                         <!--
@@ -15,86 +15,49 @@
                     {/if}
                 </div>
                 <div id="promoTKS" style="">
-                    <h3><a href="#">Общая информация</a></h3>
+                    <h3>Общая информация</h3>
                     <div>
                         Ля-ля-ля
-
-                        {if not $user_info.user_id > 0}
-                            <br><br><input id="btnFillForm" type="button" value="Заполнить анкету" />
-                        {else}
-                            <br><br><input id="btnNext" type="button" value="Далее" />
-                        {/if}
-                    </div>
+                    </div><br>
 
                     {if $user_info.user_id > 0}
                         <h3><a href="#">Создание счёта</a></h3>
                         <div>
                                 <input id="btnPrev" type="button" value="Вернуться" />
                                 <br><br><button id='btnCreateAccount'>Создать счёт</button> для вклада "TKS"<br><br>
-                                <input id="btnFillForm" type="button" value="Заполнить анкету" />
+                                <!-- <input id="btnFillForm" type="button" value="Заполнить анкету" /> -->
                         </div>
-                    {/if}                    
+                    {/if}
+
+                    <h3>Представьтесь, пожалуйста</h3>
+                    <div id="dlgTKSForm" class="">
+                        <form id="frmTKSShort" style="margin: 0px;" >
+                            <br>Фамилия: <span class="sumRed">*</span><br>
+                            <input id="txtSurname" name="surname"><br><br>
+
+                            Имя: <span class="sumRed">*</span><br>
+                            <input id="txtName" name="name"><br><br>
+
+                            Отчество: <span class="sumRed">*</span><br>
+                            <input id="txtPatronymic" name="patronymic"><br><br>
+
+                            <!-- Email: <span class="sumRed">*</span><br>
+                            <input id="txtEmail" name="email"><br><br>-->
+
+                            Мобильный телефон:<br>(начиная с 8-ки, в формате<br><b>8905</b>1234567, без дефисов и скобок) <span class="sumRed">*</span><br>
+                            <input id="txtPhone" name="phone"><br><br>
+
+                            <input type="button" id="btnSubmitShort" value="К заполнению анкеты" >
+                            <!-- &nbsp;<input type="button" id="btnSubmitFull" value="Продолжить заполнение" > -->
+                            &nbsp;<img id="imgWaiting1" src="/img/i/ajax-loader.gif" class="hidden" ><br>
+                        </form>
+
+                        <div id="divShortSuccess" class="sumGreen hidden" style="margin:8px;">анкета успешно отправлена! <a id="btnCloseDialog" href="#" class="hidden">(закрыть окно)</a></div>
+                        <div style="padding: 0px; margin-top: 10px;">
+                            <img class="ssl" src="/img/i/ssl_certificate.gif" align="left" hspace="6" >Информация передаётся в банк<br>"Тинькофф кредитные системы"<br>по защищённому соединению.<br><br>
+                        </div>
+                    </div>
                 </div>
 			</div>
 			<div class="ccb"></div>
 		</div>
-
-        <div id="dlgTKSForm" class="hidden">
-            <form id="frmTKSShort" style="margin: 10px;" >
-                КОНТАКТНЫЕ ДАННЫЕ<br>
-                <br>Фамилия: <span class="sumRed">*</span><br>
-                <input id="txtSurname" name="surname"><br><br>
-
-                Имя: <span class="sumRed">*</span><br>
-                <input id="txtName" name="name"><br><br>
-
-                Отчество: <span class="sumRed">*</span><br>
-                <input id="txtPatronymic" name="patronymic"><br><br>
-
-                <!-- Email: <span class="sumRed">*</span><br>
-                <input id="txtEmail" name="email"><br><br>-->
-
-                Мобильный телефон: <span class="sumRed">*</span><br>
-                <input id="txtPhone" name="phone"><br><br>
-
-                <input type="button" id="btnSubmitShort" value="Отправить заявку" >
-                &nbsp;<input type="button" id="btnSubmitFull" value="Продолжить заполнение" >
-                &nbsp;<img id="imgWaiting1" src="/img/i/ajax-loader.gif" class="hidden" ><br>
-            </form>
-
-            <!--
-            <table width="100%">
-                <tr>
-                    <td width="50%">
-                        SHORT
-                    </td>
-                    <td width="50%">
-                        <form id="frmTKSFull" style="margin: 10px;" >
-                            ПАСПОРТНЫЕ ДАННЫЕ<br>
-                            <br>Серия: <span class="sumRed">*</span><br>
-                            <input id="txtSerial" name="serial"><br><br>
-
-                            Номер: <span class="sumRed">*</span><br>
-                            <input id="txtNumber" name="number"><br><br>
-
-                            Кем выдан: <span class="sumRed">*</span><br>
-                            <input id="txtWhere" name="where"><br><br>
-
-                            Код подразделения: <span class="sumRed">*</span><br>
-                            <input id="txtCode" name="code"><br><br>
-
-                            Дата выдачи (дд.мм.гггг, например 20.11.1980): <span class="sumRed">*</span><br>
-                            <input id="txtDate" name="date"><br><br>
-
-                            <input type="button" id="btnSubmitFull" value="Отправить заявку" >
-                            &nbsp;<img id="imgWaiting2" src="/img/i/ajax-loader.gif" class="hidden" ><br>
-                        </form>
-                    </td>
-                </tr>
-            </table>
-            -->
-            <div id="divShortSuccess" class="sumGreen hidden" style="margin:8px;">анкета успешно отправлена! <a id="btnCloseDialog" href="#">(закрыть окно)</a></div>
-            <div style="padding:2px;">
-                <img class="ssl" src="/img/i/ssl_certificate.gif" align="left" hspace="6" >Информация передаётся в банк "Тинькофф кредитные системы" по защищённому соединению.<br><br>
-            </div>
-        </div>
