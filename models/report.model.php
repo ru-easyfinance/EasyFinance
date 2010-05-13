@@ -72,16 +72,28 @@ class Report_Model
         // Получаем список последних валют, и раскладываем их по id
         $sql = "SELECT currency_id AS id, currency_sum AS currency, cur_char_code AS char_code
         FROM daily_currency d
-        LEFT JOIN users u ON id=?
         LEFT JOIN currency c ON c.cur_id=d.currency_id
         WHERE
-        currency_from = IF (u.user_currency_default IN (4,6,9), u.user_currency_default, 1) AND
-        currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)";
+        currency_from = ? 
+            AND currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)
+        ORDER BY id";
 
-        $currency[1]['value']     = 1;
-        $currency[1]['char_code'] = 'RUB'; //@XXX RUR???
+        if ($user->getUserProps('user_currency_default') == 1) {
+            $currency[1]['value']     = 1;
+            $currency[1]['char_code'] = 'RUB'; //@XXX RUR???
+        } elseif($user->getUserProps('user_currency_default') == 4) {
+            $currency[4]['value']     = 4;
+            $currency[4]['char_code'] = 'UAH';
+        } elseif($user->getUserProps('user_currency_default') == 6) {
+            $currency[6]['value']     = 6;
+            $currency[6]['char_code'] = 'BYR';
+        } elseif($user->getUserProps('user_currency_default') == 9) {
+            $currency[9]['value']     = 9;
+            $currency[9]['char_code'] = 'KZT';
+        }
 
-        foreach ( Core::getInstance()->db->select($sql, $user->getId() ) as $value ) {
+
+        foreach(Core::getInstance()->db->select($sql, $user->getUserProps('user_currency_default')) as $value){
             $currency[$value['id']]['value'] = $value['currency'];
             $currency[$value['id']]['char_code'] = $value['char_code'];
         }
