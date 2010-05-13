@@ -449,7 +449,7 @@ $(document).ready(function(){
 		$('ul.control li#' + newActive).addClass('act');
 		$('.listing.' + newActive).show();
 		if (newActive == "c2") {
-			easyFinance.widgets.accountsPanel.redraw();
+            try { easyFinance.widgets.accountsPanel.redraw(); } catch (err) {}
 		}
 	}
 
