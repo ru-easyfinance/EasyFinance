@@ -27,10 +27,17 @@ function getClientDisplayMods(){
  * @return str
  */
 function getClientPlugins(){
+    // #1324. грёбаный IE не поддерживает navigator.plugins
+    
     var str = '';
-    for (var key in navigator.plugins) {
-        str = str + navigator.plugins[key].name + ";\n";
+    try {
+        for (var key in navigator.plugins) {
+            str = str + navigator.plugins[key].name + ";\n";
+        }
+    } catch (err) {
+        str = 'Cannot detect plugins! (IE7/IE8)';
     }
+
     return str;
 }
 
