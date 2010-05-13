@@ -39,14 +39,14 @@ easyFinance.models.currency = function(){
      * @return {float}
      */
     function getDefaultCurrencyCost(){
-        return _data[_defaultCurrencyId].cost || 0;
+        return _data[_defaultCurrencyId] ? _data[_defaultCurrencyId].cost : 0;
     }
     /**
      * Возвращает описание валюты по умолчанию
      * @return {string}
      */
     function getDefaultCurrencyText(){
-        return _data[_defaultCurrencyId].text || '';
+        return _data[_defaultCurrencyId] ? _data[_defaultCurrencyId].text : '';
     }
 
     /**
