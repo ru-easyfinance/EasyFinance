@@ -21,10 +21,10 @@
                     </div><br>
 
                     {if $user_info.user_id > 0}
-                        <h3><a href="#">Создание счёта</a></h3>
+                        <h3>Создание счёта</h3>
                         <div>
-                                <input id="btnPrev" type="button" value="Вернуться" />
-                                <br><br><button id='btnCreateAccount'>Создать счёт</button> для вклада "TKS"<br><br>
+                                <button id='btnCreateAccount'>Создать счёт</button> для вклада "TKS"<br><br>
+                                <!-- <input id="btnPrev" type="button" value="Вернуться" /> -->
                                 <!-- <input id="btnFillForm" type="button" value="Заполнить анкету" /> -->
                         </div>
                     {/if}
@@ -47,8 +47,7 @@
                             Мобильный телефон:<br>(начиная с 8-ки, в формате<br><b>8905</b>1234567, без дефисов и скобок) <span class="sumRed">*</span><br>
                             <input id="txtPhone" name="phone"><br><br>
 
-                            <input type="button" id="btnSubmitShort" value="К заполнению анкеты" >
-                            <!-- &nbsp;<input type="button" id="btnSubmitFull" value="Продолжить заполнение" > -->
+                            <input type="button" id="btnSubmitFull" value="К заполнению анкеты" >
                             &nbsp;<img id="imgWaiting1" src="/img/i/ajax-loader.gif" class="hidden" ><br>
                         </form>
 
