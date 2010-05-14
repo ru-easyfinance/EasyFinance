@@ -51,8 +51,8 @@ all:
     default_culture:        ru
 
   .actions:
-    login_module:           ~
-    login_action:           ~
+    login_module:           login
+    login_action:           index
 
     secure_module:          ~
     secure_action:          ~

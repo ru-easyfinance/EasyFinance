@@ -76,9 +76,9 @@ class User
      */
     private $user_budget = array();
 
-    
+
     private $pop_targets = array();
-    
+
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
@@ -118,7 +118,7 @@ class User
         } elseif ( $login && $password )  {
 
             $this->initUser( $login, sha1($password) );
-            
+
         }
     }
 
@@ -146,7 +146,7 @@ class User
 
     	return $userType;
     }
-    
+
     public function getDefaultPage()
     {
     	return '/';
@@ -185,7 +185,7 @@ class User
         }
 
         //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
-        $sql = "SELECT id, user_name, user_login, user_pass, user_mail, getNotify, 
+        $sql = "SELECT id, user_name, user_login, user_pass, user_mail, getNotify,
             DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active, user_service_mail,
             user_currency_default, user_currency_list, user_type
             FROM users
@@ -255,7 +255,6 @@ class User
      */
     public function save ()
     {
-
         $_SESSION['user']            = $this->props;
         $_SESSION['user_category']   = $this->user_category;
         $_SESSION['user_account']    = $this->user_account;
@@ -266,6 +265,13 @@ class User
         $_SESSION['user_events']     = $this->user_events;
         $_SESSION['user_overdue']    = $this->user_overdue;
         $_SESSION['user_reminder']   = $this->user_reminder;
+
+        // костыли для интеграции с sf
+        $_SESSION['symfony/user/sfUser/authenticated'] = true;
+        $_SESSION['symfony/user/sfUser/lastRequest'] = time();
+
+        // дублируем для симфоньки, что бы достать можно было
+        $_SESSION['symfony/user/sfUser/attributes']['user']['id'] = $this->props['id'];
 
         return true;
     }
@@ -466,7 +472,7 @@ class User
     	{
     		return;
     	}
-    	
+
         $this->user_targets = array();
         $this->user_targets['user_targets'] = array();
 
@@ -475,13 +481,13 @@ class User
             t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC LIMIT ?d,?d;", $this->getId(), 0, 20);
-        
+
         while ( list(,$target) = each($userTargets) )
         {
         		$this->user_targets['user_targets'][ $target['id'] ] = $target;
         }
         unset($userTargets);
-        
+
         $this->user_targets['pop_targets'] = $this->db->select("SELECT t.title, COUNT(t.id) AS cnt, SUM(`close`) AS
             cl FROM target t WHERE t.visible=1 GROUP BY t.title,
             t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", 0, 10);
@@ -553,12 +559,12 @@ class User
 
     function getCurrencyByDefault($mas, $def)
     {
-        
+
         if( !is_array($mas) )
         {
         	$mas = array();
         }
-        
+
         $mas = "'".implode("','", $mas)."'";
         $sql = "SELECT MAX(currency_date) as last FROM daily_currency";
         $lastdate = $this->db->query($sql);

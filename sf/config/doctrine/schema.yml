@@ -13,6 +13,7 @@ User:
   tableName: users
   columns:
     id:                { type: integer(4), unsigned: true, notnull: true, primary: true, autoincrement: true }
+    user_name:         { type: string, size: 100, notnull: true }
     user_service_mail: { type: string(100), notnull: true }
   options:
     symfony:

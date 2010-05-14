@@ -36,10 +36,7 @@
                 <ul class="menu2">
                         <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                         <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
-                        <li><a href="/profile/"><?php
-                        //print_r($_SESSION);
-                        echo $_SESSION['user']['user_name'];
-                        ?>&nbsp;</a></li>
+                        <li><a href="/profile/"><?php echo $sf_user->getUserRecord()->getUserName(); ?></a></li>
                         <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                 </ul>
             </div>
@@ -244,7 +241,7 @@
 
             <div class="block2">
             <!--наполнение-->
-                .<?php echo $sf_content ?>
+                <?php echo $sf_content ?>
             <!--/наполнение-->
             </div>
 
