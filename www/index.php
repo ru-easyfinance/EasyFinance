@@ -39,22 +39,25 @@ try
 
     } else {
         
-        // Если пользователь зашёл с мобильного браузера
-        if ( _Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA
-            && Helper_DetectBrowser::detectMobile() ) {
+        if (!IS_DEMO) {
 
-            header( 'Location: https://' . URL_ROOT_PDA );
-            exit;
+            // Если пользователь зашёл с мобильного браузера
+            if ( _Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA
+                && Helper_DetectBrowser::detectMobile() ) {
 
-        }
+                header( 'Location: https://' . URL_ROOT_PDA );
+                exit;
 
-        // Если пользователь зашёл по незащищённому соединению и он не поисковый бот
-        if ( $_SERVER['SERVER_PORT'] == 80
-            && ( !Helper_DetectBrowser::detectSearchEngine() ) ) {
+            }
 
-            header( 'Location: ' . 'https://' . URL_ROOT );
-            exit;
+            // Если пользователь зашёл по незащищённому соединению и он не поисковый бот
+            if ( $_SERVER['SERVER_PORT'] == 80
+                && ( !Helper_DetectBrowser::detectSearchEngine() ) ) {
 
+                header( 'Location: ' . 'https://' . URL_ROOT );
+                exit;
+
+            }
         }
 
         $templateEngine->display( 'index.html' );
