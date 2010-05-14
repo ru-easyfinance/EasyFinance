@@ -915,12 +915,12 @@ class Operation_Model {
             //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
             if ( $operation['transfer'] ) {
-                $operation['cat_name'] = "Отправлено на счёт '"
-                    . $accounts[$operation['transfer']]['account_name']."'";
+                $ac_name = isset($accounts[$operation['transfer']]) ? "'".$accounts[$operation['transfer']]['account_name']."'": '';
+
+                $operation['cat_name'] = "Отправлено на счёт $ac_name";
 
                 if ($operation['tr_id']) {
-                    $operation['cat_name'] = "Отправлено со счёта '"
-                        . $accounts[$operation['transfer']]['account_name']."'";
+                    $operation['cat_name'] = "Отправлено со счёта $ac_name";
                 }
             }
 

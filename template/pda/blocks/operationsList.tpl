@@ -22,7 +22,7 @@
                         {
                             echo 'цель "' . $res['user_targets'][ $operation['target_id'] ]['title'] . '"';
                         }
-                        else
+                        elseif ( $operation['cat_id'] != 0)
                         {
                             // Вывод названия категории
                             echo $res['category']['user'][ $operation['cat_id'] ]['name'];

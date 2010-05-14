@@ -558,7 +558,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
             $sumTo = (float)$this->request->get['sumTo'];
         }
 
-        $search_field = $this->request->get['search_field'];
+        $search_field = isset($this->request->get['search_field'])? $this->request->get['search_field'] : '';
 
         if (_Core_TemplateEngine::getResponseMode($this->request) != "csv") {
             $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo, $search_field);
