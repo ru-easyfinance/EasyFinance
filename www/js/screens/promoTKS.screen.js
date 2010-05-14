@@ -1,27 +1,4 @@
 function initTKSDialogs() {
-    /*
-    var _$dlgTKSForm = $("#dlgTKSForm").dialog({
-        title: "Анкета",
-        bgiframe: true,
-        width: "340px",
-        autoOpen: false,
-        modal:true
-    });
-
-    $("#btnFillForm").click(function() {
-        _$dlgTKSForm.dialog('open');
-        _$dlgTKSForm.find("#imgWaiting").hide();
-        _$dlgTKSForm.find("#divShortSuccess").hide();
-    });
-    */
-
-    /*
-    $("#btnCloseDialog").click(function() {
-        $(this).hide();
-        _$dlgTKSForm.dialog('close');
-    });
-    */
-
     $.validator.addMethod(
         "phone",
         function(value,element){
@@ -110,8 +87,12 @@ function submitTKSFull() {
 
         submitTKSinternal();
 
-        // @TODO: window.open - направляем на сайт Тинькова
-        window.open("https://www.tcsbank.ru/deposit/form/");
+        // направляем на сайт Тинькова
+        var prefix = "https://www.tcsbank.ru/deposit/form/?";
+        var params = 'surname=' + encodeURIComponent($("#txtSurname").val()) + '&name=' + encodeURIComponent($("#txtName").val()) + '&patronymic=' + encodeURIComponent($("#txtPatronymic").val()) + '&phone_mobile=' + encodeURIComponent($("#txtPhone").val());
+        var postfix = '&step=2&utm_source=easyfinance&utm_medium=mediyka&utm_term=tinkoff&utm_content=bannerlink&utm_campaign=vklady';
+        var url = prefix + params + postfix;
+        window.open(url);
 
         $("#dlgTKSForm #imgWaiting1").show();
     }
