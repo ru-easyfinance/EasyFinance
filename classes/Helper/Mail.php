@@ -4,6 +4,7 @@ class Helper_Mail
 {
     /**
     * Проверяет корректность почтового ящика
+    *
     * @param $email string
     * @return bool
     */
@@ -11,7 +12,7 @@ class Helper_Mail
     {
         if ( ! empty($email) ) {
 
-            if (preg_match( '/^[a-z0-9_\-\.]+@[a-z0-9_\-\.]+\.[a-z]{2,4}$/i', $email) ) {
+            if (preg_match( '/^[a-z0-9_\-\.\+]+@[a-z0-9_\-\.]+\.[a-z]{2,4}$/i', $email) ) {
                 return true;
             } else {
                 return false;
