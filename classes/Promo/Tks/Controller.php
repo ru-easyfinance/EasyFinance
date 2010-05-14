@@ -26,15 +26,16 @@ class Promo_Tks_Controller extends _Core_Controller
     function anketa()
     {
         $this->tpl->assign('name_page', 'promo/tks-anketa');
-
-        if (count($_POST) > 0) {
+        $data = $_POST;
+        if (count($data) > 0) {
 
             // Хак для неавторизированных пользователей
             if (!session_id()) {
                 session_start();
             }
 
-            $model = new Promo_Tks_Model($_POST);
+            $data['user_id'] = Core::getInstance()->user->getId();
+            $model = new Promo_Tks_Model($data);
 
             //@TODO Переписать вывод сообщений в новом формате JSON
             if ($model->save()) {

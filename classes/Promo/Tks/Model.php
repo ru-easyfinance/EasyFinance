@@ -20,7 +20,7 @@ class Promo_Tks_Model
             'name' => '',
             'patronymic' => '',
             'phone'=> '',
-            'user_id' => Core::getInstance()->user->getId()
+            'user_id' => '',
         );
 
         $data = array_merge($fields, (array)$data);
