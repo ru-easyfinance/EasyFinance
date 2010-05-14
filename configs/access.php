@@ -33,6 +33,7 @@ $accessConfig = array(
 	'redirect'      => _Core_Access::ALLOW_ALL,
     'api'           => _Core_Access::ALLOW_ALL,
     'integration'   => _Core_Access::ALLOW_ALL,
+    'promo'   => _Core_Access::ALLOW_ALL,
 	
 	'profile'       => _Core_Access::ALLOW_AUTHORIZED,
 	
