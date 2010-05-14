@@ -232,7 +232,7 @@ class Integration_Controller extends _Core_Controller
         $data = array_merge($indexes, $_POST['anketa']);
 
         foreach ($data as $key => $value) {
-            $data[$key] = htmlspecialchars($value, ENT_QUOTES);
+            $data[$key] = htmlspecialchars(urldecode($value), ENT_QUOTES);
         }
         return $data;
     }
