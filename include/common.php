@@ -97,7 +97,7 @@ Core::getInstance()->js = array(
 require_once dirname( dirname ( __FILE__ ) ) . "/core/external/Swift/swift_required.php";
 
 // Если это продуктив, то используем для отправки писем - sendmail
-if (defined(ENVIRONMENT) && ENVIRONMENT == 'prod') {
+if (defined('ENVIRONMENT') && ENVIRONMENT == 'prod') {
     // sendmail
     $mailTransport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
 
