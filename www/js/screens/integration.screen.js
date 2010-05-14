@@ -55,7 +55,7 @@ function initLogged() {
         easyFinance.widgets.userIntegrations.load({service_mail : res.profile.integration.email});
         $("#btnIntegrationMailNext").show();
 
-        if (res.profile.integration.account && res.profile.integration.account=='') {
+        if (typeof (res.profile.integration.account) == 'string' && res.profile.integration.account=='') {
             // следующий шаг - привязка счёта
             $("#btnIntegrationMailNext").show();
             $("#integrationSteps").accordion({
