@@ -106,7 +106,7 @@ a img, fieldset { border:0 none; }
 .mail_list { padding-top: 21px !important; }
 .mail_list .sorting { position: relative; margin-bottom: 7px;}
 .mail_list .sorting:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-.mail_list .sorting .f_field { position: relative; float: left; margin-right: 51px; }
+.mail_list .sorting .f_field { position: relative; float: left; margin-right: 43px; }
 .mail_list .sorting .f_field select { margin-left: 11px; color: #b2b2b2; }
 .mail_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
 

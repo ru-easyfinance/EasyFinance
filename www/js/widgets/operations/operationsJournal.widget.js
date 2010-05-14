@@ -18,6 +18,7 @@ easyFinance.widgets.operationsJournal = function(){
     var _sumTo = '';
     var _dateFrom = '';
     var _dateTo = '';
+    var _search_field = '';
 
     var _$node = null;
 
@@ -45,27 +46,31 @@ easyFinance.widgets.operationsJournal = function(){
     // данные получаются из модели методом loadJournal
     // и передаются в эту функцию
     function _showInfo(data) {
+
         if (data == null)
             return;
 
-        _journal = data;
+	$("#balance_before").html(data.list_before+" "+easyFinance.models.currency.getDefaultCurrencyText());
+	$("#balance_after").html(data.list_after+" "+easyFinance.models.currency.getDefaultCurrencyText());
+
+        _journal = data.operations;
 
         var tr, tp, pageTotal, curMoney;
         tr = '';
         pageTotal = 0;
         
         // Собираем данные для заполнения в таблицу
-        for(var v in data) {
+        for(var v in _journal) {
             // см. тикет #357
-            if (data[v].account_name == null)
+            if (_journal[v].account_name == null)
                 continue;
 
-            if (  data[v].transfer > 0 ) {
+            if (  _journal[v].transfer > 0 ) {
                 tp = 'transfer';
-            } else if (data[v].virt == "1") {
+            } else if (_journal[v].virt == "1") {
                 tp = 'target';
             } else {
-                if (data[v].drain == 1) {
+                if (_journal[v].drain == 1) {
                     tp = 'outcome';
                 } else {
                     tp = 'income';
@@ -73,39 +78,39 @@ easyFinance.widgets.operationsJournal = function(){
             }
 
             // не учитываем в балансе и итогах операции перевода
-            if (data[v].transfer > 0)
+            if (_journal[v].transfer > 0)
                 curMoney = 0;
             else
-                curMoney = parseFloat(data[v].money * easyFinance.models.currency.getCurrencyCostById(data[v].account_currency_id));
+                curMoney = parseFloat(_journal[v].money * easyFinance.models.currency.getCurrencyCostById(_journal[v].account_currency_id));
 
             pageTotal = pageTotal + curMoney;
 
-            tr += "<tr id='op" + (data[v].virt == "1" ? 'v' : 'r') + data[v].id
+            tr += "<tr id='op" + (_journal[v].virt == "1" ? 'v' : 'r') + _journal[v].id
                 + "' value='" + v
                 + "' moneyCur='" + curMoney.toString()
-                + "' trId='" + data[v].tr_id
-                + "' account='" + data[v].account_name
+                + "' trId='" + _journal[v].tr_id
+                + "' account='" + _journal[v].account_name
                 + "'>"
                     + "<td class='check'>"
                     + "<input type='checkbox' /></td>"
-                    + '<td class="light">'+data[v].date.substr(0, 5)+'</td>';
+                    + '<td class="light">'+_journal[v].date.substr(0, 5)+'</td>';
 
             tr += '<td class="light"><span>'+'<div class="operation ' + tp + '"></div>'+'</span></td>'
 
                 // @fixme: отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
-                //if (data[v].transfer != _account && data[v].transfer != 0){
-                //    tr += '<td class="summ '+ (-data[v].money>=0 ? 'sumGreen' : 'sumRed') +'"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
+                //if (_journal[v].transfer != _account && _journal[v].transfer != 0){
+                //    tr += '<td class="summ '+ (-_journal[v].money>=0 ? 'sumGreen' : 'sumRed') +'"><span><b>'+formatCurrency(-_journal[v].money)+'</b></span></td>'
                 //} else {
                     // если перевод осуществляется между счетами с разными валютами,
                     // то в переменной imp_id хранится сумма в валюте целевого счёта
-                    if (data[v].imp_id == null)
-                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].money)+'&nbsp;</b></span></td>'
+                    if (_journal[v].imp_id == null)
+                        tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(_journal[v].money)+'&nbsp;</b></span></td>'
                     else
-                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].imp_id)+'&nbsp;</b></span></td>'
+                        tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(_journal[v].imp_id)+'&nbsp;</b></span></td>'
                 //}
 
-                tr += '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
-                + '<td class="big">'+ (data[v].comment ? shorter(data[v].comment, 24) : '&nbsp;')
+                tr += '<td class="big"><span>'+ ((_journal[v].cat_name == null)? '' : _journal[v].cat_name) +'</span></td>'
+                + '<td class="big">'+ (_journal[v].comment ? shorter(_journal[v].comment, 24) : '&nbsp;')
                     +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                     +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                     +'<li class="del"><a title="Удалить">Удалить</a></li>'
@@ -439,6 +444,10 @@ easyFinance.widgets.operationsJournal = function(){
         $("#dateFrom, #dateTo").datepicker({dateFormat: 'dd.mm.yy'});
 
         $('#btn_ReloadData').click(loadJournal);
+
+	$('#btn_CSV').click(loadJournal_CSV);
+
+
         // #874. Обновляем данные об остатках на счетах
         // после добавления операции
         //$(document).bind('operationAdded', loadJournal);
@@ -582,8 +591,19 @@ easyFinance.widgets.operationsJournal = function(){
 
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
+	_search_field = $("#search_field").val();
+	
+        _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, false);
+    }
 
-        _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _showInfo);
+    function loadJournal_CSV() {
+        _printFilters();
+
+        _dateFrom = $('#dateFrom').val();
+        _dateTo = $('#dateTo').val();
+	_search_field = $("#search_field").val();
+
+        _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, true);
     }
 
     // reveal some private things by assigning public pointers

@@ -38,11 +38,25 @@
                                                 по
                                                 <input type="text" id="dateTo" value="{$dateTo}" size="9"/>
                                             </div>
+                                            <div class="f_field">
+                                                Поиск по меткам и комментариям:
+                                                <input type="text" id="search_field" size="30"/>
+                                            </div>
 
-                                            <input type="button" value="Показать" id="btn_ReloadData"/><br/>
-                                                                                    <div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
+                                            <input type="button" value="Показать" id="btn_ReloadData"/>
+											<input type="button" value="CSV" id="btn_CSV"/>
+															<br/>
+									<div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
                                                                             </div>
                                     </div>
+                                            <div class="f_field">
+                                                <b>Баланс до:</b>
+                                                <span type="text" id="balance_before" size="30"></span>
+                                            </div>
+                                            <div class="f_field">
+                                                <b>Баланс после:</b>
+                                                <span type="text" id="balance_after" size="30"></span>
+                                            </div>								
 
                                 </form>
 
