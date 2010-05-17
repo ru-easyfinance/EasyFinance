@@ -128,6 +128,10 @@ easyFinance.models.currency = function(){
         );
 	}
 
+    function convertToDefault(amount, currency){
+        return amount * getCurrencyRelativeCost(currency, _defaultCurrencyId);
+    }
+
     return {
         load : load,
         getDefaultCurrency : getDefaultCurrency,
@@ -141,6 +145,7 @@ easyFinance.models.currency = function(){
         getCurrencyCostById: getCurrencyCostById,
         getCurrencyRelativeCost: getCurrencyRelativeCost,
         setCurrency : setCurrency,
-		loadAllCurrency : loadAllCurrency
+		loadAllCurrency : loadAllCurrency,
+        convertToDefault: convertToDefault
     };
 }();

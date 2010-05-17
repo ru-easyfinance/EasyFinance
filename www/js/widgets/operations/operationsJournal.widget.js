@@ -92,26 +92,28 @@ easyFinance.widgets.operationsJournal = function(){
 
             tr += '<td class="light"><span>'+'<div class="operation ' + tp + '"></div>'+'</span></td>'
 
-                // @fixme: отвалился перевод в связи с изменением журнала счетов $('#op_account :selected').val()
-                //if (data[v].transfer != _account && data[v].transfer != 0){
-                //    tr += '<td class="summ '+ (-data[v].money>=0 ? 'sumGreen' : 'sumRed') +'"><span><b>'+formatCurrency(-data[v].money)+'</b></span></td>'
-                //} else {
-                    // если перевод осуществляется между счетами с разными валютами,
-                    // то в переменной imp_id хранится сумма в валюте целевого счёта
-                    if (data[v].imp_id == null)
-                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].money)+'&nbsp;</b></span></td>'
-                    else
-                        tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+formatCurrency(data[v].imp_id)+'&nbsp;</b></span></td>'
-                //}
+            // если перевод осуществляется между счетами с разными валютами,
+            // то в переменной imp_id хранится сумма в валюте целевого счёта
+            var money = (data[v].imp_id == null) ? data[v].money : data[v].imp_id;
 
-                tr += '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
-                + '<td class="big">'+ (data[v].comment ? shorter(data[v].comment, 24) : '&nbsp;')
-                    +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
-                    +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
-                    +'<li class="del"><a title="Удалить">Удалить</a></li>'
-                    +'<li class="add"><a title="Копировать">Копировать</a></li>'
-                    +'</ul></div>'
-                +'</td></tr>';
+            // #1361. Если выводим все счета,
+            // то приводим суммы к валюте по умолчанию
+            var strMoney = '';
+            if (_account == '') {
+                money = easyFinance.models.currency.convertToDefault(money, data[v].account_currency_id);
+            }
+            strMoney = formatCurrency(money);
+
+            tr += '<td class="summ ' + (data[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+strMoney+'&nbsp;</b></span></td>'
+
+            tr += '<td class="big"><span>'+ ((data[v].cat_name == null)? '' : data[v].cat_name) +'</span></td>'
+            + '<td class="big">'+ (data[v].comment ? shorter(data[v].comment, 24) : '&nbsp;')
+                +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
+                +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
+                +'<li class="del"><a title="Удалить">Удалить</a></li>'
+                +'<li class="add"><a title="Копировать">Копировать</a></li>'
+                +'</ul></div>'
+            +'</td></tr>';
         }
         
         // Очищаем таблицу
