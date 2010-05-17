@@ -290,8 +290,8 @@
                             <input type="hidden" name="step_name" value="contacts" />
 
                             <div class="fld_holder">
-                                <label for="wz_phone_home">Телефон домашний <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_phone_home" id="wz_phone_home" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <label for="wz_phone_home">Телефон домашний</label><br />
+                                <input type="text" name="wz_phone_home" id="wz_phone_home" value="" maxlength="255" /><br /><br />
                             </div>
 
                             <div class="fld_holder">
@@ -377,13 +377,43 @@
                             </div>
 
                             <div class="fld_holder">
-                                Тип карты <span class="wz_req_fld">*</span><br />
-                                <input type="radio" name="wz_card_type" id="wz_card_type_0" value="0" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_0">VISA Gold</label><br />
-                                <input type="radio" name="wz_card_type" id="wz_card_type_1" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_1">VISA Classic</label><br />
-                                <input type="radio" name="wz_card_type" id="wz_card_type_2" value="2" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_2">VISA Classic Unembossed</label><br />
-                                <input type="radio" name="wz_card_type" id="wz_card_type_3" value="3" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_3">VISA Platinum</label><br />
-                                <input type="radio" name="wz_card_type" id="wz_card_type_4" value="4" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_4">MasterCard Gold</label><br />
-                                <input type="radio" name="wz_card_type" id="wz_card_type_5" value="5" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_5">MasterCard Standard</label><br />
+                                <table id="tblAmtCards">
+                                    <tr style="font-weight: bold;">
+                                        <td>Тип карты <span class="wz_req_fld">*</span></td>
+                                        <td>Стоимость годового обслуживания</td>
+                                        <td>Первоначальный взнос<br>на&nbsp;карту</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="wz_card_type" id="wz_card_type_0" value="0" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_0">VISA Gold</label><br /></td>
+                                        <td>150 руб. /5$ /4€</td>
+                                        <td>5000 руб. /145$ /115€</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="wz_card_type" id="wz_card_type_1" value="1" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_1">VISA Classic</label><br /></td>
+                                        <td>150 руб. /5$ /4€</td>
+                                        <td>800 руб./ 25$/ 20€</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="wz_card_type" id="wz_card_type_2" value="2" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_2">VISA Classic Unembossed</label><br /></td>
+                                        <td>150 руб. /5$ /4€</td>
+                                        <td>150 руб. /5$ /4€</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="wz_card_type" id="wz_card_type_3" value="3" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_3">VISA Platinum</label><br /></td>
+                                        <td>6500 руб./185$ /145€</td>
+                                        <td>равен стоимости обслуживания</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="wz_card_type" id="wz_card_type_4" value="4" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_4">MasterCard Gold</label><br /></td>
+                                        <td>150 руб. /5$ /4€</td>
+                                        <td>5000 руб. /145$ /115€</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" name="wz_card_type" id="wz_card_type_5" value="5" onclick="dValidator.catchOnChange(this, null, 2);" onblur="dValidator.catchOnChange(this, null, 2);" /> <label for="wz_card_type_5">MasterCard Standard</label><br /></td>
+                                        <td>150 руб. /5$ /4€</td>
+                                        <td>800 руб./ 25$/ 20€</td>
+                                    </tr>
+                                </table>
                                 <br />
                             </div>
 

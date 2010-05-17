@@ -17,7 +17,7 @@
                     {/if}
                 </div>
                 <div id="integrationSteps">
-                    <h3><a href="#">1. {if $user_info.user_id > 0}Войти в систему - уже вошли{else}Зарегистрироваться или войти{/if}</a></h3>
+                    <h3><a id="integrationStep1" href="#" {if $user_info.user_id > 0}class="complete"{/if}>1. {if $user_info.user_id > 0}Войти в систему - готово!{else}Зарегистрироваться или войти{/if}</a></h3>
                     <div>
                         {if $user_info.user_id > 0}
                             <div>Блок для авторизованных пользователей</div><br>
@@ -32,7 +32,7 @@
                             </div>
                         {/if}
                     </div>
-                    <h3><a href="#">2. Создать E-Mail</a></h3>
+                    <h3><a id="integrationStep2" href="#">2. Создать E-Mail</a></h3>
                     <div>
                         <div id="integration" class="profile" style="display:block">
                             <div id="content" class="inside form">
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                    <h3><a href="#">3. Задать счет для интеграции</a></h3>
+                    <h3><a id="integrationStep3" href="#">3. Задать счет для интеграции</a></h3>
                     <div>
                         <!-- <div>Здесь инструкция</div><br> -->
                         <div>
@@ -83,7 +83,7 @@
 
                         </div>
                     </div>
-                    <h3><a href="#">4. Заполнить и распечатать анкету</a></h3>
+                    <h3><a id="integrationStep4" href="#">4. Заполнить и распечатать анкету</a></h3>
                     <div>
                         <button id='btnBackToAccount' style="font-weight: bold">Назад</button><br><br>
                         {include file="integration/amt-wizard.html"}

@@ -61,8 +61,10 @@ dValidatorClass.prototype.catchOnBlur = function(input) {
     }
 }
 
-dValidatorClass.prototype.catchOnChange = function(input, fakeField, alertType) {    this.toggleForm(input.form);
-    this.form = input.form;    this.validatingAllFields = false;
+dValidatorClass.prototype.catchOnChange = function(input, fakeField, alertType) {
+    this.toggleForm(input.form);
+    this.form = input.form;
+    this.validatingAllFields = false;
 
     if (alertType && (typeof(alertType) != 'undefined')) {
         this.alertType = alertType;
@@ -333,6 +335,18 @@ dValidatorClass.prototype.checkFieldMain = function(input, type) {
                 return ((input.value.length >= this.params.from) && this.reAlnumEn.test(input.value));
             }
             return this.reAlnumEn.test(input.value);
+            break;
+        case 'enalpha':
+            if ((this.params.to != null) && (this.params.to != '') && !isNaN(this.params.to)) {
+                if ((this.params.from != null) && (this.params.from != '') && !isNaN(this.params.from)) {
+                    return ((input.value.length >= this.params.from) && (input.value.length <= this.params.to) && this.reAlphaEn.test(input.value));
+                } else {
+                    return ((input.value.length <= this.params.to) && this.reAlphaEn.test(input.value));
+                }
+            } else if ((this.params.from != null) && (this.params.from != '') && !isNaN(this.params.from)) {
+                return ((input.value.length >= this.params.from) && this.reAlphaEn.test(input.value));
+            }
+            return this.reAlphaEn.test(input.value);
             break;
         case 'rualpha':
             if ((this.params.to != null) && (this.params.to != '') && !isNaN(this.params.to)) {
@@ -631,10 +645,12 @@ dValidatorClass.prototype.simulateInclusionOf = function(input) {
     return false;
 }
 
-dValidatorClass.prototype.existsCheck = function(input) {    if (!this.reBlank.test(input.value)) {
+dValidatorClass.prototype.existsCheck = function(input) {
+    if (!this.reBlank.test(input.value)) {
         this.lockForm();
 
-        $.ajax({            type: 'GET',
+        $.ajax({
+            type: 'GET',
             url: this.existsCheckUrl + '&model=' + this.params.model + '&id=' + input.value + '&for_field=' + input.name,
             dataType: 'json',
             cache: false,
@@ -648,21 +664,36 @@ dValidatorClass.prototype.existsCheck = function(input) {    if (!this.reBlank.
     return false;
 }
 
-dValidatorClass.prototype.catchExistsCheckSuccess = function(data) {    var res = false;
+dValidatorClass.prototype.catchExistsCheckSuccess = function(data) {
+    var res = false;
 
-    if (data && (typeof(data) != 'undefined') && (typeof(data.forField) != 'undefined') && (data.forField != '')) {        res = data.exists;    } else {        //If server returned something wrong, validation will be his his problem
-        res = true;    }
+    if (data && (typeof(data) != 'undefined') && (typeof(data.forField) != 'undefined') && (data.forField != '')) {
+        res = data.exists;
+    } else {
+        //If server returned something wrong, validation will be his his problem
+        res = true;
+    }
     dValidator.unlockForm();
 
-    if (res) {        if (dValidator.form[data.forField] && (typeof(dValidator.form[data.forField]) != 'undefined')) {
+    if (res) {
+        if (dValidator.form[data.forField] && (typeof(dValidator.form[data.forField]) != 'undefined')) {
             dValidator.makeCorrect(dValidator.form[data.forField]);
         }
-        if (dValidator.validatingAllFields) {            dValidator.existsCheckPassed[data.forField] = true;
+
+        if (dValidator.validatingAllFields) {
+            dValidator.existsCheckPassed[data.forField] = true;
             if (dValidator.validateForm(dValidator.form)) {
                 dValidator.form.submit();
-            }        }    } else {        if (dValidator.form[data.forField] && (typeof(dValidator.form[data.forField]) != 'undefined')) {            dValidator.makeIncorrect(dValidator.form[data.forField]);
-        } else {            //2DO: What should we do???
-            //alert('Nothing to hilight!');        }    }
+            }
+        }
+    } else {
+        if (dValidator.form[data.forField] && (typeof(dValidator.form[data.forField]) != 'undefined')) {
+            dValidator.makeIncorrect(dValidator.form[data.forField]);
+        } else {
+            //2DO: What should we do???
+            //alert('Nothing to hilight!');
+        }
+    }
 }
 
 dValidatorClass.prototype.catchExistsCheckError = function() {
@@ -860,18 +891,21 @@ dValidatorClass.prototype.toInt = function(val, radix) {
     return 0;
 }
 
-dValidatorClass.prototype.validateForm = function(form, alertType) {    this.toggleForm(form);
+dValidatorClass.prototype.validateForm = function(form, alertType) {
+    this.toggleForm(form);
 
     this.validatingAllFields = true;
 
-    if (this.formIsLocked) {        //alert('Генацвали, нэ тарапыся!');
+    if (this.formIsLocked) {
+        //alert('Генацвали, нэ тарапыся!');
         return false;
     } else {
         return this.validateFormMain(form, alertType);
     }
 }
 
-dValidatorClass.prototype.validateFormMain = function(form, alertType) {    this.toggleForm(form);
+dValidatorClass.prototype.validateFormMain = function(form, alertType) {
+    this.toggleForm(form);
 
     if (alertType && (typeof(alertType) != 'undefined')) {
         this.alertType = alertType;
@@ -954,7 +988,14 @@ dValidatorClass.prototype.validateFormMain = function(form, alertType) {    thi
     return (ok && !this.formIsLocked);
 }
 
-dValidatorClass.prototype.toggleForm = function(frm) {    if (frm && (typeof(frm) != 'undefined') && ((typeof(frm.name) == 'undefined') || (frm.name == ''))) {        if (frm.id && (typeof(frm.id) != 'undefined')) {            frm.name = frm.id;        } else {            frm.name = '';        }    }
+dValidatorClass.prototype.toggleForm = function(frm) {
+    if (frm && (typeof(frm) != 'undefined') && ((typeof(frm.name) == 'undefined') || (frm.name == ''))) {
+        if (frm.id && (typeof(frm.id) != 'undefined')) {
+            frm.name = frm.id;
+        } else {
+            frm.name = '';
+        }
+    }
 }
 
 dValidatorClass.prototype.lockForm = function() {

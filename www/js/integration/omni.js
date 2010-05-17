@@ -187,13 +187,13 @@ function wsInitValidator() {
 	};
 
 	dValidator.validatableElems['personal_info']['wz_surname_translit'] = {
-		'validationType' : 'blank',
+		'validationType' : 'enalpha',
 		'errMsg' : '',
 		'params' : {}
 	};
 
 	dValidator.validatableElems['personal_info']['wz_name_translit'] = {
-		'validationType' : 'blank',
+		'validationType' : 'enalpha',
 		'errMsg' : '',
 		'params' : {}
 	};
@@ -326,12 +326,6 @@ function wsInitValidator() {
 
 	dValidator.validatableElems['contacts'] = new Array();
 
-	dValidator.validatableElems['contacts']['wz_phone_home'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
-
 	dValidator.validatableElems['contacts']['wz_mail'] = {
 		'validationType' : 'mail',
 		'errMsg' : '',
@@ -399,7 +393,7 @@ function wsInitValidator() {
 	dValidator.validatableElems['finish'] = new Array();
 
 	dValidator.validatableElems['finish']['wz_password'] = {
-		'validationType' : 'blank',
+		'validationType' : 'rualpha',
 		'errMsg' : '',
 		'params' : {}
 	};

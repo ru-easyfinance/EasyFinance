@@ -18,6 +18,21 @@
     font-size: large;
 }
 
+#integrationSteps a.complete {
+    color: #CCCCCC;
+}
+
+#tblAmtCards td {
+    padding: 2px;
+}
+
+#tblAmtCards input {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+
 #integrationSteps #registration {
     display: none;
 }
