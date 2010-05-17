@@ -34,17 +34,40 @@ class Promo_Tks_Controller extends _Core_Controller
                 session_start();
             }
 
-            $data['user_id'] = Core::getInstance()->user->getId();
-            $model = new Promo_Tks_Model($data);
+            $isAuth = (Core::getInstance()->user->getId()) ? "Авторизирован" : "Не авторизирован";
+            Logs::write(new User(), 'tks_anketa', $isAuth);
 
-            //@TODO Переписать вывод сообщений в новом формате JSON
-            if ($model->save()) {
-                die(json_encode(array('result'=>'Всё нормально')));
+            if ($this->_sendData()) {
+                $this->renderJsonSuccess('OK');
             } else {
-                die(json_encode(array('error'=>'Ошибка при сохранении')));
+                $this->renderJsonError('Error');
             }
-
         }
+    }
+
+
+    /**
+     * Отправляем данные
+     */
+    function _sendData()
+    {
+        $body = "Фамилия:\t\t"   . @$_POST['surname']."\n".
+            "Имя:\t\t\t\t"       . @$_POST['name']."\n".
+            "Отчество:\t\t"      . @$_POST['patronymic']."\n".
+            "Телефон:\t\t"       . @$_POST['phone']."\n".
+            "Авторизирован:\t\t" . (Core::getInstance()->user->getId()?"Да":"Нет");
+
+        $message = Swift_Message::newInstance()
+            // Заголовок
+            ->setSubject(date('r'))
+            // От кого
+            ->setFrom('support@easyfinance.ru')
+            // Говорим "Кому"
+            ->setTo('outeref@gmail.com')
+            // Устанавливаем "Тело"
+            ->setBody($body, 'text/plain');
+
+        return Core::getInstance()->mailer->send($message);
     }
 
 }
