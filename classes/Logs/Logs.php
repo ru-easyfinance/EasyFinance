@@ -1,8 +1,8 @@
 <?php
 /**
- * Класс для учёта статистики загрузок
+ * Класс для учёта статистики
  */
-class Downloads
+class Logs
 {
     /**
      * Записывает в базу
@@ -10,11 +10,11 @@ class Downloads
      * @param User $user
      * @param string $type 'amt' или 'book'
      * @param string $info Расширенная информация
-     * @return void
+     * @return bool
      */
     static public function write(User $user, $type, $info='')
     {
-        $sql = "INSERT INTO downloads(`user_id`, `type`, `dt`, `info`) VALUES(?, ?, NOW(), ?)";
-        return Core::getInstance()->db->query($sql, $user->getId(), $type, $info);
+        $sql = "INSERT INTO logs(`user_id`, `type`, `dt`, `info`) VALUES(?, ?, NOW(), ?)";
+        return (bool)Core::getInstance()->db->query($sql, $user->getId(), $type, $info);
     }
 }
