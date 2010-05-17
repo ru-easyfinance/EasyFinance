@@ -626,8 +626,15 @@ easyFinance.widgets.operationEdit = function(){
                         return false;
                 }
             } else if (opType == "2") {
+                // для переводов
+
                 if (_selectedTransfer == '') {
                     $.jGrowl('Укажите счёт для перевода!', {theme: 'red', stick: true});
+                    return false;
+                }
+
+                if (_selectedAccount == _selectedTransfer) {
+                    $.jGrowl('Счёт-отправитель и счёт-получатель должны различаться!', {theme: 'red', stick: true});
                     return false;
                 }
             } else if (opType == "4") {
