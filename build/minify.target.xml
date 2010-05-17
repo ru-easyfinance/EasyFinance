@@ -9,7 +9,7 @@
                 <mkdir dir="${project.js.root}tmp" />
 
                 <append destFile="${project.js.root}tmp/global.js">
-                    <filelist dir="${project.basedir}/www/js/" listfile="include/js/global.list"/>
+                    <filelist dir="${project.basedir}/www/js/" listfile="include/assets/js.list"/>
                 </append>
 
                 <stubjsmin jsminpath="external/jsmin-1.1.1.php" targetdir="${project.js.root}">
@@ -30,48 +30,9 @@
                 <mkdir dir="${project.css.root}tmp" />
 
                 <append destFile="${project.css.root}tmp/global.css">
-                    <fileset dir="${project.css.root}jquery/">
-                        <include name="jquery.rw-calculator.css" />
-                        <include name="jquery.jgrowl.css" />
-                        <include name="jquery.jHtmlArea.css" />
-                        <include name="jquery.jHtmlArea.ColorPickerMenu.css" />
-                        <include name="fullcalendar.css" />
-                        <include name="fancy.css" />
-                        <include name="ufd-base.css" />
-                        <include name="ufd-plain.css" />
-                    </fileset>
-                    <fileset dir="${project.css.root}jquery/south-street/">
-                        <include name="ui.core.css" />
-                        <include name="ui.resizable.css" />
-                        <include name="ui.dialog.css" />
-                        <include name="ui.tabs.css" />
-                        <include name="ui.datepicker.css" />
-                        <include name="ui.accordion.css" />
-                    </fileset>
-                    <fileset dir="${project.css.root}">
-                        <include name="main.css" />
-                        <include name="menuUser.css" />
-                        <include name="dialogBox.css" />
-                        <include name="efTable.css" />
-                        <include name="calendar.css" />
-                        <include name="calendarOverdue.css" />
-                        <include name="calendarLeft.css" />
-                        <include name="report.css" />
-                        <include name="expert.css" />
-                        <include name="expertsList.css" />
-                        <include name="profile.css" />
-                        <include name="categoriesJournal.css" />
-                        <include name="operationsJournal.css" />
-                        <include name="budgetMaster.css" />
-                        <include name="budget.css" />
-                        <include name="accountsPanel.css" />
-                        <include name="accountsJournal.css" />
-                    </fileset>
-                    <fileset dir="${project.css.root}screens/">
-                        <include name="integration.screen.css" />
-                        <include name="promoTKS.screen.css" />
-                    </fileset>
+                    <filelist dir="${project.basedir}/www/css/" listfile="include/assets/css.list"/>
                 </append>
+
                 <stubcssmin cssminpath="external/cssmin-v1.0.0.php" targetdir="${project.css.root}">
                     <fileset dir="${project.css.root}tmp/">
                         <include name="global.css" />
