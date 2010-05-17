@@ -94,9 +94,7 @@ class Integration_Controller extends _Core_Controller
 
             $data = $this->_preparePrintData();
 
-            $info = 'ФИО: ' .$data['wz_surname'] .' '. $data['wz_name'] .' '. $data['wz_midname']. "\n" .
-                'e-mail: ' . $data['wz_mail'] .' моб. тел.: ' . $data['wz_phone_mob'];
-            Logs::write(Core::getInstance()->user, 'amt', $info);
+            Logs::write(Core::getInstance()->user, 'amt', null);
 
             require_once(SYS_DIR_ROOT.'/core/external/pdfAmt/pdf.lib.php');
             createPDF(
