@@ -1251,7 +1251,7 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 
 ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/icons.gif') no-repeat -20px -370px; }
 
-#popupreport { display: none; position: fixed; top: 20%; left: 0px; width: 450px; height: 450px; z-index: 1000; }
+#popupreport { display: none; position: fixed; top: 10%; left: 40px; width: 450px; height: 450px; z-index: 1000; }
 #popupreport .bg { position: absolute; top: 0; left: 0; width: 450px; height: 450px; z-index: 0; background: url('/img/i/ramka4.png') no-repeat 0 0; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/i/ramka4.png", sizingMethod="crop"); }
 #popupreport .inside { position: relative; padding: 18px 0 0 35px; z-index: 2; }
 #popupreport .inside h2 { margin-bottom: 5px; font-size: 16px; color: #2bb4d6; font-weight: bold; background: url('/img/i/icons.gif') no-repeat 132px -545px; }

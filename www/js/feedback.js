@@ -48,7 +48,7 @@ function getClientPlugins(){
 
         $('#footer #popupreport').hide();
 
-        $('#btnFeedback').click(function(){
+        $('#btnFeedback, #footerAddMessage').click(function(){
             $('#popupreport').show();
         });
 
