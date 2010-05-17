@@ -139,9 +139,16 @@ table#operations_list td + td + td + td + td + td{
 #operations_list div.transfer { background-position: -32px 0px; }
 #operations_list div.target { background-position: -48px 0px; }
 
+#dateTo {
+/*    margin-right: 40px;*/
+    !margin-right: 40px;
+}
+
 #btn_CSV {
-    float:right;
-/*    margin-right:30px;*/
+    float: right;
+    !float: none;
+    position: relative;
+    !margin-left:50px;
 }
 
 /*.f_field b, #divOperationsJournalTotal b {
@@ -150,17 +157,22 @@ table#operations_list td + td + td + td + td + td{
 }*/
 
 #btn_ReloadData {
-    margin-left:58px;
-/*    margin-right:32px;*/
+    position:relative;
+    margin-left:60px;
+    !margin-left:0px;
 }
 
-#search_field {
+*:first-child+html #search_field {
     float:right;
     height:30px;
 /*    margin-left:10px;*/
     margin-top:-14px;
 /*    position:absolute;*/
     width:428px;
+}
+
+#search_field {
+    margin-top:-35px;
 }
 
 #dateFrom {

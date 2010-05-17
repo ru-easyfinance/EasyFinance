@@ -38,11 +38,13 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
             $content .= "\r\n";
         }
 
-        header("content-type: text/plain");
+        header("content-type: plain/text");
         header('content-disposition: attachment; filename="'.$filename.'"');
         header("content-Transfer-Encoding: binary");
-        header("Pragma: no-cache");
         header("Expires: 0");
+        header("Expires: 0");
+        header("Cache-Control: private");
+        header("Pragma: cache");
         echo $content;
     }
 }
