@@ -227,7 +227,8 @@ easyFinance.widgets.operationEdit = function(){
         // кнопка расчёта суммы TODO
         _$node.find('#btnCalcSum').click(function(){
             var $field = $("#op_amount");
-            $field.val(calculate($field.val()));
+            if ($field.val() != '')
+                $field.val(calculate($field.val()));
 			$.rwCalculator.node = $field;
 			$.rwCalculator.functions.show.call($field);
         });
@@ -235,7 +236,8 @@ easyFinance.widgets.operationEdit = function(){
         // кнопка расчёта суммы для поля перевода
         _$node.find('#btnCalcSumTransfer').click(function(){
             var $field = $("#op_transfer");
-            $field.val(calculate($field.val()));
+            if ($field.val() != '')
+                $field.val(calculate($field.val()));
 			$.rwCalculator.node = $field;
 			$.rwCalculator.functions.show.call($field);
         });
