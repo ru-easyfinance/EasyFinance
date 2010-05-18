@@ -167,6 +167,14 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
+    function _showCalc(selector) {
+        var $field = $(selector);
+        if ($field.val() != '')
+            $field.val(calculate($field.val()));
+        $.rwCalculator.node = $field;
+        $.rwCalculator.functions.show.call($field);
+    }
+
     function _initForm(){
         _buttonsNormal = {
             "Отмена": function() {
@@ -226,20 +234,12 @@ easyFinance.widgets.operationEdit = function(){
 
         // кнопка расчёта суммы TODO
         _$node.find('#btnCalcSum').click(function(){
-            var $field = $("#op_amount");
-            if ($field.val() != '')
-                $field.val(calculate($field.val()));
-			$.rwCalculator.node = $field;
-			$.rwCalculator.functions.show.call($field);
+            _showCalc("#op_amount");
         });
 
         // кнопка расчёта суммы для поля перевода
         _$node.find('#btnCalcSumTransfer').click(function(){
-            var $field = $("#op_transfer");
-            if ($field.val() != '')
-                $field.val(calculate($field.val()));
-			$.rwCalculator.node = $field;
-			$.rwCalculator.functions.show.call($field);
+            _showCalc("#op_transfer");
         });
 
     	$('#op_amount,#op_transfer').rwCalculator();
