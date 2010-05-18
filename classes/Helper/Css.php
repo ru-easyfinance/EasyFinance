@@ -4,16 +4,12 @@ class Helper_Css implements _Core_Router_iHook
 {
     public static function execRouterHook( _Core_Request $request, &$class, &$method, array &$chunks, &$templateEngine )
     {
-        if( CSS_MINIFY ) {
+        if (CSS_MINIFY) {
             $templateEngine->append('css', 'global-min.css');
         } else {
-            foreach ( file( SYS_DIR_INC . 'assets/css.list') as $css )
-            {
+            foreach (file(SYS_DIR_INC . 'assets/css.list') as $css) {
                 $templateEngine->append('css', $css);
             }
-
-            // не нашел эту строку в билде :-(
-            // $templateEngine->append('css', 'jquery/south-street/ui.all.css');
         }
     }
 }
