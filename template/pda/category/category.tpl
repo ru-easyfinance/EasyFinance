@@ -2,13 +2,13 @@
 // Определяем класс для подсветки цветом
 switch($categorysType)
 {
-	case Category::TYPE_PROFIT:
-		$linkStyle = 'green';break;
-	case Category::TYPE_WASTE:
-		$linkStyle = 'red';break;
-	case Category::TYPE_UNIVERSAL:
-	default:
-		$linkStyle = '';break;
+    case Category::TYPE_PROFIT:
+        $linkStyle = 'green';break;
+    case Category::TYPE_WASTE:
+        $linkStyle = 'red';break;
+    case Category::TYPE_UNIVERSAL:
+    default:
+        $linkStyle = '';break;
 }
 function str_split_php4_utf8($str) {
     // place each character of the string into and array
@@ -76,58 +76,58 @@ function cutCategory($catname){
 }
 ?>
 <table cellspacing="0" cellpadding="0" class="wide"><tbody>
-	<tr>
-		<td class="wide"><strong>Категории</strong> <a href="/category/add/<?=$categorysType?>">добавить</a></td>
-		<td>&nbsp;</td>
-		<td align="right">&nbsp;</td>
-	</tr>
+    <tr>
+        <td class="wide"><strong>Категории</strong> <a href="/category/add/<?php echo $categorysType?>">добавить</a></td>
+        <td>&nbsp;</td>
+        <td align="right">&nbsp;</td>
+    </tr>
 </tbody></table>
 <div class="menu">
-	<a href="/category/waste" class="<?=($categorysType == Category::TYPE_WASTE)?'current':''?>">расход</a> | 
-	<a href="/category/profit" class="<?=($categorysType == Category::TYPE_PROFIT)?'current':''?>">доход</a> | 
-	<a href="/category/universal" class="<?=($categorysType == Category::TYPE_UNIVERSAL)?'current':''?>">универсальные</a>
+    <a href="/category/waste" class="<?php echo ($categorysType == Category::TYPE_WASTE)?'current':''?>">расход</a> | 
+    <a href="/category/profit" class="<?php echo ($categorysType == Category::TYPE_PROFIT)?'current':''?>">доход</a> | 
+    <a href="/category/universal" class="<?php echo ($categorysType == Category::TYPE_UNIVERSAL)?'current':''?>">универсальные</a>
 </div>
 <br />
 <table cellspacing="0" cellpadding="0" class="wide categories"><tbody>
-	<?php
-	$row = 1;
-	foreach( $res['category']['user'] as $category )
-	{
-		//Фильтруем по типу
-		if( $category['type'] != $categorysType && $category['visible'] )
-		{
-			continue;
-		}
-		
-		//Дочерние пропускаем, для построения дерева
-		if( $category['parent'] )
-		{
-			continue;
-		}
-		?>
-		<tr class="<?=($row % 2 == 1) ? 'odd' : 'even'?>">
-			<td class="wide"><a href="/category/edit/<?=$category['id']?>" class="<?=$linkStyle?>">
-			<?=$category['name']?></span></a></td>
-			<td><a href="/category/del/<?=$category['id']?>" class="red">X</a></td>
-		</tr>
-		<?php
-		$row++;
-		// foreach по причине правильного переключения указателей массива
-		foreach ( $res['category']['user'] as $categoryChild )
-		{
-			if( $categoryChild['parent'] != $category['id'] )
-			{
-				continue;
-			}
-			?>
-			<tr class="<?=($row % 2 == 1) ? 'odd' : 'even'?>">
-				<td class="wide childCategory"><a href="/category/edit/<?=$categoryChild['id']?>" class="<?=$linkStyle?>">
-				<?=cutCategory($categoryChild['name'])?></span></a></td>
-				<td><a href="/category/del/<?=$categoryChild['id']?>" class="red">X</a></td>
-			</tr>
-			<?php
-			$row++;
-		}
-	}
-	?>
+    <?php
+    $row = 1;
+    foreach( $res['category']['user'] as $category )
+    {
+        //Фильтруем по типу
+        if( $category['type'] != $categorysType && $category['visible'] )
+        {
+            continue;
+        }
+        
+        //Дочерние пропускаем, для построения дерева
+        if( $category['parent'] )
+        {
+            continue;
+        }
+        ?>
+        <tr class="<?php echo ($row % 2 == 1) ? 'odd' : 'even'?>">
+            <td class="wide"><a href="/category/edit/<?php echo $category['id']?>" class="<?php echo $linkStyle?>">
+            <?php echo $category['name']?></span></a></td>
+            <td><a href="/category/del/<?php echo $category['id']?>" class="red">X</a></td>
+        </tr>
+        <?php
+        $row++;
+        // foreach по причине правильного переключения указателей массива
+        foreach ( $res['category']['user'] as $categoryChild )
+        {
+            if( $categoryChild['parent'] != $category['id'] )
+            {
+                continue;
+            }
+            ?>
+            <tr class="<?php echo ($row % 2 == 1) ? 'odd' : 'even'?>">
+                <td class="wide childCategory"><a href="/category/edit/<?php echo $categoryChild['id']?>" class="<?php echo $linkStyle?>">
+                <?php echo cutCategory($categoryChild['name'])?></span></a></td>
+                <td><a href="/category/del/<?php echo $categoryChild['id']?>" class="red">X</a></td>
+            </tr>
+            <?php
+            $row++;
+        }
+    }
+    ?>
 </tbody></table>

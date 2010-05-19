@@ -56,7 +56,9 @@ abstract class _Core_Controller
 				'user_type' => $_SESSION['user']['user_type']
 			);
 			
-			$this->tpl->assign('user_info', $uar);
+			global $request;
+		        if (_Core_TemplateEngine::getResponseMode($request) == "json")
+				$this->tpl->assign('user_info', $uar);
 		}
 	}
 	
