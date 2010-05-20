@@ -105,10 +105,10 @@ class Report_Controller extends _Core_Controller_UserCommon
                 die(json_encode($this->_model->getBars($start, $end, $accounts, $currency)));
                 break;
             case 'txt_profit': //Детальные доходы
-                die(json_encode($this->_model->SelectDetailedIncome($start, $end, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->SelectDetailed(0, $start, $end, $accounts, $currency)));
                 break;
             case 'txt_loss': //Детальные расходы
-                die(json_encode($this->_model->SelectDetailedWaste($start, $end, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->SelectDetailed(1, $start, $end, $accounts, $currency)));
                 break;
             case 'txt_loss_difference': //Сравнение расходов за периоды
                 die(json_encode($this->_model->CompareWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );

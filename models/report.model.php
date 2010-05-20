@@ -20,6 +20,11 @@ class Report_Model
     private $_shortMonth;
 
     /**
+     * @var efCurrencyExchange
+     */
+    private $_ex = null;
+
+    /**
      * Конструктор
      * @return void
      */
@@ -58,6 +63,7 @@ class Report_Model
 
         $this->_db   = Core::getInstance()->db;
         $this->_user = Core::getInstance()->user;
+        $this->ex = sfConfig::get('ex');
     }
 
     /**
@@ -101,13 +107,14 @@ class Report_Model
     }
 
     /**
-     * Возвращает сформированный JSON для круговой диаграммы
+     * Доходы, Расходы
+     *
      * @param int $drain 0 - доход, 1 - расход
      * @param string mysqldate $start
      * @param string mysqldate $end
      * @param string | int $accounts Ид или список ид счетов через запятую. Например: 123,23,1234,324 или 34
      * @param int $currency - Ид валюты, в какой возвращать значения
-     * @return json
+     * @return array
      */
     function getPie ( $drain = 0, $start = '', $end = '', $account = 0, $currency_id = 0 )
     {
@@ -131,14 +138,13 @@ class Report_Model
 
         // Создаём чистый массив и наполняем его чистыми данными (конвертируя автоматом курс валюты)
         $result = array();
-        $ex = sfConfig::get('ex');
 
         foreach ($array as $key => $value ) {
 
             $result[ $key ]['cat'] = $value['cat'];
 
             $money = new efMoney(abs($value['money']), $value['cur_id']);
-            $amount = $ex->convert($money, $currency_id)->getAmount();
+            $amount = $this->ex->convert($money, $currency_id)->getAmount();
             
             if ( isset ( $result[ $key ]['money'] ) ) {
                 $result[ $key ]['money'] += $amount;
@@ -152,7 +158,7 @@ class Report_Model
     }
 
     /**
-     * Возвращает сформированный JSON для двойной диаграммы
+     * Сравнение расходов и доходов
      *
      * @param string mysqldate $start
      * @param string mysqldate $end
@@ -180,30 +186,31 @@ class Report_Model
 
         $result = $this->_db->select($sql, Core::getInstance()->user->getId(), $start, $end);
 
-        $currencies = $this->getCurrency( $this->_user );
-
         $sort = array();
 
         foreach($result as $value) {
 
-            if (isset($currencies[$currency_id]['value'])) {
-                // Сумма операции * курс валюты операции / итоговый курс
-                $money = $value['money'] * $currencies[$value['cur_id']]['value'] / $currencies[$currency_id]['value'];
-            } else {
-                throw new Exception("Currency #{$currency_id} not found");
-            }
+            $money = new efMoney(abs($value['money']), $value['cur_id']);
+            $amount = $this->ex->convert($money, $currency_id)->getAmount();
 
             // Доходы
             if ($value['drain'] == 0) {
-                $sort[$value['datef']]['in']  = $money;
+                if (isset($sort[$value['datef']]['in'])) {
+                    $sort[$value['datef']]['in']  += $amount;
+                } else {
+                    $sort[$value['datef']]['in']  = $amount;
+                }
 
             // Расходы
             } else {
-                $sort[$value['datef']]['was'] = $money;
+                if (isset($sort[$value['datef']]['was'])) {
+                    $sort[$value['datef']]['was'] += $amount;
+                } else {
+                    $sort[$value['datef']]['was'] = $amount;
+                }
             }
 
             $ts = strtotime($value['datef']);
-            $sort[$value['datef']]['curs'] = $currencies[ $currency_id ]['char_code'];
 
             // Если у нас период захватывает разные годы
             if (date("Y", strtotime($start)) == date("Y", strtotime($end))) {
@@ -214,118 +221,51 @@ class Report_Model
             }
         }
 
-        // Рисуем красивые заголовки
-        foreach($sort as $key => $value) {
-            if (count($sort) > 6) {
+        return array($sort);
+    }
+
+    /**
+     * Детальные доходы, Детальные расходы
+     *
+     * @param int $drain                0 - Доход, 1 - Расход
+     * @param string mysqldate $date1   Например: '2010-05-22'
+     * @param string mysqldate $date2   Например: '2010-05-22'
+     * @param int|string $accounts      Ид счёта, или ид счетов через запятую, по которым нужно выдать результат
+     * @param int $currency_id          Ид валюты, в которой ожидается результат
+     * @return array
+     */
+    function SelectDetailed($drain, $date1 = '', $date2 = '', $accounts = '', $currency_id = 0){
+
+        $sql = "SELECT c.cat_name, op.`date`, a.account_name, op.money, cur.cur_id
+                FROM operation op
+                LEFT JOIN accounts a ON a.account_id=op.account_id
+                LEFT JOIN category c ON c.cat_id=op.cat_id
+                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+                WHERE  op.drain=?  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
+                    AND c.cat_name <> '' AND a.account_id IN({$accounts})
+                    AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
+                ORDER BY c.cat_name";
+
+            $result = $this->_db->query($sql, $drain, $date1, $date2, $this->_user->getId());
+
+            foreach($result as $key => $value) {
+
+                $result[$key] = $value;
+
+                $money = new efMoney(abs($value['money']), $value['cur_id']);
+                $result[$key]['money'] = $this->ex->convert($money, $currency_id)->getAmount();
 
             }
-        }
 
-        return array(
-            $sort,
-            array(
-                array(
-                    "cur_char_code" =>
-                        isset( $sort[ 0 ]['curs'] )? $sort[ 0 ]['curs'] : ''
-                    )
-                )
-        );
-
-
+        return array($result);
     }
 
-    function SelectDetailedIncome($date1='', $date2='', $account='', $cursshow='', $acclist=''){
-        $arr = array();
-        if ($account != null) {
-        $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code,cur.cur_id
-            FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.accepted=1 AND op.user_id= ?
-            AND a.account_id=? AND op.money>0 AND c.cat_name <> ''
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            ORDER BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account);
-        } else{
-        $sql = "SELECT op.id, c.cat_name, op.`date`,
-            a.account_name, op.money, cur.cur_char_code, cur.cur_id
-            FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND op.money>0 AND c.cat_name <> '' AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            ORDER BY c.cat_name";
-            $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId());
-        }
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $arr[1] = $this->_db->query($sql, $cursshow);
-        return $arr;
-        }
 
-
-    function SelectDetailedWaste($date1='', $date2='', $account='', $cursshow='', $acclist=''){
-        $arr = array();
-        if ($account != null) {
-        $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id
-            FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=? AND c.cat_name <> ''
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            ORDER BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account);
-        } else{
-        $sql = "SELECT op.id, c.cat_name, op.`date`,
-                                    a.account_name, op.money, cur.cur_char_code, cur.cur_id
-            FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND c.cat_name <> '' AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            ORDER BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId());
-        }
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $arr[1] = $this->_db->query($sql, $cursshow);
-        return $arr;
-    }
-
+    /**
+     * Сравнение расходов за периоды
+     */
     function CompareWaste($date1='', $date2='', $date3='', $date4='', $account='', $cursshow='', $acclist=''){
         $arr = array();
-        if ($account != 0) {
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=? AND cur_char_code is not null
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=? AND cur_char_code is not null
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
-        }else{
         $sql = "
             SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
@@ -347,7 +287,6 @@ class Report_Model
             AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
             GROUP BY c.cat_name";
         $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
-        }
         $sql = "SELECT cur_char_code FROM currency
             WHERE cur_id = ?";
         $arr[1] = $this->_db->query($sql, $cursshow);
