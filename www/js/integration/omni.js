@@ -169,19 +169,19 @@ function wsInitValidator() {
 	dValidator.validatableElems['personal_info'] = new Array();
 
 	dValidator.validatableElems['personal_info']['wz_surname'] = {
-		'validationType' : 'blank',
+		'validationType' : 'rualpha',
 		'errMsg' : '',
 		'params' : {}
 	}
 
 	dValidator.validatableElems['personal_info']['wz_name'] = {
-		'validationType' : 'blank',
+		'validationType' : 'rualpha',
 		'errMsg' : '',
 		'params' : {}
 	};
 
 	dValidator.validatableElems['personal_info']['wz_midname'] = {
-		'validationType' : 'blank',
+		'validationType' : 'rualpha',
 		'errMsg' : '',
 		'params' : {}
 	};
@@ -225,13 +225,13 @@ function wsInitValidator() {
 	dValidator.validatableElems['registration_address'] = new Array();
 
 	dValidator.validatableElems['registration_address']['wz_reg_country'] = {
-		'validationType' : 'blank',
+		'validationType' : 'rualpha',
 		'errMsg' : '',
 		'params' : {}
 	};
 
 	dValidator.validatableElems['registration_address']['wz_reg_index'] = {
-		'validationType' : 'blank',
+		'validationType' : 'integer',
 		'errMsg' : '',
 		'params' : {}
 	};
@@ -243,7 +243,7 @@ function wsInitValidator() {
 	};
 
 	dValidator.validatableElems['registration_address']['wz_reg_city'] = {
-		'validationType' : 'blank',
+		'validationType' : 'rualpha',
 		'errMsg' : '',
 		'params' : {}
 	};
@@ -269,7 +269,7 @@ function wsInitValidator() {
 	};
 
 	dValidator.validatableElems['actual_address']['wz_actual_index'] = {
-		'validationType' : 'blank',
+		'validationType' : 'integer',
 		'errMsg' : '',
 		'params' : {}
 	};
@@ -333,7 +333,13 @@ function wsInitValidator() {
 	};
 
 	dValidator.validatableElems['contacts']['wz_phone_mob'] = {
-		'validationType' : 'blank',
+		'validationType' : 'phone',
+		'errMsg' : '',
+		'params' : {}
+	};
+
+	dValidator.validatableElems['contacts']['wz_phone_home'] = {
+		'validationType' : 'phone',
 		'errMsg' : '',
 		'params' : {}
 	};
@@ -359,7 +365,7 @@ function wsInitValidator() {
 	};
 
 	dValidator.validatableElems['work_info']['wz_work_phone'] = {
-		'validationType' : 'blank',
+		'validationType' : 'phone',
 		'errMsg' : '',
 		'params' : {}
 	};
