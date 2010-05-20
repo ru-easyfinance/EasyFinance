@@ -359,6 +359,12 @@ easyFinance.widgets.operationEdit = function(){
         // выставляем текующую дату
         $('#op_date').datepicker('setDate', new Date());
 
+        // #1276. выбираем счёт, указанные в фильтре журнала операций
+        var acc = $("#account_filtr").val();
+        if (acc !==undefined && acc != "") { 
+            setAccount(acc);
+        }
+
         // TEMP: показываем операции перевода на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
         $("#op_type").html(htmlOptions).ufd("changeOptions");
