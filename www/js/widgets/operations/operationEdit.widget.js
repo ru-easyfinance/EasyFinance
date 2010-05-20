@@ -387,8 +387,6 @@ easyFinance.widgets.operationEdit = function(){
             _initUFDs();
 
         _$blockCalendar.show()
-
-        $('#operationEdit_planning').show();
     }
 
     function _changeOperationType() {
@@ -734,13 +732,10 @@ easyFinance.widgets.operationEdit = function(){
 
         // сбрасываем параметры повторения операции
         $('#cal_repeat').val("0");
-        $('#operationEdit_repeating,#operationEdit_weekdays').hide();
         $('#cal_rep_every').attr('checked', 'checked');
         $('#cal_count').val("1");
         $('.week input').removeAttr('checked');
         $('#cal_date_end').val("");
-
-        _$blockCalendar.hide();
     }
 
     // обновляем поле "курс" на основе _realConversionRate
@@ -1145,10 +1140,10 @@ easyFinance.widgets.operationEdit = function(){
             });
         }
 
-        if (_isCalendar && isEditing && !isChain)
-            $('#operationEdit_planning').hide();
+        if (_isCalendar && _isEditing && !isChain)
+            _$blockCalendar.hide();
         else
-            $('#operationEdit_planning').show();
+            _$blockCalendar.show();
     }
 
     // reveal some private things by assigning public pointers
