@@ -17,81 +17,17 @@ default:
   javascripts:    [global-min.js]
 <?php else: ?>
   stylesheets:
-    - main.css
-    - jquery/south-street/ui.all.css
-    - jquery/south-street/ui.core.css
-    - jquery/south-street/ui.resizable.css
-    - jquery/south-street/ui.dialog.css
-    - jquery/south-street/ui.tabs.css
-    - jquery/south-street/ui.datepicker.css
-    - jquery/jquery.rw-calculator.css
-    - jquery/jquery.jgrowl.css
-    - jquery/fullcalendar.css
-    - dialogBox.css
-    - menuUser.css
-    - efTable.css
-    - calendar.css
-    - jquery/jHtmlArea.css
-    - jquery/jHtmlArea.ColorPickerMenu.css
-    - jquery/fancy.css
-    - jquery/ufd-base.css
-    - jquery/ufd-plain.css
-    - calendarOverdue.css
-    - calendarLeft.css
-    - report.css
-    - expert.css
-    - expertsList.css
-    - profile.css
-    - categoriesJournal.css
-    - operationsJournal.css
-    - budgetMaster.css
-    - budget.css
-    - accountsPanel.css
-    - accountsJournal.css
+<?php
+    foreach (file(sfConfig::get('sf_root_dir') . '/../include/assets/css.list') as $css) {
+        echo "    - ", $css, "\n";
+    }
+?>
   javascripts:
-    - jquery/jquery.min.js
-    - easyfinance.js
-    - models/calendar.cache.js
-    - jquery/ui.core.js
-    - jquery/i18n/jquery-ui-i18n.js
-    - jquery/ui.resizable.js
-    - jquery/ui.draggable.js
-    - jquery/ui.dialog.js
-    - jquery/ui.datepicker.js
-    - jquery/ui.tabs.js
-    - jquery/jquery.qtip.js
-    - jquery/jquery.jgrowl.min.js
-    - calculator.js
-    - jquery/jquery.mousewheel.js
-    - jquery/jquery.em.js
-    - jquery/jquery.maskedinput-1.2.2.min.js
-    - jquery/jquery.timepicker-table.min.js
-    - jquery/jquery.validate.js
-    - jquery/tinysort.js
-    - jquery/jquery.form.js
-    - jquery/jquery.cookie.js
-    - jquery/jquery.ui.ufd.js
-    - jquery/jquery.rw-calculator.settings.js
-    - jquery/jquery.rw-calculator.js
-    - jquery/jquery.selectboxes.js
-    - swfobject.js
-    - functions.js
-    - main.js
-    - helpers.js
-    - feedback.js
-    - widgets/help.widget.js
-    - models/currency.model.js
-    - models/user.model.js
-    - models/accounts.model.js
-    - models/category.model.js
-    - widgets/accounts/accountEdit.widget.js
-    - widgets/accounts/accountsPanel.widget.js
-    - widgets/operations/operationEdit.widget.js
-    - flowplayer-3.1.4.min.js
-    - widgets/currency/currencyRight.widget.js
-    - widgets/calendar/calendarLeft.widget.js
-    - widgets/calendar/calendarPreview.widget.js
-    - widgets/calendar/calendarOverdue.widget.js
+<?php
+    foreach (file(sfConfig::get('sf_root_dir') . '/../include/assets/js.list') as $js) {
+        echo "    - ", $js, "\n";
+    }
+?>
 <?php endif; ?>
 
   has_layout:     true
