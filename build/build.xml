@@ -129,16 +129,16 @@
                 <exclude name=".git/**" />
                 <exclude name="**/.git/**" /><!-- игнорирование субмодулей -->
                 <exclude name="**/web.api/dev.php" />
-                <exclude name="**/www/uploaded/**" />
+                <exclude name="**/www/upload" />
                 <exclude name="**/shared/**" />
                 <exclude name="tmp/smarty/cache/%%**" />
             </fileset>
         </copy>
 
-        <exec command="rm shared" dir="${project.path.deploy}/releases/tags/${strlowerpath}" />
+        <exec command="if [ -h shared ]; then rm shared; fi" dir="${project.path.deploy}/releases/tags/${strlowerpath}" checkreturn="true" />
         <exec command="ln -s ${project.basedir}/shared ${project.path.deploy}/releases/tags/${strlowerpath}/shared" checkreturn="true" />
 
-        <exec command="rm www/upload" dir="${project.path.deploy}/releases/tags/${strlowerpath}" />
+        <exec command="if [ -h www/upload ]; then rm www/upload; fi" dir="${project.path.deploy}/releases/tags/${strlowerpath}" checkreturn="true" />
         <exec command="ln -s ${project.basedir}/shared/uploaded ${project.path.deploy}/releases/tags/${strlowerpath}/www/upload" checkreturn="true" />
     </target>
 
