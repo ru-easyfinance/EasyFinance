@@ -1,5 +1,4 @@
 <?php
-
 /**
  * login actions.
  *
@@ -10,13 +9,13 @@
  */
 class loginActions extends sfActions
 {
-   /**
-    * Редирект на страницу авторизации
-    *
-    * @param sfRequest $request A request object
-    */
+    /**
+     * Редирект на страницу авторизации в старом коде
+     *
+     * @param sfRequest $request A request object
+     */
     public function executeIndex(sfWebRequest $request)
     {
-    $this->redirect('/login');
+        $this->redirect('/login');
     }
 }

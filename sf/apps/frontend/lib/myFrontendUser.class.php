@@ -8,7 +8,7 @@ class myFrontendUser extends sfBasicSecurityUser
    /**
     * Получить объект пользователя по идентификатору в сессии
     *
-    * @return
+    * @return User
     */
     public function getUserRecord() {
         if (!$this->user && $id = $this->getAttribute('id', null, 'user')) {
@@ -31,6 +31,19 @@ class myFrontendUser extends sfBasicSecurityUser
         $this->user = null;
         $this->clearCredentials();
         $this->setAuthenticated(false);
+    }
+
+    /**
+     * Получить имя пользователя
+     *
+     * @return string
+     */
+    public function getName() {
+        if (!$this->user) {
+            $this->getUserRecord();
+        }
+
+        return $this->user->getUserName();
     }
 
 }

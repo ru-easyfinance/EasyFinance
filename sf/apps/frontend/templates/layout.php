@@ -36,7 +36,7 @@
                 <ul class="menu2">
                         <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                         <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
-                        <li><a href="/profile/"><?php echo $sf_user->getUserRecord()->getUserName(); ?></a></li>
+                        <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
                         <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                 </ul>
             </div>
