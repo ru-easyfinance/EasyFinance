@@ -177,11 +177,6 @@ easyFinance.widgets.report = function(){
     }
     
     function ShowDetailedIncome(data, currencyId){
-        var multiplier = easyFinance.models.currency.getCurrencyCostById(currencyId);
-        for (var mainKey in data[0]) {
-            multiplier = easyFinance.models.currency.getCurrencyCostById(data[0][mainKey].cur_id) / multiplier;
-            data[0][mainKey].money *= multiplier;
-        }
         var th = '<tr><th>&nbsp;</th><th><span>Дата</span></th><th><span>Счёт</span></th><th><span>Сумма</span></th><th>&nbsp;</th></tr>';
         var tr = '';
         for (var key in data[0]) {
@@ -223,13 +218,7 @@ easyFinance.widgets.report = function(){
         $('.operation_list').show();
     }
     
-    function ShowDetailedWaste(data, currencyId){
-        var multiplier = easyFinance.models.currency.getCurrencyCostById(currencyId);
-        for (var mainKey in data[0]) {
-            multiplier = easyFinance.models.currency.getCurrencyCostById(data[0][mainKey].cur_id) / multiplier;
-            data[0][mainKey].money *= multiplier;
-        }
-        
+    function ShowDetailedWaste(data, currencyId){        
         var th = '<tr><th>&nbsp;</th><th><span>Дата</span></th><th><span>Счёт</span></th><th><span>Сумма</span></th><th>&nbsp;</th></tr>';
         var tr = '';
         
@@ -276,18 +265,7 @@ easyFinance.widgets.report = function(){
     /*
      * @TODO with server
      */
-    function ShowCompareWaste(data, currencyId){
-        cur = res['currency'];
-        nowcur = 0;//курс в знаменателе. в чём отображаем
-        oldcur = 0;//курс в числителе. курс валюты счёта
-        for (key in cur) {
-            cost = cur[key]['cost'];
-            name = cur[key]['name'];
-            if (name == data[1][0].cur_char_code) {
-                nowcur = cur[key]['cost'];
-            }
-        }
-        
+    function ShowCompareWaste(data, currencyId){        
         var th = '<tr><th>&nbsp;</th><th><span>Период 1</span></th><th><span>Период 2</span></th><th><span>Разница</span></th><th></th></tr>';
         
         var tr = '';
@@ -323,37 +301,6 @@ easyFinance.widgets.report = function(){
                     }
                 }
                 delta = sum2 - sum1;
-                if (data[0][c].cat_name != null && data[0][c].cur_char_code != null) {
-                    cur = res['currency'];
-                    for (key in cur) {
-                        cost = cur[key]['cost'];
-                        name = cur[key]['name'];
-                        if (name == data[0][c].cur_char_code) {
-                            oldcur = cur[key]['cost'];
-                        }
-                    }
-                    tr += '<tr><td ><span><b>' + data[0][c].cat_name +
-                    '<span><b></td>' +
-                    '<td class="' +
-                    (sum1 * oldcur / nowcur >= 0 ? 'sumGreen' : 'sumRed') +
-                    '"><span>' +
-                    formatCurrency(sum1 * oldcur / nowcur) +
-                    '</span></td>' +
-                    '<td class="' +
-                    (sum2 * oldcur / nowcur >= 0 ? 'sumGreen' : 'sumRed') +
-                    '"><span>' +
-                    formatCurrency(sum2 * oldcur / nowcur) +
-                    '</span></td>' +
-                    '<td class="' +
-                    (delta * oldcur / nowcur >= 0 ? 'sumGreen' : 'sumRed') +
-                    '"><span>' +
-                    formatCurrency(delta * oldcur / nowcur) +
-                    '</span></td>' +
-                    '</tr>';
-                    ssum1 = parseFloat(ssum1) + parseFloat(sum1 * oldcur / nowcur);
-                    ssum2 = parseFloat(ssum2) + parseFloat(sum2 * oldcur / nowcur);
-                    sdelta += Math.round(delta);
-                }
             }
         }
         tr += '<tr><td ><span><b>Итого:</span><b></td>' +
@@ -388,18 +335,7 @@ easyFinance.widgets.report = function(){
     
     
     
-    function ShowAverageIncome(data, currencyId){
-        cur = res['currency'];
-        nowcur = 0;//курс в знаменателе. в чём отображаем
-        oldcur = 0;//курс в числителе. курс валюты счёта
-        for (key in cur) {
-            cost = cur[key]['cost'];
-            name = cur[key]['name'];
-            if (name == data[3][0].cur_char_code) {
-                nowcur = cur[key]['cost'];
-            }
-        }
-        
+    function ShowAverageIncome(data, currencyId){        
         var th = '<tr><th>&nbsp;</th><th><span>Период 1</span></th><th><span>Период 2</span></th><th><span>Разница</span></th></th>';
         
         var tr = '';
@@ -422,8 +358,7 @@ easyFinance.widgets.report = function(){
                                 data[2][v].su = null;
                             }
                     }
-                }
-                else {
+                } else {
                     sum2 = data[2][c].su * data[0] / data[1];
                     sum1 = 0;
                     for (v in data[2]) {
@@ -433,39 +368,9 @@ easyFinance.widgets.report = function(){
                                 data[2][v].su = null;
                             }
                     }
-                };
-                delta = sum2 - sum1;
-                if (data[2][c].cat_name != null && data[2][c].cur_char_code != null) {// проверка на валюту чтобы отсеять мусор, те операции что не удалены рпи создании счёта.
-                    cur = res['currency'];
-                    for (key in cur) {
-                        cost = cur[key]['cost'];
-                        name = cur[key]['name'];
-                        if (name == data[2][c].cur_char_code) {
-                            oldcur = cur[key]['cost'];
-                        }
-                    }
-                    tr += '<tr><td ><span><b>' + data[2][c].cat_name +
-                    '<span><b></td>' +
-                    '<td class="' +
-                    (sum1 * oldcur / nowcur >= 0 ? 'sumGreen' : 'sumRed') +
-                    '"><span>' +
-                    formatCurrency(sum1 * oldcur / nowcur) +
-                    '</span></td>' +
-                    '<td class="' +
-                    (sum2 * oldcur / nowcur >= 0 ? 'sumGreen' : 'sumRed') +
-                    '"><span>' +
-                    formatCurrency(sum2 * oldcur / nowcur) +
-                    '</span></td>' +
-                    '<td class="' +
-                    (delta * oldcur / nowcur >= 0 ? 'sumGreen' : 'sumRed') +
-                    '"><span>' +
-                    formatCurrency(delta * oldcur / nowcur) +
-                    '</span></td>' +
-                    '</tr>';
-                    ssum1 = Math.round(parseFloat(ssum1)) + Math.round(parseFloat(sum1));
-                    ssum2 = Math.round(parseFloat(ssum2)) + Math.round(parseFloat(sum2));
-                    sdelta += Math.round(delta);
                 }
+
+                delta = sum2 - sum1;
             }
         }
         tr += '<tr><td ><span><b>Итого:<span><b></td>' +
