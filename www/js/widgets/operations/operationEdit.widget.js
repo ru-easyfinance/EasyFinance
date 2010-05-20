@@ -921,7 +921,7 @@ easyFinance.widgets.operationEdit = function(){
 
     function setSum(sum){
         _oldSum = Math.abs(sum);
-        $('#op_amount').val(_oldSum);
+        $('#op_amount').val(_oldSum == 0 ? '' : _oldSum);    
     }
 
     function setType(id){	
