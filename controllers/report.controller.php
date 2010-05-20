@@ -111,16 +111,16 @@ class Report_Controller extends _Core_Controller_UserCommon
                 die(json_encode($this->_model->SelectDetailed(1, $start, $end, $accounts, $currency)));
                 break;
             case 'txt_loss_difference': //Сравнение расходов за периоды
-                die(json_encode($this->_model->CompareWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->CompareForPeriods(1, $start, $end, $start2, $end2, $accounts, $currency)));
                 break;
             case 'txt_profit_difference': //Сравнение доходов за периоды
-                die(json_encode($this->_model->CompareIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->CompareForPeriods(0, $start, $end, $start2, $end2, $accounts, $currency)));
                 break;
             case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
-                die(json_encode($this->_model->AverageIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->CompareAverage(0, $start, $end, $start2, $end2, $accounts, $currency)));
                 break;
             case 'txt_loss_avg_difference': //Сравнение расходов со средним за периоды
-                die(json_encode($this->_model->AverageWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
+                die(json_encode($this->_model->CompareAverage(1, $start, $end, $start2, $end2, $accounts, $currency)));
                 break;
             default:
                 die('

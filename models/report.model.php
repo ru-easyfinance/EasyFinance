@@ -20,9 +20,11 @@ class Report_Model
     private $_shortMonth;
 
     /**
+     * Обменник для валют
      * @var efCurrencyExchange
      */
     private $_ex = null;
+
 
     /**
      * Конструктор
@@ -66,6 +68,7 @@ class Report_Model
         $this->ex = sfConfig::get('ex');
     }
 
+
     /**
      * Получает список валют валют и их курсы
      * @return array
@@ -106,6 +109,7 @@ class Report_Model
         return $currency;
     }
 
+
     /**
      * Доходы, Расходы
      *
@@ -145,7 +149,7 @@ class Report_Model
 
             $money = new efMoney(abs($value['money']), $value['cur_id']);
             $amount = $this->ex->convert($money, $currency_id)->getAmount();
-            
+
             if ( isset ( $result[ $key ]['money'] ) ) {
                 $result[ $key ]['money'] += $amount;
             } else {
@@ -156,6 +160,7 @@ class Report_Model
 
         return array( 0 => $result );
     }
+
 
     /**
      * Сравнение расходов и доходов
@@ -224,6 +229,7 @@ class Report_Model
         return array($sort);
     }
 
+
     /**
      * Детальные доходы, Детальные расходы
      *
@@ -262,243 +268,126 @@ class Report_Model
 
 
     /**
-     * Сравнение расходов за периоды
+     * Сравнение расходов за периоды, Сравнение доходов за периоды
+     *
+     * @param int $drain
+     * @param string mysql date $date1
+     * @param string mysql date $date2
+     * @param string mysql date $date3
+     * @param string mysql date $date4
+     * @param int|string $accounts
+     * @param int $currency_id
+     * @return array
      */
-    function CompareWaste($date1='', $date2='', $date3='', $date4='', $account='', $cursshow='', $acclist=''){
-        $arr = array();
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
+    function CompareForPeriods($drain, $date1='', $date2='', $date3='', $date4='', $accounts = '', $currency_id = 0)
+    {
+
+        $sql = "SELECT c.cat_name, c.cat_id, cur.cur_id, sum(abs(op.money)) as su, 1 as per
                 FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND cur_char_code is not null AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
+                LEFT JOIN accounts a ON a.account_id=op.account_id
+                LEFT JOIN category c ON c.cat_id=op.cat_id
+                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+                WHERE op.drain= ?
+                    AND (op.`date` BETWEEN ? AND ?)
+                    AND op.user_id= ? AND op.accepted=1
+                    AND a.account_id IN({$accounts})
+                    AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
+                GROUP BY c.cat_name, a.account_id
+                UNION
+                SELECT c.cat_name, c.cat_id, cur.cur_id, sum(abs(op.money)) as su, 2 as per
                 FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND cur_char_code is not null AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $arr[1] = $this->_db->query($sql, $cursshow);
-        return $arr;
+                LEFT JOIN accounts a ON a.account_id=op.account_id
+                LEFT JOIN category c ON c.cat_id=op.cat_id
+                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+                WHERE op.drain= ?
+                    AND (op.`date` BETWEEN ? AND ?)
+                    AND op.user_id= ? AND op.accepted=1
+                    AND a.account_id IN({$accounts})
+                    AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
+                GROUP BY c.cat_name, a.account_id";
+
+        $rows = $this->_db->query($sql, $drain, $date1, $date2, $this->_user->getId(),
+            $drain, $date3, $date4, $this->_user->getId());
+
+        $result = array();
+        foreach($rows as $key => $value) {
+
+            $money = new efMoney(abs($value['su']), $value['cur_id']);
+
+            $tempId = $value['per'].$value['cat_id'];
+
+            $result[$tempId] = $value;
+            unset($result[$tempId]['cur_id']);
+            unset($result[$tempId]['su']);
+
+            if (isset($result[$tempId]['su'])) {
+                $result[$tempId]['su'] += $this->ex->convert($money, $currency_id)->getAmount();
+            } else {
+                $result[$tempId]['su'] = $this->ex->convert($money, $currency_id)->getAmount();
+            }
+
+        }
+
+        return array($result);
     }
 
-    function CompareIncome($date1='', $date2='', $date3='', $date4='', $account='', $cursshow='', $acclist=''){
-        $arr = array();
-        if ($account != 0) {
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
+    /**
+     * Сравнение расходов со средним за периоды, Сравнение доходов со средним за периоды
+     * 
+     * @param int $drain
+     * @param string $date1
+     * @param string $date2
+     * @param string $date3
+     * @param string $date4
+     * @param int|string $accounts
+     * @param int $currency_id
+     * @return array
+     */
+    function CompareAverage($drain, $date1='', $date2='', $date3='', $date4='', $accounts='', $currency_id=0){
+        // @XXX Не понимаю, что должен делать этот отчёт
+
+        $sql = "SELECT c.cat_name, c.cat_id, cur.cur_id, sum(op.money) as su, 1 as per
                 FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=?
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
+                LEFT JOIN accounts a ON a.account_id=op.account_id
+                LEFT JOIN category c ON c.cat_id=op.cat_id
+                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+                WHERE  op.drain=?  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
+                    AND a.account_id IN({$accounts})
+                    AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
+                GROUP BY c.cat_name,  a.account_id
             UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
+                SELECT c.cat_name, c.cat_id, cur.cur_id, sum(op.money) as su, 2 as per
                 FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=?
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
-        }else{
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $arr[0] = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
+                LEFT JOIN accounts a ON a.account_id=op.account_id
+                LEFT JOIN category c ON c.cat_id=op.cat_id
+                LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
+                WHERE  op.drain=?  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
+                    AND a.account_id IN({$accounts})
+                    AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
+                GROUP BY c.cat_name,  a.account_id";
+
+        $rows = $this->_db->query($sql, $drain, $date1, $date2, $this->_user->getId(),
+            $drain, $date3, $date4, $this->_user->getId());
+
+        $result = array();
+        foreach($rows as $key => $value) {
+
+            $money = new efMoney(abs($value['su']), $value['cur_id']);
+
+            $tempId = $value['per'].$value['cat_id'];
+
+            $result[$tempId] = $value;
+            unset($result[$tempId]['cur_id']);
+            unset($result[$tempId]['su']);
+
+            if (isset($result[$tempId]['su'])) {
+                $result[$tempId]['su'] += $this->ex->convert($money, $currency_id)->getAmount();
+            } else {
+                $result[$tempId]['su'] = $this->ex->convert($money, $currency_id)->getAmount();
+            }
+
         }
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $arr[1] = $this->_db->query($sql, $cursshow);
-        return $arr;
-    }
-
-   function calcDaysDiff($dateFrom='',$dateTo='') {
-	// Создаем объекты с датами
-	$dtFromS = strtotime($dateFrom);
-  	$dtToS = strtotime($dateTo);
-  	// Получаем количество секунд с начала эпохи, вычисляем разницу и переводим ее в дни
-  	$dtDiffS = $dtToS-$dtFromS;
-  	$dtDiffM = $dtDiffS/60;
-  	$dtDiffH = $dtDiffM/60;
-  	$dtDiffD = $dtDiffH/24+1;
-
-  	return $dtDiffD;
-  }
-
-    function AverageIncome($date1='', $date2='', $date3='', $date4='', $account='', $cursshow='', $acclist=''){
-        //$mas[0] = calcDaysDiff($date1, $date2);
-        //$mas[1] = calcDaysDiff($date3, $date4);
-
-        $dtFromS = strtotime($date1);
-  	$dtToS = strtotime($date2);
-        $dtDiffS = $dtToS-$dtFromS;
-  	$dtDiffM = $dtDiffS/60;
-  	$dtDiffH = $dtDiffM/60;
-  	$dtDiffD = $dtDiffH/24+1;
-        $mas[0] = $dtDiffD;
-
-        $dtFromS = strtotime($date3);
-  	$dtToS = strtotime($date4);
-        $dtDiffS = $dtToS-$dtFromS;
-  	$dtDiffM = $dtDiffS/60;
-  	$dtDiffH = $dtDiffM/60;
-  	$dtDiffD = $dtDiffH/24+1;
-        $mas[1] = $dtDiffD;//*/
-        if ($account != 0) {
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=?
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=?
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
-        }else{
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=0  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
-        }
-        $mas[2] = $que;
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $mas[3] = $this->_db->query($sql, $cursshow);
-        return $mas;
-    }
-
-    function AverageWaste($date1='', $date2='', $date3='', $date4='', $account='', $cursshow='', $acclist=''){
-        //$mas[0] = calcDaysDiff($date1, $date2);
-        //$mas[1] = calcDaysDiff($date3, $date4);
-
-        $dtFromS = strtotime($date1);
-  	$dtToS = strtotime($date2);
-        $dtDiffS = $dtToS-$dtFromS;
-  	$dtDiffM = $dtDiffS/60;
-  	$dtDiffH = $dtDiffM/60;
-  	$dtDiffD = $dtDiffH/24+1;
-        $mas[0] = $dtDiffD;
-
-        $dtFromS = strtotime($date3);
-  	$dtToS = strtotime($date4);
-        $dtDiffS = $dtToS-$dtFromS;
-  	$dtDiffM = $dtDiffS/60;
-  	$dtDiffH = $dtDiffM/60;
-  	$dtDiffD = $dtDiffH/24+1;
-        $mas[1] = $dtDiffD;//*/
-        if ($account != 0) {
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=?
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id=?
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(), $account, $date3, $date4, $this->_user->getId(), $account);
-        }else{
-        $sql = "
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 1 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name
-            UNION
-            SELECT c.cat_name, cur.cur_char_code, cur.cur_id, sum(op.money) as su, 2 as per
-                FROM operation op
-            LEFT JOIN accounts a ON a.account_id=op.account_id
-            LEFT JOIN category c ON c.cat_id=op.cat_id
-            LEFT JOIN currency cur ON cur.cur_id = a.account_currency_id
-            WHERE  op.drain=1  AND (op.`date` BETWEEN ? AND ?) AND op.user_id= ? AND op.accepted=1
-            AND a.account_id IN({$acclist})
-            AND op.transfer = 0 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
-            GROUP BY c.cat_name";
-        $que = $this->_db->query($sql, $date1, $date2, $this->_user->getId(),  $date3, $date4, $this->_user->getId());
-        }
-        $mas[2] = $que;
-        $sql = "SELECT cur_char_code FROM currency
-            WHERE cur_id = ?";
-        $mas[3] = $this->_db->query($sql, $cursshow);
-        return $mas;
+        return array($result);
     }
 
 }
