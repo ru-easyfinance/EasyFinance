@@ -23,6 +23,21 @@ class myFunctionalTesterResponse extends sfTesterResponse
 
 
     /**
+     * Проверить, что ответ содержит указанную строку
+     *
+     * @param  $text - Искомая строка
+     */
+    public function checkContains($text)
+    {
+        PHPUnit_Framework_Assert::assertContains($text, $content = $this->response->getContent(),
+            sprintf("Expected response contains `{$text}`")
+        );
+
+        return $this->getObjectToReturn();
+    }
+
+
+    /**
      * Check: проверить редирект
      *
      * @param int    $statusCode

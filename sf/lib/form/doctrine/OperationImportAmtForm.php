@@ -86,18 +86,17 @@ class OperationImportAmtForm extends BaseFormDoctrine
         switch ($values['type']) {
 
             case Operation::TYPE_PROFIT:
-                $values['money'] = $amount;
+                $values['amount'] = $amount;
                 break;
 
             case Operation::TYPE_EXPENSE:
-                $values['money'] = -$amount;
+                $values['amount'] = -$amount;
                 break;
 
             default:
                 throw new Exception("Unxpected operation type `{$values['type']}`");
         }
         $values['drain'] = $values['type'];
-        unset($values['amount']);
 
 
         // Дата и время

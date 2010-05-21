@@ -99,13 +99,13 @@ easyFinance.widgets.calendarPreview = function(){
             $('.calendar_block .hasDatepicker').qtip('api').updateContent(content);
         });
         $('.calendar_block .hasDatepicker td a').live('click', function(){
-            var data = {
-                date: $(this).attr('date'),
-                time: ''//dt.toLocaleTimeString().substr(0, 5)
-            };
-            easyFinance.widgets.operationEdit.fillFormCalendar(data, false, true);
-        });
-        
+            var dat = getCurrentDate();
+            dat.setDate($(this).text())
+
+            easyFinance.widgets.operationEdit.fillFormCalendar({date: $.datepicker.formatDate('dd.mm.yy', dat)}, false, true);
+
+            return false;
+        });        
     }
     
     function getCurrentDate(){

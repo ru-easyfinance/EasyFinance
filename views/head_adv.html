@@ -2,31 +2,36 @@
 <dl id="advertisement">
     <dt>реклама</dt>
     <dd>
-        <div class="ramka1">
-            <div class="ct"><div></div></div>
+        <div id="bannerWrapper">
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
-            {if $user_info.user_id > 0}
-                {if $smarty.const.IS_DEMO == true}
-                    <!-- <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a> -->
-                    <script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:418,'></script>
-                {else}
-                    {php}
-                        srand(floor(time()));
-                        if (rand(0,1) == 1) {
-                            echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:420,'></script>";
-                        } else {
-                            echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:421,'></script>";
-                        }
-                    {/php}
-                {/if}
+            {if $user_info.user_id > 0 && $smarty.const.IS_DEMO == false}
+                {php}
+                    srand(floor(time()));
+                    $r = rand(0,2);
+                    if ($r == 1) {
+                        // AMT1
+                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:420,'></script>";
+                    } elseif ($r == 2) {
+                        // AMT2
+                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:421,'></script>";
+                    } else {
+                        // Тиньков
+                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
+                    }
+                {/php}
             {else}
-                {if $smarty.server.REQUEST_URI == "/"}
-                {/if}
-                <!-- <a href="http://{$smarty.const.URL_ROOT_MAIN}registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a> -->
-                <script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:418,'></script>
+                {php}
+                    srand(floor(time()));
+                    $r = rand(0,1);
+                    if ($r == 1) {
+                        // Регистрация + AMT
+                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:418,'></script>";
+                    } else {
+                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
+                    }
+                {/php}
             {/if}
             </div>
-            <div class="cb"><div></div></div>
         </div>
     </dd>
 </dl>

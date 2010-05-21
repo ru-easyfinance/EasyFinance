@@ -96,7 +96,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
 
             $calendar = new Calendar( $user );
             $calendar->create( $event );
-            $this->tpl->assign( 'result', array('text' => 'Регулярная операция добавлена') );
+            $this->tpl->assign( 'result', array('text' => 'Операция успешно запланирована') );
 
             // @FIXME Перенести этот блок кода в календарь
             Core::getInstance()->user->initUserEvents();

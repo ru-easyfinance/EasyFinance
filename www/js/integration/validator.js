@@ -31,8 +31,8 @@ dValidatorClass.prototype.initVars = function() {
     this.reAlphaEn = new RegExp('^[a-z\-]+$', 'i');
     this.reAlphaRu = new RegExp('^[а-яё\-]+$', 'i');
     this.reRusLit = new RegExp('^[а-яё0-9\\(\\)\\-\\.\\*\\+\\?\\/,:";!%\\s№]+$', 'i');
-    this.rePhone = new RegExp('^\\+(\\d){1,2}\\(\\d{3}\\)\\d{3}-(\\d{4}|\\d{2}-\\d{2})$', 'i');
-
+    this.rePhone = new RegExp('^[0-9() \\-\\+]+$', 'i');
+    this.rePhoneStrict = new RegExp('^\\+(\\d){1,2}\\(\\d{3}\\)\\d{3}-(\\d{4}|\\d{2}-\\d{2})$', 'i');
     this.reDate1 = new RegExp('^(\\d{4})-(\\d{2})-(\\d{2})$', 'i');
     this.reDateTime1 = new RegExp('^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})(:(\\d{2}))?$', 'i');
     this.reDate2 = new RegExp('^(\\d{2})[\\/\\.](\\d{2})[\\/\\.](\\d{4})$', 'i');

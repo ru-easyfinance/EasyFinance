@@ -62,18 +62,19 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     /**
      * Создать операцию
      */
-    public function makeOperation(User $user = null, array $props = array(), $save = true)
+    public function makeOperation(Account $account = null, array $props = array(), $save = true)
     {
         $defaultProps = array(
         );
         $props = array_merge($defaultProps, $props);
 
-        if (!$user) {
-            $user = $this->makeUser(array(), $save);
+        if (!$account) {
+            $account = $this->makeAccount(null, array(), $save);
         }
 
         $ob = $this->makeModel('Operation', $props, false);
-        $ob->setUser($user);
+        $ob->setAccount($account);
+        $ob->setUser($account->getUser());
 
         if ($save) {
             $ob->save();

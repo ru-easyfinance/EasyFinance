@@ -8,6 +8,27 @@ options:
   charset: utf8
 
 
+
+# Валюта (8/10 - PART)
+# Пропущено:
+#   - cur_okv_id
+#   - cur_country
+Currency:
+  tableName: currency
+  actAs: [Timestampable]
+  columns:
+    id:          { name: cur_id as id,           type: integer(4),  notnull: true, primary: true, autoincrement: true }
+    code:        { name: cur_char_code as code,  type: string(15),  notnull: true }
+    symbol:      { name: cur_name as symbol,     type: string(10),  notnull: true }
+    name:        { name: cur_name_value as name, type: string(255), notnull: true }
+    rate:        {                               type: 'decimal(20, 6)', notnull: true, default: 0 }
+    is_active:   { name: cur_uses as is_active,  type: integer(1),  notnull: true, unsigned: true, default: 0 }
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+
 # Пользователи системы
 User:
   tableName: users
@@ -75,16 +96,15 @@ Operation:
   columns:
     user_id:    { type: integer(4), unsigned: true, notnull: true }
     account_id: { type: integer(4), unsigned: true, notnull: true }             # ID счёта
-    money:      { type: 'decimal(20, 2)', notnull: true }                       # Сумма
+    category_id: { name: cat_id as category_id, type: integer(4), notnull: true } # ID категории
+    amount:     {  name: money as amount, type: 'decimal(20, 2)', notnull: true }                       # Сумма
     date:       { type: date(25), notnull: true }                               # Фактическа дата операции
     time:       { type: time(25), notnull: true }                               # Фактическое время операции
     drain:      { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
     type:       { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:    { type: clob }
     source_id:  { type: string(8), fixed: true }                                # Тип внешнего источника операции
-    accepted:   { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
-    dt_create:  { type: timestamp(25), notnull: true }
-    dt_update:  { type: timestamp(25), notnull: true }
+    accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
   relations:
     User:
       local: user_id
@@ -93,6 +113,12 @@ Operation:
       foreignType: many
       autoComplete: false    # User ничего не узнает
       onDelete: CASCADE      # При удалении пользователя удаляются все его операции
+    Account:
+      local: account_id
+      foreign: id
+      type: one
+      foreignType: many
+      foreignAlias: Operations # Account -> Operations
   indexes:
     user_id:    { fields: [user_id] }
   options:
@@ -143,9 +169,8 @@ SourceOperation:
 #categories_often
 #category
 #certificates
-#currency
 #daily_currency
-#downloads
+#logs
 #feedback_message
 #images
 #images_articles
