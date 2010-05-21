@@ -44,6 +44,7 @@ User:
 # Счет (100% - OK)
 Account:
   tableName: accounts
+  actAs: [Timestampable]
   columns:
     id:          { name: account_id as id,                   type: integer(4),  notnull: true, primary: true, autoincrement: true }
     user_id:     {                                           type: integer(4),  notnull: true, unsigned: true }
