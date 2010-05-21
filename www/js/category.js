@@ -33,9 +33,10 @@ $(document).ready(function() {
 
     $('#add_category').click(function(){
         oldCatId = -1;
-        $('#add_form').toggle();
+        $('#add_form').show();
         $('#categoryEditSystem').show();
         $('#divCategoryEditCustom').show();
+        $('#namecat').val('');
         $('#subcat').removeAttr('disabled');
         $('#cattype').removeAttr('disabled');
         $('form').attr('action','/category/add/');
