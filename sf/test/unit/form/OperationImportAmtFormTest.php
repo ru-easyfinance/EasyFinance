@@ -166,7 +166,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
         $expected = array(
             'user_id'   => $this->_getUser()->getId(),
             'account_id' => 0,
-            'money'     => abs((float) $input['amount']),
+            'amount'    => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
             'time'      => $date->format('H:i:s'),
             'drain'     => Operation::TYPE_PROFIT,
@@ -206,7 +206,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
         $expected = array(
             'user_id'   => $this->_getUser()->getId(),
             'account_id' => 0,
-            'money'     => -(float) $input['amount'],
+            'amount'    => -(float) $input['amount'],
             'drain'     => Operation::TYPE_EXPENSE,
             'type'      => Operation::TYPE_EXPENSE,
         );
