@@ -39,10 +39,9 @@ class model_OperationTest extends myUnitTestCase
      */
     public function testOnDeleteUserCascade()
     {
-        $user = $this->helper->makeUser();
-        $op   = $this->helper->makeOperation($user);
+        $op = $this->helper->makeOperation($this->helper->makeAccount());
 
-        $user->delete();
+        $op->getUser()->delete();
         $this->assertEquals(0, $op->getTable()->createQuery()->count());
     }
 
