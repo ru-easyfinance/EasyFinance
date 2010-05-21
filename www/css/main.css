@@ -157,9 +157,9 @@ table.noborder td.mark{width:50px;}
 .fl_r { float: right; }
 .clr {clear:both;}
 .ui-datepicker-today{background-color: #E5E5E5;}
-.ramka1 {  border: 1px solid #dce4da; background: #ffffff; //zoom: 1; }
+.ramka1 { }
 .ramka1 .ct, .ramka1 .ct div, .ramka1 .cb, .ramka1 .cb div,
-.ramka3 .cb, .ramka3 .cb div { position: relative; height: 12px; overflow: hidden; background: url('/img/i/coners.gif') no-repeat 0 0; //zoom: 1; }
+.ramka3 .cb, .ramka3 .cb div { position: relative; height: 12px; overflow: hidden; //zoom: 1; }
 .ramka1 .ct { margin: -1px -1px 0 -1px; }
 .ramka1 .ct div { background-position: 100% -20px; }
 .ramka1 .cb { margin: 0 -1px -1px -1px; background-position: 0 -40px; }
