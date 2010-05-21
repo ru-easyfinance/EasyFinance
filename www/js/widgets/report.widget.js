@@ -262,14 +262,10 @@ easyFinance.widgets.report = function(){
     }
     
     
-    /*
-     * @TODO with server
-     */
-    function ShowCompareWaste(data, currencyId){        
+    function ShowCompareWaste(data, currencyId){
         var th = '<tr><th>&nbsp;</th><th><span>Период 1</span></th><th><span>Период 2</span></th><th><span>Разница</span></th><th></th></tr>';
-        
         var tr = '';
-        
+
         var sum1 = 0;
         var sum2 = 0;
         var delta = 0;
@@ -282,7 +278,7 @@ easyFinance.widgets.report = function(){
                     sum1 = data[0][c].su;
                     sum2 = 0;
                     for (v in data[0]) {
-                        if (data[0][v].cat_name == data[0][c].cat_name) 
+                        if (data[0][v].cat_name == data[0][c].cat_name)
                             if (data[0][v].per == 2) {
                                 sum2 = data[0][v].su;
                                 data[0][v].su = null;
@@ -293,7 +289,7 @@ easyFinance.widgets.report = function(){
                     sum2 = data[0][c].su;
                     sum1 = 0;
                     for (v in data[0]) {
-                        if (data[0][v].cat_name == data[0][c].cat_name) 
+                        if (data[0][v].cat_name == data[0][c].cat_name)
                             if (data[0][v].per == 1) {
                                 sum1 = data[0][v].su;
                                 data[0][v].su = null;
@@ -301,6 +297,29 @@ easyFinance.widgets.report = function(){
                     }
                 }
                 delta = sum2 - sum1;
+                if (data[0][c].cat_name != null) {
+                    tr += '<tr><td ><span><b>' + data[0][c].cat_name +
+                    '<span><b></td>' +
+                    '<td class="' +
+                    (sum1 >= 0 ? 'sumGreen' : 'sumRed') +
+                    '"><span>' +
+                    formatCurrency(sum1) +
+                    '</span></td>' +
+                    '<td class="' +
+                    (sum2 >= 0 ? 'sumGreen' : 'sumRed') +
+                    '"><span>' +
+                    formatCurrency(sum2) +
+                    '</span></td>' +
+                    '<td class="' +
+                    (delta >= 0 ? 'sumGreen' : 'sumRed') +
+                    '"><span>' +
+                    formatCurrency(delta) +
+                    '</span></td>' +
+                    '</tr>';
+                    ssum1 = parseFloat(ssum1) + parseFloat(sum1);
+                    ssum2 = parseFloat(ssum2) + parseFloat(sum2);
+                    sdelta += Math.round(delta);
+                }
             }
         }
         tr += '<tr><td ><span><b>Итого:</span><b></td>' +
@@ -323,14 +342,13 @@ easyFinance.widgets.report = function(){
         $('tr:not(:first)', '#reports_list').each(function(){
             $(this).remove();
         });
-        
+
         $('#reports_list_header').html(th);
         $('#reports_list').html(tr);
-        
+
         $('#chart').hide();
         $('#Period21,#Period22').show();
         $('.operation_list').show();
-        
     }
     
     
