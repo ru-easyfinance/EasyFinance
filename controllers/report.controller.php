@@ -36,8 +36,6 @@ class Report_Controller extends _Core_Controller_UserCommon
             'txt_loss'                  => 'Детальные расходы',
             'txt_loss_difference'       => 'Сравнение расходов за периоды',
             'txt_profit_difference'     => 'Сравнение доходов за периоды',
-            'txt_profit_avg_difference' => 'Сравнение доходов со средним за периоды',
-            'txt_loss_avg_difference'   => 'Сравнение расходов со средним за периоды',
         );
     }
 
@@ -49,8 +47,11 @@ class Report_Controller extends _Core_Controller_UserCommon
     function index($args)
     {
         $this->tpl->assign('reports', $this->_reports);
+
+        //@FIXME Отвязать от смарти. Пусть данные берутся из res
         $this->tpl->assign('accounts', Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('currency', Core::getInstance()->user->getUserCurrency());
+
         $this->tpl->assign('dateFrom', date('01.m.Y'));
         $this->tpl->assign('dateTo',   date(date('t').'.m.Y'));
 
@@ -59,7 +60,10 @@ class Report_Controller extends _Core_Controller_UserCommon
             $lastmonth = 12;
         }
 
+        //@FIXME Поправить этот диапазон дат, до 2012го..
         $days = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+
+        //@TODO Переписать
         $this->tpl->assign('dateFrom2', '01'.'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ) );
         $this->tpl->assign('dateTo2',   $days[$lastmonth-1].'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ));
     }
@@ -67,7 +71,6 @@ class Report_Controller extends _Core_Controller_UserCommon
     /**
      * 
      */
-
     function getData()
     {
         $report  = trim(@$_GET['report']);
@@ -77,7 +80,7 @@ class Report_Controller extends _Core_Controller_UserCommon
         $end2    = formatRussianDate2MysqlDate(@$_GET['dateTo2']);
         $account = (int)@$_GET['account'];
         $currency= (int)@$_GET['currency'];
-        $acclist = $_GET['acclist'];
+        $acclist = @$_GET['acclist'];
 
         if (!empty ($account)) {
             $accounts = $account;
@@ -96,32 +99,33 @@ class Report_Controller extends _Core_Controller_UserCommon
 
         switch ($report) {
             case 'graph_profit': //Доходы
-                die(json_encode($this->_model->getPie(0, $start, $end, $accounts, $currency)));
-                break;
+                $this->_renderJson(
+                    $this->_model->getPie(0, $start, $end, $accounts, $currency)
+                );
             case 'graph_loss':   // Расходы
-                die(json_encode($this->_model->getPie(1, $start, $end, $accounts, $currency)));
-                break;
+                $this->_renderJson(
+                    $this->_model->getPie(1, $start, $end, $accounts, $currency)
+                );
             case 'graph_profit_loss': //Сравнение расходов и доходов
-                die(json_encode($this->_model->getBars($start, $end, $accounts, $currency)));
-                break;
+                $this->_renderJson(
+                    $this->_model->getBars($start, $end, $accounts, $currency)
+                );
             case 'txt_profit': //Детальные доходы
-                die(json_encode($this->_model->SelectDetailedIncome($start, $end, $account, $currency, $acclist))  );
-                break;
+                $this->_renderJson(
+                    $this->_model->SelectDetailed(0, $start, $end, $accounts, $currency)
+                );
             case 'txt_loss': //Детальные расходы
-                die(json_encode($this->_model->SelectDetailedWaste($start, $end, $account, $currency, $acclist))  );
-                break;
+                $this->_renderJson(
+                    $this->_model->SelectDetailed(1, $start, $end, $accounts, $currency)
+                );
             case 'txt_loss_difference': //Сравнение расходов за периоды
-                die(json_encode($this->_model->CompareWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
-                break;
+                $this->_renderJson(
+                    $this->_model->CompareForPeriods(1, $start, $end, $start2, $end2, $accounts, $currency)
+                );
             case 'txt_profit_difference': //Сравнение доходов за периоды
-                die(json_encode($this->_model->CompareIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
-                break;
-            case 'txt_profit_avg_difference': //Сравнение доходов со средним за периоды
-                die(json_encode($this->_model->AverageIncome($start, $end, $start2, $end2, $account, $currency, $acclist))  );
-                break;
-            case 'txt_loss_avg_difference': //Сравнение расходов со средним за периоды
-                die(json_encode($this->_model->AverageWaste($start, $end, $start2, $end2, $account, $currency, $acclist))  );
-                break;
+                $this->_renderJson(
+                    $this->_model->CompareForPeriods(0, $start, $end, $start2, $end2, $accounts, $currency)
+                );
             default:
                 die('
                     "elements": [{
@@ -133,8 +137,16 @@ class Report_Controller extends _Core_Controller_UserCommon
                         "values": [1,2,3,4,5,6,7]
                     }]');
         }
+    }
 
 
-        
+    /**
+     * Выводит в браузер json строку
+     *
+     * @param $data Переменная произвольного типа, которая будет преобразована в JSON
+     * @return void
+     */
+    private function _renderJson($data) {
+        die(json_encode($data));
     }
 }

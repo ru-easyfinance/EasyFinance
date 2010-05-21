@@ -53,7 +53,7 @@ easyFinance.widgets.operationsJournal = function(){
         var tr, tp, pageTotal, curMoney;
         tr = '';
         pageTotal = 0;
-        
+
         // Собираем данные для заполнения в таблицу
         for(var v in data) {
             // см. тикет #357
@@ -115,10 +115,10 @@ easyFinance.widgets.operationsJournal = function(){
                 +'</ul></div>'
             +'</td></tr>';
         }
-        
+
         // Очищаем таблицу
         $('#operations_list').find('tr').remove();
-        
+
         // Заполняем таблицу
         $('#operations_list tbody').append(tr);
 
@@ -153,7 +153,7 @@ easyFinance.widgets.operationsJournal = function(){
                 ids[key] = _journal[value].id;
 
             _ops[key] = $.extend(true, {}, _journal[value]);
-            
+
             key++;
         });
 
@@ -289,7 +289,7 @@ easyFinance.widgets.operationsJournal = function(){
             _sumTo = '';
             _category = '';
             $('#cat_filtr').get(0).options[0].selected = true;
-            
+
             _account = '';
             _accountName = '';
             $('#account_filtr').get(0).options[0].selected = true;
@@ -424,7 +424,7 @@ easyFinance.widgets.operationsJournal = function(){
      * @desc init widget
      * @usage init(nodeSelector, model)
      */
-    function init(nodeSelector, model) {        
+    function init(nodeSelector, model) {
         if (!model)
             return null;
 

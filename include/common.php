@@ -14,7 +14,7 @@ if (DEBUG) {
 
 
 // Подключение нового ядра
-require_once( dirname ( dirname ( __FILE__ ) ) . '/classes/_Core/_Core.php' );
+require_once( dirname ( dirname ( __FILE__ ) ) . '/classes/_Core/_Core.php');
 new _Core();
 
 spl_autoload_register('__autoload');
@@ -25,6 +25,21 @@ require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 // Добавлем очерёдность загрузки для JS файлов
 Core::getInstance()->currency = new Currency();
 Core::getInstance()->user = new User();
+
+
+// Загрузить курсы валют
+require_once SYS_DIR_ROOT . '/classes/Currency/efMoney.php';
+require_once SYS_DIR_ROOT . '/classes/Currency/efCurrencyExchange.php';
+require_once SYS_DIR_ROOT . '/classes/Currency/efCurrencyModel.php';
+require_once SYS_DIR_ROOT . '/sf/lib/vendor/symfony/lib/config/sfConfig.class.php';
+
+$ex = new efCurrencyExchange();
+foreach(efCurrencyModel::loadAll() as $row) {
+    $ex->setRate($row['cur_id'], $row['rate'], efMoney::RUR);
+}
+sfConfig::set('ex', $ex);
+
+
 Core::getInstance()->js = array(
     '' => array('welcome'), // слайды на главной
     'targets' => array('targets'),

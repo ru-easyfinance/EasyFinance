@@ -12,7 +12,7 @@
         <meta name="Description" content="EasyFinance.ru: онлайн система управления личными финансами, создание семейного бюджета, календарь погашения кредитов" />
         {elseif $smarty.server.REQUEST_URI|strstr:"/feedback/"}
         <title>EasyFinance.ru | Лучшая домашняя бухгалтерия: управление личными финансами, финансовые цели, семейный бюджет</title>
-        <meta name="Description" content="EasyFinance.ru: бесплатная система управления домашними финансами, для построения личного бюджета, повышения доходов и финансовые советы" />      
+        <meta name="Description" content="EasyFinance.ru: бесплатная система управления домашними финансами, для построения личного бюджета, повышения доходов и финансовые советы" />
         {elseif $smarty.server.REQUEST_URI|strstr:"/rules/"}
         <title>EasyFinance.ru | Ваш надежный инструмент для достижения финансовых целей: домашняя бухгалтерия, семейный бюджет, финансовые консультации</title>
         <meta name="Description" content="EasyFinance.ru: безопасная домашняя бухгалтерия, для создания личного бюджета, сокращения затрат и повышения доходов" />
@@ -29,7 +29,7 @@
     {/if}
 
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="Keywords" content="домашняя бухгалтерия, семейный бюджет, личные финансы, личный бюджет, финансовые цели, домашний бюджет, сокращение расходов, финансовые консультанты" />      
+        <meta name="Keywords" content="домашняя бухгалтерия, семейный бюджет, личные финансы, личный бюджет, финансовые цели, домашний бюджет, сокращение расходов, финансовые консультанты" />
         <meta name='yandex-verification' content='46ad9e6fab7b1d96' />
         <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <link href="/favicon.ico" rel="icon" type="image/x-icon" />
@@ -39,11 +39,12 @@
         {/foreach}
 
         {foreach from=$js item=i}
-        <script type="text/javascript" src="/js/{$i}?r={$smarty.const.REVISION}"></script>{/foreach}
+            <script type="text/javascript" src="/js/{$i}?r={$smarty.const.REVISION}"></script>
+        {/foreach}
+
         <script type="text/javascript">
             var res = {php} echo json_encode($this->get_template_vars('res')); {/php};
         </script>
-
     <!-- /Подключениее стилей и скриптов -->
     </head>
     <body id="p_index">
@@ -72,7 +73,7 @@
                     <li><a href="https://{$smarty.const.URL_ROOT_MAIN}articles/12" id="help" style="font-weight:bold; color: white;">Помощь</a></li>
                     <li style="background: none; margin-left: 30px;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;">Интеграция</a></li>
                 </ul>
-                <ul class="menu2">              
+                <ul class="menu2">
                     {if $user_info.user_id > 0}
                         <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                         <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
@@ -80,12 +81,12 @@
                     {else}
                         <!-- Jet. ticket #273 -->
                         {if $smarty.const.IS_DEMO == false}
-                            <li id="show_login"><a href="https://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
+                            <li id="show_login"><a id="linkLogin" href="https://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
                         {else}
-                            <li id="show_login"><a href="http://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
+                            <li id="show_login"><a id="linkLogin" href="http://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
                         {/if}
                     {/if}
-                
+
                 </ul>
             </div>
 <!-- верхнее меню -->
@@ -98,10 +99,9 @@
             {elseif $smarty.server.REQUEST_URI != "/"}
             	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`"}
             {/if}
-		            	
+
                 <a {if $logoUrl !=""}href="{$logoUrl}"{/if} class="logo">EasyFinance.ru</a>
                 <div class="slogan">Система управления личными финансами</div>
 
                 {include file="head_adv.html"}
             </div>
-        
