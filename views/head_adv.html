@@ -2,8 +2,7 @@
 <dl id="advertisement">
     <dt>реклама</dt>
     <dd>
-        <div class="ramka1">
-            <div class="ct"><div></div></div>
+        <div id="bannerWrapper">
             <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
             {if $user_info.user_id > 0 && $smarty.const.IS_DEMO == false}
                 {php}
@@ -33,7 +32,6 @@
                 {/php}
             {/if}
             </div>
-            <div class="cb"><div></div></div>
         </div>
     </dd>
 </dl>
