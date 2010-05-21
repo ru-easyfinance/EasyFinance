@@ -12,10 +12,13 @@
                 {else}
                     {php}
                         srand(floor(time()));
-                        if (rand(0,1) == 1) {
+                        $r = rand(0,2);
+                        if ($r == 1) {
                             echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:420,'></script>";
-                        } else {
+                        } elseif ($r == 2) {
                             echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:421,'></script>";
+                        } else {
+                            echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
                         }
                     {/php}
                 {/if}
