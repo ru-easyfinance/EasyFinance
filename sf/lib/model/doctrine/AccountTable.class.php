@@ -5,6 +5,15 @@
  */
 class AccountTable extends Doctrine_Table
 {
+    public function queryFindModifiedForSync(array $params)
+    {
+        $q = $this->createQuery('a')
+            ->andWhere('a.user_id = ?', $params['user_id']);
+
+        return $q;
+    }
+
+
     /**
      * Запрос для выборки счета, который привязан к AMT
      *

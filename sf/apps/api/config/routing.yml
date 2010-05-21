@@ -1,4 +1,13 @@
 
+# Sync: Отдать список измененных объектов
+sync_get_modified:
+  url: /modified/:model
+  class:   sfRequestRoute
+  params:  { module: sync, action: syncOut }
+  requirements:
+    sf_method: get
+
+
 # Импорт данных из AMT
 data_import_amt:
   url: /import/amt
