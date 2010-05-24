@@ -13,12 +13,18 @@ class syncOutAction extends sfAction
         $syncModel = $request->getParameter('model');
         $this->forward404Unless($table = $this->_getTable($syncModel));
 
-        $syncParams = array(
-            'user_id' => $request->getParameter('user_id'),
-        );
+        $this->form = new mySyncOutForm;
+        $this->form->bind($request->getGetParameters());
+        if (!$this->form->isValid()) {
+            $this->getResponse()->setStatusCode(400);
+            $this->setTemplate('validationError');
+            return;
+        }
+
+        $userId = $request->getParameter('user_id');
 
         // Vars
-        $this->setVar('list',    $table->queryFindModifiedForSync($syncParams)->fetchArray());
+        $this->setVar('list',    $table->queryFindModifiedForSync($this->form->getDatetimeRange(), $userId)->fetchArray());
         $this->setVar('model',   $table->getOption('name'), $noEscape = true);
         $this->setVar('columns', $this->_getColunmsToReturn($syncModel), $noEscape = true);
     }
