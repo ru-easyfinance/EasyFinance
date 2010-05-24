@@ -92,17 +92,24 @@ class Accounts_Controller extends _Core_Controller_UserCommon
             $accountCollection = new Account_Collection();
             $params = $_REQUEST;
 
+            $model = new Account_Model();
+            $countAccounts = $model->loadAll($this->user->getId());
+            if (count($countAccounts) <= 1) {
+                $this->renderJsonError('Перед удалением последнего счета создайте нужные Вам счета');
+            }
+
             $account = Account::getTypeByID($params);
             $er = $account->delete($this->user, $params);
             if (!$er){
-                die (json_encode(array('error'=>array('text'=>'Счёт не удалён'))));
+                $this->renderJsonError('Счёт не удалён');
             }
-            if ($er == 'cel')
-                $this->tpl->assign('error', 
-                        array('text'=>'Невозможно удалить счёт, к которому привязана фин.цель')
-                );
-            else
+            if ($er == 'cel') {
+                $this->renderJsonError('Невозможно удалить счёт, к которому привязана фин.цель');
+            } else {
+                //@XXX Тут как бы хз.. Нужно проверять какую конструкцию поставить.
+                //Сильно смущает строка ниже, передающая в шаблонизатор переменную
                 $this->tpl->assign('result',array('text'=>'Счёт удален'));
+            }
 
             $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         } elseif( !isset($_POST['confirmed']) ) {
