@@ -257,9 +257,12 @@ class Operation_Model {
      */
     function checkExistance($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0)
     {
-        $last = $this->db->select("SELECT id FROM operation WHERE user_id=? AND money=? AND date=?
-            AND cat_id=? AND drain=? AND comment=? AND account_id=?
-            AND dt_create BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
+        $last = $this->db->select("
+                SELECT id
+                FROM operation
+                WHERE user_id=? AND money=? AND date=?
+                    AND cat_id=? AND drain=? AND comment=? AND account_id=?
+                    AND created_at BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
             $this->user->getId(), $money, $date, $category, $drain, $comment, $account);
         return $last;
     }
@@ -290,7 +293,7 @@ class Operation_Model {
             }
 
             $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `type`, `comment`, `tags`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
+                `drain`, `type`, `comment`, `tags`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
 
             $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, !$drain,
                 $comment, implode(', ', $tags));
@@ -348,7 +351,7 @@ class Operation_Model {
         if ( ! empty( $sql ) ) {
 
             $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `type`, `comment`, `tags`, `accepted`, `chain_id`, `dt_create`) VALUES ' . $sql;
+                `drain`, `type`, `comment`, `tags`, `accepted`, `chain_id`, `created_at`) VALUES ' . $sql;
 
             $this->db->query( $sql );
 
@@ -454,11 +457,11 @@ class Operation_Model {
                     NULL, $this->user->getId(), $id);
                 if ( $accepted ) {
                     $sql = "INSERT INTO operation
-                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id, accepted)
+                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id, accepted)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?, 1)";
                 } else {
                     $sql = "INSERT INTO operation
-                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id)
+                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
                 }
                 $this->db->query($sql, $this->user->getId(), $money, $date, -1, $toAccount, $id,
@@ -506,7 +509,7 @@ class Operation_Model {
                 // Создаём операцию откуда переводим
                 $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                    exchange_rate, chain_id, accepted, dt_create)
+                    exchange_rate, chain_id, accepted, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, ?, 0, NOW())";
                 $this->db->query($sql, 
                     $this->user->getId(),
@@ -525,7 +528,7 @@ class Operation_Model {
                 // Создаём операцию куда переводим
                 $sql = "INSERT INTO operation
                 (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                imp_id, exchange_rate, chain_id, accepted, dt_create)
+                imp_id, exchange_rate, chain_id, accepted, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, ?, 0, NOW())";
                 
                 $this->db->query($sql,
@@ -546,7 +549,7 @@ class Operation_Model {
 
                 $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type,
-                    chain_id, accepted, dt_create)
+                    chain_id, accepted, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 0, NOW())";
 
                 $this->db->query($sql,
@@ -564,7 +567,7 @@ class Operation_Model {
 
                 $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type,
-                    imp_id, chain_id, accepted, dt_create)
+                    imp_id, chain_id, accepted, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 0, NOW())";
 
                 $this->db->query( $sql, $this->user->getId(),
@@ -629,7 +632,7 @@ class Operation_Model {
             // Создаём операцию откуда переводим
 			$sql = "INSERT INTO operation
 				(user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type, 
-                exchange_rate, dt_create)
+                exchange_rate, created_at)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, NOW())";
 			$this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
 				$comment, $to_account, $curr);
@@ -639,7 +642,7 @@ class Operation_Model {
             // Создаём операцию куда переводим
 			$sql = "INSERT INTO operation 
 			(user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type, 
-            imp_id, exchange_rate, dt_create)
+            imp_id, exchange_rate, created_at)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, NOW())";
 			$this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
 				$comment, $from_account, $money, $curr, $curTargetId);
@@ -647,7 +650,7 @@ class Operation_Model {
 		} else {
 
         $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create)
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW())";
         
         $last_id = $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
@@ -656,7 +659,7 @@ class Operation_Model {
             $last_id = mysql_insert_id();
             
         $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, dt_create, imp_id)
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
         $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, $last_id,
             $comment, $from_account, $money);
@@ -809,7 +812,7 @@ class Operation_Model {
 		// Выборка операций пользователя
 		$sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
 			o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create, o.source_id AS source
+			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, created_at, o.source_id AS source
 			FROM operation o 
 			WHERE o.user_id = " . Core::getInstance()->user->getId();
 		
@@ -871,7 +874,7 @@ class Operation_Model {
 		//Присоединение переводов на фин цель
 		$sql .= " UNION 
 			SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id, 
-			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create, ''
+			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create AS created_at, ''
 			FROM target_bill t 
 			LEFT JOIN target tt ON t.target_id=tt.id 
 			WHERE t.user_id = " . Core::getInstance()->user->getId() 
@@ -903,7 +906,7 @@ class Operation_Model {
 			$sql .= " AND ABS(t.money) <= " . $sumTo;
 		}
 		
-		$sql .= " ORDER BY dnat DESC, dt_create DESC ";
+		$sql .= " ORDER BY dnat DESC, created_at DESC ";
 		
 		$accounts = Core::getInstance()->user->getUserAccounts();
 		
@@ -1004,18 +1007,18 @@ class Operation_Model {
 		
 		$sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
 			o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create , dt_update
+			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, created_at , updated_at
 			FROM operation o 
 			WHERE o.user_id = " . Core::getInstance()->user->getId() . " AND o.date > 0 AND accepted=1
 			UNION 
 			SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id, 
 			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, 
-			dt_create , dt_update
+			dt_create AS created_at, dt_update AS updated_at
 			FROM target_bill t 
 			LEFT JOIN target tt ON t.target_id=tt.id 
 			WHERE t.user_id = " . Core::getInstance()->user->getId() . "
 			AND tt.done=0 
-			ORDER BY dt_update DESC
+			ORDER BY updated_at DESC
 			LIMIT " . (int)$count;
 		
 		$operations = $this->db->select( $sql );
@@ -1148,14 +1151,22 @@ class Operation_Model {
 	public function getOperation( $userId, $operationId )
 	{
 		// Запрос выбирает из операций и переводов на финцели
-		$sql = "SELECT o.id, o.user_id, o.money as amount, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
-			o.cat_id as category, NULL as target, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.account_id as account, o.tags, 
-			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, dt_create 
-			FROM operation o WHERE o.user_id = ? AND o.id = ?
-			UNION SELECT t.id, t.user_id, t.money as amount, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, 
-			tt.category_id as category, t.target_id as target, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.bill_id as account, t.tags, NULL, NULL, 4 as type, 
-			dt_create FROM target_bill t LEFT JOIN target tt ON t.target_id=tt.id
-			WHERE t.user_id = ? and t.id = ?";
+		$sql = "
+            SELECT
+                o.id, o.user_id, o.money as amount, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat,
+                o.cat_id as category, NULL as target, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt,
+                o.account_id as account, o.tags, o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, created_at
+			FROM
+                operation o WHERE o.user_id = ? AND o.id = ?
+			UNION
+            SELECT
+                t.id, t.user_id, t.money as amount, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat,
+                tt.category_id as category, t.target_id as target, tt.target_account_id, 1, t.comment, '', '', 1 AS virt,
+                t.bill_id as account, t.tags, NULL, NULL, 4 as type, dt_create AS created_at
+            FROM
+                target_bill t LEFT JOIN target tt ON t.target_id=tt.id
+			WHERE
+                t.user_id = ? and t.id = ?";
 		
 		$operation = $this->db->selectRow( $sql, (int)$userId, (int)$operationId, (int)$userId, (int)$operationId );
 		
@@ -1182,7 +1193,7 @@ class Operation_Model {
     public function getNumOfOperetionOnAccount($acc_id){
         $sql = "SELECT count(*) as op_count FROM operation
             WHERE account_id=?
-            AND dt_update BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW() ";
+            AND updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW() ";
         $count = $this->db->selectRow($sql, (int)$acc_id);
         return $count['op_count'];
     }

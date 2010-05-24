@@ -113,10 +113,7 @@ AccountProperty:
 # Операция с деньгами (12/20 - PART)
 Operation:
   tableName: operation
-  actAs:
-    Timestampable:
-      created: { name: dt_create }
-      updated: { name: dt_update }
+  actAs: [Timestampable]
   columns:
     user_id:    { type: integer(4), unsigned: true, notnull: true }
     account_id: { type: integer(4), unsigned: true, notnull: true }             # ID счёта
