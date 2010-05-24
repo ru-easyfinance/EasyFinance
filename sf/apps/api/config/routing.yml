@@ -6,12 +6,3 @@ sync_get_modified:
   params:  { module: sync, action: syncOut }
   requirements:
     sf_method: get
-
-
-# Импорт данных из AMT
-data_import_amt:
-  url: /import/amt
-  class:   sfRequestRoute
-  params:  { module: dataImportAmt, action: import }
-  requirements:
-    sf_method: post
