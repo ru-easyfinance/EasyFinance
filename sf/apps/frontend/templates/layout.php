@@ -8,8 +8,56 @@
         <?php include_stylesheets() ?>
         <?php include_javascripts() ?>
         <script type="text/javascript">
-            var res = <?php echo json_encode(array('errors' => array())); // тут был $res из шаблона ?>
+            <?php $_resTemplate = array(
+            //'getNotify' => '', //@FIXME
+            'profile'   => array(
+                'integration'=>array(
+                    'email' => '',
+                    'account' => '',
+                )
+            ),
+            //'tags' => '',
+            //'cloud' => '',
+            'calendar' => array(
+                'overdue'   => '',
+                'calendar'  => '',
+                'future'    => '',
+            ),
+            //'accounts' => array(),
+            //'accountsRecent' => array(),
+            //'user_targets' => array(),
+            //'popup_targets' => array(),
+            'currency' => array(
+                '1' => array(
+                    'cost' => 1,
+                    'name' => 'RUB',
+                    'text' => 'руб',
+                    'progress' => '',
+                ),
+                'default' => 1,
+            ),
+            'flash' => array(
+                'title' => '',
+                'value' => 0,
+            ),
+            'targets_category'=>array(
+                '1' => 'Квартира',
+                '2' => 'Автомобиль',
+                '3' => 'Отпуск',
+                '4' => 'Финансовая подушка',
+                '6' => 'Свадьба',
+                '7' => 'Бытовая техника',
+                '8' => 'Компьютер',
+                '5' => 'Прочее'
+            ),
+            //'budget' => '',
+            //'category' => array(),
+            'errors' => array(),
+            'user' => array('name' => $sf_user->getName()),
+            ); ?>
+            var res = <?php echo json_encode($_resTemplate); // тут был $res из шаблона ?>
         </script>
+        <?php include_component('_resources', 'accounts', array()) ?>
     </head>
 
     <body id="p_index">
@@ -34,10 +82,10 @@
                     <li><a href="/articles/12" id="help" style="font-weight:bold; color: yellow;">Помощь</a></li>
                 </ul>
                 <ul class="menu2">
-                        <!--- <li><a href="/info/">Личный кабинет</a></li> --->
-                        <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
-                        <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
-                        <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
+                    <!--- <li><a href="/info/">Личный кабинет</a></li> --->
+                    <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
+                    <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
+                    <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                 </ul>
             </div>
 <!-- верхнее меню -->
@@ -46,20 +94,20 @@
                 <a href="/info" class="logo">EasyFinance.ru</a>
                 <div class="slogan">Система управления личными финансами</div>
 
-                    <!--реклама-->
-                    <dl id="advertisement">
-                        <dt>реклама</dt>
-                        <dd>
-                            <div class="ramka1">
-                                <div class="ct"><div></div></div>
-                                <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
-                                    <a href="/registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
-                                </div>
-                                <div class="cb"><div></div></div>
+                <!--реклама-->
+                <dl id="advertisement">
+                    <dt>реклама</dt>
+                    <dd>
+                        <div class="ramka1">
+                            <div class="ct"><div></div></div>
+                            <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
+                                <a href="/registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
                             </div>
-                        </dd>
-                    </dl>
-                    <!--/реклама-->
+                            <div class="cb"><div></div></div>
+                        </div>
+                    </dd>
+                </dl>
+                <!--/реклама-->
             </div>
 
 
