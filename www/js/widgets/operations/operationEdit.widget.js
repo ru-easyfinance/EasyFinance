@@ -19,6 +19,7 @@ easyFinance.widgets.operationEdit = function(){
     var _isAccepted = true;
 
     var _accOptionsData = null;
+    var _accountOptions = null;
 
     var _oldSum = 0; // нужно для редактирования
 
@@ -454,7 +455,7 @@ easyFinance.widgets.operationEdit = function(){
             if (!_$ufdTransfer) {
                 _$ufdTransfer = $("#op_AccountForTransfer");
                 _$ufdTransfer.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
-                refreshAccounts();
+                _ufdSetOptions(_$ufdTransfer, _accountOptions);
                 _$ufdTransfer.change();
             }
 
@@ -777,6 +778,15 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
+    // используется для заполнения UFD опциями
+    function _ufdSetOptions($ufd, htmlOptions) {
+        if ($ufd) {
+            $ufd.html(htmlOptions);
+            $ufd.find('option:first').attr('selected', 'selected');
+            $ufd.ufd("changeOptions");
+        }
+    }
+
     function refreshAccounts() {
         if (!_$ufdAccount)
             return;
@@ -835,17 +845,15 @@ easyFinance.widgets.operationEdit = function(){
             strOptions += '<option value="' + _accOptionsData[k].value + '">' + _accOptionsData[k].text + '</option>';
         }
 
+        // #1412. сохраняем для последующей
+        // инициализации списка целевых счетов
+        _accountOptions = strOptions;
+
         // заполняем список счетов
-        _$ufdAccount.html(strOptions);
-        _$ufdAccount.find('option:first').attr('selected', 'selected');
-        _$ufdAccount.ufd("changeOptions");
+        _ufdSetOptions(_$ufdAccount, _accountOptions);
 
         // заполняем список целевых счетов
-        if (_$ufdTransfer) {
-            _$ufdTransfer.html(strOptions);
-            _$ufdTransfer.find('option:first').attr('selected', 'selected');
-            _$ufdTransfer.ufd("changeOptions");
-        }
+        _ufdSetOptions(_$ufdTransfer, _accountOptions);
     }
 
     function refreshCategories() {
