@@ -100,7 +100,13 @@ easyFinance.widgets.operationsJournal = function(){
             // то приводим суммы к валюте по умолчанию
             var strMoney = '';
             if (_account == '') {
-                money = easyFinance.models.currency.convertToDefault(money, data[v].account_currency_id);
+                if (data[v].moneydef) {
+                    // в мультивалётных операциях есть свой курс,
+                    // в поле moneydef уже сконвертированное значение
+                    money = data[v].moneydef;
+                } else {
+                    money = easyFinance.models.currency.convertToDefault(money, data[v].account_currency_id);
+                }
             }
             strMoney = formatCurrency(money);
 
