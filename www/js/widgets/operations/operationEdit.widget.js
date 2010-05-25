@@ -37,6 +37,7 @@ easyFinance.widgets.operationEdit = function(){
 
     // #1248. обновляем списки только при открытии диалога
     var _dirtyAccounts = true;
+    var _dirtyAccountsTransfer = true;
     var _dirtyCategories = true;
     var _dirtyTargets = true;
 
@@ -467,6 +468,8 @@ easyFinance.widgets.operationEdit = function(){
                 _$ufdTransfer.change();
             }
 
+            _refreshAccounts();
+
             _changeAccountForTransfer();
         //Перевод на финансовую цель
         } else if (_selectedType == "4") {
@@ -799,9 +802,7 @@ easyFinance.widgets.operationEdit = function(){
         if (!_$ufdAccount)
             return;
 
-        if (_dirtyAccounts) {
-            _dirtyAccounts = false;
-        } else {
+        if (!_dirtyAccounts && !_dirtyAccountsTransfer) {
             return;
         }
 
@@ -863,11 +864,19 @@ easyFinance.widgets.operationEdit = function(){
         // инициализации списка целевых счетов
         _accountOptions = strOptions;
 
-        // заполняем список счетов
-        _ufdSetOptions(_$ufdAccount, _accountOptions);
+        if (_dirtyAccounts) {
+            // заполняем список счетов
+            _dirtyAccounts = false;
+            _ufdSetOptions(_$ufdAccount, _accountOptions);
+        }
 
-        // заполняем список целевых счетов
-        _ufdSetOptions(_$ufdTransfer, _accountOptions);
+        if (_selectedType == "2") {
+            if (_dirtyAccountsTransfer) {
+                // заполняем список целевых счетов
+                _dirtyAccountsTransfer = false;
+                _ufdSetOptions(_$ufdTransfer, _accountOptions);
+            }
+        }
     }
 
     function _refreshCategories() {
@@ -933,6 +942,7 @@ easyFinance.widgets.operationEdit = function(){
         // #1248. ставим флаг для обновления списков счетов
         var accDirty = function() {
             _dirtyAccounts = true;
+            _dirtyAccountsTransfer = true;
         }
 
         $(document).bind('accountAdded', accDirty);
