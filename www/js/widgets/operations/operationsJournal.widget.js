@@ -100,7 +100,6 @@ easyFinance.widgets.operationsJournal = function(){
             // то приводим суммы к валюте по умолчанию
             var strMoney = '';
             if (_account == '') {
-                debugger;
                 if (data[v].moneydef && data[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
                     // в мультивалётных операциях есть свой курс,
                     // в поле moneydef уже сконвертированное значение
