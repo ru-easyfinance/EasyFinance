@@ -73,7 +73,7 @@ class Report_Model
      * Получает список валют валют и их курсы
      * @return array
      */
-    private function getCurrency( User $user )
+    private function getCurrency( oldUser $user )
     {
         $currency = array();
         // @XXX: Если ид валюты 4,6,9, то пересчитываем через них, иначе через рубль

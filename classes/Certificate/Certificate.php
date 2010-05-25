@@ -56,7 +56,7 @@ class Certificate
 	 * @param string $comment Комментарий
 	 * @param string $imageSrc Адрес изображения сертификата
 	 */
-	public static function create( User $user, $comment, $imageSrc )
+	public static function create( oldUser $user, $comment, $imageSrc )
 	{
 		$comment	= $comment;
 		
@@ -86,7 +86,7 @@ class Certificate
 		);
 	}
 	
-	public static function delete( User $user, $certId )
+	public static function delete( oldUser $user, $certId )
 	{
 		@unlink( SYS_DIR_ROOT . '/www' . self::getImagePath($user->getId())  );
 		@unlink( SYS_DIR_ROOT . '/www' . self::getImagePath($user->getId(), true) );

@@ -17,10 +17,10 @@ class Certificate_Container
 	/**
 	 * Создание и наполнение контейнера сертификатов пользователя
 	 *
-	 * @param User $user
+	 * @param oldUser $user
 	 * @return Certificate_Container
 	 */
-	public static function loadByUser( User $user )
+	public static function loadByUser( oldUser $user )
 	{
 		$container = new Certificate_Container();
 		

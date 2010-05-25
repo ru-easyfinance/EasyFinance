@@ -70,7 +70,7 @@ class Account_PIF extends Account
 
     /**
      * Создаёт новый счёт типа "PIF"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -89,7 +89,7 @@ class Account_PIF extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

@@ -32,10 +32,10 @@ class Calendar
 
     /**
      * Конструктор
-     * @param User $user
+     * @param oldUser $user
      * @return void
      */
-    public function __construct( User $user )
+    public function __construct( oldUser $user )
     {
         $this->_user = $user;
     }
@@ -43,14 +43,14 @@ class Calendar
     /**
      * Возвращает обьект Calendar с загруженными событиями для пользователя $user
      *
-     * @param User $user
+     * @param oldUser $user
      * @param int $start
      * @param int $end
      * @return Calendar
      * 
      * @example $calendar = Calendar::loadAll( $user );
      */
-    public function loadAll( User $user, $start = null, $end = null)
+    public function loadAll( oldUser $user, $start = null, $end = null)
     {
         if (is_null($start)) {
             $start = date('Y-m-d'); //@TODO Поставить какую-нибудь вменяемую дату
@@ -81,10 +81,10 @@ class Calendar
     /**
      * Список неподтверждённых операций
      * 
-     * @param User $user
+     * @param oldUser $user
      * @return array
      */
-    public function loadOverdue(User $user)
+    public function loadOverdue(oldUser $user)
     {
         if (!$user) {
             $user = $this->_user;
@@ -103,10 +103,10 @@ class Calendar
     /**
      * Список напоминалок на ближайшее будущее
      *
-     * @param User $user
+     * @param oldUser $user
      * @return array
      */
-    public function loadReminder(User $user)
+    public function loadReminder(oldUser $user)
     {
         if (!$user) {
             $user = $this->_user;

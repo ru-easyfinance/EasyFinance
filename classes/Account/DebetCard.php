@@ -61,7 +61,7 @@ class Account_DebetCard extends Account
 
     /**
      * Создаёт новый счёт типа "Дебетовая карта"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -81,7 +81,7 @@ class Account_DebetCard extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

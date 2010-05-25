@@ -69,7 +69,7 @@ class Account_LoanGet extends Account
 
     /**
      * Создаёт новый счёт типа "Займ полученный"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -90,7 +90,7 @@ class Account_LoanGet extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

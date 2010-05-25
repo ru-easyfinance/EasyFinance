@@ -15,7 +15,7 @@ class Mail
 	
 	protected $user;
 	
-	public function __construct( User $user )
+	public function __construct( oldUser $user )
 	{
 		$this->user = $user;
 	}
@@ -23,11 +23,11 @@ class Mail
 	/**
 	 * Возвращает обьект Mail с загруженными письмами для пользователя $user
 	 *
-	 * @param User $user
+	 * @param oldUser $user
 	 * @return Mail
 	 * @example $mail = Mail::loadAll( $user );
 	 */
-	public static function loadAll( User $user )
+	public static function loadAll( oldUser $user )
 	{
 		$mail = new Mail( $user );
 		

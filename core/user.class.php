@@ -7,7 +7,7 @@
  * @category user
  * @version SVN $Id$
  */
-class User
+class oldUser
 {
     /**
      * Массив, хранит свойства пользователя

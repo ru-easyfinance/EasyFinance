@@ -200,10 +200,10 @@ class Login_Model
      * @param string $login
      * @param string $password 
      * @param bool $remember
-     * @param User $user
+     * @param oldUser $user
      * @return void
      */
-    public function login($login, $password, $remember = false, User $user = null)
+    public function login($login, $password, $remember = false, oldUser $user = null)
     {
         $encpass = encrypt(array($login, $password));
 

@@ -61,7 +61,7 @@ class Account_BankAcc extends Account
 
     /**
      * Создаёт новый счёт типа "Банковский счёт"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -82,7 +82,7 @@ class Account_BankAcc extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

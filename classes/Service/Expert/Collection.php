@@ -17,9 +17,9 @@ class Service_Expert_Collection extends Service_Collection
 	/**
 	 * Конструктор
 	 *
-	 * @param User $user
+	 * @param oldUser $user
 	 */
-	public function __construct( User $user )
+	public function __construct( oldUser $user )
 	{
 		$this->user = $user;
 	}
@@ -27,10 +27,10 @@ class Service_Expert_Collection extends Service_Collection
 	/**
 	 * Создание и наполнение контейнера услуг эксперта
 	 *
-	 * @param User $user
+	 * @param oldUser $user
 	 * @return Service_Expert_Container
 	 */
-	public static function load( User $user )
+	public static function load( oldUser $user )
 	{
 		$container = new self( $user );
 		

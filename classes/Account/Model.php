@@ -163,7 +163,7 @@ class Account_Model
     }
     /**
      * Возвращает массив счетов пользователя, со всеми прилагающимися параметрами
-     * @param User $user
+     * @param oldUser $user
      * @return array
      */
     public function loadAll($user)

@@ -65,7 +65,7 @@ class Account_Share extends Account
 
     /**
      * Создаёт новый счёт типа "Акции"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -84,7 +84,7 @@ class Account_Share extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

@@ -82,7 +82,7 @@ class Account_Credit extends Account
 
     /**
      * Создаёт новый счёт типа "Кредит"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -103,7 +103,7 @@ class Account_Credit extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */
