@@ -1,8 +1,8 @@
 
 # Sync: Отдать список измененных объектов
 sync_get_modified:
-  url: /modified/:model
+  url: /modified/:model.:sf_format
   class:   sfRequestRoute
-  params:  { module: sync, action: syncOut }
+  params:  { module: sync, action: syncOut, sf_format: xml }
   requirements:
     sf_method: get
