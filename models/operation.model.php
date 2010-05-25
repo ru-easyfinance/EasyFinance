@@ -730,30 +730,23 @@ class Operation_Model {
 
     /**
      * Удаляет указанную операцию
+     * 
      * @param int id
      * @return bool
      */
     function deleteOperation($id = 0)
     {
-        //получаем айди дочерней смежной записи
-        $tr_id = $this->db->query('SELECT * FROM operation WHERE tr_id = ? AND user_id = ?', $id, Core::getInstance()->user->getId());
-        //родительской
-        $idsh = $this->db->query('SELECT * FROM operation WHERE id = ? AND user_id = ?', $id, Core::getInstance()->user->getId());
-        
-            if ($this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$id, Core::getInstance()->user->getId())) {
-                //return true;
-            } else {
-                return false;
-            }
-        if ( isset($tr_id[0]) && $tr_id[0]['id'] )
-        {
-            $this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$tr_id[0]['id'], Core::getInstance()->user->getId());
+        $userId = Core::getInstance()->user->getId();
+
+        //Получаем ID смежной записи (в случае, если это перевод)
+        $tr_id = $this->db->selectCell('SELECT * FROM operation WHERE tr_id = ? AND user_id = ?', $id, $userId);
+
+        if ($tr_id === null) {
+            $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND id = ?";
+        } else {
+            $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND (id = ? OR tr_id = ?)";
         }
-        if ( isset($idsh[0]) && $idsh[0]['tr_id'] )
-        {
-            $this->db->query("DELETE FROM operation WHERE id= ? AND user_id= ?",$idsh[0]['tr_id'], Core::getInstance()->user->getId());
-        }
-        return true;
+        return (bool)$this->db->query($sql, $userId, $id, $tr_id);
     }
 
     /**
@@ -810,36 +803,57 @@ class Operation_Model {
 		}
 
 		// Выборка операций пользователя
-		$sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
-			o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, created_at, o.source_id AS source
-			FROM operation o 
-			WHERE o.user_id = " . Core::getInstance()->user->getId();
+		$sql = "SELECT
+                    o.id,
+                    o.user_id,
+                    o.money,
+                    DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
+                    o.date AS dnat,
+                    o.cat_id,
+                    NULL as target_id,
+                    o.account_id,
+                    o.drain,
+                    o.comment,
+                    o.transfer,
+                    o.tr_id, 0 AS virt,
+                    o.tags,
+                    o.imp_id AS moneydef,
+                    o.exchange_rate AS curs,
+                    o.type,
+                    created_at,
+                    o.source_id AS source
+                FROM
+                    operation o
+                WHERE
+                    o.user_id = " . Core::getInstance()->user->getId();
 		
+        // Добавляем фильтр для обязательного скрытия удалённых
+        $sql .= " AND o.deleted_at IS NULL ";
+
 		// Если указан счёт (фильтруем по счёту)
-		if( (int)$currentAccount > 0 )
-		{
+		if((int)$currentAccount > 0) {
 			$sql .= " AND o.account_id = '" . (int)$currentAccount . "' ";
 		}
-		
+
 		$sql .= ' AND (`date` BETWEEN "' . $dateFrom . '" AND "' . $dateTo . '") ';
-		
+
 		// Если указана категория (фильтр по категории)
-		if (!empty($currentCategory))
-		{
-			if ( $categorys[$currentCategory]['cat_parent'] == 0 )
-			{
+		if (!empty($currentCategory)) {
+
+			if ( $categorys[$currentCategory]['cat_parent'] == 0 ) {
+
 				$sql .= ' AND o.cat_id IN (' . $cat_in . ') ';
-			} 
-			else
-			{
+
+			} else {
+
 				$sql .= ' AND o.cat_id = "' . $currentCategory .'" ';
+
 			}
+
 		}
-		
+
 		// Если указан тип (фильтр по типу)
-		if ($type >= 0)
-		{
+		if ($type >= 0) {
 			if ($type == Operation::TYPE_PROFIT )//Доход
 			{ 
 				$sql .= " AND o.drain = 0 AND o.transfer = 0 ";
@@ -873,36 +887,54 @@ class Operation_Model {
 		
 		//Присоединение переводов на фин цель
 		$sql .= " UNION 
-			SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id, 
-			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create AS created_at, ''
-			FROM target_bill t 
-			LEFT JOIN target tt ON t.target_id=tt.id 
-			WHERE t.user_id = " . Core::getInstance()->user->getId() 
+			SELECT 
+                t.id,
+                t.user_id,
+                -t.money,
+                DATE_FORMAT(t.date,'%d.%m.%Y'),
+                t.date AS dnat,
+                tt.category_id,
+                t.target_id,
+                tt.target_account_id,
+                1,
+                t.comment,
+                '',
+                '',
+                1 AS virt,
+                t.tags,
+                NULL,
+                NULL,
+                4 as type,
+                dt_create AS created_at,
+                ''
+            FROM target_bill t
+            LEFT JOIN
+                target tt
+                ON
+                t.target_id=tt.id
+			WHERE
+                t.user_id = " . Core::getInstance()->user->getId()
 			. " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
-			
-		if((int)$currentAccount > 0)
-		{
+
+		if((int)$currentAccount > 0) {
 			$sql .= " AND t.bill_id = '{$currentAccount}' ";
 		}
-		if (!empty($currentCategory))
-		{
+
+		if (!empty($currentCategory)) {
 			$sql .= " AND 0 = 1 "; // Не выбираем эти операции, т.к. у финцелей свои категории
 		}
-		
+
 		// Если фильтр по типу - и он не фин.цель
-		if ($type != -1 && $type != 4)
-		{
+		if ($type != -1 && $type != 4) {
 			// Не выбираем эти операции
 			$sql .= " AND 0 = 4";
 		}
 		
-		if ( !is_null($sumFrom) )
-		{
+		if (!is_null($sumFrom)) {
 			$sql .= " AND ABS(t.money) >= " . $sumFrom;
 		}
 		
-		if ( !is_null($sumTo) )
-		{
+		if (!is_null($sumTo)) {
 			$sql .= " AND ABS(t.money) <= " . $sumTo;
 		}
 		
@@ -1005,21 +1037,70 @@ class Operation_Model {
 	{
 		$operations = array();
 		
-		$sql = "SELECT o.id, o.user_id, o.money, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat, 
-			o.cat_id, NULL as target_id, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt, o.tags,
-			o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, created_at , updated_at
-			FROM operation o 
-			WHERE o.user_id = " . Core::getInstance()->user->getId() . " AND o.date > 0 AND accepted=1
+		$sql = "SELECT 
+                    o.id,
+                    o.user_id,
+                    o.money,
+                    DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
+                    o.date AS dnat,
+                    o.cat_id,
+                    NULL as target_id,
+                    o.account_id,
+                    o.drain,
+                    o.comment,
+                    o.transfer,
+                    o.tr_id,
+                    0 AS virt,
+                    o.tags,
+                    o.imp_id AS moneydef,
+                    o.exchange_rate AS curs,
+                    o.type,
+                    created_at,
+                    updated_at
+                FROM
+                    operation o
+                WHERE
+                    o.user_id = " . Core::getInstance()->user->getId() . "
+                AND
+                    o.date > 0
+                AND
+                    accepted=1
+                AND
+                    deleted_at IS NULL
 			UNION 
-			SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id, 
-			t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, 
-			dt_create AS created_at, dt_update AS updated_at
-			FROM target_bill t 
-			LEFT JOIN target tt ON t.target_id=tt.id 
-			WHERE t.user_id = " . Core::getInstance()->user->getId() . "
-			AND tt.done=0 
-			ORDER BY updated_at DESC
-			LIMIT " . (int)$count;
+                SELECT
+                    t.id,
+                    t.user_id,
+                    -t.money,
+                    DATE_FORMAT(t.date,'%d.%m.%Y'),
+                    t.date AS dnat,
+                    tt.category_id,
+                    t.target_id,
+                    tt.target_account_id,
+                    1,
+                    t.comment,
+                    '',
+                    '',
+                    1 AS virt,
+                    t.tags,
+                    NULL,
+                    NULL,
+                    4 as type,
+                    dt_create AS created_at,
+                    dt_update AS updated_at
+                FROM
+                    target_bill t
+                LEFT JOIN
+                    target tt
+                ON
+                    t.target_id=tt.id
+                WHERE
+                    t.user_id = " . Core::getInstance()->user->getId() . "
+                AND
+                    tt.done=0
+                ORDER BY
+                    updated_at DESC
+                LIMIT " . (int)$count;
 		
 		$operations = $this->db->select( $sql );
 		
@@ -1037,14 +1118,24 @@ class Operation_Model {
      */
     function getTotalSum($account_id = 0, $drain = null)
     {
+        // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
+        $tr = " SELECT
+                    SUM(money) as sum
+                FROM
+                    operation
+                WHERE
+                    user_id = ?
+                AND
+                    accepted= 1
+                AND
+                    deleted_at IS NULL ";
+
         if (!is_null($drain)) {
             $dr = " AND drain = '" . (int)$drain . "'";
         } else {
             $dr = '';
         }
 
-        // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
-        $tr = "SELECT SUM(money) as sum FROM operation WHERE user_id = ? AND accepted= 1 ";//AND transfer = 0 AND tr_id is NULL
         if (is_array($account_id) && count($account_id) > 0) {
             $sql = $tr." AND account_id IN (?a) {$dr}";
             $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
@@ -1072,20 +1163,6 @@ class Operation_Model {
         $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
         $first = $this->db->query($sql, $this->user->getId(), $account_id);
         return $first[0]['money'];
-    }
-
-    /**
-     * Получает комментарий указанного счёта
-     * @FIXME Перенести этот метод отсюда
-     * @deprecated
-     * @param <type> $account_id
-     * @return <type>
-     */
-    function getComment($account_id=0)
-    {
-        $sql = "SELECT account_description FROM accounts WHERE user_id=? AND account_id=?";
-        $com = $this->db->query($sql, $this->user->getId(), $account_id);
-        return $com[0]['account_description'];
     }
 
     /**
@@ -1153,20 +1230,62 @@ class Operation_Model {
 		// Запрос выбирает из операций и переводов на финцели
 		$sql = "
             SELECT
-                o.id, o.user_id, o.money as amount, DATE_FORMAT(o.date,'%d.%m.%Y') as `date`, o.date AS dnat,
-                o.cat_id as category, NULL as target, o.account_id, o.drain, o.comment, o.transfer, o.tr_id, 0 AS virt,
-                o.account_id as account, o.tags, o.imp_id AS moneydef, o.exchange_rate AS curs, o.type, created_at
+                o.id, 
+                o.user_id,
+                o.money as amount,
+                DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
+                o.date AS dnat,
+                o.cat_id as category,
+                NULL as target,
+                o.account_id,
+                o.drain,
+                o.comment,
+                o.transfer,
+                o.tr_id,
+                0 AS virt,
+                o.account_id as account,
+                o.tags,
+                o.imp_id AS moneydef,
+                o.exchange_rate AS curs,
+                o.type,
+                created_at
 			FROM
-                operation o WHERE o.user_id = ? AND o.id = ?
+                operation o 
+            WHERE
+                o.user_id = ?
+            AND
+                o.id = ?
 			UNION
             SELECT
-                t.id, t.user_id, t.money as amount, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat,
-                tt.category_id as category, t.target_id as target, tt.target_account_id, 1, t.comment, '', '', 1 AS virt,
-                t.bill_id as account, t.tags, NULL, NULL, 4 as type, dt_create AS created_at
+                t.id, 
+                t.user_id,
+                t.money as amount,
+                DATE_FORMAT(t.date,'%d.%m.%Y'),
+                t.date AS dnat,
+                tt.category_id as category,
+                t.target_id as target,
+                tt.target_account_id,
+                1,
+                t.comment,
+                '',
+                '',
+                1 AS virt,
+                t.bill_id as account,
+                t.tags,
+                NULL,
+                NULL,
+                4 as type,
+                dt_create AS created_at
             FROM
-                target_bill t LEFT JOIN target tt ON t.target_id=tt.id
+                target_bill t
+            LEFT JOIN
+                target tt
+            ON
+                t.target_id=tt.id
 			WHERE
-                t.user_id = ? and t.id = ?";
+                t.user_id = ? 
+            AND
+                t.id = ?";
 		
 		$operation = $this->db->selectRow( $sql, (int)$userId, (int)$operationId, (int)$userId, (int)$operationId );
 		
