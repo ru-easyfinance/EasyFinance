@@ -110,7 +110,7 @@ Core::getInstance()->js = array(
 );
 
 // Почта
-require_once dirname( dirname ( __FILE__ ) ) . "/core/external/Swift/swift_required.php";
+require_once dirname(dirname(__FILE__)) . "/sf/lib/vendor/symfony/lib/vendor/swiftmailer/swift_required.php";
 
 // Если это продуктив, то используем для отправки писем - sendmail
 if (defined('ENVIRONMENT') && ENVIRONMENT == 'prod') {
