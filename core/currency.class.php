@@ -6,7 +6,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Currency implements IteratorAggregate,  ArrayAccess
+class oldCurrency implements IteratorAggregate,  ArrayAccess
 {
      /**
      * Ссылка на экземпляр DBSimple
@@ -30,14 +30,14 @@ class Currency implements IteratorAggregate,  ArrayAccess
             Core::getInstance()->initDB();
         }
         $this->db = Core::getInstance()->db;
-        
+
         // Загружаем список валют
         $this->loadCurrency();
     }
 
     /**
      * Загружает валюты. Сперва пробует загрузить их из файла, а потом, если не вышло, то из базы
-     * @example Пример части загружаемого массива 
+     * @example Пример части загружаемого массива
      * <code>array(
      * '2'=>array(
      *      'name'=>'Доллар США',
@@ -54,9 +54,9 @@ class Currency implements IteratorAggregate,  ArrayAccess
         {
             $daily = null;
         }
-        
+
         $daily = null;
-        
+
         if ($daily == null)
         {
             $currency = $this->db->select("SELECT * FROM currency c WHERE cur_uses=1");

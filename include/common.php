@@ -23,7 +23,8 @@ spl_autoload_register('__autoload');
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 
 // Добавлем очерёдность загрузки для JS файлов
-Core::getInstance()->currency = new Currency();
+require_once(dirname(__FILE__) . '/../core/currency.class.php');
+Core::getInstance()->currency = new oldCurrency();
 require_once(dirname(__FILE__) . '/../core/user.class.php');
 Core::getInstance()->user = new oldUser();
 

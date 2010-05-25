@@ -34,7 +34,7 @@ class Core
 
     /**
      * Ссылка на экземпляр класса с валютами
-     * @var Currency
+     * @var oldCurrency
      * @example Core::getInstance->currency[$id] Так можно получить системную валюту по id
      * @example Пример части массива системных валют
      * <code>array(
@@ -62,14 +62,14 @@ class Core
      */
     public $url = array();
 
-    
+
     /**
      * Swift_Mailer instance
      *
      * @var object
      */
     public static $mailer = null;
-    
+
     /**
      * Возвращает ссылку на себя
      * @example Core::getInstance()->parse_url();
@@ -114,7 +114,7 @@ class Core
         $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
         // И обработчик ошибок для бд
         $db->setErrorHandler('databaseErrorHandler');
-        
+
         Core::getInstance()->db = $db;
         //Логгируем все запросы. Только во включенном режиме DEBUG
         if (DEBUG) {
