@@ -93,8 +93,8 @@ easyFinance.widgets.operationsJournal = function(){
                 }
             }
 
-            // не учитываем в балансе и итогах операции перевода
-            if (_journal[v].transfer > 0)
+            // в режиме "все счета" не учитываем в балансе и итогах операции перевода (по ним баланс всегда ноль)
+            if (_account == '' && data[v].transfer > 0)
                 curMoney = 0;
             else
                 curMoney = parseFloat(_journal[v].money * easyFinance.models.currency.getCurrencyCostById(_journal[v].account_currency_id));
