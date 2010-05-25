@@ -1,0 +1,11 @@
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="true"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader">
+</phpunit>
