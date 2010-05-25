@@ -7,6 +7,8 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
 class task_importOperationFromAmtEmailTastTest extends myUnitTestCase
 {
     private $_tmpFile;
+    private $_cwd;
+
 
     /**
      * SetUp
@@ -14,6 +16,9 @@ class task_importOperationFromAmtEmailTastTest extends myUnitTestCase
     protected function _start()
     {
         $this->_tmpFile = tempnam(sys_get_temp_dir(), __CLASS__);
+
+        $this->_cwd = getcwd();
+        chdir(sfConfig::get('sf_root_dir'));
     }
 
 
@@ -22,6 +27,7 @@ class task_importOperationFromAmtEmailTastTest extends myUnitTestCase
      */
     protected function _end()
     {
+        chdir($this->_cwd);
         unlink($this->_tmpFile);
     }
 
