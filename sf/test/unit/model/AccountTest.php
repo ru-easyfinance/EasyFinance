@@ -81,4 +81,17 @@ class model_AccountTest extends myUnitTestCase
         $this->assertEquals(1, $this->queryFind('AccountProperty', $prop1)->count(), 'Prop 1');
         $this->assertEquals(1, $this->queryFind('AccountProperty', $prop2)->count(), 'Prop 1');
     }
+
+
+    /**
+     * Невозможно удалить пользователя, если у него есть счета
+     */
+    public function testFailedDeleteUserIdConnectedWithAccount()
+    {
+        $account = $this->helper->makeAccount();
+
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
+        $account->getUser()->delete();
+    }
+
 }
