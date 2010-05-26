@@ -6,3 +6,11 @@ sync_get_modified:
   params:  { module: sync, action: syncOut, sf_format: xml }
   requirements:
     sf_method: get
+
+# Sync(In): Принять набор счетов
+sync_in_account:
+  url: /post/accounts.:sf_format
+  class:   sfRequestRoute
+  params:  { module: sync, action: syncInAccount, sf_format: xml }
+  requirements:
+    sf_method: post
