@@ -52,7 +52,7 @@ Currency:
     code:        { name: cur_char_code as code,  type: string(15),  notnull: true }
     symbol:      { name: cur_name as symbol,     type: string(10),  notnull: true }
     name:        { name: cur_name_value as name, type: string(255), notnull: true }
-    rate:        {                               type: 'decimal(20, 6)', notnull: true, default: 0 }
+    rate:        {                               type: 'decimal(20, 6)', notnull: true, default: 1 }
     is_active:   { name: cur_uses as is_active,  type: integer(1),  notnull: true, unsigned: true, default: 0 }
   options:
     symfony:
