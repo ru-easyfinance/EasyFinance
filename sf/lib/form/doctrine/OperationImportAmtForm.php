@@ -142,7 +142,10 @@ class OperationImportAmtForm extends BaseFormDoctrine
         $id = Doctrine::getTable('Account')->queryFindLinkedWithAmt($userId, 'a')
             ->select('a.id')
             ->execute(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
-        return (int) $id;
+
+        if ($id) {
+            return (int) $id;
+        }
     }
 
 

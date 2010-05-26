@@ -63,4 +63,16 @@ class model_OperationTest extends myUnitTestCase
         $op->getUser()->delete();
     }
 
+
+    /**
+     * Невозможно удалить операцию, если у нее есть счет
+     */
+    public function testFailedDeleteOperationIdConnectedWithAccount()
+    {
+        $operation = $this->helper->makeOperation();
+
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
+        $operation->getAccount()->delete();
+    }
+
 }
