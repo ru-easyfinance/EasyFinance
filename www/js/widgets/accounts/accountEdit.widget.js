@@ -135,6 +135,9 @@ easyFinance.widgets.accountEdit = function(){
                 "Сохранить": function() {
                     _saveAccount();
                 }
+            },
+            open: function(event, ui) {
+                $('#div_acc_comment').html('<textarea name="description" id="acc_comment" class="" style=""></textarea>')
             }
         });
 
