@@ -23,7 +23,7 @@ Core::getInstance()->db->setErrorHandler('databaseErrorHandler');
 
 require_once(dirname(__FILE__).'/UnitTestCase.php');
 require_once(dirname(__FILE__).'/TestMailInvokerStub.php');
-
+require_once(dirname(__FILE__).'/CreateObjectHelper.php');
 
 // Заглушка для почты
 $invoker = new TestMailInvokerStub;
