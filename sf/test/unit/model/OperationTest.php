@@ -35,14 +35,14 @@ class model_OperationTest extends myUnitTestCase
 
 
     /**
-     * При удалении пользователя, удаляются все его операции
+     * Невозможно удалить операцию, если у нее есть пользователь
      */
-    public function testOnDeleteUserCascade()
+    public function testFailedDeleteOperationIdConnectedWithUser()
     {
-        $op = $this->helper->makeOperation($this->helper->makeAccount());
+        $op = $this->helper->makeOperation();
 
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
         $op->getUser()->delete();
-        $this->assertEquals(0, $op->getTable()->createQuery()->count());
     }
 
 }
