@@ -17,6 +17,12 @@ class model_OperationTest extends myUnitTestCase
         // Пользователь
         $this->assertType('User', $op->User);
 
+        // Счет
+        $this->assertType('Account', $op->Account);
+
+        // Категория
+        $this->assertType('Category', $op->Category);
+
         // Операция из внешнего источника
         $this->assertType('SourceOperation', $op->SourceOperation);
     }
@@ -33,7 +39,7 @@ class model_OperationTest extends myUnitTestCase
         $data = array(
             'user_id'     => $user->getId(),
             'account_id'  => $account->getId(),
-            'category_id' => 1,
+            'category_id' => $this->helper->makeCategory($user)->getId(),
             'amount'      => 1234.56,
         );
         $op = new Operation;
@@ -75,4 +81,15 @@ class model_OperationTest extends myUnitTestCase
         $operation->getAccount()->delete();
     }
 
+
+    /**
+     * Невозможно удалить операцию, если у нее есть категория
+     */
+    public function testFailedDeleteOperationIdConnectedWithCategory()
+    {
+        $operation = $this->helper->makeOperation();
+
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
+        $operation->getCategory()->delete();
+    }
 }

@@ -71,10 +71,36 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         if (!$account) {
             $account = $this->makeAccount(null, array(), $save);
         }
+        $user = $account->getUser();
+        $cat  = $this->makeCategory($user);
 
         $ob = $this->makeModel('Operation', $props, false);
         $ob->setAccount($account);
         $ob->setUser($account->getUser());
+        $ob->setCategory($cat);
+
+        if ($save) {
+            $ob->save();
+        }
+        return $ob;
+    }
+
+
+    /**
+     * Создать категорию
+     */
+    public function makeCategory(User $user = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$user) {
+            $user = $this->makeUser(array(), $save);
+        }
+
+        $ob = $this->makeModel('Category', $props, false);
+        $ob->setUser($user);
 
         if ($save) {
             $ob->save();
