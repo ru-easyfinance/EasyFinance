@@ -15,7 +15,7 @@ function calculate(funcStr){
 				sign = new Number(eval(funcStr));
 			}
 
-			return (Math.round(sign*100)/100).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+			return roundToCents(sign).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 		} catch (e) {
 			return funcStr;
 			
@@ -44,7 +44,7 @@ var RW_calculator = function(){
 			}
 			clearVal = true;
 
-            return (Math.round(sign*100)/100).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+            return roundToCents(sign).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 		} catch (e) {
 			return funcStr;
 			//            return false;
