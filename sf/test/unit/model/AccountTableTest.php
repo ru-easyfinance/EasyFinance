@@ -50,7 +50,7 @@ class model_AccountTableTest extends myUnitTestCase
          * 6. не амт
          */
         $a3 = $this->_makeAccount(3, $userA);
-        $a4 = $this->_makeAccount(4, $user, $type = 9999);
+        $a4 = $this->_makeAccount(4, $user, $type = Account::TYPE_CASH);
         $a6 = $this->_makeAccount(6, $user, null, null, $value = 'not amt');
         $a5 = $this->_makeAccount(5, $user, null, $column = 9999);
         $a1 = $this->_makeAccount(1, $user);

@@ -28,7 +28,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     {
         $defaultProps = array(
             'name'        => $this->makeText('Название счета'),
-            'type_id'     => 999,
+            'type_id'     => Account::TYPE_CASH,
             'currency_id' => 1,
             'description' => $this->makeText('Описание счета'),
         );

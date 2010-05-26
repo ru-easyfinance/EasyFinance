@@ -41,6 +41,18 @@ User:
       filter: false
 
 
+# Тип счёта (100% - ОК)
+AccountType:
+  tableName: account_types
+  columns:
+    account_type_id:   { type: integer(4), notnull: true, unsigned: true, primary: true, autoincrement: true }
+    account_type_name: { type: string(255) }
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+
 # Счет (100% - OK)
 Account:
   tableName: accounts
@@ -65,6 +77,12 @@ Account:
       type: one
       foreignType: many
       autoComplete: false         # Currency ничего не узнает
+    AccountType:
+      local: account_type_id
+      foreign: account_type_id
+      type: one
+      foreignType: many
+      autoComplete: false         # AccountType ничего не узнает
   options:
     symfony:
       form:  false
