@@ -59,6 +59,12 @@ Account:
       type: one
       foreignType: many
       foreignAlias: Accounts      # User->Accounts
+    Currency:
+      local: currency_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false         # Currency ничего не узнает
   options:
     symfony:
       form:  false

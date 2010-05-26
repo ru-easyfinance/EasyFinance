@@ -17,6 +17,9 @@ class model_AccountTest extends myUnitTestCase
         // Пользователь
         $this->assertType('User', $acc->User);
 
+        // Валюта
+        $this->assertType('Currency', $acc->Currency);
+
         // Свойства счета
         $this->assertType('Doctrine_Collection', $props = $acc->Properties);
         $this->assertType('AccountPropertyTable', $props->getTable());
@@ -92,6 +95,18 @@ class model_AccountTest extends myUnitTestCase
 
         $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
         $account->getUser()->delete();
+    }
+
+
+    /**
+     * Невозможно удалить валюту, если есть связи со счетами
+     */
+    public function testFailedDeleteCurrencyIdConnectedWithAccount()
+    {
+        $account = $this->helper->makeAccount(null, array('currency_id' => 1));
+
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
+        $account->getCurrency()->delete();
     }
 
 }
