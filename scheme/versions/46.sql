@@ -1,1 +1,0 @@
-ALTER TABLE `users` ADD `getNotify` TINYINT DEFAULT '1' NOT NULL AFTER `user_new` ;
