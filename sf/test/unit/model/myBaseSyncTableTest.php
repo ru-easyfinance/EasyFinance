@@ -55,6 +55,23 @@ class model_myBaseSyncTableTest extends myUnitTestCase
 
 
     /**
+     * Выбрать удаленные объекты
+     */
+    public function testFindDeleted()
+    {
+        $table = Doctrine::getTable('Account');
+
+        $account  = $this->helper->makeAccount(null, array('updated_at' => $this->_makeDate(-1500)->format(DATE_ISO8601)));
+        $account->delete();
+
+        $found = $table->createBaseSyncQuery($this->_makeDateRange(-100, 100), $account->getUserId())
+            ->execute();
+        $this->assertEquals(1, $found->count());
+        $this->assertEquals($account->getId(), $found->getFirst()->getId());
+    }
+
+
+    /**
      * Выбрать список у которых нет пользователя
      */
     public function testFindModifiedWithoutUser()

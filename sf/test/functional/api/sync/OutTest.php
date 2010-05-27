@@ -115,6 +115,31 @@ class api_sync_OutTest extends myFunctionalTestCase
 
 
     /**
+     * Показать удаленный объект
+     */
+    public function testGetDeletedObject()
+    {
+        $account = $this->helper->makeAccount();
+        $account->delete();
+
+        $this->browser
+            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
+                'model'   => 'account',
+                'from'    => $this->_makeDate(-10),
+                'to'      => $this->_makeDate(10),
+                'user_id' => $account->getUserId())), 200)
+            ->with('response')->begin()
+                ->checkContains('<recordset type="Account">')
+                ->checkElement('record', 1)
+                ->checkElement('#'.$account->getId())
+                ->checkElement('record created_at')
+                ->checkElement('record updated_at')
+                ->checkElement('record[deleted]')
+            ->end();
+    }
+
+
+    /**
      * Отдать список операций
      */
     public function testGetOps()

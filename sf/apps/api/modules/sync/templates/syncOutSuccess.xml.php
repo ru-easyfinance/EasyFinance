@@ -13,7 +13,8 @@ $table = Doctrine::getTable($model);
 
 <recordset type="<?php echo $model; ?>">
     <?php foreach ($list as $item): ?>
-    <record id="<?php echo $item['id']; ?>">
+    <record id="<?php echo $item['id']; ?>"<?php if ($table->hasColumn('deleted_at') && $item['deleted_at']) { echo ' deleted="deleted"'; } ?>>
+
         <?php foreach ($columns as $columnName): ?>
         <?php
             $type = $table->getTypeOf($columnName);
