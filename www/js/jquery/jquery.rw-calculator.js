@@ -100,7 +100,7 @@
             else {
                 sign = new Number(eval(funcStr));
             }
-            return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ').replace('.00','');
+            return roundToCents(sign).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ').replace('.00','');
         }
         catch (e) {
             return funcStr;
