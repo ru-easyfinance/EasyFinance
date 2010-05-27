@@ -212,6 +212,9 @@ easyFinance.widgets.operationEdit = function(){
             autoOpen: false,
             title: 'Новая операция',
             width: 400,
+            open: function(event, ui) {
+                $('#div_op_comment').html('<textarea rows="1" cols="1" id="op_comment"></textarea>');
+            },
             beforeclose: function() {
                 // очищаем форму перед закрытием
                 _clearForm();
