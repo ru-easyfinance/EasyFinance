@@ -11,6 +11,18 @@ class api_sync_OutTest extends myFunctionalTestCase
 
 
     /**
+     * Создать дату с указанным смещением от текущей
+     *
+     * @param  int    $shift - Смещение в секундах
+     * @return string
+     */
+    private function _makeDate($shift)
+    {
+        return date(DATE_ISO8601, time()+$shift);
+    }
+
+
+    /**
      * 404 если указана неизвестная модель
      */
     public function test404IfModelNotSupported()
@@ -78,22 +90,26 @@ class api_sync_OutTest extends myFunctionalTestCase
      */
     public function testGetAccounts()
     {
-        $this->markTestIncomplete();
-        $account  = $this->helper->makeAccount();
+        $account1 = $this->helper->makeAccount(null, array('updated_at' => $this->_makeDate(1000)));
+        $account2 = $this->helper->makeAccount($account1->getUser());
         $accountA = $this->helper->makeAccount();
 
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
-                'model' => 'account',
-                'user_id'=>$account->getUserId())), 200)
+                'model'   => 'account',
+                'from'    => $this->_makeDate(500),
+                'to'      => $this->_makeDate(1500),
+                'user_id' => $account1->getUserId())), 200)
             ->with('response')->begin()
                 ->checkContains('<recordset type="Account">')
                 ->checkElement('record', 1)
-                ->checkElement('#'.$account->getId())
+                ->checkElement('#'.$account1->getId())
                 ->checkElement('record name')
                 ->checkElement('record description')
                 ->checkElement('record currency_id')
                 ->checkElement('record type_id')
+                ->checkElement('record created_at')
+                ->checkElement('record updated_at')
             ->end();
     }
 

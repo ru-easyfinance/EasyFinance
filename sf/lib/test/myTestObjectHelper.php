@@ -60,6 +60,30 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
 
 
     /**
+     * Создать коллекцию счетов
+     */
+    public function makeAccountCollection($count, User $user = null, array $props = array(), $save = true)
+    {
+        $coll = Doctrine_Collection::create('Account');
+
+        if (!$user) {
+            $user = $this->makeUser(array(), $save);
+        }
+
+        for ($i=0; $i<(int)$count; $i++) {
+            if (isset($props[$i])) {
+                $itemProps = $props[$i];
+            } else {
+                $itemProps = array();
+            }
+            $coll->add($this->makeAccount($user, $itemProps, $save));
+        }
+
+        return $coll;
+    }
+
+
+    /**
      * Создать операцию
      */
     public function makeOperation(Account $account = null, array $props = array(), $save = true)

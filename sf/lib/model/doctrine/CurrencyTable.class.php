@@ -4,28 +4,21 @@
 /**
  * Таблица: Валюта
  */
-class CurrencyTable extends Doctrine_Table
+class CurrencyTable extends myBaseSyncTable
 {
     /**
-     * Список измененных объектов для синка
+     * Получить список объектов подлежащих синхронизации
      *
-     * @param  array $params
+     * @param  myDatetimeRange $range  - Интервал дат
+     * @param  int             $userId - ID пользователя
      * @return Doctrine_Query
      */
     public function queryFindModifiedForSync(myDatetimeRange $range, $userId)
     {
-        $dateStart = $range->getStart()->format(DATE_ISO8601);
-        $dateEnd   = $range->getEnd()->format(DATE_ISO8601);
-
-        $q = $this->createQuery('c')
-            ->andWhere('c.updated_at BETWEEN CAST(? AS DATETIME) AND CAST(? AS DATETIME)', array(
-                $dateStart, $dateEnd
-            ))
-            ->orWhere('c.created_at BETWEEN CAST(? AS DATETIME) AND CAST(? AS DATETIME)', array(
-                $dateStart, $dateEnd
-            ))
+        $q = $this->createBaseSyncQuery($range, $userId, 'c')
             ->andWhere('c.is_active = ?', 1);
 
         return $q;
     }
+
 }

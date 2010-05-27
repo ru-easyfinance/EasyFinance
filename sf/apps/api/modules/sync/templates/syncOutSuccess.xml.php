@@ -6,6 +6,7 @@
  * @param array  $list    - Массив объектов
  * @param array  $columns - Список колонок, которые надо отобразить
  */
+use_helper('Sync');
 
 $table = Doctrine::getTable($model);
 ?>
@@ -17,13 +18,14 @@ $table = Doctrine::getTable($model);
         <?php
             $type = $table->getTypeOf($columnName);
             if ('date' == $type || 'timestamp' == $type || 'datetime' == $type) {
-                $date = new DateTime($item[$columnName]);
-                echo content_tag($columnName, $date->format(DATE_ISO8601));
+                echo content_tag($columnName, sync_date($item[$columnName]));
             } else {
                 echo content_tag($columnName, $item[$columnName]);
             }
         ?>
         <?php endforeach; ?>
+        <created_at><?php echo sync_date($item['created_at']); ?></created_at>
+        <updated_at><?php echo sync_date($item['updated_at']); ?></updated_at>
     </record>
     <?php endforeach; ?>
 </recordset>

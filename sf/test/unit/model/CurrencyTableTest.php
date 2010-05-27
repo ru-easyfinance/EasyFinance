@@ -33,46 +33,21 @@ class model_CurrencyTableTest extends myUnitTestCase
 
 
     /**
-     * Выбрать список измененных объектов для синка
+     * Для синхронизации надо выбирать только активные валюты
      */
-    public function testQueryFindModifiedForSync()
+    public function testFindActiveForSync()
     {
-        $table = Doctrine::getTable('Currency');
+        Doctrine::getTable('Currency')->createQuery()
+            ->update()
+            ->set('is_active', 0)
+            ->where('id > ?', 1)
+            ->execute();
 
-        $c1 = $table->find(1);
-        $c1->setDateTimeObject('updated_at', $this->_makeDate(1000));
-        $c1->save();
-
-        $c2 = $table->find(2);
-        $c2->setDateTimeObject('updated_at', $this->_makeDate(2000));
-        $c2->save();
-
-        $found = $table->queryFindModifiedForSync($this->_makeDateRange(1000, 1001), null)
+        $found = Doctrine::getTable('Currency')
+            ->queryFindModifiedForSync(new myDatetimeRange(new DateTime('-1year'), new DateTime), null)
             ->execute();
         $this->assertEquals(1, $found->count());
-        $this->assertEquals($c1->getId(), $found->getFirst()->getId());
-    }
-
-
-    /**
-     * Выбрать список созданных объектов для синка
-     */
-    public function testQueryFindCreatedForSync()
-    {
-        $table = Doctrine::getTable('Currency');
-
-        $c1 = $table->find(1);
-        $c1->setDateTimeObject('created_at', $this->_makeDate(1000));
-        $c1->save();
-
-        $c2 = $table->find(2);
-        $c2->setDateTimeObject('created_at', $this->_makeDate(2000));
-        $c2->save();
-
-        $found = $table->queryFindModifiedForSync($this->_makeDateRange(1000, 1001), null)
-            ->execute();
-        $this->assertEquals(1, $found->count());
-        $this->assertEquals($c1->getId(), $found->getFirst()->getId());
+        $this->assertEquals(1, $found->getFirst()->getId());
     }
 
 }

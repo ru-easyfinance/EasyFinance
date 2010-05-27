@@ -10,7 +10,6 @@ class syncOutAction extends sfAction
      */
     public function execute($request)
     {
-
         $syncModel = $request->getParameter('model');
         $this->forward404Unless($table = $this->_getTable($syncModel));
 
@@ -62,9 +61,9 @@ class syncOutAction extends sfAction
     public function _getColunmsToReturn($syncModel)
     {
         $models = array(
-            'currency'  => array('code', 'symbol', 'name', 'rate', 'created_at', 'updated_at'),
+            'currency'  => array('code', 'symbol', 'name', 'rate'),
             'account'   => array('name', 'description', 'currency_id', 'type_id'),
-            'operation' => array('account_id', 'category_id', 'amount', 'comment','dt_create', 'dt_update'),
+            'operation' => array('account_id', 'category_id', 'amount', 'comment'),
         );
         return $models[$syncModel];
     }

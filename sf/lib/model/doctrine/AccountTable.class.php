@@ -3,14 +3,18 @@
 /**
  * Таблица: счета
  */
-class AccountTable extends Doctrine_Table
+class AccountTable extends myBaseSyncTable
 {
-    public function queryFindModifiedForSync(array $params)
+    /**
+     * Получить список объектов подлежащих синхронизации
+     *
+     * @param  myDatetimeRange $range  - Интервал дат
+     * @param  int             $userId - ID пользователя
+     * @return Doctrine_Query
+     */
+    public function queryFindModifiedForSync(myDatetimeRange $range, $userId)
     {
-        $q = $this->createQuery('a')
-            ->andWhere('a.user_id = ?', $params['user_id']);
-
-        return $q;
+        return $this->createBaseSyncQuery($range, $userId);
     }
 
 
