@@ -852,13 +852,8 @@ easyFinance.widgets.operationEdit = function(){
             }
         }
 
-        // очищаем списки счетов
+        // конструируем списки счетов
         var strOptions = '';
-        _$ufdAccount.empty();
-        if (_$ufdTransfer) {
-            _$ufdTransfer.empty();
-        }
-
         for (var k in _accOptionsData) {
             strOptions += '<option value="' + _accOptionsData[k].value + '">' + _accOptionsData[k].text + '</option>';
         }
@@ -869,6 +864,7 @@ easyFinance.widgets.operationEdit = function(){
 
         if (_dirtyAccounts) {
             // заполняем список счетов
+            _$ufdAccount.empty();
             _dirtyAccounts = false;
             _ufdSetOptions(_$ufdAccount, _accountOptions);
         }
@@ -876,6 +872,7 @@ easyFinance.widgets.operationEdit = function(){
         if (_selectedType == "2") {
             if (_dirtyAccountsTransfer) {
                 // заполняем список целевых счетов
+                _$ufdTransfer.empty();
                 _dirtyAccountsTransfer = false;
                 _ufdSetOptions(_$ufdTransfer, _accountOptions);
             }
