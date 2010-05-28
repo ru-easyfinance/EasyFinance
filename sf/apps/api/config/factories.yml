@@ -19,6 +19,8 @@ test:
     param:
       session_path: %SF_TEST_CACHE_DIR%/sessions
 
+  request:
+    class: myTestRequest
   response:
     class: sfWebResponse
     param:
