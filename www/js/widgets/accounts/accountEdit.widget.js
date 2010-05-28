@@ -135,6 +135,9 @@ easyFinance.widgets.accountEdit = function(){
                 "Сохранить": function() {
                     _saveAccount();
                 }
+            },
+            open: function(event, ui) {
+                $('#div_acc_comment').html('<textarea name="description" id="acc_comment" class="" style=""></textarea>')
             }
         });
 
@@ -199,12 +202,12 @@ easyFinance.widgets.accountEdit = function(){
             .val(account.type)
             .attr('disabled', 'disabled');
 
+        _$dialog.data('title.dialog', 'Изменить счёт').dialog('open');
+
         $('#acc_name').val(account.name);
         $('#acc_comment').val(account.comment);
         $('#acc_balance').val(parseFloat(account.initPayment));
         $('#acc_currency').val(account.currency);
-
-        _$dialog.data('title.dialog', 'Изменить счёт').dialog('open');
     }
 
     function setEditMode(mode) {

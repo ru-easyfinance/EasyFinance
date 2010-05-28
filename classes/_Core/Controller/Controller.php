@@ -234,13 +234,12 @@ abstract class _Core_Controller
         // Если валюта не бел.р., гривна, тенге
         if ( !in_array( $curdef, array(4,6,9) ) )
         {
-        		//
-		$curfrom = 1;
+            $curfrom = 1;
         }
 
         try
         {
-            $curr = $user->getCurrencyByDefault($cur_user_array, $curfrom);
+            $curr = $user->getUserCurrency();
         }
         catch ( Exception $e)
         {

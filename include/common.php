@@ -22,14 +22,13 @@ spl_autoload_register('__autoload');
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 
-// Добавлем очерёдность загрузки для JS файлов
-require_once(dirname(__FILE__) . '/../core/currency.class.php');
-Core::getInstance()->currency = new oldCurrency();
-require_once(dirname(__FILE__) . '/../core/user.class.php');
-Core::getInstance()->user = new oldUser();
 
 
 // Загрузить курсы валют
+// Старые
+require_once(dirname(__FILE__) . '/../core/currency.class.php');
+Core::getInstance()->currency = new oldCurrency();
+// Новые
 require_once SYS_DIR_ROOT . '/classes/Currency/efMoney.php';
 require_once SYS_DIR_ROOT . '/classes/Currency/efCurrencyExchange.php';
 require_once SYS_DIR_ROOT . '/classes/Currency/efCurrencyModel.php';
@@ -40,6 +39,10 @@ foreach(efCurrencyModel::loadAll() as $row) {
     $ex->setRate($row['cur_id'], $row['rate'], efMoney::RUR);
 }
 sfConfig::set('ex', $ex);
+
+require_once(dirname(__FILE__) . '/../core/user.class.php');
+Core::getInstance()->user = new oldUser();
+
 
 
 Core::getInstance()->js = array(

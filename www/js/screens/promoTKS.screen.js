@@ -119,7 +119,7 @@ function submitTKSFull() {
 
         // направляем на сайт Тинькова
         var prefix = "https://www.tcsbank.ru/deposit/form/?easyfinance_formdeposit&";
-        var params = 'surname=' + escape($("#txtSurname").val()) + '&firstname=' + escape($("#txtName").val()) + '&lastname=' + escape($("#txtPatronymic").val()) + '&phone=' + $("#txtPhone").val();
+        var params = 'lastname=' + escape($("#txtSurname").val()) + '&firstname=' + escape($("#txtName").val()) + '&middlename=' + escape($("#txtPatronymic").val()) + '&phone=' + $("#txtPhone").val();
         var postfix = '&step=2';
         var url = prefix + params + postfix;
         window.open(url);
