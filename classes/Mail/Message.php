@@ -36,7 +36,7 @@ class Mail_Message
 		}
 	}
 	
-	public function __construct( Mail_MessageModel $model, User $user)
+	public function __construct( Mail_MessageModel $model, oldUser $user)
 	{
 		$this->model = $model;
 		
@@ -143,7 +143,7 @@ class Mail_Message
 		return $json;
 	}
 	
-	public static function load( User $user, $id )
+	public static function load( oldUser $user, $id )
 	{
 		$model = Mail_MessageModel::load( (int)$id, $user );
 		

@@ -5,6 +5,13 @@
  */
 abstract class UnitTestCase extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Do not preserve the global state when running in a separate PHP process.
+     * @see PHPUnit_Framework_TestCase::run()
+     */
+    protected $preserveGlobalState = false;
+
+
     private $db;
 
 

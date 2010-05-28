@@ -143,12 +143,16 @@ function formatCurrency(num) {
 			return "0.00";
 		}
 		var sign = new Number(num);
-		return sign.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+		return roundToCents(sign).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 	}catch(e){
 		return "0.00"
 	}
 }
 
+// округляем число до двух знаков после запятой
+function roundToCents(number) {
+    return Math.round(number*Math.pow(10,2))/Math.pow(10,2);
+}
 
 function roundToSignificantFigures(n, sig) {
     var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);

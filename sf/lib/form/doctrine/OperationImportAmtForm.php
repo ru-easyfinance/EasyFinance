@@ -96,7 +96,7 @@ class OperationImportAmtForm extends BaseFormDoctrine
             default:
                 throw new Exception("Unxpected operation type `{$values['type']}`");
         }
-        $values['drain'] = $values['type'];
+        $values['drain'] = $values['type']^1;
 
 
         // Дата и время
@@ -142,7 +142,10 @@ class OperationImportAmtForm extends BaseFormDoctrine
         $id = Doctrine::getTable('Account')->queryFindLinkedWithAmt($userId, 'a')
             ->select('a.id')
             ->execute(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
-        return (int) $id;
+
+        if ($id) {
+            return (int) $id;
+        }
     }
 
 

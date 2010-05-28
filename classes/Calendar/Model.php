@@ -12,7 +12,7 @@ class Calendar_Model extends _Core_Abstract_Model
      *
      * @var integer
      */
-    public function __construct( array $row, User $owner )
+    public function __construct( array $row, oldUser $owner )
     {
             $this->ownerId = $owner->getId();
 
@@ -29,7 +29,7 @@ class Calendar_Model extends _Core_Abstract_Model
      *
      * @return array Массив моделей событий
      */
-    public static function loadAll( User $user, $start, $end )
+    public static function loadAll( oldUser $user, $start, $end )
     {
         $modelsArray = array();
 
@@ -76,11 +76,11 @@ class Calendar_Model extends _Core_Abstract_Model
     /**
      * Загрузка всех неподтверждённых событий для указанного пользователя
      *
-     * @param User $user
+     * @param oldUser $user
      *
      * @return array
      */
-    public static function loadOverdue(User $user)
+    public static function loadOverdue(oldUser $user)
     {
         $modelsArray = array();
 
@@ -115,9 +115,9 @@ class Calendar_Model extends _Core_Abstract_Model
     /**
      * Выводит список напоминалок на неделю вперёд
      *
-     * @param User $user
+     * @param oldUser $user
      */
-    public function loadReminder(User $user)
+    public function loadReminder(oldUser $user)
     {
         $modelsArray = array();
 
@@ -153,12 +153,12 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Создаёт цепочку операций
-     * @param User $user Пользователь
+     * @param oldUser $user Пользователь
      * @param Calendar_Event $event Событие
      * @param array $arrayDays Массив с днями, повторениями
      * @return bool
      */
-    public static function create (User $user, Calendar_Event $event, $arrayDays)
+    public static function create (oldUser $user, Calendar_Event $event, $arrayDays)
     {
 
         // Создаём само событие
@@ -181,12 +181,12 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Обновляет события
-     * @param User $user
+     * @param oldUser $user
      * @param Calendar_Event $event
      * @param array $array
      * @return bool
      */
-    public static function update ( User $user, Calendar_Event $event, $array )
+    public static function update ( oldUser $user, Calendar_Event $event, $array )
     {
 
         // Создаём само событие
@@ -222,11 +222,11 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Возвращает даты подтверждённых событий в серии
-     * @param User $user
+     * @param oldUser $user
      * @param int $chain
      * @return array
      */
-    public static function loadAcceptedByChain (User $user, $chain)
+    public static function loadAcceptedByChain (oldUser $user, $chain)
     {
         $sql = 'SELECT `date` FROM operation c WHERE user_id=? AND chain_id=? AND accepted=1';
         return Core::getInstance()->db->selectCol($sql, $user->getId(), $chain);
@@ -234,12 +234,12 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Добавляет рег. операции
-     * @param User $user
+     * @param oldUser $user
      * @param Calendar_Event $event
      * @param int $chain
      * @param array $arrayDays
      */
-    private function createOperations (User $user, Calendar_Event $event, $chain, $arrayDays )
+    private function createOperations (oldUser $user, Calendar_Event $event, $chain, $arrayDays )
     {
         // Создаём повторы события в виде неподтверждённых операций
         $operationsArray = array();
@@ -289,11 +289,11 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Получает операцию в виде массива
-     * @param User $user
+     * @param oldUser $user
      * @param int $chain
      * @return array
      */
-    public static function getByChain ( User $user, $chain )
+    public static function getByChain ( oldUser $user, $chain )
     {
         $sql = 'SELECT * FROM calendar_chains c WHERE user_id=? AND id=?';
         return Core::getInstance()->db->selectRow($sql, $user->getId(), $chain);
@@ -301,11 +301,11 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Удаляет события
-     * @param User $user
+     * @param oldUser $user
      * @param int  $chain
      * @return bool
      */
-    public static function deleteEvents ( User $user, $chain )
+    public static function deleteEvents ( oldUser $user, $chain )
     {
         $sql = "DELETE FROM operation WHERE user_id=? AND chain_id=? AND accepted=0";
 
@@ -322,11 +322,11 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Отмечает события как выполненные
-     * @param User $user
+     * @param oldUser $user
      * @param array $ids array(int, int, int, ..)
      * @return bool
      */
-    public static function acceptEvents ( User $user, $ids )
+    public static function acceptEvents ( oldUser $user, $ids )
     {
 
          $stringIds = '';
@@ -369,12 +369,12 @@ class Calendar_Model extends _Core_Abstract_Model
 
     /**
      * Редактирует дату операции
-     * @param User $user
+     * @param oldUser $user
      * @param int $id
      * @param mysql date $date
      * @return bool
      */
-    public static function editDate ( User $user, $id, $date )
+    public static function editDate ( oldUser $user, $id, $date )
     {
         $sql = "UPDATE operation SET `date`= ? WHERE id =? AND user_id=?;";
 

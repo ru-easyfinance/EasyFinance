@@ -73,7 +73,7 @@ class Account_OFBU extends Account
 
     /**
      * Создаёт новый счёт типа "ОФБУ"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -92,7 +92,7 @@ class Account_OFBU extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

@@ -22,9 +22,9 @@ class Calendar_Event
     /**
      * Конструктор
      * @param Calendar_Model $model
-     * @param User $user
+     * @param oldUser $user
      */
-    public function __construct(Calendar_Model $model, User $user)
+    public function __construct(Calendar_Model $model, oldUser $user)
     {
         $this->_model = $model;
     }

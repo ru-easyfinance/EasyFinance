@@ -10,7 +10,7 @@ class Mail_MessageModel extends _Core_Abstract_Model
 	 */
 	private $ownerId = null;
 	
-	protected function __construct( array $row, User $owner )
+	protected function __construct( array $row, oldUser $owner )
 	{
 		$this->ownerId = $owner->getId();
 		
@@ -24,7 +24,7 @@ class Mail_MessageModel extends _Core_Abstract_Model
 	 * 
 	 * @return array Массив моделей сообщений
 	 */
-	public static function loadAll( User $user )
+	public static function loadAll( oldUser $user )
 	{		
 		$modelsArray = array();
 		
@@ -66,7 +66,7 @@ class Mail_MessageModel extends _Core_Abstract_Model
 	 * @return Mail_MessageModel
 	 * @example Mail_MessageModel::load( $id );
 	 */
-	public static function load( $messageId, User $owner )
+	public static function load( $messageId, oldUser $owner )
 	{
 		if( !is_int( $messageId ) )
 		{
@@ -93,13 +93,13 @@ class Mail_MessageModel extends _Core_Abstract_Model
 	/**
 	 * Создание нового сообщения
 	 *
-	 * @param User $sender Обьект отправителя
-	 * @param _User $reciever Обьект получателя
+	 * @param oldUser $sender Обьект отправителя
+	 * @param _oldUser $reciever Обьект получателя
 	 * @param string $subject Тема сообщения
 	 * @param string $body Тело сообщения
 	 * @param boolean $draft Указатель черновика
 	 */
-	public static function create( User $sender, _User $receiver, $subject, $body, $draft = false)
+	public static function create( oldUser $sender, _User $receiver, $subject, $body, $draft = false)
 	{
 		$sql = 'insert into messages 
 			(id, sender_id, receiver_id, subject, date, body, draft)

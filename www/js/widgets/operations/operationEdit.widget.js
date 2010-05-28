@@ -19,6 +19,7 @@ easyFinance.widgets.operationEdit = function(){
     var _isAccepted = true;
 
     var _accOptionsData = null;
+    var _accountOptions = null;
 
     var _oldSum = 0; // нужно для редактирования
 
@@ -33,6 +34,12 @@ easyFinance.widgets.operationEdit = function(){
     var _$ufdCategory = null;
     var _$ufdTransfer = null;
     var _$ufdTarget = null;
+
+    // #1248. обновляем списки только при открытии диалога
+    var _dirtyAccounts = true;
+    var _dirtyAccountsTransfer = true;
+    var _dirtyCategories = true;
+    var _dirtyTargets = true;
 
     // для мультивалютных переводов
     var _defaultCurrency = null;
@@ -108,7 +115,7 @@ easyFinance.widgets.operationEdit = function(){
             // если указатель пустой, инициализируем UFD выбора категории
             _$ufdCategory = $('#op_category');
             _$ufdCategory.ufd({manualWidth: 345, zIndexPopup: 1300, unwrapForCSS: true});
-            refreshCategories();
+            _refreshCategories();
             _$ufdCategory.change();
         }
 
@@ -120,7 +127,7 @@ easyFinance.widgets.operationEdit = function(){
             // если указатель пустой, инициализируем UFD выбора счёта
             _$ufdAccount = $("#op_account");
             _$ufdAccount.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
-            refreshAccounts();
+            _refreshAccounts();
             _$ufdAccount.change();
 
             if (preAccount) {
@@ -205,10 +212,13 @@ easyFinance.widgets.operationEdit = function(){
             autoOpen: false,
             title: 'Новая операция',
             width: 400,
+            open: function(event, ui) {
+                $('#div_op_comment').html('<textarea rows="1" cols="1" id="op_comment"></textarea>');
+            },
             beforeclose: function() {
                 // очищаем форму перед закрытием
                 _clearForm();
-				
+
 				// #1134. скрываем окно тегов, если оно открыто
 				$('.op_tags_could').dialog("close");
             },
@@ -310,7 +320,7 @@ easyFinance.widgets.operationEdit = function(){
                     i++;
                 });
             } else if ($(this).val()=="0") { // Не повторять
-                _$blockRepeating.hide();
+                _$blockWeekdays.hide();
                 _$blockRepeating.hide();
             } else { // день, месяц, год
                 _$blockWeekdays.hide();
@@ -356,12 +366,15 @@ easyFinance.widgets.operationEdit = function(){
             setType("0");
         }
 
+        _refreshAccounts();
+        _refreshCategories();
+
         // выставляем текующую дату
         $('#op_date').datepicker('setDate', new Date());
 
         // #1276. выбираем счёт, указанные в фильтре журнала операций
         var acc = $("#account_filtr").val();
-        if (acc !==undefined && acc != "") { 
+        if (acc !==undefined && acc != "") {
             setAccount(acc);
         }
 
@@ -454,9 +467,11 @@ easyFinance.widgets.operationEdit = function(){
             if (!_$ufdTransfer) {
                 _$ufdTransfer = $("#op_AccountForTransfer");
                 _$ufdTransfer.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
-                refreshAccounts();
+                _ufdSetOptions(_$ufdTransfer, _accountOptions);
                 _$ufdTransfer.change();
             }
+
+            _refreshAccounts();
 
             _changeAccountForTransfer();
         //Перевод на финансовую цель
@@ -731,7 +746,7 @@ easyFinance.widgets.operationEdit = function(){
         $('.week input').removeAttr('checked');
 
         // сбрасываем параметры повторения операции
-        $('#cal_repeat').val("0");
+        $('#cal_repeat').val("0").change();
         $('#cal_rep_every').attr('checked', 'checked');
         $('#cal_count').val("1");
         $('.week input').removeAttr('checked');
@@ -777,9 +792,22 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
-    function refreshAccounts() {
+    // используется для заполнения UFD опциями
+    function _ufdSetOptions($ufd, htmlOptions) {
+        if ($ufd) {
+            $ufd.html(htmlOptions);
+            $ufd.find('option:first').attr('selected', 'selected');
+            $ufd.ufd("changeOptions");
+        }
+    }
+
+    function _refreshAccounts() {
         if (!_$ufdAccount)
             return;
+
+        if (!_dirtyAccounts && !_dirtyAccountsTransfer) {
+            return;
+        }
 
         // составляем список счетов
         var accounts = _modelAccounts.getAccounts();
@@ -824,33 +852,42 @@ easyFinance.widgets.operationEdit = function(){
             }
         }
 
-        // очищаем списки счетов
+        // конструируем списки счетов
         var strOptions = '';
-        _$ufdAccount.empty();
-        if (_$ufdTransfer) {
-            _$ufdTransfer.empty();
-        }
-
         for (var k in _accOptionsData) {
             strOptions += '<option value="' + _accOptionsData[k].value + '">' + _accOptionsData[k].text + '</option>';
         }
 
-        // заполняем список счетов
-        _$ufdAccount.html(strOptions);
-        _$ufdAccount.find('option:first').attr('selected', 'selected');
-        _$ufdAccount.ufd("changeOptions");
+        // #1412. сохраняем для последующей
+        // инициализации списка целевых счетов
+        _accountOptions = strOptions;
 
-        // заполняем список целевых счетов
-        if (_$ufdTransfer) {
-            _$ufdTransfer.html(strOptions);
-            _$ufdTransfer.find('option:first').attr('selected', 'selected');
-            _$ufdTransfer.ufd("changeOptions");
+        if (_dirtyAccounts) {
+            // заполняем список счетов
+            _$ufdAccount.empty();
+            _dirtyAccounts = false;
+            _ufdSetOptions(_$ufdAccount, _accountOptions);
+        }
+
+        if (_selectedType == "2") {
+            if (_dirtyAccountsTransfer) {
+                // заполняем список целевых счетов
+                _$ufdTransfer.empty();
+                _dirtyAccountsTransfer = false;
+                _ufdSetOptions(_$ufdTransfer, _accountOptions);
+            }
         }
     }
 
-    function refreshCategories() {
+    function _refreshCategories() {
         if (_$ufdCategory) {
             _changeOperationType();
+        }
+
+        if (_dirtyCategories) {
+            _dirtyCategories = false;
+        } else {
+            return;
         }
     }
 
@@ -902,24 +939,34 @@ easyFinance.widgets.operationEdit = function(){
         // setup form
         _initForm();
 
-        $(document).bind('accountAdded', refreshAccounts);
-        $(document).bind('accountEdited', refreshAccounts);
-        $(document).bind('accountDeleted', refreshAccounts);
+        // #1248. ставим флаг для обновления списков счетов
+        var accDirty = function() {
+            _dirtyAccounts = true;
+            _dirtyAccountsTransfer = true;
+        }
 
-        $(document).bind('categoriesLoaded', refreshCategories);
-        //$(document).bind('categoryAdded', refreshCategories);
-        $(document).bind('categoryEdited', refreshCategories);
-        $(document).bind('categoryDeleted', refreshCategories);
+        $(document).bind('accountAdded', accDirty);
+        $(document).bind('accountEdited', accDirty);
+        $(document).bind('accountDeleted', accDirty);
+
+        // #1248. ставим флаг для обновления списка категорий
+        var catDirty = function() {
+            _dirtyCategories = true;
+        }
+
+        $(document).bind('categoriesLoaded', catDirty);
+        $(document).bind('categoryEdited', catDirty);
+        $(document).bind('categoryDeleted', catDirty);
 
         return this;
     }
 
     function setSum(sum){
         _oldSum = Math.abs(sum);
-        $('#op_amount').val(_oldSum == 0 ? '' : _oldSum);    
+        $('#op_amount').val(_oldSum == 0 ? '' : _oldSum);
     }
 
-    function setType(id){	
+    function setType(id){
         _selectedType = id;
         _changeOperationType();
         if (_$ufdType) {
@@ -966,7 +1013,7 @@ easyFinance.widgets.operationEdit = function(){
 		if (id == "0") {
 			return;
 		}
-	
+
         _selectedTarget = id;
         if (_$ufdTarget) {
             _$ufdTarget.selectOptions(id, true).ufd("changeOptions");
@@ -1101,7 +1148,7 @@ easyFinance.widgets.operationEdit = function(){
         $("#op_type").html(htmlOptions).ufd("changeOptions");
         setType(data.type);
         // EOF TEMP
-		
+
         fillForm(data, isEditing);
 
         // заполняем атрибуты цепочки / события
@@ -1157,8 +1204,6 @@ easyFinance.widgets.operationEdit = function(){
         showFormCalendar: showFormCalendar,
         fillForm: fillForm,
         fillFormCalendar: fillFormCalendar,
-        refreshAccounts: refreshAccounts,
-        refreshCategories: refreshCategories,
         refreshTargets: refreshTargets
     };
 }(); // execute anonymous function to immediatly return object

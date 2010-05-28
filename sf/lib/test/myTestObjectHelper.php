@@ -28,7 +28,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     {
         $defaultProps = array(
             'name'        => $this->makeText('Название счета'),
-            'type_id'     => 999,
+            'type_id'     => Account::TYPE_CASH,
             'currency_id' => 1,
             'description' => $this->makeText('Описание счета'),
         );
@@ -60,6 +60,30 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
 
 
     /**
+     * Создать коллекцию счетов
+     */
+    public function makeAccountCollection($count, User $user = null, array $props = array(), $save = true)
+    {
+        $coll = Doctrine_Collection::create('Account');
+
+        if (!$user) {
+            $user = $this->makeUser(array(), $save);
+        }
+
+        for ($i=0; $i<(int)$count; $i++) {
+            if (isset($props[$i])) {
+                $itemProps = $props[$i];
+            } else {
+                $itemProps = array();
+            }
+            $coll->add($this->makeAccount($user, $itemProps, $save));
+        }
+
+        return $coll;
+    }
+
+
+    /**
      * Создать операцию
      */
     public function makeOperation(Account $account = null, array $props = array(), $save = true)
@@ -71,10 +95,36 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         if (!$account) {
             $account = $this->makeAccount(null, array(), $save);
         }
+        $user = $account->getUser();
+        $cat  = $this->makeCategory($user);
 
         $ob = $this->makeModel('Operation', $props, false);
         $ob->setAccount($account);
         $ob->setUser($account->getUser());
+        $ob->setCategory($cat);
+
+        if ($save) {
+            $ob->save();
+        }
+        return $ob;
+    }
+
+
+    /**
+     * Создать категорию
+     */
+    public function makeCategory(User $user = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$user) {
+            $user = $this->makeUser(array(), $save);
+        }
+
+        $ob = $this->makeModel('Category', $props, false);
+        $ob->setUser($user);
 
         if ($save) {
             $ob->save();

@@ -154,8 +154,8 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
 
         $input = $this->getValidInput();
         // доход
-        $input['type'] = Operation::TYPE_PROFIT;
-        $input['amount'] = '-1234.56';
+        $input['type'] = 1; // см. вики
+        $input['amount'] = '-1234.56'; // минус роли не играет, abs()
         $date = new DateTime($input['timestamp']);
         $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
@@ -165,11 +165,11 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
         $op = $this->form->save();
         $expected = array(
             'user_id'   => $this->_getUser()->getId(),
-            'account_id' => 0,
+            'account_id' => null,
             'amount'    => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
             'time'      => $date->format('H:i:s'),
-            'drain'     => Operation::TYPE_PROFIT,
+            'drain'     => 0, // Доход
             'type'      => Operation::TYPE_PROFIT,
             'comment'   => sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s\nСумма платежа: %s",
                 $input['description'], $input['account'], $input['place'], $input['balance'], $input['payment']),
@@ -196,7 +196,7 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
     {
         $input = $this->getValidInput();
         // расход
-        $input['type'] = Operation::TYPE_EXPENSE;
+        $input['type'] = 0; // Расход, см. вики
         $input['amount'] = '1234.56';
 
         $this->form->bind($input, array());
@@ -205,9 +205,9 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
         $op = $this->form->save();
         $expected = array(
             'user_id'   => $this->_getUser()->getId(),
-            'account_id' => 0,
+            'account_id' => null,
             'amount'    => -(float) $input['amount'],
-            'drain'     => Operation::TYPE_EXPENSE,
+            'drain'     => 1, // Расход
             'type'      => Operation::TYPE_EXPENSE,
         );
         $this->assertOperation($expected, $op);

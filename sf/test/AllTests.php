@@ -1,23 +1,29 @@
 <?php
-require_once(dirname(__FILE__).'/bootstrap/all.php');
+
+// Suite
+require_once(dirname(__FILE__).'/../../tests/unit/AllTests.php');
 
 
-class AllSymfonyAppTests extends PHPUnit_Framework_TestSuite
+/**
+ * Все тесты EasyFinance
+ */
+class AllTests extends PHPUnit_Framework_TestSuite
 {
     /**
      * SetUp
      */
-    public function setup()
+    public function setUp()
     {
+        $dir = getcwd();
+        chdir(sfConfig::get('sf_root_dir'));
 
         // Clear logs
         sfToolkit::clearDirectory(sfConfig::get('sf_log_dir'));
 
-        // Remove current app cache
+        // Remove cache
         sfToolkit::clearDirectory(sfConfig::get('sf_cache_dir'));
 
         // Rebuild DB
-        chdir(sfConfig::get('sf_root_dir'));
         $task = new sfDoctrineBuildTask(new sfEventDispatcher, new sfFormatter);
         $task->run($args = array(), $options = array(
             'env' => 'test',
@@ -26,13 +32,7 @@ class AllSymfonyAppTests extends PHPUnit_Framework_TestSuite
             'and-migrate' => true,
         ));
 
-        // Базовые фикстуры
-        $fixtureFile = sfConfig::get('sf_data_dir') . '/fixtures/install.sql';
-        $options = Doctrine_Manager::getInstance()->getConnection('doctrine')->getOptions();
-        $dsn = Doctrine_Manager::getInstance()->parsePdoDsn($options['dsn']);
-        $cmd = sprintf('mysql -u %s --password=%s %s < %s',
-            $options['username'], $options['password'], $dsn['dbname'], $fixtureFile);
-        passthru($cmd);
+        chdir($dir);
     }
 
 
@@ -41,15 +41,15 @@ class AllSymfonyAppTests extends PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        $suite = new AllSymfonyAppTests('EasyFinance Symfony Branch');
+        $suite = new AllTests('EasyFinance');
 
         $base  = dirname(__FILE__);
         $files = sfFinder::type('file')->name('*Test.php')->in(array(
-            // $base.'/../plugins/sfPhpunitPlugin/test',
             $base.'/unit',
             $base.'/functional',
         ));
 
+        $suite->addTest(EasyFinance_Unit_AllTests::suite());
         foreach ($files as $file) {
             $suite->addTestFile($file);
         }

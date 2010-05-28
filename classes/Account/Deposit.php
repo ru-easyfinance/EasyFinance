@@ -61,7 +61,7 @@ class Account_Deposit extends Account
 
     /**
      * Создаёт новый счёт типа "Депозит"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -82,7 +82,7 @@ class Account_Deposit extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

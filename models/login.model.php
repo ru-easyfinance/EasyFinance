@@ -144,8 +144,8 @@ class Login_Model
             VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.")";
         $aid = Core::getInstance()->db->query($sql);
         $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`, `dt_create`) VALUES (?, ?, '1970-01-01', ?, ?, ?, ?, NOW())";
-            Core::getInstance()->db->query($sql, $uid, 0, 0, $aid, 0, 'Начальный остаток');
+                `drain`, `comment`, `created_at`) VALUES (?, ?, '1970-01-01', ?, ?, ?, ?, NOW())";
+            Core::getInstance()->db->query($sql, $uid, 0, null, $aid, 0, 'Начальный остаток');
 
     }
 
@@ -200,10 +200,10 @@ class Login_Model
      * @param string $login
      * @param string $password 
      * @param bool $remember
-     * @param User $user
+     * @param oldUser $user
      * @return void
      */
-    public function login($login, $password, $remember = false, User $user = null)
+    public function login($login, $password, $remember = false, oldUser $user = null)
     {
         $encpass = encrypt(array($login, $password));
 

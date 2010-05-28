@@ -1,1 +1,0 @@
-﻿ALTER TABLE `target` ADD `done` TINYINT UNSIGNED DEFAULT '0';

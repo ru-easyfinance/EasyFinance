@@ -244,21 +244,21 @@ abstract class Account
     }
     /**
      * Абстрактный метод создания счёта, переопределяется в дочерних классах
-     * @param User $user
+     * @param oldUser $user
      * @param array $param
      */
     abstract function create( $user, $param );
 
     /**
      * Абстрактный метод редактирования счёта, переопределяется в дочерних классах
-     * @param User $user
+     * @param oldUser $user
      * @param array $param
      */
     abstract function update ( $user, $param);
 
     /**
      * Удаляет счёт из обеих используемых табличек.
-     * @param User $user
+     * @param oldUser $user
      * @param array $param
      */
     public function delete( $user, $param)

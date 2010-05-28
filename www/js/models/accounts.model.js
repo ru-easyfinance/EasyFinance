@@ -333,6 +333,9 @@ easyFinance.models.accounts = function(){
         var _ids = ids;
 
         $.post(ACCEPT_OPERATIONS_URL, {ids : ids.toString() }, function(data) {
+            // update accounts
+            _loadAccounts();
+
             if (data.result) {
                 for (var key in _ids) {
                     // удаляем из списка просроченных операций
@@ -418,6 +421,18 @@ easyFinance.models.accounts = function(){
     function deleteOperationsChain(chainId, callback){
         var _chainId = chainId;
         $.post(DELETE_CHAIN_URL, {chain : chainId}, function(data) {
+                // удаляем из списка просроченных операций
+                for (row in res.calendar.overdue) {
+                    if (res.calendar.overdue[row].chain == _chainId)
+                        delete res.calendar.overdue[row];
+                }
+
+                // удаляем из списка будущих операций
+                for (row in res.calendar.future) {
+                    if (res.calendar.future[row].chain == _chainId)
+                        delete res.calendar.future[row];
+                }
+
                 var event = $.Event("operationsChainDeleted");
                 event.id = _chainId;
                 $(document).trigger(event);

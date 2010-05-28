@@ -50,7 +50,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         _journal = data;
 
-        var tr, tp, pageTotal, curMoney;
+        var tr, tp, pageTotal, curMoney, prevMoney;
         tr = '';
         pageTotal = 0;
 
@@ -100,7 +100,26 @@ easyFinance.widgets.operationsJournal = function(){
             // то приводим суммы к валюте по умолчанию
             var strMoney = '';
             if (_account == '') {
-                money = easyFinance.models.currency.convertToDefault(money, data[v].account_currency_id);
+                if (data[v].moneydef && data[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
+                    // в мультивалётных операциях есть свой курс,
+                    // в поле moneydef уже сконвертированное значение
+                    
+                    if (data[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
+                        // перевод без использования основной валюты. конвертируем по курсу
+                        money = Math.abs(prevMoney); // QUICK FIX. правильно сделать это на сервере
+                        ////data[v].money * easyFinance.models.currency.getCurrencyCostById(data[v].account_currency_id);
+                    } else {
+                        money = data[v].moneydef;
+                    }
+                } else {
+                    if (data[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
+                        money = money * parseFloat(data[v].curs);
+                    } else {
+                        money = easyFinance.models.currency.convertToDefault(money, data[v].account_currency_id);
+                    }
+                    
+                    prevMoney = money;
+                }
             }
             strMoney = formatCurrency(money);
 

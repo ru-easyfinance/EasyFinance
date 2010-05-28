@@ -1,1 +1,0 @@
-ALTER TABLE `articles` ADD `status` TINYINT NOT NULL ;

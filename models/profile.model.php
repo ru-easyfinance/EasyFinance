@@ -28,7 +28,7 @@ class Profile_Model
      * Конструктор
      * @return void
      */
-    public function __construct( User $user = null )
+    public function __construct( oldUser $user = null )
     {
         $this->db      = Core::getInstance()->db;
 
@@ -45,11 +45,11 @@ class Profile_Model
 
     /**
      * Генерация служебной почты
-     * @param User $user
+     * @param oldUser $user
      * @param string $mail
      * @return bool
      */
-    public function createServiceMail ( User $user, $mail )
+    public function createServiceMail ( oldUser $user, $mail )
     {
 
         $sql = "UPDATE users u SET user_service_mail = ? WHERE id = ?";
@@ -62,10 +62,10 @@ class Profile_Model
 
     /**
      * Удаляем служебную почту по просьбе пользователя
-     * @param User $user
+     * @param oldUser $user
      * @return bool
      */
-    public function deleteServiceMail ( User $user )
+    public function deleteServiceMail ( oldUser $user )
     {
 
         $sql = "UPDATE users u SET user_service_mail = '' WHERE id = ?";

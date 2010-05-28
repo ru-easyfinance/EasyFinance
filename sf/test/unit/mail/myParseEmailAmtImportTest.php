@@ -4,7 +4,7 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
 /**
  * Test class for myParseEmailAmtImport.
  */
-class mail_myParseEmailAmtImportTest extends PHPUnit_Framework_TestCase
+class mail_myParseEmailAmtImportTest extends myUnitTestCase
 {
     /**
      * Получить массив с данными для создания письма

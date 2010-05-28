@@ -164,7 +164,8 @@
     <!-- PHPUNIT: Тесты -->
     <target name="phpunit" depends="build">
         <echo msg="PHP Unit..." />
-        <exec command="phpunit --log-junit ${project.basedir}/build/logs/phpunit.xml ${project.basedir}/sf/test/AllTests.php" checkreturn="true" passthru="true" />
+        <exec command="${project.basedir}/sf/test/phpunit --log-junit ${project.basedir}/build/logs/phpunit.xml ${project.basedir}/sf/test/AllTests.php"
+              dir="${project.basedir}/sf/test" checkreturn="true" passthru="true" />
     </target>
 
 

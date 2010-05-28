@@ -87,8 +87,8 @@ class models_ProfileTest extends UnitTestCase
 
         Core::getInstance()->db->query( $sql );
 
-        $this->user1  = new User ('ukko1', '123123');
-        $this->user2  = new User ('ukko2', '123123');
+        $this->user1  = new oldUser ('ukko1', '123123');
+        $this->user2  = new oldUser ('ukko2', '123123');
 
         $this->profile1 = new Profile_Model( $this->user1 );
         $this->profile2 = new Profile_Model( $this->user2 );
@@ -106,7 +106,7 @@ class models_ProfileTest extends UnitTestCase
         $this->assertFalse( $this->profile1->createServiceMail( $this->user2, 'ukko2@mail.easyfinance.ru' ) );
 
         // Фэлзе
-        $this->assertFalse( $this->profile1->createServiceMail( new User(), 'ukko@mail.easyfinance.ru' ) );
+        $this->assertFalse( $this->profile1->createServiceMail( new oldUser(), 'ukko@mail.easyfinance.ru' ) );
         //$this->assertFalse( $this->profile1->createServiceMail( $this->user1, '' ) ); // кхм
     }
 

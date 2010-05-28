@@ -12,7 +12,7 @@ class Budget_Controller extends _Core_Controller_UserCommon
      * Модель бюджета
      * @var Budget_Model
      */
-    private $model = null;	
+    private $model = null;
 
     /**
      * Конструктор класса
@@ -49,14 +49,14 @@ class Budget_Controller extends _Core_Controller_UserCommon
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
 
         // Вычисляем дату конца бюджета (сейчас ровно до конца месяца начала)
-        $end   = date( 'Y-m-d', 
+        $end   = date( 'Y-m-d',
             mktime(0, 0, 0, date('m', strtotime($start . ' 00:00:00')) +1, 0)
         );
 
         if ( ! is_null($start) ) {
             die(
-                json_encode(                   
-                    $this->model->loadBudget($start, $end)
+                json_encode(
+                    $this->model->loadBudget($start, $end, null, null, Core::getInstance()->user->getUserProps('user_currency_default'))
                 )
             );
         } else {
@@ -73,7 +73,7 @@ class Budget_Controller extends _Core_Controller_UserCommon
         $start = formatRussianDate2MysqlDate(@$_POST['start']);
         $end   = null;
         $json = json_decode(stripslashes(@$_POST['data']));
-        
+
 	$budget = array();
         foreach ($json->d as $val) {
             foreach ($val as $k => $v) {

@@ -3,8 +3,21 @@
 /**
  * Таблица: счета
  */
-class AccountTable extends Doctrine_Table
+class AccountTable extends myBaseSyncTable
 {
+    /**
+     * Получить список объектов подлежащих синхронизации
+     *
+     * @param  myDatetimeRange $range  - Интервал дат
+     * @param  int             $userId - ID пользователя
+     * @return Doctrine_Query
+     */
+    public function queryFindModifiedForSync(myDatetimeRange $range, $userId)
+    {
+        return $this->createBaseSyncQuery($range, $userId);
+    }
+
+
     /**
      * Запрос для выборки счета, который привязан к AMT
      *

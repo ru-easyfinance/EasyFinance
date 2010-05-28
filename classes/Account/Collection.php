@@ -57,7 +57,7 @@ class Account_Collection extends _Core_Abstract_Collection
  
     /**
      * Загружает список счетов из базы данных
-     * @param User $user
+     * @param oldUser $user
      */
     public function load( $user )
     {

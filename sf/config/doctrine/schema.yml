@@ -1,13 +1,44 @@
 # (!) Схема не покрывает полностью БД
 # Напротив каждой таблицы указывается % покрытия,
 # например: "100% - OK"
+#
+# Оставшиеся таблицы:
+#
+#Acc_ConnectionTypes
+#Acc_Fields
+#Acc_Object
+#account_field_descriptions
+#account_field_values
+#account_fields
+#articles
+#budget
+#calend
+#calendar_chains
+#calendar_events
+#categories_often
+#certificates
+#daily_currency
+#logs
+#feedback_message
+#images
+#images_articles
+#messages
+#messages_state
+#referrers
+#registration
+#services
+#services_expert
+#system_categories
+#tags
+#target
+#target_bill
+#user_fields_expert
+
 
 
 options:
   type: INNODB
   charset: utf8
-
-
 
 # Валюта (8/10 - PART)
 # Пропущено:
@@ -21,7 +52,7 @@ Currency:
     code:        { name: cur_char_code as code,  type: string(15),  notnull: true }
     symbol:      { name: cur_name as symbol,     type: string(10),  notnull: true }
     name:        { name: cur_name_value as name, type: string(255), notnull: true }
-    rate:        {                               type: 'decimal(20, 6)', notnull: true, default: 0 }
+    rate:        {                               type: 'decimal(20, 6)', notnull: true, default: 1 }
     is_active:   { name: cur_uses as is_active,  type: integer(1),  notnull: true, unsigned: true, default: 0 }
   options:
     symfony:
@@ -42,9 +73,22 @@ User:
       filter: false
 
 
+# Тип счёта (100% - ОК)
+AccountType:
+  tableName: account_types
+  columns:
+    account_type_id:   { type: integer(4), notnull: true, unsigned: true, primary: true, autoincrement: true }
+    account_type_name: { type: string(255) }
+  options:
+    symfony:
+      form:  false
+      filter: false
+
+
 # Счет (100% - OK)
 Account:
   tableName: accounts
+  actAs: [Timestampable, SoftDelete]
   columns:
     id:          { name: account_id as id,                   type: integer(4),  notnull: true, primary: true, autoincrement: true }
     user_id:     {                                           type: integer(4),  notnull: true, unsigned: true }
@@ -59,6 +103,18 @@ Account:
       type: one
       foreignType: many
       foreignAlias: Accounts      # User->Accounts
+    Currency:
+      local: currency_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false         # Currency ничего не узнает
+    AccountType:
+      local: account_type_id
+      foreign: account_type_id
+      type: one
+      foreignType: many
+      autoComplete: false         # AccountType ничего не узнает
   options:
     symfony:
       form:  false
@@ -89,21 +145,18 @@ AccountProperty:
 # Операция с деньгами (12/20 - PART)
 Operation:
   tableName: operation
-  actAs:
-    Timestampable:
-      created: { name: dt_create }
-      updated: { name: dt_update }
+  actAs: [Timestampable]
   columns:
-    user_id:    { type: integer(4), unsigned: true, notnull: true }
-    account_id: { type: integer(4), unsigned: true, notnull: true }             # ID счёта
-    category_id: { name: cat_id as category_id, type: integer(4), notnull: true } # ID категории
-    amount:     {  name: money as amount, type: 'decimal(20, 2)', notnull: true }                       # Сумма
-    date:       { type: date(25), notnull: true }                               # Фактическа дата операции
-    time:       { type: time(25), notnull: true }                               # Фактическое время операции
-    drain:      { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
-    type:       { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
-    comment:    { type: clob }
-    source_id:  { type: string(8), fixed: true }                                # Тип внешнего источника операции
+    user_id:     { type: integer(4), unsigned: true, notnull: true }
+    account_id:  { type: integer(4), unsigned: true, default: null}             # ID счёта
+    category_id: { name: cat_id as category_id, type: integer(4), default: null, unsigned: true} # ID категории
+    amount:      { name: money as amount, type: 'decimal(20, 2)', notnull: true ,unsigned: true} # Сумма
+    date:        { type: date(25), notnull: true }                               # Фактическа дата операции
+    time:        { type: time(25), notnull: true }                               # Фактическое время операции
+    drain:       { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
+    type:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
+    comment:     { type: clob }
+    source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
     accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
   relations:
     User:
@@ -111,14 +164,19 @@ Operation:
       foreign: id
       type: one
       foreignType: many
-      autoComplete: false    # User ничего не узнает
-      onDelete: CASCADE      # При удалении пользователя удаляются все его операции
+      autoComplete: false         # User ничего не узнает
     Account:
       local: account_id
       foreign: id
       type: one
       foreignType: many
-      foreignAlias: Operations # Account -> Operations
+      foreignAlias: Operations    # Account -> Operations
+    Category:
+      local: category_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false         # Category ничего не узнает
   indexes:
     user_id:    { fields: [user_id] }
   options:
@@ -151,38 +209,29 @@ SourceOperation:
       filter: false
 
 
-#
-# Оставшиеся таблицы в БД:
-#
-#Acc_ConnectionTypes
-#Acc_Fields
-#Acc_Object
-#account_field_descriptions
-#account_field_values
-#account_fields
-#account_types
-#articles
-#budget
-#calend
-#calendar_chains
-#calendar_events
-#categories_often
-#category
-#certificates
-#daily_currency
-#logs
-#feedback_message
-#images
-#images_articles
-#messages
-#messages_state
-#referrers
-#registration
-#services
-#services_expert
-#system_categories
-#tags
-#target
-#target_bill
-#user_fields_expert
-#versions
+# Категории (100% - OK)
+Category:
+  tableName: category
+  actAs:
+    Timestampable:
+      created: { name: dt_create }
+      updated: { name: dt_update }
+  columns:
+    id:         { name: cat_id as id,                  type: integer(4), notnull: true, primary: true, autoincrement: true}
+    parent_id:  { name: cat_parent as parent_id,       type: integer(4), notnull: true, default: 0 }
+    root_id:    { name: system_category_id as root_id, type: integer(4), notnull: true, default: 0}
+    user_id:    {                                      type: integer(4), notnull: true, unsigned: true}
+    name:       { name: cat_name as name,              type: varchar(255), notnull: true}
+    type:       { type: integer(1), notnull: true, default: 0}
+    cat_active: { type: integer(4), notnull: true, default: 1}
+    visible:    { type: integer(1), notnull: true, default: 1}
+    custom:     { type: integer(1), notnull: true, default: 1} # 1 - Создана пользователем, 0 - системная
+  relations:
+    User:
+      local: user_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false         # User ничего не узнает
+  indexes:
+    user_id:    { fields: [user_id, visible] }

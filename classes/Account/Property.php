@@ -70,7 +70,7 @@ class Account_Property extends Account
 
     /**
      * Создаёт новый счёт типа "Имущество"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -89,7 +89,7 @@ class Account_Property extends Account
 
     /**
      * Редактирует существующий счёт
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */

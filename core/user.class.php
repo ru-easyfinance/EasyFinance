@@ -7,7 +7,7 @@
  * @category user
  * @version SVN $Id$
  */
-class User
+class oldUser
 {
     /**
      * Массив, хранит свойства пользователя
@@ -524,7 +524,8 @@ class User
     public function initUserBudget()
     {
         $this->user_budget = array();
-        $this->user_budget = Budget_Model::loadBudget(null, null, $this->getId(), $this->getUserCategory());
+        $this->user_budget = Budget_Model::loadBudget(null, null, $this->getId(),
+            $this->getUserCategory(), $this->getUserProps('user_currency_default'));
     }
 
     /**
@@ -557,32 +558,6 @@ class User
         return $a;
     }
 
-    function getCurrencyByDefault($mas, $def)
-    {
-
-        if( !is_array($mas) )
-        {
-        	$mas = array();
-        }
-
-        $mas = "'".implode("','", $mas)."'";
-        $sql = "SELECT MAX(currency_date) as last FROM daily_currency";
-        $lastdate = $this->db->query($sql);
-        $sql = "SELECT c.cur_id as id, dai.currency_sum as value, c.cur_char_code as charCode, c.cur_name as abbr, dai.direction
-            FROM currency c, daily_currency dai WHERE dai.currency_id=c.cur_id
-            AND dai.currency_from = ? AND currency_date = ?
-            AND c.cur_id IN ($mas)";
-        $li = $this->db->query($sql, $def, $lastdate[0]['last']);
-        $sql = "SELECT $def as id, 1 as value, c.cur_char_code as charCode, c.cur_name as abbr
-            FROM currency c WHERE c.cur_id = ?
-            ";
-        $li2 = $this->db->query($sql, $def);
-
-        $res = array_merge($li, $li2);
-
-        return $res;
-
-    }
 
     /**
      * Возвращает пользовательские счета

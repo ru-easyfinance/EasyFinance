@@ -3,19 +3,15 @@
 /**
  * Импорт структуры из существующей базы
  */
-class Migration001_InitialImport extends Doctrine_Migration_Base
+class Migration001_InitialImport extends myBaseMigration
 {
-    private function _query($sql)
-    {
-        return Doctrine_Manager::getInstance()->getConnection('doctrine')->getDbh()->query($sql);
-    }
-
-
     /**
      * Up
      */
     public function up()
     {
+        $this->rawQuery("SET NAMES utf8");
+
         $dump = "
             CREATE TABLE `users` (
               `id` int(100) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Наш новый ИД для пользователей',
@@ -493,7 +489,7 @@ class Migration001_InitialImport extends Doctrine_Migration_Base
         foreach (explode(";\n", $dump) as $query) {
             $query = trim($query);
             if ($query) {
-                $this->_query($query);
+                $this->rawQuery($query);
             }
         }
     }
@@ -504,7 +500,7 @@ class Migration001_InitialImport extends Doctrine_Migration_Base
      */
     public function down()
     {
-        $this->_query("
+        $this->rawQuery("
         DROP TABLE IF EXISTS
             Acc_ConnectionTypes,
             Acc_Fields,

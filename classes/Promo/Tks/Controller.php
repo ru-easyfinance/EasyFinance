@@ -35,7 +35,7 @@ class Promo_Tks_Controller extends _Core_Controller
             }
 
             $isAuth = (Core::getInstance()->user->getId()) ? "Авторизирован" : "Не авторизирован";
-            Logs::write(new User(), 'tks_anketa', $isAuth);
+            Logs::write(new oldUser(), 'tks_anketa', $isAuth);
 
             if ($this->_sendData()) {
                 $this->renderJsonSuccess('OK');

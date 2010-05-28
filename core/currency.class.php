@@ -6,7 +6,7 @@
  * @copyright http://easyfinance.ru/
  * @version SVN $Id$
  */
-class Currency implements IteratorAggregate,  ArrayAccess
+class oldCurrency implements IteratorAggregate,  ArrayAccess
 {
      /**
      * Ссылка на экземпляр DBSimple
@@ -30,14 +30,14 @@ class Currency implements IteratorAggregate,  ArrayAccess
             Core::getInstance()->initDB();
         }
         $this->db = Core::getInstance()->db;
-        
+
         // Загружаем список валют
         $this->loadCurrency();
     }
 
     /**
      * Загружает валюты. Сперва пробует загрузить их из файла, а потом, если не вышло, то из базы
-     * @example Пример части загружаемого массива 
+     * @example Пример части загружаемого массива
      * <code>array(
      * '2'=>array(
      *      'name'=>'Доллар США',
@@ -54,18 +54,28 @@ class Currency implements IteratorAggregate,  ArrayAccess
         {
             $daily = null;
         }
-        
+
         $daily = null;
-        
+
         if ($daily == null)
         {
             $currency = $this->db->select("SELECT * FROM currency c WHERE cur_uses=1");
-            $daily = $this->db->select("
-                SELECT currency_id, user_id, direction, currency_sum AS value, currency_date AS `date`
-                    FROM daily_currency
-                    WHERE
-                        currency_from = 1 AND
-                        currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)"
+
+            $daily = $this->db->select("SELECT
+                                            currency_id,
+                                            user_id,
+                                            direction,
+                                            currency_sum AS value,
+                                            currency_date AS `date`
+                                        FROM
+                                            daily_currency
+                                        WHERE
+                                            currency_from = 1 AND
+                                            currency_date =(SELECT MAX(currency_date)
+                                                            FROM daily_currency
+                                                            WHERE currency_from=1
+                                                                AND user_id=0)
+                                        ORDER BY currency_id"
             );
             foreach ($currency as $v) {
                 $this->sys_list_currency[$v['cur_id']] = array(

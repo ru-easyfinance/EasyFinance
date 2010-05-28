@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+set_include_path(realpath(dirname(__FILE__).'/../lib/vendor/phpunit'). PATH_SEPARATOR . get_include_path());
+
+require_once 'PHPUnit/Util/Filter.php';
+PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
+
+require 'PHPUnit/TextUI/Command.php';
+define('PHPUnit_MAIN_METHOD', 'PHPUnit_TextUI_Command::main');
+PHPUnit_TextUI_Command::main();

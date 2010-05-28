@@ -40,7 +40,7 @@ class Account_Cash extends Account
 
     /**
      * Создаёт новый счёт типа "Наличные"
-     * @param User $user
+     * @param oldUser $user
      * @param array mixed $params
      * @return bool
      */
@@ -61,7 +61,7 @@ class Account_Cash extends Account
 
     /**
      * Редактирует существующий счёт 
-     * @param User $user
+     * @param oldUser $user
      * @param array $params
      * @return bool
      */
