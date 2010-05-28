@@ -28,9 +28,10 @@ class Budget_Model {
      * @param date $end
      * @param int $user_id
      * @param int $category
+     * @param int $currency_id
      * @return
      */
-    function loadBudget($start = null, $end = null, $user_id = null, $category = null)
+    function loadBudget($start = null, $end = null, $user_id = null, $category = null, $currency_id = null)
     {
         if ( ! $user_id ) {
             $user_id = Core::getInstance()->user->getId();
@@ -57,26 +58,11 @@ class Budget_Model {
 
         $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
 
-        // Получаем список последних валют, и раскладываем их по id
-        $sql = "SELECT currency_id AS id, currency_sum AS currency
-        FROM daily_currency
-        LEFT JOIN users u ON u.id=?
-            WHERE
-            currency_from = u.user_currency_default AND
-            currency_date = (SELECT MAX(currency_date) FROM daily_currency WHERE user_id=0)";
-
-        foreach ( Core::getInstance()->db->select($sql, $user_id) as $value ) {
-            $currency[$value['id']] = $value['currency'];
-        }
-
         $fact = array();
         foreach ( $arrayoper as $key => $value ) {
+            $money = new efMoney(abs($value['money']), $value['currency_id']);
+            $sum = sfConfig::get('ex')->convert($money, $currency_id)->getAmount();
 
-            if ( isset ( $currency[$value['currency_id']] ) ) {
-                $sum = $value['money'] * $currency[$value['currency_id']];
-            } else {
-                $sum = $value['money'] * 1;
-            }
             $fact[$value['cat_id']] = (float) @$fact[$value['cat_id']] + (float)$sum;
         }
 
