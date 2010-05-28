@@ -320,7 +320,7 @@ easyFinance.widgets.operationEdit = function(){
                     i++;
                 });
             } else if ($(this).val()=="0") { // Не повторять
-                _$blockRepeating.hide();
+                _$blockWeekdays.hide();
                 _$blockRepeating.hide();
             } else { // день, месяц, год
                 _$blockWeekdays.hide();
@@ -746,7 +746,7 @@ easyFinance.widgets.operationEdit = function(){
         $('.week input').removeAttr('checked');
 
         // сбрасываем параметры повторения операции
-        $('#cal_repeat').val("0");
+        $('#cal_repeat').val("0").change();
         $('#cal_rep_every').attr('checked', 'checked');
         $('#cal_count').val("1");
         $('.week input').removeAttr('checked');
