@@ -607,7 +607,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 //          $headers = array('1', '2', '3', '4', '5', '6', '7');
             $this->tpl->assign( 'elements', $array );
             $this->tpl->assign( 'headers', $headers );
-            $this->tpl->assign( 'filename', 'Operations '.$this->request->get['dateFrom']." - ".$this->request->get['dateTo'].'.csv' );
+            $this->tpl->assign( 'filename', 'EasyFinance Operations '.$this->request->get['dateFrom']." - ".$this->request->get['dateTo'].'.csv' );
         }
     }
 

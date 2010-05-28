@@ -45,6 +45,6 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
         header("Expires: 0");
         header("Cache-Control: private");
         header("Pragma: cache");
-        echo $content;
+        echo iconv('UTF-8', 'WINDOWS-1251', $content);
     }
 }

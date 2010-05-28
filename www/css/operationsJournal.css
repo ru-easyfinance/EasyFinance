@@ -149,6 +149,9 @@ table#operations_list td + td + td + td + td + td{
     !float: none;
     position: relative;
     !margin-left:50px;
+    background-image:url("/img/images/excel.jpg");
+    height:23px;
+    width:23px;
 }
 
 /*.f_field b, #divOperationsJournalTotal b {
@@ -162,16 +165,14 @@ table#operations_list td + td + td + td + td + td{
     !margin-left:0px;
 }
 
-*:first-child+html #search_field {
+#search_field {
     float:right;
     height:30px;
-/*    margin-left:10px;*/
     margin-top:-14px;
-/*    position:absolute;*/
     width:428px;
 }
 
-#search_field {
+*:first-child+html #search_field {
     margin-top:-35px;
 }
 

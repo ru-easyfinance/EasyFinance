@@ -963,7 +963,7 @@ class Operation_Model {
 
         $total_money = $this->db->select($sql, $this->user->getId(), $dateFrom, $dateTo);
 
-        return $total_money[0]['total_money'];
+        return ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money'];
     }
 
     /**

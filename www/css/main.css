@@ -999,7 +999,7 @@ table.tab1 th{text-align: center}
 .operation_list .sorting div{margin-bottom: 7px;}
 .operation_list .sorting .f_field { position: relative; float: left; /*margin-right: 51px;*/ }
 .operation_list .sorting .f_field input {width: 90px; margin-left:3px;}
-.operation_list .sorting  select { color: #20201E; width : 350px; }
+.operation_list .sorting  select { color: #20201E; width : 210px; }
 .operation_list .sorting .f_field a { top: 3px; right: -21px; width: 19px; background-position: 0 -390px; }
 
 .operation_list ul.period { margin: 0 0 21px 71px; }
