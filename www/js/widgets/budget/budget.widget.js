@@ -8,9 +8,11 @@ easyFinance.widgets.budget = function(data){
             easyFinance.models.currency.getDefaultCurrencyText()+"</td><td class='w5 '>Остаток, "+
             easyFinance.models.currency.getDefaultCurrencyText()+"</td><td class='w6'></td>");
 
+    // #1388. обновляем данные после добавления операций
+    $(document).bind('accountsLoaded', function() { reload(_currentDate) });
+
     function init(data){
         _model = data;
-        
     }
 
     ///////////////////////////////////////////////////////////////////////////
