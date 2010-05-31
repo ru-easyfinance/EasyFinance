@@ -76,6 +76,7 @@ class CreateObjectHelper {
         $options = array_merge($default, $options);
         
         $sql = "INSERT INTO accounts (".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
+
         return Core::getInstance()->db->query($sql);
     }
 
@@ -104,6 +105,70 @@ class CreateObjectHelper {
         $options = array_merge($default, $options);
 
         $sql = "INSERT INTO operation (".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
+        return Core::getInstance()->db->query($sql);
+    }
+
+
+    /**
+     * Создаёт операцию в БД, возвращает ИД
+     *
+     * @param array $options
+     * @return int | false
+     */
+    public static function createCategory($options)
+    {
+        if (!isset($options['user_id'])) {
+            throw new Exception('Expected option user_id');
+        }
+
+        $default = array(
+            'custom'   => 1,
+            'cat_name' => 'Название категории' . rand(0, 1000),
+        );
+
+        $options = array_merge($default, $options);
+
+        $sql = "INSERT INTO category (".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
+        return Core::getInstance()->db->query($sql);
+    }
+
+
+    /**
+     * Создаёт запись бюджета в БД, возвращает ИД записи
+     *
+     * @param array $options
+     * @return true | false
+     */
+    public static function createBudget($options)
+    {
+        if (!isset($options['user_id'])) {
+            throw new Exception('Expected option user_id');
+        }
+
+        if (!isset($options['category'])) {
+            throw new Exception('Expected option category');
+        }
+
+
+        $default = array(
+            'dt_create'  => '2010-01-01 00:00:00',
+            'date_end'   => date('Y-m-d', mktime(0, 0, 0, date('m')+1, 0)),
+            'date_start' => date('Y-m-d', mktime(0, 0, 0, date('m'), 1)),
+            'amount'     => 500,
+            'currency'   => 1,
+            'drain'      => 1,
+        );
+
+        $options = array_merge($default, $options);
+
+        if (!isset($options['key'])) {
+            $options['key'] = $options['user_id'] . '-'
+                                . $options['category'] . '-'
+                                . $options['drain'] . '-'
+                                . $options['date_start'];
+        }
+
+        $sql = "INSERT INTO budget (".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
         return Core::getInstance()->db->query($sql);
     }
 }

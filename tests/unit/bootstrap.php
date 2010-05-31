@@ -19,7 +19,7 @@ require_once SYS_DIR_INC . 'common.php';
 Core::getInstance()->db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE."_test");
 
 // И обработчик ошибок для бд
-Core::getInstance()->db->setErrorHandler('databaseErrorHandler');
+Core::getInstance()->db->setErrorHandler('databaseErrorHandlerTest');
 
 require_once(dirname(__FILE__).'/UnitTestCase.php');
 require_once(dirname(__FILE__).'/TestMailInvokerStub.php');
@@ -32,3 +32,14 @@ Swift_DependencyContainer::getInstance()
     ->asValue($invoker);
 $transport = Swift_MailTransport::newInstance();
 Core::getInstance()->mailer = Swift_Mailer::newInstance($transport);
+
+/**
+ * Выводит форматированный вывод о SQL ошибках
+ * @param string $message
+ * @param array $info
+ */
+function databaseErrorHandlerTest($message, $info)
+{
+    // Выводим подробную информацию об ошибке.
+    trigger_error(print_r($info));
+}

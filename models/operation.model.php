@@ -17,7 +17,7 @@ class Operation_Model {
      * Ссылка на экземпляр класса пользователя
      * @var User
      */
-    private $user = null;
+    private $_user = null;
 
     /**
      *
@@ -45,12 +45,19 @@ class Operation_Model {
 
     /**
      * Конструктор
+     *
+     * @param oldUser $user
      * @return bool
      */
-    function __construct()
+    function __construct(oldUser $user = null)
     {
+        if ($user) {
+            $this->_user = $user;
+        } else {
+            $this->_user = Core::getInstance()->user;
+        }
+
         $this->db   = Core::getInstance()->db;
-        $this->user = Core::getInstance()->user;
         $this->load();
         return true;
     }
@@ -116,7 +123,7 @@ class Operation_Model {
 				$this->errorData['account'] = 'Не выбран счёт';
 			}
 
-            $accounts = Core::getInstance()->user->getUserAccounts();
+            $accounts = $this->_user->getUserAccounts();
 
             if ( ! isset ( $accounts[ $validated['account'] ] ) ) {
                 $this->errorData['account'] = 'Указанного счёта не существует';
@@ -263,7 +270,7 @@ class Operation_Model {
                 WHERE user_id=? AND money=? AND date=?
                     AND cat_id=? AND drain=? AND comment=? AND account_id=?
                     AND created_at BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
-            $this->user->getId(), $money, $date, $category, $drain, $comment, $account);
+            $this->_user->getId(), $money, $date, $category, $drain, $comment, $account);
         return $last;
     }
 
@@ -295,7 +302,7 @@ class Operation_Model {
             $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
                 `drain`, `type`, `comment`, `tags`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
 
-            $this->db->query($sql, $this->user->getId(), $money, $date, $category, $account, $drain, !$drain,
+            $this->db->query($sql, $this->_user->getId(), $money, $date, $category, $account, $drain, !$drain,
                 $comment, implode(', ', $tags));
 
             $operationId = mysql_insert_id();
@@ -307,15 +314,15 @@ class Operation_Model {
                 foreach ($tags as $tag)
                 {
                     if (!empty($sql)) { $sql .= ','; }
-                    $sql .= "(". $this->user->getId() . "," . (int)$operationId . ",'" . addslashes($tag) . "')";
+                    $sql .= "(". $this->_user->getId() . "," . (int)$operationId . ",'" . addslashes($tag) . "')";
                 }
 
                 $this->db->query('INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES ' . $sql);
             }
 
 		// Обновляем данные о счетах пользователя
-		Core::getInstance()->user->initUserAccounts();
-		Core::getInstance()->user->save();
+		$this->_user->initUserAccounts();
+		$this->_user->save();
 		
 		//$this->selectMoney($user_id);
 		$this->save();
@@ -333,7 +340,7 @@ class Operation_Model {
         foreach ( $operations_array as $operation ) {
             if ( ! empty ( $sql ) ) $sql .= ',';
             $sql .= "('" 
-                . $this->user->getId() . "','"
+                . $this->_user->getId() . "','"
                 . ( ( $operation['type'] == 0 ) ?
                     ( -1 * abs($operation['amount']) )
                     : $operation['amount'] ) . "','"
@@ -360,8 +367,8 @@ class Operation_Model {
         }
 
 		// Обновляем данные о счетах пользователя
-		Core::getInstance()->user->initUserAccounts();
-		Core::getInstance()->user->save();
+		$this->_user->initUserAccounts();
+		$this->_user->save();
 
 		$this->save();
         return count( $operations_array );
@@ -385,7 +392,7 @@ class Operation_Model {
 
         if ( $tags ) {
 
-            $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
+            $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->_user->getId());
 
             if ( $accepted ) {
                 $sql = "UPDATE operation
@@ -397,12 +404,12 @@ class Operation_Model {
             }
 
             $this->db->query($sql, $money, $date, $account, $toAccount, $comment,
-                implode(', ', $tags), $this->user->getId(), $id);
+                implode(', ', $tags), $this->_user->getId(), $id);
 
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
+                $sql .= "(". $this->_user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
 
@@ -426,17 +433,17 @@ class Operation_Model {
                 }
                 //Перевод "С"
                 $this->db->query($sql, ( ABS($money) * -1 ), $date, $account, $toAccount, $comment,
-                    '', NULL, $this->user->getId(), $id);
+                    '', NULL, $this->_user->getId(), $id);
 
                 // Если менялась валюта при переводе
                 if ($convert) {
                     //перевод на
                     $this->db->query($sql, $convert, $date, $toAccount, $account, $comment,
-                        '', $money, $this->user->getId(), $next[0]['id']);
+                        '', $money, $this->_user->getId(), $next[0]['id']);
                 } else {
                     //перевод на
                     $this->db->query($sql, $money, $date, $toAccount, $account, $comment, 
-                        '', $money, $this->user->getId(), $next[0]['id']);
+                        '', $money, $this->_user->getId(), $next[0]['id']);
                 }
                 
             } else {// иначе делаем перевод из доходной/расходной операции
@@ -454,7 +461,7 @@ class Operation_Model {
 
                 //перевод с
                 $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, '', 
-                    NULL, $this->user->getId(), $id);
+                    NULL, $this->_user->getId(), $id);
                 if ( $accepted ) {
                     $sql = "INSERT INTO operation
                         (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id, accepted)
@@ -464,7 +471,7 @@ class Operation_Model {
                         (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
                 }
-                $this->db->query($sql, $this->user->getId(), $money, $date, -1, $toAccount, $id,
+                $this->db->query($sql, $this->_user->getId(), $money, $date, -1, $toAccount, $id,
                     $comment, $account, NULL);
             }
         }
@@ -485,8 +492,8 @@ class Operation_Model {
     function addSomeTransfer ( $operations_array )
     {
 
-        $accounts    = Core::getInstance()->user->getUserAccounts();
-        $currensys   = Core::getInstance()->user->getUserCurrency();
+        $accounts    = $this->_user->getUserAccounts();
+        $currensys   = $this->_user->getUserCurrency();
 
         // @FIXME Предупреждаю честно, код далее может несколько загнуть сервер. Нужно его оптимизировать
         foreach ( $operations_array as $value ) {
@@ -512,7 +519,7 @@ class Operation_Model {
                     exchange_rate, chain_id, accepted, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, ?, 0, NOW())";
                 $this->db->query($sql, 
-                    $this->user->getId(),
+                    $this->_user->getId(),
                     -$value['amount'],
                     $value['date'],
                     -1,
@@ -532,7 +539,7 @@ class Operation_Model {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, ?, 0, NOW())";
                 
                 $this->db->query($sql,
-                    $this->user->getId(),
+                    $this->_user->getId(),
                     $value['convert'],
                     $value['date'],
                     -1,
@@ -553,7 +560,7 @@ class Operation_Model {
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 0, NOW())";
 
                 $this->db->query($sql,
-                    $this->user->getId(),
+                    $this->_user->getId(),
                     -$value['amount'],
                     $value['date'],
                     -1,
@@ -570,7 +577,7 @@ class Operation_Model {
                     imp_id, chain_id, accepted, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 0, NOW())";
 
-                $this->db->query( $sql, $this->user->getId(),
+                $this->db->query( $sql, $this->_user->getId(),
                     $value['amount'],
                     $value['date'],
                     -1,
@@ -585,8 +592,8 @@ class Operation_Model {
 
         }
 
-        $this->user->initUserAccounts();
-        $this->user->save();
+        $this->_user->initUserAccounts();
+        $this->_user->save();
         
         return count ( $operations_array );
     }
@@ -606,7 +613,7 @@ class Operation_Model {
     function addTransfer($money, $convert, $curr, $date, $from_account, $to_account, $comment, $tags)
     {
 
-        $accounts = Core::getInstance()->user->getUserAccounts();
+        $accounts = $this->_user->getUserAccounts();
         $curFromId = $accounts[ $from_account ]['account_currency_id'];
         $curTargetId = $accounts[ $to_account ]['account_currency_id'];
 
@@ -619,7 +626,7 @@ class Operation_Model {
 
             // Если нет - производим вычисления через рубль
 			} else {
-				$currensys = Core::getInstance()->user->getUserCurrency();
+				$currensys = $this->_user->getUserCurrency();
                 
 				// приводим сумму к пром. валюте
 				$convert = $money / $currensys[ $curTargetId ]['value'];
@@ -634,7 +641,7 @@ class Operation_Model {
 				(user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type, 
                 exchange_rate, created_at)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, NOW())";
-			$this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
+			$this->db->query($sql, $this->_user->getId(), -$money, $date, -1, $from_account, 0,
 				$comment, $to_account, $curr);
 				
 			$last_id = mysql_insert_id();
@@ -644,7 +651,7 @@ class Operation_Model {
 			(user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type, 
             imp_id, exchange_rate, created_at)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, NOW())";
-			$this->db->query($sql, $this->user->getId(), $convert, $date, -1, $to_account, $last_id,
+			$this->db->query($sql, $this->_user->getId(), $convert, $date, -1, $to_account, $last_id,
 				$comment, $from_account, $money, $curr, $curTargetId);
             
 		} else {
@@ -653,7 +660,7 @@ class Operation_Model {
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW())";
         
-        $last_id = $this->db->query($sql, $this->user->getId(), -$money, $date, -1, $from_account, 0,
+        $last_id = $this->db->query($sql, $this->_user->getId(), -$money, $date, -1, $from_account, 0,
             $comment, $to_account);
 
             $last_id = mysql_insert_id();
@@ -661,12 +668,12 @@ class Operation_Model {
         $sql = "INSERT INTO operation
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
-        $this->db->query($sql, $this->user->getId(), $money, $date, -1, $to_account, $last_id,
+        $this->db->query($sql, $this->_user->getId(), $money, $date, -1, $to_account, $last_id,
             $comment, $from_account, $money);
             $last_id2 = mysql_insert_id();
         }
-        $this->user->initUserAccounts();
-        $this->user->save();
+        $this->_user->initUserAccounts();
+        $this->_user->save();
         return $last_id;
     }
 
@@ -687,25 +694,25 @@ class Operation_Model {
         // Если есть теги, то добавляем и их тоже
         if ($tags)
         {
-            $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->user->getId());
+            $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?',$id, $this->_user->getId());
             if ( $accepted ) {
                 $sql = "UPDATE operation SET
                     money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?, accpeted=?
                     WHERE user_id = ? AND id = ?";
                 $this->db->query($sql, $money, $date, $category, $account, $drain, $comment,
-                    implode(', ', $tags), $accepted, $this->user->getId(), $id);
+                    implode(', ', $tags), $accepted, $this->_user->getId(), $id);
             } else {
                 $sql = "UPDATE operation SET
                     money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, tags=?
                     WHERE user_id = ? AND id = ?";
                 $this->db->query($sql, $money, $date, $category, $account, $drain, $comment,
-                    implode(', ', $tags), $this->user->getId(), $id);
+                    implode(', ', $tags), $this->_user->getId(), $id);
             }
 
             $sql = "";
             foreach ($tags as $tag) {
                 if (!empty($sql)) { $sql .= ','; }
-                $sql .= "(". $this->user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
+                $sql .= "(". $this->_user->getId() . "," . $id . ",'" . addslashes($tag) . "')";
             }
             $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         } else {
@@ -714,15 +721,15 @@ class Operation_Model {
                     money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?, accepted=?
                     WHERE user_id = ? AND id = ?";
                 $this->db->query($sql, $money, $date, $category, $account, $drain, $comment,
-                    $accepted, $this->user->getId(), $id);
+                    $accepted, $this->_user->getId(), $id);
             } else {
                 $sql = "UPDATE operation SET money=?, date=?, cat_id=?, account_id=?, drain=?, comment=?
                     WHERE user_id = ? AND id = ?";
-                $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, $this->user->getId(), $id);
+                $this->db->query($sql, $money, $date, $category, $account, $drain, $comment, $this->_user->getId(), $id);
             }
         }
         // Обновляем данные о счетах пользователя
-        Core::getInstance()->user->initUserAccounts();
+        $this->_user->initUserAccounts();
         //$this->selectMoney($user_id);
         $this->save();
         return '[]';
@@ -736,7 +743,7 @@ class Operation_Model {
      */
     function deleteOperation($id = 0)
     {
-        $userId = Core::getInstance()->user->getId();
+        $userId = $this->_user->getId();
 
         //Получаем ID смежной записи (в случае, если это перевод)
         $tr_id = $this->db->selectCell('SELECT * FROM operation WHERE tr_id = ? AND user_id = ?', $id, $userId);
@@ -756,11 +763,11 @@ class Operation_Model {
      */
     function deleteTargetOperation($id=0) {
         $tr_id = $this->db->select("SELECT target_id FROM target_bill WHERE id=?", $id);
-        $this->db->query("DELETE FROM target_bill WHERE id=? AND user_id=?", $id, Core::getInstance()->user->getId());
+        $this->db->query("DELETE FROM target_bill WHERE id=? AND user_id=?", $id, $this->_user->getId());
         $targ = new Targets_Model();
         $targ->staticTargetUpdate($tr_id[0]['target_id']);
-        Core::getInstance()->user->initUserTargets();
-        Core::getInstance()->user->save();
+        $this->_user->initUserTargets();
+        $this->_user->save();
         return true;
     }
 
@@ -783,7 +790,7 @@ class Operation_Model {
 		}
 		
 		// Подготавливаем фильтр по родительским категориям
-		$categorys = Core::getInstance()->user->getUserCategory();
+		$categorys = $this->_user->getUserCategory();
 		$cat_in = '';
 		
 		foreach ($categorys as $category)
@@ -825,7 +832,7 @@ class Operation_Model {
                 FROM
                     operation o
                 WHERE
-                    o.user_id = " . Core::getInstance()->user->getId();
+                    o.user_id = " . $this->_user->getId();
 		
         // Добавляем фильтр для обязательного скрытия удалённых
         $sql .= " AND o.deleted_at IS NULL ";
@@ -913,7 +920,7 @@ class Operation_Model {
                 ON
                 t.target_id=tt.id
 			WHERE
-                t.user_id = " . Core::getInstance()->user->getId()
+                t.user_id = " . $this->_user->getId()
 			. " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
 
 		if((int)$currentAccount > 0) {
@@ -940,12 +947,12 @@ class Operation_Model {
 		
 		$sql .= " ORDER BY dnat DESC, created_at DESC ";
 		
-		$accounts = Core::getInstance()->user->getUserAccounts();
+		$accounts = $this->_user->getUserAccounts();
 		
-		$operations = $this->db->select($sql, $currentAccount, $this->user->getId(), 
-			$dateFrom, $dateTo, $this->user->getId(), $dateFrom, $dateTo, $currentAccount, 
-			$currentAccount, $this->user->getId(), $dateFrom, $dateTo);
-		
+		$operations = $this->db->select($sql, $currentAccount, $this->_user->getId(),
+			$dateFrom, $dateTo, $this->_user->getId(), $dateFrom, $dateTo, $currentAccount,
+			$currentAccount, $this->_user->getId(), $dateFrom, $dateTo);
+
 		// Добавляем данные, которых не хватает
 		foreach ($operations as $key => $operation)
 		{
@@ -1013,9 +1020,9 @@ class Operation_Model {
 			
 			$operations[$key] 	= $operation;
 		}
-		
+
 		$retoper = array();
-		
+
 		//возвращаемые операции. не возвращаем мусор связанный с удалением счетов
 		foreach ($operations as $k => $v)
 		{
@@ -1060,7 +1067,7 @@ class Operation_Model {
                 FROM
                     operation o
                 WHERE
-                    o.user_id = " . Core::getInstance()->user->getId() . "
+                    o.user_id = " . $this->_user->getId() . "
                 AND
                     o.date > 0
                 AND
@@ -1095,7 +1102,7 @@ class Operation_Model {
                 ON
                     t.target_id=tt.id
                 WHERE
-                    t.user_id = " . Core::getInstance()->user->getId() . "
+                    t.user_id = " . $this->_user->getId() . "
                 AND
                     tt.done=0
                 ORDER BY
@@ -1138,13 +1145,13 @@ class Operation_Model {
 
         if (is_array($account_id) && count($account_id) > 0) {
             $sql = $tr." AND account_id IN (?a) {$dr}";
-            $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
+            $this->total_sum = $this->db->selectCell($sql, $this->_user->getId(), $account_id);
         } elseif ((int)$account_id > 0 ) {
             $sql = $tr." AND account_id = ?d  {$dr}";
-            $this->total_sum = $this->db->selectCell($sql, $this->user->getId(), $account_id);
+            $this->total_sum = $this->db->selectCell($sql, $this->_user->getId(), $account_id);
         } elseif((int)$account_id == 0) {
             $sql = $tr."  {$dr}";
-            $this->total_sum = $this->db->selectCell($sql, $this->user->getId());
+            $this->total_sum = $this->db->selectCell($sql, $this->_user->getId());
         } else {
             trigger_error(E_USER_NOTICE, 'Ошибка получения всей суммы пользователя');
             return 0;
@@ -1161,7 +1168,7 @@ class Operation_Model {
     function getFirstOperation($account_id=0)
     {
         $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
-        $first = $this->db->query($sql, $this->user->getId(), $account_id);
+        $first = $this->db->query($sql, $this->_user->getId(), $account_id);
         return $first[0]['money'];
     }
 
@@ -1175,7 +1182,7 @@ class Operation_Model {
         $TargetId = (int)$_POST['TargetId']; // Ид текущего счёта
         $aTarget = $aSource = array();
         $curr = Core::getInstance()->currency;
-        foreach (Core::getInstance()->user->getUserAccounts() as $val) {
+        foreach ($this->_user->getUserAccounts() as $val) {
             if ($val['account_id'] == $SourceId) {
                 $aTarget[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
             }
@@ -1204,9 +1211,9 @@ class Operation_Model {
     function getTypeOfOperation($id=0){
         $type = 0;//возвращаемый тип операции
         $sql = "SELECT drain, transfer, count(*) as c FROM operation WHERE id=? AND user_id=? GROUP BY id";
-        $res1 = $this->db->query($sql, $id, $this->user->getId());
+        $res1 = $this->db->query($sql, $id, $this->_user->getId());
         $sql = "SELECT count(*) AS c FROM target_bill WHERE id=? AND user_id=?";
-        $res2 = $this->db->query($sql, $id, $this->user->getId());
+        $res2 = $this->db->query($sql, $id, $this->_user->getId());
         if ( $res1[0]['c'] != $res2[0]['c'] )
         {
             if ( $res1[0]['c'] == 1 ){

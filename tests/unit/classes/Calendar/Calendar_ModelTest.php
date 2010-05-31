@@ -6,15 +6,37 @@ require_once dirname(__FILE__) . '/../../bootstrap.php';
  */
 class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
 {
-    private $userId = null;
+    private $userId    = null;
+    private $userLogin = null;
+    private $userPass  = null;
+    /** @var User */
+    private $user      = null;
 
-    function __construct()
+
+    /**
+     * SetUp
+     */
+    function _start()
     {
-        $this->userId = CreateObjectHelper::createUser();
+        $this->userLogin = 'someLogin';
+        $this->userPass  = 'somePass';
+
+        $options = array(
+            'user_login' => $this->userLogin,
+            'user_pass'  => sha1($this->userPass),
+            'user_active'=> 1,
+            'user_new'   => 0,
+
+        );
+        CreateObjectHelper::createUser($options);
     }
+
 
     private function _makeOperation()
     {
+        $this->user = new oldUser($this->userLogin, $this->userPass);
+        $this->userId = $this->user->getId();
+
         $options   = array(
             'user_id'  => $this->userId,
             'chain_id' => 999,
@@ -26,28 +48,35 @@ class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
         CreateObjectHelper::createOperation($options);
 
         // Операция не выполнена
-        $options['accepted'] = 0;
-        CreateObjectHelper::createOperation($options);
+        $data = $options;
+        $data['accepted'] = 0;
+        CreateObjectHelper::createOperation($data);
 
 
         // Дата операции установлена на завтра
-        $options['date'] = date('Y-m-d', time()+86400);
-        CreateObjectHelper::createOperation($options);
+        $data = $options;
+        $data['accepted'] = 0;
+        $data['date'] = date('Y-m-d', time()+86400);
+        CreateObjectHelper::createOperation($data);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
-        $options['accepted'] = 1;
-        $options['date'] = date('Y-m-d', time()+86400);
-        CreateObjectHelper::createOperation($options);
+        $data = $options;
+        $data['accepted'] = 1;
+        $data['date'] = date('Y-m-d', time()+86400);
+        CreateObjectHelper::createOperation($data);
 
         // Удалённая операция
-        $options['deleted_at'] = '2010-02-02 02:02:02';
-        CreateObjectHelper::createOperation($options);
+        $data = $options;
+        $data['accepted'] = 0;
+        $data['deleted_at'] = '2010-02-02 02:02:02';
+        CreateObjectHelper::createOperation($data);
 
         // Обычная операция, вне цепочки
         unset($options['deleted_at']);
         unset($options['chain_id']);
         CreateObjectHelper::createOperation($options);
     }
+
 
     /**
      * Загружает все операции
@@ -56,16 +85,17 @@ class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
     {
         $this->_makeOperation();
 
-        $sql = "SELECT COUNT(*)
-                FROM operation o
-                LEFT JOIN calendar_chains c
-                ON c.id=o.chain_id
-                WHERE o.user_id = ?
-                    AND (o.accepted=0 OR o.chain_id > 0)
-                    AND o.deleted_at IS NULL";
-        $actual = Core::getInstance()->db->selectCell($sql, $this->userId);
-        $this->assertEquals(6, $actual, 'Expected 3 operation');
+        $start = new DateTime('-1week');
+        $end   = new DateTime('+1week');
+
+        $calendar = new Calendar($this->user);
+
+        $calendar->loadAll($this->user, $start->format('U'), $end->format('U'));
+
+        $actual = $calendar->getArray();
+        $this->assertEquals(6, count($actual), 'Expected 6 operation');
     }
+
 
     /**
      * Загружает все неподтверждённые операции
@@ -73,16 +103,13 @@ class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
     public function testLoadOverdue()
     {
         $this->_makeOperation();
+        $calendar = new Calendar($this->user);
+        $calendar->loadOverdue($this->user);
 
-        $sql = "SELECT COUNT(*)
-                FROM operation o
-                LEFT JOIN calendar_chains c ON c.id=o.chain_id
-                WHERE o.user_id = ?
-                AND o.`date` <= CURRENT_DATE()
-                AND o.accepted=0
-                AND o.deleted_at IS NULL";
-        $actual = Core::getInstance()->db->selectCell($sql, $this->userId);
-        $this->assertEquals(1, $actual, 'Expected 1 operation');
+        $result = $calendar->getArray();
+        $this->assertEquals(1, count($result), 'Expected 1 operation');
+        $item = current($result);
+        $this->assertEquals(0, $item['accepted']);
     }
 
 
@@ -93,27 +120,9 @@ class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
     {
         $this->_makeOperation();
 
-        $sql = "SELECT COUNT(*)
-                FROM operation o
-                LEFT JOIN calendar_chains c ON c.id=o.chain_id
-                WHERE o.user_id = ?
-                AND o.`date` BETWEEN ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY) AND ADDDATE(CURRENT_DATE(), INTERVAL 8 DAY)
-                AND o.accepted=0
-                AND o.deleted_at IS NULL";
-        $actual = Core::getInstance()->db->selectCell($sql, $this->userId);
-        $this->assertEquals(1, $actual, 'Expected 1 operation');
-    }
-
-
-    /**
-     * Возвращает количество выполненных событий в цепочке
-     */
-    public function testLoadAcceptedByChain()
-    {
-        $this->_makeOperation();
-
-        $sql = "SELECT COUNT(*) FROM operation c WHERE user_id=? AND chain_id=? AND accepted=1 AND deleted_at IS NULL";
-        $actual = Core::getInstance()->db->selectCell($sql, $this->userId, 999);
-        $this->assertEquals(4, $actual, 'Expected 4 operation');
+        $calendar = new Calendar($this->user);
+        $calendar->loadReminder($this->user);
+        $result = $calendar->getArray();
+        $this->assertEquals(1, count($result), 'Expected 1 operation');
     }
 }

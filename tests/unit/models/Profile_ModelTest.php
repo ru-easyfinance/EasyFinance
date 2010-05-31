@@ -33,65 +33,46 @@ class models_ProfileTest extends UnitTestCase
     protected function _start()
     {
         // Создаём заместо удалённых новых, чистых
-        $sql = "INSERT INTO users
-            (
-                `id`,
-                `user_name`,
-                `user_login`,
-                `user_pass`,
-                `user_mail`,
-                `user_created`,
-                `user_active`,
-                `user_new`,
-                `getNotify`,
-                `user_currency_default`,
-                `user_currency_list`,
-                `user_type`,
-                `user_service_mail`,
-                `referrerId`
-            )
-            VALUES
-            (
-                1,
-                'ukko1',
-                'ukko1',
-                '601f1889667efaebb33b8c12572835da3f027f78',
-                'max.kamashev@gmail.com',
-                '2009-08-14',
-                1,
-                0,
-                1,
-                1,
-                '" . 'a:7:{i:0;s:1:"5";i:1;s:1:"7";i:2;s:1:"2";i:3;s:1:"3";i:4;s:2:"13";i:5;s:1:"4";i:6;s:1:"1";}'."',
-                0,
-                '',
-                ''
-            ),
-            (
-                2,
-                'ukko2',
-                'ukko2',
-                '601f1889667efaebb33b8c12572835da3f027f78',
-                'max.kamashev@gmail.com',
-                '2009-08-16',
-                1,
-                0,
-                1,
-                1,
-                '" . 'a:7:{i:0;s:1:"5";i:1;s:1:"7";i:2;s:1:"2";i:3;s:1:"3";i:4;s:2:"13";i:5;s:1:"4";i:6;s:1:"1";}'."',
-                0,
-                'ukko2@mail.easyfinance.ru',
-                ''
-            )";
+        $options = array(
+            'user_name'             => 'user1',
+            'user_login'            => 'user1',
+            'user_pass'             => sha1('123123'),
+            'user_mail'             => 'user1@gmail.com',
+            'user_created'          => '2009-08-14',
+            'user_active'           => 1,
+            'user_new'              => 0,
+            'getNotify'             => 1,
+            'user_currency_default' => 1,
+            'user_currency_list'    => 'a:7:{i:0;s:1:"5";i:1;s:1:"7";i:2;s:1:"2";i:3;s:1:"3";i:4;s:2:"13";i:5;s:1:"4";i:6;s:1:"1";}',
+            'user_type'             => 0,
+            'user_service_mail'     => '',
+            'referrerId'            => ''
+        );
 
+        $userId1 = CreateObjectHelper::createUser($options);
 
-        Core::getInstance()->db->query( $sql );
+        $options = array(
+            'user_name'             => 'user2',
+            'user_login'            => 'user2',
+            'user_pass'             => sha1('123123'),
+            'user_mail'             => 'user2@gmail.com',
+            'user_created'          => '2009-08-14',
+            'user_active'           => 1,
+            'user_new'              => 0,
+            'getNotify'             => 1,
+            'user_currency_default' => 1,
+            'user_currency_list'    => 'a:7:{i:0;s:1:"5";i:1;s:1:"7";i:2;s:1:"2";i:3;s:1:"3";i:4;s:2:"13";i:5;s:1:"4";i:6;s:1:"1";}',
+            'user_type'             => 0,
+            'user_service_mail'     => 'ukko2@mail.easyfinance.ru',
+            'referrerId'            => ''
+        );
+        $userId2 = CreateObjectHelper::createUser($options);
+        
+        $this->user1  = new oldUser ('user1', '123123');
+        $this->user2  = new oldUser ('user2', '123123');
 
-        $this->user1  = new oldUser ('ukko1', '123123');
-        $this->user2  = new oldUser ('ukko2', '123123');
-
-        $this->profile1 = new Profile_Model( $this->user1 );
-        $this->profile2 = new Profile_Model( $this->user2 );
+        $this->profile1 = new Profile_Model($this->user1);
+        $this->profile2 = new Profile_Model($this->user2);
     }
 
 
