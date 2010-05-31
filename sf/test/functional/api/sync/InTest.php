@@ -12,6 +12,10 @@ class api_sync_InTest extends myFunctionalTestCase
 
     public function testPostAccount()
     {
+        $user = $this->helper->makeUser(array('id' => 1));
+
+        $this->browser->setTester('doctrine', 'sfTesterDoctrine');
+
         $this->browser
             ->post(
                 $this->generateUrl('sync_in_account'),
@@ -21,7 +25,16 @@ class api_sync_InTest extends myFunctionalTestCase
                 ->isParameter('module', 'sync')
                 ->isParameter('action', 'syncInAccount')
             ->end()
-            ->with('response')->isStatusCode('200');
-
+            ->with('response')->begin()
+                ->isStatusCode('200')
+                ->checkContains('<resultset type="account">')
+                ->checkContains('record')
+                ->checkElement('record', 3)
+                ->checkElement('record[id]', 3)
+                ->checkElement('record[cid]', 3)
+                ->checkElement('record[success]', 3)
+            ->end()
+            ->with('doctrine')->check('Account', null, 3);
     }
+
 }

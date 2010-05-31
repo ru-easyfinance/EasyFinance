@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <request>
     <recordset type="account">
-        <record id="100">
+        <record id="100" cid="378">
             <user_id>1</user_id>
             <type_id>1</type_id>
             <currency_id>1</currency_id>
-            <name>А тут по идее CDATA</name>
-            <description>И тут тем более CDATA</description>
+            <name>Кошель с баблом №1</name>
+            <description>Описание кошеля №1, код на узелок</description>
+            <created_at>2010-05-28T14:09:42+0400</created_at>
+            <updated_at>2010-05-28T14:09:42+0400</updated_at>
+            <deleted_at></deleted_at>
+        </record>
+        <record id="101" cid="4519">
+            <user_id>1</user_id>
+            <type_id>1</type_id>
+            <currency_id>1</currency_id>
+            <name>Кошель с баблом №1</name>
+            <description>Описание кошеля №1, код на узелок</description>
+            <created_at>2010-05-28T14:09:42+0400</created_at>
+            <updated_at>2010-05-28T14:09:42+0400</updated_at>
+            <deleted_at>2010-05-28T14:09:42+0400</deleted_at>
+        </record>
+        <record cid="4525">
+            <user_id>1</user_id>
+            <type_id>1</type_id>
+            <currency_id>1</currency_id>
+            <name>Кошель с баблом №1</name>
+            <description>Описание кошеля №1, код на узелок</description>
+            <created_at>2010-05-28T14:09:42+0400</created_at>
+            <updated_at>2010-05-28T14:09:42+0400</updated_at>
+            <deleted_at></deleted_at>
         </record>
     </recordset>
 </request>
