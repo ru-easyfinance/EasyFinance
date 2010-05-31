@@ -339,25 +339,34 @@ easyFinance.widgets.operationEdit = function(){
     function _expandNormal() {
         _$dialog.dialog('option', 'buttons', _buttonsNormal);
 
+        var dialogClass = '';
+        var dialogTitle = '';
+
         if (!_isCalendar) {
-            _$dialog.dialog( "option", "dialogClass", '' );
-
-            if (_isEditing)
-                _$dialog.data('title.dialog', 'Изменить операцию').dialog('open');
-            else
-                _$dialog.data('title.dialog', 'Добавить операцию').dialog('open');
+            if (_isEditing) {
+                dialogClass = 'edit';
+                dialogTitle = 'Изменить операцию';
+            } else {
+                dialogTitle = 'Добавить операцию';
+            }
         } else {
-            _$dialog.dialog( "option", "dialogClass", 'calendar' );
-
-            if (_isEditing)
-                if (_isChain)
-                    _$dialog.data('title.dialog', 'Редактировать серию операций').dialog('open');
-                else
-                    _$dialog.data('title.dialog', 'Редактировать операцию в календаре').dialog('open');
-            else
-                if (_isChain)
-                    _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
+            if (_isEditing) {
+                dialogClass = 'calendar edit';
+                
+                if (_isChain) {
+                    dialogTitle = 'Редактировать серию операций';
+                } else {
+                    dialogTitle = 'Редактировать операцию в календаре';
+                }                
+            } else {
+                dialogTitle = 'Добавить серию операций';
+            }
         }
+
+        _$dialog
+            .data('title.dialog', dialogTitle)
+            .dialog( "option", "dialogClass", dialogClass)
+            .dialog('open');
 
         // если открываем в первый раз, инициализируем комбобоксы
         if (!_$ufdAccount) {
