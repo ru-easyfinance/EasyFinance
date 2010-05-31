@@ -56,11 +56,13 @@ class Budget_Model {
             AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = o.user_id)
                 GROUP BY o.cat_id, a.account_id";
 
+        // Сумма операций по категориям
         $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
 
         $fact = array();
-        foreach ( $arrayoper as $key => $value ) {
-            $money = new efMoney(abs($value['money']), $value['currency_id']);
+        foreach ($arrayoper as $value) {
+            // Знак суммы имеет значение
+            $money = new efMoney($value['money'], $value['currency_id']);
             $sum = sfConfig::get('ex')->convert($money, $currency_id)->getAmount();
 
             $fact[$value['cat_id']] = (float) @$fact[$value['cat_id']] + (float)$sum;
