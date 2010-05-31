@@ -37,6 +37,12 @@ class Info_Model
      */
     private $output = array();
 
+    /**
+     * Класс пользователя
+     * @var oldUser
+     */
+    private $_user;
+
     protected $balance = null;
     protected $budget = null;
     protected $drain = null;
@@ -179,8 +185,13 @@ class Info_Model
      * Конструктор
      * @return void
      */
-    public function __construct()
+    public function __construct(oldUser $user = null)
     {
+        if (!$user) {
+            $this->_user = Core::getInstance()->user;
+        } else {
+            $this->_user = $user;
+        }
         $this->db = Core::getInstance()->db;
     }
 
@@ -300,37 +311,76 @@ class Info_Model
      * @return void
      */
     public function init() {
-        //BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
-        //BETWEEN 
         // Доходы за прошедший месяц
-        //SELECT (LAST_DAY(NOW() - INTERVAL 1 MONTH)) as dateend, (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) as datebegin";
+        $sql = "SELECT
+                    SUM(o.money) as sum,
+                    a.account_currency_id as cur
+                FROM
+                    accounts a
+                LEFT JOIN
+                    operation o
+                ON
+                    a.account_id = o.account_id 
+                    AND
+                        o.deleted_at IS NULL
+                WHERE
+                    o.user_id = ?
+                AND
+                    o.drain = 0
+                AND
+                    o.transfer = 0
+                AND
+                    o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
+                AND
+                    (LAST_DAY(NOW() - INTERVAL 1 MONTH))
+                GROUP BY a.account_currency_id";
+        $profits = $this->db->query($sql, $this->_user->getId());
 
-        $sql = "SELECT SUM(o.money) as sum, a.account_currency_id as cur FROM accounts a
-            LEFT JOIN operation o ON a.account_id = o.account_id
-            WHERE o.user_id = ? AND o.drain = 0 AND o.transfer = 0
-            AND o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
-            GROUP BY a.account_currency_id";
-        $profits = $this->db->query($sql, Core::getInstance()->user->getId());
         $this->input['profit'] = 0;
         foreach ($profits as $k=>$v){
             $this->input['profit'] += $v['sum'] * Core::getInstance()->currency[$v['cur']]['value'];
         }
 
         // Расходы за прошедший месяц
-        $sql = "SELECT ABS(SUM(o.money)) as sum, a.account_currency_id as cur FROM accounts a
-            LEFT JOIN operation o ON a.account_id = o.account_id
-            WHERE o.user_id = ? AND o.drain = 1 AND o.transfer = 0
-            AND o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
-            GROUP BY a.account_currency_id";
-        $drains = $this->db->query($sql, Core::getInstance()->user->getId());
+        $sql = "SELECT
+                    ABS(SUM(o.money)) as sum,
+                    a.account_currency_id as cur
+                FROM
+                    accounts a
+                LEFT JOIN
+                    operation o
+                ON
+                    a.account_id = o.account_id
+                    AND
+                        o.deleted_at IS NULL
+                WHERE
+                    o.user_id = ?
+                AND
+                    o.drain = 1
+                AND
+                    o.transfer = 0
+                AND
+                    o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
+                AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
+                GROUP BY a.account_currency_id";
+        $drains = $this->db->query($sql, $this->_user->getId());
         $this->input['drain'] = 0;
         foreach ($drains as $k=>$v){
             $this->input['drain'] += $v['sum'] * Core::getInstance()->currency[$v['cur']]['value'];
         }
+
         // Бюджет за прошедший месяц
-        $sql = "SELECT SUM(amount) FROM budget WHERE user_id = ? AND drain=1
-            AND date_start = CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')";
-        $this->input['budget']   = (float)$this->db->selectCell($sql, Core::getInstance()->user->getId());
+        $sql = "SELECT
+                    SUM(amount)
+                FROM
+                    budget
+                WHERE
+                    user_id = ?
+                AND
+                    drain=1
+                AND
+                    date_start = CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')";
+        $this->input['budget']   = (float)$this->db->selectCell($sql, $this->_user->getId());
 
 //        // Выплаты по кредитам за прошедший месяц
 //        $accounts = '';

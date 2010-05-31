@@ -16,9 +16,8 @@ class syncInAccountAction extends sfAction
         // Явно указать шаблон
         $this->setTemplate('syncIn');
 
-        $rawXml = $request->getRawPostBody();
+        if (0 !== strlen($rawXml = $request->getContent())) {
 
-        if (0 !== strlen($rawXml)) {
             return sfView::SUCCESS;
         }
 

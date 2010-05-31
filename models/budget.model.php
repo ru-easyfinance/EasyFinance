@@ -48,37 +48,79 @@ class Budget_Model {
         }
 
         // Считаем факт доходов и факт расходов
-        $sqloper = "SELECT sum(o.money) as money, o.cat_id, a.account_currency_id AS currency_id
-            FROM operation o
-            LEFT JOIN accounts a ON a.account_id=o.account_id
-            WHERE o.user_id = ? AND o.transfer=0 AND o.accepted=1
-                AND o.date >= ? AND o.date <= ?
-            AND o.account_id IN (SELECT account_id FROM accounts WHERE user_id = o.user_id)
-                GROUP BY o.cat_id, a.account_id";
+        $sqloper = "SELECT
+                        sum(o.money) as money,
+                        o.cat_id,
+                        a.account_currency_id AS currency_id
+                    FROM
+                        operation o
+                    LEFT JOIN
+                        accounts a
+                    ON
+                        a.account_id=o.account_id
+                    WHERE
+                        o.user_id = ?
+                    AND
+                        o.transfer=0
+                    AND
+                        o.accepted=1
+                    AND
+                        o.deleted_at IS NULL
+                    AND
+                        o.date >= ? AND o.date <= ?
+                    AND
+                        o.account_id IN (SELECT account_id FROM accounts WHERE user_id = o.user_id)
+                    GROUP BY
+                        o.cat_id, a.account_id";
 
+        // Сумма операций по категориям
         $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
 
         $fact = array();
-        foreach ( $arrayoper as $key => $value ) {
-            $money = new efMoney(abs($value['money']), $value['currency_id']);
+        foreach ($arrayoper as $value) {
+            // Знак суммы имеет значение
+            $money = new efMoney($value['money'], $value['currency_id']);
             $sum = sfConfig::get('ex')->convert($money, $currency_id)->getAmount();
 
             $fact[$value['cat_id']] = (float) @$fact[$value['cat_id']] + (float)$sum;
         }
 
         // Делаем выборку по всем запланированным доходам и расходам
-        $sqlbudg = "SELECT b.category, b.drain, b.currency, b.amount,
-                DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
-                DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end
-                , (SELECT AVG(amount) FROM budget t
-                        WHERE (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-                            AND t.date_start <= LAST_DAY(b.date_start))
-                        AND b.category = t.category AND b.user_id=t.user_id
-                ) AS avg_3m
-        FROM budget b
-        LEFT JOIN category c ON c.cat_id=b.category
-        WHERE b.user_id= ? AND b.date_start= ? AND b.date_end=LAST_DAY(b.date_start) AND c.visible=1
-        ORDER BY c.cat_parent ;";
+        $sqlbudg = "SELECT
+                        b.category,
+                        b.drain,
+                        b.currency,
+                        b.amount,
+                        DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
+                        DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end,
+                        (
+                            SELECT
+                                AVG(amount)
+                            FROM
+                                budget t
+                            WHERE
+                                (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
+                                    AND t.date_start <= LAST_DAY(b.date_start))
+                                AND
+                                    b.category = t.category
+                                AND
+                                    b.user_id=t.user_id
+                        ) AS avg_3m
+                    FROM
+                        budget b
+                    LEFT JOIN
+                        category c
+                    ON
+                        c.cat_id=b.category
+                    WHERE
+                        b.user_id= ?
+                    AND
+                        b.date_start= ?
+                    AND
+                        b.date_end=LAST_DAY(b.date_start)
+                    AND
+                        c.visible=1
+                    ORDER BY c.cat_parent";
 
         $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);
 

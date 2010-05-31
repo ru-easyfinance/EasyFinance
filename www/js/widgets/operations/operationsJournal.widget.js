@@ -112,9 +112,11 @@ easyFinance.widgets.operationsJournal = function(){
                         money = data[v].moneydef;
                     }
                 } else {
-                    if (data[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
+                    if (data[v].type == "2" && data[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
+                        // для переводов учитываем курс
                         money = money * parseFloat(data[v].curs);
                     } else {
+                        // расходы / доходы / цели
                         money = easyFinance.models.currency.convertToDefault(money, data[v].account_currency_id);
                     }
                     
