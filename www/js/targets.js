@@ -75,21 +75,17 @@ $(document).ready(function(){
     // Удаляем цель
     $(".f_f_del").live('click', function(){
         var o = $(this).closest('.object');
+        var deletedId = o.attr('tid');
         if (confirm("Вы уверены, что хотите удалить финансовую цель '"+$(this).closest('.object .descr a').text()+"'?")) {
             $.post('/targets/del/', {
-                id: o.attr('tid')
+                id: deletedId
             }, function(data){
-                /*
-                debugger;
-                for (var k in res.user_targets) {
-                    if (res.user_targets[k].id)
-                        if (res.user_targets[k].id == o.attr('tid'))
-                            delete res.user_targets[k];
+                // удаляем из списка фин. целей
+                for (var key in res.user_targets) {
+                    if (res.user_targets[key].id == deletedId) {
+                        delete res.user_targets[key];
+                    }
                 }
-
-                delete res.user_targets[o.attr('tid')];
-                easyFinance.widgets.operationEdit.refreshTargets();
-                */
                
                 o.remove();
                 $.jGrowl("Финансовая цель удалена", {theme: 'green'});
@@ -167,6 +163,8 @@ $(document).ready(function(){
      * Показывает финцели пользователя
      */
     function loadTargets(data) {
+        res.user_targets = data;
+
         var s = '';
         for(v in data) {
             if ( (data[v]["done"] == 0) || showall){
@@ -210,7 +208,7 @@ $(document).ready(function(){
     }
     /**
      * Заполняет поля формы результатами из массива data
-     * @param array data Массив с данными финансовой цели
+     * @param data Массив с данными финансовой цели
      * @return void
      */
     function fillForm(data) {
@@ -271,7 +269,7 @@ $(document).ready(function(){
             $.jGrowl(str, {theme: 'red', sticky: true});
             return false;
         }
-    };
+    }
 
     /**
      * Cохранение объекта
@@ -304,21 +302,12 @@ $(document).ready(function(){
                 account  : $('#account').attr('value'),
                 visible  : $('#visible:checked').length
             }, function(data){
-                // В случае успешного добавления, закрываем диалог и обновляем календарь
-//                if (data.length == 0) {
-                    //if (data.user_targets)
-                    //    res.user_targets = data['user_targets'];
-                    //debugger;
-                    //easyFinance.widgets.operationEdit.refreshTargets();
+                $('#tpopup').dialog('close');
+                $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
 
-                    $('#tpopup').dialog('close');
-                    $.jGrowl("Финансовая цель сохранена", {theme: 'green'});
-                    loadTargets(data['user_targets']);
-//                } else {
-//                    for (var v in data) {
-//                        alert('Ошибка в ' + v);
-//                    }
-//                }
+                // #1455. обновляем данные по фин. целям
+                loadTargets(data['user_targets']);
+
                 if ($('#visible:checked').length == 1) {
                     loadPopular();
                 }
