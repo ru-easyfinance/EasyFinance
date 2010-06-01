@@ -48,6 +48,9 @@ class ProjectConfiguration extends sfProjectConfiguration
 
         // SoftDelete
         $manager->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
+
+        // Кастомный гидратор
+        $manager->registerHydrator('FetchPair', 'Doctrine_Hydrator_FetchPair');
     }
 
 }
