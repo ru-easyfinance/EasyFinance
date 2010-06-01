@@ -32,7 +32,10 @@ class accountActions extends sfActions
                 'initPayment'  => $balance,
                 'totalBalance' => $balance,
             );
-            return $this->renderText(json_encode(array('result' => $result)));
+            return $this->renderText(json_encode(array('result' => array(
+                'account' => $result,
+                'test'    => 'Счёт успешно добавлен',
+            ))));
         }
 
         $this->getResponse()->setStatusCode(400);

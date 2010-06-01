@@ -38,6 +38,21 @@ class myFunctionalTesterResponse extends sfTesterResponse
 
 
     /**
+     * Проверить, что JSON содержит ключ с указанным заначением
+     */
+    public function checkJsonContains($key, $value, $message = null)
+    {
+        $json = json_decode($this->response->getContent(), true);
+
+        $message = $message . "\n%s\n\nJSON:\n" . var_export($json, true);
+        PHPUnit_Framework_Assert::assertTrue(isset($json[$key]), sprintf($message, "Expected JSON contains key: {$key}"));
+        PHPUnit_Framework_Assert::assertEquals($value, $json[$key], sprintf($message, "Expected JSON key `{$key}` contains value"));
+
+        return $this->getObjectToReturn();
+    }
+
+
+    /**
      * Check: проверить редирект
      *
      * @param int    $statusCode

@@ -26,7 +26,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 ->isInstanceOf('AccountWithBalanceForm')
                 ->hasErrors(true)
             ->end()
-            ->with('response')->checkEquals(json_encode(array('error'=>array('text' => 'Ошибка при создании счета'))));
+            ->with('response')->checkJsonContains('error', array('text' => 'Ошибка при создании счета'));
     }
 
 
@@ -79,6 +79,9 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 'totalBalance' => (float)$data['initPayment'],
             );
             $this->browser
-                ->with('response')->checkEquals(json_encode(array('result'=>$expected)));
+                ->with('response')->checkJsonContains('result', array(
+                    'account' => $expected,
+                    'test'    => 'Счёт успешно добавлен',
+                ));
     }
 }
