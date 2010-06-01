@@ -15,7 +15,7 @@ class myFunctionalTesterResponse extends sfTesterResponse
     public function checkEquals($text)
     {
         PHPUnit_Framework_Assert::assertEquals($text, $content = $this->response->getContent(),
-            sprintf("Expected response equals\n`%s`\n\nGot:\n%s", substr($text, 0, 255), substr($content, 0, 255))
+            sprintf("Expected response equals\n%s\n\nGot:\n%s", substr($text, 0, 255), substr($content, 0, 255))
         );
 
         return $this->getObjectToReturn();

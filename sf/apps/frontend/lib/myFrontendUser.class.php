@@ -23,9 +23,26 @@ class myFrontendUser extends sfBasicSecurityUser
         return $this->user;
     }
 
-   /**
-    * Принудительный выход пользователя
-    */
+
+    /**
+     * Авторизовать пользователя
+     *
+     * @param  User $user
+     * @return void
+     */
+    public function signIn(User $user)
+    {
+        $this->user = $user;
+        $this->setAttribute('id', $user->getId(), 'user');
+
+        $this->setAuthenticated(true);
+        $this->clearCredentials();
+    }
+
+
+    /**
+     * Принудительный выход пользователя
+     */
     public function signOut() {
         $this->getAttributeHolder()->removeNamespace('user');
         $this->user = null;
