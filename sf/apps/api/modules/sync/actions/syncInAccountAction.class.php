@@ -19,9 +19,15 @@ class syncInAccountAction extends sfAction
         if (0 !== strlen($rawXml = $request->getContent())) {
             $xml = simplexml_load_string($rawXml);
 
-            // кол-во объектов 100
-            if (count($xml->recordset[0]) > 100) {
+            // кол-во объектов - отсутствуют или >100
+            $cnt = (int) count($xml->recordset[0]);
+            $limit = sfConfig::get('app_records_sync_limit');
+
+            if (($cnt <= 0) OR ($cnt > $limit)) {
                 $this->getResponse()->setStatusCode(400);
+                $this->setVar('errMessage', $cnt ?
+                    "More than 'limit' ({$limit}) objects were sent" : 'No objects were sent'
+                );
                 return sfView::ERROR;
             }
 
@@ -81,6 +87,7 @@ class syncInAccountAction extends sfAction
         }
 
         $this->getResponse()->setStatusCode(400);
+        $this->setVar('errMessage', 'No data were sent');
         return sfView::ERROR;
     }
 

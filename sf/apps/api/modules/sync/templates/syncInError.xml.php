@@ -1,3 +1,3 @@
 <error>
-    <message><?php echo 'Error'; ?></message>
+    <message><?php echo $errMessage; ?></message>
 </error>
