@@ -34,11 +34,10 @@ class AccountWithBalanceForm extends BaseAccountForm
      */
     public function processValues($values)
     {
-        $date = new DateTime('-1year');
         $operation = array(
             'user_id'     => $this->getObject()->getUserId(),
             'amount'      => $values['initPayment'],
-            'date'        => $date->format('Y-m-d'),
+            'date'        => '0000-00-00',
             'time'        => '00:00:00',
             'drain'       => 0,
             'type'        => 1,

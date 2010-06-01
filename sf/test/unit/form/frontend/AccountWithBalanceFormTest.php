@@ -124,13 +124,12 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с нулевым балансом
-        $date = new DateTime('-1year');
         $expectedOperation = array(
             'user_id'     => $user->getId(),
             'account_id'  => $account->getId(),
             'category_id' => null,
             'amount'      => 0,
-            'date'        => $date->format('Y-m-d'),
+            'date'        => '0000-00-00',
             'time'        => '00:00:00',
             'drain'       => 0,
             'type'        => 1,
@@ -161,13 +160,12 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с нулевым балансом
-        $date = new DateTime('-1year');
         $expectedOperation = array(
             'user_id'     => $user->getId(),
             'account_id'  => $account->getId(),
             'category_id' => null,
             'amount'      => $input['initPayment'],
-            'date'        => $date->format('Y-m-d'),
+            'date'        => '0000-00-00',
             'time'        => '00:00:00',
             'drain'       => 0,
             'type'        => 1,
