@@ -1,12 +1,21 @@
 
 # Создать счет
+pda_account_create:
+  url:      /account.pda
+  class:    sfDoctrineRoute
+  options:  { model: Account, type: object }
+  param:    { module: account, action: createForPda, sf_format: pda }
+  requirements:
+    sf_method: post
+
 account_create:
   url:      /account.:sf_format
   class:    sfDoctrineRoute
   options:  { model: Account, type: object }
-  param:    { module: account, action: create }
+  param:    { module: account, action: create, sf_format: html }
   requirements:
     sf_method: post
+
 
 # default rules
 homepage:

@@ -31,6 +31,21 @@ class frontend_account_AddTest extends myFunctionalTestCase
 
 
     /**
+     * Ошибки валидации для PDA версии
+     */
+    public function testPdaValidationErrors()
+    {
+        $user = $this->helper->makeUser();
+        $this->authenticateUser($user);
+
+        $this->browser
+            ->post($this->generateUrl('pda_account_create'))
+            ->with('request')->checkModuleAction('account', 'createForPda')
+            ->with('response')->checkRedirect(302, '/accounts/add', true);
+    }
+
+
+    /**
      * Создать счет с начальным балансом
      */
     public function testAddAccountWithInitBalance()
@@ -84,4 +99,27 @@ class frontend_account_AddTest extends myFunctionalTestCase
                     'test'    => 'Счёт успешно добавлен',
                 ));
     }
+
+
+    /**
+     * Создание счета для PDA версии
+     */
+    public function testPdaAddAccount()
+    {
+        $user = $this->helper->makeUser();
+        $this->authenticateUser($user);
+
+        $this->browser
+            ->post($this->generateUrl('pda_account_create'), $data = array(
+                'type_id'          => 1,
+                'currency_id'      => 1,
+                'name'             => 'Название "\'счета"',
+                'description'      => 'Описание счета',
+                'initPayment'      => '123.45',
+                ))
+            ->with('request')->checkModuleAction('account', 'createForPda')
+            ->with('response')->checkRedirect(302, '/info', true)
+            ->with('model')->check('Account', null, 1);
+    }
+
 }

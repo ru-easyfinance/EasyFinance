@@ -58,11 +58,15 @@ class myFunctionalTesterResponse extends sfTesterResponse
      * @param int    $statusCode
      * @param string $uri
      */
-    public function checkRedirect($statusCode, $uri)
+    public function checkRedirect($statusCode, $uri, $abs = false)
     {
+        if (!$abs) {
+            $uri = 'http://localhost' . $uri;
+        }
+
         return $this->begin()
             ->isStatusCode($statusCode)
-            ->isHeader('Location', 'http://localhost'.$uri)
+            ->isHeader('Location', $uri)
         ->end();
     }
 
