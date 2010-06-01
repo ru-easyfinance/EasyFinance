@@ -30,5 +30,6 @@ budgetMaster.css
 budget.css
 accountsPanel.css
 accountsJournal.css
+screens/calendar.screen.css
 screens/integration.screen.css
 screens/promoTKS.screen.css

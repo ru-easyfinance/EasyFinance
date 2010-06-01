@@ -45,42 +45,16 @@ easyFinance.widgets.calendar = function(){
             },
             events: function(start, end, calback){
                 s = new Date(start.getFullYear(), start.getMonth() - 2, start.getDate() + 14);//+10??там разбег всего на пять, но лучше перестраховаться @todo 0_о Разобраться с автором...
-                var e = new Date(s.getFullYear(), s.getMonth() + 4, s.getDate());
-                
-                
-                // ----------------- Date Bar -------------------------------------------
-                var date = $('#calendar').fullCalendar('getDate');
-                var month = date.getMonth();
-                var year = date.getFullYear();
-                var monthTitle = $.fullCalendar.monthNames[month] + ' ' + year.toString();
-                var _$cal = $('#views');
-                
-                _$cal.find('li.y_prev a').text(year - 1);
-                _$cal.find('li.y_next a').text(year + 1);
-                // -- некрасиво .. нелогично .. не нравится
-                if (month == 11) {
-                    _$cal.find('li.m_next a').text($.fullCalendar.monthNames[0]);
-                }
-                else {
-                    _$cal.find('li.m_next a').text($.fullCalendar.monthNames[month + 1]);
-                }
-                if (month === 0) {
-                    _$cal.find('li.m_prev a').text($.fullCalendar.monthNames[11]);
-                }
-                else {
-                    _$cal.find('li.m_prev a').text($.fullCalendar.monthNames[month - 1]);
-                }
-                
-                _$cal.find('li.cur').text(monthTitle);
-                
-                // ---------------- Date Bar --------------------------------------------
-                
+                var month = start.getMonth();
+                var year = end.getFullYear();
+
                 var typesToClasses = {
                     '0': 'red',
                     '1': 'green',
                     '2': 'yellow',
                     '4': 'blue'
                 }
+                
 				$('.qtip').remove();
                 _data = easyFinance.models.calendarCache.loadSetupData(month, year);
                 var nowDate = new Date();
@@ -312,31 +286,6 @@ easyFinance.widgets.calendar = function(){
                 });
                 
             }
-        });
-        
-        
-        $('#views').addClass('ui-widget-content');
-        var _$cal = $('#views');
-        _$cal.find('li.m_prev').click(function(){
-			$('#calendar').fullCalendar('prev');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        _$cal.find('li.m_next').click(function(){
-			$('#calendar').fullCalendar('next');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        _$cal.find('li.y_prev').click(function(){
-			$('#calendar').fullCalendar('prevYear');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        _$cal.find('li.y_next').click(function(){
-			$('#calendar').fullCalendar('nextYear');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        
-        _$cal.find('li.cur').click(function(){
-			$('#calendar').fullCalendar('today');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
         });
     }
 	function getCurrentDate() {
