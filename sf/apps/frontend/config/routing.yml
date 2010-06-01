@@ -1,5 +1,12 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# Создать счет
+account_create:
+  url:      /account.:sf_format
+  class:    sfDoctrineRoute
+  options:  { model: Account, type: object }
+  param:    { module: account, action: create }
+  requirements:
+    sf_method: post
 
 # default rules
 homepage:
