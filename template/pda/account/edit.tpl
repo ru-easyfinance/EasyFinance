@@ -1,11 +1,11 @@
 <strong><?php echo (false)?'Редактирование счёта' . $accountName : 'Добавление счёта';?></strong>
 <br /><br />
-<form method="POST">
+<form method="POST" action="/my/account.pda">
 <table width="220px"><tbody>
 <tr>
     <td><span class="asterisk">*</span> Тип:</td>
     <td>
-        <select id="acc_type" name="type">
+        <select id="acc_type" name="type_id">
             <option value="1" <?php if (1 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Наличные</option>
             <option value="2" <?php if (2 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Дебетовая карта</option>
             <option value="9" <?php if (9 == (isset($acc['type'])?$acc['type']:0) ) { ?> selected="selected" <?php } ?> >Кредит</option>
@@ -28,7 +28,7 @@
 <tr>
     <td><span class="asterisk">*</span> Валюта:</td>
     <td>
-    <select name="currency">
+    <select name="currency_id">
         <?php
         /*while( list(,$currency) = each($res['currency']) )
         {
@@ -52,7 +52,7 @@
 </tr>
 <tr>
     <td>Комментарий:</td>
-    <td><textarea style="width: 100%;" rows="3" cols="20" name="comment"><?php echo(isset($acc['description'])?$acc['description']:'') ?></textarea></td>
+    <td><textarea style="width: 100%;" rows="3" cols="20" name="description"><?php echo(isset($acc['description'])?$acc['description']:'') ?></textarea></td>
 </tr>
 <tr>
     <td><input type="submit" value="Сохранить" id="btnSave">

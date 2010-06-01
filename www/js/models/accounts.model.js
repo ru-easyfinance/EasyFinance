@@ -6,7 +6,7 @@
 easyFinance.models.accounts = function(){
     // constants
     var ACCOUNTS_LIST_URL = '/accounts/accountslist/?responseMode=json';
-    var ADD_ACCOUNT_URL = '/accounts/add/?responseMode=json';
+    var ADD_ACCOUNT_URL = '/my/account.json';
     var EDIT_ACCOUNT_URL = '/accounts/edit/?responseMode=json';
     var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json&confirmed=1';
 
@@ -210,7 +210,13 @@ easyFinance.models.accounts = function(){
         if (!params.type || !params.name || !params.currency)
             return false;
 
-        $.post(ADD_ACCOUNT_URL, params, function(data){
+        $.post(ADD_ACCOUNT_URL, {
+                currency_id: params.currency,
+                type_id:     params.type,
+                name:        params.name,
+                comment:     params.description,
+                initPayment: params.initPayment
+            }, function(data){
             var _id = (data.result && data.result.id) ? data.result.id : null;
 
             _loadAccounts(function() {

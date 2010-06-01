@@ -23,9 +23,11 @@ class createAction extends BaseFrontendAccountCreateAction
             'totalBalance' => $balance,
         );
 
+        // Content-Type ставим ручками поскольку не используем шаблоны
+        $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
         return $this->renderText(json_encode(array('result' => array(
             'account' => $result,
-            'test'    => 'Счёт успешно добавлен',
+            'text'    => 'Счёт успешно добавлен',
         ))));
     }
 

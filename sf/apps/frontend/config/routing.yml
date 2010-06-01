@@ -12,7 +12,7 @@ account_create:
   url:      /account.:sf_format
   class:    sfDoctrineRoute
   options:  { model: Account, type: object }
-  param:    { module: account, action: create, sf_format: html }
+  param:    { module: account, action: create }
   requirements:
     sf_method: post
 

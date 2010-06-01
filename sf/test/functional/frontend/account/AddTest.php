@@ -96,8 +96,9 @@ class frontend_account_AddTest extends myFunctionalTestCase
             $this->browser
                 ->with('response')->checkJsonContains('result', array(
                     'account' => $expected,
-                    'test'    => 'Счёт успешно добавлен',
-                ));
+                    'text'    => 'Счёт успешно добавлен',
+                ))
+                ->with('response')->isHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
 
