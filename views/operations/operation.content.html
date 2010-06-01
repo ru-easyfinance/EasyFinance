@@ -31,17 +31,27 @@
                                                 </select>
                                             </div><br><br>
                                             <div>
-                                                Метки, <br/>комментарии:
-                                                <input type="text" id="search_field"/><br/><br/>
-                                                С:
-                                                <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
-                                                По:
-                                                <input type="text" id="dateTo" value="{$dateTo}" size="9"/>
+                                                <div id="divSearchOperations" style="display:none;">
+                                                    Метки, <br/>комментарии:
+                                                    <input type="text" id="search_field"/><br/><br/>
+                                                </div>
+
+
+                                                <div class="f_field">
+                                                    Операции с:
+                                                    <input type="text" id="dateFrom" value="{$dateFrom}" size="9"/>
+                                                </div>
+                                                <div class="f_field">
+                                                    По:
+                                                    <input type="text" id="dateTo" value="{$dateTo}" size="9"/>
+                                                </div>
                                                 <input type="button" value="Показать" id="btn_ReloadData"/>
-                                                <input type="button" id="btn_CSV" title="Экспорт в Excel в формате CSV"/><br/><br/>
+                                                <input type="button" id="btn_CSV" title="Экспорт в Excel в формате CSV"/>
                                             </div>
-                                    <div id="divOperationsJournalFilters" class="hidden"><span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a></div>
-                                                                            </div>
+                                            <div id="divOperationsJournalFilters" class="hidden">
+                                                <span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                                 <ul class="period" style="display:none;">
@@ -55,15 +65,14 @@
 
                                 <div id="divOperationsJournalTotal">
                                     <span id="lblOperationsJournalSum" class="hidden"><b>Итого: </b>&nbsp;руб.</span>
-                                    <span class="before">
+                                    <span class="before hidden">
                                         <b>До: </b>
                                         <span type="text" id="balance_before" size="30">0.00 руб.</span>
                                     </span>
-                                    <span class="after">
+                                    <span class="after hidden">
                                         <b>После: </b>
                                         <span type="text" id="balance_after" size="30">0.00 руб.</span>
                                     </span>
-                                    <br/><br/>
                                     <span id="lblOperationsJournalAccountBalance" class="hidden"><b>Остаток по счёту:</b>&nbsp;руб.</span>
                                 </div>
                             </div>
