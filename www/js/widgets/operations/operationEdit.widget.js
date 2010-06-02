@@ -144,11 +144,11 @@ easyFinance.widgets.operationEdit = function(){
             _realConversionRate = parseFloat($(this).val())
         } else {
             // обмен без участия валюты по умолчанию
-            _realConversionRate = 1 / parseFloat($(this).val());
+            _realConversionRate = roundToSignificantFigures(1/parseFloat($(this).val()), 4);
         }
 
         var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-        result = roundToSignificantFigures(result, 2).toFixed(2);
+        result = roundToCents(result);
 
         if (!isNaN(result) && result != 'Infinity') {
             $("#op_transfer").val(result);
@@ -157,7 +157,7 @@ easyFinance.widgets.operationEdit = function(){
 
     function _opAmountChange(){
         var result = parseFloat(tofloat(calculate($('#op_amount').val()))) * _realConversionRate;
-        result = roundToSignificantFigures(result, 2).toFixed(2);
+        result = roundToCents(result);
 
         if (!isNaN(result) && result != 'Infinity') {
             $("#op_transfer").val(result);
@@ -169,7 +169,7 @@ easyFinance.widgets.operationEdit = function(){
         var amount = parseFloat($("#op_amount").val());
 
         if (!isNaN(transfer) && !isNaN(amount)) {
-            _realConversionRate = Math.round(transfer / amount * 10000)/10000;
+            _realConversionRate = roundToSignificantFigures(transfer / amount, 4);
             _displayConversion();
         }
     }
@@ -489,6 +489,7 @@ easyFinance.widgets.operationEdit = function(){
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
 
             if (!_$ufdTarget) {
+                // создаём выпадающий список целей
                 _$ufdTarget = $("#op_target");
 
                 _$ufdTarget.change( function() {
@@ -500,8 +501,6 @@ easyFinance.widgets.operationEdit = function(){
                     $("#op_percent_done").text(formatCurrency(option.attr("percent_done")));
                     $("#op_forecast_done").text(formatCurrency(option.attr("forecast_done")));
                 });
-
-                refreshTargets();
 
                 _$ufdTarget.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
                 _$ufdTarget.change();
@@ -782,7 +781,7 @@ easyFinance.widgets.operationEdit = function(){
 
         if (_selectedType == "2" && _selectedAccount != "" && _transferCurrency && _selectedTransfer != "" &&
             _accountCurrency && _accountCurrency.id != _transferCurrency.id) {
-                _realConversionRate = Math.round(_accountCurrency.cost / _transferCurrency.cost * 10000)/10000;
+                _realConversionRate = roundToSignificantFigures(_accountCurrency.cost / _transferCurrency.cost, 4);
 
                 $('#div_op_transfer_line').show();
 
@@ -1110,7 +1109,8 @@ easyFinance.widgets.operationEdit = function(){
 
                 _displayConversion();
 
-                setSum(data.moneydef || Math.round(Math.abs(data.money || data.amount || 0)*100)/100);
+                setSum(data.moneydef || roundToCents(Math.abs(data.money || data.amount || 0)));
+
                 $("#op_amount").change();
             } else {
                 setSum(Math.abs(data.money || data.amount || data.moneydef || 0));
@@ -1216,6 +1216,6 @@ easyFinance.widgets.operationEdit = function(){
         showForm: showForm,
         showFormCalendar: showFormCalendar,
         fillForm: fillForm,
-        fillFormCalendar: fillFormCalendar,
+        fillFormCalendar: fillFormCalendar
     };
 }(); // execute anonymous function to immediatly return object

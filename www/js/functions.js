@@ -154,6 +154,7 @@ function roundToCents(number) {
     return Math.round(number*Math.pow(10,2))/Math.pow(10,2);
 }
 
+// округляем число до sig значимых знаков
 function roundToSignificantFigures(n, sig) {
     var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
 
