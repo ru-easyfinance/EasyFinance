@@ -25,27 +25,7 @@ class Account_Model
      */
     public function create( $args )
     {
-        //получаем массив всех параметров для записи 
-        //записываем общие поля.
-        $sql = "INSERT INTO accounts (account_name, account_type_id, account_description
-                , account_currency_id, user_id)
-                VALUES (?, ?, ?, ?, ?)";
-
-        $exec = $this->db->query($sql, $args[1], $args[2], $args[7], $args[29], $this->user_id);
-        $acc_id = mysql_insert_id();//определяем айдишник только что созданного счёта
-        unset($args[1]);//название счёта
-        unset($args[2]);//тип счёта
-        unset($args[7]);//описание счёта
-        unset($args[29]);//валюта счёта
-        unset($args['id']);//убираем из массива поля , которые не будем записывать в таблицу доп полей. айди
-
-        foreach ($args as $k=>$v){
-            $sql = "INSERT INTO Acc_Values (field_id, field_value, account_id) VALUES (?, ?, ?)";
-            $exec = $this->db->query($sql, $k, $v, $acc_id);
-        }
-        return $acc_id;
-
-        
+        throw new Exception(__METHOD__.": Deprecated");
     }
 
     function getFirstOperation($account_id=0)

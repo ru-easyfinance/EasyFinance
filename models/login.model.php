@@ -140,13 +140,12 @@ class Login_Model
         if ( $uid == 0 )
             $uid = Core::getInstance()->user->getId();
         // Добавляем счёт по умолчанию
-        $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`)
-            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.")";
+        $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`, `created_at`, `updated_at`)
+            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.", NOW(), NOW())";
         $aid = Core::getInstance()->db->query($sql);
         $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`, `created_at`) VALUES (?, ?, '1970-01-01', ?, ?, ?, ?, NOW())";
+                `drain`, `comment`, `created_at`, `updated_at`) VALUES (?, ?, '0000-00-00', ?, ?, ?, ?, NOW(), NOW())";
             Core::getInstance()->db->query($sql, $uid, 0, null, $aid, 0, 'Начальный остаток');
-
     }
 
     /**
