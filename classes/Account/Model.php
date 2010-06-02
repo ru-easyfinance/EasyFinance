@@ -56,7 +56,7 @@ class Account_Model
             $drain=1;
         }
 
-        $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? ORDER BY `dt_create`";
+        $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? AND cat_id IS NULL LIMIT 0, 1";
         $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
         $model = new Operation_Model();
         $model->edit($oid,str_replace(' ', '', $data['initPayment']),'0000-00-00',0,0,'Начальный остаток', $data['id']);

@@ -689,8 +689,12 @@ class Operation_Model {
      *
      * @return bool true - Регистрация прошла успешно
      */
-    function edit($id=0, $money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null, $accepted=null)
+    function edit($id=0, $money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = null, $accepted=null)
     {
+        if (!$category) {
+            $category = null;
+        }
+
         // Если есть теги, то добавляем и их тоже
         if ($tags)
         {
