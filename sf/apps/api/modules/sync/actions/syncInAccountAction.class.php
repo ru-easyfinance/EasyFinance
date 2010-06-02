@@ -19,9 +19,9 @@ class syncInAccountAction extends sfAction
         if (0 !== strlen($rawXml = $request->getContent())) {
             $xml = simplexml_load_string($rawXml);
 
-            // кол-во объектов - отсутствуют или >100
+            // кол-во объектов - отсутствуют или >лимита
             $cnt = (int) count($xml->recordset[0]);
-            $limit = sfConfig::get('app_records_sync_limit');
+            $limit = sfConfig::get('app_records_sync_limit', 100);
 
             if (($cnt <= 0) OR ($cnt > $limit)) {
                 $this->getResponse()->setStatusCode(400);
@@ -36,22 +36,16 @@ class syncInAccountAction extends sfAction
                 $cIds[(string)$tId['id']] = (string)$tId['id'];
             }
 
-            $accounts = Doctrine::getTable('Account')->createQuery('a')
-                ->select("a.id")
+            $accounts = Doctrine_Query::create()
+                ->select("a.*")
+                ->from("Account a INDEXBY a.id")
                 ->whereIn("a.id", $cIds)
-                ->fetchArray();
-
-            $accIds = array();
-            foreach ($accounts as $account) {
-                $accIds[] = $account['id'];
-            }
+                ->execute();
 
             $results = array();
             foreach ($xml->recordset[0] as $record) {
                 $data = array();
-                if (in_array((string) $record['id'], $accIds)) {
-                    $data['id'] = (string) $record['id'];
-                }
+                $data['id']          = (int) $record['id'];
                 $data['user_id']     = (string) $record->user_id;
                 $data['type_id']     = (string) $record->type_id;
                 $data['currency_id'] = (string) $record->currency_id;
@@ -61,12 +55,10 @@ class syncInAccountAction extends sfAction
                 $data['updated_at']  = (string) $record->updated_at;
                 $data['deleted_at']  = (string) $record->deleted_at;
 
-                $form = new mySyncInAccountForm();
-                $form->bind($data);
+                $account = $accounts[$data['id']];
+                $form = new mySyncInAccountForm($account);
 
-                if ($form->isValid()) {
-                    $form->save();
-
+                if ($form->bindAndSave($data)) {
                     $results[] = array(
                         'id' => $form->getObject()->getId(),
                         'cid' => $record['cid'],
@@ -77,6 +69,7 @@ class syncInAccountAction extends sfAction
                         'id' => $record['id'],
                         'cid' => $record['cid'],
                         'success' => 0,
+                        'message' => $form->getErrorSchema(),
                     );
                 }
             }
