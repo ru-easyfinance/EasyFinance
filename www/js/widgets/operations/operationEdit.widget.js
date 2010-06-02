@@ -489,7 +489,6 @@ easyFinance.widgets.operationEdit = function(){
             $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
 
             if (!_$ufdTarget) {
-                // создаём выпадающий список целей
                 _$ufdTarget = $("#op_target");
 
                 _$ufdTarget.change( function() {
@@ -501,6 +500,8 @@ easyFinance.widgets.operationEdit = function(){
                     $("#op_percent_done").text(formatCurrency(option.attr("percent_done")));
                     $("#op_forecast_done").text(formatCurrency(option.attr("forecast_done")));
                 });
+
+                refreshTargets();
 
                 _$ufdTarget.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
                 _$ufdTarget.change();
@@ -806,6 +807,7 @@ easyFinance.widgets.operationEdit = function(){
     function _ufdSetOptions($ufd, htmlOptions) {
         if ($ufd) {
             $ufd.empty();
+
             $ufd.html(htmlOptions);
             $ufd.find('option:first').attr('selected', 'selected');
             $ufd.ufd("changeOptions");
@@ -875,8 +877,8 @@ easyFinance.widgets.operationEdit = function(){
 
         if (_dirtyAccounts) {
             // заполняем список счетов
-            _ufdSetOptions(_$ufdAccount, _accountOptions);
             _dirtyAccounts = false;
+            _ufdSetOptions(_$ufdAccount, _accountOptions);
         }
 
         if (_selectedType == "2") {
@@ -1091,7 +1093,9 @@ easyFinance.widgets.operationEdit = function(){
                 setTransfer(data.transfer);
             } else {
                 // original operation id
-                $('#op_id').val(data.tr_id);
+                if (isEditing) {
+                    $('#op_id').val(data.tr_id);
+                }
 
                 // to this account
                 setTransfer(data.account_id || data.account);
