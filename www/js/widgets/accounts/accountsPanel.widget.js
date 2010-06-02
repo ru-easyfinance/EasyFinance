@@ -83,14 +83,14 @@ easyFinance.widgets.accountsPanel = function(){
         $(document).bind('accountDeleted', redraw);
 
        $('.accounts .add,.accounts .addaccountlink').click(function(){
-			// #1095. создание счёта по ссылке из экрана профиля
-			if (document.location.pathname.indexOf("profile") != -1) {
-				// переходим на страницу счетов и открываем диалог
-				document.location = '/accounts/#add';
-			} else {
-				// отображает форму создания счёта
-				easyFinance.widgets.accountEdit.addAccount();
-			}
+            // #1095. создание счёта по ссылке из экрана профиля
+            if (document.location.pathname.indexOf("profile") != -1) {
+                // переходим на страницу счетов и открываем диалог
+                document.location = '/accounts/#add';
+            } else {
+                // отображает форму создания счёта
+                easyFinance.widgets.accountEdit.addAccount();
+            }
        })
 
        $('.accounts li a').live('click',function(evt){
