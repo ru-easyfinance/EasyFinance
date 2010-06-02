@@ -36,28 +36,12 @@ class Account_Model
     }
 
     /**
-     * Функция создаёт первую операцию со счётом 
+     * Функция создаёт первую операцию со счётом
      * @param array $data
      */
     function new_operation($data)
     {
-        //если счёт долговой , то добавляем первую операцию со знаком минус.
-        //7 - займ полученный
-        //8 - кредитная карта
-        //9 - кредит
-        $tip = "SELECT account_type_id FROM accounts WHERE account_id=? AND user_id=?";
-        $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
-        $drain = 0;
-        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9)){
-            if ( $data['initPayment'][0] == '-')
-                $data['initPayment'] = substr($data['initPayment'],1);
-            $data['initPayment'] = '-'.$data['initPayment'];
-            $drain=1;
-        }
-
-       $model = new Operation_Model();
-       $model->add(str_replace(' ', '', $data['initPayment']), /*date('Y.m.d')*/'0000-00-00', 0,$drain,
-           'Начальный остаток', $data['id']);
+        throw new Exception(__METHOD__.": Deprecated");
     }
 
     function edit_operation($data)
@@ -87,7 +71,7 @@ class Account_Model
     {
         $id = $args['id'];
         $sql = "UPDATE accounts SET account_name=?, account_type_id=?, account_description=?
-            , account_currency_id=?  WHERE account_id=? ";
+            , account_currency_id=?, updated_at=NOW()  WHERE account_id=? ";
         $exec = $this->db->query($sql, $args[1], $args[2], $args[7], $args[29], $id);
         unset($args[1]);//название счёта
         unset($args[2]);//тип счёта
