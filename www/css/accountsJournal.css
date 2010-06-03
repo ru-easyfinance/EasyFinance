@@ -92,6 +92,7 @@ width:25px;
     text-indent: -999px;
     overflow: hidden;
 }
+
 #accountsJournal table td div.cont ul li.edit a{
     width: 15px;
 }
@@ -104,4 +105,5 @@ width:25px;
 #accountsJournal table td div.cont ul li.add a{
     width: 14px;
 }
+
 

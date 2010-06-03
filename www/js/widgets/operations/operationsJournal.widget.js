@@ -101,7 +101,25 @@ easyFinance.widgets.operationsJournal = function(){
 
             pageTotal = pageTotal + curMoney;
 
+            var typ = '';
+            if ( _journal[v].transfer > 0 ) {
+                typ = 'перевод';
+            } else if (_journal[v].virt == "1") {
+                typ = 'перевод на финансовую цель';
+            } else {
+                if (_journal[v].drain == 1) {
+                    typ = 'расход';
+                } else {
+                    typ = 'доход';
+                }
+            }
+
+            var tooltipHtml = '<b>Тип:</b> ' + typ + '<br>';
+            tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[_journal[v].account_id] ? res.accounts[_journal[v].account_id].name : '' ) + '<br>';
+            tooltipHtml += '<b>Комментарий:</b><br> ' + _journal[v].comment.replace("\n", "<br>", "g");
+
             tr += "<tr id='op" + (_journal[v].virt == "1" ? 'v' : 'r') + _journal[v].id
+                + "' title='" + tooltipHtml
                 + "' value='" + v
                 + "' moneyCur='" + curMoney.toString()
                 + "' trId='" + _journal[v].tr_id
@@ -158,10 +176,10 @@ easyFinance.widgets.operationsJournal = function(){
             +'</td></tr>';
         }
 
-        // Очищаем таблицу
+        // очищаем таблицу
         $('#operations_list').find('tr').remove();
 
-        // Заполняем таблицу
+        // заполняем таблицу
         $('#operations_list tbody').append(tr);
 
         // Выводим итоги по счёту/странице
@@ -277,14 +295,17 @@ easyFinance.widgets.operationsJournal = function(){
         var opId = op.id;
 
         // remove row from table
-        $('#operations_list tr[id="op' + opVirt + opId + '"]').remove();
+        $('#operations_list tr[id="op' + opVirt + opId + '"]').mouseout().unbind().remove();
 
         // remove paired operation if it's a transfer
         if (opTransferId != null) {
-            if (opTransferId == "0")
-                $('#operations_list tr[trid="' + opId + '"]').remove();
-            else
-                $('#operations_list tr[id="op' + opVirt + opTransferId + '"]').remove();
+            var selector = '';
+            if (opTransferId == "0") {
+                selector = '#operations_list tr[trid="' + opId + '"]';
+            } else {
+                selector = '#operations_list tr[id="op' + opVirt + opTransferId + '"]';
+            }
+            $(selector).mouseout().unbind().remove();
         }
     }
 
@@ -571,55 +592,10 @@ easyFinance.widgets.operationsJournal = function(){
 
         $('#operations_list a').live('click', _editOperation);
 
-        // show selection
+        // show selection & floating menu
         $('tr','#operations_list').live('mouseover',function(){
             $('#operations_list tr').removeClass('act').find('.cont ul').hide();
             $(this).closest('tr').addClass('act').find('.cont ul').show();
-
-            // всплывающая подсказка для тикета #640
-            var operation = _journal[$(this).closest('tr').attr('value')];
-            if (!operation){
-                return ;
-            }
-            var tp = '';
-            if ( operation.transfer > 0 ) {
-                tp = 'перевод';
-            } else if (operation.virt == "1") {
-                tp = 'перевод на финансовую цель';
-            } else {
-                if (operation.drain == 1) {
-                    tp = 'расход';
-                } else {
-                    tp = 'доход';
-                }
-            }
-
-            var tooltipHtml = '<b>Тип:</b> ' + tp + '<br>';
-            tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[operation.account_id] ? res.accounts[operation.account_id].name : '' ) + '<br>';
-            tooltipHtml += '<b>Комментарий:</b><br> ' + operation.comment.replace("\n", "<br>", "g") + '<br>';
-
-            $('.qtip').remove();
-            $(this).qtip({
-                content: tooltipHtml,
-                position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-                },
-                show: {
-                  when: false, // Don't specify a show event
-                  ready: true // Show the tooltip when ready
-                },
-                hide: {
-                  when: 'mouseout'
-                }, // Don't specify a hide event
-                style: {
-                  width: {max: 300},
-                  name: 'light',
-                  tip: true // Give them tips with auto corner detection
-                }
-            });
         });
 
         $('#operation_list tr.item').live('mouseout',
