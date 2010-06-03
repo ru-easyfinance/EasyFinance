@@ -13,7 +13,7 @@ easyFinance.widgets.currencyRight = function(){
         for(key in data) {
             if (defaultCurrency != key) {
                 currencyList += '<div class="line"><span class="valuta">' +
-                    (data[key]['name'] || '') + '</span><span class="' +
+                    (data[key]['name'] || '') + '</span><span class="exchangeRate ' +
                     (data[key]['progress'] || '') +'">' +
                     (data[key]['cost'] || '') + '</span></div>';
             }
