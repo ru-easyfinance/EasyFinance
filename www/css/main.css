@@ -528,7 +528,8 @@ dl.info dd ul.list2 li a { display: block; margin-top: -3px; }
 dl.info dd .line { margin-bottom: 4px; clear:both;}
 dl.info dd .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 dl.info dd .line span { display: block; float: left; padding-left: 13px; width: 36px; color: #666666; }
-dl.info dd .line span.valuta { padding-left: 0; width: 41px; color: #908f8f; }
+dl.info dd .line span.valuta { padding-left: 0; width: 32px; color: #908f8f; }
+dl.info dd .line span.exchangeRate { width: 60px; text-align: right; }
 dl.info dd .line span.down, dl.info dd .line span.up { background: url('/img/i/icons.gif') no-repeat 0 0; }
 dl.info dd .line span.down { background-position: 0 -295px; }
 dl.info dd .line span.up { background-position: 0 -315px; }
