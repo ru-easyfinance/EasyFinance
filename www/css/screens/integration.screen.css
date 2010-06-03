@@ -1,10 +1,10 @@
 #integrationSteps .ui-accordion-header {
     margin-right: 3px;
-	background-color: #4C8F2C;
+    background-color: #4C8F2C;
 }
 
 #integrationSteps .ui-accordion-header a {
-	color: white;
+    color: white;
     cursor: default;
 }
 
@@ -48,7 +48,7 @@
 
 /*
 мастер заполнения анкеты АМТ
-автор: Глеб Дейкало 
+автор: Глеб Дейкало
 */
 .wz_req_fld {
     color: #f00;

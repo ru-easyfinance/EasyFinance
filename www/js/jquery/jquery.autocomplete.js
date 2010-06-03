@@ -95,10 +95,10 @@
                     self.ac.focus();
                 }).mousedown(function() {
                     setTimeout(function() {
-	                clearTimeout(self.close);
-	                self.ac.focus();
+                    clearTimeout(self.close);
+                    self.ac.focus();
                     }, 50); // IE scroll bug
-	        });
+            });
 
             $(window).bind('resize load', function() {
                 var c = self.container;
@@ -138,7 +138,7 @@
                         self.next();
                         break;
                     case 13: // return
-                    	e.preventDefault();
+                        e.preventDefault();
                     case 9:  // tab
                         self.select();
                         break;

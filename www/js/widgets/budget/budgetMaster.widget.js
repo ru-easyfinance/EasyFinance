@@ -45,7 +45,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * @return void
      */
     function _printMaster(type){
-        var prefix = (type == '1')? 'p':'d'; 
+        var prefix = (type == '1')? 'p':'d';
         var _data = model.returnList()[prefix]
         var children, str = '', ret ='';
         var k, key;
@@ -150,7 +150,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             $('#master .rest b').css('color','#309500')
         }
         $('#master .rest b').text(formatCurrency(profit - drain))
-        
+
     }
 
     /**
@@ -297,7 +297,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             str = '0'+str;
         return str;
     }
-    $('#btnBudgetWizard').click(function(){ 
+    $('#btnBudgetWizard').click(function(){
         $('#master .step').hide();
         $('#master #step1').show();
         var tempDate = widget.getDate()

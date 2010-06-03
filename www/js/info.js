@@ -28,7 +28,7 @@ $('.financobject_block li.edit').live('click', function(){
         var name,value,pointer,xml,chartSample_1;
         var titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
         var gauges = ['gaugeMain.gif','gaugeMoney.gif','gaugeBudget.gif','gaugeCredits.gif','gaugeExpenses.gif'];
-        
+
         for (var i=0;i<5;i++)
         {
             if (isNaN(data[i]['color']))
@@ -45,7 +45,7 @@ $('.financobject_block li.edit').live('click', function(){
         }
         print_targets(0);
     }
-    
+
     InitInformers();
 
     /**
@@ -74,7 +74,7 @@ $('.financobject_block li.edit').live('click', function(){
                 data[key]['image']='/img/i/bitv.png';
             if (data[key]['category']==8)
                 data[key]['image']='/img/i/comp.png';
-            
+
             str += "<div class='object2' id='"
                 + key + "'><!--<a class='advice'>Получить совет</a>--><div class='descr'><img src='" +
                 data[key]['image']+"' alt='' /><a>" +

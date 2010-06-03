@@ -79,7 +79,7 @@ easyFinance.widgets.calendarOverdue = function(){
 
         $(selector + ' div.content tr').live('click', function(){
             $(this).find('li.edit').click();
-            
+
             return false;
         });
 
@@ -102,7 +102,7 @@ easyFinance.widgets.calendarOverdue = function(){
         var empty = true;
         for (var key in data){
             empty = false;
-            
+
             var $tr = $("<tr>").addClass("child").val(data[key].id);
             var $td = $("<td>");
 

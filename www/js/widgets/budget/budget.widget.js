@@ -1,6 +1,6 @@
 
 easyFinance.widgets.budget = function(data){
-    
+
     var _model = data;
 
     $('div.budget.list div.head tr').html("<td class='w1 '>Категория</td><td class='w2 '>План, "+
@@ -85,7 +85,7 @@ easyFinance.widgets.budget = function(data){
     ///////////////////////////////////////////////////////////////////////////
     //                          infobar                                      //
     ///////////////////////////////////////////////////////////////////////////
-   
+
 
     /**
      * Печатает инфо-блок
@@ -95,7 +95,7 @@ easyFinance.widgets.budget = function(data){
         var _totalInfo =  _model.returnInfo();
         var planCls = ( _totalInfo.plan_profit >_totalInfo.plan_drain)?'green':'red';
         var realCls = (_totalInfo.real_profit>_totalInfo.real_drain)?'green':'red';
-        var table = 
+        var table =
             "<table>"+
                 "<tr class='plan'>"+
                     "<td class='profit'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
@@ -112,7 +112,7 @@ easyFinance.widgets.budget = function(data){
         return false;
     }
     _printInfo();
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //                          list                                         //
     ///////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ easyFinance.widgets.budget = function(data){
 
     function _printList(type, categoryes, parentId)//0 drain
     {
-        var prefix = (type == '1')? 'p':'d'; 
+        var prefix = (type == '1')? 'p':'d';
         var budgets = _model.returnList()[prefix];
         var key, temp = {}, catId, catName, catType, amount, money, totalAmount = 0, totalMoney = 0, dhtml ='';
 
@@ -160,8 +160,8 @@ easyFinance.widgets.budget = function(data){
                 if (amount > 0 || money !==0){
                     ////////// coompil html
                     var drainprc = Math.abs(Math.round(money*100/amount));
-                    
-                    
+
+
                     var b_color;
 
 
@@ -181,7 +181,7 @@ easyFinance.widgets.budget = function(data){
                             formatCurrency(amount) :
                             (cls != 'parent open' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0.00');
 
-                    dhtml += '<tr id="' + catId + '" type="' + prefix + '" parent="' + parentId + '" class="' + cls + '"><td class="w1"><a>' + 
+                    dhtml += '<tr id="' + catId + '" type="' + prefix + '" parent="' + parentId + '" class="' + cls + '"><td class="w1"><a>' +
                         catName + '</a></td><td class="w2"><div class="cont"><span>' +
                         amountStr+'</span><input type="text" value="'+
                         formatCurrency(amount)+'"/></div></td><td class="w3"><div class="indicator"><div class="' +
@@ -213,7 +213,7 @@ easyFinance.widgets.budget = function(data){
                 dateprc = 100;
             }
         }
-        
+
         var drainprc;
         var str='';
         var temp = _printList(1, _categories, 0);
@@ -238,7 +238,7 @@ easyFinance.widgets.budget = function(data){
                             '<div class="strip" style="width: ' + dateprc + '%;"></div>' +
                         '</div>' +
                     '</td>' +
-					'<td class="w5 '+ ((Math.abs(temp.totalAmount) < Math.abs(temp.totalMoney))?'sumGreen' : '') +'">' +
+                    '<td class="w5 '+ ((Math.abs(temp.totalAmount) < Math.abs(temp.totalMoney))?'sumGreen' : '') +'">' +
                         formatCurrency(Math.abs(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney))) + '</td>'+
                     '<td class="w6"></td>' +
                 '</tr>';
@@ -281,7 +281,7 @@ easyFinance.widgets.budget = function(data){
     ///////////////////////////////////////////////////////////////////////////
     //                          general                                      //
     ///////////////////////////////////////////////////////////////////////////
-    
+
 
     $('#budget .list.budget .parent.open .w1 a').live('click',function(){
         var id = $(this).closest('tr').attr('id');
@@ -346,12 +346,12 @@ easyFinance.widgets.budget = function(data){
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id;
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
-           
+
                 $('#budget .list tr .w2 input').hide();
                 $('#budget .list tr .w2 span').show();
                 $(this).find('.w2 input').val(formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\.]/g,''))).show().focus();
                 $(this).find('.w2 span').hide();
-            
+
         }
     });
     $('#budget .list tr input').live('keypress',function(e){
@@ -369,7 +369,7 @@ easyFinance.widgets.budget = function(data){
             $('#budget .list tr .w2 input').hide();
             $('#budget .list tr .w2 span').show();
         }
-        
+
     });
 
 //    $('body').click(function(){

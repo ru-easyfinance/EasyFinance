@@ -99,7 +99,7 @@ easyFinance.models.mail = function(){
             if (data.result) {
                 _folders.drafts[data.result.drafts.id] = $.extend(true, {}, data.result.drafts);
             }
-            
+
             if (typeof callback == 'function')
                 callback(data);
         }, 'json');
@@ -178,7 +178,7 @@ easyFinance.models.mail = function(){
                 // move to trash on success
                 for(var key in _ids) {
                     var id = _ids[key];
-                    
+
                     if(_folders.inbox[id]) {
                         _folders[FOLDER_TRASH][id] = _folders.inbox[id];
                         delete _folders.inbox[id];
@@ -238,7 +238,7 @@ easyFinance.models.mail = function(){
                 if (data[id] && _folders.trash[id])
                         delete _folders.trash[id];
             }
-            
+
             if (typeof callback == 'function')
                 callback(data);
         }, 'json');

@@ -601,7 +601,7 @@ div.addoperation .line .f_field select#type option {width: 123px;}
 /* div.addoperation .line .f_field select#category {width: 350px;  overflow: hidden; } */
 div.addoperation .line .f_field select#category option {width: 323px;}
 
-div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float: left; } 
+div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float: left; }
 
 div.addoperation .line .tags_could{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
 div.addoperation .line .tags_could div{position : relative; width: 100px;float: top;}
@@ -618,18 +618,18 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
     #tags li a{
         text-decoration:none;
         color:#4C4C4C;
-        padding:0 2px;  
+        padding:0 2px;
         }
-    #tags li a:hover{   
+    #tags li a:hover{
         color:#cff400;
-        }       
-    
+        }
+
     .tag1{font-size:100%;}
     .tag2{font-size:120%;}
     .tag3{font-size:140%;}
     .tag4{font-size:160%;}
     .tag5{font-size:180%;}
-    
+
     #container{
     margin:0 auto;
     text-align:left;
@@ -640,14 +640,14 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
     float:left;
     display:inline;
     width:380px;
-    margin-left:20px;   
+    margin-left:20px;
     }
     #side{
     float:left;
     display:inline;
     width:260px;
     margin-left:20px;
-    }   
+    }
     /* alternative layout */
 
     #tags .alt{
@@ -660,19 +660,19 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
         background:#efefef;
         display:block;
         }
-    #tags .alt .tag1, 
-    #tags .alt .tag2, 
-    #tags .alt .tag3, 
-    #tags .alt .tag4, 
+    #tags .alt .tag1,
+    #tags .alt .tag2,
+    #tags .alt .tag3,
+    #tags .alt .tag4,
     #tags .alt .tag5{font-size:100%;}
     #tags .alt .tag1{background:#7cc0f4;}
     #tags .alt .tag2{background:#67abe0;}
     #tags .alt .tag3{background:#4d92c7;}
     #tags .alt .tag4{background:#3277ad;}
     #tags .alt .tag5{background:#266ca2;}
-    
+
     .btn{display:block;}
-    
+
 /* // Tag cloud */
 
 div.addoperation .line .date{float: left; }
@@ -685,8 +685,8 @@ div.addoperation .line textarea { width: 350px; height: 96px; }
 div.addoperation .but input { margin-right: 6px; margin-top:14px;}
 
 div.addoperation .line .category { margin-right: 0; }
-div.addoperation .line .amount a, 
-div.addoperation .line .category a, 
+div.addoperation .line .amount a,
+div.addoperation .line .category a,
 .sorting .f_field a,
 .budget .f_field1 a,
 .budget .f_field2 a,
@@ -881,8 +881,8 @@ div.op_addoperation .op_line  .op_amount {float: left; }
     background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
     width: 16px;
     height: 16px;
-    display: inline-block; 
-    position: relative; 
+    display: inline-block;
+    position: relative;
     left: 0px;
     cursor: pointer;
 }
@@ -1286,19 +1286,19 @@ ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/i
 #popupdiagram, #popupadd_calendar { display: none; position: absolute; width: 383px; z-index: 1000; }
 #popupdiagram .cont, #poputags .cont, #popupadd_calendar .cont { position: relative; width: 383px; overflow: hidden; }
 #popupdiagram .cont .ct, #popupdiagram .cb div,
-#poputags .cont .ct, #poputags .cb div, 
+#poputags .cont .ct, #poputags .cb div,
 #popupadd_calendar .cont .ct, #popupadd_calendar .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url('/img/i/ramka5.png') no-repeat 0 0; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
 #popupdiagram .cb, #poputags .cb, #popupadd_calendar .cb { position: relative; width: 383px; height: 25px; overflow: hidden; }
 #popupdiagram .cb div, #poputags .cb div, #popupadd_calendar .cb div { top: -775px; }
-#popupdiagram .inside, 
-#poputags .inside, 
-#popupadd_calendar .inside, 
-#popupaddobject .inside, 
+#popupdiagram .inside,
+#poputags .inside,
+#popupadd_calendar .inside,
+#popupaddobject .inside,
 #popupdiagram .inside { padding: 33px 0 0 29px; }
 
-#popupdiagram .close, 
-#poputags .close, 
-#popupadd_calendar .close, 
+#popupdiagram .close,
+#poputags .close,
+#popupadd_calendar .close,
 #popupaddobject .close,
 #popupaddobject .close { position: absolute; top: 14px; right: 27px; width: 11px; height: 11px; text-indent: -999px; overflow: hidden; cursor: pointer; z-index: 10; background: url('/img/i/icons.gif') no-repeat -20px -390px; }
 
@@ -1486,7 +1486,7 @@ span.tagMatches span {
 table.currency {
     margin-bottom: 1em;
     width: 80%;
-    border-top: solid 1px #e0e3de; 
+    border-top: solid 1px #e0e3de;
     border-left: solid 1px #e0e3de;
 }
 table.currency th, table.currency td {
@@ -1497,10 +1497,10 @@ table.currency th, table.currency td {
 table.currency th {
     font-weight: normal;
     text-align: left;
-    border-right: none; 
+    border-right: none;
 }
 table.currency td {
-    text-align: right; 
+    text-align: right;
 }
 table.currency td a.delete {
     padding: .3em;
@@ -1944,7 +1944,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     height : 44px;
 }
 .calculatorRW td div{
-    
+
     cursor: pointer;
     height : 18px;
     width : 27px;

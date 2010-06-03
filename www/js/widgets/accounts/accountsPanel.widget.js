@@ -171,7 +171,7 @@ easyFinance.widgets.accountsPanel = function(){
         if (!data){
             data = {};
         }
-        
+
         var i = 0;
         var total = 0;
         var str = '';
@@ -234,7 +234,7 @@ easyFinance.widgets.accountsPanel = function(){
 
         // формирование итогов
         str = '<ul>';
-        
+
         i = 0;
         for(key in val) {
             i++;
@@ -264,14 +264,14 @@ easyFinance.widgets.accountsPanel = function(){
                     $(this).click()
             })
         }
-        
+
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
         });
 
-        
-        
+
+
         //$('div.listing dl.bill_list dt').click();
         //$('div.listing dl.bill_list dt:last').click().addClass('open');
         //$('div.listing dl.bill_list dt').click().addClass('open');

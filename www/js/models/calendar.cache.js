@@ -80,40 +80,40 @@ easyFinance.models.calendarCache = function(){
     var _rightDate,_contentDate;
     function reloadWidgets(widget){
 
-		if (typeof(easyFinance.widgets.calendar) != 'object'){
-			widget = 'calendarPreview';
-		}
+        if (typeof(easyFinance.widgets.calendar) != 'object'){
+            widget = 'calendarPreview';
+        }
 
         if (widget == 'calendar') {
-        	_rightDate = easyFinance.widgets.calendar.getCurrentDate();
-        	load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
-				$('#calendar').fullCalendar('refetchEvents');
-				easyFinance.widgets.calendarList.load(data);
-        	});
+            _rightDate = easyFinance.widgets.calendar.getCurrentDate();
+            load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
+                $('#calendar').fullCalendar('refetchEvents');
+                easyFinance.widgets.calendarList.load(data);
+            });
         } else if (widget == 'calendarPreview') {
-			_rightDate = easyFinance.widgets.calendarPreview.getCurrentDate();
-        	load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
-				easyFinance.widgets.calendarPreview.load(data);
-        	});
-		} else {
+            _rightDate = easyFinance.widgets.calendarPreview.getCurrentDate();
+            load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
+                easyFinance.widgets.calendarPreview.load(data);
+            });
+        } else {
             _rightDate = easyFinance.widgets.calendarPreview.getCurrentDate();
             _contentDate = easyFinance.widgets.calendar.getCurrentDate();
             if (_rightDate.getFullYear() == _contentDate.getFullYear() && _rightDate.getMonth() == _contentDate.getMonth()) {
-            	load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
-					$('#calendar').fullCalendar('refetchEvents');
-					easyFinance.widgets.calendarList.load(data);
-					easyFinance.widgets.calendarPreview.load(data);
-            	});
+                load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
+                    $('#calendar').fullCalendar('refetchEvents');
+                    easyFinance.widgets.calendarList.load(data);
+                    easyFinance.widgets.calendarPreview.load(data);
+                });
             } else {
-				load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
-					easyFinance.widgets.calendarPreview.load(data);
-					load(_contentDate.getMonth(), _contentDate.getFullYear(), 1, function(data){
-						// #1433. обновляем граф. календарь
+                load(_rightDate.getMonth(), _rightDate.getFullYear(), 1, function(data){
+                    easyFinance.widgets.calendarPreview.load(data);
+                    load(_contentDate.getMonth(), _contentDate.getFullYear(), 1, function(data){
+                        // #1433. обновляем граф. календарь
                         $('#calendar').fullCalendar('refetchEvents');
-						easyFinance.widgets.calendarList.load(data);
-		            });
-            	});
-			}
+                        easyFinance.widgets.calendarList.load(data);
+                    });
+                });
+            }
         }
 
         // WTF???
@@ -131,7 +131,7 @@ easyFinance.models.calendarCache = function(){
             year = tmpDate.getFullYear();
         }
 
-        //		var dateInRightCalendar = $('.calendar_block .calendar').datepicker();
+        //        var dateInRightCalendar = $('.calendar_block .calendar').datepicker();
 
         if ($('#calend').length > 0) {
             tmpDate.setMonth(month);

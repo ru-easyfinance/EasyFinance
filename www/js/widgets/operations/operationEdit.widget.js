@@ -219,8 +219,8 @@ easyFinance.widgets.operationEdit = function(){
                 // очищаем форму перед закрытием
                 _clearForm();
 
-				// #1134. скрываем окно тегов, если оно открыто
-				$('.op_tags_could').dialog("close");
+                // #1134. скрываем окно тегов, если оно открыто
+                $('.op_tags_could').dialog("close");
             },
             buttons: _buttonsNormal
         });
@@ -252,7 +252,7 @@ easyFinance.widgets.operationEdit = function(){
             _showCalc("#op_transfer");
         });
 
-    	$('#op_amount,#op_transfer').rwCalculator();
+        $('#op_amount,#op_transfer').rwCalculator();
 
         $("#op_date").datepicker().datepicker('setDate', new Date());
 
@@ -352,12 +352,12 @@ easyFinance.widgets.operationEdit = function(){
         } else {
             if (_isEditing) {
                 dialogClass = 'calendar edit';
-                
+
                 if (_isChain) {
                     dialogTitle = 'Редактировать серию операций';
                 } else {
                     dialogTitle = 'Редактировать операцию в календаре';
-                }                
+                }
             } else {
                 dialogTitle = 'Добавить серию операций';
             }
@@ -538,15 +538,15 @@ easyFinance.widgets.operationEdit = function(){
             else
                 chain = '';
         var time = '12:00';
-		var last = '';
-		var repeat = '';
-		if ($('#cal_rep_every').attr('checked')){
-	        repeat = $('#cal_count').val();
-		}else{
-			last = $('#cal_date_end').val();
-	        if (last == "00.00.0000")
-	            last = "";
-		}
+        var last = '';
+        var repeat = '';
+        if ($('#cal_rep_every').attr('checked')){
+            repeat = $('#cal_count').val();
+        }else{
+            last = $('#cal_date_end').val();
+            if (last == "00.00.0000")
+                last = "";
+        }
         var every = $('#cal_repeat').val();
 
         var week = '0000000';
@@ -640,7 +640,7 @@ easyFinance.widgets.operationEdit = function(){
         var opType = $("#op_type option:selected").val();
 
         // при добавлении обычной операции
-		// или при подтверждении планируемой
+        // или при подтверждении планируемой
         // проверяем заполнение всех полей
         if (!_isCalendar || $('#op_accepted').val() == "1") {
             if (_selectedAccount == ''){
@@ -828,7 +828,7 @@ easyFinance.widgets.operationEdit = function(){
 
         // считаем количество всех счетов
         for (key in accounts) {
-			accountsCount++;
+            accountsCount++;
         }
 
         var recentCount = 0;
@@ -984,9 +984,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setAccount(id){
-		if (id == "0") {
-			return;
-		}
+        if (id == "0") {
+            return;
+        }
 
         _selectedAccount = id;
         _changeAccountForTransfer();
@@ -996,9 +996,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setCategory(id){
-		if (id == "0") {
-			return;
-		}
+        if (id == "0") {
+            return;
+        }
 
         _selectedCategory = id;
         if (_$ufdCategory) {
@@ -1007,9 +1007,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setTransfer(id){
-		if (id == "0") {
-			return;
-		}
+        if (id == "0") {
+            return;
+        }
 
         _selectedTransfer = id;
         _changeAccountForTransfer();
@@ -1019,9 +1019,9 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setTarget(id){
-		if (id == "0") {
-			return;
-		}
+        if (id == "0") {
+            return;
+        }
 
         _selectedTarget = id;
         if (_$ufdTarget) {
@@ -1100,7 +1100,7 @@ easyFinance.widgets.operationEdit = function(){
                 setAccount(data.transfer);
             }
 
-			if ( typ == "2" && data.curs) {
+            if ( typ == "2" && data.curs) {
                 // перевод с обменом валют
                 _realConversionRate = parseFloat(data.curs);
 

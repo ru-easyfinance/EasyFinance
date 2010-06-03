@@ -1,16 +1,16 @@
-* { 
-	margin: 0;
+* {
+    margin: 0;
 }
 
 body {
-	margin: 0;
-	padding: 0;
-	
-	font-family: Arial, sans-serif;
-	font-size: small;
-	
-	color: #000;
-	background: #fff;
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, sans-serif;
+    font-size: small;
+
+    color: #000;
+    background: #fff;
 }
 
 .asterisk {
@@ -19,30 +19,30 @@ body {
 }
 
 input, select {
-	font-size: large;
-	margin-top: 2px;
-	margin-bottom: 2px;
+    font-size: large;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 /* HEADER */
 
 .logo {
-	width: 70px;
+    width: 70px;
 }
 
 .menu {
-	margin-top: 4px;
-	margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .topmenu {
         width: 100%;
-	font-size: smaller;
-	margin-bottom:10px;
+    font-size: smaller;
+    margin-bottom:10px;
 }
 
 .topmenu td {
-	width: 25%;
+    width: 25%;
         text-align: center;
         background: url(/img/pda/menuLine.gif) no-repeat right
 }
@@ -57,81 +57,81 @@ input, select {
 }
 
 img {
-	vertical-align: middle;
-	border: 0;
+    vertical-align: middle;
+    border: 0;
 }
 
 .wide {
-	width: 99%;
+    width: 99%;
 }
 
 table {
-	display: table;
-	margin-bottom: 0;
-	margin-top:0;
-	text-indent:0;
-	border-collapse: collapse;
-	border-spacing: 0px;
+    display: table;
+    margin-bottom: 0;
+    margin-top:0;
+    text-indent:0;
+    border-collapse: collapse;
+    border-spacing: 0px;
 }
 
 .green {
-	color: green;
+    color: green;
 }
 
 .red {
-	color: red;
+    color: red;
 }
 
 /* SUBMENU */
 
 a.current {
-	font-weight: bold;
-	text-decoration: none;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 /* INFO */
 
 table.accounts {
-	border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 table.accounts td {
     border-top: none;
-	border-bottom: 0px solid gray;
-	padding-bottom: 5px;
-	padding-top: 5px;
+    border-bottom: 0px solid gray;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 /* ACCOUNT */
 
 div.operation {
     border-bottom: 0px solid gray;
-	padding-bottom: 5px;
-	padding-top: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 div.line {
-	margin-top: 4px;
-	margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .even {
-	background-color: #fffddf;
+    background-color: #fffddf;
 }
 
 /* CATEGORY */
 
 .categories td
 {
-	padding-bottom: 8px;
+    padding-bottom: 8px;
 }
 
 td.childCategory {
-	padding-left: 8px;
+    padding-left: 8px;
 }
 
 /* FOOTER */
 
 #copyright {
-	font-size: smaller;
+    font-size: smaller;
 }

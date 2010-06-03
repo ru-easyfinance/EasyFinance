@@ -26,11 +26,11 @@ $.rwCalculator.buttonPanel = {
         '4': {
             'class': 'special',
             'text': 'X',
-			'event': 'hide',
-			'title': 'Скрыть'
+            'event': 'hide',
+            'title': 'Скрыть'
         }
     },
-	'1': {
+    '1': {
         '0': {
             'class':'printed',
             'text':'4'
@@ -50,11 +50,11 @@ $.rwCalculator.buttonPanel = {
         '4': {
             'class': 'special',
             'text': 'C',
-			'event': 'clear',
-			'title': 'Очистить'
+            'event': 'clear',
+            'title': 'Очистить'
         }
     },
-	'2': {
+    '2': {
         '0': {
             'class':'printed',
             'text':'7'
@@ -74,11 +74,11 @@ $.rwCalculator.buttonPanel = {
         '4': {
             'class': 'special double',
             'text': '=',
-			'event': 'calculate',
-			'rowspan' : 2
-		}
+            'event': 'calculate',
+            'rowspan' : 2
+        }
     },
-	'3': {
+    '3': {
         '0': {
             'class':'printed',
             'text':'0'
@@ -100,15 +100,15 @@ $.rwCalculator.buttonPanel = {
 
 $.rwCalculator.defaultEvents = {
     keypress: [function(e){
-	        if (e.keyCode == 9) {
-	            $.rwCalculator.functions.hide();
-	            $.rwCalculator.functions.calculate();
-	        }
-	        else 
-	            if (e.keyCode == 13) {
-	                $.rwCalculator.functions.calculate();
-	        	}
-    	}
-	],
+            if (e.keyCode == 9) {
+                $.rwCalculator.functions.hide();
+                $.rwCalculator.functions.calculate();
+            }
+            else
+                if (e.keyCode == 13) {
+                    $.rwCalculator.functions.calculate();
+                }
+        }
+    ],
     click: []
 };

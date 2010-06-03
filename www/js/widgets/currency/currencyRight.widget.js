@@ -11,7 +11,7 @@ easyFinance.widgets.currencyRight = function(){
         var currencyList = '', key;
         var defaultCurrency = _model.getDefaultCurrencyId();
         for(key in data) {
-            if (defaultCurrency != key) {        
+            if (defaultCurrency != key) {
                 currencyList += '<div class="line"><span class="valuta">' +
                     (data[key]['name'] || '') + '</span><span class="' +
                     (data[key]['progress'] || '') +'">' +

@@ -46,7 +46,7 @@ easyFinance.widgets.expertsList = function(){
 
             // full description
             $dd.append($('<p>').addClass('e-l-p').html(profile.fullInfo));
-            
+
             // mail link
             _$detailsMenu.find('#ic2 a').attr('href', '/mail#' + profile.id + ";" + profile.fio);
 
@@ -73,7 +73,7 @@ easyFinance.widgets.expertsList = function(){
                 }
             }
             $expert.append($services);
-            
+
             var $files = $('<div>').addClass('files').html('<h2>Сертификаты</h2>');
             //var $line = $('<div>').addClass('line').appendTo($files);
             for (var key in profile.certificates) {
@@ -102,7 +102,7 @@ easyFinance.widgets.expertsList = function(){
 
             // title
             $expert.append($('<dt>').text(experts[key].fio));
-            
+
             var $dd = $('<dd>');
             // photo
             $dd.append($('<img>')

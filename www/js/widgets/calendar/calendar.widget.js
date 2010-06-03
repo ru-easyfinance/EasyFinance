@@ -12,7 +12,7 @@ easyFinance.widgets.calendar = function(){
     var elem;
     var _element;
     function init(){
-    
+
         $.fullCalendar.monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
         $.fullCalendar.monthNamesShort = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
         $.fullCalendar.dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
@@ -39,7 +39,7 @@ easyFinance.widgets.calendar = function(){
             DragOpacity: {
                 // for agendaWeek and agendaDay
                 agenda: 0.5,
-                
+
                 // for all other views
                 '': 0.5
             },
@@ -54,8 +54,8 @@ easyFinance.widgets.calendar = function(){
                     '2': 'yellow',
                     '4': 'blue'
                 }
-                
-				$('.qtip').remove();
+
+                $('.qtip').remove();
                 _data = easyFinance.models.calendarCache.loadSetupData(month, year);
                 var nowDate = new Date();
                 var calendarArray = [];
@@ -66,8 +66,8 @@ easyFinance.widgets.calendar = function(){
                     easyFinance.models.accounts.getAccountCurrencyText(_data[v].account) != easyFinance.models.currency.getDefaultCurrencyText()) {
                         title += easyFinance.models.accounts.getAccountCurrencyText(_data[v].account)
                     }
-                    
-                    
+
+
                     var overdue = (_data[v].accepted == 0 && _data[v].timestamp * 1000 < nowDate.getTime());
                     calendarArray.push({
                         key: v,
@@ -80,7 +80,7 @@ easyFinance.widgets.calendar = function(){
                         draggable: true
                     });
                 }
-                
+
                 calback(calendarArray);
                 //cont
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar').remove();
@@ -153,7 +153,7 @@ easyFinance.widgets.calendar = function(){
                 $('#op_date').datepicker('setDate', date);
             },
             eventDragStart: function(calEvent, jsEvent, ui){
-            
+
             },
             eventMouseover: function(event, jsEvent, view){
                 _positioningToolbar(jsEvent.currentTarget.style.left, jsEvent.currentTarget.style.top);
@@ -174,7 +174,7 @@ easyFinance.widgets.calendar = function(){
             eventRender: function(calEvent, element){
                 var event = _data[calEvent.key];
                 var template = '';
-                
+
                 var typeToStr = {
                     '0': 'Расход',
                     '1': 'Доход',
@@ -187,7 +187,7 @@ easyFinance.widgets.calendar = function(){
                     '2': 'transfer',
                     '4': 'target'
                 };
-                
+
                 if (event.repeat != null) {
                     template = 'Повторяется';
                     //                        var lastChar = event.repeat.toString().substr(event.repeat.toString().length-1, 1);
@@ -203,7 +203,7 @@ easyFinance.widgets.calendar = function(){
                             else {
                                 template += ' до' + $.datepicker.formatDate('dd.mm.yy', Date(event.repeat));
                             }
-                            
+
                             break;
                         case '7':
                             template += ' еженедельно по';
@@ -235,7 +235,7 @@ easyFinance.widgets.calendar = function(){
                             else {
                                 template += ' до' + $.datepicker.formatDate('dd.mm.yy', Date(event.repeat));
                             }
-                            
+
                             break;
                         case '30':
                             template += ' ежемесячно';
@@ -284,15 +284,15 @@ easyFinance.widgets.calendar = function(){
                     },
                     style: 'modern'
                 });
-                
+
             }
         });
     }
-	function getCurrentDate() {
-		return $('#calendar').fullCalendar('getDate');
-	}
+    function getCurrentDate() {
+        return $('#calendar').fullCalendar('getDate');
+    }
     return {
-		getCurrentDate: getCurrentDate,
+        getCurrentDate: getCurrentDate,
         init: init
     };
 }();

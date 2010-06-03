@@ -69,12 +69,12 @@ easyFinance.models.accounts = function(){
 
                 $(document).trigger('accountsLoaded');
             }
-            
+
             if (typeof callback == 'function')
                 callback(_accounts);
         }, "json");
     }
-    
+
     // public variables
 
     // public functions
@@ -87,7 +87,7 @@ easyFinance.models.accounts = function(){
         _this = this;
 
         _modelCurrency = modelCurrency;
-        
+
         if (typeof param1 == 'object'){
             _accounts = param1;
             _orderAccounts();
@@ -192,10 +192,10 @@ easyFinance.models.accounts = function(){
         else
             return null;
     }
-    
+
     function getAccountTypeString(id){
-        var types = {1: "Наличные", 2: "Дебетовая карта", 9: "Кредит", 5: "Депозит", 6: "Займ выданный", 7: "Займ полученый", 8: "Кредитная карта", 15: "Электронный кошелек", 16: "Банковский счёт"};                
-        
+        var types = {1: "Наличные", 2: "Дебетовая карта", 9: "Кредит", 5: "Депозит", 6: "Займ выданный", 7: "Займ полученый", 8: "Кредитная карта", 15: "Электронный кошелек", 16: "Банковский счёт"};
+
         if (_accounts && _accounts[id])
             return types[_accounts[id].type];
         else
@@ -306,7 +306,7 @@ easyFinance.models.accounts = function(){
 
     // получаем списки просроченных и будущих событий
     function loadEvents(callback){
-        
+
     }
 
     // получаем список просроченных событий
@@ -317,7 +317,7 @@ easyFinance.models.accounts = function(){
     function getOverdueOperationById(id){
         if (!res.calendar || !res.calendar.overdue)
             return null;
-        
+
         for (var row in res.calendar.overdue) {
             if (res.calendar.overdue[row].id == id)
                 return $.extend({}, res.calendar.overdue[row]);
@@ -569,7 +569,7 @@ easyFinance.models.accounts = function(){
                 $(document).trigger(event);
 
                 _loadAccounts();
-                
+
                 callback(data);
             }, "json");
     }

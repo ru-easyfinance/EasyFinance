@@ -105,7 +105,7 @@ function wzSaveEverything() {
         //Customer wishes crunch
         wholeData = wzObjToArray(wholeData);
 
-		// JET. #1297 делаем красиво и модно!
+        // JET. #1297 делаем красиво и модно!
         $.download("https://" + window.location.host + "/integration/anketa?filename=anketa.pdf", wholeData, "post", "_blank");
     } else {
         $.jGrowl("Заполните все обязательные поля!", {theme: 'red', life: 10000});
@@ -166,243 +166,243 @@ function wzObjToArray(obj) {
 }
 
 function wsInitValidator() {
-	dValidator.validatableElems['personal_info'] = new Array();
+    dValidator.validatableElems['personal_info'] = new Array();
 
-	dValidator.validatableElems['personal_info']['wz_surname'] = {
-		'validationType' : 'rualpha',
-		'errMsg' : '',
-		'params' : {}
-	}
+    dValidator.validatableElems['personal_info']['wz_surname'] = {
+        'validationType' : 'rualpha',
+        'errMsg' : '',
+        'params' : {}
+    }
 
-	dValidator.validatableElems['personal_info']['wz_name'] = {
-		'validationType' : 'rualpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_name'] = {
+        'validationType' : 'rualpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_midname'] = {
-		'validationType' : 'rualpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_midname'] = {
+        'validationType' : 'rualpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_surname_translit'] = {
-		'validationType' : 'enalpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_surname_translit'] = {
+        'validationType' : 'enalpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_name_translit'] = {
-		'validationType' : 'enalpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_name_translit'] = {
+        'validationType' : 'enalpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_birthdate'] = {
-		'validationType' : 'date',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_birthdate'] = {
+        'validationType' : 'date',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_birthplace'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_birthplace'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_sex'] = {
-		'validationType' : 'radio',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_sex'] = {
+        'validationType' : 'radio',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['personal_info']['wz_citizenship'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['personal_info']['wz_citizenship'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['registration_address'] = new Array();
+    dValidator.validatableElems['registration_address'] = new Array();
 
-	dValidator.validatableElems['registration_address']['wz_reg_country'] = {
-		'validationType' : 'rualpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['registration_address']['wz_reg_country'] = {
+        'validationType' : 'rualpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['registration_address']['wz_reg_index'] = {
-		'validationType' : 'integer',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['registration_address']['wz_reg_index'] = {
+        'validationType' : 'integer',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['registration_address']['wz_reg_region'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['registration_address']['wz_reg_region'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['registration_address']['wz_reg_city'] = {
-		'validationType' : 'rualpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['registration_address']['wz_reg_city'] = {
+        'validationType' : 'rualpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['registration_address']['wz_reg_street'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['registration_address']['wz_reg_street'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['registration_address']['wz_reg_house'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['registration_address']['wz_reg_house'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['actual_address'] = new Array();
+    dValidator.validatableElems['actual_address'] = new Array();
 
-	dValidator.validatableElems['actual_address']['wz_actual_country'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['actual_address']['wz_actual_country'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['actual_address']['wz_actual_index'] = {
-		'validationType' : 'integer',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['actual_address']['wz_actual_index'] = {
+        'validationType' : 'integer',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['actual_address']['wz_actual_region'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['actual_address']['wz_actual_region'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['actual_address']['wz_actual_city'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['actual_address']['wz_actual_city'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['actual_address']['wz_actual_street'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['actual_address']['wz_actual_street'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['actual_address']['wz_actual_house'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['actual_address']['wz_actual_house'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['rf_passport'] = new Array();
+    dValidator.validatableElems['rf_passport'] = new Array();
 
-	dValidator.validatableElems['rf_passport']['wz_rf_id_series'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['rf_passport']['wz_rf_id_series'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['rf_passport']['wz_rf_id_number'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['rf_passport']['wz_rf_id_number'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['rf_passport']['wz_rf_id_organisation'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['rf_passport']['wz_rf_id_organisation'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['rf_passport']['wz_rf_id_date'] = {
-		'validationType' : 'date',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['rf_passport']['wz_rf_id_date'] = {
+        'validationType' : 'date',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['contacts'] = new Array();
+    dValidator.validatableElems['contacts'] = new Array();
 
-	dValidator.validatableElems['contacts']['wz_mail'] = {
-		'validationType' : 'mail',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['contacts']['wz_mail'] = {
+        'validationType' : 'mail',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['contacts']['wz_phone_mob'] = {
-		'validationType' : 'phone',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['contacts']['wz_phone_mob'] = {
+        'validationType' : 'phone',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['contacts']['wz_phone_home'] = {
-		'validationType' : 'phone',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['contacts']['wz_phone_home'] = {
+        'validationType' : 'phone',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['work_info'] = new Array();
+    dValidator.validatableElems['work_info'] = new Array();
 
-	dValidator.validatableElems['work_info']['wz_work_name'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['work_info']['wz_work_name'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['work_info']['wz_work_position'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['work_info']['wz_work_position'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['work_info']['wz_work_address'] = {
-		'validationType' : 'blank',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['work_info']['wz_work_address'] = {
+        'validationType' : 'blank',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['work_info']['wz_work_phone'] = {
-		'validationType' : 'phone',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['work_info']['wz_work_phone'] = {
+        'validationType' : 'phone',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['card_info'] = new Array();
+    dValidator.validatableElems['card_info'] = new Array();
 
-	dValidator.validatableElems['card_info']['wz_card_is_main'] = {
-		'validationType' : 'radio',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['card_info']['wz_card_is_main'] = {
+        'validationType' : 'radio',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	/*dValidator.validatableElems['card_info']['wz_card_currency'] = {
-		'validationType' : 'radio',
-		'errMsg' : '',
-		'params' : {}
-	};*/
+    /*dValidator.validatableElems['card_info']['wz_card_currency'] = {
+        'validationType' : 'radio',
+        'errMsg' : '',
+        'params' : {}
+    };*/
 
-	dValidator.validatableElems['card_info']['wz_card_type'] = {
-		'validationType' : 'radio',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['card_info']['wz_card_type'] = {
+        'validationType' : 'radio',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['card_info']['wz_card_rush'] = {
-		'validationType' : 'radio',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['card_info']['wz_card_rush'] = {
+        'validationType' : 'radio',
+        'errMsg' : '',
+        'params' : {}
+    };
 
-	dValidator.validatableElems['finish'] = new Array();
+    dValidator.validatableElems['finish'] = new Array();
 
-	dValidator.validatableElems['finish']['wz_password'] = {
-		'validationType' : 'rualpha',
-		'errMsg' : '',
-		'params' : {}
-	};
+    dValidator.validatableElems['finish']['wz_password'] = {
+        'validationType' : 'rualpha',
+        'errMsg' : '',
+        'params' : {}
+    };
 }
 
 $(document).ready(function(){

@@ -1,7 +1,7 @@
 easyFinance.widgets.calendarLeft = function(){
     var _$node = null;
     var _model = null;
-    
+
     var _$blockOverdue = null;
     var _$blockFuture = null;
 
@@ -73,7 +73,7 @@ easyFinance.widgets.calendarLeft = function(){
             var event = _data[key];
             var cur = easyFinance.models.accounts.getAccountCurrencyText(event.account_id);
             cur = (cur === null) ? '' : cur;
-            
+
             str += '<li class="line" id="calendarLeftOverdue'+event.id+'">'+
                         (event.comment != "" ? event.comment+'<br>' : "")+
                         '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
@@ -86,7 +86,7 @@ easyFinance.widgets.calendarLeft = function(){
                         '<li title="Редактировать" class="edit"><a></a></li>'+
                         '<li title="Удалить" class="del"><a></a></li></ul></div></li>';
         }
-        
+
         // меняем иконку в левой панели, если есть просроченные события
         if (str != "") {
             $("li#c4").addClass("warning");
@@ -100,7 +100,7 @@ easyFinance.widgets.calendarLeft = function(){
 
     function _redrawFuture(data) {
         var _data = data.future ? data.future : res.calendar.future;
-        
+
         var periodicLeft = '';
         for (var key in _data) {
             var event = _data[key];

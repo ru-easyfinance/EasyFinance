@@ -99,7 +99,7 @@ function showMail(){
     // switch to mail widget
     $('#m2').removeClass('cur');
     $('#m1').addClass('cur');
-    
+
     $('.dropdown li ul li').removeClass('selected');
 
     $('.block2 .ramka3').hide();

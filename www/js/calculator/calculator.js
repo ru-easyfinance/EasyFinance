@@ -73,7 +73,7 @@ function OJCalc()
         for(i = 0;i<len;i++)//do *
         {
             ret[k]=events[i];
-            
+
             if (ret[k-1])
             {
                 if(ret[k-1].mark == '*'){
@@ -94,7 +94,7 @@ function OJCalc()
         len = ret.length
         for(i = 0;i<len;i++)//do -
         {
-            
+
             if (ret[i-1]&&ret[i-1].mark == '-'){
                 r -=ret[i].number;
             }else{
