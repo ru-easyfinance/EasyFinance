@@ -6,7 +6,7 @@
  */
 class Helper_IframeLogin
 {
-    
+
     /**
      * Ссылка на движок для шаблонизатора
      * @var Smarty
@@ -28,7 +28,7 @@ class Helper_IframeLogin
             if ( ( _Core_Request::getCurrent()->uri == "/login/")
                     && ( isset(_Core_Request::getCurrent()->get['refer'])) && ( _Core_Request::getCurrent()->get['refer'] == 'azbuka' ) )
             {
-        
+
                 // Пользователь только пытается авторизироваться, мы забираем у него id у нас
                 // и его ключ сессии, затем по этому ключу мы делаем курлом гет запрос
                 if ( isset(_Core_Request::getCurrent()->get['id_ef'])
@@ -44,7 +44,7 @@ class Helper_IframeLogin
 
                 }
             }
-        
+
             if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
                 if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
                     header("Location: https://" . URL_ROOT_IFRAME . "login/");
@@ -82,7 +82,7 @@ class Helper_IframeLogin
             curl_setopt( $curl, CURLOPT_URL, $url );
 
             // Тут мы должны получить почту пользователя
-            $azbukaMail = curl_exec($curl); 
+            $azbukaMail = curl_exec($curl);
 
             curl_close($curl);
 

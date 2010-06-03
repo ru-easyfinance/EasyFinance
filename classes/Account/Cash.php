@@ -6,7 +6,7 @@ class Account_Cash extends Account
      * @var int
      */
     private $initPament = 0;
-    
+
 
     /**
      * Проверяет корректность введённых данных и подготавливает массив для работы с моделью
@@ -30,7 +30,7 @@ class Account_Cash extends Account
         $this->comment = $valid[7];
         $this->currency = $valid[29];
         $this->initPament = $valid[3];
-        
+
         /*if ( in_array('amount', $params) ) {
             $valid['4'] = (int)@$params['amount'];
         }*/
@@ -60,7 +60,7 @@ class Account_Cash extends Account
     }
 
     /**
-     * Редактирует существующий счёт 
+     * Редактирует существующий счёт
      * @param oldUser $user
      * @param array $params
      * @return bool

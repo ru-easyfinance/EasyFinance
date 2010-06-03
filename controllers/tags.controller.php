@@ -13,7 +13,7 @@ class Tags_Controller extends _Core_Controller_UserCommon
      * @var Tags_Model
      */
     private $model = null;
-    
+
     /**
      * Конструктор класса
      * @return void
@@ -39,7 +39,7 @@ class Tags_Controller extends _Core_Controller_UserCommon
      */
     function add ()
     {
-        
+
         $tag = trim( @$_POST['tag'] );
 
         $tags = $this->model->add( $tag );
@@ -78,7 +78,7 @@ class Tags_Controller extends _Core_Controller_UserCommon
 
         }
     }
-    
+
     /**
      * Удаляет тег
      * @return void
@@ -120,6 +120,6 @@ class Tags_Controller extends _Core_Controller_UserCommon
 
         $tags = $this->model->getTags( true );
         $this->tpl->assign( 'tags', $tags );
-        
+
     }
 }

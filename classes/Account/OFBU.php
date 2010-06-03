@@ -30,7 +30,7 @@ class Account_OFBU extends Account
      * @var string
      */
     private $dateOpen = '';
-    
+
     /**
      * Проверяет корректность введённых данных и подготавливает массив для работы с моделью
      * @param array $params

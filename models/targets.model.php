@@ -32,7 +32,7 @@ function stripslashes_deep($value)
 }
 
 class Targets_Model {
-    
+
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql $db
@@ -44,7 +44,7 @@ class Targets_Model {
      * @var User
      */
     private $user = null;
-    
+
     /**
      * Массив со ссылками на ошибки. Ключ - имя поля, значение массив текста ошибки
      * @example array('date'=>array('Не указана дата'), 'time'=> array('Не указано время'));
@@ -57,7 +57,7 @@ class Targets_Model {
      * @var array
      */
     private $errors = array();
-    
+
     /**
      * Количество целей, показываемых на отдельной странице
      * @var int
@@ -103,8 +103,8 @@ class Targets_Model {
             ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id AND b.accepted=1 ORDER BY b.dt_create ASC LIMIT 1) AS money
             FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC ;",
             Core::getInstance()->user->getId() );
-		if (!is_array($list)) $list = array();//*/
-        
+        if (!is_array($list)) $list = array();//*/
+
         return $list;
     }
 
@@ -125,7 +125,7 @@ class Targets_Model {
         }
         $list = $this->db->selectPage($total, "SELECT t.title, t.category_id as category, COUNT(t.id) AS cnt, SUM(`close`) AS
             cl, s.name FROM target t LEFT JOIN category c ON c.cat_id = t.category_id LEFT JOIN
-            system_categories s ON c.system_category_id = s.id WHERE t.visible=1 GROUP BY t.title, 
+            system_categories s ON c.system_category_id = s.id WHERE t.visible=1 GROUP BY t.title,
             t.`close` ORDER BY cnt DESC, t.title ASC LIMIT ?d, ?d;", $start, $limit);
         $array = array();
         foreach ($list as $k => $v) {
@@ -174,7 +174,7 @@ class Targets_Model {
             return 666;
         //return $res[0];
         $date = substr(date('c'),0,10);
-        
+
         $sql = "UPDATE target
             SET done=1 WHERE id=? AND user_id=?";
         $result = $this->db->select($sql, $opid, Core::getInstance()->user->getId());
@@ -209,7 +209,7 @@ class Targets_Model {
      */
     function getTarget ($id)
     {
-        $sql = "SELECT id, category_id as category, title, type, amount, 
+        $sql = "SELECT id, category_id as category, title, type, amount,
             DATE_FORMAT(date_begin, '%d.%m.%Y') as start, DATE_FORMAT(date_end, '%d.%m.%Y') as end,
             visible, photo, url, comment, target_account_id as account
             FROM target WHERE id = ?";
@@ -258,12 +258,12 @@ class Targets_Model {
         if (!$data['start']) {
             $this->errorData['start'] = "Дата начала";
         }
-        
+
         $data['end'] = formatRussianDate2MysqlDate(@$_POST['end']);
         if (!$data['end']) {
             $this->errorData['end'] = "Дата окончания";
         }
-        
+
         if ( strtotime( $data['start'] . ' 00:00:00') > strtotime( $data['end'] . ' 00:00:00') ) {
             $this->errorData['end'] = "Неверно указана дата окончания";
         }
@@ -280,19 +280,19 @@ class Targets_Model {
         }else{
             $data['visible'] = 0;
         }
-        
+
         return $data;
     }
 
     /**
      * Добавляем новую цель
-     * @return 
+     * @return
      */
     function add() {
         $data = array();
         if (isset($_POST['title'])) {
             $data = $this->checkData();
-            
+
             // Если есть ошибки, или не все обязательные поля заполнены
             if (count($this->errorData) > 0) {
                 return json_encode($this->errorData);
@@ -376,7 +376,7 @@ class Targets_Model {
             WHERE user_id=? AND id=? ", $user_id, $target_id);
         return true;
     }
-    
+
     /**
      * Добавляет массив с финцелями
      * @param Calendar_Event $event
@@ -386,7 +386,7 @@ class Targets_Model {
 
         $targets = Core::getInstance()->user->getUserTargets();
         $operations = New Operation_model;
-        
+
         foreach ( $operations_array as $value ) {
 
             // Если счёт финцели = счёту операции
@@ -489,9 +489,9 @@ class Targets_Model {
             ///operation->model->addTransfer
             /*$drain_money = $money * -1;
                 // tr_id. было drain
-		$sql = "INSERT INTO operation
+        $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $this->db->query($sql, $this->user->getId(), $money, $date, -1, $account_id, 1,
                 $comment, $a[0]['target_account_id']);*/
             $mod = New Operation_model;
@@ -512,7 +512,7 @@ class Targets_Model {
             }
             $this->staticTargetUpdate($target_id);
             return true;
-       
+
             //
         }
     }

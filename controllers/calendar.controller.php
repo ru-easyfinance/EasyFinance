@@ -12,7 +12,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      * @return void
      */
     protected function __init()
-    {        
+    {
     }
 
     /**
@@ -33,7 +33,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
     {
         // Определяем массив данных для обработки
         $request = _Core_Request::getCurrent();
-        
+
         // Если дата передана массивом (PDA) ...
         if ( is_array ( $request->post['date'] ) ) {
 
@@ -91,7 +91,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
         if ( ! $event->checkData() ) {
 
             $this->tpl->assign( 'error', array('text' => implode(",\n", $event->getErrors() ) ) );
-            
+
         } else {
 
             $calendar = new Calendar( $user );
@@ -156,9 +156,9 @@ class Calendar_Controller extends _Core_Controller_UserCommon
 
             // Если нет цепочки, значит только одна операция
             if ( $event_array['chain'] === 0 ) {
-                
+
                 $operation = new Operation_Model();
-                
+
                 if ( $event_array['type'] <= 1 ) {
 
                     if ( $event_array['type'] == 0 ) {
@@ -197,7 +197,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                 }
 
                 $this->tpl->assign( 'result', array('text' => 'Регулярная операция изменена') );
-                
+
             } else {
                 $calendar = new Calendar( $user );
                 $calendar->edit( $event );
@@ -214,7 +214,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
 
         }
     }
-    
+
     /**
      * Удаляет выбранный события
      * @return void
@@ -241,7 +241,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             $this->tpl->assign('error', array ( 'text' => implode ( ",\n", $calendar->getErrors () ) ) );
 
         }
-        
+
     }
 
     /**
@@ -285,7 +285,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
         $ids = explode(',', @$_POST['ids']);
 
         $accepted_array  = array ();
-        
+
         foreach ( $ids as $id ) {
             if ( ( int ) $id > 0 ) {
                 $accepted_array[] = $id;
@@ -303,7 +303,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             } else {
 
                 $this->tpl->assign( 'error', array ( 'text' => implode( ",\n", $calendar->getErrors() ) ) );
-                
+
             }
 
         } else {

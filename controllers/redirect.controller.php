@@ -8,7 +8,7 @@
 class Redirect_Controller
 {
     function index() {}
-    
+
     function __init(){}
 
     /**
@@ -16,7 +16,7 @@ class Redirect_Controller
      */
     function book () {
         //header('Location: http://fir.nes.ru/ru/calendar/PublishingImages/Fingramota%20Web%20Version%20.pdf');
-	header('Location: https://easyfinance.ru/upload/files/FingramotaWebVersion.pdf');
+    header('Location: https://easyfinance.ru/upload/files/FingramotaWebVersion.pdf');
         exit();
     }
 
@@ -25,7 +25,7 @@ class Redirect_Controller
      */
     function anketa_amt()
     {
-        header('Location: ' . 
+        header('Location: ' .
             'https://'. URL_ROOT . 'upload/files/Anketa%20AMT%20Bank%20-%20EasyFinance.ru.doc'
         );
         exit();

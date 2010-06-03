@@ -25,7 +25,7 @@ class Feedback_Controller extends _Core_Controller
         $this->tpl->assign('head_val', '/feedback/');
         $this->tpl->assign('name_page', 'feedback');
     }
-	
+
     /**
      * Функция добавления сообщения от пользователей
      */
