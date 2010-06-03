@@ -44,100 +44,100 @@ function jQueryAutoScroll() {}
 
 jQueryAutoScroll.initScroller = function()
 {
-	$('.autoscroll').each( function() {
+    $('.autoscroll').each( function() {
 
-			// Add event handlers to toggle pausing
-			$(this).mouseover(function() { jQueryAutoScroll.doPause(this); });
-			$(this).mouseout(function() { jQueryAutoScroll.doPause(this); });
+            // Add event handlers to toggle pausing
+            $(this).mouseover(function() { jQueryAutoScroll.doPause(this); });
+            $(this).mouseout(function() { jQueryAutoScroll.doPause(this); });
 
-			// Default each elements' scrollerStep to 1 if not set
-			if($(this).attr('scrollerStep') == undefined)
-				if(undefined === window.scrollerStep)
-					$(this).attr('scrollerStep', 1);
-				else
-					$(this).attr('scrollerStep', scrollerStep);
+            // Default each elements' scrollerStep to 1 if not set
+            if($(this).attr('scrollerStep') == undefined)
+                if(undefined === window.scrollerStep)
+                    $(this).attr('scrollerStep', 1);
+                else
+                    $(this).attr('scrollerStep', scrollerStep);
 
-	});
+    });
 
-	// Set interval to scroll another step every scrollerIntervalMs
-	setInterval("jQueryAutoScroll.doScroll()", scrollerIntervalMs);
+    // Set interval to scroll another step every scrollerIntervalMs
+    setInterval("jQueryAutoScroll.doScroll()", scrollerIntervalMs);
 }
 
 jQueryAutoScroll.doScroll = function()
 {
-	$('.autoscroll').filter(':not(".paused")').each( function() {
+    $('.autoscroll').filter(':not(".paused")').each( function() {
 
-		var scrollerStep = parseInt($(this).attr('scrollerStep'), 10);
+        var scrollerStep = parseInt($(this).attr('scrollerStep'), 10);
 
-		if($(this).hasClass('horizontalscroll'))
-		{
-			var x = this.scrollLeft;
+        if($(this).hasClass('horizontalscroll'))
+        {
+            var x = this.scrollLeft;
 
-			// The height of the div, as defined by CSS
-			var divWidth = parseInt($(this).css('width'));
+            // The height of the div, as defined by CSS
+            var divWidth = parseInt($(this).css('width'));
 
-			// The height of the div's contents
-			var contentWidth = this.scrollWidth;
+            // The height of the div's contents
+            var contentWidth = this.scrollWidth;
 
-			// Increment the position we're scrolling to by 1px
-			x += scrollerStep;
+            // Increment the position we're scrolling to by 1px
+            x += scrollerStep;
 
-			// Start over if we've scrolled too far
-			if((x <= 0) || (x >= (contentWidth - divWidth)))
-			{
-				 if($(this).hasClass('reversingscroll'))
-				 {
-				 	scrollerStep *= -1;
-				 	x = x + scrollerStep;
-				 }
-				 else
-				 {
-				 	x = 0;
-				 }
-			}
+            // Start over if we've scrolled too far
+            if((x <= 0) || (x >= (contentWidth - divWidth)))
+            {
+                 if($(this).hasClass('reversingscroll'))
+                 {
+                     scrollerStep *= -1;
+                     x = x + scrollerStep;
+                 }
+                 else
+                 {
+                     x = 0;
+                 }
+            }
 
-			// Scroll!
-			this.scrollLeft = x;
-		}
-		else
-		{
-			var x = this.scrollTop;
+            // Scroll!
+            this.scrollLeft = x;
+        }
+        else
+        {
+            var x = this.scrollTop;
 
-			// The height of the div, as defined by CSS
-			var divHeight = parseInt($(this).css('height'));
+            // The height of the div, as defined by CSS
+            var divHeight = parseInt($(this).css('height'));
 
-			// The height of the div's contents
-			var contentHeight = this.scrollHeight;
+            // The height of the div's contents
+            var contentHeight = this.scrollHeight;
 
-			// Increment the position we're scrolling to by 1px
-			x += scrollerStep;
+            // Increment the position we're scrolling to by 1px
+            x += scrollerStep;
 
-			// Start over if we've scrolled too far
-			if((x <= 0) || (x >= (contentHeight - divHeight)))
-			{
-				 if($(this).hasClass('reversingscroll'))
-				 {
-				 	scrollerStep *= -1;
-				 	x = x + scrollerStep;
-				 }
-				 else
-				 {
-				 	x = 0;
-				 }
-			}
+            // Start over if we've scrolled too far
+            if((x <= 0) || (x >= (contentHeight - divHeight)))
+            {
+                 if($(this).hasClass('reversingscroll'))
+                 {
+                     scrollerStep *= -1;
+                     x = x + scrollerStep;
+                 }
+                 else
+                 {
+                     x = 0;
+                 }
+            }
 
-			// Scroll!
-			this.scrollTop = x;
-		}
+            // Scroll!
+            this.scrollTop = x;
+        }
 
-		$(this).attr('scrollerStep', scrollerStep);
+        $(this).attr('scrollerStep', scrollerStep);
 
-	});
+    });
 }
 
 jQueryAutoScroll.doPause = function(el)
 {
-	$(el).toggleClass('paused');
+    $(el).toggleClass('paused');
 }
 
 $(document).ready(function() {

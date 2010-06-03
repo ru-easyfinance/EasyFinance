@@ -31,7 +31,7 @@ class Account_PIF extends Account
      */
     private $dateOpen = '';
 
-    
+
     /**
      * Проверяет корректность введённых данных и подготавливает массив для работы с моделью
      * @param array $params

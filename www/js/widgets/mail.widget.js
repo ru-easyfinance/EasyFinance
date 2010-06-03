@@ -181,7 +181,7 @@ easyFinance.widgets.mail = function(){
 
         _$table.find('#checkAllMails').attr('checked', false);
         _$table.find('tr:gt(0)').remove();
-        
+
         // add rows
         var str ='';
         for (key in mails)
@@ -232,7 +232,7 @@ easyFinance.widgets.mail = function(){
 
                 $(this).dialog("close");
             };
-        } 
+        }
 
         if (_folder != _model.FOLDER_TRASH){
             buttons["Удалить"] = function() {
@@ -286,7 +286,7 @@ easyFinance.widgets.mail = function(){
         }
 
         $('#mail-popup-read').dialog('option', 'buttons', buttons).dialog('open');
-        
+
         $('#mail-popup-read #mail-date').text(mail.date);
         $("#mail-popup-read #mail-subject-read").text(mail.subject);
         $("#mail-popup-read #mail-text-read").text(mail.body);
@@ -394,7 +394,7 @@ easyFinance.widgets.mail = function(){
         _$node = $(nodeSelector);
 
         _$table = $('#mailsTable');
-        
+
         _$table.find('#checkAllMails').click(_checkAllMailsClicked);
 
         $('.mail-title').live('click', _openMail);

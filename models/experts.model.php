@@ -69,7 +69,7 @@ class Experts_Model
         $this->is_expert = $_SESSION['user']['user_type'] == 1;
         return true;
     }
-    
+
     ////////////////////////////////experts///////////////////////////////////
 
     public function get_desktop_field($field_id)//update info into panel//only experts
@@ -139,6 +139,6 @@ class Experts_Model
     }
     public function get_expert($expert_id)
     {
-        return 'stop';  
+        return 'stop';
     }
 }

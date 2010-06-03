@@ -1,93 +1,93 @@
 #calendar div.cont {
-	display: none;
-	overflow: visible;
-	width: 140px;
-	position: absolute;
+    display: none;
+    overflow: visible;
+    width: 140px;
+    position: absolute;
 }
 
 #calendar.fc .fc-grid td {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #calendar div.cont.act {
-	display: block;
+    display: block;
 }
 
 #calendar div.cont ul {
-	position: absolute;
-	width: 65px;
-	background: transparent url(/img/i/icons_menu_accept_edit_delete.gif) no-repeat scroll 0 100%;
-	left: 60px;
-	z-index: 999;
+    position: absolute;
+    width: 65px;
+    background: transparent url(/img/i/icons_menu_accept_edit_delete.gif) no-repeat scroll 0 100%;
+    left: 60px;
+    z-index: 999;
 }
 
 #calendar div.cont.accepted ul {
-	width: 65px;
-	background: transparent url(/img/i/icons_control4.gif) no-repeat scroll 0 100%;
-	left: 60px;
+    width: 65px;
+    background: transparent url(/img/i/icons_control4.gif) no-repeat scroll 0 100%;
+    left: 60px;
 }
 
 #calendar div.cont ul li {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #calendar .fc-event, #calendar .fc-event a {
-	text-align: right;
-	cursor: move;
-	border-color: #c1c7c0;
-	background: #d9e0ff url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px; /* default BACKGROUND color */
-	color: #111; /* default TEXT color */
+    text-align: right;
+    cursor: move;
+    border-color: #c1c7c0;
+    background: #d9e0ff url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px; /* default BACKGROUND color */
+    color: #111; /* default TEXT color */
 }
 
 #calendar .fc-event.overdue, #calendar .fc-event.overdue a {
-	background: #f9e1e1 url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
+    background: #f9e1e1 url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
 }
 
 #calendar .fc-event.accepted, #calendar .fc-event.accepted a {
-	background: #e8f9e6 url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
+    background: #e8f9e6 url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
 }
 
 #calendar .fc-event.green a {
-	background-position: -97px 3px;
+    background-position: -97px 3px;
 }
 
 #calendar .fc-event.red a {
-	background-position: 3px 3px;
+    background-position: 3px 3px;
 }
 
 #calendar .fc-event.yellow a {
-	background-position: -197px 3px;
+    background-position: -197px 3px;
 }
 
 #calendar .fc-event.blue a {
-	background-position: -297px 3px;
+    background-position: -297px 3px;
 }
 
 #calendar .fc-event span {
-	padding-left: 10px;
+    padding-left: 10px;
 }
 
 div.calendar_tooltip div {
-	background: transparent url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
-	width: 40px;
-	max-width: 40px;
-	min-width: 40px;
-	overflow: hidden;
-	display: inline;
+    background: transparent url(/img/i/calendarEventsTypes.gif) no-repeat 103px 3px;
+    width: 40px;
+    max-width: 40px;
+    min-width: 40px;
+    overflow: hidden;
+    display: inline;
 }
 
 div.calendar_tooltip.minus div {
-	background-position: -100px 3px;
+    background-position: -100px 3px;
 }
 
 div.calendar_tooltip.plus div {
-	background-position: 0px 3px;
+    background-position: 0px 3px;
 }
 
 div.calendar_tooltip.transfer div {
-	background-position: -200px 3px;
+    background-position: -200px 3px;
 }
 
 div.calendar_tooltip.target div {
-	background-position: -300px 3px;
+    background-position: -300px 3px;
 }

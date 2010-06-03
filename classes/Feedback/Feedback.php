@@ -101,7 +101,7 @@ class Feedback
         }
 
         $feedbackReplyTo = array($this->_email => $feedbackReplyTo);
-        
+
         $feedbackHtmlPart = "<html>".
             "<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/></head>".
             "<body><pre>".var_export($this->_params, true)."</pre></body>";

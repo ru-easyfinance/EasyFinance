@@ -14,9 +14,9 @@ function findSWF(movieName) {
  */
 function chart_remove_element(chart, index)
 {
-    
+
  //   global_showing_old_data = !global_showing_old_data;
-    
+
     // clone the chart
     var modified_chart = {};
     jQuery.extend(modified_chart, chart);

@@ -1,6 +1,6 @@
 
 /* menu container */
-.menu3 { 
+.menu3 {
     position: relative;
     margin-left: 22px;
     top: 3px;
@@ -22,16 +22,16 @@
 ul.dropdown {
         position: relative;
         float: left;
-	padding: 0;
-	margin: 0;
-	list-style: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
 /* all list items */
 ul.dropdown li {
-	float: left;
-	position: relative;
-	width: 118px;
+    float: left;
+    position: relative;
+    width: 118px;
 }
 
 /*.menu3 ul li#m1.cur > a { background-position:0 -39px; }
@@ -42,10 +42,10 @@ ul.dropdown li {
 
 /* second-level lists */
 ul.dropdown li ul {
-	display: none;
-	position: absolute;
-	top: 1em;
-	left: 0px;
+    display: none;
+    position: absolute;
+    top: 1em;
+    left: 0px;
         width: 114px;
 }
 
@@ -77,18 +77,18 @@ ul.dropdown li ul li.last {
 
 /* to override top and left in browsers other than IE, which will position to the top right of the containing li, rather than bottom left */
 ul.dropdown li > ul {
-	top: 37px;
-	left: auto;
+    top: 37px;
+    left: auto;
 }
 
 .iframe ul.dropdown li > ul {
-	top: 29px;
-	left: auto;
+    top: 29px;
+    left: auto;
 }
 
 /* lists nested under hovered list items */
 ul.dropdown li:hover ul, ul li.over ul {
-	display: block;
+    display: block;
 }
 
 /*.menu3 ul { position: absolute; top: 3px; left: 0; height: 37px; //zoom: 1; } */

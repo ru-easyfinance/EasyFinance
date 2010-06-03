@@ -58,13 +58,13 @@
                 'YoudaoBot',
                 'BlogScope',
             );
-            
+
             foreach ( $bots as $value ) {
-                
+
                 if ( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) !== false ) {
                     return true;
                 }
-                
+
             }
 
             return false;
@@ -77,7 +77,7 @@
          */
         static function detectMobile ()
         {
-            
+
             /**
              * Список мобильных юзерагентов
              * @var array

@@ -1,4 +1,4 @@
-$(document).ready(function() {   
+$(document).ready(function() {
     function registrationCallback(data) {
         registrationCanClick = true;
 
@@ -13,7 +13,7 @@ $(document).ready(function() {
                 if (document.location.pathname.indexOf("integration") != -1) {
                     // #1215 регистрация на странице интеграции
                     // $.jGrowl("Регистрация успешно завершена!", {theme: 'green'});
-                    
+
                     //$("#integrationSteps").accordion("activate" , 1);
                     // перезагружаем страницу.
                     // поскольку пользователь будет уже залогинен,
@@ -45,19 +45,19 @@ $(document).ready(function() {
             /**
              * Условия валидации формы
              */
-			 
+
             jQuery.validator.addMethod("latinAndDigits", function(value, element) {
                     return this.optional(element) || !/[^a-zA-Z0-9]/.test(value);
             }, "Данное поле должно содержать только латинские буквы и символы!");
 
-			 
+
             $("#formRegister").validate({
                 rules: {
                     name: "required",
                     login: {
-						required: true,
-						latinAndDigits: true
-					},
+                        required: true,
+                        latinAndDigits: true
+                    },
                     passw: {
                         required: true,
                         minlength: 5
@@ -148,5 +148,5 @@ $(document).ready(function() {
             });
 
             break;
-	}
+    }
 });

@@ -84,7 +84,7 @@ easyFinance.widgets.expertEditServices = function(){
 
             _$table.append(_$row);
         }
-        
+
         _$table.show();
     }
 

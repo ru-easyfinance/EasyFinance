@@ -9,79 +9,79 @@
  */
 abstract class _Core_Controller
 {
-	/**
-	 * Ссылка на класс Смарти
-	 * @var Smarty
-	 * @todo Оторвать смарти, заменить на Native
-	 */
-	protected $tpl = null;
+    /**
+     * Ссылка на класс Смарти
+     * @var Smarty
+     * @todo Оторвать смарти, заменить на Native
+     */
+    protected $tpl = null;
 
-	/**
-	 * Ссылка на текущий запрос
-	 *
-	 * @var _Core_Request
-	 */
-	protected $request = null;
+    /**
+     * Ссылка на текущий запрос
+     *
+     * @var _Core_Request
+     */
+    protected $request = null;
 
-	/**
-	 * Конструктор. Содержит инициализацию общих для
-	 * всех контроллеров свойств и обьектов.
-	 *
-	 */
-	public function __construct( $template, _Core_Request $request )
-	{
-		// Шаблонизатор
-		$this->tpl   = $template;
+    /**
+     * Конструктор. Содержит инициализацию общих для
+     * всех контроллеров свойств и обьектов.
+     *
+     */
+    public function __construct( $template, _Core_Request $request )
+    {
+        // Шаблонизатор
+        $this->tpl   = $template;
 
-		// ОБьект запроса
-		$this->request = $request;
+        // ОБьект запроса
+        $this->request = $request;
 
-		// Вызов псевдоконструктора.
-		$this->__init();
+        // Вызов псевдоконструктора.
+        $this->__init();
 
-		//Ежели неавторизован пользователь ...
-		if (!Core::getInstance()->user->getId())
-		{
-			//..показываем ему сео говнотексты
-			$this->includeSeoText();
-		}
+        //Ежели неавторизован пользователь ...
+        if (!Core::getInstance()->user->getId())
+        {
+            //..показываем ему сео говнотексты
+            $this->includeSeoText();
+        }
 
 
-		// Определяем информацию о пользователе
-		if (Core::getInstance()->user->getId())
-		{
-			$uar = array(
-				'user_id'   => Core::getInstance()->user->getId(),
-				'user_name' => $_SESSION['user']['user_name'],
-				'user_type' => $_SESSION['user']['user_type']
-			);
+        // Определяем информацию о пользователе
+        if (Core::getInstance()->user->getId())
+        {
+            $uar = array(
+                'user_id'   => Core::getInstance()->user->getId(),
+                'user_name' => $_SESSION['user']['user_name'],
+                'user_type' => $_SESSION['user']['user_type']
+            );
 
             $this->tpl->assign('user_info', $uar);
         }
     }
 
-	/**
-	 * Метод для инициализации контроллера.
-	 * (во избежание переписывания конструктора)
-	 *
-	 */
-	abstract protected function __init();
+    /**
+     * Метод для инициализации контроллера.
+     * (во избежание переписывания конструктора)
+     *
+     */
+    abstract protected function __init();
 
-	/**
-	 * Подключение сео говнотекстов.
-	 *
-	 */
-	protected function includeSeoText()
-	{
-		$texts = array();
+    /**
+     * Подключение сео говнотекстов.
+     *
+     */
+    protected function includeSeoText()
+    {
+        $texts = array();
 
-		if(file_exists( DIR_SHARED . 'seo.php'))
-		{
-			include ( DIR_SHARED . 'seo.php');
-		}
+        if(file_exists( DIR_SHARED . 'seo.php'))
+        {
+            include ( DIR_SHARED . 'seo.php');
+        }
 
-		$this->tpl->assign('seotext', $texts);
-	}
+        $this->tpl->assign('seotext', $texts);
+    }
 
     /**
      * Выводит в браузер JSON
@@ -117,56 +117,56 @@ abstract class _Core_Controller
             );
     }
 
-	/**
-	 * При завершении работы, контроллера
-	 */
-	function __destruct()
-	{
-		if( !session_id() )
-		{
-			session_start();
-		}
+    /**
+     * При завершении работы, контроллера
+     */
+    function __destruct()
+    {
+        if( !session_id() )
+        {
+            session_start();
+        }
 
-		// Применение модификаций\удалений моделей (после внедрения TemplateEngine_Json - удалить)
-		_Core_ObjectWatcher::getInstance()->performOperations();
+        // Применение модификаций\удалений моделей (после внедрения TemplateEngine_Json - удалить)
+        _Core_ObjectWatcher::getInstance()->performOperations();
 
-		$user = Core::getInstance()->user;
+        $user = Core::getInstance()->user;
 
-		$res = array(
-			'errors' => Core::getInstance()->errors //@TODO Удалить потом
-		);
+        $res = array(
+            'errors' => Core::getInstance()->errors //@TODO Удалить потом
+        );
 
-		if( isset($_SESSION['resultMessage']) )
-		{
-			if( isset($_SESSION['messageSend']) )
-			{
-				$res['result'] = array( 'text' => $_SESSION['resultMessage'] );
-				unset( $_SESSION['resultMessage'], $_SESSION['messageSend']);
-			}
-			else
-			{
-				$_SESSION['messageSend'] = true;
-			}
-		}
+        if( isset($_SESSION['resultMessage']) )
+        {
+            if( isset($_SESSION['messageSend']) )
+            {
+                $res['result'] = array( 'text' => $_SESSION['resultMessage'] );
+                unset( $_SESSION['resultMessage'], $_SESSION['messageSend']);
+            }
+            else
+            {
+                $_SESSION['messageSend'] = true;
+            }
+        }
 
-		if( isset($_SESSION['errorMessage']) )
-		{
-			if( isset($_SESSION['errorMessage']) )
-			{
-				$res['result'] = array( 'text' => $_SESSION['errorMessage'] );
-				unset( $_SESSION['errorMessage'], $_SESSION['messageSend']);
-			}
-			else
-			{
-				$_SESSION['messageSend'] = true;
-			}
-		}
+        if( isset($_SESSION['errorMessage']) )
+        {
+            if( isset($_SESSION['errorMessage']) )
+            {
+                $res['result'] = array( 'text' => $_SESSION['errorMessage'] );
+                unset( $_SESSION['errorMessage'], $_SESSION['messageSend']);
+            }
+            else
+            {
+                $_SESSION['messageSend'] = true;
+            }
+        }
 
-		if ( is_null($user->getId()) )
-		{
-			$this->tpl->assign('res', $res);
-			return false;
-		}
+        if ( is_null($user->getId()) )
+        {
+            $this->tpl->assign('res', $res);
+            return false;
+        }
 
         // Подготавливаем счета
         $accounts = array();
@@ -185,7 +185,7 @@ abstract class _Core_Controller
 
 
         foreach ($account as $k=>$v)
-       	{
+           {
                 $accounts[$k] = $v;
                 if (isset($v['binding'])) {
                     $binding = $v['id'];
@@ -219,71 +219,6 @@ abstract class _Core_Controller
             $targ = 0;
         }
 
-        //валюты
-        $currency = array();
-
-        $get = $user->getCur();
-
-        $cur_user_string = $get['li'];
-        $cur_user_array = unserialize($cur_user_string);
-        $curdef = $get['def'];
-
-        //валюта которую подтягиваем из базы
-        $curfrom = $curdef;
-
-        // Если валюта не бел.р., гривна, тенге
-        if ( !in_array( $curdef, array(4,6,9) ) )
-        {
-            $curfrom = 1;
-        }
-
-        try
-        {
-            $curr = $user->getUserCurrency();
-        }
-        catch ( Exception $e)
-        {
-            $curr = 0;
-        }
-
-        //делитель в курсе
-        $delimeter = 1;
-
-        if ( !in_array( $curdef, array(4,6,9) ) )
-        {
-		foreach ($curr as $k => $v)
-		{
-			if ( $v['id'] == $curdef )
-			{
-				$delimeter = $v['value'];
-			}
-		}
-	}
-
-        foreach ($curr as $k => $v) {
-            if ($v['id'] == $get['def']){
-                $currency[$v['id']] = array(
-                    'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
-                    'name' => $v['charCode'],
-                    'text' => $v['abbr'],
-                    'progress' => ''
-                );
-            }
-        }//*/
-
-        foreach ($curr as $k => $v) {
-            if ($v['id'] != $get['def']){
-                $currency[$v['id']] = array(
-                    'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
-                    'name' => $v['charCode'],
-                    'text' => $v['abbr'],
-                    'progress' => ''
-                );
-            }
-        }
-
-        $currency['default'] = (int)$get['def'];//валюта по умолчанию
-
 
         try {
             $info = new Info_Model();
@@ -300,6 +235,28 @@ abstract class _Core_Controller
             $cats = null;
         }
 
+
+        /**
+         * Валюты
+         */
+        $ex = sfConfig::get('ex');
+        $userDefaultCurrency = $user->getUserProps('user_currency_default');
+        $userCurrencies = array();
+
+        // Все валюты пользователя по курсу к базовой
+        foreach ($user->getUserCurrency() as $currencyItem) {
+            $userCurrencies[$currencyItem['id']] = array(
+                'cost' => number_format($ex->getRate($currencyItem['id'], $userDefaultCurrency), 4, '.', ''),
+                'name' => $currencyItem['charCode'],
+                'text' => $currencyItem['abbr'],
+            );
+        }
+        $userCurrencies['default'] = (int)$userDefaultCurrency; //валюта по умолчанию
+
+
+        /**
+         * Res
+         */
         $res = array_merge($res, array(
             'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
             'profile'   => array(
@@ -321,7 +278,7 @@ abstract class _Core_Controller
             //'targets' => $targ,
             'user_targets' => $targ['user_targets'],
             'popup_targets' => $targ['pop_targets'],
-            'currency' => $currency,
+            'currency' => $userCurrencies,
             'flash' => array(
                 'title' => '',
                 'value' => isset($infoa[0][0])?$infoa[0][0]:0,
@@ -344,9 +301,9 @@ abstract class _Core_Controller
 
             if( Core::getInstance()->user->getId() > 0 )
             {
-            	$res['user'] = array(
-            		'name' => Core::getInstance()->user->getName(),
-            	);
+                $res['user'] = array(
+                    'name' => Core::getInstance()->user->getName(),
+                );
             }
 
         $this->tpl->assign('res', $res );

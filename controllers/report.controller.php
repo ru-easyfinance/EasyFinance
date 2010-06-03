@@ -16,7 +16,7 @@ class Report_Controller extends _Core_Controller_UserCommon
     private $_user = NULL;
 
     private $_reports = array();
-    
+
     /**
      * Конструктор класса
      * @return void
@@ -69,7 +69,7 @@ class Report_Controller extends _Core_Controller_UserCommon
     }
 
     /**
-     * 
+     *
      */
     function getData()
     {

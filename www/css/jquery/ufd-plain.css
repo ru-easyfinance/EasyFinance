@@ -1,7 +1,7 @@
 /**
-	ufd @VERSION: http://code.google.com/p/ufd/
-	
-	This is the default skin, a plain but attractive dropdown.
+    ufd @VERSION: http://code.google.com/p/ufd/
+
+    This is the default skin, a plain but attractive dropdown.
 */
 
 span.ufd.plain {
@@ -20,11 +20,11 @@ span.ufd.plain-focus {
     height: 16px;
     padding: 1px 3px;
     border: 0px;
-	-moz-border-radius: 0px;
+    -moz-border-radius: 0px;
 }
 
 .ufd.plain input.disabled {
-	color: #777;
+    color: #777;
     background-color: #eee !important;
 }
 
@@ -36,7 +36,7 @@ span.ufd.plain-focus {
     height: 18px;
     margin-left: 1px; /* for divider */
     background: url(/img/i/ufd.icon.gif) no-repeat 0px 0px;
-	-moz-border-radius: 0px;
+    -moz-border-radius: 0px;
 }
 
 .ufd.plain button.focus {
@@ -44,15 +44,15 @@ span.ufd.plain-focus {
 
 
 .ufd.plain button.hover {
-	background-position: -18px 0px;
+    background-position: -18px 0px;
 }
 
 .ufd.plain button.mouseDown {
-	background-position: -36px 0px;
+    background-position: -36px 0px;
 }
 
 .ufd.plain button.disabled {
-	background-position: -54px 0px !important;
+    background-position: -54px 0px !important;
 }
 
 /* dropdown */
@@ -73,12 +73,12 @@ span.ufd.plain-focus {
 }
 
 #ufd-container .plain li em {
-	font-weight: bold;
-	font-style: normal;
+    font-weight: bold;
+    font-style: normal;
 }
 
 
 #ufd-container .plain li.active {
-	background-color: highlight;
-	color: highlighttext;
+    background-color: highlight;
+    color: highlighttext;
 }

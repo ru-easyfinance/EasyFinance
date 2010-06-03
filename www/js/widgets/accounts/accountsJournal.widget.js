@@ -19,7 +19,7 @@ easyFinance.widgets.accountsJournal = function(){
         $('#accountsJournal .content tr.child td:not(.mark)').live('click',
             function(){
                 var acc = $(this).closest('tr').attr('id').split("_", 2)[1];
-		window.location = '/operation/#account=' + acc;
+        window.location = '/operation/#account=' + acc;
         });
 
         //del account click
@@ -64,7 +64,7 @@ easyFinance.widgets.accountsJournal = function(){
                     id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
                 else
                     id = $(this).closest('.item').attr('id').split("_", 2)[1];
-                
+
                 //easyFinance.widgets.accountEdit.setEditMode(true);
                 easyFinance.widgets.accountEdit.showForm();
                 accounts_hash_api('#edit'+id);
@@ -167,9 +167,9 @@ easyFinance.widgets.accountsJournal = function(){
             '<th COLSPAN=2 class="money">Эквивалент&nbsp;в&nbsp;' + _modelCurrency.getDefaultCurrencyText() +' </th>' +
             '<th class="scroll"><div>&nbsp;</div></th><tr>';
         $('#accountsJournal .head').html(head_tr);
-        
+
         redraw();
-        
+
         $(document).bind('accountsLoaded', redraw);
         //$(document).bind('accountAdded', redraw);
         $(document).bind('accountEdited', redraw);
@@ -206,7 +206,7 @@ easyFinance.widgets.accountsJournal = function(){
         {
             type = g_types[account_list_ordered[row]['type']];
             colorClass = account_list_ordered[row]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
-            
+
             if (!isNaN(type)){
                 str = '<tr class="item child" id="accountsJournalAcc_' + account_list_ordered[row]['id'] + '">';
                 str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list_ordered[row]["name"], 25) + '</span></td>';
@@ -238,4 +238,3 @@ easyFinance.widgets.accountsJournal = function(){
         redraw: redraw
     };
 }(); // execute anonymous function to immediatly return object
- 

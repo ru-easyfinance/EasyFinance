@@ -2,8 +2,8 @@
 
 //ниже приведены айди полей для таблицы дополнительных значений. и ещё названия - ключи ассоциативного
 //массива, который передаём в обе стороны
-/*                                      field_id                       
-Название                                1   name                       
+/*                                      field_id
+Название                                1   name
 Тип счёта                               2   type
 Начальная операция                      3   initPament
 Доступный остаток                       30  available
@@ -54,7 +54,7 @@ class Account_Collection extends _Core_Abstract_Collection
     CONST ACCOUNT_TYPE_ELECTPURSE = 15;
     CONST ACCOUNT_TYPE_BANKACC = 16;
 
- 
+
     /**
      * Загружает список счетов из базы данных
      * @param oldUser $user
@@ -70,7 +70,7 @@ class Account_Collection extends _Core_Abstract_Collection
                 $v['reserve'] = (float)$model->countReserve($v['id']);
                 //$v['defCur'] = $model->countSumInDefaultCurrency($v['totalBalance'], $v['currency']);
                 $v['initPayment'] = (float)$model->getFirstOperation($v['id']);
-                
+
                 $ret[$v['id']]=$v;
         }
 
@@ -94,7 +94,7 @@ class Account_Collection extends _Core_Abstract_Collection
 
     public function countAcc( $user )
     {
-        $howmuch = $this->load($user);       
+        $howmuch = $this->load($user);
     }
 
 }

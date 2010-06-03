@@ -138,3 +138,92 @@ table#operations_list td + td + td + td + td + td{
 #operations_list div.outcome { background-position: -16px 0px; }
 #operations_list div.transfer { background-position: -32px 0px; }
 #operations_list div.target { background-position: -48px 0px; }
+
+#dateTo {
+/*    margin-right: 40px;*/
+    !margin-right: 40px;
+}
+
+#btn_CSV {
+    float: right;
+    !float: none;
+    position: relative;
+    !margin-left:50px;
+    background-image:url("/img/images/excel.jpg");
+    height:23px;
+    width:23px;
+}
+
+/*.f_field b, #divOperationsJournalTotal b {
+    float: left;
+    width: 200px;
+}*/
+
+#btn_ReloadData {
+    position:relative;
+    margin-left:60px;
+    !margin-left:0px;
+}
+
+#search_field {
+    float:right;
+    height:30px;
+    margin-top:-14px;
+    width:428px;
+}
+
+*:first-child+html #search_field {
+    margin-top:-35px;
+}
+
+#dateFrom {
+    margin-right:54px;
+}
+
+#account_filtr {
+    width: 169px;
+}
+
+#divOperationsJournalTotal .b_marg {
+    float: left;
+}
+
+#lblOperationsJournalSum {
+    float:left;
+    width:190px;
+}
+
+#balance_before {
+/*    float:left;
+    margin-left:7px;
+    width:130px;
+*/
+}
+
+#balance_after {
+/*    float:left;
+    margin-left:7px;
+    width:152x;
+*/
+}
+
+#divOperationsJournalTotal * {
+    font-weight:bold;
+}
+
+#lblOperationsJournalSum b, #lblOperationsJournalAccountBalance b {
+    color: Black;
+}
+
+.before {
+    float:left;
+    text-align:center;
+    width:150px;
+}
+
+.after {
+    float:right;
+    margin-right:2px;
+    text-align:right;
+    width:165px;
+}

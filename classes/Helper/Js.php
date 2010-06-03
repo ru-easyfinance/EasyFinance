@@ -18,27 +18,27 @@ class Helper_Js implements _Core_Router_iHook
             $templateEngine->append('js',  'demo_message.js');
         }
 
-		/**
-		 * Динамическое подключение js файлов
-		 * в зависимости от модуля
-		 *
-		 */
-		$jsArr = array();
+        /**
+         * Динамическое подключение js файлов
+         * в зависимости от модуля
+         *
+         */
+        $jsArr = array();
 
-		$urlArr = explode( '/', $request->uri, 3 );
-		// первый элемент
-		array_shift($urlArr);
+        $urlArr = explode( '/', $request->uri, 3 );
+        // первый элемент
+        array_shift($urlArr);
 
-		$module = strtolower( array_shift($urlArr) );
+        $module = strtolower( array_shift($urlArr) );
 
-		if( array_key_exists( $module, Core::getInstance()->js ) )
-		{
-			$jsArr = Core::getInstance()->js[$module];
-		}
+        if( array_key_exists( $module, Core::getInstance()->js ) )
+        {
+            $jsArr = Core::getInstance()->js[$module];
+        }
 
-		foreach ($jsArr as $jsFile)
-		{
-			$templateEngine->append('js', $jsFile.'.js');
-		}
-	}
+        foreach ($jsArr as $jsFile)
+        {
+            $templateEngine->append('js', $jsFile.'.js');
+        }
+    }
 }

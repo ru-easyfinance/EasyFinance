@@ -1,5 +1,5 @@
 <?php
-class Account_Model 
+class Account_Model
 {
     /**
      * идентификатор базы данных
@@ -116,7 +116,7 @@ class Account_Model
             $return[0][$v2['name']] = $v2['field_value'];
         }
         return $return;
-        
+
     }
 
 
@@ -220,13 +220,13 @@ class Account_Model
     public function bindingAmt($account_id)
     {
         // Удаляем все существующие привязки
-        $sql = "DELETE FROM Acc_Values 
-            WHERE account_id IN (SELECT account_id FROM accounts WHERE user_id=? AND account_type_id=?) 
+        $sql = "DELETE FROM Acc_Values
+            WHERE account_id IN (SELECT account_id FROM accounts WHERE user_id=? AND account_type_id=?)
             AND field_id=?";
         $this->db->query($sql, $this->user_id, Account_Collection::ACCOUNT_TYPE_DEBETCARD, Account::FIELD_BINDING);
 
         // Привязываем текущий счёт
-        $sql = "INSERT INTO Acc_Values(`field_id`, `field_value`, `account_id`) 
+        $sql = "INSERT INTO Acc_Values(`field_id`, `field_value`, `account_id`)
             VALUES(?, ?, ?)";
 
         if ($this->db->query($sql, Account::FIELD_BINDING, 'amt', $account_id)) {

@@ -8,40 +8,40 @@ $(document).ready(function(){
         };
 
         //fields
-	$('.fields #btnAdd').live('click',
+    $('.fields #btnAdd').live('click',
             function(){
                 save_fields();
             });
-	$('.fields #btnCancel').live('click',
+    $('.fields #btnCancel').live('click',
             function(){
                 location.href="/admin/accounts/";
             });
-	$('.fields .del').live('click',
+    $('.fields .del').live('click',
             function(){
                 if (confirm('Вы уверены ?')){
                 del_fields($(this).closest('tr').attr('id'));
                 }
             });
 
-	function save_fields()
-	{
-		$.post(
+    function save_fields()
+    {
+        $.post(
                         "/admin/account_save_fields/",
-			 {
-				field_visual_name: $('#field_visual_name').val(),
-				field_name: $('#field_name').val(),
-				field_type: 'string',
-				field_regexp: $('#field_regexp').val(),
-				field_permissions: $('#field_permissions').val(),
-				field_default_value: $('#field_default_value').val(),
-				id: $('#id').val()
-			},
+             {
+                field_visual_name: $('#field_visual_name').val(),
+                field_name: $('#field_name').val(),
+                field_type: 'string',
+                field_regexp: $('#field_regexp').val(),
+                field_permissions: $('#field_permissions').val(),
+                field_default_value: $('#field_default_value').val(),
+                id: $('#id').val()
+            },
                         function (data){
-			content('.fields', data)},
+            content('.fields', data)},
                         'text'
-			
-		);
-	}
+
+        );
+    }
 
         function del_fields(mark)
         {
@@ -64,11 +64,11 @@ $(document).ready(function(){
             function(){
                 save_type();
             });
-	$('.type #btnCancelAdd').live('click',
+    $('.type #btnCancelAdd').live('click',
             function(){
                 location.href="/admin/accounts/";
             });
-	$('.type .del').live('click',
+    $('.type .del').live('click',
             function(){
                 if (confirm('Вы уверены ?')){
                 delete_type($(this).closest('tr').attr('id'));
@@ -79,19 +79,19 @@ $(document).ready(function(){
                 update_type($(this).closest('tr'));
             });
 
-	function save_type()
-	{
-		$.post("/admin/account_save_type/",
-			{
-				type_name: $('#type_name').val(),
-				type_id: $('#type_id').val()
-			},
+    function save_type()
+    {
+        $.post("/admin/account_save_type/",
+            {
+                type_name: $('#type_name').val(),
+                type_id: $('#type_id').val()
+            },
                         function (data){
-			content('.type',data)},
+            content('.type',data)},
                         'text'
-			
-		);
-	}
+
+        );
+    }
 
         function update_type(mark)
         {
@@ -115,33 +115,33 @@ $(document).ready(function(){
             function(){
                 save_type_fields();
             });
-	$('.type_fields #btnCancel').live('click',
+    $('.type_fields #btnCancel').live('click',
             function(){
                 location.href="/admin/accounts/";
             });
-	$('.type_fields .del').live('click',
+    $('.type_fields .del').live('click',
             function(){
                 if (confirm('Вы уверены ?')){
                 delete_type_fields($(this).closest('tr').attr('id'));
                 }
             });
 
-	function save_type_fields()
-	{
-		$.post(
-			"/admin/account_save_type_fields/",
-			{
-				type: $('#type').val(),
-				field: $('#field').val(),
-				id: $('#id').val(),
-				ajax: true
-			},
+    function save_type_fields()
+    {
+        $.post(
+            "/admin/account_save_type_fields/",
+            {
+                type: $('#type').val(),
+                field: $('#field').val(),
+                id: $('#id').val(),
+                ajax: true
+            },
                         function (data){
-			content('.type_fields',data)},
+            content('.type_fields',data)},
                         'text'
-			
-		);
-	}
+
+        );
+    }
 
         function delete_type_fields(mark)
         {

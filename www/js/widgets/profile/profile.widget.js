@@ -1,6 +1,6 @@
 
 easyFinance.widgets.profile = function(model){
-	var _model = model || easyFinance.models.user;
+    var _model = model || easyFinance.models.user;
     function init(){
         _model.reload(setupProfile);
 //        $('#back_info').click(function(){
@@ -10,7 +10,7 @@ easyFinance.widgets.profile = function(model){
             sendProfile();
         });
     }
-    
+
     function setupProfile(){
         var data = _model.getUserInfo();
         $('input#login').val(data.login);

@@ -1,24 +1,24 @@
 easyFinance.models.currency = function(){
     var _data =  {};
-	var _defaultCurrencyId = -1;
-	
-	var URL_FOR_SAVE_USER_CURRENCY = '/profile/save_currency/?responseMode=json';
-	var URL_FOR_LOAD_ALL_CURRENCY = '/profile/load_currency/?responseMode=json';
+    var _defaultCurrencyId = -1;
+
+    var URL_FOR_SAVE_USER_CURRENCY = '/profile/save_currency/?responseMode=json';
+    var URL_FOR_LOAD_ALL_CURRENCY = '/profile/load_currency/?responseMode=json';
     /**
      * Инициирует модель валют
      * @param data {object} - например, из res.currency
      */
     function load(data){
-		try {
-			_defaultCurrencyId = data['default'];
-			delete data['default'];
-	        for (var key in data){
-	            _data[key] = $.extend({id: key},data[key]);
-	        }
-		}catch (e){
-			_data = {}
-			_defaultCurrencyId = -1;
-		}
+        try {
+            _defaultCurrencyId = data['default'];
+            delete data['default'];
+            for (var key in data){
+                _data[key] = $.extend({id: key},data[key]);
+            }
+        }catch (e){
+            _data = {}
+            _defaultCurrencyId = -1;
+        }
     }
     /**
      * Возвращает валюту по умолчанию
@@ -116,17 +116,17 @@ easyFinance.models.currency = function(){
         'json');
     }
 
-	function loadAllCurrency(callback){
-		$.get(URL_FOR_LOAD_ALL_CURRENCY,
+    function loadAllCurrency(callback){
+        $.get(URL_FOR_LOAD_ALL_CURRENCY,
             {},
             function(data){
-				if (typeof(callback)=='function'){
-					callback(data);
-				}
+                if (typeof(callback)=='function'){
+                    callback(data);
+                }
             },
             'json'
         );
-	}
+    }
 
     function convertToDefault(amount, currency){
         return amount * getCurrencyRelativeCost(currency, _defaultCurrencyId);
@@ -145,7 +145,7 @@ easyFinance.models.currency = function(){
         getCurrencyCostById: getCurrencyCostById,
         getCurrencyRelativeCost: getCurrencyRelativeCost,
         setCurrency : setCurrency,
-		loadAllCurrency : loadAllCurrency,
+        loadAllCurrency : loadAllCurrency,
         convertToDefault: convertToDefault
     };
 }();

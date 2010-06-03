@@ -12,7 +12,7 @@ class Targets_Controller extends _Core_Controller_UserCommon
      * @var Targets_Model
      */
     private $model = null;
-    
+
     /**
      * Конструктор класса
      * @return void
@@ -35,7 +35,7 @@ class Targets_Controller extends _Core_Controller_UserCommon
         //$this->model->staticTargetUpdate(1);
         $this->tpl->assign('user_list_targets', $this->model->getLastList());
         $this->tpl->assign('closed_targets', $this->model->countClose());
-        $this->tpl->assign('pop_list_targets', $this->model->getPopList());     
+        $this->tpl->assign('pop_list_targets', $this->model->getPopList());
         $this->tpl->assign('category',get_tree_select());
         $this->tpl->assign('accounts',Core::getInstance()->user->getUserAccounts());
         $this->tpl->assign('template','default');
@@ -70,7 +70,7 @@ class Targets_Controller extends _Core_Controller_UserCommon
     {
         die(json_encode($this->model->edit()));
     }
-    
+
     /**
      * Удаляет выбранное событие
      * @param $args array mixed Какие-нибудь аргументы

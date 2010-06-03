@@ -15,11 +15,11 @@ easyFinance.widgets.accountEdit = function(){
 
     var _isEditing = false;
     var _isVisible = false; // виден ли виджет
-    
+
     var _id = null;
 
     // private functions
-    function _toggleVisibility(){ 
+    function _toggleVisibility(){
         _isEditing = false;
         $('#acc_type').removeAttr('disabled');
         $('#acc_name').val('');
@@ -44,12 +44,12 @@ easyFinance.widgets.accountEdit = function(){
 //        $('#starter_balance').live('keyup',function(e){
 //            FloatFormat(this, String.fromCharCode(e.which) + $(this).val())
 //        });
-		//TODO
-		//$('.useCalculator #acc_balance').rwCalculator();
-		$('#showCalculatorForFormAccount').click(function(){
-			$('#acc_balance').click();
-		});
-		
+        //TODO
+        //$('.useCalculator #acc_balance').rwCalculator();
+        $('#showCalculatorForFormAccount').click(function(){
+            $('#acc_balance').click();
+        });
+
         $('#addacc').click(addAccount);
 
         // @todo
@@ -196,7 +196,7 @@ easyFinance.widgets.accountEdit = function(){
 
         var account = _model.getAccounts()[id];
         if (!account)
-            return false;      
+            return false;
 
         $('#acc_type')
             .val(account.type)

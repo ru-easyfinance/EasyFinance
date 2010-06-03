@@ -27,13 +27,13 @@ class Account_Credit extends Account
 
     /**
      * Дата погашения
-     * @var string 
+     * @var string
      */
     private $dateOff = '';
 
     /**
      * Тип платежа
-     * @var int 
+     * @var int
      */
     private $typePayment = 0;
 
@@ -43,7 +43,7 @@ class Account_Credit extends Account
      */
     private $support = '';
 
-    
+
     /**
      * Проверяет корректность введённых данных и подготавливает массив для работы с моделью
      * @param array $params

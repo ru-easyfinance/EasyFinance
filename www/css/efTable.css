@@ -54,7 +54,7 @@ div.efTableWrapper{
 
 .efTable.head{
     background-color: #EEEEEE;
-	border: none;
+    border: none;
 }
 .efTable.head th.scroll, .efTable.head th.scroll div{
     width: 15px;

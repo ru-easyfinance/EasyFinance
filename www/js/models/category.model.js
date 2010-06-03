@@ -33,7 +33,7 @@ easyFinance.models.category = function(){
         return strA.localeCompare(strB);
     }
 
-    // создаёт массивы, содержащие ключи 
+    // создаёт массивы, содержащие ключи
     // отсортированных по имени категорий
     function _createOrderLists() {
         for (var prop in _categories) {
@@ -62,11 +62,11 @@ easyFinance.models.category = function(){
      */
     function load(param1, param2){
         var _this = this;
-        
+
         if (typeof param1 == 'object') {
             _categories = param1;
             _createOrderLists();
-            
+
             if (typeof param2 == 'function')
                 param2(_categories);
         } else {
@@ -121,14 +121,14 @@ easyFinance.models.category = function(){
     function editById(id, name, parent, type, system, callback){
         if (parent == "")
             parent = "0";
-        
+
         var oldCat = $.extend({}, _categories.user[id]);
 
         _update(EDIT_URL, id, name, parent, type, system, function(data){
             if (data.error && data.error.text) {
                 $.jGrowl(data.error.text, {theme: 'red'});
                 return false;
-            }                
+            }
 
             _categories.user[id].name = name;
             _categories.user[id].parent = parent;
@@ -149,7 +149,7 @@ easyFinance.models.category = function(){
             $(document).trigger('categoryEdited');
 
             callback(_categories.user[id]);
-	    return true;
+        return true;
         });
     }
 
@@ -268,10 +268,10 @@ easyFinance.models.category = function(){
     function getChildrenByParentId(id) {
         var arr = [];
         var parent = _categories.user[id];
-        
-	if (!parent){
+
+    if (!parent){
             return arr;
-	}
+    }
 
         var parentId = parent.id;
         for (var key in _categories.user) {
@@ -282,7 +282,7 @@ easyFinance.models.category = function(){
         return arr;
     }
 
-    function isParentCategory(id){        
+    function isParentCategory(id){
             return (_categories.user[id] &&  _categories.user[id].parent == '0') ? true : false;
     }
 

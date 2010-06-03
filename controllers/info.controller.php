@@ -21,7 +21,7 @@ class Info_Controller extends _Core_Controller_UserCommon
         $this->info_model = new Info_Model();
     }
 
-    
+
     /**
      * Индексная страница
      * @return void
