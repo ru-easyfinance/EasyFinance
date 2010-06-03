@@ -71,6 +71,11 @@ easyFinance.widgets.accountEdit = function(){
         params.currency = _$node.find('#acc_currency').val();
         params.initPayment = _$node.find('#acc_balance').val();
 
+        // #1475. для долговых счетов баланс всегда или 0 или отрицательный
+        if (params.type == "7" || params.type == "9") {
+            params.initPayment = (-Math.abs(parseFloat(params.initPayment))).toString();
+        }
+
         if (params.name == '') {
             $.jGrowl("Введите название счёта!", {theme: 'red', life: 10000});
             return false;
