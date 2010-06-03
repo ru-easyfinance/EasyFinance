@@ -219,71 +219,6 @@ abstract class _Core_Controller
             $targ = 0;
         }
 
-        //валюты
-        $currency = array();
-
-        $get = $user->getCur();
-
-        $cur_user_string = $get['li'];
-        $cur_user_array = unserialize($cur_user_string);
-        $curdef = $get['def'];
-
-        //валюта которую подтягиваем из базы
-        $curfrom = $curdef;
-
-        // Если валюта не бел.р., гривна, тенге
-        if ( !in_array( $curdef, array(4,6,9) ) )
-        {
-            $curfrom = 1;
-        }
-
-        try
-        {
-            $curr = $user->getUserCurrency();
-        }
-        catch ( Exception $e)
-        {
-            $curr = 0;
-        }
-
-        //делитель в курсе
-        $delimeter = 1;
-
-        if ( !in_array( $curdef, array(4,6,9) ) )
-        {
-		foreach ($curr as $k => $v)
-		{
-			if ( $v['id'] == $curdef )
-			{
-				$delimeter = $v['value'];
-			}
-		}
-	}
-
-        foreach ($curr as $k => $v) {
-            if ($v['id'] == $get['def']){
-                $currency[$v['id']] = array(
-                    'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
-                    'name' => $v['charCode'],
-                    'text' => $v['abbr'],
-                    'progress' => ''
-                );
-            }
-        }//*/
-
-        foreach ($curr as $k => $v) {
-            if ($v['id'] != $get['def']){
-                $currency[$v['id']] = array(
-                    'cost' => round( ( $v['value'] / $delimeter ) , 4) ,
-                    'name' => $v['charCode'],
-                    'text' => $v['abbr'],
-                    'progress' => ''
-                );
-            }
-        }
-
-        $currency['default'] = (int)$get['def'];//валюта по умолчанию
-
 
         try {
             $info = new Info_Model();
@@ -300,6 +235,28 @@ abstract class _Core_Controller
             $cats = null;
         }
 
+
+        /**
+         * Валюты
+         */
+        $ex = sfConfig::get('ex');
+        $userDefaultCurrency = $user->getUserProps('user_currency_default');
+        $userCurrencies = array();
+
+        // Все валюты пользователя по курсу к базовой
+        foreach ($user->getUserCurrency() as $currencyItem) {
+            $userCurrencies[$currencyItem['id']] = array(
+                'cost' => number_format($ex->getRate($currencyItem['id'], $userDefaultCurrency), 4, '.', ''),
+                'name' => $currencyItem['charCode'],
+                'text' => $currencyItem['abbr'],
+            );
+        }
+        $userCurrencies['default'] = (int)$userDefaultCurrency; //валюта по умолчанию
+
+
+        /**
+         * Res
+         */
         $res = array_merge($res, array(
             'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
             'profile'   => array(
@@ -321,7 +278,7 @@ abstract class _Core_Controller
             //'targets' => $targ,
             'user_targets' => $targ['user_targets'],
             'popup_targets' => $targ['pop_targets'],
-            'currency' => $currency,
+            'currency' => $userCurrencies,
             'flash' => array(
                 'title' => '',
                 'value' => isset($infoa[0][0])?$infoa[0][0]:0,
