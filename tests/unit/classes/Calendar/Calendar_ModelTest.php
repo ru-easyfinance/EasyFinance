@@ -43,38 +43,38 @@ class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
             'date'     => date('Y-m-d', time()-86400),
         );
         // Правильные операции, на вчера
-        CreateObjectHelper::createOperation($options);
-        CreateObjectHelper::createOperation($options);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
+        CreateObjectHelper::makeOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Операция не выполнена
         $data = $options;
         $data['accepted'] = 0;
-        CreateObjectHelper::createOperation($data);
+        CreateObjectHelper::makeOperation($data);
 
 
         // Дата операции установлена на завтра
         $data = $options;
         $data['accepted'] = 0;
         $data['date'] = date('Y-m-d', time()+86400);
-        CreateObjectHelper::createOperation($data);
+        CreateObjectHelper::makeOperation($data);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
         $data = $options;
         $data['accepted'] = 1;
         $data['date'] = date('Y-m-d', time()+86400);
-        CreateObjectHelper::createOperation($data);
+        CreateObjectHelper::makeOperation($data);
 
         // Удалённая операция
         $data = $options;
         $data['accepted'] = 0;
         $data['deleted_at'] = '2010-02-02 02:02:02';
-        CreateObjectHelper::createOperation($data);
+        CreateObjectHelper::makeOperation($data);
 
         // Обычная операция, вне цепочки
         unset($options['deleted_at']);
         unset($options['chain_id']);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
     }
 
 

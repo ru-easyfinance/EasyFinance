@@ -38,8 +38,8 @@ class CreateObjectHelper {
     /**
      * Создаёт счёт пользователя в бд, возвращает id
      *
-     * @param array $options
-     * @return int | false
+     * @param  array $options
+     * @return array
      */
     public static function makeAccount(array $props = array())
     {
@@ -70,9 +70,9 @@ class CreateObjectHelper {
      * @param array $option
      * @return int | false
      */
-    public static function createOperation($options)
+    public static function makeOperation($props)
     {
-        if (!isset($options['user_id'])) {
+        if (!isset($props['user_id'])) {
             throw new Exception('Expected option user_id');
         }
 
@@ -83,12 +83,38 @@ class CreateObjectHelper {
             'updated_at' => '2010-01-01 00:00:00',
             'chain_id'   => 0,
             'time'       => '12:00:00',
+            'accepted'   => 1,
         );
 
-        $options = array_merge($default, $options);
+        $props = array_merge($default, $props);
 
-        $sql = "INSERT INTO operation (".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
+        $sql = "INSERT INTO operation (".self::_wrapKey($props).") VALUES (".self::_wrapVal($props).")";
         return Core::getInstance()->db->query($sql);
+    }
+
+
+    /**
+     * Создать балансовую операцию
+     *
+     * @param  array $accountProps
+     * @param  floan $amount
+     * @return int
+     */
+    static public function makeBalanceOperation($accountProps, $amount)
+    {
+        $op = array(
+            'account_id'  => $accountProps['account_id'],
+            'user_id'     => $accountProps['user_id'],
+          //'cat_id'      => null,
+            'money'       => $amount,
+            'date'        => '0000-00-00',
+            'time'        => '00:00:00',
+            'drain'       => 0,
+            'type'        => 1,
+            'comment'     => 'Начальный остаток',
+            'accepted'    => 1,
+        );
+        return self::makeOperation($op);
     }
 
 

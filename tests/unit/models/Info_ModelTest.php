@@ -43,32 +43,32 @@ class Info_ModelTest extends UnitTestCase
             'account_id' => $accountId,
         );
         // Правильные операции, месячной давности
-        CreateObjectHelper::createOperation($options);
-        CreateObjectHelper::createOperation($options);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
+        CreateObjectHelper::makeOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Операция не выполнена
         $options['accepted'] = 0;
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
 
         // Доходная операция
         $options['drain'] = 0;
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
         $options['accepted'] = 1;
         $options['date'] = date('Y-m-d', time()+86400);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Удалённая операция
         $options['deleted_at'] = '2010-02-02 02:02:02';
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Обычная операция, вне цепочки
         unset($options['deleted_at']);
         unset($options['chain_id']);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         $options = array(
             'user_id' => $this->user->getId(),
