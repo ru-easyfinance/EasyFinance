@@ -116,47 +116,30 @@ class Account_Model
     }
 
     /**
-     * Возвращает массив счетов пользователя, со всеми прилагающимися параметрами
-     * @param oldUser $user
+     * Возвращает список счетов пользователя
+     *
+     * @param  int $user
      * @return array
      */
     public function loadAll($user)
     {
-        $sql = "SELECT
-            account_name as name,
+        $sql = "
+        SELECT
+            account_id AS id,
             account_type_id as type,
-            account_description as comment,
             account_currency_id as currency,
-            account_id
-            FROM accounts
-            WHERE user_id=?
-            ORDER BY account_name";
+            account_name as name,
+            account_description as comment
+        FROM accounts
+        WHERE
+                user_id=?
+            AND deleted_at IS NULL
+        ORDER BY account_name
+        ";
 
-        $string = "";
-
-        // список основных параметров по счетам
-        foreach($this->db->query($sql, $user) as $value) {
-
-            $accounts[$value['account_id']] = $value;
-            $accounts[$value['account_id']]['id'] = $value['account_id'];
-            if ($string) {
-                $string .= ',';
-            }
-
-            $string .=  $value['account_id'] ;
-
-        }
-
-        // Подробный список параметров
-        $sql = "SELECT DISTINCT v.account_id, f.name as field, v.field_value
-                FROM Acc_Values v, Acc_Fields f, Acc_ConnectionTypes c, accounts o
-                WHERE o.account_type_id = c.type_id AND c.field_id = f.id AND f.id = v.field_id
-                AND v.account_id IN ({$string})";
-
-        $fields = $this->db->select($sql);
-
-        foreach($fields as $value) {
-            $accounts[$value['account_id']][$value['field']] = $value['field_value'];
+        $accounts = array();
+        foreach($this->db->query($sql, (int)$user) as $value) {
+            $accounts[$value['id']] = $value;
         }
 
         return $accounts;
