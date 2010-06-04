@@ -42,7 +42,6 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     function add()
     {
         if( _Core_Request::getCurrent()->method == 'POST' ) {
-            $accountCollection = new Account_Collection();
             $params = $_POST;
             $account = Account::load($params);
             $accs = $account->create($this->user, $params);
@@ -62,7 +61,6 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     {
         if( _Core_Request::getCurrent()->method == 'POST' )
         {
-            $accountCollection = new Account_Collection();
             $params = $_POST;
             (isset($params['id']))?(1):($pda=1);
             (isset($params['id']))?(1):($params['id'] = $args[0]);
@@ -89,12 +87,10 @@ class Accounts_Controller extends _Core_Controller_UserCommon
     {
 
         if( (isset($_REQUEST['confirmed']) && $_REQUEST['confirmed']) ) {
-            $accountCollection = new Account_Collection();
             $params = $_REQUEST;
 
-            $model = new Account_Model();
-            $countAccounts = $model->loadAll($this->user->getId());
-            if (count($countAccounts) <= 1) {
+            // Предупреждение перед удалением
+            if (count($this->user->getUserAccounts()) == 1) {
                 $this->renderJsonError('Перед удалением последнего счета создайте нужные Вам счета');
             }
 
@@ -137,13 +133,12 @@ class Accounts_Controller extends _Core_Controller_UserCommon
      */
     public function accountslist()
     {
-        $accountCollection = new Account_Collection();
-
-        $acc = $accountCollection->load($this->user->getId());
+        $accountModel = new Account_Model;
+        $accounts = $accountModel->loadAllWithStat($this->user->getId());
 
         //@TODO Привести к нормальному возврату данных, т.е. через присвоение переменной.
         //В деструкторе ещё используется, поэтому ой
         // $this->tpl->assign('accounts', array('result'=>array('data'=> $acc)));
-        die ( json_encode (  ( $acc ) ) );
+        die (json_encode(array('result' => array('data' => $accounts))));
     }
 }

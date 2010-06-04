@@ -28,12 +28,6 @@ class Account_Model
         throw new Exception(__METHOD__.": Deprecated");
     }
 
-    function getFirstOperation($account_id=0)
-    {
-        $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
-        $first = $this->db->query($sql, $this->user_id, $account_id);
-        return ( (isset($first[0]))?($first[0]['money']):0 );
-    }
 
     /**
      * Функция создаёт первую операцию со счётом
@@ -145,6 +139,81 @@ class Account_Model
         return $accounts;
     }
 
+
+    /**
+     * Возвращает список счетов пользователя со статистикой по балансу и пр.
+     *
+     * @param  int $user
+     * @return array
+     */
+    public function loadAllWithStat($user)
+    {
+        $accounts = $this->loadAll($user);
+
+        if ($accounts) {
+            $ids = array_keys($accounts);
+            $totals = $this->_getTotalByAccounts($ids);
+            $initBalances = $this->_getInitBalanceByAccounts($ids);
+
+            foreach ($accounts as &$account) {
+                $account['totalBalance'] = isset($totals[$account['id']]) ? (float)$totals[$account['id']] : 0;
+                if ( !( 10 <= $account['type'] ) and ( $account['type'] <=15 ) )
+                    $account['reserve']     = (float)$this->countReserve($account['id']);
+                    $account['initPayment'] = isset($initBalances[$account['id']]) ? (float)$initBalances[$account['id']] : 0;
+            }
+        }
+
+        return $accounts;
+    }
+
+
+    /**
+     * Получить начальный баланс для списка счетов
+     *
+     * @param  array $accountIds
+     * @return array (id => float)
+     */
+    private function _getInitBalanceByAccounts(array $accountIds)
+    {
+        $sql = "
+            SELECT
+                account_id AS ARRAY_KEY,
+                money
+            FROM operation
+            WHERE
+                account_id IN (?a)
+                AND cat_id IS NULL
+            GROUP BY account_id
+        ";
+        return $this->db->selectCol($sql, $accountIds);
+    }
+
+
+    /**
+     * Получить итоги для списка счетов
+     *
+     * @param  array $accountIds
+     * @return array (id => float)
+     */
+    private function _getTotalByAccounts(array $accountIds)
+    {
+        // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
+        $sql = "
+            SELECT
+                account_id AS ARRAY_KEY,
+                SUM(money) as sum
+            FROM operation
+            WHERE
+                    accepted= 1
+                AND deleted_at IS NULL
+                AND account_id IN (?a)
+            GROUP BY account_id
+        ";
+
+        return $this->db->selectCol($sql, $accountIds);
+    }
+
+
     /**
      * Функция возвращает зарезервированную сумму по айди пользователя.
      * @param int $acc_id
@@ -163,17 +232,6 @@ class Account_Model
         return $ret;
     }
 
-    /**
-     * По айди счёта определяет общий баланс счёта
-     * @param int $acc_id
-     * @return float
-     */
-    public function countTotalBalance($acc_id = 0){
-        $balance = 0; //общий баланс счёта, с учётом всех его операций
-        $op = new Operation_Model();
-        $balance = $op->getTotalSum($acc_id);
-        return $balance;
-    }
 
     public function countSumInDefaultCurrency($total = 0, $curr = 1)
     {

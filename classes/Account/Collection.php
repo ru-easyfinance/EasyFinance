@@ -54,47 +54,4 @@ class Account_Collection extends _Core_Abstract_Collection
     CONST ACCOUNT_TYPE_ELECTPURSE = 15;
     CONST ACCOUNT_TYPE_BANKACC = 16;
 
-
-    /**
-     * Загружает список счетов из базы данных
-     * @param oldUser $user
-     */
-    public function load( $user )
-    {
-        $model = new Account_Model();
-        $res = $model->loadAll($user);
-
-        foreach ($res as $k=>$v){
-            $v['totalBalance'] = (float)$model->countTotalBalance($v['id']);
-            if ( !( 10 <= $v['type'] ) and ( $v['type'] <=15 ) )
-                $v['reserve'] = (float)$model->countReserve($v['id']);
-                //$v['defCur'] = $model->countSumInDefaultCurrency($v['totalBalance'], $v['currency']);
-                $v['initPayment'] = (float)$model->getFirstOperation($v['id']);
-
-                $ret[$v['id']]=$v;
-        }
-
-        $ret = array('result'=>array(
-            'data'=>$ret
-            ));
-        return $ret;
-    }
-
-    /**
-     * Загружает информацию по конкретному счёту
-     * @param int $acc_id
-     */
-    public function loadOneAcc( $acc_id )
-    {
-        $model = new Account_Model();
-        $res = $model->loadAccountById($acc_id);
-
-        return $res;
-    }
-
-    public function countAcc( $user )
-    {
-        $howmuch = $this->load($user);
-    }
-
 }

@@ -168,29 +168,19 @@ abstract class _Core_Controller
             return false;
         }
 
-        // Подготавливаем счета
-        $accounts = array();
-        try
-        {
-                $accountCollection = new Account_Collection();
-                $accou = $accountCollection->load($user->getId());
 
-                $account = $accou['result']['data'];
+        /**
+         * Счета
+         */
+        $accountModel = new Account_Model;
+        $accounts = $accountModel->loadAllWithStat($user->getId());
 
-        }
-        catch ( Exception $e)
-        {
-            $accou = 0;
+        foreach ($accounts as $accountItem) {
+            if (isset($accountItem['binding'])) {
+                $binding = $accountItem['id'];
+            }
         }
 
-
-        foreach ($account as $k=>$v)
-           {
-                $accounts[$k] = $v;
-                if (isset($v['binding'])) {
-                    $binding = $v['id'];
-                }
-        }
 
         //Подготавливаем Часто используемые счета
         $oftenAccounts = array();
