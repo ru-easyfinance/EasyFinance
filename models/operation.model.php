@@ -759,8 +759,7 @@ class Operation_Model {
      */
     function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount, $type, $sumFrom, $sumTo)
     {
-        if ($sumTo == 0)
-        {
+        if ($sumTo == 0) {
             $sumTo = null;
         }
 
@@ -770,10 +769,8 @@ class Operation_Model {
 
         foreach ($categorys as $category)
         {
-            if ( $category['cat_parent'] == $currentCategory )
-            {
-                if ($cat_in)
-                {
+            if ( $category['cat_parent'] == $currentCategory ) {
+                if ($cat_in) {
                     $cat_in .= ',';
                 }
 
@@ -813,7 +810,7 @@ class Operation_Model {
         $sql .= " AND o.deleted_at IS NULL ";
 
         // Если указан счёт (фильтруем по счёту)
-        if((int)$currentAccount > 0) {
+        if( (int)$currentAccount > 0 ) {
             $sql .= " AND o.account_id = '" . (int)$currentAccount . "' ";
         }
 
@@ -855,12 +852,10 @@ class Operation_Model {
         }
 
         // Если указан фильтр по сумме
-        if (!is_null($sumFrom))
-        {
+        if (!is_null($sumFrom)) {
             $sql .= " AND ABS(o.money) >= " . $sumFrom;
         }
-        if (!is_null($sumTo))
-        {
+        if (!is_null($sumTo)) {
             $sql .= " AND ABS(o.money) <= " . $sumTo;
         }
 
@@ -869,39 +864,16 @@ class Operation_Model {
 
         //Присоединение переводов на фин цель
         $sql .= " UNION
-            SELECT
-                t.id,
-                t.user_id,
-                -t.money,
-                DATE_FORMAT(t.date,'%d.%m.%Y'),
-                t.date AS dnat,
-                tt.category_id,
-                t.target_id,
-                tt.target_account_id,
-                1,
-                t.comment,
-                '',
-                '',
-                1 AS virt,
-                t.tags,
-                NULL,
-                NULL,
-                4 as type,
-                dt_create AS created_at,
-                ''
+            SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id,
+            t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create AS created_at, ''
             FROM target_bill t
-            LEFT JOIN
-                target tt
-                ON
-                t.target_id=tt.id
-            WHERE
-                t.user_id = " . $this->_user->getId()
+            LEFT JOIN target tt ON t.target_id=tt.id
+            WHERE t.user_id = " . $this->_user->getId()
             . " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}') ";
 
         if((int)$currentAccount > 0) {
             $sql .= " AND t.bill_id = '{$currentAccount}' ";
         }
-
         if (!empty($currentCategory)) {
             $sql .= " AND 0 = 1 "; // Не выбираем эти операции, т.к. у финцелей свои категории
         }
@@ -931,16 +903,14 @@ class Operation_Model {
         // Добавляем данные, которых не хватает
         foreach ($operations as $key => $operation)
         {
-            if ( $operation['type'] <= 1 )
-            {
+            if ( $operation['type'] <= 1 ) {
                 // До использования типов - игнорим ошибки
                 $operation['cat_name']          = @$categorys[ $operation['cat_id'] ]['cat_name'];
                 $operation['cat_parent']        = @$categorys[ $operation['cat_id'] ]['cat_parent'];
             }
 
             //Если счёт операции существует
-            if( array_key_exists( $operation['account_id'], $accounts ) )
-            {
+            if( array_key_exists( $operation['account_id'], $accounts ) ) {
                 $operation['account_name']     = $accounts[ $operation['account_id'] ]['account_name'];
                 $operation['account_currency_id'] = $accounts[ $operation['account_id'] ]['account_currency_id'];
             }
@@ -952,14 +922,12 @@ class Operation_Model {
             }
 
             //хак для журнала операций. присылаю tr_id = null для не переводов
-            if ( (int)$operation['tr_id'] == 0 && (int)$operation['transfer'] == 0 )
-            {
+            if ( (int)$operation['tr_id'] == 0 && (int)$operation['transfer'] == 0 ) {
                 $operation['tr_id'] = null;
             }
 
             //если фин цель то перезаписываем тот null что записан.
-            if (($operation['virt']) == 1)
-            {
+            if (($operation['virt']) == 1) {
                 $operation['account_currency_id'] = $accounts[$operation['account_id']]['account_currency_id'];
 
                 if ($operation['cat_id'] == 1)
@@ -1002,12 +970,37 @@ class Operation_Model {
         foreach ($operations as $k => $v)
         {
             if (!($v['account_name'] == ''))
-            {
                 $retoper[$k] = $v;
-            }
         }
 
         return $retoper;
+    }
+
+
+    /**
+     * Get balance before period and after it
+     * @param date $dateFrom
+     * @param date $dateTo
+     */
+    function getOperationMoneyBeforeAndAfter($dateFrom, $dateTo)
+    {
+        $sql = "SELECT sum(mm) as total_money FROM(SELECT sum(money) as mm
+            FROM operation o
+            WHERE o.user_id = " . $this->_user->getId();
+
+        $sql .= ' AND (`date` BETWEEN "' . $dateFrom . '" AND "' . $dateTo . '") ';
+        $sql .= " AND accepted=1 ";
+
+        $sql .= " UNION
+            SELECT sum(money) as mm
+            FROM target_bill t
+            LEFT JOIN target tt ON t.target_id=tt.id
+            WHERE t.user_id = " . $this->_user->getId()
+            . " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}'))a";
+
+        $total_money = $this->db->select($sql, $this->_user->getId(), $dateFrom, $dateTo);
+
+        return ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money'];
     }
 
     /**
@@ -1271,12 +1264,10 @@ class Operation_Model {
 
         $operation = $this->db->selectRow( $sql, (int)$userId, (int)$operationId, (int)$userId, (int)$operationId );
 
-        if( $operation['type'] == 2 && $operation['tr_id'] == 0 )
-        {
+        if( $operation['type'] == 2 && $operation['tr_id'] == 0 ) {
             $operation['toAccount'] = $operation['transfer'];
         }
-        elseif ( $operation['type'] == 2 && $operation['tr_id'] > 0 )
-        {
+        elseif ( $operation['type'] == 2 && $operation['tr_id'] > 0 ) {
             $operation['toAccount'] = $operation['account'];
             $operation['account'] = $operation['transfer'];
         }
