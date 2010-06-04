@@ -4,7 +4,6 @@
  * @category budget
  * @author Max Kamashev <max.kamashev@gmail.com>
  * @copyright http://easyfinance.ru/
- * @version SVN $Id: $
  */
 class Budget_Model {
     /**
@@ -68,8 +67,6 @@ class Budget_Model {
                         o.deleted_at IS NULL
                     AND
                         o.date >= ? AND o.date <= ?
-                    AND
-                        o.account_id IN (SELECT account_id FROM accounts WHERE user_id = o.user_id)
                     GROUP BY
                         o.cat_id, a.account_id";
 

@@ -120,11 +120,12 @@ class Account_Model
     }
 
 
-    public function getTypeByID( $id = 0 ){
+    public function getTypeByID($id = 0) {
         $sql = "SELECT account_type_id as id FROM accounts WHERE account_id = ?";
         $exec = $this->db->query($sql, $id);
         return $exec[0]['id'];
     }
+
     /**
      * Возвращает массив счетов пользователя, со всеми прилагающимися параметрами
      * @param oldUser $user
