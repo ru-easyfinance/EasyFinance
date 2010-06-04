@@ -199,51 +199,24 @@ class oldUser
             return false;
         }
 
-        // Если пользователь - эксперт: подгружаем дополнительные поля
-        if($this->getType() === 1)
-        {
-            $sql = 'SELECT `user_info_short`, `user_info_full`, `user_img`, `user_img_thumb` FROM `user_fields_expert` WHERE `user_id` = ?';
-
-            $expertProps = $this->db->selectRow( $sql, $this->getId() );
-
-            // Если нет записи в таблице дополнительных свойств
-            if( !sizeof( $expertProps) )
-            {
-                // Создаём её
-                $this->db->query( 'INSERT into `user_fields_expert` (`user_id`) VALUES (?)', $this->getId() );
-
-                // И делаем выборку заново
-                $expertProps = $this->db->selectRow( $sql, $this->getId() );
-            }
-
-            $this->props += $expertProps;
-        }
-
         $_SESSION['user']            = $this->props;
         $_SESSION['HTTP_USER_AGENT'] = @$_SERVER['HTTP_USER_AGENT'];
         $_SESSION['REMOTE_ADDR']     = @$_SERVER['REMOTE_ADDR'];
 
-        // Если профиль пользователя
-        if ($this->getType() === 0)
-        {
-            $this->init();
-            if (_Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA) {
-                // Если у нас есть неподтверждённые операции, то переходим на них
-                if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
-                    $_SESSION['REQUEST_URI'] = '/calendar/#list';
-                // Иначе переходим на самый первый счёт #1062
-                } else {
-                    $keys = array_keys($this->user_account);
-                    if (count($keys) > 0) {
-                        $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
-                    }
+        // Вызывает инициализацию пользовательских категорий, счетов, денег
+        $this->init();
+
+        if (_Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA) {
+            // Если у нас есть неподтверждённые операции, то переходим на них
+            if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
+                $_SESSION['REQUEST_URI'] = '/calendar/#list';
+            // Иначе переходим на самый первый счёт #1062
+            } else {
+                $keys = array_keys($this->user_account);
+                if (count($keys) > 0) {
+                    $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
                 }
             }
-        }
-        // Если профиль эксперта
-        elseif ($this->getType() === 1)
-        {
-            $_SESSION['REQUEST_URI']	= '/expert/';
         }
 
         return $this->save();
