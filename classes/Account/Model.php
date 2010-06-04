@@ -46,21 +46,10 @@ class Account_Model
 
     function edit_operation($data)
     {
-        $tip = "SELECT account_type_id FROM accounts WHERE account_id=? AND user_id=?";
-        $acc = $this->db->query($tip, $data['id'], $this->user_id);//тип счёта
-        $drain = 0;
-        if ( ($acc[0]['account_type_id'] == 7) || ($acc[0]['account_type_id'] == 8) || ($acc[0]['account_type_id'] == 9)){
-            if ( $data['initPayment'][0] == '-')
-                $data['initPayment'] = substr($data['initPayment'],1);
-            $data['initPayment'] = '-'.$data['initPayment'];
-            $drain=1;
-        }
-
-        $sql = "SElECT `id` FROM operation WHERE account_id=? AND user_id=? AND cat_id IS NULL LIMIT 0, 1";
-        $oid = $this->db->selectCell($sql,$data['id'],$this->user_id);
+        $sql = "SELECT `id` FROM operation WHERE account_id=? AND user_id=? AND cat_id IS NULL LIMIT 0, 1";
+        $oid = $this->db->selectCell($sql, $data['id'], $this->user_id);
         $model = new Operation_Model();
-        $model->edit($oid,str_replace(' ', '', $data['initPayment']),'0000-00-00',0,0,'Начальный остаток', $data['id']);
-
+        $model->edit($oid, str_replace(' ', '', $data['initPayment']),'0000-00-00',0,0,'Начальный остаток', $data['id']);
     }
 
     /**
