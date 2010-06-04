@@ -26,7 +26,7 @@ class Operation_ModelTest extends UnitTestCase
             'user_active'=> 1,
             'user_new'   => 0,
         );
-        CreateObjectHelper::createUser($options);
+        CreateObjectHelper::makeUser($options);
     }
 
     private function _makeOperation()
@@ -38,7 +38,8 @@ class Operation_ModelTest extends UnitTestCase
             'user_id'  => $this->userId,
             'account_name' => 'ABC'
         );
-        $this->accountId = CreateObjectHelper::createAccount($options);
+        $account = CreateObjectHelper::makeAccount($options);
+        $this->accountId = $account['account_id'];
 
         $options   = array(
             'user_id'  => $this->userId,

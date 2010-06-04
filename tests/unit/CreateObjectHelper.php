@@ -4,32 +4,15 @@
  */
 class CreateObjectHelper {
 
-    private static function _wrapKey($options)
+    private static function _wrapKey($props)
     {
-        $keys = array_keys($options);
-
-        $result = "";
-        foreach($keys as $key) {
-            if (!empty($result)) {
-                $result .= ",";
-            }
-            $result .= "`".$key."`";
-        }
-
-        return $result;
+        $keys = array_keys($props);
+        return sprintf('`%s`', implode('`, `', $keys));
     }
-    
-    private static function _wrapVal($options)
-    {
-        $result = "";
-        foreach($options as $value) {
-            if (!empty($result)) {
-                $result .= ",";
-            }
-            $result .= "'".$value."'";
-        }
 
-        return $result;
+    private static function _wrapVal($props)
+    {
+        return sprintf("'%s'", implode("', '", $props));
     }
 
 
@@ -39,13 +22,12 @@ class CreateObjectHelper {
      * @param array $options
      * @return int Возвращает id созданного пользователя или false
      */
-    public static function createUser(array $options = array())
+    public static function makeUser(array $options = array())
     {
         $default = array(
             'user_pass'  => sha1('pass'),
             'user_login' => 'login'.sha1(microtime()),
         );
-
         $options = array_merge($default, $options);
 
         $sql = "INSERT INTO users(".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
@@ -59,25 +41,26 @@ class CreateObjectHelper {
      * @param array $options
      * @return int | false
      */
-    public static function createAccount(array $options)
+    public static function makeAccount(array $props = array())
     {
-        if (!isset($options['user_id'])) {
-            throw new Exception('Expected option user_id');
-        }
-
         $default = array(
             'account_currency_id' => efMoney::RUR,
             'account_type_id'     => Account_Collection::ACCOUNT_TYPE_CASH,
             'updated_at'          => '2010-05-26 16:31:04',
             'created_at'          => '2010-05-26 16:31:04',
             'account_name'        => 'Название счёта по-русски',
+            'account_description' => 'Описание счета',
         );
+        $props = array_merge($default, $props);
 
-        $options = array_merge($default, $options);
-        
-        $sql = "INSERT INTO accounts (".self::_wrapKey($options).") VALUES (".self::_wrapVal($options).")";
+        if (!isset($props['user_id'])) {
+            $props['user_id'] = self::makeUser();
+        }
 
-        return Core::getInstance()->db->query($sql);
+        $sql = "INSERT INTO accounts (".self::_wrapKey($props).") VALUES (".self::_wrapVal($props).")";
+        $props['account_id'] = Core::getInstance()->db->query($sql);
+
+        return $props;
     }
 
 

@@ -25,7 +25,7 @@ class Info_ModelTest extends UnitTestCase
             'user_new'   => 0,
 
         );
-        CreateObjectHelper::createUser($options);
+        CreateObjectHelper::makeUser($options);
     }
 
     private function _makeOperation()
@@ -33,8 +33,8 @@ class Info_ModelTest extends UnitTestCase
         $this->user = new oldUser($this->userLogin, $this->userPass);
         $this->userId = $this->user->getId();
 
-        $accountId = CreateObjectHelper::createAccount(array('user_id'=>$this->userId));
-
+        $account = CreateObjectHelper::makeAccount(array('user_id'=>$this->userId));
+        $accountId = $account['account_id'];
 
         $options   = array(
             'user_id'  => $this->userId,
@@ -75,7 +75,7 @@ class Info_ModelTest extends UnitTestCase
         );
         $catId1     = CreateObjectHelper::createCategory($options);
         $catId2     = CreateObjectHelper::createCategory($options);
-        $accountId = CreateObjectHelper::createAccount($options);
+        $accountId = CreateObjectHelper::makeAccount($options);
 
         $options['category']  = $catId1;
         $options['drain']     = 0;

@@ -49,7 +49,7 @@ class models_ProfileTest extends UnitTestCase
             'referrerId'            => ''
         );
 
-        $userId1 = CreateObjectHelper::createUser($options);
+        $userId1 = CreateObjectHelper::makeUser($options);
 
         $options = array(
             'user_name'             => 'user2',
@@ -66,8 +66,8 @@ class models_ProfileTest extends UnitTestCase
             'user_service_mail'     => 'ukko2@mail.easyfinance.ru',
             'referrerId'            => ''
         );
-        $userId2 = CreateObjectHelper::createUser($options);
-        
+        $userId2 = CreateObjectHelper::makeUser($options);
+
         $this->user1  = new oldUser ('user1', '123123');
         $this->user2  = new oldUser ('user2', '123123');
 

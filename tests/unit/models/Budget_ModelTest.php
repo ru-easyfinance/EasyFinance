@@ -19,7 +19,7 @@ class Budget_ModelTest extends UnitTestCase
     function _start()
     {
         // Создаём пользователя
-        $this->userId = CreateObjectHelper::createUser();
+        $this->userId = CreateObjectHelper::makeUser();
 
         // Создаём категории
         $cat_options = array(
@@ -31,7 +31,8 @@ class Budget_ModelTest extends UnitTestCase
         $this->cat3 = CreateObjectHelper::createCategory($cat_options);
 
         // Создаём счёт
-        $this->accountId = CreateObjectHelper::createAccount(array('user_id'=>$this->userId));
+        $account = CreateObjectHelper::makeAccount(array('user_id'=>$this->userId));
+        $this->accountId = $account['account_id'];
     }
 
 

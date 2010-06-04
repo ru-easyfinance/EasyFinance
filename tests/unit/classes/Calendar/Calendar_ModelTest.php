@@ -28,7 +28,7 @@ class classes_Calendar_Calendar_ModelTest  extends UnitTestCase
             'user_new'   => 0,
 
         );
-        CreateObjectHelper::createUser($options);
+        CreateObjectHelper::makeUser($options);
     }
 
 
