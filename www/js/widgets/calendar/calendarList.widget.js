@@ -37,9 +37,16 @@ easyFinance.widgets.calendarList = function(){
                 $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
             }
         });
-        $('#per_tabl tr').live('dblclick',function(){
+
+        $('#per_tabl tr').live('click',function(){
             $(this).find('li.edit a').click();
         });
+
+        $('#per_tabl tr .cont').live('click', function(){
+            // #1349. do nothing!
+            return false;
+        });
+
         var element;
         $('#per_tabl tr .cont ul li.edit a').live('click',function(){
             element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];

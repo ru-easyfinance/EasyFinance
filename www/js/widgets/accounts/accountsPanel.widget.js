@@ -151,6 +151,11 @@ easyFinance.widgets.accountsPanel = function(){
             }
         });
 
+        $('.accounts li .cont').live('click', function(){
+            // #1349. do nothing!
+            return false;
+        });
+
         return this;
     }
 

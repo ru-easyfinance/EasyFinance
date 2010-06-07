@@ -84,18 +84,16 @@ width:25px;
 }
 #accountsJournal table td div.cont ul li{
     float: left;
-    margin: 9px 8px 0 0;
-    height: 12px;
+    margin: 3px 8px 0 0;
 }
 #accountsJournal table td div.cont ul li a{
     display: block;
     width: 13px;
-    height: 12px;
     text-indent: -999px;
     overflow: hidden;
 }
 #accountsJournal table td div.cont ul li.edit a{
-    width: 13px;
+    width: 15px;
 }
 #accountsJournal table td div.cont ul li.del a{
     width: 11px;
@@ -104,5 +102,6 @@ width:25px;
     margin-right: 0;
 }
 #accountsJournal table td div.cont ul li.add a{
-    width: 12px;
+    width: 14px;
 }
+

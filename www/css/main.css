@@ -1047,9 +1047,10 @@ table.tab1 tr{height: 20px}
  table.tab1#ev_tabl td{width: 32%}
  table.tab1#ev_tabl .chk {width:20px;}
 .act div.cont ul { display: block; }
+div.cont { cursor: default; }
 div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0;}
 div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-div.cont ul li { float: left; margin: 9px 8px 0 0; height: 12px; }
+div.cont ul li { float: left; margin: 9px 8px 0 0; height: 12px; cursor: pointer; }
 div.cont ul li a { display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden;  }
 div.cont ul li.edit a { width: 13px; }
 div.cont ul li.del a { width: 11px; }

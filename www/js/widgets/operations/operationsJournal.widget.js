@@ -558,10 +558,16 @@ easyFinance.widgets.operationsJournal = function(){
 
         $('#operations_list tr').live('click',function(event){
             if (event.target.type !== 'checkbox') {
+                // edit operation
                 $(this).find('li.edit a').click();
                 return false;
             }
         })
+
+        $('#operations_list .cont').live('click', function(){
+            // #1349. do nothing!
+            return false;
+        });
 
         $('#operations_list a').live('click', _editOperation);
 
