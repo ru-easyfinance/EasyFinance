@@ -14,17 +14,23 @@ class _resourcesComponents extends sfComponents
     {
         $userId = $this->getUser()->getUserRecord()->getId();
 
-        $_data = Doctrine::getTable('Account')
+        $accounts = Doctrine::getTable('Account')
             ->queryFindWithBalanceAndInitPayment($userId)
             ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
 
-        // @TODO это дерьмо считать не в цикле
         $data = array();
-        foreach ($_data as $k => $v) {
-            $data[$v['id']] = $_data[$k];
+        foreach ($accounts as $k => $v) {
+            $data[$v['id']] = $accounts[$k];
+        }
+
+        $ids = array_keys($data);
+        $reserves = Doctrine::getTable('Account')
+            ->queryCountReserves($ids)
+            ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+
+        foreach ($data as $k => $v) {
             if (!(10 <= $v['type']) and ($v['type'] <=15)) {
-                // SELECT sum(money) AS s FROM target_bill tb, target t WHERE t.id=tb.target_id AND tb.bill_id = ? AND t.done=0
-                $data[$v['id']]['reserve'] = (float) 666;
+                $data[$v['id']]['reserve'] = (float) $reserves[$v['id']]['reserve'];
             }
         }
 

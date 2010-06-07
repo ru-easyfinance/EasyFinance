@@ -55,4 +55,24 @@ class AccountTable extends Doctrine_Table
         return $q;
     }
 
+
+    /**
+     * Запрос для выборки зарезервированных средств
+     *
+     * @param  array $accountIds массив ID аккаунтов
+     * @return Doctrine_Query
+     */
+    public function queryCountReserves($accountIds)
+    {
+        $q = Doctrine_Query::create()
+            ->select("t.account_id, SUM(t.money) reserve")
+            ->from("TargetTransaction t INDEXBY t.account_id")
+            ->innerJoin("t.Target tg")
+            ->andWhere("tg.done = 0")
+            ->andWhereIn("t.account_id", $accountIds)
+            ->groupBy("t.account_id");
+
+        return $q;
+    }
+
 }
