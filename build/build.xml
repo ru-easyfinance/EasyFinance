@@ -33,7 +33,6 @@
         <param value="${project.git.rev}"/>
     </php>
 
-
     <!-- Создание директорий -->
     <echo>Prepare paths ...</echo>
     <phing phingfile="build/paths.target.xml" inheritAll="true" target="System paths prepare" />
@@ -62,9 +61,12 @@
                 <expandproperties />
             </filterchain>
         </copy>
-        <exec command="php ${project.basedir}/sf/symfony cc" checkreturn="true" />
-        <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes" checkreturn="true" passthru="true" />
+        <exec command="php ${project.basedir}/sf/symfony cc" dir="${project.basedir}/sf" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes" dir="${project.basedir}/sf" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony project:optimize api" dir="${project.basedir}/sf" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony project:permissions" dir="${project.basedir}/sf" checkreturn="true" />
 
+        <!-- Minify -->
         <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
     </target>
 
@@ -118,29 +120,21 @@
 
     <!-- DEPLOY: Копируем проект в отдельную директорию и перебрасываем симлинк -->
     <target name="deploy">
+
+        <!--Директории для выкатки -->
+        <delete dir="${project.path.deploy}/releases/tags/${strlowerpath}" includeemptydirs="true" verbose="false" failonerror="true" />
+        <mkdir dir="${project.path.deploy}/releases/tags/${strlowerpath}"/>
+
         <!-- Получаем текущее время -->
         <tstamp>
             <format property="build.time" pattern="%Y%m%d%H%I" />
         </tstamp>
 
         <!-- Копируем BASEDIR директорию в дирректорию для сборки -->
-        <copy todir="${project.path.deploy}/releases/tags/${strlowerpath}" >
-            <fileset dir=".">
-                <exclude name=".git/**" />
-                <exclude name="**/.git/**" /><!-- игнорирование субмодулей -->
-                <exclude name="**/web.api/dev.php" />
-                <exclude name="**/www/upload" />
-                <exclude name="**/shared/**" />
-                <exclude name="tmp/smarty/cache/%%**" />
-            </fileset>
-        </copy>
-
-        <exec command="if [ -h shared ]; then rm shared; fi" dir="${project.path.deploy}/releases/tags/${strlowerpath}" checkreturn="true" />
+        <exec command="tar --exclude-from ${project.basedir}/build/properties/deploy_exclude.txt -cf - . | (cd ${project.path.deploy}/releases/tags/${strlowerpath} &amp;&amp; tar -xpBf -)" dir="${project.basedir}" checkreturn="true" />
         <exec command="ln -s ${project.basedir}/shared ${project.path.deploy}/releases/tags/${strlowerpath}/shared" checkreturn="true" />
-
-        <exec command="if [ -h www/upload ]; then rm www/upload; fi" dir="${project.path.deploy}/releases/tags/${strlowerpath}" checkreturn="true" />
-        <exec command="ln -s ${project.basedir}/shared/uploaded ${project.path.deploy}/releases/tags/${strlowerpath}/www/upload" checkreturn="true" />
     </target>
+
 
     <!-- SWITCH: Переключаем ветку -->
     <target name="switch">
@@ -161,6 +155,7 @@
        </if>
     </target>
 
+
     <!-- PHPUNIT: Тесты -->
     <target name="phpunit" depends="build">
         <echo msg="PHP Unit..." />
@@ -175,7 +170,7 @@
         <if>
             <isset property="no-backup" />
             <then>
-                <echo msg="Dont create backup" />
+                <echo msg="Do not create backup" />
             </then>
             <else>
                 <tstamp>

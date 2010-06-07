@@ -94,7 +94,7 @@ easyFinance.widgets.calendarList = function(){
                 periodicList += '<tr id="ev_' + key + '" class="'+accept+'"><td class="chk"><input type="checkbox" value="" /></td>' +
                     '<td>' + $.datepicker.formatDate('dd.mm.yy',tempDate) + '</td>' +
                     '<td>' + shorter((easyFinance.models.category.getUserCategoryNameById(data[key].cat_id)||'Без категории'),25) + '</td>' +
-                    '<td class="money"><span style="background : 0; display : inline; width : auto; height : auto;" class="'+(_data[key].money > 0 ? 'sumGreen' : 'sumRed')+'">' + (formatCurrency(_data[key].money)+ '</span> ' +(easyFinance.models.accounts.getAccountCurrencyText(_data[key].account) || easyFinance.models.currency.getDefaultCurrencyText())) +
+                    '<td class="money"><span style="background : 0; display : inline; width : auto; height : auto;" class="'+(_data[key].money > 0 ? 'sumGreen' : 'sumRed')+'">' + (formatCurrency(_data[key].money)+ '</span> ' +(easyFinance.models.accounts.getAccountCurrencyText(_data[key].account_id) || easyFinance.models.currency.getDefaultCurrencyText())) +
                     '</td>' +
                     '<td><div class="cont" style="top: -17px"><ul style="right:0">' +
                         (accept == 'reject'? '<li class="accept"><a title="Подтвердить">Подтвердить</a></li>':'') +

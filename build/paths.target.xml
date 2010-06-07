@@ -1,95 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="System paths" default="minify">
+<project name="System paths" default="System paths prepare">
+
     <!-- Подготовка системных директорий-->
     <target name="System paths prepare">
 
-        <!--Директории для проекта -->
-        <if>
-            <not>
-                <available file="${project.path.deploy}/releases" type="dir" />
-            </not>
-            <then>
-                <mkdir dir="${project.path.deploy}/releases"/>
-            </then>
-        </if>
-        <if>
-            <not>
-                <available file="${project.path.deploy}/releases/tags" type="dir" />
-            </not>
-            <then>
-                <mkdir dir="${project.path.deploy}/releases/tags"/>
-            </then>
-        </if>
 
         <!--Директории для хранения временных файлов -->
-        <if>
-            <not>
-                <available file="${project.basedir}/tmp" type="dir" />
-            </not>
-            <then>
-                <mkdir dir="${project.basedir}/tmp"/>
-            </then>
-        </if>
-        <if>
-            <not>
-                <available file="${project.basedir}/tmp/smarty" type="dir" />
-            </not>
-            <then>
-                <mkdir dir="${project.basedir}/tmp/smarty"/>
-            </then>
-            <else>
-                <echo>Cleanup smarty cache ...</echo>
-                <delete>
-                    <fileset dir="${project.basedir}/tmp/smarty">
-                        <include name="*" />
-                    </fileset>
-                </delete>
-            </else>
-        </if>
+        <delete dir="${project.basedir}/tmp" includeemptydirs="true" verbose="false" failonerror="true" />
         <mkdir dir="${project.basedir}/tmp/smarty/cache" />
         <mkdir dir="${project.basedir}/tmp/smarty/views" />
-        <mkdir dir="${project.basedir}/build/logs" />
-        <if>
-            <not>
-                <available file="${project.basedir}/tmp/nginx_cache" type="dir" />
-            </not>
-            <then>
-                <mkdir dir="${project.basedir}/tmp/nginx_cache"/>
-                <exec command="chown -R ${project.user} ." dir="${project.basedir}/tmp/nginx_cache" />
-            </then>
-            <else>
-                <echo>Cleanup nginx cache ...</echo>
-                <delete>
-                    <fileset dir="${project.basedir}/tmp/nginx_cache">
-                        <include name="*" />
-                    </fileset>
-                </delete>
-            </else>
-        </if>
-
-        <!-- Скрипты должны быть исполняемыми -->
-        <echo>Making chmod on tmp dir's</echo>
-        <exec command="chmod 777 ./cache ./views" dir="${project.basedir}/tmp/smarty/" />
-
+        <mkdir dir="${project.basedir}/tmp/nginx_cache"/>
+        <!-- Права на tmp-->
+        <exec command="chmod -R 777 ./tmp" dir="${project.basedir}" />
 
         <!-- Проектный кеш (хранение файлового кеша)-->
-        <if>
-            <not>
-                <available file="${project.cache.dir}" type="dir" />
-            </not>
-            <then>
-                <mkdir dir="${project.cache.dir}"/>
-                <exec command="chown -R ${project.user} ." dir="${project.cache.dir}" />
-            </then>
-            <else>
-                <echo>Cleanup project cache ...</echo>
-                <delete>
-                    <fileset dir="${project.cache.dir}">
-                        <include name="*" />
-                    </fileset>
-                </delete>
-            </else>
-        </if>
+        <delete dir="${project.cache.dir}/tmp" includeemptydirs="true" verbose="true" failonerror="true" />
+        <mkdir dir="${project.cache.dir}"/>
+        <chmod file="${project.cache.dir}" mode="0777" failonerror="true" />
+
+        <!-- CI log -->
+        <mkdir dir="${project.basedir}/build/logs" />
+
+        <!-- Директории для Symfony -->
+        <mkdir dir="${project.basedir}/sf/cache"/>
+        <mkdir dir="${project.basedir}/sf/log"/>
+
 
         <!--Директории для хранения файлов между tags (например uploaded файлы)  -->
         <if>
@@ -120,26 +55,5 @@
             </then>
         </if>
 
-        <!-- Дирректории для sf modules -->
-        <if>
-            <not>
-                <available file="${project.basedir}/sf/cache/" type="dir" />
-            </not>
-            <then>
-                <echo>Make symfony cache dir</echo>
-                <mkdir dir="${project.basedir}/sf/cache/"/>
-                <chmod file="${project.basedir}/sf/cache/" mode="0777" />
-            </then>
-        </if>
-        <if>
-            <not>
-                <available file="${project.basedir}/sf/log/" type="dir" />
-            </not>
-            <then>
-                <echo>Make symfony logs dir</echo>
-                <mkdir dir="${project.basedir}/sf/log/"/>
-                <chmod file="${project.basedir}/sf/log/" mode="0777" />
-            </then>
-        </if>
     </target>
 </project>
