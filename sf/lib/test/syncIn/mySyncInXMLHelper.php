@@ -2,136 +2,153 @@
 
 class mySyncInXMLHelper
 {
-    protected $test, $_xmlTemplate = false;
-    public $_xml, $_xmlRecord;
+    protected static $xmlTemplate = "<request>\n    <recordset type=\"%s\" user=\"%d\">\n%s    </recordset>\n</request>\n";
+    protected static $recordTemplate = "        <record id=\"%s\" cid=\"%s\">\n%s        </record>\n";
+
+    protected $CID = 1;
+
+    protected $userId = null;
+    protected $model = '';
+    protected $modelName = '';
+    protected $records = array();
+
+    protected $inCollection = false;
 
 
-    public function __construct()
+    public function __construct($model, $userId)
     {
-    }
+        $this->model  = new $model;
+        $this->modelName = $model;
+        $this->userId = $userId;
 
-    /**
-     * Заполняет xml-представление объекта данными
-     *
-     * @param array $values
-     * @param array $attributes
-     * @see _xmlFillRecordWithValues
-     * @see _xmlFillRecordWithAttributes
-     * @return SimpleXMLElement
-     */
-    public function _xmlFillRecord($values = array(), $attributes = array(), SimpleXMLElement $record = null) {
-        $record = $this->_xmlFillRecordWithValues($values, $record);
-        $record = $this->_xmlFillRecordWithAttributes($attributes, $record);
-
-        return $record;
-    }
-
-
-    /**
-     * Заполнить/добавить данных в xml-представление объекта
-     *
-     * @param  array  $values Массив ключ->значение
-     * @return SimpleXMLElement
-     */
-    public function _xmlFillRecordWithValues($values = array(), SimpleXMLElement $record = null)
-    {
-        if ($record === null) {
-            $record = clone $this->_xmlRecord;
-        }
-
-        $values = array_merge(array(
-            'user_id'     => 1,
+        $this->model->fromArray(array(
             'type_id'     => 1,
             'currency_id' => 1,
-            'name'        => 'account',
-            'description' => 'Description',
+            'name'        => 'Счет',
+            'description' => 'Описание счета',
             'created_at'  => $this->_makeDate(-1000),
             'updated_at'  => $this->_makeDate(0),
             'deleted_at'  => '',
-        ), $values);
+        ));
+    }
 
-        foreach ($values as $k => $v) {
-            $k = (string)$k;
-            $record->$k = (string)$v;
+    /**
+     * Создать 1 строку
+     */
+    public function make($params = array())
+    {
+        $cid = $this->getCID();
+        $params['cid'] = $cid;
+        $this->addRecords(array(array_merge($params, $this->model->toArray(false))));
+
+        $id = '';
+        if (isset($params['id'])) {
+            $id = $params['id'];
+            unset($params['id']);
         }
 
-        return $record;
+        $fields = $this->createFields($params);
+
+        $record = sprintf(self::$recordTemplate, $id, $cid, $fields);
+
+        if ($this->inCollection) {
+            return $record;
+        }
+
+        return $this->decorate($record);
     }
 
 
     /**
-     * Устанавливает атрибуты в xml-представление объекта
+     * Создать набор стандартных счетов
      *
-     * @param  array  $values Массив ключ->значение
-     * @return SimpleXMLElement
+     * @param  int    $count
+     * @return string
      */
-    public function _xmlFillRecordWithAttributes($values = array(), SimpleXMLElement $record = null)
+    public function makeCollection($count = 1, $params = array())
     {
-        if ($record === null) {
-            $record = clone $this->_xmlRecord;
+        $this->inCollection = true;
+
+        $collection = '';
+        for ($i=0;$i<$count;$i++) {
+            $collection .= $this->make($params);
         }
 
-        $values = array_merge(array(
-            'id'  => '',
-            'cid' => '',
-        ), $values);
+        $this->inCollection = false;
 
-        foreach ($values as $k => $v) {
-            $record[$k] = $v;
-        }
-
-        return $record;
+        return $this->decorate($collection);
     }
 
 
     /**
-     * Добавляет в шаблон xml данные одной записи
      *
-     * @param SimpleXMLElement $record
-     * @return SimpleXMLElement
      */
-    public function _xmlAddRecord(SimpleXMLElement $record, SimpleXMLElement $xml = null)
+    protected function createFields($params = array())
     {
-        if ($xml === null) {
-            $xml = $this->_xml;
+        $params = array_merge($this->model->toArray(false), $params);
+        $fields = '';
+        foreach ($params as $tag => $value) {
+            if ($value) {
+                $fields .= sprintf("            <%s>%s</%s>\n", $tag, $value, $tag);
+            } else {
+                $fields .= sprintf("            <%s />\n", $tag);
+            }
         }
 
-        $node1 = dom_import_simplexml($xml);
-        $dom_sxe = dom_import_simplexml($record);
-        $node2 = $node1->ownerDocument->importNode($dom_sxe, true);
-        $parent = $node1->getElementsByTagName("recordset")->item(0);
-        $parent->appendChild($node2);
-
-        return simplexml_import_dom($node1);
+        return $fields;
     }
 
 
     /**
-     * Подготавливает кусочки XML строки из загруженного шаблона
      *
-     * @return void
      */
-    public function _xmlPrepare()
+    protected function addRecords($records)
     {
-        $this->_xml = clone $this->_xmlTemplate;
-
-        $this->_xmlRecord = clone $this->_xml->recordset[0]->record[0];
-        unset($this->_xml->recordset[0]->record[0]);
+        $this->records += (array) $records;
     }
 
 
     /**
-     * Достает шаблон XML
      *
-     * @return SimpleXMLElement|false
      */
-    public function _xmlLoadTemplate($path)
+    public function toArray()
     {
-        if (false === $this->_xmlTemplate) {
-            $this->_xmlTemplate = simplexml_load_file($path);
-        }
+        return $this->records;
+    }
 
-        return $this->_xmlTemplate;
+
+    public function reset()
+    {
+        $this->records = array();
+    }
+
+
+    protected function getCID()
+    {
+        $CID = $this->CID;
+        $this->CID++;
+        return $CID;
+    }
+
+
+    /**
+     *
+     */
+    public function decorate($recordSet = '')
+    {
+        return sprintf(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n%s",
+            sprintf(self::$xmlTemplate, $this->modelName, $this->userId , $recordSet)
+        );
+    }
+
+
+    /**
+     *
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
 

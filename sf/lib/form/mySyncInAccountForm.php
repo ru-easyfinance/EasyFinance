@@ -11,16 +11,20 @@ class mySyncInAccountForm extends BaseFormDoctrine
     public function configure()
     {
         $this->setValidators(array(
-            'user_id'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('User'))),
-            'type_id'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('AccountType'))),
-            'currency_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Currency'))),
-            'id'          => new sfValidatorPass(),
+            'type_id'     => new sfValidatorPass(),
+            'currency_id' => new sfValidatorPass(),
             'name'        => new sfValidatorString(array('max_length' => 255)),
             'description' => new sfValidatorString(array('max_length' => 255)),
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
         ));
+
+        if ($this->isNew()) {
+            $this->setValidator('user_id', new sfValidatorPass());
+        }
+
+        $this->validatorSchema->setOption('allow_extra_fields', true);
 
         $this->widgetSchema->setNameFormat('%s');
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

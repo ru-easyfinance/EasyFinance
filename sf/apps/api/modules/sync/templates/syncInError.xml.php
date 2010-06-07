@@ -1,3 +1,4 @@
 <error>
-    <message><?php echo $errMessage; ?></message>
+    <code><?php echo $error['code'] ?></code>
+    <message><?php echo $error['message'] ?></message>
 </error>

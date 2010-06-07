@@ -16,12 +16,8 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountEmptyPostError()
     {
-        $this
-            ->myXMLPost(null, 400)
-            ->with('response')->begin()
-                ->isValid()
-                ->checkElement('error message', 'No data were sent')
-            ->end();
+        $this->myXMLPost(null, 400);
+        $this->checkError('No data were sent');
     }
 
 
@@ -30,12 +26,8 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountEmptyXMLError()
     {
-        $this
-            ->myXMLPost($this->xmlHelper->_xml->asXML(), 400)
-            ->with('response')->begin()
-                ->isValid()
-                ->checkElement('error message', 'No objects were sent')
-            ->end();
+        $this->myXMLPost($this->getXMLHelper()->decorate(), 400);
+        $this->checkError('No objects were sent');
     }
 
 
@@ -44,73 +36,30 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountRecordsLimitError()
     {
-        $user = $this->helper->makeUser();
-
-        $xml = $this->xmlHelper->_xml;
         $this->browser->getContext(true);
+
         $this->assertNotNull(sfConfig::get('app_records_sync_limit'));
         $this->browser->setConfigValue('app_records_sync_limit', $max = 2);
-        for ($i=0;$i<$max+1; $i++) {
-            // TODO генерить в таком стиле $record = $this->xmlHelper->_xmlFillRecordset(3);
-            $record = $this->xmlHelper->_xmlFillRecord(array(
-                'user_id'     => $user->getId(),
-                'name'        => 'Test name № ' . $i,
-                'description' => 'Description № ' . $i,
-            ), array(
-                'id'  => $i+1,
-                'cid' => $i+1,
-            ));
 
-            $xml = $this->xmlHelper->_xmlAddRecord($record, $xml);
-        }
-
-        $this
-            ->myXMLPost($xml->asXML(), 400)
-            ->with('response')->begin()
-                ->isValid()
-                ->checkElement('error message', "More than 'limit' ({$max}) objects were sent")
-            ->end();
+        $xml = $this->getXMLHelper()->makeCollection($max+1);
+        $this->myXMLPost($xml, 400);
+        $this->checkError("More than 'limit' ({$max}) objects sent, " . $max + 1);
     }
 
 
     /**
-     * Принять валидный xml с парой объектов
+     * Принять валидный xml
      */
-    public function testPostAccount()
+    public function testPostAccountSingle()
     {
-        $user = $this->helper->makeUser();
-
-        $record = $this->xmlHelper->_xmlFillRecord(array(
-            'user_id'     => $user->getId(),
-            'name'        => 'Test valid account',
-        ),
-        $attr = array(
-            'id'  => 1,
-            'cid' => 1,
-        ));
-        $xml = $this->xmlHelper->_xmlAddRecord($record);
-
-        $record = $this->xmlHelper->_xmlFillRecord(array(
-            'user_id'     => $user->getId(),
-            'name'        => 'Test valid account #2',
-            'deleted_at'  => $this->_makeDate(0),
-        ), array(
-            'id'  => 2,
-            'cid' => 2,
-        ));
-        $xml = $this->xmlHelper->_xmlAddRecord($record, $xml);
+        $xml = $this->getXMLHelper()->make();
 
         $this
-            ->myXMLPost($xml->asXML(), 200)
+            ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->isValid()
-                ->checkContains('<resultset type="account">')
-                ->checkElement('resultset record')
-                ->checkElement('record[id]', 2)
-                ->checkElement('record[cid]', 2)
-                ->checkElement('record[success]', 2)
+                ->checkElement('resultset[type="account"] record[id][cid][success="true"]')
             ->end()
-            ->with('doctrine')->check('Account', null, 2);
+            ->with('doctrine')->check('Account', null, 1);
 
         $this->markTestIncomplete(
             'Доработать: проверка параметров сохраненного объекта.'
@@ -123,30 +72,89 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountReplace()
     {
-        $user = $this->helper->makeUser();
-        $account = $this->helper->makeAccount($user);
+        $account = $this->helper->makeAccount($this->_user);
 
-        $record = $this->xmlHelper->_xmlFillRecord(array(
-            'user_id'     => $user->getId(),
-            'name'        => 'Test valid account',
-        ),
-        $attr = array(
-            'id'  => $account->getId(),
-            'cid' => 1,
-        ));
-        $xml = $this->xmlHelper->_xmlAddRecord($record);
+        $xml = $this->getXMLHelper()->make(array('id' => $account->getId()));
 
         $this
-            ->myXMLPost($xml->asXML(), 200)
+            ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->isValid()
-                ->checkContains('<resultset type="account">')
-                ->checkElement('resultset record[id][success="true"][cid]', 1)
+                ->checkElement('resultset[type="account"] record[id][success="true"][cid]', 1)
                 ->checkElement(sprintf('record[id*="%d"]', $account->getId()))
                 // тут звездочка нужна? а слэшики?
                 // @see http://www.symfony-project.org/jobeet/1_4/Doctrine/en/09
             ->end()
             ->with('doctrine')->check('Account', null, 1);
+
+        $this->markTestIncomplete(
+            'Доработать: проверка параметров сохраненного объекта.'
+        );
+    }
+
+
+    /**
+     * Отвергать чужие записи
+     */
+    public function testPostAccountForeignUserRecord()
+    {
+        $user2 = $this->helper->makeUser();
+        $account = $this->helper->makeAccount($user2);
+
+        $xml = $this->getXMLHelper()->make(array('id' => $account->getId()));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="account"] record[id][success="false"][cid]', 1)
+                ->checkElement(sprintf('record[id*="%d"]', $account->getId()))
+            ->end();
+
+        $valid = $this->getXMLHelper()->toArray();
+        $this->checkRecordError($valid['0']['cid'], '[Invalid.] Foreign account');
+    }
+
+
+    /**
+     * Отвергать: Несуществующий тип (id) счета
+     */
+    public function testPostAccountTypeForeignKeyFail()
+    {
+        $id = Doctrine::getTable('AccountType')->createQuery('t')
+            ->select("MAX(t.account_type_id)")
+            ->execute(array(), Doctrine::HYDRATE_SINGLE_SCALAR) + 1;
+
+        $xml = $this->getXMLHelper()->make(array('type_id' => $id,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="account"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $valid = $this->getXMLHelper()->toArray();
+        $this->checkRecordError($valid['0']['cid'], '[Invalid.] No such account type');
+    }
+
+
+    /**
+     * Отвергать: Несуществующая валюта
+     */
+    public function testPostAccountCurrencyForeignKeyFail()
+    {
+        $id = Doctrine::getTable('Currency')->createQuery('t')
+            ->select("MAX(t.id)")
+            ->execute(array(), Doctrine::HYDRATE_SINGLE_SCALAR) + 1;
+
+        $xml = $this->getXMLHelper()->make(array('currency_id' => $id,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="account"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $valid = $this->getXMLHelper()->toArray();
+        $this->checkRecordError($valid['0']['cid'], '[Invalid.] No such currency');
     }
 
 
@@ -156,20 +164,59 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
     protected function _start()
     {
         parent::_start();
-        $this->xmlHelper->_xmlLoadTemplate(dirname(__FILE__) . '/xml/testSyncInAccounts.xml');
-        $this->xmlHelper->_xmlPrepare();
+
+        $this->_user = $this->helper->makeUser();
+        $this->xmlHelper = new mySyncInXMLHelper('account', $this->_user->getId());
     }
 
 
     /**
      * Отправляет XML
      *
-     * @param $code integer Код ответа http
+     * @param  int    $code     Код ответа сервера
+     * @param  string $xml      XML-строка
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
      */
     protected function myXMLPost($xml = null, $code = 200)
     {
         return $this
-            ->postAndCheck("sync", "syncInAccount", null === $xml ? array() : array('body' => $xml), "sync_in_account", $code);
+            ->postAndCheck("sync", "syncInAccount", null === $xml ? array() : array('body' => $xml), "sync_in_account", $code)
+            ->with('response')->begin()
+                ->isHeader("content-type", "/^text\/xml/")
+                ->isValid()
+            ->end();
+    }
+
+
+    /**
+     * Проверяет сообщения ошибок
+     *
+     * @param  string $message  Сообщение ошибки
+     * @param  string $code     Код ошибки
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
+     */
+    protected function checkError($message, $code = 0)
+    {
+        return $this->browser
+            ->with('response')->begin()
+                ->checkElement("error code", (string) $code)
+                ->checkElement("error message", $message)
+            ->end();
+    }
+
+
+    /**
+     * Проверяет ошибки обработки записей
+     *
+     * @param  int    $id       Идентификатор записи клиента
+     * @param  string $message  Сообщение ошибки   @see mySincInAccounForm
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
+     */
+    protected function checkRecordError($id, $message)
+    {
+        return $this->browser
+            ->with('response')
+            ->checkElement(sprintf('resultset record[cid*="%d"] error', $id), (string) $message);
     }
 
 }

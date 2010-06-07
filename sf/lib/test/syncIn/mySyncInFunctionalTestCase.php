@@ -13,14 +13,19 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
     {
         parent::_initialize();
 
-        $this->xmlHelper = new mySyncInXMLHelper();
-
         $this->browser->setTester('doctrine', 'sfTesterDoctrine');
     }
 
 
     /**
      * Выполняет POST-запрос и выполняет базовые проверки
+     *
+     * @param  string $module     Имя модуля
+     * @param  string $action     Имя ?экшена
+     * @param  array  $parameters Параметры запроса
+     * @param  mixed  $uri        Роутинг @see sfRoute
+     * @param  int    $code       Код ответа сервера
+     * @return sfTestFunctional   Возвращает браузер @see sfTestBrowser
      */
     public function postAndCheck($module, $action, $parameters = array(), $uri = null, $code = 200)
     {
@@ -49,6 +54,15 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
     protected function _makeDate($shift)
     {
         return date(DATE_ISO8601, time()+$shift);
+    }
+
+
+    /**
+     * @return mySyncInXMLHelper
+     */
+    protected function getXMLHelper()
+    {
+        return $this->xmlHelper;
     }
 
 
