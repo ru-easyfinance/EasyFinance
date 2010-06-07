@@ -1,0 +1,5 @@
+.git*
+sf/cache/*
+sf/log/*
+sf/data/sql/*
+shared

@@ -424,7 +424,7 @@ dl.bill_list dt { margin: 0 0 2px 11px; color: #383838; font-weight: bold;backgr
 dl.bill_list dt.open { margin: 0 0 2px 0px; color: #383838; font-weight: bold;background:#EEEEEE url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
 dl.bill_list dd { margin-bottom: 5px; display:none; cursor: pointer; }
 dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
-dl.bill_list dd ul li { margin-bottom: 4px; //margin-bottom: 2px; //zoom: 1; }
+dl.bill_list dd ul li { padding-bottom: 4px; //padding-bottom: 2px; //zoom: 1; }
 dl.bill_list dd ul li a { width: 135px; overflow: hidden; display: block; padding: 1px 3px 1px 5px; line-height: 15px; color: #363535; text-decoration: none; }
 dl.bill_list dd ul li a b { display: block; }
 /* dl.bill_list dd ul li a span { text-decoration: underline; } */
@@ -1047,9 +1047,10 @@ table.tab1 tr{height: 20px}
  table.tab1#ev_tabl td{width: 32%}
  table.tab1#ev_tabl .chk {width:20px;}
 .act div.cont ul { display: block; }
+div.cont { cursor: default; }
 div.cont ul { display: none; position: absolute; top: -4px; right: -69px; width: 59px; height: 31px; padding-left: 16px; background: url('/img/i/icons_control3.gif') no-repeat 0 0;}
 div.cont ul:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-div.cont ul li { float: left; margin: 9px 8px 0 0; height: 12px; }
+div.cont ul li { float: left; margin: 9px 8px 0 0; height: 12px; cursor: pointer; }
 div.cont ul li a { display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden;  }
 div.cont ul li.edit a { width: 13px; }
 div.cont ul li.del a { width: 11px; }

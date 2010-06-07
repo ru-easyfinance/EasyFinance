@@ -10,6 +10,7 @@ jquery/ui.datepicker.js
 jquery/ui.tabs.js
 jquery/ui.accordion.js
 jquery/jquery.qtip.js
+jquery/jquery.tooltip.js
 jquery/jquery.jgrowl.min.js
 calculator.js
 jquery/jquery.mousewheel.js

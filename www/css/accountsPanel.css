@@ -5,9 +5,10 @@
 }
 
 .bill_list li.account div.cont ul {
-    border: 0;
-    width: 79px;
-    background: url('/img/i/icons_menu_accounts.gif') no-repeat 0px 0px;
+	border: 0;
+	width: 84px;
+	background: url('/img/i/icons_menu_accounts.gif') no-repeat 0px 0px;
+    padding-left: 14px;
 }
 
 .bill_list li.account:hover div.cont ul {

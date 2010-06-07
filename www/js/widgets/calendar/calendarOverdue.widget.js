@@ -83,6 +83,11 @@ easyFinance.widgets.calendarOverdue = function(){
             return false;
         });
 
+        $(selector + ' .cont').live('click', function(){
+            // #1349. do nothing!
+            return false;
+        });
+
         $(document).bind("operationEdited", redraw);
         $(document).bind("operationsAccepted", redraw);
         $(document).bind("operationsDeleted", redraw);
