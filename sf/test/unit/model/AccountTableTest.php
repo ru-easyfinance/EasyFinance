@@ -42,24 +42,23 @@ class model_AccountTableTest extends myUnitTestCase
 
         /**
          * Фикстуры
-         * 1. Ok
-         * 2. Ok - но система нам вернет только один
-         * 3. Чужой пользователь
-         * 4. Другой тип счета
-         * 5. другая колонка
-         * 6. не амт
+         * 1. не амт
+         * 2. другая колонка
+         * 3. Другой тип счета
+         * 4. Чужой пользователь
+         * 5. Удален
+         * 6. Ok
          */
-        $a3 = $this->_makeAccount(3, $userA);
-        $a4 = $this->_makeAccount(4, $user, $type = Account::TYPE_CASH);
-        $a6 = $this->_makeAccount(6, $user, null, null, $value = 'not amt');
-        $a5 = $this->_makeAccount(5, $user, null, $column = 9999);
-        $a1 = $this->_makeAccount(1, $user);
-        $a2 = $this->_makeAccount(2, $user);
-
+        $this->_makeAccount(6, $user, null, null, $value = 'not amt');
+        $this->_makeAccount(5, $user, null, $column = 9999);
+        $this->_makeAccount(4, $user, $type = Account::TYPE_CASH);
+        $this->_makeAccount(3, $userA);
+        $this->_makeAccount(2, $user)->delete();
+        $a6 = $this->_makeAccount(1, $user);
 
         $result = Doctrine::getTable('Account')->queryFindLinkedWithAmt($user->getId())->execute();
         $this->assertEquals(1, $result->count());
-        $this->assertModels($a1, $result->getFirst());
+        $this->assertModels($a6, $result->getFirst());
     }
 
 }

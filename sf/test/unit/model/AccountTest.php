@@ -133,8 +133,7 @@ class model_AccountTest extends myUnitTestCase
         $account = $this->helper->makeAccount();
         $account->delete();
 
-        $account->refresh();
-        $this->assertEquals($account->getUpdatedAt(), $account->getCreatedAt());
+        $this->assertEquals($account->getUpdatedAt(), $account->getDeletedAt());
     }
 
 }
