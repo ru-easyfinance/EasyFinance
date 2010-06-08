@@ -69,44 +69,29 @@ class Account_Model
 
     }
 
-    /**
-     * Удаляет всё информацию по счёту из БД.
-     * @param array $args
-     */
-    public function delete($args)
-    {
-        $id = $args['id'];
-        $sql = "DELETE FROM accounts WHERE account_id=?";
-        $exec = $this->db->query($sql, $id);//удаляем запись из таблицы счетов
-        $sql = "DELETE FROM Acc_Values WHERE account_id=?";
-        $exec = $this->db->query($sql, $id);//удаляем все записи по счёту из таблицы доп. значений
-    }
-
-    public function loadAccountById($account_id)
-    {
-        $sql = "SELECT account_name as name, account_type_id as type, account_description as comment, account_currency_id as currency, account_id FROM
-            Acc_Object WHERE account_id=?";
-        $exec = $this->db->query($sql, $account_id);
-
-        $return = array();
-        $sql = "SELECT f.name as name, f.description as des, v.field_value FROM Acc_Values v, Acc_Fields f
-            WHERE v.field_id=f.account_type AND account_id=?";
-        $dop = $this->db->query($sql, $account_id);
-        foreach ($exec as $k1=>$v1){
-            $return[$k1] = $v1;
-        }
-        foreach ($dop as $k2=>$v2){
-            $return[0][$v2['name']] = $v2['field_value'];
-        }
-        return $return;
-
-    }
-
 
     public function getTypeByID($id = 0) {
         $sql = "SELECT account_type_id as id FROM accounts WHERE account_id = ?";
         $exec = $this->db->query($sql, $id);
         return $exec[0]['id'];
+    }
+
+
+    /**
+     * Удаляет всё информацию по счёту из БД.
+     * @param array $args
+     */
+    static public function delete($userId, $accountId)
+    {
+        $sql = "
+            UPDATE accounts
+            SET deleted_at=NOW(),
+                updated_at=NOW()
+            WHERE
+                    account_id = ?
+                AND user_id = ?";
+
+        Core::getInstance()->db->query($sql, $accountId, $userId);
     }
 
     /**
@@ -137,6 +122,19 @@ class Account_Model
         }
 
         return $accounts;
+    }
+
+
+    /**
+     * Найти счет по ID
+     *
+     * @param  int $accountId
+     * @return array
+     */
+    static public function findById($accountId)
+    {
+        $sql = "SELECT * FROM accounts WHERE account_id = ?";
+        return Core::getInstance()->db->selectRow($sql, $accountId);
     }
 
 

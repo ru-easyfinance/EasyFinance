@@ -90,4 +90,22 @@ class classes_Account_ModelTest  extends UnitTestCase
         $model = new Account_Model;
         $this->assertEquals(array(), $model->loadAllWithStat($account['user_id']));
     }
+
+
+    /**
+     * SoftDelete
+     */
+    public function testSoftDelete()
+    {
+        $account = CreateObjectHelper::makeAccount();
+
+        Account_Model::delete($account['user_id'], $account['account_id']);
+
+        $account = Account_Model::findById($account['account_id']);
+        $this->assertTrue((bool)$account['deleted_at'],
+            "Expected Account marked as deleted");
+        $this->assertEquals($account['deleted_at'], $account['updated_at'],
+            "Expected Account `deleted_at` equals `updated_at`");
+    }
+
 }

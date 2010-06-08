@@ -257,20 +257,20 @@ abstract class Account
     abstract function update ( $user, $param);
 
     /**
-     * Удаляет счёт из обеих используемых табличек.
+     * Удалить счёт
+     *
      * @param oldUser $user
-     * @param array $param
+     * @param array   $param
      */
-    public function delete( $user, $param)
+    public function delete(oldUser $user, $param)
     {
-        $this->model = new Account_Model();
         $fin = new Targets_Model();
         $noFinTarget = $fin->countTargetsOnAccount($param['id']);// если ноль значит удаляем
-        if ($noFinTarget > 0)
+        if ($noFinTarget > 0) {
             return 'cel';
+        }
 
-            $this->model->delete($param);
-            unset($this->model);
+        Account_Model::delete($user->getId(), $param['id']);
 
         return $this;
     }

@@ -124,4 +124,17 @@ class model_AccountTest extends myUnitTestCase
         $account->getAccountType()->delete();
     }
 
+
+    /**
+     * SoftDelete
+     */
+    public function testSoftDelete()
+    {
+        $account = $this->helper->makeAccount();
+        $account->delete();
+
+        $account->refresh();
+        $this->assertEquals($account->getUpdatedAt(), $account->getCreatedAt());
+    }
+
 }
