@@ -25,8 +25,6 @@
 #referrers
 #registration
 #tags
-#target
-#target_bill
 
 
 
@@ -229,6 +227,62 @@ SystemCategory:
   columns:
     id:   { type: integer(4),   notnull: true, unsigned: true, primary: true, autoincrement: true}
     name: { type: varchar(255), notnull: true}
+  options:
+    symfony:
+      form:   false
+      filter: false
+
+
+# Финансовые цели (3/18 - PART)
+Target:
+  tableName: target
+  columns:
+    id:          { type: integer, size: 255, notnull: true, unsigned: true, primary: true }
+    user_id:     { type: integer, size: 100, notnull: true, unsigned: true }
+    done:        { type: boolean, unsigned: true }
+  relations:
+    User:
+      local:        user_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      foreignAlias: Targets      # User->Targets
+      onDelete:     CASCADE      # При удалении пользователя удаляются все его цели
+  options:
+    symfony:
+      form:   false
+      filter: false
+
+
+# Виртуальный счет для финансовых целей / транзакции (5/13 - PART)
+TargetTransaction:
+  tableName: target_bill
+  columns:
+    id:         { type: integer, size: 255, notnull: true, unsigned: true, primary: true }
+    account_id: { type: integer, size: 255, notnull: true, unsigned: true, name: bill_id as account_id }
+    target_id:  { type: integer, size: 255, notnull: true, unsigned: true }
+    user_id:    { type: integer, size: 100, notnull: true, unsigned: true }
+    money:      { type: decimal, size: 10,  notnull: true, scale: 2}
+  relations:
+    Target:
+      local:        target_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      foreignAlias: Transactions       # Target->Transactions
+    Account:
+      local:        account_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      foreignAlias: TargetTransactions # Account->TargetTransactions
+    User:
+      local:        user_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      foreignAlias: TargetTransactions # User->TargetTransactions
+      onDelete:     CASCADE            # При удалении пользователя удаляется все
   options:
     symfony:
       form:   false
