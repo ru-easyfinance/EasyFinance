@@ -45,6 +45,9 @@ class ProjectConfiguration extends sfProjectConfiguration
         $manager->setAttribute(Doctrine_Core::ATTR_DEFAULT_TABLE_CHARSET, 'utf8');
         $manager->setAttribute(Doctrine_Core::ATTR_DEFAULT_TABLE_COLLATE, 'utf8_general_ci');
         $manager->setAttribute(Doctrine_Core::ATTR_DEFAULT_TABLE_TYPE,    'INNODB');
+
+        // SoftDelete
+        $manager->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
     }
 
 }

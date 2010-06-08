@@ -7,6 +7,8 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
  */
 class model_myBaseSyncTableTest extends myUnitTestCase
 {
+    protected $app = 'api';
+
     /**
      * Создать дату с указанным смещением в секундах от `сегодня`
      *

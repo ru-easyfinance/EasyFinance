@@ -34,4 +34,17 @@ class apiConfiguration extends sfApplicationConfiguration
 
         $this->enablePlugins($plugins);
     }
+
+
+    /**
+     * Настройки Doctrine
+     */
+    public function configureDoctrine(Doctrine_Manager $manager)
+    {
+        parent::configureDoctrine($manager);
+
+        // Отключить SoftDelete
+        $manager->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, false);
+    }
+
 }
