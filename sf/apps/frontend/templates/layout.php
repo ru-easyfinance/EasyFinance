@@ -58,6 +58,7 @@
             var res = <?php echo json_encode($_resTemplate); // тут был $res из шаблона ?>
         </script>
         <?php include_component('_resources', 'accounts', array()) ?>
+        <?php include_component('_resources', 'currencies', array()) ?>
     </head>
 
     <body id="p_index">
