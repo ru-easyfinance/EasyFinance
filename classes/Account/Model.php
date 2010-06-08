@@ -71,7 +71,7 @@ class Account_Model
 
 
     public function getTypeByID($id = 0) {
-        $sql = "SELECT account_type_id as id FROM accounts WHERE account_id = ?";
+        $sql = "SELECT account_type_id as id FROM accounts WHERE account_id = ? LIMIT 1";
         $exec = $this->db->query($sql, $id);
         return $exec[0]['id'];
     }
@@ -89,7 +89,8 @@ class Account_Model
                 updated_at=NOW()
             WHERE
                     account_id = ?
-                AND user_id = ?";
+                AND user_id = ?
+            LIMIT 1";
 
         Core::getInstance()->db->query($sql, $accountId, $userId);
     }
@@ -133,7 +134,7 @@ class Account_Model
      */
     static public function findById($accountId)
     {
-        $sql = "SELECT * FROM accounts WHERE account_id = ?";
+        $sql = "SELECT * FROM accounts WHERE account_id = ? LIMIT 1";
         return Core::getInstance()->db->selectRow($sql, $accountId);
     }
 
