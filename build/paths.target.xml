@@ -4,17 +4,16 @@
     <!-- Подготовка системных директорий-->
     <target name="System paths prepare">
 
-
         <!--Директории для хранения временных файлов -->
-        <delete dir="${project.basedir}/tmp" includeemptydirs="true" verbose="false" failonerror="true" />
+        <delete dir="${project.basedir}/tmp" includeemptydirs="true" quiet="true" />
         <mkdir dir="${project.basedir}/tmp/smarty/cache" />
         <mkdir dir="${project.basedir}/tmp/smarty/views" />
         <mkdir dir="${project.basedir}/tmp/nginx_cache"/>
         <!-- Права на tmp-->
-        <exec command="chmod -R 777 ./tmp" dir="${project.basedir}" />
+        <exec command="chmod -R 777 ./tmp" dir="${project.basedir}" checkreturn="true" />
 
         <!-- Проектный кеш (хранение файлового кеша)-->
-        <delete dir="${project.cache.dir}/tmp" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir="${project.cache.dir}/tmp" includeemptydirs="true" quiet="true" />
         <mkdir dir="${project.cache.dir}"/>
         <chmod file="${project.cache.dir}" mode="0777" failonerror="true" />
 
