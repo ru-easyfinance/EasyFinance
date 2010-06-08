@@ -135,17 +135,46 @@ function getCursorPositionFromInput (elem) {
 /**
  * Преобразует число в наш формат
  * @param {Number || String} num
+ * @param {Boolean} hideCents - скрывать ненулевые копейки или нет
+ * @param {Boolean} decorate - раскрашивать с помощью классов или нет
  * @return {String}
  */
-function formatCurrency(num) {
+function formatCurrency(num, hideCents, decorate) {
+    if (typeof hideCents === undefined) {
+        hideCents = false;
+    }
+
+    if (typeof decorate === undefined) {
+        decorate = false;
+    }
+
+    var zeroCents = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     try {
         if (isNaN(num)) {
-            return "0.00";
+            return "0" + zeroCents;
         }
-        var sign = new Number(num);
-        return roundToCents(sign).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+
+        var amount = new Number(num);
+
+        // разбиваем число на компоненты
+        var abs = Math.abs(amount);
+        var whole = Math.floor(abs);
+        var cents = Math.floor((abs - whole).toFixed(2) * 100);
+
+        var strSign = amount < 0 ? '-' : '';
+
+        var strCents = "";
+        if (!hideCents) {
+            if (cents == 0) {
+                strCents = zeroCents;
+            } else {
+                strCents = ((cents < 10) ? ".0" : ".") + cents.toString();
+            }
+        }
+
+        return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
     }catch(e){
-        return "0.00"
+        return "0" + zeroCents;
     }
 }
 

@@ -136,7 +136,7 @@ easyFinance.widgets.accountsPanel = function(){
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
             str = str + '<span>'+shorter(data[key]['name'], 20)+'</span><br>';
             str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
-                + formatCurrency(data[key]['totalBalance']) + '</span>&nbsp;';
+                + formatCurrency(data[key]['totalBalance'], true) + '</span>&nbsp;';
             str = str + _model.getAccountCurrencyText(data[key]['id']) + '</span></a>';
 
             str = str + '<div class="cont">'
@@ -192,9 +192,9 @@ easyFinance.widgets.accountsPanel = function(){
         i = 0;
         for(key in val) {
             i++;
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key], true)+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total, true)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
 
