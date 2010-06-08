@@ -77,18 +77,17 @@
 
 .budget#budget .list .list table td {
     font-size: 11px;
-    padding: 7px 0 5px 0;
+    padding: 3px 0 2px 0;
     position: relative
 }
 
 .budget#budget .list .list table td.w1 {
-    padding-left: 11px;
-    width: 190px;
+    padding-left: 2px;
+    width: 160px;
 }
 
 .budget#budget .list .list table td.w2 {
-    width: 77px;
-    text-align: right;
+    width: 107px;
 }
 
 .budget#budget .list .list table td.w2 span {

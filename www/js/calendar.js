@@ -12,7 +12,7 @@ $(window).load(function(){
 
     easyFinance.models.calendarCache.init(res.calendar.calendar)
     easyFinance.widgets.calendarList.init();
-     easyFinance.widgets.calendar.init();
+    easyFinance.widgets.calendar.init();
     easyFinance.models.calendarCache.reloadWidgets();
 
     // показываем просроченные операции

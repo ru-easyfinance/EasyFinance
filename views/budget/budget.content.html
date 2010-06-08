@@ -11,12 +11,12 @@
     <div id="budget" class="inside budget">
         <div class="addbudget"><a href="#master" id="btnBudgetWizard" class="efTooltip" title="Создать новый или отредактировать уже существующий бюджет">Мастер создания и редактирования бюджета</a></div>
         <div class="budget datebar">
-            <ul class="month_cal">
-                <li title="Переход на предыдущий год" class="y_prev"><a></a></li>
-                <li title="Переход на предыдущий месяц" class="m_prev"><a></a></li>
-                <li title="Переход на текущий месяц" class="cur"></li>
-                <li title="Переход на следующий месяц" class="m_next"><a></a></li>
-                <li title="Переход на следующий год" class="y_next"><a></a></li>
+            <ul id="budgetMonthPicker" class="month_cal">
+                <li class="y_prev" title="Переход на предыдущий год"><a></a></li>
+                <li class="m_prev" title="Переход на предыдущий месяц"><a></a></li>
+                <li class="cur" title="Переход на текущий месяц"><a></a></li>
+                <li class="m_next" title="Переход на следующий месяц"><a></a></li>
+                <li class="y_next" title="Переход на следующий год"><a></a></li>
             </ul>
         </div>
         <div class="budget info">
@@ -29,11 +29,17 @@
                         <td class="w1" class="efTooltip" title="Категория, по которой будет учитываться бюджет">Категория</td>
                         <td class="w2" class="efTooltip" title="Сумма, выделенная в бюджете на эту категорию">План, руб.</td>
                         <td class="w3" class="efTooltip" title="Риска в линии времени отображает позицию текущей даты в выбранном периоде. Зелёная полоска сигнализирует, что вы укладывайтесь в бюджет, а красная - что с текущим темпом трат, вы можете не уложиться в планируемую сумму">Факт, руб.</td>
-                        <!-- <td class="w4">Срав., руб.</td> -->
-                        <td class="w5" class="efTooltip" title="Остаток - это разница между планом и фактом">Остаток, руб.</td>
-                        <td class="w6" class="efTooltip" title=""></td>
+                        <td class="w4">Срав., руб.</td>
+                        <td class="w5" class="efTooltip" title="">Факт, руб.</td>
+                        <td class="w6" class="efTooltip" title="Разница между планом и фактом">Разница, руб.</td>
                     </tr>
                 </table>
+            </div>
+            <div class="timeline" style="position: relative; left: 160px; height: 20px;">
+                <div style="position: absolute; left: 0px; width: 20px;">1</div>
+                <div style="position: absolute; left: 90px; width: 60px;">31 Июн</div>
+                <div style="position: relative; left: 10px; top: 7px; width: 70px; height: 1px; background-color: rgb(170, 170, 170);"></div>
+                <div id="budgetTimeLine" class="line hidden" style="position: absolute; z-index: 2000; left: 20px; width: 1px; height: 230px; background-color: #AAAAAA;"></div>
             </div>
             <div class="list body">
             </div>
