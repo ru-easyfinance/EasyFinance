@@ -24,6 +24,36 @@ abstract class _Core_Controller
     protected $request = null;
 
     /**
+     * Res
+     */
+    private $_res = array();
+
+
+    /**
+     * Получить RES
+     *
+     * @return array
+     */
+    public function getRes()
+    {
+        return $this->_res;
+    }
+
+
+    /**
+     * Добавить значение в RES
+     *
+     * @param  string $name
+     * @param  mixed  $value
+     * @return void
+     */
+    public function addToRes($name, $value)
+    {
+        $this->_res[$name] = $value;
+    }
+
+
+    /**
      * Конструктор. Содержит инициализацию общих для
      * всех контроллеров свойств и обьектов.
      *
@@ -132,9 +162,8 @@ abstract class _Core_Controller
 
         $user = Core::getInstance()->user;
 
-        $res = array(
-            'errors' => Core::getInstance()->errors //@TODO Удалить потом
-        );
+        $this->addToRes('errors', Core::getInstance()->errors); //@TODO Удалить потом
+        $res = $this->getRes();
 
         if( isset($_SESSION['resultMessage']) )
         {
