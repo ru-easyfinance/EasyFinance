@@ -407,7 +407,7 @@ class oldUser
             , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
             FROM accounts a
             LEFT JOIN account_types t ON t.account_type_id = a.account_type_id
-            WHERE a.user_id=? ORDER BY o_count DESC";
+            WHERE a.user_id=? AND a.deleted_at IS NULL ORDER BY o_count DESC";
         $accounts = $this->db->select($sql, $this->getId());
 
 
