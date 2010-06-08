@@ -134,48 +134,47 @@ function getCursorPositionFromInput (elem) {
 
 /**
  * Преобразует число в наш формат
+ * по умолчанию выводит число в виде n nnn nnn.nn
  * @param {Number || String} num
- * @param {Boolean} hideCents - скрывать ненулевые копейки или нет
- * @param {Boolean} decorate - раскрашивать с помощью классов или нет
+ * [@param {Boolean} hideCents] - скрывать ненулевые копейки или нет
+ * [@param {Boolean} centsSpacers] - выводить вместо скрытых копеек пробелы или нет
  * @return {String}
  */
-function formatCurrency(num, hideCents, decorate) {
+function formatCurrency(num, hideCents, centsSpacers) {
     if (typeof hideCents === undefined) {
         hideCents = false;
     }
 
-    if (typeof decorate === undefined) {
-        decorate = false;
+    if (typeof spaceCents === undefined) {
+        centsSpacers = false;
     }
 
+    if (isNaN(num)) {
+        num = 0;
+    }
+
+    var amount = new Number(num);
+
+    // разбиваем число на компоненты
+    var abs = Math.abs(amount);
+    var whole = Math.floor(abs);
+    var cents = Math.floor((abs - whole).toFixed(2) * 100);
     var zeroCents = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    try {
-        if (isNaN(num)) {
-            return "0" + zeroCents;
-        }
 
-        var amount = new Number(num);
+    var strSign = amount < 0 ? '-' : '';
 
-        // разбиваем число на компоненты
-        var abs = Math.abs(amount);
-        var whole = Math.floor(abs);
-        var cents = Math.floor((abs - whole).toFixed(2) * 100);
-
-        var strSign = amount < 0 ? '-' : '';
-
-        var strCents = "";
-        if (!hideCents) {
-            if (cents == 0) {
+    var strCents = "";
+    if (!hideCents) {
+        if (cents == 0) {
+            if (centsSpacers) {
                 strCents = zeroCents;
-            } else {
-                strCents = ((cents < 10) ? ".0" : ".") + cents.toString();
             }
+        } else {
+            strCents = ((cents < 10) ? ".0" : ".") + cents.toString();
         }
-
-        return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
-    }catch(e){
-        return "0" + zeroCents;
     }
+
+    return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
 }
 
 // округляем число до двух знаков после запятой

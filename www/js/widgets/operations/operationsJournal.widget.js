@@ -162,7 +162,7 @@ easyFinance.widgets.operationsJournal = function(){
                     prevMoney = money;
                 }
             }
-            strMoney = formatCurrency(money);
+            strMoney = formatCurrency(money, false, true);
 
             tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+strMoney+'&nbsp;</b></span></td>'
 
@@ -186,10 +186,10 @@ easyFinance.widgets.operationsJournal = function(){
         pageTotal = Math.round(pageTotal*100)/100;
         if (_account != '' && _account != "undefined") {
             $('#lblOperationsJournalAccountBalance')
-                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account)) + ' ' + _modelAccounts.getAccountCurrency(_account).text);//.show();
+                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text);//.show();
         }
 
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
+        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal, false, false) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
 
         if (pageTotal >= 0) {
             $('#lblOperationsJournalSum').addClass('sumGreen');
