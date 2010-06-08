@@ -204,12 +204,6 @@ abstract class _Core_Controller
         $accountModel = new Account_Model;
         $accounts = $accountModel->loadAllWithStat($user->getId());
 
-        foreach ($accounts as $accountItem) {
-            if (isset($accountItem['binding'])) {
-                $binding = $accountItem['id'];
-            }
-        }
-
 
         //Подготавливаем Часто используемые счета
         $oftenAccounts = array();
@@ -278,12 +272,6 @@ abstract class _Core_Controller
          */
         $res = array_merge($res, array(
             'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
-            'profile'   => array(
-                'integration'=>array(
-                    'email' => Core::getInstance()->user->getUserProps('user_service_mail'),
-                    'account' => isset($binding)?$binding:'',
-                )
-            ),
             'tags' => $user->getUserTags(),
             'cloud' => Core::getInstance()->user->getUserTags(true),
             'calendar' => array(

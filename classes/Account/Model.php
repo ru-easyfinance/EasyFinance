@@ -264,4 +264,31 @@ class Account_Model
             return false;
         }
     }
+
+
+    /**
+     * Найти счет пользователя привязанный к AMT
+     *
+     * @param  int $userId
+     * @return int
+     */
+    static public function findBoundWithAmt($userId)
+    {
+        $sql = "
+            SELECT a.account_id
+            FROM accounts AS a
+                INNER JOIN Acc_Values AS v ON (v.account_id = a.account_id)
+            WHERE
+                    a.deleted_at IS NULL
+                AND a.user_id=?
+                AND a.account_type_id=?
+                AND v.field_id=?
+            LIMIT 1
+        ";
+        return (int) Core::getInstance()->db->selectCell($sql,
+            $userId,
+            Account_Collection::ACCOUNT_TYPE_DEBETCARD,
+            Account::FIELD_BINDING);
+    }
+
 }
