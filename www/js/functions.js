@@ -159,6 +159,11 @@ function formatCurrency(num, hideCents, centsSpacers) {
     var abs = Math.abs(amount);
     var whole = Math.floor(abs);
     var cents = Math.floor((abs - whole).toFixed(2) * 100);
+    if (cents == 100) {
+        // когда округляем числа вида 13.999
+        cents = 0;
+        whole = whole + 1;
+    }
     var zeroCents = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
     var strSign = amount < 0 ? '-' : '';
