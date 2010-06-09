@@ -211,16 +211,13 @@ SourceOperation:
 # Категории (100% - OK)
 Category:
   tableName: category
-  actAs:
-    Timestampable:
-      created: { name: dt_create }
-      updated: { name: dt_update }
+  actAs: [Timestampable]
   columns:
-    id:         { name: cat_id as id,                  type: integer(4), notnull: true, primary: true, autoincrement: true}
-    parent_id:  { name: cat_parent as parent_id,       type: integer(4), notnull: true, default: 0 }
-    root_id:    { name: system_category_id as root_id, type: integer(4), notnull: true, default: 0}
-    user_id:    {                                      type: integer(4), notnull: true, unsigned: true}
-    name:       { name: cat_name as name,              type: varchar(255), notnull: true}
+    id:         { name: cat_id as id,                    type: integer(4), notnull: true, primary: true, autoincrement: true}
+    parent_id:  { name: cat_parent as parent_id,         type: integer(4), notnull: true, default: 0 }
+    system_id:  { name: system_category_id as system_id, type: integer(4), notnull: true, default: 0}
+    user_id:    {                                        type: integer(4), notnull: true, unsigned: true}
+    name:       { name: cat_name as name,                type: varchar(255), notnull: true}
     type:       { type: integer(1), notnull: true, default: 0}
     cat_active: { type: integer(4), notnull: true, default: 1}
     visible:    { type: integer(1), notnull: true, default: 1}
@@ -232,5 +229,3 @@ Category:
       type: one
       foreignType: many
       autoComplete: false         # User ничего не узнает
-  indexes:
-    user_id:    { fields: [user_id, visible] }
