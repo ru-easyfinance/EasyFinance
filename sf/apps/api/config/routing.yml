@@ -14,3 +14,11 @@ sync_in_account:
   params:  { module: sync, action: syncInAccount, sf_format: xml }
   requirements:
     sf_method: post
+
+# Sync(In): Принять набор категорий
+sync_in_category:
+  url: /post/category.:sf_format
+  class:   sfRequestRoute
+  params:  { module: sync, action: syncInCategory, sf_format: xml }
+  requirements:
+    sf_method: post
