@@ -5,7 +5,7 @@ require_once dirname(__FILE__).'/../../../bootstrap/all.php';
 /**
  * Синхронизация: получить список объектов
  */
-class api_sync_InTest extends mySyncInFunctionalTestCase
+class api_sync_InAccountTest extends mySyncInFunctionalTestCase
 {
     protected $app = 'api';
 
