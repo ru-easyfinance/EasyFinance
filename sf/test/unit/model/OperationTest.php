@@ -42,19 +42,7 @@ class model_OperationTest extends myUnitTestCase
             'category_id' => $this->helper->makeCategory($user)->getId(),
             'amount'      => 1234.56,
         );
-        $op = new Operation;
-        $op->fromArray($data, false);
-        $expectedData = array_intersect_key($op->toArray(false), $data);
-        $this->assertEquals($data, $expectedData, "Alias column mapping");
-
-        $op->save();
-        $this->assertTrue((bool)$op->getId());
-        // Time
-        $date = date('Y-m-d H:i:s');
-        $this->assertEquals($date, $op->getCreatedAt(), 'CreatedAt');
-        $this->assertEquals($date, $op->getUpdatedAt(), 'UpdatedAt');
-
-        $this->assertEquals(1, $this->queryFind('Operation', $data)->count());
+        $this->checkModelDeclaration('Operation', $data, $isTimestampable = true);
     }
 
 

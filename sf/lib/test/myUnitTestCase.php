@@ -24,4 +24,35 @@ abstract class myUnitTestCase extends sfPHPUnitTestCase
         return new myTestObjectHelper;
     }
 
+
+    /**
+     * Создание объекта, алиасы
+     *
+     * @param  string $model           - Название класса модели
+     * @param  array  $props           - Массив свойств для инициализации объекта
+     * @param  bool   $isTimestampable
+     * @return void
+     */
+    public function checkModelDeclaration($model, array $props, $isTimestampable = false)
+    {
+        $ob = new $model;
+        $ob->fromArray($props, false);
+
+        $expectedData = array_intersect_key($ob->toArray(false), $props);
+        $this->assertEquals($props, $expectedData, "[{$model}] Alias column mapping");
+
+        $date = date('Y-m-d H:i:s');
+        $ob->save();
+        $this->assertTrue((bool)$ob->getId());
+
+        // Time
+        if ($isTimestampable) {
+            $this->assertEquals($date, $ob->getCreatedAt(), '[{$model}] CreatedAt');
+            $this->assertEquals($date, $ob->getUpdatedAt(), '[{$model}] UpdatedAt');
+        }
+
+        $this->assertEquals(1, $this->queryFind($model, $props)->count(),
+            "[{$model}] Expected object saved properly");
+    }
+
 }

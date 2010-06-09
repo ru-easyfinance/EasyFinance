@@ -41,19 +41,7 @@ class model_AccountTest extends myUnitTestCase
             'currency_id' => 1,
             'description' => 'Описание счета',
         );
-        $acc = new Account;
-        $acc->fromArray($data, false);
-        $expectedData = array_intersect_key($acc->toArray(false), $data);
-        $this->assertEquals($data, $expectedData, "Alias column mapping");
-
-        $acc->save();
-        $this->assertTrue((bool)$acc->getId());
-        // Time
-        $date = date('Y-m-d H:i:s');
-        $this->assertEquals($date, $acc->getCreatedAt(), 'CreatedAt');
-        $this->assertEquals($date, $acc->getUpdatedAt(), 'UpdatedAt');
-
-        $this->assertEquals(1, $this->queryFind('Account', $data)->count());
+        $this->checkModelDeclaration('Account', $data, $isTimestampable = true);
     }
 
 
