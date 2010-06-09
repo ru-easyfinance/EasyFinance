@@ -3,14 +3,20 @@ easyFinance.widgets.budget = function(data){
 
     var _model = data;
 
+    var $budgetBody = $('#budget .list .body');
+
     $('div.budget.list div.head tr').html(
         "<td class='w1 '>Категория</td>"
         + "<td class='w2 '>Состояние</td>"
         + "<td class='w3 '>План, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
-        + "<td class='w4 '>Факт, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
-        + "<td class='w5 '>Разница, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
-        + "<td class='w6'></td>"
+        + "<td class='w5 '>Факт, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
+        + "<td class='w6 '>Разница, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
     );
+
+    var _currentDate = new Date();
+    var date = new Date();
+
+    _updateTimeLine();
 
     // #1388. обновляем данные после добавления операций
     $(document).bind('accountsLoaded', function() { reload(_currentDate) });
@@ -19,8 +25,6 @@ easyFinance.widgets.budget = function(data){
         _model = data;
     }
 
-    var _currentDate = new Date();
-
     /**
      * Перегружает виджет на заданной дате
      * @param date {date}
@@ -28,9 +32,8 @@ easyFinance.widgets.budget = function(data){
     function reload(date){
         _model.reload(date, function() {
             _currentDate = date;
-            _printDate();
             _printInfo();
-            $('#budget .list.budget .body').html(printBudget());
+            printBudget();
         });
     }
 
@@ -77,8 +80,8 @@ easyFinance.widgets.budget = function(data){
     ///////////////////////////////////////////////////////////////////////////
     var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
     var _data;
-    var date = new Date();
-    var dateprc;
+
+    var elapsedPercent;
 
     function _getMonthDays(d){
         var m = d.getMonth();
@@ -121,20 +124,16 @@ easyFinance.widgets.budget = function(data){
                     var b_color;
 
                     if (type == '1'){ // WTF? wipe out
-                        b_color = (dateprc > drainprc) ? 'red' : 'green';
+                        b_color = (elapsedPercent > drainprc) ? 'red' : 'green';
                     }else{
-                        b_color = (dateprc < drainprc)?'red' : 'green';
+                        b_color = (elapsedPercent < drainprc)?'red' : 'green';
                     }
-                    var cls = !parentId?'parent open':'child';
+                    var cls = !parentId ? 'parent open':'child';
                     if (cls == 'parent open'){
                         if (!temp.xhtml){
                             cls = 'nochild';
                         }
                     }
-
-                    var amountStr = (amount > 0) ?
-                            formatCurrency(amount, true, false) :
-                            (cls != 'parent open' ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0');
 
                     var params = {
                         id: catId,
@@ -142,20 +141,14 @@ easyFinance.widgets.budget = function(data){
                         parent: parentId,
                         cls: cls,
                         cat: catName,
-                        plan: amountStr,
-                        drain: drainprc,
-                        date: dateprc
+                        plan: amount,
+                        fact: money,
+                        diff: Math.abs(Math.abs(amount)-Math.abs(money)),
+                        drain: drainprc
                     };
-// @TODO: replace with _buildTableRow(params)
-                    dhtml += '<tr id="' + catId + '" type="' + prefix + '" parent="' + parentId + '" class="' + cls + '"><td class="w1"><a>' +
-                        shorter(catName, 20) + '</a></td><td class="w2"><div class="cont"><span>' +
-                        amountStr+'</span><input type="text" value="'+
-                        formatCurrency(amount, true, false)+'"/></div></td><td class="w3">'
-                            + _buildIndicatorString(b_color, drainprc, dateprc) +
-                        '</td><td class="w5 '+ ((Math.abs(amount) < Math.abs(money))?(type == 1 ? 'sumGreen' : 'sumRed') : '') +'">' + ((type == 1) ? '' : '-') +
-                        formatCurrency(Math.abs(Math.abs(amount)-Math.abs(money)), true, false) + '</td><td class="w6">' +
-                        ((cls == 'nochild'||cls == 'child') ? '<div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div>':'') +
-                        '</td></tr>';
+
+                    dhtml += _buildTableRow(params);
+
                     //////////////////////
                     dhtml += temp.xhtml || '';
                 }
@@ -168,66 +161,104 @@ easyFinance.widgets.budget = function(data){
 
     function _buildTableRow(params) {
         var color;
+        var diff = 0;
+        var diffClass = '';
+        var strPlan = '';
 
+        params.plan = parseInt(params.plan);
+        params.fact = parseInt(params.fact);
+        diff = params.plan - params.fact;
+
+        // определяем цвет ползунков
         if (params.type == "p") {
-            color = (params.date > params.drain) ? 'red' : 'green';
+            // для доходов
+            if (elapsedPercent < params.drain) {
+                color = 'green';
+            } else {
+                color = 'red';
+            }
+
+            // при превышении доходов
+            if (elapsedPercent < params.drain) {
+                diffClass = 'sumGreen';
+            }
         } else {
-            color = (params.date < params.drain) ? 'red' : 'green';
+            // для расходов
+            if (elapsedPercent > params.drain) {
+                color = 'green';
+            } else {
+                color = 'red';
+            }
+
+            // при превышении расходов
+            if (elapsedPercent < params.drain) {
+                diffClass = 'sumRed';
+            }
         }
 
-        return '<tr id="' + params.id + '" type="' + params.type + '" class="' + params.cls + '">' +
-                    '<td class="w1">' +
-                        '<a>' + shorter(params.cat, 20) + '</a>'
-                    + '</td>' +
-                    '<td class="w2">' +
-                        _buildIndicatorString(color, params.drain, params.date)
-                    + '</td>' +
-                    '<td class="w3">' +
-                        '<div class="cont">' +
-                            '<span>' + params.plan + '<span>' +
-                        '</div>'
-                    + '</td>' +
-                    '<td class="w5">' +
-                        params.fact
-                    + '</td>' +
-                    '<td class="w6 ' + params.diffclass + '">' +
-                        params.diff
-                    + '</td>' +
-                '</tr>';
-        
-        /*
-        dhtml += '<tr id="' + catId + '" type="' + prefix + '" parent="' + parentId + '" class="' + cls + '"><td class="w1"><a>' +
-            shorter(catName, 20) + '</a></td><td class="w2"><div class="cont"><span>' +
-            amountStr+'</span><input type="text" value="'+
-            formatCurrency(amount, true, false)+'"/></div></td><td class="w3">'
-                + _buildIndicatorString(b_color, drainprc, dateprc) +
-            '</td><td class="w5 '+ ((Math.abs(amount) < Math.abs(money))?(type == 1 ? 'sumGreen' : 'sumRed') : '') +'">' + ((type == 1) ? '' : '-') +
-            formatCurrency(Math.abs(Math.abs(amount)-Math.abs(money)), true, false) + '</td><td class="w6">' +
-            ((cls == 'nochild'||cls == 'child') ? '<div><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div>':'') +
-            '</td></tr>';
-            */
+        if (params.plan > 0) {
+            strPlan = formatCurrency(params.plan, true, false);
+        } else {
+            strPlan = (params.cls != 'parent open') ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0';
+        }
+
+        return '<tr id="' + params.id
+                + '" type="' + params.type
+                + '" class="' + params.cls
+                + '" ' + (params.parent !== undefined ? 'parent="' + params.parent + '"' : '') + '>'
+                    + '<td class="w1">'
+                        + '<a>' + shorter(params.cat, 20) + '</a>'
+                    + '</td>'
+                    + '<td class="w2">'
+                        + _buildIndicatorString(color, params.drain)
+                    + '</td>'
+                    + '<td class="w3">'
+                        + '<div class="cont">'
+                            + '<span>' + strPlan + '</span>'
+                            + '<input type="text" value="' + formatCurrency(params.plan, true, false)+ '"/>'
+                        + '</div>'
+                    + '</td>'
+                    + '<td class="w5">'
+                        + formatCurrency(params.fact, true, false)
+                    + '</td>'
+                    + '<td class="w6 ' + diffClass + '">'
+                        + formatCurrency(diff, true, false) + ((params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : '')
+                    + '</td>'
+                + '</tr>';
     }
 
-    function _buildIndicatorString(color, drainPercent, datePercent) {
-        return '<div class="indicator">' +
-                    '<div class="' + color + '" style="width: ' + drainPercent + '%;"></div>' +
-                    '<div class="strip" style="width: ' + datePercent + '%;"></div>' +
+    function _buildIndicatorString(color, drainPercent) {
+        drainPercent = drainPercent > 100 ? 100 : drainPercent;
+
+        return '<div class="indicator">'
+                    + '<div class="' + color + '" style="width: ' + drainPercent + '%;"></div>' +
                 '</div>';
     }
 
+    function _updateTimeLine() {
+        elapsedPercent = 0;
+
+        if (_currentDate.getMonth() == date.getMonth()){
+            elapsedPercent = Math.round(date.getDate()*100/_getMonthDays(date));
+        } else {
+            if(_currentDate > date) {
+                elapsedPercent = 0;
+            } else {
+                elapsedPercent = 100;
+            }
+        }
+
+        $("#budgetTimeLine").css({
+            left: elapsedPercent + '%',
+            height: ($budgetBody.height() + 50) + 'px'
+        });
+
+        var days = 32 - new Date(_currentDate.getFullYear(), _currentDate.getMonth(), 32).getDate();
+        $(".budgetPeriodEnd").text(days + ' ' + getMonthName(_currentDate.getMonth()).substr(0, 3));
+    }
 
     function printBudget(){
         _data = _model.returnList();
-        if (_currentDate.getMonth() == date.getMonth()){
-            dateprc = Math.round(date.getDate()*100/_getMonthDays(date));
-        }
-        else{
-            if(_currentDate > date){
-                dateprc = 0;
-            }else{
-                dateprc = 100;
-            }
-        }
 
         var params = null;
         var drainprc;
@@ -245,11 +276,8 @@ easyFinance.widgets.budget = function(data){
             cat: "Доходы",
             cls: "open",
             drain: drainprc,
-            date: dateprc,
-            plan: formatCurrency(temp.totalAmount, true, false),
-            fact: formatCurrency(Math.abs(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney)), true, false),
-            diff: "",
-            diffclass: (Math.abs(temp.totalAmount) < Math.abs(temp.totalMoney))?'sumGreen' : ''
+            plan: temp.totalAmount,
+            fact: temp.totalMoney
         };
 
         str += _buildTableRow(params);
@@ -270,11 +298,8 @@ easyFinance.widgets.budget = function(data){
             cat: "Расходы",
             cls: "open",
             drain: drainprc,
-            date: dateprc,
-            plan: formatCurrency(temp.totalAmount, true, false),
-            fact: formatCurrency(Math.abs(Math.abs(temp.totalAmount)-Math.abs(temp.totalMoney)), true, false),
-            diff: "",
-            diffclass: (Math.abs(temp.totalAmount) < Math.abs(temp.totalMoney))?'sumGreen' : ''
+            plan: temp.totalAmount,
+            fact: temp.totalMoney
         };
 
         str += _buildTableRow(params);
@@ -284,10 +309,12 @@ easyFinance.widgets.budget = function(data){
 
         $("#budgetTimeLine").show();
 
-        return '<table>' + str + '</table>';
+        $budgetBody.html('<table>' + str + '</table>');
+
+        _updateTimeLine();
     }
 
-    $('#budget .list.budget .body').html(printBudget());
+    printBudget();
     
     ///////////////////////////////////////////////////////////////////////////
     //                          general                                      //
@@ -313,7 +340,7 @@ easyFinance.widgets.budget = function(data){
             var type = $(this).closest('tr').attr('type');
             _model.del(_currentDate, id, type, function(){
                 _printInfo();
-                $('#budget .list .body').html(printBudget());
+                printBudget();
             });
         }
     });
@@ -353,13 +380,12 @@ easyFinance.widgets.budget = function(data){
         var parent = $(this).attr('parent');
         var id = $(this).attr('id');
         id = isNaN(id)?'0':id;
-        if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length){
-
-                $('#budget .list tr .w2 input').hide();
-                $('#budget .list tr .w2 span').show();
-                var v = formatCurrency($(this).find('.w2 span').text().replace(/[^0-9\.]/g,''), true, false);
-                $(this).find('.w2 input').val(v == "0" ? '' : v).show().focus();
-                $(this).find('.w2 span').hide();
+        if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length) {
+                $('#budget .list tr .w3 input').hide();
+                $('#budget .list tr .w3 span').show();
+                var v = formatCurrency($(this).find('.w3 span').text().replace(/[^0-9\.]/g,''), true, false);
+                $(this).find('.w3 input').val(v == "0" ? '' : v).show().focus();
+                $(this).find('.w3 span').hide();
         }
     });
     
@@ -368,17 +394,16 @@ easyFinance.widgets.budget = function(data){
             var id = $(this).closest('tr').attr('id');
             var type = $(this).closest('tr').attr('type');
             var value = calculate($(this).val());
-            $('#budget .list tr .w2 input').hide();
-            $('#budget .list tr .w2 span').show();
+            $('#budget .list tr .w3 input').hide();
+            $('#budget .list tr .w3 span').show();
             _model.edit(_currentDate, type, id, value, function(){
                 _printInfo();
-                $('#budget .list.budget .body').html(printBudget());
+                printBudget();
             });
-        }else if (e.keyCode == 27){
-            $('#budget .list tr .w2 input').hide();
-            $('#budget .list tr .w2 span').show();
+        } else if (e.keyCode == 27) {
+            $('#budget .list tr .w3 input').hide();
+            $('#budget .list tr .w3 span').show();
         }
-
     });
 
     return {getDate : getDate, init : init, reload : reload};

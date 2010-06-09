@@ -5,7 +5,6 @@ $(document).ready(function() {
 
     // обновляем бюджет при изменении месяца в виджете выбора месяца
     $(document).bind('monthPickerChanged', function(e) {
-        alert(e.startDate);
         widgetBudget.reload(e.startDate);
     });
 
