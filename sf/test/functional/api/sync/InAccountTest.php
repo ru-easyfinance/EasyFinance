@@ -52,6 +52,10 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountSingle()
     {
+        $this->markTestIncomplete(
+            'Доработать: проверка параметров сохраненного объекта.'
+        );
+
         $xml = $this->getXMLHelper()->make();
 
         $this
@@ -60,10 +64,6 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
                 ->checkElement('resultset[type="account"] record[id][cid][success="true"]')
             ->end()
             ->with('doctrine')->check('Account', null, 1);
-
-        $this->markTestIncomplete(
-            'Доработать: проверка параметров сохраненного объекта.'
-        );
     }
 
 
@@ -72,6 +72,10 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountReplace()
     {
+        $this->markTestIncomplete(
+            'Доработать: проверка параметров сохраненного объекта.'
+        );
+
         $account = $this->helper->makeAccount($this->_user);
 
         $xml = $this->getXMLHelper()->make(array('id' => $account->getId()));
@@ -85,10 +89,6 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
                 // @see http://www.symfony-project.org/jobeet/1_4/Doctrine/en/09
             ->end()
             ->with('doctrine')->check('Account', null, 1);
-
-        $this->markTestIncomplete(
-            'Доработать: проверка параметров сохраненного объекта.'
-        );
     }
 
 
