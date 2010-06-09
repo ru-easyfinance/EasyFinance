@@ -13,6 +13,7 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
     {
         parent::_initialize();
 
+        #Max: см. myFunctionalTestCase - уже есть, только model
         $this->browser->setTester('doctrine', 'sfTesterDoctrine');
     }
 
@@ -50,6 +51,8 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
      *
      * @param  int    $shift - Смещение в секундах
      * @return string
+
+        #Max: можно перенести в myUnitTestCase
      */
     protected function _makeDate($shift)
     {
@@ -68,6 +71,8 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
 
     /**
      * Дергает методы браузера, если своих нет
+
+        #Max: а может не надо, а?
      */
     public function __call($method, $arguments)
     {

@@ -18,6 +18,9 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
     {
         $this->myXMLPost(null, 400);
         $this->checkError('No data were sent');
+
+        #Max: можно даже так:
+        # $this->checkSyncInError(null, 400, 'No data were sent');
     }
 
 
@@ -26,6 +29,8 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
      */
     public function testPostAccountEmptyXMLError()
     {
+        #Max: Не вижу, что происходит в $this->getXMLHelper()->decorate()
+        # Ну не нравится мне идея XML хелпера. Попробуй сделать категории с обычными строками
         $this->myXMLPost($this->getXMLHelper()->decorate(), 400);
         $this->checkError('No objects were sent');
     }
@@ -44,6 +49,8 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
         $xml = $this->getXMLHelper()->makeCollection($max+1);
         $this->myXMLPost($xml, 400);
         $this->checkError("More than 'limit' ({$max}) objects sent, " . $max + 1);
+
+        # +1, прочитал
     }
 
 
@@ -58,6 +65,13 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
 
         $xml = $this->getXMLHelper()->make();
 
+        /**
+         * А вот тут надо делать:
+            $expectedData = array(... набиваем один счет ... )
+            makeXml($expectedData)
+            и
+            ->with('model')->check('Account', $expectedData, 1);
+         */
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
@@ -85,11 +99,14 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
             ->with('response')->begin()
                 ->checkElement('resultset[type="account"] record[id][success="true"][cid]', 1)
                 ->checkElement(sprintf('record[id*="%d"]', $account->getId()))
+                #Max: ???
                 // тут звездочка нужна? а слэшики?
                 // @see http://www.symfony-project.org/jobeet/1_4/Doctrine/en/09
             ->end()
             ->with('doctrine')->check('Account', null, 1);
     }
+
+#Max: тест: принять объект с SID, которого нет
 
 
     /**
@@ -109,6 +126,7 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
                 ->checkElement(sprintf('record[id*="%d"]', $account->getId()))
             ->end();
 
+        #Max: не понял, а как getXMLHelper узнал об ответе?
         $valid = $this->getXMLHelper()->toArray();
         $this->checkRecordError($valid['0']['cid'], '[Invalid.] Foreign account');
     }
@@ -157,6 +175,8 @@ class api_sync_InTest extends mySyncInFunctionalTestCase
         $this->checkRecordError($valid['0']['cid'], '[Invalid.] No such currency');
     }
 
+
+#Max: все служебные методы объявляй в начале, так проще читать
 
     /**
      * Before Execute

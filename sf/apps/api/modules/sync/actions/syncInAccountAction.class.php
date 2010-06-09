@@ -26,7 +26,7 @@ class syncInAccountAction extends sfAction
     public function execute($request)
     {
         if (0 === strlen($rawXml = $request->getContent())) {
-            return $this->raiseError("No data were sent");
+            return $this->raiseError("Expected XML data");
         }
 
         $xml = simplexml_load_string($rawXml);
@@ -35,12 +35,14 @@ class syncInAccountAction extends sfAction
         $limit = sfConfig::get('app_records_sync_limit', 100);
 
         if ($count <= 0) {
-            return $this->raiseError("No objects were sent");
+            return $this->raiseError("Expected at least one record");
         } elseif ($count > $limit) {
             return $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
         }
 
         // $userId = $this->getUser()->getId();
+        # Max: у нас нет юзера в XML
+        # Надо пока так: $userId = $request->getParameter('user_id');
         $userId = (string) $xml->recordset['user'];
 
         $data = array();
@@ -54,6 +56,7 @@ class syncInAccountAction extends sfAction
             ->select("a.*")
             ->from("Account a INDEXBY a.id")
             ->whereIn("a.id", $recordIds)
+            #Max: а почему убрал? Не надо рассчитывать на то, что приходит
             //->andWhere("a.user_id = ?", $userId)
             ->execute();
 
@@ -74,6 +77,7 @@ class syncInAccountAction extends sfAction
         $results = array();
         foreach ($data as $record) {
             $account = $accounts[(int) $record['id']];
+            #Max: может перенесем формы синка под app?
             $form = new mySyncInAccountForm($account);
 
             $errors = array();
@@ -86,11 +90,13 @@ class syncInAccountAction extends sfAction
             // мысль: хорошо бы проверять еще узера на наличие валюты в используемых валютах,
             //        и если узер не использует такую валюту - цеплять ее пользователю принудительно
             //        либо в принципе не принимать счета с неиспользуемыми валютами
+            #Max: не надо, мы отказываемся от привязки пользователя к конкретным валютам
             if (!in_array($record['currency_id'], $currencies)) {
                 $errors[] = "No such currency";
             }
 
             // у аккаунта другой владелец?
+            #Max: о как, т.е. ты культурно посылаешь?
             if (!$account->isNew() && ($account->getUserId() !== $userId)) {
                 $errors[] = "Foreign account";
             }
