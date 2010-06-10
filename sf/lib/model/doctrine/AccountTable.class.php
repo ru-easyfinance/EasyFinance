@@ -48,7 +48,6 @@ class AccountTable extends Doctrine_Table
                 AND o.user_id = ?", (int) $userId)
             ->innerJoin("{$alias}.Operations op2 ON op2.account_id = {$alias}.account_id
                 AND op2.accepted = 1
-                AND op2.deleted_at IS NULL
                 AND op2.user_id = ?", (int) $userId)
             ->groupBy("{$alias}.id");
 
