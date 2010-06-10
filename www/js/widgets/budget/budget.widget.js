@@ -62,7 +62,7 @@ easyFinance.widgets.budget = function(data){
                 "<tr class='profit'>"+
                     "<td class='plan'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
                     "<td class='fact'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                    "<td class='balance " + profitCls + "'><div><b>Разница</b>:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit-_totalInfo.real_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
+                    "<td class='balance " + profitCls + "'><div><b>Разница</b>:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.plan_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
                 "</tr>"+
                 "<tr class='drain'>"+
                     "<td class='plan'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
@@ -167,11 +167,13 @@ easyFinance.widgets.budget = function(data){
 
         params.plan = parseInt(params.plan);
         params.fact = parseInt(params.fact);
-        diff = params.plan - params.fact;
+        
 
         // определяем цвет ползунков
         if (params.type == "p") {
             // для доходов
+            diff = params.fact - params.plan;
+
             if (elapsedPercent < params.drain) {
                 color = 'green';
             } else {
@@ -184,6 +186,8 @@ easyFinance.widgets.budget = function(data){
             }
         } else {
             // для расходов
+            diff = params.plan - params.fact;
+
             if (elapsedPercent > params.drain) {
                 color = 'green';
             } else {
