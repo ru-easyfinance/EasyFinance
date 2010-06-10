@@ -110,7 +110,7 @@ class Category_Model {
     function add($name, $parent, $system, $type)
     {
         $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type, custom,
-            dt_create) VALUES(?, ?, ?, ?, ?, 1, NOW())";
+            created_at, updated_at) VALUES(?, ?, ?, ?, ?, 1, NOW(), NOW())";
         $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
@@ -154,7 +154,7 @@ class Category_Model {
 
         // Если это пользовательская категория
         if ($cat[$id]['custom'] == 1) {
-            $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?
+            $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?, updated_at = NOW()
                 WHERE user_id = ? AND cat_id = ?";
             $result = $this->db->query($sql, $parent, $system, $name, $type,
                             Core::getInstance()->user->getId(), $id);
@@ -166,7 +166,7 @@ class Category_Model {
                 return array('error' => array(
                         'text' => 'Категория не была изменена'
             ));
-            $sql = "UPDATE category SET cat_name = ? WHERE user_id = ? AND cat_id = ?";
+            $sql = "UPDATE category SET cat_name = ?, updated_at = NOW() WHERE user_id = ? AND cat_id = ?";
             $result = $this->db->query($sql, $name, Core::getInstance()->user->getId(), $id);
         }
 
