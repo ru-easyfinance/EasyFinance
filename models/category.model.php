@@ -94,7 +94,7 @@ class Category_Model {
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
             sc.name FROM category c
                 LEFT JOIN system_categories sc ON sc.id = c.system_category_id
-                WHERE c.user_id = ? " . $where . " AND c.cat_active=1 ORDER BY cat_name", Core::getInstance()->user->getId());
+                WHERE c.user_id = ? " . $where . " AND c.visible=1 ORDER BY cat_name", Core::getInstance()->user->getId());
         $this->tree = $forest;
         $this->saveCache();
     }

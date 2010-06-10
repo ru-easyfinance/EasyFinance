@@ -219,7 +219,6 @@ Category:
     user_id:    {                                        type: integer(4), notnull: true, unsigned: true}
     name:       { name: cat_name as name,                type: varchar(255), notnull: true}
     type:       { type: integer(1), notnull: true, default: 0}
-    cat_active: { type: integer(4), notnull: true, default: 1}
     visible:    { type: integer(1), notnull: true, default: 1}
     custom:     { type: integer(1), notnull: true, default: 1} # 1 - Создана пользователем, 0 - системная
   relations:
