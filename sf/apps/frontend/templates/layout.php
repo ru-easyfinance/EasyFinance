@@ -23,19 +23,9 @@
                 'calendar'  => '',
                 'future'    => '',
             ),
-            //'accounts' => array(),
             //'accountsRecent' => array(),
             //'user_targets' => array(),
             //'popup_targets' => array(),
-            'currency' => array(
-                '1' => array(
-                    'cost' => 1,
-                    'name' => 'RUB',
-                    'text' => 'руб',
-                    'progress' => '',
-                ),
-                'default' => 1,
-            ),
             'flash' => array(
                 'title' => '',
                 'value' => 0,
@@ -291,6 +281,9 @@
             <!--/левая колонка-->
 
             <div class="block2">
+
+            <?php include_partial('global/common') ?>
+
             <!--наполнение-->
                 <?php echo $sf_content ?>
             <!--/наполнение-->
