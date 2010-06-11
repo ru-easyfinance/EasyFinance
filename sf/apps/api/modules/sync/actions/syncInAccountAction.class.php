@@ -140,4 +140,13 @@ class syncInAccountAction extends myBaseSyncInAction
         return $data;
     }
 
+
+    /**
+     * @return string
+     */
+    protected function getModelName()
+    {
+        return 'account';
+    }
+
 }

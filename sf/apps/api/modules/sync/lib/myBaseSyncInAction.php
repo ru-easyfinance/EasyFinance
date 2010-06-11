@@ -17,6 +17,8 @@ abstract class myBaseSyncInAction extends sfAction
 
         $this->getContext()->getConfiguration()->loadHelpers('Sync', $this->getContext()->getModuleName());
         sfConfig::set('sf_escaping_method', 'ESC_XML');
+
+        $this->setVar('type', $this->getModelName(), $noEscape = true);
     }
 
 
@@ -27,6 +29,14 @@ abstract class myBaseSyncInAction extends sfAction
      * @return array
      */
     abstract protected function prepareArray(SimpleXMLElement $record);
+
+
+    /**
+     * Возвращает название модели
+     *
+     * @return string
+     */
+    abstract protected function getModelName();
 
 
     /**

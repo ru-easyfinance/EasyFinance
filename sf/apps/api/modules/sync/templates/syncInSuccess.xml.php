@@ -5,7 +5,7 @@
  * @param  array $results    Массив результатов обработки
  */
 ?>
-<resultset type="account">
+<?php printf('<resultset type="%s">', $type); ?>
     <?php foreach ($results as $result): ?>
         <?php
             echo sprintf(

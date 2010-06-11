@@ -59,4 +59,13 @@ class syncInCategoryAction extends myBaseSyncInAction
         return $data;
     }
 
+
+    /**
+     * @return string
+     */
+    protected function getModelName()
+    {
+        return 'category';
+    }
+
 }
