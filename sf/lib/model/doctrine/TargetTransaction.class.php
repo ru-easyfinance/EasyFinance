@@ -3,6 +3,6 @@
 /**
  * Операция перевода на фин.цель
  */
-class TargetTransaction extends BaseTargetTransactions
+class TargetTransaction extends BaseTargetTransaction
 {
 }

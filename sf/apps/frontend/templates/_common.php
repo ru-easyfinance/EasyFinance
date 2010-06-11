@@ -3,6 +3,8 @@
  * Подключение всплывающих панелей .. вроде того
  *
  * @see /views/common.html
+
+#Max: давай удалим эти шаблоны из старого кода и берут у нас
  */
 include_partial('global/common/accountEdit');
 include_partial('global/common/guid');
