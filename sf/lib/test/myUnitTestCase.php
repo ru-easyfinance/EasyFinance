@@ -64,4 +64,16 @@ abstract class myUnitTestCase extends sfPHPUnitTestCase
 
     }
 
+
+    /**
+     * Создать дату с указанным смещением от текущей
+     *
+     * @param  int    $shift - Смещение в секундах
+     * @return string
+     */
+    protected function _makeDate($shift)
+    {
+        return date(DATE_ISO8601, time()+$shift);
+    }
+
 }

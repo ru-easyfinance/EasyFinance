@@ -13,7 +13,7 @@ class model_CurrencyTableTest extends myUnitTestCase
      * @param  int $shift - кол-во секунд
      * @return DateTime
      */
-    private function _makeDate($shift)
+    protected function _makeDate($shift)
     {
         return new DateTime(date(DATE_ISO8601, time()+$shift));
     }

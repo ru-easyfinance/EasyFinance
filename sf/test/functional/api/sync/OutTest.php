@@ -11,18 +11,6 @@ class api_sync_OutTest extends myFunctionalTestCase
 
 
     /**
-     * Создать дату с указанным смещением от текущей
-     *
-     * @param  int    $shift - Смещение в секундах
-     * @return string
-     */
-    private function _makeDate($shift)
-    {
-        return date(DATE_ISO8601, time()+$shift);
-    }
-
-
-    /**
      * 404 если указана неизвестная модель
      */
     public function test404IfModelNotSupported()

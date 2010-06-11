@@ -14,11 +14,10 @@
     }
 
 
-#Max: давай обсудим, я не воткнул
-
     /**
      * Вывести строку с заменой небезопасных xml-символов сущностями
      * @see EscapingHelper.php
+     * @see http://www.php.net/manual/en/function.htmlspecialchars.php
      *
      * @param  string $value
      * @return string

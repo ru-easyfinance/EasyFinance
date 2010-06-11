@@ -11,6 +11,12 @@ class syncInAccountAction extends myBaseSyncInAction
      */
     public function execute($request)
     {
+        // $userId = $this->getUser()->getId();
+        if (null === ($userId = $request->getParameter('user_id'))) {
+            $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
+            return $this->raiseError("Authentification required", 0, 401);
+        }
+
         if (0 === strlen($rawXml = $request->getContent())) {
             return $this->raiseError("Expected XML data");
         }
@@ -26,24 +32,17 @@ class syncInAccountAction extends myBaseSyncInAction
             return $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
         }
 
-        // $userId = $this->getUser()->getId();
-        # Max: у нас нет юзера в XML
-        # Надо пока так: $userId = $request->getParameter('user_id');
-        $userId = (string) $xml->recordset['user'];
-
         $data = array();
         foreach ($xml->recordset[0] as $record) {
             $data[] = $this->prepareArray($record);
         }
 
-        // существующие записи
+        // существующие записи, владельца не проверяем! так надо!
         $recordIds = $this->searchInXML($xml->xpath('//record/@id'), 'id');
         $accounts = Doctrine_Query::create()
             ->select("a.*")
             ->from("Account a INDEXBY a.id")
             ->whereIn("a.id", $recordIds)
-            #Max: а почему убрал? Не надо рассчитывать на то, что приходит
-            //->andWhere("a.user_id = ?", $userId)
             ->execute();
 
         $recordTypes = $this->searchInXML($xml->xpath('//record/type_id'));
@@ -62,8 +61,13 @@ class syncInAccountAction extends myBaseSyncInAction
 
         $results = array();
         foreach ($data as $record) {
-            $account = $accounts[(int) $record['id']];
-            #Max: может перенесем формы синка под app?
+            // не добавляем в коллекцию новых объектов, поэтому так:
+            if ($accounts->contains($record['id'])) {
+                $account = $accounts[(int) $record['id']];
+            } else {
+                $account = new Account();
+            }
+
             $form = new mySyncInAccountForm($account);
 
             $errors = array();
@@ -73,16 +77,12 @@ class syncInAccountAction extends myBaseSyncInAction
                 $errors[] = "No such account type";
             }
 
-            // мысль: хорошо бы проверять еще узера на наличие валюты в используемых валютах,
-            //        и если узер не использует такую валюту - цеплять ее пользователю принудительно
-            //        либо в принципе не принимать счета с неиспользуемыми валютами
-            #Max: не надо, мы отказываемся от привязки пользователя к конкретным валютам
+            // валюта?
             if (!in_array($record['currency_id'], $currencies)) {
                 $errors[] = "No such currency";
             }
 
-            // у аккаунта другой владелец?
-            #Max: о как, т.е. ты культурно посылаешь?
+            // у счета другой владелец, культурно посылаем (см.выше выбор счетов)
             if (!$account->isNew() && ($account->getUserId() !== $userId)) {
                 $errors[] = "Foreign account";
             }
@@ -121,6 +121,7 @@ class syncInAccountAction extends myBaseSyncInAction
     /**
      * Делает из объекта SimpleXML массив
      *
+     * @see    myBaseSyncInAction
      * @param  SimpleXMLElement $record
      * @return array
      */

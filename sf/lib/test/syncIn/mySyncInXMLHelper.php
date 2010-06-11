@@ -2,12 +2,11 @@
 
 class mySyncInXMLHelper
 {
-    protected static $xmlTemplate = "<request>\n    <recordset type=\"%s\" user=\"%d\">\n%s    </recordset>\n</request>\n";
+    protected static $xmlTemplate = "<request>\n    <recordset type=\"%s\">\n%s    </recordset>\n</request>\n";
     protected static $recordTemplate = "        <record id=\"%s\" cid=\"%s\">\n%s        </record>\n";
 
     protected $CID = 1;
 
-    protected $userId = null;
     protected $model = '';
     protected $modelName = '';
     protected $records = array();
@@ -15,36 +14,34 @@ class mySyncInXMLHelper
     protected $inCollection = false;
 
 
-    public function __construct($model, $userId)
+    /**
+     * Конструктор
+     *
+     * @param  string    $model
+     * @param  array     $default
+     */
+    public function __construct($model, $default = array())
     {
         $this->model  = new $model;
         $this->modelName = $model;
-        $this->userId = $userId;
 
-        $this->model->fromArray(array(
-            'type_id'     => 1,
-            'currency_id' => 1,
-            'name'        => 'Счет',
-            'description' => 'Описание счета',
-            'created_at'  => $this->_makeDate(-1000),
-            'updated_at'  => $this->_makeDate(0),
-            'deleted_at'  => '',
-        ));
+        $this->model->fromArray($default, false);
     }
 
     /**
      * Создать 1 строку
+     *
+     * @param  array $params   Параметры создаваемого объекта
+     * @return string
      */
     public function make($params = array())
     {
-        $cid = $this->getCID();
-        $params['cid'] = $cid;
-        $this->addRecords(array(array_merge($params, $this->model->toArray(false))));
+        $cid = $params['cid'] = isset($params['cid']) ? $this->getCID($params['cid']) : $this->getCID();
+        $this->addRecord(array_merge($this->model->toArray(false), $params));
 
         $id = '';
         if (isset($params['id'])) {
             $id = $params['id'];
-            unset($params['id']);
         }
 
         $fields = $this->createFields($params);
@@ -81,11 +78,16 @@ class mySyncInXMLHelper
 
 
     /**
+     * Создать набор тегов одной записи
      *
+     * @param  array  $params
+     * @return string
      */
     protected function createFields($params = array())
     {
         $params = array_merge($this->model->toArray(false), $params);
+        unset($params['id'], $params['cid']);
+
         $fields = '';
         foreach ($params as $tag => $value) {
             if ($value) {
@@ -100,16 +102,22 @@ class mySyncInXMLHelper
 
 
     /**
+     * Добавляет переданные параметры в кэш
      *
+     * @param  array $record
+     * @return void
      */
-    protected function addRecords($records)
+    protected function addRecord(array $record)
     {
-        $this->records += (array) $records;
+        unset($record['cid']);
+        $this->records[] = $record;
     }
 
 
     /**
+     * Возвращает набор данных, добавленных в XML в виде массива
      *
+     * @return array
      */
     public function toArray()
     {
@@ -123,8 +131,9 @@ class mySyncInXMLHelper
     }
 
 
-    protected function getCID()
+    protected function getCID($id = null)
     {
+        $this->CID = (null === $id) ? $this->CID : $id;
         $CID = $this->CID;
         $this->CID++;
         return $CID;
@@ -132,23 +141,25 @@ class mySyncInXMLHelper
 
 
     /**
-     *
+     * Объединяет шаблон и данные - records
      */
-    public function decorate($recordSet = '')
+    protected function decorate($recordSet = '')
     {
         return sprintf(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n%s",
-            sprintf(self::$xmlTemplate, $this->modelName, $this->userId , $recordSet)
+            sprintf(self::$xmlTemplate, $this->modelName, $recordSet)
         );
     }
 
 
     /**
+     * Вернуть XML без данных
      *
+     * @return string
      */
-    public function getUserId()
+    public function getEmptyRequest()
     {
-        return $this->userId;
+        return $this->decorate();
     }
 
 

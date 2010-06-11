@@ -4,36 +4,36 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
 {
     protected $xmlHelper;
 
-    /**
-     * Custiom setup initialization
-     *
-     * @see sfPHPUnitFunctionalTestCase::setUp
-     */
-    protected function _initialize()
-    {
-        parent::_initialize();
 
-        #Max: см. myFunctionalTestCase - уже есть, только model
-        $this->browser->setTester('doctrine', 'sfTesterDoctrine');
+    /**
+     * Before Execute
+     */
+    protected function _start()
+    {
+        parent::_start();
+
+        $this->_user = $this->helper->makeUser();
+        $this->xmlHelper = new mySyncInXMLHelper($this->getModelName(), $this->getDefaultModelData());
     }
 
 
     /**
      * Выполняет POST-запрос и выполняет базовые проверки
      *
-     * @param  string $module     Имя модуля
-     * @param  string $action     Имя ?экшена
-     * @param  array  $parameters Параметры запроса
-     * @param  mixed  $uri        Роутинг @see sfRoute
-     * @param  int    $code       Код ответа сервера
-     * @return sfTestFunctional   Возвращает браузер @see sfTestBrowser
+     * @param  string $module        Название модуля
+     * @param  string $action        Название действия
+     * @param  array  $parameters    Параметры POST запроса
+     * @param  mixed  $uri           Роутинг @see sfRoute
+     * @param  array  $getParameters Query string параметры
+     * @param  int    $code          Код ответа сервера
+     * @return sfTestFunctional      Возвращает браузер @see sfTestBrowser
      */
-    public function postAndCheck($module, $action, $parameters = array(), $uri = null, $code = 200)
+    public function postAndCheck($module, $action, $parameters = array(), $uri = null, $getParameters = array(), $code = 200)
     {
         if (null === $uri) {
             $uri = sprintf('/%s/%s', $module, $action);
         } else {
-            $uri = $this->generateUrl(trim($uri));
+            $uri = $this->generateUrl(trim($uri), $getParameters);
         }
 
         return $this->browser
@@ -47,18 +47,73 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
 
 
     /**
-     * Создать дату с указанным смещением от текущей
+     * Отправляет XML
      *
-     * @param  int    $shift - Смещение в секундах
-     * @return string
-
-        #Max: можно перенести в myUnitTestCase
+     * @param  string $xml      XML-строка
+     * @param  int    $code     Код ответа сервера
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
      */
-    protected function _makeDate($shift)
+    protected function postAndCheckXML($module, $action, $xml = null, $uri = null, $code = 200)
     {
-        return date(DATE_ISO8601, time()+$shift);
+        $params = array();
+        if (null !== $xml) {
+            $params['body'] = $xml;
+        }
+
+        $getParameters = array('user_id' => $this->_user->getId());
+
+        return $this
+            ->postAndCheck($module, $action, $params, $uri, $getParameters, $code)
+            ->with('response')->begin()
+                ->isHeader("content-type", "/^text\/xml/")
+                ->isValid()
+            ->end();
     }
 
+
+    /**
+     * Проверяет сообщения ошибок
+     *
+     * @param  string $xml      XML-строка
+     * @param  int    $code     Код ответа сервера
+     * @param  string $message  Сообщение ошибки
+     * @param  string $errCode  Код ошибки
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
+     */
+    protected function checkSyncInError($xml, $code, $message, $errCode = 0)
+    {
+
+        return $this
+            ->myXMLPost($xml, $code)
+            ->with('response')->begin()
+                ->checkElement("error code", (string) $errCode)
+                ->checkElement("error message", $message)
+            ->end();
+    }
+
+
+    /**
+     * Должна принять XML строку и код ответа сервера
+     * передавать методу postAndCheckXML модуль, действие и урл
+     *
+     * @see    mySyncInFunctionalTestCase::postAndCheckXML
+     * @param  string $xml      XML-строка
+     * @param  int    $code     Код ответа сервера
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
+     */
+    abstract protected function myXMLPost($xml = null, $code = 200);
+
+
+    /**
+     * Вернуть набор полей и валидных значений объекта
+     */
+    abstract protected function getDefaultModelData();
+
+
+    /**
+     * Вернуть название класса модели
+     */
+    abstract protected function getModelName();
 
     /**
      * @return mySyncInXMLHelper
@@ -66,24 +121,6 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
     protected function getXMLHelper()
     {
         return $this->xmlHelper;
-    }
-
-
-    /**
-     * Дергает методы браузера, если своих нет
-
-        #Max: а может не надо, а?
-     */
-    public function __call($method, $arguments)
-    {
-        try {
-            $retval = call_user_func_array(array($this->browser, $method), $arguments);
-        } catch (Exception $e) {
-            //return parent::__call($method, $arguments);
-            return $e;
-        }
-
-        return $retval === $this->browser ? $this : $retval;
     }
 
 }
