@@ -18,10 +18,16 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     protected function getDefaultModelData()
     {
         return array(
-            'id'          => null,
-            'created_at'  => $this->_makeDate(-1000),
-            'updated_at'  => $this->_makeDate(0),
-            'deleted_at'  => null,
+            'id'         => null,
+            'root_id'    => 1,
+            'parent_id'  => 0,
+            'name'       => 'Категория',
+            'type'       => 1,
+            'cat_active' => 1,
+            'visible'    => 1,
+            'custom'     => 1,
+            'dt_create'  => $this->_makeDate(-1000),
+            'dt_update'  => $this->_makeDate(0),
         );
     }
 
@@ -104,10 +110,10 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     public function testPostCategorySingle()
     {
         $expectedData = array(
-            'created_at'  => $this->_makeDate(-10000),
-            'updated_at'  => $this->_makeDate(-300),
-            'deleted_at'  => null,
-            'cid'         => 5,
+            'name'      => 'Какая-то категория',
+            'dt_create' => $this->_makeDate(-10000),
+            'dt_update' => $this->_makeDate(-300),
+            'cid'       => 5,
         );
 
         $xml = $this->getXMLHelper()->make($expectedData);
@@ -117,7 +123,7 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
             ->with('response')->begin()
                 ->checkElement('resultset', 1)
                 ->checkElement('resultset record', 1)
-                ->checkElement('resultset[type="account"] record[id][success="true"]', 'OK')
+                ->checkElement('resultset[type="category"] record[id][success="true"]', 'OK')
                 ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
             ->end();
 

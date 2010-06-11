@@ -127,17 +127,17 @@ class syncInAccountAction extends myBaseSyncInAction
      */
     protected function prepareArray(SimpleXMLElement $record)
     {
-        $data = array();
-        $data['id']          = (string) $record['id'];
-        $data['cid']         = (string) $record['cid'];
-        $data['type_id']     = (string) $record->type_id;
-        $data['currency_id'] = (string) $record->currency_id;
-        $data['name']        = (string) $record->name;
-        $data['description'] = (string) $record->description;
-        $data['created_at']  = (string) $record->created_at;
-        $data['updated_at']  = (string) $record->updated_at;
-        $data['deleted_at']  = (string) $record->deleted_at;
-        return $data;
+        return array(
+            'id'          => (string) $record['id'],
+            'cid'         => (string) $record['cid'],
+            'type_id'     => (string) $record->type_id,
+            'currency_id' => (string) $record->currency_id,
+            'name'        => (string) $record->name,
+            'description' => (string) $record->description,
+            'created_at'  => (string) $record->created_at,
+            'updated_at'  => (string) $record->updated_at,
+            'deleted_at'  => (string) $record->deleted_at,
+        );
     }
 
 

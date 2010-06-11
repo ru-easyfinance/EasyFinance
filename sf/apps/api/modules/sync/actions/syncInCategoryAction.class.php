@@ -32,8 +32,37 @@ class syncInCategoryAction extends myBaseSyncInAction
             return $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
         }
 
+        $data = array();
+        foreach ($xml->recordset[0] as $record) {
+            $data[] = $this->prepareArray($record);
+        }
+
         $results = array();
-        // foreach
+        foreach ($data as $record) {
+
+            $form = new mySyncInCategoryForm();
+
+            $errors = array();
+
+            if (!$errors && $form->bindAndSave($record)) {
+                $results[] = array(
+                    'id'      => $form->getObject()->getId(),
+                    'cid'     => (string) $record['cid'],
+                    'success' => 1,
+                );
+            } else {
+                $message = (strlen($form->getErrorSchema())
+                    ? $form->getErrorSchema() . " "
+                    : "[Invalid.] " . implode(" [Invalid.] ", $errors)
+                );
+                $results[] = array(
+                    'id'      => $record['id'],
+                    'cid'     => (string) $record['cid'],
+                    'success' => 0,
+                    'message' => $message,
+                );
+            }
+        }
 
         $this->setVar('results', $results, $noEscape = false);
 
@@ -50,13 +79,20 @@ class syncInCategoryAction extends myBaseSyncInAction
      */
     protected function prepareArray(SimpleXMLElement $record)
     {
-        $data = array();
-        $data['id']          = (string) $record['id'];
-        $data['cid']         = (string) $record['cid'];
-        $data['created_at']  = (string) $record->created_at;
-        $data['updated_at']  = (string) $record->updated_at;
-        $data['deleted_at']  = ((string) $record['deleted']) ? (string) $record->updated_at : null;
-        return $data;
+        return array(
+            'id'         => (string) $record['id'],
+            'cid'        => (string) $record['cid'],
+            'root_id'    => (string) $record->root_id,
+            'parent_id'  => (string) $record->parent_id,
+            'name'       => (string) $record->name,
+            'type'       => (string) $record->type,
+            'cat_active' => (string) $record->cat_active,
+            'visible'    => (string) $record->visible,
+            'custom'     => (string) $record->custom,
+            'dt_create'  => (string) $record->dt_create,
+            'dt_update'  => (string) $record->dt_update,
+            //'deleted_at' => ((string) $record['deleted']) ? (string) $record->updated_at : null,
+        );
     }
 
 
