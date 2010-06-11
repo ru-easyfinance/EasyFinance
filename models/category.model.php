@@ -94,7 +94,7 @@ class Category_Model {
         $forest = $this->db->select("SELECT c.*, c.cat_id AS ARRAY_KEY, c.cat_parent AS PARENT_KEY,
             sc.name FROM category c
                 LEFT JOIN system_categories sc ON sc.id = c.system_category_id
-                WHERE c.user_id = ? " . $where . " AND c.visible=1 ORDER BY cat_name", Core::getInstance()->user->getId());
+                WHERE c.user_id = ? " . $where . " AND c.deleted_at IS NULL ORDER BY cat_name", Core::getInstance()->user->getId());
         $this->tree = $forest;
         $this->saveCache();
     }
@@ -188,12 +188,16 @@ class Category_Model {
      */
     function del($id = 0)
     {
-        //Удаляет (скрывает) категорию, заодно и дочерние (если есть)
-        $sql = "UPDATE category SET visible=0 WHERE user_id=? AND ( cat_id=? OR cat_parent=? ) ";
+        // Удаляет (скрывает) категорию, заодно и дочерние (если есть)
+        $sql = "
+            UPDATE category
+                SET updated_at=NOW(), deleted_at=NOW()
+            WHERE
+                    user_id=?
+                AND (cat_id=? OR cat_parent=?)
+        ";
         $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);
 
-//        $sql = "UPDATE operation SET visible=0 WHERE cat_id=? AND user_id=?";
-//        $this->db->query($sql, $id, Core::getInstance()->user->getId()); //удаляет все операции по удаляемой категории.
         //@FIXME Починить удаление операций по категории
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
@@ -227,7 +231,7 @@ class Category_Model {
                 'system'  => $category['system_category_id'],
                 'name'    => $category['cat_name'],
                 'type'    => $category['type'],
-                'visible' => $category['visible'],
+                'visible' => (int)((bool)$category['deleted_at']),
                 'custom'  => $category['custom']
             );
         }

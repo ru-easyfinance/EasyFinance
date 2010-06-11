@@ -159,7 +159,7 @@ class Operation_Model {
                 }
             }
             elseif ( (int) $operation['accepted'] == 1 && ( ($validated['type'] == 0) || ($validated['type'] == 1) ) ) {
-                $cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND visible=1", $validated['category']);
+                $cat = $this->db->query("SELECT count(*) as co FROM category WHERE cat_id=? AND deleted_at IN NULL", $validated['category']);
 
                 if ( $cat[0]['co'] != 1 ) {
                     $this->errorData['category'] = 'Выбранной категории не существует!';

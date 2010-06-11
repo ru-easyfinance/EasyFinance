@@ -345,7 +345,7 @@ class oldUser
         $sql = "SELECT DISTINCT c.*,
             (SELECT count(id) FROM operation o WHERE o.cat_id=c.cat_id AND c.user_id=o.user_id) AS howoften
             FROM category AS c
-            WHERE c.user_id = ? AND c.visible='1'
+            WHERE c.user_id = ? AND c.deleted_at IS NULL
             ORDER BY c.cat_parent, c.cat_name;";
         $this->user_category = array();
         $category = $this->db->select($sql, $this->getId());

@@ -116,7 +116,7 @@ class Budget_Model {
                     AND
                         b.date_end=LAST_DAY(b.date_start)
                     AND
-                        c.visible=1
+                        c.deleted_at IS NULL
                     ORDER BY c.cat_parent";
 
         $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);
