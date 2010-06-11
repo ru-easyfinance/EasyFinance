@@ -32,7 +32,7 @@ class model_CategoryTest extends myUnitTestCase
             'type'        => Category::TYPE_PROFIT,
         );
 
-        $this->checkModelDeclaration('Category', $data, $isTimestampable = true);
+        $this->checkModelDeclaration('Category', $data, $isTimestampable = true, $isSoftDelete = true);
     }
 
 }
