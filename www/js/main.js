@@ -216,8 +216,9 @@ $(document).ready(function(){
         });
         easyFinance.models.category.load(res.category);
     }
-    // Если пользователь авторизован
-    if (inarray(Current_module, Connected_functional.operation)) {
+    
+    // Если доступна левая панель (пользователь авторизован)
+    if ($("#leftPanel").length) {
         // инициализируем виджет добавления, редактирования и планирования операций
         easyFinance.widgets.operationEdit.init('.op_addoperation', easyFinance.models.accounts, easyFinance.models.category);
         easyFinance.widgets.calendarLeft.init("#calendarLeft", easyFinance.models.accounts);

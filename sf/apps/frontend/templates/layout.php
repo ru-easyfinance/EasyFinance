@@ -162,7 +162,7 @@
         <div class="mid general_cont">
 
             <!--левая колонка-->
-            <div class="block1">
+            <div id="leftPanel" class="block1">
                 <ul class="control">
                     <li id="c1"><a title="Навигация"></a></li>
                     <li id="c2"><a title="Счета"></a></li>
