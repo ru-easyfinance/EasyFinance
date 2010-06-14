@@ -114,9 +114,10 @@ easyFinance.widgets.operationsJournal = function(){
                 }
             }
 
+            var comment = _journal[v].comment || "";
             var tooltipHtml = '<b>Тип:</b> ' + typ + '<br>';
             tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[_journal[v].account_id] ? res.accounts[_journal[v].account_id].name : '' ) + '<br>';
-            tooltipHtml += '<b>Комментарий:</b><br> ' + _journal[v].comment.replace("\n", "<br>", "g");
+            tooltipHtml += '<b>Комментарий:</b><br> ' + comment.replace("\n", "<br>", "g");
 
             tr += "<tr id='op" + (_journal[v].virt == "1" ? 'v' : 'r') + _journal[v].id
                 + "' title='" + tooltipHtml
@@ -167,7 +168,7 @@ easyFinance.widgets.operationsJournal = function(){
             tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+strMoney+'&nbsp;</b></span></td>'
 
             tr += '<td class="big"><span>'+ ((_journal[v].cat_name == null)? '' : _journal[v].cat_name) +'</span></td>'
-            + '<td class="big">'+ (_journal[v].comment ? shorter(_journal[v].comment, 24) : '&nbsp;')
+            + '<td class="big">'+ (comment == "" ? '&nbsp;' : shorter(comment, 24))
                 +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
                 +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
                 +'<li class="del"><a title="Удалить">Удалить</a></li>'
