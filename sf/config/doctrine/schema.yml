@@ -24,7 +24,6 @@
 #messages_state
 #referrers
 #registration
-#system_categories
 #tags
 #target
 #target_bill
@@ -223,3 +222,15 @@ Category:
       type: one
       foreignType: many
       autoComplete: false         # User ничего не узнает
+
+
+# Системные категории (100% - OK)
+SystemCategory:
+  tableName: system_categories
+  columns:
+    id:   { type: integer(4),   notnull: true, unsigned: true, primary: true, autoincrement: true}
+    name: { type: varchar(255), notnull: true}
+  options:
+    symfony:
+      form:   false
+      filter: false
