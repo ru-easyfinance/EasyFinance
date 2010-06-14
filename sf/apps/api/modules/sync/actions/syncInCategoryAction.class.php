@@ -52,6 +52,13 @@ class syncInCategoryAction extends myBaseSyncInAction
             ->whereIn("s.id", $recordSystemCategories)
             ->execute(array(), 'FetchPair');
 
+        $parentIds = $this->searchInXML($xml->xpath('//record/parent_id'));
+        $parents = Doctrine_Query::create()
+            ->select("c.id, c.id parent_id")
+            ->from("Category c")
+            ->whereIn("c.id", $parentIds)
+            ->execute(array(), 'FetchPair');
+
 
         $modelName = $this->getModelName();
         $formName  = sprintf("mySyncIn%sForm", $modelName);
@@ -71,6 +78,11 @@ class syncInCategoryAction extends myBaseSyncInAction
             // системная категория
             if (!in_array($record['system_id'], $systemCategories)) {
                 $errors[] = "No such root (system) category";
+            }
+
+            // родительская категория
+            if ($record['parent_id'] != 0 && !in_array($record['parent_id'], $parents)) {
+                $errors[] = "No such parent category";
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)

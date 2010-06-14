@@ -181,4 +181,20 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     }
 
 
+    /**
+     * Отвергать категорию без родительской (parent_id)
+     */
+    public function testPostCategoryParentFail()
+    {
+        $xml = $this->getXMLHelper()->make(array('parent_id' => 1, 'cid' => 6,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="category"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(6, '[Invalid.] No such parent category');
+    }
+
 }
