@@ -107,10 +107,8 @@ function MakeOperation(){
         if (data) {
             for (var v in data) {
                 if (confirm('Деньги на финансовую цель ' + data[v]['title'] + ' накоплены. Осуществить перевод денег ?')) {
-                    //alert($('.object[name="ещё"] .descr a').text());
-                    //alert($('.div.financobject_block').closest('.object '.data[v]['tid']));
                     var o = $('.object[name=' + data[v]['title'] + ']');
-                    //if (confirm('ewrf'))
+
                     $.post('/targets/close_op', {
                         opid: data[v]['id'],
                         targetcat: data[v]['category_id'],

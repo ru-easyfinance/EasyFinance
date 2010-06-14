@@ -134,19 +134,52 @@ function getCursorPositionFromInput (elem) {
 
 /**
  * Преобразует число в наш формат
+ * по умолчанию выводит число в виде n nnn nnn.nn
  * @param {Number || String} num
+ * [@param {Boolean} hideCents] - скрывать ненулевые копейки или нет
+ * [@param {Boolean} centsSpacers] - выводить вместо скрытых копеек пробелы или нет
  * @return {String}
  */
-function formatCurrency(num) {
-    try {
-        if (isNaN(num)) {
-            return "0.00";
-        }
-        var sign = new Number(num);
-        return roundToCents(sign).toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
-    }catch(e){
-        return "0.00"
+function formatCurrency(num, hideCents, centsSpacers) {
+    if (typeof hideCents === undefined) {
+        hideCents = false;
     }
+
+    if (typeof spaceCents === undefined) {
+        centsSpacers = false;
+    }
+
+    if (isNaN(num)) {
+        num = 0;
+    }
+
+    var amount = new Number(num);
+
+    // разбиваем число на компоненты
+    var abs = Math.abs(amount);
+    var whole = Math.floor(abs);
+    var cents = Math.floor((abs - whole).toFixed(2) * 100);
+    if (cents == 100) {
+        // когда округляем числа вида 13.999
+        cents = 0;
+        whole = whole + 1;
+    }
+    var zeroCents = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+
+    var strSign = amount < 0 ? '-' : '';
+
+    var strCents = "";
+    if (!hideCents) {
+        if (cents == 0) {
+            if (centsSpacers) {
+                strCents = zeroCents;
+            }
+        } else {
+            strCents = ((cents < 10) ? ".0" : ".") + cents.toString();
+        }
+    }
+
+    return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
 }
 
 // округляем число до двух знаков после запятой

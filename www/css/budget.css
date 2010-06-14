@@ -1,3 +1,7 @@
+#budget {
+    padding-bottom: 0px;
+}
+
 .budget#budget .info {
     width: 100%;
     position: relative;
@@ -50,7 +54,8 @@
     overflow-x: hidden;
     max-height: 300px;
     position: relative;
-    width: auto
+    width: auto;
+    padding-bottom: 6px;
 }
 
 .heightSmall .budget#budget .list .list.body {
@@ -77,25 +82,24 @@
 
 .budget#budget .list .list table td {
     font-size: 11px;
-    padding: 7px 0 5px 0;
+    padding: 3px 0 2px 0;
     position: relative
 }
 
 .budget#budget .list .list table td.w1 {
-    padding-left: 11px;
-    width: 190px;
+    padding-left: 2px;
+    width: 160px;
 }
 
 .budget#budget .list .list table td.w2 {
-    width: 77px;
-    text-align: right;
+    width: 107px;
 }
 
-.budget#budget .list .list table td.w2 span {
+.budget#budget .list .list table td.w3 span {
     cursor: pointer
 }
 
-.budget#budget .list .list table td.w2 input {
+.budget#budget .list .list table td.w3 input {
     display: none;
     text-align: right;
     width: 70px;
@@ -103,11 +107,16 @@
 
 .budget#budget .list .list table td.w3 {
     width: 77px;
-    text-align: center;
+    text-align: right;
 }
 
 .budget#budget .list .list table td.w5 {
     width: 77px;
+    text-align: right;
+}
+
+.budget#budget .list .list table td.w6 {
+    width: 90px;
     text-align: right;
 }
 
@@ -116,7 +125,7 @@
 }
 
 .budget#budget .list .list table .child td.w6, .budget#budget .list .list table .nochild td.w6 {
-    text-align: center;
+    text-align: right;
     width: 80px;
 }
 
@@ -128,11 +137,19 @@
     background-color: #E3FFDF
 }
 
-.budget#budget .list .list table td.w6 div {
+.budget#budget .list .list table td.w6 div.menuwrapper {
+    position: relative;
+}
+
+.budget#budget .list .list table td.w6 div.menu {
+    z-index: 2000;
+    position: absolute;
+    margin-left: 40px;
+    top: -25px;
+    left: -4px;
     width: 60px;
     background: 0;
     height: 30px;
-    margin-top: -8px
 }
 
 .budget#budget .list .list table td.w6 div a {

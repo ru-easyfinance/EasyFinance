@@ -165,9 +165,9 @@ easyFinance.widgets.accountsJournal = function(){
             if (!isNaN(type)){
                 str = '<tr title="' + getAccountTooltip(id) + '" class="item child" id="accountsJournalAcc_' + account_list_ordered[row]['id'] + '">';
                 str = str + '<td class="name"><span style="white-space:nowrap;">' + shorter(account_list_ordered[row]["name"], 25) + '</span></td>';
-                str = str + '<td class="totalBalance money"><div class="abbr">' + _model.getAccountCurrencyText(account_list_ordered[row]["id"]) + '</div>'+'<div class="number '+colorClass+'">' + formatCurrency(account_list_ordered[row]["totalBalance"] ) + '</div>';
+                str = str + '<td class="totalBalance money"><div class="abbr">' + _model.getAccountCurrencyText(account_list_ordered[row]["id"]) + '</div>'+'<div class="number '+colorClass+'">' + formatCurrency(account_list_ordered[row]["totalBalance"], true, false) + '</div>';
                 str = str + '</td>';
-                str = str + '<td class="def_cur mark money"><div class="number '+colorClass+'">' + formatCurrency( account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost']) + '';
+                str = str + '<td class="def_cur mark money"><div class="number '+colorClass+'">' + formatCurrency( account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost'], true, false) + '';
                 summ[type] += (account_list_ordered[row]["totalBalance"] * _model.getAccountCurrencyCost(account_list_ordered[row]['id']) / defaultCurrency['cost']);
                 str = str + '</div>' + div + '</td></tr>';
                 arr[type] = arr[type] + str;
@@ -179,7 +179,7 @@ easyFinance.widgets.accountsJournal = function(){
         {
             if (arr[key]){
                 s += '<tr class="parent '+(summ[key]>=0? 'sumGreen' : 'sumRed' )+'"><td colspan="4" class="name money"><strong style="color:black;display:block;float:left;position:relative">'+ g_name[key]
-                    + ':</strong> ' + formatCurrency( summ[key] )
+                    + ':</strong> ' + formatCurrency(summ[key], true, false)
                     + '</tr>' +arr[key]; //head_tr+
             }
         }

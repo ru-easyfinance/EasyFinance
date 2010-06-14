@@ -1,34 +1,3 @@
-///**
-// * @deprecated
-// */
-//function floatFormat(obj, in_string ){
-//    var l = in_string.length;
-//    var rgx = /[0-9]/;
-//    var c=0;
-//    var p =1;
-//    var newstr ='';
-//    var i = 0;
-//    for(var a=1;a<=l;a++){
-//        i=l-a+1;
-//        if (rgx.test(in_string.substr(i,1))){
-//            if (c == 3){
-//                newstr = ' ' + newstr;
-//                c = 0
-//            }
-//            newstr =in_string.substr(i,1)+newstr
-//            c++;
-//        }
-//        if (in_string.substr(i,1)=='.' || in_string.substr(i,1)==','){
-//            if (p){
-//                newstr = newstr.substr(0,2)
-//                newstr ='.'+newstr;
-//            }
-//            c=0;
-//            p = 0;
-//        }
-//    }
-//    $(obj).val(newstr)
-//}
 /**
  * @author Alexander *rewle* Ilichov
  */
@@ -49,7 +18,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var _data = model.returnList()[prefix]
         var children, str = '', ret ='';
         var k, key;
-        var categoryType, parentId, parentName, catId, catName, budget;
+        var categoryType, parentId, parentName, catId, catName, budget, plan;
         var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
         for (key in _categories){
             categoryType = _categories[key].type;
@@ -64,9 +33,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                         catId = _categories[key].children[k].id;
                         catName=_categories[key].children[k].name;
                         budget = _data[catId] ||{amount : 0, money : 0}
+                        plan = formatCurrency(budget['amount']);
                         str += '<tr id="'+catId+'"><td class="w1"><a>';
                         str += catName+'</a></td><td class="w2"><div class="cont">';
-                        str += '<input type="text" value="'+formatCurrency(budget['amount'])+'"/></div></td>';
+                        str += '<input type="text" value="' + (plan == "0" ? '' : plan) + '"/></div></td>';
                         str += '<td class="w4"><span>'+formatCurrency(budget['mean']||'0')+' </span></td>';
                         str += '</tr>';
                     }
@@ -116,30 +86,19 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      */
     function fullSum(id,step){
         var tmp;
-        //if(!id){
-            $('#master div.line').each(function(){
-                if (!$(this).find('.amount input').length){
-                    var ret = 0;
-                    $(this).find('input').each(function(){
-                        tmp = parseFloat($(this).val().toString().replace(/[^0-9\.]/gi,''))
-                        if (isNaN(tmp)){tmp = 0;}
-                        ret += tmp
-                    })
-                    $(this).find('.amount').text(formatCurrency(ret))
-                }
-            })
-//        }else{ @todo
-//            var sel = $('#master #'+step+' div.line#'+id)
-//            if (!$(sel).find('.amount input').length){
-//                var ret = 0;
-//                $(sel).find('input').each(function(){
-//                    tmp = parseFloat($(this).val().toString().replace(/[^0-9\.]/gi,''))
-//                    if (isNaN(tmp)){tmp = 0;}
-//                    ret += tmp
-//                })
-//                $(sel).find('.amount').text(formatCurrency(ret))
-//            }
-//        }
+
+        $('#master div.line').each(function(){
+            if (!$(this).find('.amount input').length){
+                var ret = 0;
+                $(this).find('input').each(function(){
+                    tmp = parseFloat($(this).val().toString().replace(/[^0-9\.]/gi,''))
+                    if (isNaN(tmp)){tmp = 0;}
+                    ret += tmp
+                })
+                $(this).find('.amount').text(formatCurrency(ret))
+            }
+        })
+
         var profit = globalSum('step2')
         var drain = globalSum('step3')
         $('#master .waste b').text(formatCurrency(drain))
@@ -321,7 +280,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     })
 
     /**
-     * Ссумирование подкатегорий
+     * Сумирование подкатегорий
      */
     $('#master').live('click',function(){fullSum(0)})
     $('#master tr input').live('blur',function(){

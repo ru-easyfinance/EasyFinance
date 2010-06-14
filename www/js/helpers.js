@@ -38,16 +38,12 @@
             } else {
                 tooltip.hide();
             }
-
-            return false;
         }).live('mouseout', function(event){
             var $node = $(this);
 
             $node.attr('title', title);
             tooltip.hide();
             //stopTimer();
-
-            return false;
         });
 
          /* Delay the fade-in animation of the tooltip */
