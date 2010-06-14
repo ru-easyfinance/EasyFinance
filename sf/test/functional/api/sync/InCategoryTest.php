@@ -19,15 +19,14 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     {
         return array(
             'id'         => null,
-            'root_id'    => 1,
+            'system_id'  => 1,
             'parent_id'  => 0,
             'name'       => 'Категория',
             'type'       => 1,
-            'cat_active' => 1,
-            'visible'    => 1,
             'custom'     => 1,
-            'dt_create'  => $this->_makeDate(-1000),
-            'dt_update'  => $this->_makeDate(0),
+            'created_at' => $this->_makeDate(-1000),
+            'updated_at' => $this->_makeDate(0),
+            'deleted_at' => false,
         );
     }
 
@@ -110,10 +109,10 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     public function testPostCategorySingle()
     {
         $expectedData = array(
-            'name'      => 'Какая-то категория',
-            'dt_create' => $this->_makeDate(-10000),
-            'dt_update' => $this->_makeDate(-300),
-            'cid'       => 5,
+            'name'       => 'Какая-то категория',
+            'created_at' => $this->_makeDate(-10000),
+            'updated_at' => $this->_makeDate(-300),
+            'cid'        => 5,
         );
 
         $xml = $this->getXMLHelper()->make($expectedData);

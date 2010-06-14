@@ -82,15 +82,14 @@ class syncInCategoryAction extends myBaseSyncInAction
         return array(
             'id'         => (string) $record['id'],
             'cid'        => (string) $record['cid'],
-            'root_id'    => (string) $record->root_id,
+            'system_id'  => (string) $record->system_id,
             'parent_id'  => (string) $record->parent_id,
             'name'       => (string) $record->name,
             'type'       => (string) $record->type,
-            'cat_active' => (string) $record->cat_active,
-            'visible'    => (string) $record->visible,
             'custom'     => (string) $record->custom,
-            'dt_create'  => (string) $record->dt_create,
-            'dt_update'  => (string) $record->dt_update,
+            'created_at' => (string) $record->created_at,
+            'updated_at' => (string) $record->updated_at,
+            'deleted_at' => null,
             //'deleted_at' => ((string) $record['deleted']) ? (string) $record->updated_at : null,
         );
     }
