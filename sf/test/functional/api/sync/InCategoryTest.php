@@ -160,4 +160,25 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     }
 
 
+    /**
+     * Отвергать: Несуществующий тип (id) системной категории
+     */
+    public function testPostCategorySystemForeignKeyFail()
+    {
+        $id = Doctrine::getTable('SystemCategory')->createQuery('t')
+            ->select("MAX(t.id)")
+            ->execute(array(), Doctrine::HYDRATE_SINGLE_SCALAR) + 1;
+
+        $xml = $this->getXMLHelper()->make(array('system_id' => $id, 'cid' => 4,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="category"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(4, '[Invalid.] No such root (system) category');
+    }
+
+
 }
