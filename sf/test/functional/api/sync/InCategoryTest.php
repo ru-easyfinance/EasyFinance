@@ -19,6 +19,7 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     {
         return array(
             'id'         => null,
+            'user_id'    => $this->_user->getId(),
             'system_id'  => 1,
             'parent_id'  => 0,
             'name'       => 'Категория',
@@ -109,6 +110,7 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
     public function testPostCategorySingle()
     {
         $expectedData = array(
+            'user_id'    => $this->_user->getId(),
             'name'       => 'Какая-то категория',
             'created_at' => $this->_makeDate(-10000),
             'updated_at' => $this->_makeDate(-300),
@@ -130,5 +132,32 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
         $this->browser
             ->with('model')->check('Category', $expectedData, 1);
     }
+
+
+    /**
+     * Отвергать чужие записи
+     */
+    public function testPostCategoryForeignUserRecord()
+    {
+        $user2 = $this->helper->makeUser();
+        $category = $this->helper->makeCategory($user2);
+
+        $expectedData = array(
+            'id'  => $category->getId(),
+            'cid' => 8,
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="category"] record[id][success="false"][cid]', 1)
+                ->checkElement(sprintf('record[id="%d"]', $expectedData['id']))
+            ->end();
+
+        $this->checkRecordError($expectedData['cid'], '[Invalid.] Foreign account');
+    }
+
 
 }

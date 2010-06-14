@@ -37,15 +37,39 @@ class syncInCategoryAction extends myBaseSyncInAction
             $data[] = $this->prepareArray($record);
         }
 
+        // существующие записи, владельца не проверяем! так надо!
+        $recordIds = $this->searchInXML($xml->xpath('//record/@id'), 'id');
+        $categories = Doctrine_Query::create()
+            ->select("c.*")
+            ->from("Category c INDEXBY c.id")
+            ->whereIn("c.id", $recordIds)
+            ->execute();
+
 
         $modelName = $this->getModelName();
         $formName  = sprintf("mySyncIn%sForm", $modelName);
         $results   = array();
         foreach ($data as $record) {
+            // не добавляем в коллекцию новых объектов, поэтому так:
+            if ($categories->contains($record['id'])) {
+                $myObject = $categories[(int) $record['id']];
+            } else {
+                $myObject = new $modelName();
+            }
 
-            $form = new mySyncInCategoryForm();
+            $form = new $formName($myObject);
 
             $errors = array();
+
+            // другой владелец, культурно посылаем (см.выше выбор счетов)
+            if (!$myObject->isNew() && ($myObject->getUserId() !== $userId)) {
+                $errors[] = "Foreign account";
+            }
+
+            // новому - установить владельца
+            if ($myObject->isNew()) {
+                $record['user_id'] = $userId;
+            }
 
             if (!$errors && $form->bindAndSave($record)) {
                 $results[] = array(
