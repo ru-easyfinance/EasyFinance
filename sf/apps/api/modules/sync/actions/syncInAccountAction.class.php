@@ -139,7 +139,7 @@ class syncInAccountAction extends myBaseSyncInAction
             'description' => (string) $record->description,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
-            'deleted_at'  => (string) $record->deleted_at,
+            'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),
         );
     }
 

@@ -3,7 +3,7 @@
 class mySyncInXMLHelper
 {
     protected static $xmlTemplate = "<request>\n    <recordset type=\"%s\">\n%s    </recordset>\n</request>\n";
-    protected static $recordTemplate = "        <record id=\"%s\" cid=\"%s\">\n%s        </record>\n";
+    protected static $recordTemplate = "        <record id=\"%s\" cid=\"%s\"%s>\n%s        </record>\n";
 
     protected $CID = 1;
 
@@ -44,9 +44,14 @@ class mySyncInXMLHelper
             $id = $params['id'];
         }
 
+        $deleted = '';
+        if (isset($params['deleted_at']) && $params['deleted_at'] !== null) {
+            $deleted = ' deleted="deleted"';
+        }
+
         $fields = $this->createFields($params);
 
-        $record = sprintf(self::$recordTemplate, $id, $cid, $fields);
+        $record = sprintf(self::$recordTemplate, $id, $cid, $deleted, $fields);
 
         if ($this->inCollection) {
             return $record;
@@ -86,6 +91,9 @@ class mySyncInXMLHelper
     protected function createFields($params = array())
     {
         $params = array_merge($this->model->toArray(false), $params);
+        if (isset($params['deleted_at'])) {
+            unset($params['deleted_at']);
+        }
         unset($params['id'], $params['cid']);
 
         $fields = '';

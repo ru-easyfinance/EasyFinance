@@ -27,7 +27,7 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
             'custom'     => 1,
             'created_at' => $this->_makeDate(-1000),
             'updated_at' => $this->_makeDate(0),
-            'deleted_at' => false,
+            'deleted_at' => null,
         );
     }
 
@@ -196,5 +196,28 @@ class api_sync_InCategoryTest extends mySyncInFunctionalTestCase
 
         $this->checkRecordError(6, '[Invalid.] No such parent category');
     }
+
+
+    /**
+     * Принять "удаленную" запись
+     */
+    public function testPostCategoryDeleted()
+    {
+        $expectedData = array(
+            'updated_at'  => $this->_makeDate(0),
+            'deleted_at'  => $this->_makeDate(0),
+            'name'        => 'Моя удаленная категория',
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="category"] record[id][success="true"][cid]', 1)
+            ->end()
+            ->with('model')->check('Category', $expectedData, 1);
+    }
+
 
 }

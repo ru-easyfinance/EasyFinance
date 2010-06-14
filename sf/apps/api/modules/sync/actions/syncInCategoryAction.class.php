@@ -140,8 +140,7 @@ class syncInCategoryAction extends myBaseSyncInAction
             'custom'     => (string) $record->custom,
             'created_at' => (string) $record->created_at,
             'updated_at' => (string) $record->updated_at,
-            'deleted_at' => null,
-            //'deleted_at' => ((string) $record['deleted']) ? (string) $record->updated_at : null,
+            'deleted_at' => (isset($record['deleted']) ? (string) $record->updated_at : null),
         );
     }
 
