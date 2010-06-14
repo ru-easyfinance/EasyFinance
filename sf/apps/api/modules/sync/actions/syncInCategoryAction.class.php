@@ -37,7 +37,10 @@ class syncInCategoryAction extends myBaseSyncInAction
             $data[] = $this->prepareArray($record);
         }
 
-        $results = array();
+
+        $modelName = $this->getModelName();
+        $formName  = sprintf("mySyncIn%sForm", $modelName);
+        $results   = array();
         foreach ($data as $record) {
 
             $form = new mySyncInCategoryForm();
@@ -100,7 +103,7 @@ class syncInCategoryAction extends myBaseSyncInAction
      */
     protected function getModelName()
     {
-        return 'category';
+        return 'Category';
     }
 
 }

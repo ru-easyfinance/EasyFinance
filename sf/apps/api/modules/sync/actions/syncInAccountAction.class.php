@@ -59,16 +59,19 @@ class syncInAccountAction extends myBaseSyncInAction
             ->whereIn("c.id", $recordCurrencies)
             ->execute(array(), 'FetchPair');
 
-        $results = array();
+
+        $modelName = $this->getModelName();
+        $formName  = sprintf("mySyncIn%sForm", $modelName);
+        $results   = array();
         foreach ($data as $record) {
             // не добавляем в коллекцию новых объектов, поэтому так:
             if ($accounts->contains($record['id'])) {
-                $account = $accounts[(int) $record['id']];
+                $myObject = $accounts[(int) $record['id']];
             } else {
-                $account = new Account();
+                $myObject = new $modelName();
             }
 
-            $form = new mySyncInAccountForm($account);
+            $form = new $formName($myObject);
 
             $errors = array();
 
@@ -83,12 +86,12 @@ class syncInAccountAction extends myBaseSyncInAction
             }
 
             // у счета другой владелец, культурно посылаем (см.выше выбор счетов)
-            if (!$account->isNew() && ($account->getUserId() !== $userId)) {
+            if (!$myObject->isNew() && ($myObject->getUserId() !== $userId)) {
                 $errors[] = "Foreign account";
             }
 
             // новому счету - установить владельца
-            if ($account->isNew()) {
+            if ($myObject->isNew()) {
                 $record['user_id'] = $userId;
             }
 
@@ -146,7 +149,7 @@ class syncInAccountAction extends myBaseSyncInAction
      */
     protected function getModelName()
     {
-        return 'account';
+        return 'Account';
     }
 
 }
