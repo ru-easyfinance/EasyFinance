@@ -57,21 +57,6 @@ class api_sync_InAccountTest extends mySyncInFunctionalTestCase
 
 
     /**
-     * Проверяет ошибки обработки записей
-     *
-     * @param  int    $id       Идентификатор записи клиента
-     * @param  string $message  Сообщение ошибки   @see mySincInAccounForm
-     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
-     */
-    protected function checkRecordError($id, $message)
-    {
-        return $this->browser
-            ->with('response')
-            ->checkElement(sprintf('resultset record[cid="%d"]', $id), (string) $message);
-    }
-
-
-    /**
      * Ошибка при отправке без авторизации
      * (пока без ID пользователя в query string)
      */

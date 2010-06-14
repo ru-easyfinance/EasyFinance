@@ -93,6 +93,21 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
 
 
     /**
+     * Проверяет ошибки обработки записей
+     *
+     * @param  int    $id       Идентификатор записи клиента
+     * @param  string $message  Сообщение ошибки   @see mySincInAccounForm
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
+     */
+    protected function checkRecordError($id, $message)
+    {
+        return $this->browser
+            ->with('response')
+            ->checkElement(sprintf('resultset record[cid="%d"]', $id), (string) $message);
+    }
+
+
+    /**
      * Должна принять XML строку и код ответа сервера
      * передавать методу postAndCheckXML модуль, действие и урл
      *
