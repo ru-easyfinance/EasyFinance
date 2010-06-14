@@ -23,7 +23,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('name_page', 'profile/profile');
     }
 
-    function index() 
+    function index()
     { }
 
     /**
@@ -53,10 +53,10 @@ class Profile_Controller extends _Core_Controller_UserCommon
         $prop = array();
         $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));
         $prop['user_currency_default'] = (int)$_POST['currency_default'];
-        
+
         die($this->model->currency('save', $prop));
     }
-    
+
     function cook(){
         die($this->model->cook());
     }
@@ -67,7 +67,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
     function create_service_mail()
     {
         $mail = _Core_Request::getCurrent()->post['mail'];
-        
+
         $user = Core::getInstance()->user;
 
         if ( Helper_Mail::validateEmail ( $mail ) ) {
@@ -77,7 +77,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
                 if ( $this->model->createServiceMail ( $user, $mail ) ) {
 
                     $this->tpl->assign('result', array('text'=>'Email успешно создан'));
-                    
+
                 }
 
             } else {
@@ -91,7 +91,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
             $this->tpl->assign('error', array('text'=>'Используйте только английские буквы и цифры'));
 
         }
-        
+
     }
 
     /**

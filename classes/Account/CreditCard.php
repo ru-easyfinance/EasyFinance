@@ -33,7 +33,7 @@ class Account_CreditCard extends Account
 
     /**
      * Свободный остаток
-     * @var int 
+     * @var int
      */
     private $remainAmount = 0;
 

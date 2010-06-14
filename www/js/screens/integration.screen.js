@@ -34,7 +34,7 @@ function initLogged() {
     // переход на следующий этап после создания email'a
     $('#btnIntegrationMailNext').click(function() {
         $("#integrationStep2").addClass("complete").append(" - готово!");
-        
+
         $("#integrationSteps").accordion("activate" , 2);
         $("#wz_card_account_mail").val($("#lblIntegrationEmail").text());
     });
@@ -164,7 +164,7 @@ function refreshAccounts(event) {
     } else {
         $("#divAmtAccounts").hide();
     }
-    
+
     // выбираем счёт после добавления
     if (event) {
         $("#optionAccount").find("option[value='" + event.id + "']").attr("selected", "selected");

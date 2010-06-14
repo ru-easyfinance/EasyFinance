@@ -176,12 +176,12 @@
     height: 200px; /*must have*/
 }
 #ui-datepicker-div {
-	z-index: 9999; /*must have*/
-	display: none;
-	background: #ffffff;
-	-moz-border-radius:5px;
-	border:#CCCCCC solid 1px;
-	padding:10px;
+    z-index: 9999; /*must have*/
+    display: none;
+    background: #ffffff;
+    -moz-border-radius:5px;
+    border:#CCCCCC solid 1px;
+    padding:10px;
 }
 
 #views.ui-widget-content .hasDatepicker .ui-widget-content, .calendar_block .calendar .ui-widget-content {

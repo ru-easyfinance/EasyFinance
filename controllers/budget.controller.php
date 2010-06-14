@@ -74,7 +74,7 @@ class Budget_Controller extends _Core_Controller_UserCommon
         $end   = null;
         $json = json_decode(stripslashes(@$_POST['data']));
 
-	$budget = array();
+    $budget = array();
         foreach ($json->d as $val) {
             foreach ($val as $k => $v) {
                 $v = str_replace(' ', '', $v);

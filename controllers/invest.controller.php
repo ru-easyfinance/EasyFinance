@@ -18,7 +18,7 @@ class Invest_Controller extends _Core_Controller_UserCommon
      * Ссылка на класс модель
      * @var Invest_Model
      */
-    private $model = null;	
+    private $model = null;
 
     /**
      * Конструктор класса
@@ -30,7 +30,7 @@ class Invest_Controller extends _Core_Controller_UserCommon
         $this->model = new Invest_Model();
         $this->tpl->assign('name_page', 'invest/portfolio');
     }
-    
+
     /**
      * Индексная страница
      * @param $args array mixed

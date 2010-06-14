@@ -1,8 +1,8 @@
 easyFinance.widgets.report = function(){
     function init(){
         var reportType = '';
-		
-		$('#dateFrom,#dateTo,#dateFrom2,#dateTo2').datepicker({dateFormat: 'dd.mm.yy'});
+
+        $('#dateFrom,#dateTo,#dateFrom2,#dateTo2').datepicker({dateFormat: 'dd.mm.yy'});
 
         //Показ и скрытие дополнительных полей при выборе типа отчёта
         $('#report').change(function(){
@@ -26,12 +26,12 @@ easyFinance.widgets.report = function(){
                     $('#itogo').hide();
                     break;
             }
-            
+
         });
         $('#btnShow').click(function(){
             load($('#report').val());
         });
-        
+
     }
     function load(reportType){
         var accountsList = [];
@@ -77,7 +77,7 @@ easyFinance.widgets.report = function(){
                 case "txt_profit_difference":
                     ShowCompareWaste(data, currencyId);
                     break;
-                    
+
                 case "txt_profit_avg_difference":
                     ShowAverageIncome(data, currencyId);
                     break;
@@ -87,7 +87,7 @@ easyFinance.widgets.report = function(){
             }
         });
     }
-    
+
     function ShowGraph(data, currencyId){
         $('#chart').empty();
         $('#chart').show();
@@ -119,7 +119,7 @@ easyFinance.widgets.report = function(){
         chartObj.addParam("WMode", "Transparent");
         chartObj.setDataXML(chart);
         chartObj.render("chart1div");
-        
+
         var total = '<table id="itogostroka" width="200px" align="right">' +
         '<tr><td width="50px">Итого : </td><td width="150px">' +
         formatCurrency(totalAmount) +
@@ -131,37 +131,37 @@ easyFinance.widgets.report = function(){
             $('#commentRest').show();
             $('#commentRest').html('<h5> * Категория прочее включает в себя Ваши категории, операции по которым за выбранный период не превысили 2% от общего объёма операций за этот период. Отчёты по этим категориям вы можете посмотреть в детальных отчётах</h5>');
         }
-        
+
     }
-    
+
     function ShowCompareGraph(data, currencyId){
         $('#chart').empty();
         var key, tempValue;
-                
+
         $('#chart').html("<div id='chart1div'>FusionCharts</div>");
-        
+
         var categories = '<categories>';
         var datasetProfit = "<dataset seriesName='Доходы'>";
         var datasetIncome = "<dataset seriesName='Расходы'>";
-        
+
         var conditionalValue = 0;//половина возвращаемых данных. индекс.
         var noshow = 'showValues="1"';
         for (key in data[0]) {
             if (data[0][key]['was'] != 0 || data[0][key]['in'] != 0) {
                 conditionalValue++;
                 categories += "<category label='" + data[0][key]['lab'] + "' />";
-                
+
                 tempValue = new Number(data[0][key]['in']);
                 datasetProfit += "<set value='" + (tempValue.toFixed(2)) + "' />";
                 tempValue = new Number(data[0][key]['was']);
                 datasetIncome += "<set value='" + (tempValue.toFixed(2)) + "' />";
             }
         }
-        
+
         if (conditionalValue > 4) {
             noshow = 'showValues="0"';
         }
-        
+
         var stri = "<chart " + noshow + " numberPrefix='" + (easyFinance.models.currency.getCurrencyTextById(currencyId)) + " '>";
         stri += categories + "</categories>";
         stri += datasetProfit + "</dataset>";
@@ -175,7 +175,7 @@ easyFinance.widgets.report = function(){
         $('#Period21,#Period22').hide();
         $('.operation_list').hide();
     }
-    
+
     function ShowDetailedIncome(data, currencyId){
         var th = '<tr><th>&nbsp;</th><th><span>Дата</span></th><th><span>Счёт</span></th><th><span>Сумма</span></th><th>&nbsp;</th></tr>';
         var tr = '';
@@ -207,21 +207,21 @@ easyFinance.widgets.report = function(){
                 '</tr>';
             }
         }
-        
+
         $('tr:not(:first)', '#reports_list').remove();
-        
+
         $('#reports_list_header').html(th);
         $('#reports_list').html(tr);
-        
+
         $('#chart').hide();
         $('#Period21,#Period22').hide();
         $('.operation_list').show();
     }
-    
-    function ShowDetailedWaste(data, currencyId){        
+
+    function ShowDetailedWaste(data, currencyId){
         var th = '<tr><th>&nbsp;</th><th><span>Дата</span></th><th><span>Счёт</span></th><th><span>Сумма</span></th><th>&nbsp;</th></tr>';
         var tr = '';
-        
+
         for (var key in data[0]) {
             if (key > 0) {
                 if (data[0][key].cat_name != data[0][key - 1].cat_name && data[0][key].account_name != null) {
@@ -233,7 +233,7 @@ easyFinance.widgets.report = function(){
                 tr += '<tr><td><span><b>' + data[0][0].cat_name +
                 '<span><b></td><td></td><td></td><td></td></tr>';
             }
-            
+
             if (data[0][key].cat_name != null && data[0][key].account_name != null) {
                 tr += "<tr>" +
                 '<td>&nbsp;</td>' +
@@ -252,16 +252,16 @@ easyFinance.widgets.report = function(){
             }
         }
         $('tr:not(:first)', '#reports_list').remove();
-        
+
         $('#reports_list_header').html(th);
         $('#reports_list').html(tr);
-        
+
         $('#chart').hide();
         $('#Period21,#Period22').hide();
         $('.operation_list').show();
     }
-    
-    
+
+
     function ShowCompareWaste(data, currencyId){
         var th = '<tr><th>&nbsp;</th><th><span>Период 1</span></th><th><span>Период 2</span></th><th><span>Разница</span></th><th></th></tr>';
         var tr = '';
@@ -350,14 +350,14 @@ easyFinance.widgets.report = function(){
         $('#Period21,#Period22').show();
         $('.operation_list').show();
     }
-    
-    
-    
-    function ShowAverageIncome(data, currencyId){        
+
+
+
+    function ShowAverageIncome(data, currencyId){
         var th = '<tr><th>&nbsp;</th><th><span>Период 1</span></th><th><span>Период 2</span></th><th><span>Разница</span></th></th>';
-        
+
         var tr = '';
-        
+
         var sum1 = 0;
         var sum2 = 0;
         var delta = 0;
@@ -370,7 +370,7 @@ easyFinance.widgets.report = function(){
                     sum1 = data[2][c].su;
                     sum2 = 0;
                     for (v in data[2]) {
-                        if (data[2][v].cat_name == data[2][c].cat_name) 
+                        if (data[2][v].cat_name == data[2][c].cat_name)
                             if (data[2][v].per == 2) {
                                 sum2 = data[2][v].su * data[0] / data[1];
                                 data[2][v].su = null;
@@ -380,7 +380,7 @@ easyFinance.widgets.report = function(){
                     sum2 = data[2][c].su * data[0] / data[1];
                     sum1 = 0;
                     for (v in data[2]) {
-                        if (data[2][v].cat_name == data[2][c].cat_name) 
+                        if (data[2][v].cat_name == data[2][c].cat_name)
                             if (data[2][v].per == 1) {
                                 sum1 = data[2][v].su * data[0] / data[1];
                                 data[2][v].su = null;
@@ -411,15 +411,15 @@ easyFinance.widgets.report = function(){
         $('tr:not(:first)', '#reports_list').each(function(){
             $(this).remove();
         });
-        
+
         $('#reports_list_header').html(th);
         $('#reports_list').html(tr);
-        
+
         $('#chart').hide();
         $('#Period21,#Period22').show();
         $('.operation_list').show();
     }
-    
+
     return {
         init: init,
         load: load

@@ -15,7 +15,7 @@ class Account_DebetCard extends Account
 
     /**
      * Платёжная система
-     * @var int 
+     * @var int
      */
     private $paySystem = 0;
 
@@ -24,7 +24,7 @@ class Account_DebetCard extends Account
      * @var string
      */
     private $validityPeriod = '';
-    
+
 
     /**
      * Проверяет корректность введённых данных и подготавливает массив для работы с моделью
@@ -55,7 +55,7 @@ class Account_DebetCard extends Account
         //$this->yearPercent = $valid[11];
         //$this->paySystem = $valid[22];
         //$this->validityPeriod = $valid[23];
- 
+
         return ($valid);
     }
 

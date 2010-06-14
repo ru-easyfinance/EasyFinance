@@ -271,7 +271,7 @@ abstract class Account
 
             $this->model->delete($param);
             unset($this->model);
-        
+
         return $this;
     }
 }

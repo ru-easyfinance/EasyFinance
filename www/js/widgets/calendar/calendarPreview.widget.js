@@ -9,13 +9,13 @@ easyFinance.widgets.calendarPreview = function(){
         $('.calendar_block .calendar').datepicker({
             onChangeMonthYear: function(year, month, inst){
                 _currentDate.setFullYear(year, month - 1);
-				setTimeout(function(){easyFinance.models.calendarCache.reloadWidgets('calendarPreview');},1000)
-				
+                setTimeout(function(){easyFinance.models.calendarCache.reloadWidgets('calendarPreview');},1000)
+
             }
         });
         if($('#calendar').length > 0){
-			$('.calendar_block .calendar .ui-datepicker-next').click();
-		}
+            $('.calendar_block .calendar .ui-datepicker-next').click();
+        }
         $(document).bind('operationEdited operationsChainAdded operationsChainEdited operationDateEdited', function(data){
             easyFinance.models.calendarCache.clean();
             easyFinance.models.calendarCache.init(data.calendar || {});
@@ -34,7 +34,7 @@ easyFinance.widgets.calendarPreview = function(){
             easyFinance.models.calendarCache.reloadWidgets();
         });
     }
-    
+
     function load(result){
         for (v in result) {
             ddt.setTime(result[v].timestamp * 1000);
@@ -105,13 +105,13 @@ easyFinance.widgets.calendarPreview = function(){
             easyFinance.widgets.operationEdit.fillFormCalendar({date: $.datepicker.formatDate('dd.mm.yy', dat)}, false, true);
 
             return false;
-        });        
+        });
     }
-    
+
     function getCurrentDate(){
         return _currentDate;
     }
-    
+
     return {
         getCurrentDate: getCurrentDate,
         load: load,

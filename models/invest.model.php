@@ -17,7 +17,7 @@ class Invest_Model
      * @var int
      */
     private $user_id = NULL;
-	
+
     /**
      * Конструктор
      * @return void

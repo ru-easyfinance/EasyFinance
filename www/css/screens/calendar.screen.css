@@ -1,0 +1,29 @@
+#calendarSwitchView {
+    position: absolute;
+    top: 5px;
+    left: 140px;
+    background: none;
+}
+
+#calendarSwitchView div {
+    float: left;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+#calendarModeCalendar {
+    background: url(/img/i/calendarSwitchView.png) no-repeat;
+}
+
+#calendarModeCalendar.active {
+    background: url(/img/i/calendarSwitchView.png) no-repeat -48px 0px;
+}
+
+#calendarModeTable {
+    background: url(/img/i/calendarSwitchView.png) no-repeat -24px 0px;
+}
+
+#calendarModeTable.active {
+    background: url(/img/i/calendarSwitchView.png) no-repeat -72px 0px;
+}

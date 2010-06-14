@@ -13,7 +13,7 @@ function dTabsClass() {
 
 dTabsClass.prototype.init = function() {
     var i = 0;
-    
+
     var step;
 
     this.labels = $('.wz_tab_header');

@@ -11,6 +11,7 @@ easyFinance.models.accounts = function(){
     var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json&confirmed=1';
 
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/?responseMode=json';
+    var OPERATIONS_JOURNAL_CSV_URL = '/operation/listOperations/?responseMode=csv';
 
     var ACCEPT_OPERATIONS_URL = '/calendar/accept_all/?responseMode=json&confirmed=1';
     var DELETE_OPERATIONS_URL = '/operation/del_all/?responseMode=json&confirmed=1';
@@ -68,12 +69,12 @@ easyFinance.models.accounts = function(){
 
                 $(document).trigger('accountsLoaded');
             }
-            
+
             if (typeof callback == 'function')
                 callback(_accounts);
         }, "json");
     }
-    
+
     // public variables
 
     // public functions
@@ -86,7 +87,7 @@ easyFinance.models.accounts = function(){
         _this = this;
 
         _modelCurrency = modelCurrency;
-        
+
         if (typeof param1 == 'object'){
             _accounts = param1;
             _orderAccounts();
@@ -191,15 +192,15 @@ easyFinance.models.accounts = function(){
         else
             return null;
     }
-	
-	function getAccountTypeString(id){
-		var types = {1: "Наличные", 2: "Дебетовая карта", 9: "Кредит", 5: "Депозит", 6: "Займ выданный", 7: "Займ полученый", 8: "Кредитная карта", 15: "Электронный кошелек", 16: "Банковский счёт"};                
-		
+
+    function getAccountTypeString(id){
+        var types = {1: "Наличные", 2: "Дебетовая карта", 9: "Кредит", 5: "Депозит", 6: "Займ выданный", 7: "Займ полученый", 8: "Кредитная карта", 15: "Электронный кошелек", 16: "Банковский счёт"};
+
         if (_accounts && _accounts[id])
             return types[_accounts[id].type];
         else
             return '';
-	}
+    }
 
     function addAccount(params, callback){
         if (typeof params != "object")
@@ -274,32 +275,38 @@ easyFinance.models.accounts = function(){
      * @usage ---loadJournal(json, callback)
      * @usage loadJournal(account, category, dateFrom, dateTo, sumFrom, sumTo, type, callback)
      */
-    function loadJournal(param1, param2, param3, param4, param5, param6, param7, param8){
+    function loadJournal(param1, param2, param3, param4, param5, param6, param7, param8, param9, csv){
         //if (typeof param1 == 'string') {
         //    _journal = param1;
         //    if (typeof param2 == 'function')
         //        param2(_journal);
         //} else {
             // load from server
-            $.get(OPERATIONS_JOURNAL_URL, {
+            if (csv == true) window.location = OPERATIONS_JOURNAL_CSV_URL + "&account="+param1+"&category="+param2+
+                "&dateFrom="+param3+"&dateTo="+param4+"&sumFrom="+param5+
+                "&sumTo="+param6+"&type="+param7+"&search_field="+param8;
+    else
+
+        $.get(OPERATIONS_JOURNAL_URL, {
                     account: param1,
                     category: param2,
                     dateFrom: param3,
                     dateTo: param4,
                     sumFrom: param5,
                     sumTo: param6,
-                    type: param7
+                    type: param7,
+            search_field : param8
                 }, function(data) {
                     _journal = data.operations;
-                    if (typeof param8 == 'function')
-                        param8(_journal);
+                    if (typeof param9 == 'function')
+                        param9(data);
             }, 'json');
         //}
     }
 
     // получаем списки просроченных и будущих событий
     function loadEvents(callback){
-        
+
     }
 
     // получаем список просроченных событий
@@ -310,12 +317,12 @@ easyFinance.models.accounts = function(){
     function getOverdueOperationById(id){
         if (!res.calendar || !res.calendar.overdue)
             return null;
-        
+
         for (var row in res.calendar.overdue) {
             if (res.calendar.overdue[row].id == id)
                 return $.extend({}, res.calendar.overdue[row]);
         }
-	return null;
+    return null;
     }
 
     function getFutureOperationById(id){
@@ -326,7 +333,7 @@ easyFinance.models.accounts = function(){
             if (res.calendar.future[row].id == id)
                 return $.extend({}, res.calendar.future[row]);
         }
-	return null;
+    return null;
     }
 
     function acceptOperationsByIds(ids, callback) {
@@ -562,7 +569,7 @@ easyFinance.models.accounts = function(){
                 $(document).trigger(event);
 
                 _loadAccounts();
-                
+
                 callback(data);
             }, "json");
     }

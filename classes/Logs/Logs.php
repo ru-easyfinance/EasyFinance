@@ -6,7 +6,7 @@ class Logs
 {
     /**
      * Записывает в базу
-     * 
+     *
      * @param oldUser $user
      * @param string $type 'amt' или 'book'
      * @param string $info Расширенная информация

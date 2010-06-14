@@ -28,7 +28,7 @@ function getClientDisplayMods(){
  */
 function getClientPlugins(){
     // #1324. грёбаный IE не поддерживает navigator.plugins
-    
+
     var str = '';
     try {
         for (var key in navigator.plugins) {
@@ -67,14 +67,14 @@ function getClientPlugins(){
             $(this).closest('div').find('label').hide();
         });
         //отправление сообщения
-        $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){            
+        $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){
             if (noClick){
                 return false;
             }
 
             var feedback = getClientDisplayMods();
             feedback.plugins = getClientPlugins();
-            
+
             // Проверяем данные, см. тикет #1127
             if (!$('#footer #ftheme').val() || $('#footer #ftheme').val() == ''){
                 $.jGrowl('Введите тему отзыва!', {theme: 'red'})
@@ -98,24 +98,24 @@ function getClientPlugins(){
             //noClick = true;
             $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
             $('#popupreport').hide();
-            
+
             feedback.msg = $('#footer #ffmes').val();
             feedback.title = $('#footer #ftheme').val();
-			
+
             $.post(
                 '/feedback/add_message/?responseMode=json',
                 feedback,
                 function(data){
                     noClick = false;
-					
+
                     if (data.error){
                         if (data.error.text) {
                             $.jGrowl(data.error.text, {theme: 'red'});
                         }
                     } else if (data.result){
-						// #1201 очищаем поля темы и сообщения
-						$('#footer #ffmes').val('');
-						$('#footer #ftheme').val('');
+                        // #1201 очищаем поля темы и сообщения
+                        $('#footer #ffmes').val('');
+                        $('#footer #ftheme').val('');
                         $('#footer .f_field label').show();
                         $('#footer #popupreport').hide();
 
@@ -124,9 +124,9 @@ function getClientPlugins(){
                         }
                     }
                 }, "json"
-			);
-			
-			return false;
+            );
+
+            return false;
         });
       })();
 });

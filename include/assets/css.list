@@ -14,6 +14,7 @@ jquery/south-street/ui.dialog.css
 jquery/south-street/ui.tabs.css
 jquery/south-street/ui.datepicker.css
 jquery/south-street/ui.accordion.css
+jquery/jquery.tooltip.css
 menuUser.css
 dialogBox.css
 efTable.css
@@ -24,11 +25,12 @@ report.css
 expert.css
 expertsList.css
 profile.css
+accountsPanel.css
+accountsJournal.css
 categoriesJournal.css
 operationsJournal.css
 budgetMaster.css
 budget.css
-accountsPanel.css
-accountsJournal.css
+screens/calendar.screen.css
 screens/integration.screen.css
 screens/promoTKS.screen.css

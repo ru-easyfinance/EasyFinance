@@ -11,14 +11,14 @@ function checkLogin() {
 
     return true;
 }
-    
+
 $(document).ready(function(){
     $('#btnLogin').click(function(e){
         // prevent double-click
         $("#btnLogin").attr("disabled", "disabled");
 
         if (document.location.pathname.indexOf("integration") != -1) {
-            // #1241 авторизация без редиректа на странице интеграции    
+            // #1241 авторизация без редиректа на странице интеграции
 
             $.post(
                 "/login/",
@@ -28,7 +28,7 @@ $(document).ready(function(){
                     pass: $('#pass').val()
                 }, function(data) {
                     $("#btnLogin").removeAttr("disabled");
-                    
+
                     if (data) {
                         if (data.error) {
                             if (data.error.text)
@@ -51,7 +51,7 @@ $(document).ready(function(){
         } else {
             $(e.target).closest('form').submit();
         }
-        
+
         return false;
     });
 

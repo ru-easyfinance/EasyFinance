@@ -9,57 +9,7 @@ easyFinance.widgets.accountsPanel = function(){
 
     // private variables
     var _model = null;
-    var _modelCurrency = null;
     var _$node = null;
-
-    var _accounts = null;
-
-    // private functions
-    function _initBigTip(){
-        $('.bill_list li.account:not(.add)').each(function(){
-            var defaultCurrency = _modelCurrency.getDefaultCurrency();
-            var id =$(this).find('div.id').attr('value').replace("edit", "");
-            _accounts = _model.getAccounts();
-            var account = _accounts[id];
-
-            if (account) {
-                var str = '<table>';
-                str +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+
-                            account.name + '</td></tr>';
-                str +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+
-                            _model.getAccountTypeString(account.id) + '</td></tr>';
-                str +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+
-                            account.comment + '</td></tr>';
-                str +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+
-                    formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(id) + '</td></tr>';
-                if (account.reserve != 0){
-                    var delta = (formatCurrency(account.totalBalance-account.reserve));
-                    str +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-                    str +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(id)+'</td></tr>';
-                }
-
-                str +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
-                    formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
-
-
-                str += '</table>';
-                $(this).qtip({
-                    content: str, // Set the tooltip content to the current corner
-                    position: {
-                      corner: {
-                         tooltip: 'topMiddle', // Use the corner...
-                         target: 'bottomMiddle' // ...and opposite corner
-                      }
-                    },
-                    style: {
-                      width: {max: 300},
-                      name: 'light',
-                      tip: true // Give them tips with auto corner detection
-                    }
-                });
-            }
-        });
-    }
 
     // public variables
 
@@ -75,22 +25,20 @@ easyFinance.widgets.accountsPanel = function(){
         _$node = $(nodeSelector);
 
         _model = model;
-        _modelCurrency = easyFinance.models.currency;
-        _accounts = _model.getAccounts();
 
         $(document).bind('accountsLoaded', redraw);
         $(document).bind('accountAdded', redraw);
         $(document).bind('accountDeleted', redraw);
 
        $('.accounts .add,.accounts .addaccountlink').click(function(){
-			// #1095. создание счёта по ссылке из экрана профиля
-			if (document.location.pathname.indexOf("profile") != -1) {
-				// переходим на страницу счетов и открываем диалог
-				document.location = '/accounts/#add';
-			} else {
-				// отображает форму создания счёта
-				easyFinance.widgets.accountEdit.addAccount();
-			}
+            // #1095. создание счёта по ссылке из экрана профиля
+            if (document.location.pathname.indexOf("profile") != -1) {
+                // переходим на страницу счетов и открываем диалог
+                document.location = '/accounts/#add';
+            } else {
+                // отображает форму создания счёта
+                easyFinance.widgets.accountEdit.addAccount();
+            }
        })
 
        $('.accounts li a').live('click',function(evt){
@@ -151,6 +99,11 @@ easyFinance.widgets.accountsPanel = function(){
             }
         });
 
+        $('.accounts li .cont').live('click', function(){
+            // #1349. do nothing!
+            return false;
+        });
+
         return this;
     }
 
@@ -164,14 +117,12 @@ easyFinance.widgets.accountsPanel = function(){
         if (!_model)
             return;
 
-        _accounts = _model.getAccounts();
-
         var data = $.extend({},_model.getAccountsOrdered());
 
         if (!data){
             data = {};
         }
-        
+
         var i = 0;
         var total = 0;
         var str = '';
@@ -180,12 +131,12 @@ easyFinance.widgets.accountsPanel = function(){
         for (key in data )
         {
             i = g_types[data[key]['type']];
-            str = '<li class="account"><a>';
+            str = '<li class="account" title="' + getAccountTooltip(data[key].id) + '"><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
             str = str + '<span>'+shorter(data[key]['name'], 20)+'</span><br>';
             str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
-                + formatCurrency(data[key]['totalBalance']) + '</span>&nbsp;';
+                + formatCurrency(data[key]['totalBalance'], true) + '</span>&nbsp;';
             str = str + _model.getAccountCurrencyText(data[key]['id']) + '</span></a>';
 
             str = str + '<div class="cont">'
@@ -223,27 +174,30 @@ easyFinance.widgets.accountsPanel = function(){
         for(key in arr)
         {
             total = total+parseFloat(summ[key]);
-            s='<ul>'+arr[key]+'</ul>';
-            if (key>=0 && key <=6)
+            s='<ul class="efListWithTooltips">'+arr[key]+'</ul>';
+            if (key>=0 && key <=6) {
                 _$node.find('#accountsPanelAcc'+key).html(s);
-            if (s!='<ul></ul>')
+            }
+   
+            if (arr[key] != '') {
                 _$node.find('#accountsPanelAcc'+key).show().prev().show();
-            else
+            } else {
                 _$node.find('#accountsPanelAcc'+key).hide().prev().hide();
+            }
         }
 
         // формирование итогов
         str = '<ul>';
-        
+
         i = 0;
         for(key in val) {
             i++;
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key])+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
+            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key], true, true)+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
+        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total, true, true)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
         str = str + '</ul>';
         _$node.find('#accountsPanel_amount').html(str);
-        _initBigTip();
+
         $('div.listing dl.bill_list dt').addClass('open');
         $('div.listing dl.bill_list dt').live('click', function(){
             $(this).toggleClass('open').next().toggle();
@@ -264,14 +218,14 @@ easyFinance.widgets.accountsPanel = function(){
                     $(this).click()
             })
         }
-        
+
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
         });
 
-        
-        
+
+
         //$('div.listing dl.bill_list dt').click();
         //$('div.listing dl.bill_list dt:last').click().addClass('open');
         //$('div.listing dl.bill_list dt').click().addClass('open');

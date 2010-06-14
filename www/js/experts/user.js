@@ -18,16 +18,16 @@ $(document).ready(function() {
 
                     html = html+'<dt>'+name+'</dt>'+
                             '<dd id="'+id+'">'+
-				'<img src="'+img+'" alt="'+name+'" />'+
-				'<ul class="rating">'+
+                '<img src="'+img+'" alt="'+name+'" />'+
+                '<ul class="rating">'+
                                     '<li class="h">Рейтинг:</li>'+
                                     '<li class="star">'+
                                         '<div style="width: '+rating+'%;">'+rating+'%</div>'+
                                     '</li>'+
                                     '<li class="result"><b></b></li>'+
-				'</ul>'+
-				mini_desc+
-				'<div class="more"><span id="expert_profile">Читать полностью</span></div>'+
+                '</ul>'+
+                mini_desc+
+                '<div class="more"><span id="expert_profile">Читать полностью</span></div>'+
                             '</dd>';
                 }
                 $('.experts_list_in').html(html);
@@ -50,16 +50,16 @@ $(document).ready(function() {
 
                 html = '<dl class="experts_one"><dt>'+name+'</dt>'+
                             '<dd id="'+id+'">'+
-				'<img src="'+img+'" alt="'+name+'" />'+
-				'<ul class="rating">'+
+                '<img src="'+img+'" alt="'+name+'" />'+
+                '<ul class="rating">'+
                                     '<li class="h">Рейтинг:</li>'+
                                     '<li class="star">'+
                                         '<div style="width: '+rating+'%;">'+rating+'%</div>'+
                                     '</li>'+
                                     '<li class="result"><b></b></li>'+
-				'</ul>'+
-				description+
-				'<div class="more"><span id="expert_profile">Читать полностью</span></div>'+
+                '</ul>'+
+                description+
+                '<div class="more"><span id="expert_profile">Читать полностью</span></div>'+
                             '</dd></dl>';
 ///////////////////////////////  услуги темы и сертификаты
 
@@ -99,7 +99,7 @@ $(document).ready(function() {
             mail_list = data;
             $('#mail_list').show();
 
-            
+
             str='<table><tr><th>Категория</th><th>Название</th><th>Дата</th><th>Удалить</th></tr>';
             for(key in data)
             {
@@ -124,7 +124,7 @@ $(document).ready(function() {
         '/mail/del_mail/',
         {id : mail_list[key].id},
         function(data){
-            
+
         },
         'json'
         )

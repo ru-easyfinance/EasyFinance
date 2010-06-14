@@ -28,7 +28,7 @@ overflow:hidden;
 width:25px;
 }
 #accountsJournal table tr.parent{
-	background: #F8FCF6 url(/img/i/point_x.gif) repeat-x scroll left bottom;
+    background: #F8FCF6 url(/img/i/point_x.gif) repeat-x scroll left bottom;
 }
 #accountsJournal table tr.parent .name {
     padding-left: 7px;
@@ -75,34 +75,35 @@ width:25px;
 #accountsJournal table td div.cont ul:hover{
     /*display: block;*/
 }
-#accountsJournal table td div.cont ul:after{ 
+#accountsJournal table td div.cont ul:after{
     display: block;
     content: ' ';
     height: 0;
     overflow: hidden;
     clear: both;
 }
-#accountsJournal table td div.cont ul li{ 
+#accountsJournal table td div.cont ul li{
     float: left;
-    margin: 9px 8px 0 0;
-    height: 12px;
+    margin: 3px 8px 0 0;
 }
-#accountsJournal table td div.cont ul li a{ 
+#accountsJournal table td div.cont ul li a{
     display: block;
     width: 13px;
-    height: 12px;
     text-indent: -999px;
     overflow: hidden;
 }
-#accountsJournal table td div.cont ul li.edit a{ 
-    width: 13px;
+
+#accountsJournal table td div.cont ul li.edit a{
+    width: 15px;
 }
-#accountsJournal table td div.cont ul li.del a{ 
+#accountsJournal table td div.cont ul li.del a{
     width: 11px;
 }
-#accountsJournal table td div.cont ul li.add{ 
+#accountsJournal table td div.cont ul li.add{
     margin-right: 0;
 }
-#accountsJournal table td div.cont ul li.add a{ 
-    width: 12px;
+#accountsJournal table td div.cont ul li.add a{
+    width: 14px;
 }
+
+

@@ -80,7 +80,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
         }
     }
 
-	/**
+    /**
      * Удаляет указанный счет
      * @param $args array mixed
      * @return void
@@ -113,23 +113,23 @@ class Accounts_Controller extends _Core_Controller_UserCommon
 
             $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         } elseif( !isset($_POST['confirmed']) ) {
-			$confirm= array (
-				'title' 	=> 'Удаление счёта',
-				'message' 	=> 'Вы действительно хотите удалить выбранный счёт?',
-				'yesLink'	=> '/accounts/delete/?id=' . $args[0] . '&confirmed=1',
-				'noLink' 	=> $_SERVER['HTTP_REFERER'],
-			);
+            $confirm= array (
+                'title'     => 'Удаление счёта',
+                'message'     => 'Вы действительно хотите удалить выбранный счёт?',
+                'yesLink'    => '/accounts/delete/?id=' . $args[0] . '&confirmed=1',
+                'noLink'     => $_SERVER['HTTP_REFERER'],
+            );
 
-			// Сохраняем в сессии адрес куда идти если согласится
-			$_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
+            // Сохраняем в сессии адрес куда идти если согласится
+            $_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
 
-			$this->tpl->assign('confirm', $confirm);
-			$this->tpl->assign('name_page', 'confirm');
-            
+            $this->tpl->assign('confirm', $confirm);
+            $this->tpl->assign('name_page', 'confirm');
+
         // Видимо передумали удалять и наша логика не сработала - редиректим на инфо
-		} else {
-			_Core_Router::redirect( '/info' );
-		}
+        } else {
+            _Core_Router::redirect( '/info' );
+        }
     }
 
     /**

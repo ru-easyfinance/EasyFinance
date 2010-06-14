@@ -42,7 +42,7 @@ class Mail_Model
      */
     function index()
     {
-        $sql = "SELECT 
+        $sql = "SELECT
                     *
                 FROM
                     mail
@@ -71,7 +71,7 @@ class Mail_Model
     {
         if (!$this->mails)
             $this->index();
-            
+
         $text = $param['text'];
         $category = $param['category'];
         $title = $param['title'];
@@ -101,7 +101,7 @@ class Mail_Model
      */
     function del_mail($param)
     {
-        
+
         if (!$this->mails)
             $this->index();
         $ids = $param['ids'];

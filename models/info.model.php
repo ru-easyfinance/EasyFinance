@@ -42,7 +42,7 @@ class Info_Model
     protected $drain = null;
     protected $loans = null;
     protected $profit = null;
-    
+
     /**
      * Массив, содержащий список значений (полей) для расчёта (красный, зелёный, жёлтые)
      * @var array mixed
@@ -285,7 +285,7 @@ class Info_Model
             $this->save();
         }
         $this->init();
-        
+
         $this->step0();
         $this->step1();
         $this->step2();
@@ -301,7 +301,7 @@ class Info_Model
      */
     public function init() {
         //BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
-        //BETWEEN 
+        //BETWEEN
         // Доходы за прошедший месяц
         //SELECT (LAST_DAY(NOW() - INTERVAL 1 MONTH)) as dateend, (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')) as datebegin";
 
@@ -359,7 +359,7 @@ class Info_Model
 //        $this->input['loans']    = 21000;
 //        $this->input['balance']  = 130000;
     }
-    
+
     /**
      * Сохраняет рассчитанные данные в кеше
      * @return void
@@ -382,9 +382,9 @@ class Info_Model
         if ($this->input['profit'] == 0 && $this->input['loans'] > 0) {
             $this->output[1]['loans'] = 100;
         }
-        
+
         //если значение 0 и при этом показатель "F" больше 0, то расчет 1 для тахометра "Деньги" = 5,
-        //если и там 0, то "Деньги" = 0; 
+        //если и там 0, то "Деньги" = 0;
         //Также если значение 0 и при этом показатель "A" больше 0,
         //то расчет 1 для тахометра "Доходы vs Расходы" = 10, если и там 0, то "Доходы vs Расходы" = 0
         if ($this->input['drain'] == 0 && $this->input['balance'] > 0) {
@@ -589,7 +589,7 @@ class Info_Model
                 $this->output[3]['profit'] = 0;
             }
         }
-        
+
 //    =IF((N11=1);
 //        ((100-C11)/(100-D11))
 //    ;

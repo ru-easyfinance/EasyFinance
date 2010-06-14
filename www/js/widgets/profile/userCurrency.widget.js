@@ -1,5 +1,5 @@
 easyFinance.widgets.userCurrency = function(model){
-	var currencyModel = model || easyFinance.models.currency;
+    var currencyModel = model || easyFinance.models.currency;
     var currencyList = {};
     var userCurrencyList = {};
     var defaultCurrency;
@@ -38,14 +38,14 @@ easyFinance.widgets.userCurrency = function(model){
     }
 
     function init(){
-		currencyModel.loadAllCurrency(function(data){
-	        currencyList = data['currency'];
-	        userCurrencyList = easyFinance.models.currency.getCurrencyList();
-	        defaultCurrency = easyFinance.models.currency.getDefaultCurrencyId();
-	        _printCurrencyLists();
-	        _printOptionForDefaultCurrency();
-			
-		});
+        currencyModel.loadAllCurrency(function(data){
+            currencyList = data['currency'];
+            userCurrencyList = easyFinance.models.currency.getCurrencyList();
+            defaultCurrency = easyFinance.models.currency.getDefaultCurrencyId();
+            _printCurrencyLists();
+            _printOptionForDefaultCurrency();
+
+        });
         $('.user li').live('click',function(){
             if (($('.user li').length > 1)) {
                 var id = $(this).attr('id');
@@ -90,7 +90,7 @@ easyFinance.widgets.userCurrency = function(model){
             $.jGrowl('Данная валюта используется!', {theme : 'red'});
         }
     }
-    
+
     function changeDefaultCurrency(currencyId){
         defaultCurrency = currencyId;
     }

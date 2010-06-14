@@ -8,56 +8,56 @@
 class Index_Controller extends _Core_Controller
 {
 
-	/**
-	 * Блюдём интерфейс
-	 *
-	 */
-	protected function __init(){}
-	
-	/**
-	 * Страница по умолчанию без параметров
-	 * @return void
-	 */
-	public function index()
-	{
-		$counters = array(
-			'users'         => 8443,
-			'operations'	=> 943132
-		);
-		
-		$countersFile = DIR_SHARED . 'counters.json';
-		
-		if( file_exists( $countersFile ) )
-		{
-			$countersJson = (array)json_decode( file_get_contents( $countersFile ) );
-			
-			if( is_array($countersJson) )
-			{
-				$counters = $countersJson;
-			}
-		}
-		
-		$this->tpl->assign('usersCount',  number_format($counters['users'], 0, ',', ' '));
-		$this->tpl->assign('operationsCount', number_format($counters['operations'], 0, ',', ' '));
+    /**
+     * Блюдём интерфейс
+     *
+     */
+    protected function __init(){}
 
-		$this->tpl->assign('name_page', 'welcome');
-	}
-	
-	public function notfound()
-	{
-		$this->tpl->assign('no_menu', '1');
-		$this->tpl->assign('name_page', '404');
-	}
+    /**
+     * Страница по умолчанию без параметров
+     * @return void
+     */
+    public function index()
+    {
+        $counters = array(
+            'users'         => 8443,
+            'operations'    => 943132
+        );
+
+        $countersFile = DIR_SHARED . 'counters.json';
+
+        if( file_exists( $countersFile ) )
+        {
+            $countersJson = (array)json_decode( file_get_contents( $countersFile ) );
+
+            if( is_array($countersJson) )
+            {
+                $counters = $countersJson;
+            }
+        }
+
+        $this->tpl->assign('usersCount',  number_format($counters['users'], 0, ',', ' '));
+        $this->tpl->assign('operationsCount', number_format($counters['operations'], 0, ',', ' '));
+
+        $this->tpl->assign('name_page', 'welcome');
+    }
+
+    public function notfound()
+    {
+        $this->tpl->assign('no_menu', '1');
+        $this->tpl->assign('name_page', '404');
+    }
 
         /**
          * Обзор сервиса
          */
-	public function review()
-	{
-		$this->tpl->assign('no_menu', '1');
-		$this->tpl->assign('head_val', '/review/');
-		$this->tpl->assign('name_page', 'review');
-	}
+    public function review()
+    {
+        $this->tpl->assign('no_menu', '1');
+        $this->tpl->assign('head_val', '/review/');
+        $this->tpl->assign('name_page', 'review');
+    }
 
         /**
          * Правила использования
@@ -86,7 +86,7 @@ class Index_Controller extends _Core_Controller
         {
             $this->tpl->assign('no_menu', '1');
             $this->tpl->assign('head_val', '/about/');
-            $this->tpl->assign('name_page', 'about');           
+            $this->tpl->assign('name_page', 'about');
 
         }
 
@@ -100,5 +100,5 @@ class Index_Controller extends _Core_Controller
             $this->tpl->assign('name_page', 'help');
         }
 
-        
+
 }

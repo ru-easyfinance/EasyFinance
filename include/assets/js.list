@@ -10,6 +10,7 @@ jquery/ui.datepicker.js
 jquery/ui.tabs.js
 jquery/ui.accordion.js
 jquery/jquery.qtip.js
+jquery/jquery.tooltip.js
 jquery/jquery.jgrowl.min.js
 calculator.js
 jquery/jquery.mousewheel.js
@@ -40,6 +41,7 @@ widgets/accounts/accountsPanel.widget.js
 widgets/operations/operationEdit.widget.js
 flowplayer-3.1.4.min.js
 widgets/currency/currencyRight.widget.js
+widgets/calendar/calendarMonthPicker.widget.js
 widgets/calendar/calendarLeft.widget.js
 widgets/calendar/calendarPreview.widget.js
 widgets/calendar/calendarOverdue.widget.js

@@ -7,8 +7,8 @@
  */
 class Logout_Controller extends _Core_Controller
 {
-	
-	protected function __init(){}
+
+    protected function __init(){}
     /**
      * Индексная страница
      * @param <array> $args  mixed
@@ -17,12 +17,12 @@ class Logout_Controller extends _Core_Controller
     function index($args)
     {
         Core::getInstance()->user->destroy();
-	if (IS_DEMO) {
-        	header("Location: https://" . URL_ROOT_MAIN);
-	        exit;
-	} else {
-        	header("Location: /");
-	        exit;
-	}
+    if (IS_DEMO) {
+            header("Location: https://" . URL_ROOT_MAIN);
+            exit;
+    } else {
+            header("Location: /");
+            exit;
+    }
     }
 }

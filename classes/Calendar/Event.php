@@ -141,9 +141,9 @@ class Calendar_Event
     {
         return $this->_model->last;
     }
-    
+
     /**
-     * 
+     *
      */
     public function getConvert ()
     {
@@ -178,7 +178,7 @@ class Calendar_Event
 
     /**
      *
-     * @return <type> 
+     * @return <type>
      */
     public function getTarget ()
     {
@@ -360,7 +360,7 @@ class Calendar_Event
 
         // Проверяем на ошибки
         if (count($this->_errors) != 0) {
-            
+
             return false;
 
         } else {

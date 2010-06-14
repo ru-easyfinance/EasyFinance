@@ -1,136 +1,136 @@
 ul.menuProfile {
-	margin-bottom: 0;
-	margin-top: 10px;
-	margin-left: 0px;
+    margin-bottom: 0;
+    margin-top: 10px;
+    margin-left: 0px;
 }
 
 ul.menuProfile:after {
-	display: block;
-	content: ' ';
-	height: 0;
-	overflow: hidden;
-	clear: both;
+    display: block;
+    content: ' ';
+    height: 0;
+    overflow: hidden;
+    clear: both;
 }
 
 ul.menuProfile li {
-	float: left;
-	margin-right: 15px !important;
-	padding: 0 16px 0 0;
-	font-size: 11px;
-	color: #6ebe41;
+    float: left;
+    margin-right: 15px !important;
+    padding: 0 16px 0 0;
+    font-size: 11px;
+    color: #6ebe41;
 }
 
 ul.menuProfile li.act, ul.menuProfile li.ui-state-active {
-	padding: 0 16px 0px 0 !important;
-	background: url('/img/i/bg15.png') no-repeat 100% 0;
+    padding: 0 16px 0px 0 !important;
+    background: url('/img/i/bg15.png') no-repeat 100% 0;
 }
 
 ul.menuProfile li div {
-	padding: 5px 0 22px 13px !important;
+    padding: 5px 0 22px 13px !important;
 }
 
 ul.menuProfile li.act div, ul.menuProfile li.ui-state-active div {
-	background: url('/img/i/bg15.png') no-repeat 0 0 !important;
+    background: url('/img/i/bg15.png') no-repeat 0 0 !important;
 }
 
 ul.menuProfile li div span, ul.menuProfile li div a {
-	cursor: pointer;
-	border-bottom: 1px dashed #6ebe41;
+    cursor: pointer;
+    border-bottom: 1px dashed #6ebe41;
 }
 
 ul.menuProfile li.act div span, ul.menuProfile li.act div a, ul.menuProfile li.ui-state-active div a {
-	cursor: default;
-	border-bottom: 0 none;
+    cursor: default;
+    border-bottom: 0 none;
 }
 
 ul.menuProfile li#ic1 div, ul.menuProfile li#icl1.act span, ul.menuProfile li#ic1 a {
-	display: block;
-	padding: 0 24px 2px 0;
-	background: url('/img/i/icons.gif') no-repeat 100% -490px;
+    display: block;
+    padding: 0 24px 2px 0;
+    background: url('/img/i/icons.gif') no-repeat 100% -490px;
 }
 
 ul.menuProfile li#ic2 div, ul.menuProfile li#icl2.act span, ul.menuProfile li#ic2 a {
-	display: block;
-	padding: 0 32px 0 0;
-	background: url('/img/i/icons.gif') no-repeat 100% -518px;
+    display: block;
+    padding: 0 32px 0 0;
+    background: url('/img/i/icons.gif') no-repeat 100% -518px;
 }
 
 ul.menuProfile li#ic3.act span, ul.menuProfile li#ic3 a {
-	display: block;
-	padding: 0 27px 2px 0;
-	background: url('/img/i/icons.gif') no-repeat 100% -579px;
+    display: block;
+    padding: 0 27px 2px 0;
+    background: url('/img/i/icons.gif') no-repeat 100% -579px;
 }
 
 ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
-	display: block;
-	padding: 0 26px 0 0;
-	background: url('/img/i/icons.gif') no-repeat 100% -609px;
+    display: block;
+    padding: 0 26px 0 0;
+    background: url('/img/i/icons.gif') no-repeat 100% -609px;
 }
 
 .profile .line{
-	border-top : 1px solid #E5E5E5;
-	padding: 15px 0;
+    border-top : 1px solid #E5E5E5;
+    padding: 15px 0;
 }
 
 .profile .line:first-child{
-	border-top : none;
+    border-top : none;
 }
 .profile .email .notExist p{
-	margin : 0;
+    margin : 0;
 }
 
 .profile .email .notExist button{
-	margin-left: 7px;
+    margin-left: 7px;
 }
 .profile .email .notExist label{
-	border: none;
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 18px;
-	color: #202020;
-	cursor: auto;	
+    border: none;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+    color: #202020;
+    cursor: auto;
 }
 .profile .email .notExist label.eventDescription{
-	font-weight: bold;
-	margin-right: 5px;
+    font-weight: bold;
+    margin-right: 5px;
 }
 
 .profile .email .exist #lblIntegrationEmail{
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .profile .email .exist .remove{
-	display: inline-block;
-	margin-left: 7px;
-	cursor: pointer;
+    display: inline-block;
+    margin-left: 7px;
+    cursor: pointer;
 }
 
 .profile .email .description{
-	margin-top: -7px;
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 18px;
-	color: #202020;	
+    margin-top: -7px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+    color: #202020;
 }
 .profile .email .description ul.numberWithPoint, .profile .email .description ul.numberWithPoint li{
-	list-style: decimal;
+    list-style: decimal;
 }
 .profile .email .description ul li{
-	margin-left: 5px;
+    margin-left: 5px;
 }
 .profile .email .description ul.numberWithPoint li{
-	margin-left: 25px;
+    margin-left: 25px;
 }
 
 .profile .email .description h4{
-	margin-top: 7px;
-	font-size: 13px;
-	line-height: 18px;
-	color: #202020;	
+    margin-top: 7px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #202020;
 }
 .profile .email #errorMessageInvalidEmail{
-	font-style: italic;
-	font-weight: normal;
-	color: #f00;
+    font-style: italic;
+    font-weight: normal;
+    color: #f00;
 }
 

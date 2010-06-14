@@ -2,7 +2,7 @@ easyFinance.widgets.calendarList = function(){
     var _data;
     var chainId;
     var operationId;
-    
+
     function init(){
         $('#event_with_select_events span#remove_all_cal').click(function() {
             var ch = $('#per_tabl tr td input:checked');
@@ -37,9 +37,16 @@ easyFinance.widgets.calendarList = function(){
                 $(this).closest('div').find('input[type=checkbox]').removeAttr('checked');
             }
         });
-        $('#per_tabl tr').live('dblclick',function(){
+
+        $('#per_tabl tr').live('click',function(){
             $(this).find('li.edit a').click();
         });
+
+        $('#per_tabl tr .cont').live('click', function(){
+            // #1349. do nothing!
+            return false;
+        });
+
         var element;
         $('#per_tabl tr .cont ul li.edit a').live('click',function(){
             element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
@@ -56,7 +63,7 @@ easyFinance.widgets.calendarList = function(){
             easyFinance.models.accounts.acceptOperationsByIds([operationId]);
             return false;
         });
-        
+
         $('#per_tabl tr .cont ul li.del a').live('click',function(){
             var element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
             chainId = element.chain;
@@ -97,7 +104,7 @@ easyFinance.widgets.calendarList = function(){
                     '</tr>';
             }
         }
-        $('#per_tabl tbody').html(periodicList);        
+        $('#per_tabl tbody').html(periodicList);
     }
 
     return{

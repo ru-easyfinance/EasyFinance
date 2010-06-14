@@ -12,29 +12,29 @@
  * Description for event:
  *    type of event == 'object'
  *    event[eventName] == [function || string]
- *    		function(e){} e is original jQuery event
+ *            function(e){} e is original jQuery event
  *          string - one of custom event
  *
  * Custom plagin options
- * 		$.rwCalculator.version - plugin version
- * 		$.rwCalculator.initialized - initialized plugin;
- * 		$.rwCalculator.buttonPanel - description button panel
- * 		$.rwCalculator.calculate - function(str) - calculate str
- * 		$.rwCalculator.node - last used initialized $(node)
- * 		$.rwCalculator.inst - plugin))
- *  	$.rwCalculator.functions - custom functions !this == node!
- *  		show - show button panel after $(this)
- *  		calculate - calculate $(this) value
- *  		clear - clear $(this) value
- *  		hide - hide button panel
+ *         $.rwCalculator.version - plugin version
+ *         $.rwCalculator.initialized - initialized plugin;
+ *         $.rwCalculator.buttonPanel - description button panel
+ *         $.rwCalculator.calculate - function(str) - calculate str
+ *         $.rwCalculator.node - last used initialized $(node)
+ *         $.rwCalculator.inst - plugin))
+ *      $.rwCalculator.functions - custom functions !this == node!
+ *          show - show button panel after $(this)
+ *          calculate - calculate $(this) value
+ *          clear - clear $(this) value
+ *          hide - hide button panel
  *
  * Button panel
- * 		-lineNumber
- * 				--ButtonNumber
- * 						---class - has 'printed' || 'special'(for use castom event)
- * 						---? rowspan - rowspan
- * 						---text - button text
- * 						---title - tooltip for button
+ *         -lineNumber
+ *                 --ButtonNumber
+ *                         ---class - has 'printed' || 'special'(for use castom event)
+ *                         ---? rowspan - rowspan
+ *                         ---text - button text
+ *                         ---title - tooltip for button
  *
  *
  *
@@ -46,14 +46,14 @@
             var _node = $node || $('body')
             var _inst = null;
             var _node = $node;
-			if (typeof(options)!='object'){
-				options = {};
-			}
+            if (typeof(options)!='object'){
+                options = {};
+            }
 
             if ($.rwCalculator._init){
                 _inst = $.rwCalculator._init();//insert rw-calculator in body
                 delete $.rwCalculator._init; //for IE7 mem hook
-				$.rwCalculator._init = false;
+                $.rwCalculator._init = false;
             }
 
             else {
@@ -111,28 +111,28 @@
     $.rwCalculator.functions = {
         'show': function(e, option){//TODO full search
 
-        	$.rwCalculator.inst.show();
-        	$(this).parent().append($.rwCalculator.inst);
+            $.rwCalculator.inst.show();
+            $(this).parent().append($.rwCalculator.inst);
 
-			var top =0;
-			//if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
-			//	top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
-			//}
-			//else {
-				top = '22px';
-			//}
-			$.rwCalculator.inst.css('top',top);
-			$('.calculatorWrapper').show();
-			$.rwCalculator.node = $(this);
+            var top =0;
+            //if ($('body').height() < ($.rwCalculator.inst.height() + $.rwCalculator.inst.offset().top)) {
+            //    top = '-' + ($.rwCalculator.inst.height() + 15) + 'px';
+            //}
+            //else {
+                top = '22px';
+            //}
+            $.rwCalculator.inst.css('top',top);
+            $('.calculatorWrapper').show();
+            $.rwCalculator.node = $(this);
             if ($.rwCalculator.node.val() == '0') {
                 $.rwCalculator.node.val('');
             }
 
         },
         'hide': function(){
-			$('.calculatorWrapper').hide();
-				$.rwCalculator.inst.hide();
-				//$.click();
+            $('.calculatorWrapper').hide();
+                $.rwCalculator.inst.hide();
+                //$.click();
         },
         'calculate': function(){
             $($.rwCalculator.node).val($.rwCalculator.calculate($($.rwCalculator.node).val()));
@@ -142,27 +142,27 @@
         }
     }
 
-	$.rwCalculator._generateHtmlButtonPanel = function(){
-		try {
-			var _html = '<table>';
+    $.rwCalculator._generateHtmlButtonPanel = function(){
+        try {
+            var _html = '<table>';
 
-			for(var line in $.rwCalculator.buttonPanel){
-				_html += '<tr>';
-					for(var btn in $.rwCalculator.buttonPanel[line]){
-						_html += '<td rowspan="' + ($.rwCalculator.buttonPanel[line][btn]['rowspan'] || '1') + '" class="' + $.rwCalculator.buttonPanel[line][btn]['class'] +
-						'" ' + ($.rwCalculator.buttonPanel[line][btn]['event']?('event="' + $.rwCalculator.buttonPanel[line][btn]['event'] + '"'):'') +
-						'><div title="' + ($.rwCalculator.buttonPanel[line][btn]['title'] ||'') +
-						'" >' + $.rwCalculator.buttonPanel[line][btn]['text'] +
-						'</div></td>';
-					}
-				_html += '</tr>'
-			}
+            for(var line in $.rwCalculator.buttonPanel){
+                _html += '<tr>';
+                    for(var btn in $.rwCalculator.buttonPanel[line]){
+                        _html += '<td rowspan="' + ($.rwCalculator.buttonPanel[line][btn]['rowspan'] || '1') + '" class="' + $.rwCalculator.buttonPanel[line][btn]['class'] +
+                        '" ' + ($.rwCalculator.buttonPanel[line][btn]['event']?('event="' + $.rwCalculator.buttonPanel[line][btn]['event'] + '"'):'') +
+                        '><div title="' + ($.rwCalculator.buttonPanel[line][btn]['title'] ||'') +
+                        '" >' + $.rwCalculator.buttonPanel[line][btn]['text'] +
+                        '</div></td>';
+                    }
+                _html += '</tr>'
+            }
 
-			return (_html + '</table>');
-		}catch (e){
-			return '';
-		}
-	}
+            return (_html + '</table>');
+        }catch (e){
+            return '';
+        }
+    }
 
     $.rwCalculator._init = function(){
         var _tmpDt = new Date();
@@ -175,10 +175,10 @@
         '</div>' +
         '<div class="calculatorWrapper">   </div></div>';
         $('body').append(_html);
-		$('.calculatorWrapper').click(function(){
-			$('.calculatorWrapper').hide();
-			$.rwCalculator.inst.hide();
-			})
+        $('.calculatorWrapper').click(function(){
+            $('.calculatorWrapper').hide();
+            $.rwCalculator.inst.hide();
+            })
         $.rwCalculator.inst = $('#' + id);
         //binds
         var clearVal = false;
@@ -197,7 +197,7 @@
                 }
         }
 
-		$.rwCalculator.inst.find('td.printed div').click(function(){
+        $.rwCalculator.inst.find('td.printed div').click(function(){
             var val = $.rwCalculator.node.val();
             var txt = $(this).text();
             if ('123456789'.indexOf(txt) != -1 && (val == '0' || clearVal)) {
@@ -218,7 +218,7 @@
             }
         });
 
-		$.rwCalculator.inst.find('td.special').click(function(e){
+        $.rwCalculator.inst.find('td.special').click(function(e){
             var event = $(this).attr('event');
             $.rwCalculator.functions[event]();
         });
@@ -228,9 +228,9 @@
     $.fn.rwCalculator = function( options){
         var _node = this;
         if (typeof(options)!='object'){
-			options = {};
-		}
-		rwCalculator(_node,  options);
+            options = {};
+        }
+        rwCalculator(_node,  options);
 
     };
 

@@ -99,7 +99,7 @@ easyFinance.models.budget = function(){
         }
         /**
          * @desc удаляет бюджет
-         * 
+         *
          * @return {String} html for $().append(html)
          */
         function del (date, id, type, callback){
@@ -187,7 +187,7 @@ easyFinance.models.budget = function(){
         }
         /**
          * @desc возвращает общее сформированное инфо о бюджете
-         * @return {} 
+         * @return {}
          */
         function returnInfo(){
             return _data.main;//.budget_info;
@@ -207,7 +207,7 @@ easyFinance.models.budget = function(){
             }
             return {};
         }
-        
+
         return {
             reload : reload,
             load : load,

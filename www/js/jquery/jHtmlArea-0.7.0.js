@@ -394,7 +394,7 @@
                     return old__doPostBack.apply(window, arguments);
                 };
             }
-            
+
         },
         isArray: function(v) {
             return v && typeof v === 'object' && typeof v.length === 'number' && typeof v.splice === 'function' && !(v.propertyIsEnumerable('length'));

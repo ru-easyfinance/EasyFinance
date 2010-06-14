@@ -39,7 +39,7 @@ class Profile_Model
         } else {
 
             $this->user_id = $user->getId();
-            
+
         }
     }
 
@@ -71,7 +71,7 @@ class Profile_Model
         $sql = "UPDATE users u SET user_service_mail = '' WHERE id = ?";
 
         // @TODO Дёргать АПИ у аутсорсеров для физического удаления ящика
-        
+
         return (bool) $this->db->query( $sql, $user->getId() );
 
     }
@@ -92,10 +92,10 @@ class Profile_Model
         } else {
 
             return true;
-            
+
         }
     }
-    
+
     private function ident($pass){
         $sql = (sha1($pass) == $_SESSION['user']['user_pass']) && ($pass) && (strlen($pass) > 3) ;
         return $sql;
@@ -143,7 +143,7 @@ class Profile_Model
                     setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
                 }
                 unset($prop['guide']);
-                
+
                 $ret['profile'] = $this->save('users', $prop, $ident);
 
 //                if ( $prop['help'] == 1 ){
@@ -152,7 +152,7 @@ class Profile_Model
 //                    setCookie("help", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
 //                }
 
-                
+
                 break;
             case 'load':
                 $ret['profile']['login']=$_SESSION['user']['user_login'];

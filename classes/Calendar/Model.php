@@ -59,7 +59,7 @@ class Calendar_Model extends _Core_Abstract_Model
 
         foreach ($rows as $row) {
             // Пропускаем повторы переводов
-            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) { 
+            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) {
                 continue;
             }
             $model = new Calendar_Model( $row, $user );

@@ -23,7 +23,7 @@ class Calendar
      * @var array
      */
     private $_errors = array();
-    
+
     /**
      * Максимально-разрешённое количество событий
      * @var
@@ -47,7 +47,7 @@ class Calendar
      * @param int $start
      * @param int $end
      * @return Calendar
-     * 
+     *
      * @example $calendar = Calendar::loadAll( $user );
      */
     public function loadAll( oldUser $user, $start = null, $end = null)
@@ -80,7 +80,7 @@ class Calendar
 
     /**
      * Список неподтверждённых операций
-     * 
+     *
      * @param oldUser $user
      * @return array
      */
@@ -220,7 +220,7 @@ class Calendar
         } else {
 
             return false;
-            
+
         }
         return true;
     }
@@ -233,10 +233,10 @@ class Calendar
      */
     private function _repeat(Calendar_Event $event, $period)
     {
-        
+
         $datetime = new DateTime( $event->getDate() );
         $week = $event->getWeek();
-        
+
         // Массив с датами события
         $arrayDays = array();
 
@@ -247,11 +247,11 @@ class Calendar
 
             // Устанавливаем максимальное число повторов
             $endRepeat = self::MAX_EVENTS;
-            
+
         } else {
 
             $endRepeat = $event->getRepeat();
-            
+
         }
 
         for ($i = 1 ; $i <= $endRepeat ; $i++) {
@@ -280,7 +280,7 @@ class Calendar
                 // Перебираем по циклу неделю, на один день меньше
                 for ( $j = 0; $j < 6; $j++ ) {
                     $dw = $dwr + $j ;
-                    if ($dw > 6) { 
+                    if ($dw > 6) {
                         $dw = $dw - 7;
                     }
 
@@ -368,7 +368,7 @@ class Calendar
             } else {
                 $this->_errors['error'] = "Не найдена операция для подтверждения";
             }
-            
+
             $operation['accepted']  = 1;
             $operation['category']  = $operation['cat_id'];
             $operation['account']   = $operation['account_id'];

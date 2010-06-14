@@ -12,7 +12,7 @@ easyFinance.widgets.calendar = function(){
     var elem;
     var _element;
     function init(){
-    
+
         $.fullCalendar.monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
         $.fullCalendar.monthNamesShort = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
         $.fullCalendar.dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
@@ -39,49 +39,23 @@ easyFinance.widgets.calendar = function(){
             DragOpacity: {
                 // for agendaWeek and agendaDay
                 agenda: 0.5,
-                
+
                 // for all other views
                 '': 0.5
             },
             events: function(start, end, calback){
                 s = new Date(start.getFullYear(), start.getMonth() - 2, start.getDate() + 14);//+10??там разбег всего на пять, но лучше перестраховаться @todo 0_о Разобраться с автором...
-                var e = new Date(s.getFullYear(), s.getMonth() + 4, s.getDate());
-                
-                
-                // ----------------- Date Bar -------------------------------------------
-                var date = $('#calendar').fullCalendar('getDate');
-                var month = date.getMonth();
-                var year = date.getFullYear();
-                var monthTitle = $.fullCalendar.monthNames[month] + ' ' + year.toString();
-                var _$cal = $('#views');
-                
-                _$cal.find('li.y_prev a').text(year - 1);
-                _$cal.find('li.y_next a').text(year + 1);
-                // -- некрасиво .. нелогично .. не нравится
-                if (month == 11) {
-                    _$cal.find('li.m_next a').text($.fullCalendar.monthNames[0]);
-                }
-                else {
-                    _$cal.find('li.m_next a').text($.fullCalendar.monthNames[month + 1]);
-                }
-                if (month === 0) {
-                    _$cal.find('li.m_prev a').text($.fullCalendar.monthNames[11]);
-                }
-                else {
-                    _$cal.find('li.m_prev a').text($.fullCalendar.monthNames[month - 1]);
-                }
-                
-                _$cal.find('li.cur').text(monthTitle);
-                
-                // ---------------- Date Bar --------------------------------------------
-                
+                var month = start.getMonth();
+                var year = end.getFullYear();
+
                 var typesToClasses = {
                     '0': 'red',
                     '1': 'green',
                     '2': 'yellow',
                     '4': 'blue'
                 }
-				$('.qtip').remove();
+
+                $('.qtip').remove();
                 _data = easyFinance.models.calendarCache.loadSetupData(month, year);
                 var nowDate = new Date();
                 var calendarArray = [];
@@ -92,8 +66,8 @@ easyFinance.widgets.calendar = function(){
                     easyFinance.models.accounts.getAccountCurrencyText(_data[v].account) != easyFinance.models.currency.getDefaultCurrencyText()) {
                         title += easyFinance.models.accounts.getAccountCurrencyText(_data[v].account)
                     }
-                    
-                    
+
+
                     var overdue = (_data[v].accepted == 0 && _data[v].timestamp * 1000 < nowDate.getTime());
                     calendarArray.push({
                         key: v,
@@ -106,7 +80,7 @@ easyFinance.widgets.calendar = function(){
                         draggable: true
                     });
                 }
-                
+
                 calback(calendarArray);
                 //cont
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar').remove();
@@ -179,7 +153,7 @@ easyFinance.widgets.calendar = function(){
                 $('#op_date').datepicker('setDate', date);
             },
             eventDragStart: function(calEvent, jsEvent, ui){
-            
+
             },
             eventMouseover: function(event, jsEvent, view){
                 _positioningToolbar(jsEvent.currentTarget.style.left, jsEvent.currentTarget.style.top);
@@ -200,7 +174,7 @@ easyFinance.widgets.calendar = function(){
             eventRender: function(calEvent, element){
                 var event = _data[calEvent.key];
                 var template = '';
-                
+
                 var typeToStr = {
                     '0': 'Расход',
                     '1': 'Доход',
@@ -213,7 +187,7 @@ easyFinance.widgets.calendar = function(){
                     '2': 'transfer',
                     '4': 'target'
                 };
-                
+
                 if (event.repeat != null) {
                     template = 'Повторяется';
                     //                        var lastChar = event.repeat.toString().substr(event.repeat.toString().length-1, 1);
@@ -229,7 +203,7 @@ easyFinance.widgets.calendar = function(){
                             else {
                                 template += ' до' + $.datepicker.formatDate('dd.mm.yy', Date(event.repeat));
                             }
-                            
+
                             break;
                         case '7':
                             template += ' еженедельно по';
@@ -261,7 +235,7 @@ easyFinance.widgets.calendar = function(){
                             else {
                                 template += ' до' + $.datepicker.formatDate('dd.mm.yy', Date(event.repeat));
                             }
-                            
+
                             break;
                         case '30':
                             template += ' ежемесячно';
@@ -310,40 +284,15 @@ easyFinance.widgets.calendar = function(){
                     },
                     style: 'modern'
                 });
-                
+
             }
         });
-        
-        
-        $('#views').addClass('ui-widget-content');
-        var _$cal = $('#views');
-        _$cal.find('li.m_prev').click(function(){
-			$('#calendar').fullCalendar('prev');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        _$cal.find('li.m_next').click(function(){
-			$('#calendar').fullCalendar('next');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        _$cal.find('li.y_prev').click(function(){
-			$('#calendar').fullCalendar('prevYear');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        _$cal.find('li.y_next').click(function(){
-			$('#calendar').fullCalendar('nextYear');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
-        
-        _$cal.find('li.cur').click(function(){
-			$('#calendar').fullCalendar('today');
-            easyFinance.models.calendarCache.reloadWidgets('calendar');
-        });
     }
-	function getCurrentDate() {
-		return $('#calendar').fullCalendar('getDate');
-	}
+    function getCurrentDate() {
+        return $('#calendar').fullCalendar('getDate');
+    }
     return {
-		getCurrentDate: getCurrentDate,
+        getCurrentDate: getCurrentDate,
         init: init
     };
 }();
