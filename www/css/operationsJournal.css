@@ -140,18 +140,18 @@ table#operations_list td + td + td + td + td + td{
 #operations_list div.target { background-position: -48px 0px; }
 
 #dateTo {
-/*    margin-right: 40px;*/
-    !margin-right: 40px;
+    margin-right: 40px;
 }
 
 #btn_CSV {
-    float: right;
-    !float: none;
-    position: relative;
-    !margin-left:50px;
-    background-image:url("/img/images/excel.jpg");
+    position: absolute;
+    margin-top: 0px;
+    top: 6px;
+    margin-right: 6px;
+    right: 315px;
     height:23px;
     width:23px;
+    background-image:url("/img/images/excel.jpg");
 }
 
 /*.f_field b, #divOperationsJournalTotal b {
@@ -161,8 +161,7 @@ table#operations_list td + td + td + td + td + td{
 
 #btn_ReloadData {
     position:relative;
-    margin-left:60px;
-    !margin-left:0px;
+    margin-left:70px;
 }
 
 #search_field {

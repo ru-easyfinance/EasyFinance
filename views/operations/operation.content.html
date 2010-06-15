@@ -3,11 +3,7 @@
                         <div class="ct">
                             <div class="head">
                                 <h2>Журнал операций</h2>
-                                <ul class="action">
-                                    <li class="over1"><a title="настройки">настройки</a></li>
-                                    <li class="over2"><a title="закрыть">закрыть</a></li>
-                                    <li class="over3"><a title="свернуть">свернуть</a></li>
-                                </ul>
+                                <input type="button" title="Экспорт в Excel в формате CSV" id="btn_CSV" >
                             </div>
                         </div>
                         <div class="operation_list operationsJournal">
@@ -46,7 +42,6 @@
                                                     <input type="text" id="dateTo" value="{$dateTo}" size="9" class="efTooltip" title="Дата конца периода, дд.мм.гггг"/>
                                                 </div>
                                                 <input type="button" value="Показать" id="btn_ReloadData"/>
-                                                <input type="button" id="btn_CSV" title="Экспорт в Excel в формате CSV"/>
                                             </div>
                                             <div id="divOperationsJournalFilters" class="hidden">
                                                 <span id="lblOperationsJournalFilters"></span>&nbsp;<a id="linkOperationsJournalClearFilters" href="#">(сбросить фильтр)</a>
