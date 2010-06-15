@@ -187,7 +187,7 @@ easyFinance.widgets.operationsJournal = function(){
         pageTotal = Math.round(pageTotal*100)/100;
         if (_account != '' && _account != "undefined") {
             $('#lblOperationsJournalAccountBalance')
-                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text);//.show();
+                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text).show();
         }
 
         $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal, false, false) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
@@ -212,10 +212,6 @@ easyFinance.widgets.operationsJournal = function(){
         } else {
             $('#lblOperationsJournalAccountBalance').addClass('sumRed');
         }
-        $("#balance_before").html(insertWBR($("#balance_before").html()));
-        $("#balance_after").html(insertWBR($("#balance_after").html()));
-        $("#lblOperationsJournalSum").html(insertWBR($("#lblOperationsJournalSum").html()));
-        $("#lblOperationsJournalAccountBalance").html(insertWBR($("#lblOperationsJournalAccountBalance").html()));
     }
 
     function _deleteChecked(){

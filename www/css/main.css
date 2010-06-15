@@ -2062,6 +2062,7 @@ div.op_addoperation div.op_line div.amount div.amount_help{
     margin-top: 0;
     padding: 0;
     color: #a1a1a1;
+    width: 170px;
 }
 div.op_addoperation div.op_line div.amount div.amount_general{
     position : relative;
