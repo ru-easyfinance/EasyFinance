@@ -1,10 +1,8 @@
 <?php
 /**
  * Набор компонентов для сборки массива ресурсов пользовательского интерфейса
- *
-#Max: а чего так не почеловчески назвал модуль?
  */
-class _resourcesComponents extends sfComponents
+class resComponents extends sfComponents
 {
     /**
      *
@@ -33,10 +31,11 @@ class _resourcesComponents extends sfComponents
             ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
 
         foreach ($data as $k => $v) {
-            #Max: ты понял, что за условие ты написал? И не говори, что так было в старом коде
-            #     вырежи к черту
-            if (!(10 <= $v['type']) and ($v['type'] <=15)) {
+            // нужно ли ставить 0 или только при положительных значениях?
+            if (isset($reserves[$v['id']])) {
                 $data[$v['id']]['reserve'] = (float) $reserves[$v['id']]['reserve'];
+            } else {
+                $data[$v['id']]['reserve'] = 0;
             }
         }
 
