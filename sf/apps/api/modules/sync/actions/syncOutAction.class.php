@@ -10,8 +10,8 @@ class syncOutAction extends sfAction
      */
     public function execute($request)
     {
-        $syncModel = $request->getParameter('model');
-        $this->forward404Unless($table = $this->_getTable($syncModel));
+        $modelName = $this->_getModelName($request->getParameter('model'));
+        $this->forward404Unless($modelName);
 
         // Явно указать layout для всех форматов
         $this->setLayout('layout');
@@ -20,11 +20,14 @@ class syncOutAction extends sfAction
         $this->form->bind($request->getGetParameters());
 
         if ($this->form->isValid()) {
+
             $userId = $request->getParameter('user_id');
+            $query = $this->_getQuery($modelName, $this->form->getDatetimeRange(), $userId);
+
             // Vars
-            $this->setVar('list',    $table->queryFindModifiedForSync($this->form->getDatetimeRange(), $userId)->fetchArray());
-            $this->setVar('model',   $table->getOption('name'), $noEscape = true);
-            $this->setVar('columns', $this->_getColunmsToReturn($syncModel), $noEscape = true);
+            $this->setVar('list',    $query->fetchArray());
+            $this->setVar('model',   $modelName, $noEscape = true);
+            $this->setVar('columns', $this->_getColunmsToReturn($modelName), $noEscape = true);
             return;
         }
 
@@ -34,38 +37,68 @@ class syncOutAction extends sfAction
 
 
     /**
-     * Получить таблицу по коду модели
+     * Получить название модели доступной для синхронизации
      *
-     * @param  string $syncModel   - код модели, см. routing.yml
-     * @return null|Doctrine_Table
+     * @param  string $syncModel
+     * @return string
      */
-    private function _getTable($syncModel)
+    private function _getModelName($syncModel)
     {
         $models = array(
+            'currency'  => 'Currency',
+            'category'  => 'Category',
             'account'   => 'Account',
             'operation' => 'Operation',
-            'currency'  => 'Currency',
         );
+
         if (isset($models[$syncModel])) {
-            return Doctrine::getTable($models[$syncModel]);
+            return $models[$syncModel];
         }
+    }
+
+
+    /**
+     * Получить инициализированный запрос для выборки объектов для синхронизации
+     *
+     * @param  string          $modelName
+     * @param  myDatetimeRange $range
+     * @param  int             $userId
+     * @return Doctrine_Query
+     */
+    private function _getQuery($modelName, myDatetimeRange $range, $userId)
+    {
+        $models = array(
+            'Currency'  => 'mySyncOutCurrencyQuery',
+            'Category'  => 'mySyncOutCategoryQuery',
+            'Account'   => 'mySyncOutAccountQuery',
+        );
+
+        if (isset($models[$modelName])) {
+            $queryClass = $models[$modelName];
+        } else {
+            throw new InvalidArgumentException(__CLASS__.": Expected valid model name, got `{$modelName}`");
+        }
+
+        $q = new $queryClass($range, $userId);
+        return $q->getQuery();
     }
 
 
     /**
      * Получить список свойств объекта, которые надо вернуть
      *
-     * @param  string $syncModel   - код модели, см. routing.yml
+     * @param  string $modelName
      * @return array
      */
-    public function _getColunmsToReturn($syncModel)
+    public function _getColunmsToReturn($modelName)
     {
         $models = array(
-            'currency'  => array('code', 'symbol', 'name', 'rate'),
-            'account'   => array('name', 'description', 'currency_id', 'type_id'),
-            'operation' => array('account_id', 'category_id', 'amount', 'comment'),
+            'Currency'  => array('code', 'symbol', 'name', 'rate'),
+            'Category'  => array('parent_id', 'system_id', 'name', 'type'),
+            'Account'   => array('name', 'description', 'currency_id', 'type_id'),
+            'Operation' => array('account_id', 'category_id', 'amount', 'comment'),
         );
-        return $models[$syncModel];
+        return $models[$modelName];
     }
 
 }

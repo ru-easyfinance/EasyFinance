@@ -42,67 +42,6 @@ class api_sync_OutTest extends myFunctionalTestCase
 
 
     /**
-     * Отдать валюты
-     * см. фикстуры, там куча валют
-     */
-    public function testGetCurrency()
-    {
-        $c = Doctrine::getTable('Currency')->find(2);
-        $c->setRate(2);
-        $c->save();
-
-        $user = $this->helper->makeUser();
-
-        $this->browser
-            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
-                'some_extra_field' => 1,
-                'from'    => $c->getDateTimeObject('updated_at')->format(DATE_ISO8601),
-                'to'      => $c->getDateTimeObject('updated_at')->format(DATE_ISO8601),
-                'model'   => 'currency',
-                'user_id' => $user->getId())), 200)
-            ->with('response')->begin()
-                ->checkContains('<recordset type="Currency">')
-                ->checkElement('record')
-                ->checkElement('record code')
-                ->checkElement('record symbol')
-                ->checkElement('record name')
-                ->checkElement('record rate')
-                ->checkElement('record created_at')
-                ->checkElement('record updated_at')
-            ->end();
-    }
-
-
-    /**
-     * Отдать список счетов
-     */
-    public function testGetAccounts()
-    {
-        $account1 = $this->helper->makeAccount(null, array('updated_at' => $this->_makeDate(1000)));
-        $account2 = $this->helper->makeAccount($account1->getUser());
-        $accountA = $this->helper->makeAccount();
-
-        $this->browser
-            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
-                'model'   => 'account',
-                'from'    => $this->_makeDate(500),
-                'to'      => $this->_makeDate(1500),
-                'user_id' => $account1->getUserId())), 200)
-            ->with('response')->begin()
-                ->checkContains('<recordset type="Account">')
-                ->checkElement('record', 1)
-                ->checkElement('#'.$account1->getId())
-                ->checkElement('record name')
-                ->checkElement('record description')
-                ->checkElement('record currency_id')
-                ->checkElement('record type_id')
-                ->checkElement('record created_at')
-                ->checkElement('record updated_at')
-            ->end();
-    }
-
-
-    /**
      * Показать удаленный объект
      */
     public function testGetDeletedObject()

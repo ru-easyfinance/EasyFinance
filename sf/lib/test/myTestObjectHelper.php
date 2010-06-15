@@ -116,6 +116,10 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeCategory(User $user = null, array $props = array(), $save = true)
     {
         $defaultProps = array(
+            'parent_id' => 0,
+            'system_id' => 1,
+            'name'      => $this->makeText('Название категории'),
+            'type'      => 1,
         );
         $props = array_merge($defaultProps, $props);
 

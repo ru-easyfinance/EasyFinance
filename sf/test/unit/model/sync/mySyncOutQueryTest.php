@@ -1,11 +1,11 @@
 <?php
-require_once dirname(__FILE__).'/../../bootstrap/all.php';
+require_once dirname(__FILE__).'/../../../bootstrap/all.php';
 
 
 /**
- * Базовая таблица для объектов, которые поддерживают синхронизацию
+ * Базовый запрос для выборки объектов для синхронизации
  */
-class model_myBaseSyncTableTest extends myUnitTestCase
+class model_sync_mySyncOutQueryTest extends myUnitTestCase
 {
     protected $app = 'api';
 
@@ -39,8 +39,6 @@ class model_myBaseSyncTableTest extends myUnitTestCase
      */
     public function testFindModified()
     {
-        $table = Doctrine::getTable('Account');
-
         $accounts = $this->helper->makeAccountCollection(3, null, array(
             array('updated_at' => $this->_makeDate(1000)->format(DATE_ISO8601)),
             array('updated_at' => $this->_makeDate(1500)->format(DATE_ISO8601)),
@@ -49,8 +47,8 @@ class model_myBaseSyncTableTest extends myUnitTestCase
         // Счет чужого пользователя
         $accountA = $this->helper->makeAccount(null, array('updated_at' => $this->_makeDate(1500)->format(DATE_ISO8601)));
 
-        $found = $table->createBaseSyncQuery($this->_makeDateRange(1400, 1500), $accounts[0]->getUserId())
-            ->execute();
+        $q = new mySyncOutAccountQuery($this->_makeDateRange(1400, 1500), $accounts[0]->getUserId());
+        $found = $q->getQuery()->execute();
         $this->assertEquals(1, $found->count());
         $this->assertEquals($accounts[1]->getId(), $found->getFirst()->getId());
     }
@@ -66,15 +64,16 @@ class model_myBaseSyncTableTest extends myUnitTestCase
         $account  = $this->helper->makeAccount(null, array('updated_at' => $this->_makeDate(-1500)->format(DATE_ISO8601)));
         $account->delete();
 
-        $found = $table->createBaseSyncQuery($this->_makeDateRange(-100, 100), $account->getUserId())
-            ->execute();
+        $q = new mySyncOutAccountQuery($this->_makeDateRange(-100, 100), $account->getUserId());
+        $found = $q->getQuery()->execute();
+
         $this->assertEquals(1, $found->count());
         $this->assertEquals($account->getId(), $found->getFirst()->getId());
     }
 
 
     /**
-     * Выбрать список у которых нет пользователя
+     * Выбрать список объектов, у которых нет пользователя
      */
     public function testFindModifiedWithoutUser()
     {
@@ -84,8 +83,9 @@ class model_myBaseSyncTableTest extends myUnitTestCase
         $c1->setDateTimeObject('updated_at', $this->_makeDate(1000));
         $c1->save();
 
-        $found = $table->queryFindModifiedForSync($this->_makeDateRange(1000, 1001), null)
-            ->execute();
+        $q = new mySyncOutCurrencyQuery($this->_makeDateRange(100, 1100), null);
+        $found = $q->getQuery()->execute();
+
         $this->assertEquals(1, $found->count());
         $this->assertEquals($c1->getId(), $found->getFirst()->getId());
     }
