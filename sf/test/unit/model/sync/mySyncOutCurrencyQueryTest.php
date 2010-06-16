@@ -15,6 +15,7 @@ class model_sync_mySyncOutCurrenctQueryTest extends myUnitTestCase
      */
     public function testFindActiveForSync()
     {
+        // Деактивировать все валюты кроме первой
         Doctrine::getTable('Currency')->createQuery()
             ->update()
             ->set('is_active', 0)

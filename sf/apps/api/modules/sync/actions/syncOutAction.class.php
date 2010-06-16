@@ -28,7 +28,7 @@ class syncOutAction extends sfAction
             $this->setVar('list',    $query->fetchArray());
             $this->setVar('model',   $modelName, $noEscape = true);
             $this->setVar('columns', $this->_getColunmsToReturn($modelName), $noEscape = true);
-            return;
+            return sfView::SUCCESS;
         }
 
         $this->getResponse()->setStatusCode(400);
