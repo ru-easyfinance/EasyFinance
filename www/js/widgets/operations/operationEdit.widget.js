@@ -503,12 +503,12 @@ easyFinance.widgets.operationEdit = function(){
                 });
 
                 _$ufdTarget.ufd({manualWidth: 140, zIndexPopup: 1300, unwrapForCSS: true});
-                _$ufdTarget.change();
             }
 
             // обновляем опции
             _dirtyTargets = true;
             _refreshTargets();
+            _$ufdTarget.change();
         }
     }
 
