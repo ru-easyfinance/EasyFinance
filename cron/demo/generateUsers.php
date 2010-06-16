@@ -216,14 +216,41 @@ for($user = 1; $user < $usersCount * $idInterval; $user = $user + $idInterval) {
 
         $db->commit();
 
-        if(DEBUG)
+        if(DEBUG) {
             echo "user #" . $user . " done;\n";
+        }
     } catch(PDOException $e) {
         $db->rollBack();
         echo "\n\n" . $e->getMessage() . "\n\n" . $e->getTraceAsString() . "\n\n" . $sql;
         exit(2);
     }
 }
+
+// Обновляем даты операций, бюджета
+
+//подгоняем даты операций к текущему времени:
+//последняя подтвержденная операция должна стать сегодняшней,
+//поэтому каждую операцию сдвигаем на разницу между текущей датой и последней операцией демо-пользователя
+//дату последней операции демо-пользователя считаем известной - 21 мая 2010
+$db->exec("UPDATE operation op SET
+    DATE = DATE_ADD(DATE, INTERVAL (DATEDIFF(CURDATE(), '2010-05-21')) DAY)");
+
+//подтягиваем бюджет к текущему месяцу:
+//т.к. эталонной пользователь был создан в мае 2010, и на май же был запланирован бюджет, сдвинем бюджет
+//на столько месяцев, сколько прошло с мая 2010, чтобы бюджет вновь стал актуален для текущего месяца
+$db->exec("UPDATE budget bu SET
+    bu.date_start = DATE_ADD(
+            bu.date_start, INTERVAL (PERIOD_DIFF(DATE_FORMAT(CURDATE(), '%Y%m'), '201005')) MONTH)");
+
+//дату конца поставим последней датой месяца начала - для этого от первого числа следующего месяца отнимем 1,
+//а следующий месяц получим аналогично дате начала - на месяц больше
+
+$db->exec("UPDATE budget bu SET
+    bu.date_end = DATE_ADD(DATE_ADD(bu.date_start, INTERVAL 1 MONTH),INTERVAL -1 DAY)");
+
+//обновляем ключи в бюджете
+$db->exec("UPDATE budget b SET
+    `key` = CONCAT(user_id, '-', category, '-', drain, '-', date_start) ORDER BY date_start DESC");
 
 file_put_contents($usersFile, '<?php $users = ' . var_export($users, true) . ';');
 chmod($usersFile, 0777);
