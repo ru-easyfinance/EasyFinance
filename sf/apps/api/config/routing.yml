@@ -22,3 +22,11 @@ sync_in_category:
   params:  { module: sync, action: syncInCategory, sf_format: xml }
   requirements:
     sf_method: post
+
+# Sync(In): Принять набор операций
+sync_in_operation:
+  url: /post/operation.:sf_format
+  class:   sfRequestRoute
+  params:  { module: sync, action: syncInOperation, sf_format: xml }
+  requirements:
+    sf_method: post
