@@ -161,7 +161,7 @@ class Login_Model
             $this->defaultAccounts();
             Core::getInstance()->user->initUserCategory();
             Core::getInstance()->user->save();
-            $body = "<html><head><title>Успешная регистрация на сайте домашней бухгалтерии EasyFinance.ru</title></head>
+            $body = "<html><head><title>Успешная регистрация в системе управления личными финансами EasyFinance.ru</title></head>
             <p>Здравствуйте!</p>
             <p>Поздравляем вас с успешным завершением регистрации в системе. Теперь вы можете в любое время войти в систему, введя свой логин и пароль на сайте https://easyfinance.ru.</p>
             <p>Используйте наш сервис для контроля своей домашней бухгалтерии.</p>
@@ -181,7 +181,7 @@ class Login_Model
 
              $message = Swift_Message::newInstance()
                 // Заголовок
-                ->setSubject('Успешная регистрация на сайте домашней бухгалтерии EasyFinance.ru')
+                ->setSubject('Успешная регистрация в системе управления личными финансами EasyFinance.ru')
                 // Указываем "От кого"
                 ->setFrom(array('support@easyfinance.ru' => 'EasyFinance.ru'))
                 // Говорим "Кому"
