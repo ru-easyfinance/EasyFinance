@@ -111,7 +111,7 @@ define('FPDF_PATH', HTML2PS_DIR.'fpdf/');
 
 // Note that WRITER_TEMPDIR !REQUIRES! slash (or backslash) on the end (unless you want to get 
 // some files like tempPS_jvckxlvjl in your working directory).
-if (defined('WRITER_TEMPDIR')) {
+if (!defined('WRITER_TEMPDIR')) {
     define('WRITER_TEMPDIR', HTML2PS_DIR.'temp/');
 }
 define('WRITER_FILE_PREFIX','PS_');
