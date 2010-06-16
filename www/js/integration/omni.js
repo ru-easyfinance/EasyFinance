@@ -326,11 +326,14 @@ function wsInitValidator() {
 
     dValidator.validatableElems['contacts'] = new Array();
 
+    /*
+     см. #1512
     dValidator.validatableElems['contacts']['wz_mail'] = {
         'validationType' : 'mail',
         'errMsg' : '',
         'params' : {}
     };
+    */
 
     dValidator.validatableElems['contacts']['wz_phone_mob'] = {
         'validationType' : 'phone',

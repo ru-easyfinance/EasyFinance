@@ -136,7 +136,7 @@ class Integration_Controller extends _Core_Controller
                 $doc_date = $data['wz_foreign_id_date'],
                 $doc_valid = $data['wz_foreign_id_expire'],
                 $contact_phone = $data['wz_phone_home'],
-                $contact_email = $data['wz_mail'],
+                $contact_email = $data['wz_card_account_mail'], //см. #1512
                 $contact_mobile = $data['wz_phone_mob'],
                 $contact_other = $data['wz_other_contacts'],
                 $work_company = $data['wz_work_name'],

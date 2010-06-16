@@ -73,8 +73,8 @@ $i++;
  ?>
 </b></div>
 <div style="position:absolute; top: 323px; left:240px;"><b><?php echo $birth_place ?></b></div>
-<?php if (mb_strtolower($gender)=='мужской') { ?><div style="position:absolute; top: 342px; left:350px;"><b>x</b></div><?php }; ?>
-<?php if (mb_strtolower($gender)=='женский') { ?><div style="position:absolute; top: 342px; left:550px;"><b>x</b></div><?php }; ?>
+<?php if ($gender=='0') { ?><div style="position:absolute; top: 342px; left:350px;"><b>v</b></div><?php }; ?>
+<?php if ($gender=='1') { ?><div style="position:absolute; top: 342px; left:550px;"><b>v</b></div><?php }; ?>
 <div style="position:absolute; top: 304px; left:820px;"><b><?php echo $citizenship ?></b></div>
 <div style="position:absolute; top: 323px; left:820px;"><b><?php echo $inn ?></b></div>
 
@@ -112,7 +112,8 @@ $i++;
 
 <div style="position:absolute; top: 805px; left:290px;"><b><?php echo $contact_phone ?></b></div>
 <div style="position:absolute; top: 805px; left:865px;"><b><?php echo $contact_mobile ?></b></div>
-<div style="position:absolute; top: 821px; left:290px;"><b><?php echo $contact_email ?></b></div>
+<div style="position:absolute; top: 821px; left:290px;"><b><?php echo $card_email . "@mail.easyfinance.ru" ?></b></div>
+
 <div style="position:absolute; top: 821px; left:865px;"><b><?php echo $contact_other ?></b></div>
 
 <div style="position:absolute; top: 860px; left:200px; width:400px;"><b><?php echo $work_company ?></b></div>
