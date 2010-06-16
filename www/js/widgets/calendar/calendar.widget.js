@@ -91,7 +91,7 @@ easyFinance.widgets.calendar = function(){
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.edit').click(function(){
                     //                        alert('edit' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
                     _element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
-                    calendarEditSingleOrChain(_element);
+                    calendarEditSingleOrChain($.extend({}, _element));
                 });
                 
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function(){
@@ -117,7 +117,11 @@ easyFinance.widgets.calendar = function(){
             },
             eventClick: function(event, element, view){
                 elem = $.extend({}, _data[event.key]);
-                calendarEditSingleOrChain(elem);
+                //calendarEditSingleOrChain(elem);
+
+                promptSingleOrChain("edit", function(isChain){
+                    easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
+                });
             },
             dayClick: function(date, allDay, jsEvent, view){
                 // открываем окно планирования

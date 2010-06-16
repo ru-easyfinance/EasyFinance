@@ -362,12 +362,15 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 }
 
 function calendarEditSingleOrChain(event) {
+    var clone = $.extend({}, event);
+
     if (event.every == "0") {
         // единичная операция, редактируем
         easyFinance.widgets.operationEdit.fillFormCalendar(event, true, false);
     } else {
         promptSingleOrChain("edit", function(isChain){
-            easyFinance.widgets.operationEdit.fillFormCalendar(event, true, isChain);
+            debugger;
+            easyFinance.widgets.operationEdit.fillFormCalendar(clone, true, isChain);
         });
     }
 }
@@ -390,7 +393,7 @@ function calendarDeleteSingleOrChain(event) {
     if (event.every == "0") {
         // если операция одиночная, удаляем после подтверждения
         if (confirm('Удалить операцию?')) {
-            easyFinance.models.accounts.deleteOperationsChain(chainId, deleteCallback);
+            easyFinance.models.accounts.deleteOperationsByIds(operationId, [], deleteCallback);
         }
     } else {
         // спрашиваем, удалить данную операцию или всю серию
