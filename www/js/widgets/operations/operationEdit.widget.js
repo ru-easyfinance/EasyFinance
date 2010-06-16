@@ -509,6 +509,7 @@ easyFinance.widgets.operationEdit = function(){
             // обновляем опции
             _dirtyTargets = true;
             _refreshTargets();
+            _$ufdTarget.change();
         }
     }
 

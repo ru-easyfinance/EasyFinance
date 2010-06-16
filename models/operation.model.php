@@ -612,7 +612,7 @@ class Operation_Model {
                 (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
                 exchange_rate, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, NOW())";
-            $this->db->query($sql, $this->_user->getId(), -$money, $date, -1, $from_account, 0,
+            $this->db->query($sql, $this->_user->getId(), -$money, $date, null, $from_account, 0,
                 $comment, $to_account, $curr);
 
             $last_id = mysql_insert_id();
@@ -622,7 +622,7 @@ class Operation_Model {
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
             imp_id, exchange_rate, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, NOW())";
-            $this->db->query($sql, $this->_user->getId(), $convert, $date, -1, $to_account, $last_id,
+            $this->db->query($sql, $this->_user->getId(), $convert, $date, null, $to_account, $last_id,
                 $comment, $from_account, $money, $curr, $curTargetId);
 
         } else {
@@ -631,7 +631,7 @@ class Operation_Model {
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW())";
 
-        $last_id = $this->db->query($sql, $this->_user->getId(), -$money, $date, -1, $from_account, 0,
+        $last_id = $this->db->query($sql, $this->_user->getId(), -$money, $date, null, $from_account, 0,
             $comment, $to_account);
 
             $last_id = mysql_insert_id();
@@ -639,7 +639,7 @@ class Operation_Model {
         $sql = "INSERT INTO operation
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
-        $this->db->query($sql, $this->_user->getId(), $money, $date, -1, $to_account, $last_id,
+        $this->db->query($sql, $this->_user->getId(), $money, $date, null, $to_account, $last_id,
             $comment, $from_account, $money);
             $last_id2 = mysql_insert_id();
         }

@@ -462,58 +462,50 @@ class Targets_Model {
 
     /**
      * Пополняет финансовую цель, переводя в резерв субсчёта из основного счёта
-     * @param $account_id int Ид счёта
-     * @param $target_id int Ид фин.цели
+     *
+     * @param $accountId int Ид счёта
+     * @param $targetId int Ид фин.цели
      * @param $user_id string Ид пользователя
      * @param $money float
      * @param $dt date
      * @return bool
      */
-    public function addTargetOperation($account_id, $target_id, $money, $comment, $date, $close) {
-        $comment = strip_tags($comment);
-        //$qwe = "SELECT count(*) AS cunt FROM `target` WHERE id = ? AND target_account_id = ?";
-        //$a = $this->db->query($qwe, $target_id, $account_id);
-        $qwe = "SELECT target_account_id FROM `target` WHERE id = ? ";
-            $a = $this->db->query($qwe, $target_id);
-        if ( $a[0]['target_account_id'] == $account_id )
-        {
-            $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
-                VALUES(?,?,?,?,NOW(),?,?);",$account_id, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
-            if ($close==1) {
-                $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
-            }
-            $this->staticTargetUpdate($target_id);
-            return true;
-        }
-        else {
-            ///operation->model->addTransfer
-            /*$drain_money = $money * -1;
-                // tr_id. было drain
-        $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $money, $date, -1, $account_id, 1,
-                $comment, $a[0]['target_account_id']);*/
-            $mod = New Operation_model;
-            $mod->addTransfer($money, 0, 0, $date, $account_id, $a[0]['target_account_id'], 'Перевод на счёт финцели', null);
+    public function addTargetOperation($accountId, $targetId, $money, $comment, $date, $close) {
 
-            /*$last_id = mysql_insert_id();
-                $sql = "INSERT INTO operation
-                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer)
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $this->db->query($sql, $this->user->getId(), $money, $date, -1, $a[0]['target_account_id'], 1,
-                $comment, $account_id);//*/
-            //
+        $targetAccountId = $this->db->selectCell("SELECT target_account_id FROM `target` WHERE id = ? ", $targetId);
+        $userId = Core::getInstance()->user->getId();
+
+        // Если счёт финцели равен текущему счёту
+        if ($targetAccountId == $accountId) {
+
+            $sql = "INSERT INTO
+                        target_bill (`bill_id`, `target_id`, `user_id`, `money`, `comment`, `date`, `dt_create`)
+                    VALUES ( ?, ?, ?, ?, ?, ?, NOW());";
+
+            $this->db->query($sql, $accountId, $targetId, $userId, $money, strip_tags($comment), $date);
+
+            if ($close == 1) {
+                $sql = "UPDATE target SET close=1 WHERE user_id=? AND id=?";
+                $this->db->query($sql, $userId, $targetId);
+            }
+
+            // Обновляем статистику по финцели
+
+            return $this->staticTargetUpdate($targetId);
+
+        } else {
+
+            $mod = New Operation_model;
+            $mod->addTransfer($money, 0, 0, $date, $accountId, $targetAccountId, 'Перевод на счёт финцели', null);
+
             //а теперь добавим перевод на фин цель со счёта фин цели!
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
-                VALUES(?,?,?,?,NOW(),?,?);",$a[0]['target_account_id']/*$account_id*/, $target_id, Core::getInstance()->user->getId(), $money, $comment, $date);
+                VALUES(?,?,?,?,NOW(),?,?);",$targetAccountId, $targetId, Core::getInstance()->user->getId(), $money, $comment, $date);
             if (!empty($close)) {
-                $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $target_id);
+                $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $targetId);
             }
-            $this->staticTargetUpdate($target_id);
-            return true;
 
-            //
+            return $this->staticTargetUpdate($targetId);
         }
     }
 
