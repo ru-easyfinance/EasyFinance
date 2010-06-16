@@ -362,14 +362,14 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 }
 
 function calendarEditSingleOrChain(event) {
+    // для сохранения в замыкании
     var clone = $.extend({}, event);
 
     if (event.every == "0") {
         // единичная операция, редактируем
-        easyFinance.widgets.operationEdit.fillFormCalendar(event, true, false);
+        easyFinance.widgets.operationEdit.fillFormCalendar(clone, true, false);
     } else {
         promptSingleOrChain("edit", function(isChain){
-            debugger;
             easyFinance.widgets.operationEdit.fillFormCalendar(clone, true, isChain);
         });
     }

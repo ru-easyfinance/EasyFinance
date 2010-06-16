@@ -117,11 +117,11 @@ easyFinance.widgets.calendar = function(){
             },
             eventClick: function(event, element, view){
                 elem = $.extend({}, _data[event.key]);
-                //calendarEditSingleOrChain(elem);
+                calendarEditSingleOrChain(elem);
 
-                promptSingleOrChain("edit", function(isChain){
-                    easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
-                });
+                //promptSingleOrChain("edit", function(isChain){
+                //    easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
+                //});
             },
             dayClick: function(date, allDay, jsEvent, view){
                 // открываем окно планирования
