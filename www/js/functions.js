@@ -360,6 +360,50 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
     }
     return returnArray;
 }
+
+function calendarEditSingleOrChain(event) {
+    if (event.every == "0") {
+        // единичная операция, редактируем
+        easyFinance.widgets.operationEdit.fillFormCalendar(event, true, false);
+    } else {
+        promptSingleOrChain("edit", function(isChain){
+            easyFinance.widgets.operationEdit.fillFormCalendar(event, true, isChain);
+        });
+    }
+}
+
+function calendarDeleteSingleOrChain(event) {
+    var deleteCallback = function(data){
+        // функция отображает результат удаления
+        if (data.result) {
+            if (data.result.text)
+                $.jGrowl(data.result.text, {theme: 'green'});
+        } else if (data.error) {
+            if (data.error.text)
+                $.jGrowl(data.error.text, {theme: 'red', stick: true});
+        }
+    };
+
+    var operationId = event.id;
+    var chainId = event.chain;
+
+    if (event.every == "0") {
+        // если операция одиночная, удаляем после подтверждения
+        if (confirm('Удалить операцию?')) {
+            easyFinance.models.accounts.deleteOperationsChain(chainId, deleteCallback);
+        }
+    } else {
+        // спрашиваем, удалить данную операцию или всю серию
+        promptSingleOrChain("delete", function(isChain){
+            if (isChain) {
+                easyFinance.models.accounts.deleteOperationsChain(chainId, deleteCallback);
+            } else {
+                easyFinance.models.accounts.deleteOperationsByIds(operationId, [], deleteCallback);
+            }
+        });
+    }
+}
+
 /**
  * TODO rewrite
  * Рисует диалог выбора для цепочки

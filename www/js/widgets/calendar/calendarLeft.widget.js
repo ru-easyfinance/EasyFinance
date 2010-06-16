@@ -38,16 +38,18 @@ easyFinance.widgets.calendarLeft = function(){
     }
 
     function _menuEdit(id){
+        // ищем операцию в списке просроченных
         _operation = easyFinance.models.accounts.getOverdueOperationById(id);
         if (_operation) {
+            // если операция была просрочена,
+            // редактируем конкретную операцию, а не всю цепочку
             easyFinance.widgets.operationEdit.fillFormCalendar(_operation, true, false);
-            return;
+        } else {
+            // для серий будущих операций спрашиваем,
+            // редактировать одно событие или серию
+            _operation = easyFinance.models.accounts.getFutureOperationById(id);
+            calendarEditSingleOrChain(_operation);
         }
-
-        _operation = easyFinance.models.accounts.getFutureOperationById(id);
-        promptSingleOrChain("edit", function(isChain){
-            easyFinance.widgets.operationEdit.fillFormCalendar(_operation, true, isChain);
-        });
     }
 
     function _menuDelete(id){
