@@ -90,14 +90,28 @@ easyFinance.widgets.calendar = function(){
                 '<li title="Удалить" class="del"><a></a></li></ul></div>');
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.edit').click(function(){
                     //                        alert('edit' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
-                    _element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
-                    calendarEditSingleOrChain($.extend({}, _element));
+                    var elem = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
+
+                    if (elem.repeat != "0") {
+                        promptSingleOrChain("edit", function(isChain){
+                            easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
+                        });
+                    } else {
+                        easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, false);
+                    }
                 });
                 
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function(){
                     //                        alert('del' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
-                    var element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
-                    calendarDeleteSingleOrChain(element);
+                    var elem = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
+
+                    if (elem.repeat != "0") {
+                        promptSingleOrChain("edit", function(isChain){
+                            easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
+                        });
+                    } else {
+                        easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, false);
+                    }
                 });
 
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar:not(.accepted) li.accept').click(function(){
@@ -116,12 +130,15 @@ easyFinance.widgets.calendar = function(){
                 //cont
             },
             eventClick: function(event, element, view){
-                elem = $.extend({}, _data[event.key]);
-                calendarEditSingleOrChain(elem);
+                var elem = _data[event.key];
 
-                //promptSingleOrChain("edit", function(isChain){
-                //    easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
-                //});
+                if (elem.repeat != "0") {
+                    promptSingleOrChain("edit", function(isChain){
+                        easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
+                    });
+                } else {
+                    easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, false);
+                }
             },
             dayClick: function(date, allDay, jsEvent, view){
                 // открываем окно планирования

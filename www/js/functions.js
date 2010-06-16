@@ -361,21 +361,28 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
     return returnArray;
 }
 
-function calendarEditSingleOrChain(event) {
+// @TODO
+// эту функцию пока нельзя использовать!
+// при редактировании неск. операций подставляются старые данные
+
+function ___calendarEditSingleOrChain(event) {
     // для сохранения в замыкании
-    var clone = $.extend({}, event);
+    //var clone = $.extend({}, event);
 
     if (event.every == "0") {
         // единичная операция, редактируем
-        easyFinance.widgets.operationEdit.fillFormCalendar(clone, true, false);
+        easyFinance.widgets.operationEdit.fillFormCalendar(event, true, false);
     } else {
-        promptSingleOrChain("edit", function(isChain){
-            easyFinance.widgets.operationEdit.fillFormCalendar(clone, true, isChain);
+        promptSingleOrChain(event, "edit", function(event, isChain){
+            easyFinance.widgets.operationEdit.fillFormCalendar(event, true, isChain);
         });
     }
 }
 
-function calendarDeleteSingleOrChain(event) {
+// @TODO
+// эту функцию пока нельзя использовать!
+// при редактировании неск. операций подставляются старые данные
+function ___calendarDeleteSingleOrChain(event) {
     var deleteCallback = function(data){
         // функция отображает результат удаления
         if (data.result) {
