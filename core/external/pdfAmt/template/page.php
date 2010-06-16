@@ -1,7 +1,9 @@
 <?php
     if (!$birth_date_split) {
         $birth_date_split = array('','','');
-    } else {
+    }
+
+    if ($birth_date) {
         $birth_date_split=explode(".", $birth_date);
     }
 
@@ -48,28 +50,44 @@ $i++;
 <div style="position:absolute; top: 304px; left:290px;"><b>
 <?php
 $i=0;
-while ($i<mb_strlen($birth_date_split[0])) {
-echo '<span style="padding-right:23px;">'.$birth_date_split[0]{$i}.'</span>';
-$i++;
-};
+$len=0;
+if (isset($birth_date_split[0])) {
+    $len = mb_strlen($birth_date_split[0]);
+    if ($len == 2) {
+        while ($i<$len) {
+            echo '<span style="padding-right:23px;">'.$birth_date_split[0]{$i}.'</span>';
+            $i++;
+        };
+    }
+}
  ?>
 </b></div>
 <div style="position:absolute; top: 304px; left:395px;"><b>
 <?php
 $i=0;
-while ($i<mb_strlen($birth_date_split[1])) {
-echo '<span style="padding-right:23px;">'.$birth_date_split[1]{$i}.'</span>';
-$i++;
-};
+if (isset($birth_date_split[1])) {
+    $len = mb_strlen($birth_date_split[1]);
+    if ($len == 2) {
+        while ($i<$len) {
+            echo '<span style="padding-right:23px;">'.$birth_date_split[1]{$i}.'</span>';
+            $i++;
+        };
+    }
+}
  ?>
 </b></div>
 <div style="position:absolute; top: 304px; left:503px;"><b>
 <?php
 $i=0;
-while ($i<mb_strlen($birth_date_split[2])) {
-echo '<span style="padding-right:23px;">'.$birth_date_split[2]{$i}.'</span>';
-$i++;
-};
+if (isset($birth_date_split[2])) {
+    $len = mb_strlen($birth_date_split[2]);
+    if ($len == 4) {
+        while ($i<$len) {
+            echo '<span style="padding-right:23px;">'.$birth_date_split[2]{$i}.'</span>';
+            $i++;
+        };
+    }
+}
  ?>
 </b></div>
 <div style="position:absolute; top: 323px; left:240px;"><b><?php echo $birth_place ?></b></div>
