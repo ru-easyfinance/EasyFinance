@@ -362,27 +362,28 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 }
 
 // @TODO
-// эту функцию пока нельзя использовать!
-// при редактировании неск. операций подставляются старые данные
+// избавиться от currentCalendarEvent!
+// сейчас, к сожалению, если работать без этого,
+// то при редактировании неск. операций подставляются старые данные
+// есть какой-то глюк или нюанс при работе с замыканиями..
+var currentCalendarEvent = null;
 
-function ___calendarEditSingleOrChain(event) {
-    // для сохранения в замыкании
-    //var clone = $.extend({}, event);
+function calendarEditSingleOrChain(event) {
+    currentCalendarEvent = event;
 
-    if (event.every == "0") {
+    if (currentCalendarEvent.every == "0") {
         // единичная операция, редактируем
-        easyFinance.widgets.operationEdit.fillFormCalendar(event, true, false);
+        easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, false);
     } else {
-        promptSingleOrChain(event, "edit", function(event, isChain){
-            easyFinance.widgets.operationEdit.fillFormCalendar(event, true, isChain);
+        promptSingleOrChain("edit", function(isChain){
+            easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, isChain);
         });
     }
 }
 
-// @TODO
-// эту функцию пока нельзя использовать!
-// при редактировании неск. операций подставляются старые данные
-function ___calendarDeleteSingleOrChain(event) {
+function calendarDeleteSingleOrChain(event) {
+    currentCalendarEvent = event;
+
     var deleteCallback = function(data){
         // функция отображает результат удаления
         if (data.result) {
@@ -394,21 +395,18 @@ function ___calendarDeleteSingleOrChain(event) {
         }
     };
 
-    var operationId = event.id;
-    var chainId = event.chain;
-
     if (event.every == "0") {
         // если операция одиночная, удаляем после подтверждения
         if (confirm('Удалить операцию?')) {
-            easyFinance.models.accounts.deleteOperationsByIds(operationId, [], deleteCallback);
+            easyFinance.models.accounts.deleteOperationsByIds(currentCalendarEvent.id, [], deleteCallback);
         }
     } else {
         // спрашиваем, удалить данную операцию или всю серию
         promptSingleOrChain("delete", function(isChain){
             if (isChain) {
-                easyFinance.models.accounts.deleteOperationsChain(chainId, deleteCallback);
+                easyFinance.models.accounts.deleteOperationsChain(currentCalendarEvent.chain, deleteCallback);
             } else {
-                easyFinance.models.accounts.deleteOperationsByIds(operationId, [], deleteCallback);
+                easyFinance.models.accounts.deleteOperationsByIds(currentCalendarEvent.id, [], deleteCallback);
             }
         });
     }
