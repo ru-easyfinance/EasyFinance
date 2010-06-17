@@ -1244,4 +1244,20 @@ class Operation_Model {
         $count = $this->db->selectRow($sql, (int)$acc_id);
         return $count['op_count'];
     }
+
+
+    /**
+     * Удаляет все операции по указанной категории
+     *
+     * @param oldUser $user
+     * @param int $catId
+     * @return bool
+     */
+    public function deleteOperationsByCategory(oldUser $user, $catId) {
+        $sql = "UPDATE operation SET updated_at=NOW(), deleted_at=NOW() WHERE cat_id IN (
+            SELECT cat_id FROM category WHERE user_id=? AND (cat_id=? OR cat_parent=?))";
+
+        return (bool)$this->db->query($sql, $user->getId(), $catId, $catId);
+    }
+
 }

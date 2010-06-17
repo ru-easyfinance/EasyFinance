@@ -241,4 +241,19 @@ class Category_Model {
             'system' => $systems
         );
     }
+
+    /**
+     * Возвращает количество операций по ID категории
+     *
+     * @param oldUser $user Ссылка на объект пользователя
+     * @param int $categoryId Ид категории которую нужно удалить
+     * @return int Количество операций по категории пользователя
+     */
+    function getCountOperationByCategory(oldUser $user, $categoryId = 0)
+    {
+        $sql = "SELECT COUNT(id) FROM operation WHERE cat_id IN (
+            SELECT cat_id FROM category WHERE user_id=? AND (cat_id=? OR cat_parent=?))";
+
+        return (int)$this->db->selectCell($sql, $user->getId(), $categoryId, $categoryId);
+    }
 }

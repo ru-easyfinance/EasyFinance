@@ -186,33 +186,39 @@ class Category_Controller extends _Core_Controller_UserCommon
      */
     function del ($args)
     {
-        die(json_encode(
-            array(
-                "confirm" => array(
-                    "text" => "Вы уверены, что хотите bla-bla-bla?",
-                    "id" => 3
-                )
-            )
-        ));
-
-
         $catId     = 0;
 
-        if( array_key_exists(0 ,$args) && is_numeric($args[0]) && $args[0] )
-        {
+        if(array_key_exists(0 ,$args) && is_numeric($args[0]) && $args[0]) {
             $catId = (int)$args[0];
-        }
-        elseif( isset($this->request->post['id']) && $this->request->post['id'] )
-        {
+        } elseif(isset($this->request->post['id']) && $this->request->post['id']) {
             $catId = (int)$this->request->post['id'];
         }
 
+        // Проверяем, есть ли по категории операции
+        if (isset($this->request->post['confirm']) &&
+            $this->request->post['confirm'] === 'false' &&
+            $this->model->getCountOperationByCategory(Core::getInstance()->user, $catId) > 0) {
+                die(json_encode(
+                        array(
+                            "confirm" => array(
+                                "text" => "Эта категория содержит операции. " .
+                                    "При удалении категории все операции по ней будут удалены!" .
+                                    "\n\nВы действительно хотите удалить категорию?",
+                                "id" => $catId
+                            )
+                        )
+                ));
+        }
+
         // Если удаление подтверждено....
-        if( isset($this->request->get['confirmed']) && $this->request->get['confirmed'] )
-        {
-            if( $this->model->del( $catId ) )
-            {
-                $this->tpl->assign( 'result', array('text'=>"Категория успешно удалена.") );
+        if(isset($this->request->get['confirmed']) && $this->request->get['confirmed']) {
+            // Отмечаем операции неподтверждёнными
+            $operation = new Operation_Model();
+            $operation->deleteOperationsByCategory(Core::getInstance()->user, $catId);
+
+            // Удаляем категорию (делаем невидимой)
+            if($this->model->del($catId)) {
+                $this->tpl->assign('result', array('text' => "Категория успешно удалена.", 'id' => $catId));
             }
             // Исключительная ситуация.
             else
@@ -227,17 +233,22 @@ class Category_Controller extends _Core_Controller_UserCommon
                 unset( $_SESSION['redirect'] );
             }
         }
+
         // Если нет  - показываем форму для подтверждения
         elseif( !isset($request->get['confirmed']) )
         {
             $confirm= array (
                 'title'         => 'Удаление категории',
                 'message'     => 'Вы действительно хотите удалить категорию?',
-                // @TODO: если есть операции, message должен быть такой:
-                // '<b>Эта категория содержит операции. При удалении категории операции по ней также будут удалены!</b><br><br>Вы действительно хотите удалить категорию?',
                 'yesLink'    => '/category/del/' . $catId . '?confirmed=1',
                 'noLink'     => $_SERVER['HTTP_REFERER'],
             );
+
+            if ($this->model->getCountOperationByCategory(Core::getInstance()->user, $catId) > 0) {
+                $confirm['message'] = "<b>Эта категория содержит операции.</b><br/>" .
+                    "При удалении категории все операции по ней будут удалены!<br/><br/>" .
+                    "Вы действительно хотите удалить категорию?";
+            }
 
             // Сохраняем в сессии адрес куда идти если согласится
             $_SESSION['redirect'] = $_SERVER['HTTP_REFERER'];
@@ -254,6 +265,7 @@ class Category_Controller extends _Core_Controller_UserCommon
 
      /**
      * Возвращает список пользовательских и системных категорий в формате JSON
+     *
      * @param array $args
      */
     function getCategory ($args) {
