@@ -51,34 +51,34 @@ class Budget_ModelTest extends UnitTestCase
             'account_id' => $this->accountId,
         );
         // Правильные операции, на вчера
-        CreateObjectHelper::createOperation($options);
-        CreateObjectHelper::createOperation($options);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
+        CreateObjectHelper::makeOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Операция не выполнена
         $options['accepted'] = 0;
         $options['cat_id'] = $this->cat2;
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
 
         // Дата операции установлена на завтра
         $options['date'] = date('Y-m-d', time()+86400);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
         $options['accepted'] = 1;
         $options['date'] = date('Y-m-d', time()+86400);
         $options['cat_id'] = $this->cat3;
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Удалённая операция
         $options['deleted_at'] = '2010-02-02 02:02:02';
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
         // Обычная операция, вне цепочки
         unset($options['deleted_at']);
         unset($options['chain_id']);
-        CreateObjectHelper::createOperation($options);
+        CreateObjectHelper::makeOperation($options);
 
 
         // Создаём записи в бюджет
@@ -96,8 +96,6 @@ class Budget_ModelTest extends UnitTestCase
 
     public function testLoadBudget()
     {
-        $this->markTestIncomplete();
-
         $this->_makeOperation();
 
         $budget = new Budget_Model();
