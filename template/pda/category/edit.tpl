@@ -12,7 +12,6 @@ $typesArray = array(
 <div class="menu">
     <a href="/category/add/waste" class="<?php echo ($category['type'] == Category::TYPE_WASTE)?'current':''?>">расход</a> | 
     <a href="/category/add/profit" class="<?php echo ($category['type'] == Category::TYPE_PROFIT)?'current':''?>">доход</a> | 
-    <a href="/category/add/universal" class="<?php echo ($category['type'] == Category::TYPE_UNIVERSAL)?'current':''?>">универсальная</a>
 </div>
 <?php
 // Вывод сообщений
