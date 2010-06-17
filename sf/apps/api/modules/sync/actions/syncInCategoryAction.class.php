@@ -25,21 +25,21 @@ class syncInCategoryAction extends myBaseSyncInAction
         }
 
         // существующие записи, владельца не проверяем! так надо!
-        $recordIds = $this->searchInXML($xml->xpath('//record/@id'), 'id');
+        $recordIds = $this->filterByXPath('//record/@id', 'id');
         $categories = Doctrine_Query::create()
             ->select("c.*")
             ->from("Category c INDEXBY c.id")
             ->whereIn("c.id", $recordIds)
             ->execute();
 
-        $recordSystemCategories = $this->searchInXML($xml->xpath('//record/system_id'));
+        $recordSystemCategories = $this->filterByXPath('//record/system_id');
         $systemCategories = Doctrine_Query::create()
             ->select("s.id, s.id as system_id")
             ->from("SystemCategory s")
             ->whereIn("s.id", $recordSystemCategories)
             ->execute(array(), 'FetchPair');
 
-        $parentIds = $this->searchInXML($xml->xpath('//record/parent_id'));
+        $parentIds = $this->filterByXPath('//record/parent_id');
         $parents = Doctrine_Query::create()
             ->select("c.id, c.id parent_id")
             ->from("Category c")
@@ -89,15 +89,11 @@ class syncInCategoryAction extends myBaseSyncInAction
                     'success' => 1,
                 );
             } else {
-                $message = (strlen($form->getErrorSchema())
-                    ? $form->getErrorSchema() . " "
-                    : "[Invalid.] " . implode(" [Invalid.] ", $errors)
-                );
                 $results[] = array(
                     'id'      => $record['id'],
                     'cid'     => (string) $record['cid'],
                     'success' => 0,
-                    'message' => $message,
+                    'message' => $this->formatErrorMessage($form, $errors),
                 );
             }
         }

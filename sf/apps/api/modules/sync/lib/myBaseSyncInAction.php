@@ -93,13 +93,28 @@ abstract class myBaseSyncInAction extends sfAction
 
 
     /**
+     * Фильтрует XML по выражению XPath, @see searchInXML
+     *
+     * @param  string $xpath Выражение для фильтрации
+     * @param  string $key   Ключ для поиска/null
+     * @return array
+     */
+    protected function filterByXPath($xpath, $key = null)
+    {
+        return $this->searchInXML($this->getXML()->xpath($xpath), $key);
+    }
+
+
+    /**
      * Ищет по SimpleXML набору значение атрибутов/содержимое элементов
+     * TODO дописать возможность генерации не плоских массивов (hash-array)
+     *      и убить отдельный метод prepareArray (с) Svel
      *
      * @param  array|SimpleXMLElement $xml Отфильтрованный xml
      * @param  string                 $key Ключ для поиска/null
      * @return array
      */
-    protected function searchInXML($xml, $key = null)
+    private function searchInXML($xml, $key = null)
     {
         $data = array();
         foreach ($xml as $tmp) {
@@ -115,6 +130,7 @@ abstract class myBaseSyncInAction extends sfAction
                 $data[] = $tmp;
             }
         }
+
         return $data;
     }
 
@@ -141,6 +157,28 @@ abstract class myBaseSyncInAction extends sfAction
         }
 
         throw new RuntimeException(__CLASS__.": Expected valid SimpleXMLElement, got null");
+    }
+
+
+    /**
+     * Собирает в строку сообщения об ошибках
+     *
+     * @param  sfForm $form
+     * @param  array  $errors
+     * @return string
+     */
+    protected function formatErrorMessage(sfForm $form, Array $errors)
+    {
+        return (
+                    ($errors
+                        ? "[Invalid.] " . implode(" [Invalid.] ", $errors)
+                        : ""
+                    ) . (
+                    strlen($form->getErrorSchema())
+                        ? (($errors ? " " : "") . $form->getErrorSchema())
+                        : ""
+                    )
+                );
     }
 
 }

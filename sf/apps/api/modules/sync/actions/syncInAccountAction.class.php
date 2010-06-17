@@ -20,26 +20,26 @@ class syncInAccountAction extends myBaseSyncInAction
         $xml = $this->getXML();
 
         $data = array();
-        foreach ($xml->recordset[0] as $record) {
+        foreach ($this->getXML()->recordset[0] as $record) {
             $data[] = $this->prepareArray($record);
         }
 
         // существующие записи, владельца не проверяем! так надо!
-        $recordIds = $this->searchInXML($xml->xpath('//record/@id'), 'id');
+        $recordIds = $this->filterByXPath('//record/@id', 'id');
         $accounts = Doctrine_Query::create()
             ->select("a.*")
             ->from("Account a INDEXBY a.id")
             ->whereIn("a.id", $recordIds)
             ->execute();
 
-        $recordTypes = $this->searchInXML($xml->xpath('//record/type_id'));
+        $recordTypes = $this->filterByXPath('//record/type_id');
         $types = Doctrine_Query::create()
             ->select("t.account_type_id id, t.account_type_id type_id")
             ->from("AccountType t")
             ->whereIn("t.account_type_id", $recordTypes)
             ->execute(array(), 'FetchPair');
 
-        $recordCurrencies = $this->searchInXML($xml->xpath('//record/currency_id'));
+        $recordCurrencies = $this->filterByXPath('//record/currency_id');
         $currencies = Doctrine_Query::create()
             ->select("c.id, c.id")
             ->from("Currency c")
@@ -89,15 +89,11 @@ class syncInAccountAction extends myBaseSyncInAction
                     'success' => 1,
                 );
             } else {
-                $message = (strlen($form->getErrorSchema())
-                    ? $form->getErrorSchema() . " "
-                    : "[Invalid.] " . implode(" [Invalid.] ", $errors)
-                );
                 $results[] = array(
                     'id'      => $record['id'],
                     'cid'     => (string) $record['cid'],
                     'success' => 0,
-                    'message' => $message,
+                    'message' => $this->formatErrorMessage($form, $errors),
                 );
             }
         }
