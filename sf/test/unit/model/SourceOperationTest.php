@@ -32,7 +32,7 @@ class model_SourceOperationTest extends myUnitTestCase
 
         $this->assertModels($op, $source->Operation);
 
-        $op->delete();
+        $op->hardDelete();
         $this->assertEquals(0, $source->getTable()->createQuery()->count());
     }
 
