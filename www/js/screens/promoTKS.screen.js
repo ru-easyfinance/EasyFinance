@@ -118,9 +118,9 @@ function submitTKSFull() {
         submitTKSinternal();
 
         // направляем на сайт Тинькова
-        var prefix = "https://www.tcsbank.ru/deposit/form/?easyfinance_formdeposit&";
+        var prefix = "https://www.tcsbank.ru/deposit/form/?easyfinance_formdeposit_1&";
         var params = 'lastname=' + escape($("#txtSurname").val()) + '&firstname=' + escape($("#txtName").val()) + '&middlename=' + escape($("#txtPatronymic").val()) + '&phone=' + $("#txtPhone").val();
-        var postfix = '&step=2';
+        var postfix = '&step=2&utm_source=easyfinance_formdeposit&utm_medium=mediyka&utm_term=tinkoff&utm_content=bannerlink&utm_campaign=vklady';
         var url = prefix + params + postfix;
         window.open(url);
 
