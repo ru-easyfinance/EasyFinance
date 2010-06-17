@@ -264,8 +264,8 @@ class Operation_Model {
             $tags = array();
         }
 
-        $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `type`, `comment`, `tags`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())';
+        $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `type`,
+            `comment`, `tags`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())';
 
         $this->db->query($sql, $this->_user->getId(), $money, $date, $category, $account, $drain, !$drain,
                 $comment, implode(', ', $tags));
@@ -304,24 +304,25 @@ class Operation_Model {
             if (!empty($sql))
                 $sql .= ',';
             $sql .= "('"
-                    . $this->_user->getId() . "','"
-                    . ( ( $operation['type'] == 0 ) ?
-                            ( -1 * abs($operation['amount']) ) : $operation['amount'] ) . "','"
-                    . $operation['date'] . "','"
-                    . $operation['category'] . "','"
-                    . $operation['account'] . "','"
-                    . $operation['drain'] . "','"
-                    . !$operation['drain'] . "','"
-                    . $operation['comment'] . "','"
-                    . $operation['tags'] . "','"
-                    . $operation['accepted'] . "', '"
-                    . $operation['chain'] . "', NOW())";
+                . $this->_user->getId() . "','"
+                . ( ( $operation['type'] == 0 ) ?
+                    ( -1 * abs($operation['amount']) )
+                    : $operation['amount'] ) . "','"
+                . $operation['date'] . "','"
+                . $operation['category'] . "','"
+                . $operation['account'] . "','"
+                . $operation['drain'] . "','"
+                . !$operation['drain'] . "','"
+                . $operation['comment'] . "','"
+                . $operation['tags'] . "','"
+                . $operation['accepted'] . "', '"
+                . $operation['chain'] . "', NOW(), NOW())";
         }
 
         if (!empty($sql)) {
 
             $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `type`, `comment`, `tags`, `accepted`, `chain_id`, `created_at`) VALUES ' . $sql;
+                `drain`, `type`, `comment`, `tags`, `accepted`, `chain_id`, `created_at`, `updated_at`) VALUES ' . $sql;
 
             $this->db->query($sql);
         } else {
@@ -424,12 +425,14 @@ class Operation_Model {
                         NULL, $this->_user->getId(), $id);
                 if ($accepted) {
                     $sql = "INSERT INTO operation
-                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id, accepted)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?, 1)";
+                                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, imp_id,
+                                    accepted, created_at, updated_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 1, NOW(), NOW())";
                 } else {
                     $sql = "INSERT INTO operation
-                        (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
+                                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, imp_id,
+                                    created_at, updated_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, NOW(), NOW())";
                 }
                 $this->db->query($sql, $this->_user->getId(), $money, $date, -1, $toAccount, $id,
                         $comment, $account, NULL);
@@ -439,9 +442,6 @@ class Operation_Model {
         return '[]';
     }
 
-    function convertSumm() {
-
-    }
 
     /**
      * Добавляет несколько однообразных переводов между счетами
@@ -473,8 +473,8 @@ class Operation_Model {
                 // Создаём операцию откуда переводим
                 $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                    exchange_rate, chain_id, accepted, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, ?, 0, NOW())";
+                    exchange_rate, chain_id, accepted, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, ?, 0, NOW(), NOW())";
                 $this->db->query($sql,
                         $this->_user->getId(),
                         -$value['amount'],
@@ -492,8 +492,8 @@ class Operation_Model {
                 // Создаём операцию куда переводим
                 $sql = "INSERT INTO operation
                 (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                imp_id, exchange_rate, chain_id, accepted, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, ?, 0, NOW())";
+                imp_id, exchange_rate, chain_id, accepted, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, ?, 0, NOW(), NOW())";
 
                 $this->db->query($sql,
                         $this->_user->getId(),
@@ -513,8 +513,8 @@ class Operation_Model {
 
                 $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type,
-                    chain_id, accepted, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 0, NOW())";
+                    chain_id, accepted, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 0, NOW(), NOW())";
 
                 $this->db->query($sql,
                         $this->_user->getId(),
@@ -531,8 +531,8 @@ class Operation_Model {
 
                 $sql = "INSERT INTO operation
                     (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type,
-                    imp_id, chain_id, accepted, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 0, NOW())";
+                    imp_id, chain_id, accepted, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 0, NOW(), NOW())";
 
                 $this->db->query($sql, $this->_user->getId(),
                         $value['amount'],
@@ -591,8 +591,8 @@ class Operation_Model {
             // Создаём операцию откуда переводим
             $sql = "INSERT INTO operation
                 (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                exchange_rate, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, NOW())";
+                exchange_rate, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, NOW(), NOW())";
             $this->db->query($sql, $this->_user->getId(), -$money, $date, null, $from_account, 0,
                     $comment, $to_account, $curr);
 
@@ -601,26 +601,26 @@ class Operation_Model {
             // Создаём операцию куда переводим
             $sql = "INSERT INTO operation
             (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-            imp_id, exchange_rate, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, NOW())";
+            imp_id, exchange_rate, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, NOW(), NOW())";
             $this->db->query($sql, $this->_user->getId(), $convert, $date, null, $to_account, $last_id,
                     $comment, $from_account, $money, $curr, $curTargetId);
         } else {
 
-            $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW())";
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), NOW())";
 
             $last_id = $this->db->query($sql, $this->_user->getId(), -$money, $date, null, $from_account, 0,
                             $comment, $to_account);
 
             $last_id = mysql_insert_id();
 
-            $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, imp_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), ?)";
-            $this->db->query($sql, $this->_user->getId(), $money, $date, null, $to_account, $last_id,
-                    $comment, $from_account, $money);
+        $sql = "INSERT INTO operation
+            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, imp_id, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, NOW(), NOW())";
+        $this->db->query($sql, $this->_user->getId(), $money, $date, null, $to_account, $last_id,
+            $comment, $from_account, $money);
             $last_id2 = mysql_insert_id();
         }
         $this->_user->initUserAccounts();
