@@ -2,8 +2,20 @@
 
 class mySyncInXMLHelper
 {
-    protected static $xmlTemplate = "<request>\n    <recordset type=\"%s\">\n%s    </recordset>\n</request>\n";
-    protected static $recordTemplate = "        <record id=\"%s\" cid=\"%s\"%s>\n%s        </record>\n";
+    protected static $xmlTemplate = '
+        <request>
+            <recordset>
+                %s
+            </recordset>
+        </request>
+    ';
+
+    // Max: а если id не указан?
+    protected static $recordTemplate = '
+        <record %s cid="%s"%s>
+            %s
+        </record>
+    ';
 
     protected $CID = 1;
 
@@ -20,10 +32,11 @@ class mySyncInXMLHelper
      * @param  string    $model
      * @param  array     $default
      */
-    public function __construct($model, $default = array())
+    public function __construct($model, $default = array(), $fields = array())
     {
         $this->model  = new $model;
         $this->modelName = $model;
+        $this->fields = $fields;
 
         $this->model->fromArray($default, false);
     }
@@ -37,11 +50,11 @@ class mySyncInXMLHelper
     public function make($params = array())
     {
         $cid = $params['cid'] = isset($params['cid']) ? $this->getCID($params['cid']) : $this->getCID();
-        $this->addRecord(array_merge($this->model->toArray(false), $params));
+        $params = array_merge($this->model->toArray(false), $params);
 
         $id = '';
-        if (isset($params['id'])) {
-            $id = $params['id'];
+        if (!empty($params['id'])) {
+            $id = "id=\"{$params['id']}\"";
         }
 
         $deleted = '';
@@ -90,52 +103,22 @@ class mySyncInXMLHelper
      */
     protected function createFields($params = array())
     {
-        $params = array_merge($this->model->toArray(false), $params);
-        if (isset($params['deleted_at'])) {
-            unset($params['deleted_at']);
-        }
-        unset($params['id'], $params['cid']);
 
         $fields = '';
-        foreach ($params as $tag => $value) {
-            if (null !== $value) {
-                $fields .= sprintf("            <%s>%s</%s>\n", $tag, $value, $tag);
-            } else {
-                $fields .= sprintf("            <%s />\n", $tag);
+        foreach ($this->fields as $tag) {
+
+            if (isset($params[$tag])) {
+                $value = $params[$tag];
+
+                if (null !== $value) {
+                    $fields .= sprintf("<%s>%s</%s>\n", $tag, $value, $tag);
+                } else {
+                    $fields .= sprintf("<%s />\n", $tag);
+                }
             }
         }
 
         return $fields;
-    }
-
-
-    /**
-     * Добавляет переданные параметры в кэш
-     *
-     * @param  array $record
-     * @return void
-     */
-    protected function addRecord(array $record)
-    {
-        unset($record['cid']);
-        $this->records[] = $record;
-    }
-
-
-    /**
-     * Возвращает набор данных, добавленных в XML в виде массива
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->records;
-    }
-
-
-    public function reset()
-    {
-        $this->records = array();
     }
 
 
@@ -155,7 +138,7 @@ class mySyncInXMLHelper
     {
         return sprintf(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n%s",
-            sprintf(self::$xmlTemplate, $this->modelName, $recordSet)
+            sprintf(self::$xmlTemplate, $recordSet)
         );
     }
 
@@ -168,18 +151,6 @@ class mySyncInXMLHelper
     public function getEmptyRequest()
     {
         return $this->decorate();
-    }
-
-
-    /**
-     * Создать дату с указанным смещением от текущей
-     *
-     * @param  int    $shift - Смещение в секундах
-     * @return string
-     */
-    protected function _makeDate($shift)
-    {
-        return date(DATE_ISO8601, time()+$shift);
     }
 
 }

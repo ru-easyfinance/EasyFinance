@@ -5,7 +5,8 @@
  * @param  array $results    Массив результатов обработки
  */
 ?>
-<?php printf('<resultset type="%s">', mb_strtolower($type)); ?>
+
+<resultset type="<?php echo $type; ?>">
     <?php foreach ($results as $result): ?>
         <?php
             echo sprintf(

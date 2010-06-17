@@ -8,6 +8,25 @@ require_once dirname(__FILE__).'/BaseIn.php';
 class api_sync_InOperationTest extends api_sync_in
 {
     /**
+     * Получить список полей полей объекта, которые принимаются из XML
+     */
+    protected function getFields()
+    {
+        return array(
+            'account_id',
+            'category_id',
+            'amount',
+            'type',
+            'date',
+            'comment',
+            'accepted',
+            'created_at',
+            'updated_at',
+        );
+    }
+
+
+    /**
      * Возвращает стандартный валидный набор полей и значений объекта
      *
      * @return array
@@ -41,7 +60,7 @@ class api_sync_InOperationTest extends api_sync_in
      */
     protected function getModelName()
     {
-        return 'operation';
+        return 'Operation';
     }
 
 
@@ -79,7 +98,7 @@ class api_sync_InOperationTest extends api_sync_in
             ->with('response')->begin()
                 ->checkElement('resultset', 1)
                 ->checkElement('resultset record', 1)
-                ->checkElement('resultset[type="operation"] record[id][success="true"]', 'OK')
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
                 ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
             ->end();
 
@@ -106,7 +125,7 @@ class api_sync_InOperationTest extends api_sync_in
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->checkElement('resultset[type="operation"] record[id][success="false"][cid]', 1)
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
                 ->checkElement(sprintf('record[id="%d"]', $expectedData['id']))
             ->end();
 

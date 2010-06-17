@@ -9,7 +9,7 @@ sync_get_modified:
 
 # Sync(In): Принять набор счетов
 sync_in_account:
-  url: /post/accounts.:sf_format
+  url: /update/account.:sf_format
   class:   sfRequestRoute
   params:  { module: sync, action: syncInAccount, sf_format: xml }
   requirements:
@@ -17,7 +17,7 @@ sync_in_account:
 
 # Sync(In): Принять набор категорий
 sync_in_category:
-  url: /post/category.:sf_format
+  url: /update/category.:sf_format
   class:   sfRequestRoute
   params:  { module: sync, action: syncInCategory, sf_format: xml }
   requirements:
@@ -25,7 +25,7 @@ sync_in_category:
 
 # Sync(In): Принять набор операций
 sync_in_operation:
-  url: /post/operation.:sf_format
+  url: /update/operation.:sf_format
   class:   sfRequestRoute
   params:  { module: sync, action: syncInOperation, sf_format: xml }
   requirements:

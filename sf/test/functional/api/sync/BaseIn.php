@@ -1,8 +1,10 @@
 <?php
 require_once dirname(__FILE__).'/../../../bootstrap/all.php';
 
+
 /**
  * Sync: базовые тесты для всех входящих синхронизаций
+ * Max: TODO: надо отказаться от наследования тестов
  */
 abstract class api_sync_in extends mySyncInFunctionalTestCase
 {
@@ -53,6 +55,27 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
         $xml = $this->getXMLHelper()->makeCollection($max+1);
 
         $this->checkSyncInError($xml, 400, "More than 'limit' ({$max}) objects sent, " . $max + 1);
+    }
+
+
+    /**
+     * Клиент не передал CID
+     * Базовый тест
+     */
+    public function testNoCid()
+    {
+        $this->markTestIncomplete();
+    }
+
+
+    /**
+     * Принять группу объектов
+     * Просто посчитать ответ
+     * Базовый тест
+     */
+    public function testUpdateCollection()
+    {
+        $this->markTestIncomplete();
     }
 
 }

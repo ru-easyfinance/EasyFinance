@@ -6,6 +6,36 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
 
 
     /**
+     * Должна принять XML строку и код ответа сервера
+     * передавать методу postAndCheckXML модуль, действие и урл
+     *
+     * @see    mySyncInFunctionalTestCase::postAndCheckXML
+     * @param  string $xml      XML-строка
+     * @param  int    $code     Код ответа сервера
+     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
+     */
+    abstract protected function myXMLPost($xml = null, $code = 200);
+
+
+    /**
+     * Вернуть набор полей и валидных значений объекта
+     */
+    abstract protected function getDefaultModelData();
+
+
+    /**
+     * Вернуть название класса модели
+     */
+    abstract protected function getModelName();
+
+
+    /**
+     * Получить список полей полей объекта, которые принимаются из XML
+     */
+    abstract protected function getFields();
+
+
+    /**
      * Before Execute
      */
     protected function _start()
@@ -13,7 +43,7 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
         parent::_start();
 
         $this->_user = $this->helper->makeUser();
-        $this->xmlHelper = new mySyncInXMLHelper($this->getModelName(), $this->getDefaultModelData());
+        $this->xmlHelper = new mySyncInXMLHelper($this->getModelName(), $this->getDefaultModelData(), $this->getFields());
     }
 
 
@@ -106,29 +136,6 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
             ->checkElement(sprintf('resultset record[cid="%d"]', $id), (string) $message);
     }
 
-
-    /**
-     * Должна принять XML строку и код ответа сервера
-     * передавать методу postAndCheckXML модуль, действие и урл
-     *
-     * @see    mySyncInFunctionalTestCase::postAndCheckXML
-     * @param  string $xml      XML-строка
-     * @param  int    $code     Код ответа сервера
-     * @return sfTestFunctional Возвращает браузер @see sfTestBrowser
-     */
-    abstract protected function myXMLPost($xml = null, $code = 200);
-
-
-    /**
-     * Вернуть набор полей и валидных значений объекта
-     */
-    abstract protected function getDefaultModelData();
-
-
-    /**
-     * Вернуть название класса модели
-     */
-    abstract protected function getModelName();
 
     /**
      * @return mySyncInXMLHelper

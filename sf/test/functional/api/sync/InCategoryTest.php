@@ -8,6 +8,33 @@ require_once dirname(__FILE__).'/BaseIn.php';
 class api_sync_InCategoryTest extends api_sync_in
 {
     /**
+     * Вернуть название модели
+     *
+     * @return string
+     */
+    protected function getModelName()
+    {
+        return 'category';
+    }
+
+
+    /**
+     * Получить список полей полей объекта, которые принимаются из XML
+     */
+    protected function getFields()
+    {
+        return array(
+            'system_id',
+            'parent_id',
+            'name',
+            'type',
+            'created_at',
+            'updated_at',
+        );
+    }
+
+
+    /**
      * Возвращает стандартный валидный набор полей и значений объекта
      *
      * @return array
@@ -26,17 +53,6 @@ class api_sync_InCategoryTest extends api_sync_in
             'updated_at' => $this->_makeDate(0),
             'deleted_at' => null,
         );
-    }
-
-
-    /**
-     * Вернуть название модели
-     *
-     * @return string
-     */
-    protected function getModelName()
-    {
-        return 'category';
     }
 
 
@@ -74,7 +90,7 @@ class api_sync_InCategoryTest extends api_sync_in
             ->with('response')->begin()
                 ->checkElement('resultset', 1)
                 ->checkElement('resultset record', 1)
-                ->checkElement('resultset[type="category"] record[id][success="true"]', 'OK')
+                ->checkElement('resultset[type="Category"] record[id][success="true"]', 'OK')
                 ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
             ->end();
 
@@ -102,7 +118,7 @@ class api_sync_InCategoryTest extends api_sync_in
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->checkElement('resultset[type="category"] record[id][success="false"][cid]', 1)
+                ->checkElement('resultset[type="Category"] record[id][success="false"][cid]', 1)
                 ->checkElement(sprintf('record[id="%d"]', $expectedData['id']))
             ->end();
 
@@ -124,7 +140,7 @@ class api_sync_InCategoryTest extends api_sync_in
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->checkElement('resultset[type="category"] record[id][success="false"][cid]', 1)
+                ->checkElement('resultset[type="Category"] record[id][success="false"][cid]', 1)
             ->end();
 
         $this->checkRecordError(4, '[Invalid.] No such root (system) category');
@@ -141,7 +157,7 @@ class api_sync_InCategoryTest extends api_sync_in
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->checkElement('resultset[type="category"] record[id][success="false"][cid]', 1)
+                ->checkElement('resultset[type="Category"] record[id][success="false"][cid]', 1)
             ->end();
 
         $this->checkRecordError(6, '[Invalid.] No such parent category');
@@ -164,7 +180,7 @@ class api_sync_InCategoryTest extends api_sync_in
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->checkElement('resultset[type="category"] record[id][success="true"][cid]', 1)
+                ->checkElement('resultset[type="Category"] record[id][success="true"][cid]', 1)
             ->end()
             ->with('model')->check('Category', $expectedData, 1);
     }
