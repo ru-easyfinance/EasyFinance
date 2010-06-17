@@ -12,7 +12,15 @@ class CreateObjectHelper {
 
     private static function _wrapVal($props)
     {
-        return sprintf("'%s'", implode("', '", $props));
+        // Хак для переменных float. php их преобразует в переменные с запятой т.е. вместо 14.23 мы получаем 14,23
+        $newProps = array();
+        foreach($props as $value) {
+            if (is_numeric($value)) {
+                $value = str_replace(',', '.', $value);
+            }
+            $newProps[] = $value;
+        }
+        return sprintf("'%s'", implode("', '", $newProps));
     }
 
 
