@@ -1,15 +1,12 @@
 <?php
-require_once dirname(__FILE__).'/../../../bootstrap/all.php';
+require_once dirname(__FILE__).'/BaseIn.php';
 
 
 /**
  * Синхронизация: получить список объектов
  */
-class api_sync_InOperationTest extends mySyncInFunctionalTestCase
+class api_sync_InOperationTest extends api_sync_in
 {
-    protected $app = 'api';
-
-
     /**
      * Возвращает стандартный валидный набор полей и значений объекта
      *

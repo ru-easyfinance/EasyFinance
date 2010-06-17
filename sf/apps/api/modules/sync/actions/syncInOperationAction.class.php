@@ -11,6 +11,12 @@ class syncInOperationAction extends myBaseSyncInAction
      */
     public function execute($request)
     {
+        try {
+            $this->prepareExecute($request);
+        } catch (sfStopException $e) {
+            return sfView::ERROR;
+        }
+
     }
 
 

@@ -1,15 +1,12 @@
 <?php
-require_once dirname(__FILE__).'/../../../bootstrap/all.php';
+require_once dirname(__FILE__).'/BaseIn.php';
 
 
 /**
  * Синхронизация: получить список объектов
  */
-class api_sync_InAccountTest extends mySyncInFunctionalTestCase
+class api_sync_InAccountTest extends api_sync_in
 {
-    protected $app = 'api';
-
-
     /**
      * Возвращает стандартный валидный набор полей и значений объекта
      *
@@ -53,53 +50,6 @@ class api_sync_InAccountTest extends mySyncInFunctionalTestCase
     {
         return $this
             ->postAndCheckXML("sync", "syncInAccount", $xml, "sync_in_account", $code);
-    }
-
-
-    /**
-     * Ошибка при отправке без авторизации
-     * (пока без ID пользователя в query string)
-     */
-    public function testPostAccountAuthError()
-    {
-        $this->_user->setId(null);
-
-        $this->checkSyncInError(null, 401, 'Authentification required');
-    }
-
-
-    /**
-     * Ошибка при отправке пустого POST
-     * нет данных на входе
-     */
-    public function testPostAccountEmptyPostError()
-    {
-        $this->checkSyncInError(null, 400, 'Expected XML data');
-    }
-
-
-    /**
-     * Пустой xml, отсутствуют записи для обработки
-     */
-    public function testPostAccountEmptyXMLError()
-    {
-        $this->checkSyncInError($this->getXMLHelper()->getEmptyRequest(), 400, 'Expected at least one record');
-    }
-
-
-    /**
-     * Входящий xml содержит слишком много записей
-     */
-    public function testPostAccountRecordsLimitError()
-    {
-        $this->browser->getContext(true);
-
-        $this->assertNotNull(sfConfig::get('app_records_sync_limit'));
-        $this->browser->setConfigValue('app_records_sync_limit', $max = 2);
-
-        $xml = $this->getXMLHelper()->makeCollection($max+1);
-
-        $this->checkSyncInError($xml, 400, "More than 'limit' ({$max}) objects sent, " . $max + 1);
     }
 
 
