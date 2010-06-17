@@ -11,26 +11,13 @@ class syncInCategoryAction extends myBaseSyncInAction
      */
     public function execute($request)
     {
-        // $userId = $this->getUser()->getId();
-        if (null === ($userId = $request->getParameter('user_id'))) {
-            $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
-            return $this->raiseError("Authentification required", 0, 401);
+        try {
+            $this->prepareExecute($request);
+        } catch (sfStopException $e) {
+            return sfView::ERROR;
         }
 
-        if (0 === strlen($rawXml = $request->getContent())) {
-            return $this->raiseError("Expected XML data");
-        }
-
-        $xml = simplexml_load_string($rawXml);
-
-        $count = (int) count($xml->recordset[0]);
-        $limit = sfConfig::get('app_records_sync_limit', 100);
-
-        if ($count <= 0) {
-            return $this->raiseError("Expected at least one record");
-        } elseif ($count > $limit) {
-            return $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
-        }
+        $xml = $this->getXML();
 
         $data = array();
         foreach ($xml->recordset[0] as $record) {
@@ -86,13 +73,13 @@ class syncInCategoryAction extends myBaseSyncInAction
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)
-            if (!$myObject->isNew() && ($myObject->getUserId() !== $userId)) {
+            if (!$myObject->isNew() && ((int) $myObject->getUserId() !== (int) $this->getUser()->getId())) {
                 $errors[] = "Foreign account";
             }
 
             // новому - установить владельца
             if ($myObject->isNew()) {
-                $record['user_id'] = $userId;
+                $record['user_id'] = $this->getUser()->getId();
             }
 
             if (!$errors && $form->bindAndSave($record)) {

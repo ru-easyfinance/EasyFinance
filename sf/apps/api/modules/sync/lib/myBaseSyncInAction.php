@@ -40,12 +40,45 @@ abstract class myBaseSyncInAction extends sfAction
 
 
     /**
+     * Проверяет входящие данные
+     *
+     * @param  sfRequest $request
+     * @return void
+     */
+    protected function prepareExecute(sfRequest $request)
+    {
+        // $userId = $this->getUser()->getId();
+        if (null === ($userId = $request->getParameter('user_id'))) {
+            $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
+            $this->raiseError("Authentification required", 0, 401);
+        }
+
+        $this->getUser()->setId($userId);
+
+        if (0 === strlen($rawXml = $request->getContent())) {
+            $this->raiseError("Expected XML data");
+        }
+
+        $this->setXML($xml = simplexml_load_string($rawXml));
+
+        $count = (int) count($xml->recordset[0]);
+        $limit = sfConfig::get('app_records_sync_limit', 100);
+
+        if ($count <= 0) {
+            $this->raiseError("Expected at least one record");
+        } elseif ($count > $limit) {
+            $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
+        }
+    }
+
+
+    /**
      * Обработка отображения глобальной ошибки
      *
      * @param  string      $message
      * @param  string|int  $errCode
      * @param  int         $code
-     * @return const       sfView::ERROR
+     * @throws sfStopException
      */
     protected function raiseError($message = "Error", $errCode = 0, $code = 400)
     {
@@ -54,7 +87,8 @@ abstract class myBaseSyncInAction extends sfAction
             'message' => $message,
             'code'    => $errCode,
         ), $noEscape = false);
-        return sfView::ERROR;
+
+        throw new sfStopException($message);
     }
 
 
@@ -82,6 +116,31 @@ abstract class myBaseSyncInAction extends sfAction
             }
         }
         return $data;
+    }
+
+
+    /**
+     * Ставит подготовленный XML в переменную
+     *
+     * @param  SimpleXMLElement $xml
+     * @return void
+     */
+    protected function setXML(SimpleXMLElement $xml)
+    {
+        $this->_xml = $xml;
+    }
+
+
+    /**
+     * Получить подготовленный XML
+     */
+    protected function getXML()
+    {
+        if (null !== $this->_xml) {
+            return $this->_xml;
+        }
+
+        throw new RuntimeException(__CLASS__.": Expected valid SimpleXMLElement, got null");
     }
 
 }
