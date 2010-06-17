@@ -47,13 +47,11 @@ class AccountTable extends Doctrine_Table
             ->addSelect("SUM(op2.money) totalBalance")
             ->andWhere("{$alias}.user_id = ?", (int) $userId)
             ->orderBy("{$alias}.name")
-            #Max: балансовая операция это еще date = 0000-00-00, это важно
             ->innerJoin("{$alias}.Operations o ON o.account_id = {$alias}.account_id
                 AND o.cat_id IS NULL
-                AND o.user_id = ?", (int) $userId)
+                AND o.date = '0000-00-00'")
             ->innerJoin("{$alias}.Operations op2 ON op2.account_id = {$alias}.account_id
-                AND op2.accepted = 1
-                AND op2.user_id = ?", (int) $userId)
+                AND op2.accepted = 1")
             ->groupBy("{$alias}.id");
 
         return $q;
