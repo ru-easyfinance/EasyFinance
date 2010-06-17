@@ -14,6 +14,7 @@ easyFinance.widgets.profile = function(model){
     function setupProfile(){
         var data = _model.getUserInfo();
         $('input#login').val(data.login);
+        $('input#mailIntegration').val(res.profile.integration && res.profile.integration.email || '');
         $('input#mail').val(data.mail);
         if (data.tooltip == '0'){
             $('#help').removeAttr('checked');
