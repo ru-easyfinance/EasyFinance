@@ -80,4 +80,17 @@ class model_OperationTest extends myUnitTestCase
         $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
         $operation->getCategory()->hardDelete();
     }
+
+
+    /**
+     * SoftDelete
+     */
+    public function testSoftDelete()
+    {
+        $operation = $this->helper->makeOperation();
+        $operation->delete();
+
+        $this->assertEquals($operation->getUpdatedAt(), $operation->getDeletedAt());
+    }
+
 }
