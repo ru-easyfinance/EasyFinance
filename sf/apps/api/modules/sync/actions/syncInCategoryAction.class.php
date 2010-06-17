@@ -9,14 +9,8 @@ class syncInCategoryAction extends myBaseSyncInAction
     /**
      * Execute
      */
-    public function execute($request)
+    protected function executeLogic(sfRequest $request)
     {
-        try {
-            $this->prepareExecute($request);
-        } catch (sfStopException $e) {
-            return sfView::ERROR;
-        }
-
         $xml = $this->getXML();
 
         $data = array();

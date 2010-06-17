@@ -40,35 +40,50 @@ abstract class myBaseSyncInAction extends sfAction
 
 
     /**
-     * Проверяет входящие данные
+     * Хук для конкретного действия
      *
-     * @param  sfRequest $request
-     * @return void
+     * @param  sfRequest   $request
+     * @return const|void  @see sfView
      */
-    protected function prepareExecute(sfRequest $request)
+    abstract protected function executeLogic(sfRequest $request);
+
+
+    /**
+     * Execute: Проверяет входящие данные
+     *
+     * @param  sfRequest    $request
+     * @see    executeLogic конкретная реализация логики
+     */
+    final public function execute($request)
     {
-        // $userId = $this->getUser()->getId();
-        if (null === ($userId = $request->getParameter('user_id'))) {
-            $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
-            $this->raiseError("Authentification required", 0, 401);
+        try {
+            // $userId = $this->getUser()->getId();
+            if (null === ($userId = $request->getParameter('user_id'))) {
+                $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
+                $this->raiseError("Authentification required", 0, 401);
+            }
+
+            $this->getUser()->setId($userId);
+
+            if (0 === strlen($rawXml = $request->getContent())) {
+                $this->raiseError("Expected XML data");
+            }
+
+            $this->setXML($xml = simplexml_load_string($rawXml));
+
+            $count = (int) count($xml->recordset[0]);
+            $limit = sfConfig::get('app_records_sync_limit', 100);
+
+            if ($count <= 0) {
+                $this->raiseError("Expected at least one record");
+            } elseif ($count > $limit) {
+                $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
+            }
+        } catch (sfStopException $e) {
+            return sfView::ERROR;
         }
 
-        $this->getUser()->setId($userId);
-
-        if (0 === strlen($rawXml = $request->getContent())) {
-            $this->raiseError("Expected XML data");
-        }
-
-        $this->setXML($xml = simplexml_load_string($rawXml));
-
-        $count = (int) count($xml->recordset[0]);
-        $limit = sfConfig::get('app_records_sync_limit', 100);
-
-        if ($count <= 0) {
-            $this->raiseError("Expected at least one record");
-        } elseif ($count > $limit) {
-            $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
-        }
+        return $this->executeLogic($request);
     }
 
 

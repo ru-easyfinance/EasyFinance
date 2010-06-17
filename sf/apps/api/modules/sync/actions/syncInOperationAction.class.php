@@ -9,14 +9,67 @@ class syncInOperationAction extends myBaseSyncInAction
     /**
      * Execute
      */
-    public function execute($request)
+    protected function executeLogic(sfRequest $request)
     {
-        try {
-            $this->prepareExecute($request);
-        } catch (sfStopException $e) {
-            return sfView::ERROR;
+        $xml = $this->getXML();
+
+        $data = array();
+        foreach ($xml->recordset[0] as $record) {
+            $data[] = $this->prepareArray($record);
         }
 
+        // существующие записи, владельца не проверяем! так надо!
+        $recordIds = $this->filterByXPath('//record/@id', 'id');
+        $operations = Doctrine_Query::create()
+            ->select("o.*")
+            ->from("Operation o INDEXBY o.id")
+            ->whereIn("o.id", $recordIds)
+            ->execute();
+
+        $modelName = $this->getModelName();
+        $formName  = sprintf("mySyncIn%sForm", $modelName);
+        $results   = array();
+        foreach ($data as $record) {
+            // не добавляем в коллекцию новых объектов, поэтому так:
+            if ($operations->contains($record['id'])) {
+                $myObject = $operations[(int) $record['id']];
+            } else {
+                $myObject = new $modelName();
+            }
+
+            $form = new $formName($myObject);
+
+            $errors = array();
+
+            // другой владелец, культурно посылаем (см.выше выбор счетов)
+            if (!$myObject->isNew() && ((int) $myObject->getUserId() !== (int) $this->getUser()->getId())) {
+                $errors[] = "Foreign account";
+            }
+
+            // новому - установить владельца
+            if ($myObject->isNew()) {
+                $record['user_id'] = $this->getUser()->getId();
+            }
+
+            if (!$errors && $form->bindAndSave($record)) {
+                $results[] = array(
+                    'id'      => $form->getObject()->getId(),
+                    'cid'     => (string) $record['cid'],
+                    'success' => 1,
+                );
+            } else {
+                $results[] = array(
+                    'id'      => $record['id'],
+                    'cid'     => (string) $record['cid'],
+                    'success' => 0,
+                    'message' => $this->formatErrorMessage($form, $errors),
+                );
+            }
+        }
+
+        $this->setVar('results', $results, $noEscape = false);
+
+        return sfView::SUCCESS;
     }
 
 
@@ -36,9 +89,9 @@ class syncInOperationAction extends myBaseSyncInAction
             'category_id' => (string) $record->category_id,
             'amount'      => (string) $record->amount,
             'date'        => (string) $record->date,
-            'time'        => (string) $record->time,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
+            'accepted'    => (string) $record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),
