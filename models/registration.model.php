@@ -86,8 +86,8 @@ class Registration_Model
      */
     function new_user($name, $login, $password, $confirm, $mail)
     {
-        $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail,
-            user_created, user_active, user_new, referrerId) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?)";
+        $sql = "INSERT INTO users (user_name, user_login, user_pass, user_mail, user_created, user_active, user_new,
+            referrerId, user_currency_default) VALUES (?, ?, ?, ?, CURDATE(), 1, 0, ?, 1)";
         Core::getInstance()->db->query($sql, $name, $login, sha1($password), $mail, $this->get_reffer());
     }
 
