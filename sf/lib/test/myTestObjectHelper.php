@@ -135,4 +135,5 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         }
         return $ob;
     }
+
 }

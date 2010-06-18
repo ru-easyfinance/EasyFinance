@@ -33,8 +33,9 @@ class CreateObjectHelper {
     public static function makeUser(array $options = array())
     {
         $default = array(
-            'user_pass'  => sha1('pass'),
-            'user_login' => 'login'.sha1(microtime()),
+            'user_pass'             => sha1('pass'),
+            'user_login'            => 'login'.sha1(microtime()),
+            'user_currency_default' => efMoney::RUR,
         );
         $options = array_merge($default, $options);
 

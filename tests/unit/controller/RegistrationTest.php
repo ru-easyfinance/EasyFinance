@@ -83,7 +83,10 @@ class controller_RegistrationTest extends UnitTestCase
     {
         $login = 'someuniquelogin';
         $email = 'someuniqueemail@example.org';
-        $this->getConnection()->query(sprintf("INSERT INTO users (user_login, user_mail) VALUES ('{$login}', '{$email}')"));
+
+        $this->getConnection()->query(sprintf(
+            "INSERT INTO users (user_login, user_mail, user_currency_default)
+            VALUES ('{$login}', '{$email}', '" . efMoney::RUR . "')"));
 
 
         $_SERVER["REQUEST_METHOD"] = 'POST';

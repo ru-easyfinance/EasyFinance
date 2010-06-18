@@ -22,4 +22,15 @@ class model_CurrencyTest extends myUnitTestCase
         $this->checkModelDeclaration('Currency', $data, $isTimestampable = true);
     }
 
+
+    /**
+     * Невозможно удалить валюту, если она установлена как валюта по-умолчанию у пользователей
+     */
+    public function testFailedDeleteCurrencyIdConnectedWithUsers()
+    {
+        $user = $this->helper->makeUser(array('currency_id' => 1));
+
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
+        Doctrine::getTable('Currency')->find(1)->delete();
+    }
 }

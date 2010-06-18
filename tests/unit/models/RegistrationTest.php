@@ -16,10 +16,11 @@ class models_RegistrationTest extends UnitTestCase
     protected function _start()
     {
         $this->user = array(
-            'login' => 'some unique login',
-            'email' => 'some unique email',
+            'login'                 => 'some unique login',
+            'email'                 => 'some unique email',
+            'user_currency_default' => efMoney::RUR,
         );
-        $this->getConnection()->query(sprintf("INSERT INTO users (user_login, user_mail) VALUES ('%s')", implode("','", $this->user)));
+        $this->getConnection()->query(sprintf("INSERT INTO users (user_login, user_mail, user_currency_default) VALUES ('%s')", implode("','", $this->user)));
 
         $this->model = new Registration_Model;
     }
