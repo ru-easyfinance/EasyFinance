@@ -186,6 +186,16 @@ class Category_Controller extends _Core_Controller_UserCommon
      */
     function del ($args)
     {
+        die(json_encode(
+            array(
+                "confirm" => array(
+                    "text" => "Вы уверены, что хотите bla-bla-bla?",
+                    "id" => 3
+                )
+            )
+        ));
+
+
         $catId     = 0;
 
         if( array_key_exists(0 ,$args) && is_numeric($args[0]) && $args[0] )
@@ -223,6 +233,8 @@ class Category_Controller extends _Core_Controller_UserCommon
             $confirm= array (
                 'title'         => 'Удаление категории',
                 'message'     => 'Вы действительно хотите удалить категорию?',
+                // @TODO: если есть операции, message должен быть такой:
+                // '<b>Эта категория содержит операции. При удалении категории операции по ней также будут удалены!</b><br><br>Вы действительно хотите удалить категорию?',
                 'yesLink'    => '/category/del/' . $catId . '?confirmed=1',
                 'noLink'     => $_SERVER['HTTP_REFERER'],
             );

@@ -469,27 +469,40 @@ $(document).ready(function() {
         }
     }
 
+    function _delCallback(data) {
+        if (data) {
+            if (data.result) {
+                // Удаляем категорию из списка
+                $('#category_' + data.result.id).remove();
+
+                // если удаляли родительскую категорию,
+                // обновляем список родительских категорий
+                if (easyFinance.models.category.isParentCategory(data.result.id) == true) {
+                    drawParentCategoriesCombo();
+                }
+
+                // Обновляем список категорий в диалоге "Добавление операции"
+                $('#op_type').change();
+
+                clearForm();
+                $('#add_form').hide();
+                $.jGrowl(data.result.text, {theme: 'green'});
+            } else if (data.confirm) {
+                if (confirm(data.confirm.text)) {
+                    // подтвердили удаление категории
+                    easyFinance.models.category.deleteById(data.confirm.id, true, _delCallback);
+                }
+            } else if (data.error) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+            }
+        }
+    }
+
     /**
      * Удаляет категорию
      * @param id
      */
     function delCategory(id) {
-        var isParent = easyFinance.models.category.isParentCategory(id);
-
-        easyFinance.models.category.deleteById(id, function() {
-            // Удаляем категорию из списка
-            $('#category_'+id).remove();
-
-            // Обновляем список родительских категорий
-            if (isParent == true)
-                drawParentCategoriesCombo();
-
-            // Обновляем список категорий в диалоге "Добавление операции"
-            $('#op_type').change();
-
-            clearForm();
-            $('#add_form').hide();
-            $.jGrowl("Категория удалена", {theme: 'green'});
-        });
+        easyFinance.models.category.deleteById(id, false, _delCallback);
     }
 });

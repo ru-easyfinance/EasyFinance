@@ -153,14 +153,16 @@ easyFinance.models.category = function(){
         });
     }
 
-    function deleteById(id, callback){
-        $.post(DELETE_URL, {id:id}, function(){
-                delete _categories.user[id];
-                _createOrderLists();
+    function deleteById(id, confirm, callback){
+        $.post(DELETE_URL, {id:id, confirm:confirm}, function(data){
+                if (data && data.result) {
+                    delete _categories.user[id];
+                    _createOrderLists();
 
-                $(document).trigger('categoryDeleted');
+                    $(document).trigger('categoryDeleted');
+                }
 
-                callback();
+                callback(data);
         }, 'json');
     }
 
