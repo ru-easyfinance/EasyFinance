@@ -747,17 +747,22 @@ class Operation_Model {
     }
 
     /**
-     * Получение списка транзакций
-     * @param date $dateFrom
-     * @param date $dateTo
-     * @param int $currentCategory
-     * @param int $currentAccount
-     * @param int $type
-     * @param float $sumFrom
-     * @param float $sumTo
+     * Получение списка транзакций в виде массива
+     *
+     * @param date $dateFrom        Дата с которой показывать операции
+     * @param date $dateTo          Дата до какой показывать операции
+     * @param int $currentCategory  Ид категории по которой отобрать операции
+     * @param int $currentAccount   Ид счёта по которому отобрать операции
+     * @param int $type             Тип операции (0 - Расход, 1 - Доход, 2 - Перевод, 4 - Перевод на фин.цель)
+     * @param float $sumFrom        Минимальная сумма для показа операций
+     * @param float $sumTo          Максимальная сумма для показа операций
+     * @param string $searchField  Поле поиска по комментариям и меткам
+     * @param bool $stat = false
+     * @param bool $acc_initial
      * @return array mixed
      */
-    function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount, $type, $sumFrom, $sumTo)
+    function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount, $type, $sumFrom,
+        $sumTo, $searchField = '', $stat = false, $acc_initial = false)
     {
         if ($sumTo == 0) {
             $sumTo = null;
@@ -781,30 +786,52 @@ class Operation_Model {
             $cat_in .= $currentCategory;
         }
 
-        // Выборка операций пользователя
-        $sql = "SELECT
-                    o.id,
-                    o.user_id,
-                    o.money,
-                    DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
-                    o.date AS dnat,
-                    o.cat_id,
-                    NULL as target_id,
-                    o.account_id,
-                    o.drain,
-                    o.comment,
-                    o.transfer,
-                    o.tr_id, 0 AS virt,
-                    o.tags,
-                    o.imp_id AS moneydef,
-                    o.exchange_rate AS curs,
-                    o.type,
-                    created_at,
-                    o.source_id AS source
-                FROM
-                    operation o
-                WHERE
-                    o.user_id = " . $this->_user->getId();
+        // Фильтр по меткам и комментариям
+        $search_sql = "";
+        if (!empty($searchField)) {
+            $search_words =  explode(" ", $searchField);
+            $search_sql = '(';
+            foreach ($search_words as $word) {
+                $search_sql .= "o.comment LIKE ? OR o.tags LIKE ? OR ";
+            }
+            if ($search_sql != '(') {
+                $search_sql = substr($search_sql,0,strlen($search_sql)-4) . ") AND ";
+            }
+        }
+
+        // Конвертация валют
+        $act_curr = sfConfig::get('ex')->getRate($this->_user->getUserProps('user_currency_default'));
+        if (!$stat) {
+            // Выборка операций пользователя
+            $sql = "SELECT
+                        o.id,
+                        o.user_id,
+                        o.money,
+                        DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
+                        o.date AS dnat,
+                        o.cat_id,
+                        NULL as target_id,
+                        o.account_id,
+                        o.drain,
+                        o.comment,
+                        o.transfer,
+                        o.tr_id, 0 AS virt,
+                        o.tags,
+                        (o.money*(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$act_curr) as moneydef,
+                        o.exchange_rate AS curs,
+                        o.type,
+                        o.created_at,
+                        o.source_id AS source ";
+                        //o.imp_id AS moneydef,
+         } else {
+            $sql = "SELECT
+                        sum(mm) as total_money
+                    FROM (SELECT sum(money*(CASE WHEN rate = 0 THEN 1 ELSE rate END)) as mm ";
+         }
+         $sql .= "FROM accounts a, currency c, operation o
+                    WHERE o.account_id = a.account_id AND a.account_currency_id  = c.cur_id AND
+                          $search_sql
+                          o.user_id = " . $this->_user->getId();
 
         // Добавляем фильтр для обязательного скрытия удалённых
         $sql .= " AND o.deleted_at IS NULL ";
@@ -814,7 +841,10 @@ class Operation_Model {
             $sql .= " AND o.account_id = '" . (int)$currentAccount . "' ";
         }
 
-        $sql .= ' AND (`date` BETWEEN "' . $dateFrom . '" AND "' . $dateTo . '") ';
+        if (!$acc_initial)
+            $sql .= ' AND (`date` BETWEEN "' . $dateFrom . '" AND "' . $dateTo . '") ';
+        else
+            $sql .= " AND `date`< '$dateFrom' ";
 
         // Если указана категория (фильтр по категории)
         if (!empty($currentCategory)) {
@@ -863,9 +893,33 @@ class Operation_Model {
         $sql .= " AND accepted=1 ";
 
         //Присоединение переводов на фин цель
-        $sql .= " UNION
-            SELECT t.id, t.user_id, -t.money, DATE_FORMAT(t.date,'%d.%m.%Y'), t.date AS dnat, tt.category_id,
-            t.target_id, tt.target_account_id, 1, t.comment, '', '', 1 AS virt, t.tags, NULL, NULL, 4 as type, dt_create AS created_at, ''
+        $sql .= " UNION ";
+        if (!$stat)
+        {
+            $sql .= "SELECT
+                t.id,
+                t.user_id,
+                -t.money,
+                DATE_FORMAT(t.date,'%d.%m.%Y'),
+                t.date AS dnat,
+                tt.category_id,
+                t.target_id,
+                tt.target_account_id,
+                1,
+                t.comment,
+                '',
+                '',
+                1 AS virt,
+                t.tags,
+                NULL,
+                NULL,
+                4 as type,
+                dt_create AS created_at,
+                '' ";
+        } else {
+            $sql .= "SELECT sum(money) as mm ";
+        }
+        $sql .= "
             FROM target_bill t
             LEFT JOIN target tt ON t.target_id=tt.id
             WHERE t.user_id = " . $this->_user->getId()
@@ -892,115 +946,114 @@ class Operation_Model {
             $sql .= " AND ABS(t.money) <= " . $sumTo;
         }
 
-        $sql .= " ORDER BY dnat DESC, created_at DESC ";
+        if ($stat) {
+            $sql .= ")a";
+        } else {
+            $sql .= " ORDER BY dnat DESC, created_at DESC ";
+        }
 
         $accounts = $this->_user->getUserAccounts();
 
-        $operations = $this->db->select($sql, $currentAccount, $this->_user->getId(),
+        $params = array($sql);
+        if (!empty($searchField)) {
+            foreach ($search_words as $word) {
+                array_push($params, "%$word%", "%$word%");
+            }
+        }
+
+        array_push($params, $currentAccount, $this->_user->getId(),
             $dateFrom, $dateTo, $this->_user->getId(), $dateFrom, $dateTo, $currentAccount,
             $currentAccount, $this->_user->getId(), $dateFrom, $dateTo);
 
-        // Добавляем данные, которых не хватает
-        foreach ($operations as $key => $operation)
+        $operations = call_user_func_array(array($this->db, "select"), $params);
+
+
+        if (!$stat)
         {
-            if ( $operation['type'] <= 1 ) {
-                // До использования типов - игнорим ошибки
-                $operation['cat_name']          = @$categorys[ $operation['cat_id'] ]['cat_name'];
-                $operation['cat_parent']        = @$categorys[ $operation['cat_id'] ]['cat_parent'];
-            }
-
-            //Если счёт операции существует
-            if( array_key_exists( $operation['account_id'], $accounts ) ) {
-                $operation['account_name']     = $accounts[ $operation['account_id'] ]['account_name'];
-                $operation['account_currency_id'] = $accounts[ $operation['account_id'] ]['account_currency_id'];
-            }
-            // Если нет - удаляем из вывода
-            else
+            // Добавляем данные, которых не хватает
+            foreach ($operations as $key => $operation)
             {
-                unset( $operations[ $key ] );
-                continue;
-            }
-
-            //хак для журнала операций. присылаю tr_id = null для не переводов
-            if ( (int)$operation['tr_id'] == 0 && (int)$operation['transfer'] == 0 ) {
-                $operation['tr_id'] = null;
-            }
-
-            //если фин цель то перезаписываем тот null что записан.
-            if (($operation['virt']) == 1) {
-                $operation['account_currency_id'] = $accounts[$operation['account_id']]['account_currency_id'];
-
-                if ($operation['cat_id'] == 1)
-                    $operation['cat_name'] = "Квартира";
-                if ($operation['cat_id'] == 2)
-                    $operation['cat_name'] = "Автомобиль";
-                if ($operation['cat_id'] == 3)
-                    $operation['cat_name'] = "Отпуск";
-                if ($operation['cat_id'] == 4)
-                    $operation['cat_name'] = "Фин. подушка";
-                if ($operation['cat_id'] == 5)
-                    $operation['cat_name'] = "Прочее";
-                if ($operation['cat_id'] == 6)
-                    $operation['cat_name'] = "Свадьба";
-                if ($operation['cat_id'] == 7)
-                    $operation['cat_name'] = "Бытовая техника";
-                if (($operation['cat_id']) == 8)
-                    $operation['cat_name'] = "Компьютер";
-            }
-            //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
-
-            if ( $operation['transfer'] )
-            {
-                $operation['cat_name'] = "Отправлено на счёт '"
-                    . $accounts[$operation['transfer']]['account_name']."'";
-
-                if ($operation['tr_id'])
+                if ( $operation['type'] <= 1 )
                 {
-                    $operation['cat_name'] = "Отправлено со счёта '"
+                    // До использования типов - игнорим ошибки
+                    $operation['cat_name']          = @$categorys[ $operation['cat_id'] ]['cat_name'];
+                    $operation['cat_parent']        = @$categorys[ $operation['cat_id'] ]['cat_parent'];
+                }
+
+                //Если счёт операции существует
+                if( array_key_exists( $operation['account_id'], $accounts ) )
+                {
+                    $operation['account_name']     = $accounts[ $operation['account_id'] ]['account_name'];
+                    $operation['account_currency_id'] = $accounts[ $operation['account_id'] ]['account_currency_id'];
+                }
+                // Если нет - удаляем из вывода
+                else
+                {
+                    unset( $operations[ $key ] );
+                    continue;
+                }
+
+                //хак для журнала операций. присылаю tr_id = null для не переводов
+                if ( (int)$operation['tr_id'] == 0 && (int)$operation['transfer'] == 0 )
+                {
+                    $operation['tr_id'] = null;
+                }
+
+                //если фин цель то перезаписываем тот null что записан.
+                if (($operation['virt']) == 1)
+                {
+                    $operation['account_currency_id'] = $accounts[$operation['account_id']]['account_currency_id'];
+
+                    if ($operation['cat_id'] == 1)
+                        $operation['cat_name'] = "Квартира";
+                    if ($operation['cat_id'] == 2)
+                        $operation['cat_name'] = "Автомобиль";
+                    if ($operation['cat_id'] == 3)
+                        $operation['cat_name'] = "Отпуск";
+                    if ($operation['cat_id'] == 4)
+                        $operation['cat_name'] = "Фин. подушка";
+                    if ($operation['cat_id'] == 5)
+                        $operation['cat_name'] = "Прочее";
+                    if ($operation['cat_id'] == 6)
+                        $operation['cat_name'] = "Свадьба";
+                    if ($operation['cat_id'] == 7)
+                        $operation['cat_name'] = "Бытовая техника";
+                    if (($operation['cat_id']) == 8)
+                        $operation['cat_name'] = "Компьютер";
+                }
+                //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
+
+                if ( $operation['transfer'] )
+                {
+                    $operation['cat_name'] = "Отправлено на счёт '"
                         . $accounts[$operation['transfer']]['account_name']."'";
+
+                    if ($operation['tr_id'])
+                    {
+                        $operation['cat_name'] = "Отправлено со счёта '"
+                            . $accounts[$operation['transfer']]['account_name']."'";
+                    }
+                }
+
+                $operations[$key]     = $operation;
+            }
+
+            $retoper = array();
+
+            //возвращаемые операции. не возвращаем мусор связанный с удалением счетов
+            foreach ($operations as $k => $v)
+            {
+                if (!($v['account_name'] == ''))
+                {
+                    $retoper[$k] = $v;
                 }
             }
-
-            $operations[$key]     = $operation;
+        } else {
+            $total_money = $operations;
+            $retoper = ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money']/sfConfig::get('ex')->getRate(Core::getInstance()->user->getUserProps('user_currency_default'));
+//            $retoper = ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money'];
         }
-
-        $retoper = array();
-
-        //возвращаемые операции. не возвращаем мусор связанный с удалением счетов
-        foreach ($operations as $k => $v)
-        {
-            if (!($v['account_name'] == ''))
-                $retoper[$k] = $v;
-        }
-
         return $retoper;
-    }
-
-
-    /**
-     * Get balance before period and after it
-     * @param date $dateFrom
-     * @param date $dateTo
-     */
-    function getOperationMoneyBeforeAndAfter($dateFrom, $dateTo)
-    {
-        $sql = "SELECT sum(mm) as total_money FROM(SELECT sum(money) as mm
-            FROM operation o
-            WHERE o.user_id = " . $this->_user->getId();
-
-        $sql .= ' AND (`date` BETWEEN "' . $dateFrom . '" AND "' . $dateTo . '") ';
-        $sql .= " AND accepted=1 ";
-
-        $sql .= " UNION
-            SELECT sum(money) as mm
-            FROM target_bill t
-            LEFT JOIN target tt ON t.target_id=tt.id
-            WHERE t.user_id = " . $this->_user->getId()
-            . " AND tt.done=0 AND (`date` >= '{$dateFrom}' AND `date` <= '{$dateTo}'))a";
-
-        $total_money = $this->db->select($sql, $this->_user->getId(), $dateFrom, $dateTo);
-
-        return ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money'];
     }
 
     /**

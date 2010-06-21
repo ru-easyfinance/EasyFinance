@@ -7,8 +7,8 @@
 }
 
 #divOperationsJournalFilters {
-    margin: 0px;
-    margin-top: 7px;
+    margin-top: 42px;
+    margin-bottom: 8px;
     color: gray;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .operationsJournal {
-    height: 480px;
+    height: 500px;
     width: 545px;
 }
 
@@ -39,7 +39,7 @@ div#operations_list_container {
 
 /* меняем размеры таблицы в зависимости от размера окна */
 .heightSmall .operationsJournal {
-    height: 276px;
+    height: 296px;
 }
 
 .heightSmall #operations_list_container {
@@ -48,7 +48,7 @@ div#operations_list_container {
 }
 
 .heightLarge .operationsJournal {
-    height: 506px;
+    height: 526px;
 }
 
 .heightLarge #operations_list_container {
@@ -140,18 +140,18 @@ table#operations_list td + td + td + td + td + td{
 #operations_list div.target { background-position: -48px 0px; }
 
 #dateTo {
-/*    margin-right: 40px;*/
-    !margin-right: 40px;
+    margin-right: 40px;
 }
 
 #btn_CSV {
-    float: right;
-    !float: none;
-    position: relative;
-    !margin-left:50px;
-    background-image:url("/img/images/excel.jpg");
+    position: absolute;
+    margin-top: 0px;
+    top: 6px;
+    margin-right: 6px;
+    right: 315px;
     height:23px;
     width:23px;
+    background-image:url("/img/images/excel.jpg");
 }
 
 /*.f_field b, #divOperationsJournalTotal b {
@@ -160,16 +160,21 @@ table#operations_list td + td + td + td + td + td{
 }*/
 
 #btn_ReloadData {
-    position:relative;
-    margin-left:60px;
-    !margin-left:0px;
+    float: right;
+}
+
+#divSearchOperations {
+    margin-bottom: 12px;
+    height: 20px;
 }
 
 #search_field {
     float:right;
-    height:30px;
-    margin-top:-14px;
-    width:428px;
+    width: 518px;
+}
+
+#search_field.blur {
+    color: grey;
 }
 
 *:first-child+html #search_field {
@@ -177,7 +182,7 @@ table#operations_list td + td + td + td + td + td{
 }
 
 #dateFrom {
-    margin-right:54px;
+    margin-right:110px;
 }
 
 #account_filtr {
@@ -217,7 +222,7 @@ table#operations_list td + td + td + td + td + td{
 
 .before {
     float:left;
-    text-align:center;
+    text-align:left;
     width:150px;
 }
 

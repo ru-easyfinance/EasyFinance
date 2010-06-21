@@ -24,10 +24,13 @@
             </div>
         </div>
         <div>
-            <div id="op_category_fields">Категория<br />
+            <div id="op_category_fields">
+                Категория
+                <br>
                 <select id="op_category"></select>
             </div>
         </div>
+        {* <!-- Финансовая цель -->*}
         <div class="op_line">
             <div class="op_field" id="op_target_fields" style="display:none;">
                 <label for="op_target">
@@ -58,6 +61,7 @@
                 </label>
             </div>
         </div>
+        {*<!-- Трансфер -->*}
         <div class="op_line op_line_transfer">
             <div class="op_field" id="op_transfer_fields" style="display:none;">
                 <label for="op_AccountForTransfer">
@@ -67,6 +71,7 @@
                 <span id="op_operationTransferCurrency" style="display:none;"><span></span><input type='text' id='op_currency'/><span id="op_convertSumCurrency"></span></span>
             </div>
         </div>
+        {*<!-- Основные поля -->*}
         <div class="op_line">
             <div class="op_f_field op_amount" id="op_amount_fields">
                 <label id="lblOpAmount" for="op_amount">
@@ -87,7 +92,7 @@
                     Дата
                 </label>
                 <input type="text" value="{$date}" id="op_date" class="op_inp" >
-            </div>
+            </div><!--<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>-->
         </div>
         <div id="div_op_transfer_line" class="op_f_field">
             <div id="op_conversion_fields">
@@ -118,17 +123,31 @@
                     Метки
                 </label>
                 <input type="text" value="" id="op_tags" class="op_inp efTooltip" title="Пометки для быстрого поиска. Например: аванс" autocomplete="off" /><a id="op_tags" title="Редактировать"></a>
+                <!--<a id="infoicon1" class="infoicon" title="инфа"></a>
+                <br><a id="infoicon2" class="infoicon" title="инфа2"></a>-->
             </div>
             <div class="op_tags_could" id="op_tags">
             </div>
+            <!--<div class="op_infobut" id="op_infobut1"><ul><li>инфа1</li></ul></div>
+            <div class="op_infobut" id="op_infobut2"><ul><li>инфа2</li></ul></div>-->
         </div>
         <div class="op_line">
-            <label for="op_comment">
-                Комментарии
-            </label>
-            <div id="div_op_comment"></div>
+            <div class="op_f_field op_tags">
+                <!-- не трогать! это для фикса #1345 -->
+                <label for="op_comment">
+                    Комментарии
+                </label>
+                <div id="div_op_comment"></div>
+            </div>
         </div>
+        {*<!-- BEGIN поля для планирования -->*}
         <div class="op_line hidden" id="operationEdit_planning">
+            <!--
+            <div class="line event" style="display: block;">
+            <label for="cal_time">Время</label>
+            <input type="text" id="cal_time" name="time"><div class="time-holder" style="display: none;"><table class="times"><tbody><tr><td class="time">08:00</td><td class="time">08:30</td><td class="time">09:00</td><td class="time">09:30</td></tr><tr><td class="time">10:00</td><td class="time">10:30</td><td class="time">11:00</td><td class="time">11:30</td></tr><tr><td class="time">12:00</td><td class="time">12:30</td><td class="time">13:00</td><td class="time">13:30</td></tr><tr><td class="time">14:00</td><td class="time">14:30</td><td class="time">15:00</td><td class="time">15:30</td></tr><tr><td class="time">16:00</td><td class="time">16:30</td><td class="time">17:00</td><td class="time">17:30</td></tr><tr><td class="time">18:00</td><td class="empty"></td><td class="empty"></td><td class="empty"></td></tr></tbody></table></div>
+            </div>
+            -->
             <div class="line" style="margin-bottom: 6px;">
                 <label for="cal_repeat">
                     Повторить
@@ -143,6 +162,7 @@
                 </select>
             </div>
             <div class="line periodic event hidden" id="operationEdit_weekdays">
+                <!-- <div class="cell">Дни недели</div> -->
                 <div class="cell">
                     <table class="week">
                         <tbody>
@@ -216,7 +236,10 @@
                         Повторить несколько раз
                     </label>
                     <input type="radio" checked="checked" rep="1" class="rep_type" id="cal_rep_every" name="rep_type"><input type="text" maxlength="3" value="1" class="ui-widget-content" id="cal_count" name="count">
-                </div>
+                </div><!--<div class="infinity repeat">
+                <input name="rep_type" id="cal_rep_inf" class="rep_type" rep="2" type="radio">
+                <label for="cal_rep_inf">Бесконечно</label>
+                </div>-->
                 <div class="">
                     <label for="cal_rep_to">
                         Повторить до даты
@@ -224,6 +247,7 @@
                     <input type="radio" rep="3" class="rep_type" id="cal_rep_to" name="rep_type"><input type="text" value="" id="cal_date_end" name="date_end" disabled="disabled">
                 </div>
             </div>
-        </div>
+        </div>{*<!-- END поля для планирования -->
+        *}
     </div>
 </form><!--/Ввод операции-->

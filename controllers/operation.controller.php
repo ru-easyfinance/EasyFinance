@@ -493,11 +493,11 @@ class Operation_Controller extends _Core_Controller_UserCommon
     function listOperations($args)
     {
         // Дата начала
-        $dateFrom   = isset($this->request->get['dateFrom'])?
+        $dateFrom   = isset($this->request->get['dateFrom']) && $this->request->get['dateFrom'] != '' ?
                     Helper_Date::getMysqlFromString($this->request->get['dateFrom']):
                     // Если дата не установлена - показываем за последнюю неделю
                     Helper_Date::getMysql( time() - (7*24*60*60) );
-
+        
         // Костылёк для PDA
         if( isset($this->request->get['period'])) {
             switch ( $this->request->get['period'] )
@@ -523,7 +523,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
 
         // Дата окончания
-        $dateTo     = isset($this->request->get['dateTo'])?
+        $dateTo     = isset($this->request->get['dateTo']) && $this->request->get['dateTo'] != '' ?
                     Helper_Date::getMysqlFromString($this->request->get['dateTo']):
                     Helper_Date::getMysql( time() );
 
@@ -566,10 +566,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
             $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo, $search_field);
         }
 
-        $firstDate = Helper_Date::getMysqlFromString('01.01.1970');
         $dateBeforeFrom = Helper_Date::getMysql(strtotime($dateFrom." -1 day"));
-        $listBefore = $this->model->getOperationMoneyBeforeAndAfter($firstDate, $dateBeforeFrom);
-        $listAfter = $this->model->getOperationMoneyBeforeAndAfter($firstDate, $dateTo);
+        $listBefore = $this->model->getOperationList($dateFrom, $dateBeforeFrom, $category, $account, $type, $sumFrom, $sumTo, $search_field, true, true);
+        $listAfter = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo, $search_field, true);
 
         if( !$list ) {
             $list = array();
@@ -601,7 +600,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
         if (_Core_TemplateEngine::getResponseMode($this->request) != "csv") {
             $this->tpl->assign( 'operations', $array );
             $this->tpl->assign( 'list_before', $listBefore );
-            $this->tpl->assign( 'list_after', $listAfter );
+            $this->tpl->assign( 'period_change', $listAfter );
         } else { //CSV
             $headers = array('Дата', 'Тип', 'Сумма', 'Счет', 'Категория', 'Метки', 'Комментарий');
 //          $headers = array('1', '2', '3', '4', '5', '6', '7');

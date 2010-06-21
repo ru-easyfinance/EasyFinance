@@ -66,9 +66,6 @@ easyFinance.widgets.operationsJournal = function(){
             break_symbol = "&shy;";
         }
 
-        $("#balance_before").html(data.list_before+" "+easyFinance.models.currency.getDefaultCurrencyText());
-        $("#balance_after").html(data.list_after+" "+easyFinance.models.currency.getDefaultCurrencyText());
-
         _journal = data.operations;
 
         var tr, tp, pageTotal, curMoney, prevMoney;
@@ -132,38 +129,13 @@ easyFinance.widgets.operationsJournal = function(){
 
             tr += '<td class="light"><span>'+'<div class="operation ' + tp + '"></div>'+'</span></td>'
 
-            // если перевод осуществляется между счетами с разными валютами,
-            // то в переменной imp_id хранится сумма в валюте целевого счёта
-            var money = (_journal[v].imp_id == null) ? _journal[v].money : _journal[v].imp_id;
+            // если перевод осуществляется между счетами с разными валютами
 
-            // #1361. Если выводим все счета,
-            // то приводим суммы к валюте по умолчанию
-            var strMoney = '';
             if (_account == '') {
-                if (_journal[v].moneydef && _journal[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
-                    // в мультивалётных операциях есть свой курс,
-                    // в поле moneydef уже сконвертированное значение
-
-                    if (_journal[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
-                        // перевод без использования основной валюты. конвертируем по курсу
-                        money = Math.abs(prevMoney); // QUICK FIX. правильно сделать это на сервере
-                        ////_journal[v].money * easyFinance.models.currency.getCurrencyCostById(_journal[v].account_currency_id);
-                    } else {
-                        money = _journal[v].moneydef;
-                    }
-                } else {
-                    if (_journal[v].type == "2" && _journal[v].account_currency_id != easyFinance.models.currency.getDefaultCurrencyId()) {
-                        // для переводов учитываем курс
-                        money = money * parseFloat(_journal[v].curs);
-                    } else {
-                        // расходы / доходы / цели
-                        money = easyFinance.models.currency.convertToDefault(money, _journal[v].account_currency_id);
-                    }
-
-                    prevMoney = money;
-                }
+                strMoney = formatCurrency(_journal[v].moneydef);
+            } else {
+                strMoney = formatCurrency(_journal[v].money);
             }
-            strMoney = formatCurrency(money, false, true);
 
             tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+strMoney+'&nbsp;</b></span></td>'
 
@@ -190,32 +162,46 @@ easyFinance.widgets.operationsJournal = function(){
                 .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text);//.show();
         }
 
-        $('#lblOperationsJournalSum').html('<b>Баланс операций: </b>' + formatCurrency(pageTotal, false, false) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
+        //data.period_change = formatCurrency(easyFinance.models.currency.convertToDefault(data.period_change, 1));
+        //data.list_before = formatCurrency(easyFinance.models.currency.convertToDefault(data.list_before, 1));
 
-        if (pageTotal >= 0) {
+        became = parseFloat(data.list_before)+parseFloat(data.period_change);
+        data.period_change = parseFloat(data.period_change);
+        data.list_before = parseFloat(data.list_before);
+
+        $("#balance_before").html(formatCurrency(data.list_before)+" "+easyFinance.models.currency.getDefaultCurrencyText());
+        $('#lblOperationsJournalSum').html('<b>изменение: </b>' + formatCurrency(data.period_change) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
+        $("#balance_after").html(formatCurrency(became) + " "+easyFinance.models.currency.getDefaultCurrencyText());
+
+        if (data.period_change >= 0) {
+            $('#lblOperationsJournalSum').removeClass('sumRed');
             $('#lblOperationsJournalSum').addClass('sumGreen');
         } else {
+            $('#lblOperationsJournalSum').removeClass('sumGreen');
             $('#lblOperationsJournalSum').addClass('sumRed');
         }
         if (data.list_before >= 0) {
+            $('#balance_before').removeClass('sumRed');
             $('#balance_before').addClass('sumGreen');
         } else {
+            $('#balance_before').removeClass('sumGreen');
             $('#balance_before').addClass('sumRed');
         }
-        if (data.list_after >= 0) {
+
+        if (became >= 0) {
+            $('#balance_after').removeClass('sumRed');
             $('#balance_after').addClass('sumGreen');
         } else {
+            $('#balance_after').removeClass('sumGreen');
             $('#balance_after').addClass('sumRed');
         }
         if  (_modelAccounts.getAccountBalanceTotal(_account) >= 0) {
+            $('#lblOperationsJournalAccountBalance').removeClass('sumRed');
             $('#lblOperationsJournalAccountBalance').addClass('sumGreen');
         } else {
+            $('#lblOperationsJournalAccountBalance').removeClass('sumGreen');
             $('#lblOperationsJournalAccountBalance').addClass('sumRed');
         }
-        $("#balance_before").html(insertWBR($("#balance_before").html()));
-        $("#balance_after").html(insertWBR($("#balance_after").html()));
-        $("#lblOperationsJournalSum").html(insertWBR($("#lblOperationsJournalSum").html()));
-        $("#lblOperationsJournalAccountBalance").html(insertWBR($("#lblOperationsJournalAccountBalance").html()));
     }
 
     function _deleteChecked(){
@@ -455,15 +441,9 @@ easyFinance.widgets.operationsJournal = function(){
         var txt = '';
 
         if (_type != '-1')
-            txt = txt + 'операции: ' + OPERATION_TYPES[_type];
+            txt = txt + 'Тип операций: ' + OPERATION_TYPES[_type];
 
-        if (_type != '-1' && _category != '')
-            txt = txt + ', ';
-
-        if (_category != '')
-            txt = txt + 'категория: ' + easyFinance.models.category.getUserCategoryNameById(_category);
-
-        if ((_type != '-1' || _category != '') && (_sumFrom != '' || _sumTo != ''))
+        if ((_type != '-1') && (_sumFrom != '' || _sumTo != ''))
             txt = txt + ', ';
 
         if (_sumFrom != '' || _sumTo != '')
@@ -480,12 +460,6 @@ easyFinance.widgets.operationsJournal = function(){
 
         if (_sumFrom != '' || _sumTo != '')
             txt = txt + ' руб';
-
-        if (txt != '' && _accountName != '')
-            txt = txt + ', ';
-
-        //if (_account != '')
-        //    txt = txt + 'счёт: ' + _accountName;
 
         if (txt == '') {
             _$node.find('#divOperationsJournalFilters').hide();
@@ -546,6 +520,15 @@ easyFinance.widgets.operationsJournal = function(){
         $('#btn_ReloadData').click(loadJournal);
 
         $('#btn_CSV').click(loadJournal_CSV);
+
+        $('#search_field').hint().keypress(function(e) {
+            if (e.keyCode == 13) {
+                $('#btn_ReloadData').click();
+                return false;
+            } else {
+                return true;
+            }
+        });
 
         // #874. Обновляем данные об остатках на счетах
         // после добавления операции
@@ -653,6 +636,7 @@ easyFinance.widgets.operationsJournal = function(){
         _dateTo = $('#dateTo').val();
 
         _search_field = $("#search_field").val();
+        _search_field = (_search_field == "поиск по меткам и коментариям") ? '' : _search_field;
 
         _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, false);
     }
@@ -662,7 +646,8 @@ easyFinance.widgets.operationsJournal = function(){
 
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
-    _search_field = $("#search_field").val();
+        _search_field = $("#search_field").val();
+        _search_field = (_search_field == "поиск по меткам и коментариям") ? '' : _search_field;
 
         _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, true);
     }
