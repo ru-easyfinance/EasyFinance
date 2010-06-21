@@ -122,7 +122,7 @@ class api_sync_InCategoryTest extends api_sync_in
                 ->checkElement(sprintf('record[id="%d"]', $expectedData['id']))
             ->end();
 
-        $this->checkRecordError($expectedData['cid'], '[Invalid.] Foreign account');
+        $this->checkRecordError($expectedData['cid'], '[Invalid.] Foreign category');
     }
 
 

@@ -68,7 +68,7 @@ class syncInCategoryAction extends myBaseSyncInAction
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)
             if (!$myObject->isNew() && ((int) $myObject->getUserId() !== (int) $this->getUser()->getId())) {
-                $errors[] = "Foreign account";
+                $errors[] = "Foreign category";
             }
 
             // новому - установить владельца
