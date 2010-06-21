@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__).'/bootstrap/all.php';
+
 
 // Suite
 require_once(dirname(__FILE__).'/../../tests/unit/AllTests.php');
@@ -31,6 +33,8 @@ class AllTests extends PHPUnit_Framework_TestSuite
             'db' => true,
             'and-migrate' => true,
         ));
+        // Таск создает свой конфиг, после чего в изоляции может молча умереть
+        ProjectConfiguration::getApplicationConfiguration('frontend', 'test', $debug = true);
 
         chdir($dir);
     }
