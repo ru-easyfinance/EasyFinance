@@ -1,0 +1,1 @@
+<?php echo $service_subscription->getUser()->getUserName() ?>

@@ -1,0 +1,40 @@
+#servicesDescription {
+    margin: 12px;
+}
+
+.services_table td {
+    border: 1px dotted #DDDDDD;
+    padding: 4px;
+    }
+
+.services_table .header {
+    background-color: #EEEEEE;
+    font-weight: bold;
+    text-align: center;
+    }
+
+.services_table .term_select {
+    width: 60px;
+    }
+
+.success_msg {
+    color: green;
+    font-weight: bold;
+    }
+
+.fail_msg {
+    color: red;
+    font-weight: bold;
+    }
+
+.service_form {
+    text-align: right;
+    }
+
+.service_form input {
+    width: 140px !important;
+    }
+
+.service_submit_button {
+    width: 130px;
+    }

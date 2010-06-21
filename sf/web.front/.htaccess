@@ -18,6 +18,7 @@ Options +FollowSymLinks
 
   RewriteRule ^css/(.+)$ /css/$1 [L]
   RewriteRule ^js/(.+)$ /js/$1 [L]
+  RewriteRule ^sf/(.+)$ /sf/$1 [L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
 

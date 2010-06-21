@@ -17,7 +17,7 @@ class ProjectConfiguration extends sfProjectConfiguration
         sfOutputEscaper::markClassesAsSafe(array(
             'DateTime',
         ));
-    }
+  }
 
 
     /**

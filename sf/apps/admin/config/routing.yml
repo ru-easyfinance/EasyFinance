@@ -1,0 +1,26 @@
+service_subscription:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                ServiceSubscription
+    module:               subscriptions
+    prefix_path:          /subscriptions
+    column:               id
+    with_wildcard_routes: true
+
+service:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Service
+    module:               services
+    prefix_path:          /services
+    column:               id
+    with_wildcard_routes: true
+
+billing_transaction:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                BillingTransaction
+    module:               transactions
+    prefix_path:          /transactions
+    column:               id
+    with_wildcard_routes: true

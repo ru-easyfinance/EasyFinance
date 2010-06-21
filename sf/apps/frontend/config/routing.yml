@@ -20,4 +20,12 @@ account_create:
 # default rules
 homepage:
   url:   /
-  param: { module: info, action: index }
+  params: { module: info, action: index }
+
+services:
+  url:   /services
+  params: { module: services, action: index }
+
+robokassa:
+  url:   /robokassa/:action
+  params: { module: robokassa }

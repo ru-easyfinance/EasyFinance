@@ -1,0 +1,64 @@
+* {
+    font-family: Arial !important;
+    font-size: 12px !important;
+}
+
+#sf_admin_container .sf_admin_action_delete  {
+    background: transparent;
+    border-right: 0px !important;
+}
+
+.sf_admin_text.sf_admin_list_th_name {
+    width: 400px;
+}
+
+#sf_admin_list_th_actions {
+    width: 150px;
+    text-align:center !important; 
+}
+
+ul.sf_admin_td_actions li {
+    display: block;
+    width: 75px !important;
+    text-align:center !important;
+}
+
+#sf_admin_content  {
+    margin-right:0px !important;    
+}
+
+.sf_admin_actions {
+    text-align: left !important;
+}
+
+#sf_admin_container #sf_admin_bar {
+    float: left;
+    position: relative !important;
+    clear: both;	
+    margin-top:0px;
+    margin-left: 0px;
+    margin-right: 10px;
+    left: 0px;
+    width: 480px;
+}
+
+.sf_admin_text.sf_admin_list_th_service_name {
+    width: 100px !important;
+}
+
+tr.sf_admin_filter_field_created_at td {
+    text-align: right !important;
+}
+
+tr.sf_admin_filter_field_subscribed_till td {
+    text-align: right !important;
+}
+
+#sf_admin_container td {
+    padding: 4px !important;
+}
+
+.ui-datepicker-calendar th, td {
+    border: 0px;
+    padding: 0px;
+}

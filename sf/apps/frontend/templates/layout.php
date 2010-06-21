@@ -112,11 +112,12 @@
     <!-- mainmenu -->
     <div class="menu3">
         <ul class="dropdown">
-            <li id="m1">
+            <li id="m1" class="cur act">
                 <a href="/info/"></a>
                 <ul>
                     <li><span> </span><a href="/info/">Инфо-панель</a></li>
                     <li><span> </span><a href="/profile/">Профиль</a></li>
+                    <li <?php if ( $this->getModuleName() == "services" ):?>class="selected"<?php endif;?>><span> </span><a href="/my/services">Услуги</a></li>
                     <li class="last"></li>
                 </ul>
             </li>

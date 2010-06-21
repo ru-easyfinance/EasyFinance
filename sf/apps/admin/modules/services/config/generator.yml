@@ -1,0 +1,43 @@
+generator:
+  class: sfDoctrineGenerator    
+  param:
+    model_class:           Service
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          service
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+    i18n_catalogue:        admin
+    config:
+      actions:        
+        _new:
+          label:           "Добавить новую запись"
+        _edit:
+          label:           "Редактировать"
+        _delete:
+          label:           "Удалить"
+      fields:  ~
+      list:  
+        title:             "Список услуг"
+        fields:
+          id:              { label: "ID" }
+          name:            { label: "Название" }
+          price:           { label: "Стоимость" }
+        actions:
+          _new:
+            label:         Новая запись       
+        display:           [id, name, price]  
+        sort:              [name, asc]
+      filter:  
+        class: false
+      form:    
+        fields:
+          name:            { label: "Название" }
+          price:           { label: "Стоимость" }
+      edit:    
+        title:             Редактировать услугу %%name%%
+      new:     
+        title:             Добавить новую услугу

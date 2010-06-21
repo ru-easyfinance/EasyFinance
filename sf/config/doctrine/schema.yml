@@ -57,7 +57,11 @@ User:
   tableName: users
   columns:
     id:                { type: integer(4), unsigned: true, notnull: true, primary: true, autoincrement: true }
-    user_name:         { type: string, size: 100, notnull: true }
+    user_name:
+      type: string
+      size: 100
+      notnull: true
+      name: user_name as name
     user_service_mail: { type: string(100), notnull: true }
     currency_id:       { name: user_currency_default as currency_id, type: integer(4), notnull: true, default: 1 }
   options:
@@ -200,6 +204,84 @@ SourceOperation:
       form:  false
       filter: false
 
+# Услуги биллинга
+Service:
+  actAs: [Timestampable]
+  tableName: billing_services
+  columns:
+    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true }   # ID услуги
+    name:                   { type: string(64), notnull: true }                                         # Наименование услуги
+    price:                  { type: float,      unsigned: true, notnull: true }                         # Стоимость услуги
+  options:
+    symfony:
+      form:  true
+      filter: true
+    
+
+# Подписка на услуги
+ServiceSubscription:
+  actAs: [Timestampable]
+  tableName: billing_subscriptions
+  columns:
+    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true }   # ID подписки
+    user_id:                { type: integer(4), unsigned: true, notnull: true }                         # ID пользователя
+    service_id:             { type: integer(4),    unsigned: true, notnull: true }                         # ID услуги
+    subscribed_till:        { type: timestamp(25), notnull: false }                                     # Срок окончания действия подписки на услугу
+  relations:
+    User:
+      local: user_id
+      foreign: id
+      type: one
+      foreignType: one
+      onDelete: CASCADE      # При удалении пользователя удаляется вся информация о его подписках
+    Service:
+      local: service_id
+      foreign: id
+      type: one
+      foreignType: one    
+  options:
+    symfony:
+      form:  true
+      filter: true
+
+
+# Транзакции биллинга
+BillingTransaction:
+  actAs: [Timestampable]
+  tableName: billing_transactions
+  columns:
+    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true }   # ID транзакции
+    user_id:                { type: integer(4), unsigned: true, notnull: true }                         # ID пользователя
+    paysystem:              { type: string(32), notnull: true }                                         # Платежная система
+    service_id:             { type: integer(4),    unsigned: true, notnull: true }                         # ID услуги
+    subscription_id:        { type: integer(4),    unsigned: true, notnull: true }                         # ID подписки на услугу
+    price:                  { type: float,      unsigned: true, notnull: true }                         # Оплачиваемая стоимость услуги
+    term:                   { type: integer(4),    unsigned: true, notnull: true }                         # Срок
+    total:                  { type: float,      unsigned: true, notnull: true }                         # Суммарная стоимость услуги
+    status:                 { type: integer(1), unsigned: true, notnull: true, default: 0 }             # Статус: 0 - платеж не овершен, 1 - принят, 2 - ошибка
+    success:                { type: integer(1), unsigned: true, notnull: true, default: 0 }             # Оплачено: 0 - нет, 1 - да
+    error_code:             { type: integer(4) }                                                           # Код ошибки
+    error_message:          { type: string(64) }                                                        # Сообщение об ошибке
+  relations:
+    User:
+      local: user_id
+      foreign: id
+      type: one
+      foreignType: one     
+    Service:
+      local: service_id
+      foreign: id
+      type: one
+      foreignType: one
+    ServiceSubscription:
+      local: subscription_id
+      foreign: id
+      type: one
+      foreignType: one
+  options:
+    symfony:
+      form:  true
+      filter: true
 
 # Категории (100% - OK)
 Category:

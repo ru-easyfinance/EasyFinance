@@ -1,0 +1,42 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           BillingTransaction
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          billing_transaction
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:
+        id:                  { label: "ID" }
+        user_name:           { label: "Пользователь" }
+        paysystem:           { label: "Платежная система" }
+        service_link:        { label: "Услуга" }
+        price:               { label: "Стоимость услуги" }
+        term:                { label: "Срок" }
+        total:               { label: "Сумма" }
+        status:              { label: "Статус" }
+        created_at:          { label: "Дата и время создания" }
+      list:
+        title: Список транзакций
+        sort: [created_at, desc]
+        display: [ id, user_name, _service_link, price, term, total, paysystem, _status, created_at ]
+        object_actions:
+          _delete:
+        actions: []
+      filter:
+        fields:
+          user_id:           { label: "Пользователь" }
+          service_id:        { label: "Услуга" }
+          status:              { label: "Статус" }
+          created_at:          { label: "Дата и время создания" }
+        display: [user_id, service_id, status, created_at]
+      form:    ~
+      edit:    ~
+      new:     ~
