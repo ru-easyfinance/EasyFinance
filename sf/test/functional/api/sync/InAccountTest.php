@@ -213,28 +213,4 @@ class api_sync_InAccountTest extends api_sync_in
         $this->checkRecordError(3, '[Invalid.] No such currency');
     }
 
-
-    /**
-     * Принять "удаленную" запись
-     */
-    public function testPostAccountDeleted()
-    {
-        $expectedData = array(
-            'updated_at'  => $this->_makeDate(0),
-            'deleted_at'  => $this->_makeDate(0),
-            'type_id'     => 2,
-            'currency_id' => 4,
-            'name'        => 'Мой счет',
-        );
-
-        $xml = $this->getXMLHelper()->make($expectedData);
-
-        $this
-            ->myXMLPost($xml, 200)
-            ->with('response')->begin()
-                ->checkElement('resultset[type="Account"] record[id][success="true"][cid]', 1)
-            ->end()
-            ->with('model')->check('Account', $expectedData, 1);
-    }
-
 }

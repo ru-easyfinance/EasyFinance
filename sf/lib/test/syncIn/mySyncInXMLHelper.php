@@ -10,9 +10,8 @@ class mySyncInXMLHelper
         </request>
     ';
 
-    // Max: а если id не указан?
     protected static $recordTemplate = '
-        <record %s cid="%s"%s>
+        <record%s%s%s>
             %s
         </record>
     ';
@@ -31,6 +30,7 @@ class mySyncInXMLHelper
      *
      * @param  string    $model
      * @param  array     $default
+     * @param  array     $fields
      */
     public function __construct($model, $default = array(), $fields = array())
     {
@@ -49,12 +49,20 @@ class mySyncInXMLHelper
      */
     public function make($params = array())
     {
-        $cid = $params['cid'] = isset($params['cid']) ? $this->getCID($params['cid']) : $this->getCID();
         $params = array_merge($this->model->toArray(false), $params);
 
         $id = '';
         if (!empty($params['id'])) {
-            $id = "id=\"{$params['id']}\"";
+            $id = " id=\"{$params['id']}\"";
+        }
+
+        $cid = '';
+        if (array_key_exists("cid", $params)) {
+            if (!empty($params['cid'])) {
+                $cid = " cid=\"" . $this->getCID($params['cid']) . "\"";
+            }
+        } else {
+            $cid = " cid=\"" . $this->getCID() . "\"";
         }
 
         $deleted = '';
@@ -122,9 +130,9 @@ class mySyncInXMLHelper
     }
 
 
-    protected function getCID($id = null)
+    protected function getCID($id = 0)
     {
-        $this->CID = (null === $id) ? $this->CID : $id;
+        $this->CID = (0 === $id) ? $this->CID : $id;
         $CID = $this->CID;
         $this->CID++;
         return $CID;

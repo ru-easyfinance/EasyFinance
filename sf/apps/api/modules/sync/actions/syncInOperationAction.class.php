@@ -32,6 +32,7 @@ class syncInOperationAction extends myBaseSyncInAction
             ->select("a.id, a.id type_id")
             ->from("Account a")
             ->whereIn("a.id", $accountTypes)
+            ->andWhere("a.user_id = ?", $this->getUser()->getId())
             ->execute(array(), 'FetchPair');
 
         // FK: выбор существующих категорий
@@ -40,6 +41,7 @@ class syncInOperationAction extends myBaseSyncInAction
             ->select("c.id, c.id type_id")
             ->from("Category c")
             ->whereIn("c.id", $categoryIds)
+            ->andWhere("c.user_id = ?", $this->getUser()->getId())
             ->execute(array(), 'FetchPair');
 
         $modelName = $this->getModelName();

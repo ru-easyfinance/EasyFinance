@@ -38,6 +38,7 @@ class syncInCategoryAction extends myBaseSyncInAction
             ->select("c.id, c.id parent_id")
             ->from("Category c")
             ->whereIn("c.id", $parentIds)
+            ->andWhere("c.user_id = ?", $this->getUser()->getId())
             ->execute(array(), 'FetchPair');
 
 

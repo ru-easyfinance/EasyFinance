@@ -79,9 +79,9 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
-     * Принять валидный xml
+     * Принять новую операцию
      */
-    public function testPostOperationSingle()
+    public function testNewOperation()
     {
         $expectedData = array(
             'user_id'     => $this->_user->getId(),
@@ -151,11 +151,47 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
+     * Отвергать: Счет другого пользователя
+     */
+    public function testOperationAccountForeign()
+    {
+        $acc = $this->helper->makeAccount();
+        $xml = $this->getXMLHelper()->make(array('account_id' => $acc->getId(), 'cid' => 4,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(4, '[Invalid.] No such account');
+    }
+
+
+    /**
      * Отвергать: Несуществующий id категории
      */
     public function testOperationCategoryFK()
     {
         $xml = $this->getXMLHelper()->make(array('category_id' => 99999, 'cid' => 4,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(4, '[Invalid.] No such category');
+    }
+
+
+    /**
+     * Отвергать: Категория другого пользователя
+     */
+    public function testOperationCategoryForeign()
+    {
+        $cat = $this->helper->makeCategory();
+        $xml = $this->getXMLHelper()->make(array('category_id' => $cat->getId(), 'cid' => 4,));
 
         $this
             ->myXMLPost($xml, 200)

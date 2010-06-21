@@ -79,6 +79,12 @@ abstract class myBaseSyncInAction extends sfAction
             } elseif ($count > $limit) {
                 $this->raiseError("More than 'limit' ({$limit}) objects sent, {$count}");
             }
+
+            $cids = $this->filterByXPath("//record/@cid", "cid");
+            if (count($cids) != $count) {
+                $this->raiseError("Request is NOT well-formed: no client ids");
+            }
+
         } catch (sfStopException $e) {
             return sfView::ERROR;
         }

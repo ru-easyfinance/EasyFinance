@@ -15,7 +15,7 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
      * Ошибка при отправке без авторизации
      * (пока без ID пользователя в query string)
      */
-    public function testPostAuthError()
+    final public function testPostAuthError()
     {
         $this->_user->setId(null);
 
@@ -27,7 +27,7 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
      * Ошибка при отправке пустого POST
      * нет данных на входе
      */
-    public function testEmptyPostError()
+    final public function testEmptyPostError()
     {
         $this->checkSyncInError(null, 400, 'Expected XML data');
     }
@@ -36,7 +36,7 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
     /**
      * Пустой xml, отсутствуют записи для обработки
      */
-    public function testPostAccountEmptyXMLError()
+    final public function testEmptyXMLError()
     {
         $this->checkSyncInError($this->getXMLHelper()->getEmptyRequest(), 400, 'Expected at least one record');
     }
@@ -45,7 +45,7 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
     /**
      * Входящий xml содержит слишком много записей
      */
-    public function testPostAccountRecordsLimitError()
+    final public function testRecordsLimitError()
     {
         $this->browser->getContext(true);
 
@@ -60,22 +60,48 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
 
     /**
      * Клиент не передал CID
-     * Базовый тест
      */
-    public function testNoCid()
+    final public function testNoCid()
     {
-        $this->markTestIncomplete();
+        $xml = $this->getXMLHelper()->make(array('cid' => null,));
+
+        $this->checkSyncInError($xml, 400, "Request is NOT well-formed: no client ids");
     }
 
 
     /**
-     * Принять группу объектов
-     * Просто посчитать ответ
-     * Базовый тест
+     * Принять группу новых объектов
      */
-    public function testUpdateCollection()
+    final public function testNewCollection()
     {
-        $this->markTestIncomplete();
+        $xml = $this->getXMLHelper()->makeCollection(5);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset record[id][success="true"][cid]', 5)
+            ->end();
+    }
+
+
+    /**
+     * Принять "удаленную" запись
+     */
+    public function testOperationDeleted()
+    {
+        $expectedData = array(
+            'updated_at'  => $this->_makeDate(0),
+            'deleted_at'  => $this->_makeDate(0),
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset record[id][success="true"][cid]', 1)
+            ->end()
+            ->with('model')->check($this->getModelName(), $expectedData, 1);
     }
 
 }

@@ -14,7 +14,7 @@ class api_sync_InCategoryTest extends api_sync_in
      */
     protected function getModelName()
     {
-        return 'category';
+        return 'Category';
     }
 
 
@@ -71,9 +71,9 @@ class api_sync_InCategoryTest extends api_sync_in
 
 
     /**
-     * Принять валидный xml
+     * Принять новую категорию
      */
-    public function testPostCategorySingle()
+    public function testNewCategory()
     {
         $expectedData = array(
             'user_id'    => $this->_user->getId(),
@@ -165,25 +165,20 @@ class api_sync_InCategoryTest extends api_sync_in
 
 
     /**
-     * Принять "удаленную" запись
+     * Отвергать: Родительская категория принадлежит другому пользователю
      */
-    public function testPostCategoryDeleted()
+    public function testCategoryForeignParent()
     {
-        $expectedData = array(
-            'updated_at'  => $this->_makeDate(0),
-            'deleted_at'  => $this->_makeDate(0),
-            'name'        => 'Моя удаленная категория',
-        );
-
-        $xml = $this->getXMLHelper()->make($expectedData);
+        $cat = $this->helper->makeCategory();
+        $xml = $this->getXMLHelper()->make(array('parent_id' => $cat->getId(), 'cid' => 6,));
 
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
-                ->checkElement('resultset[type="Category"] record[id][success="true"][cid]', 1)
-            ->end()
-            ->with('model')->check('Category', $expectedData, 1);
-    }
+                ->checkElement('resultset[type="Category"] record[id][success="false"][cid]', 1)
+            ->end();
 
+        $this->checkRecordError(6, '[Invalid.] No such parent category');
+    }
 
 }
