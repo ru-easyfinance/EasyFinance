@@ -34,6 +34,14 @@ class syncInOperationAction extends myBaseSyncInAction
             ->whereIn("a.id", $accountTypes)
             ->execute(array(), 'FetchPair');
 
+        // FK: выбор существующих категорий
+        $categoryIds = $this->filterByXPath('//record/category_id');
+        $categories = Doctrine_Query::create()
+            ->select("c.id, c.id type_id")
+            ->from("Category c")
+            ->whereIn("c.id", $categoryIds)
+            ->execute(array(), 'FetchPair');
+
         $modelName = $this->getModelName();
         $formName  = sprintf("mySyncIn%sForm", $modelName);
         $results   = array();
@@ -52,6 +60,11 @@ class syncInOperationAction extends myBaseSyncInAction
             // FK: счет существует?
             if (!in_array($record['account_id'], $accounts)) {
                 $errors[] = "No such account";
+            }
+
+            // FK: категория существует?
+            if (!in_array($record['category_id'], $categories)) {
+                $errors[] = "No such category";
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)
