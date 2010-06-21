@@ -11,7 +11,9 @@ abstract class UnitTestCase extends PHPUnit_Framework_TestCase
      */
     protected $preserveGlobalState = false;
 
-
+    /**
+     * @var DbSimple_Mysql
+     */
     private $db;
 
 
@@ -65,6 +67,7 @@ abstract class UnitTestCase extends PHPUnit_Framework_TestCase
 
     /**
      * Get database connection
+     * @return DbSimple_Mysql
      */
     protected function getConnection()
     {

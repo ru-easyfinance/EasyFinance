@@ -6,10 +6,9 @@
  * @category operation
  * @author Max Kamashev (ukko) <max.kamashev@gmail.com>
  * @copyright http://easyfinance.ru/
- * @version SVN $Id$
  */
-class Operation_Model {
-
+class Operation_Model
+{
     /**
      * Ссылка на экземпляр класса базы данных
      * @var DbSimple_Mysql
@@ -52,7 +51,8 @@ class Operation_Model {
      * @param oldUser $user
      * @return bool
      */
-    function __construct(oldUser $user = null) {
+    function __construct(oldUser $user = null)
+    {
         if ($user) {
             $this->_user = $user;
         } else {
@@ -62,13 +62,15 @@ class Operation_Model {
         $this->db = Core::getInstance()->db;
         $this->load();
         return true;
+
     }
 
     /**
      * Загрузка данных из сессии
      * @return void
      */
-    function load() {
+    function load()
+    {
         if (isset($_SESSION['user_money'])) {
             $this->user_money = $_SESSION['user_money'];
         } else {
@@ -82,7 +84,8 @@ class Operation_Model {
      * Сохранение данных в сессии
      * @return void
      */
-    function save() {
+    function save()
+    {
         $_SESSION['user_money'] = $this->user_money;
         $_SESSION['account_money'] = $this->account_money;
         $_SESSION['total_sum'] = $this->total_sum;
@@ -93,7 +96,8 @@ class Operation_Model {
      * @param array $params
      * @return array
      */
-    public function checkData(array $operation = array()) {
+    public function checkData(array $operation = array())
+    {
         $validated = array();
         $this->errorData = array();
 
@@ -218,6 +222,7 @@ class Operation_Model {
         }
 
         return $validated;
+
     }
 
     /**
@@ -237,53 +242,50 @@ class Operation_Model {
                 WHERE user_id=? AND money=? AND date=?
                     AND cat_id=? AND drain=? AND comment=? AND account_id=?
                     AND created_at BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
-                        $this->_user->getId(), $money, $date, $category, $drain, $comment, $account);
+
+        $this->_user->getId(), $money, $date, $category, $drain, $comment, $account);
+
         return $last;
+
     }
 
     /**
      * Регистрирует новую транзакцию
      * @param float  $money      Сумма транзакции
      * @param string $date       Дата транзакции в формате Y.m.d
+     * @param int    $category   Ид категории
      * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
      * @param string $comment    Комментарий транзакции
      * @param int    $account_id Ид счета
+     * @param array  $tags       Массив с тегами
      *
-     * @return int $id Если
+     * @return int $id
      */
-    function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null) {
-
-
+    function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
+    {
         // Если операция новая, и отправлена не случайно, то продолжаем, иначе возвраты
         $check = $this->checkExistance($money, $date, $category, $drain, $comment, $account);
-        if ($check) {
+        if($check) {
             return $check;
         }
 
-        if (is_null($tags)) {
+        if(is_null($tags)) {
             $tags = array();
         }
 
-        $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `type`,
-            `comment`, `tags`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())';
+        $values = array(
+            'user_id'   => $this->_user->getId(),
+            'money'     => $money,
+            'date'      => $date,
+            'cat_id'    => $category,
+            'account_id'=> $account,
+            'drain'     => $drain,
+            'type'      => !$drain,
+            'comment'   => $comment,
+            'tags'      => implode(', ', $tags),
+        );
 
-        $this->db->query($sql, $this->_user->getId(), $money, $date, $category, $account, $drain, !$drain,
-                $comment, implode(', ', $tags));
-
-        $operationId = mysql_insert_id();
-
-        // Если есть теги, то добавляем и их тоже
-        if ($tags) {
-            $sql = "";
-            foreach ($tags as $tag) {
-                if (!empty($sql)) {
-                    $sql .= ',';
-                }
-                $sql .= "(" . $this->_user->getId() . "," . (int) $operationId . ",'" . addslashes($tag) . "')";
-            }
-
-            $this->db->query('INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES ' . $sql);
-        }
+        $operationId = $this->_addOperation($values);
 
         // Обновляем данные о счетах пользователя
         $this->_user->initUserAccounts();
@@ -291,6 +293,7 @@ class Operation_Model {
 
         $this->save();
         return $operationId;
+
     }
 
     /**
@@ -298,36 +301,28 @@ class Operation_Model {
      * @param array $operations_array
      * @return int
      */
-    function addSome($operations_array = array()) {
-        $sql = '';
-        foreach ($operations_array as $operation) {
-            if (!empty($sql))
-                $sql .= ',';
-            $sql .= "('"
-                . $this->_user->getId() . "','"
-                . ( ( $operation['type'] == 0 ) ?
-                    ( -1 * abs($operation['amount']) )
-                    : $operation['amount'] ) . "','"
-                . $operation['date'] . "','"
-                . $operation['category'] . "','"
-                . $operation['account'] . "','"
-                . $operation['drain'] . "','"
-                . !$operation['drain'] . "','"
-                . $operation['comment'] . "','"
-                . $operation['tags'] . "','"
-                . $operation['accepted'] . "', '"
-                . $operation['chain'] . "', NOW(), NOW())";
+    function addSome($operations_array = array())
+    {
+        $this->db->query("BEGIN;");
+
+        foreach($operations_array as $operation) {
+            $values = array(
+                'user_id'   => $this->_user->getId(),
+                'money'     => (($operation['type'] == 0) ? (-1 * abs($operation['amount'])) : $operation['amount']),
+                'date'      => $operation['date'],
+                'cat_id'    => $operation['category'],
+                'account_id'=> $operation['account'],
+                'drain'     => $operation['drain'],
+                'type'      => !$operation['drain'],
+                'comment'   => $operation['comment'],
+                'tags'      => $operation['tags'],
+                'accepted'  => $operation['accepted'],
+                'chain_id'  => $operation['chain'],
+            );
+
+            $this->_addOperation($values);
         }
-
-        if (!empty($sql)) {
-
-            $sql = 'INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `type`, `comment`, `tags`, `accepted`, `chain_id`, `created_at`, `updated_at`) VALUES ' . $sql;
-
-            $this->db->query($sql);
-        } else {
-            return false;
-        }
+        $this->db->query("COMMIT;");
 
         // Обновляем данные о счетах пользователя
         $this->_user->initUserAccounts();
@@ -339,6 +334,7 @@ class Operation_Model {
 
     /**
      * Добавляет трансфер с одного на другой счёт
+     * 
      * @param $money        float     Деньги
      * @param $convert      float     Конвертированные в нужную валюту деньги
      * @param $date         string    Дата, когда совершаем трансфер
@@ -349,7 +345,8 @@ class Operation_Model {
      * @param $accepted     int
      * @return bool
      */
-    function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = null, $accepted = null) {
+    function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = null, $accepted = null)
+    {
 
         if ($tags) {
 
@@ -395,10 +392,10 @@ class Operation_Model {
                 }
                 //Перевод "С"
                 $this->db->query($sql, ( ABS($money) * -1), $date, $account, $toAccount, $comment,
-                        '', NULL, $this->_user->getId(), $id);
+                    '', NULL, $this->_user->getId(), $id);
 
                 // Если менялась валюта при переводе
-                if ($convert) {
+                if($convert) {
                     //перевод на
                     $this->db->query($sql, $convert, $date, $toAccount, $account, $comment,
                             '', $money, $this->_user->getId(), $next[0]['id']);
@@ -422,130 +419,138 @@ class Operation_Model {
 
                 //перевод с
                 $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, '',
-                        NULL, $this->_user->getId(), $id);
-                if ($accepted) {
-                    $sql = "INSERT INTO operation
-                                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, imp_id,
-                                    accepted, created_at, updated_at)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 1, NOW(), NOW())";
-                } else {
-                    $sql = "INSERT INTO operation
-                                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, imp_id,
-                                    created_at, updated_at)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, NOW(), NOW())";
+                    NULL, $this->_user->getId(), $id);
+
+
+                $values = array(
+                    'user_id'   => $this->_user->getId(),
+                    'money'     => $money,
+                    'date'      => $date,
+                    'cat_id'    => null,
+                    'account_id'=> $toAccount,
+                    'tr_id'     => $id,
+                    'comment'   => $comment,
+                    'transfer'  => $account,
+                    'type'      => 2,
+                    'imp_id'    => null,
+                );
+
+                if($accepted) {
+                    $values['accepted'] = 1;
                 }
-                $this->db->query($sql, $this->_user->getId(), $money, $date, -1, $toAccount, $id,
-                        $comment, $account, NULL);
+
+                $this->_addOperation($values);
             }
         }
         $this->save();
         return '[]';
-    }
 
+    }
 
     /**
      * Добавляет несколько однообразных переводов между счетами
      * @param array $operations_array Calendar_Event $event
      * @return int
      */
-    function addSomeTransfer($operations_array) {
-
+    function addSomeTransfer($operations_array)
+    {
         $accounts = $this->_user->getUserAccounts();
         $currensys = $this->_user->getUserCurrency();
 
-        // @FIXME Предупреждаю честно, код далее может несколько загнуть сервер. Нужно его оптимизировать
-        foreach ($operations_array as $value) {
+        $this->db->query("BEGIN;");
+        foreach($operations_array as $operation) {
 
-            $curFromId = $accounts[$value['account']]['account_currency_id'];
-            $curTargetId = $accounts[$value['toAccount']]['account_currency_id'];
+            $curFromId = $accounts[$operation['account']]['account_currency_id'];
+            $curTargetId = $accounts[$operation['toAccount']]['account_currency_id'];
 
             // Если перевод мультивалютный
-            if ($curFromId != $curTargetId) {
+            if($curFromId != $curTargetId) {
                 // Если нет сконвертированной суммы (так бывает в пда) производим вычисления через рубль
-                if ((float) $value['convert'] === 0) {
+                if((float) $operation['convert'] === 0) {
 
                     // приводим сумму к пром. валюте
-                    $value['convert'] = $value['amount'] / $currensys[$curTargetId]['value'];
+                    $operation['convert'] = $operation['amount'] / $currensys[$curTargetId]['value'];
                     // .. и к валюте целевого счёта
-                    $value['convert'] = $value['convert'] * $currensys[$curFromId]['value'];
+                    $operation['convert'] = $operation['convert'] * $currensys[$curFromId]['value'];
                 }
 
                 // Создаём операцию откуда переводим
-                $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                    exchange_rate, chain_id, accepted, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, ?, 0, NOW(), NOW())";
-                $this->db->query($sql,
-                        $this->_user->getId(),
-                        -$value['amount'],
-                        $value['date'],
-                        -1,
-                        $value['account'],
-                        0,
-                        $value['comment'],
-                        $value['toAccount'],
-                        $value['currency'],
-                        $value['chain']);
+                $values = array(
+                    'user_id'       => $this->_user->getId(),
+                    'money'         => -$operation['amount'],
+                    'date'          => $operation['date'],
+                    'cat_id'        => null,
+                    'account_id'    => $operation['account'],
+                    'tr_id'         => 0,
+                    'comment'       => $operation['comment'],
+                    'transfer'      => $operation['toAccount'],
+                    'drain'         => 1,
+                    'type'          => 2,
+                    'exchange_rate' => $operation['currency'],
+                    'chain_id'      => $operation['chain'],
+                    'accepted'      => 0,
+                );
 
-                $last_id = mysql_insert_id();
+                $last_id = $this->_addOperation($values);
 
                 // Создаём операцию куда переводим
-                $sql = "INSERT INTO operation
-                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                imp_id, exchange_rate, chain_id, accepted, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, ?, 0, NOW(), NOW())";
+                $values = array(
+                    'user_id'       => $this->_user->getId(),
+                    'money'         => $operation['convert'],
+                    'date'          => $operation['date'],
+                    'cat_id'        => null,
+                    'account_id'    => $operation['toAccount'],
+                    'tr_id'         => $last_id,
+                    'comment'       => $operation['comment'],
+                    'transfer'      => $operation['account'],
+                    'drain'         => 0,
+                    'type'          => 2,
+                    'imp_id'        => $operation['amount'],
+                    'exchange_rate' => $operation['currency'],
+                    'chain_id'      => $operation['chain'],
+                    'accepted'      => 0,
+                );
 
-                $this->db->query($sql,
-                        $this->_user->getId(),
-                        $value['convert'],
-                        $value['date'],
-                        -1,
-                        $value['toAccount'],
-                        $last_id,
-                        $value['comment'],
-                        $value['account'],
-                        $value['amount'],
-                        $value['currency'],
-                        $value['chain']);
+                $this->_addOperation($values);
 
                 // Если перевод в разрезе одной валюты
             } else {
 
-                $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type,
-                    chain_id, accepted, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, 0, NOW(), NOW())";
+                $values = array(
+                    'user_id'   => $this->_user->getId(),
+                    'money'     => -$operation['amount'],
+                    'date'      => $operation['date'],
+                    'cat_id'    => null,
+                    'account_id'=> $operation['account'],
+                    'tr_id'     => 0,
+                    'comment'   => $operation['comment'],
+                    'transfer'  => $operation['toAccount'],
+                    'type'      => 2,
+                    'chain_id'  => $operation['chain'],
+                    'accepted'  => 0,
+                );
 
-                $this->db->query($sql,
-                        $this->_user->getId(),
-                        -$value['amount'],
-                        $value['date'],
-                        -1,
-                        $value['account'],
-                        0,
-                        $value['comment'],
-                        $value['toAccount'],
-                        $value['chain']);
+                $last_id = $this->_addOperation($values);
 
-                $last_id = mysql_insert_id();
+                $values = array(
+                    'user_id'   => $this->_user->getId(),
+                    'money'     => $operation['amount'],
+                    'date'      => $operation['date'],
+                    'cat_id'    => null,
+                    'account_id'=> $operation['toAccount'],
+                    'tr_id'     => $last_id,
+                    'comment'   => $operation['comment'],
+                    'transfer'  => $operation['account'],
+                    'type'      => 2,
+                    'imp_id'    => $operation['amount'],
+                    'chain_id'  => $operation['chain'],
+                    'accepted'  => 0,
+                );
 
-                $sql = "INSERT INTO operation
-                    (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type,
-                    imp_id, chain_id, accepted, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 0, NOW(), NOW())";
-
-                $this->db->query($sql, $this->_user->getId(),
-                        $value['amount'],
-                        $value['date'],
-                        -1,
-                        $value['toAccount'],
-                        $last_id,
-                        $value['comment'],
-                        $value['account'],
-                        $value['amount'],
-                        $value['chain']);
+                $this->_addOperation($values);
             }
         }
+        $this->db->query("COMMIT;");
 
         $this->_user->initUserAccounts();
         $this->_user->save();
@@ -555,26 +560,27 @@ class Operation_Model {
 
     /**
      * Добавляем перевод со счёта на счёт
+     *
      * @param float  $money
-     * @param        $convert
-     * @param float  $curr
+     * @param float  $convert
+     * @param float  $exchangeRate
      * @param date   $date
-     * @param int    $from_account
-     * @param int    $to_account
+     * @param int    $fromAccount
+     * @param int    $toAccount
      * @param string $comment
-     * @param string $tags
-     * @return <type>
+     * @param array $tags
+     * @return int
      */
-    function addTransfer($money, $convert, $curr, $date, $from_account, $to_account, $comment, $tags) {
-
+    function addTransfer($money, $convert, $exchangeRate, $date, $fromAccount, $toAccount, $comment, $tags)
+    {
         $accounts = $this->_user->getUserAccounts();
-        $curFromId = $accounts[$from_account]['account_currency_id'];
-        $curTargetId = $accounts[$to_account]['account_currency_id'];
+        $curFromId = $accounts[$fromAccount]['account_currency_id'];
+        $curTargetId = $accounts[$toAccount]['account_currency_id'];
 
         // Если перевод мультивалютный
-        if ($curFromId != $curTargetId) {
+        if($curFromId != $curTargetId) {
             // Если пришла сконвертированная сумма
-            if ($convert != 0) {
+            if($convert != 0) {
 
                 // Если нет - производим вычисления через рубль
             } else {
@@ -586,46 +592,74 @@ class Operation_Model {
                 $convert = $convert * $currensys[$curFromId]['value'];
             }
 
-            $drain_money = $money * -1;
+            $values = array(
+                'user_id'       => $this->_user->getId(),
+                'money'         => -$money,
+                'date'          => $date,
+                'cat_id'        => null,
+                'account_id'    => $fromAccount,
+                'tr_id'         => 0,
+                'comment'       => $comment,
+                'transfer'      => $toAccount,
+                'drain'         => 1,
+                'type'          => 2,
+                'exchange_rate' => $exchangeRate,
+            );
 
-            // Создаём операцию откуда переводим
-            $sql = "INSERT INTO operation
-                (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-                exchange_rate, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 2, ?, NOW(), NOW())";
-            $this->db->query($sql, $this->_user->getId(), -$money, $date, null, $from_account, 0,
-                    $comment, $to_account, $curr);
-
-            $last_id = mysql_insert_id();
+            $last_id = $this->_addOperation($values);
 
             // Создаём операцию куда переводим
-            $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, drain, type,
-            imp_id, exchange_rate, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 2, ?, ?, NOW(), NOW())";
-            $this->db->query($sql, $this->_user->getId(), $convert, $date, null, $to_account, $last_id,
-                    $comment, $from_account, $money, $curr, $curTargetId);
+            $values = array(
+                'user_id'       => $this->_user->getId(),
+                'money'         => $convert,
+                'date'          => $date,
+                'cat_id'        => null,
+                'account_id'    => $toAccount,
+                'tr_id'         => $last_id,
+                'comment'       => $comment,
+                'transfer'      => $fromAccount,
+                'drain'         => 0,
+                'type'          => 2,
+                'imp_id'        => $money,
+                'exchange_rate' => $exchangeRate,
+            );
+
+            $this->_addOperation($values);
         } else {
 
-        $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, NOW(), NOW())";
+            $values = array(
+                'user_id'   => $this->_user->getId(),
+                'money'     => -$money,
+                'date'      => $date,
+                'cat_id'    => null,
+                'account_id'=> $fromAccount,
+                'tr_id'     => 0,
+                'comment'   => $comment,
+                'transfer'  => $toAccount,
+                'type'      => 2,
+            );
 
-            $last_id = $this->db->query($sql, $this->_user->getId(), -$money, $date, null, $from_account, 0,
-                            $comment, $to_account);
+            $last_id = $this->_addOperation($values);
 
-            $last_id = mysql_insert_id();
+            $values = array(
+                'user_id'   => $this->_user->getId(),
+                'money'     => $money,
+                'date'      => $date,
+                'cat_id'    => null,
+                'account_id'=> $toAccount,
+                'tr_id'     => $last_id,
+                'comment'   => $comment,
+                'transfer'  => $fromAccount,
+                'type'      => 2,
+                'imp_id'    => $money,
+            );
 
-        $sql = "INSERT INTO operation
-            (user_id, money, date, cat_id, account_id, tr_id, comment, transfer, type, imp_id, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2, ?, NOW(), NOW())";
-        $this->db->query($sql, $this->_user->getId(), $money, $date, null, $to_account, $last_id,
-            $comment, $from_account, $money);
-            $last_id2 = mysql_insert_id();
+            $this->_addOperation($values);
         }
         $this->_user->initUserAccounts();
         $this->_user->save();
         return $last_id;
+
     }
 
     /**
@@ -640,7 +674,8 @@ class Operation_Model {
      *
      * @return bool true - Регистрация прошла успешно
      */
-    function edit($id=0, $money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = null, $accepted=null) {
+    function edit($id=0, $money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = null, $accepted=null)
+    {
         if (!$category) {
             $category = null;
         }
@@ -688,6 +723,7 @@ class Operation_Model {
         //$this->selectMoney($user_id);
         $this->save();
         return '[]';
+
     }
 
     /**
@@ -702,7 +738,7 @@ class Operation_Model {
         //Получаем ID смежной записи (в случае, если это перевод)
         $tr_id = $this->db->selectCell('SELECT * FROM operation WHERE tr_id = ? AND user_id = ?', $id, $userId);
 
-        if ($tr_id === null) {
+        if($tr_id === null) {
             $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND id = ?";
         } else {
             $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND (id = ? OR tr_id = ?)";
@@ -715,7 +751,8 @@ class Operation_Model {
      * @param int $id
      * @return bool
      */
-    function deleteTargetOperation($id=0) {
+    function deleteTargetOperation($id=0)
+    {
         $tr_id = $this->db->select("SELECT target_id FROM target_bill WHERE id=?", $id);
         $this->db->query("DELETE FROM target_bill WHERE id=? AND user_id=?", $id, $this->_user->getId());
         $targ = new Targets_Model();
@@ -723,6 +760,7 @@ class Operation_Model {
         $this->_user->initUserTargets();
         $this->_user->save();
         return true;
+
     }
 
     /**
@@ -758,8 +796,9 @@ class Operation_Model {
                 $cat_in .= $category['cat_id'];
             }
 
-            if ($cat_in)
+            if ($cat_in) {
                 $cat_in .= ',';
+            }
             $cat_in .= $currentCategory;
         }
 
@@ -824,7 +863,7 @@ class Operation_Model {
             $sql .= " AND `date`< '$dateFrom' ";
 
         // Если указана категория (фильтр по категории)
-        if (!empty($currentCategory)) {
+        if(!empty($currentCategory)) {
 
             if ($categorys[$currentCategory]['cat_parent'] == 0) {
 
@@ -849,10 +888,10 @@ class Operation_Model {
         }
 
         // Если указан фильтр по сумме
-        if (!is_null($sumFrom)) {
+        if(!is_null($sumFrom)) {
             $sql .= " AND ABS(o.money) >= " . $sumFrom;
         }
-        if (!is_null($sumTo)) {
+        if(!is_null($sumTo)) {
             $sql .= " AND ABS(o.money) <= " . $sumTo;
         }
 
@@ -894,21 +933,21 @@ class Operation_Model {
         if ((int) $currentAccount > 0) {
             $sql .= " AND t.bill_id = '{$currentAccount}' ";
         }
-        if (!empty($currentCategory)) {
+        if(!empty($currentCategory)) {
             $sql .= " AND 0 = 1 "; // Не выбираем эти операции, т.к. у финцелей свои категории
         }
 
         // Если фильтр по типу - и он не фин.цель
-        if ($type != -1 && $type != 4) {
+        if($type != -1 && $type != 4) {
             // Не выбираем эти операции
             $sql .= " AND 0 = 4";
         }
 
-        if (!is_null($sumFrom)) {
+        if(!is_null($sumFrom)) {
             $sql .= " AND ABS(t.money) >= " . $sumFrom;
         }
 
-        if (!is_null($sumTo)) {
+        if(!is_null($sumTo)) {
             $sql .= " AND ABS(t.money) <= " . $sumTo;
         }
 
@@ -980,8 +1019,8 @@ class Operation_Model {
                     if (($operation['cat_id']) == 8)
                         $operation['cat_name'] = "Компьютер";
                 }
-                //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
 
+                //@todo переписать запрос про финцель, сделать отже account_id и убрать эти строчки. +посмотреть весь код где это может использоваться
                 if ($operation['transfer']) {
                     $operation['cat_name'] = "Отправлено на счёт '"
                             . $accounts[$operation['transfer']]['account_name'] . "'";
@@ -1006,7 +1045,6 @@ class Operation_Model {
         } else {
             $total_money = $operations;
             $retoper = ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money'] / sfConfig::get('ex')->getRate(Core::getInstance()->user->getUserProps('user_currency_default'));
-//            $retoper = ($total_money[0]['total_money'] == null) ? 0 : $total_money[0]['total_money'];
         }
         return $retoper;
     }
@@ -1016,7 +1054,8 @@ class Operation_Model {
      * @param int $count
      * @return array
      */
-    function getLastOperations($count = 10) {
+    function getLastOperations($count = 10)
+    {
         $operations = array();
 
         $sql = "SELECT
@@ -1098,27 +1137,29 @@ class Operation_Model {
         $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
         $first = $this->db->query($sql, $this->_user->getId(), $account_id);
         return $first[0]['money'];
+
     }
 
     /**
      * @deprecated
      * @FIXME Дописать комментарии к функции
      */
-    function getCurrency() {
+    function getCurrency()
+    {
         $SourceId = (int) $_POST['SourceId']; // Ид счёта на который нужно перевести
         $TargetId = (int) $_POST['TargetId']; // Ид текущего счёта
         $aTarget = $aSource = array();
         $curr = Core::getInstance()->currency;
-        foreach ($this->_user->getUserAccounts() as $val) {
-            if ($val['account_id'] == $SourceId) {
+        foreach($this->_user->getUserAccounts() as $val) {
+            if($val['account_id'] == $SourceId) {
                 $aTarget[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
             }
-            if ($val['account_id'] == $TargetId) {
+            if($val['account_id'] == $TargetId) {
                 $aSource[$val['account_currency_id']] = $curr[$val['account_currency_id']]['name'];
             }
         }
 
-        if (key($aSource) != key($aTarget)) {
+        if(key($aSource) != key($aTarget)) {
             // Если у нас простое сравнение с рублём
             if (key($aTarget) == 1 || key($aSource) == 1) {
                 $course = round($curr[key($aSource)]['value'] / $curr[key($aTarget)]['value'], 4);
@@ -1128,6 +1169,7 @@ class Operation_Model {
             }
             return $course;
         }
+
     }
 
     /**
@@ -1153,12 +1195,16 @@ class Operation_Model {
             else
                 $type = 4;
         }//определили тип, иначе
-        else
+        else {
             return null; //один случай на миллиард. а на деле врят ли произойдёт. случай если есть и операция и перевод на фин целт с одним айди
- return $type;
+        }
+
+        return $type;
+
     }
 
-    public function getOperation($userId, $operationId) {
+    public function getOperation($userId, $operationId)
+    {
         // Запрос выбирает из операций и переводов на финцели
         $sql = "
             SELECT
@@ -1229,6 +1275,7 @@ class Operation_Model {
         }
 
         return $operation;
+
     }
 
     /**
@@ -1238,26 +1285,79 @@ class Operation_Model {
      * @param int $acc_id
      * @return int
      */
-    public function getNumOfOperetionOnAccount($acc_id) {
+    public function getNumOfOperetionOnAccount($acc_id)
+    {
         $sql = "SELECT count(*) as op_count FROM operation
             WHERE account_id=?
             AND updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW() ";
         $count = $this->db->selectRow($sql, (int) $acc_id);
         return $count['op_count'];
+
     }
 
     /**
-     * Удаляет все операции по указанной категории
+     * Добавляет операцию в БД
      *
-     * @param oldUser $user
-     * @param int $catId
-     * @return bool
+     * @param array $values
+     * @return int Возвращает id добавленной операции
      */
-    public function deleteOperationsByCategory(oldUser $user, $catId) {
-        $sql = "UPDATE operation SET updated_at=NOW(), deleted_at=NOW() WHERE cat_id IN (
-            SELECT cat_id FROM category WHERE user_id=? AND (cat_id=? OR cat_parent=?))";
+    private function _addOperation(array $values = array())
+    {
 
-        return (bool) $this->db->query($sql, $user->getId(), $catId, $catId);
+        $default = array(
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        );
+
+        $values = array_merge($default, $values);
+
+        $sql = "INSERT INTO `operation` (" . self::_wrapKey($values) . ") VALUES (" . self::_wrapVal($values) . ")";
+
+        $operationId = $this->db->query($sql);
+
+        // Если есть теги, то добавляем и их тоже
+        if(isset($values['tags']) && !empty($values['tags'])) {
+            $tags = explode(', ', $values['tags']);
+            $sql = "";
+            foreach($tags as $tag) {
+                if(empty($tag)) {
+                    continue;
+                }
+                if(!empty($sql)) {
+                    $sql .= ',';
+                }
+
+                $sql .= "(" . $this->_user->getId() . "," . (int) $operationId . ",'" . addslashes($tag) . "')";
+            }
+
+            $this->db->query('INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES ' . $sql);
+        }
+
+        return $operationId;
+
+    }
+
+    private static function _wrapKey($props)
+    {
+        $keys = array_keys($props);
+        return sprintf('`%s`', implode('`, `', $keys));
+
+    }
+
+    private static function _wrapVal($props)
+    {
+        $result = "";
+        foreach($props as $value) {
+            if (!empty($result)) {
+                $result .= ", ";
+            }
+            if ($value === null) {
+                $result .= "null";
+            } else {
+                $result .= sprintf("'%s'", $value);
+            }
+        }
+        return $result;
     }
 
 }
