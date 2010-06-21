@@ -132,4 +132,21 @@ class api_sync_InOperationTest extends api_sync_in
         $this->checkRecordError($expectedData['cid'], '[Invalid.] Foreign account');
     }
 
+
+    /**
+     * Отвергать: Несуществующий id счета у операции
+     */
+    public function testOperationAccountFK()
+    {
+        $xml = $this->getXMLHelper()->make(array('account_id' => 9999, 'cid' => 4,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(4, '[Invalid.] No such account');
+    }
+
 }
