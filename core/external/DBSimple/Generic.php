@@ -110,7 +110,7 @@ class DbSimple_Generic
                 }
             }
         }
-        $object =& new $class($parsed);
+        $object = new $class($parsed);
         if (isset($parsed['ident_prefix'])) {
             $object->setIdentPrefix($parsed['ident_prefix']);
         }
@@ -128,9 +128,9 @@ class DbSimple_Generic
                 $fp = @fopen($testFile = $dir . '/DbSimple_' . md5(getmypid() . microtime()), 'w');
                 if ($fp) {
                     fclose($fp);
-                    unlink($testFile);                
+                    unlink($testFile);
                     require_once 'Cache' . '/Lite.php'; // "." -> no phpEclipse notice
-                    $t =& new Cache_Lite(array('cacheDir' => $dir.'/', 'lifeTime' => null, 'automaticSerialization' => true));
+                    $t = new Cache_Lite(array('cacheDir' => $dir.'/', 'lifeTime' => null, 'automaticSerialization' => true));
                     $object->_cacher =& $t;
                     break;
                 }
