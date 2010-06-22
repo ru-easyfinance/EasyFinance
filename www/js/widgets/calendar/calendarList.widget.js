@@ -50,9 +50,7 @@ easyFinance.widgets.calendarList = function(){
         var element;
         $('#per_tabl tr .cont ul li.edit a').live('click',function(){
             element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
-            promptSingleOrChain("edit", function(isChain){
-                easyFinance.widgets.operationEdit.fillFormCalendar(element, true, isChain);
-            });
+            calendarEditSingleOrChain(element);
 
             return false;
         });
@@ -66,17 +64,7 @@ easyFinance.widgets.calendarList = function(){
 
         $('#per_tabl tr .cont ul li.del a').live('click',function(){
             var element = _data[$(this).closest('tr').attr('id').replace('ev_', '')];
-            chainId = element.chain;
-            operationId = element.id;
-
-            promptSingleOrChain("delete", function(isChain) {
-                if (isChain)
-                    easyFinance.models.accounts.deleteOperationsChain(chainId, function() {
-                    });
-                else
-                    easyFinance.models.accounts.deleteOperationsByIds(operationId, [], function() {
-                    });
-            });
+            calendarDeleteSingleOrChain(element);
         });
     }
 

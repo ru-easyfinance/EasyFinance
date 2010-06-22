@@ -160,7 +160,7 @@ table#operations_list td + td + td + td + td + td{
 }*/
 
 #btn_ReloadData {
-    float: right;
+    float:right;
 }
 
 #divSearchOperations {
@@ -195,7 +195,7 @@ table#operations_list td + td + td + td + td + td{
 
 #lblOperationsJournalSum {
     float:left;
-    width:190px;
+    width:220px;
 }
 
 #balance_before {

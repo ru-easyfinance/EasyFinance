@@ -316,11 +316,15 @@ function get_tree_select2 ($selected = 0, $type = 0)
     foreach ($cat as $val) {
         if ($val['howoften'] >= $barier) {
             if ($val['cat_parent'] == 0) {
-                if ( ($val['type'] == 0) || ($val['type'] == $type) )
-                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}'  id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
+                if ( ($val['type'] == 0) || ($val['type'] == $type) ) {
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' " .
+                        "id='ca_{$val['cat_id']}' title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
+                }
             } else {
-                if ( ($type == $val['type']) || ($val['type'] == 0) )
-                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' id='ca_{$val['cat_id']}' {$s} title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
+                if ( ($type == $val['type']) || ($val['type'] == 0) ) {
+                    $arr[$val['howoften']][] = "<option value='{$val['cat_id']}' iswaste='{$val['type']}' " .
+                    "id='ca_{$val['cat_id']}' title='{$val['cat_name']}'>&mdash;&nbsp;{$val['cat_name']}</option>";
+                }
             }
         }
     }

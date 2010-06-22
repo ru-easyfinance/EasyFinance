@@ -85,7 +85,6 @@ function cutCategory($catname){
 <div class="menu">
     <a href="/category/waste" class="<?php echo ($categorysType == Category::TYPE_WASTE)?'current':''?>">расход</a> | 
     <a href="/category/profit" class="<?php echo ($categorysType == Category::TYPE_PROFIT)?'current':''?>">доход</a> | 
-    <a href="/category/universal" class="<?php echo ($categorysType == Category::TYPE_UNIVERSAL)?'current':''?>">универсальные</a>
 </div>
 <br />
 <table cellspacing="0" cellpadding="0" class="wide categories"><tbody>

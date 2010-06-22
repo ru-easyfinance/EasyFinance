@@ -360,6 +360,58 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
     }
     return returnArray;
 }
+
+// @TODO
+// избавиться от currentCalendarEvent!
+// сейчас, к сожалению, если работать без этого,
+// то при редактировании неск. операций подставляются старые данные
+// есть какой-то глюк или нюанс при работе с замыканиями..
+var currentCalendarEvent = null;
+
+function calendarEditSingleOrChain(event) {
+    currentCalendarEvent = event;
+
+    if (currentCalendarEvent.every == "0") {
+        // единичная операция, редактируем
+        easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, false);
+    } else {
+        promptSingleOrChain("edit", function(isChain){
+            easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, isChain);
+        });
+    }
+}
+
+function calendarDeleteSingleOrChain(event) {
+    currentCalendarEvent = event;
+
+    var deleteCallback = function(data){
+        // функция отображает результат удаления
+        if (data.result) {
+            if (data.result.text)
+                $.jGrowl(data.result.text, {theme: 'green'});
+        } else if (data.error) {
+            if (data.error.text)
+                $.jGrowl(data.error.text, {theme: 'red', stick: true});
+        }
+    };
+
+    if (event.every == "0") {
+        // если операция одиночная, удаляем после подтверждения
+        if (confirm('Удалить операцию?')) {
+            easyFinance.models.accounts.deleteOperationsByIds(currentCalendarEvent.id, [], deleteCallback);
+        }
+    } else {
+        // спрашиваем, удалить данную операцию или всю серию
+        promptSingleOrChain("delete", function(isChain){
+            if (isChain) {
+                easyFinance.models.accounts.deleteOperationsChain(currentCalendarEvent.chain, deleteCallback);
+            } else {
+                easyFinance.models.accounts.deleteOperationsByIds(currentCalendarEvent.id, [], deleteCallback);
+            }
+        });
+    }
+}
+
 /**
  * TODO rewrite
  * Рисует диалог выбора для цепочки

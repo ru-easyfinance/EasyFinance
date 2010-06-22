@@ -75,9 +75,11 @@ easyFinance.widgets.accountsPanel = function(){
                         document.location='/operation/#account='+id;
                     }
                 } else if (parentClass == "edit") {
-                    document.location='/accounts/#edit'+id;
-                    // для события на странице /accounts
-                    accounts_hash_api('#edit'+id);
+                    if (document.location.pathname.indexOf("profile") == -1) {
+                        easyFinance.widgets.accountEdit.editAccountById(id);
+                    } else {
+                        document.location='/accounts/#edit'+id;
+                    }
                 } else if (parentClass == "add") {
                     document.location='/accounts/#copy'+id;
                     // для события на странице /accounts

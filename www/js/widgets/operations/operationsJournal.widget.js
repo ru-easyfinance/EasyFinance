@@ -159,7 +159,7 @@ easyFinance.widgets.operationsJournal = function(){
         pageTotal = Math.round(pageTotal*100)/100;
         if (_account != '' && _account != "undefined") {
             $('#lblOperationsJournalAccountBalance')
-                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text);//.show();
+                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text).show();
         }
 
         //data.period_change = formatCurrency(easyFinance.models.currency.convertToDefault(data.period_change, 1));

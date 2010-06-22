@@ -90,41 +90,16 @@ easyFinance.widgets.calendar = function(){
                 '<li title="Удалить" class="del"><a></a></li></ul></div>');
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.edit').click(function(){
                     //                        alert('edit' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
-                    _element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
-                    promptSingleOrChain("edit", function(isChain){
-                        easyFinance.widgets.operationEdit.fillFormCalendar(_element, true, isChain);
-                    });
+                    elem = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
+                    calendarEditSingleOrChain(elem);
                 });
+                
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function(){
                     //                        alert('del' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
-                    var element = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
-                    chainId = element.chain; // заполнить!
-                    operationId = element.id; // заполнить!
-                    promptSingleOrChain("delete", function(isChain){
-                        if (isChain) {
-                            easyFinance.models.accounts.deleteOperationsChain(chainId, function(data){
-                                if (data.result) {
-                                    if (data.result.text)
-                                        $.jGrowl(data.result.text, {theme: 'green'});
-                                } else if (data.error) {
-                                    if (data.error.text)
-                                        $.jGrowl(data.error.text, {theme: 'red', stick: true});
-                                }
-                            });
-                        }
-                        else {
-                            easyFinance.models.accounts.deleteOperationsByIds(operationId, [], function(data){
-                                if (data.result) {
-                                    if (data.result.text)
-                                        $.jGrowl(data.result.text, {theme: 'green'});
-                                } else if (data.error) {
-                                    if (data.error.text)
-                                        $.jGrowl(data.error.text, {theme: 'red', stick: true});
-                                }
-                            });
-                        }
-                    });
+                    elem = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
+                    calendarDeleteSingleOrChain(elem);
                 });
+
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar:not(.accepted) li.accept').click(function(){
                     //                        alert('acc' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
                     var operationId = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')].id;
@@ -141,10 +116,8 @@ easyFinance.widgets.calendar = function(){
                 //cont
             },
             eventClick: function(event, element, view){
-                elem = $.extend({}, _data[event.key]);
-                promptSingleOrChain("edit", function(isChain){
-                    easyFinance.widgets.operationEdit.fillFormCalendar(elem, true, isChain);
-                });
+                elem = _data[event.key];
+                calendarEditSingleOrChain(elem);
             },
             dayClick: function(date, allDay, jsEvent, view){
                 // открываем окно планирования
