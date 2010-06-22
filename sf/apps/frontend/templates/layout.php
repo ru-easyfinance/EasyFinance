@@ -181,6 +181,7 @@
                                 <ul>
                                     <li><a href="/info/">Инфо-панель</a></li>
                                     <li><a href="/profile/">Профиль</a></li>
+                                    <li><a href="/my/services/">Услуги</a></li>
                                 </ul>
                             </li>
                             <li>
