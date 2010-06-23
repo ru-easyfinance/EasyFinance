@@ -13,7 +13,6 @@ class Operation extends BaseOperation
     const TYPE_TRANSFER = 2; // Перевод
     const TYPE_BALANCE  = 3; // Начальный баланс
 
-
     /**
      * Статус
      */
@@ -36,6 +35,22 @@ class Operation extends BaseOperation
     {
         $this->_set('Account', $account);
         $this->_set('user_id', $account->getUserId());
+    }
+
+
+    /**
+     * Вернуть типы операций
+     *
+     * @return array
+     */
+    static public function getTypes()
+    {
+        return array(
+            self::TYPE_EXPENSE,
+            self::TYPE_PROFIT,
+            self::TYPE_TRANSFER,
+            self::TYPE_BALANCE,
+        );
     }
 
 }

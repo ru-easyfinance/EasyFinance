@@ -34,13 +34,12 @@ class api_sync_InOperationTest extends api_sync_in
     protected function getDefaultModelData()
     {
         $account = $this->helper->makeAccount($this->_user);
-        $category = $this->helper->makeCategory($this->_user);
 
         return array(
             'id'          => null,
             'user_id'     => $this->_user->getId(),
             'account_id'  => $account->getId(),
-            'category_id' => $category->getId(),
+            'category_id' => null,
             'amount'      => 0,
             'type'        => 0,
             'date'        => $this->_makeDate(-10000),
@@ -201,5 +200,67 @@ class api_sync_InOperationTest extends api_sync_in
 
         $this->checkRecordError(4, '[Invalid.] No such category');
     }
+
+
+    /**
+     * Принять операцию расхода по типу
+     */
+    public function testAmountSignByType()
+    {
+        $expectedData = array(
+            'amount'      => 1000,
+            'type'        => 0,
+            'comment'     => 'Просто операция',
+            'cid'         => 2,
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement(sprintf(
+                    'resultset[type="Operation"] record[id][cid="%d"][success="true"]',
+                        $expectedData['cid']
+                ), 'OK')
+            ->end();
+
+        unset($expectedData['cid']); // у записи нет такого поля
+        $expectedData['amount'] = -1000;  // должна быть отрицательная сумма
+        $this->browser
+            ->with('model')->check('Operation', $expectedData, 1);
+    }
+
+
+    /**
+     * Принять балансовую операцию
+     */
+    public function testBalanceOperation()
+    {
+        $expectedData = array(
+            'amount'      => 100,
+            'type'        => 1,
+            'cid'         => 2,
+            'date'        => "0000-00-00",
+            'category_id' => null,
+            'drain'       => 0,
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement(sprintf(
+                    'resultset[type="Operation"] record[id][cid="%d"][success="true"]',
+                        $expectedData['cid']
+                ), 'OK')
+            ->end();
+
+        unset($expectedData['cid']); // у записи нет такого поля
+        $this->browser
+            ->with('model')->check('Operation', $expectedData, 1);
+    }
+
 
 }

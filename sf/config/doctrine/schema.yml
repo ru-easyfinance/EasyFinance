@@ -150,9 +150,9 @@ Operation:
   actAs: [Timestampable, SoftDelete]
   columns:
     user_id:     { type: integer(4), unsigned: true, notnull: true }
-    account_id:  { type: integer(4), unsigned: true, default: null}             # ID счёта
+    account_id:  { type: integer(4), unsigned: true, default: null }             # ID счёта
     category_id: { name: cat_id as category_id, type: integer(4), default: null, unsigned: true} # ID категории
-    amount:      { name: money as amount, type: 'decimal(20, 2)', notnull: true ,unsigned: true} # Сумма
+    amount:      { name: money as amount, type: 'decimal(20, 2)', notnull: true, unsigned: false} # Сумма
     date:        { type: date(25), notnull: true }                               # Фактическа дата операции
     drain:       { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
     type:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
@@ -160,6 +160,7 @@ Operation:
     source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
     accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
     transfer_account_id: { name: transfer as transfer_account_id, type: integer(4),       notnull: false, default: null } # ID счета получателя
+    transfer_id: { name: tr_id as transfer_id, type: integer(4), unsigned: true, notnull: false, default: null } # ID перевода
     transfer_amount:     { name: imp_id as transfer_amount,       type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
     chain_id:    { type: integer(4), notnull: false, default: null }             # Связь с календарем
   relations:

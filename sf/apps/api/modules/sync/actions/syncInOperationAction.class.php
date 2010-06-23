@@ -65,8 +65,10 @@ class syncInOperationAction extends myBaseSyncInAction
             }
 
             // FK: категория существует?
-            if (!in_array($record['category_id'], $categories)) {
+            if (!in_array($record['category_id'], $categories) AND !empty($record['category_id'])) {
                 $errors[] = "No such category";
+            } elseif (null === $record['category_id']) {
+                // TODO проверять, действительно ли это не операция дохода/расхода + тест
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)
@@ -114,8 +116,8 @@ class syncInOperationAction extends myBaseSyncInAction
             'id'          => (string) $record['id'],
             'cid'         => (string) $record['cid'],
             'account_id'  => (string) $record->account_id,
-            'category_id' => (string) $record->category_id,
-            'amount'      => (string) $record->amount,
+            'category_id' => (isset($record->category_id) ? (string) $record->category_id : null),
+            'amount'      => (int)    $record->amount,
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
