@@ -292,4 +292,28 @@ class Account_Model
             Account::FIELD_BINDING);
     }
 
+
+    /**
+     * Получает информацию по счёту (для ПДА)
+     *
+     * @param int $accountId
+     * @return array
+     */
+    public function getAccountPdaInformation($accountId) {
+        $sql = "SELECT * FROM accounts WHERE account_id=?";
+        $account = $this->db->selectRow($sql, $accountId);
+
+        $sql = "SELECT money FROM operation WHERE account_id=? AND date='0000-00-00' LIMIT 1;";
+        $money = $this->db->selectCell($sql, $accountId);
+
+        return array(
+            'name' => $account['account_name'],
+            'type' => $account['account_type_id'],
+            'description' => $account['account_description'],
+            'currency' => $account['account_currency_id'],
+            'money' => $money,
+            'id' => $accountId,
+        );
+    }
+
 }

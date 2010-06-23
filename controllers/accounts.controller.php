@@ -71,7 +71,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
             $this->tpl->assign('result' , array('text'=>'Счёт успешно изменён'));
             $this->tpl->assign( 'name_page', 'info_panel/info_panel' );
         } else {
-            $acm = new Accounts_Model();
+            $acm = new Account_Model();
             $acc = $acm->getAccountPdaInformation($args[0]);
             $this->tpl->assign( 'acc', $acc);
             $this->tpl->assign( 'name_page', 'account/edit' );
