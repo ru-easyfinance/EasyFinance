@@ -65,32 +65,4 @@ class api_sync_OutTest extends myFunctionalTestCase
             ->end();
     }
 
-
-    /**
-     * Отдать список операций
-     */
-    public function testGetOps()
-    {
-        $this->markTestIncomplete();
-        $op1 = $this->helper->makeOperation();
-        $op2 = $this->helper->makeOperation($op1->getAccount());
-
-        $this->browser
-            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
-                'model' => 'operation',
-                'user_id'=>$op1->getUserId())), 200)
-            ->with('response')->begin()
-                ->checkContains('<recordset type="Operation">')
-                ->checkElement('record', 2)
-                ->checkElement('#'.$op1->getId())
-                ->checkElement('#'.$op2->getId())
-                ->checkElement('record account_id')
-                ->checkElement('record category_id')
-                ->checkElement('record amount')
-                ->checkElement('record comment')
-                ->checkElement('record dt_update')
-                ->checkElement('record dt_create')
-            ->end();
-    }
-
 }

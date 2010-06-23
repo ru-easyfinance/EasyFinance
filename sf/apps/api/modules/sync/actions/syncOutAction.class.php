@@ -16,6 +16,10 @@ class syncOutAction extends sfAction
         // Явно указать layout для всех форматов
         $this->setLayout('layout');
 
+        $this->getContext()->getConfiguration()->loadHelpers('Sync', $this->getContext()->getModuleName());
+        sfConfig::set('sf_escaping_method', 'ESC_XML');
+
+
         $this->form = new mySyncOutForm;
         $this->form->bind($request->getGetParameters());
 
@@ -25,7 +29,7 @@ class syncOutAction extends sfAction
             $query = $this->_getQuery($modelName, $this->form->getDatetimeRange(), $userId);
 
             // Vars
-            $this->setVar('list',    $query->fetchArray());
+            $this->setVar('list',    $query->execute());
             $this->setVar('model',   $modelName, $noEscape = true);
             $this->setVar('columns', $this->_getColunmsToReturn($modelName), $noEscape = true);
             return sfView::SUCCESS;
@@ -71,6 +75,7 @@ class syncOutAction extends sfAction
             'Currency'  => 'mySyncOutCurrencyQuery',
             'Category'  => 'mySyncOutCategoryQuery',
             'Account'   => 'mySyncOutAccountQuery',
+            'Operation' => 'mySyncOutOperationQuery',
         );
 
         if (isset($models[$modelName])) {
@@ -93,11 +98,37 @@ class syncOutAction extends sfAction
     public function _getColunmsToReturn($modelName)
     {
         $models = array(
-            'Currency'  => array('code', 'symbol', 'name', 'rate'),
-            'Category'  => array('parent_id', 'system_id', 'name', 'type'),
-            'Account'   => array('name', 'description', 'currency_id', 'type_id'),
-            'Operation' => array('account_id', 'category_id', 'amount', 'comment'),
+            'Currency'  => array(
+                'code',
+                'symbol',
+                'name',
+                'rate'
+            ),
+            'Category'  => array(
+                'parent_id',
+                'system_id',
+                'name',
+                'type'
+            ),
+            'Account'   => array(
+                'name',
+                'description',
+                'currency_id',
+                'type_id'
+            ),
+            'Operation' => array(
+                'account_id',
+                'category_id',
+                'amount',
+                'type',
+                'date',
+                'accepted',
+                'comment',
+                'transfer_account_id',
+                'transfer_amount',
+            ),
         );
+
         return $models[$modelName];
     }
 

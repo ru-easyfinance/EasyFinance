@@ -138,7 +138,13 @@ AccountProperty:
       filter: false
 
 
-# Операция с деньгами (11/20 - PART)
+# Операция с деньгами (16/21 - PART)
+# Пропущено:
+#   - time
+#   - tr_id
+#   - tags
+#   - source_id
+#   - exchange_rate
 Operation:
   tableName: operation
   actAs: [Timestampable, SoftDelete]
@@ -153,6 +159,9 @@ Operation:
     comment:     { type: clob }
     source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
     accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
+    transfer_account_id: { name: transfer as transfer_account_id, type: integer(4),       notnull: false, default: null } # ID счета получателя
+    transfer_amount:     { name: imp_id as transfer_amount,       type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
+    chain_id:    { type: integer(4), notnull: false, default: null }             # Связь с календарем
   relations:
     User:
       local: user_id
@@ -215,7 +224,7 @@ Service:
     symfony:
       form:  true
       filter: true
-    
+
 
 # Подписка на услуги
 ServiceSubscription:
@@ -237,7 +246,7 @@ ServiceSubscription:
       local: service_id
       foreign: id
       type: one
-      foreignType: one    
+      foreignType: one
   options:
     symfony:
       form:  true
@@ -266,7 +275,7 @@ BillingTransaction:
       local: user_id
       foreign: id
       type: one
-      foreignType: one     
+      foreignType: one
     Service:
       local: service_id
       foreign: id

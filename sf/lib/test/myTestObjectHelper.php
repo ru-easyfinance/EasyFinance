@@ -89,6 +89,11 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeOperation(Account $account = null, array $props = array(), $save = true)
     {
         $defaultProps = array(
+            'amount'   => -$this->getUniqueCounter() - 0.99,
+            'date'     => date('Y-m-d', time()-86400),
+            'type'     => Operation::TYPE_EXPENSE,
+            'comment'  => $this->makeText('Комментарий к операции'),
+            'accepted' => Operation::STATUS_ACCEPTED,
         );
         $props = array_merge($defaultProps, $props);
 
@@ -96,12 +101,14 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
             $account = $this->makeAccount(null, array(), $save);
         }
         $user = $account->getUser();
-        $cat  = $this->makeCategory($user);
 
         $ob = $this->makeModel('Operation', $props, false);
         $ob->setAccount($account);
         $ob->setUser($account->getUser());
-        $ob->setCategory($cat);
+
+        if (empty($props['category_id'])) {
+            $ob->setCategory($this->makeCategory($user));
+        }
 
         if ($save) {
             $ob->save();
