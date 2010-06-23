@@ -83,6 +83,10 @@ class mySyncInOperationForm extends BaseFormDoctrine
         if ($this->values['type'] == Operation::TYPE_TRANSFER) {
             $this->values['drain'] = 1;
             $this->values['category_id'] = null;
+
+            if ($this->values['amount'] > 0) {
+                $this->values['amount'] = -$this->values['amount'];
+            }
         }
 
     }

@@ -22,6 +22,8 @@ class api_sync_InOperationTest extends api_sync_in
             'accepted',
             'created_at',
             'updated_at',
+            'transfer',
+            'transfer_amount',
         );
     }
 
@@ -48,6 +50,8 @@ class api_sync_InOperationTest extends api_sync_in
             'created_at'  => $this->_makeDate(-1000),
             'updated_at'  => $this->_makeDate(0),
             'deleted_at'  => null,
+            'transfer'    => null,
+            'transfer_amount' => null,
         );
     }
 
@@ -262,5 +266,56 @@ class api_sync_InOperationTest extends api_sync_in
             ->with('model')->check('Operation', $expectedData, 1);
     }
 
+
+    /**
+     * Принять перевод между счетами
+     */
+    public function testTransferNew()
+    {
+        $acc_from = $this->helper->makeAccount($this->_user);
+        $acc_to   = $this->helper->makeAccount($this->_user);
+
+        $expectedFromData = array(
+            'type'              => 2,
+            'user_id'           => $this->_user->getId(),
+            'amount'            => 100,
+            'account_id'        => $acc_from->getId(),
+            'transfer'          => $acc_to->getId(),
+            'transfer_amount'   => 500, // другая валюта
+            'cid'               => 3,
+            'drain'             => 1,
+        );
+
+        $expectedToData = array_merge($expectedFromData, array(
+            'amount'          => 500,
+            'transfer_amount' => 100,
+            'transfer'        => $acc_from->getId(),
+            'account_id'      => $acc_to->getId(),
+        ));
+
+        $xml = $this->getXMLHelper()->make($expectedFromData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement(sprintf(
+                    'resultset[type="Operation"] record[id][cid="%d"][success="true"]',
+                        $expectedFromData['cid']
+                ), 'OK')
+            ->end();
+
+        unset($expectedFromData['cid'], $expectedToData['cid'], $expectedFromData['transfer_amount']);
+
+        // исходящий - всегда отрицательная сумма
+        $expectedFromData['amount'] = -100;
+
+        $this->browser
+            ->with('model')->check('Operation', $expectedFromData, 1, $found);
+
+        $expectedToData['transfer_id'] = $found->getFirst()->getId();
+        $this->browser
+            ->with('model')->check('Operation', $expectedToData, 1, $found);
+
+    }
 
 }

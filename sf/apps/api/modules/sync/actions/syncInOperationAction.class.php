@@ -26,6 +26,13 @@ class syncInOperationAction extends myBaseSyncInAction
             ->whereIn("o.id", $recordIds)
             ->execute();
 
+        // существующие записи переводов
+        $transferts = Doctrine_Query::create()
+            ->select("o.*")
+            ->from("Operation o INDEXBY o.transfer_id")
+            ->whereIn("o.transfer_id", $recordIds)
+            ->execute();
+
         // FK: выбор существующих счетов
         $accountTypes = $this->filterByXPath('//record/account_id');
         $accounts = Doctrine_Query::create()
@@ -55,6 +62,11 @@ class syncInOperationAction extends myBaseSyncInAction
                 $myObject = new $modelName();
             }
 
+            if ($record['type'] == Operation::TYPE_TRANSFER) {
+                $formName = sprintf("mySyncIn%sForm", $modelName . "Transfer");
+
+
+            }
             $form = new $formName($myObject);
 
             $errors = array();
@@ -67,8 +79,6 @@ class syncInOperationAction extends myBaseSyncInAction
             // FK: категория существует?
             if (!in_array($record['category_id'], $categories) AND !empty($record['category_id'])) {
                 $errors[] = "No such category";
-            } elseif (null === $record['category_id']) {
-                // TODO проверять, действительно ли это не операция дохода/расхода + тест
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)
@@ -82,6 +92,27 @@ class syncInOperationAction extends myBaseSyncInAction
             }
 
             if (!$errors && $form->bindAndSave($record)) {
+                if ($record['type'] == Operation::TYPE_TRANSFER) {
+                    if ($transferts->contains($record['id'])) {
+                        $myTransfertObject = $transferts[(int) $record['id']];
+                    } else {
+                        $myTransfertObject = new $modelName();
+                    }
+
+                    $real = $form->getObject();
+                    $completeTransfert = array_merge($record, array(
+                        'account_id' => $real->getTransfer(),
+                        'amount'     => $record['transfer_amount'],
+                        'transfer'   => $record['account_id'],
+                        'transfer_id'=> $real->getId(),
+                        'transfer_amount' => abs($real->getAmount()),
+                    ));
+
+                    $transfertForm = new mySyncInOperationTransferCompleteForm($myTransfertObject);
+
+                    $transfertForm->bindAndSave($completeTransfert);
+                }
+
                 $results[] = array(
                     'id'      => $form->getObject()->getId(),
                     'cid'     => (string) $record['cid'],
@@ -121,6 +152,8 @@ class syncInOperationAction extends myBaseSyncInAction
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
+            'transfer'    => (string) $record->transfer,
+            'transfer_amount' => isset($record->transfer_amount) ? (int) $record->transfer_amount : null,
             'accepted'    => (string) $record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
