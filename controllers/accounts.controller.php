@@ -59,6 +59,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
 
     function edit($args)
     {
+        throw new Exception('Look at ticket #1527');
         if( _Core_Request::getCurrent()->method == 'POST' )
         {
             $params = $_POST;
