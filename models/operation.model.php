@@ -418,7 +418,7 @@ class Operation_Model
 
 
                 //перевод с
-                $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, '',
+                $this->db->query($sql, -$money, $date, $account, $toAccount, $comment, '', 0,
                     NULL, $this->_user->getId(), $id);
 
 
