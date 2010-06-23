@@ -20,8 +20,8 @@ class mySyncOutForm extends BaseForm
 
         $this->validatorSchema->setPostValidator(
            new sfValidatorDateRange(array(
-                'from_date'  => new sfValidatorDateTime(array('required' => false)),
-                'to_date'    => new sfValidatorDateTime(array('required' => false)),
+                'from_date'  => new myValidatorDatetimeIso8601(array('required' => false)),
+                'to_date'    => new myValidatorDatetimeIso8601(array('required' => false)),
             ), array(
                 'invalid' => 'Invalid date/time range. Expected `start date` is less than `end date`.'
             ))
