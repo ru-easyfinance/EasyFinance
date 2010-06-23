@@ -168,7 +168,6 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'account_id' => null,
             'amount'    => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
-            'time'      => $date->format('H:i:s'),
             'drain'     => 0, // Доход
             'type'      => Operation::TYPE_PROFIT,
             'comment'   => sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s\nСумма платежа: %s",

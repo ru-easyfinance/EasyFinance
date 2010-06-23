@@ -38,7 +38,6 @@ class AccountWithBalanceForm extends BaseAccountForm
             'user_id'     => $this->getObject()->getUserId(),
             'amount'      => $values['initPayment'],
             'date'        => '0000-00-00',
-            'time'        => '00:00:00',
             'drain'       => 0,
             'type'        => 1,
             'comment'     => 'Начальный остаток',

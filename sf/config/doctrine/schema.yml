@@ -138,7 +138,7 @@ AccountProperty:
       filter: false
 
 
-# Операция с деньгами (12/20 - PART)
+# Операция с деньгами (11/20 - PART)
 Operation:
   tableName: operation
   actAs: [Timestampable, SoftDelete]
@@ -148,7 +148,6 @@ Operation:
     category_id: { name: cat_id as category_id, type: integer(4), default: null, unsigned: true} # ID категории
     amount:      { name: money as amount, type: 'decimal(20, 2)', notnull: true ,unsigned: true} # Сумма
     date:        { type: date(25), notnull: true }                               # Фактическа дата операции
-    time:        { type: time(25), notnull: true }                               # Фактическое время операции
     drain:       { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
     type:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:     { type: clob }

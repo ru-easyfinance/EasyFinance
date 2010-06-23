@@ -99,10 +99,9 @@ class OperationImportAmtForm extends BaseFormDoctrine
         $values['drain'] = $values['type']^1;
 
 
-        // Дата и время
+        // Дата
         $date = new DateTime($values['timestamp']);
         $values['date'] = $date->format('Y-m-d');
-        $values['time'] = $date->format('H:i:s');
         unset($values['timestamp']);
 
         // Черновик
