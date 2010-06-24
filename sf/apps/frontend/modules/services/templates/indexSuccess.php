@@ -5,7 +5,7 @@
         </div>
     </div>
     <div id="servicesDescription">
-        описание
+        Список всех возможных услуг
     </div>
     <?php if ( $status == 1 ):?><center><span class="success_msg">Оплата произведена успешно</span></center><?php endif;?>
     <?php if ( $status == 2 ):?><center><span class="fail_msg">Ошибка во время оплаты</span></center><?php endif;?>

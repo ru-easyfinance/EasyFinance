@@ -1,4 +1,4 @@
-<?php if(!defined('INDEX')) trigger_error("Index required!", E_USER_WARNING); 
+<?php
 /**
  * Файл с конфигурацией
  * @copyright http://easyfinance.ru/
