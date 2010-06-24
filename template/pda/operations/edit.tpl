@@ -54,9 +54,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
             (!isset($operation['toAccount']) || !$operation['toAccount']) &&
             // Если есть часто используемые счета - по умолчанию самый используемый
             ( sizeof( $res['accounts'] ) < sizeof($res['accountsRecent']) )
-        )
-        
-        $useOften = false;
+        ) {
+            $useOften = false;
+        }
+
         // Если счетов больше чем часто используемых - выводим сверху частоиспользуемые
         if( sizeof( $res['accounts'] ) > sizeof($res['accountsRecent']) )
         {
@@ -71,8 +72,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
             }
             ?><option>-</option><?php
             $useOften = true;
+        } else {
+            $useOften = false;
         }
-        
+
         while ( list(,$account) = each($res['accounts']))
         {
             //Пропускаем частоиспользуемые
@@ -206,18 +209,18 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
     <div class="line">
     Комментарий: <textarea name="comment" cols="15" rows="3" class="wide" inputmode="user" ><?php echo isset($operation['comment'])?$operation['comment']:''?></textarea><br/>
     </div>
-    <?
+    <?php
     if (isset($operation['id'])) {
     ?>
         <table class="wide" cellspacing="2" cellpadding="0"><tbody><tr>
             <td class="wide"><input id="btnSave" type="submit" style="width:100%" value="Изменить"></td>
             <td>&nbsp;&nbsp;&nbsp;<a href="/operation/del/<?php echo $operation['id']?>" class="red">удалить</a></td>
         </tbody></table>
-    <?
+    <?php
     } else {
     ?>
         <input id="btnSave" type="submit" style="width:100%" value="Добавить">
-    <?
+    <?php
     }
     ?>
 </div>
