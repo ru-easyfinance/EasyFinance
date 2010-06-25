@@ -21,12 +21,13 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             'deleted_at' => date(DATE_ISO8601),
         ));
 
+        $this->authenticateUser($op->getUser());
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model'   => 'operation',
                 'from'    => $this->_makeDate(-100),
                 'to'      => $this->_makeDate(+100),
-                'user_id' => $op->getUserId(),
             )), 200)
             ->with('response')->begin()
                 ->isValid()
@@ -61,12 +62,13 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             'transfer_amount' => -567.12,
             ));
 
+        $this->authenticateUser($op->getUser());
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model'   => 'operation',
                 'from'    => $this->_makeDate(-100),
                 'to'      => $this->_makeDate(+100),
-                'user_id' => $op->getUserId(),
             )), 200)
             ->with('response')->begin()
                 ->isValid()

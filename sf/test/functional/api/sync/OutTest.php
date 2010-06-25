@@ -15,6 +15,8 @@ class api_sync_OutTest extends myFunctionalTestCase
      */
     public function test404IfModelNotSupported()
     {
+        $this->authenticateUser();
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model' => 'unknown_model',
@@ -27,6 +29,8 @@ class api_sync_OutTest extends myFunctionalTestCase
      */
     public function test400IfDateRangeNotDefined()
     {
+        $this->authenticateUser();
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model' => 'currency',
@@ -48,6 +52,7 @@ class api_sync_OutTest extends myFunctionalTestCase
     {
         $account = $this->helper->makeAccount();
         $account->delete();
+        $this->authenticateUser($account->getUser());
 
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(

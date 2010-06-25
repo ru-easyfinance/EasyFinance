@@ -17,10 +17,11 @@ class api_sync_OutCategoryTest extends myFunctionalTestCase
     {
         $cat = $this->helper->makeCategory();
 
+        $this->authenticateUser($cat->getUser());
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model'  => 'category',
-                'user_id' =>$cat->getUserId(),
                 'from'    => $this->_makeDate(-100),
                 'to'      => $this->_makeDate(+100),
             )), 200)

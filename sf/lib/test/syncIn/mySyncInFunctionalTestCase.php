@@ -43,6 +43,7 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
         parent::_start();
 
         $this->_user = $this->helper->makeUser();
+        $this->authenticateUser($this->_user);
         $this->xmlHelper = new mySyncInXMLHelper($this->getModelName(), $this->getDefaultModelData(), $this->getFields());
     }
 
@@ -90,10 +91,8 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
             $params['body'] = $xml;
         }
 
-        $getParameters = array('user_id' => $this->_user->getId());
-
         return $this
-            ->postAndCheck($module, $action, $params, $uri, $getParameters, $code)
+            ->postAndCheck($module, $action, $params, $uri, array(), $code)
             ->with('response')->begin()
                 ->isHeader("content-type", "/^text\/xml/")
                 ->isValid()

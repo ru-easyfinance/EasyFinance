@@ -1,4 +1,12 @@
 
+# Sync: Авторизация
+auth:
+  url: /
+  class:   sfRequestRoute
+  params:  { module: auth, action: login, sf_format: xml }
+  requirements:
+    sf_method: [get, post]
+
 # Sync: Отдать список измененных объектов
 sync_get_modified:
   url: /modified/:model.:sf_format

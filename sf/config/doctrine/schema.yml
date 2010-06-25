@@ -52,16 +52,13 @@ Currency:
       filter: false
 
 
-# Пользователи системы
+# Пользователи системы (5/14 - PART)
 User:
   tableName: users
   columns:
     id:                { type: integer(4), unsigned: true, notnull: true, primary: true, autoincrement: true }
-    user_name:
-      type: string
-      size: 100
-      notnull: true
-      name: user_name as name
+    user_name:         { type: string, size: 100, notnull: true, name: user_name as name }
+    password:          { type: string(40),  notnull: true, name: user_pass as password }
     user_service_mail: { type: string(100), notnull: true }
     currency_id:       { name: user_currency_default as currency_id, type: integer(4), notnull: true, default: 1 }
   options:

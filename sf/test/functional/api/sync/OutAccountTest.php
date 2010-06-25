@@ -19,12 +19,14 @@ class api_sync_OutAccountTest extends myFunctionalTestCase
         $account2 = $this->helper->makeAccount($account1->getUser());
         $accountA = $this->helper->makeAccount();
 
+        $this->authenticateUser($account1->getUser());
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model'   => 'account',
                 'from'    => $this->_makeDate(500),
                 'to'      => $this->_makeDate(1500),
-                'user_id' => $account1->getUserId())), 200)
+            )), 200)
             ->with('response')->begin()
                 ->checkContains('<recordset type="Account">')
                 ->checkElement('record', 1)

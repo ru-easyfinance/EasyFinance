@@ -12,18 +12,6 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
 
 
     /**
-     * Ошибка при отправке без авторизации
-     * (пока без ID пользователя в query string)
-     */
-    final public function testPostAuthError()
-    {
-        $this->_user->setId(null);
-
-        $this->checkSyncInError(null, 401, 'Authentification required');
-    }
-
-
-    /**
      * Ошибка при отправке пустого POST
      * нет данных на входе
      */

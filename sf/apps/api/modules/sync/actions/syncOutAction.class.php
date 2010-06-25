@@ -25,7 +25,7 @@ class syncOutAction extends sfAction
 
         if ($this->form->isValid()) {
 
-            $userId = $request->getParameter('user_id');
+            $userId = $this->getUser()->getId();
             $query = $this->_getQuery($modelName, $this->form->getDatetimeRange(), $userId);
 
             // Vars

@@ -57,13 +57,10 @@ abstract class myBaseSyncInAction extends sfAction
     final public function execute($request)
     {
         try {
-            // $userId = $this->getUser()->getId();
-            if (null === ($userId = $request->getParameter('user_id'))) {
+            if (null === ($userId = $this->getUser()->getId())) {
                 $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
                 $this->raiseError("Authentification required", 0, 401);
             }
-
-            $this->getUser()->setId($userId);
 
             if (0 === strlen($rawXml = $request->getContent())) {
                 $this->raiseError("Expected XML data");

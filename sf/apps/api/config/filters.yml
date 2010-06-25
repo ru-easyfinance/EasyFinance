@@ -1,6 +1,6 @@
 rendering: ~
-security:
-  enabled: false
+
+security: ~
 
 # insert your own filters here
 

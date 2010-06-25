@@ -39,6 +39,9 @@ all:
 
   user:
     class: myApiUser
+    param:
+      load_configuration: true
+      timeout:            180
 
   view_cache_manager:
     class: sfViewCacheManager

@@ -21,6 +21,7 @@ class api_sync_OutCurrencyTest extends myFunctionalTestCase
         $c->save();
 
         $user = $this->helper->makeUser();
+        $this->authenticateUser($user);
 
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
@@ -28,7 +29,7 @@ class api_sync_OutCurrencyTest extends myFunctionalTestCase
                 'from'    => $c->getDateTimeObject('updated_at')->format(DATE_ISO8601),
                 'to'      => $c->getDateTimeObject('updated_at')->format(DATE_ISO8601),
                 'model'   => 'currency',
-                'user_id' => $user->getId())), 200)
+            )), 200)
             ->with('response')->begin()
                 ->checkContains('<recordset type="Currency">')
                 ->checkElement('record')
