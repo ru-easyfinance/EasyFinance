@@ -378,3 +378,30 @@ TargetTransaction:
     symfony:
       form:   false
       filter: false
+
+# Категория бюджета (6/10 - PART)
+# Пропущено:
+#   - currency
+#   - date_end
+#   - dt_create
+#   - dt_update
+BudgetCategory:
+  tableName: budget
+  columns:
+    key:         { type: string(50), notnull: true, primary: true }
+    user_id:     { type: integer(4), notnull: true }
+    category_id: { name: category as category_id, type: integer(4), notnull: true}
+    drain:       { type: integer(1), notnull: true }
+    amount:      { type: 'decimal(20, 2)', notnull: true }
+    date_start:  { type: date, notnull: true }
+  relations:
+    User:
+      local:        user_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      autoComplete: false         # User ничего не узнает
+  options:
+    symfony:
+      form:   false
+      filter: false

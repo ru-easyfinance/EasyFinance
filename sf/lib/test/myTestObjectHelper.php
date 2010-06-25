@@ -143,4 +143,32 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         return $ob;
     }
 
+
+    /**
+     * Создать категорию бюджета
+     */
+    public function makeBudgetCategory(User $user = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'key'           => $this->getUniqueCounter(),
+            'category_id'   => $this->getUniqueCounter(),
+            'drain'         => 1, // Расход
+            'amount'        => rand(1000, 10000) + 0.05,
+            'date_start'    => date('Y-m-01'), // Текущий месяц
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$user) {
+            $user = $this->makeUser(array(), $save);
+        }
+
+        $ob = $this->makeModel('BudgetCategory', $props, false);
+        $ob->setUser($user);
+
+        if ($save) {
+            $ob->save();
+        }
+        return $ob;
+    }
+
 }

@@ -7,6 +7,15 @@ sync_get_modified:
   requirements:
     sf_method: get
 
+# Sync: Отдать бюджет на текущий месяц
+sync_get_budget:
+  url: /budget.:sf_format
+  class:   sfRequestRoute
+  params:  { module: sync, action: syncOutBudget, sf_format: xml }
+  requirements:
+    sf_method: get
+
+
 # Sync(In): Принять набор счетов
 sync_in_account:
   url: /update/account.:sf_format
