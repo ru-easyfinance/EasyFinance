@@ -63,17 +63,20 @@ class mySyncInOperationForm extends BaseFormDoctrine
 
         switch ($this->values['type']) {
             case Operation::TYPE_TRANSFER:
-                $this->values['amount'] = abs($this->values['amount']);
+                $this->values['amount'] = -abs($this->values['amount']);
                 $this->values['transfer_amount'] = abs($this->values['transfer_amount']);
                 $this->values['drain'] = 1;
                 $this->values['category_id'] = null;
                 break;
             case Operation::TYPE_EXPENSE:
-                $this->values['amount'] = abs($this->values['amount']);
+                $this->values['amount'] = -abs($this->values['amount']);
                 $this->values['drain'] = 1;
                 break;
             case Operation::TYPE_BALANCE:
                 $this->values['comment'] = "Начальный остаток";
+                if ($this->values['amount'] < 0) {
+                    $this->values['drain'] = 1;
+                }
                 break;
             default:
                 $this->values['amount'] = abs($this->values['amount']);

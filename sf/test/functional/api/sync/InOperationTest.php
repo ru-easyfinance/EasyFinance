@@ -245,39 +245,34 @@ class api_sync_InOperationTest extends api_sync_in
         $acc_from = $this->helper->makeAccount($this->_user);
         $acc_to   = $this->helper->makeAccount($this->_user);
 
-        $expectedFromData = array(
+        $expectedData = array(
             'type'                => 2,
             'user_id'             => $this->_user->getId(),
-            'amount'              => 100,
+            'amount'              => 100.00,
             'account_id'          => $acc_from->getId(),
             'transfer_account_id' => $acc_to->getId(),
-            'transfer_amount'     => 500, // другая валюта
+            'transfer_amount'     => -500.00,
             'cid'                 => 3,
             'drain'               => 1,
         );
 
-        $expectedToData = array_merge($expectedFromData, array(
-            'amount'              => 500,
-            'transfer_amount'     => 100,
-            'transfer_account_id' => $acc_from->getId(),
-            'account_id'          => $acc_to->getId(),
-        ));
-
-        $xml = $this->getXMLHelper()->make($expectedFromData);
+        $xml = $this->getXMLHelper()->make($expectedData);
 
         $this
             ->myXMLPost($xml, 200)
             ->with('response')->begin()
                 ->checkElement(sprintf(
                     'resultset[type="Operation"] record[id][cid="%d"][success="true"]',
-                        $expectedFromData['cid']
+                        $expectedData['cid']
                 ), 'OK')
             ->end();
 
-        unset($expectedFromData['cid'], $expectedToData['cid']);
+        unset($expectedData['cid']);
+        $expectedData['amount'] = -100;
+        $expectedData['transfer_amount'] = 500;
 
         $this->browser
-            ->with('model')->check('Operation', $expectedFromData, 1, $found);
+            ->with('model')->check('Operation', $expectedData, 1, $found);
     }
 
 
