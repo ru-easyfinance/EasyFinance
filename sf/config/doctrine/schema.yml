@@ -151,17 +151,17 @@ Operation:
   columns:
     user_id:     { type: integer(4), unsigned: true, notnull: true }
     account_id:  { type: integer(4), unsigned: true, default: null }             # ID счёта
-    category_id: { name: cat_id as category_id, type: integer(4), default: null, unsigned: true} # ID категории
-    amount:      { name: money as amount, type: 'decimal(20, 2)', notnull: true, unsigned: false} # Сумма
+    category_id: { name: cat_id as category_id, type: integer(4), default: null, unsigned: true }  # ID категории
+    amount:      { name: money as amount, type: 'decimal(20, 2)', notnull: true, unsigned: false } # Сумма
     date:        { type: date(25), notnull: true }                               # Фактическа дата операции
     drain:       { type: integer(1), unsigned: true, notnull: true, default: 1 } # @deprecated, тип операции
     type:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:     { type: clob }
     source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
     accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
-    transfer_account_id: { name: transfer as transfer_account_id, type: integer(4),       notnull: false, default: null } # ID счета получателя
     transfer_id: { name: tr_id as transfer_id, type: integer(4), unsigned: true, notnull: false, default: null } # ID перевода
-    transfer_amount:     { name: imp_id as transfer_amount,       type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
+    transfer_account_id: { name: transfer as transfer_account_id, type: integer(4), notnull: false, default: null } # ID счета получателя
+    transfer_amount:     { name: imp_id as transfer_amount, type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
     chain_id:    { type: integer(4), notnull: false, default: null }             # Связь с календарем
   relations:
     User:
@@ -218,9 +218,9 @@ Service:
   actAs: [Timestampable]
   tableName: billing_services
   columns:
-    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true }   # ID услуги
-    name:                   { type: string(64), notnull: true }                                         # Наименование услуги
-    price:                  { type: float,      unsigned: true, notnull: true }                         # Стоимость услуги
+    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true } # ID услуги
+    name:                   { type: string(64), notnull: true }                                          # Наименование услуги
+    price:                  { type: float,      unsigned: true, notnull: true }                          # Стоимость услуги
   options:
     symfony:
       form:  true
@@ -232,17 +232,17 @@ ServiceSubscription:
   actAs: [Timestampable]
   tableName: billing_subscriptions
   columns:
-    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true }   # ID подписки
-    user_id:                { type: integer(4), unsigned: true, notnull: true }                         # ID пользователя
-    service_id:             { type: integer(4),    unsigned: true, notnull: true }                         # ID услуги
-    subscribed_till:        { type: timestamp(25), notnull: false }                                     # Срок окончания действия подписки на услугу
+    id:                     { type: integer(4), unsigned: true, primary: true, autoincrement: true } # ID подписки
+    user_id:                { type: integer(4), unsigned: true, notnull: true }                      # ID пользователя
+    service_id:             { type: integer(4), unsigned: true, notnull: true }                      # ID услуги
+    subscribed_till:        { type: timestamp(25),              notnull: false }                     # Срок окончания действия подписки на услугу
   relations:
     User:
       local: user_id
       foreign: id
       type: one
       foreignType: one
-      onDelete: CASCADE      # При удалении пользователя удаляется вся информация о его подписках
+      onDelete: CASCADE    # При удалении пользователя удаляется вся информация о его подписках
     Service:
       local: service_id
       foreign: id
@@ -259,18 +259,18 @@ BillingTransaction:
   actAs: [Timestampable]
   tableName: billing_transactions
   columns:
-    id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true }   # ID транзакции
-    user_id:                { type: integer(4), unsigned: true, notnull: true }                         # ID пользователя
-    paysystem:              { type: string(32), notnull: true }                                         # Платежная система
-    service_id:             { type: integer(4),    unsigned: true, notnull: true }                         # ID услуги
-    subscription_id:        { type: integer(4),    unsigned: true, notnull: true }                         # ID подписки на услугу
-    price:                  { type: float,      unsigned: true, notnull: true }                         # Оплачиваемая стоимость услуги
-    term:                   { type: integer(4),    unsigned: true, notnull: true }                         # Срок
-    total:                  { type: float,      unsigned: true, notnull: true }                         # Суммарная стоимость услуги
-    status:                 { type: integer(1), unsigned: true, notnull: true, default: 0 }             # Статус: 0 - платеж не овершен, 1 - принят, 2 - ошибка
-    success:                { type: integer(1), unsigned: true, notnull: true, default: 0 }             # Оплачено: 0 - нет, 1 - да
-    error_code:             { type: integer(4) }                                                           # Код ошибки
-    error_message:          { type: string(64) }                                                        # Сообщение об ошибке
+    id:              { type: integer(4), unsigned: true, primary: true, autoincrement: true } # ID транзакции
+    user_id:         { type: integer(4), unsigned: true, notnull: true }                      # ID пользователя
+    paysystem:       { type: string(32),                 notnull: true }                      # Платежная система
+    service_id:      { type: integer(4), unsigned: true, notnull: true }                      # ID услуги
+    subscription_id: { type: integer(4), unsigned: true, notnull: true }                      # ID подписки на услугу
+    price:           { type: float,      unsigned: true, notnull: true }                      # Оплачиваемая стоимость услуги
+    term:            { type: integer(4), unsigned: true, notnull: true }                      # Срок
+    total:           { type: float,      unsigned: true, notnull: true }                      # Суммарная стоимость услуги
+    status:          { type: integer(1), unsigned: true, notnull: true, default: 0 } # 0 - не совершен, 1 - принят, 2 - ошибка
+    success:         { type: integer(1), unsigned: true, notnull: true, default: 0 } # Оплачено: 0 - нет, 1 - да
+    error_code:      { type: integer(4) }                                            # Код ошибки
+    error_message:   { type: string(64) }                                            # Сообщение об ошибке
   relations:
     User:
       local: user_id
