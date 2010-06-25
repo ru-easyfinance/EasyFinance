@@ -17,6 +17,8 @@ class api_sync_OutBudgetTest extends myFunctionalTestCase
     {
         $budget = $this->helper->makeBudgetCategory(null, array('drain' => 1));
 
+        $this->authenticateUser($budget->getUser());
+
         $this->browser
             ->getAndCheck('sync', 'syncOutBudget', $this->generateUrl('sync_get_budget', array(
                 'user_id' => $budget->getUserId())), 200)
