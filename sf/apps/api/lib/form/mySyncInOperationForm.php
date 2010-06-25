@@ -21,6 +21,8 @@ class mySyncInOperationForm extends BaseFormDoctrine
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
+            'transfer_account_id' => new sfValidatorInteger(array('min' => 1)),
+            'transfer_amount'     => new sfValidatorNumber(),
         ));
 
         if ($this->isNew()) {
@@ -42,51 +44,40 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     protected function doBind(array $values)
     {
+
+        switch ($values['type']) {
+            case Operation::TYPE_BALANCE:
+                unset($this['date'], $this['transfer_account_id'], $this['transfer_amount']);
+                break;
+            case Operation::TYPE_TRANSFER:
+                unset($this['category_id']);
+                break;
+            default:
+                unset($this['transfer_account_id'], $this['transfer_amount']);
+                break;
+        }
+
         parent::doBind($values);
 
-        $balanceOperation = false;
+        $this->values['drain'] = 0; // @deprecated
 
-        // это у нас балансовая операция, даты глючат от валидации
-        if ((null == $this->values['category_id']) && ($values['date'] == "0000-00-00")) {
-            unset($this->values['date']);
-            $balanceOperation = true;
-
-            $this->values['drain'] = 0;
-            $this->values['comment'] = "Начальный остаток";
-
-            if ($this->values['amount'] <= 0) {
-                $this->values['type'] = Operation::TYPE_EXPENSE;
-            } else {
-                $this->values['type'] = Operation::TYPE_PROFIT;
-            }
-
-            return true;
-        }
-
-        // если расход - сумма отрицательна
-        if ($this->values['type'] == Operation::TYPE_EXPENSE) {
-            $this->values['amount'] = ($this->values['amount'] > 0)
-                                    ? -$this->values['amount'] : $this->values['amount'];
-        } elseif ($this->values['type'] == Operation::TYPE_PROFIT) {
-            $this->values['amount'] = ($this->values['amount'] < 0)
-                                    ? -$this->values['amount'] : $this->values['amount'];
-        }
-
-        // установить drain (расход) = 1, если это тип "расход" и не балансовая операция
-        if (($this->values['type'] == Operation::TYPE_EXPENSE) && !$balanceOperation) {
-            $this->values['drain'] = 1;
-        } else {
-            $this->values['drain'] = 0;
-        }
-
-        // у переводов всегда drain = 1 и нет категории
-        if ($this->values['type'] == Operation::TYPE_TRANSFER) {
-            $this->values['drain'] = 1;
-            $this->values['category_id'] = null;
-
-            if ($this->values['amount'] > 0) {
-                $this->values['amount'] = -$this->values['amount'];
-            }
+        switch ($this->values['type']) {
+            case Operation::TYPE_TRANSFER:
+                $this->values['amount'] = abs($this->values['amount']);
+                $this->values['transfer_amount'] = abs($this->values['transfer_amount']);
+                $this->values['drain'] = 1;
+                $this->values['category_id'] = null;
+                break;
+            case Operation::TYPE_EXPENSE:
+                $this->values['amount'] = abs($this->values['amount']);
+                $this->values['drain'] = 1;
+                break;
+            case Operation::TYPE_BALANCE:
+                $this->values['comment'] = "Начальный остаток";
+                break;
+            default:
+                $this->values['amount'] = abs($this->values['amount']);
+                break;
         }
 
     }

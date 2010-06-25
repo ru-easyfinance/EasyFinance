@@ -26,21 +26,27 @@ class syncInOperationAction extends myBaseSyncInAction
             ->whereIn("o.id", $recordIds)
             ->execute();
 
-        // существующие записи переводов
-        $transferts = Doctrine_Query::create()
-            ->select("o.*")
-            ->from("Operation o INDEXBY o.transfer_id")
-            ->whereIn("o.transfer_id", $recordIds)
-            ->execute();
-
         // FK: выбор существующих счетов
-        $accountTypes = $this->filterByXPath('//record/account_id');
+        $accountsFK = $this->filterByXPath('//record/account_id');
         $accounts = Doctrine_Query::create()
             ->select("a.id, a.id type_id")
             ->from("Account a")
-            ->whereIn("a.id", $accountTypes)
+            ->whereIn("a.id", $accountsFK)
             ->andWhere("a.user_id = ?", $this->getUser()->getId())
             ->execute(array(), 'FetchPair');
+
+        // FK: выбор существующих счетов для переводов
+        $transferAccountsFK = $this->filterByXPath('//record/transfer_account_id');
+        $transferCnt = false;
+        $transferAccounts = array();
+        if ($transferCnt = count($transferAccountsFK)) {
+            $transferAccounts = Doctrine_Query::create()
+                ->select("a.id, a.id type_id")
+                ->from("Account a")
+                ->whereIn("a.id", $transferAccountsFK)
+                ->andWhere("a.user_id = ?", $this->getUser()->getId())
+                ->execute(array(), 'FetchPair');
+        }
 
         // FK: выбор существующих категорий
         $categoryIds = $this->filterByXPath('//record/category_id');
@@ -62,11 +68,6 @@ class syncInOperationAction extends myBaseSyncInAction
                 $myObject = new $modelName();
             }
 
-            if ($record['type'] == Operation::TYPE_TRANSFER) {
-                $formName = sprintf("mySyncIn%sForm", $modelName . "Transfer");
-
-
-            }
             $form = new $formName($myObject);
 
             $errors = array();
@@ -74,6 +75,11 @@ class syncInOperationAction extends myBaseSyncInAction
             // FK: счет существует?
             if (!in_array($record['account_id'], $accounts)) {
                 $errors[] = "No such account";
+            }
+
+            // FK: проверка на существование счета для перевода
+            if ($transferCnt && !in_array($record['transfer_account_id'], $transferAccounts)) {
+                $errors[] = "No such account for transfer";
             }
 
             // FK: категория существует?
@@ -92,27 +98,6 @@ class syncInOperationAction extends myBaseSyncInAction
             }
 
             if (!$errors && $form->bindAndSave($record)) {
-                if ($record['type'] == Operation::TYPE_TRANSFER) {
-                    if ($transferts->contains($record['id'])) {
-                        $myTransfertObject = $transferts[(int) $record['id']];
-                    } else {
-                        $myTransfertObject = new $modelName();
-                    }
-
-                    $real = $form->getObject();
-                    $completeTransfert = array_merge($record, array(
-                        'account_id' => $real->getTransfer(),
-                        'amount'     => $record['transfer_amount'],
-                        'transfer'   => $record['account_id'],
-                        'transfer_id'=> $real->getId(),
-                        'transfer_amount' => abs($real->getAmount()),
-                    ));
-
-                    $transfertForm = new mySyncInOperationTransferCompleteForm($myTransfertObject);
-
-                    $transfertForm->bindAndSave($completeTransfert);
-                }
-
                 $results[] = array(
                     'id'      => $form->getObject()->getId(),
                     'cid'     => (string) $record['cid'],
@@ -152,12 +137,13 @@ class syncInOperationAction extends myBaseSyncInAction
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
-            'transfer'    => (string) $record->transfer,
-            'transfer_amount' => isset($record->transfer_amount) ? (int) $record->transfer_amount : null,
             'accepted'    => (string) $record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),
+
+            'transfer_account_id' => (string) $record->transfer_account_id,
+            'transfer_amount'     => isset($record->transfer_amount) ? (int) $record->transfer_amount : null,
         );
     }
 

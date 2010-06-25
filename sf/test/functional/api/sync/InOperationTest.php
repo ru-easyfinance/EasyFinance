@@ -22,7 +22,7 @@ class api_sync_InOperationTest extends api_sync_in
             'accepted',
             'created_at',
             'updated_at',
-            'transfer',
+            'transfer_account_id',
             'transfer_amount',
         );
     }
@@ -50,8 +50,8 @@ class api_sync_InOperationTest extends api_sync_in
             'created_at'  => $this->_makeDate(-1000),
             'updated_at'  => $this->_makeDate(0),
             'deleted_at'  => null,
-            'transfer'    => null,
-            'transfer_amount' => null,
+            'transfer_account_id' => null,
+            'transfer_amount'     => null,
         );
     }
 
@@ -207,43 +207,13 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
-     * Принять операцию расхода по типу
-     */
-    public function testAmountSignByType()
-    {
-        $expectedData = array(
-            'amount'      => 1000,
-            'type'        => 0,
-            'comment'     => 'Просто операция',
-            'cid'         => 2,
-        );
-
-        $xml = $this->getXMLHelper()->make($expectedData);
-
-        $this
-            ->myXMLPost($xml, 200)
-            ->with('response')->begin()
-                ->checkElement(sprintf(
-                    'resultset[type="Operation"] record[id][cid="%d"][success="true"]',
-                        $expectedData['cid']
-                ), 'OK')
-            ->end();
-
-        unset($expectedData['cid']); // у записи нет такого поля
-        $expectedData['amount'] = -1000;  // должна быть отрицательная сумма
-        $this->browser
-            ->with('model')->check('Operation', $expectedData, 1);
-    }
-
-
-    /**
      * Принять балансовую операцию
      */
     public function testBalanceOperation()
     {
         $expectedData = array(
             'amount'      => 100,
-            'type'        => 1,
+            'type'        => 3, // тип - балансовая операция
             'cid'         => 2,
             'date'        => "0000-00-00",
             'category_id' => null,
@@ -276,21 +246,21 @@ class api_sync_InOperationTest extends api_sync_in
         $acc_to   = $this->helper->makeAccount($this->_user);
 
         $expectedFromData = array(
-            'type'              => 2,
-            'user_id'           => $this->_user->getId(),
-            'amount'            => 100,
-            'account_id'        => $acc_from->getId(),
-            'transfer'          => $acc_to->getId(),
-            'transfer_amount'   => 500, // другая валюта
-            'cid'               => 3,
-            'drain'             => 1,
+            'type'                => 2,
+            'user_id'             => $this->_user->getId(),
+            'amount'              => 100,
+            'account_id'          => $acc_from->getId(),
+            'transfer_account_id' => $acc_to->getId(),
+            'transfer_amount'     => 500, // другая валюта
+            'cid'                 => 3,
+            'drain'               => 1,
         );
 
         $expectedToData = array_merge($expectedFromData, array(
-            'amount'          => 500,
-            'transfer_amount' => 100,
-            'transfer'        => $acc_from->getId(),
-            'account_id'      => $acc_to->getId(),
+            'amount'              => 500,
+            'transfer_amount'     => 100,
+            'transfer_account_id' => $acc_from->getId(),
+            'account_id'          => $acc_to->getId(),
         ));
 
         $xml = $this->getXMLHelper()->make($expectedFromData);
@@ -304,18 +274,45 @@ class api_sync_InOperationTest extends api_sync_in
                 ), 'OK')
             ->end();
 
-        unset($expectedFromData['cid'], $expectedToData['cid'], $expectedFromData['transfer_amount']);
-
-        // исходящий - всегда отрицательная сумма
-        $expectedFromData['amount'] = -100;
+        unset($expectedFromData['cid'], $expectedToData['cid']);
 
         $this->browser
             ->with('model')->check('Operation', $expectedFromData, 1, $found);
+    }
 
-        $expectedToData['transfer_id'] = $found->getFirst()->getId();
-        $this->browser
-            ->with('model')->check('Operation', $expectedToData, 1, $found);
 
+    /**
+     * Отвергать: Несуществующий id счета у операции перевода
+     */
+    public function testTransferAccountFK()
+    {
+        $xml = $this->getXMLHelper()->make(array('transfer_account_id' => 9999, 'cid' => 4,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(4, '[Invalid.] No such account for transfer');
+    }
+
+
+    /**
+     * Отвергать: Счет у перевода - другого пользователя
+     */
+    public function testTransferAccountForeign()
+    {
+        $acc = $this->helper->makeAccount();
+        $xml = $this->getXMLHelper()->make(array('transfer_account_id' => $acc->getId(), 'cid' => 4,));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+            ->end();
+
+        $this->checkRecordError(4, '[Invalid.] No such account for transfer');
     }
 
 }
