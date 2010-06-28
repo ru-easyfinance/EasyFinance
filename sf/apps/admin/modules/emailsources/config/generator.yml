@@ -1,0 +1,43 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           EmailSource
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          email_source
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions:        
+        _new:
+          label:           "Добавить новую запись"
+        _edit:
+          label:           "Редактировать"
+        _delete:
+          label:           "Удалить"
+      fields:  ~
+      list:  
+        title:             "Список отправителей"
+        fields:
+          id:              { label: "ID" }
+          name:            { label: "Название" }
+          email_list:      
+            label: "Список адресов отправителей"
+      filter:
+        class: false
+      form:
+        fields:
+          name:            { label: "Название" }
+          email_list:      
+            label: "Список адресов отправителей"
+            params:
+              size: 80
+              class: longEditBox
+      edit:    
+        title:             Редактировать данные отправителя %%name%%
+      new:     
+        title:             Добавить нового отправителя

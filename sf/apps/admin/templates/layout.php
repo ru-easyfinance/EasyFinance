@@ -9,6 +9,55 @@
     <?php include_javascripts() ?>
   </head>
   <body>
+    <div class="admin_top_menu">
+       <div class="menu_item">Биллинг
+            <div class="submenu">
+                <a href="/services">Услуги</a><br />
+                <a href="/transactions">Транзакции</a><br />
+                <a href="/transactions">Подписки</a>
+            </div>
+       </div>
+       <div class="menu_item">Парсеры Email
+            <div class="submenu">
+                <a href="/emailsources">Отправители</a><br />
+                <a href="/emailparsers">Парсеры</a><br />
+            </div>
+       </div>
+    </div>
     <?php echo $sf_content ?>
+    <script type="text/javascript">
+    $( document ).ready( function(){
+        $(".menu_item").mouseover( function(){
+            $( this ).addClass( "selected" );
+            $( this ).children(".submenu").css("display", "block");
+        });
+
+        $(".menu_item").mouseout( function(){
+            $( this ).removeClass( "selected" );
+            $( this ).children(".submenu").css("display", "none");
+        });
+
+        $( "<a class='testRegexp' href='#'>test</a>" ).insertAfter("input[id$=regexp]");
+        $( ".testRegexp").click( function(){
+
+            $("#regexp_test").val( $(this).prev().val() );
+            var regexp = $(this).prev().val();
+            var source = $("#email_parser_sample").val();
+
+            $.post( "/emailparsers/1/regexp",
+                    {
+                        module: "emailparsers",
+                        action: "regexp",
+                        regexp: regexp,
+                        source: source,
+                        "email_parser[_csrf_token]":$("#email_parser__csrf_token").val()
+                    },
+                    function( data ){
+                        alert( data );
+                    }
+            );
+        });
+    });
+    </script>
   </body>
 </html>
