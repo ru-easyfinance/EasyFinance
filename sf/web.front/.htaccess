@@ -13,8 +13,8 @@ Options +FollowSymLinks
   #RewriteRule .* - [L]
 
   # we check if the .html version is here (caching)
-  RewriteRule ^$ index.html [QSA]
-  RewriteRule ^([^.]+)$ $1.html [QSA]
+  #RewriteRule ^$ index.html [QSA]
+  #RewriteRule ^([^.]+)$ $1.html [QSA]
 
   RewriteRule ^css/(.+)$ /css/$1 [L]
   RewriteRule ^js/(.+)$ /js/$1 [L]
@@ -23,5 +23,5 @@ Options +FollowSymLinks
   RewriteCond %{REQUEST_FILENAME} !-f
 
   # no, so we redirect to our front web controller
-  RewriteRule ^(.*)$ /my/frontend.php [QSA,L]
+  RewriteRule ^(.*)$ /my/index.php [QSA,L]
 </IfModule>
