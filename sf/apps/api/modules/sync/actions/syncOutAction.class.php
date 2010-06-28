@@ -36,6 +36,9 @@ class syncOutAction extends sfAction
         }
 
         $this->getResponse()->setStatusCode(400);
+        $this->setTemplate('error', 'common');
+        $this->setVar('code',    400);
+        $this->setVar('message', (string) $this->form->getErrorSchema());
         return sfView::ERROR;
     }
 

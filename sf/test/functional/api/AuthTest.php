@@ -18,9 +18,11 @@ class api_sync_AuthTest extends myFunctionalTestCase
         $user = $this->helper->makeUser(array(), false);
 
         $this->browser
-            ->getAndCheck('auth', 'login', $this->generateUrl("auth"), 401)
+            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
+                'model' => 'currency',
+            )), 401)
             ->with('response')->begin()
-                ->checkElement('response error message', 'Authentification required')
+                ->checkElement('response error', 'Authentification required')
             ->end()
             ->with("user")->isAuthenticated(false);
     }

@@ -20,8 +20,7 @@ class api_sync_OutBudgetTest extends myFunctionalTestCase
         $this->authenticateUser($budget->getUser());
 
         $this->browser
-            ->getAndCheck('sync', 'syncOutBudget', $this->generateUrl('sync_get_budget', array(
-                'user_id' => $budget->getUserId())), 200)
+            ->getAndCheck('sync', 'syncOutBudget', $this->generateUrl('sync_get_budget'), 200)
             ->with('response')->checkElement('budget expense', (string)$budget->getAmount());
     }
 

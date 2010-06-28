@@ -100,11 +100,11 @@ abstract class myBaseSyncInAction extends sfAction
      */
     protected function raiseError($message = "Error", $errCode = 0, $code = 400)
     {
+        $this->setTemplate('error', 'common');
+
         $this->getResponse()->setStatusCode($code);
-        $this->setVar('error', array(
-            'message' => $message,
-            'code'    => $errCode,
-        ), $noEscape = false);
+        $this->setVar('code',    $errCode);
+        $this->setVar('message', $message);
 
         throw new sfStopException($message);
     }

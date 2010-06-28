@@ -13,7 +13,7 @@ class syncOutBudgetAction extends sfAction
         // Явно указать layout для всех форматов
         $this->setLayout('layout');
 
-        $userId = $request->getParameter('user_id');
+        $userId = $this->getUser()->getId();
         $total = Doctrine::getTable('BudgetCategory')->countTotalExpense($userId);
 
         $this->setVar('total', $total, $noEsc = true);

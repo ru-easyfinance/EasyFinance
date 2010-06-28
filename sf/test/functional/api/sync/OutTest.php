@@ -40,7 +40,7 @@ class api_sync_OutTest extends myFunctionalTestCase
                 ->isInstanceOf('mySyncOutForm')
             ->end()
             ->with('response')->begin()
-                ->checkElement('response error message', '/Required/')
+                ->checkElement('response error[code="400"]', '/Required/')
             ->end();
     }
 
@@ -59,7 +59,7 @@ class api_sync_OutTest extends myFunctionalTestCase
                 'model'   => 'account',
                 'from'    => $this->_makeDate(-10),
                 'to'      => $this->_makeDate(10),
-                'user_id' => $account->getUserId())), 200)
+            )), 200)
             ->with('response')->begin()
                 ->checkContains('<recordset type="Account">')
                 ->checkElement('record', 1)

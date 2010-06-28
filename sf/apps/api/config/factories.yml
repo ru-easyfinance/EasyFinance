@@ -27,6 +27,11 @@ test:
       send_http_headers: false
 
 all:
+  request:
+    class: sfWebRequest
+    param:
+      default_format: xml
+
   routing:
     class: sfPatternRouting
     param:

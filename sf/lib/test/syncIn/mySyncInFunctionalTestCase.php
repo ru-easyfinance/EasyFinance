@@ -115,8 +115,8 @@ abstract class mySyncInFunctionalTestCase extends myFunctionalTestCase
         return $this
             ->myXMLPost($xml, $code)
             ->with('response')->begin()
-                ->checkElement("error code", (string) $errCode)
-                ->checkElement("error message", $message)
+                ->checkElement(sprintf('error[code="%d"]', $errCode))
+                ->checkElement("error", $message)
             ->end();
     }
 

@@ -9,7 +9,8 @@ class myApiUser extends sfBasicSecurityUser
     *
     * @return User
     */
-    public function getUserRecord() {
+    public function getUserRecord()
+    {
         if (!$this->user && $id = $this->getAttribute('id', null, 'user')) {
             $this->user = Doctrine::getTable('User')->find($id);
 

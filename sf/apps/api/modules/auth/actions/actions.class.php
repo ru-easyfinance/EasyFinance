@@ -6,8 +6,6 @@ class authActions extends sfActions
 {
     /**
      * Авторизация пользователя / сообщение о неавторизованности
-     *
-     * @param sfRequest $request A request object
      */
     public function executeLogin(sfRequest $request)
     {
@@ -18,6 +16,7 @@ class authActions extends sfActions
             return sfView::SUCCESS;
         }
 
+        // Запрос на авторизацию
         if ($request->isMethod('post')) {
             $form = new myAuthForm();
             $form->bind($request->getPostParameters());
@@ -27,19 +26,24 @@ class authActions extends sfActions
                 return sfView::SUCCESS;
             }
 
-            return $this->raiseError($form);
+            return $this->raiseError($form->getErrorSchema());
+
+        // Форвард из других контроллеров
         } else {
-            return $this->raiseError();
+            return $this->raiseError('Authentification required');
         }
     }
 
 
-    protected function raiseError(myAuthForm $form = null)
+    protected function raiseError($errorMessage)
     {
+        #Max: зачем этот заголовок?
         $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
         $this->getResponse()->setStatusCode(401);
 
-        $this->setVar('form', $form);
+        $this->setTemplate('error', 'common');
+        $this->setVar('code',    401);
+        $this->setVar('message', $errorMessage);
 
         return sfView::ERROR;
     }
