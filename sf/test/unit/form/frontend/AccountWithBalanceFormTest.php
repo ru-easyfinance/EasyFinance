@@ -131,7 +131,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
             'amount'      => 0,
             'date'        => '0000-00-00',
             'drain'       => 0,
-            'type'        => 1,
+            'type'        => 3,
             'comment'     => 'Начальный остаток',
             'accepted'    => 1,
         );
@@ -166,7 +166,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
             'amount'      => $input['initPayment'],
             'date'        => '0000-00-00',
             'drain'       => 0,
-            'type'        => 1,
+            'type'        => 3,
             'comment'     => 'Начальный остаток',
             'accepted'    => 1,
         );

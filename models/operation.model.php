@@ -872,14 +872,13 @@ class Operation_Model
 
     /**
      * Функция возвращает первую операцию по счёту - начальный баланс
-     * @param int $account_id
-     * @return array
+     *
+     * @param int $accountId
+     * @return float
      */
-    function getFirstOperation($account_id=0) {
-        $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND comment='Начальный остаток'";
-        $first = $this->db->query($sql, $this->_user->getId(), $account_id);
-        return $first[0]['money'];
-
+    function getFirstOperation($accountId) {
+        $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND `type`=3";
+        return (float)$this->db->selectCell($sql, $this->_user->getId(), (int)$accountId);
     }
 
     /**

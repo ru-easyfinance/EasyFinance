@@ -55,10 +55,7 @@ class AccountTable extends Doctrine_Table
             ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
             ->orderBy("{$alias}.name")
             ->leftJoin("{$alias}.Operations o ON o.account_id = {$alias}.account_id
-                AND o.category_id IS NULL
-                AND o.date = '0000-00-00'
-                AND o.accepted = ?
-                AND o.type = ?", array(Operation::STATUS_ACCEPTED, Operation::TYPE_BALANCE))
+                AND o.type = ?", array(Operation::TYPE_BALANCE))
             ->leftJoin("{$alias}.Operations op2 ON (
                     op2.account_id = {$alias}.account_id
                     OR op2.transfer_account_id = {$alias}.account_id

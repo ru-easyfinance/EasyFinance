@@ -46,7 +46,7 @@ class AccountWithBalanceForm extends BaseAccountForm
             'amount'      => $values['initPayment'],
             'date'        => '0000-00-00',
             'drain'       => 0,
-            'type'        => 1,
+            'type'        => 3,
             'comment'     => 'Начальный остаток',
             'accepted'    => 1,
         );

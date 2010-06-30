@@ -321,7 +321,7 @@ class Account_Model
         $sql = "SELECT * FROM accounts WHERE account_id=?";
         $account = $this->db->selectRow($sql, $accountId);
 
-        $sql = "SELECT money FROM operation WHERE account_id=? AND date='0000-00-00' LIMIT 1;";
+        $sql = "SELECT money FROM operation WHERE account_id = ? AND `type` = 3 LIMIT 1";
         $money = $this->db->selectCell($sql, $accountId);
 
         return array(
