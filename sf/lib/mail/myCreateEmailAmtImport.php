@@ -112,12 +112,13 @@ class myCreateEmailAmtImport
         if (isset($this->_args['payment'])) {
             $body .= "на сумму: {$this->_args['payment']};\n";
         }
-        
+
         $body .= "операция: {$this->_args['place']}; дата: ".
                     $this->_args['timestamp'] .";\n".
                 "доступный остаток: {$this->_args['balance']};";
 
         $this->_message->setSubject($subj)
+            ->setFrom('card.statement@amtbank.com')
             ->setTo('some.user@mail.easyfinance.ru')
             ->setBody($body, 'text/plain');
     }

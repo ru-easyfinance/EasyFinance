@@ -66,6 +66,15 @@ class myParseEmailAmtImport
 
 
     /**
+     * Прокси-метод для getAmtData
+     */
+    public function getData()
+    {
+    	return $this->getAmtData();
+    }
+
+
+    /**
      * Возвращает строку с XML из письма
      *
      * @return string

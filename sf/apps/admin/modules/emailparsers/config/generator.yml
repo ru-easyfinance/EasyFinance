@@ -1,0 +1,53 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           EmailParser
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          email_parser
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions:        
+        _new:
+          label:           "Добавить новую запись"
+        _edit:
+          label:           "Редактировать"
+        _delete:
+          label:           "Удалить"
+      fields:  ~
+      list:  
+        title:             "Список парсеров"
+        fields:
+          id:              { label: "ID" }
+          source_name:     { label: "Отправитель" }
+          name:            { label: "Название" }
+          subject_regexp:  { label: "Regexp темы сообщения" }
+          account_regexp:  { label: "Regexp номера счета" }
+          total_regexp:    { label: "Regexp суммы" }
+          description_regexp:  { label: "Regexp деталей операции" }
+          type_name:           { label: "Направление" }
+        display: [id, source_name, name, type_name ]
+      filter:
+        fields:
+          email_source_id: { label: "Отправитель" }
+        display: [email_source_id]
+      form:
+        fields:
+          email_source_id: { label: "Отправитель" }
+          name:            { label: "Название" }
+          sample:          { label: "Пример сообщения" }
+          subject_regexp:  { label: "Regexp темы сообщения", params: class=regexpable }
+          account_regexp:  { label: "Regexp номера счета" }
+          total_regexp:    { label: "Regexp суммы" }
+          description_regexp:  { label: "Regexp деталей операции" }
+          type:           { label: "Направление" }
+        display: [email_source_id, name, sample, subject_regexp, account_regexp, total_regexp, description_regexp, type]              
+      edit:    
+        title:             Редактировать парсер
+      new:     
+        title:             Добавить новый парсер

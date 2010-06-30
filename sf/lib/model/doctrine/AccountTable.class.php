@@ -79,4 +79,26 @@ class AccountTable extends Doctrine_Table
         return $q;
     }
 
+
+    /**
+     * Выборка счкта пользователя, который привязан к источнику
+     *
+     * @param int $userId
+     * @param string $source
+     * @return id счета или null
+     */
+    public function findLinkedWithSource( $userId, $source )
+    {
+        $id = $this->createQuery('a')
+            ->select('a.*')
+            ->innerJoin("a.Properties p")
+            ->andWhere("a.user_id = ?", (int) $userId)
+            ->andWhere('p.field_id = ?', AccountProperty::COLUMN_BINDING)
+            ->andWhere('p.field_value = ?', $source)
+            ->distinct(true)
+            ->limit(1)
+            ->select('a.id')
+            ->execute(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+        return ($id) ? (int) $id : null;;
+    }
 }

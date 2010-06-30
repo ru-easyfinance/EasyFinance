@@ -61,4 +61,25 @@ class model_AccountTableTest extends myUnitTestCase
         $this->assertModels($a6, $result->getFirst());
     }
 
+
+    /**
+     * Тест метода findLinkedWithSource
+     *
+     */
+    public function testFindLinkedWithSource()
+    {
+        $user  = $this->helper->makeUser();
+        $userA = $this->helper->makeUser();
+
+        $source = "citi1234";
+
+        $account = $this->_makeAccount(5, $user, null, null, $source ); // OK
+        $this->_makeAccount(4, $user );                                 // не тот источник
+        $this->_makeAccount(3, $user, null, $column = 9999, $source );  // другая колонка
+        $this->_makeAccount(2, $userA, null, null, $source );           // другой пользователь
+        $this->_makeAccount(1, $user)->delete();                        // пользователь удален
+
+        $result = Doctrine::getTable('Account')->findLinkedWithSource($user->getId(), $source);
+        $this->assertEquals($account->getId(), $result);
+    }
 }

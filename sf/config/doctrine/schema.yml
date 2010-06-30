@@ -402,3 +402,40 @@ BudgetCategory:
     symfony:
       form:   false
       filter: false
+
+# Отправители эл. почты
+EmailSource:
+  tableName: email_sources
+  columns:
+    id:               { type: integer(4),  notnull: true, primary: true, autoincrement: true }
+    name:             { type: string(128), notnull: true }
+    email_list:       { type: string(255), notnull: true }
+  options:
+    symfony:
+      form:  true
+      filter: true
+
+# Парсеры эл. почты
+EmailParser:
+  tableName: email_parsers
+  columns:
+    id:                   { type: integer(4),  notnull: true, primary: true, autoincrement: true }
+    email_source_id:      { type: integer(4),  notnull: true }
+    name:                 { type: string(128), notnull: true }
+    subject_regexp:       { type: string(255), notnull: true }
+    account_regexp:       { type: string(255), notnull: true }
+    total_regexp:         { type: string(255), notnull: true }
+    description_regexp:   { type: string(255), notnull: false }
+    sample:               { type: text, notnull: false }
+    type:                 { type: tinyint(1),  notnull: true }
+  options:
+    symfony:
+      form:  true
+      filter: true
+  relations:
+    EmailSource:
+      local: email_source_id
+      foreign: id
+      type: one
+      foreignType: one
+      onDelete: CASCADE

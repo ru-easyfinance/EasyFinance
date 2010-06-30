@@ -1,3 +1,21 @@
+email_parser:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmailParser
+    module:               emailparsers
+    prefix_path:          /emailparsers
+    column:               id
+    with_wildcard_routes: true
+
+email_source:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                EmailSource
+    module:               emailsources
+    prefix_path:          /emailsources
+    column:               id
+    with_wildcard_routes: true
+
 service_subscription:
   class: sfDoctrineRouteCollection
   options:

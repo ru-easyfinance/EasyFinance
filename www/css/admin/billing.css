@@ -62,3 +62,67 @@ tr.sf_admin_filter_field_subscribed_till td {
     border: 0px;
     padding: 0px;
 }
+#email_parser_subject_regexp,
+#email_parser_account_regexp,
+#email_parser_total_regexp,
+#email_parser_description_regexp,
+#email_source_email_list {
+	width: 600px !important;
+}
+
+#email_parser_name {
+	width: 400px !important;
+}
+
+div.admin_top_menu {
+	width:100%;
+	height:23px;
+	display: block;
+	clear: both;
+	background: #888888 !important;	
+	border: 1px dotted black;
+}
+
+div.admin_top_menu .menu_item {
+	float:left;
+	padding: 4px 16px;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+div.admin_top_menu .menu_item.selected{
+	background: white;
+	color: black;
+}
+
+div.submenu {
+	margin-top:2px;
+	display: none;
+	position: absolute;
+	z-index: 100;
+	background: #999999;
+	padding: 6px;
+	border: 1px dotted black;
+}
+
+div.submenu a {
+	width:100%;
+	text-decoration: none;
+	color: white;	
+}
+
+div.submenu a:hover {
+    text-decoration: none;
+    color: yellow;
+    background: black; 
+}
+
+a.testRegexp {
+	padding-left:10px;
+}
+
+#email_parser_sample {
+	width: 600px !important;
+	height: 150px;
+}
