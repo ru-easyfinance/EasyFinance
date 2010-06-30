@@ -46,7 +46,7 @@ class Budget_ModelTest extends UnitTestCase
         $options   = array(
             'user_id'    => $this->userId,
             'chain_id'   => 999,
-            'date'       => date('Y-m-d', time()-86400),
+            'date'       => date('Y-m-d'),
             'cat_id'     => $this->cat1,
             'account_id' => $this->accountId,
         );
@@ -62,37 +62,48 @@ class Budget_ModelTest extends UnitTestCase
 
 
         // Дата операции установлена на завтра
-        $options['date'] = date('Y-m-d', time()+86400);
+        $options['date'] = date('Y-m-d');
         CreateObjectHelper::makeOperation($options);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
         $options['accepted'] = 1;
-        $options['date'] = date('Y-m-d', time()+86400);
+        $options['date'] = date('Y-m-d');
         $options['cat_id'] = $this->cat3;
+        $options['money']  = 1001;
         CreateObjectHelper::makeOperation($options);
 
         // Удалённая операция
+        $options['accepted'] = 1;
+        $options['date'] = date('Y-m-d');
         $options['deleted_at'] = '2010-02-02 02:02:02';
+        $options['cat_id'] = $this->cat3;
+        $options['money']  = 1002;
         CreateObjectHelper::makeOperation($options);
 
         // Обычная операция, вне цепочки
         unset($options['deleted_at']);
         unset($options['chain_id']);
+        $options['cat_id'] = $this->cat3;
+        $options['money']  = 1003;
         CreateObjectHelper::makeOperation($options);
 
 
         // Создаём записи в бюджет
+        // Расходная часть для категории "cat1"
         $budget_options = array(
             'user_id'   => $this->userId,
             'category'  => $this->cat1,
             'drain'     => 0,
+            'amount'    => 500,
         );
         CreateObjectHelper::createBudget($budget_options);
 
+        // Доходная часть для категории "cat1"
         $budget_options['drain'] = 1;
         $budget_options['amount'] = 250;
         CreateObjectHelper::createBudget($budget_options);
     }
+
 
     public function testLoadBudget()
     {
@@ -117,7 +128,7 @@ class Budget_ModelTest extends UnitTestCase
                         'mean'   => 375,
                     ),
                     $this->cat3 => array(
-                        'money'=> 2000,
+                        'money'=> 1001 + 1003,
                         'amount' => 0,
                         'mean'   => 0,
                     )

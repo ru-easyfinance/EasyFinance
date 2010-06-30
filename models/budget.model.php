@@ -71,7 +71,7 @@ class Budget_Model {
                         o.cat_id, a.account_id";
 
         // Сумма операций по категориям
-        $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end, $user_id);
+        $arrayoper = Core::getInstance()->db->select($sqloper, $user_id, $start, $end);
 
         $fact = array();
         foreach ($arrayoper as $value) {
