@@ -28,7 +28,7 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
 
 
         $result = Doctrine::getTable('BudgetCategory')->countTotalExpense($user->getId());
-        $this->assertEquals($budget1->getAmount() + $budget2->getAmount(), $result, 'Count budget');
+        $this->assertEquals($budget1->getAmount() + $budget2->getAmount(), $result, 'Count budget', $delta = 0.01);
 
         // Нет бюджета
         $result = Doctrine::getTable('BudgetCategory')->countTotalExpense(999);
