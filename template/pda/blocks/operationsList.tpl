@@ -8,15 +8,11 @@
                 <td class="wide">
                     <a href="/operation/edit/<?php echo $operation['id']?>">
                         <?php
-                        // Перевод с текущего счёта
-                        if( $operation['type'] == 2 && !$operation['tr_id'])
+                        // Перевод
+                        if( $operation['type'] == 2 )
                         {
-                            echo 'перевод "' . $res['accounts'][ $operation['transfer'] ]['name'] . '"';
-                        }
-                        // Перевод на текущий счёт
-                        elseif( $operation['type'] == 2 )
-                        {
-                            echo 'перевод "' . $res['accounts'][ $operation['transfer'] ]['name'] . '"';
+                            echo $res['accounts'][ $operation['account_id'] ]['name'] .' » "' .
+                                $res['accounts'][ $operation['transfer'] ]['name'] . '"';
                         }
                         elseif( $operation['type'] == 4 )
                         {

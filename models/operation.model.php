@@ -763,7 +763,7 @@ class Operation_Model
                 // @TODO переписать запрос про финцель, сделать отже account_id и убрать эти строчки
                 // +посмотреть весь код где это может использоваться
                 if ($operation['type'] == 2) {
-                    $operation['cat_name'] = "Отправлено со счёта '"
+                    $operation['cat_name'] = "'" . $operation['account_name'] . "' » '"
                             . $accounts[$operation['transfer']]['account_name'] . "'";
                 }
 
@@ -842,7 +842,6 @@ class Operation_Model
                     tt.target_account_id,
                     1,
                     t.comment,
-                    '',
                     '',
                     1 AS virt,
                     t.tags,

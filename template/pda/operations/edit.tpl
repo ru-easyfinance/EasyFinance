@@ -49,9 +49,9 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
     <div class="line"><span class="asterisk">*</span> <?php echo in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT))?'Счёт':'Со счёта'?>:<br />
     <select name="account" class="wide">
         <?php
-        if( 
+        if(
             // Если какой то вариант уже выбран, зачем вводить в заблуждение
-            (!isset($operation['toAccount']) || !$operation['toAccount']) &&
+            (!isset($operation['transfer']) || !$operation['transfer']) &&
             // Если есть часто используемые счета - по умолчанию самый используемый
             ( sizeof( $res['accounts'] ) < sizeof($res['accountsRecent']) )
         ) {
@@ -80,13 +80,13 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
         {
             //Пропускаем частоиспользуемые
             if( $useOften && array_key_exists( $account['id'], $res['accountsRecent'] ) ){ continue; }
-            
+
             ?><option <?php echo (isset($operation['account']) && $account['id'] == $operation['account'])?'selected="selected"':''?>
             value="<?php echo $account['id']?>"><?php echo $account['name']?> (<?php echo $res['currency'][ $account['currency'] ]['text']?>)</option><?php
         }
         ?>
     </select></div>
-    
+
     <?php
     if( in_array($operation['type'], array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT)) )
     {
@@ -104,21 +104,21 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
         </select></div>
         <?php
     }
-    
+
     // Целевой счёт для перевода
     if( $operation['type'] == Operation::TYPE_TRANSFER )
     {
         ?>
         <div class="line"><span class="asterisk">*</span> На счёт: <br><select name="toAccount" class="wide" >
             <?php
-            if( 
+            if(
                 // Если какой то вариант уже выбран, зачем вводить в заблуждение
-                !isset($operation['toAccount']) || !$operation['toAccount']
+                !isset($operation['transfer']) || !$operation['transfer']
             )
             {
                 ?><option value="0">не выбран</option><?php
             }
-            
+
             // Если счетов больше чем часто используемых - выводим сверху частоиспользуемые
             reset($res['accountsRecent']);
             if( sizeof( $res['accounts'] ) > sizeof($res['accountsRecent']) )
@@ -127,9 +127,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
                 {
                     $account = $res['accounts'][ $accountId ];
                 ?>
-                <option 
-                <?php echo (isset($operation['account']) && $account['id'] == $operation['account'])?'selected="selected"':''?>
-                value="<?php echo $account['id']?>"><?php echo $account['name']?> 
+                <option
+                <?php echo (isset($operation['account']) && $account['id'] == $operation['transfer'])?
+                'selected="selected"':''?>
+                value="<?php echo $account['id']?>"><?php echo $account['name']?>
                 (<?php echo $res['currency'][ $account['currency'] ]['text']?>)
                 </option>
                 <?php
@@ -137,16 +138,15 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
                 ?><option>-</option><?php
                 $useOften = true;
             }
-            
+
             reset( $res['accounts'] );
             while ( list(,$account) = each($res['accounts']))
             {
                 //Пропускаем частоиспользуемые
                 if( $useOften && array_key_exists( $account['id'], $res['accountsRecent'] ) ){ continue; }
-                
-                ?><option 
-                <?php echo ( isset($operation['toAccount']) && $account['id'] == $operation['toAccount'] )
-                    ?'selected="selected"':''?> 
+
+                ?><option
+                <?php echo ( isset($operation['transfer']) && $account['id'] == $operation['transfer'] ) ? 'selected="selected"':'' ?>
                     value="<?php echo $account['id']?>">
                     <?php echo $account['name']?> (<?php echo $res['currency'][ $account['currency'] ]['text']?>)
                 </option><?php
@@ -155,7 +155,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
         </select></div>
         <?php
     }
-    
+
     // Целевая финцель
     if( $operation['type'] == Operation::TYPE_TARGET )
     {
@@ -167,10 +167,10 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
             {
                 ?><option value="0">не выбрана</option><?php
             }
-            
+
             while ( list(,$target) = each($res['user_targets']))
             {
-                ?><option 
+                ?><option
                 <?php echo ( isset($operation['target']) && $target['id'] == $operation['target'] )?'selected="selected"':''?>
                 value="<?php echo $target['id']?>"><?php echo $target['title']?></option><?php
             }
@@ -179,7 +179,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
         <?php
     }
     ?>
-    
+
     <?php
     // Преобразуем дату в массив для корректного отображения и сравнения
     $operation['date'] = explode( '.', $operation['date'] );
