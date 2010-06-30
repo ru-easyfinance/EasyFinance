@@ -59,12 +59,4 @@ class myApiUser extends sfBasicSecurityUser
         return $this->getUserRecord()->getId();
     }
 
-
-    /**
-     * Установить идентификатор пользователя
-     */
-    public function setId($id)
-    {
-        return $this->getUserRecord()->setId($id);
-    }
 }

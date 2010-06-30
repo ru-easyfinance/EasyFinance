@@ -37,8 +37,6 @@ class authActions extends sfActions
 
     protected function raiseError($errorMessage)
     {
-        #Max: зачем этот заголовок?
-        $this->getResponse()->setHttpHeader('WWW_Authenticate', "Authentification required");
         $this->getResponse()->setStatusCode(401);
 
         $this->setTemplate('error', 'common');

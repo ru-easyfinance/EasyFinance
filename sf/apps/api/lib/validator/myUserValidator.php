@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Валидатор пользователя (логина/пароля)
  */
 class myUserValidator extends sfValidatorBase
 {
