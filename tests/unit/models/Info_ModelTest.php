@@ -39,7 +39,7 @@ class Info_ModelTest extends UnitTestCase
         $options   = array(
             'user_id'  => $this->userId,
             'chain_id' => 999,
-            'date'     => date('Y-m-d', time()-(86400*31)),
+            'date'     => date('Y-m-d', time()-(86400*20)),
             'account_id' => $accountId,
         );
         // Правильные операции, месячной давности
