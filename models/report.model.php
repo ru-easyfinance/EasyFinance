@@ -21,7 +21,7 @@ class Report_Model
 
     /**
      * Обменник для валют
-     * @var efCurrencyExchange
+     * @var myCurrencyExchange
      */
     private $_ex = null;
 
@@ -128,7 +128,7 @@ class Report_Model
 
             $result[ $key ]['cat'] = $value['cat'];
 
-            $money = new efMoney(abs($value['money']), $value['cur_id']);
+            $money = new myMoney(abs($value['money']), $value['cur_id']);
             $amount = $this->ex->convert($money, $currency_id)->getAmount();
 
             if ( isset ( $result[ $key ]['money'] ) ) {
@@ -175,7 +175,7 @@ class Report_Model
                     currency cur
                 ON
                     cur.cur_id = a.account_currency_id
-                WHERE 
+                WHERE
                     o.user_id = ?
                 AND
                     `date` BETWEEN ? AND ?
@@ -195,7 +195,7 @@ class Report_Model
 
         foreach($result as $value) {
 
-            $money = new efMoney(abs($value['money']), $value['cur_id']);
+            $money = new myMoney(abs($value['money']), $value['cur_id']);
             $amount = $this->ex->convert($money, $currency_id)->getAmount();
 
             // Доходы
@@ -262,13 +262,13 @@ class Report_Model
                     currency cur
                 ON
                     cur.cur_id = a.account_currency_id
-                WHERE  
+                WHERE
                     op.drain=?
                 AND
                     (op.`date` BETWEEN ? AND ?)
                 AND
                     op.user_id= ?
-                AND 
+                AND
                     op.accepted=1
                 AND
                     op.deleted_at IS NULL
@@ -276,7 +276,7 @@ class Report_Model
                     c.cat_name <> ''
                 AND
                     a.account_id IN({$accounts})
-                AND 
+                AND
                     op.transfer = 0
                 AND ( op.tr_id < 1 OR ISNULL(op.tr_id) )
                 ORDER BY c.cat_name";
@@ -287,7 +287,7 @@ class Report_Model
 
                 $result[$key] = $value;
 
-                $money = new efMoney(abs($value['money']), $value['cur_id']);
+                $money = new myMoney(abs($value['money']), $value['cur_id']);
                 $result[$key]['money'] = $this->ex->convert($money, $currency_id)->getAmount();
 
             }
@@ -387,7 +387,7 @@ class Report_Model
         $result = array();
         foreach($rows as $key => $value) {
 
-            $money = new efMoney(abs($value['su']), $value['cur_id']);
+            $money = new myMoney(abs($value['su']), $value['cur_id']);
 
             $tempId = $value['per'].$value['cat_id'];
 

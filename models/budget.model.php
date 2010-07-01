@@ -76,7 +76,7 @@ class Budget_Model {
         $fact = array();
         foreach ($arrayoper as $value) {
             // Знак суммы имеет значение
-            $money = new efMoney($value['money'], $value['currency_id']);
+            $money = new myMoney($value['money'], $value['currency_id']);
             $sum = sfConfig::get('ex')->convert($money, $currency_id)->getAmount();
 
             $fact[$value['cat_id']] = (float) @$fact[$value['cat_id']] + (float)$sum;

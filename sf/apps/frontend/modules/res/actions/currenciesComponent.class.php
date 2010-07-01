@@ -34,16 +34,11 @@ class currenciesComponent extends sfComponent
             ->whereIn('q.id', $currencies)
             ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
 
-        #Max: мы же договорились, что перенесешь под sf и переименуешь
-        #     сделай отдельным коммитом, я его черри-пикну в дев
-        require_once sfConfig::get('sf_root_dir') . '/../classes/Currency/efCurrencyExchange.php';
-        require_once sfConfig::get('sf_root_dir') . '/../classes/Currency/efMoney.php';
-
         # Вообще это глобальная вещь, и по хорошему надо инициализировать onDemand в конфиге и класть в контекст
         # Но давай пока оставим здесь, если нельзя быстро переделать
-        $exchange = new efCurrencyExchange();
+        $exchange = new myCurrencyExchange();
         foreach ($toChange as $row) {
-            $exchange->setRate($row['id'], $row['rate'], efCurrencyExchange::BASE_CURRENCY);
+            $exchange->setRate($row['id'], $row['rate'], myCurrencyExchange::BASE_CURRENCY);
         }
         unset($row);
 

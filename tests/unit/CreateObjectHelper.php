@@ -35,7 +35,7 @@ class CreateObjectHelper {
         $default = array(
             'user_pass'             => sha1('pass'),
             'user_login'            => 'login'.sha1(microtime()),
-            'user_currency_default' => efMoney::RUR,
+            'user_currency_default' => myMoney::RUR,
         );
         $options = array_merge($default, $options);
 
@@ -53,7 +53,7 @@ class CreateObjectHelper {
     public static function makeAccount(array $props = array())
     {
         $default = array(
-            'account_currency_id' => efMoney::RUR,
+            'account_currency_id' => myMoney::RUR,
             'account_type_id'     => Account_Collection::ACCOUNT_TYPE_CASH,
             'updated_at'          => '2010-05-26 16:31:04',
             'created_at'          => '2010-05-26 16:31:04',

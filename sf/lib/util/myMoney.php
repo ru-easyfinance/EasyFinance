@@ -3,7 +3,7 @@
 /**
  * Сумма в указанной валюте
  */
-class efMoney
+class myMoney
 {
     CONST RUR = 1;
     CONST USD = 2;

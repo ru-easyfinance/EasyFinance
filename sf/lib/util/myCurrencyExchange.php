@@ -3,7 +3,7 @@
 /**
  * Обменник валют
  */
-class efCurrencyExchange
+class myCurrencyExchange
 {
     /**
      * Массив со списком курсов валют
@@ -16,7 +16,7 @@ class efCurrencyExchange
     /**
      * Базовая валюта
      */
-    CONST BASE_CURRENCY = efMoney::RUR;
+    CONST BASE_CURRENCY = myMoney::RUR;
 
 
     /**
@@ -76,29 +76,29 @@ class efCurrencyExchange
     /**
      * Конвертировать сумму в другую валюту
      *
-     * @param  efMoney $money
+     * @param  myMoney $money
      * @param  int     $codeTo
-     * @return efMoney
+     * @return myMoney
      */
-    public function convert(efMoney $money, $codeTo = self::BASE_CURRENCY)
+    public function convert(myMoney $money, $codeTo = self::BASE_CURRENCY)
     {
         $rate = $this->getRate($money->getCode(), $codeTo);
-        return new efMoney($rate * $money->getAmount(), $codeTo);
+        return new myMoney($rate * $money->getAmount(), $codeTo);
     }
 
 
     /**
      * Получить сумму двух валют
      *
-     * @param  efMoney $money1
-     * @param  efMoney $money2
+     * @param  myMoney $money1
+     * @param  myMoney $money2
      * @param  int     $codeTo - Код итоговой валюты
-     * @return efMoney
+     * @return myMoney
      */
-    public function plus(efMoney $money1, efMoney $money2, $codeTo = self::BASE_CURRENCY)
+    public function plus(myMoney $money1, myMoney $money2, $codeTo = self::BASE_CURRENCY)
     {
         $amount = $this->convert($money1, $codeTo)->getAmount() + $this->convert($money2, $codeTo)->getAmount();
-        return new efMoney($amount, $codeTo);
+        return new myMoney($amount, $codeTo);
     }
 
 
@@ -107,7 +107,7 @@ class efCurrencyExchange
      *
      * @param  array $array
      * @param  int   $codeTo
-     * @return efMoney
+     * @return myMoney
      */
     public function summ(array $array, $codeTo = self::BASE_CURRENCY)
     {

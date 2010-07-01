@@ -29,14 +29,14 @@ require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 require_once(dirname(__FILE__) . '/../core/currency.class.php');
 Core::getInstance()->currency = new oldCurrency();
 // Новые
-require_once SYS_DIR_ROOT . '/classes/Currency/efMoney.php';
-require_once SYS_DIR_ROOT . '/classes/Currency/efCurrencyExchange.php';
+require_once SYS_DIR_ROOT . '/sf/lib/util/myMoney.php';
+require_once SYS_DIR_ROOT . '/sf/lib/util/myCurrencyExchange.php';
 require_once SYS_DIR_ROOT . '/classes/Currency/efCurrencyModel.php';
 require_once SYS_DIR_ROOT . '/sf/lib/vendor/symfony/lib/config/sfConfig.class.php';
 
-$ex = new efCurrencyExchange();
+$ex = new myCurrencyExchange();
 foreach(efCurrencyModel::loadAll() as $row) {
-    $ex->setRate($row['cur_id'], $row['rate'], efMoney::RUR);
+    $ex->setRate($row['cur_id'], $row['rate'], myMoney::RUR);
 }
 sfConfig::set('ex', $ex);
 

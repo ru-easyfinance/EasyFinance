@@ -18,7 +18,7 @@ class models_RegistrationTest extends UnitTestCase
         $this->user = array(
             'login'                 => 'some unique login',
             'email'                 => 'some unique email',
-            'user_currency_default' => efMoney::RUR,
+            'user_currency_default' => myMoney::RUR,
         );
         $this->getConnection()->query(sprintf("INSERT INTO users (user_login, user_mail, user_currency_default) VALUES ('%s')", implode("','", $this->user)));
 

@@ -14,9 +14,9 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     function testCreateMoney()
     {
-        $rur100 = new efMoney(100, efMoney::RUR);
+        $rur100 = new myMoney(100, myMoney::RUR);
         $this->assertEquals(100, $rur100->getAmount(), 'Get amount');
-        $this->assertEquals(efMoney::RUR, $rur100->getCode(), 'Get code');
+        $this->assertEquals(myMoney::RUR, $rur100->getCode(), 'Get code');
     }
 
 
@@ -25,9 +25,9 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     public function testSelfRateIsAlwaysOne()
     {
-        $ex = new efCurrencyExchange;
-        $this->assertEquals(1, $ex->getRate(efMoney::RUR, efMoney::RUR));
-        $this->assertEquals(1, $ex->getRate(efMoney::USD, efMoney::USD));
+        $ex = new myCurrencyExchange;
+        $this->assertEquals(1, $ex->getRate(myMoney::RUR, myMoney::RUR));
+        $this->assertEquals(1, $ex->getRate(myMoney::USD, myMoney::USD));
     }
 
 
@@ -36,15 +36,15 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     public function testSetRate()
     {
-        $ex = new efCurrencyExchange;
-        $ex->setRate(efMoney::USD, 25, efMoney::RUR);
-        $ex->setRate(efMoney::EUR, 40, efMoney::RUR);
+        $ex = new myCurrencyExchange;
+        $ex->setRate(myMoney::USD, 25, myMoney::RUR);
+        $ex->setRate(myMoney::EUR, 40, myMoney::RUR);
 
-        $this->assertEquals(25,   $ex->getRate(efMoney::USD, efMoney::RUR), "Get RUR for 1 USD");
-        $this->assertEquals(1/25, $ex->getRate(efMoney::RUR, efMoney::USD), "Get USD for 1 RUR");
+        $this->assertEquals(25,   $ex->getRate(myMoney::USD, myMoney::RUR), "Get RUR for 1 USD");
+        $this->assertEquals(1/25, $ex->getRate(myMoney::RUR, myMoney::USD), "Get USD for 1 RUR");
 
-        $this->assertEquals(40,      $ex->getRate(efMoney::EUR, efMoney::RUR), "Get RUR for 1 EUR");
-        $this->assertEquals(1*25/40, $ex->getRate(efMoney::USD, efMoney::EUR), "Get EUR for 1 USD");
+        $this->assertEquals(40,      $ex->getRate(myMoney::EUR, myMoney::RUR), "Get RUR for 1 EUR");
+        $this->assertEquals(1*25/40, $ex->getRate(myMoney::USD, myMoney::EUR), "Get EUR for 1 USD");
     }
 
 
@@ -53,10 +53,10 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     public function testFailToSetZeroRate()
     {
-        $ex = new efCurrencyExchange;
+        $ex = new myCurrencyExchange;
 
         $this->setExpectedException('InvalidArgumentException', 'invalid rate');
-        $ex->setRate(efMoney::USD, 0, efMoney::RUR);
+        $ex->setRate(myMoney::USD, 0, myMoney::RUR);
     }
 
 
@@ -65,9 +65,9 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     public function testExceptionIfRateNotFound()
     {
-        $ex = new efCurrencyExchange;
+        $ex = new myCurrencyExchange;
         $this->setExpectedException('Exception', 'Rate not found');
-        $ex->getRate(efMoney::USD);
+        $ex->getRate(myMoney::USD);
     }
 
 
@@ -76,19 +76,19 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     public function testConvert()
     {
-        $ex = new efCurrencyExchange;
-        $ex->setRate(efMoney::USD, 25, efMoney::RUR);
-        $ex->setRate(efMoney::EUR, 40, efMoney::RUR);
+        $ex = new myCurrencyExchange;
+        $ex->setRate(myMoney::USD, 25, myMoney::RUR);
+        $ex->setRate(myMoney::EUR, 40, myMoney::RUR);
 
-        $rur100 = new efMoney(100, efMoney::RUR);
+        $rur100 = new myMoney(100, myMoney::RUR);
         $this->assertEquals($rur100, $ex->convert($rur100, $rur100->getCode()),
             "Self convert");
 
-        $this->assertEquals(new efMoney(4, efMoney::USD), $ex->convert($rur100, efMoney::USD),
+        $this->assertEquals(new myMoney(4, myMoney::USD), $ex->convert($rur100, myMoney::USD),
             "Convert 100RUR into USD with rate 1/25");
 
-        $usd8 = new efMoney(8, efMoney::USD);
-        $this->assertEquals(new efMoney(5, efMoney::EUR), $ex->convert($usd8, efMoney::EUR),
+        $usd8 = new myMoney(8, myMoney::USD);
+        $this->assertEquals(new myMoney(5, myMoney::EUR), $ex->convert($usd8, myMoney::EUR),
             "Convert 8USD into EUR with rate 25/40");
     }
 
@@ -98,16 +98,16 @@ class classes_Currency_CurrencyTest extends UnitTestCase
      */
     public function testSumm()
     {
-        $ex = new efCurrencyExchange;
-        $ex->setRate(efMoney::USD, 25, efMoney::RUR);
+        $ex = new myCurrencyExchange;
+        $ex->setRate(myMoney::USD, 25, myMoney::RUR);
 
-        $rur100 = new efMoney(100, efMoney::RUR);
-        $usd4   = new efMoney(4, efMoney::USD);
-        $usd1   = new efMoney(1, efMoney::USD);
+        $rur100 = new myMoney(100, myMoney::RUR);
+        $usd4   = new myMoney(4, myMoney::USD);
+        $usd1   = new myMoney(1, myMoney::USD);
 
-        $rur225 = $ex->summ(array($rur100, $usd4, $usd1), efMoney::RUR);
+        $rur225 = $ex->summ(array($rur100, $usd4, $usd1), myMoney::RUR);
         $this->assertEquals(225, $rur225->getAmount(), 'Get amount');
-        $this->assertEquals(efMoney::RUR, $rur225->getCode(), 'Get code');
+        $this->assertEquals(myMoney::RUR, $rur225->getCode(), 'Get code');
     }
 
 }

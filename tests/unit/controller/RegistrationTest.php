@@ -86,7 +86,7 @@ class controller_RegistrationTest extends UnitTestCase
 
         $this->getConnection()->query(sprintf(
             "INSERT INTO users (user_login, user_mail, user_currency_default)
-            VALUES ('{$login}', '{$email}', '" . efMoney::RUR . "')"));
+            VALUES ('{$login}', '{$email}', '" . myMoney::RUR . "')"));
 
 
         $_SERVER["REQUEST_METHOD"] = 'POST';
