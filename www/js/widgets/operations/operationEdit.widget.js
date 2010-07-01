@@ -1003,7 +1003,7 @@ easyFinance.widgets.operationEdit = function(){
             // меняем счёт на заданный
             _selectedAccount = id;
         }
-        
+
         _changeAccountForTransfer();
         if (_$ufdAccount) {
             _$ufdAccount.selectOptions(id, true).ufd("changeOptions");
@@ -1011,7 +1011,7 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setCategory(id){
-        if (id ===null || id == "0") {
+        if (id == "0" || id == null) {
             return;
         }
 
@@ -1087,34 +1087,22 @@ easyFinance.widgets.operationEdit = function(){
         var typ = data.type;
         setType(typ);
 
-        if (data.transfer != "" && data.tr_id != null) {
-            // перевод
-            if (data.tr_id == "0") {
-                // from this account
-                setAccount(data.account_id || data.account);
+        // перевод
+        if (typ == "2") {
 
-                // to this account
-                setTransfer(data.transfer);
-            } else {
-                // original operation id
-                if (isEditing) {
-                    $('#op_id').val(data.tr_id);
-                }
+            // from this account
+            setAccount(data.account_id || data.account);
 
-                // to this account
-                setTransfer(data.account_id || data.account);
+            // to this account
+            setTransfer(data.transfer);
 
-                // from this account
-                setAccount(data.transfer);
-            }
-
-            if ( typ == "2" && data.curs) {
-                // перевод с обменом валют
+            // перевод с обменом валют
+            if (toFloat(data.curs) != 0) {
                 _realConversionRate = parseFloat(data.curs);
 
                 _displayConversion();
 
-                setSum(data.moneydef || roundToCents(Math.abs(data.money || data.amount || 0)));
+                setSum(roundToCents(Math.abs(data.money || data.amount || 0)));
 
                 $("#op_amount").change();
             } else {
