@@ -1,9 +1,9 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php
 /**
  * Класс контроллера для журанала операций
- * @category operation
- * @copyright http://easyfinance.ru/
- * @version SVN $Id$
+ *
+ * @category    operation
+ * @copyright   http://easyfinance.ru/
  */
 class Operation_Controller extends _Core_Controller_UserCommon
 {
@@ -15,7 +15,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
     /**
      * Ссылка на экземпляр класса User
-     * @var User
+     * @var oldUser
      */
     private $user = null;
 
@@ -32,22 +32,22 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
     /**
      * Индексная страница
+     *
      * @param $args array mixed
      * @return void
      */
     function index( $args = array() )
     {
-         $this->tpl->assign('category',     get_tree_select());
-         $this->tpl->assign('accounts',     $this->user->getUserAccounts());
-
-            $this->tpl->assign('dateFrom',     date('d.m.Y', time() - 60*60*24*7));
-            $this->tpl->assign('dateTo',     date('d.m.Y')); //date(date('t').'.m.Y'));
-
-         $this->tpl->assign('name_page', 'operations/operation');
+        $this->tpl->assign('category',  get_tree_select());                  /** @deprecated */
+        $this->tpl->assign('accounts',  $this->user->getUserAccounts());     /** @deprecated */
+        $this->tpl->assign('dateFrom',  date('d.m.Y', time() - 60*60*24*7)); // За неделю от сегодня
+        $this->tpl->assign('dateTo',    date('d.m.Y'));                      // До сегодня
+        $this->tpl->assign('name_page', 'operations/operation');
     }
 
     /**
      * Возвращает дату операции
+     *
      * @return string
      */
     function getDateOperation ()
@@ -55,14 +55,14 @@ class Operation_Controller extends _Core_Controller_UserCommon
         // Определяем массив данных для обработки
 
         // Если дата передана массивом (PDA) ...
-        if ( is_array ( $this->request->post['date'] ) ) {
+        if (is_array($this->request->post['date'])) {
 
             return $this->request->post['date']['day']
                 . '.' . $this->request->post['date']['month']
                 . '.' . $this->request->post['date']['year'];
 
             // если пустая дата - подставляем сегодняшний день
-        } elseif( empty( $this->request->post['date'] ) ) {
+        } elseif(empty($this->request->post['date'])) {
 
             return date ( "d.m.Y" );
 
@@ -75,10 +75,11 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
     /**
      * Добавляет новое событие
+     *
      * @param $args array mixed Какие-нибудь аргументы
      * @return void
      */
-     function add( $args = array() )
+    function add($args = array())
     {
 
         // Определяем массив данных для обработки
@@ -106,18 +107,18 @@ class Operation_Controller extends _Core_Controller_UserCommon
             $operation = array (
                 //тип операции (расход и тд)
                 'type'         => isset($this->request->post['type'])?$this->request->post['type']:$operation['type'],
-                'account'     => $this->request->post['account'],
-                'amount'     => $this->request->post['amount'],
+                'account'      => $this->request->post['account'],
+                'amount'       => $this->request->post['amount'],
                 'category'     => isset($this->request->post['category'])?$this->request->post['category']:null,
                 'date'         => $this->getDateOperation(),
-                'comment'     => $this->request->post['comment'],
+                'comment'      => $this->request->post['comment'],
                 'tags'         => isset($this->request->post['tags'])?$this->request->post['tags']:null,
-                'convert'     => isset($this->request->post['convert'])?$this->request->post['convert']:array(),
-                'close'     => isset($this->request->post['close'])?$this->request->post['close']:array(),
+                'convert'      => isset($this->request->post['convert'])?$this->request->post['convert']:array(),
+                'close'        => isset($this->request->post['close'])?$this->request->post['close']:array(),
                 'currency'     => isset($this->request->post['currency'])?$this->request->post['currency']:array(),
-                'toAccount' => isset($this->request->post['toAccount'])?$this->request->post['toAccount']:null,
-                'target'     => isset($this->request->post['target'])?$this->request->post['target']:null,
-                'accepted'  => isset($this->request->post['accepted'])?(int)$this->request->post['accepted']:1,
+                'toAccount'    => isset($this->request->post['toAccount'])?$this->request->post['toAccount']:null,
+                'target'       => isset($this->request->post['target'])?$this->request->post['target']:null,
+                'accepted'     => isset($this->request->post['accepted'])?(int)$this->request->post['accepted']:1,
             );
 
             $operation = $this->model->checkData($operation);
@@ -253,7 +254,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 'currency'     => isset($this->request->post['currency'])?$this->request->post['currency']:array(),
                 'toAccount'     => isset($this->request->post['toAccount'])?$this->request->post['toAccount']:null,
                 'target'     => isset($this->request->post['target'])?$this->request->post['target']:null,
-                'tr_id'        => isset($operation['tr_id'])?$operation['tr_id']:0,
                 'accepted'  => isset($this->request->post['accepted'])?(int)$this->request->post['accepted']:1,
             );
 
@@ -369,9 +369,9 @@ class Operation_Controller extends _Core_Controller_UserCommon
                             $operation['account'], $operation['tags']);
                         break;
                     case Operation::TYPE_TRANSFER: // Перевод со счёта
-                        $operation['category'] = -1;
-                        $this->model->editTransfer( @$operation['tr_id']?$operation['tr_id']:$operation['id'],
-                            $operation['amount'], $operation['convert'], $operation['date'], $operation['account'],
+                        $operation['category'] = null;
+                        $this->model->editTransfer($operation['id'], $operation['amount'],
+                            $operation['convert'], $operation['date'], $operation['account'],
                             $operation['toAccount'],$operation['comment'],$operation['tags']);
                         break;
                     case Operation::TYPE_TARGET: // Перевод на финансовую цель см. в модуле фин.цели
@@ -560,11 +560,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
         $search_field = isset($this->request->get['search_field'])? $this->request->get['search_field'] : '';
 
-        if (_Core_TemplateEngine::getResponseMode($this->request) != "csv") {
-            $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo, $search_field);
-        } else {
-            $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo, $search_field);
-        }
+        $list = $this->model->getOperationList($dateFrom, $dateTo, $category, $account, $type, $sumFrom, $sumTo, $search_field);
 
         $dateBeforeFrom = Helper_Date::getMysql(strtotime($dateFrom." -1 day"));
         $listBefore = $this->model->getOperationList($dateFrom, $dateBeforeFrom, $category, $account, $type, $sumFrom, $sumTo, $search_field, true, true);
@@ -598,14 +594,13 @@ class Operation_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('name_page', 'operations/operation');
 
         if (_Core_TemplateEngine::getResponseMode($this->request) != "csv") {
-            $this->tpl->assign( 'operations', $array );
-            $this->tpl->assign( 'list_before', $listBefore );
+            $this->tpl->assign( 'operations',    $array );
+            $this->tpl->assign( 'list_before',   $listBefore );
             $this->tpl->assign( 'period_change', $listAfter );
         } else { //CSV
             $headers = array('Дата', 'Тип', 'Сумма', 'Счет', 'Категория', 'Метки', 'Комментарий');
-//          $headers = array('1', '2', '3', '4', '5', '6', '7');
             $this->tpl->assign( 'elements', $array );
-            $this->tpl->assign( 'headers', $headers );
+            $this->tpl->assign( 'headers',  $headers );
             $this->tpl->assign( 'filename', 'EasyFinance Operations '.$this->request->get['dateFrom']." - ".$this->request->get['dateTo'].'.csv' );
         }
     }
