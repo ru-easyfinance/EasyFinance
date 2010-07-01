@@ -63,8 +63,7 @@ class Calendar_Model extends _Core_Abstract_Model
                     c.repeat,
                     c.week,
                     o.accepted,
-                    o.tr_id,
-                    o.transfer,
+                    o.transfer_account_id AS transfer,
                     o.source_id AS source
                 FROM
                     operation o
@@ -83,11 +82,7 @@ class Calendar_Model extends _Core_Abstract_Model
         $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
 
         foreach ($rows as $row) {
-            // Пропускаем повторы переводов
-            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) {
-                continue;
-            }
-            $model = new Calendar_Model( $row, $user );
+            $model = new Calendar_Model($row, $user);
 
             $modelsArray[$row['id']] = $model;
         }
@@ -128,8 +123,7 @@ class Calendar_Model extends _Core_Abstract_Model
                     c.repeat,
                     c.week,
                     o.accepted,
-                    o.tr_id,
-                    o.transfer,
+                    o.transfer_account_id AS transfer,
                     o.source_id AS source
                 FROM
                     operation o
@@ -149,11 +143,7 @@ class Calendar_Model extends _Core_Abstract_Model
         $rows = Core::getInstance()->db->select($sql, $user->getId());
 
         foreach ($rows as $row) {
-            // Пропускаем повторы переводов
-            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) {
-                continue;
-            }
-            $model = new Calendar_Model( $row, $user );
+            $model = new Calendar_Model($row, $user);
 
             $modelsArray[$row['id']] = $model;
         }
@@ -189,8 +179,7 @@ class Calendar_Model extends _Core_Abstract_Model
                     c.repeat,
                     c.week,
                     o.accepted,
-                    o.tr_id,
-                    o.transfer,
+                    o.transfer_account_id AS transfer,
                     o.source_id AS source
                 FROM
                     operation o
@@ -210,10 +199,6 @@ class Calendar_Model extends _Core_Abstract_Model
         $rows = Core::getInstance()->db->select($sql, $user->getId());
 
         foreach ($rows as $row) {
-            // Пропускаем повторы переводов
-            if (((int) $row['type'] == 2) && ((int) $row['tr_id'] == 0)) {
-                continue;
-            }
             $model = new Calendar_Model( $row, $user );
 
             $modelsArray[$row['id']] = $model;
@@ -399,57 +384,15 @@ class Calendar_Model extends _Core_Abstract_Model
      */
     public static function acceptEvents ( oldUser $user, $ids )
     {
-
-         $stringIds = '';
-        // Если получили массив, преобразуем его для выборки в мускуле
-        if ( is_array($ids) ) {
-
-            foreach ($ids as $v) {
-                if ( (int) $v > 0 ) {
-                    if (!empty($stringIds)) {
-                        $stringIds .= ',';
-                    }
-                    $stringIds .= $v;
-                }
-            }
-
-        } elseif ((int) $ids > 0) {
-            $stringIds = (int)$ids;
-        } else {
-            return false;
+        $operations = array();
+        foreach ($ids as $value) {
+            $operations[] = array(
+                'accepted' => '1',
+                'id'       => $value,
+            );
         }
-
-        // Получаем все id для парных операций (нужно только для переводов)
-        $sql = "SELECT
-                    id
-                FROM
-                    operation
-                WHERE
-                    (id IN ({$stringIds}) OR tr_id IN ({$stringIds}))
-                AND
-                    user_id=?
-                AND
-                    id > 0
-                UNION DISTINCT
-                SELECT
-                    tr_id
-                FROM
-                    operation
-                WHERE
-                    (id IN ({$stringIds}) OR tr_id IN ({$stringIds}))
-                AND
-                    user_id=?
-                AND
-                    tr_id > 0";
-        $ids = Core::getInstance()->db->selectCol($sql, $user->getId(), $user->getId());
-
-        // Обновляем все операции
-        $sql = "UPDATE operation SET accepted=1 WHERE id IN (".implode(",", $ids).")";
-        if (Core::getInstance()->db->query($sql)) {
-            return true;
-        } else {
-            return false;
-        }
+        $operation = new Operation_Model($user);
+        return (bool) $operation->editMultiple($operation);
     }
 
     /**

@@ -268,8 +268,7 @@ class Calendar_Event
             'cat_id'     => $this->getCategory(),
             'account_id' => $this->getAccount(),
             'tags'       => $this->getTags(),
-            'tr_id'      => $this->_model->tr_id,
-            'transfer'   => $this->_model->transfer,
+            'transfer'   => $this->_model->transfer_account_id,
             'source'     => $this->_model->source,
         );
 

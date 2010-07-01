@@ -71,7 +71,7 @@ $tablesTemplate = array(
     ),
     'operation' => array(
         'userId' => 'user_id',
-        'addUserId' => array('id', 'cat_id', 'account_id', 'transfer', 'tr_id')
+        'addUserId' => array('id', 'cat_id', 'account_id', 'transfer_account_id')
     ),
     'tags' => array(
         'userId' => 'user_id',

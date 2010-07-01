@@ -210,12 +210,12 @@ class Info_Model
      */
     private function result()
     {
-        if ( $this->input['profit'] == 0 )
-            if ( $this->input['drain'] == 0 ){
+        if ($this->input['profit'] == 0)
+            if ($this->input['drain'] == 0){
                 $this->output[6]['result'] = 0;
                 $this->output[6]['profit'] = 0;
                 $this->output[6]['budget'] = 0;
-                $this->output[6]['drain'] = 0;
+                $this->output[6]['drain']  = 0;
 
             }
         $des1 = $this->values['result']['red']['text'];
@@ -315,10 +315,8 @@ class Info_Model
         $sql = "SELECT
                     SUM(o.money) as sum,
                     a.account_currency_id as cur
-                FROM
-                    accounts a
-                LEFT JOIN
-                    operation o
+                FROM accounts a
+                LEFT JOIN operation o
                 ON
                     a.account_id = o.account_id
                     AND
@@ -328,7 +326,7 @@ class Info_Model
                 AND
                     o.drain = 0
                 AND
-                    o.transfer = 0
+                    o.`type` IN (0, 1)
                 AND
                     o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
                 AND
@@ -347,10 +345,8 @@ class Info_Model
                     a.account_currency_id as cur
                 FROM
                     accounts a
-                LEFT JOIN
-                    operation o
-                ON
-                    a.account_id = o.account_id
+                LEFT JOIN operation o
+                ON a.account_id = o.account_id
                     AND
                         o.deleted_at IS NULL
                 WHERE
@@ -358,7 +354,7 @@ class Info_Model
                 AND
                     o.drain = 1
                 AND
-                    o.transfer = 0
+                    o.`type` IN (0, 1)
                 AND
                     o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
                 AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
@@ -382,16 +378,6 @@ class Info_Model
                     date_start = CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')";
         $this->input['budget']   = (float)$this->db->selectCell($sql, $this->_user->getId());
 
-//        // Выплаты по кредитам за прошедший месяц
-//        $accounts = '';
-//        foreach (Core::getInstance()->user->getUserAccounts() as $key => $value) {
-//            if ($value['account_type_id'] == 8 || $value['account_type_id'] == 9) {
-//                if (!empty($accounts)) { $accounts .= ','; }
-//                $accounts .= $key;
-//            }
-//        }
-//        $sql = "SELECT SUM(ABS(money)) FROM operation o WHERE account_id IN ({$accounts})";
-//        $this->input['loans']    = (float)$this->db->selectCell($sql);
         $this->input['loans'] = 0;
 
         // Остатки денег на конец прошедшего месяца
@@ -402,12 +388,6 @@ class Info_Model
                 $this->input['balance']  += (float)$value['total_sum'];
             }
         }
-
-//        $this->input['drain']    = 200000;
-//        $this->input['profit']   = 240000;
-//        $this->input['budget']   = 210000;
-//        $this->input['loans']    = 21000;
-//        $this->input['balance']  = 130000;
     }
 
     /**

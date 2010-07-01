@@ -51,16 +51,14 @@ class Budget_Model {
                         sum(o.money) as money,
                         o.cat_id,
                         a.account_currency_id AS currency_id
-                    FROM
-                        operation o
-                    LEFT JOIN
-                        accounts a
+                    FROM operation o
+                    LEFT JOIN accounts a
                     ON
                         a.account_id=o.account_id
                     WHERE
                         o.user_id = ?
                     AND
-                        o.transfer=0
+                        o.`type` IN (0,1)
                     AND
                         o.accepted=1
                     AND
@@ -93,8 +91,7 @@ class Budget_Model {
                         (
                             SELECT
                                 AVG(amount)
-                            FROM
-                                budget t
+                            FROM budget t
                             WHERE
                                 (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
                                     AND t.date_start <= LAST_DAY(b.date_start))
@@ -103,8 +100,7 @@ class Budget_Model {
                                 AND
                                     b.user_id=t.user_id
                         ) AS avg_3m
-                    FROM
-                        budget b
+                    FROM budget b
                     LEFT JOIN
                         category c
                     ON

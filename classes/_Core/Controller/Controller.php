@@ -210,7 +210,7 @@ abstract class _Core_Controller
         $oftenAccount = array();
         foreach ($accounts as $k=>$v){
             $op = new Operation_Model();
-            $oftenAccounts[$k] = $op->getNumOfOperetionOnAccount($k);
+            $oftenAccounts[$k] = $op->getNumOfOperationOnAccount($k);
         }
         arsort($oftenAccounts);
         $num = 0;
