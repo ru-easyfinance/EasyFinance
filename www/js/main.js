@@ -239,7 +239,7 @@ $(document).ready(function(){
          * Загружаем метки для левой панели
          */
         function reloadTags(){
-            $.get('tags/getTags?responseMode=json', {}, function(data){
+            $.get('/tags/getTags?responseMode=json', {}, function(data){
                 res.tags = $.extend({}, data.tags);
                 loadLPTags();
             }, 'json');
