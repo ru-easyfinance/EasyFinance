@@ -40,8 +40,8 @@ class Operation_ModelTest extends UnitTestCase
         $this->userId = $this->user->getId();
 
         // Счета
-        $options   = array(
-            'user_id'  => $this->userId,
+        $options = array(
+            'user_id'      => $this->userId,
             'account_name' => 'ABC'
         );
         $account = CreateObjectHelper::makeAccount($options);
@@ -53,10 +53,10 @@ class Operation_ModelTest extends UnitTestCase
         $this->accountId2 = $account['account_id'];
 
         // Категории
-        $options   = array(
+        $options = array(
             'user_id'  => $this->userId,
         );
-        $this->catId     = CreateObjectHelper::createCategory($options);
+        $this->catId = CreateObjectHelper::createCategory($options);
 
         // Это важный метод. Он подгрузит все счета, категории пользователя (и что-нибудь ещё)
         $this->user->init();
@@ -68,7 +68,7 @@ class Operation_ModelTest extends UnitTestCase
      */
     private function _makeOperation()
     {
-        $options   = array(
+        $options = array(
             'user_id'    => $this->userId,
             'chain_id'   => 999,
             'date'       => date('Y-m-d', time()-86400),
@@ -139,24 +139,23 @@ class Operation_ModelTest extends UnitTestCase
     {
         $this->_prepareOperation();
         $expected = array(
-            'user_id'       => $this->userId,
-            'money'         => 100,
-            'time'          => '00:00:00',
-            'date'          => '2010-01-01',
-            'cat_id'        => $this->catId,
-            'account_id'    => $this->accountId,
-            'drain'         => 0,
-            'comment'       => 'Комментарий',
-            'transfer'      => 0,
-            'tr_id'         => null,
-            'imp_id'        => null,
-            'tags'          => 'тег1',
-            'type'          => Operation::TYPE_PROFIT,
-            'source_id'     => null,
-            'accepted'      => 1,
-            'chain_id'      => 0,
-            'exchange_rate' => 0.000000,
-            'deleted_at'    => null,
+            'user_id'               => $this->userId,
+            'money'                 => 100,
+            'time'                  => '00:00:00',
+            'date'                  => '2010-01-01',
+            'cat_id'                => $this->catId,
+            'account_id'            => $this->accountId,
+            'drain'                 => 0,
+            'comment'               => 'Комментарий',
+            'transfer_account_id'   => null,
+            'transfer_amount'       => null,
+            'tags'                  => 'тег1',
+            'type'                  => Operation::TYPE_PROFIT,
+            'source_id'             => null,
+            'accepted'              => 1,
+            'chain_id'              => 0,
+            'exchange_rate'         => 0.000000,
+            'deleted_at'            => null,
         );
 
         $operation  = new Operation_Model($this->user);
@@ -197,24 +196,23 @@ class Operation_ModelTest extends UnitTestCase
     {
         $this->_prepareOperation();
         $expected = array(
-            'user_id'       => $this->userId,
-            'money'         => -100,
-            'time'          => '00:00:00',
-            'date'          => '2010-01-01',
-            'cat_id'        => $this->catId,
-            'account_id'    => $this->accountId,
-            'drain'         => 1,
-            'comment'       => 'Комментарий',
-            'transfer'      => 0,
-            'tr_id'         => null,
-            'imp_id'        => null,
-            'tags'          => 'тег1',
-            'type'          => Operation::TYPE_WASTE,
-            'source_id'     => null,
-            'accepted'      => 1,
-            'chain_id'      => 0,
-            'exchange_rate' => 0.000000,
-            'deleted_at'    => null,
+            'user_id'               => $this->userId,
+            'money'                 => -100,
+            'time'                  => '00:00:00',
+            'date'                  => '2010-01-01',
+            'cat_id'                => $this->catId,
+            'account_id'            => $this->accountId,
+            'drain'                 => 1,
+            'comment'               => 'Комментарий',
+            'transfer_account_id'   => null,
+            'transfer_amount'       => null,
+            'tags'                  => 'тег1',
+            'type'                  => Operation::TYPE_WASTE,
+            'source_id'             => null,
+            'accepted'              => 1,
+            'chain_id'              => 0,
+            'exchange_rate'         => 0.000000,
+            'deleted_at'            => null,
         );
 
         $operation  = new Operation_Model($this->user);
@@ -264,56 +262,33 @@ class Operation_ModelTest extends UnitTestCase
                 array('тег 1')
         );
 
-        $expected = array(array(
-            'id'            => $opId,
-            'user_id'       => $this->userId,
-            'money'         => -100,
-            'time'          => '00:00:00',
-            'date'          => '2010-01-01',
-            'cat_id'        => null,
-            'account_id'    => $this->accountId,
-            'drain'         => 1,
-            'comment'       => 'Комментарий',
-            'transfer'      => $this->accountId2,
-            'tr_id'         => 0,
-            'imp_id'        => null,
-            'tags'          => null,
-            'type'          => Operation::TYPE_TRANSFER,
-            'source_id'     => null,
-            'accepted'      => 1,
-            'chain_id'      => 0,
-            'exchange_rate' => 0.000000,
-            'deleted_at'    => null,
-        ),array(
-            'id'            => $opId+1,
-            'user_id'       => $this->userId,
-            'money'         => 100,
-            'time'          => '00:00:00',
-            'date'          => '2010-01-01',
-            'cat_id'        => null,
-            'account_id'    => $this->accountId2,
-            'drain'         => 1,
-            'comment'       => 'Комментарий',
-            'transfer'      => $this->accountId,
-            'tr_id'         => $opId,
-            'imp_id'        => 100.00,
-            'tags'          => null,
-            'type'          => Operation::TYPE_TRANSFER,
-            'source_id'     => null,
-            'accepted'      => 1,
-            'chain_id'      => 0,
-            'exchange_rate' => 0.000000,
-            'deleted_at'    => null,
-        ));
+        $expected = array(
+            'id'                    => $opId,
+            'user_id'               => $this->userId,
+            'money'                 => -100,
+            'time'                  => '00:00:00',
+            'date'                  => '2010-01-01',
+            'cat_id'                => null,
+            'account_id'            => $this->accountId,
+            'drain'                 => 1,
+            'comment'               => 'Комментарий',
+            'transfer_account_id'   => $this->accountId2,
+            'transfer_amount'       => null,
+            'tags'                  => 'тег 1',
+            'type'                  => Operation::TYPE_TRANSFER,
+            'source_id'             => null,
+            'accepted'              => 1,
+            'chain_id'              => 0,
+            'exchange_rate'         => 0.000000,
+            'deleted_at'            => null,
+        );
 
-        
-        $sql = "SELECT * FROM operation WHERE id=? OR tr_id=?";
-        $actual = $this->getConnection()->select($sql, $opId, $opId);
 
-        unset($actual[0]['created_at']);
-        unset($actual[0]['updated_at']);
-        unset($actual[1]['created_at']);
-        unset($actual[1]['updated_at']);
+        $sql = "SELECT * FROM operation WHERE id=?";
+        $actual = $this->getConnection()->selectRow($sql, $opId);
+
+        unset($actual['created_at']);
+        unset($actual['updated_at']);
 
         $this->assertEquals($expected, $actual, 'Expected equals operation');
     }

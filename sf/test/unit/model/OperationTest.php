@@ -83,6 +83,24 @@ class model_OperationTest extends myUnitTestCase
 
 
     /**
+     * Невозможно удалить счёт, если по нему есть операции перевода
+     */
+    public function testFailedDeleteOperationIdConnectedWithTransferAccount()
+    {
+        $transfer = $this->helper->makeAccount();
+
+        $prop = array(
+            'transfer_account_id' => $transfer->id,
+        );
+
+        $op = $this->helper->makeOperation($this->helper->makeAccount(), $prop);
+
+        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
+        $transfer->hardDelete();
+    }
+
+
+    /**
      * SoftDelete
      */
     public function testSoftDelete()
