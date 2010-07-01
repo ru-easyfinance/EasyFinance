@@ -30,28 +30,26 @@ class AccountTable extends Doctrine_Table
     /**
      * Все счета пользователя с балансом и начальным балансом
      *
-     * @param  int $userId
+     * @param  User $user
      * @return Doctrine_Query
-
-    #Max: тест?
      */
-    public function queryFindWithBalanceAndInitPayment($userId, $alias = 'a')
+    public function queryFindWithBalanceAndBalanceOperation(User $user, $alias = 'a')
     {
-        #Max: давай здесь писать по человечески, а мапить колонки в контроллере или во вью
-        #     зачем ты здесь прогибаешься под требования клиента
         $q = $this->createQuery($alias)
-            ->select("{$alias}.name, {$alias}.type_id type,
-                {$alias}.description comment, {$alias}.currency_id currency,
-                {$alias}.id, {$alias}.id account_id")
-            ->addSelect("o.money initPayment")
-            ->addSelect("SUM(op2.money) totalBalance")
-            ->andWhere("{$alias}.user_id = ?", (int) $userId)
+            ->select("{$alias}.name, {$alias}.type_id,
+                {$alias}.description, {$alias}.currency_id,
+                {$alias}.id")
+            ->addSelect("o.amount")
+            ->addSelect("SUM(op2.amount) balance")
+            ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
             ->orderBy("{$alias}.name")
-            ->innerJoin("{$alias}.Operations o ON o.account_id = {$alias}.account_id
-                AND o.cat_id IS NULL
-                AND o.date = '0000-00-00'")
-            ->innerJoin("{$alias}.Operations op2 ON op2.account_id = {$alias}.account_id
-                AND op2.accepted = 1")
+            ->leftJoin("{$alias}.Operations o ON o.account_id = {$alias}.account_id
+                AND o.category_id IS NULL
+                AND o.date = '0000-00-00'
+                AND o.accepted = ?
+                AND o.type = ?", array(Operation::STATUS_ACCEPTED, Operation::TYPE_BALANCE))
+            ->leftJoin("{$alias}.Operations op2 ON op2.account_id = {$alias}.account_id
+                AND op2.accepted = ?", Operation::STATUS_ACCEPTED)
             ->groupBy("{$alias}.id");
 
         return $q;
@@ -60,21 +58,25 @@ class AccountTable extends Doctrine_Table
 
     /**
      * Запрос для выборки зарезервированных средств
+     * индексированных и сгруппированных по ID счетов
      *
-     * @param  array $accountIds массив ID аккаунтов
+     * @param  array $accountIds массив ID счетов
+     * @param  User  $user
      * @return Doctrine_Query
-
-    #Max: тест?
      */
-    public function queryCountReserves($accountIds)
+    public function queryCountReserves(array $accountIds, User $user = null)
     {
         $q = Doctrine_Query::create()
-            ->select("t.account_id, SUM(t.money) reserve")
-            ->from("TargetTransaction t INDEXBY t.account_id")
+            ->select("t.account_id, SUM(t.amount) reserve")
+            ->from("TargetTransaction t")
             ->innerJoin("t.Target tg")
             ->andWhere("tg.done = 0")
             ->andWhereIn("t.account_id", $accountIds)
             ->groupBy("t.account_id");
+
+        if ($user) {
+            $q->andWhere("t.user_id = ? AND tg.user_id = ?", array((int) $user->getId(), (int) $user->getId()));
+        }
 
         return $q;
     }
@@ -101,4 +103,5 @@ class AccountTable extends Doctrine_Table
             ->execute(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
         return ($id) ? (int) $id : null;;
     }
+
 }

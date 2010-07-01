@@ -4,7 +4,6 @@
  */
 class accountsComponent extends sfComponent
 {
-
     /**
      * Execute
      *
@@ -12,34 +11,25 @@ class accountsComponent extends sfComponent
      */
     public function execute($request)
     {
-        $userId = $this->getUser()->getUserRecord()->getId();
+        $user = $this->getUser()->getUserRecord();
 
         $accounts = Doctrine::getTable('Account')
-            ->queryFindWithBalanceAndInitPayment($userId)
-            ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+            ->queryFindWithBalanceAndBalanceOperation($user)
+            ->fetchArray();
 
-        $data = array();
-        #Max: не делай так, меня уже трясет в старом коде от $k => $v
-        foreach ($accounts as $k => $v) {
-            $data[$v['id']] = $accounts[$k];
+        // выбрать идентификаторы счетов
+        $accountsIds = array();
+        foreach ($accounts as $account) {
+            $accountsIds[] = $account['id'];
         }
 
         // Рассчитать суммы зарезервированные на финцели
-        $ids = array_keys($data);
         $reserves = Doctrine::getTable('Account')
-            ->queryCountReserves($ids)
-            ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+            ->queryCountReserves($accountsIds, $user)
+            ->fetchArray();
 
-        foreach ($data as $k => $v) {
-            // нужно ли ставить 0 или только при положительных значениях?
-            if (isset($reserves[$v['id']])) {
-                $data[$v['id']]['reserve'] = (float) $reserves[$v['id']]['reserve'];
-            } else {
-                $data[$v['id']]['reserve'] = 0;
-            }
-        }
-
-        $this->setVar('data', $data, $noEscape = true);
+        $this->setVar('accounts', $accounts, $noEscape = true);
+        $this->setVar('reserves', $reserves, $noEscape = true);
     }
 
 }

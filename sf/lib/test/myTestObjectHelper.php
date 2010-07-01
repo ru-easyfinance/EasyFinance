@@ -106,13 +106,78 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         $ob->setAccount($account);
         $ob->setUser($account->getUser());
 
-        if (empty($props['category_id'])) {
+        if (!array_key_exists('category_id', $props) OR !is_null($props['category_id'])) {
             $ob->setCategory($this->makeCategory($user));
         }
 
         if ($save) {
             $ob->save();
         }
+        return $ob;
+    }
+
+
+    /**
+     * Создать коллекцию операций
+     */
+    public function makeOperationCollection($count, Account $account = null, array $props = array(), $save = true)
+    {
+        $coll = Doctrine_Collection::create('Operation');
+
+        for ($i=0; $i<(int)$count; $i++) {
+            if (isset($props[$i])) {
+                $itemProps = $props[$i];
+            } else {
+                $itemProps = array();
+            }
+            $coll->add($this->makeOperation($account, $itemProps, $save));
+        }
+
+        return $coll;
+    }
+
+
+    /**
+     * Создать балансовую операцию (начальный баланс)
+     * @see Operation
+     */
+    public function makeBalanceOperation(Account $account = null, $amount = null, $save = true)
+    {
+        $props = array(
+            'amount'      => -$this->getUniqueCounter() - 0.99,
+            'date'        => '0000-00-00',
+            'type'        => Operation::TYPE_BALANCE,
+            'comment'     => '',
+            'accepted'    => Operation::STATUS_ACCEPTED,
+            'category_id' => null,
+        );
+
+        if ($amount) {
+            $props['amount'] = (float) $amount;
+        }
+
+        $props['drain'] = ($props['amount'] > 0) ? 1 : 0;
+
+        if (!$account) {
+            $account = $this->makeAccount(null, array(), $save);
+        } else {
+            $ob = Doctrine_Query::create()
+                ->from('Operation o')
+                ->andWhere('o.account_id = ?', $account->getId())
+                ->fetchOne();
+
+            if ($ob) {
+                $ob->fromArray($props);
+
+                if ($save) {
+                    $ob->save();
+                }
+                return $ob;
+            }
+        }
+
+        $ob = $this->makeOperation($account, $props, $save);
+
         return $ob;
     }
 
@@ -168,6 +233,81 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         if ($save) {
             $ob->save();
         }
+        return $ob;
+    }
+
+
+    /**
+     * Создать финансовую цель
+     */
+    public function makeTarget(Account $account = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'title'         => $this->makeText(sprintf('Название цели %d', $this->getUniqueCounter())),
+            'type'          => 'r',
+            'amount'        => rand(10000, 100000) + 0.05,
+            'date_begin'    => date('Y-m-01'), // Текущий месяц
+            'date_end'      => date('Y-m-28', time() + 60*60*24*6), // 6 месяцев вперед
+            'percent_done'  => 0,
+            'forecast_done' => 0,
+            'visible'       => false,
+            'photo'         => '',
+            'url'           => '',
+            'comment'       => $this->makeText('Описание цели'),
+            'amount_done'   => 0,
+            'close'         => 0,
+            'done'          => false,
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$account) {
+            $account = $this->makeAccount(null, array(), $save);
+        }
+
+        $user = $account->getUser();
+        # Svel: что-то я перестал понимать, какие категории для чего :/
+        $category = $this->makeCategory($user, array(), $save);
+
+        $ob = $this->makeModel('Target', $props, false);
+        $ob->setUser($user);
+        $ob->setAccount($account);
+        $ob->setCategory($category);
+
+        if ($save) {
+            $ob->save();
+        }
+
+        return $ob;
+    }
+
+
+    /**
+     * Создать перевод на финансовую цель
+     */
+    public function makeTargetTransaction(Target $target = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'amount'        => rand(10000, 100000) + 0.05,
+            'comment'       => $this->makeText('Описание перевода на цель'),
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$target) {
+            $target = $this->makeTarget(null, array(), $save);
+        }
+
+        $user = $target->getUser();
+        $account = $target->getAccount();
+
+        $ob = $this->makeModel('TargetTransaction', $props, false);
+        $ob->setTarget($target);
+        $ob->setUser($user);
+        $ob->setAccount($account);
+
+        if ($save) {
+            $ob->save();
+        }
+
         return $ob;
     }
 

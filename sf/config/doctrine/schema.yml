@@ -27,7 +27,6 @@
 #tags
 
 
-
 options:
   type: INNODB
   charset: utf8
@@ -209,6 +208,7 @@ SourceOperation:
       form:  false
       filter: false
 
+
 # Услуги биллинга
 Service:
   actAs: [Timestampable]
@@ -288,6 +288,7 @@ BillingTransaction:
       form:  true
       filter: true
 
+
 # Категории (100% - OK)
 Category:
   tableName: category
@@ -321,13 +322,17 @@ SystemCategory:
       filter: false
 
 
-# Финансовые цели (3/18 - PART)
+# Финансовые цели (8/18 - PART)
 Target:
   tableName: target
   columns:
-    id:          { type: integer, size: 255, notnull: true, unsigned: true, primary: true }
-    user_id:     { type: integer, size: 100, notnull: true, unsigned: true }
-    done:        { type: boolean, unsigned: true }
+    user_id:     { type: integer(4), notnull: true, unsigned: true }            # ID пользователя
+    category_id: { type: integer(4), notnull: true, unsigned: true }            # ID категории
+    account_id:  { type: integer(4), notnull: true, unsigned: true, name: target_account_id as account_id }
+    title:       { type: varchar(255), notnull: true }                          # Название цели
+    comment:     { type: clob,         notnull: true }                          # Комментарий
+    visible:     { type: boolean, notnull: true,  unsigned: true, default: 0 }  # Видимость для всех: 0/1
+    done:        { type: boolean, notnull: false, unsigned: true, default: 0 }
   relations:
     User:
       local:        user_id
@@ -336,6 +341,18 @@ Target:
       foreignType:  many
       foreignAlias: Targets      # User->Targets
       onDelete:     CASCADE      # При удалении пользователя удаляются все его цели
+    Account:
+      local: account_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false        # Account ничего не знает
+    Category:
+      local: category_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false        # Category ничего не знает
   options:
     symfony:
       form:   false
@@ -346,11 +363,10 @@ Target:
 TargetTransaction:
   tableName: target_bill
   columns:
-    id:         { type: integer, size: 255, notnull: true, unsigned: true, primary: true }
     account_id: { type: integer, size: 255, notnull: true, unsigned: true, name: bill_id as account_id }
     target_id:  { type: integer, size: 255, notnull: true, unsigned: true }
     user_id:    { type: integer, size: 100, notnull: true, unsigned: true }
-    money:      { type: decimal, size: 10,  notnull: true, scale: 2}
+    amount:     { type: decimal, size: 10,  notnull: true, scale: 2, name: money as amount}
   relations:
     Target:
       local:        target_id
@@ -375,6 +391,7 @@ TargetTransaction:
     symfony:
       form:   false
       filter: false
+
 
 # Категория бюджета (6/10 - PART)
 # Пропущено:
