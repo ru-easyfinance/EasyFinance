@@ -1290,4 +1290,25 @@ class Operation_Model
 
         return $searchSql;
     }
+
+
+    /**
+     * Удаляет все операции по указанной категории
+     *
+     * @param oldUser $user
+     * @param int $catId
+     */
+    function deleteOperationsByCategory(oldUser $user, $catId) {
+        $sql = "SELECT id FROM operation WHERE user_id = ? AND cat_id = ?";
+        $operations = $this->db->selectCol($sql, $user->getId(), $catId);
+
+        if (count($operations)>0) {
+            $this->db->query("BEGIN;");
+            foreach($operations as $opId) {
+                $this->deleteOperation($opId);
+            }
+            $this->db->query("COMMIT;");
+        }
+        return (int)count($operations);
+    }
 }
