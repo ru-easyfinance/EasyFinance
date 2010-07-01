@@ -563,7 +563,7 @@ easyFinance.widgets.operationEdit = function(){
         var accepted = $('#op_accepted').val();
         var date = $('#op_date').val();
         var comment = $('#op_comment').val();
-        var close2 = $('#op_close2').val();
+        var close2 = $('#op_close').is(':checked')?1:0;
         var tags = $('#op_tags').val();
 
         // перед отправкой очищаем форму,

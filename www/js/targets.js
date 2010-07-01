@@ -1,4 +1,3 @@
-// {* $Id: targets.js 128 2009-08-07 15:20:49Z ukko $ *}
 $(document).ready(function(){
     $.get('/targets/user_list/', '', function(data){
             //showall = 1;// показать все

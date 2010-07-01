@@ -156,34 +156,53 @@ class Targets_Model {
         return $result;
     }
 
-    public function CloseOp($opid=0,$targetcat=0,$amount=0,$account=0){
+
+    /**
+     * Закрывает финцель
+     *
+     * @param int   $targetId
+     * @param int   $targetCat
+     * @param float $amount
+     * @param int   $account
+     * @return
+     */
+    public function CloseOp($targetId = 0, $targetCat = 0, $amount = 0, $account = 0) {
+        // Обновляем данные финцели
+        $sql = "UPDATE target SET done=1 WHERE id = ? AND user_id = ?";
+        $result = $this->db->select($sql, $targetId, Core::getInstance()->user->getId());
+
         $system = 17;
-        if ($targetcat==2)
+
+        if ($targetCat==2) {
             $system = 1;
-        if ($targetcat==3)
+        }
+
+        if ($targetCat==3) {
             $system = 6;
-        if ($targetcat==7)
+        }
+
+        if ($targetCat==7) {
             $system = 4;
-        if ($targetcat==8)
+        }
+
+        if ($targetCat==8) {
             $system = 4;
-        $sql = "SELECT cat_id FROM category
-            WHERE user_id=? AND system_category_id=?";
-        $res = $this->db->select($sql, Core::getInstance()->user->getId(), $system);
+        }
 
-        if (!$res)
-            return 666;
-        //return $res[0];
-        $date = substr(date('c'),0,10);
+        // Подбираем аналог категории финцели из категорий пользователя
+        $sql = "SELECT cat_id FROM category WHERE user_id = ? AND system_category_id = ? LIMIT 1";
 
-        $sql = "UPDATE target
-            SET done=1 WHERE id=? AND user_id=?";
-        $result = $this->db->select($sql, $opid, Core::getInstance()->user->getId());
+        $category = (int) $this->db->selectCell($sql, Core::getInstance()->user->getId(), $system);
 
-        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`,
-                `drain`, `comment`, `dt_create`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
-        $result = $this->db->query($sql, $this->user->getId(), -$amount, $date, (integer)$res[0], $account, 1, '');
+        if (!$category) {
+            return false;
+        }
+        $date = date('Y-m-d');
 
-        //return $result;
+        // Делаем фактическую операцию перевода на финцель.
+        $operation = new Operation_Model(Core::getInstance()->user);
+        $result = $operation->add(-$amount, $date, $category, 1, 'Закрытие финансовой цели', $account);
+        return $result;
     }
 
 

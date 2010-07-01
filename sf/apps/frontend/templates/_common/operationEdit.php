@@ -55,9 +55,10 @@
                         %
                     </div>
                 </div>
-                <input type="hidden" id="op_close2" value="0"><input style="display:none" type="checkbox" id="op_close" name="op_close" value="Закрытая финансовая цель" />
-                <label style="display:none" for="op_close">
-                    Закрытая финансовая цель
+                <input type="hidden" id="op_close2" value="0">
+                <label for="op_close">
+                    <input type="checkbox" id="op_close" name="op_close" value="Закрытая финансовая цель" />
+                    Закрыть финансовую цель
                 </label>
             </div>
         </div>
