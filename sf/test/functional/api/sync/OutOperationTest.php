@@ -56,9 +56,11 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
      */
     public function testTransferOperation()
     {
+        $transfer = $this->helper->makeAccount();
+
         $op = $this->helper->makeOperation(null, array(
             'type' => Operation::TYPE_TRANSFER,
-            'transfer_account_id' => 123,
+            'transfer_account_id' => $transfer->getId(),
             'transfer_amount' => -567.12,
             ));
 
