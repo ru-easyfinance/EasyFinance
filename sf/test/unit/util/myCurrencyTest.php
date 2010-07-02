@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../../bootstrap.php';
+require_once dirname(__FILE__).'/../../bootstrap/all.php';
 
 /**
  * Currency
@@ -7,7 +7,7 @@ require_once dirname(__FILE__) . '/../../bootstrap.php';
  * @todo
  *  - исключение, если указан неверный код (? проверять по наличию курсов)
  */
-class classes_Currency_CurrencyTest extends UnitTestCase
+class util_myCurrencyTest extends myUnitTestCase
 {
     /**
      * Объект Money
