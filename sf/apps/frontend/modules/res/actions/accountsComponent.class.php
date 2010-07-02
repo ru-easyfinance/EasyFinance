@@ -24,7 +24,7 @@ class accountsComponent extends sfComponent
         }
 
         // Рассчитать суммы зарезервированные на финцели
-        $reserves = Doctrine::getTable('Account')
+        $reserves = Doctrine::getTable('TargetTransaction')
             ->queryCountReserves($accountsIds, $user)
             ->fetchArray();
 

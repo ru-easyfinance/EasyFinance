@@ -8,7 +8,8 @@ class AccountTable extends Doctrine_Table
     /**
      * Запрос для выборки счета, который привязан к AMT
      *
-     * @param  int $userId
+     * @param  int    $userId
+     * @param  string $alias
      * @return Doctrine_Query
      */
     public function queryFindLinkedWithAmt($userId, $alias = 'a')
@@ -30,7 +31,8 @@ class AccountTable extends Doctrine_Table
     /**
      * Все счета пользователя с балансом и начальным балансом
      *
-     * @param  User $user
+     * @param  User   $user
+     * @param  string $alias
      * @return Doctrine_Query
      */
     public function queryFindWithBalanceAndBalanceOperation(User $user, $alias = 'a')
@@ -57,39 +59,13 @@ class AccountTable extends Doctrine_Table
 
 
     /**
-     * Запрос для выборки зарезервированных средств
-     * индексированных и сгруппированных по ID счетов
+     * Выборка счёта пользователя, который привязан к источнику
      *
-     * @param  array $accountIds массив ID счетов
-     * @param  User  $user
-     * @return Doctrine_Query
+     * @param  int       $userId
+     * @param  string    $source
+     * @return null|int  id счета или null
      */
-    public function queryCountReserves(array $accountIds, User $user = null)
-    {
-        $q = Doctrine_Query::create()
-            ->select("t.account_id, SUM(t.amount) reserve")
-            ->from("TargetTransaction t")
-            ->innerJoin("t.Target tg")
-            ->andWhere("tg.done = 0")
-            ->andWhereIn("t.account_id", $accountIds)
-            ->groupBy("t.account_id");
-
-        if ($user) {
-            $q->andWhere("t.user_id = ? AND tg.user_id = ?", array((int) $user->getId(), (int) $user->getId()));
-        }
-
-        return $q;
-    }
-
-
-    /**
-     * Выборка счкта пользователя, который привязан к источнику
-     *
-     * @param int $userId
-     * @param string $source
-     * @return id счета или null
-     */
-    public function findLinkedWithSource( $userId, $source )
+    public function findLinkedWithSource($userId, $source)
     {
         $id = $this->createQuery('a')
             ->select('a.*')
