@@ -195,7 +195,7 @@ table#operations_list td + td + td + td + td + td{
 
 #lblOperationsJournalSum {
     float:left;
-    width:220px;
+    width:190px;
 }
 
 #balance_before {
