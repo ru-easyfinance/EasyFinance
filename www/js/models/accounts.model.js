@@ -215,7 +215,7 @@ easyFinance.models.accounts = function(){
                 currency_id: params.currency,
                 type_id:     params.type,
                 name:        params.name,
-                comment:     params.description,
+                comment:     params.comment,
                 initPayment: params.initPayment
             }, function(data){
             var _id = (data.result && data.result.id) ? data.result.id : null;
