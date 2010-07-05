@@ -24,7 +24,6 @@
 #messages_state
 #referrers
 #registration
-#tags
 
 
 options:
@@ -385,6 +384,27 @@ TargetTransaction:
       type:         one
       foreignType:  many
       foreignAlias: TargetTransactions # User->TargetTransactions
+      onDelete:     CASCADE            # При удалении пользователя удаляется все
+  options:
+    symfony:
+      form:   false
+      filter: false
+
+
+# Теги (2/3 - PART)
+# Пропущено: oper_id
+Tag:
+  tableName: tags
+  columns:
+    user_id: { type: integer(4), notnull: true, unsigned: true, primary: true }
+    name:    { type: string(50), notnull: true, primary: true }
+  relations:
+    User:
+      local:        user_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      foreignAlias: Tags               # User->Tags
       onDelete:     CASCADE            # При удалении пользователя удаляется все
   options:
     symfony:

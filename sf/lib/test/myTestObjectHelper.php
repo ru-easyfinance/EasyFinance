@@ -309,4 +309,30 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         return $ob;
     }
 
+
+    /**
+     * Создать тег
+     * TODO: пока нет в схеме oper_id, нет и привязки к операциям тут
+     */
+    public function makeTag(User $user = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'name' => sprintf('Тег_%d', $this->getUniqueCounter()),
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$user) {
+            $user = $this->makeUser(array(), $save);
+        }
+
+        $ob = $this->makeModel('Tag', $props, false);
+        $ob->setUser($user);
+
+        if ($save) {
+            $ob->save();
+        }
+
+        return $ob;
+    }
+
 }

@@ -10,50 +10,7 @@
         <link rel="shortcut icon" href="/favicon.ico" />
         <?php include_stylesheets() ?>
         <?php include_javascripts() ?>
-        <script type="text/javascript">
-            <?php $_resTemplate = array(
-            //'getNotify' => '', //@FIXME
-            'profile'   => array(
-                'integration'=>array(
-                    'email' => '',
-                    'account' => '',
-                )
-            ),
-            //'tags' => '',
-            //'cloud' => '',
-            'calendar' => array(
-                'overdue'   => '',
-                'calendar'  => '',
-                'future'    => '',
-            ),
-            //'accountsRecent' => array(),
-            //'user_targets' => array(),
-            //'popup_targets' => array(),
-            'flash' => array(
-                'title' => '',
-                'value' => 0,
-            ),
-            'targets_category'=>array(
-                '1' => 'Квартира',
-                '2' => 'Автомобиль',
-                '3' => 'Отпуск',
-                '4' => 'Финансовая подушка',
-                '6' => 'Свадьба',
-                '7' => 'Бытовая техника',
-                '8' => 'Компьютер',
-                '5' => 'Прочее'
-            ),
-            //'budget' => '',
-            //'category' => array(),
-            'errors' => array(),
-            'user' => array('name' => $sf_user->getName()),
-            ); ?>
-            var res = <?php echo json_encode($_resTemplate); // тут был $res из шаблона ?>
-        </script>
-        <script type="text/javascript">
-            <?php include_component('res', 'accounts', array()) ?>
-            <?php include_component('res', 'currencies', array()) ?>
-        </script>
+        <?php include_partial('global/res', array()) ?>
     </head>
 
     <body id="p_index">

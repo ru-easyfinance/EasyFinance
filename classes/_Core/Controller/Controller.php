@@ -273,7 +273,7 @@ abstract class _Core_Controller
         $res = array_merge($res, array(
             'getNotify' => @$_SESSION['user']['getNotify'], //@FIXME
             'tags' => $user->getUserTags(),
-            'cloud' => Core::getInstance()->user->getUserTags(true),
+            'cloud' => $user->getUserTags(true),
             'calendar' => array(
                 'overdue'   => Core::getInstance()->user->getUserEvents('overdue'),
                 'calendar'  => Core::getInstance()->user->getUserEvents('calendar'),

@@ -61,11 +61,11 @@
         </ul>
     </div>
 <!--Теги-->
-<div class="listing tags_list c3" style="display:none">
+    <div class="listing tags_list c3" style="display:none">
         <div class="title">
             <h2><a href="#" title="Добавить метку" class="addlink">Добавить метку</a></h2>
             <a href="#" title="Добавить метку" class="add">Добавить</a>
-    </div>
+        </div>
     </div>
     <div class="edit_tag" style="display:none">
         <center>
@@ -86,7 +86,7 @@
     </div>
 <!--/Теги-->
 <!--счета-->
-    <div class="listing accounts c2"style="display:none">
+    <div class="listing accounts c2" style="display:none">
         <div class="title">
             <h2><a href="#" class="addaccountlink">Добавить счёт</a></h2>
             <a title="Добавить" class="add">Добавить</a>
@@ -108,11 +108,11 @@
     </div>
 <!--/счета-->
 <!--Финансовые цели-->
-    <div class="listing financobject c5"style="display:none">
+    <div class="listing financobject c5" style="display:none">
  <!-- -->
     </div>
 <!--/Регулярные транзакции-->
-    <div id="calendarLeft" class="listing transaction c4"style="display:none">
+    <div id="calendarLeft" class="listing transaction c4" style="display:none">
         <div class="overdue"></div>
         <div class="future"></div>
         &nbsp;&nbsp;&nbsp;&nbsp;<a href="/calendar/#list" id="AshowEvents">Журнал событий</a><br><br>
