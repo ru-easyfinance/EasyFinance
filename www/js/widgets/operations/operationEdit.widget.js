@@ -985,7 +985,7 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setAccount(id){
-        if (id == "0") {
+        if (id ===null || id == "0") {
             return;
         }
 
@@ -997,7 +997,7 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setCategory(id){
-        if (id == "0") {
+        if (id ===null || id == "0") {
             return;
         }
 
@@ -1008,7 +1008,7 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setTransfer(id){
-        if (id == "0") {
+        if (id ===null || id == "0") {
             return;
         }
 
@@ -1020,7 +1020,7 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setTarget(id){
-        if (id == "0") {
+        if (id ===null || id == "0") {
             return;
         }
 
