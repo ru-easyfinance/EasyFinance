@@ -169,26 +169,20 @@ easyFinance.widgets.operationsJournal = function(){
         $("#balance_after").html(formatCurrency(became) + " "+easyFinance.models.currency.getDefaultCurrencyText());
 
         if (data.period_change >= 0) {
-            $('#lblOperationsJournalSum').removeClass('sumRed');
-            $('#lblOperationsJournalSum').addClass('sumGreen');
+            $('#lblOperationsJournalSum').removeClass('sumRed').addClass('sumGreen');
         } else {
-            $('#lblOperationsJournalSum').removeClass('sumGreen');
-            $('#lblOperationsJournalSum').addClass('sumRed');
+            $('#lblOperationsJournalSum').removeClass('sumGreen').addClass('sumRed');
         }
         if (data.list_before >= 0) {
-            $('#balance_before').removeClass('sumRed');
-            $('#balance_before').addClass('sumGreen');
+            $('#balance_before').removeClass('sumRed').addClass('sumGreen');
         } else {
-            $('#balance_before').removeClass('sumGreen');
-            $('#balance_before').addClass('sumRed');
+            $('#balance_before').removeClass('sumGreen').addClass('sumRed');
         }
 
         if (became >= 0) {
-            $('#balance_after').removeClass('sumRed');
-            $('#balance_after').addClass('sumGreen');
+            $('#balance_after').removeClass('sumRed').addClass('sumGreen');
         } else {
-            $('#balance_after').removeClass('sumGreen');
-            $('#balance_after').addClass('sumRed');
+            $('#balance_after').removeClass('sumGreen').addClass('sumRed');
         }
     }
 
