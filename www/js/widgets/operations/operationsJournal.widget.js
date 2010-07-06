@@ -157,33 +157,13 @@ easyFinance.widgets.operationsJournal = function(){
 
         // Выводим итоги по счёту/странице
         pageTotal = Math.round(pageTotal*100)/100;
-        //data.period_change = formatCurrency(easyFinance.models.currency.convertToDefault(data.period_change, 1));
-        //data.list_before = formatCurrency(easyFinance.models.currency.convertToDefault(data.list_before, 1));
 
-        became = parseFloat(data.list_before)+parseFloat(data.period_change);
         data.period_change = parseFloat(data.period_change);
         data.list_before = parseFloat(data.list_before);
 
-        $("#balance_before").html(formatCurrency(data.list_before)+" "+easyFinance.models.currency.getDefaultCurrencyText());
-        $('#lblOperationsJournalSum').html('<b>Изменение: </b>' + formatCurrency(data.period_change) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
-        $("#balance_after").html(formatCurrency(became) + " "+easyFinance.models.currency.getDefaultCurrencyText());
-
-        if (data.period_change >= 0) {
-            $('#lblOperationsJournalSum').removeClass('sumRed').addClass('sumGreen');
-        } else {
-            $('#lblOperationsJournalSum').removeClass('sumGreen').addClass('sumRed');
-        }
-        if (data.list_before >= 0) {
-            $('#balance_before').removeClass('sumRed').addClass('sumGreen');
-        } else {
-            $('#balance_before').removeClass('sumGreen').addClass('sumRed');
-        }
-
-        if (became >= 0) {
-            $('#balance_after').removeClass('sumRed').addClass('sumGreen');
-        } else {
-            $('#balance_after').removeClass('sumGreen').addClass('sumRed');
-        }
+        setSumInDefaultCurrency('#balance_before', data.list_before);
+        setSumInDefaultCurrency('#lblOperationsJournalSum', data.period_change);
+        setSumInDefaultCurrency('#balance_after', parseFloat(data.list_before) + parseFloat(data.period_change));
     }
 
     function _deleteChecked(){
@@ -406,8 +386,6 @@ easyFinance.widgets.operationsJournal = function(){
         // фильтр по счёту
         _$comboAccount = _$node.find('#account_filtr');
         _$comboAccount.change(function(){
-            $('#lblOperationsJournalSum').hide();
-
             _account = $(this).val();
             _accountName = this.options[this.selectedIndex].text;
             loadJournal();

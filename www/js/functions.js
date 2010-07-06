@@ -182,6 +182,26 @@ function formatCurrency(num, hideCents, centsSpacers) {
     return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
 }
 
+/* Выводим сумму в ноду с заданным селектором,
+ * выставляет соответствующий класс суммы
+ * и добавляет в конце текст валюты по молчанию
+ *
+ * Например: setSumInDefaultCurrency('#test', 10)
+ * выведет в ноду #test '10 руб.' и присвоит ей класс sumGreen
+ **/
+function setSumInDefaultCurrency(selector, sum) {
+    var $node = $(selector);
+    $node.text (formatCurrency(sum) + " " + easyFinance.models.currency.getDefaultCurrencyText());
+
+    if (sum >= 0) {
+        $node.removeClass('sumRed').addClass('sumGreen');
+    } else {
+        $node.removeClass('sumGreen').addClass('sumRed');
+    }
+}
+
+
+
 // округляем число до двух знаков после запятой
 function roundToCents(number) {
     return Math.round(number*Math.pow(10,2))/Math.pow(10,2);
