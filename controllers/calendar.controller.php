@@ -68,7 +68,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             'type'       => ( int ) $request->post['type'],
             'account'    => ( int ) $request->post['account'],
             'amount'     => (float) str_replace ( ' ', '', $request->post['amount'] ),
-            'category'   => ( int ) $request->post['category'],
+            'category'   => ((int) $request->post['category'] <= 0) ? null : (int) $request->post['category'],
             'date'       => Helper_Date::RusDate2Mysql( $this->getDateOperation() ),
             'comment'    => ( string ) $request->post['comment'],
             'tags'       => isset( $request->post['tags'] ) ? $request->post['tags'] : null,

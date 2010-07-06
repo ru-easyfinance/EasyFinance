@@ -261,7 +261,7 @@ class Operation_Model
      *
      * @return int $id
      */
-    function add($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0, $tags = null)
+    function add($money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = null)
     {
         // Если операция новая, и отправлена не случайно, то продолжаем, иначе возвраты
         $check = $this->checkExistance($money, $date, $category, $drain, $comment, $account);
@@ -277,7 +277,7 @@ class Operation_Model
             'user_id'   => $this->_user->getId(),
             'money'     => $money,
             'date'      => $date,
-            'cat_id'    => $category,
+            'cat_id'    => ((int)$category <= 0) ? null : $category,
             'account_id'=> $account,
             'drain'     => $drain,
             'type'      => !$drain,
@@ -310,7 +310,7 @@ class Operation_Model
                 'user_id'   => $this->_user->getId(),
                 'money'     => (($operation['type'] == 0) ? (-1 * abs($operation['amount'])) : $operation['amount']),
                 'date'      => $operation['date'],
-                'cat_id'    => $operation['category'],
+                'cat_id'    => ((int)$operation['category'] <= 0) ? null : $operation['category'],
                 'account_id'=> $operation['account'],
                 'drain'     => $operation['drain'],
                 'type'      => !$operation['drain'],
