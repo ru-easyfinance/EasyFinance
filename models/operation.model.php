@@ -194,7 +194,7 @@ class Operation_Model
                 }
             }
         } else {
-            $validated['tags'] = null;
+            $validated['tags'] = array();
         }
 
         // Проверяем тип операцииe
@@ -274,7 +274,7 @@ class Operation_Model
 
         $values = array(
             'user_id'   => $this->_user->getId(),
-            'money'     => $money,
+            'money'     => ($drain == 1) ? abs($money) * -1 : abs($money),
             'date'      => $date,
             'cat_id'    => ((int)$category <= 0) ? null : $category,
             'account_id'=> $account,
@@ -307,7 +307,7 @@ class Operation_Model
         foreach($operations_array as $operation) {
             $values = array(
                 'user_id'   => $this->_user->getId(),
-                'money'     => (($operation['type'] == 0) ? (-1 * abs($operation['amount'])) : $operation['amount']),
+                'money'     => (($operation['type'] == 0) ? (-1 * abs($operation['amount'])) : abs($operation['amount'])),
                 'date'      => $operation['date'],
                 'cat_id'    => ((int)$operation['category'] <= 0) ? null : $operation['category'],
                 'account_id'=> $operation['account'],
@@ -348,12 +348,12 @@ class Operation_Model
     function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = '', $accepted = null)
     {
         $values = array(
-            'money'                 => $money,
+            'money'                 => abs($money) * -1,
             'date'                  => $date,
             'account_id'            => $account,
             'transfer_account_id'   => $toAccount,
             'comment'               => $comment,
-            'transfer_amount'       => $convert,
+            'transfer_amount'       => abs($convert),
             'tags' => ((empty($tags)) ? "" : implode(', ', $tags)),
         );
 
@@ -373,35 +373,18 @@ class Operation_Model
 
     /**
      * Добавляет несколько однообразных переводов между счетами
-     * @param array $operations_array Calendar_Event $event
+     * @param array $operationsArray Calendar_Event $event
      * @return int
      */
-    function addSomeTransfer($operations_array)
+    function addSomeTransfer($operationsArray)
     {
-        $accounts = $this->_user->getUserAccounts();
-        $currensys = $this->_user->getUserCurrency();
+        try {
+            $this->db->query("BEGIN;");
 
-        $this->db->query("BEGIN;");
-        foreach($operations_array as $operation) {
-
-            $curFromId = $accounts[$operation['account']]['account_currency_id'];
-            $curTargetId = $accounts[$operation['toAccount']]['account_currency_id'];
-
-            // Если перевод мультивалютный
-            if($curFromId != $curTargetId) {
-                // Если нет сконвертированной суммы (так бывает в пда) производим вычисления через рубль
-                if((float) $operation['convert'] === 0) {
-
-                    // приводим сумму к пром. валюте
-                    $operation['convert'] = $operation['amount'] / $currensys[$curTargetId]['value'];
-                    // .. и к валюте целевого счёта
-                    $operation['convert'] = $operation['convert'] * $currensys[$curFromId]['value'];
-                }
-
-                // Создаём операцию откуда переводим
+            foreach ($operationsArray as $operation) {
                 $values = array(
                     'user_id'               => $this->_user->getId(),
-                    'money'                 => -$operation['amount'],
+                    'money'                 => abs($operation['amount']) * -1,
                     'date'                  => $operation['date'],
                     'cat_id'                => null,
                     'account_id'            => $operation['account'],
@@ -409,73 +392,23 @@ class Operation_Model
                     'transfer_account_id'   => $operation['toAccount'],
                     'drain'                 => 1,
                     'type'                  => 2,
-                    'exchange_rate'         => $operation['currency'],
-                    'chain_id'              => $operation['chain'],
-                    'accepted'              => 0,
+                    'transfer_amount'       => $this->_convertAmount($operation['account'],
+                                                                        $operation['toAccount'],
+                                                                        $operation['convert']),
+                    'tags'                  => $operation['tags'],
                 );
 
-                $last_id = $this->_addOperation($values);
-
-                // Создаём операцию куда переводим
-                $values = array(
-                    'user_id'               => $this->_user->getId(),
-                    'money'                 => $operation['convert'],
-                    'date'                  => $operation['date'],
-                    'cat_id'                => null,
-                    'account_id'            => $operation['toAccount'],
-                    'comment'               => $operation['comment'],
-                    'transfer_account_id'   => $operation['account'],
-                    'drain'                 => 0,
-                    'type'                  => 2,
-                    'transfer_amount'       => $operation['amount'],
-                    'exchange_rate'         => $operation['currency'],
-                    'chain_id'              => $operation['chain'],
-                    'accepted'              => 0,
-                );
-
-                $this->_addOperation($values);
-
-                // Если перевод в разрезе одной валюты
-            } else {
-
-                $values = array(
-                    'user_id'               => $this->_user->getId(),
-                    'money'                 => -$operation['amount'],
-                    'date'                  => $operation['date'],
-                    'cat_id'                => null,
-                    'account_id'            => $operation['account'],
-                    'comment'               => $operation['comment'],
-                    'transfer_account_id'   => $operation['toAccount'],
-                    'type'                  => 2,
-                    'chain_id'              => $operation['chain'],
-                    'accepted'              => 0,
-                );
-
-                $last_id = $this->_addOperation($values);
-
-                $values = array(
-                    'user_id'               => $this->_user->getId(),
-                    'money'                 => $operation['amount'],
-                    'date'                  => $operation['date'],
-                    'cat_id'                => null,
-                    'account_id'            => $operation['toAccount'],
-                    'comment'               => $operation['comment'],
-                    'transfer_account_id'   => $operation['account'],
-                    'type'                  => 2,
-                    'transfer_amount'       => $operation['amount'],
-                    'chain_id'              => $operation['chain'],
-                    'accepted'              => 0,
-                );
-
-                $this->_addOperation($values);
+                $lastId = $this->_addOperation($values);
             }
+
+            $this->_user->initUserAccounts();
+            $this->_user->save();
+            $this->db->query("COMMIT;");
+        } catch (Exception $e) {
+            throw $e;
         }
-        $this->db->query("COMMIT;");
 
-        $this->_user->initUserAccounts();
-        $this->_user->save();
-
-        return count($operations_array);
+        return count($operationsArray);
     }
 
     /**
@@ -491,35 +424,11 @@ class Operation_Model
      * @param array $tags
      * @return int
      */
-    function addTransfer($money, $convert, $exchangeRate, $date, $fromAccount, $toAccount, $comment, $tags = array())
+    function addTransfer($money, $convert, $exchangeRate, $date, $fromAccount, $toAccount, $comment, array $tags = array())
     {
-        if (is_null($tags)) {
-            $tags = array();
-        }
-
-        $accounts = $this->_user->getUserAccounts();
-        $curFromId = $accounts[$fromAccount]['account_currency_id'];
-        $curTargetId = $accounts[$toAccount]['account_currency_id'];
-
-        // Если перевод мультивалютный
-        if ($curFromId != $curTargetId) {
-            // Если пришла сконвертированная сумма
-            if ($convert != 0) {
-
-            // Если нет - производим вычисления через рубль
-            } else {
-                $currensys = $this->_user->getUserCurrency();
-
-                // приводим сумму к пром. валюте
-                $convert = $money / $currensys[$curTargetId]['value'];
-                // .. и к валюте целевого счёта
-                $convert = $convert * $currensys[$curFromId]['value'];
-            }
-        }
-
         $values = array(
             'user_id'               => $this->_user->getId(),
-            'money'                 => -$money,
+            'money'                 => abs($money) * -1,
             'date'                  => $date,
             'cat_id'                => null,
             'account_id'            => $fromAccount,
@@ -528,6 +437,7 @@ class Operation_Model
             'drain'                 => 1,
             'type'                  => 2,
             'exchange_rate'         => $exchangeRate,
+            'transfer_amount'       => $this->_convertAmount($fromAccount, $toAccount, $convert),
             'tags'                  => implode(', ', $tags),
         );
 
@@ -1310,5 +1220,38 @@ class Operation_Model
             $this->db->query("COMMIT;");
         }
         return (int)count($operations);
+    }
+
+    /**
+     * Конвертирует сумму операции
+     *
+     * @param int $fromAccount
+     * @param int $toAccount
+     * @param float $convert
+     * @return float
+     */
+    function _convertAmount ($fromAccount, $toAccount, $convert)
+    {
+        $accounts    = $this->_user->getUserAccounts();
+
+        $curFromId   = $accounts[$fromAccount]['account_currency_id'];
+        $curTargetId = $accounts[$toAccount]['account_currency_id'];
+
+        // Если перевод мультивалютный
+        if ($curFromId != $curTargetId) {
+
+            // Если не указана сконвертированная сумма (в ПДА такое может быть)
+            if ($convert == 0) {
+
+                $currensys = $this->_user->getUserCurrency();
+
+                // приводим сумму к пром. валюте
+                $convert = $money / $currensys[$curTargetId]['value'];
+                // .. и к валюте целевого счёта
+                $convert = $convert * $currensys[$curFromId]['value'];
+            }
+        }
+
+        return abs($convert);
     }
 }

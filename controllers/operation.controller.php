@@ -112,7 +112,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 'category'     => isset($this->request->post['category'])?$this->request->post['category']:null,
                 'date'         => $this->getDateOperation(),
                 'comment'      => $this->request->post['comment'],
-                'tags'         => isset($this->request->post['tags'])?$this->request->post['tags']:null,
+                'tags'         => isset($this->request->post['tags'])?$this->request->post['tags']:array(),
                 'convert'      => isset($this->request->post['convert'])?$this->request->post['convert']:array(),
                 'close'        => isset($this->request->post['close'])?$this->request->post['close']:array(),
                 'currency'     => isset($this->request->post['currency'])?$this->request->post['currency']:array(),
