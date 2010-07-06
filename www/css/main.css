@@ -1558,10 +1558,17 @@ ul.currency.all li a {
     padding: .2em;
     width: 15em;
 }
+
+.formRegister table td + td {
+    padding: .2em;
+    width: 18em;
+}
+
 .formRegister table td.name {
     width: 10em;
     text-align: right;
 }
+
 .formRegister table td label.error {
     margin-left: .2em;
     color: #cc0000;
