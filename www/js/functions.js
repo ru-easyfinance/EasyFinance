@@ -542,8 +542,8 @@ function getMonthName(month) {
     return monthNames[month];
 }
 
-function trim(str, chars) {
-	return ltrim(rtrim(str, chars), chars);
+function trim(str) {
+	return str.replace(/(^\s+)|(\s+$)/g, "");
 }
 
 function ltrim(str, chars) {

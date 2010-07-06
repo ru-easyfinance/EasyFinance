@@ -57,11 +57,13 @@ $(document).ready(function() {
                     },
                     passw: {
                         required: true,
-                        minlength: 5
+                        minlength: 5,
+                        latinAndDigits: true
                     },
                     confirm_password: {
                         required: true,
                         minlength: 5,
+                        latinAndDigits: true,
                         equalTo: $("#passw")
                     },
                     mail: {
