@@ -98,12 +98,12 @@ table#operations_list_header th + th + th + th + th{
 }
 
 table#operations_list_header th + th + th + th + th + th{
-    width: 90px;
+    width: 100px;
 }
 
 /* last empty header for scrollbar */
 table#operations_list_header th + th + th + th + th + th + th{
-    width: 32px;
+    width: 22px;
 }
 
 /* column widths */

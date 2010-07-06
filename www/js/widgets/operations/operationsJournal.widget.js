@@ -111,7 +111,7 @@ easyFinance.widgets.operationsJournal = function(){
                 }
             }
 
-            var comment = _journal[v].comment || "";
+            var comment = (_journal[v].tags ? "[" + _journal[v].tags + "] " : "") + (_journal[v].comment || "");
             var tooltipHtml = '<b>Тип:</b> ' + typ + '<br>';
             tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[_journal[v].account_id] ? res.accounts[_journal[v].account_id].name : '' ) + '<br>';
             tooltipHtml += '<b>Комментарий:</b><br> ' + comment.replace("\n", "<br>", "g");
