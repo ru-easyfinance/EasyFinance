@@ -28,7 +28,7 @@ class Core
 
     /**
      * Ссылка на экземпляр класса User
-     * @var User
+     * @var oldUser
      */
     public static $user = null;
 

@@ -159,7 +159,7 @@ class oldUser
 
     /**
      * Иниализирует пользователя, достаёт из базы некоторые его свойства
-     * @param string $login
+     * @param string $login Логин или e-mail
      * @param string $pass  SHA1 пароля
      * @return bool
      */
@@ -189,9 +189,9 @@ class oldUser
             DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active, user_service_mail,
             user_currency_default, user_currency_list, user_type
             FROM users
-            WHERE user_login  = ? AND user_pass = ? AND user_new  = 0";
+            WHERE (user_login = ? OR user_mail = ?) AND user_pass = ? AND user_new  = 0";
 
-        $this->props = $this->db->selectRow($sql, $login, $pass);
+        $this->props = $this->db->selectRow($sql, $login, $login,  $pass);
 
         if (count($this->props) == 0)
         {
