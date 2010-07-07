@@ -87,7 +87,7 @@ class myParseEmailImport
      * Статический метод производящий декодировку письма
      *
      * @param string $input полный оригинальный текст email с заголовками
-     * @return array
+     * @return array либо false, в случае неверного формата входящих данных (отсутствует заголовок или часть заголовка)
      */
     public static function getEmailData( $input )
     {
@@ -98,9 +98,9 @@ class myParseEmailImport
 
         $headers = $message->getHeaders();
         if ( !count( $headers ) ) return false;
-        if ( !isset( $headers['subject'] ) || 
-             !isset( $headers['from'] ) || 
-             !isset( $headers['to'] ) 
+        if ( !isset( $headers['subject'] ) ||
+             !isset( $headers['from'] ) ||
+             !isset( $headers['to'] )
         ) return false;
 
         if ( isset( $headers['content-transfer-encoding'] ) && ( $headers['content-transfer-encoding'] == "quoted-printable" ) )
