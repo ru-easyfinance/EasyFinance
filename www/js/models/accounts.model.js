@@ -362,6 +362,12 @@ easyFinance.models.accounts = function(){
                         if (res.calendar.future[row].id == _ids[key])
                             delete res.calendar.future[row];
                     }
+
+                    // помечаем как подтверждённые в списке операций
+                    for (var row in res.calendar.calendar) {
+                        if (res.calendar.calendar[row].id == _ids[key])
+                            res.calendar.calendar[row].accepted = "1";
+                    }
                 }
 
                 var event = $.Event("operationsAccepted");

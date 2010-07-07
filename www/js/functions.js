@@ -389,15 +389,22 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 var currentCalendarEvent = null;
 
 function calendarEditSingleOrChain(event) {
-    currentCalendarEvent = event;
+    // event здесь получен из кэша календаря;
+    // нам надо взять обновленные данные о событии
+    currentCalendarEvent = res.calendar.calendar[event.id];
 
-    if (currentCalendarEvent.every == "0") {
-        // единичная операция, редактируем
-        easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, false);
+    if (currentCalendarEvent.accepted == "1") {
+        // для подтверждённых операций открываем форму для обычного редактирования
+        easyFinance.widgets.operationEdit.fillForm(currentCalendarEvent, true);
     } else {
-        promptSingleOrChain("edit", function(isChain){
-            easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, isChain);
-        });
+        if (currentCalendarEvent.every == "0") {
+            // единичная операция, редактируем
+            easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, false);
+        } else {
+            promptSingleOrChain("edit", function(isChain){
+                easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, isChain);
+            });
+        }
     }
 }
 
