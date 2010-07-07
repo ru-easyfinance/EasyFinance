@@ -55,7 +55,11 @@ class Restore_Controller extends _Core_Controller
 
         try//Пробуем загрузить пользователя с указанным логином. И, если вышло - сохраняем запрос в базу.
         {
-            $moron = _User::loadByLogin( $_POST['login'] );
+            if (strstr($_POST['login'], '@')) {
+                $moron = _User::loadByEmail($_POST['login']);
+            } else {
+                $moron = _User::loadByLogin($_POST['login']);
+            }
 
             // Уничтожаем хранимый код валидации
             unset($_COOKIE['sessIds'], $_SESSION['restoreHash']);
@@ -95,7 +99,7 @@ class Restore_Controller extends _Core_Controller
         }
         catch( _User_Exception $e )
         {
-            $json['error']['text'] = 'Введённый вами логин не существует!';
+            $json['error']['text'] = 'Введённый вами логин или e-mail не существует!';
         }
         catch( Exception $i )
         {

@@ -30,6 +30,25 @@ class _User_Model extends _Core_Abstract_Model
         return new _User_Model( $row );
     }
 
+    /**
+     * Загружает пользователя по его почте
+     *
+     * @param string $userMail
+     * @return _User_Model
+     */
+    public static function loadByEmail($userMail)
+    {
+        $sql = "SELECT * FROM users WHERE user_mail=?";
+
+        $row = Core::getInstance()->db->selectRow($sql, $userMail);
+
+        if (!is_array($row) || !count($row)) {
+            throw new _User_Exception("User with email '" . $userMail ."' do not exist!");
+        }
+
+        return new _User_Model($row);
+    }
+
     public function __get( $variable )
     {
         // Небольшой хак для удобного доступа

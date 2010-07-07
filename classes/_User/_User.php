@@ -29,6 +29,17 @@ class _User
         return new _User( $model );
     }
 
+    /**
+     * Загружает пользователя по e-mail
+     *
+     * @param string $email
+     * @return _User
+     */
+    public static function loadByEmail($email)
+    {
+        return new _User( _User_Model::loadByEmail($email));
+    }
+
     public static function getCurrent()
     {
         $user = null;
