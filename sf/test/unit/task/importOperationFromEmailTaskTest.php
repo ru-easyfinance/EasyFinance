@@ -105,7 +105,6 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
         $expected = array(
             'user_id'   => $user->getId(),
             'amount'     => abs((float) $this->_amount),
-            'drain'     => Operation::TYPE_EXPENSE^1,
             'type'      => Operation::TYPE_EXPENSE,
             'accepted'  => Operation::STATUS_DRAFT,
         );
@@ -181,7 +180,6 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
             'user_id'   => $user->getId(),
             'money'     => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
-            'drain'     => Operation::TYPE_PROFIT^1,
             'type'      => Operation::TYPE_PROFIT,
             'source_id' => Operation::SOURCE_AMT,
             'accepted'  => Operation::STATUS_DRAFT,

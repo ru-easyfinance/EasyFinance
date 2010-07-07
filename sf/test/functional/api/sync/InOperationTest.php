@@ -217,7 +217,6 @@ class api_sync_InOperationTest extends api_sync_in
             'cid'         => 2,
             'date'        => "0000-00-00",
             'category_id' => null,
-            'drain'       => 0,
         );
 
         $xml = $this->getXMLHelper()->make($expectedData);
@@ -253,7 +252,6 @@ class api_sync_InOperationTest extends api_sync_in
             'transfer_account_id' => $acc_to->getId(),
             'transfer_amount'     => -500.00,
             'cid'                 => 3,
-            'drain'               => 1,
         );
 
         $xml = $this->getXMLHelper()->make($expectedData);

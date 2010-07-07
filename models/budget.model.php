@@ -48,7 +48,7 @@ class Budget_Model {
 
         // Считаем факт доходов и факт расходов
         $sqloper = "SELECT
-                        sum(o.money) as money,
+                        abs(sum(o.money)) as money,
                         o.cat_id,
                         a.account_currency_id AS currency_id
                     FROM operation o

@@ -227,23 +227,22 @@ class Operation_Model
 
     /**
      * Проверяет, что это не дубликат введённых данных
-     * @param float $money
-     * @param date $date
-     * @param int $category
-     * @param int $drain
-     * @param string $comment
-     * @param int $account
+     *
+     * @param float     $money
+     * @param date      $date
+     * @param int       $category
+     * @param string    $comment
+     * @param int       $account
      * @return array
      */
-    function checkExistance($money = 0, $date = '', $category = 0, $drain = 0, $comment = '', $account = 0) {
+    function checkExistance($money = 0, $date = '', $category = 0, $comment = '', $account = 0) {
         $last = $this->db->select("
-                SELECT id
-                FROM operation
-                WHERE user_id=? AND money=? AND date=?
-                    AND cat_id=? AND drain=? AND comment=? AND account_id=?
-                    AND created_at BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
-
-        $this->_user->getId(), $money, $date, $category, $drain, $comment, $account);
+                    SELECT id
+                    FROM operation
+                    WHERE user_id=? AND money=? AND date=?
+                        AND cat_id=? AND comment=? AND account_id=?
+                        AND created_at BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
+                $this->_user->getId(), $money, $date, $category, $comment, $account);
 
         return $last;
     }
@@ -260,28 +259,23 @@ class Operation_Model
      *
      * @return int $id
      */
-    function add($money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = null)
+    function add($money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = array())
     {
         // Если операция новая, и отправлена не случайно, то продолжаем, иначе возвраты
-        $check = $this->checkExistance($money, $date, $category, $drain, $comment, $account);
+        $check = $this->checkExistance($money, $date, $category, $comment, $account);
         if($check) {
             return $check;
         }
 
-        if(is_null($tags)) {
-            $tags = array();
-        }
-
         $values = array(
             'user_id'   => $this->_user->getId(),
-            'money'     => ($drain == 1) ? abs($money) * -1 : abs($money),
+            'money'     => (($drain)? abs($money) * -1: abs($money)),
             'date'      => $date,
             'cat_id'    => ((int)$category <= 0) ? null : $category,
             'account_id'=> $account,
-            'drain'     => $drain,
             'type'      => !$drain,
             'comment'   => $comment,
-            'tags'      => implode(', ', $tags),
+            'tags'      => implode(', ', (array)$tags),
         );
 
         $operationId = $this->_addOperation($values);
@@ -311,7 +305,6 @@ class Operation_Model
                 'date'      => $operation['date'],
                 'cat_id'    => ((int)$operation['category'] <= 0) ? null : $operation['category'],
                 'account_id'=> $operation['account'],
-                'drain'     => $operation['drain'],
                 'type'      => !$operation['drain'],
                 'comment'   => $operation['comment'],
                 'tags'      => $operation['tags'],
@@ -390,7 +383,6 @@ class Operation_Model
                     'account_id'            => $operation['account'],
                     'comment'               => $operation['comment'],
                     'transfer_account_id'   => $operation['toAccount'],
-                    'drain'                 => 1,
                     'type'                  => 2,
                     'transfer_amount'       => $this->_convertAmount($operation['account'],
                                                                         $operation['toAccount'],
@@ -435,7 +427,6 @@ class Operation_Model
             'account_id'            => $fromAccount,
             'comment'               => $comment,
             'transfer_account_id'   => $toAccount,
-            'drain'                 => 1,
             'type'                  => 2,
             'exchange_rate'         => $exchangeRate,
             'transfer_amount'       => $this->_convertAmount($fromAccount, $toAccount, $money, $convert),
@@ -580,7 +571,6 @@ class Operation_Model
                         o.cat_id,
                         NULL as target_id,
                         o.account_id,
-                        o.drain,
                         o.comment,
                         o.transfer_account_id AS transfer,
                         0 AS virt,
@@ -627,9 +617,9 @@ class Operation_Model
         // Если указан тип (фильтр по типу)
         if ($type >= 0) {
             if ($type == Operation::TYPE_PROFIT) {//Доход
-                $sql .= " AND o.drain = 0 AND o.`type` = 1 ";
+                $sql .= " AND o.`type` = 1 ";
             } elseif ($type == Operation::TYPE_WASTE) {// Расход
-                $sql .= " AND o.drain = 1 AND o.`type` = 0 ";
+                $sql .= " AND o.`type` = 0 ";
             } elseif ($type == Operation::TYPE_TRANSFER) {// Перевод со счёт на счёт
                 $sql .= " AND o.`type` = 2  ";
             } elseif ($type == Operation::TYPE_TARGET) {// Перевод на финансовую цель
@@ -661,7 +651,6 @@ class Operation_Model
                 tt.category_id,
                 t.target_id,
                 tt.target_account_id,
-                1,
                 t.comment,
                 '',
                 1 AS virt,
@@ -810,7 +799,6 @@ class Operation_Model
                     o.cat_id,
                     NULL as target_id,
                     o.account_id,
-                    o.drain,
                     o.comment,
                     o.transfer_account_id AS transfer,
                     0 AS virt,
@@ -840,7 +828,6 @@ class Operation_Model
                     tt.category_id,
                     t.target_id,
                     tt.target_account_id,
-                    1,
                     t.comment,
                     '',
                     1 AS virt,

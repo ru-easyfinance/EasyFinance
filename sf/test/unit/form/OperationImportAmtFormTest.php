@@ -168,7 +168,6 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'account_id' => null,
             'amount'    => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
-            'drain'     => 0, // Доход
             'type'      => Operation::TYPE_PROFIT,
             'comment'   => sprintf("%s\n\nНомер счета: %s\nМесто совершения операции: %s\nТекущий баланс: %s\nСумма платежа: %s",
                 $input['description'], $input['account'], $input['place'], $input['balance'], $input['payment']),
@@ -206,7 +205,6 @@ class form_OperationImportAmtFormTest extends sfPHPUnitFormTestCase
             'user_id'   => $this->_getUser()->getId(),
             'account_id' => null,
             'amount'    => -(float) $input['amount'],
-            'drain'     => 1, // Расход
             'type'      => Operation::TYPE_EXPENSE,
         );
         $this->assertOperation($expected, $op);

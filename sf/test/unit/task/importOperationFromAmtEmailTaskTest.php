@@ -105,7 +105,6 @@ class task_importOperationFromAmtEmailTastTest extends myUnitTestCase
             'user_id'   => $user->getId(),
             'money'     => abs((float) $input['amount']),
             'date'      => $date->format('Y-m-d'),
-            'drain'     => Operation::TYPE_PROFIT^1,
             'type'      => Operation::TYPE_PROFIT,
             'source_id' => Operation::SOURCE_AMT,
             'accepted'  => Operation::STATUS_DRAFT,

@@ -324,9 +324,7 @@ class Info_Model
                 WHERE
                     o.user_id = ?
                 AND
-                    o.drain = 0
-                AND
-                    o.`type` IN (0, 1)
+                    o.`type` = 1
                 AND
                     o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
                 AND
@@ -352,9 +350,7 @@ class Info_Model
                 WHERE
                     o.user_id = ?
                 AND
-                    o.drain = 1
-                AND
-                    o.`type` IN (0, 1)
+                    o.`type` = 0
                 AND
                     o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
                 AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))

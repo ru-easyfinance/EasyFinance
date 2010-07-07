@@ -130,8 +130,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
             'category_id' => null,
             'amount'      => 0,
             'date'        => '0000-00-00',
-            'drain'       => 0,
-            'type'        => 3,
+            'type'        => Operation::TYPE_BALANCE,
             'comment'     => 'Начальный остаток',
             'accepted'    => 1,
         );
@@ -165,8 +164,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
             'category_id' => null,
             'amount'      => $input['initPayment'],
             'date'        => '0000-00-00',
-            'drain'       => 0,
-            'type'        => 3,
+            'type'        => Operation::TYPE_BALANCE,
             'comment'     => 'Начальный остаток',
             'accepted'    => 1,
         );

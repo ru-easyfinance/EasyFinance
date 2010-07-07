@@ -37,37 +37,95 @@ class Info_ModelTest extends UnitTestCase
         $accountId = $account['account_id'];
 
         $options   = array(
-            'user_id'  => $this->userId,
-            'chain_id' => 999,
-            'date'     => date('Y-m-d', time()-(86400*20)),
-            'account_id' => $accountId,
+            'money'         => -1000,
+            'type'          => 0,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()-(86400*20)),
+            'account_id'    => $accountId,
         );
         // Правильные операции, месячной давности
         CreateObjectHelper::makeOperation($options);
+
+        $options   = array(
+            'money'         => -1000,
+            'type'          => 0,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()-(86400*20)),
+            'account_id'    => $accountId,
+        );
         CreateObjectHelper::makeOperation($options);
+
+        $options   = array(
+            'money'         => -1000,
+            'type'          => 0,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()-(86400*20)),
+            'account_id'    => $accountId,
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Операция не выполнена
-        $options['accepted'] = 0;
+        $options   = array(
+            'money'         => -1000,
+            'type'          => 0,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()-(86400*20)),
+            'account_id'    => $accountId,
+            'accepted'      => 0,
+        );
         CreateObjectHelper::makeOperation($options);
 
 
-        // Доходная операция
-        $options['drain'] = 0;
+        // Доходная операция, не подтверждена
+        $options   = array(
+            'money'         => 1000,
+            'type'          => 1,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()-(86400*20)),
+            'account_id'    => $accountId,
+            'accepted'      => 0,
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
-        $options['accepted'] = 1;
-        $options['date'] = date('Y-m-d', time()+86400);
+        $options   = array(
+            'money'         => 1000,
+            'type'          => 1,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()+86400),
+            'account_id'    => $accountId,
+            'accepted'      => 1,
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Удалённая операция
-        $options['deleted_at'] = '2010-02-02 02:02:02';
+        $options   = array(
+            'money'         => 1000,
+            'type'          => 1,
+            'user_id'       => $this->userId,
+            'chain_id'      => 999,
+            'date'          => date('Y-m-d', time()+86400),
+            'account_id'    => $accountId,
+            'accepted'      => 1,
+            'deleted_at'    => '2010-02-02 02:02:02',
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Обычная операция, вне цепочки
-        unset($options['deleted_at']);
-        unset($options['chain_id']);
+        $options   = array(
+            'money'         => 1000,
+            'type'          => 1,
+            'user_id'       => $this->userId,
+            'date'          => date('Y-m-d', time()+86400),
+            'account_id'    => $accountId,
+            'accepted'      => 1,
+        );
         CreateObjectHelper::makeOperation($options);
 
         $options = array(
@@ -75,7 +133,7 @@ class Info_ModelTest extends UnitTestCase
         );
         $catId1     = CreateObjectHelper::createCategory($options);
         $catId2     = CreateObjectHelper::createCategory($options);
-        $accountId = CreateObjectHelper::makeAccount($options);
+        $accountId  = CreateObjectHelper::makeAccount($options);
 
         $options['category']  = $catId1;
         $options['drain']     = 0;

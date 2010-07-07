@@ -143,9 +143,9 @@ class Login_Model
         $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`, `created_at`, `updated_at`)
             VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.", NOW(), NOW())";
         $aid = Core::getInstance()->db->query($sql);
-        $sql = "INSERT INTO `operation` (`user_id`, `money`, `date`, `cat_id`, `account_id`, `drain`, `comment`, `type`,
-            `created_at`, `updated_at`) VALUES (?, 0, '0000-00-00', NULL, ?, ?, ?, 3, NOW(), NOW())";
-            Core::getInstance()->db->query($sql, $uid, $aid, 0, 'Начальный остаток');
+        $sql = "INSERT INTO operation (user_id, money, date, cat_id, account_id, comment, type, created_at, updated_at)
+                VALUES (?, 0, '0000-00-00', NULL, ?, ?, 3, NOW(), NOW())";
+            Core::getInstance()->db->query($sql, $uid, $aid, 'Начальный остаток');
     }
 
 

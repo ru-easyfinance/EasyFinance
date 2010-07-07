@@ -86,7 +86,7 @@ class CreateObjectHelper {
         }
 
         $default = array(
-            'money'      => 1000,
+            'money'      => -1000,
             'date'       => '2010-01-01',
             'created_at' => '2010-01-01 00:00:00',
             'updated_at' => '2010-01-01 00:00:00',
@@ -118,7 +118,6 @@ class CreateObjectHelper {
             'money'       => $amount,
             'date'        => '0000-00-00',
             'time'        => '00:00:00',
-            'drain'       => 0,
             'type'        => 3,
             'comment'     => 'Начальный остаток',
             'accepted'    => 1,
