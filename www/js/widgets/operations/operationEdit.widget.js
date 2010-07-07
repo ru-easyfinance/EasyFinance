@@ -336,46 +336,25 @@ easyFinance.widgets.operationEdit = function(){
         });
     }
 
-    function _expandNormal() {
-        _$dialog.dialog('option', 'buttons', _buttonsNormal);
-
-        var dialogClass = '';
-        var dialogTitle = '';
-
-        if (!_isCalendar) {
-            if (_isEditing) {
-                dialogClass = 'edit';
-                dialogTitle = 'Изменить операцию';
-            } else {
-                dialogTitle = 'Добавить операцию';
-            }
-        } else {
-            if (_isEditing) {
-                dialogClass = 'calendar edit';
-
-                if (_isChain) {
-                    dialogTitle = 'Редактировать серию операций';
-                } else {
-                    dialogTitle = 'Редактировать операцию в календаре';
-                }
-            } else {
-                dialogTitle = 'Добавить серию операций';
-            }
-        }
-
+    // открываем и инициализируем диалог с заданным заголовком и классом
+    function _openDialog(dialogTitle, dialogClass) {
         _$dialog
             .data('title.dialog', dialogTitle)
             .dialog( "option", "dialogClass", dialogClass)
             .dialog('open');
 
-        // если открываем в первый раз, инициализируем комбобоксы
         if (!_$ufdAccount) {
+            // если открываем в первый раз, инициализируем комбобоксы
             _initUFDs();
         } else {
+            // при открытии окна тип операции по умолчанию - расход
             setType("0");
         }
 
+        // обновляем список счетов
         _refreshAccounts();
+
+        // обновляем список категорий
         _refreshCategories();
 
         // выставляем текующую дату
@@ -386,28 +365,53 @@ easyFinance.widgets.operationEdit = function(){
         if (acc !==undefined && acc != "") {
             setAccount(acc);
         }
+    }
+
+    function _expandNormal() {
+        _$dialog.dialog('option', 'buttons', _buttonsNormal);
+
+        if (_isEditing) {
+            _openDialog('Изменить операцию', 'edit');
+        } else {
+            _openDialog('Добавить операцию', '');
+        }
 
         // TEMP: показываем операции перевода на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option><option value="4">Перевод на фин. цель</option>';
         $("#op_type").html(htmlOptions).ufd("changeOptions");
         // EOF TEMP
+
+        // скрываем блок планирования
+        _$blockCalendar.hide();
     }
 
     function _expandCalendar() {
-        _isCalendar = true;
         _$dialog.dialog('option', 'buttons', _buttonsNormal);
 
-        _$dialog.dialog( "option", "dialogClass", 'calendar' );
+        var dialogTitle = '';
+        var dialogClass = 'calendar';
+
         if (_isEditing) {
-            _$dialog.data('title.dialog', 'Редактировать операцию в календаре').dialog('open');
+            dialogClass = 'calendar edit';
+
+            if (_isChain) {
+                dialogTitle = 'Редактировать серию операций';
+            } else {
+                dialogTitle = 'Редактировать операцию в календаре';
+            }
         } else {
-            _$dialog.data('title.dialog', 'Добавить серию операций').dialog('open');
+            dialogTitle = 'Добавить серию операций';
         }
 
-        // если открываем в первый раз, инициализируем комбобоксы
-        if (!_$ufdAccount)
-            _initUFDs();
+        _openDialog(dialogTitle, dialogClass);
 
+        // TEMP: СКРЫВАЕМ переводы на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+        $("#op_type").html(htmlOptions).ufd("changeOptions");
+        setType(data.type);
+        // EOF TEMP
+
+        // показываем блок планирования
         _$blockCalendar.show()
     }
 
@@ -1051,16 +1055,7 @@ easyFinance.widgets.operationEdit = function(){
         // EOF TEMP
     }
 
-    /**
-     * Функция заполняет форму данными
-     * @param data: данные для заполнения
-     * @param isEditing: true если редактируем операцию
-     */
-    function fillForm(data, isEditing) {
-        _isEditing = isEditing;
-
-        _expandNormal();
-
+    function _fillValues(data, isEditing) {
         if (isEditing && data.id) {
             $('#op_id').val(data.id);
         } else {
@@ -1149,21 +1144,24 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
-    function fillFormCalendar(data, isEditing, isChain) {
-        _isCalendar = true;
+    /**
+     * Функция заполняет форму данными операции
+     * @param data: данные для заполнения
+     * @param isEditing: true если редактируем операцию
+     */
+    function fillForm(data, isEditing) {
+        _isCalendar = false;
+        _isChain = false;
         _isEditing = isEditing;
-        _isChain = isChain;
 
-        _expandCalendar();
+        // открываем диалог работы с обычными операциями
+        _expandNormal();
 
-        // TEMP: не показываем операции на фин. цель
-        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
-        $("#op_type").html(htmlOptions).ufd("changeOptions");
-        setType(data.type);
-        // EOF TEMP
+        // выводим данные по операции
+        _fillValues(data, isEditing);
+    }
 
-        fillForm(data, isEditing);
-
+    function _fillCalendarValues(data, isEditing, isChain) {
         // заполняем атрибуты цепочки / события
         $('#op_chain_id').val(data.chain || '');
 
@@ -1200,10 +1198,31 @@ easyFinance.widgets.operationEdit = function(){
             });
         }
 
-        if (_isCalendar && _isEditing && !isChain)
+        if (isEditing && !isChain)
             _$blockCalendar.hide();
         else
             _$blockCalendar.show();
+    }
+
+    function fillFormCalendar(data, isEditing, isChain) {
+        _isCalendar = true;
+        _isEditing = isEditing;
+        _isChain = isChain;
+
+        // открываем диалог для планирования
+        _expandCalendar();
+
+        // выводим основные данные по операции
+        _fillValues(data, isEditing);
+
+        // выводим данные по планированию операции(й)
+        _fillCalendarValues(data, isEditing, isChain);
+
+        // TEMP: не показываем операции на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+        $("#op_type").html(htmlOptions).ufd("changeOptions");
+        setType(data.type);
+        // EOF TEMP
     }
 
     // reveal some private things by assigning public pointers
