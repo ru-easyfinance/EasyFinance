@@ -390,8 +390,9 @@ var currentCalendarEvent = null;
 
 function calendarEditSingleOrChain(event) {
     // event здесь получен из кэша календаря;
-    // нам надо взять обновленные данные о событии
-    currentCalendarEvent = res.calendar.calendar[event.id];
+    // нам надо взять обновленные данные о событии,
+    // если они есть
+    currentCalendarEvent = res.calendar.calendar[event.id] || event;
 
     if (currentCalendarEvent.accepted == "1") {
         // для подтверждённых операций открываем форму для обычного редактирования
