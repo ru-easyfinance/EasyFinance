@@ -394,6 +394,7 @@ class Operation_Model
                     'type'                  => 2,
                     'transfer_amount'       => $this->_convertAmount($operation['account'],
                                                                         $operation['toAccount'],
+                                                                        $operation['amount'],
                                                                         $operation['convert']),
                     'tags'                  => $operation['tags'],
                 );
@@ -437,7 +438,7 @@ class Operation_Model
             'drain'                 => 1,
             'type'                  => 2,
             'exchange_rate'         => $exchangeRate,
-            'transfer_amount'       => $this->_convertAmount($fromAccount, $toAccount, $convert),
+            'transfer_amount'       => $this->_convertAmount($fromAccount, $toAccount, $money, $convert),
             'tags'                  => implode(', ', $tags),
         );
 
@@ -1225,12 +1226,13 @@ class Operation_Model
     /**
      * Конвертирует сумму операции
      *
-     * @param int $fromAccount
-     * @param int $toAccount
-     * @param float $convert
-     * @return float
+     * @param   int   $fromAccount
+     * @param   int   $toAccount
+     * @param   float $amount
+     * @param   float $convert
+     * @return  float
      */
-    function _convertAmount ($fromAccount, $toAccount, $convert)
+    function _convertAmount ($fromAccount, $toAccount, $amount, $convert)
     {
         $accounts    = $this->_user->getUserAccounts();
 
@@ -1246,10 +1248,14 @@ class Operation_Model
                 $currensys = $this->_user->getUserCurrency();
 
                 // приводим сумму к пром. валюте
-                $convert = $money / $currensys[$curTargetId]['value'];
+                $convert = $amount / $currensys[$curTargetId]['value'];
                 // .. и к валюте целевого счёта
                 $convert = $convert * $currensys[$curFromId]['value'];
             }
+        }
+
+        if ($convert == 0) {
+            $convert = $amount;
         }
 
         return abs($convert);

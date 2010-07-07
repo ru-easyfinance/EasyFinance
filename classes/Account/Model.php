@@ -196,20 +196,38 @@ class Account_Model
      */
     private function _getTotalByAccounts(array $accountIds)
     {
-        // в счетах отображаем общую сумму как сумму по доходам и расходам. + учесть перевод с нужным знаком.
-        $sql = "
-            SELECT
-                account_id AS ARRAY_KEY,
-                SUM(money) as sum
-            FROM operation
-            WHERE
-                    accepted= 1
-                AND deleted_at IS NULL
-                AND account_id IN (?a)
-            GROUP BY account_id
-        ";
+        $sql = "SELECT
+                    o.account_id AS account_id,
+                    (SUM(o.money))as sum
+                FROM operation o
+                WHERE
+                    o.accepted= 1
+                    AND o.deleted_at IS NULL
+                    AND o.account_id IN (?a)
+                GROUP BY o.account_id
+                UNION
+                SELECT
+                    o.transfer_account_id AS account_id,
+                    (SUM(o.transfer_amount))as sum
+                FROM operation o
+                WHERE
+                    o.accepted= 1
+                    AND o.deleted_at IS NULL
+                    AND o.transfer_account_id IN (?a)
+                GROUP BY o.transfer_account_id";
 
-        return $this->db->selectCol($sql, $accountIds);
+        $accountsBallance = array();
+
+        // Подсчитываем сумму по каждому счёту
+        foreach ($this->db->select($sql, $accountIds, $accountIds) as $accountMoney) {
+            if (isset($accountsBallance[$accountMoney['account_id']])) {
+                $accountsBallance[$accountMoney['account_id']] += $accountMoney['sum'];
+            } else {
+                $accountsBallance[$accountMoney['account_id']] = $accountMoney['sum'];
+            }
+        }
+
+        return $accountsBallance;
     }
 
 

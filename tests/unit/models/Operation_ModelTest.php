@@ -273,7 +273,7 @@ class Operation_ModelTest extends UnitTestCase
             'drain'                 => 1,
             'comment'               => 'Комментарий',
             'transfer_account_id'   => $this->accountId2,
-            'transfer_amount'       => null,
+            'transfer_amount'       => 100,
             'tags'                  => 'тег 1',
             'type'                  => Operation::TYPE_TRANSFER,
             'source_id'             => null,
