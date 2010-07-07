@@ -113,7 +113,7 @@ class importOperationFromEmailTask extends sfBaseTask
             // Ищем подходящий парсер
             $parser = $source->getParserBySubject( $subject );
 
-            if ( is_null( $parser ) )
+            if ( is_null( $parser ) || ( $parser === false ) )
             {
                 $this->logging("Can't find any suitable parser for subject", $subject);
                 return self::ERROR_NO_PARSER;
