@@ -989,11 +989,21 @@ easyFinance.widgets.operationEdit = function(){
     }
 
     function setAccount(id){
-        if (id ===null || id == "0") {
+        if (id == "0") {
             return;
         }
 
-        _selectedAccount = id;
+        // #1593. Ошибка подтверждения операций из АМТ
+        if (id === null || id === undefined) {
+            // счёт может быть не указан, например, при импорте из АМТ
+            // тогда выбранный счёт будет совпадать с тем,
+            // который уже был выбран раньше
+            id = _selectedAccount;
+        } else {
+            // меняем счёт на заданный
+            _selectedAccount = id;
+        }
+        
         _changeAccountForTransfer();
         if (_$ufdAccount) {
             _$ufdAccount.selectOptions(id, true).ufd("changeOptions");
