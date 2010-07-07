@@ -99,6 +99,15 @@ class model_AccountTableTest extends myUnitTestCase
         $op2 = $this->helper->makeBalanceOperation($account2, 500);
         $op3 = $this->helper->makeBalanceOperation($account3, -20);
 
+        // переводы со счета на счет
+        $op4 = $this->helper->makeOperation($account1, array(
+            'amount'              => -3333.14,
+            'transfer_account_id' => $account2->getId(),
+            'transfer_amount'     => 3333.14,
+            'category_id'         => null,
+            'type'                => Operation::TYPE_TRANSFER,
+        ));
+
         // а это у другого пользователя
         $this->helper->makeBalanceOperation(null, 10000);
 
@@ -107,26 +116,34 @@ class model_AccountTableTest extends myUnitTestCase
         $coll2 = $this->helper->makeOperationCollection(5, $account2);
         $coll3 = $this->helper->makeOperationCollection(5, $account3);
 
-        $balance1 = $op1->getAmount();
+        $balance1 = (float) $op1->getAmount();
         foreach ($coll1 as $collOperation) {
             $balance1 += (float) $collOperation->getAmount();
         }
-        $balance2 = $op2->getAmount();
+
+        $balance2 = (float) $op2->getAmount();
         foreach ($coll2 as $collOperation) {
             $balance2 += (float) $collOperation->getAmount();
         }
-        $balance3 = $op3->getAmount();
+
+        $balance3 = (float) $op3->getAmount();
         foreach ($coll3 as $collOperation) {
             $balance3 += (float) $collOperation->getAmount();
         }
 
+        // учтем в балансе первого и второго счетов - перевод
+        $balance1 += (float) $op4->getAmount();
+        $balance2 += (float) $op4->getTransferAmount();
+
         $result = Doctrine::getTable('Account')->queryFindWithBalanceAndBalanceOperation($user)->execute();
 
+        // счета
         $this->assertEquals(3, $result->count(), "Accounts count");
         $this->assertModels($account1, $result->get(0), "Accounts equals");
         $this->assertModels($account2, $result->get(1), "Accounts equals");
         $this->assertModels($account3, $result->get(2), "Accounts equals");
 
+        // Балансовые операции
         $this->assertEquals(1, $result->get(0)->getOperations()->count(), "Account has only one Balance Operation");
         $this->assertEquals(1, $result->get(1)->getOperations()->count(), "Account has only one Balance Operation");
         $this->assertEquals(1, $result->get(2)->getOperations()->count(), "Account has only one Balance Operation");
@@ -134,9 +151,11 @@ class model_AccountTableTest extends myUnitTestCase
         $this->assertEquals($op2->getAmount(), $result->get(1)->getOperations()->get(0)->getAmount(), "Account Balance equals");
         $this->assertEquals($op3->getAmount(), $result->get(2)->getOperations()->get(0)->getAmount(), "Account Balance equals");
 
-        $this->assertEquals($balance1, $result->get(0)->getBalance(), '', 0.01);
-        $this->assertEquals($balance2, $result->get(1)->getBalance(), '', 0.01);
-        $this->assertEquals($balance3, $result->get(2)->getBalance(), '', 0.01);
+        // Балансы счетов
+        $this->assertEquals($balance1, $result->get(0)->getBalance(), 'Баланс первого счета', 0.01);
+        $this->assertEquals($balance2, $result->get(1)->getBalance(), 'Баланс второго счета', 0.01);
+        $this->assertEquals($balance3, $result->get(2)->getBalance(), 'Баланс третьего счета', 0.01);
+
     }
 
 }

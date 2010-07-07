@@ -42,7 +42,15 @@ class AccountTable extends Doctrine_Table
                 {$alias}.description, {$alias}.currency_id,
                 {$alias}.id")
             ->addSelect("o.amount")
-            ->addSelect("SUM(op2.amount) balance")
+            // TODO: мысли вслух - м.б. использовать Views или prepared statements ?
+            ->addSelect("SUM(CASE
+                WHEN
+                    op2.type = 2 AND op2.transfer_account_id = {$alias}.account_id
+                THEN
+                    op2.transfer_amount
+                ELSE
+                    op2.amount
+                END) AS balance")
             ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
             ->orderBy("{$alias}.name")
             ->leftJoin("{$alias}.Operations o ON o.account_id = {$alias}.account_id
@@ -50,7 +58,10 @@ class AccountTable extends Doctrine_Table
                 AND o.date = '0000-00-00'
                 AND o.accepted = ?
                 AND o.type = ?", array(Operation::STATUS_ACCEPTED, Operation::TYPE_BALANCE))
-            ->leftJoin("{$alias}.Operations op2 ON op2.account_id = {$alias}.account_id
+            ->leftJoin("{$alias}.Operations op2 ON (
+                    op2.account_id = {$alias}.account_id
+                    OR op2.transfer_account_id = {$alias}.account_id
+                )
                 AND op2.accepted = ?", Operation::STATUS_ACCEPTED)
             ->groupBy("{$alias}.id");
 

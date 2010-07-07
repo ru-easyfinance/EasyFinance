@@ -52,6 +52,9 @@ class ProjectConfiguration extends sfProjectConfiguration
         // SoftDelete
         $manager->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
 
+        // что бы использовать IF | CASE и проч. SQL-полезняшки
+        $manager->setAttribute(Doctrine::ATTR_PORTABILITY, Doctrine::PORTABILITY_ALL ^ Doctrine::PORTABILITY_EXPR);
+
         // Кастомный гидратор
         $manager->registerHydrator('FetchPair', 'Doctrine_Hydrator_FetchPair');
     }
