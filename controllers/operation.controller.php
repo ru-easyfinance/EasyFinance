@@ -573,7 +573,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
         // Привет кэп !
         $array = array();
 
-                // Составляем список операций
+        // Составляем список операций
         foreach ($list as $key => $operation)
         {
 
@@ -582,6 +582,12 @@ class Operation_Controller extends _Core_Controller_UserCommon
             } else {
                 $array[$key] = $operation;
                 $array[$key]['account_name'] = '';
+            }
+
+            if ($operation['type'] == Operation::TYPE_PROFIT) {
+                $array[$key]['drain'] = 0;
+            } else {
+                $array[$key]['drain'] = 1;
             }
 
             if (_Core_TemplateEngine::getResponseMode($this->request) == "csv") switch( $array[$key]['type'] ) {

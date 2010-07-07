@@ -749,8 +749,6 @@ class Operation_Model
                         $operation['cat_name'] = "Компьютер";
                 }
 
-                // @TODO переписать запрос про финцель, сделать отже account_id и убрать эти строчки
-                // +посмотреть весь код где это может использоваться
                 if ($operation['type'] == 2) {
                     $operation['cat_name'] = "'" . $operation['account_name'] . "' » '"
                             . $accounts[$operation['transfer']]['account_name'] . "'";
