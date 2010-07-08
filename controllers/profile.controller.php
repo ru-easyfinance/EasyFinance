@@ -56,20 +56,20 @@ class Profile_Controller extends _Core_Controller_UserCommon
         $prop['getNotify']   = ((bool)$_POST['getNotify'])? 1: 0;
         $prop['guide']       = $_POST['guide'];
 
-        // почта интеграции
-        // TODO: 1) сообщения об ошибках
-        //       2) юз-кейсы:
-        //          - пустое поле
-        //          - невалидный адрес
-        //          - адрес существует в БД
-        //       3) тесты
         if (!empty($_POST['mailIntegration'])) {
             $mail = $_POST['mailIntegration'] . "@mail.easyfinance.ru";
             if (Helper_Mail::validateEmail($mail)) {
                 if ($this->model->checkServiceEmailIsUnique($mail)) {
                     $prop['user_service_mail'] = $mail;
+                } else {
+                    $this->renderJsonError("Такой адрес уже существует.\nПожалуйста, выберите другой адрес.");
                 }
+            } else {
+                $this->renderJsonError("В названии ящика есть недопустимые символы.\n".
+                    "Постарайтесь задать почту латинскими буквами, цифрами, без пробелов или других непонятных знаков.");
             }
+        } else {
+            $prop['user_service_mail'] = '';
         }
 
         die($this->model->mainsettings('save',$prop));
