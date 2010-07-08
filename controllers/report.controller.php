@@ -100,11 +100,11 @@ class Report_Controller extends _Core_Controller_UserCommon
         switch ($report) {
             case 'graph_profit': //Доходы
                 $this->_renderJson(
-                    $this->_model->getPie(0, $start, $end, $accounts, $currency)
+                    $this->_model->getPie(1, $start, $end, $accounts, $currency)
                 );
             case 'graph_loss':   // Расходы
                 $this->_renderJson(
-                    $this->_model->getPie(1, $start, $end, $accounts, $currency)
+                    $this->_model->getPie(0, $start, $end, $accounts, $currency)
                 );
             case 'graph_profit_loss': //Сравнение расходов и доходов
                 $this->_renderJson(
@@ -112,19 +112,19 @@ class Report_Controller extends _Core_Controller_UserCommon
                 );
             case 'txt_profit': //Детальные доходы
                 $this->_renderJson(
-                    $this->_model->SelectDetailed(0, $start, $end, $accounts, $currency)
+                    $this->_model->SelectDetailed(1, $start, $end, $accounts, $currency)
                 );
             case 'txt_loss': //Детальные расходы
                 $this->_renderJson(
-                    $this->_model->SelectDetailed(1, $start, $end, $accounts, $currency)
+                    $this->_model->SelectDetailed(0, $start, $end, $accounts, $currency)
                 );
             case 'txt_loss_difference': //Сравнение расходов за периоды
                 $this->_renderJson(
-                    $this->_model->CompareForPeriods(1, $start, $end, $start2, $end2, $accounts, $currency)
+                    $this->_model->CompareForPeriods(0, $start, $end, $start2, $end2, $accounts, $currency)
                 );
             case 'txt_profit_difference': //Сравнение доходов за периоды
                 $this->_renderJson(
-                    $this->_model->CompareForPeriods(0, $start, $end, $start2, $end2, $accounts, $currency)
+                    $this->_model->CompareForPeriods(1, $start, $end, $start2, $end2, $accounts, $currency)
                 );
             default:
                 die('
