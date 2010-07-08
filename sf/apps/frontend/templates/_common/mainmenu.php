@@ -38,6 +38,16 @@
                 <li class="last"></li>
             </ul>
         </li>
+        <li id="m6">
+            <a href="/integration/"></a>
+        </li>
+        <li id="m7">
+            <a href="#"></a>
+            <ul>
+                <li><span> </span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
+                <li><span> </span><a id="linkMainMenuFeedback" href="#">Обратная связь</a></li>
+                <li class="last"></li>
+            </ul>
+        </li>
     </ul>
-    <a id="tabIntegration" href="/integration/" ><img src="/img/i/tabIntegration.png" ></a>
 </div>

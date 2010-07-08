@@ -186,10 +186,19 @@ ul.dropdown li#m5.cur > a{background-position: -507px -80px;}
 /* m5 */
 
 /* m6 */
-.menu3 ul li#m6 > a { background-position: -631px 1px; left:0px;position:absolute }
-ul.dropdown li#m6.cur > a{background-position: -631px -39px;}
+.menu3 ul li#m6 > a { background-position: -755px 1px; left:0px;position:absolute }
+ul.dropdown li#m6.cur > a{background-position: -755px -39px;}
 
 ul.dropdown li#m6:hover > a,
 ul.dropdown li#m6.cur:hover > a,
-ul.dropdown li#m6.cur > a{background-position: -631px -80px;}
+ul.dropdown li#m6.cur > a{background-position: -755px -80px;}
 /* m6 */
+
+/* m7 */
+.menu3 ul li#m7 > a { background-position: -879px 1px; left:0px;position:absolute }
+ul.dropdown li#m7.cur > a{background-position: -879px -39px;}
+
+ul.dropdown li#m7:hover > a,
+ul.dropdown li#m7.cur:hover > a,
+ul.dropdown li#m7.cur > a{background-position: -879px -80px;}
+/* m7 */

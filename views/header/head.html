@@ -61,8 +61,10 @@
         <img src="/img/i/gauge107.gif" width="107" height="107" class="preload" />
         <img src="/img/i/gauge157.gif" width="157" height="157" class="preload" />
 
-        <a id="btnFeedback" class="addmessage efTooltip" title="Расскажите, что Вам нравится на сайте, а чего не хватает. Мы обязательно учтем Ваши пожелания и включим их в график работ.">оставить отзыв</a>
-        <a id="btnVideoGuide" class="btnHelp">помощь</a>
+        {if $user_info.user_id == 0}
+            <a id="btnFeedback" class="addmessage efTooltip" title="Расскажите, что Вам нравится на сайте, а чего не хватает. Мы обязательно учтем Ваши пожелания и включим их в график работ.">оставить отзыв</a>
+            <a id="btnVideoGuide" class="btnHelp">помощь</a>
+        {/if}
 
         <div id="container1">
             <div id="menumain"  value="{$head_val}">
