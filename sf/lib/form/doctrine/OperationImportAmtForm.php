@@ -96,8 +96,6 @@ class OperationImportAmtForm extends BaseFormDoctrine
             default:
                 throw new Exception("Unxpected operation type `{$values['type']}`");
         }
-        $values['drain'] = $values['type']^1;
-
 
         // Дата
         $date = new DateTime($values['timestamp']);

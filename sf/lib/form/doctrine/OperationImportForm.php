@@ -78,7 +78,6 @@ class OperationImportForm extends BaseFormDoctrine
 
         // Тип операции и сумма
         $values['money'] = abs((float)$values['amount']);
-        $values['drain'] = $values['type']^1;
 
         // Дата и время
         $values['date'] = date('Y-m-d');
