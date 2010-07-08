@@ -49,8 +49,11 @@ easyFinance.widgets.profile = function(model){
             mailIntegration: $('#mailIntegration').val()
         }
         _model.setUserInfo(data, function(data){
-            $.jGrowl("Личные данные сохранены", {theme: 'green'});
-            //setupProfile();
+            if (data.result && data.result.text) {
+                $.jGrowl(data.result.text, {theme: 'green'});
+            } else if (data.error && data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+            }
         });
     }
     return {
