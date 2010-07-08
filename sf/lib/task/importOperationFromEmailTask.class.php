@@ -43,9 +43,9 @@ class importOperationFromEmailTask extends sfBaseTask
         $this->detailedDescription =
             "Import operation from email" . PHP_EOL . PHP_EOL
           . "STDIN:" . PHP_EOL
-          . "[./symfony import:email < email.eml|INFO]" . PHP_EOL . PHP_EOL
+          . "[./symfony import:parse-email < email.eml|INFO]" . PHP_EOL . PHP_EOL
           . "From file:" . PHP_EOL
-          . "[./symfony import:email email.eml|INFO]";
+          . "[./symfony import:parse-email email.eml|INFO]";
     }
 
 
