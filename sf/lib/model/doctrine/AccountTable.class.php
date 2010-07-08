@@ -45,7 +45,8 @@ class AccountTable extends Doctrine_Table
             // TODO: мысли вслух - м.б. использовать Views или prepared statements ?
             ->addSelect("SUM(CASE
                 WHEN
-                    op2.type = 2 AND op2.transfer_account_id = {$alias}.account_id
+                    op2.type = " . Operation::TYPE_TRANSFER . "
+                    AND op2.transfer_account_id = {$alias}.account_id
                 THEN
                     op2.transfer_amount
                 ELSE
