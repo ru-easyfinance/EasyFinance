@@ -159,10 +159,10 @@ class Operation_ModelTest extends UnitTestCase
 
         $operation  = new Operation_Model($this->user);
         $opId = $operation->add(
+                Operation::TYPE_PROFIT,
                 100,
                 '2010-01-01',
                 $this->catId,
-                0,
                 "Комментарий",
                 $this->accountId,
                 array('тег1')
@@ -215,10 +215,10 @@ class Operation_ModelTest extends UnitTestCase
 
         $operation  = new Operation_Model($this->user);
         $opId = $operation->add(
+                Operation::TYPE_WASTE,
                 -100,
                 '2010-01-01',
                 $this->catId,
-                1,
                 "Комментарий",
                 $this->accountId,
                 array('тег1')

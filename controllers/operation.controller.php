@@ -118,7 +118,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 'currency'     => isset($this->request->post['currency'])?$this->request->post['currency']:array(),
                 'toAccount'    => isset($this->request->post['toAccount'])?$this->request->post['toAccount']:null,
                 'target'       => isset($this->request->post['target'])?$this->request->post['target']:null,
-                'accepted'     => isset($this->request->post['accepted'])?(int)$this->request->post['accepted']:1,
+                'accepted'     => isset($this->request->post['accepted'])?(int)$this->request->post['accepted']:Operation::STATUS_ACCEPTED,
             );
 
             $operation = $this->model->checkData($operation);
@@ -126,7 +126,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
             // Если есть ошибки, то возвращаем их пользователю в виде массива
             if (sizeof($this->model->errorData) == 0) {
                 // Добавление в зависимости от типа (расход\доход) и тд
-                $operation['drain'] = 1;
                 switch ($operation['type'])
                 {
                     //Расход
@@ -134,10 +133,10 @@ class Operation_Controller extends _Core_Controller_UserCommon
                         $operation['amount'] = abs($operation['amount']) * -1;
 
                         $this->model->add(
+                            $operation['type'],
                             $operation['amount'],
                             $operation['date'],
                             $operation['category'],
-                            $operation['drain'],
                             $operation['comment'],
                             $operation['account'],
                             $operation['tags']
@@ -145,12 +144,13 @@ class Operation_Controller extends _Core_Controller_UserCommon
                         break;
                     // Доход
                     case Operation::TYPE_PROFIT:
-                        $operation['drain'] = 0;
+                        $operation['amount'] = abs($operation['amount']);
+
                         $this->model->add(
+                            $operation['type'],
                             $operation['amount'],
                             $operation['date'],
                             $operation['category'],
-                            $operation['drain'],
                             $operation['comment'],
                             $operation['account'],
                             $operation['tags']
@@ -279,12 +279,10 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
             // Если нет ошибок - проводим операцию
             if (count($this->model->errorData) == 0) {
-                // Видимо какая то часть дальнейшей логики
-                $operation['drain'] = 1;
 
                 //если изменили тип операции
                 if ( $operation['type'] != $initType ) {
-                    if ( $initType == 4 ) {
+                    if ( $initType == Operation::TYPE_TARGET ) {
                         $this->model->deleteTargetOperation( $operation['id'] );
                     }
                     else {
@@ -300,10 +298,10 @@ class Operation_Controller extends _Core_Controller_UserCommon
                             $operation['amount'] = abs($operation['amount']) * -1;
 
                             $this->model->add(
+                                $operation['type'],
                                 $operation['amount'],
                                 $operation['date'],
                                 $operation['category'],
-                                $operation['drain'],
                                 $operation['comment'],
                                 $operation['account'],
                                 $operation['tags']
@@ -311,12 +309,11 @@ class Operation_Controller extends _Core_Controller_UserCommon
                             break;
                         // Доход
                         case Operation::TYPE_PROFIT:
-                            $operation['drain'] = 0;
                             $this->model->add(
+                                $operation['type'],
                                 $operation['amount'],
                                 $operation['date'],
                                 $operation['category'],
-                                $operation['drain'],
                                 $operation['comment'],
                                 $operation['account'],
                                 $operation['tags']
@@ -358,27 +355,54 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 {
                     case Operation::TYPE_WASTE:  //Расход
                         $operation['amount'] = abs($operation['amount']) * -1;
-                        $this->model->edit($operation['id'],$operation['amount'],
-                            $operation['date'], $operation['category'], $operation['drain'],
-                            $operation['comment'], $operation['account'], $operation['tags']);
+                        $this->model->edit(
+                                $operation['type'],
+                                $operation['id'],
+                                $operation['amount'],
+                                $operation['date'],
+                                $operation['category'],
+                                $operation['comment'],
+                                $operation['account'],
+                                $operation['tags']
+                        );
                         break;
                     case Operation::TYPE_PROFIT: //Доход
-                        $operation['drain'] = 0;
-                        $this->model->edit($operation['id'],$operation['amount'], $operation['date'],
-                            $operation['category'], $operation['drain'], $operation['comment'],
-                            $operation['account'], $operation['tags']);
+                        $operation['amount'] = abs($operation['amount']);
+                        $this->model->edit(
+                                $operation['type'],
+                                $operation['id'],
+                                $operation['amount'],
+                                $operation['date'],
+                                $operation['category'],
+                                $operation['comment'],
+                                $operation['account'],
+                                $operation['tags']
+                        );
                         break;
                     case Operation::TYPE_TRANSFER: // Перевод со счёта
                         $operation['category'] = null;
-                        $this->model->editTransfer($operation['id'], $operation['amount'],
-                            $operation['convert'], $operation['date'], $operation['account'],
-                            $operation['toAccount'],$operation['comment'],$operation['tags']);
+                        $this->model->editTransfer(
+                                $operation['id'],
+                                $operation['amount'],
+                                $operation['convert'],
+                                $operation['date'],
+                                $operation['account'],
+                                $operation['toAccount'],
+                                $operation['comment'],
+                                $operation['tags']
+                        );
                         break;
                     case Operation::TYPE_TARGET: // Перевод на финансовую цель см. в модуле фин.цели
                         $target = new Targets_Model();
-                        $target->editTargetOperation($operation['id'], $operation['amount'],
-                            $operation['date'], $operation['target'],$operation['account'],
-                            $operation['comment'], $operation['close']);
+                        $target->editTargetOperation(
+                                $operation['id'],
+                                $operation['amount'],
+                                $operation['date'],
+                                $operation['target'],
+                                $operation['account'],
+                                $operation['comment'],
+                                $operation['close']
+                        );
                     break;
                 }
 
@@ -584,17 +608,20 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 $array[$key]['account_name'] = '';
             }
 
+            //@TODO #1529 - После фикса на клиенте, можно будет убрать этот блок
             if ($operation['type'] == Operation::TYPE_PROFIT) {
                 $array[$key]['drain'] = 0;
             } else {
                 $array[$key]['drain'] = 1;
             }
 
-            if (_Core_TemplateEngine::getResponseMode($this->request) == "csv") switch( $array[$key]['type'] ) {
-                case 0: $array[$key]['type'] = 'Расход'; break;
-                case 1: $array[$key]['type'] = 'Доход'; break;
-                case 2: $array[$key]['type'] = 'Перевод со счёта'; break;
-                case 4: $array[$key]['type'] = 'Перевод на фин. цель'; break;
+            if (_Core_TemplateEngine::getResponseMode($this->request) == "csv") {
+                switch( $array[$key]['type'] ) {
+                    case Operation::TYPE_WASTE : $array[$key]['type'] = 'Расход'; break;
+                    case Operation::TYPE_PROFIT : $array[$key]['type'] = 'Доход'; break;
+                    case Operation::TYPE_TRANSFER : $array[$key]['type'] = 'Перевод со счёта'; break;
+                    case Operation::TYPE_TARGET : $array[$key]['type'] = 'Перевод на фин. цель'; break;
+                }
             }
         }
         $this->tpl->assign('name_page', 'operations/operation');

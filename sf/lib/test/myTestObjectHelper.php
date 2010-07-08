@@ -156,8 +156,6 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
             $props['amount'] = (float) $amount;
         }
 
-        $props['drain'] = ($props['amount'] > 0) ? 1 : 0;
-
         if (!$account) {
             $account = $this->makeAccount(null, array(), $save);
         } else {

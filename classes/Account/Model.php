@@ -40,10 +40,14 @@ class Account_Model
 
     function edit_operation($data)
     {
-        $sql = "SELECT `id` FROM operation WHERE account_id=? AND user_id=? AND cat_id IS NULL LIMIT 0, 1";
+        $sql = "SELECT `id` FROM operation WHERE account_id=? AND user_id=? AND cat_id IS NULL LIMIT 1";
         $oid = $this->db->selectCell($sql, $data['id'], $this->user_id);
+
+        $money = str_replace(' ', '', $data['initPayment']);
+
         $model = new Operation_Model();
-        $model->edit($oid, str_replace(' ', '', $data['initPayment']),'0000-00-00',0,0,'Начальный остаток', $data['id']);
+        return $model->edit(Operation::TYPE_BALANCE, $oid, $money, '0000-00-00', null, 'Начальный остаток',
+                $data['id'], array(), Operation::STATUS_ACCEPTED);
     }
 
     /**

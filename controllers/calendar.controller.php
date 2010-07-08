@@ -161,10 +161,8 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                 if ( $event_array['type'] <= 1 ) {
 
                     if ( $event_array['type'] == 0 ) {
-                        $event_array['drain'] = 1;
                         $event_array['amount'] = abs($event_array['amount']) * -1;
                     } else {
-                        $event_array['drain'] = 0;
                         $event_array['amount'] = abs($event_array['amount']);
                     }
 
@@ -173,7 +171,6 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                         $event_array['amount'],
                         $event_array['date'],
                         $event_array['category'],
-                        $event_array['drain'],
                         $event_array['comment'],
                         $event_array['account'],
                         $event_array['tags'],

@@ -316,7 +316,6 @@ class Calendar_Model extends _Core_Abstract_Model
                 'currency'   => $event->getCurrency(),
                 'toAccount'  => $event->getToAccount(),
                 'target'     => $event->getTarget(),
-                'drain'      => ($event->getType()==1)?0:1,
 
                 // Дополнения для планирования в календарь
                 'last'       => $event->getLast(),
@@ -336,10 +335,6 @@ class Calendar_Model extends _Core_Abstract_Model
             return $operation->addSome($operationsArray);
         } elseif ($event->getType() == 2) {
             return $operation->addSomeTransfer($operationsArray);
-        } elseif ($event->getType() == 4) {
-//// Переводы на финцель на данный момент заблокированы
-//            $target = new Targets_Model();
-//            return $target->addSomeTargetOperation( $operations_array );
         }
     }
 

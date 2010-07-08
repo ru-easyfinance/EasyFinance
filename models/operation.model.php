@@ -249,17 +249,18 @@ class Operation_Model
 
     /**
      * Регистрирует новую транзакцию
-     * @param float  $money      Сумма транзакции
-     * @param string $date       Дата транзакции в формате Y.m.d
-     * @param int    $category   Ид категории
-     * @param int    $drain      Доход или расход. Устаревшее, но на всякий случай указывать надо 0 - расход, 1 - доход
-     * @param string $comment    Комментарий транзакции
-     * @param int    $account_id Ид счета
-     * @param array  $tags       Массив с тегами
+     *
+     * @param int       $type       Тип операции: 0 - расход, 1 - доход
+     * @param float     $money      Сумма транзакции
+     * @param string    $date       Дата транзакции в формате Y.m.d
+     * @param int       $category   Ид категории
+     * @param string    $comment    Комментарий транзакции
+     * @param int       $account_id Ид счета
+     * @param array     $tags       Массив с тегами
      *
      * @return int $id
      */
-    function add($money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = array())
+    function add($type, $money = 0, $date = '', $category = null, $comment = '', $account = 0, $tags = array())
     {
         // Если операция новая, и отправлена не случайно, то продолжаем, иначе возвраты
         $check = $this->checkExistance($money, $date, $category, $comment, $account);
@@ -269,11 +270,11 @@ class Operation_Model
 
         $values = array(
             'user_id'   => $this->_user->getId(),
-            'money'     => (($drain)? abs($money) * -1: abs($money)),
+            'money'     => ((!$type)? abs($money) * -1: abs($money)),
             'date'      => $date,
             'cat_id'    => ((int)$category <= 0) ? null : $category,
             'account_id'=> $account,
-            'type'      => !$drain,
+            'type'      => $type,
             'comment'   => $comment,
             'tags'      => implode(', ', (array)$tags),
         );
@@ -305,7 +306,7 @@ class Operation_Model
                 'date'      => $operation['date'],
                 'cat_id'    => ((int)$operation['category'] <= 0) ? null : $operation['category'],
                 'account_id'=> $operation['account'],
-                'type'      => !$operation['drain'],
+                'type'      => $operation['type'],
                 'comment'   => $operation['comment'],
                 'tags'      => $operation['tags'],
                 'accepted'  => $operation['accepted'],
@@ -443,30 +444,29 @@ class Operation_Model
 
     /**
      * Редактирует транзакцию
-     * @param int    $id         Ид транзакции
-     * @param float  $money      Сумма транзакции
-     * @param string $date       Дата транзакции в формате Y.m.d
-     * @param int    $drain      Доход или расход. Устаревшее 0 - расход, 1 - доход
-     * @param string $comment    Комментарий транзакции
-     * @param int    $account_id Ид счета
-     * @param int    $accepted
+     *
+     * @param int       $type       Тип операции: 0 - расход, 1 - доход
+     * @param int       $id         Ид транзакции
+     * @param float     $money      Сумма транзакции
+     * @param string    $date       Дата транзакции в формате Y.m.d
+     * @param int       $category   Ид категории
+     * @param string    $comment    Комментарий транзакции
+     * @param int       $account_id Ид счета
+     * @param array     $tags       Теги
+     * @param int       $accepted   Подтверждена ли операция
      *
      * @return bool true - Регистрация прошла успешно
      */
-    function edit($id=0, $money = 0, $date = '', $category = null, $drain = 0, $comment = '', $account = 0, $tags = null, $accepted=null)
+    function edit($type, $id, $money = 0, $date = '', $category = null, $comment = '', $account = 0, array $tags = array(), $accepted=null)
     {
-        if (is_null($tags)) {
-            $tags = array();
-        }
-
         $values = array(
             'money'         => $money,
             'date'          => $date,
             'cat_id'        => $category,
             'account_id'    => $account,
-            'drain'         => $drain,
             'comment'       => $comment,
             'tags'          => implode(', ', $tags),
+            'type'          => $type,
         );
 
         if ($accepted) {
@@ -897,36 +897,6 @@ class Operation_Model
 
     }
 
-    /**
-     * Возвращает тип операции по айди
-     * @param integer $id
-     * @return integer
-     */
-    function getTypeOfOperation($id=0) {
-        $type = 0; //возвращаемый тип операции
-        $sql = "SELECT drain, transfer_account_id AS transfer, count(*) as c FROM operation WHERE id=? AND user_id=? GROUP BY id";
-        $res1 = $this->db->query($sql, $id, $this->_user->getId());
-        $sql = "SELECT count(*) AS c FROM target_bill WHERE id=? AND user_id=?";
-        $res2 = $this->db->query($sql, $id, $this->_user->getId());
-        if ($res1[0]['c'] != $res2[0]['c']) {
-            if ($res1[0]['c'] == 1) {
-                if ($res1[0]['drain'] == 1)
-                    $type = 0;
-                if ($res1[0]['drain'] == 0)
-                    $type = 1;
-                if ($res1[0]['transfer'] != 0)
-                    $type = 2;
-            }
-            else
-                $type = 4;
-        }//определили тип, иначе
-        else {
-            return null; //один случай на миллиард. а на деле врят ли произойдёт. случай если есть и операция и перевод на фин целт с одним айди
-        }
-
-        return $type;
-
-    }
 
     public function getOperation($userId, $operationId)
     {
@@ -941,7 +911,6 @@ class Operation_Model
                 o.cat_id as category,
                 NULL as target,
                 o.account_id,
-                o.drain,
                 o.comment,
                 o.transfer_account_id AS transfer,
                 0 AS virt,
@@ -967,7 +936,6 @@ class Operation_Model
                 tt.category_id as category,
                 t.target_id as target,
                 tt.target_account_id,
-                1,
                 t.comment,
                 '',
                 1 AS virt,
