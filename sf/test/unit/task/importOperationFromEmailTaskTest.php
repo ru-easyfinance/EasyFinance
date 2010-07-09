@@ -113,6 +113,38 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
         $this->assertEquals(1, $this->queryFind('Operation', $expected)->count(), 'Expected found 1 object');
     }
 
+    /**
+     * Успешный вызов с расширенным email-ом
+     */
+    public function testOkWithLongEmail()
+    {
+        // Подготовить письмо
+        $user = $this->helper->makeUser();
+        $this->_email = $user->getUserServiceMail();
+
+        // Создаем отправителя и парсер
+        $parser = $this->_createSourceAndParser();
+
+        // Письмо
+        $emailData = $this->_getEmailData();
+        $emailData['from'] = array('test@testbank.ru' => "Проверочный отправитель" );
+        $email = new myCreateEmailImport( $emailData );
+
+        // Импорт
+        $this->checkCmd((string)$email, $code = 0);
+
+        // Залезть в БД и проверть операцию
+        $expected = array(
+            'user_id'   => $user->getId(),
+            'amount'     => abs((float) $this->_amount),
+            'drain'     => Operation::TYPE_EXPENSE^1,
+            'type'      => Operation::TYPE_EXPENSE,
+            'accepted'  => Operation::STATUS_DRAFT,
+        );
+
+        $this->assertEquals(1, $this->queryFind('Operation', $expected)->count(), 'Expected found 1 object');
+    }
+
 
     /**
      * Проверка, что письма от AMT проходят по своему алгоритму
