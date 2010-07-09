@@ -44,8 +44,8 @@
         <li id="m7">
             <a href="#"></a>
             <ul>
-                <li><span> </span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
                 <li><span> </span><a id="linkMainMenuFeedback" href="#">Обратная связь</a></li>
+                <li><span> </span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
                 <li class="last"></li>
             </ul>
         </li>
