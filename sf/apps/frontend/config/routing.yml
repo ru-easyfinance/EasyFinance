@@ -16,6 +16,14 @@ account_create:
   requirements:
     sf_method: post
 
+# Редактировать счет
+account_edit:
+  url:      /accountedit/:id.:sf_format
+  class:    sfDoctrineRoute
+  options:  { model: Account, type: object }
+  param:    { module: account, action: edit }
+  requirements:
+    sf_method: post
 
 # default rules
 homepage:

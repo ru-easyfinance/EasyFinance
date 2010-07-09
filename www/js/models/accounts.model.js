@@ -7,7 +7,7 @@ easyFinance.models.accounts = function(){
     // constants
     var ACCOUNTS_LIST_URL = '/accounts/accountslist/?responseMode=json';
     var ADD_ACCOUNT_URL = '/my/account.json';
-    var EDIT_ACCOUNT_URL = '/accounts/edit/?responseMode=json';
+    var EDIT_ACCOUNT_URL = '/my/accountedit/';
     var DELETE_ACCOUNT_URL = '/accounts/delete/?responseMode=json&confirmed=1';
 
     var OPERATIONS_JOURNAL_URL = '/operation/listOperations/?responseMode=json';
@@ -235,13 +235,26 @@ easyFinance.models.accounts = function(){
         if (typeof params != "object")
             return false;
 
-        // ID, тип счёта, имя, валюта -
+        // тип счёта, имя, валюта -
         // обязательные параметры для всех счетов
-        params.id = id;
-        $.post(EDIT_ACCOUNT_URL, params, function(data){
-                _loadAccounts(function() {
-                    $(document).trigger('accountEdited');
-                });
+        params.id = id
+        if (!params.type || !params.name || !params.currency || !params.id)
+            return false;
+
+        $.post(EDIT_ACCOUNT_URL + params.id + ".json", {
+                currency_id: params.currency,
+                type_id:     params.type,
+                name:        params.name,
+                comment:     params.comment,
+                initPayment: params.initPayment
+            }, function(data){
+            var _id = (data.result && data.result.id) ? data.result.id : null;
+
+            _loadAccounts(function() {
+                var event = $.Event("accountEdited");
+                event.id = _id;
+                $(document).trigger(event);
+            });
 
 /*
                 if (data.result) {
@@ -256,10 +269,9 @@ easyFinance.models.accounts = function(){
 
                 @todo: calc defCur
 */
-                if (callback)
-                    callback(data);
-            }, 'json'
-        );
+            if (callback)
+                callback(data);
+        }, 'json');
     }
 
     function deleteAccountById(id, callback) {
@@ -632,3 +644,4 @@ easyFinance.models.accounts = function(){
         getFutureOperationById: getFutureOperationById
     };
 }(); // execute anonymous function to immediatly return object
+
