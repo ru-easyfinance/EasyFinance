@@ -217,6 +217,8 @@ class oldUser
                     $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
                 }
             }
+        } else {
+            $_SESSION['REQUEST_URI'] = '/operation/add/waste/';
         }
 
         return $this->save();
