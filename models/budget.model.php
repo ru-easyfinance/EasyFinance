@@ -89,16 +89,15 @@ class Budget_Model {
                         DATE_FORMAT(b.date_start,'%d.%m.%Y') AS date_start,
                         DATE_FORMAT(b.date_end,'%d.%m.%Y') AS date_end,
                         (
-                            SELECT
-                                AVG(amount)
-                            FROM budget t
+                            SELECT AVG(ABS(money))
+                            FROM operation o
                             WHERE
-                                (t.date_start >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
-                                    AND t.date_start <= LAST_DAY(b.date_start))
+                                (o.date >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
+                                    AND o.date <= LAST_DAY(b.date_start))
                                 AND
-                                    b.category = t.category
+                                    b.category = o.cat_id
                                 AND
-                                    b.user_id=t.user_id
+                                    b.user_id=o.user_id
                         ) AS avg_3m
                     FROM budget b
                     LEFT JOIN
