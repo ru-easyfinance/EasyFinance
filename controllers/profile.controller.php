@@ -72,7 +72,8 @@ class Profile_Controller extends _Core_Controller_UserCommon
             $prop['user_service_mail'] = '';
         }
 
-        die($this->model->mainsettings('save',$prop));
+        $this->model->mainsettings('save',$prop);
+        $this->renderJsonSuccess("Данные успешно сохранены");
     }
 
     function load_currency(){

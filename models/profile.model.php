@@ -81,11 +81,11 @@ class Profile_Model
      * @param string $mail
      * @return bool
      */
-    public function checkServiceEmailIsUnique ( $mail )
+    public function checkServiceEmailIsUnique ($mail)
     {
-        $sql = "SELECT user_service_mail FROM users WHERE user_service_mail=? LIMIT 1;";
+        $sql = "SELECT user_service_mail FROM users WHERE user_service_mail=? AND id != ? LIMIT 1;";
 
-        if ( $this->db->selectCell ( $sql, $mail ) ) {
+        if ($this->db->selectCell ($sql, $mail, Core::getInstance()->user->getId())) {
 
             return false;
 
@@ -108,9 +108,7 @@ class Profile_Model
         }
         $set_str .=' ';
         $set_str = substr($set_str, 1);
-//        if (!$ident) {
-//            return 'nopass';
-//        }
+
         $sql = "UPDATE $table SET $set_str WHERE id=?";
         return $this->db->query($sql,$this->user_id);
     }
@@ -145,13 +143,6 @@ class Profile_Model
                 unset($prop['guide']);
 
                 $ret['profile'] = $this->save('users', $prop, $ident);
-
-//                if ( $prop['help'] == 1 ){
-//                     setCookie("help","",0,COOKIE_PATH, COOKIE_DOMEN, false);
-//                }else{
-//                    setCookie("help", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false); //записываем в кук нужно ли выводить всплывающие подсказки
-//                }
-
 
                 break;
             case 'load':
