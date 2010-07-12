@@ -103,14 +103,21 @@ class myParseEmailImport
              !isset( $headers['to'] )
         ) return false;
 
+        // Трансформация сабжекта в формате ?UTF-8?XXX
+        $subject = iconv_mime_decode($headers['subject'], 0, 'UTF-8');
+
         if ( isset( $headers['content-transfer-encoding'] ) && ( $headers['content-transfer-encoding'] == "quoted-printable" ) )
         {
-            $subject = iconv_mime_decode($headers['subject'], 0, 'UTF-8');
+        	// Декодирование quoted printable
             $body = quoted_printable_decode( $message->getContent() );
+        }
+    	elseif ( isset( $headers['content-transfer-encoding'] ) && ( $headers['content-transfer-encoding'] == "base64" ) )
+        {
+        	// Декодирование тела письма в base64
+            $body = base64_decode( $message->getContent() );
         }
         else
         {
-            $subject = $headers['subject'];
             $body = $message->getContent();
         }
 
