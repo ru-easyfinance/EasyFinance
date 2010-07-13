@@ -18,40 +18,68 @@ class Helper_IframeLogin
 
         self::$templateEngine = $templateEngine;
 
-        // Выводим заголовки политики безопастности в IE для поддержки cookies в iframe
-        if( _Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME)
-        {
+        // Если запрошен IFRAME
+        if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME
+                || _Core_Request::getCurrent()->host . '/' == 'rambler.' . URL_ROOT_MAIN) {
             // Выводим заголовок для отображения iframe по безопасному соединению для IE
             header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
 
-            // Пользователь авторизироваться от азбуки финансов
-            if ( ( _Core_Request::getCurrent()->uri == "/login/")
-                    && ( isset(_Core_Request::getCurrent()->get['refer'])) && ( _Core_Request::getCurrent()->get['refer'] == 'azbuka' ) )
-            {
+            // Пользователь пытается авторизироваться от азбуки финансов
+            if ((_Core_Request::getCurrent()->uri == "/login/") && (isset(_Core_Request::getCurrent()->get['refer']))
+                && (_Core_Request::getCurrent()->get['refer'] == 'azbuka')) {
 
                 // Пользователь только пытается авторизироваться, мы забираем у него id у нас
                 // и его ключ сессии, затем по этому ключу мы делаем курлом гет запрос
-                if ( isset(_Core_Request::getCurrent()->get['id_ef'])
-                        && isset( _Core_Request::getCurrent()->get['session_key'] ) ) {
+                if (isset(_Core_Request::getCurrent()->get['id_ef'])
+                        && isset(_Core_Request::getCurrent()->get['session_key'])) {
 
                     self::_azbuka_login();
 
                 // Новый пользователь регистрируется с азбуки
-                } elseif ( isset( _Core_Request::getCurrent()->get['login'] )
-                        &&  isset( _Core_Request::getCurrent()->get['mail'] ) ) {
+                } elseif (isset(_Core_Request::getCurrent()->get['login'])
+                        &&  isset(_Core_Request::getCurrent()->get['mail'])) {
 
                     self::_azbuka_registration();
 
                 }
             }
 
-            if ( ( ! Core::getInstance()->user->getId() ) AND ($_SERVER['REQUEST_URI'] != "/login/" ) ) {
-                if ( $_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
+            // Если запрос идёт от Рамблера
+            if (_Core_Request::getCurrent()->host . '/' == 'rambler.' . URL_ROOT_MAIN) {
+
+                $request = explode('/', $_SERVER['REQUEST_URI']);
+
+                // Если пользователь не авторизирован
+                if (!Core::getInstance()->user->getId() && isset($request[1])
+                        && $request[1] == 'login' && isset($request[2])) {
+
+                        self::_rambler_login($request[2]);
+
+                }
+
+            }
+
+            if ((_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME)
+                    && (!Core::getInstance()->user->getId())
+                    && ($_SERVER['REQUEST_URI'] != "/login/")) {
+                if ($_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
+
                     header("Location: https://" . URL_ROOT_IFRAME . "login/");
+
                 }
             }
-            self::$templateEngine->assign('template_view', 'iframe');
-            //self::$templateEngine->display("iframe/index.iframe.html");
+
+            // Выводим шаблон для IFRAME
+            if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME) {
+
+                self::$templateEngine->assign('template_view', 'iframe');
+
+            // Выводим шаблон для Rambler
+            } elseif (_Core_Request::getCurrent()->host . '/' == 'rambler.' . URL_ROOT_MAIN) {
+
+                self::$templateEngine->assign('template_view', 'iframe');
+
+            }
         }
     }
 
@@ -155,4 +183,27 @@ class Helper_IframeLogin
 //            break;
     }
 
+    /**
+     * Логиним пользователя рамблера
+     * @param string $ramblerKey
+     * @return bool
+     */
+    private static function _rambler_login($ramblerKey)
+    {
+        $ramblerLogin = 'rambler_' . $ramblerKey;
+
+        // Пытаемся инициализировать пользователя
+        Core::getInstance()->user->initUser($ramblerLogin, sha1($ramblerLogin));
+
+        // Устанавливаем пользователю куку
+        setcookie(COOKIE_NAME, encrypt(array($ramblerLogin, sha1($ramblerLogin))),
+                time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
+
+        if (Core::getInstance()->user->getId()) {
+            header("Location: https://rambler." . URL_ROOT_MAIN . "info/");
+        } else {
+
+            Login_Model::generateUserByRamblerLogin('rambler_' . $ramblerKey);
+        }
+    }
 }
