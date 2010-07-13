@@ -193,11 +193,6 @@ table#operations_list td + td + td + td + td + td{
     float: left;
 }
 
-#lblOperationsJournalSum {
-    float:left;
-    width:220px;
-}
-
 #balance_before {
 /*    float:left;
     margin-left:7px;

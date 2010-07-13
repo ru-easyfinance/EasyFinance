@@ -57,11 +57,13 @@ $(document).ready(function() {
                     },
                     passw: {
                         required: true,
-                        minlength: 5
+                        minlength: 5,
+                        latinAndDigits: true
                     },
                     confirm_password: {
                         required: true,
                         minlength: 5,
+                        latinAndDigits: true,
                         equalTo: $("#passw")
                     },
                     mail: {
@@ -133,11 +135,11 @@ $(document).ready(function() {
                     $.post(
                         "/registration/new_user/?responseMode=json",
                         {
-                            password: $('#passw').val(),
-                            confirm_password: $('#confirm_password').val(),
-                            login: $('#log').val(),
-                            name: $('#name').val(),
-                            mail: $('#mail').val()
+                            password: trim($('#passw').val()),
+                            confirm_password: trim($('#confirm_password').val()),
+                            login: trim($('#log').val()),
+                            name: trim($('#name').val()),
+                            mail: trim($('#mail').val())
                         },
                         registrationCallback,
                         'json');

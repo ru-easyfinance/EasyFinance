@@ -43,9 +43,9 @@ class importOperationFromEmailTask extends sfBaseTask
         $this->detailedDescription =
             "Import operation from email" . PHP_EOL . PHP_EOL
           . "STDIN:" . PHP_EOL
-          . "[./symfony import:email < email.eml|INFO]" . PHP_EOL . PHP_EOL
+          . "[./symfony import:parse-email < email.eml|INFO]" . PHP_EOL . PHP_EOL
           . "From file:" . PHP_EOL
-          . "[./symfony import:email email.eml|INFO]";
+          . "[./symfony import:parse-email email.eml|INFO]";
     }
 
 
@@ -113,7 +113,7 @@ class importOperationFromEmailTask extends sfBaseTask
             // Ищем подходящий парсер
             $parser = $source->getParserBySubject( $subject );
 
-            if ( is_null( $parser ) )
+            if ( !is_object( $parser ) || !( $parser instanceof EmailParser ) )
             {
                 $this->logging("Can't find any suitable parser for subject", $subject);
                 return self::ERROR_NO_PARSER;

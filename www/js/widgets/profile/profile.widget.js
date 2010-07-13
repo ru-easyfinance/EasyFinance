@@ -45,11 +45,15 @@ easyFinance.widgets.profile = function(model){
             password : $('#pass').val(),
             newPassword : $('#newpass').val(),
             confirmpass : $('#newpass2').val(),
-            mail : $('#mail').val()
+            mail : $('#mail').val(),
+            mailIntegration: $('#mailIntegration').val()
         }
-        _model.setUserInfo(data,function(data){
-            $.jGrowl("Личные данные сохранены", {theme: 'green'});
-            //setupProfile();
+        _model.setUserInfo(data, function(data){
+            if (data.result && data.result.text) {
+                $.jGrowl(data.result.text, {theme: 'green'});
+            } else if (data.error && data.error.text) {
+                $.jGrowl(data.error.text, {theme: 'red'});
+            }
         });
     }
     return {

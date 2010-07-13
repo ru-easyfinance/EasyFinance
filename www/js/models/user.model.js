@@ -63,6 +63,7 @@ easyFinance.models.user = function(data){
                 newpass: data.newPassword,
                 //              confirmpass: data.confirmPassword || '', //server will be add confirm password
                 mail: data.mail || '',
+                mailIntegration: data.mailIntegration || '',
                 guide: data.guide || 0 // server line75
             }, function(data){
                 if (typeof(calback) == 'function') {

@@ -16,6 +16,7 @@ easyFinance.widgets.budget = function(data){
     var _currentDate = new Date();
     var date = new Date();
 
+    _updateElapsed();
     _updateTimeLine();
 
     // #1388. обновляем данные после добавления операций
@@ -121,13 +122,6 @@ easyFinance.widgets.budget = function(data){
                     ////////// coompil html
                     var drainprc = Math.abs(Math.round(money*100/amount));
 
-                    var b_color;
-
-                    if (type == '1'){ // WTF? wipe out
-                        b_color = (elapsedPercent > drainprc) ? 'red' : 'green';
-                    }else{
-                        b_color = (elapsedPercent < drainprc)?'red' : 'green';
-                    }
                     var cls = !parentId ? 'parent open':'child';
                     if (cls == 'parent open'){
                         if (!temp.xhtml){
@@ -239,7 +233,7 @@ easyFinance.widgets.budget = function(data){
                 '</div>';
     }
 
-    function _updateTimeLine() {
+    function _updateElapsed() {
         elapsedPercent = 0;
 
         if (_currentDate.getMonth() == date.getMonth()){
@@ -250,8 +244,10 @@ easyFinance.widgets.budget = function(data){
             } else {
                 elapsedPercent = 100;
             }
-        }
+        }        
+    }
 
+    function _updateTimeLine() {
         $("#budgetTimeLine").css({
             left: elapsedPercent + '%',
             height: ($budgetBody.height() + 50) + 'px'
@@ -262,6 +258,8 @@ easyFinance.widgets.budget = function(data){
     }
 
     function printBudget(){
+        _updateElapsed();
+
         _data = _model.returnList();
 
         var params = null;

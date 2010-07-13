@@ -10,7 +10,7 @@ class EmailSource extends BaseEmailSource
      * Возвращает парсер, регексп которого подходит под данную тему
      *
      * @param string $subject тема
-     * @return EmailParser
+     * @return EmailParser или false в случае если парсер не найден
      */
     public function getParserBySubject( $subject )
     {

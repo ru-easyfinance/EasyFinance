@@ -10,8 +10,15 @@ class AccountWithBalanceForm extends BaseAccountForm
      */
     public function configure()
     {
-        unset($this['id']);
-        $this->useFields(array('type_id', 'currency_id', 'name', 'description'));
+        $fieldsToUse = array('currency_id', 'name', 'description');
+
+        if ($this->getObject()->isNew()) {
+            unset($this['id']);
+            $fieldsToUse[] = 'type_id';
+        } else {
+            unset($this['type_id']);
+        }
+        $this->useFields($fieldsToUse);
 
         # Description
         $this->validatorSchema['description']->setOption('required', false);

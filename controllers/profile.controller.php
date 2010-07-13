@@ -14,17 +14,30 @@ class Profile_Controller extends _Core_Controller_UserCommon
     private $model = null;
 
     /**
+     * Ссылка на класс User
+     * @var User
+     */
+    private $_user = null;
+
+    /**
      * Конструктор класса
      * @return void
      */
     protected function __init()
     {
+        $this->_user = Core::getInstance()->user;
         $this->model = new Profile_Model();
         $this->tpl->assign('name_page', 'profile/profile');
     }
 
     function index()
-    { }
+    {
+        $this->addToRes('profile', array(
+            'integration' => array(
+                'email'   => str_replace('@mail.easyfinance.ru', '', $this->_user->getUserProps('user_service_mail')),
+            ),
+        ));
+    }
 
     /**
      * отдаёт логин имя мыло
@@ -42,7 +55,25 @@ class Profile_Controller extends _Core_Controller_UserCommon
         $prop['newpass']     = $_POST['newpass'];
         $prop['getNotify']   = ((bool)$_POST['getNotify'])? 1: 0;
         $prop['guide']       = $_POST['guide'];
-        die($this->model->mainsettings('save',$prop));
+
+        if (!empty($_POST['mailIntegration'])) {
+            $mail = $_POST['mailIntegration'] . "@mail.easyfinance.ru";
+            if (Helper_Mail::validateEmail($mail)) {
+                if ($this->model->checkServiceEmailIsUnique($mail)) {
+                    $prop['user_service_mail'] = $mail;
+                } else {
+                    $this->renderJsonError("Такой адрес уже существует.\nПожалуйста, выберите другой адрес.");
+                }
+            } else {
+                $this->renderJsonError("В названии ящика есть недопустимые символы.\n".
+                    "Постарайтесь задать почту латинскими буквами, цифрами, без пробелов или других непонятных знаков.");
+            }
+        } else {
+            $prop['user_service_mail'] = '';
+        }
+
+        $this->model->mainsettings('save',$prop);
+        $this->renderJsonSuccess("Данные успешно сохранены");
     }
 
     function load_currency(){
@@ -131,4 +162,3 @@ class Profile_Controller extends _Core_Controller_UserCommon
         }
     }
 }
-

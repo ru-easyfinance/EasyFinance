@@ -1,10 +1,10 @@
 <?php
-require_once(dirname(__FILE__).'/../lib/BaseFrontendAccountCreateAction.php');
+require_once(dirname(__FILE__).'/../lib/BaseFrontendAccountEditAction.php');
 
 /**
- * Счета
+ * Счета: редактирование
  */
-class createAction extends BaseFrontendAccountCreateAction
+class editAction extends BaseFrontendAccountEditAction
 {
     /**
      * Success
@@ -27,7 +27,7 @@ class createAction extends BaseFrontendAccountCreateAction
         $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
         return $this->renderText(json_encode(array('result' => array(
             'account' => $result,
-            'text'    => 'Счёт успешно добавлен',
+            'text'    => 'Счёт успешно изменён',
         ))));
     }
 
@@ -39,7 +39,8 @@ class createAction extends BaseFrontendAccountCreateAction
     {
         $this->getResponse()->setStatusCode(400);
         $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
-        return $this->renderText(json_encode(array('error'=>array('text' => 'Ошибка при создании счета'))));
+
+        return $this->renderText(json_encode(array('error'=>array('text' => 'Ошибка при редактировании счета'))));
     }
 
 }

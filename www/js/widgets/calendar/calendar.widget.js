@@ -44,9 +44,8 @@ easyFinance.widgets.calendar = function(){
                 '': 0.5
             },
             events: function(start, end, calback){
-                s = new Date(start.getFullYear(), start.getMonth() - 2, start.getDate() + 14);//+10??там разбег всего на пять, но лучше перестраховаться @todo 0_о Разобраться с автором...
                 var month = start.getMonth();
-                var year = end.getFullYear();
+                var year = start.getFullYear();
 
                 var typesToClasses = {
                     '0': 'red',

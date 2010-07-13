@@ -134,3 +134,7 @@ ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
     color: #f00;
 }
 
+.profile #mailIntegration {
+    width: 8em;
+}
+

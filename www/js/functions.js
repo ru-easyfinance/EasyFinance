@@ -182,6 +182,26 @@ function formatCurrency(num, hideCents, centsSpacers) {
     return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
 }
 
+/* Выводим сумму в ноду с заданным селектором,
+ * выставляет соответствующий класс суммы
+ * и добавляет в конце текст валюты по молчанию
+ *
+ * Например: setSumInDefaultCurrency('#test', 10)
+ * выведет в ноду #test '10 руб.' и присвоит ей класс sumGreen
+ **/
+function setSumInDefaultCurrency(selector, sum) {
+    var $node = $(selector);
+    $node.text (formatCurrency(sum) + " " + easyFinance.models.currency.getDefaultCurrencyText());
+
+    if (sum >= 0) {
+        $node.removeClass('sumRed').addClass('sumGreen');
+    } else {
+        $node.removeClass('sumGreen').addClass('sumRed');
+    }
+}
+
+
+
 // округляем число до двух знаков после запятой
 function roundToCents(number) {
     return Math.round(number*Math.pow(10,2))/Math.pow(10,2);
@@ -369,15 +389,23 @@ function getElementsFromObjectWithOrderByColumnWithTemplate(obj, columnName, cal
 var currentCalendarEvent = null;
 
 function calendarEditSingleOrChain(event) {
-    currentCalendarEvent = event;
+    // event здесь получен из кэша календаря;
+    // нам надо взять обновленные данные о событии,
+    // если они есть
+    currentCalendarEvent = res.calendar.calendar[event.id] || event;
 
-    if (currentCalendarEvent.every == "0") {
-        // единичная операция, редактируем
-        easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, false);
+    if (currentCalendarEvent.accepted == "1") {
+        // для подтверждённых операций открываем форму для обычного редактирования
+        easyFinance.widgets.operationEdit.fillForm(currentCalendarEvent, true);
     } else {
-        promptSingleOrChain("edit", function(isChain){
-            easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, isChain);
-        });
+        if (currentCalendarEvent.every == "0") {
+            // единичная операция, редактируем
+            easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, false);
+        } else {
+            promptSingleOrChain("edit", function(isChain){
+                easyFinance.widgets.operationEdit.fillFormCalendar(currentCalendarEvent, true, isChain);
+            });
+        }
     }
 }
 
@@ -522,3 +550,16 @@ function getMonthName(month) {
     return monthNames[month];
 }
 
+function trim(str) {
+	return str.replace(/(^\s+)|(\s+$)/g, "");
+}
+
+function ltrim(str, chars) {
+	chars = chars || "\\s";
+	return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+}
+
+function rtrim(str, chars) {
+	chars = chars || "\\s";
+	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+}

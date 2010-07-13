@@ -157,51 +157,13 @@ easyFinance.widgets.operationsJournal = function(){
 
         // Выводим итоги по счёту/странице
         pageTotal = Math.round(pageTotal*100)/100;
-        if (_account != '' && _account != "undefined") {
-            $('#lblOperationsJournalAccountBalance')
-                .html('<b>Остаток по счёту: </b>' + formatCurrency(_modelAccounts.getAccountBalanceTotal(_account), false, false) + ' ' + _modelAccounts.getAccountCurrency(_account).text).show();
-        }
 
-        //data.period_change = formatCurrency(easyFinance.models.currency.convertToDefault(data.period_change, 1));
-        //data.list_before = formatCurrency(easyFinance.models.currency.convertToDefault(data.list_before, 1));
-
-        became = parseFloat(data.list_before)+parseFloat(data.period_change);
         data.period_change = parseFloat(data.period_change);
         data.list_before = parseFloat(data.list_before);
 
-        $("#balance_before").html(formatCurrency(data.list_before)+" "+easyFinance.models.currency.getDefaultCurrencyText());
-        $('#lblOperationsJournalSum').html('<b>изменение: </b>' + formatCurrency(data.period_change) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()).show();
-        $("#balance_after").html(formatCurrency(became) + " "+easyFinance.models.currency.getDefaultCurrencyText());
-
-        if (data.period_change >= 0) {
-            $('#lblOperationsJournalSum').removeClass('sumRed');
-            $('#lblOperationsJournalSum').addClass('sumGreen');
-        } else {
-            $('#lblOperationsJournalSum').removeClass('sumGreen');
-            $('#lblOperationsJournalSum').addClass('sumRed');
-        }
-        if (data.list_before >= 0) {
-            $('#balance_before').removeClass('sumRed');
-            $('#balance_before').addClass('sumGreen');
-        } else {
-            $('#balance_before').removeClass('sumGreen');
-            $('#balance_before').addClass('sumRed');
-        }
-
-        if (became >= 0) {
-            $('#balance_after').removeClass('sumRed');
-            $('#balance_after').addClass('sumGreen');
-        } else {
-            $('#balance_after').removeClass('sumGreen');
-            $('#balance_after').addClass('sumRed');
-        }
-        if  (_modelAccounts.getAccountBalanceTotal(_account) >= 0) {
-            $('#lblOperationsJournalAccountBalance').removeClass('sumRed');
-            $('#lblOperationsJournalAccountBalance').addClass('sumGreen');
-        } else {
-            $('#lblOperationsJournalAccountBalance').removeClass('sumGreen');
-            $('#lblOperationsJournalAccountBalance').addClass('sumRed');
-        }
+        setSumInDefaultCurrency('#balance_before', data.list_before);
+        setSumInDefaultCurrency('#lblOperationsJournalSum', data.period_change);
+        setSumInDefaultCurrency('#balance_after', parseFloat(data.list_before) + parseFloat(data.period_change));
     }
 
     function _deleteChecked(){
@@ -368,8 +330,6 @@ easyFinance.widgets.operationsJournal = function(){
             _accountName = '';
             $('#account_filtr').get(0).options[0].selected = true;
 
-            $('#lblOperationsJournalAccountBalance').hide();
-
             loadJournal();
 
             return false;
@@ -426,9 +386,6 @@ easyFinance.widgets.operationsJournal = function(){
         // фильтр по счёту
         _$comboAccount = _$node.find('#account_filtr');
         _$comboAccount.change(function(){
-            $('#lblOperationsJournalAccountBalance').hide();
-            $('#lblOperationsJournalSum').hide();
-
             _account = $(this).val();
             _accountName = this.options[this.selectedIndex].text;
             loadJournal();
