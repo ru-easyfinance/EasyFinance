@@ -134,16 +134,18 @@ class myParseEmailImport
 
 
     /**
-     * Email-ы могут вернуться как в виде "name@domain.zone", так и в виде "Имя пользователя <name@domain.zone>"
-     * Этот метод извлекает из последних email в чистом виде
+     * Извлекает email в чистом виде
+     * email'ы могут быть: name@domain.zone,
+     *                    <name@domain.zone>
+     *                имя <name@domain.zone>
      *
      * @param string $email
      * @return string
      */
-    private static function _cleanEmail($email) {
+    protected static function _cleanEmail($email) {
         $matches = array();
 
-        if (preg_match("/<(.*)>/i", $email, $matches)) {
+        if (preg_match("/<(.+?@.+?\..{2,5})>/i", $email, $matches)) {
             if (isset( $matches[1])) {
                 $email = $matches[1];
             }
