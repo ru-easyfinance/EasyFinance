@@ -1,10 +1,11 @@
 <?php
 /**
  * Данные для вывода виджета счетов res.accounts
- * TODO: наверное сюда же сделать res.accountsRecent, если оно нужно
+ *                                и res.accountsRecent
  *
- * @param  array $accounts массив счетов
- * @param  array $reserves суммы, зарезервированные на фин. цели
+ * @param  array $accounts       массив счетов
+ * @param  array $reserves       суммы, зарезервированные на фин. цели
+ * @param  array $accountsRecent массив последних использовавшихся счетов
  */
 
     $data = array();
@@ -47,3 +48,4 @@
 ?>
 
 res.accounts = <?php echo json_encode($data) ?>;
+res.accountsRecent = <?php echo json_encode($accountsRecent) ?>;

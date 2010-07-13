@@ -1,6 +1,7 @@
 <?php
 /**
  * Готовит js объект res.accounts
+ *                 и res.accountsRecent
  */
 class accountsComponent extends sfComponent
 {
@@ -28,8 +29,12 @@ class accountsComponent extends sfComponent
             ->queryCountReserves($accountsIds, $user)
             ->fetchArray();
 
+        // Получить последние использовавшиеся счета
+        $accountsRecent = Doctrine::getTable('Operation')->getMonthCountByUser($user);
+
         $this->setVar('accounts', $accounts, $noEscape = true);
         $this->setVar('reserves', $reserves, $noEscape = true);
+        $this->setVar('accountsRecent', $accountsRecent, $noEscape = true);
     }
 
 }

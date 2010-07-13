@@ -975,8 +975,8 @@ class Operation_Model
             WHERE account_id=?
             AND updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW() ";
         $count = $this->db->selectRow($sql, (int) $accountId);
-        return $count['op_count'];
 
+        return $count['op_count'];
     }
 
     /**
