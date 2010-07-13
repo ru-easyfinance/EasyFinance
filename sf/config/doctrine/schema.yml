@@ -155,8 +155,8 @@ Operation:
     comment:     { type: clob }
     source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
     accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
-    transfer_account_id: { name: transfer as transfer_account_id, type: integer(4), notnull: false, default: null } # ID счета получателя
-    transfer_amount:     { name: imp_id as transfer_amount, type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
+    transfer_account_id: { name: transfer_account_id as transfer, type: integer(4), notnull: false, default: null } # ID счета получателя
+    transfer_amount:     { type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
     chain_id:    { type: integer(4), notnull: false, default: null }             # Связь с календарем
   relations:
     User:
