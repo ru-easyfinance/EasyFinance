@@ -85,15 +85,7 @@ class Profile_Model
     {
         $sql = "SELECT user_service_mail FROM users WHERE user_service_mail=? AND id != ? LIMIT 1;";
 
-        if ($this->db->selectCell ($sql, $mail, Core::getInstance()->user->getId())) {
-
-            return false;
-
-        } else {
-
-            return true;
-
-        }
+        return !(bool)$this->db->selectCell($sql, $mail, $this->user_id);
     }
 
     private function ident($pass){

@@ -45,10 +45,9 @@ class models_ProfileTest extends UnitTestCase
             'user_currency_default' => 1,
             'user_currency_list'    => 'a:7:{i:0;s:1:"5";i:1;s:1:"7";i:2;s:1:"2";i:3;s:1:"3";i:4;s:2:"13";i:5;s:1:"4";i:6;s:1:"1";}',
             'user_type'             => 0,
-            'user_service_mail'     => '',
+            'user_service_mail'     => 'ukko1@mail.easyfinance.ru',
             'referrerId'            => ''
         );
-
         $userId1 = CreateObjectHelper::makeUser($options);
 
         $options = array(
@@ -82,7 +81,7 @@ class models_ProfileTest extends UnitTestCase
     public function testCreateServiceMail ()
     {
         // Тру
-        $this->assertTrue( $this->profile1->createServiceMail( $this->user1, 'ukko1@mail.easyfinance.ru' ) );
+        $this->assertTrue( $this->profile1->createServiceMail( $this->user1, 'ukko10@mail.easyfinance.ru' ) );
         // Фэлз
         $this->assertFalse( $this->profile1->createServiceMail( $this->user2, 'ukko2@mail.easyfinance.ru' ) );
 
@@ -98,12 +97,16 @@ class models_ProfileTest extends UnitTestCase
     public function testServiceMailIsUnique ()
     {
         // Уникально
-        $email = 'ukko1@mail.easyfinance.ru';
-        $this->assertTrue($this->profile1->checkServiceEmailIsUnique( $email ));
+        $email = 'ukko3@mail.easyfinance.ru';
+        $this->assertTrue($this->profile1->checkServiceEmailIsUnique($email));
+
+        // Уникально
+        $email = 'ukko2@mail.easyfinance.ru';
+        $this->assertTrue($this->profile2->checkServiceEmailIsUnique($email));
 
         // Не уникально
-        $email = 'ukko2@mail.easyfinance.ru';
-        $this->assertFalse($this->profile2->checkServiceEmailIsUnique( $email ));
+        $email = 'ukko1@mail.easyfinance.ru';
+        $this->assertFalse($this->profile2->checkServiceEmailIsUnique($email));
     }
 
 
@@ -113,7 +116,16 @@ class models_ProfileTest extends UnitTestCase
     public function testDeleteServiceMail ()
     {
         // Фэлз, ибо нет почты
-        $this->assertFalse( $this->profile1->deleteServiceMail ( $this->user1 ) );
+        $options = array(
+            'user_login'            => 'user1'.rand(1,10000),
+            'user_pass'             => sha1($pass = '123123'),
+            'user_new'              => 0,
+            'user_service_mail'     => '',
+        );
+        CreateObjectHelper::makeUser($options);
+        $this->assertFalse($this->profile1->deleteServiceMail(new oldUser($options['user_login'], $pass)));
+
+
         // Тру, почта удалена
         $this->assertTrue( $this->profile1->deleteServiceMail ( $this->user2 ) );
     }

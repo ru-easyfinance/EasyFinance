@@ -136,7 +136,6 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
         $expected = array(
             'user_id'   => $user->getId(),
             'amount'     => abs((float) $this->_amount),
-            'drain'     => Operation::TYPE_EXPENSE^1,
             'type'      => Operation::TYPE_EXPENSE,
             'accepted'  => Operation::STATUS_DRAFT,
         );
