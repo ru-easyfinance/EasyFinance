@@ -95,8 +95,8 @@ class myParseEmailImport
      */
     public static function getEmailData($input)
     {
-        $zPath = sfConfig::get('sf_root_dir') . '/lib/vendor';
-        set_include_path($zPath . PATH_SEPARATOR . get_include_path());
+        // подключить ZF autoloader
+        ProjectConfiguration::registerZend();
 
         $message = new Zend_Mail_Message(array('raw' => $input));
 
@@ -110,9 +110,6 @@ class myParseEmailImport
             return false;
         }
 
-        // Трансформация сабжекта в формате ?UTF-8?XXX
-        $subject = iconv_mime_decode($headers['subject'], 0, 'UTF-8');
-
         $body = $message->getContent();
         if (isset($headers['content-transfer-encoding']) && ($headers['content-transfer-encoding'] == "quoted-printable")) {
             // Декодирование quoted printable
@@ -125,7 +122,7 @@ class myParseEmailImport
         $data = array(
             'from'    => self::_cleanEmail($headers['from']),
             'to'      => self::_cleanEmail($headers['to']),
-            'subject' => $subject,
+            'subject' => $headers['subject'],
             'body'    => $body,
         );
 

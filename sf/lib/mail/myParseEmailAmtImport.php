@@ -19,10 +19,8 @@ class myParseEmailAmtImport
      */
     public function __construct ($raw)
     {
-        // Подключаем свой инклуд файлов от Zend
-        // TODO: Zend явно дергает require своих модулей
-        $zPath = sfConfig::get('sf_root_dir') . '/lib/vendor';
-        set_include_path($zPath . PATH_SEPARATOR . get_include_path());
+        // подключить ZF autoloader
+        ProjectConfiguration::registerZend();
 
         $this->_raw = $raw;
     }
