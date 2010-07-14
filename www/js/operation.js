@@ -26,7 +26,7 @@ function clearForm() {
 $(document).ready(function() {
     // загружаем журнал транзакций
     // по умолчанию показываются операции по всем счетам
-
+    
     // обрабатываем хэш - по какому счёту выводить операции
     var account = window.location.hash;
     if (account.indexOf("#account") != -1) {
@@ -39,6 +39,7 @@ $(document).ready(function() {
         // #870. //easyFinance.widgets.operationEdit.showForm();
         easyFinance.widgets.operationEdit.setAccount(account);
     }
+    easyFinance.widgets.operationReminders.init("#operationEdit_reminders", easyFinance.models.user, "operation")
 
     easyFinance.widgets.operationsJournal.setAccount(account);
     easyFinance.widgets.operationsJournal.loadJournal();

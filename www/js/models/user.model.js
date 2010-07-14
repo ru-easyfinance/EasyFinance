@@ -4,15 +4,16 @@
 easyFinance.models.user = function(data){
     var URL_FOR_SET_INTEGRATION_EMAIL = '/profile/create_service_mail?responseMode=json';
     var URL_FOR_REMOVE_INTEGRATION_EMAIL = '/profile/delete_service_mail/?responseMode=json';
-    var URL_FOR_LOAD_USER_INFO = "/profile/load_main_settings/?responseMode=json";
+    var URL_FOR_LOAD_USER_INFO = "/my/profile/load_main_settings?responseMode=json";
     var URL_FOR_SAVE_USER_INFO = '/profile/save_main_settings/?responseMode=json';
+    var URL_SAVE_REMINDERS = '/my/profile/save_reminders?responseMode=json';
+
     var SETTING_FOR_WRITING_COOKIE = {
         expire: 100,
         path: '/',
         domain: false,
         secure: '1'
     }
-
 
     var _data = data || {};
     /**
@@ -28,7 +29,7 @@ easyFinance.models.user = function(data){
      */
     function reload(calback){
         $.get(URL_FOR_LOAD_USER_INFO, {}, function(data){
-            _data = data.profile;//server will be sent 'spamer'&& notify && specialMail
+            _data = data.profile;  //server will be sent 'spamer'&& notify && specialMail
             _data.getNotify = res.getNotify;
             _data.tooltip = $.cookie('tooltip');
             _data.guide = $.cookie('guide') == 'uyjsdhf';//guide
@@ -91,14 +92,28 @@ easyFinance.models.user = function(data){
      * @param callback {function}
      * @return {void}
      */
-    function setIntegrationEmail(email,callback){
+    function setIntegrationEmail(email, callback){
         $.post(URL_FOR_SET_INTEGRATION_EMAIL, {mail: email}, function(data){
             _data.email = data.integrationEmail;
+
             if (typeof(callback) == 'function') {
                 callback(data);
             }
         }, 'json');
     }
+
+    function saveRemindersDefaults(params, callback) {
+        $.post(URL_SAVE_REMINDERS, params, function(data){
+            if (data.reminders) {
+                _data.reminders = data.reminders;
+            }
+
+            if (typeof(callback) == 'function') {
+                callback(data);
+            }
+        }, 'json');
+    }
+
     /**
      * Удаление почты для интеграции с банками
      * @param callback {function}
@@ -115,12 +130,49 @@ easyFinance.models.user = function(data){
         }, 'json');
     }
 
+    function getTimeZone() {
+        // по умолчанию - московское время,
+        // или же время установленное в профиле
+        return (_data.timezone || "3");
+    }
+
+    function getRemindersSettings() {
+        return (_data.reminders ||
+            {
+                mailEnabled: "0",
+                mailDaysBefore: "3",
+                mailHour: "23",
+                mailMinutes: "45",
+
+                smsPhone: "+7-xxx-xxx-xx-xx",
+                smsEnabled: "0",
+                smsDaysBefore: "1",
+                smsHour: "9",
+                smsMinutes: "30"
+            }
+        );
+    }
+
+    function isMailRemindersAvailable() {
+        // показывает, оплачена ли услуга
+        return _data.reminders ? _data.reminders.enabled || false : false;
+    }
+
+    function isSmsRemindersAvailable() {
+        // показывает, оплачена ли услуга
+        return _data.reminders ? _data.reminders.enabled || false : false;
+    }
 
     return {
         reload: reload,
         getUserInfo: getUserInfo,
         setUserInfo: setUserInfo,
         setIntegrationEmail: setIntegrationEmail,
-        removeIntegrationEmail: removeIntegrationEmail
+        removeIntegrationEmail: removeIntegrationEmail,
+        saveRemindersDefaults: saveRemindersDefaults,
+        getTimeZone: getTimeZone,
+        getRemindersSettings: getRemindersSettings,
+        isMailRemindersAvailable: isMailRemindersAvailable,
+        isSmsRemindersAvailable: isSmsRemindersAvailable
     }
 }();

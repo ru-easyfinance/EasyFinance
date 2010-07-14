@@ -18,6 +18,11 @@
                         <a>Настройка валют</a>
                     </div>
                 </li>
+                <li id="i6" block="#reminders">
+                    <div>
+                        <a>Уведомления</a>
+                    </div>
+                </li>
                 <!--
                 <li id="i5" block="#integration">
                     <div>
@@ -192,6 +197,67 @@
                             </tr>
                         </table>
                     </div>
+                </div>
+                <div class="cb">
+                    <div>
+                    </div>
+                </div>
+            </div>
+            <div id="reminders" class="ramka3 profile" style="display:none">
+                <div class="ct">
+                    <div class="head">
+                        <h2>Напоминания для запланированных операций</h2>
+                        <ul class="action">
+                            <li class="over3">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="remindersOptions" class="inside form" >
+                    <table>
+                        <tr>
+                            <td>Часовой пояс:<br>
+                                <select id="selTimeZoneOffset" name="timezone">
+                                    <option value="-12.00">(GMT -12:00) Энивоток, Кваджалейн</option>
+                                    <option value="-11.00">(GMT -11:00) Остров Мидуэй, Самоа</option>
+                                    <option value="-10.00">(GMT -10:00) Гаваи</option>
+                                    <option value="-9.00">(GMT -9:00) Аляска</option>
+                                    <option value="-8.00">(GMT -8:00) Тихоокеанское время (США &amp; Canada)</option>
+                                    <option value="-7.00">(GMT -7:00) Горное время (США &amp; Канада)</option>
+                                    <option value="-6.00">(GMT -6:00) Центральное время (США &amp; Канада), Мехико</option>
+                                    <option value="-5.00">(GMT -5:00) Восточное время (США &amp; Канада), Богота, Лима</option>
+                                    <option value="-4.00">(GMT -4:00) Атлантическое время(Канада), Каракас, Ла Паз</option>
+                                    <option value="-3.50">(GMT -3:30) Ньюфаундленд</option>
+                                    <option value="-3.00">(GMT -3:00) Бразилия, Буэнос Айрос, Джоржтаун</option>
+                                    <option value="-2.00">(GMT -2:00) Центральная Атлантика</option>
+                                    <option value="-1.00">(GMT -1:00 час) Азорские острова, Острова Зеленого Мыса</option>
+                                    <option value="0.00">(GMT) Время западной европы, Лондон, Лиссабон, Касабланка</option>
+                                    <option value="1.00">(GMT +1:00 hour) Брюсель, Копенгаген, Мадрид, Париж</option>
+                                    <option value="2.00">(GMT +2:00) Калининград, Южная африка</option>
+                                    <option value="3.00" selected="selected">(GMT +3:00) Москва, Санкт-Петербург, Багдад</option>
+                                    <option value="3.50">(GMT +3:30) Тегеран</option>
+                                    <option value="4.00">(GMT +4:00) Абу Даби, Баку, Тбилиси</option>
+                                    <option value="4.50">(GMT +4:30) Кабул</option>
+                                    <option value="5.00">(GMT +5:00) Екатеренбург, Исламобад, Карачи, Ташкент</option>
+                                    <option value="5.50">(GMT +5:30) Бомбей, Калькутта, Мадрас, Нью-Дели</option>
+                                    <option value="6.00">(GMT +6:00) Алма-ата, Дака, Коломбо</option>
+                                    <option value="7.00">(GMT +7:00) Бангкок, Ханой, Джакарта</option>
+                                    <option value="8.00">(GMT +8:00) Пекин, Перт, Сингапур, Гонконг</option>
+                                    <option value="9.00">(GMT +9:00) Токио, Сеул, Осака, Саппоро, Якутск</option>
+                                    <option value="9.50">(GMT +9:30) Аделаида, Дарвин</option>
+                                    <option value="10.00">(GMT +10:00) Восточная Австралия, Гуам, Владивосток</option>
+                                    <option value="11.00">(GMT +11:00) Магадан, Соломоновы Острова, Новая Каледония</option>
+                                    <option value="12.00">(GMT +12:00) Окленд, Уэллингтон, Фиджи, Камчатка</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+
+                    {include file="common/reminderOptions.html"}
+
+                    <br>
+
+                    <button id="save_reminders">Сохранить</button>
                 </div>
                 <div class="cb">
                     <div>

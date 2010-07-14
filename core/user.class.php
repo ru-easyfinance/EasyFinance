@@ -187,7 +187,7 @@ class oldUser
         //@FIXME Вероятно, стоит подключаться к базе лишь в том случае, если в сессии у нас пусто
         $sql = "SELECT id, user_name, user_login, user_pass, user_mail, getNotify,
             DATE_FORMAT(user_created,'%d.%m.%Y') as user_created, user_active, user_service_mail,
-            user_currency_default, user_currency_list, user_type
+            user_currency_default, user_currency_list, user_type, time_zone_offset
             FROM users
             WHERE (user_login = ? OR user_mail = ?) AND user_pass = ? AND user_new  = 0";
 

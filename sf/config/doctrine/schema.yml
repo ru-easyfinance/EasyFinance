@@ -53,11 +53,24 @@ Currency:
 User:
   tableName: users
   columns:
-    id:                { type: integer(4), unsigned: true, notnull: true, primary: true, autoincrement: true }
     user_name:         { type: string, size: 100, notnull: true, name: user_name as name }
     password:          { type: string(40),  notnull: true, name: user_pass as password }
     user_service_mail: { type: string(100), notnull: true }
     currency_id:       { name: user_currency_default as currency_id, type: integer(4), notnull: true, default: 1 }
+    user_login:        { type: string(100), notnull: true }
+    user_mail:         { type: string(100), notnull: true }
+    time_zone_offset:  { type: float(4), notnull: true, default:  0 }
+    sms_phone:         { type: string(100) }
+    reminder_mail_aviable:         { type: integer(1), notnull: true, unsigned: true, default: 0 }
+    reminder_mail_default_enabled: { type: integer(1), notnull: true, unsigned: true, default: 0 }
+    reminder_mail_days:            { type: integer(4), notnull: true, unsigned: true, default: 3 }
+    reminder_mail_hour:            { type: integer(4), notnull: true, unsigned: true, default: 11 }
+    reminder_mail_minutes:         { type: integer(4), notnull: true, unsigned: true, default: 0 }
+    reminder_sms_aviable:          { type: integer(1), notnull: true, unsigned: true, default: 0 }
+    reminder_sms_default_enabled:  { type: integer(1), notnull: true, unsigned: true, default: 0 }
+    reminder_sms_days:             { type: integer(4), notnull: true, unsigned: true, default: 3 }
+    reminder_sms_hour:             { type: integer(4), notnull: true, unsigned: true, default: 11 }
+    reminder_sms_minutes:          { type: integer(4), notnull: true, unsigned: true, default: 0 }
   options:
     symfony:
       form:  false
@@ -154,7 +167,9 @@ Operation:
     accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
     transfer_account_id: { type: integer(4), notnull: false, default: null } # ID счета получателя
     transfer_amount:     { type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
-    chain_id:    { type: integer(4), notnull: false, default: null }             # Связь с календарем
+    tags:        { type: string(255) }
+    chain_id:    { type: integer(4), notnull: false, default: null, unsigned: true } # Связь с календарем
+    exchange_rate: {type: 'decimal(12, 6)', notnull: true, default: 0 } # Курс обмена
   relations:
     User:
       local: user_id
@@ -444,6 +459,7 @@ BudgetCategory:
       form:   false
       filter: false
 
+
 # Отправители эл. почты
 EmailSource:
   tableName: email_sources
@@ -455,6 +471,7 @@ EmailSource:
     symfony:
       form:  true
       filter: true
+
 
 # Парсеры эл. почты
 EmailParser:
@@ -480,6 +497,34 @@ EmailParser:
       type: one
       foreignType: one
       onDelete: CASCADE
+
+
+# SMS/Email оповещения о запланированных операциях
+OperationNotification:
+  tableName: operation_notifications
+  actAs:
+    Timestampable:
+      created: { name: dt_create }
+      updated: { name: dt_update }
+  columns:
+    operation_id:   { type: integer(4), unsigned: true, notnull: true }
+    date_time:      { type: timestamp, notnull: true } # дата и время на которое запланирована отправка оповешения
+    type:           { type: integer(1), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
+    is_sent:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # флаг - смс отправлено
+    fail_counter:   { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
+    is_done:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # флаг - закончили с этой операцией
+  relations:
+    Operation:
+      local:   operation_id
+      foreign: id
+      type:        one
+      foreignType: many
+      onDelete: CASCADE      # операции, удаляются все оповещения
+  options:
+    symfony:
+      form:   false
+      filter: false
+
 
 # Цепочки событий календаря  (100% - OK)
 CalendarChain:

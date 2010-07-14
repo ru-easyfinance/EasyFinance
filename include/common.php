@@ -55,10 +55,14 @@ Core::getInstance()->js = array(
         'models/user.model',
         'widgets/profile/profile.widget',
         'widgets/profile/userCurrency.widget',
-        'widgets/profile/userIntegrations.widget'
+        'widgets/profile/userIntegrations.widget',
+        'widgets/operations/operationReminders.widget'
         ),
     'operation' => array(
 		'widgets/operations/operationsJournal.widget',
+		'widgets/operations/operationReminders.widget',
+		'widgets/operations/operationEdit.widget',
+		'models/accounts.model',
 		'operation'),
     'mail' => array('mail',
 		'models/mail.model',

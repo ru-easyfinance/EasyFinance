@@ -82,6 +82,12 @@ class Calendar_Model extends _Core_Abstract_Model
         $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
 
         foreach ($rows as $row) {
+            // Добавляем напомнинания
+            $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
+            $notifications = Core::getInstance()->db->select($sql, $row['id'] );
+
+            $row = self::_addNotificationInfo( $user, $row );
+
             $model = new Calendar_Model($row, $user);
 
             $modelsArray[$row['id']] = $model;
@@ -143,6 +149,12 @@ class Calendar_Model extends _Core_Abstract_Model
         $rows = Core::getInstance()->db->select($sql, $user->getId());
 
         foreach ($rows as $row) {
+            // Добавляем напомнинания
+            $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
+            $notifications = Core::getInstance()->db->select($sql, $row['id'] );
+
+            $row = self::_addNotificationInfo( $user, $row );
+
             $model = new Calendar_Model($row, $user);
 
             $modelsArray[$row['id']] = $model;
@@ -156,7 +168,7 @@ class Calendar_Model extends _Core_Abstract_Model
      *
      * @param oldUser $user
      */
-    public function loadReminder(oldUser $user)
+    public static function loadReminder(oldUser $user)
     {
         $modelsArray = array();
 
@@ -199,13 +211,61 @@ class Calendar_Model extends _Core_Abstract_Model
         $rows = Core::getInstance()->db->select($sql, $user->getId());
 
         foreach ($rows as $row) {
-            $model = new Calendar_Model( $row, $user );
+            $row = self::_addNotificationInfo( $user, $row );
+
+            $model = new Calendar_Model($row, $user);
 
             $modelsArray[$row['id']] = $model;
         }
 
         return $modelsArray;
     }
+
+
+    /**
+     * Добавляет в запись информацию о напоминаниях
+     *
+     * @param oldUser $user
+     * @param array $row
+     * @return array
+     */
+    private function _addNotificationInfo( oldUser $user, array $row )
+    {
+        // Добавляем напомнинания
+        $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
+        $notifications = Core::getInstance()->db->select($sql, $row['id'] );
+
+        // Получаем смещение временной зоны пользователя относительно времени сервера
+        $offset = ( ( $user->getUserProps('time_zone_offset') - round( ( date("O") / 100 ), 2 ) )*3600);
+
+        // Напоминания об операциях
+        if ( count( $notifications ) ) {
+            foreach ( $notifications as $notrow ) {
+                // SMS
+                if ( $notrow['type'] == 0 ) {
+                    $row['smsEnabled'] = 1;
+                    $dtTimestamp = strtotime( $notrow['date_time'] ) + $offset;
+                    $daysBefore = floor(abs( strtotime( $row['date']) - strtotime( date( "Y-m-d", $dtTimestamp ) ) ) / (3600*24));
+                    $row['smsDaysBefore'] = $daysBefore;
+                    $row['smsHour'] = date('H', $dtTimestamp);
+                    $row['smsMinutes'] = date('i', $dtTimestamp);
+                }
+
+                // Email
+                if ( $notrow['type'] == 1 ) {
+                    $row['mailEnabled'] = 1;
+                    $dtTimestamp = strtotime( $notrow['date_time'] ) + $offset;
+                    $daysBefore = floor(abs( strtotime( $row['date']) - strtotime( date( "Y-m-d", $dtTimestamp ) ) ) / (3600*24));
+                    $row['mailDaysBefore'] = $daysBefore;
+                    $row['mailHour'] = date('H', $dtTimestamp);
+                    $row['mailMinutes'] = date('i', $dtTimestamp);
+                }
+            }
+        }
+
+        return $row;
+    }
+
 
     /**
      * Создаёт цепочку операций
@@ -325,6 +385,17 @@ class Calendar_Model extends _Core_Abstract_Model
                 'week'       => $event->getWeek(),
                 'accepted'   => 0,
                 'chain'      => $chain,
+
+                // Напоминания
+                'mailEnabled'       => $event->getMailEnabled(),
+                'mailDaysBefore'    => $event->getMailDaysBefore(),
+                'mailHour'          => $event->getMailHour(),
+                'mailMinutes'       => $event->getMailMinutes(),
+
+                'smsEnabled'        => $event->getSmsEnabled(),
+                'smsDaysBefore'     => $event->getSmsDaysBefore(),
+                'smsHour'           => $event->getSmsHour(),
+                'smsMinutes'        => $event->getSmsMinutes(),
             );
         }
 

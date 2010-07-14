@@ -18,4 +18,20 @@ class ServiceSubscriptionTable extends Doctrine_Table
             ->where('user_id=? AND service_id=?')
             ->fetchOne( array( $userId, $serviceId ) );
     }
+
+
+    /**
+     * Получить активную запись по id пользователи и id услуги
+     * @param int $userId
+     * @param int $serviceId
+     * @return ServiceSubscription
+     */
+    public function getActiveUserServiceSubscription( $userId, $serviceId )
+    {
+        return $this->createQuery()
+            ->select('*')
+            ->from('ServiceSubscription')
+            ->where('user_id=? AND service_id=? AND subscribed_till > NOW()')
+            ->fetchOne( array( $userId, $serviceId ) );
+    }
 }

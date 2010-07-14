@@ -270,6 +270,16 @@ class Calendar_Event
             'tags'       => $this->getTags(),
             'transfer'   => $this->_model->transfer_account_id,
             'source'     => $this->_model->source,
+
+            // Напоминание
+            'mailEnabled'       => $this->getMailEnabled(),
+            'mailDaysBefore'    => $this->getMailDaysBefore(),
+            'mailHour'          => $this->getMailHour(),
+            'mailMinutes'       => $this->getMailMinutes(),
+            'smsEnabled'        => $this->getSmsEnabled(),
+            'smsDaysBefore'     => $this->getSmsDaysBefore(),
+            'smsHour'           => $this->getSmsHour(),
+            'smsMinutes'        => $this->getSmsMinutes(),
         );
 
     }
@@ -299,6 +309,86 @@ class Calendar_Event
     public function setDate($date)
     {
         $this->_model->date = $date;
+    }
+
+    /**
+     * Почтовые уведомления
+     *
+     * @return boolean
+     */
+    public function getMailEnabled()
+    {
+        return $this->_model->mailEnabled;
+    }
+
+    /**
+     * За сколько дней
+     *
+     * @return int
+     */
+    public function getMailDaysBefore()
+    {
+        return (int)$this->_model->mailDaysBefore;
+    }
+
+    /**
+     * В какой час
+     *
+     * @return int
+     */
+    public function getMailHour()
+    {
+        return (int)$this->_model->mailHour;
+    }
+
+    /**
+     * В какую минуту
+     *
+     * @return int
+     */
+    public function getMailMinutes()
+    {
+        return (int)$this->_model->mailMinutes;
+    }
+
+    /**
+     * SMS уведомления
+     *
+     * @return boolean
+     */
+    public function getSmsEnabled()
+    {
+        return $this->_model->smsEnabled;
+    }
+
+    /**
+     * За сколько дней
+     *
+     * @return int
+     */
+    public function getSmsDaysBefore()
+    {
+        return (int)$this->_model->smsDaysBefore;
+    }
+
+    /**
+     * В который час
+     *
+     * @return int
+     */
+    public function getSmsHour()
+    {
+        return (int)$this->_model->smsHour;
+    }
+
+    /**
+     * В какую минуту
+     *
+     * @return int
+     */
+    public function getSmsMinutes()
+    {
+        return (int)$this->_model->smsMinutes;
     }
 
     /**

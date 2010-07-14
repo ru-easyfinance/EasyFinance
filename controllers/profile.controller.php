@@ -88,6 +88,29 @@ class Profile_Controller extends _Core_Controller_UserCommon
         die($this->model->currency('save', $prop));
     }
 
+    function save_reminders(){
+        // заглушка для #1492
+
+        $ret = array(
+            "result" => array(
+                "text" => "Настройки напоминаний сохранены"
+            ),
+            "reminders" => array(
+                "mailAvailable" => true, // подключена ли услуга
+                "mailDefaultEnabled" => true, // уведомление для новых событий
+                "mailHour" => "23",
+                "mailMinutes" => "45",
+
+                "smsAvailable" => true, // подключена ли услуга
+                "smsDefaultEnabled" => true, // уведомление для новых событий
+                "smsHour" => "10",
+                "smsMinutes" => "15"
+            )
+        );
+
+        die(json_encode($ret));
+    }
+
     function cook(){
         die($this->model->cook());
     }

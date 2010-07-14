@@ -41,8 +41,6 @@ easyFinance.widgets.calendarLeft = function(){
         // ищем операцию в списке просроченных
         _operation = easyFinance.models.accounts.getOverdueOperationById(id);
         if (_operation) {
-            // если операция была просрочена,
-            // редактируем конкретную операцию, а не всю цепочку
             easyFinance.widgets.operationEdit.fillFormCalendar(_operation, true, false);
         } else {
             // для серий будущих операций спрашиваем,

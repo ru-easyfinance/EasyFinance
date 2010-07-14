@@ -492,12 +492,14 @@ easyFinance.models.accounts = function(){
         type, account, category, date, comment,
         amount, toAccount, currency, convert,
         target, close, tags, time, last, every, repeat, week,
+        reminders,
         callback) {
             editOperationById(
                 '', "0", type, account, category, date,
                 comment, amount, toAccount, currency,
                 convert, target, close, tags,
-                null, time, last, every, repeat, week
+                null, time, last, every, repeat, week,
+                reminders
             );
     }
 
@@ -520,6 +522,8 @@ easyFinance.models.accounts = function(){
         amount, toAccount, currency, convert,
         target, close, tags,
         chain, time, last, every, repeat, week, // параметры для цепочек операций
+        mailEnabled, mailDaysBefore, mailHour, mailMinutes, // параметры напоминаний по email
+        smsEnabled, smsDaysBefore, smsHour, smsMinutes, // параметры напоминаний по sms
         callback){
             // параметры для обычной транзакции
             var params = {
@@ -541,7 +545,7 @@ easyFinance.models.accounts = function(){
 
             var url = '';
             if (typeof chain == "string") {
-                // регулярная транзакция
+                // запланированная операция / цепочка
                 url = (id == '') ? ADD_CHAIN_URL : EDIT_CHAIN_URL;
 
                 // расширяем список параметров
@@ -551,10 +555,20 @@ easyFinance.models.accounts = function(){
                 params.every = every;
                 params.repeat = repeat;
                 params.week = week;
+
+                // добавляем параметры напоминаний
+                params.mailEnabled = mailEnabled;
+                params.mailDaysBefore = mailDaysBefore;
+                params.mailHour = mailHour;
+                params.mailMinutes = mailMinutes;
+
+                params.smsEnabled = smsEnabled;
+                params.smsDaysBefore = smsDaysBefore;
+                params.smsHour = smsHour;
+                params.smsMinutes = smsMinutes;
             } else {
                 url = (id == '') ? ADD_OPERATION_URL : EDIT_OPERATION_URL;
             }
-
             $.post(url, params, function(data){
                 // @todo: update totalBalance!
 

@@ -85,6 +85,9 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             'week'       => isset( $request->post['week'] ) ? $request->post['week'] : '0000000',
         );
 
+        $notifications = $this->_readNotificationsFromRequest( $request );
+        $event_array = array_merge( $event_array, $notifications );
+
         $event = new Calendar_Event ( new Calendar_Model( $event_array, $user ), $user );
 
         if ( ! $event->checkData() ) {
@@ -145,6 +148,10 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             'accepted'   => isset( $request->post['accepted'] ) ? ( int ) $request->post['accepted'] : 0,
         );
 
+        // Напоминания
+        $notifications = $this->_readNotificationsFromRequest( $request );
+        $event_array = array_merge( $event_array, $notifications );
+
         $event = new Calendar_Event ( new Calendar_Model( $event_array, $user ), $user );
 
         if ( ! $event->checkData() ) {
@@ -174,7 +181,8 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                         $event_array['comment'],
                         $event_array['account'],
                         $event_array['tags'],
-                        $event_array['accepted']
+                        $event_array['accepted'],
+                        $notifications
                     );
 
                 } elseif ( $event_array['type'] == 2 ) {
@@ -210,6 +218,29 @@ class Calendar_Controller extends _Core_Controller_UserCommon
 
         }
     }
+
+
+    /**
+     * Получает из Request-а данные по напоминаниям
+     *
+     * @param _Core_Request $request
+     * @return array
+     */
+    private function _readNotificationsFromRequest( $request )
+    {
+         return
+         array (
+            'mailEnabled'       => isset( $request->post['mailEnabled'] ) ? ( $request->post['mailEnabled'] == 'true' ) : false,
+            'mailDaysBefore'    => isset( $request->post['mailDaysBefore'] ) ? $request->post['mailDaysBefore'] : 3,
+            'mailHour'          => isset( $request->post['mailHour'] ) ? $request->post['mailHour'] : 23,
+            'mailMinutes'       => isset( $request->post['mailMinutes'] ) ? $request->post['mailMinutes'] : 45,
+            'smsEnabled'       => isset( $request->post['smsEnabled'] ) ? ( $request->post['smsEnabled'] == 'true' ) : false,
+            'smsDaysBefore'    => isset( $request->post['smsDaysBefore'] ) ? $request->post['smsDaysBefore'] : 3,
+            'smsHour'          => isset( $request->post['smsHour'] ) ? $request->post['smsHour'] : 23,
+            'smsMinutes'       => isset( $request->post['smsMinutes'] ) ? $request->post['smsMinutes'] : 45,
+        );
+    }
+
 
     /**
      * Удаляет выбранный события

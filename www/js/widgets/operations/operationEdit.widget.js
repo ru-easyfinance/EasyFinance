@@ -50,6 +50,8 @@ easyFinance.widgets.operationEdit = function(){
     var _$blockCalendar = null;
     var _$blockWeekdays = null;
     var _$blockRepeating = null;
+    var _$blockReminders = null;
+    var _reminders = null;
 
     var _buttonsNormal = null;
     var _buttonsEditAccept = null;
@@ -296,6 +298,7 @@ easyFinance.widgets.operationEdit = function(){
 
     function _initBlockCalendar() {
         _$blockCalendar = _$node.find('#operationEdit_planning');
+        _$blockReminders = $("#operationEdit_reminders");
 
         _$blockCalendar.find('#cal_date_end').datepicker( { buttonImageOnly: true } );
 
@@ -411,8 +414,20 @@ easyFinance.widgets.operationEdit = function(){
         setType(data.type);
         // EOF TEMP
 
+        if (!_reminders) {
+            // если планируем операцию в первый раз,
+            // инициализируем виджет напоминалок
+            _reminders = easyFinance.widgets.operationReminders.init("#reminders", easyFinance.models.user, "operation");
+        } else {
+            // выставляем опции напоминалок по умолчанию
+            _reminders.setDefaults();
+        }
+
         // показываем блок планирования
-        _$blockCalendar.show()
+        _$blockCalendar.show();
+
+        // напоминалки (?)
+        _$blockReminders.show();
     }
 
     function _changeOperationType() {
@@ -570,6 +585,17 @@ easyFinance.widgets.operationEdit = function(){
         var close2 = $('#op_close').is(':checked')?1:0;
         var tags = $('#op_tags').val();
 
+        var reminders = _isCalendar ? easyFinance.widgets.operationReminders.getSettings() : {};
+        var mailEnabled = reminders.mailEnabled;
+        var mailDaysBefore = reminders.mailDaysBefore;
+        var mailHour = reminders.mailHour;
+        var mailMinutes = reminders.mailMinutes;
+
+        var smsEnabled = reminders.smsEnabled;
+        var smsDaysBefore = reminders.smsDaysBefore;
+        var smsHour = reminders.smsHour;
+        var smsMinutes = reminders.smsMinutes;
+
         // перед отправкой очищаем форму,
         // чтобы нельзя было сохранить
         // одну и ту же операцию дважды
@@ -593,6 +619,8 @@ easyFinance.widgets.operationEdit = function(){
             close2,
             tags,
             chain, time, last, every, repeat, week,
+            mailEnabled, mailDaysBefore, mailHour, mailMinutes, // параметры напоминаний по email
+            smsEnabled, smsDaysBefore, smsHour, smsMinutes, // параметры напоминаний по sms
 
             function(data){
                 // В случае успешного сохранения, закрываем диалог и обновляем календарь
@@ -654,6 +682,7 @@ easyFinance.widgets.operationEdit = function(){
 
             if (opType == "0" || opType == "1") {
                 // для доходов и расходов
+
                 if (_selectedCategory == '' || _selectedCategory == '-1' || _selectedCategory == "0") {
                         $.jGrowl('Выберите категорию!', {theme: 'red', stick: true});
                         return false;
@@ -741,6 +770,15 @@ easyFinance.widgets.operationEdit = function(){
                     }
                 }
             }
+
+            // проверка доступности напоминалок
+            var reminders = easyFinance.widgets.operationReminders.getSettings();
+            if (reminders.mailEnabled && !easyFinance.models.user.isMailRemindersAvailable()
+                || reminders.smsEnabled && !easyFinance.models.user.isSmsRemindersAvailable()) {
+                // уведомления не подключены!
+                $("#operationEdit_noReminders").show();
+                return false;
+            }
         }
 
         return true;
@@ -765,6 +803,9 @@ easyFinance.widgets.operationEdit = function(){
         $('#cal_count').val("1");
         $('.week input').removeAttr('checked');
         $('#cal_date_end').val("");
+
+        // скрываем сообщение об оплате напоминалок
+        $("#operationEdit_noReminders").hide();
     }
 
     // обновляем поле "курс" на основе _realConversionRate
@@ -942,6 +983,8 @@ easyFinance.widgets.operationEdit = function(){
 
         _$node = $(nodeSelector);
 
+        easyFinance.models.user.reload();
+
         _modelAccounts = modelAccounts;
         _modelCategory = modelCategory;
 
@@ -1049,6 +1092,7 @@ easyFinance.widgets.operationEdit = function(){
         _isCalendar = false;
         _isChain = false;
 
+        _$blockReminders.hide();
         _$blockCalendar.hide();
         _expandNormal();
     }
@@ -1200,6 +1244,21 @@ easyFinance.widgets.operationEdit = function(){
             _$blockCalendar.hide();
         else
             _$blockCalendar.show();
+
+        // заполняем параметры напоминаний
+        var reminders = {
+            mailEnabled: data.mailEnabled,
+            mailDaysBefore: data.mailDaysBefore,
+            mailHour: data.mailHour,
+            mailMinutes: data.mailMinutes,
+
+            smsEnabled: data.smsEnabled,
+            smsDaysBefore: data.smsDaysBefore,
+            smsHour: data.smsHour,
+            smsMinutes: data.smsMinutes
+        }
+
+        easyFinance.widgets.operationReminders.setSettings(reminders);
     }
 
     function fillFormCalendar(data, isEditing, isChain) {
@@ -1236,3 +1295,4 @@ easyFinance.widgets.operationEdit = function(){
         fillFormCalendar: fillFormCalendar
     };
 }(); // execute anonymous function to immediatly return object
+

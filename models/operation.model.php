@@ -313,7 +313,19 @@ class Operation_Model
                 'chain_id'  => $operation['chain'],
             );
 
-            $this->_addOperation($values);
+            $notifications = array(
+                'mailEnabled'       => $operation['mailEnabled'],
+                'mailDaysBefore'    => $operation['mailDaysBefore'],
+                'mailHour'          => $operation['mailHour'],
+                'mailMinutes'       => $operation['mailMinutes'],
+
+                'smsEnabled'       => $operation['smsEnabled'],
+                'smsDaysBefore'    => $operation['smsDaysBefore'],
+                'smsHour'          => $operation['smsHour'],
+                'smsMinutes'       => $operation['smsMinutes'],
+            );
+
+            $this->_addOperation($values, $notifications);
         }
         $this->db->query("COMMIT;");
 
@@ -438,8 +450,8 @@ class Operation_Model
 
         $this->_user->initUserAccounts();
         $this->_user->save();
-        return $lastId;
 
+        return $lastId;
     }
 
     /**
@@ -454,10 +466,11 @@ class Operation_Model
      * @param int       $account_id Ид счета
      * @param array     $tags       Теги
      * @param int       $accepted   Подтверждена ли операция
+     * @param array     $notifications
      *
      * @return bool true - Регистрация прошла успешно
      */
-    function edit($type, $id, $money = 0, $date = '', $category = null, $comment = '', $account = 0, array $tags = array(), $accepted=null)
+    function edit($type, $id, $money = 0, $date = '', $category = null, $comment = '', $account = 0, array $tags = array(), $accepted = null, $notifications = array())
     {
         $values = array(
             'money'         => $money,
@@ -471,6 +484,12 @@ class Operation_Model
 
         if ($accepted) {
             $values['accepted'] = '1';
+        }
+
+        // Если были изменены нотификации
+        $this->_deleteNotifications($id);
+        if (count($notifications)) {
+            $this->_addNotifications($id, $date, $notifications, $this->_user);
         }
 
         $this->_updateOperation($this->_user, $id, $values);
@@ -512,6 +531,8 @@ class Operation_Model
      */
     function deleteOperation($id = 0) {
         $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND id = ?";
+
+        $this->_deleteNotifications($id);
 
         return (bool) $this->db->query($sql, $this->_user->getId(), $id);
     }
@@ -1023,7 +1044,7 @@ class Operation_Model
      * @param array $values
      * @return int Возвращает id добавленной операции
      */
-    private function _addOperation(array $values = array())
+    private function _addOperation(array $values = array(), array $notifications = array())
     {
 
         $default = array(
@@ -1043,16 +1064,75 @@ class Operation_Model
             $this->_updateTags($operationId, $tags);
         }
 
-        return $operationId;
+        // Если нужно напоминание, добавляем напоминание:
+        if ( count( $notifications ) )
+        {
+            $this->_addNotifications( $operationId, $values['date'], $notifications, $this->_user );
+        }
 
+        return $operationId;
     }
 
     private static function _wrapKey($props)
     {
         $keys = array_keys($props);
         return sprintf('`%s`', implode('`, `', $keys));
-
     }
+
+
+    /**
+     * Добавление уведомлений
+     *
+     * @param array $notifications массив с настройками уведомлений
+     */
+    private function _addNotifications( $operationId, $date, $notifications, oldUser $user )
+    {
+        // Смещение в секундах относительно серверного времени
+        $offset = ( ( $user->getUserProps('time_zone_offset') - round( date("O") / 100, 2 ) ) * 3600 );
+
+        $currentDT = date('Y-m-d H:i:s');
+        $operation_ts = strtotime( $date );
+
+        $sql = "INSERT INTO
+                operation_notifications
+            SET
+                operation_id = ?,
+                type = ?,
+                date_time = ?,
+                is_sent = ?,
+                fail_counter = ?,
+                is_done = ?,
+                dt_create = ?,
+                dt_update = ?";
+
+        // Email уведомления
+        if ( $notifications['mailEnabled'] )
+        {
+            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts ) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
+            $type = 1;
+        }
+
+        // SMS уведомления
+        if ( $notifications['smsEnabled'] )
+        {
+            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts ) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
+            $type = 0;
+        }
+        $this->db->query( $sql, array( (int)$operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT ) );
+    }
+
+
+    /**
+     * Удаление уведомлений, привязанных к операции
+     *
+     * @param int $operationId id операции
+     */
+    private function _deleteNotifications( $operationId )
+    {
+        $sql = "DELETE FROM operation_notifications WHERE operation_id = ?";
+        $this->db->query( $sql, array( (int)$operationId ) );
+    }
+
 
     private static function _wrapVal($props)
     {

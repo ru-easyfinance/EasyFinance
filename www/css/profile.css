@@ -138,3 +138,19 @@ ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
     width: 8em;
 }
 
+/* стили напоминалок */
+#remindersOptions td {
+    padding: 5px 20px 5px 0;
+}
+
+#labelTimeZone {
+    width: 125px;
+}
+
+#selTimeZoneOffset {
+    width: 250px;
+}
+
+#smsPhone {
+    width: 115px;
+}

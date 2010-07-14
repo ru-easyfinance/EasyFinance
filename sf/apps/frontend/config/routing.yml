@@ -1,3 +1,21 @@
+calendar_add:           # роут для сохранения запланированной операции
+  url: /calendar/add
+  class: sfRoute
+  param: { module: calendar, action: add }
+  requirements:
+    sf_method: [get, post]
+
+save_reminder_settings:
+  url: /profile/save_reminders
+  class: sfRoute
+  param: { module: profile, action: saveReminders }
+  requirements:
+    sf_method: [get, post]
+
+load_user_data:
+  url: /profile/load_main_settings
+  class: sfRoute
+  param: { module: profile, action: loadUserData }
 
 # Создать счет
 pda_account_create:
