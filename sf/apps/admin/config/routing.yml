@@ -1,3 +1,9 @@
+# главная страница админки
+homepage:
+  url:   /
+  param: { module: sfAdminDash, action: dashboard }
+
+
 email_parser:
   class: sfDoctrineRouteCollection
   options:

@@ -12,9 +12,7 @@ default:
     #language:     en
     #robots:       index, follow
 
-  stylesheets:
-    - /sf/sf_admin/css/main.css
-    - admin/billing.css
+  stylesheets: []
 
   javascripts:
     - jquery/jquery.min.js

@@ -38,3 +38,5 @@ all:
 
     default_culture:          ru
     i18n:                   true
+
+    enabled_modules:        [sfAdminDash]

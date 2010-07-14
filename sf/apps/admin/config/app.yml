@@ -1,5 +1,26 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/11-App
+all:
 
-# default values
-#all:
+  # настройки sfAdminDash
+  sf_admin_dash:
+    web_dir:                      /sfAdminDashPlugin
+    image_dir:                    /sfAdminDashPlugin/images/icons/
+    default_image:                config.png
+    resize_mode:                  thumbnail
+    site:                         EasyFinance
+    include_path:                 true
+    include_jquery_no_conflict:   false
+    logout:                       false # не показываем ссылку для выхода
+    #login_route:                  @homepage
+    #logout_route:                 @homepage
+    categories:
+      Billing:
+        name:  Биллинг
+        items:
+          services:      { url: @service,             name: Услуги }
+          transactions:  { url: @billing_transaction, name: Транзакции }
+          subscriptions: { url: @billing_transaction, name: Подписки }
+      EmailParsers:
+        name:  Парсеры Email
+        items:
+          emailsources:  { url: @email_source, name: Отправители }
+          emailparsers:  { url: @email_parser, name: Парсеры }

@@ -11,6 +11,8 @@ generator:
     with_doctrine_route:   true
     actions_base_class:    sfActions
     i18n_catalogue:        admin
+    css:                   false
+
     config:
       actions:        
         _new:

@@ -9,34 +9,17 @@
     <?php include_javascripts() ?>
   </head>
   <body>
-    <div class="admin_top_menu">
-       <div class="menu_item">Биллинг
-            <div class="submenu">
-                <a href="/services">Услуги</a><br />
-                <a href="/transactions">Транзакции</a><br />
-                <a href="/transactions">Подписки</a>
-            </div>
-       </div>
-       <div class="menu_item">Парсеры Email
-            <div class="submenu">
-                <a href="/emailsources">Отправители</a><br />
-                <a href="/emailparsers">Парсеры</a><br />
-            </div>
-       </div>
-    </div>
+<?php
+    // TODO: добавить авторизацию и убить эту гадость
+    if (!$sf_user->isAuthenticated()) {
+        $sf_user->setAuthenticated(true);
+    }
+?>
+    <?php include_component('sfAdminDash', 'header'); ?>
     <?php echo $sf_content ?>
+    <?php include_partial('sfAdminDash/footer'); ?>
     <script type="text/javascript">
     $( document ).ready( function(){
-        $(".menu_item").mouseover( function(){
-            $( this ).addClass( "selected" );
-            $( this ).children(".submenu").css("display", "block");
-        });
-
-        $(".menu_item").mouseout( function(){
-            $( this ).removeClass( "selected" );
-            $( this ).children(".submenu").css("display", "none");
-        });
-
         $( "<a class='testRegexp' href='#'>test</a>" ).insertAfter("input[id$=regexp]");
         $( ".testRegexp").click( function(){
 

@@ -15,7 +15,8 @@ class adminConfiguration extends sfApplicationConfiguration
     {
         $this->enablePlugins(array(
             'sfDoctrinePlugin',
-            'sfFormExtraPlugin'
+            'sfFormExtraPlugin',
+            'sfAdminDashPlugin',
         ));
     }
 }

@@ -7,3 +7,6 @@
 [submodule "sf/lib/vendor/phpunit"]
 	path = sf/lib/vendor/phpunit
 	url = git://github.com/maxim-oleinik/phpunit.git
+[submodule "sf/plugins/sfAdminDashPlugin"]
+	path = sf/plugins/sfAdminDashPlugin
+	url = http://github.com/davidsblom/sfAdminDashPlugin.git
