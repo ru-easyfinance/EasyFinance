@@ -43,48 +43,96 @@ class Budget_ModelTest extends UnitTestCase
     {
 
         // Создаём операции
+
+        // Правильные операции, на вчера
         $options   = array(
             'user_id'    => $this->userId,
             'chain_id'   => 999,
             'date'       => date('Y-m-d'),
             'cat_id'     => $this->cat1,
             'account_id' => $this->accountId,
+            'money'      => -1000,
         );
-        // Правильные операции, на вчера
         CreateObjectHelper::makeOperation($options);
+
+        $options   = array(
+            'user_id'    => $this->userId,
+            'chain_id'   => 999,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat1,
+            'account_id' => $this->accountId,
+            'money'      => -1000,
+        );
         CreateObjectHelper::makeOperation($options);
+
+        $options   = array(
+            'user_id'    => $this->userId,
+            'chain_id'   => 999,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat1,
+            'account_id' => $this->accountId,
+            'money'      => -1000,
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Операция не выполнена
-        $options['accepted'] = 0;
-        $options['cat_id'] = $this->cat2;
+        $options   = array(
+            'user_id'    => $this->userId,
+            'chain_id'   => 999,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat2,
+            'account_id' => $this->accountId,
+            'money'      => -1000,
+            'accepted'   => 0,
+        );
         CreateObjectHelper::makeOperation($options);
 
 
         // Дата операции установлена на завтра
-        $options['date'] = date('Y-m-d');
+        $options   = array(
+            'user_id'    => $this->userId,
+            'chain_id'   => 999,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat2,
+            'account_id' => $this->accountId,
+            'money'      => -1000,
+            'accepted'   => 0,
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Дата операции установлена на завтра, но она отмечена выполненной
-        $options['accepted'] = 1;
-        $options['date'] = date('Y-m-d');
-        $options['cat_id'] = $this->cat3;
-        $options['money']  = 1001;
+        $options   = array(
+            'user_id'    => $this->userId,
+            'chain_id'   => 999,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat3,
+            'account_id' => $this->accountId,
+            'money'      => 1001,
+            'accepted'   => 1,
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Удалённая операция
-        $options['accepted'] = 1;
-        $options['date'] = date('Y-m-d');
-        $options['deleted_at'] = '2010-02-02 02:02:02';
-        $options['cat_id'] = $this->cat3;
-        $options['money']  = 1002;
+        $options   = array(
+            'user_id'    => $this->userId,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat3,
+            'account_id' => $this->accountId,
+            'money'      => 1002,
+            'accepted'   => 1,
+            'deleted_at' => '2010-02-02 02:02:02',
+        );
         CreateObjectHelper::makeOperation($options);
 
         // Обычная операция, вне цепочки
-        unset($options['deleted_at']);
-        unset($options['chain_id']);
-        $options['cat_id'] = $this->cat3;
-        $options['money']  = 1003;
+        $options   = array(
+            'user_id'    => $this->userId,
+            'date'       => date('Y-m-d'),
+            'cat_id'     => $this->cat3,
+            'account_id' => $this->accountId,
+            'money'      => 1003,
+            'accepted'   => 1,
+        );
         CreateObjectHelper::makeOperation($options);
 
 
@@ -99,8 +147,12 @@ class Budget_ModelTest extends UnitTestCase
         CreateObjectHelper::createBudget($budget_options);
 
         // Доходная часть для категории "cat1"
-        $budget_options['drain'] = 1;
-        $budget_options['amount'] = 250;
+        $budget_options = array(
+            'user_id'   => $this->userId,
+            'category'  => $this->cat1,
+            'drain'     => 1,
+            'amount'    => 250,
+        );
         CreateObjectHelper::createBudget($budget_options);
     }
 
@@ -118,14 +170,14 @@ class Budget_ModelTest extends UnitTestCase
                     $this->cat1 => array(
                         'amount' => 250,
                         'money'=> 0,
-                        'mean'   => 375,
+                        'mean'   => 1000,
                     )
                 ),
                 'p' => array(
                     $this->cat1 => array(
                         'amount' => 500,
                         'money'=> 3000,
-                        'mean'   => 375,
+                        'mean'   => 1000,
                     ),
                     $this->cat3 => array(
                         'money'=> 1001 + 1003,
