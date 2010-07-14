@@ -194,6 +194,19 @@ function roundToSignificantFigures(n, sig) {
     return Math.round(n * mult) / mult;
 }
 
+// обработчик по умолчанию для JSON-ответов
+// выводит ошибки или сообщения
+function jsonAnswer(data) {
+    if (data.error){
+        if (data.error.text) {
+            $.jGrowl(data.error.text, {theme: 'red'});
+        }
+    } else if (data.result){
+        if (data.result.text) {
+            $.jGrowl(data.result.text, {theme: 'green'});
+        }
+    }
+}
 
 /**
  * оставляет 4 значащих цифры

@@ -105,8 +105,13 @@ function wzSaveEverything() {
         //Customer wishes crunch
         wholeData = wzObjToArray(wholeData);
 
-        // JET. #1297 делаем красиво и модно!
-        $.download("https://" + window.location.host + "/integration/anketa?filename=anketa.pdf", wholeData, "post", "_blank");
+        // #1528
+        $.post(
+            '/integration/anketa',
+            wholeData,
+            jsonAnswer,
+            "json"
+        );
     } else {
         $.jGrowl("Заполните все обязательные поля!", {theme: 'red', life: 10000});
     }

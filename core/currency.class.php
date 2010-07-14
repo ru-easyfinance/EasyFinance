@@ -18,7 +18,7 @@ class oldCurrency implements IteratorAggregate,  ArrayAccess
      * Массив с системными валютами
      * @var array mixed
      */
-    protected $sys_list_currency;
+    protected $sys_list_currency = array();
 
     /**
      * Конструктор класса
