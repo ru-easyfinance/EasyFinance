@@ -1,0 +1,25 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/13-View
+
+default:
+  http_metas:
+    content-type: text/html; charset=UTF-8
+
+  metas:
+    #title:        symfony project
+    #description:  symfony project
+    #keywords:     symfony, project
+    #language:     en
+    #robots:       index, follow
+    title:                 EasyFinance - система управления личными финансами
+    description:           Мобильная версия EasyFinance.Ru
+    viewport:              width=240
+    MobileOptimized:       176
+    PalmComputingPlatform: true
+
+  stylesheets:    [pda.css]
+
+  javascripts:    []
+
+  has_layout:     true
+  layout:         layout

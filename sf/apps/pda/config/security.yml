@@ -1,0 +1,7 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/08-Security
+
+
+# Отключаем контроль за авторзацией для самого контроллера авторизации
+default:
+  is_secure: true

@@ -1,0 +1,24 @@
+myAuthRememberKey:
+  tableName: auth_remember_keys
+  options:
+    symfony:
+      form:   false
+      filter: false
+  actAs: [Timestampable]
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    user_id:
+      type: integer(4)
+    remember_key: string(32)
+    ip_address:
+      type: string(50)
+      primary: true
+  relations:
+    User:
+      local: user_id
+      foreignAlias: RememberKeys
+      foreignType: one
+      onDelete: CASCADE

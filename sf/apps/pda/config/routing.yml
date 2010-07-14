@@ -1,0 +1,15 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: accounts, action: index }
+
+login:
+  url:   /login
+  param: { module: myAuth, action: login }
+
+logout:
+  url:   /logout
+  param: { module: myAuth, action: logout }
