@@ -212,8 +212,8 @@ class Integration_Controller extends _Core_Controller
         $anketa['personal']['second_name']              = (string)$data['wz_midname'];
         $anketa['personal']['control_name']             = (string)$data['wz_password'];
         $anketa['personal']['birth_place']              = (string)$data['wz_birthplace'];
-        $anketa['personal']['birth_date']               = (string)$data['wz_birthdate'];
-        $anketa['personal']['gender']                   = ((int)$data['wz_sex'] == 1)? "Ж" : "М" ;
+        $anketa['personal']['birth_date']               = formatRussianDate2MysqlDate((string)$data['wz_birthdate']);
+        $anketa['personal']['gender']                   = ((int)$data['wz_sex'] == 1)? "ж" : "м" ;
         $anketa['personal']['nationality']              = (string)$data['wz_citizenship'];
         $anketa['personal']['inn']                      = (string)$data['wz_inn'];
 
@@ -242,21 +242,21 @@ class Integration_Controller extends _Core_Controller
         $anketa['main_doc']['serial']                   = (string)$data['wz_rf_id_series'];
         $anketa['main_doc']['number']                   = (string)$data['wz_rf_id_number'];
         $anketa['main_doc']['who_delivery']             = (string)$data['wz_rf_id_organisation'];
-        $anketa['main_doc']['issue_date']               = (string)$data['wz_rf_id_date'];
-        $anketa['main_doc']['expiration_date']          = (string)$data['wz_rf_expiration_date'];
+        $anketa['main_doc']['issue_date']               = formatRussianDate2MysqlDate((string)$data['wz_rf_id_date']);
+        $anketa['main_doc']['expiration_date']          = formatRussianDate2MysqlDate((string)$data['wz_rf_expiration_date']);
         $anketa['main_doc']['unit_code']                = (string)$data['wz_rf_id_organisation_code'];
 
         // Миграционная карта
         $anketa['migratory_card']['number']             = (string)$data['wz_migration_id_number'];
-        $anketa['migratory_card']['issue_date']         = (string)$data['wz_migration_id_date'];
-        $anketa['migratory_card']['expiration_date']    = (string)$data['wz_migration_id_expire'];
+        $anketa['migratory_card']['issue_date']         = formatRussianDate2MysqlDate((string)$data['wz_migration_id_date']);
+        $anketa['migratory_card']['expiration_date']    = formatRussianDate2MysqlDate((string)$data['wz_migration_id_expire']);
 
         // Данные документа подтверждающего право на жительство
         $anketa['residence_doc']['title']               = (string)$data['wz_residence_title'];
         $anketa['residence_doc']['serial']              = (string)$data['wz_foreign_id_series'];
         $anketa['residence_doc']['number']              = (string)$data['wz_foreign_id_number'];
-        $anketa['residence_doc']['issue_date']          = (string)$data['wz_foreign_id_date'];
-        $anketa['residence_doc']['expiration_date']     = (string)$data['wz_foreign_id_expire'];
+        $anketa['residence_doc']['issue_date']          = formatRussianDate2MysqlDate((string)$data['wz_foreign_id_date']);
+        $anketa['residence_doc']['expiration_date']     = formatRussianDate2MysqlDate((string)$data['wz_foreign_id_expire']);
 
         // Контактная информация
         $anketa['contacts']['home_phone']               = (string)$data['wz_phone_home'];
@@ -286,12 +286,11 @@ class Integration_Controller extends _Core_Controller
         $anketa['additionalCard']['secondName']         = (string)$data['wz_addit_card_secondname'];
         $anketa['additionalCard']['mainSKS']            = (string)$data['wz_addit_card_sks_number'];
         $anketa['additionalCard']['choiseLimits']       = (string)$data['wz_addit_card_limit'];
-//        $anketa['additionalCard']['document']           = $data['']; //@TODO
 
         // Если заказывается дополнительная карта для лица в возрасте до 14 лет
         $anketa['additionalDocument']['type']           = (string)$data['wz_addit_card14_document'];
         $anketa['additionalDocument']['who_delivery']   = (string)$data['wz_addit_card14_organisation'];
-        $anketa['additionalDocument']['delivery_date']  = (string)$data['wz_addit_card14_date'];
+        $anketa['additionalDocument']['delivery_date']  = formatRussianDate2MysqlDate((string)$data['wz_addit_card14_date']);
 
         return $anketa;
     }
