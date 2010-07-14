@@ -115,8 +115,7 @@ class Integration_Controller extends _Core_Controller
         $message = Swift_Message::newInstance()
             ->setSubject('Анкета АМТ')
             ->setFrom(array('info@easyfinance.ru' => 'Easy Finance'))
-            //->setTo(array('card.statement@amtbank.com'))
-            ->setTo(array('test@easyfinance.ru'))
+            ->setTo(sfConfig::get('mailCardAMT'))
             ->setBody($this->_makeBodyEmail($data))
             ->addPart($this->_makePartXmlEmail($data), 'text/xml');
         return Core::getInstance()->mailer->send($message);
