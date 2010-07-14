@@ -41,7 +41,7 @@ class model_EmailParserTest extends myUnitTestCase
 
         $source->delete();
 
-        $findParser = EmailParserTable::getInstance()->find( $parserId );
+        $findParser = Doctrine::getTable("EmailParser")->find($parserId);
         $this->assertEquals( $findParser, null );
     }
 }

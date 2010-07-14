@@ -20,15 +20,15 @@ class model_EmailSourceTableTest extends myUnitTestCase
         $source->save();
 
         // Ok
-        $getSource = EmailSourceTable::getInstance()->getByEmail("anytest@test.tst");
+        $getSource = Doctrine::getTable("EmailSource")->getByEmail("anytest@test.tst");
         $this->assertModels( $source, $getSource );
 
         // Ok
-        $getSource = EmailSourceTable::getInstance()->getByEmail("othertest@test.ru");
+        $getSource = Doctrine::getTable("EmailSource")->getByEmail("othertest@test.ru");
         $this->assertModels( $source, $getSource );
 
         // Fail
-        $getSource = EmailSourceTable::getInstance()->getByEmail("anybodyelse");
+        $getSource = Doctrine::getTable("EmailSource")->getByEmail("anybodyelse");
         $this->assertEquals( false, $getSource );
     }
 }

@@ -2,25 +2,20 @@
 
 /**
  * EmailSource
- *
  */
 class EmailSource extends BaseEmailSource
 {
     /**
-     * Возвращает парсер, регексп которого подходит под данную тему
+     * Возвращает парсер по теме письма
      *
-     * @param string $subject тема
-     * @return EmailParser или false в случае если парсер не найден
+     * @see    EmailParserTable::getOneBySubjectAndSource
+     * @param  string $subject тема письма
+     * @return EmailParser|false
      */
-    public function getParserBySubject( $subject )
+    public function getParserBySubject($subject)
     {
-        return
-        Doctrine_Query::create()
-            ->select('*')
-            ->from('EmailParser')
-            ->where('email_source_id = ?', $this->getId() )
-            ->andWhere('? RLIKE subject_regexp', $subject )
-            ->execute()
-            ->getFirst();
+        return Doctrine_Core::getTable("EmailParser")
+            ->getOneBySubjectAndSource($this, $subject);
     }
+
 }

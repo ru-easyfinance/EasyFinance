@@ -3,12 +3,6 @@
 
 class EmailSourceTable extends Doctrine_Table
 {
-
-    public static function getInstance()
-    {
-        return Doctrine_Core::getTable('EmailSource');
-    }
-
     /**
      * Вернуть (?)EmailSource по адресу отправителя
      * FIX: сейчас в $from должен попадать адрес без спец-символов, имен и т.п.

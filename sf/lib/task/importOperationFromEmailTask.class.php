@@ -77,7 +77,7 @@ class importOperationFromEmailTask extends sfBaseTask
         }
 
         $mail = myParseEmailImport::getEmailData($input);
-        if ( false == $mail ) {
+        if (false == $mail) {
             $this->logging("Not a valid .eml file format", $input);
             return self::ERROR_EMAIL_FORMAT;
         }
@@ -98,7 +98,7 @@ class importOperationFromEmailTask extends sfBaseTask
             $importForm = "OperationImportForm";
 
             // Получаем отправителя
-            $source = EmailSourceTable::getInstance()->getByEmail($from);
+            $source = Doctrine_Core::getTable("EmailSource")->getByEmail($from);
 
             if (false === $source) {
                 $this->logging("Unknown sender", $from);

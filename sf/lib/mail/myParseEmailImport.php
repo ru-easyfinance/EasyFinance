@@ -110,13 +110,57 @@ class myParseEmailImport
             return false;
         }
 
-        $body = $message->getContent();
-        if (isset($headers['content-transfer-encoding']) && ($headers['content-transfer-encoding'] == "quoted-printable")) {
-            // Декодирование quoted printable
-            $body = quoted_printable_decode($body);
-        } elseif (isset($headers['content-transfer-encoding']) && ($headers['content-transfer-encoding'] == "base64")) {
-            // Декодирование тела письма в base64
-            $body = base64_decode($body);
+        // выдергиваем текстовое тело письма, если можем
+        $body = null;
+        if($message->isMultipart()) {
+            foreach (new RecursiveIteratorIterator($message) as $part) {
+                try {
+                    if (strtok($part->contentType, ';') == 'text/plain') {
+                        $body = trim($part);
+                        $partHeaders = $part->getHeaders();
+                        break;
+                    }
+                } catch (Zend_Mail_Exception $e) {  }
+            }
+
+            // в письме нет текстового варианта
+            // FIXME как-то по человечески обрабатывать
+            if (!$body) {
+                throw new Exception();
+            }
+        } else {
+            $body = trim($message->getContent());
+            $partHeaders = $message->getHeaders();
+        }
+
+        switch ($partHeaders['content-transfer-encoding']) {
+            // FIXME хз нужно ли нам оно, на локалке не стоит imap_*
+            //       м.б. есть альтернативные варианты
+            /*
+            case '7bit':
+                break;
+            case '8bit':
+                $body = quoted_printable_decode(imap_8bit($body));
+                break;
+            case 'binary':
+                $body = imap_base64(imap_binary($body));
+                break;
+            case 'base64':
+                $body = imap_base64($body);
+                break;
+            */
+            case 'quoted-printable':
+                $body = quoted_printable_decode($body);
+                break;
+            case 'base64':
+                $body = base64_decode($body);
+                break;
+        }
+
+        // (?) mb_detect_encoding отказался определять кодировки
+        if (isset($partHeaders['content-type']) &&
+            $encoding = preg_filter("/^(.+?);\scharset=(.+)$/", "$2", $partHeaders['content-type'])) {
+            $body = iconv($encoding, "UTF-8//IGNORE", $body);
         }
 
         $data = array(
@@ -140,10 +184,10 @@ class myParseEmailImport
      * @return string
      */
     protected static function _cleanEmail($email) {
-        $matches = array();
+        $email = mb_strtolower($email);
 
         if (preg_match("/<(.+?@.+?\..{2,5})>/i", $email, $matches)) {
-            if (isset( $matches[1])) {
+            if (isset($matches[1])) {
                 $email = $matches[1];
             }
         }
