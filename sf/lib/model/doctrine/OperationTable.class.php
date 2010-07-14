@@ -55,4 +55,43 @@ class OperationTable extends Doctrine_Table
 
         return $accCount;
     }
+
+
+    /**
+     * Выборка просроченных запланированных операций
+     *
+     * @param  int      $userId
+     * @param  string   $alias
+     */
+    public function queryFindWithOverdueCalendarChains($userId, $alias = 'o')
+    {
+        // Missed: tags, deleted_at, форматирование дат
+        $q = $this->createQuery($alias)
+            ->select("{$alias}.id
+                    , {$alias}.chain_id
+                    , {$alias}.type
+                    , {$alias}.amount
+                    , {$alias}.comment
+                    , {$alias}.category_id
+                    , {$alias}.account_id
+                    , {$alias}.date
+                    , {$alias}.accepted
+                    , {$alias}.transfer_account_id
+                    , {$alias}.source_id
+                    ")
+            ->addSelect("c.date_start")
+            ->addSelect("c.date_end")
+            ->addSelect("c.every_day")
+            ->addSelect("c.repeat")
+            ->addSelect("c.week_days")
+            ->leftJoin("{$alias}.CalendarChain c")
+            ->andWhere("{$alias}.user_id = ?", (int) $userId)
+            ->andWhere("{$alias}.accepted=".Operation::STATUS_DRAFT)
+            ->andWhere("{$alias}.date <= CURRENT_DATE()")
+            ->andWhere("{$alias}.deleted_at IS NULL")
+            ;
+
+        return $q;
+    }
+
 }

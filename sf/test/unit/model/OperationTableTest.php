@@ -8,9 +8,57 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
 class model_OperationTableTest extends myUnitTestCase
 {
     /**
+     * Таблица просроченных операций из календаря
+     */
+    public function testQueryFindWithOverdueCalendarChains()
+    {
+        $user = $this->helper->makeUser();
+        $account = $this->helper->makeAccount($user);
+
+        $user2 = $this->helper->makeUser();
+        $account2 = $this->helper->makeAccount($user2);
+
+        $yesterday  = date('Y-m-d', time() - ONE_DAY_SECONDS);
+        $now        = date('Y-m-d', time());
+
+       /*
+       * Фикстуры (операции):
+       * 0. Не привязана к календарю
+       * 1. Подтвержденная
+       * 2. Удаленная
+       * 3. В будущем
+       * 4. Добавлена только что
+       * 5. Другого юзера
+       * 6-7. Просроченные
+       */
+
+        $op0 = $this->helper->makeOperation($account);
+
+        $cc1 = $this->helper->makeCalendarChain($account);
+        $cc2 = $this->helper->makeCalendarChain($account2);
+
+        $op1 = $this->helper->makeCalendarOperation($cc1, $account, 'op1', -1, array('accepted' => Operation::STATUS_ACCEPTED));
+        $op2 = $this->helper->makeCalendarOperation($cc1, $account, 'op2', -1, array('deleted_at' => $now));
+        $op3 = $this->helper->makeCalendarOperation($cc1, $account, 'op3', 1);
+        $op4 = $this->helper->makeCalendarOperation($cc1, $account, 'op4', 0);
+        $op5 = $this->helper->makeCalendarOperation($cc2, $account2, 'op5');
+        $op6 = $this->helper->makeCalendarOperation($cc1, $account, 'op6');
+        $op7 = $this->helper->makeCalendarOperation($cc1, $account, 'op7', -2);
+
+        // Запись в календаре с операциями
+        $result = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user->getId())->execute();
+        $this->assertEquals(3, $result->count(), "Operations count");
+        // Если операция создана только что (в ту же секунду), она сразу становится просроченной
+        $this->assertModels($op4, $result->get(0));
+        $this->assertModels($op6, $result->get(1));
+        $this->assertModels($op7, $result->get(2));
+    }
+
+
+    /**
      * Посчитать кол-во операций по счетам пользователя за месяц
      */
-    public function testQueryFindMonthCountByUser()
+    public function testGetMonthCountByUser()
     {
         $user = $this->helper->makeUser();
 

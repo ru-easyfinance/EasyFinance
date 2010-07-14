@@ -1,4 +1,5 @@
 <?php
+define('ONE_DAY_SECONDS', 86400); // 24*60*60
 
 /**
  * myTestObjectHelper
@@ -90,7 +91,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     {
         $defaultProps = array(
             'amount'   => -$this->getUniqueCounter() - 0.99,
-            'date'     => date('Y-m-d', time()-86400),
+            'date'     => date('Y-m-d', time()-ONE_DAY_SECONDS),
             'type'     => Operation::TYPE_EXPENSE,
             'comment'  => $this->makeText('Комментарий к операции'),
             'accepted' => Operation::STATUS_ACCEPTED,
@@ -109,6 +110,57 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         if (!array_key_exists('category_id', $props) OR !is_null($props['category_id'])) {
             $ob->setCategory($this->makeCategory($user));
         }
+
+        if ($save) {
+            $ob->save();
+        }
+        return $ob;
+    }
+
+    /**
+     * Запланировать событие
+     */
+    public function makeCalendarChain(Account $account = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'date_start'    => date('Y-m-d', time()-30*ONE_DAY_SECONDS), // Начнем с месяца назад
+            'date_end'      => date('Y-m-d', time()+ONE_DAY_SECONDS),
+            'every_day'     => CalendarChain::REPEAT_EVERY_DAY,
+            'repeat'        => 1,
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$account) {
+            $account = $this->makeAccount(null, array(), $save);
+        }
+        $user = $account->getUser();
+
+        $cc = $this->makeModel('CalendarChain', $props, false);
+        $cc->setUser($account->getUser());
+
+        if ($save) {
+            $cc->save();
+        }
+
+        return $cc;
+    }
+
+    /**
+     * Создать операцию для события
+     *
+     * @param int   $shiftDate  Дата операции сдвигается от текущей даты на указанное кол-во дней
+     */
+    public function makeCalendarOperation(CalendarChain $calendar, Account $account = null, $comment='', $shiftDate=-1, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'date'      => date('Y-m-d', time() + $shiftDate * ONE_DAY_SECONDS),
+            'accepted'  => Operation::STATUS_DRAFT,
+            'comment'   => $comment
+        );
+        $props = array_merge($defaultProps, $props);
+
+        $ob = $this->makeOperation($account, $props, false);
+        $ob->setCalendarChain($calendar);
 
         if ($save) {
             $ob->save();

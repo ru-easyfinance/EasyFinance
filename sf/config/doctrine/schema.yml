@@ -13,7 +13,6 @@
 #articles
 #budget
 #calend
-#calendar_chains
 #calendar_events
 #daily_currency
 #logs
@@ -175,6 +174,12 @@ Operation:
       type: one
       foreignType: many
       autoComplete: false         # Category ничего не узнает
+    CalendarChain:
+      local: chain_id
+      foreign: id
+      type: one
+      foreignType: many
+      foreignAlias: Operations    # CalendarChain -> Operations
   indexes:
     user_id:    { fields: [user_id] }
   options:
@@ -475,3 +480,26 @@ EmailParser:
       type: one
       foreignType: one
       onDelete: CASCADE
+
+# Цепочки событий календаря  (100% - OK)
+CalendarChain:
+  tableName: calendar_chains
+  columns:
+    user_id:        {                            type: integer(4), notnull: true }
+    date_start:     { name: start as date_start, type: date, notnull: true }                   # Дата начала действия события
+    date_end:       { name: last as date_end,    type: date, notnull: false }                  # Дата окончания действия события (раньше было last not null)
+    every_day:      { name: every as every_day,  type: integer(1), notnull: false }            # Через сколько дней повторить операцию (0 - без повтора, 1 - каждый день, 7 - еженедельно, 30 - ежемесячно, 90 - ежеквартально 365 - ежегодно)
+    repeat:         {                            type: integer(1), notnull: true, default: 0 } # Сколько раз повторять операцию
+    week_days:      { name: week as week_days,   type: char(7), notnull: false }               # Если повторять еженедельно, то в какие дни недели, например, "1010100" - пон-ср-пятн
+  options:
+    symfony:
+      form:     false
+      filter:   false
+  relations:
+    User:
+      local:        user_id
+      foreign:      id
+      type:         one
+      foreignType:  many
+      foreignAlias: CalendarChains     # User->CalendarChains
+      onDelete:     CASCADE            # При удалении пользователя удаляется все

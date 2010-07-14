@@ -34,7 +34,6 @@
     );
 
     $res['calendar'] = array(
-        'overdue'   => '',
         'calendar'  => '',
         'future'    => '',
     );
@@ -75,4 +74,5 @@
     <?php include_component('res', 'accounts', array()) ?>
     <?php include_component('res', 'currencies', array()) ?>
     <?php include_component('res', 'tags', array()) ?>
+    <?php include_component('res', 'overdue', array()) ?>
 </script>
