@@ -2,10 +2,7 @@
 /**
  * Сборка объекта res из компонентов
  */
-?>
 
-<script type="text/javascript">
-<?php
 
     $res = array();
 
@@ -42,12 +39,39 @@
         'future'    => '',
     );
 
+    $res['informers'] = array(
+        0 => array(
+            'title'       => '',
+            'description' => '',
+            'value'       => 0,
+        ),
+        1 => array(
+            'title'       => '',
+            'description' => '',
+            'value'       => 0,
+        ),
+        2 => array(
+            'title'       => '',
+            'description' => '',
+            'value'       => 0,
+        ),
+        3 => array(
+            'title'       => '',
+            'description' => '',
+            'value'       => 0,
+        ),
+        4 => array(
+            'title'       => '',
+            'description' => '',
+            'value'       => 0,
+        ),
+    );
+
     $res['errors'] = array();
 ?>
 
-    var res = <?php echo json_encode($res); ?>
-</script>
 <script type="text/javascript">
+    var res = <?php echo json_encode($res); ?>
     <?php include_component('res', 'accounts', array()) ?>
     <?php include_component('res', 'currencies', array()) ?>
     <?php include_component('res', 'tags', array()) ?>

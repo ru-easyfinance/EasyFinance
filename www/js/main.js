@@ -36,7 +36,7 @@ function get_array_key($arr, $val){
 
 var isChrome = /chrome/.test( navigator.userAgent.toLowerCase() );
 
-var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/']; //данный контроллер можно использовать как системный))
+var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/', '/my/']; //данный контроллер можно использовать как системный))
 
 href = location.pathname;
 href = href.toLowerCase() + '/';
@@ -46,7 +46,7 @@ var pathName = nhref[0];
 var Current_module = get_array_key(aPath, nhref);
 var Connected_functional = {
     operation: [2, 5, 6, 7, 8, 11, 15, 16, 19, 25],
-    menu: [2, 5, 6, 7, 8, 11, 15, 16, 17, 19, 25]
+    menu: [2, 5, 6, 7, 8, 11, 15, 16, 17, 19, 25, 28]
 };
 var isIframe = false;
 var pathtoid = {
