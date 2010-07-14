@@ -2,7 +2,7 @@
 /**
  * Авторизация
  */
-class authActions extends sfActions
+class myAuthActions extends sfActions
 {
     /**
      * Авторизация пользователя / сообщение о неавторизованности

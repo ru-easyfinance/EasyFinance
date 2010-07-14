@@ -45,7 +45,7 @@ class api_sync_AuthTest extends myFunctionalTestCase
         $this->browser
             ->post($this->generateUrl("auth"), $expected)
             ->with("request")->begin()
-                ->isParameter("module", "auth")
+                ->isParameter("module", "myAuth")
                 ->isParameter("action", "login")
             ->end()
             ->with("response")->begin()

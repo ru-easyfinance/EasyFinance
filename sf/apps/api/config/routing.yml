@@ -3,7 +3,7 @@
 auth:
   url: /login.:sf_format
   class:   sfRequestRoute
-  params:  { module: auth, action: login, sf_format: xml }
+  params:  { module: myAuth, action: login, sf_format: xml }
   requirements:
     sf_method: post
     sf_format: xml

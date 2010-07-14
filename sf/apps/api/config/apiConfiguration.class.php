@@ -26,6 +26,7 @@ class apiConfiguration extends sfApplicationConfiguration
     {
         $plugins = array(
             'sfDoctrinePlugin',
+            'myAuthPlugin',
         );
 
         if ('test' == $this->getEnvironment()) {

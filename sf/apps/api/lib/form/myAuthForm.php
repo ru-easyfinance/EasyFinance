@@ -2,7 +2,7 @@
 /**
  * Форма авторизации
  */
-class myAuthForm extends BaseForm
+class myAuthForm extends BaseMyAuthForm
 {
     /**
      * @see sfForm
@@ -19,16 +19,5 @@ class myAuthForm extends BaseForm
         $this->widgetSchema->setNameFormat('[%s]');
 
         $this->disableLocalCSRFProtection();
-    }
-
-    /**
-     * Вернуть объект пользователя
-     *
-     * @see    myUserValidator
-     * @return myApiUser
-     */
-    public function getUser()
-    {
-        return $this->values['user'];
     }
 }
