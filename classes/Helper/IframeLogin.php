@@ -1,8 +1,8 @@
 <?php
 /**
  * Хелпер для логина и регистрация iframe пользователей
+ *
  * @copyright http://easyfinance.ru/
- * @version SVN $Id$
  */
 class Helper_IframeLogin
 {
@@ -11,199 +11,64 @@ class Helper_IframeLogin
      * Ссылка на движок для шаблонизатора
      * @var Smarty
      */
-    static $templateEngine;
+    protected $templateEngine;
 
-    public static function login ( $templateEngine )
+    /**
+     * Конструктор
+     * @param Smarty $templateEngine
+     */
+    function  __construct($templateEngine) {
+        $this->templateEngine = $templateEngine;
+    }
+
+    static function login($templateEngine)
     {
+        // Получаем субдомен, если он есть
+        $subdomain = array_shift(explode('.', _Core_Request::getCurrent()->host));
+        $filename = dirname(__FILE__) . '/IframeLogin' . ucfirst(strtolower($subdomain)) . '.php';
+        $classname = "Helper_IframeLogin" . ucfirst(strtolower($subdomain));
 
-        self::$templateEngine = $templateEngine;
-
-        // Если запрошен IFRAME
-        if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME
-                || _Core_Request::getCurrent()->host . '/' == 'rambler.' . URL_ROOT_MAIN) {
-            // Выводим заголовок для отображения iframe по безопасному соединению для IE
-            header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
-
-            // Пользователь пытается авторизироваться от азбуки финансов
-            if ((_Core_Request::getCurrent()->uri == "/login/") && (isset(_Core_Request::getCurrent()->get['refer']))
-                && (_Core_Request::getCurrent()->get['refer'] == 'azbuka')) {
-
-                // Пользователь только пытается авторизироваться, мы забираем у него id у нас
-                // и его ключ сессии, затем по этому ключу мы делаем курлом гет запрос
-                if (isset(_Core_Request::getCurrent()->get['id_ef'])
-                        && isset(_Core_Request::getCurrent()->get['session_key'])) {
-
-                    self::_azbuka_login();
-
-                // Новый пользователь регистрируется с азбуки
-                } elseif (isset(_Core_Request::getCurrent()->get['login'])
-                        &&  isset(_Core_Request::getCurrent()->get['mail'])) {
-
-                    self::_azbuka_registration();
-
-                }
-            }
-
-            // Если запрос идёт от Рамблера
-            if (_Core_Request::getCurrent()->host . '/' == 'rambler.' . URL_ROOT_MAIN) {
-
-                $request = explode('/', $_SERVER['REQUEST_URI']);
-
-                // Если пользователь не авторизирован
-                if (!Core::getInstance()->user->getId() && isset($request[1])
-                        && $request[1] == 'login' && isset($request[2])) {
-
-                        self::_rambler_login($request[2]);
-
-                }
-
-            }
-
-            if ((_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME)
-                    && (!Core::getInstance()->user->getId())
-                    && ($_SERVER['REQUEST_URI'] != "/login/")) {
-                if ($_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
-
-                    header("Location: https://" . URL_ROOT_IFRAME . "login/");
-
-                }
-            }
-
-            // Выводим шаблон для IFRAME
-            if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME) {
-
-                self::$templateEngine->assign('template_view', 'iframe');
-
-            // Выводим шаблон для Rambler
-            } elseif (_Core_Request::getCurrent()->host . '/' == 'rambler.' . URL_ROOT_MAIN) {
-
-                self::$templateEngine->assign('template_view', 'iframe');
-
-            }
+        if (file_exists($filename)) {
+            $class = new $classname($templateEngine);
+            $class->init();
         }
     }
 
-    /**
-     * Функция устанавливает на пользователя куку
-     */
-    private static function _goToInfo ()
-    {
-        // Авторизируем пользователя
-        setcookie( COOKIE_NAME, encrypt( array( $row_user['user_login'], $row_user['user_pass'] ) ),
-                time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
 
-        // После авторизации редиректим на инфо
-        _Core_Router::redirect("https://" . URL_ROOT_IFRAME .  "info/");
+    /**
+     * Подготавливаемся к выводу iframe в браузер
+     *
+     * @return void
+     */
+    protected function _prepareDisplayIframe()
+    {
+        // Выводим заголовок для отображения iframe по безопасному соединению для IE
+        // Без этого заголовка IE не работает с iframe через SSL
+        header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
     }
 
     /**
-     * Логини для ресурса азбука финансов
+     * Делает редирект на указанную страницу. Нужна для тестов
+     *
+     * @param string $url
+     * @return void
      */
-    private static function _azbuka_login ()
+    protected function _redirect($url)
     {
-            $curl = curl_init();
-
-            $id      = _Core_Request::getCurrent()->get['id_ef'];
-            $sessKey = _Core_Request::getCurrent()->get['session_key'];
-            $url     = "http://www.azbukafinansov.ru/ef/confirmmail.php?session_key=".$sessKey;
-
-            curl_setopt( $curl, CURLOPT_URL, $url );
-
-            // Тут мы должны получить почту пользователя
-            $azbukaMail = curl_exec($curl);
-
-            curl_close($curl);
-
-            // Массив с данными пользователя
-            $row_user = Login_Model::getUserDataByID( $id );
-
-            // Разрешаем доступ пользователям зарегистрированным только на азбуке финансов
-            // @TODO Возможно эту проверку стоит удалить
-            if ( substr( $row_user['user_login'] , 0, 6 ) != 'azbuka' ) {
-                _Core_Router::redirect('/notfound', false, 404);
-            }
-
-            // Проверяем почту клиента
-            // @FIXME Почта пользователя всегда может смениться.
-            // Мы не можем просто так сбрасывать пользователся
-            // Необходимо поправить
-            if ( $azbukaMail != $row_user['user_mail'] ) {
-                die('Unknown mail format');
-            }
-
-            $uar = array(
-                'user_id'=>$id,
-                'user_name'=>$row_user['user_login'],
-                'user_type'=>0);
-
-            self::$templateEngine->assign('user_info', $uar);
-            self::$templateEngine->assign('template_view', 'iframe');
-            setcookie( COOKIE_NAME, encrypt( array( $row_user['user_login'], $row_user['user_pass'] ) ),
-                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
-
-            header("Location: https://" . URL_ROOT_IFRAME . "info/");
-
-            //self::_goToInfo( $row_user );
-
+        _Core_Router::redirect($url);
     }
+
 
     /**
-     * Регистрируем нового пользователя с азбуки финансов
+     * Устанавливаем куки
+     *
+     * @param string $login
+     * @param string $password Строка в формате SHA1
      */
-    private static function _azbuka_registration ()
+    protected function _setCookie($login, $password)
     {
-            $login = _Core_Request::getCurrent()->get['login'];
-            $mail  = _Core_Request::getCurrent()->get['mail'];
-
-            // Генерируем нового пользователя на основе логина и его почты
-            $newId = Login_Model::generateUserByAzbukaLogin( $login , $mail );
-
-            $row_user = Login_Model::getUserDataByID( $newId );
-
-            // @FIXME Непонятно что тут делает этот блок..
-            // Если мы только что сделали сами пользователя, то мы и знаем его логин, нет?
-            if ( substr( $row_user['user_login'] , 0, 6 ) != 'azbuka' ) {
-                _Core_Router::redirect('/notfound', false, 404);
-            }
-
-            //self::_goToInfo( $row_user );
-
-            $uar = array(
-                'user_id'=>$newId,
-                'user_name'=>$row_user['user_login'],
-                'user_type'=>0);
-            self::$templateEngine->assign('user_info', $uar);
-            self::$templateEngine->assign('template_view', 'iframe');
-            setcookie( COOKIE_NAME, encrypt( array( $row_user['user_login'], $row_user['user_pass'] ) ),
-                    time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
-
-            header("Location: https://" . URL_ROOT_IFRAME . "info/");
-
-            return $newId;
-//            break;
+        $cook = encrypt(array($login, $password));
+        setcookie(COOKIE_NAME, $cook, time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
     }
 
-    /**
-     * Логиним пользователя рамблера
-     * @param string $ramblerKey
-     * @return bool
-     */
-    private static function _rambler_login($ramblerKey)
-    {
-        $ramblerLogin = 'rambler_' . $ramblerKey;
-
-        // Пытаемся инициализировать пользователя
-        Core::getInstance()->user->initUser($ramblerLogin, sha1($ramblerLogin));
-
-        // Устанавливаем пользователю куку
-        setcookie(COOKIE_NAME, encrypt(array($ramblerLogin, sha1($ramblerLogin))),
-                time() + COOKIE_EXPIRE, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS );
-
-        if (Core::getInstance()->user->getId()) {
-            header("Location: https://rambler." . URL_ROOT_MAIN . "info/");
-        } else {
-
-            Login_Model::generateUserByRamblerLogin('rambler_' . $ramblerKey);
-        }
-    }
 }
