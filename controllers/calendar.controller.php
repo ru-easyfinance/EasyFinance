@@ -217,18 +217,17 @@ class Calendar_Controller extends _Core_Controller_UserCommon
      * @param _Core_Request $request
      * @return array
      */
-    private function _readNotificationsFromRequest( $request )
+    private function _readNotificationsFromRequest($request)
     {
-         return
-         array (
-            'mailEnabled'       => isset( $request->post['mailEnabled'] ) ? ( $request->post['mailEnabled'] == 'true' ) : false,
-            'mailDaysBefore'    => isset( $request->post['mailDaysBefore'] ) ? $request->post['mailDaysBefore'] : 3,
-            'mailHour'          => isset( $request->post['mailHour'] ) ? $request->post['mailHour'] : 23,
-            'mailMinutes'       => isset( $request->post['mailMinutes'] ) ? $request->post['mailMinutes'] : 45,
-            'smsEnabled'       => isset( $request->post['smsEnabled'] ) ? ( $request->post['smsEnabled'] == 'true' ) : false,
-            'smsDaysBefore'    => isset( $request->post['smsDaysBefore'] ) ? $request->post['smsDaysBefore'] : 3,
-            'smsHour'          => isset( $request->post['smsHour'] ) ? $request->post['smsHour'] : 23,
-            'smsMinutes'       => isset( $request->post['smsMinutes'] ) ? $request->post['smsMinutes'] : 45,
+         return array(
+            'mailEnabled'    => isset($request->post['mailEnabled']) ? ($request->post['mailEnabled'] == 'true') : false,
+            'mailDaysBefore' => isset($request->post['mailDaysBefore']) ? (int) $request->post['mailDaysBefore'] : 3,
+            'mailHour'       => isset($request->post['mailHour']) ? (int) $request->post['mailHour'] : 23,
+            'mailMinutes'    => isset($request->post['mailMinutes']) ? (int) $request->post['mailMinutes'] : 45,
+            'smsEnabled'     => isset($request->post['smsEnabled']) ? ($request->post['smsEnabled'] == 'true') : false,
+            'smsDaysBefore'  => isset($request->post['smsDaysBefore']) ? (int) $request->post['smsDaysBefore'] : 3,
+            'smsHour'        => isset($request->post['smsHour']) ? (int) $request->post['smsHour'] : 23,
+            'smsMinutes'     => isset($request->post['smsMinutes']) ? (int) $request->post['smsMinutes'] : 45,
         );
     }
 
