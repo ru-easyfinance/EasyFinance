@@ -122,6 +122,21 @@ abstract class Account
     const FIELD_BINDING = 29;
 
     /**
+     * Состояние счёта - обычное
+     */
+    const STATE_NORMAL   = 0;
+
+    /**
+     * Состояние счёта - избранный
+     */
+    const STATE_FAVORITE = 1;
+
+    /**
+     * Состояние счёта - в архиве
+     */
+    const STATE_ARCHIVE  = 2;
+
+    /**
      * Название счёта
      * @var string
      */

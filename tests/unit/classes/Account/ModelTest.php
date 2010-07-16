@@ -25,6 +25,7 @@ class classes_Account_ModelTest  extends UnitTestCase
                 'currency' => $account1['account_currency_id'],
                 'name'     => $account1['account_name'],
                 'comment'  => $account1['account_description'],
+                'state'    => Account::STATE_NORMAL,
             )), $result);
     }
 
@@ -72,6 +73,7 @@ class classes_Account_ModelTest  extends UnitTestCase
                 'currency'     => $account1['account_currency_id'],
                 'name'         => $account1['account_name'],
                 'comment'      => $account1['account_description'],
+                'state'        => Account::STATE_NORMAL,
                 'totalBalance' => $amount + $initBalance,
                 'reserve'      => 0,
                 'initBalance'  => $initBalance,
@@ -112,6 +114,19 @@ class classes_Account_ModelTest  extends UnitTestCase
         // Поэтому надо подчистить таблицу
         // TODO: исправить
         $this->getConnection()->query('TRUNCATE TABLE accounts');
+    }
+
+
+    public function testAccountState()
+    {
+        $account = CreateObjectHelper::makeAccount();
+        $this->assertEquals(Account::STATE_NORMAL, $account['account_state']);
+
+        $account = CreateObjectHelper::makeAccount(array('account_state' => Account::STATE_FAVORITE));
+        $this->assertEquals(Account::STATE_FAVORITE, $account['account_state']);
+
+        $account = CreateObjectHelper::makeAccount(array('account_state' => Account::STATE_ARCHIVE));
+        $this->assertEquals(Account::STATE_ARCHIVE, $account['account_state']);
     }
 
 }

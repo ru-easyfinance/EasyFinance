@@ -12,6 +12,22 @@ class Account extends BaseAccount
     const TYPE_DEBIT_CARD = 2;  // Дебетовая карта
 
     /**
+     * Состояние счёта - обычный
+     */
+    const STATE_NORMAL    = 0;
+
+    /**
+     * Состояние счёта - избранный
+     */
+    const STATE_FAVORITE  = 1;
+
+    /**
+     * Состояние счёта - в архиве
+     */
+    const STATE_ARCHIVE   = 2;
+
+
+    /**
      * Балансовая операцияs
      * @var Operation
      */

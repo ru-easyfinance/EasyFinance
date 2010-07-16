@@ -55,7 +55,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
      */
     protected function getFields()
     {
-        return array('type_id', 'currency_id', 'name', 'description', 'initBalance');
+        return array('type_id', 'currency_id', 'name', 'description', 'initBalance', 'state');
     }
 
 
