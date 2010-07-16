@@ -37,7 +37,11 @@ class model_CalendarChainTest extends myUnitTestCase
     }
 
     /**
-     * Невозможно удалить запись в календаре, если у нее есть операции
+     * Сейчас на operation.chain_id нет FK на calendar_chain.
+     * Т. е. СУБД не проверяет ссылочную целостность.
+     * Этот тест просто фиксирует текущее положение дел.
+     * Потом, если FK появится, то тест надо будет переписать, чтобы проверять
+     * срабатывает ли ON DELETE RESTRICT/ON DELETE NULL etc.
      */
     public function testFailedDeleteCalendarChainIfConnectedWithOperation()
     {
@@ -45,8 +49,9 @@ class model_CalendarChainTest extends myUnitTestCase
         $cc         = $this->helper->makeCalendarChain($account);
         $operation  = $this->helper->makeCalendarOperation($cc, $account);
 
-        $this->setExpectedException('Doctrine_Connection_Mysql_Exception', 'foreign key constraint fails');
         $cc->delete();
+        $op_stored = Doctrine::getTable('Operation')->find($operation->getId());
+        $this->assertType('Operation', $op_stored);
     }
 
 
