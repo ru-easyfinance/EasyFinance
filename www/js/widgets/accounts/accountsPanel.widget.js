@@ -108,6 +108,15 @@ easyFinance.widgets.accountsPanel = function(){
 
         return this;
     }
+    
+    function getAccountsWithoutArchive(accounts){
+        for(k in accounts){
+            if (accounts[k].state == "2") {
+                delete (accounts[k]);
+            }
+        }
+        return accounts;
+    }
 
     function redraw(){
         var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
@@ -169,8 +178,9 @@ easyFinance.widgets.accountsPanel = function(){
                  val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
                 - parseFloat(data[key]['totalBalance']);
             }*/
-
-            arr[i] = arr[i]+str;
+            if (data[key].state != "2") {
+                arr[i] = arr[i]+str;
+            }
         }
         total = 0;
         for(key in arr)

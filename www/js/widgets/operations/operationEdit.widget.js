@@ -863,6 +863,15 @@ easyFinance.widgets.operationEdit = function(){
         }
     }
 
+    function getAccountsWithoutArchive(accounts){
+        for(k in accounts){
+            if (accounts[k].state == "2") {
+                delete (accounts[k]);
+            }
+        }
+        return accounts;
+    }
+
     function _refreshAccounts() {
         if (!_$ufdAccount)
             return;
@@ -872,8 +881,9 @@ easyFinance.widgets.operationEdit = function(){
         }
 
         // составляем список счетов
-        var accounts = _modelAccounts.getAccounts();
-        var accountsOrdered = _modelAccounts.getAccountsOrdered();
+        var accounts = getAccountsWithoutArchive(_modelAccounts.getAccounts());
+
+        var accountsOrdered = getAccountsWithoutArchive(_modelAccounts.getAccountsOrdered());
         var accountsCount = 0;
         var key;
 
@@ -891,6 +901,7 @@ easyFinance.widgets.operationEdit = function(){
 
         var _accOptionsData = [];
         var recentIds = {};
+
         if (recentCount >= accountsCount || recentCount == 0) {
             // если счетов мало (не больше частых счетов),
             // выводим все счета по алфавиту

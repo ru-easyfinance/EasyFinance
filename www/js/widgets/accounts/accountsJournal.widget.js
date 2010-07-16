@@ -165,7 +165,7 @@ easyFinance.widgets.accountsJournal = function(){
             } else if(account_list_ordered[row]['state'] == "2") {
                 type = 6;
             } else {
-            type = g_types[account_list_ordered[row]['type']];
+                type = g_types[account_list_ordered[row]['type']];
             }
 
             colorClass = account_list_ordered[row]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
