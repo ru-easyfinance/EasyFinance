@@ -45,12 +45,11 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
 
     /**
      * Конфигурация
-     *
      */
     public function configure()
     {
         $this->addOptions(array(
-           new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
         ));
 
         $this->namespace = 'cron';
@@ -87,47 +86,35 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
         $notifications = OperationNotificationTable::getInstance()->getUnsentNotifications();
 
         // Выбираем те оповещения, для которых у пользователя оплачена услуга
-        foreach ( $notifications as $notification )
-        {
-            // Связанная операция
+        foreach ($notifications as $notification) {
             $operation = $notification->getOperation();
-
-            // Связанный пользователь
             $user = $operation->getUser();
 
             // Проверяем наличие подписки на услугу
-            $subscription = Doctrine::getTable('ServiceSubscription')->getActiveUserServiceSubscription( $user->getId(), self::NOTIFICATION_SERVICE_ID );
+            $subscription = Doctrine::getTable('ServiceSubscription')->getActiveUserServiceSubscription($user->getId(), self::NOTIFICATION_SERVICE_ID);
 
             // Если имеется подписка на услугу, можно продолжать
-            if ( is_object( $subscription ) && ( $subscription instanceof ServiceSubscription ) )
-            {
+            if (is_object($subscription) && ($subscription instanceof ServiceSubscription)) {
+
                 // Отправка SMS оповещения
-                if ( $notification->getType() == self::TYPE_SMS )
-                {
+                if ($notification->getType() == self::TYPE_SMS) {
                     // В телефоне оставляем только цифры, впереди семерка
                     $smsPhone = preg_replace('/[^\d]/','', $user->getSmsPhone());
-                    if ( strlen($smsPhone) == 10 )
-                    {
+                    if (strlen($smsPhone) == 10) {
                         $smsPhone = '7' . $smsPhone;
-                    }
-                    else if ( ( strlen($smsPhone) == 11 ) && ( $smsPhone[0] == 8 ) )
-                    {
+                    } else if ((strlen($smsPhone) == 11) && ($smsPhone[0] == 8)) {
                         $smsPhone[0] = '7';
                     }
 
-                    if ( $this->sendSMS($smsPhone, $operation ) )
-                    {
+                    if ($this->sendSMS($smsPhone, $operation)) {
                         $notification->setIsSent(1);
                         $notification->setIsDone(1);
                         $count++;
-                    }
-                    else
-                    {
+                    } else {
                         $failsCounter = $notification->getFailCounter();
-                        $notification->setFailCounter( $failsCounter++ );
+                        $notification->setFailCounter($failsCounter++);
                         // Если количество ошибок привысило максимально допустимое, завершаем с этим оповещением
-                        if ( $failsCounter > self::MAX_FAILS )
-                        {
+                        if ($failsCounter > self::MAX_FAILS) {
                             $notification->setIsDone(1);
                         }
                     }
@@ -135,17 +122,15 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
                 }
 
                 // Отправка Email оповещения
-                if ( $notification->getType() == self::TYPE_EMAIL )
-                {
-                    $this->sendEmail( $user->getUserMail(), $operation );
+                if ($notification->getType() == self::TYPE_EMAIL) {
+                    $this->sendEmail($user->getUserMail(), $operation);
                     $notification->setIsSent(1);
                     $notification->setIsDone(1);
                     $notification->save();
                     $count++;
                 }
-            }
-            else
-            {
+
+            } else {
                 // Услуга не активна
                 // Просто помечаем уведомление как выполненное
                 $notification->setIsDone(1);
@@ -181,7 +166,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
      * @param Operation $operation
      * @return string
      */
-    private function _getFullMessage( $operation )
+    private function _getFullMessage($operation)
     {
         return
             "Дата: " . date("d.m.Y", strtotime( $operation->getDate())) . "\n" .
@@ -202,7 +187,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
 
     Max: использовать симфоневскую систему логгирования
      */
-    private function logging ($message, $input)
+    private function logging($message, $input)
     {
         // Путь к файлу с логами
         $logPath = sfConfig::get('sf_root_dir') . '/log/notifications.'.date('Y-m-d-H-i-s-u').'.log';
@@ -218,46 +203,44 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
      * @param string $msg сообщение
      * @return bool
      */
-    private function sendSMS( $phoneNumber, $operation )
+    private function sendSMS($phoneNumber, $operation)
     {
         // Параметры запроса
-        $params     = array();
+        $params = array();
 
         // Имя пользователя и пароль для доступа к сервису
-        $params[]   = 'http_username=' . self::WEBSMS_LOGIN;
-        $params[]   = 'http_password=' . self::WEBSMS_PASSWORD;
+        $params[] = 'http_username=' . self::WEBSMS_LOGIN;
+        $params[] = 'http_password=' . self::WEBSMS_PASSWORD;
 
-        // Номер телефона без пробелов и спец сзнаков, ничинается с 7 (79019551234)
-        $params[]   = 'phone_list=' . $phoneNumber;
+        // Номер телефона без пробелов и спец знаков, ничинается с 7 (79019551234)
+        $params[] = 'phone_list=' . $phoneNumber;
         // Текст сообщения должен быть в кодировке 1251
-        $params[]   = 'message=' . urlencode(iconv( 'utf8', 'cp1251', $this->_getShortMessage( $operation )));
+        $params[] = 'message=' . urlencode(iconv('utf8', 'cp1251', $this->_getShortMessage($operation)));
         // Сервис вернет ответ в виде обычного текса, альтернатива - xml
-        $params[]   = 'format=text';
+        $params[] = 'format=text';
         // От кого SMS
-        $params[]   = 'fromPhone=EasyFinance';
+        $params[] = 'fromPhone=EasyFinance';
         // Резать длинную смс на части
-        $params[]   = 'nosplit=0';
+        $params[] = 'nosplit=0';
         // Флаг тестового режима
-        $params[]   = 'test=' . (( !$this->prod ) ? '1' : '0');
+        $params[] = 'test=' . ((!$this->prod) ? '1' : '0');
 
-        $url = self::WEBSMS_URL . implode( '&', $params );
+        $url = self::WEBSMS_URL . implode('&', $params);
 
         // Обращаемся к сервису
-        $result = file_get_contents( $url );
+        $result = file_get_contents($url);
 
         // Проверим результат
         $matches = array();
-        preg_match("/error_num=(.+)/im", $result, $matches );
-        if ( isset( $matches[1] ) && trim($matches[1]) == 'OK' )
-        {
+        preg_match("/error_num=(.+)/im", $result, $matches);
+        if (isset($matches[1]) && trim($matches[1]) == 'OK') {
             // Все в порядке, смс отправлена
             return true;
-        }
-        else
-        {
+        } else {
             // Ошибка при отправке SMS
             $this->logging("Отправка СМС не удалась", $url . "\n\n" . $result);
         }
+
         return false;
     }
 
@@ -269,23 +252,21 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
      * @param string $msg текст сообщения
      * @return boolean
      */
-    public function sendEmail( $email, $operation )
+    public function sendEmail($email, $operation)
     {
-        $subject = "Напоминание: " . $this->_getShortMessage( $operation );
-        $from = array( self::EMAIL_FROM => self::EMAIL_NAME );
+        $subject = "Напоминание: " . $this->_getShortMessage($operation);
+        $from = array(self::EMAIL_FROM => self::EMAIL_NAME,);
 
         #Max: не надо так делать. Тестировать надо по-другому. Надо в factories.yml повесить свою заглушку
-        if ( $this->prod )
-        {
+        if ($this->prod) {
             // На продакшне отправляем письмо
             $result = $this->getMailer()->composeAndSend($from, $email, $subject, $this->_getFullMessage($operation));
-        }
-        else
-        {
+        } else {
             // Иначе отправляем текст email сообщения в файл
             $message = $this->getMailer()->compose($from, $email, $subject, $this->_getFullMessage($operation));
-            file_put_contents( $this->tmpFile, (string)$message );
+            file_put_contents($this->tmpFile, (string) $message);
         }
+
         return true;
     }
 }
