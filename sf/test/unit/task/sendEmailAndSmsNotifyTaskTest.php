@@ -175,6 +175,7 @@ class task_sendEmailAndSmsNotifyTaskTest extends myUnitTestCase
         $op->save();
 
         // Нужен телефон для отправки смс
+        # Svel: ой, пля, это что за формат номера телефона?
         $op->getUser()->setSmsPhone('+7 900 000-0000')->save();
 
         // И емейл для отправки почты
@@ -183,7 +184,7 @@ class task_sendEmailAndSmsNotifyTaskTest extends myUnitTestCase
         // Оповещение
         $notification = new OperationNotification();
         $notification->setOperation( $op );
-        $notification->setDateTime( $date );
+        $notification->setSchedule( $date );
         $notification->setType( $type );
         $notification->setIsSent( $isSent );
         $notification->setIsDone( $isDone );
@@ -208,4 +209,5 @@ class task_sendEmailAndSmsNotifyTaskTest extends myUnitTestCase
 
         return $notification;
     }
+
 }

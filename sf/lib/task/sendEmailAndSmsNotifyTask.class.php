@@ -7,7 +7,6 @@
 class sendEmailAndSmsNotifyTask extends sfBaseTask
 {
    #Max: все что можно положить в конфиги с учетом env
-   #     Стандарт кодирования
 
     /**
      * Флаг продакшн версии
@@ -39,6 +38,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
     const EMAIL_FROM        = 'reminder@easyfinance.ru';
     const EMAIL_NAME        = 'EasyFinance Reminder';
 
+    # Svel: выкинуть это к чертям, кто обнаружит и не поленится
     // Временный файл для тестов
     const TMP_FILENAME      = 'sendEmailAndSmsNotifyTask_test.tmp';
 
@@ -83,10 +83,14 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
         $databaseManager = new sfDatabaseManager($this->configuration);
 
         // Выбираем все неотправленные оповещения чья дата <= текущей
-        $notifications = OperationNotificationTable::getInstance()->getUnsentNotifications();
+        # Svel: связывать с операциями и пользователями, ибо нефик
+        $notifications = Doctrine::getTable("OperationNotification")
+            ->getUnsentNotifications()
+            ->execute();
 
         // Выбираем те оповещения, для которых у пользователя оплачена услуга
         foreach ($notifications as $notification) {
+            # Svel: FIXME как-то не кошерно, сколько ж тут запросов будет
             $operation = $notification->getOperation();
             $user = $operation->getUser();
 
@@ -107,15 +111,15 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
                     }
 
                     if ($this->sendSMS($smsPhone, $operation)) {
-                        $notification->setIsSent(1);
-                        $notification->setIsDone(1);
+                        $notification->setIsSent(true);
+                        $notification->setIsDone(true);
                         $count++;
                     } else {
                         $failsCounter = $notification->getFailCounter();
                         $notification->setFailCounter($failsCounter++);
                         // Если количество ошибок привысило максимально допустимое, завершаем с этим оповещением
                         if ($failsCounter > self::MAX_FAILS) {
-                            $notification->setIsDone(1);
+                            $notification->setIsDone(true);
                         }
                     }
                     $notification->save();
@@ -124,8 +128,8 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
                 // Отправка Email оповещения
                 if ($notification->getType() == self::TYPE_EMAIL) {
                     $this->sendEmail($user->getUserMail(), $operation);
-                    $notification->setIsSent(1);
-                    $notification->setIsDone(1);
+                    $notification->setIsSent(true);
+                    $notification->setIsDone(true);
                     $notification->save();
                     $count++;
                 }
@@ -133,7 +137,8 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
             } else {
                 // Услуга не активна
                 // Просто помечаем уведомление как выполненное
-                $notification->setIsDone(1);
+                # Svel: TODO так и было в ТЗ? грязный вариант
+                $notification->setIsDone(true);
                 $notification->save();
             }
         }
@@ -166,6 +171,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
      * @param Operation $operation
      * @return string
      */
+     # Svel: FIXME а почему генерация без шаблонов для писем?
     private function _getFullMessage($operation)
     {
         return
@@ -213,16 +219,20 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
         $params[] = 'http_password=' . self::WEBSMS_PASSWORD;
 
         // Номер телефона без пробелов и спец знаков, ничинается с 7 (79019551234)
+        # Svel: TODO проверить валидатор на номер телефона
         $params[] = 'phone_list=' . $phoneNumber;
         // Текст сообщения должен быть в кодировке 1251
+        # Svel: как 1251, а утф в смсках не пошлешь? (
         $params[] = 'message=' . urlencode(iconv('utf8', 'cp1251', $this->_getShortMessage($operation)));
         // Сервис вернет ответ в виде обычного текса, альтернатива - xml
+        # Svel: имхо в xml'ках надо, и запросы в xml'ках
         $params[] = 'format=text';
         // От кого SMS
         $params[] = 'fromPhone=EasyFinance';
         // Резать длинную смс на части
         $params[] = 'nosplit=0';
         // Флаг тестового режима
+        # Svel: FIXME kill this
         $params[] = 'test=' . ((!$this->prod) ? '1' : '0');
 
         $url = self::WEBSMS_URL . implode('&', $params);

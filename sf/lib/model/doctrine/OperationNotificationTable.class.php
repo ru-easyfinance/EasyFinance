@@ -1,22 +1,24 @@
 <?php
 
-
+/**
+ * Таблица: уведомления об операциях
+ */
 class OperationNotificationTable extends Doctrine_Table
 {
-
-    public static function getInstance()
-    {
-        return Doctrine_Core::getTable('OperationNotification');
-    }
-
     /**
-     * Получить список активных неотправленных уведомлений
+     * Выбрать активные не отправленные уведомления
      *
-     * @return Doctrine_Collection
+     * @return Doctrine_Query
      */
-    public function getUnsentNotifications()
+    # Svel: TODO  теста нет
+    # Svel: FIXME join пользователей и операций, см. sendEmailAndSmsNotifyTask
+    public function getUnsentNotifications($alias = 'n')
     {
-        $dQL = "(date_time < NOW()) AND (is_sent = 0) AND ( is_done = 0 )";
-        return $this->findByDql( $dQL, array() );
+        $q = $this->createQuery($alias)
+            ->andWhere("{$alias}.schedule < ?", date('Y-m-d H:i:s'))
+            ->andWhere("{$alias}.is_sent = 0")
+            ->andWhere("{$alias}.is_done = 0");
+
+        return $q;
     }
 }
