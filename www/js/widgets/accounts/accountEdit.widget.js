@@ -25,6 +25,7 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_name').val('');
         $('#acc_comment').val('');
         $('#acc_balance').val('');
+        $('#acc_state0').attr('checked','checked');
 
         _$dialog.data('title.dialog', 'Добавить счёт');
 
@@ -70,7 +71,7 @@ easyFinance.widgets.accountEdit = function(){
         params.comment = _$node.find('#acc_comment').val();
         params.currency = _$node.find('#acc_currency').val();
         params.initBalance = 0;
-        params.state = _$node.find('#acc_state:checked').val();
+        params.state = _$node.find('#acc_state_group input:checked').val();
 
         // #1614 ошибка при незаполненном поле начального баланса
         var balance = parseFloat(_$node.find('#acc_balance').val());
@@ -222,6 +223,7 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_comment').val(account.comment);
         $('#acc_balance').val(parseFloat(account.initBalance));
         $('#acc_currency').val(account.currency);
+        $('#acc_state'+account.state).attr('checked','checked');
     }
 
     function setEditMode(mode) {

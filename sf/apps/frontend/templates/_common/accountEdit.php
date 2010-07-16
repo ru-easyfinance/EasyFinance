@@ -22,11 +22,11 @@
                     <tr>
                         <td><label>Статус:</label></td>
                     </tr>
-                    <tr>
+                    <tr id="acc_state_group">
                         <td>
-                            <label><input type="radio" value="0" id="acc_state" name="acc_state">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Обычный</label>
-                            <label><input type="radio" value="1" id="acc_state" name="acc_state"><img src="/img/i/star.png"/>&nbsp;Избранный</label>
-                            <label><input type="radio" value="2" id="acc_state" name="acc_state"><img src="/img/i/archive.png"/>&nbsp;Архивный</label>
+                            <label><input type="radio" value="0" id="acc_state0" name="acc_state">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Обычный</label>
+                            <label><input type="radio" value="1" id="acc_state1" name="acc_state"><img src="/img/i/star.png"/>&nbsp;Избранный</label>
+                            <label><input type="radio" value="2" id="acc_state2" name="acc_state"><img src="/img/i/archive.png"/>&nbsp;Архивный</label>
                         </td>
 
                     </tr>
