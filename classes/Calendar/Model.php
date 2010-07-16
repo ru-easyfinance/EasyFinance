@@ -12,12 +12,13 @@ class Calendar_Model extends _Core_Abstract_Model
      *
      * @var integer
      */
-    public function __construct( array $row, oldUser $owner )
+    public function __construct(array $row, oldUser $owner)
     {
             $this->ownerId = $owner->getId();
 
             $this->fields = $row;
     }
+
 
     /**
      * Загрузка всех событий календаря для пользователя
@@ -29,7 +30,7 @@ class Calendar_Model extends _Core_Abstract_Model
      *
      * @return array Массив моделей событий
      */
-    public static function loadAll( oldUser $user, $start, $end )
+    public static function loadAll(oldUser $user, $start, $end)
     {
         $modelsArray = array();
 
@@ -84,9 +85,9 @@ class Calendar_Model extends _Core_Abstract_Model
         foreach ($rows as $row) {
             // Добавляем напомнинания
             $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
-            $notifications = Core::getInstance()->db->select($sql, $row['id'] );
+            $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
-            $row = self::_addNotificationInfo( $user, $row );
+            $row = self::_addNotificationInfo($user, $row);
 
             $model = new Calendar_Model($row, $user);
 
@@ -98,6 +99,7 @@ class Calendar_Model extends _Core_Abstract_Model
 
         return $modelsArray;
     }
+
 
     /**
      * Загрузка всех неподтверждённых событий для указанного пользователя
@@ -151,9 +153,9 @@ class Calendar_Model extends _Core_Abstract_Model
         foreach ($rows as $row) {
             // Добавляем напомнинания
             $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
-            $notifications = Core::getInstance()->db->select($sql, $row['id'] );
+            $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
-            $row = self::_addNotificationInfo( $user, $row );
+            $row = self::_addNotificationInfo($user, $row);
 
             $model = new Calendar_Model($row, $user);
 
@@ -162,6 +164,7 @@ class Calendar_Model extends _Core_Abstract_Model
 
         return $modelsArray;
     }
+
 
     /**
      * Выводит список напоминалок на неделю вперёд
@@ -229,33 +232,33 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param array $row
      * @return array
      */
-    private function _addNotificationInfo( oldUser $user, array $row )
+    private function _addNotificationInfo(oldUser $user, array $row)
     {
         // Добавляем напомнинания
         $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
-        $notifications = Core::getInstance()->db->select($sql, $row['id'] );
+        $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
         // Получаем смещение временной зоны пользователя относительно времени сервера
-        $offset = ( ( $user->getUserProps('time_zone_offset') - round( ( date("O") / 100 ), 2 ) )*3600);
+        $offset = ($user->getUserProps('time_zone_offset') - round((date("O") / 100), 2)) * 3600;
 
         // Напоминания об операциях
-        if ( count( $notifications ) ) {
-            foreach ( $notifications as $notrow ) {
+        if (count($notifications)) {
+            foreach ($notifications as $notrow) {
+                $dtTimestamp = strtotime($notrow['schedule']) + $offset;
+
                 // SMS
-                if ( $notrow['type'] == 0 ) {
+                if ($notrow['type'] == 0) {
                     $row['smsEnabled'] = 1;
-                    $dtTimestamp = strtotime( $notrow['date_time'] ) + $offset;
-                    $daysBefore = floor(abs( strtotime( $row['date']) - strtotime( date( "Y-m-d", $dtTimestamp ) ) ) / (3600*24));
+                    $daysBefore = floor(abs(strtotime($row['date']) - strtotime(date("Y-m-d", $dtTimestamp))) / (3600 * 24));
                     $row['smsDaysBefore'] = $daysBefore;
                     $row['smsHour'] = date('H', $dtTimestamp);
                     $row['smsMinutes'] = date('i', $dtTimestamp);
                 }
 
                 // Email
-                if ( $notrow['type'] == 1 ) {
+                if ($notrow['type'] == 1) {
                     $row['mailEnabled'] = 1;
-                    $dtTimestamp = strtotime( $notrow['date_time'] ) + $offset;
-                    $daysBefore = floor(abs( strtotime( $row['date']) - strtotime( date( "Y-m-d", $dtTimestamp ) ) ) / (3600*24));
+                    $daysBefore = floor(abs(strtotime($row['date']) - strtotime(date("Y-m-d", $dtTimestamp))) / (3600 * 24));
                     $row['mailDaysBefore'] = $daysBefore;
                     $row['mailHour'] = date('H', $dtTimestamp);
                     $row['mailMinutes'] = date('i', $dtTimestamp);
@@ -274,7 +277,7 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param array $arrayDays Массив с днями, повторениями
      * @return bool
      */
-    public static function create (oldUser $user, Calendar_Event $event, $arrayDays)
+    public static function create(oldUser $user, Calendar_Event $event, $arrayDays)
     {
 
         // Создаём само событие
@@ -295,6 +298,7 @@ class Calendar_Model extends _Core_Abstract_Model
         return self::createOperations($user, $event, $calId, $arrayDays);
     }
 
+
     /**
      * Обновляет события
      * @param oldUser $user
@@ -302,9 +306,8 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param array $array
      * @return bool
      */
-    public static function update ( oldUser $user, Calendar_Event $event, $array )
+    public static function update(oldUser $user, Calendar_Event $event, $array)
     {
-
         // Создаём само событие
         $sql = "UPDATE calendar_chains c
             SET `last` = ?, `every` = ?, `repeat` = ?, `week` = ?
@@ -336,17 +339,19 @@ class Calendar_Model extends _Core_Abstract_Model
         return self::createOperations($user, $event, $event->getChain(), $arrayDays);
     }
 
+
     /**
      * Возвращает даты подтверждённых событий в серии
      * @param oldUser $user
      * @param int $chain
      * @return array
      */
-    public static function loadAcceptedByChain (oldUser $user, $chain)
+    public static function loadAcceptedByChain(oldUser $user, $chain)
     {
         $sql = 'SELECT `date` FROM operation c WHERE user_id=? AND chain_id=? AND accepted=1 AND deleted_at IS NULL';
         return Core::getInstance()->db->selectCol($sql, $user->getId(), $chain);
     }
+
 
     /**
      * Добавляет рег. операции
@@ -409,17 +414,19 @@ class Calendar_Model extends _Core_Abstract_Model
         }
     }
 
+
     /**
      * Получает операцию в виде массива
      * @param oldUser $user
      * @param int $chain
      * @return array
      */
-    public static function getByChain ( oldUser $user, $chain )
+    public static function getByChain(oldUser $user, $chain)
     {
         $sql = 'SELECT * FROM calendar_chains c WHERE user_id=? AND id=?';
         return Core::getInstance()->db->selectRow($sql, $user->getId(), $chain);
     }
+
 
     /**
      * Удаляет события
@@ -427,20 +434,17 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param int  $chain
      * @return bool
      */
-    public static function deleteEvents ( oldUser $user, $chain )
+    public static function deleteEvents(oldUser $user, $chain)
     {
         $sql = "DELETE FROM operation WHERE user_id=? AND chain_id=? AND accepted=0";
 
-        if ( Core::getInstance()->db->query($sql, $user->getId(), $chain) ) {
-
+        if (Core::getInstance()->db->query($sql, $user->getId(), $chain)) {
             return true;
-
-        } else {
-
-            return false;
-
         }
+
+        return false;
     }
+
 
     /**
      * Отмечает события как выполненные
@@ -448,7 +452,7 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param array $ids array(int, int, int, ..)
      * @return bool
      */
-    public static function acceptEvents ( oldUser $user, $ids )
+    public static function acceptEvents(oldUser $user, $ids)
     {
         $operations = array();
         foreach ($ids as $value) {
@@ -458,8 +462,10 @@ class Calendar_Model extends _Core_Abstract_Model
             );
         }
         $operation = new Operation_Model($user);
+
         return (bool) $operation->editMultiple($operation);
     }
+
 
     /**
      * Редактирует дату операции
@@ -468,29 +474,27 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param mysql date $date
      * @return bool
      */
-    public static function editDate ( oldUser $user, $id, $date )
+    public static function editDate(oldUser $user, $id, $date)
     {
         $sql = "UPDATE operation SET `date`= ? WHERE id =? AND user_id=?;";
 
         return Core::getInstance()->db->query($sql, $date, $id, $user->getId());
-
     }
+
 
     /**
      *
      */
     function load ()
     {
-
     }
 
     function save()
     {
-
     }
 
     public function delete ()
     {
-
     }
+
 }
