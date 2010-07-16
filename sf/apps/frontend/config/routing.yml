@@ -1,10 +1,13 @@
-calendar_add:           # роут для сохранения запланированной операции
+
+# сохранение запланированной операции
+calendar_add:
   url: /calendar/add
   class: sfRoute
   param: { module: calendar, action: add }
   requirements:
     sf_method: [get, post]
 
+# сохранение настроек оповещений, t1497
 save_reminder_settings:
   url: /profile/save_reminders
   class: sfRoute
@@ -12,6 +15,7 @@ save_reminder_settings:
   requirements:
     sf_method: [get, post]
 
+# загрузка пользовательских данных в js-объект
 load_user_data:
   url: /profile/load_main_settings
   class: sfRoute
@@ -49,7 +53,7 @@ homepage:
   params: { module: info, action: index }
 
 services:
-  url:   /services/
+  url:   /services
   params: { module: services, action: index }
 
 robokassa:

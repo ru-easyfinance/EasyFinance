@@ -39,18 +39,8 @@ class profileActions extends sfActions {
         }
         $user->save();
 
-        if( $request->getParameter('responseMode') == 'json' ) {
-            $ret = array(
-                'result' => array(
-                    'text' => 'Настройки напоминаний сохранены'
-                 ),
-                 'reminders' => $reminders_array
-            );
-            return $this->renderText(json_encode($ret));
-        } else {
-            $this->setLayout( false );
-            return sfView::NONE;
-        }
+        $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
+        return $this->renderText(json_encode($ret));
     }
 
 
@@ -86,6 +76,7 @@ class profileActions extends sfActions {
             )
         );
 
-        return $this->renderText( json_encode($result) );
+        $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
+        return $this->renderText(json_encode($result));
     }
 }
