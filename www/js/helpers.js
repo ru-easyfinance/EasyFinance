@@ -149,7 +149,9 @@ function getAccountTooltip(accountId) {
     var tip = '<table>';
     tip +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+ account.name + '</td></tr>';
     tip +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+ _model.getAccountTypeString(account.id) + '</td></tr>';
-    tip +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+ account.comment + '</td></tr>';
+    if (account.comment) {
+        tip +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+ account.comment + '</td></tr>';
+    }
     tip +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+ formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(account.id) + '</td></tr>';
 
     if (account.reserve != 0){
