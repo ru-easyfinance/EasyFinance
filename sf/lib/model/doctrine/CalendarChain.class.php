@@ -20,7 +20,7 @@ class CalendarChain extends BaseCalendarChain
     const REPEAT_EVERY_WEEK     = 7;   // Еженедельно
     const REPEAT_EVERY_MONTH    = 30;  // Ежемесячно
     const REPEAT_EVERY_QUARTER  = 90;  // Ежеквартально
-    const REPEAT_EVERY_YEA      = 365; // Ежегодно
+    const REPEAT_EVERY_YEAR     = 365; // Ежегодно
 
 
 }

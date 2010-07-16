@@ -1,6 +1,6 @@
 <?php
 /**
- * Готовит js объект res.overdue
+ * Готовит js объект res.calendar.overdue
  */
 class overdueComponent extends sfComponent
 {
@@ -11,8 +11,8 @@ class overdueComponent extends sfComponent
      */
     public function execute($request)
     {
-        $userId = $this->getUser()->getUserRecord()->getId();
-        $data = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($userId)->fetchArray();
+        $user = $this->getUser()->getUserRecord();
+        $data = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user)->fetchArray();
 
         $this->setVar('data', $data, $noEscape = true);
     }

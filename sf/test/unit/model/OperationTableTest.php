@@ -18,7 +18,7 @@ class model_OperationTableTest extends myUnitTestCase
         $user2 = $this->helper->makeUser();
         $account2 = $this->helper->makeAccount($user2);
 
-        $yesterday  = date('Y-m-d', time() - ONE_DAY_SECONDS);
+        $yesterday  = date('Y-m-d', time() - 24*60*60);
         $now        = date('Y-m-d', time());
 
        /*
@@ -46,7 +46,7 @@ class model_OperationTableTest extends myUnitTestCase
         $op7 = $this->helper->makeCalendarOperation($cc1, $account, 'op7', -2);
 
         // Запись в календаре с операциями
-        $result = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user->getId())->execute();
+        $result = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user)->execute();
         $this->assertEquals(3, $result->count(), "Operations count");
         // Если операция создана только что (в ту же секунду), она сразу становится просроченной
         $this->assertModels($op4, $result->get(0));

@@ -6,4 +6,4 @@
  */
 ?>
 
-res.overdue = <?php echo json_encode($data) ?>;
+res.calendar.overdue = <?php echo json_encode($data) ?>;

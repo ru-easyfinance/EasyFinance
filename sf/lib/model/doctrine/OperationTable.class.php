@@ -60,10 +60,10 @@ class OperationTable extends Doctrine_Table
     /**
      * Выборка просроченных запланированных операций
      *
-     * @param  int      $userId
+     * @param  User     $user
      * @param  string   $alias
      */
-    public function queryFindWithOverdueCalendarChains($userId, $alias = 'o')
+    public function queryFindWithOverdueCalendarChains(User $user, $alias = 'o')
     {
         // Missed: tags, deleted_at, форматирование дат
         $q = $this->createQuery($alias)
@@ -85,9 +85,9 @@ class OperationTable extends Doctrine_Table
             ->addSelect("c.repeat")
             ->addSelect("c.week_days")
             ->leftJoin("{$alias}.CalendarChain c")
-            ->andWhere("{$alias}.user_id = ?", (int) $userId)
-            ->andWhere("{$alias}.accepted=".Operation::STATUS_DRAFT)
-            ->andWhere("{$alias}.date <= CURRENT_DATE()")
+            ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
+            ->andWhere("{$alias}.accepted=" . Operation::STATUS_DRAFT)
+            ->andWhere("{$alias}.date <= ?", date('Y-m-d', time()))
             ->andWhere("{$alias}.deleted_at IS NULL")
             ;
 

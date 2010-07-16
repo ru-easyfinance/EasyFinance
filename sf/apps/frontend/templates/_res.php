@@ -34,8 +34,9 @@
     );
 
     $res['calendar'] = array(
-        'calendar'  => '',
-        'future'    => '',
+        'calendar'  => array(),
+        'future'    => array(),
+        'overdue'   => array(),
     );
 
     $res['informers'] = array(

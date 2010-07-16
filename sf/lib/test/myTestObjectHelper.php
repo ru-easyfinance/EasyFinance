@@ -155,7 +155,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         $defaultProps = array(
             'date'      => date('Y-m-d', time() + $shiftDate * ONE_DAY_SECONDS),
             'accepted'  => Operation::STATUS_DRAFT,
-            'comment'   => $comment
+            'comment'   => $comment,
         );
         $props = array_merge($defaultProps, $props);
 
