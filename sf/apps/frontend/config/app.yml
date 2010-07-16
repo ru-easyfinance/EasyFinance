@@ -1,18 +1,21 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/11-App
+
+
+prod:
+  # Данные для подключения робокассы
+  billing:
+    robokassa:
+      url:                  https://merchant.roboxchange.com/Handler/MrchSumPreview.ashx
+      login:                easyfinance
+      pass1:                Hud^y&6e35$resDf # Пароль 1
+      pass2:                gdYdt63Gsldbe5!d # Пароль 2
+
 all:
   # Данные для подключения робокассы
   billing:
     robokassa:
-      # URL "боевого" сервиса оплаты
       url:                  http://test.robokassa.ru/Index.aspx
-      # URL "тестового" сервиса оплаты
-      test_url:             http://test.robokassa.ru/Index.aspx
-      # имя пользователя в системе робокасса
-      login:                artemk1980
-      # Пароль 1
-      pass1:                password1
-      # Пароль 2
-      pass2:                password2
-      # Флаг тестового режима (влияет на то, какой URL будет использован)
-      test:                 1
+      login:                easyfinance_test
+      pass1:                test123456789 # Пароль 1
+      pass2:                test987654321 # Пароль 2
