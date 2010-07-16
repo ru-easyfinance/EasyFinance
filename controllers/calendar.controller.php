@@ -125,11 +125,11 @@ class Calendar_Controller extends _Core_Controller_UserCommon
             'type'       => ( int ) $request->post['type'],
             'account'    => ( int ) $request->post['account'],
             'amount'     => (float) str_replace ( ' ', '', $request->post['amount'] ),
-            'category'   => ( int ) $request->post['category'],
+            'category'   => ((int)$request->post['category'] <= 0) ? null : (int)$request->post['category'],
             'date'       => Helper_Date::RusDate2Mysql( $this->getDateOperation() ),
 
             'comment'    => ( string ) $request->post['comment'],
-            'tags'       => isset( $request->post['tags'] ) ? $request->post['tags'] : null,
+            'tags'       => isset( $request->post['tags'] ) ? explode(',', $request->post['tags']) : array(),
             'convert'    => isset( $request->post['convert'] ) ? $request->post['convert'] : 0,
             'close'      => isset( $request->post['close'] ) ? $request->post['close'] : 0,
             'currency'   => isset( $request->post['currency'] ) ? $request->post['currency'] : 0,
@@ -167,6 +167,7 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                     }
 
                     $operation->edit(
+                        $event_array['type'],
                         $event_array['id'],
                         $event_array['amount'],
                         $event_array['date'],
