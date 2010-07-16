@@ -119,10 +119,11 @@ easyFinance.widgets.accountsPanel = function(){
     }
 
     function redraw(){
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
+//        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
+        var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1];
 //        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
-        var arr = ['','','','',''];//содержимое каждой группы
-        var summ = [0,0,0,0,0];// сумма средств по каждой группе
+        var arr = ['','','','','',''];//содержимое каждой группы
+        var summ = [0,0,0,0,0,0];// сумма средств по каждой группе
         var val = {};//сумма средств по каждой используемой валюте
 
         if (!_model)
@@ -141,7 +142,11 @@ easyFinance.widgets.accountsPanel = function(){
         var s = '';
         for (key in data )
         {
-            i = g_types[data[key]['type']];
+            if (data[key].state == "1") {
+                i = 0;
+            } else {
+                i = g_types[data[key]['type']];
+            }
             str = '<li class="account" title="' + getAccountTooltip(data[key].id) + '"><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
@@ -187,7 +192,7 @@ easyFinance.widgets.accountsPanel = function(){
         {
             total = total+parseFloat(summ[key]);
             s='<ul class="efListWithTooltips">'+arr[key]+'</ul>';
-            if (key>=0 && key <=6) {
+            if (key>=0 && key <=7) {
                 _$node.find('#accountsPanelAcc'+key).html(s);
             }
    

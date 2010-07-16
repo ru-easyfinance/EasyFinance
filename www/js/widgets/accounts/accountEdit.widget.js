@@ -192,6 +192,7 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_name').val('');
         $('#acc_currency').val(0);
         $('#acc_balance').val(0);
+        $('#acc_state0').attr('checked','checked');
 
         _$dialog.data('title.dialog', 'Добавить счёт').dialog('open');
     }
