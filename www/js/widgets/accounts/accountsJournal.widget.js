@@ -140,10 +140,10 @@ easyFinance.widgets.accountsJournal = function(){
             return;
         }
 
-        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0]; // Жуткий масив привязки типов к группам
-        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
-        var arr = ['','','','',''];//содержимое каждой группы
-        var summ = [0,0,0,0,0];// сумма средств по каждой группе
+        var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1,1,1]; // Жуткий масив привязки типов к группам
+        var g_name = ['Избранные','Деньги','Мне должны','Я должен','Инвестиции','Имущество','Архив'];//названия групп
+        var arr = ['','','','','','',''];//содержимое каждой группы
+        var summ = [0,0,0,0,0,0,0];// сумма средств по каждой группе
         var div = "<div class='cont'><ul style='z-index: 1006'>\n\
                         <li class='operation' title='Добавить операцию'><a></a></li>\n\
                         <li class='edit' title='Редактировать'><a></a></li>\n\
@@ -158,7 +158,16 @@ easyFinance.widgets.accountsJournal = function(){
         // формирует массив с таблицей счетов по группам
         for (var row in account_list_ordered)
         {
+            // Если счёт избранный
+            if (account_list_ordered[row]['state'] == "1") {
+                type = 0;
+            // Если это архив
+            } else if(account_list_ordered[row]['state'] == "2") {
+                type = 6;
+            } else {
             type = g_types[account_list_ordered[row]['type']];
+            }
+
             colorClass = account_list_ordered[row]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
             var id = account_list_ordered[row]['id'];
 

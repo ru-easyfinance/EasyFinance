@@ -20,6 +20,17 @@
                 <br class="clr"/>
                 <table class="tableForm" cellspacing="0" cellpadding="0">
                     <tr>
+                        <td><label>Статус:</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input type="radio" value="0" id="acc_state" name="acc_state">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Обычный</label>
+                            <label><input type="radio" value="1" id="acc_state" name="acc_state"><img src="/img/i/star.png"/>&nbsp;Избранный</label>
+                            <label><input type="radio" value="2" id="acc_state" name="acc_state"><img src="/img/i/archive.png"/>&nbsp;Архивный</label>
+                        </td>
+
+                    </tr>
+                    <tr>
                         <td><div style="float: left;"><label>Название:</label></div></td>
                     </tr>
                     <tr>

@@ -246,7 +246,8 @@ easyFinance.models.accounts = function(){
             type_id:     params.type,
             name:        params.name,
             description: params.comment,
-            initBalance: params.initBalance
+            initBalance: params.initBalance,
+            state:       params.state
         };
 
         var successCallback = function(data) {
@@ -651,3 +652,4 @@ easyFinance.models.accounts = function(){
         getFutureOperationById: getFutureOperationById
     };
 }(); // execute anonymous function to immediatly return object
+

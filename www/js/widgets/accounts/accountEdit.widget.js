@@ -70,6 +70,7 @@ easyFinance.widgets.accountEdit = function(){
         params.comment = _$node.find('#acc_comment').val();
         params.currency = _$node.find('#acc_currency').val();
         params.initBalance = 0;
+        params.state = _$node.find('#acc_state:checked').val();
 
         // #1614 ошибка при незаполненном поле начального баланса
         var balance = parseFloat(_$node.find('#acc_balance').val());
@@ -239,3 +240,4 @@ easyFinance.widgets.accountEdit = function(){
         copyAccountById: copyAccountById
     };
 }(); // execute anonymous function to immediatly return object
+
