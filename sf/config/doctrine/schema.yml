@@ -499,27 +499,24 @@ EmailParser:
       onDelete: CASCADE
 
 
-# SMS/Email оповещения о запланированных операциях
+# Оповещения о запланированных операциях (SMS/Email)
 OperationNotification:
   tableName: operation_notifications
-  actAs:
-    Timestampable:
-      created: { name: dt_create }
-      updated: { name: dt_update }
+  actAs: [Timestampable]
   columns:
-    operation_id:   { type: integer(4), unsigned: true, notnull: true }
-    date_time:      { type: timestamp, notnull: true } # дата и время на которое запланирована отправка оповешения
-    type:           { type: integer(1), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
-    is_sent:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # флаг - смс отправлено
-    fail_counter:   { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
-    is_done:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # флаг - закончили с этой операцией
+    operation_id: { type: integer(8), unsigned: true, notnull: true }             # ID операции
+    schedule:     { type: timestamp(25), notnull: true }                          # планируемое время отправки уведомления
+    type:         { type: integer(2), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
+    fail_counter: { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
+    is_sent:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - отправлено
+    is_done:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - закончили с этой операцией
   relations:
     Operation:
       local:   operation_id
       foreign: id
       type:        one
       foreignType: many
-      onDelete: CASCADE      # операции, удаляются все оповещения
+      onDelete: CASCADE      # При удалении Операции удаляются все оповещения
   options:
     symfony:
       form:   false

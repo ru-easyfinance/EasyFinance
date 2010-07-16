@@ -1,71 +1,79 @@
 <?php
 
+/**
+ * Создать таблицу уведомлений
+ */
 class Migration110_Notifications_CreateTables extends Doctrine_Migration_Base
 {
+    /**
+     * Migrate
+     */
     function migrate($upDown)
     {
-
-        $fieldsNotifications =
-        array(
+        $fields = array(
             'id' => array(
-                'type' => 'integer',
-                'length' => 4,
-                'unsigned' => 1,
-                'notnull' => 1,
+                'type'     => 'integer',
+                'length'   => 4,
+                'unsigned' => true,
+                'notnull'  => true,
+                'primary'  => true,
                 'autoincrement' => true,
-                'primary' => true,
             ),
             'operation_id' => array(
-                'type' => 'integer',
-                'length' => 20,
-                'unsigned' => 1,
-                'notnull' => 1,
+                'type'     => 'integer',
+                'length'   => 8,
+                'unsigned' => true,
+                'notnull'  => true,
             ),
-            'date_time' => array(
-                'type' => 'datetime',
+            'schedule' => array(
+                'type'     => 'timestamp',
+                'length'   => '25',
+                'notnull'  => true,
             ),
             'type' => array(
-                'type' => 'integer',
-                'length' => 1,
-                'unsigned' => 1,
-                'notnull' => 1,
-                'default' => 1,
-            ),
-            'is_sent' => array(
-                'type' => 'integer',
-                'length' => 1,
-                'unsigned' => 1,
-                'notnull' => 1,
-                'default' => 0,
+                'type'     => 'integer',
+                'length'   => 1,
+                'unsigned' => true,
+                'notnull'  => true,
+                'default'  => '1',
             ),
             'fail_counter' => array(
-                'type' => 'integer',
-                'length' => 2,
-                'unsigned' => 1,
-                'notnull' => 1,
-                'default' => 0,
+                'type'     => 'integer',
+                'length'   => 1,
+                'unsigned' => true,
+                'notnull'  => true,
+                'default'  => '0',
+            ),
+            'is_sent' => array(
+                'type'     => 'boolean',
+                'unsigned' => true,
+                'notnull'  => true,
+                'default'  => '0',
             ),
             'is_done' => array(
-                'type' => 'integer',
-                'length' => 1,
-                'unsigned' => 1,
-                'notnull' => 1,
-                'default' => 0,
+                'type'     => 'boolean',
+                'unsigned' => true,
+                'notnull'  => true,
+                'default'  => '0',
             ),
-            #Max: created_at, см. Doctrine Timestampable + указать в схеме
-            'dt_create' => array(
-                'type' => 'datetime'
+            'created_at' => array(
+                'type'     => 'timestamp',
+                'length'   => 25,
+                'notnull'  => true,
             ),
-            'dt_update' => array(
-                'type' => 'datetime'
-            )
+            'updated_at' => array(
+                'type'     => 'timestamp',
+                'length'   => 25,
+                'notnull'  => true,
+            ),
         );
 
         $options = array(
-            'type'     => 'INNODB',
+            'type'    => 'INNODB',
             'charset' => 'utf8'
         );
 
-        $this->table($upDown, 'operation_notifications', $fieldsNotifications, $options);
+        $this->table($upDown, 'operation_notifications', $fields, $options);
     }
+
 }

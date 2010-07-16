@@ -1,11 +1,13 @@
 <?php
 
+/**
+ * User: добавляем колонки настроек напоминаний (см. Notification)
+ */
 class Migration109_User_Addcolumns extends Doctrine_Migration_Base
 {
     /**
      * Migrate
      */
-
     function migrate($upDown)
     {
         $this->column($upDown, 'users', 'sms_phone', 'string', 100 );
@@ -63,5 +65,5 @@ class Migration109_User_Addcolumns extends Doctrine_Migration_Base
             'unsigned'=>true,
             'default'=>0
         ));
-    } 
+    }
 }
