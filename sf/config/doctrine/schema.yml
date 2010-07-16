@@ -98,6 +98,7 @@ Account:
     user_id:     {                                           type: integer(4),  notnull: true, unsigned: true }
     type_id:     { name: account_type_id as type_id,         type: integer(4),  notnull: true }
     currency_id: { name: account_currency_id as currency_id, type: integer(4),  notnull: true }
+    state:       { name: account_state as state,             type: integer(1),  notnull: true, default: 0 }
     name:        { name: account_name as name,               type: string(255), notnull: true }
     description: { name: account_description as description, type: string(255), notnull: true }
   relations:

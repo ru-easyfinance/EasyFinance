@@ -92,7 +92,8 @@ class Account_Model
             account_type_id as type,
             account_currency_id as currency,
             account_name as name,
-            account_description as comment
+            account_description as comment,
+            account_state as state
         FROM accounts
         WHERE
                 user_id=?

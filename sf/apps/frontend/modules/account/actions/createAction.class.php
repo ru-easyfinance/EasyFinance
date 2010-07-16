@@ -21,6 +21,7 @@ class createAction extends BaseFrontendAccountCreateAction
             'comment'      => $account['description'],
             'initBalance'  => $balance,
             'totalBalance' => $balance,
+            'state'        => (int)$accoun['state'],
         );
 
         // Content-Type ставим ручками поскольку не используем шаблоны

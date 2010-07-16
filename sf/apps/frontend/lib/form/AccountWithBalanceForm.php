@@ -10,7 +10,7 @@ class AccountWithBalanceForm extends BaseAccountForm
      */
     public function configure()
     {
-        $fieldsToUse = array('currency_id', 'name', 'description');
+        $fieldsToUse = array('currency_id', 'name', 'description', 'state');
 
         if ($this->getObject()->isNew()) {
             unset($this['id']);
