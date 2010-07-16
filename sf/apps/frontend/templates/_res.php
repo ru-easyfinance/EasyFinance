@@ -81,4 +81,5 @@
         //      надо найти скрытые зависимости в js - каких ресурсов ему еще не хватает
         // include_component('res', 'overdue', array())
     ?>
+    <?php include_component('res', 'future', array()) ?>
 </script>

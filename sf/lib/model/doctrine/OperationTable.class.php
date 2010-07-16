@@ -58,14 +58,14 @@ class OperationTable extends Doctrine_Table
 
 
     /**
-     * Выборка просроченных запланированных операций
+     * Выборка запланированных операций без учета времени
      *
      * @param  User     $user
      * @param  string   $alias
      */
-    public function queryFindWithOverdueCalendarChains(User $user, $alias = 'o')
+    public function queryFindWithCalendarChainsCommon(User $user, $alias = 'o')
     {
-        // Missed: tags, deleted_at, форматирование дат
+        // Missed: tags, time, форматирование дат
         $q = $this->createQuery($alias)
             ->select("{$alias}.id
                     , {$alias}.chain_id
@@ -86,12 +86,45 @@ class OperationTable extends Doctrine_Table
             ->addSelect("c.week_days")
             ->leftJoin("{$alias}.CalendarChain c")
             ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
-            ->andWhere("{$alias}.accepted=" . Operation::STATUS_DRAFT)
-            ->andWhere("{$alias}.date <= ?", date('Y-m-d', time()))
+            ->andWhere("{$alias}.accepted=".Operation::STATUS_DRAFT)
             ->andWhere("{$alias}.deleted_at IS NULL")
             ;
 
         return $q;
+    }
+
+
+    /**
+     * Выборка просроченных запланированных операций
+     *
+     * @param  User     $user
+     * @param  string   $alias
+     */
+    public function queryFindWithOverdueCalendarChains(User $user, $alias = 'o')
+    {
+        $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
+        $q->andWhere("{$alias}.date <= ?", date('Y-m-d', time());
+        return $q;
+    }
+
+
+    /**
+     * Выборка будущих запланированных операций (на неделю вперед)
+     *
+     * @param  User     $user
+     * @param  string   $alias
+     */
+    public function queryFindWithFutureCalendarChains(User $user, $alias = 'o')
+    {
+        $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
+        $q->andWhere("{$alias}.date <= ?", date('Y-m-d', time());
+
+        return $q;
+/*
+        # Svel: ой, что это?
+                AND
+                    o.`date` BETWEEN ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY) AND ADDDATE(CURRENT_DATE(), INTERVAL 8 DAY)
+*/
     }
 
 }
