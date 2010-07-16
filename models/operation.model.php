@@ -1065,14 +1065,16 @@ class Operation_Model
         }
 
         // Если нужно напоминание, добавляем напоминание:
-        if ( count( $notifications ) )
-        {
-            $this->_addNotifications( $operationId, $values['date'], $notifications, $this->_user );
+        if (count($notifications)) {
+            $this->_addNotifications($operationId, $values['date'], $notifications, $this->_user);
         }
 
         return $operationId;
     }
 
+    /**
+     * ???
+     */
     private static function _wrapKey($props)
     {
         $keys = array_keys($props);
@@ -1085,40 +1087,39 @@ class Operation_Model
      *
      * @param array $notifications массив с настройками уведомлений
      */
-    private function _addNotifications( $operationId, $date, $notifications, oldUser $user )
+    private function _addNotifications($operationId, $date, $notifications, oldUser $user)
     {
         // Смещение в секундах относительно серверного времени
-        $offset = ( ( $user->getUserProps('time_zone_offset') - round( date("O") / 100, 2 ) ) * 3600 );
+        $offset = ($user->getUserProps('time_zone_offset') - round(date("O") / 100, 2)) * 3600;
 
         $currentDT = date('Y-m-d H:i:s');
-        $operation_ts = strtotime( $date );
+        $operation_ts = strtotime($date);
 
         $sql = "INSERT INTO
                 operation_notifications
             SET
                 operation_id = ?,
                 type = ?,
-                date_time = ?,
+                schedule = ?,
                 is_sent = ?,
                 fail_counter = ?,
                 is_done = ?,
-                dt_create = ?,
-                dt_update = ?";
+                created_at = ?,
+                updated_at = ?";
 
         // Email уведомления
-        if ( $notifications['mailEnabled'] )
-        {
-            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts ) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
+        if ($notifications['mailEnabled']) {
+            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
             $type = 1;
         }
 
         // SMS уведомления
-        if ( $notifications['smsEnabled'] )
-        {
-            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts ) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
+        if ($notifications['smsEnabled']) {
+            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
             $type = 0;
         }
-        $this->db->query( $sql, array( (int)$operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT ) );
+
+        $this->db->query($sql, array((int) $operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT));
     }
 
 
@@ -1127,13 +1128,16 @@ class Operation_Model
      *
      * @param int $operationId id операции
      */
-    private function _deleteNotifications( $operationId )
+    private function _deleteNotifications($operationId)
     {
         $sql = "DELETE FROM operation_notifications WHERE operation_id = ?";
-        $this->db->query( $sql, array( (int)$operationId ) );
+        $this->db->query($sql, array((int) $operationId));
     }
 
 
+    /**
+     * ???
+     */
     private static function _wrapVal($props)
     {
         $result = "";
@@ -1254,6 +1258,7 @@ class Operation_Model
         return (int)count($operations);
     }
 
+
     /**
      * Конвертирует сумму операции
      *
@@ -1263,7 +1268,7 @@ class Operation_Model
      * @param   float $convert
      * @return  float
      */
-    function _convertAmount ($fromAccount, $toAccount, $amount, $convert)
+    function _convertAmount($fromAccount, $toAccount, $amount, $convert)
     {
         $accounts    = $this->_user->getUserAccounts();
 
@@ -1291,4 +1296,5 @@ class Operation_Model
 
         return abs($convert);
     }
+
 }
