@@ -216,7 +216,7 @@
                 <div id="remindersOptions" class="inside form" >
                     <table>
                         <tr>
-                            <td>Часовой пояс:<br>
+                            <td>Часовой пояс:<br />
                                 <select id="selTimeZoneOffset" name="timezone">
                                     <option value="-12.00">(GMT -12:00) Энивоток, Кваджалейн</option>
                                     <option value="-11.00">(GMT -11:00) Остров Мидуэй, Самоа</option>
@@ -253,9 +253,9 @@
                         </tr>
                     </table>
 
-                    {include file="common/reminderOptions.html"}
+                    {include_php file="../sf/apps/frontend/templates/_common/reminders.php"}
 
-                    <br>
+                    <br />
 
                     <button id="save_reminders">Сохранить</button>
                 </div>

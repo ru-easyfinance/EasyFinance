@@ -369,3 +369,24 @@ function get_tree_select2 ($selected = 0, $type = 0)
     }
     return $result;
 }
+
+
+/**
+ * Альтернатива для симфоньской include_partial('<name>', array());
+ * подключает только глобальные партиалы из frontend
+ * не проверяет наличие файла, мне лень это писать/копипастить
+ *
+ * @param  string $templateName
+ * @param  array  $vars
+ * @throws Exception что бы не повадно было подключать не глобальные шаблоны
+ * @return void
+ */
+function include_partial($templateName, $vars = array()) {
+    if (false === strpos($templateName, 'global/')) {
+        throw new Exception("Только глобальные партиалы из frontend'а");
+    }
+
+    $templateName = str_ireplace('global/', '', $templateName);
+
+    include(SYS_DIR_ROOT . "/sf/apps/frontend/templates/_" . $templateName . ".php");
+}
