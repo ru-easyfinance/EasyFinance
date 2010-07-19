@@ -42,15 +42,9 @@ function databaseErrorHandler($message, $info)
 {
     // Если использовалась @, ничего не делать.
     if (!error_reporting()) return;
+
     // Выводим подробную информацию об ошибке.
-    if (DEBUG) {
-        echo "SQL Error: $message<br><pre>";
-        print_r($info);
-        echo "</pre>";
-        exit();
-    } else {
-        trigger_error('SQL Error: ' . $message, E_USER_ERROR);
-    }
+    throw new Exception(var_export($info, false));
 }
 
 function databaseLogger($db, $sql)
