@@ -14,11 +14,7 @@ easyFinance.widgets.profile = function(model){
     function setupProfile(){
         var data = _model.getUserInfo();
         $('input#login').val(data.login);
-        /* Denis
-           здесь временно закоментировал, т.к. яваскрипт спотыкается, не обнаружив свойства res.profile
-           (посмотрел где рендерится res - там res.profile и не должно быть в помине [?] )
-        */
-        $('input#mailIntegration').val( /*res.profile.integration && res.profile.integration.email || */'');
+        $('input#mailIntegration').val( res.profile.integration && res.profile.integration.email || '');
         $('input#mail').val(data.mail);
         if (data.tooltip == '0'){
             $('#help').removeAttr('checked');
@@ -65,4 +61,3 @@ easyFinance.widgets.profile = function(model){
         sendProfile : sendProfile
     }
 }(easyFinance.models.user);
-

@@ -62,6 +62,9 @@ class profileActions extends sfActions {
             'name'      => $user->getUserName(),
             'mail'      => $user->getUserMail(),
             'timezone'  => $user->getTimeZoneOffset(),
+            'integration' => array(
+                'email' => str_replace('@mail.easyfinance.ru', '', $user->getUserServiceMail()),
+            ),
             'reminders' => array(
                 'enabled'       => ( is_object( $subscribtion ) ) ? 1 : 0,
                 'mailEnabled'   => $user->getReminderMailDefaultEnabled(),
