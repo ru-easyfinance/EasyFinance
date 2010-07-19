@@ -131,7 +131,13 @@ easyFinance.widgets.operationsJournal = function(){
 
             // если перевод осуществляется между счетами с разными валютами
 
-            if (_account == '') {
+
+            // if (_account == '')
+            // TODO: добавили хак для вывода суммы перевода на финцель
+            //       Финцель .moneydef приходит пустой. Где конвертация?
+            //       Используем money и в результате получаем сумму без конвертации.
+            //       .moneydef должен быть заполнен.
+            if (_account == '' && _journal[v].virt != "1") {
                 strMoney = formatCurrency(_journal[v].moneydef);
             } else {
                 strMoney = formatCurrency(_journal[v].money);
