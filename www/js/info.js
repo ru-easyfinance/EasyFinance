@@ -26,7 +26,7 @@ $('.financobject_block li.edit').live('click', function(){
     function InitInformers(){
         var data = res.informers;
         var name,value,pointer,xml,chartSample_1;
-        var titles = ['Фин.состояние','Деньги','Бюджет','Кредиты','Расходы'];
+        var titles = ['Фин.состояние','Деньги','Бюджет','Долги','Расходы'];
         var gauges = ['gaugeMain.gif','gaugeMoney.gif','gaugeBudget.gif','gaugeCredits.gif','gaugeExpenses.gif'];
 
         for (var i=0;i<5;i++)

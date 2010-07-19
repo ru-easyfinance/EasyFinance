@@ -1,916 +1,647 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
- * Класс модели для управления счетами пользователя
- * @copyright http://easyfinance.ru/
- * @author rewle Александр Ильичёв
- * SVN $Id: $
+ * Расчет тахометров
  */
 class Info_Model
 {
-    /**
-     * Ссылка на экземпляр DBSimple
-     * @var DbSimple_Mysql
-     */
-    private $db = NULL;
-
-    /**
-     * Массив с входными данными пользователя для рассчёта
-     * @var array mixed
-     * @example
-     * profit - Доход за последний месяц<br/>
-     * drain - Расход за последний месяц<br/>
-     * loans - Выплаты по кредитам за прошедший месяц<br/>
-     * budget - Бюджет расходов за прошедший месяц<br/>
-     * balance - Положительный баланс всех денег на счетах<br/>
-     */
-    private $input = array();
-
-    /**
-     * Массив с рассчитанными данными
-     * @var array mixed
-     * @example
-     * result - Финансовое состояние<br/>
-     * profit - Доход (Деньги)<br/>
-     * budget - Бюджет <br/>
-     * loans  - Кредиты<br/>
-     * drain  - Расход<br/>
-     */
-    private $output = array();
-
-    /**
-     * Класс пользователя
-     * @var oldUser
-     */
-    private $_user;
-
-    protected $balance = null;
-    protected $budget = null;
-    protected $drain = null;
-    protected $loans = null;
-    protected $profit = null;
-
-    /**
-     * Массив, содержащий список значений (полей) для расчёта (красный, зелёный, жёлтые)
-     * @var array mixed
-     * @example
-     * 'profit' => array(<br/>
-     *      'red' => array(<br/>
-     *          1 => 0,<br/>
-     *          2 => 1,<br/>
-     *          3 => 0<br/>
-     *      ),<br/>
-     *      'yellow' => array(<br/>
-     *          1 => 2,<br/>
-     *          2 => 2,<br/>
-     *          3 => 1<br/>
-     *      ),<br/>
-     *      'green' => array(<br/>
-     *          1 => 5,<br/>
-     *          2 => 3,<br/>
-     *          3 => 2<br/>
-     *      ),<br/>
-     *      'weight' => 35
-     *  ),
-     */
-    private $values = array(
-        'profit' => array(
-            'red' => array(
-                1 => 0,
-                2 => 1,
-                3 => 0,
-                'text' => 'Запас денег на нуле. Будьте осторожны в своих расходах.'
-            ),
-            'yellow' => array(
-                1 => 2,
-                2 => 2,
-                3 => 1,
-                'text' => 'Достаточная финансовая обеспеченность и есть пути для повышения.'
-            ),
-            'green' => array(
-                1 => 5,
-                2 => 3,
-                3 => 2,
-                'text' => 'У Вас солидный запас денег. Вам стоит задуматься об инвестициях.'
-            ),
-            'weight' => 35,
-            'min' => 0,
-            'max' => 100//6
-        ),
-        'budget' => array(
-            'red' => array(
-                1 => 97,
-                2 => 1,
-                3 => 0,
-                'text' => 'Деньги исчезают в неизвестном направлении. Планируйте расходы.'
-            ),
-            'yellow' => array(
-                1 => 85,
-                2 => 2,
-                3 => 1,
-                'text' => 'Вы неплохо управляете расходами. Но постарайтесь быть экономней.'
-            ),
-            'green' => array(
-                1 => 0,
-                2 => 3,
-                3 => 2,
-                'text' => 'Вы умеете планировать и экономить. Так держать!'
-            ),
-            'weight' => 20,
-            'min' => 0,
-            'max' => 105//20
-        ),
-        'loans'  => array(
-            'red' => array(
-                1 => 70,
-                2 => 1,
-                3 => 0,
-                'text' => 'Вы утратили финансовую независимость. Сократите Ваши кредиты.'
-            ),
-            'yellow' => array(
-                1 => 40,
-                2 => 2,
-                3 => 1,
-                'text' => 'Ваша долговая нагрузка в норме. Не злоупотребляйте кредитованием.'
-            ),
-            'green' => array(
-                1 => 0,
-                2 => 3,
-                3 => 2,
-                'text' => 'У Вас высокий уровень финансовой независимости.'
-            ),
-            'weight' => 15,
-            'min' => 0,  //@TODO Узнать минимальную границу кредита
-            'max' => 100 //@TODO Узнать максимальную границу кредита
-
-        ),
-        'drain'  => array(
-            'red' => array(
-                1 => 0,
-                2 => 1,
-                3 => 0,
-                'text' => 'Вам следует либо больше зарабатывать, либо меньше тратить!'
-            ),
-            'yellow' => array(
-                1 => 5,
-                2 => 2,
-                3 => 1,
-                'text' => 'Хорошее соотношение, но есть резерв для улучшений!'
-            ),
-            'green' => array(
-                1 => 10,
-                2 => 3,
-                3 => 2,
-                'text' => 'Вы близки к достижению финансовой свободы!'
-            ),
-            'weight' => 30,
-            'min' =>0,
-            'max' =>20//100
-        ),
-        'result' => array(
-            'min' => 0,
-            'max' => 300,//300,
-            'red' => array(
-                'text' => 'Вам грозит банкротство. Срочно измените свой подход к финансовым вопросам!'
-            ),
-            'green' => array(
-                'text' => 'У вас все хорошо, но не останавливайтесь на достигнутом. Ваше финансовое состояние можно существенно улучшить!'
-            ),
-            'yellow' => array(
-                'text' => 'Неплохо. но если изменить  подход к ведению дел, финансовое состояние можно существенно улучшить.'
-            )
-        )
-    );
-
-    /**
-     * Конструктор
-     * @return void
-     */
     public function __construct(oldUser $user = null)
     {
-        if (!$user) {
-            $this->_user = Core::getInstance()->user;
-        } else {
-            $this->_user = $user;
-        }
-        $this->db = Core::getInstance()->db;
+        Tahometer::init();
     }
 
     /**
-     * Возвращает информацию для тахометров
+     * Возвращает информацию для тахометров в виде массива с пояснениями
      * @return array mixed
      */
     public function get_data()
     {
-        $this->load();
-        return $this->result();
+        $this->init();
+
+        //получим исходные данные для расчетов
+        //$this->GetBaseData();
+
+        //рассчитаем основные тахометры
+        $this->CalculateBaseTahometers();
+        //рассчитаем итоговый тахометр
+        $this->CalculateTotalTahometer();
+
+        //запихнем значения тахометров в результат
+        $result = array();
+        $result[] = $this->totalTahometer->getResult();
+        foreach ($this->tahometersByKeywords as $keyword => $tahometer)
+        {
+            $result[] = $tahometer->getResult();
+        }
+
+        return $result;
     }
 
-    /**
-     * Выводит результат расчёта в виде массива с пояснениями
-     */
-    private function result()
+    private function db()
     {
-        if ($this->input['profit'] == 0)
-            if ($this->input['drain'] == 0){
-                $this->output[6]['result'] = 0;
-                $this->output[6]['profit'] = 0;
-                $this->output[6]['budget'] = 0;
-                $this->output[6]['drain']  = 0;
+        return Core::getInstance()->db;
+    }
 
-            }
-        $des1 = $this->values['result']['red']['text'];
-        if ( $this->output[6]['result'] >= 33) $des1 = $this->values['result']['yellow']['text'];
-        if ( $this->output[6]['result'] >= 50) $des1 = $this->values['result']['green']['text'];
-        $des2 = $this->values['profit']['red']['text'];
-        if ( $this->output[6]['profit'] >= 2*10) $des2 = $this->values['profit']['yellow']['text'];
-        if ( $this->output[6]['profit'] >= 5*10) $des2 = $this->values['profit']['green']['text'];
-        $des3 = $this->values['budget']['red']['text'];
-        if ( $this->output[6]['budget'] <= 97*100/105) $des3 = $this->values['budget']['yellow']['text'];
-        if ( $this->output[6]['budget'] <= 85*100/105) $des3 = $this->values['budget']['green']['text'];
-        $des5 = $this->values['drain']['red']['text'];
-        if ( $this->output[6]['drain'] >= 5*5) $des5 = $this->values['drain']['yellow']['text'];
-        if ( $this->output[6]['drain'] >= 10*5) $des5 = $this->values['drain']['green']['text'];
-    return array(
-            /*'values' => array(
-                  round(@$this->output[6]['result'])    //Финансовое состояние
-                , round(@$this->output[6]['profit'])    //Деньги
-                , round(@$this->output[6]['budget'])    //Бюджет
-                , 0 //round(@$this->output[6]['loans'])     //Кредиты
-                , round(@$this->output[6]['drain'])     //Управление расходами
-            ),
-            'info' => array(*/
-                array(
-                    //'min'=>0,
-                    //'color'=>'',
-                    'value'=>round(@$this->output[6]['result']),
-                    'description'=>$des1,
-                    'title'=>'Итоговая оценка финансового состояния'
-                ),
-                array(
-                    //'min'=>0,
-                    //'color'=>'',
-                    'value'=>round(@$this->output[6]['profit']),
-                    'description'=>$des2,
-                    'title'=>'Уровень денежных остатков (в кратности к 1 среднему месяцу расходов за предыдущие 3 месяца) за минусом долгов'
-                ),
-                array(
-                    //'min'=>0,
-                    //'color'=>'',
-                    'value'=>round(@$this->output[6]['budget']),
-                    'description'=>$des3,
-                    'title'=>'Использование бюджета расходов (% использованного бюджета)'
-                ),
-                array(
-                    //'min'=>0,
-                    //'color'=>'',
-                    'value'=>0,
-                    'description'=>'',
-                    'title'=>'Уровень выплат по кредитам (% от доходов)'
-                ),
-                array(
-                    //'min'=>0,
-                    //'color'=>'',
-                    'value'=>round(@$this->output[6]['drain']),
-                    'description'=>$des5,
-                    'title'=>'Показатель превышения доходов над расходами (средний показ за 3 месяца)'
-                ),
-            //)
+    private function user()
+    {
+        return Core::getInstance()->user;
+    }
+
+    private $_currencyExchagerContainer;
+
+    private function getCurrencyExchanger()
+    {
+        if(!isset($this->_currencyExchagerContainer))
+            $this->_currencyExchagerContainer = sfConfig::get('ex');
+
+        return $this->_currencyExchagerContainer;
+    }
+
+    /*
+    * ключевые слова и названия тахометров
+    * упорядочены для использования в возвращаемом массиве рассчитанных значений
+    */
+    private $_tahometersByKeywords;
+
+    private function CalculateTotalTahometer()
+    {
+        //значение итогового тахометра - взвешенная сумма значений остальных
+        $totalValue = 0;
+        foreach ($this->tahometersByKeywords as $keyword => $tahometer)
+        {
+             $totalValue = $totalValue + $tahometer->getWeightedValue();
+        }
+        $this->totalTahometer->SetRawValue($totalValue);
+    }
+
+    //исходные данные для расчета
+    //значения могут быть нужны только для отладки (при закомментированном вызове GetBaseData):
+
+    //доходы за месяц
+    private $_oneMonthProfit = 50000;
+
+    //расходы за текущий месяц
+    private $_currentMonthDrain = 15000;
+
+    //выплаты по долгам за месяц
+    private $_oneMonthCreditPayments = 25000;
+
+    //плановые расходы на текущий месяц
+    private $_currentMonthBudget = 45000;
+
+    //текущий остаток доступных денег
+    private $_currentRealMoneyBalance = 3000;
+
+    //доходы за 3 месяца
+    private $_threeMonthProfit = 135000;
+
+    //расходы за 3 месяца
+    private $_threeMonthDrain = 100000;
+
+        //все числовые константы не имеют какого-либо "управляющего" значения - просто данные
+    private static $MONEY_DEFAULT_VALUE = 5;
+    private static $BUDGET_DEFAULT_VALUE = 100;
+    private static $LOANS_DEFAULT_VALUE = 100;
+    private static $DIFF_DEFAULT_VALUE = 20;
+
+    //рассчитываем основные тахометры, уже получив данные
+    private function CalculateBaseTahometers()
+    {
+        //деньги
+        $this->tahometersByKeywords[Tahometer::$MONEY_KEYWORD]->SetRawValue(
+            $this->calculateTahometerValue(
+                $this->_currentRealMoneyBalance,
+                $this->_threeMonthDrain,
+                self::$MONEY_DEFAULT_VALUE)
+        );
+
+        $this->tahometersByKeywords[Tahometer::$BUDGET_KEYWORD]->SetRawValue(
+            $this->calculateTahometerValue(
+                $this->_currentMonthDrain,
+                $this->_currentMonthBudget,
+                self::$BUDGET_DEFAULT_VALUE) * 100
+        );
+
+        $this->tahometersByKeywords[Tahometer::$LOANS_KEYWORD]->SetRawValue(
+            $this->calculateTahometerValue(
+                $this->_oneMonthCreditPayments,
+                $this->_oneMonthProfit,
+                self::$LOANS_DEFAULT_VALUE) * 100
+        );
+
+        $this->tahometersByKeywords[Tahometer::$DIFF_KEYWORD]->SetRawValue(
+            ($this->calculateTahometerValue(
+                $this->_threeMonthProfit,
+                $this->_threeMonthDrain,
+                self::$DIFF_DEFAULT_VALUE)-1)*100
         );
     }
 
-    /**
-     * Загружает данные
-     * @return void
-     */
-    public function load()
+    private function calculateTahometerValue($dividend, $divisor, $defaultValue)
     {
-        if (isset($_SESSION['info']['input'])) {
-            $this->input['balance']  = (float)$_SESSION['info']['input']['balance'];
-            $this->input['budget']   = (float)$_SESSION['info']['input']['budget'];
-            $this->input['drain']    = (float)$_SESSION['info']['input']['drain'];
-            $this->input['loans']    = (float)$_SESSION['info']['input']['loans'];
-            $this->input['money']    = (float)$_SESSION['info']['input']['money'];
-            $this->input['profit']   = (float)$_SESSION['info']['input']['profit'];
-        } else {
-            $this->init();
-            $this->save();
-        }
-        $this->init();
-
-        $this->step0();
-        $this->step1();
-        $this->step2();
-        $this->step3();
-        $this->step4();
-        $this->step5();
-        $this->step6();
+        return $dividend == 0 ? 0 :
+            ($divisor == 0 ? $defaultValue : $dividend / $divisor);
     }
 
-    /**
-     * Инициализирует данные
-     * @return void
-     */
-    public function init() {
-        // Доходы за прошедший месяц
-        $sql = "SELECT
-                    SUM(o.money) as sum,
-                    a.account_currency_id as cur
-                FROM accounts a
-                LEFT JOIN operation o
-                ON
-                    a.account_id = o.account_id
-                    AND
-                        o.deleted_at IS NULL
-                WHERE
-                    o.user_id = ?
-                AND
-                    o.`type` = 1
-                AND
-                    o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
-                AND
-                    (LAST_DAY(NOW() - INTERVAL 1 MONTH))
-                GROUP BY a.account_currency_id";
-        $profits = $this->db->query($sql, $this->_user->getId());
+    /*
+    *типы запросов
+    */
+    private static $PROFIT_QUERY = 'PROFIT';
+    private static $DRAIN_QUERY = 'DRAIN';
+    private static $CREDIT_QUERY = 'CREDIT';
+    private static $BALANCE_QUERY = 'BALANCE';
 
-        $this->input['profit'] = 0;
-        foreach ($profits as $k=>$v){
-            $this->input['profit'] += $v['sum'] * Core::getInstance()->currency[$v['cur']]['value'];
-        }
 
-        // Расходы за прошедший месяц
-        $sql = "SELECT
-                    ABS(SUM(o.money)) as sum,
-                    a.account_currency_id as cur
-                FROM
-                    accounts a
-                LEFT JOIN operation o
-                ON a.account_id = o.account_id
-                    AND
-                        o.deleted_at IS NULL
-                WHERE
-                    o.user_id = ?
-                AND
-                    o.`type` = 0
-                AND
-                    o.`date` BETWEEN (CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01'))
-                AND (LAST_DAY(NOW() - INTERVAL 1 MONTH))
-                GROUP BY a.account_currency_id";
-        $drains = $this->db->query($sql, $this->_user->getId());
-        $this->input['drain'] = 0;
-        foreach ($drains as $k=>$v){
-            $this->input['drain'] += $v['sum'] * Core::getInstance()->currency[$v['cur']]['value'];
-        }
-
-        // Бюджет за прошедший месяц
-        $sql = "SELECT
-                    SUM(amount)
-                FROM
-                    budget
-                WHERE
-                    user_id = ?
-                AND
-                    drain=1
-                AND
-                    date_start = CONCAT(DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH),'%Y-%m-'),'01')";
-        $this->input['budget']   = (float)$this->db->selectCell($sql, $this->_user->getId());
-
-        $this->input['loans'] = 0;
-
-        // Остатки денег на конец прошедшего месяца
-        $this->input['balance']  = 0;
-        foreach (Core::getInstance()->user->getUserAccounts() as $key => $value) {
-            // @TODO Дополнить фильтры
-            if ($value['account_type_id'] != 8 || $value['account_type_id'] != 9) {
-                $this->input['balance']  += (float)$value['total_sum'];
-            }
-        }
-    }
-
-    /**
-     * Сохраняет рассчитанные данные в кеше
-     * @return void
-     */
-    public function save() {
-        // Входные данные для расчёта
-        $_SESSION['info']['input']['balance'] = (float)$this->balance;
-        $_SESSION['info']['input']['budget']  = (float)$this->budget;
-        $_SESSION['info']['input']['drain']   = (float)$this->drain;
-        $_SESSION['info']['input']['loans']   = (float)$this->loans;
-        $_SESSION['info']['input']['profit']  = (float)$this->profit;
-        $_SESSION['info']['input']['money'] = 0;
-    }
-
-    /**
-     * Корректируем расчёты
-     */
-    private function step0() {
-        // если значение 0 и при этом показатель "С" больше 0, то расчет 1 для тахометра "Кредиты" = 100
-        if ($this->input['profit'] == 0 && $this->input['loans'] > 0) {
-            $this->output[1]['loans'] = 100;
-        }
-
-        //если значение 0 и при этом показатель "F" больше 0, то расчет 1 для тахометра "Деньги" = 5,
-        //если и там 0, то "Деньги" = 0;
-        //Также если значение 0 и при этом показатель "A" больше 0,
-        //то расчет 1 для тахометра "Доходы vs Расходы" = 10, если и там 0, то "Доходы vs Расходы" = 0
-        if ($this->input['drain'] == 0 && $this->input['balance'] > 0) {
-            $this->output[1]['profit'] = 5;
-        }
-        if ($this->input['balance'] == 0) {
-            $this->output[1]['profit'] = 0;
-        }
-        //@FIXME Кажется, тут может быть ошибка
-        /*if ($this->input['drain'] == 0 && $this->input['profit'] > 0) {
-            $this->output[1]['budget'] = 10;
-        } else if ($this->input['profit'] == 0) {
-            $this->output[1]['budget'] = 0;
-        }*/
-        if ($this->input['drain'] != 0 && $this->input['budget'] == 0){
-            $this->output[1]['budget'] = 100;
-        } else if ($this->input['budget'] != 0){
-            $this->output[1]['budget'] = $this->input['budget'];
-        } else {
-            $this->output[1]['budget'] = 0;
-        }
-
-        //если 0 то расчет 1 для тахометра "Кредиты" 0
-        if ($this->input['loans'] == 0) {
-            $this->output[1]['loans'] = 0;
-        }
-
-        //если значение 0  тогда расчет 1 для тахометра "Бюджет" = 100
-        if ($this->input['drain'] == 0) {
-            $this->output[1]['budget'] = 100;
-        }
-
-        //если 0 то расчет 1 для тахометра "Деньги" = 0
-        if ($this->input['balance'] == 0) {
-            $this->output[1]['profit'] = 0;
-        }
-    }
-
-    /**
-     * Расчёт тахометров, Факт значение (Расчет 1)
-     */
-    private function step1 ()
+    /*
+    * получение исходных данных
+    */
+    private function GetBaseData()
     {
-        // Деньги
-        if (!isset ($this->output[1]['profit'])) {
-            if ($this->input['drain'] != 0) {
-                $this->output[1]['profit'] = $this->input['balance'] / $this->input['drain'];
-            } else {
-                $this->output[1]['profit'] = 0;
-            }
-        }
+        //получаем каждый из показателей; показатели, получаемые как сумма за определенный период,
+        //корректируем с учетом стажа в системе: если получаем за 3 месяца, а в системе мы - 1,5 месяца, нужный показатель умножить на 2
 
-        // Кредиты
-        if (!isset ($this->output[1]['loans'])) {
-            if ($this->input['profit'] != 0) {
-                $this->output[1]['loans'] = $this->input['loans'] / $this->input['profit'] * 100;
-            } else {
-                $this->output[1]['loans'] = 0;
-            }
-        }
 
-        // Бюджет / Доходы vs Расходы
-        if (!isset ($this->output[1]['budget'])) {
-            if ($this->input['budget'] != 0) {
-                $this->output[1]['budget'] = $this->input['drain'] / $this->input['budget'] * 100;
-            } else {
-                $this->output[1]['budget'] = 0;
-            }
-        }
+        //доходы за месяц
+        $this->oneMonthProfit = $this->GetOperationsSum(
+            self::$PROFIT_QUERY, 1);
 
-        // Расходы
-        if (!isset ($this->output[1]['drain'])) {
-            if ($this->input['drain'] != 0) {
-                $this->output[1]['drain'] = $this->input['profit'] / $this->input['drain'];
-            } else {
-                $this->output[1]['drain'] = 0;
-            }
-        }
+        //расходы за текущий месяц
+        $this->currentMonthDrain = $this->GetOperationsSum(
+            self::$DRAIN_QUERY, 0);
+
+        //доходы за 3 месяца
+        $this->threeMonthProfit = $this->GetOperationsSum(
+            self::$PROFIT_QUERY, 3);
+
+        //расходы за 3 месяца
+        $this->threeMonthDrain = $this->GetOperationsSum(
+            self::$DRAIN_QUERY, 3);
+
+        //текущий остаток доступных денег - сумма всех операций за все время, включая начальные остатки
+        //по денежным счетам и кредитным картам с положительным остатком
+        $this->currentRealMoneyBalance = $this->GetOperationsSum(
+            self::$BALANCE_QUERY, NULL);
+
+        //выплаты по долгам за месяц
+        //пока считаем только как переводы на долговые счета
+        //затем добавятся расходы по соотв. спец. категориям
+        $this->oneMonthCreditPayments = $this->GetOperationsSum(
+            self::$CREDIT_QUERY, 1);
+
+        //плановые расходы на текущий месяц
+        $this->currentMonthBudget = $this->GetDrainBudget();
     }
 
-    /**
-     * Расчёт тахометров, Значение грубое (Расчет 2)
-     */
-    private function step2 ()
+    /*
+    * Получение данных по заданному запросу с учетом стажа в системе:
+    *
+    * $months - диапазон времени в месяцах, за который получаем данные: если стаж в системе меньше него, применяется коэффициент стажа
+    *
+    */
+    private function GetOperationsSum($queryType, $months)
     {
-        // Деньги
-//        =IF((C10>E10);
-//            IF((C10>F10);
-//                I10
-//            ;
-//                H10
-//            )
-//        ;
-//            G10
-//        )
-        if ($this->output[1]['profit'] > $this->values['profit']['yellow'][1]) {
-            if ($this->output[1]['profit'] > $this->values['profit']['green'][1]) {
-                $this->output[2]['profit'] = $this->values['profit']['green'][2];
-            } else {
-                $this->output[2]['profit'] = $this->values['profit']['yellow'][2];
+        $query = $this->GetFactOperationsQuery($queryType, $months);
+
+        //Получим суммы, сгруппированные по счетам
+        $sumsByAccounts = $this->db()->select($query);
+
+        $resultSum = 0;
+
+        //сложим вместе все суммы по счетам, конвертируя в нужную валюту
+        //todo: на симфони правильно работать не с суммами по счетам,
+        //а с операциями, получая суммы из них с учетом всех тонкостей валют и отношений к счетам
+        if(isset($sumsByAccounts))
+        {
+            $baseCurrency = $this->user()->getUserProps('user_currency_default');
+
+            foreach($sumsByAccounts as $sumByAccount)
+            {
+                $money = new efMoney($sumByAccount[Tahometer::$MONEY_KEYWORD], $sumByAccount['currency_id']);
+                $accountResult = $this->getCurrencyExchanger()->convert($money, $baseCurrency)->getAmount();
+
+                $resultSum = $resultSum + $accountResult;
             }
-        } else {
-            $this->output[2]['profit'] = $this->values['profit']['red'][2];
         }
 
-        // Кредиты
-//        =IF((C11<D11);
-//            IF((C11<E11);
-//                I11
-//            ;
-//                H11
-//            )
-//        ;
-//            G11
-//        )
-        if ($this->output[1]['loans'] < $this->values['loans']['red'][1]) {
-            if ($this->output[1]['loans'] < $this->values['loans']['yellow'][1]) {
-                $this->output[2]['loans'] = $this->values['loans']['green'][2];
-            } else {
-                $this->output[2]['loans'] = $this->values['loans']['yellow'][2];
-            }
-        } else {
-            $this->output[2]['loans'] = $this->values['loans']['red'][2];
-        }
+        $resultSum = abs($resultSum);
 
-        // Расходы
-//        =IF((C13>E13);
-//            IF((C13>F13);
-//                I13
-//            ;
-//                H13
-//            )
-//        ;
-//            G13
-//        )
-        if ($this->output[1]['drain'] > $this->values['drain']['yellow'][1]) {
-            if ($this->output[1]['drain'] > $this->values['drain']['green'][1]) {
-                $this->output[2]['drain'] = $this->values['drain']['green'][2];
-            } else {
-                $this->output[2]['drain'] = $this->values['drain']['yellow'][2];
-            }
-        } else {
-            $this->output[2]['drain'] = $this->values['drain']['red'][2];
+        //Скорректируем сумму с учетом стажа в системе:
+        //корректируем всегда, если задано условие на диапазон операций
+        if(isset($months))
+        {
+            $resultSum = $this->getSumWithExperienceCoeff($resultSum, $months);
         }
-
-        // Бюджет
-//        =IF((C12<D12);
-//            IF((C12<E12);
-//                I12
-//            ;
-//                H12
-//            )
-//        ;
-//            G12
-//        )
-        if ($this->output[1]['budget'] < $this->values['budget']['red'][1]) {
-            if ($this->output[1]['budget'] < $this->values['budget']['yellow'][1]) {
-                $this->output[2]['budget'] = $this->values['budget']['green'][2];
-            } else {
-                $this->output[2]['budget'] = $this->values['budget']['yellow'][2];
-            }
-        } else {
-            $this->output[2]['budget'] = $this->values['budget']['green'][2];
-        }
+        return $resultSum;
     }
 
-    /**
-     * Расчёт тахометров, Точное значение без повышений (Расчет 3)
-     */
-    private function step3 ()
+    ///запрос для получения данных
+    //в него подставляются значения типа операций и интервала, за который нужно взять операции
+    private function GetFactOperationsQuery($queryType, $months)
     {
+        //тип операций для отбора
+        $operationType = null;
 
-//    =IF((N10=3);
-//        (((C10-F10)/(6-F10)))
-//    ;
-//        IF((N10=2);
-//            (((C10-E10)/(F10-E10)))
-//        ;
-//            (C10/E10)
-//        )
-//    )
-        // Деньги
-        if ($this->output[2]['profit'] == 3) {
-            if ((6 - $this->values['profit']['green'][1]) != 0) {
-                $this->output[3]['profit'] = ($this->output[1]['profit']
-                    - $this->values['profit']['green'][1]) / (6 - $this->values['profit']['green'][1]);
-            } else {
-                $this->output[3]['profit'] = 0;
-            }
-        } elseif ($this->output[2]['profit'] == 2) {
-            if (($this->values['profit']['green'][1] - $this->values['profit']['yellow'][1]) != 0) {
-                $this->output[3]['profit'] = ($this->output[1]['profit'] - $this->values['profit']['yellow'][1])
-                    /  ($this->values['profit']['green'][1] - $this->values['profit']['yellow'][1]);
-            } else {
-                $this->output[3]['profit'] = 0;
-            }
-        } else {
-            if ($this->values['profit']['yellow'][1] != 0) {
-                $this->output[3]['profit'] = $this->output[1]['profit']
-                    / $this->values['profit']['yellow'][1];
-            } else {
-                $this->output[3]['profit'] = 0;
-            }
-        }
+        //признак отбора начальных остатков
+        $needSelectStartBalances = false;
 
-//    =IF((N11=1);
-//        ((100-C11)/(100-D11))
-//    ;
-//        IF((N11=2);
-//            (((D11-C11)/(D11-E11)))
-//        ;
-//            (((E11-C11)/E11))
-//        )
-//    )
+        //добавочные условия
 
-        // Кредиты
-        if ($this->output[2]['loans'] == 1) {
-            if ((100 - $this->values['loans']['red'][1]) != 0) {
-                $this->output[3]['loans'] = (100 - $this->output[1]['loans'])
-                    / (100 - $this->values['loans']['red'][1]);
-            } else {
-                $this->output[3]['loans'] = 0;
-            }
-        } elseif ($this->output[2]['loans'] == 2) {
-            if (($this->values['loans']['red'][1] - $this->values['loans']['yellow'][1]) != 0) {
-                $this->output[3]['loans'] = ($this->values['loans']['red'][1] - $this->output[1]['loans'])
-                    / ($this->values['loans']['red'][1] - $this->values['loans']['yellow'][1]);
-            } else {
-                $this->output[3]['loans'] = 0;
-            }
-        } else {
-            if ($this->values['loans']['yellow'][1] != 0) {
-                $this->output[3]['loans'] = ($this->values['loans']['yellow'][1]
-                    - $this->output[1]['loans']) / $this->values['loans']['yellow'][1];
-            } else {
-                $this->output[3]['loans'] = 0;
-            }
-        }
+        //признаки использования счетов-отправителей
+        $useSenders = true;
 
-//    =IF((N12=1);
-//        ((100-C12)/(100-D12))
-//    ;
-//        IF((N12=2);
-//            (((D12-C12)/(D12-E12)))
-//        ;
-//            (((E12-C12)/E12))
-//        )
-//    )
+        $additionalCondition = null;
 
-        // Бюджет
-        if ($this->output[2]['budget'] == 1) {
-            if ((100 - $this->values['budget']['red'][1]) != 0) {
-                $this->output[3]['budget'] = (100 - $this->output[1]['budget'])
-                    / (100 - $this->values['budget']['red'][1]);
-            }
-        } else {
-            if ($this->output[2]['budget'] == 2) {
-                if (($this->values['budget']['red'][1] - $this->values['budget']['yellow'][1]) != 0) {
-                    $this->output[3]['budget'] = ($this->values['budget']['red'][1] - $this->output[1]['budget'])
-                        / ($this->values['budget']['red'][1] - $this->values['budget']['yellow'][1]);
-                } else {
-                    $this->output[3]['budget'] = 0;
-                }
-            } else {
-                if ($this->values['budget']['yellow'][1] != 0) {
-                    $this->output[3]['budget'] = ($this->values['budget']['yellow'][1] - $this->output[1]['budget'])
-                        / $this->values['budget']['yellow'][1];
-                } else {
-                    $this->output[3]['budget'] = 0;
-                }
-            }
-        }
+        //доп. условия зависят от типа запроса
+        switch($queryType)
+        {
+            case self::$PROFIT_QUERY:
+                //нужны только доходные, без начальных остатков
+                $operationType = '1';
+                break;
 
-//    =IF((N13=3);
-//        (((C13-F13)/(20-F13)))
-//    ;
-//        IF((N13=2);
-//            (((C13-E13)/(F13-E13)))
-//        ;
-//            (C13/E13)
-//        )
-//    )
-        // Расход против Доход
-        if ($this->output[2]['drain'] == 3) {
-            if ((20 - $this->values['drain']['green'][1]) != 0) {
-                $this->output[3]['drain'] = ($this->output[1]['drain'] - $this->values['drain']['green'][1])
-                    / (20 - $this->values['drain']['green'][1]);
-            } else {
-                $this->output[3]['drain'] = 0;
+            case self::$DRAIN_QUERY:
+                //нужны только расходные, без начальных остатков
+                $operationType = '0';
+                break;
+
+            //долгами пока считаем только переводы на долговые счета
+            case self::$CREDIT_QUERY:
+                //нужны только 1)переводы 2)на 3)долговые счета - займы, кредиты и кредитки
+                $operationType = '2';
+                $useSenders = false;
+                $additionalCondition = "type_id IN (7, 8, 9)";
+                break;
+
+            case self::$BALANCE_QUERY:
+                //для баланса "живых" денег берем все операции, кроме переводов, и начальные остатки
+                //берем только денежные счета и кредитки с положительным балансом
+                $operationType = '0,1';
+                $needSelectStartBalances = true;
+                $additionalCondition = "type_id IN (1,2,5,15,16) OR (type_id = 8 AND money > 0)";
+                break;
             }
-        } else {
-            if ($this->output[2]['drain'] == 2) {
-                if (($this->values['drain']['green'][1] - $this->values['drain']['yellow'][1]) != 0) {
-                    $this->output[3]['drain'] = ($this->output[1]['drain'] - $this->values['drain']['yellow'][1])
-                        / ($this->values['drain']['green'][1] - $this->values['drain']['yellow'][1]);
-                } else {
-                    $this->output[3]['drain'] = 0;
-                }
-            } else {
-                if ($this->values['drain']['yellow'][1] != 0) {
-                    $this->output[3]['drain'] = $this->output[1]['drain'] / $this->values['drain']['yellow'][1];
-                } else {
-                    $this->output[3]['drain'] = 0;
-                }
-            }
-        }
+
+        $query = $this->getQueryByConditions($operationType, $needSelectStartBalances, $months, $useSenders, $additionalCondition);
+
+        return $query;
     }
 
-    /**
-     * Расчёт тахометров, Точное значение (Расчет 4)
-     */
-    private function step4 ()
+    //формирование строки запроса по условиям
+    private function getQueryByConditions($operationType, $needSelectStartBalances, $months, $useSenders, $additionalCondition)
     {
-//    =IF((N10=3);
-//        (O10+L10)
-//    ;
-//        IF((N10=2);
-//            (O10+K10)
-//        ;
-//            O10
-//        )
-//    )
-        // Деньги
-        if ($this->output[2]['profit'] == 3) {
-            $this->output[4]['profit'] = $this->output[3]['profit'] + $this->values['budget']['green'][3];
-        } elseif ($this->output[2]['profit'] == 2) {
-            $this->output[4]['profit'] = $this->output[3]['profit'] + $this->values['budget']['yellow'][3];
-        } else {
-            $this->output[4]['profit'] = $this->output[3]['profit'];
+        //задаем все подготовленные условия: типы операций, начальный остаток, интервал, дополнительные условия
+        //выбираем с привязкой к счетам
+        //всегда выбираем подтвержденные операции
+        //операции перевода входят в разные счета с разным знаком
+        $query = "
+            SELECT
+                SUM(CASE
+                        #если расход или 'перевод с' - минус
+                        WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id THEN -ABS(op.money)
+
+                        #иначе (доход или 'перевод на') - плюс
+                        ELSE ABS(op.money)
+                    END) AS money,
+                acc.account_type_id AS type_id, acc.account_currency_id AS currency_id
+            FROM
+                operation op
+            INNER JOIN
+                accounts acc
+            ON (";
+
+        if($useSenders)
+            $query = $query . "op.account_id = acc.account_id OR ";
+
+        $query = $query . "op.transfer_account_id = acc.account_id)" .
+            "WHERE op.user_id = ". $this->user()->getId() ." AND op.accepted = 1 ";
+
+        $query = $query . " AND op.type IN (" . $operationType . ")";
+
+        //условия на начальный остаток
+        if(!$needSelectStartBalances)
+        {
+            $query = $query . " AND op.comment NOT LIKE 'Начальный остаток'";
         }
 
-//    =IF((N11=1);
-//        O11
-//    ;
-//        IF((N11=2);
-//            O11+K11
-//        ;
-//            (O11+L11)
-//
-//        )
-//    )
-        // Кредиты
-        if ($this->output[2]['loans'] == 1) {
-            $this->output[4]['loans'] = $this->output[3]['loans'];
-        } elseif ($this->output[2]['profit'] == 2) {
-            $this->output[4]['loans'] = $this->output[3]['loans'] + $this->values['loans']['yellow'][3];
-        } else {
-            $this->output[4]['loans'] = $this->output[3]['loans'] + $this->values['loans']['green'][3];
+        //определим интервал, за который взять операции, если он задан
+        if(isset($months))
+        {
+            if($months > 0) //отсчитываем заданное количество месяцев
+            {
+                $subIntervalValue = $months;
+                $subIntervalType = "MONTH";
+            }
+            else //внутри текущего месяца - сбросим дни до первого
+            {
+                $subIntervalValue = "DAYOFMONTH(CURDATE()) - 1";
+                $subIntervalType = "DAY";
+            }
+
+            $query = $query . " AND op.date >= DATE_SUB(CURDATE(), INTERVAL " . $subIntervalValue . " " . $subIntervalType . ")";
         }
 
-//    =IF((N12=1);
-//        O12
-//    ;
-//        IF((N12=2);
-//            O12+K12
-//        ;
-//            O12+L12
-//        )
-//    )
-        // Расходы
-        if ($this->output[2]['drain'] == 1) {
-            $this->output[4]['drain'] = $this->output[3]['drain'];
-        } elseif ($this->output[2]['drain'] == 2) {
-            $this->output[4]['drain'] = $this->output[3]['drain'] + $this->values['drain']['yellow'][3];
-        } else {
-            $this->output[4]['drain'] = $this->output[3]['drain'] + $this->values['drain']['green'][3];
-        }
+        //группируем по счетам
+        $query = $query . " GROUP BY acc.account_id";
 
-//    =IF((N13=3);
-//        O13+L13
-//    ;
-//        IF((N13=2);
-//            O13+K13
-//        ;
-//            O13
-//        )
-//    )
-        // Бюджет
-        if ($this->output[2]['budget'] == 3) {
-            $this->output[4]['budget'] = $this->output[3]['budget'] + $this->values['drain']['green'][3];
-        } elseif ($this->output[2]['budget'] == 2) {
-            $this->output[4]['budget'] = $this->output[3]['budget'] + $this->values['drain']['yellow'][3];
-        } else {
-            $this->output[4]['budget'] = $this->output[3]['budget'];
-        }
+        //учтем добавочное условие
+        if(isset($additionalCondition))
+            $query = $query . " HAVING " . $additionalCondition;
+
+        return $query;
     }
 
-    /**
-     * Расчёт тахометров, Взвешенное значение (Расчет 5)
-     */
-    private function step5 ()
+    // сумма с учетом коэффициента стажа для экстраполяции значений, если реальный стаж меньше используемого периода:
+    // ведем учет в системе 6 дней, т.е. данные есть всего за 6 дней
+    // получаем показатель за 3 месяца
+    // поэтому полученные данные об операциях за 6 дней экстраполируем на 3 месяца - умножим на ~ (31 + 30 + 31 / 6)
+    private function getSumWithExperienceCoeff($resultSum, $months)
     {
-//    =IF(((M10*P10))<0;
-//        0
-//    ;
-//        ((M10*P10))
-//    )
-        // Деньги
-        if (($this->output[4]['profit'] * $this->values['profit']['weight']) < 0) {
-            $this->output[5]['profit'] = 0;
-        } else {
-            $this->output[5]['profit'] = ($this->output[4]['profit'] * $this->values['profit']['weight']);
+        //конец интервала считаем сегодняшним числом
+        $intervalEnd = new DateTime();
+        $intervalStart = new DateTime();
+        //сдвиг начала интервала
+        //если задано количество месяцев, их используем, иначе считаем, что нужно начало месяца - просто "сбрасываем" дни у конца интервала
+
+        $subIntervalValue = $months > 0 ? $months . ' month' : $intervalEnd->format('d') . ' day';
+        $intervalStart->modify('-' . $subIntervalValue);
+
+        //получаем интервал в днях
+        //todo: убрать SQL
+        //хз как быстро сделать это средствами PHP < 5.3, т.к. diff нет
+
+        $daysInInterval = $this->db()->selectCell(
+            "SELECT DATEDIFF('" . $intervalEnd->format('Y-m-d'). "', '" . $intervalStart->format('Y-m-d'). "')");
+
+        //собственно коэффицент
+        $experienceCoeff = $daysInInterval / $this->getExperienceDays();
+
+        //если коэффициент < 1, значит, стаж уже достаточный, и экстраполировать не нужно
+        return ($experienceCoeff > 1 ? $resultSum * $experienceCoeff : $resultSum);
+    }
+
+    //стаж в системе в днях
+    private $_experienceDaysValue;
+    private function getExperienceDays()
+    {
+        if(!isset($this->_experienceDaysValue))
+        {
+            $daysQuery = "SELECT DATEDIFF(CURDATE(), IFNULL(mindate, CURDATE())) FROM (SELECT MIN(op.date) AS mindate FROM operation op WHERE op.comment NOT LIKE 'Начальный остаток' AND op.user_id = " . $this->user()->getId() . ") AS tbl";
+
+            //добавим единицу, чтобы учесть сегодняшний день
+            //например, если вчера была первая операция, то стаж = 2 дням
+            $this->_experienceDaysValue = $this->db()->selectCell($daysQuery) + 1;
         }
 
-//    =IF(((M11*P11))<0;
-//        0
-//    ;
-//        ((M11*P11))
-//    )
-        // Кредиты
-        if (($this->output[4]['loans'] * $this->values['loans']['weight']) < 0) {
-            $this->output[5]['loans'] = 0;
-        } else {
-            $this->output[5]['loans'] = $this->output[4]['loans'] * $this->values['loans']['weight'];
-        }
+        return $this->_experienceDaysValue;
+    }
 
-//    =IF(((M12*P12))<0;
-//        0
-//    ;
-//        ((M12*P12))
-//
-//    )
-        // Бюджет
-        if (($this->output[4]['budget'] * $this->values['budget']['weight']) < 0) {
-            $this->output[5]['budget'] = 0;
-        } else {
-            $this->output[5]['budget'] = $this->output[4]['budget'] * $this->values['budget']['weight'];
-        }
+    private function GetDrainBudget()
+    {
+        //возвращаем просто сумму запланированных категорий расходов текущего месяца
+        //не паримся о валюте, т.к. бюджет пока планируем в базовой, и считаем, что тахометры получаем в базовой
 
-//    =IF(((M13*P13))<0;
-//        0
-//    ;
-//        ((M13*P13))
-//    )
-        // Расход vs Доход
-        if (($this->output[4]['drain'] * $this->values['drain']['weight']) < 0) {
-            $this->output[5]['drain'] = 0;
-        } else {
-            $this->output[5]['drain'] = $this->output[4]['drain'] * $this->values['drain']['weight'];
-        }
+        $query = "
+            SELECT SUM(amount)
+            FROM budget
+            WHERE
+                    date_start = DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY)
+                AND drain = 1
+                AND user_id = " . $this->user()->getId();
 
-        $this->output[5]['result'] = $this->output[5]['profit'] + $this->output[5]['drain'] +
-            $this->output[5]['loans'] + $this->output[5]['budget'];
+        $drainBudget = $this->db()->selectCell($query);
+
+        if(!isset($drainBudget))
+            $drainBudget = 0;
+
+        return $drainBudget;
+    }
+
+    private $_totalTahometer;
+
+    //Инициализация тахометров
+    private function init()
+    {
+        $this->totalTahometer = new Tahometer(Tahometer::$TOTAL_KEYWORD);
+        $this->tahometersByKeywords = array(
+                //Деньги
+                Tahometer::$MONEY_KEYWORD => new Tahometer(Tahometer::$MONEY_KEYWORD),
+                //Бюджет
+                Tahometer::$BUDGET_KEYWORD => new Tahometer(Tahometer::$BUDGET_KEYWORD),
+                //Долги
+                Tahometer::$LOANS_KEYWORD => new Tahometer(Tahometer::$LOANS_KEYWORD),
+                //Доходы vs Расходы
+                Tahometer::$DIFF_KEYWORD => new Tahometer(Tahometer::$DIFF_KEYWORD)
+            );
+    }
+}
+
+/*
+*класс "Тахометр" для более удобной работы с тахометрами
+*/
+class Tahometer
+{
+    public static $MONEY_KEYWORD = 'money';
+    public static $BUDGET_KEYWORD = 'budget';
+    public static $LOANS_KEYWORD = 'loans';
+    public static $DIFF_KEYWORD = 'diff';
+    public static $TOTAL_KEYWORD = 'total';
+
+    private $_keyword;
+
+    private static $_captions;
+
+
+    public static function init()
+    {
+        self::$_captions = array(
+            Tahometer::$MONEY_KEYWORD => 'Насколько Вы обеспечены деньгами: отношение доступных денег к среднему месячному расходу за последние три месяца',
+            Tahometer::$BUDGET_KEYWORD => 'Удается ли сэкономить: насколько израсходован бюджет на текущий месяц',
+            Tahometer::$LOANS_KEYWORD => 'Долговая нагрузка: какая часть доходов за последний месяц пошла на выплату кредитов и займов',
+            Tahometer::$DIFF_KEYWORD => 'Удается ли тратить меньше, чем получаете: превышение доходов над расходами за последние 3 месяца',
+            Tahometer::$TOTAL_KEYWORD => 'Итоговая оценка финансового здоровья на базе всех других показателей'
+        );
+        self::$_weights = array(
+            Tahometer::$MONEY_KEYWORD => 35,
+            Tahometer::$BUDGET_KEYWORD => 20,
+            Tahometer::$LOANS_KEYWORD => 15,
+            Tahometer::$DIFF_KEYWORD => 30
+        );
+
+        self::$_benefitCoefficients = array(
+            Tahometer::$MONEY_KEYWORD => 1,
+            Tahometer::$BUDGET_KEYWORD => -1,
+            Tahometer::$LOANS_KEYWORD => -1,
+            Tahometer::$DIFF_KEYWORD => 1,
+            Tahometer::$TOTAL_KEYWORD => 1
+        );
+
+        self::$_zoneBorders = array(
+            Tahometer::$MONEY_KEYWORD => array(0, 2, 5, 6),
+            Tahometer::$BUDGET_KEYWORD => array(100, 97, 85, 0),
+            Tahometer::$LOANS_KEYWORD => array(100, 70, 40, 0),
+            Tahometer::$DIFF_KEYWORD => array(0, 5, 10, 20),
+            Tahometer::$TOTAL_KEYWORD => array(0,100,150,300)
+        );
+
+        self::$_advices = array(
+            Tahometer::$MONEY_KEYWORD => array(
+                'Запас денег на нуле. Будьте осторожны в своих расходах.',
+                'Достаточная финансовая обеспеченность и есть пути для повышения.',
+                'У Вас солидный запас денег. Вам стоит задуматься об инвестициях.'),
+            Tahometer::$BUDGET_KEYWORD => array(
+                'Деньги исчезают в неизвестном направлении. Планируйте расходы.',
+                'Вы неплохо управляете расходами. Но постарайтесь быть экономней.',
+                'Вы умеете планировать и экономить. Так держать!'),
+            Tahometer::$LOANS_KEYWORD => array(
+                'Вы утратили финансовую независимость. Сократите Ваши кредиты.',
+                'Ваша долговая нагрузка в норме. Не злоупотребляйте кредитованием.',
+                'У Вас высокий уровень финансовой независимости.'),
+            Tahometer::$DIFF_KEYWORD => array(
+                'Вам следует либо больше зарабатывать, либо меньше тратить!',
+                'Хорошее соотношение, но есть резерв для улучшений!',
+                'Вы близки к достижению финансовой свободы!'),
+            Tahometer::$TOTAL_KEYWORD => array(
+                'Вам грозит банкротство. Срочно измените свой подход к финансовым вопросам!',
+                'Неплохо. но если изменить  подход к ведению дел, финансовое состояние можно существенно улучшить.',
+                'У вас все хорошо, но не останавливайтесь на достигнутом. Ваше финансовое состояние можно существенно улучшить!'),
+        );
     }
 
 
-    /**
-     * Корректируем данные, если они выходят за границы
-     */
-    private function step6 ()
+    private function getCaption()
     {
-        // Деньги (Доходы)
-        if ($this->output[5]['profit'] > $this->values['profit']['max']) {
-            $this->output[6]['profit'] = $this->values['profit']['max'];
-        } elseif ($this->output[5]['profit'] < $this->values['profit']['min']) {
-            $this->output[6]['profit'] = $this->values['profit']['min'];
-        } else {
-            $this->output[6]['profit'] = $this->output[5]['profit'];
-        }
-        // Высчитываем проценты
-        $this->output[6]['profit'] = ($this->output[6]['profit'] / $this->values['profit']['max']) * 100;
+        return self::$_captions[$this->_keyword];
+    }
 
-        // Расходы
-        if ($this->output[5]['drain'] > $this->values['drain']['max']) {
-            $this->output[6]['drain'] = $this->values['drain']['max'];
-        } elseif ($this->output[5]['drain'] < $this->values['drain']['min']) {
-            $this->output[6]['drain'] = $this->values['drain']['min'];
-        } else {
-            $this->output[6]['drain'] = $this->output[5]['drain'];
-        }
-        $this->output[6]['drain'] = ($this->output[6]['drain'] / $this->values['drain']['max']) * 100;
+    private function getWeight()
+    {
+        return self::$_weights[$this->_keyword];
+    }
 
-        // Кредиты
-        if ($this->output[5]['loans'] > $this->values['loans']['max']) {
-            $this->output[6]['loans'] = $this->values['loans']['max'];
-        } elseif ($this->output[5]['loans'] < $this->values['loans']['min']) {
-            $this->output[6]['loans'] = $this->values['loans']['min'];
-        } else {
-            $this->output[6]['loans'] = $this->output[5]['loans'];
-        }
-        $this->output[6]['loans'] = ($this->output[6]['loans'] / $this->values['loans']['max']) * 100;
+    private function getBenefitCoefficient()
+    {
+        return self::$_benefitCoefficients[$this->_keyword];
+    }
 
-        // Бюджет
-        if ($this->output[5]['budget'] > $this->values['budget']['max']) {
-            $this->output[6]['budget'] = $this->values['budget']['max'];
-        } elseif ($this->output[5]['budget'] < $this->values['budget']['min']) {
-            $this->output[6]['budget'] = $this->values['budget']['min'];
-        } else {
-            $this->output[6]['budget'] = $this->output[5]['budget'];
-        }
-        $this->output[6]['budget'] = ($this->output[6]['budget'] / $this->values['budget']['max']) * 100;
+    //веса тахометров
+    private static $_weights;
 
-        // Фин. Состояние
-        if ($this->output[5]['result'] > $this->values['result']['max']) {
-            $this->output[6]['result'] = $this->values['result']['max'];
-        } elseif ($this->output[5]['result'] < $this->values['result']['min']) {
-            $this->output[6]['result'] = $this->values['result']['min'];
-        } else {
-            $this->output[6]['result'] = $this->output[5]['result'];
+    //множители для сравнения с границами зон - чтобы проще сравнивать "негативные" тахометры,
+    //для которых лучшим является меньшее значение
+    private static $_benefitCoefficients;
+
+    //количество зон
+    private static $zonesCount = 3;
+
+    //границы зон
+    private static $_zoneBorders;
+
+    private function getZoneBorders()
+    {
+        return self::$_zoneBorders[$this->_keyword];
+    }
+
+    //советы, отображаемые пользователю
+    private static $_advices;
+
+    //Вычисленное значение
+    private $_rawValue;
+
+    public function SetRawValue($value)
+    {
+        $this->_rawValue = $value;
+    }
+
+    /*
+    *получение значения внутри границ и при необходимости нормализованного относительно 100
+    */
+    private function getValueInsideBorders($normalize)
+    {
+        $zoneBorders = $this->getZoneBorders();
+
+        $minBorder = $zoneBorders[0];
+        $maxBorder = $zoneBorders[self::$zonesCount];
+
+        //гарантируем, что значение - внутри границ
+        if($this->compareWithBorder($maxBorder) > 0)
+            $result = $maxBorder;
+        else if($this->compareWithBorder($minBorder) < 0)
+            $result = $minBorder;
+        else
+            $result = $this->_rawValue;
+
+        //нормализуем, если нужно
+        if($normalize)
+            $result = ($result - $minBorder) / ($maxBorder - $minBorder) * 100;
+
+        return $result;
+    }
+
+    //сравнение значения с границей с учетом коэффициента "пользы" тахометра
+    //для вредных тахометров "зоны" уменьшаются, поэтому их сравниваем с коэффициентом -1
+    private function compareWithBorder($border)
+    {
+        $valueToCompare = $this->_rawValue * $this->getBenefitCoefficient();
+        $borderToCompare = $border * $this->getBenefitCoefficient();
+
+        if($valueToCompare == $borderToCompare)
+            return 0;
+        else return $valueToCompare > $borderToCompare ? 1 : -1;
+    }
+
+    public function __construct($keyword)
+    {
+        $this->_keyword = $keyword;
+    }
+
+    private $_zoneIndex;
+
+    private function getZoneIndex()
+    {
+        if(!isset($this->_zoneIndex))
+        {
+            //вычислим, в какую зону входит значение тахометра
+            $tempZoneIndex = 0;
+
+            //перебираем все зоны, пока проходим в следующую зону
+
+            $zoneBorders = $this->getZoneBorders();
+
+            while($tempZoneIndex < self::$zonesCount - 1
+                && $this->compareWithBorder($zoneBorders[$tempZoneIndex+1]) > 0)
+                        $tempZoneIndex++;
+
+            $this->_zoneIndex = $tempZoneIndex;
         }
-        $this->output[6]['result'] = ($this->output[6]['result'] / $this->values['result']['max']) * 100;
+
+        return $this->_zoneIndex;
+    }
+
+    private function getAdvice()
+    {
+        return self::$_advices[$this->_keyword][$this->getZoneIndex()];
+    }
+
+    public function getWeightedValue()
+    {
+        $zoneBorders = $this->getZoneBorders();
+
+        //точное значение - индекс зоны + положение внутри зоны:
+        //при этом берем не нормализованное значение, а взвешенное по зонам
+        $exactValue = $this->getZoneIndex() +
+            ($this->getValueInsideBorders(false) - $zoneBorders[$this->getZoneIndex()]) /
+                ($zoneBorders[$this->getZoneIndex() + 1] - $zoneBorders[$this->getZoneIndex()]);
+
+        //наконец, установим взвешенное значение
+        return $exactValue * $this->getWeight();
+    }
+
+    //массив готовых результатов - для отображения на клиенте
+    public function getResult()
+    {
+
+        return array('value' =>
+            //берем нормализованное исходное значение, чтобы вывести исходное, но внутри границ счетчика (0-100)
+            round($this->getValueInsideBorders(true)),
+            'description' => $this->getAdvice(), 'title' => $this->getCaption());
     }
 }
