@@ -153,7 +153,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeCalendarOperation(CalendarChain $calendar, Account $account = null, $comment='', $shiftDate=-1, array $props = array(), $save = true)
     {
         $defaultProps = array(
-            'date'      => date('Y-m-d', time() + $shiftDate * ONE_DAY_SECONDS),
+            'date'      => date('Y-m-d', time() + $shiftDate * 60 * 60 * 24),
             'accepted'  => Operation::STATUS_DRAFT,
             'comment'   => $comment,
         );

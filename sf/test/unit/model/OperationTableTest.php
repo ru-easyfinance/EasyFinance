@@ -22,36 +22,57 @@ class model_OperationTableTest extends myUnitTestCase
         $now        = date('Y-m-d', time());
 
        /*
-       * Фикстуры (операции):
+       * Фикстуры (операции) (время операции в БД не хранится, только дата):
        * 0. Не привязана к календарю
-       * 1. Подтвержденная
-       * 2. Удаленная
-       * 3. В будущем
-       * 4. Добавлена только что
-       * 5. Другого юзера
-       * 6-7. Просроченные
+       * 1. Не привязана к календарю другого юзера
+       * 2. Подтвержденная, дата=вчера
+       * 3. Подтвержденная, дата=завтра
+       * 4. Удаленная, дата=вчера
+       * 5. Удаленная, дата=завтра
+       * 6. Дата вчера
+       * 7. Дата сегодня
+       * 8. Дата завтра
+       * 9. С датой через 8 суток
+       * 10. С датой через 9 суток
+       * 11. Другого юзера вчера
+       * 12. Другого юзера завтра
+       * 13. С датой через 2 суток
+       * 14. С датой через 7 суток
        */
 
         $op0 = $this->helper->makeOperation($account);
+        $op1 = $this->helper->makeOperation($account2);
 
         $cc1 = $this->helper->makeCalendarChain($account);
         $cc2 = $this->helper->makeCalendarChain($account2);
 
-        $op1 = $this->helper->makeCalendarOperation($cc1, $account, 'op1', -1, array('accepted' => Operation::STATUS_ACCEPTED));
-        $op2 = $this->helper->makeCalendarOperation($cc1, $account, 'op2', -1, array('deleted_at' => $now));
-        $op3 = $this->helper->makeCalendarOperation($cc1, $account, 'op3', 1);
-        $op4 = $this->helper->makeCalendarOperation($cc1, $account, 'op4', 0);
-        $op5 = $this->helper->makeCalendarOperation($cc2, $account2, 'op5');
-        $op6 = $this->helper->makeCalendarOperation($cc1, $account, 'op6');
-        $op7 = $this->helper->makeCalendarOperation($cc1, $account, 'op7', -2);
+        $op2  = $this->helper->makeCalendarOperation($cc1, $account, 'op2',  -1, array('accepted' => Operation::STATUS_ACCEPTED));
+        $op3  = $this->helper->makeCalendarOperation($cc1, $account, 'op3',   1, array('accepted' => Operation::STATUS_ACCEPTED));
+        $op4  = $this->helper->makeCalendarOperation($cc1, $account, 'op4',  -1, array('deleted_at' => $now));
+        $op5  = $this->helper->makeCalendarOperation($cc1, $account, 'op5',   1, array('deleted_at' => $now));
+        $op6  = $this->helper->makeCalendarOperation($cc1, $account, 'op6',  -1);
+        $op7  = $this->helper->makeCalendarOperation($cc1, $account, 'op7',   0);
+        $op8  = $this->helper->makeCalendarOperation($cc1, $account, 'op8',   1);
+        $op9  = $this->helper->makeCalendarOperation($cc1, $account, 'op9',   8);
+        $op10 = $this->helper->makeCalendarOperation($cc1, $account, 'op10',  9);
+        $op11 = $this->helper->makeCalendarOperation($cc2, $account2,'op11', -1);
+        $op12 = $this->helper->makeCalendarOperation($cc2, $account2,'op12',  1);
+        $op13 = $this->helper->makeCalendarOperation($cc1, $account, 'op13',  2);
+        $op14 = $this->helper->makeCalendarOperation($cc1, $account, 'op14',  7);
 
-        // Запись в календаре с операциями
-        $result = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user)->execute();
-        $this->assertEquals(3, $result->count(), "Operations count");
-        // Если операция создана только что (в ту же секунду), она сразу становится просроченной
-        $this->assertModels($op4, $result->get(0));
-        $this->assertModels($op6, $result->get(1));
-        $this->assertModels($op7, $result->get(2));
+        // Проверяем просроченные операции
+        $overdue = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user)->execute();
+        $this->assertEquals(2, $overdue->count(), "Overdue operations count");
+        $this->assertModels($op6, $overdue->get(0));
+        $this->assertModels($op7, $overdue->get(1));
+
+        // Проверяем будущие операции
+        $future = Doctrine::getTable('Operation')->queryFindWithFutureCalendarChains($user)->execute();
+        $this->assertEquals(4, $future->count(), "Future operations count");
+        $this->assertModels($op8,  $future->get(0));
+        $this->assertModels($op9,  $future->get(1));
+        $this->assertModels($op13, $future->get(2));
+        $this->assertModels($op14, $future->get(3));
     }
 
 

@@ -63,7 +63,7 @@ class OperationTable extends Doctrine_Table
      * @param  User     $user
      * @param  string   $alias
      */
-    public function queryFindWithCalendarChainsCommon(User $user, $alias = 'o')
+    private function queryFindWithCalendarChainsCommon(User $user, $alias = 'o')
     {
         // Missed: tags, time, форматирование дат
         $q = $this->createQuery($alias)
@@ -95,6 +95,16 @@ class OperationTable extends Doctrine_Table
 
 
     /**
+     * Возращаем дату, отстоящую от сегодня на заданное кол-во дней, в формате Y-m-d
+     *
+     * @param  int  daysCount   Кол-во дней
+     */
+    private function addDays($daysCount) {
+        return date('Y-m-d', time() + $daysCount * 24 * 60 * 60);
+    }
+
+
+    /**
      * Выборка просроченных запланированных операций
      *
      * @param  User     $user
@@ -103,7 +113,8 @@ class OperationTable extends Doctrine_Table
     public function queryFindWithOverdueCalendarChains(User $user, $alias = 'o')
     {
         $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
-        $q->andWhere("{$alias}.date <= ?", date('Y-m-d', time());
+        $q->andWhere("{$alias}.date <= ?", $this->addDays(0));
+
         return $q;
     }
 
@@ -117,14 +128,9 @@ class OperationTable extends Doctrine_Table
     public function queryFindWithFutureCalendarChains(User $user, $alias = 'o')
     {
         $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
-        $q->andWhere("{$alias}.date <= ?", date('Y-m-d', time());
+        $q->andWhere("{$alias}.date between ? and ?", array($this->addDays(1), $this->addDays(8)));
 
         return $q;
-/*
-        # Svel: ой, что это?
-                AND
-                    o.`date` BETWEEN ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY) AND ADDDATE(CURRENT_DATE(), INTERVAL 8 DAY)
-*/
     }
 
 }
