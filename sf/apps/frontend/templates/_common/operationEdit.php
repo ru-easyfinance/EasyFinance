@@ -30,7 +30,8 @@
                 <select id="op_category"></select>
             </div>
         </div>
-        {* <!-- Финансовая цель -->*}
+
+        <!-- Финансовая цель -->
         <div class="op_line">
             <div class="op_field" id="op_target_fields" style="display:none;">
                 <label for="op_target">
@@ -62,7 +63,8 @@
                 </label>
             </div>
         </div>
-        {*<!-- Трансфер -->*}
+
+        <!-- Трансфер -->
         <div class="op_line op_line_transfer">
             <div class="op_field" id="op_transfer_fields" style="display:none;">
                 <label for="op_AccountForTransfer">
@@ -72,7 +74,8 @@
                 <span id="op_operationTransferCurrency" style="display:none;"><span></span><input type='text' id='op_currency'/><span id="op_convertSumCurrency"></span></span>
             </div>
         </div>
-        {*<!-- Основные поля -->*}
+
+        <!-- Основные поля -->
         <div class="op_line">
             <div class="op_f_field op_amount" id="op_amount_fields">
                 <label id="lblOpAmount" for="op_amount">
@@ -92,7 +95,7 @@
                 <label for="op_date">
                     Дата
                 </label>
-                <input type="text" value="{$date}" id="op_date" class="op_inp" >
+                <input type="text" value="" id="op_date" class="op_inp" >
             </div><!--<label for="fonline" class="online"><input type="checkbox" value="" id="fonline" />Заплатить online</label>-->
         </div>
         <div id="div_op_transfer_line" class="op_f_field">
@@ -141,7 +144,8 @@
                 <div id="div_op_comment"></div>
             </div>
         </div>
-        {*<!-- BEGIN поля для планирования -->*}
+
+        <!-- BEGIN поля для планирования -->
         <div class="op_line hidden" id="operationEdit_planning">
             <!--
             <div class="line event" style="display: block;">
@@ -248,7 +252,7 @@
                     <input type="radio" rep="3" class="rep_type" id="cal_rep_to" name="rep_type"><input type="text" value="" id="cal_date_end" name="date_end" disabled="disabled">
                 </div>
             </div>
-        </div>{*<!-- END поля для планирования -->
-        *}
+        </div>
+        <!-- END поля для планирования -->
     </div>
 </form><!--/Ввод операции-->
