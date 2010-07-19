@@ -36,7 +36,7 @@ generator:
           service_id:        { label: "Услуга" }
           status:              { label: "Статус" }
           created_at:          { label: "Дата и время создания" }
-        display: [user_id, service_id, status, created_at]
+        display: [service_id, status, created_at]
       form:    ~
       edit:    ~
       new:     ~

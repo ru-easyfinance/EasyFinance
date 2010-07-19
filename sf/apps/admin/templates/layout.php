@@ -12,9 +12,9 @@
     <div class="admin_top_menu">
        <div class="menu_item">Биллинг
             <div class="submenu">
-                <a href="/services">Услуги</a><br />
-                <a href="/transactions">Транзакции</a><br />
-                <a href="/transactions">Подписки</a>
+                <?php echo link_to('Услуги',     'service'); ?><br />
+                <?php echo link_to('Транзакции', 'billing_transaction'); ?><br />
+                <?php echo link_to('Подписки',   'service_subscription'); ?>
             </div>
        </div>
        <div class="menu_item">Парсеры Email

@@ -29,8 +29,8 @@ generator:
           user_id:           { label: "Пользователь" }
           service_id:        { label: "Услуга" }
           subscribed_till:        { label: "Дата окончания действия услуги",  date_format: dd.MM.yyyy }
-          created_at:          { label: "Дата начала действия услуги",  date_format: dd.MM.yyyy }        
-        display: [user_id, service_id, created_at, subscribed_till]
+          created_at:          { label: "Дата начала действия услуги",  date_format: dd.MM.yyyy }
+        display: [service_id, created_at, subscribed_till]
       form:    ~
       edit:
         title: Изменение подписки пользователя %%user_name%% на услугу "%%service_name%%"    
