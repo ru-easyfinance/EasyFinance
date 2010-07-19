@@ -10,6 +10,12 @@ sfCoreAutoload::register();
 class ProjectConfiguration extends sfProjectConfiguration
 {
     /**
+     * Zend_Loader_Autoloader
+     */
+    static protected $zendAutoloader = null;
+
+
+    /**
      * SetUp
      */
     public function setup()
@@ -20,6 +26,10 @@ class ProjectConfiguration extends sfProjectConfiguration
         sfOutputEscaper::markClassesAsSafe(array(
             'DateTime',
         ));
+
+        // г-но, но без этого Zend_Mail_Message raw письма по русски не читает
+        // @see http://framework.zend.com/issues/browse/ZF-3591
+        @ini_set('iconv.internal_encoding', 'UTF-8');
   }
 
 
@@ -57,6 +67,27 @@ class ProjectConfiguration extends sfProjectConfiguration
 
         // Кастомный гидратор
         $manager->registerHydrator('FetchPair', 'Doctrine_Hydrator_FetchPair');
+    }
+
+
+    /**
+     * Подключает ZF (автолоадер)
+     * @use ProjectConfiguration::registerZend() перед использованием ZF-классов
+     *
+     * @return Zend_Loader_Autoloader instance
+     */
+    final static public function registerZend()
+    {
+        if (!self::$zendAutoloader) {
+            set_include_path(implode(PATH_SEPARATOR, array(
+                sfConfig::get('sf_lib_dir') . '/vendor',
+                get_include_path(),
+            )));
+            require_once("Zend/Loader/Autoloader.php");
+            self::$zendAutoloader = Zend_Loader_Autoloader::getInstance();
+        }
+
+        return self::$zendAutoloader;
     }
 
 }

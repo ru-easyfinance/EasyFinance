@@ -4,7 +4,7 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
 /**
  * Операции
  */
-class task_importOperationFromEmailTastTest extends myUnitTestCase
+class task_importOperationFromEmailTaskTest extends myUnitTestCase
 {
     private $_tmpFile;
     private $_cwd;
@@ -70,7 +70,7 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
      */
     public function testErrorEmptyInput()
     {
-        $this->checkCmd("", $code = importOperationFromEmailTask::ERROR_EMPTY_INPUT );
+        $this->checkCmd("", $code = importOperationFromEmailTask::ERROR_EMPTY_INPUT);
     }
 
 
@@ -79,7 +79,7 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
      */
     public function testErrorFormValidation()
     {
-        $this->checkCmd('Some Data', $code = importOperationFromEmailTask::ERROR_EMAIL_FORMAT );
+        $this->checkCmd('Some Data', $code = importOperationFromEmailTask::ERROR_EMAIL_FORMAT);
     }
 
 
@@ -104,7 +104,7 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
         // Залезть в БД и проверть операцию
         $expected = array(
             'user_id'   => $user->getId(),
-            'amount'     => abs((float) $this->_amount),
+            'amount'    => abs((float) $this->_amount),
             'type'      => Operation::TYPE_EXPENSE,
             'accepted'  => Operation::STATUS_DRAFT,
         );
@@ -126,8 +126,8 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
 
         // Письмо
         $emailData = $this->_getEmailData();
-        $emailData['from'] = array('test@testbank.ru' => "Проверочный отправитель" );
-        $email = new myCreateEmailImport( $emailData );
+        $emailData['from'] = array('test@testbank.ru' => "Проверочный отправитель");
+        $email = new myCreateEmailImport($emailData);
 
         // Импорт
         $this->checkCmd((string)$email, $code = 0);
@@ -195,10 +195,10 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
     private function _getEmailData()
     {
         return array(
-            'email'       => $this->_email,
-            'from'        => $this->_from,
-            'subject'     => $this->_subject,
-            'body'        => "Номер карты: {$this->_account},\n списано средств: {$this->_amount} RUB,\n Описание: {$this->_description}\n\n"
+            'email'   => $this->_email,
+            'from'    => $this->_from,
+            'subject' => $this->_subject,
+            'body'    => "Номер карты: {$this->_account},\n списано средств: {$this->_amount} RUB,\n Описание: {$this->_description}\n\n",
         );
     }
 
@@ -238,13 +238,13 @@ class task_importOperationFromEmailTastTest extends myUnitTestCase
 
         // Создаем парсер
         $parser = new EmailParser();
-        $parser->setEmailSourceId( $sourceId );
-        $parser->setName( $this->_subject );
-        $parser->setSubjectRegexp( "описание операции \\(Снятие наличных\\/Платеж\\)" ); // MySQL regexp!
+        $parser->setEmailSourceId($sourceId);
+        $parser->setName($this->_subject);
+        $parser->setSubjectRegexp("описание операции \\(Снятие наличных\\/Платеж\\)"); // MySQL regexp!
         $parser->setAccountRegexp("Номер карты: (\\d\\d\\d\\d)");
         $parser->setTotalRegexp("списано средств: ([\\d\\.,]+) ");
         $parser->setDescriptionRegexp("Описание: (.+)");
-        $parser->setType( $this->_type );
+        $parser->setType($this->_type);
         $parser->save();
 
         return $parser;

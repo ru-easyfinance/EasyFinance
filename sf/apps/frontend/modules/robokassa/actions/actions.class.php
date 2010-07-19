@@ -170,7 +170,7 @@ class robokassaActions extends sfActions
 
         // Получаем транзакцию
         $transaction = Doctrine::getTable('BillingTransaction')->find( $transactionId );
-        $this->forward404Unless( ( $transaction->getId() > 0 ) );
+        $this->forward404Unless($transaction);
 
         // Проверяем ID пользователя
         $this->forward404Unless( (int)$transaction->getUserId() == $userId );

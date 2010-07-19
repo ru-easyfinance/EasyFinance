@@ -71,50 +71,44 @@ class importOperationFromEmailTask extends sfBaseTask
             $input = trim($input);
         }
 
-        if ( !$input )
-        {
+        if (!$input) {
             $this->logging("Expected not empty input", $input);
             return self::ERROR_EMPTY_INPUT;
         }
 
         $mail = myParseEmailImport::getEmailData($input);
-        if ( false == $mail ) {
+        if (false == $mail) {
             $this->logging("Not a valid .eml file format", $input);
             return self::ERROR_EMAIL_FORMAT;
         }
 
-        $from = $mail['from'];
+        $from    = $mail['from'];
         $subject = $mail['subject'];
 
         // Инициализировать соединение с БД
         $databaseManager = new sfDatabaseManager($this->configuration);
 
-        if ( $from == self::AMT_SOURCE_EMAIL )
-        {
+        if ($from == self::AMT_SOURCE_EMAIL) {
             // Для парсинга AMT
             $importClass = "myParseEmailAmtImport";
             $importForm = "OperationImportAmtForm";
             $parser = null;
-        }
-        else
-        {
+        } else {
             $importClass = "myParseEmailImport";
             $importForm = "OperationImportForm";
 
             // Получаем отправителя
-            $source = EmailSourceTable::getInstance()->getByEmail( $from );
+            $source = Doctrine_Core::getTable("EmailSource")->getByEmail($from);
 
-            if ( false === $source )
-            {
+            if (false === $source) {
                 $this->logging("Unknown sender", $from);
                 return self::ERROR_UNKNOWN_SENDER;
             }
 
             // Ищем подходящий парсер
-            $parser = $source->getParserBySubject( $subject );
+            $parser = $source->getParserBySubject($subject);
 
-            if ( !is_object( $parser ) || !( $parser instanceof EmailParser ) )
-            {
+            if (!is_object($parser) || !($parser instanceof EmailParser)) {
                 $this->logging("Can't find any suitable parser for subject", $subject);
                 return self::ERROR_NO_PARSER;
             }
@@ -124,7 +118,7 @@ class importOperationFromEmailTask extends sfBaseTask
 
         // Парсинг данных
         try {
-            $getEmail = new $importClass( $input, $parser, $mail['to'] );
+            $getEmail = new $importClass($input, $parser, $mail['to']);
             $operationData = $getEmail->getData();
         } catch (Exception $e) {
             $this->logging($e->getMessage(), $input);
@@ -161,4 +155,5 @@ class importOperationFromEmailTask extends sfBaseTask
         file_put_contents($logPath, 'Error: ' . $message . "\n----\n\n" . $input);
         $this->logSection('import', 'Error: ' . $message, null, 'ERROR');
     }
+
 }

@@ -155,4 +155,10 @@ if (defined('ENVIRONMENT') && ENVIRONMENT == 'prod') {
 
 }
 
+if (!empty($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'easyfinance.ru' || $_SERVER['HTTP_HOST'] == 'rc.easyfinance.ru')) {
+    sfConfig::set('mailCardAMT', 'card.statement@amtbank.com');
+} else {
+    sfConfig::set('mailCardAMT', 'test@easyfinance.ru');
+}
+
 Core::getInstance()->mailer = Swift_Mailer::newInstance($mailTransport);

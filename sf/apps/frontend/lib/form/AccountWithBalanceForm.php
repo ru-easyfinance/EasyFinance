@@ -56,4 +56,25 @@ class AccountWithBalanceForm extends BaseAccountForm
         return $values;
     }
 
+
+    /**
+     * Проверяет initPayment (если заполнено) и подмешивает дефолтное значение
+     *
+     * @param  array $values
+     * @return void
+     */
+    protected function doBind(array $values)
+    {
+        if (isset($values['initPayment']) AND !empty($values['initPayment'])) {
+            $values['initPayment'] = trim($values['initPayment']);
+            if (!is_numeric($values['initPayment'])) {
+                $values['initPayment'] = 0;
+            }
+        } else {
+            $values['initPayment'] = 0;
+        }
+
+        parent::doBind($values);
+    }
+
 }

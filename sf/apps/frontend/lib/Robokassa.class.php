@@ -72,7 +72,7 @@ class Robokassa
      */
     private static function getURL( $params )
     {
-        $URL = ( self::getSettings('test') ) ? self::getSettings('test_url') : self::getSettings('url');
+        $URL = self::getSettings('url');
         $URL .= "?";
 
         foreach( $params as $key => $value )

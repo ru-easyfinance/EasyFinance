@@ -94,8 +94,12 @@ class CreateObjectHelper {
             'time'       => '12:00:00',
             'accepted'   => 1,
         );
-
         $props = array_merge($default, $props);
+
+        if (!isset($props['type'])) {
+            $props['type'] = ($props['money'] > 0) ? 1 : 0;
+        }
+
 
         $sql = "INSERT INTO operation (".self::_wrapKey($props).") VALUES (".self::_wrapVal($props).")";
         return Core::getInstance()->db->query($sql);

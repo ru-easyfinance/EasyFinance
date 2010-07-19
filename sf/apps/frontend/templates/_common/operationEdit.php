@@ -216,7 +216,7 @@
 
     <div id="operationEdit_reminders" class="hidden">
         <?php include_partial('global/common/reminders') ?>
-        <div id="operationEdit_noReminders" style="margin: 10px;" class="hidden"><b>Для использования напоминаний необходимо подключить услугу <a href="/my/services">"Напоминания о событиях"</a>!</b></div>
+        <div id="operationEdit_noReminders" style="margin: 10px;" class="hidden"><b>Для использования напоминаний необходимо подключить услугу <a href="/my/services/">"Напоминания о событиях"</a>!</b></div>
     </div>
 
 </form>
