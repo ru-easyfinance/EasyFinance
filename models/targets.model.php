@@ -515,7 +515,7 @@ class Targets_Model {
         } else {
 
             $mod = New Operation_model;
-            $mod->addTransfer($money, 0, 0, $date, $accountId, $targetAccountId, 'Перевод на счёт финцели', null);
+            $mod->addTransfer($money, 0, 0, $date, $accountId, $targetAccountId, 'Перевод на счёт финцели');
 
             //а теперь добавим перевод на фин цель со счёта фин цели!
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
