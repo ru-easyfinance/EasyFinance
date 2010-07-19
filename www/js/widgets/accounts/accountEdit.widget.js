@@ -69,7 +69,14 @@ easyFinance.widgets.accountEdit = function(){
         params.name = _$node.find('#acc_name').val();
         params.comment = _$node.find('#acc_comment').val();
         params.currency = _$node.find('#acc_currency').val();
-        params.initPayment = _$node.find('#acc_balance').val();
+        params.initPayment = 0;
+
+        // #1614 ошибка при незаполненном поле начального баланса
+        var balance = parseFloat(_$node.find('#acc_balance').val());
+        if (!isNaN(balance)) {
+            params.initPayment = balance.toString();
+            delete balance;
+        }
 
         // #1475. для долговых счетов баланс всегда или 0 или отрицательный
         if (params.type == "7" || params.type == "9") {
@@ -182,6 +189,7 @@ easyFinance.widgets.accountEdit = function(){
         $('#acc_type').removeAttr('disabled');
         $('#acc_name').val('');
         $('#acc_currency').val(0);
+        $('#acc_balance').val(0);
 
         _$dialog.data('title.dialog', 'Добавить счёт').dialog('open');
     }

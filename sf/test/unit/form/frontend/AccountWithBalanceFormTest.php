@@ -171,4 +171,37 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
         $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
     }
 
+
+    /**
+     * Сохраним счет с кривым начальным балансом
+     */
+    public function testSaveWithFailInitBalance()
+    {
+        $input = $this->getValidInput();
+        $input['initPayment'] = 'NaN'; // js-хрень, см. parseFloat()
+
+        $user = $this->helper->makeUser();
+        $form = $this->makeForm($user);
+        $form->bind($input);
+        $this->assertFormIsValid($form);
+
+        $account = $form->save();
+        $expected = $input;
+        unset($expected['initPayment']);
+
+        $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
+
+        // Операция с начальным балансом
+        $expectedOperation = array(
+            'user_id'     => $user->getId(),
+            'account_id'  => $account->getId(),
+            'category_id' => null,
+            'amount'      => 0,
+            'date'        => '0000-00-00',
+            'type'        => Operation::TYPE_BALANCE,
+            'accepted'    => 1,
+        );
+        $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
+    }
+
 }
