@@ -1119,7 +1119,7 @@ class Operation_Model
             $type = 0;
         }
 
-        $this->db->query($sql, array((int) $operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT));
+        $this->db->query($sql, (int) $operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT);
     }
 
 
@@ -1131,7 +1131,7 @@ class Operation_Model
     private function _deleteNotifications($operationId)
     {
         $sql = "DELETE FROM operation_notifications WHERE operation_id = ?";
-        $this->db->query($sql, array((int) $operationId));
+        $this->db->query($sql, (int) $operationId);
     }
 
 
