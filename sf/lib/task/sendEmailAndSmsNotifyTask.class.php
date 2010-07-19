@@ -30,9 +30,9 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
      * Константы для сервиса отправки SMS
      *
      */
-    const WEBSMS_URL        = 'http://www.websms.ru/http_in5.asp?';     // Адрес сервиса отправки SMS
-    const WEBSMS_LOGIN      = 'ef_tester';                              // Имя пользователя для WebSMS
-    const WEBSMS_PASSWORD   = 'ef_tester';                              // Пароль для WebSMS
+    const WEBSMS_URL        = 'http://www.websms.ru/http_in5.asp?'; // Адрес сервиса отправки SMS
+    const WEBSMS_LOGIN      = 'easyfinance';                        // Имя пользователя для WebSMS
+    const WEBSMS_PASSWORD   = 'WGj163klSQ!@^&*SAds';                // Пароль для WebSMS
 
     // Адрес отправителя Email
     const EMAIL_FROM        = 'reminder@easyfinance.ru';
@@ -126,6 +126,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
                 }
 
                 // Отправка Email оповещения
+                # Max: Невозможно отправить SMS и Email одновременно
                 if ($notification->getType() == self::TYPE_EMAIL) {
                     $this->sendEmail($user->getUserMail(), $operation);
                     $notification->setIsSent(true);
@@ -216,7 +217,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
 
         // Имя пользователя и пароль для доступа к сервису
         $params[] = 'http_username=' . self::WEBSMS_LOGIN;
-        $params[] = 'http_password=' . self::WEBSMS_PASSWORD;
+        $params[] = 'http_password=' . urlencode(self::WEBSMS_PASSWORD);
 
         // Номер телефона без пробелов и спец знаков, ничинается с 7 (79019551234)
         # Svel: TODO проверить валидатор на номер телефона

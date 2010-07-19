@@ -1,0 +1,18 @@
+
+test:
+  mailer:
+    param:
+      delivery_strategy: none
+
+dev:
+  mailer:
+    param:
+      delivery_strategy: none
+
+all:
+  mailer:
+    class: sfMailer
+    param:
+      delivery_strategy: realtime
+      transport:
+        class: Swift_MailTransport
