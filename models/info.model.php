@@ -6,7 +6,6 @@ class Info_Model
 {
     public function __construct(oldUser $user = null)
     {
-        Tahometer::init();
     }
 
     /**
@@ -16,9 +15,10 @@ class Info_Model
     public function get_data()
     {
         $this->init();
+        Tahometer::init();
 
         //получим исходные данные для расчетов
-        //$this->GetBaseData();
+        $this->GetBaseData();
 
         //рассчитаем основные тахометры
         $this->CalculateBaseTahometers();
@@ -70,76 +70,51 @@ class Info_Model
         {
              $totalValue = $totalValue + $tahometer->getWeightedValue();
         }
-        $this->totalTahometer->SetRawValue($totalValue);
+        $this->totalTahometer->SetTotalValue($totalValue);
     }
 
     //исходные данные для расчета
-    //значения могут быть нужны только для отладки (при закомментированном вызове GetBaseData):
 
     //доходы за месяц
-    private $_oneMonthProfit = 50000;
+    private $_oneMonthProfit;
 
     //расходы за текущий месяц
-    private $_currentMonthDrain = 15000;
+    private $_currentMonthDrain;
 
     //выплаты по долгам за месяц
-    private $_oneMonthCreditPayments = 25000;
+    private $_oneMonthCreditPayments;
 
     //плановые расходы на текущий месяц
-    private $_currentMonthBudget = 45000;
+    private $_currentMonthBudget;
 
     //текущий остаток доступных денег
-    private $_currentRealMoneyBalance = 3000;
+    private $_currentRealMoneyBalance;
 
     //доходы за 3 месяца
-    private $_threeMonthProfit = 135000;
+    private $_threeMonthProfit;
 
     //расходы за 3 месяца
-    private $_threeMonthDrain = 100000;
-
-        //все числовые константы не имеют какого-либо "управляющего" значения - просто данные
-    private static $MONEY_DEFAULT_VALUE = 5;
-    private static $BUDGET_DEFAULT_VALUE = 100;
-    private static $LOANS_DEFAULT_VALUE = 100;
-    private static $DIFF_DEFAULT_VALUE = 20;
+    private $_threeMonthDrain;
 
     //рассчитываем основные тахометры, уже получив данные
     private function CalculateBaseTahometers()
     {
         //деньги
-        $this->tahometersByKeywords[Tahometer::$MONEY_KEYWORD]->SetRawValue(
-            $this->calculateTahometerValue(
+        $this->tahometersByKeywords[Tahometer::$MONEY_KEYWORD]->SetBaseValue(
                 $this->_currentRealMoneyBalance,
-                $this->_threeMonthDrain,
-                self::$MONEY_DEFAULT_VALUE)
-        );
+                $this->_threeMonthDrain);
 
-        $this->tahometersByKeywords[Tahometer::$BUDGET_KEYWORD]->SetRawValue(
-            $this->calculateTahometerValue(
+        $this->tahometersByKeywords[Tahometer::$BUDGET_KEYWORD]->SetBaseValue(
                 $this->_currentMonthDrain,
-                $this->_currentMonthBudget,
-                self::$BUDGET_DEFAULT_VALUE) * 100
-        );
+                $this->_currentMonthBudget);
 
-        $this->tahometersByKeywords[Tahometer::$LOANS_KEYWORD]->SetRawValue(
-            $this->calculateTahometerValue(
+        $this->tahometersByKeywords[Tahometer::$LOANS_KEYWORD]->SetBaseValue(
                 $this->_oneMonthCreditPayments,
-                $this->_oneMonthProfit,
-                self::$LOANS_DEFAULT_VALUE) * 100
-        );
+                $this->_oneMonthProfit);
 
-        $this->tahometersByKeywords[Tahometer::$DIFF_KEYWORD]->SetRawValue(
-            ($this->calculateTahometerValue(
+        $this->tahometersByKeywords[Tahometer::$DIFF_KEYWORD]->SetBaseValue(
                 $this->_threeMonthProfit,
-                $this->_threeMonthDrain,
-                self::$DIFF_DEFAULT_VALUE)-1)*100
-        );
-    }
-
-    private function calculateTahometerValue($dividend, $divisor, $defaultValue)
-    {
-        return $dividend == 0 ? 0 :
-            ($divisor == 0 ? $defaultValue : $dividend / $divisor);
+                $this->_threeMonthDrain);
     }
 
     /*
@@ -159,36 +134,35 @@ class Info_Model
         //получаем каждый из показателей; показатели, получаемые как сумма за определенный период,
         //корректируем с учетом стажа в системе: если получаем за 3 месяца, а в системе мы - 1,5 месяца, нужный показатель умножить на 2
 
-
         //доходы за месяц
-        $this->oneMonthProfit = $this->GetOperationsSum(
+        $this->_oneMonthProfit = $this->GetOperationsSum(
             self::$PROFIT_QUERY, 1);
 
         //расходы за текущий месяц
-        $this->currentMonthDrain = $this->GetOperationsSum(
+        $this->_currentMonthDrain = $this->GetOperationsSum(
             self::$DRAIN_QUERY, 0);
 
         //доходы за 3 месяца
-        $this->threeMonthProfit = $this->GetOperationsSum(
+        $this->_threeMonthProfit = $this->GetOperationsSum(
             self::$PROFIT_QUERY, 3);
 
         //расходы за 3 месяца
-        $this->threeMonthDrain = $this->GetOperationsSum(
+        $this->_threeMonthDrain = $this->GetOperationsSum(
             self::$DRAIN_QUERY, 3);
 
         //текущий остаток доступных денег - сумма всех операций за все время, включая начальные остатки
         //по денежным счетам и кредитным картам с положительным остатком
-        $this->currentRealMoneyBalance = $this->GetOperationsSum(
+        $this->_currentRealMoneyBalance = $this->GetOperationsSum(
             self::$BALANCE_QUERY, NULL);
 
         //выплаты по долгам за месяц
         //пока считаем только как переводы на долговые счета
         //затем добавятся расходы по соотв. спец. категориям
-        $this->oneMonthCreditPayments = $this->GetOperationsSum(
+        $this->_oneMonthCreditPayments = $this->GetOperationsSum(
             self::$CREDIT_QUERY, 1);
 
         //плановые расходы на текущий месяц
-        $this->currentMonthBudget = $this->GetDrainBudget();
+        $this->_currentMonthBudget = $this->GetDrainBudget();
     }
 
     /*
@@ -222,7 +196,10 @@ class Info_Model
             }
         }
 
-        $resultSum = abs($resultSum);
+        //если получаем не баланс а относительную величину со строго определенным знаком, возьмем ее модуль
+        //баланс же может быть любого знака
+        if($queryType <> self::$BALANCE_QUERY)
+            $resultSum = abs($resultSum);
 
         //Скорректируем сумму с учетом стажа в системе:
         //корректируем всегда, если задано условие на диапазон операций
@@ -230,6 +207,7 @@ class Info_Model
         {
             $resultSum = $this->getSumWithExperienceCoeff($resultSum, $months);
         }
+
         return $resultSum;
     }
 
@@ -260,6 +238,7 @@ class Info_Model
 
             case self::$DRAIN_QUERY:
                 //нужны только расходные, без начальных остатков
+                //переводы на долговые счета не берем
                 $operationType = '0';
                 break;
 
@@ -272,9 +251,9 @@ class Info_Model
                 break;
 
             case self::$BALANCE_QUERY:
-                //для баланса "живых" денег берем все операции, кроме переводов, и начальные остатки
+                //для баланса "живых" денег берем все операции и начальные остатки
                 //берем только денежные счета и кредитки с положительным балансом
-                $operationType = '0,1';
+                $operationType = '0,1,2';
                 $needSelectStartBalances = true;
                 $additionalCondition = "type_id IN (1,2,5,15,16) OR (type_id = 8 AND money > 0)";
                 break;
@@ -292,13 +271,14 @@ class Info_Model
         //выбираем с привязкой к счетам
         //всегда выбираем подтвержденные операции
         //операции перевода входят в разные счета с разным знаком
+
+        //если расход или 'перевод с' - минус
+        //иначе (доход или 'перевод на') - плюс
         $query = "
             SELECT
                 SUM(CASE
-                        #если расход или 'перевод с' - минус
                         WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id THEN -ABS(op.money)
 
-                        #иначе (доход или 'перевод на') - плюс
                         ELSE ABS(op.money)
                     END) AS money,
                 acc.account_type_id AS type_id, acc.account_currency_id AS currency_id
@@ -312,7 +292,7 @@ class Info_Model
             $query = $query . "op.account_id = acc.account_id OR ";
 
         $query = $query . "op.transfer_account_id = acc.account_id)" .
-            "WHERE op.user_id = ". $this->user()->getId() ." AND op.accepted = 1 ";
+            "WHERE op.user_id = ". $this->user()->getId() ." AND op.accepted = 1 AND op.deleted_at IS NULL  AND acc.deleted_at IS NULL ";
 
         $query = $query . " AND op.type IN (" . $operationType . ")";
 
@@ -364,12 +344,14 @@ class Info_Model
         $subIntervalValue = $months > 0 ? $months . ' month' : $intervalEnd->format('d') . ' day';
         $intervalStart->modify('-' . $subIntervalValue);
 
+
         //получаем интервал в днях
         //todo: убрать SQL
         //хз как быстро сделать это средствами PHP < 5.3, т.к. diff нет
 
-        $daysInInterval = $this->db()->selectCell(
-            "SELECT DATEDIFF('" . $intervalEnd->format('Y-m-d'). "', '" . $intervalStart->format('Y-m-d'). "')");
+        $queryString = "SELECT DATEDIFF('" . $intervalEnd->format('Y-m-d'). "', '" . $intervalStart->format('Y-m-d'). "')";
+
+        $daysInInterval = $this->db()->selectCell($queryString);
 
         //собственно коэффицент
         $experienceCoeff = $daysInInterval / $this->getExperienceDays();
@@ -384,7 +366,8 @@ class Info_Model
     {
         if(!isset($this->_experienceDaysValue))
         {
-            $daysQuery = "SELECT DATEDIFF(CURDATE(), IFNULL(mindate, CURDATE())) FROM (SELECT MIN(op.date) AS mindate FROM operation op WHERE op.comment NOT LIKE 'Начальный остаток' AND op.user_id = " . $this->user()->getId() . ") AS tbl";
+            //стаж определяется датой первой операции
+            $daysQuery = "SELECT DATEDIFF(CURDATE(), IFNULL(mindate, CURDATE())) FROM (SELECT MIN(op.date) AS mindate FROM operation op WHERE op.comment NOT LIKE 'Начальный остаток' AND op.deleted_at IS NULL AND op.user_id = " . $this->user()->getId() . ") AS tbl";
 
             //добавим единицу, чтобы учесть сегодняшний день
             //например, если вчера была первая операция, то стаж = 2 дням
@@ -400,7 +383,7 @@ class Info_Model
         //не паримся о валюте, т.к. бюджет пока планируем в базовой, и считаем, что тахометры получаем в базовой
 
         $query = "
-            SELECT SUM(amount)
+            SELECT SUM(ABS(amount))
             FROM budget
             WHERE
                     date_start = DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY)
@@ -420,16 +403,16 @@ class Info_Model
     //Инициализация тахометров
     private function init()
     {
-        $this->totalTahometer = new Tahometer(Tahometer::$TOTAL_KEYWORD);
+        $this->totalTahometer = new TotalTahometer();
         $this->tahometersByKeywords = array(
                 //Деньги
-                Tahometer::$MONEY_KEYWORD => new Tahometer(Tahometer::$MONEY_KEYWORD),
+                Tahometer::$MONEY_KEYWORD => new BaseTahometer(Tahometer::$MONEY_KEYWORD),
                 //Бюджет
-                Tahometer::$BUDGET_KEYWORD => new Tahometer(Tahometer::$BUDGET_KEYWORD),
+                Tahometer::$BUDGET_KEYWORD => new BaseTahometer(Tahometer::$BUDGET_KEYWORD),
                 //Долги
-                Tahometer::$LOANS_KEYWORD => new Tahometer(Tahometer::$LOANS_KEYWORD),
+                Tahometer::$LOANS_KEYWORD => new BaseTahometer(Tahometer::$LOANS_KEYWORD),
                 //Доходы vs Расходы
-                Tahometer::$DIFF_KEYWORD => new Tahometer(Tahometer::$DIFF_KEYWORD)
+                Tahometer::$DIFF_KEYWORD => new BaseTahometer(Tahometer::$DIFF_KEYWORD)
             );
     }
 }
@@ -437,7 +420,7 @@ class Info_Model
 /*
 *класс "Тахометр" для более удобной работы с тахометрами
 */
-class Tahometer
+abstract class Tahometer
 {
     public static $MONEY_KEYWORD = 'money';
     public static $BUDGET_KEYWORD = 'budget';
@@ -445,7 +428,8 @@ class Tahometer
     public static $DIFF_KEYWORD = 'diff';
     public static $TOTAL_KEYWORD = 'total';
 
-    private $_keyword;
+    //ключевое слово
+    protected $_keyword;
 
     private static $_captions;
 
@@ -459,25 +443,11 @@ class Tahometer
             Tahometer::$DIFF_KEYWORD => 'Удается ли тратить меньше, чем получаете: превышение доходов над расходами за последние 3 месяца',
             Tahometer::$TOTAL_KEYWORD => 'Итоговая оценка финансового здоровья на базе всех других показателей'
         );
-        self::$_weights = array(
-            Tahometer::$MONEY_KEYWORD => 35,
-            Tahometer::$BUDGET_KEYWORD => 20,
-            Tahometer::$LOANS_KEYWORD => 15,
-            Tahometer::$DIFF_KEYWORD => 30
-        );
-
-        self::$_benefitCoefficients = array(
-            Tahometer::$MONEY_KEYWORD => 1,
-            Tahometer::$BUDGET_KEYWORD => -1,
-            Tahometer::$LOANS_KEYWORD => -1,
-            Tahometer::$DIFF_KEYWORD => 1,
-            Tahometer::$TOTAL_KEYWORD => 1
-        );
 
         self::$_zoneBorders = array(
             Tahometer::$MONEY_KEYWORD => array(0, 2, 5, 6),
-            Tahometer::$BUDGET_KEYWORD => array(100, 97, 85, 0),
-            Tahometer::$LOANS_KEYWORD => array(100, 70, 40, 0),
+            Tahometer::$BUDGET_KEYWORD => array(0, 85, 97, 100),
+            Tahometer::$LOANS_KEYWORD => array(0, 40, 70, 100),
             Tahometer::$DIFF_KEYWORD => array(0, 5, 10, 20),
             Tahometer::$TOTAL_KEYWORD => array(0,100,150,300)
         );
@@ -504,6 +474,8 @@ class Tahometer
                 'Неплохо. но если изменить  подход к ведению дел, финансовое состояние можно существенно улучшить.',
                 'У вас все хорошо, но не останавливайтесь на достигнутом. Ваше финансовое состояние можно существенно улучшить!'),
         );
+
+        BaseTahometer::init();
     }
 
 
@@ -512,30 +484,13 @@ class Tahometer
         return self::$_captions[$this->_keyword];
     }
 
-    private function getWeight()
-    {
-        return self::$_weights[$this->_keyword];
-    }
-
-    private function getBenefitCoefficient()
-    {
-        return self::$_benefitCoefficients[$this->_keyword];
-    }
-
-    //веса тахометров
-    private static $_weights;
-
-    //множители для сравнения с границами зон - чтобы проще сравнивать "негативные" тахометры,
-    //для которых лучшим является меньшее значение
-    private static $_benefitCoefficients;
-
     //количество зон
     private static $zonesCount = 3;
 
     //границы зон
     private static $_zoneBorders;
 
-    private function getZoneBorders()
+    protected function getZoneBorders()
     {
         return self::$_zoneBorders[$this->_keyword];
     }
@@ -544,17 +499,16 @@ class Tahometer
     private static $_advices;
 
     //Вычисленное значение
-    private $_rawValue;
+    protected $_rawValue;
 
-    public function SetRawValue($value)
-    {
-        $this->_rawValue = $value;
-    }
+    //константа для 100 %
+    protected static $HUNDRED_PERCENT = 100;
+
 
     /*
-    *получение значения внутри границ и при необходимости нормализованного относительно 100
+    *получение значения внутри границ и при необходимости нормализованного относительно 100 - если для вывода в тахометр
     */
-    private function getValueInsideBorders($normalize)
+    protected function getValueInsideBorders($forOutput)
     {
         $zoneBorders = $this->getZoneBorders();
 
@@ -562,40 +516,23 @@ class Tahometer
         $maxBorder = $zoneBorders[self::$zonesCount];
 
         //гарантируем, что значение - внутри границ
-        if($this->compareWithBorder($maxBorder) > 0)
+        if($this->_rawValue > $maxBorder)
             $result = $maxBorder;
-        else if($this->compareWithBorder($minBorder) < 0)
+        else if($this->_rawValue < $minBorder)
             $result = $minBorder;
         else
             $result = $this->_rawValue;
 
-        //нормализуем, если нужно
-        if($normalize)
-            $result = ($result - $minBorder) / ($maxBorder - $minBorder) * 100;
+        //нормализуем, если нужно выводить в тахометр - там шкала до 100; 100 соответствует макс. значение тахометра, 0 - минимальное
+        if($forOutput)
+            $result = ($result - $minBorder) / ($maxBorder - $minBorder) * self::$HUNDRED_PERCENT;
 
         return $result;
     }
 
-    //сравнение значения с границей с учетом коэффициента "пользы" тахометра
-    //для вредных тахометров "зоны" уменьшаются, поэтому их сравниваем с коэффициентом -1
-    private function compareWithBorder($border)
-    {
-        $valueToCompare = $this->_rawValue * $this->getBenefitCoefficient();
-        $borderToCompare = $border * $this->getBenefitCoefficient();
-
-        if($valueToCompare == $borderToCompare)
-            return 0;
-        else return $valueToCompare > $borderToCompare ? 1 : -1;
-    }
-
-    public function __construct($keyword)
-    {
-        $this->_keyword = $keyword;
-    }
-
     private $_zoneIndex;
 
-    private function getZoneIndex()
+    protected function getZoneIndex()
     {
         if(!isset($this->_zoneIndex))
         {
@@ -607,7 +544,7 @@ class Tahometer
             $zoneBorders = $this->getZoneBorders();
 
             while($tempZoneIndex < self::$zonesCount - 1
-                && $this->compareWithBorder($zoneBorders[$tempZoneIndex+1]) > 0)
+                && $this->_rawValue > $zoneBorders[$tempZoneIndex+1])
                         $tempZoneIndex++;
 
             $this->_zoneIndex = $tempZoneIndex;
@@ -621,27 +558,128 @@ class Tahometer
         return self::$_advices[$this->_keyword][$this->getZoneIndex()];
     }
 
+
+    //массив готовых результатов - для отображения на клиенте
+    public function getResult()
+    {
+        return array('value' =>
+            round($this->getValueInsideBorders(true)),
+            'description' => $this->getAdvice(), 'title' => $this->getCaption());
+    }
+}
+
+//основные тахометры - входные значения рассчитываются
+class BaseTahometer extends Tahometer
+{
+    //множители для сравнения с границами зон - чтобы проще сравнивать "негативные" тахометры,
+    //для которых лучшим является меньшее значение
+    private static $_calculateTypes;
+
+    //инициализация
+    public static function init()
+    {
+        self::$_calculateTypes = array(
+            Tahometer::$MONEY_KEYWORD => 'direct',
+            Tahometer::$BUDGET_KEYWORD => 'negative',
+            Tahometer::$LOANS_KEYWORD => 'negative',
+            Tahometer::$DIFF_KEYWORD => 'over'
+        );
+        self::$_weights = array(
+            Tahometer::$MONEY_KEYWORD => 35,
+            Tahometer::$BUDGET_KEYWORD => 20,
+            Tahometer::$LOANS_KEYWORD => 15,
+            Tahometer::$DIFF_KEYWORD => 30
+        );
+    }
+
+    //установка значения как отношения 2-х величин, используемых в данном тахометре, в процентах
+    //в итоге получаем некий процент, но для разных тахометров он может считаться по-разному
+    public function SetBaseValue($dividend, $divisor)
+    {
+        $zoneBorders = $this->getZoneBorders();
+        //если не задан числитель, ставим минимальное значение данного тахометра
+        if($dividend == 0)
+            $baseValue = $zoneBorders[0];
+
+        //если не задан знаменатель, ставим максимальное значение для данного тахометра
+        else if($divisor == 0)
+            $baseValue = $zoneBorders[self::$zonesCount];
+
+        else
+        {
+            //значение считаем в зависимости от типа подсчета значения в тахометре
+            switch($this->getCalculateType())
+            {
+                //прямое отношение величин
+                case 'direct':
+                    $baseValue = $dividend / $divisor;
+                    break;
+
+                //1 - отношение (считаем оставшуюся величину)
+                case 'negative':
+                    $baseValue = 1 - $dividend / $divisor;
+                    break;
+
+                //перекрытие (считаем превышение в процентах)
+                case 'over':
+                    $baseValue = $dividend / $divisor - 1;
+                    break;
+            }
+
+            //переведем в проценты
+            $baseValue = $baseValue * self::$HUNDRED_PERCENT;
+        }
+
+        $this->_rawValue = $baseValue;
+    }
+
+    //получение взвешенного значения
     public function getWeightedValue()
     {
         $zoneBorders = $this->getZoneBorders();
-
+        $zoneIndex = $this->getZoneIndex();
         //точное значение - индекс зоны + положение внутри зоны:
         //при этом берем не нормализованное значение, а взвешенное по зонам
-        $exactValue = $this->getZoneIndex() +
-            ($this->getValueInsideBorders(false) - $zoneBorders[$this->getZoneIndex()]) /
-                ($zoneBorders[$this->getZoneIndex() + 1] - $zoneBorders[$this->getZoneIndex()]);
+        $exactValue = $zoneIndex +
+            ($this->getValueInsideBorders(false) - $zoneBorders[$zoneIndex]) /
+                ($zoneBorders[$zoneIndex + 1] - $zoneBorders[$zoneIndex]);
 
         //наконец, установим взвешенное значение
         return $exactValue * $this->getWeight();
     }
 
-    //массив готовых результатов - для отображения на клиенте
-    public function getResult()
+    public function __construct($keyword)
     {
+        $this->_keyword = $keyword;
+    }
 
-        return array('value' =>
-            //берем нормализованное исходное значение, чтобы вывести исходное, но внутри границ счетчика (0-100)
-            round($this->getValueInsideBorders(true)),
-            'description' => $this->getAdvice(), 'title' => $this->getCaption());
+    //тип вычисления значения
+    private function getCalculateType()
+    {
+        return self::$_calculateTypes[$this->_keyword];
+    }
+
+    //веса тахометров
+    private static $_weights;
+
+    private function getWeight()
+    {
+        return self::$_weights[$this->_keyword];
+    }
+}
+
+//итоговый тахометр - входное значение устанавливается напрямую
+class TotalTahometer extends Tahometer
+{
+    //конструируем без параметров - и так все знаем
+    public function __construct()
+    {
+        $this->_keyword = self::$TOTAL_KEYWORD;
+    }
+
+    //установка значения напрямую
+    public function SetTotalValue($value)
+    {
+        $this->_rawValue = $value;
     }
 }
