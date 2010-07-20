@@ -37,6 +37,8 @@ class AccountTable extends Doctrine_Table
      */
     public function queryFindWithBalanceAndBalanceOperation(User $user, $alias = 'a')
     {
+        $userId = (int) $user->getId();
+
         $q = $this->createQuery($alias)
             ->select("{$alias}.name, {$alias}.type_id,
                 {$alias}.description, {$alias}.currency_id,
@@ -52,11 +54,11 @@ class AccountTable extends Doctrine_Table
                 ELSE
                     op2.amount
                 END) AS balance")
-            ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
+            ->andWhere("{$alias}.user_id = ?", $userId)
             ->orderBy("{$alias}.name")
-            ->leftJoin("{$alias}.Operations o ON o.account_id = {$alias}.account_id
+            ->leftJoin("{$alias}.Operations o ON o.user_id={$userId} AND o.account_id = {$alias}.account_id
                 AND o.type = ?", array(Operation::TYPE_BALANCE))
-            ->leftJoin("{$alias}.Operations op2 ON (
+            ->leftJoin("{$alias}.Operations op2 ON op2.user_id={$userId} AND (
                     op2.account_id = {$alias}.account_id
                     OR op2.transfer_account_id = {$alias}.account_id
                 )
