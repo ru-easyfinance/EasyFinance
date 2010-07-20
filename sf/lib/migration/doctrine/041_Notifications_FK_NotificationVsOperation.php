@@ -3,7 +3,7 @@
 /**
  * OperationNotification: FK на operation
  */
-class Migration111_Notifications_FK_NotificationVsOperation extends Doctrine_Migration_Base
+class Migration041_Notifications_FK_NotificationVsOperation extends Doctrine_Migration_Base
 {
     /**
      * Migrate

@@ -3,7 +3,7 @@
 /**
  * Создать таблицу уведомлений
  */
-class Migration110_Notifications_CreateTables extends Doctrine_Migration_Base
+class Migration040_Notifications_CreateTables extends Doctrine_Migration_Base
 {
     /**
      * Migrate

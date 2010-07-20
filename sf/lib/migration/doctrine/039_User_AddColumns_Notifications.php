@@ -3,7 +3,7 @@
 /**
  * User: добавляем колонки настроек напоминаний (см. Notification)
  */
-class Migration109_User_Addcolumns extends Doctrine_Migration_Base
+class Migration039_User_Addcolumns_Notifications extends Doctrine_Migration_Base
 {
     /**
      * Migrate
