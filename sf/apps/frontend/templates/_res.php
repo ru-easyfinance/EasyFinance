@@ -75,5 +75,9 @@
     <?php include_component('res', 'accounts', array()) ?>
     <?php include_component('res', 'currencies', array()) ?>
     <?php include_component('res', 'tags', array()) ?>
-    <?php include_component('res', 'overdue', array()) ?>
+    <?php
+        // Max: закомментировал, потому, что ломает js, см #1627
+        //      надо найти скрытые зависимости в js - каких ресурсов ему еще не хватает
+        // include_component('res', 'overdue', array())
+    ?>
 </script>
