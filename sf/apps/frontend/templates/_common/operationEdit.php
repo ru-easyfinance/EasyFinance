@@ -87,7 +87,7 @@
                         <span id="btnCalcSum" title="калькулятор" border="0" ></span>
                     </div>
                     <div class="amount_help">
-                        12 + 33 * 45 &lt;Enter&gt;
+                        Пример: 12 + 33 * 45 &lt;Enter&gt;
                     </div>
                 </div>
             </div>

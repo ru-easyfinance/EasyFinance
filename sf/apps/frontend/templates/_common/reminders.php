@@ -1,6 +1,6 @@
 <div id="divUseReminders" class="hidden" style="padding-left: 4px;">
     <input type="checkbox" id="op_checkReminders">
-    <label for="op_checkReminders">Напомнить об операции</label>
+    <label for="op_checkReminders">Напомнить об операции по SMS или E-mail</label>
 </div>
 
 <div id="reminderOptions_profile" class="hidden">
