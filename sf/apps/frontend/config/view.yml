@@ -13,8 +13,8 @@ default:
     #robots:       index, follow
 
 <?php if (sfConfig::get('sf_environment') == 'prod'): ?>
-  stylesheets:    [global-min.css]
-  javascripts:    [global-min.js]
+  stylesheets:    [global-min.css?r=<?php echo REVISION; ?>]
+  javascripts:    [global-min.js?r=<?php echo REVISION; ?>]
 <?php else: ?>
   stylesheets:
 <?php
