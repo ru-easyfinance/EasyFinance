@@ -69,7 +69,6 @@ class OperationTable extends Doctrine_Table
         $q = $this->createQuery($alias)
             ->leftJoin("{$alias}.CalendarChain c")
             ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
-            ->andWhere("{$alias}.accepted=".Operation::STATUS_DRAFT)
             ->andWhere("{$alias}.deleted_at IS NULL")
             ;
 
@@ -88,6 +87,25 @@ class OperationTable extends Doctrine_Table
 
 
     /**
+     * Выборка операций, запланированных в календаре или уже принятых
+     *
+     * @param  User     $user
+     * @param  DateTime $dateStart
+     * @param  DateTime $dateEnd
+     * @param  string   $alias
+     */
+    public function queryFindWithCalendarChainsForPeriod(User $user, DateTime $dateStart, DateTime $dateEnd, $alias = 'o')
+    {
+        $period = array($dateStart->format('Y-m-d'), $dateEnd->format('Y-m-d'));
+        $q = $this->queryFindWithCalendarChainsCommon($user, $alias)
+            ->andWhere("{$alias}.date between ? and ?", $period)
+            ->andWhere("( {$alias}.accepted=" . Operation::STATUS_DRAFT . " or {$alias}.chain_id > 0 )")
+          ;
+        return $q;
+    }
+
+
+    /**
      * Выборка просроченных запланированных операций
      *
      * @param  User     $user
@@ -96,7 +114,8 @@ class OperationTable extends Doctrine_Table
     public function queryFindWithOverdueCalendarChains(User $user, $alias = 'o')
     {
         $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
-        $q->andWhere("{$alias}.date <= ?", $this->addDays(0));
+        $q->andWhere("{$alias}.date <= ?", $this->addDays(0))
+          ->andWhere("{$alias}.accepted = " . Operation::STATUS_DRAFT);
 
         return $q;
     }
@@ -111,7 +130,8 @@ class OperationTable extends Doctrine_Table
     public function queryFindWithFutureCalendarChains(User $user, $alias = 'o')
     {
         $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
-        $q->andWhere("{$alias}.date between ? and ?", array($this->addDays(1), $this->addDays(8)));
+        $q->andWhere("{$alias}.date between ? and ?", array($this->addDays(1), $this->addDays(8)))
+          ->andWhere("{$alias}.accepted = " . Operation::STATUS_DRAFT);
 
         return $q;
     }

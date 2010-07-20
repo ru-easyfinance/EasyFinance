@@ -8,7 +8,7 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
 class model_OperationTableTest extends myUnitTestCase
 {
     /**
-     * Таблица просроченных операций из календаря
+     * Таблицы будущих и просроченных операций из календаря
      */
     public function testQueryFindWithCalendarChains()
     {
@@ -73,6 +73,150 @@ class model_OperationTableTest extends myUnitTestCase
         $this->assertModels($op9,  $future->get(1));
         $this->assertModels($op13, $future->get(2));
         $this->assertModels($op14, $future->get(3));
+    }
+
+    /**
+    * Создаем фикстуры для теста выборки за период.
+    * Наполняем массив операций
+    *
+    * Фикстуры (операции) (время операции в БД не хранится, только дата):
+    * 0. Не привязана к календарю, 1-е число
+    * 1. Не привязана к календарю другого юзера, 1-е число
+    * 2. Подтвержденная, 1-е число
+    * 3. Удаленная, 1-е число
+    * 4. 1-е число
+    * 5. Подтвержденная, 1-е число, прошлый месяц
+    * 6. Удаленная, 1-е число, прошлый месяц
+    * 7. 1-е число, прошлый месяц
+    * 8. 1-е число, следующий месяц
+    * 9. 9 число
+    * 10. Последнее число месяца
+    * 11. Последнее число прошлого месяца
+    *
+    * @param User   $user
+    * @param array  $operations
+    */
+    private function makeFixturesForPeriod(User $user, array &$operations)
+    {
+        $account = $this->helper->makeAccount($user);
+
+        $user2 = $this->helper->makeUser();
+        $account2 = $this->helper->makeAccount($user2);
+
+        $dateObj = DateTime::createFromFormat('Y-m-d', date('Y-m-', time()) . '01');
+        $thisMonth9 = DateTime::createFromFormat('Y-m-d', date('Y-m-', time()) . '09');
+
+        // Первое число месяца
+        $date = $dateObj->format('Y-m-d');
+        $operations[0] = $this->helper->makeOperation($account, array('date' => $date));
+        $operations[1] = $this->helper->makeOperation($account2, array('date' => $date));
+
+        $cc1 = $this->helper->makeCalendarChain($account);
+        $cc2 = $this->helper->makeCalendarChain($account2);
+
+        $operations[2]  = $this->helper->makeCalendarOperation($cc1, $account, 'op2', 0,
+            array('date'=>$date, 'accepted'=>Operation::STATUS_ACCEPTED));
+        $operations[3]  = $this->helper->makeCalendarOperation($cc1, $account, 'op4', 0,
+            array('date'=>$date, 'deleted_at'=>$thisMonth9->format('Y-m-d')));
+        $operations[4]  = $this->helper->makeCalendarOperation($cc1, $account, 'op6', 0,
+            array('date' => $date));
+
+        // Первое число прошлого месяца
+        $date = $dateObj->sub(new DateInterval('P1M'))->format('Y-m-d');
+        $operations[5]  = $this->helper->makeCalendarOperation($cc1, $account, 'op3', 0,
+            array('date'=>$date, 'accepted'=>Operation::STATUS_ACCEPTED));
+        $operations[6]  = $this->helper->makeCalendarOperation($cc1, $account, 'op5', 0,
+            array('date'=>$date, 'deleted_at'=>$thisMonth9->format('Y-m-d')));
+        $operations[7]  = $this->helper->makeCalendarOperation($cc1, $account, 'op7', 0,
+            array('date'=>$date));
+
+        // Первое число следующего месяца
+        $date = $dateObj->add(new DateInterval('P2M'))->format('Y-m-d');
+        $operations[8]  = $this->helper->makeCalendarOperation($cc1, $account, 'op8', 0,
+            array('date' => $date));
+
+        // Середина месяца, например, 9-е число
+        $operations[9]  = $this->helper->makeCalendarOperation($cc1, $account, 'op9', 0,
+            array('date'=>$thisMonth9->format('Y-m-d')));
+
+        // Последнее число месяца
+        $date = $dateObj->sub(new DateInterval('P1D'))->format('Y-m-d');
+        $operations[10] = $this->helper->makeCalendarOperation($cc1, $account, 'op10', 0,
+            array('date' => $date));
+
+        // Последнее число прошлого месяца
+        $date = $dateObj
+            ->add(new DateInterval('P1D')) // Первое число следующего месяца
+            ->sub(new DateInterval('P1M1D')) // Последнее число предыдущего месяца
+            ->format('Y-m-d');
+        $operations[11] = $this->helper->makeCalendarOperation($cc1, $account, 'op11', 0, array('date'=>$date));
+
+        // Визуально проверяем, что у фикстур правильные даты
+        //foreach($operations as $i=>$val) {
+        //    var_dump($i. ' '.$val->getDate().' '.$val->getDeletedAt(). ' '.$val->getAccepted());
+        //}
+    }
+
+    /**
+    * Проверяем выборку операций за текущий месяц
+    *
+    * @param User   $user
+    * @param array  $operations
+    */
+    private function doTestQueryForCurrentMonth(User $user, array $operations)
+    {
+        $date1 = DateTime::createFromFormat('Y-m-d', date('Y-m-', time()) . '01');
+        $date2 = DateTime::createFromFormat('Y-m-d', date('Y-m-', time()) . '01')
+                    ->add(new DateInterval('P1M'))
+                    ->sub(new DateInterval('P1D'))
+            ;
+
+        $result = Doctrine::getTable('Operation')
+            ->queryFindWithCalendarChainsForPeriod($user, $date1, $date2)
+            ->execute();
+        $this->assertEquals(4, $result->count(), "Calendar operations count (this month)");
+        $this->assertModels($operations[2],  $result->get(0));
+        $this->assertModels($operations[4],  $result->get(1));
+        $this->assertModels($operations[9],  $result->get(2));
+        $this->assertModels($operations[10], $result->get(3));
+    }
+
+    /**
+    * Проверяем выборку операций за предыдущий месяц
+    *
+    * @param User   $user
+    * @param array  $operations
+    */
+    private function doTestQueryForPreviousMonth(User $user, array $operations)
+    {
+        $date1 = DateTime::createFromFormat('Y-m-d', date('Y-m-', time()) . '01')
+                    ->sub(new DateInterval('P1M'));
+        $date2 = DateTime::createFromFormat('Y-m-d', date('Y-m-', time()) . '01')
+                    ->sub(new DateInterval('P1D'));
+
+        $result = Doctrine::getTable('Operation')
+            ->queryFindWithCalendarChainsForPeriod($user, $date1, $date2)
+            ->execute();
+        $this->assertEquals(3, $result->count(), "Calendar operations count (prev month)");
+        $this->assertModels($operations[5],  $result->get(0));
+        $this->assertModels($operations[7],  $result->get(1));
+        $this->assertModels($operations[11], $result->get(2));
+    }
+
+    /**
+     * Таблицы операций из календаря, выборка за период
+     */
+    public function testQueryFindWithCalendarChainsForPeriod()
+    {
+        $user = $this->helper->makeUser();
+        $operations = array();
+        $this->makeFixturesForPeriod($user, $operations);
+
+        // Операции за текущий месяц
+        $this->doTestQueryForCurrentMonth($user, $operations);
+
+        // Операции за прошлый месяц
+        $this->doTestQueryForPreviousMonth($user, $operations);
     }
 
 
