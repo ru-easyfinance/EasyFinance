@@ -6,7 +6,7 @@ prod:
   # Данные для подключения робокассы
   billing:
     robokassa:
-      url:                  https://merchant.roboxchange.com/Handler/MrchSumPreview.ashx
+      url:                  https://merchant.roboxchange.com/Index.aspx
       login:                easyfinance
       pass1:                Hud^y&6e35$resDf # Пароль 1
       pass2:                gdYdt63Gsldbe5!d # Пароль 2
