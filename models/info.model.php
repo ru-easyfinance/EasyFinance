@@ -189,7 +189,7 @@ class Info_Model
 
             foreach($sumsByAccounts as $sumByAccount)
             {
-                $money = new efMoney($sumByAccount[Tahometer::$MONEY_KEYWORD], $sumByAccount['currency_id']);
+                $money = new myMoney($sumByAccount[Tahometer::$MONEY_KEYWORD], $sumByAccount['currency_id']);
                 $accountResult = $this->getCurrencyExchanger()->convert($money, $baseCurrency)->getAmount();
 
                 $resultSum = $resultSum + $accountResult;
@@ -485,7 +485,7 @@ abstract class Tahometer
     }
 
     //количество зон
-    private static $zonesCount = 3;
+    protected static $zonesCount = 3;
 
     //границы зон
     private static $_zoneBorders;
