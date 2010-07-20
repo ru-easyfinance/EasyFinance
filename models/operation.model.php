@@ -602,17 +602,29 @@ class Operation_Model
                         o.created_at,
                         o.source_id AS source ";
         } else {
+
+            //compute sign basing on account relation to fix transfers
+
             $sql = "SELECT
                         sum(mm) as total_money
-                    FROM (SELECT sum(money*(CASE WHEN rate = 0 THEN 1 ELSE rate END)) as mm ";
+                    FROM (
+                    SELECT sum(
+                        (CASE
+                            WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id THEN -ABS(op.money)
+                            ELSE ABS(op.money) END)
+                        *(CASE WHEN rate = 0 THEN 1 ELSE rate END)) as mm ";
         }
         $sql .= "FROM accounts a, currency c, operation o
-                    WHERE o.account_id = a.account_id AND a.account_currency_id  = c.cur_id AND
+                    WHERE (o.account_id = a.account_id OR o.transfer_account_id = a.account_id) AND a.account_currency_id  = c.cur_id AND
                           $searchSql
                           o.user_id = " . $this->_user->getId();
 
         // Добавляем фильтр для обязательного скрытия удалённых
         $sql .= " AND o.deleted_at IS NULL ";
+
+        //condition on user to speed up
+        $sql .= " AND a.user_id = " . $this->_user->getId();
+
 
         // Если указан счёт (фильтруем по счёту)
         if ((int) $currentAccount > 0) {
