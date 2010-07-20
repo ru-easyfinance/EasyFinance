@@ -202,76 +202,69 @@ easyFinance.models.accounts = function(){
             return '';
     }
 
+
+    /**
+     * Добавить счет
+     */
     function addAccount(params, callback){
-        if (typeof params != "object")
-            return false;
-
-        // тип счёта, имя, валюта -
-        // обязательные параметры для всех счетов
-        if (!params.type || !params.name || !params.currency)
-            return false;
-
-        $.post(ADD_ACCOUNT_URL, {
-                currency_id: params.currency,
-                type_id:     params.type,
-                name:        params.name,
-                comment:     params.comment,
-                initPayment: params.initPayment
-            }, function(data){
-            var _id = (data.result && data.result.id) ? data.result.id : null;
-
-            _loadAccounts(function() {
-                var event = $.Event("accountAdded");
-                event.id = _id;
-                $(document).trigger(event);
-            });
-
-            if (callback)
-                callback(data);
-        }, 'json');
+        return _processAccount(ADD_ACCOUNT_URL, params, "accountAdded", callback);
     }
 
-    function editAccountById(id, params, callback){
-        if (typeof params != "object")
-            return false;
 
-        // тип счёта, имя, валюта -
+    /**
+     * Редактировать счет
+     */
+    function editAccountById(id, params, callback) {
+        if (!id) return false;
+        return _processAccount(EDIT_ACCOUNT_URL + id + ".json", params, "accountEdited", callback);
+    }
+
+
+    /**
+     * [private] Обработать добавление/редактирование счета
+     *
+     * @param string   url        - URL, куда постить запрос
+     * @param object   params     - Данные, которые надо отправить на сервер
+     * @param string   eventName  - Название события, которое надо кинуть
+     * @param function callback   - ? Кому это надо и кто использует.
+     *                              Найти и задокументировать или вырезать
+     */
+    function _processAccount(url, params, eventName, callback) {
+
+        if (typeof params != "object") {
+            return false;
+        }
+
+        // Тип счёта, имя, валюта -
         // обязательные параметры для всех счетов
-        params.id = id
-        if (!params.type || !params.name || !params.currency || !params.id)
+        if (!params.type || !params.name || !params.currency) {
             return false;
+        }
 
-        $.post(EDIT_ACCOUNT_URL + params.id + ".json", {
-                currency_id: params.currency,
-                type_id:     params.type,
-                name:        params.name,
-                comment:     params.comment,
-                initPayment: params.initPayment
-            }, function(data){
+        var postData = {
+            currency_id: params.currency,
+            type_id:     params.type,
+            name:        params.name,
+            description: params.comment,
+            initPayment: params.initPayment
+        };
+
+        var successCallback = function(data) {
             var _id = (data.result && data.result.id) ? data.result.id : null;
 
             _loadAccounts(function() {
-                var event = $.Event("accountEdited");
+                var event = $.Event(eventName);
                 event.id = _id;
                 $(document).trigger(event);
             });
 
-/*
-                if (data.result) {
-                    var balanceDiff = parseFloat(params.initPayment) - parseFloat(_accounts[id].initPayment);
-
-                    _accounts[id].name = params.name;
-                    _accounts[id].comment = params.comment;
-                    _accounts[id].currency = params.currency;
-                    _accounts[id].totalBalance = parseFloat(_accounts[id].totalBalance) + balanceDiff;
-                    _accounts[id].initPayment = params.initPayment;
-                }
-
-                @todo: calc defCur
-*/
-            if (callback)
+            if (callback) {
                 callback(data);
-        }, 'json');
+            }
+        };
+
+        $.post(url, postData, successCallback, 'json');
+        return true;
     }
 
     function deleteAccountById(id, callback) {
@@ -658,4 +651,3 @@ easyFinance.models.accounts = function(){
         getFutureOperationById: getFutureOperationById
     };
 }(); // execute anonymous function to immediatly return object
-
