@@ -224,7 +224,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
         $params[] = 'phone_list=' . $phoneNumber;
         // Текст сообщения должен быть в кодировке 1251
         # Svel: как 1251, а утф в смсках не пошлешь? (
-        $params[] = 'message=' . urlencode(iconv('utf8', 'cp1251', $this->_getShortMessage($operation)));
+        $params[] = 'message=' . urlencode(iconv('utf-8', 'windows-1251', $this->_getShortMessage($operation)));
         // Сервис вернет ответ в виде обычного текса, альтернатива - xml
         # Svel: имхо в xml'ках надо, и запросы в xml'ках
         $params[] = 'format=text';
