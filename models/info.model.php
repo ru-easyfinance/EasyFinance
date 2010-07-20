@@ -276,47 +276,52 @@ class Info_Model
         //иначе (доход или 'перевод на') - плюс
         $query = "
             SELECT
-                SUM(CASE
-                        WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id THEN -ABS(op.money)
-
-                        ELSE ABS(op.money)
-                    END) AS money,
+                SUM(CASE WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id
+                    THEN -ABS(op.money)
+                    ELSE ABS(op.money)
+                    END
+                ) AS money,
                 acc.account_type_id AS type_id, acc.account_currency_id AS currency_id
             FROM
                 operation op
             INNER JOIN
                 accounts acc
-            ON (";
+            ON acc.user_id = ".(int)$this->user()->getId()." AND ( ";
 
-        if($useSenders)
-            $query = $query . "op.account_id = acc.account_id OR ";
+        if($useSenders) {
+            $query .= "op.account_id = acc.account_id OR ";
+        }
 
-        $query = $query . "op.transfer_account_id = acc.account_id)" .
-            "WHERE op.user_id = ". $this->user()->getId() ." AND op.accepted = 1 AND op.deleted_at IS NULL  AND acc.deleted_at IS NULL ";
+        $query .= "op.transfer_account_id = acc.account_id )";
 
-        $query = $query . " AND op.type IN (" . $operationType . ")";
+        $query .= " WHERE op.user_id = " . $this->user()->getId()
+                . " AND op.accepted = 1"
+                . " AND op.deleted_at IS NULL"
+                . " AND acc.deleted_at IS NULL";
+
+        if (is_numeric($operationType)) {
+            $query .= " AND op.type = {$operationType}";
+        } else {
+            $query .= " AND op.type IN ({$operationType})";
+        }
 
         //условия на начальный остаток
-        if(!$needSelectStartBalances)
-        {
-            $query = $query . " AND op.comment NOT LIKE 'Начальный остаток'";
+        // Operation::TYPE_BALANCE, но вообще оно не должно быть нужно
+        if(!$needSelectStartBalances) {
+            $query = $query . " AND op.type != 3";
         }
 
         //определим интервал, за который взять операции, если он задан
-        if(isset($months))
-        {
-            if($months > 0) //отсчитываем заданное количество месяцев
-            {
+        if (isset($months)) {
+            if($months > 0) { //отсчитываем заданное количество месяцев
                 $subIntervalValue = $months;
                 $subIntervalType = "MONTH";
-            }
-            else //внутри текущего месяца - сбросим дни до первого
-            {
+            } else { //внутри текущего месяца - сбросим дни до первого
                 $subIntervalValue = "DAYOFMONTH(CURDATE()) - 1";
                 $subIntervalType = "DAY";
             }
 
-            $query = $query . " AND op.date >= DATE_SUB(CURDATE(), INTERVAL " . $subIntervalValue . " " . $subIntervalType . ")";
+            $query .= " AND op.date >= DATE_SUB(CURDATE(), INTERVAL " . $subIntervalValue . " " . $subIntervalType . ")";
         }
 
         //группируем по счетам
