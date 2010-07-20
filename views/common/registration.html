@@ -3,16 +3,16 @@
                 <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
             {/if}
             <h2>Регистрация</h2>
-            <form id="formRegister" onsubmit="return false;">
+            <form id="formRegister">
                 <table cellpadding="0" cellspacing="0">
                 <tr>
                     <td colspan="2" style="color:#5e5e5e;padding-top: 5px">
-                        <i>Все поля обязательны для заполнения.</i>
+                        <em>Все поля обязательны для заполнения.</em>
                     </td>
                 </tr>
                 <tr>
                     <td class="name">Имя:</td>
-                    <td><input id="name" type="text" name="name"/></td>
+                    <td><input id="name" type="text" name="name" /></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="color:#5e5e5e;padding-top: 5px">
@@ -21,7 +21,7 @@
                 </tr>
                 <tr>
                     <td class="name">Логин:</td>
-                    <td><input id="log" type="text" name="login"/></td>
+                    <td><input id="log" type="text" name="login" /></td>
                 </tr>
                 <tr>
                     <td class="name">Пароль:</td>
@@ -33,9 +33,8 @@
                 </tr>
                 <tr>
                     <td colspan="2" style="color:#5e5e5e;padding-top: 5px">
-                        <br/><i><span style="color: red">Внимание! </span>
-                        Очень важно указать правильный, работающий email - он используется для восстановления пароля и обратной связи с Вами. Поэтому мы просим Вас ввести email дважды и проверить его правильность
-                        </i>
+                        <br />
+                        <em><span style="color:red">Внимание!</span> Очень важно указать правильный, работающий email - он используется для восстановления пароля и обратной связи с Вами. Поэтому мы просим Вас ввести email дважды и проверить его правильность.</em>
                     </td>
                 </tr>
                 <tr>
@@ -48,9 +47,11 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><input id="butt" class="butt" type="button" value=""/></td>
+                    <td><input id="butt" class="butt" type="button" value="" /></td>
                 </tr>
                 </table>
             </form>
-            <div id="lblRegistrationStatus" class="hidden"><b>Ваша учётная запись создаётся - пожалуйста, подождите.</b></div>
+            <div id="lblRegistrationStatus" class="hidden">
+                <strong>Ваша учётная запись создаётся - пожалуйста, подождите.</strong>
+            </div>
         </div>

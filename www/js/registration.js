@@ -4,11 +4,11 @@ $(document).ready(function() {
 
         if (data) {
             if (data.error) {
-                if (data.error.text)
+                if (data.error.text) {
                     $.jGrowl(data.error.text, {theme: 'red', life: 2500});
-
-                if (data.error.redirect)
+                } else if (data.error.redirect) {
                     setTimeout(function(){window.location = data.error.redirect;},3000);
+                }
             } else if (data.result) {
                 if (document.location.pathname.indexOf("integration") != -1) {
                     // #1215 регистрация на странице интеграции
@@ -113,6 +113,19 @@ $(document).ready(function() {
             $("#mail_confirm").blur(function() {
                 $("#mail_confirm").valid();
             });
+
+            // Svel: t1629 - сабмит формы с Enter
+            $("#formRegister").keypress(function(e){
+                //if generated character code is equal to ascii 13 (if enter key)
+                if(e.keyCode == 13){
+                    //submit the form
+                    $('#butt').click();
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+
             /**
              * пересылка данных из формы на сервер
              */
@@ -143,9 +156,10 @@ $(document).ready(function() {
                         },
                         registrationCallback,
                         'json');
-                    }
+                }
             });
 
             break;
     }
 });
+
