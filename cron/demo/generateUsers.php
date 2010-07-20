@@ -143,7 +143,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Очищаем таблицы
 if(DEBUG)
     echo "\nCleanup tables ...\n";
-foreach(array_keys($tablesTemplate) as $table) {
+foreach(array_reverse(array_keys($tablesTemplate)) as $table) {
     $query = 'truncate table ' . $table;
     $db->exec($query);
 }
@@ -262,7 +262,7 @@ function quoteSql($value)
 {
     if(is_numeric($value)) {
         return $value;
-    } elseif($value !== '') {
+    } elseif(null !== $value && $value !== '') {
         return '\'' . $value . '\'';
     } else {
         return 'null';
@@ -275,4 +275,3 @@ function quoteKey($key)
     return '`' . $key . '`';
 
 }
-
