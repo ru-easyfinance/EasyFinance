@@ -40,6 +40,13 @@ class profileActions extends sfActions {
         $user->save();
 
         $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
+
+        $ret = array(
+            'result' => array(
+                'text' => 'Настройки напоминаний сохранены'
+             ),
+             'reminders' => $reminders_array
+        );
         return $this->renderText(json_encode($ret));
     }
 
