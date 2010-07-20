@@ -133,34 +133,35 @@ class myParseEmailImport
             $partHeaders = $message->getHeaders();
         }
 
-        switch ($partHeaders['content-transfer-encoding']) {
-            // FIXME хз нужно ли нам оно, на локалке не стоит imap_*
-            //       м.б. есть альтернативные варианты
-            /*
-            case '7bit':
-                break;
-            case '8bit':
-                $body = quoted_printable_decode(imap_8bit($body));
-                break;
-            case 'binary':
-                $body = imap_base64(imap_binary($body));
-                break;
-            case 'base64':
-                $body = imap_base64($body);
-                break;
-            */
-            case 'quoted-printable':
-                $body = quoted_printable_decode($body);
-                break;
-            case 'base64':
-                $body = base64_decode($body);
-                break;
+        if (isset($partHeaders['content-transfer-encoding'])) {
+            switch ($partHeaders['content-transfer-encoding']) {
+                // FIXME хз нужно ли нам оно, на локалке не стоит imap_*
+                //       м.б. есть альтернативные варианты
+                /*
+                case '7bit':
+                    break;
+                case '8bit':
+                    $body = quoted_printable_decode(imap_8bit($body));
+                    break;
+                case 'binary':
+                    $body = imap_base64(imap_binary($body));
+                    break;
+                case 'base64':
+                    $body = imap_base64($body);
+                    break;
+                */
+                case 'quoted-printable':
+                    $body = quoted_printable_decode($body);
+                    break;
+                case 'base64':
+                    $body = base64_decode($body);
+                    break;
+            }
         }
 
-        // (?) mb_detect_encoding отказался определять кодировки
         if (isset($partHeaders['content-type']) &&
-            $encoding = preg_filter("/^(.+?);\scharset=(.+)$/", "$2", $partHeaders['content-type'])) {
-            $body = iconv($encoding, "UTF-8//IGNORE", $body);
+            preg_match("/^(?:.+?);\scharset=(.+)$/", $partHeaders['content-type'], $matches)) {
+            $body = iconv($matches['1'], "UTF-8//IGNORE", $body);
         }
 
         $data = array(
