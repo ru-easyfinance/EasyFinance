@@ -1111,12 +1111,11 @@ class Operation_Model
         if ($notifications['mailEnabled']) {
             $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
             $type = 1;
-        }
-
-        // SMS уведомления
-        if ($notifications['smsEnabled']) {
+        } elseif ($notifications['smsEnabled']) { // SMS уведомления
             $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
             $type = 0;
+        } else {
+            return false;
         }
 
         $this->db->query($sql, (int) $operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT);
