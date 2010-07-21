@@ -783,8 +783,7 @@ class Operation_Model
                 }
 
                 if ($operation['type'] == 2) {
-                    $operation['cat_name'] = "'" . $operation['account_name'] . "' » '"
-                            . $accounts[$operation['transfer']]['account_name'] . "'";
+                    $operation['cat_name'] = sprintf("'%s' => '%s'", $operation['account_name'], $accounts[$operation['transfer']]['account_name']);
                 }
 
                 $operations[$key] = $operation;
