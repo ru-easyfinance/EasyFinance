@@ -16,9 +16,9 @@ all:
       Billing:
         name:  Биллинг
         items:
-          services:      { url: @service,             name: Услуги }
-          transactions:  { url: @billing_transaction, name: Транзакции }
-          subscriptions: { url: @billing_transaction, name: Подписки }
+          services:      { url: @service,              name: Услуги }
+          transactions:  { url: @billing_transaction,  name: Транзакции }
+          subscriptions: { url: @service_subscription, name: Подписки }
       EmailParsers:
         name:  Парсеры Email
         items:
