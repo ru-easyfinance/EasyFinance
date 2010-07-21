@@ -13,6 +13,8 @@
         const TYPE_TRANSFER = 2;
         const TYPE_TARGET = 4;
 
+        const STATUS_ACCEPTED = 1;
+
         private static $types = array(
             self::TYPE_WASTE     => 'waste',
             self::TYPE_PROFIT     => 'profit',
