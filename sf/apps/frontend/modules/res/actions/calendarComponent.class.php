@@ -20,13 +20,13 @@ class calendarComponent extends sfComponent
         if(empty($this->dateEnd)) {
             $this->dateEnd = date('Y-m-d', time());
         }
-        $data = Doctrine::getTable('Operation')->queryFindWithCalendarChainsForPeriod(
+        $calendarOperations = Doctrine::getTable('Operation')->queryFindWithCalendarChainsForPeriod(
               $user
             , DateTime::createFromFormat('Y-m-d', $this->dateStart)
             , DateTime::createFromFormat('Y-m-d', $this->dateEnd)
             )->fetchArray();
 
-        $this->setVar('data', $data, $noEscape = true);
+        $this->setVar('calendarOperations', $calendarOperations, $noEscape = true);
     }
 
 }

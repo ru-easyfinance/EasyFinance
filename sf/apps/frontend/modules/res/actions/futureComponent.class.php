@@ -12,9 +12,9 @@ class futureComponent extends sfComponent
     public function execute($request)
     {
         $user = $this->getUser()->getUserRecord();
-        $data = Doctrine::getTable('Operation')->queryFindWithFutureCalendarChains($user)->fetchArray();
+        $futureOperations = Doctrine::getTable('Operation')->queryFindWithFutureCalendarChains($user)->fetchArray();
 
-        $this->setVar('data', $data, $noEscape = true);
+        $this->setVar('futureOperations', $futureOperations, $noEscape = true);
     }
 
 }

@@ -19,3 +19,7 @@ all:
       login:                easyfinance_test
       pass1:                test123456789 # Пароль 1
       pass2:                test987654321 # Пароль 2
+  # Операции, созданные в какой период, считаются "будущими" операциями в календаре
+  calendarFuture:
+      daysStart:            1 # От 1 дня
+      daysEnd:              8 # До 8 дней

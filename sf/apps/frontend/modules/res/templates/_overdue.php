@@ -2,8 +2,8 @@
 /**
  * Просроченные операции из календаря (из запланированных событий)
  *
- * @param array $data Инф. об операциях и связанных с ними событиями календаря
+ * @param array $overdueOperations Инф. об операциях и связанных с ними событиями календаря
  */
 ?>
 
-res.calendar.overdue = <?php echo json_encode($data) ?>;
+res.calendar.overdue = <?php echo json_encode($overdueOperations) ?>;

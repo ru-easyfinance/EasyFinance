@@ -130,7 +130,13 @@ class OperationTable extends Doctrine_Table
     public function queryFindWithFutureCalendarChains(User $user, $alias = 'o')
     {
         $q = $this->queryFindWithCalendarChainsCommon($user, $alias);
-        $q->andWhere("{$alias}.date between ? and ?", array($this->addDays(1), $this->addDays(8)))
+
+        $period = array(
+            $this->addDays(sfConfig::get('app_calendarFuture_daysStart', 1)),
+            $this->addDays(sfConfig::get('app_calendarFuture_daysEnd', 8)),
+        );
+
+        $q->andWhere("{$alias}.date between ? and ?", $period)
           ->andWhere("{$alias}.accepted = " . Operation::STATUS_DRAFT);
 
         return $q;
