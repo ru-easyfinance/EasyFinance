@@ -521,7 +521,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
                     Helper_Date::getMysqlFromString($this->request->get['dateFrom']):
                     // Если дата не установлена - показываем за последнюю неделю
                     Helper_Date::getMysql( time() - (7*24*60*60) );
-        
+
         // Костылёк для PDA
         if( isset($this->request->get['period'])) {
             switch ( $this->request->get['period'] )
@@ -609,6 +609,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
             }
 
             //@TODO #1529 - После фикса на клиенте, можно будет убрать этот блок
+            // + Нужен для PDA
             if ($operation['type'] == Operation::TYPE_PROFIT) {
                 $array[$key]['drain'] = 0;
             } else {
@@ -685,10 +686,15 @@ class Operation_Controller extends _Core_Controller_UserCommon
 
     public function last( array $args = array() )
     {
-        $operations = $this->model->getLastOperations( 10 );
+        $operations = $this->model->getLastOperations(10);
+        foreach ($operations as &$item) {
+
+            //@TODO #1529 - После фикса на клиенте, можно будет убрать этот блок
+            // + Нужен для PDA
+            $item['drain'] = (int) ($item['type'] != Operation::TYPE_PROFIT);
+        }
 
         $this->tpl->assign('operations', $operations);
-
         $this->tpl->assign('name_page', 'operations/last');
     }
 }
