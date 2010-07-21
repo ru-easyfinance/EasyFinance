@@ -34,12 +34,14 @@ class Integration_Controller extends _Core_Controller
      */
     function index()
     {
-        $this->addToRes('profile', array(
-            'integration' => array(
-                'email'   => $this->_user->getUserProps('user_service_mail'),
-                'account' => Account_Model::findBoundWithAmt($this->_user->getId()),
-            )
-        ));
+        if ($this->_user->getId()) {
+            $this->addToRes('profile', array(
+                'integration' => array(
+                    'email'   => $this->_user->getUserProps('user_service_mail'),
+                    'account' => Account_Model::findBoundWithAmt($this->_user->getId()),
+                )
+            ));
+        }
     }
 
     /**
