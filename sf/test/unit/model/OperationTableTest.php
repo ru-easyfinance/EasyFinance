@@ -10,7 +10,7 @@ class model_OperationTableTest extends myUnitTestCase
     /**
      * Таблица просроченных операций из календаря
      */
-    public function testQueryFindWithOverdueCalendarChains()
+    public function testQueryFindWithCalendarChains()
     {
         $user = $this->helper->makeUser();
         $account = $this->helper->makeAccount($user);

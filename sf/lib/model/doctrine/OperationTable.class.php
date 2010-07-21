@@ -67,23 +67,6 @@ class OperationTable extends Doctrine_Table
     {
         // Missed: tags, time, форматирование дат
         $q = $this->createQuery($alias)
-            ->select("{$alias}.id
-                    , {$alias}.chain_id
-                    , {$alias}.type
-                    , {$alias}.amount
-                    , {$alias}.comment
-                    , {$alias}.category_id
-                    , {$alias}.account_id
-                    , {$alias}.date
-                    , {$alias}.accepted
-                    , {$alias}.transfer_account_id
-                    , {$alias}.source_id
-                    ")
-            ->addSelect("c.date_start")
-            ->addSelect("c.date_end")
-            ->addSelect("c.every_day")
-            ->addSelect("c.repeat")
-            ->addSelect("c.week_days")
             ->leftJoin("{$alias}.CalendarChain c")
             ->andWhere("{$alias}.user_id = ?", (int) $user->getId())
             ->andWhere("{$alias}.accepted=".Operation::STATUS_DRAFT)
