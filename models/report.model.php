@@ -102,11 +102,11 @@ class Report_Model
                     IFNULL(c.cat_name, '') AS cat,
                     c.cat_id
                 FROM operation o
-                LEFT JOIN accounts a
+                INNER JOIN accounts a
                     ON a.account_id=o.account_id
-                LEFT JOIN category c
+                INNER JOIN category c
                     ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur
+                INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
                     o.user_id = ?
