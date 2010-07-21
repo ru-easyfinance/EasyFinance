@@ -372,11 +372,25 @@ class Info_Model
         if(!isset($this->_experienceDaysValue))
         {
             //стаж определяется датой первой операции
-            $daysQuery = "SELECT DATEDIFF(CURDATE(), IFNULL(mindate, CURDATE())) FROM (SELECT MIN(op.date) AS mindate FROM operation op WHERE op.comment NOT LIKE 'Начальный остаток' AND op.deleted_at IS NULL AND op.user_id = " . $this->user()->getId() . ") AS tbl";
+            $daysQuery = "
+                SELECT DATEDIFF(CURDATE(), IFNULL(mindate, CURDATE()))
+                FROM (
+                    SELECT MIN(op.date) AS mindate
+                    FROM operation op
+                    WHERE op.comment NOT LIKE 'Начальный остаток'
+                        AND op.accepted = 1
+                        AND op.deleted_at IS NULL
+                        AND op.user_id = " . $this->user()->getId() . "
+                ) AS tbl";
 
             //добавим единицу, чтобы учесть сегодняшний день
             //например, если вчера была первая операция, то стаж = 2 дням
-            $this->_experienceDaysValue = $this->db()->selectCell($daysQuery) + 1;
+
+            $days = $this->db()->selectCell($daysQuery) + 1;
+            if ($days < 1) {
+                $days = 1;
+            }
+            $this->_experienceDaysValue = $days;
         }
 
         return $this->_experienceDaysValue;
