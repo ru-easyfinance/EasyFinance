@@ -610,8 +610,8 @@ class Operation_Model
                     FROM (
                     SELECT sum(
                         (CASE
-                            WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id THEN -ABS(op.money)
-                            ELSE ABS(op.money) END)
+                            WHEN o.type = 0 OR o.type = 2 AND o.account_id = a.account_id THEN -ABS(o.money)
+                            ELSE ABS(o.money) END)
                         *(CASE WHEN rate = 0 THEN 1 ELSE rate END)) as mm ";
         }
         $sql .= "FROM accounts a, currency c, operation o
