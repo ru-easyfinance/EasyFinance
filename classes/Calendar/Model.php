@@ -454,16 +454,18 @@ class Calendar_Model extends _Core_Abstract_Model
      */
     public static function acceptEvents(oldUser $user, $ids)
     {
-        $operations = array();
+        $operationList = array();
         foreach ($ids as $value) {
-            $operations[] = array(
+            $operationList[] = array(
                 'accepted' => '1',
                 'id'       => $value,
             );
         }
-        $operation = new Operation_Model($user);
 
-        return (bool) $operation->editMultiple($operation);
+        if ($operationList) {
+            $operation = new Operation_Model($user);
+            return (bool) $operation->editMultiple($operationList);
+        }
     }
 
 

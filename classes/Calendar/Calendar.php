@@ -372,7 +372,7 @@ class Calendar
             $operation['accepted']  = 1;
             $operation['category']  = $operation['cat_id'];
             $operation['account']   = $operation['account_id'];
-            $operation['toAccount'] = $operation['transfer_account_id'];
+            $operation['toAccount'] = $operation['transfer'];
             $operation['amount']    = $operation['money'];
 
             $event = new Calendar_Event (
