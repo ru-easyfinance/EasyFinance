@@ -161,7 +161,10 @@ class myParseEmailImport
 
         if (isset($partHeaders['content-type']) &&
             preg_match("/^(?:.+?);\scharset=(.+)$/", $partHeaders['content-type'], $matches)) {
-            $body = iconv($matches['1'], "UTF-8//IGNORE", $body);
+                $charset = trim($matches['1']);
+                if (!preg_match("/^(utf-8|utf8)$/i", $charset)) {
+                    $body = iconv($charset, "UTF-8//IGNORE", $body);
+                }
         }
 
         $data = array(
