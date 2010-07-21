@@ -154,19 +154,17 @@ class Integration_Controller extends _Core_Controller
      */
     private function _makePartXmlEmail(array $data)
     {
-        $writer = new XMLWriter();
-        $writer->openMemory();
-        $writer->startDocument('1.0', 'utf-8');
-        $writer->startElement('registration_form');
+        $out = '<?xml version="1.0" encoding="UTF-8"?>';
+        $out .= '<registration_form>';
         foreach ($data as $parentKey => $parentValue) {
-            $writer->startElement($parentKey);
+            $out .= "<{$parentKey}>";
             foreach ($parentValue as $childKey => $childValue) {
-                $writer->writeElement($childKey, $childValue);
+                $out .= sprintf("<%s>%s</%s>", $childKey, $this->_xmlEscape($childValue), $childKey);
             }
-            $writer->endElement();
+            $out .= "</{$parentKey}>";
         }
-        $writer->endElement();
-        return $writer->flush();
+        $out .= '</registration_form>';
+        return $out;
     }
 
     /**
@@ -299,6 +297,20 @@ class Integration_Controller extends _Core_Controller
         $anketa['additionalDocument']['delivery_date']  = formatRussianDate2MysqlDate((string)$data['wz_addit_card14_date']);
 
         return $anketa;
+    }
+
+
+    /**
+     * Чистит строку и эскейпит для xml'я
+     * TODO вынести в глобальные ф-ии,
+     *      убить копипаст (см. sf/apps/api/modules/sync/lib/helper/SyncHelper.php)
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function _xmlEscape($string)
+    {
+        return str_replace('&#039;', '&apos;', htmlspecialchars($string, ENT_QUOTES, mb_internal_encoding()));
     }
 
 }
