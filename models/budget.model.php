@@ -49,7 +49,7 @@ class Budget_Model {
 
         // Считаем факт доходов и факт расходов
         $sqloper = "SELECT
-                        abs(sum(o.money)) as money,
+                        sum(o.money) as money,
                         o.cat_id,
                         a.account_currency_id AS currency_id
                     FROM operation o
@@ -142,7 +142,7 @@ class Budget_Model {
             // Фактическая сумма
             if ( (float) $var <= 0)
             {
-                $list['d'][$key]['money']  = (float)$var;
+                $list['d'][$key]['money']  = abs((float)$var);
                 $list['d'][$key]['amount'] = (float)@$list['d'][$key]['amount'];
                 $list['d'][$key]['mean']   = (float)@$list['d'][$key]['mean'];
             } else {

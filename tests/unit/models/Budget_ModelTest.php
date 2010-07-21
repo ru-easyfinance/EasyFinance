@@ -169,14 +169,14 @@ class Budget_ModelTest extends UnitTestCase
                 'd' => array(
                     $this->cat1 => array(
                         'amount' => 250,
-                        'money'=> 0,
+                        'money'=> 3000,
                         'mean'   => 1000,
                     )
                 ),
                 'p' => array(
                     $this->cat1 => array(
                         'amount' => 500,
-                        'money'=> 3000,
+                        'money'=> 0,
                         'mean'   => 1000,
                     ),
                     $this->cat3 => array(
@@ -188,7 +188,7 @@ class Budget_ModelTest extends UnitTestCase
             )
         );
 
-        $this->assertEquals($expected, $actual, 'Expected equals array');
+        $this->assertEquals($expected, $actual, 'Expected equal arrays');
     }
 
 }
