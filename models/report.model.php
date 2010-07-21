@@ -102,11 +102,11 @@ class Report_Model
                     IFNULL(c.cat_name, '') AS cat,
                     c.cat_id
                 FROM operation o
-                LEFT JOIN accounts a
+                INNER JOIN accounts a
                     ON a.account_id=o.account_id
-                LEFT JOIN category c
+                INNER JOIN category c
                     ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur
+                INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
                     o.user_id = ?
@@ -160,11 +160,11 @@ class Report_Model
                     DATE_FORMAT(`date`,'%Y-%m-01') as `datef`,
                     o.`type`
                 FROM operation o
-                LEFT JOIN accounts a
+                INNER JOIN accounts a
                     ON a.account_id=o.account_id
-                LEFT JOIN category c
+                INNER JOIN category c
                     ON c.cat_id = o.cat_id
-                LEFT JOIN currency cur
+                INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
                     o.user_id = ?
@@ -235,11 +235,11 @@ class Report_Model
                     op.money,
                     cur.cur_id
                 FROM operation op
-                LEFT JOIN accounts a
+                INNER JOIN accounts a
                     ON a.account_id=op.account_id
-                LEFT JOIN category c
+                INNER JOIN category c
                     ON c.cat_id=op.cat_id
-                LEFT JOIN currency cur
+                INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
                     op.user_id= ?
@@ -288,11 +288,11 @@ class Report_Model
                     sum(abs(op.money)) as su,
                     1 as per
                 FROM operation op
-                LEFT JOIN accounts a
+                INNER JOIN accounts a
                     ON a.account_id=op.account_id
-                LEFT JOIN category c
+                INNER JOIN category c
                     ON c.cat_id=op.cat_id
-                LEFT JOIN currency cur
+                INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
                     op.`type`= ?
@@ -310,11 +310,11 @@ class Report_Model
                     sum(abs(op.money)) as su,
                     2 as per
                 FROM operation op
-                LEFT JOIN accounts a
+                INNER JOIN accounts a
                     ON a.account_id=op.account_id
-                LEFT JOIN category c
+                INNER JOIN category c
                     ON c.cat_id=op.cat_id
-                LEFT JOIN currency cur
+                INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
                     op.`type`= ?
