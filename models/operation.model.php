@@ -725,7 +725,7 @@ class Operation_Model
             $sql .= "SELECT
                 t.id,
                 t.user_id,
-                -t.money,
+                -(t.money * tc.rate / $actualCurrency) AS money,
                 DATE_FORMAT(t.date,'%d.%m.%Y'),
                 t.date AS dnat,
                 tt.category_id,
@@ -741,11 +741,13 @@ class Operation_Model
                 dt_create AS created_at,
                 '' ";
         } else {
-            $sql .= "SELECT sum(money) as mm ";
+            $sql .= "SELECT 0 as mm ";
         }
         $sql .= "
-            FROM target_bill t
-            LEFT JOIN target tt ON t.target_id=tt.id
+            FROM ((target_bill t
+            LEFT JOIN target tt ON t.target_id=tt.id)
+            LEFT JOIN accounts ta ON ta.account_id = tt.target_account_id)
+            LEFT JOIN currency tc ON tc.cur_id = ta.account_currency_id
             WHERE t.user_id = " . $this->_user->getId()
                 . " AND ".
                 $this->_getSearchQuery($searchField, true)

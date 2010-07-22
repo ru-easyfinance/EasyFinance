@@ -98,11 +98,28 @@ class Targets_Model {
             $start = (((int)$index - 1) * $limit);
         }
 
-        $list = $this->db->selectPage( $total, "SELECT t.id, t.category_id as category, t.title, t.amount,
-            DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start, DATE_FORMAT(t.date_end,'%d.%m.%Y') as end, t.percent_done,
-            t.forecast_done, t.visible, t.photo,t.url, t.comment, t.target_account_id AS account, t.amount_done, t.close, t.done as done
-            ,(SELECT b.money FROM target_bill b WHERE b.target_id = t.id AND b.accepted=1 ORDER BY b.dt_create ASC LIMIT 1) AS money
-            FROM target t WHERE t.user_id = ? ORDER BY t.date_end ASC ;",
+        $list = $this->db->selectPage( $total, "SELECT
+                t.id,
+                t.category_id as category,
+                t.title,
+                t.amount,
+                DATE_FORMAT(t.date_begin,'%d.%m.%Y') as start,
+                DATE_FORMAT(t.date_end,'%d.%m.%Y') as end,
+                t.percent_done,
+                t.forecast_done,
+                t.visible,
+                t.photo,t.url,
+                t.comment,
+                t.target_account_id AS account,
+                t.amount_done,
+                t.close,
+                t.done as done
+                ,(
+                    SELECT b.money
+                    FROM target_bill b
+                    WHERE b.target_id = t.id AND b.accepted=1 ORDER BY b.dt_create ASC LIMIT 1) AS money
+            FROM target t
+            WHERE t.user_id = ? ORDER BY t.date_end ASC ;",
             Core::getInstance()->user->getId() );
         if (!is_array($list)) $list = array();//*/
 
@@ -524,9 +541,11 @@ class Targets_Model {
             $mod = New Operation_model;
             $mod->addTransfer($money, 0, 0, $date, $accountId, $targetAccountId, 'Перевод на счёт финцели');
 
+            $convert = $this->_convertAmount($accountId, $targetAccountId, $money, 0);
+
             //а теперь добавим перевод на фин цель со счёта фин цели!
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
-                VALUES(?,?,?,?,NOW(),?,?);",$targetAccountId, $targetId, Core::getInstance()->user->getId(), $money, $comment, $date);
+                VALUES(?,?,?,?,NOW(),?,?);",$targetAccountId, $targetId, Core::getInstance()->user->getId(), $convert, $comment, $date);
             if (!empty($close)) {
                 $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $targetId);
             }
@@ -610,5 +629,43 @@ class Targets_Model {
         FROM `target_bill` tb
         LEFT JOIN target t on tb.target_id = t.id
         WHERE tb.id = ? AND tb.`user_id` = ?", $target_id, Core::getInstance()->user->getId());
+    }
+
+    /**
+     * Конвертирует сумму операции
+     *
+     * @param   int   $fromAccount
+     * @param   int   $toAccount
+     * @param   float $amount
+     * @param   float $convert
+     * @return  float
+     */
+    function _convertAmount($fromAccount, $toAccount, $amount, $convert)
+    {
+        $accounts    = $this->user->getUserAccounts();
+
+        $curFromId   = $accounts[$fromAccount]['account_currency_id'];
+        $curTargetId = $accounts[$toAccount]['account_currency_id'];
+
+        // Если перевод мультивалютный
+        if ($curFromId != $curTargetId) {
+
+            // Если не указана сконвертированная сумма (в ПДА такое может быть)
+            if ($convert == 0) {
+
+                $currensys = $this->user->getUserCurrency();
+
+                // приводим сумму к пром. валюте
+                $convert = $amount / $currensys[$curTargetId]['value'];
+                // .. и к валюте целевого счёта
+                $convert = $convert * $currensys[$curFromId]['value'];
+            }
+        }
+
+        if ($convert == 0) {
+            $convert = $amount;
+        }
+
+        return abs($convert);
     }
 }
