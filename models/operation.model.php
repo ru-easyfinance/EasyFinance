@@ -718,7 +718,7 @@ class Operation_Model
                 dt_create AS created_at,
                 '' ";
         } else {
-            $sql .= "SELECT sum(money * tc.rate / $actualCurrency) as mm ";
+            $sql .= "SELECT 0 as mm ";
         }
         $sql .= "
             FROM ((target_bill t
