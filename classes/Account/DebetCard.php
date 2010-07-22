@@ -59,45 +59,6 @@ class Account_DebetCard extends Account
         return ($valid);
     }
 
-    /**
-     * Создаёт новый счёт типа "Дебетовая карта"
-     * @param oldUser $user
-     * @param array mixed $params
-     * @return bool
-     */
-    function create( $user, $params )
-    {
-        $valid = $this->check($params);
-        if (!$valid) {
-
-        } else {
-            $acc = $this->model->create($valid);
-            $params['id'] = $acc;
-            $this->model->new_operation($params);
-            unset($this->model);
-        }
-        return $acc;
-    }
-
-    /**
-     * Редактирует существующий счёт
-     * @param oldUser $user
-     * @param array $params
-     * @return bool
-     */
-    function update( $user, $params)
-    {
-        $valid = $this->check($params);
-        if (!$valid) {
-
-        } else {
-            $this->model->update($valid);
-            $params['id'] = $valid['id'];
-            $this->model->edit_operation($params);
-            unset($this->model);
-        }
-        return $this;
-    }
 
     /**
      * Связывание указанного счёта с банковским

@@ -242,19 +242,7 @@ abstract class Account
 
         return new $typearray[$params['type']];
     }
-    /**
-     * Абстрактный метод создания счёта, переопределяется в дочерних классах
-     * @param oldUser $user
-     * @param array $param
-     */
-    abstract function create( $user, $param );
 
-    /**
-     * Абстрактный метод редактирования счёта, переопределяется в дочерних классах
-     * @param oldUser $user
-     * @param array $param
-     */
-    abstract function update ( $user, $param);
 
     /**
      * Удалить счёт
