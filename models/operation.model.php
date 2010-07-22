@@ -537,6 +537,29 @@ class Operation_Model
         return (bool) $this->db->query($sql, $this->_user->getId(), $id);
     }
 
+
+    /**
+     * Удалить операцию по указанному счету
+     */
+    function deleteOperationsByAccountId($accountId)
+    {
+        $opIds = $this->db->selectCol("
+            SELECT id FROM operation
+            WHERE
+                user_id = ?
+                AND (account_id = ? OR transfer_account_id = ?)
+                AND type <> " . Operation::TYPE_BALANCE . "
+            ",
+            // Балансовые операции не удаляем, поскольку это не совсем операции
+            $this->_user->getId(), $accountId, $accountId);
+
+        if ($opIds) {
+            $this->db->query("UPDATE operation o SET deleted_at=NOW() WHERE id IN (?a)", $opIds);
+            $this->_deleteNotifications($opIds);
+        }
+    }
+
+
     /**
      * Удаляет операцию перевода на финцель
      * @param int $id
@@ -1155,10 +1178,11 @@ class Operation_Model
      *
      * @param int $operationId id операции
      */
-    private function _deleteNotifications($operationId)
+    private function _deleteNotifications($operationIds)
     {
-        $sql = "DELETE FROM operation_notifications WHERE operation_id = ?";
-        $this->db->query($sql, (int) $operationId);
+        $operationIds = (array) $operationIds;
+        $sql = "DELETE FROM operation_notifications WHERE operation_id IN (?a)";
+        $this->db->query($sql, $operationIds);
     }
 
 

@@ -106,6 +106,12 @@ class classes_Account_ModelTest  extends UnitTestCase
             "Expected Account marked as deleted");
         $this->assertEquals($account['deleted_at'], $account['updated_at'],
             "Expected Account `deleted_at` equals `updated_at`");
+
+
+        // Account_Model::delete - запускает свою транзацию
+        // Поэтому надо подчистить таблицу
+        // TODO: исправить
+        $this->getConnection()->query('TRUNCATE TABLE accounts');
     }
 
 }

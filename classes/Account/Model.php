@@ -57,6 +57,9 @@ class Account_Model
      */
     static public function delete($userId, $accountId)
     {
+        Core::getInstance()->db->query("START TRANSACTION");
+
+        // Удалить счет
         $sql = "
             UPDATE accounts
             SET deleted_at=NOW(),
@@ -65,9 +68,15 @@ class Account_Model
                     account_id = ?
                 AND user_id = ?
             LIMIT 1";
-
         Core::getInstance()->db->query($sql, $accountId, $userId);
+
+        // Удалить все операции
+        $opModel = new Operation_Model(Core::getInstance()->user);
+        $opModel->deleteOperationsByAccountId($accountId);
+
+        Core::getInstance()->db->query("COMMIT");
     }
+
 
     /**
      * Возвращает список счетов пользователя
