@@ -375,7 +375,7 @@ class Info_Model
                 FROM (
                     SELECT MIN(op.date) AS mindate
                     FROM operation op
-                    WHERE op.comment NOT LIKE 'Начальный остаток'
+                    WHERE op.type <> ". Operation::TYPE_BALANCE ."
                         AND op.accepted = 1
                         AND op.deleted_at IS NULL
                         AND op.user_id = " . $this->user()->getId() . "

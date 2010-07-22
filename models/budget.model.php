@@ -95,10 +95,9 @@ class Budget_Model {
                             WHERE
                                 (o.date >= ADDDATE(b.date_start, INTERVAL -3 MONTH)
                                     AND o.date <= LAST_DAY(b.date_start))
-                                AND
-                                    b.category = o.cat_id
-                                AND
-                                    b.user_id=o.user_id
+                                AND b.category = o.cat_id
+                                AND b.user_id=o.user_id
+                                AND o.deleted_at IS NULL
                         ) AS avg_3m
                     FROM budget b LEFT JOIN category c
                     ON

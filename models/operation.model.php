@@ -666,7 +666,7 @@ class Operation_Model
 
         // Добавляем фильтр для обязательного скрытия удалённых
         $sql .= " AND o.deleted_at IS NULL ";
-        
+
         // Добавляем фильтр для обязательного скрытия операций для удалённых счетов
         $sql .= " AND a.deleted_at IS NULL ";
 
@@ -929,16 +929,6 @@ class Operation_Model
         return $operations;
     }
 
-    /**
-     * Функция возвращает первую операцию по счёту - начальный баланс
-     *
-     * @param int $accountId
-     * @return float
-     */
-    function getFirstOperation($accountId) {
-        $sql = "SELECT money FROM operation WHERE user_id=? AND account_id=? AND `type`=3";
-        return (float)$this->db->selectCell($sql, $this->_user->getId(), (int)$accountId);
-    }
 
     /**
      * @deprecated
@@ -1043,10 +1033,14 @@ class Operation_Model
      */
     public function getNumOfOperationOnAccount($accountId)
     {
-        $sql = "SELECT count(*) as op_count FROM operation
+        $sql = "
+            SELECT count(*) as op_count FROM operation
             WHERE account_id=?
-            AND updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW() ";
-        $count = $this->db->selectRow($sql, (int) $accountId);
+                AND type <> ?
+                AND deleted_at IS NULL
+                AND updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
+            ";
+        $count = $this->db->selectRow($sql, (int) $accountId, Operation::TYPE_BALANCE);
 
         return $count['op_count'];
     }

@@ -67,22 +67,20 @@ class Calendar_Model extends _Core_Abstract_Model
                     o.transfer_account_id AS transfer,
                     o.source_id AS source
                 FROM operation o
-                LEFT JOIN calendar_chains c
-                ON
-                    c.id=o.chain_id
+                    LEFT JOIN calendar_chains c ON (c.id=o.chain_id)
                 WHERE
                     o.user_id = ?
-                AND
-                    o.`date` BETWEEN ? AND ?
-                AND
-                    (o.accepted=0 OR o.chain_id > 0)
-                AND o.deleted_at IS NULL';
+                    AND o.`date` BETWEEN ? AND ?
+                    AND (o.accepted=0 OR o.chain_id > 0)
+                    AND o.deleted_at IS NULL
+        ';
 
         $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
 
         foreach ($rows as $row) {
             // Добавляем напомнинания
-            $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
+            $sql = "SELECT * FROM operation_notifications
+                    WHERE operation_id=?";
             $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
             $row = self::_addNotificationInfo($user, $row);
@@ -148,7 +146,8 @@ class Calendar_Model extends _Core_Abstract_Model
 
         foreach ($rows as $row) {
             // Добавляем напомнинания
-            $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
+            $sql = "SELECT * FROM operation_notifications
+                    WHERE operation_id=?";
             $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
             $row = self::_addNotificationInfo($user, $row);
@@ -229,7 +228,8 @@ class Calendar_Model extends _Core_Abstract_Model
     private function _addNotificationInfo(oldUser $user, array $row)
     {
         // Добавляем напомнинания
-        $sql = "SELECT * FROM operation_notifications WHERE operation_id=?";
+        $sql = "SELECT * FROM operation_notifications
+                WHERE operation_id=?";
         $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
         // Получаем смещение временной зоны пользователя относительно времени сервера
@@ -342,7 +342,8 @@ class Calendar_Model extends _Core_Abstract_Model
      */
     public static function loadAcceptedByChain(oldUser $user, $chain)
     {
-        $sql = 'SELECT `date` FROM operation c WHERE user_id=? AND chain_id=? AND accepted=1 AND deleted_at IS NULL';
+        $sql = 'SELECT `date` FROM operation c
+                WHERE user_id=? AND chain_id=? AND accepted=1 AND deleted_at IS NULL';
         return Core::getInstance()->db->selectCol($sql, $user->getId(), $chain);
     }
 
@@ -430,7 +431,8 @@ class Calendar_Model extends _Core_Abstract_Model
      */
     public static function deleteEvents(oldUser $user, $chain)
     {
-        $sql = "DELETE FROM operation WHERE user_id=? AND chain_id=? AND accepted=0";
+        $sql = "DELETE FROM operation
+                WHERE user_id=? AND chain_id=? AND accepted=0";
 
         if (Core::getInstance()->db->query($sql, $user->getId(), $chain)) {
             return true;

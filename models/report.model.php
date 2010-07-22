@@ -172,9 +172,10 @@ class Report_Model
                     AND o.accepted=1
                     AND o.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
+                    AND o.type IN (?a)
                 GROUP BY o.`type`, cur_id, `datef`";
 
-        $result = $this->_db->select($sql, Core::getInstance()->user->getId(), $start, $end);
+        $result = $this->_db->select($sql, Core::getInstance()->user->getId(), $start, $end, array(Operation::TYPE_WASTE, Operation::TYPE_PROFIT));
 
         $sort = array();
 

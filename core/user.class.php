@@ -1,4 +1,5 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php
+
 /**
  * Класс для управления пользователями
  * @author korogen
@@ -405,6 +406,7 @@ class oldUser
 	{
         $this->user_account = array();
 
+        // TODO: Неверная работа с операциями, но где используются эти данные?
         $sql = "SELECT a.* , t.*, (SELECT SUM(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS total_sum
             , (SELECT COUNT(o.money) FROM operation o WHERE o.user_id=a.user_id AND o.account_id=a.account_id) AS o_count
             FROM accounts a
