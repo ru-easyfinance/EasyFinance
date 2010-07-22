@@ -19,36 +19,6 @@ class Account_Model
         $this->user_id = Core::getInstance()->user->getId();
     }
 
-    /**
-     * Записывает информацию по счёту в БД.
-     * @param array $args
-     */
-    public function create( $args )
-    {
-        throw new Exception(__METHOD__.": Deprecated");
-    }
-
-
-    /**
-     * Функция создаёт первую операцию со счётом
-     * @param array $data
-     */
-    function new_operation($data)
-    {
-        throw new Exception(__METHOD__.": Deprecated");
-    }
-
-    function edit_operation($data)
-    {
-        $sql = "SELECT `id` FROM operation WHERE account_id=? AND user_id=? AND cat_id IS NULL LIMIT 1";
-        $oid = $this->db->selectCell($sql, $data['id'], $this->user_id);
-
-        $money = str_replace(' ', '', $data['initPayment']);
-
-        $model = new Operation_Model();
-        return $model->edit(Operation::TYPE_BALANCE, $oid, $money, '0000-00-00', null, 'Начальный остаток',
-                $data['id'], array(), Operation::STATUS_ACCEPTED);
-    }
 
     /**
      * Редактирует информация о счёты в ДБ

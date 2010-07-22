@@ -42,7 +42,7 @@ class Operation_ModelTest extends UnitTestCase
         // Счета
         $options = array(
             'user_id'      => $this->userId,
-            'account_name' => 'ABC'
+            'account_name' => 'RUR Account'
         );
         $account = CreateObjectHelper::makeAccount($options);
         $this->accountId = $account['account_id'];
@@ -51,6 +51,16 @@ class Operation_ModelTest extends UnitTestCase
         $options['account_name'] = 'ABC 2';
         $account = CreateObjectHelper::makeAccount($options);
         $this->accountId2 = $account['account_id'];
+
+        // Доллары
+        $options = array(
+            'user_id'      => $this->userId,
+            'account_name' => 'USD account',
+            'account_currency_id' => myMoney::USD
+        );
+
+        $account = CreateObjectHelper::makeAccount($options);
+        $this->accountId3 = $account['account_id'];
 
         // Категории
         $options = array(
@@ -288,5 +298,86 @@ class Operation_ModelTest extends UnitTestCase
         unset($actual['updated_at']);
 
         $this->assertEquals($expected, $actual, 'Expected equals operation');
+    }
+
+    /**
+     * Тест создания операции перевода
+     * Проверка корректности бивалютного перевода
+     */
+    public function testBicurrencyTransfer()
+    {
+        $this->_prepareOperation();
+        $operation  = new Operation_Model($this->user);
+
+        // Перевели 100 рублей с рублёвого на долларовый
+        $opId = $operation->addTransfer(
+                100,
+                0,
+                0,
+                '2010-01-01',
+                $this->accountId,
+                $this->accountId3,
+                'Комментарий',
+                array('тег 1')
+        );
+
+        $dateFrom = '2009-12-29';
+        $dateTo   = '2010-01-02';
+
+        $list = $operation->getOperationList($dateFrom, $dateTo);
+
+        $this->assertEquals(1, count($list), 'Expected only 1 transfer operation');
+
+        $list = $operation->getOperationList($dateFrom, $dateTo, null, $this->accountId, -1);
+
+        $this->assertEquals(1, count($list), 'Expected only 1 transfer operation');
+
+        // А теперь пусть переводов будет 2
+        // Перевели 500 $ с долларового кошелька на рублёвый
+        $opId = $operation->addTransfer(
+                500,
+                0,
+                0,
+                '2010-01-01',
+                $this->accountId3,
+                $this->accountId,
+                'Комментарий',
+                array('тег 1')
+        );
+
+        $list = $operation->getOperationList($dateFrom, $dateTo, null, $this->accountId, -1);
+
+        $this->assertEquals(2, count($list), 'Expected only 2 transfer operation');
+
+        $list = $operation->getOperationList($dateFrom, $dateTo, null, $this->accountId3, -1);
+
+        $this->assertEquals(2, count($list), 'Expected only 2 transfer operation');
+    }
+
+    /**
+     * Проверка корректности подсчёта баланса
+     */
+    public function testStat()
+    {
+        $this->_prepareOperation();
+        $operation  = new Operation_Model($this->user);
+
+        $dateFrom = '2009-12-29';
+        $dateTo   = '2010-01-02';
+
+        $opId = $operation->addTransfer(
+                100,
+                0,
+                0,
+                '2010-01-01',
+                $this->accountId,
+                $this->accountId3,
+                'Комментарий',
+                array('тег 1')
+        );
+
+        $list = $operation->getOperationList($dateFrom, $dateTo, null, null, -1);
+        $stat = $operation->getOperationList($dateFrom, $dateTo, null, null, -1, null, null, null, true);
+        $this->assertEquals(1, count($list), 'Expected only 2 transfer operation');
     }
 }

@@ -33,6 +33,24 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
 
 
     /**
+     * Создать массив свойств балансовой операции
+     */
+    public function _makeBlanceOpeationArray(User $user, Account $account, $balance = 0)
+    {
+        return array(
+            'user_id'     => $user->getId(),
+            'account_id'  => $account->getId(),
+            'category_id' => null,
+            'amount'      => $balance,
+            'date'        => '0000-00-00',
+            'type'        => Operation::TYPE_BALANCE,
+            'comment'     => 'Начальный остаток',
+            'accepted'    => 1,
+        );
+    }
+
+
+    /**
      * Получить массив доступных полей формы
      */
     protected function getFields()
@@ -124,16 +142,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с нулевым балансом
-        $expectedOperation = array(
-            'user_id'     => $user->getId(),
-            'account_id'  => $account->getId(),
-            'category_id' => null,
-            'amount'      => 0,
-            'date'        => '0000-00-00',
-            'type'        => Operation::TYPE_BALANCE,
-            'comment'     => 'Начальный остаток',
-            'accepted'    => 1,
-        );
+        $expectedOperation = $this->_makeBlanceOpeationArray($user, $account, $balance = 0);
         $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
     }
 
@@ -158,16 +167,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с нулевым балансом
-        $expectedOperation = array(
-            'user_id'     => $user->getId(),
-            'account_id'  => $account->getId(),
-            'category_id' => null,
-            'amount'      => $input['initPayment'],
-            'date'        => '0000-00-00',
-            'type'        => Operation::TYPE_BALANCE,
-            'comment'     => 'Начальный остаток',
-            'accepted'    => 1,
-        );
+        $expectedOperation = $this->_makeBlanceOpeationArray($user, $account, $balance = $input['initPayment']);
         $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
     }
 
@@ -192,15 +192,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с начальным балансом
-        $expectedOperation = array(
-            'user_id'     => $user->getId(),
-            'account_id'  => $account->getId(),
-            'category_id' => null,
-            'amount'      => 0,
-            'date'        => '0000-00-00',
-            'type'        => Operation::TYPE_BALANCE,
-            'accepted'    => 1,
-        );
+        $expectedOperation = $this->_makeBlanceOpeationArray($user, $account, $balance = 0);
         $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
     }
 

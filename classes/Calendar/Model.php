@@ -66,10 +66,8 @@ class Calendar_Model extends _Core_Abstract_Model
                     o.accepted,
                     o.transfer_account_id AS transfer,
                     o.source_id AS source
-                FROM
-                    operation o
-                LEFT JOIN
-                    calendar_chains c
+                FROM operation o
+                LEFT JOIN calendar_chains c
                 ON
                     c.id=o.chain_id
                 WHERE
@@ -133,10 +131,8 @@ class Calendar_Model extends _Core_Abstract_Model
                     o.accepted,
                     o.transfer_account_id AS transfer,
                     o.source_id AS source
-                FROM
-                    operation o
-                LEFT JOIN
-                    calendar_chains c
+                FROM operation o
+                LEFT JOIN calendar_chains c
                 ON
                     c.id=o.chain_id
                 WHERE
@@ -196,10 +192,8 @@ class Calendar_Model extends _Core_Abstract_Model
                     o.accepted,
                     o.transfer_account_id AS transfer,
                     o.source_id AS source
-                FROM
-                    operation o
-                LEFT JOIN
-                    calendar_chains c
+                FROM operation o
+                LEFT JOIN calendar_chains c
                 ON
                     c.id=o.chain_id
                 WHERE

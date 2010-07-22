@@ -569,8 +569,10 @@ class Operation_Model
      * @param bool      $accountInitial     Если true - включить в выборку баллансовую операцию. default = false
      * @return array mixed
      */
-    function getOperationList($dateFrom, $dateTo, $currentCategory, $currentAccount, $type, $sumFrom, $sumTo,
-        $searchField = '', $stat = false, $accountInitial = false)
+    function getOperationList($dateFrom, $dateTo, $currentCategory = null,
+        $currentAccount = null, $type = null, $sumFrom = null, $sumTo = null,
+        $searchField = '', $stat = false, $accountInitial = false
+    )
     {
         // Подготавливаем фильтр по родительским категориям
         $listCategories = $this->_user->getUserCategory();
@@ -583,10 +585,11 @@ class Operation_Model
         $actualCurrency = sfConfig::get('ex')->getRate($this->_user->getUserProps('user_currency_default'));
         if (!$stat) {
             // Выборка операций пользователя
+            // money выбирается из transfer_amount для переводов
             $sql = "SELECT
                         o.id,
                         o.user_id,
-                        o.money,
+                        (CASE WHEN o.account_id = a.account_id THEN o.money ELSE o.transfer_amount END) AS money,
                         DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
                         o.date AS dnat,
                         o.cat_id,
@@ -596,7 +599,10 @@ class Operation_Model
                         o.transfer_account_id AS transfer,
                         0 AS virt,
                         o.tags,
-                        (o.money*(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency) as moneydef,
+                        (
+                            (CASE WHEN o.account_id = a.account_id THEN o.money ELSE o.transfer_amount END)
+                            *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency
+                        ) as moneydef,
                         o.exchange_rate AS curs,
                         o.type,
                         o.created_at,
@@ -611,16 +617,35 @@ class Operation_Model
                     SELECT sum(
                         (CASE
                             WHEN o.type = 0 OR o.type = 2 AND o.account_id = a.account_id THEN -ABS(o.money)
-                            ELSE ABS(o.money) END)
+                            WHEN o.type = 2 AND a.account_id = o.transfer_account_id THEN ABS(o.transfer_amount)
+                            ELSE ABS(o.money)
+                         END
+                         )
                         *(CASE WHEN rate = 0 THEN 1 ELSE rate END)) as mm ";
         }
-        $sql .= "FROM accounts a, currency c, operation o
-                    WHERE (o.account_id = a.account_id OR o.transfer_account_id = a.account_id) AND a.account_currency_id  = c.cur_id AND
+
+        // Грязный хак, который надо убить, но см баг 1652
+        $accountJoinCondition = ' 1 ';
+
+        if ($stat) // Для получения баланса отбираем все операции для взаимоуничтожения переводов
+            $accountJoinCondition = '(o.account_id = a.account_id OR o.transfer_account_id = a.account_id)';
+        elseif (!$stat && (int) $currentAccount <= 0) // для списка операций по всем счетам перевод включаем один раз
+            $accountJoinCondition = '(o.account_id = a.account_id)';
+        elseif (!$stat && (int) $currentAccount > 0) // для списка операций по одному счёту ищем все переводы
+            $accountJoinCondition = '(o.account_id = a.account_id OR o.transfer_account_id = a.account_id)';
+        // Конец хака
+
+        $sql .= "
+                    FROM accounts a, currency c, operation o
+                    WHERE $accountJoinCondition AND a.account_currency_id  = c.cur_id AND
                           $searchSql
                           o.user_id = " . $this->_user->getId();
 
         // Добавляем фильтр для обязательного скрытия удалённых
         $sql .= " AND o.deleted_at IS NULL ";
+        
+        // Добавляем фильтр для обязательного скрытия операций для удалённых счетов
+        $sql .= " AND a.deleted_at IS NULL ";
 
         //condition on user to speed up
         $sql .= " AND a.user_id = " . $this->_user->getId();
@@ -628,8 +653,7 @@ class Operation_Model
 
         // Если указан счёт (фильтруем по счёту)
         if ((int) $currentAccount > 0) {
-            $sql .= " AND (o.account_id = '" . (int) $currentAccount .
-            "' OR o.transfer_account_id = '" . (int) $currentAccount . "')";
+            $sql .= " AND (a.account_id = '" . (int) $currentAccount . "')";
         }
 
         // Включить в выборку баллансовые операции
@@ -648,7 +672,7 @@ class Operation_Model
         }
 
         // Если указан тип (фильтр по типу)
-        if ($type >= 0) {
+        if (!is_null($type) && $type >= 0) {
             if ($type == Operation::TYPE_PROFIT) {//Доход
                 $sql .= " AND o.`type` = 1 ";
             } elseif ($type == Operation::TYPE_WASTE) {// Расход
@@ -802,8 +826,7 @@ class Operation_Model
             if ($total_money[0]['total_money'] === null) {
                 $retoper = 0;
             } else {
-                $retoper = $total_money[0]['total_money'] / sfConfig::get('ex')->
-                        getRate(Core::getInstance()->user->getUserProps('user_currency_default'));
+                $retoper = $total_money[0]['total_money'] / $actualCurrency;
             }
 
 
@@ -838,8 +861,7 @@ class Operation_Model
                     o.type,
                     created_at,
                     updated_at
-                FROM
-                    operation o
+                FROM operation o
                 WHERE
                     o.user_id = " . $this->_user->getId() . "
                 AND
@@ -867,10 +889,8 @@ class Operation_Model
                     4 as type,
                     dt_create AS created_at,
                     dt_update AS updated_at
-                FROM
-                    target_bill t
-                LEFT JOIN
-                    target tt
+                FROM target_bill t
+                LEFT JOIN target tt
                 ON
                     t.target_id=tt.id
                 WHERE
@@ -952,8 +972,7 @@ class Operation_Model
                 o.exchange_rate AS curs,
                 o.type,
                 created_at
-            FROM
-                operation o
+            FROM operation o
             WHERE
                 o.user_id = ?
             AND
@@ -977,10 +996,8 @@ class Operation_Model
                 NULL,
                 4 as type,
                 dt_create AS created_at
-            FROM
-                target_bill t
-            LEFT JOIN
-                target tt
+            FROM target_bill t
+            LEFT JOIN target tt
             ON
                 t.target_id=tt.id
             WHERE

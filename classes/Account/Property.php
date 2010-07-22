@@ -68,43 +68,4 @@ class Account_Property extends Account
         return ($valid);
     }
 
-    /**
-     * Создаёт новый счёт типа "Имущество"
-     * @param oldUser $user
-     * @param array mixed $params
-     * @return bool
-     */
-    function create( $user, $params )
-    {
-        $this->model = new Account_Model();
-        $valid = $this->check($params);
-        if (!$valid) {
-            throw new Account_Exception();
-        } else {
-            $this->model->create($valid);
-            unset($this->model);
-        }
-        return $this;
-    }
-
-    /**
-     * Редактирует существующий счёт
-     * @param oldUser $user
-     * @param array $params
-     * @return bool
-     */
-    function update( $user, $params)
-    {
-        $this->model = new Account_Model();
-        $valid = $this->check($params);
-        if (!$valid) {
-            throw new Account_Exception();
-        } else {
-            $this->model->update($valid);
-            unset($this->model);
-        }
-        return $this;
-    }
-
-
 }

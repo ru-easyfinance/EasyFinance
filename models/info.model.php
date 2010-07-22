@@ -1,4 +1,5 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php
+
 /**
  * Расчет тахометров
  */
@@ -282,10 +283,7 @@ class Info_Model
                     END
                 ) AS money,
                 acc.account_type_id AS type_id, acc.account_currency_id AS currency_id
-            FROM
-                operation op
-            INNER JOIN
-                accounts acc
+            FROM operation op INNER JOIN accounts acc
             ON acc.user_id = ".(int)$this->user()->getId()." AND ( ";
 
         if($useSenders) {

@@ -1,4 +1,5 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php
+
 /**
  * Класс модели для управления бюджетом
  * @category budget
@@ -99,9 +100,7 @@ class Budget_Model {
                                 AND
                                     b.user_id=o.user_id
                         ) AS avg_3m
-                    FROM budget b
-                    LEFT JOIN
-                        category c
+                    FROM budget b LEFT JOIN category c
                     ON
                         c.cat_id=b.category
                     WHERE

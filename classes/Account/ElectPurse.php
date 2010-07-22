@@ -36,48 +36,6 @@ class Account_ElectPurse extends Account
     }
 
     /**
-     * Создаёт новый счёт типа "Электронные деньги"
-     * @param oldUser $user
-     * @param array mixed $params
-     * @return bool
-     */
-    function create( $user, $params )
-    {
-        $this->model = new Account_Model();
-        $valid = $this->check($params);
-        if (!$valid) {
-
-        } else {
-            $acc = $this->model->create($valid);
-            $params['id'] = $acc;
-            $this->model->new_operation($params);
-            unset($this->model);
-        }
-        return $acc;
-    }
-
-    /**
-     * Редактирует существующий счёт
-     * @param oldUser $user
-     * @param array $params
-     * @return bool
-     */
-    function update( $user, $params)
-    {
-        $this->model = new Account_Model();
-        $valid = $this->check($params);
-        if (!$valid) {
-
-        } else {
-            $this->model->update($valid);
-            $params['id'] = $valid['id'];
-            $this->model->edit_operation($params);
-            unset($this->model);
-        }
-        return $this;
-    }
-
-    /**
      * Возвращает первую операцию
      * @return int
      */
