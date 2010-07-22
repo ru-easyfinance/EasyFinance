@@ -8,10 +8,11 @@
      */
     class Operation
     {
-        const TYPE_WASTE = 0;
-        const TYPE_PROFIT = 1;
+        const TYPE_WASTE    = 0;
+        const TYPE_PROFIT   = 1;
         const TYPE_TRANSFER = 2;
-        const TYPE_TARGET = 4;
+        const TYPE_BALANCE  = 3;
+        const TYPE_TARGET   = 4;
 
         const STATUS_ACCEPTED = 1;
 
