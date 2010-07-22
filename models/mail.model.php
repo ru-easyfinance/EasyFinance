@@ -44,8 +44,7 @@ class Mail_Model
     {
         $sql = "SELECT
                     *
-                FROM
-                    mail
+                FROM mail
                 WHERE
                     (`from`=? AND visible>='0') OR (`to`=? AND visible<='0'AND visible>'-2')";
         $mails = $this->db->select($sql,$this->user_id,$this->user_id);

@@ -861,8 +861,7 @@ class Operation_Model
                     o.type,
                     created_at,
                     updated_at
-                FROM
-                    operation o
+                FROM operation o
                 WHERE
                     o.user_id = " . $this->_user->getId() . "
                 AND
@@ -890,10 +889,8 @@ class Operation_Model
                     4 as type,
                     dt_create AS created_at,
                     dt_update AS updated_at
-                FROM
-                    target_bill t
-                LEFT JOIN
-                    target tt
+                FROM target_bill t
+                LEFT JOIN target tt
                 ON
                     t.target_id=tt.id
                 WHERE
@@ -975,8 +972,7 @@ class Operation_Model
                 o.exchange_rate AS curs,
                 o.type,
                 created_at
-            FROM
-                operation o
+            FROM operation o
             WHERE
                 o.user_id = ?
             AND
@@ -1000,10 +996,8 @@ class Operation_Model
                 NULL,
                 4 as type,
                 dt_create AS created_at
-            FROM
-                target_bill t
-            LEFT JOIN
-                target tt
+            FROM target_bill t
+            LEFT JOIN target tt
             ON
                 t.target_id=tt.id
             WHERE

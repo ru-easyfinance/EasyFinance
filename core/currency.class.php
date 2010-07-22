@@ -1,4 +1,4 @@
-<?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
+<?php
 /**
  * Класс для управления валютами, реализует SPL-интерфейс IteratorAggregate
  * @category currency
@@ -67,8 +67,7 @@ class oldCurrency implements IteratorAggregate,  ArrayAccess
                                             direction,
                                             currency_sum AS value,
                                             currency_date AS `date`
-                                        FROM
-                                            daily_currency
+                                        FROM daily_currency
                                         WHERE
                                             currency_from = 1 AND
                                             currency_date =(SELECT MAX(currency_date)
