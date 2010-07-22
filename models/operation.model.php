@@ -643,6 +643,9 @@ class Operation_Model
 
         // Добавляем фильтр для обязательного скрытия удалённых
         $sql .= " AND o.deleted_at IS NULL ";
+        
+        // Добавляем фильтр для обязательного скрытия операций для удалённых счетов
+        $sql .= " AND a.deleted_at IS NULL ";
 
         //condition on user to speed up
         $sql .= " AND a.user_id = " . $this->_user->getId();
