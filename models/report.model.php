@@ -112,6 +112,8 @@ class Report_Model
                     o.user_id = ?
                     AND o.accepted=1
                     AND o.deleted_at IS NULL
+                    AND a.deleted_at IS NULL
+                    AND c.deleted_at IS NULL
                     AND a.account_id IN({$account})
                     AND `date` BETWEEN ? AND ?
                     AND o.`type` = ?
@@ -171,6 +173,8 @@ class Report_Model
                     AND `date` BETWEEN ? AND ?
                     AND o.accepted=1
                     AND o.deleted_at IS NULL
+                    AND a.deleted_at IS NULL
+                    AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
                 GROUP BY o.`type`, cur_id, `datef`";
 
@@ -246,6 +250,8 @@ class Report_Model
                     AND op.accepted=1
                     AND op.deleted_at IS NULL
                     AND c.cat_name <> ''
+                    AND a.deleted_at IS NULL
+                    AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
                     AND op.`type` = ?
                 ORDER BY c.cat_name";
@@ -297,6 +303,9 @@ class Report_Model
                     op.`type`= ?
                     AND (op.`date` BETWEEN ? AND ?)
                     AND op.user_id= ? AND op.accepted=1
+                    AND op.deleted_at IS NULL
+                    AND a.deleted_at IS NULL
+                    AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
                 GROUP BY c.cat_name, a.account_id
 
@@ -321,6 +330,8 @@ class Report_Model
                     AND op.user_id= ?
                     AND op.accepted=1
                     AND op.deleted_at IS NULL
+                    AND a.deleted_at IS NULL
+                    AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
                 GROUP BY c.cat_name, a.account_id";
 
