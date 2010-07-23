@@ -280,6 +280,7 @@ class Operation_Model
         );
 
         $operationId = $this->_addOperation($values);
+        $this->_updateTags($operationId, $tags);
 
         // Обновляем данные о счетах пользователя
         $this->_user->initUserAccounts();
@@ -497,6 +498,7 @@ class Operation_Model
         }
 
         $this->_updateOperation($this->_user, $id, $values);
+        $this->_updateTags($id, $tags);
 
         // Обновляем данные о счетах пользователя
         $this->_user->initUserAccounts();
@@ -1215,8 +1217,6 @@ class Operation_Model
      */
     private function _updateTags($OperId, array $tags = array())
     {
-        $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?', $OperId, $this->_user->getId());
-
         $sql = "";
         foreach ($tags as $tag) {
             if (!empty($sql)) {
@@ -1224,7 +1224,7 @@ class Operation_Model
             }
             $sql .= "(" . $this->_user->getId() . "," . $OperId . ",'" . addslashes($tag) . "')";
         }
-        return (bool) $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
+        return (bool) $this->db->query("REPLACE INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
     }
 
 
