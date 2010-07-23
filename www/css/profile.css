@@ -154,3 +154,7 @@ ul.menuProfile li#ic4.act span, ul.menuProfile li#ic4 a {
 #smsPhone {
     width: 115px;
 }
+
+.smsPhoneTip {
+    color: #908F8F;
+}
