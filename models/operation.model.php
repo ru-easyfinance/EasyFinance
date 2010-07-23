@@ -627,7 +627,11 @@ class Operation_Model
                         0 AS virt,
                         o.tags,
                         (
-                            (CASE WHEN o.account_id = a.account_id THEN o.money ELSE o.transfer_amount END)
+                            (
+                            CASE 
+                            	WHEN o.account_id = a.account_id THEN o.money
+                            	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
+                            	ELSE o.transfer_amount END)
                             *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency
                         ) as moneydef,
                         o.exchange_rate AS curs,
