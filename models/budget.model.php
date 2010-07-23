@@ -53,7 +53,7 @@ class Budget_Model {
                         o.cat_id,
                         a.account_currency_id AS currency_id
                     FROM operation o
-                    LEFT JOIN accounts a
+                    INNER JOIN accounts a
                     ON
                         a.account_id=o.account_id
                     WHERE
@@ -64,6 +64,8 @@ class Budget_Model {
                         o.accepted=1
                     AND
                         o.deleted_at IS NULL
+                    AND
+                        a.deleted_at IS NULL
                     AND
                         o.date >= ? AND o.date <= ?
                     GROUP BY
