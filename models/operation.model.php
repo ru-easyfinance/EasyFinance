@@ -647,13 +647,14 @@ class Operation_Model
             $sql = "SELECT
                         sum(mm) as total_money
                     FROM (
+                    SELECT sum(
                         (CASE 
                         	WHEN o.account_id = a.account_id THEN o.money
                         	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
                         	ELSE o.transfer_amount END)
                         *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency) as mm ";        
+                    ;
         }
-        
  
         // Грязный хак, который надо убить, но см баг 1652
         $accountJoinCondition = ' 1 ';
