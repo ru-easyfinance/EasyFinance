@@ -616,7 +616,10 @@ class Operation_Model
             $sql = "SELECT
                         o.id,
                         o.user_id,
-                        (CASE WHEN o.account_id = a.account_id THEN o.money ELSE o.transfer_amount END) AS money,
+                        (CASE 
+                        	WHEN o.account_id = a.account_id THEN o.money
+                        	WHEN o.transfer_amount = 0 THEN ABS(o.money) 
+                        	ELSE o.transfer_amount END) AS money,
                         DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
                         o.date AS dnat,
                         o.cat_id,
@@ -627,13 +630,12 @@ class Operation_Model
                         0 AS virt,
                         o.tags,
                         (
-                            (
-                            CASE 
+                            (CASE 
                             	WHEN o.account_id = a.account_id THEN o.money
                             	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
                             	ELSE o.transfer_amount END)
                             *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency
-                        ) as moneydef,
+                        ) as moneydef,                        
                         o.exchange_rate AS curs,
                         o.type,
                         o.created_at,
@@ -645,16 +647,14 @@ class Operation_Model
             $sql = "SELECT
                         sum(mm) as total_money
                     FROM (
-                    SELECT sum(
-                        (CASE
-                            WHEN o.type = 0 OR o.type = 2 AND o.account_id = a.account_id THEN -ABS(o.money)
-                            WHEN o.type = 2 AND a.account_id = o.transfer_account_id THEN ABS(o.transfer_amount)
-                            ELSE ABS(o.money)
-                         END
-                         )
-                        *(CASE WHEN rate = 0 THEN 1 ELSE rate END)) as mm ";
+                        (CASE 
+                        	WHEN o.account_id = a.account_id THEN o.money
+                        	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
+                        	ELSE o.transfer_amount END)
+                        *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency) as mm ";        
         }
-
+        
+ 
         // Грязный хак, который надо убить, но см баг 1652
         $accountJoinCondition = ' 1 ';
 
