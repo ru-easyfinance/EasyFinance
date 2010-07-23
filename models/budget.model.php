@@ -101,9 +101,9 @@ class Budget_Model {
                                 AND b.user_id=o.user_id
                                 AND o.deleted_at IS NULL
                         ) AS avg_3m
-                    FROM budget b LEFT JOIN category c
-                    ON
-                        c.cat_id=b.category
+                    FROM (budget b
+                    LEFT JOIN category c ON c.cat_id=b.category)
+                    LEFT JOIN category cp ON c.cat_id = cp.cat_parent
                     WHERE
                         b.user_id= ?
                     AND
@@ -112,6 +112,8 @@ class Budget_Model {
                         b.date_end=LAST_DAY(b.date_start)
                     AND
                         c.deleted_at IS NULL
+                    AND
+                        cp.cat_id IS NULL
                     ORDER BY c.cat_parent";
 
         $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);
