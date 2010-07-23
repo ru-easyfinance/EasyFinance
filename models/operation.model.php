@@ -629,7 +629,7 @@ class Operation_Model
                         (
                             (
                             CASE 
-                            	WHEN o.account_id = a.account_id o.money
+                            	WHEN o.account_id = a.account_id THEN o.money
                             	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
                             	ELSE o.transfer_amount END)
                             *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency
