@@ -385,7 +385,7 @@ class Operation_Model
     function addSomeTransfer($operationsArray)
     {
         try {
-            $this->db->query("BEGIN;");
+            $this->db->query("START TRANSACTION");
 
             foreach ($operationsArray as $operation) {
                 $values = array(
@@ -393,15 +393,18 @@ class Operation_Model
                     'money'                 => abs($operation['amount']) * -1,
                     'date'                  => $operation['date'],
                     'cat_id'                => null,
-                    'account_id'            => $operation['account'],
-                    'comment'               => $operation['comment'],
-                    'transfer_account_id'   => $operation['toAccount'],
                     'type'                  => 2,
+                    'account_id'            => $operation['account'],
+                    'transfer_account_id'   => $operation['toAccount'],
                     'transfer_amount'       => $this->_convertAmount($operation['account'],
                                                                         $operation['toAccount'],
                                                                         $operation['amount'],
                                                                         $operation['convert']),
+                    'comment'               => $operation['comment'],
                     'tags'                  => $operation['tags'],
+                    // Операции из календаря
+                    'chain_id'              => !empty($operation['chain'])    ? (int) $operation['chain'] : 0,
+                    'accepted'              => !empty($operation['accepted']) ? (int) $operation['accepted'] : 0,
                 );
 
                 $lastId = $this->_addOperation($values);
@@ -409,8 +412,9 @@ class Operation_Model
 
             $this->_user->initUserAccounts();
             $this->_user->save();
-            $this->db->query("COMMIT;");
+            $this->db->query("COMMIT");
         } catch (Exception $e) {
+            $this->db->query("ROLLBACK");
             throw $e;
         }
 

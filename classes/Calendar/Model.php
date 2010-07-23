@@ -64,7 +64,7 @@ class Calendar_Model extends _Core_Abstract_Model
                     c.repeat,
                     c.week,
                     o.accepted,
-                    o.transfer_account_id AS transfer,
+                    o.transfer_account_id,
                     o.source_id AS source
                 FROM operation o
                     LEFT JOIN calendar_chains c ON (c.id=o.chain_id)
@@ -127,7 +127,7 @@ class Calendar_Model extends _Core_Abstract_Model
                     c.repeat,
                     c.week,
                     o.accepted,
-                    o.transfer_account_id AS transfer,
+                    o.transfer_account_id,
                     o.source_id AS source
                 FROM operation o
                 LEFT JOIN calendar_chains c
