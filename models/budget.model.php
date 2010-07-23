@@ -102,8 +102,8 @@ class Budget_Model {
                                 AND o.deleted_at IS NULL
                         ) AS avg_3m
                     FROM (budget b
-                    LEFT JOIN category c ON c.cat_id=b.category)
-                    LEFT JOIN category cp ON c.cat_id = cp.cat_parent
+                    INNER JOIN category c ON b.user_id= ? AND c.user_id = ? AND c.cat_id=b.category)
+                    LEFT JOIN category cp ON cp.user_id= ? AND c.cat_id = cp.cat_parent
                     WHERE
                         b.user_id= ?
                     AND
@@ -116,7 +116,7 @@ class Budget_Model {
                         cp.cat_id IS NULL
                     ORDER BY c.cat_parent";
 
-        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $start);
+        $arraybudg = Core::getInstance()->db->select($sqlbudg, $user_id, $user_id, $user_id, $user_id, $start);
 
         $list = array(
             'd' => array(),
