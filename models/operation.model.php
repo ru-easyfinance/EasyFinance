@@ -1066,11 +1066,8 @@ class Operation_Model
             'updated_at' => date('Y-m-d H:i:s'),
         );
 
-        // Если есть теги, то добавляем и их тоже
-        if(isset($values['tags']) && !empty($values['tags'])) {
-            $tags = (!is_array($values['tags'])) ? explode(', ', $values['tags']) : $values['tags'];
-            $this->_updateTags($id, $tags);
-        }
+        $tags = (!is_array($values['tags'])) ? explode(', ', $values['tags']) : $values['tags'];
+        $this->_updateTags($id, $tags);
 
         $values = array_merge($default, $values);
 
