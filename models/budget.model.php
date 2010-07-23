@@ -105,9 +105,9 @@ class Budget_Model {
                     LEFT JOIN category c ON c.cat_id=b.category)
                     LEFT JOIN category cp ON c.cat_id = cp.cat_parent
                     WHERE
-                        b.user_id=1
+                        b.user_id= ?
                     AND
-                        b.date_start='2010-07-01'
+                        b.date_start= ?
                     AND
                         b.date_end=LAST_DAY(b.date_start)
                     AND
