@@ -608,14 +608,6 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 $array[$key]['account_name'] = '';
             }
 
-            //@TODO #1529 - После фикса на клиенте, можно будет убрать этот блок
-            // + Нужен для PDA
-            if ($operation['type'] == Operation::TYPE_PROFIT) {
-                $array[$key]['drain'] = 0;
-            } else {
-                $array[$key]['drain'] = 1;
-            }
-
             if (_Core_TemplateEngine::getResponseMode($this->request) == "csv") {
                 switch( $array[$key]['type'] ) {
                     case Operation::TYPE_WASTE : $array[$key]['type'] = 'Расход'; break;
@@ -625,6 +617,8 @@ class Operation_Controller extends _Core_Controller_UserCommon
                 }
             }
         }
+        $this->_setDrain($array);
+
         $this->tpl->assign('name_page', 'operations/operation');
 
         if (_Core_TemplateEngine::getResponseMode($this->request) != "csv") {
@@ -678,6 +672,7 @@ class Operation_Controller extends _Core_Controller_UserCommon
         if( !is_array($operations) ) {
             $operations = array();
         }
+        $this->_setDrain($operations);
 
         $this->tpl->assign('accountId', $accountId);
         $this->tpl->assign('operations', $operations);
@@ -687,14 +682,25 @@ class Operation_Controller extends _Core_Controller_UserCommon
     public function last( array $args = array() )
     {
         $operations = $this->model->getLastOperations(10);
-        foreach ($operations as &$item) {
-
-            //@TODO #1529 - После фикса на клиенте, можно будет убрать этот блок
-            // + Нужен для PDA
-            $item['drain'] = (int) ($item['type'] != Operation::TYPE_PROFIT);
-        }
+        $this->_setDrain($operations);
 
         $this->tpl->assign('operations', $operations);
         $this->tpl->assign('name_page', 'operations/last');
+    }
+
+
+    /**
+     * TODO: Убрать
+     * Подсунуть в массив операций поле drain - нужно на клиенте и на PDA
+     *
+     * @param  array $operationList
+     * @return void
+     */
+    private function _setDrain(array &$operationList)
+    {
+        foreach ($operationList as &$item) {
+            $item['drain'] = (int) ($item['type'] != Operation::TYPE_PROFIT);
+        }
+
     }
 }
