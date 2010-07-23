@@ -1070,6 +1070,9 @@ class Operation_Model
             'updated_at' => date('Y-m-d H:i:s'),
         );
 
+        $tags = (!is_array($values['tags'])) ? explode(', ', $values['tags']) : $values['tags'];
+        $this->_updateTags($id, $tags);
+
         $values = array_merge($default, $values);
 
         $sets = "";

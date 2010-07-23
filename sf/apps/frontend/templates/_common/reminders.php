@@ -9,6 +9,7 @@
             <td>
                 <label for="checkReminderPhone">Телефон:</label>
                 <input id="smsPhone" name="phone" />
+                <span class="smsPhoneTip">Пример: +79161234567</span>
             </td>
         </tr>
     </table><br />
