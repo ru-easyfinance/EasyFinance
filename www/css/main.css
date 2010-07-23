@@ -29,7 +29,15 @@ ul.about {list-style-position: inside; list-style-type: disc;}
 
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
 
-input, select, textarea, button { font: 12px Arial, Tahoma, sans-serif; box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; -moz-border-radius:5px; border:#CCCCCC solid 1px;}
+input, select, textarea, button { 
+	font: 12px Arial, Tahoma, sans-serif; 
+	box-sizing:border-box; 
+	-moz-box-sizing:border-box; 
+	-webkit-box-sizing:border-box; 
+	-moz-border-radius:5px; 
+	-webkit-border-radius:5px; 
+	border:#CCCCCC solid 1px;
+}
 input[type="button"] { cursor: pointer; }
 button { cursor: pointer; }
 
