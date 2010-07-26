@@ -1071,11 +1071,17 @@ class Operation_Model
             'updated_at' => date('Y-m-d H:i:s'),
         );
 
-        $tags = (!is_array($values['tags'])) ? explode(', ', $values['tags']) : $values['tags'];
+        if (empty($values['tags'])) {
+            $tags = array();
+        } else if (!is_array($values['tags'])) {
+            $tags = explode(', ', $values['tags']);
+        } else {
+            $tags = $values['tags'];
+        }
         $this->_updateTags($id, $tags);
 
         $values = array_merge($default, $values);
-
+        $values['tags'] = implode(', ', $tags);
         $sets = "";
 
         foreach ($values as $k => $v) {
@@ -1113,13 +1119,23 @@ class Operation_Model
 
         $values = array_merge($default, $values);
 
+        // Теги, пля
+        $tags = array();
+        if (isset($values['tags'])) {
+            if (!is_array($values['tags'])) {
+                $tags = explode(', ', $values['tags']);
+            } else {
+                $tags = $values['tags'];
+                $values['tags'] = implode(', ', $tags);
+            }
+        }
+
         $sql = "INSERT INTO `operation` (" . self::_wrapKey($values) . ") VALUES (" . self::_wrapVal($values) . ")";
 
         $operationId = $this->db->query($sql);
 
         // Если есть теги, то добавляем и их тоже
-        if(isset($values['tags']) && !empty($values['tags'])) {
-            $tags = explode(', ', $values['tags']);
+        if ($tags) {
             $this->_updateTags($operationId, $tags);
         }
 
@@ -1225,14 +1241,16 @@ class Operation_Model
     {
         $this->db->query('DELETE FROM tags WHERE oper_id=? AND user_id=?', $OperId, $this->_user->getId());
 
-        $sql = "";
-        foreach ($tags as $tag) {
-            if (!empty($sql)) {
-                $sql .= ',';
+        if ($tags) {
+            $sql = "";
+            foreach ($tags as $tag) {
+                if (!empty($sql)) {
+                    $sql .= ',';
+                }
+                $sql .= "(" . $this->_user->getId() . "," . $OperId . ",'" . addslashes($tag) . "')";
             }
-            $sql .= "(" . $this->_user->getId() . "," . $OperId . ",'" . addslashes($tag) . "')";
+            return (bool) $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
         }
-        return (bool) $this->db->query("INSERT INTO `tags` (`user_id`, `oper_id`, `name`) VALUES " . $sql);
     }
 
 
