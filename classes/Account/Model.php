@@ -141,7 +141,7 @@ class Account_Model
                 $account['totalBalance'] = isset($totals[$account['id']]) ? (float)$totals[$account['id']] : 0;
                 if ( !( 10 <= $account['type'] ) and ( $account['type'] <=15 ) )
                     $account['reserve']     = (float)$this->countReserve($account['id']);
-                    $account['initPayment'] = isset($initBalances[$account['id']]) ? (float)$initBalances[$account['id']] : 0;
+                    $account['initBalance'] = isset($initBalances[$account['id']]) ? (float)$initBalances[$account['id']] : 0;
             }
         }
 
@@ -164,10 +164,10 @@ class Account_Model
             FROM operation
             WHERE
                 account_id IN (?a)
-                AND cat_id IS NULL
+                AND cat_id IS NULL AND type = ?
             GROUP BY account_id
         ";
-        return $this->db->selectCol($sql, $accountIds);
+        return $this->db->selectCol($sql, $accountIds, Operation::TYPE_BALANCE);
     }
 
 
