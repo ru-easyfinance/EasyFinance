@@ -188,7 +188,7 @@ Operation:
       foreign: id
       type: one
       foreignType: many
-      autoComplete: false         # Category ничего не узнает
+      foreignAlias: Operations    # Category -> Operations
     CalendarChain:
       local: chain_id
       foreign: id

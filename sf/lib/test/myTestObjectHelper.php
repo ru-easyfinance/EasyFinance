@@ -107,7 +107,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         $ob->setAccount($account);
         $ob->setUser($account->getUser());
 
-        if (!array_key_exists('category_id', $props) OR !is_null($props['category_id'])) {
+        if (!array_key_exists('category_id', $props)) {
             $ob->setCategory($this->makeCategory($user));
         }
 

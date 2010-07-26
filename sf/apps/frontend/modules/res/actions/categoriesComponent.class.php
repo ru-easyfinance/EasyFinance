@@ -21,15 +21,12 @@ class categoriesComponent extends sfComponent
             ->fetchArray();
 
         //      2) пользовательские
-        $users = array();
-
-        //      3) последние
-        // TODO вынести в настройки: кол-во категорий и мин.частота использования для попадания
-        $recent = array();
+        $users = Doctrine::getTable('Category')
+            ->queryFindWithUseCount($user)
+            ->fetchArray();
 
         $this->setVar('system', $system, $noEscape = true);
         $this->setVar('users',  $users,  $noEscape = true);
-        $this->setVar('recent', $recent, $noEscape = true);
     }
 
 }
