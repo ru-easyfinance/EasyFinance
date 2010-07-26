@@ -1,11 +1,11 @@
+# Временная заглушка
+homepage:
+  url:   /
+  params: { module: info, action: index }
 
-# сохранение запланированной операции
-calendar_add:
-  url: /calendar/add
-  class: sfRoute
-  param: { module: calendar, action: add }
-  requirements:
-    sf_method: [get, post]
+
+# Профиль
+# ------------------------------------------------------------------------------
 
 # сохранение настроек оповещений, t1497
 save_reminder_settings:
@@ -21,7 +21,11 @@ load_user_data:
   class: sfRoute
   param: { module: profile, action: loadUserData }
 
-# Создать счет
+
+# Счета
+# ------------------------------------------------------------------------------
+
+# Создать счет для PDA, TODO: убрать в отдельное app
 pda_account_create:
   url:      /account.pda
   class:    sfDoctrineRoute
@@ -30,6 +34,7 @@ pda_account_create:
   requirements:
     sf_method: post
 
+# Создать счет
 account_create:
   url:      /account.:sf_format
   class:    sfDoctrineRoute
@@ -47,10 +52,9 @@ account_edit:
   requirements:
     sf_method: post
 
-# default rules
-homepage:
-  url:   /
-  params: { module: info, action: index }
+
+# Услуги
+# ------------------------------------------------------------------------------
 
 services:
   url:   /services/
