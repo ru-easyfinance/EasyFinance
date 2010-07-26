@@ -59,12 +59,10 @@
                 'BlogScope',
             );
 
-            foreach ( $bots as $value ) {
-
-                if ( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) !== false ) {
+            foreach ($bots as $value) {
+                if (!empty($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], $value ) !== false) {
                     return true;
                 }
-
             }
 
             return false;
