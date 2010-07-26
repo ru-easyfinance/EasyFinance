@@ -316,19 +316,7 @@ class Operation_Model
                 'chain_id'  => $operation['chain'],
             );
 
-            $notifications = array(
-                'mailEnabled'       => $operation['mailEnabled'],
-                'mailDaysBefore'    => $operation['mailDaysBefore'],
-                'mailHour'          => $operation['mailHour'],
-                'mailMinutes'       => $operation['mailMinutes'],
-
-                'smsEnabled'       => $operation['smsEnabled'],
-                'smsDaysBefore'    => $operation['smsDaysBefore'],
-                'smsHour'          => $operation['smsHour'],
-                'smsMinutes'       => $operation['smsMinutes'],
-            );
-
-            $this->_addOperation($values, $notifications);
+            $this->_addOperation($values, $operation);
         }
         $this->db->query("COMMIT;");
 
@@ -354,7 +342,7 @@ class Operation_Model
      * @param $accepted     int
      * @return bool
      */
-    function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = '', $accepted = null)
+    function editTransfer($id=0, $money = 0, $convert = 0, $date = '', $account = 0, $toAccount=0, $comment = '', $tags = '', $accepted = null, array $notifications = array())
     {
         $values = array(
             'money'                 => abs($money) * -1,
@@ -370,7 +358,9 @@ class Operation_Model
             $values['accepted'] = '1';
         }
 
+        $this->_addNotifications($id, $date, $notifications, $this->_user);
         $this->_updateOperation($this->_user, $id, $values);
+
 
         // Обновляем данные о счетах пользователя
         $this->_user->initUserAccounts();
@@ -410,12 +400,13 @@ class Operation_Model
                     'accepted'              => !empty($operation['accepted']) ? (int) $operation['accepted'] : 0,
                 );
 
-                $lastId = $this->_addOperation($values);
+                $this->_addOperation($values, $operation);
             }
 
             $this->_user->initUserAccounts();
             $this->_user->save();
             $this->db->query("COMMIT");
+
         } catch (Exception $e) {
             $this->db->query("ROLLBACK");
             throw $e;

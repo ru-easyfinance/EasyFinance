@@ -188,7 +188,9 @@ class Calendar_Controller extends _Core_Controller_UserCommon
                         $event_array['account'],
                         $event_array['toAccount'],
                         $event_array['comment'],
-                        $event_array['tags']
+                        $event_array['tags'],
+                        $event_array['accepted'],
+                        $notifications
                     );
 
                 }
