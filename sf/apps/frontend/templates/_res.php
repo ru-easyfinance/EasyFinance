@@ -74,6 +74,7 @@
     var res = <?php echo json_encode($res); ?>
     <?php include_component('res', 'accounts', array()) ?>
     <?php include_component('res', 'currencies', array()) ?>
+    <?php include_component('res', 'categories', array()) ?>
     <?php include_component('res', 'tags', array()) ?>
     <?php
         // Max: закомментировал, потому, что ломает js, см #1627
