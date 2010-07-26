@@ -493,12 +493,7 @@ class Operation_Model
             $values['accepted'] = '1';
         }
 
-        // Если были изменены нотификации
-        $this->_deleteNotifications($id);
-        if (count($notifications)) {
-            $this->_addNotifications($id, $date, $notifications, $this->_user);
-        }
-
+        $this->_addNotifications($id, $date, $notifications, $this->_user);
         $this->_updateOperation($this->_user, $id, $values);
 
         // Обновляем данные о счетах пользователя
@@ -539,8 +534,6 @@ class Operation_Model
     function deleteOperation($id = 0) {
         $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND id = ?";
 
-        $this->_deleteNotifications($id);
-
         return (bool) $this->db->query($sql, $this->_user->getId(), $id);
     }
 
@@ -562,7 +555,6 @@ class Operation_Model
 
         if ($opIds) {
             $this->db->query("UPDATE operation o SET deleted_at=NOW() WHERE id IN (?a)", $opIds);
-            $this->_deleteNotifications($opIds);
         }
     }
 
@@ -1140,7 +1132,7 @@ class Operation_Model
         }
 
         // Если нужно напоминание, добавляем напоминание:
-        if (count($notifications)) {
+        if ($notifications) {
             $this->_addNotifications($operationId, $values['date'], $notifications, $this->_user);
         }
 
@@ -1164,36 +1156,54 @@ class Operation_Model
      */
     private function _addNotifications($operationId, $date, $notifications, oldUser $user)
     {
-        // Смещение в секундах относительно серверного времени
-        $offset = ($user->getUserProps('time_zone_offset') - round(date("O") / 100, 2)) * 3600;
+        $this->_deleteNotifications($operationId);
 
+        if ($notifications) {
+            // Смещение в секундах относительно серверного времени
+            $offset = ($user->getUserProps('time_zone_offset') - round(date("O") / 100, 2)) * 3600;
+
+            $operation_ts = strtotime($date);
+
+            // Email уведомления
+            if ($notifications['mailEnabled']) {
+                $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
+                $type = 1;
+                $this->_addNotificationRow($operationId, $type, $notify_dt);
+            }
+
+            if ($notifications['smsEnabled']) { // SMS уведомления
+                $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
+                $type = 0;
+                $this->_addNotificationRow($operationId, $type, $notify_dt);
+            }
+        }
+    }
+
+
+    /**
+     * Добавить запись об уведомлении
+     *
+     * @param  int    $operationId
+     * @param  int    $type
+     * @param  string $startDateTime
+     * @return void
+     */
+    private function _addNotificationRow($operationId, $type, $startDateTime)
+    {
         $currentDT = date('Y-m-d H:i:s');
-        $operation_ts = strtotime($date);
-
-        $sql = "INSERT INTO
-                operation_notifications
+        $sql = "
+            INSERT INTO operation_notifications
             SET
                 operation_id = ?,
                 type = ?,
                 schedule = ?,
-                is_sent = ?,
-                fail_counter = ?,
-                is_done = ?,
+                is_sent = 0,
+                is_done = 0,
+                fail_counter = 0,
                 created_at = ?,
-                updated_at = ?";
-
-        // Email уведомления
-        if ($notifications['mailEnabled']) {
-            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
-            $type = 1;
-        } elseif ($notifications['smsEnabled']) { // SMS уведомления
-            $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
-            $type = 0;
-        } else {
-            return false;
-        }
-
-        $this->db->query($sql, (int) $operationId, $type, $notify_dt, 0, 0, 0, $currentDT, $currentDT);
+                updated_at = ?
+        ";
+        $this->db->query($sql, (int) $operationId, (int) $type, $startDateTime, $currentDT, $currentDT);
     }
 
 
@@ -1205,7 +1215,7 @@ class Operation_Model
     private function _deleteNotifications($operationIds)
     {
         $operationIds = (array) $operationIds;
-        $sql = "DELETE FROM operation_notifications WHERE operation_id IN (?a)";
+        $sql = "DELETE FROM operation_notifications WHERE operation_id IN (?a) AND is_done = 0";
         $this->db->query($sql, $operationIds);
     }
 
