@@ -1,5 +1,12 @@
 
 all:
+
   # Уведомления об операциях
   notification:
+
     max_errors: 5
+
+    # Параметры SMS-шлюза
+    sms_url:   http://www.websms.ru/http_in5.asp
+    sms_login: easyfinance
+    sms_pass:  WGj163klSQ!@^&*SAds

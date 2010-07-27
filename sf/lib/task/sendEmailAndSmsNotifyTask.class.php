@@ -53,7 +53,7 @@ class sendEmailAndSmsNotifyTask extends sfBaseTask
         ));
 
         $this->namespace = 'cron';
-        $this->name      = 'notify';
+        $this->name      = 'notify-old';
 
         $this->briefDescription    = 'SMS and Email notification service';
         $this->detailedDescription =

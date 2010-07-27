@@ -12,6 +12,12 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeUser(array $props = array(), $save = true)
     {
         $defaultProps = array(
+            'user_name'         => $this->makeText('Имя пользователя'),
+            'password'          => sha1(1),
+            'currency_id'       => myMoney::RUR,
+            'user_login'        => 'login'.$this->getUniqueCounter(),
+            'user_mail'         => sprintf('user%d@example.org', $this->getUniqueCounter()),
+            'sms_phone'         => '+7 800 000-00-00',
             'user_service_mail' => sprintf('user%d@mail.easyfinance.ru', $this->getUniqueCounter()),
         );
         $props = array_merge($defaultProps, $props);

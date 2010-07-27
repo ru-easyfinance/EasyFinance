@@ -29,6 +29,9 @@ class myOperationNotificationTask extends sfBaseTask
           . "[./symfony cron:notify]";
 
 
+        // Подключить автолоад, иначе обработчики не подключить
+        $configuration = $this->createConfiguration('frontend', 'cli');
+
         // Зарегистрировать обработчки уведомлений
         $this->registerHandler(OperationNotification::TYPE_SMS,   new myNotificationHandlerSms);
         $this->registerHandler(OperationNotification::TYPE_EMAIL, new myNotificationHandlerEmail);
@@ -81,6 +84,9 @@ class myOperationNotificationTask extends sfBaseTask
     {
         $countOk    = 0;
         $countError = 0;
+
+        // Инициализировать соединение с БД
+        $databaseManager = new sfDatabaseManager($this->configuration);
 
         foreach ($this->getEventsFromQueue() as $notification) {
 
