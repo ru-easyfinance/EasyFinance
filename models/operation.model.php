@@ -696,11 +696,8 @@ class Operation_Model
         }
 
         // Если указана категория (фильтр по категории)
-        if(!empty($currentCategory)) {
-
-            if ($listCategories[$currentCategory]['cat_parent'] == 0) {
-                $sql .= ' AND o.cat_id IN (' . $category . ') ';
-            }
+        if ($category) {
+                $sql .= " AND o.cat_id IN ($category) ";
         }
 
         // Если указан тип (фильтр по типу)
@@ -1259,27 +1256,24 @@ class Operation_Model
      *
      * @param int           $parentCategory Ид родительской категории
      * @param array mixed   $listCategories Массив с категориями
-     * @return string Возвращает строку с ид, разделённую запятыми
+     * @return string|bool Возвращает строку с ид, разделённую запятыми или false
      */
     private function _getRelatedCategories($parentCategory, $listCategories)
     {
-        $relatedCategories = '';
+        if (!array_key_exists($parentCategory, $listCategories))
+            return false;
+
+        $relatedCategories = array();
+
+        $relatedCategories[] = $parentCategory;
 
         foreach ($listCategories as $category) {
             if ($category['cat_parent'] == $parentCategory) {
-                if ($relatedCategories) {
-                    $relatedCategories .= ',';
-                }
-
-                $relatedCategories .= $category['cat_id'];
+                $relatedCategories[] = $category['cat_id'];
             }
-
-            if ($relatedCategories) {
-                $relatedCategories .= ',';
-            }
-            $relatedCategories .= $parentCategory;
         }
-        return $relatedCategories;
+
+        return implode(',', $relatedCategories);
     }
 
 

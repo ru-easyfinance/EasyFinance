@@ -810,6 +810,9 @@ easyFinance.widgets.operationEdit = function(){
 
     // обновляем поле "курс" на основе _realConversionRate
     function _displayConversion() {
+        if (!_transferCurrency)
+            return false;
+
         if (_transferCurrency.id == _defaultCurrency.id) {
             // покупаем валюту по умолчанию
             // отображаемый курс совпадает с реальным коэффициентом
@@ -824,10 +827,11 @@ easyFinance.widgets.operationEdit = function(){
         _accountCurrency = _modelAccounts.getAccountCurrency(_selectedAccount);
         _transferCurrency = _modelAccounts.getAccountCurrency(_selectedTransfer);
 
+        if (_transferCurrency && _accountCurrency)
+            _realConversionRate = roundToSignificantFigures(_accountCurrency.cost / _transferCurrency.cost, 4);
+
         if (_selectedType == "2" && _selectedAccount != "" && _transferCurrency && _selectedTransfer != "" &&
             _accountCurrency && _accountCurrency.id != _transferCurrency.id) {
-                _realConversionRate = roundToSignificantFigures(_accountCurrency.cost / _transferCurrency.cost, 4);
-
                 $('#div_op_transfer_line').show();
 
                 if (_accountCurrency.id == _defaultCurrency.id || _transferCurrency.id == _defaultCurrency.id) {
@@ -842,6 +846,7 @@ easyFinance.widgets.operationEdit = function(){
 
                 _displayConversion();
         } else {
+            _displayConversion();
             $('#div_op_transfer_line').hide();
             $('#op_conversion').val('');
         }

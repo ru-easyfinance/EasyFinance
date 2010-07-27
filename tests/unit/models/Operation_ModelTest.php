@@ -62,6 +62,16 @@ class Operation_ModelTest extends UnitTestCase
         $account = CreateObjectHelper::makeAccount($options);
         $this->accountId3 = $account['account_id'];
 
+        // Доллары
+        $options = array(
+            'user_id'      => $this->userId,
+            'account_name' => 'Another USD account',
+            'account_currency_id' => myMoney::USD
+        );
+
+        $account = CreateObjectHelper::makeAccount($options);
+        $this->accountId4 = $account['account_id'];
+
         // Категории
         $options = array(
             'user_id'  => $this->userId,
@@ -352,6 +362,32 @@ class Operation_ModelTest extends UnitTestCase
         $list = $operation->getOperationList($dateFrom, $dateTo, null, $this->accountId3, -1);
 
         $this->assertEquals(2, count($list), 'Expected only 2 transfer operation');
+    }
+
+    /**
+     * Тест создания операции перевода
+     * Проверка корректности одновалютного перевода в иностранной валюте
+     */
+    public function testUnicurrencyTransfer()
+    {
+        $this->_prepareOperation();
+        $operation  = new Operation_Model($this->user);
+
+        // Перевели 100 долларов с одного на другой
+        $opId = $operation->addTransfer(
+                100,
+                0,
+                0,
+                '2010-01-01',
+                $this->accountId3,
+                $this->accountId4,
+                'Комментарий',
+                array('тег 1')
+        );
+
+        $op = $operation->getOperation($this->user->getId(), $opId);
+
+        $this->assertEquals(100, $op['moneydef'], 'Expected only 2 transfer operation');
     }
 
     /**
