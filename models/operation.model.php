@@ -860,7 +860,7 @@ class Operation_Model
             if ($total_money[0]['total_money'] === null) {
                 $retoper = 0;
             } else {
-                $retoper = $total_money[0]['total_money'] / $actualCurrency;
+                $retoper = $total_money[0]['total_money'];
             }
 
 

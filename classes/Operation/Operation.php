@@ -9,6 +9,7 @@
     class Operation
     {
         const TYPE_WASTE    = 0;
+        const TYPE_EXPENSE  = 0;
         const TYPE_PROFIT   = 1;
         const TYPE_TRANSFER = 2;
         const TYPE_BALANCE  = 3;

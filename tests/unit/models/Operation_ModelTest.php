@@ -387,7 +387,7 @@ class Operation_ModelTest extends UnitTestCase
 
         $op = $operation->getOperation($this->user->getId(), $opId);
 
-        $this->assertEquals(100, $op['moneydef'], 'Expected only 2 transfer operation');
+        $this->assertEquals(100, $op['moneydef'], 'Expected 100 dollars have been transfered');
     }
 
     /**
@@ -395,25 +395,54 @@ class Operation_ModelTest extends UnitTestCase
      */
     public function testStat()
     {
-        $this->_prepareOperation();
-        $operation  = new Operation_Model($this->user);
+        $login = 'SomeLogin--' . mktime();
+        $pass  = 'qwerty';
+        $options = array(
+            'user_login' => $login,
+            'user_pass'  => sha1($pass),
+            'user_active'=> 1,
+            'user_new'   => 0,
+            'user_currency_default' => myMoney::UAH,
+        );
+
+        CreateObjectHelper::makeUser($options);
+        $user = new oldUser($login, $pass);
+
+        // Счета
+        $options = array(
+            'user_id'      => $user->getId(),
+            'account_name' => 'USD Account For stat test',
+            'account_currency_id' => myMoney::USD,
+        );
+
+        $account = CreateObjectHelper::makeAccount($options);
+        $operation  = new Operation_Model($user);
+
+        $options = array(
+            'user_id'  => $user->getId(),
+        );
+
+        $catId = CreateObjectHelper::createCategory($options);
 
         $dateFrom = '2009-12-29';
         $dateTo   = '2010-01-02';
 
-        $opId = $operation->addTransfer(
-                100,
-                0,
-                0,
+        $rate  = sfConfig::get('ex')->getRate(myMoney::UAH, myMoney::USD);
+        $usdSpent = 100;
+        $uahSpent = $usdSpent / $rate ;
+
+        $opId = $operation->add(
+                Operation::TYPE_EXPENSE,
+                $usdSpent,
                 '2010-01-01',
-                $this->accountId,
-                $this->accountId3,
+                $catId,
                 'Комментарий',
+                $account['account_id'],
                 array('тег 1')
         );
 
-        $list = $operation->getOperationList($dateFrom, $dateTo, null, null, -1);
         $stat = $operation->getOperationList($dateFrom, $dateTo, null, null, -1, null, null, null, true);
-        $this->assertEquals(1, count($list), 'Expected only 2 transfer operation');
+
+        $this->assertEquals(round($uahSpent, 2), round(abs($stat), 2), 'Expected 100 dollars have been spent');
     }
 }
