@@ -186,7 +186,7 @@ class Account_Model
                         	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)  
                         	ELSE o.transfer_amount END)
                     FROM accounts acc
-                    INNER JOIN 
+                    INNER JOIN operation o
                     	ON o.accepted = 1
                     	AND acc.account_id IN (?a) 
                     	AND o.deleted_at IS NULL
