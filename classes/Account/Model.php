@@ -182,9 +182,9 @@ class Account_Model
         $sql = "SELECT
                     o.account_id AS account_id,
                     SUM(CASE 
-                        	WHEN o.account_id = a.account_id THEN o.money
+                        	WHEN o.account_id = acc.account_id THEN o.money
                         	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)  
-                        	ELSE o.transfer_amount END)
+                        	ELSE o.transfer_amount END) as sum
                     FROM accounts acc
                     INNER JOIN operation o
                     	ON o.accepted = 1
