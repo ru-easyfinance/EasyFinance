@@ -181,23 +181,17 @@ class Account_Model
     {
         $sql = "SELECT
                     o.account_id AS account_id,
-                    (SUM(o.money))as sum
-                FROM operation o
-                WHERE
-                    o.accepted= 1
-                    AND o.deleted_at IS NULL
-                    AND o.account_id IN (?a)
-                GROUP BY o.account_id
-                UNION
-                SELECT
-                    o.transfer_account_id AS account_id,
-                    (SUM(o.transfer_amount))as sum
-                FROM operation o
-                WHERE
-                    o.accepted= 1
-                    AND o.deleted_at IS NULL
-                    AND o.transfer_account_id IN (?a)
-                GROUP BY o.transfer_account_id";
+                    SUM(CASE 
+                        	WHEN o.account_id = a.account_id THEN o.money
+                        	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)  
+                        	ELSE o.transfer_amount END)
+                    FROM accounts acc
+                    INNER JOIN 
+                    	ON o.accepted = 1
+                    	AND acc.account_id IN (2517249) 
+                    	AND o.deleted_at IS NULL
+                    	AND (o.account_id = acc.account_id OR o.transfer_account_id = acc.account_id) 
+                    GROUP BY acc.account_id";
 
         $accountsBallance = array();
 
