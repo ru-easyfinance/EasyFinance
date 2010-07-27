@@ -6,7 +6,6 @@
  */
 class Calendar_Model extends _Core_Abstract_Model
 {
-
     /**
      * Храним ид овнера для всяческих операций.
      *
@@ -15,39 +14,29 @@ class Calendar_Model extends _Core_Abstract_Model
     public function __construct(array $row, oldUser $owner)
     {
             $this->ownerId = $owner->getId();
-
             $this->fields = $row;
     }
 
 
     /**
-     * Загрузка всех событий календаря для пользователя
+     * Выбрать все операции из календаря.
+     * Базовый запрос для выборки.
      *
-     * @param integer $userId
-     * @param mysqldate $start
-     * @param mysqldate $end
-     * @param bool $delay Если - тру, то отдаёт напоминалки
+     * @param  oldUser $user
+     * @param  array   $where       - массив дополнительных условий выборки
+     * @param  array   $bindValues  - массив значений для подстановки в дополнительные условия
      *
-     * @return array Массив моделей событий
+     * @return array
      */
-    public static function loadAll(oldUser $user, $start, $end)
+    static protected function _find(oldUser $user, array $where = array(), array $bindValues = array())
     {
-        $modelsArray = array();
+        $where = implode(' AND ', $where);
+        if ($where) {
+            $where = ' AND ' . $where;
+        }
 
-//        $cache = _Core_Cache::getInstance();
-//        $cacheId = 'calendarUser' . $user->getId();
-//
-//        // Проверка наличия в кеше идентификаторов сообщений пользователя
-//        $messageIds = $cache->get( $cacheId );
-//        // Если есть - запрашиваем их все из кеша
-//        if ( $messageIds && is_array($messageIds) )
-//        {
-//            $modelsArray = $cache->getMulti( $messageIds );
-//        }
-
-        // Запрос данных для полного календаря
-
-        $sql = 'SELECT
+        $sql = "SELECT
+                    o.id AS ARRAY_KEY,
                     o.id,
                     o.chain_id AS chain,
                     o.type,
@@ -56,10 +45,10 @@ class Calendar_Model extends _Core_Abstract_Model
                     o.cat_id AS category,
                     o.account_id AS account,
                     o.tags,
-                    DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date,
+                    DATE_FORMAT( o.date, '%d.%m.%Y' ) AS date,
                     o.time,
-                    DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start,
-                    DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
+                    DATE_FORMAT(c.start, '%d.%m.%Y' ) AS start,
+                    DATE_FORMAT(c.last, '%d.%m.%Y' ) AS last,
                     c.every,
                     c.repeat,
                     c.week,
@@ -70,30 +59,34 @@ class Calendar_Model extends _Core_Abstract_Model
                     LEFT JOIN calendar_chains c ON (c.id=o.chain_id)
                 WHERE
                     o.user_id = ?
-                    AND o.`date` BETWEEN ? AND ?
-                    AND (o.accepted=0 OR o.chain_id > 0)
                     AND o.deleted_at IS NULL
-        ';
+                    {$where}
+        ";
 
-        $rows = Core::getInstance()->db->select($sql, $user->getId(), $start, $end);
+        $args = array_merge(array($sql, $user->getId()), $bindValues);
+        return call_user_func_array(array(Core::getInstance()->db, 'select'), $args);
+    }
 
-        foreach ($rows as $row) {
-            // Добавляем напомнинания
-            $sql = "SELECT * FROM operation_notifications
-                    WHERE operation_id=?";
-            $notifications = Core::getInstance()->db->select($sql, $row['id']);
 
-            $row = self::_addNotificationInfo($user, $row);
+    /**
+     * Загрузка всех событий календаря для пользователя
+     *
+     * @param integer   $userId
+     * @param mysqldate $start
+     * @param mysqldate $end
+     *
+     * @return array Calendar_Model
+     */
+    public static function loadAll(oldUser $user, $start, $end)
+    {
+        $where = array(
+            'o.`date` BETWEEN ? AND ?',
+            '(o.accepted=0 OR o.chain_id > 0)',
+        );
+        $rows = self::_find($user, $where, array($start, $end));
 
-            $model = new Calendar_Model($row, $user);
 
-            $modelsArray[$row['id']] = $model;
-        }
-
-        // Cохранение моделей в кеш
-        //$cache->set( $cacheId, $modelsArray );
-
-        return $modelsArray;
+        return self::_prepareModelsArray($user, $rows);
     }
 
 
@@ -102,116 +95,60 @@ class Calendar_Model extends _Core_Abstract_Model
      *
      * @param oldUser $user
      *
-     * @return array
+     * @return array Calendar_Model
      */
     public static function loadOverdue(oldUser $user)
     {
-        $modelsArray = array();
+        $where = array(
+            'o.`date` <= CURRENT_DATE()',
+            'o.accepted = 0',
+        );
+        $rows = self::_find($user, $where);
 
-        // Запрос данных для полного календаря
 
-        $sql = 'SELECT
-                    o.id,
-                    o.chain_id AS chain,
-                    o.type,
-                    o.money AS amount,
-                    o.comment,
-                    o.cat_id AS category,
-                    o.account_id AS account,
-                    o.tags,
-                    DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date,
-                    o.time,
-                    DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start,
-                    DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
-                    c.every,
-                    c.repeat,
-                    c.week,
-                    o.accepted,
-                    o.transfer_account_id,
-                    o.source_id AS source
-                FROM operation o
-                LEFT JOIN calendar_chains c
-                ON
-                    c.id=o.chain_id
-                WHERE
-                    o.user_id = ?
-                AND
-                    o.`date` <= CURRENT_DATE()
-                AND
-                    o.accepted=0
-                AND
-                    o.deleted_at IS NULL';
-
-        $rows = Core::getInstance()->db->select($sql, $user->getId());
-
-        foreach ($rows as $row) {
-            // Добавляем напомнинания
-            $sql = "SELECT * FROM operation_notifications
-                    WHERE operation_id=?";
-            $notifications = Core::getInstance()->db->select($sql, $row['id']);
-
-            $row = self::_addNotificationInfo($user, $row);
-
-            $model = new Calendar_Model($row, $user);
-
-            $modelsArray[$row['id']] = $model;
-        }
-
-        return $modelsArray;
+        return self::_prepareModelsArray($user, $rows);
     }
 
 
     /**
-     * Выводит список напоминалок на неделю вперёд
+     * Загрузка всех напоминалок на неделю вперёд
      *
      * @param oldUser $user
+     *
+     * @return array Calendar_Model
      */
     public static function loadReminder(oldUser $user)
     {
+        $where = array(
+            'o.`date` BETWEEN ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY) AND ADDDATE(CURRENT_DATE(), INTERVAL 8 DAY)',
+            'o.accepted = 0',
+        );
+        $rows = self::_find($user, $where);
+
+        return self::_prepareModelsArray($user, $rows);
+    }
+
+
+    /**
+     * Подготовить массив моделей из raw-массива выборки
+     * Подмешать значения уведомлений
+     *
+     * @param  oldUser $user
+     * @param  array   $rows
+     *
+     * @return array Calendar_Model
+     */
+    static protected function _prepareModelsArray(oldUser $user, array $rows)
+    {
         $modelsArray = array();
 
-        // Запрос данных для полного календаря
+        if ($rows) {
+            self::_addNotificationInfo($user, $rows);
 
-        $sql = 'SELECT
-                    o.id,
-                    o.chain_id AS chain,
-                    o.type,
-                    o.money AS amount,
-                    o.comment,
-                    o.cat_id AS category,
-                    o.account_id AS account,
-                    o.tags,
-                    DATE_FORMAT( o.date, "%d.%m.%Y" ) AS date,
-                    o.time,
-                    DATE_FORMAT(c.start, "%d.%m.%Y" ) AS start,
-                    DATE_FORMAT(c.last, "%d.%m.%Y" ) AS last,
-                    c.every,
-                    c.repeat,
-                    c.week,
-                    o.accepted,
-                    o.transfer_account_id AS transfer,
-                    o.source_id AS source
-                FROM operation o
-                LEFT JOIN calendar_chains c
-                ON
-                    c.id=o.chain_id
-                WHERE
-                    o.user_id = ?
-                AND
-                    o.`date` BETWEEN ADDDATE(CURRENT_DATE(), INTERVAL 1 DAY) AND ADDDATE(CURRENT_DATE(), INTERVAL 8 DAY)
-                AND
-                    o.accepted=0
-                AND
-                    o.deleted_at IS NULL';
-
-        $rows = Core::getInstance()->db->select($sql, $user->getId());
-
-        foreach ($rows as $row) {
-            $row = self::_addNotificationInfo( $user, $row );
-
-            $model = new Calendar_Model($row, $user);
-
-            $modelsArray[$row['id']] = $model;
+            foreach ($rows as $row) {
+                $model = new Calendar_Model($row, $user);
+                $modelsArray[$row['id']] = $model;
+            }
         }
 
         return $modelsArray;
@@ -225,19 +162,27 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param array $row
      * @return array
      */
-    private function _addNotificationInfo(oldUser $user, array $row)
+    private function _addNotificationInfo(oldUser $user, array &$rows)
     {
-        // Добавляем напомнинания
+        // Предполагаем, что в ключах массивов лежат ID записей
+        // см. self::_find()
+        assert(!isset($rows[0]));
+        $opIds = array_keys($rows);
+
+        // Выбираем только те напомининания, которые еще не отработали
         $sql = "SELECT * FROM operation_notifications
-                WHERE operation_id=?";
-        $notifications = Core::getInstance()->db->select($sql, $row['id']);
+                WHERE operation_id IN (?a) AND is_done=0";
+        $notifications = Core::getInstance()->db->select($sql, $opIds);
 
         // Получаем смещение временной зоны пользователя относительно времени сервера
         $offset = ($user->getUserProps('time_zone_offset') - round((date("O") / 100), 2)) * 3600;
 
         // Напоминания об операциях
-        if (count($notifications)) {
+        if ($notifications) {
+
             foreach ($notifications as $notrow) {
+                $row =& $rows[$notrow['operation_id']];
+
                 $dtTimestamp = strtotime($notrow['schedule']) + $offset;
 
                 // SMS
@@ -259,8 +204,6 @@ class Calendar_Model extends _Core_Abstract_Model
                 }
             }
         }
-
-        return $row;
     }
 
 
