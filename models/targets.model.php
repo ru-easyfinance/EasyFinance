@@ -195,37 +195,19 @@ class Targets_Model {
         $sql = "UPDATE target SET done=1 WHERE id = ? AND user_id = ?";
         $result = $this->db->select($sql, $targetId, Core::getInstance()->user->getId());
 
-        $system = 17;
+        $sql      = "SELECT * FROM target WHERE id = ? AND user_id = ?";
+        $target   = $this->db->select($sql, $targetId, Core::getInstance()->user->getId());
+        $title    = addslashes($target[0]['title']);
+        $comment  = "Закрытие финансовой цели \'$title\'";
 
-        if ($targetCat==2) {
-            $system = 1;
-        }
-
-        if ($targetCat==3) {
-            $system = 6;
-        }
-
-        if ($targetCat==7) {
-            $system = 4;
-        }
-
-        if ($targetCat==8) {
-            $system = 4;
-        }
-
-        // Подбираем аналог категории финцели из категорий пользователя
-        $sql = "SELECT cat_id FROM category WHERE user_id = ? AND system_category_id = ? LIMIT 1";
-
-        $category = (int) $this->db->selectCell($sql, Core::getInstance()->user->getId(), $system);
-
-        if (!$category) {
-            return false;
-        }
+        $category = null;
         $date = date('Y-m-d');
 
         // Делаем фактическую операцию перевода на финцель.
-        $operation = new Operation_Model(Core::getInstance()->user);
-        $result = $operation->add(-$amount, $date, $category, 1, 'Закрытие финансовой цели', $account);
+        $operation   = new Operation_Model(Core::getInstance()->user);
+        $operationId = $operation->add(0, -$amount, $date,
+            $category, $comment, $account, null, false);
+
         return $result;
     }
 
