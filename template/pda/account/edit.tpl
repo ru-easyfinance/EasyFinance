@@ -23,7 +23,7 @@
 </tr>
 <tr>
     <td>Начальный баланс&nbsp;:</td>
-    <td><input name="initPayment" value="<?php echo(isset($acc['money'])?$acc['money']:'') ?>"></td>
+    <td><input name="initBalance" value="<?php echo(isset($acc['money'])?$acc['money']:'') ?>"></td>
 </tr>
 <tr>
     <td><span class="asterisk">*</span> Валюта:</td>

@@ -16,7 +16,7 @@ abstract class BaseFrontendAccountEditAction extends sfAction
         $this->form->bind($request->getPostParameters());
         if ($this->form->isValid()) {
             $account = $this->form->save();
-            $balance = (float) $this->form->getValue('initPayment');
+            $balance = (float) $this->form->getValue('initBalance');
 
             return $this->success($account, $balance);
         }

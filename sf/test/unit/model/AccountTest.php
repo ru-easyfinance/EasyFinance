@@ -124,4 +124,26 @@ class model_AccountTest extends myUnitTestCase
         $this->assertEquals($account->getUpdatedAt(), $account->getDeletedAt());
     }
 
+    /**
+     * Получить баланс
+     */
+    public function testSetAndGetBalance()
+    {
+        $balance = rand(1, 1024);
+        $account = $this->helper->makeAccount();
+        $account->setInitBalance($balance);
+        $account->save();
+        $accId = $account->getId();
+        unset($account);
+
+        $account = Doctrine::getTable('Account')->find($accId);
+
+        $this->assertEquals($balance, $account->getInitBalance(), 'Failed to get or set initial balance');
+    }
+
+    /*
+     * - getBalanceOperation - создает новую операция (+ getInitBalance())
+     * - getBalanceOperation - находит существующую (+ getInitBalance())
+     * - setInitBalance -> $acc->save -> findAccById -> getInitBalance
+     */
 }

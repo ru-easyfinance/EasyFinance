@@ -69,18 +69,18 @@ easyFinance.widgets.accountEdit = function(){
         params.name = _$node.find('#acc_name').val();
         params.comment = _$node.find('#acc_comment').val();
         params.currency = _$node.find('#acc_currency').val();
-        params.initPayment = 0;
+        params.initBalance = 0;
 
         // #1614 ошибка при незаполненном поле начального баланса
         var balance = parseFloat(_$node.find('#acc_balance').val());
         if (!isNaN(balance)) {
-            params.initPayment = balance.toString();
+            params.initBalance = balance.toString();
             delete balance;
         }
 
         // #1475. для долговых счетов баланс всегда или 0 или отрицательный
         if (params.type == "7" || params.type == "9") {
-            params.initPayment = (-Math.abs(parseFloat(params.initPayment))).toString();
+            params.initBalance = (-Math.abs(parseFloat(params.initBalance))).toString();
         }
 
         if (params.name == '') {
@@ -219,7 +219,7 @@ easyFinance.widgets.accountEdit = function(){
 
         $('#acc_name').val(account.name);
         $('#acc_comment').val(account.comment);
-        $('#acc_balance').val(parseFloat(account.initPayment));
+        $('#acc_balance').val(parseFloat(account.initBalance));
         $('#acc_currency').val(account.currency);
     }
 

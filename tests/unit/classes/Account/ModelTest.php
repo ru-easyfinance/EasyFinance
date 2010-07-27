@@ -67,14 +67,14 @@ class classes_Account_ModelTest  extends UnitTestCase
 
         $this->assertEquals(array(
             $account1['account_id'] => array(
-                'id'       => $account1['account_id'],
-                'type'     => $account1['account_type_id'],
-                'currency' => $account1['account_currency_id'],
-                'name'     => $account1['account_name'],
-                'comment'  => $account1['account_description'],
+                'id'           => $account1['account_id'],
+                'type'         => $account1['account_type_id'],
+                'currency'     => $account1['account_currency_id'],
+                'name'         => $account1['account_name'],
+                'comment'      => $account1['account_description'],
                 'totalBalance' => $amount + $initBalance,
-                'reserve' => 0,
-                'initPayment' => $initBalance,
+                'reserve'      => 0,
+                'initBalance'  => $initBalance,
             )), $result);
     }
 
