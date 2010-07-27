@@ -1,0 +1,5 @@
+
+all:
+  # Уведомления об операциях
+  notification:
+    max_errors: 5

@@ -387,4 +387,31 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         return $ob;
     }
 
+
+    /**
+     * Создать уведомление для операции из календаря
+     */
+    public function makeOperationNotification(Operation $operation = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'schedule'     => date('Y-m-d H:i:s', time()-60),
+            'type'         => OperationNotification::TYPE_EMAIL,
+            'fail_counter' => 0,
+            'is_sent'      => 0,
+            'is_done'      => 0,
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$operation) {
+            $operation = $this->makeOperation(null, array(), $save);
+        }
+
+        $ob = $this->makeModel('OperationNotification', $props, false);
+        $ob->setOperation($operation);
+
+        if ($save) {
+            $ob->save();
+        }
+        return $ob;
+    }
 }
