@@ -108,11 +108,12 @@ class Info_Model
         $this->tahometersByKeywords[Tahometer::$BUDGET_KEYWORD]->SetBaseValue(
                 $this->_currentMonthDrain,
                 $this->_currentMonthBudget);
-
+                    
         $this->tahometersByKeywords[Tahometer::$LOANS_KEYWORD]->SetBaseValue(
                 $this->_oneMonthCreditPayments,
                 $this->_oneMonthProfit);
-
+        
+        
         $this->tahometersByKeywords[Tahometer::$DIFF_KEYWORD]->SetBaseValue(
                 $this->_threeMonthProfit,
                 $this->_threeMonthDrain);
@@ -632,7 +633,6 @@ class BaseTahometer extends Tahometer
         //todo: как бы это убрать?
         return ($forOutput && $this->getCalculateType() == 'negative') ?
             self::$HUNDRED_PERCENT - $result : $result;
-            
     }
 
     //установка значения как отношения 2-х величин, используемых в данном тахометре, в процентах
@@ -642,14 +642,21 @@ class BaseTahometer extends Tahometer
         $zoneBorders = $this->getZoneBorders();
         //если не задан числитель, ставим минимальное значение данного тахометра
         if($dividend == 0)
-            $baseValue = $zoneBorders[0];
+            $baseValue = $this->getCalculateType() == 'negative' 
+            ? $zoneBorders[self::$zonesCount]
+            : $zoneBorders[0];
 
         //если не задан знаменатель, ставим максимальное значение для данного тахометра
         else if($divisor == 0)
-            $baseValue = $zoneBorders[self::$zonesCount];
-
+        {
+            $baseValue = $this->getCalculateType() == 'negative' 
+            ? $zoneBorders[0]
+            : $zoneBorders[self::$zonesCount];
+        }
+        
         else
         {
+
             //значение считаем в зависимости от типа подсчета значения в тахометре
             switch($this->getCalculateType())
             {
@@ -669,7 +676,7 @@ class BaseTahometer extends Tahometer
                     break;
             }
         }
-
+        
         $this->_rawValue = $baseValue;
     }
 
