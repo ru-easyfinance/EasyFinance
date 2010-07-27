@@ -188,7 +188,7 @@ class Account_Model
                     FROM accounts acc
                     INNER JOIN 
                     	ON o.accepted = 1
-                    	AND acc.account_id IN (2517249) 
+                    	AND acc.account_id IN (?a) 
                     	AND o.deleted_at IS NULL
                     	AND (o.account_id = acc.account_id OR o.transfer_account_id = acc.account_id) 
                     GROUP BY acc.account_id";
