@@ -103,16 +103,17 @@ class Info_Model
         //деньги
         $this->tahometersByKeywords[Tahometer::$MONEY_KEYWORD]->SetBaseValue(
                 $this->_currentRealMoneyBalance,
-                $this->_threeMonthDrain);
-
+                $this->_threeMonthDrain / 3);
+        
         $this->tahometersByKeywords[Tahometer::$BUDGET_KEYWORD]->SetBaseValue(
                 $this->_currentMonthDrain,
                 $this->_currentMonthBudget);
-
+                    
         $this->tahometersByKeywords[Tahometer::$LOANS_KEYWORD]->SetBaseValue(
                 $this->_oneMonthCreditPayments,
                 $this->_oneMonthProfit);
-
+        
+        
         $this->tahometersByKeywords[Tahometer::$DIFF_KEYWORD]->SetBaseValue(
                 $this->_threeMonthProfit,
                 $this->_threeMonthDrain);
@@ -123,7 +124,13 @@ class Info_Model
     */
     private static $PROFIT_QUERY = 'PROFIT';
     private static $DRAIN_QUERY = 'DRAIN';
-    private static $CREDIT_QUERY = 'CREDIT';
+    
+    //выплаты тела кредита - переводы на кредит
+    private static $CREDIT_BODY_QUERY = 'CREDIT_BODY';
+    
+    //выплаты процентов - расходы по категории "Проценты по кредитам и займам"
+    private static $CREDIT_PERCENT_QUERY = 'CREDIT_PERCENT';
+    
     private static $BALANCE_QUERY = 'BALANCE';
 
 
@@ -148,8 +155,11 @@ class Info_Model
             self::$PROFIT_QUERY, 3);
 
         //расходы за 3 месяца
+        //это все траты и долги, т.е. все расходы, включая категорию "Проценты по кредитам", 
+        // и переводы на долговые счета
         $this->_threeMonthDrain = $this->GetOperationsSum(
-            self::$DRAIN_QUERY, 3);
+            self::$DRAIN_QUERY, 3) + 
+            $this->GetOperationsSum(self::$CREDIT_BODY_QUERY, 3);
 
         //текущий остаток доступных денег - сумма всех операций за все время, включая начальные остатки
         //по денежным счетам и кредитным картам с положительным остатком
@@ -160,7 +170,8 @@ class Info_Model
         //пока считаем только как переводы на долговые счета
         //затем добавятся расходы по соотв. спец. категориям
         $this->_oneMonthCreditPayments = $this->GetOperationsSum(
-            self::$CREDIT_QUERY, 1);
+            self::$CREDIT_BODY_QUERY, 1) + 
+            $this->GetOperationsSum(self::$CREDIT_PERCENT_QUERY, 1);
 
         //плановые расходы на текущий месяц
         $this->_currentMonthBudget = $this->GetDrainBudget();
@@ -175,7 +186,7 @@ class Info_Model
     private function GetOperationsSum($queryType, $months)
     {
         $query = $this->GetFactOperationsQuery($queryType, $months);
-
+        
         //Получим суммы, сгруппированные по счетам
         $sumsByAccounts = $this->db()->select($query);
 
@@ -219,16 +230,13 @@ class Info_Model
         //тип операций для отбора
         $operationType = null;
 
-        //признак отбора начальных остатков
-        $needSelectStartBalances = false;
-
         //добавочные условия
 
         //признаки использования счетов-отправителей
         $useSenders = true;
 
-        $additionalCondition = null;
-
+        $additionalHaving = null;
+        $additionalWhere = null;
         //доп. условия зависят от типа запроса
         switch($queryType)
         {
@@ -243,30 +251,38 @@ class Info_Model
                 $operationType = '0';
                 break;
 
-            //долгами пока считаем только переводы на долговые счета
-            case self::$CREDIT_QUERY:
+            //долги - переводы на долговые счета
+            case self::$CREDIT_BODY_QUERY:
                 //нужны только 1)переводы 2)на 3)долговые счета - займы, кредиты и кредитки
                 $operationType = '2';
                 $useSenders = false;
-                $additionalCondition = "type_id IN (7, 8, 9)";
+                $additionalHaving = "type_id IN (7, 8, 9)";
                 break;
 
-            case self::$BALANCE_QUERY:
+            //долги - проценты
+            case self::$CREDIT_PERCENT_QUERY:
+                //нужны только расходы
+                $operationType = '0';
+                //нужна только одна системная категория
+                $additionalWhere = "op.cat_id = (SELECT cat.cat_id FROM category cat" . 
+                	" WHERE cat.system_category_id = 15 AND cat.user_id = ".(int)$this->user()->getId(). ")";
+                break;
+
+                case self::$BALANCE_QUERY:
                 //для баланса "живых" денег берем все операции и начальные остатки
                 //берем только денежные счета и кредитки с положительным балансом
-                $operationType = '0,1,2';
-                $needSelectStartBalances = true;
-                $additionalCondition = "type_id IN (1,2,5,15,16) OR (type_id = 8 AND money > 0)";
+                $operationType = '0,1,2,3';
+                $additionalHaving = "type_id IN (1,2,5,15,16) OR (type_id = 8 AND money > 0)";
                 break;
             }
 
-        $query = $this->getQueryByConditions($operationType, $needSelectStartBalances, $months, $useSenders, $additionalCondition);
+        $query = $this->getQueryByConditions($operationType, $months, $useSenders, $additionalWhere, $additionalHaving);
 
         return $query;
     }
 
     //формирование строки запроса по условиям
-    private function getQueryByConditions($operationType, $needSelectStartBalances, $months, $useSenders, $additionalCondition)
+    private function getQueryByConditions($operationType, $months, $useSenders, $additionalWhere, $additionalHaving)
     {
         //задаем все подготовленные условия: типы операций, начальный остаток, интервал, дополнительные условия
         //выбираем с привязкой к счетам
@@ -303,12 +319,6 @@ class Info_Model
             $query .= " AND op.type IN ({$operationType})";
         }
 
-        //условия на начальный остаток
-        // Operation::TYPE_BALANCE, но вообще оно не должно быть нужно
-        if(!$needSelectStartBalances) {
-            $query = $query . " AND op.type != 3";
-        }
-
         //определим интервал, за который взять операции, если он задан
         if (isset($months)) {
             if($months > 0) { //отсчитываем заданное количество месяцев
@@ -321,13 +331,18 @@ class Info_Model
 
             $query .= " AND op.date >= DATE_SUB(CURDATE(), INTERVAL " . $subIntervalValue . " " . $subIntervalType . ")";
         }
+        
+        if(isset($additionalWhere))
+        {
+            $query .= " AND " . $additionalWhere;
+        }
 
         //группируем по счетам
-        $query = $query . " GROUP BY acc.account_id";
+        $query .= " GROUP BY acc.account_id";
 
         //учтем добавочное условие
-        if(isset($additionalCondition))
-            $query = $query . " HAVING " . $additionalCondition;
+        if(isset($additionalHaving))
+            $query = $query . " HAVING " . $additionalHaving;
 
         return $query;
     }
@@ -608,6 +623,17 @@ class BaseTahometer extends Tahometer
             Tahometer::$DIFF_KEYWORD => 30
         );
     }
+    
+    //перегрузим, чтобы негативные тахометры перевернуть
+    protected function getValueInsideBorders($forOutput)
+    {
+        $result = parent::getValueInsideBorders($forOutput);
+        
+        //для отрицательных тахометров - обратный порядок шкалы
+        //todo: как бы это убрать?
+        return ($forOutput && $this->getCalculateType() == 'negative') ?
+            self::$HUNDRED_PERCENT - $result : $result;
+    }
 
     //установка значения как отношения 2-х величин, используемых в данном тахометре, в процентах
     //в итоге получаем некий процент, но для разных тахометров он может считаться по-разному
@@ -616,14 +642,21 @@ class BaseTahometer extends Tahometer
         $zoneBorders = $this->getZoneBorders();
         //если не задан числитель, ставим минимальное значение данного тахометра
         if($dividend == 0)
-            $baseValue = $zoneBorders[0];
+            $baseValue = $this->getCalculateType() == 'negative' 
+            ? $zoneBorders[self::$zonesCount]
+            : $zoneBorders[0];
 
         //если не задан знаменатель, ставим максимальное значение для данного тахометра
         else if($divisor == 0)
-            $baseValue = $zoneBorders[self::$zonesCount];
-
+        {
+            $baseValue = $this->getCalculateType() == 'negative' 
+            ? $zoneBorders[0]
+            : $zoneBorders[self::$zonesCount];
+        }
+        
         else
         {
+
             //значение считаем в зависимости от типа подсчета значения в тахометре
             switch($this->getCalculateType())
             {
@@ -632,21 +665,18 @@ class BaseTahometer extends Tahometer
                     $baseValue = $dividend / $divisor;
                     break;
 
-                //1 - отношение (считаем оставшуюся величину)
+                //1 - отношение (считаем оставшуюся величину в процентах)
                 case 'negative':
-                    $baseValue = 1 - $dividend / $divisor;
+                    $baseValue = (1 - $dividend / $divisor) * self::$HUNDRED_PERCENT;
                     break;
 
                 //перекрытие (считаем превышение в процентах)
                 case 'over':
-                    $baseValue = $dividend / $divisor - 1;
+                    $baseValue = ($dividend / $divisor - 1) * self::$HUNDRED_PERCENT;
                     break;
             }
-
-            //переведем в проценты
-            $baseValue = $baseValue * self::$HUNDRED_PERCENT;
         }
-
+        
         $this->_rawValue = $baseValue;
     }
 

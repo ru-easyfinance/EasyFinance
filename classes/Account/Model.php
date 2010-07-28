@@ -183,8 +183,8 @@ class Account_Model
                     o.account_id AS account_id,
                     SUM(CASE 
                         	WHEN o.account_id = acc.account_id THEN o.money
-                        	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)  
-                        	ELSE o.transfer_amount END) as sum
+                        	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)
+                        	ELSE o.transfer_amount END) AS sum
                     FROM accounts acc
                     INNER JOIN operation o
                     	ON o.accepted = 1
@@ -192,7 +192,7 @@ class Account_Model
                     	AND o.deleted_at IS NULL
                     	AND (o.account_id = acc.account_id OR o.transfer_account_id = acc.account_id) 
                     GROUP BY acc.account_id";
-
+        
         $accountsBallance = array();
 
         // Подсчитываем сумму по каждому счёту
