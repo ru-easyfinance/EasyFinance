@@ -31,7 +31,7 @@
         #       и выборке счета будет всегда! находиться балансовая операция
         #       @see AccountTable::queryFindWithBalanceAndBalanceOperation
         if (isset($account['Operations']['0'])) {
-            $data[$account['id']]['initPayment'] = $account['Operations']['0']['amount'];
+            $data[$account['id']]['initBalance'] = $account['Operations']['0']['amount'];
         }
 
         // мапим зарезервированные на фин. цели средства

@@ -63,6 +63,8 @@
         </copy>
         <exec command="php ${project.basedir}/sf/symfony cc" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes" dir="${project.basedir}/sf" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony project:optimize frontend" dir="${project.basedir}/sf" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony project:optimize admin" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize api" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:permissions" dir="${project.basedir}/sf" checkreturn="true" />
 
@@ -90,6 +92,7 @@
                 <!-- cd BASEDIR; git fetch  -->
                 <echo>git fetch repo ${project.git.rev}</echo>
                 <exec command="${git.bin.path} fetch" dir="${project.basedir}" passthru="true" checkreturn="true" />
+                <exec command="${git.bin.path} fetch --tags" dir="${project.basedir}" passthru="true" checkreturn="true" />
                 <echo>git remote prune origin</echo>
                 <exec command="${git.bin.path} remote prune origin" dir="${project.basedir}" passthru="true" checkreturn="true" />
 

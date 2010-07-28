@@ -59,7 +59,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 'currency_id'      => 1,
                 'name'             => 'Название "\'счета"',
                 'description'      => 'Описание счета',
-                'initPayment'      => '123.45',
+                'initBalance'      => '123.45',
                 ))
             ->with('request')->checkModuleAction('account', 'create')
             ->with('response')->isStatusCode(200)
@@ -70,7 +70,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
 
             // Сохранили в базу счет
             $accountProps = $data;
-            unset($accountProps['initPayment']);
+            unset($accountProps['initBalance']);
             $this->browser
                 ->with('model')->check('Account', $accountProps, 1, $found);
             $account = $found->getFirst()->toArray(false);
@@ -80,7 +80,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 ->with('model')->check('Operation', array(
                     'user_id'     => $user->getId(),
                     'account_id'  => $account['id'],
-                    'amount'      => $data['initPayment'],
+                    'amount'      => $data['initBalance'],
                 ), 1);
 
             // Вернули JSON со свойствами созданного счета
@@ -90,8 +90,8 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 'name'         => $account['name'],
                 'currency'     => (int)$account['currency_id'],
                 'comment'      => $account['description'],
-                'initPayment'  => (float)$data['initPayment'],
-                'totalBalance' => (float)$data['initPayment'],
+                'initBalance'  => (float)$data['initBalance'],
+                'totalBalance' => (float)$data['initBalance'],
             );
             $this->browser
                 ->with('response')->checkJsonContains('result', array(
@@ -116,7 +116,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 'currency_id'      => 1,
                 'name'             => 'Название "\'счета"',
                 'description'      => 'Описание счета',
-                'initPayment'      => '123.45',
+                'initBalance'      => '123.45',
                 ))
             ->with('request')->checkModuleAction('account', 'createForPda')
             ->with('response')->checkRedirect(302, '/info', true)

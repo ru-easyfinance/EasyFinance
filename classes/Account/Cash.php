@@ -23,7 +23,7 @@ class Account_Cash extends Account
         $valid[2] = (int)@$params['type'];
         $valid[7] = trim(@$params['comment']);
         $valid[29] = (int)@$params['currency'];
-        $valid[3] = (int)@$params['initPayment'];
+        $valid[3] = (int)@$params['initBalance'];
         //подготовим объект
         $this->name = $valid[1];
         $this->type = $valid[2];

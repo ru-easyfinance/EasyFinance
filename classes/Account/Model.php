@@ -141,7 +141,7 @@ class Account_Model
                 $account['totalBalance'] = isset($totals[$account['id']]) ? (float)$totals[$account['id']] : 0;
                 if ( !( 10 <= $account['type'] ) and ( $account['type'] <=15 ) )
                     $account['reserve']     = (float)$this->countReserve($account['id']);
-                    $account['initPayment'] = isset($initBalances[$account['id']]) ? (float)$initBalances[$account['id']] : 0;
+                    $account['initBalance'] = isset($initBalances[$account['id']]) ? (float)$initBalances[$account['id']] : 0;
             }
         }
 
@@ -164,10 +164,10 @@ class Account_Model
             FROM operation
             WHERE
                 account_id IN (?a)
-                AND cat_id IS NULL
+                AND cat_id IS NULL AND type = ?
             GROUP BY account_id
         ";
-        return $this->db->selectCol($sql, $accountIds);
+        return $this->db->selectCol($sql, $accountIds, Operation::TYPE_BALANCE);
     }
 
 
@@ -181,24 +181,18 @@ class Account_Model
     {
         $sql = "SELECT
                     o.account_id AS account_id,
-                    (SUM(o.money))as sum
-                FROM operation o
-                WHERE
-                    o.accepted= 1
-                    AND o.deleted_at IS NULL
-                    AND o.account_id IN (?a)
-                GROUP BY o.account_id
-                UNION
-                SELECT
-                    o.transfer_account_id AS account_id,
-                    (SUM(o.transfer_amount))as sum
-                FROM operation o
-                WHERE
-                    o.accepted= 1
-                    AND o.deleted_at IS NULL
-                    AND o.transfer_account_id IN (?a)
-                GROUP BY o.transfer_account_id";
-
+                    SUM(CASE 
+                        	WHEN o.account_id = acc.account_id THEN o.money
+                        	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)
+                        	ELSE o.transfer_amount END) AS sum
+                    FROM accounts acc
+                    INNER JOIN operation o
+                    	ON o.accepted = 1
+                    	AND acc.account_id IN (?a) 
+                    	AND o.deleted_at IS NULL
+                    	AND (o.account_id = acc.account_id OR o.transfer_account_id = acc.account_id) 
+                    GROUP BY acc.account_id";
+        
         $accountsBallance = array();
 
         // Подсчитываем сумму по каждому счёту

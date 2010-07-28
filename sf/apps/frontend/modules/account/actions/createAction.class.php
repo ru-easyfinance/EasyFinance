@@ -19,7 +19,7 @@ class createAction extends BaseFrontendAccountCreateAction
             'name'         => $account['name'],
             'currency'     => (int)$account['currency_id'],
             'comment'      => $account['description'],
-            'initPayment'  => $balance,
+            'initBalance'  => $balance,
             'totalBalance' => $balance,
         );
 

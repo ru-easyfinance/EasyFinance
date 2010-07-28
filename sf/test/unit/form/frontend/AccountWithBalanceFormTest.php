@@ -55,7 +55,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
      */
     protected function getFields()
     {
-        return array('type_id', 'currency_id', 'name', 'description', 'initPayment');
+        return array('type_id', 'currency_id', 'name', 'description', 'initBalance');
     }
 
 
@@ -69,7 +69,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
             'currency_id' => 1,
             'name'        => 'Название счета',
             'description' => 'Описание счета',
-            'initPayment' => 234.56,
+            'initBalance' => 234.56,
         );
     }
 
@@ -128,7 +128,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
     public function testSaveWithZeroBalance()
     {
         $input = $this->getValidInput();
-        $input['initPayment'] = '';
+        $input['initBalance'] = 0;
 
         $user = $this->helper->makeUser();
         $form = $this->makeForm($user);
@@ -137,7 +137,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
 
         $account = $form->save();
         $expected = $input;
-        unset($expected['initPayment']);
+        unset($expected['initBalance']);
 
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
@@ -153,7 +153,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
     public function testSaveWithInitBalance()
     {
         $input = $this->getValidInput();
-        $input['initPayment'] = 123.45;
+        $input['initBalance'] = 123.45;
 
         $user = $this->helper->makeUser();
         $form = $this->makeForm($user);
@@ -162,12 +162,12 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
 
         $account = $form->save();
         $expected = $input;
-        unset($expected['initPayment']);
+        unset($expected['initBalance']);
 
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с нулевым балансом
-        $expectedOperation = $this->_makeBlanceOpeationArray($user, $account, $balance = $input['initPayment']);
+        $expectedOperation = $this->_makeBlanceOpeationArray($user, $account, $balance = $input['initBalance']);
         $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
     }
 
@@ -178,7 +178,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
     public function testSaveWithFailInitBalance()
     {
         $input = $this->getValidInput();
-        $input['initPayment'] = 'NaN'; // js-хрень, см. parseFloat()
+        $input['initBalance'] = 'NaN'; // js-хрень, см. parseFloat()
 
         $user = $this->helper->makeUser();
         $form = $this->makeForm($user);
@@ -187,12 +187,69 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
 
         $account = $form->save();
         $expected = $input;
-        unset($expected['initPayment']);
+        unset($expected['initBalance']);
 
         $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
 
         // Операция с начальным балансом
         $expectedOperation = $this->_makeBlanceOpeationArray($user, $account, $balance = 0);
+        $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
+    }
+
+
+    /**
+     * Редактируем счет с начальным балансом
+     */
+    public function testEditWithInitBalance()
+    {
+        $input = $this->getValidInput();
+        $input['initBalance'] = 123.45;
+
+        $account = $this->helper->makeAccount();
+        // Балансовая операция
+        $this->helper->makeOperation($account, $this->_makeBlanceOpeationArray($account->getUser(), $account, 0));
+        $form = new AccountWithBalanceForm($account);
+
+        $form->bind($input);
+        $this->assertFormIsValid($form);
+
+        $account = $form->save();
+        $expected = $input;
+        unset($expected['initBalance']);
+
+        $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
+
+        // Операция с нулевым балансом
+        $expectedOperation = $this->_makeBlanceOpeationArray($account->getUser(), $account, $balance = $input['initBalance']);
+        $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
+    }
+
+
+    /**
+     * Редактируем счет с начальным балансом
+     * Балансовой операции нет
+     */
+    public function testEditWithNoBalanceOpeartion()
+    {
+        $input = $this->getValidInput();
+        $input['initBalance'] = 123.45;
+
+        $account = $this->helper->makeAccount();
+        // Балансовой операции нет
+        $this->helper->makeOperation($account);
+        $form = new AccountWithBalanceForm($account);
+
+        $form->bind($input);
+        $this->assertFormIsValid($form);
+
+        $account = $form->save();
+        $expected = $input;
+        unset($expected['initBalance']);
+
+        $this->assertEquals(1, $this->queryFind('Account', $expected)->count(), 'Expected found 1 object (Account)');
+
+        // Операция с нулевым балансом
+        $expectedOperation = $this->_makeBlanceOpeationArray($account->getUser(), $account, $balance = $input['initBalance']);
         $this->assertEquals(1, $this->queryFind('Operation', $expectedOperation)->count(), 'Expected found 1 object (Operation)');
     }
 

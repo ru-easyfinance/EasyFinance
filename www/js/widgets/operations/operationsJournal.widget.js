@@ -138,9 +138,9 @@ easyFinance.widgets.operationsJournal = function(){
             //       Используем money и в результате получаем сумму без конвертации.
             //       .moneydef должен быть заполнен.
             if (_account == '' && _journal[v].virt != "1") {
-                strMoney = formatCurrency(_journal[v].moneydef);
+                strMoney = formatCurrency(_journal[v].moneydef, false, true);
             } else {
-                strMoney = formatCurrency(_journal[v].money);
+                strMoney = formatCurrency(_journal[v].money, false, true);
             }
 
             tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+strMoney+'&nbsp;</b></span></td>'

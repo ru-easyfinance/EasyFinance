@@ -246,7 +246,7 @@ easyFinance.models.accounts = function(){
             type_id:     params.type,
             name:        params.name,
             description: params.comment,
-            initPayment: params.initPayment
+            initBalance: params.initBalance
         };
 
         var successCallback = function(data) {

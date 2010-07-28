@@ -260,7 +260,9 @@ class Operation_Model
      *
      * @return int $id
      */
-    function add($type, $money = 0, $date = '', $category = null, $comment = '', $account = 0, $tags = array())
+    function add($type, $money = 0, $date = '', $category = null, $comment = '',
+        $account = 0, $tags = array(), $accepted = true
+    )
     {
         // Если операция новая, и отправлена не случайно, то продолжаем, иначе возвраты
         $check = $this->checkExistance($money, $date, $category, $comment, $account);
@@ -277,6 +279,7 @@ class Operation_Model
             'type'      => $type,
             'comment'   => $comment,
             'tags'      => implode(', ', (array)$tags),
+            'accepted'  => $accepted ? 1 : 0
         );
 
         $operationId = $this->_addOperation($values);
@@ -696,11 +699,8 @@ class Operation_Model
         }
 
         // Если указана категория (фильтр по категории)
-        if(!empty($currentCategory)) {
-
-            if ($listCategories[$currentCategory]['cat_parent'] == 0) {
-                $sql .= ' AND o.cat_id IN (' . $category . ') ';
-            }
+        if ($category) {
+                $sql .= " AND o.cat_id IN ($category) ";
         }
 
         // Если указан тип (фильтр по типу)
@@ -860,7 +860,7 @@ class Operation_Model
             if ($total_money[0]['total_money'] === null) {
                 $retoper = 0;
             } else {
-                $retoper = $total_money[0]['total_money'] / $actualCurrency;
+                $retoper = $total_money[0]['total_money'];
             }
 
 
@@ -1094,7 +1094,7 @@ class Operation_Model
             if ($v === null) {
                 $sets .= "null";
             } else {
-                $sets .= sprintf("'%s'", $v);
+                $sets .= sprintf("'%s'", addslashes($v));
             }
         }
 
@@ -1259,27 +1259,24 @@ class Operation_Model
      *
      * @param int           $parentCategory Ид родительской категории
      * @param array mixed   $listCategories Массив с категориями
-     * @return string Возвращает строку с ид, разделённую запятыми
+     * @return string|bool Возвращает строку с ид, разделённую запятыми или false
      */
     private function _getRelatedCategories($parentCategory, $listCategories)
     {
-        $relatedCategories = '';
+        if (!array_key_exists($parentCategory, $listCategories))
+            return false;
+
+        $relatedCategories = array();
+
+        $relatedCategories[] = $parentCategory;
 
         foreach ($listCategories as $category) {
             if ($category['cat_parent'] == $parentCategory) {
-                if ($relatedCategories) {
-                    $relatedCategories .= ',';
-                }
-
-                $relatedCategories .= $category['cat_id'];
+                $relatedCategories[] = $category['cat_id'];
             }
-
-            if ($relatedCategories) {
-                $relatedCategories .= ',';
-            }
-            $relatedCategories .= $parentCategory;
         }
-        return $relatedCategories;
+
+        return implode(',', $relatedCategories);
     }
 
 
@@ -1349,15 +1346,19 @@ class Operation_Model
     {
         $accounts    = $this->_user->getUserAccounts();
 
+        // Если не указана сконвертированная сумма (в ПДА такое может быть)
+        if ($convert)
+            return abs($convert);
+
+        if (!isset($accounts[$fromAccount]) || !isset($accounts[$toAccount]))
+            return false;
+
         $curFromId   = $accounts[$fromAccount]['account_currency_id'];
         $curTargetId = $accounts[$toAccount]['account_currency_id'];
 
         // Если перевод мультивалютный
         if ($curFromId != $curTargetId) {
-
-            // Если не указана сконвертированная сумма (в ПДА такое может быть)
             if ($convert == 0) {
-
                 $currensys = $this->_user->getUserCurrency();
 
                 // приводим сумму к пром. валюте
@@ -1367,9 +1368,7 @@ class Operation_Model
             }
         }
 
-        if ($convert == 0) {
-            $convert = $amount;
-        }
+        $convert = $convert ? $convert : $amount;
 
         return abs($convert);
     }
