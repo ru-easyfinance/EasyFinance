@@ -19,7 +19,7 @@ class model_OperationNotificationTableTest extends myUnitTestCase
 
         // Создать услугу с захардкоженным ID
         $service = new Service();
-        $service->setId(1); // TODO: Убрать хардкод
+        $service->setId(Service::SERVICE_SMS);
         $service->save();
     }
 
@@ -39,7 +39,7 @@ class model_OperationNotificationTableTest extends myUnitTestCase
         // Подписка
         $subscription = new ServiceSubscription();
         $subscription->setUser($user);
-        $subscription->setServiceId(1); // TODO: Убрать хардкод
+        $subscription->setServiceId(Service::SERVICE_SMS);
         $subscription->setSubscribedTill($date->format('Y-m-d 00:00:00'));
         $subscription->save();
 

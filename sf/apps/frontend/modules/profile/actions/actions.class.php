@@ -61,7 +61,7 @@ class profileActions extends sfActions {
 
         $subscribtion = Doctrine::getTable('ServiceSubscription')->getActiveUserServiceSubscription(
             $user->getId(),
-            sendEmailAndSmsNotifyTask::NOTIFICATION_SERVICE_ID
+            Service::SERVICE_SMS
         );
 
         $result['profile'] = array(
