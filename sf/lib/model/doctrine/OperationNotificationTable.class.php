@@ -10,14 +10,20 @@ class OperationNotificationTable extends Doctrine_Table
      *
      * @return Doctrine_Query
      */
-    # Svel: TODO  теста нет
-    # Svel: FIXME join пользователей и операций, см. sendEmailAndSmsNotifyTask
-    public function getUnsentNotifications($alias = 'n')
+    public function queryFindUnprocessed($alias = 'n')
     {
         $q = $this->createQuery($alias)
-            ->andWhere("{$alias}.schedule < ?", date('Y-m-d H:i:s'))
-            ->andWhere("{$alias}.is_sent = 0")
-            ->andWhere("{$alias}.is_done = 0");
+            ->select("{$alias}.*, o.*, u.*")
+                ->andWhere("{$alias}.schedule < ?", date('Y-m-d H:i:s'))
+                ->andWhere("{$alias}.schedule > ?", date('Y-m-d H:i:s', time()-sfConfig::get('app_notification_ttl')))
+                ->andWhere("{$alias}.is_done = 0")
+            ->innerJoin("{$alias}.Operation o")
+                ->andWhere("o.deleted_at IS NULL")
+                ->andWhere("o.accepted = ?", Operation::STATUS_DRAFT)
+            ->innerJoin("o.User u")
+            ->innerJoin("u.ServiceSubscription ss")
+                ->andWhere('ss.service_id=? AND ss.subscribed_till > ?', array(1,  date('Y-m-d')))
+            ->limit(100);
 
         return $q;
     }

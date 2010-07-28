@@ -111,7 +111,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
 
         $ob = $this->makeModel('Operation', $props, false);
         $ob->setAccount($account);
-        $ob->setUser($account->getUser());
+        $ob->setUser($user);
 
         if (!array_key_exists('category_id', $props) OR !is_null($props['category_id'])) {
             $ob->setCategory($this->makeCategory($user));
@@ -122,6 +122,31 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         }
         return $ob;
     }
+
+
+    /**
+     * Создать коллекцию опреаций
+     */
+    public function makeOperationCollection($count, Account $account = null, array $props = array(), $save = true)
+    {
+        $coll = Doctrine_Collection::create('Operation');
+
+        if (!$account) {
+            $account = $this->makeAccount(null, array(), $save);
+        }
+
+        for ($i=0; $i<(int)$count; $i++) {
+            if (isset($props[$i])) {
+                $itemProps = $props[$i];
+            } else {
+                $itemProps = array();
+            }
+            $coll->add($this->makeOperation($account, $itemProps, $save));
+        }
+
+        return $coll;
+    }
+
 
     /**
      * Запланировать событие
@@ -172,26 +197,6 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
             $ob->save();
         }
         return $ob;
-    }
-
-
-    /**
-     * Создать коллекцию операций
-     */
-    public function makeOperationCollection($count, Account $account = null, array $props = array(), $save = true)
-    {
-        $coll = Doctrine_Collection::create('Operation');
-
-        for ($i=0; $i<(int)$count; $i++) {
-            if (isset($props[$i])) {
-                $itemProps = $props[$i];
-            } else {
-                $itemProps = array();
-            }
-            $coll->add($this->makeOperation($account, $itemProps, $save));
-        }
-
-        return $coll;
     }
 
 

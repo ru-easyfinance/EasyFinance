@@ -203,6 +203,29 @@ Operation:
       filter: false
 
 
+# Оповещения о запланированных операциях (SMS/Email)
+OperationNotification:
+  tableName: operation_notifications
+  actAs: [Timestampable]
+  columns:
+    operation_id: { type: integer(8), unsigned: true, notnull: true }             # ID операции
+    schedule:     { type: timestamp(25), notnull: true }                          # планируемое время отправки уведомления
+    type:         { type: integer(2), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
+    fail_counter: { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
+    is_sent:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - отправлено
+    is_done:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - закончили с этой операцией
+  relations:
+    Operation:
+      local: operation_id
+      foreign: id
+      type: one
+      foreignType: many
+      onDelete: CASCADE      # При удалении Операции удаляются все оповещения
+  options:
+    symfony:
+      form:   false
+      filter: false
+
 # Операция из внешнего источника (100% - OK)
 SourceOperation:
   tableName: source_operations
@@ -497,30 +520,6 @@ EmailParser:
       type: one
       foreignType: one
       onDelete: CASCADE
-
-
-# Оповещения о запланированных операциях (SMS/Email)
-OperationNotification:
-  tableName: operation_notifications
-  actAs: [Timestampable]
-  columns:
-    operation_id: { type: integer(8), unsigned: true, notnull: true }             # ID операции
-    schedule:     { type: timestamp(25), notnull: true }                          # планируемое время отправки уведомления
-    type:         { type: integer(2), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
-    fail_counter: { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
-    is_sent:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - отправлено
-    is_done:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - закончили с этой операцией
-  relations:
-    Operation:
-      local:   operation_id
-      foreign: id
-      type:        one
-      foreignType: many
-      onDelete: CASCADE      # При удалении Операции удаляются все оповещения
-  options:
-    symfony:
-      form:   false
-      filter: false
 
 
 # Цепочки событий календаря  (100% - OK)

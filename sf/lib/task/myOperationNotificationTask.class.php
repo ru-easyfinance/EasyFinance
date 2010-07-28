@@ -79,7 +79,9 @@ class myOperationNotificationTask extends sfBaseTask
      */
     public function getEventsFromQueue()
     {
-        return array();
+        return Doctrine::getTable('OperationNotification')
+            ->queryFindUnprocessed()->execute()
+            ->getData();
     }
 
 

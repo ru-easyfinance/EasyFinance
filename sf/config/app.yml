@@ -5,6 +5,7 @@ all:
   notification:
 
     max_errors: 5
+    ttl:        86400  # сек, в течение какого срока, уведомление актуально
 
     # Параметры SMS-шлюза
     sms_url:   http://www.websms.ru/http_in5.asp
