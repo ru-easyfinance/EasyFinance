@@ -10,3 +10,7 @@ all:
     sms_url:   http://www.websms.ru/http_in5.asp
     sms_login: easyfinance
     sms_pass:  WGj163klSQ!@^&*SAds
+
+    # Уведомления по Email
+    email_from: reminder@easyfinance.ru
+    email_name: EasyFinance Reminder

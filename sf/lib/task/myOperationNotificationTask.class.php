@@ -67,7 +67,7 @@ class myOperationNotificationTask extends sfBaseTask
     {
         if (!$this->_handlers) {
             $this->registerHandler(OperationNotification::TYPE_SMS,   new myNotificationHandlerSms);
-            $this->registerHandler(OperationNotification::TYPE_EMAIL, new myNotificationHandlerEmail);
+            $this->registerHandler(OperationNotification::TYPE_EMAIL, new myNotificationHandlerEmail($this->getMailer()));
         }
     }
 
@@ -91,10 +91,12 @@ class myOperationNotificationTask extends sfBaseTask
         $countOk    = 0;
         $countError = 0;
 
-        $this->_initDefaultHandlers();
-
+        // Надо подключить конфиг
+        $configuration = $this->createConfiguration('frontend', $options['env']);
         // Инициализировать соединение с БД
         $databaseManager = new sfDatabaseManager($this->configuration);
+
+        $this->_initDefaultHandlers();
 
         foreach ($this->getEventsFromQueue() as $notification) {
 

@@ -78,4 +78,16 @@ class Account extends BaseAccount
     public function postSave($event) {
         $this->getBalanceOperation()->setAccountId($this->getId())->save();
     }
+
+
+    /**
+     * ToString
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->_get('name');
+    }
+
 }
