@@ -22,6 +22,24 @@ abstract class api_sync_in extends mySyncInFunctionalTestCase
 
 
     /**
+     * XML должен прийти просто текстом
+     */
+    final public function testXMLHeaderError()
+    {
+        $this->checkSyncInError(urlencode("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"), 400, 'Expected valid text/xml');
+    }
+
+
+    /**
+     * Ошибка разбора XML парсером libxml
+     */
+    final public function testXMLParserError()
+    {
+        $this->checkSyncInError("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<record>\nsome unescaped & data\n</record>\n", 400, 'Expected valid text/xml: see xmlsoft.org');
+    }
+
+
+    /**
      * Пустой xml, отсутствуют записи для обработки
      */
     final public function testEmptyXMLError()
