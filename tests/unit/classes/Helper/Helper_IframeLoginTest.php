@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once dirname(__FILE__) . '/../../bootstrap.php';
 
 class TestHelper_IframeLoginTest extends Helper_IframeLoginRambler
@@ -41,11 +42,8 @@ class Helper_IframeLoginTest extends PHPUnit_Framework_TestCase {
         $class = new TestHelper_IframeLoginTest($templateEngine);
         $class->init();
 
-        if (isset($_SESSION['REQUEST_URI']) && !empty($_SESSION['REQUEST_URI'])) {
-            header('Location: ' . $_SESSION['REQUEST_URI']);
-        } else {
-
-        }
+        $userId = Core::getInstance()->user->getId();
+        $this->assertNotNull($userId, 'User Id mustn`t be null');
     }
 
 }

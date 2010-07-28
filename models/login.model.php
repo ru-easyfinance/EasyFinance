@@ -366,8 +366,14 @@ class Login_Model
      */
     public static function  generateUserByRamblerLogin($ramblerKey)
     {
-        $db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE);
-        return $db->query("INSERT into users (user_name , user_login, user_pass, user_active, user_new, user_created)
-            VALUES (?, ?, ?, 1, 0, NOW())", 'Рамблер', $ramblerKey, sha1($ramblerKey));
+        $query = "
+            INSERT INTO users
+                (user_name, user_login, user_pass, user_active, user_new,
+                user_created)
+            VALUES
+                (?, ?, ?, 1, 0, NOW())";
+
+        return Core::getInstance()->db->query($query, 'Рамблер', $ramblerKey, 
+            sha1($ramblerKey));
     }
 }

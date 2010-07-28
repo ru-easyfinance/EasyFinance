@@ -37,17 +37,16 @@ class Helper_IframeLoginRambler extends Helper_IframeLogin
         // Пытаемся инициализировать пользователя
         $this->_initUser($ramblerLogin, sha1($ramblerLogin));
 
-        // Устанавливаем пользователю куку
-        $this->_setCookie($ramblerLogin, sha1($ramblerLogin));
+        if (!Core::getInstance()->user->getId()) {
+            Login_Model::generateUserByRamblerLogin('rambler_' . $ramblerKey);
+            $this->_initUser($ramblerLogin, sha1($ramblerLogin));
+        }
 
         if (Core::getInstance()->user->getId()) {
-
-            $this->_redirect("Location: https://rambler." . URL_ROOT_MAIN . "info/");
-
-        } else {
-
-            Login_Model::generateUserByRamblerLogin('rambler_' . $ramblerKey);
-
+            // Устанавливаем пользователю куку
+            $this->_setCookie($ramblerLogin, sha1($ramblerLogin));
+            $this->_redirect('https://rambler.' . URL_ROOT_MAIN
+                    . 'info/');
         }
     }
 
@@ -62,5 +61,10 @@ class Helper_IframeLoginRambler extends Helper_IframeLogin
     private function _initUser($login, $password)
     {
         Core::getInstance()->user->initUser($login, $password);
+    }
+
+    protected function _redirect($url) {
+        header("Location: $url");
+        die();
     }
 }
