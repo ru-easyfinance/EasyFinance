@@ -27,14 +27,6 @@ class myOperationNotificationTask extends sfBaseTask
         $this->detailedDescription =
             "SMS and Email notification service" . PHP_EOL . PHP_EOL
           . "[./symfony cron:notify]";
-
-
-        // Подключить автолоад, иначе обработчики не подключить
-        $configuration = $this->createConfiguration('frontend', 'cli');
-
-        // Зарегистрировать обработчки уведомлений
-        $this->registerHandler(OperationNotification::TYPE_SMS,   new myNotificationHandlerSms);
-        $this->registerHandler(OperationNotification::TYPE_EMAIL, new myNotificationHandlerEmail);
     }
 
 
@@ -67,6 +59,20 @@ class myOperationNotificationTask extends sfBaseTask
 
 
     /**
+     * Инициализировать дефолтные обработчки
+     *
+     * @return void
+     */
+    private function _initDefaultHandlers()
+    {
+        if (!$this->_handlers) {
+            $this->registerHandler(OperationNotification::TYPE_SMS,   new myNotificationHandlerSms);
+            $this->registerHandler(OperationNotification::TYPE_EMAIL, new myNotificationHandlerEmail);
+        }
+    }
+
+
+    /**
      * Выбрать уведомления из очереди
      *
      * @return array OperationNotification
@@ -84,6 +90,8 @@ class myOperationNotificationTask extends sfBaseTask
     {
         $countOk    = 0;
         $countError = 0;
+
+        $this->_initDefaultHandlers();
 
         // Инициализировать соединение с БД
         $databaseManager = new sfDatabaseManager($this->configuration);

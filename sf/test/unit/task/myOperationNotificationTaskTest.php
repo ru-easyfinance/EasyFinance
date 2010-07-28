@@ -118,18 +118,6 @@ class task_myOperationNotificationTaskTest extends myUnitTestCase
 
 
     /**
-     * Дефолтная инициализация обработчиков
-     */
-    public function testDefaultHandlers()
-    {
-        $task = new myOperationNotificationTask(new sfEventDispatcher, new sfFormatter);
-
-        $this->assertType('myNotificationHandlerSms',   $task->getHandler(OperationNotification::TYPE_SMS));
-        $this->assertType('myNotificationHandlerEmail', $task->getHandler(OperationNotification::TYPE_EMAIL));
-    }
-
-
-    /**
      * Отправить одно уведомление
      */
     public function testSendOneSuccess()
