@@ -118,20 +118,68 @@ class myNotificationHandlerSms implements myNotificationHandlerInterface
 
     /**
      * Сообщение вида:
-     * ДД.ММ,8888888888 ВАЛ,КАТЕГОРИЯ_15_СИМВ,СЧЕТ_15_СИМВ,КОММЕНТ_15_СИМВ
+     * ДАТА, СУММА ВАЛЮТА, КАТЕГОРИЯ, СЧЕТ, КОММЕНТАРИЙ
      *
      * @param  Operation $operation
      * @return string
      */
     private function _makeMessage($operation)
     {
-        // Template
-        return date("d.m", strtotime( $operation->getDate())) . "," .
-            mb_substr( strip_tags( $operation->getCategory()->getCatName() ), 0, 15, 'UTF8' ) . "," .
-            abs( $operation->getMoney() ) . " " .
-            $operation->getAccount()->getCurrency()->getCurCharCode() . "," .
-            mb_substr(strip_tags( $operation->getAccount()->getAccountName() ), 0, 15, 'UTF8') ."," .
-            mb_substr(strip_tags( $operation->getComment() ), 0, 15, 'UTF8');
+        $words = array(
+            $operation->getDateTimeObject('date')->format('d.m'),
+            abs($operation->getAmount()) . ' ' . $operation->getAccount()->getCurrency()->getCode(),
+            (string) strip_tags($operation->getCategory()),
+            (string) strip_tags($operation->getAccount()),
+            strip_tags($operation->getComment()),
+        );
+
+        return $this->_fixMessageLenth($words);
+    }
+
+
+    /**
+     * Исправить длину каждого слова в сообщении, чтобы уложиться в лимит символов
+     *
+     * @param  array $words
+     * @return string
+     */
+    private function _fixMessageLenth(array $words)
+    {
+        // Максимальная длина SMS
+        $maxLen = 69;
+
+        // Длина без учета разделителей
+        $rawLen = $maxLen - (count($words)-1)*2;
+
+        // Если итоговая длина превышает допустимый размер
+        if (mb_strlen(implode(', ', $words)) > $maxLen) {
+            for ($i=0, $n=count($words); $i<$n; $i++) {
+                $this->_fixWord($words[$i], $rawLen, $i==$n-1);
+            }
+        }
+
+        return implode(', ', $words);
+    }
+
+
+    /**
+     * Исправить длину слова с учетом его допустимой длины
+     *
+     * @param  string $word         - Слово
+     * @param  int    $leftLength   - Оставшаяся длина SMS
+     * @param  bool   $last         - Является ли это слово последним
+     * @return void
+     */
+    private function _fixWord(&$word, &$leftLength, $last = false)
+    {
+        // Максимальная длина слова
+        // Если последний элемент, тогда все, что осталось
+        $maxWord = $last ? $leftLength : 15;
+
+        if (mb_strlen($word) > $maxWord) {
+            $word = mb_substr($word, 0, $maxWord, 'UTF8');
+        }
+        $leftLength -= mb_strlen($word);
     }
 
 }
