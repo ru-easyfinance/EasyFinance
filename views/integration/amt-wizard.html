@@ -13,8 +13,8 @@
                     <li class="wz_tab_header">Контакты</li>
                     <li class="wz_tab_header">Работа</li>
                     <li class="wz_tab_header">Свойства карты</li>
-                    <li class="wz_tab_header">Дополнительная карта</li>
-                    <li class="wz_tab_header">Дополнительная карта для лиц до 14</li>
+                    <li class="wz_tab_header wz_tab_header_not_main">Дополнительная карта</li>
+                    <li class="wz_tab_header wz_tab_header_not_main">Дополнительная карта для лиц до 14</li>
                     <li class="wz_tab_header">Пароль</li>
                 </ol>
             </div>
@@ -72,12 +72,12 @@
 
                             <div class="fld_holder">
                                 <label for="wz_citizenship">Гражданство <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_citizenship" id="wz_citizenship" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <select type="text" name="wz_citizenship" id="wz_citizenship"></select><br /><br />
                             </div>
 
                             <div class="fld_holder">
                                 <label for="wz_inn">ИНН</label><br />
-                                <input type="text" name="wz_inn" id="wz_inn" value="" maxlength="255" /><br /><br />
+                                <input type="text" name="wz_inn" id="wz_inn" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
                             <input type="submit" value="Далее &gt;&gt;" />
@@ -95,7 +95,7 @@
 
                             <div class="fld_holder">
                                 <label for="wz_reg_country">Страна <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_reg_country" id="wz_reg_country" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <select type="text" name="wz_reg_country" id="wz_reg_country"></select><br /><br />
                             </div>
 
                             <div class="fld_holder">
@@ -105,7 +105,7 @@
 
                             <div class="fld_holder">
                                 <label for="wz_reg_region">Регион, район <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_reg_region" id="wz_reg_region" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <select type="text" name="wz_reg_region" id="wz_reg_region"></select><br /><br />
                             </div>
 
                             <div class="fld_holder">
@@ -150,7 +150,7 @@
 
                             <div class="fld_holder">
                                 <label for="wz_actual_country">Страна <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_actual_country" id="wz_actual_country" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <select type="text" name="wz_actual_country" id="wz_actual_country"></select><br /><br />
                             </div>
 
                             <div class="fld_holder">
@@ -160,7 +160,7 @@
 
                             <div class="fld_holder">
                                 <label for="wz_actual_region">Регион, район <span class="wz_req_fld">*</span></label><br />
-                                <input type="text" name="wz_actual_region" id="wz_actual_region" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
+                                <select type="text" name="wz_actual_region" id="wz_actual_region"></select><br /><br />
                             </div>
 
                             <div class="fld_holder">

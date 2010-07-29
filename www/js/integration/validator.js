@@ -581,6 +581,13 @@ dValidatorClass.prototype.checkFieldMain = function(input, type) {
         case 'exists':
             return this.existsCheck(input);
             break;
+        case 'regexp':
+            if (this.params.regexp) {
+                return this.params.regexp.test(input.value);
+            } else {
+                return true;
+            }
+            break;
         default:
             return false;
     }

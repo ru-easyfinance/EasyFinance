@@ -94,6 +94,7 @@ Core::getInstance()->js = array(
         'integration/omni',
         'integration/tabs',
         'integration/validator',
+        'integration/countries',
         'screens/integration.screen'),
     'category' => array(
 		'models/category.model',
