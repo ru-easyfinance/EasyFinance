@@ -263,8 +263,8 @@ class Info_Model
             case self::$CREDIT_PERCENT_QUERY:
                 //нужны только расходы
                 $operationType = '0';
-                //нужна только одна системная категория
-                $additionalWhere = "op.cat_id = (SELECT cat.cat_id FROM category cat" . 
+                //категорий с системной категорией "Проценты по кредитам и займам" может быть много, поэтому выбираем через IN
+                $additionalWhere = "op.cat_id IN (SELECT cat.cat_id FROM category cat" . 
                 	" WHERE cat.system_category_id = 15 AND cat.user_id = ".(int)$this->user()->getId(). ")";
                 break;
 
