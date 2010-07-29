@@ -66,7 +66,18 @@ abstract class myBaseSyncInAction extends sfAction
                 $this->raiseError("Expected XML data");
             }
 
-            $this->setXML($xml = simplexml_load_string($rawXml));
+            if (false === strpos($rawXml, "<?xml")) {
+                $this->raiseError("Expected valid text/xml");
+            }
+
+            try {
+                $xml = simplexml_load_string($rawXml);
+            } catch (Exception $e) {
+                $this->raiseError("Expected valid text/xml: see xmlsoft.org");
+                // $xml = new SimpleXMLElement('');
+            }
+
+            $this->setXML($xml);
 
             $count = (int) count($xml->recordset[0]);
             $limit = sfConfig::get('app_records_sync_limit', 100);
