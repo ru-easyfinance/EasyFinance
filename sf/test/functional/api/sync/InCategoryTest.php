@@ -19,7 +19,7 @@ class api_sync_InCategoryTest extends api_sync_in
 
 
     /**
-     * Получить список полей полей объекта, которые принимаются из XML
+     * Получить список полей объекта, которые принимаются из XML
      */
     protected function getFields()
     {

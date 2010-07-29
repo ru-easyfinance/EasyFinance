@@ -15,7 +15,6 @@ class mySyncInCategoryForm extends BaseFormDoctrine
             'parent_id'   => new sfValidatorInteger(array('min' => 0)),
             'name'        => new sfValidatorString(array('max_length' => 255)),
             'type'        => new sfValidatorInteger(array('min' => -1, 'max' => 1)),
-            'custom'      => new sfValidatorBoolean(),
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
