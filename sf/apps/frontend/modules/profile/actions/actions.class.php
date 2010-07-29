@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/../../../lib/helper/myDateTimezoneHelper.php');
+
 
 class profileActions extends sfActions {
 
@@ -10,7 +12,7 @@ class profileActions extends sfActions {
 
         // отображение имён параметров, пришедших в запросе, на имена полей в БД
         $fields_map = array(
-            'timezone'       => 'time_zone_offset',
+            'timezone'       => 'time_zone',
             'smsPhone'       => 'sms_phone',
             'mailEnabled'    => 'reminder_mail_default_enabled',
             'smsEnabled'     => 'reminder_sms_default_enabled',
@@ -33,10 +35,18 @@ class profileActions extends sfActions {
                 if( $request_params[ $parameter_name ] == 'false' )
                     $request_params[ $parameter_name ] = 0;
 
+                if ('timezone' == $parameter_name) {
+                    if (!isset(myDateTimezoneHelper::$zones[$request_params[$parameter_name]])) {
+                        continue;
+                    }
+                }
+
                 $user->set( $field_name, $request_params[ $parameter_name ] );
                 $reminders_array[ $parameter_name ] = $request_params[ $parameter_name ];
             }
         }
+
+
         $user->save();
 
         $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
@@ -68,7 +78,7 @@ class profileActions extends sfActions {
             'login'     => $user->getUserLogin(),
             'name'      => $user->getUserName(),
             'mail'      => $user->getUserMail(),
-            'timezone'  => $user->getTimeZoneOffset(),
+            'timezone'  => $user->getTimeZone(),
             'integration' => array(
                 'email' => str_replace('@mail.easyfinance.ru', '', $user->getUserServiceMail()),
             ),
