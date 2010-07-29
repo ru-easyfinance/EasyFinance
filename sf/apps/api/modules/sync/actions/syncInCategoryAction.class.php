@@ -115,7 +115,6 @@ class syncInCategoryAction extends myBaseSyncInAction
             'parent_id'  => (string) $record->parent_id,
             'name'       => (string) $record->name,
             'type'       => (string) $record->type,
-            'custom'     => (string) $record->custom,
             'created_at' => (string) $record->created_at,
             'updated_at' => (string) $record->updated_at,
             'deleted_at' => (isset($record['deleted']) ? (string) $record->updated_at : null),
