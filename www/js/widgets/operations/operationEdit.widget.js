@@ -1270,7 +1270,7 @@ easyFinance.widgets.operationEdit = function(){
         _isCalendar = true;
         _isEditing = isEditing;
         _isChain = isChain;
-
+        setType(data.type);
         // открываем диалог для планирования
         _expandCalendar();
 
@@ -1283,7 +1283,6 @@ easyFinance.widgets.operationEdit = function(){
         // TEMP: не показываем операции на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
         $("#op_type").html(htmlOptions).ufd("changeOptions");
-        setType(data.type);
         // EOF TEMP
     }
 
