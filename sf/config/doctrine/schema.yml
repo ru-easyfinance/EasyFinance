@@ -59,7 +59,7 @@ User:
     currency_id:       { name: user_currency_default as currency_id, type: integer(4), notnull: true, default: 1 }
     user_login:        { type: string(100), notnull: true }
     user_mail:         { type: string(100), notnull: true }
-    time_zone_offset:  { type: float(4), notnull: true, default:  0 }
+    time_zone:         { type: string(32),  notnull: true, default: 'Europe/Moscow' }
     sms_phone:         { type: string(100) }
     reminder_mail_aviable:         { type: integer(1), notnull: true, unsigned: true, default: 0 }
     reminder_mail_default_enabled: { type: integer(1), notnull: true, unsigned: true, default: 0 }
