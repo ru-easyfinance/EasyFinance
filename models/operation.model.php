@@ -1145,29 +1145,44 @@ class Operation_Model
      *
      * @param array $notifications массив с настройками уведомлений
      */
-    private function _addNotifications($operationId, $date, $notifications, oldUser $user)
+    private function _addNotifications($operationId, $date, $notifications)
     {
         $this->_deleteNotifications($operationId);
 
         if ($notifications) {
-            // Смещение в секундах относительно серверного времени
-            $offset = ($user->getUserProps('time_zone_offset') - round(date("O") / 100, 2)) * 3600;
 
-            $operation_ts = strtotime($date);
 
             // Email уведомления
             if ($notifications['mailEnabled']) {
-                $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['mailDaysBefore']} days", $operation_ts) + $notifications['mailHour'] * 3600 + $notifications['mailMinutes'] * 60 - $offset);
+                $notify_dt = $this->_makeNotificationDate($date, $notifications['mailDaysBefore'], $notifications['mailHour'], $notifications['mailMinutes']);
                 $type = 1;
                 $this->_addNotificationRow($operationId, $type, $notify_dt);
             }
 
             if ($notifications['smsEnabled']) { // SMS уведомления
-                $notify_dt = date("Y-m-d H:i:s", strtotime("-{$notifications['smsDaysBefore']} days", $operation_ts) + $notifications['smsHour'] * 3600 + $notifications['smsMinutes'] * 60 - $offset);
+                $notify_dt = $this->_makeNotificationDate($date, $notifications['smsDaysBefore'], $notifications['smsHour'], $notifications['smsMinutes']);
                 $type = 0;
                 $this->_addNotificationRow($operationId, $type, $notify_dt);
             }
         }
+    }
+
+
+    /**
+     * Дата уведомления с учетом часового пояса пользователя
+     */
+    private function _makeNotificationDate($date, $days, $hours, $mins)
+    {
+        // Дата в часовом поясе пользователя
+        $date = new DateTime($date, new DateTimeZone($this->_user->getUserProps('time_zone')));
+        if ($days) {
+            $date->modify("-{$days} days");
+        }
+        $date->setTime($hours, $mins);
+
+        // Перевести в часовой пояс сервера
+        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        return $date->format('Y-m-d H:i:s');
     }
 
 

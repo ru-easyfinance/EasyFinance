@@ -174,8 +174,6 @@ class Calendar_Model extends _Core_Abstract_Model
                 WHERE operation_id IN (?a) AND is_done=0";
         $notifications = Core::getInstance()->db->select($sql, $opIds);
 
-        // Получаем смещение временной зоны пользователя относительно времени сервера
-        $offset = ($user->getUserProps('time_zone_offset') - round((date("O") / 100), 2)) * 3600;
 
         // Напоминания об операциях
         if ($notifications) {
@@ -183,24 +181,30 @@ class Calendar_Model extends _Core_Abstract_Model
             foreach ($notifications as $notrow) {
                 $row =& $rows[$notrow['operation_id']];
 
-                $dtTimestamp = strtotime($notrow['schedule']) + $offset;
+                $date = new DateTime($notrow['schedule']);
+                $date->setTimezone(new DateTimeZone($user->getUserProps('time_zone')));
+
+                // дата операции
+                // TODO: !!! Дата записана в БД без учета часового пояса пользователя
+                $now = new DateTime($row['date']);
+                $date->setTimezone(new DateTimeZone($user->getUserProps('time_zone')));
+
+                $daysBefore = floor(abs($now->format('U') - $date->format('U')) / (3600 * 24));
 
                 // SMS
                 if ($notrow['type'] == 0) {
                     $row['smsEnabled'] = 1;
-                    $daysBefore = floor(abs(strtotime($row['date']) - strtotime(date("Y-m-d", $dtTimestamp))) / (3600 * 24));
                     $row['smsDaysBefore'] = $daysBefore;
-                    $row['smsHour'] = date('H', $dtTimestamp);
-                    $row['smsMinutes'] = date('i', $dtTimestamp);
+                    $row['smsHour'] = $date->format('H');
+                    $row['smsMinutes'] = $date->format('i');
                 }
 
                 // Email
                 if ($notrow['type'] == 1) {
                     $row['mailEnabled'] = 1;
-                    $daysBefore = floor(abs(strtotime($row['date']) - strtotime(date("Y-m-d", $dtTimestamp))) / (3600 * 24));
                     $row['mailDaysBefore'] = $daysBefore;
-                    $row['mailHour'] = date('H', $dtTimestamp);
-                    $row['mailMinutes'] = date('i', $dtTimestamp);
+                    $row['mailHour'] = $date->format('H');
+                    $row['mailMinutes'] = $date->format('i');
                 }
             }
         }
