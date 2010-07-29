@@ -21,6 +21,8 @@ class validator_myValidatorDatetimeIso8601Test extends myUnitTestCase
             array('2009-05-19 14:39:22+0600', true),
             array('2009-05-19T14:39:22+0600', true),
             array('2009-05-19 14:39:22-01', true),
+            array('0000-00-00T00:00:00+00', true),
+            array('0000-00-00 00:00:00+0000', true),
 
             // Несуществующая дата/время
             array('2009-21-19T14:39:22+0600', false),

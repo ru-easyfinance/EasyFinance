@@ -9,6 +9,10 @@
      */
     function sync_date($dateStr)
     {
+        if (false !== strpos($dateStr, "0000-00-00")) {
+            return "";
+        }
+
         $date = new DateTime($dateStr);
         return $date->format(DATE_ISO8601);
     }

@@ -88,7 +88,7 @@ class api_sync_InOperationTest extends api_sync_in
     {
         $expectedData = array(
             'user_id'     => $this->_user->getId(),
-            'comment'     => 'Просто операция',
+            'comment'     => '<![CDATA[Просто операция + коммент с & спецсимволом]]>',
             'created_at'  => $this->_makeDate(-10000),
             'updated_at'  => $this->_makeDate(-300),
             'cid'         => 2,
@@ -106,6 +106,7 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
 
         unset($expectedData['cid']); // у записи нет такого поля
+        $expectedData['comment'] = "Просто операция + коммент с & спецсимволом";
         $this->browser
             ->with('model')->check('Operation', $expectedData, 1);
     }

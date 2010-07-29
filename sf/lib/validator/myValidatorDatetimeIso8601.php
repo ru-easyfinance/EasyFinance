@@ -7,7 +7,7 @@
  */
 class myValidatorDatetimeIso8601 extends sfValidatorDate
 {
-    private $_pattern = '/^\d{4}(-?)\d{2}(-?)\d{2}[T\s]\d{2}(:?)\d{2}((:?)\d{2})?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)$/';
+    private $_pattern = '/^(?:-?)\d{4}(-?)\d{2}(-?)\d{2}[T\s]\d{2}(:?)\d{2}((:?)\d{2})?([zZ]|([\+\-])([01]\d|2[0-3]):?([0-5]\d)?)$/';
 
 
     /**
