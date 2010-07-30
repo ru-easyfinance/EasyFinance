@@ -3,7 +3,7 @@
 /**
  * Accounts: Добавляем новое поле состояния счёта, для архивных и избранных счетов
  */
-class Migration039_Add_AccountField extends myBaseMigration
+class Migration046_Add_AccountField extends myBaseMigration
 {
     public function migrate()
     {
