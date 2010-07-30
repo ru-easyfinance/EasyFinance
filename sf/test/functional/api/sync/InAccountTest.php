@@ -80,7 +80,7 @@ class api_sync_InAccountTest extends api_sync_in
             'type_id'     => 2,
             'currency_id' => 4,
             'name'        => 'Мой счет',
-            'description' => 'Описание счета',
+            'description' => null, // t1712 может быть пустое описание, отправить пустой тег
             'created_at'  => $this->_makeDate(-10000),
             'updated_at'  => $this->_makeDate(-300),
             'deleted_at'  => null,

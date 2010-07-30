@@ -14,7 +14,7 @@ class mySyncInAccountForm extends BaseFormDoctrine
             'type_id'     => new sfValidatorPass(),
             'currency_id' => new sfValidatorPass(),
             'name'        => new sfValidatorString(array('max_length' => 255)),
-            'description' => new sfValidatorString(array('max_length' => 255)),
+            'description' => new sfValidatorString(array('required' => false, 'max_length' => 255,)),
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
