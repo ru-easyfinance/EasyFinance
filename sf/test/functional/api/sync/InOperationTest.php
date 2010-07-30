@@ -222,18 +222,24 @@ class api_sync_InOperationTest extends api_sync_in
 
         $xml = $this->getXMLHelper()->make($expectedData);
 
-        $this
-            ->myXMLPost($xml, 200)
+        $this->myXMLPost($xml, 200);
+
+        $recordData = $expectedData;
+        unset($recordData['cid']); // у записи нет такого поля
+        $this->browser
+            ->with('model')->check('Operation', $recordData, 1, $foundList);
+
+        // Ответ
+        $this->browser
             ->with('response')->begin()
-                ->checkElement(sprintf(
-                    'resultset[type="Operation"] record[id][cid="%d"][success="true"]',
-                        $expectedData['cid']
-                ), 'OK')
+                ->checkElement('resultset', 1)
+                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
+                        $foundList->getFirst()->getId(),
+                        $expectedData['cid'])
+                    , 'OK')
             ->end();
 
-        unset($expectedData['cid']); // у записи нет такого поля
-        $this->browser
-            ->with('model')->check('Operation', $expectedData, 1);
+        $this->assertEquals("0000-00-00", $foundList->getFirst()->getDate(), "приняли 0ую дату и правильно ее записали");
     }
 
 
