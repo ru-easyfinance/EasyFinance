@@ -462,4 +462,17 @@ $(document).ready(function(){
     wzFillSelect('#wz_reg_region', wzGetRegions());
     wzFillSelect('#wz_actual_country', wzGetCountries());
     wzFillSelect('#wz_actual_region', wzGetRegions());
+
+    $('#wz_reg_country').change(function() {
+        if (this.value != 'РОССИЯ') {
+            $('#wz_reg_region').val('Прочее');
+        }
+    });
+
+    $('#wz_actual_country').change(function() {
+        if (this.value != 'РОССИЯ') {
+            $('#wz_actual_region').val('Прочее');
+        }
+    });
+
 });
