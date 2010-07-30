@@ -263,8 +263,8 @@ class Info_Model
             case self::$CREDIT_PERCENT_QUERY:
                 //нужны только расходы
                 $operationType = '0';
-                //нужна только одна системная категория
-                $additionalWhere = "op.cat_id = (SELECT cat.cat_id FROM category cat" . 
+                //категорий с системной категорией "Проценты по кредитам и займам" может быть много, поэтому выбираем через IN
+                $additionalWhere = "op.cat_id IN (SELECT cat.cat_id FROM category cat" . 
                 	" WHERE cat.system_category_id = 15 AND cat.user_id = ".(int)$this->user()->getId(). ")";
                 break;
 
@@ -277,7 +277,7 @@ class Info_Model
             }
 
         $query = $this->getQueryByConditions($operationType, $months, $useSenders, $additionalWhere, $additionalHaving);
-
+      
         return $query;
     }
 
@@ -293,9 +293,10 @@ class Info_Model
         //иначе (доход или 'перевод на') - плюс
         $query = "
             SELECT
-                SUM(CASE WHEN op.type = 0 OR op.type = 2 AND op.account_id = acc.account_id
-                    THEN -ABS(op.money)
-                    ELSE ABS(op.money)
+                SUM(CASE 
+                        WHEN op.account_id = acc.account_id THEN op.money
+                        WHEN IFNULL(op.transfer_amount, 0) = 0 THEN ABS(op.money)
+                        ELSE op.transfer_amount 
                     END
                 ) AS money,
                 acc.account_type_id AS type_id, acc.account_currency_id AS currency_id

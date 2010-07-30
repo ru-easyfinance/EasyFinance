@@ -92,7 +92,8 @@ class Account_Model
             account_type_id as type,
             account_currency_id as currency,
             account_name as name,
-            account_description as comment
+            account_description as comment,
+            account_state as state
         FROM accounts
         WHERE
                 user_id=?
@@ -180,7 +181,7 @@ class Account_Model
     private function _getTotalByAccounts(array $accountIds)
     {
         $sql = "SELECT
-                    o.account_id AS account_id,
+                    acc.account_id AS account_id,
                     SUM(CASE 
                         	WHEN o.account_id = acc.account_id THEN o.money
                         	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)

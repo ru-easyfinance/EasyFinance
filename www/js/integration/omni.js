@@ -1,8 +1,11 @@
-function wzStepNextBack(direction) {
+function wzStepNextBack(direction, step) {
     var reStep = /^wz_tab_(\d+)$/i;
-    var step = 0;
+    var step = step ? step : 0;
 
-    if (tabs.activeTab && (typeof(tabs.activeTab) != 'undefined') && reStep.test(tabs.activeTab)) {
+    if (
+        !step && tabs.activeTab && (typeof(tabs.activeTab) != 'undefined') &&
+        reStep.test(tabs.activeTab)
+    ) {
         step = RegExp.$1 - 0;
     }
 
@@ -13,6 +16,9 @@ function wzStepNextBack(direction) {
     }
 
     if ((step >= 0) && (step < tabs.labels.length)) {
+        if ($('#wz_tab_' + step).hasClass('wz_tab_header_not_main'))
+            return wzStepNextBack(direction, step);
+
         tabs.showTab('wz_tab_' + step);
     }
 
@@ -192,15 +198,15 @@ function wsInitValidator() {
     };
 
     dValidator.validatableElems['personal_info']['wz_surname_translit'] = {
-        'validationType' : 'enalpha',
+        'validationType' : 'regexp',
         'errMsg' : '',
-        'params' : {}
+        'params' : { regexp: /[A-Z][0-9A-Z. -]{0,32}$/i}
     };
 
     dValidator.validatableElems['personal_info']['wz_name_translit'] = {
-        'validationType' : 'enalpha',
+        'validationType' : 'regexp',
         'errMsg' : '',
-        'params' : {}
+        'params' : { regexp: /[A-Z][0-9A-Z. -]{0,32}/i}
     };
 
     dValidator.validatableElems['personal_info']['wz_birthdate'] = {
@@ -225,6 +231,12 @@ function wsInitValidator() {
         'validationType' : 'blank',
         'errMsg' : '',
         'params' : {}
+    };
+
+    dValidator.validatableElems['personal_info']['wz_inn'] = {
+        'validationType' : 'regexp',
+        'errMsg' : '',
+        'params' : { regexp: /^()|([0-9]{12})$/ }
     };
 
     dValidator.validatableElems['registration_address'] = new Array();
@@ -341,9 +353,9 @@ function wsInitValidator() {
     */
 
     dValidator.validatableElems['contacts']['wz_phone_mob'] = {
-        'validationType' : 'phone',
+        'validationType' : 'regexp',
         'errMsg' : '',
-        'params' : {}
+        'params' : { regexp: /^[+][0-9]{11,15}$/i }
     };
 
     dValidator.validatableElems['contacts']['wz_phone_home'] = {
@@ -413,6 +425,13 @@ function wsInitValidator() {
     };
 }
 
+function wzFillSelect(selectId, data) {
+    var dropdownList = $(selectId);
+    for (i in data) {
+        dropdownList.append(new Option(data[i], data[i]))
+    }
+}
+
 $(document).ready(function(){
     // инициализируем валидатор
     wsInitValidator();
@@ -429,4 +448,31 @@ $(document).ready(function(){
 
         //$("#btnAddressNext").click();
     });
+
+    $('.wz_tab_header_not_main').hide();
+    $('#wz_card_is_main_0').click(function() {
+        $('.wz_tab_header_not_main').show();
+    });
+    $('#wz_card_is_main_1').click(function() {
+        $('.wz_tab_header_not_main').hide();
+    });
+
+    wzFillSelect('#wz_citizenship', wzGetCountries());
+    wzFillSelect('#wz_reg_country', wzGetCountries());
+    wzFillSelect('#wz_reg_region', wzGetRegions());
+    wzFillSelect('#wz_actual_country', wzGetCountries());
+    wzFillSelect('#wz_actual_region', wzGetRegions());
+
+    $('#wz_reg_country').change(function() {
+        if (this.value != 'РОССИЯ') {
+            $('#wz_reg_region').val('Прочее');
+        }
+    });
+
+    $('#wz_actual_country').change(function() {
+        if (this.value != 'РОССИЯ') {
+            $('#wz_actual_region').val('Прочее');
+        }
+    });
+
 });

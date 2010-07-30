@@ -12,6 +12,12 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeUser(array $props = array(), $save = true)
     {
         $defaultProps = array(
+            'user_name'         => $this->makeText('Имя пользователя'),
+            'password'          => sha1(1),
+            'currency_id'       => myMoney::RUR,
+            'user_login'        => 'login'.$this->getUniqueCounter(),
+            'user_mail'         => sprintf('user%d@example.org', $this->getUniqueCounter()),
+            'sms_phone'         => '+7 800 000-00-00',
             'user_service_mail' => sprintf('user%d@mail.easyfinance.ru', $this->getUniqueCounter()),
         );
         $props = array_merge($defaultProps, $props);
@@ -105,7 +111,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
 
         $ob = $this->makeModel('Operation', $props, false);
         $ob->setAccount($account);
-        $ob->setUser($account->getUser());
+        $ob->setUser($user);
 
         if (!array_key_exists('category_id', $props)) {
             $ob->setCategory($this->makeCategory($user));
@@ -116,6 +122,31 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         }
         return $ob;
     }
+
+
+    /**
+     * Создать коллекцию опреаций
+     */
+    public function makeOperationCollection($count, Account $account = null, array $props = array(), $save = true)
+    {
+        $coll = Doctrine_Collection::create('Operation');
+
+        if (!$account) {
+            $account = $this->makeAccount(null, array(), $save);
+        }
+
+        for ($i=0; $i<(int)$count; $i++) {
+            if (isset($props[$i])) {
+                $itemProps = $props[$i];
+            } else {
+                $itemProps = array();
+            }
+            $coll->add($this->makeOperation($account, $itemProps, $save));
+        }
+
+        return $coll;
+    }
+
 
     /**
      * Запланировать событие
@@ -166,26 +197,6 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
             $ob->save();
         }
         return $ob;
-    }
-
-
-    /**
-     * Создать коллекцию операций
-     */
-    public function makeOperationCollection($count, Account $account = null, array $props = array(), $save = true)
-    {
-        $coll = Doctrine_Collection::create('Operation');
-
-        for ($i=0; $i<(int)$count; $i++) {
-            if (isset($props[$i])) {
-                $itemProps = $props[$i];
-            } else {
-                $itemProps = array();
-            }
-            $coll->add($this->makeOperation($account, $itemProps, $save));
-        }
-
-        return $coll;
     }
 
 
@@ -387,4 +398,31 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         return $ob;
     }
 
+
+    /**
+     * Создать уведомление для операции из календаря
+     */
+    public function makeOperationNotification(Operation $operation = null, array $props = array(), $save = true)
+    {
+        $defaultProps = array(
+            'schedule'     => date('Y-m-d H:i:s', time()-60),
+            'type'         => OperationNotification::TYPE_EMAIL,
+            'fail_counter' => 0,
+            'is_sent'      => 0,
+            'is_done'      => 0,
+        );
+        $props = array_merge($defaultProps, $props);
+
+        if (!$operation) {
+            $operation = $this->makeOperation(null, array(), $save);
+        }
+
+        $ob = $this->makeModel('OperationNotification', $props, false);
+        $ob->setOperation($operation);
+
+        if ($save) {
+            $ob->save();
+        }
+        return $ob;
+    }
 }

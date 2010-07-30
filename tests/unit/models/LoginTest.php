@@ -42,4 +42,18 @@ class models_LoginTest extends UnitTestCase
         $this->assertEquals($date, $cat['created_at']);
         $this->assertEquals($cat['created_at'], $cat['updated_at']);
     }
+
+    /**
+     * Создать пользователя по ключу Рамблера
+     */
+    public function testGenerateUserByRamblerLogin()
+    {
+        $ramblerKey = 'ef-user-icaneaa-' . time();
+        $id = Login_Model::generateUserByRamblerLogin($ramblerKey);
+
+        $query = "SELECT * FROM users WHERE id = '$id'";
+        $cat = $this->getConnection()->selectRow($query);
+        $login = isset($cat['user_login']) ? $cat['user_login'] : null;
+        $this->assertEquals($ramblerKey, $login, 'Репа');
+    }
 }

@@ -59,6 +59,7 @@ class CreateObjectHelper {
             'created_at'          => '2010-05-26 16:31:04',
             'account_name'        => 'Название счёта по-русски',
             'account_description' => 'Описание счета',
+            'account_state'       => Account::STATE_NORMAL,
         );
         $props = array_merge($default, $props);
 

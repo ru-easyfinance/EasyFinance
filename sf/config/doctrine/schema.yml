@@ -59,7 +59,7 @@ User:
     currency_id:       { name: user_currency_default as currency_id, type: integer(4), notnull: true, default: 1 }
     user_login:        { type: string(100), notnull: true }
     user_mail:         { type: string(100), notnull: true }
-    time_zone_offset:  { type: float(4), notnull: true, default:  0 }
+    time_zone:         { type: string(32),  notnull: true, default: 'Europe/Moscow' }
     sms_phone:         { type: string(100) }
     reminder_mail_aviable:         { type: integer(1), notnull: true, unsigned: true, default: 0 }
     reminder_mail_default_enabled: { type: integer(1), notnull: true, unsigned: true, default: 0 }
@@ -98,6 +98,7 @@ Account:
     user_id:     {                                           type: integer(4),  notnull: true, unsigned: true }
     type_id:     { name: account_type_id as type_id,         type: integer(4),  notnull: true }
     currency_id: { name: account_currency_id as currency_id, type: integer(4),  notnull: true }
+    state:       { name: account_state as state,             type: integer(1),  notnull: true, default: 0 }
     name:        { name: account_name as name,               type: string(255), notnull: true }
     description: { name: account_description as description, type: string(255), notnull: true }
   relations:
@@ -202,6 +203,29 @@ Operation:
       form:  false
       filter: false
 
+
+# Оповещения о запланированных операциях (SMS/Email)
+OperationNotification:
+  tableName: operation_notifications
+  actAs: [Timestampable]
+  columns:
+    operation_id: { type: integer(8), unsigned: true, notnull: true }             # ID операции
+    schedule:     { type: timestamp(25), notnull: true }                          # планируемое время отправки уведомления
+    type:         { type: integer(2), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
+    fail_counter: { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
+    is_sent:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - отправлено
+    is_done:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - закончили с этой операцией
+  relations:
+    Operation:
+      local: operation_id
+      foreign: id
+      type: one
+      foreignType: many
+      onDelete: CASCADE      # При удалении Операции удаляются все оповещения
+  options:
+    symfony:
+      form:   false
+      filter: false
 
 # Операция из внешнего источника (100% - OK)
 SourceOperation:
@@ -497,30 +521,6 @@ EmailParser:
       type: one
       foreignType: one
       onDelete: CASCADE
-
-
-# Оповещения о запланированных операциях (SMS/Email)
-OperationNotification:
-  tableName: operation_notifications
-  actAs: [Timestampable]
-  columns:
-    operation_id: { type: integer(8), unsigned: true, notnull: true }             # ID операции
-    schedule:     { type: timestamp(25), notnull: true }                          # планируемое время отправки уведомления
-    type:         { type: integer(2), unsigned: true, notnull: true, default: 1 } # 0 - email, 1 - sms
-    fail_counter: { type: integer(2), unsigned: true, notnull: true, default: 0 } # счетчик неудачных отправок
-    is_sent:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - отправлено
-    is_done:      { type: boolean, unsigned: true, notnull: true, default: 0 }    # флаг - закончили с этой операцией
-  relations:
-    Operation:
-      local:   operation_id
-      foreign: id
-      type:        one
-      foreignType: many
-      onDelete: CASCADE      # При удалении Операции удаляются все оповещения
-  options:
-    symfony:
-      form:   false
-      filter: false
 
 
 # Цепочки событий календаря  (100% - OK)

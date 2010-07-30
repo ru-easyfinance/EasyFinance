@@ -80,10 +80,13 @@ abstract class _Core_Controller
         // Определяем информацию о пользователе
         if (Core::getInstance()->user->getId())
         {
+            //XXX Странная штука: $_SESSION['user'] куда-то исчезает
+            $user = isset($_SESSION['user']) ? $_SESSION['user'] :
+                array('user_name' => null, 'user_type' => 0);
             $uar = array(
                 'user_id'   => Core::getInstance()->user->getId(),
-                'user_name' => $_SESSION['user']['user_name'],
-                'user_type' => $_SESSION['user']['user_type']
+                'user_name' => $user['user_name'],
+                'user_type' => $user['user_type']
             );
 
             $this->tpl->assign('user_info', $uar);

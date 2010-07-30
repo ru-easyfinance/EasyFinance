@@ -60,6 +60,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 'name'             => 'Название "\'счета"',
                 'description'      => 'Описание счета',
                 'initBalance'      => '123.45',
+                'state'            => Account::STATE_FAVORITE,
                 ))
             ->with('request')->checkModuleAction('account', 'create')
             ->with('response')->isStatusCode(200)
@@ -92,6 +93,7 @@ class frontend_account_AddTest extends myFunctionalTestCase
                 'comment'      => $account['description'],
                 'initBalance'  => (float)$data['initBalance'],
                 'totalBalance' => (float)$data['initBalance'],
+                'state'        => (int)$data['state'],
             );
             $this->browser
                 ->with('response')->checkJsonContains('result', array(

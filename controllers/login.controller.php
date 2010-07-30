@@ -109,4 +109,28 @@ class Login_Controller extends _Core_Controller
             $this->model->authDemoUser();
         }
     }
+
+    public function rambler($args) {
+        $ramblerKey = $args[0];
+        $ramblerLogin = 'rambler_' . $ramblerKey;
+
+        $user = Core::getInstance()->user;
+
+        // Пытаемся инициализировать пользователя
+        $user->initUser($ramblerLogin, sha1($ramblerLogin));
+
+        if (!$user->getId()) {
+            Login_Model::generateUserByRamblerLogin($ramblerLogin);
+            $user->initUser($ramblerLogin, sha1($ramblerLogin));
+        }
+
+        if ($user->getId()) {
+            $this->model->login($ramblerLogin, sha1($ramblerLogin), true);
+            header('Location: /info/');
+        } else {
+            header('Location: /login/');
+        }
+
+        die();
+    }
 }

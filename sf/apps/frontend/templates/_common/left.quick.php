@@ -92,16 +92,18 @@
             <a title="Добавить" class="add">Добавить</a>
     </div>
     <dl class="bill_list">
-            <dt class="hidden">Деньги</dt>
+            <dt class="hidden">Избранные</dt>
             <dd id="accountsPanelAcc0" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Мне должны</dt>
+            <dt class="hidden">Деньги</dt>
             <dd id="accountsPanelAcc1" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Я должен</dt>
+            <dt class="hidden">Мне должны</dt>
             <dd id="accountsPanelAcc2" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Инвестиции</dt>
+            <dt class="hidden">Я должен</dt>
             <dd id="accountsPanelAcc3" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Имущество</dt>
+            <dt class="hidden">Инвестиции</dt>
             <dd id="accountsPanelAcc4" class="hidden"> <!-- --> </dd>
+            <dt class="hidden">Имущество</dt>
+            <dd id="accountsPanelAcc5" class="hidden"> <!-- --> </dd>
             <dt>Сумма:</dt>
             <dd id="accountsPanel_amount" class="amount"> <!-- --> </dd>
         </dl>
