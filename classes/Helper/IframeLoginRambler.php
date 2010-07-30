@@ -10,6 +10,7 @@ class Helper_IframeLoginRambler extends Helper_IframeLogin
      */
     public function init()
     {
+        return false;
         // Если запрос идёт от Рамблера
         $request = explode('/', $_SERVER['REQUEST_URI']);
 

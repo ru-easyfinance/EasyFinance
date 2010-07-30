@@ -373,7 +373,14 @@ class Login_Model
             VALUES
                 (?, ?, ?, 1, 0, NOW())";
 
-        return Core::getInstance()->db->query($query, 'Рамблер', $ramblerKey, 
+        $userId = Core::getInstance()->db->query($query, 'Рамблер', $ramblerKey,
             sha1($ramblerKey));
+
+        if ($userId) {
+            self::defaultCategory($userId);
+            self::defaultAccounts($userId);
+        }
+
+        return $userId;
     }
 }
