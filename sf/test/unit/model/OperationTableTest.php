@@ -307,4 +307,44 @@ class model_OperationTableTest extends myUnitTestCase
         $this->assertEquals($coll2->count(), $result[$account2->getId()], "Кол-во операций по 2 счету");
     }
 
+
+    /**
+     * Найти ID счета последней активной операции пользователя по источнику
+     */
+    public function testFindAccountIdByLastAcceptedOperationBySource()
+    {
+        $testsource = "test6666";
+        $acc1 = $this->helper->makeAccount();
+        $acc2 = $this->helper->makeAccount();
+
+        $op1 = $this->helper->makeOperation($acc2, array(
+            'updated_at' => date('Y-m-d', strtotime('-3 day')),
+            'source_id'  => $testsource,
+        ));
+
+        // найдем эту операцию
+        $op2 = $this->helper->makeOperation($acc2, array(
+            'updated_at' => date('Y-m-d', strtotime('-1 day')),
+            'source_id'  => $testsource,
+        ));
+
+        $op3 = $this->helper->makeOperation($acc2, array(
+            'source_id'  => $testsource,
+        ));
+        $op4 = $this->helper->makeOperation($acc1, array(
+            'source_id'  => $testsource,
+            'accepted'   => 0,
+        ));
+        $op5 = $this->helper->makeOperation($acc1);
+        $op6 = $this->helper->makeOperation($acc1, array(
+            'accepted'   => 0,
+        ));
+
+        $result = Doctrine_Core::getTable('Operation')
+            ->findAccountIdByLastAcceptedOperationBySource($acc2->getUserId(), $testsource);
+
+        $this->assertNotNull($op2->getId(), "id счета не null");
+        $this->assertEquals($op2->getAccountId(), $result, "Нашли нужный id счета");
+    }
+
 }

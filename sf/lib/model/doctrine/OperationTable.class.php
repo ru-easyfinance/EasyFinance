@@ -142,4 +142,28 @@ class OperationTable extends Doctrine_Table
         return $q;
     }
 
+
+    /**
+     * Найти ID счета последней активной операции пользователя по источнику
+     *
+     * @param  int  $userId
+     * @param  int  $sourceKey
+     * @return int|null
+     */
+    public function findAccountIdByLastAcceptedOperationBySource($userId, $sourceKey)
+    {
+        $q = $this->createQuery("o")
+            ->select("o.account_id")
+            ->andWhere("o.accepted = " . Operation::STATUS_ACCEPTED)
+            ->andWhere("o.updated_at = (SELECT MAX(op.updated_at) FROM Operation op WHERE op.user_id = :user AND op.source_id = :source AND op.account_id IS NOT NULL AND op.accepted = " . Operation::STATUS_ACCEPTED . ")")
+            ->andWhere("o.user_id = :user")
+            ->andWhere("o.source_id = :source", array(':user' => $userId, ':source' => $sourceKey,))
+            ->andWhere("o.account_id IS NOT NULL")
+            ->limit(1);
+
+        $accountId = $q->execute(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+
+        return ($accountId) ? $accountId : null;
+    }
+
 }
