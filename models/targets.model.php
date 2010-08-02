@@ -188,15 +188,16 @@ class Targets_Model {
      * @param int   $targetCat
      * @param float $amount
      * @param int   $account
-     * @return
+     * @return int ИД расходной операции
      */
     public function CloseOp($targetId = 0, $targetCat = 0, $amount = 0, $account = 0) {
         // Обновляем данные финцели
-        $sql = "UPDATE target SET done=1 WHERE id = ? AND user_id = ?";
-        $result = $this->db->select($sql, $targetId, Core::getInstance()->user->getId());
+        $userId   = Core::getInstance()->user->getId();
+        $sql      = "UPDATE target SET done=1 WHERE id = ? AND user_id = ?";
+        $result   = $this->db->select($sql, $targetId, $userId);
 
         $sql      = "SELECT * FROM target WHERE id = ? AND user_id = ?";
-        $target   = $this->db->select($sql, $targetId, Core::getInstance()->user->getId());
+        $target   = $this->db->select($sql, $targetId, $userId);
         $title    = addslashes($target[0]['title']);
         $comment  = "Закрытие финансовой цели \'$title\'";
 
@@ -208,7 +209,7 @@ class Targets_Model {
         $operationId = $operation->add(0, -$amount, $date,
             $category, $comment, $account, null, false);
 
-        return $result;
+        return $operation->getOperation($userId, $operationId);
     }
 
 
