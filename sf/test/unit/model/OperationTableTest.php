@@ -347,4 +347,39 @@ class model_OperationTableTest extends myUnitTestCase
         $this->assertEquals($op2->getAccountId(), $result, "Нашли нужный id счета");
     }
 
+
+    /**
+     * Обновить все неподтвержденные операции пользователя по источнику, присвоить ID счета
+     */
+    public function testUpdateAccountIdBySourceOperation()
+    {
+        $testsource = "test6666";
+        $account = $this->helper->makeAccount();
+
+        $op1 = $this->helper->makeOperation($account, array(
+            'source_id'  => $testsource,
+        ));
+
+        $op2 = $this->helper->makeOperation($account, array(
+            'source_id'  => $testsource,
+            'accepted'   => Operation::STATUS_DRAFT,
+        ), false);
+        $op2->setAccountId(null);$op2->save();
+        $op3 = $this->helper->makeOperation($account, array(
+            'source_id'  => $testsource,
+            'accepted'   => Operation::STATUS_DRAFT,
+        ), false);
+        $op3->setAccountId(null);$op3->save();
+
+        $op4 = $this->helper->makeOperation(null, array(
+            'source_id'  => $testsource,
+            'accepted'   => Operation::STATUS_DRAFT,
+        ), false);
+        $op4->setAccountId(null);$op4->save();
+
+        $result = Doctrine::getTable("Operation")->updateAccountIdBySourceOperation($op1);
+
+        $this->assertEquals(2, $result);
+    }
+
 }

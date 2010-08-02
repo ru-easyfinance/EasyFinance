@@ -166,4 +166,24 @@ class OperationTable extends Doctrine_Table
         return ($accountId) ? $accountId : null;
     }
 
+
+    /**
+     * Обновить все неподтвержденные операции пользователя по источнику, присвоить ID счета
+     *
+     * @param  Operation $operation
+     * @return int
+     */
+    public function updateAccountIdBySourceOperation(Operation $operation)
+    {
+        $q = $this->createQuery('o')
+            ->update("Operation o")
+            ->set("o.account_id", $operation->getAccountId())
+            ->where("o.accepted = " . Operation::STATUS_DRAFT)
+            ->andWhere("o.user_id = ?", $operation->getUserId())
+            ->andWhere("o.source_id = ?", $operation->getSourceId())
+            ->andWhere("o.account_id IS NULL");
+
+        return $q->execute();
+    }
+
 }
