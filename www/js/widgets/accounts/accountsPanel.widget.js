@@ -165,26 +165,15 @@ easyFinance.widgets.accountsPanel = function(){
 
             str = str + '</li>';
 
-            //if ( i!=2 ){
-            // перевод в валюту по умолчанию
-                summ[i] = summ[i]+data[key]["totalBalance"] * _model.getAccountCurrencyCost(data[key]["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
-            /*}else{
-                summ[i] = summ[i]-data[key]['defCur'];
-            }*/
-
-            if (!val[data[key]['currency']]) {
-                val[data[key]['currency']]=0;
-            }
-
-            //if ( i!=2 ){
-            val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
-                + parseFloat(data[key]['totalBalance']);
-            /*}else{
-                 val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
-                - parseFloat(data[key]['totalBalance']);
-            }*/
             if (data[key].state != "2") {
-                arr[i] = arr[i]+str;
+	            summ[i] = summ[i]+data[key]["totalBalance"] * _model.getAccountCurrencyCost(data[key]["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
+	            if (!val[data[key]['currency']]) {
+		           val[data[key]['currency']]=0;
+		        }
+
+	            val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
+	                + parseFloat(data[key]['totalBalance']);
+	                arr[i] = arr[i]+str;
             }
         }
         total = 0;
@@ -206,9 +195,7 @@ easyFinance.widgets.accountsPanel = function(){
         // формирование итогов
         str = '<ul>';
 
-        i = 0;
         for(key in val) {
-            i++;
             str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key], true, true)+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
         }
         str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total, true, true)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
