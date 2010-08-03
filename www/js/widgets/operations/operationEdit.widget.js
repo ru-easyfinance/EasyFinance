@@ -911,6 +911,8 @@ easyFinance.widgets.operationEdit = function(){
         } else {
             // если счетов много, сначала выводим часто используемые счета
             for (key in recent) {
+                if (typeof accounts[key] == 'undefined')
+                    continue;
                 _accOptionsData.push({value: accounts[key].id, text: accounts[key].name + ' (' + _modelAccounts.getAccountCurrencyText(accounts[key].id) + ')'});
                 recentIds[accounts[key].id] = true;
             }
