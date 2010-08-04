@@ -385,4 +385,60 @@ class model_OperationTableTest extends myUnitTestCase
         $this->assertEquals(2, $result);
     }
 
+    /**
+     * Считаем средний расход за 3 месяца по категориям
+     */
+    public function testGetMeanByCategory()
+    {
+        $account = $this->helper->makeAccount();
+        $category = $this->helper->makeCategory($account->getUser());
+
+        $amount = 300;
+        $monthCount = 3;
+        $op1 = $this->helper->makeOperation($account, array(
+            'amount' => $amount,
+            'date'   => date('Y-m-d', time() - ONE_DAY_SECONDS * 60),
+            'category_id' => $category->getId()
+        ));
+
+        $op1 = $this->helper->makeOperation($account, array(
+            'amount' => $amount,
+            'date'   => date('Y-m-d', time() - ONE_DAY_SECONDS * 61),
+            'category_id' => $category->getId()
+        ));
+
+        $result = Doctrine::getTable("Operation")
+            ->getMeanByCategory($account->getUser(), date('Y-m-d'), $monthCount);
+
+        $this->assertEquals(2 * $amount / $monthCount, array_pop($result));
+    }
+
+    /**
+     * Считаем фактический расход месяц по категориям
+     */
+    public function testGetFactByCategory()
+    {
+        $account = $this->helper->makeAccount();
+        $category = $this->helper->makeCategory($account->getUser());
+
+        $amount = 300;
+        $monthCount = 3;
+        $op1 = $this->helper->makeOperation($account, array(
+            'amount' => $amount,
+            'date'   => date('Y-m-d'),
+            'category_id' => $category->getId()
+        ));
+
+        $op1 = $this->helper->makeOperation($account, array(
+            'amount' => $amount,
+            'date'   => date('Y-m-d'),
+            'category_id' => $category->getId()
+        ));
+
+        $result = Doctrine::getTable("Operation")
+            ->getFactByCategory($account->getUser(), date('Y-m-d'));
+
+        $this->assertEquals(2 * $amount, array_pop($result));
+    }
+
 }

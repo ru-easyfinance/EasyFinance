@@ -34,4 +34,36 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
         $result = Doctrine::getTable('BudgetCategory')->countTotalExpense(999);
         $this->assertEquals(0, $result, 'No budget');
     }
+
+    /**
+     * Посчитать итоговую сумму расходов на текущий месяц
+     */
+    public function testQueryLoadBudget()
+    {
+        $user = $this->helper->makeUser();
+        $dateStart = date('Y-m-01');
+        //$this->helper = new myTestObjectHelper();
+
+        $category1 = $this->helper->makeCategory($user);
+        $category2 = $this->helper->makeCategory($user);
+        // OK
+        $budget1  = array(
+            'drain' => 1,
+            'category_id' => $category1->getId(),
+            'date_start' => $dateStart
+        );
+        $budget2  = array(
+            'drain' => 1,
+            'category_id' => $category2->getId(),
+            'date_start' => $dateStart
+        );
+
+        $budget1  = $this->helper->makeBudgetCategory($user, $budget1);
+        $budget2  = $this->helper->makeBudgetCategory($user, $budget2);
+
+        $data = Doctrine::getTable('BudgetCategory')->getBudget($user, $dateStart);
+
+        $this->assertEquals($budget1->getAmount(), $data[0]->getAmount());
+        $this->assertEquals($budget2->getAmount(), $data[1]->getAmount());
+    }
 }

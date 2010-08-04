@@ -81,6 +81,7 @@ robokassa:
   url:   /robokassa/:action
   params: { module: robokassa }
 
+
 # Обёртка для wiki
 # ------------------------------------------------------------------------------
 
@@ -95,6 +96,7 @@ wikiwrapper_page:
   params: { module: wikiwrapper, action: index }
   requirements:
     wikiURL: \S+
+
 
 # Статические страницы
 # ------------------------------------------------------------------------------
@@ -111,6 +113,15 @@ page:
   params: { module: page, action: index }
   requirements:
     pageName: \S+
+
+
+# Бюджет
+# ------------------------------------------------------------------------------
+
+budget:
+  url:   /budget/
+  params: { module: budget, action: index }
+
 
 # Cтраницы банков с красивыми урлами
 # ------------------------------------------------------------------------------

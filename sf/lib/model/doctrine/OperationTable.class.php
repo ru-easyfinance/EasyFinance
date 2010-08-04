@@ -60,6 +60,60 @@ class OperationTable extends Doctrine_Table
 
 
     /**
+     * Посчитать среднее за 3 месяца
+     *
+     * @param  sfUser $user
+     * @param  string $date
+     * @param  string $monthCount
+     * @return array
+     */
+    public function getMeanByCategory(User $user, $date, $monthCount = 3)
+    {
+        $monthCount = (int) $monthCount ? (int) $monthCount : 3 ;
+        $alias = 'foo';
+        $query = $this->createQuery("{$alias}")
+            ->select("category_id, sum(amount)/$monthCount AS mean")
+            ->innerJoin("{$alias}.Category c")
+                ->andWhere("c.id = {$alias}.category_id")
+            ->where("{$alias}.date >= ADDDATE('$date',
+                INTERVAL -$monthCount MONTH)")
+            ->andWhere("{$alias}.date <= '$date'")
+            ->andWhere("{$alias}.user_id = ?", $user->getId())
+            ->groupBy("{$alias}.category_id");
+
+        $data = $query->execute(array(), 'FetchPair');
+
+        return $data;
+    }
+
+    /**
+     * Посчитать фактический расход по категориям за месяц
+     *
+     * @param  sfUser $user
+     * @param  string $date дата внутри месяца
+     * @param  string $monthCount
+     * @return array
+     */
+    public function getFactByCategory(User $user, $date, $monthCount = 1)
+    {
+        $monthCount = (int) $monthCount ? (int) $monthCount : 1 ;
+        $alias = 'foo';
+        $query = $this->createQuery("{$alias}")
+            ->select("category_id, sum(amount) AS fact")
+            ->innerJoin("{$alias}.Category c")
+                ->andWhere("c.id = {$alias}.category_id")
+            ->where("{$alias}.date >= LAST_DAY('$date') - INTERVAL 1 MONTH")
+            ->andWhere("{$alias}.date <= (LAST_DAY('$date') + INTERVAL + $monthCount - 1 MONTH)")
+            ->andWhere("{$alias}.user_id = ?", $user->getId())
+            ->groupBy("{$alias}.category_id");
+
+        $data = $query->execute(array(), 'FetchPair');
+
+        return $data;
+    }
+
+
+    /**
      * Выборка запланированных операций без учета времени
      *
      * @param  User     $user

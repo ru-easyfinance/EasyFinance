@@ -20,4 +20,26 @@ class BudgetCategoryTable extends Doctrine_Table
             ->andWhere('b.drain = ?', 1)
             ->execute(array(), Doctrine::HYDRATE_SINGLE_SCALAR);
     }
+
+    /**
+     * Список запланированных расходов на месяц
+     *
+     * @param User $user
+     * @param string $start
+     */
+    public function getBudget(User $user, $start)
+    {
+        $alias  = 'b';
+        $userId = $user->getId();
+        $q = $this->createQuery($alias)
+            ->select("*")
+            ->innerJoin("{$alias}.Category c")
+                ->andWhere("c.id = {$alias}.category_id")
+            ->where("{$alias}.date_start = '$start'")
+                ->andWhere("c.deleted_at IS NULL")
+                ->andWhere("{$alias}.user_id = '$userId'")
+                ->orderBy("c.parent_id ASC");
+
+        return $q->execute()->getData();
+    }
 }
