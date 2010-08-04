@@ -39,21 +39,17 @@ class myAuthSecurityUser extends sfBasicSecurityUser
         $this->setAuthenticated(true);
         $this->clearCredentials();
 
-        if ($remember)
-        {
-            $expiration_age = sfConfig::get('app_my_auth_plugin_remember_key_expiration_age', 15 * 24 * 3600);
+        if ($remember) {
+            $now = new DateTime();
+
+            $expired = clone $now;
+            $expired->modify("-" . $this->getExpiration() . " sec");
 
             // убить все старые кючи
-            Doctrine::getTable('myAuthRememberKey')->createQuery()
-            ->delete()
-            ->where('created_at < ?', date('Y-m-d H:i:s', time() - $expiration_age))
-            ->execute();
+            Doctrine::getTable('myAuthRememberKey')->removeOldKeys($expired)->execute();
 
             // убить все ключи этого пользователя
-            Doctrine::getTable('myAuthRememberKey')->createQuery()
-            ->delete()
-            ->where('user_id = ?', $user->getId())
-            ->execute();
+            Doctrine::getTable('myAuthRememberKey')->removeKeysByUserId($user->getId())->execute();
 
             // создать новый ключ
             $key = $this->generateRandomKey();
@@ -66,8 +62,11 @@ class myAuthSecurityUser extends sfBasicSecurityUser
             $rk->save();
 
             // отдать ключ в виде печенья
-            $remember_cookie = sfConfig::get('app_my_auth_plugin_remember_cookie_name', 'myRemember');
-            sfContext::getInstance()->getResponse()->setCookie($remember_cookie, $key, time() + $expiration_age);
+            sfContext::getInstance()->getResponse()->setCookie(
+                $this->getCookieName(),
+                $key,
+                time() + $this->getExpiration()
+            );
         }
     }
 
@@ -80,9 +79,11 @@ class myAuthSecurityUser extends sfBasicSecurityUser
         $this->user = null;
         $this->clearCredentials();
         $this->setAuthenticated(false);
-        $expiration_age = sfConfig::get('app_my_auth_plugin_remember_key_expiration_age', 15 * 24 * 3600);
-        $remember_cookie = sfConfig::get('app_my_auth_plugin_remember_cookie_name', 'myRemember');
-        sfContext::getInstance()->getResponse()->setCookie($remember_cookie, '', time() - $expiration_age);
+        sfContext::getInstance()->getResponse()->setCookie(
+            $this->getCookieName(),
+            '',
+            time() - $this->getExpiration()
+        );
     }
 
 
@@ -94,8 +95,9 @@ class myAuthSecurityUser extends sfBasicSecurityUser
         return $this->getUserRecord()->getId();
     }
 
+
     /**
-     * Делает случайный ключ.
+     * Генерировать "случайный" ключ
      *
      * @param int $len длина промежуточного ключа
      * @return string
@@ -111,4 +113,23 @@ class myAuthSecurityUser extends sfBasicSecurityUser
 
         return md5($string);
     }
+
+
+    /**
+     *
+     */
+    protected function getExpiration()
+    {
+        return sfConfig::get('app_myAuth_rememberMeDuration', 15 * 24 * 3600);
+    }
+
+
+    /**
+     *
+     */
+    protected function getCookieName()
+    {
+        return sfConfig::get('app_myAuth_rememberMe_cookie', 'myAuthRememberMe');
+    }
+
 }

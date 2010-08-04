@@ -14,15 +14,14 @@ class myValidatorAuthUser extends sfValidatorBase
         $this->setMessage('invalid', 'The username and/or password is invalid.');
     }
 
+
     protected function doClean($values)
     {
         $username = isset($values[$this->getOption('username_field')]) ? $values[$this->getOption('username_field')] : '';
         $password = isset($values[$this->getOption('password_field')]) ? $values[$this->getOption('password_field')] : '';
 
         if ($username) {
-            $user = $this->getTable()->findOneByUserName($username);
-
-            if ($user) {
+            if ($user = $this->getTable()->findOneByUserLogin($username)) {
                 // password is ok?
                 if ($user->checkPassword($password)) {
                     return array_merge($values, array('user' => $user));
@@ -37,8 +36,10 @@ class myValidatorAuthUser extends sfValidatorBase
         throw new sfValidatorErrorSchema($this, array($this->getOption('username_field') => new sfValidatorError($this, 'invalid')));
     }
 
+
     protected function getTable()
     {
         return Doctrine::getTable('User');
     }
+
 }

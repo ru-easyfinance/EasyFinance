@@ -1,5 +1,6 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/11-App
-
-# default values
-#all:
+all:
+  myAuth:
+    registerRoutes: true  # подключать роуты плагина для авторизации
+    rememberMe:     true  # запоминать пользователя
+    rememberMeDuration: 1296000 # запоминать на n секунд
+    rememberMe_cookie:  myAuthRememberMe # название запоминательной куки

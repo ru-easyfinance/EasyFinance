@@ -10,10 +10,41 @@ class pdaAuthTest extends myFunctionalTestCase
     protected $app = 'pda';
 
     /**
+     * Получить необходимые и правильные поля пользователя
+     */
+    protected function getExpectedUserData()
+    {
+        return array(
+            'user_name'  => "test",
+            'user_login' => "test",
+            'password'   => "test1",
+        );
+    }
+
+
+    /**
+     * Получить правильные данные формы
+     */
+    protected function getExpectedFormData($withCookie = false)
+    {
+        $uData = $this->getExpectedUserData();
+
+        $login = $uData['user_login'];
+        $password = $uData['password'];
+
+        return array('auth' => array(
+            'login'    => $login,
+            'password' => $password,
+            'remember' => (bool) $withCookie,
+        ));
+    }
+
+
+    /**
      * Получить форму
      */
     public function testAuthForm()
-    {return true;
+    {
         $this->browser
             ->get($this->generateUrl("login"))
             ->with("request")->begin()
@@ -29,18 +60,11 @@ class pdaAuthTest extends myFunctionalTestCase
      * Авторизоваться
      */
     public function testAuthentificated()
-    {return true;
-        $expected = array(
-            'user_name' => "test",
-            'login'     => "test",
-            'password'  => "test1",
-        );
+    {
+        $user = $this->helper->makeUser($this->getExpectedUserData());
 
-        $user = $this->helper->makeUser($expected);
-
-        unset($expected['user_name']);
         $this->browser
-            ->post($this->generateUrl("login"), array('auth' => $expected))
+            ->post($this->generateUrl("login"), $this->getExpectedFormData())
             ->with("request")->begin()
                 ->isParameter("module", "myAuth")
                 ->isParameter("action", "login")
@@ -55,18 +79,11 @@ class pdaAuthTest extends myFunctionalTestCase
      * Деавторизация
      */
     public function testLogout()
-    {return true;
-        $expected = array(
-            'user_name' => "test",
-            'login'     => "test",
-            'password'  => "test1",
-        );
+    {
+        $user = $this->helper->makeUser($this->getExpectedUserData());
 
-        $user = $this->helper->makeUser($expected);
-
-        unset($expected['user_name']);
         $this->browser
-            ->post($this->generateUrl("login"), array('auth' => $expected))
+            ->post($this->generateUrl("login"), $this->getExpectedFormData())
             ->with("request")->begin()
                 ->isParameter("module", "myAuth")
                 ->isParameter("action", "login")
@@ -89,20 +106,11 @@ class pdaAuthTest extends myFunctionalTestCase
      */
     public function testRememberMe()
     {
-        $expected = array(
-            'user_name' => "test",
-            'login'     => "test",
-            'password'  => "test1",
-        );
-
-        $user = $this->helper->makeUser($expected);
-
-        unset($expected['user_name']);
-        $expected['remember'] = true;
+        $user = $this->helper->makeUser($this->getExpectedUserData());
 
         // Входим методом POST
         $this->browser
-            ->post($this->generateUrl("login"), array('auth' => $expected))
+            ->post($this->generateUrl("login"), $this->getExpectedFormData(true))
             ->with("request")->begin()
                 ->isParameter("module", "myAuth")
                 ->isParameter("action", "login")
@@ -112,9 +120,19 @@ class pdaAuthTest extends myFunctionalTestCase
             ->end()
             ->with("user")->isAuthenticated(true);
 
-        // Проверяем наличие печенья myRemember
-        $cookies = $this->browser->getResponse()->getCookies();
-        $this->assertArrayHasKey('myRemember', $cookies);
+        # Svel: дерьмо, почистить при случае и выкинуть тесты авторизации в плагин
+        $this->browser
+            ->with('model')->check('User', array('user_login' => 'test'), 1, $foundUser)
+            ->with('model')->check('myAuthRememberKey', array('user_id' => $foundUser->getFirst()->getId()), 1, $foundKey)
+            ->followRedirect();
+
+        // Проверяем наличие печенья и качество печки =)
+        $this->assertEquals(1, $foundKey->count());
+        $this->browser
+            ->with('request')->begin()
+                ->hasCookie('myAuthRememberMe', true)
+                ->isCookie('myAuthRememberMe', $foundKey->getFirst()->getRememberKey())
+            ->end();
 
         // Проверяем вход с печеньем
         $this->browser
@@ -128,4 +146,5 @@ class pdaAuthTest extends myFunctionalTestCase
             ->end()
             ->with("user")->isAuthenticated(true);
     }
+
 }

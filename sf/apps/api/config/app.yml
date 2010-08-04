@@ -1,3 +1,9 @@
 all:
+  myAuth:
+    registerRoutes: false # подключать роуты плагина для авторизации
+    rememberMe:     false # запоминать пользователя
+    # rememberMeDuration: ~ # запоминать на n секунд
+    # rememberMe_cookie: ~  # название запоминательной куки
+
   records:
     sync_limit: 100 # лимит принимаемых объектов на сессию

@@ -29,18 +29,25 @@ dev:
       delivery_strategy: none
 
 all:
+  storage:
+    class: sfSessionStorage
+    param:
+      session_name: <?php echo ini_get("session.name"), "\n"; ?>
+      session_cookie_lifetime:  3600
+      session_cookie_secure:    true
+
   routing:
     class: sfPatternRouting
     param:
       generate_shortest_url:            true
       extra_parameters_as_query_string: true
 
-  # Посмотри конфиги frontend
   user:
     class: myPdaUser
     param:
-      load_configuration: true
-      timeout:            180
+      load_configuration: true  # load security.yml configuration
+      timeout:            3600  # authentication timeout in seconds
+
 
   view_cache_manager:
     class: sfViewCacheManager

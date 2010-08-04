@@ -30,10 +30,8 @@ class BaseMyAuthForm extends BaseForm
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
         $validator = new myValidatorAuthUser();
-        // В форме ошибка отображается как 'Required' вместо 'Обязательное поле'
-        // Почему не понятно
-        $validator->setMessage('required', 'Обязательное поле.');
         $validator->setMessage('invalid', 'Неверный логин и/или пароль.');
+        $validator->setOption('throw_global_error', true);
 
         $this->validatorSchema->setPostValidator($validator);
 
@@ -42,19 +40,23 @@ class BaseMyAuthForm extends BaseForm
         $this->disableLocalCSRFProtection();
     }
 
+
     /**
      * Вернуть объект пользователя
      *
      * @see    myUserValidator
-     * @return myApiUser
+     * @return myAuthSecurityUser
      */
     public function getUser()
     {
         return $this->values['user'];
     }
 
+
+    # а это используется?
     public function getModelName()
     {
         return 'Auth';
     }
+
 }

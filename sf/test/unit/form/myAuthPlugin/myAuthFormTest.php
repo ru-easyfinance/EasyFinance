@@ -26,23 +26,26 @@ class form_myAuthFormTest extends sfPHPUnitFormTestCase
      */
     protected function getFields()
     {
-        return array('login', 'password');
+        return array('login', 'password', 'remember');
     }
 
 
     /**
      * Получить валидные логин и пароль
      */
-    protected function getValidData()
+    protected function getValidData($doRemember = false)
     {
         $expected = array(
-            'user_name' => "test",
-            'login'     => "test",
-            'password'  => "test1",
+            'user_name'  => "test",
+            'user_login' => "test",
+            'password'   => "test1",
         );
 
         $user = $this->helper->makeUser($expected);
-        unset($expected['user_name']);
+        unset($expected['user_name'], $expected['user_login']);
+
+        $expected['login'] = 'test';
+        $expected['remember'] = (boolean) $doRemember;
 
         return $expected;
     }
@@ -53,25 +56,25 @@ class form_myAuthFormTest extends sfPHPUnitFormTestCase
      */
     protected function getValidationTestingPlan()
     {
-        $expected = $this->getValidData();
         return array(
             // Ничего не отправлено
             'Empty request' => new sfPHPUnitFormValidationItem(
                 array(),
                 array(
-                    'login'    => 'required invalid',
+                    'login'    => 'required',
                     'password' => 'required',
+                    ''         => 'Неверный логин и/или пароль.',
                 )),
 
             // Заполнен логин, пустой пароль
             'Empty password' => new sfPHPUnitFormValidationItem(
                 array(
-                    'login'    => 'wrong login',
+                    'login'    => 'some login',
                     'password' => '',
                 ),
                 array(
-                    'login'    => 'invalid',
                     'password' => 'required',
+                    ''         => 'Неверный логин и/или пароль.',
                 )),
 
             // Неверный логин и пароль
@@ -81,13 +84,17 @@ class form_myAuthFormTest extends sfPHPUnitFormTestCase
                     'password' => 'foo bar',
                 ),
                 array(
-                    'login'    => 'invalid',
+                    ''         => 'Неверный логин и/или пароль.',
                 )),
 
+            // Галочко "запомни себя"
+            'Remember boolean checked' => new sfPHPUnitFormValidationItem(
+                $this->getValidData(true),
+                array()),
+
             'Good login and password' => new sfPHPUnitFormValidationItem(
-                $expected,
-                array()
-                ),
+                $this->getValidData(),
+                array()),
         );
     }
 }
