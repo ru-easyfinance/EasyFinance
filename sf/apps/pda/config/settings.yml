@@ -36,3 +36,5 @@ all:
 
     login_module:           myAuth
     login_action:           login
+
+    enabled_modules:        [myAuth]

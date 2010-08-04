@@ -10,6 +10,7 @@ class pdaConfiguration extends sfApplicationConfiguration
         $this->setWebDir($this->getRootDir().'/web.pda');
     }
 
+
     /**
      * Инициализировать плагины
      */
@@ -26,4 +27,5 @@ class pdaConfiguration extends sfApplicationConfiguration
 
         $this->enablePlugins($plugins);
     }
+
 }
