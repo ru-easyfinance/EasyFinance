@@ -1,10 +1,16 @@
 <?php
 require_once(dirname(__FILE__) . '/../../../lib/helper/myDateTimezoneHelper.php');
 
-
+/**
+ * Профиль пользователя
+ */
 class profileActions extends sfActions {
 
-    public function executeSaveReminders( sfWebRequest $request ) {
+    /**
+     * Сохранить настройки напоминаний
+     */
+    public function executeSaveReminders(sfRequest $request)
+    {
         $this->forward404Unless($request->isXmlHttpRequest());
 
         $user = $this->getUser()->getUserRecord();
@@ -21,19 +27,23 @@ class profileActions extends sfActions {
             'mailMinutes'    => 'reminder_mail_minutes',
             'smsDaysBefore'  => 'reminder_sms_days',
             'smsHour'        => 'reminder_sms_hour',
-            'smsMinutes'     => 'reminder_sms_minutes'
+            'smsMinutes'     => 'reminder_sms_minutes',
         );
-        $reminders_array = array();    // сюда складываем настройки оповещений для json-ответа
 
-        foreach( $fields_map as $parameter_name => $field_name ) {
-            if( isset($request_params[ $parameter_name ]) ) {
-            /*  в запросе значения checkbox'ов приходят строками ('true', 'false'),
-                надо менять на integer, чтобы корректно писалось в базу
-             */
-                if( $request_params[ $parameter_name ] == 'true' )
-                    $request_params[ $parameter_name ] = 1;
-                if( $request_params[ $parameter_name ] == 'false' )
-                    $request_params[ $parameter_name ] = 0;
+        $reminders_array = array(); // сюда складываем настройки оповещений для json-ответа
+
+        foreach($fields_map as $parameter_name => $field_name) {
+            if(isset($request_params[ $parameter_name ])) {
+
+                /**
+                 * в запросе значения checkbox'ов приходят строками ('true', 'false'),
+                 * надо менять на integer, чтобы корректно писалось в базу
+                 */
+                if($request_params[$parameter_name] == 'true') {
+                    $request_params[$parameter_name] = 1;
+                } elseif ($request_params[$parameter_name] == 'false') {
+                    $request_params[$parameter_name] = 0;
+                }
 
                 if ('timezone' == $parameter_name) {
                     if (!isset(myDateTimezoneHelper::$zones[$request_params[$parameter_name]])) {
@@ -41,11 +51,10 @@ class profileActions extends sfActions {
                     }
                 }
 
-                $user->set( $field_name, $request_params[ $parameter_name ] );
-                $reminders_array[ $parameter_name ] = $request_params[ $parameter_name ];
+                $user->set($field_name, $request_params[$parameter_name]);
+                $reminders_array[$parameter_name] = $request_params[$parameter_name];
             }
         }
-
 
         $user->save();
 
@@ -61,12 +70,14 @@ class profileActions extends sfActions {
     }
 
 
+    /**
+     * Загрузить данные пользователя, AJAX
+     */
+    public function executeLoadUserData(sfRequest $request)
+    {
+        $this->forward404Unless($request->isXmlHttpRequest());
 
-    public function executeLoadUserData( sfWebRequest $request ) {
-
-        $this->forward404Unless( $request->isXmlHttpRequest() );
-
-        $result = array();  // будем возвращать
+        $result = array(); // будем возвращать
         $user = $this->getUser()->getUserRecord();
 
         $subscribtion = Doctrine::getTable('ServiceSubscription')->getActiveUserServiceSubscription(
@@ -74,6 +85,9 @@ class profileActions extends sfActions {
             Service::SERVICE_SMS
         );
 
+
+        # Svel:
+        #       а не лучше ли мапить это во вью?
         $result['profile'] = array(
             'login'     => $user->getUserLogin(),
             'name'      => $user->getUserName(),
@@ -83,7 +97,7 @@ class profileActions extends sfActions {
                 'email' => str_replace('@mail.easyfinance.ru', '', $user->getUserServiceMail()),
             ),
             'reminders' => array(
-                'enabled'       => ( is_object( $subscribtion ) ) ? 1 : 0,
+                'enabled'       => (is_object($subscribtion)) ? 1 : 0,
                 'mailEnabled'   => $user->getReminderMailDefaultEnabled(),
                 'mailDaysBefore'=> $user->getReminderMailDays(),
                 'mailHour'      => $user->getReminderMailHour(),
@@ -99,4 +113,5 @@ class profileActions extends sfActions {
         $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
         return $this->renderText(json_encode($result));
     }
+
 }

@@ -1,6 +1,8 @@
 <?php
 
-
+/**
+ * Таблица: подписки на сервисы
+ */
 class ServiceSubscriptionTable extends Doctrine_Table
 {
     /**
@@ -10,13 +12,15 @@ class ServiceSubscriptionTable extends Doctrine_Table
      * @param int $serviceId id услуги
      * @return ServiceSubscription
      */
-    public function getUserServiceSubscription( $userId, $serviceId )
+    public function getUserServiceSubscription($userId, $serviceId)
     {
-        return $this->createQuery()
-            ->select('*')
-            ->from('ServiceSubscription')
-            ->where('user_id=? AND service_id=?')
-            ->fetchOne( array( $userId, $serviceId ) );
+        $alias = 'ss';
+
+        $q = $this->createQuery($alias)
+            ->andWhere('user_id = ?', $userId)
+            ->andWhere('service_id = ?', $serviceId);
+
+        return $q->fetchOne();
     }
 
 
@@ -26,12 +30,16 @@ class ServiceSubscriptionTable extends Doctrine_Table
      * @param int $serviceId
      * @return ServiceSubscription
      */
-    public function getActiveUserServiceSubscription( $userId, $serviceId )
+    public function getActiveUserServiceSubscription($userId, $serviceId)
     {
-        return $this->createQuery()
-            ->select('*')
-            ->from('ServiceSubscription')
-            ->where('user_id=? AND service_id=? AND subscribed_till > NOW()')
-            ->fetchOne( array( $userId, $serviceId ) );
+        $alias = 'ss';
+
+        $q = $this->createQuery($alias)
+            ->andWhere('user_id = ?', $userId)
+            ->andWhere('service_id = ?', $serviceId)
+            ->andWhere('subscribed_till > ?', date('Y-m-d'));
+
+        return $q->fetchOne();
     }
+
 }
