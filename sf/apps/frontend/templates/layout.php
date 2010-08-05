@@ -35,10 +35,18 @@
                     <li><a href="/articles/12" id="help" style="font-weight:bold; color: yellow;">Помощь</a></li>
                 </ul>
                 <ul class="menu2">
+                    <?php
+                    /*
                     <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                     <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
+                    */
+                    ?>
+                    <?php if ($sf_user->isAuthenticated()): ?>
                     <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
                     <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
+                    <?php else: ?>
+                    <li id="show_login"><a id="linkLogin" href="https://<?php echo URL_ROOT ?>login/">ВХОД</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
 <!-- верхнее меню -->
@@ -48,18 +56,7 @@
                 <div class="slogan">Система управления личными финансами</div>
 
                 <!--реклама-->
-                <dl id="advertisement">
-                    <dt>реклама</dt>
-                    <dd>
-                        <div class="ramka1">
-                            <div class="ct"><div></div></div>
-                            <div class="inside" title="Здесь могла бы быть ваша реклама." style="text-align:center;">
-                                <a href="/registration/"><img src="/img/i/bannerBookRegister.gif" alt="Здесь могла бы быть ваша реклама." title=" Бесплатная книга &quot;Финансовая грамота&quot;" /></a>
-                            </div>
-                            <div class="cb"><div></div></div>
-                        </div>
-                    </dd>
-                </dl>
+                <?php include_partial('global/advertisement') ?>
                 <!--/реклама-->
             </div>
 
