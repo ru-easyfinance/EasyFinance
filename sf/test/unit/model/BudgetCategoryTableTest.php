@@ -36,7 +36,7 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
     }
 
     /**
-     * Посчитать итоговую сумму расходов на текущий месяц
+     * Посчитать получить бюджет на текущий месяц
      */
     public function testQueryLoadBudget()
     {

@@ -79,6 +79,7 @@ class OperationTable extends Doctrine_Table
                 INTERVAL -$monthCount MONTH)")
             ->andWhere("{$alias}.date <= '$date'")
             ->andWhere("{$alias}.user_id = ?", $user->getId())
+            ->andWhere("{$alias}.accepted = 1")
             ->groupBy("{$alias}.category_id");
 
         $data = $query->execute(array(), 'FetchPair');
@@ -90,21 +91,21 @@ class OperationTable extends Doctrine_Table
      * Посчитать фактический расход по категориям за месяц
      *
      * @param  sfUser $user
-     * @param  string $date дата внутри месяца
+     * @param  string $date дата начала месяца
      * @param  string $monthCount
      * @return array
      */
-    public function getFactByCategory(User $user, $date, $monthCount = 1)
+    public function getFactByCategory(User $user, $date)
     {
-        $monthCount = (int) $monthCount ? (int) $monthCount : 1 ;
         $alias = 'foo';
         $query = $this->createQuery("{$alias}")
             ->select("category_id, sum(amount) AS fact")
             ->innerJoin("{$alias}.Category c")
                 ->andWhere("c.id = {$alias}.category_id")
-            ->where("{$alias}.date >= LAST_DAY('$date') - INTERVAL 1 MONTH")
-            ->andWhere("{$alias}.date <= (LAST_DAY('$date') + INTERVAL + $monthCount - 1 MONTH)")
+            ->where("{$alias}.date >= ?", $date)
+            ->andWhere("{$alias}.date <= LAST_DAY('$date')")
             ->andWhere("{$alias}.user_id = ?", $user->getId())
+            ->andWhere("{$alias}.accepted = 1")
             ->groupBy("{$alias}.category_id");
 
         $data = $query->execute(array(), 'FetchPair');

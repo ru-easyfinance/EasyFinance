@@ -76,5 +76,6 @@
     <?php include_component('res', 'future', array()) ?>
     <?php include_component('res', 'overdue', array()) ?>
     <?php include_component('res', 'profile', array()) ?>
+    <?php include_component('res', 'budget', array()) ?>
 <?php endif; ?>
 </script>

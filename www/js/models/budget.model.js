@@ -34,7 +34,7 @@ easyFinance.models.budget = function(){
             if (month.toString().length == 1){
                 month = '0'+month.toString()
             }
-            $.post('/budget/load/',
+            $.post('/my/budget/load/',
             {
                 start: '01.'+month+'.'+date.getFullYear()
             },
@@ -66,7 +66,7 @@ easyFinance.models.budget = function(){
             if (month.toString().length == 1){
                 month = '0'+month.toString()
             }
-            $.post('/budget/add/',
+            $.post('/my/budget/add/',
                 {
                     data: budget,
                     start: '01.'+month+'.'+date.getFullYear()
@@ -97,7 +97,7 @@ easyFinance.models.budget = function(){
             if (month.toString().length == 1){
                 month = '0'+month.toString()
             }
-            $.post('/budget/del',
+            $.post('/my/budget/del/',
                 {
                     start : '01.'+month+'.'+date.getFullYear(),
                     id : id,
@@ -144,7 +144,7 @@ easyFinance.models.budget = function(){
                 month = '0'+month.toString()
             }
             value = value.toString().replace(/[^0-9\.]/gi,'');
-            $.post('/budget/edit/',
+            $.post('/my/budget/edit/',
                 {
                     type: type,
                     id: id,

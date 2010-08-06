@@ -122,6 +122,22 @@ budget:
   url:   /budget/
   params: { module: budget, action: index }
 
+budget_load:
+  url:   /budget/load/
+  params: { module: budget, action: load}
+
+budget_add:
+  url:   /budget/add/
+  params: { module: budget, action: add}
+
+budget_edit:
+  url:   /budget/edit/
+  params: { module: budget, action: edit}
+
+budget_delete:
+  url:   /budget/del/
+  params: { module: budget, action: delete}
+
 
 # Cтраницы банков с красивыми урлами
 # ------------------------------------------------------------------------------
