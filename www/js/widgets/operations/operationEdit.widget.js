@@ -1283,7 +1283,12 @@ easyFinance.widgets.operationEdit = function(){
         _isCalendar = true;
         _isEditing = isEditing;
         _isChain = isChain;
+        // TEMP: не показываем операции на фин. цель
+        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
+        $("#op_type").html(htmlOptions).ufd("changeOptions");
         setType(data.type);
+        // EOF TEMP
+        
         // открываем диалог для планирования
         _expandCalendar();
 
@@ -1292,11 +1297,6 @@ easyFinance.widgets.operationEdit = function(){
 
         // выводим данные по планированию операции(й)
         _fillCalendarValues(data, isEditing, isChain);
-
-        // TEMP: не показываем операции на фин. цель
-        var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
-        $("#op_type").html(htmlOptions).ufd("changeOptions");
-        // EOF TEMP
     }
 
     // reveal some private things by assigning public pointers
