@@ -83,7 +83,7 @@ class syncInOperationAction extends myBaseSyncInAction
             }
 
             // FK: категория существует?
-            if (!in_array($record['category_id'], $categories) AND !empty($record['category_id'])) {
+            if (!empty($record['category_id']) AND !in_array($record['category_id'], $categories)) {
                 $errors[] = "No such category";
             }
 
@@ -137,7 +137,7 @@ class syncInOperationAction extends myBaseSyncInAction
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
-            'accepted'    => (string) $record->accepted,
+            'accepted'    => (bool)   $record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),

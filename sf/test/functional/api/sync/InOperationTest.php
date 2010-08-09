@@ -208,6 +208,24 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
+     * Принять: пустая категория
+     */
+    public function testOperationCategoryEmpty()
+    {
+        $xml = $this->getXMLHelper()->make(array(
+            'category_id' => null,
+            'cid' => 4,
+        ));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
+            ->end();
+    }
+
+
+    /**
      * Принять балансовую операцию
      */
     public function testBalanceOperation()
