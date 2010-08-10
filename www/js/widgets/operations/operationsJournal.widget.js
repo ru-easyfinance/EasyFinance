@@ -599,7 +599,7 @@ easyFinance.widgets.operationsJournal = function(){
         _dateTo = $('#dateTo').val();
 
         _search_field = $("#search_field").val();
-        _search_field = (_search_field == "поиск по меткам и коментариям") ? '' : _search_field;
+        _search_field = (_search_field == "поиск по меткам и комментариям") ? '' : _search_field;
 
         _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, false);
     }
@@ -610,7 +610,7 @@ easyFinance.widgets.operationsJournal = function(){
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
         _search_field = $("#search_field").val();
-        _search_field = (_search_field == "поиск по меткам и коментариям") ? '' : _search_field;
+        _search_field = (_search_field == "поиск по меткам и комментариям") ? '' : _search_field;
 
         _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, true);
     }
