@@ -16,7 +16,8 @@ function wzStepNextBack(direction, step) {
     }
 
     if ((step >= 0) && (step < tabs.labels.length)) {
-        if ($('#wz_tab_' + step).hasClass('wz_tab_header_not_main'))
+        if ($('#wz_tab_' + step).hasClass('wz_tab_header_not_main')
+                && !$('#wz_tab_8').is(':visible'))
             return wzStepNextBack(direction, step);
 
         tabs.showTab('wz_tab_' + step);
