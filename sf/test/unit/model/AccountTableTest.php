@@ -156,6 +156,8 @@ class model_AccountTableTest extends myUnitTestCase
         $this->assertEquals($balance2, $result->get(1)->getBalance(), 'Баланс второго счета', 0.01);
         $this->assertEquals($balance3, $result->get(2)->getBalance(), 'Баланс третьего счета', 0.01);
 
+        $this->assertNotNull($result->get(0)->getState(), 'Account state shouldn`t be null');
+
     }
 
 }
