@@ -115,6 +115,9 @@ function MakeOperation(){
                         amount: data[v]['amount_done'],
                         account: data[v]['target_account_id']
                     }, function(data){
+                        if (typeof data.accepted == 'undefined')
+                            data.accepted = 0;
+                        easyFinance.widgets.operationEdit.fillFormCalendar(data, true, false);
                         o.remove();
                         $.jGrowl("Финансовая цель закрыта", {
                             theme: 'green'
@@ -274,7 +277,7 @@ $(document).ready(function(){
                         }, function(data){
                             if (data) {
                                 $.jGrowl('Метка успешно сохранена', {
-                                	theme: 'green'
+                                    theme: 'green'
                                 });
                                 res.tags = null;
                                 var tags = { tags: data.tags };
@@ -284,7 +287,7 @@ $(document).ready(function(){
                                 $('.edit_tag #tag,.edit_tag #old_tag').val('');
                             } else {
                                 $.jGrowl('Ошибка при сохранении метки', {
-                                	theme: 'red'
+                                    theme: 'red'
                                 });
                             }
                         }, 'json');
@@ -296,10 +299,10 @@ $(document).ready(function(){
                                 tag: tag
                             }, function(data){
                                 if (!data) {
-                                	data = {};
+                                    data = {};
                                 }
                                 $.jGrowl('Метка удалена', {
-                                	theme: 'green'
+                                    theme: 'green'
                                 });
                                 $('.edit_tag #tag,.edit_tag #old_tag').val(0);
                                 delete res.tags;
@@ -326,17 +329,17 @@ $(document).ready(function(){
                                 tag: $('.add_tag input').val()
                             }, function(data){
                                 if (data) {
-                                	res['tags'].push($('.add_tag input').val());
-                                	loadLPTags();
-                                	$('.add_tag').dialog('close');
-                                	$('.add_tag input').val('');
-                                	$.jGrowl('Новая метка успешно добавлена', {
-                                		theme: 'green'
-                                	});
+                                    res['tags'].push($('.add_tag input').val());
+                                    loadLPTags();
+                                    $('.add_tag').dialog('close');
+                                    $('.add_tag input').val('');
+                                    $.jGrowl('Новая метка успешно добавлена', {
+                                        theme: 'green'
+                                    });
                                 } else {
-                                	$.jGrowl('Ошибка при добавлении метки', {
-                                		theme: 'red'
-                                	});
+                                    $.jGrowl('Ошибка при добавлении метки', {
+                                        theme: 'red'
+                                    });
                                 }
                                 $('.add_tag').dialog('close');
                             }, 'json');
