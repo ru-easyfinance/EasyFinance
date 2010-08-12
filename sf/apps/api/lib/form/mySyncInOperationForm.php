@@ -83,10 +83,11 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     protected function doBind(array $values)
     {
-
+        // не используем поля в зависимости от типа операции
         switch ($values['type']) {
             case Operation::TYPE_BALANCE:
                 unset($this['date'], $this['transfer_account_id'], $this['transfer_amount']);
+                $values['accepted'] = true;
                 break;
             case Operation::TYPE_TRANSFER:
                 unset($this['category_id']);
@@ -94,6 +95,11 @@ class mySyncInOperationForm extends BaseFormDoctrine
             default:
                 unset($this['transfer_account_id'], $this['transfer_amount']);
                 break;
+        }
+
+        // в зависимости от подтвержденности операции отключаем необходимости полей
+        if (!$values['accepted']) {
+            $this->setDraftValidation();
         }
 
         parent::doBind($values);
@@ -115,6 +121,23 @@ class mySyncInOperationForm extends BaseFormDoctrine
                 break;
         }
 
+    }
+
+
+    /**
+     * Черновик: отключаем необходимости полей
+     *
+     * @return void
+     */
+    protected function setDraftValidation()
+    {
+        $this->validatorSchema['account_id']->addOption('required', false);
+        $this->validatorSchema['date']->addOption('required', false);
+
+        if ($this->validatorSchema['transfer_account_id']) {
+            $this->validatorSchema['transfer_account_id']->setOption('required', false);
+            $this->validatorSchema['transfer_amount']->setOption('required', false);
+        }
     }
 
 

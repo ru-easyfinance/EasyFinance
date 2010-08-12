@@ -123,7 +123,7 @@ class syncInOperationAction extends myBaseSyncInAction
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
-            'accepted'    => (bool)(int)$record->accepted,
+            'accepted'    => (bool) (string) $record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),

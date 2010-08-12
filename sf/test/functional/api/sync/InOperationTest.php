@@ -393,4 +393,45 @@ class api_sync_InOperationTest extends api_sync_in
         $this->checkRecordError(4, '[Invalid.] No such account for transfer');
     }
 
+
+    /**
+     * Принять: операция-черновик с незаполненными полями
+     */
+    public function testEmptyFieldsDraftOperation()
+    {
+        $expectedData = array(
+            'type'                => 1,    // тип всегда приходит какой-то
+            'user_id'             => $this->_user->getId(),
+        );
+
+        $xmlData = array_merge(array(
+            'amount'              => null, // пустое кол-во денеГ
+            'account_id'          => null, // пустой Id счета
+            'date'                => null, // пользователь не установил дату
+            'transfer_account_id' => null, // счет для перевода пустой
+            'transfer_amount'     => null, // и пустое кол-во денег для перевода
+            'category_id'         => null, // нет категории
+            'comment'             => null, // пустой коммент
+            'accepted'            => null, // пусто или не принята
+            'cid'                 => 3,
+        ), $expectedData);
+
+        $xml = $this->getXMLHelper()->make($xmlData);
+
+        $this->myXMLPost($xml, 200);
+
+        $this->browser
+            ->with('model')->check('Operation', $expectedData, 1, $foundList);
+
+        // Ответ
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
+                        $foundList->getFirst()->getId(),
+                        $xmlData['cid'])
+                    , 'OK')
+            ->end();
+    }
+
 }
