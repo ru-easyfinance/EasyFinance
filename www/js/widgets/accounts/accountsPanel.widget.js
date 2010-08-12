@@ -142,9 +142,7 @@ easyFinance.widgets.accountsPanel = function(){
         var s = '';
         for (key in data )
         {
-            if (data[key].state == "1") {
-                i = 0;
-            } else if (data[key].state == "2") {
+            if (data[key].state == "2") {
                 i = 'Archive';
             } else {
                 i = g_types[data[key]['type']];
@@ -178,7 +176,12 @@ easyFinance.widgets.accountsPanel = function(){
 	                + parseFloat(data[key]['totalBalance']);
             }
 
-            innerHtmlByGroups[i] = innerHtmlByGroups[i] + str;
+            innerHtmlByGroups[i] = innerHtmlByGroups[i] ?
+                innerHtmlByGroups[i] + str : str;
+
+            if (data[key].state == '1') {
+                innerHtmlByGroups[0] = innerHtmlByGroups[i];
+            }
         }
         total = 0;
         for(key in innerHtmlByGroups)
@@ -188,7 +191,7 @@ easyFinance.widgets.accountsPanel = function(){
             if (key>=0 && key <=7 || key == 'Archive') {
                 _$node.find('#accountsPanelAcc'+key).html(s);
             }
-   
+
             if (innerHtmlByGroups[key] != '') {
                 _$node.find('#accountsPanelAcc'+key).show().prev().show();
             } else {
