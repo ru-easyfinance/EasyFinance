@@ -122,7 +122,7 @@ easyFinance.widgets.accountsPanel = function(){
 //        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
         var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1];
 //        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
-        var innerHtmlByGroups = ['','','','','','',''];//содержимое каждой группы
+        var innerHtmlByGroups = ['','','','','',''];//содержимое каждой группы
         var summByGroups = [0,0,0,0,0,0];// сумма средств по каждой группе
         var summByCurrencies = {};//сумма средств по каждой используемой валюте
 
@@ -186,7 +186,8 @@ easyFinance.widgets.accountsPanel = function(){
         total = 0;
         for(key in innerHtmlByGroups)
         {
-            total = total+parseFloat(summByGroups[key]);
+            total = summByGroups[key] ?
+                total + parseFloat(summByGroups[key]) : total;
             s='<ul class="efListWithTooltips">'+innerHtmlByGroups[key]+'</ul>';
             if (key>=0 && key <=7 || key == 'Archive') {
                 _$node.find('#accountsPanelAcc'+key).html(s);
