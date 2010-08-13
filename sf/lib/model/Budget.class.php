@@ -38,9 +38,9 @@ class Budget
             $budgetCategories[$budgetCategory->getCategoryId()]
                 = $budgetCategory;
         }
-        
+
         foreach ($this->_fact as $categoryId => $factValue) {
-            if (isset($budgetCategories[$categoryId])) {
+            if (!isset($budgetCategories[$categoryId])) {
                 $budgetCategory = new BudgetCategory();
                 $budgetCategory->setArray(
                     array(
@@ -50,6 +50,7 @@ class Budget
                         'drain'       => $factValue < 0 ? '1' : '0'
                     )
                 );
+                $budgetCategory->setBudget($this);
                 $budgetCategories[$categoryId] = $budgetCategory;
             }
         }
