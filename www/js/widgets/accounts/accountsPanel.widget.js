@@ -123,6 +123,7 @@ easyFinance.widgets.accountsPanel = function(){
         var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1];
 //        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
         var innerHtmlByGroups = ['','','','','',''];//содержимое каждой группы
+        innerHtmlByGroups['Archive'] = '';
         var summByGroups = [0,0,0,0,0,0];// сумма средств по каждой группе
         var summByCurrencies = {};//сумма средств по каждой используемой валюте
 
