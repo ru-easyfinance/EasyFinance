@@ -92,7 +92,7 @@ function wzSaveEverything() {
     var partData = {};
     var frm;
 
-    if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0) /* && wzValidateAll() */) {
+    if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0)  && wzValidateAll()) {
         for (i = 0; i < tabs.tabs.length; i++) {
             frm = $('#' + tabs.tabs[i].id + ' form.wz_frm');
 
@@ -120,7 +120,9 @@ function wzSaveEverything() {
             "json"
         );
     } else {
-        $.jGrowl("Заполните все обязательные поля!", {theme: 'red', life: 10000});
+        var msg = "Пожалуйста, заполните все обязательные поля!";
+        msg = msg + "Пункты с недозаполненными полями отмечены красным в списке слева.";
+        $.jGrowl(msg, {theme: 'red', life: 10000});
     }
 
     return false;
@@ -357,12 +359,6 @@ function wsInitValidator() {
         'validationType' : 'regexp',
         'errMsg' : '',
         'params' : { regexp: /^[+][0-9]{11,15}$/i }
-    };
-
-    dValidator.validatableElems['contacts']['wz_phone_home'] = {
-        'validationType' : 'phone',
-        'errMsg' : '',
-        'params' : {}
     };
 
     dValidator.validatableElems['work_info'] = new Array();
