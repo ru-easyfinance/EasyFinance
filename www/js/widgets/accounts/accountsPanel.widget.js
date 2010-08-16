@@ -151,7 +151,7 @@ easyFinance.widgets.accountsPanel = function(){
             str = '<li class="account" title="' + getAccountTooltip(data[key].id) + '"><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-            str = str + '<span>'+shorter(data[key]['name'], 20)+'</span><br>';
+            str = str + '<span>'+htmlEscape(shorter(data[key]['name'], 20))+'</span><br>';
             str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
                 + formatCurrency(data[key]['totalBalance'], true) + '</span>&nbsp;';
             str = str + _model.getAccountCurrencyText(data[key]['id']) + '</span></a>';

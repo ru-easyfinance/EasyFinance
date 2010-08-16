@@ -147,7 +147,7 @@ function getAccountTooltip(accountId) {
     var account = _model.getAccounts()[accountId];
 
     var tip = '<table>';
-    tip +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+ account.name + '</td></tr>';
+    tip +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+ htmlEscape(account.name) + '</td></tr>';
     tip +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+ _model.getAccountTypeString(account.id) + '</td></tr>';
     if (account.comment) {
         tip +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+ account.comment + '</td></tr>';
