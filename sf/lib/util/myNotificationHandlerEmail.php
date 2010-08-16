@@ -63,8 +63,8 @@ class myNotificationHandlerEmail implements myNotificationHandlerInterface
 
         $body = sprintf($this->_template,
             $operation->getDateTimeObject('date')->format('d.m.y'),
-            $operation->getCategory(),
-            $operation->getAccount(),
+            $operation->getCategory()->getName(),
+            $operation->getAccount()->getName(),
             abs($operation->getAmount()), $operation->getAccount()->getCurrency()->getCode(),
             $operation->getComment()
         );

@@ -69,7 +69,7 @@
                         </select>
                         :
                         <select id="mailMinutes" name="mailHour">
-                            <option value="00">00</option>
+                            <option value="0">00</option>
                             <option value="15">15</option>
                             <option value="30">30</option>
                             <option value="45">45</option>
@@ -128,7 +128,7 @@
                         </select>
                         :
                         <select id="smsMinutes" name="mailHour">
-                            <option value="00">00</option>
+                            <option value="0">00</option>
                             <option value="15">15</option>
                             <option value="30">30</option>
                             <option value="45">45</option>

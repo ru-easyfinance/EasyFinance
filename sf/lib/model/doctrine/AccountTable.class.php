@@ -42,7 +42,7 @@ class AccountTable extends Doctrine_Table
         $q = $this->createQuery($alias)
             ->select("{$alias}.name, {$alias}.type_id,
                 {$alias}.description, {$alias}.currency_id,
-                {$alias}.id")
+                {$alias}.id, {$alias}.state")
             ->addSelect("o.amount")
             // TODO: мысли вслух - м.б. использовать Views или prepared statements ?
             ->addSelect("SUM(CASE

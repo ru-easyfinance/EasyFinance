@@ -16,6 +16,7 @@
         'currency_id' => 'currency',
         'description' => 'comment',
         'name'        => 'name',
+        'state'       => 'state',
         'balance'     => 'totalBalance',
     );
 

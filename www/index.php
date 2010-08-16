@@ -41,12 +41,17 @@ try
         if (!IS_DEMO) {
 
             // Если пользователь зашёл с мобильного браузера
-            if ( _Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA
-                && Helper_DetectBrowser::detectMobile() ) {
-
-                header( 'Location: https://' . URL_ROOT_PDA );
-                exit;
-
+            if (
+                _Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA
+                && Helper_DetectBrowser::detectMobile()
+                && !isset($_COOKIE['DO_WHANT_FULL_VERSION'])
+            ) {
+                if (strpos($_SERVER['HTTP_REFERER'], URL_ROOT_PDA) === false) {
+                    header( 'Location: https://' . URL_ROOT_PDA );
+                    exit;
+                } else {
+                    setcookie('DO_WHANT_FULL_VERSION', true);
+                }
             }
 
             // Если пользователь зашёл по незащищённому соединению и он не поисковый бот

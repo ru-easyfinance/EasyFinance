@@ -129,7 +129,19 @@ function getCursorPositionFromInput (elem) {
         return null;
     }
 }
-
+/**
+ * Убирает преобразует спецсимволы html в сущности
+ * @param {String} elem
+ * @return {String}
+ */
+function htmlEscape(s) {
+    return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/'/g, '&#039;')
+        .replace(/"/g, '&quot;');
+}
 ///////////////////////////////////////Работа с числами////////////////////////////////////
 
 /**

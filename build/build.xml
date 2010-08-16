@@ -62,7 +62,7 @@
             </filterchain>
         </copy>
         <exec command="php ${project.basedir}/sf/symfony cc" dir="${project.basedir}/sf" checkreturn="true" />
-        <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes" dir="${project.basedir}/sf" checkreturn="true" />
+        <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes --application=frontend" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize frontend" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize admin" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize api" dir="${project.basedir}/sf" checkreturn="true" />

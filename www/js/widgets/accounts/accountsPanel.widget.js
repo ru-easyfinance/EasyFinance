@@ -122,9 +122,10 @@ easyFinance.widgets.accountsPanel = function(){
 //        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
         var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1];
 //        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
-        var arr = ['','','','','',''];//содержимое каждой группы
-        var summ = [0,0,0,0,0,0];// сумма средств по каждой группе
-        var val = {};//сумма средств по каждой используемой валюте
+        var innerHtmlByGroups = ['','','','','',''];//содержимое каждой группы
+        innerHtmlByGroups['Archive'] = '';
+        var summByGroups = [0,0,0,0,0,0];// сумма средств по каждой группе
+        var summByCurrencies = {};//сумма средств по каждой используемой валюте
 
         if (!_model)
             return;
@@ -142,15 +143,15 @@ easyFinance.widgets.accountsPanel = function(){
         var s = '';
         for (key in data )
         {
-            if (data[key].state == "1") {
-                i = 0;
+            if (data[key].state == "2") {
+                i = 'Archive';
             } else {
                 i = g_types[data[key]['type']];
             }
             str = '<li class="account" title="' + getAccountTooltip(data[key].id) + '"><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-            str = str + '<span>'+shorter(data[key]['name'], 20)+'</span><br>';
+            str = str + '<span>'+htmlEscape(shorter(data[key]['name'], 20))+'</span><br>';
             str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
                 + formatCurrency(data[key]['totalBalance'], true) + '</span>&nbsp;';
             str = str + _model.getAccountCurrencyText(data[key]['id']) + '</span></a>';
@@ -166,26 +167,34 @@ easyFinance.widgets.accountsPanel = function(){
             str = str + '</li>';
 
             if (data[key].state != "2") {
-	            summ[i] = summ[i]+data[key]["totalBalance"] * _model.getAccountCurrencyCost(data[key]["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
-	            if (!val[data[key]['currency']]) {
-		           val[data[key]['currency']]=0;
+	            summByGroups[i] = summByGroups[i]+data[key]["totalBalance"] * _model.getAccountCurrencyCost(data[key]["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
+	            if (!summByCurrencies[data[key]['currency']]) {
+		           summByCurrencies[data[key]['currency']] = 0;
 		        }
 
-	            val[data[key]['currency']] = parseFloat( val[data[key]['currency']] )
+	            summByCurrencies[data[key]['currency']] =
+	                parseFloat(summByCurrencies[data[key]['currency']])
 	                + parseFloat(data[key]['totalBalance']);
-	                arr[i] = arr[i]+str;
+            }
+
+            innerHtmlByGroups[i] = innerHtmlByGroups[i] ?
+                innerHtmlByGroups[i] + str : str;
+
+            if (data[key].state == '1') {
+                innerHtmlByGroups[0] = innerHtmlByGroups[i];
             }
         }
         total = 0;
-        for(key in arr)
+        for(key in innerHtmlByGroups)
         {
-            total = total+parseFloat(summ[key]);
-            s='<ul class="efListWithTooltips">'+arr[key]+'</ul>';
-            if (key>=0 && key <=7) {
+            total = summByGroups[key] ?
+                total + parseFloat(summByGroups[key]) : total;
+            s='<ul class="efListWithTooltips">'+innerHtmlByGroups[key]+'</ul>';
+            if (key>=0 && key <=7 || key == 'Archive') {
                 _$node.find('#accountsPanelAcc'+key).html(s);
             }
-   
-            if (arr[key] != '') {
+
+            if (innerHtmlByGroups[key] != '') {
                 _$node.find('#accountsPanelAcc'+key).show().prev().show();
             } else {
                 _$node.find('#accountsPanelAcc'+key).hide().prev().hide();
@@ -195,8 +204,8 @@ easyFinance.widgets.accountsPanel = function(){
         // формирование итогов
         str = '<ul>';
 
-        for(key in val) {
-            str = str+'<li><div class="' + (val[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(val[key], true, true)+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
+        for(key in summByCurrencies) {
+            str = str+'<li><div class="' + (summByCurrencies[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(summByCurrencies[key], true, true)+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
         }
         str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total, true, true)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
         str = str + '</ul>';
@@ -216,6 +225,7 @@ easyFinance.widgets.accountsPanel = function(){
         });
         //загружает состояние из
         var accountsPanel = $.cookie('accountsPanel_stated');
+
         if (accountsPanel){
             $('div.listing dl.bill_list dt:visible').each(function(){
                 if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
@@ -228,7 +238,9 @@ easyFinance.widgets.accountsPanel = function(){
             return false;
         });
 
-
+        if (!accountsPanel) {
+            $('#accountsPanelAccArchive').prev().click();
+        }
 
         //$('div.listing dl.bill_list dt').click();
         //$('div.listing dl.bill_list dt:last').click().addClass('open');

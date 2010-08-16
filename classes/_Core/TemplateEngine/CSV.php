@@ -29,7 +29,7 @@ class _Core_TemplateEngine_CSV extends _Core_Abstract_TemplateEngineOutput
             $ar = str_replace(';',',',$ar);
             $list = Array ($ar['date'],
                     $ar['type'],
-                    $ar['money'],
+                    number_format($ar['money'], 2, '.', ''),
                     $ar['account_name'],
                     $ar['cat_name'],
                     $ar['tags'],
