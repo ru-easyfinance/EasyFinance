@@ -46,7 +46,10 @@ try
                 && Helper_DetectBrowser::detectMobile()
                 && !isset($_COOKIE['DO_WHANT_FULL_VERSION'])
             ) {
-                if (strpos($_SERVER['HTTP_REFERER'], URL_ROOT_PDA) === false) {
+                if (
+                    isset($_SERVER['HTTP_REFERER'])
+                    && strpos($_SERVER['HTTP_REFERER'], URL_ROOT_PDA) === false
+                ) {
                     header( 'Location: https://' . URL_ROOT_PDA );
                     exit;
                 } else {

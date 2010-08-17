@@ -128,7 +128,7 @@ if( isset($result) && is_array($result) && array_key_exists('text', $result) )
                     $account = $res['accounts'][ $accountId ];
                 ?>
                 <option
-                <?php echo (isset($operation['account']) && $account['id'] == $operation['transfer'])?
+                <?php echo (isset($operation['account']) && isset($operation['transfer']) && $account['id'] == $operation['transfer'])?
                 'selected="selected"':''?>
                 value="<?php echo $account['id']?>"><?php echo $account['name']?>
                 (<?php echo $res['currency'][ $account['currency'] ]['text']?>)

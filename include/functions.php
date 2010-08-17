@@ -44,7 +44,7 @@ function databaseErrorHandler($message, $info)
     if (!error_reporting()) return;
 
     // Выводим подробную информацию об ошибке.
-    throw new Exception(var_export($info, false));
+    throw new Exception(var_export($info, true));
 }
 
 function databaseLogger($db, $sql)
