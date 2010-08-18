@@ -40,11 +40,11 @@ foreach ($users as $category) {
     );
 }
 
-# TODO вынести в настройки: кол-во категорий и мин.частота использования (кол-во операций) для попадания
-#      10 & 3
+// часто используемые категории
 $recent = array();
-$countMax = 10;
-$operationsMin = 3;
+$countMax      = sfConfig::get('app_categories_recent_limit', 10);
+$operationsMin = sfConfig::get('app_categories_recent_operationsFor', 3);
+
 foreach ($users as $category) {
     if ($category['count'] >= $operationsMin) {
         $recent[$category['count']] = $category['id'];

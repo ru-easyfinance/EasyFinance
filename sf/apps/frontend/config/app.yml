@@ -25,3 +25,9 @@ all:
   calendarFuture:
       daysStart:            1 # От 1 дня
       daysEnd:              8 # До 8 дней
+
+  # Категории
+  categories:
+    recent:
+      limit: 10         # максимальное кол-во часто используемых категорий
+      operationsFor: 3  # кол-во операций по категории, для попадания в частые
