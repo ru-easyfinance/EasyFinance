@@ -121,7 +121,7 @@ easyFinance.widgets.accountsPanel = function(){
     				$(this).dialog('close');
 				},
 				"Удалить": function() {
-					_model.deleteAccountById(id, function(data){
+					_model.deleteAccountById(params.id, function(data){
                         // выводим ошибку, если на счету зарегистрированы фин.цели.
                         if (data.error && data.error.text) {
                             $.jGrowl(data.error.text, {theme: 'red'});
