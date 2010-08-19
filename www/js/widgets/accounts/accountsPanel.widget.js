@@ -95,18 +95,10 @@ easyFinance.widgets.accountsPanel = function(){
                         }
                     });
                 } else if (parentClass == "del") {
-                    if (confirm("Вы уверены что хотите удалить счёт?")) {
-                        var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
-
-                        _model.deleteAccountById(id, function(data){
-                            // выводим ошибку, если на счету зарегистрированы фин.цели.
-                            if (data.error && data.error.text) {
-                                $.jGrowl(data.error.text, {theme: 'red'});
-                            } else if (data.result && data.result.text) {
-                                $.jGrowl(data.result.text, {theme: 'green'});
-                            }
-                        });
-                    }
+                	var params = {};
+                	params.id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+                	params.state = $(this).closest(".account").find('div.state').attr('value').replace("edit", "");
+                	confirmDeletion(params);
                 }
             }
         });
@@ -117,6 +109,46 @@ easyFinance.widgets.accountsPanel = function(){
         });
 
         return this;
+    }
+    
+    function confirmDeletion(params){
+    	$(".account_deletion_confirm").dialog({
+    		autoOpen: false,
+    		title: "Предупреждение",
+    		modal: true,
+			buttons: {
+				"Отмена": function() {
+    				$(this).dialog('close');
+				},
+				"Удалить": function() {
+					_model.deleteAccountById(id, function(data){
+                        // выводим ошибку, если на счету зарегистрированы фин.цели.
+                        if (data.error && data.error.text) {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        } else if (data.result && data.result.text) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        }
+                    });
+				},
+				"Скрыть": function() {
+					var handler = function(data) {
+			            if (data.result && data.result.text) {
+			                $.jGrowl(data.result.text, {theme: 'green'});
+			            }else if (data.error && data.error.text) {
+			                $.jGrowl(data.error.text, {theme: 'red'});
+			            }	
+			            
+			            $(".account_deletion_confirm").dialog("close")
+			            
+			        };
+				        
+			        $.jGrowl("Ждите", {theme: 'green'});
+			        
+			        _model.hideAccountById(params.id, handler);
+				}
+			}
+    	});
+    	$(".account_deletion_confirm").dialog("open");
     }
     
     function getAccountsWithoutArchive(accounts){
@@ -161,6 +193,7 @@ easyFinance.widgets.accountsPanel = function(){
             str = '<li class="account" title="' + getAccountTooltip(data[key].id) + '"><a>';
             str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
             str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
+            str = str + '<div style="display:none" class="state" value="'+data[key]['state']+'" />';
             str = str + '<span>'+htmlEscape(shorter(data[key]['name'], 20))+'</span><br>';
             str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
                 + formatCurrency(data[key]['totalBalance'], true) + '</span>&nbsp;';
