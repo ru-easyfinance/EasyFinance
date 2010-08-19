@@ -106,9 +106,12 @@
             <dd id="accountsPanelAcc5" class="hidden"> <!-- --> </dd>
             <dt>Сумма:</dt>
             <dd id="accountsPanel_amount" class="amount"> <!-- --> </dd>
-            <dt class="hidden">Архивные</dt>
+            <dt class="hidden">Скрытые</dt>
             <dd id="accountsPanelAccArchive" class="hidden"> <!-- --> </dd>
         </dl>
+    </div>
+    <div class="account_deletion_confirm" style="display:none">
+        точно ?
     </div>
 <!--/счета-->
 <!--Финансовые цели-->
