@@ -14,7 +14,7 @@ abstract class BaseFrontendAccountEditAction extends sfAction
 
         $this->form = new AccountWithBalanceForm($account);
         $data = $request->getPostParameters();
-        if ($request->hasParameter("oneValue")) {
+        if ($request->hasParameter("hide")) {
             $data["name"] = $account->getName();
             $data["type_id"] = $account->getTypeId();
             $data["currency_id"] = $account->getCurrencyId();

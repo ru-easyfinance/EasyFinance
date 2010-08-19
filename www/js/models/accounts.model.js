@@ -231,7 +231,7 @@ easyFinance.models.accounts = function(){
             
         var postData = {
             state: 1,
-            oneValue: 1
+            hide: 1
         };
 
         var successCallback = function(data) {
