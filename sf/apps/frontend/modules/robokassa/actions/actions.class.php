@@ -11,7 +11,7 @@ class robokassaActions extends sfActions
 {
     /**
      * /robokassa/init
-     * Инициализация транзакции и редирект на страницу оплаты
+     * Инициализация транзакции и возврат json-обекта
      *
      * @param sfWebRequest $request
      */
@@ -20,8 +20,8 @@ class robokassaActions extends sfActions
         $userId = $this->getUser()->getUserRecord()->getId();
 
         // В качестве параметра ожидаем ID услуги (POST параметр service)
-        $serviceId = (int)$request->getPostParameter("service", 0);
-        $term      = (int)$request->getPostParameter("term", 1);
+        $serviceId = (int)$request->getParameter("service", 0);
+        $term      = (int)$request->getParameter("term", 1);
 
         // Получаем стоимость услуги
         $service = Doctrine::getTable('Service')->find( $serviceId );
@@ -39,14 +39,29 @@ class robokassaActions extends sfActions
         $total = round( $term * $price, 2 );
         $transaction->setTotal( $total );
         $transaction->save();
+        
+        $url = Robokassa::getScriptURL($transaction);
+       
+        
+        $b = new sfWebBrowser();
+        $b->get($url);
+        $text = $b->getResponseText();
+        
+        $matches = array();
+        
+        preg_match_all("/^(.*)document.write\(\'(.*)\'\)/isu", $text, $matches);
 
-        // Теперь у нас есть номер транзакции, можно переходить к оплате
-        $this->redirect( Robokassa::getPaymentURL( $transaction->getId(), $total, $term ) );
+        $return = array(
+            "result" => array(
+                "script" => html_entity_decode(trim($matches[1][0])),
+                "html" => html_entity_decode(trim($matches[2][0]))
+            )            
+        );
+                
+        $this->json = json_encode($return);
 
-        return sfView::NONE;
     }
-
-
+     
     /**
      * /robokassa/result
      * Отвечает на запрос робокассы, о результате операции

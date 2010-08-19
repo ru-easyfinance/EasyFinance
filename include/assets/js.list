@@ -47,3 +47,4 @@ widgets/calendar/calendarMonthPicker.widget.js
 widgets/calendar/calendarLeft.widget.js
 widgets/calendar/calendarPreview.widget.js
 widgets/calendar/calendarOverdue.widget.js
+widgets/robokassa.widget.js

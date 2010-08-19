@@ -60,6 +60,12 @@ services:
   url:   /services/
   params: { module: services, action: index }
 
+robokassa_json:
+  url:   /robokassa/init.json
+  params: { module: robokassa, action: init, sf_format: json }
+  requirements:
+    sf_method: get
+
 robokassa:
   url:   /robokassa/:action
   params: { module: robokassa }

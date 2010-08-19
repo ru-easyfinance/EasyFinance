@@ -6,6 +6,7 @@ prod:
   # Данные для подключения робокассы
   billing:
     robokassa:
+      scriptUrl:            https://merchant.roboxchange.com/Handler/MrchSumPreview.ashx
       url:                  https://merchant.roboxchange.com/Index.aspx
       login:                easyfinance
       pass1:                Hud^y&6e35$resDf # Пароль 1
@@ -15,6 +16,7 @@ all:
   # Данные для подключения робокассы
   billing:
     robokassa:
+      scriptUrl:            https://test.roboxchange.com/Handler/MrchSumPreview.ashx
       url:                  http://test.robokassa.ru/Index.aspx
       login:                easyfinance_test
       pass1:                test123456789 # Пароль 1
