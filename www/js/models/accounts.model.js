@@ -216,6 +216,7 @@ easyFinance.models.accounts = function(){
      */
     function editAccountById(id, params, callback) {
         if (!id) return false;
+        
         return _processAccount(EDIT_ACCOUNT_URL + id + ".json", params, "accountEdited", callback);
     }
     
@@ -236,7 +237,8 @@ easyFinance.models.accounts = function(){
 
         var successCallback = function(data) {
         	var _id = (data.result && data.result.id) ? data.result.id : null;
-            _loadAccounts(function() {
+			
+			_loadAccounts(function() {
                 var event = $.Event(eventName);
                 event.id = _id;
                 $(document).trigger(event);
@@ -251,6 +253,40 @@ easyFinance.models.accounts = function(){
         return true;
             
     }
+
+
+    /**
+     * Скрыть счет
+     */
+    function hideAccountById(id, callback) {
+        if (!id) return false;
+
+        var url = EDIT_ACCOUNT_URL + id + ".json";
+        var eventName = "accountEdited";
+        
+        var postData = {
+            state: 2,
+            hide: 1
+        };
+
+        var successCallback = function(data) {
+            var _id = (data.result && data.result.id) ? data.result.id : null;
+
+            _loadAccounts(function() {
+                var event = $.Event(eventName);
+                event.id = _id;
+                $(document).trigger(event);
+            });
+
+            if (callback) {
+                callback(data);
+            }
+        };
+        
+        $.post(url, postData, successCallback, 'json');
+        return true;
+        
+    }
         
     /**
      * [private] Обработать добавление/редактирование счета
@@ -262,7 +298,7 @@ easyFinance.models.accounts = function(){
      *                              Найти и задокументировать или вырезать
      */
     function _processAccount(url, params, eventName, callback) {
-
+    	
         if (typeof params != "object") {
             return false;
         }
@@ -666,6 +702,7 @@ easyFinance.models.accounts = function(){
         editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,
         addAccountToFavouriteById: addAccountToFavouriteById,
+        hideAccountById: hideAccountById,
 
         addOperation: addOperation,
         editOperationDateById: editOperationDateById,
