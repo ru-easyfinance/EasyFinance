@@ -101,28 +101,42 @@ class myOperationNotificationTask extends sfBaseTask
         $this->_initDefaultHandlers();
 
         foreach ($this->getEventsFromQueue() as $notification) {
+            try {
+                $handler = $this->getHandler($notification->getType());
 
-            $handler = $this->getHandler($notification->getType());
-
-            // OK
-            if ($handler->run($notification)) {
-                $notification->setIsSent(1);
-                $notification->setIsDone(1);
-                $countOk++;
-
-            // Error
-            } else {
-                $failsCounter = $notification->getFailCounter() + 1;
-                $notification->setFailCounter($failsCounter);
-
-                // Если количество ошибок привысило максимально допустимое,
-                // завершаем с этим оповещением
-                if ($failsCounter >= sfConfig::get('app_notification_max_errors')) {
+                // OK
+                if ($handler->run($notification)) {
+                    $notification->setIsSent(1);
                     $notification->setIsDone(1);
+                    $countOk++;
+
+                // Error
+                } else {
+                    $failsCounter = $notification->getFailCounter() + 1;
+                    $notification->setFailCounter($failsCounter);
+
+                    // Если количество ошибок привысило максимально допустимое,
+                    // завершаем с этим оповещением
+                    if (
+                        $failsCounter
+                        >=
+                        sfConfig::get('app_notification_max_errors')
+                    ) {
+                        $notification->setIsDone(1);
+                    }
+                    $countError++;
                 }
-                $countError++;
+                $notification->save();
+            } catch (Exception $e) {
+                $this->log(
+                    sprintf(
+                        'Exception: %s caught, Message: %s, Trace: %s',
+                        get_class($e),
+                        $e->getMessage(),
+                        $e->getTraceAsString()
+                    )
+                );
             }
-            $notification->save();
         }
 
         $this->log(sprintf('Done: %d, Errors: %d', $countOk, $countError));

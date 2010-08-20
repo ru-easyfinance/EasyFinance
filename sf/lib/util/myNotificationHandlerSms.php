@@ -128,8 +128,8 @@ class myNotificationHandlerSms implements myNotificationHandlerInterface
         $words = array(
             $operation->getDateTimeObject('date')->format('d.m'),
             abs($operation->getAmount()) . ' ' . $operation->getAccount()->getCurrency()->getCode(),
-            (string) strip_tags($operation->getCategory()),
-            (string) strip_tags($operation->getAccount()),
+            (string) strip_tags($operation->getCategory()->getName()),
+            (string) strip_tags($operation->getAccount()->getName()),
             strip_tags($operation->getComment()),
         );
 

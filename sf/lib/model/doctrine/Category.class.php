@@ -15,6 +15,6 @@ class Category extends BaseCategory
      */
     public function __toString()
     {
-        return $this->_get('name');
+        return $this->getName();
     }
 }
