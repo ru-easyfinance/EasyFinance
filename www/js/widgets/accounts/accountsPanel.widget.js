@@ -84,6 +84,16 @@ easyFinance.widgets.accountsPanel = function(){
                     document.location='/accounts/#copy'+id;
                     // для события на странице /accounts
                     accounts_hash_api('#edit'+id, true);
+                }else if (parentClass == "favourite") {
+                	var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+
+                    _model.addAccountToFavouriteById(id, function(data){
+                        if (data.error && data.error.text) {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        } else if (data.result && data.result.text) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        }
+                    });
                 } else if (parentClass == "del") {
                     if (confirm("Вы уверены что хотите удалить счёт?")) {
                         var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
@@ -161,7 +171,7 @@ easyFinance.widgets.accountsPanel = function(){
                             + '<li title="Добавить операцию" class="operation"><a></a></li>'
                             + '<li title="Редактировать" class="edit"><a></a></li>'
                             + '<li title="Удалить" class="del"><a></a></li>'
-                            + '<li title="Копировать" class="add"><a></a></li>'
+                            + '<li title="В избранные" class="favourite"><a></a></li>'
                        + '</ul></div>';
 
             str = str + '</li>';
