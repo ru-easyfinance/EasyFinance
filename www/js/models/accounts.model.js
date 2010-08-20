@@ -218,8 +218,40 @@ easyFinance.models.accounts = function(){
         if (!id) return false;
         return _processAccount(EDIT_ACCOUNT_URL + id + ".json", params, "accountEdited", callback);
     }
+    
+    
+    /**
+    * Добавить счёт в избранные
+    */
+    function addAccountToFavouriteById(id, callback) {
+        if (!id) return false;
+        
+        var url = EDIT_ACCOUNT_URL + id + ".json";
+        var eventName = "accountEdited";
+            
+        var postData = {
+            state: 1,
+            oneValue: 1
+        };
 
+        var successCallback = function(data) {
+        	var _id = (data.result && data.result.id) ? data.result.id : null;
+            _loadAccounts(function() {
+                var event = $.Event(eventName);
+                event.id = _id;
+                $(document).trigger(event);
+            });
 
+            if (callback) {
+                callback(data);
+            }
+        };
+            
+        $.post(url, postData, successCallback, 'json');
+        return true;
+            
+    }
+        
     /**
      * [private] Обработать добавление/редактирование счета
      *
@@ -633,6 +665,7 @@ easyFinance.models.accounts = function(){
         addAccount: addAccount,
         editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,
+        addAccountToFavouriteById: addAccountToFavouriteById,
 
         addOperation: addOperation,
         editOperationDateById: editOperationDateById,
