@@ -16,7 +16,7 @@ all:
   # Данные для подключения робокассы
   billing:
     robokassa:
-      scriptUrl:            https://test.roboxchange.com/Handler/MrchSumPreview.ashx
+      scriptUrl:            https://merchant.roboxchange.com/Handler/MrchSumPreview.ashx
       url:                  http://test.robokassa.ru/Index.aspx
       login:                easyfinance_test
       pass1:                test123456789 # Пароль 1
