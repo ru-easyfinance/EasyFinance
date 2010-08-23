@@ -57,8 +57,10 @@ class robokassaActions extends sfActions
                 "html" => html_entity_decode(trim($matches[2][0]))
             )            
         );
-                
-        $this->json = json_encode($return);
+
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/json');
+        
+        return $this->renderText( json_encode($return) );
 
     }
      
