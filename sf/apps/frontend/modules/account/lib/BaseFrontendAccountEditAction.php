@@ -13,14 +13,7 @@ abstract class BaseFrontendAccountEditAction extends sfAction
         $account = $this->getRoute()->getObject();
 
         $this->form = new AccountWithBalanceForm($account);
-        $data = $request->getPostParameters();
-        if ($request->hasParameter("hide")) {
-            $data["name"] = $account->getName();
-            $data["type_id"] = $account->getTypeId();
-            $data["currency_id"] = $account->getCurrencyId();
-            $data["initBalance"] = $account->getInitBalance();
-        }
-        $this->form->bind($data);
+        $this->form->bind($request->getPostParameters());
         if ($this->form->isValid()) {
             $account = $this->form->save();
             $balance = (float) $this->form->getValue('initBalance');

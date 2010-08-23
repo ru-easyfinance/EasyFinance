@@ -220,74 +220,17 @@ easyFinance.models.accounts = function(){
         return _processAccount(EDIT_ACCOUNT_URL + id + ".json", params, "accountEdited", callback);
     }
     
-    
     /**
-    * Добавить счёт в избранные
+    * Сменить параметр state 
     */
-    function addAccountToFavouriteById(id, callback) {
-        if (!id) return false;
-        
-        var url = EDIT_ACCOUNT_URL + id + ".json";
-        var eventName = "accountEdited";
-            
-        var postData = {
-            state: 1,
-            hide: 1
-        };
-
-        var successCallback = function(data) {
-        	var _id = (data.result && data.result.id) ? data.result.id : null;
-			
-			_loadAccounts(function() {
-                var event = $.Event(eventName);
-                event.id = _id;
-                $(document).trigger(event);
-            });
-
-            if (callback) {
-                callback(data);
-            }
-        };
-            
-        $.post(url, postData, successCallback, 'json');
-        return true;
-            
+    function changeAccountStateById(id, state, callback){
+    	var account = _accounts[id];
+    	account.state = state;
+    	
+    	return _processAccount(EDIT_ACCOUNT_URL + id + ".json", account, "accountEdited", callback);
     }
-
-
-    /**
-     * Скрыть счет
-     */
-    function hideAccountById(id, callback) {
-        if (!id) return false;
-
-        var url = EDIT_ACCOUNT_URL + id + ".json";
-        var eventName = "accountEdited";
-        
-        var postData = {
-            state: 2,
-            hide: 1
-        };
-
-        var successCallback = function(data) {
-            var _id = (data.result && data.result.id) ? data.result.id : null;
-
-            _loadAccounts(function() {
-                var event = $.Event(eventName);
-                event.id = _id;
-                $(document).trigger(event);
-            });
-
-            if (callback) {
-                callback(data);
-            }
-        };
-        
-        $.post(url, postData, successCallback, 'json');
-        return true;
-        
-    }
-        
+    
+            
     /**
      * [private] Обработать добавление/редактирование счета
      *
@@ -701,8 +644,7 @@ easyFinance.models.accounts = function(){
         addAccount: addAccount,
         editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,
-        addAccountToFavouriteById: addAccountToFavouriteById,
-        hideAccountById: hideAccountById,
+        changeAccountStateById: changeAccountStateById,
 
         addOperation: addOperation,
         editOperationDateById: editOperationDateById,

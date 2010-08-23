@@ -87,7 +87,7 @@ easyFinance.widgets.accountsPanel = function(){
                 }else if (parentClass == "favourite") {
                 	var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
 
-                    _model.addAccountToFavouriteById(id, function(data){
+                    _model.changeAccountStateById(id, 1, function(data){
                         if (data.error && data.error.text) {
                             $.jGrowl(data.error.text, {theme: 'red'});
                         } else if (data.result && data.result.text) {
@@ -95,10 +95,8 @@ easyFinance.widgets.accountsPanel = function(){
                         }
                     });
                 } else if (parentClass == "del") {
-                	var params = {};
-                	params.id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
-                	params.state = $(this).closest(".account").find('div.state').attr('value').replace("edit", "");
-                	confirmDeletion(params);
+                	var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+                	confirmDeletion(id);
                 }
             }
         });
@@ -111,7 +109,7 @@ easyFinance.widgets.accountsPanel = function(){
         return this;
     }
     
-    function confirmDeletion(params){
+    function confirmDeletion(id){
     	$(".account_deletion_confirm").dialog({
     		autoOpen: false,
     		title: "Предупреждение",
@@ -121,7 +119,7 @@ easyFinance.widgets.accountsPanel = function(){
     				$(this).dialog('close');
 				},
 				"Удалить": function() {
-					_model.deleteAccountById(params.id, function(data){
+					_model.deleteAccountById(id, function(data){
                         // выводим ошибку, если на счету зарегистрированы фин.цели.
                         if (data.error && data.error.text) {
                             $.jGrowl(data.error.text, {theme: 'red'});
@@ -144,7 +142,7 @@ easyFinance.widgets.accountsPanel = function(){
 				        
 			        $.jGrowl("Ждите", {theme: 'green'});
 			        
-			        _model.hideAccountById(params.id, handler);
+			        _model.changeAccountStateById(id, 2, handler);
 				}
 			}
     	});
