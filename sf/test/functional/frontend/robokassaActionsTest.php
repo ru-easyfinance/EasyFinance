@@ -38,8 +38,7 @@ class robokassaActionsTest extends myFunctionalTestCase
             isParameter('term', 6)->
         end()->
         with('response')->begin()->
-            isStatusCode(302)->
-            // Убеждаемся что редирект именно на робокассу, а не на login-page
+            isStatusCode(200)->
             matches('/(robokassa)/i')->
         end();
 

@@ -74,7 +74,7 @@
 $(document).ready( function() {
 
 	$(".service_submit_button").robokassa({
-	    url: "<?php echo url_for("@robokassa_json") ?>"
+	    url: "<?php echo url_for("robokassa/init") ?>"
 	});
 	
     // Перебираем все селекты периода и прописываем необходимые обработчики
