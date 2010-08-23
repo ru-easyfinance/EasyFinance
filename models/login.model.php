@@ -32,13 +32,13 @@ class Login_Model
         (0, {$uid}, 12, 'Питание', -1, '{$date}', '{$date}'),
         (0, {$uid}, 13, 'Подарки, помощь родственникам, благотворительность', -1, '{$date}', '{$date}'),
         (0, {$uid}, 14, 'Проезд, транспорт', -1, '{$date}', '{$date}'),
-        (0, {$uid}, 15, 'Проценты по кредитам и займам', -1, '{$date}', '{$date}'),
         (0, {$uid}, 16, 'Прочие доходы', 1, '{$date}', '{$date}'),
         (0, {$uid}, 17, 'Прочие личные расходы', -1, '{$date}', '{$date}'),
         (0, {$uid}, 18, 'Расходы по работе', -1, '{$date}', '{$date}'),
         (0, {$uid}, 19, 'Связь, ТВ и интернет', -1, '{$date}', '{$date}'),
         (0, {$uid}, 20, 'Страхование', -1, '{$date}', '{$date}'),
-        (0, {$uid}, 21, 'Уход за собой', -1, '{$date}', '{$date}')";
+        (0, {$uid}, 21, 'Уход за собой', -1, '{$date}', '{$date}'),
+        (0, {$uid}, 24, 'Долги', 1, '{$date}', '{$date}')";
         Core::getInstance()->db->query($sql);
 
         $sql = "INSERT INTO category (`cat_parent`, `user_id`, `system_category_id`, `cat_name`, `type`, `created_at`, `updated_at`) VALUES
@@ -128,7 +128,11 @@ class Login_Model
 
         ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=12 AND cat_parent=0), {$uid}, 12, 'Обеды вне дома', -1, '{$date}', '{$date}'),
         ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=12 AND cat_parent=0), {$uid}, 12, 'Питание дома', -1, '{$date}', '{$date}'),
-        ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=12 AND cat_parent=0), {$uid}, 12, 'Алкоголь, табачные изделия', -1, '{$date}', '{$date}')";
+        ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=12 AND cat_parent=0), {$uid}, 12, 'Алкоголь, табачные изделия', -1, '{$date}', '{$date}'),
+
+        ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=24 AND cat_parent=0), {$uid}, 25, 'Выплата долгов', 1, '{$date}', '{$date}'),
+        ((SELECT c.cat_id FROM category c WHERE c.user_id={$uid} AND c.system_category_id=24 AND cat_parent=0), {$uid}, 15, 'Проценты по кредитам и займам', 1, '{$date}', '{$date}')";
+
         Core::getInstance()->db->query($sql);
     }
 
