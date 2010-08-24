@@ -54,7 +54,6 @@ class Account extends BaseAccount
                     'category_id' => NULL,
                     'type'        => Operation::TYPE_BALANCE,
                     'comment'     => 'Начальный остаток',
-                    'updated_at'  => '0000-00-00',
                     'accepted'    => 1,
                 );
 

@@ -20,6 +20,10 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             'type'       => Operation::TYPE_PROFIT,
             'deleted_at' => date(DATE_ISO8601),
         ));
+        $opInitBalance = $this->helper->makeOperation($op->getAccount(), array(
+            'amount'     => 100,
+            'type'       => Operation::TYPE_BALANCE,
+        ));
 
         $this->authenticateUser($op->getUser());
 
@@ -32,7 +36,7 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             ->with('response')->begin()
                 ->isValid()
                 ->checkContains('<recordset type="Operation">')
-                ->checkElement('record', 2)
+                ->checkElement('record', 3)
                 ->checkElement("record[id=\"{$opDeleted->getId()}\"][deleted]", 1)
                 ->checkElement('#'.$op->getId())
                 ->checkElement('record account_id',  (string)$op->getAccountId())
@@ -44,6 +48,8 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
                 ->checkElement('record accepted',    $op->getAccepted())
                 ->checkElement('record created_at')
                 ->checkElement('record updated_at')
+                ->checkElement('#'.$opInitBalance->getId())
+                ->checkElement("record[id=\"{$opInitBalance->getId()}\"] amount", '100')
                 // TODO: Если это не перевод, тогда не показываем поля
                 // ->checkElement('record transfer_account_id', false)
                 // ->checkElement('record transfer_amount', false)
