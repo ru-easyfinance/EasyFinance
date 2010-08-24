@@ -103,7 +103,7 @@ class Account extends BaseAccount
      */
     public function __toString()
     {
-        return $this->_get('name');
+        return $this->getName();
     }
 
 }

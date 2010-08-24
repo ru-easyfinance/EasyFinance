@@ -222,7 +222,8 @@ easyFinance.widgets.accountsPanel = function(){
                 innerHtmlByGroups[i] + str : str;
 
             if (data[key].state == '1') {
-                innerHtmlByGroups[0] = innerHtmlByGroups[i];
+                innerHtmlByGroups[0] = innerHtmlByGroups[0] ?
+                    innerHtmlByGroups[0] + str : str;
             }
         }
         total = 0;
@@ -272,17 +273,14 @@ easyFinance.widgets.accountsPanel = function(){
                 if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
                     $(this).click()
             })
+        } else {
+            $('div.listing dl.bill_list dd#accountsPanelAccArchive').prev().click();
         }
 
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
         });
-
-        if (!accountsPanel) {
-            $('#accountsPanelAccArchive').prev().click();
-        }
-
         //$('div.listing dl.bill_list dt').click();
         //$('div.listing dl.bill_list dt:last').click().addClass('open');
         //$('div.listing dl.bill_list dt').click().addClass('open');
