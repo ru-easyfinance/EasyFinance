@@ -170,6 +170,75 @@ $(document).ready(function(){
             }
         });
     }
+
+    // #1583. задаем переменные для работы с боковой панелью
+    var rightbar = $('.mid .block3'),
+        rightbarW = rightbar.width(),
+        centralfield = $('.mid .block2 .l-indent'),
+        mRight = parseInt(centralfield.css('margin-right')),
+        zeroRight = mRight - rightbarW,
+        speed = 400,
+        debounce = null,
+        forceshow = false,
+        widthState;
+
+    // #1583. кнопка для показа/скрытия правого сайдбара
+    $('.b-sidebar-btn').click(function() {
+        $(this).toggleClass('selected');
+        forceshow = !forceshow;
+        onClick();
+        return false;
+    });
+
+    // #1583. определяем размер экрана (только не для главной страницы!)
+    if (pathName != '//') {
+        function rightbarAnimate(value, animate) {
+            if(animate) rightbar.stop();
+            rightbar.animate({
+                left: value
+            }, ((animate) ? speed : 0));
+        }
+
+        function contentAnimate(value) {
+            centralfield.animate({
+                marginRight: value
+            }, 0, function() {
+                if(widthState) {
+                    $('.ct.head h2').show();
+                    $('.b-sidebar-btn').hide();
+                } else {
+                    $('.b-sidebar-btn').removeClass('selected').show();
+                }
+            });
+        }
+
+        function onClick(animation) {
+            if(forceshow) {
+                $('.ct.head h2').hide();
+                rightbarAnimate(0, ((animation == false) ? false : true));
+            } else {
+                rightbarAnimate(rightbarW + 10, ((animation == false) ? false : true));
+            }
+        }
+
+        $(window).resize(function() {
+            if(debounce) clearTimeout(debounce);
+            debounce = setTimeout(function() {
+                widthState = $(window).width() > (1260 + rightbarW);
+                if(widthState) {
+                    if(forceshow) {
+                        forceshow = false;
+                    }
+                    rightbarAnimate(0);
+                    contentAnimate(mRight);
+                } else {
+                    onClick(false);
+                    contentAnimate(zeroRight);
+                }
+            }, 200);
+        }).trigger('resize');
+    }
+
     //#538
     if (!$.cookie('referer_url') &&
     !res.accounts &&

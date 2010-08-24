@@ -7,43 +7,36 @@ easyFinance.widgets.operationsJournal = function(){
     // private constants
 
     // private variables
-    var _modelAccounts = null;
+    var _modelAccounts = null,
+        _account = '',
+        _accountName = '',
+        _category = '',
+        _categoryName = '',
+        _type = '-1',
+        _sumFrom = '',
+        _sumTo = '',
+        _dateFrom = '',
+        _dateTo = '',
+        _search_field = '',
+        _$node = null,
+        _journal = null,
+        _$txtDateFrom = null,
+        _$txtDateTo = null,
+        _$checkAll = null,
+        _$comboAccount = null,
+        _$comboCategory = null,
+        _$dialogFilterType = null,
+        _$dialogFilterSum = null,
+        _$dialogFilterAccount = null,
+        _$dialogFilterCategory = null,
+        _sexyCategoryInitialized = false,
+        OPERATION_TYPES = ['расход', 'доход', 'перевод', '', 'фин. цель'],
+        break_symbol,
 
-    var _account = '';
-    var _accountName = '';
-    var _category = '';
-    var _categoryName = '';
-    var _type = '-1';
-    var _sumFrom = '';
-    var _sumTo = '';
-    var _dateFrom = '';
-    var _dateTo = '';
-    var _search_field = '';
+        rowsCollection = {},
+        deleteBtn;
 
-    var _$node = null;
-
-    var _journal = null;
-
-    var _$txtDateFrom = null;
-    var _$txtDateTo = null;
-    var _$checkAll = null;
-
-    var _$comboAccount = null;
-    var _$comboCategory = null;
-
-    var _$dialogFilterType = null;
-    var _$dialogFilterSum = null;
-    var _$dialogFilterAccount = null;
-    var _$dialogFilterCategory = null;
-
-    var _sexyCategoryInitialized = false;
-
-    var OPERATION_TYPES = ['расход', 'доход', 'перевод', '', 'фин. цель'];
-
-    var break_symbol;
-
-    function insertWBR(td_contents)
-    {
+    function insertWBR(td_contents) {
         var res = '';
         for (i=0;i<=td_contents.length;i+=5)
             res += td_contents.substr(i, 5) + break_symbol;
@@ -68,98 +61,63 @@ easyFinance.widgets.operationsJournal = function(){
 
         _journal = data.operations;
 
-        var tr, tp, pageTotal, curMoney, prevMoney;
-        tr = '';
-        pageTotal = 0;
+        var tr = '',
+            tp, 
+            pageTotal = 0,
+            curMoney,
+            prevMoney;
 
-        // Собираем данные для заполнения в таблицу
-        for(var v in _journal) {
-            // см. тикет #357
-            if (_journal[v].account_name == null)
-                continue;
-
-            if (  _journal[v].transfer > 0 ) {
-                tp = 'transfer';
-            } else if (_journal[v].virt == "1") {
-                tp = 'target';
-            } else {
-                if (_journal[v].drain == 1) {
-                    tp = 'outcome';
-                } else {
-                    tp = 'income';
-                }
-            }
-
-            // в режиме "все счета" не учитываем в балансе и итогах операции перевода (по ним баланс всегда ноль)
-            if (_account == '' && _journal[v].transfer > 0)
-                curMoney = 0;
-            else
-                curMoney = parseFloat(_journal[v].money * easyFinance.models.currency.getCurrencyCostById(_journal[v].account_currency_id));
-
-            pageTotal = pageTotal + curMoney;
-
-            var typ = '';
-            if ( _journal[v].transfer > 0 ) {
-                typ = 'перевод';
-            } else if (_journal[v].virt == "1") {
-                typ = 'перевод на финансовую цель';
-            } else {
-                if (_journal[v].drain == 1) {
-                    typ = 'расход';
-                } else {
-                    typ = 'доход';
-                }
-            }
-
-            var comment = (_journal[v].tags ? "[" + _journal[v].tags + "] " : "") + (_journal[v].comment || "");
-            var tooltipHtml = '<b>Тип:</b> ' + typ + '<br>';
-            tooltipHtml += '<b>Счёт:</b> ' + ( res.accounts[_journal[v].account_id] ? res.accounts[_journal[v].account_id].name : '' ) + '<br>';
-            tooltipHtml += '<b>Комментарий:</b><br> ' + comment.replace("\n", "<br>", "g");
-
-            tr += "<tr id='op" + (_journal[v].virt == "1" ? 'v' : 'r') + _journal[v].id
-                + "' title='" + tooltipHtml
-                + "' value='" + v
-                + "' moneyCur='" + curMoney.toString()
-                + "' trId='" + _journal[v].tr_id
-                + "' account='" + _journal[v].account_name
-                + "'>"
-                    + "<td class='check'>"
-                    + "<input type='checkbox' /></td>"
-                    + '<td class="light">'+_journal[v].date.substr(0, 5)+'</td>';
-
-            tr += '<td class="light"><span>'+'<div class="operation ' + tp + '"></div>'+'</span></td>'
-
-            // если перевод осуществляется между счетами с разными валютами
-
-
-            // if (_account == '')
-            // TODO: добавили хак для вывода суммы перевода на финцель
-            //       Финцель .moneydef приходит пустой. Где конвертация?
-            //       Используем money и в результате получаем сумму без конвертации.
-            //       .moneydef должен быть заполнен.
-            if (_account == '' && _journal[v].virt != "1") {
-                strMoney = formatCurrency(_journal[v].moneydef, false, true);
-            } else {
-                strMoney = formatCurrency(_journal[v].money, false, true);
-            }
-
-            tr += '<td class="summ ' + (_journal[v].money>=0 ? 'sumGreen' : 'sumRed') + '"><span><b>'+strMoney+'&nbsp;</b></span></td>'
-
-            tr += '<td class="big"><span>'+ ((_journal[v].cat_name == null)? '' : _journal[v].cat_name) +'</span></td>'
-            + '<td class="big">'+ (comment == "" ? '&nbsp;' : shorter(comment, 24))
-                +'<div class="cont" style="top: -17px"><span>'+'</span><ul>'
-                +'<li class="edit"><a title="Редактировать">Редактировать</a></li>'
-                +'<li class="del"><a title="Удалить">Удалить</a></li>'
-                +'<li class="add"><a title="Копировать">Копировать</a></li>'
-                +'</ul></div>'
-            +'</td></tr>';
-        }
+        // Убираем прелоадер
+        DataTables.preloader(false);
 
         // очищаем таблицу
-        $('#operations_list').find('tr').remove();
+        DataTables.grid.fnClearTable();
 
         // заполняем таблицу
-        $('#operations_list tbody').append(tr);
+        var queue = [null],
+            typ;
+        $(_journal).each(function(i) {
+            if ( this.transfer > 0 ) {
+                typ = 'перевод';
+                operationType = 'transfer';
+            } else if (this.virt == '1') {
+                typ = 'перевод на финансовую цель';
+                operationType = 'target';
+            } else {
+                typ = (this.drain == 1) ? 'расход' : 'доход';
+                operationType = (this.drain == 1) ? 'outcome' : 'income';
+            }
+
+            var comment = (this.tags ? "[" + this.tags + "] " : "") + (this.comment || ""),
+                tooltipHtml = '<b>Тип:</b> ' + typ + '<br><b>Счёт:</b> ' + ( res.accounts[this.account_id] ? res.accounts[this.account_id].name : '' ) + ((comment) ? '<br><b>Комментарий:</b> ' : '') + comment.replace("\n", "<br>", "g"),
+                rowID = 'op' + ((this.virt == '1') ? 'v' : 'r') + this.id;
+
+            curMoney = (_account == '' && this.transfer > 0) ? 0 : parseFloat(this.money * easyFinance.models.currency.getCurrencyCostById(this.account_currency_id));
+            strMoney = (_account == '' && this.virt != "1") ? formatCurrency(this.moneydef, false, true) : formatCurrency(this.money, false, true);
+
+            DataTables.grid.fnAddData([
+                '<input type="checkbox" />',
+                this.date.substr(0, 5),
+                '<i class="b-icon operation ' + operationType + '"></i>',
+                '<span class="' + (this.money >= 0 ? 'sumGreen' : 'sumRed') + '">' + strMoney.replace(/\&nbsp\;*/g, '').replace(/\s+/g, '&nbsp;') + '</span>',
+                this.cat_name,
+                ((this.tags ? '[' + this.tags + '] ' : '') + (this.comment || '')),
+                '<ul class="b-row-menu-block" id="' + rowID + '" trid="' + this.target_id + '"><li><a href="#edit"></li><li><a href="#del"></li><li><a href="#add"></li></ul>'
+            ]);
+
+            rowsCollection[rowID] = {
+                title: tooltipHtml,
+                moneyCur: curMoney.toString(),
+                //trId: this.tr_id,
+                trId: this.target_id,
+                account: this.account_name,
+                value: i
+            }
+        });
+
+        if(deleteBtn) deleteBtn.hide();
+
+        $(document).trigger('table.ready');
 
         // Выводим итоги по счёту/странице
         pageTotal = Math.round(pageTotal*100)/100;
@@ -176,24 +134,21 @@ easyFinance.widgets.operationsJournal = function(){
         if (!confirm("Вы действительно хотите удалить выбранные операции?"))
             return false;
 
-        var _ops = [];
-        var ids = []
-        var virts = [];
-        var key = 0;
+        var _ops = [],
+            ids = [],
+            virts = [];
 
-        var $trs = $('#operations_list tr .check input:checked').closest('tr');
-        $trs.each(function(){
-            var id = $(this).attr('id');
-            var value = $(this).attr('value');
+        $('td input:checked', DataTables.table).closest('tr').each(function(key) {
+            var id = $(this).find('.b-row-menu-block').attr('id'),
+                value = rowsCollection[id].value;
 
-            if (id.indexOf("opv") != -1)
+            if (id.indexOf("opv") != -1) {
                 virts[key] = _journal[value].id;
-            else
+            } else {
                 ids[key] = _journal[value].id;
+            }
 
             _ops[key] = $.extend(true, {}, _journal[value]);
-
-            key++;
         });
 
         _modelAccounts.deleteOperationsByIds(ids, virts, function(data) {
@@ -218,10 +173,9 @@ easyFinance.widgets.operationsJournal = function(){
         if (!confirm("Вы действительно хотите удалить эту операцию?"))
             return false;
 
-        var _op = $.extend(true, {}, _journal[id]);
-
-        var ids = [];
-        var virts = [];
+        var _op = $.extend(true, {}, _journal[id]),
+            ids = [],
+            virts = [];
 
         if (_op.virt == "1") {
             virts.push(_op.id);
@@ -245,35 +199,36 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _deleteOperationFromTable(op) {
-        var opVirt = (op.virt == "1") ? 'v' : 'r';
-        var opTransferId = op.tr_id;
-        var opId = op.id;
+        var opVirt = (op.virt == '1') ? 'v' : 'r',
+            opTransferId = op.tr_id,
+            opId = op.id;
 
         // remove row from table
-        $('#operations_list tr[id="op' + opVirt + opId + '"]').mouseout().unbind().remove();
+        DataTables.grid.fnDeleteRow($('tr ul[id="op' + opVirt + opId + '"]', DataTables.table).closest('tr').get(0));
 
         // remove paired operation if it's a transfer
         if (opTransferId != null) {
             var selector = '';
             if (opTransferId == "0") {
-                selector = '#operations_list tr[trid="' + opId + '"]';
+                selector = 'tr ul[trid="' + opId + '"]';
             } else {
-                selector = '#operations_list tr[id="op' + opVirt + opTransferId + '"]';
+                selector = 'tr ul[id="op' + opVirt + opTransferId + '"]';
             }
-            $(selector).mouseout().unbind().remove();
+            DataTables.grid.fnDeleteRow($(selector, DataTables.table).closest('tr').get(0));
         }
     }
 
-    function _editOperation(){
-        var operation = $(this).parent().attr('class');
+    function _editOperation(el, operation) {
+        var operation = (operation) ? operation : el.parent().attr('class'),
+            rowValue = rowsCollection[el.closest('tr').find('.b-row-menu-block').attr('id')].value;
         if (operation == 'edit') {
-            easyFinance.widgets.operationEdit.fillForm(_journal[$(this).closest('tr').attr('value')], true);
+            easyFinance.widgets.operationEdit.fillForm(_journal[rowValue], true);
         } else if(operation == 'del') {
-            _deleteOperation($(this).closest('tr').attr('value'));
+            _deleteOperation(rowValue);
         } else if(operation == 'add') {
             // при создании копии проставляем текущую дату
             // остальные атрибуты остаются те же
-            var copy = $.extend(true, {}, _journal[$(this).closest('tr').attr('value')]);
+            var copy = $.extend(true, {}, _journal[rowValue]);
             copy.date = new Date();
             easyFinance.widgets.operationEdit.fillForm(copy, false);
         }
@@ -484,15 +439,6 @@ easyFinance.widgets.operationsJournal = function(){
 
         $('#btn_CSV').click(loadJournal_CSV);
 
-        $('#search_field').hint().keypress(function(e) {
-            if (e.keyCode == 13) {
-                $('#btn_ReloadData').click();
-                return false;
-            } else {
-                return true;
-            }
-        });
-
         // #874. Обновляем данные об остатках на счетах
         // после добавления операции
         //$(document).bind('operationAdded', loadJournal);
@@ -501,60 +447,73 @@ easyFinance.widgets.operationsJournal = function(){
         $('#remove_all_op').click(_deleteChecked);
 
         // биндим клик на чекбоксе в заголовке
-        _$checkAll = $('#operations_list_header th input');
-        _$checkAll.click(function(){
-            if($(this).attr('checked'))
-                $('#operations_list .check input').attr('checked','checked');
-            else
-                $('#operations_list .check input').removeAttr('checked');
+        _$checkAll = $('th input', DataTables.table);
+        _$checkAll.change(function() {
+            var el = $(this);
+            if(el.attr('checked')) {
+                $('td input', DataTables.table).attr('checked', 'checked').trigger('change');
+            } else {
+                $('td input', DataTables.table).removeAttr('checked').trigger('change');
+            }
+        });
 
-            // show/hide 'remove checked' link
-            if (_$node.find('table input').is(':checked'))
-                $('#remove_all_op').show();
-            else
-                $('#remove_all_op').hide();
-        })
+        $('#dataGrid_paginate span').click(function() {
+            _$checkAll.trigger('change');
+        });
 
-        // биндим клик на чекбоксы в содержимом
-        $('#operations_list input').live('click', _onCheckClicked);
+        $(document).bind('table.ready', function() {
+            $('td input', DataTables.table).unbind('change.checked').bind('change.checked', function() {
+                var el = $(this);
+                if(el.attr('checked') && !$('td input:not(:checked)', DataTables.table).length) {
+                    _$checkAll.attr('checked', 'checked');
+                } else {
+                    _$checkAll.removeAttr('checked');
+                }
+
+                if(!deleteBtn) {
+                    deleteBtn = $('<span class="paging_full_numbers"><span class="ui-corner-tl ui-corner-tr ui-corner-bl ui-corner-br fg-button ui-state-default">Удалить выделенное</span></span>').appendTo($('.fg-toolbar')).click(function() {
+                        _deleteChecked();
+                    });
+                }
+
+                if($('input:checked', DataTables.table).length) {
+                    deleteBtn.show();
+                } else {
+                    deleteBtn.hide();
+                }
+            });
+
+            $('tbody tr', DataTables.table).unbind('mouseover.tooltip, mouseout.tooltip').bind('mouseover.tooltip', function() {
+                var id = $(this).find('.b-row-menu-block').attr('id');
+                Tooltip.show({
+                    content: rowsCollection[id].title,
+                    el: $(this)
+                });
+            }).bind('mouseout.tooltip', function() {
+                Tooltip.hide();
+            });
+
+            $('div[id*="_paginate"]').click(function(e) {
+                var el = $(this);
+                $('input[type="checkbox"]', DataTables.grid).removeAttr('checked');
+                $('.paging_full_numbers:not([id])').hide();
+                $(document).trigger('table.ready');
+            });
+        });
 
         // Биндим щелчки на строках и кнопках тулбокса (править, удалить, копировать)
-        $('.light a').live('click', function(){
-            $(this).closest('tr').find('li.edit a').click();
-            return false;
-        });
+        // Для ускорения работы биндим событие на всю таблицу и потом через делегирование событий выбираем target
 
-        $('#operations_list tr').live('click',function(event){
-            if (event.target.type !== 'checkbox') {
-                // edit operation
-                $(this).find('li.edit a').click();
+        DataTables.table.unbind('click.row').bind('click.row', function(e) {
+            var target = $(e.target),
+                targetTag = target[0].tagName.toLowerCase();
+
+            if(targetTag == 'td') {
+                _editOperation(target, 'edit');
+            } else if(targetTag == 'a') {
+                _editOperation(target, target.attr('href').split('#')[1]);
                 return false;
             }
-        })
-
-        $('#operations_list .cont').live('click', function(){
-            // #1349. do nothing!
-            return false;
-        });
-
-        $('#operations_list a').live('click', _editOperation);
-
-        // show selection & floating menu
-        $('tr','#operations_list').live('mouseover',function(){
-            $('#operations_list tr').removeClass('act').find('.cont ul').hide();
-            $(this).closest('tr').addClass('act').find('.cont ul').show();
-        });
-
-        $('#operation_list tr.item').live('mouseout',
-            function(){
-                $('.qtip').remove();
-                $(this).removeClass('act');
-        });
-
-        // hide selection
-        $('.mid').mousemove(function(){
-            if (!$('ul:hover').length && !$('.act:hover').length)
-                $('#operations_list tr').removeClass('act').find('.cont ul').hide();
         });
 
         // настраиваем диалоги фильтров
@@ -592,27 +551,29 @@ easyFinance.widgets.operationsJournal = function(){
         _dateTo = dateStr;
     }
 
-    function loadJournal() {
+    function loadJournal(asCSV) {
         _printFilters();
 
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
 
-        _search_field = $("#search_field").val();
-        _search_field = (_search_field == "поиск по меткам и комментариям") ? '' : _search_field;
+        // Показываем прелоадер
+        DataTables.preloader(true);
 
-        _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, false);
+        _modelAccounts.loadJournal({
+            account: _account,
+            category: _category,
+            dateFrom: _dateFrom,
+            dateTo: _dateTo,
+            sumFrom: _sumFrom,
+            sumTo: _sumTo,
+            type: _type,
+            search_field: _search_field
+        }, _showInfo, (asCSV == true) ? true : false);
     }
 
     function loadJournal_CSV() {
-        _printFilters();
-
-        _dateFrom = $('#dateFrom').val();
-        _dateTo = $('#dateTo').val();
-        _search_field = $("#search_field").val();
-        _search_field = (_search_field == "поиск по меткам и комментариям") ? '' : _search_field;
-
-        _modelAccounts.loadJournal(_account, _category, _dateFrom, _dateTo, _sumFrom, _sumTo, _type, _search_field, _showInfo, true);
+        loadJournal(true);
     }
 
     // reveal some private things by assigning public pointers
@@ -627,5 +588,5 @@ easyFinance.widgets.operationsJournal = function(){
 }(); // execute anonymous function to immediatly return object
 
 $(document).ready(function() {
-    easyFinance.widgets.operationsJournal.init('.operation_list', easyFinance.models.accounts);
+    easyFinance.widgets.operationsJournal.init('.b-operations-journal-grid', easyFinance.models.accounts);
 });

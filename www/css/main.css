@@ -30,13 +30,13 @@ ul.about {list-style-position: inside; list-style-type: disc;}
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
 
 input, select, textarea, button { 
-	font: 12px Arial, Tahoma, sans-serif; 
-	box-sizing:border-box; 
-	-moz-box-sizing:border-box; 
-	-webkit-box-sizing:border-box; 
-	-moz-border-radius:5px; 
-	-webkit-border-radius:5px; 
-	border:#CCCCCC solid 1px;
+    font: 12px Arial, Tahoma, sans-serif; 
+    box-sizing:border-box; 
+    -moz-box-sizing:border-box; 
+    -webkit-box-sizing:border-box; 
+    -moz-border-radius:5px; 
+    -webkit-border-radius:5px; 
+    border:#CCCCCC solid 1px;
 }
 input[type="button"] { cursor: pointer; }
 button { cursor: pointer; }
@@ -782,6 +782,10 @@ ul.buttons_block li#op_addoperation_logo a { height: 50px; text-indent: 0px; }
 
 ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
+
+
+.b-sidebar-btn { float:right; width:111px; height:39px; background:url('/img/i/btnRightSidebar.png') no-repeat; margin-top:-40px; cursor:pointer; right:10px; position:absolute; z-index:99; }
+.b-sidebar-btn:hover,.b-sidebar-btn.selected { background-position:-129px 0; }
 
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 20px; width: 380px; }
 #div_op_first_line { width: 345px; margin-bottom: 2px; height:40px; }

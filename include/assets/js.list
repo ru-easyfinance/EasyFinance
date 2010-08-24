@@ -48,3 +48,7 @@ widgets/calendar/calendarLeft.widget.js
 widgets/calendar/calendarPreview.widget.js
 widgets/calendar/calendarOverdue.widget.js
 widgets/robokassa.widget.js
+input-placeholder.js
+custom-datatables.js
+custom-selectbox.js
+custom-tooltip.js
