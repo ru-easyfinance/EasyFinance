@@ -1,0 +1,199 @@
+.b-custom-input-label,
+.b-custom-textarea-label {
+    margin-bottom:6px;
+    display:block;
+}
+
+.b-custom-input #dateFrom,
+.b-custom-input #dateTo {
+    margin:0;
+}
+
+.b-custom-input,
+.b-custom-input .b-custom-input-border,
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea,
+.b-custom-textarea .b-custom-textarea-border,
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-input .b-custom-select {
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+    resize:none;
+}
+.b-custom-input,
+.b-custom-textarea {
+    background:#aaa;
+}
+.b-custom-input .b-custom-input-border,
+.b-custom-textarea .b-custom-textarea-border {
+    /*background:#66686f url(../img/ui/custom-input.png) repeat-x;*/
+}
+.b-custom-input,
+.b-custom-textarea {
+    padding:1px;
+    display:block;
+    position:relative;
+}
+.b-custom-input *,
+.b-custom-textarea * {
+    text-shadow:none !important;
+}
+.b-date-plate .l-r .b-custom-input {
+    float:left;
+    width:93px;
+    margin-top:8px;
+    margin-left:5px;
+}
+
+.b-custom-input .b-custom-input-border,
+.b-custom-textarea .b-custom-textarea-border {
+    background-color:#fff;
+    background-position:0 -165px;
+    position:relative;
+    display:block;
+}
+.b-custom-input.field-error .b-custom-input-border,
+.b-custom-textarea.field-error .b-custom-textarea-border {
+    background-color:#ffd5d5;
+}
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field {
+    width:100%;
+    border:none;
+    background:none;
+    padding:0;
+}
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-input .b-custom-select {
+    font:1em Arial, Helvetica, sans-serif;
+    color:#2D3038;
+    margin:-1px 0;
+    padding:6px 8px;
+}
+
+.b-custom-input .b-placeholder,
+.b-custom-textarea .b-placeholder,
+.b-custom-input .b-placeholder {
+    float:left;
+    font-weight:400;
+    font-style:normal;
+    color:#a9a9a9;
+    margin-top:-2px;
+    margin-bottom:-40px;
+    padding:6px 8px;
+    display:none;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .b-custom-input .b-placeholder,
+    .b-custom-textarea .b-placeholder,
+    .b-custom-input .b-placeholder {
+        margin-top:-1px;
+    }
+}
+.b-custom-textarea .b-placeholder {
+    margin-top:5px;
+}
+.b-custom-input.field-error .b-placeholder,
+.b-custom-textarea.field-error .b-placeholder,
+.b-custom-input.field-error .b-placeholder {
+    color:#666;
+}
+
+.b-custom-textarea .b-custom-textarea-field {
+    height:77px;
+    line-height:1.666em;
+}
+.b-custom-textarea .b-custom-textarea-field.big {
+    height:340px;
+}
+.b-custom-input.big .b-custom-input-field {
+    top:0;
+    font-size:2em;
+}
+.b-custom-textarea .b-custom-textarea-field.textarea {
+    overflow-y:auto;
+}
+
+.b-custom-input .b-custom-select {
+    top:0;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:27px;
+    opacity:0;
+    position:absolute;
+    z-index:3;
+}
+.b-custom-input .b-custom-select-trigger {
+    top:1px;
+    right:1px;
+    bottom:1px;
+    width:19px;
+    background:#dddddd url(../img/ui/custom-input.png) 0 -88px repeat-x;
+    position:absolute;
+}
+.b-custom-input .b-custom-select-trigger i {
+    top:50%;
+    left:50%;
+    width:8px;
+    height:6px;
+    margin:-3px 0 0 -3px;
+    background:#dddddd url(../img/ui/arrows.png) no-repeat;
+    position:absolute;
+}
+
+.b-custom-input .b-loader {
+    top: 7px;
+    right: 5px;
+    width:16px;
+    height:16px;
+    background:url(../img/ui/small-spinner.gif) no-repeat;
+    position:absolute;
+    z-index:10;
+    display:none;
+}
+.b-custom-input.blue .b-loader {
+    background:url(../img/ui/small-spinner-blue.gif) no-repeat;
+}
+.loading .b-loader {
+    display:block !important;
+}
+
+.b-custom-textarea.placeholder textarea {
+    font:60px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#B8B8B8;
+    text-align:center;
+    line-height:300px;
+}
+.b-custom-textarea.placeholder .b-custom-textarea-field.textarea {
+    font:20px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#B8B8B8;
+    text-align:center;
+    line-height:1.666em;
+    margin-bottom:-140px;
+    padding-top:140px;
+    cursor:default;
+}
+.b-custom-textarea.placeholder .b-custom-textarea-field.textarea {
+    overflow:hidden;
+}
+
+.b-custom-input-inline {
+    clear:both;
+    margin-left:10px;
+}
+.b-custom-input-inline label,
+.b-custom-input-inline .b-custom-input {
+    float:left;
+}
+.b-custom-input-inline .b-custom-input.b-date {
+    width:80px;
+}
+.b-custom-input-inline label {
+    line-height:30px;
+    margin-right:10px;
+}

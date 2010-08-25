@@ -27,6 +27,10 @@ accountsPanel.css
 accountsJournal.css
 categoriesJournal.css
 operationsJournal.css
+operationsJournalNew.css
+custom-inputs.css
+custom-buttons.css
+custom-tooltips.css
 budgetMaster.css
 budget.css
 screens/calendar.screen.css

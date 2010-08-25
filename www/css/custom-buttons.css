@@ -1,0 +1,48 @@
+.b-button {
+	margin:-5px 0 -11px;
+	padding:0 20px;
+	position:relative;
+	display:inline-block;
+	cursor:pointer;
+}
+
+
+.b-button .b-button-l,
+.b-button .b-button-c,
+.b-button .b-button-r {
+	background:url(../img/i/buttons-bg.png) no-repeat;
+}
+.b-button .b-button-l,
+.b-button .b-button-r {
+	top:0;
+	bottom:0;
+	width:20px;
+	position:absolute;
+}
+.b-button .b-button-l {
+	left:0;
+}
+
+.b-button .b-button-c {
+	float:left;
+	background-position:0 -41px;
+	background-repeat:repeat-x;
+	padding:5px 0 11px;
+}
+
+.b-button .b-button-r {
+	right:0;
+	background-position:100% -82px;
+}
+
+.b-button button {
+	height:25px;
+	font:1.25em Arial, Helvetica, sans-serif;
+	line-height:25px;
+	color:#fff;
+	text-shadow:0 -1px 0 #427e25;
+	border:none;
+	background:none;
+	padding:0;
+	cursor:pointer;
+}

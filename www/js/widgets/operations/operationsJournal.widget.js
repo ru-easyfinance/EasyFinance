@@ -556,6 +556,8 @@ easyFinance.widgets.operationsJournal = function(){
 
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
+        /*_search_field = $("#search_field").val();
+        _search_field = (_search_field == "поиск по меткам и комментариям") ? '' : _search_field;*/
 
         // Показываем прелоадер
         DataTables.preloader(true);

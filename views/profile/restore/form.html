@@ -1,72 +1,82 @@
 <div class="ramka2">
-<div class="cct"></div>
-<div id="auth" class="formRegister" >
-    {if $template_view == 'iframe'}
-        <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
-    {/if}
-    <h2>Восстановление пароля</h2>
-
-    <div class="loginMessage">{$loginMessageText}</div>
-    <div class="loginError">{$loginErrorText}</div>
-
-    <table cellpadding="0" cellspacing="0">
-    <tr>
-        <td class="name">Логин или e-mail:</td>
-        <td>
-            <input id="flogin" type="text" name="login" class="efTooltip" title="Имя Вашего аккаунта на сайте"/>
-            <input id="verifyCode" type="hidden" name="verifyCode"/>
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><input id="btnLogin" type="button" value="Восстановить пароль" class="but"/></td>
-    </tr>
-    </table>
+<div class="cct">
+    <i class="tl"></i>
+    <i class="tr"></i>
 </div>
-{literal}
-<script type="text/javascript">
-    // by Jet. ticket #540
-    $(document).ready(function() {
-        $('#btnLogin').click(function() {
-            $(this).attr('disabled', 'disabled');
+<div class="ccm">
+    <div class="ccm-container">
+    <div id="auth" class="formRegister" >
+        {if $template_view == 'iframe'}
+            <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
+        {/if}
+        <h2>Восстановление пароля</h2>
+
+        <div class="loginMessage">{$loginMessageText}</div>
+        <div class="loginError">{$loginErrorText}</div>
+
+        <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="name">Логин или e-mail:</td>
+            <td>
+                <input id="flogin" type="text" name="login" class="efTooltip" title="Имя Вашего аккаунта на сайте"/>
+                <input id="verifyCode" type="hidden" name="verifyCode"/>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="btnLogin" type="button" value="Восстановить пароль" class="but"/></td>
+        </tr>
+        </table>
+    </div>
+    {literal}
+    <script type="text/javascript">
+        // by Jet. ticket #540
+        $(document).ready(function() {
+            $('#btnLogin').click(function() {
+                $(this).attr('disabled', 'disabled');
             
-            $.post('/restore/submit_request',
-                {login: $('#flogin').val(), verifyCode: $.cookie('sessIds')},
-                function(data) {
-                    $('#btnLogin').removeAttr('disabled');
+                $.post('/restore/submit_request',
+                    {login: $('#flogin').val(), verifyCode: $.cookie('sessIds')},
+                    function(data) {
+                        $('#btnLogin').removeAttr('disabled');
                     
-                    if (data) {
-                        if (data.result) {
-                            $.jGrowl(data.result.text, {theme: 'green'});
+                        if (data) {
+                            if (data.result) {
+                                $.jGrowl(data.result.text, {theme: 'green'});
 
-                            if (data.result.redirect)
-                                window.location = data.result.redirect;
+                                if (data.result.redirect)
+                                    window.location = data.result.redirect;
+                            } else {
+                                $.jGrowl(data.error.text, {theme: 'red'});
+
+                                if (data.error.redirect)
+                                    window.location = data.error.redirect;
+                            }
                         } else {
-                            $.jGrowl(data.error.text, {theme: 'red'});
-
-                            if (data.error.redirect)
-                                window.location = data.error.redirect;
+                            $.jGrowl('Ошибка на сервере!', {theme: 'red'});
                         }
-                    } else {
-                        $.jGrowl('Ошибка на сервере!', {theme: 'red'});
-                    }
-                },
-                "json"
-            );
-        });
+                    },
+                    "json"
+                );
+            });
         
-        $('#auth').keypress(function(e){
-            //if generated character code is equal to ascii 13 (if enter key)
-            if(e.keyCode == 13){
-                //submit the form
-                $('#btnLogin').click().attr('disabled', 'disabled');
-                return false;
-            } else {
-                return true;
-            }
+            $('#auth').keypress(function(e){
+                //if generated character code is equal to ascii 13 (if enter key)
+                if(e.keyCode == 13){
+                    //submit the form
+                    $('#btnLogin').click().attr('disabled', 'disabled');
+                    return false;
+                } else {
+                    return true;
+                }
+            });
         });
-    });
-</script>
-{/literal}
-<div class="ccb"></div>
+    </script>
+    {/literal}
+    </div>
+</div>
+<div class="ccb">
+    <i class="bl"></i>
+    <i class="br"></i>
+</div>
 </div>

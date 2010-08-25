@@ -68,99 +68,108 @@
 
 
     <div class="ramka2">
-        <div class="cct"></div>
-        <!--меню4-->
-        <!--/меню4-->
-        <div class="mid general_cont">
-
-            <!--левая колонка-->
-            <?php include_partial('global/common/left.quick'); ?>
-
-            <div class="block2">
-
-            <?php include_partial('global/common') ?>
-
-            <!--наполнение-->
-                <?php echo $sf_content ?>
-            <!--/наполнение-->
-            </div>
-
-            <!--правая колонка-->
-            <div class="block3 ramka3">
-                <div class="ct head">
-                    <h2>Информер</h2>
-                    <ul class="action">
-                        <li class="over1" style="display: none;"><a title="настройки">настройки</a></li>
-                        <li class="over2" style="display: none;"><a title="закрыть">закрыть</a></li>
-                        <!--<li class="over3"><a href="#" title="свернуть">свернуть</a></li>-->
-                    </ul>
-                </div>
-                <!--Финсостояние-->
-                <div class="calendar_block">
-                    <h2>Фин. состояние</h2>
-                    <div class="flash informerGauge" id="divInformer0">
-                        <div id="divGaugeMain"></div>
-                    </div>
-                </div>
-                <!--/Финсостояние-->
-                <!--Курсы валют-->
-                <dl id="divExchangeRates" class="info hidden">
-                    <dt>Курсы валют</dt>
-                    <dd><div class="line"><span class="valuta">RUB</span><span class="">1</span></div><div class="line"><span class="valuta">USD</span><span class="">30.1240</span></div></dd>
-                </dl>
-                <!--/Курсы валют-->
-                <!--калькулятор-->
-                <div class="calculator_block">
-                    <h2>Калькулятор</h2>
-                    <div class="calculatorRW">
-                        <div class="input">
-                            <input type="text" value="0" id="calculatorRW"/>
-                        </div>
-                        <div class="panel">
-                            <table>
-                                <tr>
-                                    <td class="printed"><div>1</div></td>
-                                    <td class="printed"><div>2</div></td>
-                                    <td class="printed"><div>3</div></td>
-                                    <td class="printed"><div>/</div></td>
-                                    <td class="special" event="clear"><div>C</div></td>
-                                </tr>
-                                <tr>
-                                    <td class="printed"><div>4</div></td>
-                                    <td class="printed"><div>5</div></td>
-                                    <td class="printed"><div>6</div></td>
-                                    <td class="printed"><div>*</div></td>
-                                    <td class="special" event="back"><div>←</div></td>
-                                </tr>
-                                <tr>
-                                    <td class="printed"><div>7</div></td>
-                                    <td class="printed"><div>8</div></td>
-                                    <td class="printed"><div>9</div></td>
-                                    <td class="printed"><div>-</div></td>
-                                    <td rowspan="2" class="special double" event="calc"><div> = </div></td>
-                                </tr>
-                                <tr>
-                                    <td class="printed"><div>0</div></td>
-                                    <td class="printed"><div>000</div></td>
-                                    <td class="printed"><div>.</div></td>
-                                    <td class="printed"><div>+</div></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <!--/калькулятор-->
-                <!--календарь-->
-                <div class="calendar_block">
-                    <h2>Календарь</h2>
-                    <div class="calendar"></div>
-                </div>
-                <!--/календарь-->
-            </div>
-        <!--/правая колонка-->
-
+        <div class="cct">
+            <i class="tl"></i>
+            <i class="tr"></i>
         </div>
-        <div class="ccb"></div>
+        <div class="ccm">
+            <div class="ccm-container">
+            <!--меню4-->
+            <!--/меню4-->
+            <div class="mid general_cont">
+
+                <!--левая колонка-->
+                <?php include_partial('global/common/left.quick'); ?>
+
+                <div class="block2">
+
+                <?php include_partial('global/common') ?>
+
+                <!--наполнение-->
+                    <?php echo $sf_content ?>
+                <!--/наполнение-->
+                </div>
+
+                <!--правая колонка-->
+                <div class="block3 ramka3">
+                    <div class="ct head">
+                        <h2>Информер</h2>
+                        <ul class="action">
+                            <li class="over1" style="display: none;"><a title="настройки">настройки</a></li>
+                            <li class="over2" style="display: none;"><a title="закрыть">закрыть</a></li>
+                            <!--<li class="over3"><a href="#" title="свернуть">свернуть</a></li>-->
+                        </ul>
+                    </div>
+                    <!--Финсостояние-->
+                    <div class="calendar_block">
+                        <h2>Фин. состояние</h2>
+                        <div class="flash informerGauge" id="divInformer0">
+                            <div id="divGaugeMain"></div>
+                        </div>
+                    </div>
+                    <!--/Финсостояние-->
+                    <!--Курсы валют-->
+                    <dl id="divExchangeRates" class="info hidden">
+                        <dt>Курсы валют</dt>
+                        <dd><div class="line"><span class="valuta">RUB</span><span class="">1</span></div><div class="line"><span class="valuta">USD</span><span class="">30.1240</span></div></dd>
+                    </dl>
+                    <!--/Курсы валют-->
+                    <!--калькулятор-->
+                    <div class="calculator_block">
+                        <h2>Калькулятор</h2>
+                        <div class="calculatorRW">
+                            <div class="input">
+                                <input type="text" value="0" id="calculatorRW"/>
+                            </div>
+                            <div class="panel">
+                                <table>
+                                    <tr>
+                                        <td class="printed"><div>1</div></td>
+                                        <td class="printed"><div>2</div></td>
+                                        <td class="printed"><div>3</div></td>
+                                        <td class="printed"><div>/</div></td>
+                                        <td class="special" event="clear"><div>C</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="printed"><div>4</div></td>
+                                        <td class="printed"><div>5</div></td>
+                                        <td class="printed"><div>6</div></td>
+                                        <td class="printed"><div>*</div></td>
+                                        <td class="special" event="back"><div>←</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="printed"><div>7</div></td>
+                                        <td class="printed"><div>8</div></td>
+                                        <td class="printed"><div>9</div></td>
+                                        <td class="printed"><div>-</div></td>
+                                        <td rowspan="2" class="special double" event="calc"><div> = </div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="printed"><div>0</div></td>
+                                        <td class="printed"><div>000</div></td>
+                                        <td class="printed"><div>.</div></td>
+                                        <td class="printed"><div>+</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/калькулятор-->
+                    <!--календарь-->
+                    <div class="calendar_block">
+                        <h2>Календарь</h2>
+                        <div class="calendar"></div>
+                    </div>
+                    <!--/календарь-->
+                </div>
+            <!--/правая колонка-->
+
+            </div>
+        </div>
+        <div class="ccb">
+            <i class="bl"></i>
+            <i class="br"></i>
+        </div>
     </div>
 <!--/середина-->
 

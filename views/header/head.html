@@ -67,6 +67,7 @@
         {/if}
 
         <div id="container1">
+            {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
             <div id="menumain"  value="{$head_val}">
                 <ul class="menu1">
                     <!-- Jet. ticket #273 -->
@@ -111,3 +112,4 @@
 
                 {include file="head_adv.html"}
             </div>
+            {/if}
