@@ -10,9 +10,28 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     public function configure()
     {
+        $categories = Doctrine_Query::create()
+            ->select("c.id, c.id type_id")
+            ->from("Category c")
+            ->andWhere(
+                "c.user_id = ?", $this->getUser()->getUserRecord()->getId()
+            )
+            ->execute(array(), 'FetchPair');
+
+        $categories[] = null;
+
         $this->setValidators(array(
             'account_id'  => new sfValidatorInteger(array('min' => 1)),
-            'category_id' => new sfValidatorPass(),
+            'category_id' => new sfValidatorChoice(
+                    array(
+                        'choices'     => $categories,
+                        'required'    => false,
+                        'empty_value' => null
+                    ),
+                    array(
+                        'invalid' => 'No such category %value%'
+                    )
+                ),
             'amount'      => new sfValidatorNumber(),
             'date'        => new sfValidatorDate(),
             'type'        => new sfValidatorChoice(array('choices' => Operation::getTypes())),
@@ -85,6 +104,12 @@ class mySyncInOperationForm extends BaseFormDoctrine
     public function getModelName()
     {
         return 'Operation';
+    }
+
+
+    public function getUser()
+    {
+        return sfContext::getInstance()->getUser();
     }
 
 }

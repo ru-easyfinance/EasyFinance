@@ -50,12 +50,6 @@ class syncInOperationAction extends myBaseSyncInAction
 
         // FK: выбор существующих категорий
         $categoryIds = $this->filterByXPath('//record/category_id');
-        $categories = Doctrine_Query::create()
-            ->select("c.id, c.id type_id")
-            ->from("Category c")
-            ->whereIn("c.id", $categoryIds)
-            ->andWhere("c.user_id = ?", $this->getUser()->getId())
-            ->execute(array(), 'FetchPair');
 
         $modelName = $this->getModelName();
         $formName  = sprintf("mySyncIn%sForm", $modelName);
@@ -80,11 +74,6 @@ class syncInOperationAction extends myBaseSyncInAction
             // FK: проверка на существование счета для перевода
             if ($transferCnt && !in_array($record['transfer_account_id'], $transferAccounts)) {
                 $errors[] = "No such account for transfer";
-            }
-
-            // FK: категория существует?
-            if (!empty($record['category_id']) AND !in_array($record['category_id'], $categories)) {
-                $errors[] = "No such category";
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)

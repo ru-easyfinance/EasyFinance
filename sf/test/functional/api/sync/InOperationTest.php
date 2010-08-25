@@ -177,15 +177,17 @@ class api_sync_InOperationTest extends api_sync_in
      */
     public function testOperationCategoryFK()
     {
-        $xml = $this->getXMLHelper()->make(array('category_id' => 99999, 'cid' => 4,));
+        foreach (array(0, 99999) as $categoryId) {
+            $xml = $this->getXMLHelper()->make(array('category_id' => $categoryId, 'cid' => 4,));
 
-        $this
-            ->myXMLPost($xml, 200)
-            ->with('response')->begin()
-                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
-            ->end();
+            $this
+                ->myXMLPost($xml, 200)
+                ->with('response')->begin()
+                    ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+                ->end();
 
-        $this->checkRecordError(4, '[Invalid.] No such category');
+            $this->checkRecordError(4, "category_id [No such category $categoryId]");
+        }
     }
 
 
@@ -203,7 +205,7 @@ class api_sync_InOperationTest extends api_sync_in
                 ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
             ->end();
 
-        $this->checkRecordError(4, '[Invalid.] No such category');
+        $this->checkRecordError(4, "category_id [No such category {$cat->getId()}]");
     }
 
 
@@ -258,6 +260,29 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
 
         $this->assertEquals("0000-00-00", $foundList->getFirst()->getDate(), "приняли 0ую дату и правильно ее записали");
+
+        // Попробуем поменять балансовую операцию с известным нам ИД
+        $expectedData['id'] = $foundList->getFirst()->getId();
+        $expectedData['amount'] = $newAmount = 123;
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+        $this->myXMLPost($xml, 200);
+
+        $recordData = $expectedData;
+        unset($recordData['cid']); // у записи нет такого поля
+        $this->browser
+            ->with('model')->check('Operation', $recordData, 1, $foundList);
+
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
+                        $foundList->getFirst()->getId(),
+                        $expectedData['cid'])
+                    , 'OK')
+            ->end();
+
+       $this->assertEquals($newAmount, $foundList->getFirst()->getAmount(), "приняли новый баланс");
     }
 
 

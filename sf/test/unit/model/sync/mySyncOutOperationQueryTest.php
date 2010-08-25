@@ -29,9 +29,9 @@ class model_sync_mySyncOutOperationQueryTest extends myUnitTestCase
         $q = new mySyncOutOperationQuery(new myDatetimeRange(new DateTime('-1year'), new DateTime), $account->getUserId());
         $found = $q->getQuery()->execute();
 
-        $this->assertEquals(2, $found->count(), 'Count');
-        $this->assertEquals($opOk1->getId(), $found->getFirst()->getId(), 'Found first operation');
-        $this->assertEquals($opOk2->getId(), $found->getLast()->getId(),  'Found second operation');
+        $this->assertEquals(3, $found->count(), 'Count');
+        $this->assertEquals($opOk1->getId(), $found->get(1)->getId(), 'Found first operation');
+        $this->assertEquals($opOk2->getId(), $found->get(2)->getId(), 'Found second operation');
     }
 
 }
