@@ -1,4 +1,4 @@
-var Tooltip = null;
+﻿var Tooltip = null;
 
 $(function() {
     Tooltip = _Tooltip.bind();
@@ -6,6 +6,8 @@ $(function() {
 
 _Tooltip = {
     tooltip: null,
+    modal: false,
+    dummy: null,
 
     bind: function() {
         var self = this;
@@ -18,12 +20,21 @@ _Tooltip = {
             },
             hide: function(params) {
                 self.hide(params);
-            }
+            },
+            modal: self.modal
         }
     },
 
     show: function(params) {
-        if(params.content) $('.b-tooltip-container', this.tooltip).html(params.content);
+        var self = this,
+            text = 'Пусто';
+        if(this.modal) return false;
+        if(params.content) {
+            text = params.content;
+        } else if(params.selector) {
+            text = $(params.selector).html() || 'Элемент не был найден';
+        }
+        $('.b-tooltip-container', this.tooltip).html(text);
         if(params.el) {
             var el = params.el,
                 elw = el.width(),
@@ -32,14 +43,31 @@ _Tooltip = {
                 parentp = el.offsetParent().position();
             this.tooltip.css({
                 'top': elp.top + parentp.top + elh + 5,
-                'left': '50%',
-                'margin-left': - (this.tooltip.width() /2)
+                'left': (params.targetPos) ? elp.left : '50%',
+                'margin-left': (params.targetPos) ? -(this.tooltip.width() / 2) + (elw / 2) : -(this.tooltip.width() / 2)
             }).addClass('position');
+            if(params.modal) {
+                this.modal = true;
+                $(document).bind('click.tooltip', function(e) {
+                    if(!self.dummy) {
+                        self.dummy = true;
+                        return false;
+                    }
+                    if(!$(e.target).closest('.b-tooltip').length) {
+                        self.hide(true);
+                        self.dummy = null;
+                        $(document).unbind('click.tooltip');
+                    }
+                });
+            }
+            if(params.callback) params.callback($('.b-tooltip-container', this.tooltip));
         }
         this.tooltip.show();
     },
 
-    hide: function() {
+    hide: function(resetModal) {
+        if(this.modal && !resetModal) return false;
         this.tooltip.hide().removeClass('position');
+        if(resetModal) this.modal = false;
     }
 }

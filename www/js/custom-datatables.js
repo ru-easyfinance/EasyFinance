@@ -8,7 +8,7 @@ _ActivateDataGrid = {
     selector: 'table#dataGrid',
     pageReady: false,
     dataGrid: null,
-    styles: ['/css/dataTables/table_jui.css', '/css/jquery/smoothness/jquery-ui-1.7.2.custom.css'],
+    styles: ['/css/datatables/datatables.css'],
 
     bind: function() {
         var self = this,

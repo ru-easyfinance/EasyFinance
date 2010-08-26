@@ -2,6 +2,7 @@
     float:left;
     position:relative;
     z-index:99;
+    display:none;
 }
 .b-tooltip.position {
     position:absolute;

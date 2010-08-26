@@ -184,6 +184,7 @@
 
 .b-custom-input-inline {
     clear:both;
+    height:30px;
     margin-left:10px;
 }
 .b-custom-input-inline label,
@@ -193,7 +194,11 @@
 .b-custom-input-inline .b-custom-input.b-date {
     width:80px;
 }
+.b-custom-input-inline .b-custom-input.b-sum {
+    width:100px;
+    margin-right:10px;
+}
 .b-custom-input-inline label {
-    line-height:30px;
+    line-height:28px;
     margin-right:10px;
 }

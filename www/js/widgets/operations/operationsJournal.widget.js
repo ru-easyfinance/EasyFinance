@@ -27,13 +27,11 @@ easyFinance.widgets.operationsJournal = function(){
         _$comboCategory = null,
         _$dialogFilterType = null,
         _$dialogFilterSum = null,
-        _$dialogFilterAccount = null,
-        _$dialogFilterCategory = null,
-        _sexyCategoryInitialized = false,
         OPERATION_TYPES = ['расход', 'доход', 'перевод', '', 'фин. цель'],
         break_symbol,
 
         rowsCollection = {},
+        clearFilterBtn,
         deleteBtn;
 
     function insertWBR(td_contents) {
@@ -279,60 +277,52 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function _initFilters() {
-        // сброс фильтров
-        $('#linkOperationsJournalClearFilters').click(function(){
-            _type = '-1';
-            _sumFrom = '';
-            _sumTo = '';
-            _category = '';
-            $('#cat_filtr').get(0).options[0].selected = true;
-
-            _account = '';
-            _accountName = '';
-            $('#account_filtr').get(0).options[0].selected = true;
-
-            loadJournal();
-
-            return false;
-        });
-
         // фильтр по типу операции
-        _$dialogFilterType = $('#dialogFilterType').dialog({title: "Выберите тип операции", autoOpen: false, width: "420px"});
-        _$dialogFilterType.find('a').click(function(){
-            _type = $(this).attr('value');
-            loadJournal();
-            _$dialogFilterType.dialog('close');
-
-            return false;
+        $('.type-sort', DataTables.table).unbind().click(function() {
+            Tooltip.show({
+                selector: '#dialogFilterType',
+                el: $(this),
+                targetPos: true,
+                modal: true,
+                callback: function(container) {
+                    $('a', container).click(function() {
+                        _type = $(this).attr('value');
+                        loadJournal();
+                        Tooltip.hide(true);
+                        return false;
+                    });
+                }
+            });
         });
-        $('#btnFilterType').click(function(){_$dialogFilterType.dialog('open');});
 
         // фильтр по сумме
-        _$dialogFilterSum = $('#dialogFilterSum').dialog({title: "Выберите сумму", autoOpen: false, width: "460px"});
-        _$dialogFilterSum.find('input[type=text]').live('keyup',function(e){
-            FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
+        $('.type-sum', DataTables.table).unbind().click(function() {
+            Tooltip.show({
+                selector: '#dialogFilterSum',
+                el: $(this),
+                targetPos: true,
+                modal: true,
+                callback: function(container) {
+                    $('input[type="text"]', container).each(function(e) {
+                        FloatFormat(this, String.fromCharCode(e.which) + $(this).val());
+                    });
+                    $('input[type="button"]', container).click(function(e) {
+                        _sumFrom = Math.abs(tofloat($('#txtFilterSumFrom', container).val()));
+                        _sumTo = Math.abs(tofloat($('#txtFilterSumTo', container).val()));
+                        loadJournal();
+                        Tooltip.hide(true);
+                        return false;
+                    });
+                    $('a', container).click(function() {
+                        _sumFrom = '';
+                        _sumTo = '';
+                        loadJournal();
+                        Tooltip.hide(true);
+                        return false;
+                    });
+                }
+            });
         });
-        _$dialogFilterSum.find('a').click(function(){
-            // убираем фильтр
-            _$dialogFilterSum.find('#txtFilterSumFrom').val('');
-            _$dialogFilterSum.find('#txtFilterSumTo').val('');
-            _sumFrom = '';
-            _sumTo = '';
-            loadJournal();
-            _$dialogFilterSum.dialog('close');
-
-            return false;
-        });
-        _$dialogFilterSum.find('#btnFilterSumSave').click(function(e){
-            // ставим фильтр
-            _sumFrom = Math.abs(tofloat(_$dialogFilterSum.find('#txtFilterSumFrom').val()));
-            _sumTo = Math.abs(tofloat(_$dialogFilterSum.find('#txtFilterSumTo').val()));
-            loadJournal();
-            _$dialogFilterSum.dialog('close');
-
-            return false;
-        });
-        $('#btnFilterSum').click(function(){_$dialogFilterSum.dialog('open');});
 
         // фильтр по категории
         _$comboCategory = _$node.find('#cat_filtr');
@@ -380,9 +370,22 @@ easyFinance.widgets.operationsJournal = function(){
             txt = txt + ' руб';
 
         if (txt == '') {
-            _$node.find('#divOperationsJournalFilters').hide();
+            if(clearFilterBtn) clearFilterBtn.hide();
         } else {
-            _$node.find('#lblOperationsJournalFilters').text(txt).parent().show();
+            if(!clearFilterBtn) {
+                clearFilterBtn = $('<span class="paging_full_numbers"><em>Удалить фильтр:</em> <span class="ui-corner-tl ui-corner-tr ui-corner-bl ui-corner-br fg-button ui-state-default">' + txt + '</span></span>').appendTo($('.fg-toolbar')).click(function() {
+                    _type = '-1';
+                    _sumFrom = '';
+                    _sumTo = '';
+                    _category = '';
+                    _account = '';
+                    _accountName = '';
+                    //$('#cat_filtr').get(0).options[0].selected = true;
+                    //$('#account_filtr').get(0).options[0].selected = true;
+                    loadJournal();
+                });
+            }
+            clearFilterBtn.show();
         }
     }
 
@@ -556,8 +559,6 @@ easyFinance.widgets.operationsJournal = function(){
 
         _dateFrom = $('#dateFrom').val();
         _dateTo = $('#dateTo').val();
-        /*_search_field = $("#search_field").val();
-        _search_field = (_search_field == "поиск по меткам и комментариям") ? '' : _search_field;*/
 
         // Показываем прелоадер
         DataTables.preloader(true);
