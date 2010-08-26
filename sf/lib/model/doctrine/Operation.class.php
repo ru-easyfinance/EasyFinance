@@ -48,15 +48,16 @@ class Operation extends BaseOperation
             );
 
             if (isset($balanceOperation[0])) {
-                //print_r($balanceOperation[0]);
-                //print_r($this->getData());
                 $amount = $this->getAmount();
                 $this->assignIdentifier($balanceOperation[0]['id']);
                 $this->fromArray($balanceOperation[0]);
                 $this->load();
                 $this->setAmount($amount);
-                //print_r($this->getData());die("\n");
             }
+        }
+
+        if (!$this->getAccountId()) {
+            $this->setAccepted(0);
         }
     }
 

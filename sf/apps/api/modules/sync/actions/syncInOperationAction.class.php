@@ -48,9 +48,6 @@ class syncInOperationAction extends myBaseSyncInAction
                 ->execute(array(), 'FetchPair');
         }
 
-        // FK: выбор существующих категорий
-        $categoryIds = $this->filterByXPath('//record/category_id');
-
         $modelName = $this->getModelName();
         $formName  = sprintf("mySyncIn%sForm", $modelName);
         $results   = array();
@@ -67,7 +64,7 @@ class syncInOperationAction extends myBaseSyncInAction
             $errors = array();
 
             // FK: счет существует?
-            if (!in_array($record['account_id'], $accounts)) {
+            if (!empty($record['account_id']) && !in_array($record['account_id'], $accounts)) {
                 $errors[] = "No such account";
             }
 
@@ -126,7 +123,7 @@ class syncInOperationAction extends myBaseSyncInAction
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
-            'accepted'    => (bool)   $record->accepted,
+            'accepted'    => (bool)(int)$record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),

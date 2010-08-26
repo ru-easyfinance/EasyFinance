@@ -113,6 +113,41 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
+     * Принять новую полупустую операцию
+     */
+    public function testNewHalfEmptyOperation()
+    {
+        $expectedData = array(
+            'user_id'     => $this->_user->getId(),
+            'date'        => $this->_makeDate(10000),
+            'cid'         => 2,
+            'category_id' => null,
+            'account_id'  => null,
+            'amount'      => null,
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement('resultset record', 1)
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
+                ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
+            ->end();
+
+        $expectedData = array(
+            'user_id'     => $this->_user->getId(),
+            'accepted'    => 0,
+        );
+
+        $result = $this->browser
+            ->with('model')->check('Operation', $expectedData, 1);
+    }
+
+
+    /**
      * Отвергать чужие записи
      */
     public function testPostOperationForeignUserRecord()

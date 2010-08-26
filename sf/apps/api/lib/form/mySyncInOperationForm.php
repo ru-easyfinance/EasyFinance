@@ -10,6 +10,14 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     public function configure()
     {
+        $accounts = Doctrine_Query::create()
+            ->select("a.id key, a.id value")
+            ->from("Account a")
+            ->andWhere(
+                "a.user_id = ?", $this->getUser()->getUserRecord()->getId()
+            )
+            ->execute(array(), 'FetchPair');
+
         $categories = Doctrine_Query::create()
             ->select("c.id, c.id type_id")
             ->from("Category c")
@@ -18,25 +26,37 @@ class mySyncInOperationForm extends BaseFormDoctrine
             )
             ->execute(array(), 'FetchPair');
 
+        $accounts[]   = null;
         $categories[] = null;
 
         $this->setValidators(array(
-            'account_id'  => new sfValidatorInteger(array('min' => 1)),
-            'category_id' => new sfValidatorChoice(
-                    array(
-                        'choices'     => $categories,
-                        'required'    => false,
-                        'empty_value' => null
-                    ),
-                    array(
-                        'invalid' => 'No such category %value%'
-                    )
+            'account_id'  => new sfValidatorChoice(
+                array(
+                    'choices'     => $accounts,
+                    'required'    => false,
+                    'empty_value' => null
                 ),
+                array(
+                    'invalid' => 'No such account %value%'
+                )
+            ),
+            'category_id' => new sfValidatorChoice(
+                array(
+                    'choices'     => $categories,
+                    'required'    => false,
+                    'empty_value' => null
+                ),
+                array(
+                    'invalid' => 'No such category %value%'
+                )
+            ),
             'amount'      => new sfValidatorNumber(),
             'date'        => new sfValidatorDate(),
             'type'        => new sfValidatorChoice(array('choices' => Operation::getTypes())),
             'comment'     => new sfValidatorString(array('required' => false)),
-            'accepted'    => new sfValidatorBoolean(),
+            'accepted'    => new sfValidatorBoolean(
+                array('empty_value' => 0)
+            ),
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
