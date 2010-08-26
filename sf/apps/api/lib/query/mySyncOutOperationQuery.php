@@ -28,8 +28,27 @@ class mySyncOutOperationQuery extends mySyncOutQuery
      */
     protected function _extendQuery(myDatetimeRange $range, $userId, $alias)
     {
+        // TODO Убрать хак после рефакторинга операций
+        $hackQuery = "
+            SELECT o.id
+            FROM operation o
+                LEFT JOIN target_bill tb
+                    ON o.transfer_account_id = tb.bill_id
+                    AND o.transfer_amount = tb.money
+            WHERE
+                tb.money IS NULL
+                AND o.comment <> 'Перевод на счёт финцели'";
+
+        $data = Doctrine_Manager::getInstance()
+            ->getConnection('doctrine')
+            ->getDbh()
+            ->query($hackQuery)->fetchAll(PDO::FETCH_COLUMN);
+
+       $data = implode(', ', $data);
+
         $this->getQuery()
-            ->andWhere("{$alias}.chain_id < 1 OR {$alias}.accepted = 1");
+            ->andWhere("{$alias}.chain_id < 1 OR {$alias}.accepted = 1")
+            ->andWhere("{$alias}.id IN ($data)");
     }
 
 }
