@@ -94,10 +94,14 @@ abstract class myBaseSyncInAction extends sfAction
             }
 
         } catch (sfStopException $e) {
-            return sfView::ERROR;
+            return $this->handleException($e);
         }
 
-        return $this->executeLogic($request);
+        try {
+            return $this->executeLogic($request);
+        } catch (Exception $e) {
+            return $this->handleException($e);
+        }
     }
 
 
@@ -208,6 +212,28 @@ abstract class myBaseSyncInAction extends sfAction
                         : ""
                     )
                 );
+    }
+
+
+    /**
+     * Обрабатывает произвольные исключения
+     * @param Exception $e
+     */
+    protected function handleException(Exception $e)
+    {
+        $messageToLog = sprintf(
+            "Exception %s thrown %s \n in %s:%s \n Trace: %s",
+            get_class($e),
+            $e->getMessage(),
+            $e->getFile(),
+            $e->getLine(),
+            $e->getTraceAsString()
+        );
+
+        $this->logMessage($messageToLog);
+        $this->setVar('code', $e->getCode());
+        $this->setVar('message', $e->getMessage());
+        return sfView::ERROR;
     }
 
 }

@@ -37,7 +37,8 @@ class mySyncOutOperationQuery extends mySyncOutQuery
                     AND o.transfer_amount = tb.money
             WHERE
                 tb.money IS NULL
-                AND o.comment <> 'Перевод на счёт финцели'";
+                AND o.comment <> 'Перевод на счёт финцели'
+                AND o.user_id = $userId";
 
         $data = Doctrine_Manager::getInstance()
             ->getConnection('doctrine')
