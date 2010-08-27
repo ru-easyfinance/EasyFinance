@@ -22,7 +22,7 @@
                                 <option value="">Все категории</option>
                                 {$category}
                             {/capture}
-                            {include file="ui/textfield.tpl" value="Все категории" selectbox=$smarty.capture.selectbox sidselectid="cat_filtr"}
+                            {include file="ui/textfield.tpl" value="Все категории" selectbox=$smarty.capture.selectbox selectid="cat_filtr"}
                         </td>
                     </tr>
                     <tr>
@@ -44,7 +44,7 @@
                             </div>
                         </td>
                         <td>
-                            {include file="ui/button.tpl" value="Показать" id="btn_ReloadData"}
+                            <input class="b-button-simple" type="submit" value="Показать" id="btn_ReloadData" />
                         </td>
                     </tr>
                 </table>
@@ -102,14 +102,16 @@
     <div id="dialogFilterSum" class="hidden">
         <a href="#" value="">Любая сумма</a><br>
         <hr />
-        <div class="b-custom-input-inline">
-            <label>От:</label>
-            {include file="ui/textfield.tpl" id="txtFilterSumFrom" value="" class="b-sum"}
-            <label>До:</label>
-            {include file="ui/textfield.tpl" id="txtFilterSumTo" value="" class="b-sum"}
-            <label>руб.</label>
-            <input type="button" id="btnFilterSumSave" value="Сохранить"/>
-        </div>
+        <form method="get" action="">
+            <div class="b-custom-input-inline">
+                <label>От:</label>
+                {include file="ui/textfield.tpl" id="txtFilterSumFrom" value="" class="b-sum"}
+                <label>До:</label>
+                {include file="ui/textfield.tpl" id="txtFilterSumTo" value="" class="b-sum"}
+                <label>руб.</label>
+                <input class="b-button-simple" type="submit" value="Сохранить"/>
+            </div>
+        </form>
     </div>
 
 

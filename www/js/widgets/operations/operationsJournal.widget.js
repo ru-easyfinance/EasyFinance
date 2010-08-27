@@ -47,8 +47,7 @@ easyFinance.widgets.operationsJournal = function(){
     // данные получаются из модели методом loadJournal
     // и передаются в эту функцию
     function _showInfo(data) {
-        if (data == null)
-            return;
+        if (!data) return false;
 
         //if (navigator.userAgent.Contains("Firefox"))
         if ($.browser.mozilla) {
@@ -106,7 +105,6 @@ easyFinance.widgets.operationsJournal = function(){
             rowsCollection[rowID] = {
                 title: tooltipHtml,
                 moneyCur: curMoney.toString(),
-                //trId: this.tr_id,
                 trId: this.target_id,
                 account: this.account_name,
                 value: i
@@ -118,7 +116,7 @@ easyFinance.widgets.operationsJournal = function(){
         $(document).trigger('table.ready');
 
         // Выводим итоги по счёту/странице
-        pageTotal = Math.round(pageTotal*100)/100;
+        pageTotal = Math.round(pageTotal * 100) / 100;
 
         data.period_change = parseFloat(data.period_change);
         data.list_before = parseFloat(data.list_before);
@@ -234,39 +232,27 @@ easyFinance.widgets.operationsJournal = function(){
         return false;
     }
 
-    function _onCheckClicked() {
-        var $row = $(this).parent().parent();
-        var id = _journal[$row.attr('value')].id;
-        var trid = $row.attr('trid');
+    function _onCheckClicked(el) {
+        var el = $(el),
+            elID = el.closest('tr').find('.b-row-menu-block').attr('id'),
+            id = _journal[rowsCollection[elID].value].id,
+            trid = rowsCollection[elID].trId;
 
         // auto-check paired transfer operations
         var $pair = null;
-        if (trid != "null") {
+        if (trid) {
             if (trid == "0") {
-                $pair = $('#operations_list tr[trid="' + id + '"] input');
+                $pair = $('.b-row-menu-block[trid="' + id + '"]', DataTables.table).closest('tr').find('input');
             } else {
-                $pair = $('#operations_list tr[id="opv' + trid + '"] input');
-                if ($pair.length == 0) {
-                    $pair = $('#operations_list tr[id="opr' + trid + '"] input');
-                }
+                $pair = $('.b-row-menu-block[id="opv' + trid + '"]', DataTables.table).closest('tr').find('input');
+                if (!$pair.length) $pair = $('.b-row-menu-block[id="opr' + trid + '"]', DataTables.table).closest('tr').find('input');
             }
 
-            if ($pair) {
-                if ($(this).attr('checked'))
-                    $pair.attr('checked', 'checked');
-                else
-                    $pair.removeAttr('checked');
-            }
+            if ($pair) (el.attr('checked')) ? $pair.attr('checked', 'checked').trigger('change') : $pair.removeAttr('checked').trigger('change');
         }
-
-        // show/hide 'remove checked' link
-        if (_$node.find('table input').is(':checked'))
-            $('#remove_all_op').show();
-        else
-            $('#remove_all_op').hide();
     }
 
-    function _sexyFilter (input, text){
+    /*function _sexyFilter (input, text){
         if (this.wrapper.data("sc:lastEvent") == "click")
             return true;
 
@@ -274,7 +260,7 @@ easyFinance.widgets.operationsJournal = function(){
             return true;
         else
             return false;
-    }
+    }*/
 
     function _initFilters() {
         // фильтр по типу операции
@@ -306,7 +292,8 @@ easyFinance.widgets.operationsJournal = function(){
                     $('input[type="text"]', container).each(function(e) {
                         FloatFormat(this, String.fromCharCode(e.which) + $(this).val());
                     });
-                    $('input[type="button"]', container).click(function(e) {
+                    $('input[type="text"]:first', container);
+                    $('form', container).submit(function(e) {
                         _sumFrom = Math.abs(tofloat($('#txtFilterSumFrom', container).val()));
                         _sumTo = Math.abs(tofloat($('#txtFilterSumTo', container).val()));
                         loadJournal();
@@ -325,22 +312,18 @@ easyFinance.widgets.operationsJournal = function(){
         });
 
         // фильтр по категории
-        _$comboCategory = _$node.find('#cat_filtr');
-        _$comboCategory.change(function(){
+        _$comboCategory = $('#cat_filtr').change(function() {
             _category = $(this).val();
-
             loadJournal();
-
             return false;
         });
 
         // фильтр по счёту
-        _$comboAccount = _$node.find('#account_filtr');
-        _$comboAccount.change(function(){
-            _account = $(this).val();
-            _accountName = this.options[this.selectedIndex].text;
+        _$comboAccount = $('#account_filtr').change(function() {
+            var el = $(this);
+            _account = el.val();
+            _accountName = $('option:selected', el).text();
             loadJournal();
-
             return false;
         });
     }
@@ -349,25 +332,25 @@ easyFinance.widgets.operationsJournal = function(){
         var txt = '';
 
         if (_type != '-1')
-            txt = txt + 'Тип операций: ' + OPERATION_TYPES[_type];
+            txt += 'Тип операций: ' + OPERATION_TYPES[_type];
 
         if ((_type != '-1') && (_sumFrom != '' || _sumTo != ''))
-            txt = txt + ', ';
+            txt += ', ';
 
         if (_sumFrom != '' || _sumTo != '')
-            txt = txt + 'сумма: ';
+            txt += 'сумма: ';
 
         if (_sumFrom != '')
-            txt = txt + 'от ' + _sumFrom;
+            txt += 'от ' + _sumFrom;
 
         if (_sumFrom != '' && _sumTo != '')
-            txt = txt + ' ';
+            txt += ' ';
 
         if (_sumTo != '')
-            txt = txt + 'до ' + _sumTo;
+            txt += 'до ' + _sumTo;
 
         if (_sumFrom != '' || _sumTo != '')
-            txt = txt + ' руб';
+            txt += ' руб';
 
         if (txt == '') {
             if(clearFilterBtn) clearFilterBtn.hide();
@@ -380,27 +363,28 @@ easyFinance.widgets.operationsJournal = function(){
                     _category = '';
                     _account = '';
                     _accountName = '';
-                    //$('#cat_filtr').get(0).options[0].selected = true;
-                    //$('#account_filtr').get(0).options[0].selected = true;
+                    $('#cat_filtr option:first, #account_filtr option:first').attr('selected', true).parent().trigger('change');
                     loadJournal();
                 });
             }
-            clearFilterBtn.show();
+            clearFilterBtn.show().find('.fg-button').html(txt);
         }
     }
 
     function _recalcTotal() {
         // recalc total
-        var pageTotal = 0;
-        var rows = $('#operations_list tr');
-        for (var i=0; i<rows.length; i++) {
-            pageTotal = pageTotal + parseFloat($(rows[i]).attr('moneycur'));
+        var pageTotal = 0,
+            rows = $('tbody tr', DataTables.table);
+
+        for (var i = 0, forlength = rows.length; i < forlength; i++) {
+            try {
+                pageTotal += parseFloat(rowsCollection[$(rows[i]).find('.b-row-menu-block').attr('id')].moneyCur);
+            } catch(e) {  }
         }
-        pageTotal = Math.round(pageTotal*100)/100;
+        pageTotal = Math.round(pageTotal * 100) / 100;
 
         $('#lblOperationsJournalSum').html('<b>Баланс: </b>' + pageTotal + ' ' + (_modelAccounts.getAccountCurrency(_account) ? _modelAccounts.getAccountCurrency(_account).text : easyFinance.models.currency.getDefaultCurrencyText())).show();
 
-        //if (navigator.userAgent.Contains("Firefox"))
         if ($.browser.mozilla) {
             break_symbol = "<wbr>";
         } else {
@@ -427,12 +411,9 @@ easyFinance.widgets.operationsJournal = function(){
             return null;
 
         _$node = $(nodeSelector);
-
         _modelAccounts = model;
-
         _$txtDateFrom = $('#dateFrom');
         _$txtDateTo = $('#dateTo');
-
         _dateFrom = _$txtDateFrom.val();
         _dateTo = _$txtDateTo.val();
 
@@ -484,14 +465,18 @@ easyFinance.widgets.operationsJournal = function(){
                 } else {
                     deleteBtn.hide();
                 }
+
+                _onCheckClicked(this);
             });
 
             $('tbody tr', DataTables.table).unbind('mouseover.tooltip, mouseout.tooltip').bind('mouseover.tooltip', function() {
                 var id = $(this).find('.b-row-menu-block').attr('id');
-                Tooltip.show({
-                    content: rowsCollection[id].title,
-                    el: $(this)
-                });
+                if(rowsCollection[id]) {
+                    Tooltip.show({
+                        content: rowsCollection[id].title,
+                        el: $(this)
+                    });
+                }
             }).bind('mouseout.tooltip', function() {
                 Tooltip.hide();
             });
@@ -526,11 +511,10 @@ easyFinance.widgets.operationsJournal = function(){
     }
 
     function setAccount(account) {
-        if (account == "undefined")
-            return;
+        if (!account) return false;
 
         _account = account;
-        _$comboAccount.val(_account);
+        _$comboAccount.val(_account).trigger('change');
 
         if (_modelAccounts)
             _accountName = _modelAccounts.getAccountNameById(account);
@@ -541,7 +525,7 @@ easyFinance.widgets.operationsJournal = function(){
 
     function setCategory(cat) {
         _category = cat;
-        _$comboCategory.val(_category);
+        _$comboCategory.val(_category).trigger('change');
     }
 
     function setDateFrom(dateStr) {

@@ -37,14 +37,14 @@ _Tooltip = {
         $('.b-tooltip-container', this.tooltip).html(text);
         if(params.el) {
             var el = params.el,
-                elw = el.width(),
+                elw = el.outerWidth(true),
                 elh = el.height(),
                 elp = el.position(),
                 parentp = el.offsetParent().position();
             this.tooltip.css({
                 'top': elp.top + parentp.top + elh + 5,
-                'left': (params.targetPos) ? elp.left : '50%',
-                'margin-left': (params.targetPos) ? -(this.tooltip.width() / 2) + (elw / 2) : -(this.tooltip.width() / 2)
+                'left': (params.targetPos) ? elp.left + (elw / 2) + 8 : '50%',
+                'margin-left': -(this.tooltip.width() / 2)
             }).addClass('position');
             if(params.modal) {
                 this.modal = true;
