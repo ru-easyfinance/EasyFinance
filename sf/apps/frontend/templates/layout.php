@@ -62,7 +62,7 @@
 
 
 <!--середина-->
-
+<div id="mainwrap"  style="z-index: 5">
     <!-- mainmenu -->
     <?php include_partial('global/common/mainmenu'); ?>
 
@@ -82,12 +82,13 @@
                 <?php include_partial('global/common/left.quick'); ?>
 
                 <div class="block2">
-
+                    <div class="l-indent">
                 <?php include_partial('global/common') ?>
 
                 <!--наполнение-->
                     <?php echo $sf_content ?>
                 <!--/наполнение-->
+                    </div>
                 </div>
 
                 <!--правая колонка-->
@@ -171,6 +172,7 @@
             <i class="br"></i>
         </div>
     </div>
+</div>
 <!--/середина-->
 
         <!--подвал-->

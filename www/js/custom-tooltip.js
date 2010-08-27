@@ -70,4 +70,4 @@ _Tooltip = {
         this.tooltip.hide().removeClass('position');
         if(resetModal) this.modal = false;
     }
-}
+};

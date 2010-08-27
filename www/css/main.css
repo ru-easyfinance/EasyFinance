@@ -175,7 +175,7 @@ table.noborder td.mark{width:50px;}
 .ramka1 .cb { margin: 0 -1px -1px -1px; background-position: 0 -40px; }
 .ramka1 .cb div { background-position: 100% -60px; }
 
-.ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0; }
+.ramka2 { overflow: hidden; clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0; }
 .ramka2.compact { width:940px; margin:0 auto; }
 .ramka2 .ccm { margin-left:3px; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 100% 0; }
 .ramka2 .ccm .ccm-container {background: #fff; margin-right:3px;}
@@ -313,7 +313,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 
-#mainwrap { /*width:940px; margin:0 auto;*/ position: relative; padding-bottom: 10px; }
+#mainwrap { /*width:940px; margin:0 auto;*/ overflow:hidden; position: relative; padding-bottom: 10px; }
 
 .general_cont { position: relative; //zoom: 1; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
