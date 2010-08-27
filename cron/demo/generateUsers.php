@@ -368,7 +368,8 @@ Use: ./generateUsers.php -sdb user:passwd@source_host/database \
         $tablesSelected = $this->pickUserData($this->_sourceUserId);
         $users = $this->cloneUsers($tablesSelected, $this->_usersCount);
         $this->saveUsersToFile($users);
-        $this->hackDates();
+        if (!$this->_noTruncate)
+            $this->hackDates();
         $this->_debugMessage('Done for ' . (microtime(true) - $count) . ' ms.');
     }
 
