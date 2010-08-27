@@ -6,4 +6,4 @@
 	url = git://github.com/maxim-oleinik/sfPhpunitPlugin.git
 [submodule "sf/plugins/sfAdminDashPlugin"]
 	path = sf/plugins/sfAdminDashPlugin
-	url = http://github.com/davidsblom/sfAdminDashPlugin.git
+	url = http://github.com/EasyFinance/sfAdminDashPlugin.git
