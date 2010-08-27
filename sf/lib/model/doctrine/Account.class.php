@@ -33,6 +33,7 @@ class Account extends BaseAccount
      */
     private $balanceOperation;
 
+
     /**
      * Возвращает операцию начального остатка
      * @return Operation
@@ -67,6 +68,7 @@ class Account extends BaseAccount
         return $this->balanceOperation;
     }
 
+
     /**
      * Возвращает начальный баланс
      * @return float начальный баланс
@@ -75,6 +77,7 @@ class Account extends BaseAccount
     {
         return $this->getBalanceOperation()->getAmount();
     }
+
 
     /**
      * Устанавливает начальный баланс счёта
@@ -86,12 +89,27 @@ class Account extends BaseAccount
         $this->getBalanceOperation()->setAmount($balance);
     }
 
+
     /**
      * Сразу поле сохранения счёта надо сохранить его балансовую операцию
      * @see vendor/doctrine/Doctrine/Doctrine_Record::postSave()
      */
     public function postSave($event) {
         $this->getBalanceOperation()->setAccountId($this->getId())->save();
+    }
+
+
+    /**
+     * Удаляет операции по удалённому счёту
+     * Почему-то не работает onDelete CASCADE для softDelete
+     * @see vendor/doctrine/Doctrine/Doctrine_Record::postDelete()
+     */
+    public function postDelete($event) {
+        $query = Doctrine_Query::create()
+            ->update('Operation o')
+            ->set('o.deleted_at', '?', array(date('Y-m-d H:i:s')))
+            ->where('o.account_id = ?', $this->getId())
+            ->execute();
     }
 
 

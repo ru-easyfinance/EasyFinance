@@ -184,6 +184,7 @@ Operation:
       type: one
       foreignType: many
       foreignAlias: Operations    # Account -> Operations
+      onDelete:     CASCADE       # При удалении Счёта удаляются все Операции
     Category:
       local: category_id
       foreign: id
