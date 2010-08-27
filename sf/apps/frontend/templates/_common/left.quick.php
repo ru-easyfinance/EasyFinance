@@ -110,8 +110,9 @@
             <dd id="accountsPanelAccArchive" class="hidden"> <!-- --> </dd>
         </dl>
     </div>
-    <div class="account_deletion_confirm" style="display:none">
-        точно ?
+    <div id="accountDeletionConfirm" style="display:none;">
+        <p>При удалении счета будут удалены все операции по нему, и учет может "поплыть".</p>
+        <p>Вместо удаления предлагаем скрыть счет - он будет отображаться только в группе "Скрытые" и не будет Вам мешать.</p>
     </div>
 <!--/счета-->
 <!--Финансовые цели-->

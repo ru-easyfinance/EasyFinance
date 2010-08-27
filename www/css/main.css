@@ -29,13 +29,13 @@ ul.about {list-style-position: inside; list-style-type: disc;}
 
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
 
-input, select, textarea, button { 
-    font: 12px Arial, Tahoma, sans-serif; 
-    box-sizing:border-box; 
-    -moz-box-sizing:border-box; 
-    -webkit-box-sizing:border-box; 
-    -moz-border-radius:5px; 
-    -webkit-border-radius:5px; 
+input, select, textarea, button {
+    font: 12px Arial, Tahoma, sans-serif;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
     border:#CCCCCC solid 1px;
 }
 input[type="button"] { cursor: pointer; }
@@ -403,8 +403,23 @@ ul.menu4 li#m_last a { background: none; }
 .mid { padding-bottom: 5px; }
 .iframe .mid { padding-left: 8px; }
 
-.block1 { float:left; margin-left:-1px; padding-top: 1px; width: 163px; border: 1px solid #ebebeb; }
-.block2 { float:left; width:100%; margin:0 -180px 0 -163px; z-index: 1; }
+.block1 {
+    float: left;
+    margin-left: -1px;
+    padding-top: 1px;
+    width: 163px;
+    border: 1px solid #ebebeb;
+    z-index: 2;
+    position: absolute;
+}
+
+.block2 {
+    float: left;
+    width: 100%;
+    margin: 0 -180px 0 0px;
+    z-index: 1;
+}
+
 .block2 .l-indent { margin:0 196px 0 183px; }
 .block3 { float:right; width: 176px; background:#fff; margin-right:-1px; padding-bottom: 17px; z-index: 0; border: 1px solid #ebebeb; position:relative; }
 
