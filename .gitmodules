@@ -7,3 +7,6 @@
 [submodule "sf/plugins/sfAdminDashPlugin"]
 	path = sf/plugins/sfAdminDashPlugin
 	url = http://github.com/EasyFinance/sfAdminDashPlugin.git
+[submodule "sf/plugins/myAuthPlugin"]
+	path = sf/plugins/myAuthPlugin
+	url = http://github.com/EasyFinance/myAuthPlugin.git
