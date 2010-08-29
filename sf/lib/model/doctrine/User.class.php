@@ -22,11 +22,9 @@ class User extends BaseUser
      */
     public function setPassword($password)
     {
-        if ($this->isNew()) {
-            $password = sha1($password);
-        }
+        $this->_set('password', sha1($password));
 
-        $this->_set('password', $password);
+        return $this->_get('password');
     }
 
 }

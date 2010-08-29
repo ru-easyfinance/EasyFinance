@@ -1,3 +1,10 @@
+<script type="text/javascript">
+  res.profile.integration.email = "<?php
+    // TODO как-то это не кошерно, надо придумать как делать res динамическим
+    echo str_replace('@mail.easyfinance.ru', '', $sf_user->getUserRecord()->getUserServiceMail());
+    ?>";
+</script>
+
 <ul class="menuProfile">
     <li id="i3" class="act" block="#profile">
         <div><a>Профиль</a></div>
@@ -10,6 +17,7 @@
     </li>
 </ul>
 
+<?php // форма профиля ?>
 <div class="ramka3 profile" id="profile">
     <div class="ct">
         <div class="head">
@@ -21,29 +29,33 @@
         <div class="formRegister">
             <table>
                 <tr>
-                    <td><label>Логин:</label></td>
+                    <td><label for="login">Логин:</label></td>
                     <td><input id="login" name="login" class="disabled" type="text" value="" disabled="disabled" /></td>
                 </tr>
                 <tr>
-                    <td><label>E-Mail для интеграции:</label></td>
+                    <td><label for="mailIntegration">E-Mail для интеграции:</label></td>
                     <td><input id="mailIntegration" name="integration" type="text" value="" />@mail.easyfinance.ru</td>
+                </tr>
+                <tr>
+                    <td><label for="name">Псевдоним:</label></td>
+                    <td><input id="name" name="name" type="text" value="<?php echo $sf_user->getName() ?>" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><h3>Смена пароля</h3></td>
                 </tr>
                 <tr>
-                    <td><label>Новый пароль:</label></td>
+                    <td><label for="newpass">Новый пароль:</label></td>
                     <td><input id="newpass" name="newpass" type="password" value="" /><em class="red">*</em></td>
                 </tr>
                 <tr>
-                    <td><label>Повтор пароля:</label></td>
+                    <td><label for="newpass2">Повтор пароля:</label></td>
                     <td><input id="newpass2" type="password" value="" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><h3>Смена e-mail</h3></td>
                 </tr>
                 <tr>
-                    <td><label>e-mail:</label></td>
+                    <td><label for="mail">e-mail:</label></td>
                     <td><input id="mail" type="text" name="mail" value="" /><em class="red">*</em></td>
                 </tr>
                 <tr>
@@ -62,7 +74,7 @@
                     <td colspan="2"><h3><div> </div></h3></td>
                 </tr>
                 <tr>
-                    <td><label>Текущий пароль:</label></td>
+                    <td><label for="pass">Текущий пароль:</label></td>
                     <td><input id="pass" name="pass" type="password" value="" title="Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес." /></td>
                 </tr>
                 <tr>
@@ -81,6 +93,7 @@
 </div>
 
 
+<?php // валюты ?>
 <div id="currency" class="ramka3 profile" style="display:none">
     <div class="ct">
         <div class="head">
@@ -117,6 +130,7 @@
 </div>
 
 
+<?php // напоминания ?>
 <div id="reminders" class="ramka3 profile" style="display:none">
     <div class="ct">
         <div class="head">

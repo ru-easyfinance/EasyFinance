@@ -66,7 +66,7 @@
             <a href="/profile/">Настройки</a>
             <ul>
                 <li class="first"></li>
-                <li><span> </span><a href="/profile/">Профиль</a></li>
+                <li><span> </span><a href="/my/profile/">Профиль</a></li>
                 <li><span> </span><a href="/my/services/">Услуги</a></li>
                 <li class="last"></li>
             </ul>
@@ -95,4 +95,3 @@
         <a href="/logout/" class="icon menu-icons-logout" title="Выход"></a>
     </div>
 </div>
-

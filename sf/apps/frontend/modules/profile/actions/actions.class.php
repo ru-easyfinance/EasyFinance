@@ -4,7 +4,79 @@ require_once(dirname(__FILE__) . '/../../../lib/helper/myDateTimezoneHelper.php'
 /**
  * Профиль пользователя
  */
-class profileActions extends sfActions {
+class profileActions extends sfActions
+{
+    /**
+     * Форма редактирования
+     */
+    public function executeIndex(sfRequest $request)
+    {
+        // TODO дергать профиль для res'а, когда он будет динамическим
+        // $user = $this->getUser()->getUserRecord();
+
+        // TODO форму профиля рисовать sfForm + валидация данных
+
+        return sfView::SUCCESS;
+    }
+
+
+    /**
+     * Сохранить профиль пользователя
+     */
+    public function executeSave(sfRequest $request)
+    {
+        $user = $this->getUser()->getUserRecord();
+        $this->form = new UserProfileForm($user);
+
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/json; charset=utf-8');
+
+        $postParameters = $request->getPostParameters();
+        $formParameters = array();
+
+        $fields = array(
+            'login'             => 'user_login',
+            'mailIntegration'   => 'user_service_mail',
+            'nickname'          => 'name',
+            'mail'              => 'user_mail',
+            'pass'              => 'password',
+            'newpass'           => 'password_new',
+            'getNotify'         => 'notify',
+        );
+
+        // TODO поставить куку на гайд...
+        //$postParameters['guide'];
+
+        foreach ($fields as $parameter => $field) {
+            if (array_key_exists($parameter, $postParameters)) {
+                $formParameters[$field] = $postParameters[$parameter];
+            }
+        }
+
+        $this->form->bind($formParameters, array());
+        if ($this->form->isValid()) {
+            $this->form->save();
+
+            return $this->renderText(json_encode(array('result' => array('text' => 'Данные успешно сохранены'))));
+        }
+
+        $err = $this->form->getErrorSchema();
+        $string = '';
+        foreach ($err as $errors) {
+            if ($errors instanceof sfValidatorErrorSchema) {
+                foreach ($errors as $code => $message) {
+                    $string .= $message->getMessage() . "<br /><br />\n";
+                }
+            } elseif ($errors instanceof sfValidatorError) {
+                $string .= $errors->getMessage() . "<br /><br />\n";
+            } else {
+                $string .= $errors . "<br /><br />\n";
+            }
+        }
+
+        $this->getResponse()->setStatusCode(400);
+        return $this->renderText(json_encode(array('error' => array('text' => $string))));
+    }
+
 
     /**
      * Сохранить настройки напоминаний
