@@ -52,6 +52,7 @@ Currency:
 User:
   tableName: users
   columns:
+    id:                { type: integer, notnull: true, primary: true, autoincrement: true }
     name:              { type: string, size: 100, notnull: true, name: user_name as name }
     password:          { type: string(40),  notnull: true, name: user_pass as password }
     user_service_mail: { type: string(100), notnull: true }

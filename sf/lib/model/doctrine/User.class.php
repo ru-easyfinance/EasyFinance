@@ -30,4 +30,19 @@ class User extends BaseUser
         return $this->_get('password');
     }
 
+    public function getDebtCategoryId()
+    {
+
+        $categoryId = Doctrine::getTable('Category')
+            ->createQuery()
+            ->select('id')
+            ->where("user_id = ?", $this->getId())
+            ->andWhere(
+                "system_id = ?",
+                Category::DEBT_SYSTEM_CATEGORY_ID)
+            ->fetchOne(array(), Doctrine::HYDRATE_SINGLE_SCALAR);
+
+        return $categoryId ? (int) $categoryId : null;
+    }
+
 }

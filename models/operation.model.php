@@ -381,26 +381,19 @@ class Operation_Model
             $this->db->query("START TRANSACTION");
 
             foreach ($operationsArray as $operation) {
-                $values = array(
-                    'user_id'               => $this->_user->getId(),
-                    'money'                 => abs($operation['amount']) * -1,
-                    'date'                  => $operation['date'],
-                    'cat_id'                => null,
-                    'type'                  => 2,
-                    'account_id'            => $operation['account'],
-                    'transfer_account_id'   => $operation['toAccount'],
-                    'transfer_amount'       => $this->_convertAmount($operation['account'],
-                                                                        $operation['toAccount'],
-                                                                        $operation['amount'],
-                                                                        $operation['convert']),
-                    'comment'               => $operation['comment'],
-                    'tags'                  => $operation['tags'],
-                    // Операции из календаря
-                    'chain_id'              => !empty($operation['chain'])    ? (int) $operation['chain'] : 0,
-                    'accepted'              => !empty($operation['accepted']) ? (int) $operation['accepted'] : 0,
+                $this->addTransfer(
+                    $operation['amount'],
+                    $operation['convert'],
+                    $operation['exchange_rate'],
+                    $operation['date'],
+                    $operation['account'],
+                    $operation['toAccount'],
+                    $operation['comment'],
+                    $operation['tags'],
+                    $operation['accepted'],
+                    $operation['chain'],
+                    false
                 );
-
-                $this->_addOperation($values, $operation);
             }
 
             $this->_user->initUserAccounts();
@@ -428,13 +421,42 @@ class Operation_Model
      * @param array $tags
      * @return int
      */
-    function addTransfer($money, $convert, $exchangeRate, $date, $fromAccount, $toAccount, $comment, array $tags = array())
+    function addTransfer(
+        $money, $convert, $exchangeRate, $date, $fromAccount, $toAccount,
+        $comment, array $tags = array(), $accepted = 1, $chain = 0,
+        $reloadUser = true
+    )
     {
+        $accounts = $this->_user->getUserAccounts();
+
+        $categoryId = null;
+
+        if (
+            in_array(
+                $accounts[$toAccount]['account_type_id'],
+                array(
+                    Account_Collection::ACCOUNT_TYPE_CREDIT,
+                    Account_Collection::ACCOUNT_TYPE_CREDITCARD,
+                    Account_Collection::ACCOUNT_TYPE_LOANGET,
+                )
+            )
+            &&
+            in_array(
+                $accounts[$fromAccount]['account_type_id'],
+                array(
+                    Account_Collection::ACCOUNT_TYPE_CASH,
+                    Account_Collection::ACCOUNT_TYPE_DEBETCARD,
+                )
+            )
+        ) {
+            $categoryId = $this->_user->getUserDebtCategoryId();
+        }
+
         $values = array(
             'user_id'               => $this->_user->getId(),
             'money'                 => abs($money) * -1,
             'date'                  => $date,
-            'cat_id'                => null,
+            'cat_id'                => $categoryId,
             'account_id'            => $fromAccount,
             'comment'               => $comment,
             'transfer_account_id'   => $toAccount,
@@ -442,12 +464,16 @@ class Operation_Model
             'exchange_rate'         => $exchangeRate,
             'transfer_amount'       => $this->_convertAmount($fromAccount, $toAccount, $money, $convert),
             'tags'                  => implode(', ', $tags),
+            'accepted'              => !empty($accepted) ? (int) $accepted : 0,
+            'chain_id'              => !empty($chain) ? (int) $chain : 0,
         );
 
         $lastId = $this->_addOperation($values);
 
-        $this->_user->initUserAccounts();
-        $this->_user->save();
+        if ($reloadUser) {
+            $this->_user->initUserAccounts();
+            $this->_user->save();
+        }
 
         return $lastId;
     }

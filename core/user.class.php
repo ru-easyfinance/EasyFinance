@@ -87,6 +87,12 @@ class oldUser
     private $db;
 
     /**
+     * ИД долговой категории пользователя
+     * @var int
+     */
+    private $user_debt_category_id = null;
+
+    /**
      * Конструктор
      * @return void
      */
@@ -138,24 +144,24 @@ class oldUser
 
     public function getType()
     {
-    	$userType = null;
+        $userType = null;
 
-    	if( sizeof($this->props) && array_key_exists('user_type', $this->props) )
-    	{
-    		$userType = (int)$this->props['user_type'];
-    	}
+        if( sizeof($this->props) && array_key_exists('user_type', $this->props) )
+        {
+            $userType = (int)$this->props['user_type'];
+        }
 
-    	return $userType;
+        return $userType;
     }
 
     public function getDefaultPage()
     {
-    	return '/';
+        return '/';
     }
 
     public function getName()
     {
-    	return $this->getUserProps( 'user_name' );
+        return $this->getUserProps( 'user_name' );
     }
 
     /**
@@ -354,6 +360,8 @@ class oldUser
         foreach ($category as $val) {
             $val['cat_name'] = stripslashes($val['cat_name']);
             $this->user_category[$val['cat_id']] = $val;
+            if ($val['system_category_id'] == Category_Model::DEBT_SYSTEM_CATEGORY_ID)
+                $this->user_debt_category_id = $val['cat_id'];
         }
     }
 
@@ -397,12 +405,12 @@ class oldUser
         }
     }
 
-  	/**
+      /**
      * Возвращает счета пользователя
      * @return void
      */
-	public function initUserAccounts()
-	{
+    public function initUserAccounts()
+    {
         $this->user_account = array();
 
         // TODO: Неверная работа с операциями, но где используются эти данные?
@@ -421,7 +429,7 @@ class oldUser
                 $val['total_sum']=0;
             $this->user_account[$val['account_id']] = $val;
         }
-	}
+    }
 
     /**
      * Возвращает все теги пользователя
@@ -443,11 +451,11 @@ class oldUser
     public function initUserTargets()
     {
         $this->user_targets = array();
-    	// Ежели нет пользователя - всё это не нужно.
-    	if(!$this->getId())
-    	{
-    		return;
-    	}
+        // Ежели нет пользователя - всё это не нужно.
+        if(!$this->getId())
+        {
+            return;
+        }
 
         $this->user_targets = array();
         $this->user_targets['user_targets'] = array();
@@ -460,7 +468,7 @@ class oldUser
 
         while ( list(,$target) = each($userTargets) )
         {
-        		$this->user_targets['user_targets'][ $target['id'] ] = $target;
+                $this->user_targets['user_targets'][ $target['id'] ] = $target;
         }
         unset($userTargets);
 
@@ -512,6 +520,16 @@ class oldUser
     {
         return $this->user_category;
     }
+
+    /**
+     * Возвращает ИД долговой категории пользователя
+     * @return int
+     */
+    function getUserDebtCategoryId()
+    {
+        return $this->user_debt_category_id;
+    }
+
     /**
      * Возвращает пользовательские валюты
      * @return array mixed
@@ -553,23 +571,23 @@ class oldUser
      */
     function getUserTags($cloud = false)
     {
-    	$user_tags = array();
+        $user_tags = array();
 
-	if ($cloud)
-	{
-		$user_tags = $this->user_tags;
-	}
-	else
-	{
-            	foreach ($this->user_tags as $v)
-            	{
-			$user_tags[$v['name']] = $v['cnt'];
-		}
+    if ($cloud)
+    {
+        $user_tags = $this->user_tags;
+    }
+    else
+    {
+                foreach ($this->user_tags as $v)
+                {
+            $user_tags[$v['name']] = $v['cnt'];
+        }
 
-		$user_tags = array_keys($user_tags);
-	}
+        $user_tags = array_keys($user_tags);
+    }
 
-	return $user_tags;
+    return $user_tags;
     }
 
     /**

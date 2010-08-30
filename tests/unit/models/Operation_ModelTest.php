@@ -445,4 +445,54 @@ class Operation_ModelTest extends UnitTestCase
 
         $this->assertEquals(round($uahSpent, 2), round(abs($stat), 2), 'Expected 100 dollars have been spent');
     }
+
+    /**
+     * Тест перевода на долговой счёт
+     */
+    public function testDebtTransfer()
+    {
+        $this->_prepareOperation();
+
+         // Долговой счёт
+        $options = array(
+            'user_id'      => $this->userId,
+            'account_name' => 'Debt account',
+            'account_currency_id' => myMoney::RUR,
+            'account_type_id' => Account_Collection::ACCOUNT_TYPE_CREDIT
+        );
+
+        $account = CreateObjectHelper::makeAccount($options);
+        $toAccountId = $account['account_id'];
+
+        $options = array(
+            'user_id' => $this->userId,
+            'system_category_id' => Category_Model::DEBT_SYSTEM_CATEGORY_ID,
+        );
+        $debtCategoryId = CreateObjectHelper::createCategory($options);
+
+        $this->user->init();
+        $this->user->save();
+
+        $operation  = new Operation_Model($this->user);
+
+        // Перевели 100 рублей с рублёвого на долларовый
+        $opId = $operation->addTransfer(
+                100,
+                0,
+                0,
+                '2010-01-01',
+                $this->accountId,
+                $toAccountId,
+                'Комментарий',
+                array('тег 1')
+        );
+
+        $dateFrom = '2009-12-29';
+        $dateTo   = '2010-01-02';
+
+        $list = $operation->getOperationList($dateFrom, $dateTo);
+
+        $this->assertEquals($debtCategoryId, $list[0]['cat_id'], 'Expected only 1 transfer operation');
+    }
+
 }

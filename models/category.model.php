@@ -9,6 +9,8 @@
  */
 class Category_Model {
 
+    const DEBT_SYSTEM_CATEGORY_ID = 25;
+
     /**
      * Ссылка на экземпляр DBSimple
      * @var DbSimple_Mysql
