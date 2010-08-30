@@ -15,3 +15,9 @@ all:
     # Уведомления по Email
     email_from: reminder@easyfinance.ru
     email_name: EasyFinance Reminder
+
+
+  # Импорт операций (СИТИ)
+  emailImport:
+    subject:        "EasyFinance.ru - Fwd: "
+    from:           "helpdesk@easyfinance.ru"
