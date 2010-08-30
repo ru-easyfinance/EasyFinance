@@ -102,6 +102,7 @@ class importOperationFromEmailTask extends sfBaseTask
 
             if (false === $source) {
                 $this->logging("Unknown sender", $from);
+                $this->forwardMail($mail['to'], $mail['subject'], $mail['body']);
                 return self::ERROR_UNKNOWN_SENDER;
             }
 
@@ -110,6 +111,7 @@ class importOperationFromEmailTask extends sfBaseTask
 
             if (!is_object($parser) || !($parser instanceof EmailParser)) {
                 $this->logging("Can't find any suitable parser for subject", $subject);
+                $this->forwardMail($mail['to'], $mail['subject'], $mail['body']);
                 return self::ERROR_NO_PARSER;
             }
 
@@ -154,6 +156,41 @@ class importOperationFromEmailTask extends sfBaseTask
 
         file_put_contents($logPath, 'Error: ' . $message . "\n----\n\n" . $input);
         $this->logSection('import', 'Error: ' . $message, null, 'ERROR');
+    }
+
+
+    /**
+     * Переслать письмо пользователю
+     *
+     * @param   string  $to
+     * @param   string  $subject
+     * @param   string  $body
+     */
+    private function forwardMail($to, $subject, $body)
+    {
+        if ($user = Doctrine::getTable('User')->findOneByUserServiceMail($to)) {
+            // Надо подключить конфиг
+            $configuration = $this->createConfiguration('frontend', 'prod');
+            // и инициализировать контекст
+            $context = sfContext::createInstance($configuration);
+            $configuration->loadHelpers('Partial');
+
+            $context->getRequest()->setRequestFormat('txt');
+
+            // формируем письмо
+            $message = Swift_Message::newInstance()
+                ->setFrom(sfConfig::get('app_emailImport_from'))
+                ->setSender(sfConfig::get('app_emailImport_from'))
+                ->setReplyTo(sfConfig::get('app_emailImport_from'))
+                ->setTo($user->getUserMail())
+                ->setSubject(sfConfig::get('app_emailImport_subject') . $subject)
+                ->setBody(get_partial('global/mail/importOperation', array('serviceMail' => $to, 'body' => $body)), 'text/plain');
+
+            // посылаем
+            $this->getMailer()->sendNextImmediately()->send($message);
+        } else {
+            $this->logging('No such User identified by Service Email', $to);
+        }
     }
 
 }

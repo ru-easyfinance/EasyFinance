@@ -97,7 +97,6 @@ class OperationImportForm extends BaseFormDoctrine
         $values['comment'] = sprintf("%s %s %s\n",
             $values['source'], $values['description'], $values['account']);
 
-        unset( $values['account']);
         unset($values['description']);
         unset($values['account']);
         unset($values['id']);
