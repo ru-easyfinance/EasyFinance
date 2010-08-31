@@ -1,6 +1,6 @@
 <?php
 /**
- * Бюджет за период 
+ * Бюджет за период
  */
 class Budget
 {
@@ -17,11 +17,11 @@ class Budget
 
     /**
      * Загружает список статей бюджета
-     * @param User $user 
-     * @param string $startDate 
+     * @param User $user
+     * @param string $startDate
      */
-    public function load($user, $startDate) 
-    {        
+    public function load($user, $startDate)
+    {
         $plan = Doctrine::getTable('BudgetCategory')
             ->getBudget($user, $startDate);
 
@@ -47,23 +47,23 @@ class Budget
                         'category_id' => $categoryId,
                         'amount'      => 0,
                         'user_id'     => $user->getId(),
-                        'drain'       => $factValue < 0 ? '1' : '0'
+                        'type'        => $factValue < 0 ? '1' : '0'
                     )
                 );
                 $budgetCategory->setBudget($this);
                 $budgetCategories[$categoryId] = $budgetCategory;
             }
         }
-        
+
         return $budgetCategories;
     }
-    
+
     public function getFact($categoryId)
     {
         return isset($this->_fact[$categoryId]) ?
             $this->_fact[$categoryId] : 0;
     }
-    
+
     public function getThreeMonthMean($categoryId)
     {
         return isset($this->_threeMonthMean[$categoryId]) ?

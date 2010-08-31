@@ -63,7 +63,12 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
 
         $data = Doctrine::getTable('BudgetCategory')->getBudget($user, $dateStart);
 
-        $this->assertEquals($budget1->getAmount(), $data[0]->getAmount());
-        $this->assertEquals($budget2->getAmount(), $data[1]->getAmount());
+        $expected = array($budget1->getAmount(), $budget2->getAmount());
+        $actual   = array($data[0]->getAmount(), $data[1]->getAmount());
+
+        sort($expected);
+        sort($actual);
+
+        $this->assertEquals($expected, $actual);
     }
 }

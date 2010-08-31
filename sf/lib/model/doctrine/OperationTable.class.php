@@ -72,9 +72,10 @@ class OperationTable extends Doctrine_Table
         $monthCount = (int) $monthCount ? (int) $monthCount : 3 ;
         $alias = 'foo';
         $query = $this->createQuery("{$alias}")
-            ->select("category_id, sum(amount)/$monthCount AS mean")
+            ->select("category_id, sum(amount*cu.rate)/$monthCount AS mean")
             ->innerJoin("{$alias}.Category c")
-                ->andWhere("c.id = {$alias}.category_id")
+            ->innerJoin("{$alias}.Account a")
+            ->innerJoin("{$alias}.Account.Currency cu")
             ->where("{$alias}.date >= ADDDATE('$date',
                 INTERVAL -$monthCount MONTH)")
             ->andWhere("{$alias}.date <= '$date'")
@@ -99,9 +100,10 @@ class OperationTable extends Doctrine_Table
     {
         $alias = 'foo';
         $query = $this->createQuery("{$alias}")
-            ->select("category_id, sum(amount) AS fact")
+            ->select("category_id, sum(amount*cu.rate) AS fact")
             ->innerJoin("{$alias}.Category c")
-                ->andWhere("c.id = {$alias}.category_id")
+            ->innerJoin("{$alias}.Account a")
+            ->innerJoin("{$alias}.Account.Currency cu")
             ->where("{$alias}.date >= ?", $date)
             ->andWhere("{$alias}.date <= LAST_DAY('$date')")
             ->andWhere("{$alias}.user_id = ?", $user->getId())

@@ -17,25 +17,25 @@ class Migration048_Create_Debt_Categories extends myBaseMigration
 
         $this->rawQuery(
             "INSERT INTO category (
-                `cat_parent`, 
+                `cat_parent`,
                 `user_id`,
-                `system_category_id`, 
+                `system_category_id`,
                 `cat_name`,
                 `type`
              ) (SELECT 0, id, 24, 'Долги', -1 FROM users)"
         );
-        
+
         $this->rawQuery(
             "INSERT INTO category (
-                `cat_parent`, 
+                `cat_parent`,
                 `user_id`,
-                `system_category_id`, 
+                `system_category_id`,
                 `cat_name`,
                 `type`
              ) (
-                SELECT 
+                SELECT
                     cat_id,
-                    id, 
+                    id,
                     25,
                     'Выплата долгов',
                     -1
@@ -51,7 +51,8 @@ class Migration048_Create_Debt_Categories extends myBaseMigration
                 ON c2.system_category_id = 24
                 AND c2.user_id = c1.user_id
                 AND c1.system_category_id = 15
-             SET c1.`cat_parent` = c2.`cat_id`"
+             SET c1.`cat_parent` = c2.`cat_id`
+             WHERE c1.system_category_id = 15"
         );
     }
 

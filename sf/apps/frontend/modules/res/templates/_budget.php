@@ -14,7 +14,7 @@ $budget = array(
 );
 
 foreach ($budgetCategories as $budgetEntry) {
-    $drainOrProfit = ($budgetEntry->getDrain()) ? 'd' : 'p';
+    $drainOrProfit = ($budgetEntry->getType()) ? 'd' : 'p';
     $budget['list'][$drainOrProfit][$budgetEntry->getCategoryId()] = array(
         'amount' => $budgetEntry->getAmount(),
         'money'  => $budgetEntry->getFact(),

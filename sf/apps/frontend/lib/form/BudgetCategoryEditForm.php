@@ -52,8 +52,16 @@ class BudgetCategoryEditForm extends BaseFormDoctrine
         $key   .= "-{$values['start']}";
 
         $object = Doctrine::getTable($class)->find($key);
-        $object = $object === false ? new $class() : $object ;
-        
+
+        if ($object === false) {
+            $object = new $class();
+            $object->setKey($key);
+            $object->setUserId($userId);
+            $object->setCategoryId($values['category_id']);
+            $object->setType($values['type']);
+            $object->setDateStart($values['start']);
+        }
+
         return $object;
     }
 

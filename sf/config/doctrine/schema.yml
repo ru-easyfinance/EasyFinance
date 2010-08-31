@@ -469,7 +469,7 @@ BudgetCategory:
     key:         { type: string(50), notnull: true, primary: true }
     user_id:     { type: integer(4), notnull: true }
     category_id: { name: category as category_id, type: integer(4), notnull: true}
-    drain:       { type: integer(1), notnull: true }
+    drain:       { name: drain as type, type: integer(1), notnull: true }
     currency_id: { name: currency as currency_id, type: integer(4),  notnull: true }
     amount:      { type: 'decimal(20, 2)', notnull: true }
     date_start:  { type: date, notnull: true }
