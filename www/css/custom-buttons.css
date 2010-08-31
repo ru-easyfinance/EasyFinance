@@ -14,12 +14,13 @@
     -webkit-border-radius:3px;
     -moz-border-radius:3px;
     border-radius:3px;
-    background:#fff;
+    background:#dddddd url(../img/ui/custom-btn.png) repeat-x;
     padding:5px 8px;
     cursor:pointer;
 }
 .b-button-simple:hover {
-    background:#ecedef url(../img/i/custom-btn.png) 0 100% repeat-x;
+    background-color:#d2d2d2;
+    background-position:0 -48px;
 }
 
 

@@ -46,9 +46,21 @@ b.clear {
     margin-left:-10px;
     display:block;
 }
+.b-operations-journal .b-operations-journal-overal-info.fixed-width {
+    width:745px;
+}
 .b-operations-journal .b-operations-journal-overal-info li {
     float:left;
     width:33.33%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.col1 {
+    width:25%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.col2 {
+    width:40%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.col3 {
+    width:35%;
 }
 .b-operations-journal .b-operations-journal-overal-info li.l-right {
     text-align:right;

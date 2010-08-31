@@ -2,11 +2,11 @@
     <div class="b-border b-operations-journal">
         <h1 class="b-operations-journal-header">Журнал операций<span class="l-position-container"><i class="b-icon b-icon-export-csv"></i></span></h1>
         <div class="b-operations-journal-content">
-            <div class="b-form-skeleton b-operations-journal-options">
+            <div class="b-form-skeleton b-operations-journal-options fixed-width">
                 <table>
-                    <col width="33.33%" />
-                    <col width="33.33%" />
-                    <col width="33.33%" />
+                    <col width="25%" />
+                    <col width="40%" />
+                    <col width="35%" />
                     <tr>
                         <td>
                             {capture name='selectbox'}
@@ -17,16 +17,14 @@
                             {/capture}
                             {include file="ui/textfield.tpl" value="Все счета" selectbox=$smarty.capture.selectbox selectid="account_filtr"}
                         </td>
-                        <td colspan="2">
+                        <td>
                             {capture name='selectbox'}
                                 <option value="">Все категории</option>
                                 {$category}
                             {/capture}
                             {include file="ui/textfield.tpl" value="Все категории" selectbox=$smarty.capture.selectbox selectid="cat_filtr"}
                         </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">{include file="ui/textfield.tpl" id="grid_search_field" placeholder="поиск по меткам и коментариям"}</td>
+                        <td>{include file="ui/textfield.tpl" id="grid_search_field" placeholder="поиск по меткам и коментариям"}</td>
                     </tr>
                     <tr>
                         <td>
@@ -49,16 +47,16 @@
                     </tr>
                 </table>
             </div>
-            <ul id="divOperationsJournalTotal" class="b-operations-journal-overal-info">
-                <li>
+            <ul id="divOperationsJournalTotal" class="b-operations-journal-overal-info fixed-width">
+                <li class="col1">
                     <b>Было: </b>
                     <span id="balance_before">0.00 руб.</span>
                 </li>
-                <li>
+                <li class="col2">
                     <b>Изменение: </b>
                     <span id="lblOperationsJournalSum">0,00 руб.</span>
                 </li>
-                <li class="l-right">
+                <li class="l-right col3">
                     <b>Стало: </b>
                     <span id="balance_after">0.00 руб.</span>
                 </li>

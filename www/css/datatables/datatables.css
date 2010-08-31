@@ -525,6 +525,15 @@ tr.even.gradeU td.sorting_3 {
 .custom-grid-style.loading {
     background:url(../../img/i/spinner.gif) 50% 50% no-repeat;
 }
+.custom-grid-style.small-spinner {
+    background:none;
+}
+.small-spinner.loading .b-preloader {
+    width:16px;
+    height:16px;
+    background:url(../../img/i/spinner-small.gif) 50% 50% no-repeat;
+    display:block;
+}
 
 .custom-grid-style {
     margin-top:20px;
@@ -549,6 +558,9 @@ tr.even.gradeU td.sorting_3 {
     font-size:11px;
     vertical-align:middle;
 }
+.custom-grid-style table th {
+
+}
 .custom-grid-style table td {
     padding:5px;
     cursor:pointer;
@@ -557,6 +569,26 @@ tr.even.gradeU td.sorting_3 {
     cursor:default;
 }
 .custom-grid-style table td .b-icon {
+    width:15px;
+    height:15px;
+    background:url(../../img/i/iconsOperation.gif) no-repeat;
+    margin:0 auto;
+    display:block;
+}
+.custom-grid-style table td .b-icon.outcome {
+    background-position:-16px 0;
+}
+.custom-grid-style table td .b-icon.transfer {
+    width:16px;
+    height:16px;
+    background-position:-32px 0;
+}
+.custom-grid-style table td .b-icon.target {
+    width:15px;
+    height:16px;
+    background-position:-49px 0;
+}
+/*.custom-grid-style table td .b-icon {
     width:14px;
     height:14px;
     background:url(../../img/i/operation-icons.png) no-repeat;
@@ -573,7 +605,7 @@ tr.even.gradeU td.sorting_3 {
     width:16px;
     height:15px;
     background-position:-42px 0;
-}
+}*/
 
 .custom-grid-style table tr:hover td {
     background-color:#f7f9d5 !important;

@@ -175,7 +175,8 @@ table.noborder td.mark{width:50px;}
 .ramka1 .cb { margin: 0 -1px -1px -1px; background-position: 0 -40px; }
 .ramka1 .cb div { background-position: 100% -60px; }
 
-.ramka2 { overflow: hidden; clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0; }
+
+.ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0; }
 .ramka2.compact { width:940px; margin:0 auto; }
 .ramka2 .ccm { margin-left:3px; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 100% 0; }
 .ramka2 .ccm .ccm-container {background: #fff; margin-right:3px;}
@@ -218,7 +219,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .operation_list table.periodic.body{max-height: 300px; width: auto; height: auto; owerflow-y: scroll; overflow-x: hidden;}
 /*----------------------------------------------------------*/
 
-#container1 { max-width:1310px; min-width:970px; position: relative; margin: 0 auto -130px; padding:0 20px; min-height: 100%; display:block; }
+#container1 { max-width:1310px; min-width:970px; position: absolute; margin: 0 auto -130px; padding:0 0 130px 0; min-height: 100%; display:block; left:20px; right:20px; overflow:hidden;}
 #container1.iframe { width: 570px; }
 
 * html #container1 { height: 100%;  }
@@ -313,8 +314,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 
-#mainwrap { /*width:940px; margin:0 auto;*/ overflow:hidden; position: relative; padding-bottom: 10px; }
-
+#mainwrap { position: relative; padding-bottom: 10px; }
 .general_cont { position: relative; //zoom: 1; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 
@@ -403,23 +403,8 @@ ul.menu4 li#m_last a { background: none; }
 .mid { padding-bottom: 5px; }
 .iframe .mid { padding-left: 8px; }
 
-.block1 {
-    float: left;
-    margin-left: -1px;
-    padding-top: 1px;
-    width: 163px;
-    border: 1px solid #ebebeb;
-    z-index: 2;
-    position: absolute;
-}
-
-.block2 {
-    float: left;
-    width: 100%;
-    margin: 0 -180px 0 0px;
-    z-index: 1;
-}
-
+.block1 { float:left; margin-left:-1px; padding-top: 1px; width: 163px; border: 1px solid #ebebeb; }
+.block2 { float:left; width:100%; margin:0 -180px 0 -163px; z-index: 1; }
 .block2 .l-indent { margin:0 196px 0 183px; }
 .block3 { float:right; width: 176px; background:#fff; margin-right:-1px; padding-bottom: 17px; z-index: 0; border: 1px solid #ebebeb; position:relative; }
 
@@ -596,7 +581,7 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 
 .block2 .ramka3 { margin:0 !important; }
 .block2 .ramka3 .inside { position: relative; padding: 9px 13px 8px 13px; }
-.block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:530px !important; margin:0 auto; }
+.block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:530px !important; }
 
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -2225,17 +2210,13 @@ img.ui-datepicker-trigger {
 .b-form-skeleton {
     margin:-5px;
 }
+.b-form-skeleton.fixed-width {
+    width:745px;
+}
 .b-form-skeleton table {
     width:100%;
     border-collapse:collapse;
 }
 .b-form-skeleton td {
     padding:5px;
-}
-
-#views #calendarMonthPicker,
-#views #calend {
-    width:50%;
-    max-width:660px;
-    margin:0 auto;
 }
