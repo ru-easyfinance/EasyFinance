@@ -5,6 +5,11 @@
     position: absolute;
 }
 
+#calendar.fc,
+#calendarMonthPicker {
+    max-width: 660px;
+}
+
 #calendar.fc .fc-grid td {
     cursor: pointer;
 }

@@ -581,7 +581,7 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 
 .block2 .ramka3 { margin:0 !important; }
 .block2 .ramka3 .inside { position: relative; padding: 9px 13px 8px 13px; }
-.block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:530px !important; }
+/*.block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:530px !important; } */
 
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }

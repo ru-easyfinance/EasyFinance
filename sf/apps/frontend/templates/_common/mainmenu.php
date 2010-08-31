@@ -55,7 +55,7 @@
                 <li class="first"></li>
                 <li><span> </span><a id="linkMainMenuFeedback" href="#">Обратная связь</a></li>
                 <li><span> </span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
-                <li><span> </span><a href="http://wiki.easyfinance.ru/tiki-read_article.php?articleId=14">Частые вопросы</a></li>
+                <li><span> </span><a href="http://wiki.easyfinance.ru/tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li><span> </span><a href="/review/">Обзор</a></li>
                 <li class="last"></li>
             </ul>

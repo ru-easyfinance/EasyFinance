@@ -1,5 +1,7 @@
 #budget {
     padding-bottom: 0px;
+    max-width: 660px;
+    text-align: left;
 }
 
 .budget#budget .info {
@@ -47,6 +49,10 @@
 
 .budget#budget .list .list.head {
     background: url('/img/i/bg09.gif') repeat-x 0 0;
+}
+
+.budget#budget .list .list.head table {
+    width: 100%;
 }
 
 .budget#budget .list .list.body {

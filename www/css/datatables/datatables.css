@@ -542,7 +542,7 @@ tr.even.gradeU td.sorting_3 {
 .custom-grid-style table {
     width:100%;
     border-collapse:collapse;
-    display:block;
+    display:table; /* Safari и Google Chrome негодуют от display: block */
 }
 .custom-grid-style table th {
     text-align:left;

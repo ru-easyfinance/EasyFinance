@@ -224,7 +224,7 @@ $(document).ready(function(){
         $(window).resize(function() {
             if(debounce) clearTimeout(debounce);
             debounce = setTimeout(function() {
-                widthState = $(window).width() > (1260 + rightbarW);
+                widthState = $(window).width() > (1000 + rightbarW);
                 if(widthState) {
                     if(forceshow) {
                         forceshow = false;
