@@ -684,16 +684,27 @@ class BaseTahometer extends Tahometer
     //получение взвешенного значения
     public function getWeightedValue()
     {
-        $zoneBorders = $this->getZoneBorders();
-        $zoneIndex = $this->getZoneIndex();
-        //точное значение - индекс зоны + положение внутри зоны:
-        //при этом берем не нормализованное значение, а взвешенное по зонам
-        $exactValue = $zoneIndex +
-            ($this->getValueInsideBorders(false) - $zoneBorders[$zoneIndex]) /
-                ($zoneBorders[$zoneIndex + 1] - $zoneBorders[$zoneIndex]);
+        //точное значение тахометра - индекс зоны + положение внутри зоны
+        $exactValue = $this->getZoneIndex() +
+            $this->getPositionValueInsideZone();
 
         //наконец, установим взвешенное значение
         return $exactValue * $this->getWeight();
+    }
+    
+    //определяем положение внутри зоны
+    private function getPositionValueInsideZone()
+    {
+        $zoneIndex = $this->getZoneIndex();
+        $zoneBorders = $this->getZoneBorders();
+        
+        $leftBorder = $zoneBorders[$zoneIndex];
+        $rightBorder = $zoneBorders[$zoneIndex + 1];
+
+        //вычисляем, где между левой и правой границей находимся
+        return
+            ($this->getValueInsideBorders(false) - $leftBorder) /
+                ($rightBorder - $leftBorder);        
     }
 
     public function __construct($keyword)
