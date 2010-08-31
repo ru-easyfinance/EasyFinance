@@ -482,7 +482,7 @@ abstract class Tahometer
             Tahometer::$BUDGET_KEYWORD => array(0, 85, 97, 100),
             Tahometer::$LOANS_KEYWORD => array(0, 40, 70, 100),
             Tahometer::$DIFF_KEYWORD => array(0, 5, 10, 20),
-            Tahometer::$TOTAL_KEYWORD => array(0,100,150,300)
+            Tahometer::$TOTAL_KEYWORD => array(0,100,200,300)
         );
 
         self::$_advices = array(
