@@ -7,6 +7,7 @@ $(function() {
 _ActivateDataGrid = {
     selector: 'table#dataGrid',
     pageReady: false,
+    firstRun: true,
     dataGrid: null,
     styles: ['/css/datatables/datatables.css'],
 
@@ -24,11 +25,11 @@ _ActivateDataGrid = {
             bAutoWidth: false,
             aoColumns: [
                 {bSortable: false},
-                {sClass: 'l-right'},
+                {sClass: 'l-right', sType: 'date'},
                 null,
-                {sClass: 'l-right'},
-                null,
-                null,
+                {sClass: 'l-right', sType: 'numeric'},
+                {sType: 'string'},
+                {sType: 'string'},
                 null
             ],
             fnInitComplete: function() {
@@ -43,10 +44,11 @@ _ActivateDataGrid = {
                 },
                 sEmptyTable: 'Данные для таблицы не доступны',
                 sInfoEmpty: 'Нет записей для отображения',
-                sProcessing: 'В процессе обработки'
+                sProcessing: 'В процессе обработки',
+                sZeroRecords: 'Нет операций по заданному фильтру'
             }
         });
-        this.dataGrid.fnSort([[1, 'desc']]);
+        this.dataGrid.fnSort([[1, 'asc']]);
 
         return {
             grid: this.dataGrid,
@@ -56,7 +58,7 @@ _ActivateDataGrid = {
                     self.showPreloader();
                 } else {
                     self.hidePreloader();
-                } 
+                }
             }
         };
     },
@@ -88,16 +90,23 @@ _ActivateDataGrid = {
             }
         });
 
-        
+
     },
 
     showPreloader: function() {
         var grid = $(this.selector);
-        grid.addClass('vhidden').closest('.b-operations-journal-grid').addClass('loading');
+        if(this.firstRun) grid.addClass('vhidden');
+        grid.closest('.b-operations-journal-grid').addClass('loading');
     },
 
     hidePreloader: function() {
         var grid = $(this.selector);
-        grid.removeClass('vhidden').closest('.b-operations-journal-grid').removeClass('loading');
+        grid.closest('.b-operations-journal-grid').removeClass('loading');
+        if(this.firstRun) {
+            this.firstRun = false;
+            grid.removeClass('vhidden');
+            $('<i class="b-preloader"></i>').appendTo($('.fg-toolbar'));
+            grid.removeClass('vhidden').closest('.b-operations-journal-grid').addClass('small-spinner');
+        }
     }
 };

@@ -4,7 +4,6 @@
 	position: relative;
 	margin: 0 auto;
 	top: 3px;
-	/*left:22px;*/
 	height: 37px;
 	z-index: 2;
 }
@@ -71,6 +70,8 @@ ul.dropdown li ul li.last {
 
 ul.dropdown li ul li.first {
 	height: 8px;
+	background: url('/img/i/menu3_submenu_top.png') no-repeat;
+	border: none;
 }
 
 .iframe ul.dropdown li ul li.last {
@@ -359,21 +360,15 @@ ul.dropdown li#m7.cur>a {
 ul.dropdown li#m7:hover>a,
 ul.dropdown li#m7.cur:hover>a,
 ul.dropdown li#m7.cur>a {
-	background: url("/img/i/menu3.png") no-repeat scroll 0 0 transparent;
-	background-position: -879px -80px;
+	background: transparent;
 	z-index: 9;
-	height: 37px;
-	padding: 0px;
 }
 
 ul.dropdown li#m9:hover>a,
 ul.dropdown li#m9.cur:hover>a,
 ul.dropdown li#m9.cur>a {
-    background: url("/img/i/menu3.png") no-repeat scroll 0 0 transparent;
-    background-position: -1128px -80px;
+    background: transparent;
     z-index: 9;
-    height: 37px;
-    padding: 0px;
 }
 
 /* m7 */ /* m8 */
@@ -409,7 +404,6 @@ ul.dropdown li#m9 {
 
 ul.dropdown li#m7:hover,
 ul.dropdown li#m9:hover {
-	top: 0px;
     z-index: 6;
 }
 
@@ -432,6 +426,6 @@ ul.dropdown li#m9>a {
 
 ul.dropdown li#m7 ul,
 ul.dropdown li#m9 ul {
-	top: 27px;
+	top: 20px;
 	text-align: left;
 }

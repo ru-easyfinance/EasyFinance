@@ -15,6 +15,7 @@ jquery/south-street/ui.tabs.css
 jquery/south-street/ui.datepicker.css
 jquery/south-street/ui.accordion.css
 jquery/jquery.tooltip.css
+datatables/datatables.css
 menuUser.css
 dialogBox.css
 efTable.css

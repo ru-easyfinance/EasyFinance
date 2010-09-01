@@ -32,10 +32,10 @@ try
 	// Выполнение запроса (разбор ->вызов контроллера)
 	$router->performRequest();
 
-	if( _Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME){
-
-            $templateEngine->display( 'iframe/index.iframe.html' );
-
+    if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME) {
+        $templateEngine->display('iframe/index.iframe.html');
+    } elseif (_Core_Request::getCurrent()->host . '/' == URL_ROOT_RAMBLER) {
+        $templateEngine->display('index.html');
     } else {
         
         if (!IS_DEMO) {

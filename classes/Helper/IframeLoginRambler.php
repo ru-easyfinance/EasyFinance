@@ -46,8 +46,7 @@ class Helper_IframeLoginRambler extends Helper_IframeLogin
         if (Core::getInstance()->user->getId()) {
             // Устанавливаем пользователю куку
             $this->_setCookie($ramblerLogin, sha1($ramblerLogin));
-            $this->_redirect('https://rambler.' . URL_ROOT_MAIN
-                    . 'info/');
+            $this->_redirect('https://' . URL_ROOT_RAMBLER . 'info/');
         }
     }
 

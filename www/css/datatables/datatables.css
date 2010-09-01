@@ -210,7 +210,7 @@ table.display tr.even.gradeU {
 
 
 tr.odd td {
-    background-color: #d4efc6;
+    background-color: #e9f7e2;
 }
 
 tr.even td {
@@ -542,7 +542,7 @@ tr.even.gradeU td.sorting_3 {
 .custom-grid-style table {
     width:100%;
     border-collapse:collapse;
-    display:table; /* Safari и Google Chrome негодуют от display: block */
+    display:block;
 }
 .custom-grid-style table th {
     text-align:left;
@@ -557,9 +557,6 @@ tr.even.gradeU td.sorting_3 {
 .custom-grid-style table td {
     font-size:11px;
     vertical-align:middle;
-}
-.custom-grid-style table th {
-
 }
 .custom-grid-style table td {
     padding:5px;

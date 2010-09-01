@@ -176,7 +176,13 @@ table.noborder td.mark{width:50px;}
 .ramka1 .cb div { background-position: 100% -60px; }
 
 
-.ramka2 { clear: both; position: relative; z-index:0; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0; }
+.ramka2 {
+	overflow: hidden;
+	clear: both;
+	position: relative;
+	z-index:0;
+	background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0;
+}
 .ramka2.compact { width:940px; margin:0 auto; }
 .ramka2 .ccm { margin-left:3px; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 100% 0; }
 .ramka2 .ccm .ccm-container {background: #fff; margin-right:3px;}
@@ -314,7 +320,11 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 
-#mainwrap { position: relative; padding-bottom: 10px; }
+#mainwrap {
+	overflow:hidden;
+	position: relative;
+	padding-bottom: 10px;
+}
 .general_cont { position: relative; //zoom: 1; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 
@@ -403,8 +413,23 @@ ul.menu4 li#m_last a { background: none; }
 .mid { padding-bottom: 5px; }
 .iframe .mid { padding-left: 8px; }
 
-.block1 { float:left; margin-left:-1px; padding-top: 1px; width: 163px; border: 1px solid #ebebeb; }
-.block2 { float:left; width:100%; margin:0 -180px 0 -163px; z-index: 1; }
+.block1 {
+    float: left;
+    margin-left: -1px;
+    padding-top: 1px;
+    width: 163px;
+    border: 1px solid #ebebeb;
+    z-index: 2;
+    position: absolute;
+}
+
+.block2 {
+	float:left;
+	width:100%;
+	margin:0 -180px 0 0px;
+	z-index: 1;
+}
+
 .block2 .l-indent { margin:0 196px 0 183px; }
 .block3 { float:right; width: 176px; background:#fff; margin-right:-1px; padding-bottom: 17px; z-index: 0; border: 1px solid #ebebeb; position:relative; }
 
@@ -581,7 +606,7 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 
 .block2 .ramka3 { margin:0 !important; }
 .block2 .ramka3 .inside { position: relative; padding: 9px 13px 8px 13px; }
-/*.block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:530px !important; } */
+.block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:auto !important; }
 
 ul.buttons_block { left: 50px;position: relative; //zoom: 1; }
 ul.buttons_block:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -595,7 +620,8 @@ ul.buttons_block li#addtocalendar_but a { width: 185px; }
 ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
 
-div.report { position: relative; display: none; padding-top: 22px;left: 70px }
+div.report { position: relative; display: none; padding-top: 22px; width:380px; margin:0 auto; }
+#chart, #itogo { width:500px; margin:0 auto; }
 div.report .line { position: relative; clear: both; margin-top:10px;  color: #4c4c4c;  }
 div.report .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
 div.report .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
@@ -795,7 +821,7 @@ ul.buttons_block li#op_addoperation_logo a { height: 50px; text-indent: 0px; }
 ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
 
-.b-sidebar-btn { float:right; width:111px; height:39px; background:url('/img/i/btnRightSidebar.png') no-repeat; margin-top:-40px; cursor:pointer; right:10px; position:absolute; z-index:99; }
+.b-sidebar-btn { float:right; width:111px; height:39px; background:url('/img/i/btnRightSidebar.png') no-repeat; margin-top:-40px; cursor:pointer; right:13px; position:absolute; z-index:99; }
 .b-sidebar-btn:hover,.b-sidebar-btn.selected { background-position:-129px 0; }
 
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 20px; width: 380px; }
@@ -1146,7 +1172,7 @@ div.cont ul li.add a { width: 12px; }
 
 
  .categories .h { background: url('/img/i/bg09.gif') repeat-x 0 0; }
- .categories table.h td { font-size: 11px; padding: 7px 0 5px 0; }
+ .categories .h table td { font-size: 11px; padding: 7px 0 5px 0; }
 
  .categories table td a { color: #313131; }
  .categories table td .cont { position: relative; z-index: 10; }
@@ -1154,8 +1180,8 @@ div.cont ul li.add a { width: 12px; }
 
  .categories table td.w1 a { display: block; padding-left: 25px; }
 
- .categoriesSH .h { background: url('/img/i/bg09.gif') repeat-x 0 0; }
- .categoriesSH table.h td { font-size: 11px; padding: 7px 0 5px 0; }
+ .categoriesSH .h { background: url('/img/i/bg09.gif') repeat-x 0 0; margin-right:-2px; }
+ .categoriesSH .h table td { font-size: 11px; padding: 7px 0 5px 0; }
  .categoriesSH table td a { color: #313131; }
  .categoriesSH table td .cont { position: relative; z-index: 10; }
  .categoriesSH table tr.act td { background-color: #daffd4; }
@@ -2219,4 +2245,14 @@ img.ui-datepicker-trigger {
 }
 .b-form-skeleton td {
     padding:5px;
+}
+
+#calend,
+#calendarMonthPicker {
+    width:100%;
+    max-width:660px;
+    margin:0 auto;
+}
+#calendarMonthPicker {
+    margin:7px auto 0;
 }

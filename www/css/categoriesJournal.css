@@ -1,5 +1,7 @@
 .categories {
     position: relative;
+    /*width: 516px;*/
+    width: 100%;
     height: 300px;
     border: 1px solid #e8e8e8;
     overflow: auto;
@@ -40,8 +42,7 @@
 }
 
 .categoriesSH table.h {
-    border-top: 1px solid #E8E8E8;
-    width: 100%;
+    border-top: 1px solid #E8E8E8
 }
 
 .categoriesSH table.h tr {
@@ -63,7 +64,7 @@
 
 .categoriesSH table {
     position: relative;
-    /*width: 517px;*/
+    width: 517px;
 }
 
 .categoriesSH table td {
@@ -74,6 +75,9 @@
 .categoriesSH table td.w1 {
     width: 207px;
     padding-right: 5px;
+}
+.categoriesSH .h table td.w1 {
+    padding-left:10px;
 }
 
 .categoriesSH table td.w2 {
@@ -141,7 +145,7 @@
 
 .categories table {
     position: relative;
-    /*width: 485px;*/
+    width: 485px;
 }
 
 .categories table td {

@@ -59,7 +59,7 @@ easyFinance.widgets.operationsJournal = function(){
         _journal = data.operations;
 
         var tr = '',
-            tp, 
+            tp,
             pageTotal = 0,
             curMoney,
             prevMoney;
@@ -216,7 +216,13 @@ easyFinance.widgets.operationsJournal = function(){
 
     function _editOperation(el, operation) {
         var operation = (operation) ? operation : el.parent().attr('class'),
+            rowValue;
+        try {
             rowValue = rowsCollection[el.closest('tr').find('.b-row-menu-block').attr('id')].value;
+        } catch(e) {
+            rowValue = null;
+        }
+        if(!rowValue) return false;
         if (operation == 'edit') {
             easyFinance.widgets.operationEdit.fillForm(_journal[rowValue], true);
         } else if(operation == 'del') {

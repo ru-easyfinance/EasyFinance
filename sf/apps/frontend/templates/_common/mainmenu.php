@@ -49,7 +49,7 @@
                 <li class="last"></li>
             </ul>
         </li>
-        <li id="m7" onMouseOver="$('#m9').hide(); $('#m7>a').text('');" onMouseOut="$('#m9').show(); $('#m7>a').text('Помощь');">
+        <li id="m7">
             <a href="#">Помощь</a>
             <ul>
                 <li class="first"></li>
@@ -60,7 +60,7 @@
                 <li class="last"></li>
             </ul>
         </li>
-        <li id="m9" onMouseOver="$('#m7').hide(); $('#m9>a').text('');" onMouseOut="$('#m7').show(); $('#m9>a').text('Настройки');">
+        <li id="m9">
             <a href="/profile/">Настройки</a>
             <ul>
                 <li class="first"></li>
