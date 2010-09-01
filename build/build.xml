@@ -192,7 +192,7 @@
                     <format property="project.time" pattern="%Y%m%d%H%I" />
                 </tstamp>
                 <echo msg="Create backup" />
-                <exec command="mysqldump --skip-triggers -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/../${project.url.root}_${project.time}.sql" checkreturn="true" />
+                <exec command="mysqldump --skip-triggers -h ${project.db.host} -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/../${project.url.root}_${project.time}.sql" checkreturn="true" />
                 <!-- Сохраняем последний бэкап в удобном для скачивания виде -->
                 <exec command="cp ${project.basedir}/../${project.url.root}_${project.time}.sql ${project.basedir}/../${project.url.root}.sql" />
                 <exec command="rm ${project.basedir}/../${project.url.root}.sql.gz" />

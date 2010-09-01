@@ -1,4 +1,5 @@
 {* $Id: index_old.html -1   $ *}
+{if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
         <!--подвал-->
         <div id="footer" style="z-index: 10; height: 0; border: 0;">
             <div id="popupreport">
@@ -128,8 +129,9 @@
 				</script>
 			{/literal}
         </div>
-                
+
         <!--/подвал-->
+{/if}
         {literal}
 	<script type="text/javascript">
 		var _gaq = _gaq || [];

@@ -24,6 +24,7 @@
         <img src="/img/i/gauge107.gif" width="107" height="107" class="preload" />
         <img src="/img/i/gauge157.gif" width="157" height="157" class="preload" />
         <div id="container1">
+        <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
             <div id="menumain">
                 <ul class="menu1">
                     <!-- Jet. ticket #273 -->
@@ -59,7 +60,7 @@
                 <?php include_partial('global/advertisement') ?>
                 <!--/реклама-->
             </div>
-
+        <?php endif; ?>
 
 <!--середина-->
 <div id="mainwrap"  style="z-index: 5">
@@ -167,14 +168,14 @@
 
             </div>
         </div>
-        <div class="ccb">
-            <i class="bl"></i>
-            <i class="br"></i>
-        </div>
+    </div>
+    <div class="ccb">
+        <i class="bl"></i>
+        <i class="br"></i>
     </div>
 </div>
 <!--/середина-->
-
+<?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
         <!--подвал-->
         <div id="footer" style="z-index: 10; height: 0; border: 0;">
             <div id="popupreport">
@@ -262,8 +263,8 @@
                 });
             </script>
         </div>
-
         <!--/подвал-->
+<?php endif; ?>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(
