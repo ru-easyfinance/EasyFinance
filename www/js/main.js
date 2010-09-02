@@ -193,7 +193,7 @@ $(document).ready(function(){
     // #1583. определяем размер экрана (только не для главной страницы!)
     if (pathName != '//') {
         function rightbarAnimate(value, animate) {
-            if(animate) rightbar.stop();
+            if (animate) rightbar.stop();
             rightbar.animate({
                 left: value
             }, ((animate) ? speed : 0));
@@ -224,7 +224,7 @@ $(document).ready(function(){
         $(window).resize(function() {
             if(debounce) clearTimeout(debounce);
             debounce = setTimeout(function() {
-                widthState = $(window).width() > (1000 + rightbarW);
+                widthState = $('#mainwrap').width() > (1000 + rightbarW);
                 if(widthState) {
                     if(forceshow) {
                         forceshow = false;

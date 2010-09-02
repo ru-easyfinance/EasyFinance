@@ -225,7 +225,18 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .operation_list table.periodic.body{max-height: 300px; width: auto; height: auto; owerflow-y: scroll; overflow-x: hidden;}
 /*----------------------------------------------------------*/
 
-#container1 { max-width:1310px; min-width:970px; position: absolute; margin: 0 auto -130px; padding:0 0 130px 0; min-height: 100%; display:block; left:20px; right:20px; overflow:hidden;}
+#container1 {
+	max-width: 1310px;
+	min-width: 970px;
+	position: relative;
+	margin: 0 auto -130px;
+	padding:0 0 130px 0;
+	min-height: 100%;
+	display:block;
+	left:20px;
+	right:20px;
+}
+
 #container1.iframe { width: 570px; }
 
 * html #container1 { height: 100%;  }
@@ -321,7 +332,6 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 #mainwrap {
-	overflow:hidden;
 	position: relative;
 	padding-bottom: 10px;
 }
