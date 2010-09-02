@@ -42,7 +42,7 @@ _ActivateDataGrid = {
                     sNext: 'Следующая',
                     sPrevious: 'Предыдущая'
                 },
-                sEmptyTable: 'Данные для таблицы не доступны',
+                sEmptyTable: 'Нет операций по заданному фильтру',
                 sInfoEmpty: 'Нет записей для отображения',
                 sProcessing: 'В процессе обработки',
                 sZeroRecords: 'Нет операций по заданному фильтру'

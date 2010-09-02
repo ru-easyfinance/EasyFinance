@@ -421,6 +421,7 @@ ul.menu4 li#m_last a { background: none; }
     border: 1px solid #ebebeb;
     z-index: 2;
     position: absolute;
+    left: 0px;
 }
 
 .block2 {
@@ -604,7 +605,10 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 
 
 
-.block2 .ramka3 { margin:0 !important; }
+.block2 .ramka3 {
+	margin: 0 !important;
+	clear: both;
+}
 .block2 .ramka3 .inside { position: relative; padding: 9px 13px 8px 13px; }
 .block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:auto !important; }
 
