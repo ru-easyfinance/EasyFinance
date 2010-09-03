@@ -20,22 +20,18 @@ class Index_Controller extends _Core_Controller
      */
     public function index()
     {
+        // Эти числа были взяты из БД homemoney
+        // Отвратительно, но если это выпилить, цифры на главной будут некрасивые
         $counters = array(
-            'users'         => 8443,
-            'operations'    => 943132
+            'users'         => 7163 + 234,
+            'operations'    => 996922
         );
 
-        $countersFile = DIR_SHARED . 'counters.json';
+        $counters['users'] += Core::getInstance()->db
+            ->selectCell("SELECT count(*) FROM users");
 
-        if( file_exists( $countersFile ) )
-        {
-            $countersJson = (array)json_decode( file_get_contents( $countersFile ) );
-
-            if( is_array($countersJson) )
-            {
-                $counters = $countersJson;
-            }
-        }
+        $counters['operations'] += Core::getInstance()->db
+            ->selectCell("SELECT count(*) FROM operation");
 
         $this->tpl->assign('usersCount',  number_format($counters['users'], 0, ',', ' '));
         $this->tpl->assign('operationsCount', number_format($counters['operations'], 0, ',', ' '));
