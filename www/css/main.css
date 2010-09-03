@@ -29,7 +29,7 @@ ul.about {list-style-position: inside; list-style-type: disc;}
 
 table, tbody, tr, td, th { margin:0; padding:0; border:0 none; border-collapse:collapse; border-spacing:0; vertical-align:top; }
 
-input, select, textarea, button {
+input[type=button], input[type=submit], select, textarea, button {
     font: 12px Arial, Tahoma, sans-serif;
     box-sizing:border-box;
     -moz-box-sizing:border-box;
@@ -177,11 +177,11 @@ table.noborder td.mark{width:50px;}
 
 
 .ramka2 {
-	overflow: hidden;
-	clear: both;
-	position: relative;
-	z-index:0;
-	background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0;
+    overflow: hidden;
+    clear: both;
+    position: relative;
+    z-index:0;
+    background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0;
 }
 .ramka2.compact { width:940px; margin:0 auto; }
 .ramka2 .ccm { margin-left:3px; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 100% 0; }
@@ -226,15 +226,15 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 /*----------------------------------------------------------*/
 
 #container1 {
-	max-width: 1310px;
-	min-width: 970px;
-	position: relative;
-	margin: 0 auto -130px;
-	padding:0 0 130px 0;
-	min-height: 100%;
-	display:block;
-	left:20px;
-	right:20px;
+    max-width: 1310px;
+    min-width: 970px;
+    position: relative;
+    margin: 0 auto -130px;
+    padding:0 0 130px 0;
+    min-height: 100%;
+    display:block;
+    left:20px;
+    right:20px;
 }
 
 #container1.iframe { width: 570px; }
@@ -332,8 +332,8 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 
 #mainwrap {
-	position: relative;
-	padding-bottom: 10px;
+    position: relative;
+    padding-bottom: 10px;
 }
 .general_cont { position: relative; //zoom: 1; }
 .general_cont:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
@@ -435,10 +435,10 @@ ul.menu4 li#m_last a { background: none; }
 }
 
 .block2 {
-	float:left;
-	width:100%;
-	margin:0 -180px 0 0px;
-	z-index: 1;
+    float:left;
+    width:100%;
+    margin:0 -180px 0 0px;
+    z-index: 1;
 }
 
 .block2 .l-indent { margin:0 196px 0 183px; }
@@ -616,8 +616,8 @@ dl.info dd.fincel .indicator_block .indicator div span { display: block; padding
 
 
 .block2 .ramka3 {
-	margin: 0 !important;
-	clear: both;
+    margin: 0 !important;
+    clear: both;
 }
 .block2 .ramka3 .inside { position: relative; padding: 9px 13px 8px 13px; }
 .block2 .ramka3 .inside.b-category, .block2 .ramka3 .inside.b-report { width:auto !important; }

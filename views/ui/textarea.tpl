@@ -7,3 +7,6 @@
         <textarea class="b-custom-textarea-field{if $class} {$class}{/if}" rows="3" {if $id}id="{$id}"{/if} name="{if $prefix_fields}{$prefix_fields}[{/if}{$name}{if $prefix_fields}]{/if}">{$value|escape:'html'}</textarea>
     </div>
 </div>
+{if $hint}
+<p>{$hint}</p>
+{/if}

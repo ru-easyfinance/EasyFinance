@@ -90,26 +90,30 @@
         <i class="b-border-corners br"></i>
     </div>
     <div id="dialogFilterType" class="hidden">
-        <a href="#" value="-1">Все типы</a><br>
-        <hr />
-        <a href="#" value="0">Расход</a><br>
-        <a href="#" value="1">Доход</a><br>
-        <a href="#" value="2">Перевод</a><br>
-        <a href="#" value="4">Фин. цель</a><br>
+        <div class="b-filter-type">
+            <a href="#" value="-1">Все типы</a><br>
+            <hr />
+            <a href="#" value="0">Расход</a><br>
+            <a href="#" value="1">Доход</a><br>
+            <a href="#" value="2">Перевод</a><br>
+            <a href="#" value="4">Фин. цель</a><br>
+        </div>
     </div>
     <div id="dialogFilterSum" class="hidden">
-        <a href="#" value="">Любая сумма</a><br>
-        <hr />
-        <form method="get" action="">
-            <div class="b-custom-input-inline">
-                <label>От:</label>
-                {include file="ui/textfield.tpl" id="txtFilterSumFrom" value="" class="b-sum"}
-                <label>До:</label>
-                {include file="ui/textfield.tpl" id="txtFilterSumTo" value="" class="b-sum"}
-                <label>руб.</label>
-                <input class="b-button-simple" type="submit" value="Сохранить"/>
-            </div>
-        </form>
+        <div class="b-filter-sum">
+            <a href="#" value="">Любая сумма</a><br>
+            <hr />
+            <form method="get" action="">
+                <div class="b-custom-input-inline">
+                    <label>От:</label>
+                    {include file="ui/textfield.tpl" id="txtFilterSumFrom" value="" class="b-sum"}
+                    <label>До:</label>
+                    {include file="ui/textfield.tpl" id="txtFilterSumTo" value="" class="b-sum"}
+                    <label>руб.</label>
+                    <input class="b-button-simple" type="submit" value="Сохранить"/>
+                </div>
+            </form>
+        </div>
     </div>
 
 

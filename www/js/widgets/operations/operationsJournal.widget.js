@@ -254,7 +254,7 @@ easyFinance.widgets.operationsJournal = function(){
                 if (!$pair.length) $pair = $('.b-row-menu-block[id="opr' + trid + '"]', DataTables.table).closest('tr').find('input');
             }
 
-            if ($pair) (el.attr('checked')) ? $pair.attr('checked', 'checked').trigger('change') : $pair.removeAttr('checked').trigger('change');
+            if ($pair) (el.attr('checked')) ? $pair.attr('checked', 'checked').trigger('click.checked') : $pair.removeAttr('checked').trigger('click.checked');
         }
     }
 
@@ -438,21 +438,21 @@ easyFinance.widgets.operationsJournal = function(){
 
         // биндим клик на чекбоксе в заголовке
         _$checkAll = $('th input', DataTables.table);
-        _$checkAll.change(function() {
+        _$checkAll.click(function() {
             var el = $(this);
             if(el.attr('checked')) {
-                $('td input', DataTables.table).attr('checked', 'checked').trigger('change');
+                $('td input', DataTables.table).attr('checked', 'checked').trigger('click.checked');
             } else {
-                $('td input', DataTables.table).removeAttr('checked').trigger('change');
+                $('td input', DataTables.table).removeAttr('checked').trigger('click.checked');
             }
         });
 
         $('#dataGrid_paginate span').click(function() {
-            _$checkAll.trigger('change');
+            _$checkAll.trigger('click');
         });
 
         $(document).bind('table.ready', function() {
-            $('td input', DataTables.table).unbind('change.checked').bind('change.checked', function() {
+            $('td input', DataTables.table).unbind('click.checked').bind('click.checked', function() {
                 var el = $(this);
                 if(el.attr('checked') && !$('td input:not(:checked)', DataTables.table).length) {
                     _$checkAll.attr('checked', 'checked');

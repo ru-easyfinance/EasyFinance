@@ -52,6 +52,7 @@
     background-position:0 -165px;
     position:relative;
     display:block;
+    overflow:hidden;
 }
 .b-custom-input.field-error .b-custom-input-border,
 .b-custom-textarea.field-error .b-custom-textarea-border {
@@ -63,13 +64,14 @@
     border:none;
     background:none;
     padding:0;
+    display:block;
 }
 .b-custom-input .b-custom-input-field,
 .b-custom-textarea .b-custom-textarea-field,
 .b-custom-input .b-custom-select {
     font:1em Arial, Helvetica, sans-serif;
     color:#2D3038;
-    margin:-1px 0;
+    margin:0;
     padding:6px 8px;
 }
 
@@ -77,21 +79,23 @@
 .b-custom-textarea .b-placeholder,
 .b-custom-input .b-placeholder {
     float:left;
+    width:100%;
     font-weight:400;
     font-style:normal;
     color:#a9a9a9;
-    margin-top:-2px;
-    margin-bottom:-40px;
-    padding:6px 8px;
+    margin:5px 10px -40px;
     display:none;
+    white-space:nowrap;
+    overflow:hidden;
 }
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    .b-custom-input .b-placeholder,
-    .b-custom-textarea .b-placeholder,
-    .b-custom-input .b-placeholder {
-        margin-top:-1px;
-    }
+
+.b-custom-input.b-disabled .b-custom-input-field,
+.b-custom-textarea.b-disabled .b-custom-textarea-field,
+.b-custom-input.b-disabled .b-custom-select {
+    color:#999;
+    cursor:default;
 }
+
 .b-custom-textarea .b-placeholder {
     margin-top:5px;
 }
@@ -121,7 +125,7 @@
     left:0;
     bottom:0;
     width:100%;
-    height:27px;
+    height:30px;
     opacity:0;
     position:absolute;
     z-index:3;

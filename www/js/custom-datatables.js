@@ -89,8 +89,6 @@ _ActivateDataGrid = {
                 return false;
             }
         });
-
-
     },
 
     showPreloader: function() {
