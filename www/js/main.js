@@ -558,7 +558,7 @@ $(document).ready(function(){
         });
     }
 
-    //if ($.cookie('guide') == "uyjsdhf") {
-    //    ShowGuide();
-    //}
+    if ($.cookie('guide') == 'uyjsdhf') {
+        ShowGuide();
+    }
 });
