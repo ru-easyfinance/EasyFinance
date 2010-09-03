@@ -111,7 +111,7 @@ $(document).ready(function() {
         } else {
             $('#divCategoryEditCustom').show();
             $('#cattype').removeAttr("disabled");
-            $('#txtCategoryComment').text ('Универсальная категория может быть как расходной, так и доходной');
+            $('#txtCategoryComment').text ('');
         }
 
         $('#cat_id').val(cat.user[id]['id']);
@@ -135,7 +135,7 @@ $(document).ready(function() {
         $('#subcat,#cattype,#catsys').removeAttr('selected');
         $('#add_form').find('#btnSave').removeAttr('disabled');
         $('#cattype').removeAttr("disabled");
-        $('#txtCategoryComment').text ('Универсальная категория может быть как расходной, так и доходной');
+        $('#txtCategoryComment').text ('');
     }
 
     /**
