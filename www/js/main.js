@@ -138,6 +138,8 @@ function isLogged(){
 }
 
 $(document).ready(function(){
+    easyFinance.notifier = new $.globalNotifier();
+
     setHeightClass();
     $('ul.menu2 a').click(function(){
         $.cookie('events_hide', 0, {

@@ -1,0 +1,23 @@
+table.action-initiator-wrapper td {
+    vertical-align: middle;
+}
+div.notification-text-node {
+    margin-left: 7px;
+    margin-right: 7px;
+}
+div.notification-node-success {
+    color: #BDAD00;
+}
+div.notification-node-message {
+    color: #BDAD00;
+}
+div.notification-node-error {
+    color: #D00;
+}
+div.idle-animation {
+    background-image: url('/img/i/ajax-loader.gif');
+    width: 16px;
+    height: 16px;
+    margin-left: 3px;
+    margin-right: 3px;
+}

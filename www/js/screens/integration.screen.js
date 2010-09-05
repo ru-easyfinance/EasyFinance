@@ -132,11 +132,6 @@ function initLogged() {
     $('#btnBackToAccount').click(function() {
         $("#integrationSteps").accordion("activate" , 2);
     });
-
-    $('#btnPrintNow').click(function() {
-        wzSaveEverything();
-        return false;
-    });
 }
 
 function refreshAccounts(event) {

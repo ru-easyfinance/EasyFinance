@@ -589,7 +589,7 @@
                 <div class="wz_tab_content">
                     <h3>Пароль</h3>
 
-                    <form id="finish" action="" method="post" class="wz_frm" onsubmit="return wzSaveEverything();">
+                    <form id="finish" action="" method="post" class="wz_frm" onsubmit="return false;">
                         <fieldset>
                             <input type="hidden" name="step_name" value="finish" />
 
@@ -598,8 +598,17 @@
                                 <input name="wz_password" id="wz_password" value="" maxlength="255" onblur="dValidator.catchOnChange(this, null, 2);" /><br /><br />
                             </div>
 
-                            <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
-                            <input id="btnPrintForm" type="submit" value="Отправить" style="font-weight:bold" />
+                            <div>
+                                <div class="fl_l">
+                                    <input type="button" value="&lt;&lt;Назад" onclick="return wzStepNextBack('-');" />
+                                </div>
+                                <input id="btnPrintForm" type="submit" value="Отправить" style="font-weight:bold" />
+                                <br class="clr" />
+                            </div>
+
+                            <div>
+                                <div class="fl_l notification-text-node">&nbsp;</div>
+                            </div>
                         </fieldset>
                     </form>
                 </div>

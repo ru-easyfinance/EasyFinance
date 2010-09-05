@@ -77,7 +77,7 @@ div.center div.jGrowl-notification, div.center div.jGrowl-closer {
 div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
     background-color:         #000;
     color:                     #fff;
-    opacity:                 .85;
+    opacity:                 .95;
     filter:                 alpha(opacity = 85);
     zoom:                     1;
     width:                     235px;
@@ -126,4 +126,22 @@ div.jGrowl div.red {
 div.jGrowl div.green {
     background-color: green;
     color: white;
+}
+
+div.jGrowl div.notification {
+    border: 1px solid #927500;
+    background-color: #FFC600;
+    color: #322800;
+}
+
+div.jGrowl div.success {
+    border: 1px solid #927500;
+    background-color: #FFC600;
+    color: #322800;
+}
+
+div.jGrowl div.error {
+    border: 1px solid #92000A;
+    background-color: #F00;
+    color: #FFF;
 }

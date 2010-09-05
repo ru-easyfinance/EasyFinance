@@ -1,4 +1,5 @@
 jquery/jquery.min.js
+jquery/jquery.common.js
 easyfinance.js
 models/calendar.cache.js
 jquery/ui.core.js
@@ -28,6 +29,9 @@ jquery/jquery.rw-calculator.js
 jquery/jquery.selectboxes.js
 jquery/jquery.hint.js
 jquery/jquery.dataTables.min.js
+jquery/jquery.notifier.js
+jquery/jquery.action-initiator.js
+jquery/jquery.ajax-initiator.js
 swfobject.js
 functions.js
 main.js

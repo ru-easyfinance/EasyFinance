@@ -44,6 +44,70 @@ dTabsClass.prototype.init = function() {
 
     this.showTab('wz_tab_0', true);
     this.activeTab = 'wz_tab_0';
+
+    // Подготовка callback для инициатора ajax запросов
+    prepareBlankAction = function() {
+        // запоминаем событие в Google Analytics
+        try { _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'АМТ - PDF']); } catch(err) {};
+
+        if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0)/* && wzValidateAll()*/) {
+            var blankData = {};
+            /*
+            for (tabNo = 0; tabNo < tabs.tabs.length; tabNo++) {
+                form = $('#' + tabs.tabs[tabNo].id + ' form.wz_frm');
+
+                if (form.length > 0) {
+                    partData = wzGetFormData(form.get(0));
+
+                    if (partData.length > 1) {
+                        blankData = wzMergeObjects(blankData, partData);
+                    }
+                }
+            }
+
+            blankData.saveType = "whole_data";
+            blankData.length = 0;
+            blankData.step_name = '';
+
+            // Customer wishes crunch
+            blankData = wzObjToArray(blankData);
+            */
+            return {
+                'data': blankData,
+                'idleMessage': 'Отправляем анкету в банк ...'
+            };
+        } else {
+            return {
+                'code': $.ajaxInitiator.result.error,
+                'errorText': 'Пожалуйста, заполните все обязательные поля! Пункты с недозаполненными полями отмечены красным в списке слева.'
+            };
+        }
+        return false;
+    }
+
+    // Конструирование инициатора ajax запроса
+    this.sendBlankInitiator = $('#btnPrintForm').ajaxInitiator
+    (
+        $.ajaxInitiator.requestType.post, // request type
+        '/integration/anketa', // url
+        'json', // data type
+        { // notification params
+            'animationPosition': $.actionInitiator.animationPosition.right,
+            'align': $.actionInitiator.align.left,
+            'notificationPlace': $.actionInitiator.notificationPlace.nearTheInitiator,
+            'notificationLifetime': 7000,
+            'notificationTextNode': $('#finish div.notification-text-node'),
+        },
+        { // callbacks
+            'prepareData': prepareBlankAction,
+            'processSuccess': function (data) {
+                return 'Анкета успешно отправлена в банк';
+            },
+            'processError': function (data) {
+                // передача обработки ошибки инициатору
+            }
+        }
+    );
 }
 
 dTabsClass.prototype.showTab = function(id, skipCallback) {
