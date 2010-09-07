@@ -185,10 +185,6 @@ table#operations_list td + td + td + td + td + td{
     margin-right:110px;
 }
 
-#account_filtr {
-    width: 169px;
-}
-
 #divOperationsJournalTotal .b_marg {
     float: left;
 }

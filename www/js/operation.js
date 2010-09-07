@@ -8,22 +8,14 @@
 function clearForm() {
     $('#op_type,#op_category,#op_target').val(0);
     $('#op_amount,#op_AccountForTransfer,#op_comment,#op_tags,#op_date').val('');
-
-    $('span#op_amount_target').text();
-
-    $('span#op_amount_done').text();
-    $('span#op_forecast_done').text();
-    $('span#op_percent_done').text();
-
+    $('span#op_amount_target, span#op_amount_done, span#op_forecast_done, span#op_percent_done').text();
     $('#op_close').removeAttr('checked');
-
     $('form').attr('action','/operation/add/');
-
     $('#op_type').change();
 }
 
 
-$(document).ready(function() {
+$(function() {
     // загружаем журнал транзакций
     // по умолчанию показываются операции по всем счетам
     

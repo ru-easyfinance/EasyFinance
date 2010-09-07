@@ -1,6 +1,7 @@
 .categories {
     position: relative;
-    width: 516px;
+    /*width: 516px;*/
+    width: 100%;
     height: 300px;
     border: 1px solid #e8e8e8;
     overflow: auto;
@@ -74,6 +75,9 @@
 .categoriesSH table td.w1 {
     width: 207px;
     padding-right: 5px;
+}
+.categoriesSH .h table td.w1 {
+    padding-left:10px;
 }
 
 .categoriesSH table td.w2 {

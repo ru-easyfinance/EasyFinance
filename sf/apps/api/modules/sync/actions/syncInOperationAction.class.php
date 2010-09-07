@@ -119,7 +119,7 @@ class syncInOperationAction extends myBaseSyncInAction
             'cid'         => (string) $record['cid'],
             'account_id'  => (string) $record->account_id,
             'category_id' => (isset($record->category_id) ? (string) $record->category_id : null),
-            'amount'      => (int)    $record->amount,
+            'amount'      => (float) (string) $record->amount,
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
@@ -129,7 +129,7 @@ class syncInOperationAction extends myBaseSyncInAction
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),
 
             'transfer_account_id' => (string) $record->transfer_account_id,
-            'transfer_amount'     => isset($record->transfer_amount) ? (int) $record->transfer_amount : null,
+            'transfer_amount'     => isset($record->transfer_amount) ? (float) (string) $record->transfer_amount : null,
         );
     }
 

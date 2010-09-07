@@ -1,228 +1,240 @@
 <!--середина-->
 {include_php file="../sf/apps/frontend/templates/_common/mainmenu.php"}
 <div class="ramka2">
-    <div class="cct"><div></div></div>
-    <!--меню4--><!--/меню4-->
-    <div class="mid general_cont">
-        {include file="left.quick.html"}
-        <div class="block2">
-            <!--наполнение-->
-            <ul class="menuProfile">
-                <li id="i3" class="act" block="#profile">
-                    <div>
-                        <a>Профиль</a>
+    <div class="cct">
+        <i class="tl"></i>
+        <i class="tr"></i>
+    </div>
+    <div class="ccm">
+        <div class="ccm-container">
+        <!--меню4--><!--/меню4-->
+        <div class="mid general_cont">
+            {include file="left.quick.html"}
+            <div class="block2">
+                <div class="l-indent">
+                    <!--наполнение-->
+	                    <ul class="menuProfile">
+	                        <li id="i3" class="act" block="#profile">
+	                            <div>
+	                                <a>Профиль</a>
+	                            </div>
+	                        </li>
+	                        <li id="i4" block="#currency">
+	                            <div>
+	                                <a>Настройка валют</a>
+	                            </div>
+	                        </li>
+	                        <li id="i6" block="#reminders">
+	                            <div>
+	                                <a>Уведомления</a>
+	                            </div>
+	                        </li>
+	                        <!--
+	                        <li id="i5" block="#integration">
+	                            <div>
+	                                <a>EasyBank</a>
+	                            </div>
+	                        </li>
+	                        -->
+	                    </ul>
+	                    <a class="b-sidebar-btn" style="margin-top: -54px;"></a>
+                    <div class="ramka3 profile" id="profile">
+                        <div class="ct">
+                            <div class="head">
+                                <h2>Личные данные</h2>
+                                <ul class="action">
+                                    <li class="over3">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="content" class="inside form">
+                            <div class="formRegister">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label>Логин:</label>
+                                        </td>
+                                        <td>
+                                            <input id="login" name="login" class="disabled" type="text" value="" disabled="disabled"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>E-Mail для интеграции:</label>
+                                        </td>
+                                        <td>
+                                            <input id="mailIntegration" name="integration" type="text" value="" />@mail.easyfinance.ru
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h3>Смена пароля</h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Новый пароль:</label>
+                                        </td>
+                                        <td>
+                                            <input id="newpass" name="newpass" type="password" value=""/><em class="red">*</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Повтор пароля:</label>
+                                        </td>
+                                        <td>
+                                            <input id="newpass2" type="password" value=""/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h3>Смена e-mail</h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>e-mail:</label>
+                                        </td>
+                                        <td>
+                                            <input id="mail" type="text" name="mail" value=""/><em class="red">*</em>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="guide">Включить гид</label>
+                                        </td>
+                                        <td>
+                                            <input id="guide" name="guide" class="chek" type="checkbox" checked>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="getNotify">Получать уведомления об изменениях сервиса на электронную почту</label>
+                                        </td>
+                                        <td>
+                                            <input id="getNotify" name="getNotify" class="chek" type="checkbox" checked>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="help">Включить подсказки</label>
+                                        </td>
+                                        <td>
+                                            <input id="help" name="help" class="chek" type="checkbox" checked>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h3>
+                                                <div>
+                                                </div>
+                                            </h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Текущий пароль:</label>
+                                        </td>
+                                        <td>
+                                            <input id="pass" name="pass" type="password" value="" title="Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес."/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h6>* Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес.</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <button id="save_info">Сохранить</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="cb">
+                            <div>
+                            </div>
+                        </div>
                     </div>
-                </li>
-                <li id="i4" block="#currency">
-                    <div>
-                        <a>Настройка валют</a>
+                    <div id="currency" class="ramka3 profile" style="display:none">
+                        <div class="ct">
+                            <div class="head">
+                                <h2>Валюты</h2>
+                                <ul class="action">
+                                    <li class="over3">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="content" class="inside form">
+                            <div class="col second">
+                                <h4>Все валюты</h4>
+                                <ul class="currency all">
+                                </ul>
+                            </div>
+                            <div class="col first">
+                                <h4>Валюты пользователя</h4>
+                                <ul class="currency user">
+                                </ul>
+                            </div>
+                            <br class="clr"/>
+                            <div class="formRegister">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label>Валюта по умолчанию:</label>
+                                        </td>
+                                        <td>
+                                            <select id="def_cur">
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <button id="save_cur">Сохранить</button>
+                                            <!--<button id="back_cur">Отмена</button>-->
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="cb">
+                            <div>
+                            </div>
+                        </div>
                     </div>
-                </li>
-                <li id="i6" block="#reminders">
-                    <div>
-                        <a>Уведомления</a>
-                    </div>
-                </li>
-                <!--
-                <li id="i5" block="#integration">
-                    <div>
-                        <a>EasyBank</a>
-                    </div>
-                </li>
-                -->
-            </ul>
-            <div class="ramka3 profile" id="profile">
-                <div class="ct">
-                    <div class="head">
-                        <h2>Личные данные</h2>
-                        <ul class="action">
-                            <li class="over3">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="content" class="inside form">
-                    <div class="formRegister">
-                        <table>
-                            <tr>
-                                <td>
-                                    <label>Логин:</label>
-                                </td>
-                                <td>
-                                    <input id="login" name="login" class="disabled" type="text" value="" disabled="disabled"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>E-Mail для интеграции:</label>
-                                </td>
-                                <td>
-                                    <input id="mailIntegration" name="integration" type="text" value="" />@mail.easyfinance.ru
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <h3>Смена пароля</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Новый пароль:</label>
-                                </td>
-                                <td>
-                                    <input id="newpass" name="newpass" type="password" value=""/><em class="red">*</em>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Повтор пароля:</label>
-                                </td>
-                                <td>
-                                    <input id="newpass2" type="password" value=""/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <h3>Смена e-mail</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>e-mail:</label>
-                                </td>
-                                <td>
-                                    <input id="mail" type="text" name="mail" value=""/><em class="red">*</em>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="guide">Включить гид</label>
-                                </td>
-                                <td>
-                                    <input id="guide" name="guide" class="chek" type="checkbox" checked>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="getNotify">Получать уведомления об изменениях сервиса на электронную почту</label>
-                                </td>
-                                <td>
-                                    <input id="getNotify" name="getNotify" class="chek" type="checkbox" checked>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="help">Включить подсказки</label>
-                                </td>
-                                <td>
-                                    <input id="help" name="help" class="chek" type="checkbox" checked>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <h3>
-                                        <div>
-                                        </div>
-                                    </h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>Текущий пароль:</label>
-                                </td>
-                                <td>
-                                    <input id="pass" name="pass" type="password" value="" title="Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес."/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <h6>* Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес.</h6>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                </td>
-                                <td>
-                                    <button id="save_info">Сохранить</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="cb">
-                    <div>
+                    <div id="reminders" class="ramka3 profile" style="display:none">
+                        <div class="ct">
+                            <div class="head">
+                                <h2>Напоминания для запланированных операций</h2>
+                                <ul class="action">
+                                    <li class="over3">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        {include_php file="../sf/apps/frontend/modules/profile/templates/_reminders.php"}
+                        <div class="cb">
+                            <div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="currency" class="ramka3 profile" style="display:none">
-                <div class="ct">
-                    <div class="head">
-                        <h2>Валюты</h2>
-                        <ul class="action">
-                            <li class="over3">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="content" class="inside form">
-                    <div class="col second">
-                        <h4>Все валюты</h4>
-                        <ul class="currency all">
-                        </ul>
-                    </div>
-                    <div class="col first">
-                        <h4>Валюты пользователя</h4>
-                        <ul class="currency user">
-                        </ul>
-                    </div>
-                    <br class="clr"/>
-                    <div class="formRegister">
-                        <table>
-                            <tr>
-                                <td>
-                                    <label>Валюта по умолчанию:</label>
-                                </td>
-                                <td>
-                                    <select id="def_cur">
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                </td>
-                                <td>
-                                    <button id="save_cur">Сохранить</button>
-                                    <!--<button id="back_cur">Отмена</button>-->
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="cb">
-                    <div>
-                    </div>
-                </div>
-            </div>
-            <div id="reminders" class="ramka3 profile" style="display:none">
-                <div class="ct">
-                    <div class="head">
-                        <h2>Напоминания для запланированных операций</h2>
-                        <ul class="action">
-                            <li class="over3">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                {include_php file="../sf/apps/frontend/modules/profile/templates/_reminders.php"}
-                <div class="cb">
-                    <div>
-                    </div>
-                </div>
-            </div>
+            {include file="right.quick.html"}
         </div>
-        {include file="right.quick.html"}
+    </div>
     </div>
     <div class="ccb">
+        <i class="bl"></i>
+        <i class="br"></i>
     </div>
 </div>
 <!--/середина-->

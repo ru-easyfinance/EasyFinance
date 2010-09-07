@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
     <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=7" />
     {if $user_info.user_id > 0}
         <title>Easyfinance.ru - домашняя бухгалтерия, личный бюджет и финансы</title>
         <meta name="Description" content="C нашей помощью Вы сможете структурировать свои доходы и расходы, вести домашнюю бухгалтерию и семейный бюджет." />
@@ -41,6 +41,8 @@
             <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$smarty.const.REVISION}"/>
         {/foreach}
 
+        <!--[if gte IE 7]><link rel="stylesheet" type="text/css" href="/css/ie7.css?r={$smarty.const.REVISION}"/><![endif]-->
+
         {foreach from=$js item=i}
             <script type="text/javascript" src="/js/{$i}?r={$smarty.const.REVISION}"></script>
         {/foreach}
@@ -67,6 +69,7 @@
         {/if}
 
         <div id="container1">
+            {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
             <div id="menumain"  value="{$head_val}">
                 <ul class="menu1">
                     <!-- Jet. ticket #273 -->
@@ -99,11 +102,11 @@
 <!--шапка-->
             <div id="header">
             {if $smarty.const.IS_DEMO == true }
-            	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT_MAIN`"}
+                {assign var="logoUrl" value="https://`$smarty.const.URL_ROOT_MAIN`"}
             {elseif $smarty.session.user.id > 0}
-            	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`info"}
+                {assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`info"}
             {elseif $smarty.server.REQUEST_URI != "/"}
-            	{assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`"}
+                {assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`"}
             {/if}
 
                 <a {if $logoUrl !=""}href="{$logoUrl}"{/if} class="logo">EasyFinance.ru</a>
@@ -111,3 +114,4 @@
 
                 {include file="head_adv.html"}
             </div>
+            {/if}

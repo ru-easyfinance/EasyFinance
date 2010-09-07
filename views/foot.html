@@ -51,7 +51,7 @@
                 ></a><br>
             </div>
         </div>
-
+{if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
 		<div id="footer" style="z-index: 1">
 			<div id='dialog_rating'></div>
 			<!--/popup оставить отзыв-->
@@ -128,8 +128,9 @@
 				</script>
 			{/literal}
         </div>
-                
+{/if}
         <!--/подвал-->
+
         {literal}
 	<script type="text/javascript">
 		var _gaq = _gaq || [];

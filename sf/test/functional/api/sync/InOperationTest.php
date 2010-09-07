@@ -332,10 +332,10 @@ class api_sync_InOperationTest extends api_sync_in
         $expectedData = array(
             'type'                => 2,
             'user_id'             => $this->_user->getId(),
-            'amount'              => 100.00,
+            'amount'              => 100.75,
             'account_id'          => $acc_from->getId(),
             'transfer_account_id' => $acc_to->getId(),
-            'transfer_amount'     => -500.00,
+            'transfer_amount'     => -500.21,
             'cid'                 => 3,
         );
 
@@ -351,8 +351,8 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
 
         unset($expectedData['cid']);
-        $expectedData['amount'] = -100;
-        $expectedData['transfer_amount'] = 500;
+        $expectedData['amount'] = -abs($expectedData['amount']);
+        $expectedData['transfer_amount'] = abs($expectedData['transfer_amount']);
 
         $this->browser
             ->with('model')->check('Operation', $expectedData, 1, $found);

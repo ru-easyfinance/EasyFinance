@@ -1,0 +1,65 @@
+.b-custom-input .b-custom-select {
+    top:5px;
+    filter:alpha(opacity=0);
+}
+.b-custom-input.no-selectbox .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field {
+    background:#ffffff !important;
+    position:relative !important;
+    z-index:999 !important;
+    margin:0 0 0 0 !important;
+}
+.b-custom-input .b-custom-select-wrap {
+    top:-27px;
+    width:100%;
+    display:block;
+    position:relative;
+    margin:0;
+    z-index:10;
+}
+.b-custom-input.no-selectbox .b-custom-input-border,
+.b-custom-textarea.no-selectbox .b-custom-textarea-border {
+    padding:0 20px 0 0;
+}
+
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-input .b-custom-select {
+    padding:5px 8px;
+}
+
+.b-border-corners.tl,
+.b-border-corners.tr {
+    top:3px !important;
+}
+.b-border-corners.bl,
+.b-border-corners.br {
+    top:100% !important;
+    bottom:auto !important;
+    margin-top:-5px;
+}
+
+.b-icon-export-csv {
+    top:12px !important;
+}
+
+.b-filter-type {
+    width:57px;
+}
+.b-filter-sum {
+    width:406px;
+}
+
+.bill_list {
+    float:left;
+    margin:5px 10px 0 !important;
+}
+
+.small-spinner .b-preloader {
+    float:left;
+}
+
+#m7 ul,
+#m9 ul {
+    left:-3px;
+}

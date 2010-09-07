@@ -4,7 +4,7 @@ $(document).ready(function() {
     var cat;
     var oldCatId = -1;
 
-    $('.block2 .inside').css({width: '679px'});
+    //$('.block2 .inside').css({width: '679px'});
     $('.block2 .inside .form_block').css({width: '353px'});
 
     easyFinance.models.category.load(res.category, function() {
@@ -111,7 +111,7 @@ $(document).ready(function() {
         } else {
             $('#divCategoryEditCustom').show();
             $('#cattype').removeAttr("disabled");
-            $('#txtCategoryComment').text ('Универсальная категория может быть как расходной, так и доходной');
+            $('#txtCategoryComment').text ('');
         }
 
         $('#cat_id').val(cat.user[id]['id']);
@@ -135,7 +135,7 @@ $(document).ready(function() {
         $('#subcat,#cattype,#catsys').removeAttr('selected');
         $('#add_form').find('#btnSave').removeAttr('disabled');
         $('#cattype').removeAttr("disabled");
-        $('#txtCategoryComment').text ('Универсальная категория может быть как расходной, так и доходной');
+        $('#txtCategoryComment').text ('');
     }
 
     /**
@@ -191,7 +191,7 @@ $(document).ready(function() {
     function listInsertParentCategory(cat){
         var system = easyFinance.models.category.getSystemCategories()[cat.system];
 
-        $('<div class="line open" id="category_'+cat.id+'" style="width:496px"><div class="l_n_cont">'
+        $('<div class="line open" id="category_'+cat.id+'"><div class="l_n_cont">'
             +'<a class="name">'+cat.name+'</a>'
             +'<div class="icon"><img src="/img/i/icoCatType'+cat.type+'.gif" title="'+["Расходная", "Универсальная", "Доходная"][parseInt(cat.type)+1]+'"/></div><div class="system">'+system.name+'</div>'
                 +'<div class="cont">'
