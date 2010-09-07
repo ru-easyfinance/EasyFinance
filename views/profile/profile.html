@@ -51,6 +51,7 @@
                         <div id="content" class="inside form">
                             <div class="formRegister">
                                 <table>
+                                    {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
                                     <tr>
                                         <td>
                                             <label>Логин:</label>
@@ -59,6 +60,7 @@
                                             <input id="login" name="login" class="disabled" type="text" value="" disabled="disabled"/>
                                         </td>
                                     </tr>
+                                    {/if}
                                     <tr>
                                         <td>
                                             <label>E-Mail для интеграции:</label>
@@ -67,6 +69,7 @@
                                             <input id="mailIntegration" name="integration" type="text" value="" />@mail.easyfinance.ru
                                         </td>
                                     </tr>
+                                    {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
                                     <tr>
                                         <td colspan="2">
                                             <h3>Смена пароля</h3>
@@ -101,6 +104,7 @@
                                             <input id="mail" type="text" name="mail" value=""/><em class="red">*</em>
                                         </td>
                                     </tr>
+                                    {/if}
                                     <tr>
                                         <td>
                                             <label for="guide">Включить гид</label>
@@ -133,6 +137,7 @@
                                             </h3>
                                         </td>
                                     </tr>
+                                    {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
                                     <tr>
                                         <td>
                                             <label>Текущий пароль:</label>
@@ -146,6 +151,7 @@
                                             <h6>* Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес.</h6>
                                         </td>
                                     </tr>
+                                    {/if}
                                     <tr>
                                         <td>
                                         </td>
