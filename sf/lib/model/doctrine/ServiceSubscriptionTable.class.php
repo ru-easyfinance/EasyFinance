@@ -14,13 +14,7 @@ class ServiceSubscriptionTable extends Doctrine_Table
      */
     public function getUserServiceSubscription($userId, $serviceId)
     {
-        $alias = 'ss';
-
-        $q = $this->createQuery($alias)
-            ->andWhere('user_id = ?', $userId)
-            ->andWhere('service_id = ?', $serviceId);
-
-        return $q->fetchOne();
+        return $this->findOneByUserIdAndServiceId($userId, $serviceId);
     }
 
 

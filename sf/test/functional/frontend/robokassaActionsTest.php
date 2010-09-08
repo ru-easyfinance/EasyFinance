@@ -8,7 +8,16 @@ class robokassaActionsTest extends myFunctionalTestCase
 {
     protected $app = 'frontend';
 
-    protected $transaction;
+    /**
+     * Последняя транзакция
+     * @var BillingTransaction
+     */
+    protected $_transaction;
+
+    /**
+     * @var BillingTransaction
+     */
+    protected $_service;
 
     /**
      * Тест /robokassa/init
@@ -152,26 +161,112 @@ class robokassaActionsTest extends myFunctionalTestCase
         $this->assertEquals($transaction->getStatus(), 2);
     }
 
-
-    private function getTestTransaction( $user=null )
+    /**
+     * Тест двукратной оплаты одной и той же улуги
+     */
+    public function testDoublePay()
     {
-        if ( is_null( $this->transaction ) )
-        {
+        $user = $this->helper->makeUser();
+        $this->authenticateUser($user);
+        $user->save();
+
+        $billingSettings = sfConfig::get('app_billing_robokassa');
+
+        $this->sendSuccessRequest(
+            $this->getTestTransaction($user),
+            $billingSettings
+        );
+
+        $this->sendSuccessRequest(
+            $transaction = $this->getTestTransaction($user, true),
+            $billingSettings
+        );
+
+        $subscriptions = Doctrine::getTable('ServiceSubscription')
+            ->findByUserIdAndServiceId(
+                $transaction->getUserId(),
+                $transaction->getServiceId()
+            );
+
+        $this->assertEquals(1, $subscriptions->count());
+        $this->assertNotNull($subscriptions->getFirst()->getCreatedAt());
+    }
+
+    /**
+     * Отправляет запрос на success url
+     * @param BillingTransaction $transaction
+     * @param array $billingSettings
+     */
+    private function sendSuccessRequest($transaction, $billingSettings)
+    {
+        $url = $this->generateUrl('robokassa', array('action'  => 'success'));
+        $params = array(
+            'InvId' => $transaction->getId(),
+            'OutSum' => $transaction->getPrice() * $transaction->getTerm(),
+            'SignatureValue' => md5(
+                implode(
+                    ':',
+                    array(
+                        $transaction->getTotal(),
+                        $transaction->getId(),
+                        $billingSettings['pass1'],
+                        'shpa=' . $transaction->getTerm()
+                   )
+                )
+            ),
+            'shpa' => $transaction->getTerm(),
+        );
+
+        $this->browser->post($url, $params)
+            ->with('response')->begin()
+            ->isStatusCode(200)
+            ->matches('/(Оплата произведена успешно)/')
+            ->end();
+    }
+
+    /**
+     * @return Service
+     */
+    private function getService()
+    {
+        if (is_null($this->_service)) {
             $service = new Service();
             $service->price = 100;
             $service->save();
+            $this->_service = $service;
+        }
+
+        return $this->_service;
+    }
+
+    /**
+     * Генерирует транзакцию для пользователя и сервиса
+     * @param object $user
+     * @param bool $isNew создавать ли новую транзакцию, если есть старая
+     * @return BillingTransaction
+     */
+    private function getTestTransaction($user = null, $isNew = false)
+    {
+        if ((is_null($this->_transaction) || $isNew) && !is_null($user)) {
+            $service = $this->getService();
+            $term = 6;
 
             $transaction = new BillingTransaction();
-            $transaction->setServiceId($service->getId());
-            $transaction->setPrice($service->getPrice());
-            $transaction->setTerm(6);
-            $transaction->setStatus(0);
-            $transaction->setTotal(600);
-            $transaction->setUserId($user->getId() );
+            $transaction->fromArray(
+                array(
+                    'service_id' => $service->getId(),
+                    'price'      => $service->getPrice(),
+                    'term'       => $term,
+                    'status'     => 0,
+                    'total'      => $term * $service->getPrice(),
+                    'user_id'    => $user->getId()
+                )
+            );
             $transaction->save();
 
-            $this->transaction = $transaction;
+            $this->_transaction = $transaction;
         }
-        return $this->transaction;
+
+        return $this->_transaction;
     }
 }
