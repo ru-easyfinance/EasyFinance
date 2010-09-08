@@ -16,13 +16,13 @@
     <body id="p_index">
         <noscript>
             <div style="display:block;position:fixed;top:0px;left:0px;width:100%;height:35px;background-color:#FF2222;z-index:9999;text-align:center;padding-top:10px;">
-                <span Style="font-weight:bold;font-size:13px;">Этот сайт требует поддержку javascript</span>
+                <span style="font-weight:bold;font-size:13px;">Этот сайт требует поддержку javascript</span>
             </div>
         </noscript>
         <!-- Jet. Ticket #443. Preload images to prevent wrong resizing -->
-        <img src="/img/i/gauge70.gif" width="70" height="70" class="preload" />
-        <img src="/img/i/gauge107.gif" width="107" height="107" class="preload" />
-        <img src="/img/i/gauge157.gif" width="157" height="157" class="preload" />
+        <img alt="" src="/img/i/gauge70.gif" width="70" height="70" class="preload" />
+        <img alt="" src="/img/i/gauge107.gif" width="107" height="107" class="preload" />
+        <img alt="" src="/img/i/gauge157.gif" width="157" height="157" class="preload" />
         <div id="container1">
         <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
             <div id="menumain">
@@ -67,7 +67,6 @@
     <!-- mainmenu -->
     <?php include_partial('global/common/mainmenu'); ?>
 
-
     <div class="ramka2">
         <div class="cct">
             <i class="tl"></i>
@@ -75,66 +74,32 @@
         </div>
         <div class="ccm">
             <div class="ccm-container">
-            <!--меню4-->
-            <!--/меню4-->
-            <div class="mid general_cont">
+                <!--меню4-->
+                <!--/меню4-->
+                <div class="mid general_cont">
 
-                <!--левая колонка-->
-                <?php include_partial('global/common/left.quick'); ?>
+                    <!--левая колонка-->
+                    <?php include_partial('global/common/left.quick'); ?>
 
-                <div class="block2">
-                    <div class="l-indent">
-                <?php include_partial('global/common') ?>
+                    <div class="block2">
+                        <div class="l-indent">
+                        <?php include_partial('global/common') ?>
 
-                <!--наполнение-->
-                    <?php echo $sf_content ?>
-                <!--/наполнение-->
-                    </div>
-                </div>
-
-                <!--правая колонка-->
-                <div class="block3 ramka3">
-                    <div class="ct head">
-                        <h2>Информер</h2>
-                        <ul class="action">
-                            <li class="over1" style="display: none;"><a title="настройки">настройки</a></li>
-                            <li class="over2" style="display: none;"><a title="закрыть">закрыть</a></li>
-                            <!--<li class="over3"><a href="#" title="свернуть">свернуть</a></li>-->
-                        </ul>
-                    </div>
-                    <!--Финсостояние-->
-                    <div class="calendar_block">
-                        <h2>Фин. состояние</h2>
-                        <div class="flash informerGauge" id="divInformer0">
-                            <div id="divGaugeMain"></div>
+                        <!--наполнение-->
+                        <?php echo $sf_content ?>
+                        <!--/наполнение-->
                         </div>
                     </div>
-                    <!--/Финсостояние-->
-                    <!--Курсы валют-->
-                    <dl id="divExchangeRates" class="info hidden">
-                        <dt>Курсы валют</dt>
-                        <dd><div class="line"><span class="valuta">RUB</span><span class="">1</span></div><div class="line"><span class="valuta">USD</span><span class="">30.1240</span></div></dd>
-                    </dl>
-                    <!--/Курсы валют-->
-                    <!--калькулятор-->
-                    <?php include_partial('global/common/calcul') ?>
-                    <!--/калькулятор-->
-                    <!--календарь-->
-                    <div class="calendar_block">
-                        <h2>Календарь</h2>
-                        <div class="calendar"></div>
-                    </div>
-                    <!--/календарь-->
-                </div>
-            <!--/правая колонка-->
 
-            </div>
+                    <?php include_partial('global/rightColumn', array()) ?>
+
+                </div>
             </div>
         </div>
-    </div>
-    <div class="ccb">
-        <i class="bl"></i>
-        <i class="br"></i>
+        <div class="ccb">
+            <i class="bl"></i>
+            <i class="br"></i>
+        </div>
     </div>
 </div>
 <!--/середина-->

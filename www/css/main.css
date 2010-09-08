@@ -1463,11 +1463,9 @@ ul.month_cal li.y_next { right: 5px; }
 ul.month_cal li.y_prev a, ul.month_cal li.m_prev a , #ui-datepicker-div  .ui-datepicker-prev{ padding-left: 22px; background-position: 0 5px; }
 ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-datepicker-next{ padding-right: 22px; background-position: 100% -15px; }
 
-
-
-#footer { position: relative; margin: 0 auto; width: 940px; height: 130px; font-size: 11px;  color: #000000;}
+#footer { position: relative; margin: 0 auto; width: 100%; height: 130px; font-size: 11px;  color: #000000;}
 #footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
-#footer ul.contacts { position: absolute; top: 12px; left: 217px; }
+#footer ul.contacts { position: absolute; top: 12px; left: 8px; padding-bottom: 30px; }
 #footer ul.contacts li { margin-bottom: 1px; }
 #footer ul.contacts li.partners, #footer ul.contacts li.icq, #footer ul.contacts li.skype, #footer ul.contacts li.twitter { position: absolute; left: 538px; padding: 1px 0 0 20px; white-space: nowrap; background: url('/img/i/icons.gif') no-repeat 0 0; }
 #footer ul.contacts li.twitter { top: -1px; background-position: 0px -160px; }
@@ -1488,11 +1486,6 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .footerTextsArea li { float:left; margin: 0 0 0 34px; width: 286px; }
 #footer .footerTextsArea div { padding: 4px 0 4px 0; text-align: justify; color: #999999; }
 #footer .footerTextsArea p { padding: 0px; margin: 2px 0 0 0; }
-
-#footer { position: relative; margin: 0 auto; width: 940px; height: 130px; font-size: 11px;  color: #000000;}
-#footer dfn { display: block; margin-left: 217px; padding-top: 96px; font-style: normal; }
-#footer ul.contacts { position: absolute; top: 12px; left: 8px; padding-bottom: 30px; }
-#footer ul.contacts li { margin-bottom: 1px; }
 
 #footer p{margin: 0}
 

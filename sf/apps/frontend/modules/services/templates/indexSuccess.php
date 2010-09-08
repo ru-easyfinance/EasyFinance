@@ -16,7 +16,6 @@
         <td class="header">Оплачена&nbsp;до</td>
         <td class="header">Продлить</td>
     </tr>
-    </tr>
     <?php foreach ( $userServices as $service ):?>
     <tr>
         <td align="left"><?php echo $service['service_name'];?></td>
@@ -57,14 +56,14 @@
     <div id="paymentOptions"></div>
     <div class="notifications">
         <dl>
-        
-			<dt id="title_PCR">Яндекс.Деньги</dt>
-			<dd id="notification_PCR">Яндекс.Деньги — удобный и безопасный способ платить за телефон, интернет и многие другие товары и услуги без комиссии и без очередей.</dd>
-		    
-		    <dt id="title_WMRM">WMR</dt>
+
+            <dt id="title_PCR">Яндекс.Деньги</dt>
+            <dd id="notification_PCR">Яндекс.Деньги — удобный и безопасный способ платить за телефон, интернет и многие другие товары и услуги без комиссии и без очередей.</dd>
+
+            <dt id="title_WMRM">WMR</dt>
             <dd id="notification_WMRM">WMR — средства эквивалентные Российским рублям</dd>
-            
-		</dl>
+
+        </dl>
     </div>
     <div id="scriptContainer"></div>
 </div>
@@ -73,13 +72,13 @@
 //<![CDATA[
 $(document).ready( function() {
 
-	$(".service_submit_button").robokassa({
-	    url: "<?php echo url_for("robokassa/init") ?>"
-	});
-	
+    $(".service_submit_button").robokassa({
+        url: "<?php echo url_for("robokassa/init") ?>"
+    });
+
     // Перебираем все селекты периода и прописываем необходимые обработчики
     $('.term_select').each(function() {
-        
+
         this.updateTotalCost = function(){
             var params = this.id.split("_");
             var price = parseFloat($("#price_"+params[1]).text());
