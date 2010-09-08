@@ -50,9 +50,8 @@ dTabsClass.prototype.init = function() {
         // запоминаем событие в Google Analytics
         try { _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'АМТ - PDF']); } catch(err) {};
 
-        if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0)/* && wzValidateAll()*/) {
+        if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0) && wzValidateAll()) {
             var blankData = {};
-            /*
             for (tabNo = 0; tabNo < tabs.tabs.length; tabNo++) {
                 form = $('#' + tabs.tabs[tabNo].id + ' form.wz_frm');
 
@@ -71,7 +70,6 @@ dTabsClass.prototype.init = function() {
 
             // Customer wishes crunch
             blankData = wzObjToArray(blankData);
-            */
             return {
                 'data': blankData,
                 'idleMessage': 'Отправляем анкету в банк ...'
