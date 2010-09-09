@@ -15,4 +15,7 @@ all:
     param:
       delivery_strategy: realtime
       transport:
-        class: Swift_MailTransport
+        class: Swift_SendmailTransport
+        param:
+          command: /usr/sbin/sendmail -bs
+          # /usr/sbin/sendmail -oi -t
