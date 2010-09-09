@@ -362,19 +362,21 @@ class Login_Model
     /**
      * Создаёт нового пользователя с указанным логином
      * @param string $ramblerKey
+     * @param string $email
+     * @param string $name
      * @return bool
      */
-    public static function  generateUserByRamblerLogin($ramblerKey)
+    public static function generateUserByRamblerLogin($ramblerKey, $email = null, $name = null)
     {
         $query = "
             INSERT INTO users
-                (user_name, user_login, user_pass, user_active, user_new,
-                user_created)
+                (user_name, user_login, user_pass, user_mail, user_active,
+                user_new, user_created)
             VALUES
-                (?, ?, ?, 1, 0, NOW())";
+                (?, ?, ?, ?, 1, 0, NOW())";
 
-        $userId = Core::getInstance()->db->query($query, 'Рамблер', $ramblerKey,
-            sha1($ramblerKey));
+        $userId = Core::getInstance()->db->query($query, $name, $ramblerKey,
+            sha1($ramblerKey), $email);
 
         if ($userId) {
             self::defaultCategory($userId);

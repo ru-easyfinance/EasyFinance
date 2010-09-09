@@ -111,8 +111,10 @@ class Login_Controller extends _Core_Controller
     }
 
     public function rambler($args) {
-        $ramblerKey = $args[0];
+        $ramblerKey = addslashes($args[0]);
         $ramblerLogin = 'rambler_' . $ramblerKey;
+        $email = isset($_GET['email']) ? addslashes($_GET['email']) : null;
+        $name  = isset($_GET['name']) ? addslashes($_GET['name']) : 'Рамблер';
 
         $user = Core::getInstance()->user;
 
@@ -120,7 +122,7 @@ class Login_Controller extends _Core_Controller
         $user->initUser($ramblerLogin, sha1($ramblerLogin));
         // Создаём нового пользователя
         if (!$user->getId()) {
-            Login_Model::generateUserByRamblerLogin($ramblerLogin);
+            Login_Model::generateUserByRamblerLogin($ramblerLogin, $email, $name);
             $user->initUser($ramblerLogin, sha1($ramblerLogin));
             setCookie("guide", "uyjsdhf",0,COOKIE_PATH, COOKIE_DOMEN, false);
         }
