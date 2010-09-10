@@ -23,7 +23,7 @@
 }
 
 .dataTables_paginate {
-    width: auto;
+    width: auto !important;
 }
 
 table.display thead th {
@@ -529,6 +529,7 @@ tr.even.gradeU td.sorting_3 {
     background:none;
 }
 .small-spinner.loading .b-preloader {
+    float:left;
     width:16px;
     height:16px;
     background:url(../../img/i/spinner-small.gif) 50% 50% no-repeat;

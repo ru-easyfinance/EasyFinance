@@ -1,7 +1,42 @@
 .b-custom-input-label,
 .b-custom-textarea-label {
-    margin-bottom:6px;
+    margin-bottom:5px;
     display:block;
+}
+.b-custom-input-hint,
+.b-custom-textarea-hint {
+    color:#ccc;
+    margin:5px 0 0 0;
+}
+
+.b-custom-input-container {
+    display:block;
+    position:relative;
+}
+.b-custom-input-container.icon {
+    padding-right:26px;
+}
+.b-custom-input-container .b-custom-input-icon {
+    top:50%;
+    right:0;
+    width:16px;
+    height:16px;
+    margin-top:-8px;
+    position:absolute;
+    display:none;
+}
+.b-custom-input-container.icon .b-custom-input-icon {
+    display:block;
+}
+
+.b-custom-input-container.calculator .b-custom-input-icon {
+    height:18px;
+    background:url(../img/i/calculator_scientific.gif) no-repeat;
+    margin-top:-9px;
+}
+.b-custom-input-container.tags .b-custom-input-icon {
+    width:17px;
+    background:url(../img/i/icons.gif) 0 -551px no-repeat;
 }
 
 .b-custom-input #dateFrom,
@@ -50,6 +85,7 @@
 .b-custom-textarea .b-custom-textarea-border {
     background-color:#fff;
     background-position:0 -165px;
+    padding-right:15px;
     position:relative;
     display:block;
     overflow:hidden;
@@ -195,11 +231,13 @@
 .b-custom-input-inline .b-custom-input {
     float:left;
 }
-.b-custom-input-inline .b-custom-input.b-date {
+.b-custom-input.b-date {
     width:80px;
 }
-.b-custom-input-inline .b-custom-input.b-sum {
+.b-custom-input.b-sum {
     width:100px;
+}
+.b-custom-input-inline .b-custom-input.b-sum {
     margin-right:10px;
 }
 .b-custom-input-inline label {

@@ -1,0 +1,10 @@
+.b-custom-input .b-custom-select {
+    height:30px;
+    padding:0;
+}
+.custom-grid-style .ui-state-disabled, .custom-grid-style .ui-widget-content .ui-state-disabled {
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=35);
+}
+body .ui-dialog.edit .ui-dialog-title {
+    font-size:15px;
+}

@@ -6,8 +6,10 @@
     cursor:pointer;
 }
 
-.b-button-simple {
+.b-button-simple,
+.ui-dialog .ui-dialog-buttonpane button {
     font:1em Arial, Helvetica, sans-serif;
+    text-shadow:0 1px 0 #fff;
     color:#5F6776;
     overflow:visible;
     border:1px #aaa solid;
@@ -15,10 +17,11 @@
     -moz-border-radius:3px;
     border-radius:3px;
     background:#dddddd url(../img/ui/custom-btn.png) repeat-x;
-    padding:5px 8px;
+    padding:5px 8px !important;
     cursor:pointer;
 }
-.b-button-simple:hover {
+.b-button-simple:hover,
+.ui-dialog .ui-dialog-buttonpane button:hover {
     background-color:#d2d2d2;
     background-position:0 -48px;
 }

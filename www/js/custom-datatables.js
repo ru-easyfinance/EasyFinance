@@ -19,7 +19,7 @@ _ActivateDataGrid = {
         if(!this.pageReady) this.preparePage();
         this.dataGrid = grid.eq(0).dataTable({
             bJQueryUI: true,
-            iDisplayLength: 50,
+            iDisplayLength: 20,
             sPaginationType: "full_numbers",
             sDom: '<"H"p>t',
             bAutoWidth: false,

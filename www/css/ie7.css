@@ -1,6 +1,6 @@
 .b-custom-input .b-custom-select {
     top:5px;
-    filter:alpha(opacity=0);
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }
 .b-custom-input.no-selectbox .b-custom-input-field,
 .b-custom-textarea .b-custom-textarea-field {
@@ -20,6 +20,10 @@
 .b-custom-input.no-selectbox .b-custom-input-border,
 .b-custom-textarea.no-selectbox .b-custom-textarea-border {
     padding:0 20px 0 0;
+}
+.b-custom-input .b-custom-input-border,
+.b-custom-textarea .b-custom-textarea-border {
+    padding:0;
 }
 
 .b-custom-input .b-custom-input-field,
@@ -62,4 +66,34 @@
 #m7 ul,
 #m9 ul {
     left:-3px;
+}
+
+.b-row-menu-block {
+    margin-top:-20px;
+}
+
+.table_tab1 {
+    padding-right:18px;
+}
+.ramka3.ui-widget-content .head h2 {
+    float:left;
+    width:100%;
+}
+
+.custom-grid-style .ui-state-disabled, .custom-grid-style .ui-widget-content .ui-state-disabled {
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=35);
+}
+
+body .ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
+    top:-5px;
+    position:relative;
+}
+
+body .ui-dialog.edit .ui-dialog-title {
+    font-size:15px;
+}
+
+dl.bill_list dt{
+    width:123px;
+    zoom:1;
 }

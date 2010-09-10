@@ -217,7 +217,7 @@ $(document).ready(function(){
                 $('.ct.head h2').hide();
                 rightbarAnimate(0, ((animation == false) ? false : true));
             } else {
-                rightbarAnimate(rightbarW + 10, ((animation == false) ? false : true));
+                rightbarAnimate(rightbarW + 30, ((animation == false) ? false : true));
             }
         }
 
@@ -288,7 +288,7 @@ $(document).ready(function(){
         });
         easyFinance.models.category.load(res.category);
     }
-    
+
     // Если доступна левая панель (пользователь авторизован)
     if ($("#leftPanel").length) {
         // инициализируем виджет добавления, редактирования и планирования операций

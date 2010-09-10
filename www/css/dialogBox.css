@@ -1,10 +1,13 @@
 body .ui-dialog .ui-dialog-titlebar {
-    margin-left: -2px;
-    margin-top: -2px;
-    margin-right: -6px;
-    padding-right: 9px;
-    background-image: url("/img/i/bg_menu.png");
-    background-position: -10px 0px;
+    height:30px;
+    line-height:30px;
+    text-shadow:0 -1px 0 #666;
+    -webkit-border-radius:10px 10px 0 0;
+    -moz-border-radius:10px 10px 0 0;
+    border-radius:10px 10px 0 0;
+    background: url("/img/i/bg_menu.png") 50% 0 no-repeat;
+    margin:-2px -3px 0 -2px;
+    padding:0 10px;
 }
 
 body .ui-dialog.edit .ui-dialog-title {
@@ -30,3 +33,19 @@ body .ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-
     background: url("/img/i/jQuery/ico_close_white.gif") no-repeat scroll 50% 50% transparent;
 }
 
+.ui-dialog .ui-dialog-buttonpane {
+    padding-right:7px;
+}
+.ui-dialog .ui-dialog-content {
+    width:100% !important;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+    right:8px;
+    width:20px;
+    height:20px;
+    margin-top:-9px;
+}
+.ui-dialog .ui-dialog-titlebar-close span {
+    height:20px;
+    margin:0 !important;
+}

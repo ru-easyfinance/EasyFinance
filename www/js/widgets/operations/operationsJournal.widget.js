@@ -222,7 +222,7 @@ easyFinance.widgets.operationsJournal = function(){
         } catch(e) {
             rowValue = null;
         }
-        if(!rowValue) return false;
+        if(!rowValue && rowValue != 0) return false;
         if (operation == 'edit') {
             easyFinance.widgets.operationEdit.fillForm(_journal[rowValue], true);
         } else if(operation == 'del') {

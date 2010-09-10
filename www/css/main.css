@@ -183,8 +183,11 @@ table.noborder td.mark{width:50px;}
     z-index:0;
     background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 0 0;
 }
+.ramka2.no-overflow {
+    overflow: visible;
+}
 .ramka2.compact { width:940px; margin:0 auto; }
-.ramka2 .ccm { margin-left:3px; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 100% 0; }
+.ramka2 .ccm { margin-left:3px; padding-bottom:15px; background: #ffffff url('/img/i/bg-corners-y.png') repeat-y 100% 0; }
 .ramka2 .ccm .ccm-container {background: #fff; margin-right:3px;}
 .iframe #tabIntegration {display: none;}
 .iframe .ramka2 { background: #ffffff url('/img/i/bg05_iframe.gif') repeat-y 0 0; }
@@ -193,7 +196,7 @@ table.noborder td.mark{width:50px;}
 .ramka2 .cct .tl, .ramka2 .cct .tr, .ramka2 .ccb .bl, .ramka2 .ccb .br { top:0; left:0; width:14px; background-position:0 0; background-repeat:no-repeat; position:absolute; }
 .ramka2 .cct .tr { left:auto; right:0; background-position:-14px 0; }
 .ramka2 .cct, .ramka2 .ccb { background-color:#fff; }
-.ramka2 .ccb { background-position:0 -39px; }
+.ramka2 .ccb { bottom:0; width:100%; background-position:0 -39px; position:absolute;}
 .ramka2 .ccb .bl { top:auto; bottom:0; background-position:0 -14px; }
 .ramka2 .ccb .br { top:auto; bottom:0; left:auto; right:0; background-position:-14px -14px; }
 
@@ -230,11 +233,10 @@ table.tab1 span.t3 { background-position: 0 -20px; }
     min-width: 970px;
     position: relative;
     margin: 0 auto -130px;
-    padding:0 0 130px 0;
+    padding:0 20px 130px;
     min-height: 100%;
     display:block;
-    left:20px;
-    right:20px;
+    overflow:hidden;
 }
 
 #container1.iframe { width: 570px; }
@@ -424,20 +426,20 @@ ul.menu4 li#m_last a { background: none; }
 .iframe .mid { padding-left: 8px; }
 
 .block1 {
+    left: 0px;
     float: left;
     margin-left: -1px;
     padding-top: 1px;
     width: 163px;
     border: 1px solid #ebebeb;
     z-index: 2;
-    position: absolute;
-    left: 0px;
+    position:relative;
 }
 
 .block2 {
     float:left;
     width:100%;
-    margin:0 -180px 0 0px;
+    margin:0 -200px 0 -165px;
     z-index: 1;
 }
 
@@ -475,7 +477,7 @@ ul.menu4 li#m_last a { background: none; }
 dl.bill_list { margin: 0 10px; }
 dl.bill_list dt{padding-left:20px;}
 dl.bill_list dd{padding-left:0px;}
-dl.bill_list dt { margin: 0 0 2px 11px; color: #383838; font-weight: bold;background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 3px 5px; cursor: pointer; }
+dl.bill_list dt { margin: 0 0 2px 0; color: #383838; font-weight: bold;background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 7px 5px; cursor: pointer; }
 dl.bill_list dt.open { margin: 0 0 2px 0px; color: #383838; font-weight: bold;background:#EEEEEE url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px; }
 dl.bill_list dd { margin-bottom: 5px; display:none; cursor: pointer; }
 dl.bill_list dd ul { padding-bottom: 2px; border-bottom: 1px solid #e5e5e5; }
@@ -835,7 +837,7 @@ ul.buttons_block li#op_addoperation_logo a { height: 50px; text-indent: 0px; }
 ul.buttons_block li#op_addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#op_addtocalendar_but.act { background-position: -200px -100px; }
 
-.b-sidebar-btn { float:right; width:111px; height:39px; background:url('/img/i/btnRightSidebar.png') no-repeat; margin-top:-40px; cursor:pointer; right:13px; position:absolute; z-index:99; }
+.b-sidebar-btn { float:right; width:111px; height:39px; background:url('/img/i/btnRightSidebar.png') no-repeat; margin-top:-40px; cursor:pointer; right:13px; position:absolute; z-index:99; display:none; }
 .b-sidebar-btn:hover,.b-sidebar-btn.selected { background-position:-129px 0; }
 
 div.op_addoperation { position: relative; display: none; padding-top: 22px;left: 20px; width: 380px; }
@@ -1099,7 +1101,7 @@ table.tab1 th{text-align: center}
 
 #operations_list tr { cursor: pointer !important; }
 .operation_list table td a { color: #666666; }
-.operation_list table td, table.tab1 td { padding: 2px 5px; background: url('/img/i/point_x.gif') repeat-x top left; overflow: visible;}
+.operation_list table td, table.tab1 td { padding: 2px 5px; border-bottom:1px #ccc dotted; background:none; overflow: visible;}
 .operation_list table td.def_cur{text-align: right}
 .operation_list table .item td.name{width: 150px;max-width: 150px;}
 .operation_list table td.no_over{padding:0;overflow: visible;}
@@ -1761,8 +1763,14 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 }
 
 .ui-dialog.ui-widget-content {
-    background: #fff url('/img/i/jQuery/calendar/bg_ui-dialog_bottomright.gif') no-repeat right bottom!important;
+    background: #fff url(../img/i/popup-header-shadow.png) 0 30px repeat-x;
     border: 1px solid gray;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    box-shadow:0 5px 20px -2px #000;
+    -webkit-box-shadow:0 5px 20px -2px #000;
+    -moz-box-shadow:0 5px 20px -2px #000;
 }
 .ui-dialog.ui-widget-content .ui-resizable-nw {
     top: 0;
@@ -1785,7 +1793,6 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     left: 0;
     width: 9px;
     height: 9px;
-    background: url('/img/i/jQuery/calendar/bg_ui-dialog_bottomleft.gif') no-repeat right bottom;
     border: none;
 }
 
@@ -2049,10 +2056,10 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     width: 20px;
     overflow: visible;
 }
-#ev_tabl tbody tr td.accept,#per_tabl tbody tr td.accept{
+#ev_tabl tbody tr td.accept,#per_tabl tbody tr td.accept {
     background-image:url(/img/i/green_tick.png);
     background-repeat:no-repeat;
-    background-position:top right;
+    background-position:100% 50% !important;
 }
 #ev_tabl tbody tr td.reject,#per_tabl tbody tr td.reject{
     background:transparent url(/img/i/grey_tick.png) no-repeat scroll 100% 50%;
@@ -2243,14 +2250,20 @@ img.ui-datepicker-trigger {
 .b-form-skeleton {
     margin:-5px;
 }
+.op_addoperation .b-form-skeleton {
+    border-bottom:1px dotted #ccc;
+    margin:0;
+    padding:5px 5px 10px;
+}
 .b-form-skeleton.fixed-width {
-    width:745px;
+    max-width:745px;
 }
 .b-form-skeleton table {
     width:100%;
     border-collapse:collapse;
 }
-.b-form-skeleton td {
+.b-form-skeleton td,
+.op_addoperation .b-form-skeleton td {
     padding:5px;
 }
 
