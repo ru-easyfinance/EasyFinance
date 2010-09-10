@@ -457,8 +457,7 @@ ul.dropdown #m9 ul {
     width: 120px;
     line-height: 32px
 }
-.icon-menu3 .menu-icons a.icon,
-.icon-menu3 .menu-icons i {
+.icon-menu3 .menu-icons .icon  {
     display: inline-block;
     height: 37px;
     width: 25px;
@@ -466,7 +465,7 @@ ul.dropdown #m9 ul {
     background: url('/img/i/menu3/icons.png') no-repeat left top;
     outline-width: 0;
 }
-.icon-menu3 .menu-icons a.menu-icons-help { background-position: 0 0; }
-.icon-menu3 .menu-icons a.menu-icons-settings { background-position: -25px 0; }
-.icon-menu3 .menu-icons a.menu-icons-mobile { background-position: -50px 0; }
-.icon-menu3 .menu-icons a.menu-icons-logout { background-position: -75px 0; }
+.icon-menu3 .menu-icons .menu-icons-help { background-position: 0 0; }
+.icon-menu3 .menu-icons .menu-icons-settings { background-position: -25px 0; }
+.icon-menu3 .menu-icons .menu-icons-mobile { background-position: -50px 0; }
+.icon-menu3 .menu-icons .menu-icons-logout { background-position: -75px 0; }

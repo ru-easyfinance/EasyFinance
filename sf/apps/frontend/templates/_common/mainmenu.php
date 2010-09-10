@@ -74,15 +74,23 @@
         -->
     </ul>
     <div class="menu-icons">
-        <i class="menu-icons-help top-level" title="Помощь">
+        <i class="icon menu-icons-help top-level" title="Помощь">
             <ul class="dd-sub">
                 <li class="first"></li>
-                <li><span class="spacer"></span><a id="linkMainMenuFeedback" href="#" style="letter-spacing: -1px;">Обратная связь</a></li>
                 <li><span class="spacer"></span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
+                <li><span class="spacer"></span><a id="linkMainMenuFeedback" href="#" style="letter-spacing: -1px;">Обратная связь</a></li>
+                <li><span class="spacer"></span><a href="http://wiki.easyfinance.ru/tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li class="last"></li>
             </ul>
         </i>
-        <a href="/profile/" class="icon menu-icons-settings" title="Настройки"></a>
+        <i class="icon menu-icons-settings" title="Настройки">
+            <ul class="dd-sub">
+                <li class="first"></li>
+                <li><span class="spacer"></span><a href="/profile/">Профиль</a></li>
+                <li><span class="spacer"></span><a href="/my/services/">Услуги</a></li>
+                <li class="last"></li>
+            </ul>
+        </i>
         <a href="https://<?php echo URL_ROOT_PDA?>" class="icon menu-icons-mobile" title="Мобильная версия"></a>
         <a href="/logout/" class="icon menu-icons-logout" title="Выход"></a>
     </div>
