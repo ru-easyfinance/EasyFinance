@@ -150,6 +150,7 @@ $(document).ready(function(){
     // инициализируем виджет видео-гида
     if (!isIframe) {
         easyFinance.widgets.help.init('#popupHelp', true);
+        easyFinance.widgets.wizard.init();
         // по умолчанию устанавливаем видео,
         // которое соответствует содержанию страницы
         var tabVideo = {
@@ -169,6 +170,9 @@ $(document).ready(function(){
                 easyFinance.widgets.help.showVideo("newAccount");
             }
         });
+        $('#linkMainMenuStartWizard').click(function() {
+            easyFinance.widgets.wizard.show();
+        })
     }
 
     // #1583. задаем переменные для работы с боковой панелью
@@ -559,6 +563,7 @@ $(document).ready(function(){
     }
 
     if ($.cookie('guide') == 'uyjsdhf') {
-        ShowGuide();
+        easyFinance.widgets.wizard.init();
+        easyFinance.widgets.wizard.show();
     }
 });

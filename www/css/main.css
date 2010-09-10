@@ -2276,3 +2276,43 @@ img.ui-datepicker-trigger {
 #calendarMonthPicker {
     margin:7px auto 0;
 }
+
+.dl-tabs {
+    width: 99%;
+    overflow: hidden;
+    padding: 1px;
+    position: relative;
+    zoom: 1;
+}
+
+.dl-tabs dt {
+    float: left;
+    line-height: 2;
+    height: 2em;
+    border-bottom: 0;
+    padding: 0 1em;
+    position: relative;
+    margin-right: 1px;
+    cursor: pointer;
+}
+
+.dl-tabs dt.selected {
+    border-color: #b0d0e9;
+    background: #fff;
+    z-index: 3;
+    cursor: auto;
+}
+
+.dl-tabs dd {
+    background: #fff;
+    display: none;
+    float: right;
+    width: 100%;
+    margin: 2em 0 0 -100%;
+    position: relative;
+    z-index: 2;
+}
+
+.dl-tabs dd.selected {
+    display:block;
+}

@@ -34,6 +34,7 @@ main.js
 helpers.js
 feedback.js
 widgets/help.widget.js
+widgets/wizard.widget.js
 models/currency.model.js
 models/user.model.js
 models/accounts.model.js
