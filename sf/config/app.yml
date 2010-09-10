@@ -21,3 +21,4 @@ all:
   emailImport:
     subject:        "EasyFinance.ru - Fwd: "
     from:           "helpdesk@easyfinance.ru"
+    fromName:       "EasyFinance.ru"

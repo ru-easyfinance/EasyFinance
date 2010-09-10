@@ -179,10 +179,10 @@ class importOperationFromEmailTask extends sfBaseTask
 
             // формируем письмо
             $message = Swift_Message::newInstance()
-                ->setFrom(sfConfig::get('app_emailImport_from'))
+                ->setFrom(array(sfConfig::get('app_emailImport_from') => sfConfig::get('app_emailImport_fromName')))
                 ->setSender(sfConfig::get('app_emailImport_from'))
                 ->setReplyTo(sfConfig::get('app_emailImport_from'))
-                ->setTo($user->getUserMail())
+                ->setTo(array($user->getUserMail() => $user->getName()))
                 ->setSubject(sfConfig::get('app_emailImport_subject') . $subject)
                 ->setBody(get_partial('global/mail/importOperation', array('serviceMail' => $to, 'body' => $body)), 'text/plain');
 
