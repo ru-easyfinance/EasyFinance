@@ -52,27 +52,27 @@
             </div>
         </div>
 {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
-		<div id="footer" style="z-index: 1">
-			<div id='dialog_rating'></div>
-			<!--/popup оставить отзыв-->
+        <div id="footer" style="z-index: 1">
+            <div id='dialog_rating'></div>
+            <!--/popup оставить отзыв-->
 
-			{if count($seotext)}                
-				{php}
-					$seotext = $this->get_template_vars('seotext');
-					// для отладки 
-					// $seotext = array(array('1 sdhfsd hksdf sdjkhfskd k', '2 sd fjkhs khsdjkf hskdfh kdfsd khskdkf sdkfh', '3 s djfh skjhsd hfkskdf hskdkfhskdf jskhkfhsdk hfks hfhkhf kjhsd kfhskfh skhfdf sjk hfkjhsjksdhf'));
-					$str = '';
-					$columns = 3;
-					$cnt = count($seotext);
-					$parsed = 0;
+            {if count($seotext)}
+                {php}
+                    $seotext = $this->get_template_vars('seotext');
+                    // для отладки
+                    // $seotext = array(array('1 sdhfsd hksdf sdjkhfskd k', '2 sd fjkhs khsdjkf hskdfh kdfsd khskdkf sdkfh', '3 s djfh skjhsd hfkskdf hskdkfhskdf jskhkfhsdk hfks hfhkhf kjhsd kfhskfh skhfdf sjk hfkjhsjksdhf'));
+                    $str = '';
+                    $columns = 3;
+                    $cnt = count($seotext);
+                    $parsed = 0;
 
-					//we are going to set a new variables called $rows
-					$rows = ceil($cnt / $columns);
+                    //we are going to set a new variables called $rows
+                    $rows = ceil($cnt / $columns);
 
-					for($i = 0; $i < $columns; $i++) {
-						$str = $str . '<li class="footerTextsColumn">';
+                    for($i = 0; $i < $columns; $i++) {
+                        $str = $str . '<li class="footerTextsColumn">';
 
-						$row = 0;
+                        $row = 0;
                         while ($cnt > (($columns-$i-1)*$row)) {
                             $str = $str . '<h4>' . $seotext[$parsed][0] . '</h4>';
                             $str = $str . '<div>' . $seotext[$parsed][1] . ' <a href="#" class="footerTextToggler">&gt;&gt;</a></div>';
@@ -81,94 +81,94 @@
                             $parsed++;
                             $row++;
                             $cnt--;
-						}
+                        }
 
-						// $cnt--; #1266 WTF
-					}
+                        // $cnt--; #1266 WTF
+                    }
 
-					$str = $str . '</li>';
+                    $str = $str . '</li>';
 
-					$this->assign('seoHTML', $str);
-				{/php}
-			{/if}
-			
-			<ul class="footerTextsArea">{$seoHTML}</ul>
+                    $this->assign('seoHTML', $str);
+                {/php}
+            {/if}
 
-			<div style="position: relative; clear: both; border-top: 1px solid rgb(224, 227, 222);">
-				<div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
+            <ul class="footerTextsArea">{$seoHTML}</ul>
 
-				<dfn>© 2009-2010 EasyFinance</dfn>
-				<ul class="contacts">
-					<li><a href="http://wiki.easyfinance.ru/tiki-view_blog_post.php?postId=41">Правила использования</a></li>
-					<li><a href="http://wiki.easyfinance.ru/tiki-view_blog_post.php?postId=39" class="efTooltip" title="Основная информация и факты о компании">О компании</a></li>
-					<li><a href="http://wiki.easyfinance.ru/tiki-view_blog_post.php?postId=40" class="efTooltip" title="Политика безопасности сайта и рекомендации пользователям">Безопасность</a></li>
-					<li class="tel tel1">Телефон:  +7 (495) 971-00-52</li>					
+            <div style="position: relative; clear: both; border-top: 1px solid rgb(224, 227, 222);">
+                <div class="certificate"><img src="/img/i/ssl_certificate.gif" /></div>
+
+                <dfn>© 2009-2010 EasyFinance</dfn>
+                <ul class="contacts">
+                    <li><a href="http://{$smarty.const.URL_ROOT_WIKI}tiki-view_blog_post.php?postId=41">Правила использования</a></li>
+                    <li><a href="http://{$smarty.const.URL_ROOT_WIKI}tiki-view_blog_post.php?postId=39" class="efTooltip" title="Основная информация и факты о компании">О компании</a></li>
+                    <li><a href="http://{$smarty.const.URL_ROOT_WIKI}tiki-view_blog_post.php?postId=40" class="efTooltip" title="Политика безопасности сайта и рекомендации пользователям">Безопасность</a></li>
+                    <li class="tel tel1">Телефон:  +7 (495) 971-00-52</li>
                     <li class="tel tel2">Поддержка пользователей:  <a id="footerAddMessage" href="#">оставить заявку</a></li>
                     <li class="tel tel3">или отправить на почту <a href="mailto:helpdesk@easyfinance.ru">helpdesk@easyfinance.ru</a></li>
                     <li class="twitter">Twitter:  <a href="http://twitter.com/easyfinanceru" target="_blank">easyfinanceru</a></li>
                     <li class="partners">Работа с партнёрами: <br><a href="mailto:partners@easyfinance.ru">partners@easyfinance.ru</a></li>
-				</ul>
-				<a href="http://notamedia.ru/" target="_blank"><div class="creator" tooltip="linkalert-tip">дизайн сайта<br/>Нотамедиа 2009</div></a>
-				<!--popup оставить отзыв-->
-			</div>
+                </ul>
+                <a href="http://notamedia.ru/" target="_blank"><div class="creator" tooltip="linkalert-tip">дизайн сайта<br/>Нотамедиа 2009</div></a>
+                <!--popup оставить отзыв-->
+            </div>
 
-			<div id='dialog_rating'></div>
-			<!--/popup оставить отзыв-->
+            <div id='dialog_rating'></div>
+            <!--/popup оставить отзыв-->
 
-			{literal}
-				<script type="text/javascript">
-					$(document).ready(function() {
-						//toggle long footer text
-						$("#footer a.footerTextToggler").click(function() {
-							$(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
-							$(this).parent().next('div').slideToggle("fast");
-							return false;
-						});
-					});
-				</script>
-			{/literal}
+            {literal}
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        //toggle long footer text
+                        $("#footer a.footerTextToggler").click(function() {
+                            $(this).html($(this).html() == '&gt;&gt;' ? '&lt;&lt;' : '&gt;&gt;');
+                            $(this).parent().next('div').slideToggle("fast");
+                            return false;
+                        });
+                    });
+                </script>
+            {/literal}
         </div>
 {/if}
         <!--/подвал-->
 
         {literal}
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(
-		    ['_setAccount', 'UA-10398211-2'],
-		    ['_setDomainName', '.easyfinance.ru'],
-		    ["_addOrganic", "mail.ru", "q"],
-		    ["_addOrganic","rambler.ru", "words"],
-		    ["_addOrganic","nigma.ru", "s"],
-		    ["_addOrganic","blogs.yandex.ru", "text"],
-		    ["_addOrganic","webalta.ru", "q"],
-		    ["_addOrganic","aport.ru", "r"],
-		    ["_addOrganic","akavita.by", "z"],
-		    ["_addOrganic","meta.ua", "q"],
-		    ["_addOrganic","bigmir.net", "q"],
-		    ["_addOrganic","tut.by", "query"],
-		    ["_addOrganic","all.by", "query"],
-		    ["_addOrganic","i.ua", "q"],
-		    ["_addOrganic","online.ua", "q"],
-		    ["_addOrganic","a.ua", "s"],
-		    ["_addOrganic","ukr.net", "search_query"],
-		    ["_addOrganic","search.com.ua", "q"],
-		    ["_addOrganic","search.ua", "query"],
-		    ["_addOrganic","poisk.ru", "text"],
-		    ["_addOrganic","km.ru", "sq"],
-		    ["_addOrganic","liveinternet.ru", "ask"],
-		    ["_addOrganic","gogo.ru", "q"],
-		    ["_addOrganic","gde.ru", "keywords"],
-		    ["_addOrganic","quintura.ru", "request"],
-		    ['_trackPageview']
-		);
-		(function() {
-		 var ga = document.createElement('script');
-		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		 ga.setAttribute('async', 'true');
-		 document.documentElement.firstChild.appendChild(ga);
-		})();
-	</script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(
+            ['_setAccount', 'UA-10398211-2'],
+            ['_setDomainName', '.easyfinance.ru'],
+            ["_addOrganic", "mail.ru", "q"],
+            ["_addOrganic","rambler.ru", "words"],
+            ["_addOrganic","nigma.ru", "s"],
+            ["_addOrganic","blogs.yandex.ru", "text"],
+            ["_addOrganic","webalta.ru", "q"],
+            ["_addOrganic","aport.ru", "r"],
+            ["_addOrganic","akavita.by", "z"],
+            ["_addOrganic","meta.ua", "q"],
+            ["_addOrganic","bigmir.net", "q"],
+            ["_addOrganic","tut.by", "query"],
+            ["_addOrganic","all.by", "query"],
+            ["_addOrganic","i.ua", "q"],
+            ["_addOrganic","online.ua", "q"],
+            ["_addOrganic","a.ua", "s"],
+            ["_addOrganic","ukr.net", "search_query"],
+            ["_addOrganic","search.com.ua", "q"],
+            ["_addOrganic","search.ua", "query"],
+            ["_addOrganic","poisk.ru", "text"],
+            ["_addOrganic","km.ru", "sq"],
+            ["_addOrganic","liveinternet.ru", "ask"],
+            ["_addOrganic","gogo.ru", "q"],
+            ["_addOrganic","gde.ru", "keywords"],
+            ["_addOrganic","quintura.ru", "request"],
+            ['_trackPageview']
+        );
+        (function() {
+         var ga = document.createElement('script');
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         ga.setAttribute('async', 'true');
+         document.documentElement.firstChild.appendChild(ga);
+        })();
+    </script>
         {/literal}
         {literal}
             <!--[if lte IE 6]><script src="/js/warning.js"></script><![endif]-->

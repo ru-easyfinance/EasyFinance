@@ -63,3 +63,18 @@ services:
 robokassa:
   url:   /robokassa/:action
   params: { module: robokassa }
+
+# Обёртка для wiki
+# ------------------------------------------------------------------------------
+
+wikiwrapper:
+  url:    /wikiwrapper/
+  class:  sfRoute
+  params: { module: wikiwrapper, action: index }
+
+wikiwrapper_page:
+  url:    /wikiwrapper/:wikiURL
+  class:  sfRoute
+  params: { module: wikiwrapper, action: index }
+  requirements:
+    wikiURL: \S+
