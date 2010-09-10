@@ -9,6 +9,9 @@
         <?php include_title() ?>
         <link rel="shortcut icon" href="/favicon.ico" />
         <?php include_stylesheets() ?>
+        <!--[if gte IE 7]>
+            <link rel="stylesheet" type="text/css" href="/css/ie7.css?r=<?php echo REVISION ?>"/>
+        <![endif]-->
         <?php include_javascripts() ?>
         <?php include_partial('global/res', array()) ?>
     </head>
