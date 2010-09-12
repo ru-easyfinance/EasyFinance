@@ -384,3 +384,28 @@ function include_partial($templateName, $vars = array()) {
 
     include(SYS_DIR_ROOT . "/sf/apps/frontend/templates/_" . $templateName . ".php");
 }
+
+/**
+ * Кодирует строку в base64 и заменяет символы /, + и =
+ * @param string $string
+ * @return string закодированная строка
+ */
+function urlsafe_b64encode($string)
+{
+    $data = base64_encode($string);
+    $data = str_replace(array('+', '/', '='), array('-', '_', ''), $data);
+    return $data;
+}
+
+/**
+ * Раскодирует строку из urlsafe base64
+ * @param string $string закодированная строка
+ * @return string раскодированная строка
+ */
+function urlsafe_b64decode($string)
+{
+    $data = str_replace(array('-', '_'),array('+', '/'), $string);
+    $l    = strlen($data);
+    $data = str_pad($data, $l + (4 - ($l % 4)) % 4, '=');
+    return base64_decode($data);
+}
