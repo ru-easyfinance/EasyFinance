@@ -68,7 +68,7 @@ _ActivateDataGrid = {
             $('<link>').attr({
                 rel: 'stylesheet',
                 type: 'text/css',
-                href: this
+                href:  window.location.protocol + '//' + window.location.hostname + this
             }).appendTo('head');
         });
 
