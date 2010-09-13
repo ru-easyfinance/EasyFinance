@@ -462,8 +462,14 @@ ul.dropdown #m9 ul {
     height: 37px;
     width: 25px;
     margin-right: 1px;
-    background: url('/img/i/menu3/icons.png') no-repeat left top;
+    background: url('/img/i/menu3/icons.png') no-repeat;
+    background-position: 0 37px;
     outline-width: 0;
+    opacity: .6;
+    -webkit-transition: opacity .2s linear;
+}
+.icon-menu3 .menu-icons .icon:hover {
+    opacity: 1;
 }
 .icon-menu3 .menu-icons .menu-icons-help { background-position: 0 0; }
 .icon-menu3 .menu-icons .menu-icons-settings { background-position: -25px 0; }

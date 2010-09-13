@@ -8,3 +8,13 @@
 body .ui-dialog.edit .ui-dialog-title {
     font-size:15px;
 }
+
+.icon-menu3 .menu-icons .icon {
+    background-position: 0 0;
+}
+.icon-menu3 .menu-icons .icon:hover {
+    background-position-y: -37px;
+}
+.menu-icons i.menu-icons-help {
+    background-position-y: 3px;
+}
