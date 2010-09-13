@@ -3,7 +3,7 @@
  * @author Konstantin Kitmanov
  */
 
-easyFinance.widgets.wizard = (function(){
+;easyFinance.widgets.wizard = (function(){
     var container,
         tabsHeads,
         tabsContents;
@@ -66,4 +66,4 @@ easyFinance.widgets.wizard = (function(){
         init: init,
         show: show
     }
-})()
+})();
