@@ -1852,6 +1852,9 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .ui-dialog .ui-dialog-buttonpane button {
     padding: .1em .3em!important;
 }
+.ui-dialog .ui-dialog-content>p {
+    padding: 0 1em;
+}
 
 .qtip {
     padding: 0 14px 0 0;
