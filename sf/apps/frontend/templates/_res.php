@@ -64,6 +64,7 @@
     $res['errors'] = array();
 ?>
 
+<?php if ($sf_user->isAuthenticated()) : ?>
 <script type="text/javascript">
     var res = <?php echo json_encode($res), "\n"; ?>
     res.calendar = {};
@@ -75,3 +76,4 @@
     <?php include_component('res', 'future', array()) ?>
     <?php include_component('res', 'overdue', array()) ?>
 </script>
+<?php endif; ?>

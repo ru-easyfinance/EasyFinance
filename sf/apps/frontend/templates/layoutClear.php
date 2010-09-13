@@ -68,8 +68,9 @@
 <!--середина-->
 <div id="mainwrap"  style="z-index: 5">
     <!-- mainmenu -->
+    <?php if ($sf_user->isAuthenticated()) : ?>
     <?php include_partial('global/common/mainmenu'); ?>
-
+    <?php endif; ?>
     <div class="ramka2">
         <div class="cct">
             <i class="tl"></i>

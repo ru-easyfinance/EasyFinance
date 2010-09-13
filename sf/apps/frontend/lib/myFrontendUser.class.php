@@ -59,6 +59,10 @@ class myFrontendUser extends sfBasicSecurityUser
         if (!$this->user) {
             $this->getUserRecord();
         }
+
+        if (!$this->user)
+            return false;
+
         return $this->user->getUserName();
     }
 }
