@@ -138,6 +138,14 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         }
         return ret;
     }
+
+    /**
+     * Центрирование окна мастера
+     */
+     function _riseWizardToWindowTop() {
+        $('#master').dialog('option', 'position', ['center', 60]);
+     }
+
     /**
      * Форматирование на лету
      */
@@ -190,6 +198,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 $('#master .step').hide();
                 $('#master #step1').show();
                 var tempDate = _currentDate;
+                _riseWizardToWindowTop();
                 break;
             case 'tostep2':
                 if (($(this).hasClass('next')) && (tempDate !== _currentDate))
@@ -224,6 +233,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 }
                 $('#master .step').hide();
                 $('#master #step2').show();
+                _riseWizardToWindowTop();
                 break;
             case 'tostep3':
                 fullSum(0);
@@ -231,6 +241,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 $('#master .rest b').text(formatCurrency(globalSum('step2')-parseFloat($('#master #step2 .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
                 $('#master .step').hide();
                 $('#master #step3').show();
+                _riseWizardToWindowTop();
                 break;
             case 'tosave':
                 fullSum(0);
@@ -256,7 +267,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             str = '0'+str;
         return str;
     }
-    $('#btnBudgetWizard').click(function(){
+
+    $('#btnBudgetWizard').click(function(_event) {
         $('#master .step').hide();
         $('#master #step1').show();
         var tempDate = widget.getDate()
@@ -267,7 +279,13 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#step1 #year').val(tempDate.getFullYear());
         $('#master').dialog('open');
         $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
-    })
+
+        _riseWizardToWindowTop();
+        // preventing scroll to anchor
+        _event.preventDefault();
+        return false;
+    });
+
     /**
      * копировать - создать новый
      */
@@ -277,27 +295,28 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         }else{
             $('#master #step1 .copy').show();
         }
-    })
+    });
 
     /**
      * Сумирование подкатегорий
      */
-    $('#master').live('click',function(){fullSum(0)})
-    $('#master tr input').live('blur',function(){
-        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'))
-    })
+    $('#master').live('click',function(){fullSum(0)});
+    $('#master tr input').live('blur', function() {
+        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'));
+    });
+
     $('#master .amount input').live('blur',function(){
 
-        var profit = globalSum('step2')
-        var drain = globalSum('step3')
-        $('#master .waste b').text(formatCurrency(drain))
-        $('#master .income b').text(formatCurrency(profit))
+        var profit = globalSum('step2');
+        var drain = globalSum('step3');
+        $('#master .waste b').text(formatCurrency(drain));
+        $('#master .income b').text(formatCurrency(profit));
         if (drain - profit > 0){
-            $('#master .rest b').css('color','#EB3C34')
+            $('#master .rest b').css('color','#EB3C34');
         }else{
-            $('#master .rest b').css('color','#309500')
+            $('#master .rest b').css('color','#309500');
         }
-        $('#master .rest b').text(formatCurrency(profit - drain))
-    })
+        $('#master .rest b').text(formatCurrency(profit - drain));
+    });
     return {};
 }
