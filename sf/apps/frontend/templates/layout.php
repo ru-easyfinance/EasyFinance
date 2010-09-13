@@ -28,31 +28,33 @@
         <img alt="" src="/img/i/gauge157.gif" width="157" height="157" class="preload" />
         <div id="container1">
         <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
-            <div id="menumain">
-                <ul class="menu1">
-                    <!-- Jet. ticket #273 -->
-                    <li class="first"><a href="/review" id="review">Обзор</a></li>
-                    <li><a href="/feedback" id="feed">Отзывы</a></li>
-                    <li><a href="https://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блог</a></li>
-                    <li><a href="/articles" id="articles">Статьи</a></li>
-                    <li><a href="https://m.easyfinance.ru" id="pda">Мобильная версия</a></li>
-                    <li><a href="/articles/12" id="help" style="font-weight:bold; color: yellow;">Помощь</a></li>
-                </ul>
-                <ul class="menu2">
-                    <?php
-                    /*
-                    <!--- <li><a href="/info/">Личный кабинет</a></li> --->
-                    <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
-                    */
-                    ?>
-                    <?php if ($sf_user->isAuthenticated()): ?>
-                    <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
-                    <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
-                    <?php else: ?>
-                    <li id="show_login"><a id="linkLogin" href="https://<?php echo URL_ROOT ?>login/">ВХОД</a></li>
-                    <?php endif; ?>
-                </ul>
-            </div>
+            <?php if ($_SERVER['HTTP_HOST'] === '/'): ?>
+                <div id="menumain">
+                    <ul class="menu1">
+                        <!-- Jet. ticket #273 -->
+                        <li class="first"><a href="/review" id="review">Обзор</a></li>
+                        <li><a href="/feedback" id="feed">Отзывы</a></li>
+                        <li><a href="https://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блог</a></li>
+                        <li><a href="/articles" id="articles">Статьи</a></li>
+                        <li><a href="https://m.easyfinance.ru" id="pda">Мобильная версия</a></li>
+                        <li><a href="/articles/12" id="help" style="font-weight:bold; color: yellow;">Помощь</a></li>
+                    </ul>
+                    <ul class="menu2">
+                        <?php
+                        /*
+                        <!--- <li><a href="/info/">Личный кабинет</a></li> --->
+                        <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
+                        */
+                        ?>
+                        <?php if ($sf_user->isAuthenticated()): ?>
+                        <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
+                        <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
+                        <?php else: ?>
+                        <li id="show_login"><a id="linkLogin" href="https://<?php echo URL_ROOT ?>login/">ВХОД</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            <?php endif?>
 <!-- верхнее меню -->
 <!--шапка-->
             <div id="header">
