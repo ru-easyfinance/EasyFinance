@@ -54,23 +54,23 @@
                                                     <li>не связанным с Вашими личными данными – логином, именем, фамилией, паролем, другим email и т.п. – чтобы другой пользователь, даже обнаружив его существование при попытке создать свой email, ничего о Вас не узнал</li>
                                                 </ul>
                                             </div><br>
-                                            <div class='notExist'>
+                                            <div class="notExist">
                                                 <p>
                                                     <label for="txtIntegrationEmail" class="eventDescription">Желаемый email:</label>
                                                 </p>
                                             </div>
-                                            <div id='errorMessageInvalidEmail'></div>
-                                            <div class='notExist'><p>
-                                                    <input type="text" value='' id='txtIntegrationEmail'>
+                                            <div id="errorMessageInvalidEmail"></div>
+                                            <div class=""notExist"><p>
+                                                    <input type="text" value="" id="txtIntegrationEmail">
                                                     <label for="txtIntegrationEmail" class="emailPostfix">@mail.easyfinance.ru</label>
-                                                    <button id='btnGetIntegrationEmail'>Создать</button>
+                                                    <button id="btnGetIntegrationEmail">Создать</button>
                                                 </p>
                                             </div>
-                                            <div class='exist'>Ваш e-mail для интеграции: <span id='lblIntegrationEmail'>default@ef.ru</span>
-                                                <button id="btnIntegrationEmailRemove" class='remove' title='Удалить'>Удалить</button>
+                                            <div class="exist">Ваш e-mail для интеграции: <span id="lblIntegrationEmail">default@ef.ru</span>
+                                                <button id="btnIntegrationEmailRemove" class="remove" title="Удалить">Удалить</button>
                                             </div>
                                         </div>
-                                        <button id='btnIntegrationMailNext' class="hidden" style="font-weight: bold">Далее</button>
+                                        <button id="btnIntegrationMailNext" class="hidden" style="font-weight: bold">Далее</button>
                                     </div>
                                 </div>
                             </div>
@@ -78,19 +78,19 @@
                             <div class="step">
                                 <!-- <div>Здесь инструкция</div><br> -->
                                 <div>
-                                    <button id='btnCreateAccount'>Создайте счёт</button> для карты "EASYFINANCE"<br><br>
+                                    <button id="btnCreateAccount">Создайте счёт</button> для карты "EASYFINANCE"<br><br>
 
                                     <div id="divAmtAccounts" class="hidden">Или выберите счёт из списка (отображаются только дебетовые карты):
                                     <select id="optionAccount"></select><br><br></div>
 
-                                    <button id='btnBackToEmail' style="font-weight: bold">Назад</button>
-                                    <button id='btnLinkAccount' style="font-weight: bold">Далее</button>
+                                    <button id="btnBackToEmai" style="font-weight: bold">Назад</button>
+                                    <button id="btnLinkAccount" style="font-weight: bold">Далее</button>
 
                                 </div>
                             </div>
                             <h3><a id="integrationStep4" href="#">4. Заполнить и распечатать анкету</a></h3>
                             <div class="step">
-                                <button id='btnBackToAccount' style="font-weight: bold">Назад</button><br><br>
+                                <button id="btnBackToAccount" style="font-weight: bold">Назад</button><br><br>
                                 {include file="integration/amt-wizard.html"}
                             </div>
                         </div>
