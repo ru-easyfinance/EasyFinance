@@ -73,12 +73,23 @@ class importOperationFromEmailTask extends sfBaseTask
 
         if (!$input) {
             $this->logging("Expected not empty input", $input);
+            $this->logMessage(
+                null,
+                'Нет данных на входе',
+                'При парсинге входящего письма не получили данных.'
+            );
             return self::ERROR_EMPTY_INPUT;
         }
 
         $mail = myParseEmailImport::getEmailData($input);
         if (false == $mail) {
             $this->logging("Not a valid .eml file format", $input);
+            $this->logMessage(
+                null,
+                'Письмо не может быть распознано',
+                'Входящее письмо не может быть распознано, т.к. формат не соответствует стандарту.',
+                $input
+            );
             return self::ERROR_EMAIL_FORMAT;
         }
 
@@ -102,6 +113,12 @@ class importOperationFromEmailTask extends sfBaseTask
 
             if (false === $source) {
                 $this->logging("Unknown sender", $from);
+                $this->logMessage(
+                    null,
+                    'Неизвестный отправитель',
+                    'В нашей БД отсутствует отправитель (БАНК).',
+                    sprintf("Отправлено от: %s\nОтправлено для: %s\nТема письма: %s\nТело письма:\n%s", $from, $mail['to'], $mail['subject'], $mail['body'])
+                );
                 $this->forwardMail($mail['to'], $mail['subject'], $mail['body']);
                 return self::ERROR_UNKNOWN_SENDER;
             }
@@ -111,6 +128,12 @@ class importOperationFromEmailTask extends sfBaseTask
 
             if (!is_object($parser) || !($parser instanceof EmailParser)) {
                 $this->logging("Can't find any suitable parser for subject", $subject);
+                $this->logMessage(
+                    null,
+                    'Нет парсера для обработки письма',
+                    'Невозможно подобрать парсер, необходимый для обработки письма, по его теме.',
+                    sprintf("Отправлено от: %s\nОтправлено для: %s\nТема письма: %s\nТело письма:\n%s", $from, $mail['to'], $mail['subject'], $mail['body'])
+                );
                 $this->forwardMail($mail['to'], $mail['subject'], $mail['body']);
                 return self::ERROR_NO_PARSER;
             }
@@ -124,6 +147,12 @@ class importOperationFromEmailTask extends sfBaseTask
             $operationData = $getEmail->getData();
         } catch (Exception $e) {
             $this->logging($e->getMessage(), $input);
+            $this->logMessage(
+                null,
+                'Парсер не смог обработать письмо',
+                sprintf('Обработка данных письма вызвала ошибку "%s" при обработке тела письма', $e->getMessage()),
+                sprintf("Отправлено для: %s\nТело письма:\n%s", $mail['to'], $input)
+            );
             return self::ERROR_PARSER_EXCEPTION;
         }
 
@@ -134,9 +163,23 @@ class importOperationFromEmailTask extends sfBaseTask
             $form->save();
         } else {
             $this->logging($form->getErrorSchema(), $input);
+            $this->logMessage(
+                null,
+                'Сохранение операции',
+                sprintf("Попытка сохранения операции не удалась.\nВозникшие ошибки при валидации данных: %s", $form->getErrorSchema()),
+                sprintf("Отправлено для: %s\nТело письма:\n%s", $mail['to'], $input)
+            );
             return self::ERROR_IMPORT_OPERATION;
         }
 
+        $this->logMessage(
+            'info',
+            'Сохранение операции',
+            sprintf('Операция успешно создана.'),
+            sprintf("Отправлено для: %s\nТело письма:\n%s", $mail['to'], $input),
+            null,
+            $form->getObject()->getId()
+        );
         $this->logSection('import', 'Done');
         return self::OK;
     }
@@ -188,9 +231,49 @@ class importOperationFromEmailTask extends sfBaseTask
 
             // посылаем
             $this->getMailer()->sendNextImmediately()->send($message);
+
+            $this->logMessage(
+                'notice',
+                'Пересылка нераспознанного письма',
+                'Т.к. парсер не смог обработать письмо - мы переслали его реальному пользователю.',
+                sprintf("Оригинальное письмо:\n\nОтправлено для: %s\nТема письма: %s\nТело письма:\n%s", $to, $subject, $body),
+                $user
+            );
+        // не нашли пользователя по сервисному мылу
         } else {
+            $this->logMessage(
+                null,
+                'Неизвестный получатель',
+                'Пользователь не может быть идентифицирован по e-mail для интеграции.',
+                sprintf("Отправлено для: %s\nТема письма: %s\nТело письма:\n%s", $to, $subject, $body)
+            );
             $this->logging('No such User identified by Service Email', $to);
         }
+    }
+
+
+    /**
+     * Сообщить о событии слушателям
+     *
+     * @see     myDoctrineLoggerPlugin
+     * @param   string  $level          Уровень ошибки
+     * @param   string  $name           Название события
+     * @param   string  $description    Описание (расшифровка) события
+     * @param   string  $environment
+     * @param   User|integer  $user     Пользователь (идентификатор)
+     * @param   integer $object         Идентификатор объекта
+     */
+    protected function logMessage($level, $name, $description, $environment = '', $user = null, $object = null)
+    {
+        $this->dispatcher->notify(new sfEvent('Task "importOperationFromEmail"', 'app.activity', array(
+            'state'       => ($level ? $level : 'fail'),
+            'name'        => $name,
+            'description' => $description,
+            'component'   => 'OperationEmailParser',
+            'env'         => (string) $environment,
+            'user'        => $user,
+            'object'      => $object,
+        )));
     }
 
 }
