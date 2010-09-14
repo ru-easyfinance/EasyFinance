@@ -1,3 +1,11 @@
+<?php
+/**
+ * Основное меню
+ *
+ * TODO: написать функциональный тест
+ * TODO: убрать html-ные комментарии - нужны комменты - через php
+ */
+?>
 <div class="menu3 icon-menu3">
     <ul class="dropdown">
         <li id="m1">
@@ -86,12 +94,12 @@
         <i class="icon menu-icons-settings" title="Настройки">
             <ul class="dd-sub">
                 <li class="first"></li>
-                <li><span class="spacer"></span><a href="/profile/">Профиль</a></li>
+                <li><span class="spacer"></span><a href="/my/profile/">Профиль</a></li>
                 <li><span class="spacer"></span><a href="/my/services/">Услуги</a></li>
                 <li class="last"></li>
             </ul>
         </i>
-        <a href="https://<?php echo URL_ROOT_PDA?>" class="icon menu-icons-mobile" title="Мобильная версия"></a>
+        <a href="https://<?php echo URL_ROOT_PDA; ?>" class="icon menu-icons-mobile" title="Мобильная версия"></a>
         <a href="/logout/" class="icon menu-icons-logout" title="Выход"></a>
     </div>
 </div>

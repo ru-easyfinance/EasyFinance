@@ -556,7 +556,7 @@ $(document).ready(function(){
         });
         $('.dial').bind('dialogclose', function(event, ui){
             //setCookie2('guide','',0,COOKIE_DOMEN);
-            $.post('/profile/cook/');
+            $.post('/my/profile/guide.json', { state: '0' });
             $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {
                 theme: 'green',
                 stick: true

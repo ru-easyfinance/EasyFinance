@@ -60,7 +60,7 @@
                 </tr>
                 <tr>
                     <td><label for="guide">Включить гид</label></td>
-                    <td><input id="guide" name="guide" class="chek" type="checkbox" checked="checked" /></td>
+                    <td><input id="guide" name="guide" class="chek" type="checkbox"<?php echo $sf_request->getCookie('guide', false) ? ' checked="checked"' : '' ?> /></td>
                 </tr>
                 <tr>
                     <td><label for="getNotify">Получать уведомления об изменениях сервиса на электронную почту</label></td>

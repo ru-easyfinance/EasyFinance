@@ -4,9 +4,27 @@ require_once dirname(__FILE__).'/../../../bootstrap/all.php';
 /**
  * Профиль пользователя: показать формы
  */
-class frontend_profile_SaveTest extends myFunctionalTestCase
+class frontend_profile_profileActionsTest extends myFunctionalTestCase
 {
     protected $app = 'frontend';
+
+
+    /**
+     * Открыть страницу профиля
+     */
+    public function testProfileForm()
+    {
+        $this->authenticateUser();
+
+        $this->browser
+            ->getAndCheck('profile', 'index', $this->generateUrl('profile_form'), 200);
+
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement("#profile .formRegister", 1)
+                ->checkElement("#reminders #remindersOptions", 1)
+            ->end();
+    }
 
 
     /**
@@ -14,8 +32,7 @@ class frontend_profile_SaveTest extends myFunctionalTestCase
      */
     public function testProfileSave()
     {
-        $user = $this->helper->makeUser();
-        $this->authenticateUser($user);
+        $this->authenticateUser();
 
         $this->browser
             ->post($this->generateUrl('profile_save', array('sf_format'  => 'json')), array(
@@ -31,7 +48,7 @@ class frontend_profile_SaveTest extends myFunctionalTestCase
             ->end()
             ->with('response')->begin()
                 ->checkJsonContains('result', array('text' => 'Данные успешно сохранены'))
-                ->setsCookie('guide', '')
+                ->setsCookie('guide', false)
             ->end();
     }
 
@@ -41,8 +58,7 @@ class frontend_profile_SaveTest extends myFunctionalTestCase
      */
     public function testProfileSaveWithGuide()
     {
-        $user = $this->helper->makeUser();
-        $this->authenticateUser($user);
+        $this->authenticateUser();
 
         $this->browser
             ->post($this->generateUrl('profile_save', array('sf_format'  => 'json')), array(
@@ -62,5 +78,27 @@ class frontend_profile_SaveTest extends myFunctionalTestCase
             ->end();
     }
 
+
+    /**
+     * Сохранить состояние куки на гайд
+     */
+    public function testGuideCookie()
+    {
+        $this->authenticateUser();
+
+        // убрать куку
+        $this->browser
+            ->post($this->generateUrl('profile_guide', array('sf_format'  => 'json')), array('state' => '0'))
+            ->with('request')->checkModuleAction('profile', 'guide')
+            ->with('response')->isStatusCode(200)
+            ->with('response')->setsCookie('guide', false);
+
+        // поставить куку
+        $this->browser
+            ->post($this->generateUrl('profile_guide', array('sf_format'  => 'json')), array('state' => '1'))
+            ->with('request')->checkModuleAction('profile', 'guide')
+            ->with('response')->isStatusCode(200)
+            ->with('response')->setsCookie('guide', 'uyjsdhf');
+    }
 
 }
