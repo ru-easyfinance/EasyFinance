@@ -12,7 +12,7 @@
     {
         'undefined': '',
         'input': 'input',
-        'button': 'button',
+        'button': 'button'
         // и.тд.
     };
     // Получить HTML текушего нода
