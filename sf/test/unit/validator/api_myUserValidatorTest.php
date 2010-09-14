@@ -41,7 +41,14 @@ class validator_myUserValidatorTest extends myUnitTestCase
      */
     public function testValidator()
     {
-        $user = $this->helper->makeUser(array('user_name' => 'LoGiN', 'password' => 'PaSsWoRd'));
+        $user = $this->helper->makeUser(
+            array(
+                'user_login' => 'LoGiN',
+                'user_name' => 'NaMe',
+                'password' => 'PaSsWoRd'
+            )
+        );
+
         $input = array('login' => 'LoGiN', 'password' => 'PaSsWoRd');
 
         try {
