@@ -25,9 +25,9 @@ $.rwCalculator.buttonPanel = {
         },
         '4': {
             'class': 'special',
-            'text': 'X',
-            'event': 'hide',
-            'title': 'Скрыть'
+            'text': 'C',
+            'event': 'clear',
+            'title': 'Очистить'
         }
     },
     '1': {
@@ -48,10 +48,9 @@ $.rwCalculator.buttonPanel = {
             'text': '*'
         },
         '4': {
-            'class': 'special',
-            'text': 'C',
-            'event': 'clear',
-            'title': 'Очистить'
+           'class': 'special',
+            'text': '&larr;',
+            'event': 'removeLastSymbol'
         }
     },
     '2': {

@@ -139,6 +139,13 @@
         },
         'clear': function(){
             $($.rwCalculator.node).val('');
+        },
+        'removeLastSymbol': function(){
+            var equation = $($.rwCalculator.node).val();
+            if (equation.length > 0) {
+                equation = equation.substr(0, equation.length - 1);
+            }
+            $($.rwCalculator.node).val(equation);
         }
     }
 
@@ -168,17 +175,21 @@
         var _tmpDt = new Date();
         var id = 'rwCalculator' + (_tmpDt.getTime()).toString();
 
-
+        var headerHTML = '<div class="header"><div class="close-btn">&nbsp;</div><br class="clear" /></div>';
         var _html = '<div id="' + id + '" class="rw-widget rw-container rw-calculator rw-popup-widget">' +
         '<div class="panel">' +
+        headerHTML +
         $.rwCalculator._generateHtmlButtonPanel() +
         '</div>' +
         '<div class="calculatorWrapper">   </div></div>';
         $('body').append(_html);
-        $('.calculatorWrapper').click(function(){
+
+        var hideCalculator = function () {
             $('.calculatorWrapper').hide();
             $.rwCalculator.inst.hide();
-            })
+        }
+        $('.rw-calculator .header .close-btn').click(hideCalculator);
+        $('.calculatorWrapper').click(hideCalculator);
         $.rwCalculator.inst = $('#' + id);
         //binds
         var clearVal = false;

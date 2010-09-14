@@ -49,6 +49,25 @@ div.rw-calculator div{
     position:relative;
     font: 12px/16px Arial, Tahoma, sans-serif;
 }
+div.rw-calculator div.header {
+    padding: 0!important;
+    margin: 0!important;
+    height: 12px;
+}
+div.rw-calculator div.header div.close-btn {
+    padding: 0!important;
+    margin: 0!important;
+    margin-right: 4px!important;
+    float: left;
+    width: 12px;
+    height: 12px;
+    float: right;
+    background-image: url('/img/i/jQuery/close_btn_small_red.png');
+    cursor: pointer;
+}
+div.rw-calculator div.header div.close-btn:hover {
+    background-image: url('/img/i/jQuery/close_btn_small_red_hover.png');
+}
 div.rw-calculator table,.rw-calculator tbody,.rw-calculator tr,.rw-calculator td,.rw-calculator th {
     border-collapse:collapse;
     border-spacing:0;
