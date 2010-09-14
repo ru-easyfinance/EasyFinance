@@ -43,8 +43,14 @@ class profileActions extends sfActions
             'getNotify'         => 'notify',
         );
 
-        // TODO поставить куку на гайд...
-        //$postParameters['guide'];
+        // поставить куку на гайд...
+        if ((int) $postParameters['guide']) {
+            // поганый хардкод
+            $this->getResponse()->setCookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
+        // убить куку
+        } else {
+            $this->getResponse()->setCookie('guide', '', time() - 3600, COOKIE_PATH, COOKIE_DOMEN, false);
+        }
 
         foreach ($fields as $parameter => $field) {
             if (array_key_exists($parameter, $postParameters)) {

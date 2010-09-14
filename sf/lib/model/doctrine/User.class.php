@@ -19,6 +19,9 @@ class User extends BaseUser
 
     /**
      * Установить пароль
+     *
+     * @param   string  $password   Нешифрованный пароль
+     * @return  string              Зашифрованный пароль
      */
     public function setPassword($password)
     {
