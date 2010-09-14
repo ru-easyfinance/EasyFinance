@@ -43,7 +43,8 @@ class ProjectConfiguration extends sfProjectConfiguration
             'sfDoctrinePlugin',
             'sfPhpunitPlugin',
             'myAuthPlugin',
-            'sfWebBrowserPlugin'
+            'sfWebBrowserPlugin',
+            'myDoctrineLoggerPlugin',
         ));
     }
 
