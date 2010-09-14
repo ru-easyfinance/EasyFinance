@@ -33,7 +33,7 @@ function initLogged() {
 
     // переход на следующий этап после создания email'a
     $('#btnIntegrationMailNext').click(function() {
-        $("#integrationStep2").addClass("complete").append(" - готово!");
+        setIntegrationStepReady($("#integrationStep2"));
 
         $("#integrationSteps").accordion("activate" , 2);
         $("#wz_card_account_mail").val($("#lblIntegrationEmail").text());
@@ -53,7 +53,7 @@ function initLogged() {
         });
     } else {
         // email создан, подставляем в виджет и анкету
-        $("#integrationStep2").addClass("complete").append(" - готово!");
+        setIntegrationStepReady($("#integrationStep2"));
 
         $("#wz_card_account_mail").val(res.profile.integration.email);
         easyFinance.widgets.userIntegrations.load({service_mail : res.profile.integration.email});
@@ -69,7 +69,7 @@ function initLogged() {
             });
         } else {
             // выбираем привязанный аккаунт
-            $("#integrationStep3").addClass("complete").append(" - готово!");
+            setIntegrationStepReady($("#integrationStep3"));
 
             var $opt = $("#optionAccount").find("option[value='" + res.profile.integration.account + "']");
             if ($opt) {
@@ -189,7 +189,7 @@ function linkAccount() {
                         if (data.result.text)
                             $.jGrowl(data.result.text, {theme: 'green', life: 2500});
 
-                        $("#integrationStep3").addClass("complete").append(" - готово!");
+                        setIntegrationStepReady($("#integrationStep3"));
 
                         // открываем анкету
                         $("#integrationSteps").accordion("activate" , 3);
@@ -203,6 +203,12 @@ function linkAccount() {
                 }
             }, 'json'
         );
+    }
+}
+
+function setIntegrationStepReady(node) {
+    if (!node.hasClass("complete")) {
+        node.addClass("complete").append(" — готово!");
     }
 }
 
