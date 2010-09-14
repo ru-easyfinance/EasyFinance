@@ -28,10 +28,12 @@
     <div id="content" class="inside form">
         <div class="formRegister">
             <table>
+                <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
                 <tr>
                     <td><label for="login">Логин:</label></td>
                     <td><input id="login" name="login" class="disabled" type="text" value="" disabled="disabled" /></td>
                 </tr>
+                <?php endif; ?>
                 <tr>
                     <td><label for="mailIntegration">E-Mail для интеграции:</label></td>
                     <td><input id="mailIntegration" name="integration" type="text" value="" />@mail.easyfinance.ru</td>
@@ -40,6 +42,7 @@
                     <td><label for="name">Псевдоним:</label></td>
                     <td><input id="name" name="name" type="text" value="<?php echo $sf_user->getName() ?>" /></td>
                 </tr>
+                <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
                 <tr>
                     <td colspan="2"><h3>Смена пароля</h3></td>
                 </tr>
@@ -58,6 +61,7 @@
                     <td><label for="mail">e-mail:</label></td>
                     <td><input id="mail" type="text" name="mail" value="" /><em class="red">*</em></td>
                 </tr>
+                <?php endif; ?>
                 <tr>
                     <td><label for="guide">Включить гид</label></td>
                     <td><input id="guide" name="guide" class="chek" type="checkbox"<?php echo $sf_request->getCookie('guide', false) ? ' checked="checked"' : '' ?> /></td>
@@ -73,6 +77,7 @@
                 <tr>
                     <td colspan="2"><h3><div> </div></h3></td>
                 </tr>
+                <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
                 <tr>
                     <td><label for="pass">Текущий пароль:</label></td>
                     <td><input id="pass" name="pass" type="password" value="" title="Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес." /></td>
@@ -80,6 +85,7 @@
                 <tr>
                     <td colspan="2"><h6>* Введите пароль, если Вам нужно сменить старый пароль, или почтовый адрес.</h6></td>
                 </tr>
+                <?php endif; ?>
                 <tr>
                     <td> </td>
                     <td><button id="save_info">Сохранить</button></td>
