@@ -24,16 +24,18 @@
         <img alt="" src="/img/i/gauge157.gif" width="157" height="157" class="preload" />
         <div id="container1">
         <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
-            <?php if ($_SERVER['HTTP_HOST'] === '/'): ?>
+            <?php if (!$sf_user->isAuthenticated()) : ?>
                 <div id="menumain">
                     <ul class="menu1">
                         <!-- Jet. ticket #273 -->
-                        <li class="first"><a href="/review" id="review">Обзор</a></li>
-                        <li><a href="/feedback" id="feed">Отзывы</a></li>
-                        <li><a href="https://easyfinance-ru.livejournal.com/" id="blog" target="_blank">Блог</a></li>
-                        <li><a href="/articles" id="articles">Статьи</a></li>
-                        <li><a href="https://m.easyfinance.ru" id="pda">Мобильная версия</a></li>
-                        <li><a href="/articles/12" id="help" style="font-weight:bold; color: yellow;">Помощь</a></li>
+                        <li class="first"><a href="https://<?php echo URL_ROOT_MAIN; ?>review/" id="review" class="efTooltip" title="Описание основных элементов и сервисов">Обзор</a></li>
+                        <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=2" id="feed" class="efTooltip" title="Мнения пользователей о работе сайта и их пожелания">Отзывы</a></li>
+                        <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=4" id="feed" class="efTooltip" title="Публикации СМИ о нашем сервисе">Сми о нас</a></li>
+                        <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=1" id="blog" class="efTooltip" title="Корпоративный блог">Блог</a></li>
+                        <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_articles.php" id="articles" title="Статьи о финансах">Статьи</a></li>
+                        <li><a href="https://<?php echo URL_ROOT_PDA; ?>" id="pda" title="Версия для использования с мобильного телефона">Мобильная версия</a></li>
+                        <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14" id="help" style="font-weight:bold; color: white;" title="Помощь по использованию сервиса">Помощь</a></li>
+                        <li style="background: none; margin-left: 30px;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
                     </ul>
                     <ul class="menu2">
                         <?php
@@ -42,7 +44,7 @@
                         <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
                         */
                         ?>
-                        <?php if ($sf_user->isAuthenticated()): ?>
+                        <?php if ($sf_user->isAuthenticated()) : ?>
                         <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
                         <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                         <?php else: ?>
@@ -79,22 +81,11 @@
                 <!--меню4-->
                 <!--/меню4-->
                 <div class="mid general_cont">
-
-                    <!--левая колонка-->
-                    <?php include_partial('global/common/left.quick'); ?>
-
-                    <div class="block2">
-                        <div class="l-indent">
-                        <?php include_partial('global/common') ?>
-
-                        <!--наполнение-->
-                        <?php echo $sf_content ?>
-                        <!--/наполнение-->
-                        </div>
-                    </div>
-
-                    <?php include_partial('global/rightColumn', array()) ?>
-
+                    <?php if (isset($mainBlockClear)) : ?>
+                        <?php include '_mainBlockClear.php'; ?>
+                    <?php else : ?>
+                        <?php include '_mainBlock.php'; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
