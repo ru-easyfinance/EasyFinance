@@ -89,7 +89,8 @@ $(document).ready(function() {
     // содержание подсказок задаётся в атрибуте title
     $(".efTooltip").tooltip({
         showURL: false,
-        showBody: " - "
+        showBody: " - ",
+        extraClass: 'tahometers-tooltip'
     });
 
     /////////////////////////////////////////////////Cтили

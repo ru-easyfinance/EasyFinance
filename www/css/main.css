@@ -2334,6 +2334,7 @@ img.ui-datepicker-trigger {
 .dl-tabs dd.selected {
     display:block;
 }
+
 .b-noscript {
     display: block;
     top: 0px;
@@ -2346,4 +2347,16 @@ img.ui-datepicker-trigger {
     line-height: 35px;
     font-size: 120%;
     font-weight: bold;
+}
+
+#tooltip.tahometers-tooltip {
+    width: 500px;
+    margin-bottom: -50%;
+    text-align: left;
+    border: 1px solid #8a8;
+    padding: 1em;
+}
+#tooltip.tahometers-tooltip p {
+    text-align: justify;
+    margin-bottom: .7em;
 }
