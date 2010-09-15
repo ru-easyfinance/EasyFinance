@@ -434,4 +434,56 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
     }
 
+
+    /**
+     * Удалить операцию
+     */
+    public function testDeleteOperation()
+    {
+        $expectedData = array(
+            'user_id'     => $this->_user->getId(),
+            'created_at'  => $this->_makeDate(-10000),
+            'updated_at'  => $this->_makeDate(-300),
+            'deleted_at'  => null,
+        );
+
+        $operation = $this->helper->makeOperation(
+            $this->helper->makeAccount($this->_user),
+            $expectedData
+        );
+
+        $expectedData['id']         = $operation->getId();
+        $expectedData['cid']        = 2;
+        $expectedData['deleted_at'] = $this->_makeDate(-300);
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement('resultset record', 1)
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
+                ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
+            ->end();
+
+        $sql = "SELECT * FROM operation;";
+        $operations = Doctrine_Manager::getInstance()
+            ->getConnection('doctrine')->getDbh()->query($sql)->fetchAll(Doctrine::FETCH_ASSOC);
+
+        $opRecord = "record[id=\"{$operation->getId()}\"][deleted=\"deleted\"]";
+
+        $this->browser
+            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
+                'model'   => 'operation',
+                'from'    => $this->_makeDate(-1000),
+                'to'      => $this->_makeDate(+1000),
+            )), 200)
+            ->with('response')->begin()
+                ->isValid()
+                ->checkContains('<recordset type="Operation">')
+                ->checkElement("$opRecord", 1)
+            ->end();
+    }
+
 }
