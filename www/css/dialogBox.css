@@ -49,3 +49,82 @@ body .ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-
     height:20px;
     margin:0 !important;
 }
+
+.ui-dialog.ui-widget-content {
+    background: #fff url(../img/i/popup-header-shadow.png) 0 30px repeat-x;
+    border: 1px solid gray;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    box-shadow:0 5px 20px -2px #000;
+    -webkit-box-shadow:0 5px 20px -2px #000;
+    -moz-box-shadow:0 5px 20px -2px #000;
+}
+.ui-dialog.ui-widget-content .ui-resizable-nw {
+    top: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    background: url('/img/i/jQuery/calendar/bg_ui-dialog_topleft.gif') no-repeat right bottom;
+    border: none;
+}
+.ui-dialog.ui-widget-content .ui-resizable-ne {
+    top: 0;
+    right: 0;
+    width: 9px;
+    height: 9px;
+    background: url('/img/i/jQuery/calendar/bg_ui-dialog_topright.gif') no-repeat right bottom;
+    border: none;
+}
+.ui-dialog.ui-widget-content .ui-resizable-sw {
+    bottom: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border: none;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    -moz-border-radius: 0;
+    background: none;
+    border: none;
+}
+.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close {
+    padding: 0;
+}
+.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
+    background: url('/img/i/jQuery/ico_close.gif') no-repeat 50% 50%;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 0!important;
+}
+.ui-dialog ul.ui-tabs-nav li.ui-state-default, .ui-dialog ul.ui-tabs-nav li.ui-state-active {
+    -moz-border-radius: 0;
+    background: none;
+    border: none;
+}
+.ui-dialog ul.ui-tabs-nav li.ui-state-default a {
+    margin: 0 .5em;
+    padding: 0;
+    color: #50c319;
+    border-bottom: dotted 1px #50c319;
+}
+.ui-dialog ul.ui-tabs-nav li.ui-state-active a {
+    padding: .2em .5em;
+    color: #fff;
+    background-color: #50c319;
+    border: none;
+}
+
+.ui-dialog form table td {
+    padding: .3em;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+    padding: .1em .3em!important;
+}
+
+.ui-dialog-title {
+    font-size   : larger;
+    font-weight : bold;
+}

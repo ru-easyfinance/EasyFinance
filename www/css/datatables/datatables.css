@@ -559,6 +559,9 @@ tr.even.gradeU td.sorting_3 {
     font-size:11px;
     vertical-align:middle;
 }
+.custom-grid-style table th {
+    white-space:nowrap;
+}
 .custom-grid-style table td {
     padding:5px;
     cursor:pointer;

@@ -870,26 +870,13 @@ div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
 
-#btnCalcSum, #btnCalcSumTransfer{
-    padding-top: 2px;
-    margin-top: 0px;
-    border: none;
-    background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    position: relative;
-    left: 0px;
-    cursor: pointer;
-}
-
 #btnCalcSumTransfer {
     top: 4px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0)
 {
- #btnCalcSum, #btnCalcSumTransfer {margin-top:2px;}
+#btnCalcSumTransfer {margin-top:2px;}
  /* хак для правильного позиционирования иконки калькулятора в Safari и Chrome */
 }
 
@@ -1687,40 +1674,6 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background-color: #ffe0a0;
 }
 
-.ui-dialog.ui-widget-content {
-    background: #fff url(../img/i/popup-header-shadow.png) 0 30px repeat-x;
-    border: 1px solid gray;
-    -webkit-border-radius:10px;
-    -moz-border-radius:10px;
-    border-radius:10px;
-    box-shadow:0 5px 20px -2px #000;
-    -webkit-box-shadow:0 5px 20px -2px #000;
-    -moz-box-shadow:0 5px 20px -2px #000;
-}
-.ui-dialog.ui-widget-content .ui-resizable-nw {
-    top: 0;
-    left: 0;
-    width: 9px;
-    height: 9px;
-    background: url('/img/i/jQuery/calendar/bg_ui-dialog_topleft.gif') no-repeat right bottom;
-    border: none;
-}
-.ui-dialog.ui-widget-content .ui-resizable-ne {
-    top: 0;
-    right: 0;
-    width: 9px;
-    height: 9px;
-    background: url('/img/i/jQuery/calendar/bg_ui-dialog_topright.gif') no-repeat right bottom;
-    border: none;
-}
-.ui-dialog.ui-widget-content .ui-resizable-sw {
-    bottom: 0;
-    left: 0;
-    width: 9px;
-    height: 9px;
-    border: none;
-}
-
 .ui-resizable-n { cursor: n-resize; height: 21px; width: 100%; top: -21px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.head_c.png) repeat-x scroll left top; }
 .ui-resizable-s { cursor: s-resize; height: 30px; width: 100%; bottom: -30px; left: 0px; background:transparent url(/img/i/dialog/wel.msg.foot_c.png) repeat-x scroll left bottom; }
 .ui-resizable-e { cursor: e-resize; width: 33px; right: -33px; top: 0px; height: 100%; background:transparent url(/img/i/dialog/wel.msg.body_r.png) repeat-y scroll right top; }
@@ -1735,50 +1688,6 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
     background-color:#666666;
     opacity:0.5;
     filter:alpha(opacity=50);
-}
-
-
-.ui-dialog .ui-dialog-titlebar {
-    -moz-border-radius: 0;
-    background: none;
-    border: none;
-}
-.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close {
-    padding: 0;
-}
-.ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-closethick {
-    background: url('/img/i/jQuery/ico_close.gif') no-repeat 50% 50%;
-}
-
-.ui-dialog .ui-dialog-content {
-    padding: 0!important;
-}
-.ui-dialog ul.ui-tabs-nav li.ui-state-default, .ui-dialog ul.ui-tabs-nav li.ui-state-active {
-    -moz-border-radius: 0;
-    background: none;
-    border: none;
-}
-.ui-dialog ul.ui-tabs-nav li.ui-state-default a {
-    margin: 0 .5em;
-    padding: 0;
-    color: #50c319;
-    border-bottom: dotted 1px #50c319;
-}
-.ui-dialog ul.ui-tabs-nav li.ui-state-active a {
-    padding: .2em .5em;
-    color: #fff;
-    background-color: #50c319;
-    border: none;
-}
-
-.ui-dialog form table td {
-    padding: .3em;
-}
-.ui-dialog .ui-dialog-buttonpane button {
-    padding: .1em .3em!important;
-}
-.ui-dialog .ui-dialog-content>p {
-    padding: 0 1em;
 }
 
 .qtip {
@@ -2120,11 +2029,6 @@ div.op_addoperation div.op_line div.amount img{
     cursor: pointer;
 }*/
 
-.ui-dialog-title {
-    font-size   : larger;
-    font-weight : bold;
-}
-
 .dlgOperationEdit .ui-dialog-titlebar {
 
 }
@@ -2193,6 +2097,66 @@ img.ui-datepicker-trigger {
 .b-form-skeleton td,
 .op_addoperation .b-form-skeleton td {
     padding:5px;
+}
+
+.b-form-skeleton .rw-calculator {
+    margin-top:5px !important;
+}
+.b-form-skeleton .rw-calculator td {
+    padding:0.3em;
+}
+
+.b-form-skeleton .b-row {
+    clear:both;
+    display:block;
+}
+.b-form-skeleton .b-row .b-col {
+    float: left;
+    width: 100%;
+}
+.b-form-skeleton .b-row .b-col.text-right {
+    text-align:right;
+}
+.b-form-skeleton .b-row .b-col.center-input {
+    line-height:30px;
+}
+
+.b-form-skeleton .b-row.cols2 .b-col {
+    width: 50%;
+}
+.b-form-skeleton .b-row.cols3 .b-col {
+    width: 33.33%;
+}
+.b-form-skeleton .b-row.cols3 .b-col.invert-width {
+    width: 66.67%;
+}
+
+.b-form-skeleton .b-row.cols4 .b-col {
+    width: 25%;
+}
+.b-form-skeleton .b-row.cols4 .b-col.invert-width {
+    width: 75%;
+}
+
+.b-form-skeleton .b-row.cols5 .b-col {
+    width: 20%;
+}
+.b-form-skeleton .b-row.cols5 .b-col.invert-width {
+    width: 80%;
+}
+
+.b-form-skeleton .b-row .b-col .b-col-indent {
+    padding: 5px;
+}
+
+table.week td {
+    text-align:center;
+}
+
+b.clear {
+    width:100%;
+    clear:both;
+    display:block;
 }
 
 #calend,
