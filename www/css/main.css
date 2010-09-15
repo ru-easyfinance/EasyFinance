@@ -243,6 +243,21 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 
 #container1.iframe { width: 570px; }
 
+.body-rambler {
+    background-color: #fff;
+}
+.body-rambler #container1 {
+    padding: 0 0 130px 0;
+}
+.body-rambler .ramka2 .cct,
+.body-rambler .ramka2 .ccb,
+.body-rambler .ramka2 .cct .tl,
+.body-rambler .ramka2 .cct .tr,
+.body-rambler .ramka2 .ccb .bl,
+.body-rambler .ramka2 .ccb .br {
+    background-image: url('/img/i/bg-corners-rambler.png');
+}
+
 #menumain { position: relative; width:940px; height: 39px; background: url('/img/i/bg_menu.png') no-repeat 0 0; margin:0 auto; }
 #menumain ul.menu1 { margin-left: 21px; width: auto; overflow: hidden; //zoom: 1; }
 #menumain ul.menu1:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }

@@ -53,7 +53,7 @@
         </script>
     <!-- /Подключениее стилей и скриптов -->
     </head>
-    <body id="p_index">
+    <body id="p_index" {if !strpos($smarty.server.HTTP_HOST, 'rambler') === false} class="body-rambler" {/if}>
         <noscript>
             <div style="display:block;position:fixed;top:0px;left:0px;width:100%;height:35px;background-color:#FF2222;z-index:9999;text-align:center;padding-top:10px;">
                 <span Style="font-weight:bold;font-size:13px;">Этот сайт требует поддержку javascript</span>

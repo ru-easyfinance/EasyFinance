@@ -16,7 +16,7 @@
         <?php include_partial('global/res', array()) ?>
     </head>
 
-    <body id="p_index">
+    <body id="p_index" <?php if (!strpos($_SERVER['HTTP_HOST'], 'rambler') === false) { echo 'class="body-rambler"'; }?>>
         <noscript>
             <div style="display:block;position:fixed;top:0px;left:0px;width:100%;height:35px;background-color:#FF2222;z-index:9999;text-align:center;padding-top:10px;">
                 <span style="font-weight:bold;font-size:13px;">Этот сайт требует поддержку javascript</span>
