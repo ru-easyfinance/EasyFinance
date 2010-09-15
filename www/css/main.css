@@ -2295,6 +2295,7 @@ img.ui-datepicker-trigger {
     margin:7px auto 0;
 }
 
+<<<<<<< HEAD
 .dl-tabs {
     width: 99%;
     overflow: hidden;
@@ -2333,4 +2334,17 @@ img.ui-datepicker-trigger {
 
 .dl-tabs dd.selected {
     display:block;
+}
+.b-noscript {
+    display: block;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 35px;
+    background-color: #FF9896;
+    z-index: 9999;
+    text-align: center;
+    line-height: 35px;
+    font-size: 120%;
+    font-weight: bold;
 }

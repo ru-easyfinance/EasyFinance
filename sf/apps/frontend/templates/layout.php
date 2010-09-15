@@ -17,11 +17,7 @@
     </head>
 
     <body id="p_index" <?php if (!strpos($_SERVER['HTTP_HOST'], 'rambler') === false) { echo 'class="body-rambler"'; }?>>
-        <noscript>
-            <div style="display:block;position:fixed;top:0px;left:0px;width:100%;height:35px;background-color:#FF2222;z-index:9999;text-align:center;padding-top:10px;">
-                <span style="font-weight:bold;font-size:13px;">Этот сайт требует поддержку javascript</span>
-            </div>
-        </noscript>
+        <?php include_partial('common/noscript') ?>
         <!-- Jet. Ticket #443. Preload images to prevent wrong resizing -->
         <img alt="" src="/img/i/gauge70.gif" width="70" height="70" class="preload" />
         <img alt="" src="/img/i/gauge107.gif" width="107" height="107" class="preload" />
