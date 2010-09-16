@@ -10,11 +10,6 @@
     <ul class="dropdown">
         <li id="m1">
             <a href="/info/" class="top-level"></a>
-            <ul class="dd-sub">
-                <li><span class="spacer"></span><a href="/info/">Инфо-панель</a></li>
-                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_MAIN; ?>integration/">EasyBank</a></li>
-                <li class="last"></li>
-            </ul>
         </li>
         <li id="m2">
             <a href="/accounts/" class="top-level"></a>
@@ -87,7 +82,7 @@
                 <li class="first"></li>
                 <li><span class="spacer"></span><a id="linkMainMenuFeedback" href="#" style="letter-spacing: -1px;">Обратная связь</a></li>
                 <li><span class="spacer"></span><a id="linkMainMenuStartWizard" href="#">Мастер старта</a></li>
-                <li><span class="spacer"></span><a href="http://wiki.easyfinance.ru/tiki-read_article.php?articleId=14">FAQ</a></li>
+                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li class="last"></li>
             </ul>
         </i>

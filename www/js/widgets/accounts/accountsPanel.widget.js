@@ -127,6 +127,7 @@ easyFinance.widgets.accountsPanel = function(){
                             $.jGrowl(data.result.text, {theme: 'green'});
                         }
                     });
+                    $(this).dialog('close');
                 },
                 "Скрыть": function() {
                     var handler = function(data) {
