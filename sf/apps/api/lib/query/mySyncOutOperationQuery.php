@@ -48,7 +48,9 @@ class mySyncOutOperationQuery extends mySyncOutQuery
        $data = implode(', ', $data);
 
         $this->getQuery()
-            ->andWhere("{$alias}.chain_id < 1 OR {$alias}.accepted = 1")
+            //->andWhere("{$alias}.chain_id < 1 OR {$alias}.accepted = 1")
+            // TODO Вернуть назад, когда айфоновцы допилят приложение
+            ->andWhere("{$alias}.accepted = 1")
             ->andWhere("{$alias}.id IN ($data)");
     }
 
