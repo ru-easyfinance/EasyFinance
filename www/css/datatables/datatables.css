@@ -633,3 +633,6 @@ tr.even.gradeU td.sorting_3 {
     font-style:normal;
     margin-left:5px;
 }
+.custom-grid-style .paging_full_numbers em.b-pagination {
+    margin-right:5px;
+}

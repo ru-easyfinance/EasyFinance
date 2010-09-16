@@ -67,8 +67,8 @@ easyFinance.widgets.operationsJournal = function(){
         // Убираем прелоадер
         DataTables.preloader(false);
 
-        // очищаем таблицу
-        DataTables.grid.fnClearTable();
+        //Сбрасываем коллекцию данных перед ее повторным заполнением
+        DataTables._clear();
 
         // заполняем таблицу
         var queue = [null],
@@ -92,7 +92,7 @@ easyFinance.widgets.operationsJournal = function(){
             curMoney = (_account == '' && this.transfer > 0) ? 0 : parseFloat(this.money * easyFinance.models.currency.getCurrencyCostById(this.account_currency_id));
             strMoney = (_account == '' && this.virt != "1") ? formatCurrency(this.moneydef, false, true) : formatCurrency(this.money, false, true);
 
-            DataTables.grid.fnAddData([
+            DataTables._set([
                 '<input type="checkbox" />',
                 this.date.substr(0, 5),
                 '<i class="b-icon operation ' + operationType + '"></i>',
@@ -100,7 +100,7 @@ easyFinance.widgets.operationsJournal = function(){
                 this.cat_name,
                 ((this.tags ? '[' + this.tags + '] ' : '') + (this.comment || '')),
                 '<ul class="b-row-menu-block" id="' + rowID + '" trid="' + this.target_id + '"><li><a href="#edit"></li><li><a href="#del"></li><li><a href="#add"></li></ul>'
-            ]);
+            ], true);
 
             rowsCollection[rowID] = {
                 title: tooltipHtml,
@@ -110,6 +110,8 @@ easyFinance.widgets.operationsJournal = function(){
                 value: i
             }
         });
+
+        DataTables.draw();
 
         if(deleteBtn) deleteBtn.hide();
 
