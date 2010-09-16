@@ -17,7 +17,7 @@
     </head>
 
     <body id="p_index" <?php if (!strpos($_SERVER['HTTP_HOST'], 'rambler') === false) { echo 'class="body-rambler"'; }?>>
-        <?php include_partial('common/noscript') ?>
+        <?php include_partial('global/common/noscript') ?>
         <!-- Jet. Ticket #443. Preload images to prevent wrong resizing -->
         <img alt="" src="/img/i/gauge70.gif" width="70" height="70" class="preload" />
         <img alt="" src="/img/i/gauge107.gif" width="107" height="107" class="preload" />
