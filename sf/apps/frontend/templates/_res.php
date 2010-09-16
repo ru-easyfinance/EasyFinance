@@ -64,10 +64,10 @@
     $res['errors'] = array();
 ?>
 
-<?php if ($sf_user->isAuthenticated()) : ?>
 <script type="text/javascript">
     var res = <?php echo json_encode($res), "\n"; ?>
     res.calendar = {};
+<?php if ($sf_user->isAuthenticated()) : ?>
     <?php include_component('res', 'accounts', array()) ?>
     <?php include_component('res', 'currencies', array()) ?>
     <?php include_component('res', 'categories', array()) ?>
@@ -75,5 +75,5 @@
     <?php include_component('res', 'calendar', array('dateStart' => null, 'dateEnd' => null)) ?>
     <?php include_component('res', 'future', array()) ?>
     <?php include_component('res', 'overdue', array()) ?>
-</script>
 <?php endif; ?>
+</script>

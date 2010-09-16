@@ -104,3 +104,13 @@ wikiwrapper_page:
   params: { module: wikiwrapper, action: index }
   requirements:
     wikiURL: \S+
+
+# Статические страницы
+# ------------------------------------------------------------------------------
+
+page:
+  url:    /page/:pageName
+  class:  sfRoute
+  params: { module: page, action: index }
+  requirements:
+    pageName: \S+
