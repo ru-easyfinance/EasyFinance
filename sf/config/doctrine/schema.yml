@@ -165,7 +165,7 @@ Operation:
     type:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:     { type: clob }
     source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
-    accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
+    accepted:    { type: boolean, unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
     transfer_account_id: { type: integer(4), notnull: false, default: null } # ID счета получателя
     transfer_amount:     { type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
     tags:        { type: string(255) }

@@ -19,6 +19,8 @@ class OperationTable extends Doctrine_Table
             ->where("
                 (o.updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW())
                 AND o.type != ?
+                AND o.account_id IS NOT NULL
+                AND o.account_id != 0
             ", Operation::TYPE_BALANCE)
             ->groupBy("o.account_id");
 

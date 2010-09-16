@@ -292,6 +292,9 @@ class model_OperationTableTest extends myUnitTestCase
             'type'                => Operation::TYPE_TRANSFER,
         ));
 
+        // t2056: Импортнутая операция (без счета), неподтвержденная? - не может влиять на статистику
+        $op4 = $this->helper->makeOperation($account1, array('account_id' => null, 'accepted' => Operation::STATUS_DRAFT,));
+
         // набор операций для рассчета "частоты использования"
         $coll1 = $this->helper->makeOperationCollection(5, $account1);
         $coll2 = $this->helper->makeOperationCollection(10, $account2);
