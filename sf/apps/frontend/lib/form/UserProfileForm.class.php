@@ -101,21 +101,21 @@ class UserProfileForm extends BaseFormDoctrine
         $values['id'] = $this->getObject()->getId();
 
         // эту х-ню делать в модели
-        if (isset($values['user_service_mail'])) {
+        if (isset($values['user_service_mail']) && !empty($values['user_service_mail'])) {
             $values['user_service_mail'] = $values['user_service_mail'] . '@mail.easyfinance.ru';
         }
 
         parent::doBind($values);
 
         // не обновлять e-mail если идентичен или когда не введен пароль
-        if (isset($this->values['user_mail']) && $this->getObject()->getUserMail() != $this->values['user_mail']) {
-            if (!isset($this->values['password'])) {
-                unset($this->values['user_mail']);
+        if (isset($this->values['user_mail']) && !empty($this->values['user_mail']) && ($this->getObject()->getUserMail() != $this->values['user_mail'])) {
+            if (!isset($this->values['password']) || empty($this->values['password'])) {
+                unset($this->values['user_mail'], $this['user_mail'], $this->values['password']);
             }
         }
 
-        // обновить пароль, если задан новый и старый
-        if (isset($this->values['password']) && isset($this->values['password_new'])) {
+        // обновить пароль, если задан новый (и не пустой) и старый
+        if (isset($this->values['password']) && !empty($this->values['password']) && isset($this->values['password_new']) && !empty($this->values['password_new'])) {
             $this->values['password'] = $this->values['password_new'];
             unset($this->values['password_new'], $this['password_new']);
         // не трогать пароль без необходимости
@@ -128,7 +128,9 @@ class UserProfileForm extends BaseFormDoctrine
 
 
     /**
+     * Проверить пароль
      *
+     * @see User
      */
     public function checkPassword($validator, $value)
     {
@@ -156,7 +158,7 @@ class UserProfileForm extends BaseFormDoctrine
         }
 
         if (!empty($values['password_new']) && empty($values['password'])) {
-            $error = new sfValidatorError($validator, 'Нужно заполнить пароль для обновления', array('value' => $values['password_new']));
+            $error = new sfValidatorError($validator, 'Нужно заполнить пароль для замены', array('value' => $values['password_new']));
 
             // throw an error bound to the field
             throw new sfValidatorErrorSchema($validator, array('password' => $error));

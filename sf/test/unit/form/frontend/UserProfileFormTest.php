@@ -104,7 +104,7 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
                     'password_new' => 'qwaszx',
                     )),
                 array(
-                    'password' => 'Нужно заполнить пароль для обновления',
+                    'password' => 'Нужно заполнить пароль для замены',
                 )),
         );
     }
@@ -154,6 +154,37 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
         unset($expected['password_new'], $expected['user_service_mail']);
 
         $this->assertEquals($expected['password'], $form->getObject()->getPassword());
+        $this->assertEquals(1, $this->queryFind('User', $expected)->count(), 'Expected found 1 object (User)');
+    }
+
+
+    /**
+     * Сохранить: обновить только email
+     */
+    public function testUpdateEmail()
+    {
+        $input = array(
+            'user_login'        => 'Login',
+            'user_service_mail' => 'unique.mail',
+            'name'              => 'Дядя Федор',
+            'user_mail'         => 'real.mail@site.com',
+            'password'          => 'qwertyasdf',
+            'notify'            => 1,
+        );
+
+        $user = $this->helper->makeUser($input);
+
+        $input['user_mail'] = 'another.mail@site.com';
+        $form = new UserProfileForm($user);
+
+        $expected = $input;
+        $expected['password'] = sha1($input['password']);
+        unset($expected['user_service_mail']);
+
+        $form->bind($input);
+        $this->assertFormIsValid($form);
+
+        $user = $form->save();
         $this->assertEquals(1, $this->queryFind('User', $expected)->count(), 'Expected found 1 object (User)');
     }
 
