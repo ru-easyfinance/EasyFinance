@@ -63,6 +63,18 @@
         </copy>
         <exec command="php ${project.basedir}/sf/symfony cc" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes --application=frontend" dir="${project.basedir}/sf" checkreturn="true" />
+        <if>
+            <isset property="no-migration" />
+            <then>
+                <echo>Do not migrate</echo>
+            </then>
+            <else>
+                <exec command="ls . -1 | wc -l" outputProperty="migration.version" dir="${project.basedir}/sf/lib/migration/doctrine" />
+                <echo level="warning">Migrating Doctrine DB to: ${migration.version}</echo>
+                <exec command="php ${project.basedir}/sf/symfony doctrine:migrate ${migration.version}" dir="${project.basedir}/sf" checkreturn="true" outputProperty="migration.output" />
+                <echo level="warning" msg="${migration.output}" />
+            </else>
+        </if>
         <exec command="php ${project.basedir}/sf/symfony project:optimize frontend" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize admin" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize api" dir="${project.basedir}/sf" checkreturn="true" />
