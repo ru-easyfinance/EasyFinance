@@ -301,7 +301,7 @@ easyFinance.models.accounts = function(){
      */
     function loadJournal(params, callback, csv) {
         if(csv) {
-            window.location = OPERATIONS_JOURNAL_CSV_URL + $.param(params);
+            window.location = OPERATIONS_JOURNAL_CSV_URL + '&' + $.param(params);
         } else {
             $.getJSON(OPERATIONS_JOURNAL_URL, params, function(data) {
                 _journal = data.operations;
