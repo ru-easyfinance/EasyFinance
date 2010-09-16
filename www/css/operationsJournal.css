@@ -143,16 +143,6 @@ table#operations_list td + td + td + td + td + td{
     margin-right: 40px;
 }
 
-#btn_CSV {
-    position: absolute;
-    margin-top: 0px;
-    top: 6px;
-    margin-right: 6px;
-    right: 315px;
-    height:23px;
-    width:23px;
-    background-image:url("/img/images/excel.jpg");
-}
 
 /*.f_field b, #divOperationsJournalTotal b {
     float: left;

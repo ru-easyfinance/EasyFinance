@@ -76,13 +76,14 @@
         </li>
         -->
     </ul>
+
     <div class="menu-icons">
         <i class="icon menu-icons-help top-level" title="Помощь">
             <ul class="dd-sub">
                 <li class="first"></li>
                 <li><span class="spacer"></span><a id="linkMainMenuFeedback" href="#" style="letter-spacing: -1px;">Обратная связь</a></li>
                 <li><span class="spacer"></span><a id="linkMainMenuStartWizard" href="#">Мастер старта</a></li>
-                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
+                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li class="last"></li>
             </ul>
         </i>

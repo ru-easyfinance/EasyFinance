@@ -427,7 +427,7 @@ easyFinance.widgets.operationsJournal = function(){
 
         $('#btn_ReloadData').click(loadJournal);
 
-        $('#btn_CSV').click(loadJournal_CSV);
+        $('.js-operation-loadcsv').click(loadJournal_CSV);
 
         // #874. Обновляем данные об остатках на счетах
         // после добавления операции
