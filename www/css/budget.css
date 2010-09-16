@@ -44,11 +44,16 @@
 }
 
 .budget#budget .list.budget {
-    margin-top: 15px;
+    /*margin-top: 15px;*/
 }
 
-.budget#budget .list .list.head {
+.budget#budget .list .list.head,
+.budget#budget .list.body thead.budget-header {
     background: url('/img/i/bg09.gif') repeat-x 0 0;
+}
+
+thead.budget-header {
+    top: -20px;
 }
 
 .budget#budget .list .list.head table {
@@ -86,19 +91,22 @@
     position: relative
 }
 
+.budget#budget .list .list table th,
 .budget#budget .list .list table td {
     font-size: 11px;
     padding: 3px 0 2px 0;
     position: relative
 }
 
+.budget#budget .list .list table th.w1,
 .budget#budget .list .list table td.w1 {
     padding-left: 2px;
-    width: 160px;
+    width: 31%;
 }
 
+.budget#budget .list .list table th.w2,
 .budget#budget .list .list table td.w2 {
-    width: 107px;
+    width: 21%;
 }
 
 .budget#budget .list .list table td.w3 span {
@@ -111,18 +119,21 @@
     width: 70px;
 }
 
+.budget#budget .list .list table th.w3,
 .budget#budget .list .list table td.w3 {
-    width: 77px;
+    width: 15%;
     text-align: right;
 }
 
+.budget#budget .list .list table th.w5,
 .budget#budget .list .list table td.w5 {
-    width: 77px;
+    width: 15%;
     text-align: right;
 }
 
+.budget#budget .list .list table th.w6,
 .budget#budget .list .list table td.w6 {
-    width: 90px;
+    width: 17%;
     text-align: right;
 }
 

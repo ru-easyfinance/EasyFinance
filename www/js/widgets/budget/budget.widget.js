@@ -5,14 +5,6 @@ easyFinance.widgets.budget = function(data){
 
     var $budgetBody = $('#budget .list .body');
 
-    $('div.budget.list div.head tr').html(
-        "<td class='w1 '>Категория</td>"
-        + "<td class='w2 '>Состояние</td>"
-        + "<td class='w3 '>План, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
-        + "<td class='w5 '>Факт, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
-        + "<td class='w6 '>Разница, " + easyFinance.models.currency.getDefaultCurrencyText() + "</td>"
-    );
-
     var _currentDate = new Date();
     var date = new Date();
 
@@ -250,7 +242,7 @@ easyFinance.widgets.budget = function(data){
     function _updateTimeLine() {
         $("#budgetTimeLine").css({
             left: elapsedPercent + '%',
-            height: ($budgetBody.height() + 50) + 'px'
+            height: ($budgetBody.height()) + 'px'
         });
 
         var days = 32 - new Date(_currentDate.getFullYear(), _currentDate.getMonth(), 32).getDate();
@@ -271,6 +263,14 @@ easyFinance.widgets.budget = function(data){
         }else{
             drainprc = 0;
         }
+
+        str = '<thead class="budget-header"><tr><th class="w1">Категория</th>'
+        + '<th class="w2">Состояние</th>'
+        + '<th class="w3">План, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</th>'
+        + '<th class="w5">Факт, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</th>'
+        + '<th class="w6">Разница, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</th></tr></thead>'
+
+        str += '<tr><td style="height: 20px;"></td></tr>'
 
         params = {
             id: "profit",
