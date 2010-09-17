@@ -74,7 +74,7 @@
 }
 @-moz-document url-prefix() {
     .b-login-form .b-button-simple {
-        padding:2px 3px !important;
+        padding:3px 4px !important;
     }
 }
 .b-login-form:hover .b-button-simple {
