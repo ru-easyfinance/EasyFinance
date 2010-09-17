@@ -46,7 +46,7 @@
             width: 680,
             modal:true,
             close: function() {
-                $.post('/profile/cook/');
+                $.post('/my/profile/guide.json', { state: '0' });
                 $.jGrowl('Вы всегда можете открыть &laquo;Мастер старта&raquo; в меню &laquo;Помощь&raquo;.', {
                     theme: 'green',
                     stick: true
