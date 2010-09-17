@@ -104,12 +104,22 @@ dl.bill_list dt{
     zoom:1;
 }
 
+.icon-menu3 .menu-icons {
+    padding-top: 4px;
+}
 .icon-menu3 .menu-icons .icon {
     background-position: 0 0;
 }
 .icon-menu3 .menu-icons .icon:hover {
     background-position-y: -37px;
 }
-.menu-icons i.menu-icons-help {
+
+.icon-menu3 .menu-icons .menu-icons-help { background-position: 0 0; }
+.icon-menu3 .menu-icons .menu-icons-settings { background-position: -25px 0; }
+.icon-menu3 .menu-icons .menu-icons-mobile { background-position: -50px 0; }
+.icon-menu3 .menu-icons .menu-icons-logout { background-position: -75px 0; }
+
+.icon-menu3 .menu-icons .menu-icons-help,
+.icon-menu3 .menu-icons .menu-icons-settings {
     background-position-y: 3px;
 }
