@@ -66,3 +66,17 @@
     padding:0;
     cursor:pointer;
 }
+
+.b-login-form .b-button-simple {
+    font-size:.833em;
+    padding:3px 6px !important;
+    display:none;
+}
+@-moz-document url-prefix() {
+    .b-login-form .b-button-simple {
+        padding:2px 3px !important;
+    }
+}
+.b-login-form:hover .b-button-simple {
+    display:inline;
+}

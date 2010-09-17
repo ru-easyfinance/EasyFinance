@@ -14,16 +14,27 @@ _InputPlaceholder = {
                 input = el.next();
             if(el.text() != '') {
                 input.data('value', input.val());
-                el.show().next().css('opacity', 0).unbind('focus.placeholder').unbind('blur.placeholder').bind('focus.placeholder', function() {
-                    el.hide();
-                    $(this).css('opacity', 1);
+                el.next().unbind('focus.placeholder').unbind('blur.placeholder').bind('focus.placeholder', function() {
+                    self.show(el, $(this));
                 }).bind('blur.placeholder', function() {
-                    if(input.val() == input.data('value')) {
-                        el.show();
-                        $(this).css('opacity', 0);
+                    if(el.hasClass('error')) {
+                        if(input.val() == input.data('value')) self.hide(el, $(this));
+                    } else {
+                        if(input.val() == '') self.hide(el, $(this));
                     }
                 });
+                if(el.hasClass('error') || el.next().val() == '') self.hide(el, el.next());
             }
         });
+    },
+
+    show: function(placeholder, input) {
+        placeholder.hide();
+        input.css('opacity', 1);
+    },
+
+    hide: function(placeholder, input) {
+        placeholder.show();
+        input.css('opacity', 0);
     }
 };

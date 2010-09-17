@@ -78,22 +78,46 @@
                             <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-view_articles.php" id="articles" title="Статьи о финансах">Статьи</a></li>
                             <li><a href="https://{$smarty.const.URL_ROOT_PDA}" id="pda" title="Версия для использования с мобильного телефона">Мобильная версия</a></li>
                             <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-read_article.php?articleId=14" id="help" style="font-weight:bold; color: white;" title="Помощь по использованию сервиса">Помощь</a></li>
-                            <li style="background: none; margin-left: 30px;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
+                            <li style="background: none; margin-left: 20px;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
                         </ul>
-                        <ul class="menu2">
-                            {if $user_info.user_id > 0}
+                        {if $user_info.user_id > 0}
+                            <ul class="menu2">
                                 <!--- <li><a href="/info/">Личный кабинет</a></li> --->
                                 <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
                                 <li><a href="/profile/">{$user_info.user_name}&nbsp;</a><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
+                            </ul>
+                        {else}
+                            <!-- Jet. ticket #273 -->
+                            {if $smarty.const.IS_DEMO == false}
+                                <form method="post" action="https://{$smarty.const.URL_ROOT}login/">
+                                    <div class="b-login-form">
+                                        <div class="b-login-form-row l-buttons-inline">
+                                            {include file="ui/textfield.tpl" name="login" placeholder="логин/почта"}
+                                            {include file="ui/textfield.tpl" name="pass" type="password" placeholder="пароль"}
+                                            <input class="b-button-simple" type="submit" value="ok" />
+                                        </div>
+                                        <div class="b-login-form-row second">
+                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить меня</span></label>
+                                            <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
+                                        </div>
+                                    </div>
+                                </form>
                             {else}
-                                <!-- Jet. ticket #273 -->
-                                {if $smarty.const.IS_DEMO == false}
-                                    <li id="show_login"><a id="linkLogin" href="https://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
-                                {else}
-                                    <li id="show_login"><a id="linkLogin" href="http://{$smarty.const.URL_ROOT}login/">ВХОД</a></li>
-                                {/if}
+                                <form method="post" action="https://{$smarty.const.URL_ROOT}login/">
+                                    <div class="b-login-form">
+                                        <div class="b-login-form-row l-buttons-inline">
+                                            {include file="ui/textfield.tpl" name="login" placeholder="логин/почта"}
+                                            {include file="ui/textfield.tpl" name="pass" type="password" placeholder="пароль"}
+                                            <input class="b-button-simple" type="submit" value="ok" />
+                                        </div>
+                                        <div class="b-login-form-row second">
+                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить меня</span></label>
+                                            <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
+                                        </div>
+                                    </div>
+                                </form>
                             {/if}
-                        </ul>
+                        {/if}
                     </div>
                 {/if}
 <!-- верхнее меню -->

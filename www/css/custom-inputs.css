@@ -75,6 +75,31 @@
     display:block;
     position:relative;
 }
+.l-buttons-inline .b-custom-input {
+    float:left;
+}
+.b-login-form .b-custom-input {
+    width:80px;
+    background-color:#666;
+    margin-right:5px;
+}
+.b-login-form:hover .b-custom-input {
+    background-color:#aaa;
+}
+.b-login-form .b-custom-input input {
+    font-size:.833em;
+    padding:3px 6px;
+}
+.b-login-form .b-custom-input .b-placeholder {
+    font-size:.833em;
+    margin:2px 6px -40px;
+}
+@-moz-document url-prefix() {
+    .b-login-form .b-custom-input .b-placeholder {
+        margin:1px 6px -40px;
+    }
+}
+
 .b-custom-input *,
 .b-custom-textarea * {
     text-shadow:none !important;
@@ -98,6 +123,10 @@
 .b-custom-input-container.calculator .b-custom-input .b-custom-input-border,
 .b-custom-input-container.calculator .b-custom-textarea .b-custom-textarea-border {
     overflow:visible;
+}
+
+.b-login-form .b-custom-input .b-custom-input-border {
+    padding-right:12px;
 }
 
 .b-custom-input.suggest .b-custom-input-border {
