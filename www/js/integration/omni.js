@@ -377,10 +377,11 @@ function wsInitValidator() {
 }
 
 function wzFillSelect(selectId, data) {
-    var dropdownList = $(selectId);
-    for (i in data) {
-        dropdownList.append(new Option(data[i], data[i]))
+    var optionsList = [];
+    for (var i = 0, l = data.length; i < l; i++) {
+        optionsList.push('<option value="' + data[i] + '">' + data[i] + '</option>');
     }
+    $(selectId).append( optionsList.join('') );
 }
 
 $(document).ready(function(){
@@ -408,11 +409,11 @@ $(document).ready(function(){
         $('.wz_tab_header_not_main').hide();
     });
 
-    wzFillSelect('#wz_citizenship', wzGetCountries());
-    wzFillSelect('#wz_reg_country', wzGetCountries());
-    wzFillSelect('#wz_reg_region', wzGetRegions());
-    wzFillSelect('#wz_actual_country', wzGetCountries());
-    wzFillSelect('#wz_actual_region', wzGetRegions());
+    wzFillSelect('#wz_citizenship', wzCountries);
+    wzFillSelect('#wz_reg_country', wzCountries);
+    wzFillSelect('#wz_reg_region', wzRegions);
+    wzFillSelect('#wz_actual_country', wzCountries);
+    wzFillSelect('#wz_actual_region', wzRegions);
 
     $('#wz_reg_country').change(function() {
         if (this.value != 'РОССИЯ') {

@@ -122,3 +122,8 @@
     display: block
 }
 
+#wizard #wz_citizenship,
+#wizard #wz_reg_country,
+#wizard #wz_actual_country{
+    width: 450px;
+}
