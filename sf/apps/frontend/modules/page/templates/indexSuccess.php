@@ -1,1 +1,1 @@
-<?php include_partial('page/'.$pageName); ?>
+<?php include_partial('page/'.$pageName, array('sf_user' => $sf_user)); ?>

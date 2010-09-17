@@ -9,23 +9,32 @@
         min-height: 500px;
     "
     ></iframe>
-<?php use_stylesheet('screens/integration.screen.css'); ?>
-<?php use_javascript('screens/integration.screen.js'); ?>
+<?php use_stylesheet('screens/integration.screen.css?r='.REVISION); ?>
+<?php use_javascript('screens/integration.screen.js?r='.REVISION); ?>
+<?php use_javascript('widgets/profile/userIntegrations.widget.js?r='.REVISION); ?>
+<?php use_javascript('integration/omni.js?r='.REVISION); ?>
+<?php use_javascript('integration/tabs.js?r='.REVISION); ?>
+<?php use_javascript('integration/validator.js?r='.REVISION); ?>
+<?php use_javascript('integration/countries.js?r='.REVISION); ?>
 <div id="integrationSteps">
-<h3><a id="integrationStep1" href="#">1. Зарегистрироваться или войти</a></h3>
+    <?php if ($sf_user->isAuthenticated()) : ?>
+        <h3><a id="integrationStep1" href="#" class="complete">1. Войти в систему &mdash; готово!</a></h3>
+    <?php else : ?>
+        <h3><a id="integrationStep1" href="#">1. Зарегистрироваться или войти</a></h3>
+    <?php endif; ?>
 <div class="step">
-    <!-- {if $user_info.user_id > 0}
+    <?php if ($sf_user->isAuthenticated()) : ?>
         <div>Блок для авторизованных пользователей</div><br>
-    {else}
+    <?php else : ?>
         <div align="left">
             <input id="btnShowLogin" type="button" value="Войти" />&nbsp;&nbsp;&nbsp;или&nbsp;&nbsp;
             <input id="btnShowRegister" type="button" value="Зарегистрироваться" />&nbsp;&nbsp;&nbsp;
             <a href="/registration" target="_blank">зарегистрироваться</a>
             (форма регистрации откроется в новом окне, после регистрации и входа в систему обновите это окно)<br>
-            {include file="common/registration.html"}
-            {include file="common/authentication.html"}
+            <?php include_partial('global/common/registration'); ?>
+            <?php include_partial('global/common/authentication'); ?>
         </div>
-    {/if} -->
+    <?php endif; ?>
 </div>
 <h3><a id="integrationStep2" href="#">2. Создать E-Mail</a></h3>
 <div class="step">
@@ -81,6 +90,6 @@
 <h3><a id="integrationStep4" href="#">4. Заполнить и распечатать анкету</a></h3>
 <div class="step">
     <button id="btnBackToAccount" style="font-weight: bold">Назад</button><br><br>
-    <!-- {include file="integration/amt-wizard.html"}  -->
+    <?php include_partial('page/amt/wizard'); ?>
 </div>
 </div>
