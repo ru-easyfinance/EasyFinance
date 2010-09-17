@@ -311,7 +311,7 @@ easyFinance.widgets.budget = function(data){
 
         $("#budgetTimeLine").show();
 
-        $budgetBody.html('<table>' + str + '</table>');
+        $budgetBody.html('<table style="width: 100%;">' + str + '</table>');
 
         _updateTimeLine();
     }
