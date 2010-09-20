@@ -78,7 +78,7 @@ $(document).ready(function() {
     if (res.informers) {
         $('#divInformer0').attr("title", '<b>' + res.informers[0].title + '</b><br><br>' + res.informers[0].description);
 
-        for (var i=0;i<5;i++) {
+        for (var i=0;i<res.informers.count;i++) {
             $('#tdInformer' + i).attr("title", '<b>' + res.informers[i].title + '</b><br><br>' + res.informers[i].description);
         }
     }
