@@ -370,12 +370,19 @@ class Info_Model
 
 
         //получаем интервал в днях
-        //todo: убрать SQL
-        //хз как быстро сделать это средствами PHP < 5.3, т.к. diff нет
+        // Два варианта решения:
+        //  - используя mktime(0, 0, 0, $intervalEnd->format('m'), $intervalEnd->format('d'), $intervalEnd->format('Y'));
+        //  - используя strtotime($intervalEnd->format('Y-m-d'));
 
-        $queryString = "SELECT DATEDIFF('" . $intervalEnd->format('Y-m-d'). "', '" . $intervalStart->format('Y-m-d'). "')";
-
-        $daysInInterval = $this->db()->selectCell($queryString);
+        // @deprecated
+        // $queryString = "SELECT DATEDIFF('" . $intervalEnd->format('Y-m-d'). "', '" . $intervalStart->format('Y-m-d'). "')";
+        // $daysInInterval = $this->db()->selectCell($queryString);
+        $daysInInterval = (int) (
+            (
+                // разница в секундах
+                strtotime($intervalEnd->format('Y-m-d')) - strtotime($intervalStart->format('Y-m-d'))
+            ) / 86400 // секунд в 1 сутках 60*60*24
+        );
 
         //собственно коэффицент
         $experienceCoeff = $daysInInterval / $this->getExperienceDays();
