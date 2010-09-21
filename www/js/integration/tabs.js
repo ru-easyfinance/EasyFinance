@@ -50,6 +50,8 @@ dTabsClass.prototype.init = function() {
         // запоминаем событие в Google Analytics
         try { _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'АМТ - PDF']); } catch(err) {};
 
+        $('#btnPrintForm').attr('disabled', 'disabled'); // дизейблим, чтобы избежать повторной отправки
+
         if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0) && wzValidateAll()) {
             var blankData = {};
             for (tabNo = 0; tabNo < tabs.tabs.length; tabNo++) {
@@ -120,6 +122,8 @@ dTabsClass.prototype.showTab = function(id, skipCallback) {
     if (!skipCallback && (typeof(this.callbackShow) == 'function')) {
         this.callbackShow();
     }
+
+    $('#btnPrintForm').attr('disabled', ''); // смена таба раздизейбливает кнопку сабмита анкеты 
 
     this.activeTab = id;
 }
