@@ -157,6 +157,8 @@ AccountProperty:
 Operation:
   tableName: operation
   actAs: [Timestampable, SoftDelete]
+  attributes:
+    query_class: myOperationQuery
   columns:
     user_id:     { type: integer(4), unsigned: true, notnull: true }
     account_id:  { type: integer(4), unsigned: true, default: null }             # ID счёта
