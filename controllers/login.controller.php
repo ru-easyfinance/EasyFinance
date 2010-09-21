@@ -110,21 +110,41 @@ class Login_Controller extends _Core_Controller
         }
     }
 
+    /**
+     * Авторизует пользователя рамблера
+     *
+     * Страница рамблера передаёт в единственном аргументе зашифрованный
+     * ассоциативный массив данных о пользователе например:
+     * {
+     *     "date":        "Sun, 12 Sep 2010 20:16:21 +0400",
+     *     "id":          "ef-user-dsdsdsd-122121212",
+     *     "name":        "Ivan",
+     *     "email":       "ivan@nail.ru",
+     *     "redirectUrl": "/my/wikiwrapper/tiki-view_blog.php?blogId=1"
+     * }
+     * @param $args
+     */
     public function rambler($args)
     {
         $ramblerString = $args[0];
 
         $cipher = MCRYPT_RIJNDAEL_128;
-		$key    = 'X9Kls8DR72DqEFKLCMN02DdOQWdfLP2a';
-		$iv     = 'dOQWdfLP2aCZM12D';
+        $key    = 'X9Kls8DR72DqEFKLCMN02DdOQWdfLP2a';
+        $iv     = 'dOQWdfLP2aCZM12D';
 
-		$decoded = urlsafe_b64decode($ramblerString);
-		$json    = mcrypt_cbc($cipher, $key, $decoded, MCRYPT_DECRYPT, $iv);
-		$data    = json_decode(trim($json), true);
+        $decoded = urlsafe_b64decode($ramblerString);
+        $json    = mcrypt_cbc($cipher, $key, $decoded, MCRYPT_DECRYPT, $iv);
+        $data    = json_decode(trim($json), true);
 
-		$default = array('id' => null, 'email' => null, 'name' => 'Рамблер');
-        $data = array_merge($default, $data);
-		$ramblerLogin = "rambler_{$data['id']}";
+        $default = array(
+            'id' => null,
+            'email' => null,
+            'name' => 'Рамблер',
+            'redirectUrl' => '/info/'
+        );
+
+        $data = array_merge($default, (array)$data);
+        $ramblerLogin = "rambler_{$data['id']}";
 
         $user = Core::getInstance()->user;
 
@@ -143,7 +163,7 @@ class Login_Controller extends _Core_Controller
 
         if ($user->getId()) {
             $this->model->login($ramblerLogin, sha1($ramblerLogin), true);
-            header('Location: /info/');
+            header(sprintf('Location: %s', $data['redirectUrl']));
         } else {
             header('Location: /login/');
         }
