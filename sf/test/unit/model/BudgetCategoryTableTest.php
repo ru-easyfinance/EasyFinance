@@ -71,4 +71,17 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Итоговая сумма планируемых расходов на текущий месяц - всегда число
+     */
+    public function testBudgetExpenseTotalIsFloat()
+    {
+        $user = $this->helper->makeUser();
+        $result = Doctrine::getTable('BudgetCategory')->countTotalExpense($user->getId());
+
+        $this->assertNotNull($result, 'Budget is not empty');
+        $this->assertType('float', $result);
+    }
+
 }
