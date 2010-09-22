@@ -34,4 +34,22 @@ class model_sync_mySyncOutOperationQueryTest extends myUnitTestCase
         $this->assertEquals($opOk2->getId(), $found->get(2)->getId(), 'Found second operation');
     }
 
+    /**
+     * Отдаём операции с комментом null
+     */
+    public function testFindCommentIsNull()
+    {
+        $account = $this->helper->makeAccount();
+        $opOk = $this->helper->makeOperation($account, array(
+            'accepted' => 1,
+            'chain_id' => 123,
+            'comment'  => null
+            ));
+
+        $q = new mySyncOutOperationQuery(new myDatetimeRange(new DateTime('-1year'), new DateTime), $account->getUserId());
+        $found = $q->getQuery()->execute();
+
+        $this->assertEquals(2, $found->count(), 'Count');
+        $this->assertEquals($opOk->getId(), $found->get(1)->getId(), 'Found operation with null comment');
+    }
 }
