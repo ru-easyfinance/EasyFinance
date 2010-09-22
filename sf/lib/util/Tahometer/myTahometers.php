@@ -7,6 +7,9 @@ class myTahometers
     // пользователь
     private $user = null;
 
+    // конфигурация тахометров
+    private $tahometersConfig = array();
+
     // плановые расходы на текущий месяц
     private $monthExpense = null;
 
@@ -20,6 +23,13 @@ class myTahometers
     public function __construct(User $user)
     {
         $this->user = $user;
+
+        if (!sfContext::hasInstance()) {
+            throw new sfException('Мы не знаем как парсить конфигурации');
+        }
+        include sfContext::getInstance()->getConfigCache()->checkConfig('config/tahometers.yml');
+
+        $this->tahometersConfig = $tahometerConfig;
 
         $this->initialize();
     }
@@ -42,6 +52,17 @@ class myTahometers
     protected function initialize()
     {
         //
+    }
+
+
+    /**
+     * Получить конфигурацию тахометров
+     *
+     * @return  array
+     */
+    protected function getConfiguration()
+    {
+        return $this->tahometersConfig;
     }
 
 
