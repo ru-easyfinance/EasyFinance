@@ -111,3 +111,21 @@ page:
   params: { module: page, action: index }
   requirements:
     pageName: \S+
+
+# Cтраницы банков с красивыми урлами
+# ------------------------------------------------------------------------------
+
+easybank:
+  url:    /easybank/
+  class:  sfRoute
+  params: { module: page, action: index, pageName: easyBank }
+
+easybank_amt_easyfinance:
+  url:    /easybank/amt-easyfinance
+  class:  sfRoute
+  params: { module: page, action: index, pageName: amtEasyFinance }
+
+easybank_citi_cashback:
+  url:    /easybank/citi-cashback
+  class:  sfRoute
+  params: { module: page, action: index, pageName: citiCashBack }
