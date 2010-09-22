@@ -75,5 +75,6 @@
     <?php include_component('res', 'calendar', array('dateStart' => null, 'dateEnd' => null)) ?>
     <?php include_component('res', 'future', array()) ?>
     <?php include_component('res', 'overdue', array()) ?>
+    <?php include_component('res', 'profile', array()) ?>
 <?php endif; ?>
 </script>

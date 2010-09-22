@@ -9,13 +9,19 @@ dev:
     param:
       delivery_strategy: none
 
-all:
+prod:
   mailer:
-    class: sfMailer
     param:
       delivery_strategy: realtime
       transport:
         class: Swift_SendmailTransport
         param:
           command: /usr/sbin/sendmail -bs
-          # /usr/sbin/sendmail -oi -t
+
+all:
+  mailer:
+    class: sfMailer
+    param:
+      delivery_strategy: realtime
+      transport:
+        class: Swift_MailTransport

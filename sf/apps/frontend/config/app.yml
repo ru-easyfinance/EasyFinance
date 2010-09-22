@@ -3,6 +3,9 @@
 
 
 prod:
+  easybank:
+    mailCardCiti: [devel_test@easyfinance.ru, prod_copy@easyfinance.ru]
+
   # Данные для подключения робокассы
   billing:
     robokassa:
@@ -13,6 +16,9 @@ prod:
       pass2:                gdYdt63Gsldbe5!d # Пароль 2
 
 all:
+  easybank:
+    mailCardCiti: devel_test@easyfinance.ru
+
   # Данные для подключения робокассы
   billing:
     robokassa:

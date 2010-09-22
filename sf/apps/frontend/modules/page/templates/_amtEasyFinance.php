@@ -17,7 +17,7 @@
         <?php endif; ?>
     <div class="step">
         <?php if ($sf_user->isAuthenticated()) : ?>
-            <div>Блок для авторизованных пользователей</div><br>
+            <!-- <div>Блок для авторизованных пользователей</div><br> -->
         <?php else : ?>
             <div align="left">
                 <input id="btnShowLogin" type="button" value="Войти" />&nbsp;&nbsp;&nbsp;или&nbsp;&nbsp;

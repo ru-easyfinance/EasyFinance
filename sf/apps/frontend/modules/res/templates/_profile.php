@@ -1,0 +1,1 @@
+res.profile = <?php echo json_encode($profile) ?>;
