@@ -43,14 +43,14 @@
 
 <!-- Тэги -->
     <div class="listing tags_list c3 js-leftpaneltabs-panel" style="display:none">
-        <h2 class="b-leftpanel-title addtaglink"><span>Добавить счёт</span><i></i></h2>
+        <h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2>
     </div>
     <div class="edit_tag" style="display:none">
         <center>
             <div class="f_field">
                 <label for="tag">Метка</label>
-                <input type='text' value='' id='tag' name='tag' />
-                <input type='hidden' value='' id='old_tag' name='old_tag' />
+                <input type="text" value="" id="tag" name="tag" />
+                <input type="hidden" value="" id="old_tag" name="old_tag" />
             </div>
         </center>
     </div>
