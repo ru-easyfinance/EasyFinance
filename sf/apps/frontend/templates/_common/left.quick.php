@@ -10,20 +10,27 @@
     <div class="listing accounts c2 js-leftpaneltabs-panel" style="display:none">
         <h2 class="b-leftpanel-title addaccountlink"><span>Добавить счёт</span><i></i></h2>
         <dl class="bill_list">
-            <dt class="hidden">Избранные</dt>
+            <dt class="hidden">Избранные <span class="sum"></span></dt>
             <dd id="accountsPanelAcc0" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Деньги</dt>
+
+            <dt class="hidden">Деньги <span class="sum"></span></dt>
             <dd id="accountsPanelAcc1" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Мне должны</dt>
+
+            <dt class="hidden">Мне должны <span class="sum"></span></dt>
             <dd id="accountsPanelAcc2" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Я должен</dt>
+
+            <dt class="hidden">Я должен <span class="sum"></span></dt>
             <dd id="accountsPanelAcc3" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Инвестиции</dt>
+
+            <dt class="hidden">Инвестиции <span class="sum"></span></dt>
             <dd id="accountsPanelAcc4" class="hidden"> <!-- --> </dd>
-            <dt class="hidden">Имущество</dt>
+
+            <dt class="hidden">Имущество <span class="sum"></span></dt>
             <dd id="accountsPanelAcc5" class="hidden"> <!-- --> </dd>
+
             <dt>Сумма:</dt>
             <dd id="accountsPanel_amount" class="amount"> <!-- --> </dd>
+
             <dt class="hidden">Скрытые</dt>
             <dd id="accountsPanelAccArchive" class="hidden"> <!-- --> </dd>
         </dl>
@@ -36,7 +43,7 @@
 
 <!-- Тэги -->
     <div class="listing tags_list c3 js-leftpaneltabs-panel" style="display:none">
-        <h2 class="b-leftpanel-title addlink"><span>Добавить счёт</span><i></i></h2>
+        <h2 class="b-leftpanel-title addtaglink"><span>Добавить счёт</span><i></i></h2>
     </div>
     <div class="edit_tag" style="display:none">
         <center>

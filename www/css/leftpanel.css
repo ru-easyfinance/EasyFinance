@@ -87,8 +87,6 @@ dl.bill_list {
         }
             dl.bill_list dd ul li {
                 padding-bottom: 4px;
-                //padding-bottom: 2px;
-                //zoom: 1;
             }
                 dl.bill_list dd ul li a {
                     width: 135px;
@@ -99,7 +97,9 @@ dl.bill_list {
                     color: #363535;
                     text-decoration: none;
                 }
-                    dl.bill_list dd ul li a b { display: block; }
+                    dl.bill_list dd ul li a b {
+                        display: block;
+                    }
 
     dl.bill_list dd.amount {
         display: block;
@@ -128,6 +128,16 @@ dl.bill_list {
                     left: 110px;
                     color: black;
                 }
+
+    dl.bill_list dt .sum {
+        display: block;
+        float: right;
+        padding-right: .5em;
+    }
+    dl.bill_list dt .sum .currency {
+        color: black;
+        padding-left: .3em;
+    }
 
 /* финансовые цели*/
 .financobject h2 {
