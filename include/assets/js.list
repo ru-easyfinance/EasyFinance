@@ -35,6 +35,7 @@ jquery/jquery.ajax-initiator.js
 swfobject.js
 functions.js
 main.js
+leftpaneltabs.js
 helpers.js
 feedback.js
 widgets/help.widget.js
