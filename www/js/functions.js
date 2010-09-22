@@ -588,3 +588,11 @@ function rtrim(str, chars) {
 	chars = chars || "\\s";
 	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
 }
+
+function templetor(tpl_str, values_dict) {
+    var result = tpl_str;
+    for (var key in values_dict) {
+        result = result.split('{%' + key + '%}').join(values_dict[key])
+    }
+    return result
+}
