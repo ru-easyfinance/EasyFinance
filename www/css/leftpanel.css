@@ -37,8 +37,8 @@
         }
 
 .b-leftpanel .b-leftpanel-title {
-    font: bold 12px/12px Arial, Tahoma, sans-serif;
-    margin: .5em 2em;;
+    font: bold 14px/12px Arial, Tahoma, sans-serif;
+    margin: .5em 1em;
     cursor: pointer;
 }
     .b-leftpanel .b-leftpanel-title span {
@@ -50,9 +50,10 @@
         text-decoration: none;
     }
     .b-leftpanel .b-leftpanel-title i {
-        background: url('/img/i/icons.gif') no-repeat 0 -270px;
+        background: url('/img/i/leftpanel/icon_add.png') no-repeat;
+        background-position: -2px -2px;
         display: inline-block;
-        width: 9px; height: 9px;
+        width: 11px; height: 11px;
         margin-top: 2px;
     }
 

@@ -8,7 +8,7 @@
 
 <!--счета-->
     <div class="listing accounts c2 js-leftpaneltabs-panel" style="display:none">
-        <h2 class="b-leftpanel-title addaccountlink"><span>Добавить счёт</span><i></i></h2>
+        <h2 class="b-leftpanel-title addaccountlink"><span>Счета</span><i></i></h2>
         <dl class="bill_list">
             <dt class="hidden">Избранные <span class="sum"></span></dt>
             <dd id="accountsPanelAcc0" class="hidden"> <!-- --> </dd>
