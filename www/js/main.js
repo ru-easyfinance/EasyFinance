@@ -324,7 +324,8 @@ $(document).ready(function(){
         }
         function loadLPTags(){
             var data = res['tags'];
-            var str = '<h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2><ul>';
+//            var str = '<h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2><ul>';
+            var str = '<div class="title"><h2><a href="#" class="addtaglink">Добавить метку</a></h2><a title="Добавить" class="add">Добавить</a></div><ul>';
             for (var key in data) {
                 str = str + '<li><a>' + data[key] + '</a></li>';
             }

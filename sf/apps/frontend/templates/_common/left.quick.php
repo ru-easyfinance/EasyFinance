@@ -8,7 +8,11 @@
 
 <!--счета-->
     <div class="listing accounts c2 js-leftpaneltabs-panel" style="display:none">
-        <h2 class="b-leftpanel-title addaccountlink"><span>Счета</span><i></i></h2>
+        <div class="title">
+            <h2><a href="#" title="Добавить счёт" class="addaccountlink">Добавить счёт</a></h2>
+            <a href="#" title="Добавить счёт" class="add">Добавить счёт</a>
+        </div>
+        <!-- <h2 class="b-leftpanel-title addaccountlink"><span>Счета</span><i></i></h2> -->
         <dl class="bill_list">
             <dt class="hidden">Избранные <span class="sum"></span></dt>
             <dd id="accountsPanelAcc0" class="hidden"> <!-- --> </dd>
@@ -43,7 +47,11 @@
 
 <!-- Тэги -->
     <div class="listing tags_list c3 js-leftpaneltabs-panel" style="display:none">
-        <h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2>
+        <div class="title">
+            <h2><a href="#" title="Добавить метку" class="addlink">Добавить метку</a></h2>
+            <a href="#" title="Добавить метку" class="add">Добавить метку</a>
+        </div>
+        <!-- <h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2> -->
     </div>
     <div class="edit_tag" style="display:none">
         <center>

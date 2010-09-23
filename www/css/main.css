@@ -413,7 +413,12 @@ ul.menu4 li#m_last a { background: none; }
 /*.block1 .listing { display: none; }*/
 .block1 .financobject, .block1 .experts, .block1 .budget2 { margin: 0 10px 0 11px; padding-bottom: 18px; }
 
-.block1 .transaction ul li span.date { display: block; margin-top: -2px; color: #909090; }
+.block1 .title {}
+.block1 .title:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
+.block1 .accounts .title { margin: 0 0 7px 21px; }
+.block1 .financobject .title { margin: 0 0 7px 0; }
+.block1 .title h2, .block1 .experts h2, .block1 .budget2 h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
+.block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; cursor: pointer; }
 
 .block1 .experts { padding-bottom: 9px; }
 .block1 .experts h2 { float: none; margin: 0 0 2px 0; }

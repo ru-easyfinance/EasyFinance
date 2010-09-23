@@ -1,58 +1,85 @@
 /* виджет регулярных транзакций в левой панели */
 
-/* иконка вкладки с виджетом */
-.block1 ul.control li#c4 {
-    left: 99px;
-    background: url('/img/i/icons_control.png') no-repeat 0 0;
-    background-position: -33px 0px;
-}
-
-.block1 ul.control li#c4.act {
-    background-position: -33px -33px;
-}
-
-/* показываем предупреждение, если есть просроченные операции */
-.block1 ul.control li#c4.warning {
-    background-position: -231px 0px;
-}
-
-.block1 ul.control li#c4.act.warning {
-    background-position: -231px -33px;
-}
-
 /* заголовки разделов */
 .block1 .transaction h2 {
     float: none;
-    margin: 0 0 8px 11px;
-    font-size: 12px;
-    line-height: 12px;
-    color: #3c9915;
-    font-weight: bold;
+    clear: both;
+
+    margin: 0 0 8px 0px;
+    padding: 0 3px 0 6px;
+
+    background-color: #e5e5e5;
+    font: bold 12px/16px Arial, Tahoma, sans-serif;
 }
 
-.block1 .transaction .future h2 {
-    border-top: 1px solid #E5E5E5; padding-top: 6px;
+.transaction .overdue h2 {
+    color: red;
 }
+.transaction .future h2 {
+    color: #3C9915;
+}
+
 
 /* события */
 .block1 .transaction ul li {
     position: relative;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
     padding-bottom: 8px;
     color: #353535;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: none;
+    position: relative;
+    padding-top: 1.1em;
 }
 
-.block1 .transaction ul li {
-    border-bottom: none;
+.block1 .transaction ul li.odd {
+    background-color: #ffffff; /* оставленно намеренно, потом, возможно, будет нормальная зебра*/
+}
+
+.block1 .transaction .date {
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    color: #909090;
+    width: 6ex;
 }
 
 .block1 .transaction .sum {
-    float:right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+}
+
+    .block1 .transaction .sum .amount {
+        float: left;
+        margin-right: -5ex;
+        text-align: right;
+        width: 140px;
+    }
+
+    .block1 .transaction .sum .cur {
+        float: right;
+        color: black;
+        right: 0;
+        width: 4ex;
+        overflow: hidden;
+    }
+
+.block1 .transaction .cat {
+    display: block;
+
+}
+.block1 .transaction .comment {
+    display: block;
+    font-size: 90%;
+    font-style: italic;
+    color: #909090;
 }
 
 .block1 .transaction ul li a {
-    display:block; color: #383838;
+    display:block;
+    color: #383838;
 }
 
 .block1 .transaction ul li .cont ul li{
@@ -82,7 +109,7 @@
 }
 
 .block1 .transaction ul {
-    margin: 0 11px 6px 11px;
+    margin: 0 6px 6px 6px;
 }
 
 .block1 .transaction div.amount {

@@ -32,6 +32,9 @@
         .b-leftpanel_tabs .b-leftpanel_tabs_item_operations i {
             background-position: 0 -96px;
         }
+        .b-leftpanel_tabs .b-leftpanel_tabs_item_operations__warning i {
+            background-position: 0 -160px;
+        }
         .b-leftpanel_tabs .b-leftpanel_tabs_item_targets i {
             background-position: 0 -128px;
         }
