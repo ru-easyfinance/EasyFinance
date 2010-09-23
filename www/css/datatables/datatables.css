@@ -636,3 +636,13 @@ tr.even.gradeU td.sorting_3 {
 .custom-grid-style .paging_full_numbers em.b-pagination {
     margin-right:5px;
 }
+
+.TableTools {
+    display:none;
+    float:none;
+    height:34px;
+    margin:0;
+}
+.b-tooltip-container .TableTools {
+    display:block;
+}

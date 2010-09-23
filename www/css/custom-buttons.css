@@ -67,16 +67,14 @@
     cursor:pointer;
 }
 
-.b-login-form .b-button-simple {
-    font-size:.833em;
-    padding:3px 6px !important;
-    display:none;
-}
-@-moz-document url-prefix() {
-    .b-login-form .b-button-simple {
-        padding:3px 4px !important;
-    }
-}
-.b-login-form:hover .b-button-simple {
-    display:inline;
+.b-login-form .b-button-login {
+    top:0;
+    right:0;
+    width:35px;
+    height:35px;
+    border:none;
+    background:url(../img/i/login-icon.png) no-repeat;
+    margin:-3px -5px -40px;
+    cursor:pointer;
+    position:absolute;
 }

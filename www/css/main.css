@@ -12,7 +12,6 @@
 
 ul.about {list-style-position: inside; list-style-type: disc;}
 
-
 /* Jet. used by MAIL screen */
 #mailsTable .unread { font-weight: bold; background-color: #DAFFD4; }
 
@@ -62,7 +61,6 @@ ul.about {list-style-position: inside; list-style-type: disc;}
 .st-red{background:red;}
 .st-green{background:green;}
 .st-yellow{background:yellow;}
-
 /* //////////////////////////////////////////////////////////////////////////////////////////  */
 .mail_list { padding-top: 21px !important; }
 .mail_list .sorting { position: relative; margin-bottom: 7px;}
@@ -414,15 +412,6 @@ ul.menu4 li#m_last a { background: none; }
 
 /*.block1 .listing { display: none; }*/
 .block1 .financobject, .block1 .experts, .block1 .budget2 { margin: 0 10px 0 11px; padding-bottom: 18px; }
-
-
-.block1 .title {}
-.block1 .title:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-.block1 .accounts .title { margin: 0 0 7px 21px; }
-.block1 .financobject .title { margin: 0 0 7px 0; }
-.block1 .title h2, .block1 .experts h2, .block1 .budget2 h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
-.block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; cursor: pointer; }
-
 
 .block1 .transaction ul li span.date { display: block; margin-top: -2px; color: #909090; }
 
@@ -870,14 +859,27 @@ div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
 
+#btnCalcSum, #btnCalcSumTransfer{
+    padding-top: 2px;
+    margin-top: 0px;
+    border: none;
+    background:transparent url(/img/i/calculator_scientific.gif) no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    position: relative;
+    left: 0px;
+    cursor: pointer;
+}
+
 #btnCalcSumTransfer {
     top: 4px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0)
 {
-#btnCalcSumTransfer {margin-top:2px;}
- /* хак для правильного позиционирования иконки калькулятора в Safari и Chrome */
+#btnCalcSum, #btnCalcSumTransfer {margin-top:2px;}
+/* хак для правильного позиционирования иконки калькулятора в Safari и Chrome */
 }
 
 
@@ -2238,27 +2240,48 @@ b.clear {
 .b-login-form {
     top:6px;
     right:10px;
-    margin-top:-3px;
+    margin-top:-4px;
     padding:3px;
     position:absolute;
     z-index:999;
 }
-.b-login-form:hover {
-    right:-15px;
-    -webkit-border-radius:5px;
-    -moz-border-radius:5px;
-    border-radius:5px;
-    box-shadow:0 5px 15px -5px #000000;
-    -webkit-box-shadow:0 5px 15px -5px #000000;
-    -moz-box-shadow:0 5px 15px -5px #000000;
-    border:1px solid #2D3038;
-    background-color:#F8FCF6;
-    margin-top:-4px;
+.b-login-form .b-login-form-bg {
+    top:15px;
+    left:0;
+    width:100%;
+    height:49px;
+    background:url(../img/i/bg_menu_submenu.png) 0 -98px repeat-x;
+    position:absolute;
+    display:none;
+}
+.b-login-form:hover .b-login-form-bg {
+    display:block;
+}
+.b-login-form .b-login-form-bg i {
+    top:0;
+    left:-11px;
+    width:16px;
+    height:49px;
+    background:url(../img/i/bg_menu_submenu.png) 0 0 no-repeat;
+    position:absolute;
+}
+.b-login-form .b-login-form-bg i.r {
+    left:auto;
+    right:-11px;
+    background-position:0 -49px;
 }
 
+.b-login-form .b-login-form-row {
+    float:left;
+    clear:both;
+    position:relative;
+    z-index:1;
+    padding-right:25px;
+}
 .b-login-form .b-login-form-row.second {
-    font-size:.833em;
-    margin-top:8px;
+    width:100%;
+    font-size:.916em;
+    margin:10px -3px 0;
     padding:0;
     display:none;
 }
@@ -2268,10 +2291,40 @@ b.clear {
 
 .b-login-form .b-login-form-row.second label span {
     top:-3px;
+    color:#000;
     position:relative;
+    cursor:pointer;
+}
+@media all and (-webkit-min-device-pixel-ratio:10000),
+not all and (-webkit-min-device-pixel-ratio:0) {
+    .b-login-form .b-login-form-row.second label span {
+        top:-1px;
+    }
 }
 .b-login-form .b-login-form-row.second a {
     float:right;
+    color:#000;
+    text-decoration:none;
     margin-top:1px;
     margin-right:3px;
+}
+.b-login-form .b-login-form-row.second a:hover,
+.b-login-form .b-login-form-row.second label:hover span {
+    text-decoration:underline;
+}
+
+#tooltip.tahometers-tooltip {
+    width: 500px;
+    margin-bottom: -50%;
+    text-align: left;
+    border: 1px solid #8a8;
+    padding: 1em;
+}
+#tooltip.tahometers-tooltip p {
+    text-align: justify;
+    margin-bottom: .7em;
+}
+
+.l-right {
+    float:right;
 }

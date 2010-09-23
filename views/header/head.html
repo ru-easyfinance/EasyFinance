@@ -78,7 +78,7 @@
                             <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-view_articles.php" id="articles" title="Статьи о финансах">Статьи</a></li>
                             <li><a href="https://{$smarty.const.URL_ROOT_PDA}" id="pda" title="Версия для использования с мобильного телефона">Мобильная версия</a></li>
                             <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-read_article.php?articleId=14" id="help" style="font-weight:bold; color: white;" title="Помощь по использованию сервиса">Помощь</a></li>
-                            <li style="background: none; margin-left: 20px;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
+                            <li style="background: none; margin-left: 12px;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
                         </ul>
                         {if $user_info.user_id > 0}
                             <ul class="menu2">
@@ -94,11 +94,15 @@
                                         <div class="b-login-form-row l-buttons-inline">
                                             {include file="ui/textfield.tpl" name="login" placeholder="логин/почта"}
                                             {include file="ui/textfield.tpl" name="pass" type="password" placeholder="пароль"}
-                                            <input class="b-button-simple" type="submit" value="ok" />
+                                            <input class="b-button-login" type="submit" value="" />
                                         </div>
                                         <div class="b-login-form-row second">
-                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить меня</span></label>
+                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить</span></label>
                                             <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
+                                        </div>
+                                        <div class="b-login-form-bg">
+                                            <i class="l"></i>
+                                            <i class="r"></i>
                                         </div>
                                     </div>
                                 </form>
@@ -111,7 +115,7 @@
                                             <input class="b-button-simple" type="submit" value="ok" />
                                         </div>
                                         <div class="b-login-form-row second">
-                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить меня</span></label>
+                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить</span></label>
                                             <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
                                         </div>
                                     </div>
