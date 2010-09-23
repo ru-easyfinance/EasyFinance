@@ -70,11 +70,11 @@
 .b-login-form .b-button-login {
     top:0;
     right:0;
-    width:35px;
-    height:35px;
+    width:29px;
+    height:29px;
     border:none;
     background:url(../img/i/login-icon.png) no-repeat;
-    margin:-3px -5px -40px;
+    margin:-1px -1px -40px 0px;
     cursor:pointer;
     position:absolute;
 }

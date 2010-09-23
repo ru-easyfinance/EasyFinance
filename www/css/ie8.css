@@ -28,3 +28,10 @@ body .ui-dialog.edit .ui-dialog-title {
 .icon-menu3 .menu-icons .menu-icons-settings {
     background-position-y: 3px;
 }
+.b-custom-input.no-selectbox .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field {
+    background:#ffffff !important;
+    position:relative !important;
+    z-index:999 !important;
+    margin:0 0 0 0 !important;
+}
