@@ -330,37 +330,41 @@ easyFinance.widgets.accountsPanel = function(){
 
         _$node.find('#accountsPanel_amount').html(templetor(total_template, val));
 
-        $('div.listing dl.bill_list dt').addClass('open');
+        $('div.listing dl.bill_list dt').addClass('closed');
+        $('div.listing dl.bill_list dd').addClass('hidden');
+        
         $('div.listing dl.bill_list dt').live('click', function(){
-            $(this).toggleClass('open').next().toggle();
-            //запоминание состояние в куку
+            $(this).toggleClass('closed').next().toggleClass('hidden', $(this).hasClass('closed'));
+
+        //запоминание состояние в куку
             var accountsPanel = '';
-            $('div.listing dl.bill_list dd:visible').each(function(){
-                accountsPanel += $(this).attr('id');
+            $('div.listing dl.bill_list dt').filter('.closed').each(function() {
+                accountsPanel += $(this).next().attr('id');
             })
             var isSecure = window.location.protocol == 'https'? 1:0
             $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : isSecure});
             return false;
         });
+
+
         //загружает состояние из
         var accountsPanel = $.cookie('accountsPanel_stated');
 
-        if (accountsPanel){
-            $('div.listing dl.bill_list dt:visible').each(function(){
+        if (accountsPanel) {
+            $('div.listing dl.bill_list dt.closed').each(function(){
                 if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
                     $(this).click()
             })
-        } else {
-            $('div.listing dl.bill_list dd#accountsPanelAccArchive').prev().click();
+        }
+        else {
+            $('dl.bill_list #accountsPanel_amount').prev().click();
         }
 
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
         });
-        //$('div.listing dl.bill_list dt').click();
-        //$('div.listing dl.bill_list dt:last').click().addClass('open');
-        //$('div.listing dl.bill_list dt').click().addClass('open');
+
     }
 
     // reveal some private things by assigning public pointers

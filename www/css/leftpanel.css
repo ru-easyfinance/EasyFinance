@@ -64,22 +64,21 @@ dl.bill_list {
     dl.bill_list dt {
         padding-left: 20px;
         margin: 0 0 2px 0;
-        color: #383838;
         font-weight: bold;
-        background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 7px 5px;
         cursor: pointer;
-    }
-    dl.bill_list dt.open {
-        margin: 0 0 2px 0px;
         color: #383838;
-        font-weight: bold;
         background:#EEEEEE url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px;
+    }
+    dl.bill_list dt.closed {
+        color: #383838;
+        background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 7px 5px;
+        font-weight: bold;
+        margin: 0 0 2px 0px;
     }
 
     dl.bill_list dd {
         padding-left: 0px;
         margin-bottom: 5px;
-        display:none;
         cursor: pointer;
     }
 
@@ -103,7 +102,6 @@ dl.bill_list {
                     }
 
     dl.bill_list dd.amount {
-        display: block;
         position: relative;
         margin-left: 0;
         padding-top: 3px;
