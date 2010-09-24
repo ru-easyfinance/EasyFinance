@@ -62,8 +62,7 @@ class myOperationQueryTest extends myUnitTestCase
         $this->assertType('Account', $result1->getFirst()->getAccount());
         // баланс счета 0, т.к. операций нет и балансовая операция = 0
         $this->assertEquals($acc1->getId(), $result1->getFirst()->getAccountId());
-        $rAcc = $result1->getFirst();
-        $this->assertEquals(0, $rAcc['money'], '', 0.01);
+        $this->assertEquals(0, $result1['0']['money'], '', 0.01);
 
         // заполним операциями
         $this->helper->makeOperation($acc1, array('amount' => 101.50, 'type' => Operation::TYPE_PROFIT,));
@@ -86,19 +85,88 @@ class myOperationQueryTest extends myUnitTestCase
         $this->assertEquals(6, $result2->count());
         $this->assertEquals($acc1->getAccountId(), $result2->getFirst()->getAccountId(), '');
 
-        $rAcc1 = $result2->get(0);
-        $rAcc2 = $result2->get(1);
-        $rAcc3 = $result2->get(2);
-        $rAcc4 = $result2->get(3);
-        $rAcc5 = $result2->get(4);
-        $rAcc6 = $result2->get(5);
+        $this->assertEquals(101.50, $result2['0']['money'], '', 0.01);
+        $this->assertEquals(-102.50, $result2['1']['money'], '', 0.01);
+        $this->assertEquals(-103.50, $result2['2']['money'], '', 0.01);
+        $this->assertEquals(103.50, $result2['3']['money'], '', 0.01);
+        $this->assertEquals(0.00, $result2['4']['money'], '', 0.01);
+        $this->assertEquals(106.50 - 10.20, $result2['5']['money'], '', 0.01);
+    }
 
-        $this->assertEquals(101.50, $rAcc1['money'], '', 0.01);
-        $this->assertEquals(-102.50, $rAcc2['money'], '', 0.01);
-        $this->assertEquals(-103.50, $rAcc3['money'], '', 0.01);
-        $this->assertEquals(103.50, $rAcc4['money'], '', 0.01);
-        $this->assertEquals(0.00, $rAcc5['money'], '', 0.01);
-        $this->assertEquals(106.50 - 10.20, $rAcc6['money'], '', 0.01);
+
+    /**
+     * Запрос расходов
+     */
+    public function testGetExpenceQuery()
+    {
+        $user = $this->helper->makeUser();
+        $acc = $this->helper->makeAccount($user);
+
+        $op1 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_PROFIT,
+            'amount' => 200.00,
+        ));
+        $op2 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_EXPENSE,
+            'amount' => -300.00,
+        ));
+        $op3 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'amount' => -400.00,
+            'transfer_amount' => 500.00,
+            'transfer_account_id' => $this->helper->makeAccount($user)->getId(),
+        ));
+
+        $result = Doctrine::getTable('Operation')
+            ->createQuery()
+            ->getExpenceQuery($user)
+            ->execute();
+
+        $this->assertEquals(1, $result->count());
+        $this->assertEquals($op2->getAmount(), $result[0]['money'], '', 0.01);
+    }
+
+
+    /**
+     * Запрос доходов
+     */
+    public function testGetProfitQuery()
+    {
+        $user = $this->helper->makeUser();
+        $acc = $this->helper->makeAccount($user);
+
+        $op1 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_PROFIT,
+            'amount' => 200.00,
+        ));
+        $op2 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_EXPENSE,
+            'amount' => -300.00,
+        ));
+        $op3 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'amount' => -400.00,
+            'transfer_amount' => 500.00,
+            'transfer_account_id' => $this->helper->makeAccount($user)->getId(),
+        ));
+        $op4 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_PROFIT,
+            'amount' => 100.30,
+            'date' => date('Y-m-d', time()-(60*60*24*130)), // 130 дней, больше 3х месяцев
+        ));
+        $op5 = $this->helper->makeOperation($acc, array(
+            'type' => Operation::TYPE_PROFIT,
+            'amount' => 100.60,
+            'date' => date('Y-m-d', time()-(60*60*24*75)), // 75 дней, меньше 3х месяцев
+        ));
+
+        $result = Doctrine::getTable('Operation')
+            ->createQuery()
+            ->getProfitQuery($user, $months = 3)
+            ->execute();
+
+        $this->assertEquals(1, $result->count());
+        $this->assertEquals($op1->getAmount() + $op5->getAmount(), $result[0]['money'], '', 0.01);
     }
 
 }

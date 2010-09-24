@@ -241,4 +241,48 @@ class myOperationQuery extends myBaseQuery
         return $this;
     }
 
+
+    /**
+     * Выбрать расходные операции
+     *
+     * @param   User    $user
+     * @param   mixed   $months
+     * @return  myOperationQuery
+     */
+    public function getExpenceQuery(User $user, $months = null)
+    {
+        $rootAlias = $this->getRootAlias();
+        $joinAlias = 'a';
+        $sumAlias  = 'money';
+
+        $this->makeAggregateAccountQuery($user, $joinAlias, $sumAlias)
+            ->modifyJoinAccountCondition("{$rootAlias}.account_id = {$joinAlias}.account_id OR {$rootAlias}.transfer_account_id = {$joinAlias}.account_id", $joinAlias)
+            ->filterByPeriod($months)
+            ->andWhere("{$rootAlias}.type = ?", Operation::TYPE_EXPENSE);
+
+        return $this;
+    }
+
+
+    /**
+     * Выбрать доходные операции
+     *
+     * @param   User    $user
+     * @param   mixed   $months
+     * @return  myOperationQuery
+     */
+    public function getProfitQuery(User $user, $months = null)
+    {
+        $rootAlias = $this->getRootAlias();
+        $joinAlias = 'a';
+        $sumAlias  = 'money';
+
+        $this->makeAggregateAccountQuery($user, $joinAlias, $sumAlias)
+            ->modifyJoinAccountCondition("{$rootAlias}.account_id = {$joinAlias}.account_id OR {$rootAlias}.transfer_account_id = {$joinAlias}.account_id", $joinAlias)
+            ->filterByPeriod($months)
+            ->andWhere("{$rootAlias}.type = ?", Operation::TYPE_PROFIT);
+
+        return $this;
+    }
+
 }
