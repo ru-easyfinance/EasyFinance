@@ -487,6 +487,8 @@ easyFinance.widgets.operationEdit = function(){
 
             // обновляем список категорий
             $("#op_category").html(htmlOptions).ufd("changeOptions");
+            //выставляем текующую категорию на невыбранную
+            _selectedCategory = '-1';
         } else if (_selectedType == "2") {
             //Перевод со счёта
             $("#op_category_fields,#op_target_fields").hide();

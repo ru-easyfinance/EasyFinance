@@ -69,7 +69,7 @@
                 <echo>Do not migrate</echo>
             </then>
             <else>
-                <exec command="ls . -1 | wc -l" outputProperty="migration.version" dir="${project.basedir}/sf/lib/migration/doctrine" />
+                <exec command="ls | wc -l" outputProperty="migration.version" dir="${project.basedir}/sf/lib/migration/doctrine" />
                 <echo level="warning">Migrating Doctrine DB to: ${migration.version}</echo>
                 <exec command="php ${project.basedir}/sf/symfony doctrine:migrate ${migration.version}" dir="${project.basedir}/sf" checkreturn="true" outputProperty="migration.output" />
                 <echo level="warning" msg="${migration.output}" />

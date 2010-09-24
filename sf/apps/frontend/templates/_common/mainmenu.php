@@ -14,7 +14,6 @@
         <li id="m2">
             <a href="/accounts/" class="top-level"></a>
             <ul class="dd-sub">
-                <li><span class="spacer"></span><a href="/accounts/">Счета</a></li>
                 <li><span class="spacer"></span><a href="/operation/">Операции</a></li>
                 <li><span class="spacer"></span><a href="/category/">Категории</a></li>
                 <li class="last"></li>

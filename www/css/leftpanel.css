@@ -1,0 +1,175 @@
+.b-leftpanel {
+    width: 180px !important;
+}
+.b-leftpanel_tabs control {
+    margin: 0 0 12px 0;
+    width: 100%;
+    height: 32px;
+}
+    .b-leftpanel_tabs .b-leftpanel_tabs_item {
+        width: 32px;
+        height: 32px;
+        background: url('/img/i/leftpanel/tabs-icons.png') no-repeat 0 0;
+        display: inline-block;
+    }
+    .b-leftpanel_tabs .b-leftpanel_tabs_item.act {
+        background: #fff none;
+    }
+        .b-leftpanel_tabs .b-leftpanel_tabs_item i {
+            display: block;
+            width: 100%;
+            height: 32px;
+            width: 32px;
+            background: url('/img/i/leftpanel/tabs-icons.png') no-repeat 0 0;
+        }
+
+        .b-leftpanel_tabs .b-leftpanel_tabs_item_accounts i {
+            background-position: 0 -32px;
+        }
+        .b-leftpanel_tabs .b-leftpanel_tabs_item_tags i {
+            background-position: 0 -64px;
+        }
+        .b-leftpanel_tabs .b-leftpanel_tabs_item_operations i {
+            background-position: 0 -96px;
+        }
+        .b-leftpanel_tabs .b-leftpanel_tabs_item_targets i {
+            background-position: 0 -128px;
+        }
+
+.b-leftpanel .b-leftpanel-title {
+    font: bold 14px/12px Arial, Tahoma, sans-serif;
+    margin: .5em 1em;
+    cursor: pointer;
+}
+    .b-leftpanel .b-leftpanel-title span {
+        color: #6CBD45;
+        margin-right: 5px;
+        text-decoration: underline;
+    }
+    .b-leftpanel .b-leftpanel-title span:hover {
+        text-decoration: none;
+    }
+    .b-leftpanel .b-leftpanel-title i {
+        background: url('/img/i/leftpanel/icon_add.png') no-repeat;
+        background-position: -2px -2px;
+        display: inline-block;
+        width: 11px; height: 11px;
+        margin-top: 2px;
+    }
+
+/* счета */
+dl.bill_list {
+    
+}
+    dl.bill_list dt {
+        padding-left: 20px;
+        margin: 0 0 2px 0;
+        font-weight: bold;
+        cursor: pointer;
+        color: #383838;
+        background:#EEEEEE url(/img/i/arrow_down.gif) no-repeat scroll 6px 6px;
+    }
+    dl.bill_list dt.closed {
+        color: #383838;
+        background:transparent url(/img/i/arrow_right.gif) no-repeat scroll 7px 5px;
+        font-weight: bold;
+        margin: 0 0 2px 0px;
+    }
+
+    dl.bill_list dd {
+        padding-left: 0px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        dl.bill_list dd ul {
+            padding-bottom: 2px;
+        }
+            dl.bill_list dd ul li {
+                padding-bottom: 4px;
+            }
+                dl.bill_list dd ul li a {
+                    width: 135px;
+                    overflow: hidden;
+                    display: block;
+                    padding: 1px 3px 1px 5px;
+                    line-height: 15px;
+                    color: #363535;
+                    text-decoration: none;
+                }
+                    dl.bill_list dd ul li a b {
+                        display: block;
+                    }
+
+    dl.bill_list dd.amount {
+        position: relative;
+        margin-left: 0;
+        padding-top: 3px;
+        font-size: 14px;
+        color: #36a500;
+        line-height: 18px;
+        font-weight: bold;
+    }
+        dl.bill_list dd.amount div {
+            padding-left: 10px;
+            position: relative;
+            width: 100px;
+            text-align: right;
+        }
+            dl.bill_list dd.amount div strong{
+                position:relative;
+                left: -5px;
+            }
+                dl.bill_list dd.amount div span.currency {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 110px;
+                    color: black;
+                }
+
+    dl.bill_list dt .sum {
+        display: block;
+        float: right;
+        padding-right: .5em;
+    }
+    dl.bill_list dt .sum .currency {
+        color: black;
+        padding-left: .3em;
+    }
+
+/* финансовые цели*/
+.financobject h2 {
+    margin: 0 0 5px 0;
+    font-size: 12px;
+    color: #e5691b;
+    font-weight: bold;
+}
+.financobject ul {
+    margin-bottom: 12px;
+}
+    .financobject ul li {
+        position: relative;
+        margin-bottom: 2px;
+        padding-bottom: 8px;
+        color: #353535;
+        border-bottom: 1px solid #e5e5e5;
+    }
+        .financobject ul li span {
+            font-size: 11px;
+            color: #2c9300;
+        }
+        .financobject ul li span.date {
+            display: block;
+            margin-top: -2px;
+            color: #909090;
+        }
+        .financobject ul li a {
+            display: block;
+            color: #383838;
+        }
+    .financobject ul.popular li {
+        margin-bottom: 5px;
+        padding-bottom: 6px;
+        font-weight: bold;
+    }

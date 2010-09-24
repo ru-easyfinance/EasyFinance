@@ -324,7 +324,7 @@ $(document).ready(function(){
         }
         function loadLPTags(){
             var data = res['tags'];
-            var str = '<div class="title"><h2><a href="#" class="addtaglink">Добавить метку</a></h2><a title="Добавить" class="add">Добавить</a></div><ul>';
+            var str = '<h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2><ul>';
             for (var key in data) {
                 str = str + '<li><a>' + data[key] + '</a></li>';
             }
@@ -515,35 +515,7 @@ $(document).ready(function(){
     // Кнопка закрыть
     $('li.over2').remove();
     $('li.over1').remove();
-    /**
-     * Функция которая меняет содержимое левой панели в зависимости от требуемой вкладки
-     * @param newActive c1|c2|c3|c4|c5
-     * @return void
-     */
-    function clickOnMenuInLeftPanel(newActive){
-        $('ul.control li').removeClass('act');
-        $('.listing').hide();
-        $('ul.control li#' + newActive).addClass('act');
-        $('.listing.' + newActive).show();
-        if (newActive == "c2") {
-            try { easyFinance.widgets.accountsPanel.redraw(); } catch (err) {}
-        }
-    }
 
-    //смена пункта в левой панели
-    $('ul.control li').click(function(){
-        clickOnMenuInLeftPanel($(this).attr('id'));
-        $.cookie('activelisting', $(this).attr('id'), {
-            expire: 100,
-            path: '/',
-            domain: false,
-            secure: '1'
-        });
-        return false;
-    });
-    //открытие запомнившийся вкладки
-    var activeListing = $.cookie('activelisting') || 'c2';
-    clickOnMenuInLeftPanel(activeListing);
     //Функция показывает гид.
     function ShowGuide(){
         //alert('гид!');
@@ -555,7 +527,7 @@ $(document).ready(function(){
             width: 540
         });
         $('.dial').bind('dialogclose', function(event, ui){
-            //setCookie2('guide','',0,COOKIE_DOMEN);
+            $.cookie('guide', '', {expire: 100, path : '/', domain: false, secure : isSecure});
             $.post('/my/profile/guide.json', { state: '0' });
             $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {
                 theme: 'green',

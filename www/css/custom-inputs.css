@@ -33,6 +33,7 @@
     height:18px;
     background:url(../img/i/calculator_scientific.gif) no-repeat;
     margin-top:-9px;
+    cursor:pointer;
 }
 .b-custom-input-container.tags .b-custom-input-icon {
     width:17px;
@@ -50,7 +51,11 @@
 .b-custom-textarea,
 .b-custom-textarea .b-custom-textarea-border,
 .b-custom-textarea .b-custom-textarea-field,
-.b-custom-input .b-custom-select {
+.b-custom-textarea textarea,
+.b-custom-textarea input,
+.b-custom-textarea select,
+.b-custom-input .b-custom-select,
+.b-custom-input.suggest .ufd input {
     -webkit-border-radius:3px;
     -moz-border-radius:3px;
     border-radius:3px;
@@ -70,6 +75,28 @@
     display:block;
     position:relative;
 }
+.l-buttons-inline .b-custom-input {
+    float:left;
+}
+.b-login-form .b-custom-input {
+    width:85px;
+    background-color:#666;
+    margin-right:5px;
+}
+.b-login-form .b-custom-input input {
+    font-size:1em;
+    padding:3px 6px;
+}
+.b-login-form .b-custom-input .b-placeholder {
+    font-size:1em;
+    margin:3px 6px -40px;
+}
+@-moz-document url-prefix() {
+    .b-login-form .b-custom-input .b-placeholder {
+        margin:2px 6px -40px;
+    }
+}
+
 .b-custom-input *,
 .b-custom-textarea * {
     text-shadow:none !important;
@@ -90,12 +117,26 @@
     display:block;
     overflow:hidden;
 }
+.b-custom-input-container.calculator .b-custom-input .b-custom-input-border,
+.b-custom-input-container.calculator .b-custom-textarea .b-custom-textarea-border {
+    overflow:visible;
+}
+
+.b-login-form .b-custom-input .b-custom-input-border {
+    padding-right:12px;
+}
+
+.b-custom-input.suggest .b-custom-input-border {
+    height:28px;
+}
 .b-custom-input.field-error .b-custom-input-border,
 .b-custom-textarea.field-error .b-custom-textarea-border {
     background-color:#ffd5d5;
 }
 .b-custom-input .b-custom-input-field,
-.b-custom-textarea .b-custom-textarea-field {
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-input input,
+.b-custom-textarea textarea {
     width:100%;
     border:none;
     background:none;
@@ -104,11 +145,34 @@
 }
 .b-custom-input .b-custom-input-field,
 .b-custom-textarea .b-custom-textarea-field,
-.b-custom-input .b-custom-select {
+.b-custom-input .b-custom-select,
+.b-custom-input input,
+.b-custom-textarea textarea,
+.b-custom-input select,
+.b-custom-input.suggest .ufd input {
     font:1em Arial, Helvetica, sans-serif;
     color:#2D3038;
     margin:0;
     padding:6px 8px;
+}
+
+.b-custom-input.suggest .b-custom-input-field,
+.b-custom-input.suggest .b-custom-select {
+    display:none;
+}
+.b-custom-input.suggest .ufd {
+    width:auto !important;
+    height:auto !important;
+    border:none !important;
+    background:none !important;
+    padding-right:20px !important;
+    display:block;
+}
+.b-custom-input.suggest .ufd input {
+    width:100% !important;
+}
+.b-custom-input.suggest .ufd button {
+    display:none;
 }
 
 .b-custom-input .b-placeholder,
@@ -127,7 +191,10 @@
 
 .b-custom-input.b-disabled .b-custom-input-field,
 .b-custom-textarea.b-disabled .b-custom-textarea-field,
-.b-custom-input.b-disabled .b-custom-select {
+.b-custom-input.b-disabled .b-custom-select,
+.b-custom-input.b-disabled input,
+.b-custom-textarea.b-disabled textarea,
+.b-custom-input.b-disabled select {
     color:#999;
     cursor:default;
 }
@@ -141,18 +208,21 @@
     color:#666;
 }
 
-.b-custom-textarea .b-custom-textarea-field {
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-textarea textarea {
     height:77px;
     line-height:1.666em;
 }
-.b-custom-textarea .b-custom-textarea-field.big {
+.b-custom-textarea .b-custom-textarea-field.big,
+.b-custom-textarea textarea.big {
     height:340px;
 }
 .b-custom-input.big .b-custom-input-field {
     top:0;
     font-size:2em;
 }
-.b-custom-textarea .b-custom-textarea-field.textarea {
+.b-custom-textarea .b-custom-textarea-field.textarea,
+.b-custom-textarea textarea.textarea {
     overflow-y:auto;
 }
 
@@ -208,7 +278,8 @@
     text-align:center;
     line-height:300px;
 }
-.b-custom-textarea.placeholder .b-custom-textarea-field.textarea {
+.b-custom-textarea.placeholder .b-custom-textarea-field.textarea,
+.b-custom-textarea.placeholder textarea.textarea {
     font:20px Arial, Helvetica, sans-serif;
     font-weight:bold;
     color:#B8B8B8;
@@ -218,7 +289,8 @@
     padding-top:140px;
     cursor:default;
 }
-.b-custom-textarea.placeholder .b-custom-textarea-field.textarea {
+.b-custom-textarea.placeholder .b-custom-textarea-field.textarea,
+.b-custom-textarea.placeholder textarea.textarea {
     overflow:hidden;
 }
 
@@ -243,4 +315,12 @@
 .b-custom-input-inline label {
     line-height:28px;
     margin-right:10px;
+}
+
+#ufd-container div.list-wrapper {
+    border-top:1px #757888 solid;
+    margin-top:3px;
+}
+#ufd-container li {
+    line-height:20px;
 }

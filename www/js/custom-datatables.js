@@ -10,6 +10,11 @@ _ActivateDataGrid = {
     firstRun: true,
     dataGrid: null,
     styles: ['/css/datatables/datatables.css'],
+    dataStorage: {
+        pageCount: 0,
+        data: []
+    },
+    recordsOnPage: 20,
 
     bind: function() {
         var self = this,
@@ -19,7 +24,7 @@ _ActivateDataGrid = {
         if(!this.pageReady) this.preparePage();
         this.dataGrid = grid.eq(0).dataTable({
             bJQueryUI: true,
-            iDisplayLength: 20,
+            iDisplayLength: this.recordsOnPage,
             sPaginationType: "full_numbers",
             sDom: '<"H"p>t',
             bAutoWidth: false,
@@ -59,8 +64,44 @@ _ActivateDataGrid = {
                 } else {
                     self.hidePreloader();
                 }
+            },
+            _get: function() {
+                return self.getDataStorage();
+            },
+            _clear: function() {
+                self.dataStorage.data = [];
+            },
+            _set: function(data, push) {
+                self.setDataStorage(data, push);
+                self.calcPages();
+                return self.getDataStorage();
+            },
+            count: this.recordsOnPage,
+            draw: function() {
+                self.draw();
             }
         };
+    },
+
+    getDataStorage: function() {
+        return this.dataStorage;
+    },
+
+    setDataStorage: function(data, push) {
+        if(push) {
+            this.dataStorage.data.push(data);
+        } else {
+            this.dataStorage.data = data;
+        }
+    },
+
+    draw: function() {
+        this.dataGrid.fnClearTable();
+        this.dataGrid.fnAddData(this.dataStorage.data);
+    },
+
+    calcPages: function() {
+        this.dataStorage.pageCount = Math.ceil(this.dataStorage.data.length / this.recordsOnPage);
     },
 
     preparePage: function() {

@@ -559,6 +559,9 @@ tr.even.gradeU td.sorting_3 {
     font-size:11px;
     vertical-align:middle;
 }
+.custom-grid-style table th {
+    white-space:nowrap;
+}
 .custom-grid-style table td {
     padding:5px;
     cursor:pointer;
@@ -629,4 +632,17 @@ tr.even.gradeU td.sorting_3 {
     font-weight:400;
     font-style:normal;
     margin-left:5px;
+}
+.custom-grid-style .paging_full_numbers em.b-pagination {
+    margin-right:5px;
+}
+
+.TableTools {
+    display:none;
+    float:none;
+    height:34px;
+    margin:0;
+}
+.b-tooltip-container .TableTools {
+    display:block;
 }

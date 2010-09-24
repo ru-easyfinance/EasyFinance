@@ -104,6 +104,11 @@ dl.bill_list dt{
     zoom:1;
 }
 
+dl.bill_list dd ul li {
+    padding-bottom: 2px;
+    zoom: 1;
+}
+
 .icon-menu3 .menu-icons {
     padding-top: 4px;
 }
@@ -122,4 +127,8 @@ dl.bill_list dt{
 .icon-menu3 .menu-icons .menu-icons-help,
 .icon-menu3 .menu-icons .menu-icons-settings {
     background-position-y: 3px;
+}
+
+.b-leftpanel_tabs .b-leftpanel_tabs_item {
+    display: inline;
 }
