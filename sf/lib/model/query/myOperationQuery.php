@@ -285,4 +285,28 @@ class myOperationQuery extends myBaseQuery
         return $this;
     }
 
+
+    /**
+     * Выбрать переводы на долговые счета
+     *
+     * @param   User    $user
+     * @param   mixed   $months
+     * @return  myOperationQuery
+     */
+    public function getLoansQuery(User $user, $months = null)
+    {
+        $rootAlias = $this->getRootAlias();
+        $joinAlias = 'a';
+        $sumAlias  = 'money';
+
+        $this->makeAggregateAccountQuery($user, $joinAlias, $sumAlias)
+            ->modifyJoinAccountCondition("{$rootAlias}.transfer_account_id = {$joinAlias}.account_id", $joinAlias)
+            ->filterByPeriod($months)
+            ->andWhere("{$rootAlias}.type = ?", Operation::TYPE_TRANSFER);
+
+        $this->havingIn("{$joinAlias}.type_id", array(7, 8, 9));
+
+        return $this;
+    }
+
 }

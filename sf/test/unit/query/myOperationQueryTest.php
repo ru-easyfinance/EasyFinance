@@ -65,13 +65,13 @@ class myOperationQueryTest extends myUnitTestCase
         $this->assertEquals(0, $result1['0']['money'], '', 0.01);
 
         // заполним операциями
-        $this->helper->makeOperation($acc1, array('amount' => 101.50, 'type' => Operation::TYPE_PROFIT,));
-        $this->helper->makeOperation($acc2, array('amount' => -102.50, 'type' => Operation::TYPE_EXPENSE,));
-        $this->helper->makeOperation($acc6, array('amount' => 106.50, 'type' => Operation::TYPE_PROFIT,));
-        $this->helper->makeOperation($acc6, array('amount' => -10.20, 'type' => Operation::TYPE_EXPENSE,));
-        $this->helper->makeOperation($acc3, array(
+        $op1 = $this->helper->makeOperation($acc1, array('amount' => 101.50, 'type' => Operation::TYPE_PROFIT,));
+        $op2 = $this->helper->makeOperation($acc2, array('amount' => -102.50, 'type' => Operation::TYPE_EXPENSE,));
+        $op3 = $this->helper->makeOperation($acc6, array('amount' => 106.50, 'type' => Operation::TYPE_PROFIT,));
+        $op4 = $this->helper->makeOperation($acc6, array('amount' => -10.20, 'type' => Operation::TYPE_EXPENSE,));
+        $op5 = $this->helper->makeOperation($acc3, array(
             'amount' => -103.50,
-            'transfer_amount' => 103.50,
+            'transfer_amount' => 123.50,
             'transfer_account_id' => $acc4->getId(),
             'type' => Operation::TYPE_TRANSFER,
         ));
@@ -85,12 +85,12 @@ class myOperationQueryTest extends myUnitTestCase
         $this->assertEquals(6, $result2->count());
         $this->assertEquals($acc1->getAccountId(), $result2->getFirst()->getAccountId(), '');
 
-        $this->assertEquals(101.50, $result2['0']['money'], '', 0.01);
-        $this->assertEquals(-102.50, $result2['1']['money'], '', 0.01);
-        $this->assertEquals(-103.50, $result2['2']['money'], '', 0.01);
-        $this->assertEquals(103.50, $result2['3']['money'], '', 0.01);
+        $this->assertEquals($op1->getAmount(), $result2['0']['money'], '', 0.01);
+        $this->assertEquals($op2->getAmount(), $result2['1']['money'], '', 0.01);
+        $this->assertEquals($op5->getAmount(), $result2['2']['money'], '', 0.01);
+        $this->assertEquals($op5->getTransferAmount(), $result2['3']['money'], '', 0.01);
         $this->assertEquals(0.00, $result2['4']['money'], '', 0.01);
-        $this->assertEquals(106.50 - 10.20, $result2['5']['money'], '', 0.01);
+        $this->assertEquals($op3->getAmount() + $op4->getAmount(), $result2['5']['money'], '', 0.01);
     }
 
 
@@ -167,6 +167,55 @@ class myOperationQueryTest extends myUnitTestCase
 
         $this->assertEquals(1, $result->count());
         $this->assertEquals($op1->getAmount() + $op5->getAmount(), $result[0]['money'], '', 0.01);
+    }
+
+
+    /**
+     * Запрос переводов на долговые счета
+     */
+    public function testGetLoansQuery()
+    {
+        $user = $this->helper->makeUser();
+        // шум
+        $this->helper->makeOperationCollection(3, $this->helper->makeAccount($user));
+
+        $accFrom = $this->helper->makeAccount($user);
+        // счета куда переводим
+        $accTypes = array(7, 8, 9);
+        $i = 0;
+        foreach ($accTypes as $typeId) {
+            ++$i;
+            ${'accTo' . $i} = $this->helper->makeAccount($user, array('type_id' => $typeId,));
+        }
+
+        $op1 = $this->helper->makeOperation($accFrom, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'amount' => 200.34,
+            'transfer_amount' => 210.34,
+            'transfer_account_id' => $accTo1->getId(),
+        ));
+        $op2 = $this->helper->makeOperation($accFrom, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'amount' => 100.34,
+            'transfer_amount' => 110.34,
+            'transfer_account_id' => $accTo2->getId(),
+        ));
+        $op3 = $this->helper->makeOperation($accFrom, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'amount' => 300.34,
+            'transfer_amount' => 310.34,
+            'transfer_account_id' => $accTo3->getId(),
+        ));
+
+        $result = Doctrine::getTable('Operation')
+            ->createQuery()
+            ->getLoansQuery($user, 0)
+            ->execute();
+
+        $this->assertEquals(3, $result->count());
+        $this->assertEquals($op1->getTransferAmount(), $result[0]['money'], '', 0.01);
+        $this->assertEquals($op2->getTransferAmount(), $result[1]['money'], '', 0.01);
+        $this->assertEquals($op3->getTransferAmount(), $result[2]['money'], '', 0.01);
     }
 
 }
