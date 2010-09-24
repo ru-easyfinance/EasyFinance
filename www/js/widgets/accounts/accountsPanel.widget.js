@@ -112,7 +112,7 @@ easyFinance.widgets.accountsPanel = function(){
     function confirmDeletion(id){
         $("#accountDeletionConfirm").dialog({
             autoOpen: false,
-            title: "Предупреждение",
+            title: "Удалить или скрыть?",
             modal: true,
             buttons: {
                 "Отмена": function() {
