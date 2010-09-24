@@ -42,91 +42,80 @@ function getClientPlugins(){
 }
 
  $(document).ready(function(){
+    var dialogWrapper = $('#sendFeedBack');
+        
+    function onSend() {
+        var feedback = getClientDisplayMods();
+        feedback.plugins = getClientPlugins();
 
-    (function(){
-        var noClick = false;
+        var title = dialogWrapper.find('.js-feedback-title');
+        feedback.title = $.trim(title.val())
 
-        $('#footer #popupreport').hide();
+        if (!feedback.title) {
+            $.jGrowl('Введите тему отзыва!', {theme: 'red'});
+            return false;
+        }
 
-        $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').click(function(){
-            $('#popupreport').show();
-        });
+        var msg = dialogWrapper.find('.js-feedback-msg');
+        feedback.msg = $.trim(msg.val())
 
-        $('#popupreport .close').click(function(){
-            $('#popupreport').hide();
-        });
+        if (!feedback.msg) {
+            $.jGrowl('Введите отзыв!', {theme: 'red'});
+            return false;
+        }
 
-        $('#popupreport button, #popupreport input#fmail').keypress(function(e){
-            if (e.keyCode == 13){
-                $('#footer .but').click();
-            }
-        });
+        var email = dialogWrapper.find('.js-feedback-email');
 
-        //скрытие лишнего текста на поле ввода
-        $('#footer .f_field #ffmes').focus(function (){
-            $(this).closest('div').find('label').hide();
-        });
-        //отправление сообщения
-        $('#footer #sendFeedback,#footer #sendFeedback img').click(function (){
-            if (noClick){
+        if (email.length) {
+            feedback.email = $.trim(email.val())
+
+            if (!feedback.email) {
+                $.jGrowl('Введите e-mail!', {theme: 'red'});
                 return false;
             }
+        }
 
-            var feedback = getClientDisplayMods();
-            feedback.plugins = getClientPlugins();
+        // все проверили, можно отправлять
 
-            // Проверяем данные, см. тикет #1127
-            if (!$('#footer #ftheme').val() || $('#footer #ftheme').val() == ''){
-                $.jGrowl('Введите тему отзыва!', {theme: 'red'})
-                noClick = false;
-                return;
-            }
+        $.jGrowl('Подождите, Ваше сообщение отправляется&hellip;', {theme: 'green'});
 
-            if ($('#footer #fmail').length){
-                feedback.email = $('#footer #fmail').val();
-                if (!$('#footer #fmail').val()){
-                    $.jGrowl('Введите адрес вашей почты!', {theme: 'red'})
-                    noClick = false;
-                    return;
-                }
-            }
-
-            // см. тикет #1127
-            // вместо блокировки отправки и сообщения
-            // просто закрываем окно в случае успешной отправки
-            //
-            //noClick = true;
-            $.jGrowl('Подождите!<br/>Ваше сообщение отправляется!', {theme: 'green'});
-            $('#popupreport').hide();
-
-            feedback.msg = $('#footer #ffmes').val();
-            feedback.title = $('#footer #ftheme').val();
-
-            $.post(
-                '/feedback/add_message/?responseMode=json',
-                feedback,
-                function(data){
-                    noClick = false;
-
-                    if (data.error){
-                        if (data.error.text) {
-                            $.jGrowl(data.error.text, {theme: 'red'});
-                        }
-                    } else if (data.result){
-                        // #1201 очищаем поля темы и сообщения
-                        $('#footer #ffmes').val('');
-                        $('#footer #ftheme').val('');
-                        $('#footer .f_field label').show();
-                        $('#footer #popupreport').hide();
-
-                        if (data.result.text) {
-                            $.jGrowl(data.result.text, {theme: 'green'});
-                        }
+        $.post(
+            '/feedback/add_message/?responseMode=json',
+            feedback,
+            function(data){
+                if (data.error){
+                    if (data.error.text) {
+                        $.jGrowl(data.error.text, {theme: 'red'});
                     }
-                }, "json"
-            );
+                }
+                else if (data.result) {
+                    // #1201 очищаем поля темы и сообщения
+                    dialogWrapper.dialog('close');
 
-            return false;
-        });
-      })();
+                    if (data.result.text) {
+                        $.jGrowl(data.result.text, {theme: 'green'});
+                    }
+                    dialogWrapper.find('input[type="text"], textarea').val('')
+                }
+            }, "json"
+        );
+        return true;
+    }
+
+    dialogWrapper.dialog({
+        autoOpen: false,
+        title: "Оставить отзыв",
+        modal: true,
+        width: 'auto',
+        buttons: {
+            "Отмена": function() {
+                dialogWrapper.dialog('close');
+            },
+            "Отправить": onSend
+        }
+    });
+
+    $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').click(function(){
+        dialogWrapper.dialog('open');
+    });
 });

@@ -1,36 +1,28 @@
 <?php if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) : ?>
 <!--подвал-->
 <div id="footer" style="z-index: 10; height: 0; border: 0;">
-    <div id="popupreport">
-        <div class="inside">
-            <div class="w_d_head">&nbsp;</div>
-            <div class="w_d_body">
-                <table class="header">
-                    <tr>
-                        <td class="header">
-                            <h2>Оставить отзыв</h2>
-                         </td>
 
-                         <td class="link close">
+    <div id="sendFeedBack" style="display: none;" class="">
+        <div class="w-feedback" style="padding: 1em 1em 0 1em;">
+            <p>Оставьте отзыв о системе управления личными финансами.</p>
 
-                        </td>
-                    </tr>
-                </table>
-                <div class="f_field">
-                    <p><label for="ftheme">Тема</label></p>
-                    <input type="text" value="" id="ftheme" />
-                </div>
-                <div class="f_field ffmes">
-                    <label for="ffmes">Ваш отзыв</label>
-                    <textarea cols="1" rows="1" id="ffmes"></textarea>
-                </div>
-                <center>
-                    <button id="sendFeedback" style="background: none;border: 0;width: 160px;margin-left: -70px;">
-                        <img src="/img/i/pix.gif" class="but" alt="Отправить отзыв"/>
-                    </button>
-                </center>
-            </div>
-            <div class="w_d_foot">&nbsp;</div>
+            <label for="ftheme" class="w-feedback-title ">Тема<br/>
+                <input type="text" id="ftheme" class="b-feedback-title js-feedback-title" style="width: 240px;"/>
+            </label>
+            <br/>
+            <br/>
+
+            <label for="ffmes" class="w-feedback-msg">Ваш отзыв<br/>
+                <textarea id="ffmes" class="b-feedback-msg js-feedback-msg" style="width: 240px; height: 110px;"></textarea>
+            </label>
+            <br/>
+            <br/>
+
+            <?php if (!$sf_user->isAuthenticated() && IS_DEMO == true) : ?>
+                <label for="fmail" class="w-feedback-mail">E-mail<br/>
+                    <input type="text" id="fmail" class="b-feedback-mail js-feedback-mail"/>
+                </label>
+            <?php endif; ?>
         </div>
     </div>
 
