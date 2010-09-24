@@ -60,6 +60,24 @@ class myOperationQuery extends myBaseQuery
 
 
     /**
+     * Добавочное условие объединения: по ID пользователя
+     *
+     * @param   User    $user
+     * @param   string  $joinAlias
+     * @return  myOperationQuery
+     */
+    protected function addJoinAccountByUser(User $user, $joinAlias)
+    {
+        $rootAlias = $this->getRootAlias();
+
+        $this->modifyJoinAccountCondition(sprintf("{$joinAlias}.user_id = %d", $user->getId()), $joinAlias);
+        $this->andWhere("{$rootAlias}.user_id = ?", $user->getId());
+
+        return $this;
+    }
+
+
+    /**
      * Модифицирует (или заменяет) условия джоина к счетам
      *
      * @param   string  $addToJoinConditions
@@ -90,6 +108,101 @@ class myOperationQuery extends myBaseQuery
                 }
             }
         }
+
+        return $this;
+    }
+
+
+    /**
+     * Добавить в выборку сумму операций по счету с учетом переводов
+     *
+     * @param   string  $sumAlias
+     * @return  myOperationQuery
+     */
+    protected function selectSumOperationByAccount($sumAlias)
+    {
+        $rootAlias = $this->getRootAlias();
+        $joinAlias = $this->getCurrentAccountAlias();
+
+        $this->addSelect("SUM(
+            CASE
+                WHEN {$rootAlias}.account_id = {$joinAlias}.account_id THEN {$rootAlias}.money
+                WHEN IFNULL({$rootAlias}.transfer_amount, 0) = 0 THEN ABS({$rootAlias}.money)
+                ELSE {$rootAlias}.transfer_amount
+            END
+            ) {$sumAlias}");
+
+        return $this;
+    }
+
+
+    /**
+     * Добавить группировку по ID счета при объединении с таблицей счетов
+     *
+     * @return  myOperationQuery
+     */
+    protected function groupByAccount()
+    {
+        $joinAlias = $this->getCurrentAccountAlias();
+        $this->addGroupBy("{$joinAlias}.id");
+
+        return $this;
+    }
+
+
+    /**
+     * Выбрать только операции за период
+     * периодом может быть текущий месяц или n-месяцев
+     *
+     * @param   mixed   $months     период в месяцах|null|true
+     * @return  myOperationQuery
+     */
+    protected function filterByPeriod($months = null)
+    {
+        $rootAlias = $this->getRootAlias();
+
+        //определим интервал, за который взять операции, если он задан
+        if (isset($months)) {
+            if($months > 0) { //отсчитываем заданное количество месяцев
+                $value = $months;
+                $type = "MONTH";
+            } else { //внутри текущего месяца - сбросим дни до первого
+                $value = "DAYOFMONTH(CURDATE()) - 1";
+                $type = "DAY";
+            }
+
+            $this->andWhere("{$rootAlias}.date >= DATE_SUB(
+                CURDATE(),
+                INTERVAL {$value} {$type}
+            )");
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Выбрать суммы операций с параметрами и фильтрами
+     *
+     * @param   string  $joinAlias
+     * @param   string  $sumAlias
+     * @return  myOperationQuery
+     */
+    protected function makeAggregateAccountQuery(User $user, $joinAlias, $sumAlias)
+    {
+        $rootAlias = $this->getRootAlias();
+
+        $this->joinAccount($joinAlias)
+            ->addJoinAccountByUser($user, $joinAlias)
+
+            ->selectSumOperationByAccount($sumAlias)
+            ->addSelect("{$joinAlias}.type_id")
+            ->addSelect("{$joinAlias}.currency_id")
+            ->addSelect("{$rootAlias}.account_id")
+
+            ->andWhere("{$rootAlias}.accepted = ?", Operation::STATUS_ACCEPTED)
+
+            ->groupByAccount();
 
         return $this;
     }
