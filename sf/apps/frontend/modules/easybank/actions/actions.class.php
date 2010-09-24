@@ -38,7 +38,7 @@ class easybankActions extends myBaseFrontendJsonActions
                 $fieldName, $error->getValue(), $error->getMessage());
         }
 
-        return $this->renderJsonError("Анкета не прошла валидацию: \n" . $errorMessages);
+        return $this->renderJsonError("Анкета не прошла валидацию: \n" . implode('', $errorMessages));
     }
 
     /**
