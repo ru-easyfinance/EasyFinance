@@ -45,7 +45,7 @@
                         */
                         ?>
                         <?php if ($sf_user->isAuthenticated()) : ?>
-                        <li><a href="/profile/"><?php echo $sf_user->getName(); ?></a></li>
+                        <li><a href="/my/profile/"><?php echo $sf_user->getName(); ?></a></li>
                         <li><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                         <?php else: ?>
                         <li id="show_login"><a id="linkLogin" href="https://<?php echo URL_ROOT ?>login/">ВХОД</a></li>
