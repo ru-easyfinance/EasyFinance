@@ -527,7 +527,7 @@ $(document).ready(function(){
             width: 540
         });
         $('.dial').bind('dialogclose', function(event, ui){
-            //setCookie2('guide','',0,COOKIE_DOMEN);
+            $.cookie('guide', '', {expire: 100, path : '/', domain: false, secure : isSecure});
             $.post('/my/profile/guide.json', { state: '0' });
             $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {
                 theme: 'green',
