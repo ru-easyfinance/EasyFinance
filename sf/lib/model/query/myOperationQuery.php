@@ -70,7 +70,9 @@ class myOperationQuery extends myBaseQuery
     {
         $rootAlias = $this->getRootAlias();
 
-        $this->modifyJoinAccountCondition(sprintf("{$joinAlias}.user_id = %d", $user->getId()), $joinAlias);
+        $this->modifyJoinAccountCondition("{$joinAlias}.user_id = ?", $joinAlias);
+        $this->_params['join'][] = $user->getId();
+
         $this->andWhere("{$rootAlias}.user_id = ?", $user->getId());
 
         return $this;
@@ -203,6 +205,38 @@ class myOperationQuery extends myBaseQuery
             ->andWhere("{$rootAlias}.accepted = ?", Operation::STATUS_ACCEPTED)
 
             ->groupByAccount();
+
+        return $this;
+    }
+
+
+    /**
+     * Баланс "живых" денег
+     * для баланса "живых" денег берем все операции и начальные остатки
+     * берем только денежные счета и кредитки с положительным балансом
+     *
+     * @param   User    $user
+     * @return  myOperationQuery
+     */
+    public function getBalanceQuery($user)
+    {
+        $rootAlias = $this->getRootAlias();
+        $joinAlias = 'a';
+        $sumAlias  = 'money';
+
+        $this->makeAggregateAccountQuery($user, $joinAlias, $sumAlias)
+            ->modifyJoinAccountCondition("{$rootAlias}.account_id = {$joinAlias}.account_id OR {$rootAlias}.transfer_account_id = {$joinAlias}.account_id", $joinAlias);
+
+        $this->andWhereIn("{$rootAlias}.type", array(
+            Operation::TYPE_EXPENSE,
+            Operation::TYPE_PROFIT,
+            Operation::TYPE_TRANSFER,
+            Operation::TYPE_BALANCE,
+        ));
+
+        // TODO вынести IDшники типов в константы? хардкодить зло
+        // Тупая доктрина не желает знать о том, что в HAVING может быть условие OR, поэтому все в 1 строку
+        $this->having("{$joinAlias}.type_id IN (?, ?, ?, ?, ?) OR ({$joinAlias}.type_id = ? AND {$sumAlias} > ?)", array(1, 2, 5, 15, 16, 8, 0));
 
         return $this;
     }
