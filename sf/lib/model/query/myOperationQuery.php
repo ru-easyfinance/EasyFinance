@@ -45,6 +45,21 @@ class myOperationQuery extends myBaseQuery
 
 
     /**
+     * Выбирать операции со связанными счетами
+     *
+     * @param   string  $joinAlias
+     * @return  myOperationQuery
+     */
+    public function joinAccount($joinAlias)
+    {
+        $rootAlias = $this->getRootAlias();
+        $this->innerJoin("{$rootAlias}.Account {$joinAlias}");
+
+        return $this;
+    }
+
+
+    /**
      * Модифицирует (или заменяет) условия джоина к счетам
      *
      * @param   string  $addToJoinConditions
