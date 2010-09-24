@@ -309,4 +309,30 @@ class myOperationQuery extends myBaseQuery
         return $this;
     }
 
+
+    /**
+     * Долги-проценты
+     *
+     * @param   User    $user
+     * @param   mixed   $months
+     * @return  myOperationQuery
+     */
+    public function getCreditQuery(User $user, $months = null)
+    {
+        $rootAlias = $this->getRootAlias();
+        $joinAlias = 'a';
+        $sumAlias  = 'money';
+
+        $this->makeAggregateAccountQuery($user, $joinAlias, $sumAlias)
+            ->modifyJoinAccountCondition("{$rootAlias}.account_id = {$joinAlias}.account_id OR {$rootAlias}.transfer_account_id = {$joinAlias}.account_id", $joinAlias)
+            ->filterByPeriod($months)
+            ->andWhere("{$rootAlias}.type = ?", Operation::TYPE_EXPENSE);
+
+        // категорий с системной категорией "Проценты по кредитам и займам" может быть много, поэтому выбираем через IN
+        $subQuery = "SELECT c.id FROM Category c WHERE c.system_id = 15 AND c.user_id = ?";
+        $this->andWhere("{$rootAlias}.category_id IN ({$subQuery})", $user->getId());
+
+        return $this;
+    }
+
 }

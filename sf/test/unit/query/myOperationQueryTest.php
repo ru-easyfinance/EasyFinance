@@ -206,6 +206,16 @@ class myOperationQueryTest extends myUnitTestCase
             'transfer_amount' => 310.34,
             'transfer_account_id' => $accTo3->getId(),
         ));
+        /**
+        Чисто для потомков: идейно такая запись должна привести к 0,
+        а фактически будет ошибка, т.к. суммируется amount
+        $op4 = $this->helper->makeOperation($accTo3, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'amount' => -333.34,
+            'transfer_amount' => 333.34,
+            'transfer_account_id' => $accTo3->getId(),
+        ));
+        */
 
         $result = Doctrine::getTable('Operation')
             ->createQuery()
@@ -216,6 +226,26 @@ class myOperationQueryTest extends myUnitTestCase
         $this->assertEquals($op1->getTransferAmount(), $result[0]['money'], '', 0.01);
         $this->assertEquals($op2->getTransferAmount(), $result[1]['money'], '', 0.01);
         $this->assertEquals($op3->getTransferAmount(), $result[2]['money'], '', 0.01);
+    }
+
+
+    /**
+     * Проценты по кредитам и займам
+     */
+    public function testGetCreditQuery()
+    {
+        $user = $this->helper->makeUser();
+        $acc = $this->helper->makeAccount($user);
+        $category = $this->helper->makeCategory($user, array('system_id' => 15));
+        $op = $this->helper->makeOperation($acc, array('category_id' => $category->getId()));
+
+        $result = Doctrine::getTable('Operation')
+            ->createQuery()
+            ->getCreditQuery($user, 1)
+            ->execute();
+
+        $this->assertEquals(1, $result->count());
+        $this->assertEquals($op->getAmount(), $result['0']['money']);
     }
 
 }
