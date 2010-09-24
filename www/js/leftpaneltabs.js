@@ -32,7 +32,7 @@ var leftPanelTabs = (function() {
     }
 
     function onTab(evt) {
-        var idx = $(this).prevAll('li').length + 1
+        var idx = $(this).prevAll('li').length + 1;
         switchTo(idx);
         save(idx);
     }
@@ -48,4 +48,4 @@ var leftPanelTabs = (function() {
     }
 
     $(init);
-})()
+})();
