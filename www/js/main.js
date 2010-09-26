@@ -541,4 +541,13 @@ $(document).ready(function(){
         easyFinance.widgets.wizard.init();
         easyFinance.widgets.wizard.show();
     }
+
+    $(document).keypress(function(e) {
+        if(e.keyCode == 27) {
+            $(document).trigger('event.esc');
+        }
+        if(e.keyCode == 9) {
+            $(document).trigger('event.tab');
+        }
+    });
 });

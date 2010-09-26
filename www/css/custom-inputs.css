@@ -8,6 +8,11 @@
     color:#ccc;
     margin:5px 0 0 0;
 }
+.b-custom-input-hint_msg,
+.b-custom-textarea-hint_msg {
+    color:#20201E;
+    margin:5px 0 0 0;
+}
 
 .b-custom-input-container {
     display:block;
@@ -309,12 +314,23 @@
 .b-custom-input.b-sum {
     width:100px;
 }
+.b-custom-input.b-phone {
+    width:130px;
+}
+.b-custom-input.b-notification_hour,
+.b-custom-input.b-notification_min {
+    width:52px;
+}
+
 .b-custom-input-inline .b-custom-input.b-sum {
     margin-right:10px;
 }
 .b-custom-input-inline label {
     line-height:28px;
     margin-right:10px;
+}
+.b-custom-input-inline label.delimiter {
+    margin:0 10px;
 }
 
 #ufd-container div.list-wrapper {

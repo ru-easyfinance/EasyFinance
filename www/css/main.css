@@ -588,11 +588,6 @@ div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float
 div.addoperation .line .tags_could{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
 div.addoperation .line .tags_could div{position : relative; width: 100px;float: top;}
 
-#checkReminderMail, #checkReminderSms {
-    padding: 0px;
-    margin: 0px;
-}
-
 /* Tag cloud */
 
     #tags li{
@@ -864,7 +859,7 @@ div.op_addoperation .op_line .op_date{float: left; }
 div.op_addoperation .op_line .op_f_field .op_date input.op_inp { width: 106px;  }
 div.op_addoperation .op_line  .op_amount {float: left; }
 
-#btnCalcSum, #btnCalcSumTransfer{
+#btnCalcSumTransfer{
     padding-top: 2px;
     margin-top: 0px;
     border: none;
@@ -1994,10 +1989,6 @@ div.op_addoperation div.op_line div.amount div.amount_general{
 
 div.op_addoperation input#op_transfer{
     width: 124px;
-}
-
-#operationEdit_reminders label {
-    display: inline;
 }
 
 div.amount_general {
