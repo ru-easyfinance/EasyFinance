@@ -430,8 +430,15 @@ easyFinance.widgets.operationEdit = function(){
         _$blockReminders.show();
     }
 
+    function _setDefaultType() {
+        _selectedType = '0';
+    }
+
     function _changeOperationType() {
         // Расход или Доход
+
+        !_selectedType && _setDefaultType();
+
         if (_selectedType == "0" || _selectedType == "1") {
             $("#op_category_fields,#op_tags_fields").show();
             $("#op_target_fields,#op_transfer_fields,#div_op_transfer_line").hide();
