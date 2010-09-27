@@ -69,6 +69,119 @@ class myTahometers
 
 
     /**
+     * Получение баланса
+     */
+    public function getBalance()
+    {
+        return $this->getOperationTable()
+            ->getBalance($this->getUser());
+    }
+
+
+    /**
+     * Получение доходов
+     */
+    protected function getProfit($months = null)
+    {
+        return $this->getOperationTable()
+            ->getProfit($this->getUser(), $months);
+    }
+
+
+    /**
+     * Получение расходов
+     */
+    protected function getExpence($months = null)
+    {
+        return $this->getOperationTable()
+            ->getExpence($this->getUser(), $months);
+    }
+
+
+    /**
+     * Получение выплат за кредиты
+     */
+    protected function getRepayLoanExpence($months = null)
+    {
+        return $this->getOperationTable()
+            ->getRepayLoanExpence($this->getUser(), $months);
+    }
+
+
+    /**
+     * Получение выплат-процентов по кредитам и займам
+     */
+    protected function getInterestOnLoanExpence($months = null)
+    {
+        return $this->getOperationTable()
+            ->getInterestOnLoanExpence($this->getUser(), $months);
+    }
+
+
+    /**
+     * Получить доходы за 1 месяц
+     */
+    public function getOneMonthProfit()
+    {
+        return $this->getProfit(1);
+    }
+
+
+    /**
+     * Получить доходы за 3 месяц
+     */
+    public function getThreeMonthsProfit()
+    {
+        return $this->getProfit(3);
+    }
+
+
+    /**
+     * Расходы за текущий месяц
+     */
+    public function getCurrentMonthExpence()
+    {
+        return $this->getExpence(0);
+    }
+
+
+    /**
+     * Расходы за 3 месяца
+     */
+    public function getThreeMonthsExpence()
+    {
+        return $this->getExpence(3);
+    }
+
+
+    /**
+     * Выплаты по кредитам за месяц
+     */
+    public function getOneMonthRepayLoanExpence()
+    {
+        return $this->getRepayLoanExpence(1);
+    }
+
+
+    /**
+     * Выплаты по кредитам за 3 месяца
+     */
+    public function getThreeMonthsRepayLoanExpence()
+    {
+        return $this->getRepayLoanExpence(3);
+    }
+
+
+    /**
+     * Выплаты процентов по кредитам за месяц
+     */
+    public function getOneMonthInterestOnLoanExpence()
+    {
+        return $this->getInterestOnLoanExpence(1);
+    }
+
+
+    /**
      * Получить интервал в днях от сегодня до даты в прошлом/будущем
      *
      * @param   integer $number

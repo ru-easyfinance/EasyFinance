@@ -285,4 +285,69 @@ class OperationTable extends Doctrine_Table
         return (int) $q->execute(array(Operation::TYPE_BALANCE, $user->getId()), Doctrine::HYDRATE_SINGLE_SCALAR);
     }
 
+
+    /**
+     * Баланс пользователя по счетам
+     */
+    public function getBalance(User $user, $hydrate = Doctrine::HYDRATE_ARRAY)
+    {
+        return $this->createQuery()
+            ->getBalanceQuery($user)
+            ->execute(array(), $hydrate);
+    }
+
+
+    /**
+     * Доход пользователя по счетам
+     *
+     * @param   User    $user
+     * @param   integer $months
+     * @param   mixed   $hydrationMode  @see Doctrine_Query_Abstract::execute
+     * @return  array|mixed
+     */
+    public function getProfit(User $user, $months = null, $hydrate = Doctrine::HYDRATE_ARRAY)
+    {
+        return $this->createQuery()
+            ->getProfitQuery($user, $months)
+            ->execute(array(), $hydrate);
+    }
+
+
+    /**
+     * Расход пользователя по счетам
+     *
+     * @param   User    $user
+     * @param   integer $months
+     * @param   mixed   $hydrationMode  @see Doctrine_Query_Abstract::execute
+     * @return  array|mixed
+     */
+    public function getExpence(User $user, $months = null, $hydrate = Doctrine::HYDRATE_ARRAY)
+    {
+        return $this->createQuery()
+            ->getExpenceQuery($user, $months)
+            ->execute(array(), $hydrate);
+    }
+
+
+    /**
+     * Выплаты пользователя по кредитам
+     */
+    public function getRepayLoanExpence(User $user, $months = null, $hydrate = Doctrine::HYDRATE_ARRAY)
+    {
+        return $this->createQuery()
+            ->getRepayLoanQuery($user, $months)
+            ->execute(array(), $hydrate);
+    }
+
+
+    /**
+     * Проценты пользователя по кредитам и займам
+     */
+    public function getInterestOnLoanExpence(User $user, $months = null, $hydrate = Doctrine::HYDRATE_ARRAY)
+    {
+        return $this->createQuery()
+            ->getInterestOnLoanQuery($user, $months)
+            ->execute(array(), $hydrate);
+    }
+
 }
