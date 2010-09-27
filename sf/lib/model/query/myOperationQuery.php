@@ -243,7 +243,7 @@ class myOperationQuery extends myBaseQuery
 
 
     /**
-     * Выбрать расходные операции
+     * Расходные операции
      *
      * @param   User    $user
      * @param   mixed   $months
@@ -265,7 +265,7 @@ class myOperationQuery extends myBaseQuery
 
 
     /**
-     * Выбрать доходные операции
+     * Доходные операции
      *
      * @param   User    $user
      * @param   mixed   $months
@@ -287,13 +287,13 @@ class myOperationQuery extends myBaseQuery
 
 
     /**
-     * Выбрать переводы на долговые счета
+     * Переводы на долговые счета
      *
      * @param   User    $user
      * @param   mixed   $months
      * @return  myOperationQuery
      */
-    public function getLoansQuery(User $user, $months = null)
+    public function getRepayLoanQuery(User $user, $months = null)
     {
         $rootAlias = $this->getRootAlias();
         $joinAlias = 'a';
@@ -311,13 +311,13 @@ class myOperationQuery extends myBaseQuery
 
 
     /**
-     * Долги-проценты
+     * Расходы на проценты по кредитам
      *
      * @param   User    $user
      * @param   mixed   $months
      * @return  myOperationQuery
      */
-    public function getCreditQuery(User $user, $months = null)
+    public function getInterestOnLoanQuery(User $user, $months = null)
     {
         $rootAlias = $this->getRootAlias();
         $joinAlias = 'a';

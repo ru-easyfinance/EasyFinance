@@ -173,7 +173,7 @@ class myOperationQueryTest extends myUnitTestCase
     /**
      * Запрос переводов на долговые счета
      */
-    public function testGetLoansQuery()
+    public function testGetRepayLoanQuery()
     {
         $user = $this->helper->makeUser();
         // шум
@@ -219,7 +219,7 @@ class myOperationQueryTest extends myUnitTestCase
 
         $result = Doctrine::getTable('Operation')
             ->createQuery()
-            ->getLoansQuery($user, 0)
+            ->getRepayLoanQuery($user, 0)
             ->execute();
 
         $this->assertEquals(3, $result->count());
@@ -232,7 +232,7 @@ class myOperationQueryTest extends myUnitTestCase
     /**
      * Проценты по кредитам и займам
      */
-    public function testGetCreditQuery()
+    public function testGetInterestOnLoanQuery()
     {
         $user = $this->helper->makeUser();
         $acc = $this->helper->makeAccount($user);
@@ -241,7 +241,7 @@ class myOperationQueryTest extends myUnitTestCase
 
         $result = Doctrine::getTable('Operation')
             ->createQuery()
-            ->getCreditQuery($user, 1)
+            ->getInterestOnLoanQuery($user, 1)
             ->execute();
 
         $this->assertEquals(1, $result->count());
