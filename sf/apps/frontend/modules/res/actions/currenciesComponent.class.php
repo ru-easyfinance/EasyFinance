@@ -36,7 +36,9 @@ class currenciesComponent extends sfComponent
 
         # Вообще это глобальная вещь, и по хорошему надо инициализировать onDemand в конфиге и класть в контекст
         # Но давай пока оставим здесь, если нельзя быстро переделать
-        $exchange = new myCurrencyExchange();
+        # Сделал глобальную загрузку по событию, но не нравится. Контекст пока не нравится больше.
+        $this->dispatcher->notifyUntil($event = new sfEvent($this, 'app.myCurrencyExchange', array()));
+        $exchange = $event->getReturnValue();
         foreach ($toChange as $row) {
             $exchange->setRate($row['id'], $row['rate'], myCurrencyExchange::BASE_CURRENCY);
         }
