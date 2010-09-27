@@ -448,6 +448,7 @@ class model_OperationTableTest extends myUnitTestCase
         );
     }
 
+
     /**
      * Считаем фактический расход месяц по категориям
      */
@@ -465,6 +466,22 @@ class model_OperationTableTest extends myUnitTestCase
             'Фактический расход с учётом валют',
             $expected * 0.01
         );
+    }
+
+
+    /**
+     * Получение опытности пользователя
+     */
+    public function testGetExpirienceByUser()
+    {
+        $user = $this->helper->makeUser();
+        $acc = $this->helper->makeAccount($user);
+        $this->helper->makeOperation($acc, array('date' => date('Y-m-d', time()-60*60*24*6)));
+        $this->helper->makeOperation($acc, array('date' => date('Y-m-d', time()-60*60*24*9)));
+        $this->helper->makeOperation($this->helper->makeAccount($user), array('date' => date('Y-m-d', time()-60*60*24*8)));
+        $result = Doctrine::getTable("Operation")->getExpirienceByUser($user);
+
+        $this->assertEquals(10, $result);
     }
 
 }

@@ -261,4 +261,28 @@ class OperationTable extends Doctrine_Table
         return $q->execute();
     }
 
+
+    /**
+     * Получить опытность пользователя в днях
+     *
+     * @param   User    $user
+     * @return  integer
+     */
+    public function getExpirienceByUser(User $user)
+    {
+        $q = new Doctrine_RawSql();
+        $q->addComponent('op', 'Operation op')
+            ->select('{op.md}')
+            ->from("(SELECT
+                op.id, DATEDIFF(CURDATE(), IFNULL(MIN(op.date), CURDATE()))+1 AS md
+            FROM operation op
+            WHERE op.type != ?
+                AND op.accepted = 1
+                AND op.deleted_at IS NULL
+                AND op.user_id = ?
+        ) op");
+
+        return (int) $q->execute(array(Operation::TYPE_BALANCE, $user->getId()), Doctrine::HYDRATE_SINGLE_SCALAR);
+    }
+
 }
