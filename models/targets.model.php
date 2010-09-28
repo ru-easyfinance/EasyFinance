@@ -147,7 +147,7 @@ class Targets_Model {
                 LEFT JOIN category c ON c.cat_id = t.category_id
                 LEFT JOIN system_categories s ON c.system_category_id = s.id
             WHERE t.visible=1
-            GROUP BY t.title, t.`close`
+            GROUP BY t.title
             ORDER BY cnt DESC, t.title ASC
             LIMIT ?d, ?d;
         ", $start, $limit);
