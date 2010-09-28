@@ -7,13 +7,28 @@ class myTahometers
     // пользователь
     private $user = null;
 
+    private $dispatcher = null;
+
+    private $myCurrencyExchange = null;
+
     // конфигурация тахометров
     private $tahometersConfig = array();
 
     // опытность пользователя - дней с первой операции
     private $userExpirience = null;
-    // плановые расходы на текущий месяц
+
+    // кеш конкретных запросов
+    private $oneMonthProfit,
+            $currentMonthExpense,
+            $threeMonthProfit,
+            $threeMonthExpense,
+            $oneMonthRepayLoanExpense,
+            $threeMonthsRepayLoanExpense,
+            $oneMonthInterestOnLoanExpense = null;
+    // плановые расходы на текущий месяц (бюджет)
     private $monthExpense = null;
+    // баланс
+    private $balance = null;
 
 
     /**
@@ -31,9 +46,10 @@ class myTahometers
         }
         include sfContext::getInstance()->getConfigCache()->checkConfig('config/tahometers.yml');
 
-        $this->tahometersConfig = $tahometerConfig;
+        // TODO: убить упоминания контекста
+        $this->dispatcher = sfContext::getInstance()->getEventDispatcher();
 
-        $this->initialize();
+        $this->tahometersConfig = $tahometerConfig;
     }
 
 
@@ -60,31 +76,170 @@ class myTahometers
 
 
     /**
-     * Выбрать данные
+     * Вернуть все тахометры в виде массива данных
+     *
+     * @return  array
      */
-    protected function initialize()
+    public function toArray()
     {
-        //
+        $tahometers = $this->createTahometers();
+
+        $values = array();
+
+        foreach ($tahometers as $tahometer) {
+            $values[] = $tahometer->toArray();
+        }
+
+        return $values;
+    }
+
+
+    /**
+     * Создать тахометр
+     *
+     * @param   string  $name
+     * @return  myTahometer
+     */
+    protected function createTahometer($name)
+    {
+        if ($name !== myTahometer::NAME_TOTAL) {
+            return new myTahometer($this->getConfiguration($name));
+        }
+    }
+
+
+    /**
+     * Инициализация тахометров, заполнение данными
+     */
+    protected function createTahometers()
+    {
+        $money  = $this->createTahometer(myTahometer::NAME_MONEY);
+        $budget = $this->createTahometer(myTahometer::NAME_BUDGET);
+        $loans  = $this->createTahometer(myTahometer::NAME_LOANS);
+        $diff   = $this->createTahometer(myTahometer::NAME_DIFF);
+
+        $money->setParams(
+            $this->getBalance(),
+            ($this->getThreeMonthsExpence() + $this->getThreeMonthsRepayLoanExpence()) / 3
+        );
+
+        $budget->setParams(
+            $this->getCurrentMonthExpence(),
+            $this->getMonthExpense()
+        );
+
+        $loans->setParams(
+            $this->getOneMonthRepayLoanExpence() + $this->getOneMonthInterestOnLoanExpence(),
+            $this->getOneMonthProfit()
+        );
+
+        $diff->setParams(
+            $this->getThreeMonthsProfit(),
+            $this->getThreeMonthsExpence() + $this->getThreeMonthsRepayLoanExpence()
+        );
+
+        $total = new myTotalTahometer(
+            $this->getTotalTahometerValueFromTahometers(array($money, $budget, $loans, $diff)),
+            $this->getConfiguration(myTahometer::NAME_TOTAL)
+        );
+
+        return array(
+            $total,
+            $money,
+            $budget,
+            $loans,
+            $diff,
+        );
+    }
+
+
+    /**
+     * @return  float
+     */
+    protected function getTotalTahometerValueFromTahometers(array $tahometers)
+    {
+        $totalValue = 0.00;
+        foreach ($tahometers as $tahometer) {
+            $totalValue += $tahometer->getWeightedValue();
+        }
+
+        return $totalValue;
+    }
+
+
+    /**
+     * Инстанс обменника валют
+     *
+     * @return  myCurrencyExchange
+     */
+    protected function getExchanger()
+    {
+        if (!$this->myCurrencyExchange) {
+            $this->dispatcher->notifyUntil($event = new sfEvent($this, 'app.myCurrencyExchange', array()));
+            $this->myCurrencyExchange = $event->getReturnValue();
+        }
+
+        return $this->myCurrencyExchange;
+    }
+
+
+    /**
+     * Приводит суммы по счетам к 1ой валюте и суммирует
+     *
+     * @return  float
+     */
+    protected function calculateUserOperations(array $operations = array(), $absolute = true)
+    {
+        $ex = $this->getExchanger();
+        $defaultCurrency = $this->getUser()->getCurrencyId();
+
+        $total = 0.00;
+        //todo: на симфони правильно работать не с суммами по счетам,
+        //а с операциями, получая суммы из них с учетом всех тонкостей валют и отношений к счетам
+        // все тонкости валют? хорошо бы их описать.
+        // TODO: отрефакторить
+        foreach ($operations as $operation) {
+            $money = new myMoney($operation['money'], $operation['Account']['currency_id']);
+            $total += $ex->convert($money, $defaultCurrency)->getAmount();
+        }
+
+        if ($absolute) {
+            $total = abs($total);
+        }
+
+        return $total;
     }
 
 
     /**
      * Получение баланса
+     *
+     * @return  float
      */
     public function getBalance()
     {
-        return $this->getOperationTable()
-            ->getBalance($this->getUser());
-    }
+        if (!$this->balance) {
+            $result = $this->getOperationTable()
+                ->getBalance($this->getUser());
 
+            $this->balance = $this->calculateUserOperations($result, $absolute = false);
+        }
+
+        return $this->balance;
+    }
 
     /**
      * Получение доходов
      */
     protected function getProfit($months = null)
     {
-        return $this->getOperationTable()
+        $result = $this->getOperationTable()
             ->getProfit($this->getUser(), $months);
+
+        $total = $this->calculateUserOperations($result);
+        $total = $this->makeMoneyAccuracyByExpirience($total, $months);
+
+        return $total;
     }
 
 
@@ -93,8 +248,13 @@ class myTahometers
      */
     protected function getExpence($months = null)
     {
-        return $this->getOperationTable()
+        $result = $this->getOperationTable()
             ->getExpence($this->getUser(), $months);
+
+        $total = $this->calculateUserOperations($result);
+        $total = $this->makeMoneyAccuracyByExpirience($total, $months);
+
+        return $total;
     }
 
 
@@ -103,8 +263,13 @@ class myTahometers
      */
     protected function getRepayLoanExpence($months = null)
     {
-        return $this->getOperationTable()
+        $result = $this->getOperationTable()
             ->getRepayLoanExpence($this->getUser(), $months);
+
+        $total = $this->calculateUserOperations($result);
+        $total = $this->makeMoneyAccuracyByExpirience($total, $months);
+
+        return $total;
     }
 
 
@@ -113,8 +278,13 @@ class myTahometers
      */
     protected function getInterestOnLoanExpence($months = null)
     {
-        return $this->getOperationTable()
+        $result = $this->getOperationTable()
             ->getInterestOnLoanExpence($this->getUser(), $months);
+
+        $total = $this->calculateUserOperations($result);
+        $total = $this->makeMoneyAccuracyByExpirience($total, $months);
+
+        return $total;
     }
 
 
@@ -123,7 +293,11 @@ class myTahometers
      */
     public function getOneMonthProfit()
     {
-        return $this->getProfit(1);
+        if (!$this->oneMonthProfit) {
+            $this->oneMonthProfit = $this->getProfit(1);
+        }
+
+        return $this->oneMonthProfit;
     }
 
 
@@ -132,7 +306,11 @@ class myTahometers
      */
     public function getThreeMonthsProfit()
     {
-        return $this->getProfit(3);
+        if (!$this->threeMonthProfit) {
+            $this->threeMonthProfit = $this->getProfit(3);
+        }
+
+        return $this->threeMonthProfit;
     }
 
 
@@ -141,7 +319,11 @@ class myTahometers
      */
     public function getCurrentMonthExpence()
     {
-        return $this->getExpence(0);
+        if (!$this->currentMonthExpense) {
+            $this->currentMonthExpense = $this->getExpence(0);
+        }
+
+        return $this->currentMonthExpense;
     }
 
 
@@ -150,7 +332,11 @@ class myTahometers
      */
     public function getThreeMonthsExpence()
     {
-        return $this->getExpence(3);
+        if (!$this->threeMonthExpense) {
+            $this->threeMonthExpense = $this->getExpence(3);
+        }
+
+        return $this->threeMonthExpense;
     }
 
 
@@ -159,7 +345,10 @@ class myTahometers
      */
     public function getOneMonthRepayLoanExpence()
     {
-        return $this->getRepayLoanExpence(1);
+        if (!$this->oneMonthRepayLoanExpense) {
+            $this->oneMonthRepayLoanExpense = $this->getRepayLoanExpence(1);
+        }
+        return $this->oneMonthRepayLoanExpense;
     }
 
 
@@ -168,7 +357,10 @@ class myTahometers
      */
     public function getThreeMonthsRepayLoanExpence()
     {
-        return $this->getRepayLoanExpence(3);
+        if (!$this->threeMonthsRepayLoanExpense) {
+            $this->threeMonthsRepayLoanExpense = $this->getRepayLoanExpence(3);
+        }
+        return $this->threeMonthsRepayLoanExpense;
     }
 
 
@@ -177,7 +369,10 @@ class myTahometers
      */
     public function getOneMonthInterestOnLoanExpence()
     {
-        return $this->getInterestOnLoanExpence(1);
+        if (!$this->oneMonthInterestOnLoanExpense) {
+            $this->oneMonthInterestOnLoanExpense = $this->getInterestOnLoanExpence(1);
+        }
+        return $this->oneMonthInterestOnLoanExpense;
     }
 
 
@@ -236,10 +431,15 @@ class myTahometers
      * Получить конфигурацию тахометров
      *
      * @see     myTahometerConfigHandler::execute
+     * @param   string  $name
      * @return  array
      */
-    protected function getConfiguration()
+    protected function getConfiguration($name = null)
     {
+        if ($name && array_key_exists($name, $this->tahometersConfig)) {
+            return $this->tahometersConfig[$name];
+        }
+
         return $this->tahometersConfig;
     }
 

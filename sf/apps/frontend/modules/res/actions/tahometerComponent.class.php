@@ -14,7 +14,9 @@ class tahometerComponent extends sfComponent
     {
         $user = $this->getUser()->getUserRecord();
 
-        return sfView::NONE;
+        $tahometers = new myTahometers($user);
+
+        $this->setVar('data', $tahometers->toArray(), $noEscape = true);
     }
 
 }

@@ -33,34 +33,6 @@
         ),
     );
 
-    $res['informers'] = array(
-        0 => array(
-            'title'       => '',
-            'description' => '',
-            'value'       => 0,
-        ),
-        1 => array(
-            'title'       => '',
-            'description' => '',
-            'value'       => 0,
-        ),
-        2 => array(
-            'title'       => '',
-            'description' => '',
-            'value'       => 0,
-        ),
-        3 => array(
-            'title'       => '',
-            'description' => '',
-            'value'       => 0,
-        ),
-        4 => array(
-            'title'       => '',
-            'description' => '',
-            'value'       => 0,
-        ),
-    );
-
     $res['errors'] = array();
 ?>
 
