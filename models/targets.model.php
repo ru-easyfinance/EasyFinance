@@ -142,14 +142,21 @@ class Targets_Model {
             $start = (((int)$index ) * $limit);//-1
         }
         $list = $this->db->selectPage($total, "
-            SELECT t.title, t.category_id as category, COUNT(t.id) AS cnt, SUM(`close`) AS cl, s.name
+            SELECT t.category_id AS category, COUNT(t.id) AS cnt, SUM(`close`) AS cl,
+             CASE t.category_id
+              WHEN 1 THEN 'Квартира'
+              WHEN 2 THEN 'Автомобиль'
+              WHEN 3 THEN 'Отпуск'
+              WHEN 4 THEN 'Финансовая подушка'
+              WHEN 5 THEN 'Другое'
+              WHEN 6 THEN 'Свадьба'
+              WHEN 7 THEN 'Бытовая техника'
+              WHEN 8 THEN 'Компьютер'
+             END AS title
             FROM target t
-                LEFT JOIN category c ON c.cat_id = t.category_id
-                LEFT JOIN system_categories s ON c.system_category_id = s.id
-            WHERE t.visible=1
-            GROUP BY t.title
-            ORDER BY cnt DESC, t.title ASC
-            LIMIT ?d, ?d;
+            WHERE t.category_id BETWEEN 1 AND 8
+            GROUP BY category
+            ORDER BY cnt DESC;
         ", $start, $limit);
         $array = array();
         foreach ($list as $k => $v) {
