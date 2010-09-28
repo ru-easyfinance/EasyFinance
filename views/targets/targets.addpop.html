@@ -1,59 +1,87 @@
 <!--popup добавить цель-->
-	<div id="tpopup" title="Финансовая цель" style="display: none;">
+    <div id="tpopup" title="Финансовая цель" style="display: none;">
         <input type="hidden" id="key">
-        <table>
-            <tr>
-                <td><label for="type">Хочу</label></td>
-                <td><select id="type" class="text ui-widget-content" disabled="disabled">
-                        <option value="r" selected="selected">Накопить</option>
-                        <option value="d">Сэкономить</option>
-                        <option value="d">Снизить долги</option>
-                    </select></td>
-            </tr>
-            <tr>
-                <td><label for="category">Категория</label></td>
-                <td>
-                    <select id="targets_category" class="text ui-widget-content"></select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="title">Наименование</label></td>
-                <td><input type="text" value="" id="name" class="text ui-widget-content" style="width: 300px"/></td>
-            </tr>
-            <tr>
-                <td><label for="tg_amount">Сумма</label></td>
-                <td><input type="text" value="" id="tg_amount" /></td>
-            </tr>
-            <tr>
-                <td><label for="start">Дата начала</label></td>
-                <td><input type="text" value="" id="start" />
-            </tr>
-            <tr>
-                <td><label for="end">Дата окончания</label></td>
-                <td><input type="text" value="" id="end" />
-            </tr>
-            <!--<tr>
-                <td><label for="amountf">Сумма пер. плат.</label></td>
-                <td><input type="text" value="" id="amountf" /></td>
-            </tr>-->
-            <tr>
-                <td><label for="account">Счет накопления</label></td>
-                <td><select id="account">
-                    {foreach from=$accounts item=acc_data}
-                    <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
-                    {/foreach}
-                    </select></td>
-            </tr>
-            <tr>
-                <td><label for="comment">Комментарий</label></td>
-                <td><textarea id="comment"></textarea></td>
-            </tr>
-            <tr>
-                <td colspan="2"><label for="visible" class="showall">
-                    <input type="checkbox" value="" id="visible" checked/>
-                    Видимая для других
-                </label></td>
-            </tr>
-        </table>
+        <div class="b-form-skeleton b-operations-journal-options fixed-width">
+            <div class="b-row cols2">
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        {capture name='selectbox'}
+                            <option value="r" selected="selected">Накопить</option>
+                            <option value="d">Сэкономить</option>
+                            <option value="d">Снизить долги</option>
+                        {/capture}
+                        {include file="ui/textfield.tpl" label="Хочу:" disabled=true selectbox=$smarty.capture.selectbox selectid="type"}
+                    </div>
+                </div>
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        {include file="ui/textfield.tpl" label="Категория:" empty_selectbox=true selectid="targets_category"}
+                    </div>
+                </div>
+            </div>
+            <div class="b-row">
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        {include file="ui/textfield.tpl" label="Наименование:" id="name" value=""}
+                    </div>
+                </div>
+            </div>
+            <div class="b-row cols2">
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        <div class="b-custom-input-inline">
+                            <label class="">Дата начала:</label>
+                            {include file="ui/textfield.tpl" id="start" value=$dateFrom class="b-date"}
+                            <b class="clear"></b>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        <div class="b-custom-input-inline">
+                            <label class="">Дата окончания:</label>
+                            {include file="ui/textfield.tpl" id="end" value=$dateFrom class="b-date"}
+                            <b class="clear"></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="b-row cols2">
+                <div class="b-col">
+                    <div class="b-col-indent">
+                       {include file="ui/textfield.tpl" label="Сумма:" id="tg_amount" value=""}
+                    </div>
+                </div>
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        {capture name='selectbox'}
+                            {foreach from=$accounts item=acc_data}
+                                <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                            {/foreach}
+                        {/capture}
+                        {include file="ui/textfield.tpl" label="Счет накопления:" selectbox=$smarty.capture.selectbox selectid="account"}
+                    </div>
+                </div>
+            </div>
+            <div class="b-row">
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        {include file="ui/textarea.tpl" label="Комментарии:" id="comment"}
+                    </div>
+                </div>
+            </div>
+            <div class="b-row">
+                <div class="b-col">
+                    <div class="b-col-indent">
+                        <input type="hidden" id="op_close2" value="0" />
+                        <label>
+                            <input type="checkbox" value="" id="visible" checked />
+                            Видимая для других
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <b class="clear"></b>
+        </div>
     </div>
 <!--/popup добавить цель-->

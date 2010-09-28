@@ -2080,11 +2080,13 @@ img.ui-datepicker-trigger {
 .b-form-skeleton {
     margin:-5px;
 }
+
 .b-form-skeleton .l-right {
     float:right;
 }
 
-.op_addoperation .b-form-skeleton {
+.op_addoperation .b-form-skeleton,
+#tpopup .b-form-skeleton {
     border-bottom:1px dotted #ccc;
     margin:0;
     padding:5px 5px 10px;
