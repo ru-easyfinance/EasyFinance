@@ -19,14 +19,15 @@ class User extends BaseUser
 
     /**
      * Установить пароль
+     *
+     * @param   string  $password   Нешифрованный пароль
+     * @return  string              Зашифрованный пароль
      */
     public function setPassword($password)
     {
-        if ($this->isNew()) {
-            $password = sha1($password);
-        }
+        $this->_set('password', sha1($password));
 
-        $this->_set('password', $password);
+        return $this->_get('password');
     }
 
 }

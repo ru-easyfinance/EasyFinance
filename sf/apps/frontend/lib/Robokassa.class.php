@@ -15,6 +15,42 @@ class Robokassa
 
 
     /**
+     * Получить URL на скрипт формы оплаты
+     *
+     * @param BillingTransaction $transaction транзакция
+     * @return string URL скрипта для отображения формы выбора типа оплаты
+     */
+    public static function getScriptURL( BillingTransaction $transaction )
+    {
+    	$URL = self::getSettings('scriptUrl');
+        $URL .= "?";
+
+        $params = array(
+	        "MrchLogin" => self::getSettings('login'),
+	        "OutSum" => $transaction->getTotal(),
+	        "InvId" => $transaction->getId(),
+	        "IncCurrLabel" => "PCR",
+	        "Desc" => $transaction->getService()->getName(),
+	        "SignatureValue" => md5( self::getSettings('login') . ':' . $transaction->getTotal() . ':' . $transaction->getId() . ':' . self::getSettings('pass1') . ':' . 'shpa=' . $transaction->getTerm() ),
+	        "Culture" => "ru",
+	        "Encoding" => "utf-8",
+            "shpa" => $transaction->getTerm()
+        );
+        
+        
+        
+        foreach( $params as $key => $value )
+        {
+            if ( $URL[strlen( $URL )-1] != '?' ) {
+               $URL .= '&';
+            }
+            $URL .= $key . "=" . rawurlencode($value);
+        }
+        
+        return $URL;
+    }
+    
+    /**
      * Получить URL на страницу оплаты
      *
      * @param int $invId ID транзакции

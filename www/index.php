@@ -32,10 +32,10 @@ try
 	// Выполнение запроса (разбор ->вызов контроллера)
 	$router->performRequest();
 
-	if( _Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME){
-
-            $templateEngine->display( 'iframe/index.iframe.html' );
-
+    if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME) {
+        $templateEngine->display('iframe/index.iframe.html');
+    } elseif (_Core_Request::getCurrent()->host . '/' == URL_ROOT_RAMBLER) {
+        $templateEngine->display('index.html');
     } else {
         
         if (!IS_DEMO) {
@@ -46,7 +46,10 @@ try
                 && Helper_DetectBrowser::detectMobile()
                 && !isset($_COOKIE['DO_WHANT_FULL_VERSION'])
             ) {
-                if (strpos($_SERVER['HTTP_REFERER'], URL_ROOT_PDA) === false) {
+                if (
+                    isset($_SERVER['HTTP_REFERER'])
+                    && strpos($_SERVER['HTTP_REFERER'], URL_ROOT_PDA) === false
+                ) {
                     header( 'Location: https://' . URL_ROOT_PDA );
                     exit;
                 } else {

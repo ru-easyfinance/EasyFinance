@@ -7,6 +7,22 @@ easyFinance.widgets.calendarLeft = function(){
 
     var _operation = null;
 
+    var eventRowTemplate =
+        '<li class="line {%odd%}" id="calendarLeft{%time%}{%id%}">\
+            <span class="date">{%date%}{%mail_icon%}</span> \
+            <span class="sum {%color%}">\
+                <span class="amount">{%money%}</span>\
+                <span class="cur">{%cur%}</span>\
+            </span>\
+            <span class="cat" title="{%cat_full%}">{%cat%}</span> \
+            <span class="comment">{%comment%}</span>\
+            <div class="cont"><ul>\
+                <li title="Подтвердить" class="accept"><a></a></li>\
+                <li title="Редактировать" class="edit"><a></a></li>\
+                <li title="Удалить" class="del"><a></a></li>\
+            </ul></div>\
+        </li>';
+
     // private functions
     function _floatingMenuClicked(){
         var id = $(this).parent().closest("li").attr("id");
@@ -68,63 +84,82 @@ easyFinance.widgets.calendarLeft = function(){
     function _redrawOverdue(data) {
         var _data = data.overdue ? data.overdue : res.calendar.overdue;
 
-        var str = '';
+        var str = '',
+            rows = [],
+            values = {},
+            i = 0;
+
         for (var key in _data) {
             var event = _data[key];
             var cur = easyFinance.models.accounts.getAccountCurrencyText(event.account_id);
             cur = (cur === null) ? '' : cur;
+            i++;
 
-            str += '<li class="line" id="calendarLeftOverdue'+event.id+'">'+
-                        (event.comment != "" ? event.comment+'<br>' : "")+
-                        '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
-                        + cur + '</span>'+
-                        '<span class="date">'+event.date.substr(0, 5)+
-                        ((event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "") + '</span>'+
-                        shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
-                        '<div class="cont"><ul>'+
-                        '<li title="Подтвердить" class="accept"><a></a></li>'+
-                        '<li title="Редактировать" class="edit"><a></a></li>'+
-                        '<li title="Удалить" class="del"><a></a></li></ul></div></li>';
+            values = {
+                odd: i % 2 ? '' : 'odd',
+                time: 'Overdue',
+                id: event.id,
+                date: event.date.substr(0, 5),
+                mail_icon: (event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "",
+                cat_full: easyFinance.models.category.getUserCategoryNameById(event.cat_id),
+                cat: shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 26),
+                color: event.money >= 0 ? 'sumGreen' : 'sumRed',
+                money: event.money,
+                cur: cur,
+                comment: event.comment != "" ? event.comment : ""
+            }
+
+            rows.push(templetor(eventRowTemplate, values));
         }
 
         // меняем иконку в левой панели, если есть просроченные события
-        if (str != "") {
-            $("li#c4").addClass("warning");
-            str = '<h2 style="color: red;">Просроченные операции</h2><ul>' + str + "</ul>";
-        } else {
-            $("li#c4").removeClass("warning");
+        if (rows.length) {
+            $(".b-leftpanel_tabs .b-leftpanel_tabs_item_operations").addClass("b-leftpanel_tabs_item_operations__warning");
+            _$blockOverdue.html('<h2>Просроченные</h2><ul>' + rows.join('') + "</ul>");
+        }
+        else {
+            $(".b-leftpanel_tabs .b-leftpanel_tabs_item_operations").removeClass("b-leftpanel_tabs_item_operations__warning");
         }
 
-        _$blockOverdue.html(str);
     }
 
     function _redrawFuture(data) {
         var _data = data.future ? data.future : res.calendar.future;
 
-        var periodicLeft = '';
+        var rows = [],
+            values = {},
+            i = 0;
+
         for (var key in _data) {
             var event = _data[key];
             var cur = easyFinance.models.accounts.getAccountCurrencyText(event.account_id);
             cur = (cur === null) ? '' : cur;
 
-            periodicLeft += '<li class="line" id="calendarLeftFuture'+event.id+'">'+
-                        (event.comment != "" ? event.comment+'<br>' : "")+
-                        '<span class="sum">' + '<span class="' + (event.money>=0 ? 'sumGreen' : 'sumRed')+'">' + event.money +'&nbsp;</span>'
-                        + cur + '</span>'+
-                        '<span class="date">'+event.date.substr(0, 5)+
-                        ((event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "") + '</span>'+
-                        shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 20)+
-                        '<div class="cont"><ul>'+
-                        '<li title="Подтвердить" class="accept"><a></a></li>'+
-                        '<li title="Редактировать" class="edit"><a></a></li>'+
-                        '<li title="Удалить" class="del"><a></a></li></ul></div></li>';
+            i++;
+
+            values = {
+                odd: i % 2 ? '' : 'odd',
+                time: 'Future',
+                id: event.id,
+                date: event.date.substr(0, 5),
+                mail_icon: (event.source && event.source != "") ? ' <img src="/img/i/mail_drafts.png" style="vertical-align:middle;">' : "",
+                cat_full: easyFinance.models.category.getUserCategoryNameById(event.cat_id),
+                cat: shorter(easyFinance.models.category.getUserCategoryNameById(event.cat_id), 26),
+                color: event.money >= 0 ? 'sumGreen' : 'sumRed',
+                money: event.money,
+                cur: cur,
+                comment: event.comment != "" ? event.comment : ""
+            }
+
+            rows.push(templetor(eventRowTemplate, values))
         }
 
-        if (periodicLeft != '') {
-            periodicLeft = '<h2>Запланированные операции</h2><ul>' + periodicLeft + '</ul>';
+        if (rows.length != '') {
+            _$blockFuture.html('<h2>Запланированные</h2><ul>' + rows.join('') + '</ul>');
         }
-
-        _$blockFuture.html(periodicLeft);
+        else {
+            _$blockFuture.html('')
+        }
     }
 
     // public functions

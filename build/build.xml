@@ -63,6 +63,18 @@
         </copy>
         <exec command="php ${project.basedir}/sf/symfony cc" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony doctrine:build --all-classes --application=frontend" dir="${project.basedir}/sf" checkreturn="true" />
+        <if>
+            <isset property="no-migration" />
+            <then>
+                <echo>Do not migrate</echo>
+            </then>
+            <else>
+                <exec command="ls | wc -l" outputProperty="migration.version" dir="${project.basedir}/sf/lib/migration/doctrine" />
+                <echo level="warning">Migrating Doctrine DB to: ${migration.version}</echo>
+                <exec command="php ${project.basedir}/sf/symfony doctrine:migrate ${migration.version}" dir="${project.basedir}/sf" checkreturn="true" outputProperty="migration.output" />
+                <echo level="warning" msg="${migration.output}" />
+            </else>
+        </if>
         <exec command="php ${project.basedir}/sf/symfony project:optimize frontend" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize admin" dir="${project.basedir}/sf" checkreturn="true" />
         <exec command="php ${project.basedir}/sf/symfony project:optimize api" dir="${project.basedir}/sf" checkreturn="true" />
@@ -167,6 +179,18 @@
     </target>
 
 
+    <!-- CLONEUSERS: Генерация пользователей -->
+    <target name="cloneusers">
+        <echo msg="Clonning demo users..." />
+        <exec command="php ${project.basedir}/cron/demo/generateUsers.php -uid tst -c 1 -sdb ${project.sdb.user}:${project.sdb.pass}@${project.sdb.host}/${project.sdb.base} --force"
+              dir="${project.basedir}/cron/demo" />
+        <exec command="php ${project.basedir}/cron/demo/generateUsers.php -uid aminin -c 1 -sdb ${project.sdb.user}:${project.sdb.pass}@${project.sdb.host}/${project.sdb.base}  --no-truncate --force"
+              dir="${project.basedir}/cron/demo" />
+        <exec command="php ${project.basedir}/cron/demo/generateUsers.php -uid kristina13 -c 1 -sdb ${project.sdb.user}:${project.sdb.pass}@${project.sdb.host}/${project.sdb.base} --no-truncate --force"
+              dir="${project.basedir}/cron/demo" />
+    </target>
+
+
     <!-- BACKUP: Делаем бекап -->
     <target name="backup">
         <!-- Проверяем, Может быть мы и не хотели бекапиться -->
@@ -180,7 +204,11 @@
                     <format property="project.time" pattern="%Y%m%d%H%I" />
                 </tstamp>
                 <echo msg="Create backup" />
-                <exec command="mysqldump -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/../${project.url.root}_${project.time}.sql" checkreturn="true" />
+                <exec command="mysqldump --skip-triggers -h ${project.db.host} -u ${project.db.user} -p${project.db.pass} ${project.db.base} > ${project.basedir}/../${project.url.root}_${project.time}.sql" checkreturn="true" />
+                <!-- Сохраняем последний бэкап в удобном для скачивания виде -->
+                <exec command="cp ${project.basedir}/../${project.url.root}_${project.time}.sql ${project.basedir}/../${project.url.root}.sql" />
+                <exec command="rm ${project.basedir}/../${project.url.root}.sql.gz" />
+                <exec command="gzip ${project.basedir}/../${project.url.root}.sql" />
             </else>
         </if>
     </target>

@@ -1,0 +1,19 @@
+# скрипты страницы редактирования профиля
+indexSuccess:
+<?php if (sfConfig::get('sf_environment') == 'prod'): ?>
+  javascripts:
+    - profile.js?r=<?php echo REVISION ?>: { position: last }
+    - models/user.model.js?r=<?php echo REVISION ?>: { position: last }
+    - widgets/profile/profile.widget.js?r=<?php echo REVISION ?>: { position: last }
+    - widgets/profile/userCurrency.widget.js?r=<?php echo REVISION ?>: { position: last }
+    - widgets/profile/userIntegrations.widget.js?r=<?php echo REVISION ?>: { position: last }
+    - widgets/operations/operationReminders.widget.js?r=<?php echo REVISION ?>: { position: last }
+<?php else: ?>
+  javascripts:
+    - profile.js: { position: last }
+    - models/user.model.js: { position: last }
+    - widgets/profile/profile.widget.js: { position: last }
+    - widgets/profile/userCurrency.widget.js: { position: last }
+    - widgets/profile/userIntegrations.widget.js: { position: last }
+    - widgets/operations/operationReminders.widget.js: { position: last }
+<?php endif; ?>

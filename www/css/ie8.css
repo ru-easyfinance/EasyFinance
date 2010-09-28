@@ -1,0 +1,37 @@
+.b-custom-input .b-custom-select {
+    height:30px;
+    padding:0;
+}
+.custom-grid-style .ui-state-disabled, .custom-grid-style .ui-widget-content .ui-state-disabled {
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=35);
+}
+body .ui-dialog.edit .ui-dialog-title {
+    font-size:15px;
+}
+
+.icon-menu3 .menu-icons {
+    padding-top: 4px;
+}
+.icon-menu3 .menu-icons .icon {
+    background-position: 0 0;
+}
+.icon-menu3 .menu-icons .icon:hover {
+    background-position-y: -37px;
+}
+
+.icon-menu3 .menu-icons .menu-icons-help { background-position: 0 0; }
+.icon-menu3 .menu-icons .menu-icons-settings { background-position: -25px 0; }
+.icon-menu3 .menu-icons .menu-icons-mobile { background-position: -50px 0; }
+.icon-menu3 .menu-icons .menu-icons-logout { background-position: -75px 0; }
+
+.icon-menu3 .menu-icons .menu-icons-help,
+.icon-menu3 .menu-icons .menu-icons-settings {
+    background-position-y: 3px;
+}
+.b-custom-input.no-selectbox .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field {
+    background:#ffffff !important;
+    position:relative !important;
+    z-index:999 !important;
+    margin:0 0 0 0 !important;
+}

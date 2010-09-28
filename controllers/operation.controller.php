@@ -55,7 +55,10 @@ class Operation_Controller extends _Core_Controller_UserCommon
         // Определяем массив данных для обработки
 
         // Если дата передана массивом (PDA) ...
-        if (is_array($this->request->post['date'])) {
+        if (
+            isset($this->request->post['date'])
+            && is_array($this->request->post['date'])
+        ) {
 
             return $this->request->post['date']['day']
                 . '.' . $this->request->post['date']['month']
@@ -107,11 +110,11 @@ class Operation_Controller extends _Core_Controller_UserCommon
             $operation = array (
                 //тип операции (расход и тд)
                 'type'         => isset($this->request->post['type'])?$this->request->post['type']:$operation['type'],
-                'account'      => $this->request->post['account'],
-                'amount'       => $this->request->post['amount'],
-                'category'     => isset($this->request->post['category'])?$this->request->post['category']:null,
+                'account'      => isset($this->request->post['account']) ? $this->request->post['account'] : null ,
+                'amount'       => isset($this->request->post['amount']) ? $this->request->post['amount'] : null,
+                'category'     => isset($this->request->post['category'])?$this->request->post['category']: null,
                 'date'         => $this->getDateOperation(),
-                'comment'      => $this->request->post['comment'],
+                'comment'      => isset($this->request->post['comment']) ? $this->request->post['comment'] : null,
                 'tags'         => isset($this->request->post['tags'])?$this->request->post['tags']:array(),
                 'convert'      => isset($this->request->post['convert'])?$this->request->post['convert']:array(),
                 'close'        => isset($this->request->post['close'])?$this->request->post['close']:array(),

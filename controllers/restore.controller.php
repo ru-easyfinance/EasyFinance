@@ -38,8 +38,13 @@ class Restore_Controller extends _Core_Controller
         $json = array();
 
         // Валидация homo-sapiens
-        $restoreHash = $_SESSION['restoreHash'];
-        list( ,$restoreTime ) = explode('RfacztT', base64_decode($restoreHash));
+        if (isset($_SESSION['restoreHash'])) {
+            $restoreHash = $_SESSION['restoreHash'];
+            list( ,$restoreTime )
+                = explode('RfacztT', base64_decode($restoreHash));
+        } else {
+            $restoreTime = null;
+        }
 
         // Тройная проверка ! Теперь на 43% страннее !
         if(

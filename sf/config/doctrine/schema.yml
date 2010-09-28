@@ -11,7 +11,6 @@
 #account_field_values
 #account_fields
 #articles
-#budget
 #calend
 #calendar_events
 #daily_currency
@@ -49,15 +48,16 @@ Currency:
       filter: false
 
 
-# Пользователи системы (5/14 - PART)
+# Пользователи системы (6/14 - PART)
 User:
   tableName: users
   columns:
-    user_name:         { type: string, size: 100, notnull: true, name: user_name as name }
+    name:              { type: string, size: 100, notnull: true, name: user_name as name }
     password:          { type: string(40),  notnull: true, name: user_pass as password }
     user_service_mail: { type: string(100), notnull: true }
+    notify:            { type: boolean, unsigned: true, notnull: true, default: 1, name: getNotify as notify } # получать новости сервиса на мыло
     currency_id:       { name: user_currency_default as currency_id, type: integer(4), notnull: true, default: 1 }
-    user_login:        { type: string(100), notnull: true }
+    login:             { type: string(100), notnull: true, name: user_login as login }
     user_mail:         { type: string(100), notnull: true }
     time_zone:         { type: string(32),  notnull: true, default: 'Europe/Moscow' }
     sms_phone:         { type: string(100) }
@@ -73,7 +73,7 @@ User:
     reminder_sms_minutes:          { type: integer(4), notnull: true, unsigned: true, default: 0 }
   options:
     symfony:
-      form:  false
+      form:   false
       filter: false
 
 
@@ -165,7 +165,7 @@ Operation:
     type:        { type: integer(1), unsigned: true, notnull: true, default: 0 } # Тип операции: приход, расход, перевод
     comment:     { type: clob }
     source_id:   { type: string(8), fixed: true }                                # Тип внешнего источника операции
-    accepted:    { type: integer(1), unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
+    accepted:    { type: boolean, unsigned: true, notnull: true, default: 1 } # Да/Нет - черновик
     transfer_account_id: { type: integer(4), notnull: false, default: null } # ID счета получателя
     transfer_amount:     { type: 'decimal(20, 2)', notnull: false, default: null } # Сумма счета получателя
     tags:        { type: string(255) }
@@ -184,12 +184,13 @@ Operation:
       type: one
       foreignType: many
       foreignAlias: Operations    # Account -> Operations
+      onDelete:     CASCADE       # При удалении Счёта удаляются все Операции
     Category:
       local: category_id
       foreign: id
       type: one
       foreignType: many
-      autoComplete: false         # Category ничего не узнает
+      foreignAlias: Operations    # Category -> Operations
     CalendarChain:
       local: chain_id
       foreign: id

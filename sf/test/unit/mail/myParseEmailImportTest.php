@@ -83,6 +83,7 @@ class mail_myParseEmailImportTest extends myUnitTestCase
         $parser->save();
 
         $email = new myCreateEmailImport($this->_getEmailData());
+        $email->addPart('qwerty');
         $mailArray = myParseEmailImport::getEmailData((string)$email);
         $getEmail = new myParseEmailImport($mailArray['body'], $parser, $mailArray['to']);
         $this->assertEquals($this->_getParseData(), $getEmail->getData( $this->_operationId ));

@@ -15,4 +15,5 @@ include_partial('global/common/systemDialogs');
         <li id="op_addoperation_but"><a title="Добавить операцию">Добавить операцию</a></li>
         <li id="op_addtocalendar_but"><a title="Добавить в календарь">Добавить в календарь</a></li>
     </ul>
+    <a class="b-sidebar-btn"></a>
 </div>

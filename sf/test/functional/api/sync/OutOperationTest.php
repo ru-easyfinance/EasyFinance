@@ -20,8 +20,14 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             'type'       => Operation::TYPE_PROFIT,
             'deleted_at' => date(DATE_ISO8601),
         ));
+        $opInitBalance = $this->helper->makeOperation($op->getAccount(), array(
+            'amount'     => 100,
+            'type'       => Operation::TYPE_BALANCE,
+        ));
 
         $this->authenticateUser($op->getUser());
+
+        $opRecord = "record[id=\"{$op->getId()}\"]";
 
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
@@ -32,18 +38,20 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             ->with('response')->begin()
                 ->isValid()
                 ->checkContains('<recordset type="Operation">')
-                ->checkElement('record', 2)
+                ->checkElement('record', 3)
                 ->checkElement("record[id=\"{$opDeleted->getId()}\"][deleted]", 1)
                 ->checkElement('#'.$op->getId())
-                ->checkElement('record account_id',  (string)$op->getAccountId())
-                ->checkElement('record category_id', (string)$op->getCategoryId())
-                ->checkElement('record amount',      (string)$op->getAmount())
-                ->checkElement('record type',        (string)$op->getType())
-                ->checkElement('record date',        $op->getDateTimeObject('date')->format(DATE_ISO8601))
-                ->checkElement('record comment',     $op->getComment())
-                ->checkElement('record accepted',    $op->getAccepted())
-                ->checkElement('record created_at')
-                ->checkElement('record updated_at')
+                ->checkElement("$opRecord account_id",  (string)$op->getAccountId())
+                ->checkElement("$opRecord category_id", (string)$op->getCategoryId())
+                ->checkElement("$opRecord amount",      (string)$op->getAmount())
+                ->checkElement("$opRecord type",        (string)$op->getType())
+                ->checkElement("$opRecord date",        $op->getDateTimeObject('date')->format(DATE_ISO8601))
+                ->checkElement("$opRecord comment",     $op->getComment())
+                ->checkElement("$opRecord accepted",    $op->getAccepted())
+                ->checkElement("$opRecord created_at")
+                ->checkElement("$opRecord updated_at")
+                ->checkElement('#'.$opInitBalance->getId())
+                ->checkElement("record[id=\"{$opInitBalance->getId()}\"] amount", '100')
                 // TODO: Если это не перевод, тогда не показываем поля
                 // ->checkElement('record transfer_account_id', false)
                 // ->checkElement('record transfer_amount', false)
@@ -66,6 +74,8 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
 
         $this->authenticateUser($op->getUser());
 
+        $opRecord = "record[id=\"{$op->getId()}\"]";
+
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model'   => 'operation',
@@ -75,11 +85,11 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             ->with('response')->begin()
                 ->isValid()
                 ->checkContains('<recordset type="Operation">')
-                ->checkElement('record', 1)
-                ->checkElement('record account_id',  (string)$op->getAccountId())
-                ->checkElement('record amount',      (string)$op->getAmount())
-                ->checkElement('record transfer_account_id', (string)$op->getTransferAccountId())
-                ->checkElement('record transfer_amount', (string)$op->getTransferAmount())
+                ->checkElement('record', 2)
+                ->checkElement("$opRecord account_id",  (string)$op->getAccountId())
+                ->checkElement("$opRecord amount",      (string)$op->getAmount())
+                ->checkElement("$opRecord transfer_account_id", (string)$op->getTransferAccountId())
+                ->checkElement("$opRecord transfer_amount", (string)$op->getTransferAmount())
             ->end();
     }
 

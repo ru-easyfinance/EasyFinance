@@ -1,0 +1,39 @@
+div.robokassa {
+    display: none;
+}
+
+div.robokassa table {
+    border: 0px solid white !important;
+}
+
+div.robokassa input, div.robokassa select {
+   margin-left: 5px;
+}
+
+div.robokassa select {
+    width: 390px;
+}
+
+div.robokassa div#paymentOptions {
+    padding: 5px 5px 5px 0px;
+}
+
+div.robokassa div.notifications {
+    padding: 5px;
+}
+
+div.robokassa div.notifications dt, div.robokassa div.notifications dd {
+    display: none;
+}
+	
+div.robokassa div.notifications dt {
+    font-weight: bold;
+}
+
+input[type="submit"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner {
+    border : 0px;
+} 
+	
+input[type="submit"]:focus, input[type="button"]:focus {     
+    outline : none; 
+}

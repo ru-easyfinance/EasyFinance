@@ -1,104 +1,114 @@
 <div class="ramka2">
-<div class="cct"></div>
-<form id="auth" class="formRegister" >
-    {if $template_view == 'iframe'}
-        <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
-    {/if}
-    <h2>Создание нового пароля</h2>
-    <div class="loginMessage">{$loginMessageText}</div>
-    <div class="loginError">{$loginErrorText}</div>
+<div class="cct">
+    <i class="tl"></i>
+    <i class="tr"></i>
+</div>
+<div class="ccm">
+    <div class="ccm-container">
+    <form id="auth" class="formRegister" >
+        {if $template_view == 'iframe'}
+            <div class="smallLogo"><a href="/login"><img src="/img/i/logo_iframe.png" ></a></div>
+        {/if}
+        <h2>Создание нового пароля</h2>
+        <div class="loginMessage">{$loginMessageText}</div>
+        <div class="loginError">{$loginErrorText}</div>
 
-    <table cellpadding="0" cellspacing="0">
-    <tr>
-        <td class="name">Пароль:</td>
-        <td>
-            <input type="password" id="pass" name="pass" />
-            <input id="verifyCode" type="hidden" name="verifyCode"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="name">Подтвердите пароль:</td>
-        <td>
-            <input type="password" id="pass2" name="pass2" />
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><input id="btnLogin" type="submit" value="Сохранить новый пароль" class="but"/></td>
-    </tr>
-    </table>
-</form>
-{literal}
-<script type="text/javascript">
-    // by Jet. ticket #540
-    $(document).ready(function() {
-        // Валидация формы
-        $("#auth").validate({
-            rules: {
-                pass: {
-                    required: true,
-                    minlength: 5
-                },
-                pass2: {
-                    required: true,
-                    minlength: 5,
-                    equalTo: $("#pass")
-                }
-            },
-            messages: {
-                pass: {
-                    required: "Вы не ввели пароль!",
-                    minlength: "Ваш пароль должен состоять как минимум из 5 символов"
-                },
-                pass2: {
-                    required: "Вы не ввели пароль!",
-                    minlength: "Ваш пароль должен состоять как минимум из 5 символов",
-                    equalTo: "Пожалуйста, введите тот же пароль, что и выше"
-                }
-            },
-            submitHandler: function(form) {
-                $('#btnLogin').attr('disabled', 'disabled');
-
-                $.post('/restore/submit_confirm',
-                    {pass: $('#pass').val()},
-                    function(data) {
-                        $('#btnLogin').removeAttr('disabled');
-
-                        if (data) {
-                            if (data.error) {
-                                if (data.error.text)
-                                    $.jGrowl(data.error.text, {theme: 'red'});
-
-                                if (data.error.redirect)
-                                    window.location = data.error.redirect;
-                            } else if (data.result) {
-                                if (data.result.text)
-                                    $.jGrowl(data.result.text, {theme: 'green'});
-
-                                if (data.result.redirect)
-                                    window.location = data.result.redirect;
-                            }
-                        } else {
-                            $.jGrowl('Ошибка на сервере!', {theme: 'red'});
-                        }
+        <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="name">Пароль:</td>
+            <td>
+                <input type="password" id="pass" name="pass" />
+                <input id="verifyCode" type="hidden" name="verifyCode"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">Подтвердите пароль:</td>
+            <td>
+                <input type="password" id="pass2" name="pass2" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="btnLogin" type="submit" value="Сохранить новый пароль" class="but"/></td>
+        </tr>
+        </table>
+    </form>
+    {literal}
+    <script type="text/javascript">
+        // by Jet. ticket #540
+        $(document).ready(function() {
+            // Валидация формы
+            $("#auth").validate({
+                rules: {
+                    pass: {
+                        required: true,
+                        minlength: 5
                     },
-                    "json"
-                );
-            }
-        });
+                    pass2: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: $("#pass")
+                    }
+                },
+                messages: {
+                    pass: {
+                        required: "Вы не ввели пароль!",
+                        minlength: "Ваш пароль должен состоять как минимум из 5 символов"
+                    },
+                    pass2: {
+                        required: "Вы не ввели пароль!",
+                        minlength: "Ваш пароль должен состоять как минимум из 5 символов",
+                        equalTo: "Пожалуйста, введите тот же пароль, что и выше"
+                    }
+                },
+                submitHandler: function(form) {
+                    $('#btnLogin').attr('disabled', 'disabled');
 
-        $('#auth').keypress(function(e){
-            //if generated character code is equal to ascii 13 (if enter key)
-            if(e.keyCode == 13){
-                //submit the form
-                $('#auth').submit();
-                return false;
-            } else {
-                return true;
-            }
+                    $.post('/restore/submit_confirm',
+                        {pass: $('#pass').val()},
+                        function(data) {
+                            $('#btnLogin').removeAttr('disabled');
+
+                            if (data) {
+                                if (data.error) {
+                                    if (data.error.text)
+                                        $.jGrowl(data.error.text, {theme: 'red'});
+
+                                    if (data.error.redirect)
+                                        window.location = data.error.redirect;
+                                } else if (data.result) {
+                                    if (data.result.text)
+                                        $.jGrowl(data.result.text, {theme: 'green'});
+
+                                    if (data.result.redirect)
+                                        window.location = data.result.redirect;
+                                }
+                            } else {
+                                $.jGrowl('Ошибка на сервере!', {theme: 'red'});
+                            }
+                        },
+                        "json"
+                    );
+                }
+            });
+
+            $('#auth').keypress(function(e){
+                //if generated character code is equal to ascii 13 (if enter key)
+                if(e.keyCode == 13){
+                    //submit the form
+                    $('#auth').submit();
+                    return false;
+                } else {
+                    return true;
+                }
+            });
         });
-    });
-</script>
-{/literal}
-<div class="ccb"></div>
+    </script>
+    {/literal}
+    </div>
+</div>
+<div class="ccb">
+    <i class="bl"></i>
+    <i class="br"></i>
+</div>
 </div>

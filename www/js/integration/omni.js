@@ -82,52 +82,6 @@ function wzValidateAll() {
     return everythingCorrect;
 }
 
-function wzSaveEverything() {
-    // запоминаем событие в Google Analytics
-    try { _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'АМТ - PDF']); } catch(err) {};
-
-    var i = 0;
-    var j = 0;
-    var wholeData = {};
-    var partData = {};
-    var frm;
-
-    if (tabs && (typeof(tabs) != 'undefined') && (tabs.tabs.length > 0)  && wzValidateAll()) {
-        for (i = 0; i < tabs.tabs.length; i++) {
-            frm = $('#' + tabs.tabs[i].id + ' form.wz_frm');
-
-            if (frm.length > 0) {
-                partData = wzGetFormData(frm.get(0));
-
-                if (partData.length > 1) {
-                    wholeData = wzMergeObjects(wholeData, partData);
-                }
-            }
-        }
-
-        wholeData.saveType = "whole_data";
-        wholeData.length = 0;
-        wholeData.step_name = '';
-
-        //Customer wishes crunch
-        wholeData = wzObjToArray(wholeData);
-
-        // #1528
-        $.post(
-            '/integration/anketa',
-            wholeData,
-            jsonAnswer,
-            "json"
-        );
-    } else {
-        var msg = "Пожалуйста, заполните все обязательные поля!";
-        msg = msg + "Пункты с недозаполненными полями отмечены красным в списке слева.";
-        $.jGrowl(msg, {theme: 'red', life: 10000});
-    }
-
-    return false;
-}
-
 function wzGetFormData(frm) {
     var i =0;
     var j = 0;
@@ -423,10 +377,11 @@ function wsInitValidator() {
 }
 
 function wzFillSelect(selectId, data) {
-    var dropdownList = $(selectId);
-    for (i in data) {
-        dropdownList.append(new Option(data[i], data[i]))
+    var optionsList = [];
+    for (var i = 0, l = data.length; i < l; i++) {
+        optionsList.push('<option value="' + data[i] + '">' + data[i] + '</option>');
     }
+    $(selectId).append( optionsList.join('') );
 }
 
 $(document).ready(function(){
@@ -454,11 +409,11 @@ $(document).ready(function(){
         $('.wz_tab_header_not_main').hide();
     });
 
-    wzFillSelect('#wz_citizenship', wzGetCountries());
-    wzFillSelect('#wz_reg_country', wzGetCountries());
-    wzFillSelect('#wz_reg_region', wzGetRegions());
-    wzFillSelect('#wz_actual_country', wzGetCountries());
-    wzFillSelect('#wz_actual_region', wzGetRegions());
+    wzFillSelect('#wz_citizenship', wzCountries);
+    wzFillSelect('#wz_reg_country', wzCountries);
+    wzFillSelect('#wz_reg_region', wzRegions);
+    wzFillSelect('#wz_actual_country', wzCountries);
+    wzFillSelect('#wz_actual_region', wzRegions);
 
     $('#wz_reg_country').change(function() {
         if (this.value != 'РОССИЯ') {

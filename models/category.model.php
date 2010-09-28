@@ -213,7 +213,7 @@ class Category_Model {
         // Массив для пользовательских категорий
         $users = array();
 
-        // Массив для систменых категорий
+        // Массив для системных категорий
         $systems = $this->system_categories;
         $systems[0] = array('id'=>'0', 'name'=>'Не установлена');
 
@@ -231,6 +231,7 @@ class Category_Model {
                 'system'  => $category['system_category_id'],
                 'name'    => $category['cat_name'],
                 'type'    => $category['type'],
+                # Svel: не понял, зачем это. всегда 1
                 'visible' => (int)((bool)$category['deleted_at']),
                 'custom'  => $category['custom']
             );

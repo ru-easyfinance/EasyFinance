@@ -113,6 +113,41 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
+     * Принять новую полупустую операцию
+     */
+    public function testNewHalfEmptyOperation()
+    {
+        $expectedData = array(
+            'user_id'     => $this->_user->getId(),
+            'date'        => $this->_makeDate(10000),
+            'cid'         => 2,
+            'category_id' => null,
+            'account_id'  => null,
+            'amount'      => null,
+        );
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement('resultset record', 1)
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
+                ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
+            ->end();
+
+        $expectedData = array(
+            'user_id'     => $this->_user->getId(),
+            'accepted'    => 0,
+        );
+
+        $result = $this->browser
+            ->with('model')->check('Operation', $expectedData, 1);
+    }
+
+
+    /**
      * Отвергать чужие записи
      */
     public function testPostOperationForeignUserRecord()
@@ -177,15 +212,17 @@ class api_sync_InOperationTest extends api_sync_in
      */
     public function testOperationCategoryFK()
     {
-        $xml = $this->getXMLHelper()->make(array('category_id' => 99999, 'cid' => 4,));
+        foreach (array(0, 99999) as $categoryId) {
+            $xml = $this->getXMLHelper()->make(array('category_id' => $categoryId, 'cid' => 4,));
 
-        $this
-            ->myXMLPost($xml, 200)
-            ->with('response')->begin()
-                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
-            ->end();
+            $this
+                ->myXMLPost($xml, 200)
+                ->with('response')->begin()
+                    ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
+                ->end();
 
-        $this->checkRecordError(4, '[Invalid.] No such category');
+            $this->checkRecordError(4, "category_id [No such category $categoryId]");
+        }
     }
 
 
@@ -203,7 +240,25 @@ class api_sync_InOperationTest extends api_sync_in
                 ->checkElement('resultset[type="Operation"] record[id][success="false"][cid]', 1)
             ->end();
 
-        $this->checkRecordError(4, '[Invalid.] No such category');
+        $this->checkRecordError(4, "category_id [No such category {$cat->getId()}]");
+    }
+
+
+    /**
+     * Принять: пустая категория
+     */
+    public function testOperationCategoryEmpty()
+    {
+        $xml = $this->getXMLHelper()->make(array(
+            'category_id' => null,
+            'cid' => 4,
+        ));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
+            ->end();
     }
 
 
@@ -240,6 +295,29 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
 
         $this->assertEquals("0000-00-00", $foundList->getFirst()->getDate(), "приняли 0ую дату и правильно ее записали");
+
+        // Попробуем поменять балансовую операцию с известным нам ИД
+        $expectedData['id'] = $foundList->getFirst()->getId();
+        $expectedData['amount'] = $newAmount = 123;
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+        $this->myXMLPost($xml, 200);
+
+        $recordData = $expectedData;
+        unset($recordData['cid']); // у записи нет такого поля
+        $this->browser
+            ->with('model')->check('Operation', $recordData, 1, $foundList);
+
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
+                        $foundList->getFirst()->getId(),
+                        $expectedData['cid'])
+                    , 'OK')
+            ->end();
+
+       $this->assertEquals($newAmount, $foundList->getFirst()->getAmount(), "приняли новый баланс");
     }
 
 
@@ -254,10 +332,10 @@ class api_sync_InOperationTest extends api_sync_in
         $expectedData = array(
             'type'                => 2,
             'user_id'             => $this->_user->getId(),
-            'amount'              => 100.00,
+            'amount'              => 100.75,
             'account_id'          => $acc_from->getId(),
             'transfer_account_id' => $acc_to->getId(),
-            'transfer_amount'     => -500.00,
+            'transfer_amount'     => -500.21,
             'cid'                 => 3,
         );
 
@@ -273,8 +351,8 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
 
         unset($expectedData['cid']);
-        $expectedData['amount'] = -100;
-        $expectedData['transfer_amount'] = 500;
+        $expectedData['amount'] = -abs($expectedData['amount']);
+        $expectedData['transfer_amount'] = abs($expectedData['transfer_amount']);
 
         $this->browser
             ->with('model')->check('Operation', $expectedData, 1, $found);
@@ -313,6 +391,99 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
 
         $this->checkRecordError(4, '[Invalid.] No such account for transfer');
+    }
+
+
+    /**
+     * Принять: операция-черновик с незаполненными полями
+     */
+    public function testEmptyFieldsDraftOperation()
+    {
+        $expectedData = array(
+            'type'                => 1,    // тип всегда приходит какой-то
+            'user_id'             => $this->_user->getId(),
+        );
+
+        $xmlData = array_merge(array(
+            'amount'              => null, // пустое кол-во денеГ
+            'account_id'          => null, // пустой Id счета
+            'date'                => null, // пользователь не установил дату
+            'transfer_account_id' => null, // счет для перевода пустой
+            'transfer_amount'     => null, // и пустое кол-во денег для перевода
+            'category_id'         => null, // нет категории
+            'comment'             => null, // пустой коммент
+            'accepted'            => null, // пусто или не принята
+            'cid'                 => 3,
+        ), $expectedData);
+
+        $xml = $this->getXMLHelper()->make($xmlData);
+
+        $this->myXMLPost($xml, 200);
+
+        $this->browser
+            ->with('model')->check('Operation', $expectedData, 1, $foundList);
+
+        // Ответ
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
+                        $foundList->getFirst()->getId(),
+                        $xmlData['cid'])
+                    , 'OK')
+            ->end();
+    }
+
+
+    /**
+     * Удалить операцию
+     */
+    public function testDeleteOperation()
+    {
+        $expectedData = array(
+            'user_id'     => $this->_user->getId(),
+            'created_at'  => $this->_makeDate(-10000),
+            'updated_at'  => $this->_makeDate(-300),
+            'deleted_at'  => null,
+        );
+
+        $operation = $this->helper->makeOperation(
+            $this->helper->makeAccount($this->_user),
+            $expectedData
+        );
+
+        $expectedData['id']         = $operation->getId();
+        $expectedData['cid']        = 2;
+        $expectedData['deleted_at'] = $this->_makeDate(-300);
+
+        $xml = $this->getXMLHelper()->make($expectedData);
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset', 1)
+                ->checkElement('resultset record', 1)
+                ->checkElement('resultset[type="Operation"] record[id][success="true"]', 'OK')
+                ->checkElement(sprintf('resultset record[cid="%d"]', $expectedData['cid']), 'OK')
+            ->end();
+
+        $sql = "SELECT * FROM operation;";
+        $operations = Doctrine_Manager::getInstance()
+            ->getConnection('doctrine')->getDbh()->query($sql)->fetchAll(Doctrine::FETCH_ASSOC);
+
+        $opRecord = "record[id=\"{$operation->getId()}\"][deleted=\"deleted\"]";
+
+        $this->browser
+            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
+                'model'   => 'operation',
+                'from'    => $this->_makeDate(-1000),
+                'to'      => $this->_makeDate(+1000),
+            )), 200)
+            ->with('response')->begin()
+                ->isValid()
+                ->checkContains('<recordset type="Operation">')
+                ->checkElement("$opRecord", 1)
+            ->end();
     }
 
 }

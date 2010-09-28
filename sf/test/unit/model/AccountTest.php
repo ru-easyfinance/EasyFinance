@@ -124,6 +124,7 @@ class model_AccountTest extends myUnitTestCase
         $this->assertEquals($account->getUpdatedAt(), $account->getDeletedAt());
     }
 
+
     /**
      * Получить баланс
      */
@@ -141,9 +142,21 @@ class model_AccountTest extends myUnitTestCase
         $this->assertEquals($balance, $account->getInitBalance(), 'Failed to get or set initial balance');
     }
 
-    /*
-     * - getBalanceOperation - создает новую операция (+ getInitBalance())
-     * - getBalanceOperation - находит существующую (+ getInitBalance())
-     * - setInitBalance -> $acc->save -> findAccById -> getInitBalance
+
+    /**
+     * Проверяет удаление операций при удалении счёта
      */
+    public function testSetDeleteAccountOperations()
+    {
+        $operation = $this->helper->makeOperation();
+        $account   = $operation->getAccount();
+        $operationId = $operation->getId();
+
+        $account->delete();
+        // Убираем поведение SoftDelete
+        Doctrine::getTable('Operation')->getRecordListener()->setOption('disabled', true);
+        $operation->refresh();
+
+        $this->assertEquals($operation->getUpdatedAt(), $operation->getDeletedAt());
+    }
 }

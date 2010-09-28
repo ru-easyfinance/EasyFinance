@@ -118,7 +118,7 @@ class mySyncInXMLHelper
             if (array_key_exists($tag, $params)) {
                 $value = $params[$tag];
 
-                if ((null !== $value) or ("" !== $value)) {
+                if (null !== $value) {
                     $fields .= sprintf("<%s>%s</%s>\n", $tag, $value, $tag);
                 } else {
                     $fields .= sprintf("<%s />\n", $tag);

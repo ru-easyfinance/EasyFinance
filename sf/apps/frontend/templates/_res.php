@@ -33,12 +33,6 @@
         ),
     );
 
-    $res['calendar'] = array(
-        'calendar'  => array(),
-        'future'    => array(),
-        'overdue'   => array(),
-    );
-
     $res['informers'] = array(
         0 => array(
             'title'       => '',
@@ -71,13 +65,15 @@
 ?>
 
 <script type="text/javascript">
-    var res = <?php echo json_encode($res); ?>
+    var res = <?php echo json_encode($res), "\n"; ?>
+    res.calendar = {};
+<?php if ($sf_user->isAuthenticated()) : ?>
     <?php include_component('res', 'accounts', array()) ?>
     <?php include_component('res', 'currencies', array()) ?>
+    <?php include_component('res', 'categories', array()) ?>
     <?php include_component('res', 'tags', array()) ?>
-    <?php
-        // Max: закомментировал, потому, что ломает js, см #1627
-        //      надо найти скрытые зависимости в js - каких ресурсов ему еще не хватает
-        // include_component('res', 'overdue', array())
-    ?>
+    <?php include_component('res', 'calendar', array('dateStart' => null, 'dateEnd' => null)) ?>
+    <?php include_component('res', 'future', array()) ?>
+    <?php include_component('res', 'overdue', array()) ?>
+<?php endif; ?>
 </script>

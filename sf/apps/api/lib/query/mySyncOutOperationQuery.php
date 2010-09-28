@@ -29,7 +29,9 @@ class mySyncOutOperationQuery extends mySyncOutQuery
     protected function _extendQuery(myDatetimeRange $range, $userId, $alias)
     {
         $this->getQuery()
-            ->andWhere("{$alias}.chain_id < 1 OR {$alias}.accepted = 1");
+            //->andWhere("{$alias}.chain_id < 1 OR {$alias}.accepted = 1")
+            // TODO Вернуть назад, когда айфоновцы допилят приложение
+            ->andWhere("{$alias}.accepted = 1");
     }
 
 }

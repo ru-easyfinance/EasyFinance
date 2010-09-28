@@ -1,0 +1,103 @@
+b.clear {
+    clear:both;
+}
+
+.b-operations-journal {
+    display:block;
+}
+
+.l-position-container {
+    padding-left:20px;
+    position:relative;
+}
+
+.b-operations-journal .b-operations-journal-header {
+    font-size:22px;
+    background-color:#eee;
+    margin:-10px -10px 0;
+    padding:10px 20px;
+}
+.b-operations-journal .b-operations-journal-header span {
+    margin-left:10px;
+    padding-left:22px;
+    position:relative;
+}
+
+.b-operations-journal .b-operations-journal-header .b-icon {
+    top:1px;
+    left:0;
+    width:22px;
+    height:22px;
+    position:absolute;
+    cursor:pointer;
+}
+
+.b-operations-journal .b-operations-journal-header .b-icon-export-csv {
+    background:url(../img/images/excel.jpg) no-repeat;
+}
+
+.b-operations-journal .b-operations-journal-content {
+    margin:10px 0;
+}
+
+.b-operations-journal .b-operations-journal-overal-info {
+    min-height:15px;
+    margin-top:20px;
+    margin-left:-10px;
+    display:block;
+}
+.b-operations-journal .b-operations-journal-overal-info.fixed-width {
+    width:745px;
+}
+.b-operations-journal .b-operations-journal-overal-info li {
+    float:left;
+    width:33.33%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.col1 {
+    width:25%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.col2 {
+    width:40%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.col3 {
+    width:35%;
+}
+.b-operations-journal .b-operations-journal-overal-info li.l-right {
+    text-align:right;
+}
+.b-operations-journal .b-operations-journal-overal-info li b {
+    margin-left:20px;
+    margin-right:5px;
+}
+
+.b-row-menu-block {
+    right:-6px;
+    width:72px;
+    height:31px;
+    background:url(../img/i/icons_control3.gif) no-repeat;
+    margin-top:-15px;
+    padding-left:7px;
+    position:absolute;
+    display:none;
+    z-index:10;
+    cursor:default;
+}
+.b-row-menu-block li {
+    float:left;
+    margin:8px 0 0 7px;
+}
+.b-row-menu-block li a {
+    width:14px;
+    height:14px;
+    display:block;
+}
+.b-operations-journal-grid table tr:hover .b-row-menu-block {
+    display:block;
+}
+
+.vhidden {
+    visibility:hidden;
+}
+.hidden {
+    display:none;
+}

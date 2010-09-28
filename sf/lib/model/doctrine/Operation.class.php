@@ -38,6 +38,30 @@ class Operation extends BaseOperation
     }
 
 
+    public function preSave($event)
+    {
+        if ($this->getType() == self::TYPE_BALANCE) {
+            $balanceOperation = $this->getTable()->findByDql(
+                'account_id = ? AND type = ?',
+                array($this->getAccountId(), self::TYPE_BALANCE),
+                Doctrine::HYDRATE_ARRAY
+            );
+
+            if (isset($balanceOperation[0])) {
+                $amount = $this->getAmount();
+                $this->assignIdentifier($balanceOperation[0]['id']);
+                $this->fromArray($balanceOperation[0]);
+                $this->load();
+                $this->setAmount($amount);
+            }
+        }
+
+        if (!$this->getAccountId()) {
+            $this->setAccepted(0);
+        }
+    }
+
+
     /**
      * Вернуть типы операций
      *
@@ -52,5 +76,4 @@ class Operation extends BaseOperation
             self::TYPE_BALANCE,
         );
     }
-
 }

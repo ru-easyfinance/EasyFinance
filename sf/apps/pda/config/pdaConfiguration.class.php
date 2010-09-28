@@ -19,6 +19,7 @@ class pdaConfiguration extends sfApplicationConfiguration
         $plugins = array(
             'sfDoctrinePlugin',
             'myAuthPlugin',
+            'myDoctrineLoggerPlugin',
         );
 
         if ('test' == $this->getEnvironment()) {

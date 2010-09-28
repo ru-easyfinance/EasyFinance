@@ -48,15 +48,6 @@ class syncInOperationAction extends myBaseSyncInAction
                 ->execute(array(), 'FetchPair');
         }
 
-        // FK: выбор существующих категорий
-        $categoryIds = $this->filterByXPath('//record/category_id');
-        $categories = Doctrine_Query::create()
-            ->select("c.id, c.id type_id")
-            ->from("Category c")
-            ->whereIn("c.id", $categoryIds)
-            ->andWhere("c.user_id = ?", $this->getUser()->getId())
-            ->execute(array(), 'FetchPair');
-
         $modelName = $this->getModelName();
         $formName  = sprintf("mySyncIn%sForm", $modelName);
         $results   = array();
@@ -73,18 +64,13 @@ class syncInOperationAction extends myBaseSyncInAction
             $errors = array();
 
             // FK: счет существует?
-            if (!in_array($record['account_id'], $accounts)) {
+            if (!empty($record['account_id']) && !in_array($record['account_id'], $accounts)) {
                 $errors[] = "No such account";
             }
 
             // FK: проверка на существование счета для перевода
             if ($transferCnt && !in_array($record['transfer_account_id'], $transferAccounts)) {
                 $errors[] = "No such account for transfer";
-            }
-
-            // FK: категория существует?
-            if (!in_array($record['category_id'], $categories) AND !empty($record['category_id'])) {
-                $errors[] = "No such category";
             }
 
             // другой владелец, культурно посылаем (см.выше выбор счетов)
@@ -133,17 +119,17 @@ class syncInOperationAction extends myBaseSyncInAction
             'cid'         => (string) $record['cid'],
             'account_id'  => (string) $record->account_id,
             'category_id' => (isset($record->category_id) ? (string) $record->category_id : null),
-            'amount'      => (int)    $record->amount,
+            'amount'      => (float) (string) $record->amount,
             'date'        => (string) $record->date,
             'type'        => (string) $record->type,
             'comment'     => (string) $record->comment,
-            'accepted'    => (string) $record->accepted,
+            'accepted'    => (bool) (string) $record->accepted,
             'created_at'  => (string) $record->created_at,
             'updated_at'  => (string) $record->updated_at,
             'deleted_at'  => (isset($record['deleted']) ? (string) $record->updated_at : null),
 
             'transfer_account_id' => (string) $record->transfer_account_id,
-            'transfer_amount'     => isset($record->transfer_amount) ? (int) $record->transfer_amount : null,
+            'transfer_amount'     => isset($record->transfer_amount) ? (float) (string) $record->transfer_amount : null,
         );
     }
 

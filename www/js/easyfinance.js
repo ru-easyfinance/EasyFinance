@@ -6,3 +6,4 @@ var easyFinance = {};
 
 easyFinance.models = {};
 easyFinance.widgets = {};
+easyFinance.notifier = null;

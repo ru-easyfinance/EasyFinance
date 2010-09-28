@@ -1,3 +1,9 @@
+#integrationSteps h3 a,
+#integrationSteps div.step {
+    max-width: 940px;
+    margin: 0 auto;
+}
+
 #integrationSteps .ui-accordion-header {
     margin-right: 3px;
     background-color: #4C8F2C;
@@ -116,3 +122,8 @@
     display: block
 }
 
+#wizard #wz_citizenship,
+#wizard #wz_reg_country,
+#wizard #wz_actual_country{
+    width: 450px;
+}

@@ -1,5 +1,123 @@
 <!-- Журнал операций -->
-                    <div class="ramka3">
+    <div class="b-border b-operations-journal">
+        <h1 class="b-operations-journal-header">Журнал операций<span class="l-position-container js-operation-loadcsv" title="Экспорт в Excel в формате CSV"><i class="b-icon b-icon-export-csv"></i></span></h1>
+        <div class="b-operations-journal-content">
+            <div class="b-form-skeleton b-operations-journal-options fixed-width">
+                <table>
+                    <col width="25%" />
+                    <col width="40%" />
+                    <col width="35%" />
+                    <tr>
+                        <td>
+                            {capture name='selectbox'}
+                                <option value="">Все счета</option>
+                                {foreach from=$accounts item=acc_data}
+                                    <option value="{$acc_data.account_id}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                                {/foreach}
+                            {/capture}
+                            {include file="ui/textfield.tpl" value="Все счета" selectbox=$smarty.capture.selectbox selectid="account_filtr"}
+                        </td>
+                        <td>
+                            {capture name='selectbox'}
+                                <option value="">Все категории</option>
+                                {$category}
+                            {/capture}
+                            {include file="ui/textfield.tpl" value="Все категории" selectbox=$smarty.capture.selectbox selectid="cat_filtr"}
+                        </td>
+                        <td>{include file="ui/textfield.tpl" id="grid_search_field" placeholder="поиск по меткам и коментариям"}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="b-custom-input-inline">
+                                <label class="">С:</label>
+                                {include file="ui/textfield.tpl" id="dateFrom" value=$dateFrom class="b-date efTooltip"}
+                                <b class="clear"></b>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="b-custom-input-inline">
+                                <label>По:</label>
+                                {include file="ui/textfield.tpl" id="dateTo" value=$dateTo class="b-date efTooltip"}
+                                <b class="clear"></b>
+                            </div>
+                        </td>
+                        <td>
+                            <input class="b-button-simple" type="submit" value="Показать" id="btn_ReloadData" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <ul id="divOperationsJournalTotal" class="b-operations-journal-overal-info fixed-width">
+                <li class="col1">
+                    <b>Было: </b>
+                    <span id="balance_before">0.00 руб.</span>
+                </li>
+                <li class="col2">
+                    <b>Изменение: </b>
+                    <span id="lblOperationsJournalSum">0,00 руб.</span>
+                </li>
+                <li class="l-right col3">
+                    <b>Стало: </b>
+                    <span id="balance_after">0.00 руб.</span>
+                </li>
+            </ul>
+            <div class="b-operations-journal-grid custom-grid-style">
+                <table id="dataGrid">
+                    <col width="10" />
+                    <col width="50" />
+                    <col width="50" />
+                    <col width="60" />
+                    <col width="600" />
+                    <col width="600" />
+                    <thead>
+                        <tr>
+                            <th class="no-trigger"><input type="checkbox" /></th>
+                            <th>Дата</th>
+                            <th class="type-sort custom-sort">Тип</th>
+                            <th class="type-sum custom-sort">Сумма</th>
+                            <th>Категория</th>
+                            <th colspan="2">Метки и комментарии</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                {include file="ui/tooltip.tpl" js=true}
+            </div>
+        </div>
+        <i class="b-border-corners tl"></i>
+        <i class="b-border-corners tr"></i>
+        <i class="b-border-corners bl"></i>
+        <i class="b-border-corners br"></i>
+    </div>
+    <div id="dialogFilterType" class="hidden">
+        <div class="b-filter-type">
+            <a href="#" value="-1">Все типы</a><br>
+            <hr />
+            <a href="#" value="0">Расход</a><br>
+            <a href="#" value="1">Доход</a><br>
+            <a href="#" value="2">Перевод</a><br>
+            <a href="#" value="4">Фин. цель</a><br>
+        </div>
+    </div>
+    <div id="dialogFilterSum" class="hidden">
+        <div class="b-filter-sum">
+            <a href="#" value="">Любая сумма</a><br>
+            <hr />
+            <form method="get" action="">
+                <div class="b-custom-input-inline">
+                    <label>От:</label>
+                    {include file="ui/textfield.tpl" id="txtFilterSumFrom" value="" class="b-sum"}
+                    <label>До:</label>
+                    {include file="ui/textfield.tpl" id="txtFilterSumTo" value="" class="b-sum"}
+                    <label>руб.</label>
+                    <input class="b-button-simple" type="submit" value="Сохранить"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+                    {*<div class="ramka3">
                         <div class="ct">
                             <div class="head">
                                 <h2>Журнал операций</h2>
@@ -152,5 +270,5 @@
                             <!--<div class="operation_list"></div>-->
                         </div>
                         <div class="cb"><div></div></div>
-                    </div>
+                    </div>*}
 <!--/Журнал операций-->

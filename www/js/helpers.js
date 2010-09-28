@@ -89,7 +89,8 @@ $(document).ready(function() {
     // содержание подсказок задаётся в атрибуте title
     $(".efTooltip").tooltip({
         showURL: false,
-        showBody: " - "
+        showBody: " - ",
+        extraClass: 'tahometers-tooltip'
     });
 
     /////////////////////////////////////////////////Cтили
@@ -146,25 +147,61 @@ function getAccountTooltip(accountId) {
     var defaultCurrency = easyFinance.models.currency.getDefaultCurrency();
     var account = _model.getAccounts()[accountId];
 
-    var tip = '<table>';
-    tip +=  '<tr><th> Название </th><td>&nbsp;</td><td>'+ htmlEscape(account.name) + '</td></tr>';
-    tip +=  '<tr><th> Тип </th><td>&nbsp;</td><td>'+ _model.getAccountTypeString(account.id) + '</td></tr>';
-    if (account.comment) {
-        tip +=  '<tr><th> Описание </th><td>&nbsp;</td><td>'+ account.comment + '</td></tr>';
+    var tip_template =
+        '<table>\
+            <tr>\
+                <th>Название</th>\
+                <td>&nbsp;</td>\
+                <td>{%name%}</td>\
+            </tr>\
+            <tr>\
+                <th>Тип</th>\
+                <td>&nbsp;</td>\
+                <td>{%account_type%}</td>\
+            </tr>\
+            {%comment%}\
+            <tr>\
+                <th>Остаток</th>\
+                <td>&nbsp;</td>\
+                <td>{%leftover%}</td>\
+            </tr>\
+            {%reserved%}\
+            <tr>\
+                <th>Остаток в валюте по умолчанию</th>\
+                <td>&nbsp;</td>\
+                <td>{%default_currency_balance%} {%currency_name%}</td>\
+            </tr>\
+        </table>';
+    var tip_row_template =
+        '<tr>\
+            <th>{%head%}</th>\
+            <td>&nbsp;</td>\
+            <td>{%val%}</td>\
+        </tr>'
+
+    var val = {
+        'name': htmlEscape(account.name),
+        'account_type': _model.getAccountTypeString(account.id),
+        'comment': account.comment ? templetor(tip_row_template, {head: 'Описание', val: account.comment}) : '',
+        'leftover': formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(account.id),
+        'reserved': account.reserve != 0 ?
+            templetor(
+                tip_row_template, {
+                    head: 'Доступный&nbsp;остаток',
+                    val: formatCurrency(account.totalBalance-account.reserve) + ' ' +_model.getAccountCurrencyText(account.id)
+                }
+            ) +
+            templetor(
+                tip_row_template, {
+                    head: 'Зарезервировано',
+                    val: formatCurrency(account.reserve)+ ' ' +_model.getAccountCurrencyText(account.id)
+                }
+            )
+            : '',
+        'default_currency_balance': formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(account.id) / defaultCurrency.cost),
+        'currency_name': defaultCurrency.text
     }
-    tip +=  '<tr><th> Остаток </th><td>&nbsp;</td><td>'+ formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(account.id) + '</td></tr>';
 
-    if (account.reserve != 0){
-        var delta = (formatCurrency(account.totalBalance-account.reserve));
-        tip +=  '<tr><th> Доступный&nbsp;остаток </th><td>&nbsp;</td><td>'+delta+' '+_model.getAccountCurrencyText(account.id)+'</td></tr>';
-        tip +=  '<tr><th> Зарезервировано </th><td>&nbsp;</td><td>'+formatCurrency(account.reserve)+' '+_model.getAccountCurrencyText(account.id)+'</td></tr>';
-    }
-
-    tip +=  '<tr><th> Остаток в валюте по умолчанию</th><td>&nbsp;</td><td>'+
-        formatCurrency(account.totalBalance * _model.getAccountCurrencyCost(account.id) / defaultCurrency.cost) + ' '+defaultCurrency.text+'</td></tr>';
-
-    tip += '</table>';
-
-    return tip;
+    return templetor(tip_template, val);
 }
 

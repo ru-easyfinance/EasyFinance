@@ -126,7 +126,10 @@
                 'android',
             );
 
-            $useragent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
+            $useragent = isset($_SERVER['HTTP_USER_AGENT']) ?
+                strtolower($_SERVER['HTTP_USER_AGENT'])
+                : null;
+
             foreach ( $mobiles as $value ) {
                 if ( strpos( $useragent , $value ) !== false ) {
                     return true;

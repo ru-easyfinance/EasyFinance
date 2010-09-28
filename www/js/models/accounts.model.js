@@ -216,10 +216,21 @@ easyFinance.models.accounts = function(){
      */
     function editAccountById(id, params, callback) {
         if (!id) return false;
+        
         return _processAccount(EDIT_ACCOUNT_URL + id + ".json", params, "accountEdited", callback);
     }
-
-
+    
+    /**
+    * Сменить параметр state 
+    */
+    function changeAccountStateById(id, state, callback){
+    	var account = _accounts[id];
+    	account.state = state;
+    	
+    	return _processAccount(EDIT_ACCOUNT_URL + id + ".json", account, "accountEdited", callback);
+    }
+    
+            
     /**
      * [private] Обработать добавление/редактирование счета
      *
@@ -230,7 +241,7 @@ easyFinance.models.accounts = function(){
      *                              Найти и задокументировать или вырезать
      */
     function _processAccount(url, params, eventName, callback) {
-
+    	
         if (typeof params != "object") {
             return false;
         }
@@ -285,35 +296,18 @@ easyFinance.models.accounts = function(){
      * @desc read initial data from json/server
      * @usage ---loadJournal(json)
      * @usage ---loadJournal(json, callback)
-     * @usage loadJournal(account, category, dateFrom, dateTo, sumFrom, sumTo, type, callback)
+     * @usage ---loadJournal(account, category, dateFrom, dateTo, sumFrom, sumTo, type, callback)
+     * @usage loadJournal(params, callback, csv)
      */
-    function loadJournal(param1, param2, param3, param4, param5, param6, param7, param8, param9, csv){
-        //if (typeof param1 == 'string') {
-        //    _journal = param1;
-        //    if (typeof param2 == 'function')
-        //        param2(_journal);
-        //} else {
-            // load from server
-            if (csv == true) window.location = OPERATIONS_JOURNAL_CSV_URL + "&account="+param1+"&category="+param2+
-                "&dateFrom="+param3+"&dateTo="+param4+"&sumFrom="+param5+
-                "&sumTo="+param6+"&type="+param7+"&search_field="+param8;
-    else
-
-        $.get(OPERATIONS_JOURNAL_URL, {
-                    account: param1,
-                    category: param2,
-                    dateFrom: param3,
-                    dateTo: param4,
-                    sumFrom: param5,
-                    sumTo: param6,
-                    type: param7,
-            search_field : param8
-                }, function(data) {
-                    _journal = data.operations;
-                    if (typeof param9 == 'function')
-                        param9(data);
-            }, 'json');
-        //}
+    function loadJournal(params, callback, csv) {
+        if(csv) {
+            window.location = OPERATIONS_JOURNAL_CSV_URL + '&' + $.param(params);
+        } else {
+            $.getJSON(OPERATIONS_JOURNAL_URL, params, function(data) {
+                _journal = data.operations;
+                if(callback) callback(data);
+            });
+        }
     }
 
     // получаем списки просроченных и будущих событий
@@ -633,6 +627,7 @@ easyFinance.models.accounts = function(){
         addAccount: addAccount,
         editAccountById: editAccountById,
         deleteAccountById: deleteAccountById,
+        changeAccountStateById: changeAccountStateById,
 
         addOperation: addOperation,
         editOperationDateById: editOperationDateById,

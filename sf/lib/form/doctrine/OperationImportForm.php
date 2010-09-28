@@ -74,7 +74,11 @@ class OperationImportForm extends BaseFormDoctrine
         unset($values['email']);
 
         // Счет для привязки операции
-        $values['account_id'] = Doctrine::getTable('Account')->findLinkedWithSource($values['user_id'], $values['source']);
+        # Svel: закомментировал в соответствии с требованиями мягкости в t1713
+        // $values['account_id'] = Doctrine::getTable('Account')->findLinkedWithSource($values['user_id'], $values['source']);
+
+        // выбрать ID счета по последней активной операции
+        $values['account_id'] = Doctrine::getTable('Operation')->findAccountIdByLastAcceptedOperationBySource($values['user_id'], $values['source']);
 
         // Тип операции и сумма
         $values['money'] = abs((float)$values['amount']);

@@ -23,8 +23,7 @@ abstract class BaseFrontendAccountEditAction extends sfAction
 
         return $this->error($this->form);
     }
-
-
+    
     /**
      * Success
      */

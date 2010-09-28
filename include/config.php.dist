@@ -34,6 +34,8 @@ define('MAIL_ENABLED',     ${project.mail.enabled});
 define('URL_ROOT_MAIN',    "${project.url.root}/");
 define('URL_ROOT_DEMO',    "${demo.url.root}/");
 define('URL_ROOT_IFRAME',  "iframe." . URL_ROOT_MAIN);
+define('URL_ROOT_RAMBLER', "rambler." . URL_ROOT_MAIN);
+define('URL_ROOT_WIKI',    URL_ROOT_MAIN . 'my/wikiwrapper/');
 define('URL_ROOT_PDA',     "${pda.url.root}/");
 
 define('URL_ROOT', IS_DEMO ? URL_ROOT_DEMO : URL_ROOT_MAIN);
@@ -42,7 +44,12 @@ define('DEBUG',            ${project.debug});
 
 //COOKIE
 define('COOKIE_NAME',      "${project.cookie.name}"); // "a"
-define('COOKIE_DOMEN',     "${project.cookie.domain}"); // ".easyfinance.ru"
+
+if (!isset($_SERVER['HTTP_HOST']) || strpos($_SERVER['HTTP_HOST'], 'rambler') === false)
+    define('COOKIE_DOMEN', "${project.cookie.domain}"); // ".easyfinance.ru"
+else
+    define('COOKIE_DOMEN', $_SERVER['HTTP_HOST']);
+
 define('COOKIE_PATH',      "${project.cookie.path}"); // по-умолчанию "/"
 define('COOKIE_HTTPS',     ${project.cookie.https});  // На продуктиве всегда true
 define('COOKIE_EXPIRE',    ${project.cookie.expire}); // две недели = 60 * 60 * 24 * 2

@@ -7,6 +7,32 @@ homepage:
 # Профиль
 # ------------------------------------------------------------------------------
 
+# отобразить форму редактирования профиля
+profile_form:
+  url:   /profile/
+  class: sfRoute
+  param: { module: profile, action: index }
+  requirements:
+    sf_method: [get]
+
+# сохранение профиля
+profile_save:
+  url:   /profile/save_main_settings.:sf_format
+  class: sfRequestRoute
+  param: { module: profile, action: save }
+  requirements:
+    sf_method: [post] # PUT, если js-кой эмулировать =)
+    sf_format: json
+
+# ставит или убирает куку на гайд
+profile_guide:
+  url:   /profile/guide.:sf_format
+  class: sfRequestRoute
+  param: { module: profile, action: guide }
+  requirements:
+    sf_method: [post]
+    sf_format: json
+
 # сохранение настроек оповещений, t1497
 save_reminder_settings:
   url: /profile/save_reminders
@@ -63,3 +89,28 @@ services:
 robokassa:
   url:   /robokassa/:action
   params: { module: robokassa }
+
+# Обёртка для wiki
+# ------------------------------------------------------------------------------
+
+wikiwrapper:
+  url:    /wikiwrapper/
+  class:  sfRoute
+  params: { module: wikiwrapper, action: index }
+
+wikiwrapper_page:
+  url:    /wikiwrapper/:wikiURL
+  class:  sfRoute
+  params: { module: wikiwrapper, action: index }
+  requirements:
+    wikiURL: \S+
+
+# Статические страницы
+# ------------------------------------------------------------------------------
+
+page:
+  url:    /page/:pageName
+  class:  sfRoute
+  params: { module: page, action: index }
+  requirements:
+    pageName: \S+

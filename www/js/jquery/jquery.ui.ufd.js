@@ -62,6 +62,7 @@ $.widget(widgetName, {
             '</div>'
         ].join(''));
 
+        this.wrapper.data('dropdown', this.dropdown);
         this.selectbox.after(this.wrapper);
         this.getDropdownContainer().append(this.dropdown);
 

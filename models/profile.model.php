@@ -93,6 +93,10 @@ class Profile_Model
         return $sql;
     }
 
+
+    /**
+     * @deprecated
+     */
     private function save($table, $set, $ident = 1){
         $set_str = "";
         foreach($set as $key => $val){
@@ -110,7 +114,12 @@ class Profile_Model
         return $this->db->query($sql, $spamer, $this->user_id);
     }
 
+
+    /**
+     * @deprecated
+     */
     public function mainsettings($mod, $prop = ''){
+        trigger_error('Deprecated: use symfony', E_USER_WARNING);
         $ret = array();
         switch($mod){
             case 'save':
@@ -146,6 +155,10 @@ class Profile_Model
         return json_encode($ret);
     }
 
+
+    /**
+     * @deprecated
+     */
     public function cook(){
         setCookie("guide","",0,COOKIE_PATH, COOKIE_DOMEN, false);
     }

@@ -138,6 +138,8 @@ function isLogged(){
 }
 
 $(document).ready(function(){
+    easyFinance.notifier = new $.globalNotifier();
+
     setHeightClass();
     $('ul.menu2 a').click(function(){
         $.cookie('events_hide', 0, {
@@ -150,6 +152,7 @@ $(document).ready(function(){
     // инициализируем виджет видео-гида
     if (!isIframe) {
         easyFinance.widgets.help.init('#popupHelp', true);
+        easyFinance.widgets.wizard.init();
         // по умолчанию устанавливаем видео,
         // которое соответствует содержанию страницы
         var tabVideo = {
@@ -169,7 +172,79 @@ $(document).ready(function(){
                 easyFinance.widgets.help.showVideo("newAccount");
             }
         });
+        $('#linkMainMenuStartWizard').click(function() {
+            easyFinance.widgets.wizard.show();
+        })
     }
+
+    // #1583. задаем переменные для работы с боковой панелью
+    var rightbar = $('.mid .block3'),
+        rightbarW = rightbar.width(),
+        centralfield = $('.mid .block2 .l-indent'),
+        mRight = parseInt(centralfield.css('margin-right')),
+        zeroRight = mRight - rightbarW,
+        speed = 400,
+        debounce = null,
+        forceshow = false,
+        widthState;
+
+    // #1583. кнопка для показа/скрытия правого сайдбара
+    $('.b-sidebar-btn').click(function() {
+        $(this).toggleClass('selected');
+        forceshow = !forceshow;
+        onClick();
+        return false;
+    });
+
+    // #1583. определяем размер экрана (только не для главной страницы!)
+    if (pathName != '//') {
+        function rightbarAnimate(value, animate) {
+            if (animate) rightbar.stop();
+            rightbar.animate({
+                left: value
+            }, ((animate) ? speed : 0));
+        }
+
+        function contentAnimate(value) {
+            centralfield.animate({
+                marginRight: value
+            }, 0, function() {
+                if(widthState) {
+                    $('.ct.head h2').show();
+                    $('.b-sidebar-btn').hide();
+                } else {
+                    $('.b-sidebar-btn').removeClass('selected').show();
+                }
+            });
+        }
+
+        function onClick(animation) {
+            if(forceshow) {
+                $('.ct.head h2').hide();
+                rightbarAnimate(0, ((animation == false) ? false : true));
+            } else {
+                rightbarAnimate(rightbarW + 30, ((animation == false) ? false : true));
+            }
+        }
+
+        $(window).resize(function() {
+            if(debounce) clearTimeout(debounce);
+            debounce = setTimeout(function() {
+                widthState = $('#mainwrap').width() > (1000 + rightbarW);
+                if(widthState) {
+                    if(forceshow) {
+                        forceshow = false;
+                    }
+                    rightbarAnimate(0);
+                    contentAnimate(mRight);
+                } else {
+                    onClick(false);
+                    contentAnimate(zeroRight);
+                }
+            }, 200);
+        }).trigger('resize');
+    }
+
     //#538
     if (!$.cookie('referer_url') &&
     !res.accounts &&
@@ -219,7 +294,7 @@ $(document).ready(function(){
         });
         easyFinance.models.category.load(res.category);
     }
-    
+
     // Если доступна левая панель (пользователь авторизован)
     if ($("#leftPanel").length) {
         // инициализируем виджет добавления, редактирования и планирования операций
@@ -249,6 +324,7 @@ $(document).ready(function(){
         }
         function loadLPTags(){
             var data = res['tags'];
+//            var str = '<h2 class="b-leftpanel-title addtaglink"><span>Добавить метку</span><i></i></h2><ul>';
             var str = '<div class="title"><h2><a href="#" class="addtaglink">Добавить метку</a></h2><a title="Добавить" class="add">Добавить</a></div><ul>';
             for (var key in data) {
                 str = str + '<li><a>' + data[key] + '</a></li>';
@@ -440,35 +516,7 @@ $(document).ready(function(){
     // Кнопка закрыть
     $('li.over2').remove();
     $('li.over1').remove();
-    /**
-     * Функция которая меняет содержимое левой панели в зависимости от требуемой вкладки
-     * @param newActive c1|c2|c3|c4|c5
-     * @return void
-     */
-    function clickOnMenuInLeftPanel(newActive){
-        $('ul.control li').removeClass('act');
-        $('.listing').hide();
-        $('ul.control li#' + newActive).addClass('act');
-        $('.listing.' + newActive).show();
-        if (newActive == "c2") {
-            try { easyFinance.widgets.accountsPanel.redraw(); } catch (err) {}
-        }
-    }
 
-    //смена пункта в левой панели
-    $('ul.control li').click(function(){
-        clickOnMenuInLeftPanel($(this).attr('id'));
-        $.cookie('activelisting', $(this).attr('id'), {
-            expire: 100,
-            path: '/',
-            domain: false,
-            secure: '1'
-        });
-        return false;
-    });
-    //открытие запомнившийся вкладки
-    var activeListing = $.cookie('activelisting') || 'c2';
-    clickOnMenuInLeftPanel(activeListing);
     //Функция показывает гид.
     function ShowGuide(){
         //alert('гид!');
@@ -480,8 +528,8 @@ $(document).ready(function(){
             width: 540
         });
         $('.dial').bind('dialogclose', function(event, ui){
-            //setCookie2('guide','',0,COOKIE_DOMEN);
-            $.post('/profile/cook/');
+            $.cookie('guide', '', {expire: 100, path : '/', domain: false, secure : isSecure});
+            $.post('/my/profile/guide.json', { state: '0' });
             $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {
                 theme: 'green',
                 stick: true
@@ -489,7 +537,8 @@ $(document).ready(function(){
         });
     }
 
-    //if ($.cookie('guide') == "uyjsdhf") {
-    //    ShowGuide();
-    //}
+    if ($.cookie('guide') == 'uyjsdhf') {
+        easyFinance.widgets.wizard.init();
+        easyFinance.widgets.wizard.show();
+    }
 });

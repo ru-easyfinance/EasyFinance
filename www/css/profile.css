@@ -2,6 +2,7 @@ ul.menuProfile {
     margin-bottom: 0;
     margin-top: 10px;
     margin-left: 0px;
+    clear: both;
 }
 
 ul.menuProfile:after {

@@ -84,4 +84,9 @@ class myCreateEmailImport
     {
         return $this->_message->toString();
     }
+
+    function addPart($body, $contentType = null, $charset = null)
+    {
+        return $this->_message->addPart($body, $contentType, $charset);
+    }
 }

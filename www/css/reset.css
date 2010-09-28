@@ -1,0 +1,135 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+}
+
+body {
+    position: relative;
+    font: 12px/16px Arial, Tahoma, sans-serif;
+    color: #20201e;
+    background: #f8fcf6;
+    margin: 0;
+    padding:0;
+    border: 0 none;
+}
+
+form, ul, li, dl, dd, dt, fieldset, form, blockquote {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+}
+
+ul, dl, dd, dt {
+    list-style: none;
+}
+
+table, tbody, tr, td, th {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+h1, h2, h3 {
+    font-weight: normal;
+}
+h2 {
+    margin-bottom: 17px;
+    font-size: 22px;
+    line-height: 24px;
+}
+h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+p {
+    margin: 0 0 16px 0;
+}
+
+a {
+    color: #6cbd45;
+}
+a:hover {
+    text-decoration: none;
+}
+
+a img {
+    border: 0 none;
+}
+
+i {
+    font-style: normal;
+}
+
+input[type=button],
+input[type=submit],
+select,
+textarea,
+button {
+    font: 12px Arial, Tahoma, sans-serif;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: #CCCCCC solid 1px;
+}
+
+input[type="button"], button {
+    cursor: pointer;
+}
+
+input.check{
+    width: 14px;
+    height: 14px;
+}
+
+/* Некоторые общие стили */
+.noTextDecoration {
+    text-decoration: none;
+}
+.white {
+    color: white;
+}
+.sumGreen {
+    color: green;
+    font-weight: bold;
+}
+.sumRed {
+    color: red;
+    font-weight: bold;
+}
+.hidden {
+    display: none;
+}
+.padding10 {
+    padding: 10px
+}
+
+img.preload {
+    display: none;
+}
+
+/* ClearFix */
+.clearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+.clearfix {
+    display: inline-block;
+}

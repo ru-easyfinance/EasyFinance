@@ -1,0 +1,326 @@
+.b-custom-input-label,
+.b-custom-textarea-label {
+    margin-bottom:5px;
+    display:block;
+}
+.b-custom-input-hint,
+.b-custom-textarea-hint {
+    color:#ccc;
+    margin:5px 0 0 0;
+}
+
+.b-custom-input-container {
+    display:block;
+    position:relative;
+}
+.b-custom-input-container.icon {
+    padding-right:26px;
+}
+.b-custom-input-container .b-custom-input-icon {
+    top:50%;
+    right:0;
+    width:16px;
+    height:16px;
+    margin-top:-8px;
+    position:absolute;
+    display:none;
+}
+.b-custom-input-container.icon .b-custom-input-icon {
+    display:block;
+}
+
+.b-custom-input-container.calculator .b-custom-input-icon {
+    height:18px;
+    background:url(../img/i/calculator_scientific.gif) no-repeat;
+    margin-top:-9px;
+    cursor:pointer;
+}
+.b-custom-input-container.tags .b-custom-input-icon {
+    width:17px;
+    background:url(../img/i/icons.gif) 0 -551px no-repeat;
+}
+
+.b-custom-input #dateFrom,
+.b-custom-input #dateTo {
+    margin:0;
+}
+
+.b-custom-input,
+.b-custom-input .b-custom-input-border,
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea,
+.b-custom-textarea .b-custom-textarea-border,
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-textarea textarea,
+.b-custom-textarea input,
+.b-custom-textarea select,
+.b-custom-input .b-custom-select,
+.b-custom-input.suggest .ufd input {
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+    resize:none;
+}
+.b-custom-input,
+.b-custom-textarea {
+    background:#aaa;
+}
+.b-custom-input .b-custom-input-border,
+.b-custom-textarea .b-custom-textarea-border {
+    /*background:#66686f url(../img/ui/custom-input.png) repeat-x;*/
+}
+.b-custom-input,
+.b-custom-textarea {
+    padding:1px;
+    display:block;
+    position:relative;
+}
+.l-buttons-inline .b-custom-input {
+    float:left;
+}
+.b-login-form .b-custom-input {
+    width:85px;
+    background-color:#666;
+    margin-right:5px;
+}
+.b-login-form .b-custom-input input {
+    font-size:1em;
+    padding:3px 6px;
+}
+.b-login-form .b-custom-input .b-placeholder {
+    font-size:1em;
+    margin:3px 6px -40px;
+}
+@-moz-document url-prefix() {
+    .b-login-form .b-custom-input .b-placeholder {
+        margin:2px 6px -40px;
+    }
+}
+
+.b-custom-input *,
+.b-custom-textarea * {
+    text-shadow:none !important;
+}
+.b-date-plate .l-r .b-custom-input {
+    float:left;
+    width:93px;
+    margin-top:8px;
+    margin-left:5px;
+}
+
+.b-custom-input .b-custom-input-border,
+.b-custom-textarea .b-custom-textarea-border {
+    background-color:#fff;
+    background-position:0 -165px;
+    padding-right:15px;
+    position:relative;
+    display:block;
+    overflow:hidden;
+}
+.b-custom-input-container.calculator .b-custom-input .b-custom-input-border,
+.b-custom-input-container.calculator .b-custom-textarea .b-custom-textarea-border {
+    overflow:visible;
+}
+
+.b-login-form .b-custom-input .b-custom-input-border {
+    padding-right:12px;
+}
+
+.b-custom-input.suggest .b-custom-input-border {
+    height:28px;
+}
+.b-custom-input.field-error .b-custom-input-border,
+.b-custom-textarea.field-error .b-custom-textarea-border {
+    background-color:#ffd5d5;
+}
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-input input,
+.b-custom-textarea textarea {
+    width:100%;
+    border:none;
+    background:none;
+    padding:0;
+    display:block;
+}
+.b-custom-input .b-custom-input-field,
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-input .b-custom-select,
+.b-custom-input input,
+.b-custom-textarea textarea,
+.b-custom-input select,
+.b-custom-input.suggest .ufd input {
+    font:1em Arial, Helvetica, sans-serif;
+    color:#2D3038;
+    margin:0;
+    padding:6px 8px;
+}
+
+.b-custom-input.suggest .b-custom-input-field,
+.b-custom-input.suggest .b-custom-select {
+    display:none;
+}
+.b-custom-input.suggest .ufd {
+    width:auto !important;
+    height:auto !important;
+    border:none !important;
+    background:none !important;
+    padding-right:20px !important;
+    display:block;
+}
+.b-custom-input.suggest .ufd input {
+    width:100% !important;
+}
+.b-custom-input.suggest .ufd button {
+    display:none;
+}
+
+.b-custom-input .b-placeholder,
+.b-custom-textarea .b-placeholder,
+.b-custom-input .b-placeholder {
+    float:left;
+    width:100%;
+    font-weight:400;
+    font-style:normal;
+    color:#a9a9a9;
+    margin:5px 10px -40px;
+    display:none;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+.b-custom-input.b-disabled .b-custom-input-field,
+.b-custom-textarea.b-disabled .b-custom-textarea-field,
+.b-custom-input.b-disabled .b-custom-select,
+.b-custom-input.b-disabled input,
+.b-custom-textarea.b-disabled textarea,
+.b-custom-input.b-disabled select {
+    color:#999;
+    cursor:default;
+}
+
+.b-custom-textarea .b-placeholder {
+    margin-top:5px;
+}
+.b-custom-input.field-error .b-placeholder,
+.b-custom-textarea.field-error .b-placeholder,
+.b-custom-input.field-error .b-placeholder {
+    color:#666;
+}
+
+.b-custom-textarea .b-custom-textarea-field,
+.b-custom-textarea textarea {
+    height:77px;
+    line-height:1.666em;
+}
+.b-custom-textarea .b-custom-textarea-field.big,
+.b-custom-textarea textarea.big {
+    height:340px;
+}
+.b-custom-input.big .b-custom-input-field {
+    top:0;
+    font-size:2em;
+}
+.b-custom-textarea .b-custom-textarea-field.textarea,
+.b-custom-textarea textarea.textarea {
+    overflow-y:auto;
+}
+
+.b-custom-input .b-custom-select {
+    top:0;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:30px;
+    opacity:0;
+    position:absolute;
+    z-index:3;
+}
+.b-custom-input .b-custom-select-trigger {
+    top:1px;
+    right:1px;
+    bottom:1px;
+    width:19px;
+    background:#dddddd url(../img/ui/custom-input.png) 0 -88px repeat-x;
+    position:absolute;
+}
+.b-custom-input .b-custom-select-trigger i {
+    top:50%;
+    left:50%;
+    width:8px;
+    height:6px;
+    margin:-3px 0 0 -3px;
+    background:#dddddd url(../img/ui/arrows.png) no-repeat;
+    position:absolute;
+}
+
+.b-custom-input .b-loader {
+    top: 7px;
+    right: 5px;
+    width:16px;
+    height:16px;
+    background:url(../img/ui/small-spinner.gif) no-repeat;
+    position:absolute;
+    z-index:10;
+    display:none;
+}
+.b-custom-input.blue .b-loader {
+    background:url(../img/ui/small-spinner-blue.gif) no-repeat;
+}
+.loading .b-loader {
+    display:block !important;
+}
+
+.b-custom-textarea.placeholder textarea {
+    font:60px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#B8B8B8;
+    text-align:center;
+    line-height:300px;
+}
+.b-custom-textarea.placeholder .b-custom-textarea-field.textarea,
+.b-custom-textarea.placeholder textarea.textarea {
+    font:20px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#B8B8B8;
+    text-align:center;
+    line-height:1.666em;
+    margin-bottom:-140px;
+    padding-top:140px;
+    cursor:default;
+}
+.b-custom-textarea.placeholder .b-custom-textarea-field.textarea,
+.b-custom-textarea.placeholder textarea.textarea {
+    overflow:hidden;
+}
+
+.b-custom-input-inline {
+    clear:both;
+    height:30px;
+    margin-left:10px;
+}
+.b-custom-input-inline label,
+.b-custom-input-inline .b-custom-input {
+    float:left;
+}
+.b-custom-input.b-date {
+    width:80px;
+}
+.b-custom-input.b-sum {
+    width:100px;
+}
+.b-custom-input-inline .b-custom-input.b-sum {
+    margin-right:10px;
+}
+.b-custom-input-inline label {
+    line-height:28px;
+    margin-right:10px;
+}
+
+#ufd-container div.list-wrapper {
+    border-top:1px #757888 solid;
+    margin-top:3px;
+}
+#ufd-container li {
+    line-height:20px;
+}

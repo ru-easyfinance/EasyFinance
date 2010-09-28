@@ -5,7 +5,7 @@ easyFinance.models.user = function(data){
     var URL_FOR_SET_INTEGRATION_EMAIL = '/profile/create_service_mail?responseMode=json';
     var URL_FOR_REMOVE_INTEGRATION_EMAIL = '/profile/delete_service_mail/?responseMode=json';
     var URL_FOR_LOAD_USER_INFO = "/my/profile/load_main_settings";
-    var URL_FOR_SAVE_USER_INFO = '/profile/save_main_settings/?responseMode=json';
+    var URL_FOR_SAVE_USER_INFO = '/my/profile/save_main_settings.json';
     var URL_SAVE_REMINDERS = '/my/profile/save_reminders';
 
     var SETTING_FOR_WRITING_COOKIE = {
@@ -64,6 +64,7 @@ easyFinance.models.user = function(data){
                 newpass: data.newPassword,
                 //              confirmpass: data.confirmPassword || '', //server will be add confirm password
                 mail: data.mail || '',
+                nickname: data.nickname ? data.nickname : (data.login || ''),
                 mailIntegration: data.mailIntegration || '',
                 guide: data.guide || 0 // server line75
             }, function(data){

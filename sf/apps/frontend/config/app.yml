@@ -6,6 +6,7 @@ prod:
   # Данные для подключения робокассы
   billing:
     robokassa:
+      scriptUrl:            https://merchant.roboxchange.com/Handler/MrchSumPreview.ashx
       url:                  https://merchant.roboxchange.com/Index.aspx
       login:                easyfinance
       pass1:                Hud^y&6e35$resDf # Пароль 1
@@ -15,7 +16,18 @@ all:
   # Данные для подключения робокассы
   billing:
     robokassa:
+      scriptUrl:            https://merchant.roboxchange.com/Handler/MrchSumPreview.ashx
       url:                  http://test.robokassa.ru/Index.aspx
       login:                easyfinance_test
       pass1:                test123456789 # Пароль 1
       pass2:                test987654321 # Пароль 2
+  # Операции, созданные в какой период, считаются "будущими" операциями в календаре
+  calendarFuture:
+      daysStart:            1 # От 1 дня
+      daysEnd:              8 # До 8 дней
+
+  # Категории
+  categories:
+    recent:
+      limit: 10         # максимальное кол-во часто используемых категорий
+      operationsFor: 3  # кол-во операций по категории, для попадания в частые

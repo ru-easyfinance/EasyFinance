@@ -338,7 +338,6 @@ class oldUser
 
     /**
      * Инициализирует пользовательские категории
-     * @param string $id хэш-MD5 ид пользователя
      * @return void
      */
     public function initUserCategory ()

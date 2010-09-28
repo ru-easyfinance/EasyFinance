@@ -34,16 +34,20 @@ class api_sync_AuthTest extends myFunctionalTestCase
     public function testAuthentificated()
     {
         $expected = array(
-            'user_name' => "Login",
-            'login'     => "Login",
-            'password'  => "ValidPassword",
+            'user_name'  => "Name",
+            'user_login' => "Login",
+            'password'   => "ValidPassword",
         );
 
         $user = $this->helper->makeUser($expected);
 
-        unset($expected['user_name']);
+        $requestParams = array(
+            'login'    => $expected['user_login'],
+            'password' => $expected['password'],
+        );
+
         $this->browser
-            ->post($this->generateUrl("auth"), $expected)
+            ->post($this->generateUrl("auth"), $requestParams)
             ->with("request")->begin()
                 ->isParameter("module", "myAuth")
                 ->isParameter("action", "login")

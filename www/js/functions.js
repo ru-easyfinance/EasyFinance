@@ -557,19 +557,7 @@ var efConfirm = function(options, callback){
     }
 };
 
-var monthNames = new Array(12);
-monthNames[0]="Январь";
-monthNames[1]="Февраль";
-monthNames[2]="Март";
-monthNames[3]="Апрель";
-monthNames[4]="Май";
-monthNames[5]="Июнь";
-monthNames[6]="Июль";
-monthNames[7]="Август";
-monthNames[8]="Сентябрь";
-monthNames[9]="Октябрь";
-monthNames[10]="Ноябрь";
-monthNames[11]="Декабрь";
+var monthNames = "Январь Февраль Март Апрель Май Июнь Июль Август Сентябрь Октябрь Ноябрь Декабрь".split(' ');
 
 function getMonthName(month) {
     return monthNames[month];
@@ -587,4 +575,12 @@ function ltrim(str, chars) {
 function rtrim(str, chars) {
 	chars = chars || "\\s";
 	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+}
+
+function templetor(tpl_str, values_dict) {
+    var result = tpl_str;
+    for (var key in values_dict) {
+        result = result.split('{%' + key + '%}').join(values_dict[key])
+    }
+    return result
 }

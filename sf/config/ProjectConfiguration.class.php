@@ -42,7 +42,9 @@ class ProjectConfiguration extends sfProjectConfiguration
         $this->enablePlugins(array(
             'sfDoctrinePlugin',
             'sfPhpunitPlugin',
-            'myAuthPlugin'
+            'myAuthPlugin',
+            'sfWebBrowserPlugin',
+            'myDoctrineLoggerPlugin',
         ));
     }
 
@@ -59,6 +61,10 @@ class ProjectConfiguration extends sfProjectConfiguration
         $manager->setAttribute(Doctrine_Core::ATTR_DEFAULT_TABLE_CHARSET, 'utf8');
         $manager->setAttribute(Doctrine_Core::ATTR_DEFAULT_TABLE_COLLATE, 'utf8_general_ci');
         $manager->setAttribute(Doctrine_Core::ATTR_DEFAULT_TABLE_TYPE,    'INNODB');
+
+        // Глобальный кастомный Query класс
+        // @see http://www.doctrine-project.org/projects/orm/1.2/docs/manual/configuration/en#configure-query-class
+        $manager->setAttribute(Doctrine_Core::ATTR_QUERY_CLASS, 'myBaseQuery');
 
         // SoftDelete
         $manager->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);

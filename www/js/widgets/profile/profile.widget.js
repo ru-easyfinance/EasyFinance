@@ -45,6 +45,7 @@ easyFinance.widgets.profile = function(model){
             newPassword : $('#newpass').val(),
             confirmpass : $('#newpass2').val(),
             mail : $('#mail').val(),
+            name : $('#name').val(),
             mailIntegration: $('#mailIntegration').val()
         }
         _model.setUserInfo(data, function(data){

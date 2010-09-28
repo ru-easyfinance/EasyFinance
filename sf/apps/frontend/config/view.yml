@@ -4,7 +4,7 @@
 default:
   http_metas:
     content-type: text/html
-
+    
   metas:
     title:         Easyfinance.ru - домашняя бухгалтерия, личный бюджет и финансы
     #description:  symfony project
@@ -13,8 +13,8 @@ default:
     #robots:       index, follow
 
 <?php if (sfConfig::get('sf_environment') == 'prod'): ?>
-  stylesheets:    [global-min.css?r=<?php echo REVISION; ?>]
-  javascripts:    [global-min.js?r=<?php echo REVISION; ?>]
+  stylesheets:    [global-min.css?r=<?php echo REVISION; ?>, /css/robokassa.css]
+  javascripts:    [global-min.js?r=<?php echo REVISION; ?>, /js/widgets/robokassa.widget.js]
 <?php else: ?>
   stylesheets:
 <?php

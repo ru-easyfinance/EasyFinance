@@ -10,14 +10,53 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     public function configure()
     {
+        $accounts = Doctrine_Query::create()
+            ->select("a.id key, a.id value")
+            ->from("Account a")
+            ->andWhere(
+                "a.user_id = ?", $this->getUser()->getUserRecord()->getId()
+            )
+            ->execute(array(), 'FetchPair');
+
+        $categories = Doctrine_Query::create()
+            ->select("c.id, c.id type_id")
+            ->from("Category c")
+            ->andWhere(
+                "c.user_id = ?", $this->getUser()->getUserRecord()->getId()
+            )
+            ->execute(array(), 'FetchPair');
+
+        $accounts[]   = null;
+        $categories[] = null;
+
         $this->setValidators(array(
-            'account_id'  => new sfValidatorInteger(array('min' => 1)),
-            'category_id' => new sfValidatorPass(),
+            'account_id'  => new sfValidatorChoice(
+                array(
+                    'choices'     => $accounts,
+                    'required'    => false,
+                    'empty_value' => null
+                ),
+                array(
+                    'invalid' => 'No such account %value%'
+                )
+            ),
+            'category_id' => new sfValidatorChoice(
+                array(
+                    'choices'     => $categories,
+                    'required'    => false,
+                    'empty_value' => null
+                ),
+                array(
+                    'invalid' => 'No such category %value%'
+                )
+            ),
             'amount'      => new sfValidatorNumber(),
             'date'        => new sfValidatorDate(),
             'type'        => new sfValidatorChoice(array('choices' => Operation::getTypes())),
             'comment'     => new sfValidatorString(array('required' => false)),
-            'accepted'    => new sfValidatorBoolean(),
+            'accepted'    => new sfValidatorBoolean(
+                array('empty_value' => 0)
+            ),
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
@@ -44,10 +83,11 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     protected function doBind(array $values)
     {
-
+        // не используем поля в зависимости от типа операции
         switch ($values['type']) {
             case Operation::TYPE_BALANCE:
                 unset($this['date'], $this['transfer_account_id'], $this['transfer_amount']);
+                $values['accepted'] = true;
                 break;
             case Operation::TYPE_TRANSFER:
                 unset($this['category_id']);
@@ -55,6 +95,11 @@ class mySyncInOperationForm extends BaseFormDoctrine
             default:
                 unset($this['transfer_account_id'], $this['transfer_amount']);
                 break;
+        }
+
+        // в зависимости от подтвержденности операции отключаем необходимости полей
+        if (!$values['accepted']) {
+            $this->setDraftValidation();
         }
 
         parent::doBind($values);
@@ -80,11 +125,34 @@ class mySyncInOperationForm extends BaseFormDoctrine
 
 
     /**
+     * Черновик: отключаем необходимости полей
+     *
+     * @return void
+     */
+    protected function setDraftValidation()
+    {
+        $this->validatorSchema['account_id']->addOption('required', false);
+        $this->validatorSchema['date']->addOption('required', false);
+
+        if ($this->validatorSchema['transfer_account_id']) {
+            $this->validatorSchema['transfer_account_id']->setOption('required', false);
+            $this->validatorSchema['transfer_amount']->setOption('required', false);
+        }
+    }
+
+
+    /**
      * @return string Имя связанной модели
      */
     public function getModelName()
     {
         return 'Operation';
+    }
+
+
+    public function getUser()
+    {
+        return sfContext::getInstance()->getUser();
     }
 
 }

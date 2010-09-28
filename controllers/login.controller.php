@@ -110,23 +110,60 @@ class Login_Controller extends _Core_Controller
         }
     }
 
-    public function rambler($args) {
-        $ramblerKey = $args[0];
-        $ramblerLogin = 'rambler_' . $ramblerKey;
+    /**
+     * Авторизует пользователя рамблера
+     *
+     * Страница рамблера передаёт в единственном аргументе зашифрованный
+     * ассоциативный массив данных о пользователе например:
+     * {
+     *     "date":        "Sun, 12 Sep 2010 20:16:21 +0400",
+     *     "id":          "ef-user-dsdsdsd-122121212",
+     *     "name":        "Ivan",
+     *     "email":       "ivan@nail.ru",
+     *     "redirectUrl": "/my/wikiwrapper/tiki-view_blog.php?blogId=1"
+     * }
+     * @param $args
+     */
+    public function rambler($args)
+    {
+        $ramblerString = $args[0];
+
+        $cipher = MCRYPT_RIJNDAEL_128;
+        $key    = 'X9Kls8DR72DqEFKLCMN02DdOQWdfLP2a';
+        $iv     = 'dOQWdfLP2aCZM12D';
+
+        $decoded = urlsafe_b64decode($ramblerString);
+        $json    = mcrypt_cbc($cipher, $key, $decoded, MCRYPT_DECRYPT, $iv);
+        $data    = json_decode(trim($json), true);
+
+        $default = array(
+            'id' => null,
+            'email' => null,
+            'name' => 'Рамблер',
+            'redirectUrl' => '/info/'
+        );
+
+        $data = array_merge($default, (array)$data);
+        $ramblerLogin = "rambler_{$data['id']}";
 
         $user = Core::getInstance()->user;
 
         // Пытаемся инициализировать пользователя
         $user->initUser($ramblerLogin, sha1($ramblerLogin));
-
-        if (!$user->getId()) {
-            Login_Model::generateUserByRamblerLogin($ramblerLogin);
+        // Создаём нового пользователя
+        if (!$user->getId() && $data['id']) {
+            Login_Model::generateUserByRamblerLogin(
+                $ramblerLogin,
+                $data['email'],
+                $data['name']
+            );
             $user->initUser($ramblerLogin, sha1($ramblerLogin));
+            setCookie("guide", "uyjsdhf", 0, COOKIE_PATH, COOKIE_DOMEN, false);
         }
 
         if ($user->getId()) {
             $this->model->login($ramblerLogin, sha1($ramblerLogin), true);
-            header('Location: /info/');
+            header(sprintf('Location: %s', $data['redirectUrl']));
         } else {
             header('Location: /login/');
         }

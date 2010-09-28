@@ -84,19 +84,19 @@ easyFinance.widgets.accountsPanel = function(){
                     document.location='/accounts/#copy'+id;
                     // для события на странице /accounts
                     accounts_hash_api('#edit'+id, true);
-                } else if (parentClass == "del") {
-                    if (confirm("Вы уверены что хотите удалить счёт?")) {
-                        var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+                }else if (parentClass == "favourite") {
+                    var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
 
-                        _model.deleteAccountById(id, function(data){
-                            // выводим ошибку, если на счету зарегистрированы фин.цели.
-                            if (data.error && data.error.text) {
-                                $.jGrowl(data.error.text, {theme: 'red'});
-                            } else if (data.result && data.result.text) {
-                                $.jGrowl(data.result.text, {theme: 'green'});
-                            }
-                        });
-                    }
+                    _model.changeAccountStateById(id, 1, function(data){
+                        if (data.error && data.error.text) {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        } else if (data.result && data.result.text) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        }
+                    });
+                } else if (parentClass == "del") {
+                    var id = $(this).closest(".account").find('div.id').attr('value').replace("edit", "");
+                    confirmDeletion(id);
                 }
             }
         });
@@ -108,7 +108,48 @@ easyFinance.widgets.accountsPanel = function(){
 
         return this;
     }
-    
+
+    function confirmDeletion(id){
+        $("#accountDeletionConfirm").dialog({
+            autoOpen: false,
+            title: "Удалить или скрыть?",
+            modal: true,
+            buttons: {
+                "Отмена": function() {
+                    $(this).dialog('close');
+                },
+                "Удалить": function() {
+                    _model.deleteAccountById(id, function(data){
+                        // выводим ошибку, если на счету зарегистрированы фин.цели.
+                        if (data.error && data.error.text) {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        } else if (data.result && data.result.text) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        }
+                    });
+                    $(this).dialog('close');
+                },
+                "Скрыть": function() {
+                    var handler = function(data) {
+                        if (data.result && data.result.text) {
+                            $.jGrowl(data.result.text, {theme: 'green'});
+                        }else if (data.error && data.error.text) {
+                            $.jGrowl(data.error.text, {theme: 'red'});
+                        }
+
+                        $("#accountDeletionConfirm").dialog("close")
+
+                    };
+
+                    $.jGrowl("Ждите", {theme: 'green'});
+
+                    _model.changeAccountStateById(id, 2, handler);
+                }
+            }
+        });
+        $("#accountDeletionConfirm").dialog("open");
+    }
+
     function getAccountsWithoutArchive(accounts){
         for(k in accounts){
             if (accounts[k].state == "2") {
@@ -136,113 +177,194 @@ easyFinance.widgets.accountsPanel = function(){
             data = {};
         }
 
-        var i = 0;
-        var total = 0;
-        var str = '';
-        var key;
-        var s = '';
-        for (key in data )
-        {
+        var i = 0,
+            total = 0,
+            str = '',
+            key,
+            s = '',
+            datum,
+            current_acc_panel,
+            groupSum;
+
+
+        var li_template =
+            '<li class="account" title="{%tooltip_title%}">\
+                <a>\
+                    <div style="display:none" class="type" value="{%type%}" />\
+                    <div style="display:none" class="id" value="{%id%}" />\
+                    <div style="display:none" class="state" value="{%state%}" />\
+                    <span>{%shorter_name%}</span><br/>\
+                    <span class="{%balance_color%}">{%totalBalance%}</span>&nbsp;\
+                    {%currencyName%}\
+                </a>\
+                <div class="cont">\
+                    <ul style="z-index: 1006;">\
+                        <li title="Добавить операцию" class="operation"><a></a></li>\
+                        <li title="Редактировать" class="edit"><a></a></li>\
+                        <li title="Удалить" class="del"><a></a></li>\
+                        <li title="В избранные" class="favourite"><a></a></li>\
+                     </ul>\
+                </div>\
+            </li>';
+
+        var val = {};
+
+        for (key in data ) {
+            datum = data[key];
             if (data[key].state == "2") {
                 i = 'Archive';
-            } else {
-                i = g_types[data[key]['type']];
             }
-            str = '<li class="account" title="' + getAccountTooltip(data[key].id) + '"><a>';
-            str = str + '<div style="display:none" class="type" value="'+data[key]['type']+'" />';
-            str = str + '<div style="display:none" class="id" value="'+data[key]['id']+'" />';
-            str = str + '<span>'+htmlEscape(shorter(data[key]['name'], 20))+'</span><br>';
-            str = str + '<span class="noTextDecoration ' + (data[key]['totalBalance']>=0 ? 'sumGreen' : 'sumRed') + '">'
-                + formatCurrency(data[key]['totalBalance'], true) + '</span>&nbsp;';
-            str = str + _model.getAccountCurrencyText(data[key]['id']) + '</span></a>';
-
-            str = str + '<div class="cont">'
-                       + '<ul style="z-index: 1006;">'
-                            + '<li title="Добавить операцию" class="operation"><a></a></li>'
-                            + '<li title="Редактировать" class="edit"><a></a></li>'
-                            + '<li title="Удалить" class="del"><a></a></li>'
-                            + '<li title="Копировать" class="add"><a></a></li>'
-                       + '</ul></div>';
-
-            str = str + '</li>';
-
-            if (data[key].state != "2") {
-	            summByGroups[i] = summByGroups[i]+data[key]["totalBalance"] * _model.getAccountCurrencyCost(data[key]["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
-	            if (!summByCurrencies[data[key]['currency']]) {
-		           summByCurrencies[data[key]['currency']] = 0;
-		        }
-
-	            summByCurrencies[data[key]['currency']] =
-	                parseFloat(summByCurrencies[data[key]['currency']])
-	                + parseFloat(data[key]['totalBalance']);
+            else {
+                i = g_types[datum['type']];
             }
 
-            innerHtmlByGroups[i] = innerHtmlByGroups[i] ?
-                innerHtmlByGroups[i] + str : str;
+            val = {
+                "tooltip_title": getAccountTooltip(datum.id),
+                "type": datum['type'],
+                "id": datum['id'],
+                "state": datum['state'],
+                "shorter_name": htmlEscape(shorter(datum['name'], 20)),
+                "balance_color": datum['totalBalance'] >= 0 ? 'sumGreen' : 'sumRed',
+                "totalBalance": formatCurrency(datum['totalBalance'], true),
+                "currencyName": _model.getAccountCurrencyText(datum['id'])
+            }
 
-            if (data[key].state == '1') {
-                innerHtmlByGroups[0] = innerHtmlByGroups[0] ?
-                    innerHtmlByGroups[0] + str : str;
+            str = templetor(li_template, val);
+
+            if (datum.state != "2") {
+                summByGroups[i] = summByGroups[i] +
+                    datum["totalBalance"] * _model.getAccountCurrencyCost(datum["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
+                if (!summByCurrencies[datum['currency']]) {
+                   summByCurrencies[datum['currency']] = 0;
+                }
+
+                summByCurrencies[datum['currency']] =
+                    parseFloat(summByCurrencies[datum['currency']])
+                    + parseFloat(datum['totalBalance']);
+            }
+
+            innerHtmlByGroups[i] = (innerHtmlByGroups[i] ? innerHtmlByGroups[i] + str : str);
+
+            if (datum.state == '1') {
+                innerHtmlByGroups[0] = innerHtmlByGroups[0] ? innerHtmlByGroups[0] + str : str;
             }
         }
+
         total = 0;
-        for(key in innerHtmlByGroups)
-        {
-            total = summByGroups[key] ?
-                total + parseFloat(summByGroups[key]) : total;
-            s='<ul class="efListWithTooltips">'+innerHtmlByGroups[key]+'</ul>';
-            if (key>=0 && key <=7 || key == 'Archive') {
-                _$node.find('#accountsPanelAcc'+key).html(s);
+        for(key in innerHtmlByGroups) {
+
+            total = summByGroups[key] ? total + parseFloat(summByGroups[key]) : total;
+            s = '<ul class="efListWithTooltips">' + innerHtmlByGroups[key] + '</ul>';
+
+            current_acc_panel = _$node.find('#accountsPanelAcc' + key);
+
+            if (key >= 0 && key <=7 || key == 'Archive') {
+                current_acc_panel.html(s);
             }
 
             if (innerHtmlByGroups[key] != '') {
-                _$node.find('#accountsPanelAcc'+key).show().prev().show();
-            } else {
-                _$node.find('#accountsPanelAcc'+key).hide().prev().hide();
+                current_acc_panel
+                    .removeClass('hidden')
+                    .prev().removeClass('hidden');
+
+                groupSum = current_acc_panel.prev().find('.sum')
+                groupSum
+                    .removeClass('sumGreen sumRed')
+                    .addClass( summByGroups[key] > 0 ? 'sumGreen': 'sumRed' )
+                    .html(
+                        formatCurrency(summByGroups[key]) +
+                        '<span class="currency">' +
+                            easyFinance.models.currency.getDefaultCurrency().text +
+                        '</span>'
+                        );
+            }
+            else {
+                current_acc_panel
+                    .addClass('hidden')
+                    .prev().addClass('hidden');
             }
         }
 
         // формирование итогов
-        str = '<ul>';
+        var total_template =
+            '<ul>\
+                {%rows%}\
+                <li>\
+                    <div class="{%summColor%}">\
+                        <strong style="color: black; position:relative; float: left;">Итого:</strong><br/>\
+                        {%amount%}\
+                        <span class="currency"><br\>&nbsp;{%currencyName%}</span>\
+                    </div>\
+                </li>\
+            </ul>';
 
+        var total_row_template =
+            '<li>\
+                <div class="{%color%}">\
+                    {%amount%}\
+                    <span class="currency">&nbsp;{%currency_name%}</span>\
+                </div>\
+            </li>'
+
+
+        var rows = [];
         for(key in summByCurrencies) {
-            str = str+'<li><div class="' + (summByCurrencies[key]>=0 ? 'sumGreen' : 'sumRed') + '">'+formatCurrency(summByCurrencies[key], true, true)+' <span class="currency">&nbsp;'+ easyFinance.models.currency.getCurrencyTextById(key) +'</span></div></li>';
+            rows.push(
+                templetor(
+                    total_row_template,
+                    {
+                        color: summByCurrencies[key] >= 0 ? 'sumGreen' : 'sumRed',
+                        amount: formatCurrency(summByCurrencies[key], true, true),
+                        currency_name: easyFinance.models.currency.getCurrencyTextById(key)
+                    }
+                )
+            )
         }
-        str = str+'<li><div class="' + (total>=0 ? 'sumGreen' : 'sumRed') + '"><strong style="color: black; position:relative; float: left;">Итого:</strong> <br>'+formatCurrency(total, true, true)+' <span class="currency"><br>&nbsp;'+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div></li>';
-        str = str + '</ul>';
-        _$node.find('#accountsPanel_amount').html(str);
 
-        $('div.listing dl.bill_list dt').addClass('open');
+        val = {
+            summColor: total>=0 ? 'sumGreen' : 'sumRed',
+            amount: formatCurrency(total, true, true),
+            currencyName: easyFinance.models.currency.getDefaultCurrencyText(),
+            rows: rows.join('')
+        }
+
+        _$node.find('#accountsPanel_amount').html(templetor(total_template, val));
+
+        $('div.listing dl.bill_list dt').addClass('closed');
+        $('div.listing dl.bill_list dd').addClass('hidden');
+        
         $('div.listing dl.bill_list dt').live('click', function(){
-            $(this).toggleClass('open').next().toggle();
-            //запоминание состояние в куку
+            $(this).toggleClass('closed').next().toggleClass('hidden', $(this).hasClass('closed'));
+
+        //запоминание состояние в куку
             var accountsPanel = '';
-            $('div.listing dl.bill_list dd:visible').each(function(){
-                accountsPanel += $(this).attr('id');
+            $('div.listing dl.bill_list dt').filter('.closed').each(function() {
+                accountsPanel += $(this).next().attr('id');
             })
             var isSecure = window.location.protocol == 'https'? 1:0
             $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : isSecure});
             return false;
         });
+
+
         //загружает состояние из
         var accountsPanel = $.cookie('accountsPanel_stated');
 
-        if (accountsPanel){
-            $('div.listing dl.bill_list dt:visible').each(function(){
+        if (accountsPanel) {
+            $('div.listing dl.bill_list dt.closed').each(function(){
                 if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
                     $(this).click()
             })
-        } else {
-            $('div.listing dl.bill_list dd#accountsPanelAccArchive').prev().click();
+        }
+        else {
+            $('dl.bill_list #accountsPanel_amount').prev().click();
         }
 
         $('div.listing dd.amount').live('click', function(){
             $(this).prev().click();
             return false;
         });
-        //$('div.listing dl.bill_list dt').click();
-        //$('div.listing dl.bill_list dt:last').click().addClass('open');
-        //$('div.listing dl.bill_list dt').click().addClass('open');
+
     }
 
     // reveal some private things by assigning public pointers

@@ -30,8 +30,14 @@ class Profile_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('name_page', 'profile/profile');
     }
 
+
+    /**
+     * @deprecated
+     * @see profileActions::executeIndex
+     */
     function index()
     {
+        trigger_error('Deprecated: use profileActions::executeIndex', E_USER_WARNING);
         $this->addToRes('profile', array(
             'integration' => array(
                 'email'   => str_replace('@mail.easyfinance.ru', '', $this->_user->getUserProps('user_service_mail')),
@@ -39,15 +45,25 @@ class Profile_Controller extends _Core_Controller_UserCommon
         ));
     }
 
+
     /**
+     * @deprecated
+     * @see profileActions
      * отдаёт логин имя мыло
      * return void;
      */
     function load_main_settings(){
+        trigger_error('Deprecated: use profileActions', E_USER_WARNING);
         die($this->model->mainsettings('load'));
     }
 
+
+    /**
+     * @deprecated
+     * @see profileActions::executeSave
+     */
     function save_main_settings(){
+        trigger_error('Deprecated: use profileActions::executeSave', E_USER_WARNING);
         $prop = array();
         $prop['user_pass']   = $_POST['pass'];
         //$prop['user_name'] = htmlspecialchars($_POST['name']);
@@ -76,10 +92,18 @@ class Profile_Controller extends _Core_Controller_UserCommon
         $this->renderJsonSuccess("Данные успешно сохранены");
     }
 
+
+    /**
+     * @deprecated - вообще пора внедрять новый алгоритм валют
+     */
     function load_currency(){
         die($this->model->currency('load'));
     }
 
+
+    /**
+     * @deprecated - отказываемся от пользовательских валют
+     */
     function save_currency(){
         $prop = array();
         $prop['user_currency_list'] = serialize(explode(',',$_POST['currency']));
@@ -87,6 +111,7 @@ class Profile_Controller extends _Core_Controller_UserCommon
 
         die($this->model->currency('save', $prop));
     }
+
 
     function save_reminders(){
         // заглушка для #1492
@@ -111,6 +136,10 @@ class Profile_Controller extends _Core_Controller_UserCommon
         die(json_encode($ret));
     }
 
+
+    /**
+     * @deprecated
+     */
     function cook(){
         die($this->model->cook());
     }

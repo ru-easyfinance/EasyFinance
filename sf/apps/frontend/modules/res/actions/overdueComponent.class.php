@@ -12,9 +12,9 @@ class overdueComponent extends sfComponent
     public function execute($request)
     {
         $user = $this->getUser()->getUserRecord();
-        $data = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user)->fetchArray();
+        $overdueOperations = Doctrine::getTable('Operation')->queryFindWithOverdueCalendarChains($user)->fetchArray();
 
-        $this->setVar('data', $data, $noEscape = true);
+        $this->setVar('overdueOperations', $overdueOperations, $noEscape = true);
     }
 
 }

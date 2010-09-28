@@ -104,16 +104,20 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
         );
         $props = array_merge($defaultProps, $props);
 
+        $ob = $this->makeModel('Operation', $props, false);
+
         if (!$account) {
             $account = $this->makeAccount(null, array(), $save);
         }
         $user = $account->getUser();
-
-        $ob = $this->makeModel('Operation', $props, false);
-        $ob->setAccount($account);
         $ob->setUser($user);
 
-        if (!array_key_exists('category_id', $props) OR !is_null($props['category_id'])) {
+        // принудительно не ставить ID счета
+        if (!array_key_exists('account_id', $props)) {
+            $ob->setAccount($account);
+        }
+
+        if (!array_key_exists('category_id', $props)) {
             $ob->setCategory($this->makeCategory($user));
         }
 
@@ -184,7 +188,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeCalendarOperation(CalendarChain $calendar, Account $account = null, $comment='', $shiftDate=-1, array $props = array(), $save = true)
     {
         $defaultProps = array(
-            'date'      => date('Y-m-d', time() + $shiftDate * ONE_DAY_SECONDS),
+            'date'      => date('Y-m-d', time() + $shiftDate * 60 * 60 * 24),
             'accepted'  => Operation::STATUS_DRAFT,
             'comment'   => $comment,
         );

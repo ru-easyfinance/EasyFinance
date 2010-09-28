@@ -31,13 +31,21 @@ width:25px;
     background: #F8FCF6 url(/img/i/point_x.gif) repeat-x scroll left bottom;
 }
 #accountsJournal table tr.parent .name {
-    padding-left: 7px;
+    text-align:left;
+    padding-left: 370px;
     padding-right: 57px;
 }
+#accountsJournal table tr.parent .name strong {
+    margin-left: -363px;
+}
 #accountsJournal table th.money {
+    text-align:left;
+    padding-left:53px;
     padding-right: 50px;
 }
 #accountsJournal table th.money.totalBalance {
+    text-align:right;
+    padding-left:0;
     padding-right: 5px;
 }
 #accountsJournal table th.money.totalBalance div{
@@ -53,6 +61,8 @@ width:25px;
     width: 100%;
     max-width: 100%;
     float: none;
+    text-align:left;
+    padding-left:40px;
 }
 
 #accountsJournal table td div.cont{
