@@ -25,34 +25,28 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="line">
-                    <div class="f_field">
-                        Дата начала
-                        <input type="text" id="dateFrom" value="{$dateFrom}" class="efTooltip" title="Дата начала периода, дд.мм.гггг">
-                    </div>
-                </div>
-                <div class="line" >
-                    <div class="f_field">
-                        Дата окончания
-                        <input type="text" id="dateTo" value="{$dateTo}" class="efTooltip" title="Дата конца периода, дд.мм.гггг">
-                    </div>
+                    <label class="b-inlinecalendar">
+                        <span>Дата начала</span>
+                        <input type="text" id="dateFrom" value="{$dateFrom}" class="efTooltip" title="Дата начала периода, дд.мм.гггг"/>
+                    </label>
+                    <label class="b-inlinecalendar">
+                        <span>Дата окончания</span>
+                        <input type="text" id="dateTo" value="{$dateTo}" class="efTooltip" title="Дата конца периода, дд.мм.гггг"/>
+                    </label>
                 </div>
 
                 <div class="line hidden" id="Period21">
-                    <div class="f_field" >
-                        Дата начала
-                        <h6>Период 2</h6>
-                        <input type="text"  id="dateFrom2" value="{$dateFrom2}" class="efTooltip" title="Дата начала периода, дд.мм.гггг">
-                    </div>
+                    <label class="b-inlinecalendar">
+                        <span>Дата начала <small>(период 2)</small></span>
+                        <input type="text" id="dateFrom2" value="{$dateFrom2}" class="efTooltip" title="Дата начала периода, дд.мм.гггг"/>
+                    </label>
+                    <label class="b-inlinecalendar">
+                        <span>Дата окончания <small>(период 2)</small></span>
+                        <input type="text" id="dateTo2" value="{$dateTo2}" class="efTooltip" title="Дата конца периода, дд.мм.гггг"/>
+                    </label>
                 </div>
-                <div class="line hidden" id="Period22">
-                    <div class="f_field">
-                        Дата окончания
-                        <h6>Период 2</h6>
-                        <input type="text"  id="dateTo2" value="{$dateTo2}" class="efTooltip" title="Дата конца периода, дд.мм.гггг">
-                    </div>
-                </div>
-
 
                 <div class="line">
                     <div class="f_field" id="account_fields">Счет
@@ -82,16 +76,17 @@
         <div id="chart" class="hidden"></div>
         <div id="itogo" ></div>
         <!--<div id="commentRest"></div>-->
+
         <div id="rep" class="inside operation_list hidden">
             <div id="tmp">
             </div>
 
             <div id="divDetailedReport">
-                <table width="100%" cellspacing="0" cellpadding="0" border="0" id="reports_list_header" class="periods">
+                <table cellspacing="0" cellpadding="0" border="0" id="reports_list_header" class="periods">
                 </table>
 
                 <div id="reports_list_container">
-                    <table width="100%" cellspacing="0" cellpadding="0" border="0" id="reports_list" class="periods">
+                    <table cellspacing="0" cellpadding="0" border="0" id="reports_list" class="periods">
                         <tr></tr>
                     </table>
                 </div>
