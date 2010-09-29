@@ -115,7 +115,7 @@ easyFinance.widgets.report = function(){
             chart += "<set label='Прочее' value='" + (other.toFixed(2)) + "' />";
         }
         chart += "</chart>";
-        var chartObj = new FusionCharts("/swf/fusioncharts/Pie3D.swf", "chart1Id", "500", "400", "0", "1");
+        var chartObj = new FusionCharts("/swf/fusioncharts/Pie3D.swf", "chart1Id", "650", "400", "0", "1");
         chartObj.addParam("WMode", "Transparent");
         chartObj.setDataXML(chart);
         chartObj.render("chart1div");
@@ -167,7 +167,7 @@ easyFinance.widgets.report = function(){
         stri += datasetProfit + "</dataset>";
         stri += datasetIncome + "</dataset>";
         stri += "</chart>";
-        var chart1 = new FusionCharts("/swf/fusioncharts/MSColumn3D.swf", "chart1Id", "500", "400", "0", "1");
+        var chart1 = new FusionCharts("/swf/fusioncharts/MSColumn3D.swf", "chart1Id", "650", "400", "0", "1");
         chart1.addParam("WMode", "Transparent");
         chart1.setDataXML(stri);
         chart1.render("chart1div");
