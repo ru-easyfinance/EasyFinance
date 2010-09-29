@@ -246,8 +246,11 @@
     right:1px;
     bottom:1px;
     width:19px;
-    background:#dddddd url(../img/ui/custom-input.png) 0 -88px repeat-x;
+    background:#efefef url(../img/ui/custom-input.png) 0 -88px repeat-x;
     position:absolute;
+}
+.b-custom-input:hover .b-custom-select-trigger {
+    background-position:0 0;
 }
 .b-custom-input .b-custom-select-trigger i {
     top:50%;
@@ -255,7 +258,7 @@
     width:8px;
     height:6px;
     margin:-3px 0 0 -3px;
-    background:#dddddd url(../img/ui/arrows.png) no-repeat;
+    background:url(../img/ui/arrows.png) no-repeat;
     position:absolute;
 }
 
