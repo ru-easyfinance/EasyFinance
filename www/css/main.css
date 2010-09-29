@@ -2291,7 +2291,7 @@ b.clear {
 
 .b-login-form .b-login-form-row.second label span {
     top:-3px;
-    color:#000;
+    color:#fff;
     position:relative;
     cursor:pointer;
 }
@@ -2303,7 +2303,7 @@ not all and (-webkit-min-device-pixel-ratio:0) {
 }
 .b-login-form .b-login-form-row.second a {
     float:right;
-    color:#000;
+    color:#fff;
     text-decoration:none;
     margin-top:1px;
     margin-right:3px;
