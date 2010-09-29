@@ -2080,6 +2080,10 @@ img.ui-datepicker-trigger {
 .b-form-skeleton {
     margin:-5px;
 }
+.b-form-skeleton .l-right {
+    float:right;
+}
+
 .op_addoperation .b-form-skeleton {
     border-bottom:1px dotted #ccc;
     margin:0;
@@ -2319,8 +2323,4 @@ not all and (-webkit-min-device-pixel-ratio:0) {
 #tooltip.tahometers-tooltip p {
     text-align: justify;
     margin-bottom: .7em;
-}
-
-.l-right {
-    float:right;
 }
