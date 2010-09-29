@@ -240,6 +240,7 @@ easyFinance.widgets.budget = function(data){
     }
 
     function _updateTimeLine() {
+        $('div.timeline').removeClass('hidden');
         $("#budgetTimeLine").css({
             left: elapsedPercent + '%',
             height: ($budgetBody.height()) + 'px'

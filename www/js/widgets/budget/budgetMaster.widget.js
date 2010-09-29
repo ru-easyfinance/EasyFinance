@@ -256,7 +256,13 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * инициализация мастера
      */
-    $('#master').dialog({bgiframe: true,autoOpen: false,width: 520, modal: true, resizable: false});
+    $('#master').dialog({
+        bgiframe: true,
+        autoOpen: false,
+        width: 600,
+        modal: true,
+        resizable: false
+    });
 
     /**
      * кнопочка для вызова мастера.
@@ -290,10 +296,11 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * копировать - создать новый
      */
     $('#master #step1 input:[type="radio"]').click(function(){
-        if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new'){
-            $('#master #step1 .copy').hide();
-        }else{
-            $('#master #step1 .copy').show();
+        if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new') {
+            $('#master #step1 .copy').addClass('hidden');
+        }
+        else {
+            $('#master #step1 .copy').removeClass('hidden');
         }
     });
 

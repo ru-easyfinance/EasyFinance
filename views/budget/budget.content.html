@@ -34,17 +34,18 @@
                     </tr>
                 </table>
             </div>
-            <div class="timeline" style="position: relative; left: 204px; width: 64px; height: 20px; padding-top: 10px; top: 50px;">
+            <div class="timeline hidden" style="position: relative; left: 204px; width: 64px; height: 20px; padding-top: 10px; top: 50px;">
                 <div style="position: absolute; left: -10px; width: 20px;">1</div>
-                <div class="budgetPeriodEnd" style="position: absolute; left: 70px; width: 60px;">загрузка...</div>
+                <div class="budgetPeriodEnd" style="position: absolute; left: 70px; width: 60px;"></div>
                 <div style="position: relative; left: 0px; top: 7px; width: 64px; height: 1px; background-color: rgb(170, 170, 170);"></div>
                 <div id="budgetTimeLine" class="line hidden" style="position: absolute; z-index: 2000; left: 0%; width: 1px; height: 226px; background-color: #AAAAAA;"></div>
             </div>
             <div class="list body">
+                загрузка&hellip;
             </div>
-            <div class="timeline" style="position: relative; left: 204px; width: 64px; height: 20px; padding-top: 10px; ">
+            <div class="timeline  hidden" style="position: relative; left: 204px; width: 64px; height: 20px; padding-top: 10px; ">
                 <div style="position: absolute; left: -10px; width: 20px;">1</div>
-                <div class="budgetPeriodEnd" style="position: absolute; left: 70px; width: 60px;">загрузка...</div>
+                <div class="budgetPeriodEnd" style="position: absolute; left: 70px; width: 60px;"></div>
                 <div style="position: relative; left: 0px; top: 7px; width: 64px; height: 1px; background-color: rgb(170, 170, 170);"></div>
             </div>
         </div>
@@ -57,100 +58,103 @@
 
 <!-- master -->
 <div id="master" class="budget" style="display: none">
+    <div class="l-dialog-content">
     <!-- step1.get date -->
-    <div id="step1" class="step">
-        <div class="master head">
-            <h4>Шаг 1 из 3. Мастер планирования бюджета.</h4>
-        </div>
-        <div class="master body">
-            <p><input type="radio" id="new" name="type" plantype="new" checked="checked"><label for="new">Создать новый или отредактировать имеющийся</label></p>
-            <p><input type="radio" id="copy" name="type" plantype="copy"><label for="copy"> Создать новый из копии существующего</label></p>
-            <p>Месяц, на который нужно запланировать бюджет</p>
-            <p>
-                <select id="month" name="month">
-                    <option value="01">Январь</option>
-                    <option value="02">Февраль</option>
-                    <option value="03">Март</option>
-                    <option value="04">Апрель</option>
-                    <option value="05">Май</option>
-                    <option value="06">Июнь</option>
-                    <option value="07">Июль</option>
-                    <option value="08">Август</option>
-                    <option value="09">Сентябрь</option>
-                    <option value="10">Октябрь</option>
-                    <option value="11">Ноябрь</option>
-                    <option value="12">Декабрь</option>
-                </select>
-                <input type="text" value="2009" id="year" name="year"/>
-            </p>
-            <p class="copy">Месяц, с которого нужно cкопировать бюджет</p>
-            <p class="copy">
-                <select id="copy_month" name="copy_month">
-                    <option value="01">Январь</option>
-                    <option value="02">Февраль</option>
-                    <option value="03">Март</option>
-                    <option value="04">Апрель</option>
-                    <option value="05">Май</option>
-                    <option value="06">Июнь</option>
-                    <option value="07">Июль</option>
-                    <option value="08">Август</option>
-                    <option value="09">Сентябрь</option>
-                    <option value="10">Октябрь</option>
-                    <option value="11">Ноябрь</option>
-                    <option value="12">Декабрь</option>
-                </select>
-                <input type="text" value="2009" id="copy_year" name="copy_year"/>
-            </p>
-        </div>
-        <div class="master foot">
-            <div id="tostep2" class="button master next">Следующий шаг</div>
-        </div>
-    </div>
-    <!-- step2. conntrol profit -->
-    <div id="step2" class="waste_list step">
-        <div class="master head">
-            <h4>Заголовок заполняется скриптом</h4>
-        </div>
-        <div class="master body">
-            <div class="list head">
-                <table>
-                    <tr>
-                        <td class="w1" class="efTooltip" title="Категория, по которой будет учитываться бюджет">Категория</td>
-                        <td class="w2" class="efTooltip" title="Сумма, выделенная в бюджете на эту категорию">Сумма, руб.</td>
-                        <td class="w4" class="efTooltip" title="">Сред. доход, руб.</td>
-                    </tr>
-                </table>
+        <div id="step1" class="step">
+            <div class="master head">
+                <h4>Шаг 1 из 3. Мастер планирования бюджета.</h4>
             </div>
-            <div class="list body"></div>
-            <div class="f_field3"></div>
-        </div>
-        <div class="master foot">
-            <div id="tostep1" class="button master prev">Предыдущий шаг</div>
-            <div id="tostep3" class="button master next">Следующий шаг</div>
-        </div>
-    </div>
-    <!-- step3. conntrol drain -->
-    <div id="step3" class="waste_list step">
-        <div class="master head">
-            <h4>Заголовок заполняется скриптом</h4>
-        </div>
-        <div class="master body">
-            <div class="list head">
-                <table>
-                    <tr>
-                        <td class="w1" class="efTooltip" title="Категория, по которой будет учитываться бюджет">Категория</td>
-                        <td class="w2" class="efTooltip" title="Сумма, выделенная в бюджете на эту категорию">Сумма, руб.</td>
-                        <td class="w4" class="efTooltip" title="">Сред. расход, руб.</td>
-                    </tr>
-                </table>
+            <div class="master body">
+                <p><input type="radio" id="new" name="type" plantype="new" checked="checked"><label for="new">Создать новый или отредактировать имеющийся</label></p>
+                <p><input type="radio" id="copy" name="type" plantype="copy"><label for="copy"> Создать новый из копии существующего</label></p>
+                <p>Месяц, на который нужно запланировать бюджет</p>
+                <p>
+                    <select id="month" name="month">
+                        <option value="01">Январь</option>
+                        <option value="02">Февраль</option>
+                        <option value="03">Март</option>
+                        <option value="04">Апрель</option>
+                        <option value="05">Май</option>
+                        <option value="06">Июнь</option>
+                        <option value="07">Июль</option>
+                        <option value="08">Август</option>
+                        <option value="09">Сентябрь</option>
+                        <option value="10">Октябрь</option>
+                        <option value="11">Ноябрь</option>
+                        <option value="12">Декабрь</option>
+                    </select>
+                    <input type="text" value="2009" id="year" name="year"/>
+                </p>
+                <p class="copy hidden">Месяц, с которого нужно cкопировать бюджет</p>
+                <p class="copy hidden">
+                    <select id="copy_month" name="copy_month">
+                        <option value="01">Январь</option>
+                        <option value="02">Февраль</option>
+                        <option value="03">Март</option>
+                        <option value="04">Апрель</option>
+                        <option value="05">Май</option>
+                        <option value="06">Июнь</option>
+                        <option value="07">Июль</option>
+                        <option value="08">Август</option>
+                        <option value="09">Сентябрь</option>
+                        <option value="10">Октябрь</option>
+                        <option value="11">Ноябрь</option>
+                        <option value="12">Декабрь</option>
+                    </select>
+                    <input type="text" value="2009" id="copy_year" name="copy_year"/>
+                </p>
             </div>
-            <div class="list body"></div>
-            <div class="f_field3"></div>
+            <div class="master foot">
+                <div id="tostep2" class="button master next">Следующий шаг</div>
+            </div>
         </div>
-        <div class="master foot">
-            <div id="tostep2" class="button master prev">Предыдущий шаг</div>
-            <div id="tosave" class="button master next">Сохранить</div>
+        <!-- step2. conntrol profit -->
+        <div id="step2" class="waste_list step">
+            <div class="master head">
+                <h4>Заголовок заполняется скриптом</h4>
+            </div>
+            <div class="master body">
+                <div class="list head">
+                    <table>
+                        <tr>
+                            <td class="w1" class="efTooltip" title="Категория, по которой будет учитываться бюджет">Категория</td>
+                            <td class="w2" class="efTooltip" title="Сумма, выделенная в бюджете на эту категорию">Сумма, руб.</td>
+                            <td class="w4" class="efTooltip" title="">Сред. доход, руб.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="list body"></div>
+                <div class="f_field3"></div>
+            </div>
+            <div class="master foot">
+                <div id="tostep1" class="button master prev">Предыдущий шаг</div>
+                <div id="tostep3" class="button master next">Следующий шаг</div>
+            </div>
         </div>
+        <!-- step3. conntrol drain -->
+        <div id="step3" class="waste_list step">
+            <div class="master head">
+                <h4>Заголовок заполняется скриптом</h4>
+            </div>
+            <div class="master body">
+                <div class="list head">
+                    <table>
+                        <tr>
+                            <td class="w1" class="efTooltip" title="Категория, по которой будет учитываться бюджет">Категория</td>
+                            <td class="w2" class="efTooltip" title="Сумма, выделенная в бюджете на эту категорию">Сумма, руб.</td>
+                            <td class="w4" class="efTooltip" title="">Сред. расход, руб.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="list body"></div>
+                <div class="f_field3"></div>
+            </div>
+            <div class="master foot">
+                <div id="tostep2" class="button master prev">Предыдущий шаг</div>
+                <div id="tosave" class="button master next">Сохранить</div>
+            </div>
+        </div>
+
     </div>
 </div>
 <!-- /master -->

@@ -1,5 +1,5 @@
 .budget#master {
-    margin: 5px
+    clear: both;
 }
 
 .budget#master .master.head {
@@ -19,7 +19,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
-    max-height: 300px;
+    max-height: 600px;
 }
 
 .budget#master .waste_list .list.head {
