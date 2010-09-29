@@ -1,3 +1,135 @@
+dl.bill_list {
+
+}
+    dl.bill_list dt {
+        padding-left: 15px;
+        margin: 0 0 2px 0;
+        font-weight: bold;
+        cursor: pointer;
+        color: #383838;
+        background: #eeeeee url(/img/i/arrow_down.gif) no-repeat scroll 4px 6px;
+        position: relative;
+    }
+    dl.bill_list dt.closed {
+        background: #eeeeee url(/img/i/arrow_right.gif) no-repeat scroll 5px 5px;
+    }
+
+
+.b-accountgroup {
+    height: 1.4em;
+}
+    .b-accountgroup .b-accountgroup-name {
+        position: absolute;
+        top: 0;
+        left: 1.4em;
+    }
+    .b-accountgroup .b-accountgroup-sum {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+    }
+        .b-accountgroup .b-accountgroup-amount {
+            float: left;
+            margin-right: -5ex;
+            text-align: right;
+            width: 150px;
+        }
+        .b-accountgroup .b-accountgroup-currency {
+            float: right;
+            color: black;
+            right: -3px;
+            width: 4.5ex;
+            overflow: hidden;
+        }
+
+
+    dl.bill_list dd {
+        padding-left: 0px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        dl.bill_list dd ul {
+            padding-bottom: 2px;
+        }
+            dl.bill_list dd ul .account {
+                padding: 0 3px 4px 3px;
+            }
+            dl.bill_list dd ul .account:hover {
+                background-color: #e3ffdf;
+            }
+
+/* общая сумма */
+    dl.bill_list dd.amount {
+        position: relative;
+        margin-left: 0;
+        padding-top: 3px;
+        font-size: 14px;
+        color: #36a500;
+        line-height: 18px;
+        font-weight: bold;
+    }
+        dl.bill_list dd.amount div {
+            padding-left: 10px;
+            position: relative;
+            width: 100px;
+            text-align: right;
+        }
+            dl.bill_list dd.amount div strong{
+                position:relative;
+                left: -5px;
+            }
+                dl.bill_list dd.amount div span.currency {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 110px;
+                    color: black;
+                }
+
+    dl.bill_list dt .sum {
+        display: block;
+        float: right;
+        padding-right: .5em;
+    }
+    dl.bill_list dt .sum .currency {
+        color: black;
+        padding-left: .3em;
+    }
+
+/* итем одного счёта */
+.b-accountitem {
+    position: relative;
+    display: block;
+    color: #363535;
+}
+    .b-accountitem .b-accountitem-name {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .b-accountitem .b-accountitem-sum {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+    }
+        .b-accountitem .b-accountitem-amount {
+            float: left;
+            margin-right: -5ex;
+            text-align: right;
+            width: 147px;
+        }
+        .b-accountitem .b-accountitem-currency {
+            float: right;
+            color: black;
+            right: -3px;
+            width: 4ex;
+            overflow: hidden;
+        }
+
+/* контекстное меню счета */
 .bill_list li.account div.cont {
     position: relative;
     left: -60px;
@@ -21,11 +153,8 @@
 }
 
 .bill_list li.account ul li a {
-    height: 26px;
-    width: 11px;
+    height: 23px;
+    width: 20px;
+    display: block;
+    margin-top: 3px;
 }
-
-.bill_list li.account:hover {
-    background-color: #e3ffdf;
-}
-

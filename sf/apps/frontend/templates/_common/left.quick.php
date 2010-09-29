@@ -14,28 +14,49 @@
         </div>
         <!-- <h2 class="b-leftpanel-title addaccountlink"><span>Счета</span><i></i></h2> -->
         <dl class="bill_list">
-            <dt class="hidden">Избранные <span class="sum"></span></dt>
+            <dt class="hidden b-accountgroup js-type-favourite">
+                <span class="b-accountgroup-name">Избранные</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAcc0" class="hidden"> <!-- --> </dd>
 
-            <dt class="hidden">Деньги <span class="sum"></span></dt>
+            <dt class="hidden b-accountgroup js-type-cash">
+                <span class="b-accountgroup-name">Деньги</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAcc1" class="hidden"> <!-- --> </dd>
 
-            <dt class="hidden">Мне должны <span class="sum"></span></dt>
+            <dt class="hidden b-accountgroup js-type-borrowed">
+                <span class="b-accountgroup-name">Мне должны</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAcc2" class="hidden"> <!-- --> </dd>
 
-            <dt class="hidden">Я должен <span class="sum"></span></dt>
+            <dt class="hidden b-accountgroup js-type-owe">
+                <span class="b-accountgroup-name">Я должен</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAcc3" class="hidden"> <!-- --> </dd>
 
-            <dt class="hidden">Инвестиции <span class="sum"></span></dt>
+            <dt class="hidden b-accountgroup js-type-invested">
+                <span class="b-accountgroup-name">Инвестиции</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAcc4" class="hidden"> <!-- --> </dd>
 
-            <dt class="hidden">Имущество <span class="sum"></span></dt>
+            <dt class="hidden b-accountgroup js-type-property">
+                <span class="b-accountgroup-name">Имущество</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAcc5" class="hidden"> <!-- --> </dd>
 
             <dt>Сумма:</dt>
             <dd id="accountsPanel_amount" class="amount"> <!-- --> </dd>
 
-            <dt class="hidden">Скрытые</dt>
+            <dt class="hidden b-accountgroup js-type-archive">
+                <span class="b-accountgroup-name">Скрытые</span>
+                <span class="b-accountgroup-sum js-acc-sum"></span>
+            </dt>
             <dd id="accountsPanelAccArchive" class="hidden"> <!-- --> </dd>
         </dl>
     </div>

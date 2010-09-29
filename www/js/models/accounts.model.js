@@ -31,6 +31,27 @@ easyFinance.models.accounts = function(){
     var _accountsOrdered;
     var _journal;
 
+    var account_types = {
+        1: "Наличные",
+        2: "Дебетовая карта",
+        9: "Кредит",
+        5: "Депозит",
+        6: "Займ выданный",
+        7: "Займ полученый",
+        8: "Кредитная карта",
+        15: "Электронный кошелек",
+        16: "Банковский счёт"
+    };
+
+    var account_states = {
+        0: "Обычный",
+        1: "Избранный",
+        2: "Архивный"
+    };
+
+    var group_types_ids =   [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1,1,1];
+    var group_types_names = ['cash','cash','cash','cash','cash','cash','borrowed','owe','owe','owe','invested','invested','invested','invested','property','cash','cash','cash','cash']
+
     // private functions
     function _compareAccountsOrderByName(a, b) {
         if (!a || !b || !a.name || !b.name) {
@@ -194,10 +215,8 @@ easyFinance.models.accounts = function(){
     }
 
     function getAccountTypeString(id){
-        var types = {1: "Наличные", 2: "Дебетовая карта", 9: "Кредит", 5: "Депозит", 6: "Займ выданный", 7: "Займ полученый", 8: "Кредитная карта", 15: "Электронный кошелек", 16: "Банковский счёт"};
-
         if (_accounts && _accounts[id])
-            return types[_accounts[id].type];
+            return account_types[_accounts[id].type];
         else
             return '';
     }
@@ -229,7 +248,48 @@ easyFinance.models.accounts = function(){
     	
     	return _processAccount(EDIT_ACCOUNT_URL + id + ".json", account, "accountEdited", callback);
     }
-    
+
+    function getAccountStateString(id) {
+        if (_accounts && _accounts[id]) {
+            return account_states[_accounts[id].state]
+        }
+        else {
+            return '';
+        }
+    }
+
+    function getTypeId(id) {
+        if (_accounts[id]['state'] == "1") { // Если счёт избранный
+            return 0;
+        }
+        else if(_accounts[id]['state'] == "2") { // Если это архив
+            return 6;
+        }
+        else {
+            return group_types_ids[_accounts[id]['type']];
+        }
+    }
+    function getTypeName(id) {
+        if (_accounts[id]['state'] == "1") { // Если счёт избранный
+            return 'favourite';
+        }
+        else if(_accounts[id]['state'] == "2") { // Если это архив
+            return 'archive';
+        }
+        else {
+            return group_types_names[_accounts[id]['type']];
+        }
+    }
+
+    // получает тип, не взирая на "любимость"
+    function getTypeNameForced(id) {
+        if(_accounts[id]['state'] == "2") { // Если это архив
+            return 'archive';
+        }
+        else { // если избранный или обычный, то берем из type
+            return group_types_names[_accounts[id]['type']]
+        }
+    }
             
     /**
      * [private] Обработать добавление/редактирование счета
@@ -345,7 +405,7 @@ easyFinance.models.accounts = function(){
     function acceptOperationsByIds(ids, callback) {
         var _ids = ids;
 
-        $.post(ACCEPT_OPERATIONS_URL, {ids : ids.toString() }, function(data) {
+        $.post(ACCEPT_OPERATIONS_URL, {ids : ids.toString()}, function(data) {
             // update accounts
             _loadAccounts();
 
@@ -644,7 +704,11 @@ easyFinance.models.accounts = function(){
         //loadFutureEvents: loadFutureEvents
 
         getOverdueOperationById: getOverdueOperationById,
-        getFutureOperationById: getFutureOperationById
+        getFutureOperationById: getFutureOperationById,
+
+        getTypeId: getTypeId,
+        getTypeName: getTypeName,
+        getTypeNameForced: getTypeNameForced
     };
 }(); // execute anonymous function to immediatly return object
 

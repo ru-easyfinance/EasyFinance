@@ -139,7 +139,7 @@ easyFinance.widgets.accountsJournal = function(){
         return this;
     }
 
-    function redraw(){
+    function redraw() {
         var account_list_ordered = _model.getAccountsOrdered();
         _accounts = _model.getAccounts();
         var account_list = _accounts;
@@ -147,7 +147,6 @@ easyFinance.widgets.accountsJournal = function(){
             return;
         }
 
-        var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1,1,1]; // Жуткий масив привязки типов к группам
         var g_name = ['Избранные','Деньги','Мне должны','Я должен','Инвестиции','Имущество','Архивные']; //названия групп
         var arr = ['', '', '', '', '', '', '']; //содержимое каждой группы
         var summ = [0, 0, 0, 0, 0, 0, 0]; //сумма средств по каждой группе
@@ -169,15 +168,7 @@ easyFinance.widgets.accountsJournal = function(){
 
         // формирует массив с таблицей счетов по группам
         for (var row in account_list_ordered) {
-            if (account_list_ordered[row]['state'] == "1") { // Если счёт избранный
-                type = 0;
-            }
-            else if(account_list_ordered[row]['state'] == "2") { // Если это архив
-                type = 6;
-            }
-            else {
-                type = g_types[account_list_ordered[row]['type']];
-            }
+            type = _model.getTypeId(account_list_ordered[row]['id'])
 
             colorClass = account_list_ordered[row]["totalBalance"] >=0 ? 'sumGreen' : 'sumRed';
             var id = account_list_ordered[row]['id'];

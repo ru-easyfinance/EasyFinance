@@ -11,6 +11,52 @@ easyFinance.widgets.accountsPanel = function(){
     var _model = null;
     var _$node = null;
 
+    var li_template =
+        '<li class="account" title="{%tooltip_title%}">\
+            <a class="b-accountitem">\
+                <div style="display:none" class="type" value="{%type%}" />\
+                <div style="display:none" class="id" value="{%id%}" />\
+                <div style="display:none" class="state" value="{%state%}" />\
+                <span class="b-accountitemitem-name">{%shorter_name%}</span>\
+                <span class="b-accountitem-sum {%balance_color%}">\
+                    <span class="b-accountitem-amount">{%totalBalance%}</span>\
+                    <span class="b-accountitem-currency">{%currencyName%}</span>\
+                </span>\
+            </a>\
+            <div class="cont">\
+                <ul style="z-index: 1006;">\
+                    <li title="Добавить операцию" class="operation"><a></a></li>\
+                    <li title="Редактировать" class="edit"><a></a></li>\
+                    <li title="Удалить" class="del"><a></a></li>\
+                    <li title="В избранные" class="favourite"><a></a></li>\
+                 </ul>\
+            </div>\
+        </li>';
+
+    var header_sum_template =
+        '<span class="b-accountgroup-amount">{%amount%}</span>\
+        <span class="b-accountgroup-currency">{%currency%}</span>';
+
+    var total_template =
+        '<ul>\
+            {%rows%}\
+            <li>\
+                <div class="{%summColor%}">\
+                    <strong style="color: black; position:relative; float: left;">Итого:</strong><br/>\
+                    {%amount%}\
+                    <span class="currency"><br\>&nbsp;{%currencyName%}</span>\
+                </div>\
+            </li>\
+        </ul>';
+
+    var total_row_template =
+        '<li>\
+            <div class="{%color%}">\
+                {%amount%}\
+                <span class="currency">&nbsp;{%currency_name%}</span>\
+            </div>\
+        </li>'
+
     // public variables
 
     // public functions
@@ -106,6 +152,17 @@ easyFinance.widgets.accountsPanel = function(){
             return false;
         });
 
+        $('div.listing dl.bill_list dt').live('click', function() {
+            $(this).toggleClass('closed').next().toggleClass('hidden', $(this).hasClass('closed'));
+            saveState();
+            return false;
+        });
+
+        $('div.listing dd.amount').live('click', function() {
+            $(this).prev().click();
+            return false;
+        });
+
         return this;
     }
 
@@ -159,15 +216,147 @@ easyFinance.widgets.accountsPanel = function(){
         return accounts;
     }
 
-    function redraw(){
-//        var g_types = [0,0,0,0,0,0,1,2,2,2,3,3,3,3,4,0,0];
-        var g_types = [1,1,1,1,1,1,2,3,3,3,4,4,4,4,5,1,1];
-//        var g_name = ['Деньги','Мне должны','Я должен','Инвестиции','Имущество'];//названия групп
-        var innerHtmlByGroups = ['','','','','',''];//содержимое каждой группы
-        innerHtmlByGroups['Archive'] = '';
-        var summByGroups = [0,0,0,0,0,0];// сумма средств по каждой группе
-        var summByCurrencies = {};//сумма средств по каждой используемой валюте
+    function getSumTotal(data) {
+        var summ = {}; // ключи -- id валют, значения -- суммы по валютам
+        var acc;
+        var overall = 0;
 
+        for (var key in data) {
+            acc = data[key];
+
+            if (parseInt(acc.state) != 2) {
+                if (!summ[acc.currency]) { // если в этой валюте еще ничего нет...
+                   summ[acc.currency] = 0;
+                }
+
+                summ[acc.currency] = summ[acc.currency] + parseFloat(acc.totalBalance);
+                overall += acc.totalBalance * _model.getAccountCurrencyCost(acc.id) / easyFinance.models.currency.getDefaultCurrencyCost();
+            }
+        }
+
+        return {
+            summ: summ,
+            overall: overall
+        }
+    }
+
+    function getSumGroup(group) {
+        var balance = 0,
+            acc;
+
+        for (var i = 0, l = group.length; i < l; i++) {
+            acc = group[i];
+            balance += acc.totalBalance * _model.getAccountCurrencyCost(acc.id) / easyFinance.models.currency.getDefaultCurrencyCost();
+        }
+        return balance;
+    }
+
+    function renderAccount(accountDatum) {
+        var val = {
+            "tooltip_title": getAccountTooltip(accountDatum.id),
+            "type": accountDatum.type,
+            "id": accountDatum.id,
+            "state": accountDatum.state,
+            "shorter_name": htmlEscape(shorter(accountDatum.name, 20)),
+            "balance_color": accountDatum.totalBalance >= 0 ? 'sumGreen' : 'sumRed',
+            "totalBalance": formatCurrency(accountDatum.totalBalance, true),
+            "currencyName": _model.getAccountCurrencyText(accountDatum.id)
+        }
+
+        return templetor(li_template, val);
+    }
+
+    function renderGroup(group, id) {
+        var currentPanel = _$node.find('.js-type-' + id).next();
+
+        if (!group.length) { // если группа пустая
+            currentPanel.addClass('hidden').prev().addClass('hidden'); // скрываем ее полностью
+            return;
+        }
+
+        var groupBalance = getSumGroup(group);
+
+        var accounts = [];
+
+        for (var i = 0, l = group.length; i < l; i++) {
+            accounts.push(renderAccount(group[i]));
+        }
+
+        currentPanel
+            .html('<ul class="efListWithTooltips">' + accounts.join('') + '</ul>')
+            .removeClass('hidden')
+            .prev().removeClass('hidden');
+
+        var sumContainer = currentPanel.prev().find('span.js-acc-sum');
+
+        sumContainer.removeClass('sumGreen sumRed');
+        sumContainer.addClass( groupBalance > 0 ? 'sumGreen': 'sumRed' );
+        sumContainer.html(
+            templetor(header_sum_template, {
+                'amount': formatCurrency(groupBalance),
+                'currency': easyFinance.models.currency.getDefaultCurrency().text
+            })
+        );
+    }
+
+    function renderTotal(amount) {
+        var rows = [];
+        for(var currency in amount.summ) {
+            rows.push(
+                templetor(
+                    total_row_template,
+                    {
+                        color: amount.summ[currency] >= 0 ? 'sumGreen' : 'sumRed',
+                        amount: formatCurrency(amount.summ[currency], true, true),
+                        currency_name: easyFinance.models.currency.getCurrencyTextById(currency)
+                    }
+                )
+            )
+        }
+
+        var values = {
+            summColor: amount.overall >= 0 ? 'sumGreen' : 'sumRed',
+            amount: formatCurrency(amount.overall, true, true),
+            currencyName: easyFinance.models.currency.getDefaultCurrencyText(),
+            rows: rows.join('')
+        }
+
+        _$node.find('#accountsPanel_amount').html(templetor(total_template, values));
+
+    }
+
+    function groupAccountsByType(accounts) {
+        var groups = {};
+        var grouptype = '';
+        var acc;
+
+        // поскольку избранные отображаются дважды -- один раз в избранных и один раз в своей группе
+        // то обходим исходные данные дважды:
+        //      один раз выбираем някотку,
+        //      второй раз просто группируем, невзирая на "любимость"
+
+        groups['favourite'] = [];
+        for (var key in accounts) {
+            acc = accounts[key];
+            if (acc.state == '1') {
+                groups['favourite'].push(acc);
+            }
+        }
+
+        for (key in accounts) {
+            acc = accounts[key];
+            grouptype = _model.getTypeNameForced(acc.id);
+            if (!(grouptype in groups)) {
+                groups[grouptype] = []
+            }
+            groups[grouptype].push( acc );
+
+        }
+
+        return groups;
+    }
+
+    function redraw() {
         if (!_model)
             return;
 
@@ -177,194 +366,39 @@ easyFinance.widgets.accountsPanel = function(){
             data = {};
         }
 
-        var i = 0,
-            total = 0,
-            str = '',
-            key,
-            s = '',
-            datum,
-            current_acc_panel,
-            groupSum;
+        var summByCurrencies = getSumTotal(data); // сумма средств по каждой используемой валюте и общая сумма
 
+        var groupedAccounts = groupAccountsByType(data);
 
-        var li_template =
-            '<li class="account" title="{%tooltip_title%}">\
-                <a>\
-                    <div style="display:none" class="type" value="{%type%}" />\
-                    <div style="display:none" class="id" value="{%id%}" />\
-                    <div style="display:none" class="state" value="{%state%}" />\
-                    <span>{%shorter_name%}</span><br/>\
-                    <span class="{%balance_color%}">{%totalBalance%}</span>&nbsp;\
-                    {%currencyName%}\
-                </a>\
-                <div class="cont">\
-                    <ul style="z-index: 1006;">\
-                        <li title="Добавить операцию" class="operation"><a></a></li>\
-                        <li title="Редактировать" class="edit"><a></a></li>\
-                        <li title="Удалить" class="del"><a></a></li>\
-                        <li title="В избранные" class="favourite"><a></a></li>\
-                     </ul>\
-                </div>\
-            </li>';
-
-        var val = {};
-
-        for (key in data ) {
-            datum = data[key];
-            if (data[key].state == "2") {
-                i = 'Archive';
-            }
-            else {
-                i = g_types[datum['type']];
-            }
-
-            val = {
-                "tooltip_title": getAccountTooltip(datum.id),
-                "type": datum['type'],
-                "id": datum['id'],
-                "state": datum['state'],
-                "shorter_name": htmlEscape(shorter(datum['name'], 20)),
-                "balance_color": datum['totalBalance'] >= 0 ? 'sumGreen' : 'sumRed',
-                "totalBalance": formatCurrency(datum['totalBalance'], true),
-                "currencyName": _model.getAccountCurrencyText(datum['id'])
-            }
-
-            str = templetor(li_template, val);
-
-            if (datum.state != "2") {
-                summByGroups[i] = summByGroups[i] +
-                    datum["totalBalance"] * _model.getAccountCurrencyCost(datum["id"]) / easyFinance.models.currency.getDefaultCurrencyCost();
-                if (!summByCurrencies[datum['currency']]) {
-                   summByCurrencies[datum['currency']] = 0;
-                }
-
-                summByCurrencies[datum['currency']] =
-                    parseFloat(summByCurrencies[datum['currency']])
-                    + parseFloat(datum['totalBalance']);
-            }
-
-            innerHtmlByGroups[i] = (innerHtmlByGroups[i] ? innerHtmlByGroups[i] + str : str);
-
-            if (datum.state == '1') {
-                innerHtmlByGroups[0] = innerHtmlByGroups[0] ? innerHtmlByGroups[0] + str : str;
-            }
+        for (var groupid in groupedAccounts) {
+            renderGroup(groupedAccounts[groupid], groupid)
         }
 
-        total = 0;
-        for(key in innerHtmlByGroups) {
+        renderTotal(summByCurrencies);
 
-            total = summByGroups[key] ? total + parseFloat(summByGroups[key]) : total;
-            s = '<ul class="efListWithTooltips">' + innerHtmlByGroups[key] + '</ul>';
+        loadState();
+    }
 
-            current_acc_panel = _$node.find('#accountsPanelAcc' + key);
+    function saveState() { //запоминание состояние захлопнутых групп в куку
+        var accountsPanel = '';
+        $('div.listing dl.bill_list dt.closed').each(function() {
+            accountsPanel += $(this).next().attr('id'); // сохраняем список id захлопнутых групп
+        })
 
-            if (key >= 0 && key <=7 || key == 'Archive') {
-                current_acc_panel.html(s);
-            }
+        var isSecure = window.location.protocol == 'https' ? 1 : 0;
+        $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : isSecure});
+    }
 
-            if (innerHtmlByGroups[key] != '') {
-                current_acc_panel
-                    .removeClass('hidden')
-                    .prev().removeClass('hidden');
-
-                groupSum = current_acc_panel.prev().find('.sum')
-                groupSum
-                    .removeClass('sumGreen sumRed')
-                    .addClass( summByGroups[key] > 0 ? 'sumGreen': 'sumRed' )
-                    .html(
-                        formatCurrency(summByGroups[key]) +
-                        '<span class="currency">' +
-                            easyFinance.models.currency.getDefaultCurrency().text +
-                        '</span>'
-                        );
-            }
-            else {
-                current_acc_panel
-                    .addClass('hidden')
-                    .prev().addClass('hidden');
-            }
-        }
-
-        // формирование итогов
-        var total_template =
-            '<ul>\
-                {%rows%}\
-                <li>\
-                    <div class="{%summColor%}">\
-                        <strong style="color: black; position:relative; float: left;">Итого:</strong><br/>\
-                        {%amount%}\
-                        <span class="currency"><br\>&nbsp;{%currencyName%}</span>\
-                    </div>\
-                </li>\
-            </ul>';
-
-        var total_row_template =
-            '<li>\
-                <div class="{%color%}">\
-                    {%amount%}\
-                    <span class="currency">&nbsp;{%currency_name%}</span>\
-                </div>\
-            </li>'
-
-
-        var rows = [];
-        for(key in summByCurrencies) {
-            rows.push(
-                templetor(
-                    total_row_template,
-                    {
-                        color: summByCurrencies[key] >= 0 ? 'sumGreen' : 'sumRed',
-                        amount: formatCurrency(summByCurrencies[key], true, true),
-                        currency_name: easyFinance.models.currency.getCurrencyTextById(key)
-                    }
-                )
-            )
-        }
-
-        val = {
-            summColor: total>=0 ? 'sumGreen' : 'sumRed',
-            amount: formatCurrency(total, true, true),
-            currencyName: easyFinance.models.currency.getDefaultCurrencyText(),
-            rows: rows.join('')
-        }
-
-        _$node.find('#accountsPanel_amount').html(templetor(total_template, val));
-
-        $('div.listing dl.bill_list dt').addClass('closed');
-        $('div.listing dl.bill_list dd').addClass('hidden');
-        
-        $('div.listing dl.bill_list dt').live('click', function(){
-            $(this).toggleClass('closed').next().toggleClass('hidden', $(this).hasClass('closed'));
-
-        //запоминание состояние в куку
-            var accountsPanel = '';
-            $('div.listing dl.bill_list dt').filter('.closed').each(function() {
-                accountsPanel += $(this).next().attr('id');
-            })
-            var isSecure = window.location.protocol == 'https'? 1:0
-            $.cookie('accountsPanel_stated', accountsPanel, {expire: 100, path : '/', domain: false, secure : isSecure});
-            return false;
-        });
-
-
-        //загружает состояние из
-        var accountsPanel = $.cookie('accountsPanel_stated');
+    function loadState() { //загружает состояние из куки
+        var accountsPanel = $.cookie('accountsPanel_stated').toString();
 
         if (accountsPanel) {
-            $('div.listing dl.bill_list dt.closed').each(function(){
-                if (accountsPanel.toString().indexOf($(this).next().attr('id')) == -1)
-                    $(this).click()
+            $('div.listing dl.bill_list dt').each(function(){
+                if (accountsPanel.indexOf($(this).next().attr('id')) > -1) {
+                    $(this).addClass('closed').next().addClass('hidden');
+                }
             })
         }
-        else {
-            $('dl.bill_list #accountsPanel_amount').prev().click();
-        }
-
-        $('div.listing dd.amount').live('click', function(){
-            $(this).prev().click();
-            return false;
-        });
-
     }
 
     // reveal some private things by assigning public pointers
