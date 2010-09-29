@@ -540,6 +540,9 @@ tr.even.gradeU td.sorting_3 {
     margin-top:20px;
     display:block;
 }
+.custom-grid-style.fixedHeader {
+    margin-top:0;
+}
 .custom-grid-style table {
     width:100%;
     border-collapse:collapse;

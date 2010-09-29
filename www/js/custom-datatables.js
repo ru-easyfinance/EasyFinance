@@ -54,6 +54,8 @@ _ActivateDataGrid = {
             }
         });
         this.dataGrid.fnSort([[1, 'asc']]);
+        new FixedHeader(this.dataGrid);
+        $('.fixedHeader').addClass('custom-grid-style');
 
         return {
             grid: this.dataGrid,

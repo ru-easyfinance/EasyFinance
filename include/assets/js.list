@@ -32,6 +32,7 @@ jquery/jquery.dataTables.min.js
 jquery/jquery.notifier.js
 jquery/jquery.action-initiator.js
 jquery/jquery.ajax-initiator.js
+fixedheader/fixedheader.min.js
 swfobject.js
 functions.js
 main.js
