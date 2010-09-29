@@ -555,7 +555,7 @@ ul.buttons_block li#addtocalendar_but a { width: 185px; }
 ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
 
-div.report { position: relative; display: none; padding-top: 22px; width:380px; margin:0 auto; }
+div.report { position: relative; display: none; width:380px; margin:0 auto; }
 #chart, #itogo { width:500px; margin:0 auto; }
 div.report .line { position: relative; clear: both; margin-top:10px;  color: #4c4c4c;  }
 div.report .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
