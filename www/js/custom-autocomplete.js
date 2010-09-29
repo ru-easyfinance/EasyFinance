@@ -8,22 +8,23 @@ _Suggest = {
 
     bind: function() {
         this.setListeners();
-        this.checkStatus();
     },
 
     checkStatus: function() {
-        $(DataTables.table).click(function() {
-            var timer = setInterval(function() {
-                if($('.b-custom-input.suggest .ufd button').length) {
-                    $(document).trigger('ufd-ready');
-                    clearInterval(timer);
-                }
-            }, 100);
-        });
+        var timer = setInterval(function() {
+            if($('.b-custom-input.suggest .ufd button').length) {
+                $(document).trigger('ufd-ready');
+                clearInterval(timer);
+            }
+        }, 100);
     },
 
     setListeners: function() {
         var self = this;
+
+        $('#op_addoperation_but, #op_addtocalendar_but').add(DataTables.table).click(function() {
+            self.checkStatus();
+        });
 
         $(document).bind('ufd-ready', function() {
             $('.b-custom-input.suggest input').bind('focus.ones', function() {

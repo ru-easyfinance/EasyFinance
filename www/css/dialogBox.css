@@ -15,8 +15,7 @@ body .ui-dialog.edit .ui-dialog-title {
 }
 
 body .ui-dialog.calendar .ui-dialog-titlebar {
-    background-image: url("/img/i/bg_menu_orange.png");
-    background-position: -10px 0px;
+    background: url("/img/i/bg_menu_orange.png") 50% 0 no-repeat;
 }
 
 body .ui-dialog .ui-dialog-title {
