@@ -16,6 +16,8 @@ abstract class myBaseTahometer
 
     const PERCENT = 100;
 
+    const STYLE_TEMPLATE = "<p style=\"color:#%s;font-weight:bold;\">";
+
     // Зоны
     protected $zones = array();
     protected $zonesCount = null;
@@ -23,6 +25,9 @@ abstract class myBaseTahometer
     // Тексты
     protected $title = '';
     protected $descriptions = array();
+
+    // дополнительные свойства
+    protected $properties = array();
 
     // Результат рассчетов
     private $calculatedValue = null;
@@ -184,6 +189,18 @@ abstract class myBaseTahometer
 
 
     /**
+     * Получить параметр
+     *
+     * @param   string  $name
+     * @return  mixed
+     */
+    protected function getProperty($name)
+    {
+        return $this->properties[$name];
+    }
+
+
+    /**
      * Получить вычисленное значение
      *
      * @return  float
@@ -239,7 +256,27 @@ abstract class myBaseTahometer
             $description = $this->descriptions;
         }
 
+        $description = $this->coloriseDescription((string) $description, $zone);
+
         return (string) $description;
+    }
+
+
+    /**
+     * Покрасить первый абзац описания
+     * TODO: проверять, что заменяем именно <p> в начале строки
+     *
+     * @param   string  $description
+     * @param   integer $zoneIndex
+     * @return  string
+     */
+    protected function coloriseDescription($description, $zoneIndex)
+    {
+        $colors = $this->getProperty('colors');
+        $color = sprintf(self::STYLE_TEMPLATE, $colors[$zoneIndex]);
+        $description = $color . substr($description, 3, strlen($description));
+
+        return $description;
     }
 
 

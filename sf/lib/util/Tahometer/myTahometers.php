@@ -13,6 +13,7 @@ class myTahometers
 
     // конфигурация тахометров
     private $tahometersConfig = array();
+    private $descriptionColors = array();
 
     // опытность пользователя - дней с первой операции
     private $userExpirience = null;
@@ -50,6 +51,7 @@ class myTahometers
         $this->dispatcher = sfContext::getInstance()->getEventDispatcher();
 
         $this->tahometersConfig = $tahometerConfig;
+        $this->descriptionColors = $colors;
     }
 
 
@@ -103,7 +105,7 @@ class myTahometers
     protected function createTahometer($name)
     {
         if ($name !== myTahometer::NAME_TOTAL) {
-            return new myTahometer($this->getConfiguration($name));
+            return new myTahometer($this->getConfiguration($name), array('colors' => $this->descriptionColors));
         }
     }
 
@@ -140,7 +142,8 @@ class myTahometers
 
         $total = new myTotalTahometer(
             $this->getTotalTahometerValueFromTahometers(array($money, $budget, $loans, $diff)),
-            $this->getConfiguration(myTahometer::NAME_TOTAL)
+            $this->getConfiguration(myTahometer::NAME_TOTAL),
+            array('colors' => $this->descriptionColors)
         );
 
         return array(

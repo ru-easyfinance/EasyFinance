@@ -12,9 +12,11 @@ class myTahometer extends myBaseTahometer
     /**
      * Конструктор
      */
-    public function __construct(array $configuration)
+    public function __construct(array $configuration, array $properties = array())
     {
         $this->initialize($configuration);
+
+        $this->properties = $properties;
     }
 
 
