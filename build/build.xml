@@ -84,6 +84,11 @@
         <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
     </target>
 
+    <target name="minify">
+        <!-- just minify -->
+        <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
+    </target>
+
 
     <!-- UPDATE: Build + Обновляем все файлы: собрать проект для указанной ревизии -->
     <target name="update" depends="checkout, build">
