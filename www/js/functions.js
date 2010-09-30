@@ -584,3 +584,22 @@ function templetor(tpl_str, values_dict) {
     }
     return result
 }
+
+/**
+ * кроссбраузерное логгирование
+ * пишет в стандартную консоль браузера
+ * не вызывает ошибок в IE7 и в FF без установленного FireBug'а
+ */
+function log() {
+    if (typeof console != 'undefined') {
+        if ('apply' in console.log) { // лол, IE8 не  считает console.log полноценной функцией и не умеет console.log.apply
+            console.log.apply(console, arguments);
+        }
+        else {
+            console.log(arguments[0])
+        }
+    }
+    else if (!!window.opera) { // для старых опер; в 10.62 (как минимум) в DragonFly работает консоль
+         window.opera.postError.apply(window.opera, arguments)
+    }
+}
