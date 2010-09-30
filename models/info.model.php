@@ -743,7 +743,16 @@ abstract class Tahometer
 
     private function getAdvice()
     {
-        return self::$_advices[$this->_keyword][$this->getZoneIndex()][$this->getSubzoneIndex()];
+        $colorize = '<p style="color:#%s;font-weight:bold;">';
+        $colors = array(
+            'bf0000',
+            'd6ab00',
+            '106601',
+        );
+
+        $advice = self::$_advices[$this->_keyword][$this->getZoneIndex()][$this->getSubzoneIndex()];
+
+        return sprintf($colorize, $colors[$this->getZoneIndex()]) . substr($advice, 3, strlen($advice));
     }
 
 
