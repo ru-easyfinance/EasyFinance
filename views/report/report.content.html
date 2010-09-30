@@ -13,84 +13,116 @@
     </div>
 
     <div class="inside b-report">
-        <form action="/operation/add/">
-            <div class="report" style="display: block;">
-                <div class="line">
-                    <div class="f_field">
-                        Отчёты
-                        <select id="report">
+        <div class="b-form-skeleton">
+            <table>
+                <col width="32%" />
+                <col width="32%" />
+                <col width="32%" />
+                <tr>
+                    <td>
+                        {capture name='selectbox'}
                             {foreach from=$reports key=key item=item}
-                            <option value="{$key}" >{$item}</option>
+                                <option value="{$key}" >{$item}</option>
                             {/foreach}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="line">
-                    <label class="b-inlinecalendar">
-                        <span>Дата начала</span>
-                        <input type="text" id="dateFrom" value="{$dateFrom}" class="efTooltip" title="Дата начала периода, дд.мм.гггг"/>
-                    </label>
-                    <label class="b-inlinecalendar">
-                        <span>Дата окончания</span>
-                        <input type="text" id="dateTo" value="{$dateTo}" class="efTooltip" title="Дата конца периода, дд.мм.гггг"/>
-                    </label>
-                </div>
-
-                <div class="line hidden" id="Period21">
-                    <label class="b-inlinecalendar">
-                        <span>Дата начала <small>(период 2)</small></span>
-                        <input type="text" id="dateFrom2" value="{$dateFrom2}" class="efTooltip" title="Дата начала периода, дд.мм.гггг"/>
-                    </label>
-                    <label class="b-inlinecalendar">
-                        <span>Дата окончания <small>(период 2)</small></span>
-                        <input type="text" id="dateTo2" value="{$dateTo2}" class="efTooltip" title="Дата конца периода, дд.мм.гггг"/>
-                    </label>
-                </div>
-
-                <div class="line">
-                    <div class="f_field" id="account_fields">Счет
-                        <select id="account">
-                            <option value="" currency="" abbr="">---Все---</option>
+                        {/capture}
+                        {include file="ui/textfield.tpl" value="Отчеты" selectbox=$smarty.capture.selectbox selectid="report"}
+                    </td>
+                    <td>
+                        {capture name='selectbox'}
+                            <option value="">Все счета</option>
                             {foreach from=$accounts item=acc_data}
-                            <option value="{$acc_data.account_id}" currency="{$acc_data.account_currency_id}" abbr="{$acc_data.account_currency_name}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
+                                <option value="{$acc_data.account_id}">{$acc_data.account_name} ({$acc_data.account_currency_name})</option>
                             {/foreach}
-                        </select>
-                    </div>
-                    <div class="f_field category" id="currency_fields" hide="">
-                        Показывать сумму в
-                        <select id="currency">
+                        {/capture}
+                        {include file="ui/textfield.tpl" value="Все счета" selectbox=$smarty.capture.selectbox selectid="account"}
+                    </td>
+                    <td>
+                        {capture name='selectbox'}
                             {foreach from=$currency item=cur}
-                            <option abbr ="{$cur.abbr}" value="{$cur.id}" >{$cur.name}({$cur.abbr})</option>
+                                <option abbr="{$cur.abbr}" value="{$cur.id}" >{$cur.name}({$cur.abbr})</option>
                             {/foreach}
-                        </select>
-                    </div>
-                </div>
-                <div class="line">
-                    <div class="f_field category" id="currency_fields">
-                        <input type="button" value="Показать" id="btnShow">
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div id="chart" class="hidden"></div>
-        <div id="itogo" ></div>
-        <!--<div id="commentRest"></div>-->
+                        {/capture}
+                        {include file="ui/textfield.tpl" value="Валюта" selectbox=$smarty.capture.selectbox selectid="currency"}
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <col width="20%" />
+                <col width="20%" />
+                <col width="20%" />
+                <col width="20%" />
+                <col width="20%" />
+                <tr>
+                    <td colspan="2"><label class="js-compare-fields hidden">Период 1</label></td>
+                    <td colspan="2"><label class="js-compare-fields hidden">Период 2</label></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="b-custom-input-inline">
+                            <label>С:</label>
+                            {include file="ui/textfield.tpl" id="dateFrom" value=$dateFrom class="b-date efTooltip"}
+                            <b class="clear"></b>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="b-custom-input-inline">
+                            <label>По:</label>
+                            {include file="ui/textfield.tpl" id="dateTo" value=$dateTo class="b-date efTooltip"}
+                            <b class="clear"></b>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="b-custom-input-inline js-compare-fields hidden">
+                            <label>С:</label>
+                            {include file="ui/textfield.tpl" id="dateFrom" value=$dateFrom class="b-date efTooltip"}
+                            <b class="clear"></b>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="b-custom-input-inline js-compare-fields hidden">
+                            <label>По:</label>
+                            {include file="ui/textfield.tpl" id="dateTo" value=$dateTo class="b-date efTooltip"}
+                            <b class="clear"></b>
+                        </div>
+                    </td>
+                    <td style="text-align: right;">
+                        <input class="b-button-simple" type="submit" value="Показать" id="btnShow" />
+                    </td>
+                </tr>
+            </table>
 
-        <div id="rep" class="inside operation_list hidden">
-            <div id="tmp">
             </div>
 
-            <div id="divDetailedReport">
-                <table cellspacing="0" cellpadding="0" border="0" id="reports_list_header" class="periods">
-                </table>
+        <div class="w-report-wrapper js-reports-graphs">
+            <div id="chart" class="js-reports-graphs hidden"></div>
+            <div id="itogo" class="js-reports-graphs hidden"></div>
+            <div id="commentRest" class="js-reports-graphs hidden"></div>
+        </div>
 
-                <div id="reports_list_container">
-                    <table cellspacing="0" cellpadding="0" border="0" id="reports_list" class="periods">
-                        <tr></tr>
-                    </table>
-                </div>
-            </div>
+        <div class="w-report-wrapper js-reports-table hidden">
+            <table class="b-reportstable-body js-reports-body">
+                <thead class="b-reportstable-head__detail js-report-bodies js-detailreport hidden">
+                    <tr>
+                        <th class="col1">&nbsp;</th>
+                        <th class="col2">Дата</th>
+                        <th class="col3">Счёт</th>
+                        <th class="col4">Сумма</th>
+                    </tr>
+                </thead>
+                <thead class="b-reportstable-head__compare js-report-bodies js-comparereport hidden">
+                    <tr>
+                        <th class="col1">&nbsp;</th>
+                        <th class="col2">Период 1</th>
+                        <th class="col3">Период 2</th>
+                        <th class="col4">Разница</th>
+                    </tr>
+                </thead>
+                <tbody class="b-reportstable-body__detail js-report-bodies js-detailreport hidden">
+                </tbody>
+                <tbody class="b-reportstable-body__compare js-report-bodies js-comparereport hidden">
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

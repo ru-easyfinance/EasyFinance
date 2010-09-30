@@ -555,20 +555,6 @@ ul.buttons_block li#addtocalendar_but a { width: 185px; }
 ul.buttons_block li#addoperation_but.act { background-position: -200px -60px; }
 ul.buttons_block li#addtocalendar_but.act { background-position: -200px -100px; }
 
-div.report { position: relative; display: none; width:380px; margin:0 auto; }
-#chart, #itogo { width:500px; margin:0 auto; }
-div.report .line { position: relative; clear: both; margin-top:10px;  color: #4c4c4c;  }
-div.report .line:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-div.report .line .f_field { position: relative; float: left; margin-right: 25px; margin-bottom: 14px; }
-div.report .line .f_field .hasDatepicker{ position: static; clear: both; left: 198px;top: 0px}
-div.report .line .f_field select { display: block; color: #20201E; }
-div.report .line .f_field select#account {width: 150px;  overflow: hidden; }
-div.report .line .f_field select#account option {width: 123px;}
-div.report .line .f_field select#report {width: 332px;  overflow: hidden; }
-div.report .line .f_field select#report option {width: 305px;}
-div.report .line .f_field select#currency {width: 156px;  overflow: hidden; }
-div.report .line .f_field select#currency option {width: 129px;}
-
 div.addacc{ position: relative; padding-top: 10px;left: 70px }
 div.addoperation { position: relative; display: none; margin-top: 10px; left: 10px }
 div.addoperation .line { position: relative;  color: #4c4c4c; }

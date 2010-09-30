@@ -213,17 +213,3 @@ table#operations_list td + td + td + td + td + td{
     text-align:right;
     width:165px;
 }
-
-
-.b-inlinecalendar {
-    display: inline-block;
-    width: 170px;
-}
-    .b-inlinecalendar span {
-        display: block;
-    }
-    .b-inlinecalendar input {
-        display: block;
-        width: 70px;
-        
-    }

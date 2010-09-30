@@ -1,113 +1,150 @@
+div.report {
+    position: relative;
+    display: none;
+    margin: 0 auto;
+}
+    div.report .line {
+        position: relative;
+        clear: both;
+        color: #4c4c4c;
+    }
+
+        div.report .line:after {
+            display: block;
+            content: ' ';
+            height: 0;
+            overflow: hidden;
+            clear: both;
+        }
+
+        div.report .line .f_field {
+            position: relative;
+            float: left;
+            margin-right: 25px;
+            margin-bottom: 14px;
+        }
+            div.report .line .f_field .hasDatepicker{
+                position: static;
+                clear: both;
+                left: 198px;
+                top: 0px;
+            }
+            div.report .line .f_field select {
+                display: block;
+                color: #20201E;
+            }
+            div.report .line .f_field select#account {
+                width: 150px;
+            }
+                div.report .line .f_field select#account option {
+                    width: 123px;
+                }
+
+            div.report .line .f_field select#report {
+                width: 332px;
+                overflow: hidden;
+            }
+                div.report .line .f_field select#report option {
+                    width: 305px;
+                }
+
+            div.report .line .f_field select#currency {
+                width: 156px;
+                overflow: hidden;
+            }
+                div.report .line .f_field select#currency option {
+                    width: 129px;
+                }
+
+#chart, #itogo {
+    width: 650px;
+    margin: 0 auto;
+}
 .heightLarge #rep.operation_list {
     height: 390px;
 }
 
-#reports_list_header {
-    margin: 0px;
-    height: 20px;
-    border-bottom: none;
+.w-inlinecalendar {
+    display: inline;
+    margin-right: 2em;
 }
+.b-inlinecalendar {
+    display: inline-block;
+    width: 105px;
+}
+    .b-inlinecalendar span {
+        display: block;
+    }
+    .b-inlinecalendar input {
+        width: 70px;
+        margin-right: 0px !important;
+        margin-left: 1ex;
+    }
 
-div#reports_list_container {
-    position: relative;
-    border: 2px solid #dfdede;
+.w-report-wrapper {
     width: 650px;
-    height: 300px;
-    max-height: 300px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    margin: 1em auto 0;
 }
 
-#reports_list {
-    position: relative;
-    width: 480px;
-    overflow: scroll;
-    border-top: none;
-    margin: 0px;
-    border: none;
+.b-reportstable-body {
+    border: 2px solid #dfdede;
+    font-size: 90%;
     table-layout: fixed;
+    width: 648px;
+    color: #222;
+}
+    .b-reportstable-body tr {
+        height: 20px;
+    }
+        .b-reportstable-body tr td,
+        .b-reportstable-body tr th {
+            vertical-align: middle;
+            text-align: left;
+            padding: 5px;
+            border-bottom: 1px dotted #dfdede;
+        }
+
+.b-reportstable-head__detail,
+.b-reportstable-head__compare {
+    border-bottom: 2px solid #dfdede;
 }
 
-#reports_list tr {
-    height: 20px;
+.b-reportstable-head__detail .col1,
+.b-reportstable-body__detail .col1 {
+    width: 36%;
 }
 
-/* header widths */
-#reports_list_header th {
-    margin: 0px;
-    width: 160px;
+.b-reportstable-head__detail .col2,
+.b-reportstable-body__detail .col2 {
+    width: 15%;
 }
 
-#reports_list_header th + th {
-    width: 70px;
+.b-reportstable-head__detail .col3,
+.b-reportstable-body__detail .col3 {
+    width: 29%;
 }
 
-#reports_list_header th + th + th{
-    width: 130px;
+.b-reportstable-head__detail .col4,
+.b-reportstable-body__detail .col4 {
+    width: 18%;
 }
 
-#reports_list_header th + th + th + th{
-    width: 80px;
+.b-reportstable-head__compare .col1,
+.b-reportstable-body__compare .col1 {
+    width: 33%;
 }
 
-/* last empty header for scrollbar */
-#reports_list_header th + th + th + th + th{
-    width: 6px;
+.b-reportstable-head__compare .col2,
+.b-reportstable-body__compare .col2 {
+    width: 22%;
 }
 
-/* column widths */
-#reports_list td {
-    width: 160px;
-    height: 20px;
+.b-reportstable-head__compare .col3,
+.b-reportstable-body__compare .col3 {
+    width: 22%;
 }
 
-#reports_list td + td {
-    width: 70px;
-}
-
-#reports_list td + td + td {
-    width: 130px;
-}
-
-#reports_list td + td + td + td {
-    width: 80px;
-}
-
-/* report with periods */
-
-#reports_list_header.periods th {
-    width: 140px;
-}
-
-#reports_list_header.periods th + th {
-    width: 100px;
-}
-
-#reports_list_header.periods th + th + th{
-    width: 100px;
-}
-
-#reports_list_header.periods th + th + th + th{
-    width: 100px;
-}
-
-/* last empty header for scrollbar */
-#reports_list_header.periods th + th + th + th + th{
-    width: 6px;
-}
-
-#reports_list.periods td {
-    width: 140px;
-}
-
-#reports_list.periods td + td {
-    width: 100px;
-}
-
-#reports_list.periods td + td + td{
-    width: 100px;
-}
-
-#reports_list.periods td + td + td + td{
-    width: 100px;
+.b-reportstable-head__compare .col4,
+.b-reportstable-body__compare .col4 {
+    width: 22%;
 }
