@@ -6,10 +6,6 @@
     display: none
 }
 
-.budget#master #step1 .copy {
-    display: none
-}
-
 .budget#master .waste_list .body .list input {
     width: 100px;
     text-align: right;
