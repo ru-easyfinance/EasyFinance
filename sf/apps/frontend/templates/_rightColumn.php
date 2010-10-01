@@ -17,9 +17,9 @@
         </div>
         <!--/Финсостояние-->
         <!--Курсы валют-->
-        <dl id="divExchangeRates" class="info hidden">
+        <dl class="b-rates">
             <dt>Курсы валют</dt>
-            <dd><div class="line"><span class="valuta">RUB</span><span class="">1</span></div><div class="line"><span class="valuta">USD</span><span class="">30.1240</span></div></dd>
+            <dd></dd>
         </dl>
         <!--/Курсы валют-->
         <!--калькулятор-->

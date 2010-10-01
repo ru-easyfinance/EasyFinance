@@ -1,0 +1,56 @@
+.b-rates {
+    margin-left: 16px;
+}
+    .b-rates dt {
+        margin-bottom: 7px;
+        font: 14px/16px Helvetica, Arial, Tahoma;
+        color: #ec7b3d;
+    }
+    .b-rates dd {
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+        width: 148px;
+        font-size: 11px;
+        overflow: hidden;
+        background: url('/img/i/point_x.gif') repeat-x bottom left;
+    }
+    .b-rates .b-rates-row {
+        margin-bottom: 4px;
+        clear:both;
+    }
+    .b-rates .b-rates-row:after {
+        display: block;
+        content: ' ';
+        height: 0;
+        overflow: hidden;
+        clear: both;
+    }
+
+
+.b-rates-row span {
+    display: block;
+    float: left;
+    padding-left: 13px;
+    width: 36px;
+    color: #666666;
+}
+.b-rates-row .b-rates-row-curname {
+    padding-left: 0;
+    width: 32px;
+    color: #908f8f;
+}
+.b-rates-row .b-rates-row-rateprogress {
+    width: 60px;
+    text-align: right;
+}
+.b-rates-row .b-rates-row-rateprogress__up,
+.b-rates-row .b-rates-row-rateprogress__down {
+    background: url('/img/i/icons.gif') no-repeat 0 0;
+}
+
+.b-rates-row .b-rates-row-rateprogress__up {
+    background-position: 0 -295px;
+}
+.b-rates-row .b-rates-row-rateprogress__down {
+    background-position: 0 -315px;
+}
