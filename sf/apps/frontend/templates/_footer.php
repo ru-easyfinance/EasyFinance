@@ -7,13 +7,13 @@
             <p>Оставьте отзыв о системе управления личными финансами.</p>
 
             <label for="ftheme" class="w-feedback-title ">Тема<br/>
-                <input type="text" id="ftheme" class="b-feedback-title js-feedback-title" style="width: 240px;"/>
+                <input type="text" id="ftheme" class="b-feedback-title js-feedback-title" style="width: 340px;"/>
             </label>
             <br/>
             <br/>
 
             <label for="ffmes" class="w-feedback-msg">Ваш отзыв<br/>
-                <textarea id="ffmes" class="b-feedback-msg js-feedback-msg" style="width: 240px; height: 110px;"></textarea>
+                <textarea id="ffmes" class="b-feedback-msg js-feedback-msg" style="width: 340px; height: 110px;"></textarea>
             </label>
             <br/>
             <br/>
