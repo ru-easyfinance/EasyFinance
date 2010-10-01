@@ -5,6 +5,7 @@
     padding:3px;
     position:absolute;
     z-index:999;
+    width: 210px;
 }
     .b-login-form .b-login-form-bg {
         top:15px;

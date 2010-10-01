@@ -38,6 +38,11 @@
     padding:5px 8px;
 }
 
+.b-login-form .b-custom-input em.b-placeholder {
+    overflow-x: visible;
+    width: 70px;
+}
+
 .b-border-corners.tl,
 .b-border-corners.tr {
     top:3px !important;
