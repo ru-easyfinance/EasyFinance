@@ -1743,7 +1743,7 @@ table.tableForm input, table.tableForm select, table.tableForm textarea {
 .line div.cont ul li a{ display: block; width: 13px; height: 12px; text-indent: -999px; overflow: hidden; }
 
 /*-------------styles review.html-----------*/
-.map  { background:transparent url(/img/i/map.png) no-repeat scroll 0 0;height:1008px;left:85px;padding-bottom:60px;position:relative;text-align:center;top:25px;width:789px; }
+.map  { background:transparent url(/img/i/map.png) no-repeat scroll 0 0;height:1008px;padding-bottom:60px;position:relative;text-align:center;top:25px;width:789px; margin: 0 auto; }
 
 .map .registration{ cursor:pointer;height:250px;position:absolute;width:360px; }
 .map .CreateSales { cursor:pointer;height:200px;left:400px;position:absolute;width:150px; }

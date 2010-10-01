@@ -108,6 +108,12 @@ wikiwrapper_page:
 # Статические страницы
 # ------------------------------------------------------------------------------
 
+page_review:
+  url:    /review/
+  class:  sfRoute
+  params: { module: page, action: index, pageName: review }
+
+
 page:
   url:    /page/:pageName
   class:  sfRoute
