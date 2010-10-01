@@ -47,41 +47,36 @@
                 </tr>
             </table>
             <table>
-                <col width="20%" />
-                <col width="20%" />
-                <col width="20%" />
-                <col width="20%" />
-                <col width="20%" />
-                <tr>
-                    <td colspan="2"><label class="js-compare-fields hidden">Период 1</label></td>
-                    <td colspan="2"><label class="js-compare-fields hidden">Период 2</label></td>
-                    <td>&nbsp;</td>
-                </tr>
+                <col width="22%" />
+                <col width="22%" />
+                <col width="22%" />
+                <col width="22%" />
+                <col width="12%" />
                 <tr>
                     <td>
                         <div class="b-custom-input-inline">
-                            <label>С:</label>
+                            <label>Период с:</label>
                             {include file="ui/textfield.tpl" id="dateFrom" value=$dateFrom class="b-date efTooltip"}
                             <b class="clear"></b>
                         </div>
                     </td>
                     <td>
                         <div class="b-custom-input-inline">
-                            <label>По:</label>
+                            <label>по:</label>
                             {include file="ui/textfield.tpl" id="dateTo" value=$dateTo class="b-date efTooltip"}
                             <b class="clear"></b>
                         </div>
                     </td>
                     <td>
                         <div class="b-custom-input-inline js-compare-fields hidden">
-                            <label>С:</label>
+                            <label>сравнить с:</label>
                             {include file="ui/textfield.tpl" id="dateFrom2" value=$dateFrom class="b-date efTooltip"}
                             <b class="clear"></b>
                         </div>
                     </td>
                     <td>
                         <div class="b-custom-input-inline js-compare-fields hidden">
-                            <label>По:</label>
+                            <label>по:</label>
                             {include file="ui/textfield.tpl" id="dateTo2" value=$dateTo class="b-date efTooltip"}
                             <b class="clear"></b>
                         </div>
@@ -97,7 +92,7 @@
         <div class="w-report-wrapper js-reports-graphs">
             <div id="chart" class="js-reports-graphs hidden"></div>
             <div id="itogo" class="js-reports-graphs hidden"></div>
-            <div id="commentRest" class="js-reports-graphs hidden"></div>
+            <div id="commentRest" class="hidden"></div>
         </div>
 
         <div class="w-report-wrapper js-reports-table hidden">

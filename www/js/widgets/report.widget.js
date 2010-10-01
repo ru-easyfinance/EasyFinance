@@ -10,20 +10,20 @@ easyFinance.widgets.report = function(){
                 case "graph_profit": //Доходы":
                 case "graph_loss": //"Расходы":
                     $('.js-compare-fields').addClass('hidden');
-                    $('#itogo').show();
+                    $('#itogo').removeClass('hidden');
                     break;
                 case "graph_profit_loss": //"Сравнение расходов и доходов":
                 case "txt_profit"://"Детальные доходы":
                 case "txt_loss"://"Детальные расходы":
                     $('.js-compare-fields').addClass('hidden');
-                    $('#itogo').hide();
+                    $('#itogo').addClass('hidden');
                     break;
                 case "txt_loss_difference"://"Сравнение расходов за периоды":
                 case "txt_profit_difference"://"Сравнение доходов за периоды":
                 case "txt_profit_avg_difference": //"Сравнение доходов со средним за периоды":
                 case "txt_loss_avg_difference"://"Сравнение расходов со средним за периоды":
                     $('.js-compare-fields').removeClass('hidden');
-                    $('#itogo').hide();
+                    $('#itogo').addClass('hidden')
                     break;
             }
 
@@ -95,6 +95,7 @@ easyFinance.widgets.report = function(){
             tables: '.js-reports-table'
         }
 
+        $('#commentRest').addClass('hidden');
         $(reports.all).addClass('hidden');
         $(reports[type]).removeClass('hidden');
     }
@@ -146,12 +147,11 @@ easyFinance.widgets.report = function(){
         (easyFinance.models.currency.getCurrencyTextById(currencyId)) +
         '</td></tr></table><br>';
         $('#itogo').html(total);
+        showReports('graphs');
         if (other !== 0) {
-            $('#commentRest').show();
+            $('#commentRest').removeClass('hidden');
             $('#commentRest').html('<h5> * Категория прочее включает в себя Ваши категории, операции по которым за выбранный период не превысили 2% от общего объёма операций за этот период. Отчёты по этим категориям вы можете посмотреть в детальных отчётах</h5>');
         }
-
-        showReports('graphs');
     }
 
     function ShowCompareGraph(data, currencyId){
