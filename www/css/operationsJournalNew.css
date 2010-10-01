@@ -101,3 +101,6 @@ b.clear {
 .hidden {
     display:none;
 }
+.b-operations-journal .b-button-simple {
+    margin-right: 0px;
+}
