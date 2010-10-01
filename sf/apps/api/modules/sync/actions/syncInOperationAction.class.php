@@ -69,7 +69,11 @@ class syncInOperationAction extends myBaseSyncInAction
             }
 
             // FK: проверка на существование счета для перевода
-            if ($transferCnt && !in_array($record['transfer_account_id'], $transferAccounts)) {
+            if (
+                $transferCnt
+                && is_numeric($record['transfer_account_id'])
+                && !in_array($record['transfer_account_id'], $transferAccounts)
+            ) {
                 $errors[] = "No such account for transfer";
             }
 

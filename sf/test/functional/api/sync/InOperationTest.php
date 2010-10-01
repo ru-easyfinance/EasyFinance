@@ -377,6 +377,30 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
+     * Отвергать: Несуществующий id счета у операции перевода в пакете с другой операцией
+     */
+    public function testTransferAccountNotDoublesErrorMessage()
+    {
+        $xml = $this->getXMLHelper()->makeCollection(
+            2,
+            array(
+                array('cid' => 1, 'id' => 123),
+                array('transfer_account_id' => 9999, 'cid' => $errCid = 4),
+            )
+        );
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="true"][cid=1]', 'OK')
+                ->checkElement('resultset[type="Operation"] record[id][success="false"][cid=' . $errCid . ']', 1)
+            ->end();
+
+        $this->checkRecordError($errCid, '[Invalid.] No such account for transfer');
+    }
+
+
+    /**
      * Отвергать: Счет у перевода - другого пользователя
      */
     public function testTransferAccountForeign()
