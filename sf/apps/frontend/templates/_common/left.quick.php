@@ -1,5 +1,5 @@
 <div id="leftPanel" class="block1 b-leftpanel js-leftpaneltabs">
-    <ul class="b-leftpanel_tabs control js-leftpaneltabs-tabs">
+    <ul class="b-leftpanel_tabs js-leftpaneltabs-tabs">
         <li class="b-leftpanel_tabs_item b-leftpanel_tabs_item_accounts" title="Счета"><i></i></li>
         <li class="b-leftpanel_tabs_item b-leftpanel_tabs_item_tags" title="Метки"><i></i></li>
         <li class="b-leftpanel_tabs_item b-leftpanel_tabs_item_operations" title="Операции"><i></i></li>

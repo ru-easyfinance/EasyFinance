@@ -1,26 +1,27 @@
 .b-leftpanel {
-    width: 180px !important;
+    width: 200px !important;
 }
-.b-leftpanel_tabs control {
+.b-leftpanel_tabs {
     margin: 0 0 12px 0;
     width: 100%;
     height: 32px;
+    background: url('/img/i/leftpanel/tabs-icons.png')  0 0px;
 }
     .b-leftpanel_tabs .b-leftpanel_tabs_item {
-        width: 32px;
+        width: 34px;
         height: 32px;
-        background: url('/img/i/leftpanel/tabs-icons.png') no-repeat 0 0;
         display: inline-block;
+        border-right: 1px solid white;
+        margin-right: -3px;
     }
     .b-leftpanel_tabs .b-leftpanel_tabs_item.act {
         background: #fff none;
     }
         .b-leftpanel_tabs .b-leftpanel_tabs_item i {
             display: block;
-            width: 100%;
             height: 32px;
-            width: 32px;
-            background: url('/img/i/leftpanel/tabs-icons.png') no-repeat 0 0;
+            width: 30px;
+            background: transparent url('/img/i/leftpanel/tabs-icons.png') no-repeat 0 0;
         }
 
         .b-leftpanel_tabs .b-leftpanel_tabs_item_accounts i {

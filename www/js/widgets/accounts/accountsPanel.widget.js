@@ -257,7 +257,7 @@ easyFinance.widgets.accountsPanel = function(){
             "type": accountDatum.type,
             "id": accountDatum.id,
             "state": accountDatum.state,
-            "shorter_name": htmlEscape(shorter(accountDatum.name, 20)),
+            "shorter_name": htmlEscape(shorter(accountDatum.name, 25)),
             "balance_color": accountDatum.totalBalance >= 0 ? 'sumGreen' : 'sumRed',
             "totalBalance": formatCurrency(accountDatum.totalBalance, true),
             "currencyName": _model.getAccountCurrencyText(accountDatum.id)

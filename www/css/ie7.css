@@ -135,8 +135,12 @@ dl.bill_list dd ul li {
 
 .b-leftpanel_tabs .b-leftpanel_tabs_item {
     display: inline;
+    zoom: 1;
 }
 
 .block1 .transaction ul li {
     padding-top: 0;
+}
+.block1 .title {
+    zoom: 1;
 }

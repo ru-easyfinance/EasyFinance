@@ -401,12 +401,12 @@ ul.menu4 li#m_last a { background: none; }
 .block2 {
     float:left;
     width:100%;
-    margin:0 -200px 0 -185px;
+    margin:0 -200px 0 -195px;
     z-index: 1;
 }
 
 .block2 .l-indent {
-    margin: 0 196px 0 203px;
+    margin: 0 196px 0 213px;
 }
 .block3 { float:right; width: 176px; background:#fff; margin-right:-1px; padding-bottom: 17px; z-index: 0; border: 1px solid #ebebeb; position:relative; }
 
