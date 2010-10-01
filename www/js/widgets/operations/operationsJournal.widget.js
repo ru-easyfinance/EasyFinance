@@ -96,7 +96,7 @@ easyFinance.widgets.operationsJournal = function(){
                 '<input type="checkbox" />',
                 this.date.substr(0, 5),
                 '<i class="b-icon operation ' + operationType + '"></i>',
-                '<span class="' + (this.money >= 0 ? 'sumGreen' : 'sumRed') + '">' + strMoney.replace(/\&nbsp\;*/g, '').replace(/\s+/g, '&nbsp;') + '</span>',
+                '<span class="' + (this.money >= 0 ? 'sumGreen' : 'sumRed') + '">' + strMoney + '</span>',
                 this.cat_name,
                 ((this.tags ? '[' + this.tags + '] ' : '') + (this.comment || '')),
                 '<ul class="b-row-menu-block" id="' + rowID + '" trid="' + this.target_id + '"><li><a href="#edit"></li><li><a href="#del"></li><li><a href="#add"></li></ul>'
