@@ -137,7 +137,12 @@ Use: ./generateUsers.php -sdb user:passwd@source_host/database \
         $dsn  = "mysql:dbname={$this->_sourceDb['dbname']};";
         $dsn .= "host={$this->_sourceDb['host']}";
 
-        $db = new PDO($dsn, $this->_sourceDb['user'], $this->_sourceDb['pass']);
+        $db = new PDO(
+            $dsn,
+            $this->_sourceDb['user'],
+            $this->_sourceDb['pass'],
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')
+        );
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $result = $db->query(
@@ -392,7 +397,12 @@ Use: ./generateUsers.php -sdb user:passwd@source_host/database \
 
         $dsn = 'mysql:dbname=' . SYS_DB_BASE . ';host=' . SYS_DB_HOST;
 
-        $this->_targetDb = new PDO($dsn, SYS_DB_USER, SYS_DB_PASS);
+        $this->_targetDb = new PDO(
+            $dsn,
+            SYS_DB_USER,
+            SYS_DB_PASS,
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')
+        );
         $this->_targetDb
             ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }

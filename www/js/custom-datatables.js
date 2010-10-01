@@ -1,4 +1,24 @@
-﻿var DataTables = null;
+jQuery.fn.dataTableExt.oSort['ru_date-asc']  = function(a,b) {
+    var ruDatea = a.split('.');
+    var ruDateb = b.split('.');
+
+    var x = (ruDatea[1] + ruDatea[0]) * 1;
+    var y = (ruDateb[1] + ruDateb[0]) * 1;
+
+    return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+};
+
+jQuery.fn.dataTableExt.oSort['ru_date-desc'] = function(a,b) {
+    var ruDatea = a.split('.');
+    var ruDateb = b.split('.');
+
+    var x = (ruDatea[1] + ruDatea[0]) * 1;
+    var y = (ruDateb[1] + ruDateb[0]) * 1;
+
+    return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
+};
+
+var DataTables = null;
 
 $(function() {
     DataTables = _ActivateDataGrid.bind();
@@ -30,7 +50,7 @@ _ActivateDataGrid = {
             bAutoWidth: false,
             aoColumns: [
                 {bSortable: false},
-                {sClass: 'l-right', sType: 'date'},
+                {sClass: 'l-right', sType: 'ru_date'},
                 null,
                 {sClass: 'l-right', sType: 'numeric'},
                 {sType: 'string'},

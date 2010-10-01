@@ -28,7 +28,7 @@ jquery/jquery.rw-calculator.settings.js
 jquery/jquery.rw-calculator.js
 jquery/jquery.selectboxes.js
 jquery/jquery.hint.js
-jquery/jquery.dataTables.min.js
+jquery/jquery.dataTables.js
 jquery/jquery.notifier.js
 jquery/jquery.action-initiator.js
 jquery/jquery.ajax-initiator.js
