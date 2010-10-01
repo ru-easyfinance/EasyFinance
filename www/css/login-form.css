@@ -1,0 +1,76 @@
+.b-login-form {
+    top:6px;
+    right:10px;
+    margin-top:-4px;
+    padding:3px;
+    position:absolute;
+    z-index:999;
+}
+    .b-login-form .b-login-form-bg {
+        top:15px;
+        left:0;
+        width:100%;
+        height:49px;
+        background:url(../img/i/bg_menu_submenu.png) 0 -98px repeat-x;
+        position:absolute;
+        display:none;
+    }
+    .b-login-form:hover .b-login-form-bg {
+        display:block;
+    }
+        .b-login-form .b-login-form-bg i {
+            top:0;
+            left:-11px;
+            width:16px;
+            height:49px;
+            background:url(../img/i/bg_menu_submenu.png) 0 0 no-repeat;
+            position:absolute;
+        }
+        .b-login-form .b-login-form-bg i.r {
+            left:auto;
+            right:-11px;
+            background-position:0 -49px;
+        }
+
+    .b-login-form .b-login-form-row {
+        float:left;
+        clear:both;
+        position:relative;
+        z-index:1;
+        padding-right:25px;
+    }
+    .b-login-form .b-login-form-row.second {
+        width:100%;
+        font-size:.916em;
+        margin:10px -3px 0;
+        padding:0;
+        display:none;
+    }
+        .b-login-form:hover .b-login-form-row.second {
+            display:block;
+        }
+
+            .b-login-form .b-login-form-row.second label span {
+                top:-3px;
+                color:#fff;
+                position:relative;
+                cursor:pointer;
+            }
+            /* хак для вебкита */
+            @media all and (-webkit-min-device-pixel-ratio:10000),
+            not all and (-webkit-min-device-pixel-ratio:0) {
+                .b-login-form .b-login-form-row.second label span {
+                    top:-1px;
+                }
+            }
+            .b-login-form .b-login-form-row.second a {
+                float:right;
+                color:#fff;
+                text-decoration:none;
+                margin-top:1px;
+                margin-right:3px;
+            }
+            .b-login-form .b-login-form-row.second a:hover,
+            .b-login-form .b-login-form-row.second label:hover span {
+                text-decoration:underline;
+            }
