@@ -334,6 +334,13 @@ easyFinance.widgets.operationsJournal = function(){
             loadJournal();
             return false;
         });
+
+        // фильтр по счёту
+        $('#grid_search_field').keyup(function() {
+            var el = $(this);
+            _search_field = el.val();
+            return false;
+        });
     }
 
     function _printFilters(){

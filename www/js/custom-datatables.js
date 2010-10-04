@@ -144,11 +144,11 @@ _ActivateDataGrid = {
 
         $('#grid_search_field').unbind('keyup.datagrid').unbind('keypress.datagrid').bind('keyup.datagrid', function(e) {
             var el = $(this);
-            self.dataGrid.fnFilter(el.val());
+            //self.dataGrid.fnFilter(el.val());
         }).bind('keypress.datagrid', function(e) {
             if(e.keyCode == 27) {
                 $(this).val('').trigger('blur');
-                self.dataGrid.fnFilter('');
+                //self.dataGrid.fnFilter('');
                 return false;
             }
         });
