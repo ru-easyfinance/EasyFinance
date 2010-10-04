@@ -55,7 +55,20 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
      */
     protected function getFields()
     {
-        return array('type_id', 'currency_id', 'name', 'description', 'initBalance', 'state');
+        return array(
+            'type_id'     => array(
+                'required' => true,
+            ),
+            'currency_id' => array(
+                'required' => true,
+            ),
+            'name'        => array(
+                'required' => true,
+            ),
+            'description' => array(),
+            'initBalance' => array(),
+            'state'       => array(),
+        );
     }
 
 
@@ -70,6 +83,7 @@ class form_frontend_AccountWithBalanceFormTest extends myFormTestCase
             'name'        => 'Название счета',
             'description' => 'Описание счета',
             'initBalance' => 234.56,
+            'state'       => 0,
         );
     }
 

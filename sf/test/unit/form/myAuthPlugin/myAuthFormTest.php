@@ -26,7 +26,17 @@ class form_myAuthFormTest extends sfPHPUnitFormTestCase
      */
     protected function getFields()
     {
-        return array('login', 'password', 'remember');
+        return array(
+            'login' => array(
+                'required'    => true,
+            ),
+            'password' => array(
+                'required'    => true,
+            ),
+            'remember' => array(
+                'required'    => false,
+            ),
+        );
     }
 
 

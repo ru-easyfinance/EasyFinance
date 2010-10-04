@@ -36,14 +36,16 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
     protected function getFields()
     {
         return array(
-            'user_login',
-            'user_service_mail',
-            'name',
-            'user_mail',
-            'password_new',
-            'password_repeat',
-            'password',
-            'notify',
+            'user_login'        => array(),
+            'user_service_mail' => array(),
+            'name'              => array(
+                'required'   => true,
+            ),
+            'user_mail'         => array(),
+            'password_new'      => array(),
+            'password_repeat'   => array(),
+            'password'          => array(),
+            'notify'            => array(),
         );
     }
 
@@ -59,6 +61,8 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
             'name'              => 'Дядя Федор',
             'user_mail'         => 'real.mail@site.com',
             'password'          => 'qwertyasdf',
+            'password_new'      => '',
+            'password_repeat'   => '',
             'notify'            => 1,
         );
     }
@@ -122,6 +126,7 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
         $form = new UserProfileForm($user);
 
         $expected = $input;
+        unset($expected['password_repeat']);
 
         unset($input['user_mail']);
         $form->bind($input);
@@ -151,7 +156,7 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
         $formUser = $form->save();
         $expected = $input;
         $expected['password'] = sha1($input['password_new']);
-        unset($expected['password_new'], $expected['user_service_mail']);
+        unset($expected['password_new'], $expected['user_service_mail'], $expected['password_repeat']);
 
         $this->assertEquals($expected['password'], $form->getObject()->getPassword());
         $this->assertEquals(1, $this->queryFind('User', $expected)->count(), 'Expected found 1 object (User)');

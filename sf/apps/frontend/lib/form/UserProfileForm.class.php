@@ -100,6 +100,11 @@ class UserProfileForm extends BaseFormDoctrine
     {
         $values['id'] = $this->getObject()->getId();
 
+        // это поле всегда лишнее
+        if (array_key_exists('password_repeat', $values)) {
+            unset($values['password_repeat']);
+        }
+
         // эту х-ню делать в модели
         if (isset($values['user_service_mail']) && !empty($values['user_service_mail'])) {
             $values['user_service_mail'] = $values['user_service_mail'] . '@mail.easyfinance.ru';

@@ -31,6 +31,15 @@ class form_mySyncOutFormTest extends sfPHPUnitFormTestCase
 
 
     /**
+     * Перекрыл sfPHPUnitFormTestCase::testAutoFields т.к. у нас нет виджетов
+     */
+    public function testAutoFields()
+    {
+        $this->assertFormFields(array_keys($this->getFields()), $this->form, get_class($this->form));
+    }
+
+
+    /**
      * Получить массив валидных данных
      */
     protected function getValidData()
