@@ -195,7 +195,7 @@ class Operation_ModelTest extends UnitTestCase
         $actual = $this->getConnection()->selectRow($sql, $opId);
 
         // Смотрим на дату создания и редактирования
-        $this->assertGreaterThan(mktime(+1), strtotime($actual['created_at']));
+        $this->assertGreaterThan(date('U', time()-60), strtotime($actual['created_at']));
 
         $this->assertEquals($actual['created_at'], $actual['updated_at']);
 
@@ -250,7 +250,7 @@ class Operation_ModelTest extends UnitTestCase
         $actual = $this->getConnection()->selectRow($sql, $opId);
 
         // Смотрим на дату создания и редактирования
-        $this->assertGreaterThan(mktime(+1), strtotime($actual['created_at']));
+        $this->assertGreaterThan(date('U', time()-60), strtotime($actual['created_at']));
 
         $this->assertEquals($actual['created_at'], $actual['updated_at']);
 
