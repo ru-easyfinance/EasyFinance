@@ -3,7 +3,7 @@
 	url = git://github.com/maxim-oleinik/Symfony.git
 [submodule "sf/plugins/sfPhpunitPlugin"]
 	path = sf/plugins/sfPhpunitPlugin
-	url = git://github.com/maxim-oleinik/sfPhpunitPlugin.git
+	url = git://github.com/EasyFinance/sfPhpunitPlugin.git
 [submodule "sf/plugins/sfAdminDashPlugin"]
 	path = sf/plugins/sfAdminDashPlugin
 	url = http://github.com/EasyFinance/sfAdminDashPlugin.git
