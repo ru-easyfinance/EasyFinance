@@ -39,7 +39,7 @@ _ActionPanel = {
                 var el = $(e.target),
                     row = el.closest('li'),
                     actionPanel = $('.cont ul', row);
-                self.hoverRow(e, row, actionPanel, clearListHover);
+                //self.hoverRow(e, row, actionPanel, clearListHover);
             }).mouseleave(function() {
                 clearListHover($('li:first', container));
             });
