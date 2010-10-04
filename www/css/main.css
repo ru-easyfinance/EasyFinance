@@ -2199,7 +2199,7 @@ b.clear {
     display:block;
 }
 
-.b-noscript {
+noscript .b-noscript {
     display: block;
     top: 0px;
     left: 0px;
