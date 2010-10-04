@@ -602,10 +602,10 @@ class Operation_Model
             $sql = "SELECT
                         o.id,
                         o.user_id,
-                        (CASE 
-                        	WHEN o.account_id = a.account_id THEN o.money
-                        	WHEN o.transfer_amount = 0 THEN ABS(o.money) 
-                        	ELSE o.transfer_amount END) AS money,
+                        (CASE
+                            WHEN o.account_id = a.account_id THEN o.money
+                            WHEN o.transfer_amount = 0 THEN ABS(o.money)
+                            ELSE o.transfer_amount END) AS money,
                         DATE_FORMAT(o.date,'%d.%m.%Y') as `date`,
                         o.date AS dnat,
                         o.cat_id,
@@ -616,12 +616,12 @@ class Operation_Model
                         0 AS virt,
                         o.tags,
                         (
-                            (CASE 
-                            	WHEN o.account_id = a.account_id THEN o.money
-                            	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
-                            	ELSE o.transfer_amount END)
+                            (CASE
+                                WHEN o.account_id = a.account_id THEN o.money
+                                WHEN o.transfer_amount = 0 THEN ABS(o.money)
+                                ELSE o.transfer_amount END)
                             *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency
-                        ) as moneydef,                        
+                        ) as moneydef,
                         o.exchange_rate AS curs,
                         o.type,
                         o.created_at,
@@ -634,14 +634,14 @@ class Operation_Model
                         sum(mm) as total_money
                     FROM (
                     SELECT sum(
-                        (CASE 
-                        	WHEN o.account_id = a.account_id THEN o.money
-                        	WHEN o.transfer_amount = 0 THEN ABS(o.money)  
-                        	ELSE o.transfer_amount END)
-                        *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency) as mm ";        
+                        (CASE
+                            WHEN o.account_id = a.account_id THEN o.money
+                            WHEN o.transfer_amount = 0 THEN ABS(o.money)
+                            ELSE o.transfer_amount END)
+                        *(CASE WHEN rate = 0 THEN 1 ELSE rate END)/$actualCurrency) as mm ";
                     ;
         }
- 
+
         // Грязный хак, который надо убить, но см баг 1652
         $accountJoinCondition = ' 1 ';
 
@@ -824,7 +824,14 @@ class Operation_Model
                 }
 
                 if ($operation['type'] == 2) {
-                    $operation['cat_name'] = sprintf("%s => %s", $operation['account_name'], $accounts[$operation['transfer']]['account_name']);
+                    $accountName =
+                        (
+                            !is_null($operation['transfer'])
+                            && isset($accounts[$operation['transfer']]['account_name'])
+                        )
+                        ? $accounts[$operation['transfer']]['account_name']
+                        : 'Счёт не определён';
+                    $operation['cat_name'] = sprintf("%s => %s", $operation['account_name'], $accountName);
                 }
 
                 $operations[$key] = $operation;
