@@ -23,7 +23,7 @@ easyFinance.widgets.accountsPanel = function(){
                     <span class="b-accountitem-currency">{%currencyName%}</span>\
                 </div>\
             </a>\
-            <div class="cont">\
+            <div class="cont cont-acc_panel">\
                 <ul style="z-index: 1006;">\
                     <li title="Добавить операцию" class="operation"><a></a></li>\
                     <li title="Редактировать" class="edit"><a></a></li>\

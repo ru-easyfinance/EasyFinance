@@ -30,7 +30,7 @@ _ActionPanel = {
         // Обработка всплывающей панели в списках
         if($('.efListWithTooltips').length) {
             var container = $('.efListWithTooltips');
-            $('.cont', container).css('left', 0);
+            $('.cont:not(.cont-acc_panel)', container).css('left', 0);
             function clearListHover(row) {
                 row.closest('ul').find('li').removeClass('mouse-over');
                 return true;
