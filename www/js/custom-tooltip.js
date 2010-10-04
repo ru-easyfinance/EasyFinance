@@ -1,4 +1,4 @@
-﻿var Tooltip = null;
+var Tooltip = null;
 
 $(function() {
     Tooltip = _Tooltip.bind();
@@ -28,24 +28,35 @@ _Tooltip = {
     show: function(params) {
         var self = this,
             text = 'Пусто';
-        if(this.modal) return false;
+
+        if(this.modal) {
+            return false;
+        }
         if(params.content) {
             text = params.content;
-        } else if(params.selector) {
+        }
+        else if(params.selector) {
             text = $(params.selector).html() || 'Элемент не был найден';
         }
+
         $('.b-tooltip-container', this.tooltip).html(text);
+
         if(params.el) {
             var el = params.el,
                 elw = el.outerWidth(true),
                 elh = el.height(),
                 elp = el.position(),
                 parentp = el.offsetParent().position();
+
+            this.tooltip.appendTo(el.offsetParent()); // прикрепляем к тому же оффсетПаренту, чтобы расчет позиции был однозначный
+
             this.tooltip.css({
-                'top': elp.top + parentp.top + elh + 5,
+                //'top': elp.top + parentp.top + elh + 5,
+                'top': elp.top + elh + 15 + 'px',
                 'left': (params.targetPos) ? elp.left + (elw / 2) + 8 : '50%',
                 'margin-left': -(this.tooltip.width() / 2)
             }).addClass('position');
+
             if(params.modal) {
                 this.modal = true;
                 $(document).bind('click.tooltip', function(e) {
