@@ -7,7 +7,7 @@ _Suggest = {
     listHeight: 200,
 
     bind: function() {
-        this.setListeners();
+        //this.setListeners();
     },
 
     checkStatus: function() {
