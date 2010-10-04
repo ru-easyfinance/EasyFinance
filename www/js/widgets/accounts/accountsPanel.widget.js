@@ -17,11 +17,11 @@ easyFinance.widgets.accountsPanel = function(){
                 <div style="display:none" class="type" value="{%type%}" />\
                 <div style="display:none" class="id" value="{%id%}" />\
                 <div style="display:none" class="state" value="{%state%}" />\
-                <span class="b-accountitemitem-name">{%shorter_name%}</span>\
-                <span class="b-accountitem-sum {%balance_color%}">\
+                <div class="b-accountitem-name">{%shorter_name%}</div>\
+                <div class="b-accountitem-sum {%balance_color%}">\
                     <span class="b-accountitem-amount">{%totalBalance%}</span>\
                     <span class="b-accountitem-currency">{%currencyName%}</span>\
-                </span>\
+                </div>\
             </a>\
             <div class="cont">\
                 <ul style="z-index: 1006;">\
@@ -257,7 +257,7 @@ easyFinance.widgets.accountsPanel = function(){
             "type": accountDatum.type,
             "id": accountDatum.id,
             "state": accountDatum.state,
-            "shorter_name": htmlEscape(shorter(accountDatum.name, 25)),
+            "shorter_name": htmlEscape(accountDatum.name),
             "balance_color": accountDatum.totalBalance >= 0 ? 'sumGreen' : 'sumRed',
             "totalBalance": formatCurrency(accountDatum.totalBalance, true),
             "currencyName": _model.getAccountCurrencyText(accountDatum.id)
