@@ -514,7 +514,7 @@ easyFinance.widgets.operationEdit = function(){
         //Перевод на финансовую цель
         } else if (_selectedType == "4") {
             $("#op_target_fields").show();
-            $("#op_tags_fields,#op_transfer_fields,#op_category_fields").hide();
+            $("#op_tags_fields, #op_transfer_fields, #op_category_fields").hide();
 
             if (!_$ufdTarget) {
                 // создаём выпадающий список целей

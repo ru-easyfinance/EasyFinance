@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="b-row">
+        <div class="b-row" id="op_category_fields">
             <div class="b-col">
                 <div class="b-col-indent">
                     <label class="b-custom-input-label">Категория:</label>
@@ -216,7 +216,7 @@
                 </div>
             </div>
         </div>
-        <div class="b-row">
+        <div class="b-row" id="op_tags_fields">
             <div class="b-col">
                 <div class="b-col-indent">
                     <label class="b-custom-input-label">Метки:</label>
