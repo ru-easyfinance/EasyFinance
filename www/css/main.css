@@ -862,13 +862,6 @@ div.op_addoperation .op_line  .op_amount {float: left; }
     top: 4px;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0)
-{
-#btnCalcSum, #btnCalcSumTransfer {margin-top:2px;}
-/* хак для правильного позиционирования иконки калькулятора в Safari и Chrome */
-}
-
-
 div.op_addoperation .op_line  .op_amount div,
 div.op_addoperation .op_line  .op_amount div td,
 div.op_addoperation #div_op_transfer_line #div_op_account div,
