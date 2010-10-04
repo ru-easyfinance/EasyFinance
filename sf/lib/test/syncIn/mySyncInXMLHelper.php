@@ -85,15 +85,19 @@ class mySyncInXMLHelper
     /**
      * Создать набор стандартных счетов
      *
-     * TODO: дописать, принимать параметры для множества объектов
      * @param  int    $count
+     * @param  array  $params
      * @return string
      */
     public function makeCollection($count = 1, $params = array())
     {
         $this->inCollection = true;
-        list($key) = array_keys($params);
         $collection = '';
+
+        $key = '-none-';
+        if ($params) {
+            list($key) = array_keys($params);
+        }
 
         $params = is_int($key) ?
             array_values($params) : array_fill(0, $count, $params);
