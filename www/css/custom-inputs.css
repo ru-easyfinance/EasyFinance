@@ -2,6 +2,7 @@
 .b-custom-textarea-label {
     margin-bottom:5px;
     display:block;
+    font-weight: bold;
 }
 .b-custom-input-hint,
 .b-custom-textarea-hint {
