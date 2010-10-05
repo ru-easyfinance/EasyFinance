@@ -142,3 +142,9 @@ dl.bill_list dd ul li {
 .block1 .title {
     zoom: 1;
 }
+form.op_addoperation {
+    overflow: hidden !important;
+}
+form.op_addoperation .b-custom-select-wrap {
+    top: 0px;
+}
