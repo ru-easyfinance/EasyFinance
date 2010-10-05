@@ -100,7 +100,7 @@ class Accounts_Controller extends _Core_Controller_UserCommon
             if (!$er){
                 $this->renderJsonError('Счёт не удалён');
             }
-            if ($er == 'cel') {
+            if ($er === 'cel') {
                 $this->renderJsonError('Невозможно удалить счёт, к которому привязана фин.цель');
             } else {
                 //@XXX Тут как бы хз.. Нужно проверять какую конструкцию поставить.

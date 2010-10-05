@@ -54,6 +54,7 @@ class Account_Model
     /**
      * Удаляет всё информацию по счёту из БД.
      * @param array $args
+     * @return bool true в случае успеха
      */
     static public function delete($userId, $accountId)
     {
@@ -75,6 +76,16 @@ class Account_Model
         $opModel->deleteOperationsByAccountId($accountId);
 
         Core::getInstance()->db->query("COMMIT");
+
+        $cnt = Core::getInstance()->db->select(
+            "
+            SELECT COUNT(*) FROM accounts
+            WHERE account_id = ? AND deleted_at IS NULL
+            ",
+            $accountId
+        );
+
+        return ($cnt[0]['COUNT(*)'] == 0);
     }
 
 
@@ -182,18 +193,18 @@ class Account_Model
     {
         $sql = "SELECT
                     acc.account_id AS account_id,
-                    SUM(CASE 
-                        	WHEN o.account_id = acc.account_id THEN o.money
-                        	WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)
-                        	ELSE o.transfer_amount END) AS sum
+                    SUM(CASE
+                            WHEN o.account_id = acc.account_id THEN o.money
+                            WHEN IFNULL(o.transfer_amount, 0) = 0 THEN ABS(o.money)
+                            ELSE o.transfer_amount END) AS sum
                     FROM accounts acc
                     INNER JOIN operation o
-                    	ON o.accepted = 1
-                    	AND acc.account_id IN (?a) 
-                    	AND o.deleted_at IS NULL
-                    	AND (o.account_id = acc.account_id OR o.transfer_account_id = acc.account_id) 
+                        ON o.accepted = 1
+                        AND acc.account_id IN (?a)
+                        AND o.deleted_at IS NULL
+                        AND (o.account_id = acc.account_id OR o.transfer_account_id = acc.account_id)
                     GROUP BY acc.account_id";
-        
+
         $accountsBallance = array();
 
         // Подсчитываем сумму по каждому счёту

@@ -273,8 +273,6 @@ abstract class Account
             return 'cel';
         }
 
-        Account_Model::delete($user->getId(), $param['id']);
-
-        return $this;
+        return Account_Model::delete($user->getId(), $param['id']);
     }
 }

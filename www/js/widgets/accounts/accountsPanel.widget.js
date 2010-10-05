@@ -167,6 +167,9 @@ easyFinance.widgets.accountsPanel = function(){
     }
 
     function confirmDeletion(id){
+        var self = this;
+        self.accountId = id;
+
         $("#accountDeletionConfirm").dialog({
             autoOpen: false,
             title: "Удалить или скрыть?",
@@ -176,7 +179,7 @@ easyFinance.widgets.accountsPanel = function(){
                     $(this).dialog('close');
                 },
                 "Удалить": function() {
-                    _model.deleteAccountById(id, function(data){
+                    _model.deleteAccountById(self.accountId, function(data){
                         // выводим ошибку, если на счету зарегистрированы фин.цели.
                         if (data.error && data.error.text) {
                             $.jGrowl(data.error.text, {theme: 'red'});
@@ -200,7 +203,7 @@ easyFinance.widgets.accountsPanel = function(){
 
                     $.jGrowl("Ждите", {theme: 'green'});
 
-                    _model.changeAccountStateById(id, 2, handler);
+                    _model.changeAccountStateById(self.accountId, 2, handler);
                 }
             }
         });
@@ -390,9 +393,10 @@ easyFinance.widgets.accountsPanel = function(){
     }
 
     function loadState() { //загружает состояние из куки
-        var accountsPanel = $.cookie('accountsPanel_stated').toString();
+        var accountsPanel = $.cookie('accountsPanel_stated');
 
         if (accountsPanel) {
+            accountsPanel = accountsPanel.toString();
             $('div.listing dl.bill_list dt').each(function(){
                 if (accountsPanel.indexOf($(this).next().attr('id')) > -1) {
                     $(this).addClass('closed').next().addClass('hidden');
