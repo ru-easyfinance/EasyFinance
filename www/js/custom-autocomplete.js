@@ -19,7 +19,7 @@ _Suggest = {
 
     appendEvents: function() {
         var self = this;
-         
+
         $('.b-custom-input.suggest input[name="_ufd"]').each(function(i) {
             var el = $(this),
                 list = el.parent().data('dropdown'),
@@ -47,7 +47,7 @@ _Suggest = {
                 }
                 function hide() {
                     list.hideList();
-                    list.inputFocus();
+                    //list.inputFocus();
                     input.removeClass('open');
                 }
 
