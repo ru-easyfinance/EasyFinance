@@ -1,13 +1,3 @@
-
-function _getMonthDays(d){
-    var m = d.getMonth()
-    for (var i = 29;i<32;i++)
-    {
-        d.setDate(i)
-        if (m != d.getMonth()){return (i-1)}
-    }
-    return (i)
-}
 /**
  * @desc Модель бюджета
  * @author rewle
