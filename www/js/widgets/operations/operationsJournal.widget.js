@@ -28,7 +28,7 @@ easyFinance.widgets.operationsJournal = function(){
         _$dialogFilterType = null,
         _$dialogFilterSum = null,
         OPERATION_TYPES = ['расход', 'доход', 'перевод', '', 'фин. цель'],
-        break_symbol,
+        break_symbol = $.browser.mozilla ? '<wbr/>' : '&shy;',
 
         rowsCollection = {},
         clearFilterBtn,
@@ -49,19 +49,13 @@ easyFinance.widgets.operationsJournal = function(){
     function _showInfo(data) {
         if (!data) return false;
 
-        //if (navigator.userAgent.Contains("Firefox"))
-        if ($.browser.mozilla) {
-            break_symbol = "<wbr>";
-        } else {
-            break_symbol = "&shy;";
-        }
-
         _journal = data.operations;
 
         var tr = '',
             tp,
             pageTotal = 0,
             curMoney,
+            strMoney,
             prevMoney;
 
         // Убираем прелоадер

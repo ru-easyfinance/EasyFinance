@@ -73,7 +73,7 @@ _ActivateDataGrid = {
                 sZeroRecords: 'Нет операций по заданному фильтру'
             }
         });
-        this.dataGrid.fnSort([[1, 'asc']]);
+        this.dataGrid.fnSort([[1, 'desc']]);
         new FixedHeader(this.dataGrid);
         $('.fixedHeader').addClass('custom-grid-style');
 
