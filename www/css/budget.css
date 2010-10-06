@@ -55,6 +55,10 @@
 thead.budget-header {
     top: -20px;
 }
+thead.budget-header th {
+    font-size: 11px;
+    font-weight: 400;
+}
 
 .budget#budget .list .list.head table {
     width: 100%;
@@ -135,6 +139,13 @@ thead.budget-header {
 .budget#budget .list .list table td.w6 {
     width: 17%;
     text-align: right;
+}
+
+.budget#budget .list .list table td.w3,
+.budget#budget .list .list table td.w5,
+.budget#budget .list .list table td.w6 {
+    font-size: 12px;
+    font-weight: 400;
 }
 
 .budget#budget .list .list table .parent td.w6 div a {

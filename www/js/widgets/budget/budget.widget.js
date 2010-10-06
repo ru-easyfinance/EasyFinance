@@ -342,7 +342,7 @@ var tplbudgetHeader =
     function printBudget() {
         _updateElapsed();
 
-        var str = renderArticlesTree(_model.getArticlesTree())
+        var str = renderArticlesTree(_model.getArticlesTree());
 
         $("#budgetTimeLine").show();
 
