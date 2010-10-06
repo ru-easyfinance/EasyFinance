@@ -223,10 +223,10 @@
                     <div class="b-custom-input-container icon tags">
                         <div class="b-custom-input">
                             <div class="b-custom-input-border">
-                                <input class="b-custom-input-field" type="text" id="op_tags" value="" />
+                                <input class="b-custom-input-field js-tagslist" type="text" value="" />
                             </div>
                         </div>
-                        <i class="b-custom-input-icon"></i>
+                        <i class="b-custom-input-icon" id="op_tags" title="Редактировать метки"></i>
                     </div>
                     <p class="b-custom-input-hint">Пометки для быстрого поиска. Например: аванс</p>
                 </div>
@@ -375,4 +375,6 @@
         <b class="clear"></b>
     </div>
 </form>
+<div class="b-tagslist__window js-tagsedit-window" style="display: none;">
+</div>
 <!--/Ввод операции-->

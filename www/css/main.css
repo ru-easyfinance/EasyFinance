@@ -574,8 +574,30 @@ div.addoperation .line .f_field div {margin-top: 5px; margin-right: 50px;  float
 div.addoperation .line .tags_could{position: absolute; left:130px; top:-5px; max-width:200px ;float : left;z-index:1000}
 div.addoperation .line .tags_could div{position : relative; width: 100px;float: top;}
 
-/* Tag cloud */
+/* alternative layout */
+/* что это? */
+#container{
+margin:0 auto;
+text-align:left;
+width:700px;
+background:#fff;
+}
+#main{
+float:left;
+display:inline;
+width:380px;
+margin-left:20px;
+}
+#side{
+float:left;
+display:inline;
+width:260px;
+margin-left:20px;
+}
+.btn{display:block;}
 
+/* Tag cloud */
+/* по всей вероятности, уже не используется */
     #tags li{
         float:left;
         margin:0;
@@ -598,26 +620,6 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
     .tag4{font-size:160%;}
     .tag5{font-size:180%;}
 
-    #container{
-    margin:0 auto;
-    text-align:left;
-    width:700px;
-    background:#fff;
-    }
-    #main{
-    float:left;
-    display:inline;
-    width:380px;
-    margin-left:20px;
-    }
-    #side{
-    float:left;
-    display:inline;
-    width:260px;
-    margin-left:20px;
-    }
-    /* alternative layout */
-
     #tags .alt{
         text-align:left;
         padding:0;
@@ -638,8 +640,6 @@ div.addoperation .line .tags_could div{position : relative; width: 100px;float: 
     #tags .alt .tag3{background:#4d92c7;}
     #tags .alt .tag4{background:#3277ad;}
     #tags .alt .tag5{background:#266ca2;}
-
-    .btn{display:block;}
 
 /* // Tag cloud */
 

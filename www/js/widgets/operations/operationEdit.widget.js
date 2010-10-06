@@ -76,33 +76,37 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_infobut1').hide();
         $('#op_infobut2').hide();
 
-        $('a#op_tags').click(function(){
-            $('.op_tags_could').dialog({
+        $('#op_tags').click(function(){
+            $('.js-tagsedit-window').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
-            $('.op_tags_could li').show();
+            //$('.b-tagsedit li').show();
         });
 
-        $('.op_tags_could li').live('click',function(){
-            var txt=$('.op_tags input').val()+$(this).text()+', ';
-            $('.op_tags input').val(txt);
-            $('.op_tags_could').dialog("close");
+        $('.js-tagsedit-window a').live('click',function(){
+            var txt = $('input.js-tagslist').val() + $(this).text() + ', ';
+            $('input.js-tagslist').val(txt);
+            $('.js-tagsedit-window').dialog("close");
         });
 
         // Загружаем теги
-        var k,n;
+        var k, n;
         var data = res.cloud;
-        var str = '<ul>';
+        var tags = [];
         var m = -1;
         for (var key in data) {
-            if (m == -1) m = data[key]['cnt'];
-            k = data[key]['cnt']/m;
-            n = Math.floor(k*5);
-            str = str + '<li class="tag'+n+'"><a>'+data[key]['name']+'</a></li>';
+            if (m == -1) {
+                m = data[key]['cnt'];
+            }
+            else {
+                k = data[key]['cnt']/m;
+                n = Math.floor(k*5);
+                tags.push('<a class="tag' + n + '">' + data[key]['name'] + '</a>');
+            }
         }
 
-        $('.op_tags_could').html(str+'</ul>');
-        $('.op_tags_could li').hide();
+        $('.js-tagsedit-window').html(tags.join(''));
+        //$('.op_tags_could li').hide();
     }
 
     function _initUFDs() {
