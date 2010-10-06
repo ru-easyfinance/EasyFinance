@@ -269,13 +269,14 @@ easyFinance.widgets.accountsPanel = function(){
         return templetor(li_template, val);
     }
 
-    function renderGroup(group, id) {
-        var currentPanel = _$node.find('.js-type-' + id).next();
+    function clearSubPanels() {
+        _$node.find('dd:not(.amount)').each(function(){
+            $(this).html('').html('').addClass('hidden').prev().addClass('hidden')
+        })
+    }
 
-        if (!group.length) { // если группа пустая
-            currentPanel.addClass('hidden').prev().addClass('hidden'); // скрываем ее полностью
-            return;
-        }
+    function renderGroup(group, id) { log(id, group.length)
+        var currentPanel = _$node.find('.js-type-' + id).next();
 
         var groupBalance = getSumGroup(group);
 
@@ -372,6 +373,8 @@ easyFinance.widgets.accountsPanel = function(){
         var summByCurrencies = getSumTotal(data); // сумма средств по каждой используемой валюте и общая сумма
 
         var groupedAccounts = groupAccountsByType(data);
+
+        clearSubPanels();
 
         for (var groupid in groupedAccounts) {
             renderGroup(groupedAccounts[groupid], groupid)
