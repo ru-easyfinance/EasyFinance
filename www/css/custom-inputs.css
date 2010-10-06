@@ -122,6 +122,9 @@
     display:block;
     overflow:hidden;
 }
+.b-custom-input .b-custom-input-border {
+    padding-right:16px;
+}
 .b-custom-input-container.calculator .b-custom-input .b-custom-input-border,
 .b-custom-input-container.calculator .b-custom-textarea .b-custom-textarea-border {
     overflow:visible;
