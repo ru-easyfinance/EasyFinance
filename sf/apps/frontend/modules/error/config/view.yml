@@ -1,0 +1,11 @@
+all:
+  has_layout:     true
+  layout:         layout
+
+error404Success:
+  metas:
+    title:        'EasyFinance.ru &mdash; Страница не найдена (Ошибка 404)'
+
+disabledSuccess:
+  metas:
+    title:        'EasyFinance.ru &mdash; Раздел не доступен'

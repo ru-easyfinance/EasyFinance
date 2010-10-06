@@ -56,3 +56,9 @@ all:
 
     secure_module:          ~
     secure_action:          ~
+
+    error_404_module:       error
+    error_404_action:       error404
+
+    module_disabled_module: error
+    module_disabled_action: disabled
