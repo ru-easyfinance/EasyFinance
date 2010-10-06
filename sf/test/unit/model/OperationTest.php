@@ -108,7 +108,50 @@ class model_OperationTest extends myUnitTestCase
         $operation = $this->helper->makeOperation();
         $operation->delete();
 
-        $this->assertEquals($operation->getUpdatedAt(), $operation->getDeletedAt());
+        $this->assertEquals(
+            strtotime($operation->getUpdatedAt()),
+            strtotime($operation->getDeletedAt()),
+            'UpdatedAt и CreatedAt должны быть приближённо равны',
+            10
+        );
+    }
+
+
+    /**
+     * Исправление ошибок в операции перевода
+     */
+    public function testPreHydrateHook()
+    {
+        $account         = $this->helper->makeAccount(
+            null,
+            array('currency_id' => myMoney::RUR)
+        );
+        $transferAccount = $this->helper->makeAccount(
+            $account->getUser(),
+            array('currency_id' => myMoney::USD)
+        );
+        $operation       = $this->helper->makeOperation(
+            $account,
+            array(
+                'amount'              => 123,
+                'type'                => Operation::TYPE_TRANSFER,
+                'transfer_amount'     => 0,
+                'transfer_account_id' => $transferAccount->getId()
+            )
+        );
+
+        $hydratedOperation = $operation->getTable()
+            ->findOneById($operation->getId());
+
+        $rate = $this->getContext()->getMyCurrencyExchange()
+            ->getRate(myMoney::RUR, myMoney::USD);
+
+        $this->assertEquals(
+            $rate * $hydratedOperation->getAmount(),
+            $hydratedOperation->getTransferAmount(),
+            'transfer_amount должен вычисляться, если он 0',
+            $hydratedOperation->getTransferAmount() * 0.01
+        );
     }
 
 }

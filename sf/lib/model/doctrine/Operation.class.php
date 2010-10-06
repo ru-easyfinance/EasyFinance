@@ -61,6 +61,40 @@ class Operation extends BaseOperation
         }
     }
 
+    /**
+     * Хук для починки операций перевода
+     * @param Doctrine_Event $event
+     * @see vendor/doctrine/Doctrine/Doctrine_Record::preHydrate()
+     */
+    public function preHydrate($event)
+    {
+        $data = $event->data;
+
+        if (
+            isset($data['type'])
+            && $data['type'] == self::TYPE_TRANSFER
+            && $data['transfer_amount'] == 0
+            && isset($data['amount'])
+            && isset($data['account_id'])
+            && isset($data['transfer_account_id'])
+        ) {
+            $account = Doctrine::getTable('Account')
+                ->findOneById($data['account_id']);
+            $transferAccount = Doctrine::getTable('Account')
+                ->findOneById($data['transfer_account_id']);
+
+            $rate = sfContext::getInstance()->getMyCurrencyExchange()
+                ->getRate(
+                    $account->getCurrencyId(),
+                    $transferAccount->getCurrencyId()
+                );
+
+            $data['transfer_amount'] = ($rate ? $rate : 1) * $data['amount'];
+        }
+
+        $event->data = $data;
+    }
+
 
     /**
      * Вернуть типы операций

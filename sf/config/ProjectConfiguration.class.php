@@ -14,6 +14,7 @@ class ProjectConfiguration extends sfProjectConfiguration
      */
     static protected $zendAutoloader = null;
 
+    protected static $myCurrencyExchange = null;
 
     /**
      * SetUp
@@ -30,6 +31,10 @@ class ProjectConfiguration extends sfProjectConfiguration
         // г-но, но без этого Zend_Mail_Message raw письма по русски не читает
         // @see http://framework.zend.com/issues/browse/ZF-3591
         @ini_set('iconv.internal_encoding', 'UTF-8');
+
+        // Событие на получение "из контекста" обменника валют
+        // @see sfContext::__call
+        $this->dispatcher->connect('context.method_not_found', array(__CLASS__, 'getMyCurrencyExchange'));
   }
 
 
@@ -97,4 +102,27 @@ class ProjectConfiguration extends sfProjectConfiguration
         return self::$zendAutoloader;
     }
 
+
+    /**
+     * Загружает объект обменника валют
+     */
+    public static function getMyCurrencyExchange(sfEvent $event)
+    {
+        $params = $event->getParameters();
+        if ($params['method'] != 'getMyCurrencyExchange')
+            return false;
+
+        if (!self::$myCurrencyExchange) {
+            $currencies = Doctrine::getTable('Currency')->createQuery()->execute(array(), Doctrine::HYDRATE_ARRAY);
+            self::$myCurrencyExchange = new myCurrencyExchange();
+
+            foreach ($currencies as $currency) {
+                self::$myCurrencyExchange->setRate($currency['id'], $currency['rate'], myCurrencyExchange::BASE_CURRENCY);
+            }
+        }
+
+        // set return value and stop chain
+        $event->setReturnValue(self::$myCurrencyExchange);
+        return true;
+    }
 }
